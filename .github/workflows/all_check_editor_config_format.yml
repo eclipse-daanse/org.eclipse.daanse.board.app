@@ -1,0 +1,19 @@
+name: Editor Config format check
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  validate:
+    permissions:
+      statuses: write
+      contents: read
+      packages: read
+    uses: eclipse-daanse/.github/.github/workflows/reuse_all_check_editor_config_format.yml@main
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}

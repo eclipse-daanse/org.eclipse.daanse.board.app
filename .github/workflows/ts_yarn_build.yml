@@ -1,0 +1,53 @@
+name: CI
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    name: Build & Test
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          node-version: 18.x
+      - name: Build
+        run: yarn --skip-integrity-check --network-timeout 100000
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
+      - name: Check for uncommitted changes in yarn.lock
+        run: |
+          if git diff --name-only | grep -q "^yarn.lock"; then
+            echo "::error::The yarn.lock file has uncommitted changes!"
+            exit 1
+          fi
+      - name: Create eslint json report
+        run: |
+          yarn lint:ci
+
+      - name: Create summary
+        run: |
+          npm_config_yes=true npx github:10up/eslint-json-to-md#82ff16b --path ./eslint_report.json --output ./eslint_report.md
+          cat eslint_report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Build browser
+        run: yarn build
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - name: Cache Build Output
+        uses: actions/cache/save@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
+        with:
+          path: dist
+          key: build-cache-${{ github.sha }}

@@ -1,0 +1,8 @@
+name: Close stale issues and PRs
+on:
+  schedule:
+    - cron: '30 1 * * *'
+
+jobs:
+  stale:
+    uses: eclipse-daanse/.github/.github/workflows/reuse_all_stale_bot.yml@main

@@ -1,0 +1,15 @@
+name: License Header Check
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  validate:
+    uses: eclipse-daanse/.github/.github/workflows/reuse_all_check_license_header.yml@main
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}

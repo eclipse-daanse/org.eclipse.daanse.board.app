@@ -1,0 +1,36 @@
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_size = 2
+indent_style = space
+trim_trailing_whitespace = true
+
+[*.{xml,xmi,json,yml,yaml}]
+indent_size = 2
+
+[{LICENSE,*.md,*.g4}]
+indent_size = unset
+
+[license.templates]
+indent_size = unset
+trim_trailing_whitespace = unset
+
+[Makefile]
+indent_style = tab
+
+[**/*.{ecore,genmodel}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+

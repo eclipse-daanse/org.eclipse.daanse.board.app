@@ -1,0 +1,19 @@
+name: Eclipse-Dash IP-Check
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  issue_comment:
+    types: [created]
+
+jobs:
+  call-license-check:
+    permissions:
+      pull-requests: write
+    uses: eclipse-daanse/.github/.github/workflows/reuse_all_check_eclipse_ip.yml@main
+    secrets:
+      GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}

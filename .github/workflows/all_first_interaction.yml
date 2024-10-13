@@ -1,0 +1,15 @@
+name: First Interaction
+
+on:
+  issues:
+    types:
+      - opened
+  pull_request_target:
+    types:
+      - opened
+
+jobs:
+  trigger-workflow:
+    uses: eclipse-daanse/.github/.github/workflows/reuse_all_first_interaction.yml@main
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}
