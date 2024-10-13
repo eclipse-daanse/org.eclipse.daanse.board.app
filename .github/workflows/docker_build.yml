@@ -26,6 +26,14 @@ jobs:
           restore-keys: |
             build-cache-
 
+      - name: Update dockerhub repo description
+        uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          repository: eclipsedaanse/board
+          readme-filepath: Docker/README.md
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.1
         with:
@@ -60,10 +68,3 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/board:latest
             ghcr.io/${{ github.repository_owner }}/board:${{ github.sha }}
 
-      - name: Update dockerhub repo description
-        uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4.0.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-          repository: eclipsedaanse/board
-          readme-filepath: Docker/README.md

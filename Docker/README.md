@@ -1,7 +1,3 @@
-Certainly! Here is the updated `README.md` in English for your Docker image:
-
----
-
 # Eclipse Daanse - Board
 
 **Eclipse Daanse - Board** is a web client-only analysis, dashboarding, and reporting platform for analyzing data. This Docker image allows you to easily deploy the application in a containerized environment.
