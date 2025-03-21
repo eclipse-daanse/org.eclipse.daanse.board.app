@@ -1,4 +1,9 @@
-# Logs
+src/*
+src
+.github/*
+Docker/*
+e2e/*
+
 logs
 *.log
 npm-debug.log*
@@ -9,8 +14,6 @@ lerna-debug.log*
 
 node_modules
 .DS_Store
-dist
-dist-ssr
 coverage
 *.local
 
@@ -19,7 +22,6 @@ coverage
 
 # Editor directories and files
 .vscode/*
-!.vscode/extensions.json
 .idea
 *.suo
 *.ntvs*
@@ -31,5 +33,21 @@ coverage
 
 test-results/
 playwright-report/
-out
-.vite
+
+.vite/*
+
+.editorconfig
+.licenserc.yaml
+.prettierrc.json
+env.d.ts
+eslint.config.mjs
+eslint_report.md
+index.html
+playwright.config.ts
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+tsconfig.vitest.json
+vite.config.ts
+vitest.config.ts
+license.templates

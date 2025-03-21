@@ -47,5 +47,6 @@ header:
     - '**/logback-test.xml'
     - '**/*.svg'
     - 'yarn.lock'
+    - '.npmignore'
 
   comment: always
