@@ -1,7 +1,7 @@
 {
   "name": "@eclipse-daanse/board.app",
   "version": "0.0.1-next.1",
-  "private": false,
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,16 +9,18 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
-    "build-only": "vite build",
+    "build-only": "lerna run build --stream",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
     "lint:ci": "yarn lint --output-file eslint_report.json --format json",
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "inversify": "^7.1.0",
     "pinia": "^2.2.4",
     "vue": "^3.5.11",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",
@@ -36,15 +38,19 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-vue": "^9.28.0",
     "jsdom": "^25.0.1",
+    "lerna": "^7.4.2",
     "npm-run-all2": "^6.2.3",
     "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
     "vite": "^5.4.8",
     "vitest": "^2.1.2",
-    "vue-tsc": "^2.1.6",
-    "lerna": "^7.1.1"
+    "vue-tsc": "^2.1.6"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "volta": {
-    "node": "18.12.0"
+    "node": "18.18.0"
   }
 }
