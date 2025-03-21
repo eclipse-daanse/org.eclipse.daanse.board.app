@@ -43,8 +43,8 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.2",
+    "vite": "^5.4.12",
+    "vitest": "^2.1.9",
     "vue-tsc": "^2.1.6"
   },
   "workspaces": [
