@@ -1,10 +1,14 @@
 {
   "name": "@test-daanse/board.app",
-  "version": "0.0.1-next.10",
+  "version": "0.0.2",
   "private": false,
-  "type": "module",
+  "main": ".vite/build/electron.js",
   "scripts": {
-    "electron:start": "electron ./src/electron.ts",
+    "e:start": "electron-forge start",
+    "e:package": "electron-forge package",
+    "e:make": "electron-forge make",
+    "e:publish": "electron-forge publish",
+    "e:lint": "eslint --ext .ts,.tsx .",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -19,9 +23,19 @@
   "dependencies": {
     "pinia": "^2.2.4",
     "vue": "^3.5.11",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.5.0",
+    "@electron-forge/maker-deb": "^7.5.0",
+    "@electron-forge/maker-rpm": "^7.5.0",
+    "@electron-forge/maker-squirrel": "^7.5.0",
+    "@electron-forge/maker-zip": "^7.5.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
+    "@electron-forge/plugin-fuses": "^7.5.0",
+    "@electron/fuses": "^1.8.0",
+    "@electron-forge/plugin-vite":"^7.5.0",
     "@playwright/test": "^1.48.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.7",
@@ -44,7 +58,8 @@
     "typescript": "~5.5.4",
     "vite": "^5.4.8",
     "vitest": "^2.1.2",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^2.1.6",
+    "ts-node": "^10.9.2"
   },
   "volta": {
     "node": "18.18.0"

@@ -20,13 +20,19 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      webSecurity: false
+      //preload: path.join(__dirname, 'preload.js')
     }
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-
+  //mainWindow.loadFile('../dist/index.html')
+ // if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+ //   console.log(MAIN_WINDOW_VITE_DEV_SERVER_URL)
+ //   mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+ // } else {
+    mainWindow.loadFile(path.join(__dirname, `../../dist/index.html`));
+  //}
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
