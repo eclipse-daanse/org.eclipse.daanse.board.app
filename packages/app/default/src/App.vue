@@ -1,6 +1,16 @@
+<!--
+Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+SPDX-License-Identifier: EPL-2.0
+
+Contributors: Smart City Jena
+
+-->
+
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import { SampleWidget } from "org.eclipse.daanse.board.app.ui.vue.widget.sample"
 import { container } from "org.eclipse.daanse.board.app.lib.core"
 import { ref } from "vue";
@@ -22,10 +32,6 @@ console.log(string);
       <!-- <HelloWorld msg="You did it!" /> -->
       <SampleWidget />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
       <div>
         {{ string }}
       </div>
