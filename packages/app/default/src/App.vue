@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 -->
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+
 import { SampleWidget } from "org.eclipse.daanse.board.app.ui.vue.widget.sample"
 import { container } from "org.eclipse.daanse.board.app.lib.core"
 import { ref } from "vue";
@@ -38,7 +38,6 @@ console.log(string);
     </div>
   </header>
 
-  <RouterView />
 </template>
 
 <style scoped>

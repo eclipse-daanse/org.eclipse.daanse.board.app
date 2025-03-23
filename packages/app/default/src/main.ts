@@ -17,10 +17,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 // import router from './router'
 
-import { register } from "org.eclipse.daanse.board.app.lib.module1";
+
+
+import { init } from "org.eclipse.daanse.board.app.lib.module1";
 import { container } from "org.eclipse.daanse.board.app.lib.core";
 
-register(container);
+
+init(container);
+
 
 const app = createApp(App)
 

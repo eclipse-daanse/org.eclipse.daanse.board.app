@@ -22,11 +22,11 @@ class Module1 {
     }
 }
 
-const register = (container: Container) => {
+const init = (container: Container) => {
     const instance = new Module1();
     container.bind("Default").toConstantValue(instance);
 }
 
 export {
-    register
+  init
 }
