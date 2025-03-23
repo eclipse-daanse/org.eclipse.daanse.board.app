@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "2.2.1",
+  "version": "1.0.0",
   "npmClient": "yarn",
   "command": {
     "run": {
@@ -8,8 +8,10 @@
     },
     "publish": {
       "forcePublish": true,
-      "skipGit": true,
-      "registry": "https://registry.npmjs.org/"
+      "registry": "https://registry.npmjs.org/",
+      "push": false,
+      "gitTagVersion": false
     }
-  }
+  },
+  "packages": ["packages/**"]
 }

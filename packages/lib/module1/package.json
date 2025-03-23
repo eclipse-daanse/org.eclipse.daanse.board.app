@@ -1,0 +1,28 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.module1",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "ssemenkoff <ssemenkoff@gmail.com>",
+  "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "main": "./dist/lib.module1.umd.cjs",
+  "module": "./dist/lib.module1.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssemenkoff/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
+    "inversify": "7.2.0",
+    "vite-plugin-dts": "4.5.3"
+  }
+}
