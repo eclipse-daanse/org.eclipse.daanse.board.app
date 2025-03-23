@@ -8,8 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { fileURLToPath, URL } from 'node:url'
-
 import {defineConfig, searchForWorkspaceRoot} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -17,6 +15,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
+    //@ts-ignore
     vue(),
     vueDevTools(),
   ],

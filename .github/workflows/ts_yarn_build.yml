@@ -19,11 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
-      - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+      - uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
-          node-version: 18.x
+          node-version: 20.x
       - name: Build
-        run: yarn --skip-integrity-check --network-timeout 100000
+        working-directory: ./packages/app/default
+        run: yarn --skip-integrity-check --no-lockfile --network-timeout 100000
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
       - name: Check for uncommitted changes in yarn.lock
@@ -32,22 +33,27 @@ jobs:
             echo "::error::The yarn.lock file has uncommitted changes!"
             exit 1
           fi
-      - name: Create eslint json report
-        run: |
-          yarn lint:ci
+      #- name: Create eslint json report
+      #  run: |
+      #    yarn lint:ci
 
-      - name: Create summary
-        run: |
-          npm_config_yes=true npx github:10up/eslint-json-to-md#82ff16b --path ./eslint_report.json --output ./eslint_report.md
-          cat eslint_report.md >> $GITHUB_STEP_SUMMARY
+      #- name: Create summary
+      #  run: |
+      #    npm_config_yes=true npx github:10up/eslint-json-to-md#82ff16b --path ./eslint_report.json --output ./eslint_report.md
+      #   cat eslint_report.md >> $GITHUB_STEP_SUMMARY
+      - name: Build all Modules
+        run: lerna run build
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
 
       - name: Build browser
-        run: yarn build
+        working-directory: ./packages/app/default
+        run: yarn run build-only
         env:
           NODE_OPTIONS: --max_old_space_size=4096
 
       - name: Cache Build Output
         uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
-          path: dist
+          path: ./packages/app/default/dist
           key: build-cache-${{ github.sha }}

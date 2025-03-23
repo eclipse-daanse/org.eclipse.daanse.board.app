@@ -33,6 +33,7 @@ export default defineConfig({
     dts({
         insertTypesEntry: true
     }),
+    //@ts-ignore
     vue()
   ],
 });

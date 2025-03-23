@@ -1,6 +1,6 @@
 {
   "name": "org.eclipse.daanse.board.app.ui.vue.widget.sample",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "> TODO: description",
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
   "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
@@ -28,8 +28,9 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.3",
     "vue": "^3.5.13",
-    "vue-tsc": "^2.2.8",
-    "vite-plugin-dts": "4.5.3"
-  }
+    "vue-tsc": "^2.2.8"
+  },
+  "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd"
 }
