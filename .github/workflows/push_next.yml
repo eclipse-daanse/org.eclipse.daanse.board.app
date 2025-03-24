@@ -15,7 +15,7 @@ jobs:
   build:
     name: Build & Release
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success')
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success') && ${{ startsWith(github.repository, 'eclipse-daanse/') && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') }}
     env:
       changes: true
     steps:
@@ -36,21 +36,17 @@ jobs:
         if: github.event_name == 'workflow_run'
       - uses: actions/setup-node@v4.0.2
         with:
-          node-version: 18.x
+          node-version: 20.x
           registry-url: 'https://registry.npmjs.org'
         if: env.changes == 'true'
       - uses: actions/setup-python@v5.1.0
         with:
           python-version: '3.11'
         if: env.changes == 'true'
-      - name: Build
-        run: yarn --skip-integrity-check --network-timeout 100000
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
-        if: env.changes == 'true'
       - name: Publish NPM
-        run: yarn publish:next
+        run: lerna publish from-package --dist-tag next -y
         env:
           NPM_CONFIG_PROVENANCE: 'true'
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
         if: env.changes == 'true'
+
