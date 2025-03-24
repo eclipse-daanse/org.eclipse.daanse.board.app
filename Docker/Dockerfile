@@ -19,7 +19,7 @@ FROM nginxinc/nginx-unprivileged:alpine-slim
 COPY Docker/nginx.conf /etc/nginx/nginx.conf
 
 # add application artifact
-COPY dist /usr/share/nginx/html
+COPY packages/app/default/dist /usr/share/nginx/html
 
 # export port 8080
 EXPOSE 8080
