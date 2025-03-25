@@ -8,7 +8,7 @@
   "main": "lib/test.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ssemenkoff/org.eclipse.daanse.board.app.git"
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
     "dev": "vite",
@@ -24,7 +24,7 @@
     "format": "prettier --write src/"
   },
   "bugs": {
-    "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.core": "^0.0.1",

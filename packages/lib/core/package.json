@@ -11,13 +11,13 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ssemenkoff/org.eclipse.daanse.board.app.git"
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
     "build": "vite build"
   },
   "bugs": {
-    "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
     "inversify": "7.2.0",
