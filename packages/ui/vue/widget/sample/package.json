@@ -32,5 +32,8 @@
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.8"
   },
-  "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd"
+  "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
+  "publishConfig": {
+    "access": "public"
+  }
 }
