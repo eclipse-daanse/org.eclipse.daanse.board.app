@@ -1,3 +1,16 @@
+/*********************************************************************
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+
 // import { extractDataByPath } from "@/utils/helpers";
 import BaseDatasource, { IBaseConnectionConfiguration } from "org.eclipse.daanse.board.app.lib.datasource.base";
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
@@ -15,104 +28,104 @@ export default class RestStore extends BaseDatasource {
   // private computedUrl: ComputedVariable;
 
   constructor(configuration: IRestStoreConfiguration) {
-    super(configuration);
+    // super(configuration);
 
-    this.connection = configuration.connection;
+    // this.connection = configuration.connection;
+    // // this.resourceUrl = configuration.resourceUrl;
+
+    // // this.resourceUrl = super.initVariable(configuration.resourceUrl);
     // this.resourceUrl = configuration.resourceUrl;
 
-    // this.resourceUrl = super.initVariable(configuration.resourceUrl);
-    this.resourceUrl = configuration.resourceUrl;
-
-    this.selectedJSONValue = configuration.selectedJSONValue;
-    this.pollingInterval = configuration.pollingInterval ?? 5000;
-    if (this.pollingEnabled) {
-        this.startPolling(this.pollingInterval);
-    }
+    // this.selectedJSONValue = configuration.selectedJSONValue;
+    // this.pollingInterval = configuration.pollingInterval ?? 5000;
+    // if (this.pollingEnabled) {
+    //     this.startPolling(this.pollingInterval);
+    // }
   }
 
 //   async getData<T extends keyof DataMap>(type: T): Promise<DataMap[T]> {
   async getData(type: string): Promise<any> {
-    let response = null;
-    const connectionRepository = this.connectionRepository;
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes');
-    }
-    try {
-      const connection = connectionRepository.getConnection(this.connection) as IConnection;
-      const req = await connection.fetch({ url: this.resourceUrl.value });
-      const data = await req.json();
+    // let response = null;
+    // const connectionRepository = this.connectionRepository;
+    // if (!connectionRepository) {
+    //   throw new Error('ConnectionRepository is not provided to Store Classes');
+    // }
+    // try {
+    //   const connection = connectionRepository.getConnection(this.connection) as IConnection;
+    //   const req = await connection.fetch({ url: this.resourceUrl.value });
+    //   const data = await req.json();
 
-    //   if (this.selectedJSONValue) {
-    //     response = extractDataByPath(data, this.selectedJSONValue);
+    // //   if (this.selectedJSONValue) {
+    // //     response = extractDataByPath(data, this.selectedJSONValue);
+    // //   }
+
+    //   if (type === 'DataTable') {
+    //     response = this.parseToDataTable(response);
+    //   } else if (type === 'object') {
+    //     // Do nothing
+    //   } else if (type === 'string') {
+    //     response = JSON.stringify(response);
     //   }
 
-      if (type === 'DataTable') {
-        response = this.parseToDataTable(response);
-      } else if (type === 'object') {
-        // Do nothing
-      } else if (type === 'string') {
-        response = JSON.stringify(response);
-      }
-
-      return response;
-    } catch (e: any) {
-      console.log(e);
-      console.warn("Invalid resource URL", e.name);
-    }
-    return response as unknown as DataMap[T];
+    //   return response;
+    // } catch (e: any) {
+    //   console.log(e);
+    //   console.warn("Invalid resource URL", e.name);
+    // }
+    // return response as unknown as DataMap[T];
   }
 
   async getOriginalData() {
-    const connectionRepository = this.connectionRepository;
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes');
-    }
-    try {
-      const connection = connectionRepository.getConnection(this.connection) as IConnection;
-      const req = await connection.fetch({ url: this.resourceUrl.value });
-      const data = await req.json();
+    // const connectionRepository = this.connectionRepository;
+    // if (!connectionRepository) {
+    //   throw new Error('ConnectionRepository is not provided to Store Classes');
+    // }
+    // try {
+    //   const connection = connectionRepository.getConnection(this.connection) as IConnection;
+    //   const req = await connection.fetch({ url: this.resourceUrl.value });
+    //   const data = await req.json();
 
-      return data;
-    } catch (e: any) {
-      console.warn("Invalid resource URL", e.name)
-    }
+    //   return data;
+    // } catch (e: any) {
+    //   console.warn("Invalid resource URL", e.name)
+    // }
   }
 
   parseToDataTable(data: any): IDataTable {
-    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
+    // if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
 
-    const headers: string[] = ['index'];
-    const rows: any[] = [];
+    // const headers: string[] = ['index'];
+    // const rows: any[] = [];
 
-    const items = data.map((item: any, index: number) => {
-      if (typeof item !== 'object') return {};
+    // const items = data.map((item: any, index: number) => {
+    //   if (typeof item !== 'object') return {};
 
-      const row: IDataTableRow = {
-        index
-      };
+    //   const row: IDataTableRow = {
+    //     index
+    //   };
 
-      for (const key in item) {
-        if (typeof item[key] === 'object' || Array.isArray(item[key])) continue;
+    //   for (const key in item) {
+    //     if (typeof item[key] === 'object' || Array.isArray(item[key])) continue;
 
-        if (!headers.includes(key)) {
-          headers.push(key);
-        }
+    //     if (!headers.includes(key)) {
+    //       headers.push(key);
+    //     }
 
-        row[key] = item[key];
-      }
+    //     row[key] = item[key];
+    //   }
 
-      return row;
-    });
+    //   return row;
+    // });
 
-    items.forEach((item: IDataTableRow, index:number) => {
-      rows[index] = [];
+    // items.forEach((item: IDataTableRow, index:number) => {
+    //   rows[index] = [];
 
-      headers.forEach((header: string) => {
-        rows[index].push(item[header]);
-      })
-    })
+    //   headers.forEach((header: string) => {
+    //     rows[index].push(item[header]);
+    //   })
+    // })
 
-    return { items, headers, rows };
+    // return { items, headers, rows };
   }
 
   callEvent(event: string, params: any) {
