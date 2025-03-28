@@ -43,5 +43,8 @@
     "@electron-forge/publisher-github": "^7.8.0",
     "electron-squirrel-startup": "^1.0.1",
     "org.eclipse.daanse.board.app.app.default": "^0.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
