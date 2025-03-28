@@ -9,9 +9,11 @@ Contributors: Smart City Jena
 */
 
 import { Container } from "inversify";
+import identifiers from "./indetifiers";
 
 const container = new Container();
 
 export {
-    container
+    container,
+    identifiers
 }

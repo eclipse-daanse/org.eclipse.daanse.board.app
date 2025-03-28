@@ -5516,6 +5516,21 @@ ora@^5.4.1:
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
 
+org.eclipse.daanse.board.app.lib.core@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/org.eclipse.daanse.board.app.lib.core/-/org.eclipse.daanse.board.app.lib.core-0.0.1.tgz#3204aea3be7c7867d4fe3a93f1404b24fa29eb20"
+  integrity sha512-wMT60Q3OXchgQJmFjbdQpErgExHdItlW7hwmCeh7hwHzGiVMXN5UYggFVHuf3E5Ura10KB81i6AyeETx83WK7g==
+
+org.eclipse.daanse.board.app.lib.module1@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/org.eclipse.daanse.board.app.lib.module1/-/org.eclipse.daanse.board.app.lib.module1-0.0.1.tgz#d2fa4663697a4fbcfac718b3d0eab9b5ce8b9426"
+  integrity sha512-mZ9bVqlaaGcnO9U99eanmAq5LAX/29pfWxtHv0zc0CnJfcyc6G3dvnojiLVEMFadMa2MbQSb7fumkya3gwqDww==
+
+org.eclipse.daanse.board.app.ui.vue.widget.sample@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/org.eclipse.daanse.board.app.ui.vue.widget.sample/-/org.eclipse.daanse.board.app.ui.vue.widget.sample-0.0.1.tgz#a0c4fa2c393ee89a9edb38cb53f1a261db6c71da"
+  integrity sha512-DtTCkBtEMxVEV1E1VeootMmgDzkK7GUUiLpwZBQT4zgoadkjEnw8ZmaENYCS+jJp3dMh3BGd+Ovnuyu8EzoRcA==
+
 os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
@@ -6699,6 +6714,11 @@ through@2, "through@>=2.2.7 <3", through@^2.3.4, through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tiny-emitter@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+  integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
 
 tinybench@^2.9.0:
   version "2.9.0"
