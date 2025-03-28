@@ -14,6 +14,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 
 export default defineConfig({
+  base: './',
   plugins: [
     //@ts-ignore
     vue(),
@@ -22,8 +23,7 @@ export default defineConfig({
   resolve: {
     alias:
       [
-        {find:'@',replacement: "/src" },
-       // {find:'org.eclipse.daanse.board.app.lib.module1',replacement: "packages/lib/module1/" }
+        {find:'@',replacement: "/src" }
       ],
 
   },
