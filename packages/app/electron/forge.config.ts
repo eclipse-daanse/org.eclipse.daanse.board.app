@@ -39,7 +39,7 @@ const config: ForgeConfig = {
       config: {
         repository: {
           owner: 'eclipse-daanse',
-          name: 'org.eclipse.daanse.board.app'
+          name: 'org.eclipse.daanse.board.app',
         },
         prerelease: true
       }
