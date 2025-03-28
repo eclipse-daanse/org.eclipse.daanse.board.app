@@ -1,6 +1,6 @@
 {
   "name": "org.eclipse.daanse.board.app.app.default",
-  "version": "0.0.1",
+  "version": "0.0.1-next.1",
   "description": " TODO: description",
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
   "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
@@ -27,9 +27,9 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "org.eclipse.daanse.board.app.lib.core": "^0.0.1",
-    "org.eclipse.daanse.board.app.lib.module1": "^0.0.1",
-    "org.eclipse.daanse.board.app.ui.vue.widget.sample": "^0.0.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.module1": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.widget.sample": "^0.0.1-next.1",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
