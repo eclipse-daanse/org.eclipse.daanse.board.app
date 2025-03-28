@@ -35,6 +35,6 @@ jobs:
 
       - name: Publish Electron app
         working-directory: ./packages/app/electron
-        run: yarn run publsh
+        run: yarn run publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
