@@ -8,12 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { Container } from "inversify";
-import identifiers from "./indetifiers";
+import RestWidget from './RestWidget.vue'
 
-const container = new Container();
-
-export {
-    container,
-    identifiers
-}
+export { RestWidget };

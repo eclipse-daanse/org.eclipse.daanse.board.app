@@ -20,7 +20,7 @@ const boot = async (listOfPackages:string[])=> {
     for (const pack of listOfPackages){
         try{
 
-          let {init} = await import( /* @vite-ignore */ pack);
+          const {init} = await import( /* @vite-ignore */ pack);
           await init(container);
 
         }catch (e){
