@@ -24,12 +24,12 @@ jobs:
         with:
           node-version: 20.x
       - name: Build
-        working-directory: ./packages/app/default
+        working-directory: ./packages/app/electron
         run: yarn --skip-integrity-check --no-lockfile --network-timeout 100000
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
       - name: Build
-        working-directory: ./packages/app/default
+        working-directory: ./packages/app/electron
         run: yarn run copy_app_files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://github.com/microsoft/vscode-ripgrep/issues/9
