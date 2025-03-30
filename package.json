@@ -38,13 +38,13 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-vue": "^9.28.0",
     "jsdom": "^25.0.1",
-    "lerna": "^7.4.2",
+    "lerna": "^8.2.1",
     "npm-run-all2": "^6.2.3",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
-    "vite": "^5.4.12",
-    "vitest": "^2.1.9",
+    "vite": "6.2.3",
+    "vitest": "^3.0.9",
     "vue-tsc": "^2.1.6"
   },
   "workspaces": [
