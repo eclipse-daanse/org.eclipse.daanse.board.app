@@ -11,10 +11,12 @@ on:
 
 permissions:
   id-token: write
+  contents: write
 jobs:
   release:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ macos-latest, ubuntu-latest, windows-latest ]
 
