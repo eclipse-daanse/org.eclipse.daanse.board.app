@@ -1,9 +1,9 @@
 {
-  "name": "org.eclipse.daanse.board.app.lib.core",
+  "name": "org.eclipse.daanse.board.app.lib.datasource.rest",
   "version": "0.0.1-next.1",
   "description": "> TODO: description",
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
-  "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
   "license": "ISC",
   "main": "./dist/lib.core.umd.cjs",
   "module": "./dist/lib.core.js",
@@ -14,11 +14,13 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build",
-    "test": "node ./__tests__/test.test.js"
+    "build": "vite build"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.datasource.base": "^0.0.1-next.1"
   },
   "devDependencies": {
     "inversify": "7.2.0",
