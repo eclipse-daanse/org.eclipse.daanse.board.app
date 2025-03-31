@@ -17,18 +17,12 @@
 // import type DatasourceRepository from "./DatasourceRepository";
 
 export interface IBaseConnectionConfiguration {
-//   connectionRepository: ConnectionRepository;
-//   datasourceRepository: DatasourceRepository;
-//   variableStorage: VariableStorage;
   [key: string]: any;
 }
 
 // export default abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable {
-export default abstract class BaseDatasource {
+export abstract class BaseDatasource {
   private subscribers: any[] = [];
-//   protected datasourceRepository: DatasourceRepository;
-//   protected connectionRepository: ConnectionRepository;
-//   protected variableStorage: VariableStorage;
 
   protected pollingInterval: number = 5000;
   private pollingActive = false;
@@ -43,9 +37,6 @@ export default abstract class BaseDatasource {
     //   this.notify();
     // })
 
-    // this.datasourceRepository = configuration.datasourceRepository;
-    // this.connectionRepository = configuration.connectionRepository;
-    // this.variableStorage = configuration.variableStorage;
     this.pollingEnabled = configuration.pollingEnabled ?? false;
   }
 
