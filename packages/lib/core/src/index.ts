@@ -8,10 +8,13 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { Container } from "inversify";
+import { Container } from 'inversify'
 
-const container = new Container();
-
-export {
-    container
+const identifiers = {
+  TINY_EMITTER: Symbol.for('TINY_EMITTER'),
+  CONTAINER: Symbol.for('CONTAINER'),
 }
+
+const container = new Container()
+
+export { container, identifiers }
