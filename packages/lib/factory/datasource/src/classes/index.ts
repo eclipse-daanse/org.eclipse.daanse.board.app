@@ -15,7 +15,7 @@ import { injectable, inject, Container } from 'inversify'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface StoreConstructor<T> {
-  new (config: any): T;
+  new (config: any, container: Container): T;
   validateConfiguration: (config: any) => boolean;
 }
 
@@ -28,7 +28,7 @@ export class DatasourceFactory {
         if (ctor.validateConfiguration(configuration)) {
             return new ctor({
                 ...configuration
-            });
+            }, this.container);
         } else {
             console.warn('Invalid configuration', configuration);
             return null as unknown as T;
