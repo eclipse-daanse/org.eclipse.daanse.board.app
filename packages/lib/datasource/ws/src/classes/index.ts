@@ -12,7 +12,9 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
+import { injectable, inject, Container } from 'inversify'
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
@@ -25,8 +27,9 @@ export class WSStore extends BaseDatasource {
   private accumulatedData: any[] = []
   private topic = ''
 
-  constructor(configuration: IWSStoreConfiguration) {
-    super(configuration)
+  constructor(configuration: IWSStoreConfiguration,
+    @inject(identifiers.CONTAINER) private container: Container,) {
+    super(configuration, container)
 
     this.connection = configuration.connection
 

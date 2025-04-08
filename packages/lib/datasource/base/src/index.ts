@@ -11,6 +11,9 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { Container } from "inversify";
+import { UsesComputedVariable } from "org.eclipse.daanse.board.app.lib.variables";
+
 // import type { VariableStorage } from "../variables/VariableStorage";
 // import type ConnectionRepository from "./ConnectionRepository";
 // import UsesComputedVariable from "./connections/UsesComputedVariable";
@@ -21,7 +24,7 @@ export interface IBaseConnectionConfiguration {
 }
 
 // export default abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable {
-export abstract class BaseDatasource {
+export abstract class BaseDatasource extends UsesComputedVariable {
   private subscribers: any[] = [];
 
   protected pollingInterval: number = 5000;
@@ -29,13 +32,13 @@ export abstract class BaseDatasource {
   private pollingIntervalId: number | null = null;
   protected pollingEnabled!: boolean;
 
-  constructor(configuration: IBaseConnectionConfiguration) {
-    // super(configuration);
+  constructor(configuration: IBaseConnectionConfiguration, container: Container) {
+    super(container);
 
-    // this.setUpdateCb(() => {
-    //   console.log("Test notify");
-    //   this.notify();
-    // })
+    this.setUpdateCb(() => {
+      console.log("Test notify");
+      this.notify();
+    })
 
     this.pollingEnabled = configuration.pollingEnabled ?? false;
   }

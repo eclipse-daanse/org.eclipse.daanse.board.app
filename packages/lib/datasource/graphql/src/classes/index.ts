@@ -40,7 +40,7 @@ export class GraphQLStore extends BaseDatasource {
     configuration: IGraphQLStoreConfiguration,
     @inject(identifiers.CONTAINER) private container: Container,
   ) {
-    super(configuration)
+    super(configuration, container)
 
     this.connection = configuration.connection
     this.query = configuration.query

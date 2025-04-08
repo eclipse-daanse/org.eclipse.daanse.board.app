@@ -43,7 +43,7 @@ export class RssStore extends BaseDatasource {
     configuration: IRssStoreConfiguration,
     @inject(identifiers.CONTAINER) private container: Container,
   ) {
-    super(configuration)
+    super(configuration, container)
 
     this.connection = configuration.connection
   }

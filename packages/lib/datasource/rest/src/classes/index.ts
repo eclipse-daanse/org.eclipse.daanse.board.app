@@ -42,7 +42,7 @@ export class RestStore extends BaseDatasource {
     configuration: IRestStoreConfiguration,
     @inject(identifiers.CONTAINER) private container: Container,
   ) {
-    super(configuration)
+    super(configuration, container)
 
     console.log(container)
     this.connection = configuration.connection

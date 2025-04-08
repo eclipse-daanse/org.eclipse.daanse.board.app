@@ -46,7 +46,7 @@ export class CsvStore extends BaseDatasource {
     configuration: ICsvStoreConfiguration,
     @inject(identifiers.CONTAINER) private container: Container,
   ) {
-    super(configuration)
+    super(configuration, container)
 
     this.connection = configuration.connection
 
