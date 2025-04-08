@@ -21,6 +21,7 @@ import {
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
+import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
 export interface IRestStoreConfiguration {
   resourceUrl: string
@@ -75,9 +76,9 @@ export class RestStore extends BaseDatasource {
       response = data
 
       // TODO: Restore after creating utils
-      // if (this.selectedJSONValue) {
-      //   response = extractDataByPath(data, this.selectedJSONValue);
-      // }
+      if (this.selectedJSONValue) {
+        response = helpers.extractDataByPath(data, this.selectedJSONValue);
+      }
       if (type === 'DataTable') {
         response = this.parseToDataTable(response)
       } else if (type === 'object') {

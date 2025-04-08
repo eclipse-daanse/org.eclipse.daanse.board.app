@@ -23,6 +23,7 @@ import {
   type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
 export interface ICsvStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl: string
@@ -57,7 +58,7 @@ export class CsvStore extends BaseDatasource {
     }
   }
 
-  async getOriginalData() {
+  async getOriginalData(): Promise<any> {
     const connectionRepository = this.container.get(
       identifier,
     ) as ConnectionRepository
@@ -71,10 +72,8 @@ export class CsvStore extends BaseDatasource {
     if (!req.ok) return []
     const text = await req.text()
 
-    // TODO: fix after adding utils
-    // const data = CSV.parse(text);
-    // return data;
-    return text
+    const data = helpers.csv.parse(text);
+    return data;
   }
 
   async getData(type: string): Promise<any> {
@@ -90,14 +89,13 @@ export class CsvStore extends BaseDatasource {
     const req = await connection.fetch({ url: this.resourceUrl })
     if (!req.ok) return null
     const text = await req.text()
-    // const data: ICsvParseResult = CSV.parse(text);
+    const data: ICsvParseResult = helpers.csv.parse(text);
     if (type === 'DataTable') {
-      // return {
-      //   headers: data.header,
-      //   items: data.mappedRows,
-      //   rows: data.rows,
-      // } as IDataTable as DataMap[T];
-      return text
+      return {
+        headers: data.header,
+        items: data.mappedRows,
+        rows: data.rows,
+      };
     } else {
       console.warn('Invalid data type')
       return null
