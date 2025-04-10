@@ -3,7 +3,7 @@
   "version": "0.0.1-next.1",
   "description": "> TODO: description",
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
-  "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
   "license": "ISC",
   "type": "module",
   "main": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.sample.umd.cjs",
@@ -21,10 +21,16 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "bugs": {
-    "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.11",
+    "@types/uuid": "9.0.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
