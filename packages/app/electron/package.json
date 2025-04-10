@@ -37,7 +37,7 @@
     "copyfiles": "^2.4.1",
     "electron": "35.1.2",
     "env-cmd": "^10.1.0",
-    "eslint": "^8.57.1",
+    "eslint": "^9.24.0",
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
     "typescript": "~4.5.4",
