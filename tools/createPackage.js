@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url';
 import path,{ dirname } from 'path';
 import {exec} from "node:child_process";
 import {vite} from "./vite.config.js";
+import {readme} from "./README.md.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -100,6 +101,15 @@ try {
 } catch (err) {
   console.error(err)
   console.log(error('couldn t vite.config.ts'));
+  process.exit(1);
+}
+console.log(notice('create README.md...'))
+try {
+  fs.writeFileSync('README.md', readme(config))
+  console.log(notice('[✓]'))
+} catch (err) {
+  console.error(err)
+  console.log(error('couldn t create README.md'));
   process.exit(1);
 }
 
