@@ -15,7 +15,17 @@ import * as fs from "fs";
 interface CuePoint{
   name:string,
   test:string,
-  time:number
+  time:number,
+  absTime:number,
+  description?:string,
+  bBox?:bBox
+}
+interface bBox{
+  x:number,
+  y:number,
+  w:number,
+  h:number
+  margin:number
 }
 interface Screenshot{
   path:string,
@@ -56,10 +66,14 @@ export class ScreenShotter {
     this.startTime = new Date().getTime();
     await this.makeCuePoint(page,'start');
   }
-  async makeCuePoint(page:Page ,name=''){
+  async makeCuePoint(page:Page ,name='',description?:string,bbox?:bBox){
     //const now = await page.evaluate(() =>  new Date().getTime())
     const now = new Date().getTime();
-    this.cuePoints.push({name:`${name}`,test:`${this.prefix}${this.name}${this.suffix}`,time:now-this.startTime})
+    const cue:CuePoint = {name:`${name}`,test:`${this.prefix}${this.name}${this.suffix}`,time:now-this.startTime,absTime:now};
+    if(description) cue.description= description
+    if(bbox) cue.bBox= bbox
+
+    this.cuePoints.push(cue)
   }
 
   async generateJsonSummery(page:Page,_path='/test_output/screenshots.json'){

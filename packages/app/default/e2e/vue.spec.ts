@@ -25,7 +25,14 @@ test('Test1', async ({ page },testInfo) => {
   await page.goto('/');
 
   await screenShotter.takeScreenshot(page,'my_first_Screenshot',false);
-  await screenShotter.makeCuePoint(page,'my_firstCuePoint1')
+  await screenShotter.makeCuePoint(page,'my_firstCuePoint1','a Cue living a long time ago form start',
+    {
+      x:20,
+      y:20,
+      w:100,
+      h:100,
+      margin:20
+    })
   await screenShotter.makeCuePoint(page,'my_secCuePoint2')
   await screenShotter.makeCuePoint(page,'my_terCuePoint3')
 
