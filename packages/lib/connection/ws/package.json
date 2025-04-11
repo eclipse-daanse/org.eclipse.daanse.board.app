@@ -24,7 +24,7 @@
     "org.eclipse.daanse.board.app.lib.connection.twowayconnection": "^0.0.1-next.1"
   },
   "devDependencies": {
-    "inversify": "7.2.0",
+    "inversify": "7.5.0",
     "typescript": "^5.8.2",
     "vite": "^6.2.3",
     "vite-plugin-dts": "4.5.3"
