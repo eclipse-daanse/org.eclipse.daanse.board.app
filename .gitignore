@@ -30,6 +30,7 @@ coverage
 *.tsbuildinfo
 
 test-results/
+test_output/
 playwright-report/
 .vite
 package-lock.json

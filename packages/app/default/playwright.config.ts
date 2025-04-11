@@ -9,7 +9,8 @@ Contributors: Smart City Jena
 */
 
 import process from 'node:process'
-import { defineConfig, devices } from '@playwright/test'
+import {chromium, defineConfig, devices} from '@playwright/test'
+import path from "node:path";
 
 /**
  * Read environment variables from file.
@@ -22,6 +23,7 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
   testDir: './e2e',
+  outputDir:  path.join(__dirname,'../../..','test_output'),
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
@@ -39,7 +41,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /* Shared settings for all the projects below.
+  See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
@@ -51,28 +54,33 @@ export default defineConfig({
 
     /* Only on CI systems run the tests headless */
     headless: !!process.env.CI,
+    video: 'on',
   },
 
   /* Configure projects for major browsers */
   projects: [
+
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
       },
+      testMatch: /.*\.spec\.ts/,
     },
-    {
+
+
+    /*{
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
       },
-    },
-    {
+    },*/
+    /*{
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
       },
-    },
+    },*/
 
     /* Test against mobile viewports. */
     // {

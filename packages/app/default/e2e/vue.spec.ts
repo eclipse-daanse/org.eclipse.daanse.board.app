@@ -9,10 +9,28 @@ Contributors: Smart City Jena
 */
 
 import { test, expect } from '@playwright/test';
+import {ScreenShotter} from "../../../../tools/test/screenshoter/screenshoter";
+
+
 
 // See here how to get started:
 // https://playwright.dev/docs/intro
-test('visits the app root url', async ({ page }) => {
+
+
+
+
+test('Test1', async ({ page },testInfo) => {
+  let screenShotter = new ScreenShotter(testInfo);
+  await screenShotter.startStopWatch(page)
   await page.goto('/');
-  await expect(page.locator('h1')).toHaveText('You did it!');
+
+  await screenShotter.takeScreenshot(page,'my_first_Screenshot',false);
+  await screenShotter.makeCuePoint(page,'my_firstCuePoint1')
+  await screenShotter.makeCuePoint(page,'my_secCuePoint2')
+  await screenShotter.makeCuePoint(page,'my_terCuePoint3')
+
+
+  await screenShotter.generateJsonSummery(page);
+  await expect(page.locator('#app_testable_h1')).toHaveText('You did it!');
 })
+

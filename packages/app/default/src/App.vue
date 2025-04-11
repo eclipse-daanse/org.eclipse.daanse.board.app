@@ -27,8 +27,9 @@ console.log(string);
 <template>
   <header>
     <div class="wrapper">
-      <!-- <HelloWorld msg="You did it!" /> -->
-      <SampleWidget />
+      <h1 id="app_testable_h1">You did it!</h1>
+      <!--<SampleWidget />-->
+
 
       <div>
         {{ string }}
