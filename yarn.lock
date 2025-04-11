@@ -5095,13 +5095,6 @@ eslint-plugin-oxlint@^0.15.13:
   dependencies:
     jsonc-parser "^3.3.1"
 
-eslint-plugin-playwright@^1.6.2:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-1.8.3.tgz#00d86f3d59669c4bafd5c76d4d923bc2f0a67772"
-  integrity sha512-h87JPFHkz8a6oPhn8GRGGhSQoAJjx0AkOv1jME6NoMk2FpEsfvfJJNaQDxLSqSALkCr0IJXPGTnp6SIRVu5Nqg==
-  dependencies:
-    globals "^13.23.0"
-
 eslint-plugin-playwright@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-2.2.0.tgz#d7eda21e670274fc0c006e11ba5cc2c8417b2a6e"
