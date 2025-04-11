@@ -20,11 +20,11 @@ jobs:
         with:
           script: |
             const prNumber = context.issue.number;
-            const message = `
-👋 Hey there! Thanks for triggering this action.
-
-🚀 I will daanse!
-            `;
+            const message = [
+              "👋 Hey there! Thanks for triggering this action.",
+              "",
+              "🚀 I will daanse!"
+            ].join("\n");
 
             await github.rest.issues.addLabels({
               issue_number: prNumber,
