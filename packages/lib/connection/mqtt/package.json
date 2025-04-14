@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.connection.twowayconnection": "^0.0.1-next.1",
-    "mqtt": "^4.3.7"
+    "mqtt": "^5.11.0"
   },
   "devDependencies": {
     "inversify": "7.5.0",
