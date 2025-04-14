@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "inversify": "^7.1.0",
-    "pinia": "^2.2.4",
+    "pinia": "^3.0.2",
     "vue": "^3.5.11",
     "vue-router": "^4.4.5",
     "reflect-metadata": "^0.2.2"
