@@ -31,6 +31,7 @@ export interface IVueDatasourceRepository {
 export function useDatasourceRepository(
   dataSourceId: Ref<string>,
   type: string,
+  data: Ref<any>
 ): IVueDatasourceRepository {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties
@@ -43,7 +44,6 @@ export function useDatasourceRepository(
   }
 
   const datasourceRepository = container.get<DatasourceRepository>(identifier)
-  const data = ref(null)
 
   const getData = async () => {
     if (!dataSourceId.value) {

@@ -12,12 +12,14 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs } from 'vue'
+import { toRefs, watch, ref } from 'vue'
 
 const props = defineProps<{ datasourceId: string }>()
 const { datasourceId } = toRefs(props)
+const data = ref(null);
 
-const { data } = useDatasourceRepository(datasourceId, 'string')
+useDatasourceRepository(datasourceId, 'string', data)
+
 </script>
 
 <template>

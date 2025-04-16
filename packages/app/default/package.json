@@ -5,6 +5,7 @@
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
   "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
   "license": "ISC",
+  "type": "module",
   "main": "lib/test.js",
   "repository": {
     "type": "git",
@@ -27,12 +28,21 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "org.eclipse.daanse.board.app.lib.connection.rest": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.datasource.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.factory.connection": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.module1": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.widget": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.sample": "^0.0.1-next.1",
     "pinia": "^3.0.1",
+    "tailwindcss": "^4.1.4",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vuestic-ui": "^1.10.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

@@ -21,7 +21,8 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
-const { data } = useDatasourceRepository(datasourceId, "ChartData");
+const data = ref(null as any);
+useDatasourceRepository(datasourceId, "ChartData", data);
 
 const chartOptions = ref({
   responsive: true,

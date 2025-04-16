@@ -12,11 +12,12 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs } from 'vue';
+import { toRefs, ref } from 'vue';
 
 const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
-const { data } = useDatasourceRepository(datasourceId, "DataTable");
+const data = ref(null as any);
+useDatasourceRepository(datasourceId, "DataTable", data);
 </script>
 <template>
     <va-data-table
