@@ -4,17 +4,26 @@
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ *———
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
 
-@import 'tailwindcss';
-@source inline("top-[-25px] right-0");
-@source inline("object-contain object-cover object-fill object-scale-down");
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import type { ILayoutItem } from '@/composables/useMovableLayout'
 
-:root .daans {
-  --va-button-font-weight: 400;
-}
+export const useLayoutStore = defineStore('layout', () => {
+  const layout = ref([] as ILayoutItem[])
+
+  const updateLayout = (updatedLayout: ILayoutItem[]) => {
+    layout.value.splice(0, layout.value.length, ...updatedLayout)
+  }
+
+  return {
+    layout,
+    updateLayout,
+  }
+})

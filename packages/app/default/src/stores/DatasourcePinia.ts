@@ -31,7 +31,17 @@ export const useDataSourcesStore = defineStore('datasource', () => {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties.$container as Container
 
-  const dataSources = ref([] as DataSourceDTO[])
+  const dataSources = ref([
+    {
+      uid: 'test',
+      name: 'Test DataSource 01',
+      type: 'rest',
+      config: {
+        resourceUrl: 'posts',
+        connection: 'test',
+      },
+    },
+  ] as DataSourceDTO[])
   const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
   const createDataSource = (type: any, config: any = {}) => {

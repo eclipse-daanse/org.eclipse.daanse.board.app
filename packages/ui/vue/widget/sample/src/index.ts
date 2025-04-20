@@ -17,7 +17,7 @@ import SampleWidget from './SampleWidget.vue'
 import SampleWidgetSettings from './SampleWidgetSettings.vue'
 
 const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('TextWidget', {
+  widgetRepository.registerWidget('SampleWidget', {
     component: SampleWidget,
     settingsComponent: SampleWidgetSettings,
     supportedDSTypes: [],

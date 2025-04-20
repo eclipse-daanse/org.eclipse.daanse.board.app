@@ -40,10 +40,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export default {
-  ImageWidget,
-  ImageWidgetSettings,
-  register,
-}
+export { ImageWidget, ImageWidgetSettings, register }
 
 export type { IImageSettings }

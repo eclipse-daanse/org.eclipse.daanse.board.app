@@ -34,10 +34,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export default {
-  VideoVidget,
-  VideoWidgetSettings,
-  register,
-}
+export { VideoVidget, VideoWidgetSettings, register }
 
 export type { IVideoSettings }

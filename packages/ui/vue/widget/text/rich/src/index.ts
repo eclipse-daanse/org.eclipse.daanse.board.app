@@ -17,9 +17,8 @@ import RichTextWidget from './RichTextWidget.vue'
 import RichTextWidgetSettings from './RichTextWidgetSettings.vue'
 
 interface IRichTextEditorSettings {
-  editor: string;
+  editor: string
 }
-
 
 const register = (widgetRepository: WidgetRepository) => {
   widgetRepository.registerWidget('RichTextWidget', {
@@ -30,10 +29,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export default {
-  RichTextWidget,
-  RichTextWidgetSettings,
-  register,
-}
+export { RichTextWidget, RichTextWidgetSettings, register }
 
 export type { IRichTextEditorSettings }

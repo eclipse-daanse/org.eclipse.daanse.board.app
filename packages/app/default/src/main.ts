@@ -60,6 +60,22 @@ import {
   init as initWidgetRepo,
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { register as RegisterSample } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.sample'
+import { register as RegisterImage } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.image'
+import { register as RegisterProgress } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.progress'
+import { register as RegisterVideo } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.video'
+import { register as RegisterTextPlain } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.text.plain'
+import { register as RegisterTextRich } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.text.rich'
+import { register as RegisterSvgBase } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.svg.base'
+import { register as RegisterSvgRepeat } from
+  'org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat'
 
 const app = createApp(App)
 
@@ -75,6 +91,15 @@ initDatasourceFactory(container)
 initRestConnection(container)
 initRestDatasource(container)
 initWidgetRepo(container)
+
+RegisterSample(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterImage(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterProgress(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterVideo(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterTextPlain(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterTextRich(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterSvgBase(container.get<WidgetRepository>(WidgetIdentifier))
+RegisterSvgRepeat(container.get<WidgetRepository>(WidgetIdentifier))
 
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
 connectionRepository.registerConnectionType('rest', {

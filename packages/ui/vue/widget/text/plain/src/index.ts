@@ -36,10 +36,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export default {
-  TextWidget,
-  TextWidgetSettings,
-  register,
-}
+export { TextWidget, TextWidgetSettings, register }
 
 export type { ITextSettings }

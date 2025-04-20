@@ -11,17 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
-import dts from "vite-plugin-dts";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'org.eclipse.daanse.board.app.ui.vue.video.sample',
-      fileName: 'org.eclipse.daanse.board.app.ui.vue.video.sample',
+      name: 'org.eclipse.daanse.board.app.ui.vue.widget.video',
+      fileName: 'org.eclipse.daanse.board.app.ui.vue.widget.video',
     },
     rollupOptions: {
       external: ['vue'],
@@ -34,9 +34,9 @@ export default defineConfig({
   },
   plugins: [
     dts({
-        insertTypesEntry: true
+      insertTypesEntry: true,
     }),
     //@ts-ignore
-    vue()
+    vue(),
   ],
-});
+})

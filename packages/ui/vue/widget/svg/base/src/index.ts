@@ -40,10 +40,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export default {
-  SvgWidget,
-  SvgWidgetSettings,
-  register,
-}
+export { SvgWidget, SvgWidgetSettings, register }
 
 export type { ISvgSettings, Config, ConfigItem }

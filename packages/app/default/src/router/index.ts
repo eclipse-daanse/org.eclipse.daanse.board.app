@@ -14,6 +14,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewReport from '@/pages/ViewReport.vue'
 import DataSettings from '@/pages/DataSettings.vue'
+import EditReport from '@/pages/EditReport.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,14 +24,14 @@ const router = createRouter({
       name: 'home',
       component: ViewReport,
     },
-    // {
-    //   path: '/:id/edit',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: EditReport
-    // },
+    {
+      path: '/:id/edit',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: EditReport,
+    },
     {
       path: '/:id/data',
       name: 'data',
