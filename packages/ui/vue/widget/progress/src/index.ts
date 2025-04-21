@@ -13,8 +13,15 @@
 
 import ProgressWidget from './ProgressWidget.vue'
 import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/progress.svg'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface IProgressSettings {
   progress: string
@@ -35,6 +42,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { ProgressWidget, ProgressWidgetSettings, register }
+export { ProgressWidget, ProgressWidgetSettings, init }
 
 export type { IProgressSettings }

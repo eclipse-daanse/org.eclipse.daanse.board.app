@@ -11,10 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/rich_text.svg'
 import RichTextWidget from './RichTextWidget.vue'
 import RichTextWidgetSettings from './RichTextWidgetSettings.vue'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface IRichTextEditorSettings {
   editor: string
@@ -29,6 +36,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { RichTextWidget, RichTextWidgetSettings, register }
+export { RichTextWidget, RichTextWidgetSettings, init }
 
 export type { IRichTextEditorSettings }

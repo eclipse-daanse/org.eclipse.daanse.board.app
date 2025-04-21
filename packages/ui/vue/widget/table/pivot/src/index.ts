@@ -11,10 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface IPivotTable {
   rows: any[][]
@@ -33,5 +40,5 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { PivotTableWidget, PivotTableWidgetSettings, register }
+export { PivotTableWidget, PivotTableWidgetSettings, init }
 export type { IPivotTable }

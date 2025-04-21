@@ -11,10 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/text.svg'
 import TextWidget from './TextWidget.vue'
 import TextWidgetSettings from './TextWidgetSettings.vue'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface ITextSettings {
   text: string
@@ -36,6 +43,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { TextWidget, TextWidgetSettings, register }
+export { TextWidget, TextWidgetSettings, init }
 
 export type { ITextSettings }

@@ -13,8 +13,15 @@
 
 import SvgWidget from './SvgWidget.vue'
 import SvgWidgetSettings from './SvgWidgetSettings.vue'
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/svg_icon.svg'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface ISvgSettings {
   src: string
@@ -40,6 +47,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { SvgWidget, SvgWidgetSettings, register }
+export { SvgWidget, SvgWidgetSettings, init }
 
 export type { ISvgSettings, Config, ConfigItem }

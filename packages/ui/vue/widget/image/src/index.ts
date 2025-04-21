@@ -11,10 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/image.svg'
 import ImageWidget from './ImageWidget.vue'
 import ImageWidgetSettings from './ImageWidgetSettings.vue'
+import { Container } from 'inversify'
 
 interface IImageSettings {
   imagesSettings: GallerySettings
@@ -31,6 +32,12 @@ interface GallerySettings {
   diashowInterval: number
 }
 
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
+
 const register = (widgetRepository: WidgetRepository) => {
   widgetRepository.registerWidget('ImageWidget', {
     component: ImageWidget,
@@ -40,6 +47,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { ImageWidget, ImageWidgetSettings, register }
+export { ImageWidget, ImageWidgetSettings, init }
 
 export type { IImageSettings }

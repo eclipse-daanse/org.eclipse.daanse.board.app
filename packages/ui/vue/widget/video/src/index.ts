@@ -13,8 +13,15 @@
 
 import VideoVidget from './VideoWidget.vue'
 import VideoWidgetSettings from './VideoWidgetSettings.vue'
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/video.svg'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 interface ObjectFitSetting {
   fit: string
@@ -34,6 +41,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { VideoVidget, VideoWidgetSettings, register }
+export { VideoVidget, VideoWidgetSettings, init }
 
 export type { IVideoSettings }

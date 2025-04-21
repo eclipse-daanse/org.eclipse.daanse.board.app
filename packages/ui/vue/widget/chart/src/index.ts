@@ -11,13 +11,20 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
+import { Container } from 'inversify'
+
+const init = (container: Container) => {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+
+  register(widgetRepository);
+}
 
 const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('TextWidget', {
+  widgetRepository.registerWidget('ChartWidget', {
     component: ChartWidget,
     settingsComponent: ChartWidgetSettings,
     supportedDSTypes: [],
@@ -25,4 +32,4 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { ChartWidget, ChartWidgetSettings, register }
+export { ChartWidget, ChartWidgetSettings, init }
