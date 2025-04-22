@@ -98,22 +98,17 @@ import {
 import {
   init as initWidgetRepo,
 } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { init as initSample } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.sample'
-import { init as initImage } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.image'
-import { init as initProgress } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.progress'
-import { init as initVideo } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.video'
-import { init as initTextPlain } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.text.plain'
-import { init as initTextRich } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.text.rich'
-import { init as initSvgBase } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.svg.base'
-import { init as initSvgRepeat } from
-  'org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat'
+import { init as initSample } from 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
+import { init as initImage } from 'org.eclipse.daanse.board.app.ui.vue.widget.image'
+import { init as initProgress } from 'org.eclipse.daanse.board.app.ui.vue.widget.progress'
+import { init as initVideo } from 'org.eclipse.daanse.board.app.ui.vue.widget.video'
+import { init as initTextPlain } from 'org.eclipse.daanse.board.app.ui.vue.widget.text.plain'
+import { init as initTextRich } from 'org.eclipse.daanse.board.app.ui.vue.widget.text.rich'
+import { init as initSvgBase } from 'org.eclipse.daanse.board.app.ui.vue.widget.svg.base'
+import { init as initSvgRepeat } from 'org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat'
+import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
+import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
+import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 
 const app = createApp(App)
 
@@ -121,6 +116,7 @@ init(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })
+app.config.globalProperties.$container = container
 
 initI18next(container)
 
@@ -130,10 +126,10 @@ initI18nextVuePlugin(container)
 initConnection(container)
 initDatasource(container)
 initConnectionFactory(container)
-initDatasourceFactory(container)
 initRestConnection(container)
 initRestDatasource(container)
 initWidgetRepo(container)
+initDatasourceFactory(container)
 
 initSample(container)
 initImage(container)
@@ -152,6 +148,7 @@ initLangEnSvgRepeatWidget(container)
 initLangEnTextRichWidget(container)
 initLangEnTextPlainWidget(container)
 initLangEnVideoWidget(container)
+initTableData(container)
 
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
 connectionRepository.registerConnectionType('rest', {
@@ -164,19 +161,14 @@ connectionRepository.registerConnection('test', 'rest', {
 })
 
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
+initRestDatasourceUI(container)
+initRestConnectionUI(container)
 
-datasourceRepository.registerDatasourceType('rest', {
-  Store: RestDatasourceIdentifier,
-  Preview: null as any,
-  Settings: null as any,
-})
-
-datasourceRepository.registerDatasource('test', 'rest', {
+datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',
   connection: 'test',
 })
 
-app.config.globalProperties.$container = container
 app.use(I18nextVuePlugin);
 app.use(createPinia())
 app.use(router)

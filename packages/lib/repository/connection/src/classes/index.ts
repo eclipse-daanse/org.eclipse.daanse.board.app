@@ -19,7 +19,7 @@ import {
   type IRequestParams,
   type BaseConnectionConfig,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
-import { inject, injectable } from 'inversify'
+import { Container } from 'inversify'
 
 export interface IConnection {
   fetch(config: IRequestParams): Promise<any>
@@ -42,14 +42,10 @@ export interface ConnectionIdentifiers {
 
 const connections = new Map<string, IConnection | PubSubConnection>()
 
-@injectable()
 export class ConnectionRepository {
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
 
-  constructor(
-    @inject(ConnectionFactoryIdentifier)
-    private connectionFactory: ConnectionFactory,
-  ) {}
+  constructor(private container: Container) {}
 
   removeConnection(connectionId: string): void {
     if (connections.has(connectionId)) {
@@ -88,7 +84,11 @@ export class ConnectionRepository {
     const identifiers = this.availableConnections[type]
 
     if (identifiers) {
-      const connection = this.connectionFactory.createConnection<
+      const connectionFactory = this.container.get<ConnectionFactory>(
+        ConnectionFactoryIdentifier,
+      )
+
+      const connection = connectionFactory.createConnection<
         IConnection | PubSubConnection
       >(identifiers.Connection, connectionConfig)
       connections.set(connectionId, connection)

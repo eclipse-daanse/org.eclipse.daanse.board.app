@@ -76,6 +76,7 @@ const saveConnection = () => {
                 label="Type"
                 :options="availableConnections"
               />
+              <component :is="settingsComponent" :config="connectionProxy.config" />
             </template>
           </div>
           <div class="self-end flex gap-4 p-4">
@@ -83,14 +84,6 @@ const saveConnection = () => {
             <va-button @click="$emit('close')" preset="plain">Close</va-button>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="flex-grow">
-      <div
-        class="bg-gray-200 rounded-lg p-4 border border-gray-300 h-full w-full
-        flex items-center justify-center"
-      >
-        Preview
       </div>
     </div>
   </div>

@@ -17,10 +17,11 @@ import { ConnectionFactory } from './classes'
 const identifier = Symbol.for('ConnectionFactory')
 
 const init = (container: Container) => {
+  const connectionFactory = new ConnectionFactory(container)
+
   container
     .bind<ConnectionFactory>(identifier)
-    .to(ConnectionFactory)
-    .inSingletonScope()
+    .toConstantValue(connectionFactory)
 }
 
 export { ConnectionFactory, init, identifier }

@@ -17,10 +17,11 @@ import { DatasourceFactory } from './classes'
 const identifier = Symbol.for('DatasourceFactory')
 
 const init = (container: Container) => {
+  const datasourceFactory = new DatasourceFactory(container)
+
   container
     .bind<DatasourceFactory>(identifier)
-    .to(DatasourceFactory)
-    .inSingletonScope()
+    .toConstantValue(datasourceFactory)
 }
 
 export { DatasourceFactory, init, identifier }

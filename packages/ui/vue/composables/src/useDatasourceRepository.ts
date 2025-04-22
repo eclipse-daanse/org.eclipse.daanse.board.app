@@ -26,12 +26,13 @@ export interface IVueDatasourceRepository {
     params: any,
     shouldUpdate?: boolean,
   ) => Promise<void>
+  update: (oldVal: string, newVal: string) => void
 }
 
 export function useDatasourceRepository(
   dataSourceId: Ref<string>,
   type: string,
-  data: Ref<any>
+  data: Ref<any>,
 ): IVueDatasourceRepository {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties
@@ -54,7 +55,6 @@ export function useDatasourceRepository(
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
       data.value = await dataSource.getData(type)
-      console.log(data.value, type)
     } catch (e) {
       data.value = null
       console.warn(e)
@@ -74,21 +74,34 @@ export function useDatasourceRepository(
     }
   }
 
-  watch(
-    () => dataSourceId.value,
-    (newVal, oldVal) => {
-      getData()
-      try {
-        const oldDataSource = datasourceRepository.getDatasource(oldVal)
-        oldDataSource.unsubscribe(getData)
+  // watch(
+  //   () => dataSourceId.value,
+  //   (newVal, oldVal) => {
+  //     getData()
+  //     try {
+  //       const oldDataSource = datasourceRepository.getDatasource(oldVal)
+  //       oldDataSource.unsubscribe(getData)
 
-        const dataSource = datasourceRepository.getDatasource(newVal)
-        dataSource.subscribe(getData)
-      } catch (e) {
-        console.warn(e)
-      }
-    },
-  )
+  //       const dataSource = datasourceRepository.getDatasource(newVal)
+  //       dataSource.subscribe(getData)
+  //     } catch (e) {
+  //       console.warn(e)
+  //     }
+  //   },
+  // )
+
+  const update = (oldVal: string, newVal: string) => {
+    getData()
+    try {
+      const oldDataSource = datasourceRepository.getDatasource(oldVal)
+      oldDataSource.unsubscribe(getData)
+
+      const dataSource = datasourceRepository.getDatasource(newVal)
+      dataSource.subscribe(getData)
+    } catch (e) {
+      console.warn(e)
+    }
+  }
 
   onMounted(() => {
     getData()
@@ -113,5 +126,6 @@ export function useDatasourceRepository(
   return {
     data,
     callEvent,
+    update,
   }
 }

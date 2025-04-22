@@ -30,7 +30,6 @@ export interface IRestStoreConfiguration {
   pollingInterval?: number
 }
 
-@injectable()
 export class RestStore extends BaseDatasource {
   private connection: any
   //   private resourceUrl: ComputedString;
@@ -40,7 +39,7 @@ export class RestStore extends BaseDatasource {
 
   constructor(
     configuration: IRestStoreConfiguration,
-    @inject(identifiers.CONTAINER) private container: Container,
+    private container: Container,
   ) {
     super(configuration, container)
 

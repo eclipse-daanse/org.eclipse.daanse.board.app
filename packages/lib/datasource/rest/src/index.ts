@@ -17,7 +17,7 @@ import {
   type IRestStoreConfiguration
 } from './classes'
 
-const symbol = Symbol('RestStore')
+const symbol = Symbol.for('RestStore')
 
 const init = (container: Container) => {
   container.bind(symbol).toConstantValue(RestStore);

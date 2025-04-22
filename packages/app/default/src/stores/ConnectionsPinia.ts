@@ -32,7 +32,16 @@ export const useConnectionsStore = defineStore('connections', () => {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties.$container as Container
 
-  const connections = ref([] as ConnectionDTO[])
+  const connections = ref([
+    {
+      uid: 'test',
+      name: 'Test Connection 01',
+      type: 'rest',
+      config: {
+        url: 'https://jsonplaceholder.typicode.com/',
+      },
+    },
+  ] as ConnectionDTO[])
   const connectionRepository = container.get<ConnectionRepository>(identifier)
 
   const createConnection = (type: any, config: any = {}) => {

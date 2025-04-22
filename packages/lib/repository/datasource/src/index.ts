@@ -24,10 +24,11 @@ import {
 const identifier = Symbol.for('DatasourceRepository')
 
 const init = (container: Container) => {
+  const datasourceRepository = new DatasourceRepository(container)
+
   container
     .bind<DatasourceRepository>(identifier)
-    .to(DatasourceRepository)
-    .inSingletonScope()
+    .toConstantValue(datasourceRepository)
 }
 
 export { DatasourceRepository, init, identifier }

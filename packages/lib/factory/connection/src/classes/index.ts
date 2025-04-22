@@ -11,17 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { injectable, inject, Container } from 'inversify'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { Container } from 'inversify'
 
 export interface ConnectionConstructor<T> {
   new (config: any): T
   validateConfiguration: (config: any) => boolean
 }
 
-@injectable()
 export class ConnectionFactory {
-  constructor(@inject(identifiers.CONTAINER) private container: Container) {}
+  constructor(private container: Container) {}
 
   createConnection<T>(identifier: symbol, configuration: any): T {
     const ctor = this.container.get<ConnectionConstructor<T>>(identifier)

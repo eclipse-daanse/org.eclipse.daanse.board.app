@@ -15,7 +15,7 @@ import {
   DatasourceFactory,
   identifier as DatasourceFactoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import { inject, injectable } from 'inversify'
+import { Container } from 'inversify'
 
 export interface IDataRetrieveable {
   getData(type: string): Promise<any>
@@ -54,14 +54,10 @@ export interface StoreConstructor<T> {
 
 const datasources = new Map<string, IDataRetrieveable>()
 
-@injectable()
 export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
 
-  constructor(
-    @inject(DatasourceFactoryIdentifier)
-    private datasourceFactory: DatasourceFactory,
-  ) {}
+  constructor(private container: Container) {}
 
   removeDatasource(datasourceId: string): void {
     if (datasources.has(datasourceId)) {
@@ -96,8 +92,9 @@ export class DatasourceRepository implements IDatasourceRepository {
     const identifiers = this.availableDatasources[type]
 
     if (identifiers) {
+      const datasourceFactory = this.container.get<DatasourceFactory>(DatasourceFactoryIdentifier);
       const datasource =
-        this.datasourceFactory.createDatasource<IDataRetrieveable>(
+        datasourceFactory.createDatasource<IDataRetrieveable>(
           identifiers.Store,
           config,
         )

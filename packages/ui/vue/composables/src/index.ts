@@ -12,5 +12,6 @@
  **********************************************************************/
 
 import { useDatasourceRepository } from './useDatasourceRepository'
+import { useTemporaryStore } from './useTemporaryStore'
 
-export { useDatasourceRepository }
+export { useDatasourceRepository, useTemporaryStore }

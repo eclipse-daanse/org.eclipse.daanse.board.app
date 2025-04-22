@@ -33,7 +33,7 @@ export const useDataSourcesStore = defineStore('datasource', () => {
 
   const dataSources = ref([
     {
-      uid: 'test',
+      uid: 'test_ds',
       name: 'Test DataSource 01',
       type: 'rest',
       config: {

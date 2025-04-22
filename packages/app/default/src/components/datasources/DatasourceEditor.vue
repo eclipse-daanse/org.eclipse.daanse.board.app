@@ -18,6 +18,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { useDataSourcesStore } from '@/stores/DatasourcePinia'
+import { useConnectionsStore } from '@/stores/ConnectionsPinia'
 import { cloneDeep } from 'lodash'
 
 const props = defineProps({
@@ -33,6 +34,7 @@ const datasourceProxy = ref({} as any)
 
 const datasourceRepository = container.get<DatasourceRepository>(identifier)
 const { dataSources, updateDataSource } = useDataSourcesStore()
+const { connections } = useConnectionsStore()
 
 const availableDatasources = computed(() => {
   return datasourceRepository.registeredDatasources
@@ -60,6 +62,7 @@ const previewComponent = computed(() => {
 
 const settingsComponent = computed(() => {
   const identifiers = datasourceRepository.getDatasourceIdentifiers(datasourceProxy.value.type)
+  console.log(identifiers);
 
   if (!identifiers) {
     return null
@@ -92,6 +95,12 @@ const emit = defineEmits(['close'])
                 label="Type"
                 :options="availableDatasources"
               />
+              <component
+                :is="settingsComponent"
+                :config="datasourceProxy.config"
+                :connections="connections"
+                :dataSources="dataSources"
+              />
             </template>
           </div>
           <div class="self-end flex gap-4 p-4">
@@ -102,11 +111,10 @@ const emit = defineEmits(['close'])
       </div>
     </div>
     <div class="flex-grow">
-      <div
-        class="bg-gray-200 rounded-lg p-4 border border-gray-300
-        h-full w-full flex items-center justify-center"
-      >
-        Preview
+      <div class="bg-gray-200 rounded-lg p-4 border border-gray-300
+        h-full w-full flex items-center justify-center">
+        <component :is="previewComponent" :data-source="datasourceProxy" :key="datasourceProxy.uid"
+          @updateConfig="updateConfig" />
       </div>
     </div>
   </div>

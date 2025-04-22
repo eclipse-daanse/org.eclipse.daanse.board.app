@@ -10,30 +10,27 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-
 import { Container } from 'inversify'
 import {
   ConnectionRepository,
-  type ConnectionIdentifiers,
-  type IConnection,
-  type PubSubConnection,
-  type PubSubEvents,
-} from './classes'
+  identifier,
+} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
-const identifier = Symbol.for('ConnectionRepository')
+import { symbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+
+import Settings from './Settings.vue'
 
 const init = (container: Container) => {
-  const connectionRepository = new ConnectionRepository(container)
+  const connectionRepository = container.get<ConnectionRepository>(identifier)
 
-  container
-    .bind<ConnectionRepository>(identifier)
-    .toConstantValue(connectionRepository)
+  const settingsSymbol = Symbol.for('RestConnectionSettings')
+
+  container.bind(settingsSymbol).toConstantValue(Settings)
+
+  connectionRepository.registerConnectionType('rest', {
+    Connection: RestConnectionIdentifier,
+    Settings: settingsSymbol,
+  })
 }
 
-export { ConnectionRepository, init, identifier }
-export type {
-  ConnectionIdentifiers,
-  IConnection,
-  PubSubConnection,
-  PubSubEvents,
-}
+export { init }

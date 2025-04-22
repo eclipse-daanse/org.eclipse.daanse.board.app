@@ -18,7 +18,11 @@ const props = defineProps<{ datasourceId: string }>()
 const { datasourceId } = toRefs(props)
 const data = ref(null);
 
-useDatasourceRepository(datasourceId, 'string', data)
+watch(datasourceId, (oldVal, newVal) => {
+  update(oldVal, newVal);
+})
+
+const { update } = useDatasourceRepository(datasourceId, 'string', data)
 
 </script>
 

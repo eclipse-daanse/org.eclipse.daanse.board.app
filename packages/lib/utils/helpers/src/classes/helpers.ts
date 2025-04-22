@@ -13,30 +13,43 @@
 
 import { isArray } from 'lodash'
 
-export function extractDataByPath(data: any, path: string) {
-  if (!data) return
-  if (path === 'root') return data
-  const keys = path.replace('root.', '').split('.')
-  let currentValue = data
+export function extractDataByPath(json: any, path: string) {
+  if (!json || path === '') return undefined
+  if (path === 'root') return json
 
-  for (const key of keys) {
-    if (key.includes('[') && key.includes(']')) {
-      const [arrayKey, index] = key.replace(/\]/g, '').split('[')
-      if (index === '' || isNaN(Number(index)) || Number(index) < 0) return
-      currentValue = currentValue[arrayKey]
-      currentValue = Array.isArray(currentValue)
-        ? currentValue[Number(index)]
-        : null
+  const normalizedPath = path.startsWith('root')
+    ? path.substring(4) // Remove 'root'
+    : path
+
+  if (normalizedPath === '') return json
+
+  let current = json
+
+  const segments = normalizedPath.startsWith('.')
+    ? normalizedPath.substring(1).match(/\[([^\]]*)\]|[^.\[\]]+/g) || []
+    : normalizedPath.match(/\[([^\]]*)\]|[^.\[\]]+/g) || []
+
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i]
+
+    if (current == null) return undefined
+
+    if (segment.startsWith('[') && segment.endsWith(']')) {
+      const indexStr = segment.slice(1, -1)
+      const index = parseInt(indexStr, 10)
+
+      if (isNaN(index) || index < 0 || !Array.isArray(current)) {
+        return undefined
+      }
+
+      current = current[index]
     } else {
-      currentValue = currentValue[key]
+      current = current[segment]
     }
-
-    if (currentValue == null) break
   }
 
-  return currentValue
+  return current
 }
-
 
 export function optionalArrayToArray(el: any): any[] {
   if (Array.isArray(el)) return el

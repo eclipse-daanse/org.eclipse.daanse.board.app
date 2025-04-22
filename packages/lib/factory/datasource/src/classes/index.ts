@@ -11,8 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { injectable, inject, Container } from 'inversify'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { Container } from 'inversify'
 
 export interface StoreConstructor<T> {
   new (config: any, container: Container): T;
@@ -20,7 +19,7 @@ export interface StoreConstructor<T> {
 }
 
 export class DatasourceFactory {
-    constructor(@inject(identifiers.CONTAINER) private container: Container) {}
+    constructor(private container: Container) {}
 
     createDatasource<T>(identifier: symbol, configuration: any): T {
         const ctor = this.container.get<StoreConstructor<T>>(identifier);

@@ -19,7 +19,7 @@ import ConnectionEditor from '@/components/connections/ConnectionEditor.vue'
 import DataSourceEditor from '@/components/datasources/DatasourceEditor.vue'
 
 const activeEditor = shallowRef(null as any)
-const activeItemId = ref(null as unknown as string)
+const activeItemId = ref('' as string)
 
 const openEditor = ({ type, itemId }: { type: string; itemId: string }) => {
   console.log('openEditor', type, itemId)
@@ -35,7 +35,7 @@ const openEditor = ({ type, itemId }: { type: string; itemId: string }) => {
 
 const closeEditor = () => {
   activeEditor.value = null
-  activeItemId.value = null as unknown as string
+  activeItemId.value = '' as string
 }
 </script>
 <template>
@@ -49,10 +49,7 @@ const closeEditor = () => {
       </div>
     </div>
     <div class="w-full">
-      <component
-        :is="activeEditor"
-        :itemId="activeItemId"
-        :key="activeItemId"
+      <component :is="activeEditor" :itemId="activeItemId" :key="activeItemId"
         @close="closeEditor"
       />
     </div>
