@@ -47,5 +47,6 @@ header:
     - '**/logback-test.xml'
     - '**/*.svg'
     - 'yarn.lock'
+    - 'packages/lib/datasource/ogcsta/src/client/**'
 
   comment: always

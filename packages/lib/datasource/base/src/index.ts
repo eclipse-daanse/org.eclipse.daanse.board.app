@@ -32,7 +32,7 @@ export abstract class BaseDatasource extends UsesComputedVariable {
   private pollingIntervalId: number | null = null;
   protected pollingEnabled!: boolean;
 
-  constructor(configuration: IBaseConnectionConfiguration, container: Container) {
+  protected constructor(configuration: IBaseConnectionConfiguration, container: Container) {
     super(container);
 
     this.setUpdateCb(() => {

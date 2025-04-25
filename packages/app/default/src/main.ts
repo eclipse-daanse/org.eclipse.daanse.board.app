@@ -15,6 +15,8 @@ import './assets/main.css'
 import { createVuestic } from 'vuestic-ui'
 import 'vuestic-ui/styles/essential.css'
 import 'vuestic-ui/styles/typography.css'
+import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta/dist/ui.vue.datasource.ogcsta.css'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.map/dist/ui.vue.widget.map.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -56,6 +58,10 @@ import {
   symbol as RestDatasourceIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
 import {
+  init as initOGcStaDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
+
+import {
   init as initI18next,
   symbolForI18n,
 } from "org.eclipse.daanse.board.app.lib.i18next"
@@ -68,6 +74,7 @@ import {
   init as initI18nextVuePlugin,
   I18nextVuePlugin
 } from "org.eclipse.daanse.board.app.ui.vue.plugins.i18next"
+
 
 import {
   init as initLangEnIconWidget,
@@ -109,7 +116,9 @@ import { init as initSvgRepeat } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
-
+import { init as initOgcStaConnectionUI }
+  from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
+import { init as initWidgetMap } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 const app = createApp(App)
 
 init(container)
@@ -117,7 +126,7 @@ container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })
 app.config.globalProperties.$container = container
-
+app.provide('container',container);
 initI18next(container)
 
 initCommonEn(container)
@@ -130,6 +139,7 @@ initRestConnection(container)
 initRestDatasource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
+initOGcStaDatasource(container)
 
 initSample(container)
 initImage(container)
@@ -139,6 +149,7 @@ initTextPlain(container)
 initTextRich(container)
 initSvgBase(container)
 initSvgRepeat(container)
+initWidgetMap(container)
 
 initLangEnIconWidget(container)
 initLangEnIamgeWidget(container)
@@ -163,6 +174,7 @@ connectionRepository.registerConnection('test', 'rest', {
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
 initRestDatasourceUI(container)
 initRestConnectionUI(container)
+initOgcStaConnectionUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',

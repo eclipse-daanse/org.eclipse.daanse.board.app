@@ -28,7 +28,11 @@ export default defineConfig({
       ],
 
   },
-  server: {
-    host:'0.0.0.0'
-  },
+  css: {
+  preprocessorOptions: {
+    scss: {
+      api: 'modern-compiler'
+    }
+  }
+}
 })
