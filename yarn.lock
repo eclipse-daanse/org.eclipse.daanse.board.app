@@ -2956,7 +2956,7 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.4.tgz#56e2cc26c397c038fab0e3a917a12d5c5909e901"
   integrity sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==
 
-"@types/readable-stream@^4.0.0", "@types/readable-stream@^4.0.18":
+"@types/readable-stream@^4.0.0":
   version "4.0.18"
   resolved "https://registry.yarnpkg.com/@types/readable-stream/-/readable-stream-4.0.18.tgz#5d8d15d26c776500ce573cae580787d149823bfc"
   integrity sha512-21jK/1j+Wg+7jVw1xnSwy/2Q1VgVjWuFssbYGTREPUBeZ+rqVFl2udq0IkxzPC0ZhOzVceUbyIACFZKLqKEBlA==
@@ -2992,13 +2992,6 @@
   version "0.0.21"
   resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.21.tgz#525433c784aed9b457aaa0ee3d92aeb71f346b63"
   integrity sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==
-
-"@types/ws@^8.5.14":
-  version "8.18.1"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.18.1.tgz#48464e4bf2ddfd17db13d845467f6070ffea4aa9"
-  integrity sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==
-  dependencies:
-    "@types/node" "*"
 
 "@types/yauzl@^2.9.1":
   version "2.10.3"
@@ -8276,12 +8269,10 @@ mqtt-packet@^9.0.2:
     process-nextick-args "^2.0.1"
 
 mqtt@^5.11.0:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/mqtt/-/mqtt-5.11.0.tgz#b0a71a1d670a08cd3d64bb1c2ad4181cd50ee31d"
-  integrity sha512-VDqfADTNvohwcY02NgxPb7OojIeDrNQ1q62r/DcM+bnIWY8LBi3nMTvdEaFEp6Bu4ejBIpHjJVthUEgnvGLemA==
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/mqtt/-/mqtt-5.11.1.tgz#9b130e83e75f94ae19f87995522f37c2cb0e8916"
+  integrity sha512-GHDhnWW/npS6KTnmfcbmfIC9GNkNt7bx7AL6M4TUAIPbBNA454LTYXyp09P0OcaDuSrWS9U0XXicuRgBslbdhA==
   dependencies:
-    "@types/readable-stream" "^4.0.18"
-    "@types/ws" "^8.5.14"
     commist "^3.2.0"
     concat-stream "^2.0.0"
     debug "^4.4.0"
@@ -8291,7 +8282,6 @@ mqtt@^5.11.0:
     mqtt-packet "^9.0.2"
     number-allocator "^1.0.14"
     readable-stream "^4.7.0"
-    reinterval "^1.1.0"
     rfdc "^1.4.1"
     socks "^2.8.3"
     split2 "^4.2.0"
@@ -9911,11 +9901,6 @@ regexp.prototype.flags@^1.5.3:
     get-proto "^1.0.1"
     gopd "^1.2.0"
     set-function-name "^2.0.2"
-
-reinterval@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/reinterval/-/reinterval-1.1.0.tgz#3361ecfa3ca6c18283380dd0bb9546f390f5ece7"
-  integrity sha512-QIRet3SYrGp0HUHO88jVskiG6seqUGC5iAG7AwI/BV4ypGcuqk9Du6YQBUOUqm9c8pw1eyLoIaONifRua1lsEQ==
 
 require-directory@^2.1.1:
   version "2.1.1"
