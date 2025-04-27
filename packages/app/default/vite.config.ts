@@ -21,6 +21,9 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
+  build: {
+    sourcemap: true,
+  },
   resolve: {
     alias:
       [

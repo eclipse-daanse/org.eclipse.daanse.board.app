@@ -14,11 +14,12 @@
 import assert from 'assert';
 import { Container } from 'inversify';
 import RestConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import { symbolForRestConnection } from '../src/identifiers/identifiers'
 
 const container = new Container();
 RestConnection.init(container);
 
-const restConnection = container.get<typeof RestConnection.RestConnection>(RestConnection.symbol);
+const restConnection = container.get<typeof RestConnection.RestConnection>(symbolForRestConnection);
 
 const restConnectionA = new restConnection({ url: 'http://localhost:8080' });
 const restConnectionB = new restConnection({ url: 'http://localhost:8080' });

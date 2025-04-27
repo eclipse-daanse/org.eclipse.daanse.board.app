@@ -14,21 +14,32 @@
 import { type Variable } from './Variable'
 import { type VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
-import { Container } from 'inversify'
-import { identifier, VariableEvents } from '..'
+import { inject, injectable, unmanaged } from 'inversify'
+
+
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { ComputedStoreParameterI } from '../interfaces/ComputedStoreParameter'
+import { VariableEvents } from '../index'
+import {identifierVariableStorage} from '../identifiers/identifiers'
 
-export class ComputedStoreParameter {
-  private storage: VariableStorage
-  private innerExpression: string
-  private eventBus: TinyEmitter
-  private currentSubscriptions: Map<string, () => void> = new Map()
-  private refreshCb: () => void
 
-  constructor(container: Container, expression: string, refreshCb: () => void) {
-    this.storage = container.get<VariableStorage>(identifier)
+
+@injectable()
+export class ComputedStoreParameter implements ComputedStoreParameterI{
+  innerExpression: string
+  currentSubscriptions: Map<string, () => void> = new Map()
+  refreshCb: () => void
+
+
+  @inject(identifiers.TINY_EMITTER)
+  eventBus!:TinyEmitter
+
+  @inject(identifierVariableStorage)
+  storage!:VariableStorage
+
+  constructor(@unmanaged() expression: string, @unmanaged() refreshCb: () => void) {
+
     this.innerExpression = expression
-    this.eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
     this.refreshCb = refreshCb
 
     this.eventBus.on(VariableEvents.VariableCreated, () => {
@@ -82,35 +93,35 @@ export class ComputedStoreParameter {
     }
 
     this.currentSubscriptions.forEach((subFn, key) => {
-      const variable = this.storage.getVariable(key) as Variable
+      /*const variable = this.storage.getVariable(key) as Variable
       if (variable) {
         variable.unsubscribe(subFn)
-      }
+      }*/
     })
 
     this.currentSubscriptions.clear()
 
     dependencies.forEach(dep => {
-      const variable = this.storage.getVariable(dep) as Variable
+      /*const variable = this.storage.getVariable(dep) as Variable
 
       this.currentSubscriptions.set(dep, () => {
         console.log('Should update')
         this.refreshCb()
       })
 
-      variable.subscribe(this.currentSubscriptions.get(dep) as () => void)
+      variable.subscribe(this.currentSubscriptions.get(dep) as () => void)*/
     })
 
     console.log(this.currentSubscriptions)
 
-    dependencies.forEach(dep => {
+    /*dependencies.forEach(dep => {
       result = result.replace(
         `$${dep}`,
         typeof this.storage.getVariable(dep)?.value === 'number'
           ? this.storage.getVariable(dep)?.value
-          : `${this.storage.getVariable(dep)?.value}`,
+          : `${this.storage.getVariable(dep)?.value}`
       )
-    })
+    })*/
 
     // TODO: make logic for evaluation
     // const execFn = new Function(`return ${result}`);

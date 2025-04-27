@@ -16,7 +16,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
-import { symbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+import { symbolForRestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 
 import Settings from './Settings.vue'
 
@@ -28,7 +28,7 @@ const init = (container: Container) => {
   container.bind(settingsSymbol).toConstantValue(Settings)
 
   connectionRepository.registerConnectionType('rest', {
-    Connection: RestConnectionIdentifier,
+    Connection: symbolForRestConnection,
     Settings: settingsSymbol,
   })
 }

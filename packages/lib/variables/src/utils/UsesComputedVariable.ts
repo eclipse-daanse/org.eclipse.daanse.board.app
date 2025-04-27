@@ -11,26 +11,32 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import { ComputedStoreParameter } from '../classes/ComputedStoreParameter'
+import {  injectable } from 'inversify'
+export interface UsesComputedVariableI {
+}
 
-export class UsesComputedVariable {
+@injectable()
+export class UsesComputedVariable implements UsesComputedVariableI {
   protected updateCb: () => void = () => {}
 
-  constructor(private _container: Container) {}
+  //@inject(factoryComputedStoreParameter)
+  //private readonly computedParameter!: (expression: string,
+  //                    refreshCb: ()=>void)=>ComputedStoreParameter
+  constructor() {
+    console.log("_computedParameter")
+  }
 
   protected setUpdateCb(cb: () => void) {
     this.updateCb = cb
   }
 
-  initVariable(expression: string): ComputedStoreParameter {
-    const variable = new ComputedStoreParameter(
-      this._container,
+  initVariable(expression: string): void  {
+    /*const variable =  this.computedParameter(
       expression,
       () => {
         this.updateCb()
       },
     )
-    return variable
+    return variable*/
   }
 }

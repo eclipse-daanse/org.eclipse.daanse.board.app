@@ -20,8 +20,10 @@ import {
   type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-// import type { ComputedString } from "@/plugins/variables/ComputedString";
+
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { factoryComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables/dist/src/identifiers/identifiers'
+import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables/dist/src/classes/ComputedStoreParameter'
 
 export interface IRestStoreConfiguration {
   resourceUrl: string
@@ -30,6 +32,7 @@ export interface IRestStoreConfiguration {
   pollingInterval?: number
 }
 
+@injectable()
 export class RestStore extends BaseDatasource {
   private connection: any
   //   private resourceUrl: ComputedString;
@@ -37,13 +40,15 @@ export class RestStore extends BaseDatasource {
   private selectedJSONValue?: string
   // private computedUrl: ComputedVariable;
 
-  constructor(
-    configuration: IRestStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!:ConnectionRepository;
 
-    console.log(container)
+  constructor(
+    configuration: IRestStoreConfiguration
+  ) {
+    super(configuration)
+
+
     this.connection = configuration.connection
 
     // // this.resourceUrl = super.initVariable(configuration.resourceUrl);
@@ -59,14 +64,11 @@ export class RestStore extends BaseDatasource {
   //   async getData<T extends keyof DataMap>(type: T): Promise<DataMap[T]> {
   async getData(type: string): Promise<any> {
     let response = null
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as IConnection
       const req = await connection.fetch({ url: this.resourceUrl })
@@ -94,14 +96,12 @@ export class RestStore extends BaseDatasource {
   }
 
   async getOriginalData() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as IConnection
       const req = await connection.fetch({ url: this.resourceUrl })

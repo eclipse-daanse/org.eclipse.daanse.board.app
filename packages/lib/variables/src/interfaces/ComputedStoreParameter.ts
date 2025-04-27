@@ -11,25 +11,19 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
-import dts from 'vite-plugin-dts'
 
-export default defineConfig({
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'lib.core',
-      fileName: 'lib.core',
-    },
-    sourcemap:'inline',
-    rollupOptions: {
-      external: [],
-    },
-  },
-  plugins: [
-    dts({
-      insertTypesEntry: true,
-    }),
-  ],
-})
+import { type VariableStorage } from '../storage/VariableStorage'
+import { type TinyEmitter } from 'tiny-emitter'
+
+
+
+
+export interface ComputedStoreParameterI {
+   storage: any,
+   innerExpression: string,
+   eventBus: TinyEmitter
+   currentSubscriptions: Map<string, () => void>,
+   refreshCb: () => void
+   getDependencies(): string[]
+   computeValue(): string
+}

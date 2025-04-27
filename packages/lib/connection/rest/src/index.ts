@@ -13,11 +13,12 @@
 
 import { Container } from 'inversify'
 import { RestConnection, type IRestConnectionConfig } from './classes'
+import { symbolForRestConnection } from './identifiers/identifiers'
 
-const symbol = Symbol.for('RestConnection')
+
 
 const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RestConnection)
+  container.bind(symbolForRestConnection).toConstantValue(RestConnection)
 }
 
-export { RestConnection, IRestConnectionConfig, symbol, init }
+export { RestConnection, IRestConnectionConfig, init,symbolForRestConnection }

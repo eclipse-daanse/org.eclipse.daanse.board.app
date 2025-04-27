@@ -11,14 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import { VariableStorage } from './storage/VariableStorage'
+import { Container, unmanaged } from 'inversify'
+import { type VariableStorage as  VariableStorageType,VariableStorage} from './storage/VariableStorage'
 import { ComputedVariable } from './classes/ComputedVariable'
 import { ConstantVariable } from './classes/ConstantVariable'
 import { QueryVariable } from './classes/QueryVariable'
 import { RequestVariable } from './classes/RequestVariable'
 import { TimeVariable } from './classes/TimeVariable'
-import { UsesComputedVariable } from './utils/UsesComputedVariable'
+import { UsesComputedVariable, UsesComputedVariableI } from './utils/UsesComputedVariable'
+import { ComputedStoreParameterI } from './interfaces/ComputedStoreParameter'
+import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
+import {identifierVariableStorage,computedStoreParameterI,usesComputedVariable,factoryComputedStoreParameter} from './identifiers/identifiers'
 
 enum SourceType {
   Constant = 'Constant',
@@ -79,19 +82,36 @@ type INewVariableConfig =
   | IRequestVaribleConfig
   | IVariableConfig
 
-const identifier = Symbol.for('VariableStorage')
 
 const init = (container: Container) => {
+  console.log('init vars')
+
+
+
   container
-    .bind<VariableStorage>(identifier)
+    .bind<VariableStorageType>(identifierVariableStorage)
     .to(VariableStorage)
-    .inSingletonScope()
+    .inSingletonScope();
+
+  container.bind<ComputedStoreParameterI>(computedStoreParameterI).to(ComputedStoreParameter);
+  container.bind<UsesComputedVariableI>(usesComputedVariable).to(UsesComputedVariable);
+  container.bind<(expression: string,
+                  refreshCb: ()=>void) => ComputedStoreParameterI>(factoryComputedStoreParameter)
+    //@ts-ignore
+    .toFactory<ComputedStoreParameterI>((context)=>{
+      //@ts-ignore
+      const store = context.container.resolve(computedStoreParameterI);
+      console.log(store)
+    return (expression, refreshCb)=>{
+      return new store(expression, refreshCb);
+    }
+  })
+
+
 }
 
 export {
-  VariableStorage,
   init,
-  identifier,
   ComputedVariable,
   ConstantVariable,
   QueryVariable,
@@ -107,4 +127,8 @@ export {
   IRequestVaribleConfig,
   INewVariableConfig,
   UsesComputedVariable,
+  identifierVariableStorage,
+  computedStoreParameterI,
+  usesComputedVariable,
+  factoryComputedStoreParameter,
 }

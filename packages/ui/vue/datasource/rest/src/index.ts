@@ -16,8 +16,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-import { symbol as RestDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
-
+import { symbolForRestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
@@ -31,7 +30,7 @@ const init = (container: Container) => {
   container.bind(settingsSymbol).toConstantValue(Settings)
 
   datasourceRepository.registerDatasourceType('rest', {
-    Store: RestDatasourceIdentifier,
+    Store: symbolForRestConnection,
     Preview: previewSymbol,
     Settings: settingsSymbol,
   })

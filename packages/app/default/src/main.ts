@@ -48,13 +48,17 @@ import {
 import {
   RestConnection,
   init as initRestConnection,
-  symbol as RestConnectionIdentifier,
+
 } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+ //as RestConnectionIdentifier
+
+
 import {
-  RestStore,
   init as initRestDatasource,
   symbol as RestDatasourceIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
+initRestDatasource(container)
+
 import {
   init as initI18next,
   symbolForI18n,
@@ -109,6 +113,9 @@ import { init as initSvgRepeat } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
+import {
+  symbolForRestConnection as RestConnectionIdentifier
+} from 'org.eclipse.daanse.board.app.lib.connection.rest'
 
 const app = createApp(App)
 
@@ -149,6 +156,7 @@ initLangEnTextRichWidget(container)
 initLangEnTextPlainWidget(container)
 initLangEnVideoWidget(container)
 initTableData(container)
+
 
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
 connectionRepository.registerConnectionType('rest', {

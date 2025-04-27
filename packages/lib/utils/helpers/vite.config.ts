@@ -19,6 +19,7 @@ export default defineConfig({
       name: 'lib.core',
       fileName: 'lib.core',
     },
+    sourcemap:'inline',
     rollupOptions: {
       external: [],
     },

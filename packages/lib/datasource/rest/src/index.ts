@@ -16,10 +16,13 @@ import {
   RestStore,
   type IRestStoreConfiguration
 } from './classes'
+import {init as depinit} from "org.eclipse.daanse.board.app.lib.datasource.base";
 
 const symbol = Symbol.for('RestStore')
 
 const init = (container: Container) => {
+  console.log('restinit')
+  depinit(container)
   container.bind(symbol).toConstantValue(RestStore);
 }
 

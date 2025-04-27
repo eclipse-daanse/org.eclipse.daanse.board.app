@@ -11,21 +11,13 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { ConstantVariable } from '../classes/ConstantVariable'
-import { ComputedVariable } from '../classes/ComputedVariable'
-import { QueryVariable } from '../classes/QueryVariable'
-import { RequestVariable } from '../classes/RequestVariable'
-import { TimeVariable } from '../classes/TimeVariable'
+
 import { TinyEmitter } from 'tiny-emitter'
 import { injectable, inject } from 'inversify'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  IConstantVariableConfig,
-  IComputedVariableConfig,
+
   INewVariableConfig,
-  IRequestVaribleConfig,
-  IQueryVariableConfig,
-  SourceType,
   VariableEvents,
 } from '..'
 
@@ -38,7 +30,7 @@ export class VariableStorage {
   }
 
   createVariable(name: string, config: INewVariableConfig) {
-    switch (config.type) {
+    /*switch (config.type) {
       case SourceType.Constant:
         this.variables[name] = new ConstantVariable(
           name,
@@ -81,7 +73,8 @@ export class VariableStorage {
         break
       default:
         throw new Error('variable type not implemented yet')
-    }
+
+    }*/
 
     this.eventBus.emit(VariableEvents.VariableCreated)
     return this.variables[name]
