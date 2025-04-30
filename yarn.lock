@@ -2732,9 +2732,9 @@
   integrity sha512-NtoQw6PGijOAtXC6G+0Aq0/Z5wwEjPhNHs8nsjXogfWIgaj/aI4/zfBnA06eI3WT+emMYQTl0fTc4CUPnLVU8g==
 
 "@tiptap/pm@^2.11.2", "@tiptap/pm@^2.11.7":
-  version "2.11.7"
-  resolved "https://registry.yarnpkg.com/@tiptap/pm/-/pm-2.11.7.tgz#34e1dbe1f27ea978bc740c9144ae8195948609e3"
-  integrity sha512-7gEEfz2Q6bYKXM07vzLUD0vqXFhC5geWRA6LCozTiLdVFDdHWiBrvb2rtkL5T7mfLq03zc1QhH7rI3F6VntOEA==
+  version "2.11.9"
+  resolved "https://registry.yarnpkg.com/@tiptap/pm/-/pm-2.11.9.tgz#fc7c9be1998a2d32b1f138ce16a77bb50572d07e"
+  integrity sha512-hhonYVcL3fRkWyiCFJQ7HHXtmFviwnof8VDRFX1vm69GskGeqUTJUFR+1as2hZYekHe5rO4FZUm1dlETDWTnzQ==
   dependencies:
     prosemirror-changeset "^2.2.1"
     prosemirror-collab "^1.3.1"
@@ -11751,10 +11751,10 @@ vite-plugin-vue-inspector@^5.3.1:
     kolorist "^1.8.0"
     magic-string "^0.30.4"
 
-vite@6.3.3, "vite@^5.0.0 || ^6.0.0", vite@^6.2.3, vite@^6.2.4:
-  version "6.3.3"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-6.3.3.tgz#497392c3f2243194e4dbf09ea83e9a3dddf49b88"
-  integrity sha512-5nXH+QsELbFKhsEfWLkHrvgRpTdGJzqOZ+utSdmPTvwHmvU6ITTm3xx+mRusihkcI8GeC7lCDyn3kDtiki9scw==
+vite@6.3.4, "vite@^5.0.0 || ^6.0.0", vite@^6.2.3, vite@^6.2.4, vite@^6.3.4:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-6.3.4.tgz#d441a72c7cd9a93b719bb851250a4e6c119c9cff"
+  integrity sha512-BiReIiMS2fyFqbqNT/Qqt4CVITDU9M9vE+DKcVAsB+ZV0wvTKd+3hMbkpxz1b+NmEDMegpVbisKiAZOnvO92Sw==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.4.4"
