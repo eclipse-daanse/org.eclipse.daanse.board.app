@@ -13,12 +13,13 @@
 
 import { Container } from 'inversify'
 import { VariableStorage } from './storage/VariableStorage'
-import { ComputedVariable } from './classes/ComputedVariable'
-import { ConstantVariable } from './classes/ConstantVariable'
-import { QueryVariable } from './classes/QueryVariable'
-import { RequestVariable } from './classes/RequestVariable'
-import { TimeVariable } from './classes/TimeVariable'
+import { ComputedVariable, init as initComputed, symbol as ComputedVariableSymbol } from './classes/ComputedVariable'
+import { ConstantVariable, init as initConstant, symbol as ConstantVariableSymbol } from './classes/ConstantVariable'
+import { QueryVariable, init as initQuery, symbol as QueryVariableSymbol } from './classes/QueryVariable'
+import { RequestVariable, init as initRequest, symbol as RequestVariableSymbol } from './classes/RequestVariable'
+import { TimeVariable, init as initTime, symbol as TimeVariableSymbol } from './classes/TimeVariable'
 import { UsesComputedVariable } from './utils/UsesComputedVariable'
+import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
 
 enum SourceType {
   Constant = 'Constant',
@@ -82,6 +83,12 @@ type INewVariableConfig =
 const identifier = Symbol.for('VariableStorage')
 
 const init = (container: Container) => {
+  initComputed(container)
+  initConstant(container)
+  initQuery(container)
+  initRequest(container)
+  initTime(container)
+
   container
     .bind<VariableStorage>(identifier)
     .to(VariableStorage)
@@ -107,4 +114,10 @@ export {
   IRequestVaribleConfig,
   INewVariableConfig,
   UsesComputedVariable,
+  ComputedVariableSymbol,
+  ConstantVariableSymbol,
+  QueryVariableSymbol,
+  RequestVariableSymbol,
+  TimeVariableSymbol,
+  ComputedStoreParameter,
 }

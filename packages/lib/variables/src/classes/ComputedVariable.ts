@@ -15,18 +15,24 @@ import { Variable } from './Variable'
 import { VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { type IComputedVariableConfig } from '..'
+import { Container } from 'inversify'
 
-export class ComputedVariable extends Variable {
+const symbol = Symbol.for('ComputedVariable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(ComputedVariable);
+}
+
+class ComputedVariable extends Variable {
   private innerExpression: string = ''
   public type = 'computed'
 
   constructor(
     name: string,
-    storage: VariableStorage,
-    eventBus: TinyEmitter,
+    container: Container,
     config: IComputedVariableConfig,
   ) {
-    super(name, storage, eventBus, config)
+    super(name, container, config)
     this.expression = config.expression
 
     this.initSubscriptions()
@@ -69,9 +75,9 @@ export class ComputedVariable extends Variable {
     dependencies.forEach(dep => {
       result = result.replace(
         `$${dep}`,
-        typeof super.storage.getVariable(dep)?.value === 'number'
-          ? super.storage.getVariable(dep)?.value
-          : `'${super.storage.getVariable(dep)?.value}'`,
+        typeof this.storage.getVariable(dep)?.value === 'number'
+          ? this.storage.getVariable(dep)?.value
+          : `'${this.storage.getVariable(dep)?.value}'`,
       )
     })
 
@@ -83,13 +89,15 @@ export class ComputedVariable extends Variable {
     const dependencies = this.getDependencies()
     dependencies.forEach(dep => {
       console.log(dep)
-      const depencencyVariable = super.storage.getVariable(dep)
+      const depencencyVariable = this.storage.getVariable(dep)
       console.log(depencencyVariable)
       depencencyVariable.subscribe(() => {
         console.log('dep changed', dep)
-        super.notyfy()
+        this.notyfy()
         console.log('Variable changed')
       })
     })
   }
 }
+
+export { ComputedVariable, symbol, init }

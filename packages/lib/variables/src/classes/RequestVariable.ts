@@ -15,19 +15,25 @@ import { Variable } from './Variable'
 import { VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { type IRequestVaribleConfig } from '..'
+import { Container } from 'inversify'
 
-export class RequestVariable extends Variable {
+const symbol = Symbol.for('RequestVariable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(RequestVariable);
+}
+
+class RequestVariable extends Variable {
   private innerRequest: string = ''
   public type = 'request'
   public time = 0
 
   constructor(
     name: string,
-    storage: VariableStorage,
-    eventBus: TinyEmitter,
+    container: Container,
     config: IRequestVaribleConfig,
   ) {
-    super(name, storage, eventBus, config)
+    super(name, container, config)
     this.request = config.request
 
     super.onInterval = () => {
@@ -55,3 +61,5 @@ export class RequestVariable extends Variable {
 
   set value(value) {}
 }
+
+export { RequestVariable, symbol, init }

@@ -37,7 +37,7 @@ export const useDataSourcesStore = defineStore('datasource', () => {
       name: 'Test DataSource 01',
       type: 'rest',
       config: {
-        resourceUrl: 'posts',
+        resourceUrl: '$test',
         connection: 'test',
       },
     },

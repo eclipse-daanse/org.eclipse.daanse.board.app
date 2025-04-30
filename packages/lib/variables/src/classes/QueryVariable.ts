@@ -15,19 +15,25 @@ import { Variable } from './Variable'
 import { VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { type IQueryVariableConfig } from '..'
+import { Container } from 'inversify'
 
-export class QueryVariable extends Variable {
+const symbol = Symbol.for('QueryVariable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(QueryVariable);
+}
+
+class QueryVariable extends Variable {
   private innerQueryParam: string = ''
   public type = 'query'
 
   constructor(
     name: string,
-    storage: VariableStorage,
-    eventBus: TinyEmitter,
+    container: Container,
     config: IQueryVariableConfig,
   ) {
     console.log(config)
-    super(name, storage, eventBus, config)
+    super(name, container, config)
     this.parameter = config.queryParam
   }
 
@@ -48,3 +54,5 @@ export class QueryVariable extends Variable {
     return super.value
   }
 }
+
+export { QueryVariable, symbol, init }

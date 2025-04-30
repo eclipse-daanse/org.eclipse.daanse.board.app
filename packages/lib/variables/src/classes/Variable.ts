@@ -11,17 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { TinyEmitter } from 'tiny-emitter'
-import { VariableStorage } from '../storage/VariableStorage'
+
 import { RefreshType, VariableEvents } from '..'
 import { type IVariableConfig } from '..'
+import {
+  type VariableRepository,
+  identifier as variableRepositoryIdentifier
+} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { Container } from 'inversify'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { type TinyEmitter } from 'tiny-emitter'
 
-export class Variable {
+const symbol = Symbol.for('Variable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(Variable);
+}
+
+class Variable {
   private subscribers: any[] = []
   private innerValue: any
 
   public intervalFn: () => any = () => {}
   public description: string = ''
+  public storage: VariableRepository;
+  public eventBus: TinyEmitter;
   private refreshInterval: number = 0
   private refreshType: RefreshType = RefreshType.None
   private refreshIntervalId: number = 0
@@ -29,12 +43,16 @@ export class Variable {
 
   constructor(
     public name: string,
-    protected storage: VariableStorage,
-    private eventBus: TinyEmitter,
+    public container: Container,
     config: IVariableConfig,
   ) {
     this.description = config.description
-    this.eventBus = eventBus
+    this.eventBus = this.container.get<TinyEmitter>(
+      identifiers.TINY_EMITTER,
+    )
+    this.storage = this.container.get<VariableRepository>(
+      variableRepositoryIdentifier,
+    )
 
     this.refreshInterval = config.refreshInterval || 0
     this.refreshInterval = Math.max(this.refreshInterval, 300)
@@ -54,6 +72,7 @@ export class Variable {
         })
       }
     }
+    this.eventBus.emit(VariableEvents.VariableUpdated)
   }
 
   set onInterval(onInterval: () => any) {
@@ -96,3 +115,5 @@ export class Variable {
     }
   }
 }
+
+export { Variable, init, symbol }

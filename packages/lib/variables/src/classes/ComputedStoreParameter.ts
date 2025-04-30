@@ -12,21 +12,21 @@
  **********************************************************************/
 
 import { type Variable } from './Variable'
-import { type VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { Container } from 'inversify'
-import { identifier, VariableEvents } from '..'
+import { VariableRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { VariableEvents } from '..'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 
 export class ComputedStoreParameter {
-  private storage: VariableStorage
+  private storage: VariableRepository
   private innerExpression: string
   private eventBus: TinyEmitter
   private currentSubscriptions: Map<string, () => void> = new Map()
   private refreshCb: () => void
 
   constructor(container: Container, expression: string, refreshCb: () => void) {
-    this.storage = container.get<VariableStorage>(identifier)
+    this.storage = container.get<VariableRepository>(identifier)
     this.innerExpression = expression
     this.eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
     this.refreshCb = refreshCb
@@ -92,6 +92,8 @@ export class ComputedStoreParameter {
 
     dependencies.forEach(dep => {
       const variable = this.storage.getVariable(dep) as Variable
+      console.log('dep', dep)
+      console.log('storage', this.storage)
 
       this.currentSubscriptions.set(dep, () => {
         console.log('Should update')

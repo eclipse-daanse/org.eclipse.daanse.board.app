@@ -15,17 +15,23 @@ import { Variable } from './Variable'
 import { VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { type IConstantVariableConfig } from '..'
+import { Container } from 'inversify'
 
-export class ConstantVariable extends Variable {
+const symbol = Symbol.for('Variable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(ConstantVariable);
+}
+
+class ConstantVariable extends Variable {
   public type = 'constant'
 
   constructor(
     name: string,
-    storage: VariableStorage,
-    eventBus: TinyEmitter,
+    container: Container,
     config: IConstantVariableConfig,
   ) {
-    super(name, storage, eventBus, config)
+    super(name, container, config)
     this.value = config.value
   }
 
@@ -37,3 +43,5 @@ export class ConstantVariable extends Variable {
     super.value = value
   }
 }
+
+export { ConstantVariable, symbol, init }

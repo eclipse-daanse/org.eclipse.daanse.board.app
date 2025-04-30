@@ -15,6 +15,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ViewReport from '@/pages/ViewReport.vue'
 import DataSettings from '@/pages/DataSettings.vue'
 import EditReport from '@/pages/EditReport.vue'
+import Configuration from '@/pages/Configuration.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,11 +38,11 @@ const router = createRouter({
       name: 'data',
       component: DataSettings,
     },
-    // {
-    //   path: '/configuration',
-    //   name: 'config',
-    //   component: Configuration
-    // },
+    {
+      path: '/configuration',
+      name: 'config',
+      component: Configuration
+    },
     // {
     //   path: '/test',
     //   name: 'test',

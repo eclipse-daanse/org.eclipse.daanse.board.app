@@ -26,6 +26,7 @@ import router from './router'
 
 import { init } from 'org.eclipse.daanse.board.app.lib.module1'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { TinyEmitter } from 'tiny-emitter'
 
 // TODO: Move this to initialization of the app
 import {
@@ -119,12 +120,29 @@ import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vu
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import { init as initWidgetMap } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
+
+import { init as initVariable, ConstantVariableSymbol }
+  from 'org.eclipse.daanse.board.app.lib.variables'
+import { VariableFactory, init as initVariableFactory, identifier as variableFactoryIdentifier }
+  from 'org.eclipse.daanse.board.app.lib.factory.variable'
+import {
+  VariableRepository,
+  init as initVariableRepository,
+  identifier as variablerepositoryIdentifier
+} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+
+import { init as initConstantVariable } from "org.eclipse.daanse.board.app.ui.vue.variable.constant"
+import { init as initComputedVariable } from "org.eclipse.daanse.board.app.ui.vue.variable.computed"
+
 const app = createApp(App)
 
 init(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })
+
+const tinyEmitter = new TinyEmitter();
+container.bind(identifiers.TINY_EMITTER).toConstantValue(tinyEmitter)
 app.config.globalProperties.$container = container
 app.provide('container',container);
 initI18next(container)
@@ -161,6 +179,33 @@ initLangEnTextPlainWidget(container)
 initLangEnVideoWidget(container)
 initTableData(container)
 
+initVariable(container)
+initVariableFactory(container)
+initVariableRepository(container)
+initConstantVariable(container)
+initComputedVariable(container)
+
+// const variableFactory = container.get<VariableFactory>(variableFactoryIdentifier)
+const variableRepository = container.get<VariableRepository>(variablerepositoryIdentifier)
+
+// variableRepository.registerVariableType('constant', {
+//   Variable: ConstantVariableSymbol,
+//   Settings: null as any,
+// })
+
+variableRepository.registerVariable('test', 'constant', {
+  value: 'posts',
+})
+
+variableRepository.registerVariable('testComputed', 'computed', {
+  expression: '$test + 123',
+})
+
+window.test = function (value) {
+  const testVar = variableRepository.getVariable('test')
+  testVar.value = value
+}
+
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
 connectionRepository.registerConnectionType('rest', {
   Connection: RestConnectionIdentifier,
@@ -177,7 +222,7 @@ initRestConnectionUI(container)
 initOgcStaConnectionUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
-  resourceUrl: 'posts',
+  resourceUrl: '$test',
   connection: 'test',
 })
 

@@ -15,17 +15,24 @@ import { Variable } from './Variable'
 import { VariableStorage } from '../storage/VariableStorage'
 import { type TinyEmitter } from 'tiny-emitter'
 import { type IVariableConfig } from '..'
+import { Container } from 'inversify'
 
-export class TimeVariable extends Variable {
+
+const symbol = Symbol.for('TimeVariable')
+
+const init = (container: Container) => {
+  container.bind(symbol).toConstantValue(TimeVariable);
+}
+
+class TimeVariable extends Variable {
   public type = 'time'
 
   constructor(
     name: string,
-    storage: VariableStorage,
-    eventBus: TinyEmitter,
+    container: Container,
     config: IVariableConfig,
   ) {
-    super(name, storage, eventBus, config)
+    super(name, container, config)
     super.value = Date.now()
 
     super.onInterval = () => {
@@ -39,3 +46,5 @@ export class TimeVariable extends Variable {
 
   set value(value) {}
 }
+
+export { TimeVariable, symbol, init }

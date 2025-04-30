@@ -21,6 +21,7 @@ import {
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
+import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
 export interface IRestStoreConfiguration {
@@ -32,10 +33,8 @@ export interface IRestStoreConfiguration {
 
 export class RestStore extends BaseDatasource {
   private connection: any
-  //   private resourceUrl: ComputedString;
-  private resourceUrl: string
+  private resourceUrl: ComputedStoreParameter;
   private selectedJSONValue?: string
-  // private computedUrl: ComputedVariable;
 
   constructor(
     configuration: IRestStoreConfiguration,
@@ -46,8 +45,7 @@ export class RestStore extends BaseDatasource {
     console.log(container)
     this.connection = configuration.connection
 
-    // // this.resourceUrl = super.initVariable(configuration.resourceUrl);
-    this.resourceUrl = configuration.resourceUrl
+    this.resourceUrl = super.initVariable(configuration.resourceUrl);
 
     this.selectedJSONValue = configuration.selectedJSONValue
     this.pollingInterval = configuration.pollingInterval ?? 5000
@@ -69,7 +67,7 @@ export class RestStore extends BaseDatasource {
       const connection = connectionRepository.getConnection(
         this.connection,
       ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl })
+      const req = await connection.fetch({ url: this.resourceUrl.value })
       const data = await req.json()
 
       response = data
@@ -104,7 +102,7 @@ export class RestStore extends BaseDatasource {
       const connection = connectionRepository.getConnection(
         this.connection,
       ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl })
+      const req = await connection.fetch({ url: this.resourceUrl.value })
       const data = await req.json()
       return data
     } catch (e: any) {
