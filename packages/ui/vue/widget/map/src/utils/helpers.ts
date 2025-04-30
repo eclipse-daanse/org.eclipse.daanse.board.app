@@ -18,7 +18,7 @@ export function extractDataByPath(data: any, path: string) {
 
   for (const key of keys) {
     if (key.includes('[') && key.includes(']')) {
-      const [arrayKey, index] = key.replace(']', '').split('[')
+      const [arrayKey, index] = key.replace(/\]/g, '').split('[')
       if (index === '' || isNaN(Number(index)) || Number(index) < 0) return
       currentValue = currentValue[arrayKey]
       currentValue = Array.isArray(currentValue)
