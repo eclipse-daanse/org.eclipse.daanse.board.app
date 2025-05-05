@@ -1,0 +1,37 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.datasource.xmla",
+  "version": "0.0.1-next.1",
+  "description": "> TODO: description",
+  "author": "ssemenkoff <ssemenkoff@gmail.com>",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "main": "./dist/lib.core.umd.cjs",
+  "module": "./dist/lib.core.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build",
+    "test": "node ./__tests__/test.test.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.datasource.base": "^0.0.1-next.1"
+  },
+  "devDependencies": {
+    "inversify": "7.5.1",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.3",
+    "vite-plugin-dts": "4.5.3",
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "^0.0.1-next.1"
+  },
+  "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",
+  "publishConfig": {
+    "access": "public"
+  }
+}

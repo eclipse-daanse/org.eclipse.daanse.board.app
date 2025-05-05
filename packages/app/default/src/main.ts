@@ -64,6 +64,9 @@ import {
   symbol as RestDatasourceIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
 import {
+  init as initXmlaDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+import {
   init as initOGcStaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 
@@ -123,6 +126,7 @@ import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
+import { init as initXmlaDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import { init as initWidgetMap } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
@@ -162,6 +166,7 @@ initConnectionFactory(container)
 initRestConnection(container)
 initXmlaConnection(container)
 initRestDatasource(container)
+initXmlaDatasource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
 initOGcStaDatasource(container)
@@ -237,6 +242,7 @@ const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdent
 initRestDatasourceUI(container)
 initRestConnectionUI(container)
 initXmlaConnectionUI(container)
+initXmlaDatasourceUI(container)
 initOgcStaConnectionUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {

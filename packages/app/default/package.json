@@ -68,6 +68,7 @@
     "org.eclipse.daanse.board.app.ui.vue.datasource.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.connection.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.connection.xmla": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.datasource.xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.constant": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.computed": "^0.0.1-next.1",
     "pinia": "^3.0.1",
