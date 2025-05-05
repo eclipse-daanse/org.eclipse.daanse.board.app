@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2003/engine"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2003/engine">
+
+  <xsd:element name="LastSchemaUpdate" type="xsd:dateTime" />
+  <xsd:element name="LastDataUpdate" type="xsd:dateTime" />
+
+  <xsd:complexType name="ImpersonationInfo">
+    <xsd:all>
+      <xsd:element name="ImpersonationMode">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="ImpersonateServiceAccount" />
+            <xsd:enumeration value="ImpersonateAnonymous" />
+            <xsd:enumeration value="ImpersonateCurrentUser" />
+            <xsd:enumeration value="ImpersonateAccount" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Account" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="Password" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="ImpersonationInfoSecurity"
+        minOccurs="0">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="PasswordRemoved" />
+            <xsd:enumeration value="Unchanged" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:schema>

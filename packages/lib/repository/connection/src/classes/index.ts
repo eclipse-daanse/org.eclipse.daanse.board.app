@@ -91,6 +91,7 @@ export class ConnectionRepository {
       const connection = connectionFactory.createConnection<
         IConnection | PubSubConnection
       >(identifiers.Connection, connectionConfig)
+      console.log(connection)
       connections.set(connectionId, connection)
     }
   }

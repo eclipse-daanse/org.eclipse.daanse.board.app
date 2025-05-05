@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:ana="urn:schemas-microsoft-com:xml-analysis"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2010/engine/200/200">
+
+  <xsd:import
+    namespace="urn:schemas-microsoft-com:xml-analysis"
+    schemaLocation="xmla.xsd" />
+
+
+  <xsd:complexType name="RowNumberBinding">
+    <xsd:complexContent>
+      <xsd:extension base="ana:Binding" />
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="ExpressionBinding">
+    <xsd:complexContent>
+      <xsd:extension base="ana:Binding">
+        <xsd:all>
+          <xsd:element name="Expression" type="xsd:string" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="StorageEngineUsed">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Traditional" />
+        <xsd:enumeration value="InMemory" />
+        <xsd:enumeration value="Mixed" />
+        <xsd:enumeration value="TabularMetadata" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="ImagePath" type="xsd:string" />
+  <xsd:element name="ImageUrl" type="xsd:string" />
+  <xsd:element name="ImageUniqueID" type="xsd:string" />
+  <xsd:element name="ImageVersion" type="xsd:string" />
+  <xsd:element name="Token" type="xsd:string" />
+
+  <xsd:element name="ProcessingRecommendation">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="None" />
+        <xsd:enumeration value="Stale" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="ProcessingState">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Processed" />
+        <xsd:enumeration value="Unprocessed" />
+        <xsd:enumeration value="InvalidExpression" />
+        <xsd:enumeration value="CalculationError" />
+        <xsd:enumeration value="DependencyError" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="ShareDimensionStorage">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Distinct" />
+        <xsd:enumeration value="Shared" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+</xsd:schema>

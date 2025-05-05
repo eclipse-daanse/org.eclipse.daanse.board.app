@@ -30,6 +30,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.4",
     "org.eclipse.daanse.board.app.lib.connection.rest": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.connection.xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.ogcsta": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.rest": "^0.0.1-next.1",
@@ -66,6 +67,7 @@
 
     "org.eclipse.daanse.board.app.ui.vue.datasource.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.connection.rest": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.connection.xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.constant": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.computed": "^0.0.1-next.1",
     "pinia": "^3.0.1",

@@ -15,6 +15,7 @@
 
 export interface IRequestParams {
   url: string
+  [key: string]: any
 }
 
 export interface BaseConnectionConfig {

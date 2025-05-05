@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2011/engine/300/300"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:ana="urn:schemas-microsoft-com:xml-analysis"
+  xmlns:eng300="http://schemas.microsoft.com/analysisservices/2011/engine/300"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2011/engine/300/300">
+
+  <xsd:import
+    namespace="urn:schemas-microsoft-com:xml-analysis"
+    schemaLocation="xmla.xsd" />
+  <xsd:import
+    namespace="http://schemas.microsoft.com/analysisservices/2011/engine/300"
+    schemaLocation="eng300.xsd" />
+
+  <xsd:element name="DirectQueryMode">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="InMemory" />
+        <xsd:enumeration value="DirectQueryWithInMemory" />
+        <xsd:enumeration value="InMemoryWithDirectQuery" />
+        <xsd:enumeration value="DirectQuery" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:complexType name="Relationship">
+    <xsd:sequence>
+      <xsd:element name="ID" type="xsd:string" />
+      <xsd:element name="Visible" type="xsd:boolean" />
+      <xsd:element name="FromRelationshipEnd"
+        type="RelationshipEnd" />
+      <xsd:element name="ToRelationshipEnd"
+        type="RelationshipEnd" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RelationshipEnd">
+    <xsd:sequence>
+      <xsd:element name="Role" type="xsd:string" />
+      <xsd:element name="Multiplicity">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="One" />
+            <xsd:enumeration value="Many" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DimensionID" type="xsd:string" />
+      <xsd:element name="Attributes" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Attribute" minOccurs="0"
+              maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="AttributeID" type="xsd:string" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Translations" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Translation"
+              type="RelationshipEndTranslation" minOccurs="0"
+              maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="VisualizationProperties"
+        type="eng300:RelationshipEndVisualizationProperties" minOccurs="0"
+        maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="RelationshipEndTranslation">
+    <xsd:all>
+      <xsd:element name="Language" type="xsd:unsignedInt" />
+      <xsd:element name="Caption" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="CollectionCaption" type="xsd:string" />
+      <xsd:element name="Description" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="DisplayFolder" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="Annotations" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Annotation" type="ana:Annotation"
+              minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+
+
+  <xsd:element name="AllowedRowsExpression" type="xsd:string" />
+
+  <xsd:complexType name="Relationships">
+    <xsd:sequence>
+      <xsd:element name="Relationship" type="Relationship"
+        minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="XEvent">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ana:event_session" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="DirectQueryUsage">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="InMemoryWithDirectQuery" />
+        <xsd:enumeration value="DirectQueryOnly" />
+        <xsd:enumeration value="InMemoryOnly" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+</xsd:schema>

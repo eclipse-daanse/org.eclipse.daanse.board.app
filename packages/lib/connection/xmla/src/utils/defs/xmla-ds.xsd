@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema version="1.0"
+  targetNamespace="urn:schemas-microsoft-com:xml-analysis:mddataset"
+  xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"
+  xmlns:ana-x="urn:schemas-microsoft-com:xml-analysis:exception"
+  xmlns:eng="http://schemas.microsoft.com/analysisservices/2003/engine">
+
+
+  <xsd:import namespace="http://www.w3.org/2001/XMLSchema" />
+  <xsd:import
+    namespace="http://schemas.microsoft.com/analysisservices/2003/xmla"
+    schemaLocation="msxmla.xsd" />
+  <xsd:import
+    namespace="http://schemas.microsoft.com/analysisservices/2003/engine"
+    schemaLocation="eng.xsd" />
+  <xsd:import
+    namespace="urn:schemas-microsoft-com:xml-analysis:exception"
+    schemaLocation="xmla-x.xsd" />
+
+  <xsd:element name="root" type="mddataset" />
+
+  <xsd:complexType name="mddataset">
+    <xsd:sequence>
+      <xsd:element name="OlapInfo" minOccurs="0"
+        type="OlapInfo" />
+      <xsd:element name="Axes" minOccurs="0" type="Axes" />
+      <xsd:element name="CellData" minOccurs="0"
+        type="CellData" />
+      <xsd:element name="Exception" minOccurs="0"
+        type="ana-x:Exception" />
+      <xsd:element name="Messages" minOccurs="0"
+        type="ana-x:Messages" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="OlapInfo">
+    <xsd:sequence>
+      <xsd:element name="CubeInfo" type="CubeInfo" />
+      <xsd:element name="AxesInfo" type="AxesInfo" />
+      <xsd:element name="CellInfo" type="CellInfo" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="CubeInfo">
+    <xsd:sequence>
+      <xsd:element name="Cube" maxOccurs="unbounded"
+        type="OlapInfoCube" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="TupleType">
+    <xsd:sequence>
+      <xsd:element name="Member" type="MemberType"
+        maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="OlapInfoCube">
+    <xsd:sequence>
+      <xsd:element name="CubeName" type="xsd:string" />
+      <xsd:element ref="eng:LastDataUpdate" minOccurs="0" />
+      <xsd:element ref="eng:LastSchemaUpdate" minOccurs="0" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="AxesInfo">
+    <xsd:sequence>
+      <xsd:element name="AxisInfo" maxOccurs="unbounded"
+        type="AxisInfo"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="AxisInfo">
+    <xsd:sequence>
+      <xsd:element name="HierarchyInfo" type="HierarchyInfo"
+        minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" />
+  </xsd:complexType>
+
+
+  <xsd:complexType name="HierarchyInfo">
+    <xsd:sequence>
+      <xsd:any namespace="##targetNamespace" minOccurs="0"
+        maxOccurs="unbounded" processContents="skip" />
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"
+      use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="CellInfo">
+    <xsd:sequence>
+      <xsd:any namespace="##targetNamespace" minOccurs="0"
+        maxOccurs="unbounded" processContents="skip" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Axes">
+    <xsd:sequence>
+      <xsd:element name="Axis" type="Axis"
+        maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Axis">
+    <xsd:group ref="SetType" minOccurs="0" maxOccurs="unbounded" />
+    <xsd:attribute name="name" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:group name="SetType">
+    <xsd:choice>
+      <xsd:element name="Members" type="MembersType" />
+      <xsd:element name="Tuples" type="TuplesType" />
+      <xsd:element name="CrossProduct" type="SetListType" />
+      <xsd:element ref="msxmla:NormTupleSet" />
+      <xsd:element name="Union">
+        <xsd:complexType>
+          <xsd:group ref="SetType" minOccurs="0"
+            maxOccurs="unbounded" />
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="MembersType">
+    <xsd:sequence>
+      <xsd:element name="Member" type="MemberType"
+        minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attribute name="Hierarchy" type="xsd:string"
+      use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="MemberType">
+    <xsd:sequence>
+      <xsd:any namespace="##targetNamespace" minOccurs="0"
+        maxOccurs="unbounded" processContents="skip" />
+    </xsd:sequence>
+    <xsd:attribute name="Hierarchy" type="xsd:string" />
+  </xsd:complexType>
+
+
+  <xsd:complexType name="TuplesType">
+    <xsd:sequence>
+      <xsd:element name="Tuple" type="TupleType" minOccurs="0"
+        maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SetListType">
+    <xsd:group ref="SetType" minOccurs="0" maxOccurs="unbounded" />
+    <xsd:attribute name="Size" type="xsd:unsignedInt" />
+  </xsd:complexType>
+  <xsd:complexType name="CellData">
+    <xsd:sequence>
+      <xsd:element name="Cell" type="CellType" minOccurs="0"
+        maxOccurs="unbounded" />
+      <xsd:element name="CellSet" type="CellSetType"
+        minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="CellType">
+    <xsd:sequence>
+      <xsd:element name="Value" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Error" type="CellTypeError"
+              minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:any namespace="##targetNamespace" minOccurs="0"
+        maxOccurs="unbounded" processContents="skip" />
+    </xsd:sequence>
+    <xsd:attribute name="CellOrdinal" type="xsd:unsignedInt"
+      use="required" />
+  </xsd:complexType>
+
+
+  <xsd:complexType name="CellTypeError">
+    <xsd:attribute name="ErrorCode" type="xsd:long" />
+    <xsd:attribute name="Description" type="xsd:string" />
+  </xsd:complexType>
+
+
+  <xsd:complexType name="CellSetType">
+    <xsd:sequence>
+      <xsd:element name="Data" type="xsd:base64Binary"
+        minOccurs="1" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
