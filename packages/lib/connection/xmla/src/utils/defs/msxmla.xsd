@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2003/xmla"
+  xmlns="http://schemas.microsoft.com/analysisservices/2003/xmla"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:ana-ds="urn:schemas-microsoft-com:xml-analysis:mddataset">
+
+  <xsd:import
+    namespace="urn:schemas-microsoft-com:xml-analysis:mddataset"
+    schemaLocation="xmla-ds.xsd" />
+
+  <xsd:element name="NormTupleSet">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="NormTuples" type="NormTuplesType"
+          minOccurs="1" maxOccurs="1" />
+        <xsd:element name="MembersLookup" minOccurs="1"
+          maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Members" type="ana-ds:TupleType"
+                minOccurs="1" maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="NormTuplesType">
+    <xsd:sequence>
+      <xsd:element name="NormTuple" minOccurs="0"
+        maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="MemberRef" minOccurs="0"
+              maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="MemberOrdinal" type="xsd:int"
+                    minOccurs="1" maxOccurs="1" />
+                  <xsd:element name="MemberDispInfo" type="xsd:int"
+                    minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

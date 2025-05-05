@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2011/engine/300"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:eng="http://schemas.microsoft.com/analysisservices/2003/engine"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2011/engine/300">
+
+  <xsd:import
+    namespace="http://schemas.microsoft.com/analysisservices/2003/engine"
+    schemaLocation="eng.xsd" />
+
+
+  <xsd:element name="DataEmbeddingStyle">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Embedded" />
+        <xsd:enumeration value="NotEmbedded" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+
+  <xsd:element name="QueryImpersonationInfo"
+    type="eng:ImpersonationInfo" />
+  <xsd:element name="QueryHints" type="xsd:string" />
+  <xsd:element name="StringStoresCompatibilityLevel">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:int">
+        <xsd:enumeration value="1050" />
+        <xsd:enumeration value="1100" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="CurrentStringStoresCompatibilityLevel">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:int">
+        <xsd:enumeration value="1050" />
+        <xsd:enumeration value="1100" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+
+  <xsd:complexType
+    name="RelationshipEndVisualizationProperties">
+    <xsd:sequence>
+      <xsd:element name="FolderPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="ContextualNameRule" minOccurs="0"
+        maxOccurs="1" default="None">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="None" />
+            <xsd:enumeration value="Context" />
+            <xsd:enumeration value="Merge" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DefaultDetailsPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="DisplayKeyPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="CommonIdentifierPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="IsDefaultMeasure" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="IsDefaultImage" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="SortPropertiesPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="AttributeHierarchyProcessingState">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Processed" />
+      <xsd:enumeration value="Unprocessed" />
+      <xsd:enumeration value="DependencyError" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType
+    name="DimensionAttributeVisualizationProperties">
+    <xsd:sequence>
+      <xsd:element name="FolderPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="ContextualNameRule" minOccurs="0"
+        maxOccurs="1" default="None">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="None" />
+            <xsd:enumeration value="Context" />
+            <xsd:enumeration value="Merge" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Alignment" minOccurs="0" maxOccurs="1"
+        default="Default">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="Left" />
+            <xsd:enumeration value="Right" />
+            <xsd:enumeration value="Center" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="IsFolderDefault" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="IsRightToLeft" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="SortDirection" minOccurs="0"
+        maxOccurs="1" default="Default">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="Ascending" />
+            <xsd:enumeration value="Descending" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Units" type="xsd:string" minOccurs="0"
+        maxOccurs="1" default="" />
+      <xsd:element name="Width" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="DefaultDetailsPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="CommonIdentifierPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="SortPropertiesPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="DisplayKeyPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="IsDefaultImage" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="DefaultAggregateFunction"
+        minOccurs="0" maxOccurs="1" default="Default">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="None" />
+            <xsd:enumeration value="Sum" />
+            <xsd:enumeration value="Min" />
+            <xsd:enumeration value="Max" />
+            <xsd:enumeration value="Count" />
+            <xsd:enumeration value="Average" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType
+    name="HierarchyVisualizationProperties">
+    <xsd:sequence>
+      <xsd:element name="ContextualNameRule" minOccurs="0"
+        maxOccurs="1" default="None">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="None" />
+            <xsd:enumeration value="Context" />
+            <xsd:enumeration value="Merge" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="FolderPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ProcessingState">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Processed" />
+        <xsd:enumeration value="Unprocessed" />
+        <xsd:enumeration value="InvalidExpression" />
+        <xsd:enumeration value="DependencyError" />
+        <xsd:enumeration value="CalculationError" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="StructureType">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Natural" />
+        <xsd:enumeration value="Unnatural" />
+        <xsd:enumeration value="Unknown" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="ServerMode">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Multidimensional" />
+        <xsd:enumeration value="Tabular" />
+        <xsd:enumeration value="SharePoint" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+
+  <xsd:complexType
+    name="CalculationPropertiesVisualizationProperties">
+    <xsd:sequence>
+      <xsd:element name="FolderPosition" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="ContextualNameRule" minOccurs="0"
+        maxOccurs="1" default="None">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="None" />
+            <xsd:enumeration value="Context" />
+            <xsd:enumeration value="Merge" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Alignment" minOccurs="0" maxOccurs="1"
+        default="Default">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="Left" />
+            <xsd:enumeration value="Right" />
+            <xsd:enumeration value="Center" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="IsFolderDefault" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="IsRightToLeft" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="SortDirection" minOccurs="0"
+        maxOccurs="1" default="Default">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Default" />
+            <xsd:enumeration value="Ascending" />
+            <xsd:enumeration value="Descending" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Units" type="xsd:string" minOccurs="0"
+        maxOccurs="1" default="" />
+      <xsd:element name="Width" type="xsd:integer"
+        minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="IsDefaultMeasure" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+      <xsd:element name="DefaultDetailsPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="SortPropertiesPosition"
+        type="xsd:integer" minOccurs="0" maxOccurs="1" default="-1" />
+      <xsd:element name="IsSimpleMeasure" type="xsd:boolean"
+        minOccurs="0" maxOccurs="1" default="false" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

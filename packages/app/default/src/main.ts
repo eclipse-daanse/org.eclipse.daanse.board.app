@@ -54,6 +54,11 @@ import {
   symbol as RestConnectionIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 import {
+  XmlaConnection,
+  init as initXmlaConnection,
+  symbol as XmlaConnectionIdentifier,
+} from 'org.eclipse.daanse.board.app.lib.connection.xmla'
+import {
   RestStore,
   init as initRestDatasource,
   symbol as RestDatasourceIdentifier,
@@ -117,6 +122,7 @@ import { init as initSvgRepeat } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
+import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import { init as initWidgetMap } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
@@ -154,6 +160,7 @@ initConnection(container)
 initDatasource(container)
 initConnectionFactory(container)
 initRestConnection(container)
+initXmlaConnection(container)
 initRestDatasource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
@@ -207,10 +214,20 @@ window.test = function (value) {
 }
 
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
-connectionRepository.registerConnectionType('rest', {
-  Connection: RestConnectionIdentifier,
-  Settings: null as any,
-})
+
+// connectionRepository.registerConnection('test_xmla', 'xmla', {
+//   url: 'https://ssemenkoff.dev/emondrian/xmla',
+//   catalogName: 'catalog',
+//   cubeName: 'cube',
+// });
+
+
+XmlaConnection.getCatalogs('https://ssemenkoff.dev/emondrian/xmla').then((catalogs) => {
+  console.log('catalogs', catalogs)
+});
+XmlaConnection.getCubes('https://ssemenkoff.dev/emondrian/xmla', "FoodMart").then((cubes) => {
+  console.log('catalogs', cubes)
+});
 
 connectionRepository.registerConnection('test', 'rest', {
   url: 'https://jsonplaceholder.typicode.com/',
@@ -219,6 +236,7 @@ connectionRepository.registerConnection('test', 'rest', {
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
 initRestDatasourceUI(container)
 initRestConnectionUI(container)
+initXmlaConnectionUI(container)
 initOgcStaConnectionUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {

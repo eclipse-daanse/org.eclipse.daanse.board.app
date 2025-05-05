@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2010/engine/200"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2010/engine/200">
+
+  <xsd:element name="WarningColumn">
+    <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="Dimension" type="xsd:string" />
+        <xsd:element name="Attribute" type="xsd:string" />
+      </xsd:all>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="WarningMeasure">
+    <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="Cube" type="xsd:string" />
+        <xsd:element name="MeasureGroup" type="xsd:string" />
+        <xsd:element name="MeasureName" type="xsd:string" />
+      </xsd:all>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="WarningLocationObject">
+    <xsd:choice>
+      <xsd:element ref="WarningColumn" />
+      <xsd:element ref="WarningMeasure" />
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:element name="CalculationError">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="IgnoreError" />
+        <xsd:enumeration value="ReportAndStop" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="CompatibilityLevel" type="xsd:integer" />
+
+</xsd:schema>

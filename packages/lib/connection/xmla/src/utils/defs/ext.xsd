@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2003/ext"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2003/ext">
+
+  <xsd:element name="Authenticate">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="SspiHandshake" minOccurs="1"
+          maxOccurs="1" nillable="false" type="xsd:base64Binary" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="AuthenticateResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="return" minOccurs="1" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="SspiHandshake" minOccurs="1"
+                maxOccurs="1" nillable="false" type="xsd:base64Binary" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

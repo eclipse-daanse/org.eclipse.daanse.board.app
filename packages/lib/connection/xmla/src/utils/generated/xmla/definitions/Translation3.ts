@@ -1,0 +1,21 @@
+/*********************************************************************
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
+import type { Source1 } from "./Source1";
+
+/** Translation */
+export interface Translation3 {
+  /** xsd:int */
+  Language?: string;
+  /** Source */
+  Source?: Source1;
+}

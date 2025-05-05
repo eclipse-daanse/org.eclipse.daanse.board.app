@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<wsdl:definitions
+  xmlns="urn:daanse-eclipse-org:xmla-ws"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ana="urn:schemas-microsoft-com:xml-analysis"
+  xmlns:ext="http://schemas.microsoft.com/analysisservices/2003/ext"
+  xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"
+  xmlns:eng="http://schemas.microsoft.com/analysisservices/2003/engine"
+  xmlns:eng2="http://schemas.microsoft.com/analysisservices/2003/engine/2"
+  xmlns:eng2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2"
+  xmlns:eng100="http://schemas.microsoft.com/analysisservices/2008/engine/100"
+  xmlns:eng100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100"
+  xmlns:eng200="http://schemas.microsoft.com/analysisservices/2010/engine/200"
+  xmlns:eng200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"
+  xmlns:eng300="http://schemas.microsoft.com/analysisservices/2011/engine/300"
+  xmlns:eng300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300"
+  xmlns:eng400="http://schemas.microsoft.com/analysisservices/2012/engine/400"
+  xmlns:eng600="http://schemas.microsoft.com/analysisservices/2013/engine/600"
+  xmlns:eng800="http://schemas.microsoft.com/analysisservices/2013/engine/800"
+  xmlns:ana-ds="urn:schemas-microsoft-com:xml-analysis:mddataset"
+  xmlns:ana-e="urn:schemas-microsoft-com:xml-analysis:empty"
+  xmlns:ana-m="http://schemas.microsoft.com/analysisservices/2003/xmla-multipleresults"
+  xmlns:ana-rs="urn:schemas-microsoft-com:xml-analysis:rowset"
+  xmlns:ana-x="urn:schemas-microsoft-com:xml-analysis:exception"
+  targetNamespace="urn:daanse-eclipse-org:xmla-ws"
+  name="SQLServerAnalysisServicesProtocol">
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/xmla"
+        schemaLocation="msxmla.xsd" />
+    </xsd:schema>
+
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/ext"
+        schemaLocation="ext.xsd" />
+    </xsd:schema>
+
+    <xsd:schema>
+      <xsd:import
+        namespace="urn:schemas-microsoft-com:xml-analysis"
+        schemaLocation="xmla.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="urn:schemas-microsoft-com:xml-analysis:mddataset"
+        schemaLocation="xmla-ds.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="urn:schemas-microsoft-com:xml-analysis:rowset"
+        schemaLocation="xmla-rs.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="urn:schemas-microsoft-com:xml-analysis:empty"
+        schemaLocation="xmla-e.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/xmla-multipleresults"
+        schemaLocation="xmla-m.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="urn:schemas-microsoft-com:xml-analysis:exception"
+        schemaLocation="xmla-x.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/engine"
+        schemaLocation="eng.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/engine/2"
+        schemaLocation="eng2.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2003/engine/2/2"
+        schemaLocation="eng2_2.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2008/engine/100"
+        schemaLocation="eng100.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2008/engine/100/100"
+        schemaLocation="eng100_100.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2010/engine/200"
+        schemaLocation="eng200.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"
+        schemaLocation="eng200_200.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2011/engine/300"
+        schemaLocation="eng300.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2011/engine/300/300"
+        schemaLocation="eng300_300.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2012/engine/400"
+        schemaLocation="eng400.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2013/engine/600"
+        schemaLocation="eng600.xsd" />
+    </xsd:schema>
+    <xsd:schema>
+      <xsd:import
+        namespace="http://schemas.microsoft.com/analysisservices/2013/engine/800"
+        schemaLocation="eng800.xsd" />
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="ext:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters"
+      element="ext:AuthenticateResponse" />
+  </wsdl:message>
+
+  <wsdl:message name="DiscoverSoapIn">
+    <wsdl:part name="parameters" element="ana:Discover" />
+    <wsdl:part name="Session" element="ana:Session" />
+    <wsdl:part name="BeginSession" element="ana:BeginSession" />
+    <wsdl:part name="EndSession" element="ana:EndSession" />
+  </wsdl:message>
+  <wsdl:message name="DiscoverSoapOut">
+    <wsdl:part name="parameters" element="ana:DiscoverResponse" />
+    <wsdl:part name="Session" element="ana:Session" />
+  </wsdl:message>
+  <wsdl:message name="ExecuteSoapIn">
+    <wsdl:part name="parameters" element="ana:Execute" />
+    <wsdl:part name="Session" element="ana:Session" />
+    <wsdl:part name="BeginSession" element="ana:BeginSession" />
+    <wsdl:part name="EndSession" element="ana:EndSession" />
+  </wsdl:message>
+  <wsdl:message name="ExecuteSoapOut">
+    <wsdl:part name="parameters" element="ana:ExecuteResponse" />
+    <wsdl:part name="Session" element="ana:Session" />
+  </wsdl:message>
+
+  <wsdl:portType name="MsXmlAnalysisSoapPortType">
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="AuthenticateSoapIn" />
+      <wsdl:output message="AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Discover">
+      <wsdl:input message="DiscoverSoapIn" name="DiscoverSoapIn" />
+      <wsdl:output message="DiscoverSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Execute">
+      <wsdl:input message="ExecuteSoapIn" />
+      <wsdl:output message="ExecuteSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="MsXmlAnalysisSoapBinding"
+    type="MsXmlAnalysisSoapPortType">
+    <!-- -->
+    <soap:binding
+      transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+
+    <wsdl:operation name="Authenticate">
+      <soap:operation style="document" />
+      <wsdl:input>
+        <soap:body parts="parameters" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="parameters" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="Discover">
+      <soap:operation
+        soapAction="urn:schemas-microsoft-com:xml-analysis:Discover"
+        style="document" />
+      <wsdl:input>
+        <soap:body parts="parameters" use="literal" />
+        <soap:header message="DiscoverSoapIn" part="Session"
+          use="literal" />
+        <soap:header message="DiscoverSoapIn"
+          part="BeginSession" use="literal" />
+        <soap:header message="DiscoverSoapIn" part="EndSession"
+          use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="parameters"
+          use="literal" />
+        <soap:header message="DiscoverSoapOut" part="Session"
+          use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Execute">
+      <soap:operation
+        soapAction="urn:schemas-microsoft-com:xml-analysis:Execute"
+        style="document" />
+      <wsdl:input>
+        <soap:body parts="parameters" use="literal" />
+        <soap:header message="ExecuteSoapIn" part="Session"
+          use="literal" />
+        <soap:header message="ExecuteSoapIn" part="BeginSession"
+          use="literal" />
+        <soap:header message="ExecuteSoapIn" part="EndSession"
+          use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body parts="parameters" use="literal" />
+        <soap:header message="ExecuteSoapOut" part="Session"
+          use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="MsXmlAnalysisService">
+    <wsdl:port name="MsXmlAnalysisSoapPort"
+      binding="MsXmlAnalysisSoapBinding">
+      <soap:address location="https://ssemenkoff.dev/emondrian/xmla" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

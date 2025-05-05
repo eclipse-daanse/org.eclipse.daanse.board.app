@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0" xmlns="urn:schemas-microsoft-com:xml-analysis:empty"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  xmlns:ana-x="urn:schemas-microsoft-com:xml-analysis:exception"
+  targetNamespace="urn:schemas-microsoft-com:xml-analysis:empty">
+
+  <xsd:import
+    namespace="urn:schemas-microsoft-com:xml-analysis:exception"
+    schemaLocation="xmla-x.xsd" />
+
+  <xsd:complexType name="emptyresult">
+    <xsd:sequence>
+      <xsd:element name="Exception" minOccurs="0"
+        type="ana-x:Exception" />
+      <xsd:element name="Messages" minOccurs="0"
+        type="ana-x:Messages" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="root" type="emptyresult" />
+
+
+</xsd:schema>

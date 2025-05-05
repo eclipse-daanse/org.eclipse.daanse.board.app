@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  version="1.0"
+  xmlns="http://schemas.microsoft.com/analysisservices/2013/engine/800"
+  xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" jaxb:version="3.0"
+  targetNamespace="http://schemas.microsoft.com/analysisservices/2013/engine/800">
+
+
+  <xsd:element name="SubscriptionId" type="xsd:string" />
+
+  <xsd:element name="DaxOptimizationMode">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="1" />
+        <xsd:enumeration value="0" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+</xsd:schema>
