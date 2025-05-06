@@ -5754,9 +5754,9 @@ eslint-plugin-import@^2.31.0:
     tsconfig-paths "^3.15.0"
 
 eslint-plugin-oxlint@^0.16.6:
-  version "0.16.8"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-oxlint/-/eslint-plugin-oxlint-0.16.8.tgz#95b784cc90dbb1bafc8c19ee59805b005a2048cc"
-  integrity sha512-J8/v06ov3pj91S42HtRQXeJmfXW+J2odqz5Wyb4oSwtS0JV7GhKV+6HegM6w7zXVGy9SLjYVKgXIv6w024eA0g==
+  version "0.16.9"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-oxlint/-/eslint-plugin-oxlint-0.16.9.tgz#6d553149e32d20f6a26664352facb534e9f8e3af"
+  integrity sha512-v6VN4ata0ehULWxvf99RcHd4bevp+S/rnU8wl/gam/jyJrZPyG0L5zDtaA7xBRrT3HnYrgBX5CidQ7me9oulxQ==
   dependencies:
     jsonc-parser "^3.3.1"
 
