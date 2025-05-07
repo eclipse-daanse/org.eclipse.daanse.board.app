@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.connection.base": "^0.0.1-next.1",
-    "graphiql": "^3.8.3",
+    "graphiql": "^4.0.2",
     "graphql": "^16.10.0"
   },
   "devDependencies": {
