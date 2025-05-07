@@ -2790,9 +2790,9 @@
   integrity sha512-OGjdsXN+d3UZFQZ+r+ozX20G7BcHWCGkn9XZUVItJwzpNa9x4EiPsKCJVk17jVFRAsAHdMBcsBRdErzdO6/Hrg==
 
 "@tiptap/extension-underline@^2.11.2":
-  version "2.11.9"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-underline/-/extension-underline-2.11.9.tgz#78a3d29f9d93a2d48ab44854cf4ad76c119ca3bf"
-  integrity sha512-b8MwovgUqaDZSwCJ48ug9cKBBD3prwPTUH0IZ8HofodHc8VF8xbPmUEpePRnCYaV0ONGKPHkiz1crIwj1FBK+A==
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-underline/-/extension-underline-2.12.0.tgz#1f1c023cc01d6eeaee39b504224459e1dfdfac57"
+  integrity sha512-u95lrUCesw1SN3BXY4xrgfSuxtoCYmJ9uaU7IVVOu0zVsDFtLlOa82kd63KVF+URL0kMdO+FBmvdS6d8Era70Q==
 
 "@tiptap/pm@^2.11.2", "@tiptap/pm@^2.11.9":
   version "2.11.9"
