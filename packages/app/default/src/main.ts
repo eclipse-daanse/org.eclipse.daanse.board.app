@@ -59,6 +59,12 @@ import {
   symbol as XmlaConnectionIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 import {
+  init as initWebsocketConnection,
+} from 'org.eclipse.daanse.board.app.lib.connection.websocket'
+import {
+  init as initMqttConnection,
+} from 'org.eclipse.daanse.board.app.lib.connection.mqtt'
+import {
   RestStore,
   init as initRestDatasource,
   symbol as RestDatasourceIdentifier,
@@ -66,6 +72,9 @@ import {
 import {
   init as initXmlaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+import {
+  init as initWebsocketDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.websocket'
 import {
   init as initOGcStaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
@@ -126,7 +135,19 @@ import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
-import { init as initXmlaDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
+import {
+  init as initXmlaDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
+import {
+  init as initWebsocketConnectionUI
+} from 'org.eclipse.daanse.board.app.ui.vue.connection.ws'
+import {
+  init as initWebsocketDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.ws'
+import {
+  init as initMqttConnectionUI
+} from 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
+
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import { init as initWidgetMap } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
@@ -165,6 +186,9 @@ initDatasource(container)
 initConnectionFactory(container)
 initRestConnection(container)
 initXmlaConnection(container)
+initWebsocketConnection(container)
+initMqttConnection(container)
+initWebsocketDatasource(container)
 initRestDatasource(container)
 initXmlaDatasource(container)
 initWidgetRepo(container)
@@ -244,6 +268,9 @@ initRestConnectionUI(container)
 initXmlaConnectionUI(container)
 initXmlaDatasourceUI(container)
 initOgcStaConnectionUI(container)
+initWebsocketConnectionUI(container)
+initWebsocketDatasourceUI(container)
+initMqttConnectionUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: '$test',

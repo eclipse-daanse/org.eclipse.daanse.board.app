@@ -11,11 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-// import { extractDataByPath } from "@/utils/helpers";
-import { injectable, inject, Container } from 'inversify'
+import { inject, Container } from 'inversify'
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { type TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-// import type { ComputedString } from "@/plugins/variables/ComputedString";
+import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
@@ -33,32 +33,32 @@ export class WSStore extends BaseDatasource {
 
     this.connection = configuration.connection
 
-    // const connectionRepository = (this as any).connectionRepository
-    // const connection = connectionRepository.getConnection(
-    //   this.connection,
-    // ) as TwoWayConnection
+    const connectionRepository = this.container.get(identifier) as ConnectionRepository
+    const connection = connectionRepository.getConnection(
+      this.connection,
+    ) as TwoWayConnection
 
-    // if (configuration.topic && connection.hasTopics()) {
-    //   this.topic = configuration.topic
-    //   ;(connection as MQTTConnection).connectStore(this, configuration.topic)
-    // }
+    if (configuration.topic && connection.hasTopics()) {
+      this.topic = configuration.topic
+      ;(connection as any).connectStore(this, configuration.topic)
+    }
 
-    // connection.subscribe((event, data, topic) => {
-    //   switch (event) {
-    //     case 'connect':
-    //       this.onConnect()
-    //       break
-    //     case 'message':
-    //       this.onMessage(data, topic)
-    //       break
-    //     case 'close':
-    //       this.onClose()
-    //       break
-    //     case 'error':
-    //       this.onError(data)
-    //       break
-    //   }
-    // })
+    connection.subscribe((event, data, topic) => {
+      switch (event) {
+        case 'connect':
+          this.onConnect()
+          break
+        case 'message':
+          this.onMessage(data, topic)
+          break
+        case 'close':
+          this.onClose()
+          break
+        case 'error':
+          this.onError(data)
+          break
+      }
+    })
   }
 
   private onError(error: any) {
@@ -86,70 +86,66 @@ export class WSStore extends BaseDatasource {
   }
 
   private parseToDataTable(): any {
-    // const data = this.accumulatedData
-    // if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
+    const data = this.accumulatedData
+    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
 
-    // const headers: string[] = ['index']
-    // const rows: any[] = []
+    const headers: string[] = ['index']
+    const rows: any[] = []
 
-    // const items = data.map((item: any, index: number) => {
-    //   if (typeof item !== 'object') return {}
+    const items = data.map((item: any, index: number) => {
+      if (typeof item !== 'object') return {}
 
-    //   const row: IDataTableRow = {
-    //     index,
-    //   }
+      const row: any = {
+        index,
+      }
 
-    //   for (const key in item) {
-    //     if (typeof item[key] === 'object' || Array.isArray(item[key])) continue
+      for (const key in item) {
+        if (typeof item[key] === 'object' || Array.isArray(item[key])) continue
 
-    //     if (!headers.includes(key)) {
-    //       headers.push(key)
-    //     }
+        if (!headers.includes(key)) {
+          headers.push(key)
+        }
 
-    //     row[key] = item[key]
-    //   }
+        row[key] = item[key]
+      }
 
-    //   return row
-    // })
+      return row
+    })
 
-    // items.forEach((item: IDataTableRow, index: number) => {
-    //   rows[index] = []
+    items.forEach((item: any, index: number) => {
+      rows[index] = []
 
-    //   headers.forEach((header: string) => {
-    //     rows[index].push(item[header])
-    //   })
-    // })
+      headers.forEach((header: string) => {
+        rows[index].push(item[header])
+      })
+    })
 
-    // return { items, headers, rows }
+    return { items, headers, rows }
   }
 
   destroy(): void {
     console.log('Destroying WSStore')
 
-    // const connectionRepository = (this as any).connectionRepository
-    // const connection = connectionRepository.getConnection(
-    //   this.connection,
-    // ) as TwoWayConnection
+    const connectionRepository = this.container.get(identifier) as ConnectionRepository
+    const connection = connectionRepository.getConnection(
+      this.connection,
+    ) as TwoWayConnection
 
-    // if (connection && connection.hasTopics()) {
-    //   ;(connection as MQTTConnection).disconnectStore(this)
-    // }
+    if (connection && connection.hasTopics()) {
+      (connection as any).disconnectStore(this)
+    }
   }
 
-  getData(type: string): Promise<any> {
-    // if (type === 'DataTable') {
-    //   return this.parseToDataTable() as unknown as Promise<DataMap[T]>
-    // }
-    // if (type === 'object') {
-    //   return { messages: this.accumulatedData } as unknown as Promise<
-    //     DataMap[T]
-    //   >
-    // }
-    // if (type === 'string') {
-    //   return JSON.stringify(this.accumulatedData) as unknown as Promise<
-    //     DataMap[T]
-    //   >
-    // }
+  getData(type: string): any {
+    if (type === 'DataTable') {
+      return this.parseToDataTable()
+    }
+    if (type === 'object') {
+      return { messages: this.accumulatedData }
+    }
+    if (type === 'string') {
+      return JSON.stringify(this.accumulatedData)
+    }
 
     throw new Error('Method not implemented.')
   }

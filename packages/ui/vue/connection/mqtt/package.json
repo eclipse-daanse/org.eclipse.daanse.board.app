@@ -1,34 +1,40 @@
 {
-  "name": "org.eclipse.daanse.board.app.lib.datasource.websocket",
+  "name": "org.eclipse.daanse.board.app.ui.vue.connection.mqtt",
   "version": "0.0.1-next.1",
   "description": "> TODO: description",
   "author": "ssemenkoff <ssemenkoff@gmail.com>",
   "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
   "license": "ISC",
-  "main": "./dist/lib.core.umd.cjs",
-  "module": "./dist/lib.core.js",
-  "types": "./dist/index.d.ts",
   "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.connection.mqtt.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.connection.mqtt.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.connection.mqtt.d.ts",
+  "files": [
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "test": "node ./__tests__/test.test.ts"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "org.eclipse.daanse.board.app.lib.datasource.base": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.connection.twowayconnection": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.connection.mqtt": "^0.0.1-next.1",
+    "lodash": "^4.17.16",
+    "vue-json-pretty": "^2.4.0"
   },
   "devDependencies": {
     "inversify": "7.5.1",
     "typescript": "^5.8.2",
     "vite": "^6.2.3",
-    "vite-plugin-dts": "4.5.3"
+    "vite-plugin-dts": "4.5.3",
+    "@types/lodash": "^4.17.16"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",
   "publishConfig": {

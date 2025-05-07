@@ -17,7 +17,7 @@ import {
   type IWSStoreConfiguration
 } from './classes'
 
-const symbol = Symbol('RestStore')
+const symbol = Symbol.for('WSStore')
 
 const init = (container: Container) => {
   container.bind(symbol).toConstantValue(WSStore);
