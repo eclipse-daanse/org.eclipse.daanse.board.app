@@ -12,16 +12,16 @@ updates:
     schedule:
       interval: daily
     groups:
+      minor-updates:
+        patterns: ["*"]
+        update-types: ["minor"]
+      patch-updates:
+        patterns: ["*"]
+        update-types: ["patch"]
       argosci:
         applies-to: version-updates
         patterns:
           - "@argos-ci/*"
-      storybook:
-        applies-to: version-updates
-        patterns:
-          - "@storybook/*"
-          - "storybook"
-          - "storybook-dark-mode"
       commitlint:
         applies-to: version-updates
         patterns:
@@ -31,9 +31,6 @@ updates:
         patterns:
           - "eslint"
           - "@eslint/*"
-      typescript-eslint:
-        applies-to: version-updates
-        patterns:
           - "@typescript-eslint/*"
           - "typescript-eslint"
       vitest:
