@@ -5639,10 +5639,10 @@ electron-winstaller@^5.3.0:
   optionalDependencies:
     "@electron/windows-sign" "^1.1.2"
 
-electron@36.1.0:
-  version "36.1.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-36.1.0.tgz#9919b77e61cd1400acc6dd24f9db8451fba5f8eb"
-  integrity sha512-gnp3BnbKdGsVc7cm1qlEaZc8pJsR08mIs8H/yTo8gHEtFkGGJbDTVZOYNAfbQlL0aXh+ozv+CnyiNeDNkT1Upg==
+electron@36.2.0:
+  version "36.2.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-36.2.0.tgz#05bb179eb4c5de0412fc6d49628abc949fd679c1"
+  integrity sha512-5yldoRjBKxPQfI0QMX+qq750o3Nl8N1SZnJqOPMq0gZ6rIJ+7y4ZLp808GrFwjfTm05TYgq3GSD8FGuKQZqwEw==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^22.7.7"
@@ -6778,6 +6778,11 @@ gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
+
+geographiclib-geodesic@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/geographiclib-geodesic/-/geographiclib-geodesic-2.1.1.tgz#5f9c02f2e0db5403055ba637f76d9e58b2215863"
+  integrity sha512-lkd8EUkPSByobWu9BPMHTdYA5AUZxOa8McmUNtBE9KrvUJEvSADnN6gTDmhXbi6NzdA16LtWLpSxLE/lIIRhyA==
 
 geojson@^0.5.0:
   version "0.5.0"
@@ -9027,9 +9032,9 @@ mqtt-packet@^9.0.2:
     process-nextick-args "^2.0.1"
 
 mqtt@^5.11.0:
-  version "5.12.1"
-  resolved "https://registry.yarnpkg.com/mqtt/-/mqtt-5.12.1.tgz#71d845b62f93d0c9c2542db750ed724bd2664a9f"
-  integrity sha512-hoUFunY97OghEtaKeW6jFqFvaNDWGnYK7RhpRRK6RaWNP64iwu7rSXwapXF1wawZkEExaOvVMdWEy2FaD8R/Zg==
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/mqtt/-/mqtt-5.13.0.tgz#a7cb555890ad75740870bd8ebd921d795f81b620"
+  integrity sha512-pR+z+ChxFl3n8AKLQbTONVOOg/jl4KiKQRBAi78tjd6PksOWvl1nl9L8ZHOZ3MiavZfrUOjok2ddwc1VymGWRg==
   dependencies:
     commist "^3.2.0"
     concat-stream "^2.0.0"
@@ -10213,12 +10218,13 @@ progress@^2.0.3:
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
 proj4@^2.15.0:
-  version "2.15.0"
-  resolved "https://registry.npmjs.org/proj4/-/proj4-2.15.0.tgz#d77c9956861c8ed516071c4208d576cebe800eb5"
-  integrity sha512-LqCNEcPdI03BrCHxPLj29vsd5afsm+0sV1H/O3nTDKrv8/LA01ea1z4QADDMjUqxSXWnrmmQDjqFm1J/uZ5RLw==
+  version "2.16.2"
+  resolved "https://registry.yarnpkg.com/proj4/-/proj4-2.16.2.tgz#6dbf0ebf51f59b7ec21059adc7c98cd4d4fc096b"
+  integrity sha512-1IcYz7wG1kDpPEJSeBy+0v29wW3mhbqUgRReenvhjgHlGjFA9cA72nGWnikUUS/ggq3y/TcShWzR41sikFSrlQ==
   dependencies:
+    geographiclib-geodesic "^2.1.1"
     mgrs "1.0.0"
-    wkt-parser "^1.4.0"
+    wkt-parser "^1.5.1"
 
 promise-all-reject-late@^1.0.0:
   version "1.0.1"
@@ -12904,10 +12910,10 @@ wide-align@1.1.5:
   dependencies:
     string-width "^1.0.2 || 2 || 3 || 4"
 
-wkt-parser@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/wkt-parser/-/wkt-parser-1.4.0.tgz#7cca07a6ee5b4baf059b723e62d7fe95bc923bf5"
-  integrity sha512-qpwO7Ihds/YYDTi1aADFTI1Sm9YC/tTe3SHD24EeIlZxy7Ik6a1b4HOz7jAi0xdUAw487duqpo8OGu+Tf4nwlQ==
+wkt-parser@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/wkt-parser/-/wkt-parser-1.5.1.tgz#3f0e8231be5563ff3e2ec418c30ca0bf80b4b396"
+  integrity sha512-o78jtCrTSs+qT3s9GMfrpRZHCze/fzNbAV2+rUEAjWPP08te0oPoyASrdtOHcAdEPMgSn8atjnlnAqmCvuAqSA==
 
 word-wrap@^1.2.3, word-wrap@^1.2.5:
   version "1.2.5"
