@@ -111,7 +111,7 @@ const emit = defineEmits(['close'])
       </div>
     </div>
     <div class="flex-grow">
-      <div class="bg-gray-200 rounded-lg p-4 border border-gray-300
+      <div class="bg-white rounded-lg p-4 border border-gray-300
         h-full w-full flex items-center justify-center">
         <component :is="previewComponent" :data-source="datasourceProxy" :key="datasourceProxy.uid"
           @updateConfig="updateConfig" />

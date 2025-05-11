@@ -31,9 +31,9 @@ export class RestConnection extends BaseConnection {
   }
 
   // fetch(config: IRequestParams): Promise<any> {
-  fetch(config: any): Promise<any> {
+  fetch(config: any,options?:any): Promise<any> {
     // return fetch(this.url.value + config.url);
-    return fetch(this.url + config.url)
+    return fetch(this.url + config.url ,options)
   }
 
   setConfig(): void {

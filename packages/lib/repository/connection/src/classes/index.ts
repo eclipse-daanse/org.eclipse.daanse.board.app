@@ -22,7 +22,7 @@ import {
 import { Container } from 'inversify'
 
 export interface IConnection {
-  fetch(config: IRequestParams): Promise<any>
+  fetch(config: IRequestParams,options?:any): Promise<any>
   setConfig(config: any): void
 }
 

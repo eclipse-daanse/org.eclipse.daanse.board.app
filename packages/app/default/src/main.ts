@@ -78,7 +78,7 @@ import {
 import {
   init as initOGcStaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-
+import {init as initSparqlDataSource} from "org.eclipse.daanse.board.app.lib.datasource.sparql"
 import {
   init as initI18next,
   symbolForI18n,
@@ -170,6 +170,8 @@ import { init as initComputedVariable } from "org.eclipse.daanse.board.app.ui.vu
 
 import {init as initWrapper} from "org.eclipse.daanse.board.app.ui.vue.widget.wrapper";
 
+import {init as initSparqlDataSourceUI} from "org.eclipse.daanse.board.app.ui.vue.datasource.sparql"
+
 const app = createApp(App)
 
 init(container)
@@ -196,6 +198,7 @@ initMqttConnection(container)
 initWebsocketDatasource(container)
 initRestDatasource(container)
 initXmlaDatasource(container)
+initSparqlDataSource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
 initOGcStaDatasource(container)
@@ -278,6 +281,7 @@ initOgcStaConnectionUI(container)
 initWebsocketConnectionUI(container)
 initWebsocketDatasourceUI(container)
 initMqttConnectionUI(container)
+initSparqlDataSourceUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: '$test',
