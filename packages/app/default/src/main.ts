@@ -136,6 +136,7 @@ import { init as initSvgRepeat } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
+import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
@@ -275,6 +276,7 @@ connectionRepository.registerConnection('test', 'rest', {
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
 initRestDatasourceUI(container)
 initRestConnectionUI(container)
+initPivotTableUI(container)
 initXmlaConnectionUI(container)
 initXmlaDatasourceUI(container)
 initOgcStaConnectionUI(container)
@@ -284,7 +286,7 @@ initMqttConnectionUI(container)
 initSparqlDataSourceUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
-  resourceUrl: '$test',
+  resourceUrl: 'posts',
   connection: 'test',
 })
 

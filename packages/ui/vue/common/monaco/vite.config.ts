@@ -15,12 +15,19 @@ import dts from 'vite-plugin-dts'
 import libCss from 'vite-plugin-libcss'
 
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
+  },
   build: {
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla',
-      fileName: 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
+      name: 'org.eclipse.daanse.board.app.ui.vue.common.monaco',
+      fileName: 'org.eclipse.daanse.board.app.ui.vue.common.monaco'
     },
     rollupOptions: {
       external: ['vue'],

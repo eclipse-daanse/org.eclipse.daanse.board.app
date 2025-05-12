@@ -10,14 +10,14 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <script lang="ts" setup>
-import { provide, ref, type Ref, computed } from "vue";
+import { provide, ref, type Ref, computed, inject } from "vue";
 import { TinyEmitter } from "tiny-emitter";
 import { useElementSize } from "@vueuse/core";
 import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
-import { type IPivotTable } from "../index";
 
 const DEFAULT_COLUMN_WIDTH = 150;
 const DEFAULT_ROW_HEIGHT = 30;
@@ -175,26 +175,26 @@ const totalContentSize = computed(() => {
     </template>
 </template>
 
-<style>
+<style scoped>
 .pivotTable_container {
     padding: v-bind(DEFAULT_ROW_HEIGHT_CSS);
     height: 100%;
-}
 
-.pivotTable_container .bar {
-    position: absolute;
-    margin-top: -29px;
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: flex-end;
-}
+    .bar {
+        position: absolute;
+        margin-top: -29px;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: flex-end;
+    }
 
-.pivotTable_container .placeholder {
-    height: 8px;
+    .placeholder {
+        height: 8px;
+    }
 }
 
 .pivotTable {

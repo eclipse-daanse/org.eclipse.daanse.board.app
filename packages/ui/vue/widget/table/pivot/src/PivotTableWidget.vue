@@ -10,10 +10,11 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <script lang="ts" setup>
 import { toRefs, ref } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import PivotTable from "./components/PivotTable.vue";
+import { PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { type IPivotTable } from "./index";
 
 const props = defineProps<{ datasourceId: string, config: IPivotTable }>();

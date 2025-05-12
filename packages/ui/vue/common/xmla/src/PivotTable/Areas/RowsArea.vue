@@ -10,6 +10,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <script setup lang="ts">
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
@@ -128,11 +129,11 @@ const getRowChildCount = (i: number, j: number) => {
 const hasChildrenDisplayed = (i: number, j: number) => {
     const currentMember = props.rows?.[i]?.[j];
     if (i + 1 === props.rows.length) return false;
-    const currentHierarchyMembers = props.rows.map((e: any) => e[j]);
+    const currentHierarchyMembers = props.rows.map((e) => e[j]);
 
     if (
         currentHierarchyMembers.some(
-            (e: any) => e && e.PARENT_UNIQUE_NAME === currentMember.UName,
+            (e) => e && e.PARENT_UNIQUE_NAME === currentMember.UName,
         )
     ) {
         return true;
@@ -145,11 +146,13 @@ const rowIsExpanded = (i: number, j: number) => {
 
     if (props.rowsExpandedMembers) {
         return props.rowsExpandedMembers.some(
-            (e: any) => e.UName === currentMember.UName,
+            (e) => e.UName === currentMember.UName,
         );
     }
 
-    return false;
+    // return state.rowsExpandedMembers.some(
+    //     (e) => e.UName === currentMember.UName,
+    // );
 };
 
 const sameAsPrevious = (i: number, j: number) => {
@@ -208,7 +211,7 @@ eventBus.on("scroll", ({ top }: { top: number }) => {
 });
 
 const memberPropertiesModal = ref(null) as Ref<any>;
-const openMemberProperties = async (member: any) => {
+const openMemberProperties = async (member) => {
     // const metadataStorage = useMetadataStorage();
     // const levels = (await metadataStorage.getMetadataStorage()).levels;
 
@@ -225,7 +228,7 @@ const currentlyDisplayedValues = computed(() => {
         };
 
     let translateValue = translate.value;
-    let result = props.rows.map((rowMembers: any, i: any) => {
+    let result = props.rows.map((rowMembers, i) => {
         if (rowMembers.isProperty) {
             return {
                 ...rowMembers,
@@ -233,7 +236,7 @@ const currentlyDisplayedValues = computed(() => {
             };
         }
 
-        return rowMembers.map((member: any) => {
+        return rowMembers.map((member) => {
             return {
                 ...member,
                 i,
@@ -241,7 +244,7 @@ const currentlyDisplayedValues = computed(() => {
         });
     });
 
-    const topIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
+    const topIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
         if (
             e.start <= scrollPosition.value &&
             e.start + e.width > scrollPosition.value
@@ -249,7 +252,7 @@ const currentlyDisplayedValues = computed(() => {
             return true;
         return false;
     });
-    let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
+    let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
         const bottomCoord =
             scrollPosition.value + rowsContainer.value.clientHeight;
         if (e.start <= bottomCoord && e.start + e.width >= bottomCoord)
@@ -271,18 +274,18 @@ const currentlyDisplayedValues = computed(() => {
     };
 });
 
-const showMemberProperties = (member: any) => {
+const showMemberProperties = (member) => {
     // state.membersWithProps.push(member.HIERARCHY_UNIQUE_NAME);
 };
 
-const hideMemberProperties = (member: any) => {
+const hideMemberProperties = (member) => {
     // const indexToRemove = state.membersWithProps.indexOf(
     //     (e) => e === member.HIERARCHY_UNIQUE_NAME,
     // );
     // state.membersWithProps.splice(indexToRemove, 1);
 };
 
-const isMemberPropsVisible = (member: any) => {
+const isMemberPropsVisible = (member) => {
     // return state.membersWithProps.includes(member.HIERARCHY_UNIQUE_NAME);
 };
 
@@ -349,7 +352,7 @@ watch(
         </div>
     </div>
 </template>
-<style>
+<style scoped>
 .rowsHeader:last-child {
     border-bottom: 1px silver solid;
 }

@@ -10,6 +10,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { TinyEmitter } from "tiny-emitter";
@@ -111,19 +112,19 @@ const currentlyDisplayedValues = computed(() => {
   let xTranslateValue = xTranslate.value;
   let yTranslateValue = yTranslate.value;
 
-  const leftIndex = props.totalContentSize.xAxis.items.findIndex((e: any) => {
+  const leftIndex = props.totalContentSize.xAxis.items.findIndex((e) => {
     const leftCoord = xScrollPosition.value;
     if (e.start <= leftCoord && e.start + e.width > leftCoord) return true;
     return false;
   });
-  let rightIndex = props.totalContentSize.xAxis.items.findIndex((e: any) => {
+  let rightIndex = props.totalContentSize.xAxis.items.findIndex((e) => {
     const rightCoord = xScrollPosition.value + container.value.clientWidth;
 
     if (e.start <= rightCoord && e.start + e.width >= rightCoord) return true;
     return false;
   });
 
-  const topIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
+  const topIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
     if (
       e.start <= yScrollPosition.value &&
       e.start + e.width > yScrollPosition.value
@@ -131,7 +132,7 @@ const currentlyDisplayedValues = computed(() => {
       return true;
     return false;
   });
-  let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
+  let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
     const bottomCoord = yScrollPosition.value + container.value.clientHeight;
     if (e.start <= bottomCoord && e.start + e.width >= bottomCoord) return true;
     return false;
@@ -142,8 +143,8 @@ const currentlyDisplayedValues = computed(() => {
   if (topIndex >= 0 && bottomIndex < 0)
     bottomIndex = props.totalContentSize.yAxis.items.length - 1;
 
-  let result = props.cells.map((cellRow: any, j: number) => {
-    return cellRow.map((cell: any, i: number) => {
+  let result = props.cells.map((cellRow, j: number) => {
+    return cellRow.map((cell, i: number) => {
       return {
         ...cell,
         i,
@@ -178,18 +179,18 @@ watch(
 );
 
 const cellPropertiesModal = ref(null) as Ref<any>;
-const openCellProperties = async (cell: any) => {
+const openCellProperties = async (cell) => {
   await cellPropertiesModal.value?.run({ cell });
 };
 
-const drillthrough = (cell: any) => {
+const drillthrough = (cell) => {
   emit("drillthrough", cell);
 };
 
-function getFontStyles(fontStyle: any) {
+function getFontStyles(fontStyle) {
   const result = {
     "text-decoration": "",
-  } as any;
+  };
 
   if (fontStyle && 1) result["font-weight"] = 800;
   if (fontStyle && 2) result["fontStyle"] = "italic";
@@ -220,7 +221,7 @@ function getFontStyles(fontStyle: any) {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .cells_container {
   overflow: auto;
   height: 100%;

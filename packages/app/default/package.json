@@ -53,6 +53,7 @@
     "org.eclipse.daanse.board.app.ui.vue.widget.svg.base": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.table.data": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.widget.table.pivot": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.text.plain": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.text.rich": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.video": "^0.0.1-next.1",

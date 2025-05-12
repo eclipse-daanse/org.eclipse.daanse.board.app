@@ -10,6 +10,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <script setup lang="ts">
 import type { TinyEmitter } from "tiny-emitter";
 import { inject, ref, watch } from "vue";
@@ -25,8 +26,7 @@ defineEmits([
 ]);
 defineProps(["drillupDisabled", "propertiesShown"]);
 
-// const { t } = useI18n();
-const t = (key: string) => key;
+const t = (string: string) => string;
 const opened = ref(false);
 const eventBus = inject("pivotTableEventBus") as TinyEmitter;
 const uid = "id" + v4();
