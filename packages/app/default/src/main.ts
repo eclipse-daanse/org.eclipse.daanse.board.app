@@ -19,7 +19,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta/dist/ui.vue.dataso
 import 'org.eclipse.daanse.board.app.ui.vue.widget.map/dist/ui.vue.widget.map.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createPinia, setActivePinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
@@ -209,9 +209,11 @@ import { init as initComputedVariable } from "org.eclipse.daanse.board.app.ui.vu
 import {init as initWrapper} from "org.eclipse.daanse.board.app.ui.vue.widget.wrapper";
 
 import {init as initSparqlDataSourceUI} from "org.eclipse.daanse.board.app.ui.vue.datasource.sparql"
+import {init as initEndpointfinderPlugin}
+  from "org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder"
 
 const app = createApp(App)
-
+app.use(createVuestic())
 init(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
@@ -221,6 +223,8 @@ const tinyEmitter = new TinyEmitter();
 container.bind(identifiers.TINY_EMITTER).toConstantValue(tinyEmitter)
 app.config.globalProperties.$container = container
 app.provide('container',container);
+const symbolForApp = Symbol.for('App');
+container.bind('App').toConstantValue(app);
 initI18next(container)
 
 initCommonEn(container)
@@ -313,8 +317,11 @@ XmlaConnection.getCubes('https://ssemenkoff.dev/emondrian/xmla', "FoodMart").the
 });
 
 connectionRepository.registerConnection('test', 'rest', {
-  url: 'https://jsonplaceholder.typicode.com/',
+  url: 'https://jsonplaceholder.typicode.com/',uid:'test',type:'rest',name:'test'
 })
+const pinia = createPinia();
+setActivePinia(pinia)
+app.use(pinia)
 
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
 initRestDatasourceUI(container)
@@ -333,16 +340,16 @@ initRssConnectionUI(container)
 initRssDatasourceUI(container)
 initGraphqlConnectionUI(container)
 initGraphqlDatasourceUI(container)
-
+initEndpointfinderPlugin(container)
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',
   connection: 'test',
 })
 
 app.use(I18nextVuePlugin);
-app.use(createPinia())
+
 app.use(router)
 
-app.use(createVuestic())
+
 
 app.mount('#app')

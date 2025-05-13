@@ -9,12 +9,13 @@ Contributors: Smart City Jena
 */
 
 import type { Container } from 'inversify'
-import {useConnectionsStore} from './store/ConnectionsPinia'
+import {useConnectionsStore,type ConnectionDTO} from './store/ConnectionsPinia'
 const init = (container: Container) => {
 
 }
 
 export {
   init,
-  useConnectionsStore
+  useConnectionsStore,
+  type ConnectionDTO
 }

@@ -18,7 +18,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
-interface DataSourceDTO {
+export interface DataSourceDTO {
   uid: string
   name: string
   type: string
@@ -55,6 +55,7 @@ export const useDataSourcesStore = defineStore('datasource', () => {
     config['uid'] = uid;
     datasourceRepository.registerDatasource(uid, type, config)
     dataSources.value.push({ uid, type, name, config })
+    return uid;
   }
 
   const removeDataSource = (dataSourceId: string) => {

@@ -44,6 +44,7 @@ const connections = new Map<string, IConnection | PubSubConnection>()
 
 export class ConnectionRepository {
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
+  private connectionsByType: Record<string,string>= {};
 
   constructor(private container: Container) {}
 
@@ -75,7 +76,27 @@ export class ConnectionRepository {
   getConnectionIdentifiers(type: string): ConnectionIdentifiers {
     return this.availableConnections[type]
   }
+  getRegisteredTypes(){
+    return Object.keys(this.availableConnections);
+  }
+  getConnectionType(connectionId: string){
+    return this.connectionsByType[connectionId];
+  }
+  getConnectionId(connection:IConnection|PubSubConnection){
+    let key:string|undefined;
+    connections.forEach((aconnection,akey)=>{
+      if(connection === aconnection){
+        key = akey;
+      }
+    })
+    return key;
+  }
+  getConnectionTypeFromConnection(connection:IConnection|PubSubConnection){
+    const id = this.getConnectionId(connection);
+    if(!id) return undefined;
+    return this.getConnectionType(id)
 
+  }
   registerConnection(
     connectionId: string,
     type: string,
@@ -92,7 +113,8 @@ export class ConnectionRepository {
         IConnection | PubSubConnection
       >(identifiers.Connection, connectionConfig)
       console.log(connection)
-      connections.set(connectionId, connection)
+      connections.set(connectionId, connection);
+      this.connectionsByType[connectionId]=type;
     }
   }
 }

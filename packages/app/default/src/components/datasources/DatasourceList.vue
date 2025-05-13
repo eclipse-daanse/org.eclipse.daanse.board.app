@@ -12,13 +12,17 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
+import { inject } from 'vue'
 
 const { dataSources, createDataSource, removeDataSource } = useDataSourcesStore()
 
+const endpointfinder = inject('endpointfinder');
 const addDataSource = () => {
   createDataSource(null)
 }
-
+const endPointFinder = ()=>{
+  (endpointfinder as any)()
+}
 defineProps({
   activeItemId: {
     type: String,
@@ -33,7 +37,9 @@ defineEmits(['openEditor'])
   <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full">
     <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
       <h4 class="flex-grow text-sm font-semibold">Datasources</h4>
+      <VaButton @click="endPointFinder()" icon="travel_explore" size="small"></VaButton>
       <VaButton @click="addDataSource()" icon="add" size="small"></VaButton>
+
     </div>
     <VaList class="w-full h-full overflow-auto flex flex-col">
       <VaListItem

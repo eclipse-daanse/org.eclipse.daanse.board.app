@@ -56,6 +56,7 @@ const datasources = new Map<string, IDataRetrieveable>()
 
 export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
+  private datasourcesByType: Record<string,string>= {};
 
   constructor(private container: Container) {}
 
@@ -79,6 +80,9 @@ export class DatasourceRepository implements IDatasourceRepository {
   registerDatasourceType(name: string, identifiers: StoreIdentifiers): void {
     this.availableDatasources[name] = identifiers
   }
+  getDataSourceTypes(){
+    return Object.keys(this.availableDatasources);
+  }
 
   get registeredDatasources(): String[] {
     return Object.keys(this.availableDatasources)
@@ -87,7 +91,6 @@ export class DatasourceRepository implements IDatasourceRepository {
   getDatasourceIdentifiers(type: string): StoreIdentifiers {
     return this.availableDatasources[type]
   }
-
   registerDatasource(datasourceId: string, type: string, config: any): void {
     const identifiers = this.availableDatasources[type]
 
@@ -98,7 +101,26 @@ export class DatasourceRepository implements IDatasourceRepository {
           identifiers.Store,
           config,
         )
-      datasources.set(datasourceId, datasource)
+      datasources.set(datasourceId, datasource);
+      this.datasourcesByType[datasourceId] = type;
     }
+  }
+  getDatasourceType(datasourceId: string){
+    return this.datasourcesByType[datasourceId];
+  }
+  getDatasourceId(dataSource:IDataRetrieveable){
+    let key:string|undefined;
+    datasources.forEach((aDataSource,akey)=>{
+      if(dataSource === aDataSource){
+        key = akey;
+      }
+    })
+    return key;
+  }
+  getDatasourceTypeFromDatasource(dataSource:IDataRetrieveable){
+    const id = this.getDatasourceId(dataSource);
+    if(!id) return undefined;
+    return this.getDatasourceType(id)
+
   }
 }

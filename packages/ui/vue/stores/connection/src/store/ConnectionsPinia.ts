@@ -19,7 +19,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import {type BaseConnectionConfig} from 'org.eclipse.daanse.board.app.lib.connection.base'
 
-interface ConnectionDTO {
+export interface ConnectionDTO {
   uid: string
   name: string
   type: string
@@ -53,6 +53,7 @@ export const useConnectionsStore = defineStore('connections', () => {
     config['uid'] = uid;
     connectionRepository.registerConnection(uid, type, config)
     connections.value.push({ uid, type, name, config })
+    return uid;
   }
 
   const removeConnection = (connectionId: string) => {

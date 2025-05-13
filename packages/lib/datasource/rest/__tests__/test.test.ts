@@ -55,6 +55,9 @@ datasourceRepository.registerDatasourceType('rest', {
 
 connectionRepository.registerConnection('test', 'rest', {
   url: 'https://jsonplaceholder.typicode.com/',
+  uid:'test',
+  type:'rest',
+  name:'test'
 })
 
 datasourceRepository.registerDatasource('test', 'rest', {

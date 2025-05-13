@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 */
 
 import type { Container } from 'inversify'
-import { useDataSourcesStore } from './store/DatasourcePinia'
+import { useDataSourcesStore ,type DataSourceDTO} from './store/DatasourcePinia'
 const init = (container: Container) => {
 
 }
@@ -19,5 +19,6 @@ const init = (container: Container) => {
 
 export {
   init,
-  useDataSourcesStore
+  useDataSourcesStore,
+  type DataSourceDTO
 }

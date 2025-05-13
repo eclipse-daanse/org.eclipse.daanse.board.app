@@ -13,7 +13,7 @@
 
 // import { extractDataByPath } from "@/utils/helpers";
 import { Container } from 'inversify'
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
   type IConnection,
@@ -22,7 +22,7 @@ import {
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface IRestStoreConfiguration {
+export interface IRestStoreConfiguration extends IBaseConnectionConfiguration{
   resourceUrl: string
   connection: string
   selectedJSONValue?: string
