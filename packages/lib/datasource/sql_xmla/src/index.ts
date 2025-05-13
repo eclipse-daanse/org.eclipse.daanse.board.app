@@ -13,14 +13,14 @@
 
 import { Container } from 'inversify'
 import {
-  RssStore,
-  type IRssStoreConfiguration
+  SqlXmlaStore,
+  type ISqlXmlaStoreConfiguration
 } from './classes'
 
-const symbol = Symbol.for('RssStore')
+const symbol = Symbol.for('SqlXmlaStore')
 
 const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RssStore);
+  container.bind(symbol).toConstantValue(SqlXmlaStore);
 }
 
-export { RssStore, IRssStoreConfiguration, symbol, init }
+export { SqlXmlaStore, ISqlXmlaStoreConfiguration, symbol, init }

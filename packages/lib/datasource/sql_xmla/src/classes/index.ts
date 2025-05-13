@@ -10,49 +10,34 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-
-// import { extractDataByPath } from "@/utils/helpers";
-import { Container } from 'inversify'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
-  type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
-import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { Container } from 'inversify'
 
-export interface IRestStoreConfiguration {
-  resourceUrl: string
+export interface ISqlXmlaStoreConfiguration {
   connection: string
-  selectedJSONValue?: string
+  sql: string
   pollingInterval?: number
 }
 
-export class RestStore extends BaseDatasource {
+export class SqlXmlaStore extends BaseDatasource {
   private connection: any
-  private resourceUrl: ComputedStoreParameter;
-  private selectedJSONValue?: string
+  private sql: string
+  // private computedUrl: ComputedVariable;
 
   constructor(
-    configuration: IRestStoreConfiguration,
+    configuration: ISqlXmlaStoreConfiguration,
     private container: Container,
   ) {
     super(configuration, container)
 
-    console.log(container)
     this.connection = configuration.connection
-
-    this.resourceUrl = super.initVariable(configuration.resourceUrl);
-
-    this.selectedJSONValue = configuration.selectedJSONValue
-    this.pollingInterval = configuration.pollingInterval ?? 5000
-    if (this.pollingEnabled) {
-      this.startPolling(this.pollingInterval)
-    }
+    this.sql = configuration.sql
   }
 
-  //   async getData<T extends keyof DataMap>(type: T): Promise<DataMap[T]> {
   async getData(type: string): Promise<any> {
     let response = null
     const connectionRepository = this.container.get(
@@ -64,23 +49,30 @@ export class RestStore extends BaseDatasource {
     try {
       const connection = connectionRepository.getConnection(
         this.connection,
-      ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl.value })
-      const data = await req.json()
+      ) as any
+      const mdxResponse = await connection.fetch({
+        data: {
+          mdx: this.sql,
+        },
+      })
+      //   const req = await connection.fetch({ url: this.resourceUrl.value });
+      //   const data = await req.json();
 
-      response = data
+      const rowset = mdxResponse.Body?.DiscoverResponse?.return?.[0]?.root?.row
+      // console.log(rowset);
+      // console.log(mdxResponse);
+      if (!rowset) return null
 
-      // TODO: Restore after creating utils
-      if (this.selectedJSONValue) {
-        response = helpers.extractDataByPath(data, this.selectedJSONValue);
-      }
+      let response = null as any
+
       if (type === 'DataTable') {
-        response = this.parseToDataTable(response)
+        response = this.parseToDataTable(rowset)
       } else if (type === 'object') {
         // Do nothing
       } else if (type === 'string') {
         response = JSON.stringify(response)
       }
+
       return response
     } catch (e: any) {
       console.log(e)
@@ -90,52 +82,43 @@ export class RestStore extends BaseDatasource {
   }
 
   async getOriginalData() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
-    try {
-      const connection = connectionRepository.getConnection(
-        this.connection,
-      ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl.value })
-      const data = await req.json()
-      return data
-    } catch (e: any) {
-      console.warn('Invalid resource URL', e.name)
-    }
+    // Not implemented
   }
 
-  // TODO: Add proper typing and imports for interfaces
-  // parseToDataTable(data: any): IDataTable {
   parseToDataTable(data: any): any {
     if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
+
     const headers: string[] = ['index']
     const rows: any[] = []
+
     const items = data.map((item: any, index: number) => {
       if (typeof item !== 'object') return {}
-      // const row: IDataTableRow = {
+
       const row: any = {
         index,
       }
+
       for (const key in item) {
         if (typeof item[key] === 'object' || Array.isArray(item[key])) continue
+
         if (!headers.includes(key)) {
           headers.push(key)
         }
+
         row[key] = item[key]
       }
+
       return row
     })
-    // items.forEach((item: IDataTableRow, index:number) => {
+
     items.forEach((item: any, index: number) => {
       rows[index] = []
+
       headers.forEach((header: string) => {
         rows[index].push(item[header])
       })
     })
+
     return { items, headers, rows }
   }
 
@@ -146,16 +129,10 @@ export class RestStore extends BaseDatasource {
     )
   }
 
-  destroy(): void {
-    this.stopPolling()
-  }
+  destroy(): void {}
 
-  static validateConfiguration(configuration: IRestStoreConfiguration) {
+  static validateConfiguration(configuration: ISqlXmlaStoreConfiguration) {
     if (!configuration.connection) {
-      return false
-    }
-
-    if (!configuration.resourceUrl) {
       return false
     }
 

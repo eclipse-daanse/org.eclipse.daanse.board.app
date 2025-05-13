@@ -17,7 +17,7 @@ import {
   type IGraphQLConnectionConfiguration,
 } from './classes'
 
-const symbol = Symbol('GraphQLConnection')
+const symbol = Symbol.for('GraphQLConnection')
 
 const init = (container: Container) => {
   container.bind(symbol).toConstantValue(GraphQLConnection)

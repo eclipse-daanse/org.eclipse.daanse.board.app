@@ -54,10 +54,16 @@ import {
   symbol as RestConnectionIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 import {
+  init as initRssConnection,
+} from 'org.eclipse.daanse.board.app.lib.connection.rss'
+import {
   XmlaConnection,
   init as initXmlaConnection,
   symbol as XmlaConnectionIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
+import {
+  init as initGraphQlConnection
+} from 'org.eclipse.daanse.board.app.lib.connection.graphql'
 import {
   init as initWebsocketConnection,
 } from 'org.eclipse.daanse.board.app.lib.connection.websocket'
@@ -70,8 +76,20 @@ import {
   symbol as RestDatasourceIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
 import {
+  init as initCsvDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.csv'
+import {
+  init as initRssDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.rss'
+import {
+  init as initGraphqlDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.graphql'
+import {
   init as initXmlaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
+import {
+  init as initSqlXmlaDatasource,
+} from 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
 import {
   init as initWebsocketDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.websocket'
@@ -140,8 +158,27 @@ import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.wi
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
+  init as initCsvDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.csv'
+import {
+  init as initRssConnectionUI
+} from 'org.eclipse.daanse.board.app.ui.vue.connection.rss'
+import {
+  init as initRssDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.rss'
+import {
+  init as initGraphqlConnectionUI
+} from 'org.eclipse.daanse.board.app.ui.vue.connection.graphql'
+import {
+  init as initGraphqlDatasourceUI
+}
+from 'org.eclipse.daanse.board.app.ui.vue.datasource.graphql'
+import {
   init as initXmlaDatasourceUI
 } from 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
+import {
+  init as initSqlXmlaDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.sql_xmla'
 import {
   init as initWebsocketConnectionUI
 } from 'org.eclipse.daanse.board.app.ui.vue.connection.ws'
@@ -193,12 +230,18 @@ initConnection(container)
 initDatasource(container)
 initConnectionFactory(container)
 initRestConnection(container)
+initRssConnection(container)
 initXmlaConnection(container)
 initWebsocketConnection(container)
 initMqttConnection(container)
+initGraphQlConnection(container)
 initWebsocketDatasource(container)
 initRestDatasource(container)
+initRssDatasource(container)
+initGraphqlDatasource(container)
+initCsvDatasource(container)
 initXmlaDatasource(container)
+initSqlXmlaDatasource(container)
 initSparqlDataSource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
@@ -279,11 +322,17 @@ initRestConnectionUI(container)
 initPivotTableUI(container)
 initXmlaConnectionUI(container)
 initXmlaDatasourceUI(container)
+initCsvDatasourceUI(container)
+initSqlXmlaDatasourceUI(container)
 initOgcStaConnectionUI(container)
 initWebsocketConnectionUI(container)
 initWebsocketDatasourceUI(container)
 initMqttConnectionUI(container)
 initSparqlDataSourceUI(container)
+initRssConnectionUI(container)
+initRssDatasourceUI(container)
+initGraphqlConnectionUI(container)
+initGraphqlDatasourceUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',

@@ -14,7 +14,7 @@
 import { Container } from 'inversify'
 import { CsvStore, type ICsvStoreConfiguration } from './classes'
 
-const symbol = Symbol('CsvStore')
+const symbol = Symbol.for('CsvStore')
 
 const init = (container: Container) => {
   container.bind(symbol).toConstantValue(CsvStore)

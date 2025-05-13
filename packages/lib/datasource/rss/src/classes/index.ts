@@ -35,13 +35,12 @@ export interface IRssParseResult {
   mappedRows: any[]
 }
 
-@injectable()
 export class RssStore extends BaseDatasource {
   private connection: any
 
   constructor(
     configuration: IRssStoreConfiguration,
-    @inject(identifiers.CONTAINER) private container: Container,
+    private container: Container,
   ) {
     super(configuration, container)
 

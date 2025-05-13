@@ -17,7 +17,7 @@ import {
   type IGraphQLStoreConfiguration
 } from './classes'
 
-const symbol = Symbol('GraphQLStore')
+const symbol = Symbol.for('GraphQLStore')
 
 const init = (container: Container) => {
   container.bind(symbol).toConstantValue(GraphQLStore);

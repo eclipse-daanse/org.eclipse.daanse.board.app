@@ -12,22 +12,22 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { injectable, inject, Container } from 'inversify'
+import { Container } from 'inversify'
 import {
   BaseDatasource,
-  type IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   identifier,
   type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface ICsvStoreConfiguration extends IBaseConnectionConfiguration {
+export interface ICsvStoreConfiguration  {
   resourceUrl: string
   connection: string
+  pollingInterval?: number
 }
 
 export interface ICsvParseResult {
@@ -37,21 +37,18 @@ export interface ICsvParseResult {
   mappedRows: any[]
 }
 
-@injectable()
 export class CsvStore extends BaseDatasource {
   private connection: any
-  private resourceUrl: string
+  private resourceUrl: ComputedStoreParameter
 
   constructor(
     configuration: ICsvStoreConfiguration,
-    @inject(identifiers.CONTAINER) private container: Container,
+    public container: Container,
   ) {
     super(configuration, container)
-
     this.connection = configuration.connection
 
-    // this.resourceUrl = super.initVariable(configuration.resourceUrl);
-    this.resourceUrl = configuration.resourceUrl
+    this.resourceUrl = super.initVariable(configuration.resourceUrl);
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)
@@ -68,7 +65,7 @@ export class CsvStore extends BaseDatasource {
     const connection = connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl })
+    const req = await connection.fetch({ url: this.resourceUrl.value })
     if (!req.ok) return []
     const text = await req.text()
 
@@ -86,7 +83,7 @@ export class CsvStore extends BaseDatasource {
     const connection = connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl })
+    const req = await connection.fetch({ url: this.resourceUrl.value })
     if (!req.ok) return null
     const text = await req.text()
     const data: ICsvParseResult = helpers.csv.parse(text);
