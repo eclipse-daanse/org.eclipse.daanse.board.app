@@ -24,6 +24,11 @@ import SearchResultCard from '../components/Searchcard/SearchResultCard.vue'
 import { ConnectionDTO, useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { DataSourceDTO, useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import FilterModal from './FilterModal.vue'
+import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { ILayoutItem, useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+
+const container = inject('container') as Container
 
 const toogle = ref(false)
 const run = () => {
@@ -35,12 +40,18 @@ const connectionForm = ref()
 
 const { connections, createConnection } = useConnectionsStore()
 const { dataSources, createDataSource } = useDataSourcesStore()
+const {createWidget} = useWidgetsStore();
+const {updateLayout,layout} = useLayoutStore();
+const registeredWidgets = container.get<WidgetRepository>(widgetRepoIdentifier)
 
+const widgetOptions = ref<any[]>([]) // z.B. aus einer Factory basierend auf store.type
+const selectedWidgets = ref<any[]>([])
 
 const stepsVailid = reactive({
   step0: false,
   step1: true,
-  step2: true
+  step2: true,
+  step3: true
 })
 const steps = [
   {
@@ -57,7 +68,8 @@ const steps = [
     label: 'DataSource', icon: 'store', beforeLeave: (step: any) => {
       step.hasError = !stepsVailid.step2
     }
-  }
+  },
+  { label: 'Widgets', icon: 'widgets', beforeLeave: (step: any) => { step.hasError = !stepsVailid.step3} }
 ]
 
 const form = reactive({
@@ -110,7 +122,7 @@ const search = async () => {
 
 }
 
-const container = inject('container') as Container
+
 const connectionManager = container.get<ConnectionRepository>(identifier)
 const storeManager = container.get<DatasourceRepository>(DataSourceIdentifier)
 const types = storeManager.getDataSourceTypes()
@@ -152,6 +164,19 @@ watch(step, (val) => {
 
     if (!store) {
     }// show pickup list
+
+  }
+  if (val === 3) {
+    // Beispiel: hole mögliche Widgets für store.type
+
+    console.log(registeredWidgets.getAllWidgets())
+    const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
+      .filter(([_, widget])=>(widget.supportedDSTypes as string[]).includes(store.value?.type))
+      .filter(([_, widget]) => widget.icon)
+      .map(([name, widget]) => ({ type: name, icon: widget.icon }))
+      console.log(availableWidgets)
+
+      widgetOptions.value = availableWidgets
 
   }
 
@@ -222,6 +247,25 @@ const getComponentConnection = computed(() => {
   return container.get(identifiers.Settings)
 })
 const finish = () => {
+
+  if(selectedWidgets.value.length>0){
+    selectedWidgets.value.forEach((widget,index)=>{
+      const id= createWidget(widget.type,{datasourceId:store.value?.uid},{})
+      const slayout:ILayoutItem={
+        id: id,
+        x: 50 +(index*300),
+        y: 50,
+        width:200,
+        height:100,
+        z: 3005,
+      }
+      layout.push(slayout)
+      updateLayout(layout)
+      console.log('Endpointfinder created Widget:' +widget.type)
+    });
+
+  }
+  selectedWidgets.value = [];
   ds.value = undefined
   store.value = undefined
   step.value = 0
@@ -231,6 +275,7 @@ const finish = () => {
   stepsVailid.step0 = false
   stepsVailid.step1 = true
   stepsVailid.step2 = true
+  stepsVailid.step3 = true
   formRef.value?.resetValidation()
   connectionForm.value?.resetValidation()
   toogle.value = false
@@ -244,8 +289,8 @@ defineExpose({
 
   <va-modal :modelValue="toogle" class="infobox" hide-default-actions no-padding>
     <template #footer class="footer">
-      <VaButton v-if="step!=2" :disabled="!(stepsVailid as any)['step'+step]" @click="step++">next</VaButton>
-      <VaButton v-if="step==2" :disabled="!(stepsVailid as any)['step'+step]" @click="finish">finish</VaButton>
+      <VaButton v-if="step!=3" :disabled="!(stepsVailid as any)['step'+step]" @click="step++">next</VaButton>
+      <VaButton v-if="step==3" :disabled="!(stepsVailid as any)['step'+step]" @click="finish">finish</VaButton>
     </template>
     <template #default="{ ok }">
       <va-button
@@ -399,6 +444,33 @@ defineExpose({
               <br>
             </VaScrollContainer>
           </template>
+          <template #step-content-3>
+            <VaScrollContainer class="padd" vertical>
+              <h2 class="title">Widgets zur Datenquelle auswählen</h2>
+              <br>
+
+              <div class= "widgets_grid">
+                <div class="widgets_grid-item"
+                  v-for="widget in widgetOptions"
+                  :key="widget.type"
+                  :active="selectedWidgets.includes(widget)"
+                  @click="() => {
+                    if (selectedWidgets.includes(widget)) {
+                      selectedWidgets.splice(selectedWidgets.indexOf(widget), 1)
+                    } else {
+                      selectedWidgets.push(widget)
+                    }
+                  }"
+                >
+                      <VaCheckbox :model-value="selectedWidgets.includes(widget)" />
+                    <img class="m-2" :src="widget.icon" style="height:30px"/>
+                    {{ widget.type }}
+
+                </div>
+              </div>
+            </VaScrollContainer>
+          </template>
+
 
         </VaStepper>
       </va-card-content>
@@ -460,6 +532,20 @@ defineExpose({
 
 </style>
 <style lang="scss" scoped>
+.widgets_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  gap: 1rem;
+}
+
+:deep() .widgets_grid-item {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+}
 .flex {
   width: 100%;
 }

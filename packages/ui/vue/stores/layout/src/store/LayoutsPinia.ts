@@ -13,8 +13,15 @@
 
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { ILayoutItem } from '@/composables/useMovableLayout'
 
+export interface ILayoutItem {
+  id: string
+  width: number
+  height: number
+  x: number
+  y: number
+  z: number
+}
 export const useLayoutStore = defineStore('layout', () => {
   const layout = ref([] as ILayoutItem[])
 

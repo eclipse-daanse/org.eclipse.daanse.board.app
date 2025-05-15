@@ -11,14 +11,14 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, inject } from 'vue'
 import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '@/composables/useMovableLayout'
 
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { useWidgetsStore, type IWidget } from '@/stores/WidgetsPinia'
-import { useLayoutStore } from '@/stores/LayoutsPinia'
+import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsWindow from '@/components/common/WidgetSettingsWindow.vue'
 
@@ -32,6 +32,13 @@ const innerlayoutItems = ref([] as ILayoutItem[])
 const innerWidgets = ref<IWidget[]>([])
 const isDragging = ref(false)
 
+const endpointfinder = inject('endpointfinder');
+const endPointFinder = ()=>{
+  (endpointfinder as any)()
+}
+const endpointfinder_present = computed(()=>{
+  return !!endpointfinder
+})
 const widgetSelectorVisible = ref(false)
 const { updateLayout, layout } = useLayoutStore()
 const {
@@ -262,6 +269,14 @@ const change = (e: any) => {
         round
         size="large"
       />
+      <VaButton
+        v-if="endpointfinder_present"
+        icon="travel_explore"
+        @click="endPointFinder()"
+        round
+        size="large"
+      />
+
     </div>
     <Transition :duration="150">
       <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
