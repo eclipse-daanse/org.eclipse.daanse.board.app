@@ -22,7 +22,7 @@
     "inversify": "7.5.1",
     "typescript": "^5.8.2",
     "vite": "^6.2.3",
-    "vite-plugin-dts": "4.5.3",
+    "vite-plugin-dts": "4.5.4",
     "vite-plugin-monaco-editor": "^1.1.0",
     "@types/leaflet": "^1.9.16"
   },

@@ -35,7 +35,7 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
-    "vite-plugin-dts": "4.5.3",
+    "vite-plugin-dts": "4.5.4",
     "vue-tsc": "^2.2.8",
     "vite-plugin-libcss": "^1.1.1"
   },
