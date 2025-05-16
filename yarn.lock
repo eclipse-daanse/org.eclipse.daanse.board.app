@@ -2059,45 +2059,45 @@
   resolved "https://registry.yarnpkg.com/@one-ini/wasm/-/wasm-0.1.1.tgz#6013659736c9dbfccc96e8a9c2b3de317df39323"
   integrity sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==
 
-"@oxlint/darwin-arm64@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/darwin-arm64/-/darwin-arm64-0.16.10.tgz#cd96e7c75e8723a7434202c1739b6be881db11c5"
-  integrity sha512-lNnkf7/auNXXD7gU3IbWMyuYiKj4Va+hhoe6+NwGfAjpKm5L4Uvc93o7tay163WVzQePVUOz/IwsJPLQs3hcjQ==
+"@oxlint/darwin-arm64@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/darwin-arm64/-/darwin-arm64-0.16.11.tgz#fbb872cf0c7ebb254a08da96ccdd37a2f81fa5bc"
+  integrity sha512-zjDMBVWbP/0KhzcAdlOkZaYJtoMnJEZDc2BAXqfrXQvr1JFor7vTxZUFvWKF0B1XbSNGpJPvFWmho02bjPiR3g==
 
-"@oxlint/darwin-x64@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/darwin-x64/-/darwin-x64-0.16.10.tgz#f6f95a001e9d65e283fe9f06230624fd4fa959a2"
-  integrity sha512-axqbGX//v+AF/73OZUfUGG5pZidnZf9T+wc+1Jf19O0DViPpcmbVH7l0aLImFQuRn6Nl9LAbfBbKAgO1BS+OSg==
+"@oxlint/darwin-x64@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/darwin-x64/-/darwin-x64-0.16.11.tgz#29326fe8b31103d94942bd858275e4eaacf97aa9"
+  integrity sha512-KS9Y0rs0vwvJLc9AmxI73rUWuIdJLlyAshPuSycQN+i2p8uW8r/ZBAPBB/vFyKdPaSs8j8ymPXmfN4D1yFXG9Q==
 
-"@oxlint/linux-arm64-gnu@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-gnu/-/linux-arm64-gnu-0.16.10.tgz#abd798d6a56a37ee49feb5a967cb71f2e9b40028"
-  integrity sha512-CoFYLjmttdBRw6k3waRuSoW+36ojY8WspOkr5KzNM6GytrKKIRSLUNkaLLSSnXQK6MN13jemJa32U1DRn8/V1Q==
+"@oxlint/linux-arm64-gnu@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-gnu/-/linux-arm64-gnu-0.16.11.tgz#8b6ebaef71b2cd6b0a7c49b9260d5ceb45f84ad3"
+  integrity sha512-wULkYyufJz91NAjLtZyb3ycEw9w7sg0iFoGG9rHABqRtRHkFieaFT8BjjJTvUwRf2ZolQk+YZL4edE88h85QFQ==
 
-"@oxlint/linux-arm64-musl@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-musl/-/linux-arm64-musl-0.16.10.tgz#41ef17e8ced0b93cb28c95f73c5e5f746d1bee33"
-  integrity sha512-jidO59qo6RZ1HRk7a27noIgUeJmzju13NcKm7+5zZObPPGuXXO1OT3ZYabyO4Zz3eU+wqMTgjM4yphbJerkxPQ==
+"@oxlint/linux-arm64-musl@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-musl/-/linux-arm64-musl-0.16.11.tgz#4e4fecda4d1dca0c7775efa236c732168433a984"
+  integrity sha512-c7Evd7fCpocr2LFzHcl9eQF0BxXZauTraIiCxpKK7ddIuCnpbuPllkMpAUE9vob20mqnGy5WLHZby9v7vqSr+Q==
 
-"@oxlint/linux-x64-gnu@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-gnu/-/linux-x64-gnu-0.16.10.tgz#c07349c69c0785195c040d792a40e630c7b24aa3"
-  integrity sha512-RWbkaDIX4fD+OaE+XfNG8nOxh+qLA90KhuejlTFbAApn7lZtyhr/UTIPuJsjmzMUW145C0NJTugOB6Q6XtKGNA==
+"@oxlint/linux-x64-gnu@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-gnu/-/linux-x64-gnu-0.16.11.tgz#e37d212284e71e99c50cee522e7480813bb6b69e"
+  integrity sha512-LbjKo4seS7m6rOzw/r9H3VLvnjhuo/fFuRJ8OG6pYCbkZNtChdhk88DFN8Qr0n8Qe9PFwweIvQxXBZK7IEUu6A==
 
-"@oxlint/linux-x64-musl@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-musl/-/linux-x64-musl-0.16.10.tgz#dba33185d0e5f54a0fc16b46202445829f9aba11"
-  integrity sha512-V7oXFLCowIEOnYBph4J2KSiHYtBIrx00xmwzKzSvwMzVOxDkw1LmPUYLCz/AEU6MctE6S2ZR947IXJY7ch4HeQ==
+"@oxlint/linux-x64-musl@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-musl/-/linux-x64-musl-0.16.11.tgz#98c20b17d96c122ecdbb812ab9da3d061c7f3cf7"
+  integrity sha512-kKuIf5hD12rtmJFSe/EGv8jXi0QWwCMDpcL2F0cRVvq6RSAxwSBF/RTEq40PJBBGAf6KJeqgV9j4glxhFn5f7w==
 
-"@oxlint/win32-arm64@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/win32-arm64/-/win32-arm64-0.16.10.tgz#20d4e3e9f24db7f8b5f701b16880c6391cdd71e7"
-  integrity sha512-QrWe71tjRKSDLejklPoU7gySq16nrJMOrqcSaw+ERQtJpnJBruF0RWQEVFEev6TvzwRnxrdTqDucYcFmoFqGeg==
+"@oxlint/win32-arm64@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/win32-arm64/-/win32-arm64-0.16.11.tgz#3a35eaf51c577b46493849490b9e767794106632"
+  integrity sha512-lx9x2EEbyHW5t2aooWtXI2AWd3WzDs+4T/p3RBp/HPp9ziwL2hEdzmjMC3DgdnbmwUmUGvfquSElF6ZGC9L5pA==
 
-"@oxlint/win32-x64@0.16.10":
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/@oxlint/win32-x64/-/win32-x64-0.16.10.tgz#1ea8a27b477e8c17ad81c90f4d9576e88bcd1e07"
-  integrity sha512-V5LHfgB5uiiKNpOFOAfygsL36pN6qSuQ0moiuEyZFfWL2Iyx5026ksefiD9nXcygQsLYU7f6xQbOINAY3uIvcw==
+"@oxlint/win32-x64@0.16.11":
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/@oxlint/win32-x64/-/win32-x64-0.16.11.tgz#a42ab948d7f9ed2a79ecf056e819ca79e5ce3147"
+  integrity sha512-k/ZfoIR5V6bPoemFvMb9EJu3YkSoF2AAKhC7AfKM4tg9UfJ1Wj/9J/edTv1aRQCRTzPiWoS+W5v1SPogVE80Qg==
 
 "@petamoriken/float16@^3.4.7":
   version "3.9.2"
@@ -6135,9 +6135,9 @@ eslint-plugin-import@^2.31.0:
     tsconfig-paths "^3.15.0"
 
 eslint-plugin-oxlint@^0.16.6:
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-oxlint/-/eslint-plugin-oxlint-0.16.10.tgz#baaecbd3e75b7d1abfcb1e620dd6a820d0141c7b"
-  integrity sha512-Kk66qL33TQyJ2vg59s4jllFb1iUxt49tkAw1xKiyyz3dNRIsFoF/U0NPGZK+ws/2MiMEpI/4dS9JPRtzIYpVRw==
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-oxlint/-/eslint-plugin-oxlint-0.16.11.tgz#67b0b8536b6b986ad23106ce1dbd6b19e5e349f7"
+  integrity sha512-/pemn48rNR9L85TIqZki7XYg7wOcU8/NNnTvoAHBPkTYmCWuvhOjET5f6B2hybEHknn2uaw0B0pPo9ECAFrc7A==
   dependencies:
     jsonc-parser "^3.3.1"
 
@@ -9866,18 +9866,18 @@ own-keys@^1.0.1:
     safe-push-apply "^1.0.0"
 
 oxlint@^0.16.6:
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/oxlint/-/oxlint-0.16.10.tgz#16c1c928c7771a129678849996420c8fdea110aa"
-  integrity sha512-xSHmXzQ8cuoeUFoHsc0NIab81KsXNNUKJbK7ZaoCcSWcWSDc4oyc9giPnaVOnVCye5XR7FfX2x4OXqJ9nQdKHw==
+  version "0.16.11"
+  resolved "https://registry.yarnpkg.com/oxlint/-/oxlint-0.16.11.tgz#f52daa0e2337353324b907ab374cfd80f5e3ae8d"
+  integrity sha512-JjeOwCeDfA9Y5vLswScJZlMyWBXEVz0LKKksgfkO3cgRV/XXvVzLzBEZ0h5bBiCBK1eS+jCFWh0bycECQkoWUQ==
   optionalDependencies:
-    "@oxlint/darwin-arm64" "0.16.10"
-    "@oxlint/darwin-x64" "0.16.10"
-    "@oxlint/linux-arm64-gnu" "0.16.10"
-    "@oxlint/linux-arm64-musl" "0.16.10"
-    "@oxlint/linux-x64-gnu" "0.16.10"
-    "@oxlint/linux-x64-musl" "0.16.10"
-    "@oxlint/win32-arm64" "0.16.10"
-    "@oxlint/win32-x64" "0.16.10"
+    "@oxlint/darwin-arm64" "0.16.11"
+    "@oxlint/darwin-x64" "0.16.11"
+    "@oxlint/linux-arm64-gnu" "0.16.11"
+    "@oxlint/linux-arm64-musl" "0.16.11"
+    "@oxlint/linux-x64-gnu" "0.16.11"
+    "@oxlint/linux-x64-musl" "0.16.11"
+    "@oxlint/win32-arm64" "0.16.11"
+    "@oxlint/win32-x64" "0.16.11"
 
 p-cancelable@^2.0.0:
   version "2.1.1"
@@ -12772,6 +12772,21 @@ vite-node@3.1.3:
     es-module-lexer "^1.7.0"
     pathe "^2.0.3"
     vite "^5.0.0 || ^6.0.0"
+
+vite-plugin-dts@4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/vite-plugin-dts/-/vite-plugin-dts-4.5.3.tgz#9d9e64c12e21e9389efd9f999e034cd5864b0027"
+  integrity sha512-P64VnD00dR+e8S26ESoFELqc17+w7pKkwlBpgXteOljFyT0zDwD8hH4zXp49M/kciy//7ZbVXIwQCekBJjfWzA==
+  dependencies:
+    "@microsoft/api-extractor" "^7.50.1"
+    "@rollup/pluginutils" "^5.1.4"
+    "@volar/typescript" "^2.4.11"
+    "@vue/language-core" "2.2.0"
+    compare-versions "^6.1.1"
+    debug "^4.4.0"
+    kolorist "^1.8.0"
+    local-pkg "^1.0.0"
+    magic-string "^0.30.17"
 
 vite-plugin-dts@4.5.4:
   version "4.5.4"
