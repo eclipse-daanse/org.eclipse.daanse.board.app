@@ -28,7 +28,7 @@
     "inversify": "7.5.1",
     "typescript": "^5.8.2",
     "vite": "^6.2.3",
-    "vite-plugin-dts": "4.5.3",
+    "vite-plugin-dts": "4.5.4",
     "org.eclipse.daanse.board.app.lib.factory.connection": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.factory.datasource": "^0.0.1-next.1",
