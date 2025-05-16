@@ -51,11 +51,16 @@ export function useDatasourceRepository(
       data.value = null
       return
     }
-
+    console.log('getData', dataSourceId.value)
+    console.log('type', type)
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
       const dataRaw = await dataSource.getData(type);
-      data.value = structuredClone(dataRaw);
+      if (type === "PivotTable") {
+        data.value = JSON.parse(JSON.stringify(dataRaw));
+      } else {
+        data.value = structuredClone(dataRaw);
+      }
     } catch (e) {
       data.value = null
       console.warn(e)

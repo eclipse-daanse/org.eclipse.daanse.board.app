@@ -97,6 +97,9 @@ import {
   init as initOGcStaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import {init as initSparqlDataSource} from "org.eclipse.daanse.board.app.lib.datasource.sparql"
+import { init as initChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.chart'
+import { init as initDatatableComposer } from 'org.eclipse.daanse.board.app.lib.composer.datatable'
+
 import {
   init as initI18next,
   symbolForI18n,
@@ -156,6 +159,7 @@ import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vu
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
+import { init as initChartWidgetUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
   init as initCsvDatasourceUI
@@ -188,6 +192,12 @@ import {
 import {
   init as initMqttConnectionUI
 } from 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
+import {
+  init as initChartComposerUi
+} from 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
+import {
+  init as initDatatableComposerUI
+} from 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
 
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
@@ -250,6 +260,9 @@ initSparqlDataSource(container)
 initWidgetRepo(container)
 initDatasourceFactory(container)
 initOGcStaDatasource(container)
+initChartComposer(container)
+initDatatableComposer(container)
+
 initWrapper(container)
 initSample(container)
 initImage(container)
@@ -341,6 +354,10 @@ initRssDatasourceUI(container)
 initGraphqlConnectionUI(container)
 initGraphqlDatasourceUI(container)
 initEndpointfinderPlugin(container)
+initChartComposerUi(container)
+initDatatableComposerUI(container)
+initChartWidgetUI(container)
+
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',
   connection: 'test',

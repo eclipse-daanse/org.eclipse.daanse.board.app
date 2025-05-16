@@ -48,6 +48,7 @@ const queryConfig = ref({
   measures: props.dataSource.config.requestParams?.measures || [],
 });
 
+const drilldownState = ref(props.dataSource.config.drilldownState || {});
 
 const updateData = async () => {
   const req = await tempStore.value.getData('PivotTable');
@@ -89,6 +90,28 @@ watch(() => query, async () => {
 
   updateData();
 }, { deep: true });
+
+const onExpand = async (e: any) => {
+  drilldownState.value = tempStore.value.expand(e);
+
+  emit('updateConfig', {
+    ...props.dataSource.config,
+    drilldownState: drilldownState.value,
+  });
+
+  updateData();
+}
+
+const onCollapse = async (e: any) => {
+  drilldownState.value = tempStore.value.collapse(e);
+
+  emit('updateConfig', {
+    ...props.dataSource.config,
+    drilldownState: drilldownState.value,
+  });
+
+  updateData();
+}
 
 // const selectedFilter = ref("");
 </script>
@@ -132,6 +155,8 @@ watch(() => query, async () => {
           <!-- @onExpand="onExpand"
           @onCollapse="onCollapse" -->
           <PivotTable v-if="data" v-model="data"
+            @onExpand="onExpand"
+            @onCollapse="onCollapse"
             :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
             :columnsExpandedMembers="data.tableState.columnsExpandedMembers"
           />

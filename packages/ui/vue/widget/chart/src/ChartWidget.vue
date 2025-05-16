@@ -12,9 +12,12 @@ Contributors:
 -->
 <script setup lang="ts">
 import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import {
+  Chart as ChartJS, Title, Tooltip,
+  Legend, BarElement, CategoryScale, LinearScale
+} from 'chart.js';
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { ref, toRefs } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
@@ -22,7 +25,12 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
 const data = ref(null as any);
-useDatasourceRepository(datasourceId, "ChartData", data);
+
+watch(datasourceId, (oldVal, newVal) => {
+  update(oldVal, newVal);
+})
+
+const { update } = useDatasourceRepository(datasourceId, "ChartData", data);
 
 const chartOptions = ref({
   responsive: true,

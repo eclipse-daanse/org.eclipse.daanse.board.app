@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { toRefs, ref } from "vue";
+import { toRefs, ref, watch } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { type IPivotTable } from "./index";
@@ -21,7 +21,11 @@ const props = defineProps<{ datasourceId: string, config: IPivotTable }>();
 const { datasourceId } = toRefs(props);
 
 const data = ref(null as any);
-const { callEvent } = useDatasourceRepository(datasourceId, "PivotTable", data);
+const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data);
+
+watch(datasourceId, (oldVal, newVal) => {
+  update(oldVal, newVal);
+})
 
 const onExpand = (e: any) => {
   callEvent('expand', e, true);
