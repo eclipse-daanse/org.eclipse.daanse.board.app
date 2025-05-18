@@ -12,15 +12,41 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed, toRefs, onMounted } from "vue";
-// import { useDatasourceRepository } from "@/plugins/widgets/composables/datasourceRepository";
+import { computed, toRefs, onMounted, ref, watch } from "vue";
+import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import type { ITextSettings } from "./index";
 
 const props = defineProps<{ datasourceId: string; config: ITextSettings }>();
 const { datasourceId, config } = toRefs(props);
 
-// const { data } = useDatasourceRepository(datasourceId, "object");
-const data= "qweqwe";
+const data = ref(null as any);
+const { update } = useDatasourceRepository(datasourceId, "object", data);
+
+watch(datasourceId, (newVal, oldVal) => {
+    update(newVal, oldVal);
+})
+
+const calculatedString = computed(() => {
+    if (!config.value.text) {
+        return "";
+    }
+
+    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.text);
+    let result = "";
+
+    for (const part of parts) {
+        if (part.path || part.path === null) {
+            const value = helpers.widget.getValueByPath(data.value, part.path);
+            result += value !== undefined ? JSON.stringify(value) : part.text;
+        } else {
+            result += part.text;
+        }
+    }
+
+    return result;
+})
+
 
 const defaultConfig: ITextSettings = {
     text: "",
@@ -65,20 +91,16 @@ const textDecoration = computed(() => {
 </script>
 
 <template>
-    <div
-        class="text-container"
-        :style="{
-            'justify-content':
-                config.verticalAlign === 'Top'
-                    ? 'flex-start'
-                    : config.verticalAlign === 'Center'
-                      ? 'center'
-                      : 'flex-end',
-        }"
-    >
+    <div class="text-container" :style="{
+        'justify-content':
+            config.verticalAlign === 'Top'
+                ? 'flex-start'
+                : config.verticalAlign === 'Center'
+                    ? 'center'
+                    : 'flex-end',
+    }">
         <div class="component">
-            <!-- {{ config.text }} -->
-            {{ data }}
+            {{ calculatedString }}
         </div>
     </div>
 </template>

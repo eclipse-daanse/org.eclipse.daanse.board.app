@@ -12,6 +12,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
+import libCss from 'vite-plugin-libcss'
 
 export default defineConfig({
   build: {
@@ -34,6 +35,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true
     }),
+    libCss(),
     //@ts-ignore
     vue()
   ]

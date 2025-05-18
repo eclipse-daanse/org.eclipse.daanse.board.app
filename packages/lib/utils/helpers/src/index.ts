@@ -16,6 +16,8 @@ import {
   optionalArrayToArray,
   transposeArray,
   findMaxinArrayByField,
+  extractValuesAndFullObject,
+  getValueByPath
 } from './classes/helpers'
 import csv, { ParseOptions } from './classes/csv'
 
@@ -25,6 +27,10 @@ export default {
   transposeArray,
   findMaxinArrayByField,
   csv,
+  widget: {
+    extractValuesAndFullObject,
+    getValueByPath,
+  }
 }
 
 export type {

@@ -13,41 +13,38 @@ Contributors:
 
 <script lang="ts" setup>
 import type { IRichTextEditorSettings } from "./index";
-import { computed, toRefs } from "vue";
-// import { useDatasourceRepository } from "../composables/datasourceRepository";
+import { computed, toRefs, onMounted, ref, watch } from "vue";
+import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
 const props = defineProps<{ datasourceId: string, config: IRichTextEditorSettings }>();
 const { datasourceId, config } = toRefs(props);
 
-// const { data } = useDatasourceRepository(datasourceId, "object");
+const data = ref(null as any);
+const { update } = useDatasourceRepository(datasourceId, "object", data);
+
+watch(datasourceId, (newVal, oldVal) => {
+    update(newVal, oldVal);
+})
 
 const parsedEditorText = computed(() => {
-    let processedString = config.value.editor;
-    if (!processedString) return "";
-    return processedString;
+    if (!config.value.editor) {
+        return "";
+    }
 
-    // const regex = /{(.*?)}/g;
-    // const parts = processedString.match(regex);
+    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.editor);
+    let result = "";
 
-    // if (!parts || !data.value) return processedString;
+    for (const part of parts) {
+        if (part.path || part.path === null) {
+            const value = helpers.widget.getValueByPath(data.value, part.path);
+            result += value !== undefined ? JSON.stringify(value) : part.text;
+        } else {
+            result += part.text;
+        }
+    }
 
-    // parts.forEach((element: string) => {
-    //     const trimmedString = element.replace("{", "").replace("}", "");
-
-    //     if (trimmedString === "") {
-    //         processedString = processedString.replace(element, JSON.stringify(data.value, null, 2));
-    //     } else {
-    //         const dataField = trimmedString.split(".");
-
-    //         const res = dataField.reduce((acc: any, field) => {
-    //             return acc ? acc[field] : undefined;
-    //         }, data.value);
-
-    //         processedString = processedString.replace(element, res !== undefined ? res : element);
-    //     }
-    // });
-
-    // return processedString;
+    return result;
 });
 </script>
 

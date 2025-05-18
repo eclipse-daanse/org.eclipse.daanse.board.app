@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
     "uuid": "^11.1.0"
   },
@@ -40,6 +41,7 @@
     "@tiptap/extension-underline": "^2.11.2",
     "@tiptap/pm": "^2.11.2",
     "@tiptap/starter-kit": "^2.11.2",
+    "vite-plugin-libcss": "^1.1.1",
     "@tiptap/vue-3": "^2.11.2"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
