@@ -55,7 +55,7 @@ const { update, callEvent } = useDatasourceRepository(datasourceId, 'OGCSTAData'
 watch(datasourceId, (value, oldValue, onCleanup) => {
   console.log(value)
   console.log(oldValue)
-  update(oldValue, value)
+  update(value, oldValue)
 })
 
 

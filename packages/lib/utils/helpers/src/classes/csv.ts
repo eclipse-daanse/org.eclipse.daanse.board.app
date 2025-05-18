@@ -30,7 +30,7 @@ if (!Object.hasOwn(RegExp, 'escape')) {
   })
 }
 
-interface ParseOptions {
+export interface ParseOptions {
   quote?: string
   separators?: string[]
   forceLineFeedAfterCarriageReturn?: boolean

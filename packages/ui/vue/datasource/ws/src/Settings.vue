@@ -29,5 +29,6 @@ const connectionsFiltered = computed(() => {
   <!-- eslint-disable-next-line vue/no-mutating-props -->
   <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
     value-by="uid" />
+  <VaSwitch v-model="config.accumulate" label="Accumulate messages in array" />
   <VaInput v-model="config.topic" label="Topic"/>
 </template>

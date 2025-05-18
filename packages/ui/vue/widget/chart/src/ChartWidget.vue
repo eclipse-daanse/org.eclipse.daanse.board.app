@@ -26,8 +26,8 @@ const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
 const data = ref(null as any);
 
-watch(datasourceId, (oldVal, newVal) => {
-  update(oldVal, newVal);
+watch(datasourceId, (newVal, oldVal) => {
+  update(newVal, oldVal);
 })
 
 const { update } = useDatasourceRepository(datasourceId, "ChartData", data);

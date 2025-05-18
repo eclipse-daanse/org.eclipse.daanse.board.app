@@ -159,6 +159,7 @@ import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vu
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
+import { init as initRssWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
 import { init as initChartWidgetUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
@@ -274,6 +275,7 @@ initSvgBase(container)
 initSvgRepeat(container)
 initIconWidget(container)
 initWidgetMap(container)
+initRssWidget(container)
 
 initLangEnWidgetWrapper(container)
 initLangEnIconWidget(container)

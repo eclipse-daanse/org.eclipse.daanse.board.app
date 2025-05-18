@@ -23,8 +23,8 @@ const { datasourceId } = toRefs(props);
 const data = ref(null as any);
 const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data);
 
-watch(datasourceId, (oldVal, newVal) => {
-  update(oldVal, newVal);
+watch(datasourceId, (newVal, oldVal) => {
+  update(newVal, oldVal);
 })
 
 const onExpand = (e: any) => {

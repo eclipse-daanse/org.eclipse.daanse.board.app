@@ -96,7 +96,7 @@ export function useDatasourceRepository(
   //   },
   // )
 
-  const update = (oldVal: string, newVal: string) => {
+  const update = (newVal: string, oldVal: string) => {
     try {
       getData()
     }catch (e){
@@ -111,6 +111,7 @@ export function useDatasourceRepository(
     }
     try {
       const dataSource = datasourceRepository.getDatasource(newVal)
+      // TODO: fix duplicate subscription
       dataSource.subscribe(()=>getData())
     } catch (e) {
       console.warn(e)

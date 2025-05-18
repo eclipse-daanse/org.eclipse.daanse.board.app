@@ -104,6 +104,16 @@ onMounted(async () => {
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <VaInput v-model="tempResourceUrl" label="Resource Url"
         :rules="[() => !tempResourceUrl || available || `Invalid resource URL`]" />
+    <VaSelect v-model="config.separators" label="Separators"
+        :options="[
+            { label: 'Comma (,)', value: ',' },
+            { label: 'Semicolon (;)', value: ';',  },
+            { label: 'Tab', value: '\\t' },
+            { label: 'Pipe (|)', value: '|' },
+            { label: 'Colon (:)', value: ':' },
+        ]"
+        text-by="label" value-by="value"
+    />
     <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
     <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
 </template>

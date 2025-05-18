@@ -17,7 +17,7 @@ import {
   transposeArray,
   findMaxinArrayByField,
 } from './classes/helpers'
-import csv from './classes/csv'
+import csv, { ParseOptions } from './classes/csv'
 
 export default {
   extractDataByPath,
@@ -25,4 +25,8 @@ export default {
   transposeArray,
   findMaxinArrayByField,
   csv,
+}
+
+export type {
+  ParseOptions
 }

@@ -23,11 +23,16 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { ParseOptions } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
 export interface ICsvStoreConfiguration  {
   resourceUrl: string
   connection: string
   pollingInterval?: number
+  type: string
+  name: string
+  uid: string
+  separators: string[]
 }
 
 export interface ICsvParseResult {
@@ -40,6 +45,7 @@ export interface ICsvParseResult {
 export class CsvStore extends BaseDatasource {
   private connection: any
   private resourceUrl: ComputedStoreParameter
+  private parseOptions: ParseOptions
 
   constructor(
     configuration: ICsvStoreConfiguration,
@@ -47,6 +53,9 @@ export class CsvStore extends BaseDatasource {
   ) {
     super(configuration, container)
     this.connection = configuration.connection
+    this.parseOptions = {
+      separators: configuration.separators,
+    }
 
     this.resourceUrl = super.initVariable(configuration.resourceUrl);
     this.pollingInterval = configuration.pollingInterval ?? 5000
@@ -69,7 +78,7 @@ export class CsvStore extends BaseDatasource {
     if (!req.ok) return []
     const text = await req.text()
 
-    const data = helpers.csv.parse(text);
+    const data = helpers.csv.parse(text, this.parseOptions);
     return data;
   }
 
@@ -86,7 +95,7 @@ export class CsvStore extends BaseDatasource {
     const req = await connection.fetch({ url: this.resourceUrl.value })
     if (!req.ok) return null
     const text = await req.text()
-    const data: ICsvParseResult = helpers.csv.parse(text);
+    const data: ICsvParseResult = helpers.csv.parse(text, this.parseOptions);
     if (type === 'DataTable') {
       return {
         headers: data.header,

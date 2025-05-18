@@ -74,10 +74,44 @@ export class RssStore extends BaseDatasource {
     const req = await connection.fetch({} as any)
     if (type === 'object') {
       return req
+    } else if(type === 'string') {
+      return JSON.stringify(req)
+    } else if (type === 'DataTable') {
+      const data = req.items
+      return this.parseToDataTable(data)
     } else {
       console.warn('Invalid data type')
       return null
     }
+  }
+
+  parseToDataTable(data: any): any {
+    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
+    const headers: string[] = ['index']
+    const rows: any[] = []
+    const items = data.map((item: any, index: number) => {
+      if (typeof item !== 'object') return {}
+      // const row: IDataTableRow = {
+      const row: any = {
+        index,
+      }
+      for (const key in item) {
+        if (typeof item[key] === 'object' || Array.isArray(item[key])) continue
+        if (!headers.includes(key)) {
+          headers.push(key)
+        }
+        row[key] = item[key]
+      }
+      return row
+    })
+    // items.forEach((item: IDataTableRow, index:number) => {
+    items.forEach((item: any, index: number) => {
+      rows[index] = []
+      headers.forEach((header: string) => {
+        rows[index].push(item[header])
+      })
+    })
+    return { items, headers, rows }
   }
 
   callEvent(event: string, params: any) {

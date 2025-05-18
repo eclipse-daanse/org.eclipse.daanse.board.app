@@ -25,6 +25,8 @@ export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
 export class WSStore extends BaseDatasource {
   private connection: any
   private accumulatedData: any[] = []
+  private lastMessage: any = null
+  private accumulate: boolean = false
   private topic = ''
 
   constructor(configuration: IWSStoreConfiguration,
@@ -32,6 +34,7 @@ export class WSStore extends BaseDatasource {
     super(configuration, container)
 
     this.connection = configuration.connection
+    this.accumulate = configuration.accumulate ?? false
 
     const connectionRepository = this.container.get(identifier) as ConnectionRepository
     const connection = connectionRepository.getConnection(
@@ -72,11 +75,19 @@ export class WSStore extends BaseDatasource {
   private onMessage(data: any, topic?: string) {
     if (this.topic && topic !== this.topic) return
 
-    this.accumulatedData.push({
-      message: data,
-      timestamp: new Date(Date.now()).toTimeString(),
-      topic: topic || 'default',
-    })
+    if (this.accumulate) {
+      this.accumulatedData.push({
+        message: data,
+        timestamp: new Date(Date.now()).toTimeString(),
+        topic: topic || 'default',
+      })
+    } else {
+      this.lastMessage = {
+        message: data,
+        timestamp: new Date(Date.now()).toTimeString(),
+        topic: topic || 'default',
+      }
+    }
 
     this.notify()
   }
@@ -86,7 +97,10 @@ export class WSStore extends BaseDatasource {
   }
 
   private parseToDataTable(): any {
-    const data = this.accumulatedData
+    let data = [this.lastMessage]
+    if (this.accumulate) {
+      data = this.accumulatedData
+    }
     if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
 
     const headers: string[] = ['index']
@@ -137,14 +151,19 @@ export class WSStore extends BaseDatasource {
   }
 
   getData(type: string): any {
+    let data = this.lastMessage
+    if (this.accumulate) {
+      data = this.accumulatedData
+    }
+
     if (type === 'DataTable') {
       return this.parseToDataTable()
     }
     if (type === 'object') {
-      return { messages: this.accumulatedData }
+      return JSON.stringify(data)
     }
     if (type === 'string') {
-      return JSON.stringify(this.accumulatedData)
+      return JSON.stringify(data)
     }
 
     throw new Error('Method not implemented.')
