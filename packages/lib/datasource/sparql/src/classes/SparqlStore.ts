@@ -17,7 +17,7 @@ import {
   type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ISparqlStoreConfiguration } from '../interfaces/ISparqlStoreConfiguration'
+import { ISparqlStoreConfiguration, SparqlResponse } from '../interfaces/ISparqlStoreConfiguration'
 
 
 @injectable()
@@ -41,7 +41,7 @@ export default class SparqlStore extends BaseDatasource {
   datasourceId: string | null = null;
 
 
-  data:undefined;
+  data:SparqlResponse|undefined;
 
 
   callEvent(event: string, params: any) {
@@ -84,7 +84,25 @@ export default class SparqlStore extends BaseDatasource {
     }catch (e){
       this.data = undefined;
     }
+    if(type=='DataTable'){
+      if(this.data){
+        const headers = this.data.head.vars;
 
+        const items = this.data.results.bindings.map((binding) => {
+          const item: Record<string, any> = {};
+          for (const key of headers) {
+            item[key] = binding[key]?.value ?? null;
+          }
+          return item;
+        });
+
+        const rows = items.map((item) => headers.map((key) => item[key]));
+
+        return { headers, items, rows };
+      }else {
+
+      }return { heders:[],items: [], rows:[] };
+    }
     return  this.data;
   }
 

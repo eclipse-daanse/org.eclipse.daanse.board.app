@@ -9,7 +9,19 @@
 
 */
 
-export type ISparqlStoreConfiguration = {
+import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+
+export interface ISparqlStoreConfiguration extends IBaseConnectionConfiguration{
   query:string,
   connection: string
 }
+export type SparqlResponse = {
+  head: { vars: string[] };
+  results: { bindings: Record<string, SparqlBinding>[] };
+};
+
+export type SparqlBinding = {
+  type: string;
+  value: string;
+  [key: string]: any;
+};
