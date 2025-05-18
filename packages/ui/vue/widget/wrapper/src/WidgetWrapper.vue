@@ -136,7 +136,10 @@ const getShadowColor = computed(() => {
       {{ widget.wrapperConfig.title }}
     </div>
     <template v-if="isWidgetRegistered">
-      <div class="w-full h-full box-border cursor-pointer overflow-hidden sub">
+      <div
+        class="w-full h-full box-border cursor-pointer overflow-hidden sub"
+        style="position: relative;"
+      >
         <VaScrollContainer color="#133370" vertical horizontal>
           <component
             :is="availableWidgets[widget.type].component"
