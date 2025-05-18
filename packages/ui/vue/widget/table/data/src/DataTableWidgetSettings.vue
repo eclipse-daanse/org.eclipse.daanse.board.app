@@ -11,9 +11,34 @@ Contributors:
     Smart City Jena
 -->
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+interface IDataTableSettings {
+  headerBackground: string
+}
+
+const widgetSettings = defineModel<IDataTableSettings>({ required: true });
+
+const opened = ref(false)
+</script>
 
 <template>
-  <div>Settings should be here</div>
+  <va-collapse v-model="opened" header="Data Table Settings">
+    <div class="settings-container">
+      <va-color-input
+          class="text-color"
+          label="Header Color"
+          v-model="widgetSettings.headerBackground"
+        />
+    </div>
+  </va-collapse>
 </template>
-<style scoped></style>
+<style scoped>
+  .settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+</style>

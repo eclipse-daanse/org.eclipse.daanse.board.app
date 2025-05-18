@@ -12,15 +12,19 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch } from 'vue';
+import { toRefs, ref, watch, computed } from 'vue';
 
-const props = defineProps<{ datasourceId: string }>();
-const { datasourceId } = toRefs(props);
+const props = defineProps<{ datasourceId: string, config: any }>();
+const { datasourceId, config } = toRefs(props);
 const data = ref(null as any);
 
 watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal);
 })
+
+const headerBackground = computed(() => {
+    return config.value.headerBackground;
+});
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
 </script>
@@ -29,6 +33,7 @@ const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
         class="table"
         :items="data ? data.items : []"
         sticky-header
+        :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
     />
 </template>
 
