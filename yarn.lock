@@ -7417,9 +7417,9 @@ humanize-ms@^1.2.1:
     ms "^2.0.0"
 
 i18next@^25.0.1:
-  version "25.1.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.1.3.tgz#91867c2d489262793cc043cb43730eebab1a37b1"
-  integrity sha512-VY1iKox3YWPRTNMHFdgk5TV+Jq6rNKexLCLpPmP5oXXJ5Kl7yDBi3ycZ5fyEKZ1tNBW5gOqD4WV0XqE7rl3JUg==
+  version "25.2.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.2.0.tgz#9758164e64abfb9166fca70cba11347d50231ca8"
+  integrity sha512-ERhJICsxkw1vE7G0lhCUYv4ZxdBEs03qblt1myJs94rYRK9loJF3xDj8mgQz3LmCyp0yYrNjbN/1/GWZTZDGCA==
   dependencies:
     "@babel/runtime" "^7.27.1"
 
@@ -12046,10 +12046,10 @@ text-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/text-extensions/-/text-extensions-1.9.0.tgz#1853e45fee39c945ce6f6c36b2d659b5aabc2a26"
   integrity sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==
 
-three@0.134.0:
-  version "0.134.0"
-  resolved "https://registry.npmjs.org/three/-/three-0.134.0.tgz#d7ad4d85d050da0861bf39749b06ddfb5f17157f"
-  integrity sha512-LbBerg7GaSPjYtTOnu41AMp7tV6efUNR3p4Wk5NzkSsNTBuA5mDGOfwwZL1jhhVMLx9V20HolIUo0+U3AXehbg==
+three@0.176.0:
+  version "0.176.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.176.0.tgz#a30c1974e46db5745e4f96dd9ee2028d71e16ecf"
+  integrity sha512-PWRKYWQo23ojf9oZSlRGH8K09q7nRSWx6LY/HF/UUrMdYgN9i1e2OwJYHoQjwc6HF/4lvvYLC5YC1X8UJL2ZpA==
 
 through2@^2.0.0, through2@^2.0.1:
   version "2.0.5"
