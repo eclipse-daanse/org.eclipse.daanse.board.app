@@ -1,0 +1,34 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.persistence.loader",
+  "version": "0.0.1-next.1",
+  "description": "",
+  "author": "undefined",
+  "homepage": "",
+  "license": "EPL-2.0",
+  "main": "./dist/lib.persistence.loader.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "inversify": "7.5.1",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.3",
+    "vite-plugin-dts": "4.5.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.settings.manager": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.persistence": "0.0.1-next.1"
+  }
+}

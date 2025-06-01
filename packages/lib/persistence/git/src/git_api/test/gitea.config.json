@@ -1,0 +1,9 @@
+{
+  "repos": [
+    {
+      "owner": "name",
+      "name": "nameOfRepo",
+      "token": "AccessToken"
+    }
+  ]
+}

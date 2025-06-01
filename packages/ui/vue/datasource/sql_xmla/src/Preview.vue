@@ -47,7 +47,7 @@ watch(() => query, async () => {
 </script>
 <template>
   <div v-if="tempStore" style="overflow: hidden; height: 100%; width: 100%;" class="flex flex-col gap-4">
-    <MonacoEditor class="h-full" :supportedLanguages="[ 'sql' ]" language="sql" v-model="query" />
+    <MonacoEditor class="h-full" :supportedLanguages="[ 'sql' ]" language="sql" v-model="query"  :metadata="{}" />
     <div class="h-full">
         <VaDataTable v-if="data" :items="data.items" :stickyHeader="true" style="height: 100%;" />
     </div>

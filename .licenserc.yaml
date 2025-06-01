@@ -48,5 +48,6 @@ header:
     - '**/*.svg'
     - 'yarn.lock'
     - 'packages/lib/datasource/ogcsta/src/client/**'
+    - 'packages/lib/persistence/git/src/git_api/generated/**'
 
   comment: always

@@ -8,26 +8,23 @@
   Contributors: Smart City Jena
 */
 
-
+import type { Container } from 'inversify'
 import { Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import RestRepositoryImpl from './RestRepository/RestRepository'
 
-import GitRepositoryImpl from './GitRepository/GitRepositoryImpl'
-import { Container } from 'inversify'
+const identifier = Symbol.for('RestRepository')
 
-const identifier = Symbol.for('GitRepository')
 const init = (container: Container) => {
-  container.bind<Repository>(identifier).to(GitRepositoryImpl)
+  container.bind<Repository>(identifier).to(RestRepositoryImpl)
   const repoRegistry = container.get<RepositoryRegistryI>(persistenceIdentifieer)
   if (!repoRegistry) {
     console.log('RepositoryRegistry not found')
     return
   }
-  repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier)
-  console.log('📦 GitRepository registered')
-
+  repoRegistry.registerRepoType(RestRepositoryImpl.type, identifier)
+  console.log('📦 RestRepository registered')
 }
 
 export {
-  init,
-  identifier
+  init
 }

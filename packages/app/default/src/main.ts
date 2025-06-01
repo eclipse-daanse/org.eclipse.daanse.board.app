@@ -225,6 +225,16 @@ import {init as initWrapper} from "org.eclipse.daanse.board.app.ui.vue.widget.wr
 import {init as initSparqlDataSourceUI} from "org.eclipse.daanse.board.app.ui.vue.datasource.sparql"
 import {init as initEndpointfinderPlugin}
   from "org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder"
+import {init as initPresitenceRepos} from "org.eclipse.daanse.board.app.lib.repository.persistence"
+import {init  as initPesistaneceLocal} from "org.eclipse.daanse.board.app.lib.persistence.local"
+import {init as initSettingsManager} from "org.eclipse.daanse.board.app.lib.settings.manager"
+import {init as initPersistenceReopLoader}
+  from "org.eclipse.daanse.board.app.lib.persistence.loader"
+import {init as initPersistenceHelper} from "org.eclipse.daanse.board.app.lib.persistence.util"
+import {init as initPersistenceRest} from "org.eclipse.daanse.board.app.lib.persistence.rest"
+import {init as initPersistenceGit} from "org.eclipse.daanse.board.app.lib.persistence.git"
+
+
 window.addEventListener('load', () => {
   const preloader = document.getElementById('preloader');
   if (preloader) {
@@ -260,6 +270,7 @@ app.config.globalProperties.$container = container
 app.provide('container',container);
 const symbolForApp = Symbol.for('App');
 container.bind('App').toConstantValue(app);
+initSettingsManager(container)
 initI18next(container)
 //initSytles(container)
 initCommonEn(container)
@@ -287,6 +298,7 @@ initDatasourceFactory(container)
 initOGcStaDatasource(container)
 initChartComposer(container)
 initDatatableComposer(container)
+
 
 initWrapper(container)
 initSample(container)
@@ -320,6 +332,13 @@ initVariableRepository(container)
 initConstantVariable(container)
 initComputedVariable(container)
 
+initPersistenceHelper(container)
+initPresitenceRepos(container)
+initPesistaneceLocal(container)
+initPersistenceRest(container)
+initPersistenceGit(container)
+
+initPersistenceReopLoader(container)
 // const variableFactory = container.get<VariableFactory>(variableFactoryIdentifier)
 const variableRepository = container.get<VariableRepository>(variablerepositoryIdentifier)
 

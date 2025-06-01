@@ -1,0 +1,33 @@
+{
+  "configId":"RemoteExample~1",
+  "initWithConfigurationURI": {
+    "enabled":false,
+    "url":""
+  },
+  "viewmodeByDefault":true,
+  "visuals":{
+    "hideHeader":false,
+    "hideMenu":false,
+    "hideEdit":false,
+    "hideSaveLoad":false,
+    "hideComponentsSettings":false,
+    "hideAppSettings":false
+  },
+  "appSettings":{
+    "backgroundColor":"",
+    "language":"de",
+    "darkmode": false
+  },
+  "persistanceRepositories":{
+    "localRepositories":[{
+      "name":"BrowserFileRepo",
+      "url":"file://localhost"
+    }],
+    "gitRepositories":[
+      {
+        "name":"Github-Repository",
+        "url":"https://github.com/de-jena/daanse-dash"
+      }
+    ]
+  }
+}
