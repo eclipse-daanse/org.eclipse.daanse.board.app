@@ -17,6 +17,7 @@ interface IMonacoEditorProps {
     language?: 'sql' | 'msdax' | 'mdx';
     theme?: 'vs-dark' | 'vs-light' | 'hc-black';
     supportedLanguages?: string[];
+    showToolbar?: boolean;
     metadata: {
         // connection: XmlaConnection;
         // metadataStore: MetadataStore;
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<IMonacoEditorProps>(), {
     modelValue: '',
     language: 'sql',
     theme: 'vs-dark',
+    showToolbar: true,
     supportedLanguages: () => ['sql', 'msdax', 'mdx'],
     // supportedThemes: () => ['vs-dark', 'vs-light', 'hc-black'],
 });
@@ -161,7 +163,7 @@ watch(() => props.modelValue, (newValue) => {
 
 <template>
     <div class="editor-page">
-        <div class="toolbar">
+        <div class="toolbar" v-if="props.showToolbar">
             <va-select v-model="selectedLanguage" label="Language:" :options="supportedLanguages" />
             <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
         </div>
