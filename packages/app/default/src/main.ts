@@ -161,6 +161,7 @@ import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.wi
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { init as initVantaWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.vanta'
 import { init as initRssWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
+import { init as initMermaidWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
 import { init as initChartWidgetUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
@@ -300,6 +301,7 @@ initIconWidget(container)
 initWidgetMap(container)
 initRssWidget(container)
 initVantaWidget(container)
+initMermaidWidget(container)
 
 initLangEnWidgetWrapper(container)
 initLangEnIconWidget(container)
