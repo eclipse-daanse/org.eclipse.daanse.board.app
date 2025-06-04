@@ -1,0 +1,51 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.widget.code",
+  "version": "0.0.1-next.1",
+  "description": "> TODO: description",
+  "author": "ssemenkoff <ssemenkoff@gmail.com>",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.code.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.code.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.code.d.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.common.monaco": "0.0.1-next.1",
+    "uuid": "^11.1.0",
+    "shiki": "3.4.2",
+    "simple-code-editor": "2.0.9",
+    "highlight.js": "^11.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.11",
+    "@types/uuid": "10.0.0",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "rollup": "^4.36.0",
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4",
+    "vue": "^3.5.13",
+    "vite-plugin-libcss": "^1.1.1",
+    "vue-tsc": "^2.2.8"
+  },
+  "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
+  "publishConfig": {
+    "access": "public"
+  }
+}
