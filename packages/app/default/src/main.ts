@@ -163,6 +163,7 @@ import { init as initVantaWidget } from 'org.eclipse.daanse.board.app.ui.vue.wid
 import { init as initRssWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
 import { init as initMermaidWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
 import { init as initChartWidgetUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
+import { init as initMarkdownWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.markdown'
 import { init as initXmlaConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import {
   init as initCsvDatasourceUI
@@ -314,6 +315,7 @@ initWidgetMap(container)
 initRssWidget(container)
 initVantaWidget(container)
 initMermaidWidget(container)
+initMarkdownWidget(container)
 
 initLangEnWidgetWrapper(container)
 initLangEnIconWidget(container)
