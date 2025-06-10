@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ogcsta"
+                nsURI="http://example.com/ogcsta" nsPrefix="ogcsta">
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+    <eClassifiers xsi:type="ecore:EClass" name="IOGCSTAConfiguration">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Configuration for an OGC SensorThings API (OGCSTA) data source, extending the base connection configuration."/>
+        </eAnnotations>
+        <eSuperTypes href="http://example.com/baseconnection#//IBaseConnectionConfiguration"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="connection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A reference or ID to a specific OGCSTA connection endpoint."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+</ecore:EPackage>

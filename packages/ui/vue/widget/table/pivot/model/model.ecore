@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:PivotTable="http://www.example.org/PivotTable">
+  <ecore:EPackage name="PivotTable" nsURI="http://www.example.org/PivotTable" nsPrefix="PivotTable">
+    <eClassifiers xsi:type="ecore:EClass" name="PivotTable" eTypeParameters.0="PivotTable:IPivotTable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation">Represents a pivot table structure.  Contains rows, columns, cells, and table state information.</details>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rows" lowerBound="1" upperBound="-1" eType="#//JavaObject" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation">Rows of the pivot table.  Can contain any type of data.</details>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1" upperBound="-1" eType="#//JavaObject" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation">Columns of the pivot table. Can contain any type of data.</details>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cells" lowerBound="1" upperBound="-1" eType="#//JavaObject" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation">Cells of the pivot table. Can contain any type of data.</details>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableState" lowerBound="0" eType="ecore:EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation">The overall state of the pivot table.  Can be any type of data.</details>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="JavaObject" abstract="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation">A generic type for handling 'any' types in TypeScript. Maps to EJavaObject in Ecore.</details>
+      </eAnnotations>
+    </eClassifiers>
+  </ecore:EPackage>
+</xmi:XMI>

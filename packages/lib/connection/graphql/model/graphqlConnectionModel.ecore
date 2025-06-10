@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="graphqlconnection"
+                nsURI="http://example.com/graphqlconnection" nsPrefix="graphqlconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IGraphQLConnectionConfiguration">
+        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The specific URL endpoint for the GraphQL API.
+                                            This attribute overrides the 'url' from BaseConnectionConfig
+                                            to emphasize its specific role in GraphQL connections."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>
