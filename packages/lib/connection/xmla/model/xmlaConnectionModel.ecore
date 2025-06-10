@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="xmlaconnection"
+                nsURI="http://example.com/xmlaconnection" nsPrefix="xmlaconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IXmlaConnectionConfiguration">
+        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL endpoint for the XMLA service."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="cubeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name of the OLAP cube to connect to."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The name of the catalog containing the cube."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>

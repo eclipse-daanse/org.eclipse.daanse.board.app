@@ -34,4 +34,5 @@ test_output/
 playwright-report/
 .vite
 package-lock.json
-**/.turbo
+.turbo
+.turbo/**/*
