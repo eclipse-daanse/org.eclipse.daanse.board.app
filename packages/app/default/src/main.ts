@@ -160,6 +160,7 @@ import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vu
 import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { init as initVantaWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.vanta'
+import { init as initCodeWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.code'
 import { init as initRssWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
 import { init as initMermaidWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
 import { init as initChartWidgetUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
@@ -269,6 +270,7 @@ const tinyEmitter = new TinyEmitter();
 container.bind(identifiers.TINY_EMITTER).toConstantValue(tinyEmitter)
 app.config.globalProperties.$container = container
 app.provide('container',container);
+app.provide('codeEditorType', 'monaco');
 const symbolForApp = Symbol.for('App');
 container.bind('App').toConstantValue(app);
 initSettingsManager(container)
@@ -316,6 +318,7 @@ initRssWidget(container)
 initVantaWidget(container)
 initMermaidWidget(container)
 initMarkdownWidget(container)
+initCodeWidget(container)
 
 initLangEnWidgetWrapper(container)
 initLangEnIconWidget(container)

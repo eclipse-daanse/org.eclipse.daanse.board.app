@@ -13,11 +13,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
-    "build-only": "vite build",
+    "build-only": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "type-check": "vue-tsc --build",
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
@@ -116,6 +116,7 @@
     "org.eclipse.daanse.board.app.ui.vue.widget.mermaid": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.persistence.git": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.markdown": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.widget.code": "^0.0.1-next.1",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.1.4",
     "vue": "^3.5.13",
@@ -152,7 +153,8 @@
 
     "vite-plugin-vue-devtools": "^7.7.2",
     "vitest": "^3.0.9",
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^2.2.8",
+    "cross-env": "^7.0.3"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
   "publishConfig": {
