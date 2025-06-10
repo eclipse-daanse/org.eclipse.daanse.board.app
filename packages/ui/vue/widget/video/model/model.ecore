@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="videoSettings"
+                nsURI="http://www.example.org/videoSettings" nsPrefix="videoSettings">
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectFitSetting">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Defines how the content of a replaced element (like a video or image) should be fitted into its container's box."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The CSS 'object-fit' property value (e.g., 'fill', 'contain', 'cover', 'none', 'scale-down')."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VideoSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents the settings for displaying a video, including its URL and how it should fit into its container."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="videoFitSettings" eType="#//ObjectFitSetting" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The settings for how the video content should be fitted into its container."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="videoUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL or path to the video file."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+</ecore:EPackage>

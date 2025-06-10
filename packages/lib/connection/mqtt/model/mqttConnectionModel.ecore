@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mqttconnection"
+                nsURI="http://example.com/mqttconnection" nsPrefix="mqttconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IMQTTConnectionConfiguration">
+        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.
+                                            This attribute overrides the 'url' from BaseConnectionConfig
+                                            to emphasize its specific role in MQTT connections."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="topic" lowerBound="0" upperBound="1"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="An optional MQTT topic to subscribe or publish to by default.
+                                            If not specified, a connection might use a default topic or require one per operation."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>

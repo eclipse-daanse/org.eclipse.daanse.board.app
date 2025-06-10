@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="csvstore"
+                nsURI="http://example.com/csvstore" nsPrefix="csvstore">
+
+    <eClassifiers xsi:type="ecore:EClass" name="ICsvStoreConfiguration">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents the configuration for a CSV data store, extending the base connection configuration."/>
+        </eAnnotations>
+        <eSuperTypes href="http://example.com/baseconnection#//IBaseConnectionConfiguration"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL of the CSV resource (e.g., a file path or web URL)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="connection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A reference or ID to a connection configuration used to access the resource."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pollingInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The optional interval in milliseconds to poll the CSV resource for updates. If not specified, polling might be disabled or use a default value."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="separators" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0" upperBound="-1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="A list of possible separator characters used in the CSV file (e.g., ',', ';', '\t')."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rssconnection"
+                nsURI="http://example.com/rssconnection" nsPrefix="rssconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IRssConnectionConfiguration">
+        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The URL of the RSS feed to connect to.
+                                            This attribute overrides the 'url' from BaseConnectionConfig
+                                            to specify its role in RSS feed connections."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>
