@@ -15,7 +15,7 @@ import { onMounted, watch, ref, onBeforeUnmount, shallowRef } from 'vue';
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import GraphiQL from 'graphiql';
+import {GraphiQL} from 'graphiql';
 import 'graphiql/style.css';
 
 const props = defineProps<{ dataSource: any }>();
