@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "NODE_OPTIONS=\"--max-old-space-size=8096\" turbo run build --concurrency=2",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=65536\" turbo run build --concurrency=16",
+    "build_local": "NODE_OPTIONS=\"--max-old-space-size=4096\" turbo run build --concurrency=2",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "test:e2e": "playwright test",
