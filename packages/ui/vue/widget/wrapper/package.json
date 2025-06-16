@@ -24,7 +24,7 @@
     "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
-    "@types/node": "^22.13.11",
+    "@types/node": "^24.0.2",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",

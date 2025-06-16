@@ -133,7 +133,7 @@
     "@rollup/plugin-alias": "^5.1.1",
     "@tsconfig/node22": "^22.0.0",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.13.9",
+    "@types/node": "^24.0.2",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/eslint-plugin": "^1.1.36",
     "@vue/eslint-config-prettier": "^10.2.0",
