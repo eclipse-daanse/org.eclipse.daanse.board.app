@@ -6970,10 +6970,10 @@ eslint-plugin-import@^2.31.0:
     string.prototype.trimend "^1.0.8"
     tsconfig-paths "^3.15.0"
 
-eslint-plugin-oxlint@^0.16.6:
-  version "0.16.12"
-  resolved "https://registry.npmjs.org/eslint-plugin-oxlint/-/eslint-plugin-oxlint-0.16.12.tgz#d08ac0a196a597f8641d4e444e7d4fea1994337e"
-  integrity sha512-41nSsLHg2oOnl7E/Bb5dypPuIAlMDTobo71+HeRVn1wipC5VXU8GBPVXiwi2RVcnwpEHy3TwEYcatrDMjKd3Sg==
+eslint-plugin-oxlint@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-oxlint/-/eslint-plugin-oxlint-1.1.0.tgz#f4d8cfb831f7ce01b92e0b701600191e722c291b"
+  integrity sha512-spDWxcsAfoUDjSwxPrP2gfuOJ2Hrv8faqQ5Vkm90lURp4no5aWJQ09xRKmZroIPTuQCKYgG9nvnakdIbXGlijg==
   dependencies:
     jsonc-parser "^3.3.1"
 
