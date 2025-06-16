@@ -13,6 +13,9 @@ Contributors:
 <script lang="ts" setup>
 import { computed, onMounted, toRefs } from "vue";
 import { IIconSettings } from "./index";
+import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+
+const { wrapParameters } = useVariableRepository();
 
 const props = defineProps<{ config: IIconSettings }>();
 const { config } = toRefs(props);
@@ -33,12 +36,12 @@ onMounted(() => {
     }
 });
 
-const iconColor = computed(() => {
-    return config.value.iconColor;
-});
-
-const iconSize = computed(() => {
-    return `${config.value.iconSize}px`;
+const {
+    iconColor,
+    iconSize,
+} = wrapParameters({
+    iconColor: computed(() => config.value.iconColor),
+    iconSize: computed(() => config.value.iconSize),
 });
 
 const iconStyle = computed(() => {
@@ -77,7 +80,7 @@ const iconStyle = computed(() => {
     font-family: "Material Symbols Outlined";
     font-weight: normal;
     font-style: normal;
-    font-size: v-bind(iconSize);
+    font-size: v-bind(iconSize + "px");
     color: v-bind(iconColor);
     display: inline-block;
     line-height: 1;

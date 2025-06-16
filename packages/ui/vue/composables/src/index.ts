@@ -14,5 +14,6 @@
 import { useDatasourceRepository } from './useDatasourceRepository'
 import { useTemporaryStore } from './useTemporaryStore'
 import { usePromisifiedModal } from './promisifiedModal'
+import { useVariableRepository } from './useVariableRepository'
 
-export { useDatasourceRepository, useTemporaryStore,usePromisifiedModal }
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal }

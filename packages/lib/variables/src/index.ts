@@ -20,6 +20,7 @@ import { RequestVariable, init as initRequest, symbol as RequestVariableSymbol }
 import { TimeVariable, init as initTime, symbol as TimeVariableSymbol } from './classes/TimeVariable'
 import { UsesComputedVariable } from './utils/UsesComputedVariable'
 import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
+import { Variable } from './classes/Variable'
 
 enum SourceType {
   Constant = 'Constant',
@@ -120,4 +121,5 @@ export {
   RequestVariableSymbol,
   TimeVariableSymbol,
   ComputedStoreParameter,
+  type Variable
 }

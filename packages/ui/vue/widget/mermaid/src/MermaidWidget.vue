@@ -15,13 +15,24 @@ Contributors:
 import { nextTick, ref, watch } from 'vue';
 import mermaid from 'mermaid';
 import { IMermaidWidgetSettings } from '.';
+import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+
+const { wrapParameters } = useVariableRepository();
 
 const props = defineProps<{ config: IMermaidWidgetSettings }>();
 
 const container = ref<HTMLDivElement | null>(null);
 const timestamp = ref(Date.now());
 
-watch(() => props.config.theme, async (newTheme: any) => {
+const {
+    value,
+    theme,
+} = wrapParameters({
+    value: props.config.value,
+    theme: props.config.theme,
+});
+
+watch(() => theme, async (newTheme: any) => {
     mermaid.initialize({
         theme: newTheme,
     });
@@ -37,7 +48,7 @@ watch(() => props.config.theme, async (newTheme: any) => {
     }
 }, { immediate: true });
 
-watch(() => props.config.value, async (newValue) => {
+watch(() => value, async () => {
     timestamp.value = Date.now();
 
     await nextTick();
@@ -53,7 +64,7 @@ watch(() => props.config.value, async (newValue) => {
 
 <template>
     <div ref="container" :key="timestamp">
-        {{ props.config.value }}
+        {{ value }}
     </div>
 </template>
 

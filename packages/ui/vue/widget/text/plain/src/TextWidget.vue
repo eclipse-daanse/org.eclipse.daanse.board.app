@@ -16,23 +16,61 @@ import { computed, toRefs, onMounted, ref, watch } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import type { ITextSettings } from "./index";
+import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
+
+const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string; config: ITextSettings }>();
 const { datasourceId, config } = toRefs(props);
 
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
 
+const defaultConfig: ITextSettings = {
+    text: "",
+    fontSize: 12,
+    fontColor: "#000",
+    fontWeight: "normal",
+    fontStyle: "normal",
+    textDecoration: "none",
+    horizontalAlign: "Left",
+    verticalAlign: "Top",
+};
+
 watch(datasourceId, (newVal, oldVal) => {
     update(newVal, oldVal);
 })
 
+const {
+    text,
+    fontSize,
+    fontColor,
+    horizontalAlign,
+    fontWeight,
+    fontStyle,
+    textDecoration
+} = wrapParameters({
+    text: computed(() => config.value.text),
+    fontSize: computed(() => config.value.fontSize),
+    fontColor: computed(() => config.value.fontColor),
+    horizontalAlign: computed(() => config.value.horizontalAlign),
+    fontWeight: computed(() => config.value.fontWeight),
+    fontStyle: computed(() => config.value.fontStyle),
+    textDecoration: computed(() => config.value.textDecoration),
+});
+
+onMounted(async () => {
+    if (config.value) {
+        Object.assign(config.value, { ...defaultConfig, ...config.value });
+    }
+});
+
 const calculatedString = computed(() => {
-    if (!config.value.text) {
+    if (!text.value) {
         return "";
     }
 
-    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.text);
+    const { parts } = helpers.widget.extractValuesAndFullObject(text.value);
     let result = "";
 
     for (const part of parts) {
@@ -46,48 +84,6 @@ const calculatedString = computed(() => {
 
     return result;
 })
-
-
-const defaultConfig: ITextSettings = {
-    text: "",
-    fontSize: 12,
-    fontColor: "#000",
-    fontWeight: "normal",
-    fontStyle: "normal",
-    textDecoration: "none",
-    horizontalAlign: "Left",
-    verticalAlign: "Top",
-};
-
-onMounted(async () => {
-    if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
-    }
-});
-
-const fontSize = computed(() => {
-    return config.value.fontSize;
-});
-
-const fontColor = computed(() => {
-    return config.value.fontColor;
-});
-
-const horizontalAlign = computed(() => {
-    return config.value.horizontalAlign;
-});
-
-const fontWeight = computed(() => {
-    return config.value.fontWeight;
-});
-
-const fontStyle = computed(() => {
-    return config.value.fontStyle;
-});
-
-const textDecoration = computed(() => {
-    return config.value.textDecoration;
-});
 </script>
 
 <template>

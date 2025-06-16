@@ -13,6 +13,9 @@ Contributors:
 <script lang="ts" setup>
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { toRefs, ref, watch, computed } from 'vue';
+import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+
+const { wrapParameters } = useVariableRepository();
 
 const props = defineProps<{ datasourceId: string, config: any }>();
 const { datasourceId, config } = toRefs(props);
@@ -22,8 +25,10 @@ watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal);
 })
 
-const headerBackground = computed(() => {
-    return config.value.headerBackground;
+const {
+    headerBackground,
+} = wrapParameters({
+    headerBackground: computed(() => config.value.headerBackground || '#f0f0f0'),
 });
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)

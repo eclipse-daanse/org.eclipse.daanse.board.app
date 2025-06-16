@@ -29,7 +29,12 @@ export default defineConfig({
       fileName: 'lib.core'
     },
     rollupOptions: {
-      external: []
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue'
+        }
+      }
     }
   },
   plugins: [
