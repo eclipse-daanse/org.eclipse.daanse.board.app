@@ -2198,45 +2198,45 @@
   resolved "https://registry.npmjs.org/@one-ini/wasm/-/wasm-0.1.1.tgz#6013659736c9dbfccc96e8a9c2b3de317df39323"
   integrity sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==
 
-"@oxlint/darwin-arm64@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/darwin-arm64/-/darwin-arm64-1.1.0.tgz#de603c68041e11f46bfdceb6834705258a042407"
-  integrity sha512-sSnR3SOxIU/QfaqXrcQ0UVUkzJO0bcInQ7dMhHa102gVAgWjp1fBeMVCM0adEY0UNmEXrRkgD/rQtQgn9YAU+w==
+"@oxlint/darwin-arm64@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/darwin-arm64/-/darwin-arm64-1.2.0.tgz#793f5573a4da08b7231a40880499653d9d93c639"
+  integrity sha512-DsdZPp59sPPmuI6pR6MP1QepWWkpibFhVmRXa7ZOUobxxubUBg12SVCchAI1Iq8jejcAg9/XHXsRFpuny2LawQ==
 
-"@oxlint/darwin-x64@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/darwin-x64/-/darwin-x64-1.1.0.tgz#01c4322aa13e0312ce81307e66d6a2595a9c56d4"
-  integrity sha512-Jvd3fHnzY2OYbmsg9NSGPoBkGViDGHSFnBKyJQ9LOIw7lxAyQBG2Quxc3GYPFR/f9OYho9C3p4+dIaAJfKhnsw==
+"@oxlint/darwin-x64@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/darwin-x64/-/darwin-x64-1.2.0.tgz#bebb026c4b6d52bbeaab498fce31eaf68a801835"
+  integrity sha512-SN4lUlpGyFfGph+quUuGhEAyBMB87CgnFEK2bk3Lo96ehHcIhmzUH41nbsgi99k45+qEtD0ThIKAsbksOVn0uA==
 
-"@oxlint/linux-arm64-gnu@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-gnu/-/linux-arm64-gnu-1.1.0.tgz#c511e12f6de386cea7a472cc76858654f7e6653b"
-  integrity sha512-MgW4iskOdXuoR+wDXIJUfbdnTg2eo2FnQRaD6ZqhnDTDa7LnV+06rp/Cg3aGj2X9jSEcKDv/bMbYQuot7WRs6Q==
+"@oxlint/linux-arm64-gnu@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-gnu/-/linux-arm64-gnu-1.2.0.tgz#8621ec9b85a4aaebd82e5b38b17617e09a32267e"
+  integrity sha512-O03yN/Sas6/vyewiq8w9YN67yY8IofTpS28H2/f1a0Cb83Z7RbEzkWvsswq0erTHA0ctwJkzHfkRSRaBOmceBQ==
 
-"@oxlint/linux-arm64-musl@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-musl/-/linux-arm64-musl-1.1.0.tgz#707a75124fb9144b753e50598300710686790898"
-  integrity sha512-a+pkEKmDRdrW+y0gtZ/m68ElVW2VZgATGbMxDgDYFpdiMx9Y0pUPwTMZ2EX/17Aslop4c1BiDSFDK7aEBxKR2g==
+"@oxlint/linux-arm64-musl@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-arm64-musl/-/linux-arm64-musl-1.2.0.tgz#64e4c08c31669829c62df08d9375810d1f1cd1ca"
+  integrity sha512-DO61+/vJkYRUEaVoajU2tLpVHBu3Fe8vhJ2mgxVNfOgQ7uIvHCB7wrnkHSPgABK9yROGenLWG9K6uHq3qiXj2g==
 
-"@oxlint/linux-x64-gnu@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-gnu/-/linux-x64-gnu-1.1.0.tgz#e7d4053d6ef6012185e8d2ca747de40a7674a9d8"
-  integrity sha512-wNBsXCKVZMvUTcFitrV1wTsdhUAv8l+XQxHxciZ2SO6dpNnWEb2YCxSAIOXeyzBLdO4pIODYcSy38CvGue7TwA==
+"@oxlint/linux-x64-gnu@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-gnu/-/linux-x64-gnu-1.2.0.tgz#38bd2c6b877a0e7ca4e7d4e46b947c3c94209036"
+  integrity sha512-i2piovvEAKYsb23/NfiGug9Gqnf+5IoNgw7pDF/N7bPIFMJlzWACQHYi5dfIzFhG23FIdAnh+BHBDK9LKK5Jkw==
 
-"@oxlint/linux-x64-musl@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-musl/-/linux-x64-musl-1.1.0.tgz#5f4a7f4a0a04e23a3cf19719688da016595a10be"
-  integrity sha512-pZD0lt6A5j2Wp70fgIYk4GoPfKTZ8mHWamWIpKFT7aSkFkiOi6nhLWDFvMEIHWRTK3LgkWUNcnWPp4brvin4wQ==
+"@oxlint/linux-x64-musl@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/linux-x64-musl/-/linux-x64-musl-1.2.0.tgz#f29655b5aa4f15dbab46907cf5cb826a0e06dcb6"
+  integrity sha512-r3AjtZ7BOArWoIjyjnT6Wj3jiv2anZbeL5jsj+sUMvd8m/t7sFb18ySRqS63d4yC6Ct3OZZVLFD4MADW658ghg==
 
-"@oxlint/win32-arm64@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/win32-arm64/-/win32-arm64-1.1.0.tgz#26cd35ca45dde8b8a7a2f982a2653c5d9917ee89"
-  integrity sha512-rT6uXQvE80+B+L04HJf30uF26426FPI9i9DAY2AxBUhrpNwhqkDEhQdd9ilFWVC7SSbpHgAs50lo+ImSAAkHPQ==
+"@oxlint/win32-arm64@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/win32-arm64/-/win32-arm64-1.2.0.tgz#5fc90d4158dd033c96ebc631999cffaf09b0426e"
+  integrity sha512-a0ZJE/QlJ1JdAc5FGytjwjBzq9oIbR7y9CwbVtrvwqOBaHzB7qssI93dGPZCRE4talL3dk18L6fthd6ijvLVxg==
 
-"@oxlint/win32-x64@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@oxlint/win32-x64/-/win32-x64-1.1.0.tgz#2c08c5b8c319c4e5a8f9beb19d13ed0391733881"
-  integrity sha512-x6r5yvM3wEty93Bx0NuNK+kutUyS/K55itkUrxdExoK6GcmVDboGGuhju9HyU2cM/IWLEWO8RHcXSyaxr9GR5g==
+"@oxlint/win32-x64@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@oxlint/win32-x64/-/win32-x64-1.2.0.tgz#9eef6c1516905d5a5aa11bc4ffd107d5f23785b4"
+  integrity sha512-OrWwyUCYGAnz5xDvVjCRFLp+XkQT56alXyx5kJDhDXKZzjajXwvFRFTvT3Hstu9I6bnCsqFjBcCbjQzmUBHOYw==
 
 "@petamoriken/float16@^3.4.7":
   version "3.9.2"
@@ -6610,10 +6610,10 @@ electron-winstaller@^5.3.0:
   optionalDependencies:
     "@electron/windows-sign" "^1.1.2"
 
-electron@36.4.0:
-  version "36.4.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-36.4.0.tgz#9463bf5fa7565ae7be3a274f7f6a46359bcfe74d"
-  integrity sha512-LLOOZEuW5oqvnjC7HBQhIqjIIJAZCIFjQxltQGLfEC7XFsBoZgQ3u3iFj+Kzw68Xj97u1n57Jdt7P98qLvUibQ==
+electron@36.5.0:
+  version "36.5.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-36.5.0.tgz#5cb2cc1c6b440a26fa97cb7792231ea920176317"
+  integrity sha512-ouVtHbHDFsRBHPGx9G6RDm4ccPaSCmrrR8tbUGZuqbJhqIClVBkVMz94Spjihag2Zo1eHtYD+KevALrc/94g1g==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^22.7.7"
@@ -7699,11 +7699,6 @@ gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
-
-geographiclib-geodesic@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/geographiclib-geodesic/-/geographiclib-geodesic-2.1.1.tgz#5f9c02f2e0db5403055ba637f76d9e58b2215863"
-  integrity sha512-lkd8EUkPSByobWu9BPMHTdYA5AUZxOa8McmUNtBE9KrvUJEvSADnN6gTDmhXbi6NzdA16LtWLpSxLE/lIIRhyA==
 
 geojson@^0.5.0:
   version "0.5.0"
@@ -10768,18 +10763,18 @@ own-keys@^1.0.1:
     safe-push-apply "^1.0.0"
 
 oxlint@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/oxlint/-/oxlint-1.1.0.tgz#422281ba7414911e27c35e574343c56aaa718b8e"
-  integrity sha512-OVNpaoaQCUHHhCv5sYMPJ7Ts5k7ziw0QteH1gBSwF3elf/8GAew2Uh/0S7HsU1iGtjhlFy80+A8nwIb3Tq6m1w==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/oxlint/-/oxlint-1.2.0.tgz#9b0e74926a16af1af96b3aee8b1a183db2903a0f"
+  integrity sha512-zUtw37XW3fERrSJVVZfmHo35crJ7OS+Non9jk+kLtuhzEJYsbd1ORwGsnTVWy8oXEdNO/tXAUm+zVRoilEGelw==
   optionalDependencies:
-    "@oxlint/darwin-arm64" "1.1.0"
-    "@oxlint/darwin-x64" "1.1.0"
-    "@oxlint/linux-arm64-gnu" "1.1.0"
-    "@oxlint/linux-arm64-musl" "1.1.0"
-    "@oxlint/linux-x64-gnu" "1.1.0"
-    "@oxlint/linux-x64-musl" "1.1.0"
-    "@oxlint/win32-arm64" "1.1.0"
-    "@oxlint/win32-x64" "1.1.0"
+    "@oxlint/darwin-arm64" "1.2.0"
+    "@oxlint/darwin-x64" "1.2.0"
+    "@oxlint/linux-arm64-gnu" "1.2.0"
+    "@oxlint/linux-arm64-musl" "1.2.0"
+    "@oxlint/linux-x64-gnu" "1.2.0"
+    "@oxlint/linux-x64-musl" "1.2.0"
+    "@oxlint/win32-arm64" "1.2.0"
+    "@oxlint/win32-x64" "1.2.0"
 
 p-cancelable@^2.0.0:
   version "2.1.1"
@@ -11356,11 +11351,10 @@ progress@^2.0.3:
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
 proj4@^2.15.0:
-  version "2.17.0"
-  resolved "https://registry.npmjs.org/proj4/-/proj4-2.17.0.tgz#cf196487829e463656607a7d3118ab51d838684b"
-  integrity sha512-BqVoruVAOUgkw5U9Ns76+E2nHZG0Y42tbkC+0BpyqjhwPIai29hoivyQoyelEKFSfaV3zkR3NqPRD0EwPM4Wug==
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/proj4/-/proj4-2.19.2.tgz#49f898d8aa97cc11ac2743f33e70214bbe46f7ef"
+  integrity sha512-vOAdQoyY2nCGml2dpCsg4MHwDZudMltGxtV0Kj6ImeVe6KLxFXE59L7F8ikOXS2cyoiaR75cLIeIcj+fVpq+sA==
   dependencies:
-    geographiclib-geodesic "^2.1.1"
     mgrs "1.0.0"
     wkt-parser "^1.5.1"
 
