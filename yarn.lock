@@ -10989,10 +10989,10 @@ p-waterfall@2.1.1:
   dependencies:
     p-reduce "^2.0.0"
 
-p5@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/p5/-/p5-1.4.0.tgz#d4d0f001c297525831861af5e017cdb5ef517a75"
-  integrity sha512-U888W2ChcIzPhRhnv4FkNhaa4f5BDIWZfLhzvx9ZrQ5KtkZr/+o1UPIicV3yWTRy0HEG23NviHyDR3kgjaJ9wA==
+p5@1.11.8:
+  version "1.11.8"
+  resolved "https://registry.yarnpkg.com/p5/-/p5-1.11.8.tgz#19322dedbeb8010cedeaa484c151840dae3440b5"
+  integrity sha512-owi2+HDP/KQvzc3mAagp74cc6yPalWejMjjDfrIqjsheo6CZ16WjbPRDKjgpuIH9F5eAPVTuTSbLsTawl2Djiw==
 
 package-json-from-dist@^1.0.0:
   version "1.0.1"
@@ -13247,10 +13247,10 @@ text-extensions@^1.0.0:
   resolved "https://registry.npmjs.org/text-extensions/-/text-extensions-1.9.0.tgz#1853e45fee39c945ce6f6c36b2d659b5aabc2a26"
   integrity sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==
 
-three@0.134.0:
-  version "0.134.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.134.0.tgz#d7ad4d85d050da0861bf39749b06ddfb5f17157f"
-  integrity sha512-LbBerg7GaSPjYtTOnu41AMp7tV6efUNR3p4Wk5NzkSsNTBuA5mDGOfwwZL1jhhVMLx9V20HolIUo0+U3AXehbg==
+three@0.177.0:
+  version "0.177.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.177.0.tgz#e51f2eb2b921fbab535bdfa81c403f9993b9dd83"
+  integrity sha512-EiXv5/qWAaGI+Vz2A+JfavwYCMdGjxVsrn3oBwllUoqYeaBO75J63ZfyaQKoiLrqNHoTlUc6PFgMXnS0kI45zg==
 
 through2@^2.0.0, through2@^2.0.1:
   version "2.0.5"

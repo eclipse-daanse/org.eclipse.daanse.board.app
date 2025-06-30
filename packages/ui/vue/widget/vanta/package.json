@@ -26,8 +26,8 @@
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
-    "p5": "1.4.0",
-    "three": "0.134.0",
+    "p5": "1.11.8",
+    "three": "0.177.0",
     "uuid": "^11.1.0",
     "vanta": "0.5.24"
   },
