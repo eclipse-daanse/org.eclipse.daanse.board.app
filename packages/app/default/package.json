@@ -149,7 +149,7 @@
     "jsdom": "^26.0.0",
     "npm-run-all2": "^8.0.1",
     "oxlint": "^1.1.0",
-    "prettier": "3.6.0",
+    "prettier": "3.6.2",
     "typescript": "~5.8.0",
 
     "vite-plugin-vue-devtools": "^7.7.2",
