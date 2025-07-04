@@ -1,0 +1,35 @@
+<%#
+  Model annotations template - generates the decorators and metadata utilities
+%>
+import "reflect-metadata";
+
+// Define a decorator
+export function Attribute() {
+    return function (target: any, propertyKey: string) {
+        Reflect.defineMetadata("Attribute", true, target, propertyKey);
+    };
+}
+
+export function Reference(type: string) {
+    return function (target: any, propertyKey: string) {
+        Reflect.defineMetadata("Reference", type, target, propertyKey);
+    };
+}
+
+export function Enum(type: string) {
+    return function (target: any, propertyKey: string) {
+        Reflect.defineMetadata("Enum", type, target, propertyKey);
+    };
+}
+
+export function ModelClass(attr: {type: string}) {
+    return function (target: any) {
+        Reflect.defineMetadata("ModelClass", attr, target, "modelClass");
+    };
+}
+
+export function Documentation(type: string) {
+    return function (target: any, propertyKey: string) {
+        Reflect.defineMetadata("Documentation", type, target, propertyKey);
+    };
+}

@@ -1,0 +1,58 @@
+<%#
+  Attribute template - generates TypeScript properties from EAttribute
+_%>
+<%_
+  // Helper function to map Ecore types to TypeScript types
+  function mapEcoreTypeToTS(typeName) {
+    if (typeName.endsWith('EString') || typeName.endsWith('EChar') || typeName.endsWith('ECharacterObject')) {
+      return 'string';
+    } else if (typeName === 'EBoolean' || typeName === 'EBooleanObject') {
+      return 'boolean';
+    } else if (['EInt', 'EIntegerObject', 'EByte', 'EByteObject', 'ELong', 'ELongObject', 'EFloat', 'EFloatObject', 'EDouble', 'EDoubleObject'].includes(typeName)) {
+      return 'number';
+    } else if (typeName === 'EDate') {
+      return 'Date';
+    } else if (typeName === 'EJavaObject') {
+      return 'any';
+    } else {
+      return typeName;
+    }
+  }
+
+  const tsType = mapEcoreTypeToTS(attribute.eType ? attribute.eType.name : 'any');
+  const isArray = attribute.many || false;
+  const isEnum = attribute.eType ? isEEnum(attribute.eType) : false;
+_%>
+
+<%# Generate documentation if available -%>
+<%_ if (attribute.eAnnotations) { _%>
+  <%_ Array.from(attribute.eAnnotations).forEach(annotation => { _%>
+    <%_ if (annotation.source === 'http://www.eclipse.org/emf/2002/GenModel') { _%>
+      <%_ if (annotation.details) { _%>
+        <%_ Array.from(annotation.details).forEach(detail => { _%>
+          <%_ if (detail.key === 'documentation') { _%>
+  @Documentation("<%- detail.value -%>")
+          <%_ } _%>
+        <%_ }); _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
+<%# Generate the attribute -%>
+<%_ if (isEnum) { _%>
+  <%_ if (isArray) { _%>
+@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
+  <%_ } else { _%>
+@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (attribute.defaultValueLiteral) { _%>
+  @Attribute() <%- attribute.name -%>: <%- isArray ? `Array<${tsType}>` : tsType -%> = <% if (tsType === 'string') { %>"<%_ } %><%- attribute.defaultValueLiteral -%><%_ if (tsType === 'string') { %>"<%_ } %>;
+  <%_ } else { _%>
+    <%_ if (isArray) { _%>
+  @Attribute() <%- attribute.name -%>: Array<<%- tsType -%>> = [];
+    <%_ } else { _%>
+  @Attribute() <%- attribute.name -%>?: <%- tsType -%>;
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
