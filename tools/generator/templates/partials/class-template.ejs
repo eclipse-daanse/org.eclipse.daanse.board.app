@@ -1,0 +1,46 @@
+
+<% if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { %>
+  <% Array.from(eClass.eSuperTypes).forEach(superType => { %>
+import {<%= superType.name %>} from "./<%= superType.name %>"
+  <% }); %>
+<% } %>
+
+<%# Generate imports for referenced types %>
+<% const referencedTypes = new Set(); %>
+<% if (eClass.eStructuralFeatures) { %>
+  <% Array.from(eClass.eStructuralFeatures).forEach(feature => { %>
+    <% if (isEReference(feature) && feature.eType && feature.eType.name !== eClass.name) { %>
+      <% referencedTypes.add(feature.eType.name); %>
+    <% } %>
+  <% }); %>
+<% } %>
+<% referencedTypes.forEach(typeName => { %>
+import {<%= typeName %>} from "./<%= typeName %>"
+<% }); %>
+
+<%# Generate imports for enum types %>
+<% const enumTypes = new Set(); %>
+<% if (eClass.eAttributes) { %>
+  <% Array.from(eClass.eAttributes).forEach(attribute => { %>
+    <% if (attribute.eType && isEEnum(attribute.eType) && attribute.eType.name !== eClass.name) { %>
+      <% enumTypes.add(attribute.eType.name); %>
+    <% } %>
+  <% }); %>
+<% } %>
+<% enumTypes.forEach(enumName => { %>
+import {<%= enumName %>} from "./<%= enumName %>"
+<% }); %>
+
+import {Attribute, ModelClass, Reference, Enum} from './ModelAnnotations'
+
+@ModelClass({type:'<%= ePackage.nsURI %>#//<%= eClass.name %>'})
+export class <%= eClass.name %><% if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { %> extends <%= Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') %><% } %> {
+
+    <%# Generate structural features %>
+    <% if (eClass.eStructuralFeatures) { %>
+      <% Array.from(eClass.eStructuralFeatures).forEach(feature => { %>
+        <%- include('feature-template', { feature: feature }) %>
+      <% }); %>
+    <% } %>
+
+}

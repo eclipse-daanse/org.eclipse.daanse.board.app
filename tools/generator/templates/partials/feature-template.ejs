@@ -1,0 +1,10 @@
+<%#
+  Feature template - generates TypeScript properties from EStructuralFeatures
+_%>
+<%_ if (isEAttribute(feature)) { _%>
+  <%- include('attribute-template', { attribute: feature }) -%>
+<%_ } else if (isEReference(feature)) { _%>
+  <%- include('reference-template', { reference: feature }) -%>
+<%_ } else { _%>
+  <%- include('operation-template', { operation: feature }) -%>
+<%_ } _%>

@@ -1,0 +1,13 @@
+<%#
+  Operation template - generates TypeScript methods from EOperation
+_%>
+<%- operation.name -%>(
+<%_ if (operation.eParameters && operation.eParameters.length > 0) { _%>
+  <%_ Array.from(operation.eParameters).forEach((param, index) => { _%>
+    <%_ const isParamArray = param.many || false; _%>
+    <%- param.name -%>: <%- isParamArray ? `Array<${param.eType ? param.eType.name : 'any'}>` : (param.eType ? param.eType.name : 'any') -%><%_ if (index < operation.eParameters.length - 1) { _%>,<%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
+): <%- operation.eType ? operation.eType.name : 'void' -%> {
+    throw new Error("<%- operation.name -%> not implemented");
+}
