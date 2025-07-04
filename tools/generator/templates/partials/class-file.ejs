@@ -1,0 +1,58 @@
+<%#
+  Class file template - creates separate .ts file for each class
+_%>
+/*
+* This is generated code! Please note, that on code generation, these line are erased and generated again.
+* If you modify this file, it is possible that you changes will be lost!!!
+*
+* This method uses JSON playload, to load an EPackage.
+*
+* @generated
+*/
+
+/*
+* Generate classes and enums for TypeScript
+* Default values are set. The '_type' parameter is generated for the
+* Serialization to a backend.
+*/
+<%# Generate imports for super types -%>
+<%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%>
+  <%_ Array.from(eClass.eSuperTypes).forEach(superType => { _%>
+import {<%- superType.name -%>} from "./<%- superType.name -%>"
+  <%_ }); _%>
+<%_ } _%>
+<%# Generate imports for referenced types -%>
+<%_ const referencedTypes = new Set(); _%>
+<%_ if (eClass.eStructuralFeatures) { _%>
+  <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
+    <%_ if (isEReference(feature) && feature.eType && feature.eType.name !== eClass.name) { _%>
+      <%_ referencedTypes.add(feature.eType.name); _%>
+    <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
+<%_ referencedTypes.forEach(typeName => { _%>
+import {<%- typeName -%>} from "./<%- typeName -%>"
+<%_ }); _%>
+<%# Generate imports for enum types -%>
+<%_ const enumTypes = new Set(); _%>
+<%_ if (eClass.eAttributes) { _%>
+  <%_ Array.from(eClass.eAttributes).forEach(attribute => { _%>
+    <%_ if (attribute.eType && isEEnum(attribute.eType) && attribute.eType.name !== eClass.name) { _%>
+      <%_ enumTypes.add(attribute.eType.name); _%>
+    <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
+<%_ enumTypes.forEach(enumName => { _%>
+import {<%- enumName -%>} from "./<%- enumName -%>"
+<%_ }); _%>
+import {Documentation, Attribute, ModelClass, Reference, Enum} from <%_ if(!anopak){%>'./ModelAnnotations'<%_ }else{ %> '<%= anopak%>'<%_ } %>
+
+@ModelClass({type:'<%- ePackage.nsURI -%>#//<%- eClass.name -%>'})
+export class <%- eClass.name -%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
+    <%# Generate structural features -%>
+    <%_ if (eClass.eStructuralFeatures) { _%>
+      <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
+        <%- include('feature-template', { feature: feature }) -%>
+      <%_ }); _%>
+    <%_ } _%>
+}

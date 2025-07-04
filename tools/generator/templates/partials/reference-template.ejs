@@ -1,0 +1,10 @@
+<%#
+  Reference template - generates TypeScript references from EReference
+_%>
+<%_ const isArray = reference.many || false; _%>
+<%_ if (isArray) { _%>
+// Array of type '<%- reference.eType.name -%>'
+@Reference('<%- reference.eType.name -%>') <%- reference.name -%>: Array<<%- reference.eType.name -%>> = [];
+<%_ } else { _%>
+@Reference('<%- reference.eType.name -%>') <%- reference.name -%>: <%- reference.eType.name -%>;
+<%_ } _%>
