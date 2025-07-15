@@ -36,6 +36,35 @@ class XMLAApi {
     return []
   }
 
+  public async getKpis(catalog: string): Promise<{ kpis: any[] }> {
+    const kpisResponse = await this.SOAPClient?.DiscoverAsync({
+      Headers: {
+        Session: {
+          __attrs: {
+            xmlns: 'urn:schemas-microsoft-com:xml-analysis',
+            SessionId: this.sessionId,
+          },
+        },
+      },
+      RequestType: 'MDSCHEMA_KPIS',
+      Restrictions: {
+        RestrictionList: {},
+      },
+      Properties: {
+        PropertyList: {
+          Catalog: catalog
+        },
+      },
+    })
+    const kpis = this.rowToArray(
+      kpisResponse.Body.DiscoverResponse.return[0].root.row,
+    )
+
+    return {
+      kpis
+    }
+  }
+
   public async startSession(): Promise<void> {
     const res = await this.SOAPClient?.ExecuteAsync({
       Headers: {
@@ -433,7 +462,7 @@ class XMLAApi {
     )
   }
 
-  public async getMDX(mdx: string): Promise<any> {
+  public async getMDX(mdx: string, catalog?: string, format: string = 'Multidimensional'): Promise<any> {
     const propertiesResponce = await this.SOAPClient?.ExecuteAsync({
       Headers: {
         Session: {
@@ -446,7 +475,12 @@ class XMLAApi {
       Command: {
         Statement: mdx,
       },
-      Properties: {},
+      Properties: {
+        PropertyList: {
+          Format: format,
+          Catalog: catalog,
+        },
+      },
     })
 
     return propertiesResponce

@@ -75,7 +75,7 @@ export class XmlaConnection extends BaseConnection {
 
   async fetch(config: IRequestParams): Promise<any> {
     const api = await this.apiPromise;
-    const mdxResponce = await api.getMDX(config.data.mdx);
+    const mdxResponce = await api.getMDX(config.data.mdx, this.catalogName, config.format);
     return mdxResponce;
   }
 
@@ -122,6 +122,13 @@ export class XmlaConnection extends BaseConnection {
 
     const { catalogs } = await api.getCatalogs();
     return catalogs;
+  }
+
+  async getKpis(): Promise<{ kpis: any[] }> {
+    const api = await this.apiPromise
+
+    const kpis = await api.getKpis(this.catalogName);
+    return kpis;
   }
 
   async getProperties(): Promise<any[]> {

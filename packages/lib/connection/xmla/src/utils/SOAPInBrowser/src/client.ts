@@ -16,42 +16,42 @@ import type { WSDL } from './wsdl'
 type Port = Record<string, unknown>
 type Sevice = Record<string, unknown>
 
-function findKey (obj: Record<string, any>, val: any): string | undefined {
+function findKey(obj: Record<string, any>, val: any): string | undefined {
   for (const n in obj) if (obj[n] === val) return n
 }
 
 export class Client {
   public readonly wsdl: WSDL;
-  [key: string]: any;
+  [key: string]: any
   endpoint: string
   security: any
 
-  constructor (wsdl: WSDL, endpoint: string) {
+  constructor(wsdl: WSDL, endpoint: string) {
     this.wsdl = wsdl
     this.endpoint = endpoint
     this._initializeServices(endpoint)
   }
 
-  public setEndpoint (endpoint: string): void {
+  public setEndpoint(endpoint: string): void {
     this.endpoint = endpoint
     this._initializeServices(this.endpoint, true)
   }
 
-  public describe (): any {
+  public describe(): any {
     return this.wsdl.describeServices()
   }
 
-  public setSecurity (security: any): void {
+  public setSecurity(security: any): void {
     this.security = security
   }
 
-  public setSOAPAction (SOAPAction: any): void {
+  public setSOAPAction(SOAPAction: any): void {
     this.SOAPAction = SOAPAction
   }
 
-  private _initializeServices (
+  private _initializeServices(
     endpoint: string,
-    forceReinit: boolean = false
+    forceReinit: boolean = false,
   ): void {
     const definitions = this.wsdl.definitions
     const services = definitions.services as Record<string, any>
@@ -61,10 +61,10 @@ export class Client {
     }
   }
 
-  private _defineService (
+  private _defineService(
     service: any,
     endpoint: string,
-    forceReinit: boolean
+    forceReinit: boolean,
   ): Sevice {
     const ports = service.ports
     const def: any = {}
@@ -73,16 +73,16 @@ export class Client {
       def[name] = this._definePort(
         ports[name],
         endpoint || ports[name].location,
-        forceReinit
+        forceReinit,
       )
     }
 
     return def
   }
 
-  private _definePort (port: any, endpoint: string, forceReinit: boolean): Port {
+  private _definePort(port: any, endpoint: string, forceReinit: boolean): Port {
     const {
-      binding: { methods }
+      binding: { methods },
     } = port
     const def: any = {}
 
@@ -106,32 +106,32 @@ export class Client {
     return def
   }
 
-  private _defineMethod (method: any, location: string) {
+  private _defineMethod(method: any, location: string) {
     return async (
       args: any,
-      callback: (result: Record<string, any>) => void
+      callback: (result: Record<string, any>) => void,
     ) => {
-      await this._invoke(method, args, location).then((result) => {
+      await this._invoke(method, args, location).then(result => {
         callback(result)
       })
     }
   }
 
-  private _defineMethodAsync (method: any, location: string) {
+  private _defineMethodAsync(method: any, location: string) {
     return async (args: any): Promise<Record<string, any>> => {
       const result = await this._invoke(method, args, location)
       return result
     }
   }
 
-  private async _invoke (
+  private async _invoke(
     method: any,
     args: any,
-    location: string
+    location: string,
   ): Promise<Record<string, any>> {
     const {
       name,
-      input
+      input,
       // output,
       // style
     } = method
@@ -173,8 +173,48 @@ export class Client {
       input.$name,
       args,
       input.targetNSAlias,
-      input.targetNamespace
+      input.targetNamespace,
     )
+
+    // TODO: REMOVE WHEN KPI SERVER SUPPORTS PROPER SOAP
+    console.log('Original SOAP message:', message)
+    if (
+      message.includes('Execute') &&
+      message.includes('Command') &&
+      message.includes('Statement') &&
+      message.includes('Minimal_Cubes_With_KPI_all_Properties')
+    ) {
+      const statementMatch = message.match(
+        /<[^:]*:?Statement>([\s\S]*?)<\/[^:]*:?Statement>/,
+      )
+      const catalogMatch = message.match(
+        /<[^:]*:?Catalog>([\s\S]*?)<\/[^:]*:?Catalog>/,
+      )
+      const formatMatch = message.match(
+        /<[^:]*:?Format>([\s\S]*?)<\/[^:]*:?Format>/,
+      )
+
+      const statement = statementMatch ? statementMatch[1].trim() : ''
+      const catalog = catalogMatch ? catalogMatch[1].trim() : ''
+      const format = formatMatch ? formatMatch[1].trim() : 'Tabular'
+
+      message = `
+  <Execute xmlns="urn:schemas-microsoft-com:xml-analysis">
+    <Command>
+      <Statement>
+        ${statement}
+      </Statement>
+    </Command>
+    <Properties>
+      <PropertyList>
+        <Format>${format}</Format>
+        <Catalog>${catalog}</Catalog>
+      </PropertyList>
+    </Properties>
+  </Execute>`.trim()
+    }
+
+    console.log('SOAP message:', message)
 
     xml =
       // Encoding is not supported

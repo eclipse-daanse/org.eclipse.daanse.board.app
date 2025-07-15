@@ -94,6 +94,9 @@ import {
   init as initWebsocketDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.websocket'
 import {
+  init as initKpiTmpDatasource,
+} from "org.eclipse.daanse.board.app.lib.datasource.kpi_tmp"
+import {
   init as initOGcStaDatasource,
 } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import {init as initSparqlDataSource} from "org.eclipse.daanse.board.app.lib.datasource.sparql"
@@ -158,6 +161,7 @@ import { init as initTableData } from 'org.eclipse.daanse.board.app.ui.vue.widge
 import { init as initRestDatasourceUI } from 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import { init as initRestConnectionUI } from 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
 import { init as initPivotTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
+import { init as initKpiTableUI } from 'org.eclipse.daanse.board.app.ui.vue.widget.table.kpi'
 import { init as initIconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { init as initVantaWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.vanta'
 import { init as initCodeWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.code'
@@ -203,6 +207,9 @@ import {
 import {
   init as initDatatableComposerUI
 } from 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
+import {
+  init as initKpiTmpDatasourceUI
+} from 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import { init as initOgcStaConnectionUI }
   from 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
@@ -303,6 +310,7 @@ initDatasourceFactory(container)
 initOGcStaDatasource(container)
 initChartComposer(container)
 initDatatableComposer(container)
+initKpiTmpDatasource(container)
 
 
 initWrapper(container)
@@ -395,6 +403,7 @@ const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdent
 initRestDatasourceUI(container)
 initRestConnectionUI(container)
 initPivotTableUI(container)
+initKpiTableUI(container)
 initXmlaConnectionUI(container)
 initXmlaDatasourceUI(container)
 initCsvDatasourceUI(container)
@@ -412,6 +421,7 @@ initEndpointfinderPlugin(container)
 initChartComposerUi(container)
 initDatatableComposerUI(container)
 initChartWidgetUI(container)
+initKpiTmpDatasourceUI(container)
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',
@@ -421,7 +431,5 @@ datasourceRepository.registerDatasource('test_ds', 'rest', {
 app.use(I18nextVuePlugin);
 
 app.use(router)
-
-
 
 app.mount('#app')
