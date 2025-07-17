@@ -152,6 +152,10 @@ function onLoaded() {
   }
 }
 
+// variableRepository.registerVariableType('constant', {
+//   Variable: ConstantVariableSymbol,
+//   Settings: null as any,
+// })
 
 async function loadPackages() {
   await import("org.eclipse.daanse.board.app.lib.i18next")
@@ -196,6 +200,7 @@ const connectionRepository = container.get<ConnectionRepository>(ConnectionIdent
 //   catalogName: 'catalog',
 //   cubeName: 'cube',
 // });
+
 
 XmlaConnection.getCatalogs('https://ssemenkoff.dev/emondrian/xmla').then((catalogs) => {
   console.log('catalogs', catalogs)

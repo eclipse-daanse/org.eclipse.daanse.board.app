@@ -17,6 +17,7 @@ import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.r
 import { ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { VaScrollContainer } from 'vuestic-ui'
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 
 const selectedDatasource = ref('')
@@ -123,6 +124,10 @@ watch(selectedType, (newType) => {
       value-by="uid"
       teleport=".add_widget_window"
     />-->
+    <VaScrollContainer
+
+      vertical
+    >
     <draggable
       class="widgets_grid"
       :list="computedWidgets"
@@ -140,6 +145,7 @@ watch(selectedType, (newType) => {
         </div>
       </template>
     </draggable>
+    </VaScrollContainer>
   </div>
 </template>
 

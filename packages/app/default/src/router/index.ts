@@ -17,17 +17,19 @@ import DataSettings from '@/pages/DataSettings.vue'
 import EditReport from '@/pages/EditReport.vue'
 import Configuration from '@/pages/Configuration.vue'
 import SaveLoad from '@/pages/SaveLoad.vue'
+import EditReportGridster from '@/pages/EditReportGridster.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/:id',
+      path: '/',
       name: 'home',
       component: ViewReport,
     },
     {
-      path: '/:id/edit',
+      path: '/edit',
       name: 'edit',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -49,6 +51,16 @@ const router = createRouter({
       name: 'save',
       component: SaveLoad
     },
+    {
+      path:'/page/:pageid/edit',
+      name:'pageEdit',
+      component:EditReportGridster,
+    },
+    {
+      path:'/page/:pageid',
+      name:'page',
+      component:ViewReport,
+    }
   ],
 })
 

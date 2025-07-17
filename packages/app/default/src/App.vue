@@ -13,6 +13,9 @@ Contributors:
 
 <script setup lang="ts">
 import Header from './components/common/Header.vue'
+import { VaSpacer } from 'vuestic-ui'
+
+
 </script>
 
 <template>
@@ -29,14 +32,22 @@ import Header from './components/common/Header.vue'
             <img src="@/assets/Daanse%20Logo%20Vektor.svg" class="h-5 mt-6 mb-3">
           </div>
         <va-sidebar-item :active="$route.name === 'home'"
-          @click="$router.push('/qweqwe/')" class="pointer">
+          @click="()=>{
+            const path = $route.path.replace('/edit','');
+            $router.push(path)
+          }" class="pointer">
           <va-sidebar-item-content >
             <va-icon name="preview" />
             <va-sidebar-item-title class="font-normal"> View dashboard </va-sidebar-item-title>
           </va-sidebar-item-content>
         </va-sidebar-item>
         <va-sidebar-item :active="$route.name === 'edit'"
-          @click="$router.push('/qweqwe/edit')" class="pointer ">
+          @click="()=>{
+            let path = $route.path;
+            path = path.endsWith('/') ? path : path + '/';
+            path+='edit'
+            $router.push(path)
+          }" class="pointer ">
           <va-sidebar-item-content class="">
             <va-icon name="draw" />
             <va-sidebar-item-title  class="font-normal"> Edit dashboard </va-sidebar-item-title>
@@ -68,19 +79,11 @@ import Header from './components/common/Header.vue'
               </va-sidebar-item-title>
             </va-sidebar-item-content>
           </va-sidebar-item>
-        <!-- <va-sidebar-item
-          :active="$route.name === 'test'"
-          @click="$router.push('/test')"
-          class="pointer"
-        >
-          <va-sidebar-item-content>
-            <va-icon name="bug_report" />
-            <va-sidebar-item-title> Test </va-sidebar-item-title>
-          </va-sidebar-item-content>
-        </va-sidebar-item> -->
+
+
         </div>
       </va-sidebar>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </div>
   </div>
 </template>
