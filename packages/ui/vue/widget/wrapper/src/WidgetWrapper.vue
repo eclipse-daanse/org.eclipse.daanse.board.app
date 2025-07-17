@@ -161,7 +161,7 @@ const getpadding= computed(()=>{
         </VaScrollContainer>
       </div>
       <div
-        class="absolute top-[-25px] right-0 flex justify-end bg-white z-10"
+        class="hover absolute top-[25px] right-0 flex justify-end bg-white z-10"
         v-if="editEnabled"
       >
         <VaButton
@@ -208,5 +208,11 @@ const getpadding= computed(()=>{
 .sub{
   border-radius: v-bind(borderRadius + "px");
   padding: v-bind(getpadding + "px");
+}
+.wrapper-container:hover .hover{
+  display: block;
+}
+.wrapper-container .hover{
+  display: none;
 }
 </style>

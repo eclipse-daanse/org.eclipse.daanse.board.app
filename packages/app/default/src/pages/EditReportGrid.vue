@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, watch, computed, inject } from 'vue'
+import { ref, watch, computed, inject, toRaw, unref } from 'vue'
 import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '@/composables/useMovableLayout'
@@ -30,7 +30,9 @@ import PageSettings from '@/components/pageEditor/PageSettings.vue'
 
 const widgetConfig = ref()
 const widgetSettingsOpenedId = ref('')
-const widgetsTmp = ref([])
+const widgetsTmp =  ref<(IWidget|{uid:string})[][]>(
+  Array.from({ length: 18 }, () => [])
+)
 const route = useRoute();
 const router = useRouter();
 const pageID = route.params.pageid??'';
@@ -86,26 +88,22 @@ watch(()=>layout,(newLayout)=>{
 
 
 
-const addWidget = (type: string, datasourceId: string, dropX: number, dropY: number) => {
+const addWidget = (type: string, datasourceId: string,n?:number) => {
   const uid = `widget_${Math.random().toString(36).substring(7)}`
   const config = { datasourceId, settings: {} }
-  const newWidget: IWidget = { uid, type, config,wrapperConfig:cloneDeep(defaultConfig)}
-
-  innerWidgets.value.push(newWidget)
-
-  const width = ghostPlaceholder.value.width
-  const height = ghostPlaceholder.value.height
-
-  const newlayout = {
-    id: newWidget.uid,
-    x: dropX - width / 2,
-    y: dropY - height / 2,
-    width,
-    height,
-    z: 3005,
+  const newWidget: IWidget = {
+    uid,
+    type,
+    config,
+    wrapperConfig: cloneDeep(defaultConfig),
+  }
+  if(!n){
+    innerWidgets.value.push(newWidget)
+  }else {
+    innerWidgets.value[n!] = newWidget
+    widgetsTmp.value[n!] =[{uid:newWidget.uid}]
   }
 
-  innerlayoutItems.value.push(JSON.parse(JSON.stringify(newlayout)))
 }
 
 const openWidgetSettings = (id: string) => {
@@ -144,7 +142,7 @@ const removeWidget = (uid: string) => {
 }
 
 const currentlyEditingWidget = computed(() => {
-  return innerWidgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
+  return innerWidgets.value.find((widget) => widget && widget.uid === widgetSettingsOpenedId.value)
 })
 
 const onDrop = (event: DragEvent) => {
@@ -152,9 +150,7 @@ const onDrop = (event: DragEvent) => {
   const currentTarget = event.currentTarget as HTMLElement
 
   if (currentTarget) {
-    const { dropX, dropY } = processDropCoordinates(event, currentTarget)
-
-    widgetConfig.value = { dropX: dropX, dropY: dropY }
+    console.log(currentTarget.id);
   }
 }
 
@@ -178,95 +174,109 @@ const onDragLeave = (event: DragEvent) => {
   }
 }
 
-const change = (e: any) => {
-  console.log(e)
-  // const datasource = e.added.element.ds
-  const datasource = 'test'
-  const widgetType = e.added.element.type
-  addWidget(widgetType, datasource, widgetConfig.value.dropX, widgetConfig.value.dropY)
+const change = (e: any,n: number) => {
+  const widgetType = e.added?.element?.type
+  if (widgetType) {
+    const datasource = 'test'
+    addWidget(widgetType, datasource,n)
+  }
+  else if(e.added?.element.uid){
+    //move item
+    const index = innerWidgets.value.findIndex((widget) => widget && widget.uid === e.added?.element.uid)
+    if (index !== -1) {
+      let item = innerWidgets.value[index]
+      delete innerWidgets.value[index]
+      if(innerWidgets.value[n!]){ //switch position
+        innerWidgets.value[index] = innerWidgets.value[n!]
+        const prev = widgetsTmp.value[n].splice(1, 1);
+        widgetsTmp.value[index] = unref(prev)
+        //widgetsTmp.value[n] = prev;
+      }
+      innerWidgets.value[n!]= item
+    }
+  }
 }
+
 
 
 </script>
 
 <template>
   <div class="report-container dottet">
-    <draggable
-      :list="widgetsTmp"
-      :group="{ name: 'widgets' }"
-      ghost-class="ghost"
-      itemKey="type"
-      style="position: absolute; top: 0; left: 0; height: 100%; width: 100%"
-      @change="change"
-      @drop="onDrop"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-    >
-      <template #item="{ element }">
-        <div style="display: none">{{ element.type }}</div>
-      </template>
-    </draggable>
-    <div class="widget-board">
-      <div
-        v-if="ghostPlaceholder.visible"
-        class="ghost-placeholder"
-        :style="{
-          left: `${ghostPlaceholder.x}px`,
-          top: `${ghostPlaceholder.y}px`,
-          width: `${ghostPlaceholder.width}px`,
-          height: `${ghostPlaceholder.height}px`,
-        }"
-      ></div>
-      <template v-for="widget in innerWidgets" :key="widget.uid">
-        <div
-          :class="`${widget.uid} dashboard-item-container`"
-          :style="getInitialStyle(widget.uid)"
-          :ref="widget.uid"
-        >
-          <va-dropdown
-            :trigger="'right-click'"
-            :auto-placement="false"
-            placement="right-start"
-            cursor
+    <div v-for="n in 18" class="dashboard-grid-item" >
+      <draggable
+        :list="widgetsTmp[n]"
+        :group="{ name: 'widgets',pull: true, put: true}"
+        ghost-class="ghost"
+        itemKey="uid"
+        style="position: absolute; top: 0; left: 0; height: 100%; width: 100%"
+        @change="(e)=>change(e,n)"
+        @drop="onDrop"
+        @dragover="onDragOver"
+        @dragleave="onDragLeave"
+        :id="n.toString()"
+      >
+        <template #item="{ element }">
+          <div>
+          <div style="    display: block;
+    position: absolute;
+    top: -25px;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    background: #ccc;"></div>
+          <div v-if="innerWidgets[n]"
+               :class="`${innerWidgets[n].uid} dashboard-item-container`"
+               :style="getInitialStyle(innerWidgets[n].uid)"
+               :ref="innerWidgets[n].uid"
           >
-            <template #anchor>
-              <div class="dashboard-item">
-                <WidgetWrapper
-                  :widget="widget"
-                  :ref="`${widget.uid}_wrapper`"
-                  @openSettings="openWidgetSettings"
-                  editEnabled
-                  @removeWidget="removeWidget"
-                />
-              </div>
-            </template>
-            <va-dropdown-content>
-              <div class="dropdown-buttons-container">
-                <va-button @click="moveUp(widget.uid)"> Move up </va-button>
-                <va-button @click="moveDown(widget.uid)"> Move down </va-button>
-                <va-button @click="moveToTop(widget.uid)"> Move to top </va-button>
-                <va-button @click="moveToBottom(widget.uid)"> Move to bottom </va-button>
-              </div>
-            </va-dropdown-content>
-          </va-dropdown>
-        </div>
-        <Moveable
-          v-bind:target="[`.${widget.uid}`]"
-          v-bind:draggable="true"
-          v-bind:resizable="true"
-          v-bind:useResizeObserver="true"
-          v-bind:useMutationObserver="true"
-          @drag="drag(widget.uid, $event)"
-          @resize="resize(widget.uid, $event)"
-          :snappable="true"
-          :snapGridWidth="20"
-          :snapGridHeight="20"
-          :origin="false"
-          :ref="`${widget.uid}_control`"
-          :style="getMovableControlStyles(widget.uid)"
-        >
-        </Moveable>
-      </template>
+            <va-dropdown
+              :trigger="'right-click'"
+              :auto-placement="false"
+              placement="right-start"
+              cursor
+            >
+              <template #anchor>
+                <div class="dashboard-item">
+                  <WidgetWrapper
+                    :widget="innerWidgets[n]"
+                    :ref="`${innerWidgets[n].uid}_wrapper`"
+                    @openSettings="openWidgetSettings"
+                    editEnabled
+                    @removeWidget="removeWidget"
+                  />
+                </div>
+              </template>
+              <va-dropdown-content>
+                <div class="dropdown-buttons-container">
+                  <va-button @click="moveUp(innerWidgets[n].uid)"> Move up </va-button>
+                  <va-button @click="moveDown(innerWidgets[n].uid)"> Move down </va-button>
+                  <va-button @click="moveToTop(innerWidgets[n].uid)"> Move to top </va-button>
+                  <va-button @click="moveToBottom(innerWidgets[n].uid)"> Move to bottom </va-button>
+                </div>
+              </va-dropdown-content>
+            </va-dropdown>
+          </div>
+          </div>
+        </template>
+      </draggable>
+
+
+      <!--</div>
+                  <WidgetWrapper v-if="innerWidgets[n]"
+                    :widget="innerWidgets[n]"
+                    :ref="`${innerWidgets[n].uid}_wrapper`"
+                    @openSettings="openWidgetSettings"
+                    editEnabled
+                    @removeWidget="removeWidget"
+                  />
+       </div>-->
+
+
+</div>
+
+
     </div>
     <div class="add_widget-button ice p-2.5 z-mx">
       <VaButton
@@ -322,7 +332,6 @@ const change = (e: any) => {
         @close="pageSettingsOpenedId = undefined"
       ></PageSettings>
     </Transition>
-  </div>
 </template>
 <style>
 .ghost {
@@ -380,7 +389,7 @@ const change = (e: any) => {
 }
 
 .report-container .widgets-adding-controls {
-  display: flex;
+
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin: 16px;
@@ -389,10 +398,7 @@ const change = (e: any) => {
 .report-container .widget-board {
   width: 100%;
   height: 100%;
-  display: flex;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+
 }
 
 .report-container .add-btn {
@@ -469,4 +475,31 @@ const change = (e: any) => {
     opacity: 1;
   }
 }
+.report-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 35px;
+  padding: 35px 10px 10px 74px;
+  position: relative;
+  overflow: auto;
+
+}
+
+.dashboard-grid-item {
+  border: 1px dashed #ccc;
+  /*overflow: hidden;*/
+  position: relative;
+  width: auto;
+  height: 100%;
+}
+.dashboard-item-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%
+}
+
+
 </style>

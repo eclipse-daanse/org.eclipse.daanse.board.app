@@ -26,50 +26,54 @@ export interface IWidget {
   }
 }
 
-export const useWidgetsStore = defineStore('widgets', () => {
-  const widgets = ref([] as IWidget[])
+export const useWidgetsStore = (pageid: string = '') => {
 
-  const createWidget = (type: any, config: any = {}, wrapperConfig: any = {}) => {
-    const uid = 'li_' + Math.random().toString(36).substring(7)
-    const widgetName = 'widget_' + uid
+    const storecall = defineStore(  `widget-${pageid}`, () => {
+    const widgets = ref([] as IWidget[])
 
-    widgets.value.push({
-      uid,
-      type,
-      wrapperConfig,
-      config: {
-        datasourceId: config.datasourceId,
-        settings: { name: widgetName },
-      },
-    })
-    return uid
-  }
+    const createWidget = (type: any, config: any = {}, wrapperConfig: any = {}) => {
+      const uid = 'li_' + Math.random().toString(36).substring(7)
+      const widgetName = 'widget_' + uid
 
-  const removeWidget = (widgetId: string) => {
-    const index = widgets.value.findIndex((v) => v.uid === widgetId)
-
-    if (index > -1) {
-      widgets.value.splice(index, 1)
+      widgets.value.push({
+        uid,
+        type,
+        wrapperConfig,
+        config: {
+          datasourceId: config.datasourceId,
+          settings: { name: widgetName },
+        },
+      })
+      return uid
     }
-  }
 
-  const updateWidget = (widgetId: string, widgetProxy: IWidget) => {
-    const widget = widgets.value.find((c) => c.uid === widgetId)
+    const removeWidget = (widgetId: string) => {
+      const index = widgets.value.findIndex((v) => v.uid === widgetId)
 
-    if (!widget) return
+      if (index > -1) {
+        widgets.value.splice(index, 1)
+      }
+    }
 
-    widget.uid = widgetProxy.uid
-    widget.type = widgetProxy.type
-    widget.wrapperConfig = widgetProxy.wrapperConfig
-    widget.config = widgetProxy.config
-  }
+    const updateWidget = (widgetId: string, widgetProxy: IWidget) => {
+      const widget = widgets.value.find((c) => c.uid === widgetId)
 
-  const updateWidgets = (widgetsProxy: IWidget[]) => {
-    widgets.value.splice(0)
-    widgetsProxy.forEach((widgetProxy) => {
-      widgets.value.push(widgetProxy)
-    })
-  }
+      if (!widget) return
 
-  return { widgets, createWidget, removeWidget, updateWidget, updateWidgets }
-})
+      widget.uid = widgetProxy.uid
+      widget.type = widgetProxy.type
+      widget.wrapperConfig = widgetProxy.wrapperConfig
+      widget.config = widgetProxy.config
+    }
+
+    const updateWidgets = (widgetsProxy: IWidget[]) => {
+      widgets.value.splice(0)
+      widgetsProxy.forEach((widgetProxy) => {
+        widgets.value.push(widgetProxy)
+      })
+    }
+
+    return { widgets, createWidget, removeWidget, updateWidget, updateWidgets }
+  })
+  return storecall();
+}

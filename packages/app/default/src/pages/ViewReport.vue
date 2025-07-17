@@ -19,8 +19,13 @@ import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widg
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useMoveableLayout } from '@/composables/useMovableLayout.ts'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-const { widgets } = useWidgetsStore();
-const { layout } = useLayoutStore();
+import { useRoute } from 'vue-router'
+
+const props = defineProps(['params']);
+const route = useRoute();
+const pageID = props.params?.pageid ?? route.params.pageid??'';
+const { widgets } = useWidgetsStore(pageID as string||'');
+const { layout } = useLayoutStore(pageID as string||'');
 const {
   getInitialStyle,
 } = useMoveableLayout(ref(layout));
@@ -29,6 +34,7 @@ const {
 
 <template>
   <div class="widget-board">
+    {{pageID}}
     <template v-for="widget in widgets" :key="widget.uid">
       <div
         :class="`${widget.uid} dashboard-item-container`"

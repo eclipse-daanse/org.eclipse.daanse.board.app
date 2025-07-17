@@ -47,6 +47,7 @@ import  {identifier as VariableWrapperFactroyId,type VariableWrapperFactory }
   from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import {type Variable} from 'org.eclipse.daanse.board.app.lib.variables'
 import { useVariablesStore } from '@/stores/VariablesPinia.ts'
+import  { type PageRegistryI,identifier as PageRegistryIDentifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
 
 const {variables, createVariable, removeVariable, updateVariable,updateVariables}
   = useVariablesStore()
@@ -67,7 +68,7 @@ const variableRepository:VariableRepository|undefined =
   container?.get<VariableRepository>(VariableRepositoryId)
 const variableWrapperFactroy:VariableWrapperFactory|undefined =
   container?.get<VariableWrapperFactory>(VariableWrapperFactroyId)
-
+const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageRegistryIDentifier)
 repoManager.addObserver({
   update: async (event, repo) => {
     console.log('repos updated')
@@ -157,12 +158,29 @@ const getData = () => {
     variables.push(vari);
   }
 
+  const ids = pageRepo?.getAllPageIds();
+
+  const pages:any = {};
+
+  for (const id of ids??[]){
+    const pageinfo = pageRepo?.getPage(id)
+
+    const widgets = useWidgetsStore(id)
+    const layout = useLayoutStore(id)
+    pages[id] = {
+      info: pageinfo,
+      widgets: widgets.widgets,
+      layout:layout.layout,
+    }
+
+  }
   const data = {
     layout: layoutStore.layout,
     datasources: stores.dataSources,
     conections: conections.connections,
     widgets: widgets.widgets,
     variables:variables,
+    pages: pages,
 
   }
   return stringify(data)
@@ -180,6 +198,7 @@ const loadData = (content: any) => {
     const stores = useDataSourcesStore()
     const conections = useConnectionsStore()
     const widgets = useWidgetsStore()
+
 
 
 
@@ -223,6 +242,16 @@ const loadData = (content: any) => {
 
     if (data.widgets) widgets.widgets = data.widgets
 
+    if(data.pages){
+      for (const [key, page] of Object.entries(data.pages)){
+        const pageLayout = useLayoutStore(key)
+        const pageWidgets = useWidgetsStore(key)
+        pageLayout.layout = (page as any).layout
+        pageWidgets.widgets = (page as any).widgets
+        pageRepo?.registerPage((page as any).info)
+        variableWrapperFactroy?.initilazeVariableWrappers((page as any).widgets)
+      }
+    }
     console.log((variableRepository as VariableRepository).getVariable('testComputed').value)
   }
 
