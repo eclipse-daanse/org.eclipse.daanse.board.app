@@ -16,7 +16,6 @@ import {
   BaseDatasource,
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   identifier,
   type IConnection,
@@ -38,23 +37,20 @@ export interface IRssParseResult {
 export class RssStore extends BaseDatasource {
   private connection: any
 
-  constructor(
-    configuration: IRssStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: IRssStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
   }
 
   async getOriginalData() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
     const req = await connection.fetch({} as any)
@@ -62,19 +58,16 @@ export class RssStore extends BaseDatasource {
   }
 
   async getData(type: string): Promise<any> {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
     const req = await connection.fetch({} as any)
     if (type === 'object') {
       return req
-    } else if(type === 'string') {
+    } else if (type === 'string') {
       return JSON.stringify(req)
     } else if (type === 'DataTable') {
       const data = req.items

@@ -8,9 +8,9 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
-import dts from "vite-plugin-dts";
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 import vue from '@vitejs/plugin-vue'
 import libCss from 'vite-plugin-libcss'
 
@@ -18,8 +18,8 @@ const rootPath = resolve(__dirname, '../../../../../../') // ← ggf. anpassen
 export default defineConfig({
   resolve: {
     alias: {
-      vue: resolve(rootPath, 'node_modules/vue') // ⬅️ Vue nur aus dem Root laden
-    }
+      vue: resolve(rootPath, 'node_modules/vue'), // ⬅️ Vue nur aus dem Root laden
+    },
   },
   build: {
     sourcemap: true,
@@ -29,20 +29,28 @@ export default defineConfig({
       fileName: 'ui.vue.datasource.sparql',
     },
     rollupOptions: {
-      external: ['vue'],
+      external: [
+        'vue',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: 'Vue',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({
-        insertTypesEntry: true
+      insertTypesEntry: true,
     }),
     vue(),
-    libCss()
+    libCss(),
   ],
-});
-
+})

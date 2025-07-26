@@ -10,27 +10,23 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
-import { symbol as MqttConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.mqtt'
+import { factorySymbol as MqttConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.mqtt'
 
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const connectionRepository = container.get<ConnectionRepository>(identifier)
+const connectionRepository = container.get<ConnectionRepository>(identifier)
 
-  const settingsSymbol = Symbol.for('MqttConnectionSettings')
+const settingsSymbol = Symbol.for('MqttConnectionSettings')
 
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  connectionRepository.registerConnectionType('mqtt', {
-    Connection: MqttConnectionIdentifier,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+connectionRepository.registerConnectionType('mqtt', {
+  Connection: MqttConnectionIdentifier,
+  Settings: settingsSymbol,
+})

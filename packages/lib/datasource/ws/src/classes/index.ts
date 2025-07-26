@@ -11,11 +11,16 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { inject, Container } from 'inversify'
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import {
+  BaseDatasource,
+  IBaseConnectionConfiguration,
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { type TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import {
+  identifier,
+  ConnectionRepository,
+} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { inject } from 'inversify'
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
@@ -29,15 +34,16 @@ export class WSStore extends BaseDatasource {
   private accumulate: boolean = false
   private topic = ''
 
-  constructor(configuration: IWSStoreConfiguration,
-    @inject(identifiers.CONTAINER) private container: Container,) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: IWSStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
     this.accumulate = configuration.accumulate ?? false
 
-    const connectionRepository = this.container.get(identifier) as ConnectionRepository
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as TwoWayConnection
 
@@ -140,13 +146,12 @@ export class WSStore extends BaseDatasource {
   destroy(): void {
     console.log('Destroying WSStore')
 
-    const connectionRepository = this.container.get(identifier) as ConnectionRepository
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as TwoWayConnection
 
     if (connection && connection.hasTopics()) {
-      (connection as any).disconnectStore(this)
+      ;(connection as any).disconnectStore(this)
     }
   }
 

@@ -98,10 +98,10 @@ Contributors:
 </template>
 
 <script setup lang="ts">
-import { onMounted, getCurrentInstance, ref, computed } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { VariableRepository, identifier }
     from 'org.eclipse.daanse.board.app.lib.repository.variable';
-import { Container } from 'inversify';
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { useVariablesStore } from '@/stores/VariablesPinia'
 
 const { variables, createVariable, removeVariable, updateVariable } = useVariablesStore();
@@ -110,8 +110,6 @@ const { variables, createVariable, removeVariable, updateVariable } = useVariabl
 const showVariableModal = ref(false);
 const currentlySelectedVariable = ref(null);
 const currentlySelectedType = ref(null);
-const app = getCurrentInstance();
-const container = app?.appContext.config.globalProperties.$container as Container;
 const options = ref([] as any[]);
 const variableProxy = ref(null as unknown as any);
 

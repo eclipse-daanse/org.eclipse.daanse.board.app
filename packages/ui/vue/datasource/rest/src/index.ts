@@ -10,31 +10,26 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol as RestDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { factorySymbol as RestDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.rest'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('RestPreview')
-  const settingsSymbol = Symbol.for('RestSettings')
+const previewSymbol = Symbol.for('RestPreview')
+const settingsSymbol = Symbol.for('RestSettings')
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  datasourceRepository.registerDatasourceType('rest', {
-    Store: RestDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+datasourceRepository.registerDatasourceType('rest', {
+  Store: RestDatasourceIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})

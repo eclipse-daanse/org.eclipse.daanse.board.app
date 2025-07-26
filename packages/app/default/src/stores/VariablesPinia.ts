@@ -11,19 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { ref, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { Container } from 'inversify'
 import { type VariableRepository, identifier }
   from 'org.eclipse.daanse.board.app.lib.repository.variable';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { TinyEmitter } from 'tiny-emitter';
 import { type Variable, VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 export const useVariablesStore = defineStore('variables', () =>{
     const variables = ref([] as any[]);
-    const instance = getCurrentInstance()
-    const container = instance?.appContext.config.globalProperties.$container as Container
     const variableRepositoryInst = container.get<VariableRepository>(identifier)
     const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
 
@@ -50,7 +48,7 @@ export const useVariablesStore = defineStore('variables', () =>{
         const uid = Math.random().toString(36).substring(7)
         const name = 'Variable ' + uid
 
-      variableRepositoryInst.registerVariable(name, type, config)
+        variableRepositoryInst.registerVariable(name, type, config)
         const newVar = variableRepositoryInst.getVariable(name)
         variables.value.push({
             ...newVar,
@@ -67,12 +65,19 @@ export const useVariablesStore = defineStore('variables', () =>{
     };
 
     const updateVariable = (variableState: any) => {
-
         const prevVar = variableRepositoryInst.getVariable(variableState.originalName);
-        (prevVar as Variable).update(variableState.config)
-        if(variableState.name && prevVar.name !== variableState.name) {
-          prevVar.rename(variableState.name);
-          variableRepositoryInst.renameVariable( variableState.name,variableState.originalName);
+
+        if (prevVar.type === variableState.type) {
+            (prevVar as Variable).update(variableState.config)
+            if (variableState.name && prevVar.name !== variableState.name) {
+                prevVar.rename(variableState.name);
+                variableRepositoryInst
+                    .renameVariable(variableState.name,variableState.originalName);
+            }
+        } else {
+            variableRepositoryInst.removeVariable(variableState.originalName);
+            variableRepositoryInst
+                .registerVariable(variableState.name, variableState.type, variableState.config);
         }
         updateVariables();
     }

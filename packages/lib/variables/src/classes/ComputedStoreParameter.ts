@@ -13,42 +13,44 @@
 
 import { type Variable } from './Variable'
 import { type TinyEmitter } from 'tiny-emitter'
-import { Container } from 'inversify'
 import { VariableRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableEvents } from '..'
-import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { inject, Factory } from 'inversify'
 
 export class ComputedStoreParameter {
-  private storage: VariableRepository
-  private innerExpression: string
-  private eventBus: TinyEmitter
+  private innerExpression: string = ''
   private currentSubscriptions: Map<string, () => void> = new Map()
-  private refreshCb: () => void
+  private refreshCb: () => void = () => {}
 
-  constructor(container: Container, expression: string, refreshCb: () => void) {
-    this.storage = container.get<VariableRepository>(identifier)
+  @inject(identifiers.TINY_EMITTER)
+  private eventBus?: TinyEmitter
+
+  @inject(identifier)
+  private storage?: VariableRepository
+
+  init(expression: string, refreshCb: () => void) {
     this.innerExpression = expression
-    this.eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
     this.refreshCb = refreshCb
 
-    this.eventBus.on(VariableEvents.VariableCreated, () => {
+    this.eventBus?.on(VariableEvents.VariableCreated, () => {
       refreshCb()
     })
 
-    this.eventBus.on(VariableEvents.VariableRemoved, () => {
+    this.eventBus?.on(VariableEvents.VariableRemoved, () => {
       refreshCb()
     })
 
-    this.eventBus.on(VariableEvents.VariableUpdated, () => {
+    this.eventBus?.on(VariableEvents.VariableUpdated, () => {
       console.log('Variable updated')
       refreshCb()
     })
 
-    this.eventBus.on(VariableEvents.VariablesCleared, () => {
+    this.eventBus?.on(VariableEvents.VariablesCleared, () => {
       refreshCb()
     })
 
-    this.eventBus.on(VariableEvents.VariableRemoved, () => {
+    this.eventBus?.on(VariableEvents.VariableRemoved, () => {
       refreshCb()
     })
   }
@@ -83,7 +85,7 @@ export class ComputedStoreParameter {
 
     // Alte Subscriptions entfernen
     this.currentSubscriptions.forEach((subFn, key) => {
-      const variable = this.storage.getVariable(key) as Variable
+      const variable = this.storage?.getVariable(key) as Variable
       if (variable) {
         variable.unsubscribe(subFn)
       }
@@ -92,7 +94,7 @@ export class ComputedStoreParameter {
 
     // Neue Subscriptions einrichten
     dependencies.forEach(dep => {
-      const variable = this.storage.getVariable(dep) as Variable | undefined
+      const variable = this.storage?.getVariable(dep) as Variable | undefined
 
       if (variable) {
         const subFn = () => {
@@ -105,7 +107,7 @@ export class ComputedStoreParameter {
 
     // Nur definierte Variablen ersetzen
     dependencies.forEach(dep => {
-      const variable = this.storage.getVariable(dep)
+      const variable = this.storage?.getVariable(dep)
       if (variable && variable.value !== undefined) {
         result = result.replace(
           `$${dep}`,
@@ -122,4 +124,8 @@ export class ComputedStoreParameter {
   get value(): string {
     return this.computeValue()
   }
+}
+
+if (!container.isBound(ComputedStoreParameter)) {
+  container.bind<ComputedStoreParameter>(ComputedStoreParameter).toSelf().inTransientScope();
 }

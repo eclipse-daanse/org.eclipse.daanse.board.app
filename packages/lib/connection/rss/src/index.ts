@@ -11,13 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
 import { RssConnection, type IRssConnectionConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('RssConnection')
+const factorySymbol = Symbol.for('RssConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RssConnection)
+if (!container.isBound(RssConnection)) {
+  container.bind<RssConnection>(RssConnection).toSelf().inTransientScope()
 }
 
-export { RssConnection, IRssConnectionConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<RssConnection>>(factorySymbol).toFactory(() => {
+    return (config: IRssConnectionConfiguration) => {
+      if (!RssConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid RssConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<RssConnection>(RssConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export { RssConnection, IRssConnectionConfiguration, factorySymbol }

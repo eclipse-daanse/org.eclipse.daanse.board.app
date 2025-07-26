@@ -12,8 +12,7 @@
  **********************************************************************/
 
 import { Container } from 'inversify'
-import { VariableStorage } from './storage/VariableStorage'
-import { ComputedVariable, init as initComputed, symbol as ComputedVariableSymbol,COMPUTED_VARIABLE } from './classes/ComputedVariable'
+import { ComputedVariable, symbol as ComputedVariableSymbol,COMPUTED_VARIABLE } from './classes/ComputedVariable'
 import { ConstantVariable, init as initConstant, symbol as ConstantVariableSymbol,CONSTANT_VARIABLE } from './classes/ConstantVariable'
 import { QueryVariable, init as initQuery, symbol as QueryVariableSymbol } from './classes/QueryVariable'
 import { RequestVariable, init as initRequest, symbol as RequestVariableSymbol } from './classes/RequestVariable'
@@ -81,25 +80,11 @@ type INewVariableConfig =
   | IRequestVaribleConfig
   | IVariableConfig
 
-const identifier = Symbol.for('VariableStorage')
-
 const init = (container: Container) => {
-  initComputed(container)
-  initConstant(container)
-  initQuery(container)
-  initRequest(container)
-  initTime(container)
-
-  container
-    .bind<VariableStorage>(identifier)
-    .to(VariableStorage)
-    .inSingletonScope()
 }
 
 export {
-  VariableStorage,
   init,
-  identifier,
   ComputedVariable,
   ConstantVariable,
   QueryVariable,

@@ -12,10 +12,8 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { Container } from 'inversify'
-import {
-  BaseDatasource,
-} from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { inject } from 'inversify'
+import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
   type IConnection,
@@ -25,7 +23,7 @@ import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variabl
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ParseOptions } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface ICsvStoreConfiguration  {
+export interface ICsvStoreConfiguration {
   resourceUrl: string
   connection: string
   pollingInterval?: number
@@ -44,20 +42,21 @@ export interface ICsvParseResult {
 
 export class CsvStore extends BaseDatasource {
   private connection: any
-  private resourceUrl: ComputedStoreParameter
-  private parseOptions: ParseOptions
+  private resourceUrl: ComputedStoreParameter | null = null
+  private parseOptions: ParseOptions | null = null
 
-  constructor(
-    configuration: ICsvStoreConfiguration,
-    public container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: ICsvStoreConfiguration) {
+    super.init(configuration)
+
     this.connection = configuration.connection
     this.parseOptions = {
       separators: configuration.separators,
     }
 
-    this.resourceUrl = super.initVariable(configuration.resourceUrl);
+    this.resourceUrl = super.initVariable(configuration.resourceUrl)
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)
@@ -65,50 +64,39 @@ export class CsvStore extends BaseDatasource {
   }
 
   async getOriginalData(): Promise<any> {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl.value })
+    const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
     if (!req.ok) return []
     const text = await req.text()
 
-    const data = helpers.csv.parse(text, this.parseOptions);
-    return data;
+    const data = helpers.csv.parse(text, this.parseOptions || {})
+    return data
   }
 
   async getData(type: string): Promise<any> {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
-    const req = await connection.fetch({ url: this.resourceUrl.value })
+    const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
     if (!req.ok) return null
     const text = await req.text()
-    const data: ICsvParseResult = helpers.csv.parse(text, this.parseOptions);
+    const data: ICsvParseResult = helpers.csv.parse(
+      text,
+      this.parseOptions || {},
+    )
     console.log(data)
     if (type === 'DataTable') {
       return {
         headers: data.header,
         items: data.mappedRows,
         rows: data.rows,
-      };
+      }
     }
-    if(type == 'string'){
-      return JSON.stringify(data);
-    }
-
-    else {
+    if (type == 'string') {
+      return JSON.stringify(data)
+    } else {
       console.warn('Invalid data type')
       return null
     }

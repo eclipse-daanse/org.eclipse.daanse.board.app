@@ -21,19 +21,22 @@ export interface IRestConnectionConfig extends BaseConnectionConfig {
 }
 
 export class RestConnection extends BaseConnection {
-  private url
+  private url = ''
 
-  constructor(configuration: IRestConnectionConfig) {
-    super(configuration)
+  constructor() {
+    super()
+  }
 
-    // this.url = super.initVariable(configuration.url);
+  init(configuration: IRestConnectionConfig): void {
+    super.init(configuration)
+
     this.url = configuration.url
   }
 
   // fetch(config: IRequestParams): Promise<any> {
-  fetch(config: any,options?:any): Promise<any> {
+  fetch(config: any, options?: any): Promise<any> {
     // return fetch(this.url.value + config.url);
-    return fetch(this.url + config.url ,options)
+    return fetch(this.url + config.url, options)
   }
 
   setConfig(): void {

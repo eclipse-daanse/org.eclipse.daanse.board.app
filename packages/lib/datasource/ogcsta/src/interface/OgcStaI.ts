@@ -10,14 +10,12 @@
 */
 import { Configuration } from '../client'
 import { IOGCSTAData } from '../interfaces/OgcStaConfiguration'
-import { Container } from 'inversify'
 
 export interface OgcStaStoreI {
   connection: string
-  requestFlag: { key: string, params: any }
+  requestFlag: { key: string; params: any }
   baseConfigration: Configuration | undefined
   resultMap: IOGCSTAData
-  container: Container
 
   callEvent(event: string, params: any): void
 

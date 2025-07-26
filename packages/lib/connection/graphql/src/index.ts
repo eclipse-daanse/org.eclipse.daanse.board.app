@@ -11,16 +11,41 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   GraphQLConnection,
   type IGraphQLConnectionConfiguration,
 } from './classes'
 
-const symbol = Symbol.for('GraphQLConnection')
+const factorySymbol = Symbol.for('GraphQLConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(GraphQLConnection)
+if (!container.isBound(GraphQLConnection)) {
+  container
+    .bind<GraphQLConnection>(GraphQLConnection)
+    .toSelf()
+    .inTransientScope()
 }
 
-export { GraphQLConnection, IGraphQLConnectionConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<GraphQLConnection>>(factorySymbol).toFactory(() => {
+    return (config: IGraphQLConnectionConfiguration) => {
+      if (!GraphQLConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid GraphQLConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<GraphQLConnection>(GraphQLConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export {
+  type GraphQLConnection,
+  IGraphQLConnectionConfiguration,
+  factorySymbol,
+}
