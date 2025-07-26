@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   type ConnectionIdentifiers,
@@ -22,15 +22,16 @@ import {
 
 const identifier = Symbol.for('ConnectionRepository')
 
-const init = (container: Container) => {
-  const connectionRepository = new ConnectionRepository(container)
+if (!container.isBound(identifier)) {
+  console.log('Binding ConnectionRepository to container', container)
 
   container
     .bind<ConnectionRepository>(identifier)
-    .toConstantValue(connectionRepository)
+    .to(ConnectionRepository)
+    .inSingletonScope()
 }
 
-export { ConnectionRepository, init, identifier }
+export { type ConnectionRepository, identifier }
 export type {
   ConnectionIdentifiers,
   IConnection,

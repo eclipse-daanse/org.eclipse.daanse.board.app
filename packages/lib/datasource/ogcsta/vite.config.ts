@@ -18,16 +18,27 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'lib.datasource.ogcsta',
-      fileName: 'lib.datasource.ogcsta'
+      fileName: 'lib.datasource.ogcsta',
     },
     rollupOptions: {
-      external: []
-    }
+      external: [
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
+      output: {
+        globals: {
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({
-      insertTypesEntry: true
-    })
-  ]
+      insertTypesEntry: true,
+    }),
+  ],
 })
-

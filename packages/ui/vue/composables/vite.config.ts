@@ -13,35 +13,43 @@ import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 import vue from '@vitejs/plugin-vue'
 
-
 const rootPath = resolve(__dirname, '../../../../') // ← ggf. anpassen
 export default defineConfig({
   resolve: {
     alias: {
-      vue: resolve(rootPath, 'node_modules/vue') // ⬅️ Vue nur aus dem Root laden
-    }
+      vue: resolve(rootPath, 'node_modules/vue'), // ⬅️ Vue nur aus dem Root laden
+    },
   },
   build: {
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'lib.core',
-      fileName: 'lib.core'
+      fileName: 'lib.core',
     },
     rollupOptions: {
-      external: ['vue'],
+      external: [
+        'vue',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: 'Vue',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({
-      insertTypesEntry: true
+      insertTypesEntry: true,
     }),
     //@ts-ignore
-    vue()
-  ]
+    vue(),
+  ],
 })

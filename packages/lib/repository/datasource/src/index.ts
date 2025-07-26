@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   type StoreIdentifiers,
@@ -23,15 +23,14 @@ import {
 
 const identifier = Symbol.for('DatasourceRepository')
 
-const init = (container: Container) => {
-  const datasourceRepository = new DatasourceRepository(container)
-
+if (!container.isBound(identifier)) {
   container
     .bind<DatasourceRepository>(identifier)
-    .toConstantValue(datasourceRepository)
+    .to(DatasourceRepository)
+    .inSingletonScope()
 }
 
-export { DatasourceRepository, init, identifier }
+export { DatasourceRepository, identifier }
 export type {
   StoreIdentifiers,
   IDataRetrieveable,

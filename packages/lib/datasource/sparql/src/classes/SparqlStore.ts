@@ -17,38 +17,38 @@ import {
   type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ISparqlStoreConfiguration, SparqlResponse } from '../interfaces/ISparqlStoreConfiguration'
-
+import {
+  ISparqlStoreConfiguration,
+  SparqlResponse,
+} from '../interfaces/ISparqlStoreConfiguration'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 @injectable()
 export default class SparqlStore extends BaseDatasource {
-
   private connection: any
-  private query:string
+  private query: string = ''
 
-  constructor(
-    configuration: ISparqlStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: ISparqlStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
     this.query = configuration.query
   }
 
-  public static TYPE = 'sparql';
+  public static TYPE = 'sparql'
 
-  datasourceId: string | null = null;
+  datasourceId: string | null = null
 
-
-  data:SparqlResponse|undefined;
-
+  data: SparqlResponse | undefined
 
   callEvent(event: string, params: any) {
     if (event == QUERY) {
-      this.query = params;
+      this.query = params
     }
-    this.notify();
+    this.notify()
   }
   getOriginalData(): any {
     throw new Error('not implemented')
@@ -63,50 +63,56 @@ export default class SparqlStore extends BaseDatasource {
     return true
   }
 
-  async getData(type:string): Promise<any> {
-    try{
-      const connectionRepository = this.container.get(
-        identifier,
-      ) as ConnectionRepository
-      if (!connectionRepository) {
+  async getData(type: string): Promise<any> {
+    try {
+      if (!this.connectionRepository) {
         throw new Error('ConnectionRepository is not provided to Store Classes')
       }
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as IConnection
 
-      let encodedValue = 'query='+encodeURIComponent(this.query);
+      let encodedValue = 'query=' + encodeURIComponent(this.query)
 
-      const newData = await connection.fetch({ url:''} ,{method:'POST',body:encodedValue,headers:
-          { 'User-Agent': 'org.eclipse.daanse.datafinder.sparql/1.0','Accept': 'application/json','Content-Type': 'application/x-www-form-urlencoded'}});
+      const newData = await connection.fetch(
+        { url: '' },
+        {
+          method: 'POST',
+          body: encodedValue,
+          headers: {
+            'User-Agent': 'org.eclipse.daanse.datafinder.sparql/1.0',
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
       const parsed = await newData.json()
-      this.data = parsed;
-    }catch (e){
-      this.data = undefined;
+      this.data = parsed
+    } catch (e) {
+      this.data = undefined
     }
-    if(type=='DataTable'){
-      if(this.data){
-        const headers = this.data.head.vars;
+    if (type == 'DataTable') {
+      if (this.data) {
+        const headers = this.data.head.vars
 
-        const items = this.data.results.bindings.map((binding) => {
-          const item: Record<string, any> = {};
+        const items = this.data.results.bindings.map(binding => {
+          const item: Record<string, any> = {}
           for (const key of headers) {
-            item[key] = binding[key]?.value ?? null;
+            item[key] = binding[key]?.value ?? null
           }
-          return item;
-        });
+          return item
+        })
 
-        const rows = items.map((item) => headers.map((key) => item[key]));
+        const rows = items.map(item => headers.map(key => item[key]))
 
-        return { headers, items, rows };
-      }else {
-
-      }return { heders:[],items: [], rows:[] };
+        return { headers, items, rows }
+      } else {
+      }
+      return { heders: [], items: [], rows: [] }
     }
-    if(type == 'string'){
-      return JSON.stringify(this.data);
+    if (type == 'string') {
+      return JSON.stringify(this.data)
     }
-    return  this.data;
+    return this.data
   }
-
 }

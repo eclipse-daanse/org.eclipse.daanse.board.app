@@ -12,32 +12,26 @@
  **********************************************************************/
 
 import { Variable } from './Variable'
-import { VariableStorage } from '../storage/VariableStorage'
-import { type TinyEmitter } from 'tiny-emitter'
 import { type IComputedVariableConfig } from '..'
-import { Container } from 'inversify'
 import {  Serializable } from '../interface/JSONSerializableI'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { Factory, injectFromBase } from 'inversify'
 
 const TYPE = 'ComputedVariable'
 const symbol = Symbol.for(TYPE)
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(ComputedVariable);
-}
-
+@injectFromBase({
+  extendProperties: true,
+})
 class ComputedVariable extends Variable implements Serializable{
   private innerExpression: string = ''
   public type = TYPE
 
-  constructor(
-    name: string,
-    container: Container,
-    config: IComputedVariableConfig,
-  ) {
-    super(name, container, config)
-    this.expression = config.expression
 
-    this.initSubscriptions()
+  init(name: string, config: IComputedVariableConfig) {
+    super.init(name, config);
+    this.innerExpression = config.expression;
+    this.initSubscriptions();
   }
 
   update(config: IComputedVariableConfig): void {
@@ -59,7 +53,11 @@ class ComputedVariable extends Variable implements Serializable{
 
   // TODO: Think if the inner value is necessary
   get value(): any {
-    return this.computeValue()
+    try {
+      return this.computeValue()
+    } catch (e) {
+      return `Incorrect expression: ${this.innerExpression}`
+    }
   }
 
   getDependencies(): string[] {
@@ -84,9 +82,9 @@ class ComputedVariable extends Variable implements Serializable{
     dependencies.forEach(dep => {
       result = result.replace(
         `$${dep}`,
-        typeof this.storage.getVariable(dep)?.value === 'number'
-          ? this.storage.getVariable(dep)?.value
-          : `'${this.storage.getVariable(dep)?.value}'`,
+        typeof this.storage?.getVariable(dep)?.value === 'number'
+          ? this.storage?.getVariable(dep)?.value
+          : `'${this.storage?.getVariable(dep)?.value}'`,
       )
     })
 
@@ -98,8 +96,7 @@ class ComputedVariable extends Variable implements Serializable{
     const dependencies = this.getDependencies()
     dependencies.forEach(dep => {
       console.log(dep)
-      const depencencyVariable = this.storage.getVariable(dep)
-      console.log(depencencyVariable)
+      const depencencyVariable = this.storage?.getVariable(dep)
       if(depencencyVariable){
         depencencyVariable.subscribe(() => {
           console.log('dep changed', dep)
@@ -121,4 +118,18 @@ class ComputedVariable extends Variable implements Serializable{
   }
 }
 
-export { ComputedVariable, symbol, init, TYPE as COMPUTED_VARIABLE }
+if (!container.isBound(ComputedVariable)) {
+  container.bind<ComputedVariable>(ComputedVariable).toSelf().inTransientScope()
+}
+
+if (!container.isBound(symbol)) {
+  container.bind<Factory<ComputedVariable>>(symbol).toFactory(() => {
+    return (name: string, config: IComputedVariableConfig) => {
+      const variable = container.get<ComputedVariable>(ComputedVariable)
+      variable.init(name, config as IComputedVariableConfig)
+      return variable
+    }
+  })
+}
+
+export { ComputedVariable, symbol, TYPE as COMPUTED_VARIABLE }

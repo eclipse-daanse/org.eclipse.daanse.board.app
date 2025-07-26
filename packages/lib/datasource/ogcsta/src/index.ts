@@ -8,19 +8,32 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from "inversify";
+import type { Factory } from 'inversify'
 
-import { OgcStaStore } from './classes/OgcSta';
-import { FILTER ,FILTERRESET} from './interfaces/Constances'
-const symbolForOgcStaStore = Symbol.for('OgcStaStore')
+import { OgcStaStore } from './classes/OgcSta'
+import { FILTER, FILTERRESET } from './interfaces/Constances'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  container.bind(symbolForOgcStaStore).toConstantValue(OgcStaStore);
+const factorySymbol = Symbol.for('OgcStaStoreFactory')
+
+if (!container.isBound(OgcStaStore)) {
+  container.bind<OgcStaStore>(OgcStaStore).toSelf().inTransientScope()
 }
 
-export {
-  init,
-  symbolForOgcStaStore,
-  FILTER,
-  FILTERRESET
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<OgcStaStore>>(factorySymbol).toFactory(() => {
+    return config => {
+      if (!OgcStaStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid OgcStaStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<OgcStaStore>(OgcStaStore)
+      store.init(config)
+
+      return store
+    }
+  })
 }
+
+export { factorySymbol, FILTER, FILTERRESET }

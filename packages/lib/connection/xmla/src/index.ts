@@ -11,13 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
 import { XmlaConnection, type IXmlaConnectionConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('XmlaConnection')
+const factorySymbol = Symbol.for('XmlaConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(XmlaConnection)
+if (!container.isBound(XmlaConnection)) {
+  container.bind<XmlaConnection>(XmlaConnection).toSelf().inTransientScope()
 }
 
-export { XmlaConnection, IXmlaConnectionConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<XmlaConnection>>(factorySymbol).toFactory(() => {
+    return (config: IXmlaConnectionConfiguration) => {
+      if (!XmlaConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid XmlaConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<XmlaConnection>(XmlaConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export { XmlaConnection, IXmlaConnectionConfiguration, factorySymbol }

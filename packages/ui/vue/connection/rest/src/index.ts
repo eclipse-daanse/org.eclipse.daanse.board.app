@@ -10,27 +10,23 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { symbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
+import { factorySymbol as RestConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.rest'
 
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const connectionRepository = container.get<ConnectionRepository>(identifier)
+const connectionRepository = container.get<ConnectionRepository>(identifier)
 
-  const settingsSymbol = Symbol.for('RestConnectionSettings')
+const settingsSymbol = Symbol.for('RestConnectionSettings')
 
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  connectionRepository.registerConnectionType('rest', {
-    Connection: RestConnectionIdentifier,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+connectionRepository.registerConnectionType('rest', {
+  Connection: RestConnectionIdentifier,
+  Settings: settingsSymbol,
+})

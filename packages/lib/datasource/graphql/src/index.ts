@@ -11,16 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  GraphQLStore,
-  type IGraphQLStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { GraphQLStore, type IGraphQLStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('GraphQLStore')
+const factorySymbol = Symbol.for('GraphQLStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(GraphQLStore);
+if (!container.isBound(GraphQLStore)) {
+  container.bind<GraphQLStore>(GraphQLStore).toSelf().inTransientScope()
 }
 
-export { GraphQLStore, IGraphQLStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<GraphQLStore>>(factorySymbol).toFactory(() => {
+    return (config: IGraphQLStoreConfiguration) => {
+      if (!GraphQLStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid GraphQLStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<GraphQLStore>(GraphQLStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { GraphQLStore, IGraphQLStoreConfiguration, factorySymbol }

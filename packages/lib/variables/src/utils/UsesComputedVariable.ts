@@ -11,26 +11,23 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { ComputedStoreParameter } from '../classes/ComputedStoreParameter'
 
 export class UsesComputedVariable {
   protected updateCb: () => void = () => {}
 
-  constructor(private _container: Container) {}
+  constructor() {}
 
   protected setUpdateCb(cb: () => void) {
     this.updateCb = cb
   }
 
   initVariable(expression: string): ComputedStoreParameter {
-    const variable = new ComputedStoreParameter(
-      this._container,
-      expression,
-      () => {
-        this.updateCb()
-      },
+    const computedStoreParameter = container.get<ComputedStoreParameter>(
+      ComputedStoreParameter,
     )
-    return variable
+    computedStoreParameter.init(expression,() => { this.updateCb() })
+    return computedStoreParameter
   }
 }

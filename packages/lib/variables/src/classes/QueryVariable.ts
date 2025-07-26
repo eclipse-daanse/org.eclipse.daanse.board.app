@@ -12,28 +12,21 @@
  **********************************************************************/
 
 import { Variable } from './Variable'
-import { VariableStorage } from '../storage/VariableStorage'
-import { type TinyEmitter } from 'tiny-emitter'
 import { type IQueryVariableConfig } from '..'
-import { Container } from 'inversify'
+import { injectFromBase, Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const symbol = Symbol.for('QueryVariable')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(QueryVariable);
-}
-
+@injectFromBase({
+  extendProperties: true,
+})
 class QueryVariable extends Variable {
   private innerQueryParam: string = ''
   public type = 'query'
 
-  constructor(
-    name: string,
-    container: Container,
-    config: IQueryVariableConfig,
-  ) {
-    console.log(config)
-    super(name, container, config)
+  init(name: string, config: IQueryVariableConfig) {
+    super.init(name, config)
     this.parameter = config.queryParam
   }
 
@@ -55,4 +48,18 @@ class QueryVariable extends Variable {
   }
 }
 
-export { QueryVariable, symbol, init }
+if (!container.isBound(QueryVariable)) {
+  container.bind<QueryVariable>(QueryVariable).toSelf().inTransientScope()
+}
+
+if (!container.isBound(symbol)) {
+  container.bind<Factory<QueryVariable>>(symbol).toFactory(() => {
+    return (name: string, config: IQueryVariableConfig) => {
+      const variable = container.get<QueryVariable>(QueryVariable)
+      variable.init(name, config as IQueryVariableConfig)
+      return variable
+    }
+  })
+}
+
+export { QueryVariable, symbol }

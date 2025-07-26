@@ -11,13 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
 import { CsvStore, type ICsvStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('CsvStore')
+const factorySymbol = Symbol.for('CsvStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(CsvStore)
+if (!container.isBound(CsvStore)) {
+  container.bind(CsvStore).toSelf().inTransientScope()
 }
 
-export { CsvStore, ICsvStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<CsvStore>>(factorySymbol).toFactory(() => {
+    return config => {
+      if (!CsvStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid CsvStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<CsvStore>(CsvStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { type CsvStore, ICsvStoreConfiguration, factorySymbol }

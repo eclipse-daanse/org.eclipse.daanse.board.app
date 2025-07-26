@@ -13,9 +13,8 @@
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
-import { Container } from 'inversify'
-import { VariableFactory, init as initVariableFactory, identifier as variableFactoryIdentifier }
-  from 'org.eclipse.daanse.board.app.lib.factory.variable'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { inject } from 'inversify'
 
 export interface VariableConfig {
   [key: string]: any
@@ -29,11 +28,9 @@ export interface VariableDeffinition {
 export class VariableRepository {
   private availableVariables: Map<string, any> = new Map();
   private availableVariablesTypes: Map<string, VariableDeffinition> = new Map();
-  private eventBus: TinyEmitter
 
-  constructor (private container: Container) {
-    this.eventBus = this.container.get<TinyEmitter>(identifiers.TINY_EMITTER)
-  }
+  @inject(identifiers.TINY_EMITTER)
+  private tinyEmitter?: TinyEmitter;
 
   registerVariableType(type: string, identifiers: VariableDeffinition) {
     if (this.availableVariablesTypes.has(type)) {
@@ -54,8 +51,9 @@ export class VariableRepository {
     // this.availableVariables[type] = config
     const identifiers = this.availableVariablesTypes.get(type)
     if (identifiers) {
-      const variableFactory = this.container.get<VariableFactory>(variableFactoryIdentifier)
-      const variable = variableFactory.createVariable(identifiers.Variable, config)
+      const variableFactory = container.get(identifiers.Variable) as any
+      console.log('VariableFactory', variableFactory)
+      const variable = variableFactory(name, config)
 
       this.availableVariables.set(name, variable)
     }
@@ -80,15 +78,4 @@ export class VariableRepository {
     this.availableVariables.set(newname,avar)
     this.availableVariables.delete(oldname);
   }
-  // registerVariable(name: string, config: VariableConfig) {
-  //   this.availableVariables[name] = config
-  // }
-
-  // getVariable(name: string): VariableConfig {
-  //   return this.availableVariables[name]
-  // }
-
-  // getAllVariables(): Record<string, VariableConfig> {
-  //   return this.availableVariables
-  // }
 }

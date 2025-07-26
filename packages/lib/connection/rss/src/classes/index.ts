@@ -23,13 +23,16 @@ export interface IRssConnectionConfiguration extends BaseConnectionConfig {
 }
 
 export class RssConnection extends BaseConnection {
-  private url
-  private parser
+  private url: string = ''
+  private parser: Parser | null = null
 
-  constructor(configuration: IRssConnectionConfiguration) {
-    super(configuration)
+  constructor() {
+    super()
+  }
 
-    // this.url = super.initVariable(configuration.url);
+  init(configuration: IRssConnectionConfiguration): void {
+    super.init(configuration)
+
     this.url = configuration.url
     this.parser = new Parser()
   }

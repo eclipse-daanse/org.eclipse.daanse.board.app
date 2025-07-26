@@ -18,11 +18,13 @@ export interface IWSConnectionConfiguration {
 }
 
 export class WSConnection extends TwoWayConnection {
-  private socket: WebSocket
+  private socket: WebSocket | null = null
 
-  constructor(configuration: IWSConnectionConfiguration) {
+  constructor() {
     super()
+  }
 
+  init(configuration: IWSConnectionConfiguration): void {
     this.socket = new WebSocket(configuration.url)
 
     this.socket.onopen = () => {

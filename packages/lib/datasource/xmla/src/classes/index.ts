@@ -14,15 +14,17 @@
 import { getMdxRequest } from '../utils/MdxRequestConstructor'
 import { parseMdxRequest, parseRequestToTable } from '../utils/MdxRequestHelper'
 import { DrilldownHandler, DrilldownPayload } from './DrilldownHandler'
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { Container } from 'inversify'
+import {
+  BaseDatasource,
+  IBaseConnectionConfiguration,
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
-  type IConnection,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { inject } from 'inversify'
 
-export interface IXmlaStoreConfiguration {
+export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
   requestParams: XMLARequestParams
   useVisualEditor: boolean
@@ -50,22 +52,21 @@ export class XmlaStore extends BaseDatasource {
   private mdx: string = ''
   private drilldownHandler: DrilldownHandler | null = null
 
-  constructor(
-    configuration: IXmlaStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: IXmlaStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
 
     if (this.connection) {
-      const connectionRepository = this.container.get(
-        identifier,
-      ) as ConnectionRepository
-      if (!connectionRepository) {
+      if (!this.connectionRepository) {
         throw new Error('ConnectionRepository is not provided to Store Classes')
       }
-      const connection = connectionRepository.getConnection(this.connection)
+      const connection = this.connectionRepository.getConnection(
+        this.connection,
+      )
 
       this.drilldownHandler = new DrilldownHandler(
         connection,
@@ -98,13 +99,10 @@ export class XmlaStore extends BaseDatasource {
     let request
     let response = null
 
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as any
 
@@ -142,13 +140,10 @@ export class XmlaStore extends BaseDatasource {
   }
 
   async getMdxRequest() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as any
     const properties = await connection.getProperties()

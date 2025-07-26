@@ -8,19 +8,35 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
+import { Factory, type Container } from 'inversify'
 import SparqlStore from './classes/SparqlStore'
 import type { ISparqlStoreConfiguration } from './interfaces/ISparqlStoreConfiguration'
-import {symbol} from './interfaces/Constances';
+import { symbol } from './interfaces/Constances'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(SparqlStore);
-  console.log('📦 SparqlStore initialized')
+if (!container.isBound(SparqlStore)) {
+  container.bind(SparqlStore).toSelf().inTransientScope()
 }
 
-export {
-  init,
-  symbol,
-  SparqlStore,
-  ISparqlStoreConfiguration
+if (!container.isBound(symbol)) {
+  container.bind<Factory<SparqlStore>>(symbol).toFactory(() => {
+    return (config: ISparqlStoreConfiguration) => {
+      if (!SparqlStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid SparqlStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<SparqlStore>(SparqlStore)
+      store.init(config)
+
+      return store
+    }
+  })
 }
+
+// const init = (container: Container) => {
+//   container.bind(symbol).toConstantValue(SparqlStore);
+//   console.log('📦 SparqlStore initialized')
+// }
+
+export { symbol, SparqlStore, ISparqlStoreConfiguration }

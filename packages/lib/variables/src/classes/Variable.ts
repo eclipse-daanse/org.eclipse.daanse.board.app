@@ -18,48 +18,40 @@ import {
   type VariableRepository,
   identifier as variableRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { Container } from 'inversify'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
 import { Serializable } from '../interface/JSONSerializableI'
+import { inject } from 'inversify'
 
 
 const TYPE = 'Variable'
 const symbol = Symbol.for(TYPE)
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(Variable);
-}
 
 abstract class Variable implements Serializable{
-
   private subscribers: any[] = []
   private innerValue: any
 
   public intervalFn: () => any = () => {}
   public description: string = ''
-  public storage: VariableRepository;
-  public eventBus: TinyEmitter;
   private refreshInterval: number = 0
   private refreshType: RefreshType = RefreshType.None
   private refreshIntervalId: number = 0
   private refreshTrigger: string = null as unknown as string
   public type: string = null as unknown as string
+  public name: string = null as unknown as string
 
-  constructor(
-    public name: string,
-    public container: Container,
-    config: IVariableConfig,
-  ) {
-    this.type = TYPE;
+  @inject(identifiers.TINY_EMITTER)
+  public eventBus?: TinyEmitter;
 
-    this.eventBus = this.container.get<TinyEmitter>(
-      identifiers.TINY_EMITTER,
-    )
-    this.storage = this.container.get<VariableRepository>(
-      variableRepositoryIdentifier,
-    )
+  @inject(variableRepositoryIdentifier)
+  public storage?: VariableRepository;
+
+  public init(name: string, config: IVariableConfig) {
+    this.name = name;
+
     this.update(config);
   }
+
   public rename(newName: string){
     this.name = newName;
   }
@@ -77,12 +69,12 @@ abstract class Variable implements Serializable{
       }
     } else if (this.refreshType === RefreshType.Trigger) {
       if (this.refreshTrigger) {
-        this.eventBus.on(this.refreshTrigger, () => {
+        this.eventBus?.on(this.refreshTrigger, () => {
           this.intervalFn()
         })
       }
     }
-    this.eventBus.emit(VariableEvents.VariableUpdated)
+    this.eventBus?.emit(VariableEvents.VariableUpdated)
   }
   set onInterval(onInterval: () => any) {
     this.intervalFn = onInterval
@@ -112,7 +104,7 @@ abstract class Variable implements Serializable{
   }
 
   notyfy() {
-    this.eventBus.emit(VariableEvents.VariableUpdated)
+    this.eventBus?.emit(VariableEvents.VariableUpdated)
     this.subscribers.forEach(subscriber => subscriber())
   }
 
@@ -124,7 +116,7 @@ abstract class Variable implements Serializable{
 
   clearTrigger() {
     if (this.refreshTrigger) {
-      this.eventBus.off(this.refreshTrigger)
+      this.eventBus?.off(this.refreshTrigger)
     }
   }
   serialize(): any {
@@ -139,4 +131,4 @@ abstract class Variable implements Serializable{
   }
 }
 
-export { Variable, init, symbol }
+export { Variable, symbol }

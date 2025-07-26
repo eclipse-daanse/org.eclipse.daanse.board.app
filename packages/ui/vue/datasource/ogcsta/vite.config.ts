@@ -20,33 +20,40 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.datasource.ogcsta',
-      fileName: 'ui.vue.datasource.ogcsta'
+      fileName: 'ui.vue.datasource.ogcsta',
     },
     rollupOptions: {
-      external: ['vue'],
+      external: [
+        'vue',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: 'Vue',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler'
-      }
-    }
+        api: 'modern-compiler',
+      },
+    },
   },
   plugins: [
     //@ts-ignore
     monacoEditorPlugin,
     dts({
-      insertTypesEntry: true
+      insertTypesEntry: true,
     }),
 
-
-    vue()
-  ]
+    vue(),
+  ],
 })
-

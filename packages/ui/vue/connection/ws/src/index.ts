@@ -16,7 +16,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
-import { symbol as WSConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.websocket'
+import { factorySymbol as WSConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.websocket'
 
 import Settings from './Settings.vue'
 

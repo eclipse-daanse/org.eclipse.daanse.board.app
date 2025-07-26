@@ -12,28 +12,24 @@
  **********************************************************************/
 
 import { Variable } from './Variable'
-import { VariableStorage } from '../storage/VariableStorage'
-import { type TinyEmitter } from 'tiny-emitter'
 import { type IRequestVaribleConfig } from '..'
-import { Container } from 'inversify'
+import { Factory, injectFromBase } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+
 
 const symbol = Symbol.for('RequestVariable')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RequestVariable);
-}
 
+@injectFromBase({
+  extendProperties: true,
+})
 class RequestVariable extends Variable {
   private innerRequest: string = ''
   public type = 'request'
   public time = 0
 
-  constructor(
-    name: string,
-    container: Container,
-    config: IRequestVaribleConfig,
-  ) {
-    super(name, container, config)
+  init(name: string, config: IRequestVaribleConfig) {
+    super.init(name, config)
     this.request = config.request
 
     super.onInterval = () => {
@@ -62,4 +58,18 @@ class RequestVariable extends Variable {
   set value(value) {}
 }
 
-export { RequestVariable, symbol, init }
+if (!container.isBound(RequestVariable)) {
+  container.bind<RequestVariable>(RequestVariable).toSelf().inTransientScope()
+}
+
+if (!container.isBound(symbol)) {
+  container.bind<Factory<RequestVariable>>(symbol).toFactory(() => {
+    return (name: string, config: IRequestVaribleConfig) => {
+      const variable = container.get<RequestVariable>(RequestVariable)
+      variable.init(name, config as IRequestVaribleConfig)
+      return variable
+    }
+  })
+}
+
+export { RequestVariable, symbol }
