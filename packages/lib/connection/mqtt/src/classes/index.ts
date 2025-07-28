@@ -22,12 +22,14 @@ export interface IMQTTConnectionConfiguration {
 
 export class MQTTConnection extends TwoWayConnection {
   private url: any
-  private client: MqttClient
+  private client: MqttClient | null = null
   private topicsMaps: Map<any, string> = new Map()
 
-  constructor(configuration: IMQTTConnectionConfiguration) {
+  constructor() {
     super()
+  }
 
+  init(configuration: IMQTTConnectionConfiguration): void {
     console.log('MQTTConnection configuration', configuration)
     this.client = mqtt.connect(configuration.url)
 
@@ -73,12 +75,12 @@ export class MQTTConnection extends TwoWayConnection {
 
   removeTopics() {
     const topics = new Set(Array.from(this.topicsMaps.values()))
-    this.client.unsubscribe(Array.from(topics))
+    this.client?.unsubscribe(Array.from(topics))
   }
 
   updateTopicsList() {
     const topics = new Set(Array.from(this.topicsMaps.values()))
-    this.client.subscribe(Array.from(topics))
+    this.client?.subscribe(Array.from(topics))
   }
 
   hasTopics(): boolean {

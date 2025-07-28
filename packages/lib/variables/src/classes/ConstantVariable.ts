@@ -12,14 +12,10 @@
  **********************************************************************/
 
 import { Variable } from './Variable'
-import { VariableStorage } from '../storage/VariableStorage'
-import { type TinyEmitter } from 'tiny-emitter'
 import { type IConstantVariableConfig, RefreshType } from '..'
-import { Container } from 'inversify'
+import { Container, Factory } from 'inversify'
 import { Serializable } from '../interface/JSONSerializableI'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { identifier as variableRepositoryIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.variable/dist/src'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const TYPE = 'ConstantVariable'
 const symbol = Symbol.for(TYPE)
@@ -31,14 +27,11 @@ const init = (container: Container) => {
 class ConstantVariable extends Variable implements Serializable {
   public type = TYPE
 
-  constructor(
-    name: string,
-    container: Container,
-    config: IConstantVariableConfig,
-  ) {
-    super(name, container, config)
-    this.value = config.value
+  init(name: string, config: IConstantVariableConfig) {
+    super.init(name, config);
+    this.value = config.value;
   }
+
   update(config: IConstantVariableConfig): void {
     super.update(config);
     this.value = config.value
@@ -58,8 +51,20 @@ class ConstantVariable extends Variable implements Serializable {
     ret.type = this.type;
     return ret;
   }
-
-
 }
+
+if (!container.isBound(ConstantVariable)) {
+  container.bind(ConstantVariable).toSelf().inTransientScope();
+}
+
+if (!container.isBound(symbol)) {
+  container.bind<Factory<ConstantVariable>>(symbol).toFactory(() => {
+    return (name: string, config: IConstantVariableConfig) => {
+      const variable = container.get<ConstantVariable>(ConstantVariable);
+      variable.init(name, config);
+      return variable;
+    };
+  })
+};
 
 export { ConstantVariable, symbol, init, TYPE as CONSTANT_VARIABLE }

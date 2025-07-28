@@ -10,31 +10,27 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
+
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol as SqlXmlaDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { factorySymbol as SqlXmlaDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('SqlXmlaPreview')
-  const settingsSymbol = Symbol.for('SqlXmlaSettings')
+const previewSymbol = Symbol.for('SqlXmlaPreview')
+const settingsSymbol = Symbol.for('SqlXmlaSettings')
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  datasourceRepository.registerDatasourceType('sql_xmla', {
-    Store: SqlXmlaDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+datasourceRepository.registerDatasourceType('sql_xmla', {
+  Store: SqlXmlaDatasourceIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})

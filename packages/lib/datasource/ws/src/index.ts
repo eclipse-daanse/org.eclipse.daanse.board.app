@@ -11,16 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  WSStore,
-  type IWSStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { WSStore, type IWSStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('WSStore')
+const factorySymbol = Symbol.for('WSStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(WSStore);
+if (!container.isBound(WSStore)) {
+  container.bind<WSStore>(WSStore).toSelf().inTransientScope()
 }
 
-export { WSStore, IWSStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<WSStore>>(factorySymbol).toFactory(() => {
+    return (config: IWSStoreConfiguration) => {
+      if (!WSStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid WSStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<WSStore>(WSStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { WSStore, IWSStoreConfiguration, factorySymbol }

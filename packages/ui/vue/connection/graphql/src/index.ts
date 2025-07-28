@@ -10,27 +10,23 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { symbol as GraphqlConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.graphql'
+import { factorySymbol as GraphqlConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.graphql'
 
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const connectionRepository = container.get<ConnectionRepository>(identifier)
+const connectionRepository = container.get<ConnectionRepository>(identifier)
 
-  const settingsSymbol = Symbol.for('GraphqlConnectionSettings')
+const settingsSymbol = Symbol.for('GraphqlConnectionSettings')
 
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  connectionRepository.registerConnectionType('graphql', {
-    Connection: GraphqlConnectionIdentifier,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+connectionRepository.registerConnectionType('graphql', {
+  Connection: GraphqlConnectionIdentifier,
+  Settings: settingsSymbol,
+})

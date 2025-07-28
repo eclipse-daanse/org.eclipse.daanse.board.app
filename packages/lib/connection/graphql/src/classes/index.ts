@@ -17,17 +17,23 @@ import {
   IRequestParams,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { createGraphiQLFetcher, type Fetcher } from '@graphiql/toolkit'
+import { injectable } from 'inversify'
 
 export interface IGraphQLConnectionConfiguration extends BaseConnectionConfig {
   url: string
 }
 
+@injectable()
 export class GraphQLConnection extends BaseConnection {
   private url: any
-  public fetcher: Fetcher | null
+  public fetcher: Fetcher | null = null
 
-  constructor(configuration: IGraphQLConnectionConfiguration) {
-    super(configuration)
+  constructor() {
+    super()
+  }
+
+  init(configuration: IGraphQLConnectionConfiguration): void {
+    super.init(configuration)
 
     // this.url = super.initVariable(configuration.url);
     this.url = configuration.url

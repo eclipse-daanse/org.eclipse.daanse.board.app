@@ -15,17 +15,14 @@ import {
   identifier,
   type VariableRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { Container } from 'inversify'
-import { getCurrentInstance, ref, computed, type ComputedRef } from 'vue'
+import { ref, computed, type ComputedRef } from 'vue'
 import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export function useVariableRepository() {
   let variableRepositoryFound = false
   const updateTimestamp = ref(Date.now())
 
-  const instance = getCurrentInstance()
-  const container = instance?.appContext.config.globalProperties
-    .$container as Container
   const connectedVariables = [] as Variable[]
 
   if (!container) {

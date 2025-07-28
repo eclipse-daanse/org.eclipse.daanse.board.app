@@ -8,12 +8,12 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapperFactory } from './classes/Factory'
 
 const identifier = Symbol.for('VariableWrapperFactory')
 
-const init = (container: Container) => {
+if (!container.isBound(identifier)) {
   container
     .bind<VariableWrapperFactory>(identifier)
     .to(VariableWrapperFactory)
@@ -21,7 +21,6 @@ const init = (container: Container) => {
 }
 
 export {
-  init,
   identifier,
   type VariableWrapperFactory
 }

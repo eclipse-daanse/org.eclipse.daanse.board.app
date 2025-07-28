@@ -11,52 +11,42 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  DatasourceFactory,
-  identifier as factoryIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import {
   DatasourceRepository,
   identifier as repositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import {
-  onMounted,
-  watch,
-  onBeforeUnmount,
-  getCurrentInstance,
-  Ref,
-  toRef,
-} from 'vue'
-import { Container } from 'inversify'
+import { onMounted, watch, onBeforeUnmount, Ref } from 'vue'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export function useTemporaryStore(
   type: string,
   settings: Ref<any>,
   tempStore: Ref<any>,
 ) {
-  const instance = getCurrentInstance()
-  const container = instance?.appContext.config.globalProperties
-    .$container as Container
-
+  console.log('Container for useTemporaryStore', container)
   const datasourceRepository =
     container.get<DatasourceRepository>(repositoryIdentifier)
+  console.log('Using datasource repository', datasourceRepository)
   const identifiers = datasourceRepository.getDatasourceIdentifiers(type)
-
-  const datasourceFactory = container.get<DatasourceFactory>(factoryIdentifier)
+  console.log('Identifiers for datasource type', type, identifiers)
 
   onMounted(async () => {
-    tempStore.value = datasourceFactory.createDatasource(
-      identifiers.Store,
-      settings.value.config,
+    console.log(
+      'Creating temporary store for type',
+      type,
+      'with settings',
+      settings.value,
     )
+    const factory = container.get(identifiers.Store) as any
+    tempStore.value = factory(settings.value.config)
   })
 
   const update = () => {
     tempStore.value?.destroy()
+
     console.log('settings changes', settings)
-    tempStore.value = datasourceFactory.createDatasource(
-      identifiers.Store,
-      settings.value.config,
-    )
+
+    const factory = container.get(identifiers.Store) as any
+    tempStore.value = factory(settings.value.config)
   }
 
   watch(

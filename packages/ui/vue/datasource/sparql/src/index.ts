@@ -8,36 +8,27 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol} from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { symbol } from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import Settings from './Settings.vue'
 import Preview from './Preview.vue'
 const previewSymbol = Symbol.for('SparqlPreview')
 const settingsSymbol = Symbol.for('SparqlSettings')
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-
-
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
-  console.log(symbol);
-  datasourceRepository.registerDatasourceType('sparql', {
-    Store: symbol,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-  const identifiers = datasourceRepository.getDatasourceIdentifiers('sparql')
-  console.log(identifiers.Store == symbol);
-  console.log('📦 SparqlStoreUI initialized')
-}
-
-export {
-  init
-}
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
+console.log(symbol)
+datasourceRepository.registerDatasourceType('sparql', {
+  Store: symbol,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})
+const identifiers = datasourceRepository.getDatasourceIdentifiers('sparql')
+console.log(identifiers.Store == symbol)
+console.log('📦 SparqlStoreUI initialized')

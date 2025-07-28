@@ -12,20 +12,16 @@
  **********************************************************************/
 import { type VariableRepository, identifier } from "org.eclipse.daanse.board.app.lib.repository.variable"
 import { COMPUTED_VARIABLE, ComputedVariableSymbol } from 'org.eclipse.daanse.board.app.lib.variables'
-import { Container } from "inversify"
+import { container } from "org.eclipse.daanse.board.app.lib.core"
 import Settings from "./Settings.vue"
 
-const init = (container: Container) => {
-    const variableRepository = container.get<VariableRepository>(identifier)
-    console.log(variableRepository)
-    register(variableRepository)
-}
+const register = () => {
+    const variableRepository = container.get<VariableRepository>(identifier);
 
-const register = (variableRepository: VariableRepository) => {
     variableRepository.registerVariableType(COMPUTED_VARIABLE, {
         Variable: ComputedVariableSymbol,
         Settings: Settings,
     })
 }
 
-export { init }
+register()

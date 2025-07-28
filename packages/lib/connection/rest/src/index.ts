@@ -11,13 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestConnection, type IRestConnectionConfig } from './classes'
 
-const symbol = Symbol.for('RestConnection')
+const factorySymbol = Symbol.for('RestConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RestConnection)
+if (!container.isBound(RestConnection)) {
+  container.bind(RestConnection).toSelf().inTransientScope()
 }
 
-export { RestConnection, IRestConnectionConfig, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<RestConnection>>(factorySymbol).toFactory(() => {
+    return config => {
+      if (!RestConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid RestConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<RestConnection>(RestConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export { RestConnection, IRestConnectionConfig, factorySymbol }

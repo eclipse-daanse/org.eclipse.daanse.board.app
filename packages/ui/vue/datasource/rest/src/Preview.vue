@@ -14,6 +14,7 @@ Contributors:
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { ref, watch, toRef, shallowRef } from 'vue';
 import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const props = defineProps<{ dataSource: any }>();
 

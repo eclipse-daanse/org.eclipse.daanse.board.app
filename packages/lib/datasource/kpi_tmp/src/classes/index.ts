@@ -11,12 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import {
+  BaseDatasource,
+  IBaseConnectionConfiguration,
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
   ConnectionRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { Container } from 'inversify'
+import { inject } from 'inversify'
 
 export interface IKpiStoreConfiguration {
   connection: string
@@ -29,28 +32,22 @@ export interface IKpiStoreConfiguration {
 
 export class KpiStore extends BaseDatasource {
   private connection: any
-  private kpis: any[]
+  private kpis: any[] = []
   // private computedUrl: ComputedVariable;
 
-  constructor(
-    configuration: IKpiStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: IKpiStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
     this.kpis = configuration.kpis
   }
 
   async getData(type: string): Promise<any> {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as any
 
@@ -66,14 +63,8 @@ export class KpiStore extends BaseDatasource {
   }
 
   async getOriginalData() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as any
 
@@ -88,14 +79,9 @@ export class KpiStore extends BaseDatasource {
 
   private async getKpiData(kpis: any[]): Promise<any> {
     let response = null
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
-      throw new Error('ConnectionRepository is not provided to Store Classes')
-    }
+
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as any
 

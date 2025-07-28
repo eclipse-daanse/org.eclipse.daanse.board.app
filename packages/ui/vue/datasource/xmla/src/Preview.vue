@@ -15,9 +15,9 @@ Contributors:
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { ref, watch, toRef, shallowRef } from 'vue';
-import { Container } from 'inversify';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 const props = defineProps<{ dataSource: any }>();
 console.log(MetadataTree)
@@ -61,7 +61,6 @@ const updateData = async () => {
 
 watch(tempStore, async () => {
   console.log('tempStore changed', tempStore.value);
-  const container = tempStore.value.container as Container;
   const connectionId = tempStore.value.connection;
 
   console.log('container', container);
@@ -123,23 +122,19 @@ const onCollapse = async (e: any) => {
         <template #tabs>
           <div class="flex justify-between w-full">
             <div>
-              <va-tab v-for="tab in tabs" :key="tab"
-                :disabled="tab === 'Visual Editor'
+              <va-tab v-for="tab in tabs" :key="tab" :disabled="tab === 'Visual Editor'
                 && !props.dataSource.config.useVisualEditor">
                 {{ tab }}
               </va-tab>
             </div>
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
-            <VaCheckbox v-model="props.dataSource.config.useVisualEditor"
-              class="mt-2" label="Use query designer"
-            />
+            <VaCheckbox v-model="props.dataSource.config.useVisualEditor" class="mt-2" label="Use query designer" />
           </div>
         </template>
         <template v-if="currentTab === 0 && connection">
           <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
-          <MonacoEditor v-model="query" class="monaco-container"
-            language="mdx" :supported-languages="['mdx']" />
+          <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']" />
         </template>
         <template v-if="currentTab === 1">
           <div class="w-full h-full">
@@ -154,12 +149,9 @@ const onCollapse = async (e: any) => {
         <div class="w-full h-full">
           <!-- @onExpand="onExpand"
           @onCollapse="onCollapse" -->
-          <PivotTable v-if="data" v-model="data"
-            @onExpand="onExpand"
-            @onCollapse="onCollapse"
+          <PivotTable v-if="data" v-model="data" @onExpand="onExpand" @onCollapse="onCollapse"
             :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
-            :columnsExpandedMembers="data.tableState.columnsExpandedMembers"
-          />
+            :columnsExpandedMembers="data.tableState.columnsExpandedMembers" />
         </div>
       </div>
     </div>

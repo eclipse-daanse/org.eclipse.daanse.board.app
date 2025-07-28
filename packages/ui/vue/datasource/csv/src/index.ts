@@ -10,31 +10,26 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol as CSVDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.csv'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { factorySymbol as CSVDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.csv'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('CsvPreview')
-  const settingsSymbol = Symbol.for('CsvSettings')
+const previewSymbol = Symbol.for('CsvPreview')
+const settingsSymbol = Symbol.for('CsvSettings')
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  datasourceRepository.registerDatasourceType('csv', {
-    Store: CSVDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+datasourceRepository.registerDatasourceType('csv', {
+  Store: CSVDatasourceIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})

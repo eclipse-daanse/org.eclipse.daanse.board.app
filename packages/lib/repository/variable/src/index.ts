@@ -11,17 +11,13 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
 import { VariableRepository, type VariableConfig } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const identifier = Symbol.for('VariableRepository')
 
-const init = (container: Container) => {
-  const variableRepository = new VariableRepository(container)
-
-  container
-    .bind<VariableRepository>(identifier)
-    .toConstantValue(variableRepository)
+if (!container.isBound(identifier)) {
+  container.bind<VariableRepository>(identifier).to(VariableRepository).inSingletonScope()
 }
 
-export { VariableRepository, type VariableConfig, init, identifier }
+export { VariableRepository, type VariableConfig, identifier }

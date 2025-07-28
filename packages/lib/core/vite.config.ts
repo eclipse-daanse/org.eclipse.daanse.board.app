@@ -18,15 +18,21 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'lib.core',
-      fileName: 'lib.core'
+      fileName: 'lib.core',
     },
     rollupOptions: {
-      external: []
-    }
+      external: ['inversify', 'reflect-metadata'],
+      output: {
+        globals: {
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({
-      insertTypesEntry: true
-    })
-  ]
+      insertTypesEntry: true,
+    }),
+  ],
 })

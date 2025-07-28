@@ -8,32 +8,26 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from "inversify";
-import { symbolForOgcStaStore } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
+import { factorySymbol } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import MapPreview from './MapPreview.vue'
 import OGCSTAStoreSettings from './OGCSTAStoreSettings.vue'
 
 const symbolForOgcStaPreview = Symbol.for('OgcStaPreview')
 const symbolForOgcStaSettings = Symbol.for('OgcStaSettings')
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
-  container.bind(symbolForOgcStaPreview).toConstantValue(MapPreview)
-  container.bind(symbolForOgcStaSettings).toConstantValue(OGCSTAStoreSettings)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
+container.bind(symbolForOgcStaPreview).toConstantValue(MapPreview)
+container.bind(symbolForOgcStaSettings).toConstantValue(OGCSTAStoreSettings)
 
-  datasourceRepository.registerDatasourceType('ogcsta', {
-    Store: symbolForOgcStaStore,
-    Preview: symbolForOgcStaPreview,
-    Settings: symbolForOgcStaSettings,
-  })
-}
+datasourceRepository.registerDatasourceType('ogcsta', {
+  Store: factorySymbol,
+  Preview: symbolForOgcStaPreview,
+  Settings: symbolForOgcStaSettings,
+})
 
-export {
-  init,
-  symbolForOgcStaPreview,
-  symbolForOgcStaSettings
-}
+export { symbolForOgcStaPreview, symbolForOgcStaSettings }

@@ -11,16 +11,36 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  RestStore,
-  type IRestStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { RestStore, type IRestStoreConfiguration } from './classes'
 
-const symbol = Symbol.for('RestStore')
+const factorySymbol = Symbol.for('RestStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RestStore);
+if (!container.isBound(RestStore)) {
+  container.bind(RestStore).toSelf().inTransientScope()
 }
 
-export { RestStore, IRestStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<RestStore>>(factorySymbol).toFactory(() => {
+    return config => {
+      if (!RestStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid RestStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<RestStore>(RestStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+// const symbol = Symbol.for('RestStore')
+
+// const init = (container: Container) => {
+//   container.bind(symbol).toConstantValue(RestStore);
+// }
+
+export { type RestStore, IRestStoreConfiguration, factorySymbol }

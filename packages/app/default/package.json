@@ -44,7 +44,6 @@
     "org.eclipse.daanse.board.app.lib.datasource.csv": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.sql_xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.kpi_tmp": "^0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.factory.connection": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.factory.variable": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.i18next": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.module1": "^0.0.1-next.1",

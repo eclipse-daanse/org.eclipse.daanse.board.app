@@ -11,16 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  RssStore,
-  type IRssStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { RssStore, type IRssStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('RssStore')
+const factorySymbol = Symbol.for('RssStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(RssStore);
+if (!container.isBound(RssStore)) {
+  container.bind<RssStore>(RssStore).toSelf().inTransientScope()
 }
 
-export { RssStore, IRssStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<RssStore>>(factorySymbol).toFactory(() => {
+    return (config: IRssStoreConfiguration) => {
+      if (!RssStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid RssStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<RssStore>(RssStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { RssStore, IRssStoreConfiguration, factorySymbol }

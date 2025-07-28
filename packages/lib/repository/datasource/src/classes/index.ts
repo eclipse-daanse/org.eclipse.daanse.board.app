@@ -10,12 +10,8 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-
-import {
-  DatasourceFactory,
-  identifier as DatasourceFactoryIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { injectable } from 'inversify'
 
 export interface IDataRetrieveable {
   getData(type: string): Promise<any>
@@ -54,11 +50,12 @@ export interface StoreConstructor<T> {
 
 const datasources = new Map<string, IDataRetrieveable>()
 
+@injectable()
 export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
-  private datasourcesByType: Record<string,string>= {};
+  private datasourcesByType: Record<string, string> = {}
 
-  constructor(private container: Container) {}
+  constructor() {}
 
   removeDatasource(datasourceId: string): void {
     if (datasources.has(datasourceId)) {
@@ -80,8 +77,8 @@ export class DatasourceRepository implements IDatasourceRepository {
   registerDatasourceType(name: string, identifiers: StoreIdentifiers): void {
     this.availableDatasources[name] = identifiers
   }
-  getDataSourceTypes(){
-    return Object.keys(this.availableDatasources);
+  getDataSourceTypes() {
+    return Object.keys(this.availableDatasources)
   }
 
   get registeredDatasources(): String[] {
@@ -95,32 +92,27 @@ export class DatasourceRepository implements IDatasourceRepository {
     const identifiers = this.availableDatasources[type]
 
     if (identifiers) {
-      const datasourceFactory = this.container.get<DatasourceFactory>(DatasourceFactoryIdentifier);
-      const datasource =
-        datasourceFactory.createDatasource<IDataRetrieveable>(
-          identifiers.Store,
-          config,
-        )
-      datasources.set(datasourceId, datasource);
-      this.datasourcesByType[datasourceId] = type;
+      const datasourceFactory = container.get(identifiers.Store) as any
+      const datasource = datasourceFactory(config)
+      datasources.set(datasourceId, datasource)
+      this.datasourcesByType[datasourceId] = type
     }
   }
-  getDatasourceType(datasourceId: string){
-    return this.datasourcesByType[datasourceId];
+  getDatasourceType(datasourceId: string) {
+    return this.datasourcesByType[datasourceId]
   }
-  getDatasourceId(dataSource:IDataRetrieveable){
-    let key:string|undefined;
-    datasources.forEach((aDataSource,akey)=>{
-      if(dataSource === aDataSource){
-        key = akey;
+  getDatasourceId(dataSource: IDataRetrieveable) {
+    let key: string | undefined
+    datasources.forEach((aDataSource, akey) => {
+      if (dataSource === aDataSource) {
+        key = akey
       }
     })
-    return key;
+    return key
   }
-  getDatasourceTypeFromDatasource(dataSource:IDataRetrieveable){
-    const id = this.getDatasourceId(dataSource);
-    if(!id) return undefined;
+  getDatasourceTypeFromDatasource(dataSource: IDataRetrieveable) {
+    const id = this.getDatasourceId(dataSource)
+    if (!id) return undefined
     return this.getDatasourceType(id)
-
   }
 }

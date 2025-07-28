@@ -10,19 +10,15 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-
-import {
-  ConnectionFactory,
-  identifier as ConnectionFactoryIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.factory.connection'
 import {
   type IRequestParams,
   type BaseConnectionConfig,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
-import { Container } from 'inversify'
+import { injectable } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface IConnection {
-  fetch(config: IRequestParams,options?:any): Promise<any>
+  fetch(config: IRequestParams, options?: any): Promise<any>
   setConfig(config: any): void
 }
 
@@ -42,11 +38,10 @@ export interface ConnectionIdentifiers {
 
 const connections = new Map<string, IConnection | PubSubConnection>()
 
+@injectable()
 export class ConnectionRepository {
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
-  private connectionsByType: Record<string,string>= {};
-
-  constructor(private container: Container) {}
+  private connectionsByType: Record<string, string> = {}
 
   removeConnection(connectionId: string): void {
     if (connections.has(connectionId)) {
@@ -76,26 +71,25 @@ export class ConnectionRepository {
   getConnectionIdentifiers(type: string): ConnectionIdentifiers {
     return this.availableConnections[type]
   }
-  getRegisteredTypes(){
-    return Object.keys(this.availableConnections);
+  getRegisteredTypes() {
+    return Object.keys(this.availableConnections)
   }
-  getConnectionType(connectionId: string){
-    return this.connectionsByType[connectionId];
+  getConnectionType(connectionId: string) {
+    return this.connectionsByType[connectionId]
   }
-  getConnectionId(connection:IConnection|PubSubConnection){
-    let key:string|undefined;
-    connections.forEach((aconnection,akey)=>{
-      if(connection === aconnection){
-        key = akey;
+  getConnectionId(connection: IConnection | PubSubConnection) {
+    let key: string | undefined
+    connections.forEach((aconnection, akey) => {
+      if (connection === aconnection) {
+        key = akey
       }
     })
-    return key;
+    return key
   }
-  getConnectionTypeFromConnection(connection:IConnection|PubSubConnection){
-    const id = this.getConnectionId(connection);
-    if(!id) return undefined;
+  getConnectionTypeFromConnection(connection: IConnection | PubSubConnection) {
+    const id = this.getConnectionId(connection)
+    if (!id) return undefined
     return this.getConnectionType(id)
-
   }
   registerConnection(
     connectionId: string,
@@ -105,16 +99,10 @@ export class ConnectionRepository {
     const identifiers = this.availableConnections[type]
 
     if (identifiers) {
-      const connectionFactory = this.container.get<ConnectionFactory>(
-        ConnectionFactoryIdentifier,
-      )
-
-      const connection = connectionFactory.createConnection<
-        IConnection | PubSubConnection
-      >(identifiers.Connection, connectionConfig)
-      console.log(connection)
-      connections.set(connectionId, connection);
-      this.connectionsByType[connectionId]=type;
+      const connectionFactory = container.get(identifiers.Connection) as any
+      const connection = connectionFactory(connectionConfig)
+      connections.set(connectionId, connection)
+      this.connectionsByType[connectionId] = type
     }
   }
 }

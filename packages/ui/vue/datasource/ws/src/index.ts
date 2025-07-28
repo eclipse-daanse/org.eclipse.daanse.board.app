@@ -10,31 +10,26 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol as WSDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.websocket'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { factorySymbol as WSDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.websocket'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('WsPreview')
-  const settingsSymbol = Symbol.for('WsSettings')
+const previewSymbol = Symbol.for('WsPreview')
+const settingsSymbol = Symbol.for('WsSettings')
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  datasourceRepository.registerDatasourceType('ws', {
-    Store: WSDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+datasourceRepository.registerDatasourceType('ws', {
+  Store: WSDatasourceIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})

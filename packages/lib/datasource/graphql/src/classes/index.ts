@@ -13,7 +13,7 @@
 
 // import { extractDataByPath } from "@/utils/helpers";
 
-import { injectable, inject, Container } from 'inversify'
+import { injectable, inject } from 'inversify'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
@@ -32,15 +32,16 @@ export interface IGraphQLStoreConfiguration
   variables?: any
 }
 
+@injectable()
 export class GraphQLStore extends BaseDatasource {
   private connection: any
-  private query: string
+  private query: string = ''
 
-  constructor(
-    configuration: IGraphQLStoreConfiguration,
-    @inject(identifiers.CONTAINER) private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
+
+  init(configuration: IGraphQLStoreConfiguration) {
+    super.init(configuration)
 
     this.connection = configuration.connection
     this.query = configuration.query
@@ -51,13 +52,10 @@ export class GraphQLStore extends BaseDatasource {
   }
 
   get fetcher() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
-    const connection = connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as any
     return connection.fetcher

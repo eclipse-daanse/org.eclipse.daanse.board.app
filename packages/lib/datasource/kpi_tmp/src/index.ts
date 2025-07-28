@@ -11,16 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  KpiStore,
-  type IKpiStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { KpiStore, type IKpiStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('KpiStore')
+const factorySymbol = Symbol.for('KpiStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(KpiStore);
+if (!container.isBound(KpiStore)) {
+  container.bind<KpiStore>(KpiStore).toSelf().inTransientScope()
 }
 
-export { KpiStore, IKpiStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<KpiStore>>(factorySymbol).toFactory(() => {
+    return (config: IKpiStoreConfiguration) => {
+      if (!KpiStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid KpiStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<KpiStore>(KpiStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { KpiStore, IKpiStoreConfiguration, factorySymbol }

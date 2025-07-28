@@ -12,27 +12,20 @@
  **********************************************************************/
 
 import { Variable } from './Variable'
-import { VariableStorage } from '../storage/VariableStorage'
-import { type TinyEmitter } from 'tiny-emitter'
 import { type IVariableConfig } from '..'
-import { Container } from 'inversify'
-
+import { injectFromBase, Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const symbol = Symbol.for('TimeVariable')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(TimeVariable);
-}
-
+@injectFromBase({
+  extendProperties: true,
+})
 class TimeVariable extends Variable {
   public type = 'time'
 
-  constructor(
-    name: string,
-    container: Container,
-    config: IVariableConfig,
-  ) {
-    super(name, container, config)
+  init(name: string, config: IVariableConfig) {
+    super.init(name, config)
     super.value = Date.now()
 
     super.onInterval = () => {
@@ -47,4 +40,18 @@ class TimeVariable extends Variable {
   set value(value) {}
 }
 
-export { TimeVariable, symbol, init }
+if (!container.isBound(TimeVariable)) {
+  container.bind<TimeVariable>(TimeVariable).toSelf().inTransientScope()
+}
+
+if (!container.isBound(symbol)) {
+  container.bind<Factory<TimeVariable>>(symbol).toFactory(() => {
+    return (name: string, config: IVariableConfig) => {
+      const variable = container.get<TimeVariable>(TimeVariable)
+      variable.init(name, config as IVariableConfig)
+      return variable
+    }
+  })
+}
+
+export { TimeVariable, symbol }

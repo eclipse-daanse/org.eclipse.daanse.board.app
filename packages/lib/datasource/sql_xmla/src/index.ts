@@ -11,16 +11,30 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
-import {
-  SqlXmlaStore,
-  type ISqlXmlaStoreConfiguration
-} from './classes'
+import { Factory } from 'inversify'
+import { SqlXmlaStore, type ISqlXmlaStoreConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('SqlXmlaStore')
+const factorySymbol = Symbol.for('SqlXmlaStoreFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(SqlXmlaStore);
+if (!container.isBound(SqlXmlaStore)) {
+  container.bind<SqlXmlaStore>(SqlXmlaStore).toSelf().inTransientScope()
 }
 
-export { SqlXmlaStore, ISqlXmlaStoreConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<SqlXmlaStore>>(factorySymbol).toFactory(() => {
+    return config => {
+      if (!SqlXmlaStore.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid SqlXmlaStore configuration. Please provide a valid configuration.',
+        )
+      }
+      const store = container.get<SqlXmlaStore>(SqlXmlaStore)
+      store.init(config)
+
+      return store
+    }
+  })
+}
+
+export { SqlXmlaStore, ISqlXmlaStoreConfiguration, factorySymbol }

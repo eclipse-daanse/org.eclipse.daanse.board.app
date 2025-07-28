@@ -10,31 +10,26 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-
-import { symbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { factorySymbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('KpiPreview')
-  const settingsSymbol = Symbol.for('KpiSettings')
+const previewSymbol = Symbol.for('KpiPreview')
+const settingsSymbol = Symbol.for('KpiSettings')
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  datasourceRepository.registerDatasourceType('KPI', {
-    Store: KpiTmpDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+datasourceRepository.registerDatasourceType('KPI', {
+  Store: KpiTmpDatasourceIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})

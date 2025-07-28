@@ -11,13 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
 import { MQTTConnection, type IMQTTConnectionConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { Factory } from 'inversify'
 
-const symbol = Symbol.for('MQTTConnection')
+const factorySymbol = Symbol.for('MQTTConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(MQTTConnection)
+if (!container.isBound(MQTTConnection)) {
+  container.bind<MQTTConnection>(MQTTConnection).toSelf().inTransientScope()
 }
 
-export { MQTTConnection, IMQTTConnectionConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<MQTTConnection>>(factorySymbol).toFactory(() => {
+    return (config: IMQTTConnectionConfiguration) => {
+      if (!MQTTConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid MQTTConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<MQTTConnection>(MQTTConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export { MQTTConnection, IMQTTConnectionConfiguration, factorySymbol }

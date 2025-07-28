@@ -12,8 +12,11 @@
  **********************************************************************/
 
 // import { extractDataByPath } from "@/utils/helpers";
-import { Container } from 'inversify'
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { inject, injectable } from 'inversify'
+import {
+  BaseDatasource,
+  IBaseConnectionConfiguration,
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import {
   identifier,
   type IConnection,
@@ -22,28 +25,28 @@ import {
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
-export interface IRestStoreConfiguration extends IBaseConnectionConfiguration{
+export interface IRestStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl: string
   connection: string
   selectedJSONValue?: string
   pollingInterval?: number
 }
 
+@injectable()
 export class RestStore extends BaseDatasource {
   private connection: any
-  private resourceUrl: ComputedStoreParameter;
+  private resourceUrl: ComputedStoreParameter | null = null
   private selectedJSONValue?: string
 
-  constructor(
-    configuration: IRestStoreConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container)
+  @inject(identifier)
+  private connectionRepository!: ConnectionRepository
 
-    console.log(container)
+  init(configuration: IRestStoreConfiguration) {
+    super.init(configuration)
+
     this.connection = configuration.connection
 
-    this.resourceUrl = super.initVariable(configuration.resourceUrl);
+    this.resourceUrl = super.initVariable(configuration.resourceUrl)
 
     this.selectedJSONValue = configuration.selectedJSONValue
     this.pollingInterval = configuration.pollingInterval ?? 5000
@@ -55,24 +58,21 @@ export class RestStore extends BaseDatasource {
   //   async getData<T extends keyof DataMap>(type: T): Promise<DataMap[T]> {
   async getData(type: string): Promise<any> {
     let response = null
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl.value })
+      const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
       const data = await req.json()
 
       response = data
 
       // TODO: Restore after creating utils
       if (this.selectedJSONValue) {
-        response = helpers.extractDataByPath(data, this.selectedJSONValue);
+        response = helpers.extractDataByPath(data, this.selectedJSONValue)
       }
       if (type === 'DataTable') {
         response = this.parseToDataTable(response)
@@ -90,17 +90,17 @@ export class RestStore extends BaseDatasource {
   }
 
   async getOriginalData() {
-    const connectionRepository = this.container.get(
-      identifier,
-    ) as ConnectionRepository
-    if (!connectionRepository) {
+    // const connectionRepository = this.container.get(
+    //   identifier,
+    // ) as ConnectionRepository
+    if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
     try {
-      const connection = connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as IConnection
-      const req = await connection.fetch({ url: this.resourceUrl.value })
+      const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
       const data = await req.json()
       return data
     } catch (e: any) {

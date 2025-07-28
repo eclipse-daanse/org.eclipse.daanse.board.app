@@ -11,13 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
 import { WSConnection, type IWSConnectionConfiguration } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const symbol = Symbol.for('WSConnection')
+const factorySymbol = Symbol.for('WSConnectionFactory')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(WSConnection)
+if (!container.isBound(WSConnection)) {
+  container.bind<WSConnection>(WSConnection).toSelf().inTransientScope()
 }
 
-export { WSConnection, IWSConnectionConfiguration, symbol, init }
+if (!container.isBound(factorySymbol)) {
+  container.bind<Factory<WSConnection>>(factorySymbol).toFactory(() => {
+    return (config: IWSConnectionConfiguration) => {
+      if (!WSConnection.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid WSConnection configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const connection = container.get<WSConnection>(WSConnection)
+      connection.init(config)
+
+      return connection
+    }
+  })
+}
+
+export { WSConnection, IWSConnectionConfiguration, factorySymbol }
