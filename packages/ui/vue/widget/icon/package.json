@@ -37,7 +37,7 @@
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
     "vite-plugin-dts": "4.5.4",
-    "vue-tsc": "^2.2.8",
+    "vue-tsc": "^3.0.4",
     "vite-plugin-libcss": "^1.1.1"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",

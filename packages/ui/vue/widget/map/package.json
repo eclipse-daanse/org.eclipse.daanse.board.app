@@ -31,7 +31,7 @@
     "typescript": "^5.8.2",
 
     "vite-plugin-dts": "4.5.4",
-    "vue-tsc": "^2.2.8",
+    "vue-tsc": "^3.0.4",
     "vite-plugin-libcss": "^1.1.1"
   },
   "peerDependencies": {
