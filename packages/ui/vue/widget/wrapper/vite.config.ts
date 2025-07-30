@@ -14,13 +14,7 @@ import dts from 'vite-plugin-dts'
 import vue from '@vitejs/plugin-vue'
 import libCss from 'vite-plugin-libcss'
 
-const rootPath = resolve(__dirname, '../../../../../../') // ← ggf. anpassen
 export default defineConfig({
-  resolve: {
-    alias: {
-      vue: resolve(rootPath, 'node_modules/vue') // ⬅️ Vue nur aus dem Root laden
-    }
-  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -36,12 +30,21 @@ export default defineConfig({
       fileName: 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
     },
     rollupOptions: {
-      external: ['vue'],
+      external: [
+        'vue',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
+          vue: 'Vue',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
     }
   },
   plugins: [

@@ -8,14 +8,9 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
 import {useConnectionsStore,type ConnectionDTO} from './store/ConnectionsPinia'
-const init = (container: Container) => {
-
-}
 
 export {
-  init,
   useConnectionsStore,
   type ConnectionDTO
 }

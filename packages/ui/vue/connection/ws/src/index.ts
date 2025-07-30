@@ -10,27 +10,23 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
 import {
   ConnectionRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 import { factorySymbol as WSConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.websocket'
 
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const connectionRepository = container.get<ConnectionRepository>(identifier)
+const connectionRepository = container.get<ConnectionRepository>(identifier)
 
-  const settingsSymbol = Symbol.for('WsConnectionSettings')
+const settingsSymbol = Symbol.for('WsConnectionSettings')
 
-  container.bind(settingsSymbol).toConstantValue(Settings)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-  connectionRepository.registerConnectionType('ws', {
-    Connection: WSConnectionIdentifier,
-    Settings: settingsSymbol,
-  })
-}
-
-export { init }
+connectionRepository.registerConnectionType('ws', {
+  Connection: WSConnectionIdentifier,
+  Settings: settingsSymbol,
+})

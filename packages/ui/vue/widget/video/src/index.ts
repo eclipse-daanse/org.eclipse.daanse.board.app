@@ -11,17 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import VideoVidget from './VideoWidget.vue'
+import VideoWidget from './VideoWidget.vue'
 import VideoWidgetSettings from './VideoWidgetSettings.vue'
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/video.svg'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface ObjectFitSetting {
   fit: string
@@ -32,9 +26,10 @@ interface IVideoSettings {
   videoUrl: string
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('VideoWidget', {
-    component: VideoVidget,
+const register = () => {
+  console.log('registering Video widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('VideoWidget', {
+    component: VideoWidget,
     settingsComponent: VideoWidgetSettings,
     supportedDSTypes: [],
     icon: Icon,
@@ -42,6 +37,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { VideoVidget, VideoWidgetSettings, init }
+register();
 
+export { VideoWidget, VideoWidgetSettings }
 export type { IVideoSettings }

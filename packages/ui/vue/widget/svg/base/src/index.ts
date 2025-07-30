@@ -15,13 +15,7 @@ import SvgWidget from './SvgWidget.vue'
 import SvgWidgetSettings from './SvgWidgetSettings.vue'
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/svg_icon.svg'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface ISvgSettings {
   src: string
@@ -38,8 +32,9 @@ interface ConfigItem {
   strokeWidth: string
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('SVGWidget', {
+const register = () => {
+  console.log('registering SVG widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('SVGWidget', {
     component: SvgWidget,
     settingsComponent: SvgWidgetSettings,
     supportedDSTypes: [],
@@ -48,6 +43,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { SvgWidget, SvgWidgetSettings, init }
+register();
 
+export { SvgWidget, SvgWidgetSettings }
 export type { ISvgSettings, Config, ConfigItem }

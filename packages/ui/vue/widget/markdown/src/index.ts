@@ -15,21 +15,15 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/text.svg'
 import MarkdownWidget from './MarkdownWidget.vue'
 import MarkdownWidgetSettings from './MarkdownWidgetSettings.vue'
-import { Container } from 'inversify'
-
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IMarkdownWidgetSettings {
   value: string;
 }
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('MarkdownWidget', {
+const register = () => {
+  console.log('registering Markdown widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('MarkdownWidget', {
     component: MarkdownWidget,
     settingsComponent: MarkdownWidgetSettings,
     supportedDSTypes: [],
@@ -38,5 +32,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { MarkdownWidget, MarkdownWidgetSettings, init }
+register();
+
+export { MarkdownWidget, MarkdownWidgetSettings }
 export type { IMarkdownWidgetSettings }

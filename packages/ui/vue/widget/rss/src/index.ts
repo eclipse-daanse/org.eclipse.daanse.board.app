@@ -15,16 +15,11 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/sample.svg'
 import RssWidget from './RssWidget.vue'
 import RssWidgetSettings from './RssWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('RssWidget', {
+const register = () => {
+  console.log('registering RSS widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('RssWidget', {
     component: RssWidget,
     settingsComponent: RssWidgetSettings,
     supportedDSTypes: [],
@@ -33,4 +28,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { RssWidget, RssWidgetSettings, init }
+register();
+
+export { RssWidget, RssWidgetSettings }

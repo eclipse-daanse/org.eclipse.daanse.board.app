@@ -8,17 +8,11 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
 import { useDataSourcesStore ,type DataSourceDTO} from './store/DatasourcePinia'
-const init = (container: Container) => {
-
-}
-
 
 // Diese Zeile im globalen Kontext aufrufen, z. B. einmalig in main.ts
 
 export {
-  init,
   useDataSourcesStore,
   type DataSourceDTO
 }

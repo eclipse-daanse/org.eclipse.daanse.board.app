@@ -15,14 +15,8 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/text.svg'
 import TextWidget from './TextWidget.vue'
 import TextWidgetSettings from './TextWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
 
 interface ITextSettings {
   text: VariableWrapper<string>
@@ -35,8 +29,9 @@ interface ITextSettings {
   verticalAlign: VariableWrapper<string>
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('TextWidget', {
+const register = () => {
+  console.log('registering Text widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('TextWidget', {
     component: TextWidget,
     settingsComponent: TextWidgetSettings,
     supportedDSTypes: [],
@@ -45,6 +40,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { TextWidget, TextWidgetSettings, init }
+register();
 
+export { TextWidget, TextWidgetSettings }
 export type { ITextSettings }

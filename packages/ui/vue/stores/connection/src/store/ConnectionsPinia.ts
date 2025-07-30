@@ -10,9 +10,9 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   identifier,
@@ -30,8 +30,6 @@ export interface ConnectionDTO {
 }
 
 export const useConnectionsStore = defineStore('connections', () => {
-  const instance = getCurrentInstance()
-  const container = instance?.appContext.config.globalProperties.$container as Container
 
   const connections = ref([
     {

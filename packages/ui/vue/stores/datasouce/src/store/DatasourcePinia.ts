@@ -10,13 +10,13 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Container } from 'inversify'
 import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface DataSourceDTO {
   uid: string
@@ -31,9 +31,6 @@ export interface DataSourceDTO {
 }
 
 export const useDataSourcesStore = defineStore('datasource', () => {
-  const instance = getCurrentInstance()
-  const container = instance?.appContext.config.globalProperties.$container as Container
-
   const dataSources = ref([
     {
       uid: 'test_ds',

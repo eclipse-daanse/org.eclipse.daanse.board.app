@@ -15,16 +15,11 @@ import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.r
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
 
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('ChartWidget', {
+const register = () => {
+  container.get<WidgetRepository>(identifier).registerWidget('ChartWidget', {
     component: ChartWidget,
     settingsComponent: ChartWidgetSettings,
     supportedDSTypes: [],
@@ -33,4 +28,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { ChartWidget, ChartWidgetSettings, init }
+register();
+
+export { ChartWidget, ChartWidgetSettings }

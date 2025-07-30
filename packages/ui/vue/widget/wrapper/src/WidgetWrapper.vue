@@ -17,22 +17,20 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { computed, getCurrentInstance } from 'vue'
+import { computed } from 'vue'
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   WidgetRepository,
-  init as initWidgetRepo,
   identifier as WidgetIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { Container } from 'inversify'
+
 
 const { widget } =  defineProps<{ widget: any; editEnabled: boolean }>();
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
-const instance = getCurrentInstance()
-const container = instance?.appContext.config.globalProperties
-  .$container as Container
 const registeredWidgets = container.get<WidgetRepository>(WidgetIdentifier)
+console.log('registeredWidgets', container);
 
 const isWidgetRegistered = computed(() => {
   return registeredWidgets.getWidget(widget.type)

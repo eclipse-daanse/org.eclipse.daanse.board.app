@@ -15,23 +15,17 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/text.svg'
 import MermaidWidget from './MermaidWidget.vue'
 import MermaidWidgetSettings from './MermaidWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-
 interface IMermaidWidgetSettings {
-  theme: VariableWrapper<string>;
-  value: VariableComplexStringWrapper;
+  theme: VariableWrapper<string>
+  value: VariableComplexStringWrapper
 }
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('MermaidWidget', {
+const register = () => {
+  console.log('registering Mermaid widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('MermaidWidget', {
     component: MermaidWidget,
     settingsComponent: MermaidWidgetSettings,
     supportedDSTypes: [],
@@ -40,5 +34,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { MermaidWidget, MermaidWidgetSettings, init }
+register();
+
+export { MermaidWidget, MermaidWidgetSettings }
 export type { IMermaidWidgetSettings }

@@ -11,15 +11,18 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
 import { WidgetRepository, type WidgetConfig } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 const identifier = Symbol.for('WidgetRepository')
-const init = (container: Container) => {
+
+console.log('Refistering WidgetRepository', container)
+if (!container.isBound(identifier)) {
   container
     .bind<WidgetRepository>(identifier)
     .to(WidgetRepository)
     .inSingletonScope()
 }
 
-export { WidgetRepository, type WidgetConfig, init, identifier }
+
+export { WidgetRepository, type WidgetConfig, identifier }

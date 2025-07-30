@@ -15,13 +15,7 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/text.svg'
 import CodeWidget from './CodeWidget.vue'
 import CodeWidgetSettings from './CodeWidgetSettings.vue'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface ICodeSettings {
   code: string;
@@ -29,8 +23,8 @@ interface ICodeSettings {
   language: string;
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('CodeWidget', {
+const register = () => {
+  container.get<WidgetRepository>(identifier).registerWidget('CodeWidget', {
     component: CodeWidget,
     settingsComponent: CodeWidgetSettings,
     supportedDSTypes: [],
@@ -39,6 +33,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { CodeWidget, CodeWidgetSettings, init }
+register();
 
-export type { ICodeSettings }
+export { CodeWidget, CodeWidgetSettings, type ICodeSettings }

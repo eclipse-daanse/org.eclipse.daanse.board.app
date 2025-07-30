@@ -15,16 +15,13 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
 import SampleWidgetSettings from './SampleWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
 
-  register(widgetRepository);
-}
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('SampleWidget', {
+const register = () => {
+  console.log('registering sample', container)
+  container.get<WidgetRepository>(identifier).registerWidget('SampleWidget', {
     component: SampleWidget,
     settingsComponent: SampleWidgetSettings,
     supportedDSTypes: ['csv'],
@@ -33,4 +30,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { SampleWidget, SampleWidgetSettings, init }
+register();
+
+export { SampleWidget, SampleWidgetSettings }

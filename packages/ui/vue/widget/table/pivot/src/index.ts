@@ -15,24 +15,18 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IPivotTable {
   rows: any[][]
   columns: any[][]
   cells: any[][]
-
   tableState: any
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('PivotTableWidget', {
+const register = () => {
+  console.log('registering PivotTable widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('PivotTableWidget', {
     component: PivotTableWidget,
     settingsComponent: PivotTableWidgetSettings,
     supportedDSTypes: [],
@@ -41,5 +35,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { PivotTableWidget, PivotTableWidgetSettings, init }
+register();
+
+export { PivotTableWidget, PivotTableWidgetSettings }
 export type { IPivotTable }

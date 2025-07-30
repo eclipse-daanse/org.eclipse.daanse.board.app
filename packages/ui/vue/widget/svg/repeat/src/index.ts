@@ -15,13 +15,7 @@ import RepeatableSvgWidget from './RepeatableSvgWidget.vue'
 import RepeatableSvgWidgetSettings from './RepeatableSvgWidgetSettings.vue'
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/repeatable_svg.svg'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IRepeatableSVGSettings {
   src: string
@@ -37,8 +31,9 @@ interface IRepeatableSVGSettings {
   progress: string
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('RepeatableSVGWidget', {
+const register = () => {
+  console.log('registering RepeatableSVG widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('RepeatableSVGWidget', {
     component: RepeatableSvgWidget,
     settingsComponent: RepeatableSvgWidgetSettings,
     supportedDSTypes: [],
@@ -47,6 +42,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { RepeatableSvgWidget, RepeatableSvgWidgetSettings, init }
+register();
 
+export { RepeatableSvgWidget, RepeatableSvgWidgetSettings }
 export type { IRepeatableSVGSettings }

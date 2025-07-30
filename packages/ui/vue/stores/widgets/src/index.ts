@@ -8,14 +8,9 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
 import {type IWidget,useWidgetsStore} from './store/WidgetsPinia'
-const init = (container: Container) => {
-
-}
 
 export {
   type IWidget,
-  init,
   useWidgetsStore
 }

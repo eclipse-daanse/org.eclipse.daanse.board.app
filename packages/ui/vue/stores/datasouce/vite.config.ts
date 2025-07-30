@@ -28,7 +28,23 @@ export default defineConfig({
       fileName: 'ui.vue.stores.datasouce',
     },
     rollupOptions: {
-      external: ['vue', 'pinia'],
+      external: [
+        'vue',
+        'pinia',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
+      output: {
+        globals: {
+          vue: 'Vue',
+          pinia: 'Pinia',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
     },
   },
   plugins: [

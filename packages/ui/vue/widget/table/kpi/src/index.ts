@@ -15,22 +15,19 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/data_table.svg'
 import KpiTableWidget from './KpiTableWidget.vue'
 import KpiTableWidgetSettings from './KpiTableWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('kpiTableWidget', {
+const register = () => {
+  console.log('registering KpiTable widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('KpiTableWidget', {
     component: KpiTableWidget,
     settingsComponent: KpiTableWidgetSettings,
-    supportedDSTypes: ['csv','rest'],
+    supportedDSTypes: ['csv', 'rest'],
     icon: Icon,
     name: 'KpiTable'
   })
 }
 
-export { KpiTableWidget, KpiTableWidgetSettings, init }
+register();
+
+export { KpiTableWidget, KpiTableWidgetSettings }

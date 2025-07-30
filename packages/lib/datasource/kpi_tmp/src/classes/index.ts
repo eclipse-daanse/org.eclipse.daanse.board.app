@@ -21,7 +21,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { inject } from 'inversify'
 
-export interface IKpiStoreConfiguration {
+export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
   kpis: any[]
   pollingInterval?: number

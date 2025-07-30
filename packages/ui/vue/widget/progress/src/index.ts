@@ -15,13 +15,7 @@ import ProgressWidget from './ProgressWidget.vue'
 import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/progress.svg'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IProgressSettings {
   progress: string
@@ -31,25 +25,27 @@ interface IProgressSettings {
   isGradient: boolean
   isVertical: boolean
   rotation: number
-  min?: number;
-  max?: number;
-  barThickness?: string; // z.B. "20px"
-  borderRadius?: string; // z.B. "10px"
-  valueAlign?: "left" | "center" | "right";
-  valueJustify?: "top" | "center" | "bottom";
-  textColor?: string;
+  min?: number
+  max?: number
+  barThickness?: string
+  borderRadius?: string
+  valueAlign?: 'left' | 'center' | 'right'
+  valueJustify?: 'top' | 'center' | 'bottom'
+  textColor?: string
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('ProgressWidget', {
+const register = () => {
+  console.log('registering Progress widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('ProgressWidget', {
     component: ProgressWidget,
     settingsComponent: ProgressWidgetSettings,
     supportedDSTypes: [],
     icon: Icon,
-    name:'Progress'
+    name: 'Progress'
   })
 }
 
-export { ProgressWidget, ProgressWidgetSettings, init }
+register();
 
+export { ProgressWidget, ProgressWidgetSettings }
 export type { IProgressSettings }

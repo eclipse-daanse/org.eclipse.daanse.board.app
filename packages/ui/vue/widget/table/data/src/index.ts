@@ -15,22 +15,19 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/data_table.svg'
 import DataTableWidget from './DataTableWidget.vue'
 import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('DataTableWidget', {
+const register = () => {
+  console.log('registering DataTable widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('DataTableWidget', {
     component: DataTableWidget,
     settingsComponent: DataTableWidgetSettings,
-    supportedDSTypes: ['csv','rest'],
+    supportedDSTypes: ['csv', 'rest'],
     icon: Icon,
     name: 'DataTable'
   })
 }
 
-export { DataTableWidget, DataTableWidgetSettings, init }
+register();
+
+export { DataTableWidget, DataTableWidgetSettings }

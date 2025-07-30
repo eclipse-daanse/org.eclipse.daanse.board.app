@@ -15,20 +15,15 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/rich_text.svg'
 import RichTextWidget from './RichTextWidget.vue'
 import RichTextWidgetSettings from './RichTextWidgetSettings.vue'
-import { Container } from 'inversify'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IRichTextEditorSettings {
   editor: string
 }
 
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('RichTextWidget', {
+const register = () => {
+  console.log('registering RichText widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('RichTextWidget', {
     component: RichTextWidget,
     settingsComponent: RichTextWidgetSettings,
     supportedDSTypes: [],
@@ -37,6 +32,7 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { RichTextWidget, RichTextWidgetSettings, init }
+register();
 
+export { RichTextWidget, RichTextWidgetSettings }
 export type { IRichTextEditorSettings }

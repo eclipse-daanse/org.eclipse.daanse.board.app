@@ -15,7 +15,7 @@ import {WidgetWrapperSettings} from "org.eclipse.daanse.board.app.ui.vue.widget.
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { ref, getCurrentInstance } from 'vue'
 // import { useI18n } from "vue-i18n";
-import { type IWidget } from '@/stores/WidgetsPinia'
+import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import type { Container } from 'inversify'
 

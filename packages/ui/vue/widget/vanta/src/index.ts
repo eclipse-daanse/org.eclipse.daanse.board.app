@@ -15,16 +15,11 @@ import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.
 import Icon from './assets/image.svg'
 import VantaWidget from './VantaWidget.vue'
 import VantaWidgetSettings from './VantaWidgetSettings.vue'
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-
-  register(widgetRepository);
-}
-
-const register = (widgetRepository: WidgetRepository) => {
-  widgetRepository.registerWidget('VantaWidget', {
+const register = () => {
+  console.log('registering Vanta widget', container)
+  container.get<WidgetRepository>(identifier).registerWidget('VantaWidget', {
     component: VantaWidget,
     settingsComponent: VantaWidgetSettings,
     supportedDSTypes: [],
@@ -33,4 +28,6 @@ const register = (widgetRepository: WidgetRepository) => {
   })
 }
 
-export { VantaWidget, VantaWidgetSettings, init }
+register();
+
+export { VantaWidget, VantaWidgetSettings }
