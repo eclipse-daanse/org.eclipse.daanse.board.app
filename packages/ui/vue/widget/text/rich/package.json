@@ -40,7 +40,7 @@
     "vue-tsc": "^2.2.8",
     "@tiptap/extension-underline": "^2.11.2",
     "@tiptap/pm": "^2.11.2",
-    "@tiptap/starter-kit": "^2.11.2",
+    "@tiptap/starter-kit": "^3.0.9",
     "vite-plugin-libcss": "^1.1.1",
     "@tiptap/vue-3": "^2.11.2"
   },
