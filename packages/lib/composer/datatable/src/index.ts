@@ -11,16 +11,34 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
 import {
   DataTableComposer,
   type IDataTableComposerConfiguration
 } from './classes'
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
 const symbol = Symbol.for('DataTableComposer')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(DataTableComposer);
+if (!container.isBound(DataTableComposer)) {
+  container.bind(DataTableComposer).toSelf().inTransientScope()
 }
 
-export { DataTableComposer, IDataTableComposerConfiguration, symbol, init }
+if (!container.isBound(symbol)) {
+  container.bind<Factory<DataTableComposer>>(symbol).toFactory(() => {
+    return config => {
+      if (!DataTableComposer.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid DataTableComposer configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const composer = container.get<DataTableComposer>(DataTableComposer)
+      composer.init(config)
+
+      return composer
+    }
+  });
+}
+
+export { DataTableComposer, IDataTableComposerConfiguration, symbol }

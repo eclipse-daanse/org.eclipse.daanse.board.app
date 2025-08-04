@@ -11,8 +11,8 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { getCurrentInstance, computed, onMounted, ref } from 'vue'
-import { Container } from 'inversify'
+import { computed, onMounted, ref } from 'vue'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   identifier,
@@ -28,8 +28,6 @@ const props = defineProps({
   },
 })
 
-const intsance = getCurrentInstance()
-const container = intsance?.appContext.config.globalProperties.$container as Container
 const datasourceProxy = ref({} as any)
 
 const datasourceRepository = container.get<DatasourceRepository>(identifier)

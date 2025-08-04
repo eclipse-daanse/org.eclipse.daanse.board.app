@@ -11,11 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify';
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
-export interface IDataTableComposerConfiguration {
+export interface IDataTableComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[];
   composeBy: string;
   name: string;
@@ -28,14 +28,14 @@ export class DataTableComposer extends BaseDatasource {
     console.log("Destroying DataTableComposer");
   }
 
-  private connectedDatasources: string[];
-  private composeBy: string;
+  private connectedDatasources: string[] = [];
+  private composeBy: string = '';
 
   // TODO: find a better way to do this
   public static availableTypes = ['rest', "csv", "xmla"];
 
-  constructor(configuration: IDataTableComposerConfiguration, private container: Container) {
-    super(configuration, container);
+  init(configuration: IDataTableComposerConfiguration) {
+    super.init(configuration)
 
     this.connectedDatasources = configuration.connectedDatasources;
 
@@ -44,7 +44,7 @@ export class DataTableComposer extends BaseDatasource {
       this.notify();
     };
 
-    const datasourceRepository = this.container.get(
+    const datasourceRepository = container.get(
       identifier,
     ) as DatasourceRepository;
 
@@ -61,7 +61,7 @@ export class DataTableComposer extends BaseDatasource {
   async getData(type: string): Promise<any> {
     if (!this.composeBy) return null;
 
-    const datasourceRepository = this.container.get(
+    const datasourceRepository = container.get(
       identifier,
     ) as DatasourceRepository;
     const data = await Promise.all(

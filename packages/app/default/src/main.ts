@@ -85,8 +85,8 @@ import 'org.eclipse.daanse.board.app.lib.datasource.websocket'
 import 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
 import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
-import { init as initChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.chart'
-import { init as initDatatableComposer } from 'org.eclipse.daanse.board.app.lib.composer.datatable'
+import 'org.eclipse.daanse.board.app.lib.composer.chart'
+import 'org.eclipse.daanse.board.app.lib.composer.datatable'
 
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
@@ -120,10 +120,8 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.sql_xmla'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.ws'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ws'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
-import { init as initChartComposerUi } from 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
-import {
-  init as initDatatableComposerUI
-} from 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
@@ -188,10 +186,6 @@ app.provide('codeEditorType', 'monaco')
 
 
 
-initChartComposer(container)
-initDatatableComposer(container)
-
-
 
 
 
@@ -219,10 +213,6 @@ connectionRepository.registerConnection('test', 'rest', {
 
 
 const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
-
-initChartComposerUi(container)
-initDatatableComposerUI(container)
-
 
 datasourceRepository.registerDatasource('test_ds', 'rest', {
   resourceUrl: 'posts',

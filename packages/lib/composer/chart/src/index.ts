@@ -11,7 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify'
+import { Factory } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ChartComposer,
   type IChartComposerConfiguration
@@ -19,8 +20,26 @@ import {
 
 const symbol = Symbol.for('ChartComposer')
 
-const init = (container: Container) => {
-  container.bind(symbol).toConstantValue(ChartComposer);
+if (!container.isBound(ChartComposer)) {
+  container.bind(ChartComposer).toSelf().inTransientScope()
 }
 
-export { ChartComposer, IChartComposerConfiguration, symbol, init }
+if (!container.isBound(symbol)) {
+  container.bind<Factory<ChartComposer>>(symbol).toFactory(() => {
+    return config => {
+      if (!ChartComposer.validateConfiguration(config)) {
+        throw new Error(
+          'Invalid ChartComposer configuration. Please provide a valid configuration.',
+        )
+      }
+
+      const composer = container.get<ChartComposer>(ChartComposer)
+      composer.init(config)
+
+      return composer
+    }
+  })
+}
+
+
+export { ChartComposer, IChartComposerConfiguration, symbol }
