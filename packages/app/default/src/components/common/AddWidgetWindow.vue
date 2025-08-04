@@ -14,16 +14,14 @@ Contributors:
 <script setup lang="ts">
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { ref, computed, watch, getCurrentInstance } from 'vue'
+import { ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import type { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 
 const selectedDatasource = ref('')
 const selectedType = ref('')
 const { dataSources } = useDataSourcesStore()
-const instance = getCurrentInstance()
-const container = instance?.appContext.config.globalProperties.$container as Container
 
 const dataSourceTypeToDataTypes = {
   CSV: ['DataTable'],

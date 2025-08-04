@@ -11,11 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Container } from 'inversify';
-import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
 
-export interface IChartComposerConfiguration {
+export interface IChartComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[];
   composeBy: string;
   usedSets: string[];
@@ -30,44 +30,41 @@ export class ChartComposer extends BaseDatasource {
     console.log("Destroying ChartComposer");
   }
 
-  private connectedDatasources: string[];
-  private composeBy: string;
-  private usedSets: string[];
-  private labelColumn: string;
+  private connectedDatasources: string[] = [];
+  private composeBy: string = '';
+  private usedSets: string[] = [];
+  private labelColumn: string = '';
 
-  constructor(
-    configuration: IChartComposerConfiguration,
-    private container: Container,
-  ) {
-    super(configuration, container);
+  init(configuration: IBaseConnectionConfiguration): void {
+      super.init(configuration);
 
-    this.connectedDatasources = configuration.connectedDatasources;
+      this.connectedDatasources = configuration.connectedDatasources;
 
-    const updateFn = async () => {
-      await this.getData('DataTable');
-      this.notify();
-    };
+      const updateFn = async () => {
+        await this.getData('DataTable');
+        this.notify();
+      };
 
-    const datasourceRepository = this.container.get(
-      identifier,
-    ) as DatasourceRepository;
+      const datasourceRepository = container.get(
+        identifier,
+      ) as DatasourceRepository;
 
-    this.connectedDatasources
-      .filter((datasourceId) => datasourceId)
-      .forEach(function (ds) {
-        const datasource = datasourceRepository.getDatasource(ds);
-        datasource.subscribe(updateFn)
-      });
+      this.connectedDatasources
+        .filter((datasourceId) => datasourceId)
+        .forEach(function (ds) {
+          const datasource = datasourceRepository.getDatasource(ds);
+          datasource.subscribe(updateFn)
+        });
 
-    this.composeBy = configuration.composeBy;
-    this.usedSets = configuration.usedSets;
-    this.labelColumn = configuration.labelColumn;
+      this.composeBy = configuration.composeBy;
+      this.usedSets = configuration.usedSets;
+      this.labelColumn = configuration.labelColumn;
   }
 
   async getData(type: string): Promise<any> {
     if (!this.composeBy) return null;
 
-    const datasourceRepository = this.container.get(
+    const datasourceRepository = container.get(
       identifier,
     ) as DatasourceRepository;
 

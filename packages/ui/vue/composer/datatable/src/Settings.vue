@@ -15,11 +15,8 @@ import { DataTableComposer } from "org.eclipse.daanse.board.app.lib.composer.dat
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
-import { watch, ref, computed, getCurrentInstance } from "vue";
-import { Container } from "inversify";
-
-const app = getCurrentInstance();
-const container = app?.appContext.config.globalProperties.$container as Container;
+import { watch, ref, computed } from "vue";
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const { config, dataSources } = defineProps<{
   config: any;

@@ -21,8 +21,20 @@ export default defineConfig({
       fileName: 'lib.core'
     },
     rollupOptions: {
-      external: []
-    }
+      external: [
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
+      output: {
+        globals: {
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({

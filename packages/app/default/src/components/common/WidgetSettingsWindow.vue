@@ -13,19 +13,16 @@ Contributors:
 <script setup lang="ts">
 import {WidgetWrapperSettings} from "org.eclipse.daanse.board.app.ui.vue.widget.wrapper";
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 // import { useI18n } from "vue-i18n";
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import type { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const emit = defineEmits(['saveWidgetSettings', 'close'])
 const widget = defineModel<IWidget>()
 const storeSection = ref(false)
 const { dataSources } = useDataSourcesStore()
-
-const instance = getCurrentInstance()
-const container = instance?.appContext.config.globalProperties.$container as Container
 
 const registeredWidgets = container.get<WidgetRepository>(identifier)
 const availableWidgetsSettings = registeredWidgets.getAllWidgets()

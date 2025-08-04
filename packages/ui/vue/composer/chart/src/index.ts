@@ -10,7 +10,7 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { Container } from 'inversify'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   identifier,
@@ -21,20 +21,18 @@ import { symbol as ChartComposerIdentifier } from 'org.eclipse.daanse.board.app.
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const init = (container: Container) => {
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  const previewSymbol = Symbol.for('ChartPreview')
-  const settingsSymbol = Symbol.for('ChartSettings')
+const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
-  container.bind(previewSymbol).toConstantValue(Preview)
-  container.bind(settingsSymbol).toConstantValue(Settings)
+const previewSymbol = Symbol.for('ChartPreview')
+const settingsSymbol = Symbol.for('ChartSettings')
 
-  datasourceRepository.registerDatasourceType('chart', {
-    Store: ChartComposerIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol,
-  })
-}
+container.bind(previewSymbol).toConstantValue(Preview)
+container.bind(settingsSymbol).toConstantValue(Settings)
 
-export { init }
+datasourceRepository.registerDatasourceType('chart', {
+  Store: ChartComposerIdentifier,
+  Preview: previewSymbol,
+  Settings: settingsSymbol,
+})
+

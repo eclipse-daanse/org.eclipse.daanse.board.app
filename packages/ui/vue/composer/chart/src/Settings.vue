@@ -15,11 +15,9 @@ import { ChartComposer } from "org.eclipse.daanse.board.app.lib.composer.chart";
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
-import { watch, ref, computed, getCurrentInstance, onMounted } from "vue";
-import { Container } from "inversify";
+import { watch, ref, computed, onMounted } from "vue";
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-const app = getCurrentInstance();
-const container = app?.appContext.config.globalProperties.$container as Container;
 
 const { config, dataSources } = defineProps<{
   config: any;

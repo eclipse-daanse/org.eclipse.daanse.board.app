@@ -13,10 +13,10 @@ Contributors:
 
 <script lang="ts" setup>
 import type { ITextSettings } from './index'
-import { inject, ref, computed, getCurrentInstance } from 'vue'
+import { inject, ref } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { Container } from 'inversify/lib/esm'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 
 const previews = ref({
@@ -30,8 +30,6 @@ const timestamp = ref(null);
 
 const widgetSettings = defineModel<ITextSettings>({ required: true })
 console.log(widgetSettings)
-const instance = getCurrentInstance()
-const container = instance?.appContext.config.globalProperties.$container as Container
 const variableRepository = container.get<VariableRepository>(identifier)
 
 /*const {

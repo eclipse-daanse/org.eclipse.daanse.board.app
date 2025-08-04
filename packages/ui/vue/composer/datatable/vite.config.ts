@@ -23,13 +23,22 @@ export default defineConfig({
       fileName: 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
     },
     rollupOptions: {
-      external: ['vue'],
+      external: [
+        'vue',
+        'org.eclipse.daanse.board.app.lib.core',
+        'inversify',
+        'reflect-metadata',
+      ],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: 'Vue',
+          'org.eclipse.daanse.board.app.lib.core':
+            'org.eclipse.daanse.board.app.lib.core',
+          inversify: 'inversify',
+          'reflect-metadata': 'reflect-metadata',
+        },
+      },
+    },
   },
   plugins: [
     dts({
