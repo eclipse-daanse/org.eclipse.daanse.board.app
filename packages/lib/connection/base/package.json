@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1"
+  },
   "devDependencies": {
     "inversify": "7.7.1",
     "typescript": "^5.8.2",

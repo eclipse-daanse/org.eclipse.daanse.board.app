@@ -4,6 +4,8 @@
     "inlineSources": true,
     "declaration": true,
     "target": "ESNext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "commonjs",
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,8 +15,6 @@
     "baseUrl": "./src",
     "outDir": "dist",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-
-  },
-
+    "resolveJsonModule": true
+  }
 }
