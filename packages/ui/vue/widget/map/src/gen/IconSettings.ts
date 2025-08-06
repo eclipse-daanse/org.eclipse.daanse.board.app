@@ -1,0 +1,40 @@
+/*
+* This is generated code! Please note, that on code generation, these line are erased and generated again.
+* If you modify this file, it is possible that you changes will be lost!!!
+*
+* This method uses JSON playload, to load an EPackage.
+*
+* @generated
+*/
+
+/*
+* Generate classes and enums for TypeScript
+* Default values are set. The '_type' parameter is generated for the
+* Serialization to a backend.
+*/
+import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
+
+@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//IconSettings'})
+export class IconSettings{
+              
+  @Documentation("The identifier or path of the currently selected icon.")
+  @Attribute() currentIcon?: string;
+          
+  @Documentation("The color of the icon.")
+  @Attribute() iconColor?: string;
+          
+  @Documentation("The size of the icon in pixels.")
+  @Attribute() iconSize?: number;
+          
+  @Documentation("Indicates if the icon should be filled.")
+  @Attribute() isIconFilled?: boolean;
+          
+  @Documentation("The weight of the icon's stroke.")
+  @Attribute() strokeWeight?: number;
+          
+  @Documentation("The optical size of the icon.")
+  @Attribute() opticSize?: number;
+          
+  @Documentation("The grade or visual weight of the icon.")
+  @Attribute() grade?: number;
+}

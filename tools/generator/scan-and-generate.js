@@ -39,6 +39,12 @@ function runGenerator(modelPath) {
 
     console.log(`Generating for: ${modelPath}`);
     console.log(`Output to: ${path.join(ecoreDir, '..', 'src', 'gen')}`);
+    try {
+       fs.rmSync(path.join(ecoreDir, '..', 'src', 'gen'), { recursive: true, force: true })
+       fs.mkdirSync(path.join(ecoreDir, '..', 'src', 'gen'), { recursive: true })
+    }catch (err){
+      console.log(err);
+    }
 
     const child = spawn('node', [GENERATOR_SCRIPT, '-m', modelPath, '-g', genPath,'--no_factories' , '-a' ,'org.eclipse.daanse.board.app.lib.annotations'], {
       stdio: 'inherit',
