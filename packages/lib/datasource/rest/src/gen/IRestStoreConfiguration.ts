@@ -1,0 +1,31 @@
+/*
+* This is generated code! Please note, that on code generation, these line are erased and generated again.
+* If you modify this file, it is possible that you changes will be lost!!!
+*
+* This method uses JSON playload, to load an EPackage.
+*
+* @generated
+*/
+
+/*
+* Generate classes and enums for TypeScript
+* Default values are set. The '_type' parameter is generated for the
+* Serialization to a backend.
+*/
+import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
+
+@ModelClass({type:'http://example.com/reststore#//IRestStoreConfiguration'})
+export class IRestStoreConfiguration{
+              
+  @Documentation("The specific path or resource URL to fetch data from (e.g., '/api/data').")
+  @Attribute() resourceUrl?: string;
+          
+  @Documentation("A reference or ID to a REST connection configuration used to access the resource.")
+  @Attribute() connection?: string;
+          
+  @Documentation("An optional JSONPath or similar expression to select a specific value from the REST response.")
+  @Attribute() selectedJSONValue?: string;
+          
+  @Documentation("The optional interval in milliseconds to poll the REST resource for updates. If not specified, polling might be disabled or use a default value.")
+  @Attribute() pollingInterval?: number;
+}
