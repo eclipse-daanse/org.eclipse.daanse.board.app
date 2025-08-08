@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/xmlastore#//XMLARequestParams'})
 export class XMLARequestParams{
-              
+      
   @Documentation("The XMLA command (e.g., 'Execute', 'Discover').")
   @Attribute() command?: string;
-          
+  
   @Documentation("Optional properties for the XMLA command (e.g., format, axis info). Represented as a generic object.")
   @Attribute() properties?: any;
 }

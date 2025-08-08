@@ -12,15 +12,15 @@
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {JavaObject} from "./JavaObject"
+                                                                  import {JavaObject} from "./JavaObject"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/PivotTable#//PivotTable'})
 export class PivotTable{
-              @Reference('JavaObject') rows: JavaObject;
-          @Reference('JavaObject') columns: JavaObject;
-          @Reference('JavaObject') cells: JavaObject;
-          
+      @Reference('JavaObject') rows: Array<JavaObject> = [];
+  @Reference('JavaObject') columns: Array<JavaObject> = [];
+  @Reference('JavaObject') cells: Array<JavaObject> = [];
+  
   @Documentation("")
   @Attribute() tableState?: any;
 }

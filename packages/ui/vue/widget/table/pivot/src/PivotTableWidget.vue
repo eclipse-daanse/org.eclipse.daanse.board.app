@@ -12,13 +12,22 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { toRefs, ref, watch } from "vue";
+import { toRefs, ref, watch, onMounted } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
-import { type IPivotTable } from "./index";
+import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
+import { PivotTable } from "./gen/PivotTable";
 
-const props = defineProps<{ datasourceId: string, config: IPivotTable }>();
+const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
+const config = defineModel<PivotTable>('configv', { required: true });
+
+const defaultConfig = new PivotTable();
+
+onMounted(() => {
+    if (config.value) {
+        Object.assign(config.value, { ...defaultConfig, ...config.value });
+    }
+});
 
 const data = ref(null as any);
 const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data);
@@ -39,7 +48,7 @@ const onCollapse = (e: any) => {
 <template>
   <div class="text-container">
     <div class="component">
-      <PivotTable v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
+      <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
         :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
         :columnsExpandedMembers="data.tableState.columnsExpandedMembers" />
     </div>

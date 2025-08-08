@@ -22,16 +22,76 @@ import {<%- superType.name -%>} from "./<%- superType.name -%>"
   <%_ }); _%>
 <%_ } _%>
 <%# Generate imports for referenced types -%>
-<%_ const referencedTypes = new Set(); _%>
+<%_
+  // Helper function to map package URI to import path
+  function mapPackageToImportPath(packageURI, typeName) {
+    if (packageURI === 'org.eclipse.daanse.board.app.ui.vue.composables') {
+      return 'org.eclipse.daanse.board.app.ui.vue.composables';
+    }
+    // Add more package mappings here as needed
+    return packageURI;
+  }
+
+  const localTypes = new Set(); // Same package types
+  const externalTypes = new Map(); // External package types: typeName -> importPath
+_%>
 <%_ if (eClass.eStructuralFeatures) { _%>
   <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
-    <%_ if (isEReference(feature) && feature.eType && feature.eType.name !== eClass.name) { _%>
-      <%_ referencedTypes.add(feature.eType.name); _%>
+    <%_ if (isEReference(feature)) { _%>
+      <%# Check regular eType first -%>
+      <%_ if (feature.eType && feature.eType.name !== eClass.name) { _%>
+        <%_ if (feature.eType.ePackage && feature.eType.ePackage.nsURI === ePackage.nsURI) { _%>
+          <%# Same package -%>
+          <%_ localTypes.add(feature.eType.name); _%>
+        <%_ } else if (feature.eType.ePackage) { _%>
+          <%# External package -%>
+          <%_ const importPath = mapPackageToImportPath(feature.eType.ePackage.nsURI, feature.eType.name); _%>
+          <%_ externalTypes.set(feature.eType.name, importPath); _%>
+        <%_ } _%>
+      <%_ } _%>
+      <%# Check eGenericType.eClassifier -%>
+      <%_ if (feature.eGenericType && feature.eGenericType.eClassifier && feature.eGenericType.eClassifier.name !== eClass.name) { _%>
+        <%# Check if this is a proxy object -%>
+        <%_ if (feature.eGenericType.eClassifier.eIsProxy && feature.eGenericType.eClassifier.eIsProxy()) { _%>
+          <%# Handle proxy reference - get original URI -%>
+          <%_ const proxyURI = feature.eGenericType.eClassifier.eProxyURI(); _%>
+          <%_ if (proxyURI) { _%>
+            <%_ const uriString = proxyURI.toString(); _%>
+            <%_ if (uriString.includes('#//')) { _%>
+              <%_ const [packageURI, typeName] = uriString.split('#//'); _%>
+              <%_ const importPath = mapPackageToImportPath(packageURI, typeName); _%>
+              <%_ externalTypes.set(typeName, importPath); _%>
+            <%_ } _%>
+          <%_ } _%>
+        <%_ } else if (feature.eGenericType.eClassifier.ePackage && feature.eGenericType.eClassifier.ePackage.nsURI === ePackage.nsURI) { _%>
+          <%# Same package -%>
+          <%_ localTypes.add(feature.eGenericType.eClassifier.name); _%>
+        <%_ } else if (feature.eGenericType.eClassifier.ePackage) { _%>
+          <%# External package -%>
+          <%_ const importPath = mapPackageToImportPath(feature.eGenericType.eClassifier.ePackage.nsURI, feature.eGenericType.eClassifier.name); _%>
+          <%_ externalTypes.set(feature.eGenericType.eClassifier.name, importPath); _%>
+        <%_ } _%>
+      <%_ } else if (feature.eGenericType && feature.eGenericType.eClassifier && typeof feature.eGenericType.eClassifier === 'string') { _%>
+        <%# Handle external package references in string format like "org.eclipse.daanse.board.app.ui.vue.composables#//ValueWrapper" -%>
+        <%_ const externalRef = feature.eGenericType.eClassifier; _%>
+        <%_ if (externalRef.includes('#//')) { _%>
+          <%_ const [packageURI, typeName] = externalRef.split('#//'); _%>
+          <%_ const importPath = mapPackageToImportPath(packageURI, typeName); _%>
+          <%_ externalTypes.set(typeName, importPath); _%>
+        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
   <%_ }); _%>
 <%_ } _%>
-<%_ referencedTypes.forEach(typeName => { _%>
+<%# Generate local imports (exclude types that have external imports) -%>
+<%_ localTypes.forEach(typeName => { _%>
+  <%_ if (!externalTypes.has(typeName)) { _%>
 import {<%- typeName -%>} from "./<%- typeName -%>"
+  <%_ } _%>
+<%_ }); _%>
+<%# Generate external imports -%>
+<%_ externalTypes.forEach((importPath, typeName) => { _%>
+import {<%- typeName -%>} from '<%- importPath -%>'
 <%_ }); _%>
 <%# Generate imports for enum types -%>
 <%_ const enumTypes = new Set(); _%>
@@ -48,11 +108,11 @@ import {<%- enumName -%>} from "./<%- enumName -%>"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from <%_ if(!anopak){%>'./ModelAnnotations'<%_ }else{ %> '<%= anopak%>'<%_ } %>
 
 @ModelClass({type:'<%- ePackage.nsURI -%>#//<%- eClass.name -%>'})
-export class <%- eClass.name -%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
+export class <%- eClass.name -%><%_ if (eClass.eTypeParameters && eClass.eTypeParameters.size() > 0) { _%><<%_ const typeParams = []; _%><%_ for (let i = 0; i < eClass.eTypeParameters.size(); i++) { _%><%_ typeParams.push(eClass.eTypeParameters.get(i).name); _%><%_ } _%><%- typeParams.join(', ') -%>><%_ } _%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
     <%# Generate structural features -%>
     <%_ if (eClass.eStructuralFeatures) { _%>
       <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
-        <%- include('feature-template', { feature: feature }) -%>
+  <%- include('feature-template', { feature: feature, instances }) -%>
       <%_ }); _%>
     <%_ } _%>
 }

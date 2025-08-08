@@ -2,6 +2,7 @@
         name="IconSettings"
         nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.icon"
         nsPrefix="IconSettings"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
 
     <eClassifiers xsi:type="ecore:EClass" name="IconSettings">

@@ -20,7 +20,7 @@ _%>
   }
 
   const tsType = mapEcoreTypeToTS(attribute.eType ? attribute.eType.name : 'any');
-  const isArray = attribute.many || false;
+  const isArray = attribute.isMany || false;
   const isEnum = attribute.eType ? isEEnum(attribute.eType) : false;
 _%>
 
@@ -41,9 +41,9 @@ _%>
 <%# Generate the attribute -%>
 <%_ if (isEnum) { _%>
   <%_ if (isArray) { _%>
-@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
   <%_ } else { _%>
-@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
   <%_ } _%>
 <%_ } else { _%>
   <%_ if (attribute.defaultValueLiteral) { _%>

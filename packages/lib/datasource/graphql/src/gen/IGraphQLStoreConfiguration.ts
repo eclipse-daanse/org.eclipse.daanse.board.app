@@ -16,13 +16,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/graphqlstore#//IGraphQLStoreConfiguration'})
 export class IGraphQLStoreConfiguration{
-              
+      
   @Documentation("A reference or ID to a GraphQL connection configuration used to execute the query.")
   @Attribute() connection?: string;
-          
+  
   @Documentation("The GraphQL query string to be executed.")
   @Attribute() query?: string;
-          
+  
   @Documentation("Optional variables to be passed with the GraphQL query.")
   @Attribute() variables?: any;
 }

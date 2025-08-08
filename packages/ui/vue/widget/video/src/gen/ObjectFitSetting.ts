@@ -16,7 +16,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://www.example.org/videoSettings#//ObjectFitSetting'})
 export class ObjectFitSetting{
-              
+      
   @Documentation("The CSS 'object-fit' property value (e.g., 'fill', 'contain', 'cover', 'none', 'scale-down').")
   @Attribute() fit?: string;
 }

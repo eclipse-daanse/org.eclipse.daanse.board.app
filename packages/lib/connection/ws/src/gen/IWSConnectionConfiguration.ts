@@ -16,7 +16,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/wsconnection#//IWSConnectionConfiguration'})
 export class IWSConnectionConfiguration{
-              
+      
   @Documentation("The URL endpoint for the WebSocket connection (e.g., 'ws://example.com/socket').")
   @Attribute() url?: string;
 }

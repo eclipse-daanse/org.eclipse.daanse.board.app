@@ -16,10 +16,8 @@ import Icon from './assets/rich_text.svg'
 import RichTextWidget from './RichTextWidget.vue'
 import RichTextWidgetSettings from './RichTextWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import {RichTextEditorSettings} from './gen/RichTextEditorSettings'
 
-interface IRichTextEditorSettings {
-  editor: string
-}
 
 const register = () => {
   console.log('registering RichText widget', container)
@@ -34,5 +32,5 @@ const register = () => {
 
 register();
 
-export { RichTextWidget, RichTextWidgetSettings }
-export type { IRichTextEditorSettings }
+export { RichTextWidget, RichTextWidgetSettings,RichTextEditorSettings }
+

@@ -16,12 +16,12 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/baseconnection#//BaseConnectionConfig'})
 export class BaseConnectionConfig{
-              
+      
   @Attribute() url?: string;
-          
+  
   @Attribute() name?: string;
-          
+  
   @Attribute() type?: string;
-          
+  
   @Attribute() uid?: string;
 }

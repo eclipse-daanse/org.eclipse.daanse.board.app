@@ -12,13 +12,13 @@
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {ObjectFitSetting} from "./ObjectFitSetting"
+                      import {ObjectFitSetting} from "./ObjectFitSetting"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/videoSettings#//VideoSettings'})
 export class VideoSettings{
-  @Reference('ObjectFitSetting') videoFitSettings: ObjectFitSetting;
-
+      @Reference('ObjectFitSetting') videoFitSettings: ObjectFitSetting = new ObjectFitSetting();
+  
   @Documentation("The URL or path to the video file.")
-  @Attribute() videoUrl?: string;
+  @Attribute() videoUrl: string = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4";
 }

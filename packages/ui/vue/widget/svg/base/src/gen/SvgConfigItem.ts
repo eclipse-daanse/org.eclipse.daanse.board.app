@@ -16,13 +16,16 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem'})
 export class SvgConfigItem{
-              
+      
   @Documentation("The fill color of the SVG element (e.g., as a hex code or named color).")
   @Attribute() fill?: string;
-          
+  
   @Documentation("The stroke color of the SVG element.")
   @Attribute() stroke?: string;
-          
+  
   @Documentation("The width of the stroke of the SVG element (e.g., as a string with unit like '2px' or '1').")
   @Attribute() strokeWidth?: string;
+  
+  @Documentation("The CSS class name associated with this SVG styling configuration.")
+  @Attribute() className?: string;
 }

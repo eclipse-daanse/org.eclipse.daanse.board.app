@@ -10,12 +10,12 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 import { ref, computed, inject } from 'vue'
-import {type IWrapperSettings} from './interfaces/WidgetWrapperSettingsI';
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { WrapperSettings } from './gen/WrapperSettings'
 
 
 
-const wrapperSettings = defineModel<IWrapperSettings>({ required: true});
+const wrapperSettings = defineModel<WrapperSettings>({ required: true});
 const i118n:i18n|undefined = inject('i18n');
 const  t  = (i118n)?(key:string)=>i118n.t('wrapper:'+key):(s:string)=>{};
 

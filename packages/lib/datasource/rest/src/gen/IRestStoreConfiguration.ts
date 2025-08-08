@@ -16,16 +16,16 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/reststore#//IRestStoreConfiguration'})
 export class IRestStoreConfiguration{
-              
+      
   @Documentation("The specific path or resource URL to fetch data from (e.g., '/api/data').")
   @Attribute() resourceUrl?: string;
-          
+  
   @Documentation("A reference or ID to a REST connection configuration used to access the resource.")
   @Attribute() connection?: string;
-          
+  
   @Documentation("An optional JSONPath or similar expression to select a specific value from the REST response.")
   @Attribute() selectedJSONValue?: string;
-          
+  
   @Documentation("The optional interval in milliseconds to poll the REST resource for updates. If not specified, polling might be disabled or use a default value.")
   @Attribute() pollingInterval?: number;
 }

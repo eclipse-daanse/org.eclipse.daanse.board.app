@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/wsstore#//IWSStoreConfiguration'})
 export class IWSStoreConfiguration{
-              
+      
   @Documentation("A reference or ID to a WebSocket connection configuration.")
   @Attribute() connection?: string;
-          
+  
   @Documentation("An optional topic to subscribe to or publish on the WebSocket connection.")
   @Attribute() topic?: string;
 }

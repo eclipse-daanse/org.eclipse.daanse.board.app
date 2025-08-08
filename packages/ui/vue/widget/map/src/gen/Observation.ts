@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Observation'})
 export class Observation{
-              
+      
   @Documentation("The observation setting. (Mapped from TypeScript 'any' type).")
   @Attribute() setting?: any;
-          
+  
   @Documentation("The component related to the observation.")
   @Attribute() component?: string;
 }

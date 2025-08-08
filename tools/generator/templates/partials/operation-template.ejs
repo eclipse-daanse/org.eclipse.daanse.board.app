@@ -4,7 +4,7 @@ _%>
 <%- operation.name -%>(
 <%_ if (operation.eParameters && operation.eParameters.length > 0) { _%>
   <%_ Array.from(operation.eParameters).forEach((param, index) => { _%>
-    <%_ const isParamArray = param.many || false; _%>
+    <%_ const isParamArray = param.isMany || false; _%>
     <%- param.name -%>: <%- isParamArray ? `Array<${param.eType ? param.eType.name : 'any'}>` : (param.eType ? param.eType.name : 'any') -%><%_ if (index < operation.eParameters.length - 1) { _%>,<%_ } _%>
   <%_ }); _%>
 <%_ } _%>

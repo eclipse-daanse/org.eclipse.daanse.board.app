@@ -46,7 +46,7 @@ function runGenerator(modelPath) {
       console.log(err);
     }
 
-    const child = spawn('node', [GENERATOR_SCRIPT, '-m', modelPath, '-g', genPath,'--no_factories' , '-a' ,'org.eclipse.daanse.board.app.lib.annotations'], {
+    const child = spawn('node', [GENERATOR_SCRIPT, '-m', modelPath, '-g', genPath,'--no_factories' , '-a' ,'org.eclipse.daanse.board.app.lib.annotations','-i'], {
       stdio: 'inherit',
 
     });

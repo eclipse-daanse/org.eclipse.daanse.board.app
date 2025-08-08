@@ -16,6 +16,6 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/twowayconnection#//TwoWayConnection'})
 export class TwoWayConnection{
-              
+      
   @Attribute() ready?: boolean;
 }

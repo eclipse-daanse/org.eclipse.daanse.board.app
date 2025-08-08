@@ -47,5 +47,10 @@
                 <details key="documentation" value="The stroke color of the SVG item."/>
             </eAnnotations>
         </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The CSS class name to apply to the SVG item."/>
+            </eAnnotations>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>

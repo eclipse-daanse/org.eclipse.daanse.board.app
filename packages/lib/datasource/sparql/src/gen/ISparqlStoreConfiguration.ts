@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/sparqlstore#//ISparqlStoreConfiguration'})
 export class ISparqlStoreConfiguration{
-              
+      
   @Documentation("The SPARQL query string to be executed to retrieve data.")
   @Attribute() query?: string;
-          
+  
   @Documentation("A reference or ID to a SPARQL connection configuration used to access the endpoint.")
   @Attribute() connection?: string;
 }

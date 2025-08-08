@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings'})
 export class MermaidWidgetSettings{
-              
+      
   @Documentation("Defines the color scheme or style used for the Mermaid diagram.")
-  @Attribute() theme?: string;
-          
+  @Attribute() theme: string = "default";
+  
   @Documentation("Contains the Mermaid diagram code itself.")
-  @Attribute() value?: string;
+  @Attribute() value: string = "flowchart TD A[Christmas] -->|Get money| B(Go shopping) B --> C{Let me think} C -->|One| D[Laptop C -->|Two| E[iPhone] C -->|Three| F[fa:fa-car Car]";
 }

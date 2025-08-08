@@ -12,12 +12,13 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import type { IRichTextEditorSettings } from "./index";
+
 import { computed, toRefs, onMounted, ref, watch } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
-const props = defineProps<{ datasourceId: string, config: IRichTextEditorSettings }>();
+const props = defineProps<{ datasourceId: string, config: RichTextEditorSettings }>();
 const { datasourceId, config } = toRefs(props);
 
 const data = ref(null as any);

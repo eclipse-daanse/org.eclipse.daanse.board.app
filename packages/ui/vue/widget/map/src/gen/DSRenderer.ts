@@ -12,20 +12,20 @@
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {Condition} from "./Condition"
+                                                                  import {Condition} from "./Condition"
 import {Observation} from "./Observation"
 import {PointAndAreaSettings} from "./PointAndAreaSettings"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//DSRenderer'})
 export class DSRenderer{
-              
+      
   @Documentation("The name of the data stream renderer.")
   @Attribute() name?: string;
-          @Reference('Condition') datastream: Condition;
-          @Reference('Observation') observation: Observation;
-          @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings;
-          
+  @Reference('Condition') datastream: Array<Condition> = [];
+  @Reference('Observation') observation: Observation = new Observation();
+  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
+  
   @Documentation("A unique identifier for the data stream renderer.")
   @Attribute() id?: string;
 }

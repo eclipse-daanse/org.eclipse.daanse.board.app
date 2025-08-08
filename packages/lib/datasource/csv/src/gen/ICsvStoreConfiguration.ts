@@ -16,16 +16,16 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/csvstore#//ICsvStoreConfiguration'})
 export class ICsvStoreConfiguration{
-              
+      
   @Documentation("The URL of the CSV resource (e.g., a file path or web URL).")
   @Attribute() resourceUrl?: string;
-          
+  
   @Documentation("A reference or ID to a connection configuration used to access the resource.")
   @Attribute() connection?: string;
-          
+  
   @Documentation("The optional interval in milliseconds to poll the CSV resource for updates. If not specified, polling might be disabled or use a default value.")
   @Attribute() pollingInterval?: number;
-          
+  
   @Documentation("A list of possible separator characters used in the CSV file (e.g., ',', ';', '\t').")
-  @Attribute() separators?: string;
+  @Attribute() separators: Array<string> = [];
 }

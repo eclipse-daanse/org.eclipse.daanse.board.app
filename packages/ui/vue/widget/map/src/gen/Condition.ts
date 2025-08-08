@@ -17,13 +17,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Condition'})
 export class Condition{
-              
+      
   @Documentation("The property name to apply the condition to.")
   @Attribute() prop?: string;
-          
+  
   @Documentation("The comparison operator to use (e.g., 'eq', 'lt').")
-@Enum('Comperator') comperator: Comperator = Comperator.eq;
-          
+  @Enum('Comperator') comperator: Comperator = Comperator.eq;
+  
   @Documentation("The value to compare the property against.")
   @Attribute() value?: string;
 }

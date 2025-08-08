@@ -16,13 +16,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/sqlxmlastore#//ISqlXmlaStoreConfiguration'})
 export class ISqlXmlaStoreConfiguration{
-              
+      
   @Documentation("A reference or ID to a SQL XMLA connection configuration used to access the data source.")
   @Attribute() connection?: string;
-          
+  
   @Documentation("The SQL query to be executed to retrieve data from the XMLA source.")
   @Attribute() sql?: string;
-          
+  
   @Documentation("The optional interval in milliseconds to poll the SQL XMLA resource for updates. If not specified, polling might be disabled or use a default value.")
   @Attribute() pollingInterval?: number;
 }

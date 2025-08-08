@@ -16,10 +16,10 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/rssstore#//IRssStoreConfiguration'})
 export class IRssStoreConfiguration{
-              
+      
   @Documentation("The URL of the RSS feed to fetch data from.")
   @Attribute() resourceUrl?: string;
-          
+  
   @Documentation("A reference or ID to an RSS connection configuration used to access the feed.")
   @Attribute() connection?: string;
 }

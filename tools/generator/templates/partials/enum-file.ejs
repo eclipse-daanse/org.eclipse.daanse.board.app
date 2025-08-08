@@ -5,8 +5,8 @@ _%>
 
 export enum <%- eEnum.name -%> {
 <%_ if (eEnum.eLiterals) { _%>
-  <%_ Array.from(eEnum.eLiterals).forEach((literal, index) => { _%>
-    <%- literal.literal -%> = "<%- literal.literal -%>"<%_ if (index < eEnum.eLiterals.length - 1) { _%>,<%_ } _%>
-  <%_ }); _%>
+<%_ Array.from(eEnum.eLiterals).forEach((literal, index) => { _%>
+  <%- literal.literal -%> = "<%- literal.literal -%>"<%_ if (index < (Array.from(eEnum.eLiterals).length - 1)) { _%>,<%_ } _%>
+<%_ }); _%>
 <%_ } _%>
 }

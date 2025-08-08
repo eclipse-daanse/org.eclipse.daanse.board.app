@@ -16,13 +16,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/baseconnection#//IBaseConnectionConfiguration'})
 export class IBaseConnectionConfiguration{
-              
+      
   @Documentation("A human-readable name for the connection configuration.")
   @Attribute() name?: string;
-          
+  
   @Documentation("The type of connection (e.g., 'GraphQL', 'MQTT', 'REST').")
   @Attribute() type?: string;
-          
+  
   @Documentation("A unique identifier for this specific connection configuration.")
   @Attribute() uid?: string;
 }

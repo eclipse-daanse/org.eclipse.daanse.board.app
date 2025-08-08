@@ -12,19 +12,13 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import type { IImageSettings } from './index'
+import { onMounted, ref, watch, type Ref, computed } from 'vue'
+import { ImageSettings } from './gen/ImageSettings'
 
-const props = defineProps<{ datasourceId: string; config: IImageSettings }>()
-const { config } = toRefs(props)
+const props = defineProps<{ datasourceId: string }>()
+const config = defineModel<ImageSettings>('configv', { required: true })
 
-const defaultConfig: IImageSettings = {
-  imagesSettings: {
-    fit: 'None',
-    diashowInterval: 0,
-  },
-  images: [],
-}
+const defaultConfig = new ImageSettings();
 
 onMounted(() => {
   if (config.value) {

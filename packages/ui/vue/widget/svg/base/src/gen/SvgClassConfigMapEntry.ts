@@ -12,13 +12,13 @@
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {SvgConfigItem} from "./SvgConfigItem"
+                      import {SvgConfigItem} from "./SvgConfigItem"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgClassConfigMapEntry'})
 export class SvgClassConfigMapEntry{
-              
+      
   @Documentation("The name of the SVG class.")
   @Attribute() key?: string;
-          @Reference('SvgConfigItem') value: SvgConfigItem;
+  @Reference('SvgConfigItem') value: SvgConfigItem = new SvgConfigItem();
 }

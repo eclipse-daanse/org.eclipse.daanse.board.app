@@ -14,13 +14,14 @@ Contributors:
 <script lang="ts" setup>
 // import { useI18n } from "vue-i18n";
 import { inject, ref, watch } from 'vue'
-import type { Config, ISvgSettings } from "./index";
+import type { Config} from "./index";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { SvgSettings } from './gen/SvgSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const widgetSettings = defineModel<ISvgSettings>({ required: true });
+const widgetSettings = defineModel<SvgSettings>({ required: true });
 
 const opened = ref({
     widgetSection: false,
@@ -54,7 +55,16 @@ watch(
                 config[className] = { fill, stroke, strokeWidth };
             }
         }, {});
-        widgetSettings.value.classesConfig = { ...config };
+        // Convert object config to array of SvgClassConfigMapEntry
+        widgetSettings.value.classesConfig = Object.entries(config).map(([key, value]) => ({
+            key,
+            value: {
+                fill: value.fill,
+                stroke: value.stroke,
+                strokeWidth: value.strokeWidth,
+                className: key
+            }
+        }));
     },
     { deep: true },
 );

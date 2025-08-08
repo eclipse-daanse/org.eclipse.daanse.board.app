@@ -16,10 +16,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles'})
 export class SVGItemStyles{
-              
+      
   @Documentation("The fill color of the SVG item (e.g., a hex code or named color).")
   @Attribute() fill?: string;
-          
+  
   @Documentation("The stroke color of the SVG item.")
   @Attribute() stroke?: string;
+  
+  @Documentation("The CSS class name to apply to the SVG item.")
+  @Attribute() className?: string;
 }

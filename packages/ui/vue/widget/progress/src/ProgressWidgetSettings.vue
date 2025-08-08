@@ -15,6 +15,7 @@ Contributors:
 import type { IProgressSettings } from "./index";
 import { inject, onMounted, ref, watch } from 'vue'
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { ProgressSettings } from './gen/ProgressSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -30,7 +31,7 @@ const opened = ref({
 });
 
 const gradientFields = ref<GradientPart[]>([]);
-const widgetSettings = defineModel<IProgressSettings>({ required: true });
+const widgetSettings = defineModel<ProgressSettings>({ required: true });
 
 // const { t } = useI18n();
 

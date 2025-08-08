@@ -12,10 +12,12 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { IMermaidWidgetSettings } from '.';
-import { computed } from 'vue'
 
-const widgetSettings = defineModel<IMermaidWidgetSettings>({ required: true });
+import { computed } from 'vue'
+import { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+
+
+const widgetSettings = defineModel<MermaidWidgetSettings>({ required: true });
 
 
 </script>
@@ -23,10 +25,10 @@ const widgetSettings = defineModel<IMermaidWidgetSettings>({ required: true });
 <template>
     <div class="settings_container">
       <VaTextarea
-        v-model="widgetSettings.value.original"
+        v-model="widgetSettings.value"
         :minRows="10"
       />
-      <VaSelect v-model="widgetSettings.theme.value"
+      <VaSelect v-model="widgetSettings.theme"
                 :options="[ 'default', 'neutral', 'dark', 'forest', 'base' ]"/>
     </div>
 </template>

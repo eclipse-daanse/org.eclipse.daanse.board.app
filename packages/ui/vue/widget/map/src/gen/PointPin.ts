@@ -16,7 +16,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//PointPin'})
 export class PointPin{
-              
+      
   @Documentation("The color of the point pin.")
   @Attribute() color?: string;
 }

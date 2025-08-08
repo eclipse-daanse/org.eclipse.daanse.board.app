@@ -16,16 +16,16 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Service'})
 export class Service{
-              
+      
   @Documentation("The type of the service (e.g., 'WMS', 'WFS').")
   @Attribute() type?: string;
-          
+  
   @Documentation("The URL endpoint of the service.")
   @Attribute() url?: string;
-          
+  
   @Documentation("The internal service object. (Mapped from TypeScript 'any' type).")
   @Attribute() service?: any;
-          
+  
   @Documentation("A unique identifier for the service.")
   @Attribute() id?: string;
 }

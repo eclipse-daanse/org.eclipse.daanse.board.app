@@ -16,13 +16,13 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://example.com/xmlaconnection#//IXmlaConnectionConfiguration'})
 export class IXmlaConnectionConfiguration{
-              
+      
   @Documentation("The URL endpoint for the XMLA service.")
   @Attribute() url?: string;
-          
+  
   @Documentation("The name of the OLAP cube to connect to.")
   @Attribute() cubeName?: string;
-          
+  
   @Documentation("The name of the catalog containing the cube.")
   @Attribute() catalogName?: string;
 }
