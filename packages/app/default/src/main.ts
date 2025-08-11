@@ -59,6 +59,12 @@ container.bind('App').toConstantValue(app);
 const pinia = createPinia();
 setActivePinia(pinia)
 app.use(pinia)
+
+import {
+  type PageI,
+  identifier as PageReoIdentifier,
+  type PageRegistryI
+} from 'org.eclipse.daanse.board.app.lib.repository.page'
 loadPackages()
 // TODO: Move this to initialization of the app
 import {
@@ -139,6 +145,39 @@ import 'org.eclipse.daanse.board.app.ui.vue.variable.computed'
 
 import 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 
+
+import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
+  from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+import 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
+const pageRepo = container.get<PageRegistryI>(PageReoIdentifier)
+const layoutRepo = container.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const baseLayout
+  = layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
+
+
+if (baseLayout) {
+  pageRepo.registerPage({
+    id:'abc',
+    name:'Seite 1',
+    description:'Seite 1',
+    icon:'icon.png',
+    visibleInNavigation:true,
+    layout: baseLayout
+  } as PageI)
+  pageRepo.registerPage({
+    id:'abe',
+    name:'Seite 2',
+    description:'Seite 2',
+    icon:'icon.png',
+    visibleInNavigation:true,
+    layout: baseLayout
+  } as PageI)
+}
+
+
+
+
 if (document.readyState === 'complete') {
   // load-Event ist schon vorbei
   onLoaded()
@@ -180,6 +219,10 @@ async function loadPackages() {
   await import("org.eclipse.daanse.board.app.lib.persistence.git")
   await import("org.eclipse.daanse.board.app.ui.vue.persistence.git")
   await import("org.eclipse.daanse.board.app.lib.persistence.loader")
+
+
+  // Register pages after layouts are loaded
+
 }
 
 //initSettingsManager(container)
@@ -194,6 +237,8 @@ app.provide('codeEditorType', 'monaco')
 
 
 const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
+
+
 
 // connectionRepository.registerConnection('test_xmla', 'xmla', {
 //   url: 'https://ssemenkoff.dev/emondrian/xmla',

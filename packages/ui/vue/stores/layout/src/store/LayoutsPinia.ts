@@ -25,16 +25,17 @@ export interface ILayoutItem {
 export const useLayoutStore
   =(pageId:string = '') => {
     const storeCaller = defineStore('layout' + pageId, () => {
-    const layout = ref([] as ILayoutItem[])
+      const layout = ref<ILayoutItem[]>([] )
 
-    const updateLayout = (updatedLayout: ILayoutItem[]) => {
-      layout.value.splice(0, layout.value.length, ...updatedLayout)
-    }
+      const updateLayout = (updatedLayout: ILayoutItem[]) => {
+        layout.value.splice(0, layout.value.length);
+        layout.value = updatedLayout;
+      }
 
-    return {
-      layout,
-      updateLayout,
-    }
+      return {
+        layout,
+        updateLayout,
+      }
   })
   return storeCaller();
 }

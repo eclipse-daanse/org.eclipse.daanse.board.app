@@ -1,3 +1,16 @@
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+
 <template>
   <VaScrollContainer
     class="max-h-screen ml-15"
@@ -10,9 +23,9 @@
 
       <GridLayout ref="gridLayout" v-model:layout="layout" :row-height="30"  :responsive="true" :vertical-compact="false" :breakpoints="{ lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 }" :cols="{ lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 }">
         <template #item="{ item }">
-          <WidgetWrapper v-if="innerWidgets.get(item.i.toString())"
-            :widget="innerWidgets.get(item.i.toString())"
-            :ref="`${innerWidgets.get(item.i.toString())?.uid}_wrapper`"
+          <WidgetWrapper v-if="widgets?.find((w:any) => w.uid === item.i)"
+            :widget="widgets.find((w:any) => w.uid === item.i)"
+            :ref="`${item.i}_wrapper`"
             @openSettings="openWidgetSettings"
             editEnabled
             @removeWidget="()=>removeWidget(item.i.toString())"
@@ -35,64 +48,76 @@
     </draggable>
     </div>
   </VaScrollContainer>
-  <div class="add_widget-button ice p-2.5 z-mx">
-    <VaButton
-      :icon="widgetSelectorVisible ? 'close' : 'add'"
-      @click="widgetSelectorVisible = !widgetSelectorVisible"
-      round
-      size="large"
-    />
-
-  </div>
-  <div class="pages_board ice p-2.5 z-mx">
-    <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
-  </div>
-  <Transition :duration="150">
-    <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
-  </Transition>
-  <Transition :duration="150">
-    <WidgetSettingsWindow
-      v-if="widgetSettingsOpenedId"
-      @close="widgetSettingsOpenedId = ''"
-      v-model="currentlyEditingWidget"
-    ></WidgetSettingsWindow>
-  </Transition>
-  <Transition :duration="150">
-    <PageSettings
-      v-if="pageSettingsOpenedId"
-      v-model="pageSettingsOpenedId"
-      @close="pageSettingsOpenedId = undefined"
-    ></PageSettings>
-  </Transition>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { GridLayout, GridItem } from 'grid-layout-plus'
+import { ref, computed, nextTick } from 'vue'
+import { GridLayout, GridItem, type Layout, type LayoutItem } from 'grid-layout-plus'
 
 import { type IWidget, useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import WidgetSettingsWindow from '@/components/common/WidgetSettingsWindow.vue'
-import PageEditor from '@/components/pageEditor/PageEditor.vue'
-import PageSettings from '@/components/pageEditor/PageSettings.vue'
-import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import { useRoute, useRouter } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { cloneDeep } from 'lodash'
 
 const widgetSettingsOpenedId = ref('')
 const widgetsTmp = ref([])
+const emit = defineEmits(['openSettings', 'removeWidget'])
+
 const route = useRoute();
-const pageID = route.params.pageid??'';
-const { widgets, updateWidgets } = useWidgetsStore(pageID as string||'');
+const pageID = computed(() => route.params.pageid as string || '');
+
+// Use existing store instances directly - computed to handle route changes
+const widgetStore = computed(() => useWidgetsStore(pageID.value))
+const layoutStore = computed(() => useLayoutStore(pageID.value))
+
+// Use computed to reactively get store data
+const widgets = computed(() => widgetStore.value.widgets)
+const storedLayout = computed(() => layoutStore.value.layout)
 const widgetSelectorVisible = ref(false)
 
 const drag = ref(false);
 const pageSettingsOpenedId = ref<string|undefined>(undefined);
 const gridLayout = ref<InstanceType<typeof GridLayout>>()
-const innerWidgets = ref<Map<string, IWidget>>(new Map<string, IWidget>())
 const wrapper = ref<HTMLElement>()
-let layout = ref<{x:number,y:number,w:number,h:number,i:string,static:boolean}[]>([])
+// Convert layout store format to grid-layout-plus format
+let layout = computed<Layout>({
+  get: () => {
+    const layoutData = storedLayout.value || []
+    if (!Array.isArray(layoutData)) {
+      return []
+    }
+
+    return layoutData.map((item:any) => {
+      if (!item || typeof item !== 'object') {
+        console.warn('Invalid layout item:', item)
+        return null
+      }
+
+      return {
+        x: Math.floor((item.x || 0) / 100), // Convert pixel to grid units
+        y: Math.floor((item.y || 0) / 30),  // Convert pixel to grid units (row height = 30)
+        w: Math.max(1, Math.floor((item.width || 100) / 100)), // Minimum width 1
+        h: Math.max(1, Math.floor((item.height || 30) / 30)), // Minimum height 1
+        i: item.id || '',
+        static: false
+      } as LayoutItem
+    }).filter((item): item is LayoutItem => item !== null) // Remove any null items with proper type guard
+  },
+  set: (newLayout) => {
+    const convertedLayout = newLayout.map((item:any) => ({
+      id: item.i,
+      x: item.x * 100, // Convert grid units back to pixels
+      y: item.y * 30,  // Convert grid units back to pixels
+      width: item.w * 100,
+      height: item.h * 30,
+      z: 3000
+    }))
+
+    layoutStore.value.updateLayout(convertedLayout)
+  }
+})
 
 const change = (e:any)=>{
   const datasource = 'test'
@@ -119,7 +144,7 @@ const dragover = (event: any) => {
     mouseAt.y > parentRect.top &&
     mouseAt.y < parentRect.bottom
 
-  if (mouseInGrid && !layout.value.find(item => item.i === dropId)) {
+  if (mouseInGrid && !layout.value.find((item:any) => item.i === dropId)) {
     layout.value.push({
       x: (layout.value.length * 2) % 12,
       y: layout.value.length + 12, // puts it at the bottom
@@ -132,7 +157,7 @@ const dragover = (event: any) => {
     nextTick(() => {
 
 
-  const index = layout.value.findIndex(item => item.i === dropId)
+  const index = layout.value.findIndex((item:any) => item.i === dropId)
 
   if (index !== -1) {
     const item = gridLayout.value?.getItem(dropId)
@@ -152,11 +177,14 @@ const dragover = (event: any) => {
     if (mouseInGrid) {
       gridLayout.value?.dragEvent('dragstart', dropId, newPos.x, newPos.y, dragItem.h, dragItem.w)
       dragItem.i = `widget_${Math.random().toString(36).substring(7)}`
-      dragItem.x = layout.value[index].x
-      dragItem.y = layout.value[index].y
+      const layoutItem = layout.value[index]
+      if (layoutItem) {
+        dragItem.x = layoutItem.x
+        dragItem.y = layoutItem.y
+      }
     } else {
       gridLayout.value?.dragEvent('dragend', dropId, newPos.x, newPos.y, dragItem.h, dragItem.w)
-      layout.value = layout.value.filter(item => item.i !== dropId)
+      layout.value = layout.value.filter((item:any) => item.i !== dropId)
     }
 
 }})}}
@@ -175,7 +203,7 @@ function dragEnd() {
   //if (mouseInGrid) {
     //alert(`Dropped element props:\n${JSON.stringify(dragItem, ['x', 'y', 'w', 'h'], 2)}`)
     gridLayout.value.dragEvent('dragend', dropId, dragItem.x, dragItem.y, dragItem.h, dragItem.w)
-    layout.value = layout.value.filter(item => item.i !== dropId)
+    layout.value = layout.value.filter((item:any) => item.i !== dropId)
   //} else {
   //  return
   //}
@@ -204,24 +232,27 @@ function dragEnd() {
 const addWidget = (type: string, datasourceId: string) => {
   const uid = dragItem.i
   const config = { datasourceId, settings: {} }
-  const newWidget: IWidget = { uid, type, config,wrapperConfig:cloneDeep(defaultConfig)}
+  const newWidget: IWidget = { uid, type, config, wrapperConfig: cloneDeep(defaultConfig) }
 
-  innerWidgets.value.set(dragItem.i,newWidget)
-
-
+  // Add to widgets store
+  const newWidgets = [...widgets.value, newWidget]
+  widgetStore.value.updateWidgets(newWidgets)
 }
 const openWidgetSettings = (id: string) => {
-  widgetSettingsOpenedId.value = id;
-  widgetSelectorVisible.value = false;
+  emit('openSettings', id)
 }
 const removeWidget = (uid: string) => {
-  console.log(uid)
-  innerWidgets.value.delete(uid);
-  layout.value = layout.value.filter(item => item.i !== uid)
+  // Remove from widgets store
+  const newWidgets = widgets.value.filter((w:any) => w.uid !== uid)
+  widgetStore.value.updateWidgets(newWidgets)
+
+  // Remove from layout - the computed property will handle the conversion
+  const currentLayout = layout.value
+  layout.value = currentLayout.filter((item:any) => item.i !== uid)
+
+  emit('removeWidget', uid)
 }
-const currentlyEditingWidget = computed(() => {
-  return innerWidgets.value.get(widgetSettingsOpenedId.value)
-})
+// Remove currentlyEditingWidget - handled by parent component now
 </script>
 
 <style scoped>

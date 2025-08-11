@@ -26,6 +26,10 @@ import {
   identifier as PageIdentifier,
   type PageI, events,type PageRegistryImpl
 } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import {
+  type LayoutRepositoryI,
+  identifier as LayoutRepositoryIdentifier
+} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import type { Container } from 'inversify'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 } from 'uuid'
@@ -34,6 +38,8 @@ const router = useRouter();
 const route = useRoute();
 const container = inject<Container>('container')
 const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageIdentifier);
+const layoutRepo:LayoutRepositoryI|undefined
+  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier);
 const updated = ref(0);
 const createNew = ref(false);
 const name = ref('newPage');
@@ -83,7 +89,12 @@ const nodes = computed(() => {
 const currentPage = computed(() => {
   const pageid = route.params.pageid;
   if(pageid){
-    return pageRepo?.getPage(pageid as string).name
+    try{
+      return pageRepo?.getPage(pageid as string).name
+    }catch (r){
+      return '??'
+    }
+
   }
   else {
     return '??'
@@ -96,8 +107,19 @@ const onNodeClick = (node: PageI) => {
 const filter = ref("");
 const addPage = () => {
   createNew.value = false;
-  pageRepo?.registerPage({id:v4(),name:name.value,description:'',icon:'',visibleInNavigation:true }as PageI);
-  updated.value!+=1;
+
+  // Get default base layout
+  const baseLayout = layoutRepo?.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
+
+  pageRepo?.registerPage({
+    id: v4(),
+    name: name.value,
+    description: '',
+    icon: '',
+    visibleInNavigation: true,
+    layout: baseLayout
+  } as PageI);
+  updated.value! += 1;
 }
 const add= ()=>{
   createNew.value = true;

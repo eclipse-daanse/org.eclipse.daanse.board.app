@@ -29,7 +29,7 @@ export interface IWidget {
 export const useWidgetsStore = (pageid: string = '') => {
 
     const storecall = defineStore(  `widget-${pageid}`, () => {
-    const widgets = ref([] as IWidget[])
+    const widgets = ref<IWidget[]>([] )
 
     const createWidget = (type: any, config: any = {}, wrapperConfig: any = {}) => {
       const uid = 'li_' + Math.random().toString(36).substring(7)

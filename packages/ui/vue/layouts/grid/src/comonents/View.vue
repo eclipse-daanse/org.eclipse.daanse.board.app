@@ -1,0 +1,138 @@
+<!--
+Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+
+Contributors:
+    Smart City Jena
+-->
+<template>
+  <VaScrollContainer
+    class="max-h-screen ml-15"
+    vertical
+  >
+    <div ref="wrapper">
+      <GridLayout ref="gridLayout" v-model:layout="layout" :row-height="30" :responsive="true" :vertical-compact="false" :breakpoints="{ lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 }" :cols="{ lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 }" :is-draggable="false" :is-resizable="false">
+        <template #item="{ item }">
+          <WidgetWrapper v-if="widgets?.find((w: any) => w.uid === item.i)"
+            :widget="widgets.find((w: any) => w.uid === item.i)"
+            :ref="`${item.i}_wrapper`"
+            :editEnabled="false"
+          />
+          <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
+        </template>
+      </GridLayout>
+    </div>
+  </VaScrollContainer>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted, nextTick } from 'vue'
+import { GridLayout } from 'grid-layout-plus'
+
+import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { useRoute } from 'vue-router'
+
+const route = useRoute();
+
+// Get page ID
+const pageId = route.params.pageid as string || ''
+
+// Initialize reactive refs first
+const widgets = ref<any[]>([])
+const storedLayout = ref<any[]>([])
+
+// Store references (will be set in onMounted)
+let widgetStore: any = null
+let layoutStore: any = null
+
+
+// Initialize stores safely in onMounted with retry logic
+onMounted(async () => {
+  console.log('Grid View component mounted for page:', pageId)
+
+  // Wait a tick to ensure Pinia is fully initialized
+  await nextTick()
+
+  const initStores = () => {
+    try {
+      widgetStore = useWidgetsStore(pageId)
+      layoutStore = useLayoutStore(pageId)
+
+      // Set initial data
+      widgets.value = widgetStore.widgets
+      storedLayout.value = layoutStore.layout
+
+      console.log('Grid View stores initialized successfully, widgets:', widgets.value.length)
+      return true
+    } catch (error) {
+      console.error('Error initializing Grid View stores:', error)
+      return false
+    }
+  }
+
+  // Try to initialize immediately
+  if (!initStores()) {
+    // If it fails, try again after a short delay
+    setTimeout(() => {
+      if (!initStores()) {
+        console.error('Failed to initialize Grid View stores after retry')
+      }
+    }, 100)
+  }
+})
+
+
+const gridLayout = ref<InstanceType<typeof GridLayout>>()
+const wrapper = ref<HTMLElement>()
+
+// Convert layout store format to grid-layout-plus format
+let layout = computed(() => (storedLayout.value || []).map((item: any) => ({
+  x: Math.floor(item.x / 100), // Convert pixel to grid units
+  y: Math.floor(item.y / 30),  // Convert pixel to grid units (row height = 30)
+  w: Math.max(1, Math.floor(item.width / 100)), // Minimum width 1
+  h: Math.max(1, Math.floor(item.height / 30)), // Minimum height 1
+  i: item.id,
+  static: false
+})))
+</script>
+
+<style scoped>
+.vgl-layout {
+  --vgl-placeholder-bg: #aaa;
+  min-height:100vh;
+}
+/* Grid background disabled in view mode */
+.vgl-layout::before {
+  display: none;
+}
+
+:deep(.vgl-item:not(.vgl-item--placeholder)) {
+
+  /*border: 1px dashed #ccc;*/
+}
+
+:deep(.vgl-item--resizing) {
+  opacity: 90%;
+}
+
+:deep(.vgl-item--static) {
+  background-color: #cce;
+}
+
+.text {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  font-size: 24px;
+  text-align: center;
+}
+</style>

@@ -8,12 +8,13 @@
   Contributors: Smart City Jena
 
 */
-import {LayoutI} from "org.eclipse.daanse.board.app.lib.repository.layout.page"
-export interface PageI{
-  id: string,
-  name: string,
-  icon: string,
-  description: string,
-  visibleInNavigation: boolean,
-  layout:LayoutI
+
+import { LayoutI } from './LayoutI'
+
+export interface LayoutRepositoryI {
+  addLayout(layout: LayoutI): void;
+  removeLayout(layoutId: string): boolean;
+  getLayout(layoutId: string): LayoutI | undefined;
+  getAllLayouts(): LayoutI[];
+  hasLayout(layoutId: string): boolean;
 }
