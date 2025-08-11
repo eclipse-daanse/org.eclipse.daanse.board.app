@@ -17,7 +17,7 @@ import DataSettings from '@/pages/DataSettings.vue'
 import EditReport from '@/pages/EditReport.vue'
 import Configuration from '@/pages/Configuration.vue'
 import SaveLoad from '@/pages/SaveLoad.vue'
-import EditReportGridster from '@/pages/EditReportGridster.vue'
+
 
 
 const router = createRouter({
@@ -54,7 +54,7 @@ const router = createRouter({
     {
       path:'/page/:pageid/edit',
       name:'pageEdit',
-      component:EditReportGridster,
+      component:EditReport,
     },
     {
       path:'/page/:pageid',

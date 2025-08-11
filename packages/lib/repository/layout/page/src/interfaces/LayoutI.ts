@@ -8,12 +8,14 @@
   Contributors: Smart City Jena
 
 */
-import {LayoutI} from "org.eclipse.daanse.board.app.lib.repository.layout.page"
-export interface PageI{
+import type { Component } from 'vue'
+
+export interface LayoutI{
   id: string,
   name: string,
-  icon: string,
   description: string,
-  visibleInNavigation: boolean,
-  layout:LayoutI
+  icon?: string,
+  component: Component,
+  settings?: Component
+  editor: Component
 }

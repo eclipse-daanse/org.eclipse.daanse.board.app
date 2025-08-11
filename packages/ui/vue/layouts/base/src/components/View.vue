@@ -12,21 +12,40 @@ Contributors:
 -->
 
 <script setup lang="ts">
+
+import { useMoveableLayout } from '../composables/useMovableLayout'
+import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
-import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const props = defineProps(['params']);
 const route = useRoute();
-const pageID = props.params?.pageid ?? route.params.pageid ?? '';
+const pageID = props.params?.pageid ?? route.params.pageid??'';
+
+const {
+  layoutStore,
+  widgetStore,
+  getInitialStyle,
+} = useMoveableLayout(pageID as string || '');
 
 </script>
 
 <template>
-  <div class="report-container">
-    <LayoutRenderer
-      :pageId="pageID as string"
-      :viewMode="true"
-    />
+  <div class="widget-board">
+    <template v-for="widget in widgetStore?.widgets || []" :key="widget.uid">
+      <div
+        :class="`${widget.uid} dashboard-item-container`"
+        :style="getInitialStyle(widget.uid)"
+        :ref="widget.uid"
+      >
+        <div class="dashboard-item">
+          <WidgetWrapper
+            :widget="widget"
+            :ref="`${widget.uid}_wrapper`"
+            :editEnabled="false"
+          />
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <style scoped>

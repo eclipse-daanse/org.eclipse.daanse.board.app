@@ -28,7 +28,6 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.4",
     "org.eclipse.daanse.board.app.lib.connection.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.connection.xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.connection.websocket": "^0.0.1-next.1",
@@ -120,8 +119,11 @@
     "org.eclipse.daanse.board.app.ui.vue.widget.markdown": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.code": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.factory.variableWrapper": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.page": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.layout.page": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.layouts.base": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.layouts.grid": "^0.0.1-next.1",
     "pinia": "^3.0.1",
-    "tailwindcss": "^4.1.4",
     "vue": "^3.5.13",
     "vue-grid-layout": "^2.4.0",
     "vue-router": "^4.5.0",
@@ -131,9 +133,9 @@
     "flatted": "^3.3.3"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.4",
     "tailwindcss": "^4.1.5",
     "@tailwindcss/postcss": "^4.1.7",
-    "autoprefixer": "^10.4.21",
     "@playwright/test": "^1.51.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@tsconfig/node22": "^22.0.0",

@@ -17,11 +17,11 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'lib.repository.page',
-      fileName: 'lib.repository.page',
+      name: 'lib.repository.layout.page',
+      fileName: 'lib.repository.layout.page',
     },
     rollupOptions: {
-      external: ['org.eclipse.daanse.board.app.lib.core'],
+      external: ['vue', 'inversify', 'org.eclipse.daanse.board.app.lib.core']
     },
   },
   plugins: [

@@ -12,13 +12,18 @@ Contributors:
 -->
 <script setup lang="ts">
 
-import { inject, ref, computed, watchEffect, watch } from 'vue'
+import { inject, ref, computed, watchEffect, watch, onMounted } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
   type PageI
 } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import {
+  type LayoutRepositoryI,
+  identifier as LayoutRepositoryIdentifier,
+  type LayoutI
+} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import type { Container } from 'inversify'
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -27,13 +32,28 @@ const pageid = defineModel<string>({ required: true })
 const collepsed = ref(true);
 const container = inject<Container>('container')
 const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageIdentifier);
+const layoutRepo:LayoutRepositoryI|undefined
+  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier);
 const pageSettings = ref<PageI | null>(null)
 const emit = defineEmits(['close'])
-watchEffect(() => {
+
+const availableLayouts = computed(() => {
+  return layoutRepo?.getAllLayouts() || []
+})
+
+const defaultLayout = computed(() => {
+  return availableLayouts.value.find(layout =>
+    layout.id === "org.eclipse.daanse.board.app.ui.vue.layouts.base") || availableLayouts.value[0]
+})
+
+onMounted(() => {
   if (pageid.value && pageRepo) {
     const original = pageRepo.getPage(pageid.value)
-    // Reaktive Kopie erstellen
     pageSettings.value = original ? { ...original } : null
+
+    if (pageSettings.value && !pageSettings.value.layout && defaultLayout.value) {
+      pageSettings.value.layout = defaultLayout.value
+    }
   }
 })
 watch(pageSettings,()=>{
@@ -70,6 +90,17 @@ watch(pageSettings,()=>{
             class="field"
             :label="t('page:PageSettings.description')"
             v-model="pageSettings.description"
+          />
+        </div>
+
+        <div class="settings-block">
+          <VaSelect
+
+            :label="t('page:PageSettings.layout')"
+            v-model="pageSettings.layout"
+            :options="availableLayouts"
+            text-by="name"
+            track-by="id"
           />
         </div>
 
@@ -118,7 +149,15 @@ watch(pageSettings,()=>{
       border-radius: 8px;
       z-index: 1000000;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      overflow: visible;
       gap: 16px;
     }
+    .va-dropdown__content:deep() {
+      z-index: 3800000 !important;
+    }
+</style>
+<style>
+.va-dropdown__content {
+  z-index: 3800000 !important;
+}
 </style>

@@ -47,10 +47,17 @@ import  {identifier as VariableWrapperFactroyId,type VariableWrapperFactory }
   from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import {type Variable} from 'org.eclipse.daanse.board.app.lib.variables'
 import { useVariablesStore } from '@/stores/VariablesPinia.ts'
-import  { type PageRegistryI,identifier as PageRegistryIDentifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import  { type PageRegistryI,identifier as PageRegistryIDentifier }
+  from 'org.eclipse.daanse.board.app.lib.repository.page'
+import {
+  type LayoutRepositoryI,
+  identifier as LayoutRepositoryIdentifier
+} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+import { useRouter } from 'vue-router'
 
 const {variables, createVariable, removeVariable, updateVariable,updateVariables}
   = useVariablesStore()
+const router = useRouter()
 const releaseEndPointUrl = ref<String>('')
 if (window && (window as any)['__env'] && (window as any)['__env'].settings
   && (window as any)['__env'].settings.releaseEndPointUrl) {
@@ -69,6 +76,8 @@ const variableRepository:VariableRepository|undefined =
 const variableWrapperFactroy:VariableWrapperFactory|undefined =
   container?.get<VariableWrapperFactory>(VariableWrapperFactroyId)
 const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageRegistryIDentifier)
+const layoutRepo:LayoutRepositoryI|undefined
+  = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 repoManager.addObserver({
   update: async (event, repo) => {
     console.log('repos updated')
@@ -248,11 +257,31 @@ const loadData = (content: any) => {
         const pageWidgets = useWidgetsStore(key)
         pageLayout.layout = (page as any).layout
         pageWidgets.widgets = (page as any).widgets
-        pageRepo?.registerPage((page as any).info)
+
+        // Ensure page has layout assigned - fallback to base layout if missing
+        const pageInfo = (page as any).info
+        if (!pageInfo.layout && layoutRepo) {
+          const baseLayout =
+            layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
+          if (baseLayout) {
+            pageInfo.layout = baseLayout
+          }
+        }
+
+        pageRepo?.registerPage(pageInfo)
         variableWrapperFactroy?.initilazeVariableWrappers((page as any).widgets)
       }
     }
-    console.log((variableRepository as VariableRepository).getVariable('testComputed').value)
+
+    // After loading data, navigate to first available page or default
+    const pageIds = pageRepo?.getAllPageIds()
+    if (pageIds && pageIds.length > 0) {
+      // Navigate to first page in view mode
+      router.push(`/page/${pageIds[0]}`)
+    } else {
+      // Navigate to default page
+      router.push('/page/abc')
+    }
   }
 
 

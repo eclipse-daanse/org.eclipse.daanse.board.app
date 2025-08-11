@@ -30,6 +30,7 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['vue','pinia'],
+      output: { globals: { vue: 'Vue', pinia: 'Pinia' } }
     },
   },
   plugins: [

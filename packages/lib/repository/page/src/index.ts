@@ -14,17 +14,19 @@ import { PageRegistryImpl } from './classes/PageRegistryImpl'
 import type {PageRegistryI}  from './api/PageRegistryI'
 import { events } from './api/Events'
 const identifier = Symbol.for('PageRepository')
+import {container} from 'org.eclipse.daanse.board.app.lib.core'
 
-const init = (container: Container) => {
+if(!container.isBound(identifier)) {
   const pageRepository:PageRegistryI = new PageRegistryImpl()
 
   container
     .bind<PageRegistryI>(identifier)
     .toConstantValue(pageRepository)
+
+  console.log('📦 PageRegistry registered')
 }
 
 export {
-  init,
   type PageI,
   type PageRegistryI,
   type PageRegistryImpl,

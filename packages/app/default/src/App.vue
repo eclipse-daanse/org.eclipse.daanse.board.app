@@ -31,22 +31,30 @@ import { VaSpacer } from 'vuestic-ui'
           <div class="justify-center flex">
             <img src="@/assets/Daanse%20Logo%20Vektor.svg" class="h-5 mt-6 mb-3">
           </div>
-        <va-sidebar-item :active="$route.name === 'home'"
+        <va-sidebar-item :active="$route.name === 'home' || $route.name === 'page'"
           @click="()=>{
-            const path = $route.path.replace('/edit','');
-            $router.push(path)
+            // Navigate to view mode for current page or default
+            if ($route.params.pageid) {
+              $router.push(`/page/${$route.params.pageid}`)
+            } else {
+              // Default page - use first available page or abc
+              $router.push('/page/abc')
+            }
           }" class="pointer">
           <va-sidebar-item-content >
             <va-icon name="preview" />
             <va-sidebar-item-title class="font-normal"> View dashboard </va-sidebar-item-title>
           </va-sidebar-item-content>
         </va-sidebar-item>
-        <va-sidebar-item :active="$route.name === 'edit'"
+        <va-sidebar-item :active="$route.name === 'edit' || $route.name === 'pageEdit'"
           @click="()=>{
-            let path = $route.path;
-            path = path.endsWith('/') ? path : path + '/';
-            path+='edit'
-            $router.push(path)
+            // Navigate to edit mode for current page or default
+            if ($route.params.pageid) {
+              $router.push(`/page/${$route.params.pageid}/edit`)
+            } else {
+              // Default page - use first available page or abc
+              $router.push('/page/abc/edit')
+            }
           }" class="pointer ">
           <va-sidebar-item-content class="">
             <va-icon name="draw" />
