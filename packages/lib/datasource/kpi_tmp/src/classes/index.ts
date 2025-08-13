@@ -77,6 +77,17 @@ export class KpiStore extends BaseDatasource {
     }
   }
 
+  private generateGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === 'x' ? r : (r & 0x3) | 0x8
+        return v.toString(16)
+      },
+    )
+  }
+
   private async getKpiData(kpis: any[]): Promise<any> {
     let response = null
 
@@ -84,27 +95,68 @@ export class KpiStore extends BaseDatasource {
       const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as any
+      const cube = connection.cubeName
 
-      // TODO: MAYBE SWITH TO GUID
+      kpis = kpis.filter(kpi => kpi.CUBE_NAME === cube)
+
+      kpis.forEach(kpi => {
+        if (!kpi.KPI_GUID) {
+          kpi.KPI_GUID = `${kpi.KPI_NAME}_${this.generateGuid()}`
+        }
+      })
+
       if (kpis.length > 0) {
         let withPart = 'WITH '
 
         const kpiSets = kpis
           .map((kpi, index) => {
-            return `
-            MEMBER [Measures].[${kpi.KPI_NAME}_Value] AS ${kpi.KPI_VALUE}
-            MEMBER [Measures].[${kpi.KPI_NAME}_Goal] AS ${kpi.KPI_GOAL}
-            MEMBER [Measures].[${kpi.KPI_NAME}_Status] AS ${kpi.KPI_STATUS}
-            MEMBER [Measures].[${kpi.KPI_NAME}_Trend] AS ${kpi.KPI_TREND}`
+            let members = []
+
+            members.push(
+              `MEMBER [Measures].[${kpi.KPI_GUID}_Value] AS ${kpi.KPI_VALUE}`,
+            )
+
+            if (kpi.KPI_GOAL) {
+              members.push(
+                `MEMBER [Measures].[${kpi.KPI_GUID}_Goal] AS ${kpi.KPI_GOAL}`,
+              )
+            }
+
+            if (kpi.KPI_STATUS) {
+              members.push(
+                `MEMBER [Measures].[${kpi.KPI_GUID}_Status] AS ${kpi.KPI_STATUS}`,
+              )
+            }
+
+            if (kpi.KPI_TREND) {
+              members.push(
+                `MEMBER [Measures].[${kpi.KPI_GUID}_Trend] AS ${kpi.KPI_TREND}`,
+              )
+            }
+
+            return members.join('\n            ')
           })
           .join('\n')
 
         withPart += kpiSets
 
-        // Create the measures to select
         const measures = kpis
           .map((kpi, index) => {
-            return `[Measures].[${kpi.KPI_NAME}_Value], [Measures].[${kpi.KPI_NAME}_Goal], [Measures].[${kpi.KPI_NAME}_Status], [Measures].[${kpi.KPI_NAME}_Trend]`
+            let measuresList = [`[Measures].[${kpi.KPI_GUID}_Value]`]
+
+            if (kpi.KPI_GOAL) {
+              measuresList.push(`[Measures].[${kpi.KPI_GUID}_Goal]`)
+            }
+
+            if (kpi.KPI_STATUS) {
+              measuresList.push(`[Measures].[${kpi.KPI_GUID}_Status]`)
+            }
+
+            if (kpi.KPI_TREND) {
+              measuresList.push(`[Measures].[${kpi.KPI_GUID}_Trend]`)
+            }
+
+            return measuresList.join(', ')
           })
           .join(', ')
 
@@ -124,22 +176,31 @@ export class KpiStore extends BaseDatasource {
         if (rowset) {
           const kpiResults = kpis.map((kpi, index) => {
             // Find the keys in the rowset that correspond to this KPI
-            const valueKey = findMatchingKey(rowset, `${kpi.KPI_NAME}_Value`)
-            const goalKey = findMatchingKey(rowset, `${kpi.KPI_NAME}_Goal`)
-            const statusKey = findMatchingKey(rowset, `${kpi.KPI_NAME}_Status`)
-            const trendKey = findMatchingKey(rowset, `${kpi.KPI_NAME}_Trend`)
+            const valueKey = findMatchingKey(rowset, `${kpi.KPI_GUID}_Value`)
+            const goalKey = kpi.KPI_GOAL
+              ? findMatchingKey(rowset, `${kpi.KPI_GUID}_Goal`)
+              : null
+            const statusKey = kpi.KPI_STATUS
+              ? findMatchingKey(rowset, `${kpi.KPI_GUID}_Status`)
+              : null
+            const trendKey = kpi.KPI_TREND
+              ? findMatchingKey(rowset, `${kpi.KPI_GUID}_Trend`)
+              : null
 
             return {
               name: kpi.KPI_NAME || `KPI ${index}`,
               caption: kpi.KPI_CAPTION || `KPI Caption ${index}`,
+              displayFolder: kpi.KPI_DISPLAY_FOLDER || '',
               value: valueKey ? rowset[valueKey] : null,
               goal: goalKey ? rowset[goalKey] : null,
               status: statusKey ? rowset[statusKey] : null,
               trend: trendKey ? rowset[trendKey] : null,
+              parentKpiName: kpi.KPI_PARENT_KPI_NAME || null,
+              type: 'KPI',
+              children: [],
             }
           })
-
-          response = this.parseToDataTable(kpiResults)
+          response = this.parseToKpiTable(kpiResults)
         }
       }
     } catch (e: any) {
@@ -149,9 +210,75 @@ export class KpiStore extends BaseDatasource {
     return response
   }
 
-  // parseToDataTable(mdxResponce: any): any {
-  //   return parseRequestToTable(mdxResponce, 0)
-  // }
+  parseToKpiTable(data: any[]): any[] {
+    if (!Array.isArray(data)) return []
+
+    const result: any[] = []
+    const folderMap: Map<string, any> = new Map()
+    const kpiMap: Map<string, any> = new Map()
+
+    // First pass: create all KPI nodes and organize by display folder
+    data.forEach((kpi: any) => {
+      kpiMap.set(kpi.name, kpi)
+
+      const displayFolder = kpi.displayFolder || ''
+
+      if (!displayFolder || typeof displayFolder !== 'string') {
+        result.push(kpi)
+      } else {
+        const folders = displayFolder
+          .split('\\')
+          .filter((f: string) => f.trim())
+
+        if (folders.length === 0) {
+          result.push(kpi)
+          return
+        }
+
+        let currentPath = ''
+        let currentLevel = result
+
+        folders.forEach((folderName: string, index: number) => {
+          currentPath = currentPath
+            ? `${currentPath}\\${folderName}`
+            : folderName
+
+          let folder = currentLevel.find(
+            (item: any) => item.type === 'Folder' && item.name === folderName,
+          )
+
+          if (!folder) {
+            folder = {
+              type: 'Folder',
+              name: folderName,
+              children: [],
+            }
+            currentLevel.push(folder)
+            folderMap.set(currentPath, folder)
+          }
+
+          currentLevel = folder.children
+        })
+
+        currentLevel.push(kpi)
+      }
+    })
+
+    data.forEach((kpi: any) => {
+      if (kpi.parentKpiName) {
+        const parentKpi = kpiMap.get(kpi.parentKpiName)
+        const childKpi = kpiMap.get(kpi.name)
+
+        if (parentKpi && childKpi) {
+          parentKpi.children.push(childKpi)
+          childKpi.added = true
+        }
+      }
+    })
+
+    return result.filter(kpi => !kpi.added)
+  }
+
   parseToDataTable(data: any): any {
     if (!Array.isArray(data)) return { items: [], headers: [], rows: [] }
 

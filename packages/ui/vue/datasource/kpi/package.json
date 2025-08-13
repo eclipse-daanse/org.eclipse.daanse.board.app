@@ -28,6 +28,7 @@
     "org.eclipse.daanse.board.app.lib.datasource.kpi_tmp": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.common.monaco": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.common.kpi": "^0.0.1-next.1",
     "lodash": "^4.17.16",
     "vue-json-pretty": "^2.4.0",
     "vite-plugin-libcss": "^1.1.1"
@@ -35,7 +36,6 @@
   "devDependencies": {
     "inversify": "7.7.1",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4",
     "@types/lodash": "^4.17.16"
   },

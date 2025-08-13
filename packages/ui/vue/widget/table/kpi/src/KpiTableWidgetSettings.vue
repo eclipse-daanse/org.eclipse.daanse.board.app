@@ -12,15 +12,21 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 
-interface IDataTableSettings {
+const i18n: i18n | undefined = inject('i18n');
+const t = (key: string) => (i18n) ? i18n.t(key) : key;
+
+interface IKpiTableSettings {
   headerBackground: string;
   trendVisualType: string[];
   statusVisualType: string[];
+  showParentChild: boolean;
+  showFolders: boolean;
 }
 
-const widgetSettings = defineModel<IDataTableSettings>({ required: true });
+const widgetSettings = defineModel<IKpiTableSettings>({ required: true });
 
 const trendVisualTypes = [ 'Emoji', 'Arrow', 'Chart', 'Badge' ];
 const statusVisualTypes = [ 'Emoji', 'Lights', 'Badge' ];
@@ -31,29 +37,20 @@ const opened = ref(false)
 <template>
   <va-collapse v-model="opened" header="Kpi Table Settings" icon="settings">
     <div class="settings-container">
-      <va-color-input
-          class="text-color"
-          label="Header Color"
-          v-model="widgetSettings.headerBackground"
-      />
-      <va-select
-        v-model="widgetSettings.trendVisualType"
-        :options="trendVisualTypes"
-        placeholder="Trend Visual Type"
-      />
-      <va-select
-        v-model="widgetSettings.statusVisualType"
-        :options="statusVisualTypes"
-        placeholder="Status Visual Type"
-      />
+      <va-color-input class="text-color" label="Header Color" v-model="widgetSettings.headerBackground" />
+      <va-select v-model="widgetSettings.trendVisualType" :options="trendVisualTypes" placeholder="Trend Visual Type" />
+      <va-select v-model="widgetSettings.statusVisualType" :options="statusVisualTypes"
+        placeholder="Status Visual Type" />
+      <va-checkbox v-model="widgetSettings.showFolders" :label="t('Show Folders')" />
+      <va-checkbox v-model="widgetSettings.showParentChild" :label="t('Show Parent-Child')" />
     </div>
   </va-collapse>
 </template>
 <style scoped>
-  .settings-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
 </style>

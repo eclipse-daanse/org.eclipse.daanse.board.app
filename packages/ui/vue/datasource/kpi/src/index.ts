@@ -15,7 +15,7 @@ import {
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-// import { factorySymbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
+import { factorySymbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
@@ -29,8 +29,7 @@ container.bind(previewSymbol).toConstantValue(Preview)
 container.bind(settingsSymbol).toConstantValue(Settings)
 
 datasourceRepository.registerDatasourceType('KPI', {
-  // Store: KpiTmpDatasourceIdentifier,
-  Store: Symbol('null'), // No specific store for KPI datasource
+  Store: KpiTmpDatasourceIdentifier,
   Preview: previewSymbol,
   Settings: settingsSymbol,
 })
