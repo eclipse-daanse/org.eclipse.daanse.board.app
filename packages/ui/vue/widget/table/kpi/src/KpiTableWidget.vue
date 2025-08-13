@@ -12,8 +12,9 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed } from 'vue';
+import { toRefs, ref, watch, computed, provide } from 'vue';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+import { KpiTable } from 'org.eclipse.daanse.board.app.ui.vue.common.kpi';
 
 const { wrapParameters } = useVariableRepository();
 
@@ -26,67 +27,101 @@ watch(datasourceId, (newVal, oldVal) => {
 })
 
 const {
-    headerBackground,
     statusVisualType,
-    trendVisualType
+    trendVisualType,
+    showParentChild,
+    showFolders
 } = wrapParameters({
-    headerBackground: computed(() => config.value.headerBackground || '#f0f0f0'),
     statusVisualType: computed(() => config.value.statusVisualType || 'badge'),
-    trendVisualType: computed(() => config.value.trendVisualType || 'badge')
+    trendVisualType: computed(() => config.value.trendVisualType || 'badge'),
+    showParentChild: computed(() => config.value.showParentChild ?? false),
+    showFolders: computed(() => config.value.showFolders ?? false),
 });
 
+provide('statusVisualType', statusVisualType);
+provide('trendVisualType', trendVisualType);
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
+
+const parsedTableData = computed(() => {
+    if (!data.value) return null;
+
+    let result = data.value;
+
+    if (!(config.value.showFolders ?? false)) {
+        result = flattenFolders(result);
+    }
+
+    if (!(config.value.showParentChild ?? false)) {
+        result = flattenParentChild(result);
+    }
+
+    return result;
+});
+
+function flattenFolders(items: any[]): any[] {
+    const flattened: any[] = [];
+
+    function extractItems(items: any[]) {
+        items.forEach(item => {
+            if (item.type === 'Folder') {
+                // Extract all children from folder
+                extractItems(item.children || []);
+            } else {
+                flattened.push(item);
+            }
+        });
+    }
+
+    extractItems(items);
+    return flattened;
+}
+
+function flattenParentChild(items: any[]): any[] {
+    const flattened: any[] = [];
+
+    function extractItems(items: any[]) {
+        items.forEach(item => {
+            if (item.type === 'Folder') {
+                // Keep folder structure but flatten its contents
+                flattened.push({
+                    ...item,
+                    children: item.children ? extractItemsFromChildren(item.children) : []
+                });
+            } else {
+                // Add the item itself
+                flattened.push({
+                    ...item,
+                    children: [] // Remove children to flatten hierarchy
+                });
+                // Add all children as separate items
+                if (item.children && item.children.length > 0) {
+                    flattened.push(...extractItemsFromChildren(item.children));
+                }
+            }
+        });
+    }
+
+    function extractItemsFromChildren(children: any[]): any[] {
+        const result: any[] = [];
+        children.forEach(child => {
+            result.push({
+                ...child,
+                children: [] // Remove children to flatten hierarchy
+            });
+            if (child.children && child.children.length > 0) {
+                result.push(...extractItemsFromChildren(child.children));
+            }
+        });
+        return result;
+    }
+
+    extractItems(items);
+    return flattened;
+}
+
 </script>
 <template>
-    <VaDataTable class="table" :items="data ? data.items : []" sticky-header
-        :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
-        :columns="[
-          { key: 'name' },
-          { key: 'caption' },
-          { key: 'value' },
-          { key: 'goal' },
-          { key: 'status' },
-          { key: 'trend' }
-        ]"
-    >
-        <template #cell(status)="{ value }">
-            <div class="flex items-center gap-2">
-                <template v-if="statusVisualType === 'Lights'">
-                    <span>
-                        {{ value > 0.5 ? '🟢' : '🛑' }}
-                    </span>
-                </template>
-                <template v-else-if="statusVisualType === 'Emoji'">
-                    <span>
-                        {{ value > 0.5 ? '😊' : '☹️' }}
-                    </span>
-                </template>
-                <template v-else>
-                    <VaBadge :color="value > 0.5 ? 'success' : 'danger'" :text="value"></VaBadge>
-                </template>
-            </div>
-        </template>
-        <template #cell(trend)="{ value }">
-            <template v-if="trendVisualType === 'Chart'">
-                <span>
-                    {{ value > 0.5 ? '📈' : '📉' }}
-                </span>
-            </template>
-            <template v-else-if="trendVisualType === 'Emoji'">
-                <span>
-                    {{ value > 0.5 ? '😊' : '☹️' }}
-                </span>
-            </template>
-            <template v-else-if="trendVisualType === 'Arrow'">
-                <span>
-                    {{ value > 0.5 ? '⬆️' : '⬇️' }}
-                </span>
-            </template>
-            <template v-else>
-                <VaBadge :color="value > 0.5 ? 'success' : 'danger'" :text="value"></VaBadge>
-            </template>
-        </template>
-    </VaDataTable>
+    <KpiTable :tableData="parsedTableData" />
 </template>
 
 <style scoped>

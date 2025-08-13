@@ -13,6 +13,7 @@ Contributors:
 <script setup lang="ts">
 import { watch, ref, shallowRef, computed } from 'vue';
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { KpiTable } from 'org.eclipse.daanse.board.app.ui.vue.common.kpi';
 
 const props = defineProps<{ dataSource: any }>();
 
@@ -32,13 +33,15 @@ watch(() => props.dataSource.config.connection, () => {
   update();
 }, { deep: true });
 
-const updateSelection = (selection: any[]) => {
-  console.log('Selection updated:', selection);
-  settingsRef.value.config.kpis = selection.map((kpi: any) => kpi.name);
-  console.log('Updated KPIs:', settingsRef.value.config.kpis);
-};
-
 const data = ref(null as unknown as any);
+
+const selectedKpis = computed({
+  get: () => settingsRef.value.config.kpis || [],
+  set: (value: string[]) => {
+    settingsRef.value.config.kpis = value
+    console.log('Updated selected KPIs:', value)
+  }
+})
 
 watch(tempStore, async () => {
   data.value = await tempStore.value.getOriginalData('DataTable');
@@ -48,28 +51,7 @@ watch(tempStore, async () => {
 <template>
   <div v-if="tempStore" style="overflow: hidden; height: 100%; width: 100%;" class="flex flex-col gap-4">
     <div class="h-full">
-      <VaDataTable v-if="data" :items="data.items" :stickyHeader="true" style="height: 100%;"
-        :model-value="selection"
-        @update:model-value="updateSelection"
-        selectable select-mode="multiple"
-        :columns="[
-          { key: 'name' },
-          { key: 'caption' },
-          { key: 'value' },
-          { key: 'goal' },
-          { key: 'status' },
-          { key: 'trend' }
-        ]"
-      >
-        <template #cell(status)="{ value }">
-          <div class="flex items-center gap-2">
-            <VaBadge :color="value > 0.5 ? 'success' : 'danger'" :text="value"></VaBadge>
-          </div>
-        </template>
-        <template #cell(trend)="{ value }">
-          <VaBadge :color="value > 0.5 ? 'success' : 'danger'" :text="value"></VaBadge>
-        </template>
-      </VaDataTable>
+      <KpiTable :tableData="data" v-model:selectedItems="selectedKpis" :show-selection="true" />
     </div>
   </div>
 </template>
