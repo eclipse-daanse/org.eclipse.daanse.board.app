@@ -10,6 +10,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
+
 <template>
   <VaScrollContainer class="max-h-screen ml-15" vertical>
     <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout">
@@ -49,7 +50,7 @@ Contributors:
         @add="onExternalDragAdd"
       >
         <template #item="{ element }">
-          <div>{{ element?.type || '' }}</div>
+          <div>{{ element.type }}</div>
         </template>
       </Draggable>
     </div>

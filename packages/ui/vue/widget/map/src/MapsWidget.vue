@@ -77,6 +77,11 @@ watch(datasourceId, (value, oldValue, onCleanup) => {
   update(value, oldValue)
 })
 
+watch(() => config.value.OGCSstyles?.map(style => style.ObservationrefreshTime), (value, oldValue, onCleanup) => {
+  console.log('ObservationrefreshTime changed, reloading observations')
+  loadObservationsInView()
+}, { deep: true })
+
 
 const { getById } = useDataPointRegistry()
 const openThing = ref<{ [key: string]: boolean }>({})
@@ -255,12 +260,16 @@ const loadObservationsInView = () => {
           //store.value.getObservations(items)
           callEvent(FILTER, { observations: items })
 
-          this.handle = window.setInterval(async () => {
+          if(parseInt(key) !== 0){
+            this.handle = window.setInterval(async () => {
 
-            //store.value.getObservations(items)
+              //store.value.getObservations(items)
+              callEvent(FILTER, { observations: items })
+
+            }, (parseInt(key) * 1000))
+          }else{
             callEvent(FILTER, { observations: items })
-
-          }, (parseInt(key) * 1000))
+          }
         }
       }())
     }
@@ -511,7 +520,8 @@ const centerUpdated = (center: any) => {
                                     :is="getById(subrenderer.observation?.component)?.component"
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[0]?.result"></component>
+                                    :data="datastream.observations[datastream.observations.length-1]?.result"
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
                                 </template>
                               </div>
                             </template>
@@ -526,7 +536,8 @@ const centerUpdated = (center: any) => {
                                     :is="getById(subrenderer.observation?.component)?.component"
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[0]?.result"></component>
+                                    :data="datastream.observations[datastream.observations.length-1]?.result"
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
                                 </template>
                               </div>
                             </template>
