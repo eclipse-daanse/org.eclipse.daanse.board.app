@@ -28,6 +28,7 @@ import type { WfsEndpoint } from '@camptocamp/ogc-client'
 import { computedAsync } from '@vueuse/core'
 import PlacementSytler from './../parts/styler/PlacementSytler.vue'
 import OberservationsStyler from './../parts/styler/OberservationsStyler.vue'
+import AutoUpdateSettings from './styler/AutoUpdateSettings.vue'
 
 
 const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | IRenderer)[]>({
@@ -349,7 +350,7 @@ watch(selection,()=>{
             <template v-if=" layerModel?.type =='OGCSTA'">
               <template v-if="selection?.thing">
                 <VaTab
-                  v-for="tab in ['Conditions', 'Points', 'Areas']"
+                  v-for="tab in ['Conditions', 'Points', 'Areas', 'Auto-update']"
                   :key="tab"
                 >
                   {{ tab }}
@@ -385,11 +386,14 @@ watch(selection,()=>{
               <PointStyler v-if="tabNo==1" v-model="(selection as IDSRenderer).renderer"></PointStyler>
               <AreaStyler v-if="tabNo==2" v-model="selection.renderer.area"></AreaStyler>
             </div>
-            <div v-if="tabNo ==3" class="full rowlayout">
+            <div v-if="tabNo ==3 && layerModel?.type !=='OGCSTA'" class="full rowlayout">
 
                 <PlacementSytler v-model="(selection as IDSRenderer&PlacementI)as PlacementI"></PlacementSytler>
                 <OberservationsStyler v-model="(selection as IDSRenderer)"></OberservationsStyler>
 
+            </div>
+            <div v-else-if="tabNo ==3 && layerModel?.type =='OGCSTA' && selection.thing" class="full">
+              <AutoUpdateSettings v-model="selection.renderer"></AutoUpdateSettings>
             </div>
             <div v-else class="full">
               <template v-if="layerModel?.type =='OGCSTA' && selection.thing">
