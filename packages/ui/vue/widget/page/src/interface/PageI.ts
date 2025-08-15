@@ -10,5 +10,6 @@
 */
 
 export interface PageI{
-  path:string
+  path: string,
+  hideTitle: boolean
 }

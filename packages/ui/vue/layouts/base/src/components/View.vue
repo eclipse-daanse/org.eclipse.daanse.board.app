@@ -17,9 +17,11 @@ import { useMoveableLayout } from '../composables/useMovableLayout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
 
-const props = defineProps(['params']);
+const props = defineProps<{
+  pageId?: string
+}>();
 const route = useRoute();
-const pageID = props.params?.pageid ?? route.params.pageid??'';
+const pageID = props.pageId ?? route.params.pageid ?? '';
 
 const {
   layoutStore,

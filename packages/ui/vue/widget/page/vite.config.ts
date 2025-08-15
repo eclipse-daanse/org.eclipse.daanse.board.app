@@ -23,11 +23,24 @@ export default defineConfig({
       fileName: 'ui.vue.widget.page',
     },
     rollupOptions: {
-      external: ['vue','vue-router'],
+      external: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'org.eclipse.daanse.board.app.lib.core',
+        'org.eclipse.daanse.board.app.lib.repository.widget',
+        'org.eclipse.daanse.board.app.lib.repository.page',
+        'org.eclipse.daanse.board.app.lib.i18next',
+        'org.eclipse.daanse.board.app.ui.vue.stores.widgets',
+        'org.eclipse.daanse.board.app.ui.vue.stores.layout',
+        'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+      ],
       output: {
         globals: {
           vue: 'Vue',
-          'vue-router': 'VueRouter'
+          'vue-router': 'VueRouter',
+          pinia: 'Pinia',
+          'org.eclipse.daanse.board.app.lib.core':'org.eclipse.daanse.board.app.lib.core',
         }
       }
     }

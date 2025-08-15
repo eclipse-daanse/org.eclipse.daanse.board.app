@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 
-import { computed, inject, reactive, ref, watch } from 'vue'
+import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
 import QueryBuilder from '../queryBuilder/QueryBuilder'
 import { useSparQLEndPointManager } from '../sparql/SparqlEndpointRegistry'
 import { Formats } from '../queryBuilder/FilterAPI'
@@ -28,10 +28,20 @@ import { WidgetRepository, identifier as widgetRepoIdentifier } from 'org.eclips
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { ILayoutItem, useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { useRoute } from 'vue-router'
 
-
+const route = useRoute();
 const toogle = ref(false)
+let createWidget:any,updateLayout:any,layout:any;
+
 const run = () => {
+  const pageID = route.params.pageid ?? '';
+  const widgetStore = useWidgetsStore(pageID as string);
+  const layoutStore = useLayoutStore(pageID as string);
+  createWidget = widgetStore.createWidget;
+  updateLayout = layoutStore.updateLayout;
+  layout = layoutStore.layout;
+
   toogle.value = !toogle.value
 }
 const step = ref(0)
@@ -40,8 +50,8 @@ const connectionForm = ref()
 
 const { connections, createConnection } = useConnectionsStore()
 const { dataSources, createDataSource,updateDataSource } = useDataSourcesStore()
-const {createWidget} = useWidgetsStore();
-const {updateLayout,layout} = useLayoutStore();
+
+
 const registeredWidgets = container.get<WidgetRepository>(widgetRepoIdentifier)
 
 const widgetOptions = ref<any[]>([]) // z.B. aus einer Factory basierend auf store.type
@@ -71,7 +81,9 @@ const steps = [
   },
   { label: 'Widgets', icon: 'widgets', beforeLeave: (step: any) => { step.hasError = !stepsVailid.step3} }
 ]
-
+onMounted(()=>{
+  console.log('Mounting endpoint finder');
+})
 const form = reactive({
   searchString: '',
   loading: false
@@ -247,6 +259,8 @@ const getComponentConnection = computed(() => {
 const finish = () => {
 
   if(selectedWidgets.value.length>0){
+    const newLayoutItems: ILayoutItem[] = []
+
     selectedWidgets.value.forEach((widget,index)=>{
       const id= createWidget(widget.type,{datasourceId:store.value?.uid},
         { title: '',
@@ -266,6 +280,7 @@ const finish = () => {
         shadowY: 5,
         shadowTransparence: 25,
         transparency: 255})
+
       const slayout:ILayoutItem={
         id: id,
         x: 50 +(index*300),
@@ -274,11 +289,13 @@ const finish = () => {
         height:100,
         z: 3005,
       }
-      layout.push(slayout)
-      updateLayout(layout)
+      newLayoutItems.push(slayout)
       console.log('Endpointfinder created Widget:' +widget.type)
     });
 
+    // Update layout once with all new items
+    const updatedLayout = [...layout, ...newLayoutItems]
+    updateLayout(updatedLayout)
   }
   selectedWidgets.value = [];
   ds.value = undefined
@@ -299,6 +316,7 @@ watch(()=>store.value?.config,(config)=>{
   console.log(config)
   //updateDataSource(config.uid,store)
 },{deep:true})
+
 
 defineExpose({
   run

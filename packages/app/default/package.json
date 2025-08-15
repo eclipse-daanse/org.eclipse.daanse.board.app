@@ -115,6 +115,7 @@
     "org.eclipse.daanse.board.app.ui.vue.widget.rss": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.vanta": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.mermaid": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.widget.page":"^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.persistence.git": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.markdown": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.code": "^0.0.1-next.1",
