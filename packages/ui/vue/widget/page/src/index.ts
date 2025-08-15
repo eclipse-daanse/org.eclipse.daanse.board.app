@@ -8,7 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
 
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 //@ts-ignore
@@ -16,12 +15,14 @@ import Icon from './assets/progress.svg'
 import PageWidget from './PageWidget.vue'
 import PageWidgetSettings from './PageWidgetSettings.vue'
 import {type PageI} from './interface/PageI'
-
-const init = (container: Container) => {
-  const widgetRepository = container.get<WidgetRepository>(identifier)
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 
-  const register = (widgetRepository: WidgetRepository) => {
+
+
+  const register = () => {
+    console.log('registering Mermaid widget', container)
+    const widgetRepository = container.get<WidgetRepository>(identifier)
     widgetRepository.registerWidget('PageWidget', {
       component: PageWidget,
       settingsComponent: PageWidgetSettings,
@@ -30,11 +31,10 @@ const init = (container: Container) => {
       name:'Page'
     })
   }
-  register(widgetRepository);
+  register();
 
-}
+
 
 export {
-  init,
   type PageI
 }
