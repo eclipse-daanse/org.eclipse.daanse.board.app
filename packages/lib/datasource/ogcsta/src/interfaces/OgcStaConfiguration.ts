@@ -11,8 +11,33 @@
 import { Datastream, Observation, Thing, Location } from '../client'
 import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
+export interface IOGCSTAHistoryConfig {
+  enabled: boolean;
+  timeRange?: {
+    start?: string; // ISO 8601 DateTime
+    end?: string;   // ISO 8601 DateTime
+    startVariable?: string; // Variable name for start time
+    endVariable?: string;   // Variable name for end time
+  };
+  resultTime?: {
+    start?: string;
+    end?: string;
+    startVariable?: string;
+    endVariable?: string;
+  };
+  phenomenonTime?: {
+    start?: string;
+    end?: string;
+    startVariable?: string;
+    endVariable?: string;
+  };
+  orderBy?: 'phenomenonTime desc' | 'phenomenonTime asc' | 'resultTime desc' | 'resultTime asc';
+  limit?: number; // $top parameter
+}
+
 export interface IOGCSTAConfigartion extends IBaseConnectionConfiguration{
   connection: string;
+  history?: IOGCSTAHistoryConfig;
 }
 export abstract class DataTypeBase {}
 export interface IOGCSTAData {

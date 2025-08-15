@@ -14,6 +14,7 @@ import {
   BoxedThing,
   IOGCSTAConfigartion,
   IOGCSTAData,
+  IOGCSTAHistoryConfig,
 } from '../interfaces/OgcStaConfiguration'
 import {
   Configuration,
@@ -30,6 +31,10 @@ import {
   type IConnection,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import {
+  type VariableRepository,
+  identifier as variableIdentifier
+} from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
 import { FILTER, FILTERRESET } from '../interfaces/Constances'
@@ -41,6 +46,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   @inject(identifier)
   private connectionRepository!: ConnectionRepository
 
+  @inject(variableIdentifier)
+  private variableRepository!: VariableRepository
+
+  private configuration!: IOGCSTAConfigartion;
   connection: string = ''
   requestFlag: { key: string; params: any } = {
     key: FILTERRESET,
@@ -54,12 +63,16 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     locations: [],
   }
 
+  private debounceTimer: any | null = null;
+  private watchedVariables: Set<string> = new Set();
+
   init(configuration: IOGCSTAConfigartion): void {
     super.init(configuration)
-
+    this.configuration = configuration;
     if (!configuration.connection) throw new Error('Connetion must be set')
     this.connection = configuration.connection
     this.requestFlag = { key: FILTERRESET, params: undefined }
+    this.setupVariableWatchers();
   }
 
   callEvent(event: string, params: any): void {
@@ -74,6 +87,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   destroy(): void {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
     console.log('OGCSTA Store destroyed')
   }
 
@@ -121,17 +138,24 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     if (this.requestFlag.key == FILTER) {
       for (const d of this.requestFlag.params.observations ?? []) {
         console.log(d.iotId)
-        const ind = this.resultMap.observations?.findIndex(
+        const newObservations = this.resultMap.observations?.filter(
           o => o.ds_source == d.iotId,
-        )
-        if (ind != undefined && ind != -1) {
+        ) || []
+        
+        if (newObservations.length > 0) {
           const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-          if (ds)
-            ds.observations = this.resultMap.observations?.splice(
-              ind,
-              1,
-            ) as Observation[]
+          if (ds){
+            ds.observations = newObservations
+            console.log(ds.observations)
+          }
         }
+      }
+      
+      // Clear processed observations
+      for (const d of this.requestFlag.params.observations ?? []) {
+        this.resultMap.observations = this.resultMap.observations?.filter(
+          o => o.ds_source !== d.iotId
+        ) || []
       }
     }
     if (type == 'OGCSTAData') {
@@ -216,15 +240,124 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     this.getObservations(listOfPromesis)
   }
 
+  private resolveTimeValue(timeValue?: string, variableName?: string): string | undefined {
+    if (variableName && this.variableRepository) {
+      const variable = this.variableRepository.getVariable(variableName);
+      if (variable && variable.value) {
+        return variable.value;
+      }
+    }
+    return timeValue;
+  }
+
+  private buildHistoryFilter(historyConfig?: IOGCSTAHistoryConfig): string {
+    if (!historyConfig?.enabled) return '';
+
+    const filterParts: string[] = [];
+
+    // Phenomenon time filters
+    const phenomenonStart = this.resolveTimeValue(
+      historyConfig.phenomenonTime?.start,
+      historyConfig.phenomenonTime?.startVariable
+    );
+    const phenomenonEnd = this.resolveTimeValue(
+      historyConfig.phenomenonTime?.end,
+      historyConfig.phenomenonTime?.endVariable
+    );
+
+    if (phenomenonStart) {
+      filterParts.push(`phenomenonTime gt ${phenomenonStart}`);
+    }
+    if (phenomenonEnd) {
+      filterParts.push(`phenomenonTime lt ${phenomenonEnd}`);
+    }
+
+    // Result time filters
+    const resultStart = this.resolveTimeValue(
+      historyConfig.resultTime?.start,
+      historyConfig.resultTime?.startVariable
+    );
+    const resultEnd = this.resolveTimeValue(
+      historyConfig.resultTime?.end,
+      historyConfig.resultTime?.endVariable
+    );
+
+    if (resultStart) {
+      filterParts.push(`resultTime gt ${resultStart}`);
+    }
+    if (resultEnd) {
+      filterParts.push(`resultTime lt ${resultEnd}`);
+    }
+
+    // Generic time range (uses phenomenonTime by default)
+    const rangeStart = this.resolveTimeValue(
+      historyConfig.timeRange?.start,
+      historyConfig.timeRange?.startVariable
+    );
+    const rangeEnd = this.resolveTimeValue(
+      historyConfig.timeRange?.end,
+      historyConfig.timeRange?.endVariable
+    );
+
+    if (rangeStart) {
+      filterParts.push(`phenomenonTime gt ${rangeStart}`);
+    }
+    if (rangeEnd) {
+      filterParts.push(`phenomenonTime lt ${rangeEnd}`);
+    }
+
+    return filterParts.join(' and ');
+  }
+
+  private getHistoryQueryParams(historyConfig?: IOGCSTAHistoryConfig) {
+    const params: any = {};
+
+    if (historyConfig?.enabled) {
+      const filter = this.buildHistoryFilter(historyConfig);
+      if (filter) {
+        params.$filter = filter;
+      }
+
+      if (historyConfig.orderBy) {
+        params.$orderby = historyConfig.orderBy;
+      }
+
+      if (historyConfig.limit) {
+        params.$top = historyConfig.limit;
+      }
+    }
+
+    return params;
+  }
+
+  async getHistoricalObservations(datastreamId: string, historyConfig?: IOGCSTAHistoryConfig): Promise<Observation[]> {
+    if (!this.baseConfigration) {
+      throw new Error('Base configuration not initialized');
+    }
+
+    const queryParams = this.getHistoryQueryParams(historyConfig);
+
+    const data = await new DatastreamsApi(this.baseConfigration)
+      .v11DatastreamsEntityIdObservationsGet({
+        entityId: datastreamId,
+        ...queryParams
+      });
+
+    return data.value || [];
+  }
+
   getObservations(listOfPromesis: Promise<IOGCSTAData>[]) {
+    const historyConfig = (this.configuration as IOGCSTAConfigartion)?.history;
+
     if ('observations' in this.requestFlag.params) {
       if ('all' in this.requestFlag.params.observations!) {
         listOfPromesis.push(
           (async () => {
+            const queryParams = this.getHistoryQueryParams(historyConfig);
             const data = (
               await new ObservationsApi(
                 this.baseConfigration,
-              ).v11ObservationsGet()
+              ).v11ObservationsGet(queryParams)
             ).value
             return { observations: data }
           })(),
@@ -233,16 +366,25 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         for (const ds of this.requestFlag.params.observations) {
           listOfPromesis.push(
             (async () => {
+              const queryParams = this.getHistoryQueryParams(historyConfig);
+              const baseParams = {
+                entityId: (ds as Datastream).iotId + '',
+                $top: historyConfig?.enabled ? historyConfig.limit || 100 : 1,
+              };
+
               const data = (
                 await new DatastreamsApi(
                   this.baseConfigration,
                 ).v11DatastreamsEntityIdObservationsGet({
-                  entityId: (ds as Datastream).iotId + '',
-                  $top: 1,
+                  ...baseParams,
+                  ...queryParams
                 })
               ).value as (Observation & { ds_source?: string })[]
-              if (data && data[0]) {
-                data[0]['ds_source'] = (ds as Datastream).iotId + ''
+
+              if (data && data.length > 0) {
+                data.forEach(obs => {
+                  obs['ds_source'] = (ds as Datastream).iotId + '';
+                });
               }
               return { observations: data }
             })(),
@@ -309,5 +451,66 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         }
       }
     }
+  }
+
+  private collectVariableNames(): string[] {
+    const variables: string[] = [];
+    const historyConfig = this.configuration?.history;
+
+    if (historyConfig?.enabled) {
+      if (historyConfig.timeRange?.startVariable) variables.push(historyConfig.timeRange.startVariable);
+      if (historyConfig.timeRange?.endVariable) variables.push(historyConfig.timeRange.endVariable);
+      if (historyConfig.phenomenonTime?.startVariable) variables.push(historyConfig.phenomenonTime.startVariable);
+      if (historyConfig.phenomenonTime?.endVariable) variables.push(historyConfig.phenomenonTime.endVariable);
+      if (historyConfig.resultTime?.startVariable) variables.push(historyConfig.resultTime.startVariable);
+      if (historyConfig.resultTime?.endVariable) variables.push(historyConfig.resultTime.endVariable);
+    }
+
+    return variables;
+  }
+
+  private setupVariableWatchers(): void {
+    if (!this.variableRepository) return;
+
+    const variableNames = this.collectVariableNames();
+
+    for (const variableName of variableNames) {
+      if (!this.watchedVariables.has(variableName)) {
+        const variable = this.variableRepository.getVariable(variableName);
+        if (variable) {
+          variable.subscribe(()=>{
+            this.onVariableChanged();
+          })
+
+          // Setup polling-based watcher since we don't have reactive variables
+          this.watchedVariables.add(variableName);
+        }
+      }
+    }
+  }
+
+  private onVariableChanged(): void {
+    // Clear existing debounce timer
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    // Set new debounce timer for 100ms
+    this.debounceTimer = setTimeout(async () => {
+      try {
+        // Refetch observations with new variable values
+        /*this.resultMap = {
+          things: [],
+          datastreams: [],
+          observations: [],
+          locations: [],
+        };*/
+
+        await this.getData('OGCSTAData');
+        this.notify();
+      } catch (error) {
+        console.error('Error refetching observations after variable change:', error);
+      }
+    }, 100);
   }
 }
