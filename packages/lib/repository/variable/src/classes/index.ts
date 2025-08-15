@@ -72,6 +72,10 @@ export class VariableRepository {
   getAllVariables(): any[] {
     return Array.from(this.availableVariables)
   }
+  getAllVariablesUnwrapped(): any[] {
+    return Array.from(this.availableVariables.values())
+  }
+
 
   renameVariable(newname: string,oldname:string): void {
     const avar = this.availableVariables.get(oldname);

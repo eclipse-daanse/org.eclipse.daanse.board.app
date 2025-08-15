@@ -54,11 +54,17 @@ const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils
 
 const data = ref<any>({})
 const { update, callEvent } = useDatasourceRepository(datasourceId, 'OGCSTAData', data)
+
 watch(datasourceId, (value, oldValue, onCleanup) => {
   console.log(value)
   console.log(oldValue)
   update(value, oldValue)
 })
+
+watch(() => config.value.OGCSstyles?.map(style => style.ObservationrefreshTime), (value, oldValue, onCleanup) => {
+  console.log('ObservationrefreshTime changed, reloading observations')
+  loadObservationsInView()
+}, { deep: true })
 
 
 const { getById } = useDataPointRegistry()
@@ -84,10 +90,11 @@ onMounted(() => {
 
 })
 watch(data, (value, oldValue, onCleanup) => {
-  console.log('data Changed')
-  loadObservationsInView()
-
-}, { deep: true, once: true })
+  console.log(value)
+  if (mounted) {
+    //loadObservationsInView()
+  }
+}, { deep: true })
 
 const setFixed = ()=>{
   try {
@@ -147,7 +154,7 @@ const maploaded = () => {
   mounted = true,
     console.log('map ready')
     setFixed();
-  //loadObservationsInView();
+  loadObservationsInView();
 }
 const rev = (arr: any) => {
   return {
@@ -165,6 +172,9 @@ const mapmove = debounce(() => {
   loadObservationsInView()
 }, 2000, { leading: false })
 const loadObservationsInView = () => {
+  console.log('loadObservationsInView called')
+  console.log('data.value:', data.value)
+  console.log('config.value.OGCSstyles:', config.value.OGCSstyles)
 
   let inBounds = (map.value as any)?.leafletObject.getBounds()
 
@@ -183,41 +193,54 @@ const loadObservationsInView = () => {
   const taskListByTime: { [key: string]: BoxedDatastream[] } = {}
   for (const dataStream of (((data.value) as any)?.datastreams ?? [])) {
     for (const renderer of config.value.OGCSstyles) {
-      const refreshtime: number = renderer.ObservationrefreshTime ?? 10
-      if (!taskListByTime[refreshtime]) taskListByTime[refreshtime] = []
-      for (const subrender of renderer.ds_renderer) {
 
-        if (compareDatastream(dataStream, subrender)) {
-          if (dataStream.observedArea) {
 
-            const featrueObservedArea = (transformToGeoJson(toRaw(dataStream.observedArea)) as Polygon)
+      const refreshtime: number = renderer.renderer.ObservationrefreshTime  ?? 0;
+      //console.log(renderer)
+      //console.log('refreshtime' + refreshtime);
+      //if(refreshtime !== 0 ) {
 
-            if (booleanContains(bboxFeature, featrueObservedArea)) {
-              taskListByTime[refreshtime].push(dataStream)
-            }
-          } else {
-            if (dataStream.thing && dataStream.thing!.locations && dataStream.thing!.locations[0]) {
-              try {
-                if (booleanContains(bboxFeature, transformToGeoJson(dataStream.thing!.locations[0].location))) {
+        if (!taskListByTime[refreshtime]) taskListByTime[refreshtime] = []
+
+        if (compareThing(dataStream.thing, renderer)) {
+          for (const subrender of renderer.ds_renderer) {
+
+            if (compareDatastream(dataStream, subrender)) {
+
+              if (dataStream.observedArea) {
+
+                const featrueObservedArea = (transformToGeoJson(toRaw(dataStream.observedArea)) as Polygon)
+
+                if (booleanContains(bboxFeature, featrueObservedArea)) {
                   taskListByTime[refreshtime].push(dataStream)
                 }
-              } catch (e) {
-                console.log('FeatureCollection not supported')
+              } else {
+                if (dataStream.thing && dataStream.thing!.locations && dataStream.thing!.locations[0]) {
+                  try {
+                    if (booleanContains(bboxFeature, transformToGeoJson(dataStream.thing!.locations[0].location))) {
+                      taskListByTime[refreshtime].push(dataStream)
+                    }
+                  } catch (e) {
+                    console.log('FeatureCollection not supported')
+                  }
+
+                }
+
+                console.log(dataStream.Thing)
               }
-
             }
-
-            console.log(dataStream.Thing)
           }
         }
       }
-
-    }
+    //}
   }
+
+  console.log('taskListByTime:', taskListByTime)
 
   const tasks = []
   for (const [key, _items] of Object.entries(taskListByTime)) {
     const items: Datastream[] = uniq(_items)
+    console.log(`RefreshTime ${key}: ${items.length} items`)
     if (items.length > 0) {
       tasks.push(new class extends Task {
         readonly id = Math.random().toString()
@@ -233,12 +256,16 @@ const loadObservationsInView = () => {
           //store.value.getObservations(items)
           callEvent(FILTER, { observations: items })
 
-          this.handle = window.setInterval(async () => {
+          if(parseInt(key) !== 0){
+            this.handle = window.setInterval(async () => {
 
-            //store.value.getObservations(items)
+              //store.value.getObservations(items)
+              callEvent(FILTER, { observations: items })
+
+            }, (parseInt(key) * 1000))
+          }else{
             callEvent(FILTER, { observations: items })
-
-          }, (parseInt(key) * 1000))
+          }
         }
       }())
     }
@@ -389,7 +416,8 @@ const centerUpdated = (center: any) => {
                                     :is="getById(subrenderer.observation?.component)?.component"
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[0]?.result"></component>
+                                    :data="datastream.observations[datastream.observations.length-1]?.result"
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
                                 </template>
                               </div>
                             </template>
@@ -404,7 +432,8 @@ const centerUpdated = (center: any) => {
                                     :is="getById(subrenderer.observation?.component)?.component"
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[0]?.result"></component>
+                                    :data="datastream.observations[datastream.observations.length-1]?.result"
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
                                 </template>
                               </div>
                             </template>
@@ -414,7 +443,7 @@ const centerUpdated = (center: any) => {
                                   :is="getById(subrenderer.observation?.component)?.component"
                                   v-if="getById(subrenderer.observation?.component)"
                                   :config="subrenderer.observation?.setting"
-                                  :data="datastream.observations[0]?.result"></component>
+                                  :data="datastream.observations[datastream.observations.length-1]?.result"></component>
                               </template>
                             </template>
 

@@ -10,255 +10,322 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
-
 <template>
-  <VaScrollContainer
-    class="max-h-screen ml-15"
-    vertical
-
-  >
-    <div ref="wrapper" @dragenter="drag = true" @drop="drag=false" @drag="dragover" >
-
-
-
-      <GridLayout ref="gridLayout" v-model:layout="layout" :row-height="30"  :responsive="true" :vertical-compact="false" :breakpoints="{ lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 }" :cols="{ lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 }">
-        <template #item="{ item }">
-          <WidgetWrapper v-if="widgets?.find((w:any) => w.uid === item.i)"
-            :widget="widgets.find((w:any) => w.uid === item.i)"
-            :ref="`${item.i}_wrapper`"
-            @openSettings="openWidgetSettings"
-            editEnabled
-            @removeWidget="()=>removeWidget(item.i.toString())"
-          />
-          <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
-        </template>
-      </GridLayout>
-    <draggable
-
-      v-show="drag"
-      :list="widgetsTmp"
-      :group="{ name: 'widgets' }"
-      class="invisible-dropzone"
-      @change="change"
-      itemKey="type"
-    >
-      <template #item="{ element }">
-        <div>{{ element.type }}</div>
+  <VaScrollContainer class="max-h-screen ml-15" vertical>
+    <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout">
+      <GridLayout
+        ref="gridLayout"
+        :layout="gridLayoutModel"
+        :row-height="ROW_HEIGHT"
+        :responsive="true"
+        :vertical-compact="false"
+        :breakpoints="BREAKPOINTS"
+        :cols="COLS"
+        @layout-updated="persistLayout"
+      >
+      <template #item="{ item }">
+        <WidgetWrapper
+          v-if="widgets?.find((w:any) => w.uid === item.i)"
+          :widget="widgets.find((w:any) => w.uid === item.i)"
+          :ref="`${item.i}_wrapper`"
+          @openSettings="openWidgetSettings"
+          editEnabled
+          @removeWidget="() => removeWidget(item.i.toString())"
+        />
+        <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
       </template>
-    </draggable>
+      </GridLayout>
+
+      <!-- Overlay für externes Draggen von Widgets -->
+      <Draggable
+        v-show="drag"
+        :list="widgetsTmp"
+        :group="{ name: 'widgets' }"
+        class="invisible-dropzone"
+        itemKey="type"
+        :sort="false"
+        @start="onOverlayStart"
+        @end="onOverlayEnd"
+        @add="onExternalDragAdd"
+      >
+        <template #item="{ element }">
+          <div>{{ element.type }}</div>
+        </template>
+      </Draggable>
     </div>
   </VaScrollContainer>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
-import { GridLayout, GridItem, type Layout, type LayoutItem } from 'grid-layout-plus'
-
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { GridLayout, type LayoutItem } from 'grid-layout-plus'
 import { type IWidget, useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
-import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import { useRoute, useRouter } from 'vue-router'
+import { WidgetWrapper, defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
+import throttle from 'lodash/throttle'
 
-const widgetSettingsOpenedId = ref('')
-const widgetsTmp = ref([])
-const emit = defineEmits(['openSettings', 'removeWidget'])
+/** Konstanten */
+const BREAKPOINTS = { lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 } as const
+const COLS = { lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 } as const
+const ROW_HEIGHT = 30
 
-const route = useRoute();
-const pageID = computed(() => route.params.pageid as string || '');
-
-// Use existing store instances directly - computed to handle route changes
+/** Routing/Stores */
+const route = useRoute()
+const pageID = computed(() => (route.params.pageid as string) || '')
 const widgetStore = computed(() => useWidgetsStore(pageID.value))
 const layoutStore = computed(() => useLayoutStore(pageID.value))
-
-// Use computed to reactively get store data
 const widgets = computed(() => widgetStore.value.widgets)
 const storedLayout = computed(() => layoutStore.value.layout)
-const widgetSelectorVisible = ref(false)
 
-const drag = ref(false);
-const pageSettingsOpenedId = ref<string|undefined>(undefined);
+/** Refs auf Grid & Wrapper */
 const gridLayout = ref<InstanceType<typeof GridLayout>>()
 const wrapper = ref<HTMLElement>()
-// Convert layout store format to grid-layout-plus format
-let layout = computed<Layout>({
-  get: () => {
-    const layoutData = storedLayout.value || []
-    if (!Array.isArray(layoutData)) {
-      return []
-    }
 
-    return layoutData.map((item:any) => {
-      if (!item || typeof item !== 'object') {
-        console.warn('Invalid layout item:', item)
-        return null
-      }
+/** Drag/Drop State */
+const drag = ref(false)
+const lastPos = ref<{ x: number; y: number }>({ x: -1, y: -1 })
+const isDraggingPlaceholder = ref(false)
+const widgetsTmp = ref<any[]>([])
+const dropId = '__drop__'
 
-      return {
-        x: Math.floor((item.x || 0) / 100), // Convert pixel to grid units
-        y: Math.floor((item.y || 0) / 30),  // Convert pixel to grid units (row height = 30)
-        w: Math.max(1, Math.floor((item.width || 100) / 100)), // Minimum width 1
-        h: Math.max(1, Math.floor((item.height || 30) / 30)), // Minimum height 1
-        i: item.id || '',
-        static: false
-      } as LayoutItem
-    }).filter((item): item is LayoutItem => item !== null) // Remove any null items with proper type guard
-  },
-  set: (newLayout) => {
-    const convertedLayout = newLayout.map((item:any) => ({
-      id: item.i,
-      x: item.x * 100, // Convert grid units back to pixels
-      y: item.y * 30,  // Convert grid units back to pixels
-      width: item.w * 100,
-      height: item.h * 30,
-      z: 3000
-    }))
+/** Lokales Layout (Grid-Units) + Transient (Platzhalter) */
+const layoutModel = ref<LayoutItem[]>([])
+const transient = ref<LayoutItem[]>([])
+const gridLayoutModel = computed<LayoutItem[]>(() => [
+  ...layoutModel.value,
+  ...transient.value,
+])
 
-    layoutStore.value.updateLayout(convertedLayout)
-  }
-})
+/** Guards gegen Update-Loops */
+const syncingFromStore = ref(false)
 
-const change = (e:any)=>{
-  const datasource = 'test'
-  const widgetType = e.added.element.type
-  addWidget(widgetType, datasource)
-  dragEnd();
+/** Helper */
+function toNum(v: unknown, fallback = 0): number {
+  if (typeof v === 'number') return v
+  const n = Number(v)
+  return Number.isFinite(n) ? n : fallback
 }
-const dropId = 'drop'
-const mouseAt = { x: -1, y: -1 }
-const dragItem = { x: -1, y: -1, w: 2, h: 2, i: '' }
-const dragover = (event: any) => {
-  console.log('move')
-  if(drag.value){
-  mouseAt.x = event.clientX;
-  mouseAt.y = event.clientY
-
-  let parentRect = wrapper.value?.getBoundingClientRect()
-
-  if (!parentRect || !gridLayout.value) return
-
-  const mouseInGrid =
-    mouseAt.x > parentRect.left &&
-    mouseAt.x < parentRect.right &&
-    mouseAt.y > parentRect.top &&
-    mouseAt.y < parentRect.bottom
-
-  if (mouseInGrid && !layout.value.find((item:any) => item.i === dropId)) {
-    layout.value.push({
-      x: (layout.value.length * 2) % 12,
-      y: layout.value.length + 12, // puts it at the bottom
-      w: 2,
-      h: 2,
-      i: dropId,
-      static: false
-    })
-  }
-    nextTick(() => {
-
-
-  const index = layout.value.findIndex((item:any) => item.i === dropId)
-
-  if (index !== -1) {
-    const item = gridLayout.value?.getItem(dropId)
-
-    if (!item) return
-
-    try {
-      item.wrapper.style.display = 'none'
-    } catch (e) {}
-
-    Object.assign(item.state, {
-      top: mouseAt.y - parentRect.top,
-      left: mouseAt.x - parentRect.left,
-    })
-    const newPos = item.calcXY(mouseAt.y - parentRect.top, mouseAt.x - parentRect.left)
-
-    if (mouseInGrid) {
-      gridLayout.value?.dragEvent('dragstart', dropId, newPos.x, newPos.y, dragItem.h, dragItem.w)
-      dragItem.i = `widget_${Math.random().toString(36).substring(7)}`
-      const layoutItem = layout.value[index]
-      if (layoutItem) {
-        dragItem.x = layoutItem.x
-        dragItem.y = layoutItem.y
-      }
-    } else {
-      gridLayout.value?.dragEvent('dragend', dropId, newPos.x, newPos.y, dragItem.h, dragItem.w)
-      layout.value = layout.value.filter((item:any) => item.i !== dropId)
-    }
-
-}})}}
-function dragEnd() {
-  drag.value = false;
-  const parentRect = wrapper.value?.getBoundingClientRect()
-
-  if (!parentRect || !gridLayout.value) return
-
-  const mouseInGrid =
-    mouseAt.x > parentRect.left &&
-    mouseAt.x < parentRect.right &&
-    mouseAt.y > parentRect.top &&
-    mouseAt.y < parentRect.bottom
-
-  //if (mouseInGrid) {
-    //alert(`Dropped element props:\n${JSON.stringify(dragItem, ['x', 'y', 'w', 'h'], 2)}`)
-    gridLayout.value.dragEvent('dragend', dropId, dragItem.x, dragItem.y, dragItem.h, dragItem.w)
-    layout.value = layout.value.filter((item:any) => item.i !== dropId)
-  //} else {
-  //  return
-  //}
-
-  layout.value.push({
-    x: dragItem.x,
-    y: dragItem.y,
-    w: dragItem.w,
-    h: dragItem.h,
-    i: dragItem.i,
-    static: false
-  })
-  nextTick(() => {
-    gridLayout.value?.dragEvent('dragend', dragItem.i, dragItem.x, dragItem.y, dragItem.h, dragItem.w)
-
-    const item = gridLayout.value?.getItem(dropId)
-
-    if (!item) return
-
-    try {
-      item.wrapper.style.display = ''
-    } catch (e) {
-    }
-  });
+function getCurrentCols(width: number) {
+  if (width >= BREAKPOINTS.lg) return COLS.lg
+  if (width >= BREAKPOINTS.md) return COLS.md
+  if (width >= BREAKPOINTS.sm) return COLS.sm
+  if (width >= BREAKPOINTS.xs) return COLS.xs
+  return COLS.xxs
 }
-const addWidget = (type: string, datasourceId: string) => {
-  const uid = dragItem.i
+function getMetrics() {
+  // Use fixed container width to ensure consistent conversion
+  const containerW = 1200 // Fixed width
+  const cols = COLS.md // Fixed column count (12)
+
+  return { colW: containerW / cols, rowH: ROW_HEIGHT }
+}
+
+/** Mapping Pixel <-> Grid (Store speichert Pixel) */
+function toGrid(it: any): LayoutItem {
+  const { colW, rowH } = getMetrics()
+  const xPx = toNum(it.x, 0)
+  const yPx = toNum(it.y, 0)
+  const wPx = toNum(it.width, colW)
+  const hPx = toNum(it.height, rowH)
+  const result = {
+    i: String(it.id ?? it.i ?? ''),
+    x: Math.round(xPx / colW),
+    y: Math.round(yPx / rowH),
+    w: Math.max(1, Math.round(wPx / colW)),
+    h: Math.max(1, Math.round(hPx / rowH)),
+    static: false,
+  }
+  return result
+}
+function toPixels(it: LayoutItem) {
+  const { colW, rowH } = getMetrics()
+  const result = {
+    id: String(it.i),
+    x: toNum(it.x, 0) * colW,
+    y: toNum(it.y, 0) * rowH,
+    width: toNum(it.w, 1) * colW,
+    height: toNum(it.h, 1) * rowH,
+    z: 3000,
+  }
+  return result
+}
+
+/** Store -> Grid (mit Guard) */
+watch(storedLayout, (data) => {
+  syncingFromStore.value = true
+  try {
+    const arr = Array.isArray(data) ? data.map(toGrid) : []
+    // Nur setzen, wenn wirklich anders
+    if (!isEqual(layoutModel.value, arr)) {
+      layoutModel.value = arr
+    }
+  } finally {
+    // kleinen Tick warten, damit @layout-updated vom Grid nicht direkt wieder feuert
+    nextTick(() => (syncingFromStore.value = false))
+  }
+}, { immediate: true, deep: true })
+
+/** Re-Sync bei Resize */
+const onResize = throttle(() => {
+  // Neu mappen bei geänderten Metriken
+  const data = storedLayout.value || []
+  const arr = Array.isArray(data) ? data.map(toGrid) : []
+  if (!isEqual(layoutModel.value, arr)) layoutModel.value = arr
+}, 120)
+onMounted(() => window.addEventListener('resize', onResize, { passive: true }))
+onBeforeUnmount(() => window.removeEventListener('resize', onResize))
+
+/** Grid -> Store (nur wenn nicht gerade vom Store gesynct) */
+function persistLayout(newLayout?: LayoutItem[]) {
+  if (syncingFromStore.value) return
+  const src = (newLayout ?? gridLayoutModel.value).filter(it => it.i !== dropId)
+  // Store-Ziel berechnen
+  const nextPixels = src.map(toPixels)
+  const currPixels = (storedLayout.value || []) as any[]
+
+  // Präzisionsvergleich: runde Werte für Vergleich
+  const roundedNext = nextPixels.map(p => ({
+    ...p,
+    x: Math.round(p.x * 100) / 100,
+    y: Math.round(p.y * 100) / 100,
+    width: Math.round(p.width * 100) / 100,
+    height: Math.round(p.height * 100) / 100
+  }))
+  const roundedCurr = currPixels.map((p: any) => ({
+    ...p,
+    x: Math.round(p.x * 100) / 100,
+    y: Math.round(p.y * 100) / 100,
+    width: Math.round(p.width * 100) / 100,
+    height: Math.round(p.height * 100) / 100
+  }))
+
+  // Nur schreiben, wenn wirklich anders
+  if (!isEqual(roundedCurr, roundedNext)) {
+    layoutStore.value.updateLayout(nextPixels)
+  }
+}
+
+/** Platzhalter sichern/entfernen */
+async function ensurePlaceholder() {
+  if (!transient.value.find(it => it.i === dropId)) {
+    transient.value = [...transient.value, { x: 0, y: 0, w: 2, h: 2, i: dropId, static: false }]
+    await nextTick()
+  }
+  await nextTick()
+  return (gridLayout.value as any)?.getItem?.(dropId)
+}
+function removePlaceholder() {
+  transient.value = transient.value.filter(it => it.i !== dropId)
+}
+
+/** Overlay/Draggable Events */
+async function onOverlayStart() {
+  drag.value = true
+  isDraggingPlaceholder.value = false
+  await ensurePlaceholder()
+}
+async function onDragMove(evt: any) {
+  const e = evt
+  if (!e || !gridLayout.value) return
+
+  // Relativ zum Grid rechnen
+  const gridEl: HTMLElement | null = document.querySelector('.alayout');
+
+  if (!gridEl) return
+  const rect = gridEl.getBoundingClientRect()
+
+  if (!transient.value.find(it => it.i === dropId)) {
+    transient.value = [...transient.value, { x: 0, y: 0, w: 2, h: 2, i: dropId, static: false }]
+    await nextTick()
+  }
+  await nextTick()
+  const item = (gridLayout.value as any)?.getItem?.(dropId)
+  if (!item) return
+
+  const left = e.clientX - rect.left
+  const top  = e.clientY - rect.top
+  let pos = item.calcXY(top, left)
+  const cols = (gridLayout.value as any)?.cols ?? 12
+  if (pos.x < 0 || pos.y < 0 || pos.x >= cols) pos = item.calcXY(left, top)
+
+  lastPos.value = { x: toNum(pos.x, 0), y: toNum(pos.y, 0) }
+
+  if (!isDraggingPlaceholder.value) {
+    gridLayout.value.dragEvent('dragstart', dropId, lastPos.value.x, lastPos.value.y, 2, 2)
+    isDraggingPlaceholder.value = true
+  } else {
+    gridLayout.value.dragEvent('drag', dropId, lastPos.value.x, lastPos.value.y, 2, 2)
+  }
+}
+function onOverlayEnd() {
+  if (isDraggingPlaceholder.value && gridLayout.value) {
+    gridLayout.value.dragEvent('dragend', dropId, lastPos.value.x, lastPos.value.y, 2, 2)
+  }
+  removePlaceholder()
+  isDraggingPlaceholder.value = false
+  drag.value = false
+}
+function onExternalDragAdd(e: any) {
+  const added = e?.item?._underlying_vm_ || e?.added?.element || e?.item
+  const type = added?.type ?? 'UnknownWidget'
+  const datasourceId = added?.datasourceId ?? 'default'
+
+  if (isDraggingPlaceholder.value && gridLayout.value) {
+    gridLayout.value.dragEvent('dragend', dropId, lastPos.value.x, lastPos.value.y, 2, 2)
+  }
+  removePlaceholder()
+  isDraggingPlaceholder.value = false
+  drag.value = false
+
+  // finales Item an zuletzt berechneter Grid-Position
+  const finalId = `widget_${Math.random().toString(36).slice(2, 9)}`
+  const { x, y } = lastPos.value
+  layoutModel.value = [...layoutModel.value, { i: finalId, x, y, w: 2, h: 2, static: false }]
+
+  // Store nur aktualisieren; Grid spiegelt sich über watch(storedLayout)
+  persistLayout(layoutModel.value)
+
+  addWidget(finalId, type, datasourceId)
+
+  lastPos.value = { x: -1, y: -1 }
+}
+
+/** Wrapper (Fallback) */
+function onDragEnter() { drag.value = true }
+function onDrop() { onOverlayEnd() }
+
+/** Widgets hinzufügen/entfernen */
+function addWidget(uid: string, type: string, datasourceId: string) {
   const config = { datasourceId, settings: {} }
   const newWidget: IWidget = { uid, type, config, wrapperConfig: cloneDeep(defaultConfig) }
-
-  // Add to widgets store
-  const newWidgets = [...widgets.value, newWidget]
-  widgetStore.value.updateWidgets(newWidgets)
+  widgetStore.value.updateWidgets([...widgets.value, newWidget])
 }
+function removeWidget(uid: string) {
+  widgetStore.value.updateWidgets(widgets.value.filter((w: any) => w.uid !== uid))
+  layoutModel.value = layoutModel.value.filter((it: any) => it.i !== uid)
+  persistLayout(layoutModel.value)
+}
+
+/** UI */
+const emit = defineEmits(['openSettings', 'removeWidget'])
+
+
 const openWidgetSettings = (id: string) => {
-  emit('openSettings', id)
+  emit('openSettings', id);
 }
-const removeWidget = (uid: string) => {
-  // Remove from widgets store
-  const newWidgets = widgets.value.filter((w:any) => w.uid !== uid)
-  widgetStore.value.updateWidgets(newWidgets)
-
-  // Remove from layout - the computed property will handle the conversion
-  const currentLayout = layout.value
-  layout.value = currentLayout.filter((item:any) => item.i !== uid)
-
-  emit('removeWidget', uid)
-}
-// Remove currentlyEditingWidget - handled by parent component now
 </script>
 
 <style scoped>
+.alayout{
+  padding-left:60px;
+}
 .vgl-layout {
   --vgl-placeholder-bg: #aaa;
-  min-height:100vh;
+  min-height: 100vh;
+
 }
 .vgl-layout::before {
   position: absolute;
@@ -266,165 +333,36 @@ const removeWidget = (uid: string) => {
   height: calc(100% - 5px);
   margin: 5px;
   content: '';
-  background-image: linear-gradient(to right, #e9e9e9 1px, transparent 1px),
-  linear-gradient(to bottom, #e9e9e9 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, #e9e9e9 1px, transparent 1px),
+    linear-gradient(to bottom, #e9e9e9 1px, transparent 1px);
   background-repeat: repeat;
   background-size: calc(calc(100% - 5px) / 2) 40px;
 }
-@media (min-width: 20px) {
+@media (min-width: 20px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 2) 40px; } }
+@media (min-width: 420px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 4) 40px; } }
+@media (min-width: 708px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 6) 40px; } }
+@media (min-width: 1120px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 12) 40px; } }
+@media (min-width: 1720px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 18) 40px; } }
 
-  .vgl-layout::before {
-    background-size: calc(calc(100% - 5px) / 2) 40px;
-  }
+:deep(.vgl-item--placeholder) {
+  outline: 2px dashed #888;
+  background-color: rgba(136,136,136,0.15);
 }
-@media (min-width: 420px) {
-
-  .vgl-layout::before {
-    background-size: calc(calc(100% - 5px) / 4) 40px;
-  }
-}
-
-@media (min-width: 708px) {
-
-  .vgl-layout::before {
-    background-size: calc(calc(100% - 5px) / 6) 40px;
-  }
-}
-
-@media (min-width: 1120px) {
-  .vgl-layout::before {
-    background-size: calc(calc(100% - 5px) / 12) 40px;
-  }
-}
-
-@media (min-width: 1720px) {
-  .vgl-layout::before {
-    background-size: calc(calc(100% - 5px) / 18) 40px;
-  }
-}
-
-:deep(.vgl-item:not(.vgl-item--placeholder)) {
-
-  /*border: 1px dashed #ccc;*/
-}
-
-:deep(.vgl-item--resizing) {
-  opacity: 90%;
-}
-
-:deep(.vgl-item--static) {
-  background-color: #cce;
-}
+:deep(.vgl-item--resizing) { opacity: 90%; }
+:deep(.vgl-item--static) { background-color: #cce; }
 
 .text {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  font-size: 24px;
-  text-align: center;
-}
-.report-container .widgets-adding-controls {
-  display: flex;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  margin: 16px;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  margin: auto; font-size: 24px; text-align: center;
 }
 
-.report-container .widget-board {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.report-container .add-btn {
-  margin: 0 16px 16px 0;
-  align-self: self-end;
-}
-
-.dashboard-item {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.dashboard-item-container {
-  position: absolute;
-}
-
-.dropdown-buttons-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  z-index: 99999;
-}
-
-.va-dropdown__content {
-  z-index: 10000000 !important;
-}
-
-.va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper {
-  z-index: 20000000 !important;
-}
-
-.add_widget-button {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  right: 30px;
-  bottom: 20px;
-}
-.pages_board{
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  left: 80px;
-  bottom: 20px;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-
-
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
-}
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scaleY(0%) translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: scaleY(100%) translateY(0%);
-    opacity: 1;
-  }
-}
+/* Overlay */
 .invisible-dropzone {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /*pointer-events: auto; /* WICHTIG: stört normale Mausbedienung nicht */
-  /*z-index: 10;*/
+  inset: 0;
+  z-index: 1000;
+  pointer-events: auto;
 }
-.invisible-dropzone > * {
-  display: none !important;
-}
+.invisible-dropzone > * { opacity: 0; }
 </style>

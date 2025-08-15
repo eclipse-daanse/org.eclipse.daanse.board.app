@@ -1050,6 +1050,13 @@
   dependencies:
     "@floating-ui/utils" "^0.2.9"
 
+"@floating-ui/core@^1.7.3":
+  version "1.7.3"
+  resolved "https://registry.npmjs.org/@floating-ui/core/-/core-1.7.3.tgz#462d722f001e23e46d86fd2bd0d21b7693ccb8b7"
+  integrity sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==
+  dependencies:
+    "@floating-ui/utils" "^0.2.10"
+
 "@floating-ui/dom@^1.0.0":
   version "1.7.1"
   resolved "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.1.tgz#76a4e3cbf7a08edf40c34711cf64e0cc8053d912"
@@ -1057,6 +1064,14 @@
   dependencies:
     "@floating-ui/core" "^1.7.1"
     "@floating-ui/utils" "^0.2.9"
+
+"@floating-ui/dom@^1.7.0":
+  version "1.7.3"
+  resolved "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.3.tgz#6174ac3409e6a064bbdf1f4bb07188ee9461f8cf"
+  integrity sha512-uZA413QEpNuhtb3/iIKoYMSK07keHPYeXF02Zhd6e213j+d1NamLix/mCLxBUDW/Gx52sPH2m+chlUsyaBs/Ag==
+  dependencies:
+    "@floating-ui/core" "^1.7.3"
+    "@floating-ui/utils" "^0.2.10"
 
 "@floating-ui/react-dom@^2.0.0", "@floating-ui/react-dom@^2.1.2":
   version "2.1.3"
@@ -1073,6 +1088,11 @@
     "@floating-ui/react-dom" "^2.1.2"
     "@floating-ui/utils" "^0.2.8"
     tabbable "^6.0.0"
+
+"@floating-ui/utils@^0.2.10":
+  version "0.2.10"
+  resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.10.tgz#a2a1e3812d14525f725d011a73eceb41fef5bc1c"
+  integrity sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==
 
 "@floating-ui/utils@^0.2.8", "@floating-ui/utils@^0.2.9":
   version "0.2.9"
@@ -1219,10 +1239,182 @@
     local-pkg "^1.0.0"
     mlly "^1.7.4"
 
+"@interactjs/actions@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/actions/-/actions-1.10.2.tgz#050ae1c40b7bd3773a79a65c5fb1730bb6111e7c"
+  integrity sha512-BHJcW84WCMf/LsKmha/1Yog7aH3+QBXbLvowvZvwYvgjdUIb3xCa1a7FUYXuWAeKNMyKPVjFun+WPce75B+1tA==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/arrange@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/arrange/-/arrange-1.10.2.tgz#e6d93c5c01261d1306d46412095289671e1be4d2"
+  integrity sha512-pPLA9o4RWMFN0VfalklOFSRLL4WqqXcD9no4XEuqV00goZPCxLBbMTztaWwnutlRy7evtOhUjUH+pZVsS+dZ4Q==
+
+"@interactjs/auto-scroll@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/auto-scroll/-/auto-scroll-1.10.2.tgz#46e32fe0a67e266ab1f758db1ea6dd15288403f0"
+  integrity sha512-yYqzOawwvWd1NNnlqZdzrXoOMFafQ2/ws85erpJqdaNMQE221z2uP+QYhFRLQRgYUlTbHFfmjDpzhuJgq4uA8Q==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/auto-start@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/auto-start/-/auto-start-1.10.2.tgz#bf961ae541cdf7cb0f03cb7ba89b4def4462fab0"
+  integrity sha512-nZudj8VzJzz+uEyDHqXwtKpvUYr+Oj1+xBrJEu21CywroHQWM2J4fCIiCgeCo3d5/p/TrzFk5b+YfAWePKiLxA==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/clone@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/clone/-/clone-1.10.2.tgz#b110a1d9cfd204684c42af776847b3f9acbbae53"
+  integrity sha512-XzA8BRHSCwvysOegZ1kopg+IJF3erh4qzY6DRoZsIJovKAXawoa176E58IAzDbgYPJ2yoaSGT+XyzT2C0wa3pQ==
+
+"@interactjs/core@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/core/-/core-1.10.2.tgz#00bc9c9ea9f50c1e345ab96deb750881e7ff0e6a"
+  integrity sha512-SA5KRGo+gFJOhBj1Z2dLHhAf0/2nyHNd4SQ460aIQ3jj/QhqbJW6kGzmh7hBa2FzVGgxLhcQu7NZaP4rnDfUNw==
+
+"@interactjs/dev-tools@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/dev-tools/-/dev-tools-1.10.2.tgz#cde413abbd11dd91c87499105e16091e6eb35b67"
+  integrity sha512-aAd9NgTAGA3yVdFCYcAAYrM4TYQFuVqEvsF+xj+g5SlGyrJ7+GTjPZ2rScOyAsABY4Tz64L2pXvWmXMG87dncA==
+  dependencies:
+    "@interactjs/utils" "1.10.2"
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/feedback@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/feedback/-/feedback-1.10.2.tgz#d96dc1d3197cf36e6010479253c1cf9db8952cdb"
+  integrity sha512-XlcoICGrFeUwwRtDgOpstOOvlU42WZoEg7gJHK3LwF7j0IctPd1+3blXofFlBeVvodle8MvUMepm5CRXz741fA==
+
+"@interactjs/inertia@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/inertia/-/inertia-1.10.2.tgz#ca48feead6ebfca1ca443f71a80bc0cdfaf8aa05"
+  integrity sha512-ZmN1joN6J36Q6SOp3V0iZOisXZOBMSAUj0STo8wbwCKy7K8IrC9vjUBbO2JM52cT6o7hg5ebHsp5c8FrebSHlg==
+  dependencies:
+    "@interactjs/offset" "1.10.2"
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/interact@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/interact/-/interact-1.10.2.tgz#050bccd09f7cf5ced532ef91c5492e72e130fda3"
+  integrity sha512-Ms5uVCY9IobVYpQyBnBdkP6Bk6iDY7TkC7GupsdUPUxzAvYSQCTEAGr/1PwxSrSS6dN/8O8TuyUWPbCaylr/JA==
+  dependencies:
+    "@interactjs/core" "1.10.2"
+    "@interactjs/types" "1.10.2"
+    "@interactjs/utils" "1.10.2"
+
+"@interactjs/interactjs@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/interactjs/-/interactjs-1.10.2.tgz#af96e47fc637ca96d9477fe8d7d1858ccaef28f8"
+  integrity sha512-OwLl70af6lfZOOg/bvWKSNm1DS1nDI72QnzDYljSKfc2D8stqLIGDO1wPY2rhZudUG5q3t50EhmMUQF76yll/g==
+  dependencies:
+    "@interactjs/actions" "1.10.2"
+    "@interactjs/arrange" "1.10.2"
+    "@interactjs/auto-scroll" "1.10.2"
+    "@interactjs/auto-start" "1.10.2"
+    "@interactjs/clone" "1.10.2"
+    "@interactjs/core" "1.10.2"
+    "@interactjs/dev-tools" "1.10.2"
+    "@interactjs/feedback" "1.10.2"
+    "@interactjs/inertia" "1.10.2"
+    "@interactjs/interact" "1.10.2"
+    "@interactjs/modifiers" "1.10.2"
+    "@interactjs/multi-target" "1.10.2"
+    "@interactjs/offset" "1.10.2"
+    "@interactjs/pointer-events" "1.10.2"
+    "@interactjs/react" "1.10.2"
+    "@interactjs/reflow" "1.10.2"
+    "@interactjs/utils" "1.10.2"
+    "@interactjs/vue" "1.10.2"
+
+"@interactjs/modifiers@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/modifiers/-/modifiers-1.10.2.tgz#fde941d1f07d88b19c351d77cab3c766351c8f9e"
+  integrity sha512-3wYEucvZF2NTIslnVIKw5MWhkn9LM42cGCQaC19o3LZeWnbps7NnHJCyQp6zylJrCbwt7f+CSt4Oj2/s0f6XEA==
+  dependencies:
+    "@interactjs/snappers" "1.10.2"
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/multi-target@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/multi-target/-/multi-target-1.10.2.tgz#9b9bc26514b041cae1930d7b694be4bb5b0b6ead"
+  integrity sha512-O2GiIqgZBzjAVTOpL8doTnAcM9AtM3+H/Bb+An12wWKtNutVK7JbqUAO2nYueOk55/PP3yDLY9Qdr15RJns3lQ==
+
+"@interactjs/offset@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/offset/-/offset-1.10.2.tgz#bf5e4f8ac176c5d244969aed912ca83a185c88f1"
+  integrity sha512-xLgQqinFUY7ZqSX9d9on7XRcxvQdHNEAktj2QFwxMsEwrA6zbKROpPVwt8WQ1yBAeJSFjgYGcmCMPW5K41dT0w==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/pointer-events@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/pointer-events/-/pointer-events-1.10.2.tgz#022feff851e685c04786204c1c7393621078d3d5"
+  integrity sha512-O8s3N399hkGIzWGlcJVy0LJyDn5YWDh6XKjyowh/QivtlZSWPY8eglmlN2uZX0lmiqUYghbKI4CpQYP/cE0ZDA==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/react@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/react/-/react-1.10.2.tgz#2a3d42502f36a531bd0dfc4567010d3ec9366fcb"
+  integrity sha512-JXzPdANft+W2vq3SCSzprCwom5UuC8TaiAAhVdt8R+/P6xHbOeAX93XLS5YmDwT8e0Zh9J9jYvz55tkTdwjFZQ==
+
+"@interactjs/reflow@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/reflow/-/reflow-1.10.2.tgz#7b5b5b3740aad9149a792d6f1ed9d7bde26e3b5b"
+  integrity sha512-pc6o6RRhSCYQC4auZexRb7z5FQkdSVev5HzlRfUAjfw4C076qgbcs63ESRKy4YXdSBtUTvARQZxpuWUNGquzJw==
+  optionalDependencies:
+    "@interactjs/interact" "1.10.2"
+
+"@interactjs/snappers@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/snappers/-/snappers-1.10.2.tgz#c38f1ade249f9ca6ae2e408c6bf44e7a639ae5b0"
+  integrity sha512-wQ41Vn5GRn6VavjIEUtTkd9d5QgdKgC4+CPW0fjKkiQclLBmaic7VibNETO8twN0Jx5e73EoPj9K2nAVHIA0hA==
+
+"@interactjs/types@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/types/-/types-1.10.2.tgz#45a74d019f9b3e8fccd3ccc288b55bcf510106bc"
+  integrity sha512-l0T1bU8OHRv716ztQOYwP+K7b/lA76C0T3r/cdabbUv6CKeAFdFRRFlmNxYOM36SxMGWAiq5VWrN3SeXlB7Fow==
+
+"@interactjs/types@1.10.27":
+  version "1.10.27"
+  resolved "https://registry.npmjs.org/@interactjs/types/-/types-1.10.27.tgz#10afd71cef2498e2b5192cf0d46f937d8ceb767f"
+  integrity sha512-BUdv0cvs4H5ODuwft2Xp4eL8Vmi3LcihK42z0Ft/FbVJZoRioBsxH+LlsBdK4tAie7PqlKGy+1oyOncu1nQ6eA==
+
+"@interactjs/utils@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/utils/-/utils-1.10.2.tgz#d68dd45c9b41baab11acf0ee9686de207d754b63"
+  integrity sha512-sOr+pu7XGAN4qv+ikajMo3RJygbkbMLegmx0Tv5Qf6e80sF42FjkmHeMGuV7fL98nwat0VmDiWerOFBnKctXow==
+
+"@interactjs/vue@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.npmjs.org/@interactjs/vue/-/vue-1.10.2.tgz#48acd0883fc79e42ca41fa9df9952468af37b2f9"
+  integrity sha512-msLdc42DFsCPQZt6YBGZrw8Ro23kQcNnj+iLz2OUQcOrp/lma7WjorUuAwwfyFna2DevLtiYlMLbT0dpO/cVhg==
+
+"@inversifyjs/common@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.npmjs.org/@inversifyjs/common/-/common-1.5.0.tgz#542cdb0cfc02e36cca5a19208af726ecf904d400"
+  integrity sha512-Qj5BELk11AfI2rgZEAaLPmOftmQRLLmoCXgAjmaF0IngQN5vHomVT5ML7DZ3+CA5fgGcEVMcGbUDAun+Rz+oNg==
+
 "@inversifyjs/common@1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@inversifyjs/common/-/common-1.5.2.tgz#6836287fef1c25dddbdf6af345a33a6d6caf6835"
   integrity sha512-WlzR9xGadABS9gtgZQ+luoZ8V6qm4Ii6RQfcfC9Ho2SOlE6ZuemFo7PKJvKI0ikm8cmKbU8hw5UK6E4qovH21w==
+
+"@inversifyjs/container@1.12.1":
+  version "1.12.1"
+  resolved "https://registry.npmjs.org/@inversifyjs/container/-/container-1.12.1.tgz#6c1b142365074c5cd8766b0ec90092f02a7cddf4"
+  integrity sha512-E64SnmsJhbKA6idh/8zJNsBhMX52tjBrlFGfDfrNf63YLjF3hfOXqobWY/6Xln1jGxX79F7Z+WHrn4xNF12lzA==
+  dependencies:
+    "@inversifyjs/common" "1.5.2"
+    "@inversifyjs/core" "6.0.1"
+    "@inversifyjs/plugin" "0.2.0"
+    "@inversifyjs/reflect-metadata-utils" "1.3.0"
 
 "@inversifyjs/container@1.12.3":
   version "1.12.3"
@@ -1232,6 +1424,33 @@
     "@inversifyjs/common" "1.5.2"
     "@inversifyjs/core" "7.0.1"
     "@inversifyjs/plugin" "0.2.0"
+    "@inversifyjs/reflect-metadata-utils" "1.3.0"
+
+"@inversifyjs/container@1.9.1":
+  version "1.9.1"
+  resolved "https://registry.npmjs.org/@inversifyjs/container/-/container-1.9.1.tgz#56367187c8a155b929758b3ab46a0ff2016cce4f"
+  integrity sha512-8EhjFoAx1LoD7TpCuP9ptitwc+7kVXEpZB0IeoEsCQb9sWaNYYaBi+7Lommu3/1nYxdMbX2t7AJhQnryT1EEsg==
+  dependencies:
+    "@inversifyjs/common" "1.5.0"
+    "@inversifyjs/core" "5.2.0"
+    "@inversifyjs/reflect-metadata-utils" "1.1.0"
+
+"@inversifyjs/core@5.2.0":
+  version "5.2.0"
+  resolved "https://registry.npmjs.org/@inversifyjs/core/-/core-5.2.0.tgz#cd4e27a8096c7156f0b80ecb07af8baa40c453d7"
+  integrity sha512-MMaHGGRjQWT9uAof63sbZyEhRl4XptEAE17DJwrgUcN9LsdIEvecKP3r53pE9VF88PFR41knUKKzagUBvWLHmw==
+  dependencies:
+    "@inversifyjs/common" "1.5.0"
+    "@inversifyjs/prototype-utils" "0.1.0"
+    "@inversifyjs/reflect-metadata-utils" "1.1.0"
+
+"@inversifyjs/core@6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@inversifyjs/core/-/core-6.0.1.tgz#be7e9ea30b5a94fb33214217066d51f6c797d977"
+  integrity sha512-i0T9eSdYSZCx9b3izzlC3NIuHV03RQ1vwEa3vXgvk2vPIgW11DqMQefEVmxVx1pQZoS1EOK3ENZfHqZ/omWlzg==
+  dependencies:
+    "@inversifyjs/common" "1.5.2"
+    "@inversifyjs/prototype-utils" "0.1.2"
     "@inversifyjs/reflect-metadata-utils" "1.3.0"
 
 "@inversifyjs/core@7.0.1":
@@ -1248,12 +1467,24 @@
   resolved "https://registry.npmjs.org/@inversifyjs/plugin/-/plugin-0.2.0.tgz#03957c7d02803f32254a2ff2f8f8ffb05ec57eec"
   integrity sha512-R/JAdkTSD819pV1zi0HP54mWHyX+H2m8SxldXRgPQarS3ySV4KPyRdosWcfB8Se0JJZWZLHYiUNiS6JvMWSPjw==
 
+"@inversifyjs/prototype-utils@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@inversifyjs/prototype-utils/-/prototype-utils-0.1.0.tgz#1378596f3d708244f390e9b233599b862aba450d"
+  integrity sha512-lNz1yyajMRDXBHLvJsYYX81FcmeD15e5Qz1zAZ/3zeYTl+u7ZF/GxNRKJzNOloeMPMtuR8BnvzHA1SZxjR+J9w==
+  dependencies:
+    "@inversifyjs/common" "1.5.0"
+
 "@inversifyjs/prototype-utils@0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@inversifyjs/prototype-utils/-/prototype-utils-0.1.2.tgz#2ff5241c2f50772b3202ad5f052b84852eedd8d3"
   integrity sha512-WZAEycwVd8zVCPCQ7GRzuQmjYF7X5zbjI9cGigDbBoTHJ8y5US9om00IAp0RYislO+fYkMzgcB2SnlIVIzyESA==
   dependencies:
     "@inversifyjs/common" "1.5.2"
+
+"@inversifyjs/reflect-metadata-utils@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@inversifyjs/reflect-metadata-utils/-/reflect-metadata-utils-1.1.0.tgz#193ab71b92d47a8073e65e5bab640762bc435dcb"
+  integrity sha512-jmuAuC3eL1GnFAYfJGJOMKRDL9q1mgzOyrban6zxfM8Yg1FUHsj25h27bW2G7p8X1Amvhg3MLkaOuogszkrofA==
 
 "@inversifyjs/reflect-metadata-utils@1.3.0":
   version "1.3.0"
@@ -1330,6 +1561,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@juggle/resize-observer@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
+  integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
 "@kurkle/color@^0.3.0":
   version "0.3.4"
@@ -4085,6 +4321,20 @@
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.3.0.tgz#d06bbb384ebcf6c505fde1c3d0ed4ddffe0aaff8"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
 
+"@vexip-ui/hooks@^2.8.0":
+  version "2.9.3"
+  resolved "https://registry.npmjs.org/@vexip-ui/hooks/-/hooks-2.9.3.tgz#4a713f22c3e9e013695609e1c9857f299c14b9f8"
+  integrity sha512-DrGlwSa0P0KQ98RU0MrQ4+KcItZDaejAJISv3iT6T6/E2ly4z7c2dzuNzn5Wk7y4FYnkXDfrf2UFNv7EDw8GJg==
+  dependencies:
+    "@floating-ui/dom" "^1.7.0"
+    "@juggle/resize-observer" "^3.4.0"
+    "@vexip-ui/utils" "2.16.4"
+
+"@vexip-ui/utils@2.16.4", "@vexip-ui/utils@^2.16.1":
+  version "2.16.4"
+  resolved "https://registry.npmjs.org/@vexip-ui/utils/-/utils-2.16.4.tgz#3429376a8f9e88040e969c21f14e70fe25d36127"
+  integrity sha512-KX+Q4EsuwDp6ZlRJ7OAkiYxu52D5CVM8zpqQz/FXYV+JUtzl9T3dvxgtA8gQ0wm5Sh/xT6jp8Wo4X7tLAzRh/A==
+
 "@vitejs/plugin-vue-jsx@^4.0.1":
   version "4.2.0"
   resolved "https://registry.npmjs.org/@vitejs/plugin-vue-jsx/-/plugin-vue-jsx-4.2.0.tgz#2738ec05d4705ed553a107342017192e37351640"
@@ -4277,7 +4527,7 @@
     de-indent "^1.0.2"
     he "^1.2.0"
 
-"@vue/devtools-api@^6.6.4":
+"@vue/devtools-api@^6.6.3", "@vue/devtools-api@^6.6.4":
   version "6.6.4"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.6.4.tgz#cbe97fe0162b365edc1dba80e173f90492535343"
   integrity sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==
@@ -4848,6 +5098,11 @@ base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
+
+batch-processor@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
+  integrity sha512-xoLQD8gmmR32MeuBHgH0Tzd5PuSZx71ZsbhVxOCRbgktZEPe4SQy7s9Z50uPp0F/f7iw2XmkHN2xkgbMfckMDA==
 
 before-after-hook@^2.2.0:
   version "2.2.3"
@@ -6558,6 +6813,13 @@ electron@36.5.0:
     "@types/node" "^22.7.7"
     extract-zip "^2.0.1"
 
+element-resize-detector@^1.2.1:
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/element-resize-detector/-/element-resize-detector-1.2.4.tgz#3e6c5982dd77508b5fa7e6d5c02170e26325c9b1"
+  integrity sha512-Fl5Ftk6WwXE0wqCgNoseKWndjzZlDCwuPTcoVZfCP9R3EHQF8qUtr3YUPNETegRBOKqQKPW3n4kiIWngGi8tKg==
+  dependencies:
+    batch-processor "1.0.0"
+
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
@@ -7910,6 +8172,15 @@ graphql@^16.10.0:
   resolved "https://registry.npmjs.org/graphql/-/graphql-16.11.0.tgz#96d17f66370678027fdf59b2d4c20b4efaa8a633"
   integrity sha512-mS1lbMsxgQj6hge1XZ6p7GPhbrtFwUFYi3wRzXAC/FmYnyXMTvvI3td3rjmQ2u8ewXueaSvRPWaEcgVVOT9Jnw==
 
+grid-layout-plus@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/grid-layout-plus/-/grid-layout-plus-1.1.0.tgz#4c6610ff3aa39ddea2953861c224d1914bf5a33d"
+  integrity sha512-Q5uj0U5nx6xfHg8G1CDRJAEg+/40RVJl5jjRImcRwC78BxoJrEkTneT1pyxYMlbZ8fpGPT6QdHJQkD4+W6gt5A==
+  dependencies:
+    "@vexip-ui/hooks" "^2.8.0"
+    "@vexip-ui/utils" "^2.16.1"
+    interactjs "^1.10.27"
+
 hachure-fill@^0.5.2:
   version "0.5.2"
   resolved "https://registry.npmjs.org/hachure-fill/-/hachure-fill-0.5.2.tgz#d19bc4cc8750a5962b47fb1300557a85fcf934cc"
@@ -8264,6 +8535,13 @@ inquirer@^8.2.4:
     through "^2.3.6"
     wrap-ansi "^6.0.1"
 
+interactjs@^1.10.27:
+  version "1.10.27"
+  resolved "https://registry.npmjs.org/interactjs/-/interactjs-1.10.27.tgz#16499aba4987a5ccfdaddca7d1ba7bb1118e14d0"
+  integrity sha512-y/8RcCftGAF24gSp76X2JS3XpHiUvDQyhF8i7ujemBz77hwiHDuJzftHx7thY8cxGogwGiPJ+o97kWB6eAXnsA==
+  dependencies:
+    "@interactjs/types" "1.10.27"
+
 internal-slot@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/internal-slot/-/internal-slot-1.1.0.tgz#1eac91762947d2f7056bc838d93e13b2e9604961"
@@ -8287,6 +8565,24 @@ interpret@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/interpret/-/interpret-3.1.1.tgz#5be0ceed67ca79c6c4bc5cf0d7ee843dcea110c4"
   integrity sha512-6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==
+
+inversify@7.5.1:
+  version "7.5.1"
+  resolved "https://registry.npmjs.org/inversify/-/inversify-7.5.1.tgz#aa69cf594d7703b63a2e77902f8c47e172840bf0"
+  integrity sha512-oWWFDU2BXiuqZynGcLDDD4tqiWAeaEUCALlCj0vk/QwHGgZY/tzDFPuTmWMY3jwRmDIHxVDkcj9SL3MFTlCEDw==
+  dependencies:
+    "@inversifyjs/common" "1.5.0"
+    "@inversifyjs/container" "1.9.1"
+    "@inversifyjs/core" "5.2.0"
+
+inversify@7.7.0:
+  version "7.7.0"
+  resolved "https://registry.npmjs.org/inversify/-/inversify-7.7.0.tgz#e25fab3547377a7cf966e80acb58c2ace2ff7e26"
+  integrity sha512-CLw7WbwULppLMNp6jPliwLbapnf996Bdju3VvtW0wrfI0LTuxv0h9uqrFh1RE3QO23+r4JK0hCarETJjDN4LFw==
+  dependencies:
+    "@inversifyjs/common" "1.5.2"
+    "@inversifyjs/container" "1.12.1"
+    "@inversifyjs/core" "6.0.1"
 
 inversify@7.7.1, inversify@^7.1.0:
   version "7.7.1"
@@ -10978,6 +11274,14 @@ pify@^4.0.1:
   resolved "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
+pinia@^2.1.0:
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/pinia/-/pinia-2.3.1.tgz#54c476675b72f5abcfafa24a7582531ea8c23d94"
+  integrity sha512-khUlZSwt9xXCaTbbxFYBKDc/bWAGWJjOgvxETwkTN7KRm66EeT1ZdZj6i2ceh9sP2Pzqsbc704r2yngBrxBVug==
+  dependencies:
+    "@vue/devtools-api" "^6.6.3"
+    vue-demi "^0.14.10"
+
 pinia@^3.0.1, pinia@^3.0.2:
   version "3.0.3"
   resolved "https://registry.npmjs.org/pinia/-/pinia-3.0.3.tgz#f412019bdeb2f45e85927b432803190343e12d89"
@@ -12805,10 +13109,15 @@ tabbable@^6.0.0:
   resolved "https://registry.npmjs.org/tabbable/-/tabbable-6.2.0.tgz#732fb62bc0175cfcec257330be187dcfba1f3b97"
   integrity sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==
 
-tailwindcss@4.1.11, tailwindcss@^4.1.4:
+tailwindcss@4.1.11:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.1.11.tgz#799af3e98c19c5baaefafc6e0c16304a0e684854"
   integrity sha512-2E9TBm6MDD/xKYe+dvJZAmg3yxIEDNRc0jwlNyDg/4Fil2QcSLjFKGVff0lAf1jjeaArlG/M75Ey/EYr/OJtBA==
+
+tailwindcss@^4.1.5:
+  version "4.1.12"
+  resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.12.tgz#7baeed5b5ac77370571c2baa72ee06e0050fc0a8"
+  integrity sha512-DzFtxOi+7NsFf7DBtI3BJsynR+0Yp6etH+nRPTbpWnS2pZBaSksv/JGctNwSWzbFjp0vxSqknaUylseZqMDGrA==
 
 tapable@^2.2.0:
   version "2.2.2"
@@ -13540,6 +13849,21 @@ vite-node@3.2.4:
     pathe "^2.0.3"
     vite "^5.0.0 || ^6.0.0 || ^7.0.0-0"
 
+vite-plugin-dts@4.5.3:
+  version "4.5.3"
+  resolved "https://registry.npmjs.org/vite-plugin-dts/-/vite-plugin-dts-4.5.3.tgz#9d9e64c12e21e9389efd9f999e034cd5864b0027"
+  integrity sha512-P64VnD00dR+e8S26ESoFELqc17+w7pKkwlBpgXteOljFyT0zDwD8hH4zXp49M/kciy//7ZbVXIwQCekBJjfWzA==
+  dependencies:
+    "@microsoft/api-extractor" "^7.50.1"
+    "@rollup/pluginutils" "^5.1.4"
+    "@volar/typescript" "^2.4.11"
+    "@vue/language-core" "2.2.0"
+    compare-versions "^6.1.1"
+    debug "^4.4.0"
+    kolorist "^1.8.0"
+    local-pkg "^1.0.0"
+    magic-string "^0.30.17"
+
 vite-plugin-dts@4.5.4:
   version "4.5.4"
   resolved "https://registry.npmjs.org/vite-plugin-dts/-/vite-plugin-dts-4.5.4.tgz#51b60aaaa760d9cf5c2bb3676c69d81910d6b08c"
@@ -13714,7 +14038,7 @@ vue-component-type-helpers@^2.0.0:
   resolved "https://registry.npmjs.org/vue-component-type-helpers/-/vue-component-type-helpers-2.2.10.tgz#126a7d7258f7458c66dfe234a612500c90c4838c"
   integrity sha512-iDUO7uQK+Sab2tYuiP9D1oLujCWlhHELHMgV/cB13cuGbG4qwkLHvtfWb6FzvxrIOPDnU0oHsz2MlQjhYDeaHA==
 
-vue-demi@>=0.13.0:
+vue-demi@>=0.13.0, vue-demi@^0.14.10:
   version "0.14.10"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz#afc78de3d6f9e11bf78c55e8510ee12814522f04"
   integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
@@ -13730,6 +14054,19 @@ vue-eslint-parser@^10.2.0:
     espree "^10.3.0"
     esquery "^1.6.0"
     semver "^7.6.3"
+
+vue-grid-layout@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/vue-grid-layout/-/vue-grid-layout-2.4.0.tgz#8b604e29832666b98b3a186a6ea97b3d1ed52310"
+  integrity sha512-MRQVt1BdWDaPN4gKGEKOVVwiTyucqJhrGEyjiY9Muor+dzFFq4Hm0geSpYJpLvC1GLlTL8KWUwy0suKrHm+mqg==
+  dependencies:
+    "@interactjs/actions" "1.10.2"
+    "@interactjs/auto-scroll" "1.10.2"
+    "@interactjs/auto-start" "1.10.2"
+    "@interactjs/dev-tools" "1.10.2"
+    "@interactjs/interactjs" "1.10.2"
+    "@interactjs/modifiers" "1.10.2"
+    element-resize-detector "^1.2.1"
 
 vue-json-pretty@^2.4.0:
   version "2.5.0"
@@ -13764,7 +14101,7 @@ vue3-moveable@^0.28.0:
     framework-utils "^1.1.0"
     moveable "~0.53.0"
 
-vue@^3.2.25, vue@^3.5.11, vue@^3.5.13:
+vue@^3.2.25, vue@^3.4.0, vue@^3.5.11, vue@^3.5.13:
   version "3.5.18"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.18.tgz#3d622425ad1391a2b0138323211ec784f4415686"
   integrity sha512-7W4Y4ZbMiQ3SEo+m9lnoNpV9xG7QVMLa+/0RFwwiAVkeYoyGXqWE85jabU4pllJNUzqfLShJ5YLptewhCWUgNA==

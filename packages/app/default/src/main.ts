@@ -115,6 +115,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.markdown'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.timeline'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.csv'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.rss'
@@ -150,6 +151,7 @@ import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
   from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
+
 const pageRepo = container.get<PageRegistryI>(PageReoIdentifier)
 const layoutRepo = container.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const baseLayout
@@ -219,6 +221,7 @@ async function loadPackages() {
   await import("org.eclipse.daanse.board.app.lib.persistence.git")
   await import("org.eclipse.daanse.board.app.ui.vue.persistence.git")
   await import("org.eclipse.daanse.board.app.lib.persistence.loader")
+  await import("org.eclipse.daanse.board.app.ui.vue.widget.page")
 
 
   // Register pages after layouts are loaded
