@@ -12,18 +12,18 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import type { ISvgSettings } from "./index";
+import { SvgSettings } from "./gen/SvgSettings";
 import {
     computed,
     getCurrentInstance,
     onMounted,
     ref,
-    toRefs,
+    watch,
 } from "vue";
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string, config: ISvgSettings }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string }>();
+const config = defineModel<SvgSettings>('configv', { required: true });
 
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
@@ -31,41 +31,69 @@ const svgSource = ref("");
 const inst = getCurrentInstance();
 const scope = (inst?.type as any).__scopeId;
 
-const defaultConfig: ISvgSettings = {
-    src: "/demo/test.svg",
-    classesConfig : {
-        primary: {
-            fill: "#ff5733",
-            stroke: "#1e8449",
-            strokeWidth: "5px",
+const defaultConfig = new SvgSettings();
+
+const loadSvg = async (src: string | undefined) => {
+    if (src) {
+        console.log('Loading SVG from:', src);
+        try {
+            const req = await fetch(src);
+            const svgObject = await req.text();
+            svgSource.value = svgObject;
+            console.log('SVG loaded successfully, length:', svgObject.length);
+        } catch (error) {
+            console.error('Failed to load SVG:', error);
+            svgSource.value = "";
         }
+    } else {
+        console.warn('No SVG src provided');
+        svgSource.value = "";
     }
-}
+};
 
 onMounted(async () => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
-        const req = await fetch(config.value.src);
-        const svgObject = await req.text();
-        svgSource.value = svgObject;
-    };
+        console.log('SVG config:', config.value);
+        console.log('SVG config.value.src:', config.value.src);
+        console.log('SVG config.value (as any).settings:', (config.value as any).settings);
+        // Check if src is in the settings object (legacy structure)
+        if (!config.value.src && (config.value as any).settings?.src) {
+            console.log('Using legacy settings structure');
+            config.value.src = (config.value as any).settings.src;
+            if ((config.value as any).settings.classesConfig) {
+                config.value.classesConfig = (config.value as any).settings.classesConfig;
+            }
+        }
+        // Initial load
+        await loadSvg(config.value.src);
+    }
 });
+
+// Watch for src changes
+watch(
+    () => config.value?.src,
+    (newSrc) => {
+        console.log('SVG src changed to:', newSrc);
+        loadSvg(newSrc);
+    }
+);
 
 const styles = computed(() => {
     let string: string = "";
 
-    if (config.value.classesConfig) {
+    if (config.value?.classesConfig && config.value.classesConfig.length > 0) {
         string += "<style>";
-        for (const [key, value] of Object.entries(
-            config.value.classesConfig,
-        )) {
-            string +=
-                `[${scope}] .${key} {
-                stroke: ${value.stroke};
-                fill: ${value.fill};
-                stroke-width: ${value.strokeWidth};
-            }`;
-        }
+        config.value.classesConfig.forEach(classConfig => {
+            if (classConfig.value?.className) {
+                string +=
+                    `[${scope || ''}] .${classConfig.value.className} {
+                    stroke: ${classConfig.value.stroke || ''};
+                    fill: ${classConfig.value.fill || ''};
+                    stroke-width: ${classConfig.value.strokeWidth || ''};
+                }`;
+            }
+        });
         string += "</style>";
     }
 
@@ -99,11 +127,24 @@ const svgSourceParced = computed(() => {
 <template>
     <div v-html="styles"></div>
     <div v-bind="$attrs" class="svg" v-html="svgSourceParced"></div>
+    <div v-if="!svgSourceParced && !config?.src" class="fallback">
+        No SVG configured
+    </div>
 </template>
 
 <style scoped>
 .svg {
     width: 100%;
     height: 100%;
+}
+
+.fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-style: italic;
 }
 </style>

@@ -11,30 +11,20 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { computed, onMounted, toRefs } from "vue";
-import { IIconSettings } from "./index";
+import { computed, onMounted } from "vue";
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+import { IconSettings } from './gen/IconSettings'
 
 const { wrapParameters } = useVariableRepository();
 
-const props = defineProps<{ config: IIconSettings }>();
-const { config } = toRefs(props);
+const config = defineModel<IconSettings>('configv', { required: true });
 
-
-const defaultConfig: IIconSettings = {
-    iconColor: "#000",
-    iconSize: 100,
-    isIconFilled: false,
-    strokeWeight: 100,
-    opticSize: 48,
-    grade: 48,
-    currentIcon: "10k",
-};
+const defaultConfig = new IconSettings();
 
 onMounted(() => {
-    /*if (config.value) {
+    if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
-    }*/
+    }
 });
 
 const {
@@ -58,7 +48,6 @@ const iconStyle = computed(() => {
 </script>
 
 <template>
-  {{config}}
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         rel="stylesheet" />

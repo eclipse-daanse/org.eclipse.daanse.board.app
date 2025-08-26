@@ -16,8 +16,9 @@ import { onMounted, ref } from 'vue';
 import { IMarkdownWidgetSettings } from '.';
 import EasyMDE from 'easymde';
 import "easymde/dist/easymde.min.css";
+import { MarkdownWidgetSettings } from './gen/MarkdownWidgetSettings'
 
-const widgetSettings = defineModel<IMarkdownWidgetSettings>({ required: true });
+const widgetSettings = defineModel<MarkdownWidgetSettings>({ required: true });
 const container = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {

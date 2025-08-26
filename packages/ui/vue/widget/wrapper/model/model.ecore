@@ -1,97 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
 <ecore:EPackage xmi:version="2.0"
-                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wrapperSettings"
-                nsURI="http://www.example.org/wrapperSettings" nsPrefix="wrapperSettings">
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="wrapperSettings"
+                nsURI="http://www.example.org/wrapperSettings"
+                nsPrefix="wrapperSettings">
     <eClassifiers xsi:type="ecore:EClass" name="WrapperSettings">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Represents a comprehensive set of visual and layout settings for a UI wrapper component, controlling aspects like background, title, borders, shadows, and overall appearance."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-                             lowerBound="0">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             lowerBound="0"
+                             defaultValueLiteral="">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The optional title text to be displayed within the wrapper."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="#fff">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The background color of the wrapper, typically represented as a hexadecimal string (e.g., '#RRGGBB')."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColorTransparency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColorTransparence"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+                             defaultValueLiteral="255">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The transparency level of the background color, ranging from 0.0 (fully transparent) to 1.0 (fully opaque)."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="#7c7c7c">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The color of the title text, typically as a hexadecimal string."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="padding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="padding"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The inner spacing (padding) within the wrapper, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleFontSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleFontSize"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="15">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The font size of the title text, typically in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderSize"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The thickness of the wrapper's border, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="#ccc">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The color of the wrapper's border, typically as a hexadecimal string."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderRadius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderRadius"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="15">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The radius for rounding the corners of the wrapper, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="blur" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="blur"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The amount of blur applied to the wrapper's background or content, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullscreen" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullscreen"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="A boolean flag indicating if the wrapper should occupy the full screen."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="#333">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The color of the shadow applied to the wrapper, typically as a hexadecimal string."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowBlur" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowBlur"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="12">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The blur radius of the shadow, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowX"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="5">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The horizontal offset of the shadow from the wrapper, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowY"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="5">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The vertical offset of the shadow from the wrapper, usually in pixels."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowTransparency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="shadowTransparence"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+                             defaultValueLiteral="25">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The transparency level of the shadow, ranging from 0.0 to 1.0."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="transparency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="transparency"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+                             defaultValueLiteral="255">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The overall transparency of the entire wrapper component, ranging from 0.0 to 1.0."/>
             </eAnnotations>
         </eStructuralFeatures>
+
     </eClassifiers>
 </ecore:EPackage>

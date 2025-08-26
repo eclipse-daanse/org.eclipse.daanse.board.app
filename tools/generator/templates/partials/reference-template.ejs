@@ -1,10 +1,144 @@
+<%#/**
+* Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors: Smart City Jena
+*/_%>
 <%#
   Reference template - generates TypeScript references from EReference
 _%>
-<%_ const isArray = reference.many || false; _%>
+<%_
+  // Helper function to map Ecore types to TypeScript types
+  function mapEcoreTypeToTS(typeName) {
+    if (typeName.endsWith('EString') || typeName.endsWith('EChar') || typeName.endsWith('ECharacterObject')) {
+      return 'string';
+    } else if (typeName === 'EBoolean' || typeName === 'EBooleanObject') {
+      return 'boolean';
+    } else if (['EInt', 'EIntegerObject', 'EByte', 'EByteObject', 'ELong', 'ELongObject', 'EFloat', 'EFloatObject', 'EDouble', 'EDoubleObject'].includes(typeName)) {
+      return 'number';
+    } else if (typeName === 'EDate') {
+      return 'Date';
+    } else if (typeName === 'EJavaObject') {
+      return 'any';
+    } else {
+      return typeName;
+    }
+  }
+
+  const isArray = reference.isMany || false;
+  const isContainment = reference.isContainment || false;
+  // Helper function to extract type info from unresolved cross-package references
+  function parseExternalReference(ref) {
+    // This is a hack to get reference info from the XML when eClassifier is null
+    // We need to inspect the reference's string representation or attributes
+    // For now, we'll return null and let the template handle fallback
+    return null;
+  }
+
+  const hasGenericType = reference.eGenericType;
+  const hasResolvedClassifier = reference.eGenericType && reference.eGenericType.eClassifier;
+
+  let typeName;
+  let fullTypeName;
+
+  if (hasGenericType && hasResolvedClassifier) {
+    // Check if this is a proxy object
+    if (reference.eGenericType.eClassifier.eIsProxy && reference.eGenericType.eClassifier.eIsProxy()) {
+      // Handle proxy reference - get original URI
+      const proxyURI = reference.eGenericType.eClassifier.eProxyURI();
+      if (proxyURI) {
+        const uriString = proxyURI.toString();
+        if (uriString.includes('#//')) {
+          const [packageURI, proxyTypeName] = uriString.split('#//');
+          typeName = proxyTypeName;
+        } else {
+          typeName = 'any';
+        }
+      } else {
+        typeName = 'any';
+      }
+
+      if (reference.eGenericType.eTypeArguments && reference.eGenericType.eTypeArguments.size() > 0) {
+        // Build generic type with type arguments
+        const typeArgs = [];
+        for (let i = 0; i < reference.eGenericType.eTypeArguments.size(); i++) {
+          const typeArg = reference.eGenericType.eTypeArguments.get(i);
+          if (typeArg.eClassifier) {
+            const argTypeName = typeArg.eClassifier.name;
+            const mappedType = mapEcoreTypeToTS(argTypeName);
+            typeArgs.push(mappedType);
+          } else {
+            typeArgs.push('any');
+          }
+        }
+        fullTypeName = `${typeName}<${typeArgs.join(', ')}>`;
+      } else {
+        fullTypeName = typeName;
+      }
+    } else {
+      // Use eGenericType for type information (resolved)
+      const baseType = reference.eGenericType.eClassifier.name;
+
+      if (reference.eGenericType.eTypeArguments && reference.eGenericType.eTypeArguments.size() > 0) {
+        // Build generic type with type arguments
+        const typeArgs = [];
+        for (let i = 0; i < reference.eGenericType.eTypeArguments.size(); i++) {
+          const typeArg = reference.eGenericType.eTypeArguments.get(i);
+          if (typeArg.eClassifier) {
+            const argTypeName = typeArg.eClassifier.name;
+            const mappedType = mapEcoreTypeToTS(argTypeName);
+            typeArgs.push(mappedType);
+          } else {
+            typeArgs.push('any');
+          }
+        }
+        fullTypeName = `${baseType}<${typeArgs.join(', ')}>`;
+        typeName = baseType;
+      } else {
+        // No type arguments
+        fullTypeName = baseType;
+        typeName = baseType;
+      }
+    }
+  } else if (hasGenericType && !hasResolvedClassifier) {
+    // eGenericType exists but eClassifier is null (unresolved cross-package reference)
+    // For now, fallback to any until we can extract the original reference info
+    typeName = 'ValueWrapper'; // Hardcode for now - this should be extracted from the original reference
+    if (reference.eGenericType.eTypeArguments && reference.eGenericType.eTypeArguments.size() > 0) {
+      const typeArgs = [];
+      for (let i = 0; i < reference.eGenericType.eTypeArguments.size(); i++) {
+        const typeArg = reference.eGenericType.eTypeArguments.get(i);
+        if (typeArg.eClassifier) {
+          const argTypeName = typeArg.eClassifier.name;
+          const mappedType = mapEcoreTypeToTS(argTypeName);
+          typeArgs.push(mappedType);
+        } else {
+          typeArgs.push('any');
+        }
+      }
+      fullTypeName = `${typeName}<${typeArgs.join(', ')}>`;
+    } else {
+      fullTypeName = typeName;
+    }
+  } else if (reference.eType) {
+    // Use regular eType
+    typeName = reference.eType.name;
+    fullTypeName = typeName;
+  } else {
+    // Fallback
+    typeName = 'any';
+    fullTypeName = 'any';
+  }
+_%>
 <%_ if (isArray) { _%>
-// Array of type '<%- reference.eType.name -%>'
-@Reference('<%- reference.eType.name -%>') <%- reference.name -%>: Array<<%- reference.eType.name -%>> = [];
+  @Reference('<%- typeName -%>') <%- reference.name -%>: Array<<%- fullTypeName -%>> = [];
 <%_ } else { _%>
-@Reference('<%- reference.eType.name -%>') <%- reference.name -%>: <%- reference.eType.name -%>;
+    <%_ if(!instances){ _%>
+  @Reference('<%- typeName -%>') <%- reference.name -%>?: <%- fullTypeName -%>;
+    <%_ }else { _%>
+  @Reference('<%- typeName -%>') <%- reference.name -%>: <%- fullTypeName -%> = new <%- fullTypeName -%>();
+    <%_ } _%>
 <%_ } _%>

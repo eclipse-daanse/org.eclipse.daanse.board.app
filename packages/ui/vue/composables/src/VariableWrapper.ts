@@ -18,7 +18,7 @@ class VariableWrapper<T> {
   private _value: T|undefined =undefined;
   private isSet: boolean = false;
   private reference: Variable|undefined;
-  constructor(init_value: T) {
+  constructor(init_value: T|undefined = undefined) {
     this._value= init_value;
   }
 
