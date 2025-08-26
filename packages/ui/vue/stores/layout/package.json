@@ -23,12 +23,12 @@
     "inversify": "7.7.1",
     "typescript": "^5.8.2",
     "vue": "^3.4.0",
-    "pinia": "^2.1.0",
+    "pinia": "^3.0.3",
     "vite-plugin-dts": "4.5.4"
   },
   "peerDependencies": {
   "vue": "^3.4.0",
-  "pinia": "^2.1.0"
+  "pinia": "^3.0.3"
 },
   "publishConfig": {
     "access": "public"
