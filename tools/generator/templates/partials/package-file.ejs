@@ -1,0 +1,28 @@
+<%#
+  Package file template - creates main package .ts file
+_%>
+<%- `/* File: ${ePackage.name}.pak.ts */` -%>
+
+/*
+ * This is generated code! Please note, that on code generation, these line are erased and generated again.
+ * If you modify this file, it is possible that you changes will be lost!!!
+ * 
+ * This method uses JSON playload, to load an EPackage. 
+ *
+ * @generated
+ */
+
+/*
+ * Generate classes and enums for TypeScript
+ * Default values are set. The '_type' parameter is generated for the
+ * Serialization to a backend.
+ */
+
+<%# Export all classes and enums -%>
+<%_ if (ePackage.eClassifiers) { _%>
+  <%_ Array.from(ePackage.eClassifiers).forEach(classifier => { _%>
+export { <%- classifier.name -%> } from './<%- classifier.name -%>';
+  <%_ }); _%>
+<%_ } _%>
+
+export * from './ModelAnnotations';

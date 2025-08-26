@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="restconnection"
+                nsURI="http://example.com/restconnection" nsPrefix="restconn">
+
+    <eClassifiers xsi:type="ecore:EClass" name="IRestConnectionConfig">
+        <eSuperTypes href="http://example.com/baseconnection#//BaseConnectionConfig"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The base URL endpoint for the REST API.
+                                            This attribute overrides the 'url' from BaseConnectionConfig
+                                            to specify its role in REST connections."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+    </eClassifiers>
+
+    <eSubpackages href="http://example.com/baseconnection#/"/>
+
+</ecore:EPackage>

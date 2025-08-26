@@ -17,10 +17,11 @@ import type { IProgressSettings } from './index'
 import { computed, toRefs, onMounted, ref, watch } from 'vue'
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
+import { ProgressSettings } from './gen/ProgressSettings'
 
-const props = defineProps<{ datasourceId: string, config: IProgressSettings }>()
-const { datasourceId, config } = toRefs(props)
-
+const props = defineProps<{ datasourceId: string }>()
+const { datasourceId } = toRefs(props)
+const config = defineModel<ProgressSettings>('configv', { required: true});
 const data = ref(null)
 const { update } = useDatasourceRepository(datasourceId, "object", data)
 
@@ -28,7 +29,7 @@ watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal)
 })
 
-const defaultConfig: IProgressSettings = {
+const defaultConfig = new ProgressSettings()  /*{
   progress: "",
   fillColor: "#00FF00",
   gradientColor: "",
@@ -38,7 +39,7 @@ const defaultConfig: IProgressSettings = {
   rotation: 90,
   valueAlign: 'center',
   valueJustify: 'center',
-}
+}*/
 
 onMounted(() => {
   if (config.value) {

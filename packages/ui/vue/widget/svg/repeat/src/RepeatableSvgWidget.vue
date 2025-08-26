@@ -12,37 +12,46 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import type { IRepeatableSVGSettings } from "./index";
-import { onMounted, computed, ref, toRefs } from "vue";
+import { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
+import { onMounted, computed, ref, watch } from "vue";
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string, config: IRepeatableSVGSettings }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string }>();
+const config = defineModel<RepeatableSVGSettings>('configv', { required: true });
 const svgSource = ref("");
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
-const defaultConfig: IRepeatableSVGSettings = {
-    src: "/demo/human.svg",
-    activeItemStyles: {
-        fill: "#ff0000",
-        stroke: "#ffff00"
-    },
-    defaultItemStyles: {
-        fill: "#777777",
-        stroke: "#777777"
-    },
-    repeations: "4",
-    progress: "0.5"
+const defaultConfig = new RepeatableSVGSettings();
+
+const loadSvg = async (src: string | undefined) => {
+    if (src) {
+        try {
+            const req = await fetch(src);
+            const svgObject = await req.text();
+            svgSource.value = svgObject;
+        } catch (error) {
+            console.error('Failed to load SVG:', error);
+            svgSource.value = "";
+        }
+    } else {
+        svgSource.value = "";
+    }
 };
 
 onMounted(async () => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
-        const req = await fetch(config.value.src);
-        const svgObject = await req.text();
-        svgSource.value = svgObject;
-    };
+        await loadSvg(config.value.src);
+    }
 });
+
+// Watch for src changes
+watch(
+    () => config.value?.src,
+    (newSrc) => {
+        loadSvg(newSrc);
+    }
+);
 
 const createParsedData = (prop: string) => {
     return computed(() => {
@@ -70,14 +79,17 @@ const createParsedData = (prop: string) => {
 };
 
 const repeationsToNumber = computed(() => {
-    return !isNaN(parseFloat(config.value.repeations))
-        ? Math.floor(Number(config.value.repeations))
-        : 0;
+    const repetitions = config.value?.repetitions ?? '1';
+    return !isNaN(parseFloat(repetitions))
+        ? Math.floor(Number(repetitions))
+        : 1;
 });
 
 const progressToNumber = computed(() => {
-    return !isNaN(parseFloat(createParsedData(config.value.progress).value))
-        ? Number(createParsedData(config.value.progress).value)
+    const progress = config.value?.progress ?? '0';
+    const parsedProgress = createParsedData(progress).value;
+    return !isNaN(parseFloat(parsedProgress))
+        ? Number(parsedProgress)
         : 0;
 });
 </script>
@@ -105,8 +117,8 @@ const progressToNumber = computed(() => {
                 </mask>
             </defs>
             <g
-                :fill="config.defaultItemStyles?.fill"
-                :stroke="config.defaultItemStyles?.stroke"
+                :fill="config?.defaultItemStyles?.fill"
+                :stroke="config?.defaultItemStyles?.stroke"
             >
                 <g
                     v-html="svgSource"
@@ -118,8 +130,8 @@ const progressToNumber = computed(() => {
             </g>
             <g
                 mask="url(#bubbleKenseo)"
-                :fill="config.activeItemStyles?.fill"
-                :stroke="config.activeItemStyles?.stroke"
+                :fill="config?.activeItemStyles?.fill"
+                :stroke="config?.activeItemStyles?.stroke"
             >
                 <g
                     v-html="svgSource"

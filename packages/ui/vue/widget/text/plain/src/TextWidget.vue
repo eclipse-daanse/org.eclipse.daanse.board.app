@@ -17,12 +17,13 @@ import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.boa
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import type { ITextSettings } from "./index";
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+import { TextSettings } from './gen/TextSettings'
 
 
 const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string; }>();
 const { datasourceId } = toRefs(props);
-const config = defineModel<ITextSettings>('configv', { required: true});
+const config = defineModel<TextSettings>('configv', { required: true});
 const defaultConfig: ITextSettings = {
   text: new VariableWrapper<string>(""),
   fontSize: new VariableWrapper<number>(12),

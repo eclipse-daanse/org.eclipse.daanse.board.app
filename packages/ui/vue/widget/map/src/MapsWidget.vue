@@ -31,22 +31,13 @@ import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
+import { MapSettings } from './gen/MapSettings'
 
-const props = defineProps<{ datasourceId: string, config: IMapSettings }>()
-const { datasourceId, config } = toRefs(props)
-
+const props = defineProps<{ datasourceId: string }>()
+const { datasourceId } = toRefs(props)
+const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
-const defaultConfig: IMapSettings = {
-  baseMapUrl: 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-  zoom: 14,
-  center: [50.93115286, 11.60392726],
-  attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  layers: [],
-  styles: [],
-  OGCSstyles: [],
-  services: [],
-  fixed: true
-}
+const defaultConfig = new MapSettings()
 
 const { filterFeatureCollection, compareDatastream, compareThing } = useComparator()
 const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils()
@@ -360,7 +351,7 @@ const centerUpdated = (center: any) => {
                         <div :style="{background:renderer.renderer.pointPin.color}"
                               class="pin contain marker">
                           <div class="inner">
-                            {{ thing[((renderer as IRenderer).renderer.point_prop) ?? ''] }}
+                            {{ thing[(renderer.renderer.point_prop) ?? ''] }}
                           </div>
                         </div>
                       </template>

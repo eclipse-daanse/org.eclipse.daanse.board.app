@@ -17,11 +17,12 @@ Contributors:
 import { inject, ref } from 'vue'
 import type { IRepeatableSVGSettings } from "./index"
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { RepeatableSVGSettings } from './gen/RepeatableSVGSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const widgetSettings = defineModel<IRepeatableSVGSettings>({ required: true });
+const widgetSettings = defineModel<RepeatableSVGSettings>({ required: true });
 
 const opened = ref({
     widgetSection: false,
@@ -33,7 +34,7 @@ const opened = ref({
     <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('svgRepeat:RepeatableSvgWidget.title')">
         <div class="settings-container">
             <va-input v-model="widgetSettings.src" :label="t('svgRepeat:RepeatableSvgWidget.svgSrc')" />
-            <va-input v-model="widgetSettings.repeations" :label="t('svgRepeat:RepeatableSvgWidget.repeations')" />
+            <va-input v-model="widgetSettings.repetitions" :label="t('svgRepeat:RepeatableSvgWidget.repeations')" />
             <va-input v-model="widgetSettings.progress" :label="t('svgRepeat:RepeatableSvgWidget.progress')" />
             <div class="colors">
                 <va-color-input

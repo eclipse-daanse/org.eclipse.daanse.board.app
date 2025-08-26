@@ -8,8 +8,11 @@
   Contributors: Smart City Jena
 
 */
-import type { IDSRenderer, IRenderer } from '@/plugins/widgets/MapsWidget/api/Renderer'
-import type WFS from '@/plugins/widgets/MapsWidget/WFS'
+import  type { IDSRenderer, IRenderer } from './api/Renderer'
+import WFS from './WFS'
+import { TileLayer } from 'leaflet'
+import WMS = TileLayer.WMS
+
 
 export interface IMapSettings {
   datasourceId?: string,

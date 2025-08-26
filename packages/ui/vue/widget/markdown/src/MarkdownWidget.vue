@@ -13,19 +13,19 @@ Contributors:
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref, watch } from 'vue';
-import { IMarkdownWidgetSettings } from '.';
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css/github-markdown.css";
 
 // @ts-ignore
 import EasyMDE from 'easymde';
+import { MarkdownWidgetSettings } from './gen/MarkdownWidgetSettings'
 
-const props = defineProps<{ config: IMarkdownWidgetSettings }>();
-
+const config = defineModel<MarkdownWidgetSettings>('configv', { required: true});
 const container = ref<HTMLDivElement | null>(null);
 let easyMDE: EasyMDE | null = null;
 
 onMounted(() => {
+
     easyMDE = new EasyMDE({
         toolbar: false,
         element: container.value as HTMLDivElement,
@@ -33,13 +33,13 @@ onMounted(() => {
         previewClass: 'markdown-body',
     })
 
-    easyMDE.value(props.config.value || '');
+    easyMDE.value(config.value?.value || '');
 
     // @ts-ignore
     easyMDE.togglePreview();
 })
 
-watch(() => props.config.value, (newValue) => {
+watch(() => config.value?.value, (newValue) => {
     if (container.value) {
         easyMDE?.value(newValue || '');
     }
@@ -48,7 +48,7 @@ watch(() => props.config.value, (newValue) => {
 
 <template>
     <textarea ref="container">
-        {{ props.config.value }}
+        {{ config.value }}
     </textarea>
 </template>
 

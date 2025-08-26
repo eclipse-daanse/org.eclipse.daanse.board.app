@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="twowayconnection"
+                nsURI="http://example.com/twowayconnection" nsPrefix="twowayconn">
+
+    <eClassifiers xsi:type="ecore:EEnum" name="PubSubEvents">
+        <eLiterals name="connect" literal="connect"/>
+        <eLiterals name="message" value="1" literal="message"/>
+        <eLiterals name="close" value="2" literal="close"/>
+        <eLiterals name="error" value="3" literal="error"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="PubSubConnection" abstract="true" interface="true">
+        <eOperations name="setConfig">
+            <eParameters name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eOperations>
+        <eOperations name="subscribe">
+            <eParameters name="subscriber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eOperations>
+        <eOperations name="unsubscribe">
+            <eParameters name="subscriber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eOperations>
+        <eOperations name="notify">
+            <eParameters name="event" eType="#//PubSubEvents"/>
+            <eParameters name="data" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0"/>
+            <eParameters name="topic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        </eOperations>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="TwoWayConnection" abstract="true">
+        <eSuperTypes href="#//PubSubConnection"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="ready" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+
+        <eOperations name="onMessage">
+            <eParameters name="data" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0"/>
+            <eParameters name="topic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0"/>
+        </eOperations>
+        <eOperations name="onConnect"/>
+        <eOperations name="onClose"/>
+        <eOperations name="onError">
+            <eParameters name="error" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" lowerBound="0"/>
+        </eOperations>
+        <eOperations name="hasTopics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" abstract="true"/>
+
+    </eClassifiers>
+
+</ecore:EPackage>

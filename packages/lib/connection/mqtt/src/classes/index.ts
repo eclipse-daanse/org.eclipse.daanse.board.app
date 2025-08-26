@@ -14,8 +14,9 @@
 import { TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
 import { type MqttClient } from 'mqtt'
 import mqtt from 'mqtt'
+import type { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base'
 
-export interface IMQTTConnectionConfiguration {
+export interface IMQTTConnectionConfiguration extends BaseConnectionConfig{
   url: string
   topic?: string
 }
