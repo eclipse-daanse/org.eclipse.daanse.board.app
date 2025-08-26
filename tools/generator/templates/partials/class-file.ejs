@@ -1,6 +1,26 @@
+<%#/**
+* Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors: Smart City Jena
+*/_%>
 <%#
   Class file template - creates separate .ts file for each class
 _%>
+/*
+Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+SPDX-License-Identifier: EPL-2.0
+
+Contributors: Smart City Jena
+
+*/
+
 /*
 * This is generated code! Please note, that on code generation, these line are erased and generated again.
 * If you modify this file, it is possible that you changes will be lost!!!
@@ -16,43 +36,125 @@ _%>
 * Serialization to a backend.
 */
 <%# Generate imports for super types -%>
-<%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%>
-  <%_ Array.from(eClass.eSuperTypes).forEach(superType => { _%>
+<%_
+if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) {
+  Array.from(eClass.eSuperTypes).forEach(superType => {
+_%>
 import {<%- superType.name -%>} from "./<%- superType.name -%>"
-  <%_ }); _%>
-<%_ } _%>
+<%_
+  });
+}
+_%>
 <%# Generate imports for referenced types -%>
-<%_ const referencedTypes = new Set(); _%>
-<%_ if (eClass.eStructuralFeatures) { _%>
-  <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
-    <%_ if (isEReference(feature) && feature.eType && feature.eType.name !== eClass.name) { _%>
-      <%_ referencedTypes.add(feature.eType.name); _%>
-    <%_ } _%>
-  <%_ }); _%>
-<%_ } _%>
-<%_ referencedTypes.forEach(typeName => { _%>
+<%_
+  // Helper function to map package URI to import path
+  function mapPackageToImportPath(packageURI, typeName) {
+    if (packageURI === 'org.eclipse.daanse.board.app.ui.vue.composables') {
+      return 'org.eclipse.daanse.board.app.ui.vue.composables';
+    }
+    // Add more package mappings here as needed
+    return packageURI;
+  }
+
+  const localTypes = new Set(); // Same package types
+  const externalTypes = new Map(); // External package types: typeName -> importPath
+_%>
+<%_
+if (eClass.eStructuralFeatures) {
+  Array.from(eClass.eStructuralFeatures).forEach(feature => {
+    if (isEReference(feature)) {
+      // Check regular eType first
+      if (feature.eType && feature.eType.name !== eClass.name) {
+        if (feature.eType.ePackage && feature.eType.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(feature.eType.name);
+        } else if (feature.eType.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(feature.eType.ePackage.nsURI, feature.eType.name);
+          externalTypes.set(feature.eType.name, importPath);
+        }
+      }
+      // Check eGenericType.eClassifier
+      if (feature.eGenericType && feature.eGenericType.eClassifier && feature.eGenericType.eClassifier.name !== eClass.name) {
+        // Check if this is a proxy object
+        if (feature.eGenericType.eClassifier.eIsProxy && feature.eGenericType.eClassifier.eIsProxy()) {
+          // Handle proxy reference - get original URI
+          const proxyURI = feature.eGenericType.eClassifier.eProxyURI();
+          if (proxyURI) {
+            const uriString = proxyURI.toString();
+            if (uriString.includes('#//')) {
+              const [packageURI, typeName] = uriString.split('#//');
+              const importPath = mapPackageToImportPath(packageURI, typeName);
+              externalTypes.set(typeName, importPath);
+            }
+          }
+        } else if (feature.eGenericType.eClassifier.ePackage && feature.eGenericType.eClassifier.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(feature.eGenericType.eClassifier.name);
+        } else if (feature.eGenericType.eClassifier.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(feature.eGenericType.eClassifier.ePackage.nsURI, feature.eGenericType.eClassifier.name);
+          externalTypes.set(feature.eGenericType.eClassifier.name, importPath);
+        }
+      } else if (feature.eGenericType && feature.eGenericType.eClassifier && typeof feature.eGenericType.eClassifier === 'string') {
+        // Handle external package references in string format like "org.eclipse.daanse.board.app.ui.vue.composables#//ValueWrapper"
+        const externalRef = feature.eGenericType.eClassifier;
+        if (externalRef.includes('#//')) {
+          const [packageURI, typeName] = externalRef.split('#//');
+          const importPath = mapPackageToImportPath(packageURI, typeName);
+          externalTypes.set(typeName, importPath);
+        }
+      }
+    }
+  });
+}
+_%>
+<%# Generate local imports (exclude types that have external imports) -%>
+<%_
+localTypes.forEach(typeName => {
+  if (!externalTypes.has(typeName)) {
+_%>
 import {<%- typeName -%>} from "./<%- typeName -%>"
-<%_ }); _%>
+<%_
+  }
+});
+_%>
+<%# Generate external imports -%>
+<%_
+externalTypes.forEach((importPath, typeName) => {
+_%>
+import {<%- typeName -%>} from '<%- importPath -%>'
+<%_
+});
+_%>
 <%# Generate imports for enum types -%>
-<%_ const enumTypes = new Set(); _%>
-<%_ if (eClass.eAttributes) { _%>
-  <%_ Array.from(eClass.eAttributes).forEach(attribute => { _%>
-    <%_ if (attribute.eType && isEEnum(attribute.eType) && attribute.eType.name !== eClass.name) { _%>
-      <%_ enumTypes.add(attribute.eType.name); _%>
-    <%_ } _%>
-  <%_ }); _%>
-<%_ } _%>
-<%_ enumTypes.forEach(enumName => { _%>
+<%_
+const enumTypes = new Set();
+if (eClass.eAttributes) {
+  Array.from(eClass.eAttributes).forEach(attribute => {
+    if (attribute.eType && isEEnum(attribute.eType) && attribute.eType.name !== eClass.name) {
+      enumTypes.add(attribute.eType.name);
+    }
+  });
+}
+enumTypes.forEach(enumName => {
+_%>
 import {<%- enumName -%>} from "./<%- enumName -%>"
-<%_ }); _%>
+<%_
+});
+_%>
 import {Documentation, Attribute, ModelClass, Reference, Enum} from <%_ if(!anopak){%>'./ModelAnnotations'<%_ }else{ %> '<%= anopak%>'<%_ } %>
 
 @ModelClass({type:'<%- ePackage.nsURI -%>#//<%- eClass.name -%>'})
-export class <%- eClass.name -%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
-    <%# Generate structural features -%>
-    <%_ if (eClass.eStructuralFeatures) { _%>
-      <%_ Array.from(eClass.eStructuralFeatures).forEach(feature => { _%>
-        <%- include('feature-template', { feature: feature }) -%>
-      <%_ }); _%>
-    <%_ } _%>
+export class <%- eClass.name -%><%_ if (eClass.eTypeParameters && eClass.eTypeParameters.size() > 0) { _%><<%_ const typeParams = []; _%><%_ for (let i = 0; i < eClass.eTypeParameters.size(); i++) { _%><%_ typeParams.push(eClass.eTypeParameters.get(i).name); _%><%_ } _%><%- typeParams.join(', ') -%>><%_ } _%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
+<%# Generate structural features -%>
+<%_
+    if (eClass.eStructuralFeatures) {
+      Array.from(eClass.eStructuralFeatures).forEach(feature => {
+_%>
+<%- include('feature-template', { feature: feature, instances }) -%>
+    <%_
+      });
+    }
+    _%>
 }

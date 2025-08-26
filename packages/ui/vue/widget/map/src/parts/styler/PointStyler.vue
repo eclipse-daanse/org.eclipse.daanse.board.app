@@ -111,7 +111,7 @@ const pointSelectorOptions = [
             <div class="pin icon">
               <div class="inner">
 
-                <IconWidget :config="model.point"></IconWidget>
+                <IconWidget :config="model.point" v-model:configv="model.point"></IconWidget>
               </div>
             </div>
 

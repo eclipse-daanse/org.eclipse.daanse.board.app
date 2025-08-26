@@ -75,7 +75,7 @@ const value = computed({
               <template v-if="model.renderer.point_render_as=='icon'">
                 <div class="pin icon round">
                   <div class="inner">
-                    <IconWidget :config="model.renderer.point"
+                    <IconWidget :config="model.renderer.point" v-model:configv="model.renderer.point"
                                 :datasourceId="''"></IconWidget>
                     <!--<IconWidget ref="iconMapComponent2" v-bind="model.renderer.point"></IconWidget>-->
                   </div>

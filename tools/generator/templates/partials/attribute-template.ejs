@@ -1,6 +1,16 @@
+<%#/**
+* Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors: Smart City Jena
+*/_%>
 <%#
   Attribute template - generates TypeScript properties from EAttribute
 _%>
+
 <%_
   // Helper function to map Ecore types to TypeScript types
   function mapEcoreTypeToTS(typeName) {
@@ -20,10 +30,9 @@ _%>
   }
 
   const tsType = mapEcoreTypeToTS(attribute.eType ? attribute.eType.name : 'any');
-  const isArray = attribute.many || false;
+  const isArray = attribute.isMany || false;
   const isEnum = attribute.eType ? isEEnum(attribute.eType) : false;
 _%>
-
 <%# Generate documentation if available -%>
 <%_ if (attribute.eAnnotations) { _%>
   <%_ Array.from(attribute.eAnnotations).forEach(annotation => { _%>
@@ -41,9 +50,9 @@ _%>
 <%# Generate the attribute -%>
 <%_ if (isEnum) { _%>
   <%_ if (isArray) { _%>
-@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
   <%_ } else { _%>
-@Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
   <%_ } _%>
 <%_ } else { _%>
   <%_ if (attribute.defaultValueLiteral) { _%>
