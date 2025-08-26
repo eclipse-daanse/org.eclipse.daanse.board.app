@@ -11,13 +11,16 @@
 
 
 import { BoxedDatastream, BoxedThing } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
-import { Comperator, IDSRenderer, IRenderer } from '../api/Renderer'
 import { resolveObj } from '../utils/helpers'
 import { FeatureCollection } from 'geojson'
+import { DSRenderer } from '../gen/DSRenderer'
+import { Comperator } from '../gen/Comperator'
+import { Renderer } from '../gen/Renderer'
+
 
 export function useComparator() {
 
-  const compareThing = (th: BoxedThing, renderer: IRenderer) => {
+  const compareThing = (th: BoxedThing, renderer: Renderer) => {
 
     if (!renderer.thing || renderer.thing.length == 0) {
       return false
@@ -27,7 +30,7 @@ export function useComparator() {
         if (condition.value == '*') {
           return true
         } else {
-          const prop = resolveObj(th, condition.prop)
+          const prop = resolveObj(th, condition.prop??'')
           if (!prop) {
             return false
           }
@@ -40,7 +43,7 @@ export function useComparator() {
     return red
   }
 
-  const compareDatastream = (ds: BoxedDatastream, renderer: IDSRenderer) => {
+  const compareDatastream = (ds: BoxedDatastream, renderer: DSRenderer) => {
 
     if (!renderer.datastream || renderer.datastream.length == 0) {
       return false
@@ -51,7 +54,7 @@ export function useComparator() {
         if (condition.value == '*') {
           return true
         } else {
-          const prop = resolveObj(ds, condition.prop)
+          const prop = resolveObj(ds, condition.prop??'')
           if (!prop) {
             return false
           }
@@ -66,7 +69,7 @@ export function useComparator() {
   }
 
 
-  const filterFeatureCollection = (featurecollection: FeatureCollection, renderer: IDSRenderer): FeatureCollection<any> => {
+  const filterFeatureCollection = (featurecollection: FeatureCollection, renderer: DSRenderer): FeatureCollection<any> => {
     if (!renderer.datastream || renderer.datastream.length == 0) {
       return featurecollection
     }
@@ -80,7 +83,7 @@ export function useComparator() {
           listofFeatures.push(feature)
           break
         } else {
-          const prop = resolveObj(feature.properties, condition.prop)
+          const prop = resolveObj(feature.properties, condition.prop??'')
           if (!prop) {
             continue
           }
@@ -98,17 +101,17 @@ export function useComparator() {
 
   const compateCondition = (comperator: Comperator, prop: any, value: any) => {
     switch (comperator) {
-      case Comperator.equals:
+      case Comperator.eq:
         return String(prop) === value
-      case Comperator.notEQuals:
+      case Comperator.neq:
         return String(prop) !== value
-      case Comperator.greaterThen:
+      case Comperator.gt:
         return Number(prop) > Number(value)
-      case Comperator.greaterThenEquals:
+      case Comperator.gte:
         return Number(prop) >= Number(value)
-      case Comperator.lessThen:
+      case Comperator.lt:
         return Number(prop) < Number(value)
-      case Comperator.lessThenEquals:
+      case Comperator.lte:
         return Number(prop) <= Number(value)
       default:
         return false

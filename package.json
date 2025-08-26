@@ -12,7 +12,8 @@
     "type-check": "vue-tsc --build --force",
     "lint:ci": "yarn lint --output-file eslint_report.json --format json",
     "format": "prettier --write src/",
-    "dev": "turbo run dev"
+    "dev": "turbo run dev",
+    "generate_models": "cd tools/generator && node scan-and-generate.js"
   },
   "dependencies": {
     "grid-layout-plus": "^1.1.0",
@@ -47,9 +48,10 @@
     "ts-node": "^10.9.2",
     "typescript": "~5.9.2",
     "turbo": "^2.5.4",
-    "vite": "6.3.5",
     "vitest": "^3.0.9",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^2.1.6",
+    "vite": "6.3.5",
+    "id128": "^1.6.6"
   },
   "workspaces": [
     "packages/**"

@@ -1,20 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
 <ecore:EPackage
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-        name="image"
-        nsURI="https://org.eclipse.daanse.board.app.ui.vue.widget.image"
-        nsPrefix="image">
+        name="imagesettings"
+        nsURI="http://example.com/imagesettings"
+        nsPrefix="imagesettings">
 
-    <eClassifiers xsi:type="ecore:EClass" name="Gallery">
+    <eClassifiers xsi:type="ecore:EClass" name="ImageSettings">
         <eStructuralFeatures xsi:type="ecore:EReference"
                              name="imagesSettings"
-                             eType="imagesettings:ImageSettings"
+                             eType="#//GallerySettings"
                              containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference"
                              name="images"
                              upperBound="-1"
+                             eType="#//ImageGalleryItem"
+                             containment="true"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ImageGalleryItem">
+        <eStructuralFeatures xsi:type="ecore:EAttribute"
+                             name="id"
                              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute"
+                             name="url"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="GallerySettings">
+        <eStructuralFeatures xsi:type="ecore:EAttribute"
+                             name="fit"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute"
+                             name="diashowInterval"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
 
 </ecore:EPackage>

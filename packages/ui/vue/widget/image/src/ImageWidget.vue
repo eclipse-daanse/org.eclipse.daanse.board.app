@@ -12,19 +12,13 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import type { IImageSettings } from './index'
+import { onMounted, ref, watch, type Ref, computed } from 'vue'
+import { ImageSettings } from './gen/ImageSettings'
 
-const props = defineProps<{ datasourceId: string; config: IImageSettings }>()
-const { config } = toRefs(props)
+const props = defineProps<{ datasourceId: string }>()
+const config = defineModel<ImageSettings>('configv', { required: true })
 
-const defaultConfig: IImageSettings = {
-  imagesSettings: {
-    fit: 'None',
-    diashowInterval: 0,
-  },
-  images: [],
-}
+const defaultConfig = new ImageSettings();
 
 onMounted(() => {
   if (config.value) {
@@ -43,7 +37,7 @@ const getObjectFit = computed(() => {
   }
   return (
     fitMap[
-      (config.value.imagesSettings?.fit.toLowerCase() as keyof typeof fitMap) ||
+      (config.value.imagesSettings?.fit?.toLowerCase() as keyof typeof fitMap) ||
         'none'
     ] || ''
   )
@@ -68,14 +62,14 @@ const initInterval = () => {
   if (interval) {
     clearInterval(interval)
   }
-  if (config.value.imagesSettings.diashowInterval > 0) {
+  if (config.value.imagesSettings.diashowInterval??0 > 0) {
     interval = setInterval(() => {
       if (currentImage.value === config.value.images.length - 1) {
         currentImage.value = 0
         return
       }
       toNext()
-    }, config.value.imagesSettings.diashowInterval * 1000)
+    }, config.value.imagesSettings.diashowInterval??1 * 1000)
   }
 }
 
@@ -114,7 +108,7 @@ watch(lastImageIndex, () => {
     <img
       class="w-full h-full"
       :class="getObjectFit"
-      :src="parsedUrl(config.images[0]?.url)"
+      :src="parsedUrl(config.images[0]?.url??'')"
     />
   </template>
   <template v-else>
@@ -144,7 +138,7 @@ watch(lastImageIndex, () => {
           <img
             class="w-full h-full"
             :class="getObjectFit"
-            :src="parsedUrl(image.url)"
+            :src="parsedUrl(image.url??'')"
           />
         </div>
       </div>

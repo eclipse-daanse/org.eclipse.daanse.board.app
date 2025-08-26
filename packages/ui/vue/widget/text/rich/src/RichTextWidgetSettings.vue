@@ -26,12 +26,12 @@ import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Underline from "@tiptap/extension-underline";
-import type { IRichTextEditorSettings } from "./index";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
-const widgetSettings = defineModel<IRichTextEditorSettings>({ required: true });
+const widgetSettings = defineModel<RichTextEditorSettings>({ required: true });
 
 const opened = ref({
     widgetSection: false,

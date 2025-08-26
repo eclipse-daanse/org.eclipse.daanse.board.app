@@ -10,6 +10,7 @@ Contributors: Smart City Jena
 
 import WidgetWrapper from './WidgetWrapper.vue'
 import WidgetWrapperSettings from './WidgetWrapperSettings.vue'
-import {defaultConfig} from './default/wrapperConfig'
+import { WrapperSettings } from './gen/WrapperSettings'
+const defaultConfig = new WrapperSettings();
 
 export { WidgetWrapper, WidgetWrapperSettings, defaultConfig }

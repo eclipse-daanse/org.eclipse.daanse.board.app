@@ -12,30 +12,28 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import mermaid from 'mermaid';
 import { IMermaidWidgetSettings } from '.';
 import {  VariableWrapper,VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
 
 
-const config = defineModel<IMermaidWidgetSettings>('configv', { required: true});
+const config = defineModel<MermaidWidgetSettings>('configv', { required: true});
 
 const container = ref<HTMLDivElement | null>(null);
 const timestamp = ref(Date.now());
+const defaultConfig = new MermaidWidgetSettings();
 
-
-if(!config.value.theme)config.value.theme = new VariableWrapper('default');
-if(!config.value.value)config.value.value = new VariableComplexStringWrapper('flowchart TD\n' +
-  '    A[Christmas] -->|Get money| B(Go shopping)\n' +
-  '    B --> C{Let me think}\n' +
-  '    C -->|One| D[Laptop]\n' +
-  '    C -->|Two| E[iPhone]\n' +
-  '    C -->|Three| F[fa:fa-car Car]\n' +
-  '  ');
+onMounted(() => {
+  if (config.value) {
+    Object.assign(config.value, { ...defaultConfig, ...config.value })
+  }
+})
 
 
 
-watch(() => config.value.theme.value, async (newTheme: any) => {
+watch(() => config.value.theme, async (newTheme: any) => {
     mermaid.initialize({
         theme: newTheme,
     });
@@ -66,7 +64,7 @@ watch(() => config.value.value, async (val) => {
 
 <template>
     <div ref="container" :key="timestamp">
-        {{ config.value.value }}
+        {{ config.value }}
     </div>
 </template>
 

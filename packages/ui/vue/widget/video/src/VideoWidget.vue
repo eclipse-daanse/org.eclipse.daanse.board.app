@@ -13,23 +13,16 @@ Contributors:
 
 <script lang="ts" setup>
 
-
-import type { IVideoSettings } from "./index";
-import { computed, onMounted, toRefs } from "vue";
+import { computed, onMounted } from "vue";
+import { VideoSettings } from './gen/VideoSettings'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-
-const props = defineProps<{ datasourceId: string, config: IVideoSettings }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string }>();
+const config = defineModel<VideoSettings>('configv', { required: true });
 
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
-const defaultConfig: IVideoSettings = {
-    videoSettings: {
-        fit: "Cover",
-    },
-    videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4"
-};
+const defaultConfig = new VideoSettings();
 
 onMounted(() => {
     if (config.value) {
@@ -38,7 +31,7 @@ onMounted(() => {
 });
 
 const videoFit = computed(() => {
-    return config.value.videoSettings?.fit;
+    return config.value.videoFitSettings?.fit;
 });
 
 const videoUrlParced = computed(() => {

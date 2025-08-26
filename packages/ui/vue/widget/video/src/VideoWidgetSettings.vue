@@ -16,11 +16,12 @@ Contributors:
 import { inject, ref } from 'vue'
 import type { IVideoSettings } from "./index";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import { VideoSettings } from './gen/VideoSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
-const widgetSettings = defineModel<IVideoSettings>({ required: true });
+const widgetSettings = defineModel<VideoSettings>({ required: true });
 
 const opened = ref({
     widgetSection: false,
@@ -37,7 +38,7 @@ const opened = ref({
             />
             <va-select
                 class="mt-2"
-                v-model="widgetSettings.videoSettings.fit"
+                v-model="widgetSettings.videoFitSettings.fit"
                 :label="t('video:VideoWidget.videoFit')"
                 :options="['Cover', 'Contain', 'Stretch', 'Fill', 'None']"
                 teleport=".settings-container">
