@@ -49,7 +49,7 @@
     "turbo": "^2.5.4",
     "vite": "6.3.5",
     "vitest": "^3.0.9",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^3.0.6"
   },
   "workspaces": [
     "packages/**"

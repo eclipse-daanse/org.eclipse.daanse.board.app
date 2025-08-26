@@ -163,7 +163,7 @@
 
     "vite-plugin-vue-devtools": "^7.7.2",
     "vitest": "^3.0.9",
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^3.0.6"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
   "publishConfig": {
