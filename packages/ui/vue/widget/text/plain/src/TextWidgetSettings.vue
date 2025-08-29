@@ -57,7 +57,7 @@ const addVariable =() =>{
   const var_test = variableRepository.getVariable('test');
   console.log(var_test);
   console.log(var_test.value);
-  (widgetSettings.value.text as VariableWrapper<string>).setTo(var_test)
+
 }
 const addVariable2 =() =>{
   const var_test2 = variableRepository.getVariable('color');
@@ -75,7 +75,7 @@ const addVariable2 =() =>{
     <div class="settings-container">
       <div class="settings-block">
         <div style="flex-grow: 1;">
-          <va-input class="text-title" :label="t('textBase:TextWidget.label')" v-model="widgetSettings.text.value">
+          <va-input class="text-title" :label="t('textBase:TextWidget.label')" v-model="widgetSettings.text.original">
             <template #append>
               <VaIcon name="visibility" style="margin-left: 4px;" color="secondary"
                 @click="addVariable" />

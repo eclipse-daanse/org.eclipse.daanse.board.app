@@ -23,6 +23,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'org.eclipse.daanse.board.app.lib.core',
+        'org.eclipse.daanse.board.app.lib.variables',
         'inversify',
         'reflect-metadata',
       ],

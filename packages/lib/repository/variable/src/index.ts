@@ -11,12 +11,14 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { VariableRepository, type VariableConfig } from './classes'
+import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const identifier = Symbol.for('VariableRepository')
 
 if (!container.isBound(identifier)) {
+  console.log(VariableRepository)
+  console.log('VariableRepository - initial bind only');
   container.bind<VariableRepository>(identifier).to(VariableRepository).inSingletonScope()
 }
 

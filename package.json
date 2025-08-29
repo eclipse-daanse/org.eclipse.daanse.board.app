@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "NODE_OPTIONS=\"--max-old-space-size=65536\" turbo run build --concurrency=20",
+    "build_force": "NODE_OPTIONS=\"--max-old-space-size=65536\" turbo run build --concurrency=20 --force",
     "build_local": "NODE_OPTIONS=\"--max-old-space-size=4096\" turbo run build --concurrency=2",
     "test": "turbo run test",
     "lint": "turbo run lint",
