@@ -14,14 +14,25 @@
 
 import {  RefreshType, VariableEvents } from '..'
 import { type IVariableConfig } from '..'
-import {
-  type VariableRepository,
-  identifier as variableRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+
+enum VariableScope {
+  Global = 'global',
+  Page = 'page'
+}
+
+enum VariableAccessMode {
+  ReadOnly = 'readonly',
+  PageOnly = 'page-only',
+  ExternalWritable = 'external-writable'
+}
+// Removed import to break circular dependency
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
 import { Serializable } from '../interface/JSONSerializableI'
 import { inject } from 'inversify'
+import { AccessError } from './AccessError'
+import { v4 as uuid } from 'uuid'
 
 
 const TYPE = 'Variable'
@@ -37,17 +48,27 @@ abstract class Variable implements Serializable{
   private refreshType: RefreshType = RefreshType.None
   private refreshIntervalId: number = 0
   private refreshTrigger: string = null as unknown as string
+  public readonly id: string = uuid()
   public type: string = null as unknown as string
   public name: string = null as unknown as string
+  public scope: VariableScope = VariableScope.Global
+  public accessMode: VariableAccessMode = VariableAccessMode.ExternalWritable
+  public pageId?: string
 
   @inject(identifiers.TINY_EMITTER)
   public eventBus?: TinyEmitter;
 
-  @inject(variableRepositoryIdentifier)
-  public storage?: VariableRepository;
+  @inject(PAGE_CONTEXT_SERVICE)
+  public pageContextService?: PageContextServiceI;
 
-  public init(name: string, config: IVariableConfig) {
+  // Removed injection to break circular dependency
+  public storage?: any;
+
+  public init(name: string, config: IVariableConfig & {scope?: VariableScope, accessMode?: VariableAccessMode, pageId?: string}) {
     this.name = name;
+    this.scope = config.scope || VariableScope.Global;
+    this.accessMode = config.accessMode || VariableAccessMode.ExternalWritable;
+    this.pageId = config.pageId;
 
     this.update(config);
   }
@@ -81,10 +102,24 @@ abstract class Variable implements Serializable{
   }
 
   get value(): any {
+    const currentPageId = this.pageContextService?.getCurrentPageId();
+    if(this.scope == VariableScope.Page &&  currentPageId != this.pageId && this.accessMode == VariableAccessMode.PageOnly) {
+      throw new AccessError(this.name)
+    }
     return this.innerValue
+
   }
 
   set value(value) {
+    const currentPageId = this.pageContextService?.getCurrentPageId();
+    if(this.scope == VariableScope.Page &&  currentPageId != this.pageId && this.accessMode == VariableAccessMode.PageOnly) {
+      throw new AccessError(this.name)
+    }
+    if(this.accessMode == VariableAccessMode.ReadOnly) {
+      throw new AccessError(this.name)
+    }
+
+    console.log('Setting value, current page:', currentPageId);
     this.innerValue = value
     console.log('Value changed')
     console.log(this.subscribers[0])
@@ -119,16 +154,28 @@ abstract class Variable implements Serializable{
       this.eventBus?.off(this.refreshTrigger)
     }
   }
+  public canWriteFromPage(): boolean {
+    return this.accessMode === VariableAccessMode.PageOnly || this.accessMode === VariableAccessMode.ExternalWritable;
+  }
+
+  public canWriteFromExternal(): boolean {
+    return this.accessMode === VariableAccessMode.ExternalWritable;
+  }
+
   serialize(): any {
     const ret =   {
+      id: this.id,
       name:this.name,
       description:this.description,
       refreshType:this.refreshType,
       refreshInterval:this.refreshInterval??undefined,
-      type: this.type
+      type: this.type,
+      scope: this.scope,
+      accessMode: this.accessMode,
+      pageId: this.pageId
     }
     return ret;
   }
 }
 
-export { Variable, symbol }
+export { Variable, symbol, VariableScope, VariableAccessMode }

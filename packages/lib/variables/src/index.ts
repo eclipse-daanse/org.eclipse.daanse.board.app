@@ -14,12 +14,11 @@
 import { Container } from 'inversify'
 import { ComputedVariable, symbol as ComputedVariableSymbol,COMPUTED_VARIABLE } from './classes/ComputedVariable'
 import { ConstantVariable, init as initConstant, symbol as ConstantVariableSymbol,CONSTANT_VARIABLE } from './classes/ConstantVariable'
-import { QueryVariable, init as initQuery, symbol as QueryVariableSymbol } from './classes/QueryVariable'
-import { RequestVariable, init as initRequest, symbol as RequestVariableSymbol } from './classes/RequestVariable'
-import { TimeVariable, init as initTime, symbol as TimeVariableSymbol } from './classes/TimeVariable'
+import { QueryVariable, symbol as QueryVariableSymbol } from './classes/QueryVariable'
+import { RequestVariable, symbol as RequestVariableSymbol } from './classes/RequestVariable'
+import { TimeVariable, symbol as TimeVariableSymbol } from './classes/TimeVariable'
 import { UsesComputedVariable } from './utils/UsesComputedVariable'
 import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
-import { Variable } from './classes/Variable'
 
 enum SourceType {
   Constant = 'Constant',
@@ -73,15 +72,26 @@ interface IRequestVaribleConfig extends IVariableConfig {
   request: string
 }
 
+interface IPageVariableConfig extends IVariableConfig {
+  value: any
+  accessMode: VariableAccessMode
+  pageId: string
+  scope: VariableScope
+}
+
 type INewVariableConfig =
   | IConstantVariableConfig
   | IComputedVariableConfig
   | IQueryVariableConfig
   | IRequestVaribleConfig
+  | IPageVariableConfig
   | IVariableConfig
 
 const init = (container: Container) => {
+  // No additional initialization needed
 }
+
+import { Variable, VariableScope, VariableAccessMode } from './classes/Variable'
 
 export {
   init,
@@ -90,6 +100,10 @@ export {
   QueryVariable,
   RequestVariable,
   TimeVariable,
+  Variable,
+  VariableScope,
+  VariableAccessMode,
+  IPageVariableConfig,
   SourceType,
   VariableEvents,
   RefreshType,
@@ -106,7 +120,6 @@ export {
   RequestVariableSymbol,
   TimeVariableSymbol,
   ComputedStoreParameter,
-  type Variable,
   COMPUTED_VARIABLE,
   CONSTANT_VARIABLE
 }

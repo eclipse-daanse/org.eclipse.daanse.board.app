@@ -9,10 +9,13 @@
 
 */
 
-import { type IPageVariableConfig } from 'org.eclipse.daanse.board.app.lib.variables'
+export class AccessError extends Error{
+  name:string
+  message:string = 'Access Error on Variable Scope'
 
-export interface PageI{
-  path: string,
-  hideTitle: boolean,
-  variables?: Map<string, IPageVariableConfig>
+
+    constructor(name:string) {
+    super();
+    this.name = name;
+}
 }

@@ -13,7 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { computed, toRefs, onMounted, ref, watch, getCurrentInstance } from 'vue'
-import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import type { ITextSettings } from "./index";
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
@@ -25,7 +25,7 @@ const props = defineProps<{ datasourceId: string; }>();
 const { datasourceId } = toRefs(props);
 const config = defineModel<TextSettings>('configv', { required: true});
 const defaultConfig: ITextSettings = {
-  text: new VariableWrapper<string>(""),
+  text: new VariableComplexStringWrapper(""),
   fontSize: new VariableWrapper<number>(12),
   fontColor: new VariableWrapper<string>("#000"),
   fontWeight: new VariableWrapper<string>("normal"),

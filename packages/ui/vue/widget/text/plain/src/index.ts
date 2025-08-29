@@ -16,10 +16,10 @@ import Icon from './assets/text.svg'
 import TextWidget from './TextWidget.vue'
 import TextWidgetSettings from './TextWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 interface ITextSettings {
-  text: VariableWrapper<string>
+  text: VariableComplexStringWrapper
   fontSize: VariableWrapper<number>
   fontColor: VariableWrapper<string>
   fontWeight: VariableWrapper<string>
