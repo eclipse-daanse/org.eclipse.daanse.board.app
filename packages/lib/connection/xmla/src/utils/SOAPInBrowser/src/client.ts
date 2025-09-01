@@ -214,8 +214,6 @@ export class Client {
   </Execute>`.trim()
     }
 
-    console.log('SOAP message:', message)
-
     xml =
       // Encoding is not supported
       // `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" ${encoding} ${this.wsdl.xmlnsInEnvelope}'>'` +

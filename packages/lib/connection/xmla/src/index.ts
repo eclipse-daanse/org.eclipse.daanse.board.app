@@ -13,6 +13,7 @@
 
 import { Factory } from 'inversify'
 import { XmlaConnection, type IXmlaConnectionConfiguration } from './classes'
+import { XMLAApi } from './classes/xml'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const factorySymbol = Symbol.for('XmlaConnectionFactory')
@@ -38,4 +39,4 @@ if (!container.isBound(factorySymbol)) {
   })
 }
 
-export { XmlaConnection, IXmlaConnectionConfiguration, factorySymbol }
+export { XmlaConnection, IXmlaConnectionConfiguration, factorySymbol, type XMLAApi }

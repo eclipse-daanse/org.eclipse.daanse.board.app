@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ref, watch, toRef, shallowRef } from 'vue';
+import { ref, watch, toRef, shallowRef, nextTick } from 'vue';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
@@ -27,13 +27,9 @@ const connection = ref(null as any);
 const query = ref(props.dataSource.config.mdx || '');
 const emit = defineEmits(['updateConfig']);
 
-console.log(props.dataSource);
-watch(props.dataSource, () => {
-  update();
-}, { deep: true });
-
 const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
+const metadata = ref(null as any);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
 
 console.log(props.dataSource)
@@ -50,6 +46,14 @@ const queryConfig = ref({
 
 const drilldownState = ref(props.dataSource.config.drilldownState || {});
 
+
+console.log(props.dataSource);
+
+watch(props.dataSource, async () => {
+  const newStore = await update();
+  metadata.value = await newStore.getMetadata();
+}, { deep: true });
+
 const updateData = async () => {
   const req = await tempStore.value.getData('PivotTable');
   data.value = req;
@@ -59,17 +63,14 @@ const updateData = async () => {
   }
 }
 
+// This works only once when component is mounted
 watch(tempStore, async () => {
-  console.log('tempStore changed', tempStore.value);
   const connectionId = tempStore.value.connection;
-
-  console.log('container', container);
-  console.log('connectionId', connectionId);
   const connectionRepo = container.get(identifier) as ConnectionRepository;
   connection.value = await connectionRepo.getConnection(connectionId);
 
+  metadata.value = await tempStore.value.getMetadata();
   updateData();
-  // data.value = await tempStore.value.getData('PivotTable');
 }, { deep: true });
 
 watch(() => queryConfig, async () => {
@@ -110,6 +111,19 @@ const onCollapse = async (e: any) => {
   });
 
   updateData();
+}
+
+const getSettingsHash = (obj: any) => {
+  const str = JSON.stringify(obj);
+  if (!str) return 0;
+
+  let hash = 0;
+    for (let i = 0, len = str.length; i < len; i++) {
+        let chr = str.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
 }
 
 // const selectedFilter = ref("");
@@ -156,7 +170,7 @@ const onCollapse = async (e: any) => {
       </div>
     </div>
     <div class="h-full metadata-container">
-      <MetadataTree v-if="connection" :metadata="connection.metadata" />
+      <MetadataTree v-if="metadata" :metadata="metadata" :key="getSettingsHash(metadata)" />
       <div class="h-full w-full flex items-center justify-center" v-else>
         Select connection to load metadata
       </div>
