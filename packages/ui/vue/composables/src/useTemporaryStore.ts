@@ -40,13 +40,22 @@ export function useTemporaryStore(
     tempStore.value = factory(settings.value.config)
   })
 
-  const update = () => {
+  const update = async () => {
     tempStore.value?.destroy()
 
-    console.log('settings changes', settings)
+    tempStore.value = null
 
     const factory = container.get(identifiers.Store) as any
-    tempStore.value = factory(settings.value.config)
+
+    const newStore = factory(settings.value.config) 
+    if (newStore.initPromise) {
+        await newStore.initPromise
+        tempStore.value = newStore
+        return newStore
+    } else {
+      tempStore.value = newStore
+      return newStore
+    }
   }
 
   watch(

@@ -36,7 +36,7 @@ class XMLAApi {
     return []
   }
 
-  public async getKpis(catalog: string): Promise<{ kpis: any[] }> {
+  public async getKpis(catalog: string, cube: string): Promise<{ kpis: any[] }> {
     const kpisResponse = await this.SOAPClient?.DiscoverAsync({
       Headers: {
         Session: {
@@ -48,11 +48,15 @@ class XMLAApi {
       },
       RequestType: 'MDSCHEMA_KPIS',
       Restrictions: {
-        RestrictionList: {},
+        RestrictionList: {
+          CATALOG_NAME: catalog,
+          CUBE_NAME: cube,
+        },
       },
       Properties: {
         PropertyList: {
-          Catalog: catalog
+          Catalog: catalog,
+          Cube: cube,
         },
       },
     })

@@ -13,7 +13,8 @@ Contributors:
 
 <script setup lang="ts">
 import { debounce } from 'lodash';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
 
 const { config, connections } = defineProps<{
     config: any;
@@ -22,6 +23,7 @@ const { config, connections } = defineProps<{
 }>();
 
 const innerInterval = ref(config.pollingInterval ?? 5000);
+const cubes = ref([] as any[]);
 
 const connectionsFiltered = computed(() => {
     return connections.filter((c: any) => c.type === 'xmla');
@@ -39,12 +41,25 @@ watch(() => innerInterval.value, (nv) => {
     }
     intervalDebounce(nv);
 });
+
+watch(async () => config.connection, async () => {
+  if (config.connection) {
+    cubes.value = await XmlaStore.fetchCubes(config.connection);
+  }
+});
+
+onMounted(async () => {
+  if (config.connection) {
+    cubes.value = await XmlaStore.fetchCubes(config.connection);
+  }
+});
 </script>
 
 <template>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <VaSelect v-model="config.connection" label="Connection" :options="connectionsFiltered" text-by="name"
         value-by="uid" />
+    <VaSelect v-model="config.cube" label="Cube" :options="cubes" text-by="CUBE_NAME" value-by="CUBE_NAME" />
     <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
     <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
     <!-- eslint-disable-next-line vue/no-mutating-props -->
