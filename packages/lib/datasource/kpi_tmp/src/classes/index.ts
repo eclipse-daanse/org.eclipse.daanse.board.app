@@ -23,6 +23,7 @@ import { inject } from 'inversify'
 
 export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
+  cube: string
   kpis: any[]
   pollingInterval?: number
   name: string
@@ -33,6 +34,7 @@ export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
 export class KpiStore extends BaseDatasource {
   private connection: any
   private kpis: any[] = []
+  private cube: string = ''
   // private computedUrl: ComputedVariable;
 
   @inject(identifier)
@@ -42,6 +44,7 @@ export class KpiStore extends BaseDatasource {
     super.init(configuration)
 
     this.connection = configuration.connection
+    this.cube = configuration.cube
     this.kpis = configuration.kpis
   }
 
@@ -51,7 +54,7 @@ export class KpiStore extends BaseDatasource {
         this.connection,
       ) as any
 
-      let { kpis } = await connection.getKpis()
+      let kpis = await this.getKpis()
       kpis = kpis.filter((kpi: any) =>
         this.kpis.some((k: any) => k === kpi.KPI_NAME),
       )
@@ -64,11 +67,7 @@ export class KpiStore extends BaseDatasource {
 
   async getOriginalData() {
     try {
-      const connection = this.connectionRepository.getConnection(
-        this.connection,
-      ) as any
-
-      const { kpis } = await connection.getKpis()
+      const kpis = await this.getKpis()
       console.log('Retrieved KPIs:', kpis)
       return this.getKpiData(kpis)
     } catch (e: any) {
@@ -88,6 +87,16 @@ export class KpiStore extends BaseDatasource {
     )
   }
 
+  public async getKpis(): Promise<any[]> {
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as any
+
+    const api = await connection.getApi()
+    const { kpis } = await api.getKpis(connection.catalogName, this.cube)
+    return kpis
+  }
+
   private async getKpiData(kpis: any[]): Promise<any> {
     let response = null
 
@@ -95,9 +104,8 @@ export class KpiStore extends BaseDatasource {
       const connection = this.connectionRepository.getConnection(
         this.connection,
       ) as any
-      const cube = connection.cubeName
 
-      kpis = kpis.filter(kpi => kpi.CUBE_NAME === cube)
+      // kpis = kpis.filter(kpi => kpi.CUBE_NAME === cube)
 
       kpis.forEach(kpi => {
         if (!kpi.KPI_GUID) {
@@ -162,7 +170,7 @@ export class KpiStore extends BaseDatasource {
 
         const mdxQuery = `
           ${withPart}
-          SELECT {${measures}} ON COLUMNS FROM [${connection.cubeName}]
+          SELECT {${measures}} ON COLUMNS FROM [${this.cube}]
         `
 
         const mdxResponse = await connection.fetch({
@@ -328,9 +336,13 @@ export class KpiStore extends BaseDatasource {
   destroy(): void {}
 
   static validateConfiguration(configuration: IKpiStoreConfiguration) {
-    // if (!configuration.connection) {
-    //   return false
-    // }
+    if (!configuration.connection) {
+      return false
+    }
+
+    if (!configuration.cube) {
+      return false
+    }
 
     return true
   }

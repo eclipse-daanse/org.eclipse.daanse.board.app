@@ -29,7 +29,7 @@ const selection = computed(() => {
   return data.value.items.filter((item: any) => settingsRef.value.config.kpis.includes(item.name))
 })
 
-watch(() => props.dataSource.config.connection, () => {
+watch(() => props.dataSource.config, () => {
   update();
 }, { deep: true });
 

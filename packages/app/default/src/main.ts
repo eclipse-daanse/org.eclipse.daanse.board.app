@@ -93,6 +93,7 @@ import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import 'org.eclipse.daanse.board.app.lib.composer.chart'
 import 'org.eclipse.daanse.board.app.lib.composer.datatable'
+import 'org.eclipse.daanse.board.app.lib.composer.kpi'
 
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
@@ -128,6 +129,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.ws'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.kpi'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
@@ -233,42 +235,6 @@ app.provide('container', container)
 app.provide('codeEditorType', 'monaco')
 
 
-
-
-
-
-const connectionRepository = container.get<ConnectionRepository>(ConnectionIdentifier)
-
-
-
-// connectionRepository.registerConnection('test_xmla', 'xmla', {
-//   url: 'https://ssemenkoff.dev/emondrian/xmla',
-//   catalogName: 'catalog',
-//   cubeName: 'cube',
-// });
-
-
-XmlaConnection.getCatalogs('https://ssemenkoff.dev/emondrian/xmla').then((catalogs) => {
-  console.log('catalogs', catalogs)
-})
-XmlaConnection.getCubes('https://ssemenkoff.dev/emondrian/xmla', 'FoodMart').then((cubes) => {
-  console.log('catalogs', cubes)
-})
-
-connectionRepository.registerConnection('test', 'rest', {
-  url: 'https://jsonplaceholder.typicode.com/',
-  uid: 'test',
-  type: 'rest',
-  name: 'test',
-})
-
-
-const datasourceRepository = container.get<DatasourceRepository>(DatasourceIdentifier)
-
-datasourceRepository.registerDatasource('test_ds', 'rest', {
-  resourceUrl: 'posts',
-  connection: 'test',
-})
 
 app.use(router)
 

@@ -39,7 +39,7 @@ const availableDatasources = computed(() => {
 })
 
 onMounted(() => {
-  const dataSource = dataSources.find((ds) => ds.uid === props.itemId)
+  const dataSource = dataSources.find((ds: any) => ds.uid === props.itemId)
   datasourceProxy.value = cloneDeep(dataSource)
 })
 

@@ -99,25 +99,7 @@ export class XmlaConnection extends BaseConnection {
       return false
     }
 
-    if (!configuration.cubeName) {
-      return false
-    }
-
     return true
-  }
-
-  static async getCubes(
-    url: string,
-    catalogName: string,
-  ): Promise<MDSchemaCube[]> {
-    const client = await createClientAsync('xmla.wsdl')
-
-    client.setEndpoint(url)
-    const api = new XMLAApi(client, url)
-    await api.startSession()
-
-    const { cubes } = await api.getCubes(catalogName)
-    return cubes
   }
 
   static async getCatalogs(url: string): Promise<DBSchemaCatalog[]> {
@@ -131,33 +113,8 @@ export class XmlaConnection extends BaseConnection {
     return catalogs
   }
 
-  async getKpis(): Promise<{ kpis: any[] }> {
+  async getApi(): Promise<XMLAApi> {
     await this.apiPromise
-
-    const kpis = await this.api.getKpis(this.catalogName)
-    return kpis
-  }
-
-  async getProperties(): Promise<any[]> {
-    await this.apiPromise
-    return this.metadata.getProperties()
-  }
-
-  async getLevels(): Promise<any[]> {
-    await this.apiPromise
-    return this.metadata.getLevels()
-  }
-
-  async getMember(
-    parentLevel: MDSchemaLevel,
-    parentName: string,
-  ): Promise<any> {
-    await this.apiPromise
-
-    if (this.api) {
-      return await this.api.getMember(parentLevel, parentName)
-    } else {
-      throw new Error('API is not initialized')
-    }
+    return this.api
   }
 }
