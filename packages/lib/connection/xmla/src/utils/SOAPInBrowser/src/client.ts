@@ -153,7 +153,9 @@ export class Client {
     const alias = findKey(defs.xmlns as Record<string, any>, ns)
 
     delete args.Headers
+    console.log('exHeaders', exHeaders)
 
+    console.log('Invoking with security:', this.security)
     if (this.security?.addHeaders) {
       this.security.addHeaders(headers)
     }
@@ -226,7 +228,7 @@ export class Client {
       '</soap:Body>' +
       '</soap:Envelope>'
 
-    const responce = await request(location, xml)
+    const responce = await request(location, xml, headers)
     const textContent = await responce.text()
 
     const parsedResult = this.wsdl.xmlToObject(textContent)
