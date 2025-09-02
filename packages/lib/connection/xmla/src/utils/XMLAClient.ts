@@ -18,7 +18,7 @@ import type { DiscoverResponse } from "./generated/xmla/definitions/DiscoverResp
 import type { Execute } from "./generated/xmla/definitions/Execute";
 import type { ExecuteResponse } from "./generated/xmla/definitions/ExecuteResponse";
 import type { MsXmlAnalysisService } from "./generated/xmla/services/MsXmlAnalysisService";
-import { createClient } from "./SOAPInBrowser/src/soap";
+import { createClient, BasicAuthSecurity } from "./SOAPInBrowser/src/soap";
 
 export interface XmlaClient extends Client {
   MsXmlAnalysisService: MsXmlAnalysisService;
@@ -59,4 +59,8 @@ export function createClientAsync(
   ...args: Parameters<typeof createClient>
 ): Promise<XmlaClient> {
   return createClient(args[0]) as any;
+}
+
+export {
+  BasicAuthSecurity
 }

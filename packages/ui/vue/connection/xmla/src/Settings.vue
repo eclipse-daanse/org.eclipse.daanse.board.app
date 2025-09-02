@@ -16,7 +16,6 @@ import { watch, onMounted, ref } from 'vue';
 import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla';
 
 const catalogs = ref([] as any[]);
-const cubes = ref([] as any[]);
 
 const { config } = defineProps<{
   config: any;
@@ -29,7 +28,12 @@ onMounted(async () => {
 });
 
 const fetchCatalogs = async () => {
-  catalogs.value = await XmlaConnection.getCatalogs(config.url);
+  console.log('Fetching catalogs for URL', config.url, 'with security', config.security);
+  catalogs.value = await XmlaConnection.getCatalogs(config.url, {
+    type: config.security,
+    user: config.user,
+    password: config.password
+  });
 };
 
 
@@ -37,6 +41,17 @@ watch(async () => config.url, async () => {
   await fetchCatalogs();
 });
 
+watch(async () => config.security, async () => {
+  await fetchCatalogs();
+});
+
+watch(async () => config.user, async () => {
+  await fetchCatalogs();
+});
+
+watch(async () => config.password, async () => {
+  await fetchCatalogs();
+});
 </script>
 
 <template>
@@ -48,4 +63,7 @@ watch(async () => config.url, async () => {
   <VaSelect v-model="config.catalogName" label="Catalog" :options="catalogs" text-by="CATALOG_NAME"
     value-by="CATALOG_NAME" />
 
+  <VaSelect v-model="config.security" label="Security" :options="['None', 'Basic']" />
+  <VaInput v-if="config.security === 'Basic'" v-model="config.user" label="User" />
+  <VaInput v-if="config.security === 'Basic'" type="password" v-model="config.password" label="Password" />
 </template>

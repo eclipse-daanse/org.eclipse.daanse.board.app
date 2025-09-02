@@ -38,17 +38,14 @@ export class BasicAuthSecurity {
   private readonly _username: string
   private readonly _password: string
 
-  constructor (username: string, password: string) {
+  constructor (username: string, password: string = '') {
     this._username = username
     this._password = password
   }
 
   public addHeaders (headers: Record<string, string>): void {
-    // const bufferedCreds = Buffer.from(
-    //   `${this._username}:${this._password}`,
-    //   'base64'
-    // ).toString('binary')
-    // headers.Authorization = `Basic ${bufferedCreds}`
+    console.log('Adding headers for BasicAuthSecurity', headers)
+    headers.Authorization = `Basic ${btoa(this._username + ":" + this._password)}`
   }
 
   public toXML (): string {

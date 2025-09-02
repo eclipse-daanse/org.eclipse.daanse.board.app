@@ -18,13 +18,22 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
 
 import { XMLAApi } from './xml'
-import { createClientAsync } from '../utils/XMLAClient'
+import { createClientAsync, BasicAuthSecurity } from '../utils/XMLAClient'
 import { MetadataStore } from './MetadataStorage'
 
 export interface IXmlaConnectionConfiguration extends BaseConnectionConfig {
   url: string
   cubeName: string
   catalogName: string
+  security: 'Basic' | 'None'
+  user?: string
+  password?: string
+}
+
+export interface SecurityOptions {
+  type: 'None' | 'Basic'
+  user?: string
+  password?: string
 }
 
 export class XmlaConnection extends BaseConnection {
@@ -35,6 +44,10 @@ export class XmlaConnection extends BaseConnection {
   private api: XMLAApi = null as unknown as XMLAApi
   private apiPromiseResolve: ((value: unknown) => void) | undefined
   private apiPromise
+
+  public security: 'Basic' | 'None' = 'None'
+  public user: string = ''
+  public password: string = ''
 
   constructor() {
     super()
@@ -50,6 +63,9 @@ export class XmlaConnection extends BaseConnection {
     this.url = configuration.url
     this.catalogName = configuration.catalogName
     this.cubeName = configuration.cubeName
+    this.security = configuration.security || 'None'
+    this.user = configuration.user || ''
+    this.password = configuration.password || ''
 
     this.api = await this.initApi()
     this.metadata = await this.initMetadata()
@@ -61,6 +77,10 @@ export class XmlaConnection extends BaseConnection {
 
   async initApi(): Promise<XMLAApi> {
     const client = await createClientAsync('xmla.wsdl')
+
+    if (this.security === 'Basic') {
+      client.setSecurity(new BasicAuthSecurity(this.user, this.password))
+    }
 
     client.setEndpoint(this.url)
     const api = new XMLAApi(client, this.url)
@@ -102,10 +122,20 @@ export class XmlaConnection extends BaseConnection {
     return true
   }
 
-  static async getCatalogs(url: string): Promise<DBSchemaCatalog[]> {
+
+
+  static async getCatalogs(url: string, security: SecurityOptions): Promise<DBSchemaCatalog[]> {
     const client = await createClientAsync('xmla.wsdl')
 
+    if (security.type === 'Basic' && security.user) {
+      const securityClass = new BasicAuthSecurity(security.user, security.password)
+      console.log('Security class:', securityClass)
+
+      client.setSecurity(securityClass)
+    }
+
     client.setEndpoint(url)
+    console.log("Client", client)
     const api = new XMLAApi(client, url)
     await api.startSession()
 
