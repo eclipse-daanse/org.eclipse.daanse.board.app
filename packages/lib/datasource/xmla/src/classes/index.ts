@@ -44,6 +44,12 @@ interface XMLARequestParams {
   filters: any[]
 }
 
+export interface SecurityOptions {
+  type: 'None' | 'Basic'
+  user?: string
+  password?: string
+}
+
 export class XmlaStore extends BaseDatasource {
   private connection: any
   private requestParams: XMLARequestParams = {
