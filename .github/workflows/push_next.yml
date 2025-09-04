@@ -39,7 +39,7 @@ jobs:
           node-version: 20.x
           registry-url: 'https://registry.npmjs.org'
         if: env.changes == 'true'
-      - uses: actions/setup-python@v5.6.0
+      - uses: actions/setup-python@v6.0.0
         with:
           python-version: '3.11'
         if: env.changes == 'true'
