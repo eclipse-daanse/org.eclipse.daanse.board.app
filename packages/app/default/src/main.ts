@@ -130,6 +130,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.kpi'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.ogc'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
