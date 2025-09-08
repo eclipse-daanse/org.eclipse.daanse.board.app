@@ -86,6 +86,22 @@ export class CsvStore extends BaseDatasource {
       text,
       this.parseOptions || {},
     )
+
+    data.header = data.header.map(header => typeof header === 'string' ? header.trim() : header)
+
+    data.rows = data.rows.map(row =>
+      row.map((value: any) => typeof value === 'string' ? value.trim() : value)
+    )
+
+    data.mappedRows = data.mappedRows.map((row) => {
+      const trimmedRow: any = {}
+      for (const [key, value] of Object.entries(row)) {
+        const trimmedKey = typeof key === 'string' ? key.trim() : key
+        trimmedRow[trimmedKey] = typeof value === 'string' ? value.trim() : value
+      }
+      return trimmedRow
+    })
+
     console.log(data)
     if (type === 'DataTable') {
       return {
