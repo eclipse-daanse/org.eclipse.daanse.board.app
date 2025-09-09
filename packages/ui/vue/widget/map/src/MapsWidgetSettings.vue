@@ -155,25 +155,47 @@ const services = computedAsync(async () => {
 
     try {
       const OGCStore = datasourceRepository.getDatasource(widgetSettings.value.datasourceId)
-
-      ret.push({
-        //service:{'_info':{title:OGCStore?.name+'['+OGCStore?.type+']',name:OGCStore?.name}},
-        service: { '_info': { title: id + '[OGCSTA]', name: id } },
-        type: 'OGCSTA',
-        childs: [
-          {
-            'id': v4(),
-            'opacity': 1,
-            'service': OGCStore,
-            'geoJson': {},
-            'type': 'OGCSTA',
-            'name': 'OGCSTA',
-            'title': 'OGCSTA',
-            'attribution': ''
-          }
-        ],
-        level: 0
-      })
+      console.log(datasourceRepository
+        .getDatasourceType(widgetSettings.value.datasourceId))
+      if(datasourceRepository
+        .getDatasourceType(widgetSettings.value.datasourceId) == 'OGC Composer'){
+            ret.push({
+              service: { '_info': { title: id + '[Composer]', name: id } },
+              type: 'GEOJSON',
+              level: 0,
+              childs:   [
+                {
+                  'id': v4(),
+                  'opacity': 1,
+                  'service': OGCStore,
+                  'geoJson': {},
+                  'type': 'GEOJSON',
+                  'name': 'GEOJSON',
+                  'title': 'GEOJSON',
+                  'attribution': ''
+                }
+                ]
+            })
+      }else {
+        ret.push({
+          //service:{'_info':{title:OGCStore?.name+'['+OGCStore?.type+']',name:OGCStore?.name}},
+          service: { '_info': { title: id + '[OGCSTA]', name: id } },
+          type: 'OGCSTA',
+          childs: [
+            {
+              'id': v4(),
+              'opacity': 1,
+              'service': OGCStore,
+              'geoJson': {},
+              'type': 'OGCSTA',
+              'name': 'OGCSTA',
+              'title': 'OGCSTA',
+              'attribution': ''
+            }
+          ],
+          level: 0
+        })
+      }
     } catch (e) {
       console.log('service not supported')
     }
@@ -258,7 +280,7 @@ const modelswitch = computed(() => {
                           :min="0" :step="0.01" color="#555" />
               </div>
             </div>
-            <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA'">
+            <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON'">
               <VaButton
                 icon="format_paint"
                 preset="secondary"
