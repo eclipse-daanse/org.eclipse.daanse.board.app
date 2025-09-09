@@ -32,6 +32,8 @@ import pointOnFeature from '@turf/point-on-feature'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { MapSettings } from './gen/MapSettings'
+import { IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { IconSettings } from './gen/IconSettings'
 
 const props = defineProps<{ datasourceId: string }>()
 const { datasourceId } = toRefs(props)
@@ -317,6 +319,44 @@ const centerUpdated = (center: any) => {
             <l-geo-json v-if="!isPoint(wmsLayer.wfs_service?.geoJson)" ref="thingsLayer"
                         :geojson="filterFeatureCollection(wmsLayer.wfs_service?.geoJson as any,config.styles.find(style=>style.id==styleID)!) as unknown as  GeoJsonObject[]"
                         :options-style="()=>config.styles.find(style=>style.id==styleID)?.renderer.area as any"></l-geo-json>
+            <!-- </template>-->
+          </template>
+        </template>
+        <template v-if="wmsLayer.type == 'GEOJSON'">
+          <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
+
+            <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+              style.id==styleID)!).features)" :key="feature.id">
+              <l-geo-json v-if="!isPoint(feature.geometry)" ref="geojsonLayer"
+                          :geojson="feature"
+                          :options-style="()=>config.styles.find(style=>
+                          style.id==styleID)?.renderer.area as any"></l-geo-json>
+
+              <l-marker
+                v-if="getPoint(feature.geometry)"
+                :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
+                >
+                <l-icon class-name="someExtraClass">
+                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
+                    <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin icon">
+                      <div class="inner">
+                        <IconWidget :config="config.styles.find(style=>style.id==styleID)?.renderer.point" v-model:configv="(config.styles.find(style=>style.id==styleID)!.renderer.point) as IconSettings"></IconWidget>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='prop'">
+                    <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin contain marker">
+                      <div class="inner">
+                        {{ feature.properties![(config.styles.find(style=>style.id==styleID)?.renderer.point_prop) ?? ''] }}
+                      </div>
+                    </div>
+                  </template>
+                </l-icon>
+              </l-marker>
+
+            </template>
+            <!--<template v-if="compareDatastream(wmsLayer.wfs_service?.geoJson as BoxedDatastream, config.styles.find(style=>style.id==styleID)!)">-->
+
             <!-- </template>-->
           </template>
         </template>
