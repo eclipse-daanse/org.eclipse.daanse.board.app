@@ -27,6 +27,7 @@ export interface IVueDatasourceRepository {
     shouldUpdate?: boolean,
   ) => Promise<void>
   update: (oldVal: string, newVal: string) => void
+  getDataWithOptions: (options?: any) => Promise<void>
 }
 
 export function useDatasourceRepository(
@@ -96,6 +97,23 @@ export function useDatasourceRepository(
   //   },
   // )
 
+  const getDataWithOptions = async (options?: any) => {
+    if (!dataSourceId.value) {
+      data.value = null
+      return
+    }
+    console.log('getDataWithOptions', dataSourceId.value, options)
+    console.log('type', type)
+    try {
+      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
+      const dataRaw = await dataSource.getData(type, options);
+      data.value = structuredClone(dataRaw);
+    } catch (e) {
+      data.value = null
+      console.warn(e)
+    }
+  }
+
   const update = (newVal: string, oldVal: string) => {
     try {
       getData()
@@ -142,5 +160,6 @@ export function useDatasourceRepository(
     data,
     callEvent,
     update,
+    getDataWithOptions,
   }
 }

@@ -94,6 +94,7 @@ import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import 'org.eclipse.daanse.board.app.lib.composer.chart'
 import 'org.eclipse.daanse.board.app.lib.composer.datatable'
 import 'org.eclipse.daanse.board.app.lib.composer.kpi'
+import 'org.eclipse.daanse.board.app.lib.composer.weather'
 
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
@@ -132,10 +133,12 @@ import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.kpi'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.ogc'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.weather'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.map'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.weather'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {

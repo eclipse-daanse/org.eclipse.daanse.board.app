@@ -94,7 +94,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     console.log('OGCSTA Store destroyed')
   }
 
-  async getData<T>(type: string): Promise<T> {
+  async getData<T>(type: string, options?: any): Promise<T> {
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
@@ -109,48 +109,75 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       },
     })
 
-    /*if(type = OGCSTAData){
+    // Only clear cache if explicitly requested via options or if no data exists yet
+    const shouldReload = options?.reload ||
+                        this.requestFlag.key == FILTERRESET ||
+                        (!this.resultMap.things || this.resultMap.things.length === 0)
 
-    }*/
+    if (shouldReload) {
+      // Clear previous results only when explicitly reloading
+      this.resultMap = {
+        things: [],
+        datastreams: [],
+        observations: [],
+        locations: [],
+      }
+    }
+
     const listOfPromesis: Promise<IOGCSTAData>[] = []
 
-    if (this.requestFlag.key == FILTER) {
+    // If options contains filter parameters, temporarily set requestFlag
+    if (options?.filter) {
+
+      const originalRequestFlag = this.requestFlag
+      this.requestFlag = { key: FILTER, params: options.filter }
       this.getPartitionalData(listOfPromesis)
-    } else {
+      this.requestFlag = originalRequestFlag
+    } else if (this.requestFlag.key == FILTER) {
+      this.getPartitionalData(listOfPromesis)
+    } else if (shouldReload) {
+      // Only fetch all data if we're reloading
       this.getAllData(listOfPromesis)
     }
-    const results: IOGCSTAData[] = await Promise.all(listOfPromesis)
 
-    for (const result of results) {
-      this.resultMap.datastreams = this.resultMap.datastreams?.concat(
-        result.datastreams ?? [],
-      )
-      this.resultMap.things = this.resultMap.things?.concat(result.things ?? [])
-      this.resultMap.observations = this.resultMap.observations?.concat(
-        (result.observations as Observation[]) ?? [],
-      )
-      //if(result.observations)this.resultMap.observations = result.observations;
-      this.resultMap.locations = this.resultMap.locations?.concat(
-        result.locations ?? [],
-      )
-    }
+    // Only fetch new data if there are promises to execute
+    if (listOfPromesis.length > 0) {
+      const results: IOGCSTAData[] = await Promise.all(listOfPromesis)
 
-    if (this.requestFlag.key == FILTER) {
-      for (const d of this.requestFlag.params.observations ?? []) {
-        console.log(d.iotId)
-        const newObservations = this.resultMap.observations?.filter(
-          o => o.ds_source == d.iotId,
-        ) || []
-        
-        if (newObservations.length > 0) {
-          const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-          if (ds){
-            ds.observations = newObservations
-            console.log(ds.observations)
+      for (const result of results) {
+        if (result.datastreams) {
+          this.resultMap.datastreams = this.resultMap.datastreams?.concat(result.datastreams)
+        }
+        if (result.things) {
+          this.resultMap.things = this.resultMap.things?.concat(result.things)
+        }
+        if (result.observations) {
+          this.resultMap.observations = this.resultMap.observations?.concat(result.observations as Observation[])
+        }
+        if (result.locations) {
+          this.resultMap.locations = this.resultMap.locations?.concat(result.locations)
+        }
+      }
+
+      // Process observations for filtered data
+      if (options?.filter || this.requestFlag.key == FILTER) {
+        const observationsParam = options?.filter?.observations || this.requestFlag.params?.observations
+        for (const d of observationsParam ?? []) {
+          console.log(d.iotId)
+          const ind = this.resultMap.observations?.findIndex(
+            o => o.ds_source == d.iotId,
+          )
+          if (ind != undefined && ind != -1) {
+            const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
+            if (ds)
+              ds.observations = this.resultMap.observations?.splice(
+                ind,
+                1,
+              ) as Observation[]
           }
         }
       }
-      
+
       // Clear processed observations
       for (const d of this.requestFlag.params.observations ?? []) {
         this.resultMap.observations = this.resultMap.observations?.filter(
@@ -158,6 +185,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         ) || []
       }
     }
+
     if (type == 'OGCSTAData') {
       return this.resultMap as T
     }
@@ -182,7 +210,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             })
           ).value!
           return transformFromThingLocationDastreamToLocationThingDatastream(
-            things,
+            things as BoxedThing[],
           )
         } catch (e) {
           if ((e as ResponseError).response.status == 501) {
@@ -200,11 +228,11 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const things = (await new ThingsApi(this.baseConfigration).v11ThingsGet())
       .value! as BoxedThing[]
     for (const thing of things) {
-      if (!thing.Locations) {
-        thing.Locations = []
+      if (!thing.locations) {
+        thing.locations = []
       }
-      if (!thing.Datastreams) {
-        thing.Datastreams = []
+      if (!thing.datastreams) {
+        thing.datastreams = []
       }
       try {
         if (thing.iotId) {
@@ -213,7 +241,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
               this.baseConfigration,
             ).v11ThingsEntityIdLocationsGet({ entityId: thing.iotId })
           ).value as BoxedLocation[]
-          thing.Locations = locs
+          thing.locations = locs
         }
       } catch (e) {
         console.log(e)
@@ -224,7 +252,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             this.baseConfigration,
           ).v11ThingsEntityIdDatastreamsGet({ entityId: thing.iotId! })
         ).value as BoxedDatastream[]
-        thing.Datastreams = dss
+        thing.datastreams = dss
       } catch (e) {
         console.log(e)
       }
@@ -430,22 +458,54 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   getThings(listOfPromesis: Promise<IOGCSTAData>[]) {
     if ('things' in this.requestFlag.params) {
       if ('all' in this.requestFlag.params.things!) {
+        const includeDatastreams = this.requestFlag.params.things!.all?.includeDatastreams
+        const includeLocations = this.requestFlag.params.things!.all?.includeLocations
+
+        let expand = []
+        if (includeDatastreams) expand.push('Datastreams')
+        if (includeLocations) expand.push('Locations')
+
         listOfPromesis.push(
           (async () => {
-            const data = (
-              await new ThingsApi(this.baseConfigration).v11ThingsGet()
-            ).value!
-            return { things: data }
+            try {
+              const expandParam = expand.length > 0 ? expand.join(',') : undefined
+              const data = (
+                await new ThingsApi(this.baseConfigration).v11ThingsGet({
+                  $expand: expandParam
+                })
+              ).value! as BoxedThing[]
+
+              if (expand.length > 0) {
+                // When using expand, transform to match BoxedThing format
+                return transformFromThingLocationDastreamToLocationThingDatastream(data)
+              } else {
+                // Without expand, return as simple things
+                return { things: data }
+              }
+            } catch (e) {
+              if ((e as ResponseError).response.status == 501) {
+                // Expand not implemented --> Fallback to individual requests
+                if (expand.includes('Datastreams') || expand.includes('Locations')) {
+                  return await this.fallBackSingleRequests()
+                } else {
+                  // Simple fallback without expand
+                  const data = (await new ThingsApi(this.baseConfigration).v11ThingsGet()).value! as BoxedThing[]
+                  return { things: data }
+                }
+              } else {
+                throw e
+              }
+            }
           })(),
         )
       } else if ('ids' in this.requestFlag.params.things!) {
-        for (const id in this.requestFlag.params.things!.ids) {
+        for (const id of this.requestFlag.params.things!.ids) {
           listOfPromesis.push(
             (async () => {
               const thing = await new ThingsApi(
                 this.baseConfigration,
-              ).v11ThingsEntityIdGet({ entityId: id })
-              return { things: [thing] }
+              ).v11ThingsEntityIdGet({ entityId: id,$expand: 'Datastreams,Locations' })
+              return { things: [thing as BoxedThing] }
             })(),
           )
         }
