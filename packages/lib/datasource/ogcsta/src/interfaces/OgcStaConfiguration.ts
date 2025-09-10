@@ -54,8 +54,8 @@ export interface BoxedDatastream extends Datastream{
   observations:Observation[]
 }
 export interface BoxedThing extends Thing{
-  Datastreams?: BoxedDatastream[],
-  Locations?: BoxedLocation[]
+  datastreams?: BoxedDatastream[],
+  locations?: BoxedLocation[]
 }
 export class OGCSTAData extends DataTypeBase implements IOGCSTAData{
   things?: BoxedThing[] = [];

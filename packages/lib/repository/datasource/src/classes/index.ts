@@ -14,7 +14,7 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { injectable } from 'inversify'
 
 export interface IDataRetrieveable {
-  getData(type: string): Promise<any>
+  getData(type: string, options?: any): Promise<any>
   getOriginalData(): any
   callEvent: (event: string, params: any) => void
   subscribe: (subscriber: () => any) => void
