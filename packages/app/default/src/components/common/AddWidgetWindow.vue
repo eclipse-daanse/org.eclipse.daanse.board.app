@@ -46,7 +46,7 @@ const onDragStart = (event: DragEvent) => {
 const registeredWidgets = container.get<WidgetRepository>(identifier)
 console.log(registeredWidgets.getAllWidgets())
 const availableWidgets = Object.entries(registeredWidgets.getAllWidgets())
-  .filter(([_, widget]) => widget.icon)
+  //.filter(([_, widget]) => widget.icon)
   .map(([name, widget]) => ({ type: name,name:widget.name ,icon: widget.icon }))
 
 const computedWidgets = computed(() => {

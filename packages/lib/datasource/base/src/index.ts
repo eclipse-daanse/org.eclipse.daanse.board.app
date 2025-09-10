@@ -99,7 +99,7 @@ export abstract class BaseDatasource extends UsesComputedVariable {
     return true
   }
 
-  abstract getData(type: string): Promise<any>
+  abstract getData(type: string, options?: any): Promise<any>
   abstract getOriginalData(): any
   abstract callEvent(event: string, params: any): void
 
