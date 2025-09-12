@@ -148,7 +148,7 @@ const change = (e: any) => {
   console.log(e)
   // const datasource = e.added.element.ds
   const datasource = 'test'
-  const widgetType = e.added.element.type
+  const widgetType = e.added?.element?.type || 'default'
   addWidget(widgetType, datasource, widgetConfig.value.dropX, widgetConfig.value.dropY)
 }
 
@@ -168,7 +168,7 @@ const change = (e: any) => {
       @dragleave="onDragLeave"
     >
       <template #item="{ element }">
-        <div style="display: none">{{ element.type }}</div>
+        <div style="display: none">{{ element?.type || '' }}</div>
       </template>
     </draggable>
     <div class="widget-board">

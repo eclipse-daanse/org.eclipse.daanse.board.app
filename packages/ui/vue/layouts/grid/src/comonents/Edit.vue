@@ -49,7 +49,7 @@ Contributors:
         @add="onExternalDragAdd"
       >
         <template #item="{ element }">
-          <div>{{ element.type }}</div>
+          <div>{{ element?.type || '' }}</div>
         </template>
       </Draggable>
     </div>

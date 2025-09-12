@@ -31,8 +31,9 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@', replacement: '/src' },
-
     ],
+    dedupe: ['vue', 'pinia']
+
   },
   css: {
     preprocessorOptions: {

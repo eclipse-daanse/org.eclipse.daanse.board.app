@@ -61,7 +61,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const getInitialStyle = (id: string) => {
-    const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
+    const item = layoutStore?.layout?.find((item: ILayoutItem) => item.id === id)
     if (!item) return {}
 
     return {
