@@ -13,7 +13,7 @@ import { resolve } from 'path';
 import dts from "vite-plugin-dts";
 import vue from '@vitejs/plugin-vue'
 import libCss from 'vite-plugin-libcss'
-const rootPath = resolve(__dirname, '../../../../../../') // ← ggf. anpassen
+const rootPath = resolve(__dirname, '../../../../../') // ← Fixed: 5 levels up to root
 export default defineConfig({
   resolve: {
     alias: {
