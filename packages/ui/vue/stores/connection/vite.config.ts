@@ -26,6 +26,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.stores.connection',
       fileName: 'ui.vue.stores.connection',
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: [
@@ -35,7 +36,7 @@ export default defineConfig({
         'inversify',
         'reflect-metadata',
       ],
-      output: {
+      /*output: {
         globals: {
           vue: 'Vue',
           pinia: 'Pinia',
@@ -44,12 +45,13 @@ export default defineConfig({
           inversify: 'inversify',
           'reflect-metadata': 'reflect-metadata',
         },
-      },
+      },*/
     },
   },
   plugins: [
     dts({
-        insertTypesEntry: true
+        insertTypesEntry: true,
+        rollupTypes: true,
     })
   ],
 });

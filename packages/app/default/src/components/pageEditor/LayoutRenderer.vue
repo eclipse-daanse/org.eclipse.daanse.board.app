@@ -41,6 +41,7 @@ const currentLayout = ref<LayoutI | null>(null)
 const EditComponent = shallowRef<any>(null)
 const ViewComponent = shallowRef<any>(null)
 const refreshTrigger = ref(0)
+const isLoading = ref(true)
 
 const handleOpenWidgetSettings = (widgetId: string) => {
   emit('openWidgetSettings', widgetId)
@@ -50,7 +51,12 @@ const handleRemoveWidget = (widgetId: string) => {
   emit('removeWidget', widgetId)
 }
 
-const loadLayout = () => {
+const loadLayout = async () => {
+  isLoading.value = true
+
+  // Wait for next tick to ensure dependencies are ready
+  await nextTick()
+
   if (props.pageId && pageRepo) {
     const page = pageRepo.getPage(props.pageId)
     currentPage.value = page || null
@@ -75,6 +81,10 @@ const loadLayout = () => {
       }
     }
   }
+
+  // Small delay to ensure everything is ready
+  await new Promise(resolve => setTimeout(resolve, 50))
+  isLoading.value = false
 }
 
 const subscriptionId = ref<string | null>(null)
@@ -94,12 +104,12 @@ const onPageUpdate = (eventType: string) => {
 
 onMounted(async () => {
   // Wait a tick to ensure all dependencies are ready
-
+  await nextTick()
 
   // Small delay to ensure Pinia is fully initialized for dynamic components
+  await new Promise(resolve => setTimeout(resolve, 100))
 
-  loadLayout()
-
+  await loadLayout()
 
   if (pageRepo && 'subscribe' in pageRepo) {
     subscriptionId.value = (pageRepo as any).subscribe(onPageUpdate)
@@ -115,22 +125,47 @@ onUnmounted(() => {
 
 <template>
   <div class="layout-renderer">
-    <div v-if="props.viewMode && ViewComponent" class="view-component-wrapper">
-      <component :is="ViewComponent" :key="currentLayout?.id || 'view'" />
+    <!-- Loading state -->
+    <div v-if="isLoading" class="loading-state">
+      <va-progress-circle indeterminate />
+      <p>Loading layout...</p>
     </div>
-    <div v-else-if="!props.viewMode && EditComponent" class="edit-component-wrapper">
+
+    <!-- View mode - only render if all components are ready -->
+    <div v-else-if="props.viewMode && ViewComponent
+    && currentLayout" class="view-component-wrapper">
+      <component :is="ViewComponent" :key="currentLayout.id || 'view'" />
+    </div>
+
+    <!-- Edit mode - only render if all components are ready -->
+    <div v-else-if="!props.viewMode
+    && EditComponent && currentLayout" class="edit-component-wrapper">
       <component
         :is="EditComponent"
-        :key="currentLayout?.id || 'edit'"
+        :key="currentLayout.id || 'edit'"
         @openSettings="handleOpenWidgetSettings"
         @removeWidget="handleRemoveWidget"
       />
     </div>
+
+    <!-- Error/fallback state with more detailed info -->
     <div v-else class="no-layout-message">
       <va-alert color="warning" icon="warning">
-        {{ props.viewMode ?
-        'No layout component found for the current page layout'
-        : 'No layout editor found for the current page layout' }}
+        <div v-if="isLoading">
+          Loading layout components...
+        </div>
+        <div v-else-if="!currentPage">
+          Page "{{ props.pageId }}" not found
+        </div>
+        <div v-else-if="!currentLayout">
+          No layout configured for page "{{ currentPage.name || props.pageId }}"
+        </div>
+        <div v-else>
+          {{ props.viewMode ?
+          'No layout component found for the current page layout'
+          : 'No layout editor found for the current page layout' }}
+          <br><small>Layout ID: {{ currentLayout.id }}</small>
+        </div>
       </va-alert>
     </div>
   </div>
@@ -147,11 +182,14 @@ onUnmounted(() => {
     height: 100%;
   }
 
-  .no-layout-message {
+  .no-layout-message,
+  .loading-state {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    gap: 1rem;
   }
 }
 </style>
