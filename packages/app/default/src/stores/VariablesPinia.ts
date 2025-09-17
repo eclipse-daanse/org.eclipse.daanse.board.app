@@ -30,14 +30,16 @@ export const useVariablesStore = defineStore('variables', () =>{
     });
 
     const updateVariables = () => {
+        const allVars = variableRepositoryInst.getAllVariables();
         variables.value.splice(0, variables.value.length);
-        variables.value.push(...variableRepositoryInst.getAllVariables().map(([name, config]) => {
+        const mappedVars = allVars.map(([name, config]) => {
             return {
                 ...config,
                 name,
-                key: name + Date.now()
+                key: config.id || name // Use id as key if available, fallback to name
             }
-        }));
+        });
+        variables.value.push(...mappedVars);
     }
 
     updateVariables();
@@ -49,33 +51,48 @@ export const useVariablesStore = defineStore('variables', () =>{
         const name = 'Variable ' + uid
 
         variableRepositoryInst.registerVariable(name, type, config)
-        const newVar = variableRepositoryInst.getVariable(name)
-        variables.value.push({
-            ...newVar,
-            name
-        })
+        updateVariables(); // Refresh the entire list from repository
     };
 
-    const removeVariable = (name: string) => {
-        const index = variables.value.findIndex((v) => v.name === name);
-        if (index > -1) {
-            variables.value.splice(index, 1);
-          variableRepositoryInst.removeVariable(name);
-        }
+    const removeVariable = (nameOrId: string) => {
+        // Use the improved removeVariable that handles both names and IDs
+        variableRepositoryInst.removeVariable(nameOrId);
+        updateVariables(); // Refresh the entire list from repository
     };
 
     const updateVariable = (variableState: any) => {
-        const prevVar = variableRepositoryInst.getVariable(variableState.originalName);
+        const prevVar = variableState.id ?
+            variableRepositoryInst.getVariableById(variableState.id) :
+            variableRepositoryInst.getVariable(variableState.originalName);
+
+        if (!prevVar) {
+            console.error('Variable not found:', variableState.id || variableState.originalName);
+            return;
+        }
 
         if (prevVar.type === variableState.type) {
             (prevVar as Variable).update(variableState.config)
             if (variableState.name && prevVar.name !== variableState.name) {
+                // Find the correct scope for this variable and update the repository map
+                const scope = prevVar.scope || 'global'
+                const scopeKey = prevVar.pageId && scope === 'page' ?
+                  `page-${prevVar.pageId}` : scope
+
+                // Manual fix: Update the repository map directly using scope-aware storage
+                const repository = variableRepositoryInst as any
+                if (repository.availableVariablesByScope) {
+                    const scopeMap = repository.availableVariablesByScope.get(scopeKey)
+                    if (scopeMap && scopeMap.has(prevVar.name)) {
+                        scopeMap.set(variableState.name, prevVar)
+                        scopeMap.delete(prevVar.name)
+                    }
+                }
+
+                // Update variable name
                 prevVar.rename(variableState.name);
-                variableRepositoryInst
-                    .renameVariable(variableState.name,variableState.originalName);
             }
         } else {
-            variableRepositoryInst.removeVariable(variableState.originalName);
+            variableRepositoryInst.removeVariable(prevVar.name);
             variableRepositoryInst
                 .registerVariable(variableState.name, variableState.type, variableState.config);
         }

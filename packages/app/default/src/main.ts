@@ -222,6 +222,7 @@ async function loadPackages() {
   await import("org.eclipse.daanse.board.app.lib.persistence.git")
   await import("org.eclipse.daanse.board.app.ui.vue.persistence.git")
   await import("org.eclipse.daanse.board.app.lib.persistence.loader")
+  await import("org.eclipse.daanse.board.app.ui.vue.page_provider")
   await import("org.eclipse.daanse.board.app.ui.vue.widget.page")
 
 

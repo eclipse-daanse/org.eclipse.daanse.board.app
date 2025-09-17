@@ -1,0 +1,32 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service",
+  "version": "0.0.1-next.1",
+  "description": "Page context service for Eclipse Daanse Board",
+  "main": "./dist/lib.pagecontext.pagecontext_service.umd.js",
+  "module": "./dist/lib.pagecontext.pagecontext_service.mjs",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "inversify": "7.5.1",
+    "typescript": "^5.8.2",
+
+    "vite-plugin-dts": "4.5.3"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.utils.subscriber": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.layout.page": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

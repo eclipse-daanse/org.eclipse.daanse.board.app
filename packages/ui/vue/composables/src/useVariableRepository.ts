@@ -18,6 +18,7 @@ import {
 import { ref, computed, type ComputedRef } from 'vue'
 import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
 
 export function useVariableRepository() {
   let variableRepositoryFound = false
@@ -37,6 +38,14 @@ export function useVariableRepository() {
   }
   variableRepositoryFound = true
 
+  let pageContextService: PageContextServiceI | null = null
+  try {
+    pageContextService = container.get<PageContextServiceI>(PAGE_CONTEXT_SERVICE)
+  } catch (e) {
+    // PageContextService might not be available in all contexts
+    console.warn('PageContextService not available for variable resolution')
+  }
+
   const subscriptionFn = () => {
     updateTimestamp.value = Date.now()
   }
@@ -55,7 +64,6 @@ export function useVariableRepository() {
 
     // Find all matches in the template
     const matches = [...templateValue.matchAll(regex)]
-    console.log('Matches found:', matches)
 
     // Extract variable names from matches (without the underscore)
     const listOfVariables = matches.map(match => match[2])
@@ -66,20 +74,19 @@ export function useVariableRepository() {
     // Replace each variable placeholder with its actual value
     for (const varName of listOfVariables) {
       try {
-        console.log(
-          `Resolving variable: ${varName}`,
-          variableRepository.getVariable(varName),
-        )
         let variable = undefined;
         try{
-          variable = variableRepository.getVariable(varName)
+          // Try context-aware variable resolution first
+          const currentPageId = pageContextService?.getCurrentPageId()
+          variable = variableRepository.getVariableWithContext ?
+            variableRepository.getVariableWithContext(varName, currentPageId) :
+            variableRepository.getVariable(varName)
         }catch (e){
           console.error(e)
         }
 
 
         if (variable) {
-          console.log(`Variable found: ${varName}`, variable.subscribe)
           variable.subscribe(subscriptionFn)
           connectedVariables.push(variable)
           const value = variable.value
