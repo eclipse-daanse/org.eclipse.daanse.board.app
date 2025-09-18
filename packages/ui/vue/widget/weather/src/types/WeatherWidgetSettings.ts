@@ -20,6 +20,21 @@ export interface WeatherWidgetSettings {
   useTimeRange?: boolean
   manualTimeSelection?: boolean
   refreshInterval?: number
+  showForecast?: boolean
+  selectedForecastParameters?: string[]
+  forecastPeriods?: string[]
+  chartColors?: {
+    temperature?: string
+    humidity?: string
+    pressure?: string
+    windSpeed?: string
+    windDirection?: string
+    precipitation?: string
+    visibility?: string
+    cloudCover?: string
+    [key: string]: string | undefined
+  }
+  gridColor?: string
 }
 
 export interface WeatherDataItem {

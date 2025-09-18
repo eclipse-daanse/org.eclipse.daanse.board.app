@@ -27,7 +27,9 @@
     "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.ogcsta": "0.0.1-next.1",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "chart.js": "^4.4.1",
+    "vue-chartjs": "^5.3.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.2",

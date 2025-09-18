@@ -27,6 +27,15 @@ export interface LocationInfo {
   }
 }
 
+export interface ForecastPeriods {
+  forecast12h?: WeatherValue
+  forecast24h?: WeatherValue
+  forecast36h?: WeatherValue
+  forecast48h?: WeatherValue
+  forecast60h?: WeatherValue
+  forecast72h?: WeatherValue
+}
+
 export interface WeatherData {
   temperature?: WeatherValue
   humidity?: WeatherValue
@@ -36,9 +45,29 @@ export interface WeatherData {
   precipitation?: WeatherValue
   visibility?: WeatherValue
   cloudCover?: WeatherValue
+  
+  // Forecast data for different time periods
+  temperatureForecast?: ForecastPeriods
+  humidityForecast?: ForecastPeriods
+  pressureForecast?: ForecastPeriods
+  windSpeedForecast?: ForecastPeriods
+  windDirectionForecast?: ForecastPeriods
+  precipitationForecast?: ForecastPeriods
+  visibilityForecast?: ForecastPeriods
+  cloudCoverForecast?: ForecastPeriods
+  
   location?: LocationInfo
   timestamp?: string
   thingId?: string | number
+}
+
+export interface ForecastMapping {
+  forecast12h: string[]
+  forecast24h: string[]
+  forecast36h: string[]
+  forecast48h: string[]
+  forecast60h: string[]
+  forecast72h: string[]
 }
 
 export interface WeatherMapping {
@@ -50,4 +79,14 @@ export interface WeatherMapping {
   precipitation: string[]
   visibility: string[]
   cloudCover: string[]
+  
+  // Forecast mappings for different time periods
+  temperatureForecast: ForecastMapping
+  humidityForecast: ForecastMapping
+  pressureForecast: ForecastMapping
+  windSpeedForecast: ForecastMapping
+  windDirectionForecast: ForecastMapping
+  precipitationForecast: ForecastMapping
+  visibilityForecast: ForecastMapping
+  cloudCoverForecast: ForecastMapping
 }

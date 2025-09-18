@@ -23,18 +23,7 @@ const timeMode = ref<'auto' | 'range' | 'manual'>(
   localSettings.value.useTimeRange ? 'range' : 'auto'
 )
 
-const inputMode = ref<'thingId' | 'location'>(
-  localSettings.value.useLocation ? 'location' : 'thingId'
-)
-
-watch(inputMode, (newMode) => {
-  settings.value.useLocation = newMode === 'location'
-  if (newMode === 'location') {
-    settings.value.thingId = ''
-  } else {
-    settings.value.location = ''
-  }
-})
+// Removed inputMode - only use thingId now
 
 watch(timeMode, (newMode) => {
   settings.value.useTimeRange = newMode === 'range'
@@ -47,11 +36,7 @@ watch(timeMode, (newMode) => {
 })
 
 const isValid = computed(() => {
-  if (inputMode.value === 'thingId') {
-    return (localSettings.value.thingId || '').trim() !== ''
-  } else {
-    return (localSettings.value.location || '').trim() !== ''
-  }
+  return (localSettings.value.thingId || '').trim() !== ''
 })
 
 const setCurrentTime = () => {
@@ -69,60 +54,61 @@ const setTimeRange = (hours: number) => {
   const startTime = new Date(now.getTime() - hours * 60 * 60 * 1000)
   settings.value.startTime = startTime.toISOString().slice(0, 16)
 }
+
+// Forecast settings
+const availableForecastParameters = [
+  { key: 'temperature', label: 'Temperature' },
+  { key: 'humidity', label: 'Humidity' },
+  { key: 'pressure', label: 'Pressure' },
+  { key: 'windSpeed', label: 'Wind Speed' },
+  { key: 'windDirection', label: 'Wind Direction' },
+  { key: 'precipitation', label: 'Precipitation' },
+  { key: 'visibility', label: 'Visibility' },
+  { key: 'cloudCover', label: 'Cloud Cover' }
+]
+
+const availableForecastPeriods = [
+  { key: 'forecast12h', label: '12 hours' },
+  { key: 'forecast24h', label: '24 hours' },
+  { key: 'forecast36h', label: '36 hours' },
+  { key: 'forecast48h', label: '48 hours' },
+  { key: 'forecast60h', label: '60 hours' },
+  { key: 'forecast72h', label: '72 hours' }
+]
+
+// Initialize forecast settings if not set
+onMounted(() => {
+  if (!settings.value.selectedForecastParameters) {
+    settings.value.selectedForecastParameters = ['temperature', 'humidity', 'pressure', 'windSpeed']
+  }
+  if (!settings.value.forecastPeriods) {
+    settings.value.forecastPeriods = ['forecast12h', 'forecast24h', 'forecast48h', 'forecast72h']
+  }
+  if (settings.value.showForecast === undefined) {
+    settings.value.showForecast = false
+  }
+  if (!settings.value.chartColors) {
+    settings.value.chartColors = {
+      temperature: '#e74c3c',
+      humidity: '#3498db',
+      pressure: '#2ecc71',
+      windSpeed: '#f39c12',
+      windDirection: '#9b59b6',
+      precipitation: '#2980b9',
+      visibility: '#1abc9c',
+      cloudCover: '#95a5a6'
+    }
+  }
+  if (!settings.value.gridColor) {
+    settings.value.gridColor = '#e0e0e0'
+  }
+})
 </script>
 
 <template>
   <div class="weather-settings">
-    {{settings}}
     <div class="settings-section">
       <h4>Data Source Configuration</h4>
-
-      <div class="input-mode-selector">
-        <label>
-          <input
-            type="radio"
-            value="thingId"
-            v-model="inputMode"
-          />
-          Use Thing ID
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="location"
-            v-model="inputMode"
-          />
-          Use Location
-        </label>
-      </div>
-
-      <div v-if="inputMode === 'thingId'" class="form-group">
-        <label for="thingId">Thing ID:</label>
-        <input
-          id="thingId"
-          type="text"
-          v-model="settings.thingId"
-          placeholder="Enter OGC STA Thing ID (e.g., 10567)"
-          class="form-control"
-        />
-        <small class="form-text">
-          Enter the unique identifier for the weather station Thing in the OGC SensorThings API
-        </small>
-      </div>
-
-      <div v-if="inputMode === 'location'" class="form-group">
-        <label for="location">Location:</label>
-        <input
-          id="location"
-          type="text"
-          v-model="settings.location"
-          placeholder="Enter location name"
-          class="form-control"
-        />
-        <small class="form-text">
-          Enter a location name to find the nearest weather station
-        </small>
-      </div>
     </div>
 
     <div class="settings-section">
@@ -236,11 +222,104 @@ const setTimeRange = (hours: number) => {
       </div>
     </div>
 
-    <div class="settings-validation" v-if="!isValid">
-      <p class="error">
-        Please provide either a Thing ID or location to configure the weather widget.
-      </p>
+    <div class="settings-section">
+      <h4>Forecast Settings</h4>
+
+      <div class="form-group">
+        <label>
+          <input
+            type="checkbox"
+            v-model="settings.showForecast"
+          />
+          Show Forecast Data
+        </label>
+        <small class="form-text">
+          Enable forecast tabs to display weather predictions for different time periods
+        </small>
+      </div>
+
+      <div v-if="settings.showForecast" class="forecast-configuration">
+        <div class="form-group">
+          <label>Forecast Parameters:</label>
+          <div class="checkbox-grid">
+            <label
+              v-for="param in availableForecastParameters"
+              :key="param.key"
+              class="checkbox-item"
+            >
+              <input
+                type="checkbox"
+                :value="param.key"
+                v-model="settings.selectedForecastParameters"
+              />
+              {{ param.label }}
+            </label>
+          </div>
+          <small class="form-text">
+            Select which weather parameters to show in forecast tabs
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Forecast Periods:</label>
+          <div class="checkbox-grid">
+            <label
+              v-for="period in availableForecastPeriods"
+              :key="period.key"
+              class="checkbox-item"
+            >
+              <input
+                type="checkbox"
+                :value="period.key"
+                v-model="settings.forecastPeriods"
+              />
+              {{ period.label }}
+            </label>
+          </div>
+          <small class="form-text">
+            Select which forecast time periods to include in charts
+          </small>
+        </div>
+      </div>
     </div>
+
+    <div class="settings-section" v-if="settings.showForecast">
+      <h4>Chart Colors</h4>
+
+      <div class="color-settings">
+        <div
+          v-for="param in availableForecastParameters"
+          :key="param.key"
+          class="color-setting-item"
+        >
+          <label :for="`color-${param.key}`">{{ param.label }}:</label>
+          <input
+            :id="`color-${param.key}`"
+            type="color"
+            v-model="settings.chartColors![param.key]"
+            class="color-picker"
+          />
+          <span class="color-preview" :style="{ backgroundColor: settings.chartColors?.[param.key] }"></span>
+        </div>
+
+        <!-- Grid Color Setting -->
+        <div class="color-setting-item">
+          <label for="grid-color">Grid Color:</label>
+          <input
+            id="grid-color"
+            type="color"
+            v-model="settings.gridColor"
+            class="color-picker"
+          />
+          <span class="color-preview" :style="{ backgroundColor: settings.gridColor }"></span>
+        </div>
+      </div>
+
+      <small class="form-text">
+        Choose colors for each weather parameter in forecast charts and grid lines
+      </small>
+    </div>
+
   </div>
 </template>
 
@@ -361,6 +440,80 @@ const setTimeRange = (hours: number) => {
   border-radius: 4px;
   padding: 12px;
   margin: 0;
+}
+
+/* Forecast settings styles */
+.forecast-configuration {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: normal !important;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: auto;
+  padding: 0;
+}
+
+/* Color picker styles */
+.color-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.color-setting-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-setting-item label {
+  font-weight: 500;
+  color: #495057;
+  min-width: 80px;
+  margin-bottom: 0;
+}
+
+.color-picker {
+  width: 40px;
+  height: 30px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.color-picker:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.color-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #ced4da;
 }
 
 @media (max-width: 480px) {
