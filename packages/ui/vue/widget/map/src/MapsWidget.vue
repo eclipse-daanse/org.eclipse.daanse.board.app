@@ -77,7 +77,7 @@ watch(datasourceId, (value, oldValue, onCleanup) => {
   update(value, oldValue)
 })
 
-watch(() => config.value.OGCSstyles?.map(style => style.ObservationrefreshTime), (value, oldValue, onCleanup) => {
+watch(() => config.value?.OGCSstyles?.map(style => style.ObservationrefreshTime), (value, oldValue, onCleanup) => {
   console.log('ObservationrefreshTime changed, reloading observations')
   loadObservationsInView()
 }, { deep: true })
@@ -137,14 +137,14 @@ watch(() => config.value.fixed, (value, oldValue, onCleanup) => {
   setFixed();
 })
 const locations = computed(() => {
-  return (data.value as any)['locations'] ?? []
+  return (data.value as any)?.['locations'] ?? []
 })
 
 const getStyle = computed(() => {
 
   return (feature: any) => {
     if (resolve(config, 'value', 'renderer', 0, 'renderer', 'point')) {
-      return (config.value as any).renderer[0].renderer.area
+      return (config.value as any)?.renderer?.[0]?.renderer?.area ?? {}
     } else return {}
   }
 })
@@ -454,7 +454,7 @@ const centerUpdated = (center: any) => {
           </template>
         </template>
         <template v-if="wmsLayer.type=='OGCSTA'">
-          <template v-for="renderer in config.OGCSstyles" :key="renderer.id">
+          <template v-for="renderer in (config.OGCSstyles ?? [])" :key="renderer.id">
 
             <template v-for="location in locations" :key="location['@iot.id']+'markr'">
               <template v-for="thing in location.things??[]" :key="thing['@iot.id']+'markrThing'">

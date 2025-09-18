@@ -15,6 +15,7 @@ import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
+import ForecastChart from './components/ForecastChart.vue'
 
 const props = defineProps<{
   datasourceId: string
@@ -26,7 +27,7 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 const refreshTimer = ref<NodeJS.Timeout | null>(null)
 
-const { update, callEvent, getDataWithOptions } = useDatasourceRepository(computed(() => props.datasourceId), 'OGCSTAData', weatherDataRef)
+const { update, callEvent, getDataWithOptions } = useDatasourceRepository(computed(() => props.datasourceId), 'WeatherData', weatherDataRef)
 
 const {
   currentWeather,
@@ -44,40 +45,14 @@ const refreshData = async (newVal?: string, oldVal?: string) => {
   loading.value = true
   error.value = null
 
-  console.log('Weather Widget: All settings received:', settings.value)
-  console.log('Weather Widget: thingId from settings:', settings.value.thingId)
-  console.log('Weather Widget: typeof thingId:', typeof settings.value.thingId)
 
   try {
-    if (settings.value.thingId) {
-      // First: Load the specific Thing with its Datastreams
-      console.log('Weather Widget: Loading specific Thing with ID:', settings.value.thingId)
-      await getDataWithOptions({
-        filter: {
-          things: {
-            ids: [settings.value.thingId]
-          }
-        }
-      })
-      
-      // Second: Load observations for the datastreams of this Thing
-      if (weatherDataRef.value?.datastreams && weatherDataRef.value.datastreams.length > 0) {
-        console.log('Weather Widget: Loading observations for', weatherDataRef.value.datastreams.length, 'datastreams')
-        await getDataWithOptions({
-          filter: {
-            observations: weatherDataRef.value.datastreams
-          }
-        })
-      }
+    // Only update subscriptions if datasource ID actually changed
+    if (newVal !== oldVal && newVal && oldVal) {
+      update(newVal, oldVal)
     } else {
-      // Load all data without filter
-      console.log('Weather Widget: Loading all things and datastreams...')
+      // Just get the data without updating subscriptions
       await getDataWithOptions()
-    }
-    
-    // Update subscriptions if datasource changed
-    if (newVal !== oldVal) {
-      update(newVal || props.datasourceId, oldVal || '')
     }
   } catch (e) {
     error.value = 'Failed to load weather data'
@@ -98,13 +73,13 @@ const setupRefreshTimer = () => {
 
 watch(() => props.datasourceId, (newVal, oldVal) => {
   refreshData(newVal, oldVal)
-}, { immediate: true })
+})
 
 watch(() => settings.value.refreshInterval, setupRefreshTimer, { immediate: true })
 
 watch(() => [settings.value.startTime, settings.value.endTime], () => {
   if (hasTimeFilter.value) {
-    refreshData()
+    //refreshData()
   }
 })
 
@@ -123,26 +98,40 @@ onUnmounted(() => {
   }
 })
 
-// Update weatherData in useWeatherData composable
-watch(weatherDataRef, (newData) => {
-  console.log('Weather Widget: Raw data received:', newData)
-  console.log('Weather Widget: Datastreams available:', newData?.datastreams?.length || 0)
-  if (newData?.datastreams) {
-    newData.datastreams.forEach((ds: any, index: number) => {
-      console.log(`Datastream ${index}:`, {
-        name: ds.name,
-        description: ds.description,
-        observations: ds.observations?.length || 0
-      })
-    })
-  }
-}, { deep: true })
 
 const formatValue = (item: { value: number, unit: string, timestamp?: string }) => {
-  return `${Math.round(item.value * 10) / 10}${item.unit}`
+  if (item.value === null || item.value === undefined || isNaN(item.value)) {
+    return `--${item.unit || ''}`
+  }
+
+  let value = item.value
+  let unit = item.unit || ''
+
+  // Temperature conversion: Kelvin to Celsius
+  if (unit === 'K' || unit === 'Kelvin') {
+    value = value - 273.15
+    unit = '°C'
+  }
+
+  // Visibility conversion: meters to kilometers
+  if (unit === 'm' && value >= 1000) {
+    value = value / 1000
+    unit = 'km'
+  }
+
+  // Pressure conversion: Pascals to kilopascals
+  if (unit === 'Pa') {
+    value = value / 1000
+    unit = 'kPa'
+  }
+
+  return `${Math.round(value * 10) / 10}${unit}`
 }
 
 const getWindDirection = (degrees: number) => {
+  if (degrees === null || degrees === undefined || isNaN(degrees)) {
+    return ''
+  }
   const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
   return directions[Math.round(degrees / 45) % 8]
 }
@@ -152,23 +141,180 @@ const formatTimestamp = (timestamp?: string) => {
   return new Date(timestamp).toLocaleString()
 }
 
+// WMO Weather Codes to icons mapping
+const getWeatherIconFromWMO = (wmoCode: number): string => {
+  const wmoIcons: { [key: number]: string } = {
+    0: '☀️',   // Clear sky
+    1: '🌤️',   // Mainly clear
+    2: '⛅',   // Partly cloudy
+    3: '☁️',   // Overcast
+    45: '🌫️',  // Fog
+    48: '🌫️',  // Depositing rime fog
+    51: '🌦️',  // Drizzle: Light
+    53: '🌦️',  // Drizzle: Moderate
+    55: '🌧️',  // Drizzle: Dense
+    56: '🌨️',  // Freezing drizzle: Light
+    57: '🌨️',  // Freezing drizzle: Dense
+    61: '🌧️',  // Rain: Slight
+    63: '🌧️',  // Rain: Moderate
+    65: '⛈️',  // Rain: Heavy
+    66: '🌨️',  // Freezing rain: Light
+    67: '🌨️',  // Freezing rain: Heavy
+    71: '❄️',   // Snow fall: Slight
+    73: '❄️',   // Snow fall: Moderate
+    75: '🌨️',  // Snow fall: Heavy
+    77: '❄️',   // Snow grains
+    80: '🌦️',  // Rain showers: Slight
+    81: '🌧️',  // Rain showers: Moderate
+    82: '⛈️',  // Rain showers: Violent
+    85: '🌨️',  // Snow showers: Slight
+    86: '🌨️',  // Snow showers: Heavy
+    95: '⛈️',  // Thunderstorm: Slight or moderate
+    96: '⛈️',  // Thunderstorm with slight hail
+    99: '⛈️'   // Thunderstorm with heavy hail
+  }
+
+  return wmoIcons[wmoCode] || '🌤️'
+}
+
+// Get weather icon from available data
+const getWeatherIcon = (weather: any): string => {
+  if (!weather) return '🌤️'
+
+  // Check if we have a WMO weather code in the data
+  const wmoCode = weather.weatherCode?.value || weather.wmoCode?.value
+  if (wmoCode !== undefined && wmoCode !== null) {
+    return getWeatherIconFromWMO(wmoCode)
+  }
+
+  // Fallback: derive from available measurements
+  const temp = weather.temperature?.value
+  const humidity = weather.humidity?.value
+  const precipitation = weather.precipitation?.value
+  const cloudCover = weather.cloudCover?.value
+  const windSpeed = weather.windSpeed?.value
+
+  // Precipitation check (highest priority)
+  if (precipitation && precipitation > 0) {
+    if (temp && temp < 2) return '❄️' // Snow
+    if (precipitation > 5) return '🌧️' // Heavy rain
+    return '🌦️' // Light rain
+  }
+
+  // Cloud cover based
+  if (cloudCover) {
+    if (cloudCover > 80) return '☁️' // Overcast
+    if (cloudCover > 50) return '⛅' // Partly cloudy
+  }
+
+  // Temperature based when no other indicators
+  if (temp) {
+    if (temp > 25) return '☀️' // Hot and sunny
+    if (temp > 15) return '🌤️' // Pleasant
+    if (temp > 0) return '🌥️' // Cool
+    return '🥶' // Cold
+  }
+
+  // High humidity without precipitation
+  if (humidity && humidity > 85) return '🌫️' // Foggy/misty
+
+  // Default
+  return '🌤️'
+}
+
+// Available forecast periods and parameters
+const availableForecastPeriods = ['forecast12h', 'forecast24h', 'forecast36h', 'forecast48h', 'forecast60h', 'forecast72h']
+const availableForecastParameters = ['temperature', 'humidity', 'pressure', 'windSpeed', 'windDirection', 'precipitation', 'visibility', 'cloudCover']
+
+
+// Get forecast data for specific parameter and period
+const getForecastData = (weatherData: any, parameter: string): { period: string, value: number, unit: string }[] => {
+  const forecastKey = `${parameter}Forecast`
+  const forecastData = weatherData[forecastKey]
+  if (!forecastData) return []
+
+  return availableForecastPeriods
+    .filter(period => forecastData[period])
+    .map(period => {
+      let value = forecastData[period].value
+      let unit = forecastData[period].unit
+
+      // Apply same unit conversions as formatValue
+      if (unit === 'K' || unit === 'Kelvin') {
+        value = value - 273.15
+        unit = '°C'
+      }
+
+      if (unit === 'm' && value >= 1000) {
+        value = value / 1000
+        unit = 'km'
+      }
+
+      if (unit === 'Pa') {
+        value = value / 1000
+        unit = 'kPa'
+      }
+
+      return {
+        period: period.replace('forecast', '').replace('h', ' hours'),
+        value: value,
+        unit: unit
+      }
+    })
+}
+
+// Check if forecast data is available
+const hasForecastData = computed(() => {
+  if (!processedWeather.value) return false
+  return availableForecastParameters.some(param => {
+    const forecastKey = `${param}Forecast`
+    return processedWeather.value[forecastKey] && Object.keys(processedWeather.value[forecastKey]).length > 0
+  })
+})
+
+// Get enabled forecast parameters from settings
+const enabledForecastParameters = computed(() => {
+  if (!settings.value.selectedForecastParameters) {
+    return hasForecastData.value ? ['temperature', 'humidity', 'pressure', 'windSpeed'] : []
+  }
+  return settings.value.selectedForecastParameters
+})
+
 // Process current weather from the fetched data
 const processedWeather = computed(() => {
+  if (!weatherDataRef.value) return null
+
+
+  // Check if this is WeatherData from Weather Composer (array format)
+  if (Array.isArray(weatherDataRef.value) && weatherDataRef.value.length > 0) {
+    let weatherStation = weatherDataRef.value[0]
+
+    // If thingId is specified, find the matching station
+    if (settings.value.thingId) {
+      const specificStation = weatherDataRef.value.find((station: any) =>
+        station.thingId == settings.value.thingId || String(station.thingId) == String(settings.value.thingId)
+      )
+      if (specificStation) {
+        weatherStation = specificStation
+      }
+    }
+
+    return weatherStation // Return weather data directly
+  }
+
+  // Legacy OGC STA format handling
   if (!weatherDataRef.value?.datastreams) return null
 
   let datastreams = weatherDataRef.value.datastreams
-  
+
   // If thingId is specified, filter datastreams to only those from that Thing
   if (settings.value.thingId) {
-    console.log('Weather Widget: Filtering datastreams for Thing ID:', settings.value.thingId)
     datastreams = datastreams.filter((ds: any) => {
       const thingMatch = ds.thing && ds.thing['@iot.id'] == settings.value.thingId
-      console.log(`Datastream ${ds.name}: thing ID = ${ds.thing?.['@iot.id']}, matches = ${thingMatch}`)
       return thingMatch
     })
-    console.log('Weather Widget: Filtered datastreams count:', datastreams.length)
   }
-  
+
   const weather: any = {}
 
   datastreams.forEach((ds: any) => {
@@ -240,20 +386,40 @@ const processedWeather = computed(() => {
   return weather
 })
 
+// Get chart color from settings or fallback to default
+const getChartColor = (parameter: string): string => {
+  const defaultColors: { [key: string]: string } = {
+    temperature: '#e74c3c',
+    humidity: '#3498db',
+    pressure: '#2ecc71',
+    windSpeed: '#f39c12',
+    windDirection: '#9b59b6',
+    precipitation: '#2980b9',
+    visibility: '#1abc9c',
+    cloudCover: '#95a5a6'
+  }
+
+  return settings.value.chartColors?.[parameter] || defaultColors[parameter] || '#3498db'
+}
+
+// Get font color from CSS variable (set by wrapper) or fallback to default
+const getFontColor = computed(() => {
+  return 'var(--title-color, #495057)'
+})
+
 const processedLocationInfo = computed(() => {
   if (!weatherDataRef.value?.things || weatherDataRef.value.things.length === 0) return null
 
   let thing = weatherDataRef.value.things[0]
-  
+
   // If thingId is specified, find the specific Thing
   if (settings.value.thingId) {
     const specificThing = weatherDataRef.value.things.find((t: any) => t['@iot.id'] == settings.value.thingId)
     if (specificThing) {
       thing = specificThing
-      console.log('Weather Widget: Found specific Thing:', thing.name)
     }
   }
-  
+
   const location = thing.Locations?.[0]
 
   return {
@@ -269,7 +435,6 @@ const processedLocationInfo = computed(() => {
 
 <template>
   <div class="weather-widget">
-    {{settings}}
     <div v-if="loading" class="weather-loading">
       <div class="spinner"></div>
       <p>Loading weather data...</p>
@@ -289,6 +454,10 @@ const processedLocationInfo = computed(() => {
       </div>
 
       <div class="weather-main">
+        <div class="weather-icon-section">
+          <span class="weather-icon">{{ getWeatherIcon(processedWeather) }}</span>
+        </div>
+
         <div v-if="processedWeather.temperature" class="temperature">
           <span class="temp-value">{{ formatValue(processedWeather.temperature) }}</span>
           <div v-if="processedWeather.temperature.timestamp" class="timestamp">
@@ -334,6 +503,22 @@ const processedLocationInfo = computed(() => {
         </div>
       </div>
 
+      <!-- Forecast Charts -->
+      <div v-if="settings.showForecast && hasForecastData" class="forecast-section">
+        <h3 class="forecast-title">Weather Forecast</h3>
+        <div class="forecast-charts">
+          <ForecastChart
+            v-for="parameter in enabledForecastParameters"
+            :key="parameter"
+            :data="getForecastData(processedWeather, parameter)"
+            :parameter="parameter"
+            :color="getChartColor(parameter)"
+            :fontColor="getFontColor"
+            :gridColor="settings.gridColor || '#e0e0e0'"
+          />
+        </div>
+      </div>
+
       <div v-if="settings.refreshInterval" class="refresh-info">
         <small>Auto-refresh every {{ Math.round(settings.refreshInterval / 60000) }} minutes</small>
       </div>
@@ -348,7 +533,7 @@ const processedLocationInfo = computed(() => {
 <style scoped>
 .weather-widget {
   padding: 16px;
-  background: #f8f9fa;
+ /* background: #f8f9fa;*/
   border-radius: 8px;
   font-family: Arial, sans-serif;
   height: 100%;
@@ -403,18 +588,29 @@ const processedLocationInfo = computed(() => {
 
 .weather-header h3 {
   margin: 0 0 4px 0;
-  color: #495057;
+  color: v-bind(getFontColor);
   font-size: 1.2em;
 }
 
 .location-desc {
   margin: 0;
-  color: #6c757d;
+  color: v-bind(getFontColor);
   font-size: 0.9em;
+  opacity: 0.7;
 }
 
 .weather-main {
   flex: 1;
+}
+
+.weather-icon-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.weather-icon {
+  font-size: 5em;
+  line-height: 1;
 }
 
 .temperature {
@@ -424,8 +620,8 @@ const processedLocationInfo = computed(() => {
 
 .temp-value {
   font-size: 2.5em;
-  font-weight: bold;
-  color: #007bff;
+  font-weight: 200;
+  color: v-bind(getFontColor);
 }
 
 .weather-details {
@@ -438,18 +634,19 @@ const processedLocationInfo = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  background: white;
+  background: rgba(255, 255, 255, 0.20);
   border-radius: 6px;
-  border: 1px solid #e9ecef;
+  /*border: 1px solid #e9ecef;*/
 }
 
 .weather-item .label {
-  color: #6c757d;
+  color: v-bind(getFontColor);
+  opacity: 0.7;
   font-weight: 500;
 }
 
 .weather-item .value {
-  color: #495057;
+  color: v-bind(getFontColor);
   font-weight: 600;
 }
 
@@ -464,7 +661,8 @@ const processedLocationInfo = computed(() => {
 
 .time-range {
   margin-top: 8px;
-  color: #6c757d;
+  color: v-bind(getFontColor);
+  opacity: 0.7;
   font-style: italic;
 }
 
@@ -474,17 +672,40 @@ const processedLocationInfo = computed(() => {
 }
 
 .timestamp small {
-  color: #6c757d;
+  color: v-bind(getFontColor);
+  opacity: 0.7;
   font-size: 0.8em;
 }
 
 .refresh-info {
   margin-top: 16px;
   text-align: center;
-  color: #6c757d;
+  color: v-bind(getFontColor);
+  opacity: 0.7;
   border-top: 1px solid #dee2e6;
   padding-top: 12px;
 }
+
+/* Forecast section styles */
+.forecast-section {
+  margin-top: 20px;
+  border-top: 2px solid #dee2e6;
+  padding-top: 16px;
+}
+
+.forecast-title {
+  margin: 0 0 20px 0;
+  color: v-bind(getFontColor);
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.forecast-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 
 @media (max-width: 480px) {
   .weather-widget {
@@ -500,5 +721,14 @@ const processedLocationInfo = computed(() => {
     align-items: flex-start;
     gap: 4px;
   }
+
+  .forecast-charts {
+    gap: 15px;
+  }
+
+  .forecast-title {
+    font-size: 1.1em;
+  }
+
 }
 </style>

@@ -134,7 +134,7 @@ const getpadding= computed(()=>{
 
 <template>
   <div
-    class="flex relative flex-col w-full h-full wrapper-container" :style="{ '--blur-amount': getBlur + 'px' }">
+    class="flex relative flex-col w-full h-full wrapper-container" :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
     <div
       v-if="widget.wrapperConfig.title"
       class="p-2 font-semibold capitalize"
