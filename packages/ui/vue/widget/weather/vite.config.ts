@@ -14,6 +14,7 @@ export default defineConfig({
     vue()
   ],
   build: {
+    sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'org.eclipse.daanse.board.app.ui.vue.widget.weather',
@@ -23,6 +24,7 @@ export default defineConfig({
       external: [
         'vue',
         'org.eclipse.daanse.board.app.lib.core',
+        'org.eclipse.daanse.board.app.ui.vue.composables',
         'inversify',
         'reflect-metadata',
       ],
@@ -33,6 +35,8 @@ export default defineConfig({
             'org.eclipse.daanse.board.app.lib.core',
           inversify: 'inversify',
           'reflect-metadata': 'reflect-metadata',
+          'org.eclipse.daanse.board.app.ui.vue.composables':
+            'org.eclipse.daanse.board.app.ui.vue.composables'
         },
       }
     }

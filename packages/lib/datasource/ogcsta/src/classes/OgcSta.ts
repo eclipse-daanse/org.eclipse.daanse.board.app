@@ -162,18 +162,21 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       // Process observations for filtered data
       if (options?.filter || this.requestFlag.key == FILTER) {
         const observationsParam = options?.filter?.observations || this.requestFlag.params?.observations
+        console.log('🔍 Processing observations for datastreams:', observationsParam?.length || 0)
+        console.log('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
         for (const d of observationsParam ?? []) {
-          console.log(d.iotId)
+          console.log('🔍 Looking for observations for datastream:', d.iotId)
           const ind = this.resultMap.observations?.findIndex(
             o => o.ds_source == d.iotId,
           )
+          console.log('🔍 Found observation at index:', ind)
           if (ind != undefined && ind != -1) {
             const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-            if (ds)
-              ds.observations = this.resultMap.observations?.splice(
-                ind,
-                1,
-              ) as Observation[]
+            if (ds) {
+              // Use slice instead of splice to preserve the observation in resultMap
+              ds.observations = this.resultMap.observations?.slice(ind, ind + 1) as Observation[]
+              console.log('✅ Assigned observation to datastream:', ds.name)
+            }
           }
         }
       }
