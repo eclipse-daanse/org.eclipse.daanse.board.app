@@ -386,7 +386,7 @@ watch(selection,()=>{
               <PointStyler v-if="tabNo==1" v-model="(selection as IDSRenderer).renderer"></PointStyler>
               <AreaStyler v-if="tabNo==2" v-model="selection.renderer.area"></AreaStyler>
             </div>
-            <div v-if="tabNo ==3 && layerModel?.type !=='OGCSTA'" class="full rowlayout">
+            <div v-if="tabNo ==3 && layerModel?.type =='OGCSTA' && !selection.thing" class="full rowlayout">
 
                 <PlacementSytler v-model="(selection as IDSRenderer&PlacementI)as PlacementI"></PlacementSytler>
                 <OberservationsStyler v-model="(selection as IDSRenderer)"></OberservationsStyler>

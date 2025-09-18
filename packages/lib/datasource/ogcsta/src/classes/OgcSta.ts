@@ -162,24 +162,27 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       // Process observations for filtered data
       if (options?.filter || this.requestFlag.key == FILTER) {
         const observationsParam = options?.filter?.observations || this.requestFlag.params?.observations
+        console.log('🔍 Processing observations for datastreams:', observationsParam?.length || 0)
+        console.log('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
         for (const d of observationsParam ?? []) {
-          console.log(d.iotId)
+          console.log('🔍 Looking for observations for datastream:', d.iotId)
           const ind = this.resultMap.observations?.findIndex(
             o => o.ds_source == d.iotId,
           )
+          console.log('🔍 Found observation at index:', ind)
           if (ind != undefined && ind != -1) {
             const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-            if (ds)
-              ds.observations = this.resultMap.observations?.splice(
-                ind,
-                1,
-              ) as Observation[]
+            if (ds) {
+              // Use slice instead of splice to preserve the observation in resultMap
+              ds.observations = this.resultMap.observations?.slice(ind, ind + 1) as Observation[]
+              console.log('✅ Assigned observation to datastream:', ds.name)
+            }
           }
         }
       }
 
       // Clear processed observations
-      for (const d of this.requestFlag.params.observations ?? []) {
+      for (const d of this.requestFlag.params?.observations ?? []) {
         this.resultMap.observations = this.resultMap.observations?.filter(
           o => o.ds_source !== d.iotId
         ) || []
@@ -377,7 +380,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   getObservations(listOfPromesis: Promise<IOGCSTAData>[]) {
     const historyConfig = (this.configuration as IOGCSTAConfigartion)?.history;
 
-    if ('observations' in this.requestFlag.params) {
+    if (this.requestFlag.params && 'observations' in this.requestFlag.params) {
       if ('all' in this.requestFlag.params.observations!) {
         listOfPromesis.push(
           (async () => {
@@ -423,7 +426,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   getDataStreams(listOfPromesis: Promise<IOGCSTAData>[]) {
-    if ('datastreams' in this.requestFlag.params) {
+    if (this.requestFlag.params && 'datastreams' in this.requestFlag.params) {
       if ('all' in this.requestFlag.params.datastreams!) {
         listOfPromesis.push(
           (async () => {
@@ -456,7 +459,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   getThings(listOfPromesis: Promise<IOGCSTAData>[]) {
-    if ('things' in this.requestFlag.params) {
+    if (this.requestFlag.params && 'things' in this.requestFlag.params) {
       if ('all' in this.requestFlag.params.things!) {
         const includeDatastreams = this.requestFlag.params.things!.all?.includeDatastreams
         const includeLocations = this.requestFlag.params.things!.all?.includeLocations
