@@ -19,7 +19,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
-    "inversify": "7.7.1",
+    "inversify": "7.10.0",
     "typescript": "^5.8.2",
 
     "vite-plugin-dts": "4.5.4",
@@ -30,7 +30,7 @@
     "access": "public"
   },
   "dependencies": {
-    "monaco-editor": "^0.52.2",
+    "monaco-editor": "^0.53.0",
     "org.eclipse.daanse.board.app.lib.datasource.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
