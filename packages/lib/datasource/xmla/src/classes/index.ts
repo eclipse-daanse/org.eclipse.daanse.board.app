@@ -67,6 +67,9 @@ export class XmlaStore extends BaseDatasource {
   private initPromiseResolve: (() => void) | undefined
   private initPromise: Promise<void> = null as unknown as Promise<void>;
 
+  private metadataPromiseResolve: ((value: MetadataStore) => void) | undefined
+  private metadataPromise: Promise<MetadataStore> = null as unknown as Promise<MetadataStore>;
+
   @inject(identifier)
   private connectionRepository!: ConnectionRepository
 
@@ -79,6 +82,10 @@ export class XmlaStore extends BaseDatasource {
 
     this.initPromise = new Promise(resolve => {
       this.initPromiseResolve = resolve
+    })
+
+    this.metadataPromise = new Promise(resolve => {
+      this.metadataPromiseResolve = resolve
     })
 
     this.connection = configuration.connection
@@ -94,10 +101,6 @@ export class XmlaStore extends BaseDatasource {
     if (!connection) {
       throw new Error(`Connection ${this.connection} not found`)
     }
-
-    this.metadata = new MetadataStore(await connection.getApi())
-    await this.metadata.loadMetadata(connection.catalogName, this.cube)
-    console.log('Metadata loaded', this.metadata)
 
     this.drilldownHandler = new DrilldownHandler(
       connection,
@@ -123,6 +126,18 @@ export class XmlaStore extends BaseDatasource {
     this.initPromiseResolve?.()
   }
 
+  async loadMetadata() {
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as XmlaConnection
+
+    this.metadata = new MetadataStore(await connection.getApi())
+    await this.metadata.loadMetadata(connection.catalogName, this.cube)
+    this.metadataPromiseResolve?.(this.metadata);
+
+    return this.metadataPromise
+  }
+
   static async fetchCubes(connection: string): Promise<MDSchemaCube[]> {
     const connectionRepository = container.get(identifier) as ConnectionRepository
     if (!connectionRepository) {
@@ -146,6 +161,7 @@ export class XmlaStore extends BaseDatasource {
   async getData(type: string): Promise<any> {
     let request
     let response = null
+    await this.initPromise;
 
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
@@ -188,6 +204,7 @@ export class XmlaStore extends BaseDatasource {
   }
 
   async getMdxRequest() {
+    await this.loadMetadata()
     const properties = this.metadata.getProperties()
     const levels = this.metadata.getLevels()
 
@@ -210,8 +227,8 @@ export class XmlaStore extends BaseDatasource {
   }
 
   async getMetadata() {
-    console.log(this.initPromise)
     await this.initPromise
+    await this.loadMetadata()
     return this.metadata
   }
 

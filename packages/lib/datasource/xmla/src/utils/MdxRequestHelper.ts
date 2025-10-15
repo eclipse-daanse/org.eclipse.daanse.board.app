@@ -33,21 +33,26 @@ const parseMdxRequest = (mdxResponce: any) => {
 
   // const properties = (await metadataStorage.getMetadataStorage()).properties;
   // console.log(properties);
-  const axis0 = optionalArrayToArray(
-    optionalArrayToArray(
+
+  let tupples = optionalArrayToArray(
       mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis,
-    )?.[0]?.Tuples?.Tuple,
-  )
-  let axis1 = [] as any[]
-  if (
-    mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis?.[1]?.__attrs
-      .name === 'Axis1'
-  ) {
-    axis1 = optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis?.[1]?.Tuples
-        ?.Tuple,
-    )
-  }
+  )?.[0]?.Tuples
+  const axis0 = Array.isArray(tupples) ? tupples.map(e => e.Tuple) : optionalArrayToArray(
+    tupples?.Tuple,
+  );
+
+  tupples = optionalArrayToArray(
+    mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis
+  )?.[1]?.Tuples;
+
+  // if (
+  //   mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis?.[1]?.__attrs
+  //     .name === 'Axis1'
+  // ) {
+  const axis1 = Array.isArray(tupples) ? tupples.map(e => e.Tuple) : optionalArrayToArray(
+    tupples?.Tuple,
+  );
+  // }
   // else if (
   //   mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs
   //     .name === "SlicerAxis"
@@ -250,21 +255,35 @@ const parseCells = (cells: any[], columns: any[], rows: any[]) => {
 }
 
 const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
-  const axis0 = optionalArrayToArray(
-    optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis,
-    )?.[0]?.Tuples?.Tuple,
-  )
-  let axis1 = [] as any[]
-  if (
-    mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs
-      .name === 'Axis1'
-  ) {
-    axis1 = optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.Tuples
-        ?.Tuple,
-    )
-  }
+  let tupples = optionalArrayToArray(
+      mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis,
+  )?.[0]?.Tuples
+  const axis0 = Array.isArray(tupples) ? tupples.map(e => e.Tuple) : optionalArrayToArray(
+    tupples?.Tuple,
+  );
+
+
+  tupples = optionalArrayToArray(
+    mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis
+  )?.[1]?.Tuples;
+
+  // if (
+  //   mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis?.[1]?.__attrs
+  //     .name === 'Axis1'
+  // ) {
+  const axis1 = Array.isArray(tupples) ? tupples.map(e => e.Tuple) : optionalArrayToArray(
+    tupples?.Tuple,
+  );
+  // let axis1 = [] as any[]
+  // if (
+  //   mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs
+  //     .name === 'Axis1'
+  // ) {
+  //   axis1 = optionalArrayToArray(
+  //     mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.Tuples
+  //       ?.Tuple,
+  //   )
+  // }
 
   const cellsArray = optionalArrayToArray(
     mdxResponce.Body.ExecuteResponse.return.root.CellData?.Cell,
@@ -274,6 +293,7 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     rows: [],
     items: [],
     headers: ['Caption'],
+    rowProperties: {},
   } as any
 
   if (mainAxis === 0) {
@@ -285,6 +305,7 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     axis0.forEach((item, i) => {
       console.log(i)
       table.rows[i] = [item.Member.Caption]
+      table.rowProperties[item.Member.Caption] = item.Member;
       axis1.forEach((subItem, j) => {
         table.rows[i].push(cellsArray[j * axis0.length + i].Value)
       })
@@ -297,6 +318,7 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
 
     axis1.forEach((item, i) => {
       table.items[i] = [item.Member.Caption]
+      table.rowProperties[item.Member.Caption] = item.Member;
       axis0.forEach((subItem, j) => {
         table.items[i].push(cellsArray[i * axis0.length + j].Value)
       })

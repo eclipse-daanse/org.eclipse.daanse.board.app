@@ -123,6 +123,7 @@ export class DataTableComposer extends BaseDatasource {
       headers: [],
       rows: [],
       items: [],
+      rowProperties: {},
     };
 
     const rowMap = new Map<string, any>();
@@ -139,6 +140,14 @@ export class DataTableComposer extends BaseDatasource {
           ...rowMap.get(key),
           ...row,
         });
+      });
+
+      Object.keys(table.rowProperties).forEach((key) => {
+        const prop = table.rowProperties[key];
+        resultingDataTable.rowProperties[key] = {
+          ...resultingDataTable.rowProperties[key],
+          ...prop,
+        };
       });
     });
 

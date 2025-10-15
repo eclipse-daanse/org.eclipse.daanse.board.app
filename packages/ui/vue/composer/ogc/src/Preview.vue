@@ -27,7 +27,7 @@ const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempSto
 watch(tempStore, async () => {
   featureCollection.value = await tempStore.value.getData('FeatureCollection');
   data.value = featureCollection.value?.features || [];
-});
+}, { deep: true });
 
 watch(props.dataSource, () => {
   update();
