@@ -23,29 +23,45 @@ export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfigu
   uid: string;
   xField: string;
   yField: string;
+  useGeometryFromData?: boolean;
+  useGeometryFromProps?: boolean;
+  geometryField?: string;
+  geometryPropsField?: string;
 }
 
 export class OgcFeatureComposer extends BaseDatasource {
   private connectedDatasources: string[] = [];
-  private composeBy: string = '';
   private xField: string = '';
   private yField: string = '';
   private geometryType: string = 'Point';
+  private composeBy: string = '';
+  private useGeometryFromData: boolean = false;
+  private useGeometryFromProps: boolean = false;
+  private geometryField: string = '';
+  private geometryPropsField: string = '';
+
 
   init(configuration: IOgcFeatureComposerConfiguration) {
     super.init(configuration);
     this.connectedDatasources = configuration.connectedDatasources;
     this.composeBy = configuration.composeBy;
-    this.xField = configuration.xField.trim();
-    this.yField = configuration.yField.trim();
-    this.geometryType = configuration.geometryType.trim();
+    this.useGeometryFromProps = configuration.useGeometryFromProps ?? false;
+    this.useGeometryFromData = configuration.useGeometryFromData ?? false;
+
+    console.log(configuration);
+    if (configuration.geometryPropsField) {
+      this.geometryPropsField = configuration.geometryPropsField?.trim() || '';
+    } else if (configuration.geometryField) {
+      this.geometryField = configuration.geometryField.trim();
+    } else {
+      this.xField = configuration.xField.trim();
+      this.yField = configuration.yField.trim();
+      this.geometryType = configuration.geometryType.trim();
+    }
   }
 
   static validateConfiguration(config: IOgcFeatureComposerConfiguration): boolean {
-    console.log("Validating OgcFeatureComposer configuration:", config);
-    return Array.isArray(config.connectedDatasources)
-      && typeof config.xField === 'string'
-      && typeof config.yField === 'string';
+    return Array.isArray(config.connectedDatasources);
   }
 
   async createFeatureCollection(): Promise<any> {
@@ -63,6 +79,62 @@ export class OgcFeatureComposer extends BaseDatasource {
     // Compose OGC FeatureCollection
     const features = [];
     console.log("Datasources data:", datasourcesData);
+    if (this.useGeometryFromProps && this.geometryPropsField) {
+
+      for (const data of datasourcesData) {
+        if (!data || !Array.isArray(data.items)) continue;
+
+        for (const row of data.items) {
+          let geometry = null;
+          const caption = row.Caption;
+          let property = data.rowProperties?.[caption]?.[this.geometryPropsField];
+          if (Array.isArray(property)) property = property[0];
+
+          if (property) {
+            try {
+              geometry = JSON.parse(property);
+            } catch (e) {
+              console.warn(`Failed to parse geometry from properties field ${this.geometryPropsField}:`, e);
+            }
+          }
+
+          features.push({
+            type: 'Feature',
+            geometry,
+            properties: { ...row }
+          });
+        }
+      }
+      return {
+        type: 'FeatureCollection',
+        features
+      };
+    }
+
+    if (this.useGeometryFromData && this.geometryField) {
+
+      for (const data of datasourcesData) {
+        if (!data || !Array.isArray(data.items)) continue;
+
+        for (const row of data.items) {
+          let geometry = null;
+          if (row[this.geometryField]) {
+            geometry = JSON.parse(row[this.geometryField]);
+          }
+
+          features.push({
+            type: 'Feature',
+            geometry,
+            properties: { ...row }
+          });
+        }
+      }
+      return {
+        type: 'FeatureCollection',
+        features
+      };
+    }
+
     for (const data of datasourcesData) {
       if (!data || !Array.isArray(data.items)) continue;
 
@@ -116,6 +188,40 @@ export class OgcFeatureComposer extends BaseDatasource {
       return acc;
     }, [] as string[]);
   }
+
+  static async getProperties(connectedDatasources: string[], datasourceRepository: IDatasourceRepository): Promise<string[]> {
+    console.log("Composing properties from", connectedDatasources);
+    const data = await Promise.all(
+      connectedDatasources
+        .filter((datasourceId) => datasourceId)
+        .map(async (datasourceId) => {
+          if (!datasourceRepository) {
+            throw new Error('DatasourceRepository is not provided to DataSource Classes');
+          }
+          const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
+
+          return await datasourceInstance.getData('DataTable');
+        })
+    );
+
+    return data.reduce((acc: any, table: any) => {
+      if (!table || !table.rowProperties) return acc;
+
+      const rows = Object.keys(table.rowProperties);
+      if (rows.length === 0) return acc;
+
+      console.log(rows);
+
+      const keys = Object.keys(table.rowProperties[rows[1]] || table.rowProperties[rows[0]] || {});
+      keys.forEach((key: string) => {
+        if (!acc.includes(key)) {
+          acc.push(key);
+        }
+      });
+      return acc;
+    }, [] as string[]);
+  }
+
 
   async getData(type: string): Promise<any> {
     return this.createFeatureCollection();

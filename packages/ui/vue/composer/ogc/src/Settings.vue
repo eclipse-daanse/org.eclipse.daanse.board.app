@@ -25,10 +25,11 @@ const { config, dataSources, connections } = defineProps<{
 }>();
 
 const datasourcesFiltered = computed(() => {
-  return dataSources.filter((ds: any) => ds.type === 'csv');
+  return dataSources.filter((ds: any) => ds.type === 'csv' || ds.type === 'xmla');
 });
 
 const headers = ref([] as string[]);
+const properties = ref([] as string[]);
 
 const geometryTypes = ['Point'];
 
@@ -37,11 +38,12 @@ watch(() => config.connectedDatasources, async (newValue) => {
     newValue,
     container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
   );
-});
 
-watch(() => config.connectedDatasources, () => {
-    config.connectedDatasources = config.connectedDatasources.filter((ds: string) => ds !== null && ds !== undefined);
-})
+  properties.value = await OgcFeatureComposer.getProperties(
+    newValue,
+    container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
+  );
+});
 
 </script>
 <template>
@@ -49,12 +51,31 @@ watch(() => config.connectedDatasources, () => {
   <VaSelect v-model="config.connectedDatasources" label="Sources" :options="datasourcesFiltered" multiple text-by="name"
     value-by="uid" />
 
-  <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.xField" label="X Coordinate field" :options="headers" />
 
-  <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.yField" label="Y Coordinate field" :options="headers" />
+  <VaCheckbox v-model="config.useGeometryFromData" label="Use geometry from data" style="margin: 0.5rem 0;"/>
+  <template v-if="config.useGeometryFromData">
+    <!-- eslint-disable-next-line vue/no-mutating-props -->
+    <VaCheckbox v-model="config.useGeometryFromProps" label="Use geometry from properties" style="margin: 0.5rem 0;"/>
 
+    <template v-if="config.useGeometryFromProps">
+      <!-- eslint-disable-next-line vue/no-mutating-props -->
+      <VaSelect v-model="config.geometryPropsField" label="Geometry properties field" :options="properties" />
+    </template>
+
+    <template v-else>
+      <!-- eslint-disable-next-line vue/no-mutating-props -->
+      <VaSelect v-model="config.geometryField" label="Geometry field" :options="headers" />
+    </template>
+
+  </template>
   <!-- eslint-disable-next-line vue/no-mutating-props -->
-  <VaSelect v-model="config.geometryType" label="Geometry type" :options="geometryTypes" />
+  <template v-else>
+    <VaSelect v-model="config.xField" label="X Coordinate field" :options="headers" />
+
+    <!-- eslint-disable-next-line vue/no-mutating-props -->
+    <VaSelect v-model="config.yField" label="Y Coordinate field" :options="headers" />
+
+    <!-- eslint-disable-next-line vue/no-mutating-props -->
+    <VaSelect v-model="config.geometryType" label="Geometry type" :options="geometryTypes" />
+  </template>
 </template>

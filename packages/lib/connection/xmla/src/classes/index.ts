@@ -19,7 +19,6 @@ import {
 
 import { XMLAApi } from './xml'
 import { createClientAsync, BasicAuthSecurity } from '../utils/XMLAClient'
-import { MetadataStore } from './MetadataStorage'
 
 export interface IXmlaConnectionConfiguration extends BaseConnectionConfig {
   url: string
@@ -40,7 +39,6 @@ export class XmlaConnection extends BaseConnection {
   public url: string = ''
   public catalogName: string = ''
   public cubeName: string = ''
-  public metadata: MetadataStore = null as unknown as MetadataStore
   private api: XMLAApi = null as unknown as XMLAApi
   private apiPromiseResolve: ((value: unknown) => void) | undefined
   private apiPromise
@@ -68,7 +66,6 @@ export class XmlaConnection extends BaseConnection {
     this.password = configuration.password || ''
 
     this.api = await this.initApi()
-    this.metadata = await this.initMetadata()
 
     if (this.apiPromiseResolve) {
       this.apiPromiseResolve(this.api)
@@ -87,13 +84,6 @@ export class XmlaConnection extends BaseConnection {
     await api.startSession()
 
     return api
-  }
-
-  async initMetadata(): Promise<MetadataStore> {
-    const metadataStore = new MetadataStore(this.api)
-
-    await metadataStore.loadMetadata(this.catalogName, this.cubeName)
-    return metadataStore
   }
 
   async fetch(config: IRequestParams): Promise<any> {

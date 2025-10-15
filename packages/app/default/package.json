@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -44,6 +45,7 @@
     "org.eclipse.daanse.board.app.lib.datasource.sql_xmla": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.kpi_tmp": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.factory.variable": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.composer.ogc": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.i18next": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.module1": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.repository.connection": "^0.0.1-next.1",
