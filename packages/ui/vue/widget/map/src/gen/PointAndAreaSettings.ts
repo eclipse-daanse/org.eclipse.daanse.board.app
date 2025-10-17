@@ -34,11 +34,17 @@ export class PointAndAreaSettings{
   @Documentation("Optional flag to show or hide sub-elements.")
   @Attribute() show_SubElements?: boolean;
 
-  @Documentation("Specifies how points should be rendered (e.g., 'icon', 'pin').")
+  @Documentation("Specifies how points should be rendered (e.g., 'icon', 'pin', 'image').")
   @Attribute() point_render_as?: string;
 
   @Documentation("Optional property to use for point rendering.")
   @Attribute() point_prop?: string;
+
+  @Documentation("Optional URL for point image rendering.")
+  @Attribute() point_image_url?: string;
+
+  @Documentation("Optional size for point image rendering (in pixels).")
+  @Attribute() point_image_size?: number;
   @Reference('IconSettings') point: IconSettings = new IconSettings();
   @Reference('PointPin') pointPin: PointPin = new PointPin();
   @Reference('MapProps') area: MapProps = new MapProps();
