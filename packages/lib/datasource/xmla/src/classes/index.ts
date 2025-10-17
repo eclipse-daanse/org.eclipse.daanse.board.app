@@ -30,7 +30,7 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 export interface IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
   connection: string
   requestParams: XMLARequestParams
-  useVisualEditor: boolean
+  useMdx: boolean
   mdx: string
   cube: string
   drilldownState?: any
@@ -58,7 +58,7 @@ export class XmlaStore extends BaseDatasource {
     measures: [],
     filters: [],
   }
-  private useVisualEditor: boolean = false
+  private useMdx: boolean = false
   private mdx: string = ''
   private drilldownHandler: DrilldownHandler | null = null
   public metadata: MetadataStore = null as unknown as MetadataStore
@@ -107,8 +107,8 @@ export class XmlaStore extends BaseDatasource {
       configuration.drilldownState,
     )
 
-    if (configuration.useVisualEditor) {
-      this.useVisualEditor = configuration.useVisualEditor
+    if (configuration.useMdx) {
+      this.useMdx = configuration.useMdx
     }
 
     if (configuration.mdx) {
@@ -170,10 +170,10 @@ export class XmlaStore extends BaseDatasource {
       this.connection,
     ) as any
 
-    if (this.useVisualEditor) {
-      request = await this.getMdxRequest()
-    } else {
+    if (this.useMdx) {
       request = this.mdx
+    } else {
+      request = await this.getMdxRequest()
     }
 
     const mdxResponse = await connection.fetch({

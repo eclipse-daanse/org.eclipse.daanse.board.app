@@ -163,15 +163,26 @@ watch(() => props.modelValue, (newValue) => {
 
 <template>
     <div class="editor-page">
-        <div class="toolbar" v-if="props.showToolbar">
-            <va-select v-model="selectedLanguage" label="Language:" :options="supportedLanguages" />
-            <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
+        <div class="header-container">
+            <div class="toolbar" v-if="props.showToolbar">
+                <va-select v-model="selectedLanguage" label="Language:" :options="supportedLanguages" />
+                <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
+            </div>
+            <slot name="actions">
+                <!-- Additional action buttons can be inserted here --> 
+            </slot>
         </div>
         <div ref="editorContainer" class="monaco-editor mt-2"></div>
     </div>
 </template>
 
 <style scoped>
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .editor-page {
     display: flex;
     flex-direction: column;

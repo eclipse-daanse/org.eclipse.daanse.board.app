@@ -48,7 +48,7 @@ const closeEditor = () => {
         <ConnectionList @openEditor="openEditor" :activeItemId="activeItemId" />
       </div>
     </div>
-    <div class="w-full">
+    <div class="w-full overflow-hidden">
       <component :is="activeEditor" :itemId="activeItemId" :key="activeItemId"
         @close="closeEditor"
       />
