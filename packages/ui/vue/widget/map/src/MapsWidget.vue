@@ -32,8 +32,9 @@ import pointOnFeature from '@turf/point-on-feature'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { MapSettings } from './gen/MapSettings'
-import { IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { IconSettings } from './gen/IconSettings'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const props = defineProps<{ datasourceId: string }>()
 const { datasourceId } = toRefs(props)
@@ -46,7 +47,30 @@ const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils
 
 
 const data = ref<any>({})
-const { update, callEvent } = useDatasourceRepository(datasourceId, 'OGCSTAData', data)
+
+// Detect datasource type dynamically
+const datasourceType = computed(() => {
+  try {
+    if (!datasourceId.value) return 'ogcsta'
+    const dsRepository = container.get<DatasourceRepository>(identifier)
+    const datasource = dsRepository.getDatasource(datasourceId.value)
+    return (datasource as any).type || 'ogcsta'
+  } catch (e) {
+    console.warn('Could not detect datasource type', e)
+    return 'ogcsta'
+  }
+})
+
+// Dynamic data type mapping
+const dataTypeMapping: Record<string, string> = {
+  'rest': 'object',
+  'ogcsta': 'OGCSTAData',
+  'OGC Composer': 'OGCSTAData'
+}
+
+const dataType = computed(() => dataTypeMapping[datasourceType.value] || 'OGCSTAData')
+
+const { update, callEvent } = useDatasourceRepository(datasourceId, dataType.value as any, data)
 watch(datasourceId, (value, oldValue, onCleanup) => {
   console.log(value)
   console.log(oldValue)
@@ -158,6 +182,11 @@ const mapmove = debounce(() => {
   loadObservationsInView()
 }, 2000, { leading: false })
 const loadObservationsInView = () => {
+  // Skip observation loading for REST datasources
+  if (datasourceType.value === 'rest') {
+    console.log('Skipping observation loading for REST datasource')
+    return
+  }
 
   let inBounds = (map.value as any)?.leafletObject.getBounds()
 
@@ -358,6 +387,47 @@ const centerUpdated = (center: any) => {
             <!--<template v-if="compareDatastream(wmsLayer.wfs_service?.geoJson as BoxedDatastream, config.styles.find(style=>style.id==styleID)!)">-->
 
             <!-- </template>-->
+          </template>
+        </template>
+        <template v-if="wmsLayer.type == 'REST-GEOJSON' && datasourceType === 'rest'">
+          <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
+            <template v-if="data && data.features">
+              <!-- Render non-point geometries (Polygons, LineStrings, etc.) -->
+              <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+                style.id==styleID)!).features)" :key="'area-'+feature.id">
+                <l-geo-json v-if="feature.geometry && !isPoint(feature.geometry)" ref="restGeojsonLayer"
+                            :geojson="feature"
+                            :options-style="()=>config.styles.find(style=>
+                            style.id==styleID)?.renderer.area as any"></l-geo-json>
+              </template>
+
+              <!-- Render point geometries with custom markers -->
+              <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+                style.id==styleID)!).features)" :key="'point-'+feature.id">
+                <l-marker
+                  v-if="feature.geometry && isPoint(feature.geometry) && getPoint(feature.geometry)"
+                  :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
+                  >
+                  <l-icon class-name="someExtraClass">
+                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
+                      <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin icon">
+                        <div class="inner">
+                          <IconWidget :config="config.styles.find(style=>style.id==styleID)?.renderer.point" v-model:configv="(config.styles.find(style=>style.id==styleID)!.renderer.point) as IconSettings"></IconWidget>
+                        </div>
+                      </div>
+                    </template>
+                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='prop'">
+                      <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin contain marker">
+                        <div class="inner">
+                          {{ feature.properties![(config.styles.find(style=>style.id==styleID)?.renderer.point_prop) ?? ''] }}
+                        </div>
+                      </div>
+                    </template>
+                  </l-icon>
+                </l-marker>
+              </template>
+
+            </template>
           </template>
         </template>
         <template v-if="wmsLayer.type=='OGCSTA'">

@@ -17,7 +17,7 @@ export function useUtils() {
     if (!point) return false
     if (!point.type) return false
     if (point.type !== 'Point') return false
-    if (!point.coordinates || !isArray(point.coordinates) || point.coordinates.length != 2) return false
+    if (!point.coordinates || !isArray(point.coordinates) || point.coordinates.length < 2) return false
 
     return true
   }
