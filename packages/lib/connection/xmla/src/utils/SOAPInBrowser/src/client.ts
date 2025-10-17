@@ -228,11 +228,11 @@ export class Client {
       '</soap:Body>' +
       '</soap:Envelope>'
 
-    // if(xml.includes('GeoJson') || xml.includes('SELECT')) {
-    //   xml = xml.replaceAll('ana:', '')
-    // }
+    if(xml.includes('GeoJson') || xml.includes('SELECT')) {
+      xml = xml.replaceAll('ana:', '')
+    }
 
-    // xml = xml.replace('<Execute>', '<Execute xmlns="urn:schemas-microsoft-com:xml-analysis">')
+    xml = xml.replace('<Execute>', '<Execute xmlns="urn:schemas-microsoft-com:xml-analysis">')
 
     const responce = await request(location, xml, headers)
     const textContent = await responce.text()

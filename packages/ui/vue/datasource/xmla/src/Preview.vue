@@ -34,7 +34,7 @@ const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempSto
 
 console.log(props.dataSource)
 
-const tabs = ["Code Editor", "Visual Editor"];
+const tabs = ["Visual Editor", "Code Editor"];
 const currentTab = ref(0);
 
 const queryConfig = ref({
@@ -130,37 +130,39 @@ const getSettingsHash = (obj: any) => {
 </script>
 
 <template>
-  <div class="flex w-full h-full rounded gap-4">
-    <div class="flex flex-col h-full overflow-hidden flex-grow data-designer">
+  <div class="flex w-full h-full rounded gap-4 overflow-hidden">
+    <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
       <va-tabs v-model="currentTab" hidePagination color="info" grow>
         <template #tabs>
           <div class="flex justify-between w-full">
             <div>
-              <va-tab v-for="tab in tabs" :key="tab" :disabled="tab === 'Visual Editor'
-                && !props.dataSource.config.useVisualEditor">
+              <va-tab v-for="tab in tabs" :key="tab">
                 {{ tab }}
               </va-tab>
             </div>
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
-            <VaCheckbox v-model="props.dataSource.config.useVisualEditor" class="mt-2" label="Use query designer" />
           </div>
         </template>
-        <template v-if="currentTab === 0 && connection">
+        <template v-if="currentTab === 1 && connection">
           <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
-          <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']" />
+          <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
+            <template #actions>
+              <VaCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="Use mdx request" />
+            </template>
+          </MonacoEditor>
         </template>
-        <template v-if="currentTab === 1">
+        <template v-if="currentTab === 0">
           <div class="w-full h-full">
             <QueryDesigner v-model="queryConfig" />
           </div>
         </template>
       </va-tabs>
-      <div class="h-full flex flex-col data-preview">
+      <div class="h-full w-full flex flex-col data-preview">
         <h4>
           Data Preview
         </h4>
-        <div class="w-full h-full">
+        <div class="w-full h-full overflow-auto">
           <!-- @onExpand="onExpand"
           @onCollapse="onCollapse" -->
           <PivotTable v-if="data" v-model="data" @onExpand="onExpand" @onCollapse="onCollapse"
