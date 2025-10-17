@@ -380,6 +380,13 @@ const centerUpdated = (center: any) => {
                       </div>
                     </div>
                   </template>
+                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='image'">
+                    <div class="image-marker" :style="{width: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px', height: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px'}">
+                      <img v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
+                            :src="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
+                            :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
+                    </div>
+                  </template>
                 </l-icon>
               </l-marker>
 
@@ -423,6 +430,13 @@ const centerUpdated = (center: any) => {
                         </div>
                       </div>
                     </template>
+                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='image'">
+                      <div class="image-marker" :style="{width: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px', height: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px'}">
+                        <img v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
+                              :src="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
+                              :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
+                      </div>
+                    </template>
                   </l-icon>
                 </l-marker>
               </template>
@@ -463,6 +477,13 @@ const centerUpdated = (center: any) => {
                           <div class="inner">
                             {{ thing[(renderer.renderer.point_prop) ?? ''] }}
                           </div>
+                        </div>
+                      </template>
+                      <template v-if="renderer.renderer.point_render_as=='image'">
+                        <div class="image-marker" :style="{width: (renderer.renderer.point_image_size || 32) + 'px', height: (renderer.renderer.point_image_size || 32) + 'px'}">
+                          <img v-if="renderer.renderer.point_image_url"
+                                :src="renderer.renderer.point_image_url"
+                                :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
                         </div>
                       </template>
                     </l-icon>
@@ -630,5 +651,14 @@ const centerUpdated = (center: any) => {
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+.image-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -50%;
+  margin-top: -50%;
 }
 </style>
