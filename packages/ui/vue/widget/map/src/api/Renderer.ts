@@ -31,6 +31,8 @@ export interface IPointAndAreaSettings {
   show_SubElements?: boolean,
   point_render_as: string,
   point_prop?: string,
+  point_image_url?: string,
+  point_image_size?: number,
   point: IIconSettings
   pointPin: IPointPin
   area: IMapProps,

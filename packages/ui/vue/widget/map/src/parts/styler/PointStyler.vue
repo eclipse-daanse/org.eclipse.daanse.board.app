@@ -63,6 +63,7 @@ const thingsPropOptions = [{
 const pointSelectorOptions = [
   { label: 'Icon', value: 'icon' },
   { label: 'Property', value: 'prop' },
+  { label: 'Image', value: 'image' },
   { label: 'None', value: 'none' }
 ]
 </script>
@@ -87,6 +88,19 @@ const pointSelectorOptions = [
         placeholder="Select an option"
         text-by="text"
         value-by="selector"
+      />
+    </template>
+    <template v-if="model.point_render_as=='image'">
+      <VaInput
+        v-model="model.point_image_url"
+        label="Image URL"
+        placeholder="https://example.com/image.png"
+      />
+      <VaInput
+        v-model.number="model.point_image_size"
+        type="number"
+        label="Image Size (px)"
+        placeholder="32"
       />
     </template>
     <template v-if="model.point_render_as!='none'">
@@ -122,6 +136,12 @@ const pointSelectorOptions = [
               <div class="inner">
                 {{ model.point_prop }}
               </div>
+            </div>
+          </template>
+          <template v-if="model.point_render_as=='image'">
+            <div class="image-marker" :style="{width: (model.point_image_size || 32) + 'px', height: (model.point_image_size || 32) + 'px'}">
+              <img v-if="model.point_image_url" :src="model.point_image_url" :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
+              <div v-else class="placeholder">No Image</div>
             </div>
           </template>
         </l-icon>
@@ -202,5 +222,25 @@ const pointSelectorOptions = [
 
 .flex {
   display: flex;
+}
+
+.image-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -50%;
+  margin-top: -50%;
+}
+
+.placeholder {
+  background: #ccc;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 1px dashed #999;
 }
 </style>

@@ -157,8 +157,9 @@ const services = computedAsync(async () => {
       const OGCStore = datasourceRepository.getDatasource(widgetSettings.value.datasourceId)
       console.log(datasourceRepository
         .getDatasourceType(widgetSettings.value.datasourceId))
-      if(datasourceRepository
-        .getDatasourceType(widgetSettings.value.datasourceId) == 'OGC Composer'){
+      const dsType = datasourceRepository.getDatasourceType(widgetSettings.value.datasourceId)
+
+      if(dsType == 'OGC Composer'){
             ret.push({
               service: { '_info': { title: id + '[Composer]', name: id } },
               type: 'GEOJSON',
@@ -176,7 +177,25 @@ const services = computedAsync(async () => {
                 }
                 ]
             })
-      }else {
+      } else if (dsType == 'rest') {
+        ret.push({
+          service: { '_info': { title: id + '[REST]', name: id } },
+          type: 'REST-GEOJSON',
+          level: 0,
+          childs: [
+            {
+              'id': v4(),
+              'opacity': 1,
+              'service': OGCStore,
+              'geoJson': {},
+              'type': 'REST-GEOJSON',
+              'name': 'REST-GEOJSON',
+              'title': 'REST GeoJSON',
+              'attribution': ''
+            }
+          ]
+        })
+      } else {
         ret.push({
           //service:{'_info':{title:OGCStore?.name+'['+OGCStore?.type+']',name:OGCStore?.name}},
           service: { '_info': { title: id + '[OGCSTA]', name: id } },
@@ -280,7 +299,7 @@ const modelswitch = computed(() => {
                           :min="0" :step="0.01" color="#555" />
               </div>
             </div>
-            <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON'">
+            <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON' || element.type=='REST-GEOJSON'">
               <VaButton
                 icon="format_paint"
                 preset="secondary"
