@@ -45,7 +45,7 @@ export interface WeatherData {
   precipitation?: WeatherValue
   visibility?: WeatherValue
   cloudCover?: WeatherValue
-  
+
   // Forecast data for different time periods
   temperatureForecast?: ForecastPeriods
   humidityForecast?: ForecastPeriods
@@ -55,7 +55,7 @@ export interface WeatherData {
   precipitationForecast?: ForecastPeriods
   visibilityForecast?: ForecastPeriods
   cloudCoverForecast?: ForecastPeriods
-  
+
   location?: LocationInfo
   timestamp?: string
   thingId?: string | number
@@ -79,7 +79,7 @@ export interface WeatherMapping {
   precipitation: string[]
   visibility: string[]
   cloudCover: string[]
-  
+
   // Forecast mappings for different time periods
   temperatureForecast: ForecastMapping
   humidityForecast: ForecastMapping

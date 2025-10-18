@@ -113,7 +113,7 @@ import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
-   identifier as variableIdentifier,
+    identifier as variableIdentifier,
     type VariableRepository
 } from 'org.eclipse.daanse.board.app.lib.repository.variable';
 
@@ -706,7 +706,7 @@ onMounted(() => {
   } catch (error) {
     console.warn('VariableRepository not found in container:', error);
   }
-  
+
   // Standard-Werte setzen falls nicht vorhanden
   if (!config.value.timelineMin) {
     config.value.timelineMin = defaultTimelineMin.toISOString();

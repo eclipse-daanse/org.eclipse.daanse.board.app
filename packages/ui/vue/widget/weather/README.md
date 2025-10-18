@@ -29,7 +29,7 @@ Ein Wetter-Widget für die Eclipse Daanse Board App, das mit OGC SensorThings AP
 ## Verwendung
 
 ### Beispiel-Konfiguration für OGC STA Endpunkt
-```
+```text
 Endpunkt: https://udp.datainmotion.com/udp/rest/v1.1/
 Thing ID: 10567
 ```

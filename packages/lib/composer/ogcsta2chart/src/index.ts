@@ -13,28 +13,28 @@
 
 import { Factory } from 'inversify'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { WeatherComposer } from './classes'
+import { OGCSTAToChartComposer } from './classes'
 
 export * from './classes/index'
-export * from './interfaces/WeatherData'
+export * from './interfaces/OGCSTAToChartData'
 
 // Export symbol for dependency injection
-export const symbol = Symbol.for('WeatherComposer')
+export const symbol = Symbol.for('OGCSTAToChartComposer')
 
-if (!container.isBound(WeatherComposer)) {
-  container.bind(WeatherComposer).toSelf().inTransientScope()
+if (!container.isBound(OGCSTAToChartComposer)) {
+  container.bind(OGCSTAToChartComposer).toSelf().inTransientScope()
 }
 
 if (!container.isBound(symbol)) {
-  container.bind<Factory<WeatherComposer>>(symbol).toFactory(() => {
+  container.bind<Factory<OGCSTAToChartComposer>>(symbol).toFactory(() => {
     return config => {
-      if (!WeatherComposer.validateConfiguration(config)) {
+      if (!OGCSTAToChartComposer.validateConfiguration(config)) {
         throw new Error(
-          'Invalid WeatherComposer configuration. Please provide a valid configuration.',
+          'Invalid OGCSTAToChartComposer configuration. Please provide a valid configuration.',
         )
       }
 
-      const composer = container.get<WeatherComposer>(WeatherComposer)
+      const composer = container.get<OGCSTAToChartComposer>(OGCSTAToChartComposer)
       composer.init(config)
 
       return composer
