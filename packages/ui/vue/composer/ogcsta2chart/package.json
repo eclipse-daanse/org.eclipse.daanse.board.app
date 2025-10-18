@@ -1,0 +1,31 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart",
+  "private": true,
+  "version": "0.0.1-next.1",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.datasource": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.composer.ogcsta2chart": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "0.0.1-next.1"
+  },
+  "devDependencies": {
+    "inversify": "7.7.1",
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4",
+    "@types/lodash": "^4.17.16"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.13"
+  }
+}

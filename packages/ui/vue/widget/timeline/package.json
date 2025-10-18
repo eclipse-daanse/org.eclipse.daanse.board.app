@@ -1,0 +1,46 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.widget.timeline",
+  "version": "0.0.1-next.1",
+  "description": "Timeline widget for temporal navigation and playback",
+  "author": "ssemenkoff <ssemenkoff@gmail.com>",
+  "homepage": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.timeline.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.timeline.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.timeline.d.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "bugs": {
+    "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.repository.widget": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.plugins.i18next": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.2",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "rollup": "^4.36.0",
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4",
+    "vue": "^3.5.13",
+    "vite-plugin-libcss": "^1.1.1",
+    "vue-tsc": "^2.2.8"
+  },
+  "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -94,6 +94,8 @@ import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import 'org.eclipse.daanse.board.app.lib.composer.chart'
 import 'org.eclipse.daanse.board.app.lib.composer.datatable'
 import 'org.eclipse.daanse.board.app.lib.composer.kpi'
+import 'org.eclipse.daanse.board.app.lib.composer.weather'
+import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
@@ -116,6 +118,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.markdown'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.timeline'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.csv'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.rss'
@@ -131,10 +134,13 @@ import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.kpi'
 import 'org.eclipse.daanse.board.app.ui.vue.composer.ogc'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.weather'
+import 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.map'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.weather'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {
@@ -153,6 +159,7 @@ import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
   from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
+
 const pageRepo = container.get<PageRegistryI>(PageReoIdentifier)
 const layoutRepo = container.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const baseLayout

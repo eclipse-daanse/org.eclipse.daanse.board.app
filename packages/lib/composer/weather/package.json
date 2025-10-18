@@ -1,0 +1,27 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.composer.weather",
+  "private": true,
+  "version": "0.0.1-next.1",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/weather.umd.cjs",
+  "module": "./dist/weather.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.datasource.base": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.datasource": "0.0.1-next.1"
+  },
+  "devDependencies": {
+    "inversify": "7.7.1",
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4",
+    "org.eclipse.daanse.board.app.lib.utils.helpers": "^0.0.1-next.1"
+  }
+}
