@@ -178,10 +178,13 @@ const addDSStyle = () => {
   })
 }
 const thingsProps = computedAsync(async () => {
-  if (layerModel?.value?.type == 'WFSLayer') {
+  const layer = layerModel.value
+  if (!layer) return []
+
+  if (layer.type == 'WFSLayer') {
     try {
-      const service = services.value.find(s => s.id == layerModel?.value?.service)
-      const featurePropsDetails = await (service?.service as WfsEndpoint)?.getFeatureTypePropDetails(layerModel.value?.name ?? '')
+      const service = services.value.find(s => s.id == layer.service)
+      const featurePropsDetails = await (service?.service as WfsEndpoint)?.getFeatureTypePropDetails(layer.name ?? '')
       console.log(featurePropsDetails)
       return Object.entries(featurePropsDetails).map(
         (featureProps) => {
@@ -191,13 +194,41 @@ const thingsProps = computedAsync(async () => {
       console.log(e)
       return []
     }
+  } else if (layer.type == 'GEOJSON' && layer.geoJson) {
+    try {
+      const geoJson = layer.geoJson
+      if (!geoJson?.features || geoJson.features.length === 0) {
+        return []
+      }
 
+      // Extract all unique property keys and their values from features
+      const propsMap = new Map<string, Set<any>>()
 
+      for (const feature of geoJson.features) {
+        if (feature.properties) {
+          for (const [key, value] of Object.entries(feature.properties)) {
+            if (!propsMap.has(key)) {
+              propsMap.set(key, new Set())
+            }
+            propsMap.get(key)?.add(value)
+          }
+        }
+      }
+
+      return Array.from(propsMap.entries()).map(([key, valuesSet]) => ({
+        text: key,
+        selector: key,
+        suggestions: Array.from(valuesSet)
+      }))
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   } else {
     return []
   }
 
-})
+}, [])
 watch(showModal, (val) => {
   if (val) {
     selection.value = undefined

@@ -343,7 +343,8 @@ const sliderMax = ref(new Date());
 // Available variables
 const availableVariables = computed(() => {
   if (!variableRepository.value) return [];
-  return (variableRepository.value as VariableRepository).getAllVariablesUnwrapped()
+  return (variableRepository.value as VariableRepository).getAllVariables()
+    .map(([name, variable]: [string, any]) => variable)
     .filter((v: any) => v.value && typeof v.value === 'string')
     .map((v: any) => ({ name: v.name, value: v.value }));
 });

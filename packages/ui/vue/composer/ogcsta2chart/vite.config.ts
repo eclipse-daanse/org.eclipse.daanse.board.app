@@ -18,9 +18,8 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'WeatherComposerUI',
-      fileName: 'weather',
-      formats: ['es', 'umd']
+      name: 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart',
+      fileName: 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart'
     },
     rollupOptions: {
       external: [
@@ -49,3 +48,5 @@ export default defineConfig({
     libCss()
   ]
 })
+
+
