@@ -15,7 +15,7 @@ const HISTORY_FILTER:string = 'EHistoryFilter'
 // History time filter types
 export const TIME_FILTERS = {
   LAST_HOUR: 'PT1H',
-  LAST_DAY: 'P1D', 
+  LAST_DAY: 'P1D',
   LAST_WEEK: 'P7D',
   LAST_MONTH: 'P1M',
   LAST_YEAR: 'P1Y'
@@ -27,7 +27,7 @@ export type TimeFilterType = typeof TIME_FILTERS[keyof typeof TIME_FILTERS];
 export const getTimeRangeFilter = (range: TimeFilterType) => {
   const now = new Date();
   let start: Date;
-  
+
   switch (range) {
     case TIME_FILTERS.LAST_HOUR:
       start = new Date(now.getTime() - 60 * 60 * 1000);
@@ -47,12 +47,13 @@ export const getTimeRangeFilter = (range: TimeFilterType) => {
     default:
       start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   }
-  
+
   return {
     start: start.toISOString(),
     end: now.toISOString()
   };
 };
+
 
 export {
   FILTER,

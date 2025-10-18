@@ -40,19 +40,19 @@ function hasTimestamp(station: any): boolean {
 function getLatestTimestamp(station: any): string {
   const measurements = ['temperature', 'humidity', 'pressure', 'windSpeed', 'windDirection', 'precipitation', 'visibility', 'cloudCover'];
   let latest = '';
-  
+
   measurements.forEach(key => {
     if (station[key]?.timestamp && station[key].timestamp > latest) {
       latest = station[key].timestamp;
     }
   });
-  
+
   return latest;
 }
 
 function formatTimestamp(timestamp: string): string {
   if (!timestamp) return '';
-  
+
   try {
     const date = new Date(timestamp);
     return date.toLocaleString();
@@ -80,7 +80,7 @@ function formatTimestamp(timestamp: string): string {
           <h4>📍 {{ station.location.name }}</h4>
           <small v-if="station.location.description">{{ station.location.description }}</small>
           <small v-if="station.location.coordinates" class="coordinates">
-            {{ station.location.coordinates.latitude.toFixed(4) }}°N, 
+            {{ station.location.coordinates.latitude.toFixed(4) }}°N,
             {{ station.location.coordinates.longitude.toFixed(4) }}°E
           </small>
         </div>

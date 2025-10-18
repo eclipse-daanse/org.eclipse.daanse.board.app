@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "dev:host": "vite --host",
+    "dev:host": "vite --port 5174",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -115,6 +115,8 @@
     "org.eclipse.daanse.board.app.ui.vue.composer.datatable": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composer.kpi": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composer.ogc": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composer.weather": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.rss": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.vanta": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.mermaid": "^0.0.1-next.1",

@@ -332,35 +332,35 @@ const processedWeather = computed(() => {
           timestamp: obs.phenomenonTime
         }
       } else if (name?.includes('humidity') || name?.includes('feuchte') ||
-                 description?.includes('luftfeuchte')) {
+                  description?.includes('luftfeuchte')) {
         weather.humidity = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || '%',
           timestamp: obs.phenomenonTime
         }
       } else if (name?.includes('pressure') || name?.includes('luftdruck') ||
-                 description?.includes('pressure')) {
+                  description?.includes('pressure')) {
         weather.pressure = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || 'hPa',
           timestamp: obs.phenomenonTime
         }
       } else if ((name?.includes('wind') && name?.includes('speed')) ||
-                 name?.includes('windgeschwindigkeit')) {
+                  name?.includes('windgeschwindigkeit')) {
         weather.windSpeed = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || 'm/s',
           timestamp: obs.phenomenonTime
         }
       } else if ((name?.includes('wind') && name?.includes('direction')) ||
-                 name?.includes('windrichtung')) {
+                  name?.includes('windrichtung')) {
         weather.windDirection = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || '°',
           timestamp: obs.phenomenonTime
         }
       } else if (name?.includes('precipitation') || name?.includes('niederschlag') ||
-                 name?.includes('rain') || name?.includes('regen')) {
+                  name?.includes('rain') || name?.includes('regen')) {
         weather.precipitation = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || 'mm',
@@ -373,7 +373,7 @@ const processedWeather = computed(() => {
           timestamp: obs.phenomenonTime
         }
       } else if (name?.includes('cloud') || name?.includes('wolken') ||
-                 name?.includes('bedeckung')) {
+                  name?.includes('bedeckung')) {
         weather.cloudCover = {
           value: obs.result,
           unit: ds.unitOfMeasurement?.symbol || '%',
@@ -533,7 +533,7 @@ const processedLocationInfo = computed(() => {
 <style scoped>
 .weather-widget {
   padding: 16px;
- /* background: #f8f9fa;*/
+  /* background: #f8f9fa;*/
   border-radius: 8px;
   font-family: Arial, sans-serif;
   height: 100%;

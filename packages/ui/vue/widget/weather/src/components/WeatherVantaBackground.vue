@@ -255,8 +255,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div 
-    ref="vantaRef" 
+  <div
+    ref="vantaRef"
     class="vanta-background"
   />
 </template>

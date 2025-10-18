@@ -58,7 +58,7 @@ const getCustomMappingValue = (parameter: string) => {
   <div class="weather-composer-settings">
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <VaSelect v-model="config.connectedDatasources" label="OGC STA Sources" :options="datasourcesFiltered" multiple text-by="name" value-by="uid" />
-    
+
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <VaInput v-model="config.thingId" label="Thing ID (Optional)" placeholder="Filter by specific Thing ID (leave empty for all)" />
 
@@ -67,13 +67,13 @@ const getCustomMappingValue = (parameter: string) => {
         <h3>Custom Keyword Mapping (Optional)</h3>
         <span class="collapse-icon" :class="{ 'expanded': isMappingSectionExpanded }">▼</span>
       </div>
-      
+
       <div v-if="isMappingSectionExpanded" class="collapsible-content">
         <p class="section-description">Override default keywords for weather parameter detection</p>
 
         <div v-for="param in weatherParameters" :key="param.key" class="mapping-item">
           <!-- eslint-disable-next-line vue/no-mutating-props -->
-          <VaInput 
+          <VaInput
             :model-value="getCustomMappingValue(param.key)"
             @update:model-value="updateCustomMapping(param.key, $event)"
             :label="param.label"
