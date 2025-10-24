@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, computed } from 'vue'
 import { IDataPoint } from '../../api/Datapoint'
 
 
@@ -21,8 +21,10 @@ export interface IUnitPoint {
 }
 
 
-const props = withDefaults(defineProps<IDataPoint & { config: IUnitPoint }>(), {})
-const { config, data } = toRefs(props)
+const props = withDefaults(defineProps<IDataPoint & { config: IUnitPoint, markerSize?: number }>(), {
+  markerSize: 0
+})
+const { config, data, markerSize } = toRefs(props)
 if (config.value && !config.value.unit) {
   config.value.unit = ''
 }
@@ -37,16 +39,22 @@ if (config.value && !config.value.suffix) {
 </script>
 
 <template>
-
-  <div v-if="data" class="datapoint">
-    {{ config.prefix }}{{ data }} {{ config.unit }} {{ config.suffix }}
-  </div>
-  <div v-else class="datapoint">
-    {{ config.prefix }} -- {{ config.unit }} {{ config.suffix }}
+  <div class="datapoint-wrapper" :style="{ width: (markerSize || 0) + 'px', height: (markerSize || 0) + 'px' }">
+    <div v-if="data" class="datapoint">
+      {{ config.prefix }}{{ data }} {{ config.unit }} {{ config.suffix }}
+    </div>
+    <div v-else class="datapoint">
+      {{ config.prefix }} -- {{ config.unit }} {{ config.suffix }}
+    </div>
   </div>
 </template>
 
 <style scoped>
+.datapoint-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .datapoint {
   display: inline-block;
   text-wrap: nowrap;
@@ -54,9 +62,12 @@ if (config.value && !config.value.suffix) {
   border: 1px solid #ccc;
   background: #fff;
   padding: 4px;
-  margin-top: 0px;
-  margin-left: 0px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
   border-radius: 21px;
+  white-space: nowrap;
 }
 
 </style>

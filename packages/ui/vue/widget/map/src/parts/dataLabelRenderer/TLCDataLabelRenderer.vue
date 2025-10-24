@@ -15,19 +15,28 @@ Contributors: Smart City Jena
 import { toRefs } from 'vue'
 import { IDataPoint } from '../../api/Datapoint'
 
-const props = withDefaults(defineProps<IDataPoint & { config: undefined }>(), {})
-const { config, data } = toRefs(props)
+const props = withDefaults(defineProps<IDataPoint & { config: undefined, markerSize?: number }>(), {
+  markerSize: 45
+})
+const { config, data, markerSize } = toRefs(props)
 
 
 </script>
 
 <template>
-  <div v-if="data" class="datapoint tlc">
-    {{ data }}
+  <div class="datapoint-wrapper" :style="{ width: (markerSize || 45) + 'px', height: (markerSize || 45) + 'px' }">
+    <div v-if="data" class="datapoint tlc">
+      {{ data }}
+    </div>
   </div>
 </template>
 
 <style scoped>
+.datapoint-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .tlc {
   position: absolute;
   border: 4px solid #f8f6f6;
@@ -35,11 +44,13 @@ const { config, data } = toRefs(props)
   padding: 3px;
   border-radius: 12px;
   text-wrap: nowrap;
-  margin: 22px 0;
-  transform: rotate(-90deg);
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  margin-top: 5px;
   box-shadow: -3px 5px 6px #1919192b;
   font-size: 12px;
-
+  white-space: nowrap;
 }
 
 </style>

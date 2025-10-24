@@ -48,11 +48,18 @@ export class VariableWrapperFactory {
     valueToMatch: any
   ): SearchResult[] {
     const results: SearchResult[] = [];
+    const visited = new WeakSet();
 
     function recurse(current: any, path: string) {
       if (Array.isArray(current)) {
         current.forEach((item, index) => recurse(item, `${path}[${index}]`));
       } else if (typeof current === "object" && current !== null) {
+        // Check for circular references
+        if (visited.has(current)) {
+          return; // Skip already visited objects
+        }
+        visited.add(current);
+
         for (const key in current) {
           const newPath = path ? `${path}.${key}` : key;
 
