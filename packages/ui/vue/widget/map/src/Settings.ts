@@ -16,6 +16,7 @@ import WMS = TileLayer.WMS
 
 export interface IMapSettings {
   datasourceId?: string,
+  datasourceIds: string[],
   baseMapUrl: string,
   zoom: number,
   center: number[],
@@ -38,7 +39,8 @@ export interface LayerI {
   attribution?: string,
   geoJson?: any,
   wfs_service?: WFS,
-  opacity?: number
+  opacity?: number,
+  datasourceId?: string
 }
 
 export interface Service {

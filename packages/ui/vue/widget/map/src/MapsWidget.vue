@@ -47,6 +47,10 @@ const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils
 
 
 const data = ref<any>({})
+const additionalDatasourcesData = ref<Map<string, any>>(new Map())
+const subscribedDatasources = new Set<string>() // Track which datasources are already subscribed
+const loadingDatasources = new Set<string>() // Track which datasources are currently loading
+let isLoadingObservations = false // Prevent concurrent observation loading
 
 // Detect datasource type dynamically
 const datasourceType = computed(() => {
@@ -71,13 +75,87 @@ const dataTypeMapping: Record<string, string> = {
 const dataType = computed(() => dataTypeMapping[datasourceType.value] || 'OGCSTAData')
 
 const { update, callEvent } = useDatasourceRepository(datasourceId, dataType.value as any, data)
+
+// Multi-datasource support - load and cache data from additional datasources
+const loadDatasourceData = async (dsId: string) => {
+  if (!dsId) return
+
+  // Skip if already loading
+  if (loadingDatasources.has(dsId)) {
+    console.log('Datasource', dsId, 'is already loading, skipping')
+    return
+  }
+
+  loadingDatasources.add(dsId)
+
+  try {
+    const dsRepository = container.get<DatasourceRepository>(identifier)
+    const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+    const dsType = dsRepository.getDatasourceType(dsId)
+
+    // Determine the data type for this datasource
+    const requestType = dataTypeMapping[dsType] || 'OGCSTAData'
+
+    // Get the raw data from the datasource
+    if (datasource && typeof datasource.getData === 'function') {
+      const rawData = await datasource.getData(requestType)
+      additionalDatasourcesData.value.set(dsId, rawData)
+
+      // Subscribe to updates for this datasource (only once)
+      if (!subscribedDatasources.has(dsId) && typeof datasource.subscribe === 'function') {
+        subscribedDatasources.add(dsId)
+        const updateCallback = async () => {
+          const updatedData = await datasource.getData(requestType)
+          additionalDatasourcesData.value.set(dsId, updatedData)
+
+        }
+        datasource.subscribe(updateCallback)
+      }
+    }
+  } catch (e) {
+    console.warn('Could not get datasource data for', dsId, e)
+  } finally {
+    loadingDatasources.delete(dsId)
+  }
+}
+
+// Watch for changes in datasourceIds and layers to load additional datasources
+watch(() => [config.value?.datasourceIds, config.value?.layers], async () => {
+  const allDsIds = new Set<string>()
+
+  // Collect all datasource IDs
+  if (config.value?.datasourceIds) {
+    config.value.datasourceIds.forEach(id => allDsIds.add(id))
+  }
+
+  if (config.value?.layers) {
+    config.value.layers.forEach(layer => {
+      if (layer.datasourceId && layer.datasourceId !== datasourceId.value) {
+        allDsIds.add(layer.datasourceId)
+      }
+    })
+  }
+
+  // Load data for each datasource
+  let newDatasourceLoaded = false
+  for (const dsId of allDsIds) {
+    if (!additionalDatasourcesData.value.has(dsId)) {
+      await loadDatasourceData(dsId)
+      newDatasourceLoaded = true
+    }
+  }
+
+  // Trigger observation loading after new datasources are loaded
+  if (newDatasourceLoaded && map.value) {
+    loadObservationsInView()
+  }
+}, { deep: true, immediate: true })
+
 watch(datasourceId, (value, oldValue, onCleanup) => {
-  console.log(value)
-  console.log(oldValue)
   update(value, oldValue)
 })
 
-watch(() => config.value?.OGCSstyles?.map(style => style.ObservationrefreshTime), (value, oldValue, onCleanup) => {
+watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
   console.log('ObservationrefreshTime changed, reloading observations')
   loadObservationsInView()
 }, { deep: true })
@@ -87,10 +165,25 @@ const { getById } = useDataPointRegistry()
 const openThing = ref<{ [key: string]: boolean }>({})
 let mounted = false
 
+// Helper function to get data for a specific layer
+const getLayerData = (layer: any) => {
+  // If layer has its own datasourceId, use that
+  if (layer.datasourceId) {
+    const cachedData = additionalDatasourcesData.value.get(layer.datasourceId)
+    if (cachedData) {
+      return cachedData
+    }
+    // If not cached yet, load it
+    loadDatasourceData(layer.datasourceId)
+    return {}
+  }
+  // Otherwise use the primary datasource
+  return data.value
+}
+
 onMounted(() => {
   if (config.value) {
     Object.assign(config.value, { ...defaultConfig, ...config.value })
-    console.log(config.value)
   }
 
   const mapDiv = document.getElementById('mapholder')
@@ -106,7 +199,6 @@ onMounted(() => {
 
 })
 watch(data, (value, oldValue, onCleanup) => {
-  console.log('data Changed')
   loadObservationsInView()
 
 }, { deep: true, once: true })
@@ -139,6 +231,12 @@ watch(() => config.value.fixed, (value, oldValue, onCleanup) => {
 const locations = computed(() => {
   return (data.value as any)?.['locations'] ?? []
 })
+
+// Helper to get locations from a specific layer
+const getLayerLocations = (layer: any) => {
+  const layerData = getLayerData(layer)
+  return (layerData as any)?.['locations'] ?? []
+}
 
 const getStyle = computed(() => {
 
@@ -187,13 +285,17 @@ const mapmove = debounce(() => {
   loadObservationsInView()
 }, 2000, { leading: false })
 const loadObservationsInView = () => {
-  // Skip observation loading for REST datasources
-  if (datasourceType.value === 'rest') {
-    console.log('Skipping observation loading for REST datasource')
+  if (isLoadingObservations) {
     return
   }
 
   let inBounds = (map.value as any)?.leafletObject.getBounds()
+  if (!inBounds) {
+    console.log('No map bounds available yet')
+    return
+  }
+
+  isLoadingObservations = true
 
   let geometry: Polygon = {
     type: 'Polygon',
@@ -208,75 +310,126 @@ const loadObservationsInView = () => {
   const bboxFeature = feature(geometry)
   const catchedDSIds = []
   const taskListByTime: { [key: string]: BoxedDatastream[] } = {}
-  for (const dataStream of (((data.value) as any)?.datastreams ?? [])) {
-    for (const renderer of config.value.OGCSstyles) {
-      const refreshtime: number = renderer.ObservationrefreshTime ?? 10
-      if (!taskListByTime[refreshtime]) taskListByTime[refreshtime] = []
-      for (const subrender of renderer.ds_renderer) {
 
-        if (compareDatastream(dataStream, subrender)) {
-          if (dataStream.observedArea) {
+  // Collect all datastreams from primary datasource and additional datasources
+  // Group by datasource to call events separately
+  const datasourceDatastreams = new Map<string, any[]>()
 
-            const featrueObservedArea = (transformToGeoJson(toRaw(dataStream.observedArea)) as Polygon)
+  // Add datastreams from primary datasource
+  if ((data.value as any)?.datastreams) {
+    datasourceDatastreams.set(datasourceId.value, (data.value as any).datastreams)
+  }
 
-            if (booleanContains(bboxFeature, featrueObservedArea)) {
-              taskListByTime[refreshtime].push(dataStream)
-            }
-          } else {
-            if (dataStream.thing && dataStream.thing!.locations && dataStream.thing!.locations[0]) {
-              try {
-                if (booleanContains(bboxFeature, transformToGeoJson(dataStream.thing!.locations[0].location))) {
-                  taskListByTime[refreshtime].push(dataStream)
-                }
-              } catch (e) {
-                console.log('FeatureCollection not supported')
-              }
-
-            }
-
-            console.log(dataStream.Thing)
-          }
-        }
-      }
-
+  // Add datastreams from additional datasources
+  for (const [dsId, dsData] of additionalDatasourcesData.value.entries()) {
+    if ((dsData as any)?.datastreams) {
+      datasourceDatastreams.set(dsId, (dsData as any).datastreams)
     }
   }
 
-  const tasks = []
-  for (const [key, _items] of Object.entries(taskListByTime)) {
-    const items: Datastream[] = uniq(_items)
-    if (items.length > 0) {
-      tasks.push(new class extends Task {
-        readonly id = Math.random().toString()
-        private handle: number | undefined
+  // Build task list grouped by time and datasource
+  const taskListByTimeAndDatasource: { [key: string]: { [dsId: string]: BoxedDatastream[] } } = {}
 
-        invoke() {
-          window.clearInterval(this.handle)
-        }
+  for (const [dsId, datastreams] of datasourceDatastreams.entries()) {
+    for (const dataStream of datastreams) {
+      for (const renderer of config.value.OGCSstyles) {
+        const refreshtime: number = renderer.ObservationrefreshTime ?? 10
+        if (!taskListByTimeAndDatasource[refreshtime]) taskListByTimeAndDatasource[refreshtime] = {}
+        if (!taskListByTimeAndDatasource[refreshtime][dsId]) taskListByTimeAndDatasource[refreshtime][dsId] = []
 
-        async run() {
-          console.log('run')
-          console.log(items.map(e => e.iotId))
-          //store.value.getObservations(items)
-          callEvent(FILTER, { observations: items })
+        for (const subrender of renderer.ds_renderer) {
 
-          if(parseInt(key) !== 0){
-            this.handle = window.setInterval(async () => {
+          if (compareDatastream(dataStream, subrender)) {
+            if (dataStream.observedArea) {
 
-              //store.value.getObservations(items)
-              callEvent(FILTER, { observations: items })
+              const featrueObservedArea = (transformToGeoJson(toRaw(dataStream.observedArea)) as Polygon)
 
-            }, (parseInt(key) * 1000))
-          }else{
-            callEvent(FILTER, { observations: items })
+              if (booleanContains(bboxFeature, featrueObservedArea)) {
+                taskListByTimeAndDatasource[refreshtime][dsId].push(dataStream)
+              }
+            } else {
+              if (dataStream.thing && dataStream.thing!.locations && dataStream.thing!.locations[0]) {
+                try {
+                  if (booleanContains(bboxFeature, transformToGeoJson(dataStream.thing!.locations[0].location))) {
+                    taskListByTimeAndDatasource[refreshtime][dsId].push(dataStream)
+                  }
+                } catch (e) {
+                  console.log('FeatureCollection not supported')
+                }
+
+              }
+
+              console.log(dataStream.Thing)
+            }
           }
         }
-      }())
+
+      }
+    }
+  }
+
+  console.log('taskListByTimeAndDatasource:', taskListByTimeAndDatasource)
+
+  const tasks = []
+  for (const [refreshTime, datasourceItems] of Object.entries(taskListByTimeAndDatasource)) {
+    for (const [dsId, _items] of Object.entries(datasourceItems)) {
+      const items: Datastream[] = uniq(_items)
+      if (items.length > 0) {
+        // Get the correct datasource to call events on
+        const isDatasourcePrimary = dsId === datasourceId.value
+
+        tasks.push(new class extends Task {
+          readonly id = Math.random().toString()
+          private handle: number | undefined
+
+          invoke() {
+            window.clearInterval(this.handle)
+          }
+
+          async run() {
+
+            // Call event on the appropriate datasource
+            if (isDatasourcePrimary) {
+              callEvent(FILTER, { observations: items })
+            } else {
+              // For additional datasources, call event directly on the datasource
+              try {
+                const dsRepository = container.get<DatasourceRepository>(identifier)
+                const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+                if (datasource && typeof datasource.callEvent === 'function') {
+                  datasource.callEvent(FILTER, { observations: items })
+                }
+              } catch (e) {
+                console.warn('Could not call event on datasource', dsId, e)
+              }
+            }
+
+            if(parseInt(refreshTime) !== 0){
+              this.handle = window.setInterval(async () => {
+                if (isDatasourcePrimary) {
+                  callEvent(FILTER, { observations: items })
+                } else {
+                  try {
+                    const dsRepository = container.get<DatasourceRepository>(identifier)
+                    const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+                    if (datasource && typeof datasource.callEvent === 'function') {
+                      datasource.callEvent(FILTER, { observations: items })
+                    }
+                  } catch (e) {
+                    console.warn('Could not call event on datasource', dsId, e)
+                  }
+                }
+              }, (parseInt(refreshTime) * 1000))
+            }
+          }
+        }())
+      }
     }
   }
 
   useTaskManager().addTasksAndIvnoke(tasks)
 
+  isLoadingObservations = false
 
 }
 const collectionToPoint = (fc: any) => {
@@ -363,7 +516,7 @@ const centerUpdated = (center: any) => {
         <template v-if="wmsLayer.type == 'GEOJSON'">
           <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
 
-            <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+            <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
               style.id==styleID)!).features)" :key="feature.id">
               <l-geo-json v-if="!isPoint(feature.geometry)" ref="geojsonLayer"
                           :geojson="feature"
@@ -405,11 +558,11 @@ const centerUpdated = (center: any) => {
             <!-- </template>-->
           </template>
         </template>
-        <template v-if="wmsLayer.type == 'REST-GEOJSON' && datasourceType === 'rest'">
+        <template v-if="wmsLayer.type == 'REST-GEOJSON'">
           <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
-            <template v-if="data && data.features">
+            <template v-if="getLayerData(wmsLayer) && getLayerData(wmsLayer).features">
               <!-- Render non-point geometries (Polygons, LineStrings, etc.) -->
-              <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+              <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
                 style.id==styleID)!).features)" :key="'area-'+feature.id">
                 <l-geo-json v-if="feature.geometry && !isPoint(feature.geometry)" ref="restGeojsonLayer"
                             :geojson="feature"
@@ -418,7 +571,7 @@ const centerUpdated = (center: any) => {
               </template>
 
               <!-- Render point geometries with custom markers -->
-              <template v-for="feature in (filterFeatureCollection(data,config.styles.find(style=>
+              <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
                 style.id==styleID)!).features)" :key="'point-'+feature.id">
                 <l-marker
                   v-if="feature.geometry && isPoint(feature.geometry) && getPoint(feature.geometry)"
@@ -456,7 +609,7 @@ const centerUpdated = (center: any) => {
         <template v-if="wmsLayer.type=='OGCSTA'">
           <template v-for="renderer in (config.OGCSstyles ?? [])" :key="renderer.id">
 
-            <template v-for="location in locations" :key="location['@iot.id']+'markr'">
+            <template v-for="location in getLayerLocations(wmsLayer)" :key="location['@iot.id']+'markr'">
               <template v-for="thing in location.things??[]" :key="thing['@iot.id']+'markrThing'">
                 <template v-if="compareThing(thing, renderer)">
                   <template v-if="isFeatureCollection(location.location)">
@@ -521,7 +674,8 @@ const centerUpdated = (center: any) => {
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
                                     :data="datastream.observations[datastream.observations.length-1]?.result"
-                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
+                                    :marker-size="45"></component>
                                 </template>
                               </div>
                             </template>
@@ -537,9 +691,26 @@ const centerUpdated = (center: any) => {
                                     v-if="getById(subrenderer.observation?.component)"
                                     :config="subrenderer.observation?.setting"
                                     :data="datastream.observations[datastream.observations.length-1]?.result"
-                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"></component>
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
+                                    :marker-size="45"></component>
                                 </template>
                               </div>
+                            </template>
+                            <template v-if="subrenderer.renderer.point_render_as=='image'">
+                              <div class="image-marker" :style="{width: (subrenderer.renderer.point_image_size || 32) + 'px', height: (subrenderer.renderer.point_image_size || 32) + 'px'}">
+                                <img v-if="subrenderer.renderer.point_image_url"
+                                      :src="subrenderer.renderer.point_image_url"
+                                      :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
+                              </div>
+                                <template v-if="datastream.observations">
+                                  <component
+                                    :is="getById(subrenderer.observation?.component)?.component"
+                                    v-if="getById(subrenderer.observation?.component)"
+                                    :config="subrenderer.observation?.setting"
+                                    :data="datastream.observations[datastream.observations.length-1]?.result"
+                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
+                                    :marker-size="0"></component>
+                                </template>
                             </template>
                             <template v-if="subrenderer.renderer.point_render_as=='none'">
                               <template v-if="datastream.observations">
@@ -547,7 +718,8 @@ const centerUpdated = (center: any) => {
                                   :is="getById(subrenderer.observation?.component)?.component"
                                   v-if="getById(subrenderer.observation?.component)"
                                   :config="subrenderer.observation?.setting"
-                                  :data="datastream.observations[0]?.result"></component>
+                                  :data="datastream.observations[0]?.result"
+                                  :marker-size="renderer.renderer.point_image_size||32"></component>
                               </template>
                             </template>
 
@@ -621,8 +793,10 @@ const centerUpdated = (center: any) => {
 
   .datapoint {
     transform: rotate(45deg);
-    margin-top: 34px;
-    margin-left: -17px;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    margin: 0;
   }
 
   &.marker {

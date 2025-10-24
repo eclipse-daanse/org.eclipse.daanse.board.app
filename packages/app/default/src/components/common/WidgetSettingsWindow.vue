@@ -43,6 +43,7 @@ const t = (key: string) => {
         :is="availableWidgetsSettings[widget.type]?.settingsComponent"
         v-model="widget.config "
         :key="widget.uid"
+        :dataSources="dataSources"
       />
       <va-collapse v-model="storeSection" :header="t('Widgets.storeSettingsTitle')" icon="store">
         <VaSelect

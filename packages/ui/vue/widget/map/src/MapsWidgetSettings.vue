@@ -26,6 +26,11 @@ import type { Container } from 'inversify'
 const container = inject('container') as Container
 const instance = getCurrentInstance()
 
+// Accept optional dataSources prop for compatibility with WidgetSettingsWindow
+const props = defineProps<{
+  dataSources?: any[]
+}>()
+
 const opened = ref({
   widgetSectionLayer: true,
   widgetSection: false,
@@ -95,6 +100,9 @@ const addChilds = (layer: any, service: any) => {
   })
   return ret
 }
+// Cache for service nodes to prevent re-creating with new IDs
+const serviceNodesCache = ref<Map<string, any>>(new Map())
+
 const services = computedAsync(async () => {
   console.log('computedAsync')
   const ret: any = []
@@ -147,79 +155,93 @@ const services = computedAsync(async () => {
     }
 
   }
-  if (widgetSettings.value.datasourceId) {
+  // Process primary datasource and all additional datasources
+  const allDatasourceIds = [widgetSettings.value.datasourceId, ...widgetSettings.value.datasourceIds].filter(Boolean)
 
-    const id = widgetSettings.value.datasourceId
-    //Todo: How can i get The name of the store;
+  for (const id of allDatasourceIds) {
+    if (!id) continue
+
     const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
     try {
-      const OGCStore = datasourceRepository.getDatasource(widgetSettings.value.datasourceId)
-      console.log(datasourceRepository
-        .getDatasourceType(widgetSettings.value.datasourceId))
-      const dsType = datasourceRepository.getDatasourceType(widgetSettings.value.datasourceId)
+      const OGCStore = datasourceRepository.getDatasource(id)
+      console.log(datasourceRepository.getDatasourceType(id))
+      const dsType = datasourceRepository.getDatasourceType(id)
+
+      // Check cache first
+      if (!serviceNodesCache.value.has(id)) {
+        let childNode: any
+
+        if(dsType == 'OGC Composer'){
+          childNode = {
+            'id': v4(),
+            'opacity': 1,
+            'service': OGCStore,
+            'geoJson': {},
+            'type': 'GEOJSON',
+            'name': 'GEOJSON',
+            'title': 'GEOJSON',
+            'attribution': '',
+            'datasourceId': id
+          }
+        } else if (dsType == 'rest') {
+          childNode = {
+            'id': v4(),
+            'opacity': 1,
+            'service': OGCStore,
+            'geoJson': {},
+            'type': 'REST-GEOJSON',
+            'name': 'REST-GEOJSON',
+            'title': 'REST GeoJSON',
+            'attribution': '',
+            'datasourceId': id
+          }
+        } else {
+          childNode = {
+            'id': v4(),
+            'opacity': 1,
+            'service': OGCStore,
+            'geoJson': {},
+            'type': 'OGCSTA',
+            'name': 'OGCSTA',
+            'title': 'OGCSTA',
+            'attribution': '',
+            'datasourceId': id
+          }
+        }
+
+        serviceNodesCache.value.set(id, childNode)
+      }
+
+      const cachedChild = serviceNodesCache.value.get(id)
 
       if(dsType == 'OGC Composer'){
-            ret.push({
-              service: { '_info': { title: id + '[Composer]', name: id } },
-              type: 'GEOJSON',
-              level: 0,
-              childs:   [
-                {
-                  'id': v4(),
-                  'opacity': 1,
-                  'service': OGCStore,
-                  'geoJson': {},
-                  'type': 'GEOJSON',
-                  'name': 'GEOJSON',
-                  'title': 'GEOJSON',
-                  'attribution': ''
-                }
-                ]
-            })
+        ret.push({
+          service: { '_info': { title: id + '[Composer]', name: id } },
+          type: 'GEOJSON',
+          level: 0,
+          childs: [cachedChild]
+        })
       } else if (dsType == 'rest') {
         ret.push({
           service: { '_info': { title: id + '[REST]', name: id } },
           type: 'REST-GEOJSON',
           level: 0,
-          childs: [
-            {
-              'id': v4(),
-              'opacity': 1,
-              'service': OGCStore,
-              'geoJson': {},
-              'type': 'REST-GEOJSON',
-              'name': 'REST-GEOJSON',
-              'title': 'REST GeoJSON',
-              'attribution': ''
-            }
-          ]
+          childs: [cachedChild]
         })
       } else {
         ret.push({
-          //service:{'_info':{title:OGCStore?.name+'['+OGCStore?.type+']',name:OGCStore?.name}},
           service: { '_info': { title: id + '[OGCSTA]', name: id } },
           type: 'OGCSTA',
-          childs: [
-            {
-              'id': v4(),
-              'opacity': 1,
-              'service': OGCStore,
-              'geoJson': {},
-              'type': 'OGCSTA',
-              'name': 'OGCSTA',
-              'title': 'OGCSTA',
-              'attribution': ''
-            }
-          ],
+          childs: [cachedChild],
           level: 0
         })
       }
     } catch (e) {
-      console.log('service not supported')
+      console.log('service not supported for datasource:', id)
     }
-
   }
+
   return ret
 })
 const value = ref(0.5)
@@ -243,23 +265,96 @@ const modelswitch = computed(() => {
   return widgetSettings.value.styles
 })
 
+// Multi-datasource management
+const addServiceType = ref<'wms_wfs' | 'datasource'>('wms_wfs')
+const newDatasourceId = ref('')
+
+// Get available datasources from props or empty array
+const availableDatasources = computed(() => {
+  if (props.dataSources) {
+    return props.dataSources
+      .filter((ds: any) => ds.type === 'ogcsta' || ds.type === 'OGC Composer' || ds.type === 'rest')
+      .map((ds: any) => ({
+        text: `${ds.name} (${ds.type})`,
+        value: ds.uid
+      }))
+  }
+  return []
+})
+
+const addServiceFromDatasource = () => {
+  if (newDatasourceId.value && !widgetSettings.value.datasourceIds.includes(newDatasourceId.value)) {
+    widgetSettings.value.datasourceIds.push(newDatasourceId.value)
+    newDatasourceId.value = ''
+    showModalSizeSmall.value = false
+  }
+}
+
+const removeDatasource = (dsId: string) => {
+  const index = widgetSettings.value.datasourceIds.indexOf(dsId)
+  if (index > -1) {
+    widgetSettings.value.datasourceIds.splice(index, 1)
+    // Clear from cache
+    serviceNodesCache.value.delete(dsId)
+  }
+}
+
+const assignDatasourceToLayer = (layer: any, dsId: string) => {
+  layer.datasourceId = dsId
+}
+
 </script>
 
 <template>
   <VaModal
     v-model="showModalSizeSmall"
-    ok-text="add"
+    :ok-text="addServiceType === 'wms_wfs' ? 'Add' : 'Add Datasource'"
     size="small"
-    @ok="addService"
+    @ok="addServiceType === 'wms_wfs' ? addService() : addServiceFromDatasource()"
   >
     <div class="va-modal__message">
       <h3 class="va-h3">
-        Add new Service (WMS WFS)
+        Add Service
       </h3>
       <div class="m-0">
         <div class="settings-container">
-          <va-input v-model="url" placeholder="https://[serviceurl]"></va-input>
-          <!--<va-button @click="addService">Add</va-button>-->
+          <VaRadio
+            v-model="addServiceType"
+            option="wms_wfs"
+            label="WMS/WFS Service"
+            style="margin-bottom: 10px"
+          />
+          <VaRadio
+            v-model="addServiceType"
+            option="datasource"
+            label="Datasource"
+            style="margin-bottom: 15px"
+          />
+
+          <div v-if="addServiceType === 'wms_wfs'">
+            <va-input v-model="url" placeholder="https://[serviceurl]"></va-input>
+          </div>
+
+          <div v-else>
+            <VaSelect
+              v-if="availableDatasources.length > 0"
+              v-model="newDatasourceId"
+              :options="availableDatasources"
+              label="Select Datasource"
+              placeholder="Choose a datasource"
+              text-by="text"
+              value-by="value"
+            />
+            <va-input
+              v-else
+              v-model="newDatasourceId"
+              placeholder="Enter Datasource ID"
+              label="Datasource ID"
+            />
+            <div style="margin-top: 10px; font-size: 12px; color: #666;">
+              Primary datasource: <strong>{{ widgetSettings.datasourceId }}</strong>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -360,6 +455,18 @@ const modelswitch = computed(() => {
 
             <b v-if="node.service._info.title">{{ node.service._info.title }}</b>
             <b v-else>{{ node.service._info.name }}</b>
+
+            <!-- Show delete button only for additional datasources (not primary datasourceId) -->
+            <VaButton
+              class="mt4"
+              v-if="(node.type === 'OGCSTA' || node.type === 'GEOJSON' || node.type === 'REST-GEOJSON') &&
+                    widgetSettings.datasourceIds.includes(node.service._info.name)"
+              icon="delete"
+              preset="plain"
+              size="small"
+              @click.stop="removeDatasource(node.service._info.name)"
+              style="margin-left: 10px"
+            />
           </template>
           <template v-else>
                                   <span @click="()=>addLayer(node)">
@@ -557,5 +664,8 @@ const modelswitch = computed(() => {
       margin-top: 4px;
     }
   }
+}
+.mt4{
+  margin-top: 4px;
 }
 </style>
