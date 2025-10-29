@@ -170,7 +170,7 @@
     "typescript": "~5.9.2",
 
     "vite-plugin-vue-devtools": "^7.7.2",
-    "vitest": "^3.0.9",
+    "vitest": "^4.0.5",
     "vue-tsc": "^2.2.8"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
