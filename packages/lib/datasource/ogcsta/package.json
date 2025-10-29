@@ -14,7 +14,8 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "gen": "npx @openapitools/openapi-generator-cli generate -i ./src/client/model/openapi.yml --type-mappings AnyType=any,UNKNOWN_BASE_TYPE=object,enumPropertyNaming=original  -g typescript-axios -o ./src/client --additional-properties=withInterfaces=true,enumPropertyNaming=original"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

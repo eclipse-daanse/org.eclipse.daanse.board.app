@@ -401,6 +401,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
               const baseParams = {
                 entityId: (ds as Datastream).iotId + '',
                 $top: historyConfig?.enabled ? historyConfig.limit || 100 : 1,
+                $orderby: 'phenomenonTime desc',
               };
 
               const data = (
