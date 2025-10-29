@@ -54,6 +54,7 @@ export interface V11DatastreamsEntityIdObservationsGetRequest {
   $select?: string;
   $expand?: string;
   $filter?: string;
+  $orderby?: string;
 }
 
 export interface V11DatastreamsEntityIdObservedPropertyDatastreamsGetRequest {
@@ -207,6 +208,10 @@ export class DatastreamsApi extends runtime.BaseAPI {
 
     if (requestParameters['$filter'] != null) {
       queryParameters['$filter'] = requestParameters['$filter']
+    }
+
+    if (requestParameters['$orderby'] != null) {
+      queryParameters['$orderby'] = requestParameters['$orderby']
     }
 
     const headerParameters: runtime.HTTPHeaders = {}
