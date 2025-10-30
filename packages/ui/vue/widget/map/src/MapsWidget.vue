@@ -527,6 +527,14 @@ const centerUpdated = (center: any) => {
             :max-zoom="21"
             :use-global-leaflet="false"
             :zoom="config.zoom"
+            :options="{ zoomAnimation: true,
+                        zoomSnap: 0,
+                        wheelPxPerZoomLevel: 120,
+                        wheelDebounceTime: 5,
+                        zoomAnimationThreshold: 4,
+                        zoomDelta: 0.25,
+                        scrollWheelZoom: true
+            }"
             style="height: 100%"
             @move="mapmove"
             @ready="maploaded"
