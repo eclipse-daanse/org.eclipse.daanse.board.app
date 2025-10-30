@@ -116,4 +116,10 @@ import { VaSpacer } from 'vuestic-ui'
   height:100%;
 
 }
+@supports (-moz-appearance: none) {
+  .va-scroll-container__content{
+    height: 100%;
+  }
+}
+
 </style>
