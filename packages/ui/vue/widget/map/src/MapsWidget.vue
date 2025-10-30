@@ -262,13 +262,58 @@ const options = computed(() => {
   }
 })
 
+// Helper to get the original layer index (before reverse)
+const getOriginalLayerIndex = (layer: any) => {
+  return config.value.layers.findIndex(l => l === layer)
+}
+
+// Helper to get options with pane for a specific layer
+const getLayerOptions = (layer: any) => {
+  const originalIndex = getOriginalLayerIndex(layer)
+  return {
+    ...options.value,
+    pane: `layer-pane-${originalIndex}`
+  }
+}
+
+// Helper to get the pane name for markers
+const getMarkerPane = (layer: any) => {
+  const originalIndex = getOriginalLayerIndex(layer)
+  return `layer-pane-${originalIndex}`
+}
+
 
 const maploaded = () => {
-  mounted = true,
-    console.log('map ready')
-    setFixed();
+  mounted = true
+  console.log('map ready')
+  setFixed()
+  createLayerPanes()
   //loadObservationsInView();
 }
+
+const createLayerPanes = () => {
+  const mapObject = (map.value as any)?.leafletObject as L.Map
+  if (!mapObject || !config.value.layers) return
+
+  // Create or update panes for each layer with the appropriate z-index
+  config.value.layers.forEach((layer, index) => {
+    const paneName = `layer-pane-${index}`
+    let pane = mapObject.getPane(paneName)
+    if (!pane) {
+      pane = mapObject.createPane(paneName)
+    }
+    // Layer at index 0 should be on top, so highest z-index
+    // Default overlay pane is at z-index 400
+    pane.style.zIndex = String(400 + config.value.layers.length - index)
+  })
+}
+
+// Watch for layer changes and update z-index
+watch(() => config.value.layers, () => {
+  if (mounted) {
+    createLayerPanes()
+  }
+}, { deep: true })
 const rev = (arr: any) => {
   return {
     lat: arr[1],
@@ -491,7 +536,7 @@ const centerUpdated = (center: any) => {
     >
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
         maxZoom:25}" :url="config.baseMapUrl"></l-tile-layer>
-      <template v-for="wmsLayer in config.layers" :key="wmsLayer.name">
+      <template v-for="(wmsLayer, index) in [...config.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
         <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer'"
                         :attribution="wmsLayer.attribution"
                         :layers="wmsLayer.name!"
@@ -500,6 +545,7 @@ const centerUpdated = (center: any) => {
                         :transparent="true"
                         :url="(wmsLayer.service as  any).getOperationUrl('GetMap')"
                         :visible="(wmsLayer as any).checked"
+                        :z-index="config.layers.length - index"
                         format="image/png"
                         layer-type="base">
         </LWmsTileLayer>
@@ -509,6 +555,7 @@ const centerUpdated = (center: any) => {
             <!--<template v-if="compareDatastream(wmsLayer.wfs_service?.geoJson as BoxedDatastream, config.styles.find(style=>style.id==styleID)!)">-->
             <l-geo-json v-if="!isPoint(wmsLayer.wfs_service?.geoJson)" ref="thingsLayer"
                         :geojson="filterFeatureCollection(wmsLayer.wfs_service?.geoJson as any,config.styles.find(style=>style.id==styleID)!) as unknown as  GeoJsonObject[]"
+                        :options="getLayerOptions(wmsLayer)"
                         :options-style="()=>config.styles.find(style=>style.id==styleID)?.renderer.area as any"></l-geo-json>
             <!-- </template>-->
           </template>
@@ -520,12 +567,14 @@ const centerUpdated = (center: any) => {
               style.id==styleID)!).features)" :key="feature.id">
               <l-geo-json v-if="!isPoint(feature.geometry)" ref="geojsonLayer"
                           :geojson="feature"
+                          :options="getLayerOptions(wmsLayer)"
                           :options-style="()=>config.styles.find(style=>
                           style.id==styleID)?.renderer.area as any"></l-geo-json>
 
               <l-marker
                 v-if="getPoint(feature.geometry)"
                 :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
+                :options="{ pane: getMarkerPane(wmsLayer) }"
                 >
                 <l-icon class-name="someExtraClass">
                   <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
@@ -566,6 +615,7 @@ const centerUpdated = (center: any) => {
                 style.id==styleID)!).features)" :key="'area-'+feature.id">
                 <l-geo-json v-if="feature.geometry && !isPoint(feature.geometry)" ref="restGeojsonLayer"
                             :geojson="feature"
+                            :options="getLayerOptions(wmsLayer)"
                             :options-style="()=>config.styles.find(style=>
                             style.id==styleID)?.renderer.area as any"></l-geo-json>
               </template>
@@ -576,6 +626,7 @@ const centerUpdated = (center: any) => {
                 <l-marker
                   v-if="feature.geometry && isPoint(feature.geometry) && getPoint(feature.geometry)"
                   :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
+                  :options="{ pane: getMarkerPane(wmsLayer) }"
                   >
                   <l-icon class-name="someExtraClass">
                     <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
@@ -614,7 +665,7 @@ const centerUpdated = (center: any) => {
                 <template v-if="compareThing(thing, renderer)">
                   <template v-if="isFeatureCollection(location.location)">
                     <l-geo-json v-if="!isPoint(location.location)" ref="thingsLayer"
-                                :geojson="location.location" :options="options"
+                                :geojson="location.location" :options="getLayerOptions(wmsLayer)"
                                 :options-style="()=>renderer.renderer.area as any"></l-geo-json>
                   </template>
 
@@ -622,6 +673,7 @@ const centerUpdated = (center: any) => {
                   <l-marker
                     v-if="getPoint(location.location)"
                     :lat-lng="getPoint(location.location) as  L.LatLngExpression"
+                    :options="{ pane: getMarkerPane(wmsLayer) }"
                     @click="openThing[thing.iotId??'null']=(openThing[thing.iotId??'null'])?!openThing[thing.iotId??'null']:true">
                     <l-icon class-name="someExtraClass">
                       <template v-if="renderer.renderer.point_render_as=='icon'">
@@ -656,11 +708,12 @@ const centerUpdated = (center: any) => {
                       <template
                         v-if="compareDatastream(datastream as BoxedDatastream, subrenderer) /*&& openThing[thing['@iot.id']]*/">
                         <l-geo-json ref="thingsLayer"
-                                    :geojson="transformToGeoJson(datastream.observedArea)" :options="options"
+                                    :geojson="transformToGeoJson(datastream.observedArea)" :options="getLayerOptions(wmsLayer)"
                                     :options-style="()=>subrenderer.renderer.area as any"></l-geo-json>
                         <l-marker
                           v-if="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
-                          :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression">
+                          :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
+                          :options="{ pane: getMarkerPane(wmsLayer) }">
                           <l-icon class-name="someExtraClass">
                             <template v-if="subrenderer.renderer.point_render_as=='icon'">
                               <div :style="{background:subrenderer.renderer.pointPin.color}"
