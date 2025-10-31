@@ -170,12 +170,16 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             o => o.ds_source == d.iotId,
           )
           console.log('🔍 Found observation at index:', ind)
-          if (ind != undefined && ind != -1) {
-            const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
-            if (ds) {
+          const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
+          if (ds) {
+            if (ind != undefined && ind != -1) {
               // Use slice instead of splice to preserve the observation in resultMap
               ds.observations = this.resultMap.observations?.slice(ind, ind + 1) as Observation[]
               console.log('✅ Assigned observation to datastream:', ds.name)
+            } else {
+              // No observations found - clear the observations array
+              ds.observations = []
+              console.log('⚠️ No observations found for datastream, cleared observations:', ds.name)
             }
           }
         }
@@ -398,11 +402,14 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           listOfPromesis.push(
             (async () => {
               const queryParams = this.getHistoryQueryParams(historyConfig);
-              const baseParams = {
+              const baseParams: any = {
                 entityId: (ds as Datastream).iotId + '',
-                $top: historyConfig?.enabled ? historyConfig.limit || 100 : 1,
                 $orderby: 'phenomenonTime desc',
               };
+
+              if (!historyConfig?.enabled) {
+                baseParams.$top = 1;
+              }
 
               const data = (
                 await new DatastreamsApi(
