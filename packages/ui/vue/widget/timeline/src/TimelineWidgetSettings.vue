@@ -21,11 +21,18 @@ Contributors:
       <!-- Timeline Start (earliest time) -->
       <div class="setting-group">
         <label>{{ t('Timeline Start (earliest time)') }}</label>
-        <va-date-input
-          v-model="settings.timelineMin"
-          :label="t('Select timeline start')"
-          @update:modelValue="onSettingsChange"
-        />
+        <div class="datetime-group">
+          <va-date-input
+            v-model="timelineMinDate"
+            :label="t('Select date')"
+            @update:modelValue="onTimelineMinDateChange"
+          />
+          <va-time-input
+            v-model="timelineMinTime"
+            :label="t('Select time')"
+            @update:modelValue="onTimelineMinTimeChange"
+          />
+        </div>
       </div>
 
       <!-- Timeline End (latest time) -->
@@ -38,12 +45,18 @@ Contributors:
             @update:modelValue="onTimelineEndTypeChange"
           />
 
-          <va-date-input
-            v-if="!useCurrentTimeAsMax"
-            v-model="settings.timelineMax"
-            :label="t('Select timeline end')"
-            @update:modelValue="onSettingsChange"
-          />
+          <div v-if="!useCurrentTimeAsMax" class="datetime-group">
+            <va-date-input
+              v-model="timelineMaxDate"
+              :label="t('Select date')"
+              @update:modelValue="onTimelineMaxDateChange"
+            />
+            <va-time-input
+              v-model="timelineMaxTime"
+              :label="t('Select time')"
+              @update:modelValue="onTimelineMaxTimeChange"
+            />
+          </div>
         </div>
       </div>
 
@@ -54,6 +67,7 @@ Contributors:
           v-model="settings.stepSize"
           :options="stepSizeOptions"
           :label="t('Select step size')"
+          value-by="value"
           @update:modelValue="onSettingsChange"
         />
       </div>
@@ -329,6 +343,12 @@ const sliderRef = ref<HTMLElement>();
 const isDragging = ref(false);
 const dragType = ref<'start' | 'end' | 'range'>('start');
 
+// Separate date and time refs for timeline min/max
+const timelineMinDate = ref<Date>();
+const timelineMinTime = ref<Date>();
+const timelineMaxDate = ref<Date>();
+const timelineMaxTime = ref<Date>();
+
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);
 const useStartVariable = ref(false);
@@ -494,6 +514,38 @@ const onVariableChange = () => {
     }
   }
 
+  onSettingsChange();
+};
+
+const combineDateTime = (date?: Date, time?: Date): string | undefined => {
+  if (!date) return undefined;
+
+  const combined = new Date(date);
+  if (time) {
+    combined.setHours(time.getHours());
+    combined.setMinutes(time.getMinutes());
+    combined.setSeconds(time.getSeconds());
+  }
+  return combined.toISOString();
+};
+
+const onTimelineMinDateChange = () => {
+  settings.value.timelineMin = combineDateTime(timelineMinDate.value, timelineMinTime.value);
+  onSettingsChange();
+};
+
+const onTimelineMinTimeChange = () => {
+  settings.value.timelineMin = combineDateTime(timelineMinDate.value, timelineMinTime.value);
+  onSettingsChange();
+};
+
+const onTimelineMaxDateChange = () => {
+  settings.value.timelineMax = combineDateTime(timelineMaxDate.value, timelineMaxTime.value);
+  onSettingsChange();
+};
+
+const onTimelineMaxTimeChange = () => {
+  settings.value.timelineMax = combineDateTime(timelineMaxDate.value, timelineMaxTime.value);
   onSettingsChange();
 };
 
@@ -722,6 +774,18 @@ onMounted(() => {
     // Initialize variable flags based on existing configuration
     useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
     useEndVariable.value = !!widgetSettings.value.rangeEndVariable;
+
+    // Initialize date/time pickers from ISO strings
+    if (settings.value.timelineMin) {
+      const minDate = new Date(settings.value.timelineMin);
+      timelineMinDate.value = minDate;
+      timelineMinTime.value = minDate;
+    }
+    if (settings.value.timelineMax) {
+      const maxDate = new Date(settings.value.timelineMax);
+      timelineMaxDate.value = maxDate;
+      timelineMaxTime.value = maxDate;
+    }
   } else {
     // Initialize with defaults and trigger initial settings change
     resetToDefaults();
@@ -764,6 +828,17 @@ watch(() => widgetSettings.value, (newSettings) => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.datetime-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.datetime-group > * {
+  flex: 1;
 }
 
 .preset-buttons {

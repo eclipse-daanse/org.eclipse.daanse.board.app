@@ -642,11 +642,26 @@ const animatePlayback = () => {
 
     // Ein Schritt in StepSize-Einheiten
     const stepSizeMs = getStepSizeInMs();
+    console.log('Playback step:', {
+      stepSize: config.value.stepSize,
+      stepSizeMs,
+      currentStart: new Date(currentStartMs).toISOString(),
+      currentEnd: new Date(currentEndMs).toISOString(),
+      rangeDuration
+    });
+
     const newStartMs = currentStartMs + stepSizeMs;
     const newEndMs = newStartMs + rangeDuration;
 
+    console.log('New times:', {
+      newStart: new Date(newStartMs).toISOString(),
+      newEnd: new Date(newEndMs).toISOString(),
+      timelineMax: timelineMax.value.toISOString()
+    });
+
     // Stoppen wenn Ende erreicht
     if (newEndMs >= timelineMax.value.getTime()) {
+      stopPlayback();
       isPlaying.value = false;
       return;
     }
