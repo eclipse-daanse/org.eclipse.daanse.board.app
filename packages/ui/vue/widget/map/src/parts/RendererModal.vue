@@ -321,6 +321,13 @@ watch(selection,()=>{
                   icon="delete"
                   preset="secondary"
                   round
+                  @click="()=>{
+                    const index = model.indexOf(style);
+                    if(index !== -1){
+                      model.splice(index, 1);
+                      if(selection?.id === style.id) selection = undefined;
+                    }
+                  }"
                 />
               </div>
             </div>
@@ -363,6 +370,14 @@ watch(selection,()=>{
                       icon="delete"
                       preset="secondary"
                       round
+                      @click="()=>{
+                        const parentStyle = style as IRenderer;
+                        const index = parentStyle.ds_renderer.indexOf(substyle);
+                        if(index !== -1){
+                          parentStyle.ds_renderer.splice(index, 1);
+                          if(selection?.id === substyle.id) selection = undefined;
+                        }
+                      }"
                     />
                   </div>
                 </div>
@@ -424,7 +439,7 @@ watch(selection,()=>{
 
             </div>
             <div v-else-if="tabNo ==3 && layerModel?.type =='OGCSTA' && selection.thing" class="full">
-              <AutoUpdateSettings v-model="selection.renderer"></AutoUpdateSettings>
+              <AutoUpdateSettings v-model="selection"></AutoUpdateSettings>
             </div>
             <div v-else class="full">
               <template v-if="layerModel?.type =='OGCSTA' && selection.thing">
