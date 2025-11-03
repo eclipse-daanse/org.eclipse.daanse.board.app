@@ -16,7 +16,8 @@ version: "3.9"
 services:
   daanse_client:
     image: eclipsedaanse/board:latest
-    #  context: .
+    #build:
+    #  context: ../.
     #  dockerfile: ./Docker/Dockerfile
     ports:
       - "8091:8080"
