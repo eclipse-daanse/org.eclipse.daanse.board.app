@@ -33,7 +33,8 @@ const variableRepository = ref<VariableRepository | null>(null);
 // Available variables
 const availableVariables = computed(() => {
   if (!variableRepository.value) return [];
-  return variableRepository.value.getAllVariablesUnwrapped()
+  return variableRepository.value.getAllVariables()
+    .map(([name, v]: [string, any]) => v)
     .filter((v: any) => {
       console.log(v)
       return v.value && typeof v.value === 'string'

@@ -378,7 +378,16 @@ const loadObservationsInView = () => {
   for (const [dsId, datastreams] of datasourceDatastreams.entries()) {
     for (const dataStream of datastreams) {
       for (const renderer of config.value.OGCSstyles) {
-        const refreshtime: number = renderer.ObservationrefreshTime ?? 10
+        const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 10
+
+        console.log('Renderer ObservationrefreshTime:', renderer.ObservationrefreshTime, 'calculated refreshtime:', refreshtime)
+
+        // Skip if refresh time is 0 (no polling)
+        if (refreshtime === 0) {
+          console.log('Skipping polling for renderer because refreshtime is 0')
+          continue
+        }
+
         if (!taskListByTimeAndDatasource[refreshtime]) taskListByTimeAndDatasource[refreshtime] = {}
         if (!taskListByTimeAndDatasource[refreshtime][dsId]) taskListByTimeAndDatasource[refreshtime][dsId] = []
 

@@ -560,6 +560,89 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
   }
 
+  private async fetchHistoricalLocations(): Promise<void> {
+    const historyConfig = this.configuration?.history;
+    if (!historyConfig?.enabled) return;
+
+    // Get time range from variables or config
+    const timeEnd = this.resolveTimeValue(
+      historyConfig.timeRange?.end,
+      historyConfig.timeRange?.endVariable
+    ) || this.resolveTimeValue(
+      historyConfig.phenomenonTime?.end,
+      historyConfig.phenomenonTime?.endVariable
+    );
+
+    if (!timeEnd) return;
+
+    // Fetch historical locations for all things with datastreams in requestFlag.params
+    const datastreams = this.requestFlag.params?.observations || [];
+    const thingIds = new Set<string>();
+
+    // Collect unique thing IDs from datastreams
+    for (const ds of datastreams) {
+      const datastream = this.resultMap.datastreams?.find(d => d.iotId === ds.iotId);
+      if (datastream?.thing?.iotId) {
+        thingIds.add(datastream.thing.iotId);
+      }
+    }
+
+    if (thingIds.size === 0) return;
+
+    console.log(`📍 Fetching historical locations for ${thingIds.size} things at time: ${timeEnd}`);
+
+    // Get connection for direct fetch
+    const connection = this.connectionRepository.getConnection(
+      this.connection,
+    ) as IConnection;
+
+    // Fetch historical location for each thing
+    for (const thingId of thingIds) {
+      try {
+        const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=time le ${timeEnd}&$orderby=time desc&$top=1&$expand=Locations`;
+
+        // Use connection fetch directly
+        const response = await connection.fetch({ url } as IRequestParams, {
+          method: 'GET',
+        });
+
+        const data = await response.json();
+        const historicalLocations = data.value;
+
+        if (historicalLocations && historicalLocations.length > 0) {
+          const historicalLocation = historicalLocations[0];
+          const locations = historicalLocation.Locations;
+
+          if (locations && locations.length > 0) {
+            console.log(`📍 Found historical location for thing ${thingId}:`, locations[0]);
+
+            // Find all datastreams for this thing and update their locations
+            for (const datastream of this.resultMap.datastreams || []) {
+              if (datastream.thing?.iotId === thingId) {
+                // Replace current location with historical location
+                if (datastream.thing.locations) {
+                  datastream.thing.locations = locations;
+                  console.log(`📍 Updated datastream ${datastream.iotId} with historical location`);
+                }
+              }
+            }
+
+            // Also update in things array
+            const thing = this.resultMap.things?.find(t => t.iotId === thingId);
+            if (thing && thing.locations) {
+              thing.locations = locations;
+              console.log(`📍 Updated thing ${thingId} with historical location`);
+            }
+          }
+        } else {
+          console.log(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
+        }
+      } catch (error) {
+        console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);
+      }
+    }
+  }
+
   private onVariableChanged(): void {
     // Clear existing debounce timer
     if (this.debounceTimer) {
@@ -578,6 +661,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         };*/
 
         await this.getData('OGCSTAData');
+
+        // Fetch historical locations for the new time range
+        await this.fetchHistoricalLocations();
+
         this.notify();
       } catch (error) {
         console.error('Error refetching observations after variable change:', error);
