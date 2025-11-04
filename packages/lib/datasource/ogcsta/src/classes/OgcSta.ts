@@ -273,6 +273,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     this.getThings(listOfPromesis)
     this.getDataStreams(listOfPromesis)
     this.getObservations(listOfPromesis)
+    this.getHistoricalLocations(listOfPromesis)
   }
 
   private resolveTimeValue(timeValue?: string, variableName?: string): string | undefined {
@@ -639,6 +640,108 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         }
       } catch (error) {
         console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);
+      }
+    }
+  }
+
+  getHistoricalLocations(listOfPromesis: Promise<IOGCSTAData>[]) {
+    const historyConfig = (this.configuration as IOGCSTAConfigartion)?.history;
+
+    if (this.requestFlag.params && 'historicalLocations' in this.requestFlag.params) {
+      const things = this.requestFlag.params.historicalLocations;
+
+      for (const thing of things) {
+        listOfPromesis.push(
+          (async () => {
+            const thingId = thing.iotId || thing['@iot.id'];
+
+            // Get time filter from history config
+            const timeStart = this.resolveTimeValue(
+              historyConfig?.timeRange?.start,
+              historyConfig?.timeRange?.startVariable
+            ) || this.resolveTimeValue(
+              historyConfig?.phenomenonTime?.start,
+              historyConfig?.phenomenonTime?.startVariable
+            );
+
+            const timeEnd = this.resolveTimeValue(
+              historyConfig?.timeRange?.end,
+              historyConfig?.timeRange?.endVariable
+            ) || this.resolveTimeValue(
+              historyConfig?.phenomenonTime?.end,
+              historyConfig?.phenomenonTime?.endVariable
+            );
+
+            if (!timeEnd || !thingId) {
+              return {};
+            }
+
+            try {
+              const connection = this.connectionRepository.getConnection(
+                this.connection,
+              ) as IConnection;
+
+              // Build time filter with both start and end
+              let timeFilter = `time le ${timeEnd}`;
+              if (timeStart) {
+                timeFilter = `time ge ${timeStart} and ${timeFilter}`;
+              }
+
+              const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=${timeFilter}&$orderby=time desc&$top=1&$expand=Locations`;
+
+              const response = await connection.fetch({ url } as IRequestParams, {
+                method: 'GET',
+              });
+
+              const data = await response.json();
+              const historicalLocations = data.value;
+
+              if (historicalLocations && historicalLocations.length > 0) {
+                const historicalLocation = historicalLocations[0];
+                const locations = historicalLocation.Locations;
+
+                if (locations && locations.length > 0) {
+                  // Only use the first location
+                  const location = locations[0];
+                  console.log(`📍 Found historical location for thing ${thingId}:`, location);
+
+                  // Update the thing's location in resultMap - set only one location
+                  const thingInMap = this.resultMap.things?.find(t => t.iotId === thingId);
+                  if (thingInMap) {
+                    thingInMap.locations = [location];
+                  }
+
+                  // Update all datastreams for this thing - set only one location
+                  for (const datastream of this.resultMap.datastreams || []) {
+                    if (datastream.thing?.iotId === thingId) {
+                      if (datastream.thing) {
+                        datastream.thing.locations = [location];
+                      }
+                    }
+                  }
+
+                  // Update locations in the locations array
+                  const locationIndex = this.resultMap.locations?.findIndex(
+                    loc => loc.things?.some(t => t.iotId === thingId)
+                  );
+
+                  if (locationIndex !== undefined && locationIndex !== -1 && this.resultMap.locations) {
+                    this.resultMap.locations[locationIndex] = {
+                      ...location,
+                      things: this.resultMap.locations[locationIndex].things
+                    } as any;
+                  }
+                }
+              } else {
+                console.log(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
+              }
+            } catch (error) {
+              console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);
+            }
+
+            return {};
+          })(),
+        );
       }
     }
   }
