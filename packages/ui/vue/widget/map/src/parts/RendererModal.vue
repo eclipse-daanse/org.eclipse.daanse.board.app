@@ -56,7 +56,7 @@ const addStyle = () => {
         {
           prop: 'name',
           comperator: Comperator.equals,
-          value: '*'
+          value: 'example'
         }
       ],
       renderer: {

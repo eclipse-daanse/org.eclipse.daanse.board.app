@@ -156,8 +156,9 @@ watch(datasourceId, (value, oldValue, onCleanup) => {
 })
 
 watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
-  console.log('ObservationrefreshTime changed, reloading observations')
+  console.log('OGCSstyles changed, reloading observations and historical locations')
   loadObservationsInView()
+  loadHistoricalLocationsForAllThings()
 }, { deep: true })
 
 
@@ -200,8 +201,72 @@ onMounted(() => {
 })
 watch(data, (value, oldValue, onCleanup) => {
   loadObservationsInView()
-
+  loadHistoricalLocationsForAllThings()
 }, { deep: true, once: true })
+
+const loadHistoricalLocationsForAllThings = () => {
+  // Check if there are any OGCSTA styles configured
+  if (!config.value?.OGCSstyles || config.value.OGCSstyles.length === 0) {
+    console.log('📍 No OGCSTA styles configured, skipping historical locations load')
+    return
+  }
+
+  // Collect all things that match the style filters
+  const matchingThingsMap = new Map()
+
+  // Process primary datasource
+  const things = (data.value as any)?.things || []
+  for (const thing of things) {
+    if (!thing || !thing.iotId) continue
+
+    // Check if thing matches any renderer's thing filter
+    for (const renderer of config.value.OGCSstyles) {
+      if (compareThing(thing, renderer)) {
+        matchingThingsMap.set(thing.iotId, thing)
+        break // Thing matches, no need to check other renderers
+      }
+    }
+  }
+
+  // Process additional datasources
+  for (const [dsId, dsData] of additionalDatasourcesData.value.entries()) {
+    const additionalThings = (dsData as any)?.things || []
+    for (const thing of additionalThings) {
+      if (!thing || !thing.iotId) continue
+
+      // Check if thing matches any renderer's thing filter
+      for (const renderer of config.value.OGCSstyles) {
+        if (compareThing(thing, renderer)) {
+          matchingThingsMap.set(thing.iotId, thing)
+          break
+        }
+      }
+    }
+  }
+
+  const matchingThings = Array.from(matchingThingsMap.values())
+
+  if (matchingThings.length > 0) {
+    console.log(`📍 Setting historical locations filter for ${matchingThings.length} matching things`)
+    // Set filter for primary datasource
+    callEvent(FILTER, { historicalLocations: matchingThings })
+
+    // Set filter for additional datasources
+    for (const dsId of additionalDatasourcesData.value.keys()) {
+      try {
+        const dsRepository = container.get<DatasourceRepository>(identifier)
+        const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+        if (datasource && typeof datasource.callEvent === 'function') {
+          datasource.callEvent(FILTER, { historicalLocations: matchingThings })
+        }
+      } catch (e) {
+        console.warn('Could not call event on datasource', dsId, e)
+      }
+    }
+  } else {
+    console.log('📍 No things match the configured style filters')
+  }
+}
 
 const setFixed = ()=>{
   try {
