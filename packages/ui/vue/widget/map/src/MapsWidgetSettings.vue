@@ -247,13 +247,15 @@ const services = computedAsync(async () => {
 const value = ref(0.5)
 const renderShow = ref(false)
 const addLayer = async (node: any) => {
-  node['checked'] = true
-  if (node['type'] == 'WFSLayer') {
-    const data = await node['wfs_service'].fetch()
+  // Create a new layer object with its own styleIds array to avoid sharing references
+  const newLayer = { ...node, checked: true, styleIds: [] }
+
+  if (newLayer.type == 'WFSLayer') {
+    const data = await newLayer.wfs_service.fetch()
     console.log(data)
   }
-  node['styleIds'] = []
-  widgetSettings.value.layers.push(node)
+
+  widgetSettings.value.layers.push(newLayer)
 }
 
 const selectedLayer = ref<LayerI | undefined>(undefined)

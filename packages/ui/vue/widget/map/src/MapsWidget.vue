@@ -222,19 +222,29 @@ onMounted(async () => {
             console.warn('WMS layer missing service URL:', layer.name)
             newLayers.push(layer)
           }
-        } else if (layer.type === 'WFSLayer' && layer.wfs_service && !layer.wfs_service.getFeatureUrl) {
-          // Service was deserialized as plain object, reconstruct WfsEndpoint
-          const serviceUrl = layer.wfs_service._capabilitiesUrl || layer.wfs_service.url || layer.wfs_service.serviceUrl
-          if (serviceUrl) {
-            try {
-              const newService = await createServiceWFS(serviceUrl)
-              newLayers.push({ ...layer, wfs_service: newService })
-            } catch (e) {
-              console.warn('Could not reconstruct WFS service for layer', layer.name, e)
+        } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
+          // WFS service needs reconstruction - check if it has fetch method
+          if (typeof layer.wfs_service.fetch !== 'function') {
+            // Deserialized WFS service - reconstruct from URL
+            const wfsUrl = layer.wfs_service.url
+            if (wfsUrl) {
+              try {
+                // Import WFS class dynamically
+                const WFS = (await import('./WFS')).default
+                const newWfsService = new WFS(wfsUrl)
+                // Fetch the GeoJSON data
+                await newWfsService.fetch()
+                newLayers.push({ ...layer, wfs_service: newWfsService })
+              } catch (e) {
+                console.warn('Could not reconstruct WFS service for layer', layer.name, e)
+                newLayers.push(layer)
+              }
+            } else {
+              console.warn('WFS layer missing service URL:', layer.name)
               newLayers.push(layer)
             }
           } else {
-            console.warn('WFS layer missing service URL:', layer.name)
+            // WFS service is already valid, just keep it
             newLayers.push(layer)
           }
         } else {
