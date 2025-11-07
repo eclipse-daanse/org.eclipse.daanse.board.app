@@ -417,7 +417,12 @@ const getMarkerPane = (layer: any) => {
 }
 
 // Cache style lookups to avoid repeated .find() calls in templates
+// Use a revision counter to invalidate cache when styles change
+const stylesRevision = ref(0)
+
 const stylesByIdCache = computed(() => {
+  // Access stylesRevision to make this computed dependent on it
+  const _rev = stylesRevision.value
   const cache = new Map()
   if (config.value?.styles) {
     for (const style of config.value.styles) {
@@ -429,10 +434,30 @@ const stylesByIdCache = computed(() => {
   return cache
 })
 
-// Helper to get style by ID - much faster than repeated .find() calls
 const getStyleById = (styleId: string) => {
   return stylesByIdCache.value.get(styleId)
 }
+
+// Force re-render of styles by incrementing revision
+const invalidateStylesCache = () => {
+  stylesRevision.value++
+}
+
+// Watch for changes in styles and invalidate cache
+// We create a hash of the styles to detect actual changes
+let stylesHash = ''
+watch(() => config.value?.styles, (newStyles) => {
+  if (!newStyles) return
+
+  // Create a simple hash by stringifying the styles
+  const newHash = JSON.stringify(newStyles)
+
+  // Only invalidate if actually changed
+  if (newHash !== stylesHash) {
+    stylesHash = newHash
+    invalidateStylesCache()
+  }
+}, { deep: true })
 
 
 const maploaded = () => {
