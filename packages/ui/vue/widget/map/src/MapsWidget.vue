@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref, toRaw, toRefs, watch } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, toRaw, toRefs, watch } from 'vue'
 import type { IMapSettings } from './Settings'
 import 'leaflet/dist/leaflet.css'
 
@@ -20,7 +20,7 @@ import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasourc
 import L, { PointExpression } from 'leaflet'
 import { ERefType, IRenderer } from './api/Renderer'
 import { resolve } from './utils/helpers'
-import { debounce, uniq } from 'lodash'
+import { debounce, uniq, uniqBy } from 'lodash'
 import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojson'
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/client'
 import { Task, useTaskManager } from './composables/tasktimer'
@@ -49,8 +49,17 @@ const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils
 const data = ref<any>({})
 const additionalDatasourcesData = ref<Map<string, any>>(new Map())
 const subscribedDatasources = new Set<string>() // Track which datasources are already subscribed
+const datasourceUnsubscribeFunctions = new Map<string, () => void>() // Track unsubscribe functions
 const loadingDatasources = new Set<string>() // Track which datasources are currently loading
 let isLoadingObservations = false // Prevent concurrent observation loading
+let isUnmounting = false // Track if component is unmounting
+const activeTasks = new Map<string, Task>() // Track active tasks for cleanup
+// Create a local TaskManager instance for this widget
+const localTaskManager = useTaskManager()
+
+// Memoization cache for expensive operations
+const geoJsonCache = new WeakMap<any, any>()
+const boundsCache = new WeakMap<any, boolean>()
 
 // Detect datasource type dynamically
 const datasourceType = computed(() => {
@@ -107,9 +116,11 @@ const loadDatasourceData = async (dsId: string) => {
         const updateCallback = async () => {
           const updatedData = await datasource.getData(requestType)
           additionalDatasourcesData.value.set(dsId, updatedData)
-
         }
-        datasource.subscribe(updateCallback)
+        const unsubscribe = datasource.subscribe(updateCallback)
+        if (typeof unsubscribe === 'function') {
+          datasourceUnsubscribeFunctions.set(dsId, unsubscribe)
+        }
       }
     }
   } catch (e) {
@@ -156,7 +167,6 @@ watch(datasourceId, (value, oldValue, onCleanup) => {
 })
 
 watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
-  console.log('OGCSstyles changed, reloading observations and historical locations')
   loadObservationsInView()
   loadHistoricalLocationsForAllThings()
 }, { deep: true })
@@ -347,6 +357,24 @@ const getMarkerPane = (layer: any) => {
   return `layer-pane-${originalIndex}`
 }
 
+// Cache style lookups to avoid repeated .find() calls in templates
+const stylesByIdCache = computed(() => {
+  const cache = new Map()
+  if (config.value?.styles) {
+    for (const style of config.value.styles) {
+      if (style.id) {
+        cache.set(style.id, style)
+      }
+    }
+  }
+  return cache
+})
+
+// Helper to get style by ID - much faster than repeated .find() calls
+const getStyleById = (styleId: string) => {
+  return stylesByIdCache.value.get(styleId)
+}
+
 
 const maploaded = () => {
   mounted = true
@@ -394,6 +422,7 @@ const reverse = (arr: any) => {
 const mapmove = debounce(() => {
   loadObservationsInView()
 }, 2000, { leading: false })
+
 const loadObservationsInView = () => {
   if (isLoadingObservations) {
     return
@@ -445,11 +474,8 @@ const loadObservationsInView = () => {
       for (const renderer of config.value.OGCSstyles) {
         const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 10
 
-        console.log('Renderer ObservationrefreshTime:', renderer.ObservationrefreshTime, 'calculated refreshtime:', refreshtime)
-
         // Skip if refresh time is 0 (no polling)
         if (refreshtime === 0) {
-          console.log('Skipping polling for renderer because refreshtime is 0')
           continue
         }
 
@@ -487,18 +513,24 @@ const loadObservationsInView = () => {
     }
   }
 
-  console.log('taskListByTimeAndDatasource:', taskListByTimeAndDatasource)
 
+  // Don't clear tasks here - let TaskManager handle it based on IDs
+  // Only track new task IDs
+  const newTaskIds = new Set<string>()
   const tasks = []
   for (const [refreshTime, datasourceItems] of Object.entries(taskListByTimeAndDatasource)) {
     for (const [dsId, _items] of Object.entries(datasourceItems)) {
-      const items: Datastream[] = uniq(_items)
+      const items: Datastream[] = uniqBy(_items, 'iotId')
       if (items.length > 0) {
         // Get the correct datasource to call events on
         const isDatasourcePrimary = dsId === datasourceId.value
 
-        tasks.push(new class extends Task {
-          readonly id = Math.random().toString()
+        // Create deterministic task ID based on datasource and datastream IDs
+        const itemIds = items.map(i => i.iotId || (i as any)['@iot.id']).sort().join(',')
+        const taskId = `obs-${dsId}-${refreshTime}-${itemIds}`
+
+        const task = new class extends Task {
+          readonly id = taskId
           private handle: number | undefined
 
           invoke() {
@@ -541,12 +573,16 @@ const loadObservationsInView = () => {
               }, (parseInt(refreshTime) * 1000))
             }
           }
-        }())
+        }()
+
+        tasks.push(task)
+        // Track task for cleanup
+        activeTasks.set(task.id, task)
       }
     }
   }
 
-  useTaskManager().addTasksAndIvnoke(tasks)
+  localTaskManager.addTasksAndIvnoke(tasks)
 
   isLoadingObservations = false
 
@@ -591,6 +627,39 @@ const zoomUpdated = (zoom: any) => {
 const centerUpdated = (center: any) => {
   config.value.center = center
 }
+
+// Cleanup on unmount
+onUnmounted(() => {
+  isUnmounting = true
+
+  // Clear all active tasks and their intervals DIRECTLY
+  // We use our local task references to stop the intervals
+  for (const [taskId, task] of activeTasks.entries()) {
+    try {
+      task.invoke() // This clears the interval using our local reference
+    } catch (e) {
+      console.warn('Error stopping task interval:', e)
+    }
+  }
+
+  // Clear the entire local TaskManager since this widget is unmounting
+  localTaskManager.clearAll()
+  activeTasks.clear()
+
+  // Unsubscribe from all datasources
+  for (const [dsId, unsubscribe] of datasourceUnsubscribeFunctions.entries()) {
+    try {
+      unsubscribe()
+    } catch (e) {
+      console.warn(`Error unsubscribing from datasource ${dsId}:`, e)
+    }
+  }
+  datasourceUnsubscribeFunctions.clear()
+  subscribedDatasources.clear()
+
+  // Clear caches
+  additionalDatasourcesData.value.clear()
+})
 </script>
 
 <template>

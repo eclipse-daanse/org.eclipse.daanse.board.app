@@ -11,18 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { injectable } from 'inversify'
 
-export interface IDataRetrieveable {
-  getData(type: string, options?: any): Promise<any>
-  getOriginalData(): any
-  callEvent: (event: string, params: any) => void
-  subscribe: (subscriber: () => any) => void
-  unsubscribe: (subscriber: () => any) => void
-  destroy: () => void
-  startPolling: (interval: number) => void
-  stopPolling: () => void
-}
+
 
 export interface IDatasourceRepository {
   getDatasource(datasourceName: string): IDataRetrieveable
