@@ -43,11 +43,71 @@ const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | 
 const showModal = defineModel<boolean>('show', { default: () => false })
 
 const layerModel = defineModel<LayerI | undefined>('layer', { default: () => undefined })
-const props = defineProps<{ services: Service[] }>()
-const { services } = toRefs(props)
+const props = defineProps<{ services: Service[], allLayers?: LayerI[] }>()
+const { services, allLayers } = toRefs(props)
 const styles = ref<any[]>([])
 const tabNo = ref(0)
 const selection = ref<any>(undefined)
+
+// Confirmation dialog state
+const showDeleteConfirmation = ref(false)
+const styleToDelete = ref<any>(null)
+const affectedLayers = ref<LayerI[]>([])
+
+// Check which layers use a specific style
+const getLayersUsingStyle = (styleId: string): LayerI[] => {
+  if (!allLayers?.value) return []
+  return allLayers.value.filter(layer =>
+    layer.styleIds?.includes(styleId)
+  )
+}
+
+// Open delete confirmation dialog
+const confirmDeleteStyle = (style: any) => {
+  const usedByLayers = getLayersUsingStyle(style.id)
+
+  if (usedByLayers.length > 0) {
+    styleToDelete.value = style
+    affectedLayers.value = usedByLayers
+    showDeleteConfirmation.value = true
+  } else {
+    // If no layers use it, delete immediately
+    performDelete(style)
+  }
+}
+
+// Actually perform the delete
+const performDelete = (style: any) => {
+  // Remove style from all layers that use it
+  affectedLayers.value.forEach(layer => {
+    const index = layer.styleIds?.indexOf(style.id)
+    if (index !== undefined && index !== -1) {
+      layer.styleIds?.splice(index, 1)
+    }
+  })
+
+  // Delete the style
+  const index = model.value.indexOf(style)
+  if (index !== -1) {
+    model.value.splice(index, 1)
+    if (selection.value?.id === style.id) {
+      selection.value = undefined
+    }
+  }
+
+  // Reset dialog state
+  showDeleteConfirmation.value = false
+  styleToDelete.value = null
+  affectedLayers.value = []
+}
+
+// Cancel delete
+const cancelDelete = () => {
+  showDeleteConfirmation.value = false
+  styleToDelete.value = null
+  affectedLayers.value = []
+}
+
 const addStyle = () => {
   if (layerModel.value?.type == 'OGCSTA') {
     model.value.push({
@@ -321,13 +381,7 @@ watch(selection,()=>{
                   icon="delete"
                   preset="secondary"
                   round
-                  @click="()=>{
-                    const index = model.indexOf(style);
-                    if(index !== -1){
-                      model.splice(index, 1);
-                      if(selection?.id === style.id) selection = undefined;
-                    }
-                  }"
+                  @click="confirmDeleteStyle(style)"
                 />
               </div>
             </div>
@@ -467,6 +521,28 @@ watch(selection,()=>{
     </div>
 
 
+  </VaModal>
+
+  <!-- Delete Confirmation Modal -->
+  <VaModal
+    v-model="showDeleteConfirmation"
+    title="Delete Style"
+    size="small"
+    ok-text="Delete"
+    cancel-text="Cancel"
+    @ok="performDelete(styleToDelete)"
+    @cancel="cancelDelete"
+  >
+    <div style="padding: 10px;">
+      <p><strong>Warning:</strong> This style "{{ styleToDelete?.name }}" is used by {{ affectedLayers.length }} layer(s):</p>
+      <ul style="margin: 10px 0; padding-left: 20px;">
+        <li v-for="(layer, index) in affectedLayers" :key="index">
+          {{ layer.name || layer.title || 'Unnamed Layer' }}
+        </li>
+      </ul>
+      <p>If you delete this style, it will be removed from all these layers.</p>
+      <p><strong>Do you want to continue?</strong></p>
+    </div>
   </VaModal>
 </template>
 
