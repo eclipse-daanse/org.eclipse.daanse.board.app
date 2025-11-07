@@ -35,6 +35,11 @@ import { MapSettings } from './gen/MapSettings'
 import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { IconSettings } from './gen/IconSettings'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import WFSLayer from './components/WFSLayer.vue'
+import GeoJsonLayer from './components/GeoJsonLayer.vue'
+import RestGeoJsonLayer from './components/RestGeoJsonLayer.vue'
+import OGCSTALayer from './components/OGCSTALayer.vue'
+import { useOGCService } from './composables/Service'
 
 const props = defineProps<{ datasourceId: string }>()
 const { datasourceId } = toRefs(props)
@@ -44,10 +49,12 @@ const defaultConfig = new MapSettings()
 
 const { filterFeatureCollection, compareDatastream, compareThing } = useComparator()
 const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils()
+const { createServiceWMS, createServiceWFS } = useOGCService()
 
 
 const data = ref<any>({})
 const additionalDatasourcesData = ref<Map<string, any>>(new Map())
+const servicesReady = ref(false) // Track when services are reconstructed
 const subscribedDatasources = new Set<string>() // Track which datasources are already subscribed
 const datasourceUnsubscribeFunctions = new Map<string, () => void>() // Track unsubscribe functions
 const loadingDatasources = new Set<string>() // Track which datasources are currently loading
@@ -192,9 +199,51 @@ const getLayerData = (layer: any) => {
   return data.value
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (config.value) {
     Object.assign(config.value, { ...defaultConfig, ...config.value })
+
+    // Reconstruct service instances for WMS/WFS layers after deserialization
+    if (config.value.layers) {
+      const newLayers = []
+      for (const layer of config.value.layers) {
+        if (layer.type === 'WMSLayer' && layer.service && !layer.service.getOperationUrl) {
+          // Service was deserialized as plain object, reconstruct WmsEndpoint
+          const serviceUrl = layer.service._capabilitiesUrl || layer.service.url || layer.service.serviceUrl
+          if (serviceUrl) {
+            try {
+              const newService = await createServiceWMS(serviceUrl)
+              newLayers.push({ ...layer, service: newService })
+            } catch (e) {
+              console.warn('Could not reconstruct WMS service for layer', layer.name, e)
+              newLayers.push(layer)
+            }
+          } else {
+            console.warn('WMS layer missing service URL:', layer.name)
+            newLayers.push(layer)
+          }
+        } else if (layer.type === 'WFSLayer' && layer.wfs_service && !layer.wfs_service.getFeatureUrl) {
+          // Service was deserialized as plain object, reconstruct WfsEndpoint
+          const serviceUrl = layer.wfs_service._capabilitiesUrl || layer.wfs_service.url || layer.wfs_service.serviceUrl
+          if (serviceUrl) {
+            try {
+              const newService = await createServiceWFS(serviceUrl)
+              newLayers.push({ ...layer, wfs_service: newService })
+            } catch (e) {
+              console.warn('Could not reconstruct WFS service for layer', layer.name, e)
+              newLayers.push(layer)
+            }
+          } else {
+            console.warn('WFS layer missing service URL:', layer.name)
+            newLayers.push(layer)
+          }
+        } else {
+          newLayers.push(layer)
+        }
+      }
+      config.value.layers = newLayers
+    }
+    servicesReady.value = true
   }
 
   const mapDiv = document.getElementById('mapholder')
@@ -425,6 +474,11 @@ const mapmove = debounce(() => {
 
 const loadObservationsInView = () => {
   if (isLoadingObservations) {
+    return
+  }
+
+  // Check if map is ready and mounted
+  if (!map.value || !(map.value as any)?.leafletObject) {
     return
   }
 
@@ -688,7 +742,7 @@ onUnmounted(() => {
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
         maxZoom:25}" :url="config.baseMapUrl"></l-tile-layer>
       <template v-for="(wmsLayer, index) in [...config.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
-        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer'"
+        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof wmsLayer.service.getOperationUrl === 'function'"
                         :attribution="wmsLayer.attribution"
                         :layers="wmsLayer.name!"
                         :name="wmsLayer.name"
@@ -696,249 +750,57 @@ onUnmounted(() => {
                         :transparent="true"
                         :url="(wmsLayer.service as  any).getOperationUrl('GetMap')"
                         :visible="(wmsLayer as any).checked"
-                        :z-index="config.layers.length - index"
+                        :z-index="getOriginalLayerIndex(wmsLayer)"
+                        :options="{ pane: `layer-pane-${getOriginalLayerIndex(wmsLayer)}` }"
                         format="image/png"
                         layer-type="base">
         </LWmsTileLayer>
-        <template v-if="wmsLayer.type == 'WFSLayer'">
-
-          <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
-            <!--<template v-if="compareDatastream(wmsLayer.wfs_service?.geoJson as BoxedDatastream, config.styles.find(style=>style.id==styleID)!)">-->
-            <l-geo-json v-if="!isPoint(wmsLayer.wfs_service?.geoJson)" ref="thingsLayer"
-                        :geojson="filterFeatureCollection(wmsLayer.wfs_service?.geoJson as any,config.styles.find(style=>style.id==styleID)!) as unknown as  GeoJsonObject[]"
-                        :options="getLayerOptions(wmsLayer)"
-                        :options-style="()=>config.styles.find(style=>style.id==styleID)?.renderer.area as any"></l-geo-json>
-            <!-- </template>-->
-          </template>
-        </template>
-        <template v-if="wmsLayer.type == 'GEOJSON'">
-          <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
-
-            <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
-              style.id==styleID)!).features)" :key="feature.id">
-              <l-geo-json v-if="!isPoint(feature.geometry)" ref="geojsonLayer"
-                          :geojson="feature"
-                          :options="getLayerOptions(wmsLayer)"
-                          :options-style="()=>config.styles.find(style=>
-                          style.id==styleID)?.renderer.area as any"></l-geo-json>
-
-              <l-marker
-                v-if="getPoint(feature.geometry)"
-                :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
-                :options="{ pane: getMarkerPane(wmsLayer) }"
-                >
-                <l-icon class-name="someExtraClass">
-                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
-                    <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin icon">
-                      <div class="inner">
-                        <IconWidget :config="config.styles.find(style=>style.id==styleID)?.renderer.point" v-model:configv="(config.styles.find(style=>style.id==styleID)!.renderer.point) as IconSettings"></IconWidget>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='prop'">
-                    <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin contain marker">
-                      <div class="inner">
-                        {{ feature.properties![(config.styles.find(style=>style.id==styleID)?.renderer.point_prop) ?? ''] }}
-                      </div>
-                    </div>
-                  </template>
-                  <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='image'">
-                    <div class="image-marker" :style="{width: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px', height: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px'}">
-                      <img v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
-                            :src="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
-                            :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
-                    </div>
-                  </template>
-                </l-icon>
-              </l-marker>
-
-            </template>
-            <!--<template v-if="compareDatastream(wmsLayer.wfs_service?.geoJson as BoxedDatastream, config.styles.find(style=>style.id==styleID)!)">-->
-
-            <!-- </template>-->
-          </template>
-        </template>
-        <template v-if="wmsLayer.type == 'REST-GEOJSON'">
-          <template v-for="styleID in wmsLayer.styleIds" :key="styleID">
-            <template v-if="getLayerData(wmsLayer) && getLayerData(wmsLayer).features">
-              <!-- Render non-point geometries (Polygons, LineStrings, etc.) -->
-              <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
-                style.id==styleID)!).features)" :key="'area-'+feature.id">
-                <l-geo-json v-if="feature.geometry && !isPoint(feature.geometry)" ref="restGeojsonLayer"
-                            :geojson="feature"
-                            :options="getLayerOptions(wmsLayer)"
-                            :options-style="()=>config.styles.find(style=>
-                            style.id==styleID)?.renderer.area as any"></l-geo-json>
-              </template>
-
-              <!-- Render point geometries with custom markers -->
-              <template v-for="feature in (filterFeatureCollection(getLayerData(wmsLayer),config.styles.find(style=>
-                style.id==styleID)!).features)" :key="'point-'+feature.id">
-                <l-marker
-                  v-if="feature.geometry && isPoint(feature.geometry) && getPoint(feature.geometry)"
-                  :lat-lng="getPoint(feature.geometry) as  L.LatLngExpression"
-                  :options="{ pane: getMarkerPane(wmsLayer) }"
-                  >
-                  <l-icon class-name="someExtraClass">
-                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='icon'">
-                      <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin icon">
-                        <div class="inner">
-                          <IconWidget :config="config.styles.find(style=>style.id==styleID)?.renderer.point" v-model:configv="(config.styles.find(style=>style.id==styleID)!.renderer.point) as IconSettings"></IconWidget>
-                        </div>
-                      </div>
-                    </template>
-                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='prop'">
-                      <div :style="{background:config.styles.find(style=>style.id==styleID)?.renderer.pointPin.color}" class="pin contain marker">
-                        <div class="inner">
-                          {{ feature.properties![(config.styles.find(style=>style.id==styleID)?.renderer.point_prop) ?? ''] }}
-                        </div>
-                      </div>
-                    </template>
-                    <template v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_render_as=='image'">
-                      <div class="image-marker" :style="{width: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px', height: (config.styles.find(style=>style.id==styleID)?.renderer.point_image_size || 32) + 'px'}">
-                        <img v-if="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
-                              :src="config.styles.find(style=>style.id==styleID)?.renderer.point_image_url"
-                              :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
-                      </div>
-                    </template>
-                  </l-icon>
-                </l-marker>
-              </template>
-
-            </template>
-          </template>
-        </template>
-        <template v-if="wmsLayer.type=='OGCSTA'">
-          <template v-for="renderer in (config.OGCSstyles ?? [])" :key="renderer.id">
-
-            <template v-for="location in getLayerLocations(wmsLayer)" :key="location['@iot.id']+'markr'">
-              <template v-for="thing in location.things??[]" :key="thing['@iot.id']+'markrThing'">
-                <template v-if="compareThing(thing, renderer)">
-                  <template v-if="isFeatureCollection(location.location)">
-                    <l-geo-json v-if="!isPoint(location.location)" ref="thingsLayer"
-                                :geojson="location.location" :options="getLayerOptions(wmsLayer)"
-                                :options-style="()=>renderer.renderer.area as any"></l-geo-json>
-                  </template>
-
-
-                  <l-marker
-                    v-if="getPoint(location.location)"
-                    :lat-lng="getPoint(location.location) as  L.LatLngExpression"
-                    :options="{ pane: getMarkerPane(wmsLayer) }"
-                    @click="openThing[thing.iotId??'null']=(openThing[thing.iotId??'null'])?!openThing[thing.iotId??'null']:true">
-                    <l-icon class-name="someExtraClass">
-                      <template v-if="renderer.renderer.point_render_as=='icon'">
-                        <div :style="{background:renderer.renderer.pointPin.color}" class="pin icon">
-                          <div class="inner">
-                            <IconWidget :config="renderer.renderer.point" v-model:configv="renderer.renderer.point"></IconWidget>
-                          </div>
-                        </div>
-
-
-                      </template>
-                      <template v-if="renderer.renderer.point_render_as=='prop'">
-                        <div :style="{background:renderer.renderer.pointPin.color}"
-                              class="pin contain marker">
-                          <div class="inner">
-                            {{ thing[(renderer.renderer.point_prop) ?? ''] }}
-                          </div>
-                        </div>
-                      </template>
-                      <template v-if="renderer.renderer.point_render_as=='image'">
-                        <div class="image-marker" :style="{width: (renderer.renderer.point_image_size || 32) + 'px', height: (renderer.renderer.point_image_size || 32) + 'px'}">
-                          <img v-if="renderer.renderer.point_image_url"
-                                :src="renderer.renderer.point_image_url"
-                                :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
-                        </div>
-                      </template>
-                    </l-icon>
-                  </l-marker>
-                  <template v-for="(datastream) in thing.datastreams??[]" :key="(datastream as BoxedDatastream).iotId">
-                    <template v-for="subrenderer in renderer.ds_renderer" :key="subrenderer.id">
-
-                      <template
-                        v-if="compareDatastream(datastream as BoxedDatastream, subrenderer) /*&& openThing[thing['@iot.id']]*/">
-                        <l-geo-json ref="thingsLayer"
-                                    :geojson="transformToGeoJson(datastream.observedArea)" :options="getLayerOptions(wmsLayer)"
-                                    :options-style="()=>subrenderer.renderer.area as any"></l-geo-json>
-                        <l-marker
-                          v-if="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
-                          :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
-                          :options="{ pane: getMarkerPane(wmsLayer) }">
-                          <l-icon class-name="someExtraClass">
-                            <template v-if="subrenderer.renderer.point_render_as=='icon'">
-                              <div :style="{background:subrenderer.renderer.pointPin.color}"
-                                    class="pin icon round">
-                                <div class="inner">
-                                  <IconWidget :config="subrenderer.renderer.point" v-model:configv="subrenderer.renderer.point"></IconWidget>
-                                </div>
-                                <template v-if="datastream.observations">
-                                  <component
-                                    :is="getById(subrenderer.observation?.component)?.component"
-                                    v-if="getById(subrenderer.observation?.component)"
-                                    :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[datastream.observations.length-1]?.result"
-                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
-                                    :marker-size="45"></component>
-                                </template>
-                              </div>
-                            </template>
-                            <template v-if="subrenderer.renderer.point_render_as=='prop'">
-                              <div :style="{background:subrenderer.renderer.pointPin.color}"
-                                    class="pin round contain">
-                                <div class="inner">
-                                  {{ datastream[((subrenderer as unknown as IRenderer).renderer.point_prop) ?? ''] }}
-                                </div>
-                                <template v-if="datastream.observations">
-                                  <component
-                                    :is="getById(subrenderer.observation?.component)?.component"
-                                    v-if="getById(subrenderer.observation?.component)"
-                                    :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[datastream.observations.length-1]?.result"
-                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
-                                    :marker-size="45"></component>
-                                </template>
-                              </div>
-                            </template>
-                            <template v-if="subrenderer.renderer.point_render_as=='image'">
-                              <div class="image-marker" :style="{width: (subrenderer.renderer.point_image_size || 32) + 'px', height: (subrenderer.renderer.point_image_size || 32) + 'px'}">
-                                <img v-if="subrenderer.renderer.point_image_url"
-                                      :src="subrenderer.renderer.point_image_url"
-                                      :style="{width: '100%', height: '100%', objectFit: 'contain'}" />
-                              </div>
-                                <template v-if="datastream.observations">
-                                  <component
-                                    :is="getById(subrenderer.observation?.component)?.component"
-                                    v-if="getById(subrenderer.observation?.component)"
-                                    :config="subrenderer.observation?.setting"
-                                    :data="datastream.observations[datastream.observations.length-1]?.result"
-                                    :key="datastream.observations[datastream.observations.length-1]?.phenomenonTime"
-                                    :marker-size="0"></component>
-                                </template>
-                            </template>
-                            <template v-if="subrenderer.renderer.point_render_as=='none'">
-                              <template v-if="datastream.observations">
-                                <component
-                                  :is="getById(subrenderer.observation?.component)?.component"
-                                  v-if="getById(subrenderer.observation?.component)"
-                                  :config="subrenderer.observation?.setting"
-                                  :data="datastream.observations[0]?.result"
-                                  :marker-size="renderer.renderer.point_image_size||32"></component>
-                              </template>
-                            </template>
-
-
-                          </l-icon>
-                        </l-marker>
-                      </template>
-                    </template>
-                  </template>
-                </template>
-              </template>
-            </template>
-          </template>
-
-        </template>
+        <WFSLayer
+          v-if="wmsLayer.type == 'WFSLayer'"
+          :geo-json="wmsLayer.wfs_service?.geoJson"
+          :style-ids="wmsLayer.styleIds"
+          :layer-options="getLayerOptions(wmsLayer)"
+          :filter-feature-collection="filterFeatureCollection"
+          :get-style-by-id="getStyleById"
+          :is-point="isPoint"
+        />
+        <GeoJsonLayer
+          v-if="wmsLayer.type == 'GEOJSON'"
+          :layer-data="getLayerData(wmsLayer)"
+          :style-ids="wmsLayer.styleIds"
+          :layer-options="getLayerOptions(wmsLayer)"
+          :marker-pane="getMarkerPane(wmsLayer)"
+          :filter-feature-collection="filterFeatureCollection"
+          :get-style-by-id="getStyleById"
+          :is-point="isPoint"
+          :get-point="getPoint"
+        />
+        <RestGeoJsonLayer
+          v-if="wmsLayer.type == 'REST-GEOJSON'"
+          :layer-data="getLayerData(wmsLayer)"
+          :style-ids="wmsLayer.styleIds"
+          :layer-options="getLayerOptions(wmsLayer)"
+          :marker-pane="getMarkerPane(wmsLayer)"
+          :filter-feature-collection="filterFeatureCollection"
+          :get-style-by-id="getStyleById"
+          :is-point="isPoint"
+          :get-point="getPoint"
+        />
+        <OGCSTALayer
+          v-if="wmsLayer.type == 'OGCSTA'"
+          :locations="getLayerLocations(wmsLayer)"
+          :renderers="config.OGCSstyles ?? []"
+          :layer-options="getLayerOptions(wmsLayer)"
+          :marker-pane="getMarkerPane(wmsLayer)"
+          :compare-thing="compareThing"
+          :compare-datastream="compareDatastream"
+          :is-feature-collection="isFeatureCollection"
+          :is-point="isPoint"
+          :get-point="getPoint"
+          :get-pointform-area="getPointformArea"
+          :transform-to-geo-json="transformToGeoJson"
+          :get-by-id="getById"
+        />
       </template>
 
     </l-map>
