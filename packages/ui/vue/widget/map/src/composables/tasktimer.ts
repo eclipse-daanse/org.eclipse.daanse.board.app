@@ -38,13 +38,12 @@ const timer = ref<Map<string, TaskI>>(new Map<string, TaskI>())
 export function useTaskManager() {
 
   const addTasksAndIvnoke = (tasks: TaskI[]) => {
-
     let listofTasks = Array.from(timer.value.keys())
     let toHold = intersection(listofTasks, tasks.map(t => t.id))
     let toAdd = difference(tasks.map(t => t.id), listofTasks)
+
     timer.value.forEach((task, key) => {
       if (!toHold.includes(key)) {
-        console.log('invoking Task:' + key)
         task.invoke()
         timer.value.delete(key)
       }
@@ -52,14 +51,11 @@ export function useTaskManager() {
     tasks.forEach(t => {
       if (toAdd.includes(t.id)) {
         if (!timer.value.has(t.id)) {
-          console.log('adding Task:' + t.id)
           timer.value.set(t.id, t)
           t.run()
         }
       }
     })
-
-
   }
   const invokeTask = (id: string): void => {
     timer.value.get(id)?.invoke()
@@ -69,9 +65,21 @@ export function useTaskManager() {
     return timer.value.has(id)
   }
 
+  const clearAll = () => {
+    timer.value.forEach((task, key) => {
+      try {
+        task.invoke()
+      } catch (e) {
+        console.warn('Error invoking task during clearAll:', key, e)
+      }
+    })
+    timer.value.clear()
+  }
+
   return {
     addTasksAndIvnoke,
     invokeTask,
-    hasTask
+    hasTask,
+    clearAll
   }
 }

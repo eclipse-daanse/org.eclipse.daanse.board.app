@@ -12,7 +12,8 @@
  **********************************************************************/
 
 import { UsesComputedVariable } from 'org.eclipse.daanse.board.app.lib.variables'
-
+import { type IDataRetrieveable } from './api/IDataRetrieveable'
+export {type IDataRetrieveable} from './api/IDataRetrieveable'
 // import type ConnectionRepository from "./ConnectionRepository";
 // import UsesComputedVariable from "./connections/UsesComputedVariable";
 // import type DatasourceRepository from "./DatasourceRepository";
@@ -25,7 +26,7 @@ export interface IBaseConnectionConfiguration {
 }
 
 // export default abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable {
-export abstract class BaseDatasource extends UsesComputedVariable {
+export abstract class BaseDatasource extends UsesComputedVariable implements IDataRetrieveable{
   private subscribers: any[] = []
 
   protected pollingInterval: number = 5000
@@ -52,6 +53,10 @@ export abstract class BaseDatasource extends UsesComputedVariable {
 
   subscribe(subscriber: () => any) {
     this.subscribers.push(subscriber)
+    // Return unsubscribe function
+    return () => {
+      this.unsubscribe(subscriber)
+    }
   }
 
   unsubscribe(subscriber: () => any) {
