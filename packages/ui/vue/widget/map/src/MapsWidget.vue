@@ -204,6 +204,42 @@ onMounted(async () => {
   if (config.value) {
     Object.assign(config.value, { ...defaultConfig, ...config.value })
 
+    // Reconstruct services from URLs after deserialization
+    if (config.value.services) {
+      for (const service of config.value.services) {
+        // Check if service needs reconstruction by checking for methods
+        if (service.type === 'WMS') {
+          const hasGetLayersMethod = typeof service.service?.getLayers === 'function'
+          if (!hasGetLayersMethod && service.url) {
+            logServices('Reconstructing WMS service from URL: %s', service.url)
+            try {
+              service.service = await createServiceWMS(service.url)
+              logServices('WMS service reconstructed successfully')
+              ;(service as any).reconstructionFailed = false
+            } catch (e) {
+              logServices('Could not reconstruct WMS service: %o', e)
+              ;(service as any).reconstructionFailed = true
+            }
+          }
+        } else if (service.type === 'WFS') {
+          const hasGetFeatureTypesMethod = typeof service.service?.getFeatureTypes === 'function'
+          if (!hasGetFeatureTypesMethod && service.url) {
+            logServices('Reconstructing WFS service from URL: %s', service.url)
+            try {
+              service.service = await createServiceWFS(service.url)
+              logServices('WFS service reconstructed successfully')
+              ;(service as any).reconstructionFailed = false
+            } catch (e) {
+              logServices('Could not reconstruct WFS service: %o', e)
+              ;(service as any).reconstructionFailed = true
+            }
+          }
+        }
+      }
+      // Trigger reactivity by reassigning the array
+      config.value.services = [...config.value.services]
+    }
+
     // Reconstruct service instances for WMS/WFS layers after deserialization
     if (config.value.layers) {
       const newLayers = []
@@ -214,14 +250,14 @@ onMounted(async () => {
           if (serviceUrl) {
             try {
               const newService = await createServiceWMS(serviceUrl)
-              newLayers.push({ ...layer, service: newService })
+              newLayers.push({ ...layer, service: newService, reconstructionFailed: false })
             } catch (e) {
-              logServices('Could not reconstruct WMS service for layer', layer.name, e)
-              newLayers.push(layer)
+              logServices('Could not reconstruct WMS service for layer %s: %o', layer.name, e)
+              newLayers.push({ ...layer, reconstructionFailed: true })
             }
           } else {
-            logServices('WMS layer missing service URL:', layer.name)
-            newLayers.push(layer)
+            logServices('WMS layer missing service URL: %s', layer.name)
+            newLayers.push({ ...layer, reconstructionFailed: true })
           }
         } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
           // WFS service needs reconstruction - check if it has fetch method
@@ -235,14 +271,14 @@ onMounted(async () => {
                 const newWfsService = new WFS(wfsUrl)
                 // Fetch the GeoJSON data
                 await newWfsService.fetch()
-                newLayers.push({ ...layer, wfs_service: newWfsService })
+                newLayers.push({ ...layer, wfs_service: newWfsService, reconstructionFailed: false })
               } catch (e) {
-                logServices('Could not reconstruct WFS service for layer', layer.name, e)
-                newLayers.push(layer)
+                logServices('Could not reconstruct WFS service for layer %s: %o', layer.name, e)
+                newLayers.push({ ...layer, reconstructionFailed: true })
               }
             } else {
-              logServices('WFS layer missing service URL:', layer.name)
-              newLayers.push(layer)
+              logServices('WFS layer missing service URL: %s', layer.name)
+              newLayers.push({ ...layer, reconstructionFailed: true })
             }
           } else {
             // WFS service is already valid, just keep it
