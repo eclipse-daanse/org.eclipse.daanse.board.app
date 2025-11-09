@@ -22,6 +22,7 @@ import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
 import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { Container } from 'inversify'
+import { logServices, logDatasource } from './utils/logger'
 
 const container = inject('container') as Container
 const instance = getCurrentInstance()
@@ -47,8 +48,9 @@ const drag = ref(false)
 const selectedNodes = ref([])
 
 
+
 watch(selectedNodes, (chng) => {
-  console.log(chng)
+  logServices('Selected nodes changed:', chng)
 })
 const dragOptions = computed(() => {
   return {
@@ -104,22 +106,36 @@ const addChilds = (layer: any, service: any) => {
 const serviceNodesCache = ref<Map<string, any>>(new Map())
 
 const services = computedAsync(async () => {
-  console.log('computedAsync')
+  logServices('Computing services async')
   const ret: any = []
+
   for (let service of widgetSettings.value.services) {
-    console.log(service)
-    if (service.type == 'WFS') {
-      console.log(service.service instanceof WfsEndpoint)
-      if (!(service.service instanceof WfsEndpoint)) {
-        serviceLoading.value = true
-        service.service = await OGCService.createServiceWFS(service.url)
-        serviceLoading.value = false
-      }
+    logServices('Service:', service)
+
+    const isFailed = !!(service as any).reconstructionFailed
+
+    if (isFailed) {
+      // Add failed service to tree with error marker
+      logServices('Service failed reconstruction:', service.url)
       ret.push({
-        service: service.service,
-        type: 'WFS',
+        service: { _info: { title: `${service.url} (failed)`, name: service.url } },
+        type: service.type,
         level: 0,
-        childs: service.service.getFeatureTypes().map(
+        childs: [],
+        failed: true
+      })
+      continue
+    }
+
+    if (service.type == 'WFS') {
+      logServices('Processing WFS service')
+
+      if (service.service && typeof service.service.getFeatureTypes === 'function') {
+        ret.push({
+          service: service.service,
+          type: 'WFS',
+          level: 0,
+          childs: service.service.getFeatureTypes().map(
           (featureType: WfsFeatureTypeBrief) => {
             return {
               'id': v4(),
@@ -133,27 +149,25 @@ const services = computedAsync(async () => {
               'attribution': ''
             }
           })
-      })
-    } else {
-      console.log('else')
-      console.log(service.service)
-      if (!(service.service instanceof WmsEndpoint)) {
-        console.log('creating WMS Service')
-        serviceLoading.value = true
-        service.service = await OGCService.createServiceWMS(service.url)
-        serviceLoading.value = false
+        })
+      } else {
+        logServices('WFS service missing getFeatureTypes method')
       }
+    } else {
+      logServices('Processing WMS service')
 
-      ret.push({
-        service: service.service,
-        type: 'WMS',
-        childs: addChilds(service.service.getLayers(), service.service),
-        level: 0
-      })
-      console.log('after push'
-      )
+      if (service.service && typeof service.service.getLayers === 'function') {
+        ret.push({
+          service: service.service,
+          type: 'WMS',
+          childs: addChilds(service.service.getLayers(), service.service),
+          level: 0
+        })
+        logServices('WMS service added to tree')
+      } else {
+        logServices('WMS service missing getLayers method')
+      }
     }
-
   }
   // Process primary datasource and all additional datasources
   const allDatasourceIds = [widgetSettings.value.datasourceId, ...widgetSettings.value.datasourceIds].filter(Boolean)
@@ -165,7 +179,7 @@ const services = computedAsync(async () => {
 
     try {
       const OGCStore = datasourceRepository.getDatasource(id)
-      console.log(datasourceRepository.getDatasourceType(id))
+      logDatasource('Datasource type:', datasourceRepository.getDatasourceType(id))
       const dsType = datasourceRepository.getDatasourceType(id)
 
       // Check cache first
@@ -238,7 +252,7 @@ const services = computedAsync(async () => {
         })
       }
     } catch (e) {
-      console.log('service not supported for datasource:', id)
+      logDatasource('Service not supported for datasource:', id)
     }
   }
 
@@ -252,7 +266,7 @@ const addLayer = async (node: any) => {
 
   if (newLayer.type == 'WFSLayer') {
     const data = await newLayer.wfs_service.fetch()
-    console.log(data)
+    logServices('WFS data fetched:', data)
   }
 
   widgetSettings.value.layers.push(newLayer)
@@ -378,13 +392,17 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
       <template #item="{ element  }">
         <li class="list-group-item">
           <div class="row dragIcon">
-            <VaIcon v-if="element.checked" class="material-icons" @click="element.checked=false">
+            <VaIcon v-if="element.reconstructionFailed" class="material-icons" style="color: #ff6b6b;">
+              error
+            </VaIcon>
+            <VaIcon v-else-if="element.checked" class="material-icons" @click="element.checked=false">
               layers
             </VaIcon>
-            <VaIcon v-if="!element.checked" class="material-icons" @click="element.checked=true">
+            <VaIcon v-else class="material-icons" @click="element.checked=true">
               layers_clear
             </VaIcon>
             {{ element.title }}
+            <span v-if="element.reconstructionFailed" style="color: #ff6b6b; font-size: 0.85em; margin-left: 8px;">(failed)</span>
           </div>
           <div class="row nhidden options">
             <VaIcon class="material-icons">
@@ -451,7 +469,10 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
       <VaTreeView v-if="services" :nodes="services" childrenBy="childs">
         <template #content="node">
           <template v-if="node.level == 0">
-            <VaIcon class="material-icons">
+            <VaIcon v-if="node.failed" class="material-icons" style="color: #ff6b6b;">
+              error
+            </VaIcon>
+            <VaIcon v-else class="material-icons">
               cable
             </VaIcon>
 

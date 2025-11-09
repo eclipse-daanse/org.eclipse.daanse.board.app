@@ -302,10 +302,10 @@
   resolved "https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.10.0.tgz#b444f8aafdfa8c497313c8c0f0e7e2e978c53df5"
   integrity sha512-fdRs9PSrBF7QUntpZpq6BTw58fhgGJojgg39m9oFOJGZT+nip9b0so5cYY1oWl5pvemDLr0cPPsH46vwThEbpQ==
 
-"@camptocamp/ogc-client@^1.2.0":
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/@camptocamp/ogc-client/-/ogc-client-1.3.0.tgz#bb4a7f5a7945ebdc1169fc0e3f1eb0784c0c922f"
-  integrity sha512-E1g11pBbVyWRudlWMVJrHtSfwK6nvCP0bLy8+RyCWLjlEEg92BICKep1Eg/daS/0d2Gjxlpnr1/aXowvvnosMA==
+"@camptocamp/ogc-client@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/@camptocamp/ogc-client/-/ogc-client-1.2.0.tgz#4e8b89aadd882964ae22fcd2c7ebcc4a83981d72"
+  integrity sha512-rjnVn32SxWkmZ/S/SLqNRM7iSmWF1xrNnsEaiWtybQOSDHuQUqIrNLix3yDgxrJ6EssIYeAkEMuWJvesRoF++g==
   dependencies:
     "@rgrove/parse-xml" "^4.1.0"
     node-fetch "^3.3.1"

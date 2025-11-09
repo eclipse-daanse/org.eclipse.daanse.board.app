@@ -19,21 +19,35 @@ import { v4 } from 'uuid'
 
 const useOGCService = () => {
 
+  // Helper to add timeout to promises
+  const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) =>
+        setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs)
+      )
+    ])
+  }
+
   const createServiceWMS = async (url: string) => {
     let service = undefined
     try {
-      service = await new WmsEndpoint(url).isReady()
+      // 10 second timeout for service initialization
+      service = await withTimeout(new WmsEndpoint(url).isReady(), 10000)
     } catch (e) {
-      console.log('not a WFS Services. skipped')
+      console.log('not a WMS Service:', e)
+      throw e  // Re-throw error so caller can handle it
     }
     return service
   }
   const createServiceWFS = async (url: string) => {
     let service = undefined
     try {
-      service = await new WfsEndpoint(url).isReady()
+      // 10 second timeout for service initialization
+      service = await withTimeout(new WfsEndpoint(url).isReady(), 10000)
     } catch (e) {
-      console.log('not a WMS Services. skipped')
+      console.log('not a WFS Service:', e)
+      throw e  // Re-throw error so caller can handle it
     }
     return service
 

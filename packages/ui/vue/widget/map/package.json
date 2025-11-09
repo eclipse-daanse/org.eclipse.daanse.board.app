@@ -41,7 +41,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@camptocamp/ogc-client": "^1.2.0",
+    "@camptocamp/ogc-client": "1.2.0",
     "@turf/boolean-contains": "^7.2.0",
     "@turf/helpers": "^7.2.0",
     "@turf/point-on-feature": "^7.2.0",
