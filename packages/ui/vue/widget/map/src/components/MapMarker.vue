@@ -37,8 +37,7 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
       <div class="inner">
         <IconWidget
           v-if="iconConfig"
-          :config="iconConfig"
-          v-model:configv="iconConfig"
+          :configv="iconConfig"
         />
       </div>
       <slot name="observation" />
