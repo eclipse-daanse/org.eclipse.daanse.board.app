@@ -29,10 +29,10 @@
     "proj4": "^2.15.0",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
     "vue-tsc": "^2.2.8",
-    "vite-plugin-libcss": "^1.1.1"
+    "@types/debug": "^4.1.12"
   },
   "peerDependencies": {
     "vue": "^3.5.13"
@@ -46,14 +46,15 @@
     "@turf/helpers": "^7.2.0",
     "@turf/point-on-feature": "^7.2.0",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "debug": "^4.4.3",
     "geojson": "^0.5.0",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
+    "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.ogcsta": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.icon": "^0.0.1-next.1",
     "vue-leaflet": "^0.1.0",
-    "vuedraggable-es": "^4.1.1",
-    "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1"
+    "vuedraggable-es": "^4.1.1"
   }
 }

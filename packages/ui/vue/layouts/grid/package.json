@@ -30,7 +30,8 @@
     "org.eclipse.daanse.board.app.ui.vue.stores.layout": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.wrapper": "0.0.1-next.1",
-    "org.eclipse.daanse.board.app.ui.vue.stores.widgets":  "0.0.1-next.1"
+    "org.eclipse.daanse.board.app.ui.vue.stores.widgets":  "0.0.1-next.1",
+    "grid-layout-plus": "^1.1.1"
   },
   "publishConfig": {
     "access": "public"

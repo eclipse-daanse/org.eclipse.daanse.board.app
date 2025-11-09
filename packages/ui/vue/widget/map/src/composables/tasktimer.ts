@@ -33,9 +33,9 @@ export abstract class Task implements TaskI {
 
 }
 
-const timer = ref<Map<string, TaskI>>(new Map<string, TaskI>())
-
 export function useTaskManager() {
+  // Create instance-specific timer to avoid shared state between widget instances
+  const timer = ref<Map<string, TaskI>>(new Map<string, TaskI>())
 
   const addTasksAndIvnoke = (tasks: TaskI[]) => {
     let listofTasks = Array.from(timer.value.keys())

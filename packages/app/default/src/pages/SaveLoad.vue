@@ -122,12 +122,12 @@ const nodes = computedAsync(async () => {
   })
 })
 
-const sameName = computedAsync(async () => {
+/*const sameName = computedAsync(async () => {
   const fu = new URL((selectedRepo.value as Repository).uri)
   fu.pathname = save_Ename.value + '.json'
   const entity_exists = await (selectedRepo.value as Repository).getEntityByUri(fu)
   return entity_exists != null
-})
+})*/
 
 
 const RepoClick = async (row: any) => {

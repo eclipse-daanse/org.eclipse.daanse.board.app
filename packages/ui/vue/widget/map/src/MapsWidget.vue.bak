@@ -99,7 +99,7 @@ const loadDatasourceData = async (dsId: string) => {
 
   // Skip if already loading
   if (loadingDatasources.has(dsId)) {
-    logDatasource('Datasource', dsId, 'is already loading, skipping')
+    console.log('Datasource', dsId, 'is already loading, skipping')
     return
   }
 
@@ -132,7 +132,7 @@ const loadDatasourceData = async (dsId: string) => {
       }
     }
   } catch (e) {
-    logDatasource('Could not get datasource data for', dsId, e)
+    console.warn('Could not get datasource data for', dsId, e)
   } finally {
     loadingDatasources.delete(dsId)
   }
@@ -216,11 +216,11 @@ onMounted(async () => {
               const newService = await createServiceWMS(serviceUrl)
               newLayers.push({ ...layer, service: newService })
             } catch (e) {
-              logServices('Could not reconstruct WMS service for layer', layer.name, e)
+              console.warn('Could not reconstruct WMS service for layer', layer.name, e)
               newLayers.push(layer)
             }
           } else {
-            logServices('WMS layer missing service URL:', layer.name)
+            console.warn('WMS layer missing service URL:', layer.name)
             newLayers.push(layer)
           }
         } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
@@ -237,11 +237,11 @@ onMounted(async () => {
                 await newWfsService.fetch()
                 newLayers.push({ ...layer, wfs_service: newWfsService })
               } catch (e) {
-                logServices('Could not reconstruct WFS service for layer', layer.name, e)
+                console.warn('Could not reconstruct WFS service for layer', layer.name, e)
                 newLayers.push(layer)
               }
             } else {
-              logServices('WFS layer missing service URL:', layer.name)
+              console.warn('WFS layer missing service URL:', layer.name)
               newLayers.push(layer)
             }
           } else {
@@ -277,7 +277,7 @@ watch(data, (value, oldValue, onCleanup) => {
 const loadHistoricalLocationsForAllThings = () => {
   // Check if there are any OGCSTA styles configured
   if (!config.value?.OGCSstyles || config.value.OGCSstyles.length === 0) {
-    logObservations('No OGCSTA styles configured, skipping historical locations load')
+    console.log('📍 No OGCSTA styles configured, skipping historical locations load')
     return
   }
 
@@ -317,7 +317,7 @@ const loadHistoricalLocationsForAllThings = () => {
   const matchingThings = Array.from(matchingThingsMap.values())
 
   if (matchingThings.length > 0) {
-    logObservations(`Setting historical locations filter for ${matchingThings.length} matching things`)
+    console.log(`📍 Setting historical locations filter for ${matchingThings.length} matching things`)
     // Set filter for primary datasource
     callEvent(FILTER, { historicalLocations: matchingThings })
 
@@ -330,11 +330,11 @@ const loadHistoricalLocationsForAllThings = () => {
           datasource.callEvent(FILTER, { historicalLocations: matchingThings })
         }
       } catch (e) {
-        logDatasource('Could not call event on datasource', dsId, e)
+        console.warn('Could not call event on datasource', dsId, e)
       }
     }
   } else {
-    logObservations('No things match the configured style filters')
+    console.log('📍 No things match the configured style filters')
   }
 }
 
@@ -357,7 +357,7 @@ const setFixed = ()=>{
       map3.zoomControl.addTo(map3)
     }
   } catch (e) {
-    logMap('Error in setFixed:', e)
+    console.log(e)
   }
 }
 watch(() => config.value.fixed, (value, oldValue, onCleanup) => {
@@ -463,7 +463,7 @@ watch(() => config.value?.styles, (newStyles) => {
 
 const maploaded = () => {
   mounted = true
-  logMap('map ready')
+  console.log('map ready')
   setFixed()
   createLayerPanes()
   //loadObservationsInView();
@@ -520,7 +520,7 @@ const loadObservationsInView = () => {
 
   let inBounds = (map.value as any)?.leafletObject.getBounds()
   if (!inBounds) {
-    logMap('No map bounds available yet')
+    console.log('No map bounds available yet')
     return
   }
 
@@ -599,7 +599,7 @@ const loadObservationsInView = () => {
           geoJsonFeature = geoJsonCache.get(location)
           inBoundsCheck = booleanContains(bboxFeature, geoJsonFeature)
         } catch (e) {
-          logObservations('FeatureCollection not supported')
+          console.log('FeatureCollection not supported')
           inBoundsCheck = false
         }
       }
@@ -664,7 +664,7 @@ const loadObservationsInView = () => {
                   datasource.callEvent(FILTER, { observations: items })
                 }
               } catch (e) {
-                logDatasource('Could not call event on datasource', dsId, e)
+                console.warn('Could not call event on datasource', dsId, e)
               }
             }
 
@@ -680,7 +680,7 @@ const loadObservationsInView = () => {
                       datasource.callEvent(FILTER, { observations: items })
                     }
                   } catch (e) {
-                    logDatasource('Could not call event on datasource', dsId, e)
+                    console.warn('Could not call event on datasource', dsId, e)
                   }
                 }
               }, (parseInt(refreshTime) * 1000))
@@ -751,7 +751,7 @@ onUnmounted(() => {
     try {
       task.invoke() // This clears the interval using our local reference
     } catch (e) {
-      logTasks('Error stopping task interval:', e)
+      console.warn('Error stopping task interval:', e)
     }
   }
 
@@ -764,7 +764,7 @@ onUnmounted(() => {
     try {
       unsubscribe()
     } catch (e) {
-      logDatasource(`Error unsubscribing from datasource ${dsId}:`, e)
+      console.warn(`Error unsubscribing from datasource ${dsId}:`, e)
     }
   }
   datasourceUnsubscribeFunctions.clear()
