@@ -51,6 +51,9 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
   private configuration!: IOGCSTAConfigartion;
   connection: string = ''
+  private mqttConnection: IConnection | null = null
+  private subscribedDatastreams: Map<string, string> = new Map() // datastreamId -> topic
+  private initialLoadDone: boolean = false
   requestFlag: { key: string; params: any } = {
     key: FILTERRESET,
     params: undefined,
@@ -75,6 +78,19 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     if (!configuration.connection) throw new Error('Connetion must be set')
     this.connection = configuration.connection
     this.requestFlag = { key: FILTERRESET, params: undefined }
+
+    // Setup MQTT Connection if configured
+    if (configuration.mqttConnection && this.connectionRepository) {
+      try {
+        this.mqttConnection = this.connectionRepository.getConnection(configuration.mqttConnection)
+        this.setupMQTTMessageHandler()
+        console.log('OGCSTA: MQTT Connection established:', configuration.mqttConnection)
+      } catch (e) {
+        console.error('OGCSTA: Could not establish MQTT connection:', e)
+        this.mqttConnection = null
+      }
+    }
+
     this.setupVariableWatchers();
   }
 
@@ -122,6 +138,11 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       clearTimeout(this.filterDebounceTimer);
       this.filterDebounceTimer = null;
     }
+
+    // Cleanup MQTT subscriptions
+    this.unsubscribeAll()
+    this.mqttConnection = null
+
     console.log('OGCSTA Store destroyed')
   }
 
@@ -471,36 +492,82 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           })(),
         )
       } else {
-        for (const ds of this.requestFlag.params.observations) {
-          listOfPromesis.push(
-            (async () => {
-              const queryParams = this.getHistoryQueryParams(historyConfig);
-              const baseParams: any = {
-                entityId: (ds as Datastream).iotId + '',
-                $orderby: 'phenomenonTime desc',
-              };
+        // Check if we should use MQTT for realtime updates
+        const useMQTT = this.mqttConnection && !historyConfig?.enabled
 
-              if (!historyConfig?.enabled) {
-                baseParams.$top = 1;
-              }
+        if (useMQTT) {
+          // MQTT Mode: Initial HTTP load, then subscribe to MQTT
+          if (!this.initialLoadDone) {
+            // Initial load via HTTP
+            console.log('OGCSTA: Initial load via HTTP, then switching to MQTT')
+            for (const ds of this.requestFlag.params.observations) {
+              listOfPromesis.push(
+                (async () => {
+                  const baseParams: any = {
+                    entityId: (ds as Datastream).iotId + '',
+                    $orderby: 'phenomenonTime desc',
+                    $top: 1,
+                  };
 
-              const data = (
-                await new DatastreamsApi(
-                  this.baseConfigration,
-                ).v11DatastreamsEntityIdObservationsGet({
-                  ...baseParams,
-                  ...queryParams
-                })
-              ).value as (Observation & { ds_source?: string })[]
+                  const data = (
+                    await new DatastreamsApi(
+                      this.baseConfigration,
+                    ).v11DatastreamsEntityIdObservationsGet(baseParams)
+                  ).value as (Observation & { ds_source?: string })[]
 
-              if (data && data.length > 0) {
-                data.forEach(obs => {
-                  obs['ds_source'] = (ds as Datastream).iotId + '';
-                });
-              }
-              return { observations: data }
-            })(),
-          )
+                  if (data && data.length > 0) {
+                    data.forEach(obs => {
+                      obs['ds_source'] = (ds as Datastream).iotId + '';
+                    });
+                  }
+                  return { observations: data }
+                })(),
+              )
+            }
+
+            // Mark initial load as done and subscribe to MQTT
+            this.initialLoadDone = true
+            setTimeout(() => {
+              this.subscribeToDatastreams(this.requestFlag.params.observations)
+            }, 100) // Small delay to let initial data load complete
+          } else {
+            // Already have initial data and MQTT subscriptions
+            // Just update subscriptions if datastreams changed
+            this.subscribeToDatastreams(this.requestFlag.params.observations)
+          }
+        } else {
+          // HTTP Mode (no MQTT or history mode enabled)
+          for (const ds of this.requestFlag.params.observations) {
+            listOfPromesis.push(
+              (async () => {
+                const queryParams = this.getHistoryQueryParams(historyConfig);
+                const baseParams: any = {
+                  entityId: (ds as Datastream).iotId + '',
+                  $orderby: 'phenomenonTime desc',
+                };
+
+                if (!historyConfig?.enabled) {
+                  baseParams.$top = 1;
+                }
+
+                const data = (
+                  await new DatastreamsApi(
+                    this.baseConfigration,
+                  ).v11DatastreamsEntityIdObservationsGet({
+                    ...baseParams,
+                    ...queryParams
+                  })
+                ).value as (Observation & { ds_source?: string })[]
+
+                if (data && data.length > 0) {
+                  data.forEach(obs => {
+                    obs['ds_source'] = (ds as Datastream).iotId + '';
+                  });
+                }
+                return { observations: data }
+              })(),
+            )
+          }
         }
       }
     }
@@ -945,5 +1012,116 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         console.error('Error refetching observations after variable change:', error);
       }
     }, 100);
+  }
+
+  // ==================== MQTT Methods ====================
+
+  private setupMQTTMessageHandler(): void {
+    if (!this.mqttConnection) return
+
+    // Check if connection has subscribe capability (TwoWayConnection)
+    if (typeof (this.mqttConnection as any).subscribe === 'function') {
+      (this.mqttConnection as any).subscribe((message: string, topic: string) => {
+        this.onMQTTMessage(message, topic)
+      })
+    }
+  }
+
+  private onMQTTMessage(message: string, topic: string): void {
+    try {
+      const observation = JSON.parse(message)
+
+      // Validate that message has @iot.id (SensorThings API requirement)
+      if (!observation['@iot.id']) {
+        console.warn('OGCSTA MQTT: Invalid observation message (missing @iot.id)', message)
+        return
+      }
+
+      // Extract datastream ID from topic: v1.1/Datastreams(123)/Observations
+      const datastreamIdMatch = topic.match(/Datastreams\(([^)]+)\)/)
+      if (!datastreamIdMatch) {
+        console.warn('OGCSTA MQTT: Could not extract datastream ID from topic:', topic)
+        return
+      }
+
+      const datastreamId = datastreamIdMatch[1]
+      console.log(`OGCSTA MQTT: Received observation for datastream ${datastreamId}:`, observation)
+
+      // Find the datastream in resultMap
+      const datastream = this.resultMap.datastreams?.find(ds => ds.iotId === datastreamId)
+      if (datastream) {
+        // Update observations - replace with newest observation
+        datastream.observations = [observation]
+        console.log(`OGCSTA MQTT: Updated datastream ${datastreamId} observations`)
+
+        // Notify subscribers
+        this.notify()
+      }
+    } catch (e) {
+      console.error('OGCSTA MQTT: Error parsing message:', e, message)
+    }
+  }
+
+  private subscribeToDatastreams(datastreams: Datastream[]): void {
+    if (!this.mqttConnection) return
+
+    console.log(`OGCSTA MQTT: Updating subscriptions for ${datastreams.length} datastreams`)
+
+    // Build set of requested datastream IDs
+    const requestedIds = new Set<string>()
+    for (const ds of datastreams) {
+      const datastreamId = ds.iotId || (ds as any)['@iot.id']
+      if (datastreamId) {
+        requestedIds.add(datastreamId)
+      }
+    }
+
+    // Remove subscriptions for datastreams no longer needed
+    for (const [datastreamId, topic] of this.subscribedDatastreams.entries()) {
+      if (!requestedIds.has(datastreamId)) {
+        // Unsubscribe from this specific topic
+        if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
+          // Note: MQTT Connection's disconnectStore removes ALL subscriptions for this store
+          // So we need a different approach - just track it and remove all, then re-add needed ones
+        }
+        this.subscribedDatastreams.delete(datastreamId)
+        console.log(`OGCSTA MQTT: Removed subscription for ${datastreamId}`)
+      }
+    }
+
+    // Unsubscribe all and re-subscribe only to needed topics
+    if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
+      (this.mqttConnection as any).disconnectStore(this)
+    }
+    this.subscribedDatastreams.clear()
+
+    // Subscribe to all requested datastreams
+    for (const ds of datastreams) {
+      const datastreamId = ds.iotId || (ds as any)['@iot.id']
+      if (!datastreamId) continue
+
+      // Build topic according to OGC SensorThings API MQTT spec v1.1
+      const topic = `v1.1/Datastreams(${datastreamId})/Observations`
+
+      // Subscribe via MQTT Connection
+      if (typeof (this.mqttConnection as any).connectStore === 'function') {
+        (this.mqttConnection as any).connectStore(this, topic)
+        this.subscribedDatastreams.set(datastreamId, topic)
+        console.log(`OGCSTA MQTT: Subscribed to ${topic}`)
+      }
+    }
+  }
+
+  private unsubscribeAll(): void {
+    if (!this.mqttConnection) return
+
+    console.log(`OGCSTA MQTT: Unsubscribing from ${this.subscribedDatastreams.size} datastreams`)
+
+    // Unsubscribe from all topics
+    if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
+      (this.mqttConnection as any).disconnectStore(this)
+    }
+
+    this.subscribedDatastreams.clear()
   }
 }
