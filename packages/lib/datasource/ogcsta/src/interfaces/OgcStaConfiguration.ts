@@ -37,6 +37,7 @@ export interface IOGCSTAHistoryConfig {
 
 export interface IOGCSTAConfigartion extends IBaseConnectionConfiguration{
   connection: string;
+  mqttConnection?: string;
   history?: IOGCSTAHistoryConfig;
 }
 export abstract class DataTypeBase {}
