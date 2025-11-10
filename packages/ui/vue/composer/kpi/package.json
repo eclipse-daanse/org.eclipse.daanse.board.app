@@ -28,7 +28,8 @@
       "org.eclipse.daanse.board.app.lib.composer.kpi": "^0.0.1-next.1",
       "lodash": "^4.17.16",
       "vue-json-pretty": "^2.4.0",
-      "vite-plugin-libcss": "^1.1.1"
+      "vite-plugin-libcss": "^1.1.1",
+      "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
     },
     "devDependencies": {
       "inversify": "7.7.1",

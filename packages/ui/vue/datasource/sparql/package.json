@@ -9,6 +9,16 @@
   "main": "./dist/ui.vue.datasource.sparql.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/ui.vue.datasource.sparql.js",
+      "require": "./dist/ui.vue.datasource.sparql.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
@@ -22,7 +32,7 @@
   "devDependencies": {
     "inversify": "7.7.1",
     "typescript": "^5.8.2",
-
+    "vite": "^7.2.2",
     "vite-plugin-dts": "4.5.4",
     "sass-embedded": "^1.88.0",
     "vite-plugin-libcss": "^1.1.1"
@@ -34,7 +44,8 @@
   "dependencies": {
     "@triply/yasgui": "^4.2.28",
     "org.eclipse.daanse.board.app.lib.datasource.sparql": "0.0.1-next.1",
-    "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1"
+    "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
   },
   "peerDependencies": {
     "vue": "^3.5.13"

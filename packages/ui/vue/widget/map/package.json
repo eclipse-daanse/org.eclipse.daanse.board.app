@@ -17,22 +17,29 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vue-tsc --noEmit && vite build"
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.12",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vitest/coverage-v8": "3.2.4",
+    "@vitest/ui": "3.2.4",
     "inversify": "7.7.1",
     "ol": "^10.5.0",
     "proj4": "^2.15.0",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
+    "vite": "^7.2.2",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "vue-tsc": "^2.2.8",
-    "@types/debug": "^4.1.12"
+    "vue-tsc": "^2.2.8"
   },
   "peerDependencies": {
     "vue": "^3.5.13"

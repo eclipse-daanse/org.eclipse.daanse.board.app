@@ -10,8 +10,15 @@
   "module": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.ws.js",
   "types": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.ws.d.ts",
   "files": [
-    "src"
+    "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.ws.js",
+      "require": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.ws.umd.cjs",
+      "types": "./dist/org.eclipse.daanse.board.app.ui.vue.datasource.ws.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
@@ -26,13 +33,14 @@
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.websocket": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
     "lodash": "^4.17.16",
     "vue-json-pretty": "^2.4.0"
   },
   "devDependencies": {
     "inversify": "7.7.1",
     "typescript": "^5.8.2",
-
+    "vite": "^7.2.2",
     "vite-plugin-dts": "4.5.4",
     "@types/lodash": "^4.17.16"
   },

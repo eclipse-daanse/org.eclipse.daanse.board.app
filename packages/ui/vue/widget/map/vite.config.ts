@@ -48,11 +48,13 @@ export default defineConfig({
     }
   },
   plugins: [
+    // @ts-ignore
     dts({
       insertTypesEntry: true
     }),
     //@ts-ignore
     vue(),
+    // @ts-ignore
     libCss()
   ]
 })
