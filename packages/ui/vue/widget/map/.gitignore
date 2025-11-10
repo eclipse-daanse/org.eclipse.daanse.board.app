@@ -1,0 +1,10 @@
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Test coverage
+/coverage/
+
+# Vitest
+/.vitest/

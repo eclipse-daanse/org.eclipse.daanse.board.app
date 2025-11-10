@@ -43,6 +43,8 @@ const opened = ref({
 const widgetSettings = defineModel<IMapSettings>({ required: true })
 const showModalSizeSmall = ref(false)
 const serviceLoading = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref('')
 const OGCService = useOGCService()
 const drag = ref(false)
 const selectedNodes = ref([])
@@ -64,23 +66,51 @@ const dragOptions = computed(() => {
 const url = ref('')
 const addService = async () => {
   serviceLoading.value = true
-  const service = await OGCService.createServiceWMS(url.value)
-  if (service) {
-    widgetSettings.value.services.push({
-      service: service,
-      url: url.value,
-      type: 'WMS',
-      id: v4()
-    })
+  let wmsError = null
+  let wfsError = null
+  let hasService = false
+
+  // Try WMS
+  try {
+    const service = await OGCService.createServiceWMS(url.value)
+    if (service) {
+      widgetSettings.value.services.push({
+        service: service,
+        url: url.value,
+        type: 'WMS',
+        id: v4()
+      })
+      hasService = true
+    }
+  } catch (e) {
+    wmsError = e
   }
-  const service2 = await OGCService.createServiceWFS(url.value)
-  if (service2) {
-    widgetSettings.value.services.push({
-      service: service2,
-      url: url.value,
-      type: 'WFS',
-      id: v4()
-    })
+
+  // Try WFS
+  try {
+    const service2 = await OGCService.createServiceWFS(url.value)
+    if (service2) {
+      widgetSettings.value.services.push({
+        service: service2,
+        url: url.value,
+        type: 'WFS',
+        id: v4()
+      })
+      hasService = true
+    }
+  } catch (e) {
+    wfsError = e
+  }
+
+  // If both failed, show error
+  if (!hasService) {
+    const error: any = wmsError || wfsError
+    errorMessage.value = error?.message || 'Failed to load service. The URL is not a valid WMS or WFS service.'
+    showErrorModal.value = true
+  } else {
+    // Close modal and reset URL on success
+    showModalSizeSmall.value = false
+    url.value = ''
   }
 
   serviceLoading.value = false
@@ -372,6 +402,24 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </VaModal>
+
+  <VaModal
+    v-model="showErrorModal"
+    ok-text="OK"
+    size="small"
+    :hide-default-actions="false"
+    cancel-text=""
+  >
+    <div class="va-modal__message">
+      <h3 class="va-h3" style="color: #ff6b6b; display: flex; align-items: center; gap: 8px;">
+        <VaIcon class="material-icons">error</VaIcon>
+        Service Error
+      </h3>
+      <div style="margin-top: 16px; color: #333;">
+        {{ errorMessage }}
       </div>
     </div>
   </VaModal>

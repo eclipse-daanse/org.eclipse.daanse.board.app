@@ -9,6 +9,16 @@
   "module": "./dist/lib.core.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/lib.core.js",
+      "require": "./dist/lib.core.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"

@@ -58,7 +58,7 @@ localStorage.debug = 'daanse:maps:*'
 
 Die Logger geben Timestamps und Namespace aus:
 
-```
+```text
 daanse:maps:datasource Datasource abc123 loaded +0ms
 daanse:maps:observations Setting historical locations filter for 42 matching things +125ms
 daanse:maps:services Could not reconstruct WMS service for layer: MyLayer Error: ... +2ms
