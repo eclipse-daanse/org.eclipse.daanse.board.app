@@ -29,7 +29,7 @@
     "org.eclipse.daanse.board.app.lib.utils.helpers": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.common.monaco": "0.0.1-next.1",
     "uuid": "^11.1.0",
-    "shiki": "3.9.2",
+    "shiki": "3.15.0",
     "simple-code-editor": "2.1.0",
     "highlight.js": "^11.9.0"
   },
