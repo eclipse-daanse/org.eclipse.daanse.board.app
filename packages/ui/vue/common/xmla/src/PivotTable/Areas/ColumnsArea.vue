@@ -102,9 +102,9 @@ const getColumnMemberStyle = (i: number, j: number) => {
 const getColumnMemberOffsetItems = (i: number, j: number) => {
     const currentMember = props.columns?.[i]?.[j];
 
-    let result = "";
+    let result = [];
     for (let ind = minLevels[j]; ind < currentMember.LNum; ind++) {
-        result += "<div class='columnMemberOffset'></div>";
+        result.push({});
     }
     return result;
 };
@@ -329,11 +329,7 @@ watch(
                         <div style="width: 100%">
                             <div class="columnMember" :style="getColumnMemberStyle(member.i, j)">
                                 <div class="columnMemberContentWrapper">
-                                    <div v-html="getColumnMemberOffsetItems(
-                                        member.i,
-                                        j,
-                                    )
-                                        "></div>
+                                    <div v-for="item in getColumnMemberOffsetItems(member.i, j)" class="columnMemberOffset"></div>
                                     <div class="columnMemberContent">
                                         <template v-if="!sameAsPrevious(member.i, j)">
                                             <div v-if="

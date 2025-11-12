@@ -114,9 +114,9 @@ const getRowHeaderStyle = (i: number) => {
 const getRowMemberOffsetItems = (i: number, j: number) => {
     const currentMember = props.rows?.[i]?.[j];
 
-    let result = "";
+    let result = [];
     for (let ind = minLevels[j]; ind < currentMember.LNum; ind++) {
-        result += "<div class='rowMemberOffset'></div>";
+        result.push({});
     }
     return result;
 };
@@ -314,11 +314,12 @@ watch(
                 @showMemberProperties="showMemberProperties(member)"
                 @hideMemberProperties="hideMemberProperties(member)">
                 <template v-slot="{ }">
-                    <div class="d-flex">
+                    <div class="flex">
                         <div class="rowMember" :style="getRowMemberStyle(member.i, j)">
                             <div class="rowMemberContentWrapper">
-                                <div class="rowMemberOffsetContainer" v-html="getRowMemberOffsetItems(member.i, j)
-                                    "></div>
+                                <div class="rowMemberOffsetContainer">
+                                    <div v-for="item in getRowMemberOffsetItems(member.i, j)" class="rowMemberOffset"></div>
+                                </div>
                                 <div class="rowMemberContent">
                                     <template v-if="!sameAsPrevious(member.i, j)">
                                         <div v-if="
@@ -374,8 +375,8 @@ watch(
     border-top: 1px silver solid;
 }
 
-.rowMemberOffset {
-    width: 50px;
+.rowMemberOffsetContainer .rowMemberOffset {
+    width: 30px;
     height: 100%;
     border-right: 1px dashed lightgrey;
 }

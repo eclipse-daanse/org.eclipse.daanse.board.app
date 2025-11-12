@@ -18,7 +18,7 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 const factorySymbol = Symbol.for('XmlaStoreFactory')
 
 if (!container.isBound(XmlaStore)) {
-  container.bind<XmlaStore>(XmlaStore).toSelf().inSingletonScope()
+  container.bind<XmlaStore>(XmlaStore).toSelf().inTransientScope()
 }
 
 if (!container.isBound(factorySymbol)) {

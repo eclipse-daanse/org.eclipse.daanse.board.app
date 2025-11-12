@@ -24,7 +24,8 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "dependencies": {
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
   },
   "peerDependencies": {
     "vue": "^3.5.13"

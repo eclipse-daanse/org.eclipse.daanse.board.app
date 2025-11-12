@@ -70,6 +70,7 @@ const settingsComponent = computed(() => {
 })
 
 const updateConfig = (config: any) => {
+  console.log('updateConfig called')
   console.log(config)
   datasourceProxy.value.config = config
 }

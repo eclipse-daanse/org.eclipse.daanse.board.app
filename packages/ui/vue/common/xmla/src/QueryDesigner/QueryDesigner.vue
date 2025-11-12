@@ -13,6 +13,9 @@ Contributors:
 
 <script setup lang="ts">
 import draggable from 'vuedraggable/src/vuedraggable';
+import { ref } from "vue";
+import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
+import FilterModal from '../Modals/FiltersModal.vue';
 
 interface QueryConfig {
   filters: HierarchyTreeItem[];
@@ -22,6 +25,10 @@ interface QueryConfig {
 }
 
 const queryConfig = defineModel<QueryConfig>({ required: true });
+const filterModal = ref<any>(null);
+
+const { api, catalog } = defineProps<{ api: any, catalog: any }>();
+console.log('QueryDesigner catalog:', catalog);
 
 const addedOperationCache = {
   area: "filters" as "rows" | "columns" | "filters",
@@ -152,7 +159,23 @@ const remove = (
   }
 };
 
-const configureFilter = (type, element) => {
+const configureFilter = async (type: string, element: any) => {
+  const originalItem = queryConfig.value[type].find(
+    (e) => e.id === element.id
+  );
+
+  console.log(filterModal.value);
+  const { filters } = await filterModal.value.run({
+    element,
+    filters: element.filters,
+    api,
+  });
+
+  if (!filters) return;
+  if (originalItem) {
+    originalItem.filters = filters;
+  }
+  console.log('configureFilter', originalItem);
 };
 
 const t = (text) => text;
@@ -239,8 +262,12 @@ const t = (text) => text;
         </div>
       </div>
     </div>
+    <FilterModal ref="filterModal" :api="api" :catalog="catalog" />
   </div>
 </template>
+
+<style>
+</style>
 
 <style scoped>
 .queryDesigner {
