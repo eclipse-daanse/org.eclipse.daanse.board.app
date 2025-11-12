@@ -77,8 +77,10 @@ export class XmlaStore extends BaseDatasource {
     super()
   }
 
-  async init(configuration: IXmlaStoreConfiguration) {
+  init(configuration: IXmlaStoreConfiguration) {
     super.init(configuration)
+
+    console.log('state of store during creation', JSON.stringify(this.requestParams));
 
     this.initPromise = new Promise(resolve => {
       this.initPromiseResolve = resolve
@@ -114,10 +116,10 @@ export class XmlaStore extends BaseDatasource {
     if (configuration.mdx) {
       this.mdx = configuration.mdx
     }
-
     if (configuration.requestParams) {
       this.requestParams = configuration.requestParams
     }
+
     this.pollingInterval = configuration.pollingInterval ?? 5000
     if (this.pollingEnabled) {
       this.startPolling(this.pollingInterval)
@@ -154,6 +156,11 @@ export class XmlaStore extends BaseDatasource {
     return cubes
   }
 
+  public async setRequestParams(requestParams: XMLARequestParams) {
+    this.requestParams = requestParams;
+    this.mdx = await this.getMdxRequest();
+  }
+
   async getOriginalData() {
     throw new Error('Not Implemented')
   }
@@ -161,7 +168,6 @@ export class XmlaStore extends BaseDatasource {
   async getData(type: string): Promise<any> {
     let request
     let response = null
-    await this.initPromise;
 
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
@@ -176,6 +182,9 @@ export class XmlaStore extends BaseDatasource {
       request = await this.getMdxRequest()
     }
 
+    console.log('MDX Request in store:', request)
+    console.log('Metadata in store:', this.metadata.getProperties())
+    console.log('Metadata in store:', this.metadata.getLevels())
     const mdxResponse = await connection.fetch({
       data: {
         mdx: request,

@@ -72,7 +72,7 @@ const populateDragEvent = (e: any, element: any) => {
             <draggable v-if="node.type === TreeItemTypesEnum.Hierarchy" :modelValue="[node]"
               :group="{ name: 'hierarchies', pull: 'clone', put: false }" item-key="id">
               <template #item="{ element }">
-                <div class="d-flex align-center cursor-pointer" @dragstart="populateDragEvent($event, element)">
+                <div class="flex align-center cursor-pointer" @dragstart="populateDragEvent($event, element)">
                   <XMLAIconVue :icon="getTreeViewItemIcon(node).name"
                     :primary-color="getTreeViewItemIcon(node).primaryColor"
                     :secondary-color="getTreeViewItemIcon(node).secondaryColor" :height="24" :width="24" class="mr-1">
@@ -84,7 +84,7 @@ const populateDragEvent = (e: any, element: any) => {
             <draggable v-else-if="node.type === TreeItemTypesEnum.Measure" :modelValue="[node]"
               :group="{ name: 'measures', pull: 'clone', put: false }" item-key="id">
               <template #item="{ element }">
-                <div class="d-flex align-center cursor-pointer" @dragstart="populateDragEvent($event, element)">
+                <div class="flex align-center cursor-pointer" @dragstart="populateDragEvent($event, element)">
                   <XMLAIconVue :icon="getTreeViewItemIcon(node).name"
                     :primary-color="getTreeViewItemIcon(node).primaryColor"
                     :secondary-color="getTreeViewItemIcon(node).secondaryColor" :height="24" :width="24" class="mr-1">
@@ -93,7 +93,7 @@ const populateDragEvent = (e: any, element: any) => {
                 </div>
               </template>
             </draggable>
-            <div v-else class="d-flex align-center cursor-pointer">
+            <div v-else class="flex align-center cursor-pointer">
               <XMLAIconVue :icon="getTreeViewItemIcon(node).name"
                 :primary-color="getTreeViewItemIcon(node).primaryColor"
                 :secondary-color="getTreeViewItemIcon(node).secondaryColor" :height="24" :width="24" class="mr-1">

@@ -153,9 +153,7 @@ export class Client {
     const alias = findKey(defs.xmlns as Record<string, any>, ns)
 
     delete args.Headers
-    console.log('exHeaders', exHeaders)
 
-    console.log('Invoking with security:', this.security)
     if (this.security?.addHeaders) {
       this.security.addHeaders(headers)
     }
@@ -179,7 +177,6 @@ export class Client {
     )
 
     // TODO: REMOVE WHEN KPI SERVER SUPPORTS PROPER SOAP
-    console.log('Original SOAP message:', message)
     if (
       message.includes('Execute') &&
       message.includes('Command') &&

@@ -3,7 +3,7 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "ESNext"
+    "target": "esnext"
 ,
     "experimentalDecorators": true
 ,

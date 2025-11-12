@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ref, watch, toRef, shallowRef, nextTick } from 'vue';
+import { ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
@@ -36,6 +36,8 @@ console.log(props.dataSource)
 
 const tabs = ["Visual Editor", "Code Editor"];
 const currentTab = ref(0);
+const api = ref(null as any);
+const catalog = ref(null as any);
 
 const queryConfig = ref({
   filters: props.dataSource.config.requestParams?.filters || [],
@@ -49,25 +51,47 @@ const drilldownState = ref(props.dataSource.config.drilldownState || {});
 
 console.log(props.dataSource);
 
-watch(props.dataSource, async () => {
+watch(() => props.dataSource.config.connection, async () => {
+  console.log('connection updated', props.dataSource)
+
   const newStore = await update();
   metadata.value = await newStore.getMetadata();
-}, { deep: true });
+
+  console.log(newStore);
+});
+
+watch(() => props.dataSource.config.cube, async () => {
+  console.log('connection updated', props.dataSource)
+
+  const newStore = await update();
+  metadata.value = await newStore.getMetadata();
+
+  console.log(newStore);
+});
 
 const updateData = async () => {
+  console.log('updateData called');
   const req = await tempStore.value.getData('PivotTable');
   data.value = req;
+  console.log('data', data.value);
   if (props.dataSource.config.useVisualEditor) {
     query.value = await tempStore.value.getMdxRequest();
-    console.log('query', query.value);
   }
 }
 
+onMounted(async () => {
+  // if (!tempStore.value) return;
+  // metadata.value = await tempStore.value.getMetadata();
+});
+
 // This works only once when component is mounted
 watch(tempStore, async () => {
+  if (!tempStore.value) return;
   const connectionId = tempStore.value.connection;
   const connectionRepo = container.get(identifier) as ConnectionRepository;
   connection.value = await connectionRepo.getConnection(connectionId);
+  api.value = await connection.value.getApi();
+  catalog.value = await connection.value.catalogName;
 
   metadata.value = await tempStore.value.getMetadata();
   updateData();
@@ -79,6 +103,7 @@ watch(() => queryConfig, async () => {
     requestParams: queryConfig.value,
   });
 
+  tempStore.value?.setRequestParams(queryConfig.value);
   updateData();
 }, { deep: true });
 
@@ -88,6 +113,7 @@ watch(() => query, async () => {
     mdx: query.value,
   });
 
+  console.log('query changed', query.value);
   updateData();
 }, { deep: true });
 
@@ -154,7 +180,7 @@ const getSettingsHash = (obj: any) => {
         </template>
         <template v-if="currentTab === 0">
           <div class="w-full h-full">
-            <QueryDesigner v-model="queryConfig" />
+            <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
           </div>
         </template>
       </va-tabs>
