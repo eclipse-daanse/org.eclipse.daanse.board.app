@@ -11,9 +11,496 @@ Contributors:
     Smart City Jena
 -->
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { inject, ref, onMounted, computed } from 'vue'
+import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
+import { ChartSettings } from './gen/ChartSettings'
+
+const opened = ref({
+  styleSection: true,
+  gridSection: false,
+  annotationsSection: false,
+})
+
+const widgetSettings = defineModel<ChartSettings>({ required: true })
+
+const i18n: i18n | undefined = inject('i18n');
+const t = (key: string) => (i18n) ? i18n.t(key) : key;
+
+// Computed for chart type
+const chartType = computed(() => widgetSettings.value?.chartType?.value ?? 'bar')
+const isLineChart = computed(() => chartType.value === 'line')
+const isBarChart = computed(() => chartType.value === 'bar')
+const isPieChart = computed(() => ['pie', 'doughnut', 'polarArea'].includes(chartType.value))
+
+// Debug: Check if settings are loaded
+onMounted(() => {
+  console.log('ChartWidgetSettings mounted, config:', widgetSettings.value)
+  console.log('borderColor:', widgetSettings.value?.borderColor)
+})
+
+// Preset border dash patterns
+const borderDashPresets = [
+  { label: 'Solid', value: [] },
+  { label: 'Dashed', value: [5, 5] },
+  { label: 'Dotted', value: [2, 2] },
+  { label: 'Dash-Dot', value: [10, 5, 2, 5] },
+]
+
+const selectedBorderDashPreset = ref('[]')
+
+const updateBorderDash = (preset: any) => {
+  try {
+    // Handle both string and object values from va-select
+    const presetValue = typeof preset === 'string' ? preset : preset?.value || preset
+    const parsed = typeof presetValue === 'string' ? JSON.parse(presetValue) : presetValue
+    widgetSettings.value.borderDash.value = parsed
+  } catch (e) {
+    console.error('Error parsing border dash preset:', e, preset)
+  }
+}
+
+// Initialize selected preset
+if (widgetSettings.value.borderDash?.value) {
+  selectedBorderDashPreset.value = JSON.stringify(widgetSettings.value.borderDash.value)
+}
+
+// Annotation management
+const addHorizontalLine = () => {
+  if (!widgetSettings.value.horizontalLines) {
+    widgetSettings.value.horizontalLines = []
+  }
+  widgetSettings.value.horizontalLines.push({
+    value: 0,
+    color: 'rgba(255, 0, 0, 0.8)',
+    width: 2,
+    label: 'Line'
+  })
+}
+
+const removeHorizontalLine = (index: number) => {
+  widgetSettings.value.horizontalLines?.splice(index, 1)
+}
+
+const addVerticalLine = () => {
+  if (!widgetSettings.value.verticalLines) {
+    widgetSettings.value.verticalLines = []
+  }
+  widgetSettings.value.verticalLines.push({
+    value: 0,
+    color: 'rgba(0, 0, 255, 0.8)',
+    width: 2,
+    label: 'Line'
+  })
+}
+
+const removeVerticalLine = (index: number) => {
+  widgetSettings.value.verticalLines?.splice(index, 1)
+}
+
+const addHorizontalBox = () => {
+  if (!widgetSettings.value.horizontalBoxes) {
+    widgetSettings.value.horizontalBoxes = []
+  }
+  widgetSettings.value.horizontalBoxes.push({
+    yMin: 0,
+    yMax: 10,
+    color: 'rgba(255, 0, 0, 0.1)',
+    label: 'Range'
+  })
+}
+
+const removeHorizontalBox = (index: number) => {
+  widgetSettings.value.horizontalBoxes?.splice(index, 1)
+}
+
+const addVerticalBox = () => {
+  if (!widgetSettings.value.verticalBoxes) {
+    widgetSettings.value.verticalBoxes = []
+  }
+  widgetSettings.value.verticalBoxes.push({
+    xMin: 0,
+    xMax: 10,
+    color: 'rgba(0, 0, 255, 0.1)',
+    label: 'Range'
+  })
+}
+
+const removeVerticalBox = (index: number) => {
+  widgetSettings.value.verticalBoxes?.splice(index, 1)
+}
+</script>
 
 <template>
+  <va-collapse v-model="opened.styleSection" icon="palette" header="Chart Styling">
+    <div class="settings-container">
+      <div class="settings-block">
+        <h3>Chart Type</h3>
 
+        <va-select
+          v-if="widgetSettings.chartType"
+          label="Chart Type"
+          v-model="widgetSettings.chartType.value"
+          :options="[
+            { value: 'bar', text: 'Bar Chart' },
+            { value: 'line', text: 'Line Chart' },
+            { value: 'radar', text: 'Radar Chart' },
+            { value: 'pie', text: 'Pie Chart' },
+            { value: 'doughnut', text: 'Doughnut Chart' },
+            { value: 'polarArea', text: 'Polar Area Chart' }
+          ]"
+          value-by="value"
+        />
+      </div>
+
+      <!-- Line Chart Settings -->
+      <div class="settings-block" v-if="isLineChart">
+        <h3>Line Style</h3>
+
+        <va-color-input
+          v-if="widgetSettings.borderColor"
+          label="Line Color"
+          v-model="widgetSettings.borderColor.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.borderWidth"
+          label="Line Width (px)"
+          v-model.number="widgetSettings.borderWidth.value"
+          type="number"
+          :min="0"
+          :max="20"
+        />
+
+        <va-select
+          v-if="widgetSettings.borderDash"
+          label="Line Style"
+          v-model="selectedBorderDashPreset"
+          :options="borderDashPresets.map(p => ({ value: JSON.stringify(p.value), text: p.label }))"
+          value-by="value"
+          @update:modelValue="updateBorderDash"
+        />
+
+        <va-checkbox
+          v-if="widgetSettings.fill"
+          label="Fill Area Under Line"
+          v-model="widgetSettings.fill.value"
+        />
+
+        <va-color-input
+          v-if="widgetSettings.backgroundColor && widgetSettings.fill?.value"
+          label="Fill Color"
+          v-model="widgetSettings.backgroundColor.value"
+        />
+
+        <h3 style="margin-top: 16px;">Point Style</h3>
+
+        <va-checkbox
+          v-if="widgetSettings.showPoints"
+          label="Show Points"
+          v-model="widgetSettings.showPoints.value"
+        />
+
+        <va-color-input
+          v-if="widgetSettings.pointColor && widgetSettings.showPoints?.value"
+          label="Point Color"
+          v-model="widgetSettings.pointColor.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.pointSize && widgetSettings.showPoints?.value"
+          label="Point Size (px)"
+          v-model.number="widgetSettings.pointSize.value"
+          type="number"
+          :min="0"
+          :max="20"
+        />
+      </div>
+
+      <!-- Bar Chart Settings -->
+      <div class="settings-block" v-if="isBarChart">
+        <h3>Bar Style</h3>
+
+        <va-color-input
+          v-if="widgetSettings.backgroundColor"
+          label="Bar Fill Color"
+          v-model="widgetSettings.backgroundColor.value"
+        />
+
+        <va-color-input
+          v-if="widgetSettings.borderColor"
+          label="Bar Border Color"
+          v-model="widgetSettings.borderColor.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.borderWidth"
+          label="Border Width (px)"
+          v-model.number="widgetSettings.borderWidth.value"
+          type="number"
+          :min="0"
+          :max="20"
+        />
+      </div>
+
+      <!-- Pie/Doughnut Settings -->
+      <div class="settings-block" v-if="isPieChart">
+        <h3>Segment Style</h3>
+
+        <va-color-input
+          v-if="widgetSettings.borderColor"
+          label="Segment Border Color"
+          v-model="widgetSettings.borderColor.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.borderWidth"
+          label="Border Width (px)"
+          v-model.number="widgetSettings.borderWidth.value"
+          type="number"
+          :min="0"
+          :max="20"
+        />
+      </div>
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.gridSection" icon="grid_on" header="Grid Lines">
+    <div class="settings-container">
+      <div class="settings-block">
+        <h3>Horizontal Grid (Y-Axis)</h3>
+
+        <va-checkbox
+          v-if="widgetSettings.showHorizontalGrid"
+          label="Show Horizontal Grid"
+          v-model="widgetSettings.showHorizontalGrid.value"
+        />
+
+        <va-color-input
+          v-if="widgetSettings.horizontalGridColor"
+          label="Grid Color"
+          v-model="widgetSettings.horizontalGridColor.value"
+          :disabled="!widgetSettings.showHorizontalGrid?.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.horizontalGridWidth"
+          label="Grid Width (px)"
+          v-model.number="widgetSettings.horizontalGridWidth.value"
+          type="number"
+          :min="0"
+          :max="10"
+          :disabled="!widgetSettings.showHorizontalGrid?.value"
+        />
+      </div>
+
+      <div class="settings-block" style="margin-top: 20px;">
+        <h3>Vertical Grid (X-Axis)</h3>
+
+        <va-checkbox
+          v-if="widgetSettings.showVerticalGrid"
+          label="Show Vertical Grid"
+          v-model="widgetSettings.showVerticalGrid.value"
+        />
+
+        <va-color-input
+          v-if="widgetSettings.verticalGridColor"
+          label="Grid Color"
+          v-model="widgetSettings.verticalGridColor.value"
+          :disabled="!widgetSettings.showVerticalGrid?.value"
+        />
+
+        <va-input
+          v-if="widgetSettings.verticalGridWidth"
+          label="Grid Width (px)"
+          v-model.number="widgetSettings.verticalGridWidth.value"
+          type="number"
+          :min="0"
+          :max="10"
+          :disabled="!widgetSettings.showVerticalGrid?.value"
+        />
+      </div>
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.annotationsSection" icon="show_chart" header="Reference Lines & Areas">
+    <div class="settings-container">
+      <!-- Edit Mode Toggle -->
+      <div class="settings-block">
+        <va-checkbox
+          v-if="widgetSettings.annotationsEditMode"
+          label="Enable Drag & Drop (Move annotations in chart)"
+          v-model="widgetSettings.annotationsEditMode.value"
+        />
+      </div>
+
+      <!-- Horizontal Lines (Y-Axis) -->
+      <div class="settings-block">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Horizontal Lines (Y-Axis)</h3>
+          <va-button size="small" @click="addHorizontalLine">Add Line</va-button>
+        </div>
+
+        <div v-for="(line, index) in widgetSettings.horizontalLines" :key="`hline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong>Line {{ index + 1 }}</strong>
+            <va-button size="small" color="danger" @click="removeHorizontalLine(index)">Remove</va-button>
+          </div>
+
+          <va-input
+            label="Y-Value"
+            v-model.number="line.value"
+            type="number"
+          />
+
+          <va-color-input
+            label="Color"
+            v-model="line.color"
+          />
+
+          <va-input
+            label="Line Width (px)"
+            v-model.number="line.width"
+            type="number"
+            :min="1"
+            :max="10"
+          />
+
+          <va-input
+            label="Label (optional)"
+            v-model="line.label"
+          />
+        </div>
+      </div>
+
+      <!-- Vertical Lines (X-Axis) -->
+      <div class="settings-block" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Vertical Lines (X-Axis)</h3>
+          <va-button size="small" @click="addVerticalLine">Add Line</va-button>
+        </div>
+
+        <div v-for="(line, index) in widgetSettings.verticalLines" :key="`vline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong>Line {{ index + 1 }}</strong>
+            <va-button size="small" color="danger" @click="removeVerticalLine(index)">Remove</va-button>
+          </div>
+
+          <va-input
+            label="X-Value"
+            v-model="line.value"
+          />
+
+          <va-color-input
+            label="Color"
+            v-model="line.color"
+          />
+
+          <va-input
+            label="Line Width (px)"
+            v-model.number="line.width"
+            type="number"
+            :min="1"
+            :max="10"
+          />
+
+          <va-input
+            label="Label (optional)"
+            v-model="line.label"
+          />
+        </div>
+      </div>
+
+      <!-- Horizontal Boxes (Y-Axis Ranges) -->
+      <div class="settings-block" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Horizontal Areas (Y-Axis Ranges)</h3>
+          <va-button size="small" @click="addHorizontalBox">Add Area</va-button>
+        </div>
+
+        <div v-for="(box, index) in widgetSettings.horizontalBoxes" :key="`hbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong>Area {{ index + 1 }}</strong>
+            <va-button size="small" color="danger" @click="removeHorizontalBox(index)">Remove</va-button>
+          </div>
+
+          <va-input
+            label="Y-Min"
+            v-model.number="box.yMin"
+            type="number"
+          />
+
+          <va-input
+            label="Y-Max"
+            v-model.number="box.yMax"
+            type="number"
+          />
+
+          <va-color-input
+            label="Fill Color"
+            v-model="box.color"
+          />
+
+          <va-input
+            label="Label (optional)"
+            v-model="box.label"
+          />
+        </div>
+      </div>
+
+      <!-- Vertical Boxes (X-Axis Ranges) -->
+      <div class="settings-block" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Vertical Areas (X-Axis Ranges)</h3>
+          <va-button size="small" @click="addVerticalBox">Add Area</va-button>
+        </div>
+
+        <div v-for="(box, index) in widgetSettings.verticalBoxes" :key="`vbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong>Area {{ index + 1 }}</strong>
+            <va-button size="small" color="danger" @click="removeVerticalBox(index)">Remove</va-button>
+          </div>
+
+          <va-input
+            label="X-Min"
+            v-model="box.xMin"
+          />
+
+          <va-input
+            label="X-Max"
+            v-model="box.xMax"
+          />
+
+          <va-color-input
+            label="Fill Color"
+            v-model="box.color"
+          />
+
+          <va-input
+            label="Label (optional)"
+            v-model="box.label"
+          />
+        </div>
+      </div>
+    </div>
+  </va-collapse>
 </template>
-<style scoped></style>
+
+<style scoped>
+.settings-container {
+  padding: 16px;
+}
+
+.settings-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-block h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--va-primary);
+}
+</style>
