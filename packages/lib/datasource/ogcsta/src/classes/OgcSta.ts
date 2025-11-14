@@ -37,7 +37,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
-import { FILTER, FILTERRESET } from '../interfaces/Constances'
+import { FILTER, FILTERRESET, NOACTION } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
@@ -64,6 +64,9 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   private debounceTimer: any | null = null;
+  private filterDebounceTimer: any | null = null;
+  private lastFilterType: string | null = null;
+  private lastObservationsParams: any = null;
   private watchedVariables: Set<string> = new Set();
 
   init(configuration: IOGCSTAConfigartion): void {
@@ -77,19 +80,47 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
   callEvent(event: string, params: any): void {
     if (event == FILTER) {
+      // Determine filter type based on params
+      const filterType = Object.keys(params)[0] // 'observations', 'historicalLocations', etc.
+
+      // Save observations params for later use in onVariableChanged
+      if (filterType === 'observations' && params.observations) {
+        this.lastObservationsParams = params.observations;
+      }
+
+      // Only debounce if it's the same filter type as the last call
+      if (this.filterDebounceTimer && filterType === this.lastFilterType) {
+        clearTimeout(this.filterDebounceTimer);
+      } else if (this.filterDebounceTimer) {
+        // Different filter type - execute the pending debounced call immediately
+        clearTimeout(this.filterDebounceTimer);
+        this.filterDebounceTimer = null;
+        this.notify();
+      }
+
       this.requestFlag = { key: FILTER, params: params }
-      // await this.getData<OGCSTAData>(OGCSTAData);
+      this.lastFilterType = filterType
+
+      // Set new debounce timer for 300ms
+      this.filterDebounceTimer = setTimeout(() => {
+        this.notify();
+        this.filterDebounceTimer = null;
+      }, 300);
     } else {
       this.requestFlag = { key: FILTERRESET, params: params }
+      // FILTERRESET is immediate
+      this.notify()
     }
-    //this.getData<string>('OGCSTAData');
-    this.notify()
   }
 
   destroy(): void {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = null;
+    }
+    if (this.filterDebounceTimer) {
+      clearTimeout(this.filterDebounceTimer);
+      this.filterDebounceTimer = null;
     }
     console.log('OGCSTA Store destroyed')
   }
@@ -194,7 +225,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
 
     if (type == 'OGCSTAData') {
-      return this.resultMap as T
+      // Create a shallow copy to trigger Vue reactivity when locations are updated in-place
+      return {
+        things: this.resultMap.things ? [...this.resultMap.things] : [],
+        datastreams: this.resultMap.datastreams ? [...this.resultMap.datastreams] : [],
+        observations: this.resultMap.observations ? [...this.resultMap.observations] : [],
+        locations: this.resultMap.locations ? [...this.resultMap.locations] : []
+      } as T
     }
     return this.resultMap as T
   }
@@ -720,16 +757,17 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
                     }
                   }
 
-                  // Update locations in the locations array
-                  const locationIndex = this.resultMap.locations?.findIndex(
+                  // Update location coordinates in the locations array (in-place to keep thing references)
+                  const existingLocation = this.resultMap.locations?.find(
                     loc => loc.things?.some(t => t.iotId === thingId)
                   );
 
-                  if (locationIndex !== undefined && locationIndex !== -1 && this.resultMap.locations) {
-                    this.resultMap.locations[locationIndex] = {
-                      ...location,
-                      things: this.resultMap.locations[locationIndex].things
-                    } as any;
+                  if (existingLocation) {
+                    // Update coordinates in-place
+                    existingLocation.location = location.location;
+                    existingLocation.encodingType = location.encodingType;
+                    if (location.name) existingLocation.name = location.name;
+                    if (location.description) existingLocation.description = location.description;
                   }
                 }
               } else {
@@ -755,20 +793,21 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     // Set new debounce timer for 100ms
     this.debounceTimer = setTimeout(async () => {
       try {
-        // Refetch observations with new variable values
-        /*this.resultMap = {
-          things: [],
-          datastreams: [],
-          observations: [],
-          locations: [],
-        };*/
+        // Refetch observations with new variable values using the last observations params
+        if (this.lastObservationsParams) {
+          // Set the requestFlag to re-fetch observations with updated time variables
+          this.requestFlag = { key: FILTER, params: { observations: this.lastObservationsParams } };
 
-        await this.getData('OGCSTAData');
+          await this.getData('OGCSTAData');
 
-        // Fetch historical locations for the new time range
-        await this.fetchHistoricalLocations();
+          // Fetch historical locations for the new time range
+          await this.fetchHistoricalLocations();
 
-        this.notify();
+          // Reset requestFlag to NOACTION - return current data without new requests
+          this.requestFlag = { key: NOACTION, params: undefined };
+
+          this.notify();
+        }
       } catch (error) {
         console.error('Error refetching observations after variable change:', error);
       }

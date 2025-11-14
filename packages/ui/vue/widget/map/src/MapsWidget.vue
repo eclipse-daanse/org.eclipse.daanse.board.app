@@ -600,9 +600,6 @@ const loadObservationsInView = () => {
   for (const renderer of config.value.OGCSstyles) {
     const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 10
 
-    // Skip if refresh time is 0 (no polling)
-    if (refreshtime === 0) continue
-
     if (!renderersByRefreshTime.has(refreshtime)) {
       renderersByRefreshTime.set(refreshtime, [])
     }
@@ -646,8 +643,12 @@ const loadObservationsInView = () => {
       // Match against renderers (now O(1) lookup instead of nested loops)
       for (const [refreshtime, renderers] of renderersByRefreshTime.entries()) {
         let matched = false
-        for (const { subrender } of renderers) {
-          if (compareDatastream(dataStream, subrender)) {
+        for (const { renderer, subrender } of renderers) {
+          // Check both datastream AND thing filters
+          const datastreamMatches = compareDatastream(dataStream, subrender)
+          const thingMatches = dataStream.thing ? compareThing(dataStream.thing, renderer) : true
+
+          if (datastreamMatches && thingMatches) {
             matched = true
             break
           }
