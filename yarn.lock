@@ -4817,6 +4817,11 @@ chart.js@^4.4.1, chart.js@^4.4.7:
   dependencies:
     "@kurkle/color" "^0.3.0"
 
+chartjs-plugin-annotation@^3.0.1:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/chartjs-plugin-annotation/-/chartjs-plugin-annotation-3.1.0.tgz#0b3910862bde232344bbb6cf998633f71db7b093"
+  integrity sha512-EkAed6/ycXD/7n0ShrlT1T2Hm3acnbFhgkIEJLa0X+M6S16x0zwj1Fv4suv/2bwayCT3jGPdAtI9uLcAMToaQQ==
+
 check-error@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/check-error/-/check-error-2.1.1.tgz#87eb876ae71ee388fa0471fe423f494be1d96ccc"

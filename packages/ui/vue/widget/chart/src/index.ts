@@ -15,6 +15,7 @@ import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.r
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
+import { ChartSettings } from './gen/ChartSettings'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 
@@ -30,4 +31,4 @@ const register = () => {
 
 register();
 
-export { ChartWidget, ChartWidgetSettings }
+export { ChartWidget, ChartWidgetSettings, ChartSettings }
