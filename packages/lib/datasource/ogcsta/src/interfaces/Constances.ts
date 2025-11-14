@@ -11,6 +11,7 @@
 const FILTER:string = 'EFilter'
 const FILTERRESET:string = 'EFilterReset'
 const HISTORY_FILTER:string = 'EHistoryFilter'
+const NOACTION:string = 'ENoAction'
 
 // History time filter types
 export const TIME_FILTERS = {
@@ -58,5 +59,6 @@ export const getTimeRangeFilter = (range: TimeFilterType) => {
 export {
   FILTER,
   FILTERRESET,
-  HISTORY_FILTER
+  HISTORY_FILTER,
+  NOACTION
 }

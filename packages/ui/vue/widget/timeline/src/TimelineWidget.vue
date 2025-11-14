@@ -398,8 +398,11 @@ const getTimeFromPosition = (percentage: number): Date => {
   return new Date(minMs + (percentage / 100) * (maxMs - minMs));
 };
 
+// Debounce timeout for updateConfig
+let updateConfigTimeout: NodeJS.Timeout | null = null;
+
 // Konfiguration aktualisieren
-const updateConfig = (newStart?: Date, newEnd?: Date) => {
+const updateConfig = (newStart?: Date, newEnd?: Date, immediate = false) => {
   // Wenn Start-Knob fixiert ist, immer Timeline-Minimum verwenden
   const actualStart = config.value.fixStartKnob ? timelineMin.value : (newStart || rangeStart.value);
   const actualEnd = newEnd || rangeEnd.value;
@@ -410,26 +413,43 @@ const updateConfig = (newStart?: Date, newEnd?: Date) => {
     return;
   }
 
-  config.value = {
-    ...config.value,
-    rangeStart: actualStart.toISOString(),
-    rangeEnd: actualEnd.toISOString(),
-    playbackSpeed: playbackSpeed.value
+  const updateFn = () => {
+    config.value = {
+      ...config.value,
+      rangeStart: actualStart.toISOString(),
+      rangeEnd: actualEnd.toISOString(),
+      playbackSpeed: playbackSpeed.value
+    };
+
+    // Update variables if they are configured
+    if (config.value.rangeStartVariable && variableRepository.value) {
+      const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
+      if (startVariable) {
+        startVariable.value = actualStart.toISOString();
+      }
+    }
+
+    if (config.value.rangeEndVariable && variableRepository.value) {
+      const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
+      if (endVariable) {
+        endVariable.value = actualEnd.toISOString();
+      }
+    }
   };
 
-  // Update variables if they are configured
-  if (config.value.rangeStartVariable && variableRepository.value) {
-    const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
-    if (startVariable) {
-      startVariable.value = actualStart.toISOString();
+  // Immediate update (z.B. beim Loslassen des Sliders)
+  if (immediate) {
+    if (updateConfigTimeout) {
+      clearTimeout(updateConfigTimeout);
+      updateConfigTimeout = null;
     }
-  }
-
-  if (config.value.rangeEndVariable && variableRepository.value) {
-    const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
-    if (endVariable) {
-      endVariable.value = actualEnd.toISOString();
+    updateFn();
+  } else {
+    // Debounced update (während des Dragging)
+    if (updateConfigTimeout) {
+      clearTimeout(updateConfigTimeout);
     }
+    updateConfigTimeout = setTimeout(updateFn, 300);
   }
 };
 
@@ -454,6 +474,8 @@ const onStartKnobMouseDown = (event: MouseEvent) => {
   const endMs = rangeEnd.value.getTime();
   const totalRange = maxMs - minMs;
 
+  let lastNewStartMs = initialStartMs;
+
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.value) return;
 
@@ -462,6 +484,7 @@ const onStartKnobMouseDown = (event: MouseEvent) => {
 
     // Grenzen einhalten: nicht über timelineMin/Max und nicht über den End-Knob
     newStartMs = Math.max(minMs, Math.min(newStartMs, endMs - 60000)); // Min 1 Minute Abstand
+    lastNewStartMs = newStartMs;
 
     // Temporäre Positionen für smooth UI update
     const newStartPosition = Math.max(0, Math.min(100, ((newStartMs - minMs) / totalRange) * 100));
@@ -472,15 +495,17 @@ const onStartKnobMouseDown = (event: MouseEvent) => {
       left: newStartPosition + '%',
       width: (endPosition - newStartPosition) + '%'
     };
-
-    updateConfig(new Date(newStartMs), new Date(endMs));
   };
 
   const handleMouseUp = () => {
     isDragging.value = false;
+
     // Temporäre Positionen zurücksetzen
     tempStartPosition.value = null;
     tempRangeStripStyle.value = null;
+
+    // Sofortiges finales Update mit der letzten berechneten Position
+    updateConfig(new Date(lastNewStartMs), new Date(endMs), true);
 
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -506,6 +531,8 @@ const onEndKnobMouseDown = (event: MouseEvent) => {
   const startMs = rangeStart.value.getTime();
   const totalRange = maxMs - minMs;
 
+  let lastNewEndMs = initialEndMs;
+
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.value) return;
 
@@ -514,6 +541,7 @@ const onEndKnobMouseDown = (event: MouseEvent) => {
 
     // Grenzen einhalten: nicht über timelineMin/Max und nicht unter den Start-Knob
     newEndMs = Math.min(maxMs, Math.max(newEndMs, startMs + 60000)); // Min 1 Minute Abstand
+    lastNewEndMs = newEndMs;
 
     // Temporäre Positionen für smooth UI update
     const startPosition = Math.max(0, Math.min(100, ((startMs - minMs) / totalRange) * 100));
@@ -524,15 +552,17 @@ const onEndKnobMouseDown = (event: MouseEvent) => {
       left: startPosition + '%',
       width: (newEndPosition - startPosition) + '%'
     };
-
-    updateConfig(new Date(startMs), new Date(newEndMs));
   };
 
   const handleMouseUp = () => {
     isDragging.value = false;
+
     // Temporäre Positionen zurücksetzen
     tempEndPosition.value = null;
     tempRangeStripStyle.value = null;
+
+    // Sofortiges finales Update mit der letzten berechneten Position
+    updateConfig(new Date(startMs), new Date(lastNewEndMs), true);
 
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -563,6 +593,10 @@ const onRangeStripMouseDown = (event: MouseEvent) => {
   const initialStartMs = rangeStart.value.getTime();
   const initialEndMs = rangeEnd.value.getTime();
   const rangeDuration = initialEndMs - initialStartMs;
+  const totalRange = maxMs - minMs;
+
+  let lastNewStartMs = initialStartMs;
+  let lastNewEndMs = initialEndMs;
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.value) return;
@@ -582,11 +616,32 @@ const onRangeStripMouseDown = (event: MouseEvent) => {
       newStartMs = newEndMs - rangeDuration;
     }
 
-    updateConfig(new Date(newStartMs), new Date(newEndMs));
+    lastNewStartMs = newStartMs;
+    lastNewEndMs = newEndMs;
+
+    // Temporäre Positionen für smooth UI update
+    const newStartPosition = Math.max(0, Math.min(100, ((newStartMs - minMs) / totalRange) * 100));
+    const newEndPosition = Math.max(0, Math.min(100, ((newEndMs - minMs) / totalRange) * 100));
+
+    tempStartPosition.value = newStartPosition;
+    tempEndPosition.value = newEndPosition;
+    tempRangeStripStyle.value = {
+      left: newStartPosition + '%',
+      width: (newEndPosition - newStartPosition) + '%'
+    };
   };
 
   const handleMouseUp = () => {
     isDragging.value = false;
+
+    // Temporäre Positionen zurücksetzen
+    tempStartPosition.value = null;
+    tempEndPosition.value = null;
+    tempRangeStripStyle.value = null;
+
+    // Sofortiges finales Update mit den letzten berechneten Positionen
+    updateConfig(new Date(lastNewStartMs), new Date(lastNewEndMs), true);
+
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };

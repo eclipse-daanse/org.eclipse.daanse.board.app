@@ -49,13 +49,21 @@ Contributors: Smart City Jena
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { IRenderer } from '../../api/Renderer';
 
 const renderer = defineModel<IRenderer>({ required: true });
 
+let debounceTimeout: NodeJS.Timeout | null = null;
+
 const updateRefreshTime = (value: number) => {
-  renderer.value.ObservationrefreshTime = value;
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout);
+  }
+
+  debounceTimeout = setTimeout(() => {
+    renderer.value.ObservationrefreshTime = value;
+  }, 300);
 };
 
 const getRefreshTimeLabel = (seconds: number): string => {
