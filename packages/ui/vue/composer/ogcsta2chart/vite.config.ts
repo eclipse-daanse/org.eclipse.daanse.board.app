@@ -16,6 +16,7 @@ import libCss from 'vite-plugin-libcss'
 export default defineConfig({
   build: {
     sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart',

@@ -34,9 +34,34 @@ const availableDatastreams = ref<any[]>([])
 const isLoadingThings = ref(false)
 const isLoadingDatastreams = ref(false)
 
-// Initialize arrays if not exists
-if (!config.datastreams) {
+// Initialize arrays if not exists (without triggering watchers)
+console.log('🔧 Settings.vue mounted with config:', JSON.stringify(config, null, 2))
+
+if (!Array.isArray(config.datastreams)) {
+  console.log('⚠️ datastreams is not an array, initializing:', config.datastreams)
   config.datastreams = []
+} else {
+  console.log('✅ datastreams initialized with', config.datastreams.length, 'items:', config.datastreams)
+}
+
+if (!Array.isArray(config.thingIds)) {
+  console.log('⚠️ thingIds is not an array, initializing:', config.thingIds)
+  config.thingIds = []
+} else {
+  console.log('✅ thingIds initialized:', config.thingIds)
+}
+
+if (!Array.isArray(config.connectedDatasources)) {
+  console.log('⚠️ connectedDatasources is not an array, initializing:', config.connectedDatasources)
+  config.connectedDatasources = []
+} else {
+  console.log('✅ connectedDatasources initialized:', config.connectedDatasources)
+  // Remove undefined/null values from existing array
+  const cleaned = config.connectedDatasources.filter((id: any) => id != null && id !== undefined)
+  if (cleaned.length !== config.connectedDatasources.length) {
+    console.log('🧹 Cleaning connectedDatasources, removed', config.connectedDatasources.length - cleaned.length, 'invalid values')
+    config.connectedDatasources = cleaned
+  }
 }
 
 // Load available things when datasources change
@@ -46,12 +71,19 @@ const loadThings = async () => {
     return
   }
 
+  // Filter out undefined/null values
+  const validDatasources = config.connectedDatasources.filter((id: any) => id != null && id !== undefined)
+  if (validDatasources.length === 0) {
+    availableThings.value = []
+    return
+  }
+
   isLoadingThings.value = true
   try {
     const datasourceRepository = container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
     const allThings: any[] = []
 
-    for (const datasourceId of config.connectedDatasources) {
+    for (const datasourceId of validDatasources) {
       const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
 
       const options = {
@@ -59,7 +91,7 @@ const loadThings = async () => {
           things: {
             all: {
               includeDatastreams: false,
-              includeLocations: true
+              includeLocations: false
             }
           }
         }
@@ -87,9 +119,14 @@ const loadThings = async () => {
   }
 }
 
-// Load available datastreams when datasources or thingId changes
+// Load available datastreams when datasources or thingIds changes
 const loadDatastreams = async () => {
   if (!config.connectedDatasources || config.connectedDatasources.length === 0) {
+    availableDatastreams.value = []
+    return
+  }
+
+  if (!config.thingIds || config.thingIds.length === 0) {
     availableDatastreams.value = []
     return
   }
@@ -99,7 +136,7 @@ const loadDatastreams = async () => {
     const datasourceRepository = container.get(DatasourceRepositoryIdentifier) as DatasourceRepository
     const datastreams = await OGCSTAToChartComposer.getAvailableDatastreams(
       config.connectedDatasources,
-      config.thingId,
+      config.thingIds,
       datasourceRepository
     )
     availableDatastreams.value = datastreams
@@ -111,19 +148,15 @@ const loadDatastreams = async () => {
   }
 }
 
-onMounted(() => {
-  loadThings()
-  loadDatastreams()
-})
-
 watch(() => config.connectedDatasources, () => {
+  console.log( config.connectedDatasources)
   loadThings()
-  loadDatastreams()
 }, { deep: true })
 
-watch(() => config.thingId, () => {
+watch(() => config.thingIds, () => {
+  console.log( config.thingIds)
   loadDatastreams()
-})
+}, { deep: true })
 
 // Add a datastream selection
 const addDatastream = () => {
@@ -161,6 +194,19 @@ const generateRandomColor = () => {
 const formatDatastreamOption = (ds: any) => {
   return `${ds.name} (${ds.thingName}) - ${ds.unit}`
 }
+
+// Load things and datastreams on mount if datasources are already configured
+onMounted(() => {
+  console.log('🔧 Settings.vue onMounted')
+  if (config.connectedDatasources && config.connectedDatasources.length > 0) {
+    console.log('🔧 Loading things on mount')
+    loadThings()
+  }
+  if (config.thingIds && config.thingIds.length > 0 && config.connectedDatasources && config.connectedDatasources.length > 0) {
+    console.log('🔧 Loading datastreams on mount')
+    loadDatastreams()
+  }
+})
 </script>
 
 <template>
@@ -177,13 +223,13 @@ const formatDatastreamOption = (ds: any) => {
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <VaSelect
-      v-model="config.thingId"
-      label="Thing (Optional)"
+      v-model="config.thingIds"
+      label="Things (Required)"
       :options="availableThings"
+      multiple
       text-by="name"
       value-by="id"
-      placeholder="Select a Thing or leave empty for all"
-      clearable
+      placeholder="Select one or more Things"
       :loading="isLoadingThings"
     />
 
@@ -203,11 +249,11 @@ const formatDatastreamOption = (ds: any) => {
         Loading available datastreams...
       </div>
 
-      <div v-else-if="availableDatastreams.length === 0" class="no-datastreams">
-        No datastreams available. Please select an OGC STA datasource first.
+      <div v-if="availableDatastreams.length === 0 && config.datastreams.length === 0" class="no-datastreams">
+        No datastreams available. Please select an OGC STA datasource and one or more Things first.
       </div>
 
-      <div v-else class="datastream-list">
+      <div v-if="config.datastreams.length > 0" class="datastream-list">
         <div
           v-for="(datastream, index) in config.datastreams"
           :key="index"
@@ -222,6 +268,7 @@ const formatDatastreamOption = (ds: any) => {
               text-by="name"
               value-by="id"
               class="datastream-select"
+              :loading="isLoadingDatastreams"
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->
