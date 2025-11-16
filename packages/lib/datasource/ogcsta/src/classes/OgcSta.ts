@@ -140,12 +140,15 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       },
     })
 
+    // Check if this is an isolated request (don't modify cache)
+    const isIsolatedRequest = options?.isolatedRequest === true
+
     // Only clear cache if explicitly requested via options or if no data exists yet
     const shouldReload = options?.reload ||
                         this.requestFlag.key == FILTERRESET ||
                         (!this.resultMap.things || this.resultMap.things.length === 0)
 
-    if (shouldReload) {
+    if (shouldReload && !isIsolatedRequest) {
       // Clear previous results only when explicitly reloading
       this.resultMap = {
         things: [],
@@ -175,6 +178,43 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     if (listOfPromesis.length > 0) {
       const results: IOGCSTAData[] = await Promise.all(listOfPromesis)
 
+      // If isolated request, return data without modifying cache
+      if (isIsolatedRequest) {
+        const isolatedData: IOGCSTAData = {
+          things: [],
+          datastreams: [],
+          observations: [],
+          locations: [],
+        }
+
+        for (const result of results) {
+          if (result.datastreams) {
+            isolatedData.datastreams = isolatedData.datastreams?.concat(result.datastreams)
+          }
+          if (result.things) {
+            isolatedData.things = isolatedData.things?.concat(result.things)
+          }
+          if (result.observations) {
+            isolatedData.observations = isolatedData.observations?.concat(result.observations as Observation[])
+          }
+          if (result.locations) {
+            isolatedData.locations = isolatedData.locations?.concat(result.locations)
+          }
+        }
+
+        // Return isolated data without modifying cache
+        if (type == 'OGCSTAData') {
+          return {
+            things: isolatedData.things ? isolatedData.things.map(t => ({ ...t })) : [],
+            datastreams: isolatedData.datastreams ? [...isolatedData.datastreams] : [],
+            observations: isolatedData.observations ? [...isolatedData.observations] : [],
+            locations: isolatedData.locations ? isolatedData.locations.map(loc => ({ ...loc })) : []
+          } as T
+        }
+        return isolatedData as T
+      }
+
+      // Normal request: add to cache
       for (const result of results) {
         if (result.datastreams) {
           this.resultMap.datastreams = this.resultMap.datastreams?.concat(result.datastreams)
@@ -197,21 +237,15 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         console.log('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
         for (const d of observationsParam ?? []) {
           console.log('🔍 Looking for observations for datastream:', d.iotId)
-          const ind = this.resultMap.observations?.findIndex(
-            o => o.ds_source == d.iotId,
-          )
-          console.log('🔍 Found observation at index:', ind)
           const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
           if (ds) {
-            if (ind != undefined && ind != -1) {
-              // Use slice instead of splice to preserve the observation in resultMap
-              ds.observations = this.resultMap.observations?.slice(ind, ind + 1) as Observation[]
-              console.log('✅ Assigned observation to datastream:', ds.name)
-            } else {
-              // No observations found - clear the observations array
-              ds.observations = []
-              console.log('⚠️ No observations found for datastream, cleared observations:', ds.name)
-            }
+            // Get ALL observations for this datastream, not just the first one
+            const datastreamObservations = this.resultMap.observations?.filter(
+              o => o.ds_source == d.iotId
+            ) || []
+
+            ds.observations = datastreamObservations as Observation[]
+            console.log(`✅ Assigned ${datastreamObservations.length} observations to datastream: ${ds.name}`)
           }
         }
       }
@@ -225,12 +259,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
 
     if (type == 'OGCSTAData') {
-      // Create a shallow copy to trigger Vue reactivity when locations are updated in-place
+      // Create a deep copy of things and locations to trigger Vue reactivity when locations are updated in-place
+      // We need to copy the objects themselves, not just the arrays, because locations are mutated
       return {
-        things: this.resultMap.things ? [...this.resultMap.things] : [],
+        things: this.resultMap.things ? this.resultMap.things.map(t => ({ ...t })) : [],
         datastreams: this.resultMap.datastreams ? [...this.resultMap.datastreams] : [],
         observations: this.resultMap.observations ? [...this.resultMap.observations] : [],
-        locations: this.resultMap.locations ? [...this.resultMap.locations] : []
+        locations: this.resultMap.locations ? this.resultMap.locations.map(loc => ({ ...loc })) : []
       } as T
     }
     return this.resultMap as T
@@ -548,13 +583,32 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           })(),
         )
       } else if ('ids' in this.requestFlag.params.things!) {
+        console.log('🔍 OgcSta: Loading things by IDs:', this.requestFlag.params.things!.ids)
+        const includeDatastreams = this.requestFlag.params.things!.includeDatastreams
+        const includeLocations = this.requestFlag.params.things!.includeLocations
+
+        let expand = []
+        if (includeDatastreams) expand.push('Datastreams')
+        if (includeLocations) expand.push('Locations')
+
+        console.log('🔍 OgcSta: Expand params:', expand)
+
         for (const id of this.requestFlag.params.things!.ids) {
           listOfPromesis.push(
             (async () => {
+              const expandParam = expand.length > 0 ? expand.join(',') : undefined
+              console.log(`🔍 OgcSta: Fetching thing ${id} with expand: ${expandParam}`)
               const thing = await new ThingsApi(
                 this.baseConfigration,
-              ).v11ThingsEntityIdGet({ entityId: id,$expand: 'Datastreams,Locations' })
-              return { things: [thing as BoxedThing] }
+              ).v11ThingsEntityIdGet({ entityId: id, $expand: expandParam })
+
+              if (expand.length > 0) {
+                // When using expand, transform to match BoxedThing format
+                return transformFromThingLocationDastreamToLocationThingDatastream([thing as BoxedThing])
+              } else {
+                // Without expand, return as simple thing
+                return { things: [thing as BoxedThing] }
+              }
             })(),
           )
         }
@@ -603,6 +657,14 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     if (!historyConfig?.enabled) return;
 
     // Get time range from variables or config
+    const timeStart = this.resolveTimeValue(
+      historyConfig.timeRange?.start,
+      historyConfig.timeRange?.startVariable
+    ) || this.resolveTimeValue(
+      historyConfig.phenomenonTime?.start,
+      historyConfig.phenomenonTime?.startVariable
+    );
+
     const timeEnd = this.resolveTimeValue(
       historyConfig.timeRange?.end,
       historyConfig.timeRange?.endVariable
@@ -627,7 +689,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
     if (thingIds.size === 0) return;
 
-    console.log(`📍 Fetching historical locations for ${thingIds.size} things at time: ${timeEnd}`);
+    console.log(`📍 Fetching historical locations for ${thingIds.size} things at time range: ${timeStart || 'none'} to ${timeEnd}`);
 
     // Get connection for direct fetch
     const connection = this.connectionRepository.getConnection(
@@ -637,7 +699,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     // Fetch historical location for each thing
     for (const thingId of thingIds) {
       try {
-        const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=time le ${timeEnd}&$orderby=time desc&$top=1&$expand=Locations`;
+        // Build time filter with both start and end
+        let timeFilter = `time le ${timeEnd}`;
+        if (timeStart) {
+          timeFilter = `time ge ${timeStart} and ${timeFilter}`;
+        }
+
+        const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=${timeFilter}&$orderby=time desc&$top=1&$expand=Locations`;
 
         // Use connection fetch directly
         const response = await connection.fetch({ url } as IRequestParams, {
@@ -654,6 +722,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           if (locations && locations.length > 0) {
             console.log(`📍 Found historical location for thing ${thingId}:`, locations[0]);
 
+            // Find the thing first to show before/after
+            const thing = this.resultMap.things?.find(t => t.iotId === thingId);
+            if (thing) {
+              console.log(`🔵 BEFORE UPDATE - Thing ${thingId} current location:`, JSON.stringify(thing.locations));
+            }
+
             // Find all datastreams for this thing and update their locations
             for (const datastream of this.resultMap.datastreams || []) {
               if (datastream.thing?.iotId === thingId) {
@@ -666,14 +740,73 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             }
 
             // Also update in things array
-            const thing = this.resultMap.things?.find(t => t.iotId === thingId);
             if (thing && thing.locations) {
               thing.locations = locations;
-              console.log(`📍 Updated thing ${thingId} with historical location`);
+              console.log(`🟢 AFTER UPDATE - Thing ${thingId} new location:`, JSON.stringify(thing.locations));
+            }
+
+            // Add location back to locations array if it was removed
+            for (const location of locations) {
+              const existingLocation = this.resultMap.locations?.find(loc => loc.iotId === location.iotId);
+
+              if (existingLocation) {
+                // Update existing location and add thing if not present
+                existingLocation.location = location.location;
+                existingLocation.encodingType = location.encodingType;
+                if (location.name) existingLocation.name = location.name;
+                if (location.description) existingLocation.description = location.description;
+
+                if (!existingLocation.things) {
+                  existingLocation.things = [];
+                }
+
+                if (thing && !existingLocation.things.find(t => t.iotId === thingId)) {
+                  existingLocation.things.push(thing);
+                  console.log(`📍 Added thing ${thingId} back to location ${location.iotId}`);
+                }
+              } else if (thing) {
+                // Location doesn't exist, create it and add thing
+                const newLocation = { ...location, things: [thing] };
+                this.resultMap.locations?.push(newLocation);
+                console.log(`📍 Created new location ${location.iotId} with thing ${thingId}`);
+              }
             }
           }
         } else {
           console.log(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
+
+          // Find the thing first
+          const thing = this.resultMap.things?.find(t => t.iotId === thingId);
+
+          // Clear location when no historical location exists at this time
+          for (const datastream of this.resultMap.datastreams || []) {
+            if (datastream.thing && datastream.thing.iotId === thingId) {
+              datastream.thing.locations = [];
+              console.log(`📍 Cleared location for datastream ${datastream.iotId}`);
+            }
+          }
+
+          // Also clear in things array
+          if (thing && thing.locations) {
+            thing.locations = [];
+            console.log(`🟢 Cleared location for Thing ${thingId}`);
+          }
+
+          // Remove this thing from all locations' things arrays
+          for (const location of this.resultMap.locations || []) {
+            if (location.things) {
+              const thingIndex = location.things.findIndex(t => t.iotId === thingId);
+              if (thingIndex !== -1) {
+                location.things.splice(thingIndex, 1);
+                console.log(`📍 Removed thing ${thingId} from location ${location.iotId}`);
+              }
+            }
+          }
+
+          // Remove locations that no longer have any things
+          this.resultMap.locations = this.resultMap.locations?.filter(loc =>
+            loc.things && loc.things.length > 0
+          ) || [];
         }
       } catch (error) {
         console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);

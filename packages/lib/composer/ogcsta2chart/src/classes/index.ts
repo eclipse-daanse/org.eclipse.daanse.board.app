@@ -18,7 +18,7 @@ import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToCh
 
 export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[]
-  thingId?: string | number
+  thingIds: (string | number)[]
   datastreams: DatastreamSelection[]
   name: string
   type: string
@@ -31,11 +31,13 @@ export class OGCSTAToChartComposer extends BaseDatasource {
   }
 
   private connectedDatasources: string[] = []
-  private thingId?: string | number
+  private thingIds: (string | number)[] = []
   private datastreams: DatastreamSelection[] = []
   private isUpdating: boolean = false
   private pendingUpdate: boolean = false
   private cachedData: any = null
+  private cachedThingsStructure: any[] = []  // Cache Things structure for operation mode
+  private loadingPromises: Map<string, Promise<any>> = new Map()  // Track ongoing loads to prevent duplicates
 
   public static availableTypes = ['ogcsta']
 
@@ -43,7 +45,7 @@ export class OGCSTAToChartComposer extends BaseDatasource {
     super.init(configuration)
 
     this.connectedDatasources = configuration.connectedDatasources
-    this.thingId = configuration.thingId
+    this.thingIds = configuration.thingIds || []
     this.datastreams = configuration.datastreams || []
 
     const updateFn = async () => {
@@ -57,7 +59,11 @@ export class OGCSTAToChartComposer extends BaseDatasource {
       this.pendingUpdate = false
 
       try {
-        console.log('📊 OGCSTAToChartComposer: Updating chart data...')
+        console.log('📊 OGCSTAToChartComposer: Datasource updated, notifying widgets...')
+
+        // Add small delay to ensure datasource has finished loading observations
+        await new Promise(resolve => setTimeout(resolve, 50))
+
         this.notify()
 
         if (this.pendingUpdate) {
@@ -83,6 +89,8 @@ export class OGCSTAToChartComposer extends BaseDatasource {
   async getData(type: string, options?: any): Promise<any> {
     const datasourceRepository = container.get(identifier) as DatasourceRepository
 
+    // Check if datasource has history enabled
+    // If not, we need to load observations ourselves for the chart
     const data = await Promise.all(
       this.connectedDatasources
         .filter((datasourceId) => datasourceId)
@@ -92,89 +100,109 @@ export class OGCSTAToChartComposer extends BaseDatasource {
           }
           const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
 
-          // Configure datasource options
-          const datasourceOptions = this.thingId ? {
-            ...options,
-            filter: {
-              things: {
-                ids: [this.thingId]
-              }
-            }
-          } : {
-            ...options,
-            filter: {
-              things: {
-                all: {
-                  includeDatastreams: true,
-                  includeLocations: false
-                }
-              }
-            }
+          if (this.datastreams.length === 0) {
+            console.log('⚠️ No datastreams configured yet')
+            return { things: [], datastreams: [], observations: [] }
           }
 
-          // Step 1: Get Things + Datastreams (no observations yet)
-          let dat = await datasourceInstance.getData('OGCSTAData', datasourceOptions)
-          console.log('OGCSTAToChart Composer: Things and Datastreams loaded:', dat)
+          // Read observations from datastreams in resultMap
+          // The OGC STA datasource stores observations in datastreams after processing
+          console.log(`📊 Reading observations from datastreams in cache`)
 
-          // Step 2: Get observations for selected datastreams
-          if (dat?.things && this.datastreams.length > 0) {
-            const datastreamIds = this.datastreams.map(ds => ds.datastreamId)
+          const resultMap = (datasourceInstance as any).resultMap
+          const dsConfig = (datasourceInstance as any).configuration
+          const allObservations: any[] = []
+          const missingDatastreams: any[] = []
 
-            // Find matching datastreams in the things
-            const relevantDatastreams: any[] = []
-            for (const thing of dat.things) {
-              if (thing.datastreams && thing.datastreams.length > 0) {
-                for (const datastream of thing.datastreams) {
-                  const datastreamId = datastream['@iot.id'] || datastream.iotId
-                  if (datastreamIds.includes(datastreamId)) {
-                    relevantDatastreams.push({
-                      ...datastream,
-                      thingId: thing['@iot.id'] || thing.iotId
-                    })
-                  }
-                }
-              }
-            }
+          if (resultMap?.datastreams) {
+            console.log(`✅ Found ${resultMap.datastreams.length} datastreams in cache`)
 
-            // Get observations for relevant datastreams
-            if (relevantDatastreams.length > 0) {
-              console.log(`📊 Loading observations for ${relevantDatastreams.length} datastreams`)
+            for (const ds of this.datastreams) {
+              const datastream = resultMap.datastreams.find((d: any) => d.iotId == ds.datastreamId)
 
-              const observationsOptions = {
-                ...options,
-                filter: {
-                  observations: relevantDatastreams.map((ds: any) => ({
-                    iotId: ds['@iot.id'] || ds.iotId,
-                    $orderby: 'phenomenonTime desc'
-                  }))
-                }
-              }
+              if (datastream?.observations && datastream.observations.length > 0) {
+                console.log(`📊 Found ${datastream.observations.length} observations in datastream ${ds.datastreamId}`)
 
-              const observationsData = await datasourceInstance.getData('OGCSTAData', observationsOptions)
-
-              // Merge observations back into datastreams
-              if (observationsData?.observations) {
-                console.log(`✅ Received ${observationsData.observations.length} observations`)
-
-                dat.things.forEach((thing: any) => {
-                  if (thing.datastreams) {
-                    thing.datastreams.forEach((ds: any) => {
-                      const dsId = ds['@iot.id'] || ds.iotId
-                      const observations = observationsData.observations?.filter((obs: any) =>
-                        obs.ds_source == dsId
-                      ) || []
-                      if (observations.length > 0) {
-                        ds.observations = observations
-                        console.log(`✅ Added ${observations.length} observations to ${ds.name}`)
-                      }
-                    })
-                  }
+                // Add ds_source to observations
+                datastream.observations.forEach((obs: any) => {
+                  obs.ds_source = ds.datastreamId
+                  allObservations.push(obs)
                 })
+              } else {
+                console.log(`⚠️ No observations in cache for datastream ${ds.datastreamId}, will load directly`)
+                missingDatastreams.push(ds)
+              }
+            }
+          } else {
+            console.log(`⚠️ No datastreams in cache, will load all directly`)
+            missingDatastreams.push(...this.datastreams)
+          }
+
+          // Load missing datastreams directly
+          if (missingDatastreams.length > 0) {
+            console.log(`📊 Loading ${missingDatastreams.length} missing datastreams directly`)
+
+            const historyConfig = dsConfig?.history || {
+              enabled: true,
+              phenomenonTime: {
+                startVariable: dsConfig?.history?.phenomenonTime?.startVariable,
+                endVariable: dsConfig?.history?.phenomenonTime?.endVariable
+              }
+            }
+
+            for (const ds of missingDatastreams) {
+              try {
+                // Check if already loading this datastream
+                const loadKey = `${datasourceId}:${ds.datastreamId}`
+
+                if (this.loadingPromises.has(loadKey)) {
+                  console.log(`⏳ Already loading datastream ${ds.datastreamId}, reusing promise`)
+                  const observations = await this.loadingPromises.get(loadKey)!
+                  observations.forEach((obs: any) => {
+                    allObservations.push(obs)
+                  })
+                } else {
+                  console.log(`📊 Loading observations for missing datastream ${ds.datastreamId}`)
+
+                  // Create loading promise
+                  const loadPromise = (datasourceInstance as any).getHistoricalObservations(
+                    ds.datastreamId,
+                    historyConfig
+                  ).then((observations: any[]) => {
+                    // Add ds_source to observations
+                    observations.forEach((obs: any) => {
+                      obs.ds_source = ds.datastreamId
+                    })
+                    console.log(`✅ Loaded ${observations.length} observations for ${ds.datastreamId}`)
+
+                    // Remove from loading map after a short delay to allow concurrent calls to use it
+                    setTimeout(() => this.loadingPromises.delete(loadKey), 100)
+
+                    return observations
+                  })
+
+                  // Store promise
+                  this.loadingPromises.set(loadKey, loadPromise)
+
+                  // Wait for result
+                  const observations = await loadPromise
+                  observations.forEach((obs: any) => {
+                    allObservations.push(obs)
+                  })
+                }
+              } catch (error) {
+                console.error(`Error loading observations for ${ds.datastreamId}:`, error)
               }
             }
           }
 
-          return dat
+          console.log(`✅ Total observations collected: ${allObservations.length}`)
+
+          return {
+            things: resultMap?.things || [],
+            datastreams: resultMap?.datastreams || [],
+            observations: allObservations
+          }
         })
     )
 
@@ -216,24 +244,42 @@ export class OGCSTAToChartComposer extends BaseDatasource {
     this.datastreams.forEach((datastreamSelection) => {
       const observationsByTimestamp = new Map<string, number>()
 
-      // Find the datastream in the OGC STA data
+      // Get observations directly from the observations array (Operation mode)
       for (const ogcStaData of ogcStaDataArray) {
-        if (!ogcStaData?.things) continue
-
-        for (const thing of ogcStaData.things) {
-          if (!thing.datastreams) continue
-
-          const datastream = thing.datastreams.find((ds: any) => {
-            const dsId = ds['@iot.id'] || ds.iotId
-            return dsId === datastreamSelection.datastreamId
+        if (ogcStaData?.observations && ogcStaData.observations.length > 0) {
+          // Filter observations for this specific datastream
+          const relevantObservations = ogcStaData.observations.filter((obs: any) => {
+            // Check ds_source field (set by OgcSta.ts:504)
+            const obsDatastreamId = obs.ds_source || obs['Datastream@iot.navigationLink']?.match(/Datastreams\((.+?)\)/)?.[1] || obs.datastreamId
+            return obsDatastreamId == datastreamSelection.datastreamId  // Use == to handle string/number comparison
           })
 
-          if (datastream && datastream.observations && datastream.observations.length > 0) {
-            datastream.observations.forEach((obs: any) => {
-              const timestamp = obs.phenomenonTime || obs.resultTime || new Date().toISOString()
-              allTimestamps.add(timestamp)
-              observationsByTimestamp.set(timestamp, obs.result)
+          console.log(`📊 Found ${relevantObservations.length} observations for datastream ${datastreamSelection.datastreamId}`)
+
+          relevantObservations.forEach((obs: any) => {
+            const timestamp = obs.phenomenonTime || obs.resultTime || new Date().toISOString()
+            allTimestamps.add(timestamp)
+            observationsByTimestamp.set(timestamp, obs.result)
+          })
+        }
+
+        // Also support Things structure (Setup/Preview mode)
+        if (ogcStaData?.things) {
+          for (const thing of ogcStaData.things) {
+            if (!thing.datastreams) continue
+
+            const datastream = thing.datastreams.find((ds: any) => {
+              const dsId = ds['@iot.id'] || ds.iotId
+              return dsId === datastreamSelection.datastreamId
             })
+
+            if (datastream && datastream.observations && datastream.observations.length > 0) {
+              datastream.observations.forEach((obs: any) => {
+                const timestamp = obs.phenomenonTime || obs.resultTime || new Date().toISOString()
+                allTimestamps.add(timestamp)
+                observationsByTimestamp.set(timestamp, obs.result)
+              })
+            }
           }
         }
       }
@@ -274,34 +320,61 @@ export class OGCSTAToChartComposer extends BaseDatasource {
 
     this.datastreams.forEach((datastreamSelection) => {
       for (const ogcStaData of ogcStaDataArray) {
-        if (!ogcStaData?.things) continue
-
-        for (const thing of ogcStaData.things) {
-          if (!thing.datastreams) continue
-
-          const datastream = thing.datastreams.find((ds: any) => {
-            const dsId = ds['@iot.id'] || ds.iotId
-            return dsId === datastreamSelection.datastreamId
+        // Support observations array directly (Operation mode)
+        if (ogcStaData?.observations && ogcStaData.observations.length > 0) {
+          const relevantObservations = ogcStaData.observations.filter((obs: any) => {
+            // Check ds_source field (set by OgcSta.ts:504)
+            const obsDatastreamId = obs.ds_source || obs['Datastream@iot.navigationLink']?.match(/Datastreams\((.+?)\)/)?.[1] || obs.datastreamId
+            return obsDatastreamId == datastreamSelection.datastreamId  // Use == to handle string/number comparison
           })
 
-          if (datastream && datastream.observations && datastream.observations.length > 0) {
-            // Add all observations, not just the first one
-            datastream.observations.forEach((observation: any) => {
-              const item = {
-                datastream: datastreamSelection.label || datastream.name,
-                value: observation.result,
-                unit: datastream.unitOfMeasurement?.symbol || '',
-                timestamp: observation.phenomenonTime || observation.resultTime || ''
-              }
+          relevantObservations.forEach((observation: any) => {
+            const item = {
+              datastream: datastreamSelection.label || datastreamSelection.datastreamId,
+              value: observation.result,
+              unit: '', // Unit not available in observation-only mode
+              timestamp: observation.phenomenonTime || observation.resultTime || ''
+            }
 
-              dataTable.items.push(item)
-              dataTable.rows.push([
-                item.datastream,
-                item.value,
-                item.unit,
-                item.timestamp
-              ])
+            dataTable.items.push(item)
+            dataTable.rows.push([
+              item.datastream,
+              item.value,
+              item.unit,
+              item.timestamp
+            ])
+          })
+        }
+
+        // Support Things structure (Setup/Preview mode)
+        if (ogcStaData?.things) {
+          for (const thing of ogcStaData.things) {
+            if (!thing.datastreams) continue
+
+            const datastream = thing.datastreams.find((ds: any) => {
+              const dsId = ds['@iot.id'] || ds.iotId
+              return dsId === datastreamSelection.datastreamId
             })
+
+            if (datastream && datastream.observations && datastream.observations.length > 0) {
+              // Add all observations, not just the first one
+              datastream.observations.forEach((observation: any) => {
+                const item = {
+                  datastream: datastreamSelection.label || datastream.name,
+                  value: observation.result,
+                  unit: datastream.unitOfMeasurement?.symbol || '',
+                  timestamp: observation.phenomenonTime || observation.resultTime || ''
+                }
+
+                dataTable.items.push(item)
+                dataTable.rows.push([
+                  item.datastream,
+                  item.value,
+                  item.unit,
+                  item.timestamp
+                ])
+              })
+            }
           }
         }
       }
@@ -341,11 +414,16 @@ export class OGCSTAToChartComposer extends BaseDatasource {
   // Helper to get available datastreams from connected datasources
   static async getAvailableDatastreams(
     connectedDatasources: string[],
-    thingId?: string | number,
+    thingIds: (string | number)[],
     datasourceRepository?: DatasourceRepository
   ): Promise<any[]> {
     if (!datasourceRepository) {
       throw new Error('DatasourceRepository is required')
+    }
+
+    // Return empty if no things selected
+    if (!thingIds || thingIds.length === 0) {
+      return []
     }
 
     const allDatastreams: any[] = []
@@ -353,19 +431,13 @@ export class OGCSTAToChartComposer extends BaseDatasource {
     for (const datasourceId of connectedDatasources) {
       const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
 
-      const options = thingId ? {
+      const options = {
+        isolatedRequest: true,  // Don't affect cache, only load for UI
         filter: {
           things: {
-            ids: [thingId]
-          }
-        }
-      } : {
-        filter: {
-          things: {
-            all: {
-              includeDatastreams: true,
-              includeLocations: false
-            }
+            ids: thingIds,
+            includeDatastreams: true,
+            includeLocations: false
           }
         }
       }
