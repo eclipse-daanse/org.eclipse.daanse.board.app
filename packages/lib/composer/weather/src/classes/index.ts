@@ -76,6 +76,9 @@ export class WeatherComposer extends BaseDatasource {
 
     // Forecast mappings for different time periods
     temperatureForecast: {
+      forecast3h: ['~forecast3H~tempAboveSurface5', 'temp3h', 'temperature3h', 'temp_3h'],
+      forecast6h: ['~forecast6H~tempAboveSurface5', 'temp6h', 'temperature6h', 'temp_6h'],
+      forecast9h: ['~forecast9H~tempAboveSurface5', 'temp9h', 'temperature9h', 'temp_9h'],
       forecast12h: ['~forecast12H~tempAboveSurface5', 'forecast12h~tempabovesurface5', 'temp12h', 'temperature12h', 'temp_12h'],
       forecast24h: ['~forecast24H~tempAboveSurface5', 'temp24h', 'temperature24h', 'temp_24h'],
       forecast36h: ['~forecast36H~tempAboveSurface5', 'temp36h', 'temperature36h', 'temp_36h'],
@@ -217,7 +220,9 @@ export class WeatherComposer extends BaseDatasource {
             ...options,
             filter: {
               things: {
-                ids: [this.thingId]
+                ids: [this.thingId],
+                includeDatastreams: true,
+                includeLocations: true
               }
             }
           } : {
@@ -532,38 +537,38 @@ export class WeatherComposer extends BaseDatasource {
         const forecastHours = forecastMatch[1]
         const forecastPeriodKey = `forecast${forecastHours}h`
 
-        // Only process supported forecast periods (12, 24, 36, 48, 60, 72 hours)
-        const supportedPeriods = ['12', '24', '36', '48', '60', '72']
-        if (!supportedPeriods.includes(forecastHours)) {
-          console.log(`      ⏭️ Skipping unsupported forecast period: ${forecastPeriodKey}`)
-          continue
-        }
-
         console.log(`      🔍 Looking for forecast period: ${forecastPeriodKey} in ${weatherParam}`)
 
         const forecastKeywords = (keywords as ForecastMapping)[forecastPeriodKey as keyof ForecastMapping]
+
+        // If this forecast period is not defined in mapping, try to match by parameter name anyway
+        const parameterName = id.split('~').pop()?.toLowerCase()
+        let matchesParameter = false
+
         if (Array.isArray(forecastKeywords)) {
-          // Check if the parameter name matches (extract parameter from ID)
-          const parameterName = id.split('~').pop()?.toLowerCase()
-          const matchesParameter = forecastKeywords.some(keyword =>
+          matchesParameter = forecastKeywords.some(keyword =>
             id.includes(keyword) ||
             searchText.includes(keyword) ||
             (parameterName && keyword.toLowerCase().includes(parameterName))
           )
+        } else {
+          // No keywords defined for this period, try generic matching based on weather param base name
+          const baseWeatherParam = weatherParam.replace('Forecast', '').toLowerCase()
+          matchesParameter = parameterName?.includes(baseWeatherParam) || searchText.includes(baseWeatherParam)
+        }
 
-          if (matchesParameter) {
-            console.log(`      ✅ Matched "${weatherParam}.${forecastPeriodKey}" with ID "${id}"`)
+        if (matchesParameter) {
+          console.log(`      ✅ Matched "${weatherParam}.${forecastPeriodKey}" with ID "${id}"`)
 
-            // Initialize forecast object if it doesn't exist
-            if (!(weatherData as any)[weatherParam]) {
-              ;(weatherData as any)[weatherParam] = {}
-            }
-
-            // Add the forecast value for this time period
-            ;(weatherData as any)[weatherParam][forecastPeriodKey] = weatherValue
-            matched = true
-            break
+          // Initialize forecast object if it doesn't exist
+          if (!(weatherData as any)[weatherParam]) {
+            ;(weatherData as any)[weatherParam] = {}
           }
+
+          // Add the forecast value for this time period
+          ;(weatherData as any)[weatherParam][forecastPeriodKey] = weatherValue
+          matched = true
+          break
         }
       }
       // Handle current weather mappings (simple array structure)

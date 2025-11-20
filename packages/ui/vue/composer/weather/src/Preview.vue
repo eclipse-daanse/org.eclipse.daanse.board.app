@@ -79,7 +79,7 @@ function formatTimestamp(timestamp: string): string {
         <div class="station-header">
           <h4>📍 {{ station.location.name }}</h4>
           <small v-if="station.location.description">{{ station.location.description }}</small>
-          <small v-if="station.location.coordinates" class="coordinates">
+          <small v-if="station.location.coordinates?.latitude != null && station.location.coordinates?.longitude != null" class="coordinates">
             {{ station.location.coordinates.latitude.toFixed(4) }}°N,
             {{ station.location.coordinates.longitude.toFixed(4) }}°E
           </small>

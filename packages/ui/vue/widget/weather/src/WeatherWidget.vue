@@ -223,7 +223,7 @@ const getWeatherIcon = (weather: any): string => {
 }
 
 // Available forecast periods and parameters
-const availableForecastPeriods = ['forecast12h', 'forecast24h', 'forecast36h', 'forecast48h', 'forecast60h', 'forecast72h']
+const availableForecastPeriods = ['forecast3h', 'forecast6h', 'forecast9h', 'forecast12h', 'forecast24h', 'forecast36h', 'forecast48h', 'forecast60h', 'forecast72h']
 const availableForecastParameters = ['temperature', 'humidity', 'pressure', 'windSpeed', 'windDirection', 'precipitation', 'visibility', 'cloudCover']
 
 

@@ -24,7 +24,7 @@ import { debounce, uniq, uniqBy } from 'lodash'
 import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojson'
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/client'
 import { Task, useTaskManager } from './composables/tasktimer'
-import { FILTER, FILTERRESET } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
+import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import booleanContains from '@turf/boolean-contains'
 import { feature } from '@turf/helpers'
@@ -549,7 +549,7 @@ const loadObservationsInView = () => {
     return
   }
 
-  // Check if map is ready and mounted
+  // Check if map is ready and mountedt
   if (!map.value || !(map.value as any)?.leafletObject) {
     return
   }
@@ -734,6 +734,37 @@ const loadObservationsInView = () => {
 
   localTaskManager.addTasksAndIvnoke(tasks)
 
+  // Update MQTT subscriptions for all datasources based on current view
+  // This ensures subscriptions are cleaned up when observations leave the view
+  // Collect all observations currently in view per datasource
+  const observationsByDatasource = new Map<string, Datastream[]>()
+  for (const [refreshTime, datasourceItems] of Object.entries(taskListByTimeAndDatasource)) {
+    for (const [dsId, items] of Object.entries(datasourceItems)) {
+      if (!observationsByDatasource.has(dsId)) {
+        observationsByDatasource.set(dsId, [])
+      }
+      observationsByDatasource.get(dsId)!.push(...items)
+    }
+  }
+
+  // Send UPDATE_MQTT_SUBSCRIPTIONS for primary datasource
+  const primaryObservations = observationsByDatasource.get(datasourceId.value) || []
+  callEvent(UPDATE_MQTT_SUBSCRIPTIONS, { observations: uniqBy(primaryObservations, 'iotId') })
+
+  // Send UPDATE_MQTT_SUBSCRIPTIONS for additional datasources
+  for (const dsId of additionalDatasourcesData.value.keys()) {
+    const observations = observationsByDatasource.get(dsId) || []
+    try {
+      const dsRepository = container.get<DatasourceRepository>(identifier)
+      const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+      if (datasource && typeof datasource.callEvent === 'function') {
+        datasource.callEvent(UPDATE_MQTT_SUBSCRIPTIONS, { observations: uniqBy(observations, 'iotId') })
+      }
+    } catch (e) {
+      logDatasource('Could not call UPDATE_MQTT_SUBSCRIPTIONS on datasource', dsId, e)
+    }
+  }
+
   isLoadingObservations = false
 
 }
@@ -795,6 +826,25 @@ onUnmounted(() => {
   // Clear the entire local TaskManager since this widget is unmounting
   localTaskManager.clearAll()
   activeTasks.clear()
+
+  // Cleanup MQTT subscriptions for all datasources
+  try {
+    callEvent(MQTT_UNSUBSCRIBE_ALL, {})
+  } catch (e) {
+    logDatasource('Could not unsubscribe from MQTT for primary datasource on unmount:', e)
+  }
+
+  for (const dsId of additionalDatasourcesData.value.keys()) {
+    try {
+      const dsRepository = container.get<DatasourceRepository>(identifier)
+      const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
+      if (datasource && typeof datasource.callEvent === 'function') {
+        datasource.callEvent(MQTT_UNSUBSCRIBE_ALL, {})
+      }
+    } catch (e) {
+      logDatasource('Could not unsubscribe from MQTT for datasource', dsId, 'on unmount:', e)
+    }
+  }
 
   // Unsubscribe from all datasources
   for (const [dsId, unsubscribe] of datasourceUnsubscribeFunctions.entries()) {

@@ -1,0 +1,10 @@
+{
+  "name": "Daanse DevTools",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "Developer tools for Daanse Board App - Logger controls and debugging utilities",
+  "devtools_page": "devtools.html",
+  "permissions": [
+    "storage"
+  ]
+}

@@ -32,7 +32,7 @@ export default defineConfig({
     alias: [
       { find: '@', replacement: '/src' },
     ],
-    dedupe: ['vue', 'pinia']
+    dedupe: ['vue', 'pinia', 'debug']
 
   },
   css: {

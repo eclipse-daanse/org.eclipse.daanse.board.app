@@ -28,12 +28,16 @@ export interface LocationInfo {
 }
 
 export interface ForecastPeriods {
+  forecast3h?: WeatherValue
+  forecast6h?: WeatherValue
+  forecast9h?: WeatherValue
   forecast12h?: WeatherValue
   forecast24h?: WeatherValue
   forecast36h?: WeatherValue
   forecast48h?: WeatherValue
   forecast60h?: WeatherValue
   forecast72h?: WeatherValue
+  [key: string]: WeatherValue | undefined  // Allow dynamic forecast periods
 }
 
 export interface WeatherData {
@@ -62,12 +66,16 @@ export interface WeatherData {
 }
 
 export interface ForecastMapping {
-  forecast12h: string[]
-  forecast24h: string[]
-  forecast36h: string[]
-  forecast48h: string[]
-  forecast60h: string[]
-  forecast72h: string[]
+  forecast3h?: string[]
+  forecast6h?: string[]
+  forecast9h?: string[]
+  forecast12h?: string[]
+  forecast24h?: string[]
+  forecast36h?: string[]
+  forecast48h?: string[]
+  forecast60h?: string[]
+  forecast72h?: string[]
+  [key: string]: string[] | undefined  // Allow dynamic forecast periods
 }
 
 export interface WeatherMapping {

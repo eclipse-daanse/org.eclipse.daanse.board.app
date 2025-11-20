@@ -11,7 +11,7 @@ Contributors: Smart City Jena
 import type { Factory } from 'inversify'
 
 import { OgcStaStore } from './classes/OgcSta'
-import { FILTER, FILTERRESET } from './interfaces/Constances'
+import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from './interfaces/Constances'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const factorySymbol = Symbol.for('OgcStaStoreFactory')
@@ -36,4 +36,4 @@ if (!container.isBound(factorySymbol)) {
   })
 }
 
-export { factorySymbol, FILTER, FILTERRESET }
+export { factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL }
