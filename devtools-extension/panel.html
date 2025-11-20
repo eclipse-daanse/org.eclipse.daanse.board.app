@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Daanse DevTools</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1e1e1e;
+      color: #cccccc;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #ffffff;
+      border-bottom: 1px solid #3c3c3c;
+      padding-bottom: 8px;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .logger-group {
+      background: #252526;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .logger-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #3c3c3c;
+    }
+
+    .logger-item:last-child {
+      border-bottom: none;
+    }
+
+    .logger-name {
+      flex: 1;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      color: #4ec9b0;
+    }
+
+    .logger-description {
+      flex: 2;
+      font-size: 12px;
+      color: #999999;
+      margin: 0 16px;
+    }
+
+    .toggle-btn {
+      padding: 6px 16px;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      background: #0e639c;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn:hover {
+      background: #1177bb;
+    }
+
+    .toggle-btn.active {
+      background: #16825d;
+      border-color: #16825d;
+    }
+
+    .toggle-btn.disabled {
+      background: #3c3c3c;
+      border-color: #3c3c3c;
+      cursor: not-allowed;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      background: #252526;
+      color: #cccccc;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #2d2d30;
+      border-color: #0e639c;
+    }
+
+    .status {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status.on {
+      background: #16825d;
+    }
+
+    .status.off {
+      background: #3c3c3c;
+    }
+
+    .info-box {
+      background: #1a1a1a;
+      border-left: 3px solid #0e639c;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: #1e1e1e;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      color: #4ec9b0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛠️ Daanse Developer Tools</h1>
+  <div class="info-box">
+    Control debug loggers for the Daanse Board App. Changes are saved to localStorage and persist across sessions.
+  </div>
+
+  <div class="section">
+    <h2>Quick Actions</h2>
+    <div class="quick-actions">
+      <button class="action-btn" id="enableAll">Enable All Loggers</button>
+      <button class="action-btn" id="disableAll">Disable All Loggers</button>
+      <button class="action-btn" id="refresh">Refresh Status</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Logger Controls</h2>
+
+    <div class="logger-group">
+      <div class="logger-item">
+        <span class="status off" id="status-mqtt"></span>
+        <span class="logger-name">daanse:ogcsta:mqtt</span>
+        <span class="logger-description">OGCSTA MQTT connection, subscriptions, and message handling</span>
+        <button class="toggle-btn" id="toggle-mqtt">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-data"></span>
+        <span class="logger-name">daanse:ogcsta:data</span>
+        <span class="logger-description">OGCSTA data loading and processing</span>
+        <button class="toggle-btn" id="toggle-data">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-history"></span>
+        <span class="logger-name">daanse:ogcsta:history</span>
+        <span class="logger-description">OGCSTA historical locations</span>
+        <button class="toggle-btn" id="toggle-history">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-core"></span>
+        <span class="logger-name">daanse:ogcsta:core</span>
+        <span class="logger-description">OGCSTA core operations</span>
+        <button class="toggle-btn" id="toggle-core">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-ogcsta"></span>
+        <span class="logger-name">daanse:ogcsta:*</span>
+        <span class="logger-description">All OGCSTA logs</span>
+        <button class="toggle-btn" id="toggle-ogcsta">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-map"></span>
+        <span class="logger-name">daanse:maps:*</span>
+        <span class="logger-description">Map widget operations and rendering</span>
+        <button class="toggle-btn" id="toggle-map">Enable</button>
+      </div>
+
+      <div class="logger-item">
+        <span class="status off" id="status-all"></span>
+        <span class="logger-name">daanse:*</span>
+        <span class="logger-description">All Daanse debug logs</span>
+        <button class="toggle-btn" id="toggle-all">Enable</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Current Configuration</h2>
+    <div class="info-box">
+      <strong>localStorage.debug:</strong> <code id="currentConfig">-</code>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>

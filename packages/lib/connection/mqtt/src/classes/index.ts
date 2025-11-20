@@ -15,13 +15,24 @@ import { TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.tw
 import { type MqttClient } from 'mqtt'
 import mqtt from 'mqtt'
 import type { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base'
+import { inject, injectable } from 'inversify'
+import {
+  LoggerFactory,
+  identifier as loggerIdentifier,
+  type ILogger
+} from 'org.eclipse.daanse.board.app.lib.logger'
 
 export interface IMQTTConnectionConfiguration extends BaseConnectionConfig{
   url: string
   topic?: string
 }
 
+@injectable()
 export class MQTTConnection extends TwoWayConnection {
+  @inject(loggerIdentifier)
+  private loggerFactory!: LoggerFactory
+
+  private logMqtt!: ILogger
   private url: any
   private client: MqttClient | null = null
   private topicsMaps: Map<any, string> = new Map()
@@ -31,7 +42,10 @@ export class MQTTConnection extends TwoWayConnection {
   }
 
   init(configuration: IMQTTConnectionConfiguration): void {
-    console.log('MQTTConnection configuration', configuration)
+    // Initialize logger from factory
+    this.logMqtt = this.loggerFactory.createLogger('daanse:mqtt:connection')
+
+    this.logMqtt('MQTTConnection configuration', configuration)
     this.client = mqtt.connect(configuration.url)
 
     if (configuration.topic) {
@@ -43,7 +57,7 @@ export class MQTTConnection extends TwoWayConnection {
     })
 
     this.client.on('message', (topic, message) => {
-      console.log(topic, message.toString())
+      this.logMqtt('Message:', topic, message.toString())
       super.onMessage(message.toString(), topic)
     })
 
@@ -61,27 +75,53 @@ export class MQTTConnection extends TwoWayConnection {
   }
 
   connectStore(store: any, topic: string) {
-    this.removeTopics()
+    // Only add/update, don't remove all topics first
+    const hadTopic = this.topicsMaps.has(store)
+    const oldTopic = this.topicsMaps.get(store)
+
     this.topicsMaps.set(store, topic)
-    this.updateTopicsList()
+
+    // Only subscribe to new topic if it's different or didn't exist
+    if (!hadTopic || oldTopic !== topic) {
+      if (this.client && this.client.connected) {
+        this.client.subscribe(topic)
+        this.logMqtt(' Subscribed to', topic)
+      }
+    }
   }
 
   disconnectStore(store: any) {
-    this.removeTopics()
-    if (this.topicsMaps.has(store)) {
-      this.topicsMaps.delete(store)
+    if (!this.topicsMaps.has(store)) {
+      return
     }
-    this.updateTopicsList()
+
+    const topic = this.topicsMaps.get(store)
+    this.topicsMaps.delete(store)
+
+    // Check if any other store is still using this topic
+    const stillUsed = Array.from(this.topicsMaps.values()).includes(topic!)
+
+    // Only unsubscribe if no other store uses this topic and client is connected
+    if (!stillUsed && topic && this.client && this.client.connected) {
+      this.client.unsubscribe(topic)
+      this.logMqtt(' Unsubscribed from', topic)
+    }
   }
 
   removeTopics() {
+    if (!this.client || !this.client.connected) {
+      return
+    }
     const topics = new Set(Array.from(this.topicsMaps.values()))
-    this.client?.unsubscribe(Array.from(topics))
+    this.client.unsubscribe(Array.from(topics))
   }
 
   updateTopicsList() {
+    if (!this.client || !this.client.connected) {
+      return
+    }
     const topics = new Set(Array.from(this.topicsMaps.values()))
-    this.client?.subscribe(Array.from(topics))
+    this.client.subscribe(Array.from(topics))
   }
 
   hasTopics(): boolean {

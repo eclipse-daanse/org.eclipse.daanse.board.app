@@ -11,7 +11,9 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 const { config, dataSources } = defineProps<{
   config: any
@@ -22,6 +24,62 @@ const { config, dataSources } = defineProps<{
 const datasourcesFiltered = computed(() => {
   return dataSources.filter((ds: any) => ds.type === 'ogcsta')
 })
+
+// Available things from connected datasources
+const availableThings = ref<Array<{ iotId: string; name: string }>>([])
+const isLoadingThings = ref(false)
+
+// Load things when datasources change
+watch(() => config.connectedDatasources, async () => {
+  await loadAvailableThings()
+}, { immediate: true })
+
+async function loadAvailableThings() {
+  if (!config.connectedDatasources || config.connectedDatasources.length === 0) {
+    availableThings.value = []
+    return
+  }
+
+  isLoadingThings.value = true
+  try {
+    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const allThings: Array<{ iotId: string; name: string }> = []
+
+    for (const datasourceId of config.connectedDatasources) {
+      try {
+        const datasource = datasourceRepository.getDatasource(datasourceId)
+        const data = await datasource.getData('OGCSTAData', {
+          filter: {
+            things: {
+              all: {
+                includeDatastreams: false,
+                includeLocations: false
+              }
+            }
+          }
+        })
+
+        if (data?.things) {
+          data.things.forEach((thing: any) => {
+            const thingId = thing['@iot.id'] || thing.iotId || thing.id
+            if (thingId) {
+              allThings.push({
+                iotId: String(thingId),
+                name: thing.name || `Thing ${thingId}`
+              })
+            }
+          })
+        }
+      } catch (error) {
+        console.error('Error loading things from datasource:', datasourceId, error)
+      }
+    }
+
+    availableThings.value = allThings
+  } finally {
+    isLoadingThings.value = false
+  }
+}
 
 // State for collapsible mapping section
 const isMappingSectionExpanded = ref(false)
@@ -60,7 +118,17 @@ const getCustomMappingValue = (parameter: string) => {
     <VaSelect v-model="config.connectedDatasources" label="OGC STA Sources" :options="datasourcesFiltered" multiple text-by="name" value-by="uid" />
 
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <VaInput v-model="config.thingId" label="Thing ID (Optional)" placeholder="Filter by specific Thing ID (leave empty for all)" />
+    <VaSelect
+      v-model="config.thingId"
+      label="Thing (Optional)"
+      placeholder="All Things"
+      :options="availableThings"
+      text-by="name"
+      value-by="iotId"
+      :loading="isLoadingThings"
+      :disabled="isLoadingThings || availableThings.length === 0"
+      clearable
+    />
 
     <div class="collapsible-section">
       <div class="collapsible-header" @click="isMappingSectionExpanded = !isMappingSectionExpanded">

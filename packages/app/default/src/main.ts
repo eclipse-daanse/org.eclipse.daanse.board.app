@@ -25,6 +25,7 @@ import router from './router'
 
 import { init } from 'org.eclipse.daanse.board.app.lib.module1'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
 
 const app = createApp(App)
 app.use(createVuestic({
@@ -46,6 +47,7 @@ app.use(createVuestic({
 }))
 
 init(container)
+initLogger(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })

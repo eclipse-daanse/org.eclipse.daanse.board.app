@@ -37,9 +37,14 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
-import { FILTER, FILTERRESET, NOACTION } from '../interfaces/Constances'
+import { FILTER, FILTERRESET, NOACTION, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import {
+  LoggerFactory,
+  identifier as loggerIdentifier,
+  type ILogger
+} from 'org.eclipse.daanse.board.app.lib.logger'
 
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
@@ -49,11 +54,23 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   @inject(variableIdentifier)
   private variableRepository!: VariableRepository
 
+  @inject(loggerIdentifier)
+  private loggerFactory!: LoggerFactory
+
+  // Create loggers
+  private logMqtt!: ILogger
+  private logData!: ILogger
+  private logHistory!: ILogger
+  private logCore!: ILogger
+
   private configuration!: IOGCSTAConfigartion;
   connection: string = ''
-  private mqttConnection: IConnection | null = null
+  private mqttConnection: any = null
   private subscribedDatastreams: Map<string, string> = new Map() // datastreamId -> topic
+  private subscribedLocations: Map<string, string> = new Map() // locationId -> topic
   private initialLoadDone: boolean = false
+  private mqttUpdateTimer: any | null = null
+  private hasPendingMqttUpdates: boolean = false
   requestFlag: { key: string; params: any } = {
     key: FILTERRESET,
     params: undefined,
@@ -74,6 +91,23 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
   init(configuration: IOGCSTAConfigartion): void {
     super.init(configuration)
+
+    // Initialize loggers from factory
+    this.logMqtt = this.loggerFactory.createLogger('daanse:ogcsta:mqtt')
+    this.logData = this.loggerFactory.createLogger('daanse:ogcsta:data')
+    this.logHistory = this.loggerFactory.createLogger('daanse:ogcsta:history')
+    this.logCore = this.loggerFactory.createLogger('daanse:ogcsta:core')
+
+    // Check if this is a re-initialization (config change)
+    const isReInit = this.configuration !== undefined
+
+    // If re-initializing, clean up old MQTT subscriptions first
+    if (isReInit && this.mqttConnection) {
+      this.logMqtt('Configuration changed, cleaning up old MQTT subscriptions')
+      this.unsubscribeAll()
+      this.initialLoadDone = false
+    }
+
     this.configuration = configuration;
     if (!configuration.connection) throw new Error('Connetion must be set')
     this.connection = configuration.connection
@@ -84,11 +118,15 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       try {
         this.mqttConnection = this.connectionRepository.getConnection(configuration.mqttConnection)
         this.setupMQTTMessageHandler()
-        console.log('OGCSTA: MQTT Connection established:', configuration.mqttConnection)
+        this.logMqtt('MQTT Connection established:', configuration.mqttConnection)
       } catch (e) {
         console.error('OGCSTA: Could not establish MQTT connection:', e)
         this.mqttConnection = null
       }
+    } else if (isReInit && this.mqttConnection) {
+      // MQTT connection was removed from config
+      this.logMqtt('MQTT Connection removed from configuration')
+      this.mqttConnection = null
     }
 
     this.setupVariableWatchers();
@@ -122,6 +160,21 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         this.notify();
         this.filterDebounceTimer = null;
       }, 300);
+    } else if (event == UPDATE_MQTT_SUBSCRIPTIONS) {
+      // Update MQTT subscriptions only (no data fetch, no notify)
+      // Only works in MQTT mode - ignored otherwise
+      if (this.mqttConnection) {
+        this.logCore('Updating MQTT subscriptions:', params?.observations?.length || 0, 'observations')
+        this.subscribeToDatastreams(params?.observations || [])
+        this.subscribeToLocations()
+      }
+    } else if (event == MQTT_UNSUBSCRIBE_ALL) {
+      // Unsubscribe from all MQTT topics
+      // Only works in MQTT mode - ignored otherwise
+      if (this.mqttConnection) {
+        this.logCore('Unsubscribing from all MQTT topics')
+        this.unsubscribeAll()
+      }
     } else {
       this.requestFlag = { key: FILTERRESET, params: params }
       // FILTERRESET is immediate
@@ -130,6 +183,8 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   destroy(): void {
+    this.logCore('Store destroy() called')
+
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = null;
@@ -138,12 +193,28 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       clearTimeout(this.filterDebounceTimer);
       this.filterDebounceTimer = null;
     }
+    if (this.mqttUpdateTimer) {
+      clearTimeout(this.mqttUpdateTimer);
+      this.mqttUpdateTimer = null;
+    }
 
-    // Cleanup MQTT subscriptions
-    this.unsubscribeAll()
-    this.mqttConnection = null
+    // Cleanup MQTT subscriptions - check if connection is still active
+    if (this.mqttConnection) {
+      this.logCore(`Cleaning up MQTT subscriptions on destroy (${this.subscribedDatastreams.size} datastreams, ${this.subscribedLocations.size} locations)`)
+      // Check if the MQTT client is still connected before unsubscribing
+      const client = (this.mqttConnection as any).client
+      if (client && client.connected) {
+        this.unsubscribeAll()
+      } else {
+        this.logCore('Client not connected, just clearing maps')
+        // Just clear the maps without trying to unsubscribe
+        this.subscribedDatastreams.clear()
+        this.subscribedLocations.clear()
+      }
+      this.mqttConnection = null
+    }
 
-    console.log('OGCSTA Store destroyed')
+    this.logCore('Store destroyed')
   }
 
   async getData<T>(type: string, options?: any): Promise<T> {
@@ -254,10 +325,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       // Process observations for filtered data
       if (options?.filter || this.requestFlag.key == FILTER) {
         const observationsParam = options?.filter?.observations || this.requestFlag.params?.observations
-        console.log('🔍 Processing observations for datastreams:', observationsParam?.length || 0)
-        console.log('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
+        this.logData('🔍 Processing observations for datastreams:', observationsParam?.length || 0)
+        this.logData('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
         for (const d of observationsParam ?? []) {
-          console.log('🔍 Looking for observations for datastream:', d.iotId)
+          this.logData('🔍 Looking for observations for datastream:', d.iotId)
           const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
           if (ds) {
             // Get ALL observations for this datastream, not just the first one
@@ -266,7 +337,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             ) || []
 
             ds.observations = datastreamObservations as Observation[]
-            console.log(`✅ Assigned ${datastreamObservations.length} observations to datastream: ${ds.name}`)
+            this.logData(`✅ Assigned ${datastreamObservations.length} observations to datastream: ${ds.name}`)
           }
         }
       }
@@ -344,7 +415,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           thing.locations = locs
         }
       } catch (e) {
-        console.log(e)
+        this.logCore('Error:', e)
       }
       try {
         const dss = (
@@ -354,7 +425,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         ).value as BoxedDatastream[]
         thing.datastreams = dss
       } catch (e) {
-        console.log(e)
+        this.logCore('Error:', e)
       }
     }
     const locations =
@@ -499,7 +570,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           // MQTT Mode: Initial HTTP load, then subscribe to MQTT
           if (!this.initialLoadDone) {
             // Initial load via HTTP
-            console.log('OGCSTA: Initial load via HTTP, then switching to MQTT')
+            this.logMqtt('Initial load via HTTP, then switching to MQTT')
             for (const ds of this.requestFlag.params.observations) {
               listOfPromesis.push(
                 (async () => {
@@ -529,11 +600,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             this.initialLoadDone = true
             setTimeout(() => {
               this.subscribeToDatastreams(this.requestFlag.params.observations)
+              this.subscribeToLocations()
             }, 100) // Small delay to let initial data load complete
           } else {
             // Already have initial data and MQTT subscriptions
             // Just update subscriptions if datastreams changed
             this.subscribeToDatastreams(this.requestFlag.params.observations)
+            this.subscribeToLocations()
           }
         } else {
           // HTTP Mode (no MQTT or history mode enabled)
@@ -570,6 +643,11 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           }
         }
       }
+    } else if (this.mqttConnection && !historyConfig?.enabled) {
+      // No observations requested, but MQTT is active - cleanup subscriptions
+      this.logMqtt('No observations requested, cleaning up subscriptions')
+      this.subscribeToDatastreams([])
+      this.subscribeToLocations()
     }
   }
 
@@ -650,7 +728,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           })(),
         )
       } else if ('ids' in this.requestFlag.params.things!) {
-        console.log('🔍 OgcSta: Loading things by IDs:', this.requestFlag.params.things!.ids)
+        this.logData('🔍 OgcSta: Loading things by IDs:', this.requestFlag.params.things!.ids)
         const includeDatastreams = this.requestFlag.params.things!.includeDatastreams
         const includeLocations = this.requestFlag.params.things!.includeLocations
 
@@ -658,13 +736,13 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         if (includeDatastreams) expand.push('Datastreams')
         if (includeLocations) expand.push('Locations')
 
-        console.log('🔍 OgcSta: Expand params:', expand)
+        this.logData('🔍 OgcSta: Expand params:', expand)
 
         for (const id of this.requestFlag.params.things!.ids) {
           listOfPromesis.push(
             (async () => {
               const expandParam = expand.length > 0 ? expand.join(',') : undefined
-              console.log(`🔍 OgcSta: Fetching thing ${id} with expand: ${expandParam}`)
+              this.logData(`🔍 OgcSta: Fetching thing ${id} with expand: ${expandParam}`)
               const thing = await new ThingsApi(
                 this.baseConfigration,
               ).v11ThingsEntityIdGet({ entityId: id, $expand: expandParam })
@@ -756,7 +834,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
     if (thingIds.size === 0) return;
 
-    console.log(`📍 Fetching historical locations for ${thingIds.size} things at time range: ${timeStart || 'none'} to ${timeEnd}`);
+    this.logHistory(`📍 Fetching historical locations for ${thingIds.size} things at time range: ${timeStart || 'none'} to ${timeEnd}`);
 
     // Get connection for direct fetch
     const connection = this.connectionRepository.getConnection(
@@ -787,12 +865,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           const locations = historicalLocation.Locations;
 
           if (locations && locations.length > 0) {
-            console.log(`📍 Found historical location for thing ${thingId}:`, locations[0]);
+            this.logHistory(`📍 Found historical location for thing ${thingId}:`, locations[0]);
 
             // Find the thing first to show before/after
             const thing = this.resultMap.things?.find(t => t.iotId === thingId);
             if (thing) {
-              console.log(`🔵 BEFORE UPDATE - Thing ${thingId} current location:`, JSON.stringify(thing.locations));
+              this.logHistory(`🔵 BEFORE UPDATE - Thing ${thingId} current location:`, JSON.stringify(thing.locations));
             }
 
             // Find all datastreams for this thing and update their locations
@@ -801,7 +879,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
                 // Replace current location with historical location
                 if (datastream.thing.locations) {
                   datastream.thing.locations = locations;
-                  console.log(`📍 Updated datastream ${datastream.iotId} with historical location`);
+                  this.logHistory(`📍 Updated datastream ${datastream.iotId} with historical location`);
                 }
               }
             }
@@ -809,7 +887,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             // Also update in things array
             if (thing && thing.locations) {
               thing.locations = locations;
-              console.log(`🟢 AFTER UPDATE - Thing ${thingId} new location:`, JSON.stringify(thing.locations));
+              this.logHistory(`🟢 AFTER UPDATE - Thing ${thingId} new location:`, JSON.stringify(thing.locations));
             }
 
             // Add location back to locations array if it was removed
@@ -829,18 +907,18 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
                 if (thing && !existingLocation.things.find(t => t.iotId === thingId)) {
                   existingLocation.things.push(thing);
-                  console.log(`📍 Added thing ${thingId} back to location ${location.iotId}`);
+                  this.logHistory(`📍 Added thing ${thingId} back to location ${location.iotId}`);
                 }
               } else if (thing) {
                 // Location doesn't exist, create it and add thing
                 const newLocation = { ...location, things: [thing] };
                 this.resultMap.locations?.push(newLocation);
-                console.log(`📍 Created new location ${location.iotId} with thing ${thingId}`);
+                this.logHistory(`📍 Created new location ${location.iotId} with thing ${thingId}`);
               }
             }
           }
         } else {
-          console.log(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
+          this.logHistory(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
 
           // Find the thing first
           const thing = this.resultMap.things?.find(t => t.iotId === thingId);
@@ -849,14 +927,14 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           for (const datastream of this.resultMap.datastreams || []) {
             if (datastream.thing && datastream.thing.iotId === thingId) {
               datastream.thing.locations = [];
-              console.log(`📍 Cleared location for datastream ${datastream.iotId}`);
+              this.logHistory(`📍 Cleared location for datastream ${datastream.iotId}`);
             }
           }
 
           // Also clear in things array
           if (thing && thing.locations) {
             thing.locations = [];
-            console.log(`🟢 Cleared location for Thing ${thingId}`);
+            this.logHistory(`🟢 Cleared location for Thing ${thingId}`);
           }
 
           // Remove this thing from all locations' things arrays
@@ -865,7 +943,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
               const thingIndex = location.things.findIndex(t => t.iotId === thingId);
               if (thingIndex !== -1) {
                 location.things.splice(thingIndex, 1);
-                console.log(`📍 Removed thing ${thingId} from location ${location.iotId}`);
+                this.logHistory(`📍 Removed thing ${thingId} from location ${location.iotId}`);
               }
             }
           }
@@ -876,7 +954,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           ) || [];
         }
       } catch (error) {
-        console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);
+        this.logHistory(`❌ Error fetching historical location for thing ${thingId}:`, error);
       }
     }
   }
@@ -940,7 +1018,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
                 if (locations && locations.length > 0) {
                   // Only use the first location
                   const location = locations[0];
-                  console.log(`📍 Found historical location for thing ${thingId}:`, location);
+                  this.logHistory(`📍 Found historical location for thing ${thingId}:`, location);
 
                   // Update the thing's location in resultMap - set only one location
                   const thingInMap = this.resultMap.things?.find(t => t.iotId === thingId);
@@ -971,10 +1049,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
                   }
                 }
               } else {
-                console.log(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
+                this.logHistory(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
               }
             } catch (error) {
-              console.error(`❌ Error fetching historical location for thing ${thingId}:`, error);
+              this.logHistory(`❌ Error fetching historical location for thing ${thingId}:`, error);
             }
 
             return {};
@@ -1009,7 +1087,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           this.notify();
         }
       } catch (error) {
-        console.error('Error refetching observations after variable change:', error);
+        this.logCore('Error refetching observations after variable change:', error);
       }
     }, 100);
   }
@@ -1017,97 +1095,267 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   // ==================== MQTT Methods ====================
 
   private setupMQTTMessageHandler(): void {
-    if (!this.mqttConnection) return
+    if (!this.mqttConnection) return;
 
     // Check if connection has subscribe capability (TwoWayConnection)
     if (typeof (this.mqttConnection as any).subscribe === 'function') {
-      (this.mqttConnection as any).subscribe((message: string, topic: string) => {
-        this.onMQTTMessage(message, topic)
-      })
+      this.logMqtt('Setting up message handler');
+      // TwoWayConnection calls subscribers with (event, data, topic) - see TwoWayConnection line 64-67
+      (this.mqttConnection as any).subscribe((event: string, data: any, topic?: string) => {
+        if (event === 'message' && topic) {
+          this.logMqtt('Raw message received - topic:', topic, 'data:', data);
+          this.onMQTTMessage(data, topic);
+        }
+      });
+    } else {
+      this.logMqtt(' Connection does not have subscribe method');
     }
   }
 
   private onMQTTMessage(message: string, topic: string): void {
     try {
-      const observation = JSON.parse(message)
+      // Ignore non-entity messages (like "connect", "disconnect", etc.)
+      if (typeof message === 'string' && !message.startsWith('{')) {
+        return
+      }
+
+      // Parse message if it's a string, otherwise use it directly
+      const data = typeof message === 'string' ? JSON.parse(message) : message
+
+      // Validate that this is an entity object
+      if (!data || typeof data !== 'object') {
+        return
+      }
 
       // Validate that message has @iot.id (SensorThings API requirement)
-      if (!observation['@iot.id']) {
-        console.warn('OGCSTA MQTT: Invalid observation message (missing @iot.id)', message)
+      if (!data['@iot.id']) {
+        this.logMqtt(' Invalid message (missing @iot.id)', message)
         return
       }
 
-      // Extract datastream ID from topic: v1.1/Datastreams(123)/Observations
-      const datastreamIdMatch = topic.match(/Datastreams\(([^)]+)\)/)
-      if (!datastreamIdMatch) {
-        console.warn('OGCSTA MQTT: Could not extract datastream ID from topic:', topic)
+      // Check if this is an Observation update
+      const observationMatch = topic.match(/Observations\(([^)]+)\)/)
+      if (observationMatch) {
+        this.handleObservationUpdate(observationMatch[1], data)
         return
       }
 
-      const datastreamId = datastreamIdMatch[1]
-      console.log(`OGCSTA MQTT: Received observation for datastream ${datastreamId}:`, observation)
-
-      // Find the datastream in resultMap
-      const datastream = this.resultMap.datastreams?.find(ds => ds.iotId === datastreamId)
-      if (datastream) {
-        // Update observations - replace with newest observation
-        datastream.observations = [observation]
-        console.log(`OGCSTA MQTT: Updated datastream ${datastreamId} observations`)
-
-        // Notify subscribers
-        this.notify()
+      // Check if this is a Location update
+      const locationMatch = topic.match(/Locations\(([^)]+)\)/)
+      if (locationMatch) {
+        this.handleLocationUpdate(locationMatch[1], data)
+        return
       }
+
+      this.logMqtt(' Unknown topic format:', topic)
     } catch (e) {
-      console.error('OGCSTA MQTT: Error parsing message:', e, message)
+      this.logMqtt(' Error parsing message:', e, message)
     }
+  }
+
+  private handleObservationUpdate(datastreamId: string, observation: any): void {
+    this.logMqtt(`Received observation for datastream ${datastreamId}:`, observation)
+
+    // Find the datastream in resultMap
+    const datastream = this.resultMap.datastreams?.find(ds => ds.iotId === datastreamId)
+    if (datastream) {
+      // Update observations - replace with newest observation
+      datastream.observations = [observation]
+      this.logMqtt(`Updated datastream ${datastreamId} observations`)
+
+      // Trigger debounced UI update
+      this.triggerDebouncedUpdate()
+    } else {
+      this.logMqtt(`Datastream ${datastreamId} not found in resultMap. Available datastreams:`,
+        this.resultMap.datastreams?.map(ds => ds.iotId).slice(0, 10))
+    }
+  }
+
+  private handleLocationUpdate(locationId: string, location: any): void {
+    this.logMqtt(`Received location update for ${locationId}:`, location)
+
+    // Find the location in resultMap
+    const existingLocation = this.resultMap.locations?.find(loc => loc.iotId === locationId)
+    if (existingLocation) {
+      // Update location coordinates in-place
+      existingLocation.location = location.location
+      existingLocation.encodingType = location.encodingType
+      if (location.name) existingLocation.name = location.name
+      if (location.description) existingLocation.description = location.description
+      this.logMqtt(`Updated location ${locationId}`)
+
+      // Also update in all things that reference this location
+      for (const thing of this.resultMap.things || []) {
+        const thingLocation = thing.locations?.find(loc => loc.iotId === locationId)
+        if (thingLocation) {
+          thingLocation.location = location.location
+          thingLocation.encodingType = location.encodingType
+          if (location.name) thingLocation.name = location.name
+          if (location.description) thingLocation.description = location.description
+        }
+      }
+
+      // Also update in datastreams
+      for (const datastream of this.resultMap.datastreams || []) {
+        const datastreamLocation = datastream.thing?.locations?.find(loc => loc.iotId === locationId)
+        if (datastreamLocation) {
+          datastreamLocation.location = location.location
+          datastreamLocation.encodingType = location.encodingType
+          if (location.name) datastreamLocation.name = location.name
+          if (location.description) datastreamLocation.description = location.description
+        }
+      }
+
+      // Trigger debounced UI update
+      this.triggerDebouncedUpdate()
+    } else {
+      console.warn(`OGCSTA MQTT: Location ${locationId} not found in resultMap`)
+    }
+  }
+
+  private triggerDebouncedUpdate(): void {
+    // Mark that we have pending updates
+    this.hasPendingMqttUpdates = true
+
+    // Debounce notify calls - only notify once per 100ms even with many MQTT messages
+    if (this.mqttUpdateTimer) {
+      clearTimeout(this.mqttUpdateTimer)
+    }
+    this.mqttUpdateTimer = setTimeout(() => {
+      if (this.hasPendingMqttUpdates) {
+        this.notify()
+        this.hasPendingMqttUpdates = false
+      }
+      this.mqttUpdateTimer = null
+    }, 100)
   }
 
   private subscribeToDatastreams(datastreams: Datastream[]): void {
     if (!this.mqttConnection) return
 
-    console.log(`OGCSTA MQTT: Updating subscriptions for ${datastreams.length} datastreams`)
+    // Check if MQTT client is connected before attempting subscriptions
+    const client = (this.mqttConnection as any).client
+    if (!client || !client.connected) {
+      this.logMqtt('Client not connected, skipping subscription update')
+      return
+    }
 
-    // Build set of requested datastream IDs
+    // Build set of requested datastream IDs (can be empty if no datastreams in view)
     const requestedIds = new Set<string>()
-    for (const ds of datastreams) {
-      const datastreamId = ds.iotId || (ds as any)['@iot.id']
-      if (datastreamId) {
-        requestedIds.add(datastreamId)
+    if (datastreams && datastreams.length > 0) {
+      for (const ds of datastreams) {
+        const datastreamId = ds.iotId || (ds as any)['@iot.id']
+        if (datastreamId) {
+          requestedIds.add(datastreamId)
+        }
       }
     }
 
-    // Remove subscriptions for datastreams no longer needed
-    for (const [datastreamId, topic] of this.subscribedDatastreams.entries()) {
-      if (!requestedIds.has(datastreamId)) {
-        // Unsubscribe from this specific topic
+    // Check if subscriptions have changed
+    const currentIds = new Set(this.subscribedDatastreams.keys())
+    const hasChanges = requestedIds.size !== currentIds.size ||
+      Array.from(requestedIds).some(id => !currentIds.has(id))
+
+    if (!hasChanges) {
+      // No changes, skip re-subscription
+      return
+    }
+
+    this.logMqtt(`Updating subscriptions - current: ${currentIds.size}, requested: ${requestedIds.size}`)
+
+    // Find topics to remove (in current but not in requested)
+    const toRemove = Array.from(currentIds).filter(id => !requestedIds.has(id))
+
+    // Find topics to add (in requested but not in current)
+    const toAdd = Array.from(requestedIds).filter(id => !currentIds.has(id))
+
+    // Unsubscribe from removed topics
+    if (toRemove.length > 0) {
+      this.logMqtt(`Unsubscribing from ${toRemove.length} topics:`, toRemove.slice(0, 5))
+      for (const datastreamId of toRemove) {
+        const storeKey = `${this.connection}_${datastreamId}`
         if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
-          // Note: MQTT Connection's disconnectStore removes ALL subscriptions for this store
-          // So we need a different approach - just track it and remove all, then re-add needed ones
+          (this.mqttConnection as any).disconnectStore(storeKey)
         }
         this.subscribedDatastreams.delete(datastreamId)
-        console.log(`OGCSTA MQTT: Removed subscription for ${datastreamId}`)
       }
     }
 
-    // Unsubscribe all and re-subscribe only to needed topics
-    if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
-      (this.mqttConnection as any).disconnectStore(this)
+    // Subscribe to new topics
+    if (toAdd.length > 0) {
+      this.logMqtt(`Subscribing to ${toAdd.length} new topics`)
+      for (const ds of datastreams) {
+        const datastreamId = ds.iotId || (ds as any)['@iot.id']
+        if (!datastreamId || !toAdd.includes(datastreamId)) continue
+
+        // Build topic according to OGC SensorThings API MQTT spec v1.1
+        const topic = `v1.1/Observations(${datastreamId})`
+
+        // Subscribe via MQTT Connection
+        // Use unique store key for each topic to avoid overwriting
+        const storeKey = `${this.connection}_${datastreamId}`
+        if (typeof (this.mqttConnection as any).connectStore === 'function') {
+          (this.mqttConnection as any).connectStore(storeKey, topic)
+          this.subscribedDatastreams.set(datastreamId, topic)
+          this.logMqtt(`Subscribed to ${topic}`)
+        }
+      }
     }
-    this.subscribedDatastreams.clear()
+  }
 
-    // Subscribe to all requested datastreams
-    for (const ds of datastreams) {
-      const datastreamId = ds.iotId || (ds as any)['@iot.id']
-      if (!datastreamId) continue
+  private subscribeToLocations(): void {
+    if (!this.mqttConnection) return
 
-      // Build topic according to OGC SensorThings API MQTT spec v1.1
-      const topic = `v1.1/Datastreams(${datastreamId})/Observations`
+    // Check if MQTT client is connected before attempting subscriptions
+    const client = (this.mqttConnection as any).client
+    if (!client || !client.connected) {
+      this.logMqtt('Client not connected, skipping location subscription update')
+      return
+    }
 
-      // Subscribe via MQTT Connection
-      if (typeof (this.mqttConnection as any).connectStore === 'function') {
-        (this.mqttConnection as any).connectStore(this, topic)
-        this.subscribedDatastreams.set(datastreamId, topic)
-        console.log(`OGCSTA MQTT: Subscribed to ${topic}`)
+    // Collect all unique location IDs from resultMap (can be empty if no locations in view)
+    const locationIds = new Set<string>()
+    for (const location of this.resultMap.locations || []) {
+      if (location.iotId) {
+        locationIds.add(location.iotId)
+      }
+    }
+
+    // Check if subscriptions have changed
+    const currentLocationIds = new Set(this.subscribedLocations.keys())
+    const hasChanges = locationIds.size !== currentLocationIds.size ||
+      Array.from(locationIds).some(id => !currentLocationIds.has(id))
+
+    if (!hasChanges) {
+      return
+    }
+
+    this.logMqtt(`Updating location subscriptions - current: ${currentLocationIds.size}, requested: ${locationIds.size}`)
+
+    // Unsubscribe from old locations
+    for (const locationId of currentLocationIds) {
+      if (!locationIds.has(locationId)) {
+        const storeKey = `${this.connection}_loc_${locationId}`
+        if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
+          (this.mqttConnection as any).disconnectStore(storeKey)
+          this.logMqtt(`Unsubscribed from v1.1/Locations(${locationId})`)
+        }
+      }
+    }
+    this.subscribedLocations.clear()
+
+    // Subscribe to all locations (only if there are any)
+    if (locationIds.size > 0) {
+      this.logMqtt(`Subscribing to ${locationIds.size} location topics`)
+      for (const locationId of locationIds) {
+        const topic = `v1.1/Locations(${locationId})`
+        const storeKey = `${this.connection}_loc_${locationId}`
+
+        if (typeof (this.mqttConnection as any).connectStore === 'function') {
+          (this.mqttConnection as any).connectStore(storeKey, topic)
+          this.subscribedLocations.set(locationId, topic)
+          this.logMqtt(`Subscribed to ${topic}`)
+        }
       }
     }
   }
@@ -1115,13 +1363,23 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private unsubscribeAll(): void {
     if (!this.mqttConnection) return
 
-    console.log(`OGCSTA MQTT: Unsubscribing from ${this.subscribedDatastreams.size} datastreams`)
+    this.logMqtt(`Unsubscribing from ${this.subscribedDatastreams.size} datastreams and ${this.subscribedLocations.size} locations`)
 
-    // Unsubscribe from all topics
+    // Unsubscribe from all datastream topics
     if (typeof (this.mqttConnection as any).disconnectStore === 'function') {
-      (this.mqttConnection as any).disconnectStore(this)
+      for (const datastreamId of this.subscribedDatastreams.keys()) {
+        const storeKey = `${this.connection}_${datastreamId}`
+        ;(this.mqttConnection as any).disconnectStore(storeKey)
+      }
+
+      // Unsubscribe from all location topics
+      for (const locationId of this.subscribedLocations.keys()) {
+        const storeKey = `${this.connection}_loc_${locationId}`
+        ;(this.mqttConnection as any).disconnectStore(storeKey)
+      }
     }
 
     this.subscribedDatastreams.clear()
+    this.subscribedLocations.clear()
   }
 }

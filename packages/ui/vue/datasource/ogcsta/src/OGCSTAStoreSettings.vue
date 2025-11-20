@@ -27,6 +27,10 @@ const connectionsFiltered = computed(() => {
   return connections.filter((c: any) => c.type === 'rest');
 });
 
+const mqttConnectionsFiltered = computed(() => {
+  return connections.filter((c: any) => c.type === 'mqtt');
+});
+
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);
 
@@ -73,6 +77,18 @@ onMounted(() => {
         :options="connectionsFiltered"
         text-by="name"
         value-by="uid"
+      />
+    </div>
+
+    <!-- MQTT Connection Selection -->
+    <div class="setting-group">
+      <VaSelect
+        v-model="config.mqttConnection"
+        label="MQTT Connection (optional, for realtime updates)"
+        :options="mqttConnectionsFiltered"
+        text-by="name"
+        value-by="uid"
+        clearable
       />
     </div>
 

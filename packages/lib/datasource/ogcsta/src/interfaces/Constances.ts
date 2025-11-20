@@ -12,6 +12,8 @@ const FILTER:string = 'EFilter'
 const FILTERRESET:string = 'EFilterReset'
 const HISTORY_FILTER:string = 'EHistoryFilter'
 const NOACTION:string = 'ENoAction'
+const MQTT_UNSUBSCRIBE_ALL:string = 'EMqttUnsubscribeAll'
+const UPDATE_MQTT_SUBSCRIPTIONS:string = 'EUpdateMqttSubscriptions'
 
 // History time filter types
 export const TIME_FILTERS = {
@@ -60,5 +62,7 @@ export {
   FILTER,
   FILTERRESET,
   HISTORY_FILTER,
-  NOACTION
+  NOACTION,
+  MQTT_UNSUBSCRIBE_ALL,
+  UPDATE_MQTT_SUBSCRIPTIONS
 }
