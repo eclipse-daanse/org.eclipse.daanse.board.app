@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {BaseConnectionConfig} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/rssconnection#//IRssConnectionConfiguration'})
-export class IRssConnectionConfiguration{
+export class IRssConnectionConfiguration extends BaseConnectionConfig {
 
   @Documentation("The URL of the RSS feed to connect to.
                                             This attribute overrides the 'url' from BaseConnectionConfig

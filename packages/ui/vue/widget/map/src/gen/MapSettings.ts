@@ -29,8 +29,8 @@ import {Renderer} from "./Renderer"
 import {Service} from "./Service"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//MapSettings'})
-export class MapSettings{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapSettings'})
+export class MapSettings {
 
   @Documentation("Optional identifier for the data source.")
   @Attribute() datasourceId?: string;
@@ -56,4 +56,7 @@ export class MapSettings{
 
   @Documentation("if true maps can not be moved in viewmode")
   @Attribute() fixed?: boolean;
+
+  @Documentation("Enable marker clustering for OGC STA Things and Datastreams")
+  @Attribute() enableClustering?: boolean;
 }

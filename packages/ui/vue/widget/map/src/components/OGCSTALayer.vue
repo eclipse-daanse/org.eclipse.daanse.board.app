@@ -9,12 +9,20 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch,type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
 import L from 'leaflet'
 import { ERefType } from '../api/Renderer'
 import MapMarker from './MapMarker.vue'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
+import { ThingClickPayload } from '../gen/ThingClickPayload'
+import { DatastreamClickPayload } from '../gen/DatastreamClickPayload'
+import { LocationClickPayload } from '../gen/LocationClickPayload'
+import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger'
+
+const log = loggerFactory.createLogger('daanse:maps:click')
 
 interface OGCSTALayerProps {
   locations: any[]
@@ -22,6 +30,7 @@ interface OGCSTALayerProps {
   layerOptions: any
   markerPane: string
   areaPane?: string
+  widgetId: string | undefined
   compareThing: (thing: any, renderer: any) => boolean
   compareDatastream: (datastream: any, renderer: any) => boolean
   isFeatureCollection: (obj: any) => boolean
@@ -107,6 +116,95 @@ watch(() => [props.locations, props.renderers] as const, ([locations, renderers]
 
   console.log(`[OGCSTALayer] Total matched: ${matchedThingCount} things, ${matchedDatastreamCount} datastreams`)
 }, { immediate: true })
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+
+const emitThingClick = (thing: any, location: any, renderer: any) => {
+  if (!props.widgetId) return
+
+  const payload = new ThingClickPayload()
+  payload.id = thing['@iot.id'] || thing.iotId
+  payload.name = thing.name
+  payload.description = thing.description
+  payload.properties = thing.properties
+  payload.location = location.location
+  payload.rendererId = renderer.id
+
+  const datastreams = thing.datastreams || thing.Datastreams || []
+  payload.datastreams = datastreams.map((ds: any) => ({
+    id: ds['@iot.id'] || ds.iotId,
+    name: ds.name,
+    observedProperty: ds.ObservedProperty?.name || ds.observedProperty?.name
+  }))
+
+  const event = {
+    type: 'widget:MapWidget:click_on_thing',
+    widgetId: props.widgetId,
+    payload: payload,
+    timestamp: Date.now()
+  }
+
+  console.log('🗺️ Map Widget: Emitting thing click event', event)
+  eventBus.emit('widget:MapWidget:click_on_thing', event)
+}
+
+const emitDatastreamClick = (datastream: BoxedDatastream, thing: any, subrenderer: any) => {
+  log('Emitting datastream click, widgetId: %s', props.widgetId)
+  if (!props.widgetId) {
+    log('⚠️ widgetId is undefined, not emitting event')
+    return
+  }
+
+  const payload = new DatastreamClickPayload()
+  payload.id = datastream.iotId || (datastream as any)['@iot.id']
+  payload.name = datastream.name
+  payload.thingId = thing['@iot.id'] || thing.iotId
+  payload.unitOfMeasurement = datastream.unitOfMeasurement
+  payload.observedProperty = datastream.observedProperty?.name
+
+  const observations = datastream.observations || []
+  if (observations.length > 0) {
+    const latestObs = observations[observations.length - 1]
+    payload.latestObservationResult = latestObs.result
+    payload.latestObservationTime = latestObs.phenomenonTime
+  }
+
+  eventBus.emit('widget:MapWidget:click_on_datastream', {
+    type: 'widget:MapWidget:click_on_datastream',
+    widgetId: props.widgetId,
+    payload: payload,
+    timestamp: Date.now()
+  })
+}
+
+const emitLocationClick = (location: any) => {
+  if (!props.widgetId) return
+
+  const payload = new LocationClickPayload()
+  payload.id = location['@iot.id'] || location.iotId
+  payload.name = location.name
+  payload.geometry = location.location
+
+  const things = location.things || location.Things || []
+  payload.thingIds = things.map((t: any) => t['@iot.id'] || t.iotId)
+
+  eventBus.emit('widget:MapWidget:click_on_location', {
+    type: 'widget:MapWidget:click_on_location',
+    widgetId: props.widgetId,
+    payload: payload,
+    timestamp: Date.now()
+  })
+}
+
+const handleThingClick = (thing: any, location: any, renderer: any) => {
+  log('🖱️ Thing clicked: %o', thing)
+  openThing.value[thing.iotId ?? 'null'] = !openThing.value[thing.iotId ?? 'null']
+  emitThingClick(thing, location, renderer)
+}
+
+const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, subrenderer: any) => {
+  log('🖱️ Datastream marker clicked: %o', datastream)
+  emitDatastreamClick(datastream, thing, subrenderer)
+}
 </script>
 
 <template>
@@ -128,7 +226,7 @@ watch(() => [props.locations, props.renderers] as const, ([locations, renderers]
             v-if="getPoint(location.location)"
             :lat-lng="getPoint(location.location) as L.LatLngExpression"
             :options="{ pane: markerPane }"
-            @click="openThing[thing.iotId??'null']=(openThing[thing.iotId??'null'])?!openThing[thing.iotId??'null']:true"
+            @click="handleThingClick(thing, location, renderer)"
           >
             <l-icon class-name="someExtraClass">
               <MapMarker
@@ -174,6 +272,7 @@ watch(() => [props.locations, props.renderers] as const, ([locations, renderers]
                   v-if="subrenderer.observations && subrenderer.observations.some((obs: any) => !getById(obs.component)?.isLayerRenderer) && ((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :options="{ pane: markerPane }"
+                  @click="handleDatastreamMarkerClick(datastream as BoxedDatastream, thing, subrenderer)"
                 >
                   <l-icon class-name="someExtraClass">
                     <MapMarker

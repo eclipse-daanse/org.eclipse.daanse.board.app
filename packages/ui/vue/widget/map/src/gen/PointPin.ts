@@ -25,8 +25,8 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//PointPin'})
-export class PointPin{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//PointPin'})
+export class PointPin {
 
   @Documentation("The color of the point pin.")
   @Attribute() color?: string;

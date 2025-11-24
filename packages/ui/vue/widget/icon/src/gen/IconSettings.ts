@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings'})
-export class IconSettings{
+export class IconSettings {
 
   @Documentation("Color value (hex or CSS) used to render the icon.")
   @Attribute() iconColor?: string;

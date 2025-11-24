@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles'})
-export class SVGItemStyles{
+export class SVGItemStyles {
 
   @Documentation("The fill color of the SVG item (e.g., a hex code or named color).")
   @Attribute() fill?: string;

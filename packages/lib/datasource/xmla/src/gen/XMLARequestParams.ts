@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/xmlastore#//XMLARequestParams'})
-export class XMLARequestParams{
+export class XMLARequestParams {
 
   @Documentation("The XMLA command (e.g., 'Execute', 'Discover').")
   @Attribute() command?: string;

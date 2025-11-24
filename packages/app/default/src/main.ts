@@ -21,11 +21,11 @@ import { createApp } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 
 import App from './App.vue'
-import router from './router'
 
 import { init } from 'org.eclipse.daanse.board.app.lib.module1'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
+import { registerSystemActions } from './systemActions'
 
 const app = createApp(App)
 app.use(createVuestic({
@@ -100,6 +100,8 @@ import 'org.eclipse.daanse.board.app.lib.composer.weather'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
+import 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import 'org.eclipse.daanse.board.app.lib.repository.route'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.image'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.progress'
@@ -144,6 +146,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.weather'
+import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {
@@ -163,8 +166,56 @@ import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
 
+import {
+  NAVIGATION_REGISTRY,
+  type NavigationRegistry,
+  NavigationItem
+} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import {
+  ROUTE_REGISTRY,
+  type RouteRegistry,
+  RouteDefinition
+} from 'org.eclipse.daanse.board.app.lib.repository.route'
+
+// Register built-in routes
+import Configuration from './pages/Configuration.vue'
+import SaveLoad from './pages/SaveLoad.vue'
+
+const routeRegistry = container.get<RouteRegistry>(ROUTE_REGISTRY)
+
+const configRoute = new RouteDefinition()
+configRoute.path = '/configuration'
+configRoute.name = 'config'
+configRoute.component = Configuration
+routeRegistry.registerRoute(configRoute)
+
+const saveRoute = new RouteDefinition()
+saveRoute.path = '/save'
+saveRoute.name = 'save'
+saveRoute.component = SaveLoad
+routeRegistry.registerRoute(saveRoute)
+
+// Import router AFTER all packages are loaded so routes can be registered
+import router from './router'
+
+// Add dynamically registered routes to router
+const routeRegistryForDynamic = container.get<RouteRegistry>(ROUTE_REGISTRY) as any
+const allRoutes = routeRegistryForDynamic.getAllRoutesArray
+  ? routeRegistryForDynamic.getAllRoutesArray()
+  : []
+allRoutes.forEach((route: any) => {
+  router.addRoute({
+    path: route.path,
+    name: route.name,
+    component: route.component,
+    ...(route.meta && { meta: route.meta })
+  })
+  console.log('Added dynamic route:', route.name, route.path)
+})
+
 const pageRepo = container.get<PageRegistryI>(PageReoIdentifier)
 const layoutRepo = container.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY)
 const baseLayout
   = layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
 
@@ -187,6 +238,27 @@ if (baseLayout) {
     layout: baseLayout
   } as PageI)
 }
+
+// Register navigation items
+const configNav = new NavigationItem()
+configNav.id = 'config'
+configNav.label = 'Environment variables'
+configNav.icon = 'settings'
+configNav.route = '/configuration'
+configNav.routeName = 'config'
+configNav.order = 10
+configNav.visible = true
+navRegistry.registerNavigationItem(configNav)
+
+const saveNav = new NavigationItem()
+saveNav.id = 'save'
+saveNav.label = 'Store and Restore'
+saveNav.icon = 'cloud_sync'
+saveNav.route = '/save'
+saveNav.routeName = 'save'
+saveNav.order = 20
+saveNav.visible = true
+navRegistry.registerNavigationItem(saveNav)
 
 
 
@@ -249,5 +321,8 @@ app.provide('codeEditorType', 'monaco')
 
 
 app.use(router)
+
+// Register system actions
+registerSystemActions(router)
 
 app.mount('#app')

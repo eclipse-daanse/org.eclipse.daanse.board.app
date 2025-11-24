@@ -9,7 +9,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "dist/ui.vue.widget.map.css"
+    "dist/ui.vue.widget.map.css",
+    "dist/model"
   ],
   "type": "module",
   "repository": {
@@ -59,6 +60,7 @@
     "lodash": "^4.17.21",
     "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.datasource.ogcsta": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.events": "0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.icon": "^0.0.1-next.1",
     "vue-leaflet": "^0.1.0",

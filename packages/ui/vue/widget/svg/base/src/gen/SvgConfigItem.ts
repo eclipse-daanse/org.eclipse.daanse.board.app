@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem'})
-export class SvgConfigItem{
+export class SvgConfigItem {
 
   @Documentation("The fill color of the SVG element (e.g., as a hex code or named color).")
   @Attribute() fill?: string;

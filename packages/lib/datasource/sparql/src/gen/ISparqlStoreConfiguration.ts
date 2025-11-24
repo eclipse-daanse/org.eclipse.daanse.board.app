@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/sparqlstore#//ISparqlStoreConfiguration'})
-export class ISparqlStoreConfiguration{
+export class ISparqlStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("The SPARQL query string to be executed to retrieve data.")
   @Attribute() query?: string;

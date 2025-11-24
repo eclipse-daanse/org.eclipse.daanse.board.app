@@ -27,7 +27,7 @@ import {SvgConfigItem} from "./SvgConfigItem"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgClassConfigMapEntry'})
-export class SvgClassConfigMapEntry{
+export class SvgClassConfigMapEntry {
 
   @Documentation("The name of the SVG class.")
   @Attribute() key?: string;

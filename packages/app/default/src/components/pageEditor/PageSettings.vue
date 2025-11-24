@@ -12,7 +12,7 @@ Contributors:
 -->
 <script setup lang="ts">
 
-import { inject, ref, computed, watchEffect, watch, onMounted } from 'vue'
+import { inject, ref, computed, watchEffect, watch, onMounted, defineAsyncComponent } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import {
   type PageRegistryI,
@@ -25,11 +25,16 @@ import {
   type LayoutI
 } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import type { Container } from 'inversify'
+
+const EventManagerUI = defineAsyncComponent(() =>
+  import('org.eclipse.daanse.board.app.ui.vue.eventmanager').then(m => m.EventManagerUI)
+)
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
 
 const pageid = defineModel<string>({ required: true })
 const collepsed = ref(true);
+const showEventManager = ref(false);
 const container = inject<Container>('container')
 const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageIdentifier);
 const layoutRepo:LayoutRepositoryI|undefined
@@ -179,10 +184,28 @@ watch(pageSettings,()=>{
         </div>
       </div>
     </va-collapse>
+
+    <va-collapse :header="t('page:PageSettings.eventManager')" icon="event">
+      <va-button @click="showEventManager = true">Open Event Manager</va-button>
+    </va-collapse>
+
     <div class="buttons">
       <va-button @click="emit('close')">Close</va-button>
     </div>
   </div>
+
+  <!-- Event Manager Modal - Teleported to body -->
+  <Teleport to="body">
+    <div v-if="showEventManager" class="event-manager-modal">
+      <div class="event-manager-modal-content">
+        <div class="event-manager-header">
+          <h2>Event Manager</h2>
+          <button @click="showEventManager = false" class="close-button">✕</button>
+        </div>
+        <EventManagerUI />
+      </div>
+    </div>
+  </Teleport>
   </template>
 
 <style scoped lang="scss">
@@ -221,6 +244,57 @@ watch(pageSettings,()=>{
     }
     .va-dropdown__content:deep() {
       z-index: 3800000 !important;
+    }
+
+    .event-manager-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999999;
+    }
+
+    .event-manager-modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90vw;
+      max-width: 1200px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .event-manager-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .event-manager-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      line-height: 1;
+      color: #666;
+    }
+
+    .close-button:hover {
+      color: #000;
     }
 </style>
 <style>

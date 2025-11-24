@@ -28,8 +28,8 @@ import {PointAndAreaSettings} from "./PointAndAreaSettings"
 import {DSRenderer} from "./DSRenderer"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Renderer'})
-export class Renderer{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Renderer'})
+export class Renderer {
 
   @Documentation("The name of the renderer.")
   @Attribute() name?: string;
