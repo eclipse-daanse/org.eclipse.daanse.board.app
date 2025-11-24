@@ -28,7 +28,7 @@ import {VerticalAlign} from "./VerticalAlign"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/progresswidgets#//ProgressSettings'})
-export class ProgressSettings{
+export class ProgressSettings {
 
   @Documentation("The current progress value, potentially as a percentage or numeric string.")
   @Attribute() progress?: string;

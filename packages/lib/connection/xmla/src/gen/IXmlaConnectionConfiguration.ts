@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {BaseConnectionConfig} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/xmlaconnection#//IXmlaConnectionConfiguration'})
-export class IXmlaConnectionConfiguration{
+export class IXmlaConnectionConfiguration extends BaseConnectionConfig {
 
   @Documentation("The URL endpoint for the XMLA service.")
   @Attribute() url?: string;

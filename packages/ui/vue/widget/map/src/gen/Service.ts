@@ -25,8 +25,8 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Service'})
-export class Service{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Service'})
+export class Service {
 
   @Documentation("The type of the service (e.g., 'WMS', 'WFS').")
   @Attribute() type?: string;

@@ -19,12 +19,21 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import TLCDataLabelRendererDescription from './parts/dataLabelRenderer/TLCDataLabelRendererDescription'
 import ValueUnitDataLabelRendererDescription from './parts/dataLabelRenderer/ValueUnitDataLabelRendererDescription'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { MapWidgetEvents } from './events/MapWidgetEvents'
+import { MapWidgetInterface } from './gen/MapWidgetInterface'
+import ecoreModelContent from '../model/model.ecore?raw'
 
 const register = () => {
   console.log('registering Map widget', container)
+  console.log('EVENT_REGISTRY bound?', container.isBound(EVENT_REGISTRY))
   const widgetRepository = container.get<WidgetRepository>(identifier)
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+
   useDataPointRegistry().registerDataPointRenderer(new TLCDataLabelRendererDescription())
   useDataPointRegistry().registerDataPointRenderer(new ValueUnitDataLabelRendererDescription())
+
   widgetRepository.registerWidget('MapWidget', {
     component: MapsWidget,
     settingsComponent: MapsWidgetSettings,
@@ -32,6 +41,16 @@ const register = () => {
     icon: Icon,
     name: 'Map'
   })
+
+  eventRegistry.registerWidget('MapWidget', MapWidgetEvents)
+
+  // Register widget actions from Ecore model (async, non-blocking)
+  actionsRegistry.registerWidgetTypeFromEcoreString('MapWidget', ecoreModelContent, 'model.ecore')
+    .catch((error) => {
+      console.error('Failed to register MapWidget from Ecore, falling back to decorator-based registration:', error)
+      // Fallback to decorator-based registration
+      actionsRegistry.registerWidgetType('MapWidget', MapWidgetInterface)
+    })
 }
 
 register();

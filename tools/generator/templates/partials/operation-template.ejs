@@ -10,13 +10,60 @@
 <%#
   Operation template - generates TypeScript methods from EOperation
 _%>
-<%- operation.name -%>(
-<%_ if (operation.eParameters && operation.eParameters.length > 0) { _%>
-  <%_ Array.from(operation.eParameters).forEach((param, index) => { _%>
-    <%_ const isParamArray = param.isMany || false; _%>
-    <%- param.name -%>: <%- isParamArray ? `Array<${param.eType ? param.eType.name : 'any'}>` : (param.eType ? param.eType.name : 'any') -%><%_ if (index < operation.eParameters.length - 1) { _%>,<%_ } _%>
-  <%_ }); _%>
-<%_ } _%>
-): <%- operation.eType ? operation.eType.name : 'void' -%> {
-    throw new Error("<%- operation.name -%> not implemented");
-}
+<%# Generate custom annotations as decorators -%>
+
+<%_
+  if (operation.eAnnotations && operation.eAnnotations.size() > 0) {
+    for (let i = 0; i < operation.eAnnotations.size(); i++) {
+      const annotation = operation.eAnnotations.get(i);
+      const source = annotation.source;
+
+      // Skip standard GenModel annotations
+      if (source === 'http://www.eclipse.org/emf/2002/GenModel') {
+        continue;
+      }
+
+      // Extract decorator name from source (last part after /)
+      const decoratorName = source.split('/').pop();
+
+      // Collect details as key-value pairs
+      const details = {};
+      if (annotation.details && annotation.details.size() > 0) {
+        for (let j = 0; j < annotation.details.size(); j++) {
+          const entry = annotation.details.get(j);
+          details[entry.key] = entry.value;
+        }
+      }
+
+      // Generate decorator call
+      const detailsStr = Object.entries(details)
+        .map(([key, value]) => `${key}: '${value}'`)
+        .join(', ');
+_%>
+  @<%- decoratorName -%>(<%- detailsStr ? `{${detailsStr}}` : '' -%>)
+<%_
+    }
+  }
+_%>
+  <%- operation.name -%>(<%_
+    if (operation.eParameters && operation.eParameters.size() > 0) {
+        for (let i = 0; i < operation.eParameters.size(); i++) {
+            const param = operation.eParameters.get(i);
+            const isParamArray = param.isMany || param.upperBound === -1 || false;
+            const paramType = mapEcoreTypeToTS(param.eType ? param.eType.name : 'any');
+            // Debug: log parameter info
+            console.log(`Parameter: ${param.name}, defaultValueLiteral: ${param.defaultValueLiteral}, lowerBound: ${param.lowerBound}`);
+            const hasDefault = param.defaultValueLiteral !== undefined && param.defaultValueLiteral !== null && param.defaultValueLiteral !== '';
+            const isOptional = (param.lowerBound === 0 || param.lowerBound === undefined) && !hasDefault;
+_%><%- param.name -%><%- isOptional ? '?' : '' -%>: <%- isParamArray ? `Array<${paramType}>` : paramType -%><%_
+            if (hasDefault) {
+_%> = <%- param.defaultValueLiteral -%><%_
+            }
+            if (i < operation.eParameters.size() - 1) {
+_%>, <%_
+            }
+        }
+    }
+_%>): <%- mapEcoreTypeToTS(operation.eType ? operation.eType.name : null) -%> {
+        throw new Error("<%- operation.name -%> not implemented");
+  }

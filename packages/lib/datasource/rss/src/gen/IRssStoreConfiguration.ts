@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/rssstore#//IRssStoreConfiguration'})
-export class IRssStoreConfiguration{
+export class IRssStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("The URL of the RSS feed to fetch data from.")
   @Attribute() resourceUrl?: string;

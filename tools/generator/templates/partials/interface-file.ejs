@@ -1,0 +1,263 @@
+<%#/**
+* Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors: Smart City Jena
+*/_%>
+<%#
+  Interface file template - creates separate .ts file for each interface
+_%>
+/*
+Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+SPDX-License-Identifier: EPL-2.0
+
+Contributors: Smart City Jena
+
+*/
+
+/*
+* This is generated code! Please note, that on code generation, these line are erased and generated again.
+* If you modify this file, it is possible that you changes will be lost!!!
+*
+* This method uses JSON playload, to load an EPackage.
+*
+* @generated
+*/
+
+/*
+* Generate interfaces for TypeScript
+*/
+<%# Generate imports for all types -%>
+<%_
+  // Helper function to map package URI to import path
+  function mapPackageToImportPath(packageURI, typeName) {
+    if (packageURI === 'org.eclipse.daanse.board.app.ui.vue.composables') {
+      return 'org.eclipse.daanse.board.app.ui.vue.composables';
+    }
+    // Remove http:// or https:// prefix
+    let importPath = packageURI;
+    if (importPath.startsWith('http://')) {
+      importPath = importPath.substring(7);
+    } else if (importPath.startsWith('https://')) {
+      importPath = importPath.substring(8);
+    }
+    // Add more package mappings here as needed
+    return importPath;
+  }
+
+  const localTypes = new Set(); // Same package types
+  const externalTypes = new Map(); // External package types: typeName -> importPath
+
+  // Process eSuperTypes for imports
+  if (eClass.eSuperTypes && eClass.eSuperTypes.size() > 0) {
+    for (let i = 0; i < eClass.eSuperTypes.size(); i++) {
+      const superType = eClass.eSuperTypes.get(i);
+
+      // Check if this is a proxy object
+      if (superType.eIsProxy && superType.eIsProxy()) {
+        const proxyURI = superType.eProxyURI();
+        if (proxyURI) {
+          const uriString = proxyURI.toString();
+          if (uriString.includes('#//')) {
+            const [packageURI, typeName] = uriString.split('#//');
+            const importPath = mapPackageToImportPath(packageURI, typeName);
+            externalTypes.set(typeName, importPath);
+          }
+        }
+      } else if (superType.name && superType.name !== eClass.name) {
+        if (superType.ePackage && superType.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(superType.name);
+        } else if (superType.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(superType.ePackage.nsURI, superType.name);
+          externalTypes.set(superType.name, importPath);
+        }
+      }
+    }
+  }
+_%>
+<%_
+if (eClass.eStructuralFeatures) {
+  Array.from(eClass.eStructuralFeatures).forEach(feature => {
+    if (isEReference(feature)) {
+      // Check regular eType first
+      if (feature.eType && feature.eType.name !== eClass.name) {
+        if (feature.eType.ePackage && feature.eType.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(feature.eType.name);
+        } else if (feature.eType.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(feature.eType.ePackage.nsURI, feature.eType.name);
+          externalTypes.set(feature.eType.name, importPath);
+        }
+      }
+      // Check eGenericType.eClassifier
+      if (feature.eGenericType && feature.eGenericType.eClassifier && feature.eGenericType.eClassifier.name !== eClass.name) {
+        // Check if this is a proxy object
+        if (feature.eGenericType.eClassifier.eIsProxy && feature.eGenericType.eClassifier.eIsProxy()) {
+          // Handle proxy reference - get original URI
+          const proxyURI = feature.eGenericType.eClassifier.eProxyURI();
+          if (proxyURI) {
+            const uriString = proxyURI.toString();
+            if (uriString.includes('#//')) {
+              const [packageURI, typeName] = uriString.split('#//');
+              const importPath = mapPackageToImportPath(packageURI, typeName);
+              externalTypes.set(typeName, importPath);
+            }
+          }
+        } else if (feature.eGenericType.eClassifier.ePackage && feature.eGenericType.eClassifier.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(feature.eGenericType.eClassifier.name);
+        } else if (feature.eGenericType.eClassifier.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(feature.eGenericType.eClassifier.ePackage.nsURI, feature.eGenericType.eClassifier.name);
+          externalTypes.set(feature.eGenericType.eClassifier.name, importPath);
+        }
+      } else if (feature.eGenericType && feature.eGenericType.eClassifier && typeof feature.eGenericType.eClassifier === 'string') {
+        // Handle external package references in string format
+        const externalRef = feature.eGenericType.eClassifier;
+        if (externalRef.includes('#//')) {
+          const [packageURI, typeName] = externalRef.split('#//');
+          const importPath = mapPackageToImportPath(packageURI, typeName);
+          externalTypes.set(typeName, importPath);
+        }
+      }
+    }
+  });
+}
+_%>
+<%# Generate local imports -%>
+<%_
+localTypes.forEach(typeName => {
+  if (!externalTypes.has(typeName)) {
+_%>
+import {<%- typeName -%>} from "./<%- typeName -%>"
+<%_
+  }
+});
+_%>
+<%# Generate external imports -%>
+<%_
+externalTypes.forEach((importPath, typeName) => {
+_%>
+import {<%- typeName -%>} from '<%- importPath -%>'
+<%_
+});
+_%>
+<%# Generate imports for enum types -%>
+<%_
+const enumTypes = new Set();
+if (eClass.eAttributes) {
+  Array.from(eClass.eAttributes).forEach(attribute => {
+    if (attribute.eType && isEEnum(attribute.eType) && attribute.eType.name !== eClass.name) {
+      enumTypes.add(attribute.eType.name);
+    }
+  });
+}
+enumTypes.forEach(enumName => {
+_%>
+import {<%- enumName -%>} from "./<%- enumName -%>"
+<%_
+});
+_%>
+
+export interface <%- eClass.name -%><%_
+  if (eClass.eTypeParameters && eClass.eTypeParameters.size() > 0) {
+    const typeParams = [];
+    for (let i = 0; i < eClass.eTypeParameters.size(); i++) {
+      typeParams.push(eClass.eTypeParameters.get(i).name);
+    }
+_%><<%- typeParams.join(', ') -%>><%_ }
+  if (eClass.eSuperTypes && eClass.eSuperTypes.size() > 0) {
+    const superTypeNames = [];
+    for (let i = 0; i < eClass.eSuperTypes.size(); i++) {
+      const superType = eClass.eSuperTypes.get(i);
+      // Check if this is a proxy object
+      if (superType.eIsProxy && superType.eIsProxy()) {
+        const proxyURI = superType.eProxyURI();
+        if (proxyURI) {
+          const uriString = proxyURI.toString();
+          if (uriString.includes('#//')) {
+            const [packageURI, typeName] = uriString.split('#//');
+            superTypeNames.push(typeName);
+          }
+        }
+      } else if (superType.name) {
+        superTypeNames.push(superType.name);
+      }
+    }
+    if (superTypeNames.length > 0) {
+%> extends <%- superTypeNames.join(', ') %><%_ }
+  }
+%> {
+<%# Generate structural features -%>
+<%_
+    if (eClass.eStructuralFeatures) {
+      Array.from(eClass.eStructuralFeatures).forEach(feature => {
+        if (isEAttribute(feature)) {
+          const tsType = mapEcoreTypeToTS(feature.eType ? feature.eType.name : 'any');
+          const isArray = feature.isMany || false;
+          const isOptional = feature.lowerBound === 0 || feature.lowerBound === undefined;
+_%>
+  <%- feature.name -%><%- isOptional ? '?' : '' -%>: <%- isArray ? `Array<${tsType}>` : tsType -%>;
+<%_
+        } else if (isEReference(feature)) {
+          let refType = 'any';
+          if (feature.eGenericType && feature.eGenericType.eClassifier) {
+            if (feature.eGenericType.eClassifier.eIsProxy && feature.eGenericType.eClassifier.eIsProxy()) {
+              const proxyURI = feature.eGenericType.eClassifier.eProxyURI();
+              if (proxyURI) {
+                const uriString = proxyURI.toString();
+                if (uriString.includes('#//')) {
+                  const [packageURI, typeName] = uriString.split('#//');
+                  refType = typeName;
+                }
+              }
+            } else if (feature.eGenericType.eClassifier.name) {
+              refType = feature.eGenericType.eClassifier.name;
+            }
+          } else if (feature.eType) {
+            refType = feature.eType.name;
+          }
+
+          const isArray = feature.isMany || feature.upperBound === -1;
+          const isOptional = feature.lowerBound === 0 || feature.lowerBound === undefined;
+_%>
+  <%- feature.name -%><%- isOptional ? '?' : '' -%>: <%- isArray ? `Array<${refType}>` : refType -%>;
+<%_
+        }
+      });
+    }
+_%>
+<%# Generate operations -%>
+<%_
+    if (eClass.eOperations && eClass.eOperations.size() > 0) {
+      for (let i = 0; i < eClass.eOperations.size(); i++) {
+        const operation = eClass.eOperations.get(i);
+_%>
+  <%- operation.name -%>(<%_
+    if (operation.eParameters && operation.eParameters.size() > 0) {
+        for (let j = 0; j < operation.eParameters.size(); j++) {
+            const param = operation.eParameters.get(j);
+            const isParamArray = param.isMany || param.upperBound === -1 || false;
+            const paramType = mapEcoreTypeToTS(param.eType ? param.eType.name : 'any');
+            const isOptional = param.lowerBound === 0 || param.lowerBound === undefined;
+_%><%- param.name -%><%- isOptional ? '?' : '' -%>: <%- isParamArray ? `Array<${paramType}>` : paramType -%><%_
+            if (j < operation.eParameters.size() - 1) {
+_%>, <%_
+            }
+        }
+    }
+_%>): <%- mapEcoreTypeToTS(operation.eType ? operation.eType.name : null) -%>;
+<%_
+      }
+    }
+_%>
+}

@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings'})
-export class MermaidWidgetSettings{
+export class MermaidWidgetSettings {
 
   @Documentation("Defines the color scheme or style used for the Mermaid diagram.")
   @Attribute() theme: string = "default";

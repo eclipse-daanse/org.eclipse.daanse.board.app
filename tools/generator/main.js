@@ -1,15 +1,17 @@
 #!/usr/bin/env node
+/*********************************************************************
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
 
-/*
-Copyright (c) 2023 Contributors to the  Eclipse Foundation.
-This program and the accompanying materials are made
-available under the terms of the Eclipse Public License 2.0
-which is available at https://www.eclipse.org/legal/epl-2.0/
-SPDX-License-Identifier: EPL-2.0
-
-Contributors: Smart City Jena
-
-*/
 import Z from "fs";
 import $e from "id128";
 import ye from "path";
@@ -1576,30 +1578,30 @@ class Ws extends Is {
         let l = a, u = this.eResolveProxy(l);
         if (a = u, l != u) {
           if (e.eDynamicSet(s, u), we(t)) {
-            let h = null;
+            let _ = null;
             if (Se(t)) {
-              let d = t.eOpposite;
+              let T = t.eOpposite;
               if (l) {
-                let p = l, O = p.eClass().getFeatureID(d);
-                h = p.eInverseRemove(this, O, h);
+                let p = l, O = p.eClass().getFeatureID(T);
+                _ = p.eInverseRemove(this, O, _);
               }
               if (u) {
-                let p = u, O = p.eClass().getFeatureID(d);
-                h = p.eInverseAdd(this, O, h);
+                let p = u, O = p.eClass().getFeatureID(T);
+                _ = p.eInverseAdd(this, O, _);
               }
             } else {
-              let _ = this.eClass().getFeatureID(t);
-              l && (h = l.eInverseRemove(
+              let h = this.eClass().getFeatureID(t);
+              l && (_ = l.eInverseRemove(
                 this,
-                M - _,
-                h
-              )), u && (h = u.eInverseAdd(
+                M - h,
+                _
+              )), u && (_ = u.eInverseAdd(
                 this,
-                M - _,
-                h
+                M - h,
+                _
               ));
             }
-            h && h.dispatch();
+            _ && _.dispatch();
           }
           this.eNotificationRequired && this.eNotify(new g(this, S.RESOLVE, t, l, u));
         }
@@ -1655,38 +1657,38 @@ class Ws extends Is {
     if (pe(t)) {
       let a = this.eClass().getFeatureID(t), l = this.eInternalContainer(), u = v(r) ? r : null;
       if (u != l || u && this.eInternalContainerFeatureID() != a) {
-        let h;
-        if (l && (h = this.eBasicRemoveFromContainer(h)), u) {
-          let _ = t.eOpposite, d = u.eClass().getFeatureID(_);
-          h = u.eInverseAdd(this, d, h);
+        let _;
+        if (l && (_ = this.eBasicRemoveFromContainer(_)), u) {
+          let h = t.eOpposite, T = u.eClass().getFeatureID(h);
+          _ = u.eInverseAdd(this, T, _);
         }
-        h = this.eBasicSetContainer(u, a, h), h && h.dispatch();
+        _ = this.eBasicSetContainer(u, a, _), _ && _.dispatch();
       } else this.eNotificationRequired && this.eNotify(new g(this, S.SET, t, r, r));
     } else if (Se(t) || we(t)) {
       let a = e.eDynamicGet(s);
       if (a != r) {
-        let l = null, u = v(a) ? a : null, h = v(r) ? r : null;
+        let l = null, u = v(a) ? a : null, _ = v(r) ? r : null;
         if (Se(t)) {
-          let d = t.eOpposite;
+          let T = t.eOpposite;
           if (u) {
-            let p = u.eClass().getFeatureID(d);
+            let p = u.eClass().getFeatureID(T);
             l = u.eInverseRemove(this, p, l);
           }
-          if (h) {
-            let p = h.eClass().getFeatureID(d);
-            l = h.eInverseAdd(this, p, l);
+          if (_) {
+            let p = _.eClass().getFeatureID(T);
+            l = _.eInverseAdd(this, p, l);
           }
         } else {
-          let _ = this.eClass().getFeatureID(t);
+          let h = this.eClass().getFeatureID(t);
           u && (l = u.eInverseRemove(
             this,
-            M - _,
+            M - h,
             l
-          )), h && (l = h.eInverseAdd(this, M - _, l));
+          )), _ && (l = _.eInverseAdd(this, M - h, l));
         }
         if (e.eDynamicSet(s, r), this.eNotificationRequired) {
-          let _ = new g(this, S.SET, t, a, r);
-          l ? l.add(_) : l = _;
+          let h = new g(this, S.SET, t, a, r);
+          l ? l.add(h) : l = h;
         }
         l && l.dispatch();
       }
@@ -1755,10 +1757,10 @@ class Ws extends Is {
       if (r) {
         let a = null, l = v(r) ? r : null;
         if (Se(t)) {
-          let h = t.eOpposite;
+          let _ = t.eOpposite;
           if (l) {
-            let _ = l.eClass().getFeatureID(h);
-            a = l.eInverseRemove(this, _, a);
+            let h = l.eClass().getFeatureID(_);
+            a = l.eInverseRemove(this, h, a);
           }
         } else if (l) {
           let u = this.eClass().getFeatureID(t);
@@ -1769,8 +1771,8 @@ class Ws extends Is {
           );
         }
         if (e.eDynamicUnset(s), this.eNotificationRequired) {
-          let u = t.isUnsettable ? S.UNSET : S.SET, h = new g(this, u, t, r, null);
-          a ? a.add(h) : a = h;
+          let u = t.isUnsettable ? S.UNSET : S.SET, _ = new g(this, u, t, r, null);
+          a ? a.add(_) : a = _;
         }
         a && a.dispatch();
       }
@@ -1819,16 +1821,16 @@ class Ws extends Is {
       let l = e.eDynamicGet(r), u = v(l) ? l : null;
       if (u) {
         if (we(s)) {
-          let h = this.eClass().getFeatureID(s);
-          a = u.eInverseRemove(this, M - h, a);
+          let _ = this.eClass().getFeatureID(s);
+          a = u.eInverseRemove(this, M - _, a);
         } else if (Se(s)) {
-          let _ = s.eOpposite, d = u.eClass().getFeatureID(_);
-          a = u.eInverseRemove(this, d, a);
+          let h = s.eOpposite, T = u.eClass().getFeatureID(h);
+          a = u.eInverseRemove(this, T, a);
         }
       }
       if (e.eDynamicSet(r, t), this.eNotificationRequired) {
-        let h = new g(this, S.SET, s, l, t);
-        a ? a.add(h) : a = h;
+        let _ = new g(this, S.SET, s, l, t);
+        a ? a.add(_) : a = _;
       }
     }
     return a;
@@ -1870,21 +1872,21 @@ class Ws extends Is {
     return a;
   }
   eBasicSetContainer(e, t, s) {
-    let r = s, a = this.eInternalResource(), l = this.eInternalContainer(), u = this.eInternalContainerFeatureID(), h = null;
-    if (a ? e && !this.eObjectContainmentFeature(this, e, t).isResolveProxies ? (r = a.eContents().removeWithNotification(this, r), this.eSetInternalResource(null), h = e.eResource()) : a = null : (l && (a = l.eResource()), e && (h = e.eResource())), a && a != h && a.detached(this), h && h != a && h.attached(this), this.eSetInternalContainer(e, t), this.eNotificationRequired) {
+    let r = s, a = this.eInternalResource(), l = this.eInternalContainer(), u = this.eInternalContainerFeatureID(), _ = null;
+    if (a ? e && !this.eObjectContainmentFeature(this, e, t).isResolveProxies ? (r = a.eContents().removeWithNotification(this, r), this.eSetInternalResource(null), _ = e.eResource()) : a = null : (l && (a = l.eResource()), e && (_ = e.eResource())), a && a != _ && a.detached(this), _ && _ != a && _.attached(this), this.eSetInternalContainer(e, t), this.eNotificationRequired) {
       if (l != null && u >= 0 && u != t) {
-        let _ = new g(this, S.SET, u, l, null);
-        r != null ? r.add(_) : r = _;
+        let h = new g(this, S.SET, u, l, null);
+        r != null ? r.add(h) : r = h;
       }
       if (t >= 0) {
-        let _ = new g(
+        let h = new g(
           this,
           S.SET,
           t,
           u == t ? l : null,
           e
         );
-        r != null ? r.add(_) : r = _;
+        r != null ? r.add(h) : r = h;
       }
     }
     return r;
@@ -2262,8 +2264,8 @@ class Ns extends Ws {
   }
 }
 class U extends At {
-  constructor(e, t, s, r, a, l, u, h) {
-    super(), this._owner = e, this._featureID = t, this._inverseFeatureID = s, this._containment = r, this._inverse = a, this._opposite = l, this._proxies = u, this._unset = h;
+  constructor(e, t, s, r, a, l, u, _) {
+    super(), this._owner = e, this._featureID = t, this._inverseFeatureID = s, this._containment = r, this._inverse = a, this._opposite = l, this._proxies = u, this._unset = _;
   }
   get notifier() {
     return this._owner;
@@ -2574,18 +2576,18 @@ class xt extends er {
         if (t == "%") {
           let l = e.lastIndexOf("%"), u = !1;
           if (l != 0 && (u = e[l + 1] == ".", l == e.length - 1 || u)) {
-            let h = "", _ = e.slice(1, l);
-            _ != "%" && (h = decodeURI(_));
-            let d = 0;
+            let _ = "", h = e.slice(1, l);
+            h != "%" && (_ = decodeURI(h));
+            let T = 0;
             if (u) {
               let p = parseInt(e.slice(l + 2));
-              isNaN(p) || (d = p);
+              isNaN(p) || (T = p);
             }
             for (const p of this.eContents())
-              if (at(p) && (p.source, p.source == h)) {
-                if (d == 0)
+              if (at(p) && (p.source, p.source == _)) {
+                if (T == 0)
                   return p;
-                d--;
+                T--;
               }
             return null;
           }
@@ -5461,10 +5463,10 @@ class Ct extends fr {
   initEClass(e, t, s, r, a) {
     e.name = t, e.isAbstract = r, e.isInterface = a, e.instanceTypeName = s;
   }
-  initEStructuralFeature(e, t, s, r, a, l, u, h, _, d, p, O, y) {
-    e.name = s, e.eType = t, e.defaultValueLiteral = r, e.lowerBound = a, e.upperBound = l, e.isTransient = u, e.isVolatile = h, e.isChangeable = _, e.isUnsettable = d, e.isUnique = p, e.isDerived = O, e.isOrdered = y;
+  initEStructuralFeature(e, t, s, r, a, l, u, _, h, T, p, O, y) {
+    e.name = s, e.eType = t, e.defaultValueLiteral = r, e.lowerBound = a, e.upperBound = l, e.isTransient = u, e.isVolatile = _, e.isChangeable = h, e.isUnsettable = T, e.isUnique = p, e.isDerived = O, e.isOrdered = y;
   }
-  initEAttribute(e, t, s, r, a, l, u, h, _, d, p, O, y, q) {
+  initEAttribute(e, t, s, r, a, l, u, _, h, T, p, O, y, q) {
     this.initEStructuralFeature(
       e,
       t,
@@ -5473,15 +5475,15 @@ class Ct extends fr {
       a,
       l,
       u,
-      h,
       _,
-      d,
+      h,
+      T,
       p,
       O,
       y
     ), e.isID = q;
   }
-  initEReference(e, t, s, r, a, l, u, h, _, d, p, O, y, q, he, ne) {
+  initEReference(e, t, s, r, a, l, u, _, h, T, p, O, y, q, he, ne) {
     this.initEStructuralFeature(
       e,
       t,
@@ -5489,9 +5491,9 @@ class Ct extends fr {
       a,
       l,
       u,
-      h,
       _,
-      d,
+      h,
+      T,
       y,
       q,
       he,
@@ -5502,8 +5504,8 @@ class Ct extends fr {
     e.name = s, e.eType = t, e.lowerBound = r, e.upperBound = a, e.isUnique = l, e.isOrdered = u;
   }
   addEParameter(e, t, s, r, a, l, u) {
-    let h = Xe().createEParameterFromContainer(e);
-    h.name = s, h.eType = t, h.lowerBound = r, h.upperBound = a, h.isUnique = l, h.isOrdered = u;
+    let _ = Xe().createEParameterFromContainer(e);
+    _.name = s, _.eType = t, _.lowerBound = r, _.upperBound = a, _.isUnique = l, _.isOrdered = u;
   }
   initEClassifier(e, t, s) {
     e.name = t, e.instanceTypeName = s;
@@ -9547,12 +9549,12 @@ var Fr = (
   function e() {
     for (var r = [], a = 0; a < arguments.length; a++)
       r[a] = arguments[a];
-    for (var l = [], u = 0, h = r; u < h.length; u++) {
-      var _ = h[u];
-      if (_.isSome())
-        l.push(_.value);
+    for (var l = [], u = 0, _ = r; u < _.length; u++) {
+      var h = _[u];
+      if (h.isSome())
+        l.push(h.value);
       else
-        return _;
+        return h;
     }
     return be(l);
   }
@@ -9561,9 +9563,9 @@ var Fr = (
     for (var r = [], a = 0; a < arguments.length; a++)
       r[a] = arguments[a];
     for (var l = 0, u = r; l < u.length; l++) {
-      var h = u[l];
-      if (h.isSome())
-        return h;
+      var _ = u[l];
+      if (_.isSome())
+        return _;
     }
     return De;
   }
@@ -9699,50 +9701,50 @@ var Me = function(n, e, t) {
 ), J = Dr, as;
 (function(n) {
   function e(u) {
-    for (var h = [], _ = 0, d = u; _ < d.length; _++) {
-      var p = d[_];
+    for (var _ = [], h = 0, T = u; h < T.length; h++) {
+      var p = T[h];
       if (p.isOk())
-        h.push(p.value);
+        _.push(p.value);
       else
         return p;
     }
-    return new J(h);
+    return new J(_);
   }
   n.all = e;
   function t(u) {
-    for (var h = [], _ = 0, d = u; _ < d.length; _++) {
-      var p = d[_];
+    for (var _ = [], h = 0, T = u; h < T.length; h++) {
+      var p = T[h];
       if (p.isOk())
         return p;
-      h.push(p.error);
+      _.push(p.error);
     }
-    return new z(h);
+    return new z(_);
   }
   n.any = t;
   function s(u) {
     try {
       return new J(u());
-    } catch (h) {
-      return new z(h);
+    } catch (_) {
+      return new z(_);
     }
   }
   n.wrap = s;
   function r(u) {
     try {
-      return u().then(function(h) {
-        return new J(h);
-      }).catch(function(h) {
-        return new z(h);
+      return u().then(function(_) {
+        return new J(_);
+      }).catch(function(_) {
+        return new z(_);
       });
-    } catch (h) {
-      return Promise.resolve(new z(h));
+    } catch (_) {
+      return Promise.resolve(new z(_));
     }
   }
   n.wrapAsync = r;
   function a(u) {
-    return u.reduce(function(h, _) {
-      var d = h[0], p = h[1];
-      return _.isOk() ? [Me(Me([], d, !0), [_.value], !1), p] : [d, Me(Me([], p, !0), [_.error], !1)];
+    return u.reduce(function(_, h) {
+      var T = _[0], p = _[1];
+      return h.isOk() ? [Me(Me([], T, !0), [h.value], !1), p] : [T, Me(Me([], p, !0), [h.error], !1)];
     }, [[], []]);
   }
   n.partition = a;
@@ -9758,24 +9760,24 @@ var Be = function(n, e, t, s) {
     });
   }
   return new (t || (t = Promise))(function(a, l) {
-    function u(d) {
+    function u(T) {
       try {
-        _(s.next(d));
+        h(s.next(T));
       } catch (p) {
         l(p);
       }
     }
-    function h(d) {
+    function _(T) {
       try {
-        _(s.throw(d));
+        h(s.throw(T));
       } catch (p) {
         l(p);
       }
     }
-    function _(d) {
-      d.done ? a(d.value) : r(d.value).then(u, h);
+    function h(T) {
+      T.done ? a(T.value) : r(T.value).then(u, _);
     }
-    _((s = s.apply(n, e || [])).next());
+    h((s = s.apply(n, e || [])).next());
   });
 }, Ge = function(n, e) {
   var t = { label: 0, sent: function() {
@@ -9785,56 +9787,56 @@ var Be = function(n, e, t, s) {
   return l.next = u(0), l.throw = u(1), l.return = u(2), typeof Symbol == "function" && (l[Symbol.iterator] = function() {
     return this;
   }), l;
-  function u(_) {
-    return function(d) {
-      return h([_, d]);
+  function u(h) {
+    return function(T) {
+      return _([h, T]);
     };
   }
-  function h(_) {
+  function _(h) {
     if (s) throw new TypeError("Generator is already executing.");
-    for (; l && (l = 0, _[0] && (t = 0)), t; ) try {
-      if (s = 1, r && (a = _[0] & 2 ? r.return : _[0] ? r.throw || ((a = r.return) && a.call(r), 0) : r.next) && !(a = a.call(r, _[1])).done) return a;
-      switch (r = 0, a && (_ = [_[0] & 2, a.value]), _[0]) {
+    for (; l && (l = 0, h[0] && (t = 0)), t; ) try {
+      if (s = 1, r && (a = h[0] & 2 ? r.return : h[0] ? r.throw || ((a = r.return) && a.call(r), 0) : r.next) && !(a = a.call(r, h[1])).done) return a;
+      switch (r = 0, a && (h = [h[0] & 2, a.value]), h[0]) {
         case 0:
         case 1:
-          a = _;
+          a = h;
           break;
         case 4:
-          return t.label++, { value: _[1], done: !1 };
+          return t.label++, { value: h[1], done: !1 };
         case 5:
-          t.label++, r = _[1], _ = [0];
+          t.label++, r = h[1], h = [0];
           continue;
         case 7:
-          _ = t.ops.pop(), t.trys.pop();
+          h = t.ops.pop(), t.trys.pop();
           continue;
         default:
-          if (a = t.trys, !(a = a.length > 0 && a[a.length - 1]) && (_[0] === 6 || _[0] === 2)) {
+          if (a = t.trys, !(a = a.length > 0 && a[a.length - 1]) && (h[0] === 6 || h[0] === 2)) {
             t = 0;
             continue;
           }
-          if (_[0] === 3 && (!a || _[1] > a[0] && _[1] < a[3])) {
-            t.label = _[1];
+          if (h[0] === 3 && (!a || h[1] > a[0] && h[1] < a[3])) {
+            t.label = h[1];
             break;
           }
-          if (_[0] === 6 && t.label < a[1]) {
-            t.label = a[1], a = _;
+          if (h[0] === 6 && t.label < a[1]) {
+            t.label = a[1], a = h;
             break;
           }
           if (a && t.label < a[2]) {
-            t.label = a[2], t.ops.push(_);
+            t.label = a[2], t.ops.push(h);
             break;
           }
           a[2] && t.ops.pop(), t.trys.pop();
           continue;
       }
-      _ = e.call(n, t);
-    } catch (d) {
-      _ = [6, d], r = 0;
+      h = e.call(n, t);
+    } catch (T) {
+      h = [6, T], r = 0;
     } finally {
       s = a = 0;
     }
-    if (_[0] & 5) throw _[1];
-    return { value: _[0] ? _[1] : void 0, done: !0 };
+    if (h[0] & 5) throw h[1];
+    return { value: h[0] ? h[1] : void 0, done: !0 };
   }
 }, zt = (
   /** @class */
@@ -9913,24 +9915,24 @@ var Be = function(n, e, t, s) {
     });
   }
   return new (t || (t = Promise))(function(a, l) {
-    function u(d) {
+    function u(T) {
       try {
-        _(s.next(d));
+        h(s.next(T));
       } catch (p) {
         l(p);
       }
     }
-    function h(d) {
+    function _(T) {
       try {
-        _(s.throw(d));
+        h(s.throw(T));
       } catch (p) {
         l(p);
       }
     }
-    function _(d) {
-      d.done ? a(d.value) : r(d.value).then(u, h);
+    function h(T) {
+      T.done ? a(T.value) : r(T.value).then(u, _);
     }
-    _((s = s.apply(n, e || [])).next());
+    h((s = s.apply(n, e || [])).next());
   });
 }, Tt = function(n, e) {
   var t = { label: 0, sent: function() {
@@ -9940,56 +9942,56 @@ var Be = function(n, e, t, s) {
   return l.next = u(0), l.throw = u(1), l.return = u(2), typeof Symbol == "function" && (l[Symbol.iterator] = function() {
     return this;
   }), l;
-  function u(_) {
-    return function(d) {
-      return h([_, d]);
+  function u(h) {
+    return function(T) {
+      return _([h, T]);
     };
   }
-  function h(_) {
+  function _(h) {
     if (s) throw new TypeError("Generator is already executing.");
-    for (; l && (l = 0, _[0] && (t = 0)), t; ) try {
-      if (s = 1, r && (a = _[0] & 2 ? r.return : _[0] ? r.throw || ((a = r.return) && a.call(r), 0) : r.next) && !(a = a.call(r, _[1])).done) return a;
-      switch (r = 0, a && (_ = [_[0] & 2, a.value]), _[0]) {
+    for (; l && (l = 0, h[0] && (t = 0)), t; ) try {
+      if (s = 1, r && (a = h[0] & 2 ? r.return : h[0] ? r.throw || ((a = r.return) && a.call(r), 0) : r.next) && !(a = a.call(r, h[1])).done) return a;
+      switch (r = 0, a && (h = [h[0] & 2, a.value]), h[0]) {
         case 0:
         case 1:
-          a = _;
+          a = h;
           break;
         case 4:
-          return t.label++, { value: _[1], done: !1 };
+          return t.label++, { value: h[1], done: !1 };
         case 5:
-          t.label++, r = _[1], _ = [0];
+          t.label++, r = h[1], h = [0];
           continue;
         case 7:
-          _ = t.ops.pop(), t.trys.pop();
+          h = t.ops.pop(), t.trys.pop();
           continue;
         default:
-          if (a = t.trys, !(a = a.length > 0 && a[a.length - 1]) && (_[0] === 6 || _[0] === 2)) {
+          if (a = t.trys, !(a = a.length > 0 && a[a.length - 1]) && (h[0] === 6 || h[0] === 2)) {
             t = 0;
             continue;
           }
-          if (_[0] === 3 && (!a || _[1] > a[0] && _[1] < a[3])) {
-            t.label = _[1];
+          if (h[0] === 3 && (!a || h[1] > a[0] && h[1] < a[3])) {
+            t.label = h[1];
             break;
           }
-          if (_[0] === 6 && t.label < a[1]) {
-            t.label = a[1], a = _;
+          if (h[0] === 6 && t.label < a[1]) {
+            t.label = a[1], a = h;
             break;
           }
           if (a && t.label < a[2]) {
-            t.label = a[2], t.ops.push(_);
+            t.label = a[2], t.ops.push(h);
             break;
           }
           a[2] && t.ops.pop(), t.trys.pop();
           continue;
       }
-      _ = e.call(n, t);
-    } catch (d) {
-      _ = [6, d], r = 0;
+      h = e.call(n, t);
+    } catch (T) {
+      h = [6, T], r = 0;
     } finally {
       s = a = 0;
     }
-    if (_[0] & 5) throw _[1];
-    return { value: _[0] ? _[1] : void 0, done: !0 };
+    if (h[0] & 5) throw h[1];
+    return { value: h[0] ? h[1] : void 0, done: !0 };
   }
 }, Jt = (
   /** @class */
@@ -10310,14 +10312,14 @@ function li(n, e, t) {
     if (!(u & 128))
       a.push(u);
     else if ((u & 224) === 192) {
-      const h = n[s++] & 63;
-      a.push((u & 31) << 6 | h);
+      const _ = n[s++] & 63;
+      a.push((u & 31) << 6 | _);
     } else if ((u & 240) === 224) {
-      const h = n[s++] & 63, _ = n[s++] & 63;
-      a.push((u & 31) << 12 | h << 6 | _);
+      const _ = n[s++] & 63, h = n[s++] & 63;
+      a.push((u & 31) << 12 | _ << 6 | h);
     } else if ((u & 248) === 240) {
-      const h = n[s++] & 63, _ = n[s++] & 63, d = n[s++] & 63;
-      let p = (u & 7) << 18 | h << 12 | _ << 6 | d;
+      const _ = n[s++] & 63, h = n[s++] & 63, T = n[s++] & 63;
+      let p = (u & 7) << 18 | _ << 12 | h << 6 | T;
       p > 65535 && (p -= 65536, a.push(p >>> 10 & 1023 | 55296), p = 56320 | p & 1023), a.push(p);
     } else
       a.push(u);
@@ -10637,21 +10639,21 @@ class gi {
       e.addAll(new G(s));
     else {
       let a = new Array(r), l = 0, u = [...e.toArray()];
-      e: for (let h = 0; h < t; h++) {
-        let _ = s[h], d = l;
+      e: for (let _ = 0; _ < t; _++) {
+        let h = s[_], T = l;
         for (let p = 0; p < r; p++) {
           let O = u[p];
-          if (O == _) {
-            l != d && e.moveTo(d, l), a[l] = h, l++, u[p] = null;
+          if (O == h) {
+            l != T && e.moveTo(T, l), a[l] = _, l++, u[p] = null;
             continue e;
-          } else O && d++;
+          } else O && T++;
         }
-        s[h - l] = _;
+        s[_ - l] = h;
       }
       t -= r, e.addAll(new G(s));
-      for (let h = 0; h < r; h++) {
-        let _ = a[h], d = t + h;
-        _ != d && e.moveTo(d, _);
+      for (let _ = 0; _ < r; _++) {
+        let h = a[_], T = t + _;
+        h != T && e.moveTo(T, h);
       }
     }
   }
@@ -10664,8 +10666,8 @@ class gi {
     if (this._packageData.length <= e) {
       let t = this.decodeString(), s = this.decodeURI(), r = this._resource.eResourceSet(), l = (r ? r.getPackageRegistry() : Ze()).getPackage(t);
       if (!l) {
-        let h = r.getEObject(s, !0);
-        qe(h) && (l = h);
+        let _ = r.getEObject(s, !0);
+        qe(_) && (l = _);
       }
       let u = this.newPackageData(l);
       return this._packageData.push(u), u;
@@ -10698,8 +10700,8 @@ class gi {
       case N.bfkDataList: {
         let r = this.decodeNumber(), a = [];
         for (let u = 0; u < r; u++) {
-          let h = this.decodeString(), _ = t.eFactory.createFromString(t.eDataType, h);
-          a.push(_);
+          let _ = this.decodeString(), h = t.eFactory.createFromString(t.eDataType, _);
+          a.push(h);
         }
         e.eGetResolve(t.eFeature, !1).addAll(new G(a));
         break;
@@ -10967,28 +10969,28 @@ class Di {
           if (s.eIsProxy())
             this.encodeNumber(-2), this.encodeURI(s.eProxyURI()), u = !1;
           else {
-            let h = s.eInternalResource();
-            h && (this.encodeNumber(-2), this.encodeURIWithFragment(h.eURI, h.getURIFragment(s)), u = !1);
+            let _ = s.eInternalResource();
+            _ && (this.encodeNumber(-2), this.encodeURIWithFragment(_.eURI, _.getURIFragment(s)), u = !1);
           }
           break;
         case 2:
           if (s.eIsProxy())
             this.encodeNumber(-2), this.encodeURI(s.eProxyURI()), u = !1;
           else {
-            let h = s.eInternalResource();
-            h != null && (h != this._resource || this._objectRoot != null && !te.isAncestor(this._objectRoot, s)) && (this.encodeNumber(-2), this.encodeURIWithFragment(h.eURI, h.getURIFragment(s)), u = !1);
+            let _ = s.eInternalResource();
+            _ != null && (_ != this._resource || this._objectRoot != null && !te.isAncestor(this._objectRoot, s)) && (this.encodeNumber(-2), this.encodeURIWithFragment(_.eURI, _.getURIFragment(s)), u = !1);
           }
           break;
       }
       if (u) {
-        let h = this._resource.eObjectIDManager;
-        if (this._isIDAttributeEncoded && h) {
-          let _ = h.getID(e);
-          _ && (this.encodeNumber(-1), this.encodeAny(_));
+        let _ = this._resource.eObjectIDManager;
+        if (this._isIDAttributeEncoded && _) {
+          let h = _.getID(e);
+          h && (this.encodeNumber(-1), this.encodeAny(h));
         }
-        for (let _ = 0; _ < l.featureData.length; _++) {
-          let d = l.featureData[_];
-          !d.isTransient && (t == 3 || d.featureKind != N.bfkObjectContainerProxy) && this.encodeFeatureValue(s, _, d);
+        for (let h = 0; h < l.featureData.length; h++) {
+          let T = l.featureData[h];
+          !T.isTransient && (t == 3 || T.featureKind != N.bfkObjectContainerProxy) && this.encodeFeatureValue(s, h, T);
         }
       }
       this.encodeNumber(0);
@@ -11085,19 +11087,19 @@ class Di {
         case N.bfkDataList:
           let l = r;
           this.encodeNumber(l.size());
-          for (const h of l) {
-            let _ = s.factory.convertToString(s.dataType, h);
-            this.encodeString(_);
+          for (const _ of l) {
+            let h = s.factory.convertToString(s.dataType, _);
+            this.encodeString(h);
           }
           break;
         case N.bfkEnum:
           let u = s.factory.convertToString(s.dataType, r);
           if (this._enumLiteralToIDMap.has(u)) {
-            let h = this._enumLiteralToIDMap.get(u);
-            this.encodeNumber(h);
+            let _ = this._enumLiteralToIDMap.get(u);
+            this.encodeNumber(_);
           } else {
-            let h = this._enumLiteralToIDMap.size;
-            this._enumLiteralToIDMap.set(u, h), this.encodeNumber(h), this.encodeString(u);
+            let _ = this._enumLiteralToIDMap.size;
+            this._enumLiteralToIDMap.set(u, _), this.encodeNumber(_), this.encodeString(u);
           }
           break;
         case N.bfkDate:
@@ -11255,7 +11257,7 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   (function(e) {
     e.parser = function(E, o) {
       return new s(E, o);
-    }, e.SAXParser = s, e.SAXStream = d, e.createStream = _, e.MAX_BUFFER_LENGTH = 64 * 1024;
+    }, e.SAXParser = s, e.SAXStream = T, e.createStream = h, e.MAX_BUFFER_LENGTH = 64 * 1024;
     var t = [
       "comment",
       "sgmlDecl",
@@ -11294,7 +11296,7 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
       if (!(this instanceof s))
         return new s(E, o);
       var C = this;
-      a(C), C.q = C.c = "", C.bufferCheckPosition = e.MAX_BUFFER_LENGTH, C.opt = o || {}, C.opt.lowercase = C.opt.lowercase || C.opt.lowercasetags, C.looseCase = C.opt.lowercase ? "toLowerCase" : "toUpperCase", C.tags = [], C.closed = C.closedRoot = C.sawRoot = !1, C.tag = C.error = null, C.strict = !!E, C.noscript = !!(E || C.opt.noscript), C.state = c.BEGIN, C.strictEntities = C.opt.strictEntities, C.ENTITIES = C.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), C.attribList = [], C.opt.xmlns && (C.ns = Object.create(he)), C.opt.unquotedAttributeValues === void 0 && (C.opt.unquotedAttributeValues = !E), C.trackPosition = C.opt.position !== !1, C.trackPosition && (C.position = C.line = C.column = 0), T(C, "onready");
+      a(C), C.q = C.c = "", C.bufferCheckPosition = e.MAX_BUFFER_LENGTH, C.opt = o || {}, C.opt.lowercase = C.opt.lowercase || C.opt.lowercasetags, C.looseCase = C.opt.lowercase ? "toLowerCase" : "toUpperCase", C.tags = [], C.closed = C.closedRoot = C.sawRoot = !1, C.tag = C.error = null, C.strict = !!E, C.noscript = !!(E || C.opt.noscript), C.state = c.BEGIN, C.strictEntities = C.opt.strictEntities, C.ENTITIES = C.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), C.attribList = [], C.opt.xmlns && (C.ns = Object.create(he)), C.opt.unquotedAttributeValues === void 0 && (C.opt.unquotedAttributeValues = !E), C.trackPosition = C.opt.position !== !1, C.trackPosition && (C.position = C.line = C.column = 0), d(C, "onready");
     }
     Object.create || (Object.create = function(E) {
       function o() {
@@ -11360,22 +11362,22 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
     }
     u || (u = function() {
     });
-    var h = e.EVENTS.filter(function(E) {
+    var _ = e.EVENTS.filter(function(E) {
       return E !== "error" && E !== "end";
     });
-    function _(E, o) {
-      return new d(E, o);
+    function h(E, o) {
+      return new T(E, o);
     }
-    function d(E, o) {
-      if (!(this instanceof d))
-        return new d(E, o);
+    function T(E, o) {
+      if (!(this instanceof T))
+        return new T(E, o);
       u.apply(this), this._parser = new s(E, o), this.writable = !0, this.readable = !0;
       var C = this;
       this._parser.onend = function() {
         C.emit("end");
       }, this._parser.onerror = function(f) {
         C.emit("error", f), C._parser.error = null;
-      }, this._decoder = null, h.forEach(function(f) {
+      }, this._decoder = null, _.forEach(function(f) {
         Object.defineProperty(C, "on" + f, {
           get: function() {
             return C._parser["on" + f];
@@ -11390,11 +11392,11 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
         });
       });
     }
-    d.prototype = Object.create(u.prototype, {
+    T.prototype = Object.create(u.prototype, {
       constructor: {
-        value: d
+        value: T
       }
-    }), d.prototype.write = function(E) {
+    }), T.prototype.write = function(E) {
       if (typeof Buffer == "function" && typeof Buffer.isBuffer == "function" && Buffer.isBuffer(E)) {
         if (!this._decoder) {
           var o = Mi.StringDecoder;
@@ -11403,11 +11405,11 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
         E = this._decoder.write(E);
       }
       return this._parser.write(E.toString()), this.emit("data", E), !0;
-    }, d.prototype.end = function(E) {
+    }, T.prototype.end = function(E) {
       return E && E.length && this.write(E), this._parser.end(), !0;
-    }, d.prototype.on = function(E, o) {
+    }, T.prototype.on = function(E, o) {
       var C = this;
-      return !C._parser["on" + E] && h.indexOf(E) !== -1 && (C._parser["on" + E] = function() {
+      return !C._parser["on" + E] && _.indexOf(E) !== -1 && (C._parser["on" + E] = function() {
         var f = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
         f.splice(0, 0, E), C.emit.apply(C, f);
       }), u.prototype.on.call(C, E, o);
@@ -11770,14 +11772,14 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
     for (var R in e.STATE)
       e.STATE[e.STATE[R]] = R;
     c = e.STATE;
-    function T(E, o, C) {
+    function d(E, o, C) {
       E[o] && E[o](C);
     }
     function A(E, o, C) {
-      E.textNode && I(E), T(E, o, C);
+      E.textNode && I(E), d(E, o, C);
     }
     function I(E) {
-      E.textNode = b(E.opt, E.textNode), E.textNode && T(E, "ontext", E.textNode), E.textNode = "";
+      E.textNode = b(E.opt, E.textNode), E.textNode && d(E, "ontext", E.textNode), E.textNode = "";
     }
     function b(E, o) {
       return E.trim && (o = o.trim()), E.normalize && (o = o.replace(/\s+/g, " ")), o;
@@ -11786,10 +11788,10 @@ const vi = {}, wi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
       return I(E), E.trackPosition && (o += `
 Line: ` + E.line + `
 Column: ` + E.column + `
-Char: ` + E.c), o = new Error(o), E.error = o, T(E, "onerror", o), E;
+Char: ` + E.c), o = new Error(o), E.error = o, d(E, "onerror", o), E;
     }
     function re(E) {
-      return E.sawRoot && !E.closedRoot && m(E, "Unclosed root tag"), E.state !== c.BEGIN && E.state !== c.BEGIN_WHITESPACE && E.state !== c.TEXT && P(E, "Unexpected end"), I(E), E.c = "", E.closed = !0, T(E, "onend"), s.call(E, E.strict, E.opt), E;
+      return E.sawRoot && !E.closedRoot && m(E, "Unclosed root tag"), E.state !== c.BEGIN && E.state !== c.BEGIN_WHITESPACE && E.state !== c.TEXT && P(E, "Unexpected end"), I(E), E.c = "", E.closed = !0, d(E, "onend"), s.call(E, E.strict, E.opt), E;
     }
     function m(E, o) {
       if (typeof E != "object" || !(E instanceof s))
@@ -12390,11 +12392,11 @@ class Bs {
   createObjectFromTypeName(e, t, s) {
     let r = "", a = t, l = t.indexOf(":");
     l != -1 && (r = t.slice(0, l), a = t.slice(l + 1));
-    let u = this._namespaces.getURI(r), h = this.getFactoryForURI(u);
-    if (!h)
+    let u = this._namespaces.getURI(r), _ = this.getFactoryForURI(u);
+    if (!_)
       return this.handleUnknownPackage(r), null;
-    let _ = this.getType(h.ePackage, a), d = this.createObjectWithFactory(h, _);
-    return this.validateObject(d, u, a), d && this.setFeatureValue(e, s, d, -1), this.processObject(d), d;
+    let h = this.getType(_.ePackage, a), T = this.createObjectWithFactory(_, h);
+    return this.validateObject(T, u, a), T && this.setFeatureValue(e, s, T, -1), this.processObject(T), T;
   }
   getFactoryForURI(e) {
     let t = this._uriToFactories.get(e);
@@ -12438,18 +12440,18 @@ class Bs {
           if (r) {
             let a = null;
             if (t.isMany ? a = e.eGet(t).get(0) : a = e.eGet(t), s.isMany) {
-              let h = a.eGetResolve(s, !1), _ = h.indexOf(r);
-              if (_ != -1) {
-                let d = h.indexOf(e);
-                h.moveTo(d, _), d > _ ? h.removeAt(d - 1) : h.removeAt(d + 1);
+              let _ = a.eGetResolve(s, !1), h = _.indexOf(r);
+              if (h != -1) {
+                let T = _.indexOf(e);
+                _.moveTo(T, h), T > h ? _.removeAt(T - 1) : _.removeAt(T + 1);
                 break;
               }
             }
             let l = !1;
             if (t.isMany ? l = !r.eGet(t).contains(a) : l = r.eGet(t) != a, l)
               if (s.isMany) {
-                let h = a.eGetResolve(s, !1), _ = h.indexOf(e);
-                h.set(_, r);
+                let _ = a.eGetResolve(s, !1), h = _.indexOf(e);
+                _.set(h, r);
               } else
                 a.eSet(s, r);
             break;
@@ -12483,15 +12485,15 @@ class Bs {
       if (l != -1) {
         let u = a.slice(a.indexOf(" ") + 1, l);
         s = a.slice(l + 3), console.log("DEBUG: Parsed external reference - prefix:", t, "uri:", u, "fragment:", s);
-        let h = this.getFactoryForURI(u);
-        if (h) {
-          let _ = h.ePackage;
+        let _ = this.getFactoryForURI(u);
+        if (_) {
+          let h = _.ePackage;
           if (s) {
-            for (let d of _.eClassifiers)
-              if (d.name === s)
-                return console.log("DEBUG: Found external classifier:", d.name, "in package:", _.name), d;
+            for (let T of h.eClassifiers)
+              if (T.name === s)
+                return console.log("DEBUG: Found external classifier:", T.name, "in package:", h.name), T;
           }
-          console.log("DEBUG: Could not find classifier '" + s + "' in package '" + _.name + "'");
+          console.log("DEBUG: Could not find classifier '" + s + "' in package '" + h.name + "'");
         } else
           console.log("DEBUG: Could not find factory for URI:", u);
       } else
@@ -12550,13 +12552,13 @@ class Bs {
     let a = this.getLoadFeatureKind(t);
     switch (a) {
       case 0: {
-        let h = t.eType, _ = h.ePackage.eFactoryInstance;
-        s ? e.eSet(t, _.createFromString(h, s)) : e.eSet(t, null);
+        let _ = t.eType, h = _.ePackage.eFactoryInstance;
+        s ? e.eSet(t, h.createFromString(_, s)) : e.eSet(t, null);
         break;
       }
       case 1: {
-        let h = t.eType, _ = h.ePackage.eFactoryInstance, d = e.eGetResolve(t, !1);
-        r == -2 || (s ? d.add(_.createFromString(h, s)) : d.add(null));
+        let _ = t.eType, h = _.ePackage.eFactoryInstance, T = e.eGetResolve(t, !1);
+        r == -2 || (s ? T.add(h.createFromString(_, s)) : T.add(null));
         break;
       }
       case 2:
@@ -12576,19 +12578,19 @@ class Bs {
     }
   }
   setValueFromId(e, t, s) {
-    let r = this._isResolveDeferred, a = !1, l = !0, u = 0, h = [], _ = s.split(" "), d = "";
-    for (let p of _) {
+    let r = this._isResolveDeferred, a = !1, l = !0, u = 0, _ = [], h = s.split(" "), T = "";
+    for (let p of h) {
       let O = p.indexOf("#");
       if (O != -1)
         if (O == 0)
           p = p.slice(1);
         else {
           let y = this.setAttributes(null), q;
-          d.length == 0 ? q = this.createObjectFromFeatureType(e, t) : q = this.createObjectFromTypeName(e, d, t), this.setAttributes(y), q && this.handleProxy(q, p), this._objects.pop(), d = "", u++;
+          T.length == 0 ? q = this.createObjectFromFeatureType(e, t) : q = this.createObjectFromTypeName(e, T, t), this.setAttributes(y), q && this.handleProxy(q, p), this._objects.pop(), T = "", u++;
           continue;
         }
       else if (p.indexOf(":") != -1) {
-        d = p;
+        T = p;
         continue;
       }
       if (!this._isResolveDeferred) {
@@ -12599,19 +12601,19 @@ class Bs {
         if (a) {
           let y = this._resource.getEObject(p);
           if (y) {
-            this.setFeatureValue(e, t, y, -1), d = "", u++;
+            this.setFeatureValue(e, t, y, -1), T = "", u++;
             continue;
           }
         }
       }
-      r && h.push({
+      r && _.push({
         object: e,
         feature: t,
         id: p,
         pos: u
-      }), d = "", u++;
+      }), T = "", u++;
     }
-    u == 0 ? this.setFeatureValue(e, t, null, -2) : this._references.push(...h);
+    u == 0 ? this.setFeatureValue(e, t, null, -2) : this._references.push(..._);
   }
   getFeature(e, t) {
     let s = e.eClass(), r = s.getEStructuralFeatureFromName(t);
@@ -12954,9 +12956,9 @@ class Gs {
   saveFeatures(e, t) {
     let s = e.eClass().eAllStructuralFeatures, r, a = 0;
     e: for (let l = 0; l < s.size(); l++) {
-      let u = s.get(l), h = this._featureKinds.get(u);
-      if (h === void 0 && (h = this.getSaveFeatureKind(u), this._featureKinds.set(u, h)), h != 0 && this.shouldSaveFeature(e, u)) {
-        switch (h) {
+      let u = s.get(l), _ = this._featureKinds.get(u);
+      if (_ === void 0 && (_ = this.getSaveFeatureKind(u), this._featureKinds.set(u, _)), _ != 0 && this.shouldSaveFeature(e, u)) {
+        switch (_) {
           case 1: {
             this.saveDataTypeSingle(e, u);
             continue e;
@@ -12984,7 +12986,7 @@ class Gs {
             if (!this.isNil(e, u))
               switch (this.getSaveResourceKindSingle(e, u)) {
                 case 2: {
-                  const _ = e.eGet(u), d = _.eClass().ePackage.name, p = _.eClass().name, O = d + ":" + p + " " + te.getURI(_);
+                  const h = e.eGet(u), T = h.eClass().ePackage.name, p = h.eClass().name, O = T + ":" + p + " " + te.getURI(h);
                   this._str.addAttribute(this.getFeatureQName(u), O);
                   continue e;
                 }
@@ -13106,12 +13108,12 @@ class Gs {
   }
   saveDataTypeMany(e, t) {
     let s = e.eGetResolve(t, !1), r = t.eType, l = r.ePackage.eFactoryInstance, u = this.getFeatureQName(t);
-    for (const h of s)
-      if (!h)
+    for (const _ of s)
+      if (!_)
         this._str.startElement(u), this._str.addAttribute("xsi:nil", "true"), this._str.endEmptyElement(), this._uriToPrefixes.set(L.xsiURI, [L.xsiNS]), this._prefixesToURI.set(L.xsiNS, L.xsiURI);
       else {
-        let _ = l.convertToString(r, h);
-        this._str.addContent(u, _);
+        let h = l.convertToString(r, _);
+        this._str.addContent(u, h);
       }
   }
   saveManyEmpty(e, t) {
@@ -13128,8 +13130,8 @@ class Gs {
     let s = e.eGetResolve(t, !1), r = !1, a = !0, l = "";
     for (const u of s)
       if (u) {
-        let h = this.getHRef(u);
-        h == "" ? r = !0 : (a || (l += " "), l += h, a = !1);
+        let _ = this.getHRef(u);
+        _ == "" ? r = !0 : (a || (l += " "), l += _, a = !1);
       }
     !r && l.length > 0 && this._str.addAttribute(this.getFeatureQName(t), l);
   }
@@ -13184,8 +13186,8 @@ class Gs {
     let s = e.eGetResolve(t, !1), r = !1, a = "", l = !0;
     for (const u of s)
       if (u) {
-        let h = this.getIDRef(u);
-        h == "" ? r = !0 : (l || (a += " "), a += h, l = !1);
+        let _ = this.getIDRef(u);
+        _ == "" ? r = !0 : (l || (a += " "), a += _, l = !1);
       }
     !r && a.length > 0 && this._str.addAttribute(this.getFeatureQName(t), a);
   }
@@ -13193,8 +13195,8 @@ class Gs {
     let s = e.eGetResolve(t, !1), r = !1, a = "", l = !0;
     for (const u of s)
       if (u) {
-        let h = this.getIDCrossRef(u);
-        h == "" ? r = !0 : (l || (a += " "), a += h, l = !1);
+        let _ = this.getIDCrossRef(u);
+        _ == "" ? r = !0 : (l || (a += " "), a += _, l = !1);
       }
     !r && a.length > 0 && this._str.addAttribute(this.getFeatureQName(t), a);
   }
@@ -13571,22 +13573,22 @@ class ps {
       if (e.isMany) {
         let a = r, l = s.eGetResolve(e, !1), u = a;
         this._resolve || (u = a.getUnResolvedList());
-        let h = l.getUnResolvedList();
+        let _ = l.getUnResolvedList();
         if (u.isEmpty())
-          h.clear();
+          _.clear();
         else {
-          let _ = e.eOpposite != null, d = 0;
+          let h = e.eOpposite != null, T = 0;
           for (const p of u) {
             let O = this._objects.get(p);
             if (O) {
-              if (_) {
-                let y = h.indexOf(O);
-                y == -1 ? h.insert(d, O) : d != y && h.move(d, O);
+              if (h) {
+                let y = _.indexOf(O);
+                y == -1 ? _.insert(T, O) : T != y && _.move(T, O);
               } else
-                h.insert(d, O);
-              d++;
+                _.insert(T, O);
+              T++;
             } else
-              this._originalReferences && !_ && (h.insert(d, p), d++);
+              this._originalReferences && !h && (_.insert(T, p), T++);
           }
         }
       } else if (ge(r)) {
@@ -13692,8 +13694,8 @@ class te {
           l != -1 ? a.slice(0, l) : a
         );
         if (u) {
-          let h = u.eResource();
-          h && (r = h.getEObject(l != -1 ? a.slice(l + 1) : ""));
+          let _ = u.eResource();
+          _ && (r = _.getEObject(l != -1 ? a.slice(l + 1) : ""));
         }
       }
       if (r && r != e)
@@ -13781,14 +13783,14 @@ function Ki(n) {
   let e = n.replace(/\\/g, "/"), t = zi.exec(e);
   if (!t)
     throw new Error(`invalid uri: ${e}`);
-  let s = t[2] ?? "", r = "", a = "", l = "", u = "", h = t[3] ?? "", _ = Ji.exec(h);
-  if (!_)
-    r = h;
+  let s = t[2] ?? "", r = "", a = "", l = "", u = "", _ = t[3] ?? "", h = Ji.exec(_);
+  if (!h)
+    r = _;
   else {
-    let d = _[1], p = qi.exec(d);
+    let T = h[1], p = qi.exec(T);
     if (!p)
-      throw new Error(`invalid authority: ${d}`);
-    p[1] && (u = p[1], p[2] && (u += p[2])), a = p[3] ?? "", l = p[4] ?? "", r = _[2] ?? "";
+      throw new Error(`invalid authority: ${T}`);
+    p[1] && (u = p[1], p[2] && (u += p[2])), a = p[3] ?? "", l = p[4] ?? "", r = h[2] ?? "";
   }
   return {
     scheme: s,
@@ -13978,15 +13980,15 @@ function $i(n, e) {
   for (let a = 0; a < t; a++) {
     let l = 0;
     for (let u = !0; u; u = a < t) {
-      let h = e[a];
-      if (n[h] == Te) {
-        if (h == s) {
+      let _ = e[a];
+      if (n[_] == Te) {
+        if (_ == s) {
           l = 1;
           break;
-        } else if (n[h + 1] == 0) {
+        } else if (n[_ + 1] == 0) {
           l = 1;
           break;
-        } else if (n[h + 1] == Te && (h + 1 == s || n[h + 2] == 0)) {
+        } else if (n[_ + 1] == Te && (_ + 1 == s || n[_ + 2] == 0)) {
           l = 2;
           break;
         }
@@ -14046,11 +14048,11 @@ function tn(n, e, t) {
 }
 var xs = {}, ks = {};
 (function(n) {
-  var e = /[|\\{}()[\]^$+*?.]/g, t = Object.prototype.hasOwnProperty, s = function(_, d) {
-    return t.apply(_, [d]);
+  var e = /[|\\{}()[\]^$+*?.]/g, t = Object.prototype.hasOwnProperty, s = function(h, T) {
+    return t.apply(h, [T]);
   };
-  n.escapeRegExpChars = function(_) {
-    return _ ? String(_).replace(e, "\\$&") : "";
+  n.escapeRegExpChars = function(h) {
+    return h ? String(h).replace(e, "\\$&") : "";
   };
   var r = {
     "&": "&amp;",
@@ -14059,8 +14061,8 @@ var xs = {}, ks = {};
     '"': "&#34;",
     "'": "&#39;"
   }, a = /[&<>'"]/g;
-  function l(_) {
-    return r[_] || _;
+  function l(h) {
+    return r[h] || h;
   }
   var u = `var _ENCODE_HTML_RULES = {
       "&": "&amp;"
@@ -14074,51 +14076,51 @@ function encode_char(c) {
   return _ENCODE_HTML_RULES[c] || c;
 };
 `;
-  n.escapeXML = function(_) {
-    return _ == null ? "" : String(_).replace(a, l);
+  n.escapeXML = function(h) {
+    return h == null ? "" : String(h).replace(a, l);
   };
-  function h() {
+  function _() {
     return Function.prototype.toString.call(this) + `;
 ` + u;
   }
   try {
-    typeof Object.defineProperty == "function" ? Object.defineProperty(n.escapeXML, "toString", { value: h }) : n.escapeXML.toString = h;
+    typeof Object.defineProperty == "function" ? Object.defineProperty(n.escapeXML, "toString", { value: _ }) : n.escapeXML.toString = _;
   } catch {
     console.warn("Unable to set escapeXML.toString (is the Function prototype frozen?)");
   }
-  n.shallowCopy = function(_, d) {
-    if (d = d || {}, _ != null)
-      for (var p in d)
-        s(d, p) && (p === "__proto__" || p === "constructor" || (_[p] = d[p]));
-    return _;
-  }, n.shallowCopyFromList = function(_, d, p) {
-    if (p = p || [], d = d || {}, _ != null)
+  n.shallowCopy = function(h, T) {
+    if (T = T || {}, h != null)
+      for (var p in T)
+        s(T, p) && (p === "__proto__" || p === "constructor" || (h[p] = T[p]));
+    return h;
+  }, n.shallowCopyFromList = function(h, T, p) {
+    if (p = p || [], T = T || {}, h != null)
       for (var O = 0; O < p.length; O++) {
         var y = p[O];
-        if (typeof d[y] < "u") {
-          if (!s(d, y) || y === "__proto__" || y === "constructor")
+        if (typeof T[y] < "u") {
+          if (!s(T, y) || y === "__proto__" || y === "constructor")
             continue;
-          _[y] = d[y];
+          h[y] = T[y];
         }
       }
-    return _;
+    return h;
   }, n.cache = {
     _data: {},
-    set: function(_, d) {
-      this._data[_] = d;
+    set: function(h, T) {
+      this._data[h] = T;
     },
-    get: function(_) {
-      return this._data[_];
+    get: function(h) {
+      return this._data[h];
     },
-    remove: function(_) {
-      delete this._data[_];
+    remove: function(h) {
+      delete this._data[h];
     },
     reset: function() {
       this._data = {};
     }
-  }, n.hyphenToCamel = function(_) {
-    return _.replace(/-[a-z]/g, function(d) {
-      return d[1].toUpperCase();
+  }, n.hyphenToCamel = function(h) {
+    return h.replace(/-[a-z]/g, function(T) {
+      return T[1].toUpperCase();
     });
   }, n.createNullProtoObjWherePossible = function() {
     return typeof Object.create == "function" ? function() {
@@ -14128,11 +14130,11 @@ function encode_char(c) {
     } : function() {
       return { __proto__: null };
     };
-  }(), n.hasOwnOnlyObject = function(_) {
-    var d = n.createNullProtoObjWherePossible();
-    for (var p in _)
-      s(_, p) && (d[p] = _[p]);
-    return d;
+  }(), n.hasOwnOnlyObject = function(h) {
+    var T = n.createNullProtoObjWherePossible();
+    for (var p in h)
+      s(h, p) && (T[p] = h[p]);
+    return T;
   };
 })(ks);
 const sn = "3.1.10", rn = {
@@ -14146,7 +14148,7 @@ const sn = "3.1.10", rn = {
    * @project EJS
    * @license {@link http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0}
    */
-  var e = Z, t = ye, s = ks, r = !1, a = rn.version, l = "<", u = ">", h = "%", _ = "locals", d = "ejs", p = "(<%%|%%>|<%=|<%-|<%_|<%#|<%|%>|-%>|_%>)", O = [
+  var e = Z, t = ye, s = ks, r = !1, a = rn.version, l = "<", u = ">", _ = "%", h = "locals", T = "ejs", p = "(<%%|%%>|<%=|<%-|<%_|<%#|<%|%>|-%>|_%>)", O = [
     "delimiter",
     "scope",
     "context",
@@ -14159,49 +14161,49 @@ const sn = "3.1.10", rn = {
     "filename",
     "async"
   ], y = O.concat("cache"), q = /^\uFEFF/, he = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
-  n.cache = s.cache, n.fileLoader = e.readFileSync, n.localsName = _, n.promiseImpl = new Function("return this;")().Promise, n.resolveInclude = function(c, R, T) {
-    var A = t.dirname, I = t.extname, b = t.resolve, P = b(T ? R : A(R), c), re = I(c);
+  n.cache = s.cache, n.fileLoader = e.readFileSync, n.localsName = h, n.promiseImpl = new Function("return this;")().Promise, n.resolveInclude = function(c, R, d) {
+    var A = t.dirname, I = t.extname, b = t.resolve, P = b(d ? R : A(R), c), re = I(c);
     return re || (P += ".ejs"), P;
   };
   function ne(c, R) {
-    var T;
+    var d;
     if (R.some(function(A) {
-      return T = n.resolveInclude(c, A, !0), e.existsSync(T);
+      return d = n.resolveInclude(c, A, !0), e.existsSync(d);
     }))
-      return T;
+      return d;
   }
   function Ne(c, R) {
-    var T, A, I = R.views, b = /^[A-Za-z]+:\\|^\//.exec(c);
+    var d, A, I = R.views, b = /^[A-Za-z]+:\\|^\//.exec(c);
     if (b && b.length)
-      c = c.replace(/^\/*/, ""), Array.isArray(R.root) ? T = ne(c, R.root) : T = n.resolveInclude(c, R.root || "/", !0);
-    else if (R.filename && (A = n.resolveInclude(c, R.filename), e.existsSync(A) && (T = A)), !T && Array.isArray(I) && (T = ne(c, I)), !T && typeof R.includer != "function")
+      c = c.replace(/^\/*/, ""), Array.isArray(R.root) ? d = ne(c, R.root) : d = n.resolveInclude(c, R.root || "/", !0);
+    else if (R.filename && (A = n.resolveInclude(c, R.filename), e.existsSync(A) && (d = A)), !d && Array.isArray(I) && (d = ne(c, I)), !d && typeof R.includer != "function")
       throw new Error('Could not find the include file "' + R.escapeFunction(c) + '"');
-    return T;
+    return d;
   }
   function _e(c, R) {
-    var T, A = c.filename, I = arguments.length > 1;
+    var d, A = c.filename, I = arguments.length > 1;
     if (c.cache) {
       if (!A)
         throw new Error("cache option requires a filename");
-      if (T = n.cache.get(A), T)
-        return T;
+      if (d = n.cache.get(A), d)
+        return d;
       I || (R = Y(A).toString().replace(q, ""));
     } else if (!I) {
       if (!A)
         throw new Error("Internal EJS error: no file name or template provided");
       R = Y(A).toString().replace(q, "");
     }
-    return T = n.compile(R, c), c.cache && n.cache.set(A, T), T;
+    return d = n.compile(R, c), c.cache && n.cache.set(A, d), d;
   }
-  function rt(c, R, T) {
+  function rt(c, R, d) {
     var A;
-    if (T) {
+    if (d) {
       try {
         A = _e(c)(R);
       } catch (I) {
-        return T(I);
+        return d(I);
       }
-      T(null, A);
+      d(null, A);
     } else {
       if (typeof n.promiseImpl == "function")
         return new n.promiseImpl(function(I, b) {
@@ -14218,17 +14220,17 @@ const sn = "3.1.10", rn = {
     return n.fileLoader(c);
   }
   function Ae(c, R) {
-    var T = s.shallowCopy(s.createNullProtoObjWherePossible(), R);
-    if (T.filename = Ne(c, T), typeof R.includer == "function") {
-      var A = R.includer(c, T.filename);
-      if (A && (A.filename && (T.filename = A.filename), A.template))
-        return _e(T, A.template);
+    var d = s.shallowCopy(s.createNullProtoObjWherePossible(), R);
+    if (d.filename = Ne(c, d), typeof R.includer == "function") {
+      var A = R.includer(c, d.filename);
+      if (A && (A.filename && (d.filename = A.filename), A.template))
+        return _e(d, A.template);
     }
-    return _e(T);
+    return _e(d);
   }
-  function Pe(c, R, T, A, I) {
+  function Pe(c, R, d, A, I) {
     var b = R.split(`
-`), P = Math.max(A - 3, 0), re = Math.min(b.length, A + 3), m = I(T), ae = b.slice(P, re).map(function(le, ue) {
+`), P = Math.max(A - 3, 0), re = Math.min(b.length, A + 3), m = I(d), ae = b.slice(P, re).map(function(le, ue) {
       var ee = ue + P + 1;
       return (ee == A ? " >> " : "    ") + ee + "| " + le;
     }).join(`
@@ -14241,21 +14243,21 @@ const sn = "3.1.10", rn = {
   function se(c) {
     return c.replace(/;(\s*$)/, "$1");
   }
-  n.compile = function(R, T) {
+  n.compile = function(R, d) {
     var A;
-    return T && T.scope && (r || (console.warn("`scope` option is deprecated and will be removed in EJS 3"), r = !0), T.context || (T.context = T.scope), delete T.scope), A = new w(R, T), A.compile();
-  }, n.render = function(c, R, T) {
-    var A = R || s.createNullProtoObjWherePossible(), I = T || s.createNullProtoObjWherePossible();
+    return d && d.scope && (r || (console.warn("`scope` option is deprecated and will be removed in EJS 3"), r = !0), d.context || (d.context = d.scope), delete d.scope), A = new w(R, d), A.compile();
+  }, n.render = function(c, R, d) {
+    var A = R || s.createNullProtoObjWherePossible(), I = d || s.createNullProtoObjWherePossible();
     return arguments.length == 2 && s.shallowCopyFromList(I, A, O), _e(I, c)(A);
   }, n.renderFile = function() {
-    var c = Array.prototype.slice.call(arguments), R = c.shift(), T, A = { filename: R }, I, b;
-    return typeof arguments[arguments.length - 1] == "function" && (T = c.pop()), c.length ? (I = c.shift(), c.length ? s.shallowCopy(A, c.pop()) : (I.settings && (I.settings.views && (A.views = I.settings.views), I.settings["view cache"] && (A.cache = !0), b = I.settings["view options"], b && s.shallowCopy(A, b)), s.shallowCopyFromList(A, I, y)), A.filename = R) : I = s.createNullProtoObjWherePossible(), rt(A, I, T);
+    var c = Array.prototype.slice.call(arguments), R = c.shift(), d, A = { filename: R }, I, b;
+    return typeof arguments[arguments.length - 1] == "function" && (d = c.pop()), c.length ? (I = c.shift(), c.length ? s.shallowCopy(A, c.pop()) : (I.settings && (I.settings.views && (A.views = I.settings.views), I.settings["view cache"] && (A.cache = !0), b = I.settings["view options"], b && s.shallowCopy(A, b)), s.shallowCopyFromList(A, I, y)), A.filename = R) : I = s.createNullProtoObjWherePossible(), rt(A, I, d);
   }, n.Template = w, n.clearCache = function() {
     n.cache.reset();
   };
   function w(c, R) {
-    var T = s.hasOwnOnlyObject(R), A = s.createNullProtoObjWherePossible();
-    this.templateText = c, this.mode = null, this.truncate = !1, this.currentLine = 1, this.source = "", A.client = T.client || !1, A.escapeFunction = T.escape || T.escapeFunction || s.escapeXML, A.compileDebug = T.compileDebug !== !1, A.debug = !!T.debug, A.filename = T.filename, A.openDelimiter = T.openDelimiter || n.openDelimiter || l, A.closeDelimiter = T.closeDelimiter || n.closeDelimiter || u, A.delimiter = T.delimiter || n.delimiter || h, A.strict = T.strict || !1, A.context = T.context, A.cache = T.cache || !1, A.rmWhitespace = T.rmWhitespace, A.root = T.root, A.includer = T.includer, A.outputFunctionName = T.outputFunctionName, A.localsName = T.localsName || n.localsName || _, A.views = T.views, A.async = T.async, A.destructuredLocals = T.destructuredLocals, A.legacyInclude = typeof T.legacyInclude < "u" ? !!T.legacyInclude : !0, A.strict ? A._with = !1 : A._with = typeof T._with < "u" ? T._with : !0, this.opts = A, this.regex = this.createRegex();
+    var d = s.hasOwnOnlyObject(R), A = s.createNullProtoObjWherePossible();
+    this.templateText = c, this.mode = null, this.truncate = !1, this.currentLine = 1, this.source = "", A.client = d.client || !1, A.escapeFunction = d.escape || d.escapeFunction || s.escapeXML, A.compileDebug = d.compileDebug !== !1, A.debug = !!d.debug, A.filename = d.filename, A.openDelimiter = d.openDelimiter || n.openDelimiter || l, A.closeDelimiter = d.closeDelimiter || n.closeDelimiter || u, A.delimiter = d.delimiter || n.delimiter || _, A.strict = d.strict || !1, A.context = d.context, A.cache = d.cache || !1, A.rmWhitespace = d.rmWhitespace, A.root = d.root, A.includer = d.includer, A.outputFunctionName = d.outputFunctionName, A.localsName = d.localsName || n.localsName || h, A.views = d.views, A.async = d.async, A.destructuredLocals = d.destructuredLocals, A.legacyInclude = typeof d.legacyInclude < "u" ? !!d.legacyInclude : !0, A.strict ? A._with = !1 : A._with = typeof d._with < "u" ? d._with : !0, this.opts = A, this.regex = this.createRegex();
   }
   w.modes = {
     EVAL: "eval",
@@ -14265,26 +14267,26 @@ const sn = "3.1.10", rn = {
     LITERAL: "literal"
   }, w.prototype = {
     createRegex: function() {
-      var c = p, R = s.escapeRegExpChars(this.opts.delimiter), T = s.escapeRegExpChars(this.opts.openDelimiter), A = s.escapeRegExpChars(this.opts.closeDelimiter);
-      return c = c.replace(/%/g, R).replace(/</g, T).replace(/>/g, A), new RegExp(c);
+      var c = p, R = s.escapeRegExpChars(this.opts.delimiter), d = s.escapeRegExpChars(this.opts.openDelimiter), A = s.escapeRegExpChars(this.opts.closeDelimiter);
+      return c = c.replace(/%/g, R).replace(/</g, d).replace(/>/g, A), new RegExp(c);
     },
     compile: function() {
-      var c, R, T = this.opts, A = "", I = "", b = T.escapeFunction, P, re = T.filename ? JSON.stringify(T.filename) : "undefined";
+      var c, R, d = this.opts, A = "", I = "", b = d.escapeFunction, P, re = d.filename ? JSON.stringify(d.filename) : "undefined";
       if (!this.source) {
         if (this.generateSource(), A += `  var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
-`, T.outputFunctionName) {
-          if (!he.test(T.outputFunctionName))
+`, d.outputFunctionName) {
+          if (!he.test(d.outputFunctionName))
             throw new Error("outputFunctionName is not a valid JS identifier.");
-          A += "  var " + T.outputFunctionName + ` = __append;
+          A += "  var " + d.outputFunctionName + ` = __append;
 `;
         }
-        if (T.localsName && !he.test(T.localsName))
+        if (d.localsName && !he.test(d.localsName))
           throw new Error("localsName is not a valid JS identifier.");
-        if (T.destructuredLocals && T.destructuredLocals.length) {
-          for (var m = "  var __locals = (" + T.localsName + ` || {}),
-`, ae = 0; ae < T.destructuredLocals.length; ae++) {
-            var le = T.destructuredLocals[ae];
+        if (d.destructuredLocals && d.destructuredLocals.length) {
+          for (var m = "  var __locals = (" + d.localsName + ` || {}),
+`, ae = 0; ae < d.destructuredLocals.length; ae++) {
+            var le = d.destructuredLocals[ae];
             if (!he.test(le))
               throw new Error("destructuredLocals[" + ae + "] is not a valid JS identifier.");
             ae > 0 && (m += `,
@@ -14293,26 +14295,26 @@ const sn = "3.1.10", rn = {
           A += m + `;
 `;
         }
-        T._with !== !1 && (A += "  with (" + T.localsName + ` || {}) {
+        d._with !== !1 && (A += "  with (" + d.localsName + ` || {}) {
 `, I += `  }
 `), I += `  return __output;
 `, this.source = A + this.source + I;
       }
-      T.compileDebug ? c = `var __line = 1
+      d.compileDebug ? c = `var __line = 1
   , __lines = ` + JSON.stringify(this.templateText) + `
   , __filename = ` + re + `;
 try {
 ` + this.source + `} catch (e) {
   rethrow(e, __lines, __filename, __line, escapeFn);
 }
-` : c = this.source, T.client && (c = "escapeFn = escapeFn || " + b.toString() + `;
-` + c, T.compileDebug && (c = "rethrow = rethrow || " + Pe.toString() + `;
-` + c)), T.strict && (c = `"use strict";
-` + c), T.debug && console.log(c), T.compileDebug && T.filename && (c = c + `
+` : c = this.source, d.client && (c = "escapeFn = escapeFn || " + b.toString() + `;
+` + c, d.compileDebug && (c = "rethrow = rethrow || " + Pe.toString() + `;
+` + c)), d.strict && (c = `"use strict";
+` + c), d.debug && console.log(c), d.compileDebug && d.filename && (c = c + `
 //# sourceURL=` + re + `
 `);
       try {
-        if (T.async)
+        if (d.async)
           try {
             P = new Function("return (async function(){}).constructor;")();
           } catch (K) {
@@ -14320,26 +14322,26 @@ try {
           }
         else
           P = Function;
-        R = new P(T.localsName + ", escapeFn, include, rethrow", c);
+        R = new P(d.localsName + ", escapeFn, include, rethrow", c);
       } catch (K) {
-        throw K instanceof SyntaxError && (T.filename && (K.message += " in " + T.filename), K.message += ` while compiling ejs
+        throw K instanceof SyntaxError && (d.filename && (K.message += " in " + d.filename), K.message += ` while compiling ejs
 
 `, K.message += `If the above error is not helpful, you may want to try EJS-Lint:
-`, K.message += "https://github.com/RyanZim/EJS-Lint", T.async || (K.message += `
+`, K.message += "https://github.com/RyanZim/EJS-Lint", d.async || (K.message += `
 `, K.message += "Or, if you meant to create an async function, pass `async: true` as an option.")), K;
       }
-      var ue = T.client ? R : function(Fe) {
+      var ue = d.client ? R : function(Fe) {
         var ve = function(it, E) {
           var o = s.shallowCopy(s.createNullProtoObjWherePossible(), Fe);
-          return E && (o = s.shallowCopy(o, E)), Ae(it, T)(o);
+          return E && (o = s.shallowCopy(o, E)), Ae(it, d)(o);
         };
         return R.apply(
-          T.context,
+          d.context,
           [Fe || s.createNullProtoObjWherePossible(), b, ve, Pe]
         );
       };
-      if (T.filename && typeof Object.defineProperty == "function") {
-        var ee = T.filename, Oe = t.basename(ee, t.extname(ee));
+      if (d.filename && typeof Object.defineProperty == "function") {
+        var ee = d.filename, Oe = t.basename(ee, t.extname(ee));
         try {
           Object.defineProperty(ue, "name", {
             value: Oe,
@@ -14356,17 +14358,17 @@ try {
       var c = this.opts;
       c.rmWhitespace && (this.templateText = this.templateText.replace(/[\r\n]+/g, `
 `).replace(/^\s+|\s+$/gm, "")), this.templateText = this.templateText.replace(/[ \t]*<%_/gm, "<%_").replace(/_%>[ \t]*/gm, "_%>");
-      var R = this, T = this.parseTemplateText(), A = this.opts.delimiter, I = this.opts.openDelimiter, b = this.opts.closeDelimiter;
-      T && T.length && T.forEach(function(P, re) {
+      var R = this, d = this.parseTemplateText(), A = this.opts.delimiter, I = this.opts.openDelimiter, b = this.opts.closeDelimiter;
+      d && d.length && d.forEach(function(P, re) {
         var m;
-        if (P.indexOf(I + A) === 0 && P.indexOf(I + A + A) !== 0 && (m = T[re + 2], !(m == A + b || m == "-" + A + b || m == "_" + A + b)))
+        if (P.indexOf(I + A) === 0 && P.indexOf(I + A + A) !== 0 && (m = d[re + 2], !(m == A + b || m == "-" + A + b || m == "_" + A + b)))
           throw new Error('Could not find matching close tag for "' + P + '".');
         R.scanLine(P);
       });
     },
     parseTemplateText: function() {
-      for (var c = this.templateText, R = this.regex, T = R.exec(c), A = [], I; T; )
-        I = T.index, I !== 0 && (A.push(c.substring(0, I)), c = c.slice(I)), A.push(T[0]), c = c.slice(T[0].length), T = R.exec(c);
+      for (var c = this.templateText, R = this.regex, d = R.exec(c), A = [], I; d; )
+        I = d.index, I !== 0 && (A.push(c.substring(0, I)), c = c.slice(I)), A.push(d[0]), c = c.slice(d[0].length), d = R.exec(c);
       return c && A.push(c), A;
     },
     _addOutput: function(c) {
@@ -14376,33 +14378,33 @@ try {
 `;
     },
     scanLine: function(c) {
-      var R = this, T = this.opts.delimiter, A = this.opts.openDelimiter, I = this.opts.closeDelimiter, b = 0;
+      var R = this, d = this.opts.delimiter, A = this.opts.openDelimiter, I = this.opts.closeDelimiter, b = 0;
       switch (b = c.split(`
 `).length - 1, c) {
-        case A + T:
-        case A + T + "_":
+        case A + d:
+        case A + d + "_":
           this.mode = w.modes.EVAL;
           break;
-        case A + T + "=":
+        case A + d + "=":
           this.mode = w.modes.ESCAPED;
           break;
-        case A + T + "-":
+        case A + d + "-":
           this.mode = w.modes.RAW;
           break;
-        case A + T + "#":
+        case A + d + "#":
           this.mode = w.modes.COMMENT;
           break;
-        case A + T + T:
-          this.mode = w.modes.LITERAL, this.source += '    ; __append("' + c.replace(A + T + T, A + T) + `")
+        case A + d + d:
+          this.mode = w.modes.LITERAL, this.source += '    ; __append("' + c.replace(A + d + d, A + d) + `")
 `;
           break;
-        case T + T + I:
-          this.mode = w.modes.LITERAL, this.source += '    ; __append("' + c.replace(T + T + I, T + I) + `")
+        case d + d + I:
+          this.mode = w.modes.LITERAL, this.source += '    ; __append("' + c.replace(d + d + I, d + I) + `")
 `;
           break;
-        case T + I:
-        case "-" + T + I:
-        case "_" + T + I:
+        case d + I:
+        case "-" + d + I:
+        case "_" + d + I:
           this.mode == w.modes.LITERAL && this._addOutput(c), this.mode = null, this.truncate = c.indexOf("-") === 0 || c.indexOf("_") === 0;
           break;
         default:
@@ -14440,10 +14442,13 @@ try {
       R.opts.compileDebug && b && (this.currentLine += b, this.source += "    ; __line = " + this.currentLine + `
 `);
     }
-  }, n.escapeXML = s.escapeXML, n.__express = n.renderFile, n.VERSION = a, n.name = d, typeof window < "u" && (window.ejs = n);
+  }, n.escapeXML = s.escapeXML, n.__express = n.renderFile, n.VERSION = a, n.name = T, typeof window < "u" && (window.ejs = n);
 })(xs);
 const je = /* @__PURE__ */ ws(xs);
-function nn() {
+function nn(n) {
+  return n ? n.endsWith("EString") || n.endsWith("EChar") || n.endsWith("ECharacterObject") ? "string" : n === "EBoolean" || n === "EBooleanObject" ? "boolean" : ["EInt", "EIntegerObject", "EByte", "EByteObject", "ELong", "ELongObject", "EFloat", "EFloatObject", "EDouble", "EDoubleObject"].includes(n) ? "number" : n === "EDate" ? "Date" : n === "EJavaObject" ? "any" : n : "void";
+}
+function an() {
   const n = process.argv.slice(2), e = {
     modelPath: "./model/model.ecore",
     genPath: "./output",
@@ -14482,7 +14487,7 @@ Usage: npm run dev [options]
 Options:
   -m, --model-path <path>    Path to the Ecore model file (default: ./model/model.ecore)
   -g, --gen-path <path>      Path to the output directory (default: ./output)
-  -- no_factories            Dont generate Factories
+  -- no_factories            Dont generate Factories   
   -a, --ano-pak<package>     import anaotations from seperate package
   -i, --instances            instanceate contained Referceces as default
   -h, --help                 Show this help message
@@ -14497,8 +14502,8 @@ Examples:
     }
   return e;
 }
-async function an() {
-  const n = nn();
+async function ln() {
+  const n = an();
   console.log(`Model Path: ${n.modelPath}`), console.log(`Generation Path: ${n.genPath}`), Z.existsSync(n.genPath) || Z.mkdirSync(n.genPath, { recursive: !0 });
   let e = new et();
   e.eURI = new B(n.modelPath);
@@ -14511,20 +14516,22 @@ async function an() {
         if (Ee(a)) {
           try {
             if (console.log(a.name), a.name == "TextSettings") {
-              let u = a.getEStructuralFeatureFromName("text");
-              if (console.log("Main eClassifier isProxy:", u?.eGenericType?.eClassifier?.eIsProxy()), console.log("Main eClassifier name:", u?.eGenericType?.eClassifier?.name), u?.eGenericType?.eClassifier?.eIsProxy()) {
-                let h = u.eGenericType.eClassifier.eProxyURI()?.toString();
-                console.log("Original reference string:", h);
+              let h = a.getEStructuralFeatureFromName("text");
+              if (console.log("Main eClassifier isProxy:", h?.eGenericType?.eClassifier?.eIsProxy()), console.log("Main eClassifier name:", h?.eGenericType?.eClassifier?.name), h?.eGenericType?.eClassifier?.eIsProxy()) {
+                let T = h.eGenericType.eClassifier.eProxyURI()?.toString();
+                console.log("Original reference string:", T);
               }
-              if (console.log("eTypeArguments size:", u?.eGenericType?.eTypeArguments?.size()), u?.eGenericType?.eTypeArguments?.size() > 0) {
-                let h = u.eGenericType.eTypeArguments.get(0);
-                console.log("TypeArg eClassifier isProxy:", h?.eClassifier?.eIsProxy()), console.log("TypeArg eClassifier name:", h?.eClassifier?.name);
+              if (console.log("eTypeArguments size:", h?.eGenericType?.eTypeArguments?.size()), h?.eGenericType?.eTypeArguments?.size() > 0) {
+                let T = h.eGenericType.eTypeArguments.get(0);
+                console.log("TypeArg eClassifier isProxy:", T?.eClassifier?.eIsProxy()), console.log("TypeArg eClassifier name:", T?.eClassifier?.name);
               }
             }
-          } catch (u) {
-            console.log(u);
+          } catch (h) {
+            console.log(h);
           }
-          const l = await je.renderFile("./templates/partials/class-file.ejs", {
+          const l = a.isInterface;
+          console.log(`${a.name}: isInterface = ${l}`);
+          const u = l ? "./templates/partials/interface-file.ejs" : "./templates/partials/class-file.ejs", _ = await je.renderFile(u, {
             ePackage: s,
             eClass: a,
             anopak: n.anopak,
@@ -14533,9 +14540,10 @@ async function an() {
             isEClass: Ee,
             isEEnum: fe,
             isEReference: H,
-            isEAttribute: de
+            isEAttribute: de,
+            mapEcoreTypeToTS: nn
           });
-          Z.writeFileSync(ye.join(n.genPath, `${a.name}.ts`), l), console.log(`Generated: ${a.name}.ts`);
+          Z.writeFileSync(ye.join(n.genPath, `${a.name}.ts`), _), console.log(`Generated: ${a.name}.ts`);
         } else if (fe(a)) {
           const l = await je.renderFile("./templates/partials/enum-file.ejs", {
             eEnum: a,
@@ -14561,4 +14569,4 @@ async function an() {
     }
   console.log("Generation completed successfully!");
 }
-an().catch(console.error);
+ln().catch(console.error);

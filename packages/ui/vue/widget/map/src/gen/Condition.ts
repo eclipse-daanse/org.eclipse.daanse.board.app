@@ -26,8 +26,8 @@ Contributors: Smart City Jena
 import {Comperator} from "./Comperator"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Condition'})
-export class Condition{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Condition'})
+export class Condition {
 
   @Documentation("The property name to apply the condition to.")
   @Attribute() prop?: string;

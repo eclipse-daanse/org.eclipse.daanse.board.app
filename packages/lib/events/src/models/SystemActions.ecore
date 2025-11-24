@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+  This program and the accompanying materials are made
+  available under the terms of the Eclipse Public License 2.0
+  which is available at https://www.eclipse.org/legal/epl-2.0/
+
+  SPDX-License-Identifier: EPL-2.0
+
+  Contributors:
+    Smart City Jena
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="systemactions" nsURI="http://org.eclipse.daanse.board.app.lib.events.systemactions"
+    nsPrefix="systemactions">
+
+  <eClassifiers xsi:type="ecore:EClass" name="SystemActions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="System-level actions that can be triggered by events"/>
+    </eAnnotations>
+
+    <eOperations name="changePage">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Navigate to a different page"/>
+      </eAnnotations>
+      <eAnnotations source="WidgetAction">
+        <details key="eventType" value="system.changePage"/>
+      </eAnnotations>
+      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="ID of the page to navigate to"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+
+    <eOperations name="setGlobalVariable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Set or update a global variable"/>
+      </eAnnotations>
+      <eAnnotations source="WidgetAction">
+        <details key="eventType" value="system.setGlobalVariable"/>
+      </eAnnotations>
+      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the variable to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Value to set"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="PageActions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Page-level actions that can be triggered by events"/>
+    </eAnnotations>
+
+    <eOperations name="setPageVariable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Set or update a page-scoped variable"/>
+      </eAnnotations>
+      <eAnnotations source="WidgetAction">
+        <details key="eventType" value="page.setPageVariable"/>
+      </eAnnotations>
+      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the variable to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Value to set"/>
+        </eAnnotations>
+      </eParameters>
+      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Optional page ID (defaults to current page)"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>

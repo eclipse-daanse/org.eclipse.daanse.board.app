@@ -14,8 +14,23 @@ Contributors:
 <script setup lang="ts">
 import Header from './components/common/Header.vue'
 import { VaSpacer } from 'vuestic-ui'
+import { ref, onMounted } from 'vue'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import {
+  NAVIGATION_REGISTRY,
+  type NavigationRegistry,
+  type NavigationItem
+} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
 
+const navigationItems = ref<NavigationItem[]>([])
 
+onMounted(() => {
+  const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY) as any
+  navigationItems.value = navRegistry.getAllNavigationItemsArray
+    ? navRegistry.getAllNavigationItemsArray()
+    : []
+  console.log('Loaded navigation items:', navigationItems.value)
+})
 </script>
 
 <template>
@@ -31,6 +46,7 @@ import { VaSpacer } from 'vuestic-ui'
           <div class="justify-center flex">
             <img src="@/assets/Daanse%20Logo%20Vektor.svg" class="h-5 mt-6 mb-3">
           </div>
+        <!-- Static navigation items for dashboards -->
         <va-sidebar-item :active="$route.name === 'home' || $route.name === 'page'"
           @click="()=>{
             // Navigate to view mode for current page or default
@@ -68,25 +84,19 @@ import { VaSpacer } from 'vuestic-ui'
             <va-sidebar-item-title class="font-normal"> Data configuration </va-sidebar-item-title>
           </va-sidebar-item-content>
         </va-sidebar-item>
-        <va-sidebar-item :active="$route.name === 'config'"
-          @click="$router.push('/configuration')" class="pointer ">
-          <va-sidebar-item-content class="">
-            <va-icon name="settings" />
-            <va-sidebar-item-title class="font-normal">
-              Environment variables
-            </va-sidebar-item-title>
+
+        <!-- Dynamic navigation items from registry -->
+        <va-sidebar-item
+          v-for="item in navigationItems"
+          :key="item.id"
+          :active="$route.name === item.routeName"
+          @click="$router.push(item.route)"
+          class="pointer">
+          <va-sidebar-item-content>
+            <va-icon :name="item.icon" />
+            <va-sidebar-item-title class="font-normal">{{ item.label }}</va-sidebar-item-title>
           </va-sidebar-item-content>
         </va-sidebar-item>
-
-          <va-sidebar-item :active="$route.name === 'save'"
-                            @click="$router.push('/save')" class="pointer ">
-            <va-sidebar-item-content class="">
-              <va-icon name="cloud_sync" />
-              <va-sidebar-item-title class="font-normal">
-                Store and Restore
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
 
 
         </div>

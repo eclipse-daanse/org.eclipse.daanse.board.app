@@ -19,12 +19,12 @@ Contributors: Smart City Jena
 */
 
 /*
-* Generate classes and enums for TypeScript
-* Default values are set. The '_type' parameter is generated for the
-* Serialization to a backend.
+* Generate interfaces for TypeScript
 */
-import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://example.com/twowayconnection#//PubSubConnection'})
-export class PubSubConnection{
+export interface PubSubConnection {
+  setConfig(config?: any): void;
+  subscribe(subscriber?: any): void;
+  unsubscribe(subscriber?: any): void;
+  notify(event?: PubSubEvents,data?: any,topic?: string): void;
 }

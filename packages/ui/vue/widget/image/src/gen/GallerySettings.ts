@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/imagesettings#//GallerySettings'})
-export class GallerySettings{
+export class GallerySettings {
 
   @Attribute() fit?: string;
 

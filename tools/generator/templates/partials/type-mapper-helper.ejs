@@ -1,0 +1,31 @@
+<%#/**
+* Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors: Smart City Jena
+*/_%>
+<%#
+  Type Mapper Helper - Shared function to map Ecore types to TypeScript types
+_%>
+<%_
+  // Helper function to map Ecore types to TypeScript types
+  function mapEcoreTypeToTS(typeName) {
+    if (!typeName) return 'any';
+    if (typeName.endsWith('EString') || typeName.endsWith('EChar') || typeName.endsWith('ECharacterObject')) {
+      return 'string';
+    } else if (typeName === 'EBoolean' || typeName === 'EBooleanObject') {
+      return 'boolean';
+    } else if (['EInt', 'EIntegerObject', 'EByte', 'EByteObject', 'ELong', 'ELongObject', 'EFloat', 'EFloatObject', 'EDouble', 'EDoubleObject'].includes(typeName)) {
+      return 'number';
+    } else if (typeName === 'EDate') {
+      return 'Date';
+    } else if (typeName === 'EJavaObject') {
+      return 'any';
+    } else {
+      return typeName;
+    }
+  }
+_%>
