@@ -56,7 +56,7 @@ _%>
   <%_ } _%>
 <%_ } else { _%>
   <%_ if (attribute.defaultValueLiteral) { _%>
-  @Attribute() <%- attribute.name -%>: <%- isArray ? `Array<${tsType}>` : tsType -%> = <% if (tsType === 'string') { %>"<%_ } %><%- attribute.defaultValueLiteral -%><%_ if (tsType === 'string') { %>"<%_ } %>;
+  @Attribute() <%- attribute.name -%>: <%- isArray ? `Array<${tsType}>` : tsType -%> = <% if (tsType === 'string' && !isArray) { %>"<%_ } %><%- attribute.defaultValueLiteral -%><%_ if (tsType === 'string' && !isArray) { %>"<%_ } %>;
   <%_ } else { _%>
     <%_ if (isArray) { _%>
   @Attribute() <%- attribute.name -%>: Array<<%- tsType -%>> = [];

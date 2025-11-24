@@ -27,7 +27,7 @@ import {SVGItemStyles} from "./SVGItemStyles"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings'})
-export class RepeatableSVGSettings{
+export class RepeatableSVGSettings {
 
   @Documentation("The path or URL to the base SVG source file that will be repeated.")
   @Attribute() src?: string;

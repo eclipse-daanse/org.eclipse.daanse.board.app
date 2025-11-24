@@ -19,15 +19,9 @@ Contributors: Smart City Jena
 */
 
 /*
-* Generate classes and enums for TypeScript
-* Default values are set. The '_type' parameter is generated for the
-* Serialization to a backend.
+* Generate interfaces for TypeScript
 */
-import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://example.com/wsconnection#//IWSConnectionConfiguration'})
-export class IWSConnectionConfiguration{
-
-  @Documentation("The URL endpoint for the WebSocket connection (e.g., 'ws://example.com/socket').")
-  @Attribute() url?: string;
+export interface IWSConnectionConfiguration {
+  url?: string;
 }

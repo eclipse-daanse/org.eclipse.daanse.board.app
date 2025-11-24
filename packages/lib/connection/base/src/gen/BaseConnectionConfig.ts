@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/baseconnection#//BaseConnectionConfig'})
-export class BaseConnectionConfig{
+export abstract class BaseConnectionConfig {
 
   @Attribute() url?: string;
 

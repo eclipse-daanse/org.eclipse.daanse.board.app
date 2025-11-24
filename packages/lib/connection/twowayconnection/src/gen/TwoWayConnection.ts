@@ -23,10 +23,31 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {PubSubConnection} from ''
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/twowayconnection#//TwoWayConnection'})
-export class TwoWayConnection{
+export abstract class TwoWayConnection extends PubSubConnection {
 
   @Attribute() ready?: boolean;
+
+  onMessage(data?: any,topic?: string): void {
+        throw new Error("onMessage not implemented");
+  }
+
+  onConnect(): void {
+        throw new Error("onConnect not implemented");
+  }
+
+  onClose(): void {
+        throw new Error("onClose not implemented");
+  }
+
+  onError(error?: any): void {
+        throw new Error("onError not implemented");
+  }
+
+  hasTopics(): boolean {
+        throw new Error("hasTopics not implemented");
+  }
 }

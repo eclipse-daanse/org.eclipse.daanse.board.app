@@ -27,7 +27,7 @@ import {JavaObject} from "./JavaObject"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/PivotTable#//PivotTable'})
-export class PivotTable{
+export class PivotTable {
   @Reference('JavaObject') rows: Array<JavaObject> = [];
   @Reference('JavaObject') columns: Array<JavaObject> = [];
   @Reference('JavaObject') cells: Array<JavaObject> = [];

@@ -27,7 +27,7 @@ import {ObjectFitSetting} from "./ObjectFitSetting"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/videoSettings#//VideoSettings'})
-export class VideoSettings{
+export class VideoSettings {
   @Reference('ObjectFitSetting') videoFitSettings: ObjectFitSetting = new ObjectFitSetting();
 
   @Documentation("The URL or path to the video file.")

@@ -13,6 +13,7 @@ import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 import vue from '@vitejs/plugin-vue'
 import libCss from 'vite-plugin-libcss'
+import { copyFileSync, mkdirSync } from 'fs'
 
 export default defineConfig({
   css: {
@@ -50,7 +51,21 @@ export default defineConfig({
     //@ts-ignore
     vue(),
     // @ts-ignore
-    libCss()
+    libCss(),
+    {
+      name: 'copy-ecore-model',
+      closeBundle() {
+        try {
+          mkdirSync(resolve(__dirname, 'dist/model'), { recursive: true })
+          copyFileSync(
+            resolve(__dirname, 'model/model.ecore'),
+            resolve(__dirname, 'dist/model/model.ecore')
+          )
+        } catch (err) {
+          console.warn('Failed to copy ecore model:', err)
+        }
+      }
+    }
   ]
 })
 

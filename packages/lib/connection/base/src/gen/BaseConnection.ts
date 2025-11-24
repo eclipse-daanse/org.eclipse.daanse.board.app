@@ -26,11 +26,19 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/baseconnection#//BaseConnection'})
-export class BaseConnection{
+export abstract class BaseConnection {
 
   @Attribute() name?: string;
 
   @Attribute() type?: string;
 
   @Attribute() uid?: string;
+
+  fetch(config?: IRequestParams): any {
+        throw new Error("fetch not implemented");
+  }
+
+  setConfig(config?: any): void {
+        throw new Error("setConfig not implemented");
+  }
 }

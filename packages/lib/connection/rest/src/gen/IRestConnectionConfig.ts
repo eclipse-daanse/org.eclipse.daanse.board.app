@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {BaseConnectionConfig} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/restconnection#//IRestConnectionConfig'})
-export class IRestConnectionConfig{
+export class IRestConnectionConfig extends BaseConnectionConfig {
 
   @Documentation("The base URL endpoint for the REST API.
                                             This attribute overrides the 'url' from BaseConnectionConfig

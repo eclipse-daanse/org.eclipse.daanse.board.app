@@ -24,10 +24,11 @@ Contributors: Smart City Jena
 * Serialization to a backend.
 */
 import {XMLARequestParams} from "./XMLARequestParams"
+import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/xmlastore#//IXmlaStoreConfiguration'})
-export class IXmlaStoreConfiguration{
+export class IXmlaStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("A reference or ID to an XMLA connection configuration.")
   @Attribute() connection?: string;

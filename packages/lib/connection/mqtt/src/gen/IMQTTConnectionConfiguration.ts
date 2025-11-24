@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {BaseConnectionConfig} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/mqttconnection#//IMQTTConnectionConfiguration'})
-export class IMQTTConnectionConfiguration{
+export class IMQTTConnectionConfiguration extends BaseConnectionConfig {
 
   @Documentation("The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.
                                             This attribute overrides the 'url' from BaseConnectionConfig
