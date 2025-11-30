@@ -24,20 +24,14 @@ export default defineConfig({
     vue()
   ],
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'org.eclipse.daanse.board.app.ui.vue.widget.weather',
       fileName: 'org.eclipse.daanse.board.app.ui.vue.widget.weather',
     },
     rollupOptions: {
-      external: [
-        'vue',
-        'org.eclipse.daanse.board.app.lib.core',
-        'org.eclipse.daanse.board.app.ui.vue.composables',
-        'inversify',
-        'reflect-metadata',
-      ],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue',

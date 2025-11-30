@@ -16,19 +16,14 @@ import libCss from 'vite-plugin-libcss'
 
 export default defineConfig({
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'org.eclipse.daanse.board.app.ui.vue.composer.ogc',
       fileName: 'org.eclipse.daanse.board.app.ui.vue.composer.ogc'
     },
     rollupOptions: {
-      external: [
-        'vue',
-        'org.eclipse.daanse.board.app.lib.core',
-        'inversify',
-        'reflect-metadata',
-      ],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue',

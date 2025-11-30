@@ -14,14 +14,14 @@ import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'lib.annotations',
       fileName: 'lib.annotations',
     },
     rollupOptions: {
-      external: [],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
     },
   },
   plugins: [

@@ -23,14 +23,14 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'org.eclipse.daanse.board.app.ui.vue.common.monaco',
       fileName: 'org.eclipse.daanse.board.app.ui.vue.common.monaco'
     },
     rollupOptions: {
-      external: ['vue'],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue'

@@ -33,6 +33,7 @@ header:
     - '**/*.html'
     - '**/.classpath'
     - '**/.editorconfig'
+    - '**/.browserslistrc'
     - 'LICENSE'
     - 'NOTICE'
     - '.gitattributes'

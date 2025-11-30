@@ -26,14 +26,14 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.plugins.endpointfinder',
       fileName: 'ui.vue.plugins.endpointfinder',
     },
     rollupOptions: {
-      external: ['vue','pinia','org.eclipse.daanse.board.app.lib.core','vue-router'],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue'

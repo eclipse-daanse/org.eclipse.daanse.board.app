@@ -16,25 +16,14 @@ import libCss from 'vite-plugin-libcss'
 
 export default defineConfig({
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.widget.page',
       fileName: 'ui.vue.widget.page',
     },
     rollupOptions: {
-      external: [
-        'vue',
-        'vue-router',
-        'pinia',
-        'org.eclipse.daanse.board.app.lib.core',
-        'org.eclipse.daanse.board.app.lib.repository.widget',
-        'org.eclipse.daanse.board.app.lib.repository.page',
-        'org.eclipse.daanse.board.app.lib.i18next',
-        'org.eclipse.daanse.board.app.ui.vue.stores.widgets',
-        'org.eclipse.daanse.board.app.ui.vue.stores.layout',
-        'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-      ],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue',

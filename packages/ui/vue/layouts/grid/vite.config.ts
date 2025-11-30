@@ -28,25 +28,14 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.layouts.grid',
       fileName: 'ui.vue.layouts.grid',
     },
     rollupOptions: {
-      external: [
-        'vue',
-        'vue-router',
-        'grid-layout-plus',
-        'vuedraggable',
-        'lodash',
-        'org.eclipse.daanse.board.app.ui.vue.widget.wrapper',
-        'org.eclipse.daanse.board.app.ui.vue.stores.widgets',
-        'org.eclipse.daanse.board.app.ui.vue.stores.layout',
-        'org.eclipse.daanse.board.app.lib.repository.layout.page',
-        'org.eclipse.daanse.board.app.lib.core'
-      ],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue: 'Vue'

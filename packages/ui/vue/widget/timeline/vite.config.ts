@@ -21,6 +21,7 @@ export default defineConfig({
     libCss(),
   ],
   build: {
+    minify: false,
     lib: {
       entry: './src/index.ts',
       name: 'TimelineWidget',
@@ -28,10 +29,7 @@ export default defineConfig({
       fileName: (format) => `org.eclipse.daanse.board.app.ui.vue.widget.timeline.${format === 'es' ? 'js' : 'umd.cjs'}`
     },
     rollupOptions: {
-      external: ['vue',
-        'org.eclipse.daanse.board.app.lib.core',
-        'inversify',
-        'reflect-metadata'],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: {
         globals: {
           vue:'Vue',
