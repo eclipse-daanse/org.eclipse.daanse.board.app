@@ -42,7 +42,13 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ['highlight.js']
+  },
   build: {
+    minify: false,
+    cssMinify: false,
+    target: ['chrome90', 'firefox88', 'safari14', 'edge90'],
     rollupOptions: {
       //external: ['org.eclipse.daanse.board.app.lib.core'],
       output: {

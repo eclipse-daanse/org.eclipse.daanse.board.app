@@ -22,14 +22,14 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.stores.layout',
       fileName: 'ui.vue.stores.layout',
     },
     rollupOptions: {
-      external: ['vue','pinia'],
+      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
       output: { globals: { vue: 'Vue', pinia: 'Pinia' } }
     },
   },

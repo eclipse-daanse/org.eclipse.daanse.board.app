@@ -44,8 +44,8 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
     border-top-right-radius: 16px;
     border-bottom-right-radius: 16px;
     box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
     /* border: 1px solid #cecece; */
     filter: saturate(2);
 
@@ -58,8 +58,8 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
     border-radius: 16px;
 
 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
     /*border: 1px solid #d5d5d5*/
   }
   .z-mx{

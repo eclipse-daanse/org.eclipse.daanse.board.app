@@ -49,7 +49,7 @@ jobs:
 
       - name: Build browser
         working-directory: ./packages/app/default
-        run: yarn run build-only
+        run: yarn run build:prod
         env:
           NODE_OPTIONS: --max_old_space_size=65536
 

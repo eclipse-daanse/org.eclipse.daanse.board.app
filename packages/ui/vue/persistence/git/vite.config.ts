@@ -22,14 +22,14 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ui.vue.persistence.git',
       fileName: 'ui.vue.persistence.git',
     },
     rollupOptions: {
-        external: ['vue'],
+        external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
     },
   },
   plugins: [

@@ -15,7 +15,12 @@ module.exports = {
   plugins: {
     "@tailwindcss/postcss": {
       config: './tailwind.config.ts',
+      optimize: {
+        minify: false,
+      }
     },
-    autoprefixer: {},
+    autoprefixer: {
+      overrideBrowserslist: ['last 2 versions', 'not dead']
+    },
   },
 }
