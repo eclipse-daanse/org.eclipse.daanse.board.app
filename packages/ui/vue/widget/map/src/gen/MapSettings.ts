@@ -35,9 +35,6 @@ export class MapSettings{
   @Documentation("Optional identifier for the data source.")
   @Attribute() datasourceId?: string;
 
-  @Documentation("Optional array of additional datasource identifiers for multi-datasource support.")
-  @Attribute() datasourceIds: Array<string> = [];
-
   @Documentation("The URL of the base map service.")
   @Attribute() baseMapUrl: string = "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
 
@@ -56,6 +53,4 @@ export class MapSettings{
 
   @Documentation("if true maps can not be moved in viewmode")
   @Attribute() fixed?: boolean;
-
-  // No custom toJSON needed - the standard serializer handles it with the Factory fix
 }

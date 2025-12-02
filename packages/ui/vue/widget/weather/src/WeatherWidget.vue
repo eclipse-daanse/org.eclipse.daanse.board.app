@@ -68,14 +68,18 @@ const setupRefreshTimer = () => {
   }
 
   const interval = settings.value.refreshInterval || 300000 // 5 minutes default
-  refreshTimer.value = setInterval(() => refreshData(), interval)
+  console.log('Weather widget refresh interval (ms):', interval, 'seconds:', interval/1000)
+  refreshTimer.value = setInterval(() => {
+    console.log('Weather widget auto-refresh triggered')
+    refreshData()
+  }, interval)
 }
 
 watch(() => props.datasourceId, (newVal, oldVal) => {
   refreshData(newVal, oldVal)
 })
 
-watch(() => settings.value.refreshInterval, setupRefreshTimer, { immediate: true })
+watch(() => settings.value.refreshInterval, setupRefreshTimer)
 
 watch(() => [settings.value.startTime, settings.value.endTime], () => {
   if (hasTimeFilter.value) {
@@ -90,6 +94,7 @@ watch(() => settings.value.thingId, () => {
 
 onMounted(() => {
   setupRefreshTimer()
+  refreshData()
 })
 
 onUnmounted(() => {

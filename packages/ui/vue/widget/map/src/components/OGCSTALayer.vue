@@ -21,6 +21,7 @@ interface OGCSTALayerProps {
   renderers: any[]
   layerOptions: any
   markerPane: string
+  areaPane?: string
   compareThing: (thing: any, renderer: any) => boolean
   compareDatastream: (datastream: any, renderer: any) => boolean
   isFeatureCollection: (obj: any) => boolean
@@ -74,7 +75,7 @@ const openThing = ref<{ [key: string]: boolean }>({})
                 <l-geo-json
                   ref="thingsLayer"
                   :geojson="transformToGeoJson(datastream.observedArea)"
-                  :options="layerOptions"
+                  :options="{ ...layerOptions, pane: areaPane || 'overlayPane' }"
                   :options-style="()=>subrenderer.renderer.area as any"
                 />
 
