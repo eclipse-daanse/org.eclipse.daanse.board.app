@@ -94,8 +94,4 @@ export class ChartSettings{
 
   @Documentation("Vertical boxes/areas (X-axis ranges)")
   @Attribute() verticalBoxes: Array<{xMin: number | string, xMax: number | string, color: string, label?: string}> = [];
-
-  // Date/Time Formatting
-  @Documentation("Date/time display format for X-axis labels (e.g., 'dd.MM.yyyy', 'yyyy-MM-dd HH:mm', 'HH:mm:ss')")
-  @Reference('VariableWrapper') dateDisplayFormat: VariableWrapper<string> = new VariableWrapper<string>('dd.MM.yyyy HH:mm');
 }

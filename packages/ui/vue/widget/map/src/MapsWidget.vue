@@ -453,6 +453,11 @@ const getMarkerPane = (layer: any) => {
   return `layer-pane-${originalIndex}`
 }
 
+// Helper to get the pane name for areas (observedArea) - use overlayPane for lower z-index
+const getAreaPane = () => {
+  return 'overlayPane' // Default Leaflet pane with z-index 400 (markerPane has 600)
+}
+
 // Cache style lookups to avoid repeated .find() calls in templates
 // Use a revision counter to invalidate cache when styles change
 const stylesRevision = ref(0)
@@ -938,6 +943,7 @@ onUnmounted(() => {
           :renderers="config.OGCSstyles ?? []"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
+          :area-pane="getAreaPane()"
           :compare-thing="compareThing"
           :compare-datastream="compareDatastream"
           :is-feature-collection="isFeatureCollection"

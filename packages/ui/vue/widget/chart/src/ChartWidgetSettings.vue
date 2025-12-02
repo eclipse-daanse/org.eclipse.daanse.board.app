@@ -19,6 +19,7 @@ import { ChartSettings } from './gen/ChartSettings'
 const opened = ref({
   styleSection: true,
   gridSection: false,
+  dateFormatSection: false,
   annotationsSection: false,
 })
 
@@ -319,6 +320,40 @@ const removeVerticalBox = (index: number) => {
           :max="10"
           :disabled="!widgetSettings.showVerticalGrid?.value"
         />
+      </div>
+
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.dateFormatSection" icon="event" header="Date/Time Formatting">
+    <div class="settings-container">
+      <div class="settings-block">
+        <h3>X-Axis Date/Time Format</h3>
+
+        <va-select
+          v-if="widgetSettings.dateDisplayFormat"
+          label="Date Format"
+          v-model="widgetSettings.dateDisplayFormat.value"
+          :options="[
+            { value: 'dd.MM.yyyy HH:mm', text: 'dd.MM.yyyy HH:mm' },
+            { value: 'dd.MM.yyyy HH:mm:ss', text: 'dd.MM.yyyy HH:mm:ss' },
+            { value: 'dd.MM.yyyy', text: 'dd.MM.yyyy' },
+            { value: 'dd.MM.yy HH:mm', text: 'dd.MM.yy HH:mm' },
+            { value: 'dd.MM.yy', text: 'dd.MM.yy' },
+            { value: 'yyyy-MM-dd HH:mm:ss', text: 'yyyy-MM-dd HH:mm:ss' },
+            { value: 'yyyy-MM-dd HH:mm', text: 'yyyy-MM-dd HH:mm' },
+            { value: 'yyyy-MM-dd', text: 'yyyy-MM-dd' },
+            { value: 'dd/MM/yyyy HH:mm', text: 'dd/MM/yyyy HH:mm' },
+            { value: 'dd/MM/yyyy', text: 'dd/MM/yyyy' },
+            { value: 'MM/dd/yyyy HH:mm', text: 'MM/dd/yyyy HH:mm' },
+            { value: 'MM/dd/yyyy', text: 'MM/dd/yyyy' },
+            { value: 'HH:mm:ss', text: 'HH:mm:ss' },
+            { value: 'HH:mm', text: 'HH:mm' },
+            { value: 'yyyy-MM-dd\'T\'HH:mm:ss', text: 'yyyy-MM-dd\'T\'HH:mm:ss (ISO)' }
+          ]"
+          value-by="value"
+        />
+
       </div>
     </div>
   </va-collapse>

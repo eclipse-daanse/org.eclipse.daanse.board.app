@@ -58,7 +58,4 @@ export class Layer{
 
   @Documentation("Optional opacity level for the layer (0.0 to 1.0).")
   @Attribute() opacity?: number;
-
-  @Documentation("Optional datasource ID for this specific layer.")
-  @Attribute() datasourceId?: string;
 }

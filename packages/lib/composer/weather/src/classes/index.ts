@@ -193,14 +193,14 @@ export class WeatherComposer extends BaseDatasource {
       }
     }
 
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    /*const datasourceRepository = container.get(identifier) as DatasourceRepository
 
     this.connectedDatasources
       .filter((datasourceId) => datasourceId)
       .forEach((ds) => {
         const datasource = datasourceRepository.getDatasource(ds)
         datasource.subscribe(updateFn)
-      })
+      })*/
   }
 
   async getData(type: string, options?: any): Promise<any> {

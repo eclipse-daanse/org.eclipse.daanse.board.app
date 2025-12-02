@@ -131,7 +131,7 @@ const chartOptions = computed(() => {
   const annotations: any = {}
 
   // Horizontal lines (Y-axis)
-  config.value.horizontalLines?.forEach((line, index) => {
+  config.value.horizontalLines?.forEach((line: any, index: number) => {
     annotations[`hline_${index}`] = {
       type: 'line',
       yMin: line.value,
@@ -161,7 +161,7 @@ const chartOptions = computed(() => {
   })
 
   // Vertical lines (X-axis)
-  config.value.verticalLines?.forEach((line, index) => {
+  config.value.verticalLines?.forEach((line: any, index: number) => {
     annotations[`vline_${index}`] = {
       type: 'line',
       xMin: line.value,
@@ -191,7 +191,7 @@ const chartOptions = computed(() => {
   })
 
   // Horizontal boxes (Y-axis ranges)
-  config.value.horizontalBoxes?.forEach((box, index) => {
+  config.value.horizontalBoxes?.forEach((box: any, index: number) => {
     annotations[`hbox_${index}`] = {
       type: 'box',
       yMin: box.yMin,
@@ -224,7 +224,7 @@ const chartOptions = computed(() => {
   })
 
   // Vertical boxes (X-axis ranges)
-  config.value.verticalBoxes?.forEach((box, index) => {
+  config.value.verticalBoxes?.forEach((box: any, index: number) => {
     annotations[`vbox_${index}`] = {
       type: 'box',
       xMin: box.xMin,
@@ -256,6 +256,42 @@ const chartOptions = computed(() => {
     }
   })
 
+  // Helper function to format dates based on the configured format
+  const formatDate = (value: any, format: string) => {
+    if (!value) return value
+
+    const date = new Date(value)
+    if (isNaN(date.getTime())) return value
+
+    // Simple date formatting without external libraries
+    const pad = (n: number) => n.toString().padStart(2, '0')
+
+    const replacements: Record<string, string> = {
+      'yyyy': date.getFullYear().toString(),
+      'yy': date.getFullYear().toString().slice(-2),
+      'MM': pad(date.getMonth() + 1),
+      'M': (date.getMonth() + 1).toString(),
+      'dd': pad(date.getDate()),
+      'd': date.getDate().toString(),
+      'HH': pad(date.getHours()),
+      'H': date.getHours().toString(),
+      'mm': pad(date.getMinutes()),
+      'm': date.getMinutes().toString(),
+      'ss': pad(date.getSeconds()),
+      's': date.getSeconds().toString(),
+    }
+
+    let result = format
+    // Sort by length descending to replace longer patterns first
+    Object.keys(replacements).sort((a, b) => b.length - a.length).forEach(key => {
+      result = result.replace(new RegExp(key, 'g'), replacements[key])
+    })
+
+    return result
+  }
+
+  const dateFormat = config.value.dateDisplayFormat?.value ?? 'dd.MM.yyyy HH:mm'
+
   const options = {
     responsive: true,
     maintainAspectRatio: true,
@@ -265,6 +301,13 @@ const chartOptions = computed(() => {
           display: config.value.showVerticalGrid?.value ?? true,
           color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
           lineWidth: config.value.verticalGridWidth?.value ?? 1,
+        },
+        ticks: {
+          callback: function(value: any, index: number, ticks: any[]): string {
+            // Try to format as date if the value looks like a date
+            const label: any = (this as any).getLabelForValue(value)
+            return formatDate(label, dateFormat)
+          }
         }
       },
       y: {
