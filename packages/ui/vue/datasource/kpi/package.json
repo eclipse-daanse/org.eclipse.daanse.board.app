@@ -34,7 +34,7 @@
     "vite-plugin-libcss": "^1.1.1"
   },
   "devDependencies": {
-    "inversify": "7.7.1",
+    "inversify": "7.10.4",
     "typescript": "^5.8.2",
     "vite-plugin-dts": "4.5.4",
     "@types/lodash": "^4.17.16"
