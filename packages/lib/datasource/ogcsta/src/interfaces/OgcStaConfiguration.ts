@@ -39,6 +39,7 @@ export interface IOGCSTAConfigartion extends IBaseConnectionConfiguration{
   connection: string;
   mqttConnection?: string;
   history?: IOGCSTAHistoryConfig;
+  useCurrentLocationInsteadOfHistorical?: boolean; // If true, use already loaded current Locations instead of fetching HistoricalLocations
 }
 export abstract class DataTypeBase {}
 export interface IOGCSTAData {

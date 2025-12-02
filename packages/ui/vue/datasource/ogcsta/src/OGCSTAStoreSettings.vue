@@ -225,6 +225,18 @@ onMounted(() => {
             :max="10000"
             placeholder="100"
           />
+
+          <va-checkbox
+            v-model="config.useCurrentLocationInsteadOfHistorical"
+            label="Use current locations instead of historical locations"
+          >
+            <template #label>
+              <span>Use current locations instead of historical locations</span>
+              <div style="font-size: 0.75rem; color: var(--va-text-secondary); margin-top: 0.25rem;">
+                Reuse already loaded current locations instead of fetching historical locations via API
+              </div>
+            </template>
+          </va-checkbox>
         </div>
       </div>
     </va-collapse>

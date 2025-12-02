@@ -801,6 +801,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const historyConfig = this.configuration?.history;
     if (!historyConfig?.enabled) return;
 
+    // If configured to use current locations instead of historical, skip fetching
+    if (this.configuration?.useCurrentLocationInsteadOfHistorical) {
+      this.logHistory('📍 Using current locations instead of historical locations (useCurrentLocationInsteadOfHistorical=true)');
+      return;
+    }
+
     // Get time range from variables or config
     const timeStart = this.resolveTimeValue(
       historyConfig.timeRange?.start,
