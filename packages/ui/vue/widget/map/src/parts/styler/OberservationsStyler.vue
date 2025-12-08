@@ -30,10 +30,12 @@ const dataPointcomponentDesc = computed(() => {
   return getById(value.value)
 })
 const value = computed({
-  get: () => (model.value as any)?.observation.component,
+  get: () => (model.value as any)?.observations?.[0]?.component,
   set: (val: string) => {
     let m = model.value as any
-    m!.observation.component = val
+    if (!m.observations) m.observations = []
+    if (!m.observations[0]) m.observations[0] = { setting: {}, component: val }
+    else m.observations[0].component = val
     model.value = m
   }
 })
@@ -57,9 +59,9 @@ const value = computed({
 
 
     <div class="flex flex-col md6 pa-3">
-      <template v-if="dataPointcomponentDesc.setupComponent">
+      <template v-if="dataPointcomponentDesc.setupComponent && model.observations && model.observations[0]">
         <component :is="dataPointcomponentDesc.setupComponent"
-          v-model="(model.observation as any).setting"></component>
+          v-model="(model.observations[0] as any).setting"></component>
       </template>
 
     </div>
@@ -92,9 +94,9 @@ const value = computed({
                 </div>
               </template>
 
-              <template v-if="dataPointcomponentDesc">
+              <template v-if="dataPointcomponentDesc && model.observations && model.observations[0]">
               <component :is="dataPointcomponentDesc.component" ref="valuedatalabelrenderer"
-                          :config="(model.observation as any).setting"
+                          :config="(model.observations[0] as any).setting"
                           :data="dataPointcomponentDesc.example"></component>
               </template>
             </l-icon>

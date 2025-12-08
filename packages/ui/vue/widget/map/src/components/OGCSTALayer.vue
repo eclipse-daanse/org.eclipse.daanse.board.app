@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
 import L from 'leaflet'
@@ -34,6 +34,79 @@ interface OGCSTALayerProps {
 
 const props = defineProps<OGCSTALayerProps>()
 const openThing = ref<{ [key: string]: boolean }>({})
+
+// Debug logging
+watch(() => props.locations, (newVal) => {
+  console.log('[OGCSTALayer] Locations:', newVal)
+  if (newVal && newVal.length > 0) {
+    console.log('[OGCSTALayer] First location:', newVal[0])
+    console.log('[OGCSTALayer] Has things:', newVal[0]?.things?.length)
+    if (newVal[0]?.things?.[0]) {
+      console.log('[OGCSTALayer] First thing:', newVal[0].things[0])
+      console.log('[OGCSTALayer] Datastreams:', newVal[0].things[0].datastreams?.length)
+      if (newVal[0].things[0].datastreams?.[0]) {
+        console.log('[OGCSTALayer] First datastream:', newVal[0].things[0].datastreams[0])
+        console.log('[OGCSTALayer] Observations:', newVal[0].things[0].datastreams[0].observations?.length)
+      }
+    }
+  }
+}, { immediate: true })
+
+watch(() => props.renderers, (newVal) => {
+  console.log('[OGCSTALayer] Renderers:', newVal)
+  if (newVal && newVal.length > 0) {
+    console.log('[OGCSTALayer] First renderer thing conditions:', newVal[0].thing)
+    console.log('[OGCSTALayer] First renderer ds_renderer:', newVal[0].ds_renderer)
+    if (newVal[0].ds_renderer?.[0]) {
+      console.log('[OGCSTALayer] First ds_renderer conditions:', newVal[0].ds_renderer[0].datastream)
+      console.log('[OGCSTALayer] First ds_renderer observations:', newVal[0].ds_renderer[0].observations)
+    }
+  }
+}, { immediate: true })
+
+// Check which things match
+watch(() => [props.locations, props.renderers] as const, ([locations, renderers]) => {
+  if (!locations || !renderers || locations.length === 0 || renderers.length === 0) return
+
+  console.log('[OGCSTALayer] Checking thing matches...')
+  let matchedThingCount = 0
+  let matchedDatastreamCount = 0
+
+  for (const location of locations) {
+    if (!location.things) continue
+    for (const thing of location.things) {
+      for (const renderer of renderers) {
+        if (props.compareThing(thing, renderer)) {
+          matchedThingCount++
+          console.log('[OGCSTALayer] ✓ Thing matched:', thing.name, thing.iotId)
+          console.log('[OGCSTALayer]   Location:', location.location)
+          console.log('[OGCSTALayer]   Has point:', !!props.getPoint(location.location))
+          if (props.getPoint(location.location)) {
+            console.log('[OGCSTALayer]   Point coords:', props.getPoint(location.location))
+            console.log('[OGCSTALayer]   Renderer point config:', renderer.renderer.point)
+            console.log('[OGCSTALayer]   Renderer point_render_as:', renderer.renderer.point_render_as)
+          }
+
+          // Check datastreams
+          if (thing.datastreams && renderer.ds_renderer) {
+            for (const datastream of thing.datastreams) {
+              for (const dsRenderer of renderer.ds_renderer) {
+                if (props.compareDatastream(datastream, dsRenderer)) {
+                  matchedDatastreamCount++
+                  console.log('[OGCSTALayer]   ✓ Datastream matched:', datastream.name, datastream.iotId)
+                  console.log('[OGCSTALayer]     Observations count:', datastream.observations?.length || 0)
+                  console.log('[OGCSTALayer]     Has observation renderers:', dsRenderer.observations?.length || 0)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  console.log(`[OGCSTALayer] Total matched: ${matchedThingCount} things, ${matchedDatastreamCount} datastreams`)
+}, { immediate: true })
 </script>
 
 <template>
@@ -79,8 +152,26 @@ const openThing = ref<{ [key: string]: boolean }>({})
                   :options-style="()=>subrenderer.renderer.area as any"
                 />
 
+                <!-- Layer-based renderers (e.g., GeoJSON) -->
+                <template v-if="subrenderer.observations && datastream.observations">
+                  <template v-for="obsRenderer in subrenderer.observations" :key="obsRenderer.component">
+                    <template v-if="getById(obsRenderer.component)?.isLayerRenderer">
+                      <template v-for="observation in datastream.observations" :key="observation.iotId">
+                        <component
+                          :is="getById(obsRenderer.component)?.component"
+                          v-if="getById(obsRenderer.component) && observation.result"
+                          :config="obsRenderer.setting"
+                          :data="observation.result"
+                          :marker-size="0"
+                        />
+                      </template>
+                    </template>
+                  </template>
+                </template>
+
+                <!-- Marker-based renderers (e.g., ValueUnit, TLC) -->
                 <l-marker
-                  v-if="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
+                  v-if="subrenderer.observations && subrenderer.observations.some((obs: any) => !getById(obs.component)?.isLayerRenderer) && ((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :options="{ pane: markerPane }"
                 >
@@ -96,14 +187,16 @@ const openThing = ref<{ [key: string]: boolean }>({})
                     >
                       <template #observation>
                         <template v-if="datastream.observations">
-                          <component
-                            :is="getById(subrenderer.observation?.component)?.component"
-                            v-if="getById(subrenderer.observation?.component)"
-                            :config="subrenderer.observation?.setting"
-                            :data="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.result"
-                            :key="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.phenomenonTime"
-                            :marker-size="subrenderer.renderer.point_render_as === 'image' ? 0 : subrenderer.renderer.point_render_as === 'none' ? (renderer.renderer.point_image_size||32) : 45"
-                          />
+                          <template v-for="obsRenderer in subrenderer.observations" :key="obsRenderer.component">
+                            <component
+                              :is="getById(obsRenderer.component)?.component"
+                              v-if="getById(obsRenderer.component) && !getById(obsRenderer.component)?.isLayerRenderer"
+                              :config="obsRenderer.setting"
+                              :data="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.result"
+                              :key="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.phenomenonTime"
+                              :marker-size="subrenderer.renderer.point_render_as === 'image' ? 0 : subrenderer.renderer.point_render_as === 'none' ? (renderer.renderer.point_image_size||32) : 45"
+                            />
+                          </template>
                         </template>
                       </template>
                     </MapMarker>

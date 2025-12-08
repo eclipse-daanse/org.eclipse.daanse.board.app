@@ -1,0 +1,38 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer",
+  "version": "0.0.1-next.1",
+  "description": "GeoJSON renderer plugin for map observations",
+  "author": "undefined",
+  "homepage": "",
+  "license": "EPL-2.0",
+  "main": "./dist/ui.vue.plugins.geojson_renderer.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "inversify": "7.7.1",
+    "typescript": "^5.8.2",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
+    "@vitejs/plugin-vue": "^5.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.ui.vue.widget.map": "^0.0.1-next.1",
+    "vue": "^3.5.13",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "leaflet": "^1.9.4"
+  }
+}

@@ -18,4 +18,5 @@ export interface IDataPointDescription {
   readonly qualifiedName: string,
   readonly description: string,
   readonly example: any;
+  readonly isLayerRenderer?: boolean; // If true, renders as map layer instead of marker content
 }

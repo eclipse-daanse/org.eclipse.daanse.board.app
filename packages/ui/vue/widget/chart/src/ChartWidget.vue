@@ -44,6 +44,17 @@ watch(datasourceId, (newVal, oldVal) => {
 const { update } = useDatasourceRepository(datasourceId, "ChartData", data);
 
 const chartComponent = computed(() => {
+  // Check if we have mixed chart types (different types per series)
+  const hasMixedTypes = config.value?.seriesSettings?.some(
+    (s: any) => s.chartType?.value && s.chartType.value !== config.value?.chartType?.value
+  )
+
+  // For mixed charts, always use Bar as the base component
+  if (hasMixedTypes) {
+    return Bar
+  }
+
+  // Otherwise use the configured chart type
   const type = config.value?.chartType?.value ?? 'bar'
   const components: Record<string, any> = {
     'bar': Bar,
@@ -67,51 +78,88 @@ watch(() => config.value, (newVal) => {
   chartKey.value++
 }, { deep: true })
 
-// Apply settings to data (override dataset colors)
+// Apply settings to data (override dataset colors and apply per-series settings)
 const chartData = computed(() => {
   if (!data.value) return null
 
   const dataCopy = JSON.parse(JSON.stringify(data.value))
 
+  // Check if we have any series-specific settings
+  const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
+
   if (dataCopy.datasets && Array.isArray(dataCopy.datasets)) {
-    dataCopy.datasets = dataCopy.datasets.map((dataset: any) => {
-      const chartType = config.value?.chartType?.value ?? 'bar'
+    dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
+      // Check if there's a series-specific setting for this dataset
+      const seriesSettings = config.value?.seriesSettings?.find(
+        (s: any) => s.seriesIndex?.value === index
+      )
+
+      // Determine chart type (series-specific or global fallback)
+      const chartType = seriesSettings?.chartType?.value ?? config.value?.chartType?.value ?? 'bar'
+
+      // Determine axis assignment (series-specific or default)
+      const xAxisId = seriesSettings?.xAxisId?.value
+      const yAxisId = seriesSettings?.yAxisId?.value
+
+      // Determine colors (series-specific or global fallback)
+      const borderColor = seriesSettings?.borderColor?.value ?? config.value?.borderColor?.value ?? dataset.borderColor
+      const backgroundColor = seriesSettings?.backgroundColor?.value ?? config.value?.backgroundColor?.value ?? dataset.backgroundColor
+      const borderWidth = seriesSettings?.borderWidth?.value ?? config.value?.borderWidth?.value ?? dataset.borderWidth
+      const borderDash = seriesSettings?.borderDash?.value ?? config.value?.borderDash?.value ?? dataset.borderDash
 
       // Apply settings based on chart type
+      let result: any = {
+        ...dataset,
+        borderColor,
+        backgroundColor,
+        borderWidth,
+      }
+
+      // Only set type and axis IDs if we have series-specific settings
+      if (hasSeriesSettings) {
+        result.type = chartType
+        if (xAxisId) {
+          result.xAxisID = xAxisId
+        }
+        if (yAxisId) {
+          result.yAxisID = yAxisId
+        }
+        // Override label if series-specific label is set
+        if (seriesSettings?.label?.value) {
+          result.label = seriesSettings.label.value
+        }
+      }
+
       if (chartType === 'line') {
-        const showPoints = config.value?.showPoints?.value ?? true
-        const fillEnabled = config.value?.fill?.value ?? false
-        const result = {
-          ...dataset,
-          borderColor: config.value?.borderColor?.value ?? dataset.borderColor,
-          borderWidth: config.value?.borderWidth?.value ?? dataset.borderWidth,
-          borderDash: config.value?.borderDash?.value ?? dataset.borderDash,
-          backgroundColor: config.value?.backgroundColor?.value ?? dataset.backgroundColor,
+        // Determine line-specific settings (series-specific or global fallback)
+        const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
+        const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
+        const pointColor = seriesSettings?.pointColor?.value ?? config.value?.pointColor?.value ?? dataset.pointBackgroundColor
+        const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
+
+        result = {
+          ...result,
+          borderDash,
           fill: fillEnabled ? 'origin' : false,
           // Point settings
-          pointRadius: showPoints ? (config.value?.pointSize?.value ?? 3) : 0,
-          pointBackgroundColor: config.value?.pointColor?.value ?? dataset.pointBackgroundColor,
-          pointBorderColor: config.value?.pointColor?.value ?? dataset.pointBorderColor,
-          pointHoverRadius: showPoints ? ((config.value?.pointSize?.value ?? 3) + 2) : 0,
+          pointRadius: showPoints ? pointSize : 0,
+          pointBackgroundColor: pointColor,
+          pointBorderColor: pointColor,
+          pointHoverRadius: showPoints ? (pointSize + 2) : 0,
         }
-        console.log('Line dataset config:', { fillEnabled, fill: result.fill, backgroundColor: result.backgroundColor })
-        return result
       } else if (chartType === 'bar') {
-        return {
-          ...dataset,
-          borderColor: config.value?.borderColor?.value ?? dataset.borderColor,
-          borderWidth: config.value?.borderWidth?.value ?? dataset.borderWidth,
-          backgroundColor: config.value?.backgroundColor?.value ?? dataset.backgroundColor,
+        result = {
+          ...result,
+          borderDash,
         }
       } else {
         // pie, doughnut, etc
-        return {
-          ...dataset,
-          borderColor: config.value?.borderColor?.value ?? dataset.borderColor,
-          borderWidth: config.value?.borderWidth?.value ?? dataset.borderWidth,
-          backgroundColor: config.value?.backgroundColor?.value ?? dataset.backgroundColor,
+        result = {
+          ...result,
         }
       }
+
+      return result
     })
   }
 
@@ -292,32 +340,97 @@ const chartOptions = computed(() => {
 
   const dateFormat = config.value.dateDisplayFormat?.value ?? 'dd.MM.yyyy HH:mm'
 
+  // Collect all unique axis IDs from series settings
+  const xAxisIds = new Set<string>()
+  const yAxisIds = new Set<string>()
+  const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
+
+  if (hasSeriesSettings) {
+    // If we have series settings, collect all axis IDs
+    xAxisIds.add('x') // Default x-axis
+    yAxisIds.add('y') // Default y-axis
+    config.value.seriesSettings?.forEach((s: any) => {
+      if (s.xAxisId?.value) {
+        xAxisIds.add(s.xAxisId.value)
+      }
+      if (s.yAxisId?.value) {
+        yAxisIds.add(s.yAxisId.value)
+      }
+    })
+  }
+
+  // Build scales configuration dynamically
+  const scales: any = {
+    y: {
+      grid: {
+        display: config.value.showHorizontalGrid?.value ?? true,
+        color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
+        lineWidth: config.value.horizontalGridWidth?.value ?? 1,
+      }
+    },
+    x: {
+      grid: {
+        display: config.value.showVerticalGrid?.value ?? true,
+        color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
+        lineWidth: config.value.verticalGridWidth?.value ?? 1,
+      },
+      ticks: {
+        callback: function(value: any, index: number, ticks: any[]): string {
+          // Try to format as date if the value looks like a date
+          const label: any = (this as any).getLabelForValue(value)
+          return formatDate(label, dateFormat)
+        }
+      }
+    }
+  }
+
+  // Create additional scales for each unique X-axis ID (if we have multiple axes)
+  if (xAxisIds.size > 1) {
+    xAxisIds.forEach((axisId) => {
+      if (axisId !== 'x') { // Don't override the default x-axis
+        scales[axisId] = {
+          type: 'category', // Explicitly set the axis type
+          grid: {
+            display: config.value.showVerticalGrid?.value ?? true,
+            color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
+            lineWidth: config.value.verticalGridWidth?.value ?? 1,
+          },
+          ticks: {
+            callback: function(value: any, index: number, ticks: any[]): string {
+              // Try to format as date if the value looks like a date
+              const label: any = (this as any).getLabelForValue(value)
+              return formatDate(label, dateFormat)
+            }
+          },
+          // Position secondary axes at the top
+          position: 'top'
+        }
+      }
+    })
+  }
+
+  // Create additional scales for each unique Y-axis ID (if we have multiple axes)
+  if (yAxisIds.size > 1) {
+    yAxisIds.forEach((axisId) => {
+      if (axisId !== 'y') { // Don't override the default y-axis
+        scales[axisId] = {
+          type: 'linear', // Explicitly set the axis type
+          grid: {
+            display: config.value.showHorizontalGrid?.value ?? true,
+            color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
+            lineWidth: config.value.horizontalGridWidth?.value ?? 1,
+          },
+          // Position secondary Y-axes on the right
+          position: 'right'
+        }
+      }
+    })
+  }
+
   const options = {
     responsive: true,
     maintainAspectRatio: true,
-    scales: {
-      x: {
-        grid: {
-          display: config.value.showVerticalGrid?.value ?? true,
-          color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-          lineWidth: config.value.verticalGridWidth?.value ?? 1,
-        },
-        ticks: {
-          callback: function(value: any, index: number, ticks: any[]): string {
-            // Try to format as date if the value looks like a date
-            const label: any = (this as any).getLabelForValue(value)
-            return formatDate(label, dateFormat)
-          }
-        }
-      },
-      y: {
-        grid: {
-          display: config.value.showHorizontalGrid?.value ?? true,
-          color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-          lineWidth: config.value.horizontalGridWidth?.value ?? 1,
-        }
-      }
-    },
+    scales,
     plugins: {
       annotation: {
         annotations

@@ -23,6 +23,8 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {PointAndAreaSettings} from "./PointAndAreaSettings"
+import {Condition} from "./Condition"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Observation'})
@@ -33,4 +35,6 @@ export class Observation{
 
   @Documentation("The component related to the observation.")
   @Attribute() component?: string;
+  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
+  @Reference('Condition') conditions: Array<Condition> = [];
 }
