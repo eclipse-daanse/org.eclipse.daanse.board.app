@@ -14,9 +14,11 @@ Contributors:
 <script lang="ts" setup>
 import { inject, ref, onMounted, computed } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
-import { ChartSettings } from './gen/ChartSettings'
+import { ChartSettings, SeriesSettings } from './gen/ChartSettings'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const opened = ref({
+  seriesSection: false,
   styleSection: true,
   gridSection: false,
   dateFormatSection: false,
@@ -130,10 +132,253 @@ const addVerticalBox = () => {
 const removeVerticalBox = (index: number) => {
   widgetSettings.value.verticalBoxes?.splice(index, 1)
 }
+
+// Series settings management
+const addSeriesSettings = () => {
+  if (!widgetSettings.value.seriesSettings) {
+    widgetSettings.value.seriesSettings = []
+  }
+  const newSettings = new SeriesSettings()
+  newSettings.seriesIndex = new VariableWrapper<number>(widgetSettings.value.seriesSettings.length)
+  newSettings.chartType = new VariableWrapper<string>('bar')
+  newSettings.xAxisId = new VariableWrapper<string>('x')
+  newSettings.yAxisId = new VariableWrapper<string>('y')
+
+  // Initialize optional label
+  newSettings.label = new VariableWrapper<string>('')
+
+  // Initialize optional styling fields
+  newSettings.borderColor = new VariableWrapper<string>('')
+  newSettings.backgroundColor = new VariableWrapper<string>('')
+  newSettings.borderWidth = new VariableWrapper<number>(2)
+  newSettings.borderDash = new VariableWrapper<number[]>([])
+  newSettings.fill = new VariableWrapper<boolean>(false)
+
+  // Initialize optional point fields
+  newSettings.showPoints = new VariableWrapper<boolean>(true)
+  newSettings.pointColor = new VariableWrapper<string>('')
+  newSettings.pointSize = new VariableWrapper<number>(3)
+
+  widgetSettings.value.seriesSettings.push(newSettings)
+}
+
+const removeSeriesSettings = (index: number) => {
+  widgetSettings.value.seriesSettings?.splice(index, 1)
+}
+
+// Helper to update series border dash
+const updateSeriesBorderDash = (series: SeriesSettings, preset: any) => {
+  try {
+    const presetValue = typeof preset === 'string' ? preset : preset?.value || preset
+    const parsed = typeof presetValue === 'string' ? JSON.parse(presetValue) : presetValue
+    if (!series.borderDash) {
+      series.borderDash = new VariableWrapper<number[]>(parsed)
+    } else {
+      series.borderDash.value = parsed
+    }
+  } catch (e) {
+    console.error('Error parsing border dash preset:', e, preset)
+  }
+}
+
+// Initialize seriesSettings if it doesn't exist and migrate existing series
+onMounted(() => {
+  if (!widgetSettings.value.seriesSettings) {
+    widgetSettings.value.seriesSettings = []
+  }
+
+  // Migrate existing series to add missing fields
+  widgetSettings.value.seriesSettings.forEach((series: SeriesSettings) => {
+    if (!series.label) {
+      series.label = new VariableWrapper<string>('')
+    }
+    if (!series.borderColor) {
+      series.borderColor = new VariableWrapper<string>('')
+    }
+    if (!series.backgroundColor) {
+      series.backgroundColor = new VariableWrapper<string>('')
+    }
+    if (!series.borderWidth) {
+      series.borderWidth = new VariableWrapper<number>(2)
+    }
+    if (!series.borderDash) {
+      series.borderDash = new VariableWrapper<number[]>([])
+    }
+    if (!series.fill) {
+      series.fill = new VariableWrapper<boolean>(false)
+    }
+    if (!series.showPoints) {
+      series.showPoints = new VariableWrapper<boolean>(true)
+    }
+    if (!series.pointColor) {
+      series.pointColor = new VariableWrapper<string>('')
+    }
+    if (!series.pointSize) {
+      series.pointSize = new VariableWrapper<number>(3)
+    }
+  })
+})
 </script>
 
 <template>
-  <va-collapse v-model="opened.styleSection" icon="palette" header="Chart Styling">
+  <!-- Series-specific Settings -->
+  <va-collapse v-model="opened.seriesSection" icon="format_list_numbered" header="Per-Series Settings">
+    <div class="settings-container">
+      <div class="settings-block">
+        <p style="margin-bottom: 12px; color: var(--va-text-secondary);">
+          Configure individual data series. Each series can have its own chart type, axis assignment, colors, and styling.
+        </p>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3>Series Configuration</h3>
+          <va-button size="small" @click="addSeriesSettings">Add Series</va-button>
+        </div>
+
+        <div v-for="(series, index) in widgetSettings.seriesSettings" :key="`series_${index}`"
+          style="border: 1px solid #ddd; padding: 16px; border-radius: 4px; margin-bottom: 12px; background: #fafafa;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <strong style="font-size: 15px;">Series {{ series.seriesIndex?.value ?? index }}</strong>
+            <va-button size="small" color="danger" @click="removeSeriesSettings(index)">Remove</va-button>
+          </div>
+
+          <!-- Basic Info -->
+          <va-input
+            v-if="series.seriesIndex"
+            label="Series Index (0-based)"
+            v-model.number="series.seriesIndex.value"
+            type="number"
+            :min="0"
+            style="margin-bottom: 12px;"
+          />
+
+          <va-input
+            v-if="series.label !== undefined"
+            label="Series Label/Title (optional)"
+            v-model="series.label.value"
+            placeholder="e.g., Temperature, Humidity, Pressure..."
+            style="margin-bottom: 12px;"
+          />
+
+          <va-select
+            v-if="series.chartType"
+            label="Chart Type"
+            v-model="series.chartType.value"
+            :options="[
+              { value: 'bar', text: 'Bar Chart' },
+              { value: 'line', text: 'Line Chart' },
+              { value: 'radar', text: 'Radar Chart' },
+              { value: 'pie', text: 'Pie Chart' },
+              { value: 'doughnut', text: 'Doughnut Chart' },
+              { value: 'polarArea', text: 'Polar Area Chart' }
+            ]"
+            value-by="value"
+            style="margin-bottom: 12px;"
+          />
+
+          <!-- Axis Assignment -->
+          <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Axis Assignment</h4>
+
+          <va-input
+            v-if="series.xAxisId"
+            label="X-Axis ID (e.g., 'x', 'x1', 'x2')"
+            v-model="series.xAxisId.value"
+            placeholder="x"
+            style="margin-bottom: 8px;"
+          />
+
+          <va-input
+            v-if="series.yAxisId"
+            label="Y-Axis ID (e.g., 'y', 'y1', 'y2')"
+            v-model="series.yAxisId.value"
+            placeholder="y"
+            style="margin-bottom: 12px;"
+          />
+
+          <!-- Colors -->
+          <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Colors</h4>
+
+          <va-color-input
+            v-if="series.borderColor !== undefined"
+            label="Border Color"
+            v-model="series.borderColor.value"
+            style="margin-bottom: 8px;"
+          />
+
+          <va-color-input
+            v-if="series.backgroundColor !== undefined"
+            label="Background Color"
+            v-model="series.backgroundColor.value"
+            style="margin-bottom: 12px;"
+          />
+
+          <!-- Line/Border Style -->
+          <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Border Style</h4>
+
+          <va-input
+            v-if="series.borderWidth !== undefined"
+            label="Border Width (px)"
+            v-model.number="series.borderWidth.value"
+            type="number"
+            :min="0"
+            :max="20"
+            style="margin-bottom: 8px;"
+          />
+
+          <va-select
+            v-if="series.borderDash !== undefined"
+            label="Border Style"
+            :model-value="JSON.stringify(series.borderDash?.value || [])"
+            :options="borderDashPresets.map(p => ({ value: JSON.stringify(p.value), text: p.label }))"
+            value-by="value"
+            @update:modelValue="updateSeriesBorderDash(series, $event)"
+            style="margin-bottom: 8px;"
+          />
+
+          <va-checkbox
+            v-if="series.fill !== undefined"
+            label="Fill Area"
+            v-model="series.fill.value"
+            style="margin-bottom: 12px;"
+          />
+
+          <!-- Point Style (for line charts) -->
+          <div v-if="series.chartType?.value === 'line'">
+            <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Point Style</h4>
+
+            <va-checkbox
+              v-if="series.showPoints !== undefined"
+              label="Show Points"
+              v-model="series.showPoints.value"
+              style="margin-bottom: 8px;"
+            />
+
+            <va-color-input
+              v-if="series.pointColor !== undefined && series.showPoints?.value"
+              label="Point Color"
+              v-model="series.pointColor.value"
+              style="margin-bottom: 8px;"
+            />
+
+            <va-input
+              v-if="series.pointSize !== undefined && series.showPoints?.value"
+              label="Point Size (px)"
+              v-model.number="series.pointSize.value"
+              type="number"
+              :min="0"
+              :max="20"
+            />
+          </div>
+        </div>
+
+        <div v-if="!widgetSettings.seriesSettings || widgetSettings.seriesSettings.length === 0"
+          style="padding: 20px; text-align: center; color: var(--va-text-secondary);">
+          No series-specific settings configured. Click "Add Series" to configure individual data series.
+        </div>
+      </div>
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.styleSection" icon="palette" header="Default Chart Styling">
     <div class="settings-container">
       <div class="settings-block">
         <h3>Chart Type</h3>

@@ -29,6 +29,7 @@ import { computedAsync } from '@vueuse/core'
 import PlacementSytler from './../parts/styler/PlacementSytler.vue'
 import OberservationsStyler from './../parts/styler/OberservationsStyler.vue'
 import AutoUpdateSettings from './styler/AutoUpdateSettings.vue'
+import { useDataPointRegistry } from './../composables/datapointRegistry'
 
 
 const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | IRenderer)[]>({
@@ -53,6 +54,11 @@ const selection = ref<any>(undefined)
 const showDeleteConfirmation = ref(false)
 const styleToDelete = ref<any>(null)
 const affectedLayers = ref<LayerI[]>([])
+
+// Observation renderer type selection
+const showObservationTypeDialog = ref(false)
+const observationParentRenderer = ref<any>(null)
+const { getAll: getAllDataPointRenderers, getById } = useDataPointRegistry()
 
 // Check which layers use a specific style
 const getLayersUsingStyle = (styleId: string): LayerI[] => {
@@ -230,12 +236,70 @@ const addDSStyle = () => {
         className: ''
       }
     },
-    observation: {
-      setting: {},
-      component: 'generalValueUnitDataPointRenderer'
-    },
+    observations: [],
     id: v4()
   })
+}
+
+const promptAddObservation = (dsRenderer: any) => {
+  observationParentRenderer.value = dsRenderer
+  showObservationTypeDialog.value = true
+}
+
+const addObservationRenderer = (componentId: string) => {
+  if (!observationParentRenderer.value) return
+
+  const desc = getById(componentId)
+  const newObservation: any = {
+    component: componentId
+  }
+
+  // If it's a layer renderer (like GeoJSON), add default settings
+  if (desc?.isLayerRenderer) {
+    newObservation.setting = {
+      conditions: [],
+      renderer: {
+        point_render_as: 'icon',
+        point_prop: 'name',
+        point: {
+          currentIcon: 'add_location_alt',
+          iconColor: '#545050',
+          iconSize: 48,
+          isIconFilled: false,
+          strokeWeight: 2,
+          opticSize: 24,
+          grade: 1
+        },
+        pointPin: {
+          color: '#ccc'
+        },
+        area: {
+          stroke: true,
+          color: '#3388ff',
+          weight: 3,
+          opacity: 1,
+          lineCap: 'None',
+          dashOffset: '2',
+          fill: true,
+          fillOpacity: 0.2,
+          fillColor: '#3388ff',
+          className: ''
+        }
+      }
+    }
+  } else {
+    newObservation.setting = {}
+  }
+
+  // Initialize observations array if not exists
+  if (!observationParentRenderer.value.observations) {
+    observationParentRenderer.value.observations = []
+  }
+
+  observationParentRenderer.value.observations.push(newObservation)
+
+  showObservationTypeDialog.value = false
+  observationParentRenderer.value = null
 }
 const thingsProps = computedAsync(async () => {
   const layer = layerModel.value
@@ -419,7 +483,12 @@ watch(selection,()=>{
 
                   </div>
                   <div class="options">
-
+                    <VaButton
+                      icon="add"
+                      preset="secondary"
+                      round
+                      @click="promptAddObservation(substyle)"
+                    />
                     <VaButton
                       icon="delete"
                       preset="secondary"
@@ -435,6 +504,50 @@ watch(selection,()=>{
                     />
                   </div>
                 </div>
+
+                <!-- Observation renderers (third level) -->
+                <template v-for="substyle in (style as IRenderer)?.ds_renderer" :key="'obs-parent-'+substyle.id">
+                  <div v-if="substyle.observations && substyle.observations.length > 0" class="childs">
+                    <div v-for="(obs, obsIdx) in substyle.observations" :key="'obs-'+substyle.id+'-'+obsIdx" :class="{'active':obs===(selection)}" class="menuitem"
+                          @click="selection=obs">
+                      <div></div>
+                      <div class="icon">
+                        <VaBadge
+                          :offset="[5,14]"
+                          class="mr-6"
+                          color="#efefef"
+                          overlap
+                          style="--va-badge-text-wrapper-border-radius: 50%;"
+                          text="Obs"
+                        >
+                          <VaIcon
+                            class="material-icons"
+                          >
+                            visibility
+                          </VaIcon>
+                        </VaBadge>
+                      </div>
+                      <div class="text">
+                        {{ obs.component || 'Observation' }}
+                      </div>
+                      <div class="options">
+                        <VaButton
+                          icon="delete"
+                          preset="secondary"
+                          round
+                          @click="()=>{
+                            if (!substyle.observations) return;
+                            const index = substyle.observations.indexOf(obs);
+                            if(index !== -1){
+                              substyle.observations.splice(index, 1);
+                              if(selection === obs) selection = undefined;
+                            }
+                          }"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </template>
               </div>
             </template>
 
@@ -448,6 +561,7 @@ watch(selection,()=>{
         <VaTabs v-model="tabNo">
           <template #tabs>
             <template v-if=" layerModel?.type =='OGCSTA'">
+              <!-- Thing Renderer -->
               <template v-if="selection?.thing">
                 <VaTab
                   v-for="tab in ['Conditions', 'Points', 'Areas', 'Auto-update']"
@@ -456,9 +570,22 @@ watch(selection,()=>{
                   {{ tab }}
                 </VaTab>
               </template>
+              <!-- Observation Renderer -->
+              <template v-else-if="selection?.component && !selection?.datastream">
+                <VaTab>Settings</VaTab>
+              </template>
+              <!-- DS Renderer -->
+              <template v-else-if="layerModel?.type =='OGCSTA'">
+                <VaTab
+                  v-for="tab in ['Conditions', 'Points', 'Areas', 'Placement']"
+                  :key="tab"
+                >
+                  {{ tab }}
+                </VaTab>
+              </template>
               <template v-else>
                 <VaTab
-                  v-for="tab in ['Conditions', 'Points', 'Areas','Values']"
+                  v-for="tab in ['Conditions', 'Points', 'Areas']"
                   :key="tab"
                 >
                   {{ tab }}
@@ -482,30 +609,43 @@ watch(selection,()=>{
             class="scroller"
             vertical
           >
-            <div v-if="tabNo == 1 || tabNo == 2" class="rowlayout">
-              <PointStyler v-if="tabNo==1" v-model="(selection as IDSRenderer).renderer"></PointStyler>
-              <AreaStyler v-if="tabNo==2" v-model="selection.renderer.area"></AreaStyler>
-            </div>
-            <div v-if="tabNo ==3 && layerModel?.type =='OGCSTA' && !selection.thing" class="full rowlayout">
+            <!-- Observation Renderer Content -->
+            <template v-if="selection?.component && !selection?.datastream">
+              <div class="full">
+                <component
+                  :is="getById(selection.component)?.setupComponent"
+                  v-if="getById(selection.component)?.setupComponent"
+                  v-model="selection.setting"
+                />
+              </div>
+            </template>
 
-                <PlacementSytler v-model="(selection as IDSRenderer&PlacementI)as PlacementI"></PlacementSytler>
-                <OberservationsStyler v-model="(selection as IDSRenderer)"></OberservationsStyler>
+            <!-- DS/Thing Renderer Content -->
+            <template v-else>
+              <div v-if="tabNo == 1 || tabNo == 2" class="rowlayout">
+                <PointStyler v-if="tabNo==1" v-model="(selection as IDSRenderer).renderer"></PointStyler>
+                <AreaStyler v-if="tabNo==2" v-model="selection.renderer.area"></AreaStyler>
+              </div>
+              <div v-if="tabNo ==3 && layerModel?.type =='OGCSTA' && !selection.thing" class="full rowlayout">
 
-            </div>
-            <div v-else-if="tabNo ==3 && layerModel?.type =='OGCSTA' && selection.thing" class="full">
-              <AutoUpdateSettings v-model="selection"></AutoUpdateSettings>
-            </div>
-            <div v-else class="full">
-              <template v-if="layerModel?.type =='OGCSTA' && selection.thing">
-                <ConditionSettings v-if="tabNo==0" v-model="selection.thing"></ConditionSettings>
-              </template>
-              <template v-else>
+                  <PlacementSytler v-model="(selection as IDSRenderer&PlacementI)as PlacementI"></PlacementSytler>
 
-                <ConditionSettings v-if="tabNo==0" v-model="selection.datastream"
-                                    v-model:thing-props="thingsProps"></ConditionSettings>
+              </div>
+              <div v-else-if="tabNo ==3 && layerModel?.type =='OGCSTA' && selection.thing" class="full">
+                <AutoUpdateSettings v-model="selection"></AutoUpdateSettings>
+              </div>
+              <div v-else class="full">
+                <template v-if="layerModel?.type =='OGCSTA' && selection.thing">
+                  <ConditionSettings v-if="tabNo==0" v-model="selection.thing"></ConditionSettings>
+                </template>
+                <template v-else>
 
-              </template>
-            </div>
+                  <ConditionSettings v-if="tabNo==0" v-model="selection.datastream"
+                                      v-model:thing-props="thingsProps"></ConditionSettings>
+
+                </template>
+              </div>
+            </template>
           </VaScrollContainer>
 
 
@@ -542,6 +682,31 @@ watch(selection,()=>{
       </ul>
       <p>If you delete this style, it will be removed from all these layers.</p>
       <p><strong>Do you want to continue?</strong></p>
+    </div>
+  </VaModal>
+
+  <!-- Observation Renderer Type Selection Modal -->
+  <VaModal
+    v-model="showObservationTypeDialog"
+    title="Select Observation Renderer Type"
+    size="medium"
+    hide-default-actions
+  >
+    <div style="padding: 20px;">
+      <p style="margin-bottom: 15px;">Choose which type of renderer to use for observations:</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <VaButton
+          v-for="[id, desc] in getAllDataPointRenderers()"
+          :key="id"
+          @click="addObservationRenderer(id)"
+          style="justify-content: flex-start;"
+        >
+          <div style="text-align: left;">
+            <div style="font-weight: bold;">{{ desc.name }}</div>
+            <div style="font-size: 0.85em; opacity: 0.7;">{{ desc.description }}</div>
+          </div>
+        </VaButton>
+      </div>
     </div>
   </VaModal>
 </template>

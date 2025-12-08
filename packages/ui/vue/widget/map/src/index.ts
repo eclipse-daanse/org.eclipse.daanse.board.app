@@ -36,4 +36,5 @@ const register = () => {
 
 register();
 
-export { MapsWidget, MapsWidgetSettings }
+export { MapsWidget, MapsWidgetSettings, useDataPointRegistry }
+export type { IDataPointDescription } from './composables/IDataPointDescription'

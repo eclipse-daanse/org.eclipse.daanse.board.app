@@ -18,16 +18,153 @@
                 nsURI="http://www.example.org/chartsettings"
                 nsPrefix="chartsettings">
 
+    <!-- Series Settings for per-dataset configuration -->
+    <eClassifiers xsi:type="ecore:EClass" name="SeriesSettings">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Configuration for individual data series/datasets"/>
+        </eAnnotations>
+
+        <!-- Series Identifier -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="seriesIndex" containment="false" defaultValueLiteral="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Index of the dataset/series (0-based)"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Series Label/Title -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="label" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Custom label/title for this series (overrides default dataset label)"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Chart Type per Series -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="chartType" containment="false" defaultValueLiteral="bar">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Chart type for this series: 'bar', 'line', 'radar', 'pie', 'doughnut', 'polarArea'"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Axis Assignment -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="xAxisId" containment="false" defaultValueLiteral="x">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="ID of the X-axis this series should use (e.g., 'x', 'x1', 'x2')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="yAxisId" containment="false" defaultValueLiteral="y">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="ID of the Y-axis this series should use (e.g., 'y', 'y1', 'y2')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Styling -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="borderColor" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Border color for this series (e.g., '#FF6384', 'rgba(255,99,132,1)')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColor" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Background color for this series (e.g., 'rgba(75, 192, 192, 0.2)')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="borderWidth" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Border width in pixels"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="borderDash" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Border dash pattern (e.g., [5, 5] for dashed, [] for solid)"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fill" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Enable fill under line/area"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Point Styling (for line charts) -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="showPoints" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Show points on line chart"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="pointColor" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Point color"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="pointSize" containment="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Point size (radius in pixels)"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+    </eClassifiers>
+
     <eClassifiers xsi:type="ecore:EClass" name="ChartSettings">
 
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Configuration for chart rendering with Chart.js"/>
         </eAnnotations>
 
-        <!-- Chart Type -->
+        <!-- Series-specific settings -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="seriesSettings" upperBound="-1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Per-series configuration (chart type, x-axis assignment, styling)"/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <!-- Chart Type (Global fallback) -->
         <eStructuralFeatures xsi:type="ecore:EReference" name="chartType" containment="false" defaultValueLiteral="bar">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Chart type: 'bar', 'line', 'radar', 'pie', 'doughnut', 'polarArea'"/>
+                <details key="documentation" value="Default chart type: 'bar', 'line', 'radar', 'pie', 'doughnut', 'polarArea' (used if no series-specific type is set)"/>
             </eAnnotations>
             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -42,7 +42,7 @@ export interface IPointAndAreaSettings {
 export interface IDSRenderer {
   name: string,
   datastream: ICondition[],
-  observation?: ObservationI,
+  observations?: ObservationI[],
   renderer: IPointAndAreaSettings
   id: string;
 
@@ -55,6 +55,8 @@ export interface PlacementI {
 export interface ObservationI {
   setting: any,
   component: string,
+  renderer?: IPointAndAreaSettings,
+  conditions?: ICondition[],
 }
 
 export interface ICondition {

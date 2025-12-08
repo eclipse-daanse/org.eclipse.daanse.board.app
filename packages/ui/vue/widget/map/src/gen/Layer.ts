@@ -28,6 +28,9 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Layer'})
 export class Layer{
 
+  @Documentation("Optional datasource identifier for this layer.")
+  @Attribute() datasourceId?: string;
+
   @Documentation("The service associated with this layer. (Mapped from TypeScript 'any' type).")
   @Attribute() service?: any;
 
