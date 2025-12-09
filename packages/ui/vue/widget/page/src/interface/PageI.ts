@@ -14,5 +14,6 @@ import { type IPageVariableConfig } from 'org.eclipse.daanse.board.app.lib.varia
 export interface PageI{
   path: string,
   hideTitle: boolean,
+  backgroundColor?: string,
   variables?: Map<string, IPageVariableConfig>
 }

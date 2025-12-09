@@ -116,6 +116,9 @@ const handleRemoveWidget = (widgetId: string) => {
     <div v-else>
       <div
         class="page-widget-content"
+        :style="{
+          backgroundColor: config.backgroundColor || undefined
+        }"
         :class="{
 
         }"

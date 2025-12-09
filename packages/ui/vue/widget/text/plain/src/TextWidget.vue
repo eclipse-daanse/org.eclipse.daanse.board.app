@@ -107,7 +107,7 @@ const calculatedString = computed(() => {
 }
 
 .component {
-    font-size: v-bind(fontSize + "px");
+    font-size: v-bind(config.fontSize.value + "px");
     color: v-bind(config.fontColor.value);
     text-align: v-bind(config.horizontalAlign.value);
     font-weight: v-bind(config.fontWeight.value);
