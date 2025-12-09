@@ -15,5 +15,10 @@ export interface PageI{
   icon: string,
   description: string,
   visibleInNavigation: boolean,
+  backgroundColor?: string,
+  backgroundImage?: string,
+  backgroundSize?: 'auto' | 'cover' | 'contain',
+  backgroundPosition?: string,
+  backgroundRepeat?: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y',
   layout:LayoutI
 }

@@ -88,11 +88,49 @@ const loadLayout = async () => {
 }
 
 const subscriptionId = ref<string | null>(null)
+const previousPageData = ref<{
+  layoutId?: string,
+  backgroundColor?: string
+} | null>(null)
+
+const updatePageData = () => {
+  if (props.pageId && pageRepo) {
+    const page = pageRepo.getPage(props.pageId)
+
+    // Store previous layout and style properties
+    const prevLayoutId = currentPage.value?.layout?.id
+    const prevBackgroundColor = currentPage.value?.backgroundColor
+    const prevBackgroundImage = currentPage.value?.backgroundImage
+    const prevBackgroundSize = currentPage.value?.backgroundSize
+    const prevBackgroundPosition = currentPage.value?.backgroundPosition
+    const prevBackgroundRepeat = currentPage.value?.backgroundRepeat
+
+    currentPage.value = page || null
+
+    // Check if only style properties changed (background properties)
+    const onlyStyleChanged =
+      page?.layout?.id === prevLayoutId &&
+      (page?.backgroundColor !== prevBackgroundColor ||
+        page?.backgroundImage !== prevBackgroundImage ||
+        page?.backgroundSize !== prevBackgroundSize ||
+        page?.backgroundPosition !== prevBackgroundPosition ||
+        page?.backgroundRepeat !== prevBackgroundRepeat)
+
+    return { onlyStyleChanged, layoutChanged: page?.layout?.id !== prevLayoutId }
+  }
+  return { onlyStyleChanged: false, layoutChanged: false }
+}
 
 const onPageUpdate = (eventType: string) => {
   if (eventType === 'PAGE_UPDATE') {
-    refreshTrigger.value++
-    loadLayout()
+    const { onlyStyleChanged, layoutChanged } = updatePageData()
+
+    // Only reload layout if structure changed, not if only style changed
+    if (layoutChanged || !currentLayout.value) {
+      refreshTrigger.value++
+      loadLayout()
+    }
+    // If only style changed (like backgroundColor), the reactive binding will handle it
   }
 }
 
@@ -124,7 +162,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="layout-renderer">
+  <div class="layout-renderer" :style="{
+    backgroundColor: currentPage?.backgroundColor || undefined,
+    backgroundImage: currentPage?.backgroundImage
+      ? `url(${currentPage.backgroundImage})`
+      : undefined,
+    backgroundSize: currentPage?.backgroundSize || 'cover',
+    backgroundPosition: currentPage?.backgroundPosition || 'center',
+    backgroundRepeat: currentPage?.backgroundRepeat || 'no-repeat'
+  }">
     <!-- Loading state -->
     <div v-if="isLoading" class="loading-state">
       <va-progress-circle indeterminate />

@@ -85,6 +85,12 @@ const isValidSelection = computed(() => {
             >
               {{ t('page:pageWidget.selfReferenceWarning') }}
             </va-alert>
+
+            <!-- Hintergrundfarbe -->
+            <va-color-input
+                v-model="widgetSettings.backgroundColor"
+                :label="t('page:pageWidget.backgroundColor')"
+            />
             <!-- Manueller Pfad-Input als Fallback -->
             <va-collapse
                 v-model="opened.storeSection"

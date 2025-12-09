@@ -105,6 +105,73 @@ watch(pageSettings,()=>{
         </div>
 
         <div class="settings-block">
+          <va-color-input
+            class="field"
+            :label="t('page:PageSettings.backgroundColor')"
+            v-model="pageSettings.backgroundColor"
+          />
+        </div>
+
+        <div class="settings-block">
+          <va-input
+            class="field"
+            :label="t('page:PageSettings.backgroundImage')"
+            v-model="pageSettings.backgroundImage"
+            placeholder="URL to background image"
+          />
+        </div>
+
+        <div class="settings-block">
+          <va-select
+            class="field"
+            :label="t('page:PageSettings.backgroundSize')"
+            v-model="pageSettings.backgroundSize"
+            :options="[
+              { value: 'auto', text: 'Auto' },
+              { value: 'cover', text: 'Cover (fill page)' },
+              { value: 'contain', text: 'Contain (fit in page)' }
+            ]"
+            value-by="value"
+            placeholder="cover"
+          />
+
+          <va-select
+            class="field"
+            :label="t('page:PageSettings.backgroundRepeat')"
+            v-model="pageSettings.backgroundRepeat"
+            :options="[
+              { value: 'no-repeat', text: 'No Repeat' },
+              { value: 'repeat', text: 'Repeat' },
+              { value: 'repeat-x', text: 'Repeat Horizontally' },
+              { value: 'repeat-y', text: 'Repeat Vertically' }
+            ]"
+            value-by="value"
+            placeholder="no-repeat"
+          />
+        </div>
+
+        <div class="settings-block">
+          <va-select
+            class="field"
+            :label="t('page:PageSettings.backgroundPosition')"
+            v-model="pageSettings.backgroundPosition"
+            :options="[
+              { value: 'center', text: 'Center' },
+              { value: 'top', text: 'Top' },
+              { value: 'bottom', text: 'Bottom' },
+              { value: 'left', text: 'Left' },
+              { value: 'right', text: 'Right' },
+              { value: 'top left', text: 'Top Left' },
+              { value: 'top right', text: 'Top Right' },
+              { value: 'bottom left', text: 'Bottom Left' },
+              { value: 'bottom right', text: 'Bottom Right' }
+            ]"
+            value-by="value"
+            placeholder="center"
+          />
+        </div>
+
+        <div class="settings-block">
           <va-switch
             :label="t('page:PageSettings.visibleInNavigation')"
             v-model="pageSettings.visibleInNavigation"
