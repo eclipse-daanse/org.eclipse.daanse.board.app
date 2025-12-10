@@ -18,16 +18,6 @@ import TextWidgetSettings from './TextWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-interface ITextSettings {
-  text: VariableComplexStringWrapper
-  fontSize: VariableWrapper<number>
-  fontColor: VariableWrapper<string>
-  fontWeight: VariableWrapper<string>
-  fontStyle: VariableWrapper<string>
-  textDecoration: VariableWrapper<string>
-  horizontalAlign: VariableWrapper<string>
-  verticalAlign: VariableWrapper<string>
-}
 
 const register = () => {
   console.log('registering Text widget', container)
@@ -43,4 +33,4 @@ const register = () => {
 register();
 
 export { TextWidget, TextWidgetSettings }
-export type { ITextSettings }
+

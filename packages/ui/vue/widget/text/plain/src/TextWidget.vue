@@ -15,7 +15,6 @@ Contributors:
 import { computed, toRefs, onMounted, ref, watch, getCurrentInstance } from 'vue'
 import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
-import type { ITextSettings } from "./index";
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { TextSettings } from './gen/TextSettings'
 
@@ -24,39 +23,21 @@ const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string; }>();
 const { datasourceId } = toRefs(props);
 const config = defineModel<TextSettings>('configv', { required: true});
-const defaultConfig: ITextSettings = {
-  text: new VariableComplexStringWrapper(""),
-  fontSize: new VariableWrapper<number>(12),
-  fontColor: new VariableWrapper<string>("#000"),
-  fontWeight: new VariableWrapper<string>("normal"),
-  fontStyle: new VariableWrapper<string>("normal"),
-  textDecoration: new VariableWrapper<string>("none"),
-  horizontalAlign: new VariableWrapper<string>("Left"),
-  verticalAlign: new VariableWrapper<string>("Top"),
-};
+
+const defaultConfig = new TextSettings();
+
+// Initialize config with defaults immediately
+if (config.value) {
+    Object.assign(config.value, { ...defaultConfig, ...config.value });
+}
 
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
-
-
-
 
 watch(datasourceId, (newVal, oldVal) => {
     update(newVal, oldVal);
 })
 
-type ConfigKeys = keyof ITextSettings;
-if(!config.value.text){
-  for (const key of Object.keys(defaultConfig) as ConfigKeys[]) {
-    const defaultVal = defaultConfig[key];
-    const currentVal = config.value[key];
-
-    if (currentVal === undefined || currentVal === null) {
-      // TypeScript hilft hier nicht automatisch → expliziter Cast nötig
-      (config.value[key] as typeof defaultVal) = defaultVal;
-    }
-  }
-}
 
 const calculatedString = computed(() => {
     console.log(config.value.text.value)
@@ -84,9 +65,9 @@ const calculatedString = computed(() => {
 <template>
   <div class="text-container" :style="{
         'justify-content':
-            config.verticalAlign.value === 'Top'
+            config.verticalAlign?.value === 'Top'
                 ? 'flex-start'
-                : config.verticalAlign.value === 'Center'
+                : config.verticalAlign?.value === 'Center'
                     ? 'center'
                     : 'flex-end',
     }">
@@ -107,12 +88,12 @@ const calculatedString = computed(() => {
 }
 
 .component {
-    font-size: v-bind(config.fontSize.value + "px");
-    color: v-bind(config.fontColor.value);
-    text-align: v-bind(config.horizontalAlign.value);
-    font-weight: v-bind(config.fontWeight.value);
-    font-style: v-bind(config.fontStyle.value);
-    text-decoration: v-bind(config.textDecoration.value);
+    font-size: v-bind((config.fontSize?.value || '12') + "px");
+    color: v-bind(config.fontColor?.value || '#000');
+    text-align: v-bind(config.horizontalAlign?.value || 'Left');
+    font-weight: v-bind(config.fontWeight?.value || 'normal');
+    font-style: v-bind(config.fontStyle?.value || 'normal');
+    text-decoration: v-bind(config.textDecoration?.value || 'none');
     overflow: hidden;
 }
 </style>
