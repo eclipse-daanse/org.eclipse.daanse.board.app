@@ -31,6 +31,8 @@ export interface ICsvStoreConfiguration {
   name: string
   uid: string
   separators: string[]
+  skipRowsFromStart?: number
+  skipRowsFromEnd?: number
 }
 
 export interface ICsvParseResult {
@@ -44,6 +46,8 @@ export class CsvStore extends BaseDatasource {
   private connection: any
   private resourceUrl: ComputedStoreParameter | null = null
   private parseOptions: ParseOptions | null = null
+  private skipRowsFromStart: number = 0
+  private skipRowsFromEnd: number = 0
 
   @inject(identifier)
   private connectionRepository!: ConnectionRepository
@@ -55,6 +59,8 @@ export class CsvStore extends BaseDatasource {
     this.parseOptions = {
       separators: configuration.separators,
     }
+    this.skipRowsFromStart = configuration.skipRowsFromStart ?? 0
+    this.skipRowsFromEnd = configuration.skipRowsFromEnd ?? 0
 
     this.resourceUrl = super.initVariable(configuration.resourceUrl)
     this.pollingInterval = configuration.pollingInterval ?? 5000
@@ -81,7 +87,19 @@ export class CsvStore extends BaseDatasource {
     ) as IConnection
     const req = await connection.fetch({ url: this.resourceUrl?.value || '' })
     if (!req.ok) return null
-    const text = await req.text()
+    let text = await req.text()
+
+    // Apply row skipping BEFORE parsing
+    if (this.skipRowsFromStart > 0 || this.skipRowsFromEnd > 0) {
+      const lines = text.split('\n')
+      const startIndex = this.skipRowsFromStart
+      const endIndex = this.skipRowsFromEnd > 0
+        ? lines.length - this.skipRowsFromEnd
+        : lines.length
+
+      text = lines.slice(startIndex, endIndex).join('\n')
+    }
+
     const data: ICsvParseResult = helpers.csv.parse(
       text,
       this.parseOptions || {},

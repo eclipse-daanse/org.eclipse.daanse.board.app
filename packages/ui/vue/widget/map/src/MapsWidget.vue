@@ -453,9 +453,11 @@ const getMarkerPane = (layer: any) => {
   return `layer-pane-${originalIndex}`
 }
 
-// Helper to get the pane name for areas (observedArea) - use overlayPane for lower z-index
-const getAreaPane = () => {
-  return 'overlayPane' // Default Leaflet pane with z-index 400 (markerPane has 600)
+// Helper to get the pane name for areas (observedArea) - use layer-specific area pane
+const getAreaPane = (layer?: any) => {
+  if (!layer) return 'overlayPane'
+  const originalIndex = getOriginalLayerIndex(layer)
+  return `layer-area-pane-${originalIndex}`
 }
 
 // Cache style lookups to avoid repeated .find() calls in templates
@@ -516,14 +518,25 @@ const createLayerPanes = () => {
 
   // Create or update panes for each layer with the appropriate z-index
   config.value.layers.forEach((layer, index) => {
+    // Create marker pane for this layer
     const paneName = `layer-pane-${index}`
     let pane = mapObject.getPane(paneName)
     if (!pane) {
       pane = mapObject.createPane(paneName)
     }
     // Layer at index 0 should be on top, so highest z-index
-    // Default overlay pane is at z-index 400
-    pane.style.zIndex = String(400 + config.value.layers.length - index)
+    // Base z-index 400, then add (layers.length - index) * 2 to leave room for area panes
+    const baseZIndex = 400 + (config.value.layers.length - index) * 2
+    pane.style.zIndex = String(baseZIndex)
+
+    // Create area pane for this layer (for observedArea polygons)
+    // Area pane has z-index 1 lower than marker pane
+    const areaPaneName = `layer-area-pane-${index}`
+    let areaPane = mapObject.getPane(areaPaneName)
+    if (!areaPane) {
+      areaPane = mapObject.createPane(areaPaneName)
+    }
+    areaPane.style.zIndex = String(baseZIndex - 1)
   })
 }
 
@@ -943,7 +956,7 @@ onUnmounted(() => {
           :renderers="config.OGCSstyles ?? []"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
-          :area-pane="getAreaPane()"
+          :area-pane="getAreaPane(wmsLayer)"
           :compare-thing="compareThing"
           :compare-datastream="compareDatastream"
           :is-feature-collection="isFeatureCollection"
