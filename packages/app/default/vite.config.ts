@@ -15,6 +15,10 @@ import tailwindcss from '@tailwindcss/vite'
 import dts from 'vite-plugin-dts'
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
+import { resolve } from 'path'
+
+const isDev = process.env.NODE_ENV !== 'production'
+
 export default defineConfig({
   base: './',
   plugins: [
@@ -31,9 +35,26 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@', replacement: '/src' },
+      // Dev mode: Use source files directly for HMR
+      ...(isDev ? [
+        {
+          find: 'org.eclipse.daanse.board.app.ui.vue.widget.map',
+          replacement: resolve(__dirname, '../../ui/vue/widget/map/src/index.ts')
+        },
+        {
+          find: 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper',
+          replacement: resolve(__dirname, '../../ui/vue/widget/wrapper/src/index.ts')
+        },
+      ] : [])
     ],
     dedupe: ['vue', 'pinia', 'debug']
 
+  },
+  server: {
+    fs: {
+      // Allow serving files from workspace root for monorepo
+      allow: [searchForWorkspaceRoot(process.cwd())]
+    }
   },
   css: {
     preprocessorOptions: {

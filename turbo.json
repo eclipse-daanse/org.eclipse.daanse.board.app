@@ -3,7 +3,9 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": ["SKIP_TYPE_CHECK"],
+      "cache": true
     },
     "dev": {
       "cache": false

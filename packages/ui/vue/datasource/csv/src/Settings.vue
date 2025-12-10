@@ -114,6 +114,29 @@ onMounted(async () => {
         ]"
         text-by="label" value-by="value"
     />
+
+    <VaInput
+        v-model.number="config.skipRowsFromStart"
+        type="number"
+        label="Skip Rows from Start"
+        :min="0"
+        placeholder="0"
+    >
+        <template #prepend>
+            <VaIcon name="skip_next" />
+        </template>
+    </VaInput>
+    <VaInput
+        v-model.number="config.skipRowsFromEnd"
+        type="number"
+        label="Skip Rows from End"
+        :min="0"
+        placeholder="0"
+    >
+        <template #prepend>
+            <VaIcon name="skip_previous" />
+        </template>
+    </VaInput>
     <VaSwitch v-model="config.pollingEnabled" label="Enable Long Polling" />
     <VaInput v-if="config.pollingEnabled" v-model="innerInterval" label="Polling Interval (ms)" />
 </template>

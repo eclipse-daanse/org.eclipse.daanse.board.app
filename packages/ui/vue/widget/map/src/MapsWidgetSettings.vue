@@ -582,6 +582,20 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
     <template #body>
 
       <div class="settings-container">
+        <va-input
+          v-model="widgetSettings.baseMapUrl"
+          label="Base Map URL"
+          placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        >
+          <template #prepend>
+            <VaIcon name="public" />
+          </template>
+        </va-input>
+
+        <p class="hint-text">
+          Tile server URL template. Use {z}, {x}, {y} placeholders for zoom and coordinates.
+        </p>
+
         <va-checkbox
           v-model="widgetSettings.fixed"
           label="Map fixed"
@@ -592,7 +606,6 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 
   </va-collapse>
 
-
 </template>
 <style scoped>
 
@@ -602,6 +615,13 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
   flex-direction: column;
   gap: 1rem;
   padding: 15px;
+}
+
+.hint-text {
+  font-size: 12px;
+  color: var(--va-text-secondary);
+  margin: -8px 0 0 0;
+  padding-left: 4px;
 }
 
 .list-group-item {
