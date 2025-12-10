@@ -12,12 +12,13 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import type { ITextSettings } from './index'
+
 import { inject, ref } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { useVariableRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { TextSettings } from './gen/TextSettings'
 
 const previews = ref({
 } as Record<string, boolean>)
@@ -28,7 +29,7 @@ const opened = ref({
 })
 const timestamp = ref(null);
 
-const widgetSettings = defineModel<ITextSettings>({ required: true })
+const widgetSettings = defineModel<TextSettings>({ required: true })
 console.log(widgetSettings)
 const variableRepository = container.get<VariableRepository>(identifier)
 
@@ -61,12 +62,12 @@ const addVariable =() =>{
 }
 const addVariable2 =() =>{
   const var_test2 = variableRepository.getVariable('color');
-  console.log(var_test2);
-  console.log(var_test2.value);
   (widgetSettings.value.fontColor as VariableWrapper<string>).setTo(var_test2)
-  window.setTimeout(() => {
-    var_test2.value = '#999'
-  },15000)
+}
+
+const addVariable3 =() =>{
+  const var_test3 = variableRepository.getVariable('font');
+  (widgetSettings.value.fontSize as VariableWrapper<string>).setTo(var_test3)
 }
 </script>
 
@@ -87,7 +88,7 @@ const addVariable2 =() =>{
           <va-input class="text-size" :label="t('textBase:TextWidget.fontSize')" v-model="widgetSettings.fontSize.value">
             <template #append>
               <VaIcon name="visibility" style="margin-left: 4px;" color="secondary"
-                @click="previews['font-size'] = !previews['font-size']" />
+                @click="addVariable3" />
             </template>
           </va-input>
           <div v-if="previews['font-size']">{{ widgetSettings.fontSize.value }}</div>
