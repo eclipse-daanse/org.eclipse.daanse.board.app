@@ -20,7 +20,7 @@
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
   "devDependencies": {
-    "inversify": "7.7.1",
+    "inversify": "7.10.6",
     "typescript": "^5.8.2",
     "vue": "^3.4.0",
     "pinia": "^2.1.0",
