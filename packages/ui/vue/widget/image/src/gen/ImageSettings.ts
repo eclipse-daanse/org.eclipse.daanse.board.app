@@ -28,7 +28,7 @@ import {ImageGalleryItem} from "./ImageGalleryItem"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/imagesettings#//ImageSettings'})
-export class ImageSettings{
+export class ImageSettings {
   @Reference('GallerySettings') imagesSettings: GallerySettings = new GallerySettings();
   @Reference('ImageGalleryItem') images: Array<ImageGalleryItem> = [];
 }

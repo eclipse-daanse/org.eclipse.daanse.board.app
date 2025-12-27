@@ -156,6 +156,7 @@ const getpadding= computed(()=>{
             :config="widget.config"
             v-model:configv="widget.config"
             :datasourceId="widget.config.datasourceId"
+            :id="widget.uid || widget.id"
             class="widget_component"
           />
         </VaScrollContainer>

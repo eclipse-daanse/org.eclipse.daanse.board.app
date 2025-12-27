@@ -31,7 +31,6 @@ import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
-import { MapSettings } from './gen/MapSettings'
 import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { IconSettings } from './gen/IconSettings'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
@@ -41,12 +40,18 @@ import RestGeoJsonLayer from './components/RestGeoJsonLayer.vue'
 import OGCSTALayer from './components/OGCSTALayer.vue'
 import { useOGCService } from './composables/Service'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
+import type { MapWidgetInterface } from './gen/MapWidgetInterface'
+import { MapSettings } from './gen/MapSettings'
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 
-const props = defineProps<{ datasourceId: string }>()
-const { datasourceId } = toRefs(props)
+const props = defineProps<{ datasourceId: string; id: string }>()
+const { datasourceId, id: widgetId } = toRefs(props)
 const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
 const defaultConfig = new MapSettings()
+
+// Get EventActionsRegistry
+const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
 
 const { filterFeatureCollection, compareDatastream, compareThing } = useComparator()
 const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils()
@@ -827,9 +832,72 @@ const centerUpdated = (center: any) => {
   config.value.center = center
 }
 
+
+let api = new class implements MapWidgetInterface{
+  zoomToThing = (thingId: string, zoom: number = 16, duration: number = 1000) => {
+    if (!map.value || !(map.value as any).leafletObject) {
+      console.warn('Map instance not available. Cannot zoom to thing.')
+      return
+    }
+
+    // Search for the thing in primary datasource
+    let thing = ((data.value as any)?.things || []).find((t: any) => t.iotId === thingId || t['@iot.id'] === thingId)
+
+    // If not found, search in additional datasources
+    if (!thing) {
+      for (const [dsId, dsData] of additionalDatasourcesData.value.entries()) {
+        const additionalThings = (dsData as any)?.things || []
+        thing = additionalThings.find((t: any) => t.iotId === thingId || t['@iot.id'] === thingId)
+        if (thing) break
+      }
+    }
+
+    if (!thing) {
+      console.warn(`Thing with ID "${thingId}" not found.`)
+      return
+    }
+
+    // Extract location from thing
+    if (!thing.locations || !thing.locations[0]) {
+      console.warn(`Thing with ID "${thingId}" has no location.`)
+      return
+    }
+
+    const location = thing.locations[0].location
+    const geoJson = transformToGeoJson(location)
+
+    // Get center point from GeoJSON
+    const point = getPoint(geoJson)
+    if (!point) {
+      console.warn(`Could not extract coordinates from thing location.`)
+      return
+    }
+
+    // Get the Leaflet map instance and zoom to location
+    const mapInstance = (map.value as any).leafletObject as L.Map
+    mapInstance.flyTo(point as L.LatLngExpression, zoom, {
+      duration: duration / 1000, // Leaflet expects seconds
+      easeLinearity: 0.25
+    })
+  }
+};
+
+// Expose MapWidgetInterface methods
+defineExpose<MapWidgetInterface>(api)
+
+// Register widget instance with EventActionsRegistry
+onMounted(() => {
+  actionsRegistry.registerWidgetInstance(widgetId.value, api)
+  logMap('Registered widget instance with EventActionsRegistry:', widgetId.value)
+})
+
 // Cleanup on unmount
 onUnmounted(() => {
   isUnmounting = true
+
+  // Unregister widget instance from EventActionsRegistry
+  actionsRegistry.unregisterWidgetInstance(widgetId.value)
+  logMap('Unregistered widget instance from EventActionsRegistry:', widgetId.value)
 
   // Clear all active tasks and their intervals DIRECTLY
   // We use our local task references to stop the intervals
@@ -957,6 +1025,7 @@ onUnmounted(() => {
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :area-pane="getAreaPane(wmsLayer)"
+          :widget-id="widgetId"
           :compare-thing="compareThing"
           :compare-datastream="compareDatastream"
           :is-feature-collection="isFeatureCollection"

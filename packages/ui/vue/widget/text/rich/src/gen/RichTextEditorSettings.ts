@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/richTextEditor#//RichTextEditorSettings'})
-export class RichTextEditorSettings{
+export class RichTextEditorSettings {
 
   @Documentation("An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.).")
   @Attribute() editor?: string;

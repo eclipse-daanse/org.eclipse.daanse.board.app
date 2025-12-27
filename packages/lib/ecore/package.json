@@ -1,0 +1,35 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.ecore",
+  "version": "0.0.1-next.1",
+  "description": "Ecore library for Eclipse Daanse Board App",
+  "author": "undefined",
+  "homepage": "",
+  "license": "EPL-2.0",
+  "main": "./dist/lib.ecore.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "reflect-metadata": "^0.2.2",
+    "ts-results-es": "^4.2.0",
+    "sax": "^1.4.1",
+    "id128": "^1.6.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

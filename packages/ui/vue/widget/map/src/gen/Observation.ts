@@ -27,8 +27,8 @@ import {PointAndAreaSettings} from "./PointAndAreaSettings"
 import {Condition} from "./Condition"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Observation'})
-export class Observation{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Observation'})
+export class Observation {
 
   @Documentation("The observation setting. (Mapped from TypeScript 'any' type).")
   @Attribute() setting?: any;

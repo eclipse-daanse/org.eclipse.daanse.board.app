@@ -53,6 +53,12 @@ import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+import {
+  EventManager,
+  EVENT_MANAGER,
+  EventBusBridge,
+  EVENT_BUS_BRIDGE
+} from 'org.eclipse.daanse.board.app.lib.events'
 import { useRouter } from 'vue-router'
 
 const {variables, createVariable, removeVariable, updateVariable,updateVariables}
@@ -78,6 +84,7 @@ const variableWrapperFactroy:VariableWrapperFactory|undefined =
 const pageRepo:PageRegistryI|undefined = container?.get<PageRegistryI>(PageRegistryIDentifier)
 const layoutRepo:LayoutRepositoryI|undefined
   = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const eventManager:EventManager|undefined = container?.get<EventManager>(EVENT_MANAGER)
 repoManager.addObserver({
   update: async (event, repo) => {
     console.log('repos updated')
@@ -183,6 +190,10 @@ const getData = () => {
     }
 
   }
+
+  // Get event mappings
+  const eventMappings = eventManager?.getAllMappings() || []
+
   const data = {
     layout: layoutStore.layout,
     datasources: stores.dataSources,
@@ -190,6 +201,7 @@ const getData = () => {
     widgets: widgets.widgets,
     variables:variables,
     pages: pages,
+    eventMappings: eventMappings,
 
   }
   return stringify(data)
@@ -271,6 +283,12 @@ const loadData = (content: any) => {
         pageRepo?.registerPage(pageInfo)
         variableWrapperFactroy?.initilazeVariableWrappers((page as any).widgets)
       }
+    }
+
+    // Load event mappings
+    if (data.eventMappings && eventManager) {
+      eventManager.setAllMappings(data.eventMappings)
+      console.log(`💾 Loaded ${data.eventMappings.length} event mappings from board`)
     }
 
     // After loading data, navigate to first available page or default

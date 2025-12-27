@@ -1,0 +1,47 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.eventmanager",
+  "version": "0.0.1-next.1",
+  "description": "Event Manager UI for configuring event-action mappings",
+  "author": "undefined",
+  "homepage": "",
+  "license": "EPL-2.0",
+  "main": "./dist/ui.vue.eventmanager.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "dist/ui.vue.eventmanager.css"
+  ],
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "inversify": "7.7.1",
+    "typescript": "^5.8.2",
+    "vite": "^7.2.2",
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
+    "vue-tsc": "^2.2.8"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.13"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.core": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.events": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.page": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.navigation": "0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.repository.route": "0.0.1-next.1"
+  }
+}

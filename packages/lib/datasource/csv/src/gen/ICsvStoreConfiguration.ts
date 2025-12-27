@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/csvstore#//ICsvStoreConfiguration'})
-export class ICsvStoreConfiguration{
+export class ICsvStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("The URL of the CSV resource (e.g., a file path or web URL).")
   @Attribute() resourceUrl?: string;

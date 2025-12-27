@@ -13,6 +13,7 @@
 
 import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { registerVariableActions } from './actions/VariableActions'
 
 const identifier = Symbol.for('VariableRepository')
 
@@ -21,5 +22,8 @@ if (!container.isBound(identifier)) {
   console.log('VariableRepository - initial bind only');
   container.bind<VariableRepository>(identifier).to(VariableRepository).inSingletonScope()
 }
+
+// Register variable actions when the package is imported
+registerVariableActions()
 
 export { VariableRepository, type VariableConfig, identifier }

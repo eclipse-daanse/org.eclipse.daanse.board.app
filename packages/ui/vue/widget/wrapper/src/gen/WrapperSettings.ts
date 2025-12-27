@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/wrapperSettings#//WrapperSettings'})
-export class WrapperSettings{
+export class WrapperSettings {
 
   @Documentation("The optional title text to be displayed within the wrapper.")
   @Attribute() title?: string;
