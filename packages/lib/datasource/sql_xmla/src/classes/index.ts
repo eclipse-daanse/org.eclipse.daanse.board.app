@@ -59,7 +59,10 @@ export class SqlXmlaStore extends BaseDatasource {
       //   const req = await connection.fetch({ url: this.resourceUrl.value });
       //   const data = await req.json();
 
-      const rowset = mdxResponse.Body?.DiscoverResponse?.return?.[0]?.root?.row
+      let rowset = mdxResponse.Body?.DiscoverResponse?.return?.[0]?.root?.row
+      if (!rowset) {
+        rowset = mdxResponse.Body?.ExecuteResponse?.return?.root?.row
+      }
       // console.log(rowset);
       // console.log(mdxResponse);
       if (!rowset) return null
@@ -80,6 +83,53 @@ export class SqlXmlaStore extends BaseDatasource {
       console.warn('Invalid resource URL', e.name)
     }
     return response
+  }
+
+  async getTables(): Promise<any[]> {
+    if (!this.connectionRepository) {
+      throw new Error('ConnectionRepository is not provided to Store Classes')
+    }
+    try {
+      const connection = this.connectionRepository.getConnection(
+        this.connection,
+      ) as any
+
+      const api = await connection.getApi();
+      console.log('API:', api);
+
+      const tables = await api.getTables();
+      return tables;
+
+    } catch (e: any) {
+      console.log(e)
+      console.warn('Invalid resource URL', e.name)
+    }
+  }
+
+  async getCatalogs(): Promise<any[]> {
+    if (!this.connectionRepository) {
+      throw new Error('ConnectionRepository is not provided to Store Classes')
+    }
+    const conn = this.connectionRepository.getConnection(
+      this.connection,
+    ) as any
+
+    const api = await conn.getApi()
+    const { catalogs } = await api.getCatalogs()
+    return catalogs
+  }
+
+  async getColumns(): Promise<any[]> {
+    if (!this.connectionRepository) {
+      throw new Error('ConnectionRepository is not provided to Store Classes')
+    }
+    const conn = this.connectionRepository.getConnection(
+      this.connection,
+    ) as any
+
+    const api = await conn.getApi()
+    const { columns } = await api.getColumns()
+    return columns
   }
 
   async getOriginalData() {

@@ -18,10 +18,7 @@ interface IMonacoEditorProps {
     theme?: 'vs-dark' | 'vs-light' | 'hc-black';
     supportedLanguages?: string[];
     showToolbar?: boolean;
-    metadata: {
-        // connection: XmlaConnection;
-        // metadataStore: MetadataStore;
-    }
+    metadata: any;
     // supportedThemes?: string[];
     // editorOptions?: monaco.editor.IStandaloneEditorConstructionOptions;
 }
@@ -30,6 +27,7 @@ import * as monaco from 'monaco-editor';
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import "./autoCompletion";
 import { initMDXCompletionProvider } from "./autoCompletion";
+import { setupSqlIntellisense } from './autoComplete/sql';
 
 const editorContainer = ref<HTMLDivElement | null>(null);
 let editorInstance: monaco.editor.IStandaloneCodeEditor | null = null;
@@ -123,6 +121,12 @@ const initEditor = async () => {
 
 };
 
+watch(() => props.metadata, async (newMetadata) => {
+    console.log('Metadata changed:', newMetadata);
+    if (props.supportedLanguages.indexOf('sql') !== -1) {
+        setupSqlIntellisense(monaco, newMetadata);
+    }
+}, { deep: true });
 
 const disposeEditor = () => {
     if (editorInstance) {
@@ -169,7 +173,7 @@ watch(() => props.modelValue, (newValue) => {
                 <!-- <va-select class="ml-3" v-model="selectedTheme" label="Theme:" :options="supportedThemes" /> -->
             </div>
             <slot name="actions">
-                <!-- Additional action buttons can be inserted here --> 
+                <!-- Additional action buttons can be inserted here -->
             </slot>
         </div>
         <div ref="editorContainer" class="monaco-editor mt-2"></div>

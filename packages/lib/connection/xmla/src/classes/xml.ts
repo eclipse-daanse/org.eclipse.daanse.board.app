@@ -121,6 +121,63 @@ class XMLAApi {
     }
   }
 
+
+  public async getTables(): Promise<{ tables: any[] }> {
+    const tablesResponse = await this.SOAPClient?.DiscoverAsync({
+      Headers: {
+        Session: {
+          __attrs: {
+            xmlns: 'urn:schemas-microsoft-com:xml-analysis',
+            SessionId: this.sessionId,
+          },
+        },
+      },
+      RequestType: 'DBSCHEMA_TABLES',
+      Restrictions: {
+        RestrictionList: {},
+      },
+      Properties: {
+        PropertyList: {},
+      },
+    })
+
+    const tables = this.rowToArray(
+      tablesResponse.Body.DiscoverResponse.return[0].root.row,
+    )
+
+    return {
+      tables,
+    }
+  }
+
+  public async getColumns(): Promise<{ columns: any[] }> {
+    const columnsResponse = await this.SOAPClient?.DiscoverAsync({
+      Headers: {
+        Session: {
+          __attrs: {
+            xmlns: 'urn:schemas-microsoft-com:xml-analysis',
+            SessionId: this.sessionId,
+          },
+        },
+      },
+      RequestType: 'DBSCHEMA_COLUMNS',
+      Restrictions: {
+        RestrictionList: {},
+      },
+      Properties: {
+        PropertyList: {},
+      },
+    })
+
+    const columns = this.rowToArray(
+      columnsResponse.Body.DiscoverResponse.return[0].root.row,
+    )
+
+    return {
+      columns,
+    }
+  }
+
   public async getCubes(
     catalogName: string,
   ): Promise<{ cubes: MDSchemaCube[] }> {
