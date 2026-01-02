@@ -48,17 +48,18 @@ function runGenerator(modelPath) {
     const genPath =  path.join(ecoreDir, '..', 'src', 'gen');
 
     console.log(`Generating for: ${modelPath}`);
-    console.log(`Output to: ${path.join(ecoreDir, '..', 'src', 'gen')}`);
+    console.log(`Output to: ${genPath}`);
+
+    // Ensure gen directory exists (but don't delete - clearing is done per package)
     try {
-       fs.rmSync(path.join(ecoreDir, '..', 'src', 'gen'), { recursive: true, force: true })
-       fs.mkdirSync(path.join(ecoreDir, '..', 'src', 'gen'), { recursive: true })
-    }catch (err){
+       fs.mkdirSync(genPath, { recursive: true })
+    } catch (err) {
       console.log(err);
     }
 
     const child = spawn('node', [GENERATOR_SCRIPT, '-m', modelPath, '-g', genPath,'--no_factories' , '-a' ,'org.eclipse.daanse.board.app.lib.annotations','-i'], {
       stdio: 'inherit',
-
+      cwd: __dirname,
     });
 
     child.on('close', (code) => {
@@ -82,6 +83,39 @@ function runGenerator(modelPath) {
   });
 }
 
+/**
+ * Group ecore files by their target gen path (package)
+ */
+function groupByGenPath(ecoreFiles) {
+  const groups = new Map();
+
+  for (const ecoreFile of ecoreFiles) {
+    const ecoreDir = path.dirname(ecoreFile);
+    const genPath = path.join(ecoreDir, '..', 'src', 'gen');
+    const normalizedGenPath = path.resolve(genPath);
+
+    if (!groups.has(normalizedGenPath)) {
+      groups.set(normalizedGenPath, []);
+    }
+    groups.get(normalizedGenPath).push(ecoreFile);
+  }
+
+  return groups;
+}
+
+/**
+ * Clear a gen directory before generating
+ */
+function clearGenDirectory(genPath) {
+  try {
+    fs.rmSync(genPath, { recursive: true, force: true });
+    fs.mkdirSync(genPath, { recursive: true });
+    console.log(`🗑️  Cleared: ${genPath}`);
+  } catch (err) {
+    console.log(`Could not clear ${genPath}:`, err.message);
+  }
+}
+
 async function main() {
   const packagesPath = path.resolve(__dirname, PACKAGES_DIR);
 
@@ -102,17 +136,30 @@ async function main() {
   ecoreFiles.forEach(file => console.log(`  - ${file}`));
   console.log('');
 
+  // Group ecore files by target gen path to avoid clearing files from same package
+  const groupedFiles = groupByGenPath(ecoreFiles);
+  console.log(`Grouped into ${groupedFiles.size} package(s):\n`);
+
   let successCount = 0;
   let failureCount = 0;
 
-  for (const ecoreFile of ecoreFiles) {
-    try {
-      await runGenerator(ecoreFile);
-      successCount++;
-    } catch (error) {
-      failureCount++;
+  for (const [genPath, files] of groupedFiles) {
+    console.log(`📦 Package: ${genPath}`);
+    console.log(`   Models: ${files.length}`);
+
+    // Clear gen directory once per package
+    clearGenDirectory(genPath);
+
+    // Generate all ecore files for this package
+    for (const ecoreFile of files) {
+      try {
+        await runGenerator(ecoreFile);
+        successCount++;
+      } catch (error) {
+        failureCount++;
+      }
     }
-    console.log(''); // Empty line between generations
+    console.log(''); // Empty line between packages
   }
 
   console.log('='.repeat(50));
@@ -120,6 +167,7 @@ async function main() {
   console.log(`  ✓ Successful: ${successCount}`);
   console.log(`  ✗ Failed: ${failureCount}`);
   console.log(`  📁 Total: ${ecoreFiles.length}`);
+  console.log(`  📦 Packages: ${groupedFiles.size}`);
 
   if (failureCount > 0) {
     process.exit(1);

@@ -15,7 +15,8 @@ import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { type TinyEmitter } from 'tiny-emitter'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { inject, injectable } from 'inversify'
-// Import moved to method level to avoid circular dependency
+import { SystemVariableActions } from '../gen/SystemVariableActions'
+import { PageVariableActions } from '../gen/PageVariableActions'
 
 export interface VariableConfig {
   [key: string]: any
@@ -26,7 +27,7 @@ export interface VariableDeffinition {
   Settings: any
 }
 @injectable()
-export class VariableRepository {
+export class VariableRepository implements SystemVariableActions, PageVariableActions {
   private availableVariables: Map<string, any> = new Map();
   private availableVariablesByScope: Map<string, Map<string, any>> = new Map(); // scope -> name -> variable
   private availableVariablesTypes: Map<string, VariableDeffinition> = new Map();
@@ -277,5 +278,40 @@ export class VariableRepository {
     }
     // Fall back to global variable
     return this.getVariable(name);
+  }
+
+  /**
+   * Sets or updates a global variable (Action method)
+   */
+  setGlobalVariable(variableName: string, value: any): void {
+    const existingVar = this.getVariable(variableName);
+
+    if (existingVar) {
+      existingVar.value = value;
+    } else {
+      this.registerVariable(variableName, 'constant', {
+        value: value,
+        scope: 'global'
+      });
+    }
+  }
+
+  /**
+   * Sets or updates a page-scoped variable (Action method)
+   */
+  setPageVariable(variableName: string, value: any, pageId?: string): void {
+    const existingVar = this.getVariableWithContext(variableName, pageId);
+
+    if (existingVar && typeof existingVar.set === 'function') {
+      existingVar.set(value);
+    } else if (existingVar) {
+      existingVar.value = value;
+    } else {
+      this.registerVariable(variableName, 'constant', {
+        value: value,
+        scope: 'page',
+        pageId: pageId
+      });
+    }
   }
 }

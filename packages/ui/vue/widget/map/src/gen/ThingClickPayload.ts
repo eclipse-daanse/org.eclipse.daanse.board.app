@@ -31,21 +31,21 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 export class ThingClickPayload extends Payload {
 
   @Documentation("Unique identifier of the Thing.")
-  @Attribute() id?: string = undefined;
+  @Attribute() id?: string;
 
   @Documentation("Name of the Thing.")
-  @Attribute() name?: string = undefined;
+  @Attribute() name?: string;
 
   @Documentation("Description of the Thing.")
-  @Attribute() description?: string = undefined;
+  @Attribute() description?: string;
 
   @Documentation("Custom properties of the Thing (mapped from Record<string, any>).")
-  @Attribute() properties?: any = undefined;
+  @Attribute() properties?: any;
 
   @Documentation("Location geometry (GeoJSON) of the Thing.")
-  @Attribute() location?: any = undefined;
+  @Attribute() location?: any;
 
   @Documentation("ID of the renderer that triggered this event.")
-  @Attribute() rendererId?: string = undefined;
+  @Attribute() rendererId?: string;
   @Reference('DatastreamSummary') datastreams: Array<DatastreamSummary> = [];
 }

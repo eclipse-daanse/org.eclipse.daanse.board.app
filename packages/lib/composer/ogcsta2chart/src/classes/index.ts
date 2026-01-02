@@ -11,10 +11,21 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import {
+  BaseDatasource,
+  IBaseConnectionConfiguration
+} from 'org.eclipse.daanse.board.app.lib.datasource.base'
+import {
+  identifier,
+  DatasourceRepository
+} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
+import {
+  EventActionsRegistry,
+  EVENT_ACTIONS_REGISTRY
+} from 'org.eclipse.daanse.board.app.lib.events'
+import { OGCSTAToChartComposerActions } from '../gen/OGCSTAToChartComposerActions'
 
 export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[]
@@ -25,14 +36,46 @@ export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConf
   uid: string
 }
 
-export class OGCSTAToChartComposer extends BaseDatasource {
-  destroy(): void {
-    console.log("Destroying OGCSTAToChartComposer")
-  }
+export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToChartComposerActions {
 
+  private instanceId: string = ''
+  private configuration!: IOGCSTAToChartComposerConfiguration  // Store config reference
   private connectedDatasources: string[] = []
   private thingIds: (string | number)[] = []
   private datastreams: DatastreamSelection[] = []
+  private allThingsCache: any[] = []  // Cache all things for name/id lookup
+
+  destroy(): void {
+    console.log(`Destroying OGCSTAToChartComposer: ${this.instanceId}`)
+
+    // Unregister instance from actions registry
+    if (this.instanceId) {
+      try {
+        if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
+          const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+          // Use unregisterInstance to remove from widgetInstances map
+          actionsRegistry.unregisterInstance(this.instanceId)
+          console.log(`📝 Unregistered OGCSTAToChartComposer instance: ${this.instanceId}`)
+        }
+      } catch (error) {
+        console.warn('Could not unregister composer instance:', error)
+      }
+    }
+  }
+
+  /**
+   * Get the instance ID for this composer
+   */
+  getInstanceId(): string {
+    return this.instanceId
+  }
+
+  /**
+   * Set the instance ID (called by factory)
+   */
+  setInstanceId(id: string): void {
+    this.instanceId = id
+  }
   private isUpdating: boolean = false
   private pendingUpdate: boolean = false
   private cachedData: any = null
@@ -43,6 +86,9 @@ export class OGCSTAToChartComposer extends BaseDatasource {
 
   init(configuration: IOGCSTAToChartComposerConfiguration) {
     super.init(configuration)
+
+    // Store reference to configuration for UI sync
+    this.configuration = configuration
 
     this.connectedDatasources = configuration.connectedDatasources
     this.thingIds = configuration.thingIds || []
@@ -225,7 +271,254 @@ export class OGCSTAToChartComposer extends BaseDatasource {
   }
 
   callEvent(event: string, params: any) {
+    // Handle switch thing events
+    if (event === 'switchThingByName' && params?.name) {
+      this.switchThingByName(params.name)
+      return
+    }
+    if (event === 'switchThingById' && params?.id) {
+      this.switchThingById(params.id)
+      return
+    }
     console.warn(`Event "${event}" is not available for OGCSTAToChartComposer`, params)
+  }
+
+  /**
+   * Switch to a different Thing by its name
+   * @param name - The name of the Thing to switch to
+   */
+  async switchThingByName(name: string): Promise<void> {
+    console.log(`🔄 OGCSTAToChartComposer: Switching thing by name: "${name}"`)
+
+    const thing = await this.findThingByName(name)
+    if (thing) {
+      const thingId = thing['@iot.id'] || thing.iotId
+      await this.switchToThing(thingId, thing)
+    } else {
+      console.warn(`⚠️ Thing with name "${name}" not found`)
+    }
+  }
+
+  /**
+   * Switch to a different Thing by its ID
+   * @param id - The ID of the Thing to switch to
+   */
+  async switchThingById(id: string): Promise<void> {
+    console.log(`🔄 OGCSTAToChartComposer: Switching thing by id: "${id}"`)
+
+    const thing = await this.findThingById(id)
+    if (thing) {
+      await this.switchToThing(id, thing)
+    } else {
+      console.warn(`⚠️ Thing with id "${id}" not found`)
+    }
+  }
+
+  /**
+   * Find a Thing by its name from connected datasources
+   */
+  private async findThingByName(name: string): Promise<any | null> {
+    await this.refreshThingsCache()
+
+    const thing = this.allThingsCache.find((t: any) => {
+      const thingName = t.name || t.Name
+      return thingName === name ||
+             thingName?.toLowerCase() === name.toLowerCase()
+    })
+
+    return thing || null
+  }
+
+  /**
+   * Find a Thing by its ID from connected datasources
+   */
+  private async findThingById(id: string): Promise<any | null> {
+    await this.refreshThingsCache()
+
+    const thing = this.allThingsCache.find((t: any) => {
+      const thingId = t['@iot.id'] || t.iotId
+      return thingId == id  // Use == for string/number comparison
+    })
+
+    return thing || null
+  }
+
+  /**
+   * Refresh the cache of all things from connected datasources
+   */
+  private async refreshThingsCache(): Promise<void> {
+    if (this.allThingsCache.length > 0) {
+      return  // Cache is already populated
+    }
+
+    const datasourceRepository = container.get(identifier) as DatasourceRepository
+
+    for (const datasourceId of this.connectedDatasources) {
+      if (!datasourceId) continue
+
+      try {
+        const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
+        const resultMap = (datasourceInstance as any).resultMap
+
+        if (resultMap?.things && resultMap.things.length > 0) {
+          this.allThingsCache.push(...resultMap.things)
+        } else {
+          // Try to load things directly
+          const data = await datasourceInstance.getData('OGCSTAData', {
+            isolatedRequest: true,
+            filter: {
+              things: {
+                includeDatastreams: true,
+                includeLocations: false
+              }
+            }
+          })
+
+          if (data?.things) {
+            this.allThingsCache.push(...data.things)
+          }
+        }
+      } catch (error) {
+        console.error(`Error loading things from datasource ${datasourceId}:`, error)
+      }
+    }
+
+    console.log(`📦 Cached ${this.allThingsCache.length} things for lookup`)
+  }
+
+  /**
+   * Switch to a specific thing (without changing datastreams)
+   * Use addDatastreamsByName or similar actions to configure datastreams separately
+   */
+  private async switchToThing(thingId: string | number, thing: any): Promise<void> {
+    console.log(`🔄 Switching to thing: ${thingId} (${thing.name || 'unnamed'})`)
+
+    // Update thingIds
+    this.thingIds = [thingId]
+
+    // Sync configuration object for UI updates (reactive)
+    if (this.configuration) {
+      // Update thingIds array using splice to trigger Vue reactivity
+      this.configuration.thingIds.splice(0, this.configuration.thingIds.length, thingId)
+    }
+
+    // Clear cached data to force refresh
+    this.cachedData = null
+
+    // Notify subscribers about the change
+    this.notify()
+  }
+
+  /**
+   * Add datastreams by name pattern
+   * @param name - The name (or part of name) of datastreams to add
+   */
+  async addDatastreamsByName(name: string): Promise<void> {
+    console.log(`➕ OGCSTAToChartComposer: Adding datastreams by name: "${name}"`)
+
+    await this.refreshThingsCache()
+
+    // Find datastreams matching the name from the current thing(s)
+    const matchingDatastreams: DatastreamSelection[] = []
+
+    for (const thing of this.allThingsCache) {
+      const thingId = thing['@iot.id'] || thing.iotId
+      // Only search in currently selected things
+      if (!this.thingIds.includes(thingId) && !this.thingIds.includes(String(thingId))) {
+        continue
+      }
+
+      if (thing.datastreams) {
+        for (const ds of thing.datastreams) {
+          const dsName = ds.name || ''
+          const dsId = String(ds['@iot.id'] || ds.iotId)
+
+          // Match by exact name or partial name (case-insensitive)
+          if (dsName === name || dsName.toLowerCase().includes(name.toLowerCase())) {
+            // Check if not already added
+            const alreadyExists = this.datastreams.some(d => d.datastreamId === dsId)
+            if (!alreadyExists) {
+              matchingDatastreams.push({
+                datastreamId: dsId,
+                label: dsName,
+                color: this.generateColor()
+              })
+            }
+          }
+        }
+      }
+    }
+
+    if (matchingDatastreams.length > 0) {
+      console.log(`✅ Found ${matchingDatastreams.length} matching datastream(s)`, matchingDatastreams)
+      this.datastreams.push(...matchingDatastreams)
+      console.log(`📊 Total datastreams now: ${this.datastreams.length}`, this.datastreams)
+
+      // Sync with configuration for UI reactivity
+      if (this.configuration) {
+        this.configuration.datastreams.splice(
+          this.configuration.datastreams.length,
+          0,
+          ...matchingDatastreams
+        )
+        console.log(`📝 Config datastreams synced: ${this.configuration.datastreams.length}`)
+      } else {
+        console.warn(`⚠️ No configuration reference!`)
+      }
+
+      this.cachedData = null
+      console.log(`🔔 Calling notify() on instance ${this.instanceId}`)
+      this.notify()
+    } else {
+      console.warn(`⚠️ No datastreams matching "${name}" found in instance ${this.instanceId}`)
+    }
+  }
+
+  /**
+   * Remove all datastreams from the composer
+   */
+  removeAllDatastreams(): void {
+    console.log(`🗑️ OGCSTAToChartComposer: Removing all datastreams`)
+
+    this.datastreams = []
+
+    // Sync with configuration for UI reactivity
+    if (this.configuration) {
+      this.configuration.datastreams.splice(0, this.configuration.datastreams.length)
+    }
+
+    this.cachedData = null
+    this.notify()
+  }
+
+  /**
+   * Remove a specific datastream by name
+   * @param name - The name of the datastream to remove
+   */
+  removeDatastreamByName(name: string): void {
+    console.log(`🗑️ OGCSTAToChartComposer: Removing datastream by name: "${name}"`)
+
+    const initialLength = this.datastreams.length
+    this.datastreams = this.datastreams.filter(ds => {
+      const dsLabel = ds.label || ''
+      return dsLabel !== name && !dsLabel.toLowerCase().includes(name.toLowerCase())
+    })
+
+    const removedCount = initialLength - this.datastreams.length
+
+    if (removedCount > 0) {
+      console.log(`✅ Removed ${removedCount} datastream(s)`)
+
+      // Sync with configuration for UI reactivity
+      if (this.configuration) {
+        this.configuration.datastreams.splice(0, this.configuration.datastreams.length, ...this.datastreams)
+      }
+
+      this.cachedData = null
+      this.notify()
+    } else {
+      console.warn(`⚠️ No datastreams matching "${name}" found to remove`)
+    }
   }
 
   private composeChartData(ogcStaDataArray: any[]): OGCSTAToChartData {

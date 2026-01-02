@@ -8,6 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 
 */
-/* File: HorizontalAlign.ts */
-export enum HorizontalAlign {
-  LEFT = "left",  CENTER = "center",  RIGHT = "right"}
+/* File: Comparator.ts */
+export enum Comparator {
+  eq = "==",  neq = "!=",  lt = "<",  lte = "<=",  gt = ">",  gte = ">="}

@@ -26,38 +26,19 @@ Contributors: Smart City Jena
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/chartsettings#//ChartSettings'})
-export class ChartSettings {
-
-  @Documentation("Per-series configuration (chart type, x-axis assignment, styling)")
-  @Attribute() seriesSettings: Array<any> = [];
+@ModelClass({type:'http://www.example.org/chartsettings#//SeriesSettings'})
+export class SeriesSettings {
+  @Reference('VariableWrapper') seriesIndex: VariableWrapper<number> = new VariableWrapper<number>();
+  @Reference('VariableWrapper') label: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') chartType: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') xAxisId: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') yAxisId: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();
   @Reference('VariableWrapper') borderDash: VariableWrapper<any> = new VariableWrapper<any>();
-  @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') fill: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') showPoints: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') pointColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') pointSize: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') showHorizontalGrid: VariableWrapper<boolean> = new VariableWrapper<boolean>();
-  @Reference('VariableWrapper') horizontalGridColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') horizontalGridWidth: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') showVerticalGrid: VariableWrapper<boolean> = new VariableWrapper<boolean>();
-  @Reference('VariableWrapper') verticalGridColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') verticalGridWidth: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') annotationsEditMode: VariableWrapper<boolean> = new VariableWrapper<boolean>();
-
-  @Documentation("Horizontal reference lines (Y-axis values)")
-  @Attribute() horizontalLines: Array<any> = [];
-
-  @Documentation("Vertical reference lines (X-axis values)")
-  @Attribute() verticalLines: Array<any> = [];
-
-  @Documentation("Horizontal boxes/areas (Y-axis ranges)")
-  @Attribute() horizontalBoxes: Array<any> = [];
-
-  @Documentation("Vertical boxes/areas (X-axis ranges)")
-  @Attribute() verticalBoxes: Array<any> = [];
-  @Reference('VariableWrapper') dateDisplayFormat: VariableWrapper<string> = new VariableWrapper<string>();
 }

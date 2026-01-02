@@ -16,7 +16,6 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import { VariableRepository } from '../classes/VariableRepository';
 import VariableActionsModelContent from '../../model/VariableActions.ecore?raw';
-import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
 
 const VariableRepositoryIdentifier = Symbol.for('VariableRepository');
 
@@ -29,57 +28,22 @@ export function registerVariableActions() {
   const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
   const variableRepository = container.get<VariableRepository>(VariableRepositoryIdentifier);
 
-  // Register Variable Actions metadata from Ecore model
-  // This registers the action signatures so the UI knows about parameters
-  actionsRegistry.registerWidgetTypeFromEcoreString('SystemVariableActions', VariableActionsModelContent);
-  actionsRegistry.registerWidgetTypeFromEcoreString('PageVariableActions', VariableActionsModelContent);
-
-  // setGlobalVariable Action - sets or updates a global variable
-  actionsRegistry.register(
+  // Register Variable Actions metadata from Ecore model with correct context
+  actionsRegistry.registerActionsFromEcoreString(
+    'SystemVariableActions',
+    VariableActionsModelContent,
     'system',
-    'setGlobalVariable',
-    async (variableName: string, value: any) => {
-      log('🌐 Setting global variable: %s = %o', variableName, value);
-
-      // Get existing variable
-      const existingVar:Variable = variableRepository.getVariable(variableName);
-
-      if (existingVar) {
-        // Update existing variable value
-        existingVar.value=value;
-      } else {
-        // Create new constant variable if it doesn't exist
-        variableRepository.registerVariable(variableName, 'constant', {
-          value: value,
-          scope: 'global'
-        });
-      }
-    }
+    'VariableActions.ecore'
   );
-
-  // setPageVariable Action - sets or updates a page-scoped variable
-  actionsRegistry.register(
+  actionsRegistry.registerActionsFromEcoreString(
+    'PageVariableActions',
+    VariableActionsModelContent,
     'page',
-    'setPageVariable',
-    async (variableName: string, value: any, pageId?: string) => {
-      log('📄 Setting page variable: %s = %o (pageId: %s)', variableName, value, pageId);
-
-      // Get existing variable with page context
-      const existingVar = variableRepository.getVariableWithContext(variableName, pageId);
-
-      if (existingVar && typeof existingVar.set === 'function') {
-        // Update existing variable value
-        existingVar.set(value);
-      } else {
-        // Create new page-scoped constant variable
-        variableRepository.registerVariable(variableName, 'constant', {
-          value: value,
-          scope: 'page',
-          pageId: pageId
-        });
-      }
-    }
+    'VariableActions.ecore'
   );
 
-  log('✅ Variable actions registered');
+  // Register VariableRepository as instance for action execution
+  actionsRegistry.registerInstance('VariableRepository', variableRepository);
+
+  log('Variable actions registered');
 }

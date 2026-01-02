@@ -14,7 +14,8 @@ Contributors:
 <script lang="ts" setup>
 import { inject, ref, onMounted, computed } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
-import { ChartSettings, SeriesSettings } from './gen/ChartSettings'
+import { ChartSettings } from './gen/ChartSettings'
+import { SeriesSettings } from './gen/SeriesSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const opened = ref({
