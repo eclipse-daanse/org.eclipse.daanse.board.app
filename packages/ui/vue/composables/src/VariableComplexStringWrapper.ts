@@ -16,13 +16,13 @@ import { useVariableRepository } from './useVariableRepository'
 
 const TYPE = 'VARIABLECOMPLEXSTRINGWRAPPER'
 
-class VariableComplexStringWrapper {
+class VariableComplexStringWrapper<T = string> {
   public readonly type: string = TYPE;
   public original: Ref<string> = ref('');
 
   public value: ReturnType<typeof computed>;
 
-  constructor(initValue: string) {
+  constructor(initValue: string = '') {
     const { calculateValue,wrapParameters } = useVariableRepository();
     this.original.value = initValue;
 

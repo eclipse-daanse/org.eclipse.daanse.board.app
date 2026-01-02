@@ -63,12 +63,6 @@
                 <details key="documentation" value="Optional array of additional datasource identifiers for multi-datasource support."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceIds" upperBound="-1"
-                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Optional list of datasource identifiers for multi-datasource support."/>
-            </eAnnotations>
-        </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseMapUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
                              defaultValueLiteral="https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -199,12 +193,6 @@
                              lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Optional opacity level for the layer (0.0 to 1.0)."/>
-            </eAnnotations>
-        </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasourceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-                             lowerBound="0">
-            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-                <details key="documentation" value="Optional datasource ID for this layer (for multi-datasource support)."/>
             </eAnnotations>
         </eStructuralFeatures>
     </eClassifiers>
@@ -559,32 +547,32 @@
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Enumeration for comparison operators used in conditions."/>
         </eAnnotations>
-        <eLiterals name="equals" literal="eq">
+        <eLiterals name="eq" literal="eq">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Equality operator (==)."/>
             </eAnnotations>
         </eLiterals>
-        <eLiterals name="lessThen" value="1" literal="lt">
+        <eLiterals name="lt" value="1" literal="lt">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Less than operator (&lt;)."/>
             </eAnnotations>
         </eLiterals>
-        <eLiterals name="greaterThen" value="2" literal="gt">
+        <eLiterals name="gt" value="2" literal="gt">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Greater than operator (>)."/>
             </eAnnotations>
         </eLiterals>
-        <eLiterals name="lessThenEquals" value="3" literal="lte">
+        <eLiterals name="lte" value="3" literal="lte">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Less than or equals operator (<=)."/>
             </eAnnotations>
         </eLiterals>
-        <eLiterals name="greaterThenEquals" value="4" literal="gte">
+        <eLiterals name="gte" value="4" literal="gte">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Greater than or equals operator (>=)."/>
             </eAnnotations>
         </eLiterals>
-        <eLiterals name="notEQuals" value="5" literal="neq">
+        <eLiterals name="neq" value="5" literal="neq">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Not equals operator (!=)."/>
             </eAnnotations>

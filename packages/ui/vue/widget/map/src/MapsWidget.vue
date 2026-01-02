@@ -887,17 +887,17 @@ defineExpose<MapWidgetInterface>(api)
 
 // Register widget instance with EventActionsRegistry
 onMounted(() => {
-  actionsRegistry.registerWidgetInstance(widgetId.value, api)
-  logMap('Registered widget instance with EventActionsRegistry:', widgetId.value)
+  actionsRegistry.registerInstance(widgetId.value, api)
+  logMap('Registered instance with EventActionsRegistry:', widgetId.value)
 })
 
 // Cleanup on unmount
 onUnmounted(() => {
   isUnmounting = true
 
-  // Unregister widget instance from EventActionsRegistry
-  actionsRegistry.unregisterWidgetInstance(widgetId.value)
-  logMap('Unregistered widget instance from EventActionsRegistry:', widgetId.value)
+  // Unregister instance from EventActionsRegistry
+  actionsRegistry.unregisterInstance(widgetId.value)
+  logMap('Unregistered instance from EventActionsRegistry:', widgetId.value)
 
   // Clear all active tasks and their intervals DIRECTLY
   // We use our local task references to stop the intervals

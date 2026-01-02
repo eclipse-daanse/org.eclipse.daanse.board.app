@@ -1,7 +1,18 @@
 {
-  "extends": "../../../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "target": "ESNext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "declaration": true,
+    "outDir": "./dist/types",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
     "skipLibCheck": true
   },
   "include": ["src"]

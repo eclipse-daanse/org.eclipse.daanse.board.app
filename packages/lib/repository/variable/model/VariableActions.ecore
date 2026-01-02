@@ -16,7 +16,7 @@
     nsPrefix="variableactions">
 
   <!-- Reference to Events package -->
-  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
+  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="System-level variable actions"/>
     </eAnnotations>
@@ -41,7 +41,7 @@
     </eOperations>
   </eClassifiers>
 
-  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">
+  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Page-level variable actions"/>
     </eAnnotations>

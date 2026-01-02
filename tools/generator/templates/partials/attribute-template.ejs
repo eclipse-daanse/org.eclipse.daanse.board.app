@@ -52,7 +52,7 @@ _%>
   <%_ if (isArray) { _%>
   @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
   <%_ } else { _%>
-  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).name -%>;
   <%_ } _%>
 <%_ } else { _%>
   <%_ if (attribute.defaultValueLiteral) { _%>

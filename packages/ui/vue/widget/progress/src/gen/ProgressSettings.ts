@@ -67,8 +67,8 @@ export class ProgressSettings {
   @Attribute() borderRadius: string = "0px";
 
   @Documentation("The horizontal alignment of the value text.")
-  @Enum('HorizontalAlign') valueAlign: HorizontalAlign = HorizontalAlign.left;
+  @Enum('HorizontalAlign') valueAlign: HorizontalAlign = HorizontalAlign.LEFT;
 
   @Documentation("The vertical alignment of the value text.")
-  @Enum('VerticalAlign') valueJustify: VerticalAlign = VerticalAlign.top;
+  @Enum('VerticalAlign') valueJustify: VerticalAlign = VerticalAlign.TOP;
 }

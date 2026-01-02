@@ -27,7 +27,19 @@ export interface PayloadToArgMapping {
 }
 
 /**
+ * Definition einer einzelnen Action
+ */
+export interface ActionDefinition {
+  targetContext: EventActionContext;
+  targetContextId?: string;
+  actionName: string;
+  actionArgs?: any[];  // Statische Args
+  payloadMapping?: PayloadToArgMapping[];  // Dynamisches Mapping von Payload zu Args
+}
+
+/**
  * Event-Action-Mapping mit Conditions
+ * Unterstützt einzelne Action (actionName) oder mehrere Actions (actions Array)
  */
 export interface EventActionMapping {
   id: string;
@@ -35,11 +47,14 @@ export interface EventActionMapping {
   contextId?: string;
   eventType: string;
   conditions?: Condition[];
-  targetContext: EventActionContext;
+  // Single action (legacy/simple case)
+  targetContext?: EventActionContext;
   targetContextId?: string;
-  actionName: string;
+  actionName?: string;
   actionArgs?: any[];  // Statische Args
   payloadMapping?: PayloadToArgMapping[];  // Dynamisches Mapping von Payload zu Args
+  // Multiple actions (new)
+  actions?: ActionDefinition[];
 }
 
 /**
@@ -194,13 +209,13 @@ export class EventManager {
   /**
    * Baut die Action Arguments basierend auf statischen Args und Payload-Mapping
    */
-  private buildActionArgs(mapping: EventActionMapping, payload: any): any[] {
+  private buildActionArgs(action: ActionDefinition, payload: any): any[] {
     // Start mit statischen Args oder leerem Array
-    const args: any[] = [...(mapping.actionArgs || [])];
+    const args: any[] = [...(action.actionArgs || [])];
 
     // Wende Payload-Mappings an
-    if (mapping.payloadMapping && mapping.payloadMapping.length > 0) {
-      for (const pm of mapping.payloadMapping) {
+    if (action.payloadMapping && action.payloadMapping.length > 0) {
+      for (const pm of action.payloadMapping) {
         const value = this.getNestedProperty(payload, pm.payloadPath);
         args[pm.argIndex] = value;
         log('  Mapped payload.%s -> arg[%d] = %o', pm.payloadPath, pm.argIndex, value);
@@ -208,6 +223,52 @@ export class EventManager {
     }
 
     return args;
+  }
+
+  /**
+   * Führt eine einzelne Action aus
+   */
+  private async executeAction(action: ActionDefinition, payload: any): Promise<void> {
+    const args = this.buildActionArgs(action, payload);
+
+    if (!action.targetContextId) {
+      // Wenn keine targetContextId angegeben ist, führe auf allen Instanzen aus
+      log('No targetContextId specified, executing action on all instances');
+      await this.actionsRegistry.executeActionOnAll(
+        action.actionName,
+        ...args
+      );
+    } else {
+      // Führe auf spezifischer Instanz aus
+      await this.actionsRegistry.executeInstanceAction(
+        action.targetContextId,
+        action.actionName,
+        ...args
+      );
+    }
+  }
+
+  /**
+   * Konvertiert ein legacy Mapping (mit actionName) zu ActionDefinition Array
+   */
+  private getActionsFromMapping(mapping: EventActionMapping): ActionDefinition[] {
+    // Wenn actions Array existiert, nutze es
+    if (mapping.actions && mapping.actions.length > 0) {
+      return mapping.actions;
+    }
+
+    // Legacy: Konvertiere einzelne Action zu Array
+    if (mapping.actionName) {
+      return [{
+        targetContext: mapping.targetContext!,
+        targetContextId: mapping.targetContextId,
+        actionName: mapping.actionName,
+        actionArgs: mapping.actionArgs,
+        payloadMapping: mapping.payloadMapping
+      }];
+    }
+
+    return [];
   }
 
   /**
@@ -238,43 +299,27 @@ export class EventManager {
       try {
         // Prüfe Conditions
         if (!this.evaluateConditions(mapping.conditions || [], payload)) {
-          log('⏭️  Conditions not met for mapping %s, skipping action %s', mapping.id, mapping.actionName);
+          log('⏭️  Conditions not met for mapping %s, skipping', mapping.id);
           continue;
         }
 
-        log('▶️  Executing action %s for mapping %s', mapping.actionName, mapping.id);
+        // Hole alle Actions für dieses Mapping (unterstützt legacy single action und neue multiple actions)
+        const actions = this.getActionsFromMapping(mapping);
 
-        // Baue Arguments mit Payload-Mapping
-        const args = this.buildActionArgs(mapping, payload);
+        if (actions.length === 0) {
+          log('⚠️  No actions defined for mapping %s', mapping.id);
+          continue;
+        }
 
-        // Führe Action aus
-        if (mapping.targetContext === 'widget') {
-          // Widget Action
-          if (!mapping.targetContextId) {
-            // Wenn keine targetContextId angegeben ist, führe auf allen Widgets des Event-Typs aus
-            log('📢 No targetContextId specified, executing action on all widgets of this type');
-            await this.actionsRegistry.executeWidgetActionOnAll(
-              mapping.actionName,
-              ...args
-            );
-          } else {
-            // Führe auf spezifischem Widget aus
-            await this.actionsRegistry.executeWidgetAction(
-              mapping.targetContextId,
-              mapping.actionName,
-              ...args
-            );
-          }
-        } else {
-          // System/Page Action (über EventActionsRegistry)
-          await this.actionsRegistry.execute(
-            mapping.targetContext,
-            mapping.actionName,
-            ...args
-          );
+        log('▶️  Executing %d action(s) for mapping %s', actions.length, mapping.id);
+
+        // Führe alle Actions sequenziell aus
+        for (const action of actions) {
+          log('  → Action: %s on %s', action.actionName, action.targetContextId || 'all instances');
+          await this.executeAction(action, payload);
         }
       } catch (error) {
-        log('❌ Error executing action for mapping %s: %o', mapping.id, error);
+        log('❌ Error executing actions for mapping %s: %o', mapping.id, error);
       }
     }
   }
