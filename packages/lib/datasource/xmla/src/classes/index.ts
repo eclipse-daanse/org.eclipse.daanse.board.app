@@ -133,7 +133,9 @@ export class XmlaStore extends BaseDatasource {
       this.connection,
     ) as XmlaConnection
 
-    this.metadata = new MetadataStore(await connection.getApi())
+    this.metadata = new MetadataStore()
+    const api = await connection.getApi();
+    this.metadata.init(api);
     await this.metadata.loadMetadata(connection.catalogName, this.cube)
     this.metadataPromiseResolve?.(this.metadata);
 
