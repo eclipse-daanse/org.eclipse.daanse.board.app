@@ -25,8 +25,8 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//Layer'})
-export class Layer{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Layer'})
+export class Layer {
 
   @Documentation("Optional datasource identifier for this layer.")
   @Attribute() datasourceId?: string;

@@ -52,11 +52,11 @@ _%>
   <%_ if (isArray) { _%>
   @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: Array<<%- attribute.eType.name -%>> = [];
   <%_ } else { _%>
-  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).literal -%>;
+  @Enum('<%- attribute.eType.name -%>') <%- attribute.name -%>: <%- attribute.eType.name -%> = <%- attribute.eType.name -%>.<%- attribute.eType.eLiterals.get(0).name -%>;
   <%_ } _%>
 <%_ } else { _%>
   <%_ if (attribute.defaultValueLiteral) { _%>
-  @Attribute() <%- attribute.name -%>: <%- isArray ? `Array<${tsType}>` : tsType -%> = <% if (tsType === 'string') { %>"<%_ } %><%- attribute.defaultValueLiteral -%><%_ if (tsType === 'string') { %>"<%_ } %>;
+  @Attribute() <%- attribute.name -%>: <%- isArray ? `Array<${tsType}>` : tsType -%> = <% if (tsType === 'string' && !isArray) { %>"<%_ } %><%- attribute.defaultValueLiteral -%><%_ if (tsType === 'string' && !isArray) { %>"<%_ } %>;
   <%_ } else { _%>
     <%_ if (isArray) { _%>
   @Attribute() <%- attribute.name -%>: Array<<%- tsType -%>> = [];

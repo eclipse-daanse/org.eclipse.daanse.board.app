@@ -29,8 +29,8 @@ import {PointAndAreaSettings} from "./PointAndAreaSettings"
 import {ERefType} from "./ERefType"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//DSRenderer'})
-export class DSRenderer{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//DSRenderer'})
+export class DSRenderer {
 
   @Documentation("The name of the data stream renderer.")
   @Attribute() name?: string;

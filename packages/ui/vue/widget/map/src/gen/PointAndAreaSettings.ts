@@ -28,8 +28,8 @@ import {PointPin} from "./PointPin"
 import {MapProps} from "./MapProps"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//PointAndAreaSettings'})
-export class PointAndAreaSettings{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//PointAndAreaSettings'})
+export class PointAndAreaSettings {
 
   @Documentation("Optional flag to show or hide sub-elements.")
   @Attribute() show_SubElements?: boolean;

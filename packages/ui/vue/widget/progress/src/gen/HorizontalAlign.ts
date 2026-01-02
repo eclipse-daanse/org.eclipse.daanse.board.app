@@ -10,4 +10,4 @@ Contributors: Smart City Jena
 */
 /* File: HorizontalAlign.ts */
 export enum HorizontalAlign {
-  left = "left",  center = "center",  right = "right"}
+  LEFT = "left",  CENTER = "center",  RIGHT = "right"}

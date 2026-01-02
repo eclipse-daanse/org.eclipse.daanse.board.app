@@ -35,29 +35,55 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-<%# Generate imports for super types -%>
-<%_
-if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) {
-  Array.from(eClass.eSuperTypes).forEach(superType => {
-_%>
-import {<%- superType.name -%>} from "./<%- superType.name -%>"
-<%_
-  });
-}
-_%>
-<%# Generate imports for referenced types -%>
+<%# Generate imports for all types -%>
 <%_
   // Helper function to map package URI to import path
   function mapPackageToImportPath(packageURI, typeName) {
     if (packageURI === 'org.eclipse.daanse.board.app.ui.vue.composables') {
       return 'org.eclipse.daanse.board.app.ui.vue.composables';
     }
+    // Remove http:// or https:// prefix
+    let importPath = packageURI;
+    if (importPath.startsWith('http://')) {
+      importPath = importPath.substring(7);
+    } else if (importPath.startsWith('https://')) {
+      importPath = importPath.substring(8);
+    }
     // Add more package mappings here as needed
-    return packageURI;
+    return importPath;
   }
 
   const localTypes = new Set(); // Same package types
   const externalTypes = new Map(); // External package types: typeName -> importPath
+
+  // Process eSuperTypes for imports
+  if (eClass.eSuperTypes && eClass.eSuperTypes.size() > 0) {
+    for (let i = 0; i < eClass.eSuperTypes.size(); i++) {
+      const superType = eClass.eSuperTypes.get(i);
+
+      // Check if this is a proxy object
+      if (superType.eIsProxy && superType.eIsProxy()) {
+        const proxyURI = superType.eProxyURI();
+        if (proxyURI) {
+          const uriString = proxyURI.toString();
+          if (uriString.includes('#//')) {
+            const [packageURI, typeName] = uriString.split('#//');
+            const importPath = mapPackageToImportPath(packageURI, typeName);
+            externalTypes.set(typeName, importPath);
+          }
+        }
+      } else if (superType.name && superType.name !== eClass.name) {
+        if (superType.ePackage && superType.ePackage.nsURI === ePackage.nsURI) {
+          // Same package
+          localTypes.add(superType.name);
+        } else if (superType.ePackage) {
+          // External package
+          const importPath = mapPackageToImportPath(superType.ePackage.nsURI, superType.name);
+          externalTypes.set(superType.name, importPath);
+        }
+      }
+    }
+  }
 _%>
 <%_
 if (eClass.eStructuralFeatures) {
@@ -143,10 +169,80 @@ import {<%- enumName -%>} from "./<%- enumName -%>"
 <%_
 });
 _%>
+<%# Collect custom decorators from annotations -%>
+<%_
+const customDecorators = new Map(); // decoratorName -> importSource
+
+// Check class annotations
+if (eClass.eAnnotations && eClass.eAnnotations.size() > 0) {
+  for (let i = 0; i < eClass.eAnnotations.size(); i++) {
+    const annotation = eClass.eAnnotations.get(i);
+    const source = annotation.source;
+    if (source && source !== 'http://www.eclipse.org/emf/2002/GenModel') {
+      const decoratorName = source.split('/').pop();
+      const importSource = source.substring(0, source.lastIndexOf('/'));
+      customDecorators.set(decoratorName, importSource);
+    }
+  }
+}
+
+// Check operation annotations
+if (eClass.eOperations && eClass.eOperations.size() > 0) {
+  for (let i = 0; i < eClass.eOperations.size(); i++) {
+    const operation = eClass.eOperations.get(i);
+    if (operation.eAnnotations && operation.eAnnotations.size() > 0) {
+      for (let j = 0; j < operation.eAnnotations.size(); j++) {
+        const annotation = operation.eAnnotations.get(j);
+        const source = annotation.source;
+        if (source && source !== 'http://www.eclipse.org/emf/2002/GenModel') {
+          const decoratorName = source.split('/').pop();
+          const importSource = source.substring(0, source.lastIndexOf('/'));
+          customDecorators.set(decoratorName, importSource);
+        }
+      }
+    }
+  }
+}
+
+// Generate imports for custom decorators
+customDecorators.forEach((importSource, decoratorName) => {
+_%>
+import {<%- decoratorName -%>} from '<%- importSource -%>'
+<%_
+});
+_%>
 import {Documentation, Attribute, ModelClass, Reference, Enum} from <%_ if(!anopak){%>'./ModelAnnotations'<%_ }else{ %> '<%= anopak%>'<%_ } %>
 
 @ModelClass({type:'<%- ePackage.nsURI -%>#//<%- eClass.name -%>'})
-export class <%- eClass.name -%><%_ if (eClass.eTypeParameters && eClass.eTypeParameters.size() > 0) { _%><<%_ const typeParams = []; _%><%_ for (let i = 0; i < eClass.eTypeParameters.size(); i++) { _%><%_ typeParams.push(eClass.eTypeParameters.get(i).name); _%><%_ } _%><%- typeParams.join(', ') -%>><%_ } _%><%_ if (eClass.eSuperTypes && eClass.eSuperTypes.length > 0) { _%> extends <%- Array.from(eClass.eSuperTypes).map(s => s.name).join(', ') -%><%_ } _%> {
+export <%- eClass.isAbstract ? 'abstract ' : '' -%>class <%- eClass.name -%> <%_
+  if (eClass.eTypeParameters && eClass.eTypeParameters.size() > 0) {
+    const typeParams = [];
+    for (let i = 0; i < eClass.eTypeParameters.size(); i++) {
+      typeParams.push(eClass.eTypeParameters.get(i).name);
+    }
+_%><<%- typeParams.join(', ') -%>><%_ }
+  if (eClass.eSuperTypes && eClass.eSuperTypes.size() > 0) {
+    const superTypeNames = [];
+    for (let i = 0; i < eClass.eSuperTypes.size(); i++) {
+      const superType = eClass.eSuperTypes.get(i);
+      // Check if this is a proxy object
+      if (superType.eIsProxy && superType.eIsProxy()) {
+        const proxyURI = superType.eProxyURI();
+        if (proxyURI) {
+          const uriString = proxyURI.toString();
+          if (uriString.includes('#//')) {
+            const [packageURI, typeName] = uriString.split('#//');
+            superTypeNames.push(typeName);
+          }
+        }
+      } else if (superType.name) {
+        superTypeNames.push(superType.name);
+      }
+    }
+    if (superTypeNames.length > 0) {
+%> extends <%- superTypeNames.join(', ') %><%_ }
+  }
+%> {
 <%# Generate structural features -%>
 <%_
     if (eClass.eStructuralFeatures) {
@@ -155,6 +251,17 @@ _%>
 <%- include('feature-template', { feature: feature, instances }) -%>
     <%_
       });
+    }
+    _%>
+<%# Generate operations -%>
+<%_
+    if (eClass.eOperations && eClass.eOperations.size() > 0) {
+      for (let i = 0; i < eClass.eOperations.size(); i++) {
+        const operation = eClass.eOperations.get(i);
+_%>
+  <%- include('operation-template', { operation: operation }) -%>
+<%_
+      }
     }
     _%>
 }

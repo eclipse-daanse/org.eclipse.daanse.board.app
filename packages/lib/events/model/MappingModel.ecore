@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2024 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="EventMapping"
+                nsURI="http://org.eclipse.daanse.board.app.lib.events.mapping" nsPrefix="EventMapping">
+
+    <!-- EventActionContext Enum -->
+    <eClassifiers xsi:type="ecore:EEnum" name="EventActionContext">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Defines the context scope for events and actions."/>
+        </eAnnotations>
+        <eLiterals name="system" value="0" literal="system"/>
+        <eLiterals name="page" value="1" literal="page"/>
+        <eLiterals name="widget" value="2" literal="widget"/>
+    </eClassifiers>
+
+    <!-- Comparator Enum -->
+    <eClassifiers xsi:type="ecore:EEnum" name="Comparator">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Comparison operators for conditions."/>
+        </eAnnotations>
+        <eLiterals name="eq" value="0" literal="=="/>
+        <eLiterals name="neq" value="1" literal="!="/>
+        <eLiterals name="lt" value="2" literal="&lt;"/>
+        <eLiterals name="lte" value="3" literal="&lt;="/>
+        <eLiterals name="gt" value="4" literal=">"/>
+        <eLiterals name="gte" value="5" literal=">="/>
+    </eClassifiers>
+
+    <!-- Condition Class -->
+    <eClassifiers xsi:type="ecore:EClass" name="Condition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents a condition that must be met for an action to execute."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="prop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Property name from the event payload to evaluate."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="comparator" eType="#//Comparator">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Comparison operator to use."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Value to compare against."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <!-- PayloadMapping Class -->
+    <eClassifiers xsi:type="ecore:EClass" name="PayloadMapping">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Maps a property from the event payload to a function argument."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="payloadPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Path to the property in the event payload."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="argIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Index of the function argument to map to."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+    <!-- EventActionMapping Class -->
+    <eClassifiers xsi:type="ecore:EClass" name="EventActionMapping">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Defines a mapping between an event and an action, including conditions and parameter mappings."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Unique identifier for this mapping."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="#//EventActionContext">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Context where the event originates (system, page, widget)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="contextId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Optional specific context ID (e.g., pageId or widgetId)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Type of event to listen for."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1" eType="#//Condition" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="List of conditions that must be met for the action to execute."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetContext" eType="#//EventActionContext">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Context where the action should execute (system, page, widget)."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetContextId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Optional specific target context ID."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Name of the action method to execute."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionArgs" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Optional static arguments to pass to the action."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="payloadMapping" upperBound="-1" eType="#//PayloadMapping" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Mappings from event payload properties to action arguments."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+</ecore:EPackage>

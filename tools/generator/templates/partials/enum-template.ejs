@@ -13,7 +13,7 @@
 export enum <%= eEnum.name %> {
 <% if (eEnum.eLiterals) { %>
   <% Array.from(eEnum.eLiterals).forEach((literal, index) => { %>
-    <%= literal.literal %> = "<%= literal.literal %>"<% if (index < eEnum.eLiterals.length - 1) { %>,<% } %>
+    <%= literal.name %> = "<%= literal.literal %>"<% if (index < eEnum.eLiterals.length - 1) { %>,<% } %>
   <% }); %>
 <% } %>
 }

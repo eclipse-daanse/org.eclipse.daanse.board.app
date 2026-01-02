@@ -23,10 +23,11 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {IBaseConnectionConfiguration} from 'example.com/baseconnection'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://example.com/graphqlstore#//IGraphQLStoreConfiguration'})
-export class IGraphQLStoreConfiguration{
+export class IGraphQLStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("A reference or ID to a GraphQL connection configuration used to execute the query.")
   @Attribute() connection?: string;

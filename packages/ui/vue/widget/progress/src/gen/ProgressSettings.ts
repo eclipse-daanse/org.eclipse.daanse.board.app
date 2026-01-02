@@ -28,7 +28,7 @@ import {VerticalAlign} from "./VerticalAlign"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/progresswidgets#//ProgressSettings'})
-export class ProgressSettings{
+export class ProgressSettings {
 
   @Documentation("The current progress value, potentially as a percentage or numeric string.")
   @Attribute() progress?: string;
@@ -67,8 +67,8 @@ export class ProgressSettings{
   @Attribute() borderRadius: string = "0px";
 
   @Documentation("The horizontal alignment of the value text.")
-  @Enum('HorizontalAlign') valueAlign: HorizontalAlign = HorizontalAlign.left;
+  @Enum('HorizontalAlign') valueAlign: HorizontalAlign = HorizontalAlign.LEFT;
 
   @Documentation("The vertical alignment of the value text.")
-  @Enum('VerticalAlign') valueJustify: VerticalAlign = VerticalAlign.top;
+  @Enum('VerticalAlign') valueJustify: VerticalAlign = VerticalAlign.TOP;
 }

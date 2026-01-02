@@ -25,8 +25,8 @@ Contributors: Smart City Jena
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://rg.eclipse.daanse.board.app.ui.vue.widget.map#//IconSettings'})
-export class IconSettings{
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//IconSettings'})
+export class IconSettings {
 
   @Documentation("The identifier or path of the currently selected icon.")
   @Attribute() currentIcon?: string;

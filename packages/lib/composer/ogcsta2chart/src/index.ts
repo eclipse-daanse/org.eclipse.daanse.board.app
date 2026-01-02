@@ -14,9 +14,15 @@
 import { Factory } from 'inversify'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { OGCSTAToChartComposer } from './classes'
+import {
+  EventActionsRegistry,
+  EVENT_ACTIONS_REGISTRY
+} from 'org.eclipse.daanse.board.app.lib.events'
+import ecoreModelContent from '../model/OGCSTAToChartActions.ecore?raw'
 
 export * from './classes/index'
 export * from './interfaces/OGCSTAToChartData'
+export * from './interfaces/OGCSTAToChartComposerInterface'
 
 // Export symbol for dependency injection
 export const symbol = Symbol.for('OGCSTAToChartComposer')
@@ -37,7 +43,45 @@ if (!container.isBound(symbol)) {
       const composer = container.get<OGCSTAToChartComposer>(OGCSTAToChartComposer)
       composer.init(config)
 
+      // Register composer instance for action execution
+      try {
+        if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
+          const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+          const instanceId = config.uid || config.name || `composer-${Date.now()}`
+          composer.setInstanceId(instanceId)
+
+          // Register instance so actions can be executed on it
+          actionsRegistry.registerInstance(instanceId, composer)
+
+          console.log(`Registered OGCSTAToChartComposer instance: ${instanceId}`)
+        }
+      } catch (error) {
+        console.warn('Could not register composer instance:', error)
+      }
+
       return composer
     }
   })
 }
+
+// Register composer actions from Ecore model so they appear in EventManager UI
+const registerComposerActions = () => {
+  try {
+    if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
+      const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+
+      // Register with 'system' context from Ecore model
+      actionsRegistry.registerActionsFromEcoreString(
+        'OGCSTAToChartComposer',
+        ecoreModelContent,
+        'system',
+        'OGCSTAToChartActions.ecore'
+      )
+      console.log('Registered OGCSTAToChartComposer actions from Ecore model')
+    }
+  } catch (error) {
+    console.warn('Could not register OGCSTAToChartComposer actions:', error)
+  }
+}
+
+registerComposerActions()
