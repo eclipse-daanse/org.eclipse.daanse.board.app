@@ -21,6 +21,14 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineConfig({
   base: './',
+  esbuild: {
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true
+      }
+    }
+  },
   plugins: [
     //@ts-ignore
     vue(),

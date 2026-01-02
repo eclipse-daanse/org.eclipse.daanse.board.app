@@ -10,4 +10,4 @@ Contributors: Smart City Jena
 */
 /* File: VerticalAlign.ts */
 export enum VerticalAlign {
-  top = "top",  center = "center",  bottom = "bottom"}
+  TOP = "top",  CENTER = "center",  BOTTOM = "bottom"}

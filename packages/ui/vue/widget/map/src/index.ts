@@ -45,11 +45,11 @@ const register = () => {
   eventRegistry.registerWidget('MapWidget', MapWidgetEvents)
 
   // Register widget actions from Ecore model (async, non-blocking)
-  actionsRegistry.registerWidgetTypeFromEcoreString('MapWidget', ecoreModelContent, 'model.ecore')
+  actionsRegistry.registerActionsFromEcoreString('MapWidget', ecoreModelContent, 'widget', 'model.ecore')
     .catch((error) => {
       console.error('Failed to register MapWidget from Ecore, falling back to decorator-based registration:', error)
       // Fallback to decorator-based registration
-      actionsRegistry.registerWidgetType('MapWidget', MapWidgetInterface)
+      actionsRegistry.registerWidgetType('MapWidget', MapWidgetInterface, 'widget')
     })
 }
 

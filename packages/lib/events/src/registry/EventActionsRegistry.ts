@@ -36,6 +36,7 @@ export interface WidgetTypeRegistration {
   widgetType: string;
   baseClass: any; // Die abstrakte Basis-Klasse mit @WidgetAction Decorators
   actions: Array<WidgetActionMetadata & { methodName: string }>;
+  context?: EventActionContext; // Optional: Kontext für diese Actions (widget, system, page)
 }
 
 /**
@@ -171,39 +172,48 @@ export class EventActionsRegistry {
   /**
    * Registriert einen Widget-Typ mit seinen Actions (aus @WidgetAction Decorators)
    * Wird beim Package-Import aufgerufen
+   * @param widgetType - Widget type identifier
+   * @param baseClass - Die abstrakte Basis-Klasse mit @WidgetAction Decorators
+   * @param context - Optional: Kontext für diese Actions (default: 'widget')
    */
-  registerWidgetType(widgetType: string, baseClass: any): void {
+  registerWidgetType(widgetType: string, baseClass: any, context?: EventActionContext): void {
     const actions = getWidgetActions(baseClass);
 
     this.widgetTypes.set(widgetType, {
       widgetType,
       baseClass,
-      actions
+      actions,
+      context: context || 'widget'
     });
 
-    console.log(`📝 Registered widget type "${widgetType}" with ${actions.length} actions:`);
+    console.log(`📝 Registered widget type "${widgetType}" (context: ${context || 'widget'}) with ${actions.length} actions:`);
     actions.forEach(action => {
       console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
     });
   }
 
   /**
-   * Registriert einen Widget-Typ aus einem Ecore-Modell
-   * @param widgetType - Widget type identifier (z.B. "MapWidget")
+   * Registriert Actions aus einem Ecore-Modell
+   * @param name - Action type identifier (z.B. "MapWidget", "OGCSTAToChartComposer")
    * @param ecoreUri - URI zum Ecore-Model (z.B. "model/model.ecore")
+   * @param context - Kontext für diese Actions (default: 'widget')
    */
-  async registerWidgetTypeFromEcore(widgetType: string, ecoreUri: string): Promise<void> {
+  async registerActionsFromEcore(
+    name: string,
+    ecoreUri: string,
+    context?: EventActionContext
+  ): Promise<void> {
     if (!this.ecoreMetadataService) {
-      console.error('EcoreMetadataService not set. Cannot register widget type from Ecore.');
+      console.error('EcoreMetadataService not set. Cannot register actions from Ecore.');
       return;
     }
 
     try {
       // Load the Ecore model
-      await this.ecoreMetadataService.loadModel(widgetType, ecoreUri);
+      await this.ecoreMetadataService.loadModel(name, ecoreUri);
 
       // Extract actions from the model
-      const ecoreActions = this.ecoreMetadataService.extractActions(widgetType);
+      const ecoreActions = this.ecoreMetadataService.extractActions(name);
 
       // Convert EcoreActionMetadata to WidgetActionMetadata format
       const actions = ecoreActions.map(ecoreAction => ({
@@ -214,41 +224,56 @@ export class EventActionsRegistry {
         )
       }));
 
-      // Register the widget type
-      this.widgetTypes.set(widgetType, {
-        widgetType,
-        baseClass: null, // No base class for Ecore-based widgets
-        actions
+      // Register the action type
+      this.widgetTypes.set(name, {
+        widgetType: name,
+        baseClass: null, // No base class for Ecore-based actions
+        actions,
+        context: context || 'widget'
       });
 
-      console.log(`📝 Registered widget type "${widgetType}" from Ecore with ${actions.length} actions:`);
+      console.log(`📝 Registered actions "${name}" (context: ${context || 'widget'}) from Ecore with ${actions.length} actions:`);
       actions.forEach(action => {
         console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
       });
     } catch (error) {
-      console.error(`Failed to register widget type "${widgetType}" from Ecore:`, error);
+      console.error(`Failed to register actions "${name}" from Ecore:`, error);
       throw error;
     }
   }
 
   /**
-   * Registriert einen Widget-Typ aus einem Ecore-Modell-String
-   * @param widgetType - Widget type identifier
+   * @deprecated Use registerActionsFromEcore instead
+   */
+  async registerWidgetTypeFromEcore(widgetType: string, ecoreUri: string): Promise<void> {
+    console.warn('registerWidgetTypeFromEcore is deprecated. Use registerActionsFromEcore instead.');
+    return this.registerActionsFromEcore(widgetType, ecoreUri, 'widget');
+  }
+
+  /**
+   * Registriert Actions aus einem Ecore-Modell-String
+   * @param name - Action type identifier (z.B. "MapWidget", "OGCSTAToChartComposer")
    * @param ecoreContent - Ecore model as string
+   * @param context - Kontext für diese Actions (default: 'widget')
    * @param uri - Optional URI for the model
    */
-  async registerWidgetTypeFromEcoreString(widgetType: string, ecoreContent: string, uri?: string): Promise<void> {
+  async registerActionsFromEcoreString(
+    name: string,
+    ecoreContent: string,
+    context?: EventActionContext,
+    uri?: string
+  ): Promise<void> {
     if (!this.ecoreMetadataService) {
-      console.error('EcoreMetadataService not set. Cannot register widget type from Ecore.');
+      console.error('EcoreMetadataService not set. Cannot register actions from Ecore.');
       return;
     }
 
     try {
       // Load the Ecore model from string
-      await this.ecoreMetadataService.loadModelFromString(widgetType, ecoreContent, uri);
+      await this.ecoreMetadataService.loadModelFromString(name, ecoreContent, uri);
 
       // Extract actions from the model
-      const ecoreActions = this.ecoreMetadataService.extractActions(widgetType);
+      const ecoreActions = this.ecoreMetadataService.extractActions(name);
 
       // Convert EcoreActionMetadata to WidgetActionMetadata format
       const actions = ecoreActions.map(ecoreAction => ({
@@ -259,96 +284,136 @@ export class EventActionsRegistry {
         )
       }));
 
-      // Register the widget type
-      this.widgetTypes.set(widgetType, {
-        widgetType,
-        baseClass: null, // No base class for Ecore-based widgets
-        actions
+      // Register the action type
+      this.widgetTypes.set(name, {
+        widgetType: name,
+        baseClass: null, // No base class for Ecore-based actions
+        actions,
+        context: context || 'widget'
       });
 
-      console.log(`📝 Registered widget type "${widgetType}" from Ecore string with ${actions.length} actions:`);
+      console.log(`📝 Registered actions "${name}" (context: ${context || 'widget'}) from Ecore string with ${actions.length} actions:`);
       actions.forEach(action => {
         console.log(`  - ${action.methodName}(${action.parameters?.join(', ') || ''})`, action);
       });
     } catch (error) {
-      console.error(`Failed to register widget type "${widgetType}" from Ecore string:`, error);
+      console.error(`Failed to register actions "${name}" from Ecore string:`, error);
       throw error;
     }
   }
 
   /**
-   * Registriert eine Widget-Instanz (Component Ref)
-   * Wird beim Widget-Mount aufgerufen
+   * @deprecated Use registerActionsFromEcoreString instead
+   */
+  async registerWidgetTypeFromEcoreString(widgetType: string, ecoreContent: string, uri?: string): Promise<void> {
+    console.warn('registerWidgetTypeFromEcoreString is deprecated. Use registerActionsFromEcoreString instead.');
+    return this.registerActionsFromEcoreString(widgetType, ecoreContent, 'widget', uri);
+  }
+
+  /**
+   * Registriert eine Instanz (Widget, Composer, Datasource, etc.)
+   * Wird beim Mount/Init aufgerufen
+   * @param instanceId - Eindeutige ID der Instanz
+   * @param instanceRef - Referenz auf die Instanz mit den Action-Methoden
+   */
+  registerInstance(instanceId: string, instanceRef: any): void {
+    this.widgetInstances.set(instanceId, instanceRef);
+    console.log(`Registered instance "${instanceId}"`);
+  }
+
+  /**
+   * @deprecated Use registerInstance instead
    */
   registerWidgetInstance(widgetInstanceId: string, widgetRef: any): void {
-    this.widgetInstances.set(widgetInstanceId, widgetRef);
-    console.log(`Registered widget instance "${widgetInstanceId}"`);
+    this.registerInstance(widgetInstanceId, widgetRef);
   }
 
   /**
-   * Entfernt eine Widget-Instanz
-   * Wird beim Widget-Unmount aufgerufen
+   * Entfernt eine Instanz
+   * Wird beim Unmount/Dispose aufgerufen
+   * @param instanceId - ID der Instanz
+   */
+  unregisterInstance(instanceId: string): void {
+    this.widgetInstances.delete(instanceId);
+    console.log(`Unregistered instance "${instanceId}"`);
+  }
+
+  /**
+   * @deprecated Use unregisterInstance instead
    */
   unregisterWidgetInstance(widgetInstanceId: string): void {
-    this.widgetInstances.delete(widgetInstanceId);
-    console.log(`Unregistered widget instance "${widgetInstanceId}"`);
+    this.unregisterInstance(widgetInstanceId);
   }
 
   /**
-   * Führt eine Widget-Action aus
-   * @param widgetInstanceId - ID der Widget-Instanz
-   * @param actionName - Name der Action-Methode (z.B. 'zoomToThing')
+   * Führt eine Action auf einer Instanz aus
+   * @param instanceId - ID der Instanz
+   * @param actionName - Name der Action-Methode (z.B. 'zoomToThing', 'switchThingByName')
    * @param args - Argumente für die Action
    */
-  async executeWidgetAction(widgetInstanceId: string, actionName: string, ...args: any[]): Promise<void> {
-    const widgetRef = this.widgetInstances.get(widgetInstanceId);
+  async executeInstanceAction(instanceId: string, actionName: string, ...args: any[]): Promise<void> {
+    const instanceRef = this.widgetInstances.get(instanceId);
 
-    if (!widgetRef) {
-      console.warn(`Widget instance "${widgetInstanceId}" not found.`);
+    if (!instanceRef) {
+      console.warn(`Instance "${instanceId}" not found.`);
       return;
     }
 
-    if (typeof widgetRef[actionName] !== 'function') {
-      console.warn(`Action "${actionName}" not found on widget instance "${widgetInstanceId}".`);
+    if (typeof instanceRef[actionName] !== 'function') {
+      console.warn(`Action "${actionName}" not found on instance "${instanceId}".`);
       return;
     }
 
     try {
-      await widgetRef[actionName](...args);
+      await instanceRef[actionName](...args);
     } catch (error) {
-      console.error(`Error executing widget action "${actionName}" on "${widgetInstanceId}":`, error);
+      console.error(`Error executing action "${actionName}" on "${instanceId}":`, error);
     }
   }
 
   /**
-   * Führt eine Widget-Action auf allen registrierten Widget-Instanzen aus
+   * @deprecated Use executeInstanceAction instead
+   */
+  async executeWidgetAction(widgetInstanceId: string, actionName: string, ...args: any[]): Promise<void> {
+    return this.executeInstanceAction(widgetInstanceId, actionName, ...args);
+  }
+
+  /**
+   * Führt eine Action auf allen registrierten Instanzen aus
    * @param actionName - Name der Action-Methode (z.B. 'zoomToThing')
    * @param args - Argumente für die Action
    */
-  async executeWidgetActionOnAll(actionName: string, ...args: any[]): Promise<void> {
+  async executeActionOnAll(actionName: string, ...args: any[]): Promise<void> {
     if (this.widgetInstances.size === 0) {
-      console.warn(`No widget instances registered to execute action "${actionName}".`);
+      console.warn(`No instances registered to execute action "${actionName}".`);
       return;
     }
 
     let executedCount = 0;
-    for (const [widgetInstanceId, widgetRef] of this.widgetInstances.entries()) {
-      if (typeof widgetRef[actionName] === 'function') {
+    for (const [instanceId, instanceRef] of this.widgetInstances.entries()) {
+      if (typeof instanceRef[actionName] === 'function') {
         try {
-          await widgetRef[actionName](...args);
+          await instanceRef[actionName](...args);
           executedCount++;
-          console.log(`✅ Executed action "${actionName}" on widget instance "${widgetInstanceId}"`);
+          console.log(`Executed action "${actionName}" on instance "${instanceId}"`);
         } catch (error) {
-          console.error(`Error executing widget action "${actionName}" on "${widgetInstanceId}":`, error);
+          console.error(`Error executing action "${actionName}" on "${instanceId}":`, error);
         }
       }
     }
 
     if (executedCount === 0) {
-      console.warn(`Action "${actionName}" not found on any widget instances.`);
+      console.warn(`Action "${actionName}" not found on any instances.`);
     } else {
-      console.log(`📢 Executed action "${actionName}" on ${executedCount} widget instance(s)`);
+      console.log(`Executed action "${actionName}" on ${executedCount} instance(s)`);
     }
+  }
+
+  /**
+   * @deprecated Use executeActionOnAll instead
+   */
+  async executeWidgetActionOnAll(actionName: string, ...args: any[]): Promise<void> {
+    return this.executeActionOnAll(actionName, ...args);
   }
 
   /**

@@ -23,26 +23,18 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {NavigationItem} from "./NavigationItem"
+import {Comparator} from "./Comparator"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://org.eclipse.daanse.board.app.lib.repository.navigation#//NavigationRegistry'})
-export class NavigationRegistry {
-  @Reference('NavigationItem') items: Array<NavigationItem> = [];
-  
-  registerNavigationItem(item?: NavigationItem): boolean {
-        throw new Error("registerNavigationItem not implemented");
-  }
-  
-  unregisterNavigationItem(id?: string): boolean {
-        throw new Error("unregisterNavigationItem not implemented");
-  }
-  
-  getNavigationItem(id?: string): NavigationItem {
-        throw new Error("getNavigationItem not implemented");
-  }
-  
-  getAllNavigationItems(): NavigationItem {
-        throw new Error("getAllNavigationItems not implemented");
-  }
+@ModelClass({type:'http://org.eclipse.daanse.board.app.lib.events.mapping#//Condition'})
+export class Condition {
+
+  @Documentation("Property name from the event payload to evaluate.")
+  @Attribute() prop?: string;
+
+  @Documentation("Comparison operator to use.")
+  @Enum('Comparator') comparator: Comparator = Comparator.eq;
+
+  @Documentation("Value to compare against.")
+  @Attribute() value?: any;
 }

@@ -10,11 +10,14 @@ Contributors: Smart City Jena
 */
 
 import { Payload } from './gen/Payload';
+import { WidgetActionInterface } from './gen/WidgetActionInterface';
+import { SystemActionInterface } from './gen/SystemActionInterface';
+import { PageActionInterface } from './gen/PageActionInterface';
 import { Condition } from './manager/Condition';
 import { Comperator } from './manager/Comperator';
 import { EventRegistry, EVENT_REGISTRY, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventAction, type EventActionContext, type WidgetTypeRegistration } from './registry/EventActionsRegistry';
-import { EventManager, EVENT_MANAGER, type EventActionMapping, type PayloadToArgMapping } from './manager/EventManager';
+import { EventManager, EVENT_MANAGER, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
 import { EventBusBridge, EVENT_BUS_BRIDGE } from './bridge/EventBusBridge';
 import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type ActionParameterMetadata } from './decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, type EcoreActionMetadata, type EcoreParameterMetadata } from './registry/EcoreMetadataService';
@@ -86,6 +89,9 @@ if (!container.isBound(ecoreServiceIdentifier)) {
 
 export {
   Payload,
+  WidgetActionInterface,
+  SystemActionInterface,
+  PageActionInterface,
   Condition,
   Comperator,
   EventRegistry,
@@ -118,5 +124,6 @@ export {
   type EcoreParameterMetadata,
   type WidgetTypeRegistration,
   type EventActionMapping,
+  type ActionDefinition,
   type PayloadToArgMapping
 };

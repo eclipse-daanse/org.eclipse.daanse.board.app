@@ -12,7 +12,7 @@
 import 'reflect-metadata'
 import { ref, computed, onMounted } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventManager, EVENT_MANAGER, type EventActionMapping, EventRegistry, EVENT_REGISTRY, type WidgetEventDefinition, EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext, type WidgetTypeRegistration, Condition, Comperator } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventManager, EVENT_MANAGER, type EventActionMapping, type ActionDefinition, EventRegistry, EVENT_REGISTRY, type WidgetEventDefinition, EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext, type WidgetTypeRegistration, Condition, Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
 
 let eventManager: EventManager
@@ -28,11 +28,16 @@ const availablePages = ref<string[]>([])
 const showAddDialog = ref(false)
 const showEditDialog = ref(false)
 const editingMappingId = ref<string | null>(null)
+const currentActionIndex = ref(0)
 const newMapping = ref<Partial<EventActionMapping>>({
   context: 'widget',
-  targetContext: 'widget',
   conditions: [],
-  payloadMapping: []
+  actions: [{
+    targetContext: 'widget',
+    actionName: '',
+    actionArgs: [],
+    payloadMapping: []
+  }]
 })
 
 const contextOptions = [
@@ -54,11 +59,72 @@ const columns = [
   { key: 'id', label: 'ID', sortable: true },
   { key: 'context', label: 'Event Context', sortable: true },
   { key: 'eventType', label: 'Event Type', sortable: true },
-  { key: 'targetContext', label: 'Action Context', sortable: true },
-  { key: 'actionName', label: 'Action', sortable: true },
+  { key: 'actionsCount', label: 'Actions', sortable: true },
   { key: 'conditions', label: 'Conditions' },
-  { key: 'actions', label: 'Actions', width: 100 }
+  { key: 'tableActions', label: '', width: 100 }
 ]
+
+// Get current action being edited
+const currentAction = computed(() => {
+  if (!newMapping.value.actions || newMapping.value.actions.length === 0) {
+    return null
+  }
+  return newMapping.value.actions[currentActionIndex.value]
+})
+
+// Add a new action to the mapping
+const addAction = () => {
+  if (!newMapping.value.actions) {
+    newMapping.value.actions = []
+  }
+  newMapping.value.actions.push({
+    targetContext: 'widget',
+    actionName: '',
+    actionArgs: [],
+    payloadMapping: []
+  })
+  currentActionIndex.value = newMapping.value.actions.length - 1
+  // Reset parameter tracking for new action
+  parameterValueSources.value.clear()
+  manualParameterValues.value.clear()
+}
+
+// Remove an action from the mapping
+const removeAction = (index: number) => {
+  if (!newMapping.value.actions) return
+  newMapping.value.actions.splice(index, 1)
+  if (currentActionIndex.value >= newMapping.value.actions.length) {
+    currentActionIndex.value = Math.max(0, newMapping.value.actions.length - 1)
+  }
+  // Reset parameter tracking
+  parameterValueSources.value.clear()
+  manualParameterValues.value.clear()
+}
+
+// Select an action for editing
+const selectAction = (index: number) => {
+  currentActionIndex.value = index
+  // Restore parameter sources for this action
+  parameterValueSources.value.clear()
+  manualParameterValues.value.clear()
+
+  const action = newMapping.value.actions?.[index]
+  if (action) {
+    if (action.payloadMapping) {
+      action.payloadMapping.forEach(pm => {
+        parameterValueSources.value.set(pm.argIndex, 'payload')
+      })
+    }
+    if (action.actionArgs) {
+      action.actionArgs.forEach((arg, idx) => {
+        if (arg !== undefined && !action.payloadMapping?.some(pm => pm.argIndex === idx)) {
+          parameterValueSources.value.set(idx, 'manual')
+          manualParameterValues.value.set(idx, String(arg))
+        }
+      })
+    }
+  }
+}
 
 const loadMappings = () => {
   mappings.value = eventManager.getAllMappings()
@@ -98,64 +164,43 @@ const availablePayloadProperties = computed(() => {
 })
 
 const availableActions = computed(() => {
-  if (!newMapping.value.targetContext) return []
+  if (!currentAction.value?.targetContext) return []
 
-  if (newMapping.value.targetContext === 'widget') {
-    const actions: { text: string; value: string; parameters?: string[]; widgetType?: string }[] = []
-    for (const widgetType of availableWidgetTypes.value) {
+  const targetContext = currentAction.value.targetContext
+  const actions: { text: string; value: string; parameters?: string[]; widgetType?: string }[] = []
+
+  for (const widgetType of availableWidgetTypes.value) {
+    // Filter by context field, fallback to name-based filtering only if context is not set
+    const hasExplicitContext = widgetType.context !== undefined
+    const typeContext = widgetType.context || 'widget'
+
+    let matches = false
+    if (hasExplicitContext) {
+      // New way: use explicit context
+      matches = typeContext === targetContext
+    } else {
+      // Legacy fallback: name-based filtering
+      matches = (
+        (targetContext === 'system' && widgetType.widgetType.includes('System')) ||
+        (targetContext === 'page' && widgetType.widgetType.includes('Page')) ||
+        (targetContext === 'widget' && !widgetType.widgetType.includes('System') && !widgetType.widgetType.includes('Page'))
+      )
+    }
+
+    if (matches) {
       for (const action of widgetType.actions) {
+        const prefix = targetContext === 'widget' ? `${widgetType.widgetType}.` : ''
         actions.push({
-          text: `${widgetType.widgetType}.${action.methodName}`,
+          text: `${prefix}${action.methodName}`,
           value: action.methodName,
           parameters: action.parameters,
           widgetType: widgetType.widgetType
         })
       }
     }
-    return actions
   }
 
-  if (newMapping.value.targetContext === 'system') {
-    // Get system actions from all registered action types
-    const actions: { text: string; value: string; parameters?: string[]; widgetType?: string }[] = []
-
-    // Collect from all *SystemActions or *SystemVariableActions types
-    for (const widgetType of availableWidgetTypes.value) {
-      if (widgetType.widgetType.includes('System')) {
-        for (const action of widgetType.actions) {
-          actions.push({
-            text: `${action.methodName}`,
-            value: action.methodName,
-            parameters: action.parameters,
-            widgetType: widgetType.widgetType
-          })
-        }
-      }
-    }
-    return actions
-  }
-
-  if (newMapping.value.targetContext === 'page') {
-    // Get page actions from all registered action types
-    const actions: { text: string; value: string; parameters?: string[]; widgetType?: string }[] = []
-
-    // Collect from all *PageActions or *PageVariableActions types
-    for (const widgetType of availableWidgetTypes.value) {
-      if (widgetType.widgetType.includes('Page')) {
-        for (const action of widgetType.actions) {
-          actions.push({
-            text: `${action.methodName}`,
-            value: action.methodName,
-            parameters: action.parameters,
-            widgetType: widgetType.widgetType
-          })
-        }
-      }
-    }
-    return actions
-  }
-
-  return []
+  return actions
 })
 
 interface ActionParameterInfo {
@@ -166,22 +211,30 @@ interface ActionParameterInfo {
 }
 
 const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
-  if (!newMapping.value.actionName || !newMapping.value.targetContext) return []
+  if (!currentAction.value?.actionName || !currentAction.value?.targetContext) return []
 
-  // Determine which widget type to search based on target context
-  let searchWidgetTypes: WidgetTypeRegistration[] = availableWidgetTypes.value
+  const targetContext = currentAction.value.targetContext
 
-  if (newMapping.value.targetContext === 'system') {
-    // Search all types containing "System"
-    searchWidgetTypes = availableWidgetTypes.value.filter(wt => wt.widgetType.includes('System'))
-  } else if (newMapping.value.targetContext === 'page') {
-    // Search all types containing "Page"
-    searchWidgetTypes = availableWidgetTypes.value.filter(wt => wt.widgetType.includes('Page'))
-  }
+  // Filter widget types by context field, fallback to name-based filtering only if context is not set
+  const searchWidgetTypes = availableWidgetTypes.value.filter(wt => {
+    const hasExplicitContext = wt.context !== undefined
+    const typeContext = wt.context || 'widget'
+
+    if (hasExplicitContext) {
+      return typeContext === targetContext
+    } else {
+      // Legacy fallback
+      return (
+        (targetContext === 'system' && wt.widgetType.includes('System')) ||
+        (targetContext === 'page' && wt.widgetType.includes('Page')) ||
+        (targetContext === 'widget' && !wt.widgetType.includes('System') && !wt.widgetType.includes('Page'))
+      )
+    }
+  })
 
   for (const widgetType of searchWidgetTypes) {
-    const action = widgetType.actions.find(a => a.methodName === newMapping.value.actionName)
-    console.log('🎯 Looking for action:', newMapping.value.actionName, 'in', widgetType.widgetType)
+    const action = widgetType.actions.find(a => a.methodName === currentAction.value?.actionName)
+    console.log('🎯 Looking for action:', currentAction.value?.actionName, 'in', widgetType.widgetType)
     console.log('   Found action:', action)
 
     if (action && action.parameters) {
@@ -213,25 +266,31 @@ const selectedActionParameters = computed<ActionParameterInfo[]>(() => {
   return []
 })
 
-const getActionSignature = (mapping: EventActionMapping): string => {
-  if (mapping.targetContext === 'widget') {
-    // Find the widget type and action to get parameter information
-    for (const widgetType of availableWidgetTypes.value) {
-      const action = widgetType.actions.find(a => a.methodName === mapping.actionName)
-      if (action) {
-        const paramsText = action.parameters?.length
-          ? `(${action.parameters.join(', ')})`
-          : '()'
-        return `${mapping.actionName}${paramsText}`
-      }
-    }
+// Get all actions from a mapping (handles legacy format)
+const getMappingActions = (mapping: EventActionMapping): ActionDefinition[] => {
+  if (mapping.actions && mapping.actions.length > 0) {
+    return mapping.actions
   }
-  // For system/page actions or if not found, just return the action name
-  return mapping.actionName
+  // Legacy format: convert single action to array
+  if (mapping.actionName) {
+    return [{
+      targetContext: mapping.targetContext!,
+      targetContextId: mapping.targetContextId,
+      actionName: mapping.actionName,
+      actionArgs: mapping.actionArgs,
+      payloadMapping: mapping.payloadMapping
+    }]
+  }
+  return []
 }
 
 const addMapping = () => {
-  if (!newMapping.value.eventType || !newMapping.value.actionName) {
+  // Validate: must have event type and at least one action with actionName
+  if (!newMapping.value.eventType) {
+    return
+  }
+  const validActions = newMapping.value.actions?.filter(a => a.actionName) || []
+  if (validActions.length === 0) {
     return
   }
 
@@ -241,11 +300,7 @@ const addMapping = () => {
     contextId: newMapping.value.contextId,
     eventType: newMapping.value.eventType,
     conditions: newMapping.value.conditions || [],
-    targetContext: newMapping.value.targetContext as EventActionContext,
-    targetContextId: newMapping.value.targetContextId,
-    actionName: newMapping.value.actionName,
-    actionArgs: newMapping.value.actionArgs,
-    payloadMapping: newMapping.value.payloadMapping || []
+    actions: validActions
   }
 
   if (editingMappingId.value) {
@@ -264,35 +319,46 @@ const addMapping = () => {
 
 const editMapping = (mapping: EventActionMapping) => {
   editingMappingId.value = mapping.id
+
+  // Convert legacy format to actions array
+  const actions = getMappingActions(mapping)
+
   newMapping.value = {
     context: mapping.context,
     contextId: mapping.contextId,
     eventType: mapping.eventType,
-    targetContext: mapping.targetContext,
-    targetContextId: mapping.targetContextId,
-    actionName: mapping.actionName,
-    actionArgs: mapping.actionArgs,
     conditions: mapping.conditions || [],
-    payloadMapping: mapping.payloadMapping || []
+    actions: actions.length > 0 ? actions : [{
+      targetContext: 'widget',
+      actionName: '',
+      actionArgs: [],
+      payloadMapping: []
+    }]
   }
 
-  // Restore parameter sources and manual values
+  // Reset to first action
+  currentActionIndex.value = 0
+
+  // Restore parameter sources and manual values for first action
   parameterValueSources.value.clear()
   manualParameterValues.value.clear()
 
-  if (mapping.payloadMapping) {
-    mapping.payloadMapping.forEach(pm => {
-      parameterValueSources.value.set(pm.argIndex, 'payload')
-    })
-  }
+  const firstAction = newMapping.value.actions?.[0]
+  if (firstAction) {
+    if (firstAction.payloadMapping) {
+      firstAction.payloadMapping.forEach(pm => {
+        parameterValueSources.value.set(pm.argIndex, 'payload')
+      })
+    }
 
-  if (mapping.actionArgs) {
-    mapping.actionArgs.forEach((arg, index) => {
-      if (arg !== undefined && !mapping.payloadMapping?.some(pm => pm.argIndex === index)) {
-        parameterValueSources.value.set(index, 'manual')
-        manualParameterValues.value.set(index, String(arg))
-      }
-    })
+    if (firstAction.actionArgs) {
+      firstAction.actionArgs.forEach((arg, index) => {
+        if (arg !== undefined && !firstAction.payloadMapping?.some(pm => pm.argIndex === index)) {
+          parameterValueSources.value.set(index, 'manual')
+          manualParameterValues.value.set(index, String(arg))
+        }
+      })
+    }
   }
 
   showEditDialog.value = true
@@ -306,11 +372,16 @@ const removeMapping = (mappingId: string) => {
 const resetForm = () => {
   newMapping.value = {
     context: 'widget',
-    targetContext: 'widget',
     conditions: [],
-    payloadMapping: []
+    actions: [{
+      targetContext: 'widget',
+      actionName: '',
+      actionArgs: [],
+      payloadMapping: []
+    }]
   }
   editingMappingId.value = null
+  currentActionIndex.value = 0
   parameterValueSources.value.clear()
   manualParameterValues.value.clear()
 }
@@ -331,18 +402,21 @@ const parameterValueSources = ref<Map<number, 'payload' | 'manual'>>(new Map())
 const manualParameterValues = ref<Map<number, string>>(new Map())
 
 const updateParameterMapping = (paramIndex: number, payloadPath: string) => {
-  if (!newMapping.value.payloadMapping) {
-    newMapping.value.payloadMapping = []
+  const action = currentAction.value
+  if (!action) return
+
+  if (!action.payloadMapping) {
+    action.payloadMapping = []
   }
 
   // Remove existing mapping for this parameter index
-  newMapping.value.payloadMapping = newMapping.value.payloadMapping.filter(
+  action.payloadMapping = action.payloadMapping.filter(
     pm => pm.argIndex !== paramIndex
   )
 
   // Add new mapping if a payload path is selected
   if (payloadPath) {
-    newMapping.value.payloadMapping.push({
+    action.payloadMapping.push({
       payloadPath,
       argIndex: paramIndex
     })
@@ -352,24 +426,27 @@ const updateParameterMapping = (paramIndex: number, payloadPath: string) => {
 const updateManualParameterValue = (paramIndex: number, value: string) => {
   manualParameterValues.value.set(paramIndex, value)
 
+  const action = currentAction.value
+  if (!action) return
+
   // Also store in actionArgs if using manual values
-  if (!newMapping.value.actionArgs) {
-    newMapping.value.actionArgs = []
+  if (!action.actionArgs) {
+    action.actionArgs = []
   }
   // Ensure array is large enough
-  while (newMapping.value.actionArgs.length <= paramIndex) {
-    newMapping.value.actionArgs.push(undefined)
+  while (action.actionArgs.length <= paramIndex) {
+    action.actionArgs.push(undefined)
   }
 
   // Parse value based on type
   const param = selectedActionParameters.value.find(p => p.index === paramIndex)
   if (param) {
     if (param.type === 'number' || param.type.includes('number')) {
-      newMapping.value.actionArgs[paramIndex] = parseFloat(value) || 0
+      action.actionArgs[paramIndex] = parseFloat(value) || 0
     } else if (param.type === 'boolean') {
-      newMapping.value.actionArgs[paramIndex] = value === 'true'
+      action.actionArgs[paramIndex] = value === 'true'
     } else {
-      newMapping.value.actionArgs[paramIndex] = value
+      action.actionArgs[paramIndex] = value
     }
   }
 }
@@ -381,25 +458,29 @@ const getParameterValueSource = (paramIndex: number): 'payload' | 'manual' => {
 const setParameterValueSource = (paramIndex: number, source: 'payload' | 'manual') => {
   parameterValueSources.value.set(paramIndex, source)
 
+  const action = currentAction.value
+  if (!action) return
+
   if (source === 'manual') {
     // Clear payload mapping
-    if (newMapping.value.payloadMapping) {
-      newMapping.value.payloadMapping = newMapping.value.payloadMapping.filter(
+    if (action.payloadMapping) {
+      action.payloadMapping = action.payloadMapping.filter(
         pm => pm.argIndex !== paramIndex
       )
     }
   } else {
     // Clear manual value
     manualParameterValues.value.delete(paramIndex)
-    if (newMapping.value.actionArgs && newMapping.value.actionArgs[paramIndex] !== undefined) {
-      newMapping.value.actionArgs[paramIndex] = undefined
+    if (action.actionArgs && action.actionArgs[paramIndex] !== undefined) {
+      action.actionArgs[paramIndex] = undefined
     }
   }
 }
 
 const getPayloadPathForParameter = (paramIndex: number): string => {
-  if (!newMapping.value.payloadMapping) return ''
-  const mapping = newMapping.value.payloadMapping.find(pm => pm.argIndex === paramIndex)
+  const action = currentAction.value
+  if (!action?.payloadMapping) return ''
+  const mapping = action.payloadMapping.find(pm => pm.argIndex === paramIndex)
   return mapping?.payloadPath || ''
 }
 
@@ -447,16 +528,19 @@ onMounted(() => {
           <template #cell(context)="{ rowData }">
             {{ rowData.context }}{{ rowData.contextId ? `:${rowData.contextId}` : '' }}
           </template>
-          <template #cell(targetContext)="{ rowData }">
-            {{ rowData.targetContext }}{{ rowData.targetContextId ? `:${rowData.targetContextId}` : '' }}
-          </template>
-          <template #cell(actionName)="{ rowData }">
-            {{ getActionSignature(rowData) }}
+          <template #cell(actionsCount)="{ rowData }">
+            <div class="actions-list">
+              <div v-for="(action, idx) in getMappingActions(rowData)" :key="idx" class="action-item">
+                <span class="action-context">{{ action.targetContext }}</span>
+                <span class="action-separator">→</span>
+                <span class="action-name">{{ action.actionName }}</span>
+              </div>
+            </div>
           </template>
           <template #cell(conditions)="{ rowData }">
             <span class="text-xs">{{ formatConditions(rowData.conditions) }}</span>
           </template>
-          <template #cell(actions)="{ rowData }">
+          <template #cell(tableActions)="{ rowData }">
             <div class="flex gap-2">
               <VaButton
                 @click="editMapping(rowData)"
@@ -529,43 +613,72 @@ onMounted(() => {
           </VaCardContent>
         </VaCard>
 
-        <!-- Action Target Section -->
+        <!-- Actions Section -->
         <VaCard class="card-section">
-          <VaCardTitle class="section-title">Action Target</VaCardTitle>
+          <VaCardTitle class="flex justify-between items-center">
+            <span class="section-title">Actions</span>
+            <VaButton @click="addAction" size="small" icon="add">Add Action</VaButton>
+          </VaCardTitle>
           <VaCardContent>
-            <VaSelect
-              v-model="newMapping.targetContext"
-              label="Action Context"
-              :options="contextOptions"
-              text-by="text"
-              value-by="value"
-            />
+            <!-- Action Tabs -->
+            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-tabs">
+              <div class="action-tabs-header">
+                <button
+                  v-for="(action, idx) in newMapping.actions"
+                  :key="idx"
+                  :class="['action-tab', { active: currentActionIndex === idx }]"
+                  @click="selectAction(idx)"
+                >
+                  <span class="action-tab-label">{{ idx + 1 }}. {{ action.actionName || '(empty)' }}</span>
+                  <VaButton
+                    v-if="newMapping.actions.length > 1"
+                    @click.stop="removeAction(idx)"
+                    preset="plain"
+                    icon="close"
+                    color="danger"
+                    size="small"
+                    class="action-tab-remove"
+                  />
+                </button>
+              </div>
 
-            <VaSelect
-              v-if="newMapping.targetContext === 'page'"
-              v-model="newMapping.targetContextId"
-              label="Target Page ID"
-              :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-              text-by="text"
-              value-by="value"
-              clearable
-            />
+              <!-- Current Action Editor -->
+              <div v-if="currentAction" class="action-editor">
+                <VaSelect
+                  v-model="currentAction.targetContext"
+                  label="Action Context"
+                  :options="contextOptions"
+                  text-by="text"
+                  value-by="value"
+                />
 
-            <VaInput
-              v-else-if="newMapping.targetContext === 'widget'"
-              v-model="newMapping.targetContextId"
-              label="Target Widget ID (optional)"
-              placeholder="e.g., specific widgetId"
-              clearable
-            />
+                <VaSelect
+                  v-if="currentAction.targetContext === 'page'"
+                  v-model="currentAction.targetContextId"
+                  label="Target Page ID"
+                  :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                  text-by="text"
+                  value-by="value"
+                  clearable
+                />
 
-            <VaSelect
-              v-model="newMapping.actionName"
-              label="Action"
-              :options="availableActions"
-              text-by="text"
-              value-by="value"
-            />
+                <VaInput
+                  v-else-if="currentAction.targetContext === 'widget'"
+                  v-model="currentAction.targetContextId"
+                  label="Target Widget ID (optional)"
+                  placeholder="e.g., specific widgetId"
+                  clearable
+                />
+
+                <VaSelect
+                  v-model="currentAction.actionName"
+                  label="Action"
+                  :options="availableActions"
+                  text-by="text"
+                  value-by="value"
+                />
+              </div>
+            </div>
           </VaCardContent>
         </VaCard>
 
@@ -727,43 +840,72 @@ onMounted(() => {
           </VaCardContent>
         </VaCard>
 
-        <!-- Action Target Section -->
+        <!-- Actions Section -->
         <VaCard class="card-section">
-          <VaCardTitle class="section-title">Action Target</VaCardTitle>
+          <VaCardTitle class="flex justify-between items-center">
+            <span class="section-title">Actions</span>
+            <VaButton @click="addAction" size="small" icon="add">Add Action</VaButton>
+          </VaCardTitle>
           <VaCardContent>
-            <VaSelect
-              v-model="newMapping.targetContext"
-              label="Action Context"
-              :options="contextOptions"
-              text-by="text"
-              value-by="value"
-            />
+            <!-- Action Tabs -->
+            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-tabs">
+              <div class="action-tabs-header">
+                <button
+                  v-for="(action, idx) in newMapping.actions"
+                  :key="idx"
+                  :class="['action-tab', { active: currentActionIndex === idx }]"
+                  @click="selectAction(idx)"
+                >
+                  <span class="action-tab-label">{{ idx + 1 }}. {{ action.actionName || '(empty)' }}</span>
+                  <VaButton
+                    v-if="newMapping.actions.length > 1"
+                    @click.stop="removeAction(idx)"
+                    preset="plain"
+                    icon="close"
+                    color="danger"
+                    size="small"
+                    class="action-tab-remove"
+                  />
+                </button>
+              </div>
 
-            <VaSelect
-              v-if="newMapping.targetContext === 'page'"
-              v-model="newMapping.targetContextId"
-              label="Target Page ID"
-              :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-              text-by="text"
-              value-by="value"
-              clearable
-            />
+              <!-- Current Action Editor -->
+              <div v-if="currentAction" class="action-editor">
+                <VaSelect
+                  v-model="currentAction.targetContext"
+                  label="Action Context"
+                  :options="contextOptions"
+                  text-by="text"
+                  value-by="value"
+                />
 
-            <VaInput
-              v-else-if="newMapping.targetContext === 'widget'"
-              v-model="newMapping.targetContextId"
-              label="Target Widget ID (optional)"
-              placeholder="e.g., specific widgetId"
-              clearable
-            />
+                <VaSelect
+                  v-if="currentAction.targetContext === 'page'"
+                  v-model="currentAction.targetContextId"
+                  label="Target Page ID"
+                  :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                  text-by="text"
+                  value-by="value"
+                  clearable
+                />
 
-            <VaSelect
-              v-model="newMapping.actionName"
-              label="Action"
-              :options="availableActions"
-              text-by="text"
-              value-by="value"
-            />
+                <VaInput
+                  v-else-if="currentAction.targetContext === 'widget'"
+                  v-model="currentAction.targetContextId"
+                  label="Target Widget ID (optional)"
+                  placeholder="e.g., specific widgetId"
+                  clearable
+                />
+
+                <VaSelect
+                  v-model="currentAction.actionName"
+                  label="Action"
+                  :options="availableActions"
+                  text-by="text"
+                  value-by="value"
+                />
+              </div>
+            </div>
           </VaCardContent>
         </VaCard>
 
@@ -1059,5 +1201,90 @@ onMounted(() => {
 .table-wrapper {
   height: calc(100vh - 130px);
   background: #fff;
+}
+
+/* Actions list in table */
+.actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.action-context {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.action-separator {
+  color: #9ca3af;
+}
+
+.action-name {
+  font-weight: 500;
+  color: #0066cc;
+}
+
+/* Action tabs styling */
+.actions-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-tabs-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(213, 213, 213, 0.4);
+}
+
+.action-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(213, 213, 213, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.action-tab:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 102, 204, 0.3);
+}
+
+.action-tab.active {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: #0066cc;
+  color: #0066cc;
+}
+
+.action-tab-label {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-tab-remove {
+  margin-left: 0.25rem;
+}
+
+.action-editor {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(213, 213, 213, 0.3);
 }
 </style>

@@ -40,10 +40,4 @@ export class ICsvStoreConfiguration extends IBaseConnectionConfiguration {
 
   @Documentation("A list of possible separator characters used in the CSV file (e.g., ',', ';', '\t').")
   @Attribute() separators: Array<string> = [];
-
-  @Documentation("Number of rows to skip from the start of the CSV file (e.g., to remove headers or metadata).")
-  @Attribute() skipRowsFromStart?: number;
-
-  @Documentation("Number of rows to skip from the end of the CSV file (e.g., to remove footers or summary rows).")
-  @Attribute() skipRowsFromEnd?: number;
 }

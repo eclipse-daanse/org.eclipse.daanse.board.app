@@ -23,17 +23,15 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import { ActionParameter, WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
+import {WidgetActionInterface} from 'org.eclipse.daanse.board.app.lib.events'
+import {WidgetAction} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapWidgetInterface'})
-export abstract class MapWidgetInterface {
-
+export abstract class MapWidgetInterface extends WidgetActionInterface {
+  
   @WidgetAction({eventType: 'map.zoomToThing'})
-  zoomToThing(
-    @ActionParameter() thingId: string,
-    @ActionParameter({optional: true}) zoom?: number,
-    @ActionParameter({optional: true}) duration?: number): void {
+  zoomToThing(thingId: string,zoom?: number,duration?: number): void {
         throw new Error("zoomToThing not implemented");
   }
 }

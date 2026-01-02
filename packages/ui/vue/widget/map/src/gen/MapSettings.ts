@@ -35,7 +35,7 @@ export class MapSettings {
   @Documentation("Optional identifier for the data source.")
   @Attribute() datasourceId?: string;
 
-  @Documentation("Optional list of datasource identifiers for multi-datasource support.")
+  @Documentation("Optional array of additional datasource identifiers for multi-datasource support.")
   @Attribute() datasourceIds: Array<string> = [];
 
   @Documentation("The URL of the base map service.")
