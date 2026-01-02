@@ -79,7 +79,7 @@ export async function useFilterTreeDataSource(element: {
 
   try {
     const mdx = `
-        SELECT {AddCalculatedMembers({${element.item.DIMENSION_UNIQUE_NAME}.${element.item.HIERARCHY_UNIQUE_NAME}.Levels(0).Members})} DIMENSION PROPERTIES MEMBER_TYPE ON 0, {} ON 1 FROM [${element.item.CUBE_NAME}] CELL PROPERTIES CELL_ORDINAL
+        SELECT {AddCalculatedMembers({${element.item.HIERARCHY_UNIQUE_NAME}.Levels(0).Members})} DIMENSION PROPERTIES MEMBER_TYPE ON 0, {} ON 1 FROM [${element.item.CUBE_NAME}] CELL PROPERTIES CELL_ORDINAL
       `;
 
     const childMembersResponce = await api.getMDX(mdx, catalog);
