@@ -55,14 +55,14 @@ export class MetadataStore {
   private api: XMLAApi | null = null
 
   private initPromiseResolve: any
-  private initPromise: Promise<void>
+  private initPromise: Promise<void> | null = null;
 
-  constructor(api: XMLAApi) {
+  public init(api: XMLAApi) {
     this.api = api
 
     this.initPromise = new Promise(resolve => {
       this.initPromiseResolve = resolve
-    })
+    });
   }
 
   public async waitForInit() {

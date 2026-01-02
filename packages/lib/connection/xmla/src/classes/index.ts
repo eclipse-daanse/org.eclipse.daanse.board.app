@@ -112,8 +112,6 @@ export class XmlaConnection extends BaseConnection {
     return true
   }
 
-
-
   static async getCatalogs(url: string, security: SecurityOptions): Promise<DBSchemaCatalog[]> {
     const client = await createClientAsync('xmla.wsdl')
 
