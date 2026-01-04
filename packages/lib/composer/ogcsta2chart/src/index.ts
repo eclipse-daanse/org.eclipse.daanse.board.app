@@ -27,6 +27,9 @@ export * from './interfaces/OGCSTAToChartComposerInterface'
 // Export symbol for dependency injection
 export const symbol = Symbol.for('OGCSTAToChartComposer')
 
+// Widget type identifier - used for action registration and instance registration
+export const WIDGET_TYPE = 'OGCSTAToChartComposer'
+
 if (!container.isBound(OGCSTAToChartComposer)) {
   container.bind(OGCSTAToChartComposer).toSelf().inTransientScope()
 }
@@ -50,10 +53,10 @@ if (!container.isBound(symbol)) {
           const instanceId = config.uid || config.name || `composer-${Date.now()}`
           composer.setInstanceId(instanceId)
 
-          // Register instance so actions can be executed on it
-          actionsRegistry.registerInstance(instanceId, composer)
+          // Register instance with widget type so actions can be executed on it
+          actionsRegistry.registerInstance(instanceId, composer, WIDGET_TYPE)
 
-          console.log(`Registered OGCSTAToChartComposer instance: ${instanceId}`)
+          console.log(`Registered ${WIDGET_TYPE} instance: ${instanceId}`)
         }
       } catch (error) {
         console.warn('Could not register composer instance:', error)
@@ -72,12 +75,12 @@ const registerComposerActions = () => {
 
       // Register with 'system' context from Ecore model
       actionsRegistry.registerActionsFromEcoreString(
-        'OGCSTAToChartComposer',
+        WIDGET_TYPE,
         ecoreModelContent,
         'system',
         'OGCSTAToChartActions.ecore'
       )
-      console.log('Registered OGCSTAToChartComposer actions from Ecore model')
+      console.log(`Registered ${WIDGET_TYPE} actions from Ecore model`)
     }
   } catch (error) {
     console.warn('Could not register OGCSTAToChartComposer actions:', error)
