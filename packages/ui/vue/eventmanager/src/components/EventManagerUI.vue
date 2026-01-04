@@ -203,6 +203,26 @@ const availableActions = computed(() => {
   return actions
 })
 
+// Get available instances for the selected action's widget type
+const availableInstances = computed(() => {
+  if (!currentAction.value?.actionName) return []
+
+  // Find the widget type for the selected action
+  const selectedAction = availableActions.value.find(a => a.value === currentAction.value?.actionName)
+  if (!selectedAction?.widgetType) return []
+
+  // Get registered instances of this widget type
+  const instances = actionsRegistry?.getRegisteredInstances(selectedAction.widgetType) || []
+
+  return [
+    { text: 'All instances', value: '' },
+    ...instances.map(inst => ({
+      text: `${inst.instanceId} (${inst.widgetType})`,
+      value: inst.instanceId
+    }))
+  ]
+})
+
 interface ActionParameterInfo {
   name: string
   type: string
@@ -573,127 +593,60 @@ onMounted(() => {
       cancel-text="Cancel"
     >
       <div class="space-y-4">
-        <!-- Event Source Section -->
+        <!-- 1. Event Source Section -->
         <VaCard class="card-section">
-          <VaCardTitle class="section-title">Event Source</VaCardTitle>
+          <VaCardTitle class="section-title">1. Event Source</VaCardTitle>
           <VaCardContent>
-            <VaSelect
-              v-model="newMapping.context"
-              label="Event Context"
-              :options="contextOptions"
-              text-by="text"
-              value-by="value"
-            />
+            <div class="event-source-grid">
+              <VaSelect
+                v-model="newMapping.context"
+                label="Context"
+                :options="contextOptions"
+                text-by="text"
+                value-by="value"
+              />
 
-            <VaSelect
-              v-if="newMapping.context === 'page'"
-              v-model="newMapping.contextId"
-              label="Page ID"
-              :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-              text-by="text"
-              value-by="value"
-              clearable
-            />
+              <VaSelect
+                v-if="newMapping.context === 'page'"
+                v-model="newMapping.contextId"
+                label="Page ID"
+                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                text-by="text"
+                value-by="value"
+                clearable
+              />
 
-            <VaInput
-              v-else-if="newMapping.context === 'widget'"
-              v-model="newMapping.contextId"
-              label="Widget ID (optional)"
-              placeholder="e.g., specific widgetId"
-              clearable
-            />
+              <VaInput
+                v-else-if="newMapping.context === 'widget'"
+                v-model="newMapping.contextId"
+                label="Widget ID (optional)"
+                placeholder="e.g., specific widgetId"
+                clearable
+              />
 
-            <VaSelect
-              v-model="newMapping.eventType"
-              label="Event Type"
-              :options="availableEvents"
-              text-by="type"
-              value-by="type"
-            />
-          </VaCardContent>
-        </VaCard>
-
-        <!-- Actions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
-            <span class="section-title">Actions</span>
-            <VaButton @click="addAction" size="small" icon="add">Add Action</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
-            <!-- Action Tabs -->
-            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-tabs">
-              <div class="action-tabs-header">
-                <button
-                  v-for="(action, idx) in newMapping.actions"
-                  :key="idx"
-                  :class="['action-tab', { active: currentActionIndex === idx }]"
-                  @click="selectAction(idx)"
-                >
-                  <span class="action-tab-label">{{ idx + 1 }}. {{ action.actionName || '(empty)' }}</span>
-                  <VaButton
-                    v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)"
-                    preset="plain"
-                    icon="close"
-                    color="danger"
-                    size="small"
-                    class="action-tab-remove"
-                  />
-                </button>
-              </div>
-
-              <!-- Current Action Editor -->
-              <div v-if="currentAction" class="action-editor">
-                <VaSelect
-                  v-model="currentAction.targetContext"
-                  label="Action Context"
-                  :options="contextOptions"
-                  text-by="text"
-                  value-by="value"
-                />
-
-                <VaSelect
-                  v-if="currentAction.targetContext === 'page'"
-                  v-model="currentAction.targetContextId"
-                  label="Target Page ID"
-                  :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                  text-by="text"
-                  value-by="value"
-                  clearable
-                />
-
-                <VaInput
-                  v-else-if="currentAction.targetContext === 'widget'"
-                  v-model="currentAction.targetContextId"
-                  label="Target Widget ID (optional)"
-                  placeholder="e.g., specific widgetId"
-                  clearable
-                />
-
-                <VaSelect
-                  v-model="currentAction.actionName"
-                  label="Action"
-                  :options="availableActions"
-                  text-by="text"
-                  value-by="value"
-                />
-              </div>
+              <VaSelect
+                v-model="newMapping.eventType"
+                label="Event Type"
+                :options="availableEvents"
+                text-by="type"
+                value-by="type"
+              />
             </div>
           </VaCardContent>
         </VaCard>
 
-        <!-- Conditions Section -->
+        <!-- 2. Conditions Section -->
         <VaCard class="card-section">
           <VaCardTitle class="flex justify-between items-center">
-            <span class="section-title">Conditions</span>
-            <VaButton @click="addCondition" size="small" icon="add">Add Condition</VaButton>
+            <span class="section-title">2. Conditions</span>
+            <VaButton @click="addCondition" size="small" icon="add" preset="secondary">Add</VaButton>
           </VaCardTitle>
           <VaCardContent>
             <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
               <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
                 <VaSelect
                   v-model="condition.prop"
-                  placeholder="Select property"
+                  placeholder="Property"
                   :options="availablePayloadProperties"
                   text-by="text"
                   value-by="value"
@@ -704,7 +657,7 @@ onMounted(() => {
                   :options="comperatorOptions"
                   text-by="text"
                   value-by="value"
-                  class="w-24"
+                  class="w-20"
                 />
                 <VaInput
                   v-model="condition.value"
@@ -726,62 +679,129 @@ onMounted(() => {
           </VaCardContent>
         </VaCard>
 
-        <!-- Function Parameters Section -->
-        <VaCard v-if="selectedActionParameters.length > 0" class="card-section">
-          <VaCardTitle class="section-title">Function Parameters</VaCardTitle>
+        <!-- 3. Actions Section -->
+        <VaCard class="card-section">
+          <VaCardTitle class="flex justify-between items-center">
+            <span class="section-title">3. Actions</span>
+            <VaButton @click="addAction" size="small" icon="add" preset="secondary">Add Action</VaButton>
+          </VaCardTitle>
           <VaCardContent>
-            <div class="space-y-3">
-              <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-wrapper">
-                <div class="parameter-header">
-                  <span class="parameter-info">
-                    <span class="parameter-name">{{ param.name }}</span>
-                    <span v-if="param.optional" class="parameter-optional">?</span>
-                    <span class="parameter-separator">:</span>
-                    <span class="parameter-type">{{ param.type }}</span>
+            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
+              <!-- Action Cards -->
+              <div
+                v-for="(action, idx) in newMapping.actions"
+                :key="idx"
+                :class="['action-card', { active: currentActionIndex === idx }]"
+                @click="selectAction(idx)"
+              >
+                <div class="action-card-header">
+                  <span class="action-number">{{ idx + 1 }}</span>
+                  <span class="action-summary">
+                    <span class="action-context-badge">{{ action.targetContext }}</span>
+                    <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
+                    <span v-else class="action-empty">(select action)</span>
                   </span>
+                  <VaButton
+                    v-if="newMapping.actions.length > 1"
+                    @click.stop="removeAction(idx)"
+                    preset="plain"
+                    icon="close"
+                    color="danger"
+                    size="small"
+                  />
                 </div>
 
-                <div class="flex gap-4 mb-2">
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      :name="`source-${param.index}`"
-                      value="payload"
-                      :checked="getParameterValueSource(param.index) === 'payload'"
-                      @change="setParameterValueSource(param.index, 'payload')"
+                <!-- Expanded Action Editor (when selected) -->
+                <div v-if="currentActionIndex === idx" class="action-card-body">
+                  <div class="action-settings-row">
+                    <VaSelect
+                      v-model="action.targetContext"
+                      label="Context"
+                      :options="contextOptions"
+                      text-by="text"
+                      value-by="value"
+                      class="context-select"
                     />
-                    <span class="text-sm">From Event Payload</span>
-                  </label>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      :name="`source-${param.index}`"
-                      value="manual"
-                      :checked="getParameterValueSource(param.index) === 'manual'"
-                      @change="setParameterValueSource(param.index, 'manual')"
+
+                    <VaSelect
+                      v-if="action.targetContext === 'page'"
+                      v-model="action.targetContextId"
+                      label="Target Page"
+                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                      text-by="text"
+                      value-by="value"
+                      clearable
+                      class="target-select"
                     />
-                    <span class="text-sm">Manual Value</span>
-                  </label>
+
+                    <VaSelect
+                      v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
+                      v-model="action.targetContextId"
+                      label="Target Instance"
+                      :options="availableInstances"
+                      text-by="text"
+                      value-by="value"
+                      clearable
+                      class="target-select"
+                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"
+                    />
+
+                    <VaSelect
+                      v-model="action.actionName"
+                      label="Action"
+                      :options="availableActions"
+                      text-by="text"
+                      value-by="value"
+                      class="action-select"
+                    />
+                  </div>
+
+                  <!-- Parameters (inline) -->
+                  <div v-if="selectedActionParameters.length > 0" class="action-parameters">
+                    <div class="parameters-title">Parameters</div>
+                    <div class="parameters-list">
+                      <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-item">
+                        <div class="parameter-label">
+                          <span class="parameter-name">{{ param.name }}</span>
+                          <span v-if="param.optional" class="parameter-optional">?</span>
+                          <span class="parameter-type-badge">{{ param.type }}</span>
+                        </div>
+                        <div class="parameter-input-row">
+                          <div class="source-toggle">
+                            <button
+                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'payload' }]"
+                              @click.stop="setParameterValueSource(param.index, 'payload')"
+                              type="button"
+                            >Payload</button>
+                            <button
+                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'manual' }]"
+                              @click.stop="setParameterValueSource(param.index, 'manual')"
+                              type="button"
+                            >Manual</button>
+                          </div>
+                          <VaSelect
+                            v-if="getParameterValueSource(param.index) === 'payload'"
+                            :model-value="getPayloadPathForParameter(param.index)"
+                            @update:model-value="updateParameterMapping(param.index, $event)"
+                            :placeholder="param.optional ? '(optional)' : 'Select property'"
+                            :options="availablePayloadProperties"
+                            text-by="text"
+                            value-by="value"
+                            clearable
+                            class="parameter-value-input"
+                          />
+                          <VaInput
+                            v-else
+                            :model-value="getManualValueForParameter(param.index)"
+                            @update:model-value="updateManualParameterValue(param.index, $event)"
+                            :placeholder="`Enter ${param.type}`"
+                            class="parameter-value-input"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <VaSelect
-                  v-if="getParameterValueSource(param.index) === 'payload'"
-                  :model-value="getPayloadPathForParameter(param.index)"
-                  @update:model-value="updateParameterMapping(param.index, $event)"
-                  :placeholder="param.optional ? '(optional)' : 'Select payload property'"
-                  :options="availablePayloadProperties"
-                  text-by="text"
-                  value-by="value"
-                  clearable
-                />
-
-                <VaInput
-                  v-else
-                  :model-value="getManualValueForParameter(param.index)"
-                  @update:model-value="updateManualParameterValue(param.index, $event)"
-                  :placeholder="`Enter ${param.type} value`"
-                  :messages="[`Type: ${param.type}`]"
-                />
               </div>
             </div>
           </VaCardContent>
@@ -800,127 +820,60 @@ onMounted(() => {
       cancel-text="Cancel"
     >
       <div class="space-y-4">
-        <!-- Event Source Section -->
+        <!-- 1. Event Source Section -->
         <VaCard class="card-section">
-          <VaCardTitle class="section-title">Event Source</VaCardTitle>
+          <VaCardTitle class="section-title">1. Event Source</VaCardTitle>
           <VaCardContent>
-            <VaSelect
-              v-model="newMapping.context"
-              label="Event Context"
-              :options="contextOptions"
-              text-by="text"
-              value-by="value"
-            />
+            <div class="event-source-grid">
+              <VaSelect
+                v-model="newMapping.context"
+                label="Context"
+                :options="contextOptions"
+                text-by="text"
+                value-by="value"
+              />
 
-            <VaSelect
-              v-if="newMapping.context === 'page'"
-              v-model="newMapping.contextId"
-              label="Page ID"
-              :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-              text-by="text"
-              value-by="value"
-              clearable
-            />
+              <VaSelect
+                v-if="newMapping.context === 'page'"
+                v-model="newMapping.contextId"
+                label="Page ID"
+                :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                text-by="text"
+                value-by="value"
+                clearable
+              />
 
-            <VaInput
-              v-else-if="newMapping.context === 'widget'"
-              v-model="newMapping.contextId"
-              label="Widget ID (optional)"
-              placeholder="e.g., specific widgetId"
-              clearable
-            />
+              <VaInput
+                v-else-if="newMapping.context === 'widget'"
+                v-model="newMapping.contextId"
+                label="Widget ID (optional)"
+                placeholder="e.g., specific widgetId"
+                clearable
+              />
 
-            <VaSelect
-              v-model="newMapping.eventType"
-              label="Event Type"
-              :options="availableEvents"
-              text-by="type"
-              value-by="type"
-            />
-          </VaCardContent>
-        </VaCard>
-
-        <!-- Actions Section -->
-        <VaCard class="card-section">
-          <VaCardTitle class="flex justify-between items-center">
-            <span class="section-title">Actions</span>
-            <VaButton @click="addAction" size="small" icon="add">Add Action</VaButton>
-          </VaCardTitle>
-          <VaCardContent>
-            <!-- Action Tabs -->
-            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-tabs">
-              <div class="action-tabs-header">
-                <button
-                  v-for="(action, idx) in newMapping.actions"
-                  :key="idx"
-                  :class="['action-tab', { active: currentActionIndex === idx }]"
-                  @click="selectAction(idx)"
-                >
-                  <span class="action-tab-label">{{ idx + 1 }}. {{ action.actionName || '(empty)' }}</span>
-                  <VaButton
-                    v-if="newMapping.actions.length > 1"
-                    @click.stop="removeAction(idx)"
-                    preset="plain"
-                    icon="close"
-                    color="danger"
-                    size="small"
-                    class="action-tab-remove"
-                  />
-                </button>
-              </div>
-
-              <!-- Current Action Editor -->
-              <div v-if="currentAction" class="action-editor">
-                <VaSelect
-                  v-model="currentAction.targetContext"
-                  label="Action Context"
-                  :options="contextOptions"
-                  text-by="text"
-                  value-by="value"
-                />
-
-                <VaSelect
-                  v-if="currentAction.targetContext === 'page'"
-                  v-model="currentAction.targetContextId"
-                  label="Target Page ID"
-                  :options="[{ text: 'Any page', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
-                  text-by="text"
-                  value-by="value"
-                  clearable
-                />
-
-                <VaInput
-                  v-else-if="currentAction.targetContext === 'widget'"
-                  v-model="currentAction.targetContextId"
-                  label="Target Widget ID (optional)"
-                  placeholder="e.g., specific widgetId"
-                  clearable
-                />
-
-                <VaSelect
-                  v-model="currentAction.actionName"
-                  label="Action"
-                  :options="availableActions"
-                  text-by="text"
-                  value-by="value"
-                />
-              </div>
+              <VaSelect
+                v-model="newMapping.eventType"
+                label="Event Type"
+                :options="availableEvents"
+                text-by="type"
+                value-by="type"
+              />
             </div>
           </VaCardContent>
         </VaCard>
 
-        <!-- Conditions Section -->
+        <!-- 2. Conditions Section -->
         <VaCard class="card-section">
           <VaCardTitle class="flex justify-between items-center">
-            <span class="section-title">Conditions</span>
-            <VaButton @click="addCondition" size="small" icon="add">Add Condition</VaButton>
+            <span class="section-title">2. Conditions</span>
+            <VaButton @click="addCondition" size="small" icon="add" preset="secondary">Add</VaButton>
           </VaCardTitle>
           <VaCardContent>
             <div v-if="newMapping.conditions && newMapping.conditions.length > 0" class="space-y-2">
               <div v-for="(condition, index) in newMapping.conditions" :key="index" class="condition-row">
                 <VaSelect
                   v-model="condition.prop"
-                  placeholder="Select property"
+                  placeholder="Property"
                   :options="availablePayloadProperties"
                   text-by="text"
                   value-by="value"
@@ -931,7 +884,7 @@ onMounted(() => {
                   :options="comperatorOptions"
                   text-by="text"
                   value-by="value"
-                  class="w-24"
+                  class="w-20"
                 />
                 <VaInput
                   v-model="condition.value"
@@ -953,62 +906,129 @@ onMounted(() => {
           </VaCardContent>
         </VaCard>
 
-        <!-- Function Parameters Section -->
-        <VaCard v-if="selectedActionParameters.length > 0" class="card-section">
-          <VaCardTitle class="section-title">Function Parameters</VaCardTitle>
+        <!-- 3. Actions Section -->
+        <VaCard class="card-section">
+          <VaCardTitle class="flex justify-between items-center">
+            <span class="section-title">3. Actions</span>
+            <VaButton @click="addAction" size="small" icon="add" preset="secondary">Add Action</VaButton>
+          </VaCardTitle>
           <VaCardContent>
-            <div class="space-y-3">
-              <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-wrapper">
-                <div class="parameter-header">
-                  <span class="parameter-info">
-                    <span class="parameter-name">{{ param.name }}</span>
-                    <span v-if="param.optional" class="parameter-optional">?</span>
-                    <span class="parameter-separator">:</span>
-                    <span class="parameter-type">{{ param.type }}</span>
+            <div v-if="newMapping.actions && newMapping.actions.length > 0" class="actions-list-editor">
+              <!-- Action Cards -->
+              <div
+                v-for="(action, idx) in newMapping.actions"
+                :key="idx"
+                :class="['action-card', { active: currentActionIndex === idx }]"
+                @click="selectAction(idx)"
+              >
+                <div class="action-card-header">
+                  <span class="action-number">{{ idx + 1 }}</span>
+                  <span class="action-summary">
+                    <span class="action-context-badge">{{ action.targetContext }}</span>
+                    <span v-if="action.actionName" class="action-name-text">{{ action.actionName }}</span>
+                    <span v-else class="action-empty">(select action)</span>
                   </span>
+                  <VaButton
+                    v-if="newMapping.actions.length > 1"
+                    @click.stop="removeAction(idx)"
+                    preset="plain"
+                    icon="close"
+                    color="danger"
+                    size="small"
+                  />
                 </div>
 
-                <div class="flex gap-4 mb-2">
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      :name="`source-${param.index}`"
-                      value="payload"
-                      :checked="getParameterValueSource(param.index) === 'payload'"
-                      @change="setParameterValueSource(param.index, 'payload')"
+                <!-- Expanded Action Editor (when selected) -->
+                <div v-if="currentActionIndex === idx" class="action-card-body">
+                  <div class="action-settings-row">
+                    <VaSelect
+                      v-model="action.targetContext"
+                      label="Context"
+                      :options="contextOptions"
+                      text-by="text"
+                      value-by="value"
+                      class="context-select"
                     />
-                    <span class="text-sm">From Event Payload</span>
-                  </label>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      :name="`source-${param.index}`"
-                      value="manual"
-                      :checked="getParameterValueSource(param.index) === 'manual'"
-                      @change="setParameterValueSource(param.index, 'manual')"
+
+                    <VaSelect
+                      v-if="action.targetContext === 'page'"
+                      v-model="action.targetContextId"
+                      label="Target Page"
+                      :options="[{ text: 'Any', value: '' }, ...availablePages.map(p => ({ text: p, value: p }))]"
+                      text-by="text"
+                      value-by="value"
+                      clearable
+                      class="target-select"
                     />
-                    <span class="text-sm">Manual Value</span>
-                  </label>
+
+                    <VaSelect
+                      v-else-if="action.targetContext === 'widget' || action.targetContext === 'system'"
+                      v-model="action.targetContextId"
+                      label="Target Instance"
+                      :options="availableInstances"
+                      text-by="text"
+                      value-by="value"
+                      clearable
+                      class="target-select"
+                      :placeholder="availableInstances.length > 1 ? 'Select instance' : 'All instances'"
+                    />
+
+                    <VaSelect
+                      v-model="action.actionName"
+                      label="Action"
+                      :options="availableActions"
+                      text-by="text"
+                      value-by="value"
+                      class="action-select"
+                    />
+                  </div>
+
+                  <!-- Parameters (inline) -->
+                  <div v-if="selectedActionParameters.length > 0" class="action-parameters">
+                    <div class="parameters-title">Parameters</div>
+                    <div class="parameters-list">
+                      <div v-for="param in selectedActionParameters" :key="param.index" class="parameter-item">
+                        <div class="parameter-label">
+                          <span class="parameter-name">{{ param.name }}</span>
+                          <span v-if="param.optional" class="parameter-optional">?</span>
+                          <span class="parameter-type-badge">{{ param.type }}</span>
+                        </div>
+                        <div class="parameter-input-row">
+                          <div class="source-toggle">
+                            <button
+                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'payload' }]"
+                              @click.stop="setParameterValueSource(param.index, 'payload')"
+                              type="button"
+                            >Payload</button>
+                            <button
+                              :class="['toggle-btn', { active: getParameterValueSource(param.index) === 'manual' }]"
+                              @click.stop="setParameterValueSource(param.index, 'manual')"
+                              type="button"
+                            >Manual</button>
+                          </div>
+                          <VaSelect
+                            v-if="getParameterValueSource(param.index) === 'payload'"
+                            :model-value="getPayloadPathForParameter(param.index)"
+                            @update:model-value="updateParameterMapping(param.index, $event)"
+                            :placeholder="param.optional ? '(optional)' : 'Select property'"
+                            :options="availablePayloadProperties"
+                            text-by="text"
+                            value-by="value"
+                            clearable
+                            class="parameter-value-input"
+                          />
+                          <VaInput
+                            v-else
+                            :model-value="getManualValueForParameter(param.index)"
+                            @update:model-value="updateManualParameterValue(param.index, $event)"
+                            :placeholder="`Enter ${param.type}`"
+                            class="parameter-value-input"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <VaSelect
-                  v-if="getParameterValueSource(param.index) === 'payload'"
-                  :model-value="getPayloadPathForParameter(param.index)"
-                  @update:model-value="updateParameterMapping(param.index, $event)"
-                  :placeholder="param.optional ? '(optional)' : 'Select payload property'"
-                  :options="availablePayloadProperties"
-                  text-by="text"
-                  value-by="value"
-                  clearable
-                />
-
-                <VaInput
-                  v-else
-                  :model-value="getManualValueForParameter(param.index)"
-                  @update:model-value="updateManualParameterValue(param.index, $event)"
-                  :placeholder="`Enter ${param.type} value`"
-                  :messages="[`Type: ${param.type}`]"
-                />
               </div>
             </div>
           </VaCardContent>
@@ -1107,8 +1127,8 @@ onMounted(() => {
 }
 
 .parameter-name {
-  font-weight: 600;
-  color: #0066cc;
+  /*font-weight: 600;
+  color: #cc9100;*/
 }
 
 .parameter-optional {
@@ -1227,8 +1247,8 @@ onMounted(() => {
 }
 
 .action-name {
-  font-weight: 500;
-  color: #0066cc;
+  /*font-weight: 500;
+  color: #cc9100;*/
 }
 
 /* Action tabs styling */
@@ -1261,13 +1281,13 @@ onMounted(() => {
 
 .action-tab:hover {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(0, 102, 204, 0.3);
+  border-color: rgba(205, 145, 0, 0.3);
 }
 
 .action-tab.active {
   background: rgba(0, 102, 204, 0.1);
-  border-color: #0066cc;
-  color: #0066cc;
+  border-color: #cc9100;
+  color: #cc9100;
 }
 
 .action-tab-label {
@@ -1286,5 +1306,216 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
   border: 1px solid rgba(213, 213, 213, 0.3);
+}
+
+/* New compact layout styles */
+.event-source-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Action cards list */
+.actions-list-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-card {
+ /* border: 1px solid rgba(213, 213, 213, 0.4);*/
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 1px 1px 5px #cccccc69;
+}
+
+.action-card:hover {
+  border-color: rgba(149, 149, 149, 0.3);
+}
+
+.action-card.active {
+  border-color: rgba(149, 149, 149, 0.3);
+}
+
+.action-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.action-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  /* background: #cc9100; */
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  border: 1px solid #cc9100;
+  color: #cc9100;
+}
+
+.action-summary {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.action-context-badge {
+  padding: 0.125rem 0.5rem;
+  background: #e5e7eb;
+  color: #4b5563;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.action-name-text {
+  font-weight: 500;
+  /*color: #cc9100;*/
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-empty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.action-card-body {
+  padding: 0 1rem 1rem 1rem;
+  border-top: 1px solid rgba(213, 213, 213, 0.3);
+  margin-top: 0;
+}
+
+.action-settings-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.context-select {
+  min-width: 100px;
+}
+
+.target-select {
+  min-width: 120px;
+}
+
+.action-select {
+  min-width: 180px;
+}
+
+/* Inline parameters */
+.action-parameters {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(213, 213, 213, 0.5);
+}
+
+.parameters-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.parameters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.parameter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  /*background: rgba(248, 250, 252, 0.8);
+  border-radius: 6px;
+  border: 1px solid rgba(213, 213, 213, 0.3);*/
+}
+
+.parameter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.parameter-label .parameter-name {
+  font-weight: 600;
+  /*color: #cc9100;*/
+}
+
+.parameter-label .parameter-optional {
+  color: #9ca3af;
+}
+
+.parameter-type-badge {
+  margin-left: 0.25rem;
+  padding: 0.0625rem 0.375rem;
+  /* background: #dbeafe; */
+  /* color: #cc9100; */
+  border-radius: 3px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  /* border-color: #d9d9d9; */
+  border: 1px solid #ddd;
+}
+
+.parameter-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.source-toggle {
+  display: flex;
+  border: 1px solid rgba(213, 213, 213, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.toggle-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #6b7280;
+}
+
+.toggle-btn:first-child {
+  border-right: 1px solid rgba(213, 213, 213, 0.5);
+}
+
+.toggle-btn:hover {
+  background: #f3f4f6;
+}
+
+.toggle-btn.active {
+  background: #6767676e;
+  color: white;
+}
+
+.parameter-value-input {
+  flex: 1;
+  min-width: 150px;
 }
 </style>

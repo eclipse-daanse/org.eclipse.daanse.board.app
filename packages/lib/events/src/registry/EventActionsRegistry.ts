@@ -40,6 +40,15 @@ export interface WidgetTypeRegistration {
 }
 
 /**
+ * Registrierte Instanz
+ */
+export interface RegisteredInstance {
+  instanceId: string;
+  widgetType: string;
+  instanceRef: any;
+}
+
+/**
  * Registry für Event-Aktionen in verschiedenen Kontexten
  */
 @injectable()
@@ -47,6 +56,7 @@ export class EventActionsRegistry {
   private actions: Map<string, EventAction[]> = new Map();
   private widgetTypes: Map<string, WidgetTypeRegistration> = new Map();
   private widgetInstances: Map<string, any> = new Map(); // widgetInstanceId -> widget component ref
+  private instanceTypes: Map<string, string> = new Map(); // instanceId -> widgetType
   private ecoreMetadataService?: EcoreMetadataService;
 
   /**
@@ -315,10 +325,14 @@ export class EventActionsRegistry {
    * Wird beim Mount/Init aufgerufen
    * @param instanceId - Eindeutige ID der Instanz
    * @param instanceRef - Referenz auf die Instanz mit den Action-Methoden
+   * @param widgetType - Optional: Widget-Typ für die Instanz (z.B. "OGCSTAToChartComposer")
    */
-  registerInstance(instanceId: string, instanceRef: any): void {
+  registerInstance(instanceId: string, instanceRef: any, widgetType?: string): void {
     this.widgetInstances.set(instanceId, instanceRef);
-    console.log(`Registered instance "${instanceId}"`);
+    if (widgetType) {
+      this.instanceTypes.set(instanceId, widgetType);
+    }
+    console.log(`Registered instance "${instanceId}"${widgetType ? ` (type: ${widgetType})` : ''}`);
   }
 
   /**
@@ -335,7 +349,37 @@ export class EventActionsRegistry {
    */
   unregisterInstance(instanceId: string): void {
     this.widgetInstances.delete(instanceId);
+    this.instanceTypes.delete(instanceId);
     console.log(`Unregistered instance "${instanceId}"`);
+  }
+
+  /**
+   * Gibt alle registrierten Instanzen zurück
+   * @param widgetType - Optional: Filter nach Widget-Typ
+   */
+  getRegisteredInstances(widgetType?: string): RegisteredInstance[] {
+    const result: RegisteredInstance[] = [];
+
+    for (const [instanceId, instanceRef] of this.widgetInstances.entries()) {
+      const type = this.instanceTypes.get(instanceId) || 'unknown';
+
+      if (!widgetType || type === widgetType) {
+        result.push({
+          instanceId,
+          widgetType: type,
+          instanceRef
+        });
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Gibt alle Instanz-IDs zurück
+   */
+  getInstanceIds(): string[] {
+    return Array.from(this.widgetInstances.keys());
   }
 
   /**
