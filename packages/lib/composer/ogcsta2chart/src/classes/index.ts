@@ -42,8 +42,19 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   private configuration!: IOGCSTAToChartComposerConfiguration  // Store config reference
   private connectedDatasources: string[] = []
   private thingIds: (string | number)[] = []
-  private datastreams: DatastreamSelection[] = []
   private allThingsCache: any[] = []  // Cache all things for name/id lookup
+
+  // Use getter to always access configuration.datastreams directly
+  // This ensures we stay in sync even when Settings UI modifies the array
+  private get datastreams(): DatastreamSelection[] {
+    return this.configuration?.datastreams || []
+  }
+
+  private set datastreams(value: DatastreamSelection[]) {
+    if (this.configuration) {
+      this.configuration.datastreams = value
+    }
+  }
 
   destroy(): void {
     console.log(`Destroying OGCSTAToChartComposer: ${this.instanceId}`)
@@ -90,9 +101,16 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     // Store reference to configuration for UI sync
     this.configuration = configuration
 
+    // Ensure arrays exist in configuration
+    if (!Array.isArray(configuration.datastreams)) {
+      configuration.datastreams = []
+    }
+    if (!Array.isArray(configuration.thingIds)) {
+      configuration.thingIds = []
+    }
+
     this.connectedDatasources = configuration.connectedDatasources
-    this.thingIds = configuration.thingIds || []
-    this.datastreams = configuration.datastreams || []
+    this.thingIds = configuration.thingIds
 
     const updateFn = async () => {
       if (this.isUpdating) {
@@ -225,6 +243,11 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
                     setTimeout(() => this.loadingPromises.delete(loadKey), 100)
 
                     return observations
+                  }).catch((error: any) => {
+                    // Remove failed promise from cache immediately so next call can retry
+                    this.loadingPromises.delete(loadKey)
+                    console.error(`❌ Failed to load observations for ${ds.datastreamId}:`, error)
+                    throw error  // Re-throw to propagate error
                   })
 
                   // Store promise
@@ -451,20 +474,10 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
 
     if (matchingDatastreams.length > 0) {
       console.log(`✅ Found ${matchingDatastreams.length} matching datastream(s)`, matchingDatastreams)
+      // datastreams getter/setter directly accesses configuration.datastreams
+      // so we only need to push to one place
       this.datastreams.push(...matchingDatastreams)
       console.log(`📊 Total datastreams now: ${this.datastreams.length}`, this.datastreams)
-
-      // Sync with configuration for UI reactivity
-      if (this.configuration) {
-        this.configuration.datastreams.splice(
-          this.configuration.datastreams.length,
-          0,
-          ...matchingDatastreams
-        )
-        console.log(`📝 Config datastreams synced: ${this.configuration.datastreams.length}`)
-      } else {
-        console.warn(`⚠️ No configuration reference!`)
-      }
 
       this.cachedData = null
       console.log(`🔔 Calling notify() on instance ${this.instanceId}`)
@@ -480,12 +493,8 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   removeAllDatastreams(): void {
     console.log(`🗑️ OGCSTAToChartComposer: Removing all datastreams`)
 
-    this.datastreams = []
-
-    // Sync with configuration for UI reactivity
-    if (this.configuration) {
-      this.configuration.datastreams.splice(0, this.configuration.datastreams.length)
-    }
+    // Use splice to clear array in-place (maintains Vue reactivity)
+    this.datastreams.splice(0, this.datastreams.length)
 
     this.cachedData = null
     this.notify()
@@ -499,21 +508,25 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     console.log(`🗑️ OGCSTAToChartComposer: Removing datastream by name: "${name}"`)
 
     const initialLength = this.datastreams.length
-    this.datastreams = this.datastreams.filter(ds => {
+
+    // Find indices to remove (in reverse order to avoid index shifting)
+    const indicesToRemove: number[] = []
+    this.datastreams.forEach((ds, index) => {
       const dsLabel = ds.label || ''
-      return dsLabel !== name && !dsLabel.toLowerCase().includes(name.toLowerCase())
+      if (dsLabel === name || dsLabel.toLowerCase().includes(name.toLowerCase())) {
+        indicesToRemove.push(index)
+      }
     })
+
+    // Remove in reverse order to maintain correct indices
+    for (let i = indicesToRemove.length - 1; i >= 0; i--) {
+      this.datastreams.splice(indicesToRemove[i], 1)
+    }
 
     const removedCount = initialLength - this.datastreams.length
 
     if (removedCount > 0) {
       console.log(`✅ Removed ${removedCount} datastream(s)`)
-
-      // Sync with configuration for UI reactivity
-      if (this.configuration) {
-        this.configuration.datastreams.splice(0, this.configuration.datastreams.length, ...this.datastreams)
-      }
-
       this.cachedData = null
       this.notify()
     } else {

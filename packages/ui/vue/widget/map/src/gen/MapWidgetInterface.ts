@@ -29,9 +29,14 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapWidgetInterface'})
 export abstract class MapWidgetInterface extends WidgetActionInterface {
-  
+
   @WidgetAction({eventType: 'map.zoomToThing'})
   zoomToThing(thingId: string,zoom?: number,duration?: number): void {
         throw new Error("zoomToThing not implemented");
+  }
+
+  @WidgetAction({eventType: 'map.selectThingById'})
+  selectThingById(thingId: string): void {
+        throw new Error("selectThingById not implemented");
   }
 }

@@ -37,7 +37,8 @@ export function useTemporaryStore(
       settings.value,
     )
     const factory = container.get(identifiers.Store) as any
-    tempStore.value = factory(settings.value.config)
+    // Mark as temporary preview - factories should not register these in EventActionsRegistry
+    tempStore.value = factory({ ...settings.value.config, _isTemporaryPreview: true })
   })
 
   const update = async () => {
@@ -47,7 +48,8 @@ export function useTemporaryStore(
 
     const factory = container.get(identifiers.Store) as any
 
-    const newStore = factory(settings.value.config) 
+    // Mark as temporary preview - factories should not register these in EventActionsRegistry
+    const newStore = factory({ ...settings.value.config, _isTemporaryPreview: true })
     if (newStore.initPromise) {
         await newStore.initPromise
         tempStore.value = newStore

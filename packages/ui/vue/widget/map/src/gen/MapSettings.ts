@@ -59,4 +59,7 @@ export class MapSettings {
 
   @Documentation("Enable marker clustering for OGC STA Things and Datastreams")
   @Attribute() enableClustering?: boolean;
+
+  @Documentation("Color used to highlight selected Things on the map (default: #ff0000)")
+  @Attribute() selectionHighlightColor?: string = "#ff0000";
 }

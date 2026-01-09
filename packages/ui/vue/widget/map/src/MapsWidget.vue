@@ -187,6 +187,7 @@ watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
 
 const { getById } = useDataPointRegistry()
 const openThing = ref<{ [key: string]: boolean }>({})
+const selectedThingId = ref<string | null>(null)
 let mounted = false
 
 // Helper function to get data for a specific layer
@@ -880,6 +881,19 @@ let api = new class implements MapWidgetInterface{
       easeLinearity: 0.25
     })
   }
+
+  selectThingById = (thingId: string) => {
+    logMap('selectThingById called with:', thingId)
+
+    // Toggle selection: if already selected, deselect
+    if (selectedThingId.value === thingId) {
+      selectedThingId.value = null
+      logMap('Thing deselected')
+    } else {
+      selectedThingId.value = thingId
+      logMap('Thing selected:', thingId)
+    }
+  }
 };
 
 // Expose MapWidgetInterface methods
@@ -1034,6 +1048,8 @@ onUnmounted(() => {
           :get-pointform-area="getPointformArea"
           :transform-to-geo-json="transformToGeoJson"
           :get-by-id="getById"
+          :selected-thing-id="selectedThingId"
+          :selection-highlight-color="config.selectionHighlightColor ?? '#ff0000'"
         />
       </template>
 

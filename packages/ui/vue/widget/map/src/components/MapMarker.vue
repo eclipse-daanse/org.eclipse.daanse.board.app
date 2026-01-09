@@ -20,18 +20,24 @@ interface MapMarkerProps {
   imageUrl?: string
   imageSize?: number
   isRound?: boolean
+  isSelected?: boolean
+  selectionColor?: string
 }
 
 const props = withDefaults(defineProps<MapMarkerProps>(), {
   isRound: false,
-  imageSize: 32
+  imageSize: 32,
+  isSelected: false,
+  selectionColor: '#ff0000'
 })
 </script>
 
 <template>
   <template v-if="renderAs === 'icon'">
     <div
-      :style="{ background: backgroundColor }"
+      :style="{
+        background: isSelected ? selectionColor : backgroundColor
+      }"
       :class="['pin', 'icon', { round: isRound }]"
     >
       <div class="inner">
@@ -46,7 +52,9 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
 
   <template v-if="renderAs === 'prop'">
     <div
-      :style="{ background: backgroundColor }"
+      :style="{
+        background: isSelected ? selectionColor : backgroundColor
+      }"
       :class="['pin', 'contain', 'marker', { round: isRound }]"
     >
       <div class="inner">
@@ -61,7 +69,10 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
       class="image-marker"
       :style="{
         width: `${imageSize}px`,
-        height: `${imageSize}px`
+        height: `${imageSize}px`,
+        background: isSelected ? selectionColor : undefined,
+        borderRadius: isSelected ? '50%' : undefined,
+        padding: isSelected ? '4px' : undefined
       }"
     >
       <img
