@@ -30,23 +30,23 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 export abstract class TwoWayConnection extends PubSubConnection {
 
   @Attribute() ready?: boolean;
-  
+
   onMessage(data?: any,topic?: string): void {
         throw new Error("onMessage not implemented");
   }
-  
+
   onConnect(): void {
         throw new Error("onConnect not implemented");
   }
-  
+
   onClose(): void {
         throw new Error("onClose not implemented");
   }
-  
+
   onError(error?: any): void {
         throw new Error("onError not implemented");
   }
-  
+
   hasTopics(): boolean {
         throw new Error("hasTopics not implemented");
   }

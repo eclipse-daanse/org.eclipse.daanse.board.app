@@ -62,4 +62,7 @@ export class MapSettings {
 
   @Documentation("Color used to highlight selected Things on the map (default: #ff0000)")
   @Attribute() selectionHighlightColor?: string = "#ff0000";
+
+  @Documentation("ID of the currently selected Thing (persisted across mode switches)")
+  @Attribute() selectedThingId?: string | null;
 }

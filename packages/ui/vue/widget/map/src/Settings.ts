@@ -26,7 +26,8 @@ export interface IMapSettings {
   OGCSstyles: IRenderer[],
   services: Service[];
   fixed:boolean,
-  selectionHighlightColor?: string
+  selectionHighlightColor?: string,
+  selectedThingId?: string | null
 }
 
 export interface LayerI {

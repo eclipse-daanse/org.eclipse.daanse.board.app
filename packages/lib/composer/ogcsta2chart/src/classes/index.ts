@@ -92,6 +92,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   private cachedData: any = null
   private cachedThingsStructure: any[] = []  // Cache Things structure for operation mode
   private loadingPromises: Map<string, Promise<any>> = new Map()  // Track ongoing loads to prevent duplicates
+  private requestSessionId: number = 0  // Incremented on each thing switch to invalidate old requests
 
   public static availableTypes = ['ogcsta']
 
@@ -323,9 +324,9 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   }
 
   /**
-   * Switch to a different Thing by its ID
-   * @param id - The ID of the Thing to switch to
-   */
+    * Switch to a different Thing by its ID
+    * @param id - The ID of the Thing to switch to
+    */
   async switchThingById(id: string): Promise<void> {
     console.log(`🔄 OGCSTAToChartComposer: Switching thing by id: "${id}"`)
 
@@ -346,7 +347,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     const thing = this.allThingsCache.find((t: any) => {
       const thingName = t.name || t.Name
       return thingName === name ||
-             thingName?.toLowerCase() === name.toLowerCase()
+            thingName?.toLowerCase() === name.toLowerCase()
     })
 
     return thing || null
@@ -410,11 +411,77 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   }
 
   /**
+   * Load datastreams for a specific thing if not already loaded
+   */
+  private async loadDatastreamsForThing(thingId: string | number): Promise<any | null> {
+    // Find thing in cache
+    const thing = this.allThingsCache.find((t: any) => {
+      const tId = t['@iot.id'] || t.iotId
+      return tId == thingId
+    })
+
+    // If thing has datastreams, return it
+    if (thing?.datastreams && thing.datastreams.length > 0) {
+      console.log(`📦 Thing ${thingId} already has ${thing.datastreams.length} datastreams cached`)
+      return thing
+    }
+
+    // Load datastreams for this thing
+    console.log(`📡 Loading datastreams for thing ${thingId}...`)
+    const datasourceRepository = container.get(identifier) as DatasourceRepository
+
+    for (const datasourceId of this.connectedDatasources) {
+      if (!datasourceId) continue
+
+      try {
+        const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
+
+        const data = await datasourceInstance.getData('OGCSTAData', {
+          isolatedRequest: true,
+          filter: {
+            things: {
+              ids: [thingId],
+              includeDatastreams: true,
+              includeLocations: false
+            }
+          }
+        })
+
+        if (data?.things && data.things.length > 0) {
+          const loadedThing = data.things[0]
+          console.log(`✅ Loaded ${loadedThing.datastreams?.length || 0} datastreams for thing ${thingId}`)
+
+          // Update cache with loaded datastreams
+          if (thing) {
+            thing.datastreams = loadedThing.datastreams
+          } else {
+            // Add to cache if not found
+            this.allThingsCache.push(loadedThing)
+          }
+
+          return thing || loadedThing
+        }
+      } catch (error) {
+        console.error(`Error loading datastreams for thing ${thingId}:`, error)
+      }
+    }
+
+    return thing
+  }
+
+  /**
    * Switch to a specific thing (without changing datastreams)
    * Use addDatastreamsByName or similar actions to configure datastreams separately
    */
   private async switchToThing(thingId: string | number, thing: any): Promise<void> {
     console.log(`🔄 Switching to thing: ${thingId} (${thing.name || 'unnamed'})`)
+
+    // Increment session ID to invalidate any in-flight requests from previous thing
+    this.requestSessionId++
+    console.log(`🔄 New request session: ${this.requestSessionId}`)
+
+    // Clear all loading promises from previous thing
+    this.loadingPromises.clear()
 
     // Update thingIds
     this.thingIds = [thingId]
@@ -428,8 +495,8 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     // Clear cached data to force refresh
     this.cachedData = null
 
-    // Notify subscribers about the change
-    this.notify()
+    // Don't notify here - let removeAllDatastreams and addDatastreamsByName handle it
+    // This prevents getData from being called with old datastreams
   }
 
   /**
@@ -444,10 +511,12 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     // Find datastreams matching the name from the current thing(s)
     const matchingDatastreams: DatastreamSelection[] = []
 
-    for (const thing of this.allThingsCache) {
-      const thingId = thing['@iot.id'] || thing.iotId
-      // Only search in currently selected things
-      if (!this.thingIds.includes(thingId) && !this.thingIds.includes(String(thingId))) {
+    for (const thingId of this.thingIds) {
+      // Load datastreams for this thing if not already loaded
+      const thing = await this.loadDatastreamsForThing(thingId)
+
+      if (!thing) {
+        console.warn(`⚠️ Thing ${thingId} not found`)
         continue
       }
 

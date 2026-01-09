@@ -28,12 +28,12 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.events.systemactions#//SystemActions'})
 export class SystemActions {
-  
+
   @WidgetAction({eventType: 'system.changePage'})
   changePage(pageId?: string): void {
         throw new Error("changePage not implemented");
   }
-  
+
   @WidgetAction({eventType: 'system.setGlobalVariable'})
   setGlobalVariable(variableName?: string,value?: any): void {
         throw new Error("setGlobalVariable not implemented");
