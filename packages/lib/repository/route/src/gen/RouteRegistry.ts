@@ -29,19 +29,19 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.repository.route#//RouteRegistry'})
 export class RouteRegistry {
   @Reference('RouteDefinition') routes: Array<RouteDefinition> = [];
-  
+
   registerRoute(route?: RouteDefinition): boolean {
         throw new Error("registerRoute not implemented");
   }
-  
+
   unregisterRoute(name?: string): boolean {
         throw new Error("unregisterRoute not implemented");
   }
-  
+
   getRoute(name?: string): RouteDefinition {
         throw new Error("getRoute not implemented");
   }
-  
+
   getAllRoutes(): RouteDefinition {
         throw new Error("getAllRoutes not implemented");
   }

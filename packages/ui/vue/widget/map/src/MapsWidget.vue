@@ -187,7 +187,16 @@ watch(() => config.value?.OGCSstyles, (value, oldValue, onCleanup) => {
 
 const { getById } = useDataPointRegistry()
 const openThing = ref<{ [key: string]: boolean }>({})
-const selectedThingId = ref<string | null>(null)
+// Initialize selectedThingId from config to persist across mode switches
+const selectedThingId = ref<string | null>(config.value?.selectedThingId ?? null)
+
+// Watch for changes to selectedThingId and sync back to config
+watch(selectedThingId, (newValue) => {
+  if (config.value) {
+    config.value.selectedThingId = newValue
+  }
+})
+
 let mounted = false
 
 // Helper function to get data for a specific layer

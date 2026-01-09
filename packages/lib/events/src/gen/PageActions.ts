@@ -28,7 +28,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.events.systemactions#//PageActions'})
 export class PageActions {
-  
+
   @WidgetAction({eventType: 'page.setPageVariable'})
   setPageVariable(variableName?: string,value?: any,pageId?: string): void {
         throw new Error("setPageVariable not implemented");

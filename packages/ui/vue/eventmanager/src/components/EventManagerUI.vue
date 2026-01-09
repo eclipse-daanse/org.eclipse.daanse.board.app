@@ -1323,7 +1323,7 @@ onMounted(() => {
 }
 
 .action-card {
- /* border: 1px solid rgba(213, 213, 213, 0.4);*/
+  /* border: 1px solid rgba(213, 213, 213, 0.4);*/
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
