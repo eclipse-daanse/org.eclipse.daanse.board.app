@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref, watch,type Ref } from 'vue'
+import { ref, watch, computed, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
 import L from 'leaflet'
@@ -39,6 +39,8 @@ interface OGCSTALayerProps {
   getPointformArea: (obj: any) => any
   transformToGeoJson: (obj: any) => any
   getById: (id: string) => any
+  selectedThingId?: string | null
+  selectionHighlightColor?: string
 }
 
 const props = defineProps<OGCSTALayerProps>()
@@ -205,6 +207,16 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
   log('🖱️ Datastream marker clicked: %o', datastream)
   emitDatastreamClick(datastream, thing, subrenderer)
 }
+
+// Check if a thing is selected
+const isThingSelected = (thing: any): boolean => {
+  if (!props.selectedThingId) return false
+  const thingId = thing['@iot.id'] || thing.iotId
+  return thingId === props.selectedThingId
+}
+
+// Get highlight color with default
+const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000')
 </script>
 
 <template>
@@ -218,7 +230,9 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
               ref="thingsLayer"
               :geojson="location.location"
               :options="layerOptions"
-              :options-style="()=>renderer.renderer.area as any"
+              :options-style="() => isThingSelected(thing)
+                ? { ...renderer.renderer.area, fillColor: highlightColor, color: highlightColor, fillOpacity: 0.5, weight: 3 }
+                : renderer.renderer.area as any"
             />
           </template>
 
@@ -236,6 +250,8 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
                 :property-value="thing[renderer.renderer.point_prop ?? '']"
                 :image-url="renderer.renderer.point_image_url"
                 :image-size="renderer.renderer.point_image_size || 32"
+                :is-selected="isThingSelected(thing)"
+                :selection-color="highlightColor"
               />
             </l-icon>
           </l-marker>
@@ -283,6 +299,8 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
                       :image-url="subrenderer.renderer.point_image_url"
                       :image-size="subrenderer.renderer.point_image_size || 32"
                       :is-round="true"
+                      :is-selected="isThingSelected(thing)"
+                      :selection-color="highlightColor"
                     >
                       <template #observation>
                         <template v-if="datastream.observations">

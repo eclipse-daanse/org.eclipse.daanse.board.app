@@ -600,6 +600,14 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
           v-model="widgetSettings.fixed"
           label="Map fixed"
         />
+
+        <va-color-input
+          v-model="widgetSettings.selectionHighlightColor"
+          label="Selection Highlight Color"
+        />
+        <p class="hint-text">
+          Color used to highlight selected Things on the map.
+        </p>
       </div>
 
     </template>

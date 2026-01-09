@@ -46,6 +46,14 @@ if (!container.isBound(symbol)) {
       const composer = container.get<OGCSTAToChartComposer>(OGCSTAToChartComposer)
       composer.init(config)
 
+      // Don't register temporary preview instances - they would override the real instance
+      if (config._isTemporaryPreview) {
+        const previewId = `preview-${config.uid || config.name}-${Date.now()}`
+        composer.setInstanceId(previewId)
+        console.log(`Created temporary preview ${WIDGET_TYPE}: ${previewId} (not registered)`)
+        return composer
+      }
+
       // Register composer instance for action execution
       try {
         if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
