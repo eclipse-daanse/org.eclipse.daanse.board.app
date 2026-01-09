@@ -26,7 +26,7 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-    "vite": "^7.2.2",
+    "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
     "vue-tsc": "^2.2.8"

@@ -37,7 +37,7 @@
     "proj4": "^2.15.0",
     "rollup": "^4.36.0",
     "typescript": "^5.8.2",
-    "vite": "^7.2.2",
+    "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
     "vue-tsc": "^2.2.8"
