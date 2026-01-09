@@ -25,7 +25,7 @@
     "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1"
   },
   "devDependencies": {
-    "inversify": "7.7.1",
+    "inversify": "7.11.0",
     "typescript": "^5.8.2",
 
     "vite-plugin-dts": "4.5.4"
