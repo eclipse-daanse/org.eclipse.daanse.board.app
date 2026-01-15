@@ -158,7 +158,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
     "autoprefixer": "^10.4.21",
-    "cross-env": "7.0.3",
+    "cross-env": "10.1.0",
     "eslint": "^9.21.0",
     "eslint-plugin-oxlint": "^1.1.0",
     "eslint-plugin-playwright": "^2.2.0",
