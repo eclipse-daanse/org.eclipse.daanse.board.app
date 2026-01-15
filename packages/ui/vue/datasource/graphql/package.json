@@ -31,7 +31,7 @@
     "vite-plugin-libcss": "^1.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "graphiql": "^4.1.2",
+    "graphiql": "^5.2.2",
     "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1"
   },
   "devDependencies": {

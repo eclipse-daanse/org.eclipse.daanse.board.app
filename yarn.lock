@@ -932,46 +932,41 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.36"
 
-"@graphiql/plugin-doc-explorer@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/@graphiql/plugin-doc-explorer/-/plugin-doc-explorer-0.2.2.tgz"
-  integrity sha512-0Pj0vsNFfZJZJ3moC7O9xF1Dt2KWyvdxke+cFFZQLN1L2VxdTUa4cfGSg5ujv/ikDUUyyPQNTZuyXzagM4NG5g==
+"@graphiql/plugin-doc-explorer@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@graphiql/plugin-doc-explorer/-/plugin-doc-explorer-0.4.1.tgz#9fa7d2fec92827a63444c822fd81bfbcb6d9e2e3"
+  integrity sha512-+ram1dDDGMqJn/f9n5I8E6grTvxcM9JZYt/HhtYLuCvkN8kERI6/E3zBHBshhIUnQZoXioZ03fAzXg7JOn0Kyg==
   dependencies:
-    "@graphiql/react" "^0.34.1"
     "@headlessui/react" "^2.2"
-    react-compiler-runtime "19.1.0-rc.1"
     zustand "^5"
 
-"@graphiql/plugin-history@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/@graphiql/plugin-history/-/plugin-history-0.2.2.tgz"
-  integrity sha512-ta1k8ichGVfMg6eDwRYa/2e92PfLPh+wgtJTuTQagmXBLXhM7g8Hbk+CaE2clUahQ8/4CZOIRXJHbQ7B5tI9dg==
+"@graphiql/plugin-history@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@graphiql/plugin-history/-/plugin-history-0.4.1.tgz#2a1574570c9b200159c44ef19568dd8672a3f4b4"
+  integrity sha512-UyGI/Nm5tzKNMB71li41p6TfkthLqHkmNi9CgHzAM1zKgPIrtSq7Q8WCWKHLOEB5n4/8X8sXFeyQfHgnGYTXYg==
   dependencies:
-    "@graphiql/react" "^0.34.1"
     "@graphiql/toolkit" "^0.11.3"
-    react-compiler-runtime "19.1.0-rc.1"
     zustand "^5"
 
-"@graphiql/react@^0.34.1":
-  version "0.34.1"
-  resolved "https://registry.npmjs.org/@graphiql/react/-/react-0.34.1.tgz"
-  integrity sha512-Ykqt5uzIRKcbriyVisr/y6BwxK9ZIsilaJFPbajDAcoDiXlGEx/Pl86OcJNjslsqn79M9BkrphWvWa7cBGz3Sw==
+"@graphiql/react@^0.37.3":
+  version "0.37.3"
+  resolved "https://registry.yarnpkg.com/@graphiql/react/-/react-0.37.3.tgz#0d805ff12aa15c1231aad09b0dd8ead80e0d85b9"
+  integrity sha512-rNJjwsYGhcZRdZ2FnyU6ss06xQaZ4UordyvOhp7+b/bEqQiEBpMOLJjuUr48Z6T7zEbZBnzCJpIJyXNqlcfQeA==
   dependencies:
     "@graphiql/toolkit" "^0.11.3"
     "@radix-ui/react-dialog" "^1.1"
     "@radix-ui/react-dropdown-menu" "^2.1"
     "@radix-ui/react-tooltip" "^1.2"
     "@radix-ui/react-visually-hidden" "^1.2"
-    "@types/codemirror" "^5.60.8"
     clsx "^1.2.1"
-    codemirror "^5.65.3"
-    codemirror-graphql "^2.2.1"
-    copy-to-clipboard "^3.2.0"
-    framer-motion "^12"
+    framer-motion "^12.12"
     get-value "^3.0.1"
-    graphql-language-service "^5.3.1"
+    graphql-language-service "^5.5.0"
+    jsonc-parser "^3.3.1"
     markdown-it "^14.1.0"
-    react-compiler-runtime "19.1.0-rc.1"
+    monaco-editor "0.52.2"
+    monaco-graphql "^1.7.3"
+    prettier "^3.5.3"
     set-value "^4.1.0"
     zustand "^5"
 
@@ -3545,14 +3540,7 @@
     "@types/deep-eql" "*"
     assertion-error "^2.0.1"
 
-"@types/codemirror@^0.0.90":
-  version "0.0.90"
-  resolved "https://registry.npmjs.org/@types/codemirror/-/codemirror-0.0.90.tgz"
-  integrity sha512-8Z9+tSg27NPRGubbUPUCrt5DDG/OWzLph5BvcDykwR5D7RyZh5mhHG0uS1ePKV1YFCA+/cwc4Ey2AJAEFfV3IA==
-  dependencies:
-    "@types/tern" "*"
-
-"@types/codemirror@^5.60.10", "@types/codemirror@^5.60.8":
+"@types/codemirror@^5.60.10":
   version "5.60.17"
   resolved "https://registry.npmjs.org/@types/codemirror/-/codemirror-5.60.17.tgz"
   integrity sha512-AZq2FIsUHVMlp7VSe2hTfl5w4pcUkoFkM3zVsRKsn1ca8CXRDYvnin04+HP2REkwsxemuHqvDofdlhUWNpbwfw==
@@ -5267,14 +5255,6 @@ cmd-shim@6.0.3, cmd-shim@^6.0.0:
   resolved "https://registry.npmjs.org/cmd-shim/-/cmd-shim-6.0.3.tgz"
   integrity sha512-FMabTRlc5t5zjdenF6mS0MBeFZm0XqHqeOkcskKFb/LYCcRQ5fVgLOHVc4Lq9CqABd9zhjwPjMBCJvMCziSVtA==
 
-codemirror-graphql@^2.2.1:
-  version "2.2.4"
-  resolved "https://registry.npmjs.org/codemirror-graphql/-/codemirror-graphql-2.2.4.tgz"
-  integrity sha512-VW4rpbAqgAIEWKXwE3nDFz2QEaY5Cme0CnKET43ZE3RSKAAeOaUcecR6wBf3LYfxWwOyyzeCzqxRoUj+HNAEQA==
-  dependencies:
-    "@types/codemirror" "^0.0.90"
-    graphql-language-service "5.5.0"
-
 codemirror-spell-checker@1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/codemirror-spell-checker/-/codemirror-spell-checker-1.1.2.tgz"
@@ -5282,7 +5262,7 @@ codemirror-spell-checker@1.1.2:
   dependencies:
     typo-js "*"
 
-codemirror@^5.51.0, codemirror@^5.65.15, codemirror@^5.65.3:
+codemirror@^5.51.0, codemirror@^5.65.15:
   version "5.65.20"
   resolved "https://registry.npmjs.org/codemirror/-/codemirror-5.65.20.tgz"
   integrity sha512-i5dLDDxwkFCbhjvL2pNjShsojoL3XHyDwsGv1jqETUoW+lzpBKKqNTUWgQwVAOa0tUm4BwekT455ujafi8payA==
@@ -5526,13 +5506,6 @@ copy-anything@^4:
   integrity sha512-7Vv6asjS4gMOuILabD3l739tsaxFQmC+a7pLZm02zyvs8p977bL3zEgq3yDk5rn9B0PbYgIv++jmHcuUab4RhA==
   dependencies:
     is-what "^5.2.0"
-
-copy-to-clipboard@^3.2.0:
-  version "3.3.3"
-  resolved "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz"
-  integrity sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==
-  dependencies:
-    toggle-selection "^1.0.6"
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -6916,13 +6889,13 @@ fraction.js@^4.3.7:
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-framer-motion@^12:
-  version "12.23.24"
-  resolved "https://registry.npmjs.org/framer-motion/-/framer-motion-12.23.24.tgz"
-  integrity sha512-HMi5HRoRCTou+3fb3h9oTLyJGBxHfW+HnNE25tAXOvVx/IvwMHK0cx7IR4a2ZU6sh3IX1Z+4ts32PcYBOqka8w==
+framer-motion@^12.12:
+  version "12.26.2"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.26.2.tgz#6dcae8c06aa559c978745ec5f2e7d3fbbfad8eb6"
+  integrity sha512-lflOQEdjquUi9sCg5Y1LrsZDlsjrHw7m0T9Yedvnk7Bnhqfkc89/Uha10J3CFhkL+TCZVCRw9eUGyM/lyYhXQA==
   dependencies:
-    motion-dom "^12.23.23"
-    motion-utils "^12.23.6"
+    motion-dom "^12.26.2"
+    motion-utils "^12.24.10"
     tslib "^2.4.0"
 
 framework-utils@^1.1.0:
@@ -7201,19 +7174,19 @@ graphemer@^1.4.0:
   resolved "https://registry.npmjs.org/graphemer/-/graphemer-1.4.0.tgz"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
-graphiql@^4.0.2, graphiql@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.npmjs.org/graphiql/-/graphiql-4.1.2.tgz"
-  integrity sha512-rNlzQIAzm6i2KBXmVQWBgLvt0TloxFVB2d18bukvdsvjEuFDHsKx5IVOomL1W1o5WW+tE54+ioHb2AEKzO2cUg==
+graphiql@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-5.2.2.tgz#d30447ca7297c5f6876e01256261684c330eb26f"
+  integrity sha512-qYhw7e2QPLPEIdJXqlLa/XkZtEu2SVYyD71abOpPnrzmJzTdB+QsEswFIMg9u1WGkEtp/wi8epCsuKeA/chRcg==
   dependencies:
-    "@graphiql/plugin-doc-explorer" "^0.2.2"
-    "@graphiql/plugin-history" "^0.2.2"
-    "@graphiql/react" "^0.34.1"
+    "@graphiql/plugin-doc-explorer" "^0.4.1"
+    "@graphiql/plugin-history" "^0.4.1"
+    "@graphiql/react" "^0.37.3"
     react-compiler-runtime "19.1.0-rc.1"
 
-graphql-language-service@5.5.0, graphql-language-service@^5.3.1:
+graphql-language-service@^5.5.0:
   version "5.5.0"
-  resolved "https://registry.npmjs.org/graphql-language-service/-/graphql-language-service-5.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/graphql-language-service/-/graphql-language-service-5.5.0.tgz#2e68b23bd5384f2fbf1e9391e907106e8246d025"
   integrity sha512-9EvWrLLkF6Y5e29/2cmFoAO6hBPPAZlCyjznmpR11iFtRydfkss+9m6x+htA8h7YznGam+TtJwS6JuwoWWgb2Q==
   dependencies:
     debounce-promise "^3.1.2"
@@ -8819,6 +8792,11 @@ modify-values@^1.0.1:
   resolved "https://registry.npmjs.org/modify-values/-/modify-values-1.0.1.tgz"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
+monaco-editor@0.52.2:
+  version "0.52.2"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.52.2.tgz#53c75a6fcc6802684e99fd1b2700299857002205"
+  integrity sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==
+
 monaco-editor@^0.55.1:
   version "0.55.1"
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.55.1.tgz#e74c6fe5a6bf985b817d2de3eb88d56afc494a1b"
@@ -8827,17 +8805,25 @@ monaco-editor@^0.55.1:
     dompurify "3.2.7"
     marked "14.0.0"
 
-motion-dom@^12.23.23:
-  version "12.23.23"
-  resolved "https://registry.npmjs.org/motion-dom/-/motion-dom-12.23.23.tgz"
-  integrity sha512-n5yolOs0TQQBRUFImrRfs/+6X4p3Q4n1dUEqt/H58Vx7OW6RF+foWEgmTVDhIWJIMXOuNNL0apKH2S16en9eiA==
+monaco-graphql@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/monaco-graphql/-/monaco-graphql-1.7.3.tgz#985adbcc8dcbc1bd60967f9126c98a557466da10"
+  integrity sha512-6LAIcg/vT2NGLjHnT+5iIZONsZCaCuz2orbg7qD/u4Ry9R7rDotLh0HAzIF/yKdzEA5fTZC+TofSx2O+Zi+0ow==
   dependencies:
-    motion-utils "^12.23.6"
+    graphql-language-service "^5.5.0"
+    picomatch-browser "^2.2.6"
 
-motion-utils@^12.23.6:
-  version "12.23.6"
-  resolved "https://registry.npmjs.org/motion-utils/-/motion-utils-12.23.6.tgz"
-  integrity sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==
+motion-dom@^12.26.2:
+  version "12.26.2"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.26.2.tgz#0d9f65b45e429bb71fb17bb630d7310495b7b6b5"
+  integrity sha512-KLMT1BroY8oKNeliA3JMNJ+nbCIsTKg6hJpDb4jtRAJ7nCKnnpg/LTq/NGqG90Limitz3kdAnAVXecdFVGlWTw==
+  dependencies:
+    motion-utils "^12.24.10"
+
+motion-utils@^12.24.10:
+  version "12.24.10"
+  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-12.24.10.tgz#73d0bead3c08c4ba2965a5f7ee39dd53f661ae7e"
+  integrity sha512-x5TFgkCIP4pPsRLpKoI86jv/q8t8FQOiM/0E8QKBzfMozWHfkKap2gA1hOki+B5g3IsBNpxbUnfOum1+dgvYww==
 
 mount-vue-component@^0.10.2:
   version "0.10.2"
@@ -9689,6 +9675,11 @@ picocolors@^1.1.1:
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
+picomatch-browser@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/picomatch-browser/-/picomatch-browser-2.2.6.tgz#e0626204575eb49f019f2f2feac24fc3b53e7a8a"
+  integrity sha512-0ypsOQt9D4e3hziV8O4elD9uN0z/jtUEfxVRtNaAAtXIyUx9m/SzlO020i8YNL2aL/E6blOvvHQcin6HZlFy/w==
+
 picomatch@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
@@ -9844,6 +9835,11 @@ prettier@3.7.4, prettier@^3.3.3:
   version "3.7.4"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.4.tgz#d2f8335d4b1cec47e1c8098645411b0c9dff9c0f"
   integrity sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==
+
+prettier@^3.5.3:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.0.tgz#f72cf71505133f40cfa2ef77a2668cdc558fcd69"
+  integrity sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA==
 
 pretty-format@^29.7.0:
   version "29.7.0"
@@ -11383,11 +11379,6 @@ toad-cache@^3.7.0:
   version "3.7.0"
   resolved "https://registry.npmjs.org/toad-cache/-/toad-cache-3.7.0.tgz"
   integrity sha512-/m8M+2BJUpoJdgAHoG+baCwBT+tf2VraSfkBgl0Y00qIWt41DJ8R5B8nsEw0I58YwF5IZH6z24/2TobDKnqSWw==
-
-toggle-selection@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/toggle-selection/-/toggle-selection-1.0.6.tgz"
-  integrity sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==
 
 totalist@^3.0.0:
   version "3.0.1"
