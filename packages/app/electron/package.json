@@ -27,7 +27,7 @@
     "@typescript-eslint/parser": "^8.29.1",
     "copyfiles": "^2.4.1",
     "electron": "36.8.1",
-    "env-cmd": "^10.1.0",
+    "env-cmd": "^11.0.0",
     "eslint": "^9.24.0",
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
