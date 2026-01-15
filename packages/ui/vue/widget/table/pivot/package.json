@@ -32,7 +32,7 @@
     "org.eclipse.daanse.board.app.lib.annotations": "0.0.1-next.1"
   },
   "devDependencies": {
-    "@types/node": "^24.0.2",
+    "@types/node": "^25.0.8",
     "@types/uuid": "10.0.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "rollup": "^4.36.0",
