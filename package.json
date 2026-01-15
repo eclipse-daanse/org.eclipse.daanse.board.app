@@ -24,7 +24,7 @@
     "@topcli/prompts": "^2.2.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^24.0.2",
+    "@types/node": "^25.0.8",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "@vitest/eslint-plugin": "1.6.6",
