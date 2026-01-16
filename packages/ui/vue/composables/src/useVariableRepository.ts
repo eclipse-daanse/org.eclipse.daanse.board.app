@@ -50,15 +50,16 @@ export function useVariableRepository() {
     updateTimestamp.value = Date.now()
   }
 
-  const calculateValue = (templateValue: string): string => {
+  const calculateValue = (templateValue: string, subscription = () => {}): string => {
     // Regex pattern to find variables in format {{ _variableName }}
     // This matches:
     // 1. Double curly brackets with optional whitespace
     // 2. Underscore (in capture group 1) followed by alphanumeric characters and/or underscores (capture group 2)
     // 3. Closing double curly brackets with optional whitespace
-    const regex = /\{\{\s*(_)([a-zA-Z0-9_]+)\s*\}\}/g
+    const regex = /\{\s*([a-zA-Z0-9_]+)\s*\}/g
     for (const variable of connectedVariables) {
       variable.unsubscribe(subscriptionFn)
+      variable.unsubscribe(subscription)
     }
     connectedVariables.length = 0
 
@@ -66,7 +67,7 @@ export function useVariableRepository() {
     const matches = [...templateValue.matchAll(regex)]
 
     // Extract variable names from matches (without the underscore)
-    const listOfVariables = matches.map(match => match[2])
+    const listOfVariables = matches.map(match => match[1])
 
     // Process the template by replacing variables with their values
     let result = templateValue
@@ -88,12 +89,13 @@ export function useVariableRepository() {
 
         if (variable) {
           variable.subscribe(subscriptionFn)
+          variable.subscribe(subscription)
           connectedVariables.push(variable)
           const value = variable.value
 
           // If variable exists, replace all instances of its placeholder with the underscore in template
           const variableRegex = new RegExp(
-            `\\{\\{\\s*_${varName}\\s*\\}\\}`,
+            `\\{\\s*${varName}\\s*\\}`,
             'g',
           )
           result = result.replace(variableRegex, String(value))

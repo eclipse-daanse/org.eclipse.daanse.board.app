@@ -168,7 +168,8 @@ export class VariableRepository implements SystemVariableActions, PageVariableAc
       }
     }
 
-    return Array.from(allVariables.values())
+    // Not sure about this fix
+    return Array.from(allVariables.values());
   }
 
   renameVariable(newname: string, oldname: string): void {

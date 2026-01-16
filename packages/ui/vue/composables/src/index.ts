@@ -18,5 +18,9 @@ import { useVariableRepository } from './useVariableRepository'
 import { VariableWrapper,VARIABLEWRAPPER } from './VariableWrapper'
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
 
+const WrapperTypes = {
+  'VariableWrapper': VariableWrapper,
+  'VariableComplexStringWrapper': VariableComplexStringWrapper,
+}
 
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal,VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal,VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes}

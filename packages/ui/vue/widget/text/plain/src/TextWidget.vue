@@ -12,27 +12,39 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed, toRefs, onMounted, ref, watch, getCurrentInstance } from 'vue'
-import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { computed, toRefs, onMounted, ref, watch, getCurrentInstance, onBeforeMount } from 'vue'
+import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper, WrapperTypes } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
-import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { TextSettings } from './gen/TextSettings'
+import 'reflect-metadata';
 
-
-const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string; }>();
 const { datasourceId } = toRefs(props);
 const config = defineModel<TextSettings>('configv', { required: true});
 
-const defaultConfig = new TextSettings();
-
-// Initialize config with defaults immediately
-if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value });
+// TODO: Should be moved somewhere central
+const defaultConfig = {
+  text: "Some text",
+  fontSize: 12,
+  fontColor: "#000",
+  fontWeight: "normal",
+  fontStyle: "normal",
+  textDecoration: "none",
+  horizontalAlign: "Left",
+  verticalAlign: "Top",
 }
 
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
+
+Object.keys(defaultConfig).forEach((key) => {
+  if (config.value[key as keyof TextSettings] === undefined || config.value[key as keyof TextSettings] === null) {
+    const refTypeName = Reflect.getMetadata("Reference", TextSettings.prototype, key);
+    const Constructor = WrapperTypes[refTypeName as keyof typeof WrapperTypes];
+    const defaultValue = defaultConfig[key as keyof typeof defaultConfig];
+    (config.value as any)[key] = new Constructor(defaultValue as string);
+  }
+});
 
 watch(datasourceId, (newVal, oldVal) => {
     update(newVal, oldVal);
@@ -40,7 +52,6 @@ watch(datasourceId, (newVal, oldVal) => {
 
 
 const calculatedString = computed(() => {
-    console.log(config.value.text.value)
     if (!config.value.text.value) {
         return "";
     }
@@ -88,12 +99,12 @@ const calculatedString = computed(() => {
 }
 
 .component {
-    font-size: v-bind((config.fontSize?.value || '12') + "px");
-    color: v-bind(config.fontColor?.value || '#000');
-    text-align: v-bind(config.horizontalAlign?.value || 'Left');
-    font-weight: v-bind(config.fontWeight?.value || 'normal');
-    font-style: v-bind(config.fontStyle?.value || 'normal');
-    text-decoration: v-bind(config.textDecoration?.value || 'none');
+    font-size: v-bind(config.fontSize.value + "px");
+    color: v-bind(config.fontColor.value);
+    text-align: v-bind(config.horizontalAlign.value);
+    font-weight: v-bind(config.fontWeight.value);
+    font-style: v-bind(config.fontStyle.value);
+    text-decoration: v-bind(config.textDecoration.value);
     overflow: hidden;
 }
 </style>
