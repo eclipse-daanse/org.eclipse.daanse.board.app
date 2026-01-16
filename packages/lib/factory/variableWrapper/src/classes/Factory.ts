@@ -10,7 +10,7 @@
 */
 import { injectable, inject, Container } from 'inversify'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, VARIABLEWRAPPER, VariableComplexStringWrapper, VARIABLECOMPLEXSTRINGWRAPPER } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {identifier as IDVariableRepo,VariableRepository} from 'org.eclipse.daanse.board.app.lib.repository.variable'
 type SearchResult = {
   path: string;
@@ -36,6 +36,20 @@ export class VariableWrapperFactory {
             var1.setTo(ref);
           }
           this.setValueAtPath(json,upperPath,var1)
+        }
+      }
+    }
+
+    const complexResults = this.findPropertyWithValue(json, 'type', VARIABLECOMPLEXSTRINGWRAPPER)
+    if (complexResults) {
+      for (const result of complexResults) {
+        const short = result.path.split('.');
+        short.pop();
+        const upperPath = short.join('.');
+        const originalValue = this.getValueAtPath(json, short.join('.'))
+        if (originalValue._value) {
+          const var1 = new VariableComplexStringWrapper<string>(originalValue._value);
+          this.setValueAtPath(json, upperPath, var1)
         }
       }
     }

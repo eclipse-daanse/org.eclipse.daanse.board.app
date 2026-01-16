@@ -18,28 +18,31 @@ const TYPE = 'VARIABLECOMPLEXSTRINGWRAPPER'
 
 class VariableComplexStringWrapper<T = string> {
   public readonly type: string = TYPE;
-  public original: Ref<string> = ref('');
 
-  public value: ReturnType<typeof computed>;
+  private _value: string | undefined = undefined;
+  private _computedValue: string | null = null;
 
-  constructor(initValue: string = '') {
-    const { calculateValue,wrapParameters } = useVariableRepository();
-    this.original.value = initValue;
+  constructor(initValue = '') {
+    this._value = initValue;
+  }
 
-    this.value =
-    wrapParameters({
-      value:computed({get:()=>this.original.value,set:(val)=>this.original.value = val}),
-    }).value
-    // value wird aus _original berechnet
-    /*this.value = computed({
-      get: () => {
-        return calculateValue(this.original.value);
-      },
-      set: (newVal: string) => {
-        // nur _original wird verändert
-        this.original.value = newVal;
-      }
-    });*/
+  get original() {
+    return this._value || '';
+  }
+
+  updateFn() {
+    const { calculateValue } = useVariableRepository();
+    this._computedValue = calculateValue(this._value || '');
+  }
+
+  get value() {
+    const { calculateValue } = useVariableRepository();
+    this._computedValue = calculateValue(this._value || '', this.updateFn.bind(this));
+    return this._computedValue;
+  }
+
+  set value(newValue: string) {
+    this._value = newValue;
   }
 }
 

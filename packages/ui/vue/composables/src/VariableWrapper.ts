@@ -16,8 +16,10 @@ const TYPE = 'VARIABLEWRAPPER'
 class VariableWrapper<T> {
   public readonly type:string = TYPE;
   private _value: T|undefined =undefined;
-  private isSet: boolean = false;
-  private reference: Variable|undefined;
+  public isSet: boolean = false;
+  public reference: Variable|undefined;
+  public variable = null as string|null;
+
   constructor(init_value: T|undefined = undefined) {
     this._value= init_value;
   }
@@ -31,11 +33,15 @@ class VariableWrapper<T> {
           this._value = (this.reference).value;
     }});
     this._value = this.reference.value as T;
+    this.variable = this.reference.name;
     this.isSet = true;
   }
+
   get value(){
     return this._value as T;
   }
+
+  // TODO: Memory leak
   set value(isn:T){
     //this.reference?.unsubscribe(this.boundOnChange)
     this.reference = undefined;

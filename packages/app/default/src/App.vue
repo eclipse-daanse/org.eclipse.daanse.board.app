@@ -112,6 +112,8 @@ onMounted(() => {
 </style>
 <style>
 @import "./assets/main.css";
+@import 'floating-vue/dist/style.css';
+
 .va-modal{
   /*z-index: 3700!important;*/
   .va-dropdown__content{
