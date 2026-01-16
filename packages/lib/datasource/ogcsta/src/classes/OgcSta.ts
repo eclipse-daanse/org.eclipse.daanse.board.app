@@ -1089,9 +1089,11 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
           // Reset requestFlag to NOACTION - return current data without new requests
           this.requestFlag = { key: NOACTION, params: undefined };
-
-          this.notify();
         }
+
+        // Always notify subscribers when variables change
+        // This allows composers (like OGCSTAToChartComposer) to reload data with new time variables
+        this.notify();
       } catch (error) {
         this.logCore('Error refetching observations after variable change:', error);
       }
