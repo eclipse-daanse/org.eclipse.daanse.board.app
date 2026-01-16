@@ -14,6 +14,9 @@ import View from './components/View.vue'
 import Edit from './components/Edit.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
+// Export clipboard store for use in other layouts
+export { useClipboardStore } from './composables/useClipboardStore'
+
 if(container.isBound(identifier)) {
 
   const layoutRepo = container.get<LayoutRepositoryI>(identifier)
