@@ -46,6 +46,7 @@ const pageSettingsOpenedId = ref<string|undefined>(undefined);
 const {
   layoutStore,
   widgetStore,
+  clipboardStore,
   ghostPlaceholder,
   processDropCoordinates,
   processDragOverCoordinates,
@@ -60,9 +61,62 @@ const {
   moveToTop,
   addWidget: addWidgetComposable,
   removeWidget: removeWidgetComposable,
+  copyWidget: copyWidgetComposable,
+  pasteWidget: pasteWidgetComposable,
 } = useMoveableLayout(pageId)
 
 const safeWidgets = computed(() => widgetStore?.widgets || [])
+
+// Copy/Paste functionality
+const pastePosition = ref({ x: 0, y: 0 })
+
+const captureMousePosition = (event: MouseEvent) => {
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  pastePosition.value = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  }
+}
+
+const copyWidget = (widgetId: string) => {
+  copyWidgetComposable(widgetId)
+}
+
+const pasteWidget = () => {
+  pasteWidgetComposable(pastePosition.value.x, pastePosition.value.y)
+}
+
+// Canvas context menu state
+const canvasContextMenu = ref({ visible: false, x: 0, y: 0 })
+
+const onCanvasContextMenu = (event: MouseEvent) => {
+  // Only show paste menu if clipboard has content
+  if (!clipboardStore.hasClipboard) {
+    canvasContextMenu.value.visible = false
+    return // Allow native context menu
+  }
+
+  event.preventDefault()
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  pastePosition.value = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  }
+  canvasContextMenu.value = {
+    visible: true,
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  }
+}
+
+const closeCanvasContextMenu = () => {
+  canvasContextMenu.value.visible = false
+}
+
+const pasteWidgetFromMenu = () => {
+  pasteWidgetComposable(pastePosition.value.x, pastePosition.value.y)
+  canvasContextMenu.value.visible = false
+}
 
 
 
@@ -155,7 +209,7 @@ const change = (e: any) => {
 </script>
 
 <template>
-  <div class="report-container dottet">
+  <div class="report-container dottet" @contextmenu="onCanvasContextMenu" @click="closeCanvasContextMenu">
     <draggable
       :list="widgetsTmp"
       :group="{ name: 'widgets' }"
@@ -166,6 +220,7 @@ const change = (e: any) => {
       @drop="onDrop"
       @dragover="onDragOver"
       @dragleave="onDragLeave"
+      @contextmenu="onCanvasContextMenu"
     >
       <template #item="{ element }">
         <div style="display: none">{{ element?.type || '' }}</div>
@@ -195,7 +250,7 @@ const change = (e: any) => {
             cursor
           >
             <template #anchor>
-              <div class="dashboard-item">
+              <div class="dashboard-item" @contextmenu.stop>
                 <WidgetWrapper
                   :widget="widget"
                   :ref="`${widget.uid}_wrapper`"
@@ -211,6 +266,7 @@ const change = (e: any) => {
                 <va-button @click="moveDown(widget.uid)"> Move down </va-button>
                 <va-button @click="moveToTop(widget.uid)"> Move to top </va-button>
                 <va-button @click="moveToBottom(widget.uid)"> Move to bottom </va-button>
+                <va-button @click="copyWidget(widget.uid)"> Copy </va-button>
               </div>
             </va-dropdown-content>
           </va-dropdown>
@@ -232,6 +288,17 @@ const change = (e: any) => {
         >
         </Moveable>
       </template>
+
+      <!-- Canvas Context Menu (floating) for Paste -->
+      <div
+        v-if="canvasContextMenu.visible && clipboardStore.hasClipboard"
+        class="canvas-context-menu"
+        :style="{ left: canvasContextMenu.x + 'px', top: canvasContextMenu.y + 'px' }"
+      >
+        <div class="dropdown-buttons-container">
+          <va-button @click="pasteWidgetFromMenu" size="small"> Paste </va-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -321,11 +388,26 @@ const change = (e: any) => {
   position: absolute;
 }
 
+.widget-board-dropdown {
+  width: 100%;
+  height: 100%;
+}
+
 .dropdown-buttons-container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   z-index: 99999;
+}
+
+.canvas-context-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10000001;
 }
 
 .va-dropdown__content {

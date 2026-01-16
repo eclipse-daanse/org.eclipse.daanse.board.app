@@ -13,29 +13,40 @@ Contributors:
 
 <template>
   <VaScrollContainer class="max-h-screen ml-15" vertical>
-    <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout">
-      <GridLayout
-        ref="gridLayout"
-        :layout="gridLayoutModel"
-        :row-height="ROW_HEIGHT"
-        :responsive="true"
-        :vertical-compact="false"
-        :breakpoints="BREAKPOINTS"
-        :cols="COLS"
-        @layout-updated="persistLayout"
-      >
-      <template #item="{ item }">
-        <WidgetWrapper
-          v-if="widgets?.find((w:any) => w.uid === item.i)"
-          :widget="widgets.find((w:any) => w.uid === item.i)"
-          :ref="`${item.i}_wrapper`"
-          @openSettings="openWidgetSettings"
-          editEnabled
-          @removeWidget="() => removeWidget(item.i.toString())"
-        />
-        <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
-      </template>
-      </GridLayout>
+    <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus">
+          <GridLayout
+            ref="gridLayout"
+            :layout="gridLayoutModel"
+            :row-height="ROW_HEIGHT"
+            :responsive="true"
+            :vertical-compact="false"
+            :breakpoints="BREAKPOINTS"
+            :cols="COLS"
+            @layout-updated="persistLayout"
+          >
+          <template #item="{ item }">
+            <div class="widget-item-wrapper" @contextmenu.stop.prevent="openWidgetContextMenu($event, String(item.i))">
+              <WidgetWrapper
+                v-if="widgets?.find((w:any) => w.uid === item.i)"
+                :widget="widgets.find((w:any) => w.uid === item.i)"
+                :ref="`${item.i}_wrapper`"
+                @openSettings="openWidgetSettings"
+                editEnabled
+                @removeWidget="() => removeWidget(item.i.toString())"
+              />
+              <span v-else class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
+            </div>
+          </template>
+          </GridLayout>
+
+          <!-- Widget Context Menu (floating) -->
+          <div
+            v-if="widgetContextMenu.visible"
+            class="widget-context-menu"
+            :style="{ left: widgetContextMenu.x + 'px', top: widgetContextMenu.y + 'px' }"
+          >
+            <va-button @click="copyWidgetFromMenu" size="small"> Copy </va-button>
+          </div>
 
       <!-- Overlay für externes Draggen von Widgets -->
       <Draggable
@@ -53,6 +64,15 @@ Contributors:
           <div>{{ element.type }}</div>
         </template>
       </Draggable>
+
+      <!-- Canvas Context Menu (floating) for Paste -->
+      <div
+        v-if="canvasContextMenu.visible && clipboardStore.hasClipboard"
+        class="canvas-context-menu"
+        :style="{ left: canvasContextMenu.x + 'px', top: canvasContextMenu.y + 'px' }"
+      >
+        <va-button @click="pasteWidgetFromMenu" size="small"> Paste </va-button>
+      </div>
     </div>
   </VaScrollContainer>
 </template>
@@ -67,6 +87,7 @@ import { useRoute } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
+import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 
 /** Konstanten */
 const BREAKPOINTS = { lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 } as const
@@ -80,6 +101,119 @@ const widgetStore = computed(() => useWidgetsStore(pageID.value))
 const layoutStore = computed(() => useLayoutStore(pageID.value))
 const widgets = computed(() => widgetStore.value.widgets)
 const storedLayout = computed(() => layoutStore.value.layout)
+const clipboardStore = useClipboardStore()
+
+/** Copy/Paste */
+const pastePosition = ref({ x: 0, y: 0 })
+
+// Widget context menu state
+const widgetContextMenu = ref({
+  visible: false,
+  x: 0,
+  y: 0,
+  widgetId: ''
+})
+
+// Canvas context menu state
+const canvasContextMenu = ref({
+  visible: false,
+  x: 0,
+  y: 0
+})
+
+const onCanvasContextMenu = (event: MouseEvent) => {
+  // Hide widget context menu
+  widgetContextMenu.value.visible = false
+
+  // Only show canvas context menu if there's something to paste
+  if (!clipboardStore.hasClipboard) {
+    canvasContextMenu.value.visible = false
+    // Allow native context menu to show
+    return
+  }
+
+  // Prevent native context menu only when we show our paste menu
+  event.preventDefault()
+
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  pastePosition.value = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  }
+  // Show canvas context menu
+  canvasContextMenu.value = {
+    visible: true,
+    x: event.clientX,
+    y: event.clientY
+  }
+}
+
+const openWidgetContextMenu = (event: MouseEvent, widgetId: string) => {
+  widgetContextMenu.value = {
+    visible: true,
+    x: event.clientX,
+    y: event.clientY,
+    widgetId
+  }
+  // Hide canvas context menu
+  canvasContextMenu.value.visible = false
+}
+
+const closeAllContextMenus = () => {
+  widgetContextMenu.value.visible = false
+  canvasContextMenu.value.visible = false
+}
+
+const copyWidgetFromMenu = () => {
+  copyWidget(widgetContextMenu.value.widgetId)
+  closeAllContextMenus()
+}
+
+const pasteWidgetFromMenu = () => {
+  pasteWidget()
+  closeAllContextMenus()
+}
+
+const copyWidget = (widgetId: string) => {
+  const widget = widgets.value.find((w: any) => w.uid === widgetId)
+  const layoutItem = storedLayout.value.find((l: any) => l.id === widgetId)
+  if (widget && layoutItem) {
+    clipboardStore.copy(widget, layoutItem)
+  }
+}
+
+const pasteWidget = () => {
+  const clipboard = clipboardStore.paste()
+  if (!clipboard) return
+
+  const newUid = 'li_' + Math.random().toString(36).substring(7)
+
+  // Clone widget with new UID
+  const newWidget = cloneDeep(clipboard.widget) as any
+  newWidget.uid = newUid
+  if (newWidget.config?.settings) {
+    newWidget.config.settings.name = 'widget_' + newUid
+  }
+
+  // Clone layout with new position (convert mouse position to grid position)
+  const { colW, rowH } = getMetrics()
+  const gridX = Math.round(pastePosition.value.x / colW)
+  const gridY = Math.round(pastePosition.value.y / rowH)
+
+  const newLayout: LayoutItem = {
+    i: newUid,
+    x: gridX,
+    y: gridY,
+    w: Math.max(1, Math.round((clipboard.layout.width || 200) / colW)),
+    h: Math.max(1, Math.round((clipboard.layout.height || 100) / rowH)),
+    static: false
+  }
+
+  // Add to stores
+  widgetStore.value.updateWidgets([...widgets.value, newWidget])
+  layoutModel.value = [...layoutModel.value, newLayout]
+  persistLayout(layoutModel.value)
+}
 
 /** Refs auf Grid & Wrapper */
 const gridLayout = ref<InstanceType<typeof GridLayout>>()
@@ -366,4 +500,28 @@ const openWidgetSettings = (id: string) => {
   pointer-events: auto;
 }
 .invisible-dropzone > * { opacity: 0; }
+
+/* Copy/Paste */
+.widget-item-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.dropdown-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 99999;
+}
+
+.widget-context-menu,
+.canvas-context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100000;
+}
 </style>

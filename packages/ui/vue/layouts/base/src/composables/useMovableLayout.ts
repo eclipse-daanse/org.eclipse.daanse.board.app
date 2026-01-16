@@ -24,10 +24,14 @@ import { ref } from 'vue'
 import type { OnDrag, OnResize } from 'vue3-moveable'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useClipboardStore } from './useClipboardStore'
+import { cloneDeep } from 'lodash'
 
 export function useMoveableLayout(pageId: string = '') {
   const layoutStore = useLayoutStore(pageId)
   const widgetStore = useWidgetsStore(pageId)
+  const clipboardStore = useClipboardStore()
+
   const ghostPlaceholder = ref({
     x: 0,
     y: 0,
@@ -159,9 +163,46 @@ export function useMoveableLayout(pageId: string = '') {
     }
   }
 
+  const copyWidget = (widgetId: string) => {
+    const widget = widgetStore.widgets.find((w: any) => w.uid === widgetId)
+    const layoutItem = layoutStore.layout.find((l: ILayoutItem) => l.id === widgetId)
+    if (widget && layoutItem) {
+      clipboardStore.copy(widget, layoutItem)
+    }
+  }
+
+  const pasteWidget = (x: number, y: number) => {
+    const clipboard = clipboardStore.paste()
+    if (!clipboard) return null
+
+    const newUid = 'li_' + Math.random().toString(36).substring(7)
+    const maxZ = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z), 0)
+
+    // Clone widget with new UID
+    const newWidget = cloneDeep(clipboard.widget) as any
+    newWidget.uid = newUid
+    if (newWidget.config?.settings) {
+      newWidget.config.settings.name = 'widget_' + newUid
+    }
+
+    // Clone layout with new position
+    const newLayout: ILayoutItem = {
+      ...clipboard.layout,
+      id: newUid,
+      x: x,
+      y: y,
+      z: maxZ + 1
+    }
+
+    widgetStore.widgets.push(newWidget)
+    layoutStore.layout.push(newLayout)
+    return newUid
+  }
+
   return {
     layoutStore,
     widgetStore,
+    clipboardStore,
     ghostPlaceholder,
     processDropCoordinates,
     processDragOverCoordinates,
@@ -176,5 +217,7 @@ export function useMoveableLayout(pageId: string = '') {
     moveToBottom,
     addWidget,
     removeWidget,
+    copyWidget,
+    pasteWidget,
   }
 }
