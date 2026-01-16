@@ -126,6 +126,9 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       try {
         console.log('📊 OGCSTAToChartComposer: Datasource updated, notifying widgets...')
 
+        // Clear loading promises to force fresh data load (e.g., when time variables change)
+        this.loadingPromises.clear()
+
         // Add small delay to ensure datasource has finished loading observations
         await new Promise(resolve => setTimeout(resolve, 50))
 
@@ -149,6 +152,12 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
         const datasource = datasourceRepository.getDatasource(ds)
         datasource.subscribe(updateFn)
       })
+
+    // Trigger initial load after a short delay to ensure datasources are ready
+    setTimeout(() => {
+      console.log('📊 OGCSTAToChartComposer: Initial notify to load data')
+      this.notify()
+    }, 100)
   }
 
   async getData(type: string, options?: any): Promise<any> {
@@ -170,11 +179,24 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
             return { things: [], datastreams: [], observations: [] }
           }
 
+          // Ensure datasource is initialized by calling getData() at least once
+          // This sets up baseConfigration which is needed for getHistoricalObservations()
+          let resultMap = (datasourceInstance as any).resultMap
+          if (!resultMap?.datastreams || resultMap.datastreams.length === 0) {
+            console.log('📊 OGCSTAToChartComposer: Initializing datasource...')
+            try {
+              await datasourceInstance.getData('OGCSTAData', { reload: true })
+              // Re-read resultMap after initialization
+              resultMap = (datasourceInstance as any).resultMap
+              console.log('📊 OGCSTAToChartComposer: Datasource initialized')
+            } catch (error) {
+              console.error('Failed to initialize datasource:', error)
+            }
+          }
+
           // Read observations from datastreams in resultMap
           // The OGC STA datasource stores observations in datastreams after processing
           console.log(`📊 Reading observations from datastreams in cache`)
-
-          const resultMap = (datasourceInstance as any).resultMap
           const dsConfig = (datasourceInstance as any).configuration
           const allObservations: any[] = []
           const missingDatastreams: any[] = []

@@ -210,9 +210,20 @@ const getData = () => {
 const loadData = (content: any) => {
 
   if(content){
-    let data = JSON.parse(content)
-    if(Array.isArray(data)){ //false format serialized be flatted ?
-      data = parse(content)
+    let data: any
+    // Handle both string and object content
+    if (typeof content === 'string') {
+      data = JSON.parse(content)
+      if(Array.isArray(data)){ //false format serialized be flatted ?
+        data = parse(content)
+      }
+    } else {
+      // Content is already an object (e.g., from repository)
+      data = content
+      if(Array.isArray(data)){ //false format serialized be flatted ?
+        // If it's a flatted array, we need to parse it differently
+        data = parse(JSON.stringify(content))
+      }
     }
 
     const layoutStore = useLayoutStore()
