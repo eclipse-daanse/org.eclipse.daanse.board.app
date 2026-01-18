@@ -55,8 +55,10 @@ export function useComparator() {
           return true
         } else {
           const prop = resolveObj(ds, condition.prop??'')
-          if (!prop) {
-            return false
+          if (prop === undefined || prop === null) {
+            // For neq: null != anything → true (so default renderer matches)
+            // For eq and others: null == anything → false
+            return condition.comperator === Comperator.neq
           }
 
           return compateCondition(condition.comperator, prop, condition.value)

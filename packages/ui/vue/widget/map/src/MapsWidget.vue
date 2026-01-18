@@ -325,10 +325,17 @@ onMounted(async () => {
   }
 
 })
-watch(data, (value, oldValue, onCleanup) => {
-  loadObservationsInView()
-  loadHistoricalLocationsForAllThings()
-}, { deep: true, once: true })
+// Watch data changes - load observations when data arrives
+watch(data, (value, oldValue) => {
+  const oldLocations = (oldValue as any)?.locations?.length || 0
+  const newLocations = (value as any)?.locations?.length || 0
+
+  // First load: when we go from no locations to having locations
+  if (oldLocations === 0 && newLocations > 0) {
+    loadObservationsInView()
+    loadHistoricalLocationsForAllThings()
+  }
+}, { deep: true })
 
 const loadHistoricalLocationsForAllThings = () => {
   // Check if there are any OGCSTA styles configured
@@ -583,12 +590,16 @@ const mapmove = debounce(() => {
 }, 2000, { leading: true, trailing: true })
 
 const loadObservationsInView = () => {
+  console.log('[MAP] loadObservationsInView called')
+
   if (isLoadingObservations) {
+    console.log('[MAP] Already loading, skipping')
     return
   }
 
   // Check if map is ready and mountedt
   if (!map.value || !(map.value as any)?.leafletObject) {
+    console.log('[MAP] Map not ready')
     return
   }
 
@@ -621,6 +632,9 @@ const loadObservationsInView = () => {
   // Add datastreams from primary datasource
   if ((data.value as any)?.datastreams) {
     datasourceDatastreams.set(datasourceId.value, (data.value as any).datastreams)
+    console.log('[MAP] Found', (data.value as any).datastreams.length, 'datastreams in primary datasource')
+  } else {
+    console.log('[MAP] No datastreams in data.value')
   }
 
   // Add datastreams from additional datasources
@@ -630,13 +644,15 @@ const loadObservationsInView = () => {
     }
   }
 
+  console.log('[MAP] OGCSstyles count:', config.value.OGCSstyles?.length || 0)
+
   // Build task list grouped by time and datasource
   const taskListByTimeAndDatasource: { [key: string]: { [dsId: string]: BoxedDatastream[] } } = {}
 
   // Build renderer lookup map for faster matching (optimization: avoid nested loops)
   const renderersByRefreshTime = new Map<number, Array<{ renderer: any, subrender: any }>>()
   for (const renderer of config.value.OGCSstyles) {
-    const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 10
+    const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 0
 
     if (!renderersByRefreshTime.has(refreshtime)) {
       renderersByRefreshTime.set(refreshtime, [])
@@ -770,6 +786,7 @@ const loadObservationsInView = () => {
     }
   }
 
+  console.log('[MAP] Created', tasks.length, 'tasks to invoke')
   localTaskManager.addTasksAndIvnoke(tasks)
 
   // Update MQTT subscriptions for all datasources based on current view
