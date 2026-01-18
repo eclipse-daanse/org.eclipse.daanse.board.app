@@ -106,7 +106,7 @@ export abstract class BaseDatasource extends UsesComputedVariable implements IDa
 
   abstract getData(type: string, options?: any): Promise<any>
   abstract getOriginalData(): any
-  abstract callEvent(event: string, params: any): void
+  abstract callEvent(event: string, params: any, shouldUpdate?: boolean): Promise<void> | void
 
   abstract destroy(): void
 }

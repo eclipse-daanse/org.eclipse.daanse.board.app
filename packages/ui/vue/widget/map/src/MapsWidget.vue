@@ -381,8 +381,8 @@ const loadHistoricalLocationsForAllThings = () => {
 
   if (matchingThings.length > 0) {
     logObservations(`Setting historical locations filter for ${matchingThings.length} matching things`)
-    // Set filter for primary datasource
-    callEvent(FILTER, { historicalLocations: matchingThings })
+    // Set filter for primary datasource with shouldUpdate=false to avoid triggering chart updates
+    callEvent(FILTER, { historicalLocations: matchingThings }, false)
 
     // Set filter for additional datasources
     for (const dsId of additionalDatasourcesData.value.keys()) {
@@ -390,7 +390,7 @@ const loadHistoricalLocationsForAllThings = () => {
         const dsRepository = container.get<DatasourceRepository>(identifier)
         const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
         if (datasource && typeof datasource.callEvent === 'function') {
-          datasource.callEvent(FILTER, { historicalLocations: matchingThings })
+          datasource.callEvent(FILTER, { historicalLocations: matchingThings }, false)
         }
       } catch (e) {
         logDatasource('Could not call event on datasource', dsId, e)
@@ -776,16 +776,16 @@ const loadObservationsInView = async () => {
 
           async run() {
 
-            // Call event on the appropriate datasource
+            // Call event on the appropriate datasource with shouldUpdate=false to avoid triggering chart updates
             if (isDatasourcePrimary) {
-              callEvent(FILTER, { observations: items })
+              callEvent(FILTER, { observations: items }, false)
             } else {
               // For additional datasources, call event directly on the datasource
               try {
                 const dsRepository = container.get<DatasourceRepository>(identifier)
                 const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
                 if (datasource && typeof datasource.callEvent === 'function') {
-                  datasource.callEvent(FILTER, { observations: items })
+                  datasource.callEvent(FILTER, { observations: items }, false)
                 }
               } catch (e) {
                 logDatasource('Could not call event on datasource', dsId, e)
@@ -795,13 +795,13 @@ const loadObservationsInView = async () => {
             if(parseInt(refreshTime) !== 0){
               this.handle = window.setInterval(async () => {
                 if (isDatasourcePrimary) {
-                  callEvent(FILTER, { observations: items })
+                  callEvent(FILTER, { observations: items }, false)
                 } else {
                   try {
                     const dsRepository = container.get<DatasourceRepository>(identifier)
                     const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
                     if (datasource && typeof datasource.callEvent === 'function') {
-                      datasource.callEvent(FILTER, { observations: items })
+                      datasource.callEvent(FILTER, { observations: items }, false)
                     }
                   } catch (e) {
                     logDatasource('Could not call event on datasource', dsId, e)

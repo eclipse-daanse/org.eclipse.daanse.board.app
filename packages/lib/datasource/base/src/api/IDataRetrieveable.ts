@@ -11,7 +11,7 @@
 export interface IDataRetrieveable {
   getData(type: string, options?: any): Promise<any>
   getOriginalData(): any
-  callEvent: (event: string, params: any) => void
+  callEvent: (event: string, params: any, shouldUpdate?: boolean) => Promise<void> | void
   subscribe: (subscriber: () => any) => void
   unsubscribe: (subscriber: () => any) => void
   destroy: () => void

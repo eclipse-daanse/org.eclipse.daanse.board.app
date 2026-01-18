@@ -68,13 +68,20 @@ export function useDatasourceRepository(
     }
   }
 
-  const callEvent = async (event: string, params: any) => {
+  const callEvent = async (event: string, params: any, shouldUpdate: boolean = true) => {
     if (dataSourceId.value) {
       try {
         const dataSource = datasourceRepository.getDatasource(
           dataSourceId.value,
         )
-        await dataSource.callEvent(event, params)
+        const result = dataSource.callEvent(event, params, shouldUpdate)
+
+        // When shouldUpdate=false, wait for data to be ready, then update our own data
+        if (!shouldUpdate && result instanceof Promise) {
+          await result
+          const dataRaw = await dataSource.getData(type)
+          data.value = structuredClone(dataRaw)
+        }
       } catch (e) {
         console.warn(e)
       }

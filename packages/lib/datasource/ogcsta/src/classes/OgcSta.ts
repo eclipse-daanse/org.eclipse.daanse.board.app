@@ -45,6 +45,7 @@ import {
   identifier as loggerIdentifier,
   type ILogger
 } from 'org.eclipse.daanse.board.app.lib.logger'
+import { getObservationsWorkerManager, type ObservationsWorkerManager } from '../workers/ObservationsWorkerManager'
 
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
@@ -89,6 +90,8 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private lastObservationsParams: any = null;
   private watchedVariables: Set<string> = new Set();
   private pendingRequestFlag: { key: string; params: any } | null = null;
+  private workerManager: ObservationsWorkerManager | null = null;
+  private connectionBaseUrl: string = '';
 
   init(configuration: IOGCSTAConfigartion): void {
     super.init(configuration)
@@ -131,9 +134,22 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     }
 
     this.setupVariableWatchers();
+
+    // Initialize worker manager for background fetching
+    this.workerManager = getObservationsWorkerManager();
+
+    // Get base URL from connection for worker
+    try {
+      const connection = this.connectionRepository.getConnection(this.connection) as any;
+      if (connection?.url) {
+        this.connectionBaseUrl = connection.url;
+      }
+    } catch (e) {
+      this.logCore('Could not get connection base URL:', e);
+    }
   }
 
-  callEvent(event: string, params: any): void {
+  callEvent(event: string, params: any, shouldUpdate: boolean = true): Promise<void> | void {
     if (event == FILTER) {
       // Determine filter type based on params
       const filterType = Object.keys(params)[0] // 'observations', 'historicalLocations', etc.
@@ -141,6 +157,21 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       // Save observations params for later use in onVariableChanged
       if (filterType === 'observations' && params.observations) {
         this.lastObservationsParams = params.observations;
+      }
+
+      // shouldUpdate=false: just update requestFlag, fetch data, but don't notify subscribers
+      // Returns a Promise that resolves when data is ready
+      if (!shouldUpdate) {
+        // Clear any pending debounce timer to prevent delayed notify()
+        if (this.filterDebounceTimer) {
+          clearTimeout(this.filterDebounceTimer);
+          this.filterDebounceTimer = null;
+        }
+        this.requestFlag = { key: FILTER, params: params }
+        // Return Promise that resolves when getData is done
+        return this.getData('OGCSTAData').then(() => {}).catch(e => {
+          this.logCore('Silent getData error:', e);
+        });
       }
 
       // Only debounce if it's the same filter type as the last call
@@ -637,36 +668,70 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
           }
         } else {
           // HTTP Mode (no MQTT or history mode enabled)
-          for (const ds of this.requestFlag.params.observations) {
+          // Use Web Worker for background fetching if available and baseUrl is set
+          if (this.workerManager && this.connectionBaseUrl) {
+            const queryParams = this.getHistoryQueryParams(historyConfig);
+            const historyParams: any = {
+              $orderby: queryParams.$orderby || 'phenomenonTime desc',
+            };
+            if (queryParams.$filter) historyParams.$filter = queryParams.$filter;
+            if (!historyConfig?.enabled) {
+              historyParams.$top = 1;
+            } else if (queryParams.$top) {
+              historyParams.$top = queryParams.$top;
+            }
+
+            // Single promise that fetches all observations via worker
             listOfPromesis.push(
               (async () => {
-                const queryParams = this.getHistoryQueryParams(historyConfig);
-                const baseParams: any = {
-                  entityId: (ds as Datastream).iotId + '',
-                  $orderby: 'phenomenonTime desc',
-                };
+                const results = await this.workerManager!.fetchObservations(
+                  this.connectionBaseUrl,
+                  this.requestFlag.params.observations,
+                  historyParams
+                );
 
-                if (!historyConfig?.enabled) {
-                  baseParams.$top = 1;
+                // Flatten results into observations array
+                const allObservations: (Observation & { ds_source?: string })[] = [];
+                for (const result of results) {
+                  allObservations.push(...result.observations);
                 }
 
-                const data = (
-                  await new DatastreamsApi(
-                    this.baseConfigration,
-                  ).v11DatastreamsEntityIdObservationsGet({
-                    ...baseParams,
-                    ...queryParams
-                  })
-                ).value as (Observation & { ds_source?: string })[]
-
-                if (data && data.length > 0) {
-                  data.forEach(obs => {
-                    obs['ds_source'] = (ds as Datastream).iotId + '';
-                  });
-                }
-                return { observations: data }
+                return { observations: allObservations };
               })(),
-            )
+            );
+          } else {
+            // Fallback: fetch on main thread
+            for (const ds of this.requestFlag.params.observations) {
+              listOfPromesis.push(
+                (async () => {
+                  const queryParams = this.getHistoryQueryParams(historyConfig);
+                  const baseParams: any = {
+                    entityId: (ds as Datastream).iotId + '',
+                    $orderby: 'phenomenonTime desc',
+                  };
+
+                  if (!historyConfig?.enabled) {
+                    baseParams.$top = 1;
+                  }
+
+                  const data = (
+                    await new DatastreamsApi(
+                      this.baseConfigration,
+                    ).v11DatastreamsEntityIdObservationsGet({
+                      ...baseParams,
+                      ...queryParams
+                    })
+                  ).value as (Observation & { ds_source?: string })[]
+
+                  if (data && data.length > 0) {
+                    data.forEach(obs => {
+                      obs['ds_source'] = (ds as Datastream).iotId + '';
+                    });
+                  }
+                  return { observations: data }
+                })(),
+              )
+            }
           }
         }
       }
