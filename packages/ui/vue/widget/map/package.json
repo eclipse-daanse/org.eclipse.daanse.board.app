@@ -11,6 +11,7 @@
     "dist",
     "dist/ui.vue.widget.map.css",
     "dist/model"
+
   ],
   "type": "module",
   "repository": {

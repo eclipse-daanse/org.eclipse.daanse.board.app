@@ -17,7 +17,7 @@ import { IconSettings } from './gen/IconSettings'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
-const props = defineProps<{ id: string }>();
+const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
 const { wrapParameters } = useVariableRepository();
