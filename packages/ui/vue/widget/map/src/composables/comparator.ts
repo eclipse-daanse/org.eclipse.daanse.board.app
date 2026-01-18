@@ -99,12 +99,46 @@ export function useComparator() {
     return copyOfFeaturecollection
   }
 
+  /**
+   * Checks if a value matches a wildcard pattern
+   * Supports: *_derived (ends with), sensor_* (starts with), *temp* (contains)
+   */
+  const matchesWildcard = (propValue: string, pattern: string): boolean => {
+    const startsWithWildcard = pattern.startsWith('*')
+    const endsWithWildcard = pattern.endsWith('*')
+
+    if (startsWithWildcard && endsWithWildcard) {
+      // *pattern* - contains
+      const search = pattern.slice(1, -1)
+      return propValue.includes(search)
+    } else if (startsWithWildcard) {
+      // *pattern - ends with
+      const suffix = pattern.slice(1)
+      return propValue.endsWith(suffix)
+    } else if (endsWithWildcard) {
+      // pattern* - starts with
+      const prefix = pattern.slice(0, -1)
+      return propValue.startsWith(prefix)
+    }
+    return false
+  }
+
   const compateCondition = (comperator: Comperator, prop: any, value: any) => {
+    const propStr = String(prop)
+    const valueStr = String(value)
+    const hasWildcard = valueStr.includes('*')
+
     switch (comperator) {
       case Comperator.eq:
-        return String(prop) === value
+        if (hasWildcard) {
+          return matchesWildcard(propStr, valueStr)
+        }
+        return propStr === valueStr
       case Comperator.neq:
-        return String(prop) !== value
+        if (hasWildcard) {
+          return !matchesWildcard(propStr, valueStr)
+        }
+        return propStr !== valueStr
       case Comperator.gt:
         return Number(prop) > Number(value)
       case Comperator.gte:

@@ -283,9 +283,9 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
                   </template>
                 </template>
 
-                <!-- Marker-based renderers (e.g., ValueUnit, TLC) -->
+                <!-- Marker-based renderers (e.g., ValueUnit, TLC) or icon-only datastream markers -->
                 <l-marker
-                  v-if="subrenderer.observations && subrenderer.observations.some((obs: any) => !getById(obs.component)?.isLayerRenderer) && ((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
+                  v-if="(subrenderer.renderer.point_render_as !== 'none' || (subrenderer.observations && subrenderer.observations.some((obs: any) => !getById(obs.component)?.isLayerRenderer))) && ((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
                   :options="{ pane: markerPane }"
                   @click="handleDatastreamMarkerClick(datastream as BoxedDatastream, thing, subrenderer)"
