@@ -725,7 +725,8 @@ watch(selection,()=>{
 
 .tree {
   width: 300px;
-
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .detail {

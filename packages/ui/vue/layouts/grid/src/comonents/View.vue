@@ -38,6 +38,8 @@ import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widg
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
 
 const props = defineProps<{
   pageId?: string
@@ -56,6 +58,9 @@ const storedLayout = ref<any[]>([])
 let widgetStore: any = null
 let layoutStore: any = null
 
+
+// Get EventBus for page loaded event
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
 
 // Initialize stores safely in onMounted with retry logic
 onMounted(async () => {
@@ -87,10 +92,23 @@ onMounted(async () => {
     setTimeout(() => {
       if (!initStores()) {
         console.error('Failed to initialize Grid View stores after retry')
+      } else {
+        // Emit page loaded event after successful retry
+        emitPageLoaded()
       }
     }, 100)
+  } else {
+    // Wait another tick to ensure widgets are mounted and registered
+    await nextTick()
+    emitPageLoaded()
   }
 })
+
+// Emit page loaded event
+const emitPageLoaded = () => {
+  console.log('📄 Emitting system:pageLoaded for page:', pageId)
+  eventBus.emit('system:pageLoaded', { pageId })
+}
 
 
 const gridLayout = ref<InstanceType<typeof GridLayout>>()

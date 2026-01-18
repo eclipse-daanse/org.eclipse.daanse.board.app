@@ -46,6 +46,7 @@ export interface RegisteredInstance {
   instanceId: string;
   widgetType: string;
   instanceRef: any;
+  pageId?: string;
 }
 
 /**
@@ -57,7 +58,9 @@ export class EventActionsRegistry {
   private widgetTypes: Map<string, WidgetTypeRegistration> = new Map();
   private widgetInstances: Map<string, any> = new Map(); // widgetInstanceId -> widget component ref
   private instanceTypes: Map<string, string> = new Map(); // instanceId -> widgetType
+  private instancePages: Map<string, string> = new Map(); // instanceId -> pageId
   private ecoreMetadataService?: EcoreMetadataService;
+  private pageIdLookupFn?: (widgetId: string) => string | undefined;
 
   /**
    * Erstellt einen eindeutigen Key für die Registry
@@ -326,13 +329,43 @@ export class EventActionsRegistry {
    * @param instanceId - Eindeutige ID der Instanz
    * @param instanceRef - Referenz auf die Instanz mit den Action-Methoden
    * @param widgetType - Optional: Widget-Typ für die Instanz (z.B. "OGCSTAToChartComposer")
+   * @param pageId - Optional: Page ID auf der die Instanz lebt
    */
-  registerInstance(instanceId: string, instanceRef: any, widgetType?: string): void {
+  registerInstance(instanceId: string, instanceRef: any, widgetType?: string, pageId?: string): void {
     this.widgetInstances.set(instanceId, instanceRef);
     if (widgetType) {
       this.instanceTypes.set(instanceId, widgetType);
     }
-    console.log(`Registered instance "${instanceId}"${widgetType ? ` (type: ${widgetType})` : ''}`);
+    if (pageId) {
+      this.instancePages.set(instanceId, pageId);
+    }
+    console.log(`Registered instance "${instanceId}"${widgetType ? ` (type: ${widgetType})` : ''}${pageId ? ` (page: ${pageId})` : ''}`);
+  }
+
+  /**
+   * Gibt die pageId für eine Instanz zurück
+   * Prüft zuerst die manuelle Registrierung, dann die Lookup-Funktion
+   */
+  getInstancePageId(instanceId: string): string | undefined {
+    // Erst in der manuellen Registrierung schauen
+    const manualPageId = this.instancePages.get(instanceId);
+    if (manualPageId) return manualPageId;
+
+    // Dann die Lookup-Funktion verwenden falls vorhanden
+    if (this.pageIdLookupFn) {
+      return this.pageIdLookupFn(instanceId);
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Setzt eine Funktion die pageId von widgetId ableiten kann
+   * Diese Funktion wird von der Vue-App gesetzt um Zugriff auf die Pinia Stores zu haben
+   */
+  setPageIdLookup(fn: (widgetId: string) => string | undefined): void {
+    this.pageIdLookupFn = fn;
+    console.log('📝 PageId lookup function registered');
   }
 
   /**
@@ -350,6 +383,7 @@ export class EventActionsRegistry {
   unregisterInstance(instanceId: string): void {
     this.widgetInstances.delete(instanceId);
     this.instanceTypes.delete(instanceId);
+    this.instancePages.delete(instanceId);
     console.log(`Unregistered instance "${instanceId}"`);
   }
 
@@ -428,28 +462,35 @@ export class EventActionsRegistry {
    * @param args - Argumente für die Action
    */
   async executeActionOnAll(actionName: string, ...args: any[]): Promise<void> {
+    console.log(`🎯 executeActionOnAll: "${actionName}" with args:`, args);
+    console.log(`🎯 Registered instances: ${this.widgetInstances.size}`);
+
     if (this.widgetInstances.size === 0) {
-      console.warn(`No instances registered to execute action "${actionName}".`);
+      console.warn(`❌ No instances registered to execute action "${actionName}".`);
       return;
     }
 
     let executedCount = 0;
     for (const [instanceId, instanceRef] of this.widgetInstances.entries()) {
+      const instanceType = this.instanceTypes.get(instanceId);
+      console.log(`🎯 Checking instance "${instanceId}" (type: ${instanceType}), has ${actionName}: ${typeof instanceRef[actionName]}`);
+
       if (typeof instanceRef[actionName] === 'function') {
         try {
+          console.log(`🎯 Calling ${actionName} on "${instanceId}"...`);
           await instanceRef[actionName](...args);
           executedCount++;
-          console.log(`Executed action "${actionName}" on instance "${instanceId}"`);
+          console.log(`✅ Executed action "${actionName}" on instance "${instanceId}"`);
         } catch (error) {
-          console.error(`Error executing action "${actionName}" on "${instanceId}":`, error);
+          console.error(`❌ Error executing action "${actionName}" on "${instanceId}":`, error);
         }
       }
     }
 
     if (executedCount === 0) {
-      console.warn(`Action "${actionName}" not found on any instances.`);
+      console.warn(`❌ Action "${actionName}" not found on any instances.`);
     } else {
-      console.log(`Executed action "${actionName}" on ${executedCount} instance(s)`);
+      console.log(`✅ Executed action "${actionName}" on ${executedCount} instance(s)`);
     }
   }
 

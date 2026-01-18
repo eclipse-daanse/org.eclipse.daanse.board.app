@@ -24,6 +24,9 @@ import { EcoreMetadataService, ECORE_METADATA_SERVICE, type EcoreActionMetadata,
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 
+// Export Ecore model content for external use
+import SystemActionsEcoreContent from '../model/SystemActions.ecore?raw';
+
 const log = loggerFactory.createLogger('daanse:events:registry');
 
 const identifier = EVENT_REGISTRY;
@@ -126,5 +129,6 @@ export {
   type RegisteredInstance,
   type EventActionMapping,
   type ActionDefinition,
-  type PayloadToArgMapping
+  type PayloadToArgMapping,
+  SystemActionsEcoreContent
 };
