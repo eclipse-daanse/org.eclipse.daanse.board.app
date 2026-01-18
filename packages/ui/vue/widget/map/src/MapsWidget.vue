@@ -433,7 +433,9 @@ const locations = computed(() => {
 // Helper to get locations from a specific layer
 const getLayerLocations = (layer: any) => {
   const layerData = getLayerData(layer)
-  return (layerData as any)?.['locations'] ?? []
+  const locations = (layerData as any)?.['locations'] ?? []
+  // Filter out invalid locations to prevent Leaflet errors
+  return locations.filter((loc: any) => loc && (loc['@iot.id'] || loc.iotId))
 }
 
 const getStyle = computed(() => {
@@ -587,7 +589,7 @@ const reverse = (arr: any) => {
 
 const mapmove = debounce(() => {
   loadObservationsInView()
-}, 2000, { leading: true, trailing: true })
+}, 500, { leading: false, trailing: true })
 
 const loadObservationsInView = () => {
   console.log('[MAP] loadObservationsInView called')
@@ -1057,7 +1059,7 @@ onUnmounted(() => {
                         scrollWheelZoom: true
             }"
             style="height: 100%"
-            @move="mapmove"
+            @moveend="mapmove"
             @ready="maploaded"
             @update:zoom="zoomUpdated"
             @update:center="centerUpdated"

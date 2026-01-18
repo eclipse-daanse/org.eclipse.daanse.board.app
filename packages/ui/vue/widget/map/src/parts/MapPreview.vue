@@ -62,7 +62,7 @@ watch(() => config, () => {
     <l-map id="map" ref="map" :center="center as PointExpression" :max-zoom="21" :zoom="zoom" style="height: 100%">
       <l-tile-layer :attribution="attribution" :options="{maxNativeZoom:19,
                 maxZoom:25}" :url="baseMapUrl"></l-tile-layer>
-      <l-geo-json :geojson="geoJsonExample as FeatureCollection" :optionsStyle="()=>style as StyleFunction<any>"></l-geo-json>
+      <l-geo-json :geojson="geoJsonExample as FeatureCollection" :optionsStyle="style as any"></l-geo-json>
     </l-map>
 
   </div>

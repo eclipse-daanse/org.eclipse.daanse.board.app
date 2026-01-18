@@ -28,6 +28,7 @@ export default defineConfig({
         'org.eclipse.daanse.board.app.lib.core',
         'inversify',
         'reflect-metadata',
+        'vue-mention',
       ],
       output: {
         globals: {
@@ -36,6 +37,7 @@ export default defineConfig({
             'org.eclipse.daanse.board.app.lib.core',
           inversify: 'inversify',
           'reflect-metadata': 'reflect-metadata',
+          'vue-mention': 'VueMention',
         },
       },
     },
