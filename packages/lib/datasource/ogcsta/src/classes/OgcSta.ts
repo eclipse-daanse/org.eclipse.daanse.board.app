@@ -88,6 +88,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   private lastFilterType: string | null = null;
   private lastObservationsParams: any = null;
   private watchedVariables: Set<string> = new Set();
+  private pendingRequestFlag: { key: string; params: any } | null = null;
 
   init(configuration: IOGCSTAConfigartion): void {
     super.init(configuration)
@@ -149,6 +150,9 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         // Different filter type - execute the pending debounced call immediately
         clearTimeout(this.filterDebounceTimer);
         this.filterDebounceTimer = null;
+        // Save the pending request params BEFORE overwriting requestFlag
+        // This ensures getData() uses the correct params when notify() triggers it
+        this.pendingRequestFlag = { ...this.requestFlag };
         this.notify();
       }
 
@@ -218,6 +222,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   async getData<T>(type: string, options?: any): Promise<T> {
+    // Use pendingRequestFlag if available (set when different filter types interleave)
+    const effectiveRequestFlag = this.pendingRequestFlag || this.requestFlag;
+    this.pendingRequestFlag = null; // Clear after use
+
     if (!this.connectionRepository) {
       throw new Error('ConnectionRepository is not provided to Store Classes')
     }
@@ -237,7 +245,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
 
     // Only clear cache if explicitly requested via options or if no data exists yet
     const shouldReload = options?.reload ||
-                        this.requestFlag.key == FILTERRESET ||
+                        effectiveRequestFlag.key == FILTERRESET ||
                         (!this.resultMap.things || this.resultMap.things.length === 0)
 
     if (shouldReload && !isIsolatedRequest) {
@@ -259,8 +267,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       this.requestFlag = { key: FILTER, params: options.filter }
       this.getPartitionalData(listOfPromesis)
       this.requestFlag = originalRequestFlag
-    } else if (this.requestFlag.key == FILTER) {
+    } else if (effectiveRequestFlag.key == FILTER) {
+      // Temporarily set requestFlag to effectiveRequestFlag for getPartitionalData
+      const originalRequestFlag = this.requestFlag
+      this.requestFlag = effectiveRequestFlag
       this.getPartitionalData(listOfPromesis)
+      this.requestFlag = originalRequestFlag
     } else if (shouldReload) {
       // Only fetch all data if we're reloading
       this.getAllData(listOfPromesis)
@@ -323,12 +335,10 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
       }
 
       // Process observations for filtered data
-      if (options?.filter || this.requestFlag.key == FILTER) {
-        const observationsParam = options?.filter?.observations || this.requestFlag.params?.observations
-        this.logData('🔍 Processing observations for datastreams:', observationsParam?.length || 0)
-        this.logData('🔍 Available observations in resultMap:', this.resultMap.observations?.length || 0)
+      if (options?.filter || effectiveRequestFlag.key == FILTER) {
+        const observationsParam = options?.filter?.observations || effectiveRequestFlag.params?.observations
+
         for (const d of observationsParam ?? []) {
-          this.logData('🔍 Looking for observations for datastream:', d.iotId)
           const ds = this.resultMap.datastreams?.find(s => s.iotId == d.iotId)
           if (ds) {
             // Get ALL observations for this datastream, not just the first one
@@ -337,13 +347,30 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
             ) || []
 
             ds.observations = datastreamObservations as Observation[]
-            this.logData(`✅ Assigned ${datastreamObservations.length} observations to datastream: ${ds.name}`)
+
+            // Also assign to the datastream in the thing (nested structure)
+            for (const thing of this.resultMap.things || []) {
+              const nestedDs = thing.datastreams?.find(tds => tds.iotId == d.iotId)
+              if (nestedDs) {
+                nestedDs.observations = datastreamObservations as Observation[]
+              }
+            }
+
+            // Also update in locations->things->datastreams
+            for (const location of this.resultMap.locations || []) {
+              for (const thing of location.things || []) {
+                const locationDs = thing.datastreams?.find(lds => lds.iotId == d.iotId)
+                if (locationDs) {
+                  locationDs.observations = datastreamObservations as Observation[]
+                }
+              }
+            }
           }
         }
       }
 
       // Clear processed observations
-      for (const d of this.requestFlag.params?.observations ?? []) {
+      for (const d of effectiveRequestFlag.params?.observations ?? []) {
         this.resultMap.observations = this.resultMap.observations?.filter(
           o => o.ds_source !== d.iotId
         ) || []
@@ -966,6 +993,12 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   }
 
   getHistoricalLocations(listOfPromesis: Promise<IOGCSTAData>[]) {
+    // Skip if configured to use current locations instead of historical
+    if (this.configuration?.useCurrentLocationInsteadOfHistorical) {
+      this.logHistory('📍 Using current locations instead of historical locations (useCurrentLocationInsteadOfHistorical=true)');
+      return;
+    }
+
     const historyConfig = (this.configuration as IOGCSTAConfigartion)?.history;
 
     if (this.requestFlag.params && 'historicalLocations' in this.requestFlag.params) {

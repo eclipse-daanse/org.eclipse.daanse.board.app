@@ -487,6 +487,7 @@
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="ObservationrefreshTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
                              lowerBound="0">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+
                 <details key="documentation" value="Optional refresh interval for observation data in milliseconds."/>
             </eAnnotations>
         </eStructuralFeatures>
