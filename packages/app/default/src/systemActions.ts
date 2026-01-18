@@ -14,29 +14,81 @@
 import type { Router } from 'vue-router';
 import {
   EventActionsRegistry,
-  EVENT_ACTIONS_REGISTRY
+  EVENT_ACTIONS_REGISTRY,
+  SystemActionsEcoreContent
 } from 'org.eclipse.daanse.board.app.lib.events';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
+import type { TinyEmitter } from 'tiny-emitter';
 
 const log = loggerFactory.createLogger('daanse:system:actions');
+
+/**
+ * SystemActions Implementierung mit Router-Zugriff
+ */
+class SystemActionsImpl {
+  private eventBus: TinyEmitter;
+
+  constructor(private router: Router) {
+    this.eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+  }
+
+  async changePage(pageId?: string): Promise<void> {
+    if (!pageId) {
+      log('⚠️ changePage called without pageId');
+      return;
+    }
+    log('📄 Changing page to: %s', pageId);
+
+    // Create promise that resolves when pageLoaded event is received
+    const pageLoadedPromise = new Promise<void>((resolve) => {
+      const handler = (event: { pageId: string }) => {
+        if (event.pageId === pageId) {
+          log('📄 Received pageLoaded event for page: %s', pageId);
+          this.eventBus.off('system:pageLoaded', handler);
+          resolve();
+        }
+      };
+      this.eventBus.on('system:pageLoaded', handler);
+
+      // Timeout fallback after 5 seconds
+      setTimeout(() => {
+        this.eventBus.off('system:pageLoaded', handler);
+        log('⚠️ pageLoaded timeout for page: %s, continuing anyway', pageId);
+        resolve();
+      }, 5000);
+    });
+
+    await this.router.push(`/page/${pageId}`);
+    await pageLoadedPromise;
+
+    log('📄 Page change complete, widgets should be registered');
+  }
+
+  async setGlobalVariable(variableName?: string, value?: any): Promise<void> {
+    // Diese Action wird vom VariableRepository implementiert
+    log('⚠️ setGlobalVariable should be handled by VariableRepository');
+  }
+}
 
 /**
  * Registriert System-Actions (nur router-bezogene Actions)
  * Variable-Actions sind im variable package registriert
  */
-export function registerSystemActions(router: Router) {
+export async function registerSystemActions(router: Router) {
   const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
 
-  // changePage Action
-  actionsRegistry.register(
+  // Registriere SystemActions Metadata aus Ecore Model
+  await actionsRegistry.registerActionsFromEcoreString(
+    'SystemActions',
+    SystemActionsEcoreContent,
     'system',
-    'changePage',
-    async (pageId: string) => {
-      log('📄 Changing page to: %s', pageId);
-      await router.push(`/page/${pageId}`);
-    }
+    'SystemActions.ecore'
   );
+
+  // Registriere Instanz mit Router-Zugriff
+  const systemActions = new SystemActionsImpl(router);
+  actionsRegistry.registerInstance('SystemActions', systemActions, 'SystemActions');
 
   log('✅ System actions registered');
 }

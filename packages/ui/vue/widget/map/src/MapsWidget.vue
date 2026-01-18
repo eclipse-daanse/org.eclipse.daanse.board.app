@@ -43,9 +43,14 @@ import { logMap, logDatasource, logObservations, logServices, logTasks } from '.
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
 import { MapSettings } from './gen/MapSettings'
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
 const { datasourceId, id: widgetId } = toRefs(props)
+
+// Get pageId from route
+const route = useRoute()
+const pageId = (route.params.pageid as string) || ''
 const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
 const defaultConfig = new MapSettings()
@@ -903,6 +908,53 @@ let api = new class implements MapWidgetInterface{
       logMap('Thing selected:', thingId)
     }
   }
+
+  zoomToLocation = async (location: any, zoom: number = 16, duration: number = 1000) => {
+    console.log('🎯 zoomToLocation called with:', { location, zoom, duration })
+
+    // Wait for map to be ready (max 3 seconds)
+    let waitTime = 0
+    while ((!map.value || !(map.value as any).leafletObject) && waitTime < 3000) {
+      console.log('🎯 Waiting for map to be ready...')
+      await new Promise(resolve => setTimeout(resolve, 100))
+      waitTime += 100
+    }
+
+    if (!map.value || !(map.value as any).leafletObject) {
+      console.warn('🎯 Map instance not available after waiting. Cannot zoom to location.')
+      return
+    }
+
+    if (!location) {
+      console.warn('🎯 zoomToLocation called without location')
+      return
+    }
+
+    console.log('🎯 Location type:', typeof location, 'value:', location)
+
+    // Transform to GeoJSON if needed
+    const geoJson = transformToGeoJson(location)
+    console.log('🎯 Transformed GeoJSON:', geoJson)
+
+    // Get center point from GeoJSON
+    const point = getPoint(geoJson)
+    console.log('🎯 Extracted point:', point)
+
+    if (!point) {
+      console.warn('🎯 Could not extract coordinates from location. GeoJSON was:', geoJson)
+      return
+    }
+
+    // Get the Leaflet map instance and zoom to location
+    const mapInstance = (map.value as any).leafletObject as L.Map
+    console.log('🎯 Flying to', point, 'with zoom', zoom, 'duration', duration)
+
+    mapInstance.flyTo(point as L.LatLngExpression, zoom, {
+      duration: duration / 1000, // Leaflet expects seconds
+      easeLinearity: 0.25
+    })
+    console.log('🎯 flyTo called successfully')
+  }
 };
 
 // Expose MapWidgetInterface methods
@@ -910,8 +962,8 @@ defineExpose<MapWidgetInterface>(api)
 
 // Register widget instance with EventActionsRegistry
 onMounted(() => {
-  actionsRegistry.registerInstance(widgetId.value, api)
-  logMap('Registered instance with EventActionsRegistry:', widgetId.value)
+  actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId)
+  logMap('Registered instance with EventActionsRegistry:', widgetId.value, 'on page:', pageId)
 })
 
 // Cleanup on unmount

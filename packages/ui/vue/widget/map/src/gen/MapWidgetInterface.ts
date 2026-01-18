@@ -39,4 +39,9 @@ export abstract class MapWidgetInterface extends WidgetActionInterface {
   selectThingById(thingId: string): void {
         throw new Error("selectThingById not implemented");
   }
+
+  @WidgetAction({eventType: 'map.zoomToLocation'})
+  zoomToLocation(location: any, zoom?: number, duration?: number): void {
+        throw new Error("zoomToLocation not implemented");
+  }
 }

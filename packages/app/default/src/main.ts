@@ -322,7 +322,11 @@ app.provide('codeEditorType', 'monaco')
 
 app.use(router)
 
-// Register system actions
-registerSystemActions(router)
+// Register system actions (async, but app can mount before it completes)
+registerSystemActions(router).then(() => {
+  console.log('✅ System actions registered')
+}).catch((err) => {
+  console.error('❌ Failed to register system actions:', err)
+})
 
 app.mount('#app')

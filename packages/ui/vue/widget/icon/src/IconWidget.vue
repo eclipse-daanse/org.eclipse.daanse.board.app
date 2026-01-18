@@ -11,9 +11,14 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { IconSettings } from './gen/IconSettings'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
+
+const props = defineProps<{ id: string }>();
+const { id: widgetId } = toRefs(props);
 
 const { wrapParameters } = useVariableRepository();
 
@@ -21,11 +26,32 @@ const config = defineModel<IconSettings>('configv', { required: true });
 
 const defaultConfig = new IconSettings();
 
+// Get EventBus
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
 onMounted(() => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
     }
 });
+
+// Emit click event
+const handleClick = () => {
+    if (!widgetId.value) return;
+
+    const payload = {
+        iconName: config.value?.currentIcon || '',
+        widgetId: widgetId.value,
+        timestamp: Date.now()
+    };
+
+    console.log('🖱️ Icon Widget: Emitting click event', payload);
+    eventBus.emit('widget:IconWidget:click', {
+        type: 'widget:IconWidget:click',
+        widgetId: widgetId.value,
+        payload
+    });
+};
 
 const {
     iconColor,
@@ -51,7 +77,7 @@ const iconStyle = computed(() => {
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         rel="stylesheet" />
-    <div class="icon">
+    <div class="icon" @click="handleClick" style="cursor: pointer;">
         <span v-bind="$attrs" :style="iconStyle" class="material-symbols-outlined">
             {{ config.currentIcon }}
         </span>

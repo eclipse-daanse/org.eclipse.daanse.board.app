@@ -66,4 +66,16 @@
         </eStructuralFeatures>
 
     </eClassifiers>
+
+    <!-- Event System: IconClickPayload -->
+    <eClassifiers xsi:type="ecore:EClass" name="IconClickPayload" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//Payload">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Payload emitted when an icon is clicked."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Name of the clicked icon."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
 </ecore:EPackage>

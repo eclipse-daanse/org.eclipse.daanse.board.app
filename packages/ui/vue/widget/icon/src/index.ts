@@ -16,6 +16,8 @@ import Icon from './assets/icon.svg'
 import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { IconWidgetEvents } from './events/IconWidgetEvents'
 
 interface Variable<T> {
   name: string
@@ -34,13 +36,19 @@ interface IIconSettings {
 
 const register = () => {
   console.log('registering Icon widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('IconWidget', {
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+
+  widgetRepository.registerWidget('IconWidget', {
     component: IconWidget,
     settingsComponent: IconWidgetSettings,
     supportedDSTypes: [],
     icon: Icon,
     name: 'Icon'
   })
+
+  // Register widget events
+  eventRegistry.registerWidget('IconWidget', IconWidgetEvents)
 }
 
 register();
