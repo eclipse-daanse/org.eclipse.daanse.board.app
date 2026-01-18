@@ -121,6 +121,14 @@ import {
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
 
+type RelativeTimeUnit = 'hours' | 'days' | 'weeks' | 'months' | 'years';
+
+interface RelativeTimeConfig {
+  enabled: boolean;
+  offset: number;
+  unit: RelativeTimeUnit;
+}
+
 interface TimelineSettings {
   // Zeitgrenzen aus Settings
   timelineMin?: string; // Früheste erlaubte Zeit (ISO 8601)
@@ -128,6 +136,8 @@ interface TimelineSettings {
   // Aktueller Zeitbereich
   rangeStart?: string; // Aktueller Start des Zeitbereichs (ISO 8601)
   rangeEnd?: string;   // Aktuelles Ende des Zeitbereichs (ISO 8601)
+  // Relative Time Support
+  relativeTime?: RelativeTimeConfig; // If enabled, Start = Now - offset, End = Now
   // Variable Support
   rangeStartVariable?: string; // Variable name for start time
   rangeEndVariable?: string;   // Variable name for end time
@@ -173,6 +183,79 @@ const defaultTimelineMin = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 3
 const defaultTimelineMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);  // 7 Tage voraus
 const defaultRangeStart = new Date(Date.now() - 24 * 60 * 60 * 1000);       // 24h zurück
 const defaultRangeEnd = new Date();                                          // Jetzt
+
+// Calculate relative time: now minus offset in specified unit
+const calculateRelativeTime = (offset: number, unit: RelativeTimeUnit | { value: string }): { start: Date; end: Date } => {
+  const now = new Date();
+  const start = new Date(now);
+
+  // Ensure offset is a valid number
+  const safeOffset = Number(offset) || 24;
+
+  // Extract unit value if it's an object (from va-select)
+  const unitValue = typeof unit === 'object' && unit !== null ? (unit as any).value : unit;
+
+  switch (unitValue) {
+    case 'hours':
+      start.setHours(start.getHours() - safeOffset);
+      break;
+    case 'days':
+      start.setDate(start.getDate() - safeOffset);
+      break;
+    case 'weeks':
+      start.setDate(start.getDate() - (safeOffset * 7));
+      break;
+    case 'months':
+      start.setMonth(start.getMonth() - safeOffset);
+      break;
+    case 'years':
+      start.setFullYear(start.getFullYear() - safeOffset);
+      break;
+    default:
+      start.setHours(start.getHours() - safeOffset);
+  }
+
+  return { start, end: now };
+};
+
+// Apply relative time to config (sets timeline bounds and range)
+const applyRelativeTime = () => {
+  if (!config.value.relativeTime?.enabled) return;
+
+  const { start, end } = calculateRelativeTime(
+    config.value.relativeTime.offset,
+    config.value.relativeTime.unit
+  );
+
+  // Set timeline bounds (the frame)
+  config.value.timelineMin = start.toISOString();
+  config.value.timelineMax = end.toISOString();
+
+  // Always set range to 20% of frame at the end (most recent)
+  // This ensures the slider is always visible and movable
+  const frameDuration = end.getTime() - start.getTime();
+  const rangeDuration = frameDuration * 0.2;
+
+  const newRangeEnd = end;
+  const newRangeStart = new Date(end.getTime() - rangeDuration);
+
+  config.value.rangeStart = newRangeStart.toISOString();
+  config.value.rangeEnd = newRangeEnd.toISOString();
+
+  // Update variables if configured
+  if (config.value.rangeStartVariable && variableRepository.value) {
+    const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
+    if (startVariable) {
+      startVariable.value = newRangeStart.toISOString();
+    }
+  }
+  if (config.value.rangeEndVariable && variableRepository.value) {
+    const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
+    if (endVariable) {
+      endVariable.value = newRangeEnd.toISOString();
+    }
+  }
+};
 
 // Zeitgrenzen (durch Settings bestimmt)
 const timelineMin = computed(() => {
@@ -768,6 +851,11 @@ watch(() => rangeEndWrapper.value.value, (newValue) => {
   }
 });
 
+// Note: Relative time changes are handled by TimelineWidgetSettings component.
+// The Widget only applies relative time on mount (for initial state).
+// The Settings component is responsible for calculating and propagating the correct range values.
+// No watch here to avoid race conditions where the Widget overwrites Settings' correct values.
+
 // Initialisierung
 onMounted(() => {
   // Initialize variable repository
@@ -827,6 +915,11 @@ onMounted(() => {
     if (endVariable) {
       rangeEndWrapper.value.setTo(endVariable);
     }
+  }
+
+  // Apply relative time if enabled
+  if (config.value.relativeTime?.enabled) {
+    applyRelativeTime();
   }
 });
 

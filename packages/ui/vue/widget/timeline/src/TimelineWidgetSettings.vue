@@ -129,8 +129,42 @@ Contributors:
         />
       </div>
 
+      <!-- Relative Time Configuration -->
+      <div class="setting-group" v-if="settings.relativeTime">
+        <label>{{ t('Relative Time Range') }}</label>
+        <va-checkbox
+          v-model="settings.relativeTime.enabled"
+          :label="t('Use relative timeline bounds (Min = Now - Offset, Max = Now)')"
+          @update:modelValue="onRelativeTimeToggle"
+        />
+
+        <div v-if="settings.relativeTime.enabled" class="relative-time-config">
+          <div class="relative-time-row">
+            <va-input
+              v-model.number="settings.relativeTime.offset"
+              :label="t('Offset')"
+              type="number"
+              :min="1"
+              :max="10000"
+              @update:modelValue="onRelativeTimeChange"
+            />
+            <va-select
+              v-model="settings.relativeTime.unit"
+              :options="timeUnitOptions"
+              :label="t('Unit')"
+              text-by="text"
+              value-by="value"
+              @update:modelValue="onRelativeTimeChange"
+            />
+          </div>
+          <div class="relative-time-preview">
+            {{ t('Timeline bounds') }}: {{ t('Now') }} - {{ settings.relativeTime.offset }} {{ t(settings.relativeTime.unit) }} → {{ t('Now') }}
+          </div>
+        </div>
+      </div>
+
       <!-- Quick Time Range Presets -->
-      <div class="setting-group">
+      <div class="setting-group" v-if="!settings.relativeTime?.enabled">
         <label>{{ t('Quick Time Range Presets') }}</label>
         <div class="preset-buttons">
           <button
@@ -285,12 +319,22 @@ import {
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
 
+type RelativeTimeUnit = 'hours' | 'days' | 'weeks' | 'months' | 'years';
+
+interface RelativeTimeConfig {
+  enabled: boolean;
+  offset: number;
+  unit: RelativeTimeUnit;
+}
+
 interface TimelineSettings {
   // Widget-kompatible Eigenschaften
   timelineMin?: string; // Früheste erlaubte Zeit (ISO 8601)
   timelineMax?: string; // Späteste erlaubte Zeit (ISO 8601)
   rangeStart?: string; // Aktueller Start des Zeitbereichs (ISO 8601)
   rangeEnd?: string;   // Aktuelles Ende des Zeitbereichs (ISO 8601)
+  // Relative Time Support (Start = Now - offset, End = Now)
+  relativeTime?: RelativeTimeConfig;
   // Variable Support
   rangeStartVariable?: string; // Variable name for start time
   rangeEndVariable?: string;   // Variable name for end time
@@ -328,6 +372,11 @@ const settings = ref<TimelineSettings>({
   timelineMax: defaultTimelineEnd.toISOString(),
   rangeStart: defaultRangeStart.toISOString(),
   rangeEnd: defaultRangeEnd.toISOString(),
+  relativeTime: {
+    enabled: false,
+    offset: 24,
+    unit: 'hours'
+  },
   stepSize: 'hour',
   playbackSpeed: 1,
   autoPlay: false,
@@ -412,6 +461,111 @@ const timePresets = computed(() => [
     getStartTime: () => new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   }
 ]);
+
+const timeUnitOptions = [
+  { text: 'Hours', value: 'hours' },
+  { text: 'Days', value: 'days' },
+  { text: 'Weeks', value: 'weeks' },
+  { text: 'Months', value: 'months' },
+  { text: 'Years', value: 'years' }
+];
+
+// Relative time handlers
+const onRelativeTimeToggle = () => {
+  if (settings.value.relativeTime?.enabled) {
+    // Apply relative time immediately
+    applyRelativeTime();
+  }
+  onSettingsChange();
+};
+
+const onRelativeTimeChange = () => {
+  if (settings.value.relativeTime?.enabled) {
+    applyRelativeTime();
+  }
+  onSettingsChange();
+};
+
+const calculateRelativeTime = (offset: number, unit: RelativeTimeUnit | { value: string }): { start: Date; end: Date } => {
+  const now = new Date();
+  const start = new Date(now);
+
+  // Ensure offset is a valid number
+  const safeOffset = Number(offset) || 24;
+
+  // Extract unit value if it's an object (from va-select)
+  const unitValue = typeof unit === 'object' && unit !== null ? (unit as any).value : unit;
+
+  switch (unitValue) {
+    case 'hours':
+      start.setHours(start.getHours() - safeOffset);
+      break;
+    case 'days':
+      start.setDate(start.getDate() - safeOffset);
+      break;
+    case 'weeks':
+      start.setDate(start.getDate() - (safeOffset * 7));
+      break;
+    case 'months':
+      start.setMonth(start.getMonth() - safeOffset);
+      break;
+    case 'years':
+      start.setFullYear(start.getFullYear() - safeOffset);
+      break;
+    default:
+      console.warn('Unknown unit:', unitValue, '- defaulting to hours');
+      start.setHours(start.getHours() - safeOffset);
+  }
+
+  return { start, end: now };
+};
+
+const applyRelativeTime = () => {
+  if (!settings.value.relativeTime?.enabled) return;
+
+  const { start, end } = calculateRelativeTime(
+    settings.value.relativeTime.offset,
+    settings.value.relativeTime.unit
+  );
+
+  // Calculate range as 20% of frame at the end (most recent)
+  const frameDuration = end.getTime() - start.getTime();
+  const rangeDuration = frameDuration * 0.2;
+  const newRangeEnd = end;
+  const newRangeStart = new Date(end.getTime() - rangeDuration);
+
+  const newRangeStartISO = newRangeStart.toISOString();
+  const newRangeEndISO = newRangeEnd.toISOString();
+  const newTimelineMinISO = start.toISOString();
+  const newTimelineMaxISO = end.toISOString();
+
+  // Update settings.value
+  settings.value.timelineMin = newTimelineMinISO;
+  settings.value.timelineMax = newTimelineMaxISO;
+  settings.value.rangeStart = newRangeStartISO;
+  settings.value.rangeEnd = newRangeEndISO;
+
+  // ALSO update widgetSettings directly to ensure propagation
+  widgetSettings.value.timelineMin = newTimelineMinISO;
+  widgetSettings.value.timelineMax = newTimelineMaxISO;
+  widgetSettings.value.rangeStart = newRangeStartISO;
+  widgetSettings.value.rangeEnd = newRangeEndISO;
+
+  // Update variables if configured (Widget reads from variables if set)
+  if (settings.value.rangeStartVariable && variableRepository.value) {
+    const startVariable = variableRepository.value.getVariable(settings.value.rangeStartVariable);
+    if (startVariable) {
+      startVariable.value = newRangeStartISO;
+    }
+  }
+  if (settings.value.rangeEndVariable && variableRepository.value) {
+    const endVariable = variableRepository.value.getVariable(settings.value.rangeEndVariable);
+    if (endVariable) {
+      endVariable.value = newRangeEndISO;
+    }
+  }
+
+};
 
 const formatDateTime = (dateString?: string): string => {
   if (!dateString) return 'Not set';
@@ -568,6 +722,7 @@ const onSettingsChange = () => {
     timelineMax: useCurrentTimeAsMax.value ? new Date().toISOString() : settings.value.timelineMax,
     rangeStart: actualRangeStart,
     rangeEnd: actualRangeEnd,
+    relativeTime: settings.value.relativeTime,
     rangeStartVariable: settings.value.rangeStartVariable,
     rangeEndVariable: settings.value.rangeEndVariable,
     stepSize: settings.value.stepSize,
@@ -624,6 +779,11 @@ const resetToDefaults = () => {
     timelineMax: defaultTimelineEnd.toISOString(),
     rangeStart: defaultRangeStart.toISOString(),
     rangeEnd: defaultRangeEnd.toISOString(),
+    relativeTime: {
+      enabled: false,
+      offset: 24,
+      unit: 'hours'
+    },
     stepSize: 'hour',
     playbackSpeed: 1,
     autoPlay: false,
@@ -774,6 +934,15 @@ onMounted(() => {
     // Initialize variable flags based on existing configuration
     useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
     useEndVariable.value = !!widgetSettings.value.rangeEndVariable;
+
+    // Ensure relativeTime is initialized
+    if (!settings.value.relativeTime) {
+      settings.value.relativeTime = {
+        enabled: false,
+        offset: 24,
+        unit: 'hours'
+      };
+    }
 
     // Initialize date/time pickers from ISO strings
     if (settings.value.timelineMin) {
@@ -1005,8 +1174,41 @@ watch(() => widgetSettings.value, (newSettings) => {
   word-wrap: break-word;
 }
 
+.relative-time-config {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--va-background-element);
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.relative-time-row {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+}
+
+.relative-time-row > * {
+  flex: 1;
+}
+
+.relative-time-preview {
+  font-size: 0.85rem;
+  color: var(--va-primary);
+  padding: 0.5rem;
+  background: var(--va-background-secondary);
+  border-radius: 4px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .preset-buttons {
+    flex-direction: column;
+  }
+
+  .relative-time-row {
     flex-direction: column;
   }
 
