@@ -93,6 +93,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   private cachedThingsStructure: any[] = []  // Cache Things structure for operation mode
   private loadingPromises: Map<string, Promise<any>> = new Map()  // Track ongoing loads to prevent duplicates
   private requestSessionId: number = 0  // Incremented on each thing switch to invalidate old requests
+  private lastObservationsSignature: string = ''  // Track if relevant observations changed
 
   public static availableTypes = ['ogcsta']
 
@@ -124,7 +125,16 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       this.pendingUpdate = false
 
       try {
-        console.log('📊 OGCSTAToChartComposer: Datasource updated, notifying widgets...')
+        // Check if observations for our configured datastreams have changed
+        const hasRelevantChanges = await this.checkForRelevantChanges()
+
+        if (!hasRelevantChanges) {
+          console.log('📊 OGCSTAToChartComposer: No relevant changes for configured datastreams, skipping update')
+          this.isUpdating = false
+          return
+        }
+
+        console.log('📊 OGCSTAToChartComposer: Relevant changes detected, notifying widgets...')
 
         // Clear loading promises to force fresh data load (e.g., when time variables change)
         this.loadingPromises.clear()
@@ -158,6 +168,56 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       console.log('📊 OGCSTAToChartComposer: Initial notify to load data')
       this.notify()
     }, 100)
+  }
+
+  /**
+   * Check if observations for configured datastreams have changed
+   * Returns true if there are relevant changes that require re-rendering
+   */
+  private async checkForRelevantChanges(): Promise<boolean> {
+    // If no datastreams configured, always update (might be initial setup)
+    if (this.datastreams.length === 0) {
+      return true
+    }
+
+    const datasourceRepository = container.get(identifier) as DatasourceRepository
+
+    // Build signature from observations in cache for our datastreams
+    let signature = ''
+
+    for (const datasourceId of this.connectedDatasources) {
+      if (!datasourceId) continue
+
+      try {
+        const datasourceInstance = datasourceRepository.getDatasource(datasourceId)
+        const resultMap = (datasourceInstance as any).resultMap
+
+        if (resultMap?.datastreams) {
+          for (const ds of this.datastreams) {
+            const datastream = resultMap.datastreams.find((d: any) => d.iotId == ds.datastreamId)
+            if (datastream?.observations) {
+              // Create signature from count and last observation timestamp
+              const obsCount = datastream.observations.length
+              const lastObs = datastream.observations[datastream.observations.length - 1]
+              const lastTimestamp = lastObs?.phenomenonTime || lastObs?.resultTime || ''
+              signature += `${ds.datastreamId}:${obsCount}:${lastTimestamp};`
+            }
+          }
+        }
+      } catch (error) {
+        // If we can't read, assume changes
+        return true
+      }
+    }
+
+    // Compare with last signature
+    if (signature === this.lastObservationsSignature) {
+      return false
+    }
+
+    // Update signature and return true (changes detected)
+    this.lastObservationsSignature = signature
+    return true
   }
 
   async getData(type: string, options?: any): Promise<any> {
