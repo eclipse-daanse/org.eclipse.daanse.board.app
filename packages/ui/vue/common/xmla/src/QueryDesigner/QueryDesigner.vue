@@ -132,7 +132,41 @@ const changeItems = (area: "rows" | "columns" | "filters", e: any) => {
   }
 };
 
-const changeMeasures = (e: any) => { };
+const changeMeasures = (e: any) => {
+  const { added } = e;
+
+  if (added) {
+    const element: MeasureTreeItem = added.element;
+
+    const duplicates = queryConfig.value.measures.filter(
+      (e) => e.originalItem.MEASURE_UNIQUE_NAME === element.originalItem.MEASURE_UNIQUE_NAME,
+    );
+
+    if (duplicates.length > 1) {
+      const areaContent = queryConfig.value['measures'];
+      const index = areaContent.findIndex((e) => e.id === element.id);
+      areaContent.splice(index, 1);
+      return;
+    }
+  }
+
+  if (queryConfig.value.measures.length > 1) {
+    queryConfig.value.columns.push({
+      type: "Values",
+      id: "Values",
+      children: [],
+      caption: "Values",
+      originalItem: {
+        HIERARCHY_UNIQUE_NAME: "Values",
+      } as any,
+      filters: null as any,
+    });
+  } else {
+    queryConfig.value.columns = queryConfig.value.columns.filter(
+      (e) => (e as any).type !== 'Values',
+    );
+  }
+};
 
 const remove = (
   area: "rows" | "columns" | "filters" | "measures",

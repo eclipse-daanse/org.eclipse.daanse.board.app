@@ -276,7 +276,11 @@ export class XmlaStore extends BaseDatasource {
   }
 
   parseToPivotTable(mdxResponse: any): any {
-    return parseMdxRequest(mdxResponse)
+    return parseMdxRequest(mdxResponse, {
+      rows: this.requestParams.rows,
+      columns: this.requestParams.columns,
+      measures: this.requestParams.measures,
+    })
   }
 
   parseToDataTable(mdxResponce: any): any {
