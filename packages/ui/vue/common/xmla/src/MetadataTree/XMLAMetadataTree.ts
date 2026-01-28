@@ -204,5 +204,10 @@ function getChildHierarchies(
 }
 
 export function reorderTree(tree: any[]) {
-  return tree
+  return tree.sort((a, b) => {
+    console.log('Reorder tree items', a, b);
+    if (a.isMeasureDimension) return -2;
+    else if (a.type === 8) return -1;
+    else return 1;
+  });
 }
