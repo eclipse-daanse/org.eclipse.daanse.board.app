@@ -22,8 +22,8 @@
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
     "vite-plugin-monaco-editor": "^1.1.0",
     "@types/leaflet": "^1.9.16"
   },
@@ -31,6 +31,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "leaflet": "^1.9.4",
     "monaco-editor": "^0.55.1",
     "org.eclipse.daanse.board.app.lib.datasource.rest": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.repository.datasource": "^0.0.1-next.1",

@@ -25,6 +25,7 @@ export interface IIconSettings {
 
 export interface IPointPin {
   color: string;
+  solid?: boolean;
 }
 
 export interface IPointAndAreaSettings {
