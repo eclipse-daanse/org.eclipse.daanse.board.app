@@ -178,6 +178,7 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
                 :property-value="thing[renderer.renderer.point_prop ?? '']"
                 :image-url="renderer.renderer.point_image_url"
                 :image-size="renderer.renderer.point_image_size || 32"
+                :is-solid="renderer.renderer.pointPin?.solid"
                 :is-selected="isThingSelected(thing)"
                 :selection-color="highlightColor"
               />
@@ -226,6 +227,7 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
                       :property-value="datastream[subrenderer.renderer.point_prop ?? '']"
                       :image-url="subrenderer.renderer.point_image_url"
                       :image-size="subrenderer.renderer.point_image_size || 32"
+                      :is-solid="subrenderer.renderer.pointPin?.solid"
                       :is-round="true"
                       :is-selected="isThingSelected(thing)"
                       :selection-color="highlightColor"

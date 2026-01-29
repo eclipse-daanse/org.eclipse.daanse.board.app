@@ -112,6 +112,10 @@ const pointSelectorOptions = [
         label="Pin Color"
 
       />
+      <VaCheckbox
+        v-model="model.pointPin.solid"
+        label="Solid (vollflächig)"
+      />
     </template>
   </div>
   <div class="flex flex-col md6 pa-3">
@@ -122,7 +126,7 @@ const pointSelectorOptions = [
 
 
           <template v-if="model.point_render_as=='icon'">
-            <div class="pin icon">
+            <div :class="['pin', 'icon', { solid: model.pointPin.solid }]">
               <div class="inner">
 
                 <IconWidget :config="model.point" v-model:configv="model.point"></IconWidget>
@@ -132,7 +136,7 @@ const pointSelectorOptions = [
 
           </template>
           <template v-if="model.point_render_as=='prop'">
-            <div class="pin contain marker">
+            <div :class="['pin', 'contain', 'marker', { solid: model.pointPin.solid }]">
               <div class="inner">
                 {{ model.point_prop }}
               </div>
@@ -162,10 +166,16 @@ const pointSelectorOptions = [
   left: 50%;
   top: 50%;
   margin: -15px 71px 0 -15px;
-  box-shadow: -4px -6px 8px #0000005c;
+  box-shadow: -4px -6px 8px #00000008;
 
   &.round {
     border-radius: 50% 50% 50% 50%;
+  }
+
+  &.solid {
+    .inner {
+      background: transparent;
+    }
   }
 
   &.contain {

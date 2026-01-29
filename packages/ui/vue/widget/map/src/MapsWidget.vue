@@ -591,7 +591,10 @@ const mapmove = debounce(() => {
   loadObservationsInView()
 }, 500, { leading: false, trailing: true })
 
-const loadObservationsInView = () => {
+// Session ID to cancel outdated processing when map moves again
+let loadObservationsSessionId = 0
+
+const loadObservationsInView = async () => {
   console.log('[MAP] loadObservationsInView called')
 
   if (isLoadingObservations) {
@@ -612,6 +615,7 @@ const loadObservationsInView = () => {
   }
 
   isLoadingObservations = true
+  const currentSessionId = ++loadObservationsSessionId
 
   let geometry: Polygon = {
     type: 'Polygon',
@@ -664,9 +668,29 @@ const loadObservationsInView = () => {
     }
   }
 
-  // Process datastreams with optimized renderer matching
+  // Flatten datastreams into array with dsId for chunked processing
+  const allDatastreams: Array<{ dsId: string, dataStream: any }> = []
   for (const [dsId, datastreams] of datasourceDatastreams.entries()) {
     for (const dataStream of datastreams) {
+      allDatastreams.push({ dsId, dataStream })
+    }
+  }
+
+  // Process datastreams in chunks to avoid blocking UI
+  const CHUNK_SIZE = 100  // Smaller chunks for smoother scrolling
+  let processed = 0
+
+  for (let i = 0; i < allDatastreams.length; i += CHUNK_SIZE) {
+    // Check if this session is still valid (map might have moved again)
+    if (currentSessionId !== loadObservationsSessionId) {
+      console.log('[MAP] Session invalidated, aborting chunked processing')
+      isLoadingObservations = false
+      return
+    }
+
+    const chunk = allDatastreams.slice(i, i + CHUNK_SIZE)
+
+    for (const { dsId, dataStream } of chunk) {
       // Check if datastream is in bounds ONCE (before renderer matching)
       let inBoundsCheck: boolean | null = null
       let geoJsonFeature: any = null
@@ -716,6 +740,13 @@ const loadObservationsInView = () => {
           taskListByTimeAndDatasource[refreshtime][dsId].push(dataStream)
         }
       }
+    }
+
+    processed += chunk.length
+
+    // Yield to browser between chunks (allow UI updates)
+    if (i + CHUNK_SIZE < allDatastreams.length) {
+      await new Promise(resolve => setTimeout(resolve, 0))
     }
   }
 

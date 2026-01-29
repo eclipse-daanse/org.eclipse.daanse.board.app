@@ -20,12 +20,14 @@ interface MapMarkerProps {
   imageUrl?: string
   imageSize?: number
   isRound?: boolean
+  isSolid?: boolean
   isSelected?: boolean
   selectionColor?: string
 }
 
 const props = withDefaults(defineProps<MapMarkerProps>(), {
   isRound: false,
+  isSolid: false,
   imageSize: 32,
   isSelected: false,
   selectionColor: '#ff0000'
@@ -38,7 +40,7 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
       :style="{
         background: isSelected ? selectionColor : backgroundColor
       }"
-      :class="['pin', 'icon', { round: isRound }]"
+      :class="['pin', 'icon', { round: isRound, solid: isSolid }]"
     >
       <div class="inner">
         <IconWidget
@@ -55,7 +57,7 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
       :style="{
         background: isSelected ? selectionColor : backgroundColor
       }"
-      :class="['pin', 'contain', 'marker', { round: isRound }]"
+      :class="['pin', 'contain', 'marker', { round: isRound, solid: isSolid }]"
     >
       <div class="inner">
         {{ propertyValue }}
@@ -98,10 +100,16 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
   left: 50%;
   top: 50%;
   margin: -15px 71px 0 -15px;
-  box-shadow: -4px -6px 8px #0000005c;
+  box-shadow: -4px -6px 8px #00000008;
 
   &.round {
     border-radius: 50% 50% 50% 50%;
+  }
+
+  &.solid {
+    .inner {
+      background: transparent;
+    }
   }
 
   &.contain {
