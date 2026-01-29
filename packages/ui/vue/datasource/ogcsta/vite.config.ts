@@ -13,6 +13,7 @@ import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 import vue from '@vitejs/plugin-vue'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor'
+import libCss from 'vite-plugin-libcss'
 
 export default defineConfig({
   build: {
@@ -23,7 +24,13 @@ export default defineConfig({
       fileName: 'ui.vue.datasource.ogcsta',
     },
     rollupOptions: {
-      external: (id) => !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0"),
+      external: (id) => {
+        // Include leaflet CSS in the bundle
+        if (id.includes('leaflet') && id.endsWith('.css')) {
+          return false;
+        }
+        return !id.startsWith(".") && !id.startsWith("/") && !id.startsWith("\0");
+      },
       output: {
         globals: {
           vue: 'Vue',
@@ -48,7 +55,8 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
     }),
-
     vue(),
+    // @ts-ignore
+    libCss(),
   ],
 })
