@@ -30,4 +30,7 @@ export class PointPin {
 
   @Documentation("The color of the point pin.")
   @Attribute() color?: string;
+
+  @Documentation("If true, the pin is rendered as a solid filled shape without the inner circle.")
+  @Attribute() solid?: boolean;
 }

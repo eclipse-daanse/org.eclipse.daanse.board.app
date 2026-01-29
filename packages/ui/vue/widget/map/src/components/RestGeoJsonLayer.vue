@@ -57,6 +57,7 @@ const props = defineProps<RestGeoJsonLayerProps>()
               :property-value="feature.properties?.[getStyleById(styleID)?.renderer.point_prop ?? '']"
               :image-url="getStyleById(styleID)?.renderer.point_image_url"
               :image-size="getStyleById(styleID)?.renderer.point_image_size || 32"
+              :is-solid="getStyleById(styleID)?.renderer.pointPin?.solid"
             />
           </l-icon>
         </l-marker>
