@@ -117,6 +117,22 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     this.connection = configuration.connection
     this.requestFlag = { key: FILTERRESET, params: undefined }
 
+    // Auto-enable history if time filters are configured but enabled is undefined
+    // (backwards compatibility with old configs that have time filters but no enabled flag)
+    if (configuration.history && configuration.history.enabled === undefined) {
+      const hasTimeFilters =
+        configuration.history.timeRange?.start || configuration.history.timeRange?.startVariable ||
+        configuration.history.timeRange?.end || configuration.history.timeRange?.endVariable ||
+        configuration.history.phenomenonTime?.start || configuration.history.phenomenonTime?.startVariable ||
+        configuration.history.phenomenonTime?.end || configuration.history.phenomenonTime?.endVariable ||
+        configuration.history.resultTime?.start || configuration.history.resultTime?.startVariable ||
+        configuration.history.resultTime?.end || configuration.history.resultTime?.endVariable;
+      if (hasTimeFilters) {
+        this.logHistory('Auto-enabling history due to configured time filters');
+        configuration.history.enabled = true;
+      }
+    }
+
     // Setup MQTT Connection if configured
     if (configuration.mqttConnection && this.connectionRepository) {
       try {

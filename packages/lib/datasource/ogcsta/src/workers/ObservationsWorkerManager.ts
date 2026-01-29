@@ -67,10 +67,9 @@ export class ObservationsWorkerManager {
                 } else {
                   params.set('$orderby', 'phenomenonTime desc');
                 }
+                // Only set $top if explicitly provided (don't default to 1 for history queries)
                 if (req.historyParams && req.historyParams.$top) {
                   params.set('$top', req.historyParams.$top.toString());
-                } else {
-                  params.set('$top', '1');
                 }
 
                 const url = req.baseUrl + '/v1.1/Datastreams(' + req.datastreamId + ')/Observations?' + params.toString();
@@ -199,8 +198,8 @@ export class ObservationsWorkerManager {
         if (historyParams?.$filter) params.set('$filter', historyParams.$filter)
         if (historyParams?.$orderby) params.set('$orderby', historyParams.$orderby)
         else params.set('$orderby', 'phenomenonTime desc')
+        // Only set $top if explicitly provided (don't default to 1 for history queries)
         if (historyParams?.$top) params.set('$top', historyParams.$top.toString())
-        else params.set('$top', '1')
 
         const url = `${baseUrl}/v1.1/Datastreams(${datastreamId})/Observations?${params.toString()}`
         const response = await fetch(url)
