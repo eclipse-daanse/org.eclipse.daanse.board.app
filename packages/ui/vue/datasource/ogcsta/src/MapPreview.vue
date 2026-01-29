@@ -453,9 +453,12 @@ watch([chartData, chartCanvas], async () => {
             No data available
           </div>
 
-          <div v-for="thing in hierarchicalData" :key="thing.iotId || thing['@iot.id']"
-               class="thing-item"
-               :class="{ 'thing-selected': selectedThing?.id === (thing.iotId || thing['@iot.id']) }">
+          <div
+            v-for="thing in hierarchicalData"
+            :key="thing.iotId || thing['@iot.id']"
+            class="thing-item"
+            :class="{ 'thing-selected': selectedThing?.id === (thing.iotId || thing['@iot.id']) }"
+          >
             <div class="tree-node thing-node" @click="toggleThing(thing.iotId || thing['@iot.id'], thing)">
               <va-icon :name="expandedThings.has(thing.iotId || thing['@iot.id']) ? 'expand_more' : 'chevron_right'" size="small" />
               <va-icon name="sensors" size="small" color="primary" />

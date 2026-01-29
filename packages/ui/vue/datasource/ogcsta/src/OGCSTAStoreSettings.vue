@@ -9,13 +9,14 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+import { computed, shallowRef, watch } from 'vue';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   identifier as variableIdentifier,
   type VariableRepository
 } from 'org.eclipse.daanse.board.app.lib.repository.variable';
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components';
 
 const { config, connections } = defineProps<{
   config: any;
@@ -31,20 +32,13 @@ const mqttConnectionsFiltered = computed(() => {
   return connections.filter((c: any) => c.type === 'mqtt');
 });
 
-// Variable Support
-const variableRepository = ref<VariableRepository | null>(null);
-
-// Available variables
-const availableVariables = computed(() => {
-  if (!variableRepository.value) return [];
-  return variableRepository.value.getAllVariables()
-    .map(([name, v]: [string, any]) => v)
-    .filter((v: any) => {
-      console.log(v)
-      return v.value && typeof v.value === 'string'
-    })
-    .map((v: any) => ({ name: v.name, value: v.value }));
-});
+// Variable Support - get synchronously so wrappers are initialized before VariableInput renders
+let variableRepository: VariableRepository | null = null;
+try {
+  variableRepository = container.get<VariableRepository>(variableIdentifier);
+} catch (error) {
+  console.warn('VariableRepository not found in container:', error);
+}
 
 // Initialize history config if not present
 if (!config.history) {
@@ -56,14 +50,84 @@ if (!config.history) {
   };
 }
 
-// Initialize variable repository
-onMounted(() => {
-  try {
-    variableRepository.value = container.get<VariableRepository>(variableIdentifier);
-  } catch (error) {
-    console.warn('VariableRepository not found in container:', error);
+// Ensure nested objects exist
+if (!config.history.timeRange) config.history.timeRange = {};
+if (!config.history.resultTime) config.history.resultTime = {};
+if (!config.history.phenomenonTime) config.history.phenomenonTime = {};
+
+// Auto-enable history if time filters are configured (for backwards compatibility with old configs)
+if (config.history.enabled === undefined) {
+  const hasTimeFilters =
+    config.history.timeRange?.start || config.history.timeRange?.startVariable ||
+    config.history.timeRange?.end || config.history.timeRange?.endVariable ||
+    config.history.phenomenonTime?.start || config.history.phenomenonTime?.startVariable ||
+    config.history.phenomenonTime?.end || config.history.phenomenonTime?.endVariable ||
+    config.history.resultTime?.start || config.history.resultTime?.startVariable ||
+    config.history.resultTime?.end || config.history.resultTime?.endVariable;
+  config.history.enabled = hasTimeFilters ? true : false;
+}
+
+// Helper to initialize a wrapper from config (synchronously)
+const initWrapper = (wrapper: VariableWrapper<string>, value?: string, variableName?: string) => {
+  if (variableName && variableRepository) {
+    const variable = variableRepository.getVariable(variableName);
+    if (variable) {
+      wrapper.setTo(variable);
+      return;
+    }
   }
-});
+  if (value) {
+    wrapper.value = value;
+  }
+};
+
+// Create VariableWrapper refs for each time field
+// Using shallowRef to prevent Vue from deeply unwrapping the VariableWrapper class
+// Initialize synchronously so VariableInput sees the correct isSet state
+const timeRangeStart = shallowRef(new VariableWrapper<string>());
+initWrapper(timeRangeStart.value, config.history.timeRange?.start, config.history.timeRange?.startVariable);
+
+const timeRangeEnd = shallowRef(new VariableWrapper<string>());
+initWrapper(timeRangeEnd.value, config.history.timeRange?.end, config.history.timeRange?.endVariable);
+
+const phenomenonTimeStart = shallowRef(new VariableWrapper<string>());
+initWrapper(phenomenonTimeStart.value, config.history.phenomenonTime?.start, config.history.phenomenonTime?.startVariable);
+
+const phenomenonTimeEnd = shallowRef(new VariableWrapper<string>());
+initWrapper(phenomenonTimeEnd.value, config.history.phenomenonTime?.end, config.history.phenomenonTime?.endVariable);
+
+const resultTimeStart = shallowRef(new VariableWrapper<string>());
+initWrapper(resultTimeStart.value, config.history.resultTime?.start, config.history.resultTime?.startVariable);
+
+const resultTimeEnd = shallowRef(new VariableWrapper<string>());
+initWrapper(resultTimeEnd.value, config.history.resultTime?.end, config.history.resultTime?.endVariable);
+
+// Helper to sync wrapper changes back to config
+const createWatcher = (
+  wrapper: typeof timeRangeStart,
+  getConfigObj: () => any,
+  startKey: string,
+  variableKey: string
+) => {
+  watch(wrapper, (w) => {
+    const configObj = getConfigObj();
+    if (w.isSet && w.variable) {
+      configObj[variableKey] = w.variable;
+      configObj[startKey] = undefined;
+    } else {
+      configObj[startKey] = w.value;
+      configObj[variableKey] = undefined;
+    }
+  }, { deep: true });
+};
+
+// Setup watchers to sync back to config
+createWatcher(timeRangeStart, () => config.history.timeRange, 'start', 'startVariable');
+createWatcher(timeRangeEnd, () => config.history.timeRange, 'end', 'endVariable');
+createWatcher(phenomenonTimeStart, () => config.history.phenomenonTime, 'start', 'startVariable');
+createWatcher(phenomenonTimeEnd, () => config.history.phenomenonTime, 'end', 'endVariable');
+createWatcher(resultTimeStart, () => config.history.resultTime, 'start', 'startVariable');
+createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariable');
 
 </script>
 
@@ -100,105 +164,87 @@ onMounted(() => {
         <div class="setting-group">
           <h4>Time Range Filter</h4>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.timeRange.start"
-              label="Start Time"
-            />
-            <va-select
-              v-model="config.history.timeRange.startVariable"
-              :options="availableVariables"
-              label="Or use Start Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="timeRangeStart" label="Start Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="Start Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.timeRange.end"
-              label="End Time"
-            />
-            <va-select
-              v-model="config.history.timeRange.endVariable"
-              :options="availableVariables"
-              label="Or use End Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="timeRangeEnd" label="End Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="End Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
         </div>
 
         <!-- Phenomenon Time Configuration -->
         <div class="setting-group">
           <h4>Phenomenon Time Filter</h4>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.phenomenonTime.start"
-              label="Start Time"
-            />
-            <va-select
-              v-model="config.history.phenomenonTime.startVariable"
-              :options="availableVariables"
-              label="Or use Start Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="phenomenonTimeStart" label="Start Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="Start Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.phenomenonTime.end"
-              label="End Time"
-            />
-            <va-select
-              v-model="config.history.phenomenonTime.endVariable"
-              :options="availableVariables"
-              label="Or use End Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="phenomenonTimeEnd" label="End Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="End Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
         </div>
 
         <!-- Result Time Configuration -->
         <div class="setting-group">
           <h4>Result Time Filter</h4>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.resultTime.start"
-              label="Start Time"
-            />
-            <va-select
-              v-model="config.history.resultTime.startVariable"
-              :options="availableVariables"
-              label="Or use Start Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="resultTimeStart" label="Start Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="Start Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
 
-          <div class="time-config-row">
-            <va-date-input
-              v-model="config.history.resultTime.end"
-              label="End Time"
-            />
-            <va-select
-              v-model="config.history.resultTime.endVariable"
-              :options="availableVariables"
-              label="Or use End Variable"
-              text-by="name"
-              value-by="name"
-              clearable
-            />
-          </div>
+          <VariableInput v-model="resultTimeEnd" label="End Time">
+            <template #default="{ value, change }">
+              <va-input
+                :model-value="value"
+                @update:model-value="change({ target: { value: $event } })"
+                label="End Time"
+                placeholder="ISO 8601 DateTime"
+                class="w-full"
+              />
+            </template>
+          </VariableInput>
         </div>
 
         <!-- Additional History Settings -->
@@ -272,17 +318,7 @@ onMounted(() => {
   padding-bottom: 0.5rem;
 }
 
-.time-config-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  align-items: end;
-}
-
-@media (max-width: 768px) {
-  .time-config-row {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
+.w-full {
+  width: 100%;
 }
 </style>
