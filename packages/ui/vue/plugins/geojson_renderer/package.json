@@ -24,7 +24,7 @@
     "vite": "^6.0.11",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "@vitejs/plugin-vue": "^5.2.1"
+    "@vitejs/plugin-vue": "^6.0.3"
   },
   "publishConfig": {
     "access": "public"
