@@ -22,6 +22,8 @@ const available = ref(false);
 const url = ref(config.url);
 const isUrlValid = ref(true);
 const statusCode = ref<string | null>(null);
+const cacheEnabled = ref(config.cacheEnabled ?? false);
+const cacheTTL = ref(config.cacheTTL ?? 30000);
 
 const statusCircleClass = computed(() => {
   if (!url.value) return 'bg-gray-400';
@@ -77,6 +79,14 @@ watch(url, (newUrl) =>  {
   }
 });
 
+watch(cacheEnabled, (newValue) => {
+  config.cacheEnabled = newValue;
+});
+
+watch(cacheTTL, (newValue) => {
+  config.cacheTTL = newValue;
+});
+
 onMounted(async () => {
   if (config.url) {
     url.value = config.url;
@@ -84,6 +94,8 @@ onMounted(async () => {
     available.value = resp.available;
     statusCode.value = resp.statusCode;
   }
+  cacheEnabled.value = config.cacheEnabled ?? false;
+  cacheTTL.value = config.cacheTTL ?? 30000;
 });
 </script>
 
@@ -94,6 +106,22 @@ onMounted(async () => {
   <div v-if="isUrlValid && url" class="ml-2 flex items-center space-x-2">
     <div :class="`w-3 h-3 rounded-full ${statusCircleClass}`"></div>
     <span class="text-sm font-medium" :class="statusTextClass">Status: {{ statusCode  }}</span>
+  </div>
+
+  <div class="mt-4">
+    <VaCheckbox v-model="cacheEnabled" label="Enable Response Caching" />
+  </div>
+
+  <div v-if="cacheEnabled" class="mt-2">
+    <VaInput
+      v-model.number="cacheTTL"
+      label="Cache TTL (ms)"
+      type="number"
+      :min="1000"
+      :max="3600000"
+      :rules="[() => cacheTTL >= 1000 || 'Minimum 1000ms']"
+    />
+    <span class="text-xs text-gray-500">Time-to-live for cached responses (default: 30000ms = 30s)</span>
   </div>
 </template>
 

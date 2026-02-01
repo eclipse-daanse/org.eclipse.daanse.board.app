@@ -25,6 +25,7 @@ import {
   ResponseError,
   ThingsApi,
 } from '../client'
+import { getSharedCachingFetch } from '../client/CachingMiddleware'
 import { inject, injectable } from 'inversify'
 import {
   ConnectionRepository,
@@ -279,12 +280,19 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
     const connection = this.connectionRepository.getConnection(
       this.connection,
     ) as IConnection
+
+    // Create base fetch function using the connection
+    const baseFetch = (a: any, b: any) => {
+      //@ts-ignore
+      return connection.fetch({ url: a } as IRequestParams, b) as Promise<any>
+    }
+
+    // Wrap with caching for request deduplication and TTL caching
+    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 30000, maxEntries: 200 })
+
     this.baseConfigration = new Configuration({
       basePath: '',
-      fetchApi: (a, b) => {
-        //@ts-ignore
-        return connection.fetch({ url: a } as IRequestParams, b) as Promise<any>
-      },
+      fetchApi: cachingFetch,
     })
 
     // Check if this is an isolated request (don't modify cache)
