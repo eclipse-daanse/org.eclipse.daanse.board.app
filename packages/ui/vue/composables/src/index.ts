@@ -15,6 +15,7 @@ import { useDatasourceRepository } from './useDatasourceRepository'
 import { useTemporaryStore } from './useTemporaryStore'
 import { usePromisifiedModal } from './promisifiedModal'
 import { useVariableRepository } from './useVariableRepository'
+import { useGlobalLoading } from './useGlobalLoading'
 import { VariableWrapper,VARIABLEWRAPPER } from './VariableWrapper'
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
 
@@ -23,4 +24,4 @@ const WrapperTypes = {
   'VariableComplexStringWrapper': VariableComplexStringWrapper,
 }
 
-export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal,VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes}
+export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes}

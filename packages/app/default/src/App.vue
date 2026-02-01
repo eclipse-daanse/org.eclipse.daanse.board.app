@@ -21,8 +21,10 @@ import {
   type NavigationRegistry,
   type NavigationItem
 } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import { useGlobalLoading } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const navigationItems = ref<NavigationItem[]>([])
+const { isLoading } = useGlobalLoading()
 
 onMounted(() => {
   const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY) as any
@@ -35,6 +37,10 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col h-full w-full">
+    <!-- Global Loading Indicator -->
+    <div v-if="isLoading" class="global-loading-bar">
+      <div class="global-loading-bar-progress"></div>
+    </div>
     <Header />
     <div class="flex-grow flex overflow-hidden h-full">
       <va-sidebar
@@ -107,8 +113,32 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.global-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  /*background: rgba(0, 0, 0, 0.1);*/
+  z-index: 8000;
+  overflow: hidden;
+}
 
+.global-loading-bar-progress {
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, #e79542, #f5a623, #e79542);
+  animation: loading-slide 1.2s ease-in-out infinite;
+}
 
+@keyframes loading-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
 </style>
 <style>
 @import "./assets/main.css";

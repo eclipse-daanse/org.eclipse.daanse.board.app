@@ -29,7 +29,7 @@ export class VariableWrapperFactory {
         short.pop();
         const upperPath = short.join('.');
         const originalValue = this.getValueAtPath(json,short.join('.'))
-        if(originalValue._value){
+        if(originalValue._value !== undefined && originalValue._value !== null){
           const var1 = new VariableWrapper(originalValue._value);
           if(originalValue.reference && originalValue.reference.name){
             const ref = this.variables.getVariable(originalValue.reference.name)
@@ -47,7 +47,7 @@ export class VariableWrapperFactory {
         short.pop();
         const upperPath = short.join('.');
         const originalValue = this.getValueAtPath(json, short.join('.'))
-        if (originalValue._value) {
+        if (originalValue._value !== undefined && originalValue._value !== null) {
           const var1 = new VariableComplexStringWrapper<string>(originalValue._value);
           this.setValueAtPath(json, upperPath, var1)
         }

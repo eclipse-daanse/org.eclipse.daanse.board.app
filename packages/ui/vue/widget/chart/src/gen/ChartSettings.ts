@@ -32,6 +32,12 @@ export class ChartSettings {
   @Documentation("Per-series configuration (chart type, x-axis assignment, styling)")
   @Attribute() seriesSettings: Array<any> = [];
   @Reference('VariableWrapper') chartType: VariableWrapper<string> = new VariableWrapper<string>();
+
+  @Documentation("Bar chart orientation: 'vertical' (default) or 'horizontal'")
+  @Reference('VariableWrapper') barOrientation: VariableWrapper<string> = new VariableWrapper<string>();
+
+  @Documentation("Enable stacked mode for bar charts")
+  @Reference('VariableWrapper') stacked: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();
   @Reference('VariableWrapper') borderDash: VariableWrapper<any> = new VariableWrapper<any>();
