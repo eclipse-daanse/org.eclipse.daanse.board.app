@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service": "0.0.1-next.1",
-    "vue-router": "^4.5.0"
+    "vue-router": "^5.0.1"
   },
   "publishConfig": {
     "access": "public"
