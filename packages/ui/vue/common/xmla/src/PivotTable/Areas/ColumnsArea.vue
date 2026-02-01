@@ -16,17 +16,93 @@ import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
 import MemberDropdown from "./MemberDropdown.vue";
 
-const DEFAULT_COLUMN_WIDTH = 150;
 const MDDISPINFO_CHILD_COUNT = 65535;
 
-const props = defineProps([
-    "columns",
-    "columnsStyles",
-    "columnsOffset",
-    "totalContentSize",
-    "leftPadding",
-    "columnsExpandedMembers",
-]);
+const props = defineProps({
+    columns: {
+        required: true,
+        type: Array,
+    },
+    columnsStyles: {
+        required: true,
+        type: Array,
+    },
+    columnsOffset: {
+        required: false,
+        type: Number,
+        default: 0,
+    },
+    totalContentSize: {
+        required: true,
+        type: Object,
+    },
+    leftPadding: {
+        required: false,
+        type: Number,
+        default: 0,
+    },
+    columnsExpandedMembers: {
+        required: false,
+        type: Array,
+        default: () => [],
+    },
+    headerBackgroundColor: {
+        required: false,
+        type: String,
+        default: '#f5f5f5',
+    },
+    headerTextColor: {
+        required: false,
+        type: String,
+        default: '#000000',
+    },
+    borderColor: {
+        required: false,
+        type: String,
+        default: 'silver',
+    },
+    defaultColumnWidth: {
+        required: false,
+        type: Number,
+        default: 150,
+    },
+    defaultRowHeight: {
+        required: false,
+        type: Number,
+        default: 30,
+    },
+    fontSize: {
+        required: false,
+        type: Number,
+        default: 14,
+    },
+    headerFontWeight: {
+        required: false,
+        type: Number,
+        default: 600,
+    },
+    levelStyles: {
+        required: false,
+        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        default: () => [],
+    },
+});
+
+const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
+
+const getLevelStyle = (level: number) => {
+    if (!props.levelStyles || props.levelStyles.length === 0) {
+        return null;
+    }
+    return props.levelStyles.find(s => s.level === level) || null;
+};
+const DEFAULT_ROW_HEIGHT = computed(() => props.defaultRowHeight);
+const DEFAULT_ROW_HEIGHT_CSS = computed(() => `${props.defaultRowHeight}px`);
+const borderColorCSS = computed(() => props.borderColor);
+const headerBackgroundColorCSS = computed(() => props.headerBackgroundColor);
+const headerTextColorCSS = computed(() => props.headerTextColor);
+const fontSizeCSS = computed(() => `${props.fontSize}px`);
+const headerFontWeightCSS = computed(() => props.headerFontWeight);
 const eventBus = inject("pivotTableEventBus") as TinyEmitter;
 const setParentStylesValue = inject("setColumnsStyles") as (
     index: number,
@@ -44,7 +120,7 @@ const getColumnHeaderOffsetStyle = () => {
 
 const getColumnHeaderStyle = (i: number) => {
     return {
-        width: `${props.columnsStyles[i] || DEFAULT_COLUMN_WIDTH}px`,
+        width: `${props.columnsStyles[i] || DEFAULT_COLUMN_WIDTH.value}px`,
         transform: `translate(${translate.value}px, 0)`,
     };
 };
@@ -89,7 +165,18 @@ const getColumnMemberStyle = (i: number, j: number) => {
     const styles = {} as { [key: string]: string };
     const levelCount = minLevels[j] === 0 ? maxLevels[j] + 1 : maxLevels[j];
 
-    styles["height"] = `${30 * levelCount}px`;
+    styles["height"] = `${DEFAULT_ROW_HEIGHT.value * levelCount}px`;
+
+    // Apply level-specific styles
+    if (currentMember?.LNum !== undefined) {
+        const level = parseInt(currentMember.LNum);
+        const levelStyle = getLevelStyle(level);
+        if (levelStyle) {
+            styles["background-color"] = levelStyle.backgroundColor;
+            styles["color"] = levelStyle.textColor;
+            styles["font-weight"] = String(levelStyle.fontWeight);
+        }
+    }
 
     if (!currentMember || !nextMember) return styles;
 
@@ -182,7 +269,7 @@ const onStopResize = () => {
 const onResize = (e: MouseEvent) => {
     if (resizeInProg) {
         const rowStyles =
-            (props.columnsStyles[itemResized] || DEFAULT_COLUMN_WIDTH) +
+            (props.columnsStyles[itemResized] || DEFAULT_COLUMN_WIDTH.value) +
             e.movementX;
         setParentStylesValue(itemResized, rowStyles);
     }
@@ -379,6 +466,8 @@ watch(
 .columnHeader_container {
     overflow: hidden;
     flex-shrink: 0;
+    font-size: v-bind(fontSizeCSS);
+    color: v-bind(headerTextColorCSS);
 }
 
 .columnScroller {
@@ -393,10 +482,11 @@ watch(
     position: relative;
     display: flex;
     flex-direction: column;
+    background-color: v-bind(headerBackgroundColorCSS);
 }
 
 .columnHeader:last-child {
-    border-right: 1px silver solid;
+    border-right: 1px v-bind(borderColorCSS) solid;
 }
 
 .columnMemberWrapper {
@@ -405,8 +495,8 @@ watch(
 
 .columnMember {
     display: flex;
-    border-top: 1px silver solid;
-    border-left: 1px silver solid;
+    border-top: 1px v-bind(borderColorCSS) solid;
+    border-left: 1px v-bind(borderColorCSS) solid;
     width: 100%;
     height: 100%;
 }
@@ -414,7 +504,7 @@ watch(
 .columnMemberContent {
     display: flex;
     padding-left: 3px;
-    height: 30px;
+    height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
 }
 
 .columnMemberContentWrapper {
@@ -424,12 +514,12 @@ watch(
 }
 
 .columnMemberOffset {
-    height: 30px;
+    height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
     border-bottom: 1px dashed lightgray;
 }
 
 .columnMemberHeader {
-    font-weight: 600;
+    font-weight: v-bind(headerFontWeightCSS);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

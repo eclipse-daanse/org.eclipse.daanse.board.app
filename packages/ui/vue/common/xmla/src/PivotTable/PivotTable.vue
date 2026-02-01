@@ -19,16 +19,7 @@ import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
 
-const DEFAULT_COLUMN_WIDTH = 150;
-const DEFAULT_ROW_HEIGHT = 30;
-const DEFAULT_ROW_HEIGHT_CSS = `${DEFAULT_ROW_HEIGHT}px`;
-
 const data = defineModel<IPivotTable>({ required: true });
-
-// const propertiesRows = ref([] as any[]);
-// const propertiesCols = ref([] as any[]);
-// const rowsExpandedMembers = ref([] as any[]);
-// const columnsExpandedMembers = ref([] as any[]);
 
 const props = defineProps({
     propertiesRows: {
@@ -51,7 +42,87 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    headerBackgroundColor: {
+        required: false,
+        type: String,
+        default: '#f5f5f5',
+    },
+    headerTextColor: {
+        required: false,
+        type: String,
+        default: '#000000',
+    },
+    cellBackgroundColor: {
+        required: false,
+        type: String,
+        default: '#ffffff',
+    },
+    cellTextColor: {
+        required: false,
+        type: String,
+        default: '#000000',
+    },
+    borderColor: {
+        required: false,
+        type: String,
+        default: 'silver',
+    },
+    defaultColumnWidth: {
+        required: false,
+        type: Number,
+        default: 150,
+    },
+    defaultRowHeight: {
+        required: false,
+        type: Number,
+        default: 30,
+    },
+    fontSize: {
+        required: false,
+        type: Number,
+        default: 14,
+    },
+    headerFontWeight: {
+        required: false,
+        type: Number,
+        default: 600,
+    },
+    cellTextAlign: {
+        required: false,
+        type: String as () => 'left' | 'center' | 'right',
+        default: 'left',
+    },
+    rowLevelStyles: {
+        required: false,
+        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        default: () => [],
+    },
+    columnLevelStyles: {
+        required: false,
+        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        default: () => [],
+    },
+    conditionalFormats: {
+        required: false,
+        type: Array as () => Array<{
+            id: string;
+            conditionType: string;
+            value1: number | string;
+            value2?: number | string;
+            backgroundColor: string;
+            textColor: string;
+            fontWeight?: number;
+            minColor?: string;
+            maxColor?: string;
+            priority: number;
+        }>,
+        default: () => [],
+    },
 });
+
+const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
+const DEFAULT_ROW_HEIGHT = computed(() => props.defaultRowHeight);
+const DEFAULT_ROW_HEIGHT_CSS = computed(() => `${props.defaultRowHeight}px`);
 
 const colStyles = ref([] as number[]);
 const rowsStyles = ref([] as number[]);
@@ -73,7 +144,7 @@ const onStopResize = () => {
 const drillthrough = () => { };
 
 const columnsOffset = computed(() => {
-    return data.value.rows?.[0]?.length * DEFAULT_COLUMN_WIDTH;
+    return data.value.rows?.[0]?.length * DEFAULT_COLUMN_WIDTH.value;
 });
 
 const setRowsStyles = (i: number, value: number) => {
@@ -120,9 +191,9 @@ const totalContentSize = computed(() => {
         ) => {
             acc.items[i] = {
                 start: acc.totalWidth,
-                width: colStyles.value[i] || DEFAULT_COLUMN_WIDTH,
+                width: colStyles.value[i] || DEFAULT_COLUMN_WIDTH.value,
             };
-            acc.totalWidth = acc.totalWidth + (colStyles.value[i] || DEFAULT_COLUMN_WIDTH);
+            acc.totalWidth = acc.totalWidth + (colStyles.value[i] || DEFAULT_COLUMN_WIDTH.value);
             return acc;
         },
         { items: [], totalWidth: 0 },
@@ -143,9 +214,9 @@ const totalContentSize = computed(() => {
         ) => {
             acc.items[i] = {
                 start: acc.totalWidth,
-                width: rowsStyles.value[i] || DEFAULT_ROW_HEIGHT,
+                width: rowsStyles.value[i] || DEFAULT_ROW_HEIGHT.value,
             };
-            acc.totalWidth = acc.totalWidth + (rowsStyles.value[i] || DEFAULT_ROW_HEIGHT);
+            acc.totalWidth = acc.totalWidth + (rowsStyles.value[i] || DEFAULT_ROW_HEIGHT.value);
             return acc;
         },
         { items: [], totalWidth: 0 },
@@ -164,12 +235,36 @@ const totalContentSize = computed(() => {
             @contextmenu.stop.prevent="">
             <ColumnsArea :columnsStyles="colStyles" :columnsOffset="columnsOffset"
                 :columns="[...propertiesCols, ...data.columns]" :totalContentSize="totalContentSize"
-                :leftPadding="rowsWidth" :columns-expanded-members="props.columnsExpandedMembers"></ColumnsArea>
+                :leftPadding="rowsWidth" :columns-expanded-members="props.columnsExpandedMembers"
+                :headerBackgroundColor="props.headerBackgroundColor"
+                :headerTextColor="props.headerTextColor"
+                :borderColor="props.borderColor"
+                :defaultColumnWidth="props.defaultColumnWidth"
+                :defaultRowHeight="props.defaultRowHeight"
+                :fontSize="props.fontSize"
+                :headerFontWeight="props.headerFontWeight"
+                :levelStyles="props.columnLevelStyles"></ColumnsArea>
             <div class="flex flex-row overflow-hidden vertical-scroll">
                 <RowsArea ref="rowsContainer" :rows="[...propertiesRows, ...data.rows]" :rowsStyles="rowsStyles"
-                    :totalContentSize="totalContentSize" :rows-expanded-members="props.rowsExpandedMembers"></RowsArea>
+                    :totalContentSize="totalContentSize" :rows-expanded-members="props.rowsExpandedMembers"
+                    :headerBackgroundColor="props.headerBackgroundColor"
+                    :headerTextColor="props.headerTextColor"
+                    :borderColor="props.borderColor"
+                    :defaultColumnWidth="props.defaultColumnWidth"
+                    :defaultRowHeight="props.defaultRowHeight"
+                    :fontSize="props.fontSize"
+                    :headerFontWeight="props.headerFontWeight"
+                    :levelStyles="props.rowLevelStyles"></RowsArea>
                 <CellsArea :rowsStyles="rowsStyles" :colsStyles="colStyles" :totalContentSize="totalContentSize"
-                    :cells="data.cells" @drillthrough="drillthrough"></CellsArea>
+                    :cells="data.cells" @drillthrough="drillthrough"
+                    :cellBackgroundColor="props.cellBackgroundColor"
+                    :cellTextColor="props.cellTextColor"
+                    :borderColor="props.borderColor"
+                    :defaultColumnWidth="props.defaultColumnWidth"
+                    :defaultRowHeight="props.defaultRowHeight"
+                    :fontSize="props.fontSize"
+                    :cellTextAlign="props.cellTextAlign"
+                    :conditionalFormats="props.conditionalFormats"></CellsArea>
             </div>
         </div>
     </template>

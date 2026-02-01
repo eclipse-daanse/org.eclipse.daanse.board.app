@@ -53,17 +53,16 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
 
   let axis1 = [] as any[];
   if (mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs.name === 'Axis1') {
-    axis1 = optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.Tuples?.Tuple,
+    axis1 = Array.isArray(tupples) ? tupples.map((e: any) => e.Tuple) : optionalArrayToArray(
+      tupples?.Tuple,
     )
   }
   else if (
     mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs
       .name === "SlicerAxis"
   ) {
-    axis1 = optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.Tuples
-        ?.Tuple,
+    axis1 = Array.isArray(tupples) ? tupples.map((e: any) => e.Tuple) : optionalArrayToArray(
+      tupples?.Tuple,
     );
   }
 

@@ -16,16 +16,82 @@ import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
 import MemberDropdown from "./MemberDropdown.vue";
 
-const DEFAULT_ROW_HEIGHT = 30;
-const DEFAULT_ROW_HEIGHT_CSS = `${DEFAULT_ROW_HEIGHT}px`;
 const MDDISPINFO_CHILD_COUNT = 65535;
 
-const props = defineProps([
-    "rows",
-    "rowsStyles",
-    "totalContentSize",
-    "rowsExpandedMembers",
-]);
+const props = defineProps({
+    rows: {
+        required: true,
+        type: Array,
+    },
+    rowsStyles: {
+        required: true,
+        type: Array,
+    },
+    totalContentSize: {
+        required: true,
+        type: Object,
+    },
+    rowsExpandedMembers: {
+        required: false,
+        type: Array,
+        default: () => [],
+    },
+    headerBackgroundColor: {
+        required: false,
+        type: String,
+        default: '#f5f5f5',
+    },
+    headerTextColor: {
+        required: false,
+        type: String,
+        default: '#000000',
+    },
+    borderColor: {
+        required: false,
+        type: String,
+        default: 'silver',
+    },
+    defaultColumnWidth: {
+        required: false,
+        type: Number,
+        default: 150,
+    },
+    defaultRowHeight: {
+        required: false,
+        type: Number,
+        default: 30,
+    },
+    fontSize: {
+        required: false,
+        type: Number,
+        default: 14,
+    },
+    headerFontWeight: {
+        required: false,
+        type: Number,
+        default: 600,
+    },
+    levelStyles: {
+        required: false,
+        type: Array as () => Array<{ level: number; backgroundColor: string; textColor: string; fontWeight: number }>,
+        default: () => [],
+    },
+});
+
+const DEFAULT_ROW_HEIGHT = computed(() => props.defaultRowHeight);
+
+const getLevelStyle = (level: number) => {
+    if (!props.levelStyles || props.levelStyles.length === 0) {
+        return null;
+    }
+    return props.levelStyles.find(s => s.level === level) || null;
+};
+const DEFAULT_ROW_HEIGHT_CSS = computed(() => `${props.defaultRowHeight}px`);
+const borderColorCSS = computed(() => props.borderColor);
+const headerBackgroundColorCSS = computed(() => props.headerBackgroundColor);
+const headerTextColorCSS = computed(() => props.headerTextColor);
+const fontSizeCSS = computed(() => `${props.fontSize}px`);
+const headerFontWeightCSS = computed(() => props.headerFontWeight);
 const eventBus = inject("pivotTableEventBus") as TinyEmitter;
 const setParentStylesValue = inject("setRowsStyles") as (
     index: number,
@@ -95,6 +161,18 @@ const getRowMemberStyle = (i: number, j: number) => {
     const levelCount = minLevels[j] === 0 ? maxLevels[j] + 1 : maxLevels[j];
 
     styles["width"] = `${50 * (levelCount - 1) + 150}px`;
+
+    // Apply level-specific styles
+    if (currentMember?.LNum !== undefined) {
+        const level = parseInt(currentMember.LNum);
+        const levelStyle = getLevelStyle(level);
+        if (levelStyle) {
+            styles["background-color"] = levelStyle.backgroundColor;
+            styles["color"] = levelStyle.textColor;
+            styles["font-weight"] = String(levelStyle.fontWeight);
+        }
+    }
+
     if (!currentMember || !nextMember) return styles;
 
     if (currentMember.UName === nextMember.UName) {
@@ -105,7 +183,7 @@ const getRowMemberStyle = (i: number, j: number) => {
 
 const getRowHeaderStyle = (i: number) => {
     return {
-        height: `${props.rowsStyles[i] || DEFAULT_ROW_HEIGHT}px`,
+        height: `${props.rowsStyles[i] || DEFAULT_ROW_HEIGHT.value}px`,
 
         transform: `translate(0, ${translate.value}px)`,
     };
@@ -178,7 +256,7 @@ const onStopResize = () => {
 const onResize = (e: MouseEvent) => {
     if (resizeInProg) {
         const rowStyles =
-            (props.rowsStyles[itemResized] || DEFAULT_ROW_HEIGHT) + e.movementY;
+            (props.rowsStyles[itemResized] || DEFAULT_ROW_HEIGHT.value) + e.movementY;
         setParentStylesValue(itemResized, rowStyles);
     }
 };
@@ -355,11 +433,13 @@ watch(
 </template>
 <style scoped>
 .rowsHeader:last-child {
-    border-bottom: 1px silver solid;
+    border-bottom: 1px v-bind(borderColorCSS) solid;
 }
 
 .rowsHeader_container {
     height: 100%;
+    font-size: v-bind(fontSizeCSS);
+    color: v-bind(headerTextColorCSS);
 }
 
 .rowsHeader {
@@ -372,7 +452,8 @@ watch(
     border-left: 0;
     height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
     line-height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
-    border-top: 1px silver solid;
+    border-top: 1px v-bind(borderColorCSS) solid;
+    background-color: v-bind(headerBackgroundColorCSS);
 }
 
 .rowMemberOffsetContainer .rowMemberOffset {
@@ -415,12 +496,12 @@ watch(
 
 .rowMember {
     display: flex;
-    border-left: 1px silver solid;
+    border-left: 1px v-bind(borderColorCSS) solid;
     align-items: flex-start;
 }
 
 .rowMemberCaption {
-    font-weight: 600;
+    font-weight: v-bind(headerFontWeightCSS);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
