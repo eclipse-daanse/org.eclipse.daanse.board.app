@@ -18,6 +18,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive } from 'vue'
 import { watch, ref } from 'vue'
+import { useGlobalLoading } from './useGlobalLoading'
 
 export interface IVueDatasourceRepository {
   data: any
@@ -46,6 +47,7 @@ export function useDatasourceRepository(
   }
 
   const datasourceRepository = container.get<DatasourceRepository>(identifier)
+  const { startLoading, stopLoading } = useGlobalLoading()
 
   const getData = async () => {
     if (!dataSourceId.value) {
@@ -54,6 +56,7 @@ export function useDatasourceRepository(
     }
     console.log('getData', dataSourceId.value)
     console.log('type', type)
+    startLoading()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
       const dataRaw = await dataSource.getData(type);
@@ -65,6 +68,8 @@ export function useDatasourceRepository(
     } catch (e) {
       data.value = null
       console.warn(e)
+    } finally {
+      stopLoading()
     }
   }
 
@@ -111,6 +116,7 @@ export function useDatasourceRepository(
     }
     console.log('getDataWithOptions', dataSourceId.value, options)
     console.log('type', type)
+    startLoading()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
       const dataRaw = await dataSource.getData(type, options);
@@ -118,6 +124,8 @@ export function useDatasourceRepository(
     } catch (e) {
       data.value = null
       console.warn(e)
+    } finally {
+      stopLoading()
     }
   }
 

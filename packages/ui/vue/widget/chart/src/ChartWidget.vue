@@ -359,9 +359,13 @@ const chartOptions = computed(() => {
     })
   }
 
+  // Determine if stacked mode is enabled
+  const isStacked = config.value.stacked?.value ?? false
+
   // Build scales configuration dynamically
   const scales: any = {
     y: {
+      stacked: isStacked,
       grid: {
         display: config.value.showHorizontalGrid?.value ?? true,
         color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
@@ -369,6 +373,7 @@ const chartOptions = computed(() => {
       }
     },
     x: {
+      stacked: isStacked,
       grid: {
         display: config.value.showVerticalGrid?.value ?? true,
         color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
@@ -427,9 +432,14 @@ const chartOptions = computed(() => {
     })
   }
 
-  const options = {
+  // Determine bar orientation (horizontal uses indexAxis: 'y')
+  const barOrientation = config.value.barOrientation?.value ?? 'vertical'
+  const indexAxis = barOrientation === 'horizontal' ? 'y' : 'x'
+
+  const options: any = {
     responsive: true,
     maintainAspectRatio: true,
+    indexAxis,
     scales,
     plugins: {
       annotation: {

@@ -466,7 +466,26 @@ onMounted(() => {
 
       <!-- Bar Chart Settings -->
       <div class="settings-block" v-if="isBarChart">
-        <h3>Bar Style</h3>
+        <h3>Bar Layout</h3>
+
+        <va-select
+          v-if="widgetSettings.barOrientation"
+          label="Bar Orientation"
+          v-model="widgetSettings.barOrientation.value"
+          :options="[
+            { value: 'vertical', text: 'Vertical (Standard)' },
+            { value: 'horizontal', text: 'Horizontal' }
+          ]"
+          value-by="value"
+        />
+
+        <va-checkbox
+          v-if="widgetSettings.stacked"
+          label="Stacked Bars"
+          v-model="widgetSettings.stacked.value"
+        />
+
+        <h3 style="margin-top: 16px;">Bar Style</h3>
 
         <va-color-input
           v-if="widgetSettings.backgroundColor"
