@@ -17,9 +17,14 @@ import { events } from '../api/Events'
 export class PageRegistryImpl extends SubscribeNotifyImpl implements PageRegistryI {
 
   public pages: Record<string, PageI> = {}
+  public defaultPageId: string | null = null
 
   registerPage(page: PageI): void {
     this.pages[page.id] = page
+    // Automatically set first registered page as default if none is set
+    if (this.defaultPageId === null) {
+      this.defaultPageId = page.id
+    }
     this.notify(events.PAGE_REGISTRATION)
   }
 
@@ -27,8 +32,26 @@ export class PageRegistryImpl extends SubscribeNotifyImpl implements PageRegistr
     return this.pages[pageId]
   }
 
+  getDefaultPage(): PageI | null {
+    if (this.defaultPageId && this.pages[this.defaultPageId]) {
+      return this.pages[this.defaultPageId]
+    }
+    return null
+  }
+
+  setDefaultPage(pageId: string): void {
+    if (this.pages[pageId]) {
+      this.defaultPageId = pageId
+    }
+  }
+
   unregisterPage(pageId: string): void {
     delete this.pages[pageId]
+    // Reset default if the default page was unregistered
+    if (this.defaultPageId === pageId) {
+      const remainingIds = Object.keys(this.pages)
+      this.defaultPageId = remainingIds.length > 0 ? remainingIds[0] : null
+    }
     this.notify(events.PAGE_UNREGISTRATION)
   }
   getAllPageIds():string[] {

@@ -13,9 +13,15 @@ import { PageI } from './PageI'
 export interface PageRegistryI {
   pages: Record<string, PageI>
 
+  defaultPageId: string | null
+
   registerPage(page: PageI): void
 
   getPage(pageId: string): PageI
+
+  getDefaultPage(): PageI | null
+
+  setDefaultPage(pageId: string): void
 
   unregisterPage(pageId: string): void
 
