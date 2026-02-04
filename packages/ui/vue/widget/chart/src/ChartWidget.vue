@@ -304,9 +304,21 @@ const chartOptions = computed(() => {
     }
   })
 
+  // Helper function to check if a value looks like a date string
+  const isDateString = (value: any): boolean => {
+    if (typeof value !== 'string') return false
+    // Check for ISO date format or common date patterns
+    const isoPattern = /^\d{4}-\d{2}-\d{2}(T|\s)/
+    const datePattern = /^\d{1,2}[./-]\d{1,2}[./-]\d{2,4}/
+    return isoPattern.test(value) || datePattern.test(value)
+  }
+
   // Helper function to format dates based on the configured format
   const formatDate = (value: any, format: string) => {
     if (!value) return value
+
+    // Only try to parse as date if it looks like a date string
+    if (!isDateString(value)) return value
 
     const date = new Date(value)
     if (isNaN(date.getTime())) return value
