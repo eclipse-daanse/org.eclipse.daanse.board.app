@@ -23,12 +23,14 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
+import {WidgetActionInterface} from 'org.eclipse.daanse.board.app.lib.events'
+import {WidgetAction} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconClickPayload'})
-export class IconClickPayload extends Payload {
-
-  @Documentation("Name of the clicked icon.")
-  @Attribute() iconName?: string;
+@ModelClass({type:'http://www.example.org/PivotTable#//PivotTableInterface'})
+export abstract class PivotTableInterface extends WidgetActionInterface {
+  @WidgetAction({eventType: 'pivotTable.expandRow'})
+  expandRow(rowUniqueName?: any): void {
+        throw new Error("expandRow not implemented");
+  }
 }

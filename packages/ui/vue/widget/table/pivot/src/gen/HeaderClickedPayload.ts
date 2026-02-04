@@ -26,9 +26,9 @@ Contributors: Smart City Jena
 import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconClickPayload'})
-export class IconClickPayload extends Payload {
+@ModelClass({type:'http://www.example.org/PivotTable#//HeaderClickedPayload'})
+export class HeaderClickedPayload extends Payload {
 
-  @Documentation("Name of the clicked icon.")
-  @Attribute() iconName?: string;
+  @Documentation("Header Unique Name.")
+  @Attribute() uniqueName?: string;
 }

@@ -16,6 +16,10 @@ import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { PivotTableEvents } from './events/PivotTableEvents'
+import { PivotTableInterface } from './gen/PivotTableInterface'
+import ecoreModelContent from '../model/model.ecore?raw'
 
 interface IPivotTable {
   rows: any[][]
@@ -33,6 +37,20 @@ const register = () => {
     icon: Icon,
     name: 'PivotTable'
   })
+
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+
+  eventRegistry.registerWidget('PivotTableWidget', PivotTableEvents)
+
+  // Register widget actions from Ecore model (async, non-blocking)
+  actionsRegistry.registerActionsFromEcoreString('PivotTableWidget', ecoreModelContent, 'widget', 'model.ecore')
+    .catch((error) => {
+      console.error('Failed to register PivotTableWidget from Ecore, falling back to decorator-based registration:', error)
+      // Fallback to decorator-based registration
+      actionsRegistry.registerWidgetType('PivotTableWidget', PivotTableInterface, 'widget')
+    })
 }
 
 register();

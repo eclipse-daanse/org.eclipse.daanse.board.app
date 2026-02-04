@@ -83,7 +83,7 @@ class XMLAApi {
         Statement: '',
       },
       Properties: {
-        PropertieList: {
+        PropertyList: {
           LocaleIdentifier: '1033',
         },
       },

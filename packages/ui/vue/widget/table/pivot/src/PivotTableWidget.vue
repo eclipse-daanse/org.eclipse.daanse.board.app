@@ -16,6 +16,9 @@ import { toRefs, ref, watch, onMounted, computed } from "vue";
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { PivotTable } from "./gen/PivotTable";
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { useRoute } from 'vue-router'
 
 interface ILevelStyle {
   level: number
@@ -80,6 +83,8 @@ onMounted(() => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
     }
+
+    // actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId);
 });
 
 const stylingProps = computed(() => ({

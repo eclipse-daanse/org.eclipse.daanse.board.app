@@ -29,12 +29,14 @@ export interface IVueDatasourceRepository {
   ) => Promise<void>
   update: (oldVal: string, newVal: string) => void
   getDataWithOptions: (options?: any) => Promise<void>
+  getDatasourceInstance: () => any
 }
 
 export function useDatasourceRepository(
   dataSourceId: Ref<string>,
   type: string,
   data: Ref<any>,
+  subscriptions: Array<() => any> = [],
 ): IVueDatasourceRepository {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties
@@ -139,6 +141,9 @@ export function useDatasourceRepository(
     try {
       const oldDataSource = datasourceRepository.getDatasource(oldVal)
       oldDataSource.unsubscribe(getData)
+      subscriptions.forEach(fn => {
+        oldDataSource.unsubscribe(fn);
+      });
     } catch (e) {
       console.warn(e)
     }
@@ -146,8 +151,22 @@ export function useDatasourceRepository(
       const dataSource = datasourceRepository.getDatasource(newVal)
       // TODO: fix duplicate subscription
       dataSource.subscribe(()=>getData())
+      subscriptions.forEach(fn => {
+        dataSource.subscribe(fn);
+      })
     } catch (e) {
       console.warn(e)
+    }
+  }
+
+  const getDatasourceInstance = () => {
+    try {
+      const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
+      return dataSource
+    }
+    catch (e) {
+      console.warn(e)
+      return null
     }
   }
 
@@ -157,6 +176,9 @@ export function useDatasourceRepository(
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
       dataSource.subscribe(getData)
+      subscriptions.forEach(fn => {
+        dataSource.subscribe(fn);
+      })
     } catch (e) {
       console.warn(e)
     }
@@ -166,6 +188,9 @@ export function useDatasourceRepository(
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value)
       dataSource.unsubscribe(getData)
+      subscriptions.forEach(fn => {
+        dataSource.unsubscribe(fn);
+      })
     } catch (e) {
       console.warn(e)
     }
@@ -176,5 +201,6 @@ export function useDatasourceRepository(
     callEvent,
     update,
     getDataWithOptions,
+    getDatasourceInstance,
   }
 }
