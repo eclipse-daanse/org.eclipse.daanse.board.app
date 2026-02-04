@@ -102,6 +102,16 @@ const setSelection = ({
 };
 
 function ok() {
+  const composedFilters = filterConfigured.value;
+
+  if (filterConfigured.value.enabled && !filterConfigured.value.multipleChoise && !filterConfigured.value.selectedItem.id) {
+    close({
+      filters: {
+        enabled: false
+      }
+    })
+  }
+
   close({ filters: filterConfigured.value });
 }
 
@@ -110,7 +120,8 @@ function cancel() {
 }
 
 function resetSelection() {
-  filterTreeView.value?.resetSelection();
+  const exposed = filterTreeView.value?.$.exposed as any;
+  exposed['resetSelection']();
 }
 </script>
 

@@ -14,5 +14,6 @@
 import MetadataTree from './MetadataTree/MetadataTree.vue'
 import QueryDesigner from './QueryDesigner/QueryDesigner.vue'
 import PivotTable from './PivotTable/PivotTable.vue'
+import FiltersModal from './Modals/FiltersModal.vue'
 
-export { MetadataTree, QueryDesigner, PivotTable }
+export { MetadataTree, QueryDesigner, PivotTable, FiltersModal }

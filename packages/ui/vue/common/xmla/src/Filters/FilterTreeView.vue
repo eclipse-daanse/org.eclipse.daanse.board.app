@@ -15,7 +15,7 @@ Contributors:
 import { useFilterTreeDataSource } from "../Composables/filterTreeDataSource";
 import { useSearchResultTreeData } from "../Composables/searchResultTreeData";
 import { debounce } from "lodash";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 type RootHierarchy = any;
 
@@ -95,7 +95,7 @@ const multipleChoise = ref(
 const singleSelection = ref({ id: null });
 
 // expose resetSelection as function
-function resetSelection() {
+const resetSelection = () => {
   singleSelection.value = { id: null };
 }
 defineExpose({ resetSelection });
@@ -147,6 +147,12 @@ const emptySelection = computed(() => {
 function selectFilter(e: any) {
   singleSelection.value = e;
 }
+
+onMounted(() => {
+  if (props.rootHierarchy.filters.enabled && !props.rootHierarchy.filters.multipleChoise && props.rootHierarchy.filters.selectedItem?.id) {
+    singleSelection.value = props.rootHierarchy.filters.selectedItem;
+  }
+})
 </script>
 <template>
   <div class="flex" style="flex-direction: column; width: 100%">

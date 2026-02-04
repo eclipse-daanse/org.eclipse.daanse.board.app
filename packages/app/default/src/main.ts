@@ -146,6 +146,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.weather'
+import 'org.eclipse.daanse.board.app.ui.vue.widget.xmla.filters'
 import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
 import 'org.eclipse.daanse.board.app.lib.variables'

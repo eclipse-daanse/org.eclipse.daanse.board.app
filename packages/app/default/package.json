@@ -135,6 +135,7 @@
     "org.eclipse.daanse.board.app.ui.vue.widget.vanta": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.video": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.wrapper": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.widget.xmla.filters": "^0.0.1-next.1",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
     "vue-grid-layout": "^2.4.0",

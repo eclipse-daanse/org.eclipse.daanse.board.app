@@ -50,6 +50,12 @@ export interface SecurityOptions {
   password?: string
 }
 
+export interface FilterChangePayload {
+  area: 'rows' | 'columns' | 'filters'
+  filters: any
+  id: string
+}
+
 export class XmlaStore extends BaseDatasource {
   private connection: any
   private requestParams: XMLARequestParams = {
@@ -230,7 +236,7 @@ export class XmlaStore extends BaseDatasource {
       this.requestParams.measures,
       {},
       properties,
-      [],
+      this.requestParams.filters,
       levels,
     )
 
@@ -260,6 +266,18 @@ export class XmlaStore extends BaseDatasource {
     return connectionRepository.getConnection(this.connection)
   }
 
+  changeFilters(e: FilterChangePayload) {
+    console.log('event in the datasource', e);
+
+    const originalItem = this.requestParams[e.area].find(
+      (item) => item.id === e.id
+    );
+
+    if (originalItem) {
+      originalItem.filters = e.filters;
+    }
+  }
+
   callEvent(event: string, params: any) {
     switch (event) {
       case 'expand':
@@ -267,6 +285,9 @@ export class XmlaStore extends BaseDatasource {
         break
       case 'collapse':
         this.collapse(params)
+        break
+      case 'filterChange':
+        this.changeFilters(params)
         break
       default:
         console.warn('Event is not available for this type of store')
