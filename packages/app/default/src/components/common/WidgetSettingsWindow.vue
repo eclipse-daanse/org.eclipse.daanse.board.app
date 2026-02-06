@@ -43,7 +43,11 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key
         :key="widget.uid"
         :dataSources="dataSources"
       />
-      <va-collapse v-model="storeSection" :header="t('common:Widgets.storeSettingsTitle')" icon="store">
+      <va-collapse
+        v-model="storeSection"
+        :header="t('common:Widgets.storeSettingsTitle')"
+        icon="store"
+      >
         <VaSelect
           label="Datasource ID"
           class="mx-3 my-3"

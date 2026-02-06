@@ -48,7 +48,9 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
           :configv="iconConfig"
         />
       </div>
-      <slot name="observation" />
+      <div class="observation-slot">
+        <slot name="observation" />
+      </div>
     </div>
   </template>
 
@@ -62,7 +64,9 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
       <div class="inner">
         {{ propertyValue }}
       </div>
-      <slot name="observation" />
+      <div class="observation-slot">
+        <slot name="observation" />
+      </div>
     </div>
   </template>
 
@@ -140,6 +144,13 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
     top: 50px;
     left: 0;
     margin: 0;
+  }
+
+  .observation-slot {
+    transform: rotate(45deg);
+    position: absolute;
+    top: 0px;
+    left: 0;
   }
 
   &.marker {

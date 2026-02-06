@@ -65,6 +65,7 @@ const dragOptions = computed(() => {
 
 const url = ref('')
 const addService = async () => {
+  console.log('addService called with URL:', url.value)
   serviceLoading.value = true
   let wmsError = null
   let wfsError = null
@@ -72,7 +73,9 @@ const addService = async () => {
 
   // Try WMS
   try {
+    console.log('Trying WMS...')
     const service = await OGCService.createServiceWMS(url.value)
+    console.log('WMS result:', service)
     if (service) {
       widgetSettings.value.services.push({
         service: service,
@@ -83,12 +86,15 @@ const addService = async () => {
       hasService = true
     }
   } catch (e) {
+    console.log('WMS error:', e)
     wmsError = e
   }
 
   // Try WFS
   try {
+    console.log('Trying WFS...')
     const service2 = await OGCService.createServiceWFS(url.value)
+    console.log('WFS result:', service2)
     if (service2) {
       widgetSettings.value.services.push({
         service: service2,
@@ -99,6 +105,7 @@ const addService = async () => {
       hasService = true
     }
   } catch (e) {
+    console.log('WFS error:', e)
     wfsError = e
   }
 
@@ -185,15 +192,22 @@ const services = computedAsync(async () => {
       }
     } else {
       logServices('Processing WMS service')
+      console.log('[MapsWidgetSettings] WMS service object:', service)
+      console.log('[MapsWidgetSettings] service.service:', service.service)
+      console.log('[MapsWidgetSettings] service.service._info:', service.service?._info)
+      console.log('[MapsWidgetSettings] getLayers type:', typeof service.service?.getLayers)
 
       if (service.service && typeof service.service.getLayers === 'function') {
+        const layers = service.service.getLayers()
+        console.log('[MapsWidgetSettings] WMS layers:', layers)
         ret.push({
           service: service.service,
           type: 'WMS',
-          childs: addChilds(service.service.getLayers(), service.service),
+          childs: addChilds(layers, service.service),
           level: 0
         })
         logServices('WMS service added to tree')
+        console.log('[MapsWidgetSettings] ret after adding WMS:', JSON.parse(JSON.stringify(ret)))
       } else {
         logServices('WMS service missing getLayers method')
       }
@@ -286,6 +300,8 @@ const services = computedAsync(async () => {
     }
   }
 
+  console.log('[MapsWidgetSettings] Final services array:', ret)
+  console.log('[MapsWidgetSettings] Final services length:', ret.length)
   return ret
 })
 const value = ref(0.5)
@@ -300,6 +316,13 @@ const addLayer = async (node: any) => {
   }
 
   widgetSettings.value.layers.push(newLayer)
+}
+
+const removeLayer = (layer: any) => {
+  const index = widgetSettings.value.layers.indexOf(layer)
+  if (index > -1) {
+    widgetSettings.value.layers.splice(index, 1)
+  }
 }
 
 const selectedLayer = ref<LayerI | undefined>(undefined)
@@ -472,7 +495,13 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
 
               </VaButton>
             </div>
-
+            <VaButton
+              icon="delete"
+              preset="secondary"
+              round
+              color="danger"
+              @click.stop="removeLayer(element)"
+            />
 
           </div>
 
@@ -514,7 +543,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
                                 <span v-if="services && services.length==0" class="empty">
                                 No Services here
                     </span>
-      <VaTreeView v-if="services" :nodes="services" childrenBy="childs">
+      <VaTreeView v-if="services && services.length > 0" :nodes="services" :key="services.length" childrenBy="childs">
         <template #content="node">
           <template v-if="node.level == 0">
             <VaIcon v-if="node.failed" class="material-icons" style="color: #ff6b6b;">

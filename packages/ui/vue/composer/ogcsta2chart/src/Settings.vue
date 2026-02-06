@@ -101,11 +101,15 @@ const loadThings = async () => {
 
       if (data?.things) {
         data.things.forEach((thing: any) => {
-          allThings.push({
-            id: thing['@iot.id'] || thing.iotId,
-            name: thing.name,
-            description: thing.description
-          })
+          const thingId = thing['@iot.id'] || thing.iotId
+          // Avoid duplicates by checking if ID already exists
+          if (!allThings.some(t => t.id === thingId)) {
+            allThings.push({
+              id: thingId,
+              name: thing.name,
+              description: thing.description
+            })
+          }
         })
       }
     }
@@ -227,10 +231,12 @@ onMounted(() => {
       label="Things (Required)"
       :options="availableThings"
       multiple
+      searchable
       text-by="name"
       value-by="id"
       placeholder="Select one or more Things"
       :loading="isLoadingThings"
+      no-options-text="No things found"
     />
 
     <div class="datastreams-section">
@@ -265,10 +271,12 @@ onMounted(() => {
               v-model="datastream.datastreamId"
               label="Datastream"
               :options="availableDatastreams"
+              searchable
               text-by="name"
               value-by="id"
               class="datastream-select"
               :loading="isLoadingDatastreams"
+              no-options-text="No datastreams found"
             />
 
             <!-- eslint-disable-next-line vue/no-mutating-props -->

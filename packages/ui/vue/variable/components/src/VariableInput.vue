@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { identifier, VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -28,9 +28,13 @@ interface VariableOption {
 }
 
 let usesVariable = ref(false);
-if (model.value.isSet) {
-  usesVariable.value = true;
-}
+
+// Watch for model changes and update usesVariable accordingly
+watch(() => model.value?.isSet, (isSet) => {
+  if (isSet) {
+    usesVariable.value = true;
+  }
+}, { immediate: true });
 
 onMounted(() => {
   const variableRepository = container.get<VariableRepository>(identifier)
@@ -51,10 +55,13 @@ const getVariableValue = (name: string) => {
 }
 
 const onChange = (e: any) => {
-  model.value.value = e.target.value;
+  if (model.value) {
+    model.value.value = e.target.value;
+  }
 }
 
 const setVariable = (v: VariableOption) => {
+  if (!model.value) return;
   const name = v.label;
   const variableRepository = container.get<VariableRepository>(identifier)
   const variable = variableRepository.getVariable(name);
@@ -63,7 +70,7 @@ const setVariable = (v: VariableOption) => {
 }
 
 const selectModel = computed(() => {
-  const name = model.value.variable || '' as string;
+  const name = model.value?.variable || '' as string;
   let variable = null as null | VariableWrapper<any>;
 
   if (name) {
@@ -78,7 +85,7 @@ const selectModel = computed(() => {
 })
 </script>
 <template>
-  <div class="flex items-end justify-between gap-2 variable-input">
+  <div v-if="model" class="flex items-end justify-between gap-2 variable-input">
     <template v-if="!usesVariable">
       <div class="input-block">
         <slot :value="model.value" :change="onChange"></slot>

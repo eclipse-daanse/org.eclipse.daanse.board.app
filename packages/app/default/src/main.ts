@@ -158,6 +158,7 @@ import 'org.eclipse.daanse.board.app.lib.repository.variable'
 
 import 'org.eclipse.daanse.board.app.ui.vue.variable.constant'
 import 'org.eclipse.daanse.board.app.ui.vue.variable.computed'
+import 'org.eclipse.daanse.board.app.ui.vue.variable.timepicker'
 
 import 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 

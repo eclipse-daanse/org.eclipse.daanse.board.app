@@ -17,6 +17,7 @@ import { ConstantVariable, init as initConstant, symbol as ConstantVariableSymbo
 import { QueryVariable, symbol as QueryVariableSymbol } from './classes/QueryVariable'
 import { RequestVariable, symbol as RequestVariableSymbol } from './classes/RequestVariable'
 import { TimeVariable, symbol as TimeVariableSymbol } from './classes/TimeVariable'
+import { DateTimePickerVariable, symbol as DateTimePickerVariableSymbol, DATETIME_PICKER_VARIABLE, type IDateTimePickerVariableConfig } from './classes/DateTimePickerVariable'
 import { UsesComputedVariable } from './utils/UsesComputedVariable'
 import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
 
@@ -100,6 +101,7 @@ export {
   QueryVariable,
   RequestVariable,
   TimeVariable,
+  DateTimePickerVariable,
   Variable,
   VariableScope,
   VariableAccessMode,
@@ -112,6 +114,7 @@ export {
   IComputedVariableConfig,
   IConstantVariableConfig,
   IRequestVaribleConfig,
+  IDateTimePickerVariableConfig,
   INewVariableConfig,
   UsesComputedVariable,
   ComputedVariableSymbol,
@@ -119,7 +122,9 @@ export {
   QueryVariableSymbol,
   RequestVariableSymbol,
   TimeVariableSymbol,
+  DateTimePickerVariableSymbol,
   ComputedStoreParameter,
   COMPUTED_VARIABLE,
-  CONSTANT_VARIABLE
+  CONSTANT_VARIABLE,
+  DATETIME_PICKER_VARIABLE
 }

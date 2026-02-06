@@ -1,0 +1,43 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.variable.timepicker",
+  "version": "0.0.1-next.1",
+  "description": "DateTime Picker Variable for storing ISO 8601 datetime values",
+  "author": "Smart City Jena",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
+  "license": "EPL-2.0",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.variable.datetimepicker.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.variable.datetimepicker.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.variable.datetimepicker.d.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "dependencies": {
+    "org.eclipse.daanse.board.app.lib.repository.variable": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.variables": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.lib.core": "^0.0.1-next.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.8",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "rollup": "^4.36.0",
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4",
+    "vue": "^3.5.13",
+    "vue-tsc": "^3.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

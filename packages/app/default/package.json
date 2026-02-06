@@ -113,6 +113,7 @@
     "org.eclipse.daanse.board.app.ui.vue.stores.widgets": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.computed": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.variable.constant": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.variable.timepicker": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.chart": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.code": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.widget.icon": "^0.0.1-next.1",
