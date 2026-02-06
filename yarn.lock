@@ -9316,10 +9316,10 @@ obug@^2.1.1:
   resolved "https://registry.yarnpkg.com/obug/-/obug-2.1.1.tgz#2cba74ff241beb77d63055ddf4cd1e9f90b538be"
   integrity sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==
 
-octokit-commit-multiple-files@^5.0.2:
-  version "5.0.3"
-  resolved "https://registry.npmjs.org/octokit-commit-multiple-files/-/octokit-commit-multiple-files-5.0.3.tgz"
-  integrity sha512-yd2s1a9/vgukaSTRbVQ6iCJKSLYLtq46KDD9/0O5oTmmxn0Chj/6/lC6BnI1UU503W4Mefon+kjQNYulanTiFg==
+octokit-commit-multiple-files@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/octokit-commit-multiple-files/-/octokit-commit-multiple-files-6.0.3.tgz#5333fb1442953a818fdf15e79fa0632153d2e57e"
+  integrity sha512-NXm3kqdFg3ur/+SHjE3/MsLX3BCjHtjczy23a46+2NfqxSNOqG8u+ZiZieKxc83QJeWKfNb+2E80fIocwCfSFA==
 
 octokit@^5.0.3:
   version "5.0.5"
