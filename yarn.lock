@@ -11941,21 +11941,6 @@ vite-hot-client@^2.1.0:
   resolved "https://registry.yarnpkg.com/vite-hot-client/-/vite-hot-client-2.1.0.tgz#88f8469875e0121eae2f460cbf35cb528c049961"
   integrity sha512-7SpgZmU7R+dDnSmvXE1mfDtnHLHQSisdySVR7lO8ceAXvM0otZeuQQ6C8LrS5d/aYyP/QZ0hI0L+dIPrm4YlFQ==
 
-vite-plugin-dts@4.5.3:
-  version "4.5.3"
-  resolved "https://registry.npmjs.org/vite-plugin-dts/-/vite-plugin-dts-4.5.3.tgz"
-  integrity sha512-P64VnD00dR+e8S26ESoFELqc17+w7pKkwlBpgXteOljFyT0zDwD8hH4zXp49M/kciy//7ZbVXIwQCekBJjfWzA==
-  dependencies:
-    "@microsoft/api-extractor" "^7.50.1"
-    "@rollup/pluginutils" "^5.1.4"
-    "@volar/typescript" "^2.4.11"
-    "@vue/language-core" "2.2.0"
-    compare-versions "^6.1.1"
-    debug "^4.4.0"
-    kolorist "^1.8.0"
-    local-pkg "^1.0.0"
-    magic-string "^0.30.17"
-
 vite-plugin-dts@4.5.4:
   version "4.5.4"
   resolved "https://registry.npmjs.org/vite-plugin-dts/-/vite-plugin-dts-4.5.4.tgz"
