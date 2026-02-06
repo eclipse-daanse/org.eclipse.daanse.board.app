@@ -13,8 +13,8 @@ Contributors:
 <script setup lang="ts">
 import {WidgetWrapperSettings} from "org.eclipse.daanse.board.app.ui.vue.widget.wrapper";
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { ref } from 'vue'
-// import { useI18n } from "vue-i18n";
+import { ref, inject } from 'vue'
+import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
@@ -27,10 +27,8 @@ const { dataSources } = useDataSourcesStore()
 const registeredWidgets = container.get<WidgetRepository>(identifier)
 const availableWidgetsSettings = registeredWidgets.getAllWidgets()
 
-// const { t } = useI18n();
-const t = (key: string) => {
-  return key
-}
+const i18n: i18n | undefined = inject('i18n')
+const t = (key: string) => (i18n) ? i18n.t(key) : key
 </script>
 
 <template>
@@ -45,7 +43,7 @@ const t = (key: string) => {
         :key="widget.uid"
         :dataSources="dataSources"
       />
-      <va-collapse v-model="storeSection" :header="t('Widgets.storeSettingsTitle')" icon="store">
+      <va-collapse v-model="storeSection" :header="t('common:Widgets.storeSettingsTitle')" icon="store">
         <VaSelect
           label="Datasource ID"
           class="mx-3 my-3"
