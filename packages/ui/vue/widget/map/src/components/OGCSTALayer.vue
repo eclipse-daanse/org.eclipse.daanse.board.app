@@ -48,6 +48,92 @@ const openThing = ref<{ [key: string]: boolean }>({})
 
 const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
 
+// Pre-compute all matched things and datastreams in a flat list
+// This eliminates O(renderers × locations × things × datastreams × ds_renderers) template evaluations
+const matchedItems = computed(() => {
+  const things: Array<{
+    key: string
+    thing: any
+    location: any
+    renderer: any
+    point: any
+    geoJson: any
+    isArea: boolean
+  }> = []
+
+  const datastreams: Array<{
+    key: string
+    datastream: any
+    thing: any
+    location: any
+    renderer: any
+    subrenderer: any
+    point: any
+    observedAreaGeoJson: any
+    showMarker: boolean
+  }> = []
+
+  for (const renderer of props.renderers) {
+    for (const location of props.locations) {
+      const locationThings = location.things ?? []
+      for (const thing of locationThings) {
+        if (!props.compareThing(thing, renderer)) continue
+
+        const thingId = thing['@iot.id'] || thing.iotId || ''
+        const locationId = location['@iot.id'] || ''
+        const point = props.getPoint(location.location)
+        const isFc = props.isFeatureCollection(location.location)
+        const isPt = props.isPoint(location.location)
+
+        things.push({
+          key: `${renderer.id}-${locationId}-${thingId}`,
+          thing,
+          location,
+          renderer,
+          point,
+          geoJson: (isFc && !isPt) ? location.location : null,
+          isArea: isFc && !isPt
+        })
+
+        const thingDatastreams = thing.datastreams ?? []
+        for (const datastream of thingDatastreams) {
+          const dsId = (datastream as BoxedDatastream).iotId || ''
+          for (const subrenderer of renderer.ds_renderer) {
+            if (!props.compareDatastream(datastream as BoxedDatastream, subrenderer)) continue
+
+            const observedAreaGeoJson = datastream.observedArea
+              ? props.transformToGeoJson(datastream.observedArea)
+              : null
+
+            const dsPoint = subrenderer.placement === ERefType.Thing
+              ? point
+              : (observedAreaGeoJson ? props.getPointformArea(observedAreaGeoJson) : null)
+
+            const hasNonLayerObs = subrenderer.observations?.some(
+              (obs: any) => !props.getById(obs.component)?.isLayerRenderer
+            )
+            const showMarker = (subrenderer.renderer.point_render_as !== 'none' || hasNonLayerObs) && !!dsPoint
+
+            datastreams.push({
+              key: `${renderer.id}-${subrenderer.id}-${dsId}`,
+              datastream,
+              thing,
+              location,
+              renderer,
+              subrenderer,
+              point: dsPoint,
+              observedAreaGeoJson,
+              showMarker
+            })
+          }
+        }
+      }
+    }
+  }
+
+  return { things, datastreams }
+})
+
 const emitThingClick = (thing: any, location: any, renderer: any) => {
   if (!props.widgetId) return
 
@@ -148,112 +234,109 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
 </script>
 
 <template>
-  <template v-for="renderer in renderers" :key="renderer.id">
-    <template v-for="location in locations" :key="location['@iot.id']+'markr'">
-      <template v-for="thing in location.things??[]" :key="thing['@iot.id']+'markrThing'">
-        <template v-if="compareThing(thing, renderer)">
-          <template v-if="isFeatureCollection(location.location)">
-            <l-geo-json
-              v-if="!isPoint(location.location)"
-              ref="thingsLayer"
-              :geojson="location.location"
-              :options="layerOptions"
-              :options-style="() => isThingSelected(thing)
-                ? { ...renderer.renderer.area, fillColor: highlightColor, color: highlightColor, fillOpacity: 0.5, weight: 3 }
-                : renderer.renderer.area as any"
+  <!-- Thing markers/areas - flat list, no nested loops -->
+  <template v-for="item in matchedItems.things" :key="item.key + 'area'">
+    <l-geo-json
+      v-if="item.isArea"
+      ref="thingsLayer"
+      :geojson="item.location.location"
+      :options="layerOptions"
+      :options-style="() => isThingSelected(item.thing)
+        ? { ...item.renderer.renderer.area, fillColor: highlightColor, color: highlightColor, fillOpacity: 0.5, weight: 3 }
+        : item.renderer.renderer.area as any"
+    />
+  </template>
+
+  <template v-for="item in matchedItems.things" :key="item.key + 'marker'">
+    <l-marker
+      v-if="item.point"
+      :lat-lng="item.point as L.LatLngExpression"
+      :options="{ pane: markerPane }"
+      @click="handleThingClick(item.thing, item.location, item.renderer)"
+    >
+      <l-icon class-name="someExtraClass">
+        <MapMarker
+          :render-as="item.renderer.renderer.point_render_as"
+          :background-color="item.renderer.renderer.pointPin?.color"
+          :icon-config="item.renderer.renderer.point"
+          :property-value="item.thing[item.renderer.renderer.point_prop ?? '']"
+          :image-url="item.renderer.renderer.point_image_url"
+          :image-size="item.renderer.renderer.point_image_size || 32"
+          :is-solid="item.renderer.renderer.pointPin?.solid"
+          :is-selected="isThingSelected(item.thing)"
+          :selection-color="highlightColor"
+        />
+      </l-icon>
+    </l-marker>
+  </template>
+
+  <!-- Datastream areas -->
+  <template v-for="item in matchedItems.datastreams" :key="item.key + 'dsarea'">
+    <l-geo-json
+      v-if="item.observedAreaGeoJson"
+      ref="thingsLayer"
+      :geojson="item.observedAreaGeoJson"
+      :options="{ ...layerOptions, pane: areaPane || 'overlayPane' }"
+      :options-style="()=>item.subrenderer.renderer.area as any"
+    />
+  </template>
+
+  <!-- Datastream layer-based observation renderers -->
+  <template v-for="item in matchedItems.datastreams" :key="item.key + 'dslayer'">
+    <template v-if="item.subrenderer.observations && item.datastream.observations">
+      <template v-for="obsRenderer in item.subrenderer.observations" :key="obsRenderer.component">
+        <template v-if="getById(obsRenderer.component)?.isLayerRenderer">
+          <template v-for="observation in item.datastream.observations" :key="observation.iotId">
+            <component
+              :is="getById(obsRenderer.component)?.component"
+              v-if="getById(obsRenderer.component) && observation.result"
+              :config="obsRenderer.setting"
+              :data="observation.result"
+              :marker-size="0"
             />
-          </template>
-
-          <l-marker
-            v-if="getPoint(location.location)"
-            :lat-lng="getPoint(location.location) as L.LatLngExpression"
-            :options="{ pane: markerPane }"
-            @click="handleThingClick(thing, location, renderer)"
-          >
-            <l-icon class-name="someExtraClass">
-              <MapMarker
-                :render-as="renderer.renderer.point_render_as"
-                :background-color="renderer.renderer.pointPin?.color"
-                :icon-config="renderer.renderer.point"
-                :property-value="thing[renderer.renderer.point_prop ?? '']"
-                :image-url="renderer.renderer.point_image_url"
-                :image-size="renderer.renderer.point_image_size || 32"
-                :is-solid="renderer.renderer.pointPin?.solid"
-                :is-selected="isThingSelected(thing)"
-                :selection-color="highlightColor"
-              />
-            </l-icon>
-          </l-marker>
-
-          <template v-for="(datastream) in thing.datastreams??[]" :key="(datastream as BoxedDatastream).iotId">
-            <template v-for="subrenderer in renderer.ds_renderer" :key="subrenderer.id">
-              <template v-if="compareDatastream(datastream as BoxedDatastream, subrenderer)">
-                <l-geo-json
-                  ref="thingsLayer"
-                  :geojson="transformToGeoJson(datastream.observedArea)"
-                  :options="{ ...layerOptions, pane: areaPane || 'overlayPane' }"
-                  :options-style="()=>subrenderer.renderer.area as any"
-                />
-
-                <!-- Layer-based renderers (e.g., GeoJSON) -->
-                <template v-if="subrenderer.observations && datastream.observations">
-                  <template v-for="obsRenderer in subrenderer.observations" :key="obsRenderer.component">
-                    <template v-if="getById(obsRenderer.component)?.isLayerRenderer">
-                      <template v-for="observation in datastream.observations" :key="observation.iotId">
-                        <component
-                          :is="getById(obsRenderer.component)?.component"
-                          v-if="getById(obsRenderer.component) && observation.result"
-                          :config="obsRenderer.setting"
-                          :data="observation.result"
-                          :marker-size="0"
-                        />
-                      </template>
-                    </template>
-                  </template>
-                </template>
-
-                <!-- Marker-based renderers (e.g., ValueUnit, TLC) or icon-only datastream markers -->
-                <l-marker
-                  v-if="(subrenderer.renderer.point_render_as !== 'none' || (subrenderer.observations && subrenderer.observations.some((obs: any) => !getById(obs.component)?.isLayerRenderer))) && ((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
-                  :lat-lng="((subrenderer.placement == ERefType.Thing)?getPoint(location.location):getPointformArea(transformToGeoJson(datastream.observedArea))) as L.LatLngExpression"
-                  :options="{ pane: markerPane }"
-                  @click="handleDatastreamMarkerClick(datastream as BoxedDatastream, thing, subrenderer)"
-                >
-                  <l-icon class-name="someExtraClass">
-                    <MapMarker
-                      :render-as="subrenderer.renderer.point_render_as"
-                      :background-color="subrenderer.renderer.pointPin?.color"
-                      :icon-config="subrenderer.renderer.point"
-                      :property-value="datastream[subrenderer.renderer.point_prop ?? '']"
-                      :image-url="subrenderer.renderer.point_image_url"
-                      :image-size="subrenderer.renderer.point_image_size || 32"
-                      :is-solid="subrenderer.renderer.pointPin?.solid"
-                      :is-round="true"
-                      :is-selected="isThingSelected(thing)"
-                      :selection-color="highlightColor"
-                    >
-                      <template #observation>
-                        <template v-if="datastream.observations">
-                          <template v-for="obsRenderer in subrenderer.observations" :key="obsRenderer.component">
-                            <component
-                              :is="getById(obsRenderer.component)?.component"
-                              v-if="getById(obsRenderer.component) && !getById(obsRenderer.component)?.isLayerRenderer"
-                              :config="obsRenderer.setting"
-                              :data="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.result"
-                              :key="datastream.observations[subrenderer.renderer.point_render_as === 'none' ? 0 : datastream.observations.length-1]?.phenomenonTime"
-                              :marker-size="subrenderer.renderer.point_render_as === 'image' ? 0 : subrenderer.renderer.point_render_as === 'none' ? (renderer.renderer.point_image_size||32) : 45"
-                            />
-                          </template>
-                        </template>
-                      </template>
-                    </MapMarker>
-                  </l-icon>
-                </l-marker>
-              </template>
-            </template>
           </template>
         </template>
       </template>
     </template>
+  </template>
+
+  <!-- Datastream markers -->
+  <template v-for="item in matchedItems.datastreams" :key="item.key + 'dsmarker'">
+    <l-marker
+      v-if="item.showMarker"
+      :lat-lng="item.point as L.LatLngExpression"
+      :options="{ pane: markerPane }"
+      @click="handleDatastreamMarkerClick(item.datastream as BoxedDatastream, item.thing, item.subrenderer)"
+    >
+      <l-icon class-name="someExtraClass">
+        <MapMarker
+          :render-as="item.subrenderer.renderer.point_render_as"
+          :background-color="item.subrenderer.renderer.pointPin?.color"
+          :icon-config="item.subrenderer.renderer.point"
+          :property-value="item.datastream[item.subrenderer.renderer.point_prop ?? '']"
+          :image-url="item.subrenderer.renderer.point_image_url"
+          :image-size="item.subrenderer.renderer.point_image_size || 32"
+          :is-solid="item.subrenderer.renderer.pointPin?.solid"
+          :is-round="true"
+          :is-selected="isThingSelected(item.thing)"
+          :selection-color="highlightColor"
+        >
+          <template #observation>
+            <template v-if="item.datastream.observations">
+              <template v-for="obsRenderer in item.subrenderer.observations" :key="obsRenderer.component">
+                <component
+                  :is="getById(obsRenderer.component)?.component"
+                  v-if="getById(obsRenderer.component) && !getById(obsRenderer.component)?.isLayerRenderer"
+                  :config="obsRenderer.setting"
+                  :data="item.datastream.observations[item.subrenderer.renderer.point_render_as === 'none' ? 0 : item.datastream.observations.length-1]?.result"
+                  :key="item.datastream.observations[item.subrenderer.renderer.point_render_as === 'none' ? 0 : item.datastream.observations.length-1]?.phenomenonTime"
+                  :marker-size="item.subrenderer.renderer.point_render_as === 'image' ? 0 : item.subrenderer.renderer.point_render_as === 'none' ? (item.renderer.renderer.point_image_size||32) : 45"
+                />
+              </template>
+            </template>
+          </template>
+        </MapMarker>
+      </l-icon>
+    </l-marker>
   </template>
 </template>

@@ -111,3 +111,10 @@ body{
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Fix color picker positioning - browser needs dimensions to calculate popup position */
+.va-color-input__hidden-input {
+  width: 1px !important;
+  height: 1px !important;
+}
+

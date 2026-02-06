@@ -69,7 +69,8 @@ const servicesReady = ref(false) // Track when services are reconstructed
 const subscribedDatasources = new Set<string>() // Track which datasources are already subscribed
 const datasourceUnsubscribeFunctions = new Map<string, () => void>() // Track unsubscribe functions
 const loadingDatasources = new Set<string>() // Track which datasources are currently loading
-let isLoadingObservations = false // Prevent concurrent observation loading
+// Session-based cancellation replaces the old isLoadingObservations flag
+// Each new call increments loadObservationsSessionId; old runs detect the mismatch and abort
 let isUnmounting = false // Track if component is unmounting
 const activeTasks = new Map<string, Task>() // Track active tasks for cleanup
 // Create a local TaskManager instance for this widget
@@ -78,6 +79,80 @@ const localTaskManager = useTaskManager()
 // Memoization cache for expensive operations
 const geoJsonCache = new WeakMap<any, any>()
 const boundsCache = new WeakMap<any, boolean>()
+
+// Pre-computed spatial index: coordinates extracted once, reused on every map move
+// For points: lng/lat are the coordinates, for complex geometries: geoJsonFeature is set
+interface SpatialEntry {
+  lng: number
+  lat: number
+  dsId: string
+  dataStream: any
+  geoJsonFeature: any  // only set for complex (non-point) geometries
+}
+let spatialIndex: SpatialEntry[] = []
+let buildIndexSessionId = 0
+
+const buildSpatialIndex = async () => {
+  const currentSession = ++buildIndexSessionId
+  const entries: SpatialEntry[] = []
+
+  const rawData = toRaw(data.value) as any
+  const rawAdditional = toRaw(additionalDatasourcesData.value)
+
+  const sources: Array<[string, any[]]> = []
+  if (rawData?.datastreams) {
+    sources.push([datasourceId.value, rawData.datastreams])
+  }
+  for (const [dsId, dsData] of rawAdditional.entries()) {
+    const raw = toRaw(dsData) as any
+    if (raw?.datastreams) {
+      sources.push([dsId, raw.datastreams])
+    }
+  }
+
+  const YIELD_MS = 4
+  let lastYield = performance.now()
+
+  for (const [dsId, datastreams] of sources) {
+    for (let i = 0; i < datastreams.length; i++) {
+      // Time-based yielding: yield every 4ms to keep 60fps
+      const now = performance.now()
+      if (now - lastYield > YIELD_MS) {
+        if (currentSession !== buildIndexSessionId) return // cancelled
+        await new Promise(resolve => setTimeout(resolve, 0))
+        lastYield = performance.now()
+      }
+
+      const ds = datastreams[i]
+
+      if (ds.observedArea) {
+        // Complex geometry - cache the geoJson transform now, check bounds at query time
+        if (!geoJsonCache.has(ds.observedArea)) {
+          geoJsonCache.set(ds.observedArea, transformToGeoJson(toRaw(ds.observedArea)))
+        }
+        entries.push({ lng: 0, lat: 0, dsId, dataStream: ds, geoJsonFeature: geoJsonCache.get(ds.observedArea) })
+      } else if (ds.thing?.locations?.[0]) {
+        const location = ds.thing.locations[0].location
+        const coords = extractPointCoords(location)
+        if (coords) {
+          // Point: store coordinates directly
+          entries.push({ lng: coords[0], lat: coords[1], dsId, dataStream: ds, geoJsonFeature: null })
+        } else {
+          // Non-point geometry
+          if (!geoJsonCache.has(location)) {
+            geoJsonCache.set(location, transformToGeoJson(location))
+          }
+          entries.push({ lng: 0, lat: 0, dsId, dataStream: ds, geoJsonFeature: geoJsonCache.get(location) })
+        }
+      }
+      // no geometry → not added to index (can never be in bounds)
+    }
+  }
+
+  if (currentSession !== buildIndexSessionId) return // cancelled
+  spatialIndex = entries
+  logMap('Spatial index built:', entries.length, 'entries')
+}
 
 // Detect datasource type dynamically
 const datasourceType = computed(() => {
@@ -176,6 +251,7 @@ watch(() => [config.value?.datasourceIds, config.value?.layers], async () => {
 
   // Trigger observation loading after new datasources are loaded
   if (newDatasourceLoaded && map.value) {
+    await buildSpatialIndex()
     loadObservationsInView()
   }
 }, { deep: true, immediate: true })
@@ -326,16 +402,17 @@ onMounted(async () => {
 
 })
 // Watch data changes - load observations when data arrives
-watch(data, (value, oldValue) => {
-  const oldLocations = (oldValue as any)?.locations?.length || 0
-  const newLocations = (value as any)?.locations?.length || 0
-
+// Use a targeted getter instead of deep: true to avoid expensive deep comparison of the entire data tree
+let previousLocationCount = 0
+watch(() => (data.value as any)?.locations?.length || 0, async (newLocations) => {
   // First load: when we go from no locations to having locations
-  if (oldLocations === 0 && newLocations > 0) {
+  if (previousLocationCount === 0 && newLocations > 0) {
+    await buildSpatialIndex()
     loadObservationsInView()
     loadHistoricalLocationsForAllThings()
   }
-}, { deep: true })
+  previousLocationCount = newLocations
+})
 
 const loadHistoricalLocationsForAllThings = () => {
   // Check if there are any OGCSTA styles configured
@@ -533,12 +610,28 @@ watch(() => config.value?.styles, (newStyles) => {
 }, { deep: true })
 
 
+// Track whether the user is actively interacting with the map (drag/zoom)
+// During interaction, suppress all data processing to keep the UI smooth
+let isMapInteracting = false
+
 const maploaded = () => {
   mounted = true
   logMap('map ready')
   setFixed()
   createLayerPanes()
-  //loadObservationsInView();
+
+  // Register drag/zoom listeners to suppress processing during interaction
+  const leaflet = (map.value as any)?.leafletObject as L.Map
+  if (leaflet) {
+    leaflet.on('movestart', () => {
+      isMapInteracting = true
+      // Cancel any in-progress processing immediately
+      loadObservationsSessionId++
+    })
+    leaflet.on('moveend', () => {
+      isMapInteracting = false
+    })
+  }
 }
 
 const createLayerPanes = () => {
@@ -587,7 +680,31 @@ const reverse = (arr: any) => {
 
 }
 
+// Fast point coordinate extraction: returns [lng, lat] for Point geometries, null otherwise
+const extractPointCoords = (geom: any): [number, number] | null => {
+  if (!geom) return null
+  // Direct Point geometry
+  if (geom.type === 'Point' && Array.isArray(geom.coordinates)) {
+    return geom.coordinates as [number, number]
+  }
+  // Feature wrapping a Point
+  if (geom.type === 'Feature' && geom.geometry?.type === 'Point' && Array.isArray(geom.geometry.coordinates)) {
+    return geom.geometry.coordinates as [number, number]
+  }
+  return null
+}
+
 const mapmove = debounce(() => {
+  // Skip if user is still interacting with the map
+  if (isMapInteracting) return
+
+  // Sync center/zoom from Leaflet to config only after movement stops
+  const leaflet = (map.value as any)?.leafletObject
+  if (leaflet) {
+    const center = leaflet.getCenter()
+    config.value.center = [center.lat, center.lng]
+    config.value.zoom = leaflet.getZoom()
+  }
   loadObservationsInView()
 }, 500, { leading: false, trailing: true })
 
@@ -595,16 +712,11 @@ const mapmove = debounce(() => {
 let loadObservationsSessionId = 0
 
 const loadObservationsInView = async () => {
-  console.log('[MAP] loadObservationsInView called')
+  logMap('loadObservationsInView called')
 
-  if (isLoadingObservations) {
-    console.log('[MAP] Already loading, skipping')
-    return
-  }
-
-  // Check if map is ready and mountedt
+  // Check if map is ready and mounted
   if (!map.value || !(map.value as any)?.leafletObject) {
-    console.log('[MAP] Map not ready')
+    logMap('Map not ready')
     return
   }
 
@@ -614,52 +726,32 @@ const loadObservationsInView = async () => {
     return
   }
 
-  isLoadingObservations = true
+  // Cancel any in-progress loading by incrementing session ID
   const currentSessionId = ++loadObservationsSessionId
 
-  let geometry: Polygon = {
-    type: 'Polygon',
-    coordinates: [[[inBounds._northEast.lng, inBounds._northEast.lat],
+  // Extract bounds as plain numbers (no repeated object access in hot loop)
+  const swLng = inBounds._southWest.lng
+  const swLat = inBounds._southWest.lat
+  const neLng = inBounds._northEast.lng
+  const neLat = inBounds._northEast.lat
 
-      [inBounds._northEast.lng, inBounds._southWest.lat],
-      [inBounds._southWest.lng, inBounds._southWest.lat],
-      [inBounds._southWest.lng, inBounds._northEast.lat],
-      [inBounds._northEast.lng, inBounds._northEast.lat]
-    ]]
-  }
-  const bboxFeature = feature(geometry)
-  const catchedDSIds = []
-  const taskListByTime: { [key: string]: BoxedDatastream[] } = {}
-
-  // Collect all datastreams from primary datasource and additional datasources
-  // Group by datasource to call events separately
-  const datasourceDatastreams = new Map<string, any[]>()
-
-  // Add datastreams from primary datasource
-  if ((data.value as any)?.datastreams) {
-    datasourceDatastreams.set(datasourceId.value, (data.value as any).datastreams)
-    console.log('[MAP] Found', (data.value as any).datastreams.length, 'datastreams in primary datasource')
-  } else {
-    console.log('[MAP] No datastreams in data.value')
-  }
-
-  // Add datastreams from additional datasources
-  for (const [dsId, dsData] of additionalDatasourcesData.value.entries()) {
-    if ((dsData as any)?.datastreams) {
-      datasourceDatastreams.set(dsId, (dsData as any).datastreams)
+  // Lazy-create bboxFeature only if needed (for complex geometries)
+  let bboxFeature: any = null
+  const getBboxFeature = () => {
+    if (!bboxFeature) {
+      bboxFeature = feature({
+        type: 'Polygon',
+        coordinates: [[[neLng, neLat], [neLng, swLat], [swLng, swLat], [swLng, neLat], [neLng, neLat]]]
+      } as Polygon)
     }
+    return bboxFeature
   }
 
-  console.log('[MAP] OGCSstyles count:', config.value.OGCSstyles?.length || 0)
-
-  // Build task list grouped by time and datasource
-  const taskListByTimeAndDatasource: { [key: string]: { [dsId: string]: BoxedDatastream[] } } = {}
-
-  // Build renderer lookup map for faster matching (optimization: avoid nested loops)
+  // Build renderer lookup map (small: ~17 renderers)
+  const rawStyles = toRaw(config.value.OGCSstyles)
   const renderersByRefreshTime = new Map<number, Array<{ renderer: any, subrender: any }>>()
-  for (const renderer of config.value.OGCSstyles) {
+  for (const renderer of rawStyles) {
     const refreshtime: number = renderer.ObservationrefreshTime !== undefined && renderer.ObservationrefreshTime !== null ? renderer.ObservationrefreshTime : 0
-
     if (!renderersByRefreshTime.has(refreshtime)) {
       renderersByRefreshTime.set(refreshtime, [])
     }
@@ -668,88 +760,67 @@ const loadObservationsInView = async () => {
     }
   }
 
-  // Flatten datastreams into array with dsId for chunked processing
-  const allDatastreams: Array<{ dsId: string, dataStream: any }> = []
-  for (const [dsId, datastreams] of datasourceDatastreams.entries()) {
-    for (const dataStream of datastreams) {
-      allDatastreams.push({ dsId, dataStream })
-    }
-  }
+  const taskListByTimeAndDatasource: { [key: string]: { [dsId: string]: BoxedDatastream[] } } = {}
 
-  // Process datastreams in chunks to avoid blocking UI
-  const CHUNK_SIZE = 100  // Smaller chunks for smoother scrolling
-  let processed = 0
+  // Use pre-computed spatial index for fast bounds checking
+  const index = spatialIndex
+  // Time-based yielding: yield every ~4ms to maintain 60fps
+  // (16ms per frame, leave ~12ms for browser rendering/input)
+  const YIELD_MS = 4
+  let lastYield = performance.now()
 
-  for (let i = 0; i < allDatastreams.length; i += CHUNK_SIZE) {
-    // Check if this session is still valid (map might have moved again)
-    if (currentSessionId !== loadObservationsSessionId) {
-      console.log('[MAP] Session invalidated, aborting chunked processing')
-      isLoadingObservations = false
-      return
-    }
-
-    const chunk = allDatastreams.slice(i, i + CHUNK_SIZE)
-
-    for (const { dsId, dataStream } of chunk) {
-      // Check if datastream is in bounds ONCE (before renderer matching)
-      let inBoundsCheck: boolean | null = null
-      let geoJsonFeature: any = null
-
-      // Compute and cache geometry check
-      if (dataStream.observedArea) {
-        // Use cached transformation if available
-        if (!geoJsonCache.has(dataStream.observedArea)) {
-          geoJsonCache.set(dataStream.observedArea, transformToGeoJson(toRaw(dataStream.observedArea)))
-        }
-        geoJsonFeature = geoJsonCache.get(dataStream.observedArea)
-        inBoundsCheck = booleanContains(bboxFeature, geoJsonFeature as Polygon)
-      } else if (dataStream.thing?.locations?.[0]) {
-        try {
-          const location = dataStream.thing.locations[0].location
-          if (!geoJsonCache.has(location)) {
-            geoJsonCache.set(location, transformToGeoJson(location))
-          }
-          geoJsonFeature = geoJsonCache.get(location)
-          inBoundsCheck = booleanContains(bboxFeature, geoJsonFeature)
-        } catch (e) {
-          logObservations('FeatureCollection not supported')
-          inBoundsCheck = false
-        }
+  for (let i = 0; i < index.length; i++) {
+    // Time-based yield: check elapsed time instead of fixed chunk count
+    const now = performance.now()
+    if (now - lastYield > YIELD_MS) {
+      if (currentSessionId !== loadObservationsSessionId || isMapInteracting) {
+        return
       }
-
-      // Skip if not in bounds
-      if (inBoundsCheck === false || inBoundsCheck === null) continue
-
-      // Match against renderers (now O(1) lookup instead of nested loops)
-      for (const [refreshtime, renderers] of renderersByRefreshTime.entries()) {
-        let matched = false
-        for (const { renderer, subrender } of renderers) {
-          // Check both datastream AND thing filters
-          const datastreamMatches = compareDatastream(dataStream, subrender)
-          const thingMatches = dataStream.thing ? compareThing(dataStream.thing, renderer) : true
-
-          if (datastreamMatches && thingMatches) {
-            matched = true
-            break
-          }
-        }
-
-        if (matched) {
-          if (!taskListByTimeAndDatasource[refreshtime]) taskListByTimeAndDatasource[refreshtime] = {}
-          if (!taskListByTimeAndDatasource[refreshtime][dsId]) taskListByTimeAndDatasource[refreshtime][dsId] = []
-          taskListByTimeAndDatasource[refreshtime][dsId].push(dataStream)
-        }
-      }
-    }
-
-    processed += chunk.length
-
-    // Yield to browser between chunks (allow UI updates)
-    if (i + CHUNK_SIZE < allDatastreams.length) {
       await new Promise(resolve => setTimeout(resolve, 0))
+      lastYield = performance.now()
+    }
+
+    const entry = index[i]
+
+    // Fast bounds check - hot path is just 4 number comparisons
+    let inView: boolean
+    if (entry.geoJsonFeature) {
+      // Complex geometry (rare): use booleanContains
+      inView = booleanContains(getBboxFeature(), entry.geoJsonFeature as Polygon)
+    } else {
+      // Point (common, ~99%): pure number comparison
+      inView = entry.lng >= swLng && entry.lng <= neLng && entry.lat >= swLat && entry.lat <= neLat
+    }
+
+    if (!inView) continue
+
+    // Only do expensive renderer matching for items actually in bounds
+    const { dsId, dataStream } = entry
+    for (const [refreshtime, renderers] of renderersByRefreshTime.entries()) {
+      let matched = false
+      for (const { renderer, subrender } of renderers) {
+        const datastreamMatches = compareDatastream(dataStream, subrender)
+        const thingMatches = dataStream.thing ? compareThing(dataStream.thing, renderer) : true
+
+        if (datastreamMatches && thingMatches) {
+          matched = true
+          break
+        }
+      }
+
+      if (matched) {
+        if (!taskListByTimeAndDatasource[refreshtime]) taskListByTimeAndDatasource[refreshtime] = {}
+        if (!taskListByTimeAndDatasource[refreshtime][dsId]) taskListByTimeAndDatasource[refreshtime][dsId] = []
+        taskListByTimeAndDatasource[refreshtime][dsId].push(dataStream)
+      }
     }
   }
 
+  // Final session check after all chunks are processed
+  if (currentSessionId !== loadObservationsSessionId) {
+    logMap('Session invalidated after chunked processing, aborting')
+    return
+  }
 
   // Don't clear tasks here - let TaskManager handle it based on IDs
   // Only track new task IDs
@@ -762,9 +833,15 @@ const loadObservationsInView = async () => {
         // Get the correct datasource to call events on
         const isDatasourcePrimary = dsId === datasourceId.value
 
-        // Create deterministic task ID based on datasource and datastream IDs
-        const itemIds = items.map(i => i.iotId || (i as any)['@iot.id']).sort().join(',')
-        const taskId = `obs-${dsId}-${refreshTime}-${itemIds}`
+        // Create deterministic task ID using a fast hash instead of sorting+joining all IDs
+        let hash = 0
+        for (const item of items) {
+          const id = String(item.iotId || (item as any)['@iot.id'] || '')
+          for (let c = 0; c < id.length; c++) {
+            hash = ((hash << 5) - hash + id.charCodeAt(c)) | 0
+          }
+        }
+        const taskId = `obs-${dsId}-${refreshTime}-${items.length}-${hash >>> 0}`
 
         const task = new class extends Task {
           readonly id = taskId
@@ -819,7 +896,7 @@ const loadObservationsInView = async () => {
     }
   }
 
-  console.log('[MAP] Created', tasks.length, 'tasks to invoke')
+  logMap('Created', tasks.length, 'tasks to invoke')
   localTaskManager.addTasksAndIvnoke(tasks)
 
   // Update MQTT subscriptions for all datasources based on current view
@@ -852,8 +929,6 @@ const loadObservationsInView = async () => {
       logDatasource('Could not call UPDATE_MQTT_SUBSCRIPTIONS on datasource', dsId, e)
     }
   }
-
-  isLoadingObservations = false
 
 }
 const collectionToPoint = (fc: any) => {
@@ -889,12 +964,6 @@ const getPointformArea = (PointOrFeature: any) => {
       return null
     }
   }
-}
-const zoomUpdated = (zoom: any) => {
-  config.value.zoom = zoom
-}
-const centerUpdated = (center: any) => {
-  config.value.center = center
 }
 
 
@@ -1092,8 +1161,6 @@ onUnmounted(() => {
             style="height: 100%"
             @moveend="mapmove"
             @ready="maploaded"
-            @update:zoom="zoomUpdated"
-            @update:center="centerUpdated"
             :dragging="!config.fixed"
     >
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
