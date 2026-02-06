@@ -10,7 +10,6 @@
 */
 
 import { ref } from 'vue'
-import { difference, intersection, uniq } from 'lodash'
 
 
 export interface TaskI {
@@ -37,25 +36,30 @@ export function useTaskManager() {
   // Create instance-specific timer to avoid shared state between widget instances
   const timer = ref<Map<string, TaskI>>(new Map<string, TaskI>())
 
-  const addTasksAndIvnoke = (tasks: TaskI[]) => {
-    let listofTasks = Array.from(timer.value.keys())
-    let toHold = intersection(listofTasks, tasks.map(t => t.id))
-    let toAdd = difference(tasks.map(t => t.id), listofTasks)
+  const addTasksAndIvnoke = async (tasks: TaskI[]) => {
+    const newTaskIds = new Set(tasks.map(t => t.id))
 
+    // Remove tasks that are no longer needed
     timer.value.forEach((task, key) => {
-      if (!toHold.includes(key)) {
+      if (!newTaskIds.has(key)) {
         task.invoke()
         timer.value.delete(key)
       }
     })
-    tasks.forEach(t => {
-      if (toAdd.includes(t.id)) {
-        if (!timer.value.has(t.id)) {
-          timer.value.set(t.id, t)
-          t.run()
+
+    // Add new tasks in batches, yielding to the browser between batches
+    const BATCH_SIZE = 10
+    let count = 0
+    for (const t of tasks) {
+      if (!timer.value.has(t.id)) {
+        timer.value.set(t.id, t)
+        t.run()
+        count++
+        if (count % BATCH_SIZE === 0) {
+          await new Promise(resolve => setTimeout(resolve, 0))
         }
       }
-    })
+    }
   }
   const invokeTask = (id: string): void => {
     timer.value.get(id)?.invoke()
