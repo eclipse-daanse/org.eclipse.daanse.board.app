@@ -54,7 +54,7 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=65536
 
       - name: Cache Build Output
-        uses: actions/cache/save@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
+        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: ./packages/app/default/dist
           key: build-cache-${{ github.sha }}
