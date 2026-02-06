@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script setup lang="ts">
-import { computed, shallowRef, watch } from 'vue';
+import { computed, reactive, watch, ref } from 'vue';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
@@ -81,35 +81,33 @@ const initWrapper = (wrapper: VariableWrapper<string>, value?: string, variableN
   }
 };
 
-// Create VariableWrapper refs for each time field
-// Using shallowRef to prevent Vue from deeply unwrapping the VariableWrapper class
-// Initialize synchronously so VariableInput sees the correct isSet state
-const timeRangeStart = shallowRef(new VariableWrapper<string>());
-initWrapper(timeRangeStart.value, config.history.timeRange?.start, config.history.timeRange?.startVariable);
+// Create a reactive object holding all VariableWrappers
+// This approach mirrors how TextSettings works - VariableWrappers as properties of a reactive object
+const timeWrappers = reactive({
+  timeRangeStart: new VariableWrapper<string>(),
+  timeRangeEnd: new VariableWrapper<string>(),
+  phenomenonTimeStart: new VariableWrapper<string>(),
+  phenomenonTimeEnd: new VariableWrapper<string>(),
+  resultTimeStart: new VariableWrapper<string>(),
+  resultTimeEnd: new VariableWrapper<string>()
+});
 
-const timeRangeEnd = shallowRef(new VariableWrapper<string>());
-initWrapper(timeRangeEnd.value, config.history.timeRange?.end, config.history.timeRange?.endVariable);
-
-const phenomenonTimeStart = shallowRef(new VariableWrapper<string>());
-initWrapper(phenomenonTimeStart.value, config.history.phenomenonTime?.start, config.history.phenomenonTime?.startVariable);
-
-const phenomenonTimeEnd = shallowRef(new VariableWrapper<string>());
-initWrapper(phenomenonTimeEnd.value, config.history.phenomenonTime?.end, config.history.phenomenonTime?.endVariable);
-
-const resultTimeStart = shallowRef(new VariableWrapper<string>());
-initWrapper(resultTimeStart.value, config.history.resultTime?.start, config.history.resultTime?.startVariable);
-
-const resultTimeEnd = shallowRef(new VariableWrapper<string>());
-initWrapper(resultTimeEnd.value, config.history.resultTime?.end, config.history.resultTime?.endVariable);
+// Initialize wrappers from config
+initWrapper(timeWrappers.timeRangeStart, config.history.timeRange?.start, config.history.timeRange?.startVariable);
+initWrapper(timeWrappers.timeRangeEnd, config.history.timeRange?.end, config.history.timeRange?.endVariable);
+initWrapper(timeWrappers.phenomenonTimeStart, config.history.phenomenonTime?.start, config.history.phenomenonTime?.startVariable);
+initWrapper(timeWrappers.phenomenonTimeEnd, config.history.phenomenonTime?.end, config.history.phenomenonTime?.endVariable);
+initWrapper(timeWrappers.resultTimeStart, config.history.resultTime?.start, config.history.resultTime?.startVariable);
+initWrapper(timeWrappers.resultTimeEnd, config.history.resultTime?.end, config.history.resultTime?.endVariable);
 
 // Helper to sync wrapper changes back to config
 const createWatcher = (
-  wrapper: typeof timeRangeStart,
+  getWrapper: () => VariableWrapper<string>,
   getConfigObj: () => any,
   startKey: string,
   variableKey: string
 ) => {
-  watch(wrapper, (w) => {
+  watch(getWrapper, (w) => {
     const configObj = getConfigObj();
     if (w.isSet && w.variable) {
       configObj[variableKey] = w.variable;
@@ -122,69 +120,126 @@ const createWatcher = (
 };
 
 // Setup watchers to sync back to config
-createWatcher(timeRangeStart, () => config.history.timeRange, 'start', 'startVariable');
-createWatcher(timeRangeEnd, () => config.history.timeRange, 'end', 'endVariable');
-createWatcher(phenomenonTimeStart, () => config.history.phenomenonTime, 'start', 'startVariable');
-createWatcher(phenomenonTimeEnd, () => config.history.phenomenonTime, 'end', 'endVariable');
-createWatcher(resultTimeStart, () => config.history.resultTime, 'start', 'startVariable');
-createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariable');
+createWatcher(() => timeWrappers.timeRangeStart, () => config.history.timeRange, 'start', 'startVariable');
+createWatcher(() => timeWrappers.timeRangeEnd, () => config.history.timeRange, 'end', 'endVariable');
+createWatcher(() => timeWrappers.phenomenonTimeStart, () => config.history.phenomenonTime, 'start', 'startVariable');
+createWatcher(() => timeWrappers.phenomenonTimeEnd, () => config.history.phenomenonTime, 'end', 'endVariable');
+createWatcher(() => timeWrappers.resultTimeStart, () => config.history.resultTime, 'start', 'startVariable');
+createWatcher(() => timeWrappers.resultTimeEnd, () => config.history.resultTime, 'end', 'endVariable');
+
+// Helper to parse ISO 8601 datetime string to Date
+const parseIsoToDate = (isoString: string | undefined): Date | null => {
+  if (!isoString) return null;
+  const date = new Date(isoString);
+  return isNaN(date.getTime()) ? null : date;
+};
+
+// Helper to format Date to ISO 8601 datetime string with UTC timezone
+const formatToIso = (date: Date | null, time: Date | null): string => {
+  if (!date) return '';
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = (time?.getHours() || 0).toString().padStart(2, '0');
+  const minutes = (time?.getMinutes() || 0).toString().padStart(2, '0');
+  const seconds = (time?.getSeconds() || 0).toString().padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+};
+
+// Create datetime picker computed for a wrapper
+const createDateTimeComputed = (getWrapper: () => VariableWrapper<string>) => {
+  const dateValue = ref<Date | null>(parseIsoToDate(getWrapper().value));
+  const timeValue = ref<Date | null>(parseIsoToDate(getWrapper().value));
+
+  // Watch wrapper value changes (from variable updates)
+  watch(() => getWrapper().value, (newVal) => {
+    dateValue.value = parseIsoToDate(newVal);
+    timeValue.value = parseIsoToDate(newVal);
+  });
+
+  const updateWrapper = () => {
+    getWrapper().value = formatToIso(dateValue.value, timeValue.value);
+  };
+
+  return { dateValue, timeValue, updateWrapper };
+};
+
+// Create datetime pickers for all time fields
+const timeRangeStartDT = createDateTimeComputed(() => timeWrappers.timeRangeStart);
+const timeRangeEndDT = createDateTimeComputed(() => timeWrappers.timeRangeEnd);
+const phenomenonTimeStartDT = createDateTimeComputed(() => timeWrappers.phenomenonTimeStart);
+const phenomenonTimeEndDT = createDateTimeComputed(() => timeWrappers.phenomenonTimeEnd);
+const resultTimeStartDT = createDateTimeComputed(() => timeWrappers.resultTimeStart);
+const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd);
 
 </script>
 
 <template>
-  <div class="ogcsta-settings">
-    <!-- Connection Selection -->
-    <div class="setting-group">
-      <VaSelect
-        v-model="config.connection"
-        label="Connection"
-        :options="connectionsFiltered"
-        text-by="name"
-        value-by="uid"
-      />
-    </div>
+  <div class="ogcsta-settings-wrapper">
+    <va-scroll-container class="ogcsta-scroll-container" vertical>
+      <div class="ogcsta-settings">
+        <!-- Connection Selection -->
+        <div class="setting-group">
+          <VaSelect
+            v-model="config.connection"
+            label="Connection"
+            :options="connectionsFiltered"
+            text-by="name"
+            value-by="uid"
+          />
+        </div>
 
-    <!-- MQTT Connection Selection -->
-    <div class="setting-group">
-      <VaSelect
-        v-model="config.mqttConnection"
-        label="MQTT Connection (optional, for realtime updates)"
-        :options="mqttConnectionsFiltered"
-        text-by="name"
-        value-by="uid"
-        clearable
-      />
-    </div>
+        <!-- MQTT Connection Selection -->
+        <div class="setting-group">
+          <VaSelect
+            v-model="config.mqttConnection"
+            label="MQTT Connection (optional, for realtime updates)"
+            :options="mqttConnectionsFiltered"
+            text-by="name"
+            value-by="uid"
+            clearable
+          />
+        </div>
 
-    <!-- History Configuration -->
-    <va-collapse v-model="config.history.enabled" icon="history" header="Historical Data Configuration">
-      <div class="history-settings">
+        <!-- History Configuration -->
+        <va-collapse v-model="config.history.enabled" icon="history" header="Historical Data Configuration">
+          <div class="history-settings">
 
         <!-- Time Range Configuration -->
         <div class="setting-group">
           <h4>Time Range Filter</h4>
 
-          <VariableInput v-model="timeRangeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.timeRangeStart" label="Start Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="Start Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="timeRangeStartDT.dateValue.value"
+                  label="Start Date"
+                  @update:model-value="timeRangeStartDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="timeRangeStartDT.timeValue.value"
+                  label="Start Time"
+                  @update:model-value="timeRangeStartDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="timeRangeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.timeRangeEnd" label="End Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="End Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="timeRangeEndDT.dateValue.value"
+                  label="End Date"
+                  @update:model-value="timeRangeEndDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="timeRangeEndDT.timeValue.value"
+                  label="End Time"
+                  @update:model-value="timeRangeEndDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
         </div>
@@ -193,27 +248,37 @@ createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariabl
         <div class="setting-group">
           <h4>Phenomenon Time Filter</h4>
 
-          <VariableInput v-model="phenomenonTimeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.phenomenonTimeStart" label="Start Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="Start Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="phenomenonTimeStartDT.dateValue.value"
+                  label="Start Date"
+                  @update:model-value="phenomenonTimeStartDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="phenomenonTimeStartDT.timeValue.value"
+                  label="Start Time"
+                  @update:model-value="phenomenonTimeStartDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="phenomenonTimeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.phenomenonTimeEnd" label="End Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="End Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="phenomenonTimeEndDT.dateValue.value"
+                  label="End Date"
+                  @update:model-value="phenomenonTimeEndDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="phenomenonTimeEndDT.timeValue.value"
+                  label="End Time"
+                  @update:model-value="phenomenonTimeEndDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
         </div>
@@ -222,27 +287,37 @@ createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariabl
         <div class="setting-group">
           <h4>Result Time Filter</h4>
 
-          <VariableInput v-model="resultTimeStart" label="Start Time">
+          <VariableInput v-model="timeWrappers.resultTimeStart" label="Start Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="Start Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="resultTimeStartDT.dateValue.value"
+                  label="Start Date"
+                  @update:model-value="resultTimeStartDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="resultTimeStartDT.timeValue.value"
+                  label="Start Time"
+                  @update:model-value="resultTimeStartDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
 
-          <VariableInput v-model="resultTimeEnd" label="End Time">
+          <VariableInput v-model="timeWrappers.resultTimeEnd" label="End Time">
             <template #default="{ value, change }">
-              <va-input
-                :model-value="value"
-                @update:model-value="change({ target: { value: $event } })"
-                label="End Time"
-                placeholder="ISO 8601 DateTime"
-                class="w-full"
-              />
+              <div class="datetime-picker-group">
+                <va-date-input
+                  v-model="resultTimeEndDT.dateValue.value"
+                  label="End Date"
+                  @update:model-value="resultTimeEndDT.updateWrapper()"
+                />
+                <va-time-input
+                  v-model="resultTimeEndDT.timeValue.value"
+                  label="End Time"
+                  @update:model-value="resultTimeEndDT.updateWrapper()"
+                />
+              </div>
             </template>
           </VariableInput>
         </div>
@@ -286,27 +361,44 @@ createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariabl
         </div>
       </div>
     </va-collapse>
+      </div>
+    </va-scroll-container>
   </div>
 </template>
 
 <style scoped>
+.ogcsta-settings-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.ogcsta-scroll-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .ogcsta-settings {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 0.5rem;
 }
 
 .history-settings {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .setting-group {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .setting-group h4 {
@@ -320,5 +412,21 @@ createWatcher(resultTimeEnd, () => config.history.resultTime, 'end', 'endVariabl
 
 .w-full {
   width: 100%;
+}
+
+.datetime-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+:deep(.va-collapse__body-wrapper) {
+  overflow: visible !important;
+}
+
+.datetime-picker-group > * {
+  flex: 1;
+  min-width: 0;
 }
 </style>

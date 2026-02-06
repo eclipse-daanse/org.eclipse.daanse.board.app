@@ -92,7 +92,8 @@ export const useVariablesStore = defineStore('variables', () =>{
                 prevVar.rename(variableState.name);
             }
         } else {
-            variableRepositoryInst.removeVariable(prevVar.name);
+            // Use ID for removal to ensure proper cleanup from scope-aware storage
+            variableRepositoryInst.removeVariable(prevVar.id);
             variableRepositoryInst
                 .registerVariable(variableState.name, variableState.type, variableState.config);
         }

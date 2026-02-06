@@ -27,24 +27,21 @@ Contributors:
 
         <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex-grow">
           <!-- Header row -->
-          <div class="grid grid-cols-[1fr_120px_120px_80px] bg-gray-50 border-b
-                    border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <div class="px-4 py-3">Name</div>
-            <div class="px-4 py-3">Type</div>
-            <div class="px-4 py-3">Value</div>
-            <div class="px-4 py-3 text-right">Actions</div>
+          <div class="variable-table-header">
+            <div class="var-col-name">Name</div>
+            <div class="var-col-type">Type</div>
+            <div class="var-col-value">Value</div>
+            <div class="var-col-actions">Actions</div>
           </div>
 
           <!-- List items -->
           <div class="divide-y divide-gray-200">
             <template v-for="variable in store.variables" :key="variable.id">
-              <div class="grid grid-cols-[1fr_120px_120px_80px] items-center
-                        hover:bg-gray-50" v-if="variable.scope == VariableScope.Global">
-                <div class="px-4 py-3 truncate">{{ variable.name }}</div>
-                <div class="px-4 py-3">{{ variable.type }}</div>
-                <div class="px-4 py-3 truncate">{{ getVariableValue(variable.id) }}
-                </div>
-                <div class="px-4 py-3 flex justify-end gap-1">
+              <div class="variable-table-row" v-if="variable.scope == VariableScope.Global">
+                <div class="var-col-name truncate">{{ variable.name }}</div>
+                <div class="var-col-type truncate">{{ variable.type }}</div>
+                <div class="var-col-value truncate">{{ getVariableValue(variable.id) }}</div>
+                <div class="var-col-actions">
                   <VaButton icon="edit" size="small" preset="secondary"
                             @click="editVariable(variable.id)"></VaButton>
                   <VaButton icon="delete" size="small" color="danger"
@@ -80,26 +77,22 @@ Contributors:
 
         <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex-grow">
           <!-- Header row -->
-          <div class="grid grid-cols-[1fr_120px_120px_80px] bg-gray-50 border-b
-                    border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <div class="px-4 py-3">Name</div>
-            <div class="px-4 py-3">Access Mode</div>
-            <div class="px-4 py-3">Value</div>
-            <div class="px-4 py-3 text-right">Actions</div>
+          <div class="variable-table-header">
+            <div class="var-col-name">Name</div>
+            <div class="var-col-type">Access Mode</div>
+            <div class="var-col-value">Value</div>
+            <div class="var-col-actions">Actions</div>
           </div>
 
           <!-- Page variables list -->
           <div class="divide-y divide-gray-200"
                 v-if="selectedPageId && currentPageVariables">
-            <div class="grid grid-cols-[1fr_120px_120px_80px] items-center
-                        hover:bg-gray-50"
+            <div class="variable-table-row"
                   v-for="variable in currentPageVariables" :key="variable.id">
-              <div class="px-4 py-3 truncate">{{ variable.name }}</div>
-              <div class="px-4 py-3">
-                {{ getAccessModeText(variable.accessMode) }}
-              </div>
-              <div class="px-4 py-3 truncate">{{ variable.value }}</div>
-              <div class="px-4 py-3 flex justify-end gap-1">
+              <div class="var-col-name truncate">{{ variable.name }}</div>
+              <div class="var-col-type truncate">{{ getAccessModeText(variable.accessMode) }}</div>
+              <div class="var-col-value truncate">{{ variable.value }}</div>
+              <div class="var-col-actions">
                 <VaButton icon="edit" size="small" preset="secondary"
                           @click="editVariable(variable.id)"></VaButton>
                 <VaButton icon="delete" size="small" color="danger"
@@ -316,3 +309,51 @@ const onPageSelected = (pageId: string) => {
   // The computed property will automatically update
 }
 </script>
+
+<style scoped>
+.variable-table-header {
+  display: flex;
+  background-color: rgb(249 250 251);
+  border-bottom: 1px solid rgb(229 231 235);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(107 114 128);
+}
+
+.variable-table-row {
+  display: flex;
+  align-items: center;
+}
+
+.variable-table-row:hover {
+  background-color: rgb(249 250 251);
+}
+
+.var-col-name {
+  flex: 2;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+}
+
+.var-col-type {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+}
+
+.var-col-value {
+  flex: 2;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+}
+
+.var-col-actions {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+}
+</style>
