@@ -49,7 +49,13 @@ export default class File implements FileI {
 
   getContent(): any {
     try {
-      const content_as_string = atob(this.content)
+      // Decode Base64 to binary, then decode as UTF-8
+      const binaryString = atob(this.content)
+      const bytes = new Uint8Array(binaryString.length)
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i)
+      }
+      const content_as_string = new TextDecoder('utf-8').decode(bytes)
       return JSON.parse(content_as_string)
     } catch (e) {
       //throw new FileParseError('File not get parsed')
@@ -60,7 +66,11 @@ export default class File implements FileI {
   setContent(content: any) {
     try {
       const content_as_String = JSON.stringify(content)
-      const content_as_base = btoa(content_as_String)
+      // Encode UTF-8 string to binary, then to Base64
+      const bytes = new TextEncoder().encode(content_as_String)
+      let binaryString = ''
+      bytes.forEach(byte => binaryString += String.fromCharCode(byte))
+      const content_as_base = btoa(binaryString)
       this.content = content_as_base
       if (this.file_state != FileState.NEW) this.file_state = FileState.MODIFIED
     } catch (e) {
