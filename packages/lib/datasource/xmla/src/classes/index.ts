@@ -173,7 +173,7 @@ export class XmlaStore extends BaseDatasource {
     throw new Error('Not Implemented')
   }
 
-  async getData(type: string): Promise<any> {
+  async getData(type: string, requestConfig: any = {}): Promise<any> {
     let request
     let response = null
 
@@ -200,7 +200,8 @@ export class XmlaStore extends BaseDatasource {
     })
 
     if (type === 'PivotTable') {
-      response = this.parseToPivotTable(mdxResponse)
+      response = this.parseToPivotTable(mdxResponse, requestConfig)
+      console.log('Parsed responce in datasource', response);
       if (!response) return null
 
       response.tableState = {
@@ -296,11 +297,17 @@ export class XmlaStore extends BaseDatasource {
     this.notify()
   }
 
-  parseToPivotTable(mdxResponse: any): any {
+  parseToPivotTable(mdxResponse: any, requestConfig: any = {}): any {
+    const properties = this.metadata.getProperties()
+    console.log(requestConfig);
+
     return parseMdxRequest(mdxResponse, {
       rows: this.requestParams.rows,
       columns: this.requestParams.columns,
       measures: this.requestParams.measures,
+      properties,
+      showRowsProperties: requestConfig.showRowsProperties,
+      showColumnsProperties: requestConfig.showColumnsProperties
     })
   }
 

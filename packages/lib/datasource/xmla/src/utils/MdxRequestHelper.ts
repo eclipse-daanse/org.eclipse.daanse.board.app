@@ -16,6 +16,9 @@ interface QueryParams {
   rows: any[]
   columns: any[]
   measures: any[]
+  properties: any[]
+  showRowsProperties: boolean
+  showColumnsProperties: boolean
 }
 
 const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
@@ -38,7 +41,8 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
   if (!mdxResponce.Body.ExecuteResponse) return null
 
   // const properties = (await metadataStorage.getMetadataStorage()).properties;
-  // console.log(properties);
+  const properties = params.properties;
+  console.log('properties in helper', properties);
 
   let tupples = optionalArrayToArray(
       mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis,
@@ -99,29 +103,32 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
   const columnProperties = [] as any[]
   const rowsProperties = [] as any[]
 
-  // columns.value[0]?.forEach((col) => {
-  //   const colPropsShown = pivotTableStore.state.membersWithProps.includes(
-  //     col.HIERARCHY_UNIQUE_NAME,
-  //   );
-  //   if (!colPropsShown) return;
+  console.log('Params in helper', params)
 
-  //   const colProps: any[] = properties.filter(
-  //     (prop) => prop.HIERARCHY_UNIQUE_NAME === col.HIERARCHY_UNIQUE_NAME,
-  //   );
-  //   columnProperties.push(...colProps);
-  // });
+  columns[0].forEach((col: any) => {
+    // const colPropsShown = pivotTableStore.state.membersWithProps.includes(
+    //   col.HIERARCHY_UNIQUE_NAME,
+    // );
+    if (!params.showColumnsProperties) return;
+    console.log(col);
 
-  // rows.value[0]?.forEach((row) => {
-  //   const rowPropsShown = pivotTableStore.state.membersWithProps.includes(
-  //     row.HIERARCHY_UNIQUE_NAME,
-  //   );
-  //   if (!rowPropsShown) return;
+    const colProps: any[] = properties.filter(
+      (prop) => prop.HIERARCHY_UNIQUE_NAME === col.HIERARCHY_UNIQUE_NAME,
+    );
+    columnProperties.push(...colProps);
+  });
 
-  //   const rowProps: any[] = properties.filter(
-  //     (prop) => prop.HIERARCHY_UNIQUE_NAME === row.HIERARCHY_UNIQUE_NAME,
-  //   );
-  //   rowsProperties.push(...rowProps);
-  // });
+  rows[0].forEach((row: any) => {
+    // const rowPropsShown = pivotTableStore.state.membersWithProps.includes(
+    //   row.HIERARCHY_UNIQUE_NAME,
+    // );
+    if (!params.showRowsProperties) return;
+
+    const rowProps: any[] = properties.filter(
+      (prop) => prop.HIERARCHY_UNIQUE_NAME === row.HIERARCHY_UNIQUE_NAME,
+    );
+    rowsProperties.push(...rowProps);
+  });
 
   const colPropertiesDescription = optionalArrayToArray(
     optionalArrayToArray(
@@ -187,7 +194,9 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
     })
   })
 
-  cells = [...propertiesCells, ...cells]
+  if (params.showColumnsProperties) {
+    cells = [...propertiesCells, ...cells]
+  }
 
   cells = cells.map((row, i) => {
     const propertiesCells = propertiesCols.map(prop => {
@@ -215,8 +224,12 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
       }
     })
 
-    return [...propertiesCells, ...row]
+    if (params.showRowsProperties) {
+      return [...propertiesCells, ...row]
+    }
+    return row
   })
+
 
   return {
     columns,

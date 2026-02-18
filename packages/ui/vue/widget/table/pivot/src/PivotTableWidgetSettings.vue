@@ -50,6 +50,8 @@ interface IPivotTableSettings {
   rowLevelStyles?: ILevelStyle[]
   columnLevelStyles?: ILevelStyle[]
   conditionalFormats?: IConditionalFormat[]
+  showRowsProperties: boolean,
+  showColumnsProperties: boolean
 }
 
 const widgetSettings = defineModel<IPivotTableSettings>({ required: true });
@@ -61,6 +63,7 @@ const opened = ref({
   rowLevelsSection: false,
   columnLevelsSection: false,
   conditionalFormatSection: false,
+  dataSettings: false,
 })
 
 const textAlignOptions = [
@@ -174,6 +177,12 @@ const needsResultColors = (type: ConditionType) => {
 </script>
 
 <template>
+  <va-collapse v-model="opened.dataSettings" header="Data settings" icon="palette">
+    <div class="settings-container">
+      <VaCheckbox v-model="widgetSettings.showRowsProperties" label="Show rows" style="margin: 0.5rem 0;"/>
+      <VaCheckbox v-model="widgetSettings.showColumnsProperties" label="Show columns" style="margin: 0.5rem 0;"/>
+    </div>
+  </va-collapse>
   <va-collapse v-model="opened.colorsSection" header="Farben" icon="palette">
     <div class="settings-container">
       <div class="settings-block">

@@ -16,7 +16,7 @@ import {
   identifier,
   DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive } from 'vue'
+import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive, ComputedRef } from 'vue'
 import { watch, ref } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'
 
@@ -27,7 +27,7 @@ export interface IVueDatasourceRepository {
     params: any,
     shouldUpdate?: boolean,
   ) => Promise<void>
-  update: (oldVal: string, newVal: string) => void
+  update: (oldVal?: string, newVal?: string) => void
   getDataWithOptions: (options?: any) => Promise<void>
   getDatasourceInstance: () => any
 }
@@ -37,6 +37,7 @@ export function useDatasourceRepository(
   type: string,
   data: Ref<any>,
   subscriptions: Array<() => any> = [],
+  requestConfig?: ComputedRef,
 ): IVueDatasourceRepository {
   const instance = getCurrentInstance()
   const container = instance?.appContext.config.globalProperties
@@ -61,7 +62,7 @@ export function useDatasourceRepository(
     startLoading()
     try {
       const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type);
+      const dataRaw = await dataSource.getData(type, requestConfig?.value || {});
       if (type === "PivotTable") {
         data.value = JSON.parse(JSON.stringify(dataRaw));
       } else {
@@ -131,12 +132,14 @@ export function useDatasourceRepository(
     }
   }
 
-  const update = (newVal: string, oldVal: string) => {
+  const update = (newVal?: string, oldVal?: string) => {
     try {
       getData()
-    }catch (e){
+    } catch (e){
       console.warn(e)
     }
+
+    if (!newVal || !oldVal || newVal === oldVal) return;
 
     try {
       const oldDataSource = datasourceRepository.getDatasource(oldVal)

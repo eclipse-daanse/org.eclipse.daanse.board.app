@@ -14,7 +14,21 @@
 import * as TreeViewItems from './TreeViewItems'
 
 export function getTreeViewNodes(storage: MetadataStorage) {
-  const tree = [getSets(storage), ...getDimensions(storage)]
+  const dimensions = getDimensions(storage);
+  const measuresGroup = dimensions.find(d => d.isMeasureDimension);
+
+  console.log('Measures Group', measuresGroup)
+  const tree = [
+    getSets(storage),
+    measuresGroup,
+    {
+      caption: 'Dimensions',
+      id: 'dimensions_folder',
+      expanded: true,
+      type: TreeViewItems.TreeItemTypesEnum.DimensionFolder,
+      children: dimensions.filter(d => !d.isMeasureDimension),
+    }
+  ]
   return reorderTree(tree)
 }
 
@@ -37,6 +51,7 @@ export function getDimensions(storage: MetadataStorage) {
 
     if (dimension.DIMENSION_UNIQUE_NAME === '[Measures]') {
       const measureGroups = getMeasureGroups(storage)
+      dimensionDesc.expanded = true
       dimensionDesc.children = [...measureGroups]
     } else {
       const sets = getSetsForDimensions(dimension, storage)

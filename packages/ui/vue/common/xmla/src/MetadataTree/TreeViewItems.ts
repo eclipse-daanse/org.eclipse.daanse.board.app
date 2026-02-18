@@ -226,6 +226,7 @@ export const MDSchemaDimensionType = {
 
 export enum TreeItemTypesEnum {
   Dimension,
+  DimensionFolder,
   Hierarchy,
   Folder,
   Level,

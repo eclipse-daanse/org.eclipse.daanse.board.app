@@ -13,7 +13,8 @@ Contributors:
 
 <script setup lang="ts">
 import { computed } from "vue";
-import * as icons from "./svg";
+import { default as icons } from "./svg";
+console.log(icons);
 
 const props = defineProps({
   icon: {
@@ -48,12 +49,13 @@ const containerWidth = computed(() => typeof props.width === "number" ? props.wi
   <div class="icon-container" v-if="icon">
     <component :is="icon"></component>
   </div>
-  <va-icon v-else :name="props.icon" color="#000" :size="height" />
+  <va-icon v-else :name="props.icon" color="#000" :size="height" style="margin-right: 4px;" />
 </template>
 <style>
 .icon-container {
   height: v-bind(containerHeight);
   width: v-bind(containerWidth);
+  margin-right: 4px;
 }
 
 .stPrimary {

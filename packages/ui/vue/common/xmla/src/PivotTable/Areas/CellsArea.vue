@@ -317,7 +317,7 @@ const getCellValue = (cell: any) => {
 };
 const toLocalString = (value: number | string) => {
   try {
-    if (typeof value == "string") value = Number(value)
+    if (typeof value == "string") value = isNaN(Number(value)) ? value : Number(value)
     return value.toLocaleString("de-DE");
   } catch (e) {
     return value
