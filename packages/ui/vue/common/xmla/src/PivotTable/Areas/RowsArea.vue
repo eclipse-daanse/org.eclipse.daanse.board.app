@@ -452,6 +452,7 @@ watch(
     border-left: 0;
     height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
     line-height: v-bind(DEFAULT_ROW_HEIGHT_CSS);
+    padding-right: 10px;
     border-top: 1px v-bind(borderColorCSS) solid;
     background-color: v-bind(headerBackgroundColorCSS);
 }
@@ -520,6 +521,7 @@ watch(
 
 .propertyRow {
     width: 100%;
+    min-width: 150px;
     font-style: italic;
     font-weight: 500;
 }

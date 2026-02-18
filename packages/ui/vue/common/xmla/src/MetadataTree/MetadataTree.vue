@@ -18,7 +18,7 @@ import { TreeItemTypesEnum } from './TreeViewItems';
 import XMLAIconVue from './XMLAIcon.vue';
 import draggable from 'vuedraggable/src/vuedraggable'
 
-const { metadata, cubename } = defineProps(['metadata', 'cubename'])
+const { metadata } = defineProps(['metadata'])
 
 const treeViewData = ref(null as any);
 const treeContainer = ref(null as any);
@@ -42,13 +42,79 @@ onMounted(() => {
 });
 
 const filter = ref("");
-const getTreeViewItemIcon = (treeViewItem: any) => {
+const getTreeViewItemIcon = (treeViewItem) => {
   const iconDesc = {
     name: "",
     primaryColor: "",
     secondaryColor: "",
   };
-
+  if (treeViewItem.type === TreeItemTypesEnum.Measure) {
+    iconDesc.name = "MeasureIcon";
+  } else if (
+    treeViewItem.type === TreeItemTypesEnum.SetsFolder ||
+    treeViewItem.type === TreeItemTypesEnum.Folder ||
+    treeViewItem.type === TreeItemTypesEnum.DimensionFolder
+  ) {
+    // if (this.expandedNodes.some((e) => e === treeViewItem.id)) {
+    iconDesc.name = "folder_open";
+    // } else {
+    iconDesc.name = "folder";
+    // }
+  } else if (treeViewItem.type === TreeItemTypesEnum.Set) {
+    iconDesc.name = "SetIcon";
+  } else if (treeViewItem.type === TreeItemTypesEnum.Dimension) {
+    if (treeViewItem.isMeasureDimension) {
+      iconDesc.name = "MeasureIcon";
+    } else {
+      iconDesc.name = "DimesionIcon";
+    }
+  } else if (treeViewItem.type === TreeItemTypesEnum.MeasureGroup) {
+    // if (this.expandedNodes.some((e) => e === treeViewItem.id)) {
+    //   iconDesc.name = "MeasureFolderOpened";
+    //   iconDesc.secondaryColor = "#154EC1";
+    // } else {
+    iconDesc.name = "MeasureFolder";
+    iconDesc.secondaryColor = "#154EC1";
+    // }
+  } else if (treeViewItem.type === TreeItemTypesEnum.Hierarchy) {
+    if (treeViewItem.originalItem.PARENT_CHILD) {
+      iconDesc.name = "HierarchyParentChild";
+      iconDesc.secondaryColor = "#154EC1";
+    }
+    iconDesc.name = "HierarchyNormal";
+    iconDesc.secondaryColor = "#154EC1";
+  } else if (treeViewItem.type === TreeItemTypesEnum.Level) {
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "0") {
+      iconDesc.name = "LevelZero";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "1") {
+      iconDesc.name = "LevelOne";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "2") {
+      iconDesc.name = "LevelTwo";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "3") {
+      iconDesc.name = "LevelThree";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "4") {
+      iconDesc.name = "LevelFour";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "5") {
+      iconDesc.name = "LevelFive";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "6") {
+      iconDesc.name = "LevelSix";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "7") {
+      iconDesc.name = "LevelSeven";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "8") {
+      iconDesc.name = "LevelEight";
+    }
+    if (treeViewItem.originalItem.LEVEL_NUMBER === "9") {
+      iconDesc.name = "LevelNine";
+    }
+  }
   return iconDesc;
 }
 
@@ -58,12 +124,11 @@ const populateDragEvent = (e: any, element: any) => {
 </script>
 
 <template>
-  <h1 class="area-header">Metadata Tree</h1>
+  <h1 class="area-header">Cube Explorer</h1>
   <div class="metadata_tree-container" ref="treeContainer">
     <div v-if="treeViewData">
       <div class="tree-container">
         <div class="tree-header mb-2">
-          <h3 class="ma-2">Cube: {{ cubename }}</h3>
           <va-input v-model="filter" placeholder="Filter..." clearable class="filter-input" />
         </div>
         <va-tree-view :nodes="treeViewData" class="tree-view overflow-auto" :filter="filter" :text-by="'caption'">
@@ -111,6 +176,12 @@ const populateDragEvent = (e: any, element: any) => {
 </template>
 
 <style scoped>
+.area-header {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0rem 1rem 1rem 1rem;
+}
+
 .tree-container {
   display: flex;
   flex-direction: column;

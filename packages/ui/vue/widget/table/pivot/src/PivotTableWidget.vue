@@ -56,6 +56,8 @@ interface IPivotTableConfig extends PivotTable {
   rowLevelStyles?: ILevelStyle[]
   columnLevelStyles?: ILevelStyle[]
   conditionalFormats?: IConditionalFormat[]
+  showColumnsProperties?: boolean
+  showRowsProperties?: boolean
 }
 
 const props = defineProps<{ datasourceId: string }>();
@@ -77,6 +79,8 @@ const defaultConfig = {
   rowLevelStyles: [] as ILevelStyle[],
   columnLevelStyles: [] as ILevelStyle[],
   conditionalFormats: [] as IConditionalFormat[],
+  showRowsProperties: false,
+  showColumnsProperties: false,
 };
 
 onMounted(() => {
@@ -103,12 +107,22 @@ const stylingProps = computed(() => ({
   conditionalFormats: config.value?.conditionalFormats || defaultConfig.conditionalFormats,
 }));
 
+const dataProps = computed(() => ({
+  showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
+  showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
+}))
+
 const data = ref(null as any);
-const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data);
+const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
 
 watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal);
 })
+
+watch(() => dataProps.value, () => {
+  console.log(dataProps.value);
+  update();
+});
 
 const onExpand = (e: any) => {
   callEvent('expand', e, true);
@@ -123,8 +137,11 @@ const onCollapse = (e: any) => {
   <div class="text-container">
     <div class="component">
       <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
+        :key="JSON.stringify(data).length"
         :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
         :columnsExpandedMembers="data.tableState.columnsExpandedMembers"
+        :propertiesRows="data.propertiesRows"
+        :propertiesCols="data.propertiesCols"
         :headerBackgroundColor="stylingProps.headerBackgroundColor"
         :headerTextColor="stylingProps.headerTextColor"
         :cellBackgroundColor="stylingProps.cellBackgroundColor"
@@ -154,5 +171,6 @@ const onCollapse = (e: any) => {
 
 .component {
   overflow: hidden;
+  padding: 16px;
 }
 </style>

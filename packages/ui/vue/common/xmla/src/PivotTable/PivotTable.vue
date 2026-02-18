@@ -274,6 +274,9 @@ const totalContentSize = computed(() => {
 .pivotTable_container {
     padding: v-bind(DEFAULT_ROW_HEIGHT_CSS);
     height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     .bar {
         position: absolute;
