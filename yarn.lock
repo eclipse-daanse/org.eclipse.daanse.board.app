@@ -10813,9 +10813,9 @@ sass@1.97.2:
     "@parcel/watcher" "^2.4.1"
 
 sax@>=0.6.0, sax@^1.4.1:
-  version "1.4.3"
-  resolved "https://registry.npmjs.org/sax/-/sax-1.4.3.tgz"
-  integrity sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-1.4.4.tgz#f29c2bba80ce5b86f4343b4c2be9f2b96627cf8b"
+  integrity sha512-1n3r/tGXO6b6VXMdFT54SHzT9ytu9yr7TaELowdYpMqY/Ao7EnlQGmAQ1+RatX7Tkkdm6hONI2owqNx2aZj5Sw==
 
 saxes@^6.0.0:
   version "6.0.0"
