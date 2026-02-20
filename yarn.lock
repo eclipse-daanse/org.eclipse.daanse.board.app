@@ -9590,10 +9590,10 @@ p-waterfall@2.1.1:
   dependencies:
     p-reduce "^2.0.0"
 
-p5@1.11.10:
-  version "1.11.10"
-  resolved "https://registry.npmjs.org/p5/-/p5-1.11.10.tgz"
-  integrity sha512-lFe18Af+SUxyZyPkgza0DYhIV+Ymr1oD4w6Y0Bjhbi5TCaIktRys8xu847eH7epL/GZ1jATFekqW71/v4PvNGA==
+p5@1.11.11:
+  version "1.11.11"
+  resolved "https://registry.yarnpkg.com/p5/-/p5-1.11.11.tgz#8baf158eb5b858e37cd67360d1863273347cc5d6"
+  integrity sha512-k58mfexvavFb+KNRpi70PbkKE2gCNiWQkzS4kVOyC2F9SKGgYy1jSO+JXZ24ikXV9OvZIAxGusiSVWEijYrmNg==
 
 package-json-from-dist@^1.0.0:
   version "1.0.1"
