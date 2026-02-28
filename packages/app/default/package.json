@@ -147,7 +147,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
-    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-alias": "^6.0.0",
     "@tailwindcss/postcss": "^4.1.7",
     "@tailwindcss/vite": "^4.1.4",
     "@tsconfig/node22": "^22.0.0",
