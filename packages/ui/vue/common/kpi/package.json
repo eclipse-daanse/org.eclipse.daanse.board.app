@@ -35,7 +35,7 @@
 
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-libcss": "^1.1.1",
-    "@rollup/plugin-commonjs" : "^28.0.3"
+    "@rollup/plugin-commonjs" : "^29.0.0"
   },
   "gitHead": "aecb37efd418b32c929d0657474b25cce42c17cd",
   "publishConfig": {
