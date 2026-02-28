@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
-    "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue": "^6.0.4",
     "@vitest/coverage-v8": "4.0.18",
     "@vitest/ui": "4.0.18",
     "inversify": "7.11.0",
