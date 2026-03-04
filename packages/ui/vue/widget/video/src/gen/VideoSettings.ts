@@ -24,12 +24,11 @@ Contributors: Smart City Jena
 * Serialization to a backend.
 */
 import {ObjectFitSetting} from "./ObjectFitSetting"
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/videoSettings#//VideoSettings'})
 export class VideoSettings {
   @Reference('ObjectFitSetting') videoFitSettings: ObjectFitSetting = new ObjectFitSetting();
-
-  @Documentation("The URL or path to the video file.")
-  @Attribute() videoUrl: string = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4";
+  @Reference('VariableWrapper') videoUrl: VariableWrapper<string> = new VariableWrapper<string>();
 }

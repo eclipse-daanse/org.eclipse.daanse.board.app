@@ -23,59 +23,26 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/wrapperSettings#//WrapperSettings'})
 export class WrapperSettings {
-
-  @Documentation("The optional title text to be displayed within the wrapper.")
-  @Attribute() title?: string;
-
-  @Documentation("The background color of the wrapper, typically represented as a hexadecimal string (e.g., '#RRGGBB').")
-  @Attribute() backgroundColor: string = "#fff";
-
-  @Documentation("The transparency level of the background color, ranging from 0.0 (fully transparent) to 1.0 (fully opaque).")
-  @Attribute() backgroundColorTransparence: number = 255;
-
-  @Documentation("The color of the title text, typically as a hexadecimal string.")
-  @Attribute() titleColor: string = "#7c7c7c";
-
-  @Documentation("The inner spacing (padding) within the wrapper, usually in pixels.")
-  @Attribute() padding: number = 0;
-
-  @Documentation("The font size of the title text, typically in pixels.")
-  @Attribute() titleFontSize: number = 15;
-
-  @Documentation("The thickness of the wrapper's border, usually in pixels.")
-  @Attribute() borderSize: number = 0;
-
-  @Documentation("The color of the wrapper's border, typically as a hexadecimal string.")
-  @Attribute() borderColor: string = "#ccc";
-
-  @Documentation("The radius for rounding the corners of the wrapper, usually in pixels.")
-  @Attribute() borderRadius: number = 15;
-
-  @Documentation("The amount of blur applied to the wrapper's background or content, usually in pixels.")
-  @Attribute() blur: number = 0;
-
-  @Documentation("A boolean flag indicating if the wrapper should occupy the full screen.")
-  @Attribute() fullscreen: boolean = false;
-
-  @Documentation("The color of the shadow applied to the wrapper, typically as a hexadecimal string.")
-  @Attribute() shadowColor: string = "#333";
-
-  @Documentation("The blur radius of the shadow, usually in pixels.")
-  @Attribute() shadowBlur: number = 12;
-
-  @Documentation("The horizontal offset of the shadow from the wrapper, usually in pixels.")
-  @Attribute() shadowX: number = 5;
-
-  @Documentation("The vertical offset of the shadow from the wrapper, usually in pixels.")
-  @Attribute() shadowY: number = 5;
-
-  @Documentation("The transparency level of the shadow, ranging from 0.0 to 1.0.")
-  @Attribute() shadowTransparence: number = 25;
-
-  @Documentation("The overall transparency of the entire wrapper component, ranging from 0.0 to 1.0.")
-  @Attribute() transparency: number = 255;
+  @Reference('VariableWrapper') title: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') backgroundColorTransparence: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') titleColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') padding: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') titleFontSize: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') borderSize: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') borderRadius: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') blur: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') fullscreen: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') shadowColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') shadowBlur: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') shadowX: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') shadowY: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') shadowTransparence: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') transparency: VariableWrapper<string> = new VariableWrapper<string>();
 }

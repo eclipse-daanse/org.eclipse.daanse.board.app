@@ -33,9 +33,113 @@
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableState" lowerBound="0" eType="ecore:EJavaObject">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation">The overall state of the pivot table.  Can be any type of data.</details>
+          <details key="documentation">The overall state of the pivot table. Can be any type of data.</details>
         </eAnnotations>
       </eStructuralFeatures>
+
+      <!-- New Style and Variable Properties -->
+      <eStructuralFeatures xsi:type="ecore:EReference" name="headerBackgroundColor" containment="false" defaultValueLiteral="#f5f5f5">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="headerTextColor" containment="false" defaultValueLiteral="#000000">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cellBackgroundColor" containment="false" defaultValueLiteral="#ffffff">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cellTextColor" containment="false" defaultValueLiteral="#000000">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="borderColor" containment="false" defaultValueLiteral="silver">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultColumnWidth" containment="false" defaultValueLiteral="150">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultRowHeight" containment="false" defaultValueLiteral="30">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fontSize" containment="false" defaultValueLiteral="14">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="headerFontWeight" containment="false" defaultValueLiteral="600">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      
+      <!-- Native non-variable properties -->
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cellTextAlign" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="left" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="showRowsProperties" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="showColumnsProperties" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false" />
+
+      <!-- Nested Array Containment -->
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rowLevelStyles" lowerBound="0" upperBound="-1" eType="#//LevelStyle" containment="true" />
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columnLevelStyles" lowerBound="0" upperBound="-1" eType="#//LevelStyle" containment="true" />
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalFormats" lowerBound="0" upperBound="-1" eType="#//ConditionalFormat" containment="true" />
+
+    </eClassifiers>
+
+    <!-- New nested classes -->
+    <eClassifiers xsi:type="ecore:EClass" name="LevelStyle">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" />
+      <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColor" containment="false" defaultValueLiteral="#f5f5f5">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="textColor" containment="false" defaultValueLiteral="#000000">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fontWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="600" />
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalFormat">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="greaterThan" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="0" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="100" />
+      
+      <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColor" containment="false" defaultValueLiteral="#ffcccc">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="textColor" containment="false" defaultValueLiteral="#000000">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="minColor" containment="false" defaultValueLiteral="#ffffff">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="maxColor" containment="false" defaultValueLiteral="#ff0000">
+        <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fontWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="400" />
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="JavaObject" abstract="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

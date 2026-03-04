@@ -12,25 +12,40 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch, markRaw } from 'vue'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 interface IDataTableSettings {
-  headerBackground: string
+  headerBackground: string | VariableWrapper<string>
 }
 
 const widgetSettings = defineModel<IDataTableSettings>({ required: true });
 
 const opened = ref(false)
+
+watch(() => widgetSettings.value, (newVal) => {
+    if (newVal) {
+        if (!(newVal.headerBackground instanceof VariableWrapper)) {
+            newVal.headerBackground = markRaw(new VariableWrapper<string>(newVal.headerBackground || ''));
+        }
+    }
+}, { immediate: true, deep: true });
 </script>
 
 <template>
   <va-collapse v-model="opened" header="Data Table Settings" icon="settings">
     <div class="settings-container">
-      <va-color-input
-          class="text-color"
-          label="Header Color"
-          v-model="widgetSettings.headerBackground"
-        />
+      <VariableInput v-model="(widgetSettings.headerBackground as unknown as VariableWrapper<string>)" label="Header Color">
+        <template #default="{ value, change }">
+          <va-color-input
+            class="text-color"
+            label="Header Color"
+            :model-value="value"
+            @input="change"
+          />
+        </template>
+      </VariableInput>
     </div>
   </va-collapse>
 </template>

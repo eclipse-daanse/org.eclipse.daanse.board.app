@@ -24,12 +24,11 @@ Contributors: Smart City Jena
 * Serialization to a backend.
 */
 import {SvgClassConfigMapEntry} from "./SvgClassConfigMapEntry"
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings'})
 export class SvgSettings {
-
-  @Documentation("The path or URL to the SVG source file.")
-  @Attribute() src?: string;
+  @Reference('VariableWrapper') src: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('SvgClassConfigMapEntry') classesConfig: Array<SvgClassConfigMapEntry> = [];
 }
