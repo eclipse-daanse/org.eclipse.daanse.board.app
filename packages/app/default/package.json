@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "vite --port 5174",
-    "dev:host": "vite --port 5174",
+    "dev:host": "vite --port 5174 --host",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:prod": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build && npm run minify",
     "minify": "for file in dist/assets/*.js; do terser \"$file\" -c -m --module -o \"${file%.js}.min.js\" && mv \"${file%.js}.min.js\" \"$file\"; done",

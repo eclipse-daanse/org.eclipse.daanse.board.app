@@ -17,6 +17,7 @@ import { inject, ref } from 'vue'
 import type { IVideoSettings } from "./index";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { VideoSettings } from './gen/VideoSettings'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -32,10 +33,15 @@ const opened = ref({
 <template>
     <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('video:VideoWidget.title')">
         <div class="settings-container">
-            <va-input
-                v-model="widgetSettings.videoUrl"
-                :label="t('video:VideoWidget.videoUrl')"
-            />
+            <VariableInput v-model="widgetSettings.videoUrl" :label="t('video:VideoWidget.videoUrl')">
+                <template #default="{ value, change }">
+                    <va-input
+                        :model-value="value"
+                        @input="change"
+                        :label="t('video:VideoWidget.videoUrl')"
+                    />
+                </template>
+            </VariableInput>
             <va-select
                 class="mt-2"
                 v-model="widgetSettings.videoFitSettings.fit"

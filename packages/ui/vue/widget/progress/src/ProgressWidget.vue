@@ -1,4 +1,4 @@
-<!--
+w<!--
 Copyright (c) 2025 Contributors to the Eclipse Foundation.
 
 This program and the accompanying materials are made
@@ -15,7 +15,7 @@ Contributors:
 <script setup lang="ts">
 import type { IProgressSettings } from './index'
 import { computed, toRefs, onMounted, ref, watch } from 'vue'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ProgressSettings } from './gen/ProgressSettings'
 
@@ -29,64 +29,113 @@ watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal)
 })
 
-const defaultConfig = new ProgressSettings()  /*{
+const primitives = {
+  isGradient: false,
+  isVertical: false,
+  valueAlign: 'center',
+  valueJustify: 'center'
+};
+
+const wrappedDefaults = {
   progress: "",
   fillColor: "#00FF00",
   gradientColor: "",
   backgroundColor: "#D3D3D3",
-  isGradient: false,
-  isVertical: false,
   rotation: 90,
-  valueAlign: 'center',
-  valueJustify: 'center',
-}*/
+  min: 0,
+  max: 100,
+  textColor: "#000000",
+  barThickness: "20px",
+  borderRadius: "10px"
+};
 
 onMounted(() => {
-  if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+  if (!config.value) {
+      config.value = new ProgressSettings();
+  }
+
+  // Handle Wrapped Properties
+  for (const [key, defaultVal] of Object.entries(wrappedDefaults)) {
+      const current = config.value[key as keyof ProgressSettings];
+
+      if (current === undefined || current === null) {
+          (config.value as any)[key] = new VariableWrapper(defaultVal);
+      } else if ((current as any) instanceof VariableWrapper) {
+          // Already correct instance
+      } else if (typeof current === 'object' && 'value' in (current as any)) {
+          // Rehydrate from JSON object
+          const v = new VariableWrapper((current as any).value);
+          if ('variable' in (current as any)) v.variable = (current as any).variable;
+          (config.value as any)[key] = v;
+      } else {
+          // Upgrade primitive to wrapper
+          (config.value as any)[key] = new VariableWrapper(current);
+      }
+  }
+
+  // Handle Primitives
+  for (const [key, defaultVal] of Object.entries(primitives)) {
+      if (config.value[key as keyof ProgressSettings] === undefined || config.value[key as keyof ProgressSettings] === null) {
+          (config.value as any)[key] = defaultVal;
+      }
   }
 })
 
-const backgroundColor = computed(() => config.value.backgroundColor)
+const backgroundColor = computed(() => (config.value.backgroundColor as any)?.value)
+
+const rotationVal = computed(() => {
+    const val = (config.value.rotation as any)?.value;
+    return parseFloat(val) || 0;
+});
+
+const gradientColor = computed(() => (config.value.gradientColor as any)?.value);
+
 const backgroundProgressColor = computed(() =>
   config.value.isGradient
-    ? `linear-gradient(${config.value.rotation}deg, ${config.value.gradientColor})`
-    : config.value.fillColor
+    ? `linear-gradient(${rotationVal.value}deg, ${gradientColor.value})`
+    : (config.value.fillColor as any)?.value
 )
 
 const transition = computed(() =>
   config.value.isVertical ? "height .7s ease" : "width .7s ease"
 )
 
+const minVal = computed(() => parseFloat((config.value.min as any)?.value) || 0);
+const maxVal = computed(() => parseFloat((config.value.max as any)?.value) || 100);
+
 const verticalPositionFiller = computed(() =>
-  config.value.isVertical && parsedProgress.value
-    ? `${(parsedProgress.value / (config.value.max ?? 100)) * 100}%`
+  config.value.isVertical && parsedProgress.value !== null
+    ? `${(parsedProgress.value / (maxVal.value)) * 100}%`
     : "35px"
 )
 
 const horizontalPositionFiller = computed(() =>
-  !config.value.isVertical && parsedProgress.value
-    ? `${(parsedProgress.value / (config.value.max ?? 100)) * 100}%`
+  !config.value.isVertical && parsedProgress.value !== null
+    ? `${(parsedProgress.value / (maxVal.value)) * 100}%`
     : "35px"
 )
 const verticalPositionWrapper = computed(() =>
-  config.value.isVertical && parsedProgress.value
+  config.value.isVertical && parsedProgress.value !== null
     ? `35px`
     : "100%"
 )
 
 const horizontalPositionWrapper= computed(() =>
-  !config.value.isVertical && parsedProgress.value
+  !config.value.isVertical && parsedProgress.value !== null
     ? `35px`
     : "100%"
 )
 
-const barRadius = computed(() => config.value.borderRadius || "10px")
+const barRadius = computed(() => (config.value.borderRadius as any)?.value || "10px")
 
 const parsedProgress = computed(() => {
-  if (!config.value.progress) return null
+  const progWrapper = (config.value.progress as any);
+  if (!progWrapper) return null;
 
-  const { parts } = helpers.widget.extractValuesAndFullObject(config.value.progress)
+  const rawValue = progWrapper.value;
+  if (!rawValue && rawValue !== 0) return null;
+
+  const { parts } = helpers.widget.extractValuesAndFullObject(String(rawValue));
   let result = ""
 
   for (const part of parts) {
@@ -99,8 +148,8 @@ const parsedProgress = computed(() => {
   const numeric = parseFloat(result)
   if (isNaN(numeric)) return null
 
-  const min = config.value.min ?? 0
-  const max = config.value.max ?? 100
+  const min = minVal.value;
+  const max = maxVal.value;
   return Math.max(min, Math.min(max, numeric))
 })
 
@@ -111,7 +160,7 @@ const horizontalAlignClass = computed(() => {
     default: return "align-center"
   }
 })
-const textColor = computed(() => config.value.textColor || "#000000")
+const textColor = computed(() => (config.value.textColor as any)?.value || "#000000")
 
 const verticalAlignClass = computed(() => {
   switch (config.value?.valueJustify) {

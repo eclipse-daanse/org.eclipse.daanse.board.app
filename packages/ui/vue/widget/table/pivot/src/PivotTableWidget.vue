@@ -12,76 +12,20 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { toRefs, ref, watch, onMounted, computed } from "vue";
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
+import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { PivotTable } from "./gen/PivotTable";
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { useRoute } from 'vue-router'
 
-interface ILevelStyle {
-  level: number
-  backgroundColor: string
-  textColor: string
-  fontWeight: number
-}
-
-type ConditionType = 'greaterThan' | 'lessThan' | 'equals' | 'notEquals' | 'between' | 'contains' | 'colorScale' | 'topN' | 'bottomN'
-
-interface IConditionalFormat {
-  id: string
-  conditionType: ConditionType
-  value1: number | string
-  value2?: number | string
-  backgroundColor: string
-  textColor: string
-  fontWeight?: number
-  minColor?: string
-  maxColor?: string
-  priority: number
-}
-
-interface IPivotTableConfig extends PivotTable {
-  headerBackgroundColor?: string
-  headerTextColor?: string
-  cellBackgroundColor?: string
-  cellTextColor?: string
-  borderColor?: string
-  defaultColumnWidth?: number
-  defaultRowHeight?: number
-  fontSize?: number
-  headerFontWeight?: number
-  cellTextAlign?: 'left' | 'center' | 'right'
-  rowLevelStyles?: ILevelStyle[]
-  columnLevelStyles?: ILevelStyle[]
-  conditionalFormats?: IConditionalFormat[]
-  showColumnsProperties?: boolean
-  showRowsProperties?: boolean
-}
-
 const props = defineProps<{ datasourceId: string }>();
 const { datasourceId } = toRefs(props);
-const config = defineModel<IPivotTableConfig>('configv', { required: true });
+const config = defineModel<PivotTable>('configv', { required: true });
+const { wrapParameters } = useVariableRepository();
 
-const defaultConfig = {
-  ...new PivotTable(),
-  headerBackgroundColor: '#f5f5f5',
-  headerTextColor: '#000000',
-  cellBackgroundColor: '#ffffff',
-  cellTextColor: '#000000',
-  borderColor: 'silver',
-  defaultColumnWidth: 150,
-  defaultRowHeight: 30,
-  fontSize: 14,
-  headerFontWeight: 600,
-  cellTextAlign: 'left' as const,
-  rowLevelStyles: [] as ILevelStyle[],
-  columnLevelStyles: [] as ILevelStyle[],
-  conditionalFormats: [] as IConditionalFormat[],
-  showRowsProperties: false,
-  showColumnsProperties: false,
-};
+const defaultConfig = new PivotTable()
 
 onMounted(() => {
     if (config.value) {
@@ -91,20 +35,74 @@ onMounted(() => {
     // actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId);
 });
 
+const wrappedConfig = wrapParameters({
+    headerBackgroundColor: computed(() => (config.value?.headerBackgroundColor as any)?.value ?? defaultConfig.headerBackgroundColor),
+    headerTextColor: computed(() => (config.value?.headerTextColor as any)?.value ?? defaultConfig.headerTextColor),
+    cellBackgroundColor: computed(() => (config.value?.cellBackgroundColor as any)?.value ?? defaultConfig.cellBackgroundColor),
+    cellTextColor: computed(() => (config.value?.cellTextColor as any)?.value ?? defaultConfig.cellTextColor),
+    borderColor: computed(() => (config.value?.borderColor as any)?.value ?? defaultConfig.borderColor),
+    defaultColumnWidth: computed(() => (config.value?.defaultColumnWidth as any)?.value ?? defaultConfig.defaultColumnWidth),
+    defaultRowHeight: computed(() => (config.value?.defaultRowHeight as any)?.value ?? defaultConfig.defaultRowHeight),
+    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? defaultConfig.fontSize),
+    headerFontWeight: computed(() => (config.value?.headerFontWeight as any)?.value ?? defaultConfig.headerFontWeight),
+    jsonArrays: computed(() => {
+        const payload = {
+            rowLevelStyles: config.value?.rowLevelStyles?.map((s:any) => ({
+                ...s,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+            })),
+            columnLevelStyles: config.value?.columnLevelStyles?.map((s:any) => ({
+                ...s,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+            })),
+            conditionalFormats: config.value?.conditionalFormats?.map((s:any) => ({
+                ...s,
+                id: s.id ?? '',
+                priority: s.priority ?? 0,
+                backgroundColor: (s.backgroundColor as any)?.value ?? s.backgroundColor,
+                textColor: (s.textColor as any)?.value ?? s.textColor,
+                minColor: (s.minColor as any)?.value ?? s.minColor,
+                maxColor: (s.maxColor as any)?.value ?? s.maxColor,
+            })),
+        };
+        return JSON.stringify(payload);
+    })
+});
+
+const parsedNestedPivots = computed(() => {
+    try {
+        const str = wrappedConfig.jsonArrays.value;
+        const parsed = JSON.parse(str || "{}");
+        return {
+            rowLevelStyles: parsed.rowLevelStyles || defaultConfig.rowLevelStyles,
+            columnLevelStyles: parsed.columnLevelStyles || defaultConfig.columnLevelStyles,
+            conditionalFormats: parsed.conditionalFormats || defaultConfig.conditionalFormats,
+        };
+    } catch (e) {
+        return {
+          rowLevelStyles: defaultConfig.rowLevelStyles,
+          columnLevelStyles: defaultConfig.columnLevelStyles,
+          conditionalFormats: defaultConfig.conditionalFormats,
+        };
+    }
+});
+
 const stylingProps = computed(() => ({
-  headerBackgroundColor: config.value?.headerBackgroundColor || defaultConfig.headerBackgroundColor,
-  headerTextColor: config.value?.headerTextColor || defaultConfig.headerTextColor,
-  cellBackgroundColor: config.value?.cellBackgroundColor || defaultConfig.cellBackgroundColor,
-  cellTextColor: config.value?.cellTextColor || defaultConfig.cellTextColor,
-  borderColor: config.value?.borderColor || defaultConfig.borderColor,
-  defaultColumnWidth: config.value?.defaultColumnWidth || defaultConfig.defaultColumnWidth,
-  defaultRowHeight: config.value?.defaultRowHeight || defaultConfig.defaultRowHeight,
-  fontSize: config.value?.fontSize || defaultConfig.fontSize,
-  headerFontWeight: config.value?.headerFontWeight || defaultConfig.headerFontWeight,
-  cellTextAlign: config.value?.cellTextAlign || defaultConfig.cellTextAlign,
-  rowLevelStyles: config.value?.rowLevelStyles || defaultConfig.rowLevelStyles,
-  columnLevelStyles: config.value?.columnLevelStyles || defaultConfig.columnLevelStyles,
-  conditionalFormats: config.value?.conditionalFormats || defaultConfig.conditionalFormats,
+  headerBackgroundColor: wrappedConfig.headerBackgroundColor.value,
+  headerTextColor: wrappedConfig.headerTextColor.value,
+  cellBackgroundColor: wrappedConfig.cellBackgroundColor.value,
+  cellTextColor: wrappedConfig.cellTextColor.value,
+  borderColor: wrappedConfig.borderColor.value,
+  defaultColumnWidth: wrappedConfig.defaultColumnWidth.value,
+  defaultRowHeight: wrappedConfig.defaultRowHeight.value,
+  fontSize: wrappedConfig.fontSize.value,
+  headerFontWeight: wrappedConfig.headerFontWeight.value,
+  cellTextAlign: (config.value?.cellTextAlign || defaultConfig.cellTextAlign) as "left" | "center" | "right" | undefined,
+  rowLevelStyles: parsedNestedPivots.value.rowLevelStyles,
+  columnLevelStyles: parsedNestedPivots.value.columnLevelStyles,
+  conditionalFormats: parsedNestedPivots.value.conditionalFormats as any[],
 }));
 
 const dataProps = computed(() => ({

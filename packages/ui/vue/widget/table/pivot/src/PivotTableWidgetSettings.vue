@@ -10,51 +10,17 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
-
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-
-interface ILevelStyle {
-  level: number
-  backgroundColor: string
-  textColor: string
-  fontWeight: number
-}
+<script setup lang="ts">
+import { ref, onMounted, watch, markRaw } from 'vue'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { PivotTable } from './gen/PivotTable'
+import { LevelStyle } from './gen/LevelStyle'
+import { ConditionalFormat } from './gen/ConditionalFormat'
 
 type ConditionType = 'greaterThan' | 'lessThan' | 'equals' | 'notEquals' | 'between' | 'contains' | 'colorScale' | 'topN' | 'bottomN'
 
-interface IConditionalFormat {
-  id: string
-  conditionType: ConditionType
-  value1: number | string
-  value2?: number | string
-  backgroundColor: string
-  textColor: string
-  fontWeight?: number
-  minColor?: string
-  maxColor?: string
-  priority: number
-}
-
-interface IPivotTableSettings {
-  headerBackgroundColor?: string
-  headerTextColor?: string
-  cellBackgroundColor?: string
-  cellTextColor?: string
-  borderColor?: string
-  defaultColumnWidth?: number
-  defaultRowHeight?: number
-  fontSize?: number
-  headerFontWeight?: number
-  cellTextAlign?: 'left' | 'center' | 'right'
-  rowLevelStyles?: ILevelStyle[]
-  columnLevelStyles?: ILevelStyle[]
-  conditionalFormats?: IConditionalFormat[]
-  showRowsProperties: boolean,
-  showColumnsProperties: boolean
-}
-
-const widgetSettings = defineModel<IPivotTableSettings>({ required: true });
+const widgetSettings = defineModel<PivotTable>({ required: true });
 
 const opened = ref({
   colorsSection: true,
@@ -72,29 +38,14 @@ const textAlignOptions = [
   { value: 'right', text: 'Rechts' },
 ]
 
-onMounted(() => {
-  if (!widgetSettings.value.rowLevelStyles) {
-    widgetSettings.value.rowLevelStyles = []
-  }
-  if (!widgetSettings.value.columnLevelStyles) {
-    widgetSettings.value.columnLevelStyles = []
-  }
-  if (!widgetSettings.value.conditionalFormats) {
-    widgetSettings.value.conditionalFormats = []
-  }
-})
-
 const addRowLevelStyle = () => {
   if (!widgetSettings.value.rowLevelStyles) {
     widgetSettings.value.rowLevelStyles = []
   }
   const nextLevel = widgetSettings.value.rowLevelStyles.length
-  widgetSettings.value.rowLevelStyles.push({
-    level: nextLevel,
-    backgroundColor: '#f5f5f5',
-    textColor: '#000000',
-    fontWeight: 600,
-  })
+  const newStyle = new LevelStyle()
+  newStyle.level = nextLevel
+  widgetSettings.value.rowLevelStyles.push(newStyle)
 }
 
 const removeRowLevelStyle = (index: number) => {
@@ -106,12 +57,9 @@ const addColumnLevelStyle = () => {
     widgetSettings.value.columnLevelStyles = []
   }
   const nextLevel = widgetSettings.value.columnLevelStyles.length
-  widgetSettings.value.columnLevelStyles.push({
-    level: nextLevel,
-    backgroundColor: '#f5f5f5',
-    textColor: '#000000',
-    fontWeight: 600,
-  })
+  const newStyle = new LevelStyle()
+  newStyle.level = nextLevel
+  widgetSettings.value.columnLevelStyles.push(newStyle)
 }
 
 const removeColumnLevelStyle = (index: number) => {
@@ -137,41 +85,33 @@ const addConditionalFormat = () => {
     widgetSettings.value.conditionalFormats = []
   }
   const priority = widgetSettings.value.conditionalFormats.length
-  widgetSettings.value.conditionalFormats.push({
-    id: generateId(),
-    conditionType: 'greaterThan',
-    value1: 0,
-    value2: 100,
-    backgroundColor: '#ffcccc',
-    textColor: '#000000',
-    fontWeight: 400,
-    minColor: '#ffffff',
-    maxColor: '#ff0000',
-    priority,
-  })
+  const newFormat = new ConditionalFormat()
+  newFormat.id = generateId()
+  newFormat.priority = priority
+  widgetSettings.value.conditionalFormats.push(newFormat)
 }
 
 const removeConditionalFormat = (index: number) => {
   widgetSettings.value.conditionalFormats?.splice(index, 1)
 }
 
-const needsSecondValue = (type: ConditionType) => {
+const needsSecondValue = (type?: string) => {
   return type === 'between'
 }
 
-const needsColorScale = (type: ConditionType) => {
+const needsColorScale = (type?: string) => {
   return type === 'colorScale'
 }
 
-const needsTextValue = (type: ConditionType) => {
+const needsTextValue = (type?: string) => {
   return type === 'contains'
 }
 
-const needsCountValue = (type: ConditionType) => {
+const needsCountValue = (type?: string) => {
   return type === 'topN' || type === 'bottomN'
 }
 
-const needsResultColors = (type: ConditionType) => {
+const needsResultColors = (type?: string) => {
   return type !== 'colorScale'
 }
 </script>
@@ -187,34 +127,41 @@ const needsResultColors = (type: ConditionType) => {
     <div class="settings-container">
       <div class="settings-block">
         <h3>Header</h3>
-        <va-color-input
-          label="Header Hintergrund"
-          v-model="widgetSettings.headerBackgroundColor"
-        />
-        <va-color-input
-          label="Header Textfarbe"
-          v-model="widgetSettings.headerTextColor"
-        />
+        <VariableInput v-model="(widgetSettings.headerBackgroundColor as unknown as VariableWrapper<string>)" label="Header Hintergrund">
+          <template #default="{ value, change }">
+            <va-color-input label="Header Hintergrund" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
+
+        <VariableInput v-model="(widgetSettings.headerTextColor as unknown as VariableWrapper<string>)" label="Header Textfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Header Textfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
       </div>
 
       <div class="settings-block">
         <h3>Zellen</h3>
-        <va-color-input
-          label="Zellen Hintergrund"
-          v-model="widgetSettings.cellBackgroundColor"
-        />
-        <va-color-input
-          label="Zellen Textfarbe"
-          v-model="widgetSettings.cellTextColor"
-        />
+        <VariableInput v-model="(widgetSettings.cellBackgroundColor as unknown as VariableWrapper<string>)" label="Zellen Hintergrund">
+          <template #default="{ value, change }">
+            <va-color-input label="Zellen Hintergrund" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
+
+        <VariableInput v-model="(widgetSettings.cellTextColor as unknown as VariableWrapper<string>)" label="Zellen Textfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Zellen Textfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
       </div>
 
       <div class="settings-block">
         <h3>Rahmen</h3>
-        <va-color-input
-          label="Rahmenfarbe"
-          v-model="widgetSettings.borderColor"
-        />
+        <VariableInput v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)" label="Rahmenfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Rahmenfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
       </div>
     </div>
   </va-collapse>
@@ -222,20 +169,30 @@ const needsResultColors = (type: ConditionType) => {
   <va-collapse v-model="opened.dimensionsSection" header="Dimensionen" icon="straighten">
     <div class="settings-container">
       <div class="settings-block">
-        <va-input
-          label="Standard Spaltenbreite (px)"
-          v-model.number="widgetSettings.defaultColumnWidth"
-          type="number"
-          :min="50"
-          :max="500"
-        />
-        <va-input
-          label="Standard Zeilenhöhe (px)"
-          v-model.number="widgetSettings.defaultRowHeight"
-          type="number"
-          :min="20"
-          :max="100"
-        />
+        <VariableInput v-model="(widgetSettings.defaultColumnWidth as unknown as VariableWrapper<any>)" label="Standard Spaltenbreite (px)">
+          <template #default="{ value, change }">
+            <va-input
+              label="Standard Spaltenbreite (px)"
+              :model-value="value"
+              @update:model-value="change"
+              type="number"
+              :min="50"
+              :max="500"
+            />
+          </template>
+        </VariableInput>
+        <VariableInput v-model="(widgetSettings.defaultRowHeight as unknown as VariableWrapper<any>)" label="Standard Zeilenhöhe (px)">
+          <template #default="{ value, change }">
+            <va-input
+              label="Standard Zeilenhöhe (px)"
+              :model-value="value"
+              @update:model-value="change"
+              type="number"
+              :min="20"
+              :max="100"
+            />
+          </template>
+        </VariableInput>
       </div>
     </div>
   </va-collapse>
@@ -243,21 +200,31 @@ const needsResultColors = (type: ConditionType) => {
   <va-collapse v-model="opened.textSection" header="Text" icon="text_fields">
     <div class="settings-container">
       <div class="settings-block">
-        <va-input
-          label="Schriftgröße (px)"
-          v-model.number="widgetSettings.fontSize"
-          type="number"
-          :min="8"
-          :max="32"
-        />
-        <va-input
-          label="Header Font-Weight"
-          v-model.number="widgetSettings.headerFontWeight"
-          type="number"
-          :min="100"
-          :max="900"
-          :step="100"
-        />
+        <VariableInput v-model="(widgetSettings.fontSize as unknown as VariableWrapper<any>)" label="Schriftgröße (px)">
+          <template #default="{ value, change }">
+            <va-input
+              label="Schriftgröße (px)"
+              :model-value="value"
+              @update:model-value="change"
+              type="number"
+              :min="8"
+              :max="32"
+            />
+          </template>
+        </VariableInput>
+        <VariableInput v-model="(widgetSettings.headerFontWeight as unknown as VariableWrapper<any>)" label="Header Font-Weight">
+          <template #default="{ value, change }">
+            <va-input
+              label="Header Font-Weight"
+              :model-value="value"
+              @update:model-value="change"
+              type="number"
+              :min="100"
+              :max="900"
+              :step="100"
+            />
+          </template>
+        </VariableInput>
         <va-select
           label="Text-Ausrichtung (Zellen)"
           v-model="widgetSettings.cellTextAlign"
@@ -296,15 +263,17 @@ const needsResultColors = (type: ConditionType) => {
           :min="0"
         />
 
-        <va-color-input
-          label="Hintergrundfarbe"
-          v-model="levelStyle.backgroundColor"
-        />
+        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Hintergrundfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
 
-        <va-color-input
-          label="Textfarbe"
-          v-model="levelStyle.textColor"
-        />
+        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Textfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
 
         <va-input
           label="Font-Weight"
@@ -350,15 +319,17 @@ const needsResultColors = (type: ConditionType) => {
           :min="0"
         />
 
-        <va-color-input
-          label="Hintergrundfarbe"
-          v-model="levelStyle.backgroundColor"
-        />
+        <VariableInput v-model="(levelStyle.backgroundColor as unknown as VariableWrapper<string>)" label="Hintergrundfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Hintergrundfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
 
-        <va-color-input
-          label="Textfarbe"
-          v-model="levelStyle.textColor"
-        />
+        <VariableInput v-model="(levelStyle.textColor as unknown as VariableWrapper<string>)" label="Textfarbe">
+          <template #default="{ value, change }">
+            <va-color-input label="Textfarbe" :model-value="value" @input="change" />
+          </template>
+        </VariableInput>
 
         <va-input
           label="Font-Weight"

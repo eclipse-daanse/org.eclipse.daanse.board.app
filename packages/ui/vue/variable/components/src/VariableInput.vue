@@ -21,6 +21,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 const options = ref([] as Array<VariableOption>);
 const model = defineModel<VariableWrapper<any>>({ required: true });
 const props = defineProps<{ label?: string }>();
+console.log(model.value);
 
 interface VariableOption {
   label: string;
@@ -55,6 +56,7 @@ const getVariableValue = (name: string) => {
 }
 
 const onChange = (e: any) => {
+  console.log('onChange triggered', e)
   if (model.value) {
     model.value.value = e.target.value;
   }

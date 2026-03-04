@@ -15,19 +15,45 @@ Contributors:
 
 import { computed, onMounted } from "vue";
 import { VideoSettings } from './gen/VideoSettings'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string }>();
 const config = defineModel<VideoSettings>('configv', { required: true });
 
+console.log(config);
+
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
-const defaultConfig = new VideoSettings();
+const defaultConfig = {
+    videoUrl: "",
+    videoFitSettings: {
+        fit: "cover"
+    }
+};
 
 onMounted(() => {
-    if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
-    };
+    if (!config.value) {
+        config.value = new VideoSettings();
+    }
+
+    // Handle Video URL Wrapper
+    const currentUrl = config.value.videoUrl;
+    if (currentUrl === undefined || currentUrl === null) {
+        (config.value as any).videoUrl = new VariableWrapper(defaultConfig.videoUrl);
+    } else if ((currentUrl as any) instanceof VariableWrapper) {
+        // Already correct instance
+    } else if (typeof currentUrl === 'object' && 'value' in (currentUrl as any)) {
+        const v = new VariableWrapper((currentUrl as any).value);
+        if ('variable' in (currentUrl as any)) v.variable = (currentUrl as any).variable;
+        (config.value as any).videoUrl = v;
+    } else {
+        (config.value as any).videoUrl = new VariableWrapper(currentUrl);
+    }
+
+    if (config.value && !config.value.videoFitSettings) {
+        config.value.videoFitSettings = defaultConfig.videoFitSettings;
+    }
 });
 
 const videoFit = computed(() => {
@@ -35,27 +61,9 @@ const videoFit = computed(() => {
 });
 
 const videoUrlParced = computed(() => {
-    let processedString = config.value.videoUrl;
+    // Access .value and cast to any because TS thinks it is string
+    let processedString = (config.value.videoUrl as any)?.value;
     return processedString;
-    // if (!processedString) return;
-    // const regex = /{(.*?)}/g;
-    // const parts = processedString.match(regex);
-
-    // if (!parts || !data.value) {
-    //     return processedString;
-    // }
-
-    // parts.forEach((element: string) => {
-    //     const trimmedString = element.replace("{", "").replace("}", "");
-    //     const dataField = trimmedString.split(".");
-
-    //     const res = dataField.reduce((acc: any, field) => {
-    //         return acc[field];
-    //     }, data.value);
-
-    //     processedString = processedString.replace(element, res);
-    // });
-    // return processedString;
 });
 </script>
 

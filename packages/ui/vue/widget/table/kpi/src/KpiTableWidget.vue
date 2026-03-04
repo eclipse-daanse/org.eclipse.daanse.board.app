@@ -11,8 +11,8 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed, provide } from 'vue';
+import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { toRefs, ref, watch, computed, provide, onMounted } from 'vue';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { KpiTable } from 'org.eclipse.daanse.board.app.ui.vue.common.kpi';
 
@@ -26,16 +26,48 @@ watch(datasourceId, (newVal, oldVal) => {
     update(newVal, oldVal);
 })
 
+onMounted(() => {
+    if (!config.value) return;
+    const upgradeFields: Record<string, string> = {
+        headerBackground: '#f0f0f0'
+    };
+
+    for (const [key, defaultVal] of Object.entries(upgradeFields)) {
+        const current = config.value[key];
+        let valToUse = current;
+        if (Array.isArray(current)) {
+          valToUse = current[0] || defaultVal;
+        }
+
+        if (valToUse === undefined || valToUse === null) {
+            config.value[key] = new VariableWrapper(defaultVal);
+        } else if (valToUse instanceof VariableWrapper) {
+            // Good
+        } else if (typeof valToUse === 'object' && 'value' in valToUse) {
+            const v = new VariableWrapper(valToUse.value);
+            if ('variable' in valToUse) v.variable = valToUse.variable;
+            config.value[key] = v;
+        } else {
+            config.value[key] = new VariableWrapper(valToUse);
+        }
+    }
+});
+
 const {
-    statusVisualType,
-    trendVisualType,
     showParentChild,
     showFolders
 } = wrapParameters({
-    statusVisualType: computed(() => config.value.statusVisualType || 'badge'),
-    trendVisualType: computed(() => config.value.trendVisualType || 'badge'),
     showParentChild: computed(() => config.value.showParentChild ?? false),
     showFolders: computed(() => config.value.showFolders ?? false),
+});
+
+const statusVisualType = computed(() => {
+    const val = config.value.statusVisualType;
+    return Array.isArray(val) ? val[0] || 'Badge' : (val || 'Badge');
+});
+const trendVisualType = computed(() => {
+    const val = config.value.trendVisualType;
+    return Array.isArray(val) ? val[0] || 'Badge' : (val || 'Badge');
 });
 
 provide('statusVisualType', statusVisualType);

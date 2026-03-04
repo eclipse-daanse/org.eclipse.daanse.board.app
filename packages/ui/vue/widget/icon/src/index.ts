@@ -19,19 +19,16 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { IconWidgetEvents } from './events/IconWidgetEvents'
 
-interface Variable<T> {
-  name: string
-  value: T
-}
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 interface IIconSettings {
-  currentIcon: string | Variable<string>
-  iconColor: string | Variable<string>
-  iconSize: number | Variable<number>
-  isIconFilled: boolean | Variable<boolean>
-  strokeWeight: number | Variable<number>
-  opticSize: number | Variable<number>
-  grade: number | Variable<number>
+  currentIcon: string;
+  iconColor: string | VariableWrapper<string>;
+  iconSize: number;
+  isIconFilled: boolean;
+  strokeWeight: number;
+  opticSize: number;
+  grade: number;
 }
 
 const register = () => {
