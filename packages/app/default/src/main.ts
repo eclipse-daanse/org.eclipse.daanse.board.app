@@ -296,6 +296,7 @@ async function loadPackages() {
   await import("org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en")
   await import("org.eclipse.daanse.board.app.ui.vue.lang.text.plain.en")
   await import('org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en')
+  await import('org.eclipse.daanse.board.app.ui.vue.lang.page.en')
   await import("org.eclipse.daanse.board.app.lib.settings.manager")
   await import("org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder")
 

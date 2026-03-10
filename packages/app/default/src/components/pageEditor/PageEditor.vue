@@ -43,11 +43,17 @@ const layoutRepo:LayoutRepositoryI|undefined
 const updated = ref(0);
 const createNew = ref(false);
 const name = ref('newPage');
+const showDeleteConfirm = ref(false);
+const pageToDelete = ref<string | null>(null);
 const emit = defineEmits(['pageSettings'])
 let subid:string|undefined = undefined
 onMounted(() => {
   subid = (pageRepo as PageRegistryImpl).subscribe((ev:string)=>{
-    if(ev == events.PAGE_UPDATE) updated.value+=1;
+    if(
+      ev == events.PAGE_UPDATE
+      || ev == events.PAGE_UNREGISTRATION
+      || ev == events.PAGE_REGISTRATION
+    ) updated.value+=1;
   })
 })
 onUnmounted(()=> {
@@ -121,6 +127,34 @@ const addPage = () => {
   } as PageI);
   updated.value! += 1;
 }
+const pageToDeleteName = computed(() => {
+  if (!pageToDelete.value) return '';
+  try {
+    return pageRepo?.getPage(pageToDelete.value)?.name || '';
+  } catch {
+    return '';
+  }
+})
+const confirmRemovePage = (pageId: string) => {
+  pageToDelete.value = pageId;
+  showDeleteConfirm.value = true;
+}
+const removePage = () => {
+  const pageId = pageToDelete.value;
+  if (!pageId) return;
+  pageRepo?.unregisterPage(pageId);
+  updated.value += 1;
+  showDeleteConfirm.value = false;
+  pageToDelete.value = null;
+  if (route.params.pageid === pageId) {
+    const remainingIds = pageRepo?.getAllPageIds() || [];
+    if (remainingIds.length > 0) {
+      router.push(`/page/${remainingIds[0]}/edit`);
+    } else {
+      router.push('/');
+    }
+  }
+}
 const add= ()=>{
   createNew.value = true;
   name.value = 'newPage';
@@ -143,6 +177,12 @@ const add= ()=>{
             @click="emit('pageSettings',node.id)"
             size="small"
             class="ml-auto"
+          />
+          <VaButton
+            preset="secondary"
+            icon="delete"
+            @click.stop="confirmRemovePage(node.id)"
+            size="small"
           />
         </div>
         <div v-else>
@@ -167,6 +207,32 @@ const add= ()=>{
     icon-right="unfold_more"
     @click="showNodes=!showNodes"
   >{{currentPage}}</VaButton>
+
+  <VaModal
+    size="small"
+    hide-default-actions
+    v-model="showDeleteConfirm"
+    overlay-opacity="0.3"
+  >
+    <div class="delete-dialog">
+      <VaIcon name="warning" color="danger" size="2rem" />
+      <h5 class="va-h5">Seite löschen</h5>
+      <p class="delete-dialog__message">
+        Möchtest du die Seite <strong>{{ pageToDeleteName }}</strong> wirklich löschen?
+        Diese Aktion kann nicht rückgängig gemacht werden.
+      </p>
+    </div>
+    <template #footer>
+      <div class="delete-dialog__actions">
+        <VaButton preset="secondary" @click="showDeleteConfirm = false; pageToDelete = null;">
+          Abbrechen
+        </VaButton>
+        <VaButton color="danger" icon="delete" @click="removePage()">
+          Löschen
+        </VaButton>
+      </div>
+    </template>
+  </VaModal>
 </template>
 
 <style scoped>
@@ -179,5 +245,25 @@ const add= ()=>{
       visibility: visible;
     }
   }
+}
+.delete-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 1rem 0.5rem 0;
+}
+.delete-dialog__message {
+  color: var(--va-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+.delete-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  width: 100%;
 }
 </style>
