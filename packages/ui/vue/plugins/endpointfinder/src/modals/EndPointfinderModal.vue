@@ -75,7 +75,7 @@ const steps = [
     }
   },
   {
-    label: 'DataSource', icon: 'store', beforeLeave: (step: any) => {
+    label: 'Store', icon: 'store', beforeLeave: (step: any) => {
       step.hasError = !stepsVailid.step2
     }
   },

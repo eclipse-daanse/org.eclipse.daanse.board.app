@@ -17,7 +17,7 @@
     "storeList": "Store List",
     "appSettings": "App settings",
     "addWidgetButton": "Add",
-    "dataSourceList": "Data source list"
+    "dataSourceList": "Store list"
   },
 
   "AppSidebarSettings": {
@@ -51,9 +51,9 @@
     "caption": "Caption",
     "dataEndpoint": "Data endpoint",
     "newStore": "New Store",
-    "dataSourcesTitle": "Connections:",
+    "dataSourcesTitle": "Stores:",
     "noAvailableStores": "No stores available",
-    "addDatasourceButton": "Add connection",
+    "addDatasourceButton": "Add store",
     "storeListItem": {
       "params": "Params",
       "events": "Events",
@@ -87,18 +87,18 @@
   },
 
   "SidebarDatasourceList": {
-    "title": "Data Source List"
+    "title": "Store List"
   },
 
   "StoreConfigurationModal": {
-    "datasourceSelection": "Datasource selection",
+    "datasourceSelection": "Store selection",
     "addNew": "Add new",
     "okButton": "Ok",
     "createButton": "Create",
     "cancelButton": "Cancel",
-    "datasourceCaptionLabel": "Datasource caption",
-    "datasourceURLLabel": "Datasource URL",
-    "datasourceTypeLabel": "Datasource type"
+    "datasourceCaptionLabel": "Store caption",
+    "datasourceURLLabel": "Store URL",
+    "datasourceTypeLabel": "Store type"
   },
 
   "StoreSelectionModal": {
@@ -297,8 +297,8 @@
   },
 
   "DataSource": {
-    "dataSource": "Datasources",
-    "withoutDataSource": "No datasource available"
+    "dataSource": "Stores",
+    "withoutDataSource": "No store available"
   },
 
   "Modals": {
@@ -365,7 +365,7 @@
   "Routes": {
     "addWidgetButton": "Add widget",
     "loading": "Loading...",
-    "addRestDatasourceButton": "Add REST datasource"
+    "addRestDatasourceButton": "Add REST store"
   },
   "vuestic": {
     "toggleDropdown": "toggle",

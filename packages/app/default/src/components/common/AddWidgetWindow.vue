@@ -108,7 +108,7 @@ watch(selectedType, (newType) => {
   <div class="add_widget_window ice z-mx p-6 shadow-sm">
     <span class="center font-normal text-center text-lg"><h3>Add Widget</h3></span>
     <!--<VaSelect
-      label="Datasource type"
+      label="Store type"
       class="mx-3 my-3"
       v-model="selectedType"
       :options="filteredTypes"
@@ -116,7 +116,7 @@ watch(selectedType, (newType) => {
     />
     <VaSelect
       v-if="selectedType && selectedType !== 'None'"
-      label="Datasource ID"
+      label="Store ID"
       class="mx-3 my-3"
       v-model="selectedDatasource"
       :options="filteredIds"

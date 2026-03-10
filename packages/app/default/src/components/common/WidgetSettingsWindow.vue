@@ -49,7 +49,7 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key
         icon="store"
       >
         <VaSelect
-          label="Datasource ID"
+          label="Store ID"
           class="mx-3 my-3"
           v-model="widget.config.datasourceId"
           :options="dataSources"
