@@ -29,6 +29,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://www.example.org/PivotTable#//PivotTableInterface'})
 export abstract class PivotTableInterface extends WidgetActionInterface {
+
   @WidgetAction({eventType: 'pivotTable.expandRow'})
   expandRow(rowUniqueName?: any): void {
         throw new Error("expandRow not implemented");

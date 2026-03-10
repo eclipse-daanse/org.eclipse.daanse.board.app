@@ -23,19 +23,14 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem'})
 export class SvgConfigItem {
-
-  @Documentation("The fill color of the SVG element (e.g., as a hex code or named color).")
-  @Attribute() fill?: string;
-
-  @Documentation("The stroke color of the SVG element.")
-  @Attribute() stroke?: string;
-
-  @Documentation("The width of the stroke of the SVG element (e.g., as a string with unit like '2px' or '1').")
-  @Attribute() strokeWidth?: string;
+  @Reference('VariableWrapper') fill: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') stroke: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') strokeWidth: VariableWrapper<string> = new VariableWrapper<string>();
 
   @Documentation("The CSS class name associated with this SVG styling configuration.")
   @Attribute() className?: string;

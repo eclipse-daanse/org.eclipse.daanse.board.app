@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { computed, onMounted, toRefs } from "vue";
-import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
+import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { IconSettings } from './gen/IconSettings'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -32,6 +32,17 @@ const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
 onMounted(() => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
+
+        if (!((config.value.iconColor as any) instanceof VariableWrapper)) {
+            const current = config.value.iconColor;
+            if (typeof current === 'object' && current !== null && 'value' in current) {
+                const v = new VariableWrapper((current as any).value);
+                if ('variable' in current) v.variable = (current as any).variable;
+                (config.value as any).iconColor = v;
+            } else {
+                (config.value as any).iconColor = new VariableWrapper((current as string) || '#000000');
+            }
+        }
     }
 });
 
@@ -57,7 +68,7 @@ const {
     iconColor,
     iconSize,
 } = wrapParameters({
-    iconColor: computed(() => config.value.iconColor),
+    iconColor: computed(() => (config.value.iconColor as any)?.value || '#000000'),
     iconSize: computed(() => config.value.iconSize),
 });
 

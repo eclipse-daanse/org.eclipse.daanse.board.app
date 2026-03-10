@@ -12,8 +12,10 @@ Contributors:
 -->
 <script lang="ts" setup>
 import type { IIconSettings } from './index'
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, type Ref, watch, markRaw } from 'vue'
 import MaterialIcons from './assets/output.json'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // interface MaterialIcon {
 //     name: string;
@@ -58,6 +60,14 @@ onMounted(() => {
   iconsList.value = MaterialIcons
 })
 
+watch(() => widgetSettings.value, (newVal) => {
+    if (newVal) {
+        if (!(newVal.iconColor instanceof VariableWrapper)) {
+            newVal.iconColor = markRaw(new VariableWrapper<string>((newVal.iconColor as string) || '#000000'));
+        }
+    }
+}, { immediate: true, deep: true });
+
 const fontColor = computed(() => {
   return isDarkTheme.value ? '#ffffff' : ''
 })
@@ -90,10 +100,15 @@ const iconStyle = computed(() => {
         v-model="widgetSettings.isIconFilled"
         :label="t('icon:IconWidget.iconFilled')"
       />
-      <va-color-input
-        v-model="widgetSettings.iconColor"
-        :label="t('icon:IconWidget.iconColor')"
-      />
+      <VariableInput v-model="(widgetSettings.iconColor as unknown as VariableWrapper<string>)" :label="t('icon:IconWidget.iconColor')">
+        <template #default="{ value, change }">
+          <va-color-input
+            :model-value="value"
+            @input="change"
+            :label="t('icon:IconWidget.iconColor')"
+          />
+        </template>
+      </VariableInput>
       <va-slider
         class="slider"
         v-model="widgetSettings.iconSize"

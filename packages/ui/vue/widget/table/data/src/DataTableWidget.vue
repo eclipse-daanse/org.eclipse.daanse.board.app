@@ -11,8 +11,8 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed } from 'vue';
+import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { toRefs, ref, watch, computed, onMounted } from 'vue';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
 const { wrapParameters } = useVariableRepository();
@@ -25,10 +25,28 @@ watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal);
 })
 
+onMounted(() => {
+    if (!config.value) return;
+    const current = config.value.headerBackground;
+    if (current === undefined || current === null) {
+        config.value.headerBackground = new VariableWrapper('#f0f0f0');
+    } else if (current instanceof VariableWrapper) {
+        // Already correct instance
+    } else if (typeof current === 'object' && 'value' in current) {
+        // Rehydrate from JSON object
+        const v = new VariableWrapper(current.value);
+        if ('variable' in current) v.variable = current.variable;
+        config.value.headerBackground = v;
+    } else {
+        // Upgrade primitive to wrapper
+        config.value.headerBackground = new VariableWrapper(current);
+    }
+});
+
 const {
     headerBackground,
 } = wrapParameters({
-    headerBackground: computed(() => config.value.headerBackground || '#f0f0f0'),
+    headerBackground: computed(() => (config.value.headerBackground as any)?.value || '#f0f0f0'),
 });
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)

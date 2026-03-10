@@ -13,7 +13,9 @@ Contributors:
 
 <script lang="ts" setup>
 import { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
+import { SVGItemStyles } from "./gen/SVGItemStyles";
 import { onMounted, computed, ref, watch } from "vue";
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string }>();
@@ -23,8 +25,9 @@ const svgSource = ref("");
 
 const defaultConfig = new RepeatableSVGSettings();
 
-const loadSvg = async (src: string | undefined) => {
-    if (src) {
+const loadSvg = async (srcWrapper: any) => {
+    const src = srcWrapper?.value || srcWrapper;
+    if (src && typeof src === 'string') {
         try {
             const req = await fetch(src);
             const svgObject = await req.text();
@@ -38,60 +41,75 @@ const loadSvg = async (src: string | undefined) => {
     }
 };
 
-onMounted(async () => {
-    if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
-        await loadSvg(config.value.src);
+const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
+    const current = obj[key];
+    if (current === undefined || current === null) {
+        obj[key] = new VariableWrapper(defaultVal);
+    } else if (current instanceof VariableWrapper) {
+        // already good
+    } else if (typeof current === 'object' && 'value' in current) {
+        const v = new VariableWrapper(current.value);
+        if ('variable' in current) v.variable = current.variable;
+        obj[key] = v;
+    } else {
+        obj[key] = new VariableWrapper(current);
     }
+}
+
+const ensureStyles = (styles: SVGItemStyles | undefined) => {
+    if (!styles) return;
+    ensureWrapper(styles, 'fill', '#000000');
+    ensureWrapper(styles, 'stroke', 'none');
+}
+
+onMounted(async () => {
+    if (!config.value) {
+        config.value = new RepeatableSVGSettings();
+    }
+
+    // Ensure wrappers for top level
+    ensureWrapper(config.value, 'src', '');
+    ensureWrapper(config.value, 'repetitions', '1');
+    ensureWrapper(config.value, 'progress', '0');
+
+    // Ensure children exist and are wrapped
+    if (!config.value.activeItemStyles) config.value.activeItemStyles = new SVGItemStyles();
+    ensureStyles(config.value.activeItemStyles);
+
+    if (!config.value.defaultItemStyles) config.value.defaultItemStyles = new SVGItemStyles();
+    ensureStyles(config.value.defaultItemStyles);
+
+    await loadSvg(config.value.src);
 });
 
 // Watch for src changes
 watch(
-    () => config.value?.src,
+    () => (config.value?.src as any)?.value,
     (newSrc) => {
         loadSvg(newSrc);
     }
 );
 
-const createParsedData = (prop: string) => {
-    return computed(() => {
-        let processedString = String(prop);
-        return processedString;
-        // const regex = /{(.*?)}/g;
-        // const parts = processedString.match(regex);
-
-        // if (!parts || !data.value) {
-        //     return processedString;
-        // }
-
-        // parts.forEach((element: string) => {
-        //     const trimmedString = element.replace("{", "").replace("}", "");
-        //     const dataField = trimmedString.split(".");
-
-        //     const res = dataField.reduce((acc: any, field) => {
-        //         return acc[field];
-        //     }, data.value);
-
-        //     processedString = processedString.replace(element, res);
-        // });
-        // return processedString;
-    });
-};
-
 const repeationsToNumber = computed(() => {
-    const repetitions = config.value?.repetitions ?? '1';
+    const repetitions = (config.value?.repetitions as any)?.value ?? '1';
     return !isNaN(parseFloat(repetitions))
         ? Math.floor(Number(repetitions))
         : 1;
 });
 
 const progressToNumber = computed(() => {
-    const progress = config.value?.progress ?? '0';
-    const parsedProgress = createParsedData(progress).value;
-    return !isNaN(parseFloat(parsedProgress))
-        ? Number(parsedProgress)
+    const progress = (config.value?.progress as any)?.value ?? '0';
+
+    return !isNaN(parseFloat(progress))
+        ? Number(progress)
         : 0;
 });
+
+const activeFill = computed(() => (config.value?.activeItemStyles?.fill as any)?.value);
+const activeStroke = computed(() => (config.value?.activeItemStyles?.stroke as any)?.value);
+const defaultFill = computed(() => (config.value?.defaultItemStyles?.fill as any)?.value);
+const defaultStroke = computed(() => (config.value?.defaultItemStyles?.stroke as any)?.value);
+
 </script>
 
 <template>
@@ -117,8 +135,8 @@ const progressToNumber = computed(() => {
                 </mask>
             </defs>
             <g
-                :fill="config?.defaultItemStyles?.fill"
-                :stroke="config?.defaultItemStyles?.stroke"
+                :fill="defaultFill"
+                :stroke="defaultStroke"
             >
                 <g
                     v-html="svgSource"
@@ -130,8 +148,8 @@ const progressToNumber = computed(() => {
             </g>
             <g
                 mask="url(#bubbleKenseo)"
-                :fill="config?.activeItemStyles?.fill"
-                :stroke="config?.activeItemStyles?.stroke"
+                :fill="activeFill"
+                :stroke="activeStroke"
             >
                 <g
                     v-html="svgSource"
