@@ -36,7 +36,7 @@ defineEmits(['openEditor'])
 <template>
   <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full ice ">
     <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
-      <h4 class="flex-grow text-sm font-semibold">Datasources</h4>
+      <h4 class="flex-grow text-sm font-semibold">Stores</h4>
       <VaButton @click="endPointFinder()" icon="travel_explore" size="small"></VaButton>
       <VaButton @click="addDataSource()" icon="add" size="small"></VaButton>
 

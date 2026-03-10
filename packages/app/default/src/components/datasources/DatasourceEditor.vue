@@ -82,7 +82,7 @@ const emit = defineEmits(['close'])
     <div class="min-w-[350px]">
       <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full">
         <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
-          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Datasource settings</h4>
+          <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Store settings</h4>
         </div>
         <div class="flex-grow flex flex-col h-full">
           <div class="flex-grow p-4 flex flex-col gap-2">
