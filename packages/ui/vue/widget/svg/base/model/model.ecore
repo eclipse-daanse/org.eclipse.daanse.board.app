@@ -19,7 +19,10 @@
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Represents the settings for displaying an SVG image, including the configuration of its internal classes."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="src" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="src" containment="false">
+             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The path or URL to the SVG source file."/>
             </eAnnotations>
@@ -54,17 +57,26 @@
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="documentation" value="Defines the styling properties for a specific element or group of elements within an SVG."/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fill" containment="false">
+             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The fill color of the SVG element (e.g., as a hex code or named color)."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="stroke" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="stroke" containment="false">
+             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The stroke color of the SVG element."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="strokeWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="strokeWidth" containment="false">
+             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The width of the stroke of the SVG element (e.g., as a string with unit like '2px' or '1')."/>
             </eAnnotations>

@@ -12,14 +12,16 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { ref, inject } from 'vue'
+import { ref, inject, watch, markRaw } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
 
 interface IKpiTableSettings {
-  headerBackground: string;
+  headerBackground: string | VariableWrapper<string>;
   trendVisualType: string[];
   statusVisualType: string[];
   showParentChild: boolean;
@@ -32,12 +34,24 @@ const trendVisualTypes = [ 'Emoji', 'Arrow', 'Chart', 'Badge' ];
 const statusVisualTypes = [ 'Emoji', 'Lights', 'Badge' ];
 
 const opened = ref(false)
+
+watch(() => widgetSettings.value, (newVal) => {
+    if (newVal) {
+        if (!(newVal.headerBackground instanceof VariableWrapper)) {
+            newVal.headerBackground = markRaw(new VariableWrapper<string>(newVal.headerBackground || '#f0f0f0'));
+        }
+    }
+}, { immediate: true, deep: true });
 </script>
 
 <template>
   <va-collapse v-model="opened" header="Kpi Table Settings" icon="settings">
     <div class="settings-container">
-      <va-color-input class="text-color" label="Header Color" v-model="widgetSettings.headerBackground" />
+      <VariableInput v-model="(widgetSettings.headerBackground as unknown as VariableWrapper<string>)" label="Header Color">
+        <template #default="{ value, change }">
+          <va-color-input class="text-color" label="Header Color" :model-value="value" @input="change" />
+        </template>
+      </VariableInput>
       <va-select v-model="widgetSettings.trendVisualType" :options="trendVisualTypes" placeholder="Trend Visual Type" />
       <va-select v-model="widgetSettings.statusVisualType" :options="statusVisualTypes"
         placeholder="Status Visual Type" />

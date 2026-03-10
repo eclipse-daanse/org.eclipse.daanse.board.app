@@ -18,6 +18,7 @@ import { inject, ref } from 'vue'
 import type { IRepeatableSVGSettings } from "./index"
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { RepeatableSVGSettings } from './gen/RepeatableSVGSettings'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -33,33 +34,61 @@ const opened = ref({
 <template>
     <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('svgRepeat:RepeatableSvgWidget.title')">
         <div class="settings-container">
-            <va-input v-model="widgetSettings.src" :label="t('svgRepeat:RepeatableSvgWidget.svgSrc')" />
-            <va-input v-model="widgetSettings.repetitions" :label="t('svgRepeat:RepeatableSvgWidget.repeations')" />
-            <va-input v-model="widgetSettings.progress" :label="t('svgRepeat:RepeatableSvgWidget.progress')" />
-            <div class="colors">
-                <va-color-input
-                    class="color-input"
-                    v-model="widgetSettings.activeItemStyles.fill"
-                    :label="t('svgRepeat:RepeatableSvgWidget.activeItemFill')"
-                />
-                <va-color-input
-                    class="color-input"
-                    v-model="widgetSettings.activeItemStyles.stroke"
-                    :label="t('svgRepeat:RepeatableSvgWidget.activeItemStroke')"
-                />
-            </div>
-            <div class="colors">
-                <va-color-input
-                    class="color-input"
-                    v-model="widgetSettings.defaultItemStyles.fill"
-                    :label="t('svgRepeat:RepeatableSvgWidget.defaultItemFill')"
-                />
-                <va-color-input
-                    class="color-input"
-                    v-model="widgetSettings.defaultItemStyles.stroke"
-                    :label="t('svgRepeat:RepeatableSvgWidget.defaultItemStroke')"
-                />
-            </div>
+            <VariableInput v-model="widgetSettings.src" :label="t('svgRepeat:RepeatableSvgWidget.svgSrc')">
+                <template #default="{ value, change }">
+                    <va-input :model-value="value" @input="change" :label="t('svgRepeat:RepeatableSvgWidget.svgSrc')" />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.repetitions" :label="t('svgRepeat:RepeatableSvgWidget.repeations')">
+                <template #default="{ value, change }">
+                    <va-input :model-value="value" @input="change" :label="t('svgRepeat:RepeatableSvgWidget.repeations')" />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.progress" :label="t('svgRepeat:RepeatableSvgWidget.progress')">
+                <template #default="{ value, change }">
+                    <va-input :model-value="value" @input="change" :label="t('svgRepeat:RepeatableSvgWidget.progress')" />
+                </template>
+            </VariableInput>
+                <VariableInput v-model="widgetSettings.activeItemStyles.fill" :label="t('svgRepeat:RepeatableSvgWidget.activeItemFill')" class="color-input">
+                    <template #default="{ value, change }">
+                        <va-color-input
+                            :model-value="value"
+                            @input="change"
+                            class="width-100"
+                            :label="t('svgRepeat:RepeatableSvgWidget.activeItemFill')"
+                        />
+                    </template>
+                </VariableInput>
+                <VariableInput v-model="widgetSettings.activeItemStyles.stroke" :label="t('svgRepeat:RepeatableSvgWidget.activeItemStroke')" class="color-input">
+                    <template #default="{ value, change }">
+                        <va-color-input
+                            :model-value="value"
+                            @input="change"
+                            class="width-100"
+                            :label="t('svgRepeat:RepeatableSvgWidget.activeItemStroke')"
+                        />
+                    </template>
+                </VariableInput>
+                <VariableInput v-model="widgetSettings.defaultItemStyles.fill" :label="t('svgRepeat:RepeatableSvgWidget.defaultItemFill')" class="color-input">
+                    <template #default="{ value, change }">
+                        <va-color-input
+                            :model-value="value"
+                            @input="change"
+                            class="width-100"
+                            :label="t('svgRepeat:RepeatableSvgWidget.defaultItemFill')"
+                        />
+                    </template>
+                </VariableInput>
+                <VariableInput v-model="widgetSettings.defaultItemStyles.stroke" :label="t('svgRepeat:RepeatableSvgWidget.defaultItemStroke')" class="color-input">
+                    <template #default="{ value, change }">
+                        <va-color-input
+                            :model-value="value"
+                            @input="change"
+                            class="width-100"
+                            :label="t('svgRepeat:RepeatableSvgWidget.defaultItemStroke')"
+                        />
+                    </template>
+                </VariableInput>
         </div>
     </va-collapse>
 </template>

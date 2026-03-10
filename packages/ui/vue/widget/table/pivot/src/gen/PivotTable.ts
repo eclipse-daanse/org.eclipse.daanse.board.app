@@ -24,6 +24,9 @@ Contributors: Smart City Jena
 * Serialization to a backend.
 */
 import {JavaObject} from "./JavaObject"
+import {LevelStyle} from "./LevelStyle"
+import {ConditionalFormat} from "./ConditionalFormat"
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://www.example.org/PivotTable#//PivotTable'})
@@ -34,4 +37,22 @@ export class PivotTable {
 
   @Documentation("")
   @Attribute() tableState?: any;
+  @Reference('VariableWrapper') headerBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') headerTextColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') cellBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') cellTextColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') defaultColumnWidth: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') defaultRowHeight: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') fontSize: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') headerFontWeight: VariableWrapper<string> = new VariableWrapper<string>();
+
+  @Attribute() cellTextAlign: string = "left";
+
+  @Attribute() showRowsProperties: boolean = false;
+
+  @Attribute() showColumnsProperties: boolean = false;
+  @Reference('LevelStyle') rowLevelStyles: Array<LevelStyle> = [];
+  @Reference('LevelStyle') columnLevelStyles: Array<LevelStyle> = [];
+  @Reference('ConditionalFormat') conditionalFormats: Array<ConditionalFormat> = [];
 }

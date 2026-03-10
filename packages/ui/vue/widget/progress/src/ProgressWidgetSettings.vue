@@ -16,6 +16,7 @@ import type { IProgressSettings } from "./index";
 import { inject, onMounted, ref, watch } from 'vue'
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { ProgressSettings } from './gen/ProgressSettings'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -43,13 +44,28 @@ const addItem = () => {
   });
 };
 
+const onValueChange = (change: (e: any) => void) => (val: any) => {
+    change({ target: { value: val } });
+};
+
 watch(
   [() => widgetSettings.value.fillColor, () => gradientFields.value],
-  ([color, fields]) => {
+  ([colorWrapper, fields]) => {
+      // Access .value since it is now a VariableWrapper
+      // We assume runtime object is wrapper, though type def might be old.
+      const color = (colorWrapper as any)?.value || (colorWrapper as any);
+
       if (widgetSettings.value.isGradient) {
-        fields.length < 1
-          ? widgetSettings.value.gradientColor = `${color} 0%, #FAFAFA 85%`
-          : widgetSettings.value.gradientColor = fields.map((v: GradientPart) => `${v.color} ${v.location}%`).join(", ")
+        const grad = fields.length < 1
+          ? `${color} 0%, #FAFAFA 85%`
+          : fields.map((v: GradientPart) => `${v.color} ${v.location}%`).join(", ");
+
+          if (widgetSettings.value.gradientColor && 'value' in (widgetSettings.value.gradientColor as any)) {
+            (widgetSettings.value.gradientColor as any).value = grad;
+          } else {
+            // Fallback if not initialized as wrapper yet (should not happen if Widget ensures it)
+            (widgetSettings.value.gradientColor as any) = grad;
+          }
       }
   },
   { deep: true },
@@ -58,9 +74,10 @@ watch(
 watch(
     () => widgetSettings.value.isGradient,
     (newValue) => {
+        const color = (widgetSettings.value.fillColor as any)?.value || widgetSettings.value.fillColor;
         newValue
             ? gradientFields.value.push(
-                { color: `${widgetSettings.value.fillColor}`, location: 0 },
+                { color: `${color}`, location: 0 },
                 { color: "#FAFAFA", location: 85 },
             )
             : (gradientFields.value = []);
@@ -81,42 +98,83 @@ const deleteField = (id: number) => {
         icon="settings"
     >
         <div class="settings-container">
-            <va-input
-                v-model="widgetSettings.progress"
-                :label="t('progress:ProgressWidget.progress')"
-            />
-          <va-input
-            v-model="widgetSettings.min"
-            type="number"
-            :label="t('progress:ProgressWidget.min')"
-          />
-          <va-input
-            v-model="widgetSettings.max"
-            type="number"
-            :label="t('progress:ProgressWidget.max')"
-          />
-            <va-color-input
-                v-model="widgetSettings.fillColor"
-                :label="t('progress:ProgressWidget.fillColor')"
-            />
-            <va-color-input
-                v-model="widgetSettings.backgroundColor"
-                :label="t('progress:ProgressWidget.backgroundColor')"
-            />
-          <va-color-input
-            v-model="widgetSettings.textColor"
-            :label="t('progress:ProgressWidget.textColor')"
-          />
-          <va-input
-            v-model="widgetSettings.barThickness"
-            :label="t('progress:ProgressWidget.barThickness')"
-            placeholder="z.B. 20px"
-          />
-          <va-input
-            v-model="widgetSettings.borderRadius"
-            :label="t('progress:ProgressWidget.borderRadius')"
-            placeholder="z.B. 10px"
-          />
+            <VariableInput v-model="widgetSettings.progress" :label="t('progress:ProgressWidget.progress')">
+                <template #default="{ value, change }">
+                    <va-input
+                        :model-value="value"
+                        @input="change"
+                        :label="t('progress:ProgressWidget.progress')"
+                    />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.min" :label="t('progress:ProgressWidget.min')">
+                <template #default="{ value, change }">
+                  <va-input
+                    :model-value="value"
+                    @input="change"
+                    type="number"
+                    :label="t('progress:ProgressWidget.min')"
+                  />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.max" :label="t('progress:ProgressWidget.max')">
+                <template #default="{ value, change }">
+                  <va-input
+                    :model-value="value"
+                    @input="change"
+                    type="number"
+                    :label="t('progress:ProgressWidget.max')"
+                  />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.fillColor" :label="t('progress:ProgressWidget.fillColor')">
+                <template #default="{ value, change }">
+                    <va-color-input
+                        :model-value="value"
+                        @input="change"
+                        :label="t('progress:ProgressWidget.fillColor')"
+                    />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.backgroundColor" :label="t('progress:ProgressWidget.backgroundColor')">
+                <template #default="{ value, change }">
+                    <va-color-input
+                        :model-value="value"
+                        @input="change"
+                        :label="t('progress:ProgressWidget.backgroundColor')"
+                    />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.textColor" :label="t('progress:ProgressWidget.textColor')">
+                <template #default="{ value, change }">
+                  <va-color-input
+                    :model-value="value"
+                    @input="change"
+                    :label="t('progress:ProgressWidget.textColor')"
+                  />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.barThickness" :label="t('progress:ProgressWidget.barThickness')">
+                <template #default="{ value, change }">
+                  <va-input
+                    :model-value="value"
+                    @input="change"
+                    :label="t('progress:ProgressWidget.barThickness')"
+                    placeholder="z.B. 20px"
+                  />
+                </template>
+            </VariableInput>
+            <VariableInput v-model="widgetSettings.borderRadius" :label="t('progress:ProgressWidget.borderRadius')">
+                <template #default="{ value, change }">
+                  <va-input
+                    :model-value="value"
+                    @input="change"
+                    :label="t('progress:ProgressWidget.borderRadius')"
+                    placeholder="z.B. 10px"
+                  />
+                </template>
+            </VariableInput>
+
           <va-select
             v-model="widgetSettings.valueAlign"
             :label="t('progress:ProgressWidget.valueAlign')"
@@ -154,11 +212,16 @@ const deleteField = (id: number) => {
                 {{ t("progress:ProgressWidget.addButton") }}
             </va-button>
             <div>
-                <va-input
-                    class="mt-2"
-                    v-model="widgetSettings.rotation"
-                    :label="t('progress:ProgressWidget.rotation')"
-                />
+                <VariableInput v-model="widgetSettings.rotation" :label="t('progress:ProgressWidget.rotation')">
+                    <template #default="{ value, change }">
+                        <va-input
+                            class="mt-2"
+                            :model-value="value"
+                            @input="change"
+                            :label="t('progress:ProgressWidget.rotation')"
+                        />
+                    </template>
+                </VariableInput>
                 <va-data-table
                     class="table-config"
                     :items="gradientFields"
@@ -192,7 +255,6 @@ const deleteField = (id: number) => {
         </div>
     </va-collapse>
 </template>
-
 <style scoped>
 .settings-container {
   display: flex;

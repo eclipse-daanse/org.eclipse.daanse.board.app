@@ -20,6 +20,7 @@ import {
     ref,
     watch,
 } from "vue";
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string }>();
@@ -33,8 +34,9 @@ const scope = (inst?.type as any).__scopeId;
 
 const defaultConfig = new SvgSettings();
 
-const loadSvg = async (src: string | undefined) => {
-    if (src) {
+const loadSvg = async (srcWrapper: any) => {
+    const src = srcWrapper?.value || srcWrapper;
+    if (src && typeof src === 'string') {
         console.log('Loading SVG from:', src);
         try {
             const req = await fetch(src);
@@ -51,12 +53,28 @@ const loadSvg = async (src: string | undefined) => {
     }
 };
 
+const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
+    const current = obj[key];
+    if (current === undefined || current === null) {
+        obj[key] = new VariableWrapper(defaultVal);
+    } else if (current instanceof VariableWrapper) {
+        // already good
+    } else if (typeof current === 'object' && 'value' in current) {
+        const v = new VariableWrapper(current.value);
+        if ('variable' in current) v.variable = current.variable;
+        obj[key] = v;
+    } else {
+        obj[key] = new VariableWrapper(current);
+    }
+}
+
 onMounted(async () => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
         console.log('SVG config:', config.value);
         console.log('SVG config.value.src:', config.value.src);
         console.log('SVG config.value (as any).settings:', (config.value as any).settings);
+
         // Check if src is in the settings object (legacy structure)
         if (!config.value.src && (config.value as any).settings?.src) {
             console.log('Using legacy settings structure');
@@ -65,6 +83,19 @@ onMounted(async () => {
                 config.value.classesConfig = (config.value as any).settings.classesConfig;
             }
         }
+
+        ensureWrapper(config.value, 'src', '');
+
+        if (config.value.classesConfig) {
+            config.value.classesConfig.forEach(entry => {
+                if (entry.value) {
+                    ensureWrapper(entry.value, 'fill', '');
+                    ensureWrapper(entry.value, 'stroke', '');
+                    ensureWrapper(entry.value, 'strokeWidth', '');
+                }
+            });
+        }
+
         // Initial load
         await loadSvg(config.value.src);
     }
@@ -72,7 +103,7 @@ onMounted(async () => {
 
 // Watch for src changes
 watch(
-    () => config.value?.src,
+    () => (config.value?.src as any)?.value,
     (newSrc) => {
         console.log('SVG src changed to:', newSrc);
         loadSvg(newSrc);
@@ -86,11 +117,15 @@ const styles = computed(() => {
         string += "<style>";
         config.value.classesConfig.forEach(classConfig => {
             if (classConfig.value?.className) {
+                const fill = (classConfig.value.fill as any)?.value || '';
+                const stroke = (classConfig.value.stroke as any)?.value || '';
+                const strokeWidth = (classConfig.value.strokeWidth as any)?.value || '';
+
                 string +=
                     `[${scope || ''}] .${classConfig.value.className} {
-                    stroke: ${classConfig.value.stroke || ''};
-                    fill: ${classConfig.value.fill || ''};
-                    stroke-width: ${classConfig.value.strokeWidth || ''};
+                    stroke: ${stroke};
+                    fill: ${fill};
+                    stroke-width: ${strokeWidth};
                 }`;
             }
         });
@@ -127,7 +162,7 @@ const svgSourceParced = computed(() => {
 <template>
     <div v-html="styles"></div>
     <div v-bind="$attrs" class="svg" v-html="svgSourceParced"></div>
-    <div v-if="!svgSourceParced && !config?.src" class="fallback">
+    <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback">
         No SVG configured
     </div>
 </template>
