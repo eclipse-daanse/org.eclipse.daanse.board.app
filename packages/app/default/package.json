@@ -100,6 +100,7 @@
     "org.eclipse.daanse.board.app.ui.vue.lang.text.plain.en": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.lang.video.en": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.lang.page.en": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.layouts.base": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.layouts.grid": "^0.0.1-next.1",
