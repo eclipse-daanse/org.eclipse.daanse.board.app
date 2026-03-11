@@ -3555,10 +3555,18 @@
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
 
-"@turf/helpers@7.3.1", "@turf/helpers@^7.2.0":
+"@turf/helpers@7.3.1":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-7.3.1.tgz#2f0e666ecdefbf75d0df1b94ea1f5ccc6e4abc5b"
   integrity sha512-zkL34JVhi5XhsuMEO0MUTIIFEJ8yiW1InMu4hu/oRqamlY4mMoZql0viEmH6Dafh/p+zOl8OYvMJ3Vm3rFshgg==
+  dependencies:
+    "@types/geojson" "^7946.0.10"
+    tslib "^2.8.1"
+
+"@turf/helpers@^7.2.0":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-7.3.4.tgz#a8c918981599dddcf452421c7b307c5832d05f02"
+  integrity sha512-U/S5qyqgx3WTvg4twaH0WxF3EixoTCfDsmk98g1E3/5e2YKp7JKYZdz0vivsS5/UZLJeZDEElOSFH4pUgp+l7g==
   dependencies:
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
