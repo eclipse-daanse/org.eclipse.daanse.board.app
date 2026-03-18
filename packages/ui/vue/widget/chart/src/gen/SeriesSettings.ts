@@ -37,8 +37,12 @@ export class SeriesSettings {
   @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();
   @Reference('VariableWrapper') borderDash: VariableWrapper<any> = new VariableWrapper<any>();
-  @Reference('VariableWrapper') fill: VariableWrapper<boolean> = new VariableWrapper<boolean>();
-  @Reference('VariableWrapper') showPoints: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+
+  @Documentation("Enable fill under line/area")
+  @Attribute() fill?: boolean;
+
+  @Documentation("Show points on line chart")
+  @Attribute() showPoints?: boolean;
   @Reference('VariableWrapper') pointColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') pointSize: VariableWrapper<number> = new VariableWrapper<number>();
 }

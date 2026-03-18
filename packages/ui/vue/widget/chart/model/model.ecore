@@ -110,23 +110,17 @@
             </eGenericType>
         </eStructuralFeatures>
 
-        <eStructuralFeatures xsi:type="ecore:EReference" name="fill" containment="false">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Enable fill under line/area"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <!-- Point Styling (for line charts) -->
-        <eStructuralFeatures xsi:type="ecore:EReference" name="showPoints" containment="false">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Show points on line chart"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="pointColor" containment="false">
@@ -171,6 +165,19 @@
             </eGenericType>
         </eStructuralFeatures>
 
+        <!-- Bar Layout Settings -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="barOrientation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="vertical">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Orientation for bar charts: 'vertical' or 'horizontal'"/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="stacked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Enable stacked bars"/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
         <!-- Dataset Styling -->
         <eStructuralFeatures xsi:type="ecore:EReference" name="borderColor" containment="false" defaultValueLiteral="rgba(75, 192, 192, 1)">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -208,23 +215,17 @@
             </eGenericType>
         </eStructuralFeatures>
 
-        <eStructuralFeatures xsi:type="ecore:EReference" name="fill" containment="false" defaultValueLiteral="false">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Enable fill under line/area"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <!-- Point Styling -->
-        <eStructuralFeatures xsi:type="ecore:EReference" name="showPoints" containment="false" defaultValueLiteral="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Show points on line chart"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="pointColor" containment="false" defaultValueLiteral="rgba(75, 192, 192, 1)">
@@ -246,13 +247,10 @@
         </eStructuralFeatures>
 
         <!-- Grid Lines -->
-        <eStructuralFeatures xsi:type="ecore:EReference" name="showHorizontalGrid" containment="false" defaultValueLiteral="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showHorizontalGrid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Show horizontal grid lines"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="horizontalGridColor" containment="false" defaultValueLiteral="rgba(0, 0, 0, 0.1)">
@@ -273,13 +271,10 @@
             </eGenericType>
         </eStructuralFeatures>
 
-        <eStructuralFeatures xsi:type="ecore:EReference" name="showVerticalGrid" containment="false" defaultValueLiteral="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showVerticalGrid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Show vertical grid lines"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EReference" name="verticalGridColor" containment="false" defaultValueLiteral="rgba(0, 0, 0, 0.1)">
@@ -301,13 +296,10 @@
         </eStructuralFeatures>
 
         <!-- Annotations Edit Mode -->
-        <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsEditMode" containment="false" defaultValueLiteral="false">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotationsEditMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Enable draggable annotations in edit mode"/>
             </eAnnotations>
-            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
-                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-            </eGenericType>
         </eStructuralFeatures>
 
         <!-- Annotations (Lines and Boxes) - These stay as EAttribute since they're complex arrays -->
