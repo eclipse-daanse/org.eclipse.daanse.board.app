@@ -17,6 +17,7 @@ import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { ChartSettings } from './gen/ChartSettings'
 import { SeriesSettings } from './gen/SeriesSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 const opened = ref({
   seriesSection: false,
@@ -27,6 +28,8 @@ const opened = ref({
 })
 
 const widgetSettings = defineModel<ChartSettings>({ required: true })
+
+console.log(widgetSettings.value);
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -153,10 +156,8 @@ const addSeriesSettings = () => {
   newSettings.backgroundColor = new VariableWrapper<string>('')
   newSettings.borderWidth = new VariableWrapper<number>(2)
   newSettings.borderDash = new VariableWrapper<number[]>([])
-  newSettings.fill = new VariableWrapper<boolean>(false)
 
   // Initialize optional point fields
-  newSettings.showPoints = new VariableWrapper<boolean>(true)
   newSettings.pointColor = new VariableWrapper<string>('')
   newSettings.pointSize = new VariableWrapper<number>(3)
 
@@ -205,12 +206,6 @@ onMounted(() => {
     if (!series.borderDash) {
       series.borderDash = new VariableWrapper<number[]>([])
     }
-    if (!series.fill) {
-      series.fill = new VariableWrapper<boolean>(false)
-    }
-    if (!series.showPoints) {
-      series.showPoints = new VariableWrapper<boolean>(true)
-    }
     if (!series.pointColor) {
       series.pointColor = new VariableWrapper<string>('')
     }
@@ -242,23 +237,38 @@ onMounted(() => {
             <va-button size="small" color="danger" @click="removeSeriesSettings(index)">Remove</va-button>
           </div>
 
-          <!-- Basic Info -->
-          <va-input
+          <VariableInput
             v-if="series.seriesIndex"
             label="Series Index (0-based)"
-            v-model.number="series.seriesIndex.value"
-            type="number"
-            :min="0"
+            v-model="(series.seriesIndex as unknown as VariableWrapper<number>)"
             style="margin-bottom: 12px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="Series Index (0-based)"
+                :model-value="value"
+                @input="change"
+                type="number"
+                :min="0"
+              />
+            </template>
+          </VariableInput>
 
-          <va-input
+          <VariableInput
             v-if="series.label !== undefined"
             label="Series Label/Title (optional)"
-            v-model="series.label.value"
-            placeholder="e.g., Temperature, Humidity, Pressure..."
+            v-model="(series.label as unknown as VariableWrapper<string>)"
             style="margin-bottom: 12px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="Series Label/Title (optional)"
+                :model-value="value"
+                @input="change"
+                placeholder="e.g., Temperature, Humidity, Pressure..."
+              />
+            </template>
+          </VariableInput>
 
           <va-select
             v-if="series.chartType"
@@ -276,59 +286,97 @@ onMounted(() => {
             style="margin-bottom: 12px;"
           />
 
-          <!-- Axis Assignment -->
           <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Axis Assignment</h4>
 
-          <va-input
+          <VariableInput
             v-if="series.xAxisId"
             label="X-Axis ID (e.g., 'x', 'x1', 'x2')"
-            v-model="series.xAxisId.value"
-            placeholder="x"
+            v-model="(series.xAxisId as unknown as VariableWrapper<string>)"
             style="margin-bottom: 8px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="X-Axis ID"
+                :model-value="value"
+                @input="change"
+                placeholder="x"
+              />
+            </template>
+          </VariableInput>
 
-          <va-input
+          <VariableInput
             v-if="series.yAxisId"
             label="Y-Axis ID (e.g., 'y', 'y1', 'y2')"
-            v-model="series.yAxisId.value"
-            placeholder="y"
+            v-model="(series.yAxisId as unknown as VariableWrapper<string>)"
             style="margin-bottom: 12px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="Y-Axis ID"
+                :model-value="value"
+                @input="change"
+                placeholder="y"
+              />
+            </template>
+          </VariableInput>
 
-          <!-- Colors -->
           <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Colors</h4>
 
-          <va-color-input
+          <VariableInput
             v-if="series.borderColor !== undefined"
             label="Border Color"
-            v-model="series.borderColor.value"
+            v-model="(series.borderColor as unknown as VariableWrapper<string>)"
             style="margin-bottom: 8px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-color-input
+                label="Border Color"
+                :model-value="value"
+                @input="change"
+              />
+            </template>
+          </VariableInput>
 
-          <va-color-input
+          <VariableInput
             v-if="series.backgroundColor !== undefined"
             label="Background Color"
-            v-model="series.backgroundColor.value"
+            v-model="(series.backgroundColor as unknown as VariableWrapper<string>)"
             style="margin-bottom: 12px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-color-input
+                label="Background Color"
+                :model-value="value"
+                @input="change"
+              />
+            </template>
+          </VariableInput>
 
-          <!-- Line/Border Style -->
           <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Border Style</h4>
 
-          <va-input
+          <VariableInput
             v-if="series.borderWidth !== undefined"
             label="Border Width (px)"
-            v-model.number="series.borderWidth.value"
-            type="number"
-            :min="0"
-            :max="20"
+            v-model="(series.borderWidth as unknown as VariableWrapper<number>)"
             style="margin-bottom: 8px;"
-          />
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="Border Width (px)"
+                :model-value="value"
+                @input="change"
+                type="number"
+                :min="0"
+                :max="20"
+              />
+            </template>
+          </VariableInput>
 
+          <!-- For BorderDash, using JSON.stringify for selection matching -->
           <va-select
             v-if="series.borderDash !== undefined"
             label="Border Style"
-            :model-value="JSON.stringify(series.borderDash?.value || [])"
+            :model-value="JSON.stringify(series.borderDash.value || [])"
             :options="borderDashPresets.map(p => ({ value: JSON.stringify(p.value), text: p.label }))"
             value-by="value"
             @update:modelValue="updateSeriesBorderDash(series, $event)"
@@ -343,7 +391,7 @@ onMounted(() => {
           />
 
           <!-- Point Style (for line charts) -->
-          <div v-if="series.chartType?.value === 'line'">
+          <div v-if="series.chartType?.value === 'line' || (series.chartType as any) === 'line'">
             <h4 style="margin: 16px 0 8px 0; font-size: 13px; color: var(--va-primary);">Point Style</h4>
 
             <va-checkbox
@@ -353,21 +401,37 @@ onMounted(() => {
               style="margin-bottom: 8px;"
             />
 
-            <va-color-input
+            <VariableInput
               v-if="series.pointColor !== undefined && series.showPoints?.value"
               label="Point Color"
-              v-model="series.pointColor.value"
+              v-model="(series.pointColor as unknown as VariableWrapper<string>)"
               style="margin-bottom: 8px;"
-            />
+            >
+              <template #default="{ value, change }">
+                <va-color-input
+                  label="Point Color"
+                  :model-value="value"
+                  @input="change"
+                />
+              </template>
+            </VariableInput>
 
-            <va-input
+            <VariableInput
               v-if="series.pointSize !== undefined && series.showPoints?.value"
               label="Point Size (px)"
-              v-model.number="series.pointSize.value"
-              type="number"
-              :min="0"
-              :max="20"
-            />
+              v-model="(series.pointSize as unknown as VariableWrapper<number>)"
+            >
+              <template #default="{ value, change }">
+                <va-input
+                  label="Point Size (px)"
+                  :model-value="value"
+                  @input="change"
+                  type="number"
+                  :min="0"
+                  :max="20"
+                />
+              </template>
+            </VariableInput>
           </div>
         </div>
 
@@ -404,20 +468,36 @@ onMounted(() => {
       <div class="settings-block" v-if="isLineChart">
         <h3>Line Style</h3>
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.borderColor"
           label="Line Color"
-          v-model="widgetSettings.borderColor.value"
-        />
+          v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Line Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
+        <VariableInput
           v-if="widgetSettings.borderWidth"
           label="Line Width (px)"
-          v-model.number="widgetSettings.borderWidth.value"
-          type="number"
-          :min="0"
-          :max="20"
-        />
+          v-model="(widgetSettings.borderWidth as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Line Width (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="20"
+            />
+          </template>
+        </VariableInput>
 
         <va-select
           v-if="widgetSettings.borderDash"
@@ -431,37 +511,61 @@ onMounted(() => {
         <va-checkbox
           v-if="widgetSettings.fill"
           label="Fill Area Under Line"
-          v-model="widgetSettings.fill.value"
+          v-model="widgetSettings.fill"
         />
 
-        <va-color-input
-          v-if="widgetSettings.backgroundColor && widgetSettings.fill?.value"
+        <VariableInput
+          v-if="widgetSettings.backgroundColor && widgetSettings.fill"
           label="Fill Color"
-          v-model="widgetSettings.backgroundColor.value"
-        />
+          v-model="(widgetSettings.backgroundColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Fill Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
         <h3 style="margin-top: 16px;">Point Style</h3>
 
         <va-checkbox
           v-if="widgetSettings.showPoints"
           label="Show Points"
-          v-model="widgetSettings.showPoints.value"
+          v-model="widgetSettings.showPoints"
         />
 
-        <va-color-input
-          v-if="widgetSettings.pointColor && widgetSettings.showPoints?.value"
+        <VariableInput
+          v-if="widgetSettings.pointColor && widgetSettings.showPoints"
           label="Point Color"
-          v-model="widgetSettings.pointColor.value"
-        />
+          v-model="(widgetSettings.pointColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Point Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
-          v-if="widgetSettings.pointSize && widgetSettings.showPoints?.value"
+        <VariableInput
+          v-if="widgetSettings.pointSize && widgetSettings.showPoints"
           label="Point Size (px)"
-          v-model.number="widgetSettings.pointSize.value"
-          type="number"
-          :min="0"
-          :max="20"
-        />
+          v-model="(widgetSettings.pointSize as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Point Size (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="20"
+            />
+          </template>
+        </VariableInput>
       </div>
 
       <!-- Bar Chart Settings -->
@@ -471,7 +575,7 @@ onMounted(() => {
         <va-select
           v-if="widgetSettings.barOrientation"
           label="Bar Orientation"
-          v-model="widgetSettings.barOrientation.value"
+          v-model="widgetSettings.barOrientation"
           :options="[
             { value: 'vertical', text: 'Vertical (Standard)' },
             { value: 'horizontal', text: 'Horizontal' }
@@ -482,51 +586,91 @@ onMounted(() => {
         <va-checkbox
           v-if="widgetSettings.stacked"
           label="Stacked Bars"
-          v-model="widgetSettings.stacked.value"
+          v-model="widgetSettings.stacked"
         />
 
         <h3 style="margin-top: 16px;">Bar Style</h3>
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.backgroundColor"
           label="Bar Fill Color"
-          v-model="widgetSettings.backgroundColor.value"
-        />
+          v-model="(widgetSettings.backgroundColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Bar Fill Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.borderColor"
           label="Bar Border Color"
-          v-model="widgetSettings.borderColor.value"
-        />
+          v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Bar Border Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
+        <VariableInput
           v-if="widgetSettings.borderWidth"
           label="Border Width (px)"
-          v-model.number="widgetSettings.borderWidth.value"
-          type="number"
-          :min="0"
-          :max="20"
-        />
+          v-model="(widgetSettings.borderWidth as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Border Width (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="20"
+            />
+          </template>
+        </VariableInput>
       </div>
 
       <!-- Pie/Doughnut Settings -->
       <div class="settings-block" v-if="isPieChart">
         <h3>Segment Style</h3>
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.borderColor"
           label="Segment Border Color"
-          v-model="widgetSettings.borderColor.value"
-        />
+          v-model="(widgetSettings.borderColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Segment Border Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
+        <VariableInput
           v-if="widgetSettings.borderWidth"
           label="Border Width (px)"
-          v-model.number="widgetSettings.borderWidth.value"
-          type="number"
-          :min="0"
-          :max="20"
-        />
+          v-model="(widgetSettings.borderWidth as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Border Width (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="20"
+            />
+          </template>
+        </VariableInput>
       </div>
     </div>
   </va-collapse>
@@ -539,25 +683,39 @@ onMounted(() => {
         <va-checkbox
           v-if="widgetSettings.showHorizontalGrid"
           label="Show Horizontal Grid"
-          v-model="widgetSettings.showHorizontalGrid.value"
+          v-model="widgetSettings.showHorizontalGrid"
         />
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.horizontalGridColor"
           label="Grid Color"
-          v-model="widgetSettings.horizontalGridColor.value"
-          :disabled="!widgetSettings.showHorizontalGrid?.value"
-        />
+          v-model="(widgetSettings.horizontalGridColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Grid Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
+        <VariableInput
           v-if="widgetSettings.horizontalGridWidth"
           label="Grid Width (px)"
-          v-model.number="widgetSettings.horizontalGridWidth.value"
-          type="number"
-          :min="0"
-          :max="10"
-          :disabled="!widgetSettings.showHorizontalGrid?.value"
-        />
+          v-model="(widgetSettings.horizontalGridWidth as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Grid Width (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="10"
+            />
+          </template>
+        </VariableInput>
       </div>
 
       <div class="settings-block" style="margin-top: 20px;">
@@ -566,25 +724,39 @@ onMounted(() => {
         <va-checkbox
           v-if="widgetSettings.showVerticalGrid"
           label="Show Vertical Grid"
-          v-model="widgetSettings.showVerticalGrid.value"
+          v-model="widgetSettings.showVerticalGrid"
         />
 
-        <va-color-input
+        <VariableInput
           v-if="widgetSettings.verticalGridColor"
           label="Grid Color"
-          v-model="widgetSettings.verticalGridColor.value"
-          :disabled="!widgetSettings.showVerticalGrid?.value"
-        />
+          v-model="(widgetSettings.verticalGridColor as unknown as VariableWrapper<string>)"
+        >
+          <template #default="{ value, change }">
+            <va-color-input
+              label="Grid Color"
+              :model-value="value"
+              @input="change"
+            />
+          </template>
+        </VariableInput>
 
-        <va-input
+        <VariableInput
           v-if="widgetSettings.verticalGridWidth"
           label="Grid Width (px)"
-          v-model.number="widgetSettings.verticalGridWidth.value"
-          type="number"
-          :min="0"
-          :max="10"
-          :disabled="!widgetSettings.showVerticalGrid?.value"
-        />
+          v-model="(widgetSettings.verticalGridWidth as unknown as VariableWrapper<number>)"
+        >
+          <template #default="{ value, change }">
+            <va-input
+              label="Grid Width (px)"
+              :model-value="value"
+              @input="change"
+              type="number"
+              :min="0"
+              :max="10"
+            />
+          </template>
+        </VariableInput>
       </div>
 
     </div>
@@ -630,7 +802,7 @@ onMounted(() => {
         <va-checkbox
           v-if="widgetSettings.annotationsEditMode"
           label="Enable Drag & Drop (Move annotations in chart)"
-          v-model="widgetSettings.annotationsEditMode.value"
+          v-model="widgetSettings.annotationsEditMode"
         />
       </div>
 

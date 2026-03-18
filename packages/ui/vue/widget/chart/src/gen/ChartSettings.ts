@@ -33,26 +33,36 @@ export class ChartSettings {
   @Attribute() seriesSettings: Array<any> = [];
   @Reference('VariableWrapper') chartType: VariableWrapper<string> = new VariableWrapper<string>();
 
-  @Documentation("Bar chart orientation: 'vertical' (default) or 'horizontal'")
-  @Reference('VariableWrapper') barOrientation: VariableWrapper<string> = new VariableWrapper<string>();
+  @Documentation("Orientation for bar charts: 'vertical' or 'horizontal'")
+  @Attribute() barOrientation: string = "vertical";
 
-  @Documentation("Enable stacked mode for bar charts")
-  @Reference('VariableWrapper') stacked: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+  @Documentation("Enable stacked bars")
+  @Attribute() stacked: boolean = false;
   @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();
   @Reference('VariableWrapper') borderDash: VariableWrapper<any> = new VariableWrapper<any>();
   @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') fill: VariableWrapper<boolean> = new VariableWrapper<boolean>();
-  @Reference('VariableWrapper') showPoints: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+
+  @Documentation("Enable fill under line/area")
+  @Attribute() fill: boolean = false;
+
+  @Documentation("Show points on line chart")
+  @Attribute() showPoints: boolean = true;
   @Reference('VariableWrapper') pointColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') pointSize: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') showHorizontalGrid: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+
+  @Documentation("Show horizontal grid lines")
+  @Attribute() showHorizontalGrid: boolean = true;
   @Reference('VariableWrapper') horizontalGridColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') horizontalGridWidth: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') showVerticalGrid: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+
+  @Documentation("Show vertical grid lines")
+  @Attribute() showVerticalGrid: boolean = true;
   @Reference('VariableWrapper') verticalGridColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') verticalGridWidth: VariableWrapper<number> = new VariableWrapper<number>();
-  @Reference('VariableWrapper') annotationsEditMode: VariableWrapper<boolean> = new VariableWrapper<boolean>();
+
+  @Documentation("Enable draggable annotations in edit mode")
+  @Attribute() annotationsEditMode: boolean = false;
 
   @Documentation("Horizontal reference lines (Y-axis values)")
   @Attribute() horizontalLines: Array<any> = [];
