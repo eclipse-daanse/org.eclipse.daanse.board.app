@@ -127,6 +127,25 @@ createWatcher(() => timeWrappers.phenomenonTimeEnd, () => config.history.phenome
 createWatcher(() => timeWrappers.resultTimeStart, () => config.history.resultTime, 'start', 'startVariable');
 createWatcher(() => timeWrappers.resultTimeEnd, () => config.history.resultTime, 'end', 'endVariable');
 
+// Clear helpers for time filters
+const clearTimeRange = () => {
+  timeWrappers.timeRangeStart.value = '';
+  timeWrappers.timeRangeEnd.value = '';
+  config.history.timeRange = {};
+};
+
+const clearPhenomenonTime = () => {
+  timeWrappers.phenomenonTimeStart.value = '';
+  timeWrappers.phenomenonTimeEnd.value = '';
+  config.history.phenomenonTime = {};
+};
+
+const clearResultTime = () => {
+  timeWrappers.resultTimeStart.value = '';
+  timeWrappers.resultTimeEnd.value = '';
+  config.history.resultTime = {};
+};
+
 // Helper to parse ISO 8601 datetime string to Date
 const parseIsoToDate = (isoString: string | undefined): Date | null => {
   if (!isoString) return null;
@@ -207,7 +226,17 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
         <!-- Time Range Configuration -->
         <div class="setting-group">
-          <h4>Time Range Filter</h4>
+          <div class="filter-header">
+            <h4>Time Range Filter</h4>
+            <va-button
+              preset="plain"
+              icon="delete"
+              size="small"
+              color="danger"
+              @click="clearTimeRange"
+              title="Clear Time Range Filter"
+            />
+          </div>
 
           <VariableInput v-model="timeWrappers.timeRangeStart" label="Start Time">
             <template #default="{ value, change }">
@@ -246,7 +275,17 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
         <!-- Phenomenon Time Configuration -->
         <div class="setting-group">
-          <h4>Phenomenon Time Filter</h4>
+          <div class="filter-header">
+            <h4>Phenomenon Time Filter</h4>
+            <va-button
+              preset="plain"
+              icon="delete"
+              size="small"
+              color="danger"
+              @click="clearPhenomenonTime"
+              title="Clear Phenomenon Time Filter"
+            />
+          </div>
 
           <VariableInput v-model="timeWrappers.phenomenonTimeStart" label="Start Time">
             <template #default="{ value, change }">
@@ -285,7 +324,17 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
 
         <!-- Result Time Configuration -->
         <div class="setting-group">
-          <h4>Result Time Filter</h4>
+          <div class="filter-header">
+            <h4>Result Time Filter</h4>
+            <va-button
+              preset="plain"
+              icon="delete"
+              size="small"
+              color="danger"
+              @click="clearResultTime"
+              title="Clear Result Time Filter"
+            />
+          </div>
 
           <VariableInput v-model="timeWrappers.resultTimeStart" label="Start Time">
             <template #default="{ value, change }">
@@ -399,6 +448,20 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
   flex-direction: column;
   gap: 0.75rem;
   min-width: 0;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--va-background-border);
+  padding-bottom: 0.5rem;
+}
+
+.filter-header h4 {
+  margin: 0;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .setting-group h4 {

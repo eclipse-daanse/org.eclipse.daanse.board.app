@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import Icon from './assets/progress.svg'
+import Icon from './assets/map.svg'
 import MapsWidget from './MapsWidget.vue'
 import MapsWidgetSettings from './MapsWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'

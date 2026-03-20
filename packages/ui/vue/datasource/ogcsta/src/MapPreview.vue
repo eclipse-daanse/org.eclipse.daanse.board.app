@@ -183,11 +183,18 @@ watch(() => selectedDatastream.value, async () => {
   }, 100);
 });
 
-const selectThingOnMap = (thing: any) => {
+const selectThingOnMap = async (thing: any) => {
   selectedThing.value = thing;
   const thingId = thing.id || thing.iotId || thing['@iot.id'];
   expandedThings.value.add(thingId);
   centerOnThing(thingId);
+
+  // Scroll to the corresponding thing in the list
+  await nextTick();
+  const el = document.querySelector(`[data-thing-id="${thingId}"]`);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 };
 
 const centerOnThing = (thingId: string) => {
@@ -456,6 +463,7 @@ watch([chartData, chartCanvas], async () => {
           <div
             v-for="thing in hierarchicalData"
             :key="thing.iotId || thing['@iot.id']"
+            :data-thing-id="thing.iotId || thing['@iot.id']"
             class="thing-item"
             :class="{ 'thing-selected': selectedThing?.id === (thing.iotId || thing['@iot.id']) }"
           >

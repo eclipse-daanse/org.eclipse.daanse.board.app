@@ -122,11 +122,17 @@ const getShadow = computed(() => {
 })
 
 const getBackground = computed(() => {
-  let post = ''
+  let bgAlpha = 255
   const bgTransparence = widget.wrapperConfig.backgroundColorTransparence?.value;
   if (isByte(bgTransparence)) {
-    post = bgTransparence.toString(16)
+    bgAlpha = bgTransparence
   }
+  // Also factor in overall widget transparency
+  const transparencyVal = widget.wrapperConfig.transparency?.value;
+  if (isByte(transparencyVal)) {
+    bgAlpha = Math.round(bgAlpha * (transparencyVal / 255))
+  }
+
   let color = (widget.wrapperConfig.backgroundColor?.value || '#FFFFFF').replace(
     '#',
     '',
@@ -135,6 +141,7 @@ const getBackground = computed(() => {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }
 
+  const post = bgAlpha < 255 ? bgAlpha.toString(16).padStart(2, '0') : ''
   const ret = `#${color}${post}`
   return ret
 })
@@ -201,16 +208,27 @@ const getpadding = computed(() => {
 </script>
 
 <template>
-  <div class="flex relative flex-col w-full h-full wrapper-container"
+  <div
+    class="flex relative flex-col w-full h-full wrapper-container"
     :style="{ '--blur-amount': getBlur + 'px', '--title-color': titleColor }">
-    <div v-if="widget.wrapperConfig.title?.value" class="p-2 font-semibold capitalize" :style="{
-      fontSize: titleFontSize + 'px',
-      color: titleColor,
-    }">
+    <div
+      v-if="widget.wrapperConfig.title?.value"
+      class="font-semibold capitalize"
+      :style="{
+        fontSize: titleFontSize + 'px',
+        color: titleColor,
+        padding: getpadding + 'px',
+        paddingBottom: 0,
+        opacity: transparency,
+      }"
+    >
       {{ widget.wrapperConfig.title.value }}
     </div>
     <template v-if="isWidgetRegistered">
-      <div class="w-full h-full box-border cursor-pointer overflow-hidden sub" style="position: relative;">
+      <div
+        class="w-full h-full box-border cursor-pointer overflow-hidden sub"
+        :style="{ position: 'relative', opacity: transparency }"
+      >
         <VaScrollContainer color="#cbcbcb" vertical horizontal>
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
             v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
@@ -245,7 +263,6 @@ const getpadding = computed(() => {
   width: 100%;
   height: 100%;
   box-Shadow: v-bind(getShadow);
-  opacity: v-bind(transparency);
   border-radius: v-bind(borderRadius + "px");
   backdrop-filter: blur(var(--blur-amount));
 }

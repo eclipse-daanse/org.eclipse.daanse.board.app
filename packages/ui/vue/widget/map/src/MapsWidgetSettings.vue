@@ -487,7 +487,7 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
             </div>
             <div v-if="element.type=='WFSLayer' || element.type=='OGCSTA' || element.type=='GEOJSON' || element.type=='REST-GEOJSON'">
               <VaButton
-                icon="format_paint"
+                icon="settings"
                 preset="secondary"
                 round
                 @click="()=>{selectedLayer=element;renderShow=true}"

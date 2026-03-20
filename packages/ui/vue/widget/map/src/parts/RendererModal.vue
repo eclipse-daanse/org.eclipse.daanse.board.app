@@ -466,7 +466,7 @@ watch(selection,()=>{
                       <VaIcon
                         class="material-icons"
                       >
-                        format_paint
+                        settings
 
                       </VaIcon>
                     </VaBadge>
@@ -659,7 +659,11 @@ watch(selection,()=>{
 
       </div>
     </div>
-
+    <template #footer>
+      <div style="display: flex; justify-content: flex-end; padding: 8px;">
+        <VaButton @click="showModal = false">Close</VaButton>
+      </div>
+    </template>
 
   </VaModal>
 
