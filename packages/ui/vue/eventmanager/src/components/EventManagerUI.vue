@@ -543,7 +543,7 @@ onMounted(() => {
           class="w-full"
         >
           <template #cell(id)="{ rowData }">
-            <span class="text-xs text-gray-600">{{ rowData.id }}</span>
+            <span class="mapping-id" :title="rowData.id">{{ rowData.id }}</span>
           </template>
           <template #cell(context)="{ rowData }">
             {{ rowData.context }}{{ rowData.contextId ? `:${rowData.contextId}` : '' }}
@@ -552,6 +552,7 @@ onMounted(() => {
             <div class="actions-list">
               <div v-for="(action, idx) in getMappingActions(rowData)" :key="idx" class="action-item">
                 <span class="action-context">{{ action.targetContext }}</span>
+                <span v-if="action.targetContextId" class="action-target-id" :title="action.targetContextId">{{ action.targetContextId }}</span>
                 <span class="action-separator">→</span>
                 <span class="action-name">{{ action.actionName }}</span>
               </div>
@@ -1237,9 +1238,32 @@ onMounted(() => {
   font-size: 0.875rem;
 }
 
+.mapping-id {
+  font-size: 0.8rem;
+  color: #374151;
+  font-family: 'Monaco', 'Courier New', monospace;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 .action-context {
   color: #6b7280;
   font-size: 0.75rem;
+}
+
+.action-target-id {
+  font-size: 0.7rem;
+  color: #6b7280;
+  font-family: 'Monaco', 'Courier New', monospace;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .action-separator {

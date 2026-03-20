@@ -28,6 +28,7 @@ Contributors:
           <div
             v-if="!config.fixStartKnob"
             class="timeline-knob start-knob"
+            :style="{ zIndex: startKnobOnTop ? 5 : 4 }"
             @mousedown.stop="onStartKnobMouseDown"
             title="Startzeit"
           ></div>
@@ -40,6 +41,7 @@ Contributors:
           <!-- Rechter Knob (Ende) -->
           <div
             class="timeline-knob end-knob"
+            :style="{ zIndex: startKnobOnTop ? 3 : 4 }"
             @mousedown.stop="onEndKnobMouseDown"
             title="Endzeit"
           ></div>
@@ -414,6 +416,13 @@ const calculatePlayingColor = (hexColor: string): string => {
 // Prüfung ob Ende erreicht
 const isAtEnd = computed(() => {
   return rangeEnd.value.getTime() >= timelineMax.value.getTime();
+});
+
+// Start-Knob soll oben liegen wenn beide Knobs nah beieinander sind (< 5% Abstand)
+// Das ermöglicht es dem User, den Start-Knob nach links zu ziehen um sie zu trennen
+const startKnobOnTop = computed(() => {
+  const distance = endKnobPosition.value - startKnobPosition.value;
+  return distance < 5;
 });
 
 // Zeitachse mit formatierten Ticks

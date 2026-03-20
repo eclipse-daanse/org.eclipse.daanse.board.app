@@ -101,11 +101,11 @@ const chartData = computed(() => {
       const xAxisId = seriesSettings?.xAxisId?.value
       const yAxisId = seriesSettings?.yAxisId?.value
 
-      // Determine colors (series-specific or global fallback)
-      const borderColor = seriesSettings?.borderColor?.value ?? config.value?.borderColor?.value ?? dataset.borderColor
-      const backgroundColor = seriesSettings?.backgroundColor?.value ?? config.value?.backgroundColor?.value ?? dataset.backgroundColor
-      const borderWidth = seriesSettings?.borderWidth?.value ?? config.value?.borderWidth?.value ?? dataset.borderWidth
-      const borderDash = seriesSettings?.borderDash?.value ?? config.value?.borderDash?.value ?? dataset.borderDash
+      // Determine colors: series-specific > dataset (from composer) > global config
+      const borderColor = seriesSettings?.borderColor?.value ?? dataset.borderColor ?? config.value?.borderColor?.value
+      const backgroundColor = seriesSettings?.backgroundColor?.value ?? dataset.backgroundColor ?? config.value?.backgroundColor?.value
+      const borderWidth = seriesSettings?.borderWidth?.value ?? dataset.borderWidth ?? config.value?.borderWidth?.value
+      const borderDash = seriesSettings?.borderDash?.value ?? dataset.borderDash ?? config.value?.borderDash?.value
 
       // Apply settings based on chart type
       let result: any = {
@@ -134,7 +134,7 @@ const chartData = computed(() => {
         // Determine line-specific settings (series-specific or global fallback)
         const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
         const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
-        const pointColor = seriesSettings?.pointColor?.value ?? config.value?.pointColor?.value ?? dataset.pointBackgroundColor
+        const pointColor = seriesSettings?.pointColor?.value ?? dataset.pointBackgroundColor ?? config.value?.pointColor?.value
         const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
 
         result = {
