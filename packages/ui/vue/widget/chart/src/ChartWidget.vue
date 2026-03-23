@@ -18,10 +18,11 @@ import {
   RadialLinearScale, ArcElement, Filler
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { computed, onMounted, ref, toRefs, watch } from 'vue';
 import { ChartSettings } from './gen/ChartSettings';
 
+const { wrapParameters } = useVariableRepository()
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement, RadialLinearScale, ArcElement, Filler, annotationPlugin)
 
@@ -70,13 +71,32 @@ const chartComponent = computed(() => {
 // Force re-render when config changes
 const chartKey = ref(0)
 watch(() => config.value, (newVal) => {
-  console.log('Chart config changed:', {
-    chartType: newVal?.chartType?.value,
-    borderColor: newVal?.borderColor?.value,
-    backgroundColor: newVal?.backgroundColor?.value
-  })
   chartKey.value++
 }, { deep: true })
+
+const resolvedConfig = wrapParameters({
+  chartType: computed(() => (config.value?.chartType as any)?.value ?? 'bar'),
+  borderColor: computed(() => (config.value?.borderColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
+  backgroundColor: computed(() => (config.value?.backgroundColor as any)?.value ?? 'rgba(75, 192, 192, 0.2)'),
+  borderWidth: computed(() => (config.value?.borderWidth as any)?.value ?? 2),
+  borderDash: computed(() => (config.value?.borderDash as any)?.value ?? []),
+  fill: computed(() => config.value?.fill ?? false),
+  showPoints: computed(() => config.value?.showPoints ?? true),
+  pointColor: computed(() => (config.value?.pointColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
+  pointSize: computed(() => (config.value?.pointSize as any)?.value ?? 3),
+  barOrientation: computed(() => (config.value as any)?.barOrientation?.value ?? 'vertical'),
+  stacked: computed(() => (config.value as any)?.stacked?.value ?? false),
+  showHorizontalGrid: computed(() => config.value?.showHorizontalGrid ?? true),
+  horizontalGridColor: computed(() => (config.value?.horizontalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
+  horizontalGridWidth: computed(() => (config.value?.horizontalGridWidth as any)?.value ?? 1),
+  showVerticalGrid: computed(() => config.value?.showVerticalGrid ?? true),
+  verticalGridColor: computed(() => (config.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
+  verticalGridWidth: computed(() => (config.value?.verticalGridWidth as any)?.value ?? 1),
+  dateDisplayFormat: computed(() => (config.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
+  annotationsEditMode: computed(() => config.value?.annotationsEditMode ?? false)
+})
+
+console.log(resolvedConfig.backgroundColor.value);
 
 // Apply settings to data (override dataset colors and apply per-series settings)
 const chartData = computed(() => {
@@ -91,21 +111,21 @@ const chartData = computed(() => {
     dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
       // Check if there's a series-specific setting for this dataset
       const seriesSettings = config.value?.seriesSettings?.find(
-        (s: any) => s.seriesIndex?.value === index
+        (s: any) => (s.seriesIndex as any)?.value === index
       )
 
       // Determine chart type (series-specific or global fallback)
-      const chartType = seriesSettings?.chartType?.value ?? config.value?.chartType?.value ?? 'bar'
+      const chartType = (seriesSettings?.chartType as any)?.value ?? resolvedConfig.chartType ?? 'bar'
 
       // Determine axis assignment (series-specific or default)
-      const xAxisId = seriesSettings?.xAxisId?.value
-      const yAxisId = seriesSettings?.yAxisId?.value
+      const xAxisId = (seriesSettings?.xAxisId as any)?.value
+      const yAxisId = (seriesSettings?.yAxisId as any)?.value
 
       // Determine colors (series-specific or global fallback)
-      const borderColor = seriesSettings?.borderColor?.value ?? config.value?.borderColor?.value ?? dataset.borderColor
-      const backgroundColor = seriesSettings?.backgroundColor?.value ?? config.value?.backgroundColor?.value ?? dataset.backgroundColor
-      const borderWidth = seriesSettings?.borderWidth?.value ?? config.value?.borderWidth?.value ?? dataset.borderWidth
-      const borderDash = seriesSettings?.borderDash?.value ?? config.value?.borderDash?.value ?? dataset.borderDash
+      const borderColor = (seriesSettings?.borderColor as any)?.value ?? resolvedConfig.borderColor ?? dataset.borderColor
+      const backgroundColor = (seriesSettings?.backgroundColor as any)?.value ?? resolvedConfig.backgroundColor ?? dataset.backgroundColor
+      const borderWidth = (seriesSettings?.borderWidth as any)?.value ?? resolvedConfig.borderWidth ?? dataset.borderWidth
+      const borderDash = (seriesSettings?.borderDash as any)?.value ?? resolvedConfig.borderDash ?? dataset.borderDash
 
       // Apply settings based on chart type
       let result: any = {
@@ -125,17 +145,17 @@ const chartData = computed(() => {
           result.yAxisID = yAxisId
         }
         // Override label if series-specific label is set
-        if (seriesSettings?.label?.value) {
-          result.label = seriesSettings.label.value
+        if ((seriesSettings?.label as any)?.value) {
+          result.label = (seriesSettings?.label as any).value
         }
       }
 
       if (chartType === 'line') {
         // Determine line-specific settings (series-specific or global fallback)
-        const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
-        const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
-        const pointColor = seriesSettings?.pointColor?.value ?? config.value?.pointColor?.value ?? dataset.pointBackgroundColor
-        const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
+        const showPoints = seriesSettings?.showPoints?.value ?? resolvedConfig.showPoints ?? true
+        const fillEnabled = seriesSettings?.fill?.value ?? resolvedConfig.fill ?? false
+        const pointColor = (seriesSettings?.pointColor as any)?.value ?? resolvedConfig.pointColor ?? dataset.pointBackgroundColor
+        const pointSize = (seriesSettings?.pointSize as any)?.value ?? resolvedConfig.pointSize ?? 3
 
         result = {
           ...result,
@@ -173,7 +193,7 @@ const chartOptions = computed(() => {
     }
   }
 
-  const editMode = config.value.annotationsEditMode?.value ?? false
+  const editMode = resolvedConfig.annotationsEditMode
 
   // Build annotations
   const annotations: any = {}
@@ -350,7 +370,7 @@ const chartOptions = computed(() => {
     return result
   }
 
-  const dateFormat = config.value.dateDisplayFormat?.value ?? 'dd.MM.yyyy HH:mm'
+  const dateFormat = resolvedConfig.dateDisplayFormat
 
   // Collect all unique axis IDs from series settings
   const xAxisIds = new Set<string>()
@@ -362,34 +382,34 @@ const chartOptions = computed(() => {
     xAxisIds.add('x') // Default x-axis
     yAxisIds.add('y') // Default y-axis
     config.value.seriesSettings?.forEach((s: any) => {
-      if (s.xAxisId?.value) {
-        xAxisIds.add(s.xAxisId.value)
+      if ((s?.xAxisId as any)?.value) {
+        xAxisIds.add((s.xAxisId as any).value)
       }
-      if (s.yAxisId?.value) {
-        yAxisIds.add(s.yAxisId.value)
+      if ((s?.yAxisId as any)?.value) {
+        yAxisIds.add((s.yAxisId as any).value)
       }
     })
   }
 
   // Determine if stacked mode is enabled
-  const isStacked = config.value.stacked?.value ?? false
+  const isStacked = resolvedConfig.stacked
 
   // Build scales configuration dynamically
   const scales: any = {
     y: {
       stacked: isStacked,
       grid: {
-        display: config.value.showHorizontalGrid?.value ?? true,
-        color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-        lineWidth: config.value.horizontalGridWidth?.value ?? 1,
+        display: resolvedConfig.showHorizontalGrid,
+        color: resolvedConfig.horizontalGridColor,
+        lineWidth: resolvedConfig.horizontalGridWidth,
       }
     },
     x: {
       stacked: isStacked,
       grid: {
-        display: config.value.showVerticalGrid?.value ?? true,
-        color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-        lineWidth: config.value.verticalGridWidth?.value ?? 1,
+        display: resolvedConfig.showVerticalGrid,
+        color: resolvedConfig.verticalGridColor,
+        lineWidth: resolvedConfig.verticalGridWidth,
       },
       ticks: {
         callback: function(value: any, index: number, ticks: any[]): string {
@@ -408,9 +428,9 @@ const chartOptions = computed(() => {
         scales[axisId] = {
           type: 'category', // Explicitly set the axis type
           grid: {
-            display: config.value.showVerticalGrid?.value ?? true,
-            color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-            lineWidth: config.value.verticalGridWidth?.value ?? 1,
+            display: resolvedConfig.showVerticalGrid,
+            color: resolvedConfig.verticalGridColor,
+            lineWidth: resolvedConfig.verticalGridWidth,
           },
           ticks: {
             callback: function(value: any, index: number, ticks: any[]): string {
@@ -433,9 +453,9 @@ const chartOptions = computed(() => {
         scales[axisId] = {
           type: 'linear', // Explicitly set the axis type
           grid: {
-            display: config.value.showHorizontalGrid?.value ?? true,
-            color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
-            lineWidth: config.value.horizontalGridWidth?.value ?? 1,
+            display: resolvedConfig.showHorizontalGrid,
+            color: resolvedConfig.horizontalGridColor,
+            lineWidth: resolvedConfig.horizontalGridWidth,
           },
           // Position secondary Y-axes on the right
           position: 'right'
@@ -445,7 +465,7 @@ const chartOptions = computed(() => {
   }
 
   // Determine bar orientation (horizontal uses indexAxis: 'y')
-  const barOrientation = config.value.barOrientation?.value ?? 'vertical'
+  const barOrientation = resolvedConfig.barOrientation
   const indexAxis = barOrientation === 'horizontal' ? 'y' : 'x'
 
   const options: any = {

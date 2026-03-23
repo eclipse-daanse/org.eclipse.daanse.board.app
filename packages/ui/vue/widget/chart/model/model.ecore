@@ -171,6 +171,25 @@
             </eGenericType>
         </eStructuralFeatures>
 
+        <!-- Bar Layout Settings -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="barOrientation" containment="false" defaultValueLiteral="vertical">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Orientation for bar charts: 'vertical' or 'horizontal'"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="stacked" containment="false" defaultValueLiteral="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Enable stacked bars"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
         <!-- Dataset Styling -->
         <eStructuralFeatures xsi:type="ecore:EReference" name="borderColor" containment="false" defaultValueLiteral="rgba(75, 192, 192, 1)">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
