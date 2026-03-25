@@ -59,7 +59,7 @@ const loadLayout = async () => {
 
   if (props.pageId && pageRepo) {
     const page = pageRepo.getPage(props.pageId)
-    currentPage.value = page || null
+    currentPage.value = page ? { ...page } : null
 
     // Reset components first
     EditComponent.value = null
@@ -93,7 +93,7 @@ const onPageUpdate = (eventType: string) => {
   if (eventType === 'PAGE_UPDATE') {
     if (props.pageId && pageRepo) {
       const page = pageRepo.getPage(props.pageId)
-      currentPage.value = page || null
+      currentPage.value = page ? { ...page } : null
 
       const layoutChanged =
         page?.layout?.id !== currentLayout.value?.id
@@ -152,7 +152,7 @@ onUnmounted(() => {
     <!-- View mode - only render if all components are ready -->
     <div v-else-if="props.viewMode && ViewComponent
     && currentLayout" class="view-component-wrapper">
-      <component :is="ViewComponent" :key="currentLayout.id || 'view'" />
+      <component :is="ViewComponent" :key="currentLayout.id || 'view'" :layout-settings="currentPage?.layoutSettings" />
     </div>
 
     <!-- Edit mode - only render if all components are ready -->
@@ -161,6 +161,7 @@ onUnmounted(() => {
       <component
         :is="EditComponent"
         :key="currentLayout.id || 'edit'"
+        :layout-settings="currentPage?.layoutSettings"
         @openSettings="handleOpenWidgetSettings"
         @removeWidget="handleRemoveWidget"
       />

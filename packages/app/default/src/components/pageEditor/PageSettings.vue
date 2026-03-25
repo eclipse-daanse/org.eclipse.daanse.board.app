@@ -55,6 +55,14 @@ onMounted(() => {
     if (pageSettings.value && !pageSettings.value.layout && defaultLayout.value) {
       pageSettings.value.layout = defaultLayout.value
     }
+
+    // Resolve full layout object from layout repo (includes settings component)
+    if (pageSettings.value?.layout && layoutRepo) {
+      const fullLayout = layoutRepo.getLayout(pageSettings.value.layout.id)
+      if (fullLayout) {
+        pageSettings.value.layout = fullLayout
+      }
+    }
   }
 })
 watch(pageSettings,()=>{
@@ -102,6 +110,14 @@ watch(pageSettings,()=>{
             :options="availableLayouts"
             text-by="name"
             track-by="id"
+          />
+        </div>
+
+        <!-- Layout-specific settings -->
+        <div class="settings-block" v-if="pageSettings.layout?.settings">
+          <component
+            :is="pageSettings.layout.settings"
+            v-model="pageSettings.layoutSettings"
           />
         </div>
 

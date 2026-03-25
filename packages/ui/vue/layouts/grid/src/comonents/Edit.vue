@@ -13,15 +13,18 @@ Contributors:
 
 <template>
   <VaScrollContainer class="max-h-screen ml-15" vertical>
-    <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus">
+    <div ref="wrapper" @dragenter="onDragEnter" @drop.prevent="onDrop" @drag="onDragMove" class="alayout" @click="closeAllContextMenus"
+      :style="{ '--grid-row-height': ROW_HEIGHT + 'px', '--grid-cols': currentColCount }"
+    >
           <GridLayout
             ref="gridLayout"
+            :key="gridSettingsKey"
             :layout="gridLayoutModel"
             :row-height="ROW_HEIGHT"
             :responsive="true"
             :vertical-compact="false"
             :breakpoints="BREAKPOINTS"
-            :cols="COLS"
+            :cols="COLS as any"
             @layout-updated="persistLayout"
           >
           <template #item="{ item }">
@@ -88,11 +91,18 @@ import Draggable from 'vuedraggable'
 import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { container as diContainer } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Konstanten */
-const BREAKPOINTS = { lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 } as const
-const COLS = { lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 } as const
-const ROW_HEIGHT = 30
+/** Grid Settings — direkt aus dem Page Repository lesen */
+const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)
+const gridSettings = computed(() => resolveGridSettings(layoutSettingsRef.value))
+const COLS = computed(() => gridSettings.value.cols)
+const ROW_HEIGHT = computed(() => gridSettings.value.rowHeight)
+const gridSettingsKey = computed(() => `${ROW_HEIGHT.value}-${Object.values(COLS.value).join('-')}`)
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
+const currentColCount = computed(() => getCurrentCols(windowWidth.value))
 
 /** Routing/Stores */
 const route = useRoute()
@@ -244,18 +254,19 @@ function toNum(v: unknown, fallback = 0): number {
   return Number.isFinite(n) ? n : fallback
 }
 function getCurrentCols(width: number) {
-  if (width >= BREAKPOINTS.lg) return COLS.lg
-  if (width >= BREAKPOINTS.md) return COLS.md
-  if (width >= BREAKPOINTS.sm) return COLS.sm
-  if (width >= BREAKPOINTS.xs) return COLS.xs
-  return COLS.xxs
+  const cols = COLS.value
+  if (width >= BREAKPOINTS.lg) return cols.lg
+  if (width >= BREAKPOINTS.md) return cols.md
+  if (width >= BREAKPOINTS.sm) return cols.sm
+  if (width >= BREAKPOINTS.xs) return cols.xs
+  return cols.xxs
 }
 function getMetrics() {
   // Use fixed container width to ensure consistent conversion
   const containerW = 1200 // Fixed width
-  const cols = COLS.md // Fixed column count (12)
+  const cols = COLS.value.md
 
-  return { colW: containerW / cols, rowH: ROW_HEIGHT }
+  return { colW: containerW / cols, rowH: ROW_HEIGHT.value }
 }
 
 /** Mapping Pixel <-> Grid (Store speichert Pixel) */
@@ -305,13 +316,40 @@ watch(storedLayout, (data) => {
 
 /** Re-Sync bei Resize */
 const onResize = throttle(() => {
+  windowWidth.value = window.innerWidth
   // Neu mappen bei geänderten Metriken
   const data = storedLayout.value || []
   const arr = Array.isArray(data) ? data.map(toGrid) : []
   if (!isEqual(layoutModel.value, arr)) layoutModel.value = arr
 }, 120)
-onMounted(() => window.addEventListener('resize', onResize, { passive: true }))
-onBeforeUnmount(() => window.removeEventListener('resize', onResize))
+/** Page Repo Subscription für layoutSettings */
+let pageSubId: string | null = null
+const pageRepo = diContainer.isBound(PageIdentifier)
+  ? diContainer.get<PageRegistryI>(PageIdentifier)
+  : null
+
+function syncLayoutSettings() {
+  if (pageRepo && pageID.value) {
+    const page = pageRepo.getPage(pageID.value)
+    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', onResize, { passive: true })
+  syncLayoutSettings()
+  if (pageRepo && 'subscribe' in pageRepo) {
+    pageSubId = (pageRepo as any).subscribe((ev: string) => {
+      if (ev === 'PAGE_UPDATE') syncLayoutSettings()
+    })
+  }
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
+  if (pageRepo && 'unsubscribe' in pageRepo && pageSubId) {
+    (pageRepo as any).unsubscribe(pageSubId)
+  }
+})
 
 /** Grid -> Store (nur wenn nicht gerade vom Store gesynct) */
 function persistLayout(newLayout?: LayoutItem[]) {
@@ -472,13 +510,8 @@ const openWidgetSettings = (id: string) => {
     linear-gradient(to right, #e9e9e9 1px, transparent 1px),
     linear-gradient(to bottom, #e9e9e9 1px, transparent 1px);
   background-repeat: repeat;
-  background-size: calc(calc(100% - 5px) / 2) 40px;
+  background-size: calc(calc(100% - 5px) / var(--grid-cols, 12)) calc(var(--grid-row-height, 30px) + 10px);
 }
-@media (min-width: 20px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 2) 40px; } }
-@media (min-width: 420px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 4) 40px; } }
-@media (min-width: 708px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 6) 40px; } }
-@media (min-width: 1120px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 12) 40px; } }
-@media (min-width: 1720px) { .vgl-layout::before { background-size: calc(calc(100% - 5px) / 18) 40px; } }
 
 :deep(.vgl-item--placeholder) {
   outline: 2px dashed #888;

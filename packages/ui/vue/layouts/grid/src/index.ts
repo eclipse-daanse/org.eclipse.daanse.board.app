@@ -11,6 +11,7 @@ Contributors: Smart City Jena
 import { identifier,type  LayoutI, type LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 import View from './comonents/View.vue'
 import Edit from './comonents/Edit.vue'
+import GridSettingsPanel from './comonents/GridSettingsPanel.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 if(container.isBound(identifier)) {
@@ -21,7 +22,8 @@ if(container.isBound(identifier)) {
       name: "GridLayout",
       description: "responsive grid-based layout",
       component: View,
-      editor: Edit
+      editor: Edit,
+      settings: GridSettingsPanel
     } as LayoutI;
     layoutRepo.addLayout(layout)
     console.log('📦 GridLayout added')
