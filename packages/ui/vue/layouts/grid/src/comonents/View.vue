@@ -16,7 +16,7 @@ Contributors:
     vertical
   >
     <div ref="wrapper" class="view_grid_layout">
-      <GridLayout ref="gridLayout" v-model:layout="layout" :row-height="30" :responsive="true" :vertical-compact="false" :breakpoints="{ lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 }" :cols="{ lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 }" :is-draggable="false" :is-resizable="false">
+      <GridLayout ref="gridLayout" :key="gridSettingsKey" v-model:layout="layout" :row-height="ROW_HEIGHT" :responsive="true" :vertical-compact="false" :breakpoints="BREAKPOINTS" :cols="COLS as any" :is-draggable="false" :is-resizable="false">
         <template #item="{ item }">
           <WidgetWrapper v-if="widgets?.find((w: any) => w.uid === item.i)"
             :widget="widgets.find((w: any) => w.uid === item.i)"
@@ -40,10 +40,20 @@ import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrappe
 import { useRoute } from 'vue-router'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
+import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
 
 const props = defineProps<{
-  pageId?: string
+  pageId?: string,
+  layoutSettings?: Record<string, any>
 }>();
+
+/** Grid Settings — direkt aus dem Page Repository lesen */
+const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)
+const gridSettings = computed(() => resolveGridSettings(layoutSettingsRef.value))
+const COLS = computed(() => gridSettings.value.cols)
+const ROW_HEIGHT = computed(() => gridSettings.value.rowHeight)
+const gridSettingsKey = computed(() => `${ROW_HEIGHT.value}-${Object.values(COLS.value).join('-')}`)
 
 const route = useRoute();
 
@@ -62,9 +72,30 @@ let layoutStore: any = null
 // Get EventBus for page loaded event
 const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
 
+/** Page Repo Subscription für layoutSettings */
+let pageSubId: string | null = null
+const pageRepo = container.isBound(PageIdentifier)
+  ? container.get<PageRegistryI>(PageIdentifier)
+  : null
+
+function syncLayoutSettings() {
+  if (pageRepo && pageId) {
+    const page = pageRepo.getPage(pageId)
+    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+  }
+}
+
 // Initialize stores safely in onMounted with retry logic
 onMounted(async () => {
   console.log('Grid View component mounted for page:', pageId)
+
+  // Sync grid layout settings
+  syncLayoutSettings()
+  if (pageRepo && 'subscribe' in pageRepo) {
+    pageSubId = (pageRepo as any).subscribe((ev: string) => {
+      if (ev === 'PAGE_UPDATE') syncLayoutSettings()
+    })
+  }
 
   // Wait a tick to ensure Pinia is fully initialized
   await nextTick()
@@ -121,25 +152,20 @@ function toNum(n: any, fallback: number) {
 }
 
 function getCurrentCols(width: number) {
-  const BREAKPOINTS = { lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 } as const
-  const COLS = { lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 } as const
-
-  if (width >= BREAKPOINTS.lg) return COLS.lg
-  if (width >= BREAKPOINTS.md) return COLS.md
-  if (width >= BREAKPOINTS.sm) return COLS.sm
-  if (width >= BREAKPOINTS.xs) return COLS.xs
-  return COLS.xxs
+  const cols = COLS.value
+  if (width >= BREAKPOINTS.lg) return cols.lg
+  if (width >= BREAKPOINTS.md) return cols.md
+  if (width >= BREAKPOINTS.sm) return cols.sm
+  if (width >= BREAKPOINTS.xs) return cols.xs
+  return cols.xxs
 }
 
 function getMetrics() {
-  const ROW_HEIGHT = 30
-  const COLS = { lg: 18, md: 12, sm: 6, xs: 4, xxs: 2 } as const
-
   // Use fixed container width to ensure consistent conversion
   const containerW = 1200 // Fixed width
-  const cols = COLS.md // Fixed column count (12)
+  const cols = COLS.value.md
 
-  return { colW: containerW / cols, rowH: ROW_HEIGHT }
+  return { colW: containerW / cols, rowH: ROW_HEIGHT.value }
 }
 
 function toGrid(it: any) {

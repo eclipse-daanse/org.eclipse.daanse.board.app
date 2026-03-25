@@ -20,5 +20,6 @@ export interface PageI{
   backgroundSize?: 'auto' | 'cover' | 'contain',
   backgroundPosition?: string,
   backgroundRepeat?: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y',
+  layoutSettings?: Record<string, any>,
   layout:LayoutI
 }
