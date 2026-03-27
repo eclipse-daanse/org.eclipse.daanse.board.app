@@ -418,11 +418,13 @@ const isAtEnd = computed(() => {
   return rangeEnd.value.getTime() >= timelineMax.value.getTime();
 });
 
-// Start-Knob soll oben liegen wenn beide Knobs nah beieinander sind (< 5% Abstand)
-// Das ermöglicht es dem User, den Start-Knob nach links zu ziehen um sie zu trennen
+// Wenn beide Knobs nah beieinander sind (< 5% Abstand):
+// - Am linken Ende: End-Knob oben, damit man ihn nach rechts ziehen kann
+// - Am rechten Ende: Start-Knob oben, damit man ihn nach links ziehen kann
 const startKnobOnTop = computed(() => {
   const distance = endKnobPosition.value - startKnobPosition.value;
-  return distance < 5;
+  if (distance >= 10) return false;
+  return startKnobPosition.value > 50;
 });
 
 // Zeitachse mit formatierten Ticks
