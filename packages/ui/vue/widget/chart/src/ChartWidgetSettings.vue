@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { inject, ref, onMounted, computed } from 'vue'
+import { inject, ref, onMounted, computed, watch } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { ChartSettings } from './gen/ChartSettings'
 import { SeriesSettings } from './gen/SeriesSettings'
@@ -23,10 +23,31 @@ const opened = ref({
   styleSection: true,
   gridSection: false,
   dateFormatSection: false,
+  axisLabelSection: false,
   annotationsSection: false,
 })
 
 const widgetSettings = defineModel<ChartSettings>({ required: true })
+
+// Axis title local refs (VariableWrapper._value is not reactive)
+const xAxisTitleLocal = ref(widgetSettings.value?.xAxisTitle?.value ?? '')
+const yAxisTitleLocal = ref(widgetSettings.value?.yAxisTitle?.value ?? '')
+
+watch(xAxisTitleLocal, (val) => {
+  if (!widgetSettings.value.xAxisTitle) {
+    widgetSettings.value.xAxisTitle = new VariableWrapper<string>(val)
+  } else {
+    widgetSettings.value.xAxisTitle.value = val
+  }
+})
+
+watch(yAxisTitleLocal, (val) => {
+  if (!widgetSettings.value.yAxisTitle) {
+    widgetSettings.value.yAxisTitle = new VariableWrapper<string>(val)
+  } else {
+    widgetSettings.value.yAxisTitle.value = val
+  }
+})
 
 const i18n: i18n | undefined = inject('i18n');
 const t = (key: string) => (i18n) ? i18n.t(key) : key;
@@ -36,6 +57,36 @@ const chartType = computed(() => widgetSettings.value?.chartType?.value ?? 'bar'
 const isLineChart = computed(() => chartType.value === 'line')
 const isBarChart = computed(() => chartType.value === 'bar')
 const isPieChart = computed(() => ['pie', 'doughnut', 'polarArea'].includes(chartType.value))
+
+// Collect all unique Y-axis IDs from series settings
+const yAxisIds = computed(() => {
+  const ids = new Set<string>(['y'])
+  widgetSettings.value?.seriesSettings?.forEach((s: any) => {
+    if (s.yAxisId?.value) ids.add(s.yAxisId.value)
+  })
+  return Array.from(ids)
+})
+
+// Get/set Y-axis title from the first series that uses this axis
+function getYAxisTitle(axisId: string): string {
+  const series = widgetSettings.value?.seriesSettings?.find(
+    (s: any) => s.yAxisId?.value === axisId
+  )
+  return series?.yAxisTitle?.value ?? ''
+}
+
+function setYAxisTitle(axisId: string, title: string) {
+  const series = widgetSettings.value?.seriesSettings?.find(
+    (s: any) => s.yAxisId?.value === axisId
+  )
+  if (series) {
+    if (!series.yAxisTitle) {
+      series.yAxisTitle = new VariableWrapper<string>(title)
+    } else {
+      series.yAxisTitle.value = title
+    }
+  }
+}
 
 // Debug: Check if settings are loaded
 onMounted(() => {
@@ -292,6 +343,14 @@ onMounted(() => {
             label="Y-Axis ID (e.g., 'y', 'y1', 'y2')"
             v-model="series.yAxisId.value"
             placeholder="y"
+            style="margin-bottom: 8px;"
+          />
+
+          <va-input
+            v-if="series.yAxisTitle"
+            label="Y-Axis Title"
+            v-model="series.yAxisTitle.value"
+            placeholder="e.g., Temperatur (°C)"
             style="margin-bottom: 12px;"
           />
 
@@ -587,6 +646,38 @@ onMounted(() => {
         />
       </div>
 
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.axisLabelSection" icon="text_fields" header="Axis Titles">
+    <div class="settings-container">
+      <div class="settings-block">
+
+        <va-input
+          label="X-Axis Title"
+          v-model="xAxisTitleLocal"
+          placeholder="e.g., Zeit, Datum"
+          style="margin-bottom: 8px;"
+        />
+
+        <va-input
+          label="Y-Axis Title (y)"
+          v-model="yAxisTitleLocal"
+          placeholder="e.g., Temperatur (°C)"
+          style="margin-bottom: 8px;"
+        />
+
+        <template v-for="axisId in yAxisIds" :key="axisId">
+          <va-input
+            v-if="axisId !== 'y'"
+            :label="`Y-Axis Title (${axisId})`"
+            :model-value="getYAxisTitle(axisId)"
+            @update:model-value="setYAxisTitle(axisId, $event)"
+            placeholder="e.g., Niederschlag (mm)"
+            style="margin-bottom: 8px;"
+          />
+        </template>
+      </div>
     </div>
   </va-collapse>
 

@@ -52,6 +52,8 @@ export class ChartSettings {
   @Reference('VariableWrapper') showVerticalGrid: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') verticalGridColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') verticalGridWidth: VariableWrapper<number> = new VariableWrapper<number>();
+  @Reference('VariableWrapper') xAxisTitle: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') yAxisTitle: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') annotationsEditMode: VariableWrapper<boolean> = new VariableWrapper<boolean>();
 
   @Documentation("Horizontal reference lines (Y-axis values)")
