@@ -271,6 +271,10 @@ const openThing = ref<{ [key: string]: boolean }>({})
 // Initialize selectedThingId from config to persist across mode switches
 const selectedThingId = ref<string | null>(config.value?.selectedThingId ?? null)
 
+// Tooltip state for action-triggered tooltips
+const tooltipThingId = ref<string | null>(null)
+const tooltipContent = ref<string | null>(null)
+
 // Watch for changes to selectedThingId and sync back to config
 watch(selectedThingId, (newValue) => {
   if (config.value) {
@@ -1074,6 +1078,16 @@ let api = new class implements MapWidgetInterface{
     })
     console.log('🎯 flyTo called successfully')
   }
+
+  showTooltip = (thingId: string, content?: string) => {
+    tooltipThingId.value = thingId
+    tooltipContent.value = content || null
+  }
+
+  hideTooltip = () => {
+    tooltipThingId.value = null
+    tooltipContent.value = null
+  }
 };
 
 // Expose MapWidgetInterface methods
@@ -1228,6 +1242,8 @@ onUnmounted(() => {
           :get-by-id="getById"
           :selected-thing-id="selectedThingId"
           :selection-highlight-color="config.selectionHighlightColor ?? '#ff0000'"
+          :tooltip-thing-id="tooltipThingId"
+          :tooltip-content="tooltipContent"
         />
       </template>
 
