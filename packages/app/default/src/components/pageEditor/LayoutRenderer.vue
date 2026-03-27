@@ -152,7 +152,11 @@ onUnmounted(() => {
     <!-- View mode - only render if all components are ready -->
     <div v-else-if="props.viewMode && ViewComponent
     && currentLayout" class="view-component-wrapper">
-      <component :is="ViewComponent" :key="currentLayout.id || 'view'" :layout-settings="currentPage?.layoutSettings" />
+      <component
+        :is="ViewComponent"
+        :key="currentLayout.id || 'view'"
+        :layout-settings="currentPage?.layoutSettings"
+      />
     </div>
 
     <!-- Edit mode - only render if all components are ready -->
