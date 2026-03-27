@@ -41,5 +41,17 @@ export const MapWidgetEvents: WidgetEventDefinition[] = [
     type: 'click_on_location',
     description: 'Triggered when a Location is clicked on the map',
     payloadType: LocationClickPayload
+  },
+  {
+    name: 'Thing Hovered',
+    type: 'hover_on_thing',
+    description: 'Triggered when hovering over a Thing marker on the map',
+    payloadType: ThingClickPayload
+  },
+  {
+    name: 'Datastream Hovered',
+    type: 'hover_on_datastream',
+    description: 'Triggered when hovering over a Datastream marker on the map',
+    payloadType: DatastreamClickPayload
   }
 ];

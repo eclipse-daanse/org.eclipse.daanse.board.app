@@ -44,4 +44,14 @@ export abstract class MapWidgetInterface extends WidgetActionInterface {
   zoomToLocation(location: any, zoom?: number, duration?: number): void {
         throw new Error("zoomToLocation not implemented");
   }
+
+  @WidgetAction({eventType: 'map.showTooltip'})
+  showTooltip(thingId: string, content?: string): void {
+        throw new Error("showTooltip not implemented");
+  }
+
+  @WidgetAction({eventType: 'map.hideTooltip'})
+  hideTooltip(): void {
+        throw new Error("hideTooltip not implemented");
+  }
 }

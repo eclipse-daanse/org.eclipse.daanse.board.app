@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 import { ref, watch, computed, type Ref } from 'vue'
-import { LGeoJson, LMarker, LIcon } from '@vue-leaflet/vue-leaflet'
+import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
 import L from 'leaflet'
 import { ERefType } from '../api/Renderer'
@@ -41,6 +41,8 @@ interface OGCSTALayerProps {
   getById: (id: string) => any
   selectedThingId?: string | null
   selectionHighlightColor?: string
+  tooltipThingId?: string | null
+  tooltipContent?: string | null
 }
 
 const props = defineProps<OGCSTALayerProps>()
@@ -222,6 +224,78 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
   emitDatastreamClick(datastream, thing, subrenderer)
 }
 
+const handleThingHover = (thing: any, location: any, renderer: any) => {
+  if (!props.widgetId) return
+
+  const payload = new ThingClickPayload()
+  payload.id = thing['@iot.id'] || thing.iotId
+  payload.name = thing.name
+  payload.description = thing.description
+  payload.properties = thing.properties
+  payload.location = location.location
+  payload.rendererId = renderer.id
+
+  eventBus.emit('widget:MapWidget:hover_on_thing', {
+    type: 'widget:MapWidget:hover_on_thing',
+    widgetId: props.widgetId,
+    payload,
+    timestamp: Date.now()
+  })
+}
+
+const handleDatastreamHover = (datastream: BoxedDatastream, thing: any) => {
+  if (!props.widgetId) return
+
+  const payload = new DatastreamClickPayload()
+  payload.id = datastream.iotId || (datastream as any)['@iot.id']
+  payload.name = datastream.name
+  payload.thingId = thing['@iot.id'] || thing.iotId
+  payload.unitOfMeasurement = datastream.unitOfMeasurement
+  payload.observedProperty = datastream.observedProperty?.name
+
+  const observations = datastream.observations || []
+  if (observations.length > 0) {
+    const latestObs = observations[observations.length - 1]
+    payload.latestObservationResult = latestObs.result
+    payload.latestObservationTime = latestObs.phenomenonTime
+  }
+
+  eventBus.emit('widget:MapWidget:hover_on_datastream', {
+    type: 'widget:MapWidget:hover_on_datastream',
+    widgetId: props.widgetId,
+    payload,
+    timestamp: Date.now()
+  })
+}
+
+const isActionTooltipVisible = (thing: any) => {
+  if (!props.tooltipThingId) return false
+  const thingId = thing['@iot.id'] || thing.iotId
+  return thingId === props.tooltipThingId
+}
+
+const getActionTooltipContent = (thing: any) => {
+  if (!isActionTooltipVisible(thing)) return null
+  return props.tooltipContent || null
+}
+
+const getThingTooltip = (thing: any) => {
+  return thing.name || thing.description || thing.iotId || ''
+}
+
+const getDatastreamTooltip = (datastream: any, thing: any) => {
+  const parts = []
+  if (thing.name) parts.push(thing.name)
+  if (datastream.name) parts.push(datastream.name)
+  const observations = datastream.observations || []
+  if (observations.length > 0) {
+    const latest = observations[observations.length - 1]
+    const unit = datastream.unitOfMeasurement?.symbol || ''
+    parts.push(`${latest.result} ${unit}`)
+  }
+  return parts.join(' - ')
+}
+
 // Check if a thing is selected
 const isThingSelected = (thing: any): boolean => {
   if (!props.selectedThingId) return false
@@ -253,6 +327,7 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
       :lat-lng="item.point as L.LatLngExpression"
       :options="{ pane: markerPane }"
       @click="handleThingClick(item.thing, item.location, item.renderer)"
+      @mouseenter="handleThingHover(item.thing, item.location, item.renderer)"
     >
       <l-icon class-name="someExtraClass">
         <MapMarker
@@ -267,6 +342,13 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
           :selection-color="highlightColor"
         />
       </l-icon>
+      <l-tooltip
+        :options="{
+          permanent: isActionTooltipVisible(item.thing),
+          direction: 'top',
+          offset: [0, -20]
+        }"
+      >{{ getActionTooltipContent(item.thing) || getThingTooltip(item.thing) }}</l-tooltip>
     </l-marker>
   </template>
 
@@ -307,7 +389,9 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
       :lat-lng="item.point as L.LatLngExpression"
       :options="{ pane: markerPane }"
       @click="handleDatastreamMarkerClick(item.datastream as BoxedDatastream, item.thing, item.subrenderer)"
+      @mouseenter="handleDatastreamHover(item.datastream as BoxedDatastream, item.thing)"
     >
+      <l-tooltip>{{ getDatastreamTooltip(item.datastream, item.thing) }}</l-tooltip>
       <l-icon class-name="someExtraClass">
         <MapMarker
           :render-as="item.subrenderer.renderer.point_render_as"
