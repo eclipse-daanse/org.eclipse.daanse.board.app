@@ -73,6 +73,15 @@
             </eGenericType>
         </eStructuralFeatures>
 
+        <eStructuralFeatures xsi:type="ecore:EReference" name="yAxisTitle" containment="false" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Title for the Y-axis this series uses (e.g., 'Temperatur (°C)')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
         <!-- Styling -->
         <eStructuralFeatures xsi:type="ecore:EReference" name="borderColor" containment="false">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -297,6 +306,25 @@
             </eAnnotations>
             <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
                 <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <!-- Axis Title Settings -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="xAxisTitle" containment="false" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Title text for the X-axis (e.g., 'Zeit', 'Datum')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="yAxisTitle" containment="false" defaultValueLiteral="">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Title text for the Y-axis (e.g., 'Temperatur (°C)', 'Niederschlag (mm)')"/>
+            </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eGenericType>
         </eStructuralFeatures>
 

@@ -33,6 +33,7 @@ export class SeriesSettings {
   @Reference('VariableWrapper') chartType: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') xAxisId: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') yAxisId: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') yAxisTitle: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();

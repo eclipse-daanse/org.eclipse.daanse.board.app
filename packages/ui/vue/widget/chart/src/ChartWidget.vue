@@ -33,7 +33,12 @@ const data = ref(null as any);
 
 onMounted(() => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    // Merge defaults for any missing properties
+    for (const key of Object.keys(defaultConfig)) {
+      if (!(key in config.value) || config.value[key as keyof ChartSettings] === undefined) {
+        (config.value as any)[key] = (defaultConfig as any)[key]
+      }
+    }
   }
 })
 
@@ -70,11 +75,6 @@ const chartComponent = computed(() => {
 // Force re-render when config changes
 const chartKey = ref(0)
 watch(() => config.value, (newVal) => {
-  console.log('Chart config changed:', {
-    chartType: newVal?.chartType?.value,
-    borderColor: newVal?.borderColor?.value,
-    backgroundColor: newVal?.backgroundColor?.value
-  })
   chartKey.value++
 }, { deep: true })
 
@@ -357,6 +357,9 @@ const chartOptions = computed(() => {
   const yAxisIds = new Set<string>()
   const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
 
+  // Map axis ID -> title from series settings
+  const yAxisTitles: Record<string, string> = {}
+
   if (hasSeriesSettings) {
     // If we have series settings, collect all axis IDs
     xAxisIds.add('x') // Default x-axis
@@ -367,6 +370,9 @@ const chartOptions = computed(() => {
       }
       if (s.yAxisId?.value) {
         yAxisIds.add(s.yAxisId.value)
+        if (s.yAxisTitle?.value) {
+          yAxisTitles[s.yAxisId.value] = s.yAxisTitle.value
+        }
       }
     })
   }
@@ -374,10 +380,18 @@ const chartOptions = computed(() => {
   // Determine if stacked mode is enabled
   const isStacked = config.value.stacked?.value ?? false
 
+  // Axis title settings
+  const xAxisTitle = config.value.xAxisTitle?.value ?? ''
+  const yAxisTitle = config.value.yAxisTitle?.value ?? ''
+
   // Build scales configuration dynamically
   const scales: any = {
     y: {
       stacked: isStacked,
+      title: {
+        display: !!yAxisTitle,
+        text: yAxisTitle,
+      },
       grid: {
         display: config.value.showHorizontalGrid?.value ?? true,
         color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
@@ -386,6 +400,10 @@ const chartOptions = computed(() => {
     },
     x: {
       stacked: isStacked,
+      title: {
+        display: !!xAxisTitle,
+        text: xAxisTitle,
+      },
       grid: {
         display: config.value.showVerticalGrid?.value ?? true,
         color: config.value.verticalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
@@ -393,7 +411,6 @@ const chartOptions = computed(() => {
       },
       ticks: {
         callback: function(value: any, index: number, ticks: any[]): string {
-          // Try to format as date if the value looks like a date
           const label: any = (this as any).getLabelForValue(value)
           return formatDate(label, dateFormat)
         }
@@ -430,8 +447,13 @@ const chartOptions = computed(() => {
   if (yAxisIds.size > 1) {
     yAxisIds.forEach((axisId) => {
       if (axisId !== 'y') { // Don't override the default y-axis
+        const axisTitle = yAxisTitles[axisId] ?? ''
         scales[axisId] = {
           type: 'linear', // Explicitly set the axis type
+          title: {
+            display: !!axisTitle,
+            text: axisTitle,
+          },
           grid: {
             display: config.value.showHorizontalGrid?.value ?? true,
             color: config.value.horizontalGridColor?.value ?? 'rgba(0, 0, 0, 0.1)',
