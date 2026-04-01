@@ -18,8 +18,32 @@ import { VideoSettings } from './gen/VideoSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string }>();
+const props = defineProps<{ datasourceId: string; id?: string }>();
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const config = defineModel<VideoSettings>('configv', { required: true });
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VideoWidget:click', {
+        type: 'widget:VideoWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VideoWidget:right_click', {
+        type: 'widget:VideoWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 console.log(config);
 
@@ -68,7 +92,7 @@ const videoUrlParced = computed(() => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <video controls :src="videoUrlParced">
             Your browser does not support embedded videos.
         </video>

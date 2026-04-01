@@ -12,11 +12,34 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed } from 'vue'
+import { onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
 import { ImageSettings } from './gen/ImageSettings'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
 
-const props = defineProps<{ datasourceId: string }>()
+const props = defineProps<{ datasourceId: string, id?: string }>()
+const { id: widgetId } = toRefs(props)
 const config = defineModel<ImageSettings>('configv', { required: true })
+
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+
+const handleClick = (url: string) => {
+  if (!widgetId?.value) return;
+  eventBus.emit('widget:ImageWidget:click', {
+    type: 'widget:ImageWidget:click',
+    widgetId: widgetId.value,
+    payload: { imageUrl: url, widgetId: widgetId.value, timestamp: Date.now() }
+  });
+};
+
+const handleRightClick = (url: string) => {
+  if (!widgetId?.value) return;
+  eventBus.emit('widget:ImageWidget:right_click', {
+    type: 'widget:ImageWidget:right_click',
+    widgetId: widgetId.value,
+    payload: { imageUrl: url, widgetId: widgetId.value, timestamp: Date.now() }
+  });
+};
 
 const defaultConfig = new ImageSettings();
 
@@ -106,9 +129,11 @@ watch(lastImageIndex, () => {
 <template>
   <template v-if="config.images?.length <= 1">
     <img
-      class="w-full h-full"
+      class="w-full h-full cursor-pointer"
       :class="getObjectFit"
       :src="parsedUrl(config.images[0]?.url??'')"
+      @click="handleClick(config.images[0]?.url??'')"
+      @contextmenu.prevent="handleRightClick(config.images[0]?.url??'')"
     />
   </template>
   <template v-else>
@@ -136,9 +161,11 @@ watch(lastImageIndex, () => {
           :style="`transform: translateX(${100 * i}%)`"
         >
           <img
-            class="w-full h-full"
+            class="w-full h-full cursor-pointer"
             :class="getObjectFit"
             :src="parsedUrl(image.url??'')"
+            @click="handleClick(image.url??'')"
+            @contextmenu.prevent="handleRightClick(image.url??'')"
           />
         </div>
       </div>

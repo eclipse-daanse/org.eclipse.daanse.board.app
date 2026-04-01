@@ -18,8 +18,30 @@ import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.com
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
-const props = defineProps<{ datasourceId: string, config: RichTextEditorSettings }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string, config: RichTextEditorSettings, id?: string }>();
+const { datasourceId, config, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RichTextWidget:click', {
+        type: 'widget:RichTextWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RichTextWidget:right_click', {
+        type: 'widget:RichTextWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
@@ -50,7 +72,7 @@ const parsedEditorText = computed(() => {
 </script>
 
 <template>
-    <div class="text-container">
+    <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <div class="editor-content pl-6" v-html="parsedEditorText" />
     </div>
 </template>

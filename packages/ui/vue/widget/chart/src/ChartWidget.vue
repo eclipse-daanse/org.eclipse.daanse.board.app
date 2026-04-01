@@ -21,15 +21,37 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { computed, onMounted, ref, toRefs, watch } from 'vue';
 import { ChartSettings } from './gen/ChartSettings';
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
 
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement, RadialLinearScale, ArcElement, Filler, annotationPlugin)
 
-const props = defineProps<{ datasourceId: string }>();
-const { datasourceId } = toRefs(props);
+const props = defineProps<{ datasourceId: string, id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
 const config = defineModel<ChartSettings>('configv', { required: true });
 const defaultConfig = new ChartSettings();
 const data = ref(null as any);
+
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:ChartWidget:click', {
+        type: 'widget:ChartWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:ChartWidget:right_click', {
+        type: 'widget:ChartWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 onMounted(() => {
   if (config.value) {
@@ -487,12 +509,14 @@ const chartOptions = computed(() => {
 })
 </script>
 <template>
-  <component
-    :is="chartComponent"
-    :key="chartKey"
-    id="my-chart-id"
-    v-if="chartData && chartOptions"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick">
+    <component
+      :is="chartComponent"
+      :key="chartKey"
+      id="my-chart-id"
+      v-if="chartData && chartOptions"
+      :options="chartOptions"
+      :data="chartData"
+    />
+  </div>
 </template>

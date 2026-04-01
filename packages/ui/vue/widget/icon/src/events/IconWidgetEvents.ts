@@ -13,6 +13,7 @@
 
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
 import { IconClickPayload } from '../gen/IconClickPayload';
+import { IconRightClickPayload } from '../gen/IconRightClickPayload';
 
 export const IconWidgetEvents: WidgetEventDefinition[] = [
   {
@@ -20,5 +21,11 @@ export const IconWidgetEvents: WidgetEventDefinition[] = [
     type: 'click',
     description: 'Triggered when the icon is clicked',
     payloadType: IconClickPayload
+  },
+  {
+    name: 'Icon Right Clicked',
+    type: 'right_click',
+    description: 'Triggered when the icon is right-clicked',
+    payloadType: IconRightClickPayload
   }
 ];

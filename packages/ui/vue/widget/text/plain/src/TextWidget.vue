@@ -18,8 +18,30 @@ import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { TextSettings } from './gen/TextSettings'
 import 'reflect-metadata';
 
-const props = defineProps<{ datasourceId: string; }>();
-const { datasourceId } = toRefs(props);
+const props = defineProps<{ datasourceId: string; id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:TextWidget:click', {
+        type: 'widget:TextWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:TextWidget:right_click', {
+        type: 'widget:TextWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const config = defineModel<TextSettings>('configv', { required: true});
 
 // TODO: Should be moved somewhere central
@@ -71,10 +93,11 @@ const calculatedString = computed(() => {
 
     return result;
 })
+const fontSizeStyle = computed(() => { return (config.value?.fontSize?.value || 12) + "px"; });
 </script>
 
 <template>
-  <div class="text-container" :style="{
+  <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick" :style="{
         'justify-content':
             config.verticalAlign?.value === 'Top'
                 ? 'flex-start'
@@ -99,12 +122,12 @@ const calculatedString = computed(() => {
 }
 
 .component {
-    font-size: v-bind(config.fontSize.value + "px");
-    color: v-bind(config.fontColor.value);
-    text-align: v-bind(config.horizontalAlign.value);
-    font-weight: v-bind(config.fontWeight.value);
-    font-style: v-bind(config.fontStyle.value);
-    text-decoration: v-bind(config.textDecoration.value);
+    font-size: v-bind('fontSizeStyle');
+    color: v-bind('config.fontColor.value');
+    text-align: v-bind('config.horizontalAlign.value');
+    font-weight: v-bind('config.fontWeight.value');
+    font-style: v-bind('config.fontStyle.value');
+    text-decoration: v-bind('config.textDecoration.value');
     overflow: hidden;
 }
 </style>
