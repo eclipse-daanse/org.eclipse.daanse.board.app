@@ -17,8 +17,30 @@ import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.compo
 
 const { wrapParameters } = useVariableRepository();
 
-const props = defineProps<{ datasourceId: string, config: any }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
+const { datasourceId, config, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:click', {
+        type: 'widget:DataTableWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:right_click', {
+        type: 'widget:DataTableWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const data = ref(null as any);
 
 watch(datasourceId, (newVal, oldVal) => {
@@ -52,12 +74,14 @@ const {
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
 </script>
 <template>
-    <va-data-table
-        class="table"
-        :items="data ? data.items : []"
-        sticky-header
-        :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
-    />
+    <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick">
+        <va-data-table
+            class="table"
+            :items="data ? data.items : []"
+            sticky-header
+            :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
+        />
+    </div>
 </template>
 
 <style scoped>

@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <template>
-  <div class="timeline-widget">
+  <div class="timeline-widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <!-- Timeline Slider Container -->
     <div class="timeline-container">
       <!-- Timeline Track -->
@@ -156,8 +156,32 @@ interface TimelineSettings {
   showControls?: boolean;
 }
 
-const props = defineProps<{ datasourceId: string }>();
+const props = defineProps<{ datasourceId: string; id?: string }>();
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const config = defineModel<TimelineSettings>('configv', { required: true });
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:TimelineWidget:click', {
+        type: 'widget:TimelineWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:TimelineWidget:right_click', {
+        type: 'widget:TimelineWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 // Variable Support
 const variableRepository = ref<VariableRepository | null>(null);

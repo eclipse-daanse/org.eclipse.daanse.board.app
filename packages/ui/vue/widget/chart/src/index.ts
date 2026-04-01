@@ -18,6 +18,8 @@ import ChartWidgetSettings from './ChartWidgetSettings.vue'
 import { ChartSettings } from './gen/ChartSettings'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { ChartWidgetEvents } from './events/ChartWidgetEvents'
 
 const register = () => {
   container.get<WidgetRepository>(identifier).registerWidget('ChartWidget', {
@@ -27,6 +29,9 @@ const register = () => {
     icon: Icon,
     name:'Chart'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('ChartWidget', ChartWidgetEvents)
 }
 
 register();

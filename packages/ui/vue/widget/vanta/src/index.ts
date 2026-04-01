@@ -17,6 +17,9 @@ import VantaWidget from './VantaWidget.vue'
 import VantaWidgetSettings from './VantaWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { VantaWidgetEvents } from './events/VantaWidgetEvents'
+
 const register = () => {
   console.log('registering Vanta widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('VantaWidget', {
@@ -26,6 +29,9 @@ const register = () => {
     icon: Icon,
     name: 'Vanta'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('VantaWidget', VantaWidgetEvents)
 }
 
 register();

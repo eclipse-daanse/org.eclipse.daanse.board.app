@@ -32,8 +32,30 @@ const vantaContainer: Ref<HTMLElement | null> = ref(null)
 const widgetContainer: Ref<HTMLElement | null> = ref(null)
 const vantaEffect: Ref<any> = ref(null)
 
-const props = defineProps<{ datasourceId: string; config: any }>()
-const { config } = toRefs(props)
+const props = defineProps<{ datasourceId: string; config: any; id?: string }>()
+const { config, id: widgetId } = toRefs(props)
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VantaWidget:click', {
+        type: 'widget:VantaWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VantaWidget:right_click', {
+        type: 'widget:VantaWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 const resizeObserver = new ResizeObserver(entries => {
   for (let entry of entries) {
@@ -183,7 +205,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div ref="widgetContainer" class="widget-container">
+    <div ref="widgetContainer" class="widget-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <div ref="vantaContainer" class="vanta-container"></div>
     </div>
 </template>

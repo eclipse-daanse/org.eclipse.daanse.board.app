@@ -19,6 +19,9 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {RichTextEditorSettings} from './gen/RichTextEditorSettings'
 
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { RichTextWidgetEvents } from './events/RichTextWidgetEvents'
+
 const register = () => {
   console.log('registering RichText widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('RichTextWidget', {
@@ -28,6 +31,9 @@ const register = () => {
     icon: Icon,
     name: 'RichText'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('RichTextWidget', RichTextWidgetEvents)
 }
 
 register();

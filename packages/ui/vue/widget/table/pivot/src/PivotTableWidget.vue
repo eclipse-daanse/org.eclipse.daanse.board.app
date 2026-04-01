@@ -20,8 +20,30 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { useRoute } from 'vue-router'
 
-const props = defineProps<{ datasourceId: string }>();
-const { datasourceId } = toRefs(props);
+const props = defineProps<{ datasourceId: string, id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
+
+import { identifiers, container as coreContainer } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:click', {
+        type: 'widget:PivotTableWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:right_click', {
+        type: 'widget:PivotTableWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
@@ -132,7 +154,7 @@ const onCollapse = (e: any) => {
 </script>
 
 <template>
-  <div class="text-container">
+  <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="component">
       <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
         :key="JSON.stringify(data).length"

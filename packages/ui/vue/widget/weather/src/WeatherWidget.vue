@@ -18,10 +18,35 @@ import { useWeatherData } from './composables/useWeatherData'
 import ForecastChart from './components/ForecastChart.vue'
 
 const props = defineProps<{
-  datasourceId: string
+  datasourceId: string;
+  id?: string;
 }>()
 
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const settings = defineModel<WeatherWidgetSettings>('configv', { required: false, default: () => ({}) })
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:WeatherWidget:click', {
+        type: 'widget:WeatherWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:WeatherWidget:right_click', {
+        type: 'widget:WeatherWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const weatherDataRef = ref<any>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -439,7 +464,7 @@ const processedLocationInfo = computed(() => {
 </script>
 
 <template>
-  <div class="weather-widget">
+  <div class="weather-widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div v-if="loading" class="weather-loading">
       <div class="spinner"></div>
       <p>Loading weather data...</p>

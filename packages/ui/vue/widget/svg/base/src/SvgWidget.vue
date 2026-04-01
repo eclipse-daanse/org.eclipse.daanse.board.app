@@ -23,8 +23,32 @@ import {
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string }>();
+const props = defineProps<{ datasourceId: string, id?: string }>();
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const config = defineModel<SvgSettings>('configv', { required: true });
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:SVGWidget:click', {
+        type: 'widget:SVGWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:SVGWidget:right_click', {
+        type: 'widget:SVGWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
@@ -161,8 +185,8 @@ const svgSourceParced = computed(() => {
 
 <template>
     <div v-html="styles"></div>
-    <div v-bind="$attrs" class="svg" v-html="svgSourceParced"></div>
-    <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback">
+    <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick"></div>
+    <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
         No SVG configured
     </div>
 </template>

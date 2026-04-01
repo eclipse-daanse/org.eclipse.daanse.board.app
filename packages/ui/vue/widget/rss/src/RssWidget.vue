@@ -14,8 +14,30 @@ Contributors:
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { toRefs, watch, ref } from 'vue'
 
-const props = defineProps<{ datasourceId: string }>()
-const { datasourceId } = toRefs(props)
+const props = defineProps<{ datasourceId: string, id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RssWidget:click', {
+        type: 'widget:RssWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RssWidget:right_click', {
+        type: 'widget:RssWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const data = ref(null as any);
 
 watch(datasourceId, (newVal, oldVal) => {
@@ -27,7 +49,7 @@ const { update } = useDatasourceRepository(datasourceId, 'object', data)
 </script>
 
 <template>
-  <div class="widget" >
+  <div class="widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div v-if="data && data.items" v-for="item in data.items" class="preview-item">
         <div class="preview-item-title">{{ item.title }}</div>
         <div v-html="item.content" class="preview-item-content">

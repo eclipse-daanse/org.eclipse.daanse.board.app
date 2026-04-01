@@ -19,6 +19,9 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { SampleWidgetEvents } from './events/SampleWidgetEvents'
+
 const register = () => {
   console.log('registering sample', container)
   container.get<WidgetRepository>(identifier).registerWidget('SampleWidget', {
@@ -28,6 +31,9 @@ const register = () => {
     icon: Icon,
     name: 'Sample'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('SampleWidget', SampleWidgetEvents)
 }
 
 register();

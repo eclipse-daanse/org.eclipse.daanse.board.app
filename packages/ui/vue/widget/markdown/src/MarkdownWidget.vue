@@ -12,7 +12,9 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch, toRefs } from 'vue';
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css/github-markdown.css";
 
@@ -21,6 +23,29 @@ import EasyMDE from 'easymde';
 import { MarkdownWidgetSettings } from './gen/MarkdownWidgetSettings'
 
 const config = defineModel<MarkdownWidgetSettings>('configv', { required: true});
+const props = defineProps<{ id?: string }>();
+const { id: widgetId } = toRefs(props);
+
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:MarkdownWidget:click', {
+        type: 'widget:MarkdownWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:MarkdownWidget:right_click', {
+        type: 'widget:MarkdownWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
 const container = ref<HTMLDivElement | null>(null);
 let easyMDE: EasyMDE | null = null;
 
@@ -47,9 +72,11 @@ watch(() => config.value?.value, (newValue) => {
 </script>
 
 <template>
-    <textarea ref="container">
-        {{ config.value }}
-    </textarea>
+    <div class="markdown-wrapper" @click="emitClick" @contextmenu.prevent="emitRightClick">
+        <textarea ref="container">
+            {{ config.value }}
+        </textarea>
+    </div>
 </template>
 
 <style scoped>
@@ -61,5 +88,10 @@ watch(() => config.value?.value, (newValue) => {
 :global(.EasyMDEContainer) {
     height: 100%;
     width: 100%;
+}
+
+.markdown-wrapper {
+    width: 100%;
+    height: 100%;
 }
 </style>

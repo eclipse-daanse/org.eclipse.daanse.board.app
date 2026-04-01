@@ -18,8 +18,32 @@ import { onMounted, computed, ref, watch } from "vue";
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string }>();
+const props = defineProps<{ datasourceId: string, id?: string }>();
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const config = defineModel<RepeatableSVGSettings>('configv', { required: true });
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RepeatableSVGWidget:click', {
+        type: 'widget:RepeatableSVGWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:RepeatableSVGWidget:right_click', {
+        type: 'widget:RepeatableSVGWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const svgSource = ref("");
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
@@ -113,7 +137,7 @@ const defaultStroke = computed(() => (config.value?.defaultItemStyles?.stroke as
 </script>
 
 <template>
-    <div class="repeatable-svg-container">
+    <div class="repeatable-svg-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
         <svg
             fill="#000000"
             version="1.1"

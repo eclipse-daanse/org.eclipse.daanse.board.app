@@ -17,6 +17,9 @@ import KpiTableWidget from './KpiTableWidget.vue'
 import KpiTableWidgetSettings from './KpiTableWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { KpiTableWidgetEvents } from './events/KpiTableWidgetEvents'
+
 const register = () => {
   console.log('registering KpiTable widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('KpiTableWidget', {
@@ -26,6 +29,9 @@ const register = () => {
     icon: Icon,
     name: 'KpiTable'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('KpiTableWidget', KpiTableWidgetEvents)
 }
 
 register();

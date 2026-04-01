@@ -64,6 +64,24 @@ const handleClick = () => {
     });
 };
 
+// Emit right-click event
+const handleRightClick = () => {
+    if (!widgetId.value) return;
+
+    const payload = {
+        iconName: config.value?.currentIcon || '',
+        widgetId: widgetId.value,
+        timestamp: Date.now()
+    };
+
+    console.log('🖱️ Icon Widget: Emitting right-click event', payload);
+    eventBus.emit('widget:IconWidget:right_click', {
+        type: 'widget:IconWidget:right_click',
+        widgetId: widgetId.value,
+        payload
+    });
+};
+
 const {
     iconColor,
     iconSize,
@@ -88,7 +106,7 @@ const iconStyle = computed(() => {
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         rel="stylesheet" />
-    <div class="icon" @click="handleClick" style="cursor: pointer;">
+    <div class="icon" @click="handleClick" @contextmenu.prevent="handleRightClick" style="cursor: pointer;">
         <span v-bind="$attrs" :style="iconStyle" class="material-symbols-outlined">
             {{ config.currentIcon }}
         </span>

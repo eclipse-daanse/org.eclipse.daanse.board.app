@@ -13,12 +13,35 @@ Contributors:
 
 <script lang="ts" setup>
 import { codeToHtml } from 'shiki'
-import { ref, watch } from 'vue';
+import { ref, watch, toRefs } from 'vue';
 import { ICodeSettings } from '.';
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
 
-const props = defineProps<{ config: ICodeSettings }>();
+const props = defineProps<{ config: ICodeSettings, id?: string }>();
+const { id: widgetId } = toRefs(props);
 
 const htmlString = ref<string>('');
+
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:CodeWidget:click', {
+        type: 'widget:CodeWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:CodeWidget:right_click', {
+        type: 'widget:CodeWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 
 const renderCode = async () => {
     htmlString.value = await codeToHtml(props.config.code || '', {
@@ -41,7 +64,7 @@ watch(() => props.config.language, async () => {
 </script>
 
 <template>
-    <div v-html="htmlString" class="code_container"></div>
+    <div v-html="htmlString" class="code_container" @click="emitClick" @contextmenu.prevent="emitRightClick"></div>
 </template>
 
 <style scoped>
