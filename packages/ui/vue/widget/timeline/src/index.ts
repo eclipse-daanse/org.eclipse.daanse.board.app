@@ -24,6 +24,9 @@ export interface TimelineSettings {
 }
 
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { TimelineWidgetEvents } from './events/TimelineWidgetEvents'
+
 const register = () => {
   console.log('registering Timeline widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('TimelineWidget', {
@@ -33,6 +36,9 @@ const register = () => {
     icon: icon,
     name: 'Timeline'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('TimelineWidget', TimelineWidgetEvents)
 }
 
 register();

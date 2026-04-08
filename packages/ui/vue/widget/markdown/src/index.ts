@@ -21,6 +21,9 @@ interface IMarkdownWidgetSettings {
   value: string;
 }
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { MarkdownWidgetEvents } from './events/MarkdownWidgetEvents'
+
 const register = () => {
   console.log('registering Markdown widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('MarkdownWidget', {
@@ -30,6 +33,9 @@ const register = () => {
     icon: Icon,
     name: 'Markdown'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('MarkdownWidget', MarkdownWidgetEvents)
 }
 
 register();

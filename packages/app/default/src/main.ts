@@ -26,6 +26,7 @@ import { init } from 'org.eclipse.daanse.board.app.lib.module1'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
 import { registerSystemActions } from './systemActions'
+import { registerTestActions } from './testActions'
 
 const app = createApp(App)
 app.use(createVuestic({
@@ -330,6 +331,12 @@ registerSystemActions(router).then(() => {
   console.log('✅ System actions registered')
 }).catch((err) => {
   console.error('❌ Failed to register system actions:', err)
+})
+
+registerTestActions().then(() => {
+  console.log('✅ Test actions registered')
+}).catch((err) => {
+  console.error('❌ Failed to register test actions:', err)
 })
 
 app.mount('#app')

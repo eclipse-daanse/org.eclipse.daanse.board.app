@@ -31,6 +31,9 @@ interface IRepeatableSVGSettings {
   progress: string
 }
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { RepeatableSVGWidgetEvents } from './events/RepeatableSVGWidgetEvents'
+
 const register = () => {
   console.log('registering RepeatableSVG widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('RepeatableSVGWidget', {
@@ -40,6 +43,9 @@ const register = () => {
     icon: Icon,
     name: 'RepeatableSVG'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('RepeatableSVGWidget', RepeatableSVGWidgetEvents)
 }
 
 register();

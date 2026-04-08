@@ -34,6 +34,9 @@ interface IProgressSettings {
   textColor?: string
 }
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
+
 const register = () => {
   console.log('registering Progress widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('ProgressWidget', {
@@ -43,6 +46,9 @@ const register = () => {
     icon: Icon,
     name: 'Progress'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('ProgressWidget', ProgressWidgetEvents)
 }
 
 register();

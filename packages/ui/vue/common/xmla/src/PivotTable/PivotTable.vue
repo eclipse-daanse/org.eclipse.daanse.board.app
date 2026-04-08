@@ -155,7 +155,34 @@ const setColumnsStyles = (i: number, value: number) => {
     colStyles.value[i] = value;
 };
 
-const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup"]);
+const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup", "row_clicked", "row_right_clicked", "column_clicked", "column_right_clicked", "cell_clicked", "cell_right_clicked"]);
+
+eventBus.on("row_clicked", (uName: string) => emit("row_clicked", uName));
+eventBus.on("row_right_clicked", (uName: string) => emit("row_right_clicked", uName));
+eventBus.on("column_clicked", (uName: string) => emit("column_clicked", uName));
+eventBus.on("column_right_clicked", (uName: string) => emit("column_right_clicked", uName));
+eventBus.on("cell_clicked", ({ i, j }: { i: number; j: number }) => {
+    let rowId = String(j);
+    let colId = String(i);
+    if (data.value && Array.isArray(data.value.rows) && data.value.rows[j]) {
+        rowId = data.value.rows[j][data.value.rows[j].length - 1]?.UName || rowId;
+    }
+    if (data.value && Array.isArray(data.value.columns) && data.value.columns[i]) {
+        colId = data.value.columns[i][data.value.columns[i].length - 1]?.UName || colId;
+    }
+    emit("cell_clicked", { rowId, colId });
+});
+eventBus.on("cell_right_clicked", ({ i, j }: { i: number; j: number }) => {
+    let rowId = String(j);
+    let colId = String(i);
+    if (data.value && Array.isArray(data.value.rows) && data.value.rows[j]) {
+        rowId = data.value.rows[j][data.value.rows[j].length - 1]?.UName || rowId;
+    }
+    if (data.value && Array.isArray(data.value.columns) && data.value.columns[i]) {
+        colId = data.value.columns[i][data.value.columns[i].length - 1]?.UName || colId;
+    }
+    emit("cell_right_clicked", { rowId, colId });
+});
 
 provide("setRowsStyles", setRowsStyles);
 provide("setColumnsStyles", setColumnsStyles);

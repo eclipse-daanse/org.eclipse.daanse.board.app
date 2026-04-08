@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
+import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
 import { HeaderExpandedPayload } from '../gen/HeaderExpandedPayload';
 import { HeaderClickedPayload } from '../gen/HeaderClickedPayload';
 
@@ -51,5 +52,29 @@ export const PivotTableEvents: WidgetEventDefinition[] = [
     type: 'column_clicked',
     description: 'Triggered when a column is clicked in the pivot table',
     payloadType: HeaderClickedPayload
+  },
+  {
+    name: 'Row Right Clicked',
+    type: 'row_right_clicked',
+    description: 'Triggered when a row is right-clicked in the pivot table',
+    payloadType: HeaderClickedPayload
+  },
+  {
+    name: 'Column Right Clicked',
+    type: 'column_right_clicked',
+    description: 'Triggered when a column is right-clicked in the pivot table',
+    payloadType: HeaderClickedPayload
+  },
+  {
+    name: 'Cell Clicked',
+    type: 'cell_clicked',
+    description: 'Triggered when a cell is clicked in the pivot table',
+    payloadType: Payload
+  },
+  {
+    name: 'Cell Right Clicked',
+    type: 'cell_right_clicked',
+    description: 'Triggered when a cell is right-clicked in the pivot table',
+    payloadType: Payload
   }
 ];

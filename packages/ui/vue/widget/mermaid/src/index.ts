@@ -23,6 +23,9 @@ interface IMermaidWidgetSettings {
   value: VariableComplexStringWrapper
 }
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { MermaidWidgetEvents } from './events/MermaidWidgetEvents'
+
 const register = () => {
   console.log('registering Mermaid widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('MermaidWidget', {
@@ -32,6 +35,9 @@ const register = () => {
     icon: Icon,
     name: 'Mermaid'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('MermaidWidget', MermaidWidgetEvents)
 }
 
 register();

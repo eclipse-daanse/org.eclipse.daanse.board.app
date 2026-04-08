@@ -19,8 +19,30 @@ import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.boa
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ProgressSettings } from './gen/ProgressSettings'
 
-const props = defineProps<{ datasourceId: string }>()
-const { datasourceId } = toRefs(props)
+const props = defineProps<{ datasourceId: string, id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:ProgressWidget:click', {
+        type: 'widget:ProgressWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:ProgressWidget:right_click', {
+        type: 'widget:ProgressWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
 const config = defineModel<ProgressSettings>('configv', { required: true});
 const data = ref(null)
 const { update } = useDatasourceRepository(datasourceId, "object", data)
@@ -172,7 +194,7 @@ const verticalAlignClass = computed(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="grid-layout" :class="{ vertical: config.isVertical }">
       <div
         class="progress-value"

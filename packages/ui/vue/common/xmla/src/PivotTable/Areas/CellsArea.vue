@@ -427,6 +427,14 @@ const drillthrough = (cell) => {
   emit("drillthrough", cell);
 };
 
+const onCellClick = (cell: any) => {
+    eventBus.emit("cell_clicked", { i: cell.i, j: cell.j });
+};
+
+const onCellRightClick = (e: MouseEvent, cell: any) => {
+    eventBus.emit("cell_right_clicked", { i: cell.i, j: cell.j });
+};
+
 function getFontStyles(fontStyle) {
   const result = {
     "text-decoration": "",
@@ -452,7 +460,7 @@ function getFontStyles(fontStyle) {
         <CellDropdown v-for="cell in cellRow" :key="`${cell.i}_${cell.j}`" :style="getCellStyle(cell.i, cell.j)"
           class="cell" @openCellProperties="openCellProperties(cell)" @drillthrough="drillthrough(cell)">
           <template v-slot="{ }">
-            <div>
+            <div @click="onCellClick(cell)" @contextmenu="onCellRightClick($event, cell)">
               {{ toLocalString(getCellValue(cell)) }}
             </div>
           </template>

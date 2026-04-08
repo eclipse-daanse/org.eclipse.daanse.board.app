@@ -17,8 +17,85 @@ import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.compo
 
 const { wrapParameters } = useVariableRepository();
 
-const props = defineProps<{ datasourceId: string, config: any }>();
-const { datasourceId, config } = toRefs(props);
+const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
+const { datasourceId, config, id: widgetId } = toRefs(props);
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:click', {
+        type: 'widget:DataTableWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:right_click', {
+        type: 'widget:DataTableWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRowClick = (rowId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:row_click', {
+        type: 'widget:DataTableWidget:row_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
+    });
+};
+
+const emitRowRightClick = (rowId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:row_right_click', {
+        type: 'widget:DataTableWidget:row_right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId }
+    });
+};
+
+const emitColumnClick = (colId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:col_click', {
+        type: 'widget:DataTableWidget:col_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
+    });
+};
+
+const emitColumnRightClick = (colId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:col_right_click', {
+        type: 'widget:DataTableWidget:col_right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), colId }
+    });
+};
+
+const emitCellClick = (rowId: string, colId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:cell_click', {
+        type: 'widget:DataTableWidget:cell_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
+    });
+};
+
+const emitCellRightClick = (rowId: string, colId: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:DataTableWidget:cell_right_click', {
+        type: 'widget:DataTableWidget:cell_right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId, colId }
+    });
+};
+
 const data = ref(null as any);
 
 watch(datasourceId, (newVal, oldVal) => {
@@ -50,14 +127,63 @@ const {
 });
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)
+
+const onRowClick = (e: any) => {
+    emitRowClick(e.itemIndex?.toString() || '');
+};
+
+const onRowRightClick = (e: any) => {
+    emitRowRightClick(e.itemIndex?.toString() || '');
+};
+
+const cellBind = (cell: any, row: any, column: any, rowIndex: number) => {
+    return {
+        onClick: (e: MouseEvent) => {
+            emitCellClick(rowIndex.toString(), column.key || column.name || '');
+        },
+        onContextmenu: (e: MouseEvent) => {
+            emitCellRightClick(rowIndex.toString(), column.key || column.name || '');
+        }
+    };
+};
+
+const extractColIdFromTh = (th: HTMLElement) => {
+    const tr = th.parentElement;
+    if (!tr) return '';
+    const colIndex = Array.prototype.indexOf.call(tr.children, th);
+    const keys = data.value?.items?.[0] ? Object.keys(data.value.items[0]) : [];
+    if (keys[colIndex]) {
+        return keys[colIndex];
+    }
+    return th.textContent?.trim() || '';
+};
+
+const onWrapperClick = (e: MouseEvent) => {
+    const th = (e.target as HTMLElement).closest('th');
+    if (th) {
+        emitColumnClick(extractColIdFromTh(th));
+    }
+};
+
+const onWrapperContextMenu = (e: MouseEvent) => {
+    const th = (e.target as HTMLElement).closest('th');
+    if (th) {
+        emitColumnRightClick(extractColIdFromTh(th));
+    }
+};
 </script>
 <template>
-    <va-data-table
-        class="table"
-        :items="data ? data.items : []"
-        sticky-header
-        :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
-    />
+    <div class="w-full h-full" @click="emitClick" @contextmenu.prevent="emitRightClick" @click.capture="onWrapperClick" @contextmenu.capture="onWrapperContextMenu">
+        <va-data-table
+            class="table"
+            :items="data ? data.items : []"
+            sticky-header
+            :style="`--va-data-table-thead-background--computed: ${headerBackground};`"
+            @row:click="onRowClick"
+            @row:contextmenu="onRowRightClick"
+            :cell-bind="cellBind"
+        />
+    </div>
 </template>
 
 <style scoped>

@@ -16,8 +16,39 @@ import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.com
 import { toRefs, watch, ref, onMounted } from 'vue'
 import { FiltersModal } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 
-const props = defineProps<{ datasourceId: string, config: any }>()
-const { datasourceId } = toRefs(props)
+const props = defineProps<{ datasourceId: string, config: any; id?: string }>()
+const { datasourceId, id: widgetId } = toRefs(props)
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:FiltersWidget:click', {
+        type: 'widget:FiltersWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:FiltersWidget:right_click', {
+        type: 'widget:FiltersWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitChange = (id: string, area: string, filterData: any) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:FiltersWidget:change', {
+        type: 'widget:FiltersWidget:change',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), id, area, filterData }
+    });
+};
 const rows = ref<any[]>([]);
 const columns = ref<any[]>([]);
 const filters = ref<any[]>([]);
@@ -172,6 +203,8 @@ const configureFilter = async (type: string, element: any) => {
 
   if (!filters) return;
 
+  emitChange(element.id, type, filters);
+
   callEvent('filterChange', {
     area: type,
     id: element.id,
@@ -181,7 +214,7 @@ const configureFilter = async (type: string, element: any) => {
 </script>
 
 <template>
-  <div class="widget">
+  <div class="widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="hierarchies-section" v-if="props.config.settings.showRows && rows.length > 0">
       <h4>Rows:</h4>
       <div v-for="hierarchy in rows" :key="hierarchy.originalItem.HIERARCHY_UNIQUE_NAME" class="hierarchy-item">

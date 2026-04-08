@@ -16,6 +16,8 @@ import Icon from './assets/image.svg'
 import ImageWidget from './ImageWidget.vue'
 import ImageWidgetSettings from './ImageWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { ImageWidgetEvents } from './events/ImageWidgetEvents'
 
 interface IImageSettings {
   imagesSettings: GallerySettings
@@ -33,14 +35,20 @@ interface GallerySettings {
 }
 
 const register = () => {
-  console.log('registering Image widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('ImageWidget', {
+  console.log('registering image widget')
+  const widgetRepository = container.get<WidgetRepository>(identifier)
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+
+  widgetRepository.registerWidget('ImageWidget', {
     component: ImageWidget,
     settingsComponent: ImageWidgetSettings,
     supportedDSTypes: [],
     icon: Icon,
     name: 'Image'
   })
+
+  // Register widget events
+  eventRegistry.registerWidget('ImageWidget', ImageWidgetEvents)
 }
 
 register();

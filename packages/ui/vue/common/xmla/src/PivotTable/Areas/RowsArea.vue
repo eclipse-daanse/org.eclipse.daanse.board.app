@@ -281,6 +281,14 @@ const collapse = (member: any) => {
     collapseFn(member, "rows");
 };
 
+const rowClick = (member: any) => {
+    eventBus.emit("row_clicked", member.UName);
+};
+
+const rowRightClick = (e: MouseEvent, member: any) => {
+    eventBus.emit("row_right_clicked", member.UName);
+};
+
 eventBus.on("onResize", onResize);
 eventBus.on("onStopResize", onStopResize);
 
@@ -392,7 +400,7 @@ watch(
                 @showMemberProperties="showMemberProperties(member)"
                 @hideMemberProperties="hideMemberProperties(member)">
                 <template v-slot="{ }">
-                    <div class="flex">
+                    <div class="flex" @click="rowClick(member)" @contextmenu="rowRightClick($event, member)">
                         <div class="rowMember" :style="getRowMemberStyle(member.i, j)">
                             <div class="rowMemberContentWrapper">
                                 <div class="rowMemberOffsetContainer">
