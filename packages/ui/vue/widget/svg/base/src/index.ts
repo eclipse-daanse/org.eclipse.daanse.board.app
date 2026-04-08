@@ -32,6 +32,9 @@ interface ConfigItem {
   strokeWidth: string
 }
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { SVGWidgetEvents } from './events/SVGWidgetEvents'
+
 const register = () => {
   console.log('registering SVG widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('SVGWidget', {
@@ -41,6 +44,9 @@ const register = () => {
     icon: Icon,
     name: 'SVG'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('SVGWidget', SVGWidgetEvents)
 }
 
 register();

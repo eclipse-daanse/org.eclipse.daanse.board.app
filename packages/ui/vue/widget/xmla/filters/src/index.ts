@@ -19,6 +19,9 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { FiltersWidgetEvents } from './events/FiltersWidgetEvents'
+
 const register = () => {
   console.log('registering sample', container)
   container.get<WidgetRepository>(identifier).registerWidget('FiltersWidget', {
@@ -28,6 +31,9 @@ const register = () => {
     icon: Icon,
     name: 'XMLA Filters',
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('FiltersWidget', FiltersWidgetEvents)
 }
 
 register();

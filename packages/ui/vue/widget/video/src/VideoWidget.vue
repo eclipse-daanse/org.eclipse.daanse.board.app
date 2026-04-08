@@ -18,8 +18,52 @@ import { VideoSettings } from './gen/VideoSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
-const props = defineProps<{ datasourceId: string }>();
+const props = defineProps<{ datasourceId: string; id?: string }>();
+import { toRefs } from 'vue';
+const { id: widgetId } = toRefs(props);
 const config = defineModel<VideoSettings>('configv', { required: true });
+
+import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VideoWidget:click', {
+        type: 'widget:VideoWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:VideoWidget:right_click', {
+        type: 'widget:VideoWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitVideoEvent = (eventType: string, event: Event) => {
+    if (!widgetId?.value) return;
+    let payloadData: any = { widgetId: widgetId.value, timestamp: Date.now() };
+
+    if (eventType === 'timeupdate') {
+        const target = event.target as HTMLVideoElement;
+        payloadData.currentTime = target.currentTime;
+        payloadData.duration = target.duration;
+    } else if (eventType === 'error') {
+        const target = event.target as HTMLVideoElement;
+        payloadData.error = target.error?.message || target.error?.code || 'Unknown Error';
+    }
+
+    eventBus.emit(`widget:VideoWidget:${eventType}`, {
+        type: `widget:VideoWidget:${eventType}`,
+        widgetId: widgetId.value,
+        payload: payloadData
+    });
+};
 
 console.log(config);
 
@@ -68,8 +112,13 @@ const videoUrlParced = computed(() => {
 </script>
 
 <template>
-    <div class="container">
-        <video controls :src="videoUrlParced">
+    <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
+        <video controls :src="videoUrlParced"
+            @play="emitVideoEvent('play', $event)"
+            @pause="emitVideoEvent('pause', $event)"
+            @timeupdate="emitVideoEvent('timeupdate', $event)"
+            @ended="emitVideoEvent('ended', $event)"
+            @error="emitVideoEvent('error', $event)">
             Your browser does not support embedded videos.
         </video>
     </div>

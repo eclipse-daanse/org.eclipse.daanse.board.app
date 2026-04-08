@@ -295,6 +295,14 @@ const collapse = (member: any) => {
     collapseFn(member, "columns");
 };
 
+const colClick = (member: any) => {
+    eventBus.emit("column_clicked", member.UName);
+};
+
+const colRightClick = (e: MouseEvent, member: any) => {
+    eventBus.emit("column_right_clicked", member.UName);
+};
+
 eventBus.on("onResize", onResize);
 eventBus.on("onStopResize", onStopResize);
 eventBus.on("scroll", ({ left }: { left: number }) => {
@@ -413,7 +421,7 @@ watch(
                     @showMemberProperties="showMemberProperties(member)"
                     @hideMemberProperties="hideMemberProperties(member)">
                     <template v-slot="{ }">
-                        <div style="width: 100%">
+                        <div style="width: 100%" @click="colClick(member)" @contextmenu="colRightClick($event, member)">
                             <div class="columnMember" :style="getColumnMemberStyle(member.i, j)">
                                 <div class="columnMemberContentWrapper">
                                     <div v-for="item in getColumnMemberOffsetItems(member.i, j)" class="columnMemberOffset"></div>

@@ -20,8 +20,120 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { useRoute } from 'vue-router'
 
-const props = defineProps<{ datasourceId: string }>();
-const { datasourceId } = toRefs(props);
+const props = defineProps<{ datasourceId: string, id?: string }>();
+const { datasourceId, id: widgetId } = toRefs(props);
+
+import { identifiers, container as coreContainer } from 'org.eclipse.daanse.board.app.lib.core';
+import type { TinyEmitter } from 'tiny-emitter';
+const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+
+const emitClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:click', {
+        type: 'widget:PivotTableWidget:click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRightClick = () => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:right_click', {
+        type: 'widget:PivotTableWidget:right_click',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+    });
+};
+
+const emitRowClick = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:row_clicked', {
+        type: 'widget:PivotTableWidget:row_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitRowRightClick = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:row_right_clicked', {
+        type: 'widget:PivotTableWidget:row_right_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitColumnClick = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:column_clicked', {
+        type: 'widget:PivotTableWidget:column_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitColumnRightClick = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:column_right_clicked', {
+        type: 'widget:PivotTableWidget:column_right_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitCellClick = (payloadObj: { rowId: string, colId: string }) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:cell_clicked', {
+        type: 'widget:PivotTableWidget:cell_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId: payloadObj.rowId, colId: payloadObj.colId }
+    });
+};
+
+const emitCellRightClick = (payloadObj: { rowId: string, colId: string }) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:cell_right_clicked', {
+        type: 'widget:PivotTableWidget:cell_right_clicked',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), rowId: payloadObj.rowId, colId: payloadObj.colId }
+    });
+};
+
+const emitRowExpanded = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:row_expanded', {
+        type: 'widget:PivotTableWidget:row_expanded',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitRowCollapsed = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:row_collapsed', {
+        type: 'widget:PivotTableWidget:row_collapsed',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitColumnExpanded = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:column_expanded', {
+        type: 'widget:PivotTableWidget:column_expanded',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
+
+const emitColumnCollapsed = (uName: string) => {
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:column_collapsed', {
+        type: 'widget:PivotTableWidget:column_collapsed',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), uniqueName: uName }
+    });
+};
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
@@ -124,17 +236,30 @@ watch(() => dataProps.value, () => {
 
 const onExpand = (e: any) => {
   callEvent('expand', e, true);
+  if (e.area === 'rows') {
+      emitRowExpanded(e.value?.UName || e.value?.UNAME);
+  } else if (e.area === 'columns') {
+      emitColumnExpanded(e.value?.UName || e.value?.UNAME);
+  }
 };
 
 const onCollapse = (e: any) => {
   callEvent('collapse', e, true);
+  if (e.area === 'rows') {
+      emitRowCollapsed(e.value?.UName || e.value?.UNAME);
+  } else if (e.area === 'columns') {
+      emitColumnCollapsed(e.value?.UName || e.value?.UNAME);
+  }
 };
 </script>
 
 <template>
-  <div class="text-container">
+  <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
     <div class="component">
       <PivotTableComponent v-if="data" :model-value="data" @onExpand="onExpand" @onCollapse="onCollapse"
+        @row_clicked="emitRowClick" @row_right_clicked="emitRowRightClick"
+        @column_clicked="emitColumnClick" @column_right_clicked="emitColumnRightClick"
+        @cell_clicked="emitCellClick" @cell_right_clicked="emitCellRightClick"
         :key="JSON.stringify(data).length"
         :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
         :columnsExpandedMembers="data.tableState.columnsExpandedMembers"

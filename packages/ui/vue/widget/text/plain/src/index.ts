@@ -19,6 +19,9 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
+import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { TextWidgetEvents } from './events/TextWidgetEvents'
+
 const register = () => {
   console.log('registering Text widget', container)
   container.get<WidgetRepository>(identifier).registerWidget('TextWidget', {
@@ -28,6 +31,9 @@ const register = () => {
     icon: Icon,
     name: 'Text'
   })
+
+  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  eventRegistry.registerWidget('TextWidget', TextWidgetEvents)
 }
 
 register();
