@@ -235,7 +235,7 @@ watch(pageSettings,()=>{
       border-radius: 8px;
       z-index: 1000000;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      overflow: visible;
+      overflow-y: auto;
       gap: 16px;
     }
     .va-dropdown__content:deep() {

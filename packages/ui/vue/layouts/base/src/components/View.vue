@@ -103,13 +103,12 @@ onMounted(async () => {
   margin: 16px;
 }
 
-.report-container .widget-board {
+.widget-board {
   width: 100%;
   height: 100%;
   display: flex;
   box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
 }
 
 .report-container .add-btn {

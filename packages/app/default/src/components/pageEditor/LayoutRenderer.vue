@@ -51,39 +51,43 @@ const handleRemoveWidget = (widgetId: string) => {
   emit('removeWidget', widgetId)
 }
 
+let loadLayoutVersion = 0
+
 const loadLayout = async () => {
+  const version = ++loadLayoutVersion
   isLoading.value = true
 
   // Wait for next tick to ensure dependencies are ready
   await nextTick()
 
+  // Abort if a newer loadLayout call was started
+  if (version !== loadLayoutVersion) return
+
   if (props.pageId && pageRepo) {
     const page = pageRepo.getPage(props.pageId)
     currentPage.value = page ? { ...page } : null
-
-    // Reset components first
-    EditComponent.value = null
-    ViewComponent.value = null
-    currentLayout.value = null
 
     if (page?.layout && layoutRepo) {
       const layout = layoutRepo.getLayout(page.layout.id)
       currentLayout.value = layout || null
 
       if (props.viewMode) {
-        if (layout?.component) {
-          ViewComponent.value = layout.component
-        }
+        ViewComponent.value = layout?.component || null
+        EditComponent.value = null
       } else {
-        if (layout?.editor) {
-          EditComponent.value = layout.editor
-        }
+        EditComponent.value = layout?.editor || null
+        ViewComponent.value = null
       }
+    } else {
+      EditComponent.value = null
+      ViewComponent.value = null
+      currentLayout.value = null
     }
   }
 
   // Small delay to ensure everything is ready
   await new Promise(resolve => setTimeout(resolve, 50))
+  if (version !== loadLayoutVersion) return
   isLoading.value = false
 }
 
