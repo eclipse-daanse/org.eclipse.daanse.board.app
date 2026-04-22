@@ -13,6 +13,7 @@
 @import
 url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+@source "../../../ui/vue/**/*.vue";
 @source inline("top-[-25px] right-0");
 @source inline("object-contain object-cover object-fill object-scale-down");
 @source inline("grid grid-cols-2 grid-rows-4");

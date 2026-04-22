@@ -39,6 +39,7 @@ const opened = ref({
 });
 
 const editor = useEditor({
+    content: widgetSettings.value.editor || '',
     extensions: [
         StarterKit,
         Bold.configure({

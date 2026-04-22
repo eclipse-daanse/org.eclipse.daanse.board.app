@@ -113,7 +113,7 @@ const handleRemoveWidget = (widgetId: string) => {
     </div>
 
     <!-- Normale Darstellung mit LayoutRenderer -->
-    <div v-else>
+    <div v-else style="width: 100%; height: 100%">
       <div
         class="page-widget-content"
         :style="{
@@ -206,7 +206,7 @@ const handleRemoveWidget = (widgetId: string) => {
   position: relative;
   min-height: 0; /* Wichtig für Flex-Layout */
   width: 100%;
-  height: 100%;
+  overflow: auto;
 }
 
 /* Sicherstellen dass Layout-Engines korrekt funktionieren */

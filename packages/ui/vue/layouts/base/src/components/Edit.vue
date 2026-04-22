@@ -369,8 +369,7 @@ const change = (e: any) => {
   height: 100%;
   display: flex;
   box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
 }
 
 .report-container .add-btn {

@@ -282,6 +282,7 @@ watch(selectedThingId, (newValue) => {
   }
 })
 
+const mapReady = ref(false)
 let mounted = false
 
 // Helper function to get data for a specific layer

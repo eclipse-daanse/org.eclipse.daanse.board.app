@@ -85,14 +85,14 @@ const initInterval = () => {
   if (interval) {
     clearInterval(interval)
   }
-  if (config.value.imagesSettings.diashowInterval??0 > 0) {
+  if ((config.value.imagesSettings.diashowInterval ?? 0) > 0) {
     interval = setInterval(() => {
       if (currentImage.value === config.value.images.length - 1) {
         currentImage.value = 0
         return
       }
       toNext()
-    }, config.value.imagesSettings.diashowInterval??1 * 1000)
+    }, (config.value.imagesSettings.diashowInterval ?? 1) * 1000)
   }
 }
 
@@ -137,10 +137,8 @@ watch(lastImageIndex, () => {
     />
   </template>
   <template v-else>
-    <div class="w-full h-full overflow-hidden relative">
-      <div
-        class="absolute left-10 top-1/2 w-8 h-8 -translate-y-1/2 z-10 bg-black/60 rounded-full flex flex-row items-center justify-center"
-      >
+    <div class="slideshow-container">
+      <div class="slideshow-nav slideshow-nav--prev">
         <va-button
           @click="toPrev()"
           icon="chevron_left"
@@ -151,14 +149,14 @@ watch(lastImageIndex, () => {
         </va-button>
       </div>
       <div
-        class="w-full h-full overflow-visible relative transition-transform duration-300 ease-in-out"
-        :style="`transform: translateX(-${100 * currentImage}%)`"
+        class="slideshow-track"
+        :style="{ transform: `translateX(-${100 * currentImage}%)` }"
       >
         <div
           v-for="(image, i) in config.images"
           :key="image.id"
-          class="w-full h-full absolute"
-          :style="`transform: translateX(${100 * i}%)`"
+          class="slideshow-slide"
+          :style="{ transform: `translateX(${100 * i}%)` }"
         >
           <img
             class="w-full h-full cursor-pointer"
@@ -170,9 +168,7 @@ watch(lastImageIndex, () => {
         </div>
       </div>
 
-      <div
-        class="absolute right-10 top-1/2 w-8 h-8 -translate-y-1/2 z-10 bg-black/60 rounded-full flex flex-row items-center justify-center"
-      >
+      <div class="slideshow-nav slideshow-nav--next">
         <va-button
           @click="toNext()"
           icon="chevron_right"
@@ -185,3 +181,50 @@ watch(lastImageIndex, () => {
     </div>
   </template>
 </template>
+
+<style scoped>
+.slideshow-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slideshow-track {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+
+.slideshow-slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.slideshow-nav {
+  position: absolute;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideshow-nav--prev {
+  left: 40px;
+}
+
+.slideshow-nav--next {
+  right: 40px;
+}
+</style>
