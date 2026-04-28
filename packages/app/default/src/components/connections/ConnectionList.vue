@@ -12,9 +12,25 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
-
+import { ref } from 'vue'
 
 const { connections, createConnection, removeConnection } = useConnectionsStore()
+
+const showDeleteConfirm = ref(false)
+const connToDelete = ref<string | null>(null)
+
+const confirmRemoveConnection = (uid: string) => {
+  connToDelete.value = uid
+  showDeleteConfirm.value = true
+}
+
+const doRemoveConnection = () => {
+  if (connToDelete.value) {
+    removeConnection(connToDelete.value)
+  }
+  showDeleteConfirm.value = false
+  connToDelete.value = null
+}
 
 const addConnection = () => {
   createConnection(null)
@@ -57,11 +73,33 @@ defineEmits(['openEditor'])
           <VaIcon
             name="delete"
             color="danger"
-            @click.stop.prevent="removeConnection(connection.uid)"
+            @click.stop.prevent="confirmRemoveConnection(connection.uid)"
           />
         </VaListItemSection>
       </VaListItem>
     </VaList>
+    <VaModal
+      v-model="showDeleteConfirm"
+      size="small"
+      hide-default-actions
+      overlay-opacity="0.3"
+    >
+      <div style="text-align: center; padding: 1rem;">
+        <VaIcon name="warning" color="danger" size="2rem" />
+        <h5 style="margin: 0.5rem 0;">Connection löschen</h5>
+        <p>Möchtest du diese Connection wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      </div>
+      <template #footer>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <VaButton preset="secondary" @click="showDeleteConfirm = false; connToDelete = null;">
+            Abbrechen
+          </VaButton>
+          <VaButton color="danger" icon="delete" @click="doRemoveConnection()">
+            Löschen
+          </VaButton>
+        </div>
+      </template>
+    </VaModal>
   </div>
 </template>
 <style scoped></style>

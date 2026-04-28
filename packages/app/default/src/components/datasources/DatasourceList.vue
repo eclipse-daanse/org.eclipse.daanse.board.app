@@ -12,9 +12,25 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 
 const { dataSources, createDataSource, removeDataSource } = useDataSourcesStore()
+
+const showDeleteConfirm = ref(false)
+const dsToDelete = ref<string | null>(null)
+
+const confirmRemoveDataSource = (uid: string) => {
+  dsToDelete.value = uid
+  showDeleteConfirm.value = true
+}
+
+const doRemoveDataSource = () => {
+  if (dsToDelete.value) {
+    removeDataSource(dsToDelete.value)
+  }
+  showDeleteConfirm.value = false
+  dsToDelete.value = null
+}
 
 const endpointfinder = inject('endpointfinder');
 const addDataSource = () => {
@@ -62,11 +78,33 @@ defineEmits(['openEditor'])
           <VaIcon
             name="delete"
             color="danger"
-            @click.stop.prevent="removeDataSource(dataSource.uid)"
+            @click.stop.prevent="confirmRemoveDataSource(dataSource.uid)"
           />
         </VaListItemSection>
       </VaListItem>
     </VaList>
+    <VaModal
+      v-model="showDeleteConfirm"
+      size="small"
+      hide-default-actions
+      overlay-opacity="0.3"
+    >
+      <div style="text-align: center; padding: 1rem;">
+        <VaIcon name="warning" color="danger" size="2rem" />
+        <h5 style="margin: 0.5rem 0;">Datasource löschen</h5>
+        <p>Möchtest du diese Datasource wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      </div>
+      <template #footer>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <VaButton preset="secondary" @click="showDeleteConfirm = false; dsToDelete = null;">
+            Abbrechen
+          </VaButton>
+          <VaButton color="danger" icon="delete" @click="doRemoveDataSource()">
+            Löschen
+          </VaButton>
+        </div>
+      </template>
+    </VaModal>
   </div>
 </template>
 

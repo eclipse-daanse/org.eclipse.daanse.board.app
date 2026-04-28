@@ -17,7 +17,7 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   WidgetRepository,
@@ -43,8 +43,20 @@ const availableWidgets = computed(() => {
   return registeredWidgets.getAllWidgets()
 })
 
+const showDeleteConfirm = ref(false)
+const widgetToDelete = ref<string | null>(null)
+
 const deleteWidget = (id: string): void => {
-  emit('removeWidget', id)
+  widgetToDelete.value = id
+  showDeleteConfirm.value = true
+}
+
+const confirmDelete = (): void => {
+  if (widgetToDelete.value) {
+    emit('removeWidget', widgetToDelete.value)
+  }
+  showDeleteConfirm.value = false
+  widgetToDelete.value = null
 }
 
 const openSettings = (id: string): void => {
@@ -245,6 +257,29 @@ const getpadding = computed(() => {
     <div v-else>
       <p>Widget type {{ widget.type }} is not registered.</p>
     </div>
+
+    <VaModal
+      v-model="showDeleteConfirm"
+      size="small"
+      hide-default-actions
+      overlay-opacity="0.3"
+    >
+      <div style="text-align: center; padding: 1rem;">
+        <VaIcon name="warning" color="danger" size="2rem" />
+        <h5 style="margin: 0.5rem 0;">Widget löschen</h5>
+        <p>Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      </div>
+      <template #footer>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <VaButton preset="secondary" @click="showDeleteConfirm = false; widgetToDelete = null;">
+            Abbrechen
+          </VaButton>
+          <VaButton color="danger" icon="delete" @click="confirmDelete()">
+            Löschen
+          </VaButton>
+        </div>
+      </template>
+    </VaModal>
   </div>
 </template>
 <style scoped>

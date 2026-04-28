@@ -45,7 +45,7 @@ Contributors:
                   <VaButton icon="edit" size="small" preset="secondary"
                             @click="editVariable(variable.id)"></VaButton>
                   <VaButton icon="delete" size="small" color="danger"
-                            @click="store.removeVariable(variable.id)"></VaButton>
+                            @click="confirmRemoveVariable(variable.id)"></VaButton>
                 </div>
               </div>
             </template>
@@ -96,7 +96,7 @@ Contributors:
                 <VaButton icon="edit" size="small" preset="secondary"
                           @click="editVariable(variable.id)"></VaButton>
                 <VaButton icon="delete" size="small" color="danger"
-                          @click="store.removeVariable(variable.id)"></VaButton>
+                          @click="confirmRemoveVariable(variable.id)"></VaButton>
               </div>
             </div>
           </div>
@@ -145,6 +145,29 @@ Contributors:
       </div>
     </VaModal>
 
+    <VaModal
+      v-model="showDeleteConfirm"
+      size="small"
+      hide-default-actions
+      overlay-opacity="0.3"
+    >
+      <div style="text-align: center; padding: 1rem;">
+        <VaIcon name="warning" color="danger" size="2rem" />
+        <h5 style="margin: 0.5rem 0;">Variable löschen</h5>
+        <p>Möchtest du diese Variable wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      </div>
+      <template #footer>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <VaButton preset="secondary" @click="showDeleteConfirm = false; variableToDelete = null;">
+            Abbrechen
+          </VaButton>
+          <VaButton color="danger" icon="delete" @click="doRemoveVariable()">
+            Löschen
+          </VaButton>
+        </div>
+      </template>
+    </VaModal>
+
     <!-- Empty state (uncomment to use) -->
     <!--
   <div class="p-8 flex flex-col items-center justify-center text-center text-gray-500">
@@ -176,6 +199,21 @@ const store = useVariablesStore()
 const pages = ref([] as any[])
 const selectedPageId = ref<string>('')
 
+const showDeleteConfirm = ref(false)
+const variableToDelete = ref<string | null>(null)
+
+const confirmRemoveVariable = (variableId: string) => {
+  variableToDelete.value = variableId
+  showDeleteConfirm.value = true
+}
+
+const doRemoveVariable = () => {
+  if (variableToDelete.value) {
+    store.removeVariable(variableToDelete.value)
+  }
+  showDeleteConfirm.value = false
+  variableToDelete.value = null
+}
 
 const showVariableModal = ref(false)
 const currentlySelectedVariable = ref(null)

@@ -137,4 +137,15 @@ watch(parsedEditorText, (newVal, oldVal) => {
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
+
+.editor-content a,
+.editor-content .custom-link {
+    color: #154EC2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.editor-content a:visited {
+    color: #6B21A8;
+}
 </style>
