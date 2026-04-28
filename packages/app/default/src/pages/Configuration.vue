@@ -154,8 +154,7 @@ Contributors:
       <div style="text-align: center; padding: 1rem;">
         <VaIcon name="warning" color="danger" size="2rem" />
         <h5 style="margin: 0.5rem 0;">Variable löschen</h5>
-        <p>Möchtest du diese Variable wirklich löschen?
-          Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <p>Möchtest du diese Variable wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
       </div>
       <template #footer>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
