@@ -17,9 +17,11 @@ import {
     computed,
     getCurrentInstance,
     onMounted,
+    onUnmounted,
     ref,
     watch,
 } from "vue";
+import { useRoute } from 'vue-router';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
@@ -30,7 +32,39 @@ const config = defineModel<SvgSettings>('configv', { required: true });
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { SvgWidgetInterface } from './api/SvgWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const svgZoomLevel = ref(1);
+
+const svgContainerRef = ref<HTMLElement | null>(null);
+
+class SvgWidgetApi extends SvgWidgetInterface {
+    zoom(level: number): void {
+        svgZoomLevel.value = Math.max(0.1, Math.min(10, level));
+        const el = svgContainerRef.value;
+        if (el) {
+            el.style.transform = `scale(${svgZoomLevel.value})`;
+            el.style.transformOrigin = 'top left';
+        }
+    }
+    resetZoom(): void {
+        svgZoomLevel.value = 1;
+        const el = svgContainerRef.value;
+        if (el) {
+            el.style.transform = '';
+            el.style.transformOrigin = '';
+        }
+    }
+}
+const api = new SvgWidgetApi();
+defineExpose<SvgWidgetInterface>(api);
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -93,6 +127,7 @@ const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
 }
 
 onMounted(async () => {
+    if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'SVGWidget', pageId);
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
         console.log('SVG config:', config.value);
@@ -123,6 +158,10 @@ onMounted(async () => {
         // Initial load
         await loadSvg(config.value.src);
     }
+})
+
+onUnmounted(() => {
+    if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
 });
 
 // Watch for src changes
@@ -185,7 +224,7 @@ const svgSourceParced = computed(() => {
 
 <template>
     <div v-html="styles"></div>
-    <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick"></div>
+    <div v-bind="$attrs" class="svg" v-html="svgSourceParced" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="svgContainerRef"></div>
     <div v-if="!svgSourceParced && !((config?.src as any)?.value)" class="fallback" @click="emitClick" @contextmenu.prevent="emitRightClick">
         No SVG configured
     </div>

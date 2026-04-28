@@ -12,7 +12,8 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed, provide, onMounted } from 'vue';
+import { toRefs, ref, watch, computed, provide, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { KpiTable } from 'org.eclipse.daanse.board.app.ui.vue.common.kpi';
 
@@ -23,7 +24,24 @@ const { datasourceId, config, id: widgetId } = toRefs(props);
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class KpiTableWidgetApi extends KpiTableWidgetInterface {
+    refresh(): void {
+        update(datasourceId.value, datasourceId.value);
+    }
+}
+const api = new KpiTableWidgetApi();
+defineExpose<KpiTableWidgetInterface>(api);
+
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -49,6 +67,7 @@ watch(datasourceId, (newVal, oldVal) => {
 })
 
 onMounted(() => {
+    if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'KpiTableWidget', pageId);
     if (!config.value) return;
     const upgradeFields: Record<string, string> = {
         headerBackground: '#f0f0f0'

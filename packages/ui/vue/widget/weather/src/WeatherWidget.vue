@@ -12,6 +12,7 @@ Contributors:
 -->
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { WeatherWidgetSettings } from './types/WeatherWidgetSettings'
 import { useWeatherData } from './composables/useWeatherData'
@@ -28,7 +29,22 @@ const settings = defineModel<WeatherWidgetSettings>('configv', { required: false
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { WeatherWidgetInterface } from './api/WeatherWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class WeatherWidgetApi extends WeatherWidgetInterface {
+    refresh(): void {
+        refreshData();
+    }
+}
+const api = new WeatherWidgetApi();
+defineExpose<WeatherWidgetInterface>(api);
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -118,11 +134,13 @@ watch(() => settings.value.thingId, () => {
 })
 
 onMounted(() => {
+  actionsRegistry.registerInstance(widgetId.value || '', api, 'WeatherWidget', pageId);
   setupRefreshTimer()
   refreshData()
 })
 
 onUnmounted(() => {
+  actionsRegistry.unregisterInstance(widgetId.value || '');
   if (refreshTimer.value) {
     clearInterval(refreshTimer.value)
   }

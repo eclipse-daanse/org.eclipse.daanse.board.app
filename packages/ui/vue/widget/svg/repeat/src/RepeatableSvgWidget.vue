@@ -14,7 +14,8 @@ Contributors:
 <script lang="ts" setup>
 import { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
 import { SVGItemStyles } from "./gen/SVGItemStyles";
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, onUnmounted, computed, ref, watch } from "vue";
+import { useRoute } from 'vue-router';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
@@ -25,7 +26,39 @@ const config = defineModel<RepeatableSVGSettings>('configv', { required: true })
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { RepeatableSvgWidgetInterface } from './api/RepeatableSvgWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const rsvgZoomLevel = ref(1);
+
+const rsvgContainerRef = ref<HTMLElement | null>(null);
+
+class RepeatableSvgWidgetApi extends RepeatableSvgWidgetInterface {
+    zoom(level: number): void {
+        rsvgZoomLevel.value = Math.max(0.1, Math.min(10, level));
+        const el = rsvgContainerRef.value;
+        if (el) {
+            el.style.transform = `scale(${rsvgZoomLevel.value})`;
+            el.style.transformOrigin = 'top left';
+        }
+    }
+    resetZoom(): void {
+        rsvgZoomLevel.value = 1;
+        const el = rsvgContainerRef.value;
+        if (el) {
+            el.style.transform = '';
+            el.style.transformOrigin = '';
+        }
+    }
+}
+const api = new RepeatableSvgWidgetApi();
+defineExpose<RepeatableSvgWidgetInterface>(api);
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -87,6 +120,7 @@ const ensureStyles = (styles: SVGItemStyles | undefined) => {
 }
 
 onMounted(async () => {
+    if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'RepeatableSVGWidget', pageId);
     if (!config.value) {
         config.value = new RepeatableSVGSettings();
     }
@@ -104,6 +138,10 @@ onMounted(async () => {
     ensureStyles(config.value.defaultItemStyles);
 
     await loadSvg(config.value.src);
+});
+
+onUnmounted(() => {
+    if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
 });
 
 // Watch for src changes
@@ -137,7 +175,7 @@ const defaultStroke = computed(() => (config.value?.defaultItemStyles?.stroke as
 </script>
 
 <template>
-    <div class="repeatable-svg-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
+    <div class="repeatable-svg-container" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="rsvgContainerRef">
         <svg
             fill="#000000"
             version="1.1"

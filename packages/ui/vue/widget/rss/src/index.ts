@@ -17,8 +17,9 @@ import RssWidget from './RssWidget.vue'
 import RssWidgetSettings from './RssWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { RssWidgetEvents } from './events/RssWidgetEvents'
+import { RssWidgetInterface } from './api/RssWidgetInterface'
 
 const register = () => {
   console.log('registering RSS widget', container)
@@ -32,6 +33,9 @@ const register = () => {
 
   const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
   eventRegistry.registerWidget('RssWidget', RssWidgetEvents)
+
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  actionsRegistry.registerWidgetType('RssWidget', RssWidgetInterface, 'widget')
 }
 
 register();

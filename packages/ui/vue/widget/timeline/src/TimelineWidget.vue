@@ -111,6 +111,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
@@ -163,7 +164,58 @@ const config = defineModel<TimelineSettings>('configv', { required: true });
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { TimelineWidgetInterface } from './api/TimelineWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class TimelineWidgetApi extends TimelineWidgetInterface {
+    zoomIn(): void {
+        // Shrink the visible range by 25% from both sides toward the center
+        const start = new Date(config.value.rangeStart || Date.now() - 86400000);
+        const end = new Date(config.value.rangeEnd || Date.now());
+        const duration = end.getTime() - start.getTime();
+        const shrink = duration * 0.25;
+        const newStart = new Date(start.getTime() + shrink);
+        const newEnd = new Date(end.getTime() - shrink);
+        if (newEnd.getTime() - newStart.getTime() > 60000) {
+            config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        }
+    }
+    zoomOut(): void {
+        // Expand the visible range by 50% on both sides
+        const start = new Date(config.value.rangeStart || Date.now() - 86400000);
+        const end = new Date(config.value.rangeEnd || Date.now());
+        const duration = end.getTime() - start.getTime();
+        const expand = duration * 0.5;
+        const newStart = new Date(Math.max(
+            start.getTime() - expand,
+            new Date(config.value.timelineMin || 0).getTime()
+        ));
+        const newEnd = new Date(Math.min(
+            end.getTime() + expand,
+            new Date(config.value.timelineMax || Date.now() + 86400000 * 7).getTime()
+        ));
+        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+    }
+    setDateRange(start: string, end: string): void {
+        config.value = { ...config.value, rangeStart: start, rangeEnd: end };
+    }
+    jumpToNow(): void {
+        const now = new Date();
+        const duration = new Date(config.value.rangeEnd || now).getTime() -
+            new Date(config.value.rangeStart || now).getTime();
+        const newEnd = now;
+        const newStart = new Date(now.getTime() - duration);
+        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+    }
+}
+const api = new TimelineWidgetApi();
+defineExpose<TimelineWidgetInterface>(api);
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -893,6 +945,7 @@ watch(() => rangeEndWrapper.value.value, (newValue) => {
 
 // Initialisierung
 onMounted(() => {
+  if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'TimelineWidget', pageId);
   // Initialize variable repository
   try {
     variableRepository.value = container.get<VariableRepository>(variableIdentifier);
@@ -960,6 +1013,7 @@ onMounted(() => {
 
 // Cleanup
 onUnmounted(() => {
+  if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
   stopPlayback();
 });
 </script>

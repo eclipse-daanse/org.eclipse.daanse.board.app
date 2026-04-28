@@ -18,8 +18,9 @@ import WeatherWidgetSettings from './WeatherWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import type { WeatherWidgetSettings as IWeatherWidgetSettings } from './types/WeatherWidgetSettings'
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { WeatherWidgetEvents } from './events/WeatherWidgetEvents'
+import { WeatherWidgetInterface } from './api/WeatherWidgetInterface'
 
 const register = () => {
   try {
@@ -37,6 +38,9 @@ const register = () => {
 
     const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
     eventRegistry.registerWidget('WeatherWidget', WeatherWidgetEvents)
+
+    const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+    actionsRegistry.registerWidgetType('WeatherWidget', WeatherWidgetInterface, 'widget')
   } catch (error) {
     console.error('Failed to register Weather widget:', error)
   }

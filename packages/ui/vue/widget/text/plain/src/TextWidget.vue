@@ -12,7 +12,8 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed, toRefs, onMounted, ref, watch, getCurrentInstance, onBeforeMount } from 'vue'
+import { computed, toRefs, onMounted, onUnmounted, ref, watch, getCurrentInstance, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper, WrapperTypes } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { TextSettings } from './gen/TextSettings'
@@ -23,7 +24,29 @@ const { datasourceId, id: widgetId } = toRefs(props);
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { TextWidgetInterface } from './api/TextWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class TextWidgetApi extends TextWidgetInterface {
+    clearContent(): void {
+        if (config.value?.text) config.value.text.value = '';
+    }
+    copyContent(): void {
+        const text = calculatedString.value || '';
+        navigator.clipboard?.writeText(text).catch(() => {});
+    }
+}
+const api = new TextWidgetApi();
+defineExpose<TextWidgetInterface>(api);
+
+onMounted(() => { if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'TextWidget', pageId); });
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;

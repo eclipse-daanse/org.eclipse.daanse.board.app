@@ -17,8 +17,9 @@ import DataTableWidget from './DataTableWidget.vue'
 import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
+import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
 
 const register = () => {
   console.log('registering DataTable widget', container)
@@ -32,6 +33,9 @@ const register = () => {
 
   const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
   eventRegistry.registerWidget('DataTableWidget', DataTableWidgetEvents)
+
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  actionsRegistry.registerWidgetType('DataTableWidget', DataTableWidgetInterface, 'widget')
 }
 
 register();
