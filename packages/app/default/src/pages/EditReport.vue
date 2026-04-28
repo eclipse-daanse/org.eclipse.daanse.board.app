@@ -70,35 +70,36 @@ const currentlyEditingWidget = computed(() => {
 </script>
 
 <template>
-  <div class="report-outer">
-    <div class="report-container dottet">
-      <LayoutRenderer
-        :pageId="pageID as string"
-        @openWidgetSettings="openWidgetSettings"
-      ></LayoutRenderer>
+  <div class="report-container dottet">
+    <LayoutRenderer
+      :pageId="pageID as string"
+      @openWidgetSettings="openWidgetSettings"
 
-      <div class="add_widget-button ice p-2.5 z-mx">
-        <VaButton
-          :icon="widgetSelectorVisible ? 'close' : 'add'"
-          @click="widgetSelectorVisible = !widgetSelectorVisible"
-          round
-          size="large"
-        />
-        <VaButton
-          v-if="endpointfinder_present"
-          icon="travel_explore"
-          @click="endPointFinder()"
-          round
-          size="large"
-        />
-      </div>
-      <div class="pages_board ice p-2.5 z-mx">
-        <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
-      </div>
-      <Transition :duration="150">
-        <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
-      </Transition>
+    ></LayoutRenderer>
+
+    <div class="add_widget-button ice p-2.5 z-mx">
+
+      <VaButton
+        :icon="widgetSelectorVisible ? 'close' : 'add'"
+        @click="widgetSelectorVisible = !widgetSelectorVisible"
+        round
+        size="large"
+      />
+      <VaButton
+        v-if="endpointfinder_present"
+        icon="travel_explore"
+        @click="endPointFinder()"
+        round
+        size="large"
+      />
+
     </div>
+    <div class="pages_board ice p-2.5 z-mx">
+      <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
+    </div>
+    <Transition :duration="150">
+      <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
+    </Transition>
     <Transition :duration="150">
       <WidgetSettingsWindow
         v-if="widgetSettingsOpenedId"
@@ -119,16 +120,13 @@ const currentlyEditingWidget = computed(() => {
 .ghost {
   display: none;
 }
+
+.report-container:has(.minimap) .pages_board {
+  left: 300px;
+}
 </style>
 
 <style scoped>
-
-.report-outer {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
 
 .ghost-placeholder {
   position: absolute;
@@ -144,8 +142,7 @@ const currentlyEditingWidget = computed(() => {
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   height: 100%;
   position: relative;
 }
@@ -217,7 +214,9 @@ const currentlyEditingWidget = computed(() => {
   gap: 10px;
   left: 80px;
   bottom: 20px;
+  transition: left 0.2s ease;
 }
+
 
 .v-enter-active,
 .v-leave-active {
