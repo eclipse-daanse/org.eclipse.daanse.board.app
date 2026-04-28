@@ -26,11 +26,24 @@ import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
+
+const setLink = () => {
+    if (!editor.value) return;
+    const previousUrl = editor.value.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+    if (url === null) return;
+    if (url === '') {
+        editor.value.chain().focus().extendMarkRange('link').unsetLink().run();
+        return;
+    }
+    editor.value.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+}
 const widgetSettings = defineModel<RichTextEditorSettings>({ required: true });
 
 const opened = ref({
@@ -93,6 +106,12 @@ const editor = useEditor({
         Underline.configure({
             HTMLAttributes: {
                 class: "custom-underline",
+            },
+        }),
+        Link.configure({
+            openOnClick: false,
+            HTMLAttributes: {
+                class: "custom-link",
             },
         }),
     ],
@@ -250,6 +269,20 @@ watch(
                 </va-button>
                 <va-button
                     class="editor-btn"
+                    @click="setLink()"
+                    :class="{ 'is-active': editor.isActive('link') }"
+                >
+                    🔗 Link
+                </va-button>
+                <va-button
+                    class="editor-btn"
+                    @click="editor.chain().focus().unsetLink().run()"
+                    :disabled="!editor.isActive('link')"
+                >
+                    Link entfernen
+                </va-button>
+                <va-button
+                    class="editor-btn"
                     @click="editor.chain().focus().undo().run()"
                     :disabled="!editor.can().chain().focus().undo().run()"
                 >
@@ -369,6 +402,12 @@ watch(
 
 .custom-underline {
     font-weight: unset;
+}
+
+.custom-link {
+    color: #154EC2;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .editor-btn {

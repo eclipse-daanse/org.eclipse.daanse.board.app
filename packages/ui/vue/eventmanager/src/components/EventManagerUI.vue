@@ -384,9 +384,21 @@ const editMapping = (mapping: EventActionMapping) => {
   showEditDialog.value = true
 }
 
+const showDeleteConfirm = ref(false)
+const mappingToDelete = ref<string | null>(null)
+
 const removeMapping = (mappingId: string) => {
-  eventManager.unregisterMapping(mappingId)
-  loadMappings()
+  mappingToDelete.value = mappingId
+  showDeleteConfirm.value = true
+}
+
+const confirmRemoveMapping = () => {
+  if (mappingToDelete.value) {
+    eventManager.unregisterMapping(mappingToDelete.value)
+    loadMappings()
+  }
+  showDeleteConfirm.value = false
+  mappingToDelete.value = null
 }
 
 const resetForm = () => {
@@ -1035,6 +1047,29 @@ onMounted(() => {
           </VaCardContent>
         </VaCard>
       </div>
+    </VaModal>
+
+    <VaModal
+      v-model="showDeleteConfirm"
+      size="small"
+      hide-default-actions
+      overlay-opacity="0.3"
+    >
+      <div style="text-align: center; padding: 1rem;">
+        <VaIcon name="warning" color="danger" size="2rem" />
+        <h5 style="margin: 0.5rem 0;">Event-Mapping löschen</h5>
+        <p>Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+      </div>
+      <template #footer>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <VaButton preset="secondary" @click="showDeleteConfirm = false; mappingToDelete = null;">
+            Abbrechen
+          </VaButton>
+          <VaButton color="danger" icon="delete" @click="confirmRemoveMapping()">
+            Löschen
+          </VaButton>
+        </div>
+      </template>
     </VaModal>
   </div>
 </template>
