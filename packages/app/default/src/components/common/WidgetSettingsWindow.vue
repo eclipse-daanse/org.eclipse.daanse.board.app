@@ -100,18 +100,15 @@ h3 {
 }
 
 .widget_settings_window {
-  position: absolute;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 40px);
+  height: 100%;
   width: 400px;
-  right: 20px;
-  top: 20px;
+  min-width: 400px;
   background-color: #ecf0f1;
   padding: 1rem 0;
-  border-radius: 8px;
   z-index: 1000000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   gap: 16px;
 }
