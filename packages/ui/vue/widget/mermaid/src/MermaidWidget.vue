@@ -12,9 +12,12 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, watch, toRefs } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { MermaidWidgetInterface } from './api/MermaidWidgetInterface';
 import mermaid from 'mermaid';
 import { IMermaidWidgetSettings } from '.';
 import {  VariableWrapper,VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -26,6 +29,34 @@ const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const zoomLevel = ref(1);
+
+class MermaidWidgetApi extends MermaidWidgetInterface {
+    refresh(): void {
+        // Force mermaid to re-render by bumping the timestamp key
+        timestamp.value = Date.now();
+        nextTick(() => {
+            mermaid.run({ nodes: container.value ? [container.value] : [] }).catch(() => {});
+        });
+    }
+    zoom(level: number): void {
+        zoomLevel.value = Math.max(0.1, Math.min(5, level));
+        if (container.value) {
+            container.value.style.transform = `scale(${zoomLevel.value})`;
+            container.value.style.transformOrigin = 'top left';
+        }
+    }
+}
+const api = new MermaidWidgetApi();
+defineExpose<MermaidWidgetInterface>(api);
+
+onMounted(() => { if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'MermaidWidget', pageId); });
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;

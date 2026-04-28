@@ -23,6 +23,8 @@
     /* Skip type checking all .d.ts files. */
     "types": [
       "vite/client"
-    ]
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

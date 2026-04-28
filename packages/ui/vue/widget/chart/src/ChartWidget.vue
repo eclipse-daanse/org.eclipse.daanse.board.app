@@ -19,10 +19,13 @@ import {
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { computed, onMounted, ref, toRefs, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { ChartSettings } from './gen/ChartSettings';
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { ChartWidgetInterface } from './api/ChartWidgetInterface';
 
 const { wrapParameters } = useVariableRepository()
 
@@ -35,6 +38,54 @@ const defaultConfig = new ChartSettings();
 const data = ref(null as any);
 
 const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const yAxisZoom = ref<{ min: number | null; max: number | null }>({ min: null, max: null });
+const chartRef = ref<any>(null);
+
+class ChartWidgetApi extends ChartWidgetInterface {
+    refresh(): void {
+        update(datasourceId.value, datasourceId.value);
+    }
+    zoomIn(): void {
+        const min = yAxisZoom.value.min ?? 0;
+        const max = yAxisZoom.value.max ?? 100;
+        const range = max - min;
+        const mid = (max + min) / 2;
+        yAxisZoom.value = { min: mid - range * 0.4, max: mid + range * 0.4 };
+        chartKey.value++;
+    }
+    zoomOut(): void {
+        const min = yAxisZoom.value.min ?? 0;
+        const max = yAxisZoom.value.max ?? 100;
+        const range = max - min;
+        const mid = (max + min) / 2;
+        yAxisZoom.value = { min: mid - range * 0.75, max: mid + range * 0.75 };
+        chartKey.value++;
+    }
+    resetZoom(): void {
+        yAxisZoom.value = { min: null, max: null };
+        chartKey.value++;
+    }
+    exportAsImage(format?: string): void {
+        if (chartRef.value && chartRef.value.chart) {
+            const chartInstance = chartRef.value.chart;
+            const type = format || 'image/png';
+            const base64 = chartInstance.toBase64Image(type);
+            const a = document.createElement('a');
+            a.href = base64;
+            a.download = `chart.${type.split('/')[1] || 'png'}`;
+            a.click();
+        }
+    }
+}
+const api = new ChartWidgetApi();
+defineExpose<ChartWidgetInterface>(api);
+
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -55,6 +106,7 @@ const emitRightClick = () => {
 };
 
 onMounted(() => {
+  if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'ChartWidget', pageId);
   if (config.value) {
     // Merge defaults for any missing properties
     for (const key of Object.keys(defaultConfig)) {
@@ -539,6 +591,7 @@ const chartOptions = computed(() => {
       :is="chartComponent"
       :key="chartKey"
       id="my-chart-id"
+      ref="chartRef"
       v-if="chartData && chartOptions"
       :options="chartOptions"
       :data="chartData"

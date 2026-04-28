@@ -12,12 +12,14 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch, toRefs } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch, toRefs } from 'vue';
+import { useRoute } from 'vue-router';
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { MarkdownWidgetInterface } from './api/MarkdownWidgetInterface';
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css/github-markdown.css";
-
 // @ts-ignore
 import EasyMDE from 'easymde';
 import { MarkdownWidgetSettings } from './gen/MarkdownWidgetSettings'
@@ -27,6 +29,49 @@ const props = defineProps<{ id?: string }>();
 const { id: widgetId } = toRefs(props);
 
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const wrapperRef = ref<HTMLDivElement | null>(null);
+
+class MarkdownWidgetApi extends MarkdownWidgetInterface {
+    refresh(): void {
+        // Re-render the markdown by bumping easyMDE value
+        if (easyMDE) {
+            const current = config.value?.value || '';
+            easyMDE.value('');
+            easyMDE.value(current);
+        }
+    }
+    copyContent(): void {
+        const text = config.value?.value || '';
+        navigator.clipboard?.writeText(text).catch(() => {});
+    }
+    scrollToTop(): void {
+        if (wrapperRef.value) {
+            const preview = wrapperRef.value.querySelector('.editor-preview');
+            if (preview) {
+                preview.scrollTop = 0;
+            } else {
+                wrapperRef.value.scrollTop = 0;
+            }
+        }
+    }
+    scrollToHash(hashId: string): void {
+        if (wrapperRef.value) {
+            const target = wrapperRef.value.querySelector(`#${hashId}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }
+}
+const api = new MarkdownWidgetApi();
+defineExpose<MarkdownWidgetInterface>(api);
+
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -59,6 +104,7 @@ const container = ref<HTMLDivElement | null>(null);
 let easyMDE: EasyMDE | null = null;
 
 onMounted(() => {
+  if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'MarkdownWidget', pageId);
 
     easyMDE = new EasyMDE({
         toolbar: false,
@@ -84,7 +130,7 @@ watch(() => config.value?.value, (newValue, oldValue) => {
 </script>
 
 <template>
-    <div class="markdown-wrapper" @click="emitClick" @contextmenu.prevent="emitRightClick">
+    <div class="markdown-wrapper" @click="emitClick" @contextmenu.prevent="emitRightClick" ref="wrapperRef">
         <textarea ref="container">
             {{ config.value }}
         </textarea>

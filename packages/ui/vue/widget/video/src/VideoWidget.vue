@@ -13,7 +13,8 @@ Contributors:
 
 <script lang="ts" setup>
 
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { VideoSettings } from './gen/VideoSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
@@ -25,7 +26,64 @@ const config = defineModel<VideoSettings>('configv', { required: true });
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { VideoWidgetInterface } from './api/VideoWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+const videoElement = ref<HTMLVideoElement | null>(null);
+
+class VideoWidgetApi extends VideoWidgetInterface {
+    play(): void {
+        if (videoElement.value) {
+            videoElement.value.play();
+        }
+    }
+
+    pause(): void {
+        if (videoElement.value) {
+            videoElement.value.pause();
+        }
+    }
+
+    stop(): void {
+        if (videoElement.value) {
+            videoElement.value.pause();
+            videoElement.value.currentTime = 0;
+        }
+    }
+
+    seek(time: number): void {
+        if (videoElement.value) {
+            videoElement.value.currentTime = time;
+        }
+    }
+
+    mute(): void {
+        if (videoElement.value) {
+            videoElement.value.muted = true;
+        }
+    }
+
+    unmute(): void {
+        if (videoElement.value) {
+            videoElement.value.muted = false;
+        }
+    }
+
+    setVolume(volume: number): void {
+        if (videoElement.value) {
+            videoElement.value.volume = Math.max(0, Math.min(1, volume));
+        }
+    }
+}
+
+const api = new VideoWidgetApi();
+defineExpose<VideoWidgetInterface>(api);
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -77,6 +135,10 @@ const defaultConfig = {
 };
 
 onMounted(() => {
+    if (widgetId?.value) {
+        actionsRegistry.registerInstance(widgetId.value, api, 'VideoWidget', pageId);
+    }
+
     if (!config.value) {
         config.value = new VideoSettings();
     }
@@ -100,6 +162,12 @@ onMounted(() => {
     }
 });
 
+onUnmounted(() => {
+    if (widgetId?.value) {
+        actionsRegistry.unregisterInstance(widgetId.value);
+    }
+});
+
 const videoFit = computed(() => {
     return config.value.videoFitSettings?.fit;
 });
@@ -113,7 +181,7 @@ const videoUrlParced = computed(() => {
 
 <template>
     <div class="container" @click="emitClick" @contextmenu.prevent="emitRightClick">
-        <video controls :src="videoUrlParced"
+        <video controls :src="videoUrlParced" ref="videoElement"
             @play="emitVideoEvent('play', $event)"
             @pause="emitVideoEvent('pause', $event)"
             @timeupdate="emitVideoEvent('timeupdate', $event)"

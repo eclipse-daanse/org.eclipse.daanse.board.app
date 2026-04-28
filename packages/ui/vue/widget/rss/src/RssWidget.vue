@@ -12,14 +12,34 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, watch, ref } from 'vue'
+import { toRefs, watch, ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { RssWidgetInterface } from './api/RssWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class RssWidgetApi extends RssWidgetInterface {
+    refresh(): void {
+        // Trigger datasource re-fetch by calling update with the current ID
+        update(datasourceId.value, datasourceId.value);
+    }
+}
+const api = new RssWidgetApi();
+defineExpose<RssWidgetInterface>(api);
+
+onMounted(() => { if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'RssWidget', pageId); });
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
