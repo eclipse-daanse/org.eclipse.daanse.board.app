@@ -220,7 +220,7 @@ const chartOptions = computed(() => {
     }
   }
 
-  const editMode = resolvedConfig.annotationsEditMode
+  const editMode = resolvedConfig.annotationsEditMode.value
 
   // Build annotations
   const annotations: any = {}
@@ -397,7 +397,7 @@ const chartOptions = computed(() => {
     return result
   }
 
-  const dateFormat = resolvedConfig.dateDisplayFormat
+  const dateFormat = resolvedConfig.dateDisplayFormat.value
 
   // Collect all unique axis IDs from series settings
   const xAxisIds = new Set<string>()
@@ -425,7 +425,7 @@ const chartOptions = computed(() => {
   }
 
   // Determine if stacked mode is enabled
-  const isStacked = resolvedConfig.stacked
+  const isStacked = resolvedConfig.stacked.value
 
   // Axis title settings
   const xAxisTitle = config.value.xAxisTitle?.value ?? ''
@@ -440,9 +440,9 @@ const chartOptions = computed(() => {
         text: yAxisTitle,
       },
       grid: {
-        display: resolvedConfig.showHorizontalGrid,
-        color: resolvedConfig.horizontalGridColor,
-        lineWidth: resolvedConfig.horizontalGridWidth,
+        display: resolvedConfig.showHorizontalGrid.value,
+        color: resolvedConfig.horizontalGridColor.value,
+        lineWidth: resolvedConfig.horizontalGridWidth.value,
       }
     },
     x: {
@@ -452,9 +452,9 @@ const chartOptions = computed(() => {
         text: xAxisTitle,
       },
       grid: {
-        display: resolvedConfig.showVerticalGrid,
-        color: resolvedConfig.verticalGridColor,
-        lineWidth: resolvedConfig.verticalGridWidth,
+        display: resolvedConfig.showVerticalGrid.value,
+        color: resolvedConfig.verticalGridColor.value,
+        lineWidth: resolvedConfig.verticalGridWidth.value,
       },
       ticks: {
         callback: function(value: any, index: number, ticks: any[]): string {
@@ -472,9 +472,9 @@ const chartOptions = computed(() => {
         scales[axisId] = {
           type: 'category', // Explicitly set the axis type
           grid: {
-            display: resolvedConfig.showVerticalGrid,
-            color: resolvedConfig.verticalGridColor,
-            lineWidth: resolvedConfig.verticalGridWidth,
+            display: resolvedConfig.showVerticalGrid.value,
+            color: resolvedConfig.verticalGridColor.value,
+            lineWidth: resolvedConfig.verticalGridWidth.value,
           },
           ticks: {
             callback: function(value: any, index: number, ticks: any[]): string {
@@ -502,9 +502,9 @@ const chartOptions = computed(() => {
             text: axisTitle,
           },
           grid: {
-            display: resolvedConfig.showHorizontalGrid,
-            color: resolvedConfig.horizontalGridColor,
-            lineWidth: resolvedConfig.horizontalGridWidth,
+            display: resolvedConfig.showHorizontalGrid.value,
+            color: resolvedConfig.horizontalGridColor.value,
+            lineWidth: resolvedConfig.horizontalGridWidth.value,
           },
           // Position secondary Y-axes on the right
           position: 'right'
@@ -514,7 +514,7 @@ const chartOptions = computed(() => {
   }
 
   // Determine bar orientation (horizontal uses indexAxis: 'y')
-  const barOrientation = resolvedConfig.barOrientation
+  const barOrientation = resolvedConfig.barOrientation.value
   const indexAxis = barOrientation === 'horizontal' ? 'y' : 'x'
 
   const options: any = {

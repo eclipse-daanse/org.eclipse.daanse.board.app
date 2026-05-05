@@ -87,6 +87,6 @@ const loadStateFromStorage = async () => {
   </va-navbar>-->
   <Teleport to="body">
     <!-- <SaveModal ref="loadsaveModal" /> -->
-    <LoadModal ref="loadModalRef" />
+    <!-- <LoadModal ref="loadModalRef" /> -->
   </Teleport>
 </template>
