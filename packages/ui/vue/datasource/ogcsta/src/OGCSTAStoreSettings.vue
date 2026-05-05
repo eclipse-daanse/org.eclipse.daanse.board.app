@@ -205,6 +205,7 @@ const resultTimeEndDT = createDateTimeComputed(() => timeWrappers.resultTimeEnd)
             :options="connectionsFiltered"
             text-by="name"
             value-by="uid"
+            clearable
           />
         </div>
 

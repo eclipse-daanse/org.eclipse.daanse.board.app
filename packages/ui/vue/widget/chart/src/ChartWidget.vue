@@ -575,6 +575,12 @@ const chartOptions = computed(() => {
     indexAxis,
     scales,
     plugins: {
+      legend: {
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle'
+        }
+      },
       annotation: {
         annotations
       }

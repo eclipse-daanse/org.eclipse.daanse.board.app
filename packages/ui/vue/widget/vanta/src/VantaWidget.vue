@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed, toRefs, onBeforeUnmount } from 'vue'
+import { onMounted, ref, watch, type Ref, computed, toRefs, onBeforeUnmount, nextTick } from 'vue'
 // @ts-ignore
 import * as THREE from 'three'
 // @ts-ignore
@@ -65,8 +65,13 @@ const resizeObserver = new ResizeObserver(entries => {
   }
 });
 
-watch(() => config.value, () => {
+watch(() => config.value, async () => {
     if (vantaContainer.value) {
+        if (vantaEffect.value) {
+            vantaEffect.value.destroy()
+            vantaEffect.value = null
+        }
+        await nextTick()
         initVanta()
     }
 }, { deep: true })
@@ -82,15 +87,18 @@ onMounted(() => {
 const initVanta = () => {
     if (vantaEffect.value) {
         vantaEffect.value.destroy()
+        vantaEffect.value = null
     }
+
+    if (!vantaContainer.value) return
 
     let options = {
         el: vantaContainer.value,
         THREE: THREE,
-        p5: p5,
     } as any
 
-    switch (config.value.type) {
+    try {
+      switch (config.value.type) {
         case 'CLOUDS':
             if (config.value.backgroundColor) {
                 options.backgroundColor = config.value.backgroundColor
@@ -120,6 +128,7 @@ const initVanta = () => {
             vantaEffect.value = CLOUDS(options)
             break
         case 'BIRDS':
+            options.p5 = p5
             if (config.value.quantity) {
                 options.quantity = config.value.quantity
             }
@@ -170,6 +179,7 @@ const initVanta = () => {
             vantaEffect.value = NET(options)
             break
         case 'TRUNK':
+            options.p5 = p5
             if (config.value.color) {
                 options.color = config.value.color
             }
@@ -194,6 +204,18 @@ const initVanta = () => {
                 THREE: THREE,
             })
             break
+      }
+    } catch (e) {
+      console.warn('[VantaWidget] Failed to init effect:', config.value.type, e)
+      // Fallback to CLOUDS on error
+      try {
+        vantaEffect.value = CLOUDS({
+          el: vantaContainer.value,
+          THREE: THREE,
+        })
+      } catch (e2) {
+        console.error('[VantaWidget] Fallback also failed:', e2)
+      }
     }
 }
 

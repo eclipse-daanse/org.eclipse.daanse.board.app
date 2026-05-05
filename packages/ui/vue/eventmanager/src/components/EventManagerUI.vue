@@ -558,13 +558,14 @@ onMounted(() => {
             <span class="mapping-id" :title="rowData.id">{{ rowData.id }}</span>
           </template>
           <template #cell(context)="{ rowData }">
-            {{ rowData.context }}{{ rowData.contextId ? `:${rowData.contextId}` : '' }}
+            <span>{{ rowData.context }}</span>
+            <span v-if="rowData.contextId" class="uid-badge" :title="rowData.contextId">{{ rowData.contextId }}</span>
           </template>
           <template #cell(actionsCount)="{ rowData }">
             <div class="actions-list">
               <div v-for="(action, idx) in getMappingActions(rowData)" :key="idx" class="action-item">
                 <span class="action-context">{{ action.targetContext }}</span>
-                <span v-if="action.targetContextId" class="action-target-id" :title="action.targetContextId">{{ action.targetContextId }}</span>
+                <span v-if="action.targetContextId" class="uid-badge" :title="action.targetContextId">{{ action.targetContextId }}</span>
                 <span class="action-separator">→</span>
                 <span class="action-name">{{ action.actionName }}</span>
               </div>
@@ -1277,28 +1278,33 @@ onMounted(() => {
   font-size: 0.8rem;
   color: #374151;
   font-family: 'Monaco', 'Courier New', monospace;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.uid-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+  color: #1e40af;
+  background-color: #dbeafe;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
   max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.25rem;
 }
 
 .action-context {
   color: #6b7280;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
 }
-
-.action-target-id {
-  font-size: 0.7rem;
-  color: #6b7280;
-  font-family: 'Monaco', 'Courier New', monospace;
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .action-separator {

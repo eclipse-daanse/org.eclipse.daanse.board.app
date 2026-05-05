@@ -33,7 +33,10 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key
 
 <template>
   <div class="widget_settings_window ice z-mx p-6 shadow-sm">
-    <h3>Widget Settings</h3>
+    <div class="settings-header">
+      <h3>Widget Settings</h3>
+      <code class="uid-value" :title="widget?.uid">{{ widget?.uid }}</code>
+    </div>
     <div class="content" v-if="widget">
       <WidgetWrapperSettings v-model="widget.wrapperConfig" />
 
@@ -68,7 +71,8 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key
 <style scoped>
 h3 {
   font-size: 20px;
-  padding: 1rem;
+  padding: 0;
+  margin: 0;
 }
 
 .content {
@@ -97,6 +101,23 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.uid-value {
+  color: #c45e00;
+  background-color: #fff3e0;
+  border: 1px solid #ffcc80;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  user-select: all;
 }
 
 .widget_settings_window {
