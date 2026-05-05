@@ -23,8 +23,9 @@ interface ICodeSettings {
   language: string;
 }
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { CodeWidgetEvents } from './events/CodeWidgetEvents'
+import { CodeWidgetInterface } from './api/CodeWidgetInterface'
 
 const register = () => {
   container.get<WidgetRepository>(identifier).registerWidget('CodeWidget', {
@@ -37,6 +38,9 @@ const register = () => {
 
   const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
   eventRegistry.registerWidget('CodeWidget', CodeWidgetEvents)
+
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  actionsRegistry.registerWidgetType('CodeWidget', CodeWidgetInterface, 'widget')
 }
 
 register();

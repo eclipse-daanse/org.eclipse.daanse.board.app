@@ -26,8 +26,9 @@ interface IVideoSettings {
   videoUrl: string
 }
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { VideoWidgetEvents } from './events/VideoWidgetEvents'
+import { VideoWidgetInterface } from './api/VideoWidgetInterface'
 
 const register = () => {
   console.log('registering Video widget', container)
@@ -41,6 +42,9 @@ const register = () => {
 
   const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
   eventRegistry.registerWidget('VideoWidget', VideoWidgetEvents)
+
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  actionsRegistry.registerWidgetType('VideoWidget', VideoWidgetInterface, 'widget')
 }
 
 register();

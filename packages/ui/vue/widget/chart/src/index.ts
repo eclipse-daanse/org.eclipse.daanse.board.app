@@ -18,8 +18,9 @@ import ChartWidgetSettings from './ChartWidgetSettings.vue'
 import { ChartSettings } from './gen/ChartSettings'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
 import { ChartWidgetEvents } from './events/ChartWidgetEvents'
+import { ChartWidgetInterface } from './api/ChartWidgetInterface'
 
 const register = () => {
   container.get<WidgetRepository>(identifier).registerWidget('ChartWidget', {
@@ -32,6 +33,9 @@ const register = () => {
 
   const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
   eventRegistry.registerWidget('ChartWidget', ChartWidgetEvents)
+
+  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  actionsRegistry.registerWidgetType('ChartWidget', ChartWidgetInterface, 'widget')
 }
 
 register();

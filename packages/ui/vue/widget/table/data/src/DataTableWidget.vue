@@ -12,7 +12,8 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed, onMounted } from 'vue';
+import { toRefs, ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 
 const { wrapParameters } = useVariableRepository();
@@ -22,7 +23,24 @@ const { datasourceId, config, id: widgetId } = toRefs(props);
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class DataTableWidgetApi extends DataTableWidgetInterface {
+    refresh(): void {
+        update(datasourceId.value, datasourceId.value);
+    }
+}
+const api = new DataTableWidgetApi();
+defineExpose<DataTableWidgetInterface>(api);
+
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -103,6 +121,7 @@ watch(datasourceId, (newVal, oldVal) => {
 })
 
 onMounted(() => {
+    if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'DataTableWidget', pageId);
     if (!config.value) return;
     const current = config.value.headerBackground;
     if (current === undefined || current === null) {

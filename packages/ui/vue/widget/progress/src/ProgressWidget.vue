@@ -14,7 +14,8 @@ Contributors:
 
 <script setup lang="ts">
 import type { IProgressSettings } from './index'
-import { computed, toRefs, onMounted, ref, watch } from 'vue'
+import { computed, toRefs, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ProgressSettings } from './gen/ProgressSettings'
@@ -24,7 +25,36 @@ const { datasourceId, id: widgetId } = toRefs(props);
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { ProgressWidgetInterface } from './api/ProgressWidgetInterface';
+
 const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+
+const route = useRoute();
+const pageId = (route.params.pageid as string) || '';
+
+class ProgressWidgetApi extends ProgressWidgetInterface {
+    setValue(value: number): void {
+        if (config.value?.progress) {
+            (config.value.progress as any).value = String(value);
+        }
+    }
+    setMax(max: number): void {
+        if (config.value?.max) {
+            (config.value.max as any).value = String(max);
+        }
+    }
+    reset(): void {
+        if (config.value?.progress) {
+            (config.value.progress as any).value = '0';
+        }
+    }
+}
+const api = new ProgressWidgetApi();
+defineExpose<ProgressWidgetInterface>(api);
+
+onUnmounted(() => { if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value); });
 
 const emitClick = () => {
     if (!widgetId?.value) return;
@@ -72,6 +102,7 @@ const wrappedDefaults = {
 };
 
 onMounted(() => {
+  if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'ProgressWidget', pageId);
   if (!config.value) {
       config.value = new ProgressSettings();
   }
