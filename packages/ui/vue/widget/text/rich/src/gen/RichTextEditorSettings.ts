@@ -24,10 +24,14 @@ Contributors: Smart City Jena
 * Serialization to a backend.
 */
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 @ModelClass({type:'http://www.example.org/richTextEditor#//RichTextEditorSettings'})
 export class RichTextEditorSettings {
 
   @Documentation("An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.).")
   @Attribute() editor?: string;
+
+  @Attribute() fontSize: VariableWrapper<string> = new VariableWrapper<string>('16');
+  @Attribute() fontColor: VariableWrapper<string> = new VariableWrapper<string>('#000000');
 }
