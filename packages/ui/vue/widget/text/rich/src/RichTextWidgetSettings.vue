@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { inject, ref, watch } from 'vue'
+import { inject, ref, watch, onMounted } from 'vue'
 import StarterKit from "@tiptap/starter-kit";
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import Bold from "@tiptap/extension-bold";
@@ -33,12 +33,144 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifier as varIdentifier, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+// Extend OrderedList to support listStyleType attribute
+const CustomOrderedList = OrderedList.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            listStyleType: {
+                default: 'decimal',
+                parseHTML: (element: HTMLElement) => element.style.listStyleType || 'decimal',
+                renderHTML: (attributes: any) => {
+                    return { style: `list-style-type: ${attributes.listStyleType || 'decimal'}` }
+                },
+            },
+        }
+    },
+})
+
+// Extend BulletList to support listStyleType attribute
+const CustomBulletList = BulletList.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            listStyleType: {
+                default: 'disc',
+                parseHTML: (element: HTMLElement) => element.style.listStyleType || 'disc',
+                renderHTML: (attributes: any) => {
+                    return { style: `list-style-type: ${attributes.listStyleType || 'disc'}` }
+                },
+            },
+        }
+    },
+})
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
 const fontSize = ref('16')
 const fontColor = ref('#000000')
+const showOlStyleMenu = ref(false)
+const showUlStyleMenu = ref(false)
+const showVariableMenu = ref(false)
+const showSizeVarMenu = ref(false)
+const showColorVarMenu = ref(false)
+const availableVariables = ref<{ name: string; value: any }[]>([])
+
+onMounted(() => {
+    try {
+        const repo = container.get<VariableRepository>(varIdentifier)
+        availableVariables.value = repo.getAllVariables().map(([name]) => {
+            const v = repo.getVariable(name)
+            return { name: v.name, value: v.value }
+        })
+    } catch (e) {
+        console.warn('VariableRepository not available:', e)
+    }
+})
+
+const setSizeVariable = (varName: string) => {
+    try {
+        const repo = container.get<VariableRepository>(varIdentifier)
+        const variable = repo.getVariable(varName)
+        if (variable && widgetSettings.value.fontSize) {
+            widgetSettings.value.fontSize.setTo(variable)
+        }
+    } catch (e) { console.warn(e) }
+    showSizeVarMenu.value = false
+}
+
+const clearSizeVariable = () => {
+    if (widgetSettings.value.fontSize) {
+        widgetSettings.value.fontSize.value = fontSize.value
+    }
+    showSizeVarMenu.value = false
+}
+
+const setColorVariable = (varName: string) => {
+    try {
+        const repo = container.get<VariableRepository>(varIdentifier)
+        const variable = repo.getVariable(varName)
+        if (variable && widgetSettings.value.fontColor) {
+            widgetSettings.value.fontColor.setTo(variable)
+        }
+    } catch (e) { console.warn(e) }
+    showColorVarMenu.value = false
+}
+
+const clearColorVariable = () => {
+    if (widgetSettings.value.fontColor) {
+        widgetSettings.value.fontColor.value = fontColor.value
+    }
+    showColorVarMenu.value = false
+}
+
+const insertVariable = (varName: string) => {
+    if (!editor.value) return
+    editor.value.chain().focus().insertContent(`{${varName}}`).run()
+    showVariableMenu.value = false
+}
+
+const olStyles = [
+    { label: '1, 2, 3', value: 'decimal' },
+    { label: 'a, b, c', value: 'lower-alpha' },
+    { label: 'A, B, C', value: 'upper-alpha' },
+    { label: 'i, ii, iii', value: 'lower-roman' },
+    { label: 'I, II, III', value: 'upper-roman' },
+]
+
+const ulStyles = [
+    { label: '●', value: 'disc' },
+    { label: '○', value: 'circle' },
+    { label: '■', value: 'square' },
+]
+
+const setOrderedListStyle = (style: string) => {
+    if (!editor.value) return
+    if (!editor.value.isActive('orderedList')) {
+        editor.value.chain().focus().toggleOrderedList().run()
+    }
+    editor.value.chain().focus()
+        .updateAttributes('orderedList', { listStyleType: style })
+        .run()
+    showOlStyleMenu.value = false
+}
+
+const setUnorderedListStyle = (style: string) => {
+    if (!editor.value) return
+    if (!editor.value.isActive('bulletList')) {
+        editor.value.chain().focus().toggleBulletList().run()
+    }
+    editor.value.chain().focus()
+        .updateAttributes('bulletList', { listStyleType: style })
+        .run()
+    showUlStyleMenu.value = false
+}
 
 const setFontSize = () => {
     if (!editor.value) return;
@@ -63,6 +195,14 @@ const setLink = () => {
     editor.value.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
 }
 const widgetSettings = defineModel<RichTextEditorSettings>({ required: true });
+
+// Initialize fontSize/fontColor if missing (older configs)
+if (!widgetSettings.value.fontSize) {
+    widgetSettings.value.fontSize = new VariableWrapper<string>('16');
+}
+if (!widgetSettings.value.fontColor) {
+    widgetSettings.value.fontColor = new VariableWrapper<string>('#000000');
+}
 
 const opened = ref({
     widgetSection: false,
@@ -91,12 +231,12 @@ const editor = useEditor({
         Heading.configure({
             levels: [1, 2, 3, 4, 5, 6],
         }),
-        OrderedList.configure({
+        CustomOrderedList.configure({
             HTMLAttributes: {
                 class: "custom-ordered-list",
             },
         }),
-        BulletList.configure({
+        CustomBulletList.configure({
             HTMLAttributes: {
                 class: "custom-bullet-list",
             },
@@ -165,6 +305,28 @@ watch(
                         min="8" max="96" step="1"
                         title="Font Size"
                     />
+                    <div class="toolbar-dropdown-wrapper">
+                        <va-button
+                            class="toolbar-btn toolbar-btn--var" size="small" preset="secondary"
+                            icon="tune"
+                            @click.stop="showSizeVarMenu = !showSizeVarMenu; showColorVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
+                            :class="{ 'is-active': widgetSettings.fontSize?.isSet }"
+                            title="Font Size Variable"
+                        />
+                        <div v-if="showSizeVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
+                            <button class="toolbar-dropdown-item" @click="clearSizeVariable()">
+                                <span class="var-name">Manual</span>
+                            </button>
+                            <button
+                                v-for="v in availableVariables" :key="'fs-'+v.name"
+                                class="toolbar-dropdown-item"
+                                @click="setSizeVariable(v.name)"
+                            >
+                                <span class="var-name">{{ v.name }}</span>
+                                <span class="var-value">{{ v.value }}</span>
+                            </button>
+                        </div>
+                    </div>
                     <input
                         type="color"
                         class="toolbar-color-input"
@@ -172,6 +334,28 @@ watch(
                         @input="setFontColor(($event.target as HTMLInputElement).value)"
                         title="Font Color"
                     />
+                    <div class="toolbar-dropdown-wrapper">
+                        <va-button
+                            class="toolbar-btn toolbar-btn--var" size="small" preset="secondary"
+                            icon="tune"
+                            @click.stop="showColorVarMenu = !showColorVarMenu; showSizeVarMenu = false; showOlStyleMenu = false; showUlStyleMenu = false; showVariableMenu = false"
+                            :class="{ 'is-active': widgetSettings.fontColor?.isSet }"
+                            title="Font Color Variable"
+                        />
+                        <div v-if="showColorVarMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
+                            <button class="toolbar-dropdown-item" @click="clearColorVariable()">
+                                <span class="var-name">Manual</span>
+                            </button>
+                            <button
+                                v-for="v in availableVariables" :key="'fc-'+v.name"
+                                class="toolbar-dropdown-item"
+                                @click="setColorVariable(v.name)"
+                            >
+                                <span class="var-name">{{ v.name }}</span>
+                                <span class="var-value">{{ v.value }}</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Text Format -->
@@ -312,19 +496,57 @@ watch(
 
                 <!-- Lists -->
                 <div class="toolbar-group">
+                    <div class="toolbar-dropdown-wrapper">
+                        <va-button
+                            class="toolbar-btn" size="small" preset="secondary"
+                            icon="format_list_bulleted"
+                            @click="editor.chain().focus().toggleBulletList().run()"
+                            :class="{ 'is-active': editor.isActive('bulletList') }"
+                            title="Bullet List"
+                        />
+                        <button class="toolbar-dropdown-arrow"
+                            @click.stop="showUlStyleMenu = !showUlStyleMenu; showOlStyleMenu = false"
+                        >▾</button>
+                        <div v-if="showUlStyleMenu" class="toolbar-dropdown-menu">
+                            <button
+                                v-for="s in ulStyles" :key="s.value"
+                                class="toolbar-dropdown-item"
+                                @click="setUnorderedListStyle(s.value)"
+                            >{{ s.label }}</button>
+                        </div>
+                    </div>
+                    <div class="toolbar-dropdown-wrapper">
+                        <va-button
+                            class="toolbar-btn" size="small" preset="secondary"
+                            icon="format_list_numbered"
+                            @click="editor.chain().focus().toggleOrderedList().run()"
+                            :class="{ 'is-active': editor.isActive('orderedList') }"
+                            title="Ordered List"
+                        />
+                        <button class="toolbar-dropdown-arrow"
+                            @click.stop="showOlStyleMenu = !showOlStyleMenu; showUlStyleMenu = false"
+                        >▾</button>
+                        <div v-if="showOlStyleMenu" class="toolbar-dropdown-menu">
+                            <button
+                                v-for="s in olStyles" :key="s.value"
+                                class="toolbar-dropdown-item"
+                                @click="setOrderedListStyle(s.value)"
+                            >{{ s.label }}</button>
+                        </div>
+                    </div>
                     <va-button
                         class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_list_bulleted"
-                        @click="editor.chain().focus().toggleBulletList().run()"
-                        :class="{ 'is-active': editor.isActive('bulletList') }"
-                        title="Bullet List"
+                        icon="format_indent_decrease"
+                        @click="editor.chain().focus().liftListItem('listItem').run()"
+                        :disabled="!editor.can().liftListItem('listItem')"
+                        title="Outdent"
                     />
                     <va-button
                         class="toolbar-btn" size="small" preset="secondary"
-                        icon="format_list_numbered"
-                        @click="editor.chain().focus().toggleOrderedList().run()"
-                        :class="{ 'is-active': editor.isActive('orderedList') }"
-                        title="Ordered List"
+                        icon="format_indent_increase"
+                        @click="editor.chain().focus().sinkListItem('listItem').run()"
+                        :disabled="!editor.can().sinkListItem('listItem')"
+                        title="Indent"
                     />
                 </div>
 
@@ -374,6 +596,34 @@ watch(
                         :disabled="!editor.isActive('link')"
                         title="Remove Link"
                     />
+                </div>
+
+                <!-- Variables -->
+                <div class="toolbar-group">
+                    <div class="toolbar-dropdown-wrapper">
+                        <va-button
+                            class="toolbar-btn" size="small" preset="secondary"
+                            icon="data_array"
+                            @click.stop="showVariableMenu = !showVariableMenu; showOlStyleMenu = false; showUlStyleMenu = false"
+                            title="Insert Variable"
+                        />
+                        <button class="toolbar-dropdown-arrow"
+                            @click.stop="showVariableMenu = !showVariableMenu; showOlStyleMenu = false; showUlStyleMenu = false"
+                        >▾</button>
+                        <div v-if="showVariableMenu" class="toolbar-dropdown-menu toolbar-dropdown-menu--wide">
+                            <button
+                                v-for="v in availableVariables" :key="v.name"
+                                class="toolbar-dropdown-item"
+                                @click="insertVariable(v.name)"
+                            >
+                                <span class="var-name">{{ v.name }}</span>
+                                <span class="var-value">{{ v.value }}</span>
+                            </button>
+                            <div v-if="availableVariables.length === 0" class="toolbar-dropdown-empty">
+                                No variables defined
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Undo/Redo & Clear -->
@@ -432,11 +682,27 @@ watch(
 }
 
 .custom-ordered-list {
-    list-style: decimal;
+    padding-left: 1.5rem;
 }
 
 .custom-bullet-list {
-    list-style: disc;
+    padding-left: 1.5rem;
+}
+
+.tiptap ol {
+    padding-left: 1.5rem;
+}
+
+.tiptap ul {
+    padding-left: 1.5rem;
+}
+
+.tiptap li {
+    display: list-item;
+}
+
+.tiptap ol ol, .tiptap ul ul, .tiptap ol ul, .tiptap ul ol {
+    padding-left: 1.5rem;
 }
 
 .tiptap h1 {
@@ -569,7 +835,14 @@ watch(
 
 .toolbar-group--inputs {
     align-items: center;
-    gap: 4px;
+    gap: 3px;
+}
+
+.toolbar-btn--var {
+    min-width: 22px !important;
+    height: 22px !important;
+    padding: 0 2px !important;
+    font-size: 0.6rem !important;
 }
 
 .toolbar-size-input {
@@ -605,6 +878,81 @@ watch(
 .toolbar-color-input::-webkit-color-swatch {
     border: none;
     border-radius: 2px;
+}
+
+.toolbar-dropdown-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-dropdown-arrow {
+    width: 14px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.6rem;
+    color: #6b7280;
+    padding: 0;
+    line-height: 1;
+}
+
+.toolbar-dropdown-arrow:hover {
+    color: #111827;
+}
+
+.toolbar-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 0.25rem;
+    min-width: 90px;
+}
+
+.toolbar-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-align: left;
+    border-radius: 0.2rem;
+    white-space: nowrap;
+}
+
+.toolbar-dropdown-item:hover {
+    background-color: #fff3e0;
+    color: #c45e00;
+}
+
+.toolbar-dropdown-empty {
+    padding: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: center;
+}
+
+.toolbar-dropdown-menu--wide {
+    min-width: 180px;
+}
+
+.var-name {
+    font-weight: 500;
+}
+
+.var-value {
+    margin-left: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.7rem;
 }
 
 .loading {
