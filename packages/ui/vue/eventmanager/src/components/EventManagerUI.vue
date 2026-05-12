@@ -1305,7 +1305,6 @@ onMounted(() => {
   color: #6b7280;
   font-size: 0.8rem;
 }
-}
 
 .action-separator {
   color: #9ca3af;
