@@ -52,6 +52,7 @@ export class PivotTable {
   @Attribute() showRowsProperties: boolean = false;
 
   @Attribute() showColumnsProperties: boolean = false;
+  @Attribute() showSingleMeasureHeader: boolean = false;
   @Reference('LevelStyle') rowLevelStyles: Array<LevelStyle> = [];
   @Reference('LevelStyle') columnLevelStyles: Array<LevelStyle> = [];
   @Reference('ConditionalFormat') conditionalFormats: Array<ConditionalFormat> = [];

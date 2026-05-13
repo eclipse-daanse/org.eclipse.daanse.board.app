@@ -220,6 +220,7 @@ const stylingProps = computed(() => ({
 const dataProps = computed(() => ({
   showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
   showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
+  showSingleMeasureHeader: config.value?.showSingleMeasureHeader ?? defaultConfig.showSingleMeasureHeader,
 }))
 
 const data = ref(null as any);
@@ -230,7 +231,6 @@ watch(datasourceId, (newVal, oldVal) => {
 })
 
 watch(() => dataProps.value, () => {
-  console.log(dataProps.value);
   update();
 });
 
