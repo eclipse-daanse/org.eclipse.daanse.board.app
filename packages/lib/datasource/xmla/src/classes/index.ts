@@ -187,7 +187,7 @@ export class XmlaStore extends BaseDatasource {
     if (this.useMdx) {
       request = this.mdx
     } else {
-      request = await this.getMdxRequest()
+      request = await this.getMdxRequest(requestConfig)
     }
 
     console.log('MDX Request in store:', request)
@@ -221,7 +221,7 @@ export class XmlaStore extends BaseDatasource {
     return response
   }
 
-  async getMdxRequest() {
+  async getMdxRequest(requestConfig: any = {}) {
     await this.loadMetadata()
     const properties = this.metadata.getProperties()
     const levels = this.metadata.getLevels()
@@ -235,7 +235,7 @@ export class XmlaStore extends BaseDatasource {
       this.requestParams.rows,
       this.requestParams.columns,
       this.requestParams.measures,
-      {},
+      requestConfig,
       properties,
       this.requestParams.filters,
       levels,

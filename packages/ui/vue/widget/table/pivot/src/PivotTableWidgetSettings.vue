@@ -119,8 +119,9 @@ const needsResultColors = (type?: string) => {
 <template>
   <va-collapse v-model="opened.dataSettings" header="Data settings" icon="palette">
     <div class="settings-container">
-      <VaCheckbox v-model="widgetSettings.showRowsProperties" label="Show rows" style="margin: 0.5rem 0;"/>
-      <VaCheckbox v-model="widgetSettings.showColumnsProperties" label="Show columns" style="margin: 0.5rem 0;"/>
+      <VaCheckbox v-model="widgetSettings.showRowsProperties" label="Show rows properties" style="margin: 0.5rem 0;"/>
+      <VaCheckbox v-model="widgetSettings.showColumnsProperties" label="Show columns properties" style="margin: 0.5rem 0;"/>
+      <VaCheckbox v-model="widgetSettings.showSingleMeasureHeader" label="Show single measure header" style="margin: 0.5rem 0;"/>
     </div>
   </va-collapse>
   <va-collapse v-model="opened.colorsSection" header="Farben" icon="palette">
