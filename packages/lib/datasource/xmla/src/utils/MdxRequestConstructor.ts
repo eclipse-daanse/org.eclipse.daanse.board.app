@@ -30,6 +30,11 @@ export async function getMdxRequest(
   filters: any[],
   levels: any[],
 ) {
+  if (measures.length === 1 && pivotTableSettings?.showSingleMeasureHeader === false) {
+    rows = rows.filter(e => e.type !== 'Values')
+    columns = columns.filter(e => e.type !== 'Values')
+  }
+
   const filtersRequest = getFiltersRequest(filters)
 
   if (!rows.length || !columns.length) {
@@ -50,7 +55,8 @@ export async function getMdxRequest(
   } else {
     let withSection = 'WITH'
     let selectSection = 'SELECT'
-    const fromSection = getFromPart(measures, cubename, filtersRequest.where)
+    const hasValues = rows.some((e: any) => e.type === 'Values') || columns.some((e: any) => e.type === 'Values')
+    const fromSection = getFromPart(measures, cubename, filtersRequest.where, hasValues)
 
     if (!pivotTableSettings.showEmpty) selectSection += ' NON EMPTY'
 
@@ -377,8 +383,10 @@ async function getSingleHierarchyRequest(
   filtersRequest: any,
   levels: any[],
 ) {
+  const forceValues = (rows.length === 0 && columns.length === 0 && measures.length > 0 && pivotTableSettings?.showSingleMeasureHeader !== false)
+  const hasValues = rows.some((e: any) => e.type === 'Values') || columns.some((e: any) => e.type === 'Values') || forceValues
   const selectPart = getSelectWithOptions(pivotTableSettings)
-  const fromPart = getFromPart(measures, cubename, filtersRequest.where)
+  const fromPart = getFromPart(measures, cubename, filtersRequest.where, hasValues)
 
   if (rows.length) {
     const request = await getRowsRequest(
@@ -433,8 +441,11 @@ async function getSingleHierarchyRequest(
       ${fromPart}
     `
   } else if (measures.length) {
+    const selectRequest = measures.map((e: any) => e.originalItem.MEASURE_UNIQUE_NAME).join(',')
     return `
-      SELECT ${fromPart}
+      ${selectPart}
+      {${selectRequest}} ON 0
+      ${fromPart}
     `
   }
   return ''
@@ -446,9 +457,9 @@ function getSelectWithOptions(pivotTableSettings: any) {
   return result
 }
 
-function getFromPart(measures: any[], cubename: string, filtersWhere: any) {
+function getFromPart(measures: any[], cubename: string, filtersWhere: any, hasValues: boolean = false) {
   let measuresPart = ''
-  if (measures.length === 1) {
+  if (measures.length === 1 && !hasValues) {
     measuresPart = `${measures[0].originalItem.MEASURE_UNIQUE_NAME}`
   }
 
