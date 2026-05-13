@@ -105,7 +105,7 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
 
   console.log('Params in helper', params)
 
-  columns[0].forEach((col: any) => {
+  columns[0]?.forEach((col: any) => {
     // const colPropsShown = pivotTableStore.state.membersWithProps.includes(
     //   col.HIERARCHY_UNIQUE_NAME,
     // );
@@ -118,7 +118,7 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
     columnProperties.push(...colProps);
   });
 
-  rows[0].forEach((row: any) => {
+  rows[0]?.forEach((row: any) => {
     // const rowPropsShown = pivotTableStore.state.membersWithProps.includes(
     //   row.HIERARCHY_UNIQUE_NAME,
     // );
@@ -299,31 +299,34 @@ const parseRequestToTable = (mdxResponce: any, mainAxis = 0) => {
     rowProperties: {},
   } as any
 
+  const getCaption = (member: any) => {
+    return optionalArrayToArray(member).map(m => m.Caption).join(' - ')
+  }
+
   if (mainAxis === 0) {
     axis1.forEach((item, index) => {
-      const newItem = item.Member.Caption
-      table.headers.push(newItem)
+      table.headers.push(getCaption(item.Member))
     })
 
     axis0.forEach((item, i) => {
-      console.log(i)
-      table.rows[i] = [item.Member.Caption]
-      table.rowProperties[item.Member.Caption] = item.Member;
+      const caption = getCaption(item.Member)
+      table.rows[i] = [caption]
+      table.rowProperties[caption] = item.Member;
       axis1.forEach((subItem, j) => {
-        table.rows[i].push(cellsArray[j * axis0.length + i].Value)
+        table.rows[i].push(cellsArray[j * axis0.length + i]?.Value)
       })
     })
   } else if (mainAxis === 1) {
     axis0.forEach((item, index) => {
-      const newItem = item.Member.Caption
-      table.headers.push(newItem)
+      table.headers.push(getCaption(item.Member))
     })
 
     axis1.forEach((item, i) => {
-      table.items[i] = [item.Member.Caption]
-      table.rowProperties[item.Member.Caption] = item.Member;
+      const caption = getCaption(item.Member)
+      table.items[i] = [caption]
+      table.rowProperties[caption] = item.Member;
       axis0.forEach((subItem, j) => {
-        table.items[i].push(cellsArray[i * axis0.length + j].Value)
+        table.items[i].push(cellsArray[i * axis0.length + j]?.Value)
       })
     })
   }
