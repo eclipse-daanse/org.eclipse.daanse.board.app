@@ -476,8 +476,8 @@ const chartOptions = computed(() => {
     })
   }
 
-  // Determine if stacked mode is enabled
-  const isStacked = resolvedConfig.stacked.value
+  // Determine if stacked mode is enabled (ensure boolean, not truthy string)
+  const isStacked = resolvedConfig.stacked.value === true || resolvedConfig.stacked.value === 'true'
 
   // Axis title settings
   const xAxisTitle = config.value.xAxisTitle?.value ?? ''
