@@ -39,9 +39,9 @@ export class PointAndAreaSettings {
 
   @Documentation("Optional property to use for point rendering.")
   @Attribute() point_prop?: string;
-  @Reference('IconSettings') point: IconSettings = new IconSettings();
-  @Reference('PointPin') pointPin: PointPin = new PointPin();
-  @Reference('MapProps') area: MapProps = new MapProps();
+  @Reference('IconSettings') point?: IconSettings;
+  @Reference('PointPin') pointPin?: PointPin;
+  @Reference('MapProps') area?: MapProps;
 
   @Documentation("Optional settings for labels. (Mapped from TypeScript 'any' type).")
   @Attribute() label?: any;

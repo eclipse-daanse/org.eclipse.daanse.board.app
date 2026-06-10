@@ -36,7 +36,7 @@ export class Layer {
 
   @Documentation("The type of the layer (e.g., 'WMS', 'GeoJSON').")
   @Attribute() type?: string;
-  @Reference('Layer') childs: Layer = new Layer();
+  @Reference('Layer') childs?: Layer;
 
   @Documentation("The hierarchical level of the layer.")
   @Attribute() level?: number;

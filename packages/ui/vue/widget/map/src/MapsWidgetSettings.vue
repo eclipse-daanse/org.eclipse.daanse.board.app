@@ -242,6 +242,18 @@ const services = computedAsync(async () => {
             'attribution': '',
             'datasourceId': id
           }
+        } else if (dsType == 'valhalla') {
+          childNode = {
+            'id': v4(),
+            'opacity': 1,
+            'service': OGCStore,
+            'geoJson': {},
+            'type': 'ROUTE',
+            'name': 'Route',
+            'title': 'Valhalla Route',
+            'attribution': '',
+            'datasourceId': id
+          }
         } else if (dsType == 'rest') {
           childNode = {
             'id': v4(),
@@ -277,6 +289,13 @@ const services = computedAsync(async () => {
         ret.push({
           service: { '_info': { title: id + '[Composer]', name: id } },
           type: 'GEOJSON',
+          level: 0,
+          childs: [cachedChild]
+        })
+      } else if (dsType == 'valhalla') {
+        ret.push({
+          service: { '_info': { title: id + '[Valhalla Route]', name: id } },
+          type: 'ROUTE',
           level: 0,
           childs: [cachedChild]
         })
@@ -342,7 +361,7 @@ const newDatasourceId = ref('')
 const availableDatasources = computed(() => {
   if (props.dataSources) {
     return props.dataSources
-      .filter((ds: any) => ds.type === 'ogcsta' || ds.type === 'OGC Composer' || ds.type === 'rest')
+      .filter((ds: any) => ds.type === 'ogcsta' || ds.type === 'OGC Composer' || ds.type === 'rest' || ds.type === 'valhalla')
       .map((ds: any) => ({
         text: `${ds.name} (${ds.type})`,
         value: ds.uid

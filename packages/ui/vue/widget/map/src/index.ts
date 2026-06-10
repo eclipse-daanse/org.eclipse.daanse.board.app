@@ -37,7 +37,7 @@ const register = () => {
   widgetRepository.registerWidget('MapWidget', {
     component: MapsWidget,
     settingsComponent: MapsWidgetSettings,
-    supportedDSTypes: ['ogcsta','OGC Composer','rest'],
+    supportedDSTypes: ['ogcsta','OGC Composer','rest','valhalla'],
     icon: Icon,
     name: 'Map'
   })
