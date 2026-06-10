@@ -23,18 +23,21 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {PointAndAreaSettings} from "./PointAndAreaSettings"
-import {Condition} from "./Condition"
+import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Observation'})
-export class Observation {
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//WaypointPayload'})
+export class WaypointPayload extends Payload {
 
-  @Documentation("The observation setting. (Mapped from TypeScript 'any' type).")
-  @Attribute() setting?: any;
+  @Documentation("Latitude of the waypoint.")
+  @Attribute() lat?: number;
 
-  @Documentation("The component related to the observation.")
-  @Attribute() component?: string;
-  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
-  @Reference('Condition') conditions: Array<Condition> = [];
+  @Documentation("Longitude of the waypoint.")
+  @Attribute() lon?: number;
+
+  @Documentation("Display name of the waypoint.")
+  @Attribute() name?: string;
+
+  @Documentation("Index of the waypoint in the list.")
+  @Attribute() index?: number;
 }
