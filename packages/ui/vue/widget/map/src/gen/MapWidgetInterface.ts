@@ -29,37 +29,37 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapWidgetInterface'})
 export abstract class MapWidgetInterface extends WidgetActionInterface {
-  
+
   @WidgetAction({eventType: 'map.zoomToThing'})
   zoomToThing(thingId: string,zoom?: number,duration?: number): void {
         throw new Error("zoomToThing not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.selectThingById'})
   selectThingById(thingId: string): void {
         throw new Error("selectThingById not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.zoomToLocation'})
   zoomToLocation(location: any,zoom?: number,duration?: number): void {
         throw new Error("zoomToLocation not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.showTooltip'})
   showTooltip(thingId: string,content?: string): void {
         throw new Error("showTooltip not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.hideTooltip'})
   hideTooltip(): void {
         throw new Error("hideTooltip not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.displayRoute'})
   displayRoute(geojson: any,color?: string,width?: number): void {
         throw new Error("displayRoute not implemented");
   }
-  
+
   @WidgetAction({eventType: 'map.clearRoute'})
   clearRoute(): void {
         throw new Error("clearRoute not implemented");

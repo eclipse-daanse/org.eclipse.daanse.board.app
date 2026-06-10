@@ -29,27 +29,27 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetInterface'})
 export abstract class RoutingWidgetInterface extends WidgetActionInterface {
-  
+
   @WidgetAction({eventType: 'routing.addWaypoint'})
   addWaypoint(lat: number,lon: number,name?: string): void {
         throw new Error("addWaypoint not implemented");
   }
-  
+
   @WidgetAction({eventType: 'routing.removeWaypoint'})
   removeWaypoint(index: number): void {
         throw new Error("removeWaypoint not implemented");
   }
-  
+
   @WidgetAction({eventType: 'routing.clearWaypoints'})
   clearWaypoints(): void {
         throw new Error("clearWaypoints not implemented");
   }
-  
+
   @WidgetAction({eventType: 'routing.setCosting'})
   setCosting(costing: string): void {
         throw new Error("setCosting not implemented");
   }
-  
+
   @WidgetAction({eventType: 'routing.calculateRoute'})
   calculateRoute(): void {
         throw new Error("calculateRoute not implemented");
