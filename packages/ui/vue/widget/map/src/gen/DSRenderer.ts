@@ -36,7 +36,7 @@ export class DSRenderer {
   @Attribute() name?: string;
   @Reference('Condition') datastream: Array<Condition> = [];
   @Reference('Observation') observations: Array<Observation> = [];
-  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
+  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
 
   @Documentation("A unique identifier for the data stream renderer.")
   @Attribute() id?: string;

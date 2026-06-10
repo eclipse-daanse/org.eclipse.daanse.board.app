@@ -16,8 +16,15 @@ import { ThingClickPayload } from '../gen/ThingClickPayload';
 import { DatastreamClickPayload } from '../gen/DatastreamClickPayload';
 import { ObservationClickPayload } from '../gen/ObservationClickPayload';
 import { LocationClickPayload } from '../gen/LocationClickPayload';
+import { MapClickPayload } from '../gen/MapClickPayload';
 
 export const MapWidgetEvents: WidgetEventDefinition[] = [
+  {
+    name: 'Map Clicked',
+    type: 'click_on_map',
+    description: 'Triggered when the map background is clicked (provides lat/lon)',
+    payloadType: MapClickPayload
+  },
   {
     name: 'Thing Clicked',
     type: 'click_on_thing',
