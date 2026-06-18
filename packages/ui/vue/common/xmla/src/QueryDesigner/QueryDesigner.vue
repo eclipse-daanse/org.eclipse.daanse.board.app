@@ -150,19 +150,26 @@ const changeMeasures = (e: any) => {
     }
   }
 
-  if (queryConfig.value.measures.length > 1) {
-    queryConfig.value.columns.push({
-      type: "Values",
-      id: "Values",
-      children: [],
-      caption: "Values",
-      originalItem: {
-        HIERARCHY_UNIQUE_NAME: "Values",
-      } as any,
-      filters: null as any,
-    });
+  if (queryConfig.value.measures.length > 0) {
+    const hasValues = queryConfig.value.columns.some((e: any) => e.type === 'Values') ||
+                      queryConfig.value.rows.some((e: any) => e.type === 'Values');
+    if (!hasValues) {
+      queryConfig.value.columns.push({
+        type: "Values",
+        id: "Values",
+        children: [],
+        caption: "Values",
+        originalItem: {
+          HIERARCHY_UNIQUE_NAME: "Values",
+        } as any,
+        filters: null as any,
+      });
+    }
   } else {
     queryConfig.value.columns = queryConfig.value.columns.filter(
+      (e) => (e as any).type !== 'Values',
+    );
+    queryConfig.value.rows = queryConfig.value.rows.filter(
       (e) => (e as any).type !== 'Values',
     );
   }
@@ -178,7 +185,7 @@ const remove = (
     const index = areaContent.findIndex((e) => e.id === item.id);
 
     if (area === "measures") {
-      if (areaContent.length === 2) {
+      if (areaContent.length === 1) {
         queryConfig.value["rows"] = queryConfig.value[
           "rows"
         ].filter((e) => (e as any).type !== "Values");

@@ -15,7 +15,7 @@ Contributors:
 
 import { computed, toRefs, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from 'vue-router';
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { RichTextEditorSettings } from './gen/RichTextEditorSettings'
 
@@ -75,6 +75,13 @@ const emitTextChange = (newText: string) => {
     });
 };
 
+const { calculateValue, wrapParameters } = useVariableRepository()
+
+const resolvedStyle = wrapParameters({
+    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? '16'),
+    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? '#000000'),
+})
+
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
 
@@ -87,7 +94,11 @@ const parsedEditorText = computed(() => {
         return "";
     }
 
-    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.editor);
+    // First resolve variables like {variableName}
+    let html = calculateValue(config.value.editor)
+
+    // Then resolve datasource paths
+    const { parts } = helpers.widget.extractValuesAndFullObject(html);
     let result = "";
 
     for (const part of parts) {
@@ -110,7 +121,8 @@ watch(parsedEditorText, (newVal, oldVal) => {
 </script>
 
 <template>
-    <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick">
+    <div class="text-container" @click="emitClick" @contextmenu.prevent="emitRightClick"
+        :style="{ fontSize: resolvedStyle.fontSize.value + 'px', color: resolvedStyle.fontColor.value }">
         <div class="editor-content pl-6" v-html="parsedEditorText" />
     </div>
 </template>
@@ -170,5 +182,22 @@ watch(parsedEditorText, (newVal, oldVal) => {
 
 .editor-content a:visited {
     color: #6B21A8;
+}
+
+.editor-content ol {
+    padding-left: 1.5rem;
+}
+
+.editor-content ul {
+    padding-left: 1.5rem;
+}
+
+.editor-content li {
+    display: list-item;
+}
+
+.editor-content ol ol, .editor-content ul ul,
+.editor-content ol ul, .editor-content ul ol {
+    padding-left: 1.5rem;
 }
 </style>

@@ -33,16 +33,19 @@ import { useDataPointRegistry } from './composables/datapointRegistry'
 import { IconWidget } from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
 import { IDataRetrieveable, DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { IconSettings } from './gen/IconSettings'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import type { TinyEmitter } from 'tiny-emitter'
 import WFSLayer from './components/WFSLayer.vue'
 import GeoJsonLayer from './components/GeoJsonLayer.vue'
 import RestGeoJsonLayer from './components/RestGeoJsonLayer.vue'
 import OGCSTALayer from './components/OGCSTALayer.vue'
+import RouteLayer from './components/RouteLayer.vue'
 import { useOGCService } from './composables/Service'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
 import { MapSettings } from './gen/MapSettings'
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { MapClickPayload } from './gen/MapClickPayload'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
@@ -57,6 +60,21 @@ const defaultConfig = new MapSettings()
 
 // Get EventActionsRegistry
 const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+
+function handleMapClick(e: any) {
+  if (!widgetId?.value) return
+  const { lat, lng } = e.latlng
+  const payload = new MapClickPayload()
+  payload.lat = lat
+  payload.lon = lng
+  eventBus.emit('widget:MapWidget:click_on_map', {
+    type: 'widget:MapWidget:click_on_map',
+    widgetId: widgetId.value,
+    payload,
+    timestamp: Date.now(),
+  })
+}
 
 const { filterFeatureCollection, compareDatastream, compareThing } = useComparator()
 const { isPoint, isFeatureCollection, transformToGeoJson, isFeature } = useUtils()
@@ -275,10 +293,16 @@ const selectedThingId = ref<string | null>(config.value?.selectedThingId ?? null
 const tooltipThingId = ref<string | null>(null)
 const tooltipContent = ref<string | null>(null)
 
+// Route overlay state
+const routeGeoJson = ref<any>(null)
+const routeColor = ref('#c45e00')
+const routeWeight = ref(5)
+let routeLayerGroup: L.LayerGroup | null = null
+
 // Watch for changes to selectedThingId and sync back to config
 watch(selectedThingId, (newValue) => {
   if (config.value) {
-    config.value.selectedThingId = newValue
+    config.value.selectedThingId = newValue ?? undefined
   }
 })
 
@@ -1089,6 +1113,89 @@ let api = new class implements MapWidgetInterface{
     tooltipThingId.value = null
     tooltipContent.value = null
   }
+
+  displayRoute = (geojson: any, color: string = '#c45e00', width: number = 5) => {
+    if (!map.value || !(map.value as any).leafletObject) {
+      console.warn('Map not ready. Cannot display route.')
+      return
+    }
+
+    const mapInstance = (map.value as any).leafletObject as L.Map
+
+    if (routeLayerGroup) {
+      mapInstance.removeLayer(routeLayerGroup)
+      routeLayerGroup = null
+    }
+
+    if (!geojson || !geojson.features) return
+
+    routeLayerGroup = L.layerGroup()
+
+    for (const feature of geojson.features) {
+      if (feature.geometry.type === 'LineString') {
+        const coords = feature.geometry.coordinates.map(
+          (c: number[]) => [c[1], c[0]] as L.LatLngTuple,
+        )
+        const polyline = L.polyline(coords, {
+          color,
+          weight: width,
+          opacity: 0.8,
+        })
+        routeLayerGroup.addLayer(polyline)
+      } else if (feature.geometry.type === 'Point') {
+        const [lon, lat] = feature.geometry.coordinates
+        const role = feature.properties?.role
+        let markerColor = '#2196f3'
+        if (role === 'start') markerColor = '#4caf50'
+        else if (role === 'end') markerColor = '#f44336'
+
+        const circle = L.circleMarker([lat, lon], {
+          radius: 8,
+          fillColor: markerColor,
+          color: '#fff',
+          weight: 2,
+          fillOpacity: 1,
+        })
+
+        if (feature.properties?.name) {
+          circle.bindTooltip(feature.properties.name)
+        }
+
+        routeLayerGroup.addLayer(circle)
+      }
+    }
+
+    routeLayerGroup.addTo(mapInstance)
+
+    const lineFeatures = geojson.features.filter(
+      (f: any) => f.geometry.type === 'LineString',
+    )
+    if (lineFeatures.length > 0) {
+      const allCoords = lineFeatures.flatMap(
+        (f: any) => f.geometry.coordinates.map(
+          (c: number[]) => [c[1], c[0]] as L.LatLngTuple,
+        ),
+      )
+      if (allCoords.length > 0) {
+        mapInstance.fitBounds(L.latLngBounds(allCoords), {
+          padding: [50, 50],
+        })
+      }
+    }
+
+    routeGeoJson.value = geojson
+    routeColor.value = color
+    routeWeight.value = width
+  }
+
+  clearRoute = () => {
+    if (routeLayerGroup && map.value && (map.value as any).leafletObject) {
+      const mapInstance = (map.value as any).leafletObject as L.Map
+      mapInstance.removeLayer(routeLayerGroup)
+      routeLayerGroup = null
+    }
+    routeGeoJson.value = null
+  }
 };
 
 // Expose MapWidgetInterface methods
@@ -1176,6 +1283,7 @@ onUnmounted(() => {
             style="height: 100%"
             @moveend="mapmove"
             @ready="maploaded"
+            @click="handleMapClick"
             :dragging="!config.fixed"
     >
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
@@ -1224,6 +1332,10 @@ onUnmounted(() => {
           :get-style-by-id="getStyleById"
           :is-point="isPoint"
           :get-point="getPoint"
+        />
+        <RouteLayer
+          v-if="wmsLayer.type == 'ROUTE' && wmsLayer.datasourceId"
+          :datasource-id="wmsLayer.datasourceId"
         />
         <OGCSTALayer
           v-if="wmsLayer.type == 'OGCSTA'"

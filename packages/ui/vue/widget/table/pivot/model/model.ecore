@@ -88,6 +88,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cellTextAlign" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="left" />
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="showRowsProperties" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false" />
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="showColumnsProperties" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false" />
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="showSingleMeasureHeader" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false" />
 
       <!-- Nested Array Containment -->
       <eStructuralFeatures xsi:type="ecore:EReference" name="rowLevelStyles" lowerBound="0" upperBound="-1" eType="#//LevelStyle" containment="true" />

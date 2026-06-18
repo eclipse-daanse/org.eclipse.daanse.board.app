@@ -35,6 +35,6 @@ export class Observation {
 
   @Documentation("The component related to the observation.")
   @Attribute() component?: string;
-  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
+  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
   @Reference('Condition') conditions: Array<Condition> = [];
 }

@@ -53,74 +53,82 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
           </template>
         </ComplexTextInput>
       </div>
-      <div class="settings-block">
-        <VariableInput v-model="widgetSettings.fontSize" :label="t('textBase:TextWidget.fontSize')">
-          <template #default="{ value, change }">
-            <va-input :label="t('textBase:TextWidget.fontSize')" :model-value="value" class="w-full" @input="change">
-            </va-input>
-          </template>
-        </VariableInput>
-      </div>
-      <div class="settings-block">
-        <VariableInput v-model="widgetSettings.fontColor" :label="t('textBase:TextWidget.fontColor')">
-          <template #default="{ value, change }">
-            <va-color-input class="text-color w-full" :label="t('textBase:TextWidget.fontColor')"
-              :model-value="value" @input="change" />
-          </template>
-        </VariableInput>
-      </div>
-      <div class="settings-block">
-        <div class="align-buttons-group align-buttons-group__format">
-          <VaButton class="align-button" icon="format_bold" size="small" icon-color="#000000" :color="widgetSettings.fontWeight.value === 'bold' ? '#606060' : '#fafafa'
-            " @click="
-              widgetSettings.fontWeight.value === 'bold'
-                ? (widgetSettings.fontWeight.value = 'normal')
-                : (widgetSettings.fontWeight.value = 'bold')
-              " />
-          <VaButton class="align-button" icon="format_italic" size="small" icon-color="#000000" :color="widgetSettings.fontStyle.value === 'italic' ? '#606060' : '#fafafa'
-            " @click="
-              widgetSettings.fontStyle.value === 'italic'
-                ? (widgetSettings.fontStyle.value = 'normal')
-                : (widgetSettings.fontStyle.value = 'italic')
-              " />
-          <VaButton class="align-button" icon="format_underline" size="small" icon-color="#000000" :color="widgetSettings.textDecoration.value === 'underline'
-            ? '#606060'
-            : '#fafafa'
-            " @click="
-              widgetSettings.textDecoration.value === 'underline'
-                ? (widgetSettings.textDecoration.value = 'None')
-                : (widgetSettings.textDecoration.value = 'underline')
-              " />
+      <div class="toolbar">
+        <!-- Font Size & Color -->
+        <div class="toolbar-group toolbar-group--inputs">
+          <VariableInput v-model="widgetSettings.fontSize" :label="t('textBase:TextWidget.fontSize')">
+            <template #default="{ value, change }">
+              <va-input :model-value="value" @input="change" placeholder="Size" class="toolbar-input" />
+            </template>
+          </VariableInput>
+          <VariableInput v-model="widgetSettings.fontColor" :label="t('textBase:TextWidget.fontColor')">
+            <template #default="{ value, change }">
+              <va-color-input :model-value="value" @input="change" class="toolbar-input" />
+            </template>
+          </VariableInput>
         </div>
-        <div class="align-buttons-group">
-          <div class="align-horizontal-buttons">
-            <VaButton class="align-button" icon="align_horizontal_left" size="small" icon-color="#000000" :color="widgetSettings.horizontalAlign.value === 'Left'
-              ? '#606060'
-              : '#fafafa'
-              " @click="widgetSettings.horizontalAlign.value = 'Left'" />
-            <VaButton class="align-button" icon="align_horizontal_center" size="small" icon-color="#000000" :color="widgetSettings.horizontalAlign.value === 'Center'
-              ? '#606060'
-              : '#fafafa'
-              " @click="widgetSettings.horizontalAlign.value = 'Center'" />
-            <VaButton class="align-button" icon="align_horizontal_right" size="small" icon-color="#000000" :color="widgetSettings.horizontalAlign.value === 'Right'
-              ? '#606060'
-              : '#fafafa'
-              " @click="widgetSettings.horizontalAlign.value = 'Right'" />
-          </div>
+        <!-- Text Format -->
+        <div class="toolbar-group">
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_bold"
+            :class="{ 'is-active': widgetSettings.fontWeight.value === 'bold' }"
+            @click="widgetSettings.fontWeight.value = widgetSettings.fontWeight.value === 'bold' ? 'normal' : 'bold'"
+            title="Bold"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_italic"
+            :class="{ 'is-active': widgetSettings.fontStyle.value === 'italic' }"
+            @click="widgetSettings.fontStyle.value = widgetSettings.fontStyle.value === 'italic' ? 'normal' : 'italic'"
+            title="Italic"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_underlined"
+            :class="{ 'is-active': widgetSettings.textDecoration.value === 'underline' }"
+            @click="widgetSettings.textDecoration.value = widgetSettings.textDecoration.value === 'underline' ? 'None' : 'underline'"
+            title="Underline"
+          />
         </div>
-        <div class="align-buttons-group">
-          <div class="align-vertical-buttons">
-            <VaButton class="align-button" icon="align_vertical_top" size="small" icon-color="#000000" :color="widgetSettings.verticalAlign.value === 'Top' ? '#606060' : '#fafafa'
-              " @click="widgetSettings.verticalAlign.value = 'Top'" />
-            <VaButton class="align-button" icon="align_vertical_center" size="small" icon-color="#000000" :color="widgetSettings.verticalAlign.value === 'Center'
-              ? '#606060'
-              : '#fafafa'
-              " @click="widgetSettings.verticalAlign.value = 'Center'" />
-            <VaButton class="align-button" icon="align_vertical_bottom" size="small" icon-color="#000000" :color="widgetSettings.verticalAlign.value === 'Bottom'
-              ? '#606060'
-              : '#fafafa'
-              " @click="widgetSettings.verticalAlign.value = 'Bottom'" />
-          </div>
+        <!-- Horizontal Align -->
+        <div class="toolbar-group">
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_align_left"
+            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Left' }"
+            @click="widgetSettings.horizontalAlign.value = 'Left'"
+            title="Left"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_align_center"
+            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Center' }"
+            @click="widgetSettings.horizontalAlign.value = 'Center'"
+            title="Center"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="format_align_right"
+            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Right' }"
+            @click="widgetSettings.horizontalAlign.value = 'Right'"
+            title="Right"
+          />
+        </div>
+        <!-- Vertical Align -->
+        <div class="toolbar-group">
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="vertical_align_top"
+            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Top' }"
+            @click="widgetSettings.verticalAlign.value = 'Top'"
+            title="Top"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="vertical_align_center"
+            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Center' }"
+            @click="widgetSettings.verticalAlign.value = 'Center'"
+            title="Center"
+          />
+          <VaButton class="toolbar-btn" size="small" preset="secondary"
+            icon="vertical_align_bottom"
+            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Bottom' }"
+            @click="widgetSettings.verticalAlign.value = 'Bottom'"
+            title="Bottom"
+          />
         </div>
       </div>
     </div>
@@ -162,29 +170,54 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
   background-color: var(--app-response-background);
 }
 
-.align-buttons-group .align-button:hover {
-  --va-background-color: #a2b5da !important;
-}
-
-.align-buttons-group {
+.toolbar {
   display: flex;
-  align-self: flex-end;
-  border: 2px solid #cdcfdb;
-  border-radius: 4px;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
 }
 
-.align-buttons-group__format {
-  width: 100%;
-}
-
-.align-buttons-group .align-vertical-buttons,
-.align-buttons-group .align-horizontal-buttons {
+.toolbar-group {
   display: flex;
+  gap: 2px;
+  padding-right: 0.5rem;
+  margin-right: 0.25rem;
+  border-right: 1px solid #e5e7eb;
 }
 
-.align-buttons-group .align-button {
-  width: 100%;
-  height: 32px;
-  padding: 0 7.5px;
+.toolbar-group:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.toolbar-btn {
+  min-width: 28px !important;
+  height: 28px !important;
+  padding: 0 4px !important;
+  border: 1px solid transparent !important;
+  border-radius: 0.25rem !important;
+}
+
+.toolbar-btn:hover {
+  background-color: #e5e7eb !important;
+}
+
+.is-active {
+  background-color: #fff3e0 !important;
+  border-color: rgb(236, 156, 29) !important;
+  color: #c45e00 !important;
+}
+
+.toolbar-group--inputs {
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.toolbar-input {
+  max-width: 70px;
 }
 </style>

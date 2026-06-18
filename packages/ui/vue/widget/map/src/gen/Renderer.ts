@@ -34,7 +34,7 @@ export class Renderer {
   @Documentation("The name of the renderer.")
   @Attribute() name?: string;
   @Reference('Condition') thing: Array<Condition> = [];
-  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
+  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
   @Reference('DSRenderer') ds_renderer: Array<DSRenderer> = [];
 
   @Documentation("Optional refresh interval for observation data in milliseconds.")
