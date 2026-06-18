@@ -27,7 +27,7 @@
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-    "vite-plugin-dts": "4.5.4"
+    "vite-plugin-dts": "5.0.2"
   },
   "gitHead": "c5d831f34534a4bff713917fedce8c09892d5a24",
   "publishConfig": {
