@@ -10,7 +10,7 @@
 */
 
 
-import { BoxedDatastream, BoxedThing } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
+import { type BoxedDatastream, type BoxedThing } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { resolveObj } from '../utils/helpers'
 import { FeatureCollection } from 'geojson'
 import { DSRenderer } from '../gen/DSRenderer'

@@ -11,7 +11,7 @@ Contributors: Smart City Jena
 <script lang="ts" setup>
 import { ref, watch, computed, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
-import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta/dist/src/interfaces/OgcStaConfiguration'
+import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L from 'leaflet'
 import { ERefType } from '../api/Renderer'
 import MapMarker from './MapMarker.vue'
