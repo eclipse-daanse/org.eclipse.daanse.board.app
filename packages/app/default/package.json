@@ -173,7 +173,7 @@
     "jsdom": "^28.1.0",
     "npm-run-all2": "^8.0.1",
     "oxlint": "^1.1.0",
-    "prettier": "3.8.1",
+    "prettier": "3.8.4",
     "tailwindcss": "^4.1.5",
     "terser": "^5.36.0",
     "typescript": "~5.9.2",
