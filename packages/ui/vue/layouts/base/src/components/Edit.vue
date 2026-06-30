@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, computed, inject, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
@@ -47,13 +47,16 @@ const {
   layoutStore,
   widgetStore,
   clipboardStore,
+  undoRedoStore,
   ghostPlaceholder,
   processDropCoordinates,
   processDragOverCoordinates,
   hidePlaceholder,
   getInitialStyle,
   getMovableControlStyles,
+  dragStart,
   drag,
+  resizeStart,
   resize,
   moveUp,
   moveDown,
@@ -63,6 +66,8 @@ const {
   removeWidget: removeWidgetComposable,
   copyWidget: copyWidgetComposable,
   pasteWidget: pasteWidgetComposable,
+  undo,
+  redo,
 } = useMoveableLayout(pageId)
 
 const safeWidgets = computed(() => widgetStore?.widgets || [])
@@ -134,8 +139,24 @@ const showMinimap = computed(() => {
   return canvasSize.value.width > el.clientWidth || canvasSize.value.height > el.clientHeight
 })
 
+const onKeyDown = (e: KeyboardEvent) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault()
+    undo()
+  }
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+    e.preventDefault()
+    redo()
+  }
+}
+
 onMounted(() => {
   nextTick(() => updateViewport())
+  window.addEventListener('keydown', onKeyDown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeyDown)
 })
 
 watch(canvasSize, () => nextTick(() => updateViewport()))
@@ -366,7 +387,9 @@ const change = (e: any) => {
           v-bind:resizable="true"
           v-bind:useResizeObserver="true"
           v-bind:useMutationObserver="true"
+          @dragStart="dragStart()"
           @drag="drag(widget.uid, $event)"
+          @resizeStart="resizeStart()"
           @resize="resize(widget.uid, $event)"
           :snappable="true"
           :snapGridWidth="20"

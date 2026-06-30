@@ -25,12 +25,14 @@ import type { OnDrag, OnResize } from 'vue3-moveable'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { useClipboardStore } from './useClipboardStore'
+import { useUndoRedoStore, type IEditorSnapshot } from './useUndoRedoStore'
 import { cloneDeep } from 'lodash'
 
 export function useMoveableLayout(pageId: string = '') {
   const layoutStore = useLayoutStore(pageId)
   const widgetStore = useWidgetsStore(pageId)
   const clipboardStore = useClipboardStore()
+  const undoRedoStore = useUndoRedoStore(pageId)
 
   const ghostPlaceholder = ref({
     x: 0,
@@ -39,6 +41,34 @@ export function useMoveableLayout(pageId: string = '') {
     height: 150,
     visible: false,
   })
+
+  const getCurrentSnapshot = (): IEditorSnapshot => ({
+    widgets: cloneDeep(widgetStore.widgets),
+    layout: cloneDeep(layoutStore.layout),
+  })
+
+  const saveSnapshot = () => {
+    undoRedoStore.pushSnapshot(getCurrentSnapshot())
+  }
+
+  const restoreSnapshot = (snapshot: IEditorSnapshot) => {
+    layoutStore.layout.splice(0, layoutStore.layout.length, ...snapshot.layout)
+    widgetStore.widgets.splice(0, widgetStore.widgets.length, ...snapshot.widgets)
+  }
+
+  const undo = () => {
+    const snapshot = undoRedoStore.undo(getCurrentSnapshot())
+    if (snapshot) {
+      restoreSnapshot(snapshot)
+    }
+  }
+
+  const redo = () => {
+    const snapshot = undoRedoStore.redo(getCurrentSnapshot())
+    if (snapshot) {
+      restoreSnapshot(snapshot)
+    }
+  }
 
   const processDropCoordinates = (event: DragEvent, container: HTMLElement) => {
     const { clientX, clientY } = event
@@ -85,6 +115,10 @@ export function useMoveableLayout(pageId: string = '') {
     }
   }
 
+  const dragStart = () => {
+    saveSnapshot()
+  }
+
   const drag = (id: string, e: OnDrag) => {
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
@@ -93,6 +127,10 @@ export function useMoveableLayout(pageId: string = '') {
     item.y = e.translate[1]
 
     e.target.style.transform = e.transform
+  }
+
+  const resizeStart = () => {
+    saveSnapshot()
   }
 
   const resize = (id: string, e: OnResize) => {
@@ -110,6 +148,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const moveUp = (id: string) => {
+    saveSnapshot()
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
@@ -117,6 +156,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const moveToTop = (id: string) => {
+    saveSnapshot()
     const zIndexMax = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z))
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
@@ -125,6 +165,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const moveDown = (id: string) => {
+    saveSnapshot()
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
@@ -132,6 +173,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const moveToBottom = (id: string) => {
+    saveSnapshot()
     const zIndexMin = Math.min(...layoutStore.layout.map((item: ILayoutItem) => item.z))
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
@@ -140,6 +182,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const addWidget = (type: any, config: any = {}, wrapperConfig: any = {}, layoutConfig: Partial<ILayoutItem> = {}) => {
+    saveSnapshot()
     const uid = widgetStore.createWidget(type, config, wrapperConfig)
 
     const defaultLayout: ILayoutItem = {
@@ -156,6 +199,7 @@ export function useMoveableLayout(pageId: string = '') {
   }
 
   const removeWidget = (id: string) => {
+    saveSnapshot()
     widgetStore.removeWidget(id)
     const layoutIndex = layoutStore.layout.findIndex((item:any) => item.id === id)
     if (layoutIndex > -1) {
@@ -175,6 +219,7 @@ export function useMoveableLayout(pageId: string = '') {
     const clipboard = clipboardStore.paste()
     if (!clipboard) return null
 
+    saveSnapshot()
     const newUid = 'li_' + Math.random().toString(36).substring(7)
     const maxZ = Math.max(...layoutStore.layout.map((item: ILayoutItem) => item.z), 0)
 
@@ -203,13 +248,16 @@ export function useMoveableLayout(pageId: string = '') {
     layoutStore,
     widgetStore,
     clipboardStore,
+    undoRedoStore,
     ghostPlaceholder,
     processDropCoordinates,
     processDragOverCoordinates,
     hidePlaceholder,
     getInitialStyle,
     getMovableControlStyles,
+    dragStart,
     drag,
+    resizeStart,
     resize,
     moveUp,
     moveDown,
@@ -219,5 +267,7 @@ export function useMoveableLayout(pageId: string = '') {
     removeWidget,
     copyWidget,
     pasteWidget,
+    undo,
+    redo,
   }
 }
