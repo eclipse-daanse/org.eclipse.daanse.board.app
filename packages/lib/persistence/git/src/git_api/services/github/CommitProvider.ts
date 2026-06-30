@@ -15,7 +15,7 @@ import Commit from '../../services/common/Commit'
 import type { FileProviderI } from '../../api/FileProvider'
 import type { FileI } from '../../api/File'
 import type { BranchI } from '../../api/Branch'
-import OktokitMultipleFiles from 'octokit-commit-multiple-files'
+import { CreateOrUpdateFiles } from 'octokit-commit-multiple-files'
 import type { FolderI } from '../../api/Folder'
 import { FileState } from '../../api/FileState'
 import { AuthentificationError } from '../common/CastError'
@@ -35,7 +35,7 @@ export default class CommitProvider implements CommitProviderI {
     this.owner = owner
     this.name = name
     this.options = options
-    const oc = Octokit.plugin(OktokitMultipleFiles as unknown as OctokitPlugin)
+    const oc = Octokit.plugin(CreateOrUpdateFiles as unknown as OctokitPlugin)
     this._oc = new oc(this.options)
   }
 
@@ -116,7 +116,7 @@ export default class CommitProvider implements CommitProviderI {
 
   setOptions(options: any) {
     this.options = options
-    const oc = Octokit.plugin(OktokitMultipleFiles as unknown as OctokitPlugin)
+    const oc = Octokit.plugin(CreateOrUpdateFiles as unknown as OctokitPlugin)
     this._oc = new oc(this.options)
   }
 
