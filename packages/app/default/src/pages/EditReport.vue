@@ -16,6 +16,9 @@ import { ref, watch, computed, inject } from 'vue'
 import {  type ILayoutItem } from '@/composables/useMovableLayout'
 
 import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
+import { useUndoRedoStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
+import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
+import { cloneDeep } from 'lodash'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsWindow from '@/components/common/WidgetSettingsWindow.vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -28,7 +31,28 @@ const widgetSettingsOpenedId = ref('')
 const route = useRoute();
 
 const pageID = route.params.pageid??'';
-const { widgets } = useWidgetsStore(pageID as string||'');
+const widgetStore = useWidgetsStore(pageID as string||'');
+const { widgets } = widgetStore;
+const layoutStore = useLayoutStore(pageID as string||'');
+const undoRedoStore = useUndoRedoStore(pageID as string||'');
+
+const undo = () => {
+  const current = { widgets: cloneDeep(widgetStore.widgets), layout: cloneDeep(layoutStore.layout) }
+  const snapshot = undoRedoStore.undo(current)
+  if (snapshot) {
+    layoutStore.layout.splice(0, layoutStore.layout.length, ...snapshot.layout)
+    widgetStore.widgets.splice(0, widgetStore.widgets.length, ...snapshot.widgets)
+  }
+}
+
+const redo = () => {
+  const current = { widgets: cloneDeep(widgetStore.widgets), layout: cloneDeep(layoutStore.layout) }
+  const snapshot = undoRedoStore.redo(current)
+  if (snapshot) {
+    layoutStore.layout.splice(0, layoutStore.layout.length, ...snapshot.layout)
+    widgetStore.widgets.splice(0, widgetStore.widgets.length, ...snapshot.widgets)
+  }
+}
 
 
 const innerWidgets = ref<IWidget[]>([])
@@ -94,8 +118,28 @@ const currentlyEditingWidget = computed(() => {
       />
 
     </div>
-    <div class="pages_board ice p-2.5 z-mx">
-      <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
+    <div class="bottom-panel z-mx">
+      <div class="pages_board ice p-2.5">
+        <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
+      </div>
+      <div class="undo-redo-buttons ice p-2.5">
+        <VaButton
+          icon="undo"
+          :disabled="!undoRedoStore.canUndo"
+          @click="undo"
+          round
+          size="small"
+          title="Undo (Ctrl+Z)"
+        />
+        <VaButton
+          icon="redo"
+          :disabled="!undoRedoStore.canRedo"
+          @click="redo"
+          round
+          size="small"
+          title="Redo (Ctrl+Y)"
+        />
+      </div>
     </div>
     <Transition :duration="150">
       <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
@@ -121,7 +165,7 @@ const currentlyEditingWidget = computed(() => {
   display: none;
 }
 
-.report-container:has(.minimap) .pages_board {
+.report-container:has(.minimap) .bottom-panel {
   left: 300px;
 }
 </style>
@@ -207,14 +251,27 @@ const currentlyEditingWidget = computed(() => {
   right: 30px;
   bottom: 20px;
 }
-.pages_board{
+.bottom-panel {
   position: absolute;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-end;
   gap: 10px;
   left: 80px;
   bottom: 20px;
   transition: left 0.2s ease;
+}
+
+.pages_board {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.undo-redo-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
 }
 
 

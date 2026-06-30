@@ -236,7 +236,18 @@ const add= ()=>{
 </template>
 
 <style scoped>
+:deep(.va-tree-node) {
+  padding-left: 0 !important;
+}
+
+:deep(.va-tree-node-content) {
+  padding-left: 0 !important;
+}
+
 .item{
+  display: flex;
+  align-items: center;
+  width: 100%;
   button{
     visibility: hidden;
   }
