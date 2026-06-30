@@ -7,23 +7,7 @@
   Contributors: Smart City Jena
 */
 declare module 'octokit-commit-multiple-files' {
-  import { Octokit } from '@octokit/core'
+  import type { OctokitPlugin } from '@octokit/core/dist-types/types'
 
-  interface CommitFile {
-    path: string;
-    content: string;
-  }
-
-  interface CommitOptions {
-    owner: string;
-    repo: string;
-    message: string;
-    files: CommitFile[];
-    branch?: string;
-  }
-
-  export function commitMultipleFiles(
-    octokit: Octokit,
-    options: CommitOptions
-  ): Promise<any>;
+  export const CreateOrUpdateFiles: OctokitPlugin;
 }
