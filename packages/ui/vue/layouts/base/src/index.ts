@@ -16,6 +16,7 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Export clipboard store for use in other layouts
 export { useClipboardStore } from './composables/useClipboardStore'
+export { useUndoRedoStore } from './composables/useUndoRedoStore'
 
 if(container.isBound(identifier)) {
 
