@@ -39,19 +39,60 @@ const closeEditor = () => {
 }
 </script>
 <template>
-  <div class="flex flex-row w-full p-4 gap-4 h-full pl-18 ">
-    <div class="flex flex-shrink-0 w-[300px] h-full gap-4 grid grid-cols-1 grid-rows-2">
-      <div class="h-full flex-grow-0">
-        <DatasourceList @openEditor="openEditor" :activeItemId="activeItemId" />
+  <div class="flex flex-row w-full p-4 h-full pl-18 overflow-hidden">
+    <Transition name="sidebar-slide">
+      <div v-if="!activeEditor" class="sidebar-wrapper flex-shrink-0 w-[300px] h-full mr-4">
+        <div class="w-[300px] h-full gap-4 grid grid-cols-1 grid-rows-2">
+          <div class="h-full flex-grow-0">
+            <DatasourceList @openEditor="openEditor" :activeItemId="activeItemId" />
+          </div>
+          <div class="h-full flex-grow-0">
+            <ConnectionList @openEditor="openEditor" :activeItemId="activeItemId" />
+          </div>
+        </div>
       </div>
-      <div class="h-full flex-grow-0">
-        <ConnectionList @openEditor="openEditor" :activeItemId="activeItemId" />
-      </div>
-    </div>
-    <div class="w-full overflow-hidden">
-      <component :is="activeEditor" :itemId="activeItemId" :key="activeItemId"
-        @close="closeEditor"
-      />
+    </Transition>
+    <div class="w-full h-full overflow-hidden">
+      <Transition name="editor-fade" mode="out-in">
+        <component :is="activeEditor" :itemId="activeItemId" :key="activeItemId"
+          @close="closeEditor"
+        />
+      </Transition>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Sidebar Slide and Fade transition */
+.sidebar-slide-enter-active,
+.sidebar-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar-slide-enter-from,
+.sidebar-slide-leave-to {
+  width: 0 !important;
+  opacity: 0;
+  margin-right: 0 !important;
+  transform: translateX(-20px);
+}
+
+/* Editor Slide and Fade transition */
+.editor-fade-enter-active,
+.editor-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.editor-fade-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.editor-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+</style>
+
