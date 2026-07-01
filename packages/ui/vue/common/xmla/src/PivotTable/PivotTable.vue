@@ -18,6 +18,7 @@ import { useElementSize } from "@vueuse/core";
 import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
+import DrillthroughModal from "./DrillthroughModal.vue";
 
 const data = defineModel<IPivotTable>({ required: true });
 
@@ -118,6 +119,12 @@ const props = defineProps({
         }>,
         default: () => [],
     },
+    cubeName: {
+        required: false,
+        type: String,
+        default: '',
+    },
+
 });
 
 const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
@@ -141,7 +148,11 @@ const onStopResize = () => {
     eventBus.emit("onStopResize");
 };
 
-const drillthrough = () => { };
+const drillthroughModal = ref<InstanceType<typeof DrillthroughModal> | null>(null);
+
+const drillthrough = (cell: any) => {
+    drillthroughModal.value?.open(cell, data.value);
+};
 
 const columnsOffset = computed(() => {
     return data.value.rows?.[0]?.length * DEFAULT_COLUMN_WIDTH.value;
@@ -293,6 +304,14 @@ const totalContentSize = computed(() => {
                     :cellTextAlign="props.cellTextAlign"
                     :conditionalFormats="props.conditionalFormats"></CellsArea>
             </div>
+
+            <!-- Separate Drillthrough Modal Component -->
+            <DrillthroughModal
+                ref="drillthroughModal"
+                :cubeName="props.cubeName"
+                :propertiesRows="props.propertiesRows"
+                :propertiesCols="props.propertiesCols"
+            />
         </div>
     </template>
 </template>

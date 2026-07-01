@@ -14,7 +14,8 @@ Contributors:
 <script setup lang="ts">
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import { ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { ref, watch, toRef, shallowRef, nextTick, onMounted, provide, computed } from 'vue';
+import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
@@ -31,6 +32,7 @@ const tempStore = shallowRef(null as any)
 const settingsRef = ref(props.dataSource);
 const metadata = ref(null as any);
 const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
+provide('datasource', computed(() => tempStore.value));
 
 console.log(props.dataSource)
 
