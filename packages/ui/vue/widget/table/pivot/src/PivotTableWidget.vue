@@ -148,15 +148,15 @@ onMounted(() => {
 });
 
 const wrappedConfig = wrapParameters({
-    headerBackgroundColor: computed(() => (config.value?.headerBackgroundColor as any)?.value ?? defaultConfig.headerBackgroundColor),
-    headerTextColor: computed(() => (config.value?.headerTextColor as any)?.value ?? defaultConfig.headerTextColor),
-    cellBackgroundColor: computed(() => (config.value?.cellBackgroundColor as any)?.value ?? defaultConfig.cellBackgroundColor),
-    cellTextColor: computed(() => (config.value?.cellTextColor as any)?.value ?? defaultConfig.cellTextColor),
-    borderColor: computed(() => (config.value?.borderColor as any)?.value ?? defaultConfig.borderColor),
-    defaultColumnWidth: computed(() => (config.value?.defaultColumnWidth as any)?.value ?? defaultConfig.defaultColumnWidth),
-    defaultRowHeight: computed(() => (config.value?.defaultRowHeight as any)?.value ?? defaultConfig.defaultRowHeight),
-    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? defaultConfig.fontSize),
-    headerFontWeight: computed(() => (config.value?.headerFontWeight as any)?.value ?? defaultConfig.headerFontWeight),
+    headerBackgroundColor: computed(() => (config.value?.headerBackgroundColor as any)?.value ?? defaultConfig.headerBackgroundColor.value),
+    headerTextColor: computed(() => (config.value?.headerTextColor as any)?.value ?? defaultConfig.headerTextColor.value),
+    cellBackgroundColor: computed(() => (config.value?.cellBackgroundColor as any)?.value ?? defaultConfig.cellBackgroundColor.value),
+    cellTextColor: computed(() => (config.value?.cellTextColor as any)?.value ?? defaultConfig.cellTextColor.value),
+    borderColor: computed(() => (config.value?.borderColor as any)?.value ?? defaultConfig.borderColor.value),
+    defaultColumnWidth: computed(() => (config.value?.defaultColumnWidth as any)?.value ?? defaultConfig.defaultColumnWidth.value),
+    defaultRowHeight: computed(() => (config.value?.defaultRowHeight as any)?.value ?? defaultConfig.defaultRowHeight.value),
+    fontSize: computed(() => (config.value?.fontSize as any)?.value ?? defaultConfig.fontSize.value),
+    headerFontWeight: computed(() => (config.value?.headerFontWeight as any)?.value ?? defaultConfig.headerFontWeight.value),
     jsonArrays: computed(() => {
         const payload = {
             rowLevelStyles: config.value?.rowLevelStyles?.map((s:any) => ({
@@ -217,6 +217,9 @@ const stylingProps = computed(() => ({
   conditionalFormats: parsedNestedPivots.value.conditionalFormats as any[],
 }));
 
+console.log('stylingProps', stylingProps.value);
+console.log('fontSize', wrappedConfig.fontSize);
+
 const dataProps = computed(() => ({
   showRowsProperties: config.value?.showRowsProperties || defaultConfig.showRowsProperties,
   showColumnsProperties: config.value?.showColumnsProperties || defaultConfig.showColumnsProperties,
@@ -224,7 +227,40 @@ const dataProps = computed(() => ({
 }))
 
 const data = ref(null as any);
-const { callEvent, update } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
+const { callEvent, update, getDatasourceInstance } = useDatasourceRepository(datasourceId, "PivotTable", data, [], dataProps);
+
+const cubeName = computed(() => {
+  const ds = getDatasourceInstance();
+  return ds?.getCubeName ? ds.getCubeName() : '';
+});
+
+const emitCellEdit = (e: any) => {
+    console.log('CELL EDIT FIRED')
+    callEvent('cellUpdate', { query: e.query });
+    if (!widgetId?.value) return;
+    eventBus.emit('widget:PivotTableWidget:cell_edited', {
+        type: 'widget:PivotTableWidget:cell_edited',
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now(), cell: e.cell, value: e.value, query: e.query }
+    });
+};
+
+const onEditModeChanged = async (isEditing: boolean) => {
+    console.log('EDIT MODE CHANGED', isEditing);
+    if (isEditing) {
+        await callEvent('beginTransaction', undefined);
+    }
+};
+
+const onCommitTransaction = async () => {
+    console.log('COMMIT TRANSACTION IN WIDGET');
+    await callEvent('commitTransaction', undefined);
+};
+
+const onRollbackTransaction = async () => {
+    console.log('ROLLBACK TRANSACTION IN WIDGET');
+    await callEvent('rollbackTransaction', undefined);
+};
 
 watch(datasourceId, (newVal, oldVal) => {
   update(newVal, oldVal);
@@ -251,6 +287,15 @@ const onCollapse = (e: any) => {
       emitColumnCollapsed(e.value?.UName || e.value?.UNAME);
   }
 };
+
+const tableKey = computed(() => {
+  if (!data.value) return 'empty';
+  const rowsLen = data.value.rows?.length ?? 0;
+  const colsLen = data.value.columns?.length ?? 0;
+  const rowsExpanded = data.value.tableState?.rowsExpandedMembers?.join(',') ?? '';
+  const colsExpanded = data.value.tableState?.columnsExpandedMembers?.join(',') ?? '';
+  return `${datasourceId.value}_${rowsLen}_${colsLen}_${rowsExpanded}_${colsExpanded}`;
+});
 </script>
 
 <template>
@@ -260,7 +305,12 @@ const onCollapse = (e: any) => {
         @row_clicked="emitRowClick" @row_right_clicked="emitRowRightClick"
         @column_clicked="emitColumnClick" @column_right_clicked="emitColumnRightClick"
         @cell_clicked="emitCellClick" @cell_right_clicked="emitCellRightClick"
-        :key="JSON.stringify(data).length"
+        @onCellEdit="emitCellEdit"
+        @onEditModeChanged="onEditModeChanged"
+        @onCommitTransaction="onCommitTransaction"
+        @onRollbackTransaction="onRollbackTransaction"
+        :cubeName="cubeName"
+        :key="tableKey"
         :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
         :columnsExpandedMembers="data.tableState.columnsExpandedMembers"
         :propertiesRows="data.propertiesRows"

@@ -134,18 +134,29 @@ export class XmlaStore extends BaseDatasource {
     this.initPromiseResolve?.()
   }
 
+  private metadataLoading = false;
   async loadMetadata() {
-    const connection = this.connectionRepository.getConnection(
-      this.connection,
-    ) as XmlaConnection
+    if (this.metadataLoading) {
+      return this.metadataPromise;
+    }
+    if (this.metadata && this.metadata.getLevels()?.length > 0) {
+      return this.metadata;
+    }
+    this.metadataLoading = true;
+    try {
+      const connection = this.connectionRepository.getConnection(
+        this.connection,
+      ) as XmlaConnection
 
-    this.metadata = new MetadataStore()
-    const api = await connection.getApi();
-    this.metadata.init(api);
-    await this.metadata.loadMetadata(connection.catalogName, this.cube)
-    this.metadataPromiseResolve?.(this.metadata);
-
-    return this.metadataPromise
+      this.metadata = new MetadataStore()
+      const api = await connection.getApi();
+      this.metadata.init(api);
+      await this.metadata.loadMetadata(connection.catalogName, this.cube)
+      this.metadataPromiseResolve?.(this.metadata);
+      return this.metadata;
+    } finally {
+      this.metadataLoading = false;
+    }
   }
 
   static async fetchCubes(connection: string): Promise<MDSchemaCube[]> {
@@ -166,7 +177,21 @@ export class XmlaStore extends BaseDatasource {
 
   public async setRequestParams(requestParams: XMLARequestParams) {
     this.requestParams = requestParams;
+    this.executeCleanup();
     this.mdx = await this.getMdxRequest();
+  }
+
+  private executeCleanup() {
+    if (this.drilldownHandler) {
+      this.drilldownHandler.flushExpands(
+        this.requestParams.columns,
+        this.requestParams.rows,
+      )
+      this.drilldownHandler.flushDrilldowns(
+        this.requestParams.columns,
+        this.requestParams.rows,
+      )
+    }
   }
 
   async getOriginalData() {
@@ -223,13 +248,14 @@ export class XmlaStore extends BaseDatasource {
 
   async getMdxRequest(requestConfig: any = {}) {
     await this.loadMetadata()
+    this.executeCleanup();
     const properties = this.metadata.getProperties()
     const levels = this.metadata.getLevels()
 
     const mdxRequest = await getMdxRequest(
       this.cube,
-      this.drilldownHandler?.columnsDrilldownMembers || [],
       this.drilldownHandler?.rowsDrilldownMembers || [],
+      this.drilldownHandler?.columnsDrilldownMembers || [],
       this.drilldownHandler?.rowsExpandedMembers || [],
       this.drilldownHandler?.columnsExpandedMembers || [],
       this.requestParams.rows,
@@ -248,6 +274,10 @@ export class XmlaStore extends BaseDatasource {
     await this.initPromise
     await this.loadMetadata()
     return this.metadata
+  }
+
+  public getCubeName(): string {
+    return this.cube
   }
 
   expand(e: DrilldownPayload): any {
@@ -279,7 +309,127 @@ export class XmlaStore extends BaseDatasource {
     }
   }
 
-  callEvent(event: string, params: any) {
+  private generateUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16).toUpperCase();
+    });
+  }
+
+  async cellUpdate(params: { query: string }) {
+    console.log('Executing cellUpdate MDX:', params.query);
+    const connection = this.getConnection()
+    try {
+      await connection.fetch({
+        format: 'Native',
+        properties: {
+          Timeout: 0,
+          VisualMode: 1,
+          DbpropMsmdFlattened2: false,
+          SafetyOptions: 2,
+          Dialect: 'MDX',
+          MdxMissingMemberMode: 'Error',
+          DbpropMsmdActivityID: this.generateUUID(),
+          DbpropMsmdRequestID: this.generateUUID(),
+          LocaleIdentifier: 1049,
+          DbpropMsmdMDXCompatibility: 1,
+        },
+        data: {
+          mdx: params.query,
+        },
+      })
+    } catch (e) {
+      console.error('Error executing cellUpdate MDX:', e)
+      throw e;
+    }
+  }
+
+  async beginTransaction() {
+    console.log('Beginning transaction');
+    const connection = this.getConnection()
+    try {
+      await connection.fetch({
+        format: 'Native',
+        properties: {
+          Timeout: 0,
+          VisualMode: 1,
+          DbpropMsmdFlattened2: false,
+          SafetyOptions: 2,
+          Dialect: 'MDX',
+          MdxMissingMemberMode: 'Error',
+          DbpropMsmdActivityID: this.generateUUID(),
+          DbpropMsmdRequestID: this.generateUUID(),
+          LocaleIdentifier: 1049,
+          DbpropMsmdMDXCompatibility: 1,
+        },
+        data: {
+          mdx: 'BEGIN TRANSACTION',
+        },
+      })
+    } catch (e) {
+      console.error('Error executing BEGIN TRANSACTION:', e)
+      throw e;
+    }
+  }
+
+  async commitTransaction() {
+    console.log('Committing transaction');
+    const connection = this.getConnection()
+    try {
+      await connection.fetch({
+        format: 'Native',
+        properties: {
+          Timeout: 0,
+          VisualMode: 1,
+          DbpropMsmdFlattened2: false,
+          SafetyOptions: 2,
+          Dialect: 'MDX',
+          MdxMissingMemberMode: 'Error',
+          DbpropMsmdActivityID: this.generateUUID(),
+          DbpropMsmdRequestID: this.generateUUID(),
+          LocaleIdentifier: 1049,
+          DbpropMsmdMDXCompatibility: 1,
+        },
+        data: {
+          mdx: 'COMMIT TRANSACTION',
+        },
+      })
+    } catch (e) {
+      console.error('Error executing COMMIT TRANSACTION:', e)
+      throw e;
+    }
+  }
+
+  async rollbackTransaction() {
+    console.log('Rolling back transaction');
+    const connection = this.getConnection()
+    try {
+      await connection.fetch({
+        format: 'Native',
+        properties: {
+          Timeout: 0,
+          VisualMode: 1,
+          DbpropMsmdFlattened2: false,
+          SafetyOptions: 2,
+          Dialect: 'MDX',
+          MdxMissingMemberMode: 'Error',
+          DbpropMsmdActivityID: this.generateUUID(),
+          DbpropMsmdRequestID: this.generateUUID(),
+          LocaleIdentifier: 1049,
+          DbpropMsmdMDXCompatibility: 1,
+        },
+        data: {
+          mdx: 'ROLLBACK TRANSACTION',
+        },
+      })
+    } catch (e) {
+      console.error('Error executing ROLLBACK TRANSACTION:', e)
+      throw e;
+    }
+  }
+
+  async callEvent(event: string, params: any) {
     switch (event) {
       case 'expand':
         this.expand(params)
@@ -289,6 +439,18 @@ export class XmlaStore extends BaseDatasource {
         break
       case 'filterChange':
         this.changeFilters(params)
+        break
+      case 'cellUpdate':
+        await this.cellUpdate(params)
+        break
+      case 'beginTransaction':
+        await this.beginTransaction()
+        break
+      case 'commitTransaction':
+        await this.commitTransaction()
+        break
+      case 'rollbackTransaction':
+        await this.rollbackTransaction()
         break
       default:
         console.warn('Event is not available for this type of store')

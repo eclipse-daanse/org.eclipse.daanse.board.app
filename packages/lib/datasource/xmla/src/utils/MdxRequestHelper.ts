@@ -21,6 +21,26 @@ interface QueryParams {
   showColumnsProperties: boolean
 }
 
+const buildPropKeyMap = (hierarchyInfo: any): Map<string, string> => {
+  const map = new Map<string, string>()
+  if (!hierarchyInfo) return map
+  for (const [key, val] of Object.entries(hierarchyInfo)) {
+    if (Array.isArray(val)) {
+      for (const entry of val) {
+        if (entry?.__attrs?.name) {
+          map.set(entry.__attrs.name, key)
+        }
+      }
+    } else if (val && typeof val === 'object') {
+      const name = (val as any).__attrs?.name
+      if (name) {
+        map.set(name, key)
+      }
+    }
+  }
+  return map
+}
+
 const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
   let columns = [] as any[]
   let rows = [] as any[]
@@ -162,29 +182,24 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
     isProperty: true,
   }))
 
+  const colPropMaps = colPropertiesDescription.map(buildPropKeyMap)
+  const rowPropMaps = rowPropertiesDescription.map(buildPropKeyMap)
+
   const propertiesCells = propertiesRows.map(prop => {
     return columns.map(col => {
       const propsOrigin = col.find(
         (e: any) => e.HIERARCHY_UNIQUE_NAME === prop.HIERARCHY_UNIQUE_NAME,
       )
+      if (!propsOrigin) return { Value: '' }
 
       const colHierarchyIndex = col.indexOf(propsOrigin)
-      const desc = colPropertiesDescription[colHierarchyIndex]
+      const propMap = colPropMaps[colHierarchyIndex]
       const propName = `${prop.HIERARCHY_UNIQUE_NAME}.[${prop.PROPERTY_NAME}]`
-      const objPropName = Object.entries(desc).find((keyValue: any) => {
-        if (Array.isArray(keyValue[1])) {
-          const att = keyValue[1].find(entry => {
-            return entry.__attrs?.name === propName
-          })
-          if (att) return att
-        } else {
-          return keyValue[1]?.__attrs?.name === propName
-        }
-      })
+      const objPropKey = propMap?.get(propName)
 
-      if (objPropName) {
+      if (objPropKey) {
         return {
-          Value: propsOrigin[objPropName[0]],
+          Value: propsOrigin[objPropKey],
         }
       }
 
@@ -205,17 +220,16 @@ const parseMdxRequest = (mdxResponce: any, params: QueryParams) => {
       const propsOrigin = rowDesc.find(
         (e: any) => e.HIERARCHY_UNIQUE_NAME === prop.HIERARCHY_UNIQUE_NAME,
       )
+      if (!propsOrigin) return { Value: '' }
 
       const rowHierarchyIndex = rowDesc.indexOf(propsOrigin)
-      const desc = rowPropertiesDescription[rowHierarchyIndex]
+      const propMap = rowPropMaps[rowHierarchyIndex]
       const propName = `${prop.HIERARCHY_UNIQUE_NAME}.[${prop.PROPERTY_NAME}]`
-      const objPropName = Object.entries(desc)?.find((keyValue: any) => {
-        return keyValue[1]?.__attrs?.name === propName
-      })
+      const objPropKey = propMap?.get(propName)
 
-      if (objPropName) {
+      if (objPropKey) {
         return {
-          Value: propsOrigin[objPropName[0]],
+          Value: propsOrigin[objPropKey],
         }
       }
 

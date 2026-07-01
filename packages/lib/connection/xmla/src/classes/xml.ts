@@ -523,7 +523,12 @@ class XMLAApi {
     )
   }
 
-  public async getMDX(mdx: string, catalog?: string, format: string = 'Multidimensional'): Promise<any> {
+  public async getMDX(
+    mdx: string,
+    catalog?: string,
+    format: string = 'Multidimensional',
+    additionalProperties?: Record<string, any>,
+  ): Promise<any> {
     const propertiesResponce = await this.SOAPClient?.ExecuteAsync({
       Headers: {
         Session: {
@@ -540,6 +545,7 @@ class XMLAApi {
         PropertyList: {
           Format: format,
           Catalog: catalog,
+          ...additionalProperties,
         },
       },
     })

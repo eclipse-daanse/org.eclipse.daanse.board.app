@@ -19,6 +19,13 @@ import RowsArea from "./Areas/RowsArea.vue";
 import ColumnsArea from "./Areas/ColumnsArea.vue";
 import CellsArea from "./Areas/CellsArea.vue";
 
+interface IPivotTable {
+    rows: any[][];
+    columns: any[][];
+    cells: any[][];
+    tableState: any;
+}
+
 const data = defineModel<IPivotTable>({ required: true });
 
 const props = defineProps({
@@ -118,6 +125,11 @@ const props = defineProps({
         }>,
         default: () => [],
     },
+    cubeName: {
+        required: false,
+        type: String,
+        default: '',
+    },
 });
 
 const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
@@ -132,6 +144,24 @@ const { width: rowsWidth } = useElementSize(rowsContainer);
 
 const eventBus = new TinyEmitter();
 provide("pivotTableEventBus", eventBus);
+
+const isEditMode = ref(false);
+const toggleEditMode = () => {
+    isEditMode.value = !isEditMode.value;
+    emit("onEditModeChanged", isEditMode.value);
+};
+
+const commitTransaction = () => {
+    emit("onCommitTransaction");
+    isEditMode.value = false;
+    // emit("onEditModeChanged", false);
+};
+
+const rollbackTransaction = () => {
+    emit("onRollbackTransaction");
+    isEditMode.value = false;
+    // emit("onEditModeChanged", false);
+};
 
 const onResize = (e: MouseEvent) => {
     eventBus.emit("onResize", e);
@@ -155,31 +185,52 @@ const setColumnsStyles = (i: number, value: number) => {
     colStyles.value[i] = value;
 };
 
-const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup", "row_clicked", "row_right_clicked", "column_clicked", "column_right_clicked", "cell_clicked", "cell_right_clicked"]);
+const emit = defineEmits(["onExpand", "onCollapse", "onDrilldown", "onDrillup", "row_clicked", "row_right_clicked", "column_clicked", "column_right_clicked", "cell_clicked", "cell_right_clicked", "onCellEdit", "onEditModeChanged", "onCommitTransaction", "onRollbackTransaction"]);
+
+const onCellEdit = ({ cell, value }: { cell: any; value: any }) => {
+    const rowOffset = props.propertiesRows?.length || 0;
+    const colOffset = props.propertiesCols?.length || 0;
+    const rowTuple = data.value.rows?.[cell.j - rowOffset] || [];
+    const colTuple = data.value.columns?.[cell.i - colOffset] || [];
+    const uNames = [...rowTuple, ...colTuple].map(m => m.UName).filter(Boolean);
+    uNames.sort();
+    const cube = props.cubeName || 'AccountingWb';
+    const query = `UPDATE CUBE [${cube}] SET  (${uNames.join(', ')})  = ${value} USE_EQUAL_ALLOCATION`;
+    console.log(query);
+    emit("onCellEdit", { cell, value, query });
+};
 
 eventBus.on("row_clicked", (uName: string) => emit("row_clicked", uName));
 eventBus.on("row_right_clicked", (uName: string) => emit("row_right_clicked", uName));
 eventBus.on("column_clicked", (uName: string) => emit("column_clicked", uName));
 eventBus.on("column_right_clicked", (uName: string) => emit("column_right_clicked", uName));
 eventBus.on("cell_clicked", ({ i, j }: { i: number; j: number }) => {
+    const rowOffset = props.propertiesRows?.length || 0;
+    const colOffset = props.propertiesCols?.length || 0;
     let rowId = String(j);
     let colId = String(i);
-    if (data.value && Array.isArray(data.value.rows) && data.value.rows[j]) {
-        rowId = data.value.rows[j][data.value.rows[j].length - 1]?.UName || rowId;
+    const rowIdx = j - rowOffset;
+    const colIdx = i - colOffset;
+    if (data.value && Array.isArray(data.value.rows) && data.value.rows[rowIdx]) {
+        rowId = data.value.rows[rowIdx][data.value.rows[rowIdx].length - 1]?.UName || rowId;
     }
-    if (data.value && Array.isArray(data.value.columns) && data.value.columns[i]) {
-        colId = data.value.columns[i][data.value.columns[i].length - 1]?.UName || colId;
+    if (data.value && Array.isArray(data.value.columns) && data.value.columns[colIdx]) {
+        colId = data.value.columns[colIdx][data.value.columns[colIdx].length - 1]?.UName || colId;
     }
     emit("cell_clicked", { rowId, colId });
 });
 eventBus.on("cell_right_clicked", ({ i, j }: { i: number; j: number }) => {
+    const rowOffset = props.propertiesRows?.length || 0;
+    const colOffset = props.propertiesCols?.length || 0;
     let rowId = String(j);
     let colId = String(i);
-    if (data.value && Array.isArray(data.value.rows) && data.value.rows[j]) {
-        rowId = data.value.rows[j][data.value.rows[j].length - 1]?.UName || rowId;
+    const rowIdx = j - rowOffset;
+    const colIdx = i - colOffset;
+    if (data.value && Array.isArray(data.value.rows) && data.value.rows[rowIdx]) {
+        rowId = data.value.rows[rowIdx][data.value.rows[rowIdx].length - 1]?.UName || rowId;
     }
-    if (data.value && Array.isArray(data.value.columns) && data.value.columns[i]) {
-        colId = data.value.columns[i][data.value.columns[i].length - 1]?.UName || colId;
+    if (data.value && Array.isArray(data.value.columns) && data.value.columns[colIdx]) {
+        colId = data.value.columns[colIdx][data.value.columns[colIdx].length - 1]?.UName || colId;
     }
     emit("cell_right_clicked", { rowId, colId });
 });
@@ -203,6 +254,7 @@ provide("collapse", (value: any, area: string) => {
 });
 
 const totalContentSize = computed(() => {
+    console.log('col styles', colStyles);
     const columnsDesc = [
         ...props.propertiesCols,
         ...(data.value.columns.length ? data.value.columns : [{}]),
@@ -216,11 +268,12 @@ const totalContentSize = computed(() => {
             _: any,
             i: number,
         ) => {
+            const width = Number(colStyles.value[i]) || Number(DEFAULT_COLUMN_WIDTH.value);
             acc.items[i] = {
                 start: acc.totalWidth,
-                width: colStyles.value[i] || DEFAULT_COLUMN_WIDTH.value,
+                width: width,
             };
-            acc.totalWidth = acc.totalWidth + (colStyles.value[i] || DEFAULT_COLUMN_WIDTH.value);
+            acc.totalWidth = acc.totalWidth + width;
             return acc;
         },
         { items: [], totalWidth: 0 },
@@ -239,11 +292,12 @@ const totalContentSize = computed(() => {
             _: any,
             i: number,
         ) => {
+            const height = Number(rowsStyles.value[i]) || Number(DEFAULT_ROW_HEIGHT.value);
             acc.items[i] = {
                 start: acc.totalWidth,
-                width: rowsStyles.value[i] || DEFAULT_ROW_HEIGHT.value,
+                width: height,
             };
-            acc.totalWidth = acc.totalWidth + (rowsStyles.value[i] || DEFAULT_ROW_HEIGHT.value);
+            acc.totalWidth = acc.totalWidth + height;
             return acc;
         },
         { items: [], totalWidth: 0 },
@@ -260,6 +314,13 @@ const totalContentSize = computed(() => {
     <template v-if="data">
         <div class="pivotTable_container" @mousemove="onResize" @mouseup="onStopResize" @mouseleave="onStopResize"
             @contextmenu.stop.prevent="">
+            <div class="bar">
+                <template v-if="isEditMode">
+                    <va-button size="small" color="success" class="mr-2" @click="commitTransaction" icon="check"></va-button>
+                    <va-button size="small" color="warning" class="mr-2" @click="rollbackTransaction" icon="undo"></va-button>
+                </template>
+                <va-button size="small" :class="['edit-mode-btn', { active: isEditMode }]" @click="toggleEditMode" :color="isEditMode ? 'danger' : ''" :icon="isEditMode ? 'close' : 'edit'"></va-button>
+            </div>
             <ColumnsArea :columnsStyles="colStyles" :columnsOffset="columnsOffset"
                 :columns="[...propertiesCols, ...data.columns]" :totalContentSize="totalContentSize"
                 :leftPadding="rowsWidth" :columns-expanded-members="props.columnsExpandedMembers"
@@ -284,6 +345,8 @@ const totalContentSize = computed(() => {
                     :levelStyles="props.rowLevelStyles"></RowsArea>
                 <CellsArea :rowsStyles="rowsStyles" :colsStyles="colStyles" :totalContentSize="totalContentSize"
                     :cells="data.cells" @drillthrough="drillthrough"
+                    @cell-edit="onCellEdit"
+                    :isEditMode="isEditMode"
                     :cellBackgroundColor="props.cellBackgroundColor"
                     :cellTextColor="props.cellTextColor"
                     :borderColor="props.borderColor"
@@ -306,15 +369,47 @@ const totalContentSize = computed(() => {
     flex-direction: column;
 
     .bar {
-        position: absolute;
-        margin-top: -29px;
         width: 100%;
         height: auto;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         align-content: center;
-        justify-content: flex-end;
+        gap: 8px;
+        padding-bottom: 16px;
+    }
+
+    .edit-mode-btn {
+        background: linear-gradient(135deg, hsl(230, 80%, 60%) 0%, hsl(280, 80%, 50%) 100%);
+        color: #ffffff;
+        border: none;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1;
+        outline: none;
+    }
+
+    .edit-mode-btn:hover {
+        background: linear-gradient(135deg, hsl(230, 85%, 65%) 0%, hsl(280, 85%, 55%) 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .edit-mode-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .edit-mode-btn.active {
+        background: linear-gradient(135deg, hsl(340, 80%, 60%) 0%, hsl(10, 80%, 60%) 100%);
     }
 
     .placeholder {

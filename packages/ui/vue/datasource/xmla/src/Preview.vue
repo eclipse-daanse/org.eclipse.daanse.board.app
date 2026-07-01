@@ -15,6 +15,7 @@ Contributors:
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
+import { debounce } from 'lodash';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
@@ -47,6 +48,7 @@ const queryConfig = ref({
 });
 
 const drilldownState = ref(props.dataSource.config.drilldownState || {});
+const cellEditLoading = ref(false);
 
 
 console.log(props.dataSource);
@@ -79,6 +81,10 @@ const updateData = async () => {
   }
 }
 
+const debouncedUpdateData = debounce(async () => {
+  await updateData();
+}, 100);
+
 onMounted(async () => {
   // if (!tempStore.value) return;
   // metadata.value = await tempStore.value.getMetadata();
@@ -95,7 +101,7 @@ watch(tempStore, async () => {
 
   metadata.value = await tempStore.value.getMetadata();
   updateData();
-}, { deep: true });
+});
 
 watch(() => queryConfig, async () => {
   emit('updateConfig', {
@@ -104,7 +110,7 @@ watch(() => queryConfig, async () => {
   });
 
   tempStore.value?.setRequestParams(queryConfig.value);
-  updateData();
+  debouncedUpdateData();
 }, { deep: true });
 
 watch(() => query, async () => {
@@ -114,7 +120,7 @@ watch(() => query, async () => {
   });
 
   console.log('query changed', query.value);
-  updateData();
+  debouncedUpdateData();
 }, { deep: true });
 
 const onExpand = async (e: any) => {
@@ -139,6 +145,57 @@ const onCollapse = async (e: any) => {
   updateData();
 }
 
+const onCellEdit = async (e: any) => {
+  console.log('CELL EDIT FIRED IN PREVIEW');
+  if (tempStore.value) {
+    cellEditLoading.value = true;
+    try {
+      await tempStore.value.callEvent('cellUpdate', { query: e.query });
+      await updateData();
+    } finally {
+      cellEditLoading.value = false;
+    }
+  }
+}
+
+const onEditModeChanged = async (isEditing: boolean) => {
+  console.log('EDIT MODE CHANGED IN PREVIEW', isEditing);
+  if (isEditing && tempStore.value) {
+    cellEditLoading.value = true;
+    try {
+      await tempStore.value.callEvent('beginTransaction');
+    } finally {
+      cellEditLoading.value = false;
+    }
+  }
+}
+
+const onCommitTransaction = async () => {
+  console.log('COMMIT TRANSACTION IN PREVIEW');
+  if (tempStore.value) {
+    cellEditLoading.value = true;
+    try {
+      await tempStore.value.callEvent('commitTransaction');
+      await updateData();
+    } finally {
+      cellEditLoading.value = false;
+    }
+  }
+}
+
+const onRollbackTransaction = async () => {
+  console.log('ROLLBACK TRANSACTION IN PREVIEW');
+  if (tempStore.value) {
+    cellEditLoading.value = true;
+    try {
+      await tempStore.value.callEvent('rollbackTransaction');
+      await updateData();
+    } finally {
+      cellEditLoading.value = false;
+    }
+  }
+}
+
 const getSettingsHash = (obj: any) => {
   const str = JSON.stringify(obj);
   if (!str) return 0;
@@ -156,54 +213,69 @@ const getSettingsHash = (obj: any) => {
 </script>
 
 <template>
-  <div class="flex w-full h-full rounded gap-4 overflow-hidden">
-    <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
-      <va-tabs v-model="currentTab" hidePagination color="info" grow>
-        <template #tabs>
-          <div class="flex justify-between w-full">
-            <div>
-              <va-tab v-for="tab in tabs" :key="tab">
-                {{ tab }}
-              </va-tab>
+  <VaSplit
+    class="split-demo w-full h-full"
+    vertical
+    modelValue="30"
+    stateful
+  >
+    <template #start>
+      <div class="h-full w-full flex overflow-hidden" style="flex-direction: row-reverse;">
+        <va-tabs v-model="currentTab" hidePagination color="info" grow>
+          <template #tabs>
+            <div class="flex justify-between w-full">
+              <div>
+                <va-tab v-for="tab in tabs" :key="tab">
+                  {{ tab }}
+                </va-tab>
+              </div>
+              <!-- eslint-disable-next-line vue/no-mutating-props -->
             </div>
-
-            <!-- eslint-disable-next-line vue/no-mutating-props -->
+          </template>
+          <template v-if="currentTab === 1 && connection">
+            <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
+            <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']" :metadata="metadata">
+              <template #actions>
+                <VaCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="Use mdx request" />
+              </template>
+            </MonacoEditor>
+          </template>
+          <template v-if="currentTab === 0">
+            <div class="w-full h-full overflow-auto">
+              <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
+            </div>
+          </template>
+        </va-tabs>
+      <div class="h-full metadata-container">
+          <MetadataTree v-if="metadata" :metadata="metadata" :key="getSettingsHash(metadata)" />
+          <div class="h-full w-full flex items-center justify-center" v-else>
+            Select connection to load metadata
           </div>
-        </template>
-        <template v-if="currentTab === 1 && connection">
-          <!-- <MonacoEditor v-model="query" height="100%" width="100%" language="mdx" :supported-languages="[ 'mdx' ]" :metadata="metadataStore" /> -->
-          <MonacoEditor v-model="query" class="monaco-container" language="mdx" :supported-languages="['mdx']">
-            <template #actions>
-              <VaCheckbox v-model="props.dataSource.config.useMdx" class="mt-2" label="Use mdx request" />
-            </template>
-          </MonacoEditor>
-        </template>
-        <template v-if="currentTab === 0">
-          <div class="w-full h-full">
-            <QueryDesigner v-model="queryConfig" :api="api" :catalog="catalog"/>
-          </div>
-        </template>
-      </va-tabs>
-      <div class="h-full w-full flex flex-col data-preview">
-        <h4>
-          Data Preview
-        </h4>
-        <div class="w-full h-full overflow-auto">
-          <!-- @onExpand="onExpand"
-          @onCollapse="onCollapse" -->
-          <PivotTable v-if="data" v-model="data" @onExpand="onExpand" @onCollapse="onCollapse"
-            :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
-            :columnsExpandedMembers="data.tableState.columnsExpandedMembers" />
         </div>
       </div>
-    </div>
-    <div class="h-full metadata-container">
-      <MetadataTree v-if="metadata" :metadata="metadata" :key="getSettingsHash(metadata)" />
-      <div class="h-full w-full flex items-center justify-center" v-else>
-        Select connection to load metadata
-      </div>
-    </div>
-  </div>
+      </template>
+      <template #end>
+        <div class="flex flex-col w-full h-full overflow-hidden flex-grow data-designer">
+          <h4>
+            Data Preview
+          </h4>
+          <div class="w-full h-full overflow-auto">
+            <!-- @onExpand="onExpand"
+            @onCollapse="onCollapse" -->
+            <va-inner-loading :loading="cellEditLoading" class="h-full w-full">
+              <PivotTable v-if="data" v-model="data" @onExpand="onExpand" @onCollapse="onCollapse"
+                @onCellEdit="onCellEdit"
+                @onEditModeChanged="onEditModeChanged"
+                @onCommitTransaction="onCommitTransaction"
+                @onRollbackTransaction="onRollbackTransaction"
+                :cubeName="tempStore?.getCubeName ? tempStore.getCubeName() : ''"
+                :rowsExpandedMembers="data.tableState.rowsExpandedMembers"
+                :columnsExpandedMembers="data.tableState.columnsExpandedMembers" />
+            </va-inner-loading>
+          </div>
+        </div>
+      </template>
+    </VaSplit>
 </template>
 <style>
 .va-tabs {

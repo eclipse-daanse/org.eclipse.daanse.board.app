@@ -92,6 +92,7 @@ export class XmlaConnection extends BaseConnection {
       config.data.mdx,
       this.catalogName,
       config.format,
+      config.properties,
     )
     return mdxResponce
   }
