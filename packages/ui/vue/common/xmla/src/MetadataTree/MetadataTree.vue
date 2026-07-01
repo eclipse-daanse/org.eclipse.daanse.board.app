@@ -214,5 +214,6 @@ const populateDragEvent = (e: any, element: any) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: auto;
 }
 </style>

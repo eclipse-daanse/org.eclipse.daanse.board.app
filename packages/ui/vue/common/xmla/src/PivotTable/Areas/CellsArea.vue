@@ -14,7 +14,8 @@ Contributors:
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { TinyEmitter } from "tiny-emitter";
-import { computed, inject, ref, watch, type Ref } from "vue";
+import { computed, inject, ref, watch, type Ref, nextTick } from "vue";
+import { useElementSize } from "@vueuse/core";
 import CellDropdown from "./CellDropdown.vue";
 // import CellPropertiesModal from "@/components/Modals/CellPropertiesModal.vue";
 
@@ -87,9 +88,14 @@ const props = defineProps({
     }>,
     default: () => [],
   },
+  isEditMode: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["drillthrough"]);
+const emit = defineEmits(["drillthrough", "cell-edit"]);
 
 const DEFAULT_COLUMN_WIDTH = computed(() => props.defaultColumnWidth);
 const DEFAULT_ROW_HEIGHT = computed(() => props.defaultRowHeight);
@@ -294,8 +300,16 @@ const getCellStyle = (i: number, j: number) => {
   const fontStyles = getFontStyles(parseInt(cellValues.FONT_FLAGS));
   const fontSize = cellValues.FONT_SIZE ? `${parseInt(cellValues.FONT_SIZE)}px` : `${props.fontSize}px`;
 
+  let textAlign = props.cellTextAlign;
+  if (cellValues.Value !== undefined && cellValues.Value !== null && cellValues.Value !== "") {
+    const num = Number(cellValues.Value);
+    if (!isNaN(num)) {
+      textAlign = "right";
+    }
+  }
+
   const result: Record<string, any> = {
-    "text-align": props.cellTextAlign,
+    "text-align": textAlign,
     width: `${props.colsStyles[i] || DEFAULT_COLUMN_WIDTH.value}px`,
     height: `${props.rowsStyles[j] || DEFAULT_ROW_HEIGHT.value}px`,
     color: foreColor,
@@ -341,6 +355,18 @@ const getRowStyles = computed(() => {
 });
 
 const container = ref(null) as unknown as Ref<HTMLElement>;
+const { width: containerWidth, height: containerHeight } = useElementSize(container);
+const debouncedContainerWidth = ref(0);
+const debouncedContainerHeight = ref(0);
+let debounceTimeout: NodeJS.Timeout | null = null;
+watch([containerWidth, containerHeight], ([newWidth, newHeight]) => {
+  if (debounceTimeout) clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => {
+    debouncedContainerWidth.value = newWidth;
+    debouncedContainerHeight.value = newHeight;
+  }, 100);
+}, { immediate: true });
+
 const currentlyDisplayedValues = computed(() => {
   if (!container.value)
     return {
@@ -358,7 +384,7 @@ const currentlyDisplayedValues = computed(() => {
     return false;
   });
   let rightIndex = props.totalContentSize.xAxis.items.findIndex((e) => {
-    const rightCoord = xScrollPosition.value + container.value.clientWidth;
+    const rightCoord = xScrollPosition.value + debouncedContainerWidth.value;
 
     if (e.start <= rightCoord && e.start + e.width >= rightCoord) return true;
     return false;
@@ -373,7 +399,7 @@ const currentlyDisplayedValues = computed(() => {
     return false;
   });
   let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
-    const bottomCoord = yScrollPosition.value + container.value.clientHeight;
+    const bottomCoord = yScrollPosition.value + debouncedContainerHeight.value;
     if (e.start <= bottomCoord && e.start + e.width >= bottomCoord) return true;
     return false;
   });
@@ -449,6 +475,199 @@ function getFontStyles(fontStyle) {
 
   return result;
 }
+
+const isCellEditable = (cell: any) => {
+  console.log(cell);
+  const val = cell?.UPDATEABLE?.Value ?? cell?.UPDATEABLE ?? cell?.Updateable?.Value ?? cell?.Updateable;
+  return Number(val) === 1 || Number(val) === 2;
+};
+
+const onCellEdit = (cell: any) => {
+  emit("cell-edit", { cell, value: cell.Value });
+};
+
+const focusCell = (col: number, row: number) => {
+  if (!container.value) return;
+
+  const colItem = (props.totalContentSize.xAxis.items as any[])?.[col];
+  const rowItem = (props.totalContentSize.yAxis.items as any[])?.[row];
+
+  if (colItem && rowItem) {
+    const margin = 10;
+    const left = container.value.scrollLeft;
+    const right = left + container.value.clientWidth;
+    const top = container.value.scrollTop;
+    const bottom = top + container.value.clientHeight;
+
+    let newScrollLeft = left;
+    let newScrollTop = top;
+
+    if (colItem.start < left) {
+      newScrollLeft = colItem.start - margin;
+    } else if (colItem.start + colItem.width > right) {
+      newScrollLeft = colItem.start + colItem.width - container.value.clientWidth + margin;
+    }
+
+    if (rowItem.start < top) {
+      newScrollTop = rowItem.start - margin;
+    } else if (rowItem.start + rowItem.width > bottom) {
+      newScrollTop = rowItem.start + rowItem.width - container.value.clientHeight + margin;
+    }
+
+    if (newScrollLeft !== left || newScrollTop !== top) {
+      container.value.scrollLeft = newScrollLeft;
+      container.value.scrollTop = newScrollTop;
+      xScrollPosition.value = newScrollLeft;
+      yScrollPosition.value = newScrollTop;
+      eventBus.emit("scroll", {
+        top: newScrollTop,
+        left: newScrollLeft,
+      });
+
+      nextTick(() => {
+        const targetInput = container.value?.querySelector(
+          `input[data-col="${col}"][data-row="${row}"]`
+        ) as HTMLInputElement | null;
+        if (targetInput) {
+          targetInput.focus();
+          targetInput.select();
+        }
+      });
+      return;
+    }
+  }
+
+  const targetInput = container.value.querySelector(
+    `input[data-col="${col}"][data-row="${row}"]`
+  ) as HTMLInputElement | null;
+
+  if (targetInput) {
+    targetInput.focus();
+    targetInput.select();
+  }
+};
+
+const findNextEditableCell = (
+  col: number,
+  row: number,
+  direction: 'tab' | 'shift-tab' | 'enter' | 'shift-enter' | 'left' | 'right' | 'up' | 'down'
+) => {
+  const cellsArray = props.cells as any[][];
+  const maxCols = cellsArray?.[0]?.length || 0;
+  const maxRows = cellsArray?.length || 0;
+  if (maxCols === 0 || maxRows === 0) return null;
+
+  const isEditable = (c: number, r: number) => {
+    const cell = cellsArray?.[r]?.[c];
+    if (!cell) return false;
+    return isCellEditable(cell);
+  };
+
+  if (direction === 'tab') {
+    let idx = row * maxCols + col + 1;
+    const totalCells = maxRows * maxCols;
+    for (let step = 0; step < totalCells; step++) {
+      const currentIdx = (idx + step) % totalCells;
+      const r = Math.floor(currentIdx / maxCols);
+      const c = currentIdx % maxCols;
+      if (isEditable(c, r)) {
+        return { col: c, row: r };
+      }
+    }
+  } else if (direction === 'shift-tab') {
+    let idx = row * maxCols + col - 1;
+    const totalCells = maxRows * maxCols;
+    for (let step = 0; step < totalCells; step++) {
+      const currentIdx = (idx - step + totalCells * 2) % totalCells;
+      const r = Math.floor(currentIdx / maxCols);
+      const c = currentIdx % maxCols;
+      if (isEditable(c, r)) {
+        return { col: c, row: r };
+      }
+    }
+  } else if (direction === 'enter') {
+    let idx = col * maxRows + row + 1;
+    const totalCells = maxRows * maxCols;
+    for (let step = 0; step < totalCells; step++) {
+      const currentIdx = (idx + step) % totalCells;
+      const r = currentIdx % maxRows;
+      const c = Math.floor(currentIdx / maxRows);
+      if (isEditable(c, r)) {
+        return { col: c, row: r };
+      }
+    }
+  } else if (direction === 'shift-enter') {
+    let idx = col * maxRows + row - 1;
+    const totalCells = maxRows * maxCols;
+    for (let step = 0; step < totalCells; step++) {
+      const currentIdx = (idx - step + totalCells * 2) % totalCells;
+      const r = currentIdx % maxRows;
+      const c = Math.floor(currentIdx / maxRows);
+      if (isEditable(c, r)) {
+        return { col: c, row: r };
+      }
+    }
+  } else if (direction === 'down') {
+    for (let r = row + 1; r < maxRows; r++) {
+      if (isEditable(col, r)) {
+        return { col, row: r };
+      }
+    }
+  } else if (direction === 'up') {
+    for (let r = row - 1; r >= 0; r--) {
+      if (isEditable(col, r)) {
+        return { col, row: r };
+      }
+    }
+  } else if (direction === 'right') {
+    for (let c = col + 1; c < maxCols; c++) {
+      if (isEditable(c, row)) {
+        return { col: c, row };
+      }
+    }
+  } else if (direction === 'left') {
+    for (let c = col - 1; c >= 0; c--) {
+      if (isEditable(c, row)) {
+        return { col: c, row };
+      }
+    }
+  }
+
+  return null;
+};
+
+const handleKeyDown = (event: KeyboardEvent, col: number, row: number) => {
+  let direction: 'tab' | 'shift-tab' | 'enter' | 'shift-enter' | 'left' | 'right' | 'up' | 'down' | null = null;
+
+  if (event.key === 'Tab') {
+    event.preventDefault();
+    direction = event.shiftKey ? 'shift-tab' : 'tab';
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    direction = event.shiftKey ? 'shift-enter' : 'enter';
+  } else if (event.ctrlKey) {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      direction = 'right';
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      direction = 'left';
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      direction = 'down';
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      direction = 'up';
+    }
+  }
+
+  if (direction) {
+    const nextCell = findNextEditableCell(col, row, direction);
+    if (nextCell) {
+      focusCell(nextCell.col, nextCell.row);
+    }
+  }
+};
 </script>
 <template>
   <div class="cells_container" @scroll="handleScroll" ref="container">
@@ -460,7 +679,21 @@ function getFontStyles(fontStyle) {
         <CellDropdown v-for="cell in cellRow" :key="`${cell.i}_${cell.j}`" :style="getCellStyle(cell.i, cell.j)"
           class="cell" @openCellProperties="openCellProperties(cell)" @drillthrough="drillthrough(cell)">
           <template v-slot="{ }">
-            <div @click="onCellClick(cell)" @contextmenu="onCellRightClick($event, cell)">
+            <div v-if="props.isEditMode && isCellEditable(cell)" class="cell-input-container">
+              <input
+                type="text"
+                v-model="cell.Value"
+                class="cell-input"
+                :data-col="cell.i"
+                :data-row="cell.j"
+                @click.stop
+                @contextmenu.stop
+                @change="onCellEdit(cell)"
+                @keyup.enter="onCellEdit(cell)"
+                @keydown="handleKeyDown($event, cell.i, cell.j)"
+              />
+            </div>
+            <div v-else @click="onCellClick(cell)" @contextmenu="onCellRightClick($event, cell)">
               {{ toLocalString(getCellValue(cell)) }}
             </div>
           </template>
@@ -505,5 +738,39 @@ function getFontStyles(fontStyle) {
 
 .virtual-scroll-container {
   overflow: hidden;
+}
+
+.cell-input-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 1px !important;
+}
+
+.cell-input {
+  width: 100%;
+  height: calc(100% - 2px);
+  border: 1px solid silver;
+  border-radius: 4px;
+  padding: 0 6px;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  background-color: transparent;
+  text-align: inherit;
+  box-shadow: none;
+  transition: all 0.15s ease-in-out;
+  line-height: normal;
+  box-sizing: border-box;
+}
+
+.cell-input:focus {
+  outline: none;
+  border-color: hsl(207, 90%, 54%);
+  box-shadow: 0 0 0 3px hsla(207, 90%, 54%, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
 }
 </style>

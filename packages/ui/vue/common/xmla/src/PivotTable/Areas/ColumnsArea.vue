@@ -14,6 +14,7 @@ Contributors:
 <script setup lang="ts">
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
+import { useElementSize } from "@vueuse/core";
 import MemberDropdown from "./MemberDropdown.vue";
 
 const MDDISPINFO_CHILD_COUNT = 65535;
@@ -21,11 +22,11 @@ const MDDISPINFO_CHILD_COUNT = 65535;
 const props = defineProps({
     columns: {
         required: true,
-        type: Array,
+        type: Array as () => any[],
     },
     columnsStyles: {
         required: true,
-        type: Array,
+        type: Array as () => any[],
     },
     columnsOffset: {
         required: false,
@@ -34,7 +35,7 @@ const props = defineProps({
     },
     totalContentSize: {
         required: true,
-        type: Object,
+        type: Object as () => any,
     },
     leftPadding: {
         required: false,
@@ -43,7 +44,7 @@ const props = defineProps({
     },
     columnsExpandedMembers: {
         required: false,
-        type: Array,
+        type: Array as () => any[],
         default: () => [],
     },
     headerBackgroundColor: {
@@ -132,33 +133,43 @@ watch(
     () => props.columns,
     () => {
         maxLevels = [];
-        for (let i = 0; i < props.columns[0]?.length; i++) {
-            for (let j = 0; j < props.columns.length; j++) {
-                const level = parseInt(props.columns[j][i].LNum);
-                if ((maxLevels[i] || 0) <= level) {
+        for (let j = 0; j < props.columns.length; j++) {
+            const colMembers = props.columns[j];
+            if (!colMembers || colMembers.isProperty || !Array.isArray(colMembers)) continue;
+            for (let i = 0; i < colMembers.length; i++) {
+                const member = colMembers[i];
+                if (!member || member.LNum === undefined) continue;
+                const level = parseInt(member.LNum);
+                if (maxLevels[i] === void 0 || maxLevels[i] <= level) {
                     maxLevels[i] = level;
                 }
             }
         }
     },
+    { immediate: true, deep: true }
 );
 
 watch(
     () => props.columns,
     () => {
         minLevels = [];
-        for (let i = 0; i < props.columns[0]?.length; i++) {
-            for (let j = 0; j < props.columns.length; j++) {
-                const level = parseInt(props.columns[j][i].LNum);
+        for (let j = 0; j < props.columns.length; j++) {
+            const colMembers = props.columns[j];
+            if (!colMembers || colMembers.isProperty || !Array.isArray(colMembers)) continue;
+            for (let i = 0; i < colMembers.length; i++) {
+                const member = colMembers[i];
+                if (!member || member.LNum === undefined) continue;
+                const level = parseInt(member.LNum);
                 if (minLevels[i] === void 0 || minLevels[i] >= level) {
                     minLevels[i] = level;
                 }
             }
         }
     },
+    { immediate: true, deep: true }
 );
 
-const getColumnMemberStyle = (i: number, j: number) => {
+const getColumnMemberStyle = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
     const nextMember = props.columns?.[i - 1]?.[j];
 
@@ -186,8 +197,9 @@ const getColumnMemberStyle = (i: number, j: number) => {
     return styles;
 };
 
-const getColumnMemberOffsetItems = (i: number, j: number) => {
+const getColumnMemberOffsetItems = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
+    if (!currentMember) return [];
 
     let result = [];
     for (let ind = minLevels[j]; ind < currentMember.LNum; ind++) {
@@ -196,18 +208,20 @@ const getColumnMemberOffsetItems = (i: number, j: number) => {
     return result;
 };
 
-const getColumnMemberCaption = (i: number, j: number) => {
+const getColumnMemberCaption = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
     const nextMember = props.columns?.[i - 1]?.[j];
-    if (!currentMember || !nextMember) return currentMember.Caption;
+    if (!currentMember) return "";
+    if (!nextMember) return currentMember.Caption;
     if (currentMember.UName === nextMember.UName) {
         return "";
     }
     return currentMember.Caption;
 };
 
-const getColChildCount = (i: number, j: number) => {
+const getColChildCount = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
+    if (!currentMember) return 0;
     return currentMember.DisplayInfo & MDDISPINFO_CHILD_COUNT;
 };
 
@@ -217,8 +231,9 @@ const getColumnScrollerStyle = () => {
     };
 };
 
-const hasChildrenDisplayed = (i: number, j: number) => {
+const hasChildrenDisplayed = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
+    if (!currentMember) return false;
     if (i + 1 === props.columns.length) return false;
     const currentHierarchyMembers = props.columns.map((e) => e[j]);
 
@@ -232,8 +247,9 @@ const hasChildrenDisplayed = (i: number, j: number) => {
     return false;
 };
 
-const colIsExpanded = (i: number, j: number) => {
+const colIsExpanded = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
+    if (!currentMember) return false;
 
     if (props.columnsExpandedMembers) {
         return props.columnsExpandedMembers.some(
@@ -241,12 +257,10 @@ const colIsExpanded = (i: number, j: number) => {
         );
     }
 
-    return state.columnsExpandedMembers.some(
-        (e) => e.UName === currentMember.UName,
-    );
+    return false;
 };
 
-const sameAsPrevious = (i: number, j: number) => {
+const sameAsPrevious = (i: any, j: any) => {
     const currentMember = props.columns?.[i]?.[j];
     const prevMember = props.columns?.[i - 1]?.[j];
 
@@ -255,11 +269,11 @@ const sameAsPrevious = (i: number, j: number) => {
 };
 
 let resizeInProg = false;
-let itemResized: number = -1;
+let itemResized: any = -1;
 
-const onStartResize = (e: MouseEvent, i: number) => {
+const onStartResize = (e: MouseEvent, i: any) => {
     if (e.button === 0) {
-        itemResized = i;
+        itemResized = Number(i);
         resizeInProg = true;
     }
 };
@@ -315,7 +329,7 @@ eventBus.on("scroll", ({ left }: { left: number }) => {
 });
 
 const memberPropertiesModal = ref(null) as Ref<any>;
-const openMemberProperties = async (member) => {
+const openMemberProperties = async (member: any) => {
     // const metadataStorage = useMetadataStorage();
 
     // const levels = (await metadataStorage.getMetadataStorage()).levels;
@@ -323,16 +337,27 @@ const openMemberProperties = async (member) => {
     // await memberPropertiesModal.value?.run({ level, member });
 };
 
+const colsViewport = ref(null) as unknown as Ref<HTMLElement>;
 const colsContaner = ref(null) as unknown as Ref<HTMLElement>;
+const { width: colsContainerWidth } = useElementSize(colsViewport);
+const debouncedColsContainerWidth = ref(0);
+let debounceTimeout: NodeJS.Timeout | null = null;
+watch(colsContainerWidth, (newWidth) => {
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+        debouncedColsContainerWidth.value = newWidth;
+    }, 100);
+}, { immediate: true });
+
 const currentlyDisplayedValues = computed(() => {
-    if (!colsContaner.value)
+    if (!colsViewport.value)
         return {
             data: [],
             translate: translate.value,
         };
 
     let translateValue = translate.value;
-    let result = props.columns.map((columnMembers, i) => {
+    let result = props.columns.map((columnMembers: any, i: number) => {
         if (columnMembers.isProperty) {
             return {
                 ...columnMembers,
@@ -340,7 +365,7 @@ const currentlyDisplayedValues = computed(() => {
             };
         }
 
-        return columnMembers.map((member) => {
+        return columnMembers.map((member: any) => {
             return {
                 ...member,
                 i,
@@ -348,15 +373,14 @@ const currentlyDisplayedValues = computed(() => {
         });
     });
 
-    const leftIndex = props.totalContentSize.xAxis.items.findIndex((e) => {
+    const leftIndex = props.totalContentSize.xAxis.items.findIndex((e: any) => {
         const leftCoord = scrollPosition.value;
         if (e.start <= leftCoord && e.start + e.width > leftCoord) return true;
         return false;
     });
-    let rightIndex = props.totalContentSize.xAxis.items.findIndex((e) => {
+    let rightIndex = props.totalContentSize.xAxis.items.findIndex((e: any) => {
         const rightCoord =
-            scrollPosition.value + colsContaner.value.clientWidth;
-
+            scrollPosition.value + debouncedColsContainerWidth.value;
         if (e.start <= rightCoord && e.start + e.width >= rightCoord)
             return true;
         return false;
@@ -376,18 +400,18 @@ const currentlyDisplayedValues = computed(() => {
     };
 });
 
-const showMemberProperties = (member) => {
+const showMemberProperties = (member: any) => {
     // state.membersWithProps.push(member.HIERARCHY_UNIQUE_NAME);
 };
 
-const hideMemberProperties = (member) => {
+const hideMemberProperties = (member: any) => {
     // const indexToRemove = state.membersWithProps.indexOf(
     //     (e) => e === member.HIERARCHY_UNIQUE_NAME,
     // );
     // state.membersWithProps.splice(indexToRemove, 1);
 };
 
-const isMemberPropsVisible = (member) => {
+const isMemberPropsVisible = (member: any) => {
     // return state.membersWithProps.includes(member.HIERARCHY_UNIQUE_NAME);
 };
 
@@ -399,7 +423,7 @@ watch(
 );
 </script>
 <template>
-    <div class="columnHeader_container" :style="getColumnHeaderOffsetStyle()">
+    <div class="columnHeader_container" :style="getColumnHeaderOffsetStyle()" ref="colsViewport">
         <Teleport to="body">
             <!-- <MemberPropertiesModal ref="memberPropertiesModal" /> -->
         </Teleport>
@@ -414,7 +438,7 @@ watch(
                         {{ column.PROPERTY_NAME }}
                     </div>
                 </template>
-                <MemberDropdown v-else v-for="(member, j) in column" :key="member.UNAME" class="columnMemberWrapper"
+                <MemberDropdown v-else v-for="(member, j) in column" :key="member?.UName || member?.UNAME || j" class="columnMemberWrapper"
                     :drillupDisabled="member.LNum === '0'" :propertiesShown="isMemberPropsVisible(member)"
                     @drilldown="drilldown(member)" @drillup="drillup(member)"
                     @openMemberProperties="openMemberProperties(member)"

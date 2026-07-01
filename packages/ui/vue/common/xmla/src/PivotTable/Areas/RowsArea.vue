@@ -14,6 +14,7 @@ Contributors:
 <script setup lang="ts">
 import type { TinyEmitter } from "tiny-emitter";
 import { computed, inject, ref, watch, type Ref } from "vue";
+import { useElementSize } from "@vueuse/core";
 import MemberDropdown from "./MemberDropdown.vue";
 
 const MDDISPINFO_CHILD_COUNT = 65535;
@@ -21,19 +22,19 @@ const MDDISPINFO_CHILD_COUNT = 65535;
 const props = defineProps({
     rows: {
         required: true,
-        type: Array,
+        type: Array as () => any[],
     },
     rowsStyles: {
         required: true,
-        type: Array,
+        type: Array as () => any[],
     },
     totalContentSize: {
         required: true,
-        type: Object,
+        type: Object as () => any,
     },
     rowsExpandedMembers: {
         required: false,
-        type: Array,
+        type: Array as () => any[],
         default: () => [],
     },
     headerBackgroundColor: {
@@ -101,11 +102,12 @@ const setParentStylesValue = inject("setRowsStyles") as (
 const scrollPosition = ref(0);
 const translate = ref(0);
 
-const getRowMemberCaption = (i: number, j: number) => {
+const getRowMemberCaption = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
     const nextMember = props.rows?.[i - 1]?.[j];
 
-    if (!currentMember || !nextMember) return currentMember.Caption;
+    if (!currentMember) return "";
+    if (!nextMember) return currentMember.Caption;
 
     if (currentMember.UName === nextMember.UName) {
         return "";
@@ -125,16 +127,22 @@ let maxLevels = [] as number[];
 watch(
     () => props.rows,
     () => {
+        console.log(props.rows);
         maxLevels = [];
         for (let j = 0; j < props.rows.length; j++) {
-            for (let i = 0; i < props.rows[0]?.length; i++) {
-                const level = parseInt(props.rows[j][i].LNum);
+            const rowMembers = props.rows[j];
+            if (!rowMembers || rowMembers.isProperty || !Array.isArray(rowMembers)) continue;
+            for (let i = 0; i < rowMembers.length; i++) {
+                const member = rowMembers[i];
+                if (!member || member.LNum === undefined) continue;
+                const level = parseInt(member.LNum);
                 if (maxLevels[i] === void 0 || maxLevels[i] <= level) {
                     maxLevels[i] = level;
                 }
             }
         }
     },
+    { immediate: true, deep: true }
 );
 
 watch(
@@ -142,17 +150,22 @@ watch(
     () => {
         minLevels = [];
         for (let j = 0; j < props.rows.length; j++) {
-            for (let i = 0; i < props.rows[0]?.length; i++) {
-                const level = parseInt(props.rows[j][i].LNum);
+            const rowMembers = props.rows[j];
+            if (!rowMembers || rowMembers.isProperty || !Array.isArray(rowMembers)) continue;
+            for (let i = 0; i < rowMembers.length; i++) {
+                const member = rowMembers[i];
+                if (!member || member.LNum === undefined) continue;
+                const level = parseInt(member.LNum);
                 if (minLevels[i] === void 0 || minLevels[i] >= level) {
                     minLevels[i] = level;
                 }
             }
         }
     },
+    { immediate: true, deep: true }
 );
 
-const getRowMemberStyle = (i: number, j: number) => {
+const getRowMemberStyle = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
     const nextMember = props.rows?.[i - 1]?.[j];
 
@@ -189,8 +202,9 @@ const getRowHeaderStyle = (i: number) => {
     };
 };
 
-const getRowMemberOffsetItems = (i: number, j: number) => {
+const getRowMemberOffsetItems = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
+    if (!currentMember) return [];
 
     let result = [];
     for (let ind = minLevels[j]; ind < currentMember.LNum; ind++) {
@@ -199,13 +213,15 @@ const getRowMemberOffsetItems = (i: number, j: number) => {
     return result;
 };
 
-const getRowChildCount = (i: number, j: number) => {
+const getRowChildCount = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
+    if (!currentMember) return 0;
     return currentMember.DisplayInfo & MDDISPINFO_CHILD_COUNT;
 };
 
-const hasChildrenDisplayed = (i: number, j: number) => {
+const hasChildrenDisplayed = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
+    if (!currentMember) return false;
     if (i + 1 === props.rows.length) return false;
     const currentHierarchyMembers = props.rows.map((e) => e[j]);
 
@@ -219,21 +235,18 @@ const hasChildrenDisplayed = (i: number, j: number) => {
     return false;
 };
 
-const rowIsExpanded = (i: number, j: number) => {
+const rowIsExpanded = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
+    if (!currentMember) return false;
 
     if (props.rowsExpandedMembers) {
         return props.rowsExpandedMembers.some(
             (e) => e.UName === currentMember.UName,
         );
     }
-
-    // return state.rowsExpandedMembers.some(
-    //     (e) => e.UName === currentMember.UName,
-    // );
 };
 
-const sameAsPrevious = (i: number, j: number) => {
+const sameAsPrevious = (i: any, j: any) => {
     const currentMember = props.rows?.[i]?.[j];
     const prevMember = props.rows?.[i - 1]?.[j];
 
@@ -242,11 +255,11 @@ const sameAsPrevious = (i: number, j: number) => {
 };
 
 let resizeInProg = false;
-let itemResized: number = -1;
+let itemResized: any = -1;
 
-const onStartResize = (e: MouseEvent, i: number) => {
+const onStartResize = (e: MouseEvent, i: any) => {
     if (e.button === 0) {
-        itemResized = i;
+        itemResized = Number(i);
         resizeInProg = true;
     }
 };
@@ -297,7 +310,7 @@ eventBus.on("scroll", ({ top }: { top: number }) => {
 });
 
 const memberPropertiesModal = ref(null) as Ref<any>;
-const openMemberProperties = async (member) => {
+const openMemberProperties = async (member: any) => {
     // const metadataStorage = useMetadataStorage();
     // const levels = (await metadataStorage.getMetadataStorage()).levels;
 
@@ -305,16 +318,27 @@ const openMemberProperties = async (member) => {
     // await memberPropertiesModal.value?.run({ level, member });
 };
 
+const rowsViewport = ref(null) as unknown as Ref<HTMLElement>;
 const rowsContainer = ref(null) as unknown as Ref<HTMLElement>;
+const { height: rowsContainerHeight } = useElementSize(rowsViewport);
+const debouncedRowsContainerHeight = ref(0);
+let debounceTimeout: NodeJS.Timeout | null = null;
+watch(rowsContainerHeight, (newHeight) => {
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+        debouncedRowsContainerHeight.value = newHeight;
+    }, 100);
+}, { immediate: true });
+
 const currentlyDisplayedValues = computed(() => {
-    if (!rowsContainer.value)
+    if (!rowsViewport.value)
         return {
             data: [],
             translate: translate.value,
         };
 
     let translateValue = translate.value;
-    let result = props.rows.map((rowMembers, i) => {
+    let result = props.rows.map((rowMembers: any, i: number) => {
         if (rowMembers.isProperty) {
             return {
                 ...rowMembers,
@@ -322,7 +346,7 @@ const currentlyDisplayedValues = computed(() => {
             };
         }
 
-        return rowMembers.map((member) => {
+        return rowMembers.map((member: any) => {
             return {
                 ...member,
                 i,
@@ -330,7 +354,7 @@ const currentlyDisplayedValues = computed(() => {
         });
     });
 
-    const topIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
+    const topIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
         if (
             e.start <= scrollPosition.value &&
             e.start + e.width > scrollPosition.value
@@ -338,9 +362,9 @@ const currentlyDisplayedValues = computed(() => {
             return true;
         return false;
     });
-    let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e) => {
+    let bottomIndex = props.totalContentSize.yAxis.items.findIndex((e: any) => {
         const bottomCoord =
-            scrollPosition.value + rowsContainer.value.clientHeight;
+            scrollPosition.value + debouncedRowsContainerHeight.value;
         if (e.start <= bottomCoord && e.start + e.width >= bottomCoord)
             return true;
         return false;
@@ -353,6 +377,7 @@ const currentlyDisplayedValues = computed(() => {
         result = result.slice(topIndex, bottomIndex + 1);
         translateValue = props.totalContentSize.yAxis.items[topIndex].start;
     }
+    console.log("ROW PARSED", result)
 
     return {
         data: result,
@@ -360,18 +385,18 @@ const currentlyDisplayedValues = computed(() => {
     };
 });
 
-const showMemberProperties = (member) => {
+const showMemberProperties = (member: any) => {
     // state.membersWithProps.push(member.HIERARCHY_UNIQUE_NAME);
 };
 
-const hideMemberProperties = (member) => {
+const hideMemberProperties = (member: any) => {
     // const indexToRemove = state.membersWithProps.indexOf(
     //     (e) => e === member.HIERARCHY_UNIQUE_NAME,
     // );
     // state.membersWithProps.splice(indexToRemove, 1);
 };
 
-const isMemberPropsVisible = (member) => {
+const isMemberPropsVisible = (member: any) => {
     // return state.membersWithProps.includes(member.HIERARCHY_UNIQUE_NAME);
 };
 
@@ -383,8 +408,9 @@ watch(
 );
 </script>
 <template>
-    <div class="rowsHeader_container" :style="getRowsHeaderContainerStyle()" ref="rowsContainer">
-        <Teleport to="body">
+    <div class="rowsHeader_viewport" ref="rowsViewport">
+        <div class="rowsHeader_container" :style="getRowsHeaderContainerStyle()" ref="rowsContainer">
+            <Teleport to="body">
             <!-- <MemberPropertiesModal ref="memberPropertiesModal" /> -->
         </Teleport>
         <div class="rowsHeader" v-for="row in currentlyDisplayedValues.data" :key="row.isProperty ? row.i : row[0].i"
@@ -394,7 +420,7 @@ watch(
                     {{ row.PROPERTY_NAME }}
                 </div>
             </template>
-            <MemberDropdown v-else v-for="(member, j) in row" :key="member.UNAME"
+            <MemberDropdown v-else v-for="(member, j) in row" :key="member?.UName || member?.UNAME || j"
                 :propertiesShown="isMemberPropsVisible(member)" @drilldown="drilldown(member)"
                 @drillup="drillup(member)" @openMemberProperties="openMemberProperties(member)"
                 @showMemberProperties="showMemberProperties(member)"
@@ -431,15 +457,20 @@ watch(
                             </div>
                         </div>
                         <div class="row_dragAreaBottom" @mousedown="onStartResize($event, member.i)"></div>
-                        <div v-if="row.i > 0" class="row_dragAreaTop" @mousedown="onStartResize($event, member.i - 1)">
+                        <div v-if="member.i > 0" class="row_dragAreaTop" @mousedown="onStartResize($event, member.i - 1)">
                         </div>
                     </div>
                 </template>
             </MemberDropdown>
         </div>
     </div>
+    </div>
 </template>
 <style scoped>
+.rowsHeader_viewport {
+    height: 100%;
+    overflow: hidden;
+}
 .rowsHeader:last-child {
     border-bottom: 1px v-bind(borderColorCSS) solid;
 }

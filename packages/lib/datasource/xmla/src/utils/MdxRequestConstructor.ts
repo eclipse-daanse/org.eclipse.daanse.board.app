@@ -116,12 +116,32 @@ async function getColumnsRequest(
   let columnsWhere = ''
 
   if (columns.length >= 1) {
+    const drilldownMap = new Map<string, any>()
+    columnsDrilldownMembers.forEach((member: any) => {
+      if (member?.HIERARCHY_UNIQUE_NAME) {
+        drilldownMap.set(member.HIERARCHY_UNIQUE_NAME, member)
+      }
+    })
+
+    const expandedMap = new Map<string, any[]>()
+    colsExpandedMembers.forEach((member: any) => {
+      if (member?.HIERARCHY_UNIQUE_NAME) {
+        const list = expandedMap.get(member.HIERARCHY_UNIQUE_NAME) || []
+        list.push(member)
+        expandedMap.set(member.HIERARCHY_UNIQUE_NAME, list)
+      }
+    })
+
     for (let i = 0; i < columns.length; i++) {
       const e = columns[i]
+      const hName = e.originalItem?.HIERARCHY_UNIQUE_NAME
+      const drilledDownMember = hName ? drilldownMap.get(hName) : undefined
+      const expandedMembers = (hName ? expandedMap.get(hName) : undefined) || []
+
       const columnsRequest = await getSingleColumnRequest(
         e,
-        columnsDrilldownMembers,
-        colsExpandedMembers,
+        drilledDownMember,
+        expandedMembers,
         measures,
         levels,
       )
@@ -133,9 +153,11 @@ async function getColumnsRequest(
         columnsWhere += columnsRequest.with
 
         columnsSelect = `
-          CrossJoin(
-            ${columnsSelect},
-            ${columnsRequest.select}
+          NonEmpty(
+            CrossJoin(
+              ${columnsSelect},
+              ${columnsRequest.select}
+            )
           )`
       }
     }
@@ -151,8 +173,8 @@ async function getColumnsRequest(
 
 async function getSingleColumnRequest(
   e: any,
-  columnsDrilldownMembers: any[],
-  colsExpandedMembers: any[],
+  drilledDownMember: any,
+  expandedMembers: any[],
   measures: any[],
   levels: any[],
 ) {
@@ -168,25 +190,12 @@ async function getSingleColumnRequest(
 
   const filteredRequest = await getAxisFilterRequest(e, levels)
 
-  const drilledDownMember = columnsDrilldownMembers.find(drilldownedMembers => {
-    return (
-      drilldownedMembers.HIERARCHY_UNIQUE_NAME ===
-      e.originalItem.HIERARCHY_UNIQUE_NAME
-    )
-  })
-  const expandedMembers = colsExpandedMembers.filter(drilldownedMembers => {
-    return (
-      drilldownedMembers.HIERARCHY_UNIQUE_NAME ===
-      e.originalItem.HIERARCHY_UNIQUE_NAME
-    )
-  })
-
   const rootExpanded = expandedMembers.some(member => member.LNum === '0')
   if (drilledDownMember || (expandedMembers.length && rootExpanded)) {
     const request = await getColsDrilldownRequestString(
       e,
       drilledDownMember,
-      colsExpandedMembers,
+      expandedMembers,
       levels,
     )
 
@@ -225,13 +234,32 @@ async function getRowsRequest(
   let rowsWhere = ''
 
   if (rows.length >= 1) {
+    const drilldownMap = new Map<string, any>()
+    rowsDrilldownMembers.forEach((member: any) => {
+      if (member?.HIERARCHY_UNIQUE_NAME) {
+        drilldownMap.set(member.HIERARCHY_UNIQUE_NAME, member)
+      }
+    })
+
+    const expandedMap = new Map<string, any[]>()
+    rowsExpandedMembers.forEach((member: any) => {
+      if (member?.HIERARCHY_UNIQUE_NAME) {
+        const list = expandedMap.get(member.HIERARCHY_UNIQUE_NAME) || []
+        list.push(member)
+        expandedMap.set(member.HIERARCHY_UNIQUE_NAME, list)
+      }
+    })
+
     for (let i = 0; i < rows.length; i++) {
       const e = rows[i]
+      const hName = e.originalItem?.HIERARCHY_UNIQUE_NAME
+      const drilledDownMember = hName ? drilldownMap.get(hName) : undefined
+      const expandedMembers = (hName ? expandedMap.get(hName) : undefined) || []
 
       const rowsRequest = await getSingleRowRequest(
         e,
-        rowsDrilldownMembers,
-        rowsExpandedMembers,
+        drilledDownMember,
+        expandedMembers,
         measures,
         levels,
       )
@@ -242,9 +270,11 @@ async function getRowsRequest(
         rowsWhere += rowsRequest.with
 
         rowsSelect = `
-          CrossJoin(
-            ${rowsSelect},
-            ${rowsRequest.select}
+          NonEmpty(
+            CrossJoin(
+              ${rowsSelect},
+              ${rowsRequest.select}
+            )
           )`
       }
     }
@@ -262,8 +292,8 @@ async function getRowsRequest(
 
 async function getSingleRowRequest(
   e: any,
-  rowsDrilldownMembers: any[],
-  rowsExpandedMembers: any[],
+  drilledDownMember: any,
+  expandedMembers: any[],
   measures: any[],
   levels: any[],
 ) {
@@ -278,19 +308,6 @@ async function getSingleRowRequest(
   }
 
   const filteredRequest = await getAxisFilterRequest(e, levels)
-
-  const drilledDownMember = rowsDrilldownMembers.find(drilldownedMembers => {
-    return (
-      drilldownedMembers.HIERARCHY_UNIQUE_NAME ===
-      e.originalItem.HIERARCHY_UNIQUE_NAME
-    )
-  })
-  const expandedMembers = rowsExpandedMembers.filter(drilldownedMembers => {
-    return (
-      drilldownedMembers.HIERARCHY_UNIQUE_NAME ===
-      e.originalItem.HIERARCHY_UNIQUE_NAME
-    )
-  })
 
   const rootExpanded = expandedMembers.some(member => member.LNum === '0')
   if (drilledDownMember || (expandedMembers.length && rootExpanded)) {
@@ -466,14 +483,14 @@ function getFromPart(measures: any[], cubename: string, filtersWhere: any, hasVa
   let result = ''
   if (filtersWhere) {
     if (measuresPart) {
-      result = `FROM [${cubename}] WHERE (${filtersWhere},${measuresPart}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`
+      result = `FROM [${cubename}] WHERE (${filtersWhere},${measuresPart}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS, UPDATEABLE`
     } else {
-      result = `FROM [${cubename}] WHERE (${filtersWhere}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`
+      result = `FROM [${cubename}] WHERE (${filtersWhere}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS, UPDATEABLE`
     }
   } else if (measuresPart) {
-    result = `FROM [${cubename}] WHERE ${measuresPart} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`
+    result = `FROM [${cubename}] WHERE ${measuresPart} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS, UPDATEABLE`
   } else {
-    result = `FROM [${cubename}] CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`
+    result = `FROM [${cubename}] CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS, UPDATEABLE`
   }
   return result
 }

@@ -155,7 +155,7 @@ const changeMeasures = (e: any) => {
                       queryConfig.value.rows.some((e: any) => e.type === 'Values');
     if (!hasValues) {
       queryConfig.value.columns.push({
-        type: "Values",
+        type: "Values" as any,
         id: "Values",
         children: [],
         caption: "Values",
@@ -200,9 +200,9 @@ const remove = (
   }
 };
 
-const configureFilter = async (type: string, element: any) => {
+const configureFilter = async (type: "filters" | "columns" | "rows", element: any) => {
   const originalItem = queryConfig.value[type].find(
-    (e) => e.id === element.id
+    (e: any) => e.id === element.id
   );
 
   console.log(filterModal.value);
@@ -219,7 +219,7 @@ const configureFilter = async (type: string, element: any) => {
   console.log('configureFilter', originalItem);
 };
 
-const t = (text) => text;
+const t = (text: string) => text;
 
 </script>
 <template>
@@ -330,7 +330,8 @@ const t = (text) => text;
     height: 100%;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 16px;
 
     .queryDesignerArea {
       display: flex;

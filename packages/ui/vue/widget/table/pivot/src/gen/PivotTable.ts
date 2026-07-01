@@ -37,15 +37,15 @@ export class PivotTable {
 
   @Documentation("")
   @Attribute() tableState?: any;
-  @Reference('VariableWrapper') headerBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') headerTextColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') cellBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') cellTextColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') defaultColumnWidth: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') defaultRowHeight: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') fontSize: VariableWrapper<string> = new VariableWrapper<string>();
-  @Reference('VariableWrapper') headerFontWeight: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') headerBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>('#f5f5f5');
+  @Reference('VariableWrapper') headerTextColor: VariableWrapper<string> = new VariableWrapper<string>('#000000');
+  @Reference('VariableWrapper') cellBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>('#ffffff');
+  @Reference('VariableWrapper') cellTextColor: VariableWrapper<string> = new VariableWrapper<string>('#000000');
+  @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>('silver');
+  @Reference('VariableWrapper') defaultColumnWidth: VariableWrapper<string> = new VariableWrapper<string>('150');
+  @Reference('VariableWrapper') defaultRowHeight: VariableWrapper<string> = new VariableWrapper<string>('30');
+  @Reference('VariableWrapper') fontSize: VariableWrapper<string> = new VariableWrapper<string>('14');
+  @Reference('VariableWrapper') headerFontWeight: VariableWrapper<string> = new VariableWrapper<string>('600');
 
   @Attribute() cellTextAlign: string = "left";
 
