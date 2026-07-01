@@ -16,7 +16,7 @@ import {
   identifier,
   DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive, ComputedRef } from 'vue'
+import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive, ComputedRef, provide, computed } from 'vue'
 import { watch, ref } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'
 
@@ -50,6 +50,18 @@ export function useDatasourceRepository(
   }
 
   const datasourceRepository = container.get<DatasourceRepository>(identifier)
+  const datasourceInstance = computed(() => {
+    if (dataSourceId.value) {
+      try {
+        return datasourceRepository.getDatasource(dataSourceId.value)
+      } catch (e) {
+        return null
+      }
+    }
+    return null
+  })
+  provide('datasource', datasourceInstance)
+
   const { startLoading, stopLoading } = useGlobalLoading()
 
   const getData = async () => {
