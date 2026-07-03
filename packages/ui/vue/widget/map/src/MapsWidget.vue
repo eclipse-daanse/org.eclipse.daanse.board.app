@@ -1362,6 +1362,7 @@ onUnmounted(() => {
           :tooltip-thing-id="tooltipThingId"
           :tooltip-content="tooltipContent"
           :current-zoom="currentZoom"
+          :cluster-global="config.clusterGlobal ?? false"
         />
       </template>
 

@@ -75,20 +75,29 @@ export function resolve(start: any, ...args: (string | number)[]) {
   }, start)
 }
 
-export function resolveObj(obj: any, dotNotatedstring: string) {
-  const replace = dotNotatedstring.replace('\\.', '<|>')
-  try {
-    return replace.split('.').reduce((o, i) => {
-      const aNumber = parseInt(i)
-      if (isFinite(aNumber) && Array.isArray(o)) {
-        return o[aNumber]
-      }
-      return o[i.replace('<|>', '.')]
-    }, obj)
-  } catch (e) {
-    return null
-  }
+// resolveObj runs tens of thousands of times per map recompute (once per
+// condition per datastream), so the parsed key path is cached instead of
+// doing replace/split/parseInt on every call.
+const resolvePathCache = new Map<string, string[]>()
 
+export function resolveObj(obj: any, dotNotatedstring: string) {
+  let keys = resolvePathCache.get(dotNotatedstring)
+  if (!keys) {
+    keys = dotNotatedstring.replace('\\.', '<|>').split('.')
+      .map(k => k.replace('<|>', '.'))
+    resolvePathCache.set(dotNotatedstring, keys)
+  }
+  let o = obj
+  for (const k of keys) {
+    if (o == null) return null
+    if (Array.isArray(o)) {
+      const aNumber = parseInt(k)
+      o = isFinite(aNumber) ? o[aNumber] : o[k as keyof typeof o]
+    } else {
+      o = o[k]
+    }
+  }
+  return o
 }
 
 

@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref, computed, onErrorCaptured, type Ref } from 'vue'
+import { ref, computed, onErrorCaptured, toRaw, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L from 'leaflet'
@@ -44,6 +44,7 @@ interface OGCSTALayerProps {
   tooltipThingId?: string | null
   tooltipContent?: string | null
   currentZoom?: number
+  clusterGlobal?: boolean
 }
 
 const props = defineProps<OGCSTALayerProps>()
@@ -93,9 +94,15 @@ const matchedItems = computed(() => {
     for (const location of props.locations) {
       const locationThings = location.things ?? []
       for (const thing of locationThings) {
-        if (!props.compareThing(thing, renderer)) continue
+        // Condition matching (compareThing/compareDatastream → resolveObj) reads
+        // many properties per datastream. Doing that through Vue's reactive
+        // proxies dominated zoom/pan profiles, so match on the raw objects.
+        // Reactivity is kept by explicitly touching `observations` below —
+        // the store re-assigns it when new observations are merged.
+        const rawThing = toRaw(thing)
+        if (!props.compareThing(rawThing, renderer)) continue
 
-        const thingId = thing['@iot.id'] || thing.iotId || ''
+        const thingId = rawThing['@iot.id'] || rawThing.iotId || ''
         const locationId = location['@iot.id'] || ''
         const point = props.getPoint(location.location)
         const isFc = props.isFeatureCollection(location.location)
@@ -113,12 +120,16 @@ const matchedItems = computed(() => {
 
         const thingDatastreams = thing.datastreams ?? []
         for (const datastream of thingDatastreams) {
-          const dsId = (datastream as BoxedDatastream).iotId || ''
+          // Track the reactive observations reference so observation merges
+          // still retrigger this computed (see db4d3512).
+          void (datastream as any).observations
+          const rawDs = toRaw(datastream) as BoxedDatastream
+          const dsId = rawDs.iotId || ''
           for (const subrenderer of renderer.ds_renderer) {
-            if (!props.compareDatastream(datastream as BoxedDatastream, subrenderer)) continue
+            if (!props.compareDatastream(rawDs, subrenderer)) continue
 
-            const observedAreaGeoJson = datastream.observedArea
-              ? props.transformToGeoJson(datastream.observedArea)
+            const observedAreaGeoJson = (rawDs as any).observedArea
+              ? props.transformToGeoJson((rawDs as any).observedArea)
               : null
 
             const dsPoint = subrenderer.placement === ERefType.Thing
@@ -320,11 +331,26 @@ const isThingSelected = (thing: any): boolean => {
 // Get highlight color with default
 const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000')
 
+// Whether any renderer actually uses zoom-dependent features. If none do,
+// effectiveZoom stays constant so zooming/panning never re-renders the
+// (potentially hundreds of) markers — Leaflet moves them via CSS on its own.
+const usesZoomSettings = (s: any): boolean =>
+  s != null && (s.iconMinZoom != null || s.iconScaleWithZoom || s.labelMinZoom != null ||
+    s.labelScaleWithZoom || s.clusterEnabled)
+
+const zoomFeaturesActive = computed(() =>
+  props.renderers.some((r: any) =>
+    usesZoomSettings(r.renderer) || (r.ds_renderer ?? []).some((d: any) => usesZoomSettings(d.renderer))
+  )
+)
+
+const effectiveZoom = computed(() => zoomFeaturesActive.value ? (props.currentZoom ?? 99) : 99)
+
 // Zoom-based visibility and scaling for icons
 const isIconVisible = (renderer: any): boolean => {
   const settings = renderer.renderer
   if (settings?.iconMinZoom == null) return true
-  return (props.currentZoom ?? 99) >= settings.iconMinZoom
+  return effectiveZoom.value >= settings.iconMinZoom
 }
 
 const getIconScale = (renderer: any): number => {
@@ -340,7 +366,7 @@ const getIconScale = (renderer: any): number => {
 const isLabelVisible = (renderer: any): boolean => {
   const settings = renderer.renderer
   if (settings?.labelMinZoom == null) return true
-  return (props.currentZoom ?? 99) >= settings.labelMinZoom
+  return effectiveZoom.value >= settings.labelMinZoom
 }
 
 const getLabelScale = (renderer: any): number => {
@@ -357,7 +383,7 @@ const shouldCluster = (renderer: any): boolean => {
   const settings = renderer.renderer
   if (!settings?.clusterEnabled) return false
   const clusterBelow = settings.clusterBelowZoom ?? 14
-  return (props.currentZoom ?? 99) < clusterBelow
+  return effectiveZoom.value < clusterBelow
 }
 
 // Grid-based clustering: divides the map into cells of clusterRadius pixels.
@@ -376,23 +402,29 @@ const gridCluster = <T extends { point: any; renderer: any }>(
   }> = []
   const unclustered: T[] = []
 
-  // Group by renderer id
-  const byRenderer = new Map<string, T[]>()
+  // Group items that should cluster. Per renderer by default; with
+  // clusterGlobal all cluster-enabled renderers share one group so nearby
+  // markers of different renderers merge into a single cluster.
+  const byGroup = new Map<string, T[]>()
   for (const item of items) {
     if (!item.point) continue
-    const rid = item.renderer.id ?? 'default'
-    if (!byRenderer.has(rid)) byRenderer.set(rid, [])
-    byRenderer.get(rid)!.push(item)
-  }
-
-  for (const [rid, rendererItems] of byRenderer) {
-    const renderer = rendererItems[0].renderer
-    if (!shouldCluster(renderer)) {
-      unclustered.push(...rendererItems)
+    if (!shouldCluster(item.renderer)) {
+      unclustered.push(item)
       continue
     }
+    const gid = props.clusterGlobal ? '__global__' : (item.renderer.id ?? 'default')
+    if (!byGroup.has(gid)) byGroup.set(gid, [])
+    byGroup.get(gid)!.push(item)
+  }
 
-    const radiusPx = renderer.renderer?.clusterRadius ?? 40
+  for (const [rid, rendererItems] of byGroup) {
+    const renderer = rendererItems[0].renderer
+
+    // Global group: largest configured radius wins so the merge is at least
+    // as aggressive as each participating renderer expects.
+    const radiusPx = props.clusterGlobal
+      ? Math.max(...rendererItems.map(g => g.renderer.renderer?.clusterRadius ?? 40))
+      : (renderer.renderer?.clusterRadius ?? 40)
     const zoom = props.currentZoom ?? 14
     // Grid cell size in degrees: convert pixel radius to degrees at current zoom
     const metersPerPixel = 156543.03 / Math.pow(2, zoom)
@@ -417,11 +449,25 @@ const gridCluster = <T extends { point: any; renderer: any }>(
           sumLat += g.point[0]
           sumLng += g.point[1]
         }
+        // The cluster is styled after the renderer contributing the most
+        // markers, so global clusters look like per-renderer ones unless
+        // they genuinely mix renderers — then the majority wins.
+        let clusterRenderer = renderer
+        if (props.clusterGlobal) {
+          const countByRenderer = new Map<any, number>()
+          for (const g of cellItems) {
+            countByRenderer.set(g.renderer, (countByRenderer.get(g.renderer) ?? 0) + 1)
+          }
+          let best = 0
+          for (const [r, n] of countByRenderer) {
+            if (n > best) { best = n; clusterRenderer = r }
+          }
+        }
         clusters.push({
           key: `${keyPrefix}-${rid}-${cellKey}`,
           point: [sumLat / cellItems.length, sumLng / cellItems.length],
           count: cellItems.length,
-          renderer,
+          renderer: clusterRenderer,
           items: cellItems,
         })
       }
@@ -441,19 +487,54 @@ const clusteredThings = computed(() =>
 const clusteredDatastreams = computed(() =>
   gridCluster(matchedItems.value.datastreams.filter(i => i.showMarker), 'ds-cluster')
 )
+
+// Areas belong to a location/observedArea, not to a thing or renderer. Emit each
+// unique geometry once instead of once per (renderer × thing [× datastream × ds_renderer]),
+// which previously stacked dozens of identical polygons on top of each other.
+const thingAreas = computed(() => {
+  const seen = new Map<string, any>()
+  for (const item of matchedItems.value.things) {
+    if (!item.isArea || !item.geoJson) continue
+    const locId = item.location['@iot.id'] || item.location.iotId || item.key
+    if (!seen.has(locId)) {
+      seen.set(locId, {
+        key: `area-${locId}`,
+        geojson: item.location.location,
+        area: item.renderer.renderer.area,
+        selected: false,
+      })
+    }
+    // an area counts as selected if ANY thing on it is selected
+    if (isThingSelected(item.thing)) seen.get(locId)!.selected = true
+  }
+  return [...seen.values()]
+})
+
+const datastreamAreas = computed(() => {
+  const seen = new Map<string, any>()
+  for (const item of matchedItems.value.datastreams) {
+    if (!item.observedAreaGeoJson) continue
+    const dsId = item.datastream.iotId || (item.datastream as any)['@iot.id'] || item.key
+    if (seen.has(dsId)) continue
+    seen.set(dsId, {
+      key: `dsarea-${dsId}`,
+      geojson: item.observedAreaGeoJson,
+      area: item.subrenderer.renderer.area,
+    })
+  }
+  return [...seen.values()]
+})
 </script>
 
 <template>
-  <!-- Thing markers/areas - flat list, no nested loops -->
-  <template v-for="item in matchedItems.things" :key="item.key + 'area'">
+  <!-- Thing areas — one <l-geo-json> per unique location geometry -->
+  <template v-for="area in thingAreas" :key="area.key">
     <l-geo-json
-      v-if="item.isArea"
-      ref="thingsLayer"
-      :geojson="item.location.location"
+      :geojson="area.geojson"
       :options="layerOptions"
-      :options-style="() => isThingSelected(item.thing)
-        ? { ...item.renderer.renderer.area, fillColor: highlightColor, color: highlightColor, fillOpacity: 0.5, weight: 3 }
-        : item.renderer.renderer.area as any"
+      :options-style="() => area.selected
+        ? { ...area.area, fillColor: highlightColor, color: highlightColor, fillOpacity: 0.5, weight: 3 }
+        : area.area as any"
     />
   </template>
 
@@ -512,14 +593,12 @@ const clusteredDatastreams = computed(() =>
     </l-marker>
   </template>
 
-  <!-- Datastream areas -->
-  <template v-for="item in matchedItems.datastreams" :key="item.key + 'dsarea'">
+  <!-- Datastream areas — one per unique observedArea -->
+  <template v-for="area in datastreamAreas" :key="area.key">
     <l-geo-json
-      v-if="item.observedAreaGeoJson"
-      ref="thingsLayer"
-      :geojson="item.observedAreaGeoJson"
+      :geojson="area.geojson"
       :options="{ ...layerOptions, pane: areaPane || 'overlayPane' }"
-      :options-style="()=>item.subrenderer.renderer.area as any"
+      :options-style="() => area.area as any"
     />
   </template>
 

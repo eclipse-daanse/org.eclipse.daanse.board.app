@@ -60,6 +60,9 @@ export class MapSettings {
   @Documentation("Enable marker clustering for OGC STA Things and Datastreams")
   @Attribute() enableClustering?: boolean;
 
+  @Documentation("Cluster markers of all renderers into shared clusters instead of one cluster set per renderer. Only applies to renderers that have clustering enabled.")
+  @Attribute() clusterGlobal?: boolean;
+
   @Documentation("Color used to highlight selected Things on the map (default: #ff0000)")
   @Attribute() selectionHighlightColor: string = "#ff0000";
 
