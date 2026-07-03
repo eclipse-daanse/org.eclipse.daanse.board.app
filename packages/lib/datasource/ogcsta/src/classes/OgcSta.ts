@@ -373,19 +373,42 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
         return isolatedData as T
       }
 
-      // Normal request: add to cache
+      // Normal request: merge into cache. Deduplicate by iotId — every
+      // filter/refresh cycle used to blindly concat the full result set,
+      // multiplying every location/thing/datastream in the cache (6× after
+      // six cycles) and inflating marker counts, cluster numbers and loop
+      // work everywhere downstream. Existing entries win so observations
+      // already merged onto cached objects are kept.
+      const mergeById = <T>(existing: T[] | undefined, incoming: T[]): T[] => {
+        const current = existing ?? []
+        if (current.length === 0) return current.concat(incoming)
+        const seen = new Set<any>()
+        for (const e of current) {
+          const id = (e as any)?.iotId ?? (e as any)?.['@iot.id']
+          if (id != null) seen.add(id)
+        }
+        const additions = incoming.filter(item => {
+          const id = (item as any)?.iotId ?? (item as any)?.['@iot.id']
+          if (id == null) return true
+          if (seen.has(id)) return false
+          seen.add(id)
+          return true
+        })
+        return additions.length ? current.concat(additions) : current
+      }
+
       for (const result of results) {
         if (result.datastreams) {
-          this.resultMap.datastreams = this.resultMap.datastreams?.concat(result.datastreams)
+          this.resultMap.datastreams = mergeById(this.resultMap.datastreams, result.datastreams)
         }
         if (result.things) {
-          this.resultMap.things = this.resultMap.things?.concat(result.things)
+          this.resultMap.things = mergeById(this.resultMap.things, result.things)
         }
         if (result.observations) {
           this.resultMap.observations = this.resultMap.observations?.concat(result.observations as Observation[])
         }
         if (result.locations) {
-          this.resultMap.locations = this.resultMap.locations?.concat(result.locations)
+          this.resultMap.locations = mergeById(this.resultMap.locations, result.locations)
         }
       }
 
