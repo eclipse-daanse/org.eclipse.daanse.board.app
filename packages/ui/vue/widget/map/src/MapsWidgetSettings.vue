@@ -649,6 +649,14 @@ const assignDatasourceToLayer = (layer: any, dsId: string) => {
           label="Map fixed"
         />
 
+        <va-checkbox
+          v-model="widgetSettings.clusterGlobal"
+          label="Cluster markers across renderers"
+        />
+        <p class="hint-text">
+          Combine markers of all renderers into shared clusters instead of one cluster set per renderer.
+        </p>
+
         <va-color-input
           v-model="widgetSettings.selectionHighlightColor"
           label="Selection Highlight Color"

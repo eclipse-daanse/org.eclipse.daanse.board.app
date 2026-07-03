@@ -28,6 +28,7 @@ export interface IMapSettings {
   fixed:boolean,
   selectionHighlightColor?: string,
   selectedThingId?: string | null
+  clusterGlobal?: boolean,
 }
 
 export interface LayerI {
