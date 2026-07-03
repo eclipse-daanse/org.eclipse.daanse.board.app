@@ -42,4 +42,7 @@ export class SeriesSettings {
   @Reference('VariableWrapper') showPoints: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') pointColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') pointSize: VariableWrapper<number> = new VariableWrapper<number>();
+
+  @Documentation("Optional JavaScript expression applied to every data point of this series, with the raw value available as 'value'. Example: (value - 32) * 5 / 9 converts Fahrenheit to Celsius.")
+  @Reference('VariableWrapper') valueFormula: VariableWrapper<string> = new VariableWrapper<string>();
 }

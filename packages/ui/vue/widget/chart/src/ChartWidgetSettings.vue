@@ -212,6 +212,9 @@ const addSeriesSettings = () => {
   newSettings.pointColor = new VariableWrapper<string>('')
   newSettings.pointSize = new VariableWrapper<number>(3)
 
+  // Initialize optional value conversion formula
+  newSettings.valueFormula = new VariableWrapper<string>('')
+
   widgetSettings.value.seriesSettings.push(newSettings)
 }
 
@@ -269,6 +272,9 @@ onMounted(() => {
     if (!series.pointSize) {
       series.pointSize = new VariableWrapper<number>(3)
     }
+    if (!series.valueFormula) {
+      series.valueFormula = new VariableWrapper<string>('')
+    }
   })
 })
 </script>
@@ -323,6 +329,23 @@ onMounted(() => {
                 :model-value="value"
                 @input="change"
                 placeholder="e.g., Temperature, Humidity, Pressure..."
+              />
+            </template>
+          </VariableInput>
+
+          <VariableInput
+            v-if="series.valueFormula !== undefined"
+            label="Value formula (optional)"
+            v-model="(series.valueFormula as unknown as VariableWrapper<string>)"
+            style="margin-bottom: 12px;"
+          >
+            <template #default="{ value, change }">
+              <va-input
+                label="Value formula (optional)"
+                :model-value="value"
+                @input="change"
+                placeholder="e.g. (value - 32) * 5 / 9"
+                messages="JavaScript expression applied to each data point; the raw value is available as 'value'."
               />
             </template>
           </VariableInput>

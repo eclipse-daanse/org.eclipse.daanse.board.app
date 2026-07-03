@@ -258,6 +258,30 @@ const chartData = computed(() => {
         }
       }
 
+      // Apply optional per-series value conversion formula (e.g. °F → °C).
+      // The expression sees the raw data point as `value`; compiled once per
+      // dataset, invalid formulas leave the data untouched.
+      const valueFormula = (seriesSettings?.valueFormula as any)?.value
+      if (typeof valueFormula === 'string' && valueFormula.trim() && Array.isArray(result.data)) {
+        try {
+          const convert = new Function('value', `return (${valueFormula})`) as (v: number) => number
+          result.data = result.data.map((point: any) => {
+            if (point == null) return point
+            if (typeof point === 'number') {
+              const converted = convert(point)
+              return Number.isFinite(converted) ? converted : point
+            }
+            if (typeof point === 'object' && point.y != null) {
+              const converted = convert(Number(point.y))
+              return Number.isFinite(converted) ? { ...point, y: converted } : point
+            }
+            return point
+          })
+        } catch (e) {
+          console.warn('Invalid series value formula:', valueFormula, e)
+        }
+      }
+
       return result
     })
   }
