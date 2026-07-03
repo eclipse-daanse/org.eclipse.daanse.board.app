@@ -37,7 +37,16 @@ export interface IPointAndAreaSettings {
   point: IIconSettings
   pointPin: IPointPin
   area: IMapProps,
-  label?: any
+  label?: any,
+  iconMinZoom?: number,
+  iconScaleWithZoom?: boolean,
+  iconFullSizeZoom?: number,
+  labelMinZoom?: number,
+  labelScaleWithZoom?: boolean,
+  labelFullSizeZoom?: number,
+  clusterEnabled?: boolean,
+  clusterBelowZoom?: number,
+  clusterRadius?: number,
 }
 
 export interface IDSRenderer {

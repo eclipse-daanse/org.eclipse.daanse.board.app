@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { ref, watch, computed, type Ref } from 'vue'
+import { ref, computed, onErrorCaptured, type Ref } from 'vue'
 import { LGeoJson, LMarker, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet'
 import { type BoxedDatastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import L from 'leaflet'
@@ -43,10 +43,24 @@ interface OGCSTALayerProps {
   selectionHighlightColor?: string
   tooltipThingId?: string | null
   tooltipContent?: string | null
+  currentZoom?: number
 }
 
 const props = defineProps<OGCSTALayerProps>()
 const openThing = ref<{ [key: string]: boolean }>({})
+
+// Safety net for a known vue-leaflet (0.10.1) teardown race: when markers are
+// unmounted during cluster/zoom transitions, Leaflet's removeLayer can touch an
+// already-detached layer and throw `_leaflet_id`. It is harmless (the layer is
+// going away anyway), but must be caught so it doesn't tear down the marker layer.
+// We log it instead of swallowing it silently, and let every other error propagate.
+// TODO: re-evaluate removing this once verified in-app that reduced churn no longer triggers it.
+onErrorCaptured((err) => {
+  if (err instanceof TypeError && err.message.includes('_leaflet_id')) {
+    log('suppressed known vue-leaflet teardown race: %s', err.message)
+    return false
+  }
+})
 
 const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
 
@@ -305,6 +319,128 @@ const isThingSelected = (thing: any): boolean => {
 
 // Get highlight color with default
 const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000')
+
+// Zoom-based visibility and scaling for icons
+const isIconVisible = (renderer: any): boolean => {
+  const settings = renderer.renderer
+  if (settings?.iconMinZoom == null) return true
+  return (props.currentZoom ?? 99) >= settings.iconMinZoom
+}
+
+const getIconScale = (renderer: any): number => {
+  const settings = renderer.renderer
+  if (!settings?.iconScaleWithZoom) return 1
+  const fullSizeZoom = settings.iconFullSizeZoom ?? 18
+  const zoom = props.currentZoom ?? fullSizeZoom
+  if (zoom >= fullSizeZoom) return 1
+  return Math.max(0.2, zoom / fullSizeZoom)
+}
+
+// Zoom-based visibility and scaling for labels
+const isLabelVisible = (renderer: any): boolean => {
+  const settings = renderer.renderer
+  if (settings?.labelMinZoom == null) return true
+  return (props.currentZoom ?? 99) >= settings.labelMinZoom
+}
+
+const getLabelScale = (renderer: any): number => {
+  const settings = renderer.renderer
+  if (!settings?.labelScaleWithZoom) return 1
+  const fullSizeZoom = settings.labelFullSizeZoom ?? 18
+  const zoom = props.currentZoom ?? fullSizeZoom
+  if (zoom >= fullSizeZoom) return 1
+  return Math.max(0.2, zoom / fullSizeZoom)
+}
+
+// Clustering: should this renderer cluster at current zoom?
+const shouldCluster = (renderer: any): boolean => {
+  const settings = renderer.renderer
+  if (!settings?.clusterEnabled) return false
+  const clusterBelow = settings.clusterBelowZoom ?? 14
+  return (props.currentZoom ?? 99) < clusterBelow
+}
+
+// Grid-based clustering: divides the map into cells of clusterRadius pixels.
+// Each cell that contains more than one marker becomes a cluster.
+// This prevents the greedy "chain" effect where distant markers get lumped together.
+const gridCluster = <T extends { point: any; renderer: any }>(
+  items: T[],
+  keyPrefix: string
+) => {
+  const clusters: Array<{
+    key: string
+    point: any
+    count: number
+    renderer: any
+    items: T[]
+  }> = []
+  const unclustered: T[] = []
+
+  // Group by renderer id
+  const byRenderer = new Map<string, T[]>()
+  for (const item of items) {
+    if (!item.point) continue
+    const rid = item.renderer.id ?? 'default'
+    if (!byRenderer.has(rid)) byRenderer.set(rid, [])
+    byRenderer.get(rid)!.push(item)
+  }
+
+  for (const [rid, rendererItems] of byRenderer) {
+    const renderer = rendererItems[0].renderer
+    if (!shouldCluster(renderer)) {
+      unclustered.push(...rendererItems)
+      continue
+    }
+
+    const radiusPx = renderer.renderer?.clusterRadius ?? 40
+    const zoom = props.currentZoom ?? 14
+    // Grid cell size in degrees: convert pixel radius to degrees at current zoom
+    const metersPerPixel = 156543.03 / Math.pow(2, zoom)
+    const cellSize = (radiusPx * metersPerPixel) / 111320
+
+    // Assign each item to a grid cell
+    const cells = new Map<string, T[]>()
+    for (const item of rendererItems) {
+      const cellX = Math.floor(item.point[1] / cellSize) // lng
+      const cellY = Math.floor(item.point[0] / cellSize) // lat
+      const cellKey = `${cellX},${cellY}`
+      if (!cells.has(cellKey)) cells.set(cellKey, [])
+      cells.get(cellKey)!.push(item)
+    }
+
+    for (const [cellKey, cellItems] of cells) {
+      if (cellItems.length === 1) {
+        unclustered.push(cellItems[0])
+      } else {
+        let sumLat = 0, sumLng = 0
+        for (const g of cellItems) {
+          sumLat += g.point[0]
+          sumLng += g.point[1]
+        }
+        clusters.push({
+          key: `${keyPrefix}-${rid}-${cellKey}`,
+          point: [sumLat / cellItems.length, sumLng / cellItems.length],
+          count: cellItems.length,
+          renderer,
+          items: cellItems,
+        })
+      }
+    }
+  }
+
+  return { clusters, unclustered }
+}
+
+// Grid-clustered marker sets, recomputed reactively. Vue's keyed diffing only
+// mounts/unmounts the markers whose keys actually change on a cluster/zoom
+// transition, so we avoid the mass destroy/create that used to trigger the
+// vue-leaflet removeLayer race (see onErrorCaptured above).
+const clusteredThings = computed(() =>
+  gridCluster(matchedItems.value.things, 'cluster')
+)
+const clusteredDatastreams = computed(() =>
+  gridCluster(matchedItems.value.datastreams.filter(i => i.showMarker), 'ds-cluster')
+)
 </script>
 
 <template>
@@ -321,9 +457,26 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
     />
   </template>
 
-  <template v-for="item in matchedItems.things" :key="item.key + 'marker'">
+  <!-- Thing cluster markers -->
+  <template v-for="cluster in clusteredThings.clusters" :key="cluster.key">
     <l-marker
-      v-if="item.point"
+      v-if="isIconVisible(cluster.renderer)"
+      :lat-lng="cluster.point as L.LatLngExpression"
+      :options="{ pane: markerPane }"
+    >
+      <l-icon class-name="someExtraClass">
+        <div class="cluster-marker" :style="{ background: cluster.renderer.renderer.pointPin?.color || '#3388ff' }">
+          {{ cluster.count }}
+        </div>
+      </l-icon>
+      <l-tooltip>{{ cluster.count }} items</l-tooltip>
+    </l-marker>
+  </template>
+
+  <!-- Unclustered thing markers -->
+  <template v-for="item in clusteredThings.unclustered" :key="item.key + 'marker'">
+    <l-marker
+      v-if="item.point && isIconVisible(item.renderer)"
       :lat-lng="item.point as L.LatLngExpression"
       :options="{ pane: markerPane }"
       @click="handleThingClick(item.thing, item.location, item.renderer)"
@@ -340,15 +493,22 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
           :is-solid="item.renderer.renderer.pointPin?.solid"
           :is-selected="isThingSelected(item.thing)"
           :selection-color="highlightColor"
+          :scale="getIconScale(item.renderer)"
         />
       </l-icon>
       <l-tooltip
+        v-if="isLabelVisible(item.renderer)"
         :options="{
           permanent: isActionTooltipVisible(item.thing),
           direction: 'top',
           offset: [0, -20]
         }"
-      >{{ getActionTooltipContent(item.thing) || getThingTooltip(item.thing) }}</l-tooltip>
+      >
+        <span v-if="getLabelScale(item.renderer) !== 1" :style="{ transform: `scale(${getLabelScale(item.renderer)})`, display: 'inline-block', transformOrigin: 'center' }">
+          {{ getActionTooltipContent(item.thing) || getThingTooltip(item.thing) }}
+        </span>
+        <template v-else>{{ getActionTooltipContent(item.thing) || getThingTooltip(item.thing) }}</template>
+      </l-tooltip>
     </l-marker>
   </template>
 
@@ -382,16 +542,37 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
     </template>
   </template>
 
-  <!-- Datastream markers -->
-  <template v-for="item in matchedItems.datastreams" :key="item.key + 'dsmarker'">
+  <!-- Datastream cluster markers -->
+  <template v-for="cluster in clusteredDatastreams.clusters" :key="cluster.key">
     <l-marker
-      v-if="item.showMarker"
+      v-if="isIconVisible(cluster.renderer)"
+      :lat-lng="cluster.point as L.LatLngExpression"
+      :options="{ pane: markerPane }"
+    >
+      <l-icon class-name="someExtraClass">
+        <div class="cluster-marker" :style="{ background: cluster.renderer.renderer.pointPin?.color || '#3388ff' }">
+          {{ cluster.count }}
+        </div>
+      </l-icon>
+      <l-tooltip>{{ cluster.count }} items</l-tooltip>
+    </l-marker>
+  </template>
+
+  <!-- Unclustered datastream markers -->
+  <template v-for="item in clusteredDatastreams.unclustered" :key="item.key + 'dsmarker'">
+    <l-marker
+      v-if="item.showMarker && isIconVisible(item.renderer)"
       :lat-lng="item.point as L.LatLngExpression"
       :options="{ pane: markerPane }"
       @click="handleDatastreamMarkerClick(item.datastream as BoxedDatastream, item.thing, item.subrenderer)"
       @mouseenter="handleDatastreamHover(item.datastream as BoxedDatastream, item.thing)"
     >
-      <l-tooltip>{{ getDatastreamTooltip(item.datastream, item.thing) }}</l-tooltip>
+      <l-tooltip v-if="isLabelVisible(item.renderer)">
+        <span v-if="getLabelScale(item.renderer) !== 1" :style="{ transform: `scale(${getLabelScale(item.renderer)})`, display: 'inline-block', transformOrigin: 'center' }">
+          {{ getDatastreamTooltip(item.datastream, item.thing) }}
+        </span>
+        <template v-else>{{ getDatastreamTooltip(item.datastream, item.thing) }}</template>
+      </l-tooltip>
       <l-icon class-name="someExtraClass">
         <MapMarker
           :render-as="item.subrenderer.renderer.point_render_as"
@@ -404,6 +585,7 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
           :is-round="true"
           :is-selected="isThingSelected(item.thing)"
           :selection-color="highlightColor"
+          :scale="getIconScale(item.renderer)"
         >
           <template #observation>
             <template v-if="item.datastream.observations">
@@ -424,3 +606,21 @@ const highlightColor = computed(() => props.selectionHighlightColor || '#ff0000'
     </l-marker>
   </template>
 </template>
+
+<style scoped>
+.cluster-marker {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  transform: translate(-50%, -50%);
+}
+</style>

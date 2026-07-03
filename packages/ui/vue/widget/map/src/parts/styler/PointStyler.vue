@@ -117,6 +117,66 @@ const pointSelectorOptions = [
         label="Solid (vollflächig)"
       />
     </template>
+
+    <VaDivider class="mb15" />
+    <h4 class="va-title">Zoom Visibility</h4>
+
+    <VaInput
+      v-model.number="model.iconMinZoom"
+      type="number"
+      label="Icon min. Zoom"
+      placeholder="e.g. 12"
+    />
+    <VaCheckbox
+      v-model="model.iconScaleWithZoom"
+      label="Scale icons with zoom"
+    />
+    <VaInput
+      v-if="model.iconScaleWithZoom"
+      v-model.number="model.iconFullSizeZoom"
+      type="number"
+      label="Icon full size at zoom"
+      placeholder="e.g. 18"
+    />
+    <VaInput
+      v-model.number="model.labelMinZoom"
+      type="number"
+      label="Label min. Zoom"
+      placeholder="e.g. 14"
+    />
+    <VaCheckbox
+      v-model="model.labelScaleWithZoom"
+      label="Scale labels with zoom"
+    />
+    <VaInput
+      v-if="model.labelScaleWithZoom"
+      v-model.number="model.labelFullSizeZoom"
+      type="number"
+      label="Label full size at zoom"
+      placeholder="e.g. 18"
+    />
+
+    <VaDivider class="mb15" />
+    <h4 class="va-title">Clustering</h4>
+
+    <VaCheckbox
+      v-model="model.clusterEnabled"
+      label="Cluster markers when zoomed out"
+    />
+    <template v-if="model.clusterEnabled">
+      <VaInput
+        v-model.number="model.clusterBelowZoom"
+        type="number"
+        label="Cluster below zoom"
+        placeholder="e.g. 14"
+      />
+      <VaInput
+        v-model.number="model.clusterRadius"
+        type="number"
+        label="Cluster radius (px)"
+        placeholder="e.g. 40"
+      />
+    </template>
   </div>
   <div class="flex flex-col md6 pa-3">
     <MapPreviewPoint ref="MapPrev2" v-bind="model.point">

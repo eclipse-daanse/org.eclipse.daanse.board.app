@@ -56,6 +56,7 @@ const route = useRoute()
 const pageId = (route.params.pageid as string) || ''
 const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
+const currentZoom = ref(config.value?.zoom ?? 14)
 const defaultConfig = new MapSettings()
 
 // Get EventActionsRegistry
@@ -659,6 +660,9 @@ const maploaded = () => {
     })
     leaflet.on('moveend', () => {
       isMapInteracting = false
+    })
+    leaflet.on('zoomend', () => {
+      currentZoom.value = leaflet.getZoom()
     })
   }
 }
@@ -1357,6 +1361,7 @@ onUnmounted(() => {
           :selection-highlight-color="config.selectionHighlightColor ?? '#ff0000'"
           :tooltip-thing-id="tooltipThingId"
           :tooltip-content="tooltipContent"
+          :current-zoom="currentZoom"
         />
       </template>
 
