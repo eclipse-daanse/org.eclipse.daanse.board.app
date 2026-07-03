@@ -45,4 +45,31 @@ export class PointAndAreaSettings {
 
   @Documentation("Optional settings for labels. (Mapped from TypeScript 'any' type).")
   @Attribute() label?: any;
+
+  @Documentation("Minimum zoom level at which icons are visible. Below this zoom level, icons are hidden.")
+  @Attribute() iconMinZoom?: number;
+
+  @Documentation("Enable scaling of icons based on zoom level. Icons shrink when zooming out.")
+  @Attribute() iconScaleWithZoom?: boolean;
+
+  @Documentation("The zoom level at which icons are rendered at full size (scale=1). Below this, icons shrink proportionally.")
+  @Attribute() iconFullSizeZoom?: number;
+
+  @Documentation("Minimum zoom level at which labels/tooltips are visible. Below this zoom level, labels are hidden.")
+  @Attribute() labelMinZoom?: number;
+
+  @Documentation("Enable scaling of labels based on zoom level. Labels shrink when zooming out.")
+  @Attribute() labelScaleWithZoom?: boolean;
+
+  @Documentation("The zoom level at which labels are rendered at full size (scale=1). Below this, labels shrink proportionally.")
+  @Attribute() labelFullSizeZoom?: number;
+
+  @Documentation("Enable clustering of markers when zoomed out. Below clusterBelowZoom, nearby markers are grouped into a single marker showing the count.")
+  @Attribute() clusterEnabled?: boolean;
+
+  @Documentation("Zoom level below which markers are clustered. At and above this zoom level, individual markers are shown.")
+  @Attribute() clusterBelowZoom?: number;
+
+  @Documentation("Pixel radius used to group nearby markers into a cluster.")
+  @Attribute() clusterRadius?: number;
 }

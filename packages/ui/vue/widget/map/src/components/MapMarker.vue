@@ -23,6 +23,7 @@ interface MapMarkerProps {
   isSolid?: boolean
   isSelected?: boolean
   selectionColor?: string
+  scale?: number
 }
 
 const props = withDefaults(defineProps<MapMarkerProps>(), {
@@ -30,7 +31,8 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
   isSolid: false,
   imageSize: 32,
   isSelected: false,
-  selectionColor: '#ff0000'
+  selectionColor: '#ff0000',
+  scale: 1,
 })
 </script>
 
@@ -38,7 +40,8 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
   <template v-if="renderAs === 'icon'">
     <div
       :style="{
-        background: isSelected ? selectionColor : backgroundColor
+        background: isSelected ? selectionColor : backgroundColor,
+        transform: scale !== 1 ? `rotate(-45deg) scale(${scale})` : undefined,
       }"
       :class="['pin', 'icon', { round: isRound, solid: isSolid }]"
     >
@@ -57,7 +60,8 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
   <template v-if="renderAs === 'prop'">
     <div
       :style="{
-        background: isSelected ? selectionColor : backgroundColor
+        background: isSelected ? selectionColor : backgroundColor,
+        transform: scale !== 1 ? `scale(${scale})` : undefined,
       }"
       :class="['pin', 'contain', 'marker', { round: isRound, solid: isSolid }]"
     >
@@ -78,7 +82,8 @@ const props = withDefaults(defineProps<MapMarkerProps>(), {
         height: `${imageSize}px`,
         background: isSelected ? selectionColor : undefined,
         borderRadius: isSelected ? '50%' : undefined,
-        padding: isSelected ? '4px' : undefined
+        padding: isSelected ? '4px' : undefined,
+        transform: scale !== 1 ? `scale(${scale})` : undefined,
       }"
     >
       <img
