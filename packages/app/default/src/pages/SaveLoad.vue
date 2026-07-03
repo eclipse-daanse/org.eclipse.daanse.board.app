@@ -148,7 +148,9 @@ watch(upload, (newVal) => {
       save_Ename.value = name.split('.')[0]
       isOpenedName.value = true
       content.value = result.target?.result ?? undefined
-
+      // Actually load the uploaded board — previously the content was read but
+      // never consumed, so "Upload file" appeared to do nothing.
+      if (content.value !== undefined) loadData(content.value)
     })
     reader.readAsText(newVal[0])
   }
@@ -214,7 +216,12 @@ const loadData = (content: any) => {
     // Handle both string and object content
     if (typeof content === 'string') {
       data = JSON.parse(content)
-      if(Array.isArray(data)){ //false format serialized be flatted ?
+      // Downloaded boards are double-encoded: a flatted string that JSON.stringify
+      // wrapped again. JSON.parse then yields the inner flatted string, which must
+      // be flatted-parsed. Repo-stored boards yield a flatted array directly.
+      if (typeof data === 'string') {
+        data = parse(data)
+      } else if (Array.isArray(data)) { //false format serialized be flatted ?
         data = parse(content)
       }
     } else {
@@ -247,20 +254,20 @@ const loadData = (content: any) => {
     }
 
     if (data.conections) conections.connections = data.conections
-    for(const connection of data.conections) {
+    for(const connection of (data.conections || [])) {
       if(connectionRepository)(connectionRepository as ConnectionRepository)
         .registerConnection(connection.uid, connection.type, connection.config)
     }
 
 
 
-    for(const datasource of data.datasources) {
+    for(const datasource of (data.datasources || [])) {
       if(dsRepository && !['chart','datatable'].includes(datasource.type)){
         (dsRepository as DatasourceRepository)
           .registerDatasource(datasource.uid, datasource.type, datasource.config)
       }
     }
-    for(const datasource of data.datasources) {
+    for(const datasource of (data.datasources || [])) {
       if(dsRepository && ['chart','datatable'].includes(datasource.type)){
         (dsRepository as DatasourceRepository)
           .registerDatasource(datasource.uid, datasource.type, datasource.config)
