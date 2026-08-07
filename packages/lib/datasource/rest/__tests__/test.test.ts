@@ -9,82 +9,79 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import ConnectionFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.connection'
-import ConnectionRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import DatasourceFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import DatasourceRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import RestConnectionModule from 'org.eclipse.daanse.board.app.lib.connection.rest'
-import RestDatasourceModule from 'org.eclipse.daanse.board.app.lib.datasource.rest'
+import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { ConnectionRepository, identifier as connectionRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.connection';
+import { DatasourceRepository, identifier as datasourceRepoSymbol } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { factorySymbol as restConnectionFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import { factorySymbol as restStoreFactorySymbol, RestStore } from '../src/index';
 
-const container = new Container()
+const mockFetch = vi.fn().mockResolvedValue({
+  json: () => Promise.resolve([
+    { id: 1, title: 'Test Post 1' },
+    { id: 2, title: 'Test Post 2' }
+  ])
+});
+vi.stubGlobal('fetch', mockFetch);
 
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
+describe('REST Datasource Integration Tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-ConnectionFactoryModule.init(container)
-ConnectionRepositoryModule.init(container)
-RestConnectionModule.init(container)
-RestDatasourceModule.init(container)
-DatasourceFactoryModule.init(container)
-DatasourceRepositoryModule.init(container)
+  test('registers connection, datasource, and retrieves data correctly', async () => {
+    const connectionRepository = container.get<ConnectionRepository>(connectionRepoSymbol);
+    const datasourceRepository = container.get<DatasourceRepository>(datasourceRepoSymbol);
 
-const connectionRepository = container.get(
-  ConnectionRepositoryModule.identifier,
-) as ConnectionRepositoryModule.ConnectionRepository
+    // Get factories from container to ensure they are registered/initialized
+    const connFactory = container.get<any>(restConnectionFactorySymbol);
+    const storeFactory = container.get<any>(restStoreFactorySymbol);
 
-connectionRepository.registerConnectionType('rest', {
-  Connection: RestConnectionModule.symbol,
-  Settings: null as any,
-})
+    expect(connFactory).toBeDefined();
+    expect(storeFactory).toBeDefined();
 
-const datasourceRepository = container.get(
-  DatasourceRepositoryModule.identifier,
-) as DatasourceRepositoryModule.DatasourceRepository
+    // Register type info in repository
+    connectionRepository.registerConnectionType('rest', {
+      Connection: restConnectionFactorySymbol,
+      Settings: null as any
+    });
 
-datasourceRepository.registerDatasourceType('rest', {
-  Store: RestDatasourceModule.symbol,
-  Preview: null as any,
-  Settings: null as any,
-})
+    datasourceRepository.registerDatasourceType('rest', {
+      Store: restStoreFactorySymbol,
+      Preview: null as any,
+      Settings: null as any
+    });
 
-connectionRepository.registerConnection('test', 'rest', {
-  url: 'https://jsonplaceholder.typicode.com/',
-  uid:'test',
-  type:'rest',
-  name:'test'
-})
+    // Register instance config
+    connectionRepository.registerConnection('test-conn', 'rest', {
+      url: 'https://jsonplaceholder.typicode.com/',
+      uid: 'test-conn',
+      type: 'rest',
+      name: 'Test Connection'
+    });
 
-datasourceRepository.registerDatasource('test', 'rest', {
-  resourceUrl: 'posts',
-  connection: 'test',
-})
+    datasourceRepository.registerDatasource('test-ds', 'rest', {
+      resourceUrl: 'posts',
+      connection: 'test-conn',
+      uid: 'test-ds',
+      type: 'rest',
+      name: 'Test Datasource'
+    });
 
-const datasource = datasourceRepository.getDatasource('test')
-console.log(datasource)
+    const datasource = datasourceRepository.getDatasource('test-ds') as RestStore;
+    expect(datasource).toBeDefined();
 
-const getData = async () => {
-  const data = await datasource.getOriginalData()
-  assert.notEqual(data.length, 0, 'Expected data to be not empty')
-  console.log('original data', data)
-}
+    const originalData = await datasource.getOriginalData();
+    expect(originalData).toEqual([
+      { id: 1, title: 'Test Post 1' },
+      { id: 2, title: 'Test Post 2' }
+    ]);
 
-const getData2 = async () => {
-  const data = await datasource.getData('object')
-  console.log('data as object', data)
-}
-
-const getData3 = async () => {
-  const data = await datasource.getData('DataTable')
-  console.log('data as datatable', data)
-}
-
-getData()
-getData2()
-getData3()
-// console.log(datasource);
+    const tabularData = await datasource.getData('DataTable');
+    expect(tabularData.headers).toContain('id');
+    expect(tabularData.headers).toContain('title');
+    expect(tabularData.items.length).toBe(2);
+  });
+});

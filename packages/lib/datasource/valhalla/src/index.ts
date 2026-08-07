@@ -43,7 +43,7 @@ if (!container.isBound(factorySymbol)) {
 }
 
 export {
-  type ValhallaStore,
+  ValhallaStore,
   type IValhallaStoreConfiguration,
   SET_WAYPOINTS,
   SET_COSTING,

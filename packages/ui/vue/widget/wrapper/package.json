@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "[ \"$SKIP_TYPE_CHECK\" = \"true\" ] && vite build || (vue-tsc --noEmit && vite build)",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "vitest run"
   },
   "bugs": {
     "url": "https://github.com/ssemenkoff/org.eclipse.daanse.board.app/issues"

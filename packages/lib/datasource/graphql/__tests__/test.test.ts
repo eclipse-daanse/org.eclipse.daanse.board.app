@@ -11,84 +11,102 @@
  *   Smart City Jena
  **********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import ConnectionFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.connection'
-import ConnectionRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import DatasourceFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import DatasourceRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import GraphQLConnectionModule from 'org.eclipse.daanse.board.app.lib.connection.graphql'
-import GraphQLDatasourceModule from 'org.eclipse.daanse.board.app.lib.datasource.graphql'
+import assert from 'assert';
+import { describe, test } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
+import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { factorySymbol as graphqlConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.graphql';
+import { factorySymbol as graphqlStoreFactorySymbol } from 'org.eclipse.daanse.board.app.lib.datasource.graphql';
 
-const container = new Container()
+// Retrieve repositories from the shared container
+const connectionRepository = container.get<any>(connRepoId);
+const datasourceRepository = container.get<any>(dsRepoId);
 
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
-
-ConnectionFactoryModule.init(container)
-ConnectionRepositoryModule.init(container)
-GraphQLConnectionModule.init(container)
-GraphQLDatasourceModule.init(container)
-DatasourceFactoryModule.init(container)
-DatasourceRepositoryModule.init(container)
-
-const connectionRepository = container.get(
-  ConnectionRepositoryModule.identifier,
-) as ConnectionRepositoryModule.ConnectionRepository
-
+// Register the connection and datasource types
 connectionRepository.registerConnectionType('graphql', {
-  Connection: GraphQLConnectionModule.symbol,
+  Connection: graphqlConnFactorySymbol,
   Settings: null as any,
-})
-
-const datasourceRepository = container.get(
-  DatasourceRepositoryModule.identifier,
-) as DatasourceRepositoryModule.DatasourceRepository
+});
 
 datasourceRepository.registerDatasourceType('graphql', {
-  Store: GraphQLDatasourceModule.symbol,
+  Store: graphqlStoreFactorySymbol,
   Preview: null as any,
   Settings: null as any,
-})
+});
 
-connectionRepository.registerConnection('test', 'graphql', {
-  url: 'https://spacex-production.up.railway.app/',
-})
+// Test 1: Store Registration
+async function testStoreRegistration() {
+  console.info('Running: testStoreRegistration');
 
-datasourceRepository.registerDatasource('test', 'graphql', {
-  query: `
-    query ($name: String!) {
-        __type(name: $name) {
-            name
-        }
-    }
-  `,
-  connection: 'test',
-})
+  connectionRepository.registerConnection('graphql-conn-test', 'graphql', {
+    url: 'https://example.com/graphql',
+    uid: 'graphql-conn-test',
+    type: 'graphql',
+    name: 'graphql-conn-test',
+  });
 
-const datasource = datasourceRepository.getDatasource('test')
-console.log(datasource)
+  datasourceRepository.registerDatasource('graphql-store-test', 'graphql', {
+    connection: 'graphql-conn-test',
+    query: 'query { test }',
+    uid: 'graphql-store-test',
+    type: 'graphql',
+    name: 'graphql-store-test',
+  });
 
-// const getData = async () => {
-//   const data = await datasource.getOriginalData()
-//   assert.notEqual(data.length, 0, 'Expected data to be not empty')
-//   console.log('original data', data)
-// }
-
-const getData2 = async () => {
-  const data = await datasource.getData('object')
-  console.log('data as object', data)
+  const store = datasourceRepository.getDatasource('graphql-store-test');
+  assert.ok(store, 'GraphQL Store should be successfully registered and retrieved');
+  console.info('✅ Passed: Store Registration.');
 }
 
-const getData3 = async () => {
-  const data = await datasource.getData('DataTable')
-  console.log('data as datatable', data)
+// Test 2: Verify getData returns mock GraphQL data
+async function testStoreGetData() {
+  console.info('Running: testStoreGetData');
+  const connection = connectionRepository.getConnection('graphql-conn-test');
+
+  // Mock fetcher to simulate graphQL query execution
+  const mockFetcher = async () => {
+    return {
+      next: async () => {
+        return {
+          value: {
+            data: { test: 'graphql-data-success' }
+          }
+        };
+      }
+    };
+  };
+
+  connection.fetcher = mockFetcher;
+
+  const store = datasourceRepository.getDatasource('graphql-store-test');
+  const result = await store.getData('object');
+  assert.deepStrictEqual(result, { test: 'graphql-data-success' }, 'Should retrieve mocked graphQL query data');
+  console.info('✅ Passed: Store getData retrieval.');
 }
 
-// Tests will not work in node
-// getData()
-// getData2()
-// getData3()
-// console.log(datasource);
+// Test 3: Verify parseToDataTable formatting
+async function testStoreParseToDataTable() {
+  console.info('Running: testStoreParseToDataTable');
+  const store = datasourceRepository.getDatasource('graphql-store-test');
+  const rawData = [
+    { id: '1', name: 'Alpha' },
+    { id: '2', name: 'Beta' }
+  ];
+  const table = store.parseToDataTable(rawData);
+
+  assert.ok(Array.isArray(table.items), 'Items should be an array');
+  assert.strictEqual(table.items.length, 2);
+  assert.ok(table.headers.includes('id'), 'Headers should include id');
+  assert.ok(table.headers.includes('name'), 'Headers should include name');
+  assert.deepStrictEqual(table.rows[0], [0, '1', 'Alpha'], 'Rows should match structure');
+  console.info('✅ Passed: Store parseToDataTable formatting.');
+}
+
+describe('GraphQL datasource/store integration tests', () => {
+  test('runs all tests successfully', async () => {
+    await testStoreRegistration();
+    await testStoreGetData();
+    await testStoreParseToDataTable();
+  });
+});

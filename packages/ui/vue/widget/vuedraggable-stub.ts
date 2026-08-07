@@ -9,9 +9,14 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert'
+import { defineComponent, h } from 'vue';
 
-assert.strictEqual('Hello from test', 'Hello from test')
-console.info('test tests passed')
+export default defineComponent({
+  name: 'draggable',
+  props: ['modelValue', 'list', 'itemKey'],
+  setup(props, { slots }) {
+    return () => h('div', { class: 'vuedraggable-stub' }, slots.default ? slots.default() : []);
+  }
+});

@@ -9,19 +9,23 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert';
-import { Container } from 'inversify';
-import XmlaConnection from 'org.eclipse.daanse.board.app.lib.connection.xmla';
+import { describe, test, expect } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { XmlaConnection, factorySymbol } from '../src/index';
 
-const container = new Container();
-XmlaConnection.init(container);
+describe('XmlaConnection Tests', () => {
+  test('creates new XmlaConnection instances via factory', () => {
+    const factory = container.get<any>(factorySymbol);
+    const configA = { url: 'http://localhost:8080', catalogName: 'catalogA', cubeName: 'cubeA', uid: 'xmla-a', type: 'xmla', name: 'Xmla A' };
+    const configB = { url: 'http://localhost:8080', catalogName: 'catalogB', cubeName: 'cubeB', uid: 'xmla-b', type: 'xmla', name: 'Xmla B' };
 
-const xmlaConnection = container.get<typeof XmlaConnection.XmlaConnection>(XmlaConnection.symbol);
+    const connA = factory(configA);
+    const connB = factory(configB);
 
-const xmlaConnectionA = new xmlaConnection({ catalogName: 'catalog', cubeName: 'cube', url: 'http://localhost:8080' });
-const xmlaConnectionB = new xmlaConnection({ catalogName: 'catalog', cubeName: 'cube', url: 'http://localhost:8080' });
-
-
-assert.notStrictEqual(xmlaConnectionA, xmlaConnectionB);
+    expect(connA).toBeInstanceOf(XmlaConnection);
+    expect(connB).toBeInstanceOf(XmlaConnection);
+    expect(connA).not.toBe(connB);
+  });
+});

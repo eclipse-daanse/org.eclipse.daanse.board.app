@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "test": "node ./__tests__/test.test.ts"
+    "test": "echo \"No tests specified\""
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

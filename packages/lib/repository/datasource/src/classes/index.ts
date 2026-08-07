@@ -12,6 +12,7 @@
  **********************************************************************/
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+export { type IDataRetrieveable }
 import { injectable } from 'inversify'
 
 

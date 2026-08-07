@@ -11,7 +11,6 @@
     "dist",
     "dist/ui.vue.widget.map.css",
     "dist/model"
-
   ],
   "type": "module",
   "repository": {
@@ -20,7 +19,7 @@
   },
   "scripts": {
     "build": "[ \"$SKIP_TYPE_CHECK\" = \"true\" ] && vite build || (vue-tsc --noEmit && vite build)",
-    "test": "vitest",
+    "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"

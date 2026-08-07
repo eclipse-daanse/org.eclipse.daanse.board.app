@@ -15,13 +15,14 @@ Contributors:
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const widgetSettings = defineModel() as any;
+const widgetSettings = defineModel<any>({ required: true });
 
-
-widgetSettings.settings = widgetSettings.settings ?? {};
-widgetSettings.settings.showRows = widgetSettings.settings?.showRows ?? true;
-widgetSettings.settings.showColumns = widgetSettings.settings?.showRows ?? true;
-widgetSettings.settings.showFilters = widgetSettings.settings?.showRows ?? true;
+if (widgetSettings.value) {
+  widgetSettings.value.settings = widgetSettings.value.settings ?? {};
+  widgetSettings.value.settings.showRows = widgetSettings.value.settings.showRows ?? true;
+  widgetSettings.value.settings.showColumns = widgetSettings.value.settings.showColumns ?? true;
+  widgetSettings.value.settings.showFilters = widgetSettings.value.settings.showFilters ?? true;
+}
 const opened = ref(false)
 </script>
 

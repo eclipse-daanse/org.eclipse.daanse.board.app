@@ -20,6 +20,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    server: {
+      deps: {
+        inline: [
+          /org\.eclipse\.daanse\.board\.app\.lib\..*/,
+          /org\.eclipse\.daanse\.board\.app\.ui\..*/
+        ]
+      }
+    },
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

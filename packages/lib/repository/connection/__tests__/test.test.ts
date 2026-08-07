@@ -9,52 +9,49 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import ConnectionFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.connection'
-import ConnectionRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { describe, test, expect } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { ConnectionRepository, identifier as repositorySymbol } from '../src/index';
 
-const container = new Container()
-
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
-
-const testSymbol = Symbol.for('TestClass')
+const testSymbol = Symbol.for('TestClass');
 
 class TestClass {
-  public testProperty: string = 'test'
-  constructor() {
-    console.log('TestClass instantiated')
-  }
-
+  public testProperty: string = 'test';
   static validateConfiguration() {
-    return true
+    return true;
   }
 }
 
-container.bind(testSymbol).toConstantValue(TestClass)
+// Bind a mock connection factory function for testSymbol
+if (!container.isBound(testSymbol)) {
+  container.bind<any>(testSymbol).toConstantValue((config: any) => {
+    return new TestClass();
+  });
+}
 
-ConnectionFactoryModule.init(container)
-ConnectionRepositoryModule.init(container)
+describe('ConnectionRepository Tests', () => {
+  test('registers connection types and connections correctly', () => {
+    const connectionRepository = container.get<ConnectionRepository>(repositorySymbol);
 
-const ConnectionRepository = container.get(
-  ConnectionRepositoryModule.identifier,
-) as ConnectionRepositoryModule.ConnectionRepository
-ConnectionRepository.registerConnectionType('test', {
-  Connection: testSymbol,
-  Settings: null as any,
-})
-ConnectionRepository.registerConnection('test', 'test', { url: 'null' })
-const connectionsRegistered = ConnectionRepository.registeredConnections
-console.log(ConnectionRepository)
-console.log(connectionsRegistered)
+    connectionRepository.registerConnectionType('test', {
+      Connection: testSymbol,
+      Settings: null as any,
+    });
 
-assert.equal(
-  connectionsRegistered.length,
-  1,
-  'Expected one connection registered',
-)
+    connectionRepository.registerConnection('test-id', 'test', {
+      url: 'null',
+      uid: 'test-id',
+      type: 'test',
+      name: 'Test Name'
+    });
+
+    const connectionsRegistered = connectionRepository.registeredConnections;
+    expect(connectionsRegistered.length).toBe(1);
+    expect(connectionsRegistered[0]).toBe('test');
+
+    const conn = connectionRepository.getConnection('test-id');
+    expect(conn).toBeInstanceOf(TestClass);
+  });
+});

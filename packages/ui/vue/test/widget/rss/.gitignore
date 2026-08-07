@@ -1,0 +1,12 @@
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Vite
+dist/
+dist-ssr/
+*.local
+
+# Logs
+*.log

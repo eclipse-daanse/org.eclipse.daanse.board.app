@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "test": "node ./__tests__/test.test.js"
+    "test": "vitest run"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

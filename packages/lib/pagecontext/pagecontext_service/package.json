@@ -4,6 +4,12 @@
   "description": "Page context service for Eclipse Daanse Board",
   "main": "./dist/lib.pagecontext.pagecontext_service.umd.js",
   "module": "./dist/lib.pagecontext.pagecontext_service.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/lib.pagecontext.pagecontext_service.mjs",
+      "require": "./dist/lib.pagecontext.pagecontext_service.umd.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",

@@ -45,7 +45,7 @@ if (!container.isBound(factorySymbol)) {
 }
 
 export {
-  type GraphQLConnection,
-  IGraphQLConnectionConfiguration,
+  GraphQLConnection,
+  type IGraphQLConnectionConfiguration,
   factorySymbol,
 }

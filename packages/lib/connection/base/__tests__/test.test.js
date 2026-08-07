@@ -11,7 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { test } from 'vitest';
 import assert from 'assert';
 
-assert.strictEqual('Hello from test', 'Hello from test');
-console.info('test tests passed');
+test('base connection placeholder', () => {
+  assert.strictEqual('Hello from test', 'Hello from test');
+  console.info('test tests passed');
+});

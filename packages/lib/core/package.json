@@ -7,6 +7,13 @@
   "license": "ISC",
   "main": "./dist/lib.core.umd.cjs",
   "module": "./dist/lib.core.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/lib.core.js",
+      "require": "./dist/lib.core.umd.cjs"
+    }
+  },
   "types": "./dist/index.d.ts",
   "type": "module",
   "repository": {

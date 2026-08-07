@@ -18,10 +18,31 @@ import viteConfig from './vite.config'
 export default mergeConfig(
   viteConfig,
   defineConfig({
+    resolve: {
+      alias: {
+        'vuedraggable/src/vuedraggable': fileURLToPath(new URL('./packages/ui/vue/widget/vuedraggable-stub.ts', import.meta.url)),
+        'vuedraggable': fileURLToPath(new URL('./packages/ui/vue/widget/vuedraggable-stub.ts', import.meta.url)),
+        'vuedraggable-es': fileURLToPath(new URL('./packages/ui/vue/widget/vuedraggable-stub.ts', import.meta.url))
+      }
+    },
     test: {
       environment: 'jsdom',
-      exclude: [...configDefaults.exclude, 'e2e/**'],
-      root: fileURLToPath(new URL('./', import.meta.url))
+      // live.test.ts files make real network calls and are opt-in only
+      // (run them explicitly, e.g. `vitest run **/live.test.ts`) — they
+      // must not run as part of the default test/CI gate.
+      exclude: [...configDefaults.exclude, 'e2e/**', '**/live.test.ts'],
+      root: fileURLToPath(new URL('./', import.meta.url)),
+      server: {
+        deps: {
+          inline: [
+            /org\.eclipse\.daanse\.board\.app\.lib\..*/,
+            /org\.eclipse\.daanse\.board\.app\.ui\..*/
+          ]
+        }
+      }
+    },
+    ssr: {
+      noExternal: true
     }
   })
 )

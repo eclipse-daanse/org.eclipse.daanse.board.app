@@ -9,19 +9,23 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert';
-import { Container } from 'inversify';
-import RestConnection from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import { describe, test, expect } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { RestConnection, factorySymbol } from '../src/index';
 
-const container = new Container();
-RestConnection.init(container);
+describe('RestConnection Tests', () => {
+  test('creates new RestConnection instances via factory', () => {
+    const factory = container.get<any>(factorySymbol);
+    const configA = { url: 'https://jsonplaceholder.typicode.com/todos/1', uid: 'rest-a', type: 'rest', name: 'Rest A' };
+    const configB = { url: 'https://jsonplaceholder.typicode.com/todos/1', uid: 'rest-b', type: 'rest', name: 'Rest B' };
 
-const restConnection = container.get<typeof RestConnection.RestConnection>(RestConnection.symbol);
+    const connA = factory(configA);
+    const connB = factory(configB);
 
-const restConnectionA = new restConnection({ url: 'http://localhost:8080' });
-const restConnectionB = new restConnection({ url: 'http://localhost:8080' });
-
-
-assert.notStrictEqual(restConnectionA, restConnectionB);
+    expect(connA).toBeInstanceOf(RestConnection);
+    expect(connB).toBeInstanceOf(RestConnection);
+    expect(connA).not.toBe(connB);
+  });
+});

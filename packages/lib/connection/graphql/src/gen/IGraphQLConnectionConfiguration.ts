@@ -29,8 +29,6 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://example.com/graphqlconnection#//IGraphQLConnectionConfiguration'})
 export class IGraphQLConnectionConfiguration extends BaseConnectionConfig {
 
-  @Documentation("The specific URL endpoint for the GraphQL API.
-                                            This attribute overrides the 'url' from BaseConnectionConfig
-                                            to emphasize its specific role in GraphQL connections.")
+  @Documentation("The specific URL endpoint for the GraphQL API. This attribute overrides the 'url' from BaseConnectionConfig to emphasize its specific role in GraphQL connections.")
   @Attribute() url?: string;
 }

@@ -36,6 +36,6 @@ if (!container.isBound(factorySymbol)) {
   })
 }
 
-export { factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL }
+export { OgcStaStore, factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL }
 export type { BoxedDatastream, BoxedThing, BoxedLocation, IOGCSTAData, IOGCSTAConfigartion, IOGCSTAHistoryConfig } from './interfaces/OgcStaConfiguration'
 export type { Datastream } from './client'

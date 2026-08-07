@@ -29,8 +29,8 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://example.com/rssconnection#//IRssConnectionConfiguration'})
 export class IRssConnectionConfiguration extends BaseConnectionConfig {
 
-  @Documentation("The URL of the RSS feed to connect to.
+  @Documentation(`The URL of the RSS feed to connect to.
                                             This attribute overrides the 'url' from BaseConnectionConfig
-                                            to specify its role in RSS feed connections.")
+                                            to specify its role in RSS feed connections.`)
   @Attribute() url?: string;
 }

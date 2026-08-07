@@ -29,12 +29,12 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://example.com/mqttconnection#//IMQTTConnectionConfiguration'})
 export class IMQTTConnectionConfiguration extends BaseConnectionConfig {
 
-  @Documentation("The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.
+  @Documentation(`The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.
                                             This attribute overrides the 'url' from BaseConnectionConfig
-                                            to emphasize its specific role in MQTT connections.")
+                                            to emphasize its specific role in MQTT connections.`)
   @Attribute() url?: string;
 
-  @Documentation("An optional MQTT topic to subscribe or publish to by default.
-                                            If not specified, a connection might use a default topic or require one per operation.")
+  @Documentation(`An optional MQTT topic to subscribe or publish to by default.
+                                            If not specified, a connection might use a default topic or require one per operation.`)
   @Attribute() topic?: string;
 }

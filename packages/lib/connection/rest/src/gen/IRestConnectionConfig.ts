@@ -29,8 +29,8 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://example.com/restconnection#//IRestConnectionConfig'})
 export class IRestConnectionConfig extends BaseConnectionConfig {
 
-  @Documentation("The base URL endpoint for the REST API.
+  @Documentation(`The base URL endpoint for the REST API.
                                             This attribute overrides the 'url' from BaseConnectionConfig
-                                            to specify its role in REST connections.")
+                                            to specify its role in REST connections.`)
   @Attribute() url?: string;
 }

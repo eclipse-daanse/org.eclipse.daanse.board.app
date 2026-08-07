@@ -10,76 +10,105 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import ConnectionFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.connection'
-import ConnectionRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import DatasourceFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import DatasourceRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import RssConnectionModule from 'org.eclipse.daanse.board.app.lib.connection.rss'
-import RssDatasourceModule from 'org.eclipse.daanse.board.app.lib.datasource.rss'
 
-const container = new Container()
+import assert from 'assert';
+import { describe, test, vi } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
+import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { factorySymbol as rssConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rss';
+import { factorySymbol as rssStoreFactorySymbol, RssStore } from '../src/index';
 
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
-
-ConnectionFactoryModule.init(container)
-ConnectionRepositoryModule.init(container)
-RssConnectionModule.init(container)
-RssDatasourceModule.init(container)
-DatasourceFactoryModule.init(container)
-DatasourceRepositoryModule.init(container)
-
-const connectionRepository = container.get(
-  ConnectionRepositoryModule.identifier,
-) as ConnectionRepositoryModule.ConnectionRepository
+const connectionRepository = container.get<any>(connRepoId);
+const datasourceRepository = container.get<any>(dsRepoId);
 
 connectionRepository.registerConnectionType('rss', {
-  Connection: RssConnectionModule.symbol,
+  Connection: rssConnFactorySymbol,
   Settings: null as any,
-})
-
-const datasourceRepository = container.get(
-  DatasourceRepositoryModule.identifier,
-) as DatasourceRepositoryModule.DatasourceRepository
+});
 
 datasourceRepository.registerDatasourceType('rss', {
-  Store: RssDatasourceModule.symbol,
+  Store: rssStoreFactorySymbol,
   Preview: null as any,
   Settings: null as any,
-})
+});
 
-connectionRepository.registerConnection('test', 'rss', {
-  url: 'https://www.reddit.com/.rss',
-})
+// Test 1: Store Registration
+async function testStoreRegistration() {
+  console.info('Running: testStoreRegistration');
 
-datasourceRepository.registerDatasource('test', 'rss', {
-  connection: 'test',
-})
+  connectionRepository.registerConnection('rss-conn-test', 'rss', {
+    url: 'https://example.com/rss.xml',
+    uid: 'rss-conn-test',
+    type: 'rss',
+    name: 'rss-conn-test',
+  });
 
-const datasource = datasourceRepository.getDatasource('test')
+  datasourceRepository.registerDatasource('rss-store-test', 'rss', {
+    connection: 'rss-conn-test',
+    uid: 'rss-store-test',
+    type: 'rss',
+    name: 'rss-store-test',
+  });
 
-const getData = async () => {
-  const data = await datasource.getOriginalData()
-  // assert.notEqual(data.length, 0, 'Expected data to be not empty')
-  console.log('original data', data)
+  const store = datasourceRepository.getDatasource('rss-store-test');
+  assert.ok(store, 'RSS Store should be successfully registered and retrieved');
+  console.info('✅ Passed: Store Registration.');
 }
 
-const getData2 = async () => {
-  const data = await datasource.getData('object')
-  console.log('data as object', data)
+// Test 2: Verify getData returns mock RSS data
+async function testStoreGetData() {
+  console.info('Running: testStoreGetData');
+  const connection = connectionRepository.getConnection('rss-conn-test');
+
+  // Mock fetch to simulate feed download
+  const mockFetch = async () => {
+    return {
+      title: 'Hacker News',
+      items: [
+        { title: 'Item Alpha', link: 'http://alpha.com' },
+        { title: 'Item Beta', link: 'http://beta.com' }
+      ]
+    };
+  };
+
+  connection.fetch = mockFetch;
+
+  const store = datasourceRepository.getDatasource('rss-store-test');
+
+  const objectResult = await store.getData('object');
+  assert.strictEqual(objectResult.title, 'Hacker News', 'Should get raw object feed title');
+  assert.strictEqual(objectResult.items.length, 2, 'Should get raw items');
+
+  const dtResult = await store.getData('DataTable');
+  assert.ok(Array.isArray(dtResult.items), 'Parsed DataTable should have items array');
+  assert.ok(dtResult.headers.includes('title'), 'DataTable headers should contain title');
+  assert.ok(dtResult.headers.includes('link'), 'DataTable headers should contain link');
+  assert.deepStrictEqual(dtResult.rows[0], [0, 'Item Alpha', 'http://alpha.com'], 'First row should match items list');
+  console.info('✅ Passed: Store getData retrieval.');
 }
 
-const getData3 = async () => {
-  const data = await datasource.getData('DataTable')
-  console.log('data as datatable', data)
+// Test 3: Verify parseToDataTable formatting
+async function testStoreParseToDataTable() {
+  console.info('Running: testStoreParseToDataTable');
+  const store = datasourceRepository.getDatasource('rss-store-test');
+  const rawData = [
+    { title: 'Story 1', creator: 'John' },
+    { title: 'Story 2', creator: 'Doe' }
+  ];
+  const table = store.parseToDataTable(rawData);
+
+  assert.strictEqual(table.items.length, 2);
+  assert.ok(table.headers.includes('title'));
+  assert.ok(table.headers.includes('creator'));
+  assert.deepStrictEqual(table.rows[0], [0, 'Story 1', 'John']);
+  console.info('✅ Passed: Store parseToDataTable formatting.');
 }
 
-// Can't be run in node
-// getData()
-// getData2()
-// getData3()
-// console.log(datasource);
+describe('RSS datasource/store integration tests', () => {
+  test('runs all tests successfully', async () => {
+    await testStoreRegistration();
+    await testStoreGetData();
+    await testStoreParseToDataTable();
+  });
+});

@@ -1,32 +1,46 @@
 /*********************************************************************
-* Copyright (c) 2025 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   Smart City Jena
-**********************************************************************/
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ * ********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import GraphQLConnection from 'org.eclipse.daanse.board.app.lib.connection.graphql'
+import { describe, test, expect } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { factorySymbol, GraphQLConnection } from '../src/index';
 
-const container = new Container()
-GraphQLConnection.init(container)
+describe('GraphQL Connection Tests', () => {
+  test('factory creates distinct connection instances', () => {
+    const factory = container.get<any>(factorySymbol);
+    const connA = factory({ url: 'https://spacex-production.up.railway.app/' });
+    const connB = factory({ url: 'https://spacex-production.up.railway.app/' });
 
-const graphqlConnection = container.get<
-  typeof GraphQLConnection.GraphQLConnection
->(GraphQLConnection.symbol)
+    expect(connA).toBeInstanceOf(GraphQLConnection);
+    expect(connB).toBeInstanceOf(GraphQLConnection);
+    expect(connA).not.toBe(connB);
+  });
 
-const graphqlConnectionA = new graphqlConnection({
-  url: 'https://spacex-production.up.railway.app/',
-})
-const graphqlConnectionB = new graphqlConnection({
-  url: 'https://spacex-production.up.railway.app/',
-})
+  test('validates configuration validation logic', () => {
+    const validate = GraphQLConnection.validateConfiguration;
+    expect(validate({ url: '' })).toBe(false);
+    expect(validate({ url: 'https://example.com/graphql' })).toBe(true);
+  });
 
-assert.notStrictEqual(graphqlConnectionA, graphqlConnectionB)
+  test('initializes connection configuration parameters correctly', () => {
+    const factory = container.get<any>(factorySymbol);
+    const conn = factory({ url: 'https://example.com/graphql' });
+    expect((conn as any).url).toBe('https://example.com/graphql');
+  });
+
+  test('fetch method throws Method not implemented', () => {
+    const factory = container.get<any>(factorySymbol);
+    const conn = factory({ url: 'https://example.com/graphql' });
+    expect(() => conn.fetch({} as any)).toThrow(/Method not implemented/);
+  });
+});

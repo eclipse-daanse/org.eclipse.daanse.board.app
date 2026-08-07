@@ -7,6 +7,12 @@
   "homepage": "",
   "license": "EPL-2.0",
   "main": "./dist/ui.vue.datasource.ogcsta.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ui.vue.datasource.ogcsta.js",
+      "require": "./dist/ui.vue.datasource.ogcsta.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "type": "module",
   "repository": {
@@ -14,7 +20,8 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest run"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"

@@ -7,6 +7,12 @@
   "homepage": "",
   "license": "EPL-2.0",
   "main": "./dist/lib.logger.js",
+  "exports": {
+    ".": {
+      "import": "./dist/lib.logger.js",
+      "require": "./dist/lib.logger.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "type": "module",
   "repository": {

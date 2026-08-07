@@ -9,56 +9,48 @@
  *
  * Contributors:
  *   Smart City Jena
- **********************************************************************/
+ * ********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import DatasourceFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import DatasourceRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { describe, test, expect } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { DatasourceRepository, identifier as repositorySymbol } from '../src/index';
 
-const container = new Container()
-
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
-
-const testSymbol = Symbol.for('TestClass')
+const testSymbol = Symbol.for('TestClass');
 
 class TestClass {
-  public testProperty: string = 'test'
-  constructor() {
-    console.log('TestClass instantiated')
-  }
-
+  public testProperty: string = 'test';
   static validateConfiguration() {
-    return true
+    return true;
   }
 }
 
-container.bind(testSymbol).toConstantValue(TestClass)
+// Bind a mock datasource factory function for testSymbol
+if (!container.isBound(testSymbol)) {
+  container.bind<any>(testSymbol).toConstantValue((config: any) => {
+    return new TestClass();
+  });
+}
 
-DatasourceFactoryModule.init(container)
-DatasourceRepositoryModule.init(container)
+describe('DatasourceRepository Tests', () => {
+  test('registers datasource types and datasources correctly', () => {
+    const datasourceRepository = container.get<DatasourceRepository>(repositorySymbol);
 
-const DatasourceRepository = container.get(
-  DatasourceRepositoryModule.identifier,
-) as DatasourceRepositoryModule.DatasourceRepository
+    datasourceRepository.registerDatasourceType('test', {
+      Store: testSymbol,
+      Preview: null as any,
+      Settings: null as any,
+    });
 
-DatasourceRepository.registerDatasourceType('test', {
-  Store: testSymbol,
-  Preview: null as any,
-  Settings: null as any,
-})
-DatasourceRepository.registerDatasource('test', 'test', {
-  url: 'null',
-  type: 'test',
-})
+    datasourceRepository.registerDatasource('test-id', 'test', {
+      url: 'null',
+      type: 'test',
+    });
 
-const datasourcesRegistered = DatasourceRepository.registeredDatasources
+    const datasourcesRegistered = datasourceRepository.registeredDatasources;
+    expect(datasourcesRegistered.length).toBe(1);
+    expect(datasourcesRegistered[0]).toBe('test');
 
-assert.equal(
-  datasourcesRegistered.length,
-  1,
-  'Expected one datasource registered',
-)
+    const ds = datasourceRepository.getDatasource('test-id');
+    expect(ds).toBeInstanceOf(TestClass);
+  });
+});

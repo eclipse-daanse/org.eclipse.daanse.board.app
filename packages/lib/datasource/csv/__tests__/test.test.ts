@@ -11,77 +11,82 @@
  *   Smart City Jena
  **********************************************************************/
 
-import assert from 'assert'
-import { Container } from 'inversify'
-import CoreModule from 'org.eclipse.daanse.board.app.lib.core'
-import ConnectionFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.connection'
-import ConnectionRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import DatasourceFactoryModule from 'org.eclipse.daanse.board.app.lib.factory.datasource'
-import DatasourceRepositoryModule from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import RestConnectionModule from 'org.eclipse.daanse.board.app.lib.connection.rest'
-import CsvDatasourceModule from 'org.eclipse.daanse.board.app.lib.datasource.csv'
+import assert from 'assert';
+import { describe, test } from 'vitest';
+import { container } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifier as connRepoId } from 'org.eclipse.daanse.board.app.lib.repository.connection';
+import { identifier as dsRepoId } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { factorySymbol as restConnFactorySymbol } from 'org.eclipse.daanse.board.app.lib.connection.rest';
+import { factorySymbol as csvStoreFactorySymbol } from '../src/index';
 
-const container = new Container()
-
-container.bind(CoreModule.identifiers.CONTAINER).toDynamicValue((ctx: any) => {
-  return ctx as Container
-})
-
-ConnectionFactoryModule.init(container)
-ConnectionRepositoryModule.init(container)
-RestConnectionModule.init(container)
-CsvDatasourceModule.init(container)
-DatasourceFactoryModule.init(container)
-DatasourceRepositoryModule.init(container)
-
-const connectionRepository = container.get(
-  ConnectionRepositoryModule.identifier,
-) as ConnectionRepositoryModule.ConnectionRepository
+const connectionRepository = container.get<any>(connRepoId);
+const datasourceRepository = container.get<any>(dsRepoId);
 
 connectionRepository.registerConnectionType('rest', {
-  Connection: RestConnectionModule.symbol,
+  Connection: restConnFactorySymbol,
   Settings: null as any,
-})
-
-const datasourceRepository = container.get(
-  DatasourceRepositoryModule.identifier,
-) as DatasourceRepositoryModule.DatasourceRepository
+});
 
 datasourceRepository.registerDatasourceType('csv', {
-  Store: CsvDatasourceModule.symbol,
+  Store: csvStoreFactorySymbol,
   Preview: null as any,
   Settings: null as any,
-})
+});
 
-connectionRepository.registerConnection('test', 'rest', {
-  url: 'https://jsonplaceholder.typicode.com/',
-})
+describe('CSV datasource/store integration tests', () => {
+  test('runs all tests successfully', async () => {
+    // 1. Store Registration
+    connectionRepository.registerConnection('csv-conn-test', 'rest', {
+      url: 'https://example.com/api/',
+      uid: 'csv-conn-test',
+      type: 'rest',
+      name: 'csv-conn-test'
+    });
 
-datasourceRepository.registerDatasource('test', 'csv', {
-  resourceUrl: 'posts',
-  connection: 'test',
-})
+    datasourceRepository.registerDatasource('csv-store-test', 'csv', {
+      connection: 'csv-conn-test',
+      resourceUrl: 'data.csv',
+      separators: [','],
+      uid: 'csv-store-test',
+      type: 'csv',
+      name: 'csv-store-test'
+    });
 
-const datasource = datasourceRepository.getDatasource('test')
-console.log(datasource)
+    const store = datasourceRepository.getDatasource('csv-store-test');
+    assert.ok(store, 'CSV Store should be successfully registered');
 
-const getData = async () => {
-  const data = await datasource.getOriginalData()
-  assert.notEqual(data.length, 0, 'Expected data to be not empty')
-  console.log('original data', data)
-}
+    // Mock fetch on the connection
+    const mockCsvContent = 'id,name,role\n1,Alice,Admin\n2,Bob,User';
+    const connection = connectionRepository.getConnection('csv-conn-test');
+    connection.fetch = async () => {
+      return {
+        ok: true,
+        text: async () => mockCsvContent
+      };
+    };
 
-const getData2 = async () => {
-  const data = await datasource.getData('object')
-  console.log('data as object', data)
-}
+    // Verify getData
+    const dt = await store.getData('DataTable');
+    assert.deepStrictEqual(dt.headers, ['id', 'name', 'role']);
+    assert.strictEqual(dt.items.length, 2);
+    assert.deepStrictEqual(dt.items[0], { id: '1', name: 'Alice', role: 'Admin' });
+    assert.deepStrictEqual(dt.items[1], { id: '2', name: 'Bob', role: 'User' });
 
-const getData3 = async () => {
-  const data = await datasource.getData('DataTable')
-  console.log('data as datatable', data)
-}
+    // 3. Test Row Skipping
+    datasourceRepository.registerDatasource('csv-store-skip-test', 'csv', {
+      connection: 'csv-conn-test',
+      resourceUrl: 'data.csv',
+      separators: [','],
+      skipRowsFromStart: 1, // Skip the headers row and treat line 2 as headers
+      uid: 'csv-store-skip-test',
+      type: 'csv',
+      name: 'csv-store-skip-test'
+    });
 
-getData()
-getData2()
-getData3()
-// console.log(datasource);
+    const skipStore = datasourceRepository.getDatasource('csv-store-skip-test');
+    const dtSkip = await skipStore.getData('DataTable');
+    assert.deepStrictEqual(dtSkip.headers, ['1', 'Alice', 'Admin']);
+    assert.strictEqual(dtSkip.items.length, 1);
+    assert.deepStrictEqual(dtSkip.items[0], { '1': '2', 'Alice': 'Bob', 'Admin': 'User' });
+  });
+});
