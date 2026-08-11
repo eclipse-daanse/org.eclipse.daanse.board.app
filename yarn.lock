@@ -499,6 +499,14 @@
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.13.0.tgz"
   integrity sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==
 
+"@eclipse-daanse/tsm@0.0.1-next.2":
+  version "0.0.1-next.2"
+  resolved "https://registry.npmjs.org/@eclipse-daanse/tsm/-/tsm-0.0.1-next.2.tgz#bd340075e589b78a870bf08c2a88377cca4e122e"
+  integrity sha512-7dlRRiT0Qzsa5RIqo2rR2G9mDvx/dXLw2dV+U871v3rlnhBgYh4g1Z7++2x5z7da1Gtp8MHUAmv4gspglHCUvA==
+  dependencies:
+    reflect-metadata "^0.2.2"
+    semver "^7.7.3"
+
 "@egjs/agent@^2.2.1":
   version "2.4.4"
   resolved "https://registry.npmjs.org/@egjs/agent/-/agent-2.4.4.tgz"
@@ -11404,7 +11412,7 @@ sass@1.99.0:
   optionalDependencies:
     "@parcel/watcher" "^2.4.1"
 
-sax@>=0.6.0, sax@^1.4.1:
+sax@>=0.6.0:
   version "1.4.3"
   resolved "https://registry.npmjs.org/sax/-/sax-1.4.3.tgz"
   integrity sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==
@@ -12193,11 +12201,6 @@ ts-node@^10.9.2:
     make-error "^1.1.1"
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
-
-ts-results-es@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/ts-results-es/-/ts-results-es-7.0.0.tgz#d8dd936c08cfc6b7970f96f1afe42a673cd14851"
-  integrity sha512-GuXPzBk1mE7QN4zo0KOHxQ+vrvjUqgMnwbKRF4ztrDQuI6CdOmPx43O+Y5BEgMIHQqVSd1rg5sIMnp+QDfBWuw==
 
 tsconfig-paths@4.2.0:
   version "4.2.0"

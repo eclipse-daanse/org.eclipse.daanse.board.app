@@ -24,4 +24,23 @@ if (!container.isBound(identifiers.TINY_EMITTER)) {
   container.bind<TinyEmitter>(identifiers.TINY_EMITTER).toConstantValue(tinyEmitter)
 }
 
-export { container, identifiers }
+import { BoardServiceRegistry } from './BoardServiceRegistry'
+import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
+
+/**
+ * Die ServiceRegistry der Anwendung.
+ *
+ * Umgestellte Pakete registrieren hier über ihren `activate`-Kontext. Bis
+ * alle Pakete umgestellt sind, löst die Registry unbekannte IDs zusätzlich
+ * gegen den Inversify-Container auf.
+ */
+const services = new BoardServiceRegistry(container)
+
+export {
+  container,
+  identifiers,
+  services,
+  BoardServiceRegistry,
+  type ActivationContext,
+  type ActivatableModule,
+}

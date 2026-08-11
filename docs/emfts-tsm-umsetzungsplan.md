@@ -34,16 +34,37 @@ beides liefert innerhalb weniger Tage die Grundlage, um den Rest verbindlich zu 
 Diese drei Punkte kann ich nicht aus dem Code ableiten; sie sind Projektentscheidungen.
 Ich gebe jeweils eine Empfehlung.
 
-### E1 — Ersetzt die tsm-`ServiceRegistry` Inversify, oder liegt sie darüber?
+### E1 — Ersetzt die tsm-`ServiceRegistry` Inversify, oder liegt sie darüber?  ✔ entschieden
 
-71 Pakete greifen heute direkt auf den globalen Inversify-`Container` zu. Ein Austausch
-würde alle 71 gleichzeitig treffen.
+**Entschieden: tsm ersetzt Inversify.** `DefaultServiceRegistry` aus
+`@eclipse-daanse/tsm` ist die Registry; Inversify bleibt nur als absterbender
+Rückfallweg, bis das letzte Paket umgestellt ist.
 
-**Empfehlung: Adapter, kein Ersatz.** Der Inversify-Container bleibt die
-Auflösungsmaschine; eine dünne `ServiceRegistry`-Implementierung delegiert
-`register`/`bind`/`get` an ihn. Damit funktionieren alte und neue Pakete zur gleichen
-Zeit, und die Migration kann paketweise laufen. tsm gibt die Registry als Interface
-vor (`src/types.ts`), nicht als Implementierung — der Adapter ist also vorgesehen.
+*Die ursprüngliche Empfehlung lautete umgekehrt — ein Adapter mit
+tsm-Schnittstelle über Inversify — und wurde verworfen. Sie stützte sich darauf,
+dass „ein Austausch alle Pakete gleichzeitig treffen" würde. Das Argument ist
+zirkulär: Die Pakete werden bei der `activate`-Migration ohnehin alle angefasst,
+und dabei ist gleichgültig, was hinter `ctx.services` steht. Ein Adapter hätte
+die eigentliche Arbeit — die Umstellung der Decorators — nur verschoben und
+danach selbst zurückgebaut werden müssen.*
+
+Der Abgleich mit dem, was die Anwendung an Inversify tatsächlich nutzt, stützt
+den Wechsel:
+
+| Inversify | Verwendungen | tsm |
+|---|---:|---|
+| `toConstantValue` | 53 | `register(id, service)` |
+| `toSelf` + Scope | 31 | `bindClass(id, ctor, { scope })` |
+| `toFactory` | 29 | `register(id, fn)` — einfacher, da der Umweg über eine Factory-Bindung entfällt |
+| `toDynamicValue` | 8 | `bind(id, factory, { scope })` |
+| `@injectable` / `@inject` | 27 / 57 | eigene Decorators — mechanische Umstellung |
+| `multiInject` | 2 | `getAll(idPattern)` mit Wildcard |
+| `tagged` / `named` | 2 / 3 | kein Äquivalent — betrifft nur den ungenutzten, auskommentierten `RootService` |
+
+`DefaultServiceRegistry` ist getestet (`ServiceRegistry.test.ts`,
+`decorators.test.ts`, `integration.test.ts`) und deckt den benötigten
+Funktionsumfang ab. Was für die **Migration** dorthin fehlt, ist als
+[Feature Request](./tsm-feature-requests.md) an tsm gemeldet statt lokal umgangen.
 
 ### E2 — Wie weit soll tsm gehen: Lifecycle oder echtes Laufzeitladen?
 

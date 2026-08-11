@@ -1,0 +1,122 @@
+# Feature Requests an tsm
+
+Ziel-Repository: <https://github.com/eclipse-daanse/org.eclipse.daanse.tsm>
+Getestet gegen: `@eclipse-daanse/tsm@0.0.1-next.2`
+Kontext: Einführung von tsm als Service-Registry der Daanse Board App
+([Umsetzungsplan](./emfts-tsm-umsetzungsplan.md), Strang B)
+
+Grundsatz für dieses Projekt: Fehlendes wird nach tsm gemeldet, nicht lokal
+umgangen. Was hier steht, sind die Punkte, an denen wir beim Einbau tatsächlich
+angestoßen sind — keine Wunschliste.
+
+---
+
+## FR-1 — Rückfall-Resolver für die schrittweise Migration
+
+**Problem.** Eine bestehende Anwendung stellt ihre Pakete nicht an einem Tag auf
+tsm um. Während der Übergangszeit müssen bereits umgestellte Pakete Dienste
+finden, die noch in der alten DI-Lösung registriert sind — sonst ist nur ein
+Big-Bang möglich.
+
+**Heutiger Umweg.** Wir leiten von `DefaultServiceRegistry` ab und überschreiben
+`get` und `has`:
+
+```typescript
+export class BoardServiceRegistry extends DefaultServiceRegistry {
+  constructor(private readonly legacyContainer: Container) { super() }
+
+  override get<T>(id: string, _resolving?: Set<string>): T | undefined {
+    return super.get<T>(id, _resolving) ?? this.getFromLegacyContainer<T>(id)
+  }
+
+  override has(id: string): boolean {
+    return super.has(id) || this.isBoundInLegacyContainer(id)
+  }
+}
+```
+
+Das funktioniert, koppelt uns aber an interne Details (siehe FR-2).
+
+**Vorschlag.** Ein optionaler Resolver im Konstruktor:
+
+```typescript
+interface FallbackResolver {
+  has(id: string): boolean
+  get<T>(id: string): T | undefined
+}
+
+new DefaultServiceRegistry({ fallback?: FallbackResolver })
+```
+
+Die Registry fragt ihn genau dann, wenn eine ID intern unbekannt ist — auch bei
+der Abhängigkeitsauflösung in `bindClass`. Damit wird die schrittweise Migration
+zu einer unterstützten Betriebsart statt zu einem Vererbungstrick, und der
+Rückfallweg lässt sich am Ende ersatzlos entfernen.
+
+**Nutzen über unseren Fall hinaus.** Jede Anwendung, die von Inversify, tsyringe
+oder InversifyJS-ähnlichen Containern auf tsm wechselt, braucht genau das.
+
+---
+
+## FR-2 — `get()` hat einen internen Parameter, der nicht im Interface steht
+
+**Beobachtung.** Das Interface `ServiceRegistry` deklariert:
+
+```typescript
+get<T>(id: string): T | undefined
+```
+
+`DefaultServiceRegistry` implementiert aber:
+
+```typescript
+get<T>(id: string, _resolving?: Set<string>): T | undefined
+```
+
+Der zweite Parameter dient der Zyklenerkennung bei der Abhängigkeitsauflösung.
+Wer die Klasse ableitet und `get` überschreibt, muss ihn kennen und
+durchreichen — sonst bricht die Auflösung verschachtelter `@inject`-Ketten still
+ab. Aus dem Interface geht das nicht hervor, aus der Signatur nur durch den
+Unterstrich-Präfix, der üblicherweise „ungenutzt" bedeutet.
+
+**Vorschlag.** Entweder den Zustand in eine private Methode verlagern, sodass die
+öffentliche `get`-Signatur dem Interface entspricht, oder den Parameter
+dokumentieren und im Interface führen. Erste Variante wäre uns lieber — dann ist
+`get` sauber überschreibbar. Mit FR-1 verliert der Punkt allerdings an Gewicht,
+weil wir dann gar nicht mehr ableiten müssten.
+
+---
+
+## FR-3 — Aufzählbarkeit fremder Bindungen (klein, optional)
+
+`getServiceIds()` liefert die IDs der eigenen Registry. Für Diagnosezwecke
+(„welche Dienste kennt die Anwendung gerade?") wäre es hilfreich, wenn ein
+Fallback-Resolver aus FR-1 optional auch eine Aufzählung beisteuern könnte:
+
+```typescript
+interface FallbackResolver {
+  has(id: string): boolean
+  get<T>(id: string): T | undefined
+  ids?(): string[]        // optional
+}
+```
+
+Geringe Priorität — nur für Diagnose relevant.
+
+---
+
+## Ausdrücklich *kein* Feature Request
+
+Beim Abgleich mit dem, was unsere Anwendung an Inversify tatsächlich nutzt, haben
+sich diese anfänglichen Bedenken erledigt:
+
+| Erwartet als Lücke | Ergebnis |
+|---|---|
+| `toFactory` (29 Verwendungen) — Factories mit Argumenten | Kein Problem. `register(id, fn)` nimmt beliebige Werte, also auch eine parametrierte Factory. Der Umweg über eine eigene Factory-Bindung entfällt sogar. |
+| `multiInject` (2 Verwendungen) | `getAll(idPattern)` mit Wildcard deckt den Fall ab. |
+| `tagged` / `named` (2 / 3 Verwendungen) | Kein Äquivalent — betrifft aber ausschließlich `RootService`, der im Projekt auskommentiert und ungenutzt ist. Kein Bedarf. |
+| Scopes `singleton` / `transient` | Vollständig vorhanden, inklusive Auflösungsreihenfolge `options.scope` > Decorator > Default. |
+| Konstruktor-Injektion | Vorhanden und getestet (`decorators.test.ts`, `integration.test.ts`). |
+
+`DefaultServiceRegistry` deckt den Funktionsumfang ab, den diese Anwendung
+braucht. Die offenen Punkte betreffen ausschließlich die **Migration** dorthin,
+nicht den Zielzustand.

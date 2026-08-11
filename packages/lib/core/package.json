@@ -27,6 +27,9 @@
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
   },
+  "dependencies": {
+    "@eclipse-daanse/tsm": "0.0.1-next.2"
+  },
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
