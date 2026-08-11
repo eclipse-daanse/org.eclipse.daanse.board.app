@@ -13,6 +13,15 @@ entfallen. Besonders hilfreich war die Kompatibilitätsschicht für
 Die folgenden Punkte sind beim Einbau aufgefallen, in der Reihenfolge ihrer
 Auswirkung. Jeder ist mit einem lauffähigen Minimalbeispiel belegt.
 
+**Eingereicht am 11.08.2026** als Issues (Account `vwfox`, auf Englisch):
+
+| | Issue |
+|---|---|
+| FR-1 | [#65 — eGenericType leaves the feature without any eType](https://github.com/eclipse-fennec/emf.ts/issues/65) |
+| FR-2 | [#66 — Nested model elements (EOperation, EParameter) load as DynamicEObject](https://github.com/eclipse-fennec/emf.ts/issues/66) |
+| FR-3 | [#67 — registerPackage() missing on a ResourceSet's package registry](https://github.com/eclipse-fennec/emf.ts/issues/67) |
+| Anmerkungen | [#68 — Docs: mixed EList/array returns, and latest predates the masagroup compatibility layer](https://github.com/eclipse-fennec/emf.ts/issues/68) |
+
 ---
 
 ## FR-1 — `eGenericType` lässt das Feature ohne `eType` zurück
