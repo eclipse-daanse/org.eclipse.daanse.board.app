@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/PivotTable#//LevelStyle'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//LevelStyle'})
 export class LevelStyle {
 
   @Attribute() level?: number;

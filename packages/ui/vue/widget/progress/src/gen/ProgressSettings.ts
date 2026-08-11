@@ -28,7 +28,7 @@ import {HorizontalAlign} from "./HorizontalAlign"
 import {VerticalAlign} from "./VerticalAlign"
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/progresswidgets#//ProgressSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings'})
 export class ProgressSettings {
   @Reference('VariableWrapper') progress: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') fillColor: VariableWrapper<string> = new VariableWrapper<string>();

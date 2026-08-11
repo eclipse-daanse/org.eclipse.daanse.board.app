@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {PubSubConnection} from ''
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://example.com/twowayconnection#//TwoWayConnection'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.lib.connection.twowayconnection#//TwoWayConnection'})
 export abstract class TwoWayConnection extends PubSubConnection {
 
   @Attribute() ready?: boolean;

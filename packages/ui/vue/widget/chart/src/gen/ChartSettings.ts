@@ -26,7 +26,7 @@ Contributors: Smart City Jena
 import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
-@ModelClass({type:'http://www.example.org/chartsettings#//ChartSettings'})
+@ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings'})
 export class ChartSettings {
 
   @Documentation("Per-series configuration (chart type, x-axis assignment, styling)")
