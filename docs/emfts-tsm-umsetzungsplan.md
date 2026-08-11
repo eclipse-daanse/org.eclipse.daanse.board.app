@@ -236,12 +236,47 @@ einschließlich `app.default`.
 
 ### A4 — Layering-Verletzung auflösen (S10)
 
-`packages/lib/factory/variableWrapper` hängt an
-`org.eclipse.daanse.board.app.ui.vue.composables`. Die benötigte Funktionalität
-identifizieren und entweder nach `lib` ziehen oder das Paket nach `ui` verschieben.
+**Status: erledigt** (Commit `6a5ee935`). `packages/lib/**` enthält jetzt weder
+eine `ui`-Abhängigkeit noch `vue`.
 
-**Akzeptanzkriterium:** keine `lib → ui`-Kante mehr; `packages/lib/**` enthält kein
-`vue` als Abhängigkeit.
+Die Ursache war gemischt, weshalb keine der beiden im Plan angedachten Varianten
+allein gereicht hätte: `VariableWrapper` ist **Vue-frei** und hängt nur an
+`lib.variables`, `VariableComplexStringWrapper` importiert Vue **zur Laufzeit**.
+
+- `VariableWrapper` wanderte nach `lib/variables`. `ui.vue.composables`
+  re-exportiert ihn, damit die rund 38 bestehenden Importstellen — viele davon
+  generiert — unverändert gültig bleiben.
+- Die Factory kennt `VariableComplexStringWrapper` nicht mehr fest. Sie behandelt
+  `VariableWrapper` selbst, weil nur sie das `VariableRepository` für die
+  Referenzauflösung hat, und nimmt weitere Typen über
+  `registerWrapperType(WrapperTypeI)` entgegen. Die App registriert den
+  Vue-gebundenen Wrapper in `main.ts`.
+
+**Verifiziert:** Vollbuild 133/133; App startet im Dev-Server, rendert und meldet
+keinen JS-Fehler — `main.ts` läuft also bis zum abschließenden `app.mount()`
+durch. Das Bundle schrumpft um 383 kB, weil `lib` nicht mehr das Vue-Paket
+mitzieht.
+
+**Nebenbefund mit Folgen für B2 — der globale Container ist nicht global.**
+Beim Versuch, die umgebaute Factory mit einem Unit-Test abzusichern, zeigte
+sich: `lib.core` lieferte kein `exports`-Feld, weshalb Node die UMD-Variante
+lud. Nachgerüstet nach dem Muster von `ui.vue.composables`. Der Test scheiterte
+dennoch, und die Gegenprobe erklärt warum:
+
+```
+esm.container === cjs.container  →  false
+```
+
+ESM- und CJS-Build von `lib.core` erzeugen **zwei verschiedene
+Container-Instanzen**. In der App fällt das nicht auf, weil dort alles ESM ist —
+aber jeder Test-, SSR- oder Node-Kontext bekommt einen zweiten Container. Das
+verschärft S4 über das dort Beschriebene hinaus und ist ein zusätzliches
+Argument für B2: eine `ServiceRegistry` mit klar definiertem Besitzer statt
+eines Modul-Singletons, dessen Identität vom Modulformat abhängt.
+
+Ein Unit-Test der Factory wurde deshalb **nicht** hinterlassen — er wäre nur mit
+Kunstgriffen lauffähig gewesen. Er ist nach B3/B4 nachzuholen, wenn die Pakete
+nicht mehr beim Import auf den Container zugreifen.
 
 ### A5 — Entscheidungsvorlage für Stufe 1 (Generator)
 
