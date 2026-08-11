@@ -13,9 +13,9 @@
 
 import ProgressWidget from './ProgressWidget.vue'
 import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/progress.svg'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IProgressSettings {
   progress: string
@@ -34,13 +34,12 @@ interface IProgressSettings {
   textColor?: string
 }
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
 import { ProgressWidgetInterface } from './api/ProgressWidgetInterface'
 
-const register = () => {
-  console.log('registering Progress widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('ProgressWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('ProgressWidget', {
     component: ProgressWidget,
     settingsComponent: ProgressWidgetSettings,
     supportedDSTypes: [],
@@ -48,14 +47,18 @@ const register = () => {
     name: 'Progress'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('ProgressWidget', ProgressWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('ProgressWidget', ProgressWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('ProgressWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('ProgressWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('ProgressWidget')
+}
 
 export { ProgressWidget, ProgressWidgetSettings }
 export type { IProgressSettings }

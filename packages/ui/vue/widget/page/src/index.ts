@@ -9,31 +9,27 @@ Contributors: Smart City Jena
 */
 
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 //@ts-ignore
 import Icon from './assets/progress.svg'
 import PageWidget from './PageWidget.vue'
 import PageWidgetSettings from './PageWidgetSettings.vue'
 import {type PageI} from './interface/PageI'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('PageWidget', {
+    component: PageWidget,
+    settingsComponent: PageWidgetSettings,
+    supportedDSTypes: [],
+    icon: Icon,
+    name:'Page'
+  })
+}
 
-
-
-  const register = () => {
-    console.log('registering Mermaid widget', container)
-    const widgetRepository = container.get<WidgetRepository>(identifier)
-    widgetRepository.registerWidget('PageWidget', {
-      component: PageWidget,
-      settingsComponent: PageWidgetSettings,
-      supportedDSTypes: [],
-      icon: Icon,
-      name:'Page'
-    })
-  }
-  register();
-
-
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('PageWidget')
+}
 
 export {
   type PageI

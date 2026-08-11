@@ -11,21 +11,20 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/text.svg'
 import TextWidget from './TextWidget.vue'
 import TextWidgetSettings from './TextWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { TextWidgetEvents } from './events/TextWidgetEvents'
 import { TextWidgetInterface } from './api/TextWidgetInterface'
 
-const register = () => {
-  console.log('registering Text widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('TextWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('TextWidget', {
     component: TextWidget,
     settingsComponent: TextWidgetSettings,
     supportedDSTypes: [],
@@ -33,14 +32,18 @@ const register = () => {
     name: 'Text'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('TextWidget', TextWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('TextWidget', TextWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('TextWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('TextWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('TextWidget')
+}
 
 export { TextWidget, TextWidgetSettings }
 

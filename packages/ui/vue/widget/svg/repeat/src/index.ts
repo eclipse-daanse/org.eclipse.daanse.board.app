@@ -13,9 +13,9 @@
 
 import RepeatableSvgWidget from './RepeatableSvgWidget.vue'
 import RepeatableSvgWidgetSettings from './RepeatableSvgWidgetSettings.vue'
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/repeatable_svg.svg'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 interface IRepeatableSVGSettings {
   src: string
@@ -31,13 +31,12 @@ interface IRepeatableSVGSettings {
   progress: string
 }
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { RepeatableSVGWidgetEvents } from './events/RepeatableSVGWidgetEvents'
 import { RepeatableSvgWidgetInterface } from './api/RepeatableSvgWidgetInterface'
 
-const register = () => {
-  console.log('registering RepeatableSVG widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('RepeatableSVGWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('RepeatableSVGWidget', {
     component: RepeatableSvgWidget,
     settingsComponent: RepeatableSvgWidgetSettings,
     supportedDSTypes: [],
@@ -45,14 +44,18 @@ const register = () => {
     name: 'RepeatableSVG'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('RepeatableSVGWidget', RepeatableSVGWidgetEvents)
 
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
   actionsRegistry.registerWidgetType('RepeatableSVGWidget', RepeatableSvgWidgetInterface, 'widget')
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('RepeatableSVGWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('RepeatableSVGWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('RepeatableSVGWidget')
+}
 
 export { RepeatableSvgWidget, RepeatableSvgWidgetSettings }
 export type { IRepeatableSVGSettings }

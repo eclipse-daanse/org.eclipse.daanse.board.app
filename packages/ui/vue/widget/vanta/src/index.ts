@@ -11,18 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/image.svg'
 import VantaWidget from './VantaWidget.vue'
 import VantaWidgetSettings from './VantaWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { VantaWidgetEvents } from './events/VantaWidgetEvents'
 
-const register = () => {
-  console.log('registering Vanta widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('VantaWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('VantaWidget', {
     component: VantaWidget,
     settingsComponent: VantaWidgetSettings,
     supportedDSTypes: [],
@@ -30,10 +29,13 @@ const register = () => {
     name: 'Vanta'
   })
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   eventRegistry.registerWidget('VantaWidget', VantaWidgetEvents)
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('VantaWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('VantaWidget')
+}
 
 export { VantaWidget, VantaWidgetSettings }

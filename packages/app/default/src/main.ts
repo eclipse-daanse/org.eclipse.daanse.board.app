@@ -110,26 +110,8 @@ import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import 'org.eclipse.daanse.board.app.lib.repository.route'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.image'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.progress'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.video'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.text.plain'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.text.rich'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.svg.base'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.table.data'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.table.pivot'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.table.kpi'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.vanta'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.code'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.rss'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.mermaid'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.chart'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.markdown'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.timeline'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.csv'
 import 'org.eclipse.daanse.board.app.ui.vue.connection.rss'
@@ -151,11 +133,7 @@ import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.ui.vue.datasource.valhalla'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.routing'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.weather'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.xmla.filters'
 import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
@@ -331,7 +309,6 @@ async function loadPackages() {
   await import("org.eclipse.daanse.board.app.ui.vue.persistence.git")
   await import("org.eclipse.daanse.board.app.lib.persistence.loader")
   await import("org.eclipse.daanse.board.app.ui.vue.page_provider")
-  await import("org.eclipse.daanse.board.app.ui.vue.widget.page")
 
 
   // Register pages after layouts are loaded

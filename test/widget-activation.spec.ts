@@ -28,7 +28,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { Container } from 'inversify'
 import { BoardServiceRegistry, ModuleBootstrapper } from 'org.eclipse.daanse.board.app.lib.core'
 import { WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 
 const stilleAusgabe = () => ({
   debug: () => {},
@@ -125,5 +125,40 @@ describe('Widget-Aktivierung', () => {
     await import('org.eclipse.daanse.board.app.ui.vue.widget.sample')
 
     expect(Object.keys(widgets.getAllWidgets())).toEqual([])
+  })
+})
+
+/*
+ * Der Vertrag gilt für die ganze Familie, nicht nur für den Piloten. Geprüft
+ * werden die Pakete, die ohne Browser-Umgebung ladbar sind - die übrigen
+ * bringen Abhängigkeiten mit (Leaflet, Vanta, Monaco), die in jsdom nicht
+ * initialisierbar sind, und werden im Vollbuild sowie im Dev-Server erfasst.
+ */
+describe('Widget-Familie', () => {
+  const pakete: Array<[string, string, () => Promise<unknown>]> = [
+    ['sample', 'SampleWidget', () => import('org.eclipse.daanse.board.app.ui.vue.widget.sample')],
+    ['image', 'ImageWidget', () => import('org.eclipse.daanse.board.app.ui.vue.widget.image')],
+    ['text.plain', 'TextWidget', () => import('org.eclipse.daanse.board.app.ui.vue.widget.text.plain')],
+    ['table.data', 'DataTableWidget', () => import('org.eclipse.daanse.board.app.ui.vue.widget.table.data')],
+    ['page', 'PageWidget', () => import('org.eclipse.daanse.board.app.ui.vue.widget.page')],
+  ]
+
+  it.each(pakete)('%s registriert und entfernt %s', async (id, typ, load) => {
+    const services = new BoardServiceRegistry(new Container())
+    const bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
+    const widgets = new WidgetRepository()
+
+    services.register(WIDGET_REPOSITORY, widgets)
+    services.register(EVENT_REGISTRY_ID, new EventRegistryDouble())
+    services.register(EVENT_ACTIONS_REGISTRY_ID, {
+      registerWidgetType: () => {},
+      unregisterWidgetType: () => {},
+    })
+
+    await bootstrapper.activateAll([{ id, load: load as never }])
+    expect(widgets.getWidget(typ), `${id} hat ${typ} nicht registriert`).toBeDefined()
+
+    await bootstrapper.deactivateAll()
+    expect(widgets.getWidget(typ), `${id} hat ${typ} nicht entfernt`).toBeUndefined()
   })
 })

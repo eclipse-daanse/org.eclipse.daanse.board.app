@@ -16,7 +16,8 @@ import { PageActionInterface } from './gen/PageActionInterface';
 import { Condition } from './manager/Condition';
 import { Comperator } from './manager/Comperator';
 import { EventRegistry, EVENT_REGISTRY, EVENT_REGISTRY_ID, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventAction, type EventActionContext, type WidgetTypeRegistration, type RegisteredInstance } from './registry/EventActionsRegistry';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, EVENT_ACTIONS_REGISTRY_ID,
+  type EventAction, type EventActionContext, type WidgetTypeRegistration, type RegisteredInstance } from './registry/EventActionsRegistry';
 import { EventManager, EVENT_MANAGER, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
 import { EventBusBridge, EVENT_BUS_BRIDGE } from './bridge/EventBusBridge';
 import { WidgetAction, ActionParameter, getWidgetActions, type WidgetActionMetadata, type ActionParameterMetadata } from './decorators/WidgetAction';
@@ -113,6 +114,7 @@ export {
   EVENT_REGISTRY,
   EVENT_REGISTRY_ID,
   EVENT_ACTIONS_REGISTRY,
+  EVENT_ACTIONS_REGISTRY_ID,
   EVENT_MANAGER,
   EVENT_BUS_BRIDGE,
   ECORE_METADATA_SERVICE,

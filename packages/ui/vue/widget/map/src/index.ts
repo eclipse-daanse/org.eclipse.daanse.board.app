@@ -11,25 +11,23 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/map.svg'
 import MapsWidget from './MapsWidget.vue'
 import MapsWidgetSettings from './MapsWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import TLCDataLabelRendererDescription from './parts/dataLabelRenderer/TLCDataLabelRendererDescription'
 import ValueUnitDataLabelRendererDescription from './parts/dataLabelRenderer/ValueUnitDataLabelRendererDescription'
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { MapWidgetEvents } from './events/MapWidgetEvents'
 import { MapWidgetInterface } from './gen/MapWidgetInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
 
-const register = () => {
-  console.log('registering Map widget', container)
-  console.log('EVENT_REGISTRY bound?', container.isBound(EVENT_REGISTRY))
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+export function activate({ services }: ActivationContext) {
+  const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
 
   useDataPointRegistry().registerDataPointRenderer(new TLCDataLabelRendererDescription())
   useDataPointRegistry().registerDataPointRenderer(new ValueUnitDataLabelRendererDescription())
@@ -53,7 +51,11 @@ const register = () => {
     })
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('MapWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('MapWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('MapWidget')
+}
 
 export { MapsWidget, MapsWidgetSettings, useDataPointRegistry }
 export type { IDataPointDescription } from './composables/IDataPointDescription'

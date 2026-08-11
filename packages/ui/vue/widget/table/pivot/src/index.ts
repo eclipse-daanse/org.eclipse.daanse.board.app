@@ -11,12 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { PivotTableEvents } from './events/PivotTableEvents'
 import { PivotTableInterface } from './gen/PivotTableInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
@@ -28,9 +28,8 @@ interface IPivotTable {
   tableState: any
 }
 
-const register = () => {
-  console.log('registering PivotTable widget', container)
-  container.get<WidgetRepository>(identifier).registerWidget('PivotTableWidget', {
+export function activate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('PivotTableWidget', {
     component: PivotTableWidget,
     settingsComponent: PivotTableWidgetSettings,
     supportedDSTypes: [],
@@ -39,8 +38,8 @@ const register = () => {
   })
 
 
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
-  const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
+  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
 
   eventRegistry.registerWidget('PivotTableWidget', PivotTableEvents)
 
@@ -53,7 +52,11 @@ const register = () => {
     })
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('PivotTableWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('PivotTableWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('PivotTableWidget')
+}
 
 export { PivotTableWidget, PivotTableWidgetSettings }
 export type { IPivotTable }

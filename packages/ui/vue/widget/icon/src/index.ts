@@ -11,12 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/icon.svg'
 import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { EventRegistry, EVENT_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { EventRegistry, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { IconWidgetEvents } from './events/IconWidgetEvents'
 
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -31,10 +31,9 @@ interface IIconSettings {
   grade: number;
 }
 
-const register = () => {
-  console.log('registering Icon widget', container)
-  const widgetRepository = container.get<WidgetRepository>(identifier)
-  const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+export function activate({ services }: ActivationContext) {
+  const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
+  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
 
   widgetRepository.registerWidget('IconWidget', {
     component: IconWidget,
@@ -48,7 +47,10 @@ const register = () => {
   eventRegistry.registerWidget('IconWidget', IconWidgetEvents)
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('IconWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('IconWidget')
+}
 
 export { IconWidget, IconWidgetSettings }
 export type { IIconSettings }

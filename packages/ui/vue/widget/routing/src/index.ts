@@ -13,29 +13,29 @@
 
 import {
   type WidgetRepository,
-  identifier,
+  WIDGET_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/routing.svg'
 import RoutingWidget from './RoutingWidget.vue'
 import RoutingWidgetSettings from './RoutingWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   EventRegistry,
-  EVENT_REGISTRY,
+  EVENT_REGISTRY_ID,
   EventActionsRegistry,
-  EVENT_ACTIONS_REGISTRY,
+  EVENT_ACTIONS_REGISTRY_ID,
 } from 'org.eclipse.daanse.board.app.lib.events'
 import { RoutingWidgetEvents } from './events/RoutingWidgetEvents'
 import { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
 
-const register = () => {
+export function activate({ services }: ActivationContext) {
   const widgetRepository =
-    container.get<WidgetRepository>(identifier)
+    services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
   const eventRegistry =
-    container.get<EventRegistry>(EVENT_REGISTRY)
+    services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
   const actionsRegistry =
-    container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+    services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
 
   widgetRepository.registerWidget('RoutingWidget', {
     component: RoutingWidget,
@@ -67,6 +67,10 @@ const register = () => {
     })
 }
 
-register()
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('RoutingWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('RoutingWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('RoutingWidget')
+}
 
 export { RoutingWidget, RoutingWidgetSettings }

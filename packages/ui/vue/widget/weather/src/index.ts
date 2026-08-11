@@ -11,21 +11,20 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 import Icon from './assets/weather.svg'
 import WeatherWidget from './WeatherWidget.vue'
 import WeatherWidgetSettings from './WeatherWidgetSettings.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import type { WeatherWidgetSettings as IWeatherWidgetSettings } from './types/WeatherWidgetSettings'
 
-import { EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { WeatherWidgetEvents } from './events/WeatherWidgetEvents'
 import { WeatherWidgetInterface } from './api/WeatherWidgetInterface'
 
-const register = () => {
+export function activate({ services }: ActivationContext) {
   try {
-    console.log('registering Weather widget', container)
-    const widgetRepository = container.get<WidgetRepository>(identifier);
+    const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY);
     console.log(widgetRepository);
     widgetRepository.registerWidget('WeatherWidget', {
       component: WeatherWidget,
@@ -36,17 +35,21 @@ const register = () => {
     })
     console.log('Weather widget registered successfully')
 
-    const eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
+    const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
     eventRegistry.registerWidget('WeatherWidget', WeatherWidgetEvents)
 
-    const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+    const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
     actionsRegistry.registerWidgetType('WeatherWidget', WeatherWidgetInterface, 'widget')
   } catch (error) {
     console.error('Failed to register Weather widget:', error)
   }
 }
 
-register();
+export function deactivate({ services }: ActivationContext) {
+  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('WeatherWidget')
+  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('WeatherWidget')
+  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('WeatherWidget')
+}
 
 export {
   WeatherWidget,
