@@ -326,8 +326,29 @@ export function deactivate(ctx: ModuleContext): void | Promise<void>
   Phase 2 der von tsm gestellte ist. `ServiceI` deckt die Semantik bereits ab und
   sollte darauf abgebildet, nicht ersetzt werden.
 
-**Akzeptanzkriterium:** eine Tabelle aller 71 Pakete mit Familie, Registrierungsmuster
-und geschätztem Migrationsaufwand; ein schriftlich fixierter `activate`-Vertrag.
+**Status: erledigt.** Ergebnis in [`tsm-modulvertrag.md`](./tsm-modulvertrag.md).
+
+Es sind **113 Pakete**, nicht 71 — die frühere Zahl erfasste nur
+`container.bind`/`isBound`, nicht die Pakete, die ausschließlich `container.get`
+aufrufen. Eingeteilt nach dem Ort des Zugriffs, weil daraus der Aufwand folgt:
+
+| Klasse | n | Bedeutung | Aufwand |
+|---|---:|---|---|
+| A — nur `bind` | 17 | idempotent, keine Auflösung beim Import | trivial |
+| B — `get` in einer Funktion | 62 | faktisch schon ein `activate`, nur selbst aufgerufen | klein |
+| C — `get` auf Modulebene | 34 | erzwingt die Ladereihenfolge, Ursache der Race Condition | mittel |
+
+**Der wichtigste Befund: 62 von 113 sind bereits gekapselt.** Für die Mehrheit ist
+die Migration eine Umbenennung, kein Umbau. Die 34 kritischen Fälle sind auf vier
+Familien konzentriert (`ui/vue/lang`, `ui/vue/datasource`, `ui/vue/composer`,
+`ui/vue/connection`) und als gleichförmige Blöcke abzuarbeiten.
+
+**Zweiter Befund, mit Folgen für B3:** Den Registries fehlt überwiegend die
+Gegenoperation. `NavigationRegistry`, `RouteRegistry` und i18next können
+zurücknehmen; `DatasourceRepository` und `ConnectionRepository` nur Instanzen,
+nicht die registrierten Typen; **`WidgetRepository` kann gar nichts zurücknehmen**.
+Vor dem Piloten ist deshalb ein `unregisterWidget` zu ergänzen — sonst wäre
+`deactivate` eine Attrappe und der Pilot ohne Aussagekraft.
 
 ### B2 — ServiceRegistry-Adapter über Inversify (Entscheidung E1)
 
