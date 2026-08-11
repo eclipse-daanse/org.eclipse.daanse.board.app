@@ -59,7 +59,7 @@ Zwei getrennte Ausbaustufen, die oft in einen Topf geworfen werden:
 Arbeit; Ziel 2 ist danach überwiegend Konfiguration. Wer beides mischt, debuggt
 Ladefehler und Reihenfolgefehler gleichzeitig.
 
-### E3 — `nsURI`-Schema
+### E3 — `nsURI`-Schema  ✔ entschieden
 
 Die 41 Modelle tragen heute Platzhalter wie `http://example.com/baseconnection`.
 Vorschlag als verbindliche Konvention:
@@ -70,9 +70,11 @@ https://eclipse.dev/daanse/board/<bereich>/<paket>/<major.minor>
 
 Beispiel: `https://eclipse.dev/daanse/board/connection/rest/1.0`
 
-Die Entscheidung muss **vor A3** fallen, weil ab dann Modelle über die Registry
-aufgelöst werden und der `nsURI` zur Identität wird. Eine spätere Änderung
-invalidiert gespeicherte Boards.
+**Entschieden wurde anders** — siehe A3: die im Projekt bereits vorhandene
+Konvention `http://<paketname>` wird durchgezogen, statt ein neues Schema
+einzuführen. Ausschlaggebend war, dass 13 Modelle ihr bereits folgen und ein
+Wechsel auch `lib/events` samt hartkodierter Konstante und
+paketübergreifender Referenz angefasst hätte.
 
 ---
 
@@ -193,17 +195,44 @@ einschließlich `app.default`, also der vollständigen Anwendung.
 App-Bundle liegt bei **26,6 MB** (5,25 MB gzip) in einem einzigen Chunk. Das ist
 die konkrete Größenordnung, an der sich der Nutzen von B5 später messen lässt.
 
-### A3 — `nsURI`-Migration der 41 Modelle
+### A3 — `nsURI`-Migration
 
-Nach Entscheidung E3.
+**Status: erledigt** (Commits `b5b1b2aa`, `fb08cb14`).
 
-- `.ecore`-Dateien auf das neue Schema umstellen
-- Neu generieren, damit die `@ModelClass({type: …})`-Annotationen mitziehen
-- Prüfen, welche der 193 generierten Dateien sich ändern — die Diffs sollten
-  ausschließlich URIs betreffen
+**Entscheidung E3 gefallen:** der nsURI beginnt mit `http://<paketname>`;
+mehrere Modelle eines Pakets unterscheiden sich durch ein Suffix. Das war
+bereits die faktische Konvention von 13 Modellen — darunter `lib/events` samt
+seiner paketübergreifenden Referenz —, die deshalb unverändert blieben. Das
+ursprünglich vorgeschlagene `eclipse.dev`-Schema hätte alle 40 Modelle plus
+Code angefasst, ohne inhaltlichen Gewinn.
 
-**Akzeptanzkriterium:** kein `example.com` mehr unter `packages/**/model/*.ecore`,
-Vollbuild grün, App startet.
+Migriert: **27 Modelle und 40 generierte Dateien** (19 × `example.com`,
+7 × `www.example.org`, 1 ganz ohne Schema).
+
+**Dabei aufgedeckt und behoben — eine doppelt vergebene Identität:**
+`http://example.com/baseconnection` gehörte gleichzeitig `lib/connection/base`
+und `lib/datasource/base`. In einer gemeinsamen PackageRegistry hätte eines
+das andere verdrängt. Die Zuordnung war über die referenzierten Klassen
+eindeutig: `IBaseConnectionConfiguration` → `datasource.base`, die übrigen drei
+→ `connection.base`.
+
+**Nebeneffekt, der die Konvention nachträglich rechtfertigt:** Der Generator
+leitet auch **Import-Pfade** aus dem nsURI ab. Die bisherigen
+`import … from 'example.com/baseconnection'` waren nicht auflösbar und fielen
+nur deshalb nie auf, weil es reine Typ-Importe sind. Sie zeigen jetzt auf die
+tatsächlichen Pakete, die ohnehin schon als Dependency eingetragen waren.
+
+**Zwei Vorschäden**, aufgedeckt weil die Verifikation die Modelle erstmals
+wirklich *lädt* statt sie zu durchsuchen (separat in `b5b1b2aa`): `widget/icon`
+fehlte ein `</eClassifiers>`, `widget/map` hatte ein unescaptes `<` in einem
+Dokumentationstext. Beide Modelle waren für jeden Parser unlesbar.
+
+**Neu: `test/ecore-models.spec.ts`** sichert die Konvention repo-weit ab —
+lädt jedes Modell mit dem echten Loader und prüft Eindeutigkeit der nsURIs,
+Schema und Abwesenheit von Platzhaltern.
+
+**Verifiziert:** 4/4 Modelltests, Vollbuild mit **133/133 Turbo-Tasks**
+einschließlich `app.default`.
 
 ### A4 — Layering-Verletzung auflösen (S10)
 
