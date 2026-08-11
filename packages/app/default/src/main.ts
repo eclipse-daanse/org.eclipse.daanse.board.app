@@ -23,7 +23,13 @@ import { createPinia, setActivePinia } from 'pinia'
 import App from './App.vue'
 
 import { init } from 'org.eclipse.daanse.board.app.lib.module1'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import {
+  container,
+  identifiers,
+  services,
+  ModuleBootstrapper,
+} from 'org.eclipse.daanse.board.app.lib.core'
+import { modules } from './modules'
 import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
@@ -104,7 +110,6 @@ import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import 'org.eclipse.daanse.board.app.lib.repository.route'
-import 'org.eclipse.daanse.board.app.ui.vue.widget.sample'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.image'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.progress'
 import 'org.eclipse.daanse.board.app.ui.vue.widget.video'
@@ -356,4 +361,23 @@ registerTestActions().then(() => {
   console.error('❌ Failed to register test actions:', err)
 })
 
-app.mount('#app')
+// Module aktivieren, bevor die Oberfläche montiert wird — sonst fehlten ihre
+// Beiträge (Widgets, Datenquellen, ...) beim ersten Rendern.
+const bootstrapper = new ModuleBootstrapper(services, {
+  debug: (msg, ...args) => console.debug(msg, ...args),
+  info: (msg, ...args) => console.info(msg, ...args),
+  warn: (msg, ...args) => console.warn(msg, ...args),
+  error: (msg, ...args) => console.error(msg, ...args),
+})
+
+bootstrapper
+  .activateAll(modules)
+  .then(({ activated }) => {
+    console.log(`✅ ${activated.length} Module aktiviert`)
+  })
+  .catch((err) => {
+    console.error('❌ Modulaktivierung fehlgeschlagen:', err)
+  })
+  .finally(() => {
+    app.mount('#app')
+  })

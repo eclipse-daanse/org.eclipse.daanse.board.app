@@ -86,7 +86,43 @@ weil wir dann gar nicht mehr ableiten müssten.
 
 ---
 
-## FR-3 — Aufzählbarkeit fremder Bindungen (klein, optional)
+## FR-3 — `exports` deckt nur den ESM-Pfad ab
+
+**Problem.** `package.json` deklariert:
+
+```json
+"exports": {
+  ".":      { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+  "./vite": { "types": "./dist/vite/index.d.ts", "import": "./dist/vite/index.js" }
+}
+```
+
+Es gibt weder einen `require`- noch einen `default`-Eintrag. Wird das Paket auf
+einem CommonJS-Pfad angefordert — was in Testläufern und Node-Werkzeugen
+regelmäßig passiert, etwa wenn ein abhängiges Paket selbst als CJS geladen
+wird — bricht die Auflösung ab:
+
+```
+Error: No "exports" main defined in .../node_modules/@eclipse-daanse/tsm/package.json
+```
+
+Bei uns trat das auf, sobald ein Vitest-Lauf ein Workspace-Paket über seinen
+CJS-Einstieg lud, das seinerseits `@eclipse-daanse/tsm` importiert.
+
+**Vorschlag.** Entweder einen CJS-Build ergänzen und als `require` eintragen,
+oder — wenn das Paket bewusst ESM-only bleiben soll — zumindest einen
+`default`-Eintrag setzen, damit die Fehlermeldung aussagekräftig wird
+(„ESM-only" statt „no exports main defined"). Ersteres wäre für Konsumenten in
+gemischten Monorepos deutlich angenehmer.
+
+**Umgehung bei uns.** Kein lokaler Patch am Paket — wir lassen Tests über
+Alias auf die Quellen der Workspace-Pakete zeigen, wodurch der CJS-Pfad gar
+nicht erst betreten wird. Das war ohnehin fällig, weil derselbe CJS/ESM-Bruch
+den DI-Container doppelt entstehen ließ.
+
+---
+
+## FR-4 — Aufzählbarkeit fremder Bindungen (klein, optional)
 
 `getServiceIds()` liefert die IDs der eigenen Registry. Für Diagnosezwecke
 („welche Dienste kennt die Anwendung gerade?") wäre es hilfreich, wenn ein

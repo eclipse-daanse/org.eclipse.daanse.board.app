@@ -15,7 +15,7 @@ import { SystemActionInterface } from './gen/SystemActionInterface';
 import { PageActionInterface } from './gen/PageActionInterface';
 import { Condition } from './manager/Condition';
 import { Comperator } from './manager/Comperator';
-import { EventRegistry, EVENT_REGISTRY, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
+import { EventRegistry, EVENT_REGISTRY, EVENT_REGISTRY_ID, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventAction, type EventActionContext, type WidgetTypeRegistration, type RegisteredInstance } from './registry/EventActionsRegistry';
 import { EventManager, EVENT_MANAGER, type EventActionMapping, type ActionDefinition, type PayloadToArgMapping } from './manager/EventManager';
 import { EventBusBridge, EVENT_BUS_BRIDGE } from './bridge/EventBusBridge';
@@ -111,6 +111,7 @@ export {
   bridgeIdentifier,
   ecoreServiceIdentifier,
   EVENT_REGISTRY,
+  EVENT_REGISTRY_ID,
   EVENT_ACTIONS_REGISTRY,
   EVENT_MANAGER,
   EVENT_BUS_BRIDGE,

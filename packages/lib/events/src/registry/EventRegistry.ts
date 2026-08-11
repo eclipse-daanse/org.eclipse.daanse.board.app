@@ -212,5 +212,13 @@ export class EventRegistry {
   }
 }
 
+/**
+ * Dienst-ID im Namensraum der ServiceRegistry.
+ *
+ * `EVENT_REGISTRY` ist das dazu passende Symbol für den Inversify-Container;
+ * beide bezeichnen denselben Dienst, weil `Symbol.for` global registriert.
+ */
+export const EVENT_REGISTRY_ID = 'EventRegistry';
+
 // Symbol für Dependency Injection
-export const EVENT_REGISTRY = Symbol.for('EventRegistry');
+export const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);
