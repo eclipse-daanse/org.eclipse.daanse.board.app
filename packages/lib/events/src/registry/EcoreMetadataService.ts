@@ -11,19 +11,113 @@ Contributors: Smart City Jena
 
 import { injectable } from 'inversify';
 import {
-  EResourceSet,
+  ResourceSet,
+  Resource,
   EResourceSetImpl,
   URI,
   EPackage,
   EClass,
-  EOperation,
-  EParameter,
+  EClassifier,
   EAnnotation,
-  EDataType,
-  getEcorePackage,
+  EStructuralFeature,
   isEClass
-} from 'org.eclipse.daanse.board.app.lib.ecore';
+} from '@emfts/core';
 import eventModelContent from '../../model/EventModel.ecore?raw';
+
+const EVENTS_NS_URI = 'http://org.eclipse.daanse.board.app.lib.events';
+
+/*
+ * Reflective access helpers.
+ *
+ * When @emfts/core loads an .ecore file it materialises EPackage, EClass and
+ * EAnnotation as typed objects, but the elements nested inside a class —
+ * EOperation, EParameter and the entries of an annotation's detail map — arrive
+ * as DynamicEObject, which exposes only the reflective API (eClass/eGet).
+ *
+ * The helpers below prefer a typed accessor when the runtime offers one and
+ * fall back to the reflective API otherwise. Reading a metamodel reflectively is
+ * idiomatic EMF, and this way the code keeps working unchanged once the runtime
+ * materialises those elements as typed objects as well.
+ */
+
+interface ReflectiveEObject {
+  eClass(): EClass | null;
+  eGet(feature: EStructuralFeature): unknown;
+}
+
+function isReflective(value: unknown): value is ReflectiveEObject {
+  const candidate = value as ReflectiveEObject | null;
+  return (
+    candidate != null &&
+    typeof candidate.eClass === 'function' &&
+    typeof candidate.eGet === 'function'
+  );
+}
+
+/**
+ * Read a single feature of a metamodel element by name.
+ *
+ * @param element      the model element to read from
+ * @param featureName  name of the Ecore feature, e.g. 'eParameters'
+ * @param typedGetter  name of the typed accessor to prefer, e.g. 'getEParameters'
+ */
+function readFeature(element: unknown, featureName: string, typedGetter: string): unknown {
+  const candidate = element as Record<string, unknown> | null;
+  if (candidate == null) {
+    return undefined;
+  }
+
+  const accessor = candidate[typedGetter];
+  if (typeof accessor === 'function') {
+    return (accessor as () => unknown).call(candidate);
+  }
+
+  if (isReflective(element)) {
+    const feature = element.eClass()?.getEStructuralFeature(featureName);
+    if (feature) {
+      return element.eGet(feature);
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Normalise a multi-valued feature to a plain array — the runtime returns
+ * either a native array or an EList depending on the element.
+ */
+function toArray<T>(value: unknown): T[] {
+  if (value == null) {
+    return [];
+  }
+  if (Array.isArray(value)) {
+    return value as T[];
+  }
+
+  const list = value as { size?: () => number; get?: (index: number) => T };
+  if (typeof list.size === 'function' && typeof list.get === 'function') {
+    const result: T[] = [];
+    for (let i = 0; i < list.size(); i++) {
+      result.push(list.get(i));
+    }
+    return result;
+  }
+
+  return [];
+}
+
+/**
+ * Find an annotation of a model element by its source
+ */
+function findAnnotation(element: unknown, source: string): EAnnotation | undefined {
+  const annotations = toArray<EAnnotation>(
+    readFeature(element, 'eAnnotations', 'getEAnnotations')
+  );
+
+  return annotations.find(
+    (annotation) => readFeature(annotation, 'source', 'getSource') === source
+  );
+}
 
 export interface EcoreParameterMetadata {
   name: string;
@@ -55,7 +149,7 @@ export interface EcorePayloadMetadata {
 @injectable()
 export class EcoreMetadataService {
   private modelCache: Map<string, EPackage> = new Map();
-  private resourceSet: EResourceSet;
+  private resourceSet: ResourceSet;
 
   constructor() {
     this.resourceSet = this.createResourceSet();
@@ -64,12 +158,12 @@ export class EcoreMetadataService {
 
   /**
    * Creates a ResourceSet with registered Ecore package
+   *
+   * EResourceSetImpl registers the Ecore package and the XMI resource
+   * factory for the `.ecore` extension in its constructor.
    */
-  private createResourceSet(): EResourceSet {
-    const rs = new EResourceSetImpl();
-    const ecorePackage = getEcorePackage();
-    rs.getPackageRegistry().registerPackage(ecorePackage);
-    return rs;
+  private createResourceSet(): ResourceSet {
+    return new EResourceSetImpl();
   }
 
   /**
@@ -77,16 +171,17 @@ export class EcoreMetadataService {
    */
   private loadEventsModelSync(): void {
     try {
-      const resource = this.resourceSet.createResource(new URI('http://org.eclipse.daanse.board.app.lib.events/EventModel.ecore'));
-      // Load synchronously - the ?raw import makes it available as a string
-      resource.loadFromString(eventModelContent);
+      const resource = this.createLoadedResource(
+        `${EVENTS_NS_URI}/EventModel.ecore`,
+        eventModelContent
+      );
 
-      const contents = resource.eContents();
+      const contents = resource.getContents();
       if (contents.size() > 0) {
         const eventsPackage = contents.get(0) as EPackage;
         // Register the Events package by its nsURI so it can be resolved
-        this.resourceSet.getPackageRegistry().registerPackage(eventsPackage);
-        console.log('✅ Loaded and registered Events model package with nsURI:', eventsPackage.nsURI);
+        this.registerPackage(eventsPackage);
+        console.log('✅ Loaded and registered Events model package with nsURI:', eventsPackage.getNsURI());
       }
     } catch (error) {
       console.error('❌ Failed to load Events model:', error);
@@ -94,9 +189,40 @@ export class EcoreMetadataService {
   }
 
   /**
+   * Create a resource for the given URI and load the XMI content into it.
+   *
+   * `loadFromString` is optional on the Resource interface — only the XMI
+   * resource implementation provides it. The resource factory registered for
+   * `.ecore` returns one, so a missing method means the URI did not resolve to
+   * an XMI resource and the caller needs to know.
+   */
+  private createLoadedResource(uri: string, content: string): Resource {
+    const resource = this.resourceSet.createResource(URI.createURI(uri));
+
+    if (typeof resource.loadFromString !== 'function') {
+      throw new Error(
+        `Resource for "${uri}" does not support loading from a string; expected an XMI resource.`
+      );
+    }
+
+    resource.loadFromString(content);
+    return resource;
+  }
+
+  /**
+   * Register an EPackage in the ResourceSet's package registry under its nsURI
+   */
+  private registerPackage(pkg: EPackage): void {
+    const nsURI = pkg.getNsURI();
+    if (nsURI) {
+      this.resourceSet.getPackageRegistry().set(nsURI, pkg);
+    }
+  }
+
+  /**
    * Get the ResourceSet instance
    */
-  getResourceSet(): EResourceSet {
+  getResourceSet(): ResourceSet {
     return this.resourceSet;
   }
 
@@ -119,11 +245,10 @@ export class EcoreMetadataService {
    */
   async loadModelFromString(widgetType: string, ecoreContent: string, uri: string = 'model.ecore'): Promise<void> {
     try {
-      const resource = this.resourceSet.createResource(new URI(uri));
-      await resource.loadFromString(ecoreContent);
+      const resource = this.createLoadedResource(uri, ecoreContent);
 
       // Extract the package from the resource
-      const contents = resource.eContents();
+      const contents = resource.getContents();
       if (contents.size() > 0) {
         const pkg = contents.get(0) as EPackage;
         this.modelCache.set(widgetType, pkg);
@@ -155,7 +280,7 @@ export class EcoreMetadataService {
     const actions: EcoreActionMetadata[] = [];
 
     // Iterate through all classifiers in the package
-    const classifiers = pkg.eClassifiers;
+    const classifiers = pkg.getEClassifiers();
     for (let i = 0; i < classifiers.size(); i++) {
       const classifier = classifiers.get(i);
 
@@ -169,14 +294,17 @@ export class EcoreMetadataService {
           continue;
         }
 
-        const operations = eClass.eOperations;
+        const operations = toArray<unknown>(
+          readFeature(eClass, 'eOperations', 'getEOperations')
+        );
 
-        for (let j = 0; j < operations.size(); j++) {
-          const operation = operations.get(j);
+        for (let j = 0; j < operations.length; j++) {
+          const operation = operations[j];
+          const operationName = readFeature(operation, 'name', 'getName') as string | null;
 
           // Check if operation has WidgetAction annotation
-          const widgetActionAnnotation = this.findAnnotation(
-            operation.eAnnotations,
+          const widgetActionAnnotation = findAnnotation(
+            operation,
             'org.eclipse.daanse.board.app.lib.events/WidgetAction'
           );
 
@@ -185,22 +313,24 @@ export class EcoreMetadataService {
             const parameters: EcoreParameterMetadata[] = [];
 
             // Extract parameters
-            const eParameters = operation.eParameters;
-            for (let k = 0; k < eParameters.size(); k++) {
-              const param = eParameters.get(k);
-              const paramType = param.eType;
+            const eParameters = toArray<unknown>(
+              readFeature(operation, 'eParameters', 'getEParameters')
+            );
+            for (let k = 0; k < eParameters.length; k++) {
+              const param = eParameters[k];
+              const paramType = readFeature(param, 'eType', 'getEType') as EClassifier | null;
               const tsType = this.mapEcoreTypeToTS(paramType);
 
               // Check for ActionParameter annotation
-              const actionParamAnnotation = this.findAnnotation(
-                param.eAnnotations,
+              const actionParamAnnotation = findAnnotation(
+                param,
                 'org.eclipse.daanse.board.app.lib.events/ActionParameter'
               );
 
               // Parameter is optional if:
               // 1. lowerBound is 0, OR
               // 2. ActionParameter annotation has optional=true detail
-              const lowerBound = param.lowerBound;
+              const lowerBound = readFeature(param, 'lowerBound', 'getLowerBound');
               let optional = lowerBound === 0;
 
               if (actionParamAnnotation) {
@@ -211,7 +341,7 @@ export class EcoreMetadataService {
               }
 
               parameters.push({
-                name: param.name || `arg${k}`,
+                name: (readFeature(param, 'name', 'getName') as string) || `arg${k}`,
                 type: tsType,
                 optional,
                 index: k
@@ -219,8 +349,8 @@ export class EcoreMetadataService {
             }
 
             actions.push({
-              methodName: operation.name || `action${j}`,
-              eventType: eventType || `${widgetType}.${operation.name}`,
+              methodName: operationName || `action${j}`,
+              eventType: eventType || `${widgetType}.${operationName}`,
               parameters
             });
           }
@@ -233,26 +363,26 @@ export class EcoreMetadataService {
   }
 
   /**
-   * Find an annotation by source
-   */
-  private findAnnotation(annotations: any, source: string): EAnnotation | undefined {
-    for (let i = 0; i < annotations.size(); i++) {
-      const ann = annotations.get(i);
-      if (ann.source === source) {
-        return ann;
-      }
-    }
-    return undefined;
-  }
-
-  /**
    * Get annotation detail value by key
    */
   private getAnnotationDetail(annotation: EAnnotation, key: string): string | undefined {
-    const details = annotation.details;
-    // EMap uses get() method
-    const value = details.getValue(key);
-    return value || undefined;
+    const details = readFeature(annotation, 'details', 'getDetails');
+    if (details == null) {
+      return undefined;
+    }
+
+    // Typed EMap
+    const map = details as { getByKey?: (key: string) => string | undefined };
+    if (typeof map.getByKey === 'function') {
+      return map.getByKey(key) || undefined;
+    }
+
+    // Reflective fallback: a list of map entries carrying 'key' and 'value'
+    const entry = toArray<unknown>(details).find(
+      (candidate) => readFeature(candidate, 'key', 'getKey') === key
+    );
+    const value = entry ? readFeature(entry, 'value', 'getValue') : undefined;
+    return (value as string) || undefined;
   }
 
   /**
@@ -266,24 +396,26 @@ export class EcoreMetadataService {
     }
 
     // Find the payload class
-    const classifiers = pkg.eClassifiers;
+    const classifiers = pkg.getEClassifiers();
     for (let i = 0; i < classifiers.size(); i++) {
       const classifier = classifiers.get(i);
 
       if (isEClass(classifier)) {
         const eClass = classifier as EClass;
 
-        if (eClass.name === payloadClassName) {
+        if (eClass.getName() === payloadClassName) {
           const properties: EcorePayloadPropertyMetadata[] = [];
 
           // Extract all structural features (attributes and references)
-          const features = eClass.eAllStructuralFeatures;
-          for (let j = 0; j < features.size(); j++) {
-            const feature = features.get(j);
-            const featureName = feature.name;
-            const featureType = feature.eType;
-            const lowerBound = feature.lowerBound;
-            const upperBound = feature.upperBound;
+          const features = toArray<unknown>(
+            readFeature(eClass, 'eAllStructuralFeatures', 'getEAllStructuralFeatures')
+          );
+          for (let j = 0; j < features.length; j++) {
+            const feature = features[j];
+            const featureName = readFeature(feature, 'name', 'getName') as string;
+            const featureType = readFeature(feature, 'eType', 'getEType') as EClassifier | null;
+            const lowerBound = readFeature(feature, 'lowerBound', 'getLowerBound');
+            const upperBound = readFeature(feature, 'upperBound', 'getUpperBound') as number;
 
             // Determine TypeScript type
             let tsType = this.mapEcoreTypeToTS(featureType);
@@ -320,15 +452,20 @@ export class EcoreMetadataService {
    */
   private extendsWidgetActionInterface(eClass: EClass): boolean {
     // Check all super types
-    const superTypes = eClass.eSuperTypes;
-    for (let i = 0; i < superTypes.size(); i++) {
-      const superType = superTypes.get(i);
-      const superTypeName = superType.name;
-      const superTypeNsURI = superType.ePackage?.nsURI;
+    const superTypes = toArray<EClass>(
+      readFeature(eClass, 'eSuperTypes', 'getESuperTypes')
+    );
+    for (let i = 0; i < superTypes.length; i++) {
+      const superType = superTypes[i];
+      const superTypeName = readFeature(superType, 'name', 'getName') as string | null;
+      const superTypePackage = readFeature(superType, 'ePackage', 'getEPackage') as EPackage | null;
+      const superTypeNsURI = superTypePackage
+        ? (readFeature(superTypePackage, 'nsURI', 'getNsURI') as string | null)
+        : null;
 
       // Check if this is WidgetActionInterface from events package
       if (superTypeName === 'WidgetActionInterface' &&
-          superTypeNsURI === 'http://org.eclipse.daanse.board.app.lib.events') {
+          superTypeNsURI === EVENTS_NS_URI) {
         return true;
       }
 
@@ -343,10 +480,11 @@ export class EcoreMetadataService {
   /**
    * Map Ecore data types to TypeScript types
    */
-  private mapEcoreTypeToTS(eType: any): string {
+  private mapEcoreTypeToTS(eType: EClassifier | null | undefined): string {
     if (!eType) return 'any';
 
-    const typeName = eType.name ? eType.name : String(eType);
+    const name = readFeature(eType, 'name', 'getName') as string | null;
+    const typeName = name ? name : String(eType);
 
     const typeMap: Record<string, string> = {
       'EString': 'string',
@@ -365,7 +503,7 @@ export class EcoreMetadataService {
       'EJavaObject': 'any'
     };
 
-    return typeMap[typeName] || typeName;
+    return typeMap[typeName as string] || (typeName as string);
   }
 
   /**
