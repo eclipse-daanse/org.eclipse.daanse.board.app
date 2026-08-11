@@ -171,14 +171,27 @@ geklärt.
 
 ### A2 — `lib/ecore` entfernen
 
-**Freigegeben** — A1 ist grün, `lib/events` hat keinen Bezug mehr auf `lib/ecore`.
+**Status: erledigt** (Commit `ebb2c8a9`). Entfernt wurden 210 getrackte Dateien mit
+33.247 Zeilen; ein Vite-Lib-Build weniger. Damit gibt es nur noch eine
+Ecore-Runtime im Projekt.
 
-- `packages/lib/ecore` löschen — 355 Dateien, ~26.000 LOC, ein Build weniger
-- Abhängigkeitseintrag in `packages/lib/events/package.json` austauschen
-- `packages/lib/ecore/vite.config.ts` und die Referenz in der Workspace-Liste bereinigen
+Mit dem Paket verschwand auch sein Ausschluss aus `.licenserc.yaml`. Der
+Lizenz-Nebenbefund aus A1 hat sich dabei bestätigt: das Paket war genau deshalb
+vom Header-Check ausgenommen, weil es MPL-2.0-Fremdcode war. Das Repo ist jetzt
+durchgängig EPL-2.0.
 
-**Akzeptanzkriterium:** Vollbuild grün, `grep -r "lib.ecore" packages` liefert keine
-Treffer mehr.
+`lerna.json` und die Workspace-Liste brauchten keine Pflege — beide verwenden
+`packages/**`.
+
+**Verifiziert:** keine Referenz mehr in Code oder Konfiguration (verbleibende
+Treffer sind Dokumentation und ein historischer Testkommentar), `lib/events` mit
+9/9 Tests, `tsc --noEmit` und `vite build` grün, sowie
+`turbo run build --filter='...lib.events'` mit **132/132 Tasks erfolgreich** —
+einschließlich `app.default`, also der vollständigen Anwendung.
+
+**Beiläufige Beobachtung aus diesem Build**, die S5/S8 beziffert: das
+App-Bundle liegt bei **26,6 MB** (5,25 MB gzip) in einem einzigen Chunk. Das ist
+die konkrete Größenordnung, an der sich der Nutzen von B5 später messen lässt.
 
 ### A3 — `nsURI`-Migration der 41 Modelle
 
