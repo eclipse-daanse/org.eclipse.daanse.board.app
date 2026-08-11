@@ -273,10 +273,18 @@ allein gereicht hätte: `VariableWrapper` ist **Vue-frei** und hängt nur an
   `registerWrapperType(WrapperTypeI)` entgegen. Die App registriert den
   Vue-gebundenen Wrapper in `main.ts`.
 
-**Verifiziert:** Vollbuild 133/133; App startet im Dev-Server, rendert und meldet
-keinen JS-Fehler — `main.ts` läuft also bis zum abschließenden `app.mount()`
-durch. Das Bundle schrumpft um 383 kB, weil `lib` nicht mehr das Vue-Paket
-mitzieht.
+**Verifiziert:** Vollbuild 133/133. Das Bundle schrumpft um 383 kB, weil `lib`
+nicht mehr das Vue-Paket mitzieht.
+
+> **Korrektur (bei B3 aufgefallen).** Die ursprünglich hier angeführte
+> Laufzeitprüfung war wertlos: Der Dev-Server wurde auf Port 5199 gestartet, den
+> zu diesem Zeitpunkt bereits `EMFTs/uimodel-composer/editor` belegte. Geprüft
+> wurde also eine fremde Anwendung — erkennbar erst am Seitentitel
+> („UIModel & Style Editor" statt „Daanse Floor"). Die Aussage selbst ist
+> inzwischen belegt: Bei der B3-Verifikation lief die Board-App mit allen
+> A4-Änderungen auf einem freien Port, mountete und registrierte ihre 24
+> Widgets. Lehre für weitere Prüfungen: Port mit `--strictPort` erzwingen und
+> die Identität der Seite bestätigen, bevor aus ihr etwas geschlossen wird.
 
 **Nebenbefund mit Folgen für B2 — der globale Container ist nicht global.**
 Beim Versuch, die umgebaute Factory mit einem Unit-Test abzusichern, zeigte
