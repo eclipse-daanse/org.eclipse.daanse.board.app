@@ -1,0 +1,177 @@
+# Feature Requests an @emfts/core
+
+Ziel-Repository: <https://github.com/eclipse-fennec/emf.ts>
+Getestet gegen: `@emfts/core@0.1.1-next.16` (dist-tag `next`)
+Kontext: Ablösung der projekteigenen Ecore-Runtime durch `@emfts/core` in der
+Daanse Board App ([Umsetzungsplan](./emfts-tsm-umsetzungsplan.md), Strang A)
+
+Vorab: Die Umstellung ist **gelungen**. `@emfts/core` trägt als alleinige
+Ecore-Runtime; die projekteigene Portierung (~26.000 LOC) konnte ersatzlos
+entfallen. Besonders hilfreich war die Kompatibilitätsschicht für
+`@masagroup/ecore` — sie hat den Aufwand von Wochen auf Tage gedrückt.
+
+Die folgenden Punkte sind beim Einbau aufgefallen, in der Reihenfolge ihrer
+Auswirkung. Jeder ist mit einem lauffähigen Minimalbeispiel belegt.
+
+---
+
+## FR-1 — `eGenericType` lässt das Feature ohne `eType` zurück
+
+**Schwere:** hoch — es gehen Modellinformationen verloren, und zwar still.
+
+Ein `EStructuralFeature`, dessen Typ über `eGenericType` statt über das
+Attribut `eType` angegeben ist, kommt nach dem Laden **ohne jeden Typ** an.
+Nicht nur die Typargumente fehlen, sondern `getEType()` liefert `null`.
+
+### Reproduktion
+
+```typescript
+import { EResourceSetImpl, URI, type EPackage, type EClass } from '@emfts/core'
+
+const MODELL = `<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    name="t" nsURI="http://test/generics" nsPrefix="t">
+  <eClassifiers xsi:type="ecore:EClass" name="Holder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" containment="false">
+      <eGenericType eClassifier="http://test/generics#//Box">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="plain"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Box">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+</ecore:EPackage>`
+
+const rs = new EResourceSetImpl()
+const resource = rs.createResource(URI.createURI('generics.ecore'))
+resource.loadFromString!(MODELL)
+
+console.log('Ladefehler:', resource.getErrors().length)
+const holder = (resource.getContents().get(0) as EPackage)
+  .getEClassifiers().get(0) as EClass
+for (const f of holder.getEStructuralFeatures()) {
+  console.log(f.getName(), '->', f.getEType()?.getName() ?? 'NULL')
+}
+```
+
+**Ist:**
+
+```
+Ladefehler: 3
+  [Line 8, Col 103] Feature 'eTypeArguments' has no parent object
+  Unknown feature 'eGenericType' for type 'EReference'
+label -> NULL
+plain -> EString
+```
+
+**Soll:** `label -> Box`. Die Typargumente dürfen aus unserer Sicht gern
+zunächst ignoriert werden — entscheidend ist, dass der Basistyp erhalten bleibt.
+
+### Auswirkung bei uns
+
+Acht Widget-Modelle typisieren ihre Konfigurationsfelder als
+`VariableWrapper<EString>`, also über `eGenericType`. Alle diese Felder erscheinen
+in der ausgelesenen Metadatenstruktur als `any` statt als ihr tatsächlicher Typ.
+Beim Start der Anwendung erzeugt das zusätzlich dutzende Konsolenfehler.
+
+Der Fehler ist deshalb unangenehm, weil er nicht zum Abbruch führt: Das Modell
+lädt, die Klasse existiert, nur der Typ ist weg.
+
+### Vorschlag
+
+Im XMI-Handler `eGenericType` als Kindelement von `EStructuralFeature`,
+`EOperation`, `EParameter` und `EClass` (`eSuperTypes`) verstehen und mindestens
+das `eClassifier`-Attribut auf `eType` abbilden. Vollständige Generics-Unterstützung
+(`EGenericType` als eigenes Modellelement mit `eTypeArguments`,
+`eTypeParameters`, `eBound`) wäre die saubere Lösung; die Interfaces
+`EGenericType` und `ETypeParameter` sind ja bereits vorhanden und werden aus
+`index.ts` exportiert — sie werden vom Loader nur nicht gefüllt.
+
+---
+
+## FR-2 — Verschachtelte Modellelemente kommen als `DynamicEObject`
+
+**Schwere:** mittel — Interface-Zusagen gelten zur Laufzeit nicht.
+
+Beim Laden einer `.ecore`-Datei werden `EPackage`, `EClass` und `EAnnotation` als
+typisierte Objekte materialisiert (`BasicEPackage`, `BasicEClass`,
+`BasicEAnnotation`). Die darin verschachtelten `EOperation`, `EParameter` und die
+Einträge einer Annotation-Detail-Map dagegen als `DynamicEObject`, das nur
+`eClass()` und `eGet()` anbietet.
+
+### Reproduktion
+
+```typescript
+const op = eClass.getEOperations()[0]
+console.log(op.constructor.name)
+// -> 'DynamicEObject'
+console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(op)))
+// -> ['constructor', 'eClass', 'eGet']
+
+op.getEAnnotation('meine/quelle')
+// -> TypeError: op.getEAnnotation is not a function
+```
+
+`EModelElement` deklariert `getEAnnotation(source)`, und `BasicEOperation`
+implementiert es auch — nur erzeugt der Loader an dieser Stelle keine
+`BasicEOperation`.
+
+### Auswirkung bei uns
+
+Code, der gegen die Interfaces geschrieben ist, bricht zur Laufzeit. Wir lesen
+diese Elemente deshalb reflektiv über `eGet()` und halten uns eine kleine
+Hilfsschicht, die den typisierten Zugriff bevorzugt und sonst zurückfällt. Das
+ist tragbar — reflektives Lesen eines Metamodells ist idiomatisches EMF —, aber
+es überrascht, weil dieselbe Datei `EClass` typisiert liefert.
+
+### Vorschlag
+
+Im XMI-Loader die vorhandenen `Basic*`-Implementierungen auch für die
+verschachtelten Elemente verwenden. Sollte das aus Aufwandsgründen nicht
+kurzfristig gehen, wäre eine Notiz in der Dokumentation hilfreich, welche
+Elemente typisiert ankommen und welche nicht — dann rechnet man damit.
+
+---
+
+## FR-3 — `registerPackage()` fehlt auf der Instanz-Registry
+
+**Schwere:** gering — Bequemlichkeit.
+
+`createPackageRegistry()` und `getPackageRegistry()` liefern eine Registry mit
+`registerPackage(pkg)`, die den `nsURI` selbst aus dem Paket zieht. Die Registry
+einer `ResourceSet`-Instanz — `resourceSet.getPackageRegistry()` — hat diese
+Methode nicht, dort muss man
+
+```typescript
+const nsURI = pkg.getNsURI()
+if (nsURI) resourceSet.getPackageRegistry().set(nsURI, pkg)
+```
+
+schreiben. Da der `nsURI` ohnehin am Paket hängt, wäre `registerPackage(pkg)` auf
+`EPackageRegistry` die naheliegendere Schnittstelle — und beide Wege wären
+gleich benutzbar.
+
+---
+
+## Anmerkungen ohne Handlungsbedarf
+
+Zwei Beobachtungen, die uns beim Portieren Zeit gekostet haben und die
+vielleicht in die Dokumentation passen — als Fehler betrachten wir sie nicht:
+
+**Uneinheitliche Rückgabetypen für mehrwertige Features.**
+`EPackage.getEClassifiers()` liefert eine `EList` (Zugriff über `size()`/`get(i)`),
+`EClass.getEOperations()`, `getESuperTypes()` und `getEAllStructuralFeatures()`
+dagegen native Arrays. Beim Portieren war das die häufigste Fehlerquelle, weil
+`.size()` auf einem Array still ein `TypeError` wird. Eine Übersicht, welche
+Zugriffe was liefern, würde helfen.
+
+**`dist-tag latest` zeigt auf eine deutlich älteren Stand.** `latest` ist
+`0.1.0`, `next` ist `0.1.1-next.16`. Die Kompatibilitätsschicht für
+`@masagroup/ecore` — für uns der Grund, überhaupt umsteigen zu können — steckt
+nur in `next`. Wer `npm install @emfts/core` ausführt, bekommt sie nicht und
+schließt womöglich, sie existiere nicht.

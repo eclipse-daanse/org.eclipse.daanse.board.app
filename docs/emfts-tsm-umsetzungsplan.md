@@ -172,7 +172,8 @@ Zugriff bevorzugen und sonst auf `eGet` zurückfallen. Reflektives Lesen eines
 Metamodells ist idiomatisches EMF, und der Code bleibt unverändert gültig,
 sobald die Runtime auch diese Elemente typisiert liefert.
 
-**Offene Punkte für einen Beitrag an `@emfts/core`:**
+**Offene Punkte für einen Beitrag an `@emfts/core`** — ausgearbeitet mit
+Minimalbeispielen in [`emfts-feature-requests.md`](./emfts-feature-requests.md):
 
 1. `EOperation`, `EParameter` und Detail-Einträge beim XMI-Laden typisiert
    materialisieren — die `Basic*`-Klassen existieren bereits, der Loader nutzt
