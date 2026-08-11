@@ -179,6 +179,19 @@ sobald die Runtime auch diese Elemente typisiert liefert.
    sie an dieser Stelle nur nicht.
 2. `registerPackage()` auch auf der Instanz-Registry anbieten; heute existiert
    sie nur auf der über `createPackageRegistry()` erzeugten Variante.
+3. **EMF-Generics** (`eGenericType`, `eTypeArguments`) werden vom XMI-Loader
+   nicht verstanden. Beim Start der Anwendung meldet die Konsole dutzendfach
+   `Unknown feature 'eGenericType' for type 'EReference'`. Betroffen sind acht
+   Widget-Modelle (chart, progress, svg/base, svg/repeat, table/pivot,
+   text/plain, video, wrapper), die damit `VariableWrapper<T>` typisieren.
+   Noch zu klären: ob dadurch Metadaten verlorengehen oder nur die Typparameter
+   ignoriert werden.
+
+**Damit zusammenhängend, aber eigenständig:** Die betroffenen `eGenericType`
+verweisen auf `org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper`.
+Für `ui.vue.composables` existiert jedoch gar kein Ecore-Modell — die Referenz
+war also schon vor allen Umbauten unauflösbar. Seit A4 liegt `VariableWrapper`
+zudem in `lib.variables`. Beim Aufräumen ist beides zusammen zu korrigieren.
 
 **Nebenbefund (Lizenz, unabhängig von der Portierung):** `packages/lib/ecore`
 trägt in den Dateiköpfen **MPL-2.0 (MASA Group)**, nicht EPL-2.0 wie der Rest
@@ -408,9 +421,23 @@ Parallel entsteht in `app/default` ein schlanker Bootstrapper, der die Liste in
 definierter Reihenfolge aktiviert und **auf `await` besteht** — das beseitigt die
 Race Condition aus `main.ts:68`.
 
-**Akzeptanzkriterium:** kein `import '…widget…'` mehr in `main.ts`; die App startet
-mit identischem Widget-Angebot; ein Widget lässt sich zur Laufzeit deaktivieren und
-verschwindet aus der Palette.
+**Status: erledigt** (Commits `66c301f4`, `8e42e99d`). Alle drei
+Akzeptanzkriterien erfüllt: `main.ts` enthält keinen Widget-Import mehr, die App
+startet mit denselben 24 Widgets wie zuvor, und die Rücknahme ist wirksam.
+
+22 Pakete wurden skriptgestützt umgestellt, `page` manuell — dort war der
+Selbstaufruf eingerückt, weshalb das Skript es übersprungen statt geraten hat.
+`wrapper` und `layout/grid` blieben unberührt, da sie nichts registrieren.
+
+Was das Skript nicht erfassen konnte und im Build auffiel: eine Debug-Zeile mit
+`container.isBound` in `map`, 17 tote `console.log(…, container)`, ein
+mehrzeiliger Import in `routing`, sowie ein fehlender Re-Export von
+`EVENT_ACTIONS_REGISTRY_ID`. Letzterer blieb in den Tests unsichtbar, weil die
+seit B3 gegen die Quellen laufen — nur der Build nutzt `dist`. Beide Prüfwege
+haben also eigenen Wert.
+
+Nebenbei ergänzt: 20 Widget-Pakete deklarieren `lib.core` jetzt als
+Abhängigkeit; sie importierten es zuvor, ohne es zu deklarieren.
 
 ### B4 — Restliche Familien nachziehen
 
