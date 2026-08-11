@@ -96,33 +96,82 @@ Das ist die Voraussetzung dafür, dass A1 realistisch in Tagen und nicht in Woch
 `packages/lib/events/src/registry/EcoreMetadataService.ts`. Sie ist der einzige echte
 Konsument von `lib/ecore` und benutzt dessen API breit genug, um als Prüfstein zu taugen.
 
-**Konkrete API-Abweichungen, die dabei zu überbrücken sind** (aus dem Quellvergleich,
-noch nicht kompiliert verifiziert):
+**Status: erledigt** (Commits `d1be7c77`, `1c3ea123`). Vorgehen war: erst ein
+runtime-neutraler Referenztest gegen die alte Implementierung (9 Zusicherungen,
+grün), dann der Runtime-Tausch, dann derselbe Test unverändert gegen
+`@emfts/core` — ebenfalls grün. Zusätzlich verifiziert: `tsc --noEmit`,
+`vite build`, und `vue-tsc` auf `ui.vue.widget.map` als abhängigem Konsumenten.
 
-| Board App heute | `@emfts/core` | Anpassung |
-|---|---|---|
-| `EResourceSet` (Typ) | `ResourceSet` | Import umbenennen |
-| `resource.eContents()` → `EList` mit `.size()` / `.get(0)` | `eContents(): EObject[]` | `.length` / `[0]` |
-| `registry.registerPackage(pkg)` | `EPackageRegistry.set(nsURI, pkg)` | Aufruf ändern **oder** `registerPackage` in `@emfts/core` nachrüsten |
-| `pkg.nsURI` (Property) | vermutlich `getNsURI()` | beim Portieren verifizieren |
-| `resource.loadFromString(...)` | in `Resource` als **optional** deklariert (`loadFromString?`) | Typ-Narrowing oder Cast auf `XMIResource` |
+**Ergebnis: `@emfts/core` trägt.** Verwendet wurde `0.1.1-next.16` von npm
+(`dist-tag: next`; `latest` ist mit `0.1.0` deutlich älter und ohne die
+Kompatibilitätsschicht).
 
-**Akzeptanzkriterium:** `lib/events` baut und seine Tests laufen gegen `@emfts/core`,
-ohne dass `lib/ecore` importiert wird. Die Ecore-Modelle `EventModel.ecore`,
-`MappingModel.ecore` und `SystemActions.ecore` laden und liefern dieselben
-Action-Metadaten wie vorher.
+**Die tatsächlichen API-Abweichungen** — es waren 18, nicht 5. Die wichtigste
+Erkenntnis: `@emfts/core` verwendet durchgängig **Java-Style-Getter**, wo
+`lib/ecore` Properties anbot.
 
-**Ergebnis der Stufe:** belastbare Antwort auf die Frage, ob `@emfts/core` als
-alleinige Runtime trägt. Fällt sie negativ aus, ist der Rest von Strang A neu zu
-bewerten — deswegen steht A1 vorn und nicht das Löschen.
+| Board App (lib/ecore) | `@emfts/core` |
+|---|---|
+| `EResourceSet` (Typ) | `ResourceSet` |
+| `new URI(s)` | `URI.createURI(s)` — Konstruktor ist privat |
+| `resource.eContents()` | `resource.getContents()` (bleibt `EList`) |
+| `registry.registerPackage(pkg)` | `registry.set(nsURI, pkg)` |
+| `registry.getPackage(uri)` | `registry.getEPackage(uri)` |
+| `pkg.eClassifiers` | `pkg.getEClassifiers()` → `EList` |
+| `pkg.nsURI` | `pkg.getNsURI()` |
+| `eClass.name` | `eClass.getName()` |
+| `eClass.eOperations` | `getEOperations()` → **Array** |
+| `eClass.eSuperTypes` | `getESuperTypes()` → **Array** |
+| `eClass.eAllStructuralFeatures` | `getEAllStructuralFeatures()` → **Array** |
+| `classifier.ePackage` | `classifier.getEPackage()` |
+| `op.eParameters` | `getEParameters()` → **Array** |
+| `param.eType` / `.lowerBound` / `.name` | `getEType()` / `getLowerBound()` / `getName()` |
+| `feature.upperBound` | `getUpperBound()` |
+| `ann.source` | `ann.getSource()` |
+| `ann.details.getValue(k)` | `ann.getDetails().getByKey(k)` |
+| `resource.loadFromString(…)` | dort als **optional** deklariert (`loadFromString?`) |
 
-**Was bei Lücken zu tun ist:** fehlende APIs gehören als Beitrag nach `@emfts/core`
-(z. B. `registerPackage` als Bequemlichkeitsmethode), nicht als lokaler Workaround
-in die Board App.
+Beachtenswert: Die Rückgabetypen sind **uneinheitlich** — `getEClassifiers()`
+liefert eine `EList` mit `size()`/`get()`, `getEOperations()` dagegen ein
+natives Array. Das ist beim Portieren die häufigste Fehlerquelle.
+
+**Der eigentliche Befund — teilweise typisierte Materialisierung**
+
+Beim Laden einer `.ecore`-Datei materialisiert `@emfts/core` `EPackage`,
+`EClass` und `EAnnotation` als typisierte Objekte (`BasicEClass`,
+`BasicEAnnotation`), die darin verschachtelten `EOperation`, `EParameter` und
+die Einträge der Detail-Map dagegen als `DynamicEObject` — mit ausschließlich
+`eClass()` und `eGet()`. Ein `operation.getEAnnotation(source)`, das die
+`EModelElement`-Schnittstelle zusagt, schlägt deshalb zur Laufzeit fehl.
+
+Gelöst über zwei kleine Helfer (`readFeature`, `toArray`), die den typisierten
+Zugriff bevorzugen und sonst auf `eGet` zurückfallen. Reflektives Lesen eines
+Metamodells ist idiomatisches EMF, und der Code bleibt unverändert gültig,
+sobald die Runtime auch diese Elemente typisiert liefert.
+
+**Offene Punkte für einen Beitrag an `@emfts/core`:**
+
+1. `EOperation`, `EParameter` und Detail-Einträge beim XMI-Laden typisiert
+   materialisieren — die `Basic*`-Klassen existieren bereits, der Loader nutzt
+   sie an dieser Stelle nur nicht.
+2. `registerPackage()` auch auf der Instanz-Registry anbieten; heute existiert
+   sie nur auf der über `createPackageRegistry()` erzeugten Variante.
+
+**Nebenbefund (Lizenz, unabhängig von der Portierung):** `packages/lib/ecore`
+trägt in den Dateiköpfen **MPL-2.0 (MASA Group)**, nicht EPL-2.0 wie der Rest
+des Projekts. Das ist vor A2 kurz zu prüfen — es spricht zusätzlich für das
+Entfernen des Pakets.
+
+**Nebenbefund (Modellfehler):** In `SystemActions.ecore` trägt die Klasse
+`PageActions` kein `eSuperTypes`, obwohl ihre Operation `setPageVariable` eine
+`WidgetAction`-Annotation hat. Sie wird deshalb vom Service übersprungen — es
+werden 2 statt 3 Aktionen gefunden. Das Verhalten ist im Referenztest
+festgehalten; ob das Modell oder die Erwartung falsch ist, gehört separat
+geklärt.
 
 ### A2 — `lib/ecore` entfernen
 
-Erst nach grünem A1.
+**Freigegeben** — A1 ist grün, `lib/events` hat keinen Bezug mehr auf `lib/ecore`.
 
 - `packages/lib/ecore` löschen — 355 Dateien, ~26.000 LOC, ein Build weniger
 - Abhängigkeitseintrag in `packages/lib/events/package.json` austauschen
