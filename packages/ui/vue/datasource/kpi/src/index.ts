@@ -11,25 +11,35 @@
  *   Smart City Jena
  **********************************************************************/
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as KpiTmpDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
 
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('KpiPreview')
 const settingsSymbol = Symbol.for('KpiSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('KpiPreview', Preview)
+  services.register('KpiSettings', Settings)
 
-datasourceRepository.registerDatasourceType('KPI', {
-  Store: KpiTmpDatasourceIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('KPI', {
+      Store: KpiTmpDatasourceIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('KPI')
+  services.unregister('KpiPreview')
+  services.unregister('KpiSettings')
+}

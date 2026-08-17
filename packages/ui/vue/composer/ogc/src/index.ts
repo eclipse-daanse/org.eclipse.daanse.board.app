@@ -11,26 +11,35 @@
  *   Smart City Jena
  **********************************************************************/
 
-import Preview from './Preview.vue';
-import Settings from './Settings.vue';
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import Preview from './Preview.vue'
+import Settings from './Settings.vue'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { symbol as OgcComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.ogc'
-
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
 
 const previewSymbol = Symbol.for('OgcComposerPreview')
 const settingsSymbol = Symbol.for('OgcComposerSettings')
 
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
+export function activate({ services }: ActivationContext) {
+  services.register('OgcComposerPreview', Preview)
+  services.register('OgcComposerSettings', Settings)
 
-datasourceRepository.registerDatasourceType('OGC Composer', {
-  Store: OgcComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('OGC Composer', {
+      Store: OgcComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
 
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('OGC Composer')
+  services.unregister('OgcComposerPreview')
+  services.unregister('OgcComposerSettings')
+}

@@ -21,7 +21,10 @@ import {
   type IDatasourceRepository,
 } from './classes'
 
-const identifier = Symbol.for('DatasourceRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const DATASOURCE_REPOSITORY = 'DatasourceRepository'
+
+const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 
 if (!container.isBound(identifier)) {
   container
@@ -30,7 +33,7 @@ if (!container.isBound(identifier)) {
     .inSingletonScope()
 }
 
-export { DatasourceRepository, identifier }
+export { DatasourceRepository, identifier, DATASOURCE_REPOSITORY }
 export type {
   StoreIdentifiers,
   IDataRetrieveable,

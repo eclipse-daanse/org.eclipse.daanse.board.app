@@ -74,7 +74,6 @@ import {
   identifier as PageReoIdentifier,
   type PageRegistryI
 } from 'org.eclipse.daanse.board.app.lib.repository.page'
-loadPackages()
 // TODO: Move this to initialization of the app
 import {
   type ConnectionRepository,
@@ -110,29 +109,7 @@ import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import 'org.eclipse.daanse.board.app.lib.repository.route'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.rest'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.rest'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.xmla'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.csv'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.rss'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.rss'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.graphql'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.graphql'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.xmla'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.sql_xmla'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.ws'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.ws'
-import 'org.eclipse.daanse.board.app.ui.vue.connection.mqtt'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.chart'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.datatable'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.kpi'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.ogc'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.weather'
-import 'org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.kpi'
 
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'
-import 'org.eclipse.daanse.board.app.ui.vue.datasource.valhalla'
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
 import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
@@ -284,35 +261,37 @@ function onLoaded() {
 //   Settings: null as any,
 // })
 
-async function loadPackages() {
-  await import("org.eclipse.daanse.board.app.lib.i18next")
-  await import("org.eclipse.daanse.board.app.ui.vue.plugins.i18next")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.common.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.icon.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.image.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.progress.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.video.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.svg.base.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.svg.repeat.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en")
-  await import("org.eclipse.daanse.board.app.ui.vue.lang.text.plain.en")
-  await import('org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en')
-  await import('org.eclipse.daanse.board.app.ui.vue.lang.page.en')
-  await import("org.eclipse.daanse.board.app.lib.settings.manager")
-  await import("org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder")
+/**
+ * Grunddienste, die umgestellte Module in `activate` bereits benötigen —
+ * allen voran i18next, an das sich die Sprachmodule hängen.
+ */
+async function loadGrunddienste() {
+  await import('org.eclipse.daanse.board.app.lib.i18next')
+  await import('org.eclipse.daanse.board.app.ui.vue.plugins.i18next')
+  await import('org.eclipse.daanse.board.app.lib.settings.manager')
+}
 
-  await import("org.eclipse.daanse.board.app.lib.repository.persistence")
-  await import("org.eclipse.daanse.board.app.lib.persistence.local")
-  await import("org.eclipse.daanse.board.app.lib.persistence.util")
-  await import("org.eclipse.daanse.board.app.lib.persistence.rest")
-  await import("org.eclipse.daanse.board.app.lib.persistence.git")
-  await import("org.eclipse.daanse.board.app.ui.vue.persistence.git")
-  await import("org.eclipse.daanse.board.app.lib.persistence.loader")
-  await import("org.eclipse.daanse.board.app.ui.vue.page_provider")
+/**
+ * Pakete, die die registrierten Typen der Module bereits benutzen.
+ *
+ * Muss **nach** der Modulaktivierung laufen — zwei Beispiele aus diesem
+ * Bündel: der Endpointfinder legt beim Laden eine REST-Verbindung an, und der
+ * Persistenz-Loader stellt ein gespeichertes Board wieder her. Beides setzt
+ * registrierte Verbindungs- und Datenquellentypen voraus. Vor der Umstellung
+ * war das nur dadurch gegeben, dass jene Pakete weiter oben im Importblock
+ * standen.
+ */
+async function loadNachModulen() {
+  await import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder')
 
-
-  // Register pages after layouts are loaded
-
+  await import('org.eclipse.daanse.board.app.lib.repository.persistence')
+  await import('org.eclipse.daanse.board.app.lib.persistence.local')
+  await import('org.eclipse.daanse.board.app.lib.persistence.util')
+  await import('org.eclipse.daanse.board.app.lib.persistence.rest')
+  await import('org.eclipse.daanse.board.app.lib.persistence.git')
+  await import('org.eclipse.daanse.board.app.ui.vue.persistence.git')
+  await import('org.eclipse.daanse.board.app.lib.persistence.loader')
+  await import('org.eclipse.daanse.board.app.ui.vue.page_provider')
 }
 
 //initSettingsManager(container)
@@ -347,13 +326,19 @@ const bootstrapper = new ModuleBootstrapper(services, {
   error: (msg, ...args) => console.error(msg, ...args),
 })
 
-bootstrapper
-  .activateAll(modules)
+// Startreihenfolge, jetzt explizit statt als Nebenwirkung der Importzeilen:
+// Grunddienste, dann die Module, dann die Wiederherstellung gespeicherter
+// Boards — die setzt die registrierten Typen der Module bereits voraus.
+loadGrunddienste()
+  .then(() => bootstrapper.activateAll(modules))
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
+    return loadNachModulen()
   })
   .catch((err) => {
-    console.error('❌ Modulaktivierung fehlgeschlagen:', err)
+    // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,
+    // und ohne sie steht in der Konsole nur, welches Modul scheiterte.
+    console.error('❌ Start fehlgeschlagen:', err, '\nUrsache:', err?.cause ?? '(keine)')
   })
   .finally(() => {
     app.mount('#app')

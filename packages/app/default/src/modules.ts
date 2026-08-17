@@ -28,6 +28,150 @@ import type { ModuleEntry } from 'org.eclipse.daanse.board.app.lib.core'
  * in welcher Folge sie in der Palette erscheinen.
  */
 export const modules: ModuleEntry[] = [
+  // i18n-Ressourcen
+  {
+    id: 'ui.vue.lang.common.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.common.en'),
+  },
+  {
+    id: 'ui.vue.lang.icon.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.icon.en'),
+  },
+  {
+    id: 'ui.vue.lang.image.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.image.en'),
+  },
+  {
+    id: 'ui.vue.lang.page.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.page.en'),
+  },
+  {
+    id: 'ui.vue.lang.progress.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.progress.en'),
+  },
+  {
+    id: 'ui.vue.lang.svg.base.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.svg.base.en'),
+  },
+  {
+    id: 'ui.vue.lang.svg.repeat.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.svg.repeat.en'),
+  },
+  {
+    id: 'ui.vue.lang.text.plain.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.text.plain.en'),
+  },
+  {
+    id: 'ui.vue.lang.text.rich.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en'),
+  },
+  {
+    id: 'ui.vue.lang.video.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.video.en'),
+  },
+  {
+    id: 'ui.vue.lang.wrapper.en',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en'),
+  },
+
+  // Verbindungen (UI)
+  {
+    id: 'ui.vue.connection.graphql',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.graphql'),
+  },
+  {
+    id: 'ui.vue.connection.mqtt',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.mqtt'),
+  },
+  {
+    id: 'ui.vue.connection.rest',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.rest'),
+  },
+  {
+    id: 'ui.vue.connection.rss',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.rss'),
+  },
+  {
+    id: 'ui.vue.connection.ws',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.ws'),
+  },
+  {
+    id: 'ui.vue.connection.xmla',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.connection.xmla'),
+  },
+
+  // Datenquellen (UI)
+  {
+    id: 'ui.vue.datasource.csv',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.csv'),
+  },
+  {
+    id: 'ui.vue.datasource.graphql',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.graphql'),
+  },
+  {
+    id: 'ui.vue.datasource.kpi',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.kpi'),
+  },
+  {
+    id: 'ui.vue.datasource.ogcsta',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.ogcsta'),
+  },
+  {
+    id: 'ui.vue.datasource.rest',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.rest'),
+  },
+  {
+    id: 'ui.vue.datasource.rss',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.rss'),
+  },
+  {
+    id: 'ui.vue.datasource.sparql',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.sparql'),
+  },
+  {
+    id: 'ui.vue.datasource.sql_xmla',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.sql_xmla'),
+  },
+  {
+    id: 'ui.vue.datasource.valhalla',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.valhalla'),
+  },
+  {
+    id: 'ui.vue.datasource.ws',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.ws'),
+  },
+  {
+    id: 'ui.vue.datasource.xmla',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.xmla'),
+  },
+
+  // Composer (UI)
+  {
+    id: 'ui.vue.composer.chart',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.chart'),
+  },
+  {
+    id: 'ui.vue.composer.datatable',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.datatable'),
+  },
+  {
+    id: 'ui.vue.composer.kpi',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.kpi'),
+  },
+  {
+    id: 'ui.vue.composer.ogc',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.ogc'),
+  },
+  {
+    id: 'ui.vue.composer.ogcsta2chart',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.ogcsta2chart'),
+  },
+  {
+    id: 'ui.vue.composer.weather',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.composer.weather'),
+  },
+
   // Widgets
   {
     id: 'ui.vue.widget.sample',

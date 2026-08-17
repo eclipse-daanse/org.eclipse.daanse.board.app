@@ -15,7 +15,10 @@ import { VariableRepository, type VariableConfig } from './classes/VariableRepos
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { registerVariableActions } from './actions/VariableActions'
 
-const identifier = Symbol.for('VariableRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const VARIABLE_REPOSITORY = 'VariableRepository'
+
+const identifier = Symbol.for(VARIABLE_REPOSITORY)
 
 if (!container.isBound(identifier)) {
   console.log(VariableRepository)
@@ -26,4 +29,4 @@ if (!container.isBound(identifier)) {
 // Register variable actions when the package is imported
 registerVariableActions()
 
-export { VariableRepository, type VariableConfig, identifier }
+export { VariableRepository, type VariableConfig, identifier, VARIABLE_REPOSITORY }

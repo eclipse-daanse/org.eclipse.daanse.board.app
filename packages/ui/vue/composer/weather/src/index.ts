@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
-  DatasourceRepository,
-  identifier,
+  type DatasourceRepository,
+  DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 import { symbol as WeatherComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.weather'
@@ -21,19 +21,28 @@ import { symbol as WeatherComposerIdentifier } from 'org.eclipse.daanse.board.ap
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
-
 const previewSymbol = Symbol.for('WeatherComposerPreview')
 const settingsSymbol = Symbol.for('WeatherComposerSettings')
 
 // Create factory function for WeatherComposer
-container.bind(previewSymbol).toConstantValue(Preview)
-container.bind(settingsSymbol).toConstantValue(Settings)
 
-datasourceRepository.registerDatasourceType('weather', {
-  Store: WeatherComposerIdentifier,
-  Preview: previewSymbol,
-  Settings: settingsSymbol,
-})
+export function activate({ services }: ActivationContext) {
+  services.register('WeatherComposerPreview', Preview)
+  services.register('WeatherComposerSettings', Settings)
 
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .registerDatasourceType('weather', {
+      Store: WeatherComposerIdentifier,
+      Preview: previewSymbol,
+      Settings: settingsSymbol,
+    })
+}
 
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<DatasourceRepository>(DATASOURCE_REPOSITORY)
+    .unregisterDatasourceType('weather')
+  services.unregister('WeatherComposerPreview')
+  services.unregister('WeatherComposerSettings')
+}

@@ -12,7 +12,10 @@ import {container} from 'org.eclipse.daanse.board.app.lib.core'
 import { LayoutRepository } from './classes/LayoutRepository'
 import type{LayoutRepositoryI } from './interfaces/LayoutRepositoryI'
 import type{ LayoutI } from './interfaces/LayoutI'
-const identifier = Symbol.for('LayoutRepository')
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const LAYOUT_REPOSITORY = 'LayoutRepository'
+
+const identifier = Symbol.for(LAYOUT_REPOSITORY)
 if(!container.isBound(identifier)) {
   console.log("📦 LayoutRepository initialized");
   container
@@ -24,5 +27,4 @@ if(!container.isBound(identifier)) {
 export {
   identifier,
   LayoutI,
-  LayoutRepositoryI
-}
+  LayoutRepositoryI, LAYOUT_REPOSITORY }
