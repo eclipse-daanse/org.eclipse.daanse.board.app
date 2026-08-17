@@ -134,17 +134,12 @@ container
     create: (value: any) => new VariableComplexStringWrapper<string>(value),
   })
 
-import 'org.eclipse.daanse.board.app.ui.vue.variable.constant'
-import 'org.eclipse.daanse.board.app.ui.vue.variable.computed'
-import 'org.eclipse.daanse.board.app.ui.vue.variable.timepicker'
 
 import 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 
 
 import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
   from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
-import 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
-import 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
 
 import {
   NAVIGATION_REGISTRY,
@@ -193,31 +188,7 @@ allRoutes.forEach((route: any) => {
   console.log('Added dynamic route:', route.name, route.path)
 })
 
-const pageRepo = container.get<PageRegistryI>(PageReoIdentifier)
-const layoutRepo = container.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY)
-const baseLayout
-  = layoutRepo.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
-
-
-if (baseLayout) {
-  pageRepo.registerPage({
-    id:'abc',
-    name:'Seite 1',
-    description:'Seite 1',
-    icon:'icon.png',
-    visibleInNavigation:true,
-    layout: baseLayout
-  } as PageI)
-  pageRepo.registerPage({
-    id:'abe',
-    name:'Seite 2',
-    description:'Seite 2',
-    icon:'icon.png',
-    visibleInNavigation:true,
-    layout: baseLayout
-  } as PageI)
-}
 
 // Register navigation items
 const configNav = new NavigationItem()

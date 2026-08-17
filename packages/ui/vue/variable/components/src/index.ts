@@ -15,4 +15,3 @@ import VariableInput from './VariableInput.vue'
 import ComplexTextInput from './ComplexTextInput.vue'
 
 export { VariableInput, ComplexTextInput }
-

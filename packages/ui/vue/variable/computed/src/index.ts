@@ -10,18 +10,28 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { type VariableRepository, identifier } from "org.eclipse.daanse.board.app.lib.repository.variable"
-import { COMPUTED_VARIABLE, ComputedVariableSymbol } from 'org.eclipse.daanse.board.app.lib.variables'
-import { container } from "org.eclipse.daanse.board.app.lib.core"
-import Settings from "./Settings.vue"
+import {
+  type VariableRepository,
+  VARIABLE_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import {
+  COMPUTED_VARIABLE,
+  ComputedVariableSymbol,
+} from 'org.eclipse.daanse.board.app.lib.variables'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import Settings from './Settings.vue'
 
-const register = () => {
-    const variableRepository = container.get<VariableRepository>(identifier);
-
-    variableRepository.registerVariableType(COMPUTED_VARIABLE, {
-        Variable: ComputedVariableSymbol,
-        Settings: Settings,
+export function activate({ services }: ActivationContext) {
+  services
+    .getRequired<VariableRepository>(VARIABLE_REPOSITORY)
+    .registerVariableType(COMPUTED_VARIABLE, {
+      Variable: ComputedVariableSymbol,
+      Settings: Settings,
     })
 }
 
-register()
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<VariableRepository>(VARIABLE_REPOSITORY)
+    .unregisterVariableType(COMPUTED_VARIABLE)
+}

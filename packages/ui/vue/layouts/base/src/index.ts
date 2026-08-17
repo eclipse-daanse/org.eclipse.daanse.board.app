@@ -8,32 +8,32 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-
-import { identifier,type  LayoutI, type LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+import {
+  type LayoutI,
+  type LayoutRepositoryI,
+  LAYOUT_REPOSITORY,
+} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import View from './components/View.vue'
 import Edit from './components/Edit.vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Export clipboard store for use in other layouts
 export { useClipboardStore } from './composables/useClipboardStore'
 
-if(container.isBound(identifier)) {
+const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 
-  const layoutRepo = container.get<LayoutRepositoryI>(identifier)
-  if(layoutRepo){
-    const layout = {
-      id: "org.eclipse.daanse.board.app.ui.vue.layouts.base",
-      name: "BaseLayout",
-      description: "pixelbased Layout",
-      component: View,
-      editor: Edit
-    } as LayoutI;
-    layoutRepo.addLayout(layout)
-    console.log('📦 BaseLayout added')
-  }
-  else{
-    console.log('X📦X LayoutRepository is not found, cannot add BaseLayout')
-  }
+export function activate({ services }: ActivationContext) {
+  services.getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY).addLayout({
+    id: LAYOUT_ID,
+    name: 'BaseLayout',
+    description: 'pixelbased Layout',
+    component: View,
+    editor: Edit,
+  } as LayoutI)
 }
 
-
+export function deactivate({ services }: ActivationContext) {
+  services
+    .getRequired<LayoutRepositoryI>(LAYOUT_REPOSITORY)
+    .removeLayout(LAYOUT_ID)
+}

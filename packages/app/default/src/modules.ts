@@ -28,6 +28,30 @@ import type { ModuleEntry } from 'org.eclipse.daanse.board.app.lib.core'
  * in welcher Folge sie in der Palette erscheinen.
  */
 export const modules: ModuleEntry[] = [
+  // Layouts - vor allem, was Layouts nachschlägt
+  {
+    id: 'ui.vue.layouts.base',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.layouts.base'),
+  },
+  {
+    id: 'ui.vue.layouts.grid',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.layouts.grid'),
+  },
+
+  // Variablentypen
+  {
+    id: 'ui.vue.variable.constant',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.variable.constant'),
+  },
+  {
+    id: 'ui.vue.variable.computed',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.variable.computed'),
+  },
+  {
+    id: 'ui.vue.variable.timepicker',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.variable.timepicker'),
+  },
+
   // i18n-Ressourcen
   {
     id: 'ui.vue.lang.common.en',
