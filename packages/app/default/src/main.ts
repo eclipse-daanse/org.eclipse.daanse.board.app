@@ -135,7 +135,6 @@ container
   })
 
 
-import 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 
 
 import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }

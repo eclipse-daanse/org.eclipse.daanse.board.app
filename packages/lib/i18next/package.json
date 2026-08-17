@@ -13,7 +13,7 @@
     "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "tsc --noEmit && vite build"
   },
   "bugs": {
     "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
@@ -24,7 +24,6 @@
   "devDependencies": {
     "inversify": "7.11.0",
     "typescript": "^5.8.2",
-
     "vite-plugin-dts": "4.5.4"
   },
   "publishConfig": {

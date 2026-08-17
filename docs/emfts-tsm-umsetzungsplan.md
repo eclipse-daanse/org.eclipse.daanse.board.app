@@ -451,9 +451,52 @@ nach dem Muster aus B3. Am Ende:
 - `RootService.activate()` wird entweder benutzt oder gelöscht — der auskommentierte
   Block in `bootstrap.ts` verschwindet
 
-**Akzeptanzkriterium:** `main.ts` unter 100 Zeilen; Startreihenfolge explizit und
-`await`-korrekt; kein `console.warn`-Schlucken von Init-Fehlern mehr — fehlgeschlagene
-Pflichtmodule brechen den Start ab, optionale werden protokolliert.
+**Stand nach dem ersten Durchgang** (Commits `200cb243`, `064315e5`): 39 Pakete
+umgestellt — 11 Sprachmodule, 11 Datenquellen-UI, 6 Verbindungen-UI, 6 Composer,
+2 Layouts, 3 Variablentypen. `main.ts` hat 36 Importe weniger, die Demo-Seiten
+sind entfernt, `RootService` und `bootstrap.ts` gelöscht.
+
+Ergänzt wurden die fehlenden Gegenstücke `unregisterDatasourceType`,
+`unregisterConnectionType` und `unregisterVariableType` sowie String-Dienst-IDs
+für acht Registries.
+
+**Die Startreihenfolge ist jetzt benannt statt zufällig.** Drei Phasen:
+Grunddienste (i18next, Einstellungen) → Modulaktivierung → Nachlauf
+(Endpointfinder, Persistenz). Der Nachlauf setzt registrierte Verbindungs- und
+Datenquellentypen voraus; vorher hing das allein daran, in welcher Zeile ein
+Import stand. Beim ersten Versuch hatte ich die Phasen falsch verkettet — was
+die Abhängigkeit überhaupt erst sichtbar machte.
+
+**Die Brücke musste in beide Richtungen wirken.** Der Rückfallweg deckte nur ab,
+dass ein umgestelltes Paket Dienste der übrigen findet. Umgekehrt lesen noch
+nicht umgestellte Konsumenten — etwa `DatasourceEditor.vue` für die
+Preview-Komponenten — weiterhin über `container.get(Symbol.for(...))`. Die
+Registry spiegelt `register` deshalb in den Container und räumt bei `unregister`
+mit auf. Ohne das Aufräumen hätte der Rückfallweg den eben entfernten Dienst
+weitergeliefert und `deactivate` wäre wirkungslos gewesen.
+
+**Offen: 50 Pakete**, geteilt nach dem, was den Aufwand bestimmt:
+
+| | Anzahl | |
+|---|---:|---|
+| **ohne** Inversify-Decorators | 21 | mechanisch umstellbar |
+| **mit** `@injectable`/`@inject` | 29 | Wechsel des DI-Mechanismus |
+
+Die 29 binden Klassen über Inversifys DI; `services.bindClass()` erwartet
+tsm-eigene Decorators. Das ist kein Umbenennen, sondern ein eigener Schritt —
+E1 nennt es „mechanische Umstellung", was zutrifft, den Umfang aber
+unterschätzt. Unter den 21 sind neun Factory-Muster (`lib/composer`,
+`lib/connection`), die `container.get(Klasse)` verwenden; eine Klasse als
+Dienst-ID hat in tsm keine Entsprechung und braucht erst eine Konvention. Vier
+weitere sind bootstrap-nah.
+
+**Der Hauptgewinn ist erreicht:** Die Reihenfolge-Zwänge sind weg. Was bleibt,
+bindet nur oder ist lazy und verursacht keine Race Conditions — dort ist die
+Umstellung Vereinheitlichung, nicht Fehlerbehebung.
+
+**Vom Akzeptanzkriterium offen:** `main.ts` ist bei rund 300 Zeilen, nicht unter
+100 — dafür müssten die verbleibenden 34 Nebenwirkungsimporte weichen, also die
+50 offenen Pakete. Startreihenfolge und Fehlerbehandlung erfüllen das Kriterium.
 
 ### B5 — Echtes Laufzeitladen (Ziel 2 aus E2)
 
