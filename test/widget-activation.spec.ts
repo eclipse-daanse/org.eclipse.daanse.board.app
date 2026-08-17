@@ -162,3 +162,65 @@ describe('Widget-Familie', () => {
     expect(widgets.getWidget(typ), `${id} hat ${typ} nicht entfernt`).toBeUndefined()
   })
 })
+
+/*
+ * Die Registries werden seit B4 selbst als Module aktiviert. Dieser Test
+ * prüft, dass die Reihenfolge in der Modulliste trägt: erst das Repository,
+ * dann die Pakete, die sich dort eintragen. Nichts wird vorab von Hand
+ * registriert.
+ */
+describe('Aktivierungsreihenfolge', () => {
+  const registryModule = {
+    id: 'lib.repository.widget',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
+  }
+  const widgetModule = {
+    id: 'ui.vue.widget.sample',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.widget.sample'),
+  }
+
+  const kontext = () => {
+    const services = new BoardServiceRegistry(new Container())
+    services.register(EVENT_REGISTRY_ID, new EventRegistryDouble())
+    return { services, bootstrapper: new ModuleBootstrapper(services, stilleAusgabe()) }
+  }
+
+  it('das Repository stellt sich selbst bereit', async () => {
+    const { services, bootstrapper } = kontext()
+    expect(services.has(WIDGET_REPOSITORY)).toBe(false)
+
+    await bootstrapper.activateAll([registryModule])
+
+    expect(services.has(WIDGET_REPOSITORY)).toBe(true)
+  })
+
+  it('ein Widget findet das zuvor aktivierte Repository', async () => {
+    const { services, bootstrapper } = kontext()
+
+    await bootstrapper.activateAll([registryModule, widgetModule])
+
+    const repo = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
+    expect(repo.getWidget('SampleWidget')).toBeDefined()
+  })
+
+  it('bricht ab, wenn das Repository nach dem Widget stünde', async () => {
+    const { bootstrapper } = kontext()
+
+    // Falsche Reihenfolge: das Widget kommt zuerst und findet nichts vor
+    await expect(
+      bootstrapper.activateAll([widgetModule, registryModule]),
+    ).rejects.toThrow(/sample/)
+  })
+
+  it('macht das Repository auch ueber den Container auffindbar', async () => {
+    // Noch nicht umgestellte Konsumenten - AddWidgetWindow.vue,
+    // WidgetSettingsWindow.vue - lesen weiterhin so.
+    const container = new Container()
+    const services = new BoardServiceRegistry(container)
+    const bootstrapper = new ModuleBootstrapper(services, stilleAusgabe())
+
+    await bootstrapper.activateAll([registryModule])
+
+    expect(container.isBound(Symbol.for(WIDGET_REPOSITORY))).toBe(true)
+  })
+})

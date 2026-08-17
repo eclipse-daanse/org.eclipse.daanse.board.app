@@ -28,6 +28,20 @@ import type { ModuleEntry } from 'org.eclipse.daanse.board.app.lib.core'
  * in welcher Folge sie in der Palette erscheinen.
  */
 export const modules: ModuleEntry[] = [
+  // Registries - muessen vor allem stehen, was sie benutzt
+  {
+    id: 'lib.repository.widget',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
+  },
+  {
+    id: 'lib.repository.page',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.page'),
+  },
+  {
+    id: 'lib.repository.layout.page',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.layout.page'),
+  },
+
   // Layouts - vor allem, was Layouts nachschlägt
   {
     id: 'ui.vue.layouts.base',

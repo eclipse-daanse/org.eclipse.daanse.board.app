@@ -106,7 +106,6 @@ import 'org.eclipse.daanse.board.app.lib.composer.kpi'
 import 'org.eclipse.daanse.board.app.lib.composer.weather'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
-import 'org.eclipse.daanse.board.app.lib.repository.widget'
 import 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import 'org.eclipse.daanse.board.app.lib.repository.route'
 
