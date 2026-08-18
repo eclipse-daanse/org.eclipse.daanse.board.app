@@ -192,3 +192,43 @@ importiert" und „was das Manifest deklariert" von Hand über jedes Modul hinwe
 gepflegt. Das driftet — und zwar still, weil Tests korrekt aufsetzen. Die
 Prüfung in den Build zu ziehen ist der Unterschied zwischen einer Fehlerklasse,
 die nicht auftreten kann, und einer, die im Betrieb auffällt.
+
+---
+
+## FR-6 — `requiresService` wartet nicht, sondern scheitert
+
+**Eingereicht als [#18](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/18).**
+
+`requiresService` ist heute eine Vorbedingung, die wirft — keine Bedingung, die
+wartet. Ein Modul, dessen Pflichtdienst noch nicht da ist, landet dauerhaft in
+`error`, auch wenn der Dienst Sekunden später erscheint. `ModuleState` kennt
+keinen Wartezustand:
+
+```
+'registered' | 'resolving' | 'loading' | 'activating' | 'active' | 'deactivating' | 'stopped' | 'error'
+```
+
+**Die Folge:** Die Ladereihenfolge bleibt Aufgabe des Aufrufers. Genau das tun
+wir heute — `modules.ts` ist eine handsortierte Liste (Registries zuerst, dann
+Layouts, dann was Layouts nachschlägt), und der Bootstrap zerfällt in drei
+Phasen, weil ein Paket beim Laden eine Verbindung anlegt. Das ist
+Abhängigkeitsauflösung von Hand, obwohl die Manifeste die Information tragen.
+
+Die Gegenrichtung fehlt ebenso: Verschwindet ein Dienst — und `deactivate`
+entfernt seit B3 wirklich etwas —, behalten Konsumenten ihre Referenz.
+
+**Was OSGi hier macht:** Declarative Services erzeugt eine Komponente mit
+unerfüllter Pflicht-`@Reference` gar nicht erst und aktiviert sie automatisch,
+sobald der Dienst erscheint. Beim Wegfall wird sie benachrichtigt
+(`policy=dynamic`) oder abgebaut und neu erzeugt (`policy=static`). Niemand
+sortiert eine Startliste von Hand.
+
+**Vorgeschlagen:** ein Zustand `unsatisfied` statt sofortigem `error`, plus
+Benachrichtigung beim Wegfall. Beide Bausteine existieren bereits —
+`checkRequirements()` berechnet `{ satisfied, missing }`, und
+`ServiceRegistry.addListener()` meldet `registered`/`unregistered`. Es fehlt
+die Verbindung zwischen beiden.
+
+Uns ist bewusst, dass das tsm vom Modullader Richtung Komponentenlaufzeit
+verschiebt — das ist eine Designentscheidung und keine Kleinigkeit. Eingereicht,
+weil bereits Schritt 1 die handsortierten Startlisten überflüssig machen würde.
