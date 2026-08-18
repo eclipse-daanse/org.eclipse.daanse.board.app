@@ -156,3 +156,39 @@ sich diese anfänglichen Bedenken erledigt:
 `DefaultServiceRegistry` deckt den Funktionsumfang ab, den diese Anwendung
 braucht. Die offenen Punkte betreffen ausschließlich die **Migration** dorthin,
 nicht den Zielzustand.
+
+---
+
+## FR-5 — Vite-Plugin prüft `tsm:`-Importe nicht gegen das Manifest
+
+**Eingereicht als [#17](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/17).**
+
+Das Plugin transformiert jeden `tsm:`-Import, hält ihn aber nicht gegen die
+`dependencies` des Moduls. Code und Manifest sind damit zwei unabhängige
+Wahrheiten; eine Abweichung fällt erst zur Laufzeit auf.
+
+```typescript
+import { GEO_SERVICE } from 'tsm:plugin-a'   // Build läuft durch
+```
+```json
+{ "dependencies": [] }                        // plugin-a fehlt — niemand merkt es
+```
+
+Zur Laufzeit findet `__tsm__.require('plugin-a')` nichts, und das Modul
+aktiviert nicht.
+
+**Warum das Plugin die richtige Stelle ist:** `transformTsmImports()` entnimmt
+die Modul-ID bereits jedem `tsm:`-Spezifizierer — genau die Information, die
+eine Prüfung braucht. Das Manifest kennt das Plugin dagegen gar nicht; das Wort
+kommt in `src/vite/plugin.ts` kein einziges Mal vor.
+
+Vorgeschlagen: optionales Manifest als Plugin-Option, Fehler bei nicht
+deklarierten Importen, Warnung bei toten Deklarationen. Typ-Importe bleiben
+ausgenommen — sie hinterlassen keine Laufzeitspur, und genau das macht
+paketübergreifende Typisierung ohne Bundling möglich.
+
+**Warum uns das betrifft:** Bei rund 130 Paketen wird die Paarung „was der Code
+importiert" und „was das Manifest deklariert" von Hand über jedes Modul hinweg
+gepflegt. Das driftet — und zwar still, weil Tests korrekt aufsetzen. Die
+Prüfung in den Build zu ziehen ist der Unterschied zwischen einer Fehlerklasse,
+die nicht auftreten kann, und einer, die im Betrieb auffällt.
