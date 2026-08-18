@@ -214,3 +214,71 @@ explizit übergeben werden, statt als Modul-Singleton importiert zu werden.
 
 Nach Schritt 4 sollte `main.ts` ohne nebenwirkungsgetriebene Importe auskommen und
 die Startreihenfolge explizit sein.
+
+---
+
+## 7. Nachtrag: Service-Locator in den Klassenrümpfen
+
+Beim Umstellen des Factory-Musters kam die Frage auf, warum die betroffenen
+Klassen eigentlich nicht `@injectable` sind. Die Antwort erklärt zugleich eine
+Grenze der bisherigen Arbeit.
+
+### Befund
+
+Die Decorator-Lage ist uneinheitlich und weitgehend wirkungslos:
+
+| | `@injectable` | `@inject` | Konstruktor |
+|---|---|---|---|
+| `composer/chart`, `datatable`, `ogc`, `weather` | – | – | – |
+| `composer/kpi` | ✓ | – | – |
+| `connection/rest`, `rss`, `ws`, `xmla` | – | – | leer |
+| `connection/mqtt` | ✓ | ✓ (Property) | ✓ |
+
+`composer/kpi` trägt `@injectable()` ohne jede Injektion — der Decorator tut
+dort nichts. Nur `mqtt` injiziert wirklich, und zwar einen Logger als Property.
+
+**Der Grund:** Diese Klassen holen ihre Abhängigkeiten selbst aus dem globalen
+Container, statt sie sich geben zu lassen:
+
+```typescript
+// lib/composer/chart/src/classes/index.ts
+import { container } from 'org.eclipse.daanse.board.app.lib.core'
+…
+const datasourceRepository = container.get(…)   // mitten in einer Methode
+```
+
+Das ist ein **Service Locator**, keine Dependency Injection. Deshalb brauchen
+die Klassen keine Konstruktor-Injektion — und deshalb war
+`container.get(ChartComposer)` in der Factory nur ein Umweg um `new`.
+
+### Was das für den Modulvertrag bedeutet
+
+Regel 2 verlangt: kein Import des globalen Containers, Zugriff nur über
+`ctx.services`. Erfüllt ist das bisher **für die `index.ts` der umgestellten
+Pakete** — nicht für ihre Klassenrümpfe.
+
+**82 Dateien** greifen außerhalb einer `index.ts` direkt auf den Container zu:
+Composer- und Variablenklassen, Vue-Composables, einzelne Komponenten. Die
+bisherige Umstellung betraf durchgehend die *Registrierungsseite*; die
+*Konsumentenseite* ist unberührt.
+
+Das ist keine Regression — der Zustand bestand vorher genauso. Aber es begrenzt,
+was „umgestellt" bedeutet: Ein Paket erfüllt den Vertrag an seiner Oberfläche,
+während sein Inneres weiterhin am globalen Container hängt.
+
+### Konsequenz
+
+Der Rückfallweg samt Spiegelung kann **erst dann entfallen**, wenn auch diese
+82 Dateien umgestellt sind — nicht schon, wenn alle `index.ts` umgestellt sind.
+Das war in Abschnitt 5 zu optimistisch formuliert.
+
+Zwei Wege stehen offen, sie schließen sich nicht aus:
+
+1. **Echte Konstruktor-Injektion** für die Klassen, die heute den Locator
+   nutzen. Sauber, aber es fasst die Klassen selbst an und ändert ihre
+   Erzeugung — die Fabriken müssten die Abhängigkeiten durchreichen.
+2. **Den Kontext durchreichen**: Klassen bekommen die benötigten Dienste als
+   Parameter, statt sie zu ziehen. Kleinerer Eingriff, dafür mehr Signaturen.
+
+Beides gehört entschieden, bevor Inversify wirklich verschwinden kann. Für den
+Zwischenstand ändert sich nichts: Die Spiegelung deckt beide Richtungen ab.

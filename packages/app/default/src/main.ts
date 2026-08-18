@@ -83,8 +83,6 @@ import {
   DatasourceRepository,
   identifier as DatasourceIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import 'org.eclipse.daanse.board.app.lib.connection.rest'
-import 'org.eclipse.daanse.board.app.lib.connection.rss'
 import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 import 'org.eclipse.daanse.board.app.lib.connection.graphql'
 import 'org.eclipse.daanse.board.app.lib.connection.websocket'
@@ -100,10 +98,6 @@ import 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
 import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
-import 'org.eclipse.daanse.board.app.lib.composer.chart'
-import 'org.eclipse.daanse.board.app.lib.composer.datatable'
-import 'org.eclipse.daanse.board.app.lib.composer.kpi'
-import 'org.eclipse.daanse.board.app.lib.composer.weather'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
 import 'org.eclipse.daanse.board.app.lib.repository.navigation'

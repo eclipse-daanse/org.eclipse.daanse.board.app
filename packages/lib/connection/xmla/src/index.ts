@@ -11,32 +11,47 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { XmlaConnection, type IXmlaConnectionConfiguration } from './classes'
 import { XMLAApi } from './classes/xml'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('XmlaConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const XMLA_CONNECTION_FACTORY = 'XmlaConnectionFactory'
 
-if (!container.isBound(XmlaConnection)) {
-  container.bind<XmlaConnection>(XmlaConnection).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(XMLA_CONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createXmlaConnection(config: IXmlaConnectionConfiguration) {
+  if (!XmlaConnection.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid XmlaConnection configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const connection = new XmlaConnection()
+  connection.init(config)
+
+  return connection
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<XmlaConnection>>(factorySymbol).toFactory(() => {
-    return (config: IXmlaConnectionConfiguration) => {
-      if (!XmlaConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid XmlaConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<XmlaConnection>(XmlaConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(XMLA_CONNECTION_FACTORY, createXmlaConnection)
 }
 
-export { XmlaConnection, IXmlaConnectionConfiguration, factorySymbol, type XMLAApi }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(XMLA_CONNECTION_FACTORY)
+}
+
+export {
+  XmlaConnection,
+  IXmlaConnectionConfiguration,
+  factorySymbol,
+  type XMLAApi,
+  XMLA_CONNECTION_FACTORY,
+}

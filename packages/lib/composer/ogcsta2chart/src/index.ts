@@ -16,7 +16,7 @@ import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { OGCSTAToChartComposer } from './classes'
 import {
   EventActionsRegistry,
-  EVENT_ACTIONS_REGISTRY
+  EVENT_ACTIONS_REGISTRY,
 } from 'org.eclipse.daanse.board.app.lib.events'
 import ecoreModelContent from '../model/OGCSTAToChartActions.ecore?raw'
 
@@ -43,22 +43,29 @@ if (!container.isBound(symbol)) {
         )
       }
 
-      const composer = container.get<OGCSTAToChartComposer>(OGCSTAToChartComposer)
+      const composer = container.get<OGCSTAToChartComposer>(
+        OGCSTAToChartComposer,
+      )
       composer.init(config)
 
       // Don't register temporary preview instances - they would override the real instance
       if (config._isTemporaryPreview) {
         const previewId = `preview-${config.uid || config.name}-${Date.now()}`
         composer.setInstanceId(previewId)
-        console.log(`Created temporary preview ${WIDGET_TYPE}: ${previewId} (not registered)`)
+        console.log(
+          `Created temporary preview ${WIDGET_TYPE}: ${previewId} (not registered)`,
+        )
         return composer
       }
 
       // Register composer instance for action execution
       try {
         if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
-          const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
-          const instanceId = config.uid || config.name || `composer-${Date.now()}`
+          const actionsRegistry = container.get<EventActionsRegistry>(
+            EVENT_ACTIONS_REGISTRY,
+          )
+          const instanceId =
+            config.uid || config.name || `composer-${Date.now()}`
           composer.setInstanceId(instanceId)
 
           // Register instance with widget type so actions can be executed on it
@@ -79,14 +86,16 @@ if (!container.isBound(symbol)) {
 const registerComposerActions = () => {
   try {
     if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
-      const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+      const actionsRegistry = container.get<EventActionsRegistry>(
+        EVENT_ACTIONS_REGISTRY,
+      )
 
       // Register with 'system' context from Ecore model
       actionsRegistry.registerActionsFromEcoreString(
         WIDGET_TYPE,
         ecoreModelContent,
         'system',
-        'OGCSTAToChartActions.ecore'
+        'OGCSTAToChartActions.ecore',
       )
       console.log(`Registered ${WIDGET_TYPE} actions from Ecore model`)
     }

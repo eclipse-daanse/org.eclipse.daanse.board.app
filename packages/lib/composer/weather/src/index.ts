@@ -11,33 +11,42 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { WeatherComposer } from './classes'
 
 export * from './classes/index'
 export * from './interfaces/WeatherData'
 
 // Export symbol for dependency injection
-export const symbol = Symbol.for('WeatherComposer')
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+export const WEATHER_COMPOSER = 'WeatherComposer'
 
-if (!container.isBound(WeatherComposer)) {
-  container.bind(WeatherComposer).toSelf().inTransientScope()
+export const symbol = Symbol.for(WEATHER_COMPOSER)
+
+/**
+ * Erzeugt eine Instanz aus einer Konfiguration.
+ *
+ * Wird ueber die Dienst-ID aufgeloest und mit der Konfiguration aufgerufen.
+ * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
+ * jetzt schlicht ueber `new`.
+ */
+function createWeatherComposer(config: any) {
+  if (!WeatherComposer.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid WeatherComposer configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const composer = new WeatherComposer()
+  composer.init(config)
+
+  return composer
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<WeatherComposer>>(symbol).toFactory(() => {
-    return config => {
-      if (!WeatherComposer.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid WeatherComposer configuration. Please provide a valid configuration.',
-        )
-      }
+export function activate({ services }: ActivationContext) {
+  services.register(WEATHER_COMPOSER, createWeatherComposer)
+}
 
-      const composer = container.get<WeatherComposer>(WeatherComposer)
-      composer.init(config)
-
-      return composer
-    }
-  })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(WEATHER_COMPOSER)
 }

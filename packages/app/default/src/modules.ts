@@ -112,6 +112,44 @@ export const modules: ModuleEntry[] = [
     load: () => import('org.eclipse.daanse.board.app.ui.vue.lang.wrapper.en'),
   },
 
+  // Composer und Verbindungen (Fabriken)
+  {
+    id: 'lib.composer.chart',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.chart'),
+  },
+  {
+    id: 'lib.composer.datatable',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.datatable'),
+  },
+  {
+    id: 'lib.composer.kpi',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.kpi'),
+  },
+  {
+    id: 'lib.composer.ogc',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.ogc'),
+  },
+  {
+    id: 'lib.composer.weather',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.weather'),
+  },
+  {
+    id: 'lib.connection.rest',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.rest'),
+  },
+  {
+    id: 'lib.connection.rss',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.rss'),
+  },
+  {
+    id: 'lib.connection.websocket',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.websocket'),
+  },
+  {
+    id: 'lib.connection.xmla',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.xmla'),
+  },
+
   // Verbindungen (UI)
   {
     id: 'ui.vue.connection.graphql',

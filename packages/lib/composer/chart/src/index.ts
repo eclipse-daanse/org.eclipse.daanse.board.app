@@ -11,35 +11,39 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  ChartComposer,
-  type IChartComposerConfiguration
-} from './classes'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { ChartComposer, type IChartComposerConfiguration } from './classes'
 
-const symbol = Symbol.for('ChartComposer')
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+const CHART_COMPOSER = 'ChartComposer'
 
-if (!container.isBound(ChartComposer)) {
-  container.bind(ChartComposer).toSelf().inTransientScope()
+const symbol = Symbol.for(CHART_COMPOSER)
+
+/**
+ * Erzeugt einen Composer aus einer Konfiguration.
+ *
+ * Wird vom DatasourceRepository als `Store` aufgelöst und mit der
+ * Konfiguration aufgerufen. Jeder Aufruf liefert eine eigene Instanz —
+ * vorher über inTransientScope, jetzt schlicht über `new`.
+ */
+function createChartComposer(config: IChartComposerConfiguration): ChartComposer {
+  if (!ChartComposer.validateConfiguration(config)) {
+    throw new Error(
+      'Invalid ChartComposer configuration. Please provide a valid configuration.',
+    )
+  }
+
+  const composer = new ChartComposer()
+  composer.init(config)
+  return composer
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<ChartComposer>>(symbol).toFactory(() => {
-    return config => {
-      if (!ChartComposer.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid ChartComposer configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const composer = container.get<ChartComposer>(ChartComposer)
-      composer.init(config)
-
-      return composer
-    }
-  })
+export function activate({ services }: ActivationContext) {
+  services.register(CHART_COMPOSER, createChartComposer)
 }
 
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(CHART_COMPOSER)
+}
 
-export { ChartComposer, IChartComposerConfiguration, symbol }
+export { ChartComposer, IChartComposerConfiguration, symbol, CHART_COMPOSER }
