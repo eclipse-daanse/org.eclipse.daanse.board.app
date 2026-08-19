@@ -14,25 +14,23 @@
 import type { ServiceRegistry, ModuleLogger } from '@eclipse-daanse/tsm'
 
 /**
- * Kontext, den ein Paket bei Aktivierung und Deaktivierung erhält.
+ * Context a package receives on activation and deactivation.
  *
- * Die Felder sind eine Teilmenge des `ModuleContext` von tsm, sodass ein
- * Paket, das gegen diesen Vertrag geschrieben ist, später unverändert von
- * tsm aktiviert werden kann.
+ * The fields are a subset of tsm's `ModuleContext`, so a package written
+ * against this contract can later be activated by tsm unchanged.
  */
 export interface ActivationContext {
-  /** Dienste registrieren und auflösen */
+  /** Register and resolve services */
   readonly services: ServiceRegistry
-  /** Logger, auf das aktivierte Modul vorbeschriftet */
+  /** Logger, prefixed with the activated module's id */
   readonly log: ModuleLogger
 }
 
 /**
- * Vertrag, den ein aktivierbares Paket erfüllt.
+ * Contract an activatable package fulfils.
  *
- * Ein Paket exportiert `activate` und - sofern es seine Registrierungen
- * zurücknehmen kann - `deactivate`. Der Import des Pakets selbst darf keine
- * Wirkung haben.
+ * A package exports `activate` and - if it can withdraw its registrations -
+ * `deactivate`. Importing the package itself must not have any effect.
  */
 export interface ActivatableModule {
   activate(context: ActivationContext): void | Promise<void>

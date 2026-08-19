@@ -3,7 +3,7 @@
   "id": "platform.vue",
   "name": "Vue Platform Libraries",
   "version": "0.0.1-next.1",
-  "description": "Stellt vue und vue-router als geteilte Bibliotheken bereit",
+  "description": "Provides vue and vue-router as shared libraries",
   "entry": "./dist/index.js",
   "exports": {},
   "capabilities": [

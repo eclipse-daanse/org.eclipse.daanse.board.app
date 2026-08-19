@@ -261,28 +261,45 @@ const bootstrapper = new ModuleBootstrapper(services, {
 // Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
 // beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
 /*
- * Der tsm-ModuleLoader lädt die echten Bundles aus bundles.ts — Pakete mit
- * eigenem Build und entry-URL. Er teilt sich die Registry mit dem
- * Bootstrapper: Dienste des statischen Bestands sind für Bundles gewöhnliche
- * Dienste und umgekehrt. Die Migration verschiebt Module aus modules.ts
- * hierher; der Bootstrapper stirbt durch Leere.
+ * The tsm ModuleLoader loads the real bundles from bundles.ts - packages with
+ * their own build and entry URL. It shares the registry with the bootstrapper:
+ * services of the static stock are ordinary services to bundles and vice
+ * versa. The migration moves modules from modules.ts over here; the
+ * bootstrapper dies by becoming empty.
  */
+/*
+ * Modules that still live inside the host bundle but are run by the loader:
+ * the entryResolver hands over their namespace instead of fetching the entry
+ * URL. An entry disappears from this map once the module is built as a real
+ * bundle - from then on its URL is used.
+ */
+const preloadedContainers = new Map<string, () => Promise<unknown>>([
+  ['platform.vue', () => import('org.eclipse.daanse.board.app.platform.vue')],
+])
+
+const resolvedContainers = new Map<string, unknown>()
+
 const loader = new ModuleLoader({
   serviceRegistry: services,
   hotReload: import.meta.env.DEV,
   continueOnError: true,
+  entryResolver: (manifest) => resolvedContainers.get(manifest.id),
 })
 
-// Die tsm-Konsole: in den Browser-DevTools stehen tsm.lb(), tsm.services()
-// und Verwandte zur Verfügung — Einblick in Module, Dienste und Zustände.
+// The tsm console: tsm.lb(), tsm.services() and friends become available in
+// the browser devtools - insight into modules, services and their states.
 installDevtools({ loader })
 
-async function ladePlattformBundles() {
-  const [manifest, container] = await Promise.all([
-    import('org.eclipse.daanse.board.app.platform.vue/manifest.json'),
-    import('org.eclipse.daanse.board.app.platform.vue'),
-  ])
-  await loader.loadModule(manifest.default, { container })
+async function loadBundles() {
+  const manifests = [
+    (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json')).default,
+    ...bundles,
+  ]
+  for (const [id, load] of preloadedContainers) {
+    resolvedContainers.set(id, await load())
+  }
+  loader.register(manifests)
+  await loader.loadAll()
 }
 
 bootstrapper
@@ -290,23 +307,20 @@ bootstrapper
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
     seitenEinrichten()
-    // Nach dem statischen Bestand, damit dessen Dienste registriert sind,
-    // wenn ein Bundle sie als requiresService nennt.
+    // After the static stock, so its services are registered by the time a
+    // bundle names them in requiresService.
     //
-    // platform.vue geht als erstes durch den Loader: sein Manifest traegt die
-    // tsm.library-Capabilities, gegen die die sharedDependencies der Bundles
-    // aufgeloest werden. Der Container wird uebergeben statt per URL geladen,
-    // weil das Modul dieselbe Vue-Instanz ausgeben muss, mit der der Host
-    // rendert - es lebt deshalb noch im Modulgraphen des Hosts.
-    return ladePlattformBundles()
-      .then(() => {
-        loader.register(bundles)
-        return loader.loadAll()
-      })
+    // The host does not load any bundle itself - it registers manifests and
+    // resolves the preloaded containers. What loads when is decided by the
+    // resolver from the manifests' dependencies: a widget naming platform.vue
+    // pulls it ahead of itself in the order. The platform.vue manifest
+    // carries the tsm.library capabilities that the bundles'
+    // sharedDependencies are validated against.
+    return loadBundles()
   })
   .then(() => {
     if (bundles.length > 0) {
-      console.log(`📦 ${bundles.length} Bundle(s) geladen`)
+      console.log(`📦 ${bundles.length} bundle(s) loaded`)
     }
   })
   .catch((err) => {

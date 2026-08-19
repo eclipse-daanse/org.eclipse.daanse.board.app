@@ -14,14 +14,14 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { version as vueVersion } from 'vue'
 import { isTsmRuntimeAvailable, tsmRuntime } from '@eclipse-daanse/tsm'
-import { activate, VERSIONEN } from './index'
+import { activate, VERSIONS } from './index'
 
-const stille = { debug() {}, info() {}, warn() {}, error() {} }
+const silent = { debug() {}, info() {}, warn() {}, error() {} }
 
 describe('platform.vue', () => {
   afterEach(() => {
-    // Runtime ist ein globales Singleton; aufraeumen, damit Folgetests
-    // nicht von dieser Registrierung abhaengen.
+    // The runtime is a global singleton; clean up so later tests do not
+    // depend on this registration.
     if (isTsmRuntimeAvailable()) {
       tsmRuntime.unregister?.('vue')
       tsmRuntime.unregister?.('vue-router')
@@ -29,16 +29,16 @@ describe('platform.vue', () => {
   })
 
   /*
-   * Die deklarierte Version ist ein Versprechen an die versionRange-Pruefung
-   * der Konsumenten. Stimmt sie nicht mit der tatsaechlich gebuendelten
-   * ueberein, prueft der Resolver gegen eine Fiktion.
+   * The declared version is a promise to the consumers' versionRange check.
+   * If it does not match what is actually bundled, the resolver validates
+   * against a fiction.
    */
-  it('deklariert genau die Version, die tatsaechlich gebuendelt ist', () => {
-    expect(VERSIONEN.vue).toBe(vueVersion)
+  it('declares exactly the version that is actually bundled', () => {
+    expect(VERSIONS.vue).toBe(vueVersion)
   })
 
-  it('stellt vue und vue-router unter ihren Namen bereit', () => {
-    activate({ services: undefined as never, log: stille })
+  it('provides vue and vue-router under their names', () => {
+    activate({ services: undefined as never, log: silent })
 
     expect(isTsmRuntimeAvailable()).toBe(true)
     const vue = globalThis.window.__tsm__.require('vue') as typeof import('vue')
@@ -47,15 +47,15 @@ describe('platform.vue', () => {
   })
 
   /*
-   * Die Uebergangsbedingung aus dem Kommentar im Modul: die bereitgestellte
-   * Instanz muss DIESELBE sein, die der Host importiert - zwei Kopien waeren
-   * zwei Reaktivitaetssysteme.
+   * The transition constraint from the module comment: the provided instance
+   * must be THE SAME one the host imports - two copies would be two
+   * reactivity systems.
    */
-  it('gibt dieselbe Vue-Instanz aus, die der Host importiert', async () => {
-    activate({ services: undefined as never, log: stille })
+  it('hands out the same Vue instance the host imports', async () => {
+    activate({ services: undefined as never, log: silent })
 
-    const geteilt = globalThis.window.__tsm__.require('vue') as typeof import('vue')
-    const direkt = await import('vue')
-    expect(geteilt.ref).toBe(direkt.ref)
+    const shared = globalThis.window.__tsm__.require('vue') as typeof import('vue')
+    const direct = await import('vue')
+    expect(shared.ref).toBe(direct.ref)
   })
 })

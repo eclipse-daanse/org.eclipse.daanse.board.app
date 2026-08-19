@@ -17,29 +17,28 @@ import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 /**
- * Das Bibliotheks-Bundle für Vue: es stellt die Vue-Instanz der Anwendung
- * als geteilte Bibliothek bereit, damit URL-geladene Bundles sie über
- * `__tsm__.require('vue')` beziehen, statt eine eigene Kopie zu bündeln.
+ * The library bundle for Vue: it provides the application's Vue instance as a
+ * shared library, so URL-loaded bundles obtain it via `__tsm__.require('vue')`
+ * instead of bundling a copy of their own.
  *
- * Warum ein Bundle und nicht der Host: Wer Vue liefert, ist damit eine
- * Frage des Wirings statt einer Registrierungszeile in main.ts. Das Manifest
- * dieses Moduls trägt die `tsm.library`-Capability; die `sharedDependencies`
- * der Konsumenten werden vom Resolver dagegen geprüft, und die tsm-Konsole
- * kann zeigen, wer Vue anbietet und wer es verbraucht — wie ein Bundle in
- * OSGi, das ein Paket exportiert, während das Framework nur vermittelt.
+ * Why a bundle and not the host: who provides Vue becomes a matter of wiring
+ * rather than a registration line in main.ts. This module's manifest carries
+ * the `tsm.library` capabilities; the consumers' `sharedDependencies` are
+ * checked against them by the resolver, and the tsm console can show who
+ * offers Vue and who consumes it - like an OSGi bundle exporting a package
+ * while the framework merely mediates.
  *
- * Übergangsbedingung: Solange die Host-Anwendung selbst statisch gebaut ist,
- * MUSS hier dieselbe Instanz ausgegeben werden, mit der der Host rendert —
- * zwei Vue-Kopien wären zwei Reaktivitätssysteme. Das ist derzeit
- * konstruktiv gesichert, weil dieses Modul im Modulgraphen des Hosts lebt
- * und `import * as Vue from 'vue'` dort genau eine Auflösung hat. Wird die
- * Host-Shell selbst ein Bundle, dreht sich die Richtung um: dann ist die
- * Datei dieses Bundles über die Import-Map die einzige Vue-Quelle, auch für
- * den Host.
+ * Transition constraint: as long as the host application itself is statically
+ * built, this module MUST hand out the very instance the host renders with -
+ * two Vue copies would be two reactivity systems. This is currently ensured
+ * by construction, because this module lives in the host's module graph and
+ * `import * as Vue from 'vue'` has exactly one resolution there. Once the
+ * host shell becomes a bundle itself, the direction flips: this bundle's file
+ * becomes the only Vue source via the import map, for the host as well.
  */
 
-/** Muss zur tatsächlich gebündelten Version passen; geprüft in index.test.ts. */
-const VERSIONEN = {
+/** Must match the actually bundled versions; checked in index.test.ts. */
+const VERSIONS = {
   vue: '3.5.24',
   'vue-router': '5.0.6',
 } as const
@@ -47,17 +46,17 @@ const VERSIONEN = {
 export function activate({ log }: ActivationContext) {
   const runtime = initTsmRuntime()
 
-  runtime.register('vue', Vue, VERSIONEN.vue, 'platform.vue')
-  runtime.register('vue-router', VueRouter, VERSIONEN['vue-router'], 'platform.vue')
+  runtime.register('vue', Vue, VERSIONS.vue, 'platform.vue')
+  runtime.register('vue-router', VueRouter, VERSIONS['vue-router'], 'platform.vue')
 
-  log.info(`geteilte Bibliotheken bereit: vue@${VERSIONEN.vue}, vue-router@${VERSIONEN['vue-router']}`)
+  log.info(`shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}`)
 }
 
 /**
- * Bewusst kein deactivate: Eine geteilte Bibliothek kann nicht zur Laufzeit
- * verschwinden, solange Konsumenten laufen — jede Komponente im Baum hängt an
- * dieser Vue-Instanz. Entladbar wird das erst, wenn der Resolver Konsumenten
- * vorher stoppt; bis dahin wäre ein unregister eine Attrappe.
+ * Deliberately no deactivate: a shared library cannot vanish at runtime while
+ * consumers are alive - every component in the tree hangs on this Vue
+ * instance. It only becomes unloadable once the resolver stops consumers
+ * first; until then an unregister would be a sham.
  */
 
-export { VERSIONEN }
+export { VERSIONS }

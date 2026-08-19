@@ -14,20 +14,20 @@
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 
 /**
- * Die echten Bundles der Anwendung: eigenständig gebaut, vom tsm-ModuleLoader
- * zur Laufzeit über ihre `entry`-URL geladen.
+ * The application's real bundles: built on their own, loaded at runtime by
+ * the tsm ModuleLoader through their `entry` URL.
  *
- * Das ist die Gegenliste zu `modules.ts`. Dort steht der statisch gebündelte
- * Bestand, den noch unser Bootstrapper aktiviert; hier landet, was bereits
- * als Bundle vorliegt. Die Migration verschiebt Einträge von dort nach hier —
- * ist `modules.ts` leer, sind Bootstrapper und Sortierung löschbar, und der
- * Loader trägt allein.
+ * This is the counterpart list to `modules.ts`. Over there lives the
+ * statically bundled stock still activated by our bootstrapper; whatever
+ * already exists as a bundle lands here. The migration moves entries from
+ * there to here - once `modules.ts` is empty, bootstrapper and ordering can
+ * be deleted and the loader carries alone.
  *
- * Ein Eintrag ist ein tsm-Manifest: `id`, `version`, `entry` (URL des
- * Bundles), `provides`/`requiresService` für die Dienste, `dependencies` für
- * Modulbezüge. Dienste aus dem statischen Bestand sind für ein Bundle ganz
- * normale Dienste — beide Welten teilen sich die BoardServiceRegistry, und
- * seit tsm `unsatisfied` kennt, wartet ein Bundle auf einen fehlenden
- * Pflichtdienst, statt zu scheitern.
+ * An entry is a tsm manifest: `id`, `version`, `entry` (the bundle's URL),
+ * `provides`/`requiresService` for services, `dependencies` for module
+ * references. Services from the static stock are perfectly ordinary services
+ * to a bundle - both worlds share the BoardServiceRegistry, and since tsm
+ * knows `unsatisfied`, a bundle waits for a missing required service instead
+ * of failing.
  */
 export const bundles: ModuleManifest[] = []

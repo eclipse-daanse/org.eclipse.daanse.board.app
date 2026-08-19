@@ -1,7 +1,7 @@
 {
   "name": "org.eclipse.daanse.board.app.platform.vue",
   "version": "0.0.1-next.1",
-  "description": "Stellt Vue und Vue Router als geteilte Bibliotheken fuer tsm-Bundles bereit",
+  "description": "Provides Vue and Vue Router as shared libraries for tsm bundles",
   "license": "EPL-2.0",
   "type": "module",
   "main": "./src/index.ts",
