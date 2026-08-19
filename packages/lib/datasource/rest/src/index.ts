@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { RestStore, type IRestStoreConfiguration } from './classes'
 
-const factorySymbol = Symbol.for('RestStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const REST_STORE_FACTORY = 'RestStoreFactory'
 
-if (!container.isBound(RestStore)) {
-  container.bind(RestStore).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(REST_STORE_FACTORY)
+
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(REST_STORE_FACTORY, (config: any) => {
+    if (!RestStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid RestStore configuration. Please provide a valid configuration.',
+      )
+    }
+
+    const store = services.construct(RestStore)
+    store.init(config)
+
+    return store
+  })
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<RestStore>>(factorySymbol).toFactory(() => {
-    return config => {
-      if (!RestStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid RestStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<RestStore>(RestStore)
-      store.init(config)
-
-      return store
-    }
-  })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(REST_STORE_FACTORY)
 }
 
 // const symbol = Symbol.for('RestStore')
@@ -43,4 +51,4 @@ if (!container.isBound(factorySymbol)) {
 //   container.bind(symbol).toConstantValue(RestStore);
 // }
 
-export { type RestStore, IRestStoreConfiguration, factorySymbol }
+export { type RestStore, IRestStoreConfiguration, REST_STORE_FACTORY, factorySymbol }

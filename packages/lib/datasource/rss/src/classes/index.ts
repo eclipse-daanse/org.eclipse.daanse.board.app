@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { injectable, inject, Container } from 'inversify'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
@@ -37,7 +37,7 @@ export interface IRssParseResult {
 export class RssStore extends BaseDatasource {
   private connection: any
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IRssStoreConfiguration) {

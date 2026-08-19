@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { CsvStore, type ICsvStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('CsvStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const CSV_STORE_FACTORY = 'CsvStoreFactory'
 
-if (!container.isBound(CsvStore)) {
-  container.bind(CsvStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(CSV_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<CsvStore>>(factorySymbol).toFactory(() => {
-    return config => {
-      if (!CsvStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid CsvStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<CsvStore>(CsvStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(CSV_STORE_FACTORY, (config: any) => {
+    if (!CsvStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid CsvStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(CsvStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { type CsvStore, ICsvStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(CSV_STORE_FACTORY)
+}
+
+export { type CsvStore, ICsvStoreConfiguration, CSV_STORE_FACTORY, factorySymbol }

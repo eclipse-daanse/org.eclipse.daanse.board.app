@@ -12,30 +12,39 @@ import type { Factory } from 'inversify'
 
 import { OgcStaStore } from './classes/OgcSta'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from './interfaces/Constances'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('OgcStaStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const OGC_STA_STORE_FACTORY = 'OgcStaStoreFactory'
 
-if (!container.isBound(OgcStaStore)) {
-  container.bind<OgcStaStore>(OgcStaStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(OGC_STA_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<OgcStaStore>>(factorySymbol).toFactory(() => {
-    return config => {
-      if (!OgcStaStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid OgcStaStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<OgcStaStore>(OgcStaStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(OGC_STA_STORE_FACTORY, (config: any) => {
+    if (!OgcStaStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid OgcStaStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(OgcStaStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(OGC_STA_STORE_FACTORY)
+}
+
+export { OGC_STA_STORE_FACTORY, factorySymbol, FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL }
 export type { BoxedDatastream, BoxedThing, BoxedLocation, IOGCSTAData, IOGCSTAConfigartion, IOGCSTAHistoryConfig } from './interfaces/OgcStaConfiguration'
 export type { Datastream } from './client'

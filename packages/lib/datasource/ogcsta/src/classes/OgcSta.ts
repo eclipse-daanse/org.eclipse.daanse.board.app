@@ -26,7 +26,7 @@ import {
   ThingsApi,
 } from '../client'
 import { getSharedCachingFetch } from '../client/CachingMiddleware'
-import { inject, injectable } from 'inversify'
+import { inject, injectable } from '@eclipse-daanse/tsm'
 import {
   ConnectionRepository,
   type IConnection,
@@ -50,13 +50,13 @@ import { getObservationsWorkerManager, type ObservationsWorkerManager } from '..
 
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
-  @inject(variableIdentifier)
+  @inject('VariableRepository')
   private variableRepository!: VariableRepository
 
-  @inject(loggerIdentifier)
+  @inject('Logger')
   private loggerFactory!: LoggerFactory
 
   // Create loggers

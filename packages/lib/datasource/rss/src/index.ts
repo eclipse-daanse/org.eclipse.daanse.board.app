@@ -11,30 +11,38 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { Factory } from 'inversify'
 import { RssStore, type IRssStoreConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('RssStoreFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const RSS_STORE_FACTORY = 'RssStoreFactory'
 
-if (!container.isBound(RssStore)) {
-  container.bind<RssStore>(RssStore).toSelf().inTransientScope()
-}
+const factorySymbol = Symbol.for(RSS_STORE_FACTORY)
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<RssStore>>(factorySymbol).toFactory(() => {
-    return (config: IRssStoreConfiguration) => {
-      if (!RssStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid RssStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<RssStore>(RssStore)
-      store.init(config)
-
-      return store
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(RSS_STORE_FACTORY, (config: IRssStoreConfiguration) => {
+    if (!RssStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid RssStore configuration. Please provide a valid configuration.',
+      )
     }
+
+    const store = services.construct(RssStore)
+    store.init(config)
+
+    return store
   })
 }
 
-export { RssStore, IRssStoreConfiguration, factorySymbol }
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(RSS_STORE_FACTORY)
+}
+
+export { RssStore, IRssStoreConfiguration, RSS_STORE_FACTORY, factorySymbol }

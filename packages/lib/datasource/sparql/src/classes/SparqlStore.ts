@@ -10,7 +10,7 @@
 */
 
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { Container, inject, injectable } from 'inversify'
+import { inject, injectable } from '@eclipse-daanse/tsm'
 import { QUERY } from '../interfaces/Constances'
 import {
   identifier,
@@ -28,7 +28,7 @@ export default class SparqlStore extends BaseDatasource {
   private connection: any
   private query: string = ''
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: ISparqlStoreConfiguration) {

@@ -87,17 +87,6 @@ import { XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla
 import 'org.eclipse.daanse.board.app.lib.connection.graphql'
 import 'org.eclipse.daanse.board.app.lib.connection.websocket'
 import 'org.eclipse.daanse.board.app.lib.connection.mqtt'
-import 'org.eclipse.daanse.board.app.lib.datasource.rest'
-import 'org.eclipse.daanse.board.app.lib.datasource.csv'
-import 'org.eclipse.daanse.board.app.lib.datasource.rss'
-import 'org.eclipse.daanse.board.app.lib.datasource.graphql'
-import 'org.eclipse.daanse.board.app.lib.datasource.xmla'
-import 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
-import 'org.eclipse.daanse.board.app.lib.datasource.websocket'
-import 'org.eclipse.daanse.board.app.lib.datasource.kpi_tmp'
-import 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
-import 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
 

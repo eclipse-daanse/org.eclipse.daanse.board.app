@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { inject, injectable } from 'inversify'
+import { inject, injectable } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
@@ -173,7 +173,7 @@ export class ValhallaStore extends BaseDatasource {
   private waypoints: Waypoint[] = []
   private lastResult: ValhallaRouteResult | null = null
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IValhallaStoreConfiguration) {

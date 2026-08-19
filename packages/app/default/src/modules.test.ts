@@ -121,6 +121,7 @@ describe('modules.ts', () => {
       'EventActionsRegistry',
       'EventRegistry',
       'I18next',
+      'Logger',
       'TINY_EMITTER',
     ])
   })

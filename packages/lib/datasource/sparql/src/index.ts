@@ -12,26 +12,35 @@ import { Factory, type Container } from 'inversify'
 import SparqlStore from './classes/SparqlStore'
 import type { ISparqlStoreConfiguration } from './interfaces/ISparqlStoreConfiguration'
 import { symbol } from './interfaces/Constances'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-if (!container.isBound(SparqlStore)) {
-  container.bind(SparqlStore).toSelf().inTransientScope()
+/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
+const SPARQL_STORE = 'SparqlStore'
+
+/**
+ * Erzeugt einen Store aus einer Konfiguration.
+ *
+ * Die Instanz kommt ueber `construct`, nicht ueber `new`: die Klasse loest
+ * ihre Dienste ueber `@inject` auf, und `construct` traegt sie ein. Jeder
+ * Aufruf liefert eine eigene Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(SPARQL_STORE, (config: ISparqlStoreConfiguration) => {
+    if (!SparqlStore.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid SparqlStore configuration. Please provide a valid configuration.',
+      )
+    }
+
+    const store = services.construct(SparqlStore)
+    store.init(config)
+
+    return store
+  })
 }
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<SparqlStore>>(symbol).toFactory(() => {
-    return (config: ISparqlStoreConfiguration) => {
-      if (!SparqlStore.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid SparqlStore configuration. Please provide a valid configuration.',
-        )
-      }
-      const store = container.get<SparqlStore>(SparqlStore)
-      store.init(config)
-
-      return store
-    }
-  })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(SPARQL_STORE)
 }
 
 // const init = (container: Container) => {

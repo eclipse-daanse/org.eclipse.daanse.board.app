@@ -13,7 +13,7 @@
 
 // import { extractDataByPath } from "@/utils/helpers";
 
-import { injectable, inject } from 'inversify'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 import {
   BaseDatasource,
   IBaseConnectionConfiguration,
@@ -37,7 +37,7 @@ export class GraphQLStore extends BaseDatasource {
   private connection: any
   private query: string = ''
 
-  @inject(identifier)
+  @inject('ConnectionRepository')
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IGraphQLStoreConfiguration) {
