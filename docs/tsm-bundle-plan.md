@@ -100,7 +100,28 @@ Inversify-Rückfallweg.
 `loader.loadAll()` für die (anfangs leere) Bundle-Liste. Kein Modul wird
 angefasst.
 
-### B5.2 — Pilot: ein Widget als echtes Bundle
+### B5.2 — Pilot: ein Widget als echtes Bundle  ✔ durchgeführt
+
+Ergebnis: **Das Zielbild trägt.** `ui.vue.widget.progress` läuft als
+URL-geladenes Bundle (75 KB, nichts Geteiltes enthalten), als
+`@component` mit Konstruktor-Injektion und `@activate`/`@deactivate` für die
+Event-Registrierungen. Die `WidgetRepository` ist Tracker statt Sammelbecken.
+Nachgewiesen im Browser: Palette folgt dem Bundle (unload → weg, load →
+zurück), die Reload-Brücke tauscht nach einem Quelltext-Speichern in ~1 s
+live aus, und die Komponente rendert in der Host-Vue-Instanz (Scoped Styles,
+Reaktivität).
+
+Zwei Befunde für die Familien-Ausrollung: (1) Der Tracker muss über
+Referenz-Properties synchronisieren, nicht über das Ereignisobjekt — eine
+Komponenten-Registrierung ist lazy, ihre Instanz existiert beim
+`registered`-Ereignis noch nicht. (2) `platform.compat` teilt übergangsweise
+die acht Workspace-Pakete, die Bundles noch brauchen — jede Zeile dort ist
+Schuld mit Fälligkeit: wird eines davon selbst ein Bundle, wandert seine
+Zeile dorthin.
+
+Ursprünglicher Text:
+
+
 
 Ein Widget (Vorschlag: `ui.vue.widget.progress` — homogen, überschaubar,
 ersetzbar) bekommt:
