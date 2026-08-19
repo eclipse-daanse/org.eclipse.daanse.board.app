@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
+import type { ServiceProperties, ServiceRegistration } from '@eclipse-daanse/tsm'
 import type { Container } from 'inversify'
 
 /**
@@ -56,8 +57,16 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
    * letzte Paket umgestellt, liest niemand mehr aus dem Container, und beide
    * entfallen gemeinsam.
    */
-  override register<T>(id: string, service: T): void {
-    super.register(id, service)
+  override register<T>(
+    id: string,
+    service: T,
+    options: {
+      providedBy?: string
+      ranking?: number
+      properties?: ServiceProperties
+    } = {},
+  ): ServiceRegistration {
+    const registration = super.register(id, service, options)
 
     const identifier = Symbol.for(id)
     try {
@@ -69,6 +78,8 @@ export class BoardServiceRegistry extends DefaultServiceRegistry {
       // Die Spiegelung ist eine Zugabe für den Übergang. Schlägt sie fehl,
       // bleibt die Registrierung in dieser Registry trotzdem gültig.
     }
+
+    return registration
   }
 
   /**

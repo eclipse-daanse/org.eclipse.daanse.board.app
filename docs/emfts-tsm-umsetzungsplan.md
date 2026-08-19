@@ -66,6 +66,31 @@ den Wechsel:
 Funktionsumfang ab. Was für die **Migration** dorthin fehlt, ist als
 [Feature Request](./tsm-feature-requests.md) an tsm gemeldet statt lokal umgangen.
 
+### Abhängigkeit auf tsm: lokaler Stand statt npm
+
+Bis tsm final ist, arbeitet die Board App **gegen den lokalen Quellbaum**:
+
+```json
+// packages/lib/core/package.json
+"@eclipse-daanse/tsm": "link:../../../../EMFTs/tsm"
+```
+
+`link:` legt einen Symlink an — Änderungen an tsm wirken nach einem `npm run
+build` dort sofort, ohne Veröffentlichung. Sobald tsm auf npm released wird,
+tritt an die Stelle wieder eine Versionsangabe.
+
+**Zu beachten:** Die Versionsnummern führen in die Irre. Der lokale Stand
+trägt `0.0.1-next.1`, enthält aber deutlich mehr als das veröffentlichte
+`0.0.1-next.2` — unter anderem Requirements & Capabilities, ConfigurationAdmin,
+Metatype, Komponenten-Decorators sowie beide von uns gemeldeten Punkte:
+
+| unser FR | Umsetzung im lokalen Stand |
+|---|---|
+| [#17](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/17) — Manifest-Prüfung im Build | `manifest`-Option am Vite-Plugin, Modi `validate` und `derive` |
+| [#18](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/18) — Warten statt Scheitern | `ModuleState: 'unsatisfied'`, dazu `onServiceBound` / `onServiceUnbound`, `cardinality`, `policy` |
+
+Wer also gegen npm baut, sieht diese Funktionen nicht.
+
 ### E2 — Wie weit soll tsm gehen: Lifecycle oder echtes Laufzeitladen?
 
 Zwei getrennte Ausbaustufen, die oft in einen Topf geworfen werden:
