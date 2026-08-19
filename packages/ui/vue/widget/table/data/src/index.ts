@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,36 +11,52 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import Icon from './assets/data_table.svg'
 import DataTableWidget from './DataTableWidget.vue'
 import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('DataTableWidget', {
-    component: DataTableWidget,
-    settingsComponent: DataTableWidgetSettings,
-    supportedDSTypes: ['csv', 'rest'],
-    icon: Icon,
-    name: 'DataTable'
-  })
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  eventRegistry.registerWidget('DataTableWidget', DataTableWidgetEvents)
+const WIDGET_TYPE = 'DataTableWidget'
 
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-  actionsRegistry.registerWidgetType('DataTableWidget', DataTableWidgetInterface, 'widget')
-}
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class DataTableWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = DataTableWidget
+  readonly settingsComponent = DataTableWidgetSettings
+  readonly supportedDSTypes = ['csv', 'rest']
+  readonly icon = Icon
+  readonly name = 'DataTable'
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('DataTableWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('DataTableWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('DataTableWidget')
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, DataTableWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, DataTableWidgetInterface, 'widget')
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { DataTableWidget, DataTableWidgetSettings }

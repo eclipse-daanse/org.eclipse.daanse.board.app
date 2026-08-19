@@ -23,10 +23,29 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 /** Where the separately built tsm bundles live, keyed by module id. */
 const bundleDirs: Record<string, string> = {
-  'ui.vue.widget.progress': resolve(
-    __dirname,
-    '../../ui/vue/widget/progress/dist-bundle',
-  ),
+  'ui.vue.widget.progress': resolve(__dirname, '../../ui/vue/widget/progress/dist-bundle'),
+  'ui.vue.widget.chart': resolve(__dirname, '../../ui/vue/widget/chart/dist-bundle'),
+  'ui.vue.widget.code': resolve(__dirname, '../../ui/vue/widget/code/dist-bundle'),
+  'ui.vue.widget.icon': resolve(__dirname, '../../ui/vue/widget/icon/dist-bundle'),
+  'ui.vue.widget.image': resolve(__dirname, '../../ui/vue/widget/image/dist-bundle'),
+  'ui.vue.widget.markdown': resolve(__dirname, '../../ui/vue/widget/markdown/dist-bundle'),
+  'ui.vue.widget.mermaid': resolve(__dirname, '../../ui/vue/widget/mermaid/dist-bundle'),
+  'ui.vue.widget.page': resolve(__dirname, '../../ui/vue/widget/page/dist-bundle'),
+  'ui.vue.widget.routing': resolve(__dirname, '../../ui/vue/widget/routing/dist-bundle'),
+  'ui.vue.widget.rss': resolve(__dirname, '../../ui/vue/widget/rss/dist-bundle'),
+  'ui.vue.widget.sample': resolve(__dirname, '../../ui/vue/widget/sample/dist-bundle'),
+  'ui.vue.widget.svg.base': resolve(__dirname, '../../ui/vue/widget/svg/base/dist-bundle'),
+  'ui.vue.widget.svg.repeat': resolve(__dirname, '../../ui/vue/widget/svg/repeat/dist-bundle'),
+  'ui.vue.widget.table.data': resolve(__dirname, '../../ui/vue/widget/table/data/dist-bundle'),
+  'ui.vue.widget.table.kpi': resolve(__dirname, '../../ui/vue/widget/table/kpi/dist-bundle'),
+  'ui.vue.widget.table.pivot': resolve(__dirname, '../../ui/vue/widget/table/pivot/dist-bundle'),
+  'ui.vue.widget.text.plain': resolve(__dirname, '../../ui/vue/widget/text/plain/dist-bundle'),
+  'ui.vue.widget.text.rich': resolve(__dirname, '../../ui/vue/widget/text/rich/dist-bundle'),
+  'ui.vue.widget.timeline': resolve(__dirname, '../../ui/vue/widget/timeline/dist-bundle'),
+  'ui.vue.widget.vanta': resolve(__dirname, '../../ui/vue/widget/vanta/dist-bundle'),
+  'ui.vue.widget.video': resolve(__dirname, '../../ui/vue/widget/video/dist-bundle'),
+  'ui.vue.widget.weather': resolve(__dirname, '../../ui/vue/widget/weather/dist-bundle'),
+  'ui.vue.widget.xmla.filters': resolve(__dirname, '../../ui/vue/widget/xmla/filters/dist-bundle'),
 }
 
 const BUNDLE_TYPES: Record<string, string> = {

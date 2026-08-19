@@ -1,18 +1,24 @@
-/*
-  Copyright (c) 2025 Contributors to the  Eclipse Foundation.
-  This program and the accompanying materials are made
-  available under the terms of the Eclipse Public License 2.0
-  which is available at https://www.eclipse.org/legal/epl-2.0/
-  SPDX-License-Identifier: EPL-2.0
+/*********************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Smart City Jena
+ **********************************************************************/
 
-  Contributors: Smart City Jena
-
-*/
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import TimelineWidget from './TimelineWidget.vue'
 import TimelineWidgetSettings from './TimelineWidgetSettings.vue'
 import icon from './assets/timeline.svg'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { TimelineWidgetEvents } from './events/TimelineWidgetEvents'
+import { TimelineWidgetInterface } from './api/TimelineWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 export interface TimelineSettings {
   startTime?: string; // ISO 8601 DateTime
@@ -23,31 +29,47 @@ export interface TimelineSettings {
   autoPlay?: boolean;
 }
 
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
-import { TimelineWidgetEvents } from './events/TimelineWidgetEvents'
-import { TimelineWidgetInterface } from './api/TimelineWidgetInterface'
+const WIDGET_TYPE = 'TimelineWidget'
 
-export function activate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).registerWidget('TimelineWidget', {
-    component: TimelineWidget,
-    settingsComponent: TimelineWidgetSettings,
-    supportedDSTypes: [],
-    icon: icon,
-    name: 'Timeline'
-  })
+/**
+ * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * WidgetRepository tracks it into the palette, unloading withdraws it.
+ */
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class TimelineWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = TimelineWidget
+  readonly settingsComponent = TimelineWidgetSettings
+  readonly supportedDSTypes = []
+  readonly icon = icon
+  readonly name = 'Timeline'
 
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  eventRegistry.registerWidget('TimelineWidget', TimelineWidgetEvents)
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
 
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-  actionsRegistry.registerWidgetType('TimelineWidget', TimelineWidgetInterface, 'widget')
-}
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, TimelineWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, TimelineWidgetInterface, 'widget')
+  }
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('TimelineWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('TimelineWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('TimelineWidget')
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export { TimelineWidget, TimelineWidgetSettings }

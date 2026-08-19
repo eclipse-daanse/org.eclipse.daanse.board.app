@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,44 +11,53 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
 import Icon from './assets/weather.svg'
 import WeatherWidget from './WeatherWidget.vue'
 import WeatherWidgetSettings from './WeatherWidgetSettings.vue'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import type { WeatherWidgetSettings as IWeatherWidgetSettings } from './types/WeatherWidgetSettings'
-
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { WeatherWidgetEvents } from './events/WeatherWidgetEvents'
 import { WeatherWidgetInterface } from './api/WeatherWidgetInterface'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
-export function activate({ services }: ActivationContext) {
-  try {
-    const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY);
-    console.log(widgetRepository);
-    widgetRepository.registerWidget('WeatherWidget', {
-      component: WeatherWidget,
-      settingsComponent: WeatherWidgetSettings,
-      supportedDSTypes: ['OGCSTAData'],
-      icon: Icon,
-      name: 'Weather'
-    })
-    console.log('Weather widget registered successfully')
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-    const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-    eventRegistry.registerWidget('WeatherWidget', WeatherWidgetEvents)
+const WIDGET_TYPE = 'WeatherWidget'
 
-    const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
-    actionsRegistry.registerWidgetType('WeatherWidget', WeatherWidgetInterface, 'widget')
-  } catch (error) {
-    console.error('Failed to register Weather widget:', error)
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class WeatherWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = WeatherWidget
+  readonly settingsComponent = WeatherWidgetSettings
+  readonly supportedDSTypes = ['OGCSTAData']
+  readonly icon = Icon
+  readonly name = 'Weather'
+
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
+
+  @activate()
+  register(): void {
+    this.events.registerWidget(WIDGET_TYPE, WeatherWidgetEvents)
+    this.actions.registerWidgetType(WIDGET_TYPE, WeatherWidgetInterface, 'widget')
   }
-}
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('WeatherWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('WeatherWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('WeatherWidget')
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
 export {

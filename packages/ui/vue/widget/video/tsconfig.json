@@ -6,14 +6,15 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "types": [
       "vite/client"
-    ]
+    ],
+    "moduleResolution": "bundler"
   }
 }

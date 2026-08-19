@@ -3,9 +3,9 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "es2016",
+    "target": "es2022",
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs",
+    "module": "esnext", "moduleResolution": "bundler",
     /* Specify what module code is generated. */
     "declaration": true,
     /* Generate .d.ts files from TypeScript and JavaScript files in your project. */

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.widget.icon",
+  "name": "IconWidget",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/ui.vue.widget.icon/index.js",
+  "exports": {},
+  "dependencies": [
+    "platform.vue",
+    "platform.compat"
+  ],
+  "requiresService": [
+    {
+      "id": "EventRegistry"
+    }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.annotations",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.i18next",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.variable.components",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "provides": [
+    {
+      "id": "daanse.widget"
+    }
+  ]
+}
