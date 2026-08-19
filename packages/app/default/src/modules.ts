@@ -161,6 +161,18 @@ export const modules: ModuleEntry[] = [
     requires: ['ConnectionRepository'],
   },
   {
+    id: 'lib.events',
+    load: () => import('org.eclipse.daanse.board.app.lib.events'),
+    provides: [
+      'EcoreMetadataService',
+      'EventActionsRegistry',
+      'EventBusBridge',
+      'EventManager',
+      'EventRegistry',
+    ],
+    requires: ['TINY_EMITTER'],
+  },
+  {
     id: 'lib.i18next',
     load: () => import('org.eclipse.daanse.board.app.lib.i18next'),
     provides: ['I18next'],

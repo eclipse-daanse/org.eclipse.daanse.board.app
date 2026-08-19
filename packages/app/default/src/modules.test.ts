@@ -117,11 +117,6 @@ describe('modules.ts', () => {
       .filter((d) => !angeboten.has(d))
       .sort()
 
-    expect(extern).toEqual([
-      'App',
-      'EventActionsRegistry',
-      'EventRegistry',
-      'TINY_EMITTER',
-    ])
+    expect(extern).toEqual(['App', 'TINY_EMITTER'])
   })
 })
