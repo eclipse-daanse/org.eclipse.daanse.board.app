@@ -8,29 +8,32 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  symbolForI18n,
-} from "org.eclipse.daanse.board.app.lib.i18next"
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next"
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import type {Plugin} from "@vue/runtime-core";
-import { Options } from '@vitejs/plugin-vue'
 import { App } from 'vue'
 
 
-let inititalized = false
-let i18n:i18n;
-if(!inititalized){
-  i18n = container.get<i18n>(symbolForI18n);
-  const I18nextVuePlugin:Plugin = {
-    install(app, options:Options) {
-      // configure the app
-      app.provide('i18n',i18n)
-    }
+/**
+ * Haengt i18next als Vue-Plugin in die Anwendung.
+ *
+ * Braucht beides zur Aktivierungszeit: die i18next-Instanz und die
+ * App-Instanz. Vorher stand das auf Modulebene hinter einem
+ * `inititalized`-Wächter - der war noetig, weil ein Import mehrfach
+ * ausgewertet werden konnte. `activate` laeuft genau einmal, der Waechter
+ * entfaellt.
+ */
+export function activate({ services }: ActivationContext) {
+  const i18n = services.getRequired<i18n>(I18NEXT)
+  const app = services.getRequired<App<any>>('App')
+
+  const I18nextVuePlugin: Plugin = {
+    install(app) {
+      app.provide('i18n', i18n)
+    },
   }
-  const app: App<any> = container.get('App')
+
   app.use(I18nextVuePlugin)
-  console.log('📦 I18nextVuePlugin initialized')
-  inititalized = true;
 }
 

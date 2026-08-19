@@ -30,7 +30,6 @@ import {
   ModuleBootstrapper,
 } from 'org.eclipse.daanse.board.app.lib.core'
 import { modules } from './modules'
-import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 
@@ -54,7 +53,6 @@ app.use(createVuestic({
 }))
 
 init(container)
-initLogger(container)
 container.bind(identifiers.CONTAINER).toDynamicValue((ctx: any) => {
   return ctx
 })
@@ -65,6 +63,13 @@ app.provide('container', container);
 app.provide('codeEditorType', 'monaco');
 const symbolForApp = Symbol.for('App');
 container.bind('App').toConstantValue(app);
+/*
+ * Zusaetzlich in der Registry: die Container-Bindung oben verwendet den String
+ * 'App' als Identifier, waehrend der Rueckfallweg der Registry ueber
+ * Symbol.for(id) sucht - er faende sie also nicht. Module, die die App-Instanz
+ * brauchen, loesen sie ueber diese Registrierung auf.
+ */
+services.register('App', app);
 const pinia = createPinia();
 setActivePinia(pinia)
 app.use(pinia)
@@ -216,16 +221,6 @@ function onLoaded() {
 // })
 
 /**
- * Grunddienste, die umgestellte Module in `activate` bereits benötigen —
- * allen voran i18next, an das sich die Sprachmodule hängen.
- */
-async function loadGrunddienste() {
-  await import('org.eclipse.daanse.board.app.lib.i18next')
-  await import('org.eclipse.daanse.board.app.ui.vue.plugins.i18next')
-  await import('org.eclipse.daanse.board.app.lib.settings.manager')
-}
-
-/**
  * Pakete, die die registrierten Typen der Module bereits benutzen.
  *
  * Muss **nach** der Modulaktivierung laufen — zwei Beispiele aus diesem
@@ -280,10 +275,11 @@ const bootstrapper = new ModuleBootstrapper(services, {
 })
 
 // Startreihenfolge, jetzt explizit statt als Nebenwirkung der Importzeilen:
-// Grunddienste, dann die Module, dann die Wiederherstellung gespeicherter
-// Boards — die setzt die registrierten Typen der Module bereits voraus.
-loadGrunddienste()
-  .then(() => bootstrapper.activateAll(modules))
+// erst die Module — deren Reihenfolge untereinander aus ihren Deklarationen
+// folgt —, dann die Wiederherstellung gespeicherter Boards, die die
+// registrierten Typen der Module bereits voraussetzt.
+bootstrapper
+  .activateAll(modules)
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
     seitenEinrichten()

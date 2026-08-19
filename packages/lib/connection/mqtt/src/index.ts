@@ -12,30 +12,37 @@
  **********************************************************************/
 
 import { MQTTConnection, type IMQTTConnectionConfiguration } from './classes'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
-import { Factory } from 'inversify'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
-const factorySymbol = Symbol.for('MQTTConnectionFactory')
+/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
+const MQTT_CONNECTION_FACTORY = 'MQTTConnectionFactory'
 
-if (!container.isBound(MQTTConnection)) {
-  container.bind<MQTTConnection>(MQTTConnection).toSelf().inTransientScope()
+const factorySymbol = Symbol.for(MQTT_CONNECTION_FACTORY)
+
+/**
+ * Erzeugt eine Verbindung aus einer Konfiguration.
+ *
+ * `construct` statt `new`: die Klasse loest ihren Logger ueber
+ * `@inject` auf. Jeder Aufruf liefert eine eigene
+ * Instanz - vorher ueber `inTransientScope`.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(MQTT_CONNECTION_FACTORY, (config: IMQTTConnectionConfiguration) => {
+    if (!MQTTConnection.validateConfiguration(config)) {
+      throw new Error(
+        'Invalid MQTTConnection configuration. Please provide a valid configuration.',
+      )
+    }
+
+    const connection = services.construct(MQTTConnection)
+    connection.init(config)
+
+    return connection
+  })
 }
 
-if (!container.isBound(factorySymbol)) {
-  container.bind<Factory<MQTTConnection>>(factorySymbol).toFactory(() => {
-    return (config: IMQTTConnectionConfiguration) => {
-      if (!MQTTConnection.validateConfiguration(config)) {
-        throw new Error(
-          'Invalid MQTTConnection configuration. Please provide a valid configuration.',
-        )
-      }
-
-      const connection = container.get<MQTTConnection>(MQTTConnection)
-      connection.init(config)
-
-      return connection
-    }
-  })
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(MQTT_CONNECTION_FACTORY)
 }
 
 export { MQTTConnection, IMQTTConnectionConfiguration, factorySymbol }

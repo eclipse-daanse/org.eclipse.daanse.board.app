@@ -64,6 +64,17 @@ export const modules: ModuleEntry[] = [
     provides: ['WeatherComposer'],
   },
   {
+    id: 'lib.connection.graphql',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.graphql'),
+    provides: ['GraphQLConnectionFactory'],
+  },
+  {
+    id: 'lib.connection.mqtt',
+    load: () => import('org.eclipse.daanse.board.app.lib.connection.mqtt'),
+    provides: ['MQTTConnectionFactory'],
+    requires: ['LoggerFactory'],
+  },
+  {
     id: 'lib.connection.rest',
     load: () => import('org.eclipse.daanse.board.app.lib.connection.rest'),
     provides: ['RestConnectionFactory'],
@@ -105,7 +116,7 @@ export const modules: ModuleEntry[] = [
     id: 'lib.datasource.ogcsta',
     load: () => import('org.eclipse.daanse.board.app.lib.datasource.ogcsta'),
     provides: ['OgcStaStoreFactory'],
-    requires: ['ConnectionRepository', 'Logger', 'VariableRepository'],
+    requires: ['ConnectionRepository', 'LoggerFactory', 'VariableRepository'],
   },
   {
     id: 'lib.datasource.rest',
@@ -148,6 +159,16 @@ export const modules: ModuleEntry[] = [
     load: () => import('org.eclipse.daanse.board.app.lib.datasource.xmla'),
     provides: ['XmlaStoreFactory'],
     requires: ['ConnectionRepository'],
+  },
+  {
+    id: 'lib.i18next',
+    load: () => import('org.eclipse.daanse.board.app.lib.i18next'),
+    provides: ['I18next'],
+  },
+  {
+    id: 'lib.logger',
+    load: () => import('org.eclipse.daanse.board.app.lib.logger'),
+    provides: ['LoggerFactory'],
   },
   {
     id: 'lib.repository.connection',
@@ -194,6 +215,11 @@ export const modules: ModuleEntry[] = [
     id: 'lib.repository.widget',
     load: () => import('org.eclipse.daanse.board.app.lib.repository.widget'),
     provides: ['WidgetRepository'],
+  },
+  {
+    id: 'lib.settings.manager',
+    load: () => import('org.eclipse.daanse.board.app.lib.settings.manager'),
+    provides: ['SettingsManager'],
   },
   {
     id: 'ui.vue.composer.chart',
@@ -402,6 +428,11 @@ export const modules: ModuleEntry[] = [
     id: 'ui.vue.layouts.grid',
     load: () => import('org.eclipse.daanse.board.app.ui.vue.layouts.grid'),
     requires: ['LayoutRepository'],
+  },
+  {
+    id: 'ui.vue.plugins.i18next',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.plugins.i18next'),
+    requires: ['App', 'I18next'],
   },
   {
     id: 'ui.vue.variable.computed',

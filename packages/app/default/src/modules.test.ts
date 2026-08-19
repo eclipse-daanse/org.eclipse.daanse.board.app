@@ -118,10 +118,9 @@ describe('modules.ts', () => {
       .sort()
 
     expect(extern).toEqual([
+      'App',
       'EventActionsRegistry',
       'EventRegistry',
-      'I18next',
-      'Logger',
       'TINY_EMITTER',
     ])
   })

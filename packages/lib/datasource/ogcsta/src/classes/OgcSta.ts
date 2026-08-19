@@ -56,7 +56,7 @@ export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
   @inject('VariableRepository')
   private variableRepository!: VariableRepository
 
-  @inject('Logger')
+  @inject('LoggerFactory')
   private loggerFactory!: LoggerFactory
 
   // Create loggers
