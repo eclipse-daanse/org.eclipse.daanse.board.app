@@ -28,12 +28,14 @@ Folgenden möglich.
 - **Ausgeführt werden Komponenten vom `ModuleLoader`** (`ModuleLoader.ts:1821`),
   nicht von der Registry. DS nutzen heißt: unser `ModuleBootstrapper` weicht dem
   Loader. Das ist keine Zusatzoption, sondern die Konsequenz.
-- **Der Loader kann statisch geladene Module übernehmen:** `loadEntry` prüft
-  zuerst `window[moduleId]` auf einen Container (`activate`/`deactivate`/Exporte
-  genügen). Damit gibt es einen Übergangspfad, der **ohne** URLs auskommt: die
-  Anwendung importiert wie bisher, legt die Namespaces unter `window[id]` ab,
-  und der Loader behandelt sie wie geladene Bundles. Echtes Nachladen per URL
-  kommt später dazu, ohne die Module erneut anzufassen.
+- **Der Loader kann statisch geladene Module übernehmen — aber heute nur über
+  `window[moduleId]`** (Module-Federation-Konvention; `loadEntry` prüft diese
+  Stelle vor dem URL-Import). Für 112 Module ist der globale Scope der falsche
+  Ort: Namensraumverschmutzung, mögliche Kollisionen mit DOM-`id`s (der Loader
+  warnt selbst davor), kein `window` in Node-Tests. Deshalb **FR-7 an tsm**:
+  explizite Übergabe per `loadModule(manifest, { container })` oder
+  `entryResolver`-Option. B5.1 beginnt, sobald die Antwort da ist — der
+  `window`-Pfad bleibt Rückfalloption, falls tsm den Vorschlag ablehnt.
 - **`requiresService` wirft heute statt zu warten** (FR-6 / #18). Für den
   Umstieg auf den Loader ist die Antwort des tsm-Teams relevant; bis dahin
   sortiert der Loader über `dependencies`, und unsere `requires`-Angaben wandern
@@ -78,8 +80,9 @@ export class ProgressWidgetProvider implements WidgetProvider {
 ### B5.1 — Loader statt eigenem Bootstrapper (der Pfadwechsel)
 
 Manifeste für alle 112 Module generieren (aus `modules.ts` — die Felder sind
-absichtlich gleich benannt), `window[id]`-Übergabepfad aufsetzen,
-`ModuleBootstrapper` durch `ModuleLoader` ersetzen. `modules.ts` schrumpft auf
+absichtlich gleich benannt), Container-Übergabe an den Loader (FR-7; bis zur
+Antwort ist `window[id]` nur Rückfalloption), `ModuleBootstrapper` durch
+`ModuleLoader` ersetzen. `modules.ts` schrumpft auf
 eine Manifestliste. Erfolgskriterium: identischer Start (112 aktiv, Palette
 unverändert) — nachweisbar mit dem vorhandenen Browser-Prüfskript.
 **Unser Bootstrapper und die Sortierung werden gelöscht** — sie waren

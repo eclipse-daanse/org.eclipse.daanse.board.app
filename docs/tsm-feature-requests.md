@@ -255,3 +255,41 @@ Uns ist bewusst, dass das tsm vom Modullader Richtung Komponentenlaufzeit
 verschiebt — das ist eine Designentscheidung und keine Kleinigkeit. Eingereicht,
 weil bereits Schritt 1 die handsortierten Startlisten überflüssig macht — was
 der Nachtrag oben inzwischen praktisch zeigt.
+
+---
+
+## FR-7 — Modul-Container explizit übergeben statt über `window[moduleId]`
+
+**Kontext.** Für den Übergang von statisch gebündelten Modulen zu echten
+Bundles (unser B5.1) sollen bereits importierte Module vom `ModuleLoader`
+übernommen werden, ohne dass sie eine `entry`-URL haben. Der einzige Weg dafür
+ist heute die Module-Federation-Konvention: den Namespace vor dem Laden unter
+`window[moduleId]` ablegen, `loadEntry` findet ihn dort.
+
+**Problem.** Der globale Scope ist dafür der falsche Ort, und der Loader weiß
+das selbst — `loadEntry` enthält Abwehrcode gegen DOM-Elemente, deren `id`
+der Browser als globale Variable exponiert, und warnt bei belegten Namen.
+Dazu kommt: `window` existiert in Node-Testläufen nicht, zwei Anwendungen auf
+einer Seite teilen sich den Scope, und die Übergabe ist ein impliziter
+Vertrag („leg es dorthin, bevor du lädst") statt einer API.
+
+**Vorschlag.** Eine explizite Übergabe, eine der beiden Formen (oder beide):
+
+```typescript
+// pro Modul:
+await loader.loadModule(manifest, { container: moduleNamespace })
+
+// oder als Auflöser fuer den Host:
+new ModuleLoader({
+  entryResolver: (manifest) => preloaded.get(manifest.id)  // undefined -> URL-Weg
+})
+```
+
+`loadEntry` fragt zuerst den übergebenen Container bzw. Resolver, dann erst
+`window`, dann die URL. Der `window`-Pfad bleibt für MF-Remotes unverändert.
+
+**Nutzen über unseren Fall hinaus.** Jede Anwendung, die schrittweise von
+einem Bundler-Monolithen auf tsm-Bundles umsteigt, braucht genau diese Phase:
+Loader-Semantik (Manifeste, DS-Komponenten, Lebenszyklus) für Module, die
+noch im Hauptbundle stecken. Auch Tests profitieren: ein Modul lässt sich dem
+Loader direkt übergeben, ohne URL-Mock oder jsdom-Global.
