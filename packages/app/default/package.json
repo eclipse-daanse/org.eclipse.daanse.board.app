@@ -147,7 +147,8 @@
     "vue-router": "^5.0.1",
     "vue3-moveable": "^0.28.0",
     "vuedraggable": "^4.1.0",
-    "vuestic-ui": "^1.10.3"
+    "vuestic-ui": "^1.10.3",
+    "@eclipse-daanse/tsm": "link:../../../../EMFTs/tsm"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

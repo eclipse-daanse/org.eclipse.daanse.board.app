@@ -30,6 +30,9 @@ import {
   ModuleBootstrapper,
 } from 'org.eclipse.daanse.board.app.lib.core'
 import { modules } from './modules'
+import { bundles } from './bundles'
+import { ModuleLoader } from '@eclipse-daanse/tsm'
+import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 
@@ -257,11 +260,37 @@ const bootstrapper = new ModuleBootstrapper(services, {
 // Der gesamte Start: alle Pakete sind Module, ihre Reihenfolge folgt aus den
 // Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
 // beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
+/*
+ * Der tsm-ModuleLoader lädt die echten Bundles aus bundles.ts — Pakete mit
+ * eigenem Build und entry-URL. Er teilt sich die Registry mit dem
+ * Bootstrapper: Dienste des statischen Bestands sind für Bundles gewöhnliche
+ * Dienste und umgekehrt. Die Migration verschiebt Module aus modules.ts
+ * hierher; der Bootstrapper stirbt durch Leere.
+ */
+const loader = new ModuleLoader({
+  serviceRegistry: services,
+  hotReload: import.meta.env.DEV,
+  continueOnError: true,
+})
+
+// Die tsm-Konsole: in den Browser-DevTools stehen tsm.lb(), tsm.services()
+// und Verwandte zur Verfügung — Einblick in Module, Dienste und Zustände.
+installDevtools({ loader })
+
 bootstrapper
   .activateAll(modules)
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
     seitenEinrichten()
+    // Nach dem statischen Bestand, damit dessen Dienste registriert sind,
+    // wenn ein Bundle sie als requiresService nennt.
+    loader.register(bundles)
+    return loader.loadAll()
+  })
+  .then(() => {
+    if (bundles.length > 0) {
+      console.log(`📦 ${bundles.length} Bundle(s) geladen`)
+    }
   })
   .catch((err) => {
     // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,
