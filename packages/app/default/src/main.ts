@@ -277,6 +277,14 @@ const loader = new ModuleLoader({
 // und Verwandte zur Verfügung — Einblick in Module, Dienste und Zustände.
 installDevtools({ loader })
 
+async function ladePlattformBundles() {
+  const [manifest, container] = await Promise.all([
+    import('org.eclipse.daanse.board.app.platform.vue/manifest.json'),
+    import('org.eclipse.daanse.board.app.platform.vue'),
+  ])
+  await loader.loadModule(manifest.default, { container })
+}
+
 bootstrapper
   .activateAll(modules)
   .then(({ activated }) => {
@@ -284,8 +292,17 @@ bootstrapper
     seitenEinrichten()
     // Nach dem statischen Bestand, damit dessen Dienste registriert sind,
     // wenn ein Bundle sie als requiresService nennt.
-    loader.register(bundles)
-    return loader.loadAll()
+    //
+    // platform.vue geht als erstes durch den Loader: sein Manifest traegt die
+    // tsm.library-Capabilities, gegen die die sharedDependencies der Bundles
+    // aufgeloest werden. Der Container wird uebergeben statt per URL geladen,
+    // weil das Modul dieselbe Vue-Instanz ausgeben muss, mit der der Host
+    // rendert - es lebt deshalb noch im Modulgraphen des Hosts.
+    return ladePlattformBundles()
+      .then(() => {
+        loader.register(bundles)
+        return loader.loadAll()
+      })
   })
   .then(() => {
     if (bundles.length > 0) {
