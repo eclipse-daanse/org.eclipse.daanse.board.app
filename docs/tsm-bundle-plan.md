@@ -28,14 +28,18 @@ Folgenden möglich.
 - **Ausgeführt werden Komponenten vom `ModuleLoader`** (`ModuleLoader.ts:1821`),
   nicht von der Registry. DS nutzen heißt: unser `ModuleBootstrapper` weicht dem
   Loader. Das ist keine Zusatzoption, sondern die Konsequenz.
-- **Der Loader kann statisch geladene Module übernehmen — aber heute nur über
-  `window[moduleId]`** (Module-Federation-Konvention; `loadEntry` prüft diese
-  Stelle vor dem URL-Import). Für 112 Module ist der globale Scope der falsche
-  Ort: Namensraumverschmutzung, mögliche Kollisionen mit DOM-`id`s (der Loader
-  warnt selbst davor), kein `window` in Node-Tests. Deshalb **FR-7 an tsm** ([#19](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/19)):
-  explizite Übergabe per `loadModule(manifest, { container })` oder
-  `entryResolver`-Option. B5.1 beginnt, sobald die Antwort da ist — der
-  `window`-Pfad bleibt Rückfalloption, falls tsm den Vorschlag ablehnt.
+- **Der `window[moduleId]`-Pfad in `loadEntry` verschwindet:** Module
+  Federation war nie Teil von tsm und wird entfernt, mit ihr der
+  `window`-Zugriff (Auskunft tsm-Team). Für die Migrationsrichtung dieses
+  Plans ist das ohne Belang — der Loader lädt hier ausschließlich echte
+  Bundles per URL. **FR-7 /
+  [#19](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/19)**
+  (explizite Container-Übergabe) bleibt als Testbarkeits-Wunsch offen, ist
+  aber keine Abhängigkeit mehr.
+- **Der Loader nimmt eine fremde Registry** (`options.serviceRegistry`).
+  Bootstrapper und Loader können deshalb parallel laufen und in dieselbe
+  `BoardServiceRegistry` schreiben — dasselbe Brückenmuster wie beim
+  Inversify-Übergang.
 - **`requiresService` wirft heute statt zu warten** (FR-6 / #18). Für den
   Umstieg auf den Loader ist die Antwort des tsm-Teams relevant; bis dahin
   sortiert der Loader über `dependencies`, und unsere `requires`-Angaben wandern
@@ -75,51 +79,79 @@ export class ProgressWidgetProvider implements WidgetProvider {
    EClass/EAttribute statt handgebauter Settings-Dialoge. Das ist ein eigener
    Schritt nach dem Bundle-Umbau, kein Teil davon.
 
-## 4. Schritte
+## 4. Schritte — vertikal statt horizontal
 
-### B5.1 — Loader statt eigenem Bootstrapper (der Pfadwechsel)
+Die erste Fassung dieses Plans wollte horizontal vorgehen: alle 112 Module in
+den Loader heben (vorgeladen, ohne URLs), dann DS, dann Sichtbarkeit, zuletzt
+echte Bundles. Das hätte alle Module in einen Zwischenzustand gebracht, den
+der letzte Schritt ein zweites Mal anfasst — und das eigentliche Risiko
+(geteilte Abhängigkeiten, Import-Grenze) erst am Ende aufgedeckt.
 
-Manifeste für alle 112 Module generieren (aus `modules.ts` — die Felder sind
-absichtlich gleich benannt), Container-Übergabe an den Loader (FR-7; bis zur
-Antwort ist `window[id]` nur Rückfalloption), `ModuleBootstrapper` durch
-`ModuleLoader` ersetzen. `modules.ts` schrumpft auf
-eine Manifestliste. Erfolgskriterium: identischer Start (112 aktiv, Palette
-unverändert) — nachweisbar mit dem vorhandenen Browser-Prüfskript.
-**Unser Bootstrapper und die Sortierung werden gelöscht** — sie waren
-Übergangswerkzeug, und tsm übernimmt.
+**Beschlossen ist die Gegenrichtung:** Pakete werden einzeln zu echten,
+URL-geladenen Bundles. Der Loader lädt von Anfang an nur Echtes; der alte
+Bootstrapper behält den Rest und stirbt durch Leere — wie zuvor der
+Inversify-Rückfallweg.
 
-### B5.2 — DS-Pilot: die Widget-Familie (24 Pakete, homogen)
+### B5.1 — Loader neben dem Bootstrapper aufsetzen
 
-`WidgetProvider`-Schnittstelle in einem neuen API-Paket, `WidgetRepository`
-auf Tracker umbauen (mit Rückwärts-API für die Übergangszeit), die 24 Widgets
-auf `@component` umstellen. Die `EventRegistry`-Anmeldungen wandern in
-dieselbe Komponente (`@activate`/`@deactivate`-Methoden). Danach dasselbe für
-die 23 Typ-Registrierungen (Datasource/Connection/Composer-UI) und die 14
-Factories (`scope: 'transient'`-Komponenten oder registrierte Funktionen —
-Pilot entscheidet).
+`ModuleLoader` mit unserer `BoardServiceRegistry` instanziieren
+(`options.serviceRegistry`), Start in `main.ts`: erst
+`bootstrapper.activateAll(modules)` für den statischen Bestand, dann
+`loader.loadAll()` für die (anfangs leere) Bundle-Liste. Kein Modul wird
+angefasst.
 
-### B5.3 — Sichtbarkeitsgrenze
+### B5.2 — Pilot: ein Widget als echtes Bundle
 
-API-Pakete abtrennen (Typen dürfen importiert werden — 201 Typ-Importe sind
-unkritisch), Wert-Importe zwischen Bundles durch Dienste ersetzen,
-`tsm:`-Importe für Bundle-zu-Bundle-Bezüge, `sharedDependencies` für vue/pinia
-über die Import-Map. Das ist der teuerste Schritt (653 Wert-Importe), aber er
-ist **pro Familie** machbar, nicht nur als Ganzes.
+Ein Widget (Vorschlag: `ui.vue.widget.progress` — homogen, überschaubar,
+ersetzbar) bekommt:
 
-### B5.4 — Echtes Nachladen
+- eigenen Vite-Build (`vite build --lib`), der **vue/pinia externalisiert**
+  und aus dem Dienstzugriff kommend keine Wert-Importe in den Host hat.
+  Die String-Konstanten (`WIDGET_REPOSITORY`, `EVENT_REGISTRY_ID`) werden zu
+  Literalen bzw. wandern in ein API-Paket mit reinen Typen — der einzige
+  nötige Schnitt, und er ist klein
+- ein `tsm.manifest.json` mit `entry`-URL, `provides`, `requiresService`,
+  `sharedDependencies`
+- DS-Form: `@component`-Provider statt `activate`-Prozedur; die
+  `WidgetRepository` bekommt fürs Pilotpaket den Tracker-Pfad
+  (`addListener` auf `widget.type`-Property)
+- Import-Map im Host (`generateImportMap` aus tsm), damit das Bundle Vue vom
+  Host bezieht — **eine** Vue-Instanz, nicht zwei
 
-`entry`-URLs statt `window`-Übergabe, Bundles als eigene Vite-Builds,
-Hot Reload und die `gene`-DevTools-Konsole. Erst hier wird aus dem
-Monorepo-Build ein Installationsmodell.
+Erfolgskriterium: Das Widget erscheint in der Palette, funktioniert im Board,
+übersteht `unloadModule`/`loadModule` zur Laufzeit (Verschwinden aus der
+Palette inklusive), und der Eintrag ist aus `modules.ts` gelöscht. **Der
+Pilot beweist oder widerlegt das Zielbild, bevor 111 weitere folgen.**
+
+### B5.3 — Familienweise nachziehen
+
+Reihenfolge nach Homogenität und Kopplungsarmut: übrige 23 Widgets, dann
+Typ-Registrierungen (Datasource/Connection/Composer-UI, 23), i18n (11),
+Factories (14), Singletons (14), Sonstige (26). Je Familie: Wert-Importe
+kappen (API-Pakete für Typen), eigener Build, Manifest, DS-Form, Eintrag aus
+`modules.ts` raus. Die Registries werden dabei nacheinander auf das
+Tracker-Muster umgebaut.
+
+### B5.4 — Bootstrapper löschen
+
+Wenn `modules.ts` leer ist: `ModuleBootstrapper`, Sortierung und die
+`provides`/`requires`-Felder an `ModuleEntry` entfernen. Hot Reload und die
+`gene`-Konsole kommen mit dem Loader von selbst; danach Inversify-Brücke
+prüfen — zu dem Zeitpunkt dürfte auch der Vue-Service-Locator-Rest (30
+Dateien) klein genug sein, um den Container ganz zu entfernen.
 
 ## 5. Reihenfolge-Begründung
 
-Loader zuerst (B5.1), weil DS-Komponenten nur er ausführt — jede
-`@component`-Umstellung vor dem Loader-Wechsel wäre toter Code. Widgets als
-Pilot (B5.2), weil die Familie homogen ist und der Tracker-Umbau der
-`WidgetRepository` das Muster für alle übrigen Registries liefert.
-Sichtbarkeit (B5.3) danach, weil sie ohne laufende DS-Dienste nichts zu
-ersetzen hätte.
+Der Pilot zuerst, weil er die einzige offene Existenzfrage beantwortet: trägt
+ein extern gebautes Bundle mit geteiltem Vue im Zusammenspiel mit dem
+statischen Rest? Alles Weitere ist Wiederholung des Pilotmusters. Der
+Loader-Beistellbetrieb (B5.1) ist bewusst trivial — er ändert nichts am
+Bestand und schafft nur den Ort, an dem Bundles ankommen.
+
+**Damit hängt kein Schritt mehr an #19.** FR-6/#18 (`unsatisfied` statt
+`error`) bleibt relevant: ein Bundle, dessen Pflichtdienst im statischen
+Bestand liegt, muss auf ihn warten können, falls die Startreihenfolge je
+kippt — bis dahin startet der Bootstrapper schlicht vor dem Loader.
 
 ## 6. Aufwandsbild (Module nach Registrierungsart, B4-Auszählung)
 

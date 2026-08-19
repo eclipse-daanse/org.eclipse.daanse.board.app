@@ -262,6 +262,14 @@ der Nachtrag oben inzwischen praktisch zeigt.
 
 **Eingereicht als [#19](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/19).**
 
+**Nachtrag:** Zweifach überholt. Erstens entfernt tsm Module Federation und
+damit den `window[moduleId]`-Zugriff — der dort beschriebene Rückfallweg
+entfällt. Zweitens haben wir die Migrationsrichtung gedreht
+([Bundle-Plan](./tsm-bundle-plan.md)): der Loader lädt nur noch echte Bundles
+per URL, vorgeladene Container braucht der Übergang nicht mehr. Der FR bleibt
+als Testbarkeits-Anliegen bestehen (ein Modul im Test direkt übergeben statt
+eine URL zu mocken), ist für uns aber nicht mehr blockierend.
+
 **Kontext.** Für den Übergang von statisch gebündelten Modulen zu echten
 Bundles (unser B5.1) sollen bereits importierte Module vom `ModuleLoader`
 übernommen werden, ohne dass sie eine `entry`-URL haben. Der einzige Weg dafür
