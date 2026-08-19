@@ -164,6 +164,20 @@ den Bundle-Configs markiert).
 
 Stand: 87 statische Module, 25 Bundles + 2 Plattform-Module.
 
+**Typ-Registrierungs-Familien ✔** (Datasource-/Connection-/Composer-UI, 23
+Pakete, plus `endpointfinder`): ohne Code-Umbau — die B4-`activate`-Exporte
+sind per Konstruktion eine Teilmenge von tsms `ModuleContext`, der Loader
+führt sie als Modul-Lebenszyklen, und die gescopte Registry räumt beim
+Entladen automatisch ab. Die Factory-Symbol-Importe wurden zu
+`Symbol.for`-Literalen (global identisch); drei echte Klassen-Nutzungen
+wanderten stattdessen nach `platform.compat`. `endpointfinder` musste im
+selben Schritt mit: seine Startbedingung (registrierter rest-Verbindungstyp)
+ist zwischen Bootstrapper- und Loader-Welt nicht deklarierbar — als Bundle
+sagt er `dependencies: ['ui.vue.connection.rest']`, und der Resolver leistet,
+was früher die Phasen in main.ts taten.
+
+Stand: **63 statische Module, 50 Bundles + 2 Plattform-Module.**
+
 **Es folgen:**
 
 Reihenfolge nach Homogenität und Kopplungsarmut: übrige 23 Widgets, dann
