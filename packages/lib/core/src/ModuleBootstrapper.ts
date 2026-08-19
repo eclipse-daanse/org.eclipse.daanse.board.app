@@ -23,6 +23,23 @@ export interface ModuleEntry {
   /** Lädt das Modul. Der Import selbst darf keine Wirkung haben. */
   readonly load: () => Promise<Partial<ActivatableModule>>
   /**
+   * Dienst-IDs, die dieses Modul in `activate` registriert.
+   *
+   * Daraus leitet der Bootstrapper die Aktivierungsreihenfolge ab — die Liste
+   * muss deshalb nicht mehr von Hand sortiert werden. Entspricht `provides`
+   * im tsm-Manifest.
+   */
+  readonly provides?: readonly string[]
+  /**
+   * Dienst-IDs, die dieses Modul in `activate` auflöst.
+   *
+   * Dienste, die kein Modul der Liste bereitstellt, gelten als extern: sie
+   * kommen aus noch nicht umgestellten Paketen und werden über den
+   * Rückfallweg der Registry aufgelöst. Sie beeinflussen die Reihenfolge
+   * nicht. Entspricht `requiresService` im tsm-Manifest.
+   */
+  readonly requires?: readonly string[]
+  /**
    * Ein optionales Modul darf fehlschlagen, ohne den Start abzubrechen.
    * Voreinstellung ist `false`: ein Pflichtmodul, das nicht aktiviert werden
    * kann, bricht den Start ab.
@@ -41,12 +58,20 @@ export interface BootstrapResult {
 }
 
 /**
- * Aktiviert Module in der angegebenen Reihenfolge und wartet auf jedes.
+ * Aktiviert Module und wartet auf jedes einzelne.
  *
- * Damit ist die Startreihenfolge explizit und nicht mehr eine Folge davon, in
- * welcher Zeile ein Import steht. Vor allem wird auf asynchrone Aktivierung
- * gewartet — bisher lief `loadPackages()` ohne `await` neben dem synchron
- * folgenden Code, was nur durch Timing gutging.
+ * Die Reihenfolge wird aus den `provides`/`requires`-Angaben der Einträge
+ * abgeleitet, nicht der Liste entnommen: Ein Modul läuft nach denen, deren
+ * Dienste es auflöst. Wo keine Abhängigkeit besteht, bleibt die Reihenfolge
+ * der Liste erhalten — die Widget-Palette behält also ihre Sortierung.
+ *
+ * Dienste, die kein Eintrag bereitstellt, gelten als extern: sie stammen aus
+ * noch nicht umgestellten Paketen und werden über den Rückfallweg der
+ * Registry aufgelöst.
+ *
+ * Auf asynchrone Aktivierung wird gewartet — bisher lief `loadPackages()`
+ * ohne `await` neben dem synchron folgenden Code, was nur durch Timing
+ * gutging.
  *
  * Fehler werden nicht verschluckt: ein Pflichtmodul, das nicht aktiviert
  * werden kann, bricht den Start mit der ursprünglichen Ursache ab. Nur als
@@ -64,7 +89,7 @@ export class ModuleBootstrapper {
     const activated: string[] = []
     const failed: ActivationFailure[] = []
 
-    for (const entry of entries) {
+    for (const entry of this.reihenfolge(entries)) {
       try {
         const module = (await entry.load()) as ActivatableModule
 
@@ -109,6 +134,53 @@ export class ModuleBootstrapper {
 
     this.activated.length = 0
     return failed
+  }
+
+  /**
+   * Bringt die Einträge in eine Reihenfolge, in der jedes Modul nach den
+   * Modulen steht, deren Dienste es auflöst.
+   *
+   * Stabil: Einträge ohne Abhängigkeit zueinander behalten ihre relative
+   * Reihenfolge aus der Liste. Ein Zyklus bricht mit den beteiligten Modulen
+   * ab, statt eine willkürliche Reihenfolge zu wählen.
+   */
+  private reihenfolge(entries: readonly ModuleEntry[]): ModuleEntry[] {
+    const anbieter = new Map<string, ModuleEntry>()
+    for (const entry of entries) {
+      for (const dienst of entry.provides ?? []) {
+        anbieter.set(dienst, entry)
+      }
+    }
+
+    const geordnet: ModuleEntry[] = []
+    const fertig = new Set<ModuleEntry>()
+    const imGang = new Set<ModuleEntry>()
+
+    const einfuegen = (entry: ModuleEntry, pfad: readonly ModuleEntry[]): void => {
+      if (fertig.has(entry)) return
+      if (imGang.has(entry)) {
+        const zyklus = [...pfad.slice(pfad.indexOf(entry)), entry].map(e => e.id)
+        throw new Error(`Zyklische Modulabhängigkeit: ${zyklus.join(' -> ')}`)
+      }
+
+      imGang.add(entry)
+      for (const dienst of entry.requires ?? []) {
+        const lieferant = anbieter.get(dienst)
+        // Kein Lieferant in der Liste: externer Dienst, kein Einfluss auf die Reihenfolge
+        if (lieferant && lieferant !== entry) {
+          einfuegen(lieferant, [...pfad, entry])
+        }
+      }
+      imGang.delete(entry)
+
+      fertig.add(entry)
+      geordnet.push(entry)
+    }
+
+    for (const entry of entries) {
+      einfuegen(entry, [])
+    }
+    return geordnet
   }
 
   private contextFor(entry: ModuleEntry): ActivationContext {
