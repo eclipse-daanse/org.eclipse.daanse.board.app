@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
+import progressWidget from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 
 /**
  * The application's real bundles: built on their own, loaded at runtime by
@@ -30,4 +31,6 @@ import type { ModuleManifest } from '@eclipse-daanse/tsm'
  * knows `unsatisfied`, a bundle waits for a missing required service instead
  * of failing.
  */
-export const bundles: ModuleManifest[] = []
+export const bundles: ModuleManifest[] = [
+  progressWidget as ModuleManifest,
+]

@@ -275,6 +275,7 @@ const bootstrapper = new ModuleBootstrapper(services, {
  */
 const preloadedContainers = new Map<string, () => Promise<unknown>>([
   ['platform.vue', () => import('org.eclipse.daanse.board.app.platform.vue')],
+  ['platform.compat', () => import('org.eclipse.daanse.board.app.platform.compat')],
 ])
 
 const resolvedContainers = new Map<string, unknown>()
@@ -293,6 +294,7 @@ installDevtools({ loader })
 async function loadBundles() {
   const manifests = [
     (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json')).default,
+    (await import('org.eclipse.daanse.board.app.platform.compat/manifest.json')).default,
     ...bundles,
   ]
   for (const [id, load] of preloadedContainers) {
@@ -300,6 +302,20 @@ async function loadBundles() {
   }
   loader.register(manifests)
   await loader.loadAll()
+}
+
+/*
+ * Dev reload bridge: the vite plugin in vite.config.ts watches the built
+ * bundles and sends this event after every rebuild. A save in a bundle
+ * (with `vite build --watch` running there) swaps the module live -
+ * a real restart with deactivate/activate, not a component patch.
+ */
+if (import.meta.hot) {
+  import.meta.hot.on('tsm:bundle-changed', ({ id }: { id: string }) => {
+    loader.reloadModule(id).catch((error) => {
+      console.error(`bundle reload failed for ${id}:`, error)
+    })
+  })
 }
 
 bootstrapper
