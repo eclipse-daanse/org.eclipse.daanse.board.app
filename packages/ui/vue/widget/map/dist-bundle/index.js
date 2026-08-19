@@ -1203,7 +1203,8 @@ var hasRequiredDebug;
 function requireDebug() {
   if (hasRequiredDebug) return debug_1;
   hasRequiredDebug = 1;
-  const debug2 = typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
+  var define_process_env_default = {};
+  const debug2 = typeof process === "object" && define_process_env_default && define_process_env_default.NODE_DEBUG && /\bsemver\b/i.test(define_process_env_default.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
   };
   debug_1 = debug2;
   return debug_1;
@@ -27703,6 +27704,7 @@ function requireBrowser() {
   if (hasRequiredBrowser) return browser.exports;
   hasRequiredBrowser = 1;
   (function(module, exports$1) {
+    var define_process_env_default = {};
     exports$1.formatArgs = formatArgs;
     exports$1.save = save2;
     exports$1.load = load;
@@ -27848,7 +27850,7 @@ function requireBrowser() {
       } catch (error) {
       }
       if (!r && typeof process !== "undefined" && "env" in process) {
-        r = process.env.DEBUG;
+        r = define_process_env_default.DEBUG;
       }
       return r;
     }

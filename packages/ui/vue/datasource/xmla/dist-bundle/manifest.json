@@ -1,0 +1,47 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.datasource.xmla",
+  "name": "xmla datasource UI",
+  "version": "0.0.1-next.1",
+  "entry": "/bundles/ui.vue.datasource.xmla/index.js",
+  "exports": {},
+  "dependencies": [
+    "platform.vue",
+    "platform.compat"
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    },
+    {
+      "id": "XmlaStoreFactory"
+    }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.datasource.xmla",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "provides": []
+}

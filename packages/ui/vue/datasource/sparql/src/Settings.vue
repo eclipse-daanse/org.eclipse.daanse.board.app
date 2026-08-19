@@ -15,7 +15,7 @@ import { type Ref, onMounted, ref, watch, computed } from "vue";
 import Yasgui from "@triply/yasgui";
 import "@triply/yasgui/build/yasgui.min.css";
 import type Tab from "@triply/yasgui/build/ts/src/Tab";
-import { ISparqlStoreConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
+import type { ISparqlStoreConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 
 
 const { config, connections } = defineProps<{

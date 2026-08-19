@@ -13,7 +13,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { symbol } from 'org.eclipse.daanse.board.app.lib.datasource.sparql'
+// Service id of lib.datasource.sparql; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const symbol = Symbol.for('SparqlStore')
 import Settings from './Settings.vue'
 import Preview from './Preview.vue'
 const previewSymbol = Symbol.for('SparqlPreview')

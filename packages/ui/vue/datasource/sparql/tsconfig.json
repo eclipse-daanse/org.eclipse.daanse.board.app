@@ -3,15 +3,16 @@
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,
-    "target": "es2016",
+    "target": "es2022",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler"
   }
 }

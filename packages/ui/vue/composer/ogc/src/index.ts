@@ -18,8 +18,9 @@ import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { symbol as OgcComposerIdentifier } from 'org.eclipse.daanse.board.app.lib.composer.ogc'
-
+// Service id of lib.composer.ogc; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const OgcComposerIdentifier = Symbol.for('OgcFeatureComposer')
 const previewSymbol = Symbol.for('OgcComposerPreview')
 const settingsSymbol = Symbol.for('OgcComposerSettings')
 

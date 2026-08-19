@@ -16,8 +16,9 @@ import {
   DATASOURCE_REPOSITORY,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { factorySymbol as SqlXmlaDatasourceIdentifier } from 'org.eclipse.daanse.board.app.lib.datasource.sql_xmla'
-
+// Service id of lib.datasource.sql_xmla; Symbol.for is global, so this literal
+// denotes the same symbol the factory package exports.
+const SqlXmlaDatasourceIdentifier = Symbol.for('SqlXmlaStoreFactory')
 import Preview from './Preview.vue'
 import Settings from './Settings.vue'
 

@@ -1173,7 +1173,8 @@ var hasRequiredDebug;
 function requireDebug() {
   if (hasRequiredDebug) return debug_1;
   hasRequiredDebug = 1;
-  const debug = typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
+  var define_process_env_default = {};
+  const debug = typeof process === "object" && define_process_env_default && define_process_env_default.NODE_DEBUG && /\bsemver\b/i.test(define_process_env_default.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
   };
   debug_1 = debug;
   return debug_1;
