@@ -8,9 +8,8 @@
   Contributors: Smart City Jena
  */
 
-import  { container } from 'org.eclipse.daanse.board.app.lib.core';
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
 import type { Plugin } from '@vue/runtime-core'
-import { Options } from '@vitejs/plugin-vue'
 import EndPointfinderModal from './modals/EndPointfinderModal.vue'
 import { mount } from 'mount-vue-component'
 import { App, Component } from 'vue'
@@ -21,35 +20,36 @@ import { RestConnection } from 'org.eclipse.daanse.board.app.lib.connection.rest
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { DataSourceDTO } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 
-let initialized = false;
-
-if (!initialized) {
+/**
+ * Haengt den Endpointfinder in die Anwendung und legt die Standardverbindung
+ * zur SPARQL-Quelle an.
+ *
+ * Braucht die App-Instanz und das ConnectionRepository, und ausserdem einen
+ * angemeldeten REST-Verbindungstyp - der Store legt beim Aufruf eine Verbindung
+ * dieses Typs an. Genau deshalb lief dieses Paket bisher in einer eigenen
+ * Nachlaufphase: die Bedingung stand nirgends, sie war nur eingehalten.
+ */
+export function activate({ services, log }: ActivationContext) {
   const endpointFinderPlugin: Plugin = {
-    install(app, options: Options) {
-      // configure the app
-      const { vNode, destroy, el } = mount(EndPointfinderModal as unknown as Component, { props: {}, app: app })
-
+    install(app) {
+      const { vNode } = mount(EndPointfinderModal as unknown as Component, { props: {}, app })
       app.provide('endpointfinder', async () => {
-        await vNode.component?.exposed?.run(() => {
-        })
+        await vNode.component?.exposed?.run(() => {})
       })
-    }
+    },
   }
 
-  const app: App<any> = container.get('App')
-  app.use(endpointFinderPlugin)
+  services.getRequired<App<any>>('App').use(endpointFinderPlugin)
 
-  const { createConnection, connections } = useConnectionsStore()
+  const { createConnection } = useConnectionsStore()
   const conid = createConnection('rest', { url: 'https://www.govdata.de/sparql' })
-  const connection = connections.find((ds: DataSourceDTO) => ds.uid === conid)
-  const dsManager = container.get<ConnectionRepository>(identifier)
 
+  const connectionRepository = services.getRequired<ConnectionRepository>('ConnectionRepository')
+  const verbindung = connectionRepository.getConnection(conid)
 
-  const ds = dsManager.getConnection(conid)
-  useSparQLEndPointManager().registerEndpoint(ds as RestConnection, 'SparqlDataEurope')
+  useSparQLEndPointManager().registerEndpoint(verbindung as RestConnection, 'SparqlDataEurope')
   useSparQLEndPointManager().setActive('SparqlDataEurope')
-  console.log('📦 Endpointfinder initialized')
-  initialized = true;
+  log.info('Endpointfinder bereit')
 }
 
 

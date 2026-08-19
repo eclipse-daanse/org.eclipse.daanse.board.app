@@ -221,22 +221,6 @@ function onLoaded() {
 //   Settings: null as any,
 // })
 
-/**
- * Pakete, die die registrierten Typen der Module bereits benutzen.
- *
- * Muss **nach** der Modulaktivierung laufen — zwei Beispiele aus diesem
- * Bündel: der Endpointfinder legt beim Laden eine REST-Verbindung an, und der
- * Persistenz-Loader stellt ein gespeichertes Board wieder her. Beides setzt
- * registrierte Verbindungs- und Datenquellentypen voraus. Vor der Umstellung
- * war das nur dadurch gegeben, dass jene Pakete weiter oben im Importblock
- * standen.
- */
-async function loadNachModulen() {
-  await import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder')
-
-  await import('org.eclipse.daanse.board.app.ui.vue.persistence.git')
-  await import('org.eclipse.daanse.board.app.ui.vue.page_provider')
-}
 
 //initSettingsManager(container)
 
@@ -270,16 +254,14 @@ const bootstrapper = new ModuleBootstrapper(services, {
   error: (msg, ...args) => console.error(msg, ...args),
 })
 
-// Startreihenfolge, jetzt explizit statt als Nebenwirkung der Importzeilen:
-// erst die Module — deren Reihenfolge untereinander aus ihren Deklarationen
-// folgt —, dann die Wiederherstellung gespeicherter Boards, die die
-// registrierten Typen der Module bereits voraussetzt.
+// Der gesamte Start: alle Pakete sind Module, ihre Reihenfolge folgt aus den
+// Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
+// beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
 bootstrapper
   .activateAll(modules)
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
     seitenEinrichten()
-    return loadNachModulen()
   })
   .catch((err) => {
     // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,

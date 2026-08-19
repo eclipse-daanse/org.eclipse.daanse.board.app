@@ -59,6 +59,12 @@ export const modules: ModuleEntry[] = [
     provides: ['OgcFeatureComposer'],
   },
   {
+    id: 'lib.composer.ogcsta2chart',
+    load: () => import('org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'),
+    provides: ['OGCSTAToChartComposer'],
+    requires: ['EventActionsRegistry'],
+  },
+  {
     id: 'lib.composer.weather',
     load: () => import('org.eclipse.daanse.board.app.lib.composer.weather'),
     provides: ['WeatherComposer'],
@@ -479,6 +485,26 @@ export const modules: ModuleEntry[] = [
     id: 'ui.vue.layouts.grid',
     load: () => import('org.eclipse.daanse.board.app.ui.vue.layouts.grid'),
     requires: ['LayoutRepository'],
+  },
+  {
+    id: 'ui.vue.page_provider',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.page_provider'),
+    provides: ['VuePageProvider'],
+    requires: ['PageContext'],
+  },
+  {
+    id: 'ui.vue.persistence.git',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.persistence.git'),
+    requires: ['RepositoryRegistry'],
+  },
+  {
+    id: 'ui.vue.plugins.endpointfinder',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder'),
+    requires: ['App', 'ConnectionRepository', 'RestConnectionFactory'],
+  },
+  {
+    id: 'ui.vue.plugins.geojson_renderer',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'),
   },
   {
     id: 'ui.vue.plugins.i18next',

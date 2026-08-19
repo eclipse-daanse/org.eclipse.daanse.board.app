@@ -8,17 +8,14 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Container } from 'inversify'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {identifier,RepositoryRegistryI} from "org.eclipse.daanse.board.app.lib.repository.persistence";
 import {type} from "org.eclipse.daanse.board.app.lib.persistence.git";
 import GitRepositoryV from './GitRepositoryV.vue'
 
-const init = (container: Container) => {
-  const repoRegistry = container.get<RepositoryRegistryI>(identifier);
-  repoRegistry.registerViewForRepoType(type,GitRepositoryV);
-  console.log('📦 GitRepositoryUI registered');
-}
-
-export {
-  init
+/** Meldet die Vue-Ansicht fuer Git-Repositories bei der Registry an. */
+export function activate({ services }: ActivationContext) {
+  services
+    .getRequired<RepositoryRegistryI>('RepositoryRegistry')
+    .registerViewForRepoType(type, GitRepositoryV)
 }
