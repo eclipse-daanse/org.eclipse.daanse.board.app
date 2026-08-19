@@ -84,14 +84,45 @@ export const modules: ModuleEntry[] = [
     provides: ['XmlaConnectionFactory'],
   },
   {
+    id: 'lib.repository.connection',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.connection'),
+    provides: ['ConnectionRepository'],
+  },
+  {
+    id: 'lib.repository.datasource',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.datasource'),
+    provides: ['DatasourceRepository'],
+  },
+  {
     id: 'lib.repository.layout.page',
     load: () => import('org.eclipse.daanse.board.app.lib.repository.layout.page'),
     provides: ['LayoutRepository'],
   },
   {
+    id: 'lib.repository.navigation',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.navigation'),
+    provides: ['NavigationRegistry'],
+  },
+  {
     id: 'lib.repository.page',
     load: () => import('org.eclipse.daanse.board.app.lib.repository.page'),
     provides: ['PageRepository'],
+  },
+  {
+    id: 'lib.repository.persistence',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.persistence'),
+    provides: ['RepositoryRegistry'],
+  },
+  {
+    id: 'lib.repository.route',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.route'),
+    provides: ['RouteRegistry'],
+  },
+  {
+    id: 'lib.repository.variable',
+    load: () => import('org.eclipse.daanse.board.app.lib.repository.variable'),
+    provides: ['VariableRepository'],
+    requires: ['TINY_EMITTER'],
   },
   {
     id: 'lib.repository.widget',
@@ -235,6 +266,11 @@ export const modules: ModuleEntry[] = [
     load: () => import('org.eclipse.daanse.board.app.ui.vue.datasource.xmla'),
     provides: ['XmlaPreview', 'XmlaSettings'],
     requires: ['DatasourceRepository'],
+  },
+  {
+    id: 'ui.vue.eventmanager',
+    load: () => import('org.eclipse.daanse.board.app.ui.vue.eventmanager'),
+    requires: ['NavigationRegistry', 'RouteRegistry'],
   },
   {
     id: 'ui.vue.lang.common.en',

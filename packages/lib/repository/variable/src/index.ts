@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { registerVariableActions } from './actions/VariableActions'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
@@ -20,13 +20,18 @@ const VARIABLE_REPOSITORY = 'VariableRepository'
 
 const identifier = Symbol.for(VARIABLE_REPOSITORY)
 
-if (!container.isBound(identifier)) {
-  console.log(VariableRepository)
-  console.log('VariableRepository - initial bind only');
-  container.bind<VariableRepository>(identifier).to(VariableRepository).inSingletonScope()
+/**
+ * Singleton mit einer Abhaengigkeit (`TINY_EMITTER`), deshalb `construct`
+ * statt `new`: das loest die mit `@inject` ausgezeichneten Felder auf.
+ * Registriert wird die fertige Instanz, damit auch der Rueckfallweg sie sieht.
+ */
+export function activate({ services }: ActivationContext) {
+  services.register(VARIABLE_REPOSITORY, services.construct(VariableRepository))
+  registerVariableActions()
 }
 
-// Register variable actions when the package is imported
-registerVariableActions()
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(VARIABLE_REPOSITORY)
+}
 
 export { VariableRepository, type VariableConfig, identifier, VARIABLE_REPOSITORY }

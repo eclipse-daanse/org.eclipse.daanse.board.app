@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   type StoreIdentifiers,
@@ -26,11 +26,13 @@ const DATASOURCE_REPOSITORY = 'DatasourceRepository'
 
 const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 
-if (!container.isBound(identifier)) {
-  container
-    .bind<DatasourceRepository>(identifier)
-    .to(DatasourceRepository)
-    .inSingletonScope()
+/** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
+export function activate({ services }: ActivationContext) {
+  services.register(DATASOURCE_REPOSITORY, new DatasourceRepository())
+}
+
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(DATASOURCE_REPOSITORY)
 }
 
 export { DatasourceRepository, identifier, DATASOURCE_REPOSITORY }

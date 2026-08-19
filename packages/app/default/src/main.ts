@@ -100,11 +100,8 @@ import 'org.eclipse.daanse.board.app.lib.datasource.sparql'
 import 'org.eclipse.daanse.board.app.lib.datasource.valhalla'
 import 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 
-import 'org.eclipse.daanse.board.app.lib.repository.navigation'
-import 'org.eclipse.daanse.board.app.lib.repository.route'
 
 import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
-import 'org.eclipse.daanse.board.app.ui.vue.eventmanager'
 
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {
@@ -112,7 +109,6 @@ import {
   identifier as variableFactoryWrapperIdentifier,
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import 'org.eclipse.daanse.board.app.lib.repository.variable'
 import {
   VariableComplexStringWrapper,
   VARIABLECOMPLEXSTRINGWRAPPER,
@@ -134,12 +130,12 @@ import { identifier as LayoutRepositoryIdentifier, type LayoutRepositoryI }
   from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
 
 import {
-  NAVIGATION_REGISTRY,
+  NAVIGATION_REGISTRY_ID,
   type NavigationRegistry,
   NavigationItem
 } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import {
-  ROUTE_REGISTRY,
+  ROUTE_REGISTRY_ID,
   type RouteRegistry,
   RouteDefinition
 } from 'org.eclipse.daanse.board.app.lib.repository.route'
@@ -148,60 +144,66 @@ import {
 import Configuration from './pages/Configuration.vue'
 import SaveLoad from './pages/SaveLoad.vue'
 
-const routeRegistry = container.get<RouteRegistry>(ROUTE_REGISTRY)
-
-const configRoute = new RouteDefinition()
-configRoute.path = '/configuration'
-configRoute.name = 'config'
-configRoute.component = Configuration
-routeRegistry.registerRoute(configRoute)
-
-const saveRoute = new RouteDefinition()
-saveRoute.path = '/save'
-saveRoute.name = 'save'
-saveRoute.component = SaveLoad
-routeRegistry.registerRoute(saveRoute)
-
-// Import router AFTER all packages are loaded so routes can be registered
 import router from './router'
 
-// Add dynamically registered routes to router
-const routeRegistryForDynamic = container.get<RouteRegistry>(ROUTE_REGISTRY) as any
-const allRoutes = routeRegistryForDynamic.getAllRoutesArray
-  ? routeRegistryForDynamic.getAllRoutesArray()
-  : []
-allRoutes.forEach((route: any) => {
-  router.addRoute({
-    path: route.path,
-    name: route.name,
-    component: route.component,
-    ...(route.meta && { meta: route.meta })
-  })
-  console.log('Added dynamic route:', route.name, route.path)
-})
+/**
+ * Trägt die anwendungseigenen Seiten in Routen- und Navigationsregistrierung
+ * ein und übernimmt anschließend alles Registrierte in den Router.
+ *
+ * Läuft nach der Modulaktivierung, weil beide Registries seit ihrer
+ * Umstellung erst dort entstehen. Vorher stand dieser Block auf Modulebene
+ * und griff auf Dienste zu, die zu dem Zeitpunkt gebunden waren, weil der
+ * Import sie gebunden hatte — genau die Kopplung, die die Umstellung auflöst.
+ */
+function seitenEinrichten() {
+  const routeRegistry = services.getRequired<RouteRegistry>(ROUTE_REGISTRY_ID)
 
-const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY)
+  const configRoute = new RouteDefinition()
+  configRoute.path = '/configuration'
+  configRoute.name = 'config'
+  configRoute.component = Configuration
+  routeRegistry.registerRoute(configRoute)
 
-// Register navigation items
-const configNav = new NavigationItem()
-configNav.id = 'config'
-configNav.label = 'Environment variables'
-configNav.icon = 'settings'
-configNav.route = '/configuration'
-configNav.routeName = 'config'
-configNav.order = 10
-configNav.visible = true
-navRegistry.registerNavigationItem(configNav)
+  const saveRoute = new RouteDefinition()
+  saveRoute.path = '/save'
+  saveRoute.name = 'save'
+  saveRoute.component = SaveLoad
+  routeRegistry.registerRoute(saveRoute)
 
-const saveNav = new NavigationItem()
-saveNav.id = 'save'
-saveNav.label = 'Store and Restore'
-saveNav.icon = 'cloud_sync'
-saveNav.route = '/save'
-saveNav.routeName = 'save'
-saveNav.order = 20
-saveNav.visible = true
-navRegistry.registerNavigationItem(saveNav)
+  const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
+
+  const configNav = new NavigationItem()
+  configNav.id = 'config'
+  configNav.label = 'Environment variables'
+  configNav.icon = 'settings'
+  configNav.route = '/configuration'
+  configNav.routeName = 'config'
+  configNav.order = 10
+  configNav.visible = true
+  navRegistry.registerNavigationItem(configNav)
+
+  const saveNav = new NavigationItem()
+  saveNav.id = 'save'
+  saveNav.label = 'Store and Restore'
+  saveNav.icon = 'cloud_sync'
+  saveNav.route = '/save'
+  saveNav.routeName = 'save'
+  saveNav.order = 20
+  saveNav.visible = true
+  navRegistry.registerNavigationItem(saveNav)
+
+  const dynamische = routeRegistry as unknown as {
+    getAllRoutesArray?: () => Array<Record<string, any>>
+  }
+  for (const route of dynamische.getAllRoutesArray?.() ?? []) {
+    router.addRoute({
+      path: route.path,
+      name: route.name,
+      component: route.component,
+      ...(route.meta && { meta: route.meta }),
+    })
+  }
+}
 
 
 
@@ -247,7 +249,6 @@ async function loadGrunddienste() {
 async function loadNachModulen() {
   await import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder')
 
-  await import('org.eclipse.daanse.board.app.lib.repository.persistence')
   await import('org.eclipse.daanse.board.app.lib.persistence.local')
   await import('org.eclipse.daanse.board.app.lib.persistence.util')
   await import('org.eclipse.daanse.board.app.lib.persistence.rest')
@@ -296,6 +297,7 @@ loadGrunddienste()
   .then(() => bootstrapper.activateAll(modules))
   .then(({ activated }) => {
     console.log(`✅ ${activated.length} Module aktiviert`)
+    seitenEinrichten()
     return loadNachModulen()
   })
   .catch((err) => {

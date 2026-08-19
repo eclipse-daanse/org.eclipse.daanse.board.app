@@ -14,7 +14,6 @@ import {
   type IRequestParams,
   type BaseConnectionConfig,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
-import { injectable } from 'inversify'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface IConnection {
@@ -38,7 +37,6 @@ export interface ConnectionIdentifiers {
 
 const connections = new Map<string, IConnection | PubSubConnection>()
 
-@injectable()
 export class ConnectionRepository {
   private availableConnections: Record<string, ConnectionIdentifiers> = {}
   private connectionsByType: Record<string, string> = {}

@@ -11,11 +11,9 @@
 
 import type { Repository, RepositoryRegistryI } from '../api/persistance'
 import { type Component } from 'vue'
-import { injectable } from 'inversify'
 import { RepositoryObserver, RepositoryObserverPatternInterface } from '../api/RepositoryObserverI'
 
 
-@injectable()
 export class RepositoryRegistry implements RepositoryRegistryI,RepositoryObserverPatternInterface {
 
   private availableRepos = new Map<string, Repository>()

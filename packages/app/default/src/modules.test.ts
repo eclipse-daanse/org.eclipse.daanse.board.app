@@ -118,12 +118,10 @@ describe('modules.ts', () => {
       .sort()
 
     expect(extern).toEqual([
-      'ConnectionRepository',
-      'DatasourceRepository',
       'EventActionsRegistry',
       'EventRegistry',
       'I18next',
-      'VariableRepository',
+      'TINY_EMITTER',
     ])
   })
 })
