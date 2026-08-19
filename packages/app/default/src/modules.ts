@@ -173,6 +173,12 @@ export const modules: ModuleEntry[] = [
     requires: ['TINY_EMITTER'],
   },
   {
+    id: 'lib.factory.variableWrapper',
+    load: () => import('org.eclipse.daanse.board.app.lib.factory.variableWrapper'),
+    provides: ['VariableWrapperFactory'],
+    requires: ['VariableRepository'],
+  },
+  {
     id: 'lib.i18next',
     load: () => import('org.eclipse.daanse.board.app.lib.i18next'),
     provides: ['I18next'],
@@ -181,6 +187,39 @@ export const modules: ModuleEntry[] = [
     id: 'lib.logger',
     load: () => import('org.eclipse.daanse.board.app.lib.logger'),
     provides: ['LoggerFactory'],
+  },
+  {
+    id: 'lib.pagecontext.pagecontext_service',
+    load: () => import('org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'),
+    provides: ['PageContext'],
+  },
+  {
+    id: 'lib.persistence.git',
+    load: () => import('org.eclipse.daanse.board.app.lib.persistence.git'),
+    provides: ['GitRepository'],
+    requires: ['RepositoryRegistry'],
+  },
+  {
+    id: 'lib.persistence.loader',
+    load: () => import('org.eclipse.daanse.board.app.lib.persistence.loader'),
+    requires: ['GitRepository', 'LocalRepository', 'RepositoryRegistry', 'RestRepository', 'SettingsManager'],
+  },
+  {
+    id: 'lib.persistence.local',
+    load: () => import('org.eclipse.daanse.board.app.lib.persistence.local'),
+    provides: ['LocalRepository'],
+    requires: ['RepositoryRegistry', 'ValidityCheck'],
+  },
+  {
+    id: 'lib.persistence.rest',
+    load: () => import('org.eclipse.daanse.board.app.lib.persistence.rest'),
+    provides: ['RestRepository'],
+    requires: ['RepositoryRegistry'],
+  },
+  {
+    id: 'lib.persistence.util',
+    load: () => import('org.eclipse.daanse.board.app.lib.persistence.util'),
+    provides: ['ValidityCheck'],
   },
   {
     id: 'lib.repository.connection',

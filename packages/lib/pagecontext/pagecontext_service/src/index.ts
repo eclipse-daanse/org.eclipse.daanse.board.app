@@ -11,16 +11,24 @@
  *   Smart City Jena
  **********************************************************************/
 
-import {container} from "org.eclipse.daanse.board.app.lib.core"
+import type { ActivationContext } from "org.eclipse.daanse.board.app.lib.core"
 import {type PageContextServiceI } from './api/PageContextServiceI'
 import {type PageContextProviderI } from './api/PageContextProviderI'
 import { PageContextService } from './classes/PageContextService'
 
-const identifier = Symbol.for('PageContext')
-if(!container.isBound(identifier)){
-  container.bind<PageContextServiceI>(identifier).to(PageContextService).inSingletonScope();
-  console.log("📦 PageContextService initialized");
+/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
+const PAGE_CONTEXT = 'PageContext'
+
+const identifier = Symbol.for(PAGE_CONTEXT)
+
+/** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
+export function activate({ services }: ActivationContext) {
+  services.register(PAGE_CONTEXT, new PageContextService())
 }
 
-export {identifier , type PageContextServiceI, type PageContextProviderI}
+export function deactivate({ services }: ActivationContext) {
+  services.unregister(PAGE_CONTEXT)
+}
+
+export {identifier, PAGE_CONTEXT, type PageContextServiceI, type PageContextProviderI}
 

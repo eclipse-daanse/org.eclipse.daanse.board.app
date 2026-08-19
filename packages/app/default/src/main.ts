@@ -100,7 +100,6 @@ import 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'
 import 'org.eclipse.daanse.board.app.lib.variables'
 import {
   // init as initVariableWrapperFactory,
-  identifier as variableFactoryWrapperIdentifier,
   type VariableWrapperFactory,
 } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import {
@@ -108,14 +107,7 @@ import {
   VARIABLECOMPLEXSTRINGWRAPPER,
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
-// VariableComplexStringWrapper haengt an Vue und bleibt deshalb in der
-// UI-Schicht; die Factory in lib kennt ihn nur ueber diese Registrierung.
-container
-  .get<VariableWrapperFactory>(variableFactoryWrapperIdentifier)
-  .registerWrapperType({
-    type: VARIABLECOMPLEXSTRINGWRAPPER,
-    create: (value: any) => new VariableComplexStringWrapper<string>(value),
-  })
+
 
 
 
@@ -150,6 +142,15 @@ import router from './router'
  * Import sie gebunden hatte — genau die Kopplung, die die Umstellung auflöst.
  */
 function seitenEinrichten() {
+  // VariableComplexStringWrapper haengt an Vue und bleibt deshalb in der
+  // UI-Schicht; die Factory in lib kennt ihn nur ueber diese Registrierung.
+  services
+    .getRequired<VariableWrapperFactory>('VariableWrapperFactory')
+    .registerWrapperType({
+      type: VARIABLECOMPLEXSTRINGWRAPPER,
+      create: (value: any) => new VariableComplexStringWrapper<string>(value),
+    })
+
   const routeRegistry = services.getRequired<RouteRegistry>(ROUTE_REGISTRY_ID)
 
   const configRoute = new RouteDefinition()
@@ -233,12 +234,7 @@ function onLoaded() {
 async function loadNachModulen() {
   await import('org.eclipse.daanse.board.app.ui.vue.plugins.endpointfinder')
 
-  await import('org.eclipse.daanse.board.app.lib.persistence.local')
-  await import('org.eclipse.daanse.board.app.lib.persistence.util')
-  await import('org.eclipse.daanse.board.app.lib.persistence.rest')
-  await import('org.eclipse.daanse.board.app.lib.persistence.git')
   await import('org.eclipse.daanse.board.app.ui.vue.persistence.git')
-  await import('org.eclipse.daanse.board.app.lib.persistence.loader')
   await import('org.eclipse.daanse.board.app.ui.vue.page_provider')
 }
 

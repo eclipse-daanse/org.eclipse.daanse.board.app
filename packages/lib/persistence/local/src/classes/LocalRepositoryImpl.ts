@@ -14,14 +14,15 @@ import type { Entity, Repository, WritableRepository } from 'org.eclipse.daanse.
 import { BaseRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 import { identifier, ValidityCheckI } from 'org.eclipse.daanse.board.app.lib.persistence.util'
 
-import { injectable, optional, inject } from 'inversify'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 import {parse} from 'flatted';
 
 @injectable()
 export default class LocalRepositoryImpl extends BaseRepository implements WritableRepository {
 
   public static readonly type = 'localRepositories'
-  @inject(identifier) @optional()
+  /* tsm fuehrt das optionale Nachschlagen als Option statt als zweiten Decorator. */
+  @inject('ValidityCheck', { optional: true })
   private readonly ValidityCheck!: ValidityCheckI
 
   init(url: URL, name: string) {

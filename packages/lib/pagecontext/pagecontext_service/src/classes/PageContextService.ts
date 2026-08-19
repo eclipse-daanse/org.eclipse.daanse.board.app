@@ -8,11 +8,9 @@
   Contributors: Smart City Jena
   */
 
-import { injectable } from 'inversify'
 import { PageContextServiceI } from '../api/PageContextServiceI'
 import { PageContextProviderI } from '../api/PageContextProviderI'
 
-@injectable()
 class PageContextService implements PageContextServiceI {
   private provider?: PageContextProviderI;
 

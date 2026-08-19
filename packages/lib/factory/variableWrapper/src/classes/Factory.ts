@@ -8,7 +8,7 @@
   Contributors: Smart City Jena
 
 */
-import { injectable, inject } from 'inversify'
+import { injectable, inject } from '@eclipse-daanse/tsm'
 import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import {identifier as IDVariableRepo,VariableRepository} from 'org.eclipse.daanse.board.app.lib.repository.variable'
 type SearchResult = {
@@ -34,7 +34,7 @@ export interface WrapperTypeI {
 export class VariableWrapperFactory {
   private readonly wrapperTypes = new Map<string, WrapperTypeI>()
 
-  constructor(@inject(IDVariableRepo) private variables: VariableRepository) {
+  constructor(@inject('VariableRepository') private variables: VariableRepository) {
   }
 
   /**
