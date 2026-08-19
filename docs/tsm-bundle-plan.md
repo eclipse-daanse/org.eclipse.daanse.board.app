@@ -32,7 +32,7 @@ Folgenden möglich.
   `window[moduleId]`** (Module-Federation-Konvention; `loadEntry` prüft diese
   Stelle vor dem URL-Import). Für 112 Module ist der globale Scope der falsche
   Ort: Namensraumverschmutzung, mögliche Kollisionen mit DOM-`id`s (der Loader
-  warnt selbst davor), kein `window` in Node-Tests. Deshalb **FR-7 an tsm**:
+  warnt selbst davor), kein `window` in Node-Tests. Deshalb **FR-7 an tsm** ([#19](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/19)):
   explizite Übergabe per `loadModule(manifest, { container })` oder
   `entryResolver`-Option. B5.1 beginnt, sobald die Antwort da ist — der
   `window`-Pfad bleibt Rückfalloption, falls tsm den Vorschlag ablehnt.

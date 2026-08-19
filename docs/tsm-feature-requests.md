@@ -260,6 +260,8 @@ der Nachtrag oben inzwischen praktisch zeigt.
 
 ## FR-7 — Modul-Container explizit übergeben statt über `window[moduleId]`
 
+**Eingereicht als [#19](https://github.com/eclipse-daanse/org.eclipse.daanse.tsm/issues/19).**
+
 **Kontext.** Für den Übergang von statisch gebündelten Modulen zu echten
 Bundles (unser B5.1) sollen bereits importierte Module vom `ModuleLoader`
 übernommen werden, ohne dass sie eine `entry`-URL haben. Der einzige Weg dafür
