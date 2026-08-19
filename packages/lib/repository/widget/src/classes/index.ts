@@ -39,9 +39,35 @@ export interface WidgetProvider extends WidgetConfig {
 
 export class WidgetRepository {
   private availableWidgets: Record<string, WidgetConfig> = {}
+  private changeListeners = new Set<() => void>()
 
   registerWidget(typename: string, config: WidgetConfig) {
     this.availableWidgets[typename] = config
+    this.notifyChange()
+  }
+
+  /**
+   * Called after every registration change.
+   *
+   * Framework-free on purpose - this package must not depend on Vue. The
+   * wrapper turns the callback into reactivity on its side, so a widget
+   * whose bundle stops flips to the placeholder instead of silently
+   * rendering stale code, and flips back when the bundle starts again.
+   * Returns the unsubscribe function.
+   */
+  onChange(listener: () => void): () => void {
+    this.changeListeners.add(listener)
+    return () => this.changeListeners.delete(listener)
+  }
+
+  private notifyChange(): void {
+    for (const listener of this.changeListeners) {
+      try {
+        listener()
+      } catch {
+        // One broken subscriber must not keep the others from hearing it
+      }
+    }
   }
 
   /**
@@ -55,6 +81,7 @@ export class WidgetRepository {
       return false
     }
     delete this.availableWidgets[typename]
+    this.notifyChange()
     return true
   }
 
