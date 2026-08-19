@@ -523,6 +523,68 @@ Umstellung Vereinheitlichung, nicht Fehlerbehebung.
 100 — dafür müssten die verbleibenden 34 Nebenwirkungsimporte weichen, also die
 50 offenen Pakete. Startreihenfolge und Fehlerbehandlung erfüllen das Kriterium.
 
+### B4 — Abschluss: 112 Pakete, ein Startvorgang
+
+Der zweite Durchgang hat die verbleibenden Familien nachgezogen. Der Stand:
+
+| | |
+|---|---:|
+| Pakete mit `activate` | **112** |
+| Nebenwirkungsimporte in `main.ts` | **0** |
+| Startphasen | **1** (vorher 3) |
+| Dienste, die noch von außen kommen | **2** (`App`, `TINY_EMITTER`) |
+
+**Der Decorator-Wechsel war kleiner als veranschlagt.** Im Plan standen 29
+Pakete, „Wechsel des DI-Mechanismus". Tatsächlich gab es im ganzen Projekt
+**26 `@inject`-Stellen**; die meisten Pakete trugen nur ein `@injectable()`,
+das allein für die Klassenbindung da war und mit ihr entfiel. Welche
+Konstante auf welchen Dienst zeigt, wurde über die Importe aufgelöst statt
+über den Namen geraten — `identifier` heißt in verschiedenen Paketen
+verschieden viel, und einmal habe ich falsch geraten (`Logger` statt
+`LoggerFactory`), was der Abgleich aufdeckte.
+
+**Drei Muster deckten fast alles ab:**
+
+| Fall | Rezept |
+|---|---|
+| Singleton ohne Abhängigkeit | `services.register(ID, new X())` — die Klassenbindung samt `@injectable` entfällt |
+| Singleton mit Abhängigkeit | `services.register(ID, services.construct(X))` |
+| Factory (`toFactory` + `inTransientScope`) | `services.register(ID, config => { … services.construct(X) … })` |
+
+`construct()` war der Schlüssel: dieselbe Auflösung wie `bindClass()`, aber
+ohne Registrierung. Damit geht die fertige Instanz über `register` in die
+Registry und wird in den Inversify-Container gespiegelt — bei `bindClass`
+wäre die Spiegelung ausgeblieben und die noch nicht umgestellten Konsumenten
+hätten nichts gefunden.
+
+**Was die Umstellung sichtbar gemacht hat.** Neun Pakete prüften ihre
+Voraussetzung mit `container.isBound(...)` und übersprangen sie bei
+Abwesenheit stillschweigend — der Event-Manager verschwand dann aus der
+Navigation, Composer-Aktionen fehlten in der Oberfläche, ein Repository-Typ
+war nicht angemeldet. Als `requires` deklariert bricht die Aktivierung
+stattdessen mit Grund ab.
+
+Ein Fehler ließ sich dabei aufklären, den ich dreimal als vorbestehend
+abgehakt hatte: `classConstructor.plugins[i] is not a function` stammt aus
+`@octokit/rest` und trat beim Wiederherstellen eines gespeicherten
+Git-Repositories auf. Er war nur als unbehandelte Zusage sichtbar, weil der
+Persistenz-Loader als `init()` ohne `await` neben dem Start herlief. Als
+Pflichtmodul brach er den Start ab — das war der Anlass, genauer hinzusehen.
+Der Octokit-Defekt selbst ist offen, aber lokalisiert
+(`CommitProvider` in `GitRepositoryImpl.init`).
+
+**Was offen bleibt:**
+
+- `lib.variables` behält die Inversify-Decorators. Seine Klassen werden nicht
+  vom Paket selbst erzeugt, sondern per Service Locator
+  (`container.get(ComputedStoreParameter)` in `UsesComputedVariable`). Die
+  Decorators zu wechseln, ohne die Erzeugung mitzunehmen, würde sie brechen —
+  das gehört zur Service-Locator-Auflösung, nicht hierher.
+- `lib.module1` ist ein Beispielpaket, dessen `init` niemand aufruft.
+- **96 Vue-Dateien** greifen über `container.get(...)` auf Dienste zu. Das ist
+  der eigentliche Rest von Inversify und der Gegenstand von §7 des
+  Modulvertrags.
+
 ### B4a — Die Handsortierung in `modules.ts` auflösen
 
 `ModuleEntry` trägt jetzt `provides` und `requires` — benannt wie im späteren

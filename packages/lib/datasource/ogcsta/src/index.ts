@@ -8,7 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import type { Factory } from 'inversify'
 
 import { OgcStaStore } from './classes/OgcSta'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from './interfaces/Constances'

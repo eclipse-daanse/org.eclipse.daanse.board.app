@@ -8,7 +8,6 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { Factory, type Container } from 'inversify'
 import SparqlStore from './classes/SparqlStore'
 import type { ISparqlStoreConfiguration } from './interfaces/ISparqlStoreConfiguration'
 import { symbol } from './interfaces/Constances'
