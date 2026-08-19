@@ -47,5 +47,14 @@
       "id": "org.eclipse.daanse.board.app.ui.vue.variable.components",
       "versionRange": ">=0.0.1-0"
     }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.widget.icon",
+        "version": "0.0.1-next.1"
+      }
+    }
   ]
 }

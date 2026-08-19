@@ -39,6 +39,34 @@ import manifest from './manifest.json'
  * the bundle a single self-contained artefact; the style tag is keyed by
  * module id, so a reload replaces it instead of stacking copies.
  */
+
+/**
+ * WORKAROUND (tsm FR pending): the tsm plugin rewrites named, namespace and
+ * default imports of shared modules to __tsm__.require(), but leaves bare
+ * side-effect imports (`import "module"`) untouched; Rollup then emits them
+ * into the entry chunk, where the browser cannot resolve the bare specifier.
+ * Shared libraries are side-effect-free by definition here, so stripping is
+ * sound. Remove once the plugin handles the bare form itself.
+ */
+function stripBareSharedImports() {
+  const ids = ['vue', 'vue-router', ...manifest.sharedDependencies.map((d) => d.id)]
+  return {
+    name: 'strip-bare-shared-imports',
+    apply: 'build' as const,
+    enforce: 'post' as const,
+    generateBundle(_o: unknown, bundle: Record<string, { type: string; code?: string }>) {
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== 'chunk' || !chunk.code) continue
+        for (const id of ids) {
+          const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+          chunk.code = chunk.code.replace(
+            new RegExp('^import\\s*["\']' + escaped + '["\'];?\\s*$', 'gm'), '')
+        }
+      }
+    },
+  }
+}
+
 function inlineCss() {
   return {
     name: 'inline-bundle-css',
@@ -65,6 +93,7 @@ export default defineConfig({
   plugins: [
     vue(),
     inlineCss(),
+    stripBareSharedImports(),
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
       components: 'derive',

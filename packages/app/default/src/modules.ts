@@ -503,10 +503,6 @@ export const modules: ModuleEntry[] = [
     requires: ['App', 'ConnectionRepository', 'RestConnectionFactory'],
   },
   {
-    id: 'ui.vue.plugins.geojson_renderer',
-    load: () => import('org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer'),
-  },
-  {
     id: 'ui.vue.plugins.i18next',
     load: () => import('org.eclipse.daanse.board.app.ui.vue.plugins.i18next'),
     requires: ['App', 'I18next'],
@@ -534,9 +530,4 @@ export const modules: ModuleEntry[] = [
    * Folge. Wer die Palette umsortieren will, sortiert hier.
    */
 
-  {
-    id: 'ui.vue.widget.map',
-    load: () => import('org.eclipse.daanse.board.app.ui.vue.widget.map'),
-    requires: ['EventActionsRegistry', 'EventRegistry', 'WidgetRepository'],
-  },
 ]

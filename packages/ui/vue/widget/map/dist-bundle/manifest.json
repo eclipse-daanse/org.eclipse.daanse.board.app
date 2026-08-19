@@ -1,23 +1,31 @@
 {
   "$schema": "https://tsm.dev/schema/manifest/v1.json",
-  "id": "ui.vue.widget.icon",
-  "name": "IconWidget",
+  "id": "ui.vue.widget.map",
+  "name": "Map Widget",
   "version": "0.0.1-next.1",
-  "entry": "/bundles/ui.vue.widget.icon/index.js",
+  "entry": "/bundles/ui.vue.widget.map/index.js",
   "exports": {},
   "dependencies": [
     "platform.vue",
-    "platform.compat"
+    "platform.compat",
+    "ui.vue.widget.icon"
   ],
   "requiresService": [
     {
       "id": "EventRegistry"
+    },
+    {
+      "id": "EventActionsRegistry"
     }
   ],
   "sharedDependencies": [
     {
       "id": "vue",
       "versionRange": "^3.5.0"
+    },
+    {
+      "id": "vue-router",
+      "versionRange": "^5.0.0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.annotations",
@@ -32,7 +40,11 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.i18next",
+      "id": "org.eclipse.daanse.board.app.lib.logger",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -44,7 +56,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.ui.vue.variable.components",
+      "id": "org.eclipse.daanse.board.app.ui.vue.widget.icon",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -52,7 +64,7 @@
     {
       "namespace": "tsm.library",
       "attributes": {
-        "library": "org.eclipse.daanse.board.app.ui.vue.widget.icon",
+        "library": "org.eclipse.daanse.board.app.ui.vue.widget.map",
         "version": "0.0.1-next.1"
       }
     }

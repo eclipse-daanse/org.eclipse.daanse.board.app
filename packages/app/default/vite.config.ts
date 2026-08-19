@@ -24,6 +24,8 @@ const isDev = process.env.NODE_ENV !== 'production'
 /** Where the separately built tsm bundles live, keyed by module id. */
 const bundleDirs: Record<string, string> = {
   'ui.vue.widget.progress': resolve(__dirname, '../../ui/vue/widget/progress/dist-bundle'),
+  'ui.vue.widget.map': resolve(__dirname, '../../ui/vue/widget/map/dist-bundle'),
+  'ui.vue.plugins.geojson_renderer': resolve(__dirname, '../../ui/vue/plugins/geojson_renderer/dist-bundle'),
   'ui.vue.widget.chart': resolve(__dirname, '../../ui/vue/widget/chart/dist-bundle'),
   'ui.vue.widget.code': resolve(__dirname, '../../ui/vue/widget/code/dist-bundle'),
   'ui.vue.widget.icon': resolve(__dirname, '../../ui/vue/widget/icon/dist-bundle'),
@@ -133,7 +135,10 @@ export default defineConfig({
       // Dev mode: Use source files directly for HMR
       ...(isDev ? [
         {
-          find: 'org.eclipse.daanse.board.app.ui.vue.widget.map',
+          // Exact match: a bare-string find matches as a prefix, which would
+          // also rewrite 'pkg/manifest.json' onto a file path and break the
+          // bundle manifest imports in bundles.ts.
+          find: /^org\.eclipse\.daanse\.board\.app\.ui\.vue\.widget\.map$/,
           replacement: resolve(__dirname, '../../ui/vue/widget/map/src/index.ts')
         },
         {

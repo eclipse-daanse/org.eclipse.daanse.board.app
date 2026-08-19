@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/icon.svg'
 import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
@@ -62,6 +63,20 @@ export class IconWidgetProvider implements WidgetProvider {
   @activate()
   register(): void {
     this.events.registerWidget(WIDGET_TYPE, IconWidgetEvents)
+
+    /*
+     * Publish this bundle's public API as a shared library: the map bundle
+     * renders IconWidget inside its markers and must use THIS component
+     * object, not a bundled copy. The listing is explicit on purpose - it is
+     * the bundle's declared API surface, importing our own namespace would
+     * be circular.
+     */
+    initTsmRuntime().register(
+      'org.eclipse.daanse.board.app.ui.vue.widget.icon',
+      { IconWidget, IconWidgetSettings },
+      '0.0.1-next.1',
+      'ui.vue.widget.icon',
+    )
   }
 
   @deactivate()

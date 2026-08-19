@@ -13,6 +13,8 @@
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import progressWidget from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
+import wmap from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
+import geojsonRenderer from 'org.eclipse.daanse.board.app.ui.vue.plugins.geojson_renderer/manifest.json'
 import wchart from 'org.eclipse.daanse.board.app.ui.vue.widget.chart/manifest.json'
 import wcode from 'org.eclipse.daanse.board.app.ui.vue.widget.code/manifest.json'
 import wicon from 'org.eclipse.daanse.board.app.ui.vue.widget.icon/manifest.json'
@@ -55,6 +57,8 @@ import wxmlafilters from 'org.eclipse.daanse.board.app.ui.vue.widget.xmla.filter
  */
 export const bundles: ModuleManifest[] = [
   progressWidget as ModuleManifest,
+  wmap as ModuleManifest,
+  geojsonRenderer as ModuleManifest,
   wchart as ModuleManifest,
   wcode as ModuleManifest,
   wicon as ModuleManifest,

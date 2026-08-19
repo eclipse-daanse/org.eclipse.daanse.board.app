@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,51 +11,95 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type WidgetRepository, WIDGET_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/map.svg'
 import MapsWidget from './MapsWidget.vue'
 import MapsWidgetSettings from './MapsWidgetSettings.vue'
-import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { useDataPointRegistry } from './composables/datapointRegistry'
 import TLCDataLabelRendererDescription from './parts/dataLabelRenderer/TLCDataLabelRendererDescription'
 import ValueUnitDataLabelRendererDescription from './parts/dataLabelRenderer/ValueUnitDataLabelRendererDescription'
-import { EventRegistry, EVENT_REGISTRY_ID, EventActionsRegistry, EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { MapWidgetEvents } from './events/MapWidgetEvents'
+import MapMarker from './components/MapMarker.vue'
+import ConditionSettings from './parts/conditionLogic/ConditionSettings.vue'
+import PointStyler from './parts/styler/PointStyler.vue'
+import AreaStyler from './parts/styler/AreaStyler.vue'
 import { MapWidgetInterface } from './gen/MapWidgetInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
-export function activate({ services }: ActivationContext) {
-  const widgetRepository = services.getRequired<WidgetRepository>(WIDGET_REPOSITORY)
-  const eventRegistry = services.getRequired<EventRegistry>(EVENT_REGISTRY_ID)
-  const actionsRegistry = services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID)
+/*
+ * Literal on purpose: the tsm plugin derives the manifest's provides at
+ * build time and cannot evaluate an imported constant. Must match
+ * WIDGET_SERVICE_ID in lib.repository.widget.
+ */
+const WIDGET_SERVICE = 'daanse.widget'
 
-  useDataPointRegistry().registerDataPointRenderer(new TLCDataLabelRendererDescription())
-  useDataPointRegistry().registerDataPointRenderer(new ValueUnitDataLabelRendererDescription())
+const WIDGET_TYPE = 'MapWidget'
 
-  widgetRepository.registerWidget('MapWidget', {
-    component: MapsWidget,
-    settingsComponent: MapsWidgetSettings,
-    supportedDSTypes: ['ogcsta','OGC Composer','rest','valhalla'],
-    icon: Icon,
-    name: 'Map'
-  })
+@component({
+  service: [WIDGET_SERVICE],
+  properties: { 'widget.type': WIDGET_TYPE },
+})
+export class MapWidgetProvider implements WidgetProvider {
+  readonly type = WIDGET_TYPE
+  readonly component = MapsWidget
+  readonly settingsComponent = MapsWidgetSettings
+  readonly supportedDSTypes = ['ogcsta', 'OGC Composer', 'rest', 'valhalla']
+  readonly icon = Icon
+  readonly name = 'Map'
 
-  eventRegistry.registerWidget('MapWidget', MapWidgetEvents)
+  constructor(
+    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+  ) {}
 
-  // Register widget actions from Ecore model (async, non-blocking)
-  actionsRegistry.registerActionsFromEcoreString('MapWidget', ecoreModelContent, 'widget', 'model.ecore')
-    .catch((error) => {
-      console.error('Failed to register MapWidget from Ecore, falling back to decorator-based registration:', error)
-      // Fallback to decorator-based registration
-      actionsRegistry.registerWidgetType('MapWidget', MapWidgetInterface, 'widget')
-    })
+  @activate()
+  register(): void {
+    useDataPointRegistry().registerDataPointRenderer(new TLCDataLabelRendererDescription())
+    useDataPointRegistry().registerDataPointRenderer(new ValueUnitDataLabelRendererDescription())
+
+    this.events.registerWidget(WIDGET_TYPE, MapWidgetEvents)
+
+    // Actions from the Ecore model; decorator registration is the fallback
+    this.actions
+      .registerActionsFromEcoreString(WIDGET_TYPE, ecoreModelContent, 'widget', 'model.ecore')
+      .catch(() => {
+        this.actions.registerWidgetType(WIDGET_TYPE, MapWidgetInterface, 'widget')
+      })
+
+    /*
+     * Publish this bundle's public API as a shared library: the geojson
+     * renderer plugin registers itself into the DataPointRegistry, and that
+     * registry is module state of THIS bundle - the plugin must reach this
+     * copy, not one of its own.
+     */
+    initTsmRuntime().register(
+      'org.eclipse.daanse.board.app.ui.vue.widget.map',
+      {
+        MapsWidget,
+        MapsWidgetSettings,
+        useDataPointRegistry,
+        // Renderer building blocks: the geojson plugin composes its markers
+        // and stylers from these. Public API on purpose - a deep import into
+        // this bundle's src tree cannot be resolved at runtime.
+        MapMarker,
+        ConditionSettings,
+        PointStyler,
+        AreaStyler,
+      },
+      '0.0.1-next.1',
+      'ui.vue.widget.map',
+    )
+  }
+
+  @deactivate()
+  unregister(): void {
+    this.events.unregisterWidget(WIDGET_TYPE)
+    this.actions.unregisterWidgetType(WIDGET_TYPE)
+  }
 }
 
-export function deactivate({ services }: ActivationContext) {
-  services.getRequired<WidgetRepository>(WIDGET_REPOSITORY).unregisterWidget('MapWidget')
-  services.getRequired<EventRegistry>(EVENT_REGISTRY_ID).unregisterWidget('MapWidget')
-  services.getRequired<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY_ID).unregisterWidgetType('MapWidget')
-}
-
-export { MapsWidget, MapsWidgetSettings, useDataPointRegistry }
+export { MapsWidget, MapsWidgetSettings, useDataPointRegistry, MapMarker, ConditionSettings, PointStyler, AreaStyler }
 export type { IDataPointDescription } from './composables/IDataPointDescription'

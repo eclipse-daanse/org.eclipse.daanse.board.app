@@ -1412,14 +1412,12 @@ var __decorateClass = (decorators, target, key, kind) => {
 const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "PageWidget";
 let PageWidgetProvider = class {
-  constructor() {
-    this.type = WIDGET_TYPE;
-    this.component = PageWidget;
-    this.settingsComponent = PageWidgetSettings;
-    this.supportedDSTypes = [];
-    this.icon = Icon;
-    this.name = "Page";
-  }
+  type = WIDGET_TYPE;
+  component = PageWidget;
+  settingsComponent = PageWidgetSettings;
+  supportedDSTypes = [];
+  icon = Icon;
+  name = "Page";
 };
 PageWidgetProvider = __decorateClass([
   component({
