@@ -19,7 +19,8 @@
     "dev:app": "NODE_ENV=development npm run dev --workspace=packages/app/default",
     "generate_models": "cd tools/generator && node scan-and-generate.js",
     "bundles": "node scripts/build-bundles.mjs",
-    "bundles:watch": "node scripts/watch-bundles.mjs"
+    "bundles:watch": "node scripts/watch-bundles.mjs",
+    "start": "node scripts/dev.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",
