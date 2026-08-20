@@ -217,7 +217,26 @@ die Startreihenfolge explizit sein.
 
 ---
 
-## 7. Nachtrag: Service-Locator in den Klassenrümpfen
+## 7. Nachtrag: Service-Locator in den Klassenrümpfen  ✔ aufgelöst
+
+**Stand 2026-08-20: Das Muster ist aus dem Anwendungscode verschwunden** —
+147 Stellen, vier Ersatzmuster je nach Konsumentenart:
+
+| Konsument | Ersatz |
+|---|---|
+| Vue-Komponenten (50 Dateien) | Vues `provide`/`inject`, gespeist von einer Bridge im Launcher, die jeden Dienst unter seiner String-ID **und** unter `Symbol.for(id)` provided — also genau unter den `identifier`-Konstanten der Pakete. `container.get<T>(identifier)` → `inject<T>(identifier)` |
+| Klassen aus eigenen Factories | Konstruktor-/Property-DI, Abhängigkeiten einmal bei der Aktivierung geschlossen; Repositories lösen ihre Typ-Einträge selbst auf (`resolveIdentifier`, Symbol-Description = Dienst-ID) |
+| Statics und Helfer | Abhängigkeiten als Parameter vom Aufrufer, der sie legitim hält |
+| Pinia-Stores | Closure-DI an der Modulgrenze: die Store-Pakete wurden Module, deren `activate` das Repository in die Store-Datei reicht (`inject` scheidet aus — Stores werden auch außerhalb von Component-Setup erstinstanziiert) |
+
+`lib.variables` hat seine Import-Zeit-Bindungen verloren: jede Variablenklasse
+entsteht über eine typbezogene Factory aus dem neuen `activate` des Pakets.
+Verbleibende Container-Nutzer: die Composition-Root (`main.ts`) und die
+Spiegelung in der `BoardServiceRegistry` — beide fallen gemeinsam mit dem
+Container selbst, der jetzt entfernbar geworden ist.
+
+Ursprünglicher Befund:
+
 
 Beim Umstellen des Factory-Musters kam die Frage auf, warum die betroffenen
 Klassen eigentlich nicht `@injectable` sind. Die Antwort erklärt zugleich eine
