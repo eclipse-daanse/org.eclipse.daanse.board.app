@@ -25,9 +25,7 @@ if (!container.isBound(identifiers.TINY_EMITTER)) {
 }
 
 import { BoardServiceRegistry } from './BoardServiceRegistry'
-import { ModuleBootstrapper } from './ModuleBootstrapper'
 import type { ActivationContext, ActivatableModule } from './api/ActivationContext'
-import type { ModuleEntry, BootstrapResult, ActivationFailure } from './ModuleBootstrapper'
 
 /**
  * Die ServiceRegistry der Anwendung.
@@ -43,10 +41,6 @@ export {
   identifiers,
   services,
   BoardServiceRegistry,
-  ModuleBootstrapper,
   type ActivationContext,
   type ActivatableModule,
-  type ModuleEntry,
-  type BootstrapResult,
-  type ActivationFailure,
 }

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.plugins.i18next",
+  "name": "ui.vue.plugins.i18next",
+  "version": "0.0.1-next.1",
+  "entry": "./src/index.ts",
+  "exports": {},
+  "requiresService": [
+    {
+      "id": "App"
+    },
+    {
+      "id": "I18next"
+    }
+  ]
+}

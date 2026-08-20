@@ -27,11 +27,10 @@ import {
   container,
   identifiers,
   services,
-  ModuleBootstrapper,
 } from 'org.eclipse.daanse.board.app.lib.core'
-import { modules } from './modules'
+import { preloadedModules } from './preloaded'
 import { bundles } from './bundles'
-import { ModuleLoader } from '@eclipse-daanse/tsm'
+import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
@@ -248,36 +247,20 @@ registerTestActions().then(() => {
   console.error('❌ Failed to register test actions:', err)
 })
 
-// Module aktivieren, bevor die Oberfläche montiert wird — sonst fehlten ihre
-// Beiträge (Widgets, Datenquellen, ...) beim ersten Rendern.
-const bootstrapper = new ModuleBootstrapper(services, {
-  debug: (msg, ...args) => console.debug(msg, ...args),
-  info: (msg, ...args) => console.info(msg, ...args),
-  warn: (msg, ...args) => console.warn(msg, ...args),
-  error: (msg, ...args) => console.error(msg, ...args),
-})
-
-// Der gesamte Start: alle Pakete sind Module, ihre Reihenfolge folgt aus den
-// Deklarationen in modules.ts. Was hier bleibt, ist anwendungseigen — die
-// beiden Seiten Configuration und SaveLoad und ihre Navigationseintraege.
 /*
- * The tsm ModuleLoader loads the real bundles from bundles.ts - packages with
- * their own build and entry URL. It shares the registry with the bootstrapper:
- * services of the static stock are ordinary services to bundles and vice
- * versa. The migration moves modules from modules.ts over here; the
- * bootstrapper dies by becoming empty.
+ * The whole start runs through the tsm ModuleLoader. Three kinds of modules
+ * share one registry and one lifecycle model:
+ *
+ * - preloaded modules (preloaded.ts): still bundled with the host, their
+ *   containers handed over via entryResolver. Order is not declared anywhere:
+ *   a module whose required service is missing parks as 'unsatisfied' and
+ *   activates in the cascade once the provider registered - tsm#18 at work.
+ * - platform modules: preloaded as well; they publish shared libraries.
+ * - real bundles (bundles.ts): fetched through their entry URL.
+ *
+ * The ModuleBootstrapper and the hand-derived ordering it carried are gone -
+ * they were transition tools, and the loader owns both jobs now.
  */
-/*
- * Modules that still live inside the host bundle but are run by the loader:
- * the entryResolver hands over their namespace instead of fetching the entry
- * URL. An entry disappears from this map once the module is built as a real
- * bundle - from then on its URL is used.
- */
-const preloadedContainers = new Map<string, () => Promise<unknown>>([
-  ['platform.vue', () => import('org.eclipse.daanse.board.app.platform.vue')],
-  ['platform.compat', () => import('org.eclipse.daanse.board.app.platform.compat')],
-])
-
 const resolvedContainers = new Map<string, unknown>()
 
 const loader = new ModuleLoader({
@@ -290,19 +273,6 @@ const loader = new ModuleLoader({
 // The tsm console: tsm.lb(), tsm.services() and friends become available in
 // the browser devtools - insight into modules, services and their states.
 installDevtools({ loader })
-
-async function loadBundles() {
-  const manifests = [
-    (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json')).default,
-    (await import('org.eclipse.daanse.board.app.platform.compat/manifest.json')).default,
-    ...bundles,
-  ]
-  for (const [id, load] of preloadedContainers) {
-    resolvedContainers.set(id, await load())
-  }
-  loader.register(manifests)
-  await loader.loadAll()
-}
 
 /*
  * Dev reload bridge: the vite plugin in vite.config.ts watches the built
@@ -318,31 +288,47 @@ if (import.meta.hot) {
   })
 }
 
-bootstrapper
-  .activateAll(modules)
-  .then(({ activated }) => {
-    console.log(`✅ ${activated.length} Module aktiviert`)
-    seitenEinrichten()
-    // After the static stock, so its services are registered by the time a
-    // bundle names them in requiresService.
-    //
-    // The host does not load any bundle itself - it registers manifests and
-    // resolves the preloaded containers. What loads when is decided by the
-    // resolver from the manifests' dependencies: a widget naming platform.vue
-    // pulls it ahead of itself in the order. The platform.vue manifest
-    // carries the tsm.library capabilities that the bundles'
-    // sharedDependencies are validated against.
-    return loadBundles()
-  })
-  .then(() => {
-    if (bundles.length > 0) {
-      console.log(`📦 ${bundles.length} bundle(s) loaded`)
-    }
-  })
+async function start() {
+  // Two services the host itself provides: its Vue app instance, and the
+  // event bus that lib.core still binds only into the legacy container.
+  services.register('App', app)
+  services.register('TINY_EMITTER', container.get(identifiers.TINY_EMITTER))
+
+  const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
+    [
+      (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
+        .default as ModuleManifest,
+      () => import('org.eclipse.daanse.board.app.platform.vue'),
+    ],
+    [
+      (await import('org.eclipse.daanse.board.app.platform.compat/manifest.json'))
+        .default as ModuleManifest,
+      () => import('org.eclipse.daanse.board.app.platform.compat'),
+    ],
+  ]
+
+  const preloaded = [...platform, ...preloadedModules]
+  for (const [manifest, load] of preloaded) {
+    resolvedContainers.set(manifest.id, await load())
+  }
+
+  loader.register([...preloaded.map(([manifest]) => manifest), ...bundles])
+  await loader.loadAll()
+
+  const all = loader.getManifests()
+  const active = all.filter((m) => loader.getModule(m.id)?.state === 'active').length
+  const parked = loader.getUnsatisfiedModules()
+  console.log(`✅ ${active}/${all.length} modules active (${bundles.length} URL bundles)`)
+  if (parked.length > 0) {
+    console.warn('⏸ unsatisfied:', parked.map((p) => `${p.moduleId} <- ${p.waitingFor.join(',')}`).join('; '))
+  }
+
+  seitenEinrichten()
+}
+
+start()
   .catch((err) => {
-    // Die Ursache mit ausgeben - der Bootstrapper hängt sie als `cause` an,
-    // und ohne sie steht in der Konsole nur, welches Modul scheiterte.
-    console.error('❌ Start fehlgeschlagen:', err, '\nUrsache:', err?.cause ?? '(keine)')
+    console.error('❌ start failed:', err, '\ncause:', err?.cause ?? '(none)')
   })
   .finally(() => {
     app.mount('#app')
