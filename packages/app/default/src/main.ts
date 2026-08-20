@@ -133,10 +133,10 @@ if (import.meta.hot) {
 }
 
 async function start() {
-  // Two services the host itself provides: its Vue app instance, and the
-  // event bus that lib.core still binds only into the legacy container.
+  // The single service the host itself provides: its Vue app instance.
+  // Only the composition root can construct it; everything else that used
+  // to be registered here has an owning module now (platform.system).
   services.register('App', app)
-  services.register('TINY_EMITTER', container.get(identifiers.TINY_EMITTER))
 
   const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
     [

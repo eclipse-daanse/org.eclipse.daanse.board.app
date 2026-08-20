@@ -138,7 +138,9 @@ describe('widget bundles as declared components', () => {
     'table.kpi', 'table.pivot', 'text.plain', 'text.rich', 'timeline',
     'vanta', 'video', 'weather', 'xmla.filters', 'progress',
   ]
-  it.each(bundleIds)('%s exports a daanse.widget component', async (suffix) => {
+  // 30s: the code widget drags monaco through the SSR transform on a cold
+  // cache - import cost, not a defect.
+  it.each(bundleIds)('%s exports a daanse.widget component', { timeout: 30_000 }, async (suffix) => {
     const ns = await import(/* @vite-ignore */ `org.eclipse.daanse.board.app.ui.vue.widget.${suffix}`)
 
     const providers = Object.values(ns).filter(
