@@ -19,7 +19,6 @@ import {
   identifier,
   DatasourceRepository
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
 import {
   EventActionsRegistry,
@@ -37,6 +36,17 @@ export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConf
 }
 
 export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToChartComposerActions {
+  /**
+   * Dependencies arrive through the constructor - the factory in this
+   * package's activate passes them from the registry. No global lookups.
+   */
+  constructor(
+    private readonly datasourceRepository: DatasourceRepository,
+    private readonly actionsRegistry?: EventActionsRegistry,
+  ) {
+    super()
+  }
+
 
   private instanceId: string = ''
   private configuration!: IOGCSTAToChartComposerConfiguration  // Store config reference
@@ -62,8 +72,8 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
     // Unregister instance from actions registry
     if (this.instanceId) {
       try {
-        if (container.isBound(EVENT_ACTIONS_REGISTRY)) {
-          const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
+        if (this.actionsRegistry) {
+          const actionsRegistry = this.actionsRegistry
           // Use unregisterInstance to remove from widgetInstances map
           actionsRegistry.unregisterInstance(this.instanceId)
           console.log(`📝 Unregistered OGCSTAToChartComposer instance: ${this.instanceId}`)
@@ -144,7 +154,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       }
     }
 
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     this.connectedDatasources
       .filter((datasourceId) => datasourceId)
@@ -161,7 +171,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
   }
 
   async getData(type: string, options?: any): Promise<any> {
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     // Check if datasource has history enabled
     // If not, we need to load observations ourselves for the chart
@@ -397,7 +407,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
       return  // Cache is already populated
     }
 
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     for (const datasourceId of this.connectedDatasources) {
       if (!datasourceId) continue
@@ -450,7 +460,7 @@ export class OGCSTAToChartComposer extends BaseDatasource implements OGCSTAToCha
 
     // Load datastreams for this thing
     console.log(`📡 Loading datastreams for thing ${thingId}...`)
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     for (const datasourceId of this.connectedDatasources) {
       if (!datasourceId) continue

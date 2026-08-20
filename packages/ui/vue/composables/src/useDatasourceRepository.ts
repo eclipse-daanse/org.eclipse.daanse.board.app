@@ -11,12 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { type Container } from 'inversify'
 import {
   identifier,
   DatasourceRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { onMounted, onUnmounted, type Ref, getCurrentInstance, reactive, ComputedRef } from 'vue'
+import { onMounted, onUnmounted, inject, type Ref, reactive, ComputedRef } from 'vue'
 import { watch, ref } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'
 
@@ -39,17 +38,12 @@ export function useDatasourceRepository(
   subscriptions: Array<() => any> = [],
   requestConfig?: ComputedRef,
 ): IVueDatasourceRepository {
-  const instance = getCurrentInstance()
-  const container = instance?.appContext.config.globalProperties
-    .$container as Container
-
-  if (!container) {
-    throw new Error(
-      'Container not found. Check if youe modules is properly configured.',
-    )
+  // Vue-native DI: the host bridges every service into app-level provides
+  // under its identifier symbol. A composable runs in setup, so inject works.
+  const datasourceRepository = inject<DatasourceRepository>(identifier)
+  if (!datasourceRepository) {
+    throw new Error('DatasourceRepository not provided')
   }
-
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
   const { startLoading, stopLoading } = useGlobalLoading()
 
   const getData = async () => {

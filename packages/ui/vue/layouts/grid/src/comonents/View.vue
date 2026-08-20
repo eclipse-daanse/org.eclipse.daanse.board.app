@@ -31,7 +31,7 @@ Contributors:
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { inject, ref, computed, onMounted, nextTick } from 'vue'
 import { GridLayout } from 'grid-layout-plus'
 
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
@@ -70,13 +70,11 @@ let layoutStore: any = null
 
 
 // Get EventBus for page loaded event
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
 /** Page Repo Subscription für layoutSettings */
 let pageSubId: string | null = null
-const pageRepo = container.isBound(PageIdentifier)
-  ? container.get<PageRegistryI>(PageIdentifier)
-  : null
+const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 
 function syncLayoutSettings() {
   if (pageRepo && pageId) {

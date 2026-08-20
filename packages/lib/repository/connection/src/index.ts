@@ -30,7 +30,7 @@ const identifier = Symbol.for(CONNECTION_REPOSITORY)
  * genuegt, erzeugt beim Aktivieren statt beim ersten Zugriff.
  */
 export function activate({ services }: ActivationContext) {
-  services.register(CONNECTION_REPOSITORY, new ConnectionRepository())
+  services.register(CONNECTION_REPOSITORY, new ConnectionRepository(services))
 }
 
 export function deactivate({ services }: ActivationContext) {

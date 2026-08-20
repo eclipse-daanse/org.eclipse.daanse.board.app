@@ -6,9 +6,23 @@
   "entry": "./index.ts",
   "exports": {},
   "requiresService": [
-    { "id": "VariableWrapperFactory" },
-    { "id": "RouteRegistry" },
-    { "id": "NavigationRegistry" },
-    { "id": "EventActionsRegistry" }
+    {
+      "id": "VariableWrapperFactory"
+    },
+    {
+      "id": "RouteRegistry"
+    },
+    {
+      "id": "NavigationRegistry"
+    },
+    {
+      "id": "EventActionsRegistry"
+    },
+    {
+      "id": "VariableRepository"
+    },
+    {
+      "id": "TINY_EMITTER"
+    }
   ]
 }

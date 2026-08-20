@@ -1,9 +1,8 @@
-(function(){var i="ui.vue.composer.ogcsta2chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.h50[data-v-891461ee]{\n  height: 50%;\n}\n.preview-placeholder[data-v-891461ee] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n  color: #6c757d;\n  font-style: italic;\n}\n\n.ogcsta2chart-composer-settings[data-v-c13f4fa8] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  max-height: 600px;\n  overflow-y: auto;\n}\n.datastreams-section[data-v-c13f4fa8] {\n  border: 1px solid #dee2e6;\n  border-radius: 8px;\n  padding: 16px;\n  background: #f8f9fa;\n}\n.section-header[data-v-c13f4fa8] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 16px;\n}\n.section-header h3[data-v-c13f4fa8] {\n  margin: 0;\n  color: #495057;\n  font-size: 1.1em;\n}\n.loading-indicator[data-v-c13f4fa8],\n.no-datastreams[data-v-c13f4fa8] {\n  padding: 16px;\n  text-align: center;\n  color: #6c757d;\n  font-style: italic;\n}\n.datastream-list[data-v-c13f4fa8] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  max-height: 300px;\n  overflow-y: auto;\n}\n.datastream-item[data-v-c13f4fa8] {\n  display: flex;\n  gap: 8px;\n  align-items: flex-start;\n  padding: 12px;\n  background: white;\n  border: 1px solid #dee2e6;\n  border-radius: 6px;\n}\n.datastream-fields[data-v-c13f4fa8] {\n  flex: 1;\n  display: grid;\n  grid-template-columns: 2fr 1fr auto;\n  gap: 12px;\n  align-items: start;\n}\n.datastream-select[data-v-c13f4fa8] {\n  grid-column: 1 / 2;\n}\n.datastream-label[data-v-c13f4fa8] {\n  grid-column: 2 / 3;\n}\n.datastream-color[data-v-c13f4fa8] {\n  grid-column: 3 / 4;\n  width: 100px;\n}\n.remove-button[data-v-c13f4fa8] {\n  margin-top: 8px;\n}\n";})();
+(function(){var i="ui.vue.composer.ogcsta2chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.h50[data-v-891461ee]{\n  height: 50%;\n}\n.preview-placeholder[data-v-891461ee] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n  color: #6c757d;\n  font-style: italic;\n}\n\n.ogcsta2chart-composer-settings[data-v-c42a04a7] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  max-height: 600px;\n  overflow-y: auto;\n}\n.datastreams-section[data-v-c42a04a7] {\n  border: 1px solid #dee2e6;\n  border-radius: 8px;\n  padding: 16px;\n  background: #f8f9fa;\n}\n.section-header[data-v-c42a04a7] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 16px;\n}\n.section-header h3[data-v-c42a04a7] {\n  margin: 0;\n  color: #495057;\n  font-size: 1.1em;\n}\n.loading-indicator[data-v-c42a04a7],\n.no-datastreams[data-v-c42a04a7] {\n  padding: 16px;\n  text-align: center;\n  color: #6c757d;\n  font-style: italic;\n}\n.datastream-list[data-v-c42a04a7] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  max-height: 300px;\n  overflow-y: auto;\n}\n.datastream-item[data-v-c42a04a7] {\n  display: flex;\n  gap: 8px;\n  align-items: flex-start;\n  padding: 12px;\n  background: white;\n  border: 1px solid #dee2e6;\n  border-radius: 6px;\n}\n.datastream-fields[data-v-c42a04a7] {\n  flex: 1;\n  display: grid;\n  grid-template-columns: 2fr 1fr auto;\n  gap: 12px;\n  align-items: start;\n}\n.datastream-select[data-v-c42a04a7] {\n  grid-column: 1 / 2;\n}\n.datastream-label[data-v-c42a04a7] {\n  grid-column: 2 / 3;\n}\n.datastream-color[data-v-c42a04a7] {\n  grid-column: 3 / 4;\n  width: 100px;\n}\n.remove-button[data-v-c42a04a7] {\n  margin-top: 8px;\n}\n";})();
 const { identifier, DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
 const { OGCSTAToChartComposer, symbol } = __tsm__.require("org.eclipse.daanse.board.app.lib.composer.ogcsta2chart");
-const { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version: version$1, isProxy, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, createBlock, createCommentVNode, unref, computed, withCtx, createTextVNode, Fragment, renderList } = __tsm__.require("vue");
+const { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version: version$1, isProxy, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, createBlock, createCommentVNode, unref, computed, withCtx, createTextVNode, Fragment, renderList, inject } = __tsm__.require("vue");
 const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { container } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 /*!
  * @kurkle/color v0.3.4
  * https://github.com/kurkle/color#readme
@@ -2165,19 +2164,19 @@ function getRelativePosition(event, chart) {
 function getContainerSize(canvas, width, height) {
   let maxWidth, maxHeight;
   if (width === void 0 || height === void 0) {
-    const container2 = canvas && _getParentNode(canvas);
-    if (!container2) {
+    const container = canvas && _getParentNode(canvas);
+    if (!container) {
       width = canvas.clientWidth;
       height = canvas.clientHeight;
     } else {
-      const rect = container2.getBoundingClientRect();
-      const containerStyle = getComputedStyle(container2);
+      const rect = container.getBoundingClientRect();
+      const containerStyle = getComputedStyle(container);
       const containerBorder = getPositionedStyle(containerStyle, "border", "width");
       const containerPadding = getPositionedStyle(containerStyle, "padding");
       width = rect.width - containerPadding.width - containerBorder.width;
       height = rect.height - containerPadding.height - containerBorder.height;
-      maxWidth = parseMaxStyle(containerStyle.maxWidth, container2, "clientWidth");
-      maxHeight = parseMaxStyle(containerStyle.maxHeight, container2, "clientHeight");
+      maxWidth = parseMaxStyle(containerStyle.maxWidth, container, "clientWidth");
+      maxHeight = parseMaxStyle(containerStyle.maxHeight, container, "clientHeight");
     }
   }
   return {
@@ -4788,14 +4787,14 @@ function unlistenDevicePixelRatioChanges(chart) {
 }
 function createResizeObserver(chart, type, listener) {
   const canvas = chart.canvas;
-  const container2 = canvas && _getParentNode(canvas);
-  if (!container2) {
+  const container = canvas && _getParentNode(canvas);
+  if (!container) {
     return;
   }
   const resize = throttled((width, height) => {
-    const w = container2.clientWidth;
+    const w = container.clientWidth;
     listener(width, height);
-    if (w < container2.clientWidth) {
+    if (w < container.clientWidth) {
       listener();
     }
   }, window);
@@ -4808,7 +4807,7 @@ function createResizeObserver(chart, type, listener) {
     }
     resize(width, height);
   });
-  observer.observe(container2);
+  observer.observe(container);
   listenDevicePixelRatioChanges(chart, resize);
   return observer;
 }
@@ -4897,8 +4896,8 @@ class DomPlatform extends BasePlatform {
     return getMaximumSize(canvas, width, height, aspectRatio);
   }
   isAttached(canvas) {
-    const container2 = canvas && _getParentNode(canvas);
-    return !!(container2 && container2.isConnected);
+    const container = canvas && _getParentNode(canvas);
+    return !!(container && container.isConnected);
   }
 }
 function _detectPlatform(canvas) {
@@ -10941,7 +10940,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
       isLoadingThings.value = true;
       try {
-        const datasourceRepository = container.get(identifier);
+        const datasourceRepository = inject(identifier);
         const allThings = [];
         for (const datasourceId of validDatasources) {
           const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
@@ -10988,7 +10987,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
       isLoadingDatastreams.value = true;
       try {
-        const datasourceRepository = container.get(identifier);
+        const datasourceRepository = inject(identifier);
         const datastreams = await OGCSTAToChartComposer.getAvailableDatastreams(
           __props.config.connectedDatasources,
           __props.config.thingIds,
@@ -11140,7 +11139,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const Settings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-c13f4fa8"]]);
+const Settings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-c42a04a7"]]);
 const previewSymbol = Symbol.for("OGCSTAToChartComposerPreview");
 const settingsSymbol = Symbol.for("OGCSTAToChartComposerSettings");
 function activate({ services }) {

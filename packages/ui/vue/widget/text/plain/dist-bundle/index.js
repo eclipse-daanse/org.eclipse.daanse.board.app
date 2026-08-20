@@ -1,10 +1,10 @@
-(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container[data-v-e729c407] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.component[data-v-e729c407] {\n    font-size: var(--v93ce5f4c);\n    color: var(--v29ac4b12);\n    text-align: var(--v2ba0b1ff);\n    font-weight: var(--v443d900f);\n    font-style: var(--v44e87240);\n    text-decoration: var(--a93761b6);\n    overflow: hidden;\n}\n\n.settings-container[data-v-2095ef85] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.settings-block[data-v-2095ef85] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 8px;\n}\n.text-title[data-v-2095ef85] {\n  width: 100%;\n}\n.text-size[data-v-2095ef85] {\n  width: 100%;\n  margin-left: 12px;\n}\n.text-weight[data-v-2095ef85] {\n  width: 100px;\n}\n.loading[data-v-2095ef85] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n.toolbar[data-v-2095ef85] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n}\n.toolbar-group[data-v-2095ef85] {\n  display: flex;\n  gap: 2px;\n  padding-right: 0.5rem;\n  margin-right: 0.25rem;\n  border-right: 1px solid #e5e7eb;\n}\n.toolbar-group[data-v-2095ef85]:last-child {\n  border-right: none;\n  padding-right: 0;\n  margin-right: 0;\n}\n.toolbar-btn[data-v-2095ef85] {\n  min-width: 28px !important;\n  height: 28px !important;\n  padding: 0 4px !important;\n  border: 1px solid transparent !important;\n  border-radius: 0.25rem !important;\n}\n.toolbar-btn[data-v-2095ef85]:hover {\n  background-color: #e5e7eb !important;\n}\n.is-active[data-v-2095ef85] {\n  background-color: #fff3e0 !important;\n  border-color: rgb(236, 156, 29) !important;\n  color: #c45e00 !important;\n}\n.toolbar-group--inputs[data-v-2095ef85] {\n  align-items: center;\n  gap: 0.25rem;\n}\n.toolbar-input[data-v-2095ef85] {\n  max-width: 70px;\n}\n";})();
-const { defineComponent, mergeModels, useCssVars, useModel, computed, toRefs, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, createElementVNode, toDisplayString, inject: inject$1, resolveComponent, createBlock, withCtx, createVNode, unref, normalizeClass } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container[data-v-f4d148e9] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.component[data-v-f4d148e9] {\n    font-size: var(--v27c49178);\n    color: var(--v6744ebb4);\n    text-align: var(--v35f2d121);\n    font-weight: var(--v8c8df8a6);\n    font-style: var(--v1b246782);\n    text-decoration: var(--v48a0c3c3);\n    overflow: hidden;\n}\n\n.settings-container[data-v-244ff857] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.settings-block[data-v-244ff857] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 8px;\n}\n.text-title[data-v-244ff857] {\n  width: 100%;\n}\n.text-size[data-v-244ff857] {\n  width: 100%;\n  margin-left: 12px;\n}\n.text-weight[data-v-244ff857] {\n  width: 100px;\n}\n.loading[data-v-244ff857] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n.toolbar[data-v-244ff857] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n}\n.toolbar-group[data-v-244ff857] {\n  display: flex;\n  gap: 2px;\n  padding-right: 0.5rem;\n  margin-right: 0.25rem;\n  border-right: 1px solid #e5e7eb;\n}\n.toolbar-group[data-v-244ff857]:last-child {\n  border-right: none;\n  padding-right: 0;\n  margin-right: 0;\n}\n.toolbar-btn[data-v-244ff857] {\n  min-width: 28px !important;\n  height: 28px !important;\n  padding: 0 4px !important;\n  border: 1px solid transparent !important;\n  border-radius: 0.25rem !important;\n}\n.toolbar-btn[data-v-244ff857]:hover {\n  background-color: #e5e7eb !important;\n}\n.is-active[data-v-244ff857] {\n  background-color: #fff3e0 !important;\n  border-color: rgb(236, 156, 29) !important;\n  color: #c45e00 !important;\n}\n.toolbar-group--inputs[data-v-244ff857] {\n  align-items: center;\n  gap: 0.25rem;\n}\n.toolbar-input[data-v-244ff857] {\n  max-width: 70px;\n}\n";})();
+const { defineComponent, mergeModels, useCssVars, useModel, computed, toRefs, inject: inject$1, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, createElementVNode, toDisplayString, resolveComponent, createBlock, withCtx, createVNode, unref, normalizeClass } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { VariableComplexStringWrapper, VariableWrapper, useDatasourceRepository, WrapperTypes } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const helpers = __tsm__.require("org.eclipse.daanse.board.app.lib.utils.helpers").default;
 const { Reference, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
 const { ComplexTextInput, VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
@@ -2308,17 +2308,17 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "v93ce5f4c": fontSizeStyle.value,
-      "v29ac4b12": config.value.fontColor.value,
-      "v2ba0b1ff": config.value.horizontalAlign.value,
-      "v443d900f": config.value.fontWeight.value,
-      "v44e87240": config.value.fontStyle.value,
-      "a93761b6": config.value.textDecoration.value
+      "v27c49178": fontSizeStyle.value,
+      "v6744ebb4": config.value.fontColor.value,
+      "v35f2d121": config.value.horizontalAlign.value,
+      "v8c8df8a6": config.value.fontWeight.value,
+      "v1b246782": config.value.fontStyle.value,
+      "v48a0c3c3": config.value.textDecoration.value
     }));
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     class TextWidgetApi extends TextWidgetInterface {
@@ -2432,7 +2432,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const TextWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-e729c407"]]);
+const TextWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-f4d148e9"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _hoisted_2 = { class: "settings-block" };
 const _hoisted_3 = { class: "toolbar" };
@@ -2455,7 +2455,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     });
     const widgetSettings = useModel(__props, "modelValue");
     console.log(widgetSettings);
-    container.get(identifier);
+    inject$1(identifier);
     const i18n = inject$1("i18n");
     const t = (key) => i18n ? i18n.t(key) : key;
     return (_ctx, _cache) => {
@@ -2607,7 +2607,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const TextWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-2095ef85"]]);
+const TextWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-244ff857"]]);
 const TextWidgetEvents = [
   { name: "Text Clicked", type: "click", description: "Triggered when the text widget is clicked", payloadType: Payload },
   { name: "Text Right Clicked", type: "right_click", description: "Triggered when the text widget is right-clicked", payloadType: Payload },

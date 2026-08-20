@@ -13,6 +13,7 @@
 
 import { KpiComposer, type IKpiComposerConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
 const KPI_COMPOSER = 'KpiComposer'
@@ -26,21 +27,28 @@ const symbol = Symbol.for(KPI_COMPOSER)
  * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
  * jetzt schlicht ueber `new`.
  */
-function createKpiComposer(config: any) {
+/**
+ * Factory factory: the repository is closed over once, at activation - the
+ * config-taking function the registry hands out carries its dependency
+ * instead of looking anything up.
+ */
+function createKpiComposer(repository: DatasourceRepository) {
+  return (config: any) => {
   if (!KpiComposer.validateConfiguration(config)) {
     throw new Error(
       'Invalid KpiComposer configuration. Please provide a valid configuration.',
     )
   }
 
-  const composer = new KpiComposer()
+  const composer = new KpiComposer(repository)
   composer.init(config)
 
   return composer
+  }
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(KPI_COMPOSER, createKpiComposer)
+  services.register(KPI_COMPOSER, createKpiComposer(services.getRequired('DatasourceRepository')))
 }
 
 export function deactivate({ services }: ActivationContext) {

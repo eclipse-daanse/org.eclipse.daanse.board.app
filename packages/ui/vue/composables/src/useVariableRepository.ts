@@ -15,9 +15,8 @@ import {
   identifier,
   type VariableRepository,
 } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { ref, computed, type ComputedRef } from 'vue'
+import { ref, computed, inject, type ComputedRef } from 'vue'
 import { Variable } from 'org.eclipse.daanse.board.app.lib.variables'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
 
 export function useVariableRepository() {
@@ -26,21 +25,15 @@ export function useVariableRepository() {
 
   const connectedVariables = [] as Variable[]
 
-  if (!container) {
-    throw new Error(
-      'Container not found. Check if your module is properly configured.',
-    )
-  }
-
-  const variableRepository = container.get<VariableRepository>(identifier)
+  const variableRepository = inject<VariableRepository>(identifier)
   if (!variableRepository) {
-    throw new Error('VariableRepository not found in the container.')
+    throw new Error('VariableRepository not provided')
   }
   variableRepositoryFound = true
 
   let pageContextService: PageContextServiceI | null = null
   try {
-    pageContextService = container.get<PageContextServiceI>(PAGE_CONTEXT_SERVICE)
+    pageContextService = inject<PageContextServiceI>(PAGE_CONTEXT_SERVICE)!
   } catch (e) {
     // PageContextService might not be available in all contexts
     console.warn('PageContextService not available for variable resolution')

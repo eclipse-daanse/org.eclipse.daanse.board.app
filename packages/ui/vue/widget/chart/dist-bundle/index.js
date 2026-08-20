@@ -1,9 +1,9 @@
 (function(){var i="ui.vue.widget.chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.settings-container[data-v-7701abd6] {\n  padding: 16px;\n}\n.settings-block[data-v-7701abd6] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.settings-block h3[data-v-7701abd6] {\n  margin: 0 0 8px 0;\n  font-size: 14px;\n  font-weight: 600;\n  color: var(--va-primary);\n}\n";})();
-const { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version: version$2, isProxy, mergeModels, toRefs, useModel, computed, createElementBlock, openBlock, withModifiers, createBlock, createCommentVNode, resolveDynamicComponent, inject: inject$1, resolveComponent, Fragment, createVNode, withCtx, createElementVNode, createTextVNode, renderList, toDisplayString, unref } = __tsm__.require("vue");
+const { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version: version$2, isProxy, mergeModels, toRefs, useModel, inject: inject$1, computed, createElementBlock, openBlock, withModifiers, createBlock, createCommentVNode, resolveDynamicComponent, resolveComponent, Fragment, createVNode, withCtx, createElementVNode, createTextVNode, renderList, toDisplayString, unref } = __tsm__.require("vue");
 const { VariableWrapper, useVariableRepository, useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { useRoute } = __tsm__.require("vue-router");
 const { Documentation, Attribute, Reference, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -3581,19 +3581,19 @@ function getRelativePosition$1(event, chart) {
 function getContainerSize(canvas, width, height) {
   let maxWidth, maxHeight;
   if (width === void 0 || height === void 0) {
-    const container2 = canvas && _getParentNode(canvas);
-    if (!container2) {
+    const container = canvas && _getParentNode(canvas);
+    if (!container) {
       width = canvas.clientWidth;
       height = canvas.clientHeight;
     } else {
-      const rect = container2.getBoundingClientRect();
-      const containerStyle = getComputedStyle(container2);
+      const rect = container.getBoundingClientRect();
+      const containerStyle = getComputedStyle(container);
       const containerBorder = getPositionedStyle(containerStyle, "border", "width");
       const containerPadding = getPositionedStyle(containerStyle, "padding");
       width = rect.width - containerPadding.width - containerBorder.width;
       height = rect.height - containerPadding.height - containerBorder.height;
-      maxWidth = parseMaxStyle(containerStyle.maxWidth, container2, "clientWidth");
-      maxHeight = parseMaxStyle(containerStyle.maxHeight, container2, "clientHeight");
+      maxWidth = parseMaxStyle(containerStyle.maxWidth, container, "clientWidth");
+      maxHeight = parseMaxStyle(containerStyle.maxHeight, container, "clientHeight");
     }
   }
   return {
@@ -7193,14 +7193,14 @@ function unlistenDevicePixelRatioChanges(chart) {
 }
 function createResizeObserver(chart, type, listener) {
   const canvas = chart.canvas;
-  const container2 = canvas && _getParentNode(canvas);
-  if (!container2) {
+  const container = canvas && _getParentNode(canvas);
+  if (!container) {
     return;
   }
   const resize = throttled((width, height) => {
-    const w = container2.clientWidth;
+    const w = container.clientWidth;
     listener(width, height);
-    if (w < container2.clientWidth) {
+    if (w < container.clientWidth) {
       listener();
     }
   }, window);
@@ -7213,7 +7213,7 @@ function createResizeObserver(chart, type, listener) {
     }
     resize(width, height);
   });
-  observer.observe(container2);
+  observer.observe(container);
   listenDevicePixelRatioChanges(chart, resize);
   return observer;
 }
@@ -7302,8 +7302,8 @@ class DomPlatform extends BasePlatform {
     return getMaximumSize(canvas, width, height, aspectRatio);
   }
   isAttached(canvas) {
-    const container2 = canvas && _getParentNode(canvas);
-    return !!(container2 && container2.isConnected);
+    const container = canvas && _getParentNode(canvas);
+    return !!(container && container.isConnected);
   }
 }
 function _detectPlatform(canvas) {
@@ -17600,8 +17600,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const config = useModel(__props, "configv");
     const defaultConfig = new ChartSettings();
     const data = ref(null);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const yAxisZoom = ref({ min: null, max: null });

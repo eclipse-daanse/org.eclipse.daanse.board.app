@@ -17,7 +17,7 @@
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
-import { computed, ref, onUnmounted } from 'vue'
+import { inject, computed, ref, onUnmounted } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   WidgetRepository,
@@ -31,7 +31,7 @@ const { widget } = defineProps<{ widget: any; editEnabled: boolean }>();
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
-const registeredWidgets = container.get<WidgetRepository>(WidgetIdentifier)
+const registeredWidgets = inject<WidgetRepository>(WidgetIdentifier)!
 
 /*
  * The repository is deliberately framework-free, so its record is not

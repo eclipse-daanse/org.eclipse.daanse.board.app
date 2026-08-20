@@ -9,5 +9,10 @@
     {
       "id": "ChartComposer"
     }
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    }
   ]
 }

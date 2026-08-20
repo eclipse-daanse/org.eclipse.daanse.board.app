@@ -13,6 +13,9 @@
   "requiresService": [
     {
       "id": "TINY_EMITTER"
+    },
+    {
+      "id": "EventActionsRegistry"
     }
   ]
 }

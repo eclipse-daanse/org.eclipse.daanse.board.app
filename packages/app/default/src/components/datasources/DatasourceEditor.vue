@@ -11,7 +11,7 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { inject, computed, onMounted, ref } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
@@ -30,7 +30,7 @@ const props = defineProps({
 
 const datasourceProxy = ref({} as any)
 
-const datasourceRepository = container.get<DatasourceRepository>(identifier)
+const datasourceRepository = inject<DatasourceRepository>(identifier)!
 const { dataSources, updateDataSource } = useDataSourcesStore()
 const { connections } = useConnectionsStore()
 
@@ -55,7 +55,7 @@ const previewComponent = computed(() => {
     return null
   }
 
-  return container.get(identifiers.Preview)
+  return datasourceRepository.resolveIdentifier(identifiers.Preview)
 })
 
 const settingsComponent = computed(() => {
@@ -66,7 +66,7 @@ const settingsComponent = computed(() => {
     return null
   }
 
-  return container.get(identifiers.Settings)
+  return datasourceRepository.resolveIdentifier(identifiers.Settings)
 })
 
 const updateConfig = (config: any) => {

@@ -1,6 +1,6 @@
-(function(){var i="ui.vue.widget.vanta",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vanta-container[data-v-77af23af] {\n  width: 100%;\n  height: 100%;\n}\n.widget-container[data-v-77af23af] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}";})();
-const { defineComponent, ref, toRefs, watch, nextTick, onMounted, onBeforeUnmount, createElementBlock, openBlock, withModifiers, createElementVNode, useModel, resolveComponent, createBlock, withCtx, createVNode, createCommentVNode, Fragment } = __tsm__.require("vue");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+(function(){var i="ui.vue.widget.vanta",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vanta-container[data-v-f66900e3] {\n  width: 100%;\n  height: 100%;\n}\n.widget-container[data-v-f66900e3] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}";})();
+const { defineComponent, ref, toRefs, inject: inject$1, watch, nextTick, onMounted, onBeforeUnmount, createElementBlock, openBlock, withModifiers, createElementVNode, useModel, resolveComponent, createBlock, withCtx, createVNode, createCommentVNode, Fragment } = __tsm__.require("vue");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
@@ -11947,11 +11947,11 @@ StructuredUniform.prototype.setValue = function(gl, value, textures) {
   }
 };
 const RePathPart = /(\w+)(\])?(\[|\.)?/g;
-function addUniform(container2, uniformObject) {
-  container2.seq.push(uniformObject);
-  container2.map[uniformObject.id] = uniformObject;
+function addUniform(container, uniformObject) {
+  container.seq.push(uniformObject);
+  container.map[uniformObject.id] = uniformObject;
 }
-function parseUniform(activeInfo, addr, container2) {
+function parseUniform(activeInfo, addr, container) {
   const path = activeInfo.name, pathLength = path.length;
   RePathPart.lastIndex = 0;
   while (true) {
@@ -11960,16 +11960,16 @@ function parseUniform(activeInfo, addr, container2) {
     const idIsIndex = match[2] === "]", subscript = match[3];
     if (idIsIndex) id = id | 0;
     if (subscript === void 0 || subscript === "[" && matchEnd + 2 === pathLength) {
-      addUniform(container2, subscript === void 0 ? new SingleUniform(id, activeInfo, addr) : new PureArrayUniform(id, activeInfo, addr));
+      addUniform(container, subscript === void 0 ? new SingleUniform(id, activeInfo, addr) : new PureArrayUniform(id, activeInfo, addr));
       break;
     } else {
-      const map = container2.map;
+      const map = container.map;
       let next = map[id];
       if (next === void 0) {
         next = new StructuredUniform(id);
-        addUniform(container2, next);
+        addUniform(container, next);
       }
-      container2 = next;
+      container = next;
     }
   }
 }
@@ -47658,7 +47658,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const vantaEffect = ref(null);
     const props = __props;
     const { config, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
     const emitClick = () => {
       if (!widgetId?.value) return;
       eventBus.emit("widget:VantaWidget:click", {
@@ -47850,7 +47850,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const VantaWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-77af23af"]]);
+const VantaWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-f66900e3"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "VantaWidgetSettings",

@@ -13,7 +13,7 @@ Contributors:
 -->
 <script setup lang="ts">
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, watch, ref, onMounted } from 'vue'
+import { inject, toRefs, watch, ref, onMounted } from 'vue'
 import { FiltersModal } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 
 const props = defineProps<{ datasourceId: string, config: any; id?: string }>()
@@ -21,7 +21,7 @@ const { datasourceId, id: widgetId } = toRefs(props)
 
 import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 const emitClick = () => {
     if (!widgetId?.value) return;

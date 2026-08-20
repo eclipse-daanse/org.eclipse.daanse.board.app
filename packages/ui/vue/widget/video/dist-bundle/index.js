@@ -1,9 +1,9 @@
-(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-1110f987] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-1110f987] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--ed179fc6);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
-const { defineComponent, mergeModels, useCssVars, computed, toRefs, useModel, ref, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, inject: inject$1, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-a0ab759e] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-a0ab759e] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--v4584ae86);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
+const { defineComponent, mergeModels, useCssVars, computed, toRefs, useModel, inject: inject$1, ref, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { Documentation, Attribute, ModelClass, Reference } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 const { VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -1246,13 +1246,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "ed179fc6": videoFit.value
+      "v4584ae86": videoFit.value
     }));
     const props = __props;
     const { id: widgetId } = toRefs(props);
     const config = useModel(__props, "configv");
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const videoElement = ref(null);
@@ -1398,7 +1398,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const VideoWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-1110f987"]]);
+const VideoWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-a0ab759e"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "VideoWidgetSettings",

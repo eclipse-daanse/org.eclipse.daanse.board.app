@@ -14,7 +14,7 @@ Contributors:
 <script setup lang="ts">
 import Header from './components/common/Header.vue'
 import { VaSpacer } from 'vuestic-ui'
-import { ref, onMounted } from 'vue'
+import { inject, ref, onMounted } from 'vue'
 import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   NAVIGATION_REGISTRY,
@@ -27,7 +27,7 @@ const navigationItems = ref<NavigationItem[]>([])
 const { isLoading } = useGlobalLoading()
 
 onMounted(() => {
-  const navRegistry = container.get<NavigationRegistry>(NAVIGATION_REGISTRY) as any
+  const navRegistry = inject<NavigationRegistry>(NAVIGATION_REGISTRY)! as any
   navigationItems.value = navRegistry.getAllNavigationItemsArray
     ? navRegistry.getAllNavigationItemsArray()
     : []

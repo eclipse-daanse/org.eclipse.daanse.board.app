@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { ChartComposer, type IChartComposerConfiguration } from './classes'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
@@ -26,20 +27,27 @@ const symbol = Symbol.for(CHART_COMPOSER)
  * Konfiguration aufgerufen. Jeder Aufruf liefert eine eigene Instanz —
  * vorher über inTransientScope, jetzt schlicht über `new`.
  */
-function createChartComposer(config: IChartComposerConfiguration): ChartComposer {
+/**
+ * Factory factory: the repository is closed over once, at activation - the
+ * config-taking function the registry hands out carries its dependency
+ * instead of looking anything up.
+ */
+function createChartComposer(repository: DatasourceRepository) {
+  return (config: IChartComposerConfiguration): ChartComposer => {
   if (!ChartComposer.validateConfiguration(config)) {
     throw new Error(
       'Invalid ChartComposer configuration. Please provide a valid configuration.',
     )
   }
 
-  const composer = new ChartComposer()
+  const composer = new ChartComposer(repository)
   composer.init(config)
   return composer
+  }
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(CHART_COMPOSER, createChartComposer)
+  services.register(CHART_COMPOSER, createChartComposer(services.getRequired('DatasourceRepository')))
 }
 
 export function deactivate({ services }: ActivationContext) {

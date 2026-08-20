@@ -12,8 +12,7 @@
  **********************************************************************/
 
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { WeatherData, WeatherValue, LocationInfo, WeatherMapping, ForecastMapping } from '../interfaces/WeatherData'
 
 export interface IWeatherComposerConfiguration extends IBaseConnectionConfiguration {
@@ -26,6 +25,16 @@ export interface IWeatherComposerConfiguration extends IBaseConnectionConfigurat
 }
 
 export class WeatherComposer extends BaseDatasource {
+  /**
+   * Dependencies arrive through the constructor - the factory in this
+   * package's activate passes them from the registry. No global lookups.
+   */
+  constructor(
+    private readonly datasourceRepository: DatasourceRepository,
+  ) {
+    super()
+  }
+
   destroy(): void {
     console.log("Destroying WeatherComposer")
   }
@@ -193,7 +202,7 @@ export class WeatherComposer extends BaseDatasource {
       }
     }
 
-    /*const datasourceRepository = container.get(identifier) as DatasourceRepository
+    /*const datasourceRepository = this.datasourceRepository
 
     this.connectedDatasources
       .filter((datasourceId) => datasourceId)
@@ -204,7 +213,7 @@ export class WeatherComposer extends BaseDatasource {
   }
 
   async getData(type: string, options?: any): Promise<any> {
-    const datasourceRepository = container.get(identifier) as DatasourceRepository
+    const datasourceRepository = this.datasourceRepository
 
     const data = await Promise.all(
       this.connectedDatasources
@@ -711,7 +720,7 @@ export class WeatherComposer extends BaseDatasource {
   // Check if relevant things have changed before doing expensive processing
   private async checkForRelevantChanges(): Promise<boolean> {
     try {
-      const datasourceRepository = container.get(identifier) as DatasourceRepository
+      const datasourceRepository = this.datasourceRepository
 
       // Get current relevant things from the datasource (lightweight check)
       const currentRelevantThings = new Set<string>()

@@ -1,14 +1,11 @@
 (function(){var i="ui.vue.widget.routing",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.routing-widget {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  padding: 0.75rem;\n  gap: 0.75rem;\n  overflow-y: auto;\n  font-family: inherit;\n  font-size: 0.875rem;\n}\n.routing-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.5rem;\n}\n.routing-title {\n  font-weight: 600;\n  font-size: 1rem;\n  color: #c45e00;\n}\n.costing-select {\n  padding: 0.25rem 0.5rem;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  font-size: 0.8rem;\n  background: #fff;\n}\n.waypoints-list {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n}\n.waypoint-row {\n  display: flex;\n  align-items: flex-start;\n  gap: 0.5rem;\n}\n.waypoint-dot {\n  width: 12px;\n  height: 12px;\n  border-radius: 50%;\n  margin-top: 1.4rem;\n  flex-shrink: 0;\n}\n.waypoint-input-wrapper {\n  flex: 1;\n  position: relative;\n}\n.waypoint-label {\n  display: block;\n  font-size: 0.7rem;\n  color: #888;\n  margin-bottom: 2px;\n}\n.waypoint-input {\n  width: 100%;\n  padding: 0.35rem 0.5rem;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  font-size: 0.8rem;\n  box-sizing: border-box;\n}\n.waypoint-input:focus {\n  outline: none;\n  border-color: #c45e00;\n}\n.suggestions-dropdown {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  right: 0;\n  background: #fff;\n  border: 1px solid #ddd;\n  border-radius: 0 0 4px 4px;\n  z-index: 100;\n  max-height: 200px;\n  overflow-y: auto;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n}\n.suggestion-item {\n  padding: 0.4rem 0.5rem;\n  cursor: pointer;\n  font-size: 0.75rem;\n  border-bottom: 1px solid #f0f0f0;\n}\n.suggestion-item:hover {\n  background: #fff3e0;\n}\n.remove-btn {\n  background: none;\n  border: none;\n  color: #999;\n  font-size: 1.2rem;\n  cursor: pointer;\n  padding: 0.2rem;\n  margin-top: 1.2rem;\n  line-height: 1;\n}\n.remove-btn:hover {\n  color: #f44336;\n}\n.routing-actions {\n  display: flex;\n  gap: 0.5rem;\n  flex-wrap: wrap;\n}\n.btn-primary {\n  padding: 0.4rem 0.75rem;\n  background: #c45e00;\n  color: #fff;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 0.8rem;\n  font-weight: 500;\n}\n.btn-primary:hover {\n  background: #a04e00;\n}\n.btn-primary:disabled {\n  background: #ccc;\n  cursor: not-allowed;\n}\n.btn-secondary {\n  padding: 0.4rem 0.75rem;\n  background: #fff;\n  color: #555;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 0.8rem;\n}\n.btn-secondary:hover {\n  background: #f5f5f5;\n}\n.btn-clear {\n  padding: 0.4rem 0.75rem;\n  background: #fff;\n  color: #f44336;\n  border: 1px solid #ffcdd2;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 0.8rem;\n}\n.btn-clear:hover {\n  background: #ffebee;\n}\n.route-result {\n  border-top: 1px solid #e0e0e0;\n  padding-top: 0.75rem;\n}\n.result-summary {\n  display: flex;\n  gap: 1rem;\n  flex-wrap: wrap;\n}\n.summary-item {\n  display: flex;\n  flex-direction: column;\n}\n.summary-value {\n  font-weight: 600;\n  font-size: 1rem;\n  color: #333;\n}\n.summary-label {\n  font-size: 0.7rem;\n  color: #888;\n}\n.maneuvers-section {\n  margin-top: 0.75rem;\n}\n.maneuvers-toggle {\n  background: none;\n  border: none;\n  cursor: pointer;\n  font-size: 0.8rem;\n  color: #555;\n  padding: 0.25rem 0;\n  font-weight: 500;\n}\n.maneuvers-toggle:hover {\n  color: #c45e00;\n}\n.maneuvers-list {\n  margin-top: 0.5rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n.maneuver-item {\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-start;\n  gap: 0.5rem;\n  padding: 0.3rem 0;\n  border-bottom: 1px solid #f5f5f5;\n  font-size: 0.75rem;\n}\n.maneuver-instruction {\n  flex: 1;\n  color: #333;\n}\n.maneuver-distance {\n  color: #888;\n  white-space: nowrap;\n}\n\n.routing-settings[data-v-79a5860e] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n  padding: 0.5rem;\n}\n";})();
-const { defineComponent, toRefs, ref, watch, computed, onMounted, onUnmounted, createElementBlock, openBlock, createElementVNode, createCommentVNode, withDirectives, Fragment, renderList, toDisplayString, vModelSelect, normalizeStyle, vModelText, withModifiers, resolveComponent, unref, createVNode } = __tsm__.require("vue");
+const { defineComponent, toRefs, inject: inject$1, ref, watch, computed, onMounted, onUnmounted, createElementBlock, openBlock, createElementVNode, createCommentVNode, withDirectives, Fragment, renderList, toDisplayString, vModelSelect, normalizeStyle, vModelText, withModifiers, resolveComponent, unref, createVNode } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { container, identifiers: identifiers$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers: identifiers$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, Payload, EVENT_ACTIONS_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { ModelClass, Documentation, Attribute } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
 var _Reflect = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -50,13 +47,13 @@ function require_Reflect() {
       function functionThis() {
         try {
           return Function("return this;")();
-        } catch (_2) {
+        } catch (_) {
         }
       }
       function indirectEvalThis() {
         try {
           return (void 0, eval)("(function() { return this; })()");
-        } catch (_2) {
+        } catch (_) {
         }
       }
       function sloppyModeThis() {
@@ -206,8 +203,8 @@ function require_Reflect() {
       }
       exporter("deleteMetadata", deleteMetadata);
       function DecorateConstructor(decorators, target) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
           var decorated = decorator(target);
           if (!IsUndefined(decorated) && !IsNull(decorated)) {
             if (!IsConstructor(decorated))
@@ -218,8 +215,8 @@ function require_Reflect() {
         return target;
       }
       function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
           var decorated = decorator(target, propertyKey, descriptor);
           if (!IsUndefined(decorated) && !IsNull(decorated)) {
             if (!IsObject(decorated))
@@ -229,58 +226,58 @@ function require_Reflect() {
         }
         return descriptor;
       }
-      function OrdinaryHasMetadata(MetadataKey, O2, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
+      function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
         if (hasOwn2)
           return true;
-        var parent = OrdinaryGetPrototypeOf(O2);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (!IsNull(parent))
           return OrdinaryHasMetadata(MetadataKey, parent, P);
         return false;
       }
-      function OrdinaryHasOwnMetadata(MetadataKey, O2, P) {
+      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           false
         );
         if (IsUndefined(provider))
           return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O2, P));
+        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
       }
-      function OrdinaryGetMetadata(MetadataKey, O2, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
+      function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
         if (hasOwn2)
-          return OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
+          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (!IsNull(parent))
           return OrdinaryGetMetadata(MetadataKey, parent, P);
         return void 0;
       }
-      function OrdinaryGetOwnMetadata(MetadataKey, O2, P) {
+      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           false
         );
         if (IsUndefined(provider))
           return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O2, P);
+        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
       }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P) {
+      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           true
         );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P);
+        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
       }
-      function OrdinaryMetadataKeys(O2, P) {
-        var ownKeys = OrdinaryOwnMetadataKeys(O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
+      function OrdinaryMetadataKeys(O, P) {
+        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (parent === null)
           return ownKeys;
         var parentKeys = OrdinaryMetadataKeys(parent, P);
@@ -308,9 +305,9 @@ function require_Reflect() {
         }
         return keys;
       }
-      function OrdinaryOwnMetadataKeys(O2, P) {
+      function OrdinaryOwnMetadataKeys(O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*create*/
           false
@@ -318,7 +315,7 @@ function require_Reflect() {
         if (!provider) {
           return [];
         }
-        return provider.OrdinaryOwnMetadataKeys(O2, P);
+        return provider.OrdinaryOwnMetadataKeys(O, P);
       }
       function Type(x) {
         if (x === null)
@@ -377,18 +374,18 @@ function require_Reflect() {
         }
         return OrdinaryToPrimitive(input);
       }
-      function OrdinaryToPrimitive(O2, hint) {
+      function OrdinaryToPrimitive(O, hint) {
         var valueOf, result, toString_2;
         {
-          var toString_1 = O2.toString;
+          var toString_1 = O.toString;
           if (IsCallable(toString_1)) {
-            var result = toString_1.call(O2);
+            var result = toString_1.call(O);
             if (!IsObject(result))
               return result;
           }
-          var valueOf = O2.valueOf;
+          var valueOf = O.valueOf;
           if (IsCallable(valueOf)) {
-            var result = valueOf.call(O2);
+            var result = valueOf.call(O);
             if (!IsObject(result))
               return result;
           }
@@ -426,11 +423,11 @@ function require_Reflect() {
             return false;
         }
       }
-      function SameValueZero(x, y2) {
-        return x === y2 || x !== x && y2 !== y2;
+      function SameValueZero(x, y) {
+        return x === y || x !== x && y !== y;
       }
-      function GetMethod(V2, P) {
-        var func = V2[P];
+      function GetMethod(V, P) {
+        var func = V[P];
         if (func === void 0 || func === null)
           return void 0;
         if (!IsCallable(func))
@@ -454,24 +451,24 @@ function require_Reflect() {
         return result.done ? false : result;
       }
       function IteratorClose(iterator) {
-        var f2 = iterator["return"];
-        if (f2)
-          f2.call(iterator);
+        var f = iterator["return"];
+        if (f)
+          f.call(iterator);
       }
-      function OrdinaryGetPrototypeOf(O2) {
-        var proto = Object.getPrototypeOf(O2);
-        if (typeof O2 !== "function" || O2 === functionPrototype)
+      function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
           return proto;
         if (proto !== functionPrototype)
           return proto;
-        var prototype = O2.prototype;
+        var prototype = O.prototype;
         var prototypeProto = prototype && Object.getPrototypeOf(prototype);
         if (prototypeProto == null || prototypeProto === Object.prototype)
           return proto;
         var constructor = prototypeProto.constructor;
         if (typeof constructor !== "function")
           return proto;
-        if (constructor === O2)
+        if (constructor === O)
           return proto;
         return constructor;
       }
@@ -514,12 +511,12 @@ function require_Reflect() {
               break;
           }
         }
-        function getProviderNoCache(O2, P) {
+        function getProviderNoCache(O, P) {
           if (!IsUndefined(first)) {
-            if (first.isProviderFor(O2, P))
+            if (first.isProviderFor(O, P))
               return first;
             if (!IsUndefined(second)) {
-              if (second.isProviderFor(O2, P))
+              if (second.isProviderFor(O, P))
                 return first;
               if (!IsUndefined(rest)) {
                 var iterator = GetIterator(rest);
@@ -529,7 +526,7 @@ function require_Reflect() {
                     return void 0;
                   }
                   var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O2, P)) {
+                  if (provider.isProviderFor(O, P)) {
                     IteratorClose(iterator);
                     return provider;
                   }
@@ -537,13 +534,13 @@ function require_Reflect() {
               }
             }
           }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O2, P)) {
+          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
             return fallback;
           }
           return void 0;
         }
-        function getProvider(O2, P) {
-          var providerMap = targetProviderMap.get(O2);
+        function getProvider(O, P) {
+          var providerMap = targetProviderMap.get(O);
           var provider;
           if (!IsUndefined(providerMap)) {
             provider = providerMap.get(P);
@@ -551,11 +548,11 @@ function require_Reflect() {
           if (!IsUndefined(provider)) {
             return provider;
           }
-          provider = getProviderNoCache(O2, P);
+          provider = getProviderNoCache(O, P);
           if (!IsUndefined(provider)) {
             if (IsUndefined(providerMap)) {
               providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
+              targetProviderMap.set(O, providerMap);
             }
             providerMap.set(P, provider);
           }
@@ -566,19 +563,19 @@ function require_Reflect() {
             throw new TypeError();
           return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
         }
-        function setProvider(O2, P, provider) {
+        function setProvider(O, P, provider) {
           if (!hasProvider(provider)) {
             throw new Error("Metadata provider not registered.");
           }
-          var existingProvider = getProvider(O2, P);
+          var existingProvider = getProvider(O, P);
           if (existingProvider !== provider) {
             if (!IsUndefined(existingProvider)) {
               return false;
             }
-            var providerMap = targetProviderMap.get(O2);
+            var providerMap = targetProviderMap.get(O);
             if (IsUndefined(providerMap)) {
               providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
+              targetProviderMap.set(O, providerMap);
             }
             providerMap.set(P, provider);
           }
@@ -606,8 +603,8 @@ function require_Reflect() {
       function CreateMetadataProvider(registry) {
         var metadata2 = new _WeakMap();
         var provider = {
-          isProviderFor: function(O2, P) {
-            var targetMetadata = metadata2.get(O2);
+          isProviderFor: function(O, P) {
+            var targetMetadata = metadata2.get(O);
             if (IsUndefined(targetMetadata))
               return false;
             return targetMetadata.has(P);
@@ -620,14 +617,14 @@ function require_Reflect() {
         };
         metadataRegistry.registerProvider(provider);
         return provider;
-        function GetOrCreateMetadataMap(O2, P, Create) {
-          var targetMetadata = metadata2.get(O2);
+        function GetOrCreateMetadataMap(O, P, Create) {
+          var targetMetadata = metadata2.get(O);
           var createdTargetMetadata = false;
           if (IsUndefined(targetMetadata)) {
             if (!Create)
               return void 0;
             targetMetadata = new _Map();
-            metadata2.set(O2, targetMetadata);
+            metadata2.set(O, targetMetadata);
             createdTargetMetadata = true;
           }
           var metadataMap = targetMetadata.get(P);
@@ -636,19 +633,19 @@ function require_Reflect() {
               return void 0;
             metadataMap = new _Map();
             targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O2, P, provider)) {
+            if (!registry.setProvider(O, P, provider)) {
               targetMetadata.delete(P);
               if (createdTargetMetadata) {
-                metadata2.delete(O2);
+                metadata2.delete(O);
               }
               throw new Error("Wrong provider for target.");
             }
           }
           return metadataMap;
         }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O2, P) {
+        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -657,9 +654,9 @@ function require_Reflect() {
             return false;
           return ToBoolean(metadataMap.has(MetadataKey));
         }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O2, P) {
+        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -668,19 +665,19 @@ function require_Reflect() {
             return void 0;
           return metadataMap.get(MetadataKey);
         }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O2, P) {
+        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             true
           );
           metadataMap.set(MetadataKey, MetadataValue);
         }
-        function OrdinaryOwnMetadataKeys2(O2, P) {
+        function OrdinaryOwnMetadataKeys2(O, P) {
           var keys = [];
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -689,16 +686,16 @@ function require_Reflect() {
             return keys;
           var keysObj = metadataMap.keys();
           var iterator = GetIterator(keysObj);
-          var k2 = 0;
+          var k = 0;
           while (true) {
             var next = IteratorStep(iterator);
             if (!next) {
-              keys.length = k2;
+              keys.length = k;
               return keys;
             }
             var nextValue = IteratorValue(next);
             try {
-              keys[k2] = nextValue;
+              keys[k] = nextValue;
             } catch (e) {
               try {
                 IteratorClose(iterator);
@@ -706,12 +703,12 @@ function require_Reflect() {
                 throw e;
               }
             }
-            k2++;
+            k++;
           }
         }
-        function OrdinaryDeleteMetadata(MetadataKey, O2, P) {
+        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -721,7 +718,7 @@ function require_Reflect() {
           if (!metadataMap.delete(MetadataKey))
             return false;
           if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O2);
+            var targetMetadata = metadata2.get(O);
             if (!IsUndefined(targetMetadata)) {
               targetMetadata.delete(P);
               if (targetMetadata.size === 0) {
@@ -736,15 +733,15 @@ function require_Reflect() {
         var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
         var metadataOwner = new _WeakMap();
         var provider = {
-          isProviderFor: function(O2, P) {
-            var metadataPropertySet = metadataOwner.get(O2);
+          isProviderFor: function(O, P) {
+            var metadataPropertySet = metadataOwner.get(O);
             if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
               return true;
             }
-            if (getOwnMetadataKeys2(O2, P).length) {
+            if (getOwnMetadataKeys2(O, P).length) {
               if (IsUndefined(metadataPropertySet)) {
                 metadataPropertySet = new _Set();
-                metadataOwner.set(O2, metadataPropertySet);
+                metadataOwner.set(O, metadataPropertySet);
               }
               metadataPropertySet.add(P);
               return true;
@@ -759,13 +756,13 @@ function require_Reflect() {
         };
         return provider;
       }
-      function GetMetadataProvider(O2, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O2, P);
+      function GetMetadataProvider(O, P, Create) {
+        var registeredProvider = metadataRegistry.getProvider(O, P);
         if (!IsUndefined(registeredProvider)) {
           return registeredProvider;
         }
         if (Create) {
-          if (metadataRegistry.setProvider(O2, P, metadataProvider)) {
+          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
             return metadataProvider;
           }
           throw new Error("Illegal state.");
@@ -872,9 +869,9 @@ function require_Reflect() {
               );
               if (index >= 0) {
                 var size = this._keys.length;
-                for (var i2 = index + 1; i2 < size; i2++) {
-                  this._keys[i2 - 1] = this._keys[i2];
-                  this._values[i2 - 1] = this._values[i2];
+                for (var i = index + 1; i < size; i++) {
+                  this._keys[i - 1] = this._keys[i];
+                  this._values[i - 1] = this._values[i];
                 }
                 this._keys.length--;
                 this._values.length--;
@@ -910,9 +907,9 @@ function require_Reflect() {
             Map3.prototype._find = function(key, insert) {
               if (!SameValueZero(this._cacheKey, key)) {
                 this._cacheIndex = -1;
-                for (var i2 = 0; i2 < this._keys.length; i2++) {
-                  if (SameValueZero(this._keys[i2], key)) {
-                    this._cacheIndex = i2;
+                for (var i = 0; i < this._keys.length; i++) {
+                  if (SameValueZero(this._keys[i], key)) {
+                    this._cacheIndex = i;
                     break;
                   }
                 }
@@ -928,10 +925,10 @@ function require_Reflect() {
           })()
         );
         return Map2;
-        function getKey(key, _2) {
+        function getKey(key, _) {
           return key;
         }
-        function getValue(_2, value) {
+        function getValue(_, value) {
           return value;
         }
         function getEntry(key, value) {
@@ -1050,8 +1047,8 @@ function require_Reflect() {
           return target[rootKey];
         }
         function FillRandomBytes(buffer, size) {
-          for (var i2 = 0; i2 < size; ++i2)
-            buffer[i2] = Math.random() * 255 | 0;
+          for (var i = 0; i < size; ++i)
+            buffer[i] = Math.random() * 255 | 0;
           return buffer;
         }
         function GenRandomBytes(size) {
@@ -1144,14 +1141,14 @@ function deactivate() {
   };
 }
 const Icon = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3ccircle%20cx='6'%20cy='19'%20r='3'/%3e%3ccircle%20cx='18'%20cy='5'%20r='3'/%3e%3cpath%20d='M12%2019h4.5a3.5%203.5%200%200%200%200-7h-9a3.5%203.5%200%200%201%200-7H12'/%3e%3c/svg%3e";
-var __defProp$6 = Object.defineProperty;
-var __getOwnPropDesc$8 = Object.getOwnPropertyDescriptor;
-var __decorateClass$a = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$8(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+var __defProp$5 = Object.defineProperty;
+var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
+var __decorateClass$4 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp$6(target, key, result);
+  if (kind && result) __defProp$5(target, key, result);
   return result;
 };
 let RoutingWidgetInterface = class extends WidgetActionInterface {
@@ -1171,32 +1168,32 @@ let RoutingWidgetInterface = class extends WidgetActionInterface {
     throw new Error("calculateRoute not implemented");
   }
 };
-__decorateClass$a([
+__decorateClass$4([
   WidgetAction({ eventType: "routing.addWaypoint" })
 ], RoutingWidgetInterface.prototype, "addWaypoint", 1);
-__decorateClass$a([
+__decorateClass$4([
   WidgetAction({ eventType: "routing.removeWaypoint" })
 ], RoutingWidgetInterface.prototype, "removeWaypoint", 1);
-__decorateClass$a([
+__decorateClass$4([
   WidgetAction({ eventType: "routing.clearWaypoints" })
 ], RoutingWidgetInterface.prototype, "clearWaypoints", 1);
-__decorateClass$a([
+__decorateClass$4([
   WidgetAction({ eventType: "routing.setCosting" })
 ], RoutingWidgetInterface.prototype, "setCosting", 1);
-__decorateClass$a([
+__decorateClass$4([
   WidgetAction({ eventType: "routing.calculateRoute" })
 ], RoutingWidgetInterface.prototype, "calculateRoute", 1);
-RoutingWidgetInterface = __decorateClass$a([
+RoutingWidgetInterface = __decorateClass$4([
   ModelClass({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetInterface" })
 ], RoutingWidgetInterface);
-var __defProp$5 = Object.defineProperty;
-var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
-var __decorateClass$9 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+var __defProp$4 = Object.defineProperty;
+var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
+var __decorateClass$3 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp$5(target, key, result);
+  if (kind && result) __defProp$4(target, key, result);
   return result;
 };
 let RouteCalculatedPayload = class extends Payload {
@@ -1206,37 +1203,37 @@ let RouteCalculatedPayload = class extends Payload {
   waypoints;
   costing;
 };
-__decorateClass$9([
+__decorateClass$3([
   Documentation("GeoJSON FeatureCollection of the route."),
   Attribute()
 ], RouteCalculatedPayload.prototype, "geojson", 2);
-__decorateClass$9([
+__decorateClass$3([
   Documentation("Total route distance in kilometers."),
   Attribute()
 ], RouteCalculatedPayload.prototype, "distance_km", 2);
-__decorateClass$9([
+__decorateClass$3([
   Documentation("Total route duration in minutes."),
   Attribute()
 ], RouteCalculatedPayload.prototype, "duration_min", 2);
-__decorateClass$9([
+__decorateClass$3([
   Documentation("Array of waypoints used for the route."),
   Attribute()
 ], RouteCalculatedPayload.prototype, "waypoints", 2);
-__decorateClass$9([
+__decorateClass$3([
   Documentation("Transport mode used for the route."),
   Attribute()
 ], RouteCalculatedPayload.prototype, "costing", 2);
-RouteCalculatedPayload = __decorateClass$9([
+RouteCalculatedPayload = __decorateClass$3([
   ModelClass({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RouteCalculatedPayload" })
 ], RouteCalculatedPayload);
-var __defProp$4 = Object.defineProperty;
-var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
-var __decorateClass$8 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+var __defProp$3 = Object.defineProperty;
+var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
+var __decorateClass$2 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp$4(target, key, result);
+  if (kind && result) __defProp$3(target, key, result);
   return result;
 };
 let WaypointPayload = class extends Payload {
@@ -1245,23 +1242,23 @@ let WaypointPayload = class extends Payload {
   name;
   index;
 };
-__decorateClass$8([
+__decorateClass$2([
   Documentation("Latitude of the waypoint."),
   Attribute()
 ], WaypointPayload.prototype, "lat", 2);
-__decorateClass$8([
+__decorateClass$2([
   Documentation("Longitude of the waypoint."),
   Attribute()
 ], WaypointPayload.prototype, "lon", 2);
-__decorateClass$8([
+__decorateClass$2([
   Documentation("Display name of the waypoint."),
   Attribute()
 ], WaypointPayload.prototype, "name", 2);
-__decorateClass$8([
+__decorateClass$2([
   Documentation("Index of the waypoint in the list."),
   Attribute()
 ], WaypointPayload.prototype, "index", 2);
-WaypointPayload = __decorateClass$8([
+WaypointPayload = __decorateClass$2([
   ModelClass({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//WaypointPayload" })
 ], WaypointPayload);
 var re = { exports: {} };
@@ -1303,9 +1300,9 @@ function requireDebug() {
   if (hasRequiredDebug) return debug_1;
   hasRequiredDebug = 1;
   var define_process_env_default = {};
-  const debug2 = typeof process === "object" && define_process_env_default && define_process_env_default.NODE_DEBUG && /\bsemver\b/i.test(define_process_env_default.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
+  const debug = typeof process === "object" && define_process_env_default && define_process_env_default.NODE_DEBUG && /\bsemver\b/i.test(define_process_env_default.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
   };
-  debug_1 = debug2;
+  debug_1 = debug;
   return debug_1;
 }
 var hasRequiredRe;
@@ -1318,13 +1315,13 @@ function requireRe() {
       MAX_SAFE_BUILD_LENGTH,
       MAX_LENGTH
     } = requireConstants();
-    const debug2 = requireDebug();
+    const debug = requireDebug();
     exports$1 = module.exports = {};
     const re2 = exports$1.re = [];
     const safeRe = exports$1.safeRe = [];
     const src = exports$1.src = [];
     const safeSrc = exports$1.safeSrc = [];
-    const t2 = exports$1.t = {};
+    const t = exports$1.t = {};
     let R = 0;
     const LETTERDASHNUMBER = "[a-zA-Z0-9-]";
     const safeRegexReplacements = [
@@ -1341,8 +1338,8 @@ function requireRe() {
     const createToken = (name, value, isGlobal) => {
       const safe = makeSafeRegex(value);
       const index = R++;
-      debug2(name, index, value);
-      t2[name] = index;
+      debug(name, index, value);
+      t[name] = index;
       src[index] = value;
       safeSrc[index] = safe;
       re2[index] = new RegExp(value, isGlobal ? "g" : void 0);
@@ -1351,46 +1348,46 @@ function requireRe() {
     createToken("NUMERICIDENTIFIER", "0|[1-9]\\d*");
     createToken("NUMERICIDENTIFIERLOOSE", "\\d+");
     createToken("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
-    createToken("MAINVERSION", `(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})`);
-    createToken("MAINVERSIONLOOSE", `(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASEIDENTIFIER", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIER]})`);
-    createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASE", `(?:-(${src[t2.PRERELEASEIDENTIFIER]}(?:\\.${src[t2.PRERELEASEIDENTIFIER]})*))`);
-    createToken("PRERELEASELOOSE", `(?:-?(${src[t2.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t2.PRERELEASEIDENTIFIERLOOSE]})*))`);
+    createToken("MAINVERSION", `(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})`);
+    createToken("MAINVERSIONLOOSE", `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})`);
+    createToken("PRERELEASEIDENTIFIER", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIER]})`);
+    createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIERLOOSE]})`);
+    createToken("PRERELEASE", `(?:-(${src[t.PRERELEASEIDENTIFIER]}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`);
+    createToken("PRERELEASELOOSE", `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`);
     createToken("BUILDIDENTIFIER", `${LETTERDASHNUMBER}+`);
-    createToken("BUILD", `(?:\\+(${src[t2.BUILDIDENTIFIER]}(?:\\.${src[t2.BUILDIDENTIFIER]})*))`);
-    createToken("FULLPLAIN", `v?${src[t2.MAINVERSION]}${src[t2.PRERELEASE]}?${src[t2.BUILD]}?`);
-    createToken("FULL", `^${src[t2.FULLPLAIN]}$`);
-    createToken("LOOSEPLAIN", `[v=\\s]*${src[t2.MAINVERSIONLOOSE]}${src[t2.PRERELEASELOOSE]}?${src[t2.BUILD]}?`);
-    createToken("LOOSE", `^${src[t2.LOOSEPLAIN]}$`);
+    createToken("BUILD", `(?:\\+(${src[t.BUILDIDENTIFIER]}(?:\\.${src[t.BUILDIDENTIFIER]})*))`);
+    createToken("FULLPLAIN", `v?${src[t.MAINVERSION]}${src[t.PRERELEASE]}?${src[t.BUILD]}?`);
+    createToken("FULL", `^${src[t.FULLPLAIN]}$`);
+    createToken("LOOSEPLAIN", `[v=\\s]*${src[t.MAINVERSIONLOOSE]}${src[t.PRERELEASELOOSE]}?${src[t.BUILD]}?`);
+    createToken("LOOSE", `^${src[t.LOOSEPLAIN]}$`);
     createToken("GTLT", "((?:<|>)?=?)");
-    createToken("XRANGEIDENTIFIERLOOSE", `${src[t2.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-    createToken("XRANGEIDENTIFIER", `${src[t2.NUMERICIDENTIFIER]}|x|X|\\*`);
-    createToken("XRANGEPLAIN", `[v=\\s]*(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:${src[t2.PRERELEASE]})?${src[t2.BUILD]}?)?)?`);
-    createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:${src[t2.PRERELEASELOOSE]})?${src[t2.BUILD]}?)?)?`);
-    createToken("XRANGE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAIN]}$`);
-    createToken("XRANGELOOSE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAINLOOSE]}$`);
+    createToken("XRANGEIDENTIFIERLOOSE", `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
+    createToken("XRANGEIDENTIFIER", `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`);
+    createToken("XRANGEPLAIN", `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:${src[t.PRERELEASE]})?${src[t.BUILD]}?)?)?`);
+    createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:${src[t.PRERELEASELOOSE]})?${src[t.BUILD]}?)?)?`);
+    createToken("XRANGE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`);
+    createToken("XRANGELOOSE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`);
     createToken("COERCEPLAIN", `${"(^|[^\\d])(\\d{1,"}${MAX_SAFE_COMPONENT_LENGTH}})(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`);
-    createToken("COERCE", `${src[t2.COERCEPLAIN]}(?:$|[^\\d])`);
-    createToken("COERCEFULL", src[t2.COERCEPLAIN] + `(?:${src[t2.PRERELEASE]})?(?:${src[t2.BUILD]})?(?:$|[^\\d])`);
-    createToken("COERCERTL", src[t2.COERCE], true);
-    createToken("COERCERTLFULL", src[t2.COERCEFULL], true);
+    createToken("COERCE", `${src[t.COERCEPLAIN]}(?:$|[^\\d])`);
+    createToken("COERCEFULL", src[t.COERCEPLAIN] + `(?:${src[t.PRERELEASE]})?(?:${src[t.BUILD]})?(?:$|[^\\d])`);
+    createToken("COERCERTL", src[t.COERCE], true);
+    createToken("COERCERTLFULL", src[t.COERCEFULL], true);
     createToken("LONETILDE", "(?:~>?)");
-    createToken("TILDETRIM", `(\\s*)${src[t2.LONETILDE]}\\s+`, true);
+    createToken("TILDETRIM", `(\\s*)${src[t.LONETILDE]}\\s+`, true);
     exports$1.tildeTrimReplace = "$1~";
-    createToken("TILDE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAIN]}$`);
-    createToken("TILDELOOSE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAINLOOSE]}$`);
+    createToken("TILDE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`);
+    createToken("TILDELOOSE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`);
     createToken("LONECARET", "(?:\\^)");
-    createToken("CARETTRIM", `(\\s*)${src[t2.LONECARET]}\\s+`, true);
+    createToken("CARETTRIM", `(\\s*)${src[t.LONECARET]}\\s+`, true);
     exports$1.caretTrimReplace = "$1^";
-    createToken("CARET", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAIN]}$`);
-    createToken("CARETLOOSE", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAINLOOSE]}$`);
-    createToken("COMPARATORLOOSE", `^${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]})$|^$`);
-    createToken("COMPARATOR", `^${src[t2.GTLT]}\\s*(${src[t2.FULLPLAIN]})$|^$`);
-    createToken("COMPARATORTRIM", `(\\s*)${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]}|${src[t2.XRANGEPLAIN]})`, true);
+    createToken("CARET", `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`);
+    createToken("CARETLOOSE", `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`);
+    createToken("COMPARATORLOOSE", `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`);
+    createToken("COMPARATOR", `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`);
+    createToken("COMPARATORTRIM", `(\\s*)${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true);
     exports$1.comparatorTrimReplace = "$1$2$3";
-    createToken("HYPHENRANGE", `^\\s*(${src[t2.XRANGEPLAIN]})\\s+-\\s+(${src[t2.XRANGEPLAIN]})\\s*$`);
-    createToken("HYPHENRANGELOOSE", `^\\s*(${src[t2.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t2.XRANGEPLAINLOOSE]})\\s*$`);
+    createToken("HYPHENRANGE", `^\\s*(${src[t.XRANGEPLAIN]})\\s+-\\s+(${src[t.XRANGEPLAIN]})\\s*$`);
+    createToken("HYPHENRANGELOOSE", `^\\s*(${src[t.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t.XRANGEPLAINLOOSE]})\\s*$`);
     createToken("STAR", "(<|>)?=?\\s*\\*");
     createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
     createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
@@ -1422,19 +1419,19 @@ function requireIdentifiers() {
   if (hasRequiredIdentifiers) return identifiers;
   hasRequiredIdentifiers = 1;
   const numeric = /^[0-9]+$/;
-  const compareIdentifiers = (a, b2) => {
-    if (typeof a === "number" && typeof b2 === "number") {
-      return a === b2 ? 0 : a < b2 ? -1 : 1;
+  const compareIdentifiers = (a, b) => {
+    if (typeof a === "number" && typeof b === "number") {
+      return a === b ? 0 : a < b ? -1 : 1;
     }
     const anum = numeric.test(a);
-    const bnum = numeric.test(b2);
+    const bnum = numeric.test(b);
     if (anum && bnum) {
       a = +a;
-      b2 = +b2;
+      b = +b;
     }
-    return a === b2 ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b2 ? -1 : 1;
+    return a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
   };
-  const rcompareIdentifiers = (a, b2) => compareIdentifiers(b2, a);
+  const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a);
   identifiers = {
     compareIdentifiers,
     rcompareIdentifiers
@@ -1446,9 +1443,9 @@ var hasRequiredSemver$1;
 function requireSemver$1() {
   if (hasRequiredSemver$1) return semver$1;
   hasRequiredSemver$1 = 1;
-  const debug2 = requireDebug();
+  const debug = requireDebug();
   const { MAX_LENGTH, MAX_SAFE_INTEGER } = requireConstants();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const parseOptions = requireParseOptions();
   const { compareIdentifiers } = requireIdentifiers();
   class SemVer {
@@ -1468,18 +1465,18 @@ function requireSemver$1() {
           `version is longer than ${MAX_LENGTH} characters`
         );
       }
-      debug2("SemVer", version, options);
+      debug("SemVer", version, options);
       this.options = options;
       this.loose = !!options.loose;
       this.includePrerelease = !!options.includePrerelease;
-      const m2 = version.trim().match(options.loose ? re2[t2.LOOSE] : re2[t2.FULL]);
-      if (!m2) {
+      const m = version.trim().match(options.loose ? re2[t.LOOSE] : re2[t.FULL]);
+      if (!m) {
         throw new TypeError(`Invalid Version: ${version}`);
       }
       this.raw = version;
-      this.major = +m2[1];
-      this.minor = +m2[2];
-      this.patch = +m2[3];
+      this.major = +m[1];
+      this.minor = +m[2];
+      this.patch = +m[3];
       if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
         throw new TypeError("Invalid major version");
       }
@@ -1489,10 +1486,10 @@ function requireSemver$1() {
       if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
         throw new TypeError("Invalid patch version");
       }
-      if (!m2[4]) {
+      if (!m[4]) {
         this.prerelease = [];
       } else {
-        this.prerelease = m2[4].split(".").map((id) => {
+        this.prerelease = m[4].split(".").map((id) => {
           if (/^[0-9]+$/.test(id)) {
             const num = +id;
             if (num >= 0 && num < MAX_SAFE_INTEGER) {
@@ -1502,7 +1499,7 @@ function requireSemver$1() {
           return id;
         });
       }
-      this.build = m2[5] ? m2[5].split(".") : [];
+      this.build = m[5] ? m[5].split(".") : [];
       this.format();
     }
     format() {
@@ -1516,7 +1513,7 @@ function requireSemver$1() {
       return this.version;
     }
     compare(other) {
-      debug2("SemVer.compare", this.version, this.options, other);
+      debug("SemVer.compare", this.version, this.options, other);
       if (!(other instanceof SemVer)) {
         if (typeof other === "string" && other === this.version) {
           return 0;
@@ -1563,57 +1560,57 @@ function requireSemver$1() {
       } else if (!this.prerelease.length && !other.prerelease.length) {
         return 0;
       }
-      let i2 = 0;
+      let i = 0;
       do {
-        const a = this.prerelease[i2];
-        const b2 = other.prerelease[i2];
-        debug2("prerelease compare", i2, a, b2);
-        if (a === void 0 && b2 === void 0) {
+        const a = this.prerelease[i];
+        const b = other.prerelease[i];
+        debug("prerelease compare", i, a, b);
+        if (a === void 0 && b === void 0) {
           return 0;
-        } else if (b2 === void 0) {
+        } else if (b === void 0) {
           return 1;
         } else if (a === void 0) {
           return -1;
-        } else if (a === b2) {
+        } else if (a === b) {
           continue;
         } else {
-          return compareIdentifiers(a, b2);
+          return compareIdentifiers(a, b);
         }
-      } while (++i2);
+      } while (++i);
     }
     compareBuild(other) {
       if (!(other instanceof SemVer)) {
         other = new SemVer(other, this.options);
       }
-      let i2 = 0;
+      let i = 0;
       do {
-        const a = this.build[i2];
-        const b2 = other.build[i2];
-        debug2("build compare", i2, a, b2);
-        if (a === void 0 && b2 === void 0) {
+        const a = this.build[i];
+        const b = other.build[i];
+        debug("build compare", i, a, b);
+        if (a === void 0 && b === void 0) {
           return 0;
-        } else if (b2 === void 0) {
+        } else if (b === void 0) {
           return 1;
         } else if (a === void 0) {
           return -1;
-        } else if (a === b2) {
+        } else if (a === b) {
           continue;
         } else {
-          return compareIdentifiers(a, b2);
+          return compareIdentifiers(a, b);
         }
-      } while (++i2);
+      } while (++i);
     }
     // preminor will bump the version up to the next minor release, and immediately
     // down to pre-release. premajor and prepatch work the same way.
-    inc(release, identifier2, identifierBase) {
+    inc(release, identifier, identifierBase) {
       if (release.startsWith("pre")) {
-        if (!identifier2 && identifierBase === false) {
+        if (!identifier && identifierBase === false) {
           throw new Error("invalid increment argument: identifier is empty");
         }
-        if (identifier2) {
-          const match = `-${identifier2}`.match(this.options.loose ? re2[t2.PRERELEASELOOSE] : re2[t2.PRERELEASE]);
-          if (!match || match[1] !== identifier2) {
-            throw new Error(`invalid identifier: ${identifier2}`);
+        if (identifier) {
+          const match = `-${identifier}`.match(this.options.loose ? re2[t.PRERELEASELOOSE] : re2[t.PRERELEASE]);
+          if (!match || match[1] !== identifier) {
+            throw new Error(`invalid identifier: ${identifier}`);
           }
         }
       }
@@ -1623,26 +1620,26 @@ function requireSemver$1() {
           this.patch = 0;
           this.minor = 0;
           this.major++;
-          this.inc("pre", identifier2, identifierBase);
+          this.inc("pre", identifier, identifierBase);
           break;
         case "preminor":
           this.prerelease.length = 0;
           this.patch = 0;
           this.minor++;
-          this.inc("pre", identifier2, identifierBase);
+          this.inc("pre", identifier, identifierBase);
           break;
         case "prepatch":
           this.prerelease.length = 0;
-          this.inc("patch", identifier2, identifierBase);
-          this.inc("pre", identifier2, identifierBase);
+          this.inc("patch", identifier, identifierBase);
+          this.inc("pre", identifier, identifierBase);
           break;
         // If the input is a non-prerelease version, this acts the same as
         // prepatch.
         case "prerelease":
           if (this.prerelease.length === 0) {
-            this.inc("patch", identifier2, identifierBase);
+            this.inc("patch", identifier, identifierBase);
           }
-          this.inc("pre", identifier2, identifierBase);
+          this.inc("pre", identifier, identifierBase);
           break;
         case "release":
           if (this.prerelease.length === 0) {
@@ -1678,26 +1675,26 @@ function requireSemver$1() {
           if (this.prerelease.length === 0) {
             this.prerelease = [base];
           } else {
-            let i2 = this.prerelease.length;
-            while (--i2 >= 0) {
-              if (typeof this.prerelease[i2] === "number") {
-                this.prerelease[i2]++;
-                i2 = -2;
+            let i = this.prerelease.length;
+            while (--i >= 0) {
+              if (typeof this.prerelease[i] === "number") {
+                this.prerelease[i]++;
+                i = -2;
               }
             }
-            if (i2 === -1) {
-              if (identifier2 === this.prerelease.join(".") && identifierBase === false) {
+            if (i === -1) {
+              if (identifier === this.prerelease.join(".") && identifierBase === false) {
                 throw new Error("invalid increment argument: identifier already exists");
               }
               this.prerelease.push(base);
             }
           }
-          if (identifier2) {
-            let prerelease = [identifier2, base];
+          if (identifier) {
+            let prerelease = [identifier, base];
             if (identifierBase === false) {
-              prerelease = [identifier2];
+              prerelease = [identifier];
             }
-            if (compareIdentifiers(this.prerelease[0], identifier2) === 0) {
+            if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
               if (isNaN(this.prerelease[1])) {
                 this.prerelease = prerelease;
               }
@@ -1774,17 +1771,17 @@ function requireInc() {
   if (hasRequiredInc) return inc_1;
   hasRequiredInc = 1;
   const SemVer = requireSemver$1();
-  const inc = (version, release, options, identifier2, identifierBase) => {
+  const inc = (version, release, options, identifier, identifierBase) => {
     if (typeof options === "string") {
-      identifierBase = identifier2;
-      identifier2 = options;
+      identifierBase = identifier;
+      identifier = options;
       options = void 0;
     }
     try {
       return new SemVer(
         version instanceof SemVer ? version.version : version,
         options
-      ).inc(release, identifier2, identifierBase).version;
+      ).inc(release, identifier, identifierBase).version;
     } catch (er) {
       return null;
     }
@@ -1885,7 +1882,7 @@ function requireCompare() {
   if (hasRequiredCompare) return compare_1;
   hasRequiredCompare = 1;
   const SemVer = requireSemver$1();
-  const compare = (a, b2, loose) => new SemVer(a, loose).compare(new SemVer(b2, loose));
+  const compare = (a, b, loose) => new SemVer(a, loose).compare(new SemVer(b, loose));
   compare_1 = compare;
   return compare_1;
 }
@@ -1895,7 +1892,7 @@ function requireRcompare() {
   if (hasRequiredRcompare) return rcompare_1;
   hasRequiredRcompare = 1;
   const compare = requireCompare();
-  const rcompare = (a, b2, loose) => compare(b2, a, loose);
+  const rcompare = (a, b, loose) => compare(b, a, loose);
   rcompare_1 = rcompare;
   return rcompare_1;
 }
@@ -1905,7 +1902,7 @@ function requireCompareLoose() {
   if (hasRequiredCompareLoose) return compareLoose_1;
   hasRequiredCompareLoose = 1;
   const compare = requireCompare();
-  const compareLoose = (a, b2) => compare(a, b2, true);
+  const compareLoose = (a, b) => compare(a, b, true);
   compareLoose_1 = compareLoose;
   return compareLoose_1;
 }
@@ -1915,9 +1912,9 @@ function requireCompareBuild() {
   if (hasRequiredCompareBuild) return compareBuild_1;
   hasRequiredCompareBuild = 1;
   const SemVer = requireSemver$1();
-  const compareBuild = (a, b2, loose) => {
+  const compareBuild = (a, b, loose) => {
     const versionA = new SemVer(a, loose);
-    const versionB = new SemVer(b2, loose);
+    const versionB = new SemVer(b, loose);
     return versionA.compare(versionB) || versionA.compareBuild(versionB);
   };
   compareBuild_1 = compareBuild;
@@ -1929,7 +1926,7 @@ function requireSort() {
   if (hasRequiredSort) return sort_1;
   hasRequiredSort = 1;
   const compareBuild = requireCompareBuild();
-  const sort = (list, loose) => list.sort((a, b2) => compareBuild(a, b2, loose));
+  const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
   sort_1 = sort;
   return sort_1;
 }
@@ -1939,7 +1936,7 @@ function requireRsort() {
   if (hasRequiredRsort) return rsort_1;
   hasRequiredRsort = 1;
   const compareBuild = requireCompareBuild();
-  const rsort = (list, loose) => list.sort((a, b2) => compareBuild(b2, a, loose));
+  const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
   rsort_1 = rsort;
   return rsort_1;
 }
@@ -1949,7 +1946,7 @@ function requireGt() {
   if (hasRequiredGt) return gt_1;
   hasRequiredGt = 1;
   const compare = requireCompare();
-  const gt = (a, b2, loose) => compare(a, b2, loose) > 0;
+  const gt = (a, b, loose) => compare(a, b, loose) > 0;
   gt_1 = gt;
   return gt_1;
 }
@@ -1959,7 +1956,7 @@ function requireLt() {
   if (hasRequiredLt) return lt_1;
   hasRequiredLt = 1;
   const compare = requireCompare();
-  const lt = (a, b2, loose) => compare(a, b2, loose) < 0;
+  const lt = (a, b, loose) => compare(a, b, loose) < 0;
   lt_1 = lt;
   return lt_1;
 }
@@ -1969,7 +1966,7 @@ function requireEq() {
   if (hasRequiredEq) return eq_1;
   hasRequiredEq = 1;
   const compare = requireCompare();
-  const eq = (a, b2, loose) => compare(a, b2, loose) === 0;
+  const eq = (a, b, loose) => compare(a, b, loose) === 0;
   eq_1 = eq;
   return eq_1;
 }
@@ -1979,7 +1976,7 @@ function requireNeq() {
   if (hasRequiredNeq) return neq_1;
   hasRequiredNeq = 1;
   const compare = requireCompare();
-  const neq = (a, b2, loose) => compare(a, b2, loose) !== 0;
+  const neq = (a, b, loose) => compare(a, b, loose) !== 0;
   neq_1 = neq;
   return neq_1;
 }
@@ -1989,7 +1986,7 @@ function requireGte() {
   if (hasRequiredGte) return gte_1;
   hasRequiredGte = 1;
   const compare = requireCompare();
-  const gte = (a, b2, loose) => compare(a, b2, loose) >= 0;
+  const gte = (a, b, loose) => compare(a, b, loose) >= 0;
   gte_1 = gte;
   return gte_1;
 }
@@ -1999,7 +1996,7 @@ function requireLte() {
   if (hasRequiredLte) return lte_1;
   hasRequiredLte = 1;
   const compare = requireCompare();
-  const lte = (a, b2, loose) => compare(a, b2, loose) <= 0;
+  const lte = (a, b, loose) => compare(a, b, loose) <= 0;
   lte_1 = lte;
   return lte_1;
 }
@@ -2014,38 +2011,38 @@ function requireCmp() {
   const gte = requireGte();
   const lt = requireLt();
   const lte = requireLte();
-  const cmp = (a, op, b2, loose) => {
+  const cmp = (a, op, b, loose) => {
     switch (op) {
       case "===":
         if (typeof a === "object") {
           a = a.version;
         }
-        if (typeof b2 === "object") {
-          b2 = b2.version;
+        if (typeof b === "object") {
+          b = b.version;
         }
-        return a === b2;
+        return a === b;
       case "!==":
         if (typeof a === "object") {
           a = a.version;
         }
-        if (typeof b2 === "object") {
-          b2 = b2.version;
+        if (typeof b === "object") {
+          b = b.version;
         }
-        return a !== b2;
+        return a !== b;
       case "":
       case "=":
       case "==":
-        return eq(a, b2, loose);
+        return eq(a, b, loose);
       case "!=":
-        return neq(a, b2, loose);
+        return neq(a, b, loose);
       case ">":
-        return gt(a, b2, loose);
+        return gt(a, b, loose);
       case ">=":
-        return gte(a, b2, loose);
+        return gte(a, b, loose);
       case "<":
-        return lt(a, b2, loose);
+        return lt(a, b, loose);
       case "<=":
-        return lte(a, b2, loose);
+        return lte(a, b, loose);
       default:
         throw new TypeError(`Invalid operator: ${op}`);
     }
@@ -2060,7 +2057,7 @@ function requireCoerce() {
   hasRequiredCoerce = 1;
   const SemVer = requireSemver$1();
   const parse = requireParse();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const coerce = (version, options) => {
     if (version instanceof SemVer) {
       return version;
@@ -2074,9 +2071,9 @@ function requireCoerce() {
     options = options || {};
     let match = null;
     if (!options.rtl) {
-      match = version.match(options.includePrerelease ? re2[t2.COERCEFULL] : re2[t2.COERCE]);
+      match = version.match(options.includePrerelease ? re2[t.COERCEFULL] : re2[t.COERCE]);
     } else {
-      const coerceRtlRegex = options.includePrerelease ? re2[t2.COERCERTLFULL] : re2[t2.COERCERTL];
+      const coerceRtlRegex = options.includePrerelease ? re2[t.COERCERTLFULL] : re2[t.COERCERTL];
       let next;
       while ((next = coerceRtlRegex.exec(version)) && (!match || match.index + match[0].length !== version.length)) {
         if (!match || next.index + next[0].length !== match.index + match[0].length) {
@@ -2163,19 +2160,19 @@ function requireRange() {
       this.loose = !!options.loose;
       this.includePrerelease = !!options.includePrerelease;
       this.raw = range2.trim().replace(SPACE_CHARACTERS, " ");
-      this.set = this.raw.split("||").map((r) => this.parseRange(r.trim())).filter((c2) => c2.length);
+      this.set = this.raw.split("||").map((r) => this.parseRange(r.trim())).filter((c) => c.length);
       if (!this.set.length) {
         throw new TypeError(`Invalid SemVer Range: ${this.raw}`);
       }
       if (this.set.length > 1) {
         const first = this.set[0];
-        this.set = this.set.filter((c2) => !isNullSet(c2[0]));
+        this.set = this.set.filter((c) => !isNullSet(c[0]));
         if (this.set.length === 0) {
           this.set = [first];
         } else if (this.set.length > 1) {
-          for (const c2 of this.set) {
-            if (c2.length === 1 && isAny(c2[0])) {
-              this.set = [c2];
+          for (const c of this.set) {
+            if (c.length === 1 && isAny(c[0])) {
+              this.set = [c];
               break;
             }
           }
@@ -2186,16 +2183,16 @@ function requireRange() {
     get range() {
       if (this.formatted === void 0) {
         this.formatted = "";
-        for (let i2 = 0; i2 < this.set.length; i2++) {
-          if (i2 > 0) {
+        for (let i = 0; i < this.set.length; i++) {
+          if (i > 0) {
             this.formatted += "||";
           }
-          const comps = this.set[i2];
-          for (let k2 = 0; k2 < comps.length; k2++) {
-            if (k2 > 0) {
+          const comps = this.set[i];
+          for (let k = 0; k < comps.length; k++) {
+            if (k > 0) {
               this.formatted += " ";
             }
-            this.formatted += comps[k2].toString().trim();
+            this.formatted += comps[k].toString().trim();
           }
         }
       }
@@ -2215,23 +2212,23 @@ function requireRange() {
         return cached;
       }
       const loose = this.options.loose;
-      const hr = loose ? re2[t2.HYPHENRANGELOOSE] : re2[t2.HYPHENRANGE];
+      const hr = loose ? re2[t.HYPHENRANGELOOSE] : re2[t.HYPHENRANGE];
       range2 = range2.replace(hr, hyphenReplace(this.options.includePrerelease));
-      debug2("hyphen replace", range2);
-      range2 = range2.replace(re2[t2.COMPARATORTRIM], comparatorTrimReplace);
-      debug2("comparator trim", range2);
-      range2 = range2.replace(re2[t2.TILDETRIM], tildeTrimReplace);
-      debug2("tilde trim", range2);
-      range2 = range2.replace(re2[t2.CARETTRIM], caretTrimReplace);
-      debug2("caret trim", range2);
+      debug("hyphen replace", range2);
+      range2 = range2.replace(re2[t.COMPARATORTRIM], comparatorTrimReplace);
+      debug("comparator trim", range2);
+      range2 = range2.replace(re2[t.TILDETRIM], tildeTrimReplace);
+      debug("tilde trim", range2);
+      range2 = range2.replace(re2[t.CARETTRIM], caretTrimReplace);
+      debug("caret trim", range2);
       let rangeList = range2.split(" ").map((comp) => parseComparator(comp, this.options)).join(" ").split(/\s+/).map((comp) => replaceGTE0(comp, this.options));
       if (loose) {
         rangeList = rangeList.filter((comp) => {
-          debug2("loose invalid filter", comp, this.options);
-          return !!comp.match(re2[t2.COMPARATORLOOSE]);
+          debug("loose invalid filter", comp, this.options);
+          return !!comp.match(re2[t.COMPARATORLOOSE]);
         });
       }
-      debug2("range list", rangeList);
+      debug("range list", rangeList);
       const rangeMap = /* @__PURE__ */ new Map();
       const comparators = rangeList.map((comp) => new Comparator(comp, this.options));
       for (const comp of comparators) {
@@ -2273,8 +2270,8 @@ function requireRange() {
           return false;
         }
       }
-      for (let i2 = 0; i2 < this.set.length; i2++) {
-        if (testSet(this.set[i2], version, this.options)) {
+      for (let i = 0; i < this.set.length; i++) {
+        if (testSet(this.set[i], version, this.options)) {
           return true;
         }
       }
@@ -2286,18 +2283,18 @@ function requireRange() {
   const cache = new LRU();
   const parseOptions = requireParseOptions();
   const Comparator = requireComparator();
-  const debug2 = requireDebug();
+  const debug = requireDebug();
   const SemVer = requireSemver$1();
   const {
     safeRe: re2,
-    t: t2,
+    t,
     comparatorTrimReplace,
     tildeTrimReplace,
     caretTrimReplace
   } = requireRe();
   const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = requireConstants();
-  const isNullSet = (c2) => c2.value === "<0.0.0-0";
-  const isAny = (c2) => c2.value === "";
+  const isNullSet = (c) => c.value === "<0.0.0-0";
+  const isAny = (c) => c.value === "";
   const isSatisfiable = (comparators, options) => {
     let result = true;
     const remainingComparators = comparators.slice();
@@ -2311,101 +2308,101 @@ function requireRange() {
     return result;
   };
   const parseComparator = (comp, options) => {
-    comp = comp.replace(re2[t2.BUILD], "");
-    debug2("comp", comp, options);
+    comp = comp.replace(re2[t.BUILD], "");
+    debug("comp", comp, options);
     comp = replaceCarets(comp, options);
-    debug2("caret", comp);
+    debug("caret", comp);
     comp = replaceTildes(comp, options);
-    debug2("tildes", comp);
+    debug("tildes", comp);
     comp = replaceXRanges(comp, options);
-    debug2("xrange", comp);
+    debug("xrange", comp);
     comp = replaceStars(comp, options);
-    debug2("stars", comp);
+    debug("stars", comp);
     return comp;
   };
   const isX = (id) => !id || id.toLowerCase() === "x" || id === "*";
   const replaceTildes = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c2) => replaceTilde(c2, options)).join(" ");
+    return comp.trim().split(/\s+/).map((c) => replaceTilde(c, options)).join(" ");
   };
   const replaceTilde = (comp, options) => {
-    const r = options.loose ? re2[t2.TILDELOOSE] : re2[t2.TILDE];
-    return comp.replace(r, (_2, M2, m2, p, pr) => {
-      debug2("tilde", comp, _2, M2, m2, p, pr);
+    const r = options.loose ? re2[t.TILDELOOSE] : re2[t.TILDE];
+    return comp.replace(r, (_, M, m, p, pr) => {
+      debug("tilde", comp, _, M, m, p, pr);
       let ret;
-      if (isX(M2)) {
+      if (isX(M)) {
         ret = "";
-      } else if (isX(m2)) {
-        ret = `>=${M2}.0.0 <${+M2 + 1}.0.0-0`;
+      } else if (isX(m)) {
+        ret = `>=${M}.0.0 <${+M + 1}.0.0-0`;
       } else if (isX(p)) {
-        ret = `>=${M2}.${m2}.0 <${M2}.${+m2 + 1}.0-0`;
+        ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`;
       } else if (pr) {
-        debug2("replaceTilde pr", pr);
-        ret = `>=${M2}.${m2}.${p}-${pr} <${M2}.${+m2 + 1}.0-0`;
+        debug("replaceTilde pr", pr);
+        ret = `>=${M}.${m}.${p}-${pr} <${M}.${+m + 1}.0-0`;
       } else {
-        ret = `>=${M2}.${m2}.${p} <${M2}.${+m2 + 1}.0-0`;
+        ret = `>=${M}.${m}.${p} <${M}.${+m + 1}.0-0`;
       }
-      debug2("tilde return", ret);
+      debug("tilde return", ret);
       return ret;
     });
   };
   const replaceCarets = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c2) => replaceCaret(c2, options)).join(" ");
+    return comp.trim().split(/\s+/).map((c) => replaceCaret(c, options)).join(" ");
   };
   const replaceCaret = (comp, options) => {
-    debug2("caret", comp, options);
-    const r = options.loose ? re2[t2.CARETLOOSE] : re2[t2.CARET];
-    const z2 = options.includePrerelease ? "-0" : "";
-    return comp.replace(r, (_2, M2, m2, p, pr) => {
-      debug2("caret", comp, _2, M2, m2, p, pr);
+    debug("caret", comp, options);
+    const r = options.loose ? re2[t.CARETLOOSE] : re2[t.CARET];
+    const z = options.includePrerelease ? "-0" : "";
+    return comp.replace(r, (_, M, m, p, pr) => {
+      debug("caret", comp, _, M, m, p, pr);
       let ret;
-      if (isX(M2)) {
+      if (isX(M)) {
         ret = "";
-      } else if (isX(m2)) {
-        ret = `>=${M2}.0.0${z2} <${+M2 + 1}.0.0-0`;
+      } else if (isX(m)) {
+        ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`;
       } else if (isX(p)) {
-        if (M2 === "0") {
-          ret = `>=${M2}.${m2}.0${z2} <${M2}.${+m2 + 1}.0-0`;
+        if (M === "0") {
+          ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`;
         } else {
-          ret = `>=${M2}.${m2}.0${z2} <${+M2 + 1}.0.0-0`;
+          ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`;
         }
       } else if (pr) {
-        debug2("replaceCaret pr", pr);
-        if (M2 === "0") {
-          if (m2 === "0") {
-            ret = `>=${M2}.${m2}.${p}-${pr} <${M2}.${m2}.${+p + 1}-0`;
+        debug("replaceCaret pr", pr);
+        if (M === "0") {
+          if (m === "0") {
+            ret = `>=${M}.${m}.${p}-${pr} <${M}.${m}.${+p + 1}-0`;
           } else {
-            ret = `>=${M2}.${m2}.${p}-${pr} <${M2}.${+m2 + 1}.0-0`;
+            ret = `>=${M}.${m}.${p}-${pr} <${M}.${+m + 1}.0-0`;
           }
         } else {
-          ret = `>=${M2}.${m2}.${p}-${pr} <${+M2 + 1}.0.0-0`;
+          ret = `>=${M}.${m}.${p}-${pr} <${+M + 1}.0.0-0`;
         }
       } else {
-        debug2("no pr");
-        if (M2 === "0") {
-          if (m2 === "0") {
-            ret = `>=${M2}.${m2}.${p}${z2} <${M2}.${m2}.${+p + 1}-0`;
+        debug("no pr");
+        if (M === "0") {
+          if (m === "0") {
+            ret = `>=${M}.${m}.${p}${z} <${M}.${m}.${+p + 1}-0`;
           } else {
-            ret = `>=${M2}.${m2}.${p}${z2} <${M2}.${+m2 + 1}.0-0`;
+            ret = `>=${M}.${m}.${p}${z} <${M}.${+m + 1}.0-0`;
           }
         } else {
-          ret = `>=${M2}.${m2}.${p} <${+M2 + 1}.0.0-0`;
+          ret = `>=${M}.${m}.${p} <${+M + 1}.0.0-0`;
         }
       }
-      debug2("caret return", ret);
+      debug("caret return", ret);
       return ret;
     });
   };
   const replaceXRanges = (comp, options) => {
-    debug2("replaceXRanges", comp, options);
-    return comp.split(/\s+/).map((c2) => replaceXRange(c2, options)).join(" ");
+    debug("replaceXRanges", comp, options);
+    return comp.split(/\s+/).map((c) => replaceXRange(c, options)).join(" ");
   };
   const replaceXRange = (comp, options) => {
     comp = comp.trim();
-    const r = options.loose ? re2[t2.XRANGELOOSE] : re2[t2.XRANGE];
-    return comp.replace(r, (ret, gtlt, M2, m2, p, pr) => {
-      debug2("xRange", comp, ret, gtlt, M2, m2, p, pr);
-      const xM = isX(M2);
-      const xm = xM || isX(m2);
+    const r = options.loose ? re2[t.XRANGELOOSE] : re2[t.XRANGE];
+    return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
+      debug("xRange", comp, ret, gtlt, M, m, p, pr);
+      const xM = isX(M);
+      const xm = xM || isX(m);
       const xp = xm || isX(p);
       const anyX = xp;
       if (gtlt === "=" && anyX) {
@@ -2420,47 +2417,47 @@ function requireRange() {
         }
       } else if (gtlt && anyX) {
         if (xm) {
-          m2 = 0;
+          m = 0;
         }
         p = 0;
         if (gtlt === ">") {
           gtlt = ">=";
           if (xm) {
-            M2 = +M2 + 1;
-            m2 = 0;
+            M = +M + 1;
+            m = 0;
             p = 0;
           } else {
-            m2 = +m2 + 1;
+            m = +m + 1;
             p = 0;
           }
         } else if (gtlt === "<=") {
           gtlt = "<";
           if (xm) {
-            M2 = +M2 + 1;
+            M = +M + 1;
           } else {
-            m2 = +m2 + 1;
+            m = +m + 1;
           }
         }
         if (gtlt === "<") {
           pr = "-0";
         }
-        ret = `${gtlt + M2}.${m2}.${p}${pr}`;
+        ret = `${gtlt + M}.${m}.${p}${pr}`;
       } else if (xm) {
-        ret = `>=${M2}.0.0${pr} <${+M2 + 1}.0.0-0`;
+        ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`;
       } else if (xp) {
-        ret = `>=${M2}.${m2}.0${pr} <${M2}.${+m2 + 1}.0-0`;
+        ret = `>=${M}.${m}.0${pr} <${M}.${+m + 1}.0-0`;
       }
-      debug2("xRange return", ret);
+      debug("xRange return", ret);
       return ret;
     });
   };
   const replaceStars = (comp, options) => {
-    debug2("replaceStars", comp, options);
-    return comp.trim().replace(re2[t2.STAR], "");
+    debug("replaceStars", comp, options);
+    return comp.trim().replace(re2[t.STAR], "");
   };
   const replaceGTE0 = (comp, options) => {
-    debug2("replaceGTE0", comp, options);
-    return comp.trim().replace(re2[options.includePrerelease ? t2.GTE0PRE : t2.GTE0], "");
+    debug("replaceGTE0", comp, options);
+    return comp.trim().replace(re2[options.includePrerelease ? t.GTE0PRE : t.GTE0], "");
   };
   const hyphenReplace = (incPr) => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr) => {
     if (isX(fM)) {
@@ -2490,19 +2487,19 @@ function requireRange() {
     return `${from} ${to}`.trim();
   };
   const testSet = (set, version, options) => {
-    for (let i2 = 0; i2 < set.length; i2++) {
-      if (!set[i2].test(version)) {
+    for (let i = 0; i < set.length; i++) {
+      if (!set[i].test(version)) {
         return false;
       }
     }
     if (version.prerelease.length && !options.includePrerelease) {
-      for (let i2 = 0; i2 < set.length; i2++) {
-        debug2(set[i2].semver);
-        if (set[i2].semver === Comparator.ANY) {
+      for (let i = 0; i < set.length; i++) {
+        debug(set[i].semver);
+        if (set[i].semver === Comparator.ANY) {
           continue;
         }
-        if (set[i2].semver.prerelease.length > 0) {
-          const allowed = set[i2].semver;
+        if (set[i].semver.prerelease.length > 0) {
+          const allowed = set[i].semver;
           if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
             return true;
           }
@@ -2534,7 +2531,7 @@ function requireComparator() {
         }
       }
       comp = comp.trim().split(/\s+/).join(" ");
-      debug2("comparator", comp, options);
+      debug("comparator", comp, options);
       this.options = options;
       this.loose = !!options.loose;
       this.parse(comp);
@@ -2543,29 +2540,29 @@ function requireComparator() {
       } else {
         this.value = this.operator + this.semver.version;
       }
-      debug2("comp", this);
+      debug("comp", this);
     }
     parse(comp) {
-      const r = this.options.loose ? re2[t2.COMPARATORLOOSE] : re2[t2.COMPARATOR];
-      const m2 = comp.match(r);
-      if (!m2) {
+      const r = this.options.loose ? re2[t.COMPARATORLOOSE] : re2[t.COMPARATOR];
+      const m = comp.match(r);
+      if (!m) {
         throw new TypeError(`Invalid comparator: ${comp}`);
       }
-      this.operator = m2[1] !== void 0 ? m2[1] : "";
+      this.operator = m[1] !== void 0 ? m[1] : "";
       if (this.operator === "=") {
         this.operator = "";
       }
-      if (!m2[2]) {
+      if (!m[2]) {
         this.semver = ANY;
       } else {
-        this.semver = new SemVer(m2[2], this.options.loose);
+        this.semver = new SemVer(m[2], this.options.loose);
       }
     }
     toString() {
       return this.value;
     }
     test(version) {
-      debug2("Comparator.test", version, this.options.loose);
+      debug("Comparator.test", version, this.options.loose);
       if (this.semver === ANY || version === ANY) {
         return true;
       }
@@ -2620,9 +2617,9 @@ function requireComparator() {
   }
   comparator = Comparator;
   const parseOptions = requireParseOptions();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const cmp = requireCmp();
-  const debug2 = requireDebug();
+  const debug = requireDebug();
   const SemVer = requireSemver$1();
   const Range = requireRange();
   return comparator;
@@ -2650,7 +2647,7 @@ function requireToComparators() {
   if (hasRequiredToComparators) return toComparators_1;
   hasRequiredToComparators = 1;
   const Range = requireRange();
-  const toComparators = (range2, options) => new Range(range2, options).set.map((comp) => comp.map((c2) => c2.value).join(" ").trim().split(" "));
+  const toComparators = (range2, options) => new Range(range2, options).set.map((comp) => comp.map((c) => c.value).join(" ").trim().split(" "));
   toComparators_1 = toComparators;
   return toComparators_1;
 }
@@ -2731,8 +2728,8 @@ function requireMinVersion() {
       return minver;
     }
     minver = null;
-    for (let i2 = 0; i2 < range2.set.length; ++i2) {
-      const comparators = range2.set[i2];
+    for (let i = 0; i < range2.set.length; ++i) {
+      const comparators = range2.set[i];
       let setMin = null;
       comparators.forEach((comparator2) => {
         const compver = new SemVer(comparator2.semver.version);
@@ -2826,8 +2823,8 @@ function requireOutside() {
     if (satisfies(version, range2, options)) {
       return false;
     }
-    for (let i2 = 0; i2 < range2.set.length; ++i2) {
-      const comparators = range2.set[i2];
+    for (let i = 0; i < range2.set.length; ++i) {
+      const comparators = range2.set[i];
       let high = null;
       let low = null;
       comparators.forEach((comparator2) => {
@@ -2901,7 +2898,7 @@ function requireSimplify() {
     const set = [];
     let first = null;
     let prev = null;
-    const v = versions.sort((a, b2) => compare(a, b2, options));
+    const v = versions.sort((a, b) => compare(a, b, options));
     for (const version of v) {
       const included = satisfies(version, range2, options);
       if (included) {
@@ -2995,13 +2992,13 @@ function requireSubset() {
     }
     const eqSet = /* @__PURE__ */ new Set();
     let gt, lt;
-    for (const c2 of sub) {
-      if (c2.operator === ">" || c2.operator === ">=") {
-        gt = higherGT(gt, c2, options);
-      } else if (c2.operator === "<" || c2.operator === "<=") {
-        lt = lowerLT(lt, c2, options);
+    for (const c of sub) {
+      if (c.operator === ">" || c.operator === ">=") {
+        gt = higherGT(gt, c, options);
+      } else if (c.operator === "<" || c.operator === "<=") {
+        lt = lowerLT(lt, c, options);
       } else {
-        eqSet.add(c2.semver);
+        eqSet.add(c.semver);
       }
     }
     if (eqSet.size > 1) {
@@ -3023,8 +3020,8 @@ function requireSubset() {
       if (lt && !satisfies(eq, String(lt), options)) {
         return null;
       }
-      for (const c2 of dom) {
-        if (!satisfies(eq, String(c2), options)) {
+      for (const c of dom) {
+        if (!satisfies(eq, String(c), options)) {
           return false;
         }
       }
@@ -3037,40 +3034,40 @@ function requireSubset() {
     if (needDomLTPre && needDomLTPre.prerelease.length === 1 && lt.operator === "<" && needDomLTPre.prerelease[0] === 0) {
       needDomLTPre = false;
     }
-    for (const c2 of dom) {
-      hasDomGT = hasDomGT || c2.operator === ">" || c2.operator === ">=";
-      hasDomLT = hasDomLT || c2.operator === "<" || c2.operator === "<=";
+    for (const c of dom) {
+      hasDomGT = hasDomGT || c.operator === ">" || c.operator === ">=";
+      hasDomLT = hasDomLT || c.operator === "<" || c.operator === "<=";
       if (gt) {
         if (needDomGTPre) {
-          if (c2.semver.prerelease && c2.semver.prerelease.length && c2.semver.major === needDomGTPre.major && c2.semver.minor === needDomGTPre.minor && c2.semver.patch === needDomGTPre.patch) {
+          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomGTPre.major && c.semver.minor === needDomGTPre.minor && c.semver.patch === needDomGTPre.patch) {
             needDomGTPre = false;
           }
         }
-        if (c2.operator === ">" || c2.operator === ">=") {
-          higher = higherGT(gt, c2, options);
-          if (higher === c2 && higher !== gt) {
+        if (c.operator === ">" || c.operator === ">=") {
+          higher = higherGT(gt, c, options);
+          if (higher === c && higher !== gt) {
             return false;
           }
-        } else if (gt.operator === ">=" && !satisfies(gt.semver, String(c2), options)) {
+        } else if (gt.operator === ">=" && !satisfies(gt.semver, String(c), options)) {
           return false;
         }
       }
       if (lt) {
         if (needDomLTPre) {
-          if (c2.semver.prerelease && c2.semver.prerelease.length && c2.semver.major === needDomLTPre.major && c2.semver.minor === needDomLTPre.minor && c2.semver.patch === needDomLTPre.patch) {
+          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomLTPre.major && c.semver.minor === needDomLTPre.minor && c.semver.patch === needDomLTPre.patch) {
             needDomLTPre = false;
           }
         }
-        if (c2.operator === "<" || c2.operator === "<=") {
-          lower = lowerLT(lt, c2, options);
-          if (lower === c2 && lower !== lt) {
+        if (c.operator === "<" || c.operator === "<=") {
+          lower = lowerLT(lt, c, options);
+          if (lower === c && lower !== lt) {
             return false;
           }
-        } else if (lt.operator === "<=" && !satisfies(lt.semver, String(c2), options)) {
+        } else if (lt.operator === "<=" && !satisfies(lt.semver, String(c), options)) {
           return false;
         }
       }
-      if (!c2.operator && (lt || gt) && gtltComp !== 0) {
+      if (!c.operator && (lt || gt) && gtltComp !== 0) {
         return false;
       }
     }
@@ -3085,19 +3082,19 @@ function requireSubset() {
     }
     return true;
   };
-  const higherGT = (a, b2, options) => {
+  const higherGT = (a, b, options) => {
     if (!a) {
-      return b2;
+      return b;
     }
-    const comp = compare(a.semver, b2.semver, options);
-    return comp > 0 ? a : comp < 0 ? b2 : b2.operator === ">" && a.operator === ">=" ? b2 : a;
+    const comp = compare(a.semver, b.semver, options);
+    return comp > 0 ? a : comp < 0 ? b : b.operator === ">" && a.operator === ">=" ? b : a;
   };
-  const lowerLT = (a, b2, options) => {
+  const lowerLT = (a, b, options) => {
     if (!a) {
-      return b2;
+      return b;
     }
-    const comp = compare(a.semver, b2.semver, options);
-    return comp < 0 ? a : comp > 0 ? b2 : b2.operator === "<" && a.operator === "<=" ? b2 : a;
+    const comp = compare(a.semver, b.semver, options);
+    return comp < 0 ? a : comp > 0 ? b : b.operator === "<" && a.operator === "<=" ? b : a;
   };
   subset_1 = subset;
   return subset_1;
@@ -3198,2382 +3195,13 @@ function requireSemver() {
   return semver;
 }
 requireSemver();
-var ReflectLite = {};
-/*! *****************************************************************************
-Copyright (C) Microsoft. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-var hasRequiredReflectLite;
-function requireReflectLite() {
-  if (hasRequiredReflectLite) return ReflectLite;
-  hasRequiredReflectLite = 1;
-  var Reflect2;
-  (function(Reflect3) {
-    (function(factory) {
-      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
-      var exporter = makeExporter(Reflect3);
-      if (typeof root.Reflect !== "undefined") {
-        exporter = makeExporter(root.Reflect, exporter);
-      }
-      factory(exporter, root);
-      if (typeof root.Reflect === "undefined") {
-        root.Reflect = Reflect3;
-      }
-      function makeExporter(target, previous) {
-        return function(key, value) {
-          Object.defineProperty(target, key, { configurable: true, writable: true, value });
-          if (previous)
-            previous(key, value);
-        };
-      }
-      function sloppyModeThis() {
-        throw new ReferenceError("globalThis could not be found. Please polyfill globalThis before loading this module.");
-      }
-    })(function(exporter, root) {
-      var supportsSymbol = typeof Symbol === "function";
-      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : fail("Symbol.toPrimitive not found.");
-      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : fail("Symbol.iterator not found.");
-      var functionPrototype = Object.getPrototypeOf(Function);
-      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : fail("A valid Map constructor could not be found.");
-      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : fail("A valid Set constructor could not be found.");
-      var _WeakMap = typeof WeakMap === "function" ? WeakMap : fail("A valid WeakMap constructor could not be found.");
-      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
-      var metadataRegistry = GetOrCreateMetadataRegistry();
-      var metadataProvider = CreateMetadataProvider(metadataRegistry);
-      function decorate(decorators, target, propertyKey, attributes) {
-        if (!IsUndefined(propertyKey)) {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
-            throw new TypeError();
-          if (IsNull(attributes))
-            attributes = void 0;
-          propertyKey = ToPropertyKey(propertyKey);
-          return DecorateProperty(decorators, target, propertyKey, attributes);
-        } else {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsConstructor(target))
-            throw new TypeError();
-          return DecorateConstructor(decorators, target);
-        }
-      }
-      exporter("decorate", decorate);
-      function metadata(metadataKey, metadataValue) {
-        function decorator(target, propertyKey) {
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
-            throw new TypeError();
-          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-        }
-        return decorator;
-      }
-      exporter("metadata", metadata);
-      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-      }
-      exporter("defineMetadata", defineMetadata);
-      function hasMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasMetadata", hasMetadata);
-      function hasOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasOwnMetadata", hasOwnMetadata);
-      function getMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getMetadata", getMetadata);
-      function getOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getOwnMetadata", getOwnMetadata);
-      function getMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryMetadataKeys(target, propertyKey);
-      }
-      exporter("getMetadataKeys", getMetadataKeys);
-      function getOwnMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryOwnMetadataKeys(target, propertyKey);
-      }
-      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
-      function deleteMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        var provider = GetMetadataProvider(
-          target,
-          propertyKey,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("deleteMetadata", deleteMetadata);
-      function DecorateConstructor(decorators, target) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
-          var decorated = decorator(target);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsConstructor(decorated))
-              throw new TypeError();
-            target = decorated;
-          }
-        }
-        return target;
-      }
-      function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
-          var decorated = decorator(target, propertyKey, descriptor);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsObject(decorated))
-              throw new TypeError();
-            descriptor = decorated;
-          }
-        }
-        return descriptor;
-      }
-      function OrdinaryHasMetadata(MetadataKey, O2, P) {
-        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
-        if (hasOwn)
-          return true;
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (!IsNull(parent))
-          return OrdinaryHasMetadata(MetadataKey, parent, P);
-        return false;
-      }
-      function OrdinaryHasOwnMetadata(MetadataKey, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O2, P));
-      }
-      function OrdinaryGetMetadata(MetadataKey, O2, P) {
-        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
-        if (hasOwn)
-          return OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (!IsNull(parent))
-          return OrdinaryGetMetadata(MetadataKey, parent, P);
-        return void 0;
-      }
-      function OrdinaryGetOwnMetadata(MetadataKey, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-      }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          true
-        );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P);
-      }
-      function OrdinaryMetadataKeys(O2, P) {
-        var ownKeys = OrdinaryOwnMetadataKeys(O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (parent === null)
-          return ownKeys;
-        var parentKeys = OrdinaryMetadataKeys(parent, P);
-        if (parentKeys.length <= 0)
-          return ownKeys;
-        if (ownKeys.length <= 0)
-          return parentKeys;
-        var set = new _Set();
-        var keys = [];
-        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
-          var key = ownKeys_1[_i];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-          var key = parentKeys_1[_a];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        return keys;
-      }
-      function OrdinaryOwnMetadataKeys(O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*create*/
-          false
-        );
-        if (!provider) {
-          return [];
-        }
-        return provider.OrdinaryOwnMetadataKeys(O2, P);
-      }
-      function Type(x) {
-        if (x === null)
-          return 1;
-        switch (typeof x) {
-          case "undefined":
-            return 0;
-          case "boolean":
-            return 2;
-          case "string":
-            return 3;
-          case "symbol":
-            return 4;
-          case "number":
-            return 5;
-          case "object":
-            return x === null ? 1 : 6;
-          default:
-            return 6;
-        }
-      }
-      function IsUndefined(x) {
-        return x === void 0;
-      }
-      function IsNull(x) {
-        return x === null;
-      }
-      function IsSymbol(x) {
-        return typeof x === "symbol";
-      }
-      function IsObject(x) {
-        return typeof x === "object" ? x !== null : typeof x === "function";
-      }
-      function ToPrimitive(input, PreferredType) {
-        switch (Type(input)) {
-          case 0:
-            return input;
-          case 1:
-            return input;
-          case 2:
-            return input;
-          case 3:
-            return input;
-          case 4:
-            return input;
-          case 5:
-            return input;
-        }
-        var hint = "string";
-        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-        if (exoticToPrim !== void 0) {
-          var result = exoticToPrim.call(input, hint);
-          if (IsObject(result))
-            throw new TypeError();
-          return result;
-        }
-        return OrdinaryToPrimitive(input);
-      }
-      function OrdinaryToPrimitive(O2, hint) {
-        var valueOf, result, toString_2;
-        {
-          var toString_1 = O2.toString;
-          if (IsCallable(toString_1)) {
-            var result = toString_1.call(O2);
-            if (!IsObject(result))
-              return result;
-          }
-          var valueOf = O2.valueOf;
-          if (IsCallable(valueOf)) {
-            var result = valueOf.call(O2);
-            if (!IsObject(result))
-              return result;
-          }
-        }
-        throw new TypeError();
-      }
-      function ToBoolean(argument) {
-        return !!argument;
-      }
-      function ToString(argument) {
-        return "" + argument;
-      }
-      function ToPropertyKey(argument) {
-        var key = ToPrimitive(argument);
-        if (IsSymbol(key))
-          return key;
-        return ToString(key);
-      }
-      function IsArray(argument) {
-        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
-      }
-      function IsCallable(argument) {
-        return typeof argument === "function";
-      }
-      function IsConstructor(argument) {
-        return typeof argument === "function";
-      }
-      function IsPropertyKey(argument) {
-        switch (Type(argument)) {
-          case 3:
-            return true;
-          case 4:
-            return true;
-          default:
-            return false;
-        }
-      }
-      function GetMethod(V2, P) {
-        var func = V2[P];
-        if (func === void 0 || func === null)
-          return void 0;
-        if (!IsCallable(func))
-          throw new TypeError();
-        return func;
-      }
-      function GetIterator(obj) {
-        var method = GetMethod(obj, iteratorSymbol);
-        if (!IsCallable(method))
-          throw new TypeError();
-        var iterator = method.call(obj);
-        if (!IsObject(iterator))
-          throw new TypeError();
-        return iterator;
-      }
-      function IteratorValue(iterResult) {
-        return iterResult.value;
-      }
-      function IteratorStep(iterator) {
-        var result = iterator.next();
-        return result.done ? false : result;
-      }
-      function IteratorClose(iterator) {
-        var f2 = iterator["return"];
-        if (f2)
-          f2.call(iterator);
-      }
-      function OrdinaryGetPrototypeOf(O2) {
-        var proto = Object.getPrototypeOf(O2);
-        if (typeof O2 !== "function" || O2 === functionPrototype)
-          return proto;
-        if (proto !== functionPrototype)
-          return proto;
-        var prototype = O2.prototype;
-        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
-        if (prototypeProto == null || prototypeProto === Object.prototype)
-          return proto;
-        var constructor = prototypeProto.constructor;
-        if (typeof constructor !== "function")
-          return proto;
-        if (constructor === O2)
-          return proto;
-        return constructor;
-      }
-      function fail(e) {
-        throw e;
-      }
-      function CreateMetadataRegistry() {
-        var fallback;
-        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
-          fallback = CreateFallbackProvider(root.Reflect);
-        }
-        var first;
-        var second;
-        var rest;
-        var targetProviderMap = new _WeakMap();
-        var registry = {
-          registerProvider,
-          getProvider,
-          setProvider
-        };
-        return registry;
-        function registerProvider(provider) {
-          if (!Object.isExtensible(registry)) {
-            throw new Error("Cannot add provider to a frozen registry.");
-          }
-          switch (true) {
-            case fallback === provider:
-              break;
-            case IsUndefined(first):
-              first = provider;
-              break;
-            case first === provider:
-              break;
-            case IsUndefined(second):
-              second = provider;
-              break;
-            case second === provider:
-              break;
-            default:
-              if (rest === void 0)
-                rest = new _Set();
-              rest.add(provider);
-              break;
-          }
-        }
-        function getProviderNoCache(O2, P) {
-          if (!IsUndefined(first)) {
-            if (first.isProviderFor(O2, P))
-              return first;
-            if (!IsUndefined(second)) {
-              if (second.isProviderFor(O2, P))
-                return first;
-              if (!IsUndefined(rest)) {
-                var iterator = GetIterator(rest);
-                while (true) {
-                  var next = IteratorStep(iterator);
-                  if (!next) {
-                    return void 0;
-                  }
-                  var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O2, P)) {
-                    IteratorClose(iterator);
-                    return provider;
-                  }
-                }
-              }
-            }
-          }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O2, P)) {
-            return fallback;
-          }
-          return void 0;
-        }
-        function getProvider(O2, P) {
-          var providerMap = targetProviderMap.get(O2);
-          var provider;
-          if (!IsUndefined(providerMap)) {
-            provider = providerMap.get(P);
-          }
-          if (!IsUndefined(provider)) {
-            return provider;
-          }
-          provider = getProviderNoCache(O2, P);
-          if (!IsUndefined(provider)) {
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return provider;
-        }
-        function hasProvider(provider) {
-          if (IsUndefined(provider))
-            throw new TypeError();
-          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
-        }
-        function setProvider(O2, P, provider) {
-          if (!hasProvider(provider)) {
-            throw new Error("Metadata provider not registered.");
-          }
-          var existingProvider = getProvider(O2, P);
-          if (existingProvider !== provider) {
-            if (!IsUndefined(existingProvider)) {
-              return false;
-            }
-            var providerMap = targetProviderMap.get(O2);
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return true;
-        }
-      }
-      function GetOrCreateMetadataRegistry() {
-        var metadataRegistry2;
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          metadataRegistry2 = root.Reflect[registrySymbol];
-        }
-        if (IsUndefined(metadataRegistry2)) {
-          metadataRegistry2 = CreateMetadataRegistry();
-        }
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          Object.defineProperty(root.Reflect, registrySymbol, {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: metadataRegistry2
-          });
-        }
-        return metadataRegistry2;
-      }
-      function CreateMetadataProvider(registry) {
-        var metadata2 = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O2, P) {
-            var targetMetadata = metadata2.get(O2);
-            if (IsUndefined(targetMetadata))
-              return false;
-            return targetMetadata.has(P);
-          },
-          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
-          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
-          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
-          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
-          OrdinaryDeleteMetadata
-        };
-        metadataRegistry.registerProvider(provider);
-        return provider;
-        function GetOrCreateMetadataMap(O2, P, Create) {
-          var targetMetadata = metadata2.get(O2);
-          var createdTargetMetadata = false;
-          if (IsUndefined(targetMetadata)) {
-            if (!Create)
-              return void 0;
-            targetMetadata = new _Map();
-            metadata2.set(O2, targetMetadata);
-            createdTargetMetadata = true;
-          }
-          var metadataMap = targetMetadata.get(P);
-          if (IsUndefined(metadataMap)) {
-            if (!Create)
-              return void 0;
-            metadataMap = new _Map();
-            targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O2, P, provider)) {
-              targetMetadata.delete(P);
-              if (createdTargetMetadata) {
-                metadata2.delete(O2);
-              }
-              throw new Error("Wrong provider for target.");
-            }
-          }
-          return metadataMap;
-        }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          return ToBoolean(metadataMap.has(MetadataKey));
-        }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return void 0;
-          return metadataMap.get(MetadataKey);
-        }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            true
-          );
-          metadataMap.set(MetadataKey, MetadataValue);
-        }
-        function OrdinaryOwnMetadataKeys2(O2, P) {
-          var keys = [];
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return keys;
-          var keysObj = metadataMap.keys();
-          var iterator = GetIterator(keysObj);
-          var k2 = 0;
-          while (true) {
-            var next = IteratorStep(iterator);
-            if (!next) {
-              keys.length = k2;
-              return keys;
-            }
-            var nextValue = IteratorValue(next);
-            try {
-              keys[k2] = nextValue;
-            } catch (e) {
-              try {
-                IteratorClose(iterator);
-              } finally {
-                throw e;
-              }
-            }
-            k2++;
-          }
-        }
-        function OrdinaryDeleteMetadata(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          if (!metadataMap.delete(MetadataKey))
-            return false;
-          if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O2);
-            if (!IsUndefined(targetMetadata)) {
-              targetMetadata.delete(P);
-              if (targetMetadata.size === 0) {
-                metadata2.delete(targetMetadata);
-              }
-            }
-          }
-          return true;
-        }
-      }
-      function CreateFallbackProvider(reflect) {
-        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
-        var metadataOwner = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O2, P) {
-            var metadataPropertySet = metadataOwner.get(O2);
-            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
-              return true;
-            }
-            if (getOwnMetadataKeys2(O2, P).length) {
-              if (IsUndefined(metadataPropertySet)) {
-                metadataPropertySet = new _Set();
-                metadataOwner.set(O2, metadataPropertySet);
-              }
-              metadataPropertySet.add(P);
-              return true;
-            }
-            return false;
-          },
-          OrdinaryDefineOwnMetadata: defineMetadata2,
-          OrdinaryHasOwnMetadata: hasOwnMetadata2,
-          OrdinaryGetOwnMetadata: getOwnMetadata2,
-          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
-          OrdinaryDeleteMetadata: deleteMetadata2
-        };
-        return provider;
-      }
-      function GetMetadataProvider(O2, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O2, P);
-        if (!IsUndefined(registeredProvider)) {
-          return registeredProvider;
-        }
-        if (Create) {
-          if (metadataRegistry.setProvider(O2, P, metadataProvider)) {
-            return metadataProvider;
-          }
-          throw new Error("Illegal state.");
-        }
-        return void 0;
-      }
-    });
-  })(Reflect2 || (Reflect2 = {}));
-  return ReflectLite;
-}
-requireReflectLite();
-function c(t2, n, e) {
-  return Reflect.getOwnMetadata(n, t2, e);
-}
-function i(t2, n, e, u, f2) {
-  const r = u(c(t2, n, f2) ?? e());
-  Reflect.defineMetadata(n, r, t2, f2);
-}
-function t(t2) {
-  const o = Object.getPrototypeOf(t2.prototype), r = o?.constructor;
-  return r;
-}
-function* l(...e) {
-  for (const t2 of e) yield* t2;
-}
-var f;
-!(function(e) {
-  e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(f || (f = {}));
-const h = "@inversifyjs/core/classMetadataReflectKey";
-function g() {
-  return { constructorArguments: [], lifecycle: { postConstructMethodNames: /* @__PURE__ */ new Set(), preDestroyMethodNames: /* @__PURE__ */ new Set() }, properties: /* @__PURE__ */ new Map(), scope: void 0 };
-}
-const m = "@inversifyjs/core/pendingClassMetadataCountReflectKey";
-const y = Symbol.for("@inversifyjs/core/InversifyCoreError");
-class M extends Error {
-  [y];
-  kind;
-  constructor(e, t2, n) {
-    super(t2, n), this[y] = true, this.kind = e;
-  }
-  static is(e) {
-    return "object" == typeof e && null !== e && true === e[y];
-  }
-  static isErrorOfKind(e, t2) {
-    return M.is(e) && e.kind === t2;
-  }
-}
-var I, b, w, C, S;
-function N(t2) {
-  const n = c(t2, h) ?? g();
-  if (!(function(t3) {
-    const n2 = c(t3, m);
-    return void 0 !== n2 && 0 !== n2;
-  })(t2)) return (function(e, t3) {
-    const n2 = [];
-    if (t3.length < e.length) throw new M(I.missingInjectionDecorator, `Found unexpected missing metadata on type "${e.name}". "${e.name}" constructor requires at least ${e.length.toString()} arguments, found ${t3.length.toString()} instead.
-Are you using @inject, @multiInject or @unmanaged decorators in every non optional constructor argument?
-
-If you're using typescript and want to rely on auto injection, set "emitDecoratorMetadata" compiler option to true`);
-    for (let e2 = 0; e2 < t3.length; ++e2) void 0 === t3[e2] && n2.push(e2);
-    if (n2.length > 0) throw new M(I.missingInjectionDecorator, `Found unexpected missing metadata on type "${e.name}" at constructor indexes "${n2.join('", "')}".
-
-Are you using @inject, @multiInject or @unmanaged decorators at those indexes?
-
-If you're using typescript and want to rely on auto injection, set "emitDecoratorMetadata" compiler option to true`);
-  })(t2, n.constructorArguments), n;
-  !(function(e, t3) {
-    const n2 = [];
-    for (let i2 = 0; i2 < t3.constructorArguments.length; ++i2) {
-      const o = t3.constructorArguments[i2];
-      void 0 !== o && o.kind !== b.unknown || n2.push(`  - Missing or incomplete metadata for type "${e.name}" at constructor argument with index ${i2.toString()}.
-Every constructor parameter must be decorated either with @inject, @multiInject or @unmanaged decorator.`);
-    }
-    for (const [i2, o] of t3.properties) o.kind === b.unknown && n2.push(`  - Missing or incomplete metadata for type "${e.name}" at property "${i2.toString()}".
-This property must be decorated either with @inject or @multiInject decorator.`);
-    if (0 === n2.length) throw new M(I.unknown, `Unexpected class metadata for type "${e.name}" with uncompletion traces.
-This might be caused by one of the following reasons:
-
-1. A third party library is targeting inversify reflection metadata.
-2. A bug is causing the issue. Consider submiting an issue to fix it.`);
-    throw new M(I.missingInjectionDecorator, `Invalid class metadata at type ${e.name}:
-
-${n2.join("\n\n")}`);
-  })(t2, n);
-}
-!(function(e) {
-  e[e.injectionDecoratorConflict = 0] = "injectionDecoratorConflict", e[e.missingInjectionDecorator = 1] = "missingInjectionDecorator", e[e.planning = 2] = "planning", e[e.resolution = 3] = "resolution", e[e.unknown = 4] = "unknown";
-})(I || (I = {})), (function(e) {
-  e[e.unknown = 32] = "unknown";
-})(b || (b = {})), (function(e) {
-  e.id = "id", e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(w || (w = {}));
-!(function(e) {
-  e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(C || (C = {}));
-function F() {
-  return 0;
-}
-function k(e) {
-  return (t2) => {
-    void 0 !== t2 && t2.kind === b.unknown && i(e, m, F, (e2) => e2 - 1);
-  };
-}
-function $(e, t2) {
-  return (...n) => (i2) => {
-    if (void 0 === i2) return e(...n);
-    if (i2.kind === S.unmanaged) throw new M(I.injectionDecoratorConflict, "Unexpected injection found. Multiple @inject, @multiInject or @unmanaged decorators found");
-    return t2(i2, ...n);
-  };
-}
-function D(e) {
-  if (e.kind !== b.unknown && true !== e.isFromTypescriptParamType) throw new M(I.injectionDecoratorConflict, "Unexpected injection found. Multiple @inject, @multiInject or @unmanaged decorators found");
-}
-!(function(e) {
-  e[e.multipleInjection = 0] = "multipleInjection", e[e.singleInjection = 1] = "singleInjection", e[e.unmanaged = 2] = "unmanaged";
-})(S || (S = {}));
-const V = $(function(e, t2, n) {
-  return e === S.multipleInjection ? { chained: n?.chained ?? false, kind: e, name: void 0, optional: false, tags: /* @__PURE__ */ new Map(), value: t2 } : { kind: e, name: void 0, optional: false, tags: /* @__PURE__ */ new Map(), value: t2 };
-}, function(e, t2, n, i2) {
-  return D(e), t2 === S.multipleInjection ? { ...e, chained: i2?.chained ?? false, kind: t2, value: n } : { ...e, kind: t2, value: n };
-});
-function O$1(e, t2) {
-  return (n) => {
-    const i2 = n.properties.get(t2);
-    return n.properties.set(t2, e(i2)), n;
-  };
-}
-var E;
-function _(e, t2, n, i2) {
-  if (M.isErrorOfKind(i2, I.injectionDecoratorConflict)) {
-    const o = (function(e2, t3, n2) {
-      if (void 0 === n2) {
-        if (void 0 === t3) throw new M(I.unknown, "Unexpected undefined property and index values");
-        return { kind: E.property, property: t3, targetClass: e2.constructor };
-      }
-      return "number" == typeof n2 ? { index: n2, kind: E.parameter, targetClass: e2 } : { kind: E.method, method: t3, targetClass: e2 };
-    })(e, t2, n);
-    throw new M(I.injectionDecoratorConflict, `Unexpected injection error.
-
-Cause:
-
-${i2.message}
-
-Details
-
-${(function(e2) {
-      switch (e2.kind) {
-        case E.method:
-          return `[class: "${e2.targetClass.name}", method: "${e2.method.toString()}"]`;
-        case E.parameter:
-          return `[class: "${e2.targetClass.name}", index: "${e2.index.toString()}"]`;
-        case E.property:
-          return `[class: "${e2.targetClass.name}", property: "${e2.property.toString()}"]`;
-      }
-    })(o)}`, { cause: i2 });
-  }
-  throw i2;
-}
-function z(e, t2) {
-  return (i$1, o, r) => {
-    try {
-      void 0 === r ? (function(e2, t3) {
-        const i$12 = L(e2, t3);
-        return (e3, t4) => {
-          i(e3.constructor, h, g, O$1(i$12(e3), t4));
-        };
-      })(e, t2)(i$1, o) : "number" == typeof r ? (function(e2, t3) {
-        const i$12 = L(e2, t3);
-        return (e3, t4, o2) => {
-          if (!/* @__PURE__ */ (function(e4, t5) {
-            return "function" == typeof e4 && void 0 === t5;
-          })(e3, t4)) throw new M(I.injectionDecoratorConflict, `Found an @inject decorator in a non constructor parameter.
-Found @inject decorator at method "${t4?.toString() ?? ""}" at class "${e3.constructor.name}"`);
-          i(e3, h, g, /* @__PURE__ */ (function(e4, t5) {
-            return (n) => {
-              const i2 = n.constructorArguments[t5];
-              return n.constructorArguments[t5] = e4(i2), n;
-            };
-          })(i$12(e3), o2));
-        };
-      })(e, t2)(i$1, o, r) : (function(e2, t3) {
-        const i$12 = L(e2, t3);
-        return (e3, t4, o2) => {
-          if (!(function(e4) {
-            return void 0 !== e4.set;
-          })(o2)) throw new M(I.injectionDecoratorConflict, `Found an @inject decorator in a non setter property method.
-Found @inject decorator at method "${t4.toString()}" at class "${e3.constructor.name}"`);
-          i(e3.constructor, h, g, O$1(i$12(e3), t4));
-        };
-      })(e, t2)(i$1, o, r);
-    } catch (e2) {
-      _(i$1, o, r, e2);
-    }
-  };
-}
-function L(e, t2) {
-  return (n) => {
-    const i2 = t2(n);
-    return (t3) => (i2(t3), e(t3));
-  };
-}
-function U(e) {
-  return z(V(S.singleInjection, e), k);
-}
-!(function(e) {
-  e[e.method = 0] = "method", e[e.parameter = 1] = "parameter", e[e.property = 2] = "property";
-})(E || (E = {}));
-function X(e, t2, n) {
-  let i2;
-  return e.extendConstructorArguments ?? true ? (i2 = [...t2.constructorArguments], n.constructorArguments.map((e2, t3) => {
-    i2[t3] = e2;
-  })) : i2 = n.constructorArguments, i2;
-}
-function H(e, t2, n) {
-  return e ? /* @__PURE__ */ new Set([...t2, ...n]) : n;
-}
-function J(e, t2, n) {
-  const i2 = e.lifecycle?.extendPostConstructMethods ?? true, o = H(e.lifecycle?.extendPreDestroyMethods ?? true, t2.lifecycle.preDestroyMethodNames, n.lifecycle.preDestroyMethodNames);
-  return { postConstructMethodNames: H(i2, t2.lifecycle.postConstructMethodNames, n.lifecycle.postConstructMethodNames), preDestroyMethodNames: o };
-}
-function Q(e, t2, n) {
-  let i2;
-  return i2 = e.extendProperties ?? true ? new Map(l(t2.properties, n.properties)) : n.properties, i2;
-}
-function Y(e) {
-  return (t2) => {
-    const i$1 = N(e.type);
-    i(t2, h, g, /* @__PURE__ */ (function(e2, t3) {
-      const n = (n2) => ({ constructorArguments: X(e2, t3, n2), lifecycle: J(e2, t3, n2), properties: Q(e2, t3, n2), scope: n2.scope });
-      return n;
-    })(e, i$1));
-  };
-}
-function Z(e) {
-  return (t$1) => {
-    const n = t(t$1);
-    if (void 0 === n) throw new M(I.injectionDecoratorConflict, `Expected base type for type "${t$1.name}", none found.`);
-    Y({ ...e, type: n })(t$1);
-  };
-}
-var fe;
-!(function(e) {
-  e[e.multipleInjection = 0] = "multipleInjection", e[e.singleInjection = 1] = "singleInjection";
-})(fe || (fe = {}));
-var We;
-!(function(e) {
-  e.bindingAdded = "bindingAdded", e.bindingRemoved = "bindingRemoved";
-})(We || (We = {}));
-var O;
-!(function(e) {
-  e[e.invalidOperation = 0] = "invalidOperation";
-})(O || (O = {}));
-var browser = { exports: {} };
-var ms;
-var hasRequiredMs;
-function requireMs() {
-  if (hasRequiredMs) return ms;
-  hasRequiredMs = 1;
-  var s = 1e3;
-  var m2 = s * 60;
-  var h2 = m2 * 60;
-  var d = h2 * 24;
-  var w2 = d * 7;
-  var y2 = d * 365.25;
-  ms = function(val, options) {
-    options = options || {};
-    var type = typeof val;
-    if (type === "string" && val.length > 0) {
-      return parse(val);
-    } else if (type === "number" && isFinite(val)) {
-      return options.long ? fmtLong(val) : fmtShort(val);
-    }
-    throw new Error(
-      "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
-    );
-  };
-  function parse(str) {
-    str = String(str);
-    if (str.length > 100) {
-      return;
-    }
-    var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-      str
-    );
-    if (!match) {
-      return;
-    }
-    var n = parseFloat(match[1]);
-    var type = (match[2] || "ms").toLowerCase();
-    switch (type) {
-      case "years":
-      case "year":
-      case "yrs":
-      case "yr":
-      case "y":
-        return n * y2;
-      case "weeks":
-      case "week":
-      case "w":
-        return n * w2;
-      case "days":
-      case "day":
-      case "d":
-        return n * d;
-      case "hours":
-      case "hour":
-      case "hrs":
-      case "hr":
-      case "h":
-        return n * h2;
-      case "minutes":
-      case "minute":
-      case "mins":
-      case "min":
-      case "m":
-        return n * m2;
-      case "seconds":
-      case "second":
-      case "secs":
-      case "sec":
-      case "s":
-        return n * s;
-      case "milliseconds":
-      case "millisecond":
-      case "msecs":
-      case "msec":
-      case "ms":
-        return n;
-      default:
-        return void 0;
-    }
-  }
-  function fmtShort(ms2) {
-    var msAbs = Math.abs(ms2);
-    if (msAbs >= d) {
-      return Math.round(ms2 / d) + "d";
-    }
-    if (msAbs >= h2) {
-      return Math.round(ms2 / h2) + "h";
-    }
-    if (msAbs >= m2) {
-      return Math.round(ms2 / m2) + "m";
-    }
-    if (msAbs >= s) {
-      return Math.round(ms2 / s) + "s";
-    }
-    return ms2 + "ms";
-  }
-  function fmtLong(ms2) {
-    var msAbs = Math.abs(ms2);
-    if (msAbs >= d) {
-      return plural(ms2, msAbs, d, "day");
-    }
-    if (msAbs >= h2) {
-      return plural(ms2, msAbs, h2, "hour");
-    }
-    if (msAbs >= m2) {
-      return plural(ms2, msAbs, m2, "minute");
-    }
-    if (msAbs >= s) {
-      return plural(ms2, msAbs, s, "second");
-    }
-    return ms2 + " ms";
-  }
-  function plural(ms2, msAbs, n, name) {
-    var isPlural = msAbs >= n * 1.5;
-    return Math.round(ms2 / n) + " " + name + (isPlural ? "s" : "");
-  }
-  return ms;
-}
-var common;
-var hasRequiredCommon;
-function requireCommon() {
-  if (hasRequiredCommon) return common;
-  hasRequiredCommon = 1;
-  function setup(env) {
-    createDebug.debug = createDebug;
-    createDebug.default = createDebug;
-    createDebug.coerce = coerce;
-    createDebug.disable = disable;
-    createDebug.enable = enable;
-    createDebug.enabled = enabled;
-    createDebug.humanize = requireMs();
-    createDebug.destroy = destroy;
-    Object.keys(env).forEach((key) => {
-      createDebug[key] = env[key];
-    });
-    createDebug.names = [];
-    createDebug.skips = [];
-    createDebug.formatters = {};
-    function selectColor(namespace) {
-      let hash = 0;
-      for (let i2 = 0; i2 < namespace.length; i2++) {
-        hash = (hash << 5) - hash + namespace.charCodeAt(i2);
-        hash |= 0;
-      }
-      return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
-    }
-    createDebug.selectColor = selectColor;
-    function createDebug(namespace) {
-      let prevTime;
-      let enableOverride = null;
-      let namespacesCache;
-      let enabledCache;
-      function debug2(...args) {
-        if (!debug2.enabled) {
-          return;
-        }
-        const self2 = debug2;
-        const curr = Number(/* @__PURE__ */ new Date());
-        const ms2 = curr - (prevTime || curr);
-        self2.diff = ms2;
-        self2.prev = prevTime;
-        self2.curr = curr;
-        prevTime = curr;
-        args[0] = createDebug.coerce(args[0]);
-        if (typeof args[0] !== "string") {
-          args.unshift("%O");
-        }
-        let index = 0;
-        args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
-          if (match === "%%") {
-            return "%";
-          }
-          index++;
-          const formatter = createDebug.formatters[format];
-          if (typeof formatter === "function") {
-            const val = args[index];
-            match = formatter.call(self2, val);
-            args.splice(index, 1);
-            index--;
-          }
-          return match;
-        });
-        createDebug.formatArgs.call(self2, args);
-        const logFn = self2.log || createDebug.log;
-        logFn.apply(self2, args);
-      }
-      debug2.namespace = namespace;
-      debug2.useColors = createDebug.useColors();
-      debug2.color = createDebug.selectColor(namespace);
-      debug2.extend = extend;
-      debug2.destroy = createDebug.destroy;
-      Object.defineProperty(debug2, "enabled", {
-        enumerable: true,
-        configurable: false,
-        get: () => {
-          if (enableOverride !== null) {
-            return enableOverride;
-          }
-          if (namespacesCache !== createDebug.namespaces) {
-            namespacesCache = createDebug.namespaces;
-            enabledCache = createDebug.enabled(namespace);
-          }
-          return enabledCache;
-        },
-        set: (v) => {
-          enableOverride = v;
-        }
-      });
-      if (typeof createDebug.init === "function") {
-        createDebug.init(debug2);
-      }
-      return debug2;
-    }
-    function extend(namespace, delimiter) {
-      const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
-      newDebug.log = this.log;
-      return newDebug;
-    }
-    function enable(namespaces) {
-      createDebug.save(namespaces);
-      createDebug.namespaces = namespaces;
-      createDebug.names = [];
-      createDebug.skips = [];
-      const split = (typeof namespaces === "string" ? namespaces : "").trim().replace(/\s+/g, ",").split(",").filter(Boolean);
-      for (const ns of split) {
-        if (ns[0] === "-") {
-          createDebug.skips.push(ns.slice(1));
-        } else {
-          createDebug.names.push(ns);
-        }
-      }
-    }
-    function matchesTemplate(search, template) {
-      let searchIndex = 0;
-      let templateIndex = 0;
-      let starIndex = -1;
-      let matchIndex = 0;
-      while (searchIndex < search.length) {
-        if (templateIndex < template.length && (template[templateIndex] === search[searchIndex] || template[templateIndex] === "*")) {
-          if (template[templateIndex] === "*") {
-            starIndex = templateIndex;
-            matchIndex = searchIndex;
-            templateIndex++;
-          } else {
-            searchIndex++;
-            templateIndex++;
-          }
-        } else if (starIndex !== -1) {
-          templateIndex = starIndex + 1;
-          matchIndex++;
-          searchIndex = matchIndex;
-        } else {
-          return false;
-        }
-      }
-      while (templateIndex < template.length && template[templateIndex] === "*") {
-        templateIndex++;
-      }
-      return templateIndex === template.length;
-    }
-    function disable() {
-      const namespaces = [
-        ...createDebug.names,
-        ...createDebug.skips.map((namespace) => "-" + namespace)
-      ].join(",");
-      createDebug.enable("");
-      return namespaces;
-    }
-    function enabled(name) {
-      for (const skip of createDebug.skips) {
-        if (matchesTemplate(name, skip)) {
-          return false;
-        }
-      }
-      for (const ns of createDebug.names) {
-        if (matchesTemplate(name, ns)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    function coerce(val) {
-      if (val instanceof Error) {
-        return val.stack || val.message;
-      }
-      return val;
-    }
-    function destroy() {
-      console.warn("Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
-    }
-    createDebug.enable(createDebug.load());
-    return createDebug;
-  }
-  common = setup;
-  return common;
-}
-var hasRequiredBrowser;
-function requireBrowser() {
-  if (hasRequiredBrowser) return browser.exports;
-  hasRequiredBrowser = 1;
-  (function(module, exports$1) {
-    var define_process_env_default = {};
-    exports$1.formatArgs = formatArgs;
-    exports$1.save = save;
-    exports$1.load = load;
-    exports$1.useColors = useColors;
-    exports$1.storage = localstorage();
-    exports$1.destroy = /* @__PURE__ */ (() => {
-      let warned = false;
-      return () => {
-        if (!warned) {
-          warned = true;
-          console.warn("Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
-        }
-      };
-    })();
-    exports$1.colors = [
-      "#0000CC",
-      "#0000FF",
-      "#0033CC",
-      "#0033FF",
-      "#0066CC",
-      "#0066FF",
-      "#0099CC",
-      "#0099FF",
-      "#00CC00",
-      "#00CC33",
-      "#00CC66",
-      "#00CC99",
-      "#00CCCC",
-      "#00CCFF",
-      "#3300CC",
-      "#3300FF",
-      "#3333CC",
-      "#3333FF",
-      "#3366CC",
-      "#3366FF",
-      "#3399CC",
-      "#3399FF",
-      "#33CC00",
-      "#33CC33",
-      "#33CC66",
-      "#33CC99",
-      "#33CCCC",
-      "#33CCFF",
-      "#6600CC",
-      "#6600FF",
-      "#6633CC",
-      "#6633FF",
-      "#66CC00",
-      "#66CC33",
-      "#9900CC",
-      "#9900FF",
-      "#9933CC",
-      "#9933FF",
-      "#99CC00",
-      "#99CC33",
-      "#CC0000",
-      "#CC0033",
-      "#CC0066",
-      "#CC0099",
-      "#CC00CC",
-      "#CC00FF",
-      "#CC3300",
-      "#CC3333",
-      "#CC3366",
-      "#CC3399",
-      "#CC33CC",
-      "#CC33FF",
-      "#CC6600",
-      "#CC6633",
-      "#CC9900",
-      "#CC9933",
-      "#CCCC00",
-      "#CCCC33",
-      "#FF0000",
-      "#FF0033",
-      "#FF0066",
-      "#FF0099",
-      "#FF00CC",
-      "#FF00FF",
-      "#FF3300",
-      "#FF3333",
-      "#FF3366",
-      "#FF3399",
-      "#FF33CC",
-      "#FF33FF",
-      "#FF6600",
-      "#FF6633",
-      "#FF9900",
-      "#FF9933",
-      "#FFCC00",
-      "#FFCC33"
-    ];
-    function useColors() {
-      if (typeof window !== "undefined" && window.process && (window.process.type === "renderer" || window.process.__nwjs)) {
-        return true;
-      }
-      if (typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-        return false;
-      }
-      let m2;
-      return typeof document !== "undefined" && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
-      typeof window !== "undefined" && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
-      // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-      typeof navigator !== "undefined" && navigator.userAgent && (m2 = navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/)) && parseInt(m2[1], 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
-      typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
-    }
-    function formatArgs(args) {
-      args[0] = (this.useColors ? "%c" : "") + this.namespace + (this.useColors ? " %c" : " ") + args[0] + (this.useColors ? "%c " : " ") + "+" + module.exports.humanize(this.diff);
-      if (!this.useColors) {
-        return;
-      }
-      const c2 = "color: " + this.color;
-      args.splice(1, 0, c2, "color: inherit");
-      let index = 0;
-      let lastC = 0;
-      args[0].replace(/%[a-zA-Z%]/g, (match) => {
-        if (match === "%%") {
-          return;
-        }
-        index++;
-        if (match === "%c") {
-          lastC = index;
-        }
-      });
-      args.splice(lastC, 0, c2);
-    }
-    exports$1.log = console.debug || console.log || (() => {
-    });
-    function save(namespaces) {
-      try {
-        if (namespaces) {
-          exports$1.storage.setItem("debug", namespaces);
-        } else {
-          exports$1.storage.removeItem("debug");
-        }
-      } catch (error) {
-      }
-    }
-    function load() {
-      let r;
-      try {
-        r = exports$1.storage.getItem("debug") || exports$1.storage.getItem("DEBUG");
-      } catch (error) {
-      }
-      if (!r && typeof process !== "undefined" && "env" in process) {
-        r = define_process_env_default.DEBUG;
-      }
-      return r;
-    }
-    function localstorage() {
-      try {
-        return localStorage;
-      } catch (error) {
-      }
-    }
-    module.exports = requireCommon()(exports$1);
-    const { formatters } = module.exports;
-    formatters.j = function(v) {
-      try {
-        return JSON.stringify(v);
-      } catch (error) {
-        return "[UnexpectedJSONParseError]: " + error.message;
-      }
-    };
-  })(browser, browser.exports);
-  return browser.exports;
-}
-var browserExports = requireBrowser();
-const debug = /* @__PURE__ */ getDefaultExportFromCjs(browserExports);
-debug.log = console.log.bind(console);
-if (typeof localStorage !== "undefined") {
-  const debugConfig = localStorage.getItem("debug");
-  if (debugConfig) {
-    debug.enable(debugConfig);
-  }
-}
-class LoggerFactory {
-  /**
-   * Create a namespaced logger
-   * @param namespace The namespace for the logger (e.g., 'daanse:ogcsta:mqtt')
-   */
-  createLogger(namespace) {
-    return debug(namespace);
-  }
-  /**
-   * Enable specific debug namespaces
-   * @param namespaces Comma-separated list of namespaces (e.g., 'daanse:*,express:*')
-   */
-  enable(namespaces) {
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem("debug", namespaces);
-    }
-    debug.enable(namespaces);
-  }
-  /**
-   * Disable all debug logging
-   */
-  disable() {
-    if (typeof localStorage !== "undefined") {
-      localStorage.removeItem("debug");
-    }
-    debug.disable();
-  }
-  /**
-   * Check if a namespace is enabled
-   * @param namespace The namespace to check
-   */
-  isEnabled(namespace) {
-    const logger = debug(namespace);
-    return logger.enabled;
-  }
-}
-const loggerFactory = new LoggerFactory();
-if (typeof window !== "undefined") {
-  window.__daanseLoggerFactory = loggerFactory;
-  window.__daanseDebug = debug;
-}
-var __defProp$3 = Object.defineProperty;
-var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, typeof key !== "symbol" ? key + "" : key, value);
-var __defProp2$2 = Object.defineProperty;
-var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
-var __decorateClass$7 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp2$2(target, key, result);
-  return result;
-};
-let VariableRepository = class {
-  constructor() {
-    __publicField$2(this, "availableVariables", /* @__PURE__ */ new Map());
-    __publicField$2(this, "availableVariablesByScope", /* @__PURE__ */ new Map());
-    __publicField$2(this, "availableVariablesTypes", /* @__PURE__ */ new Map());
-    __publicField$2(this, "tinyEmitter");
-  }
-  registerVariableType(type, identifiers2) {
-    if (this.availableVariablesTypes.has(type)) {
-      throw Error("Multiple registration of the same variable type");
-    }
-    this.availableVariablesTypes.set(type, identifiers2);
-  }
-  /**
-   * Nimmt die Registrierung eines Variablentyps zurück.
-   *
-   * Gegenstück zu registerVariableType, damit ein Modul seine Registrierung
-   * in deactivate() wieder aufheben kann. Betrifft nur den Typ; angelegte
-   * Variablen werden über removeVariable entfernt.
-   *
-   * @returns ob der Typ registriert war
-   */
-  unregisterVariableType(type) {
-    return this.availableVariablesTypes.delete(type);
-  }
-  getRegisteredVariableTypes() {
-    return Array.from(this.availableVariablesTypes.keys());
-  }
-  getVariableIdentifiers(type) {
-    return this.availableVariablesTypes.get(type);
-  }
-  registerVariable(name, type, config) {
-    const identifiers2 = this.availableVariablesTypes.get(type);
-    if (identifiers2) {
-      const variableFactory = container.get(identifiers2.Variable);
-      const variable = variableFactory(name, config);
-      const scope = config.scope || "global";
-      const scopeKey = config.pageId && scope === "page" ? `${scope}-${config.pageId}` : scope;
-      if (!this.availableVariablesByScope.has(scopeKey)) {
-        this.availableVariablesByScope.set(scopeKey, /* @__PURE__ */ new Map());
-      }
-      this.availableVariablesByScope.get(scopeKey).set(name, variable);
-      if (!config.scope || config.scope === "global") {
-        this.availableVariables.set(name, variable);
-      }
-    }
-  }
-  getVariable(name) {
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(name)) {
-        return scopeMap.get(name);
-      }
-    }
-    if (this.availableVariables.has(name)) {
-      return this.availableVariables.get(name);
-    }
-    return void 0;
-  }
-  getVariableWithContext(name, pageId) {
-    if (pageId) {
-      const pageScopeKey = `page-${pageId}`;
-      const pageScope = this.availableVariablesByScope.get(pageScopeKey);
-      if (pageScope && pageScope.has(name)) {
-        return pageScope.get(name);
-      }
-    }
-    const globalScope = this.availableVariablesByScope.get("global");
-    if (globalScope && globalScope.has(name)) {
-      return globalScope.get(name);
-    }
-    return this.availableVariables.get(name);
-  }
-  getVariableById(id) {
-    for (const scopeMap of this.availableVariablesByScope.values()) {
-      for (const variable of scopeMap.values()) {
-        if (variable.id === id) {
-          return variable;
-        }
-      }
-    }
-    for (const variable of this.availableVariables.values()) {
-      if (variable.id === id) {
-        return variable;
-      }
-    }
-    return void 0;
-  }
-  removeVariable(nameOrId) {
-    let variableToRemove = this.getVariableById(nameOrId);
-    let nameToRemove = nameOrId;
-    if (variableToRemove) {
-      nameToRemove = variableToRemove.name;
-      const scope = variableToRemove.scope || "global";
-      const scopeKey = variableToRemove.pageId && scope === "page" ? `page-${variableToRemove.pageId}` : scope;
-      const scopeMap = this.availableVariablesByScope.get(scopeKey);
-      if (scopeMap) {
-        scopeMap.delete(nameToRemove);
-      }
-    }
-    if (this.availableVariables.has(nameToRemove)) {
-      this.availableVariables.delete(nameToRemove);
-    }
-  }
-  getAllVariables() {
-    const allVariables = /* @__PURE__ */ new Map();
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        allVariables.set(variable.id, [variable.name, variable]);
-      }
-    }
-    for (const [name, variable] of this.availableVariables) {
-      if (variable.id && !allVariables.has(variable.id)) {
-        allVariables.set(variable.id, [name, variable]);
-      }
-    }
-    return Array.from(allVariables.values());
-  }
-  renameVariable(newname, oldname) {
-    let avar = null;
-    let foundScopeKey = null;
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(oldname)) {
-        avar = scopeMap.get(oldname);
-        foundScopeKey = scopeKey;
-        break;
-      }
-    }
-    if (!avar) {
-      avar = this.availableVariables.get(oldname);
-      if (avar) {
-        foundScopeKey = "old-system";
-      }
-    }
-    if (avar && foundScopeKey) {
-      if (foundScopeKey !== "old-system") {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
-        if (scopeMap) {
-          scopeMap.set(newname, avar);
-          scopeMap.delete(oldname);
-        }
-      }
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar);
-        this.availableVariables.delete(oldname);
-      }
-    }
-  }
-  renameVariableById(id, newname) {
-    let avar = null;
-    let foundScopeKey = null;
-    let oldname = null;
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = scopeKey;
-          oldname = name;
-          break;
-        }
-      }
-      if (avar) break;
-    }
-    if (!avar) {
-      for (const [name, variable] of this.availableVariables) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = "old-system";
-          oldname = name;
-          break;
-        }
-      }
-    }
-    if (avar && foundScopeKey && oldname) {
-      if (foundScopeKey !== "old-system") {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
-        if (scopeMap) {
-          scopeMap.set(newname, avar);
-          scopeMap.delete(oldname);
-        }
-      }
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar);
-        this.availableVariables.delete(oldname);
-      }
-    }
-  }
-  getVariablesByScope(scope, pageId) {
-    const allVars = Array.from(this.availableVariables);
-    return allVars.filter(([name, variable]) => {
-      if (scope === "global") {
-        return variable.scope === "global";
-      } else {
-        return variable.scope === "page" && variable.pageId === pageId;
-      }
-    });
-  }
-  getVariableWithPageContext(pageId, name) {
-    const pageVar = this.getVariablesByScope("page", pageId).find(([varName]) => varName === name);
-    if (pageVar) {
-      return pageVar[1];
-    }
-    return this.getVariable(name);
-  }
-  /**
-   * Sets or updates a global variable (Action method)
-   */
-  setGlobalVariable(variableName, value) {
-    const existingVar = this.getVariable(variableName);
-    if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "global"
-      });
-    }
-  }
-  /**
-   * Sets or updates a page-scoped variable (Action method)
-   */
-  setPageVariable(variableName, value, pageId) {
-    const existingVar = this.getVariableWithContext(variableName, pageId);
-    if (existingVar && typeof existingVar.set === "function") {
-      existingVar.set(value);
-    } else if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "page",
-        pageId
-      });
-    }
-  }
-};
-__decorateClass$7([
-  inject("TINY_EMITTER")
-], VariableRepository.prototype, "tinyEmitter", 2);
-VariableRepository = __decorateClass$7([
-  injectable()
-], VariableRepository);
-loggerFactory.createLogger("daanse:variable:actions");
-const VARIABLE_REPOSITORY = "VariableRepository";
-const identifier$1 = Symbol.for(VARIABLE_REPOSITORY);
-const PAGE_CONTEXT = "PageContext";
-const identifier = Symbol.for(PAGE_CONTEXT);
-const byteToHex = [];
-for (let i2 = 0; i2 < 256; ++i2) {
-  byteToHex.push((i2 + 256).toString(16).slice(1));
-}
-function unsafeStringify(arr, offset = 0) {
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
-}
-const rnds8 = new Uint8Array(16);
-function rng() {
-  return crypto.getRandomValues(rnds8);
-}
-function v4(options, buf, offset) {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return _v4(options);
-}
-function _v4(options, buf, offset) {
-  options = options || {};
-  const rnds = options.random ?? options.rng?.() ?? rng();
-  if (rnds.length < 16) {
-    throw new Error("Random bytes length must be >= 16");
-  }
-  rnds[6] = rnds[6] & 15 | 64;
-  rnds[8] = rnds[8] & 63 | 128;
-  return unsafeStringify(rnds);
-}
 var __defProp$2 = Object.defineProperty;
 var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
-class AccessError extends Error {
-  constructor(name) {
-    super();
-    __publicField$1(this, "name");
-    __publicField$1(this, "message", "Access Error on Variable Scope");
-    this.name = name;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "", value);
+function requireParameterFactory() {
+  {
+    throw new Error("ComputedStoreParameter factory not provided - is lib.variables active?");
   }
-}
-var __defProp$1$1 = Object.defineProperty;
-var __decorateClass$5 = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp$1$1(target, key, result);
-  return result;
-};
-class Variable {
-  constructor() {
-    __publicField$1(this, "subscribers", []);
-    __publicField$1(this, "innerValue");
-    __publicField$1(this, "intervalFn", () => {
-    });
-    __publicField$1(this, "description", "");
-    __publicField$1(this, "refreshInterval", 0);
-    __publicField$1(this, "refreshType", RefreshType.None);
-    __publicField$1(this, "refreshIntervalId", 0);
-    __publicField$1(this, "refreshTrigger", null);
-    __publicField$1(this, "id", v4());
-    __publicField$1(this, "type", null);
-    __publicField$1(this, "name", null);
-    __publicField$1(this, "scope", "global");
-    __publicField$1(this, "accessMode", "external-writable");
-    __publicField$1(this, "pageId");
-    __publicField$1(this, "eventBus");
-    __publicField$1(this, "pageContextService");
-    __publicField$1(this, "storage");
-  }
-  init(name, config) {
-    this.name = name;
-    this.scope = config.scope || "global";
-    this.accessMode = config.accessMode || "external-writable";
-    this.pageId = config.pageId;
-    this.update(config);
-  }
-  rename(newName) {
-    this.name = newName;
-  }
-  update(config) {
-    var _a, _b;
-    this.description = config.description;
-    this.refreshInterval = config.refreshInterval || 0;
-    this.refreshInterval = Math.max(this.refreshInterval, 300);
-    this.refreshType = config.refreshType || RefreshType.None;
-    this.refreshTrigger = config.refreshTrigger || null;
-    if (this.refreshType === RefreshType.Interval) {
-      if (this.refreshInterval) {
-        this.refreshIntervalId = setInterval(() => {
-          this.intervalFn();
-        }, this.refreshInterval);
-      }
-    } else if (this.refreshType === RefreshType.Trigger) {
-      if (this.refreshTrigger) {
-        (_a = this.eventBus) == null ? void 0 : _a.on(this.refreshTrigger, () => {
-          this.intervalFn();
-        });
-      }
-    }
-    (_b = this.eventBus) == null ? void 0 : _b.emit(VariableEvents.VariableUpdated);
-  }
-  set onInterval(onInterval) {
-    this.intervalFn = onInterval;
-  }
-  get value() {
-    var _a;
-    const currentPageId = (_a = this.pageContextService) == null ? void 0 : _a.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
-    return this.innerValue;
-  }
-  set value(value) {
-    var _a;
-    const currentPageId = (_a = this.pageContextService) == null ? void 0 : _a.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
-    if (this.accessMode == "readonly") {
-      throw new AccessError(this.name);
-    }
-    console.log("Setting value, current page:", currentPageId);
-    this.innerValue = value;
-    console.log("Value changed");
-    console.log(this.subscribers[0]);
-    this.subscribers.forEach((subscriber) => subscriber());
-  }
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
-  }
-  unsubscribe(subscriber) {
-    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
-  }
-  getSubscriptions() {
-    return this.subscribers;
-  }
-  notyfy() {
-    var _a;
-    (_a = this.eventBus) == null ? void 0 : _a.emit(VariableEvents.VariableUpdated);
-    this.subscribers.forEach((subscriber) => subscriber());
-  }
-  forceUpdate() {
-  }
-  clearInterval() {
-    clearInterval(this.refreshIntervalId);
-  }
-  clearTrigger() {
-    var _a;
-    if (this.refreshTrigger) {
-      (_a = this.eventBus) == null ? void 0 : _a.off(this.refreshTrigger);
-    }
-  }
-  canWriteFromPage() {
-    return this.accessMode === "page-only" || this.accessMode === "external-writable";
-  }
-  canWriteFromExternal() {
-    return this.accessMode === "external-writable";
-  }
-  serialize() {
-    const ret = {
-      id: this.id,
-      name: this.name,
-      description: this.description,
-      refreshType: this.refreshType,
-      refreshInterval: this.refreshInterval ?? void 0,
-      type: this.type,
-      scope: this.scope,
-      accessMode: this.accessMode,
-      pageId: this.pageId
-    };
-    return ret;
-  }
-}
-__decorateClass$5([
-  U(identifiers$1.TINY_EMITTER)
-], Variable.prototype, "eventBus");
-__decorateClass$5([
-  U(identifier)
-], Variable.prototype, "pageContextService");
-var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
-var __decorateClass$4 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const TYPE$3 = "ComputedVariable";
-const symbol$5 = Symbol.for(TYPE$3);
-let ComputedVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerExpression", "");
-    __publicField$1(this, "type", TYPE$3);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.innerExpression = config.expression;
-    this.initSubscriptions();
-  }
-  update(config) {
-    super.update(config);
-    this.expression = config.expression;
-    this.initSubscriptions();
-  }
-  get expression() {
-    return this.innerExpression;
-  }
-  set expression(expression) {
-    this.innerExpression = expression;
-    this.initSubscriptions();
-  }
-  // TODO: Think if the inner value is necessary
-  get value() {
-    try {
-      return this.computeValue();
-    } catch (e) {
-      return `Incorrect expression: ${this.innerExpression}`;
-    }
-  }
-  getDependencies() {
-    const regexp = /\$(\S+)*/gm;
-    const dependencies = [];
-    let m2;
-    while ((m2 = regexp.exec(this.innerExpression)) !== null) {
-      if (m2.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m2[1]);
-    }
-    return dependencies;
-  }
-  computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    dependencies.forEach((dep) => {
-      var _a, _b, _c, _d, _e, _f;
-      result = result.replace(
-        `$${dep}`,
-        typeof ((_b = (_a = this.storage) == null ? void 0 : _a.getVariable(dep)) == null ? void 0 : _b.value) === "number" ? (_d = (_c = this.storage) == null ? void 0 : _c.getVariable(dep)) == null ? void 0 : _d.value : `'${(_f = (_e = this.storage) == null ? void 0 : _e.getVariable(dep)) == null ? void 0 : _f.value}'`
-      );
-    });
-    const execFn = new Function(`return ${result}`);
-    return execFn();
-  }
-  initSubscriptions() {
-    const dependencies = this.getDependencies();
-    dependencies.forEach((dep) => {
-      var _a;
-      console.log(dep);
-      const depencencyVariable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (depencencyVariable) {
-        depencencyVariable.subscribe(() => {
-          console.log("dep changed", dep);
-          this.notyfy();
-          console.log("Variable changed");
-        });
-      } else {
-        console.log("dep pending:", dep);
-      }
-    });
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.expression = this.innerExpression;
-    ret.type = this.type;
-    return ret;
-  }
-};
-ComputedVariable = __decorateClass$4([
-  Z({
-    extendProperties: true
-  })
-], ComputedVariable);
-if (!container.isBound(ComputedVariable)) {
-  container.bind(ComputedVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$5)) {
-  container.bind(symbol$5).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(ComputedVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-const TYPE$2 = "ConstantVariable";
-const symbol$4 = Symbol.for(TYPE$2);
-class ConstantVariable extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", TYPE$2);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.value = config.value;
-  }
-  update(config) {
-    super.update(config);
-    this.value = config.value;
-  }
-  get value() {
-    return super.value;
-  }
-  set value(value) {
-    super.value = value;
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.type = this.type;
-    return ret;
-  }
-}
-if (!container.isBound(ConstantVariable)) {
-  container.bind(ConstantVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$4)) {
-  container.bind(symbol$4).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(ConstantVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
-var __decorateClass$3 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$3 = Symbol.for("QueryVariable");
-let QueryVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerQueryParam", "");
-    __publicField$1(this, "type", "query");
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.parameter = config.queryParam;
-  }
-  get parameter() {
-    return this.innerQueryParam;
-  }
-  set parameter(parameter) {
-    this.innerQueryParam = parameter;
-    const paramValue = new URLSearchParams(window.location.search).get(
-      this.innerQueryParam
-    );
-    super.value = paramValue;
-  }
-  get value() {
-    return super.value;
-  }
-};
-QueryVariable = __decorateClass$3([
-  Z({
-    extendProperties: true
-  })
-], QueryVariable);
-if (!container.isBound(QueryVariable)) {
-  container.bind(QueryVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$3)) {
-  container.bind(symbol$3).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(QueryVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$1$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$2 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$2 = Symbol.for("RequestVariable");
-let RequestVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerRequest", "");
-    __publicField$1(this, "type", "request");
-    __publicField$1(this, "time", 0);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.request = config.request;
-    super.onInterval = () => {
-      this.request = config.request;
-    };
-  }
-  get request() {
-    return this.innerRequest;
-  }
-  set request(request) {
-    this.innerRequest = request;
-    fetch(this.innerRequest).then((response) => response.json()).then((data) => {
-      super.value = data;
-    });
-  }
-  get value() {
-    return JSON.stringify(super.value);
-  }
-  set value(value) {
-  }
-};
-RequestVariable = __decorateClass$2([
-  Z({
-    extendProperties: true
-  })
-], RequestVariable);
-if (!container.isBound(RequestVariable)) {
-  container.bind(RequestVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$2)) {
-  container.bind(symbol$2).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(RequestVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
-var __decorateClass$1$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$1 = Symbol.for("TimeVariable");
-let TimeVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", "time");
-  }
-  init(name, config) {
-    super.init(name, config);
-    super.value = Date.now();
-    super.onInterval = () => {
-      super.value = Date.now();
-    };
-  }
-  get value() {
-    return super.value;
-  }
-  set value(value) {
-  }
-};
-TimeVariable = __decorateClass$1$1([
-  Z({
-    extendProperties: true
-  })
-], TimeVariable);
-if (!container.isBound(TimeVariable)) {
-  container.bind(TimeVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$1)) {
-  container.bind(symbol$1).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(TimeVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-const TYPE$1 = "DateTimePickerVariable";
-const symbol = Symbol.for(TYPE$1);
-class DateTimePickerVariable extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", TYPE$1);
-    __publicField$1(this, "innerDatetime", "");
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.innerDatetime = config.datetime || "";
-  }
-  update(config) {
-    super.update(config);
-    this.innerDatetime = config.datetime || "";
-  }
-  get datetime() {
-    return this.innerDatetime;
-  }
-  set datetime(value) {
-    this.innerDatetime = value;
-    this.notyfy();
-  }
-  get value() {
-    return this.innerDatetime;
-  }
-  set value(value) {
-    this.innerDatetime = value;
-    this.notyfy();
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.datetime = this.innerDatetime;
-    ret.type = this.type;
-    return ret;
-  }
-}
-if (!container.isBound(DateTimePickerVariable)) {
-  container.bind(DateTimePickerVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol)) {
-  container.bind(symbol).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(DateTimePickerVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __defProp2$1 = Object.defineProperty;
-var __decorateClass$6 = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp2$1(target, key, result);
-  return result;
-};
-class ComputedStoreParameter {
-  constructor() {
-    __publicField$1(this, "innerExpression", "");
-    __publicField$1(this, "currentSubscriptions", /* @__PURE__ */ new Map());
-    __publicField$1(this, "refreshCb", () => {
-    });
-    __publicField$1(this, "eventBus");
-    __publicField$1(this, "storage");
-  }
-  init(expression, refreshCb) {
-    var _a, _b, _c, _d, _e;
-    this.innerExpression = expression;
-    this.refreshCb = refreshCb;
-    (_a = this.eventBus) == null ? void 0 : _a.on(VariableEvents.VariableCreated, () => {
-      refreshCb();
-    });
-    (_b = this.eventBus) == null ? void 0 : _b.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
-    });
-    (_c = this.eventBus) == null ? void 0 : _c.on(VariableEvents.VariableUpdated, () => {
-      console.log("Variable updated");
-      refreshCb();
-    });
-    (_d = this.eventBus) == null ? void 0 : _d.on(VariableEvents.VariablesCleared, () => {
-      refreshCb();
-    });
-    (_e = this.eventBus) == null ? void 0 : _e.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
-    });
-  }
-  // Case 1: Static string
-  // Case 2: Computed string with variables
-  //      - updated when variables change
-  //      - updated when variables are added or removed
-  getDependencies() {
-    const regexp = /\$([a-zA-Z_][\w]*)/g;
-    const dependencies = [];
-    let m2;
-    while ((m2 = regexp.exec(this.innerExpression)) !== null) {
-      if (m2.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m2[1]);
-    }
-    return dependencies;
-  }
-  computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    if (dependencies.length === 0) {
-      return result;
-    }
-    this.currentSubscriptions.forEach((subFn, key) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(key);
-      if (variable) {
-        variable.unsubscribe(subFn);
-      }
-    });
-    this.currentSubscriptions.clear();
-    dependencies.forEach((dep) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (variable) {
-        const subFn = () => {
-          this.refreshCb();
-        };
-        this.currentSubscriptions.set(dep, subFn);
-        variable.subscribe(subFn);
-      }
-    });
-    dependencies.forEach((dep) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (variable && variable.value !== void 0) {
-        result = result.replace(
-          `$${dep}`,
-          typeof variable.value === "number" ? variable.value.toString() : `${variable.value}`
-        );
-      }
-    });
-    return result;
-  }
-  get value() {
-    return this.computeValue();
-  }
-}
-__decorateClass$6([
-  U(identifiers$1.TINY_EMITTER)
-], ComputedStoreParameter.prototype, "eventBus");
-__decorateClass$6([
-  U(identifier$1)
-], ComputedStoreParameter.prototype, "storage");
-if (!container.isBound(ComputedStoreParameter)) {
-  container.bind(ComputedStoreParameter).toSelf().inTransientScope();
 }
 class UsesComputedVariable {
   constructor() {
@@ -5584,30 +3212,13 @@ class UsesComputedVariable {
     this.updateCb = cb;
   }
   initVariable(expression) {
-    const computedStoreParameter = container.get(
-      ComputedStoreParameter
-    );
+    const computedStoreParameter = requireParameterFactory()();
     computedStoreParameter.init(expression, () => {
       this.updateCb();
     });
     return computedStoreParameter;
   }
 }
-var VariableEvents = /* @__PURE__ */ ((VariableEvents2) => {
-  VariableEvents2["VariableUpdated"] = "VariableUpdated";
-  VariableEvents2["VariableDeleted"] = "VariableDeleted";
-  VariableEvents2["VariableCreated"] = "VariableCreated";
-  VariableEvents2["VariablesCleared"] = "VariablesCleared";
-  VariableEvents2["VariableRemoved"] = "VariableRemoved";
-  return VariableEvents2;
-})(VariableEvents || {});
-var RefreshType = /* @__PURE__ */ ((RefreshType2) => {
-  RefreshType2["None"] = "None";
-  RefreshType2["Reactive"] = "Reactive";
-  RefreshType2["Interval"] = "Interval";
-  RefreshType2["Trigger"] = "Trigger";
-  return RefreshType2;
-})(RefreshType || {});
 class BaseDatasource extends UsesComputedVariable {
   constructor() {
     super(...arguments);
@@ -5679,8 +3290,8 @@ var __defProp2 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
 var __decorateClass$1 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp2(target, key, result);
   return result;
@@ -5718,14 +3329,14 @@ function decodePolyline(encoded, precision = 6) {
 }
 function shapeToGeoJSON(legs, waypoints) {
   const features = [];
-  for (let i2 = 0; i2 < legs.length; i2++) {
-    const coords = decodePolyline(legs[i2].shape);
+  for (let i = 0; i < legs.length; i++) {
+    const coords = decodePolyline(legs[i].shape);
     features.push({
       type: "Feature",
       properties: {
-        legIndex: i2,
-        length: legs[i2].length,
-        time: legs[i2].time
+        legIndex: i,
+        length: legs[i].length,
+        time: legs[i].time
       },
       geometry: {
         type: "LineString",
@@ -5733,14 +3344,14 @@ function shapeToGeoJSON(legs, waypoints) {
       }
     });
   }
-  waypoints.forEach((wp, i2) => {
+  waypoints.forEach((wp, i) => {
     let role = "via";
-    if (i2 === 0) role = "start";
-    else if (i2 === waypoints.length - 1) role = "end";
+    if (i === 0) role = "start";
+    else if (i === waypoints.length - 1) role = "end";
     features.push({
       type: "Feature",
       properties: {
-        waypointIndex: i2,
+        waypointIndex: i,
         role,
         name: wp.name || ""
       },
@@ -5862,14 +3473,14 @@ let ValhallaStore = class extends BaseDatasource {
     const data = await response.json();
     if (data.trip) {
       const legs = data.trip.legs.map((leg) => ({
-        maneuvers: leg.maneuvers.map((m2) => ({
-          instruction: m2.instruction,
-          length: m2.length,
-          time: m2.time,
-          type: m2.type,
-          street_names: m2.street_names,
-          begin_shape_index: m2.begin_shape_index,
-          end_shape_index: m2.end_shape_index
+        maneuvers: leg.maneuvers.map((m) => ({
+          instruction: m.instruction,
+          length: m.length,
+          time: m.time,
+          type: m.type,
+          street_names: m.street_names,
+          begin_shape_index: m.begin_shape_index,
+          end_shape_index: m.end_shape_index
         })),
         length: leg.summary.length,
         time: leg.summary.time,
@@ -6618,7 +4229,7 @@ function requireLodash() {
         return string.match(reUnicodeWord) || [];
       }
       var runInContext = (function runInContext2(context) {
-        context = context == null ? root : _2.defaults(root.Object(), context, _2.pick(root, contextProps));
+        context = context == null ? root : _.defaults(root.Object(), context, _.pick(root, contextProps));
         var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String2 = context.String, TypeError2 = context.TypeError;
         var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
         var coreJsData = context["__core-js_shared__"];
@@ -7949,8 +5560,8 @@ function requireLodash() {
           result2.lastIndex = regexp.lastIndex;
           return result2;
         }
-        function cloneSymbol(symbol2) {
-          return symbolValueOf ? Object2(symbolValueOf.call(symbol2)) : {};
+        function cloneSymbol(symbol) {
+          return symbolValueOf ? Object2(symbolValueOf.call(symbol)) : {};
         }
         function cloneTypedArray(typedArray, isDeep) {
           var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
@@ -8690,8 +6301,8 @@ function requireLodash() {
             return [];
           }
           object = Object2(object);
-          return arrayFilter(nativeGetSymbols(object), function(symbol2) {
-            return propertyIsEnumerable.call(object, symbol2);
+          return arrayFilter(nativeGetSymbols(object), function(symbol) {
+            return propertyIsEnumerable.call(object, symbol);
           });
         };
         var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
@@ -10026,7 +7637,7 @@ function requireLodash() {
           var tag = baseGetTag(value);
           return tag == errorTag || tag == domExcTag || typeof value.message == "string" && typeof value.name == "string" && !isPlainObject(value);
         }
-        function isFinite2(value) {
+        function isFinite(value) {
           return typeof value == "number" && nativeIsFinite(value);
         }
         function isFunction(value) {
@@ -11127,7 +8738,7 @@ function requireLodash() {
         lodash2.isEqual = isEqual;
         lodash2.isEqualWith = isEqualWith;
         lodash2.isError = isError;
-        lodash2.isFinite = isFinite2;
+        lodash2.isFinite = isFinite;
         lodash2.isFunction = isFunction;
         lodash2.isInteger = isInteger;
         lodash2.isLength = isLength;
@@ -11392,12 +9003,12 @@ function requireLodash() {
         }
         return lodash2;
       });
-      var _2 = runInContext();
+      var _ = runInContext();
       if (freeModule) {
-        (freeModule.exports = _2)._ = _2;
-        freeExports._ = _2;
+        (freeModule.exports = _)._ = _;
+        freeExports._ = _;
       } else {
-        root._ = _2;
+        root._ = _;
       }
     }).call(lodash);
   })(lodash$1, lodash$1.exports);
@@ -11447,8 +9058,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   setup(__props, { expose: __expose }) {
     const props = __props;
     const { datasourceId, config, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers$1.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers$1.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const savedWaypoints = config.value?.waypoints;
@@ -11507,14 +9118,14 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       if (!routeResult.value) return "";
       const min = routeResult.value.summary.duration_min;
       if (min < 60) return `${min} min`;
-      const h2 = Math.floor(min / 60);
-      const m2 = min % 60;
-      return m2 > 0 ? `${h2} h ${m2} min` : `${h2} h`;
+      const h = Math.floor(min / 60);
+      const m = min % 60;
+      return m > 0 ? `${h} h ${m} min` : `${h} h`;
     });
     const allManeuvers = computed(() => {
       if (!routeResult.value?.legs) return [];
       return routeResult.value.legs.flatMap(
-        (leg, li) => leg.maneuvers.map((m2) => ({ ...m2, legIndex: li }))
+        (leg, li) => leg.maneuvers.map((m) => ({ ...m, legIndex: li }))
       );
     });
     async function searchAddress(query, index) {
@@ -11597,9 +9208,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       try {
         const {
           DatasourceRepository,
-          identifier: identifier2
-        } = await import("./lib.core-BZy2ubqb.js");
-        const dsRepo = container.get(identifier2);
+          identifier
+        } = await import("./lib.core-C_U6_Xi_.js");
+        const dsRepo = inject$1(identifier);
         const ds = dsRepo.getDatasource(datasourceId.value);
         if (ds && typeof ds.callEvent === "function") {
           await ds.callEvent(SET_WAYPOINTS, {
@@ -11736,41 +9347,41 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           ])
         ]),
         createElementVNode("div", _hoisted_4, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(Math.max(2, waypoints.value.length), (wp, i2) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList(Math.max(2, waypoints.value.length), (wp, i) => {
             return openBlock(), createElementBlock("div", {
-              key: i2,
+              key: i,
               class: "waypoint-row"
             }, [
               createElementVNode("div", {
                 class: "waypoint-dot",
-                style: normalizeStyle({ backgroundColor: waypointColor(i2) })
+                style: normalizeStyle({ backgroundColor: waypointColor(i) })
               }, null, 4),
               createElementVNode("div", _hoisted_5, [
-                createElementVNode("label", _hoisted_6, toDisplayString(waypointLabel(i2)), 1),
+                createElementVNode("label", _hoisted_6, toDisplayString(waypointLabel(i)), 1),
                 withDirectives(createElementVNode("input", {
-                  "onUpdate:modelValue": ($event) => addressInputs.value[i2] = $event,
+                  "onUpdate:modelValue": ($event) => addressInputs.value[i] = $event,
                   class: "waypoint-input",
                   placeholder: "Adresse eingeben...",
-                  onInput: ($event) => onAddressInput(i2),
-                  onFocus: ($event) => activeSuggestionIndex.value = i2
+                  onInput: ($event) => onAddressInput(i),
+                  onFocus: ($event) => activeSuggestionIndex.value = i
                 }, null, 40, _hoisted_7), [
-                  [vModelText, addressInputs.value[i2]]
+                  [vModelText, addressInputs.value[i]]
                 ]),
-                activeSuggestionIndex.value === i2 && suggestions.value[i2] && suggestions.value[i2].length > 0 ? (openBlock(), createElementBlock("div", _hoisted_8, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value[i2], (s, si) => {
+                activeSuggestionIndex.value === i && suggestions.value[i] && suggestions.value[i].length > 0 ? (openBlock(), createElementBlock("div", _hoisted_8, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value[i], (s, si) => {
                     return openBlock(), createElementBlock("div", {
                       key: si,
                       class: "suggestion-item",
-                      onMousedown: withModifiers(($event) => selectSuggestion(i2, s), ["prevent"])
+                      onMousedown: withModifiers(($event) => selectSuggestion(i, s), ["prevent"])
                     }, toDisplayString(s.display_name), 41, _hoisted_9);
                   }), 128))
                 ])) : createCommentVNode("", true)
               ]),
-              i2 >= 2 ? (openBlock(), createElementBlock("button", {
+              i >= 2 ? (openBlock(), createElementBlock("button", {
                 key: 0,
                 class: "remove-btn",
                 title: "Entfernen",
-                onClick: ($event) => removeWaypointAt(i2)
+                onClick: ($event) => removeWaypointAt(i)
               }, " × ", 8, _hoisted_10)) : createCommentVNode("", true)
             ]);
           }), 128))
@@ -11812,13 +9423,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
               onClick: _cache[1] || (_cache[1] = ($event) => showManeuvers.value = !showManeuvers.value)
             }, toDisplayString(showManeuvers.value ? "▾" : "▸") + " Manöver (" + toDisplayString(allManeuvers.value.length) + ") ", 1),
             showManeuvers.value ? (openBlock(), createElementBlock("div", _hoisted_22, [
-              (openBlock(true), createElementBlock(Fragment, null, renderList(allManeuvers.value, (m2, mi) => {
+              (openBlock(true), createElementBlock(Fragment, null, renderList(allManeuvers.value, (m, mi) => {
                 return openBlock(), createElementBlock("div", {
                   key: mi,
                   class: "maneuver-item"
                 }, [
-                  createElementVNode("span", _hoisted_23, toDisplayString(m2.instruction), 1),
-                  createElementVNode("span", _hoisted_24, toDisplayString(m2.length.toFixed(1)) + " km ", 1)
+                  createElementVNode("span", _hoisted_23, toDisplayString(m.instruction), 1),
+                  createElementVNode("span", _hoisted_24, toDisplayString(m.length.toFixed(1)) + " km ", 1)
                 ]);
               }), 128))
             ])) : createCommentVNode("", true)
@@ -11905,8 +9516,8 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp(target, key, result);
   return result;

@@ -9,5 +9,10 @@
     {
       "id": "WeatherComposer"
     }
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    }
   ]
 }

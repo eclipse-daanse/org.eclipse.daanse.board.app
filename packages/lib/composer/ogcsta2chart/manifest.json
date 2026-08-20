@@ -13,6 +13,9 @@
   "requiresService": [
     {
       "id": "EventActionsRegistry"
+    },
+    {
+      "id": "DatasourceRepository"
     }
   ]
 }

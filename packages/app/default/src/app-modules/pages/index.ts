@@ -36,10 +36,19 @@ import {
 import Configuration from '../../pages/Configuration.vue'
 import SaveLoad from '../../pages/SaveLoad.vue'
 import router from '../../router'
+import { provideVariablesStoreDependencies } from '../../stores/VariablesPinia'
+import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import type { TinyEmitter } from 'tiny-emitter'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
 import { registerSystemActions } from '../../systemActions'
 import { registerTestActions } from '../../testActions'
 
 export async function activate({ services, log }: ActivationContext) {
+  provideVariablesStoreDependencies({
+    repository: services.getRequired<VariableRepository>('VariableRepository'),
+    eventBus: services.getRequired<TinyEmitter>('TINY_EMITTER'),
+  })
+
   // VariableComplexStringWrapper depends on Vue and therefore lives in the
   // UI layer; the factory in lib only knows it through this registration.
   services
@@ -102,13 +111,17 @@ export async function activate({ services, log }: ActivationContext) {
   // One failing action set must not take the other down; both used to be
   // fire-and-forget next to the mount and hid their timing behind the race.
   try {
-    await registerSystemActions(router)
+    await registerSystemActions(
+      router,
+      services.getRequired<EventActionsRegistry>('EventActionsRegistry'),
+      services.getRequired<TinyEmitter>('TINY_EMITTER'),
+    )
     log.info('system actions registered')
   } catch (error) {
     log.error('system actions failed', error)
   }
   try {
-    await registerTestActions()
+    await registerTestActions(services.getRequired<EventActionsRegistry>('EventActionsRegistry'))
     log.info('test actions registered')
   } catch (error) {
     log.error('test actions failed', error)

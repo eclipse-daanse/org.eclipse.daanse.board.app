@@ -1,9 +1,9 @@
-(function(){var i="ui.vue.widget.svg.base",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.svg[data-v-969347e6] {\n    width: 100%;\n    height: 100%;\n}\n.fallback[data-v-969347e6] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: #666;\n    font-style: italic;\n}\n\n.settings-container[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1.5rem;\n}\n.class-config-header[data-v-932707bc] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n}\n.class-config-header h3[data-v-932707bc] {\n    margin: 0;\n    font-size: 1rem;\n    color: var(--va-text-primary);\n}\n.class-list[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n}\n.class-item[data-v-932707bc] {\n    border: 1px solid var(--va-background-element);\n    border-radius: 8px;\n    padding: 1rem;\n    background-color: var(--va-background-primary);\n}\n.class-item-header[data-v-932707bc] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 1rem;\n    gap: 1rem;\n}\n.input-class-name[data-v-932707bc] {\n    flex-grow: 1;\n}\n.class-item-properties[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    gap: 0.75rem;\n    padding-left: 0.5rem;\n    border-left: 2px solid var(--va-primary);\n}\n.width-100[data-v-932707bc] {\n    width: 100%;\n}\n";})();
-const { defineComponent, mergeModels, toRefs, useModel, ref, getCurrentInstance, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, Fragment, createElementVNode, createCommentVNode, mergeProps, withModifiers, inject: inject$1, resolveComponent, createBlock, withCtx, createVNode, unref, createTextVNode, toDisplayString, renderList, markRaw } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.svg.base",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.svg[data-v-629a9530] {\n    width: 100%;\n    height: 100%;\n}\n.fallback[data-v-629a9530] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: #666;\n    font-style: italic;\n}\n\n.settings-container[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1.5rem;\n}\n.class-config-header[data-v-932707bc] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n}\n.class-config-header h3[data-v-932707bc] {\n    margin: 0;\n    font-size: 1rem;\n    color: var(--va-text-primary);\n}\n.class-list[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n}\n.class-item[data-v-932707bc] {\n    border: 1px solid var(--va-background-element);\n    border-radius: 8px;\n    padding: 1rem;\n    background-color: var(--va-background-primary);\n}\n.class-item-header[data-v-932707bc] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 1rem;\n    gap: 1rem;\n}\n.input-class-name[data-v-932707bc] {\n    flex-grow: 1;\n}\n.class-item-properties[data-v-932707bc] {\n    display: flex;\n    flex-direction: column;\n    gap: 0.75rem;\n    padding-left: 0.5rem;\n    border-left: 2px solid var(--va-primary);\n}\n.width-100[data-v-932707bc] {\n    width: 100%;\n}\n";})();
+const { defineComponent, mergeModels, toRefs, useModel, inject: inject$1, ref, getCurrentInstance, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, Fragment, createElementVNode, createCommentVNode, mergeProps, withModifiers, resolveComponent, createBlock, withCtx, createVNode, unref, createTextVNode, toDisplayString, renderList, markRaw } = __tsm__.require("vue");
 const { VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { Reference, ModelClass, Documentation, Attribute } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 const { useRoute } = __tsm__.require("vue-router");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -1199,8 +1199,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const props = __props;
     const { id: widgetId } = toRefs(props);
     const config = useModel(__props, "configv");
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const svgZoomLevel = ref(1);
@@ -1365,7 +1365,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const SvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-969347e6"]]);
+const SvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-629a9530"]]);
 var __defProp$2 = Object.defineProperty;
 var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
 var __decorateClass$2 = (decorators, target, key, kind) => {

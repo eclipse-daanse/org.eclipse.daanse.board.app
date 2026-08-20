@@ -12,6 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
+import { inject } from 'vue'
 import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
 import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
@@ -25,7 +26,7 @@ const { datasourceId, id: widgetId } = toRefs(props);
 
 import { identifiers, container as coreContainer } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 const emitClick = () => {
     if (!widgetId?.value) return;

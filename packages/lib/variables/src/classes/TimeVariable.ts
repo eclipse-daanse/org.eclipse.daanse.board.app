@@ -13,14 +13,10 @@
 
 import { Variable } from './Variable'
 import { type IVariableConfig } from '..'
-import { injectFromBase, Factory } from 'inversify'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import type { VariableDependencies } from './Variable'
 
 const symbol = Symbol.for('TimeVariable')
 
-@injectFromBase({
-  extendProperties: true,
-})
 class TimeVariable extends Variable {
   public type = 'time'
 
@@ -40,18 +36,20 @@ class TimeVariable extends Variable {
   set value(value) {}
 }
 
-if (!container.isBound(TimeVariable)) {
-  container.bind<TimeVariable>(TimeVariable).toSelf().inTransientScope()
-}
 
-if (!container.isBound(symbol)) {
-  container.bind<Factory<TimeVariable>>(symbol).toFactory(() => {
-    return (name: string, config: IVariableConfig) => {
-      const variable = container.get<TimeVariable>(TimeVariable)
-      variable.init(name, config as IVariableConfig)
-      return variable
-    }
-  })
+/**
+ * Builds the per-type factory the VariableRepository resolves and calls.
+ * Dependencies are closed over once, at activation - the instances receive
+ * them as plain properties, no container involved.
+ */
+export function createTimeVariableFactory(deps: VariableDependencies) {
+  return (name: string, config: IVariableConfig): TimeVariable => {
+    const variable = new TimeVariable()
+    variable.eventBus = deps.eventBus
+    variable.pageContextService = deps.pageContextService
+    variable.init(name, config)
+    return variable
+  }
 }
 
 export { TimeVariable, symbol }

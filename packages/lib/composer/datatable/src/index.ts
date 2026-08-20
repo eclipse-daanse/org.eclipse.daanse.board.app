@@ -16,6 +16,7 @@ import {
   type IDataTableComposerConfiguration,
 } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
 const DATA_TABLE_COMPOSER = 'DataTableComposer'
@@ -29,21 +30,28 @@ const symbol = Symbol.for(DATA_TABLE_COMPOSER)
  * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
  * jetzt schlicht ueber `new`.
  */
-function createDataTableComposer(config: any) {
+/**
+ * Factory factory: the repository is closed over once, at activation - the
+ * config-taking function the registry hands out carries its dependency
+ * instead of looking anything up.
+ */
+function createDataTableComposer(repository: DatasourceRepository) {
+  return (config: any) => {
   if (!DataTableComposer.validateConfiguration(config)) {
     throw new Error(
       'Invalid DataTableComposer configuration. Please provide a valid configuration.',
     )
   }
 
-  const composer = new DataTableComposer()
+  const composer = new DataTableComposer(repository)
   composer.init(config)
 
   return composer
+  }
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(DATA_TABLE_COMPOSER, createDataTableComposer)
+  services.register(DATA_TABLE_COMPOSER, createDataTableComposer(services.getRequired('DatasourceRepository')))
 }
 
 export function deactivate({ services }: ActivationContext) {

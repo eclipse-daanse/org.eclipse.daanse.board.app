@@ -1,8 +1,8 @@
-(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.filters[data-v-27d346d5] {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    gap: 1rem;\n    padding: 1rem;\n    flex-grow: 0;\n}\n.table_container[data-v-27d346d5] {\n    display: flex;\n    flex-direction: column;\n    height: 100%;\n}\n.table_container .pagination[data-v-27d346d5] {\n    flex-grow: 0;\n    padding: 1rem;\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr;\n    justify-items: center;\n    align-items: end;\n}\n.table_container .pagination .page_input[data-v-27d346d5] {\n    justify-self: start;\n}\n.table_container .table[data-v-27d346d5] {\n    flex-grow: 1;\n    flex-shrink: 1;\n}\n.loading[data-v-27d346d5] {\n    display: flex;\n    height: 100%;\n}\n\n.settings-container[data-v-50bce613] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
-const { defineComponent, toRefs, onUnmounted, ref, watch, onMounted, computed, resolveComponent, createElementBlock, openBlock, withModifiers, createVNode, normalizeStyle, unref, useModel, markRaw, createBlock, withCtx, createElementVNode } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.filters[data-v-3b53399b] {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr 1fr;\n    gap: 1rem;\n    padding: 1rem;\n    flex-grow: 0;\n}\n.table_container[data-v-3b53399b] {\n    display: flex;\n    flex-direction: column;\n    height: 100%;\n}\n.table_container .pagination[data-v-3b53399b] {\n    flex-grow: 0;\n    padding: 1rem;\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr;\n    justify-items: center;\n    align-items: end;\n}\n.table_container .pagination .page_input[data-v-3b53399b] {\n    justify-self: start;\n}\n.table_container .table[data-v-3b53399b] {\n    flex-grow: 1;\n    flex-shrink: 1;\n}\n.loading[data-v-3b53399b] {\n    display: flex;\n    height: 100%;\n}\n\n.settings-container[data-v-50bce613] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
+const { defineComponent, toRefs, inject: inject$1, onUnmounted, ref, watch, onMounted, computed, resolveComponent, createElementBlock, openBlock, withModifiers, createVNode, normalizeStyle, unref, useModel, markRaw, createBlock, withCtx, createElementVNode } = __tsm__.require("vue");
 const { useVariableRepository, useDatasourceRepository, VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { useRoute } = __tsm__.require("vue-router");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -1165,8 +1165,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const { wrapParameters } = useVariableRepository();
     const props = __props;
     const { datasourceId, config, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     class DataTableWidgetApi extends DataTableWidgetInterface {
@@ -1335,7 +1335,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const DataTableWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-27d346d5"]]);
+const DataTableWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-3b53399b"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "DataTableWidgetSettings",

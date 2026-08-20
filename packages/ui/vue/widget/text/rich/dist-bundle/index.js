@@ -1,9 +1,9 @@
 (function(){var i="ui.vue.widget.text.rich",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.editor-content {\n    width: 100%;\n    height: 100%;\n    overflow-wrap: anywhere;\n}\n.editor-content h1 {\n    font-size: 2rem;\n    margin-bottom: 1rem;\n}\n.editor-content h2 {\n    font-size: 1.75rem;\n    margin-bottom: 1rem;\n}\n.editor-content h3 {\n    font-size: 1.5rem;\n    margin-bottom: 1rem;\n}\n.editor-content h4 {\n    font-size: 1.25rem;\n    margin-bottom: 1rem;\n}\n.editor-content h5 {\n    font-size: 1.11rem;\n    margin-bottom: 1rem;\n}\n.editor-content h6 {\n    font-size: 0.9rem;\n    margin-bottom: 1rem;\n}\n.editor-content a,\n.editor-content .custom-link {\n    color: #154EC2;\n    text-decoration: underline;\n    cursor: pointer;\n}\n.editor-content a:visited {\n    color: #6B21A8;\n}\n.editor-content ol {\n    padding-left: 1.5rem;\n}\n.editor-content ul {\n    padding-left: 1.5rem;\n}\n.editor-content li {\n    display: list-item;\n}\n.editor-content ol ol, .editor-content ul ul,\n.editor-content ol ul, .editor-content ul ol {\n    padding-left: 1.5rem;\n}\n\n.settings-container {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.editor {\n    border: 1px solid rgb(168, 157, 157);\n    height: 200px;\n    padding: 5px 10px;\n    overflow: auto;\n}\n.editor .ml-2 {\n    height: 100%;\n}\n.editor .tiptap.ProseMirror {\n    height: 100%;\n    outline: none;\n}\n.custom-ordered-list {\n    padding-left: 1.5rem;\n}\n.custom-bullet-list {\n    padding-left: 1.5rem;\n}\n.tiptap ol {\n    padding-left: 1.5rem;\n}\n.tiptap ul {\n    padding-left: 1.5rem;\n}\n.tiptap li {\n    display: list-item;\n}\n.tiptap ol ol, .tiptap ul ul, .tiptap ol ul, .tiptap ul ol {\n    padding-left: 1.5rem;\n}\n.tiptap h1 {\n    font-size: 2rem;\n    margin-bottom: 1rem;\n}\n.tiptap h2 {\n    font-size: 1.75rem;\n    margin-bottom: 1rem;\n}\n.tiptap h3 {\n    font-size: 1.5rem;\n    margin-bottom: 1rem;\n}\n.tiptap h4 {\n    font-size: 1.25rem;\n    margin-bottom: 1rem;\n}\n.tiptap h5 {\n    font-size: 1.11rem;\n    margin-bottom: 1rem;\n}\n.tiptap h6 {\n    font-size: 0.9rem;\n    margin-bottom: 1rem;\n}\n.custom-bold {\n    font-weight: bold;\n}\n.custom-italic {\n    font-weight: unset;\n}\n.custom-strike {\n    font-weight: unset;\n}\n.custom-code {\n    font-size: 0.9rem;\n    padding: 0.25em;\n    border-radius: 0.25em;\n    background-color: rgba(97, 97, 97, 0.2);\n    color: #616161;\n}\n.custom-code-block {\n    background: #0d0d0d;\n    color: #fff;\n    font-family: \"JetBrainsMono\", monospace;\n    padding: 0.75rem 1rem;\n    border-radius: 0.5rem;\n}\n.custom-code-block code {\n    color: inherit;\n    padding: 0;\n    background: none;\n    font-size: 0.8rem;\n}\n.custom-blockquote {\n    padding-left: 1rem;\n    border-left: 3px solid rgba(#0d0d0d, 0.1);\n}\n.custom-horizontal-rule {\n    border-top: 1px solid #68cef8;\n}\n.custom-underline {\n    font-weight: unset;\n}\n.custom-link {\n    color: #154EC2;\n    text-decoration: underline;\n    cursor: pointer;\n}\n.toolbar {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 0.25rem;\n    padding: 0.5rem;\n    background: #f9fafb;\n    border: 1px solid #e5e7eb;\n    border-radius: 0.375rem;\n}\n.toolbar-group {\n    display: flex;\n    gap: 2px;\n    padding-right: 0.5rem;\n    margin-right: 0.25rem;\n    border-right: 1px solid #e5e7eb;\n}\n.toolbar-group:last-child {\n    border-right: none;\n    padding-right: 0;\n    margin-right: 0;\n}\n.toolbar-btn {\n    min-width: 28px !important;\n    height: 28px !important;\n    padding: 0 4px !important;\n    border: 1px solid transparent !important;\n    border-radius: 0.25rem !important;\n    font-size: 0.7rem !important;\n    font-weight: 600 !important;\n}\n.toolbar-btn:hover {\n    background-color: #e5e7eb !important;\n}\n.is-active {\n    background-color: #fff3e0 !important;\n    border-color: rgb(236, 156, 29) !important;\n    color: #c45e00 !important;\n}\n.toolbar-group--inputs {\n    align-items: center;\n    gap: 3px;\n}\n.toolbar-btn--var {\n    min-width: 22px !important;\n    height: 22px !important;\n    padding: 0 2px !important;\n    font-size: 0.6rem !important;\n}\n.toolbar-size-input {\n    width: 45px;\n    height: 26px;\n    border: 1px solid #d1d5db;\n    border-radius: 0.25rem;\n    padding: 0 4px;\n    font-size: 0.75rem;\n    text-align: center;\n    background: white;\n}\n.toolbar-size-input:focus {\n    outline: none;\n    border-color: rgb(236, 156, 29);\n}\n.toolbar-color-input {\n    width: 26px;\n    height: 26px;\n    border: 1px solid #d1d5db;\n    border-radius: 0.25rem;\n    padding: 1px;\n    cursor: pointer;\n    background: white;\n}\n.toolbar-color-input::-webkit-color-swatch-wrapper {\n    padding: 1px;\n}\n.toolbar-color-input::-webkit-color-swatch {\n    border: none;\n    border-radius: 2px;\n}\n.toolbar-dropdown-wrapper {\n    position: relative;\n    display: flex;\n    align-items: center;\n}\n.toolbar-dropdown-arrow {\n    width: 14px;\n    height: 28px;\n    border: none;\n    background: transparent;\n    cursor: pointer;\n    font-size: 0.6rem;\n    color: #6b7280;\n    padding: 0;\n    line-height: 1;\n}\n.toolbar-dropdown-arrow:hover {\n    color: #111827;\n}\n.toolbar-dropdown-menu {\n    position: absolute;\n    top: 100%;\n    left: 0;\n    z-index: 10;\n    background: white;\n    border: 1px solid #e5e7eb;\n    border-radius: 0.375rem;\n    box-shadow: 0 4px 12px rgba(0,0,0,0.15);\n    padding: 0.25rem;\n    min-width: 90px;\n}\n.toolbar-dropdown-item {\n    display: block;\n    width: 100%;\n    padding: 0.35rem 0.5rem;\n    border: none;\n    background: none;\n    cursor: pointer;\n    font-size: 0.8rem;\n    text-align: left;\n    border-radius: 0.2rem;\n    white-space: nowrap;\n}\n.toolbar-dropdown-item:hover {\n    background-color: #fff3e0;\n    color: #c45e00;\n}\n.toolbar-dropdown-empty {\n    padding: 0.5rem;\n    color: #9ca3af;\n    font-size: 0.75rem;\n    font-style: italic;\n    text-align: center;\n}\n.toolbar-dropdown-menu--wide {\n    min-width: 180px;\n}\n.var-name {\n    font-weight: 500;\n}\n.var-value {\n    margin-left: 0.5rem;\n    color: #9ca3af;\n    font-size: 0.7rem;\n}\n.loading {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
-const { defineComponent, toRefs, onMounted, onUnmounted, computed, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, unref, createElementVNode, shallowRef, onBeforeUnmount, h: h$1, getCurrentInstance, watchEffect, nextTick, markRaw, customRef, inject: inject$1, useModel, resolveComponent, createBlock, withCtx, createCommentVNode, withDirectives, vModelText, createVNode, normalizeClass, Fragment: Fragment$5, renderList, toDisplayString, createTextVNode } = __tsm__.require("vue");
+const { defineComponent, toRefs, inject: inject$1, onMounted, onUnmounted, computed, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, unref, createElementVNode, shallowRef, onBeforeUnmount, h: h$1, getCurrentInstance, watchEffect, nextTick, markRaw, customRef, useModel, resolveComponent, createBlock, withCtx, createCommentVNode, withDirectives, vModelText, createVNode, normalizeClass, Fragment: Fragment$5, renderList, toDisplayString, createTextVNode } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { useVariableRepository, useDatasourceRepository, VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const helpers = __tsm__.require("org.eclipse.daanse.board.app.lib.utils.helpers").default;
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
 const { Documentation, Attribute: Attribute$3, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
@@ -1173,8 +1173,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   setup(__props, { expose: __expose }) {
     const props = __props;
     const { datasourceId, config, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     class RichTextWidgetApi extends RichTextWidgetInterface {
@@ -19326,18 +19326,18 @@ class DOMObserver {
   ignoreSelectionChange(sel) {
     if (!sel.focusNode)
       return true;
-    let ancestors = /* @__PURE__ */ new Set(), container2;
+    let ancestors = /* @__PURE__ */ new Set(), container;
     for (let scan = sel.focusNode; scan; scan = parentNode(scan))
       ancestors.add(scan);
     for (let scan = sel.anchorNode; scan; scan = parentNode(scan))
       if (ancestors.has(scan)) {
-        container2 = scan;
+        container = scan;
         break;
       }
-    let desc = container2 && this.view.docView.nearestDesc(container2);
+    let desc = container && this.view.docView.nearestDesc(container);
     if (desc && desc.ignoreMutation({
       type: "selection",
-      target: container2.nodeType == 3 ? container2.parentNode : container2
+      target: container.nodeType == 3 ? container.parentNode : container
     })) {
       this.setCurSelection();
       return true;
@@ -21696,9 +21696,9 @@ function flattenExtensions(extensions) {
 function getHTMLFromFragment(fragment, schema) {
   const documentFragment = DOMSerializer$1.fromSchema(schema).serializeFragment(fragment);
   const temporaryDocument = document.implementation.createHTMLDocument();
-  const container2 = temporaryDocument.createElement("div");
-  container2.appendChild(documentFragment);
-  return container2.innerHTML;
+  const container = temporaryDocument.createElement("div");
+  container.appendChild(documentFragment);
+  return container.innerHTML;
 }
 function isFunction(value) {
   return typeof value === "function";
@@ -34949,11 +34949,11 @@ function findScrollParent(element) {
   }
   return window;
 }
-function getContainerRect(container2) {
-  if (container2 === window) {
+function getContainerRect(container) {
+  if (container === window) {
     return { top: 0, bottom: window.innerHeight };
   }
-  return container2.getBoundingClientRect();
+  return container.getBoundingClientRect();
 }
 function getViewportBoundaryPositions({
   doc: doc2,
@@ -36073,7 +36073,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     const availableVariables = ref([]);
     onMounted(() => {
       try {
-        const repo = container.get(identifier);
+        const repo = inject$1(identifier);
         availableVariables.value = repo.getAllVariables().map(([name]) => {
           const v = repo.getVariable(name);
           return { name: v.name, value: v.value };
@@ -36084,7 +36084,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     });
     const setSizeVariable = (varName) => {
       try {
-        const repo = container.get(identifier);
+        const repo = inject$1(identifier);
         const variable = repo.getVariable(varName);
         if (variable && widgetSettings.value.fontSize) {
           widgetSettings.value.fontSize.setTo(variable);
@@ -36102,7 +36102,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
     const setColorVariable = (varName) => {
       try {
-        const repo = container.get(identifier);
+        const repo = inject$1(identifier);
         const variable = repo.getVariable(varName);
         if (variable && widgetSettings.value.fontColor) {
           widgetSettings.value.fontColor.setTo(variable);

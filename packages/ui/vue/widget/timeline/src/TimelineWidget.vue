@@ -167,8 +167,8 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface';
 
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';
@@ -944,11 +944,14 @@ watch(() => rangeEndWrapper.value.value, (newValue) => {
 // No watch here to avoid race conditions where the Widget overwrites Settings' correct values.
 
 // Initialisierung
+const injectedVariableRepository = inject<VariableRepository>(variableIdentifier)
+
 onMounted(() => {
   if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'TimelineWidget', pageId);
   // Initialize variable repository
   try {
-    variableRepository.value = container.get<VariableRepository>(variableIdentifier);
+    variableRepository.value = injectedVariableRepository ?? null;
+    if (!variableRepository.value) throw new Error('VariableRepository not provided');
   } catch (error) {
     console.warn('VariableRepository not found in container:', error);
   }

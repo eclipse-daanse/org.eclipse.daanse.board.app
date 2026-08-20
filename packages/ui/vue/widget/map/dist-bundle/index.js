@@ -1,16 +1,16 @@
-(function(){var i="ui.vue.widget.map",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="/* required styles */\r\n\r\n.leaflet-pane,\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-tile-container,\r\n.leaflet-pane > svg,\r\n.leaflet-pane > canvas,\r\n.leaflet-zoom-box,\r\n.leaflet-image-layer,\r\n.leaflet-layer {\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\t}\r\n.leaflet-container {\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\t-webkit-user-select: none;\r\n\t   -moz-user-select: none;\r\n\t        user-select: none;\r\n\t  -webkit-user-drag: none;\r\n\t}\r\n/* Prevents IE11 from highlighting tiles in blue */\r\n.leaflet-tile::selection {\r\n\tbackground: transparent;\r\n}\r\n/* Safari renders non-retina tile on retina better with this, but Chrome is worse */\r\n.leaflet-safari .leaflet-tile {\r\n\timage-rendering: -webkit-optimize-contrast;\r\n\t}\r\n/* hack that prevents hw layers \"stretching\" when loading new tiles */\r\n.leaflet-safari .leaflet-tile-container {\r\n\twidth: 1600px;\r\n\theight: 1600px;\r\n\t-webkit-transform-origin: 0 0;\r\n\t}\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\tdisplay: block;\r\n\t}\r\n/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */\r\n/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */\r\n.leaflet-container .leaflet-overlay-pane svg {\r\n\tmax-width: none !important;\r\n\tmax-height: none !important;\r\n\t}\r\n.leaflet-container .leaflet-marker-pane img,\r\n.leaflet-container .leaflet-shadow-pane img,\r\n.leaflet-container .leaflet-tile-pane img,\r\n.leaflet-container img.leaflet-image-layer,\r\n.leaflet-container .leaflet-tile {\r\n\tmax-width: none !important;\r\n\tmax-height: none !important;\r\n\twidth: auto;\r\n\tpadding: 0;\r\n\t}\r\n\r\n.leaflet-container img.leaflet-tile {\r\n\t/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */\r\n\tmix-blend-mode: plus-lighter;\r\n}\r\n\r\n.leaflet-container.leaflet-touch-zoom {\r\n\t-ms-touch-action: pan-x pan-y;\r\n\ttouch-action: pan-x pan-y;\r\n\t}\r\n.leaflet-container.leaflet-touch-drag {\r\n\t-ms-touch-action: pinch-zoom;\r\n\t/* Fallback for FF which doesn't support pinch-zoom */\r\n\ttouch-action: none;\r\n\ttouch-action: pinch-zoom;\r\n}\r\n.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {\r\n\t-ms-touch-action: none;\r\n\ttouch-action: none;\r\n}\r\n.leaflet-container {\r\n\t-webkit-tap-highlight-color: transparent;\r\n}\r\n.leaflet-container a {\r\n\t-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);\r\n}\r\n.leaflet-tile {\r\n\tfilter: inherit;\r\n\tvisibility: hidden;\r\n\t}\r\n.leaflet-tile-loaded {\r\n\tvisibility: inherit;\r\n\t}\r\n.leaflet-zoom-box {\r\n\twidth: 0;\r\n\theight: 0;\r\n\t-moz-box-sizing: border-box;\r\n\t     box-sizing: border-box;\r\n\tz-index: 800;\r\n\t}\r\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\r\n.leaflet-overlay-pane svg {\r\n\t-moz-user-select: none;\r\n\t}\r\n\r\n.leaflet-pane         { z-index: 400; }\r\n\r\n.leaflet-tile-pane    { z-index: 200; }\r\n.leaflet-overlay-pane { z-index: 400; }\r\n.leaflet-shadow-pane  { z-index: 500; }\r\n.leaflet-marker-pane  { z-index: 600; }\r\n.leaflet-tooltip-pane   { z-index: 650; }\r\n.leaflet-popup-pane   { z-index: 700; }\r\n\r\n.leaflet-map-pane canvas { z-index: 100; }\r\n.leaflet-map-pane svg    { z-index: 200; }\r\n\r\n.leaflet-vml-shape {\r\n\twidth: 1px;\r\n\theight: 1px;\r\n\t}\r\n.lvml {\r\n\tbehavior: url(#default#VML);\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\t}\r\n\r\n\r\n/* control positioning */\r\n\r\n.leaflet-control {\r\n\tposition: relative;\r\n\tz-index: 800;\r\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-top,\r\n.leaflet-bottom {\r\n\tposition: absolute;\r\n\tz-index: 1000;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-top {\r\n\ttop: 0;\r\n\t}\r\n.leaflet-right {\r\n\tright: 0;\r\n\t}\r\n.leaflet-bottom {\r\n\tbottom: 0;\r\n\t}\r\n.leaflet-left {\r\n\tleft: 0;\r\n\t}\r\n.leaflet-control {\r\n\tfloat: left;\r\n\tclear: both;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tfloat: right;\r\n\t}\r\n.leaflet-top .leaflet-control {\r\n\tmargin-top: 10px;\r\n\t}\r\n.leaflet-bottom .leaflet-control {\r\n\tmargin-bottom: 10px;\r\n\t}\r\n.leaflet-left .leaflet-control {\r\n\tmargin-left: 10px;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tmargin-right: 10px;\r\n\t}\r\n\r\n\r\n/* zoom and fade animations */\r\n\r\n.leaflet-fade-anim .leaflet-popup {\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.2s linear;\r\n\t   -moz-transition: opacity 0.2s linear;\r\n\t        transition: opacity 0.2s linear;\r\n\t}\r\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\r\n\topacity: 1;\r\n\t}\r\n.leaflet-zoom-animated {\r\n\t-webkit-transform-origin: 0 0;\r\n\t    -ms-transform-origin: 0 0;\r\n\t        transform-origin: 0 0;\r\n\t}\r\nsvg.leaflet-zoom-animated {\r\n\twill-change: transform;\r\n}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-animated {\r\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t}\r\n.leaflet-zoom-anim .leaflet-tile,\r\n.leaflet-pan-anim .leaflet-tile {\r\n\t-webkit-transition: none;\r\n\t   -moz-transition: none;\r\n\t        transition: none;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-hide {\r\n\tvisibility: hidden;\r\n\t}\r\n\r\n\r\n/* cursors */\r\n\r\n.leaflet-interactive {\r\n\tcursor: pointer;\r\n\t}\r\n.leaflet-grab {\r\n\tcursor: -webkit-grab;\r\n\tcursor:    -moz-grab;\r\n\tcursor:         grab;\r\n\t}\r\n.leaflet-crosshair,\r\n.leaflet-crosshair .leaflet-interactive {\r\n\tcursor: crosshair;\r\n\t}\r\n.leaflet-popup-pane,\r\n.leaflet-control {\r\n\tcursor: auto;\r\n\t}\r\n.leaflet-dragging .leaflet-grab,\r\n.leaflet-dragging .leaflet-grab .leaflet-interactive,\r\n.leaflet-dragging .leaflet-marker-draggable {\r\n\tcursor: move;\r\n\tcursor: -webkit-grabbing;\r\n\tcursor:    -moz-grabbing;\r\n\tcursor:         grabbing;\r\n\t}\r\n\r\n/* marker & overlays interactivity */\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-image-layer,\r\n.leaflet-pane > svg path,\r\n.leaflet-tile-container {\r\n\tpointer-events: none;\r\n\t}\r\n\r\n.leaflet-marker-icon.leaflet-interactive,\r\n.leaflet-image-layer.leaflet-interactive,\r\n.leaflet-pane > svg path.leaflet-interactive,\r\nsvg.leaflet-image-layer.leaflet-interactive path {\r\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\r\n\tpointer-events: auto;\r\n\t}\r\n\r\n/* visual tweaks */\r\n\r\n.leaflet-container {\r\n\tbackground: #ddd;\r\n\toutline-offset: 1px;\r\n\t}\r\n.leaflet-container a {\r\n\tcolor: #0078A8;\r\n\t}\r\n.leaflet-zoom-box {\r\n\tborder: 2px dotted #38f;\r\n\tbackground: rgba(255,255,255,0.5);\r\n\t}\r\n\r\n\r\n/* general typography */\r\n.leaflet-container {\r\n\tfont-family: \"Helvetica Neue\", Arial, Helvetica, sans-serif;\r\n\tfont-size: 12px;\r\n\tfont-size: 0.75rem;\r\n\tline-height: 1.5;\r\n\t}\r\n\r\n\r\n/* general toolbar styles */\r\n\r\n.leaflet-bar {\r\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.65);\r\n\tborder-radius: 4px;\r\n\t}\r\n.leaflet-bar a {\r\n\tbackground-color: #fff;\r\n\tborder-bottom: 1px solid #ccc;\r\n\twidth: 26px;\r\n\theight: 26px;\r\n\tline-height: 26px;\r\n\tdisplay: block;\r\n\ttext-align: center;\r\n\ttext-decoration: none;\r\n\tcolor: black;\r\n\t}\r\n.leaflet-bar a,\r\n.leaflet-control-layers-toggle {\r\n\tbackground-position: 50% 50%;\r\n\tbackground-repeat: no-repeat;\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-bar a:hover,\r\n.leaflet-bar a:focus {\r\n\tbackground-color: #f4f4f4;\r\n\t}\r\n.leaflet-bar a:first-child {\r\n\tborder-top-left-radius: 4px;\r\n\tborder-top-right-radius: 4px;\r\n\t}\r\n.leaflet-bar a:last-child {\r\n\tborder-bottom-left-radius: 4px;\r\n\tborder-bottom-right-radius: 4px;\r\n\tborder-bottom: none;\r\n\t}\r\n.leaflet-bar a.leaflet-disabled {\r\n\tcursor: default;\r\n\tbackground-color: #f4f4f4;\r\n\tcolor: #bbb;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-bar a {\r\n\twidth: 30px;\r\n\theight: 30px;\r\n\tline-height: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:first-child {\r\n\tborder-top-left-radius: 2px;\r\n\tborder-top-right-radius: 2px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:last-child {\r\n\tborder-bottom-left-radius: 2px;\r\n\tborder-bottom-right-radius: 2px;\r\n\t}\r\n\r\n/* zoom control */\r\n\r\n.leaflet-control-zoom-in,\r\n.leaflet-control-zoom-out {\r\n\tfont: bold 18px 'Lucida Console', Monaco, monospace;\r\n\ttext-indent: 1px;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {\r\n\tfont-size: 22px;\r\n\t}\r\n\r\n\r\n/* layers control */\r\n\r\n.leaflet-control-layers {\r\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.4);\r\n\tbackground: #fff;\r\n\tborder-radius: 5px;\r\n\t}\r\n.leaflet-control-layers-toggle {\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);\r\n\twidth: 36px;\r\n\theight: 36px;\r\n\t}\r\n.leaflet-retina .leaflet-control-layers-toggle {\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);\r\n\tbackground-size: 26px 26px;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers-toggle {\r\n\twidth: 44px;\r\n\theight: 44px;\r\n\t}\r\n.leaflet-control-layers .leaflet-control-layers-list,\r\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\r\n\tdisplay: none;\r\n\t}\r\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\r\n\tdisplay: block;\r\n\tposition: relative;\r\n\t}\r\n.leaflet-control-layers-expanded {\r\n\tpadding: 6px 10px 6px 6px;\r\n\tcolor: #333;\r\n\tbackground: #fff;\r\n\t}\r\n.leaflet-control-layers-scrollbar {\r\n\toverflow-y: scroll;\r\n\toverflow-x: hidden;\r\n\tpadding-right: 5px;\r\n\t}\r\n.leaflet-control-layers-selector {\r\n\tmargin-top: 2px;\r\n\tposition: relative;\r\n\ttop: 1px;\r\n\t}\r\n.leaflet-control-layers label {\r\n\tdisplay: block;\r\n\tfont-size: 13px;\r\n\tfont-size: 1.08333em;\r\n\t}\r\n.leaflet-control-layers-separator {\r\n\theight: 0;\r\n\tborder-top: 1px solid #ddd;\r\n\tmargin: 5px -10px 5px -6px;\r\n\t}\r\n\r\n/* Default icon URLs */\r\n.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=);\r\n\t}\r\n\r\n\r\n/* attribution and scale controls */\r\n\r\n.leaflet-container .leaflet-control-attribution {\r\n\tbackground: #fff;\r\n\tbackground: rgba(255, 255, 255, 0.8);\r\n\tmargin: 0;\r\n\t}\r\n.leaflet-control-attribution,\r\n.leaflet-control-scale-line {\r\n\tpadding: 0 5px;\r\n\tcolor: #333;\r\n\tline-height: 1.4;\r\n\t}\r\n.leaflet-control-attribution a {\r\n\ttext-decoration: none;\r\n\t}\r\n.leaflet-control-attribution a:hover,\r\n.leaflet-control-attribution a:focus {\r\n\ttext-decoration: underline;\r\n\t}\r\n.leaflet-attribution-flag {\r\n\tdisplay: inline !important;\r\n\tvertical-align: baseline !important;\r\n\twidth: 1em;\r\n\theight: 0.6669em;\r\n\t}\r\n.leaflet-left .leaflet-control-scale {\r\n\tmargin-left: 5px;\r\n\t}\r\n.leaflet-bottom .leaflet-control-scale {\r\n\tmargin-bottom: 5px;\r\n\t}\r\n.leaflet-control-scale-line {\r\n\tborder: 2px solid #777;\r\n\tborder-top: none;\r\n\tline-height: 1.1;\r\n\tpadding: 2px 5px 1px;\r\n\twhite-space: nowrap;\r\n\t-moz-box-sizing: border-box;\r\n\t     box-sizing: border-box;\r\n\tbackground: rgba(255, 255, 255, 0.8);\r\n\ttext-shadow: 1px 1px #fff;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child) {\r\n\tborder-top: 2px solid #777;\r\n\tborder-bottom: none;\r\n\tmargin-top: -2px;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\r\n\tborder-bottom: 2px solid #777;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-attribution,\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tbox-shadow: none;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tborder: 2px solid rgba(0,0,0,0.2);\r\n\tbackground-clip: padding-box;\r\n\t}\r\n\r\n\r\n/* popup */\r\n\r\n.leaflet-popup {\r\n\tposition: absolute;\r\n\ttext-align: center;\r\n\tmargin-bottom: 20px;\r\n\t}\r\n.leaflet-popup-content-wrapper {\r\n\tpadding: 1px;\r\n\ttext-align: left;\r\n\tborder-radius: 12px;\r\n\t}\r\n.leaflet-popup-content {\r\n\tmargin: 13px 24px 13px 20px;\r\n\tline-height: 1.3;\r\n\tfont-size: 13px;\r\n\tfont-size: 1.08333em;\r\n\tmin-height: 1px;\r\n\t}\r\n.leaflet-popup-content p {\r\n\tmargin: 17px 0;\r\n\tmargin: 1.3em 0;\r\n\t}\r\n.leaflet-popup-tip-container {\r\n\twidth: 40px;\r\n\theight: 20px;\r\n\tposition: absolute;\r\n\tleft: 50%;\r\n\tmargin-top: -1px;\r\n\tmargin-left: -20px;\r\n\toverflow: hidden;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-popup-tip {\r\n\twidth: 17px;\r\n\theight: 17px;\r\n\tpadding: 1px;\r\n\r\n\tmargin: -10px auto 0;\r\n\tpointer-events: auto;\r\n\r\n\t-webkit-transform: rotate(45deg);\r\n\t   -moz-transform: rotate(45deg);\r\n\t    -ms-transform: rotate(45deg);\r\n\t        transform: rotate(45deg);\r\n\t}\r\n.leaflet-popup-content-wrapper,\r\n.leaflet-popup-tip {\r\n\tbackground: white;\r\n\tcolor: #333;\r\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\tborder: none;\r\n\ttext-align: center;\r\n\twidth: 24px;\r\n\theight: 24px;\r\n\tfont: 16px/24px Tahoma, Verdana, sans-serif;\r\n\tcolor: #757575;\r\n\ttext-decoration: none;\r\n\tbackground: transparent;\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button:hover,\r\n.leaflet-container a.leaflet-popup-close-button:focus {\r\n\tcolor: #585858;\r\n\t}\r\n.leaflet-popup-scrolled {\r\n\toverflow: auto;\r\n\t}\r\n\r\n.leaflet-oldie .leaflet-popup-content-wrapper {\r\n\t-ms-zoom: 1;\r\n\t}\r\n.leaflet-oldie .leaflet-popup-tip {\r\n\twidth: 24px;\r\n\tmargin: 0 auto;\r\n\r\n\t-ms-filter: \"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";\r\n\tfilter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);\r\n\t}\r\n\r\n.leaflet-oldie .leaflet-control-zoom,\r\n.leaflet-oldie .leaflet-control-layers,\r\n.leaflet-oldie .leaflet-popup-content-wrapper,\r\n.leaflet-oldie .leaflet-popup-tip {\r\n\tborder: 1px solid #999;\r\n\t}\r\n\r\n\r\n/* div icon */\r\n\r\n.leaflet-div-icon {\r\n\tbackground: #fff;\r\n\tborder: 1px solid #666;\r\n\t}\r\n\r\n\r\n/* Tooltip */\r\n/* Base styles for the element that has a tooltip */\r\n.leaflet-tooltip {\r\n\tposition: absolute;\r\n\tpadding: 6px;\r\n\tbackground-color: #fff;\r\n\tborder: 1px solid #fff;\r\n\tborder-radius: 3px;\r\n\tcolor: #222;\r\n\twhite-space: nowrap;\r\n\t-webkit-user-select: none;\r\n\t-moz-user-select: none;\r\n\t-ms-user-select: none;\r\n\tuser-select: none;\r\n\tpointer-events: none;\r\n\tbox-shadow: 0 1px 3px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-tooltip.leaflet-interactive {\r\n\tcursor: pointer;\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-tooltip-top:before,\r\n.leaflet-tooltip-bottom:before,\r\n.leaflet-tooltip-left:before,\r\n.leaflet-tooltip-right:before {\r\n\tposition: absolute;\r\n\tpointer-events: none;\r\n\tborder: 6px solid transparent;\r\n\tbackground: transparent;\r\n\tcontent: \"\";\r\n\t}\r\n\r\n/* Directions */\r\n\r\n.leaflet-tooltip-bottom {\r\n\tmargin-top: 6px;\r\n}\r\n.leaflet-tooltip-top {\r\n\tmargin-top: -6px;\r\n}\r\n.leaflet-tooltip-bottom:before,\r\n.leaflet-tooltip-top:before {\r\n\tleft: 50%;\r\n\tmargin-left: -6px;\r\n\t}\r\n.leaflet-tooltip-top:before {\r\n\tbottom: 0;\r\n\tmargin-bottom: -12px;\r\n\tborder-top-color: #fff;\r\n\t}\r\n.leaflet-tooltip-bottom:before {\r\n\ttop: 0;\r\n\tmargin-top: -12px;\r\n\tmargin-left: -6px;\r\n\tborder-bottom-color: #fff;\r\n\t}\r\n.leaflet-tooltip-left {\r\n\tmargin-left: -6px;\r\n}\r\n.leaflet-tooltip-right {\r\n\tmargin-left: 6px;\r\n}\r\n.leaflet-tooltip-left:before,\r\n.leaflet-tooltip-right:before {\r\n\ttop: 50%;\r\n\tmargin-top: -6px;\r\n\t}\r\n.leaflet-tooltip-left:before {\r\n\tright: 0;\r\n\tmargin-right: -12px;\r\n\tborder-left-color: #fff;\r\n\t}\r\n.leaflet-tooltip-right:before {\r\n\tleft: 0;\r\n\tmargin-left: -12px;\r\n\tborder-right-color: #fff;\r\n\t}\r\n\r\n/* Printing */\r\n\r\n@media print {\r\n\t/* Prevent printers from removing background-images of controls. */\r\n\t.leaflet-control {\r\n\t\t-webkit-print-color-adjust: exact;\r\n\t\tprint-color-adjust: exact;\r\n\t\t}\r\n\t}\r\n\n.pin {\n&[data-v-dc572ab0] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #00000008;\n}\n&.round[data-v-dc572ab0] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.solid {\n.inner[data-v-dc572ab0] {\n      background: transparent;\n}\n}\n&.contain {\n&[data-v-dc572ab0] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n}\n.inner[data-v-dc572ab0] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n.datapoint[data-v-dc572ab0] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 50px;\n    left: 0;\n    margin: 0;\n}\n.observation-slot[data-v-dc572ab0] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 0px;\n    left: 0;\n}\n&.marker {\n&[data-v-dc572ab0]::before {\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-dc572ab0] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.image-marker[data-v-dc572ab0] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n\n.text-container[data-v-b7343795] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  gap: 1rem;\n  align-items: stretch;\n}\n.pin {\n&[data-v-b7343795] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n\n\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #0000005c;\n  }\n&.round[data-v-b7343795] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.contain {\n&[data-v-b7343795] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n    }\n.inner[data-v-b7343795] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n.datapoint[data-v-b7343795] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 50px;\n    left: 0;\n    margin: 0;\n}\n&.marker {\n&[data-v-b7343795]::before {\n\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-b7343795] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.component[data-v-b7343795] {\n  overflow: hidden;\n}\n.cmap_container[data-v-b7343795] {\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.image-marker[data-v-b7343795] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n\n.row {\n  align-items: flex-start;\n  display: flex;\n  flex: 1 1 auto;\n  flex-wrap: wrap;\n  min-width: 0;\n  flex-direction: row;\n}\n.table-inline__cell{\n  padding: 0;\n}\n#proptableConditions{\n.va-data-table__table-td{\n    padding: 0;\n    margin: 7px 0px 7px 0;\n}\n}\n\n\n.pmap_container[data-v-c72cb17a] {\n  width: 100%;\n  /*height: 100%;*/\n  min-height: 250px;\n}\n\n\n\n.pin {\n&[data-v-27027675] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n\n  background: var(--v11ef15f9);\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #00000008;\n}\n&.round[data-v-27027675] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.solid {\n.inner[data-v-27027675] {\n      background: transparent;\n}\n}\n&.contain {\n&[data-v-27027675] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n}\n.inner[data-v-27027675] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n&.marker {\n&[data-v-27027675]::before {\n\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      background: var(--v11ef15f9);\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-27027675] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.flex[data-v-27027675] {\n  display: flex;\n}\n.image-marker[data-v-27027675] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n.placeholder[data-v-27027675] {\n  background: #ccc;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 10px;\n  border: 1px dashed #999;\n}\n\n.pmap_container[data-v-77cbf15c] {\n  width: 100%;\n  height: 250px;\n}\n\n\n.settings-container[data-v-65a760a2] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-65a760a2] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-65a760a2] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-65a760a2]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-65a760a2] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-65a760a2] {\n  padding: 0 10px;\n}\n\n.auto-update-settings[data-v-bf0c06f4] {\n  padding: 1rem;\n  display: flex;\n  flex-direction: column;\n  gap: 1.5rem;\n}\n.auto-update-settings h3[data-v-bf0c06f4] {\n  margin: 0;\n  color: var(--va-text-primary);\n  font-size: 1.1rem;\n  font-weight: 600;\n}\n.refresh-setting[data-v-bf0c06f4] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n}\n.refresh-setting label[data-v-bf0c06f4] {\n  font-weight: 500;\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n}\n.refresh-slider[data-v-bf0c06f4] {\n  margin: 0.5rem 0;\n}\n.slider-labels[data-v-bf0c06f4] {\n  display: flex;\n  justify-content: space-between;\n  font-size: 0.8rem;\n  color: var(--va-text-secondary);\n  margin-top: 0.5rem;\n}\n.refresh-info[data-v-bf0c06f4] {\n  background: var(--va-background-secondary);\n  border: 1px solid var(--va-background-border);\n  border-radius: 6px;\n  padding: 1rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n}\n.info-item[data-v-bf0c06f4] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.info-item .label[data-v-bf0c06f4] {\n  font-weight: 500;\n  color: var(--va-text-secondary);\n  font-size: 0.9rem;\n}\n.info-item .value[data-v-bf0c06f4] {\n  font-weight: 600;\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n}\n\n.full[data-v-17c997bf]{\n  position:relative;\n}\n.tree_detail[data-v-17c997bf] {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n  align-content: flex-start;\n  gap: 5px;\n}\n.tree[data-v-17c997bf] {\n  width: 300px;\n  max-height: 500px;\n  overflow-y: auto;\n}\n.detail[data-v-17c997bf] {\n  border-left: 1px solid #ccc;\n}\n.menuitem {\n&[data-v-17c997bf]{\n  display: grid;\n  grid-template-columns: 25px 35px 1fr  min-content;\n  align-items: center;\n  padding-top: 2px;\n  padding-bottom: 2px;\n  padding-left: 5px;\n  cursor: pointer;\n  }\n.checked[data-v-17c997bf] {\n    margin-top: -5px;\n}\n&.active[data-v-17c997bf] {\n    background-color: #e5e7eb;\n}\n.options[data-v-17c997bf] {\n    display: flex;\n    flex-direction: row;\n}\n}\n.childs[data-v-17c997bf] {\n  grid-column: span 4;\n  padding-left: 15px;\n}\n.content {\n&[data-v-17c997bf]{\n  width: 846px;\n  height: 500px;\n  padding: 0 0 0 15px;\n  }\n.scroller[data-v-17c997bf] {\n    min-height: 100%;\n}\n&.center[data-v-17c997bf] {\n    display: flex;\n    flex-direction: column;\n    align-content: center;\n    justify-content: center;\n    align-items: center;\n    color: #8f8f8f;\n}\n}\n.underline[data-v-17c997bf] {\n  cursor: pointer;\n}\n.blue[data-v-17c997bf] {\n  color: rgb(19, 51, 112);\n}\n.rowlayout[data-v-17c997bf] {\n  display: grid;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  width: 100%;\n  grid-template-columns: 66% 1fr;\n  gap: 15px;\n}\n\n\n.settings-container[data-v-a4a6bfa8] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n  padding: 15px;\n}\n.hint-text[data-v-a4a6bfa8] {\n  font-size: 12px;\n  color: var(--va-text-secondary);\n  margin: -8px 0 0 0;\n  padding-left: 4px;\n}\n.list-group-item {\n&[data-v-a4a6bfa8] {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n\n  cursor: move;\n  padding: var(--va-tree-node-padding);\n  list-style: none;\n  }\n.row[data-v-a4a6bfa8] {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: nowrap;\n    gap: 6px;\n    align-items: center;\n}\n&[data-v-a4a6bfa8]:hover {\n    background-color: #d6dde3;\n    border-radius: var(--va-tree-node-border-radius);\n}\n}\n.empty[data-v-a4a6bfa8] {\n  display: block;\n  width: 100%;\n  vertical-align: middle;\n  text-align: center;\n  font-variant: small-caps;\n  font-style: italic;\n  color: #5d5d5d;\n}\n.bottomframe[data-v-a4a6bfa8] {\n  border-bottom: 1px solid var(--va-background-border);\n}\n#header-va-4[data-v-a4a6bfa8] {\n  padding: 6px 12px 6px 12px;\n}\n.options[data-v-a4a6bfa8] {\n  padding-top: 6px;\n  padding-left: 12px;\n  border-top: 1px dotted #00000047;\n}\n.row.nhidden[data-v-a4a6bfa8] {\n  display: none;\n}\n.dragIcon[data-v-a4a6bfa8] {\n  cursor: n-resize;\n}\n\n.button {\n  margin-top: 35px;\n}\n.flip-list-move {\n  transition: transform 0.5s;\n}\n.no-move {\n  transition: transform 0s;\n}\n.ghost {\n  opacity: 0.5;\n  background: #c8ebfb;\n}\n.list-group {\n  min-height: 20px;\n}\n.list-group-item {\n  cursor: move;\n}\n.list-group-item i {\n  cursor: pointer;\n}\n.nhidden, .row.nhidden {\n  display: none;\n}\n.va-tree-node-root {\n&:hover {\n    cursor: pointer;\n.nhidden {\n      display: inline;\n}\n.nsee {\n      display: none;\n}\n}\n}\n.list-group-item {\n&:hover {\n    cursor: pointer;\n.nhidden {\n      display: flex;\n}\n}\n}\n.sliderPopOver {\n  /*background-color: #fefefe99 !important;*/\n  padding: 2px 7px;\n.va-slider__handler {\n    left: 51%;\n    background-color: rgb(255 255 255) !important;\n    border-color: rgb(153 169 200) !important;\n    border-radius: 6px !important;\n    border-width: 1px !important;\n    width: 11px;\n    height: 20px;\n.va-slider__handler__dot--focus {\n      margin-top: 4px;\n}\n}\n}\n.mt4{\n  margin-top: 4px;\n}\n\n.datapoint-wrapper[data-v-2eb55b7f] {\n  position: relative;\n  display: inline-block;\n}\n.tlc[data-v-2eb55b7f] {\n  position: absolute;\n  border: 4px solid #f8f6f6;\n  background: #6a6a6a;\n  padding: 3px;\n  border-radius: 12px;\n  text-wrap: nowrap;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%) rotate(-90deg);\n  margin-top: 5px;\n  box-shadow: -3px 5px 6px #1919192b;\n  font-size: 12px;\n  white-space: nowrap;\n}\n\n\n.settings-container[data-v-ca2b9f21] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-ca2b9f21] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-ca2b9f21] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-ca2b9f21]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-ca2b9f21] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-ca2b9f21] {\n  padding: 0 10px;\n}\n\n.datapoint-wrapper[data-v-a78b518d] {\n  position: relative;\n  display: inline-block;\n}\n.datapoint[data-v-a78b518d] {\n  display: inline-block;\n  text-wrap: nowrap;\n  position: absolute;\n  border: 1px solid #ccc;\n  background: #fff;\n  padding: 4px;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-top: 5px;\n  border-radius: 21px;\n  white-space: nowrap;\n}\n\n\n.settings-container[data-v-39ec496f] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-39ec496f] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-39ec496f] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-39ec496f]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-39ec496f] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-39ec496f] {\n  padding: 0 10px;\n}\n";})();
-const { defineComponent, h: h$2, ref, reactive, provide, computed, onMounted, markRaw, nextTick, onBeforeUnmount, inject: inject$1, watch, onUnmounted, render, createElementBlock, openBlock, Fragment, renderList, createBlock, createCommentVNode, unref, renderSlot, normalizeClass, normalizeStyle, createElementVNode, toDisplayString, withCtx, createVNode, createTextVNode, resolveDynamicComponent, mergeModels, toRefs, useModel, toRaw, resolveComponent, TransitionGroup, useCssVars, mergeProps, isRef, shallowRef, watchEffect, withDirectives, vModelText, getCurrentInstance, withModifiers } = __tsm__.require("vue");
-const { container, identifiers: identifiers$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { Payload, EVENT_ACTIONS_REGISTRY, WidgetAction, WidgetActionInterface } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
-const { loggerFactory } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
+(function(){var i="ui.vue.widget.map",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="/* required styles */\r\n\r\n.leaflet-pane,\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-tile-container,\r\n.leaflet-pane > svg,\r\n.leaflet-pane > canvas,\r\n.leaflet-zoom-box,\r\n.leaflet-image-layer,\r\n.leaflet-layer {\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\t}\r\n.leaflet-container {\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\t-webkit-user-select: none;\r\n\t   -moz-user-select: none;\r\n\t        user-select: none;\r\n\t  -webkit-user-drag: none;\r\n\t}\r\n/* Prevents IE11 from highlighting tiles in blue */\r\n.leaflet-tile::selection {\r\n\tbackground: transparent;\r\n}\r\n/* Safari renders non-retina tile on retina better with this, but Chrome is worse */\r\n.leaflet-safari .leaflet-tile {\r\n\timage-rendering: -webkit-optimize-contrast;\r\n\t}\r\n/* hack that prevents hw layers \"stretching\" when loading new tiles */\r\n.leaflet-safari .leaflet-tile-container {\r\n\twidth: 1600px;\r\n\theight: 1600px;\r\n\t-webkit-transform-origin: 0 0;\r\n\t}\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\tdisplay: block;\r\n\t}\r\n/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */\r\n/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */\r\n.leaflet-container .leaflet-overlay-pane svg {\r\n\tmax-width: none !important;\r\n\tmax-height: none !important;\r\n\t}\r\n.leaflet-container .leaflet-marker-pane img,\r\n.leaflet-container .leaflet-shadow-pane img,\r\n.leaflet-container .leaflet-tile-pane img,\r\n.leaflet-container img.leaflet-image-layer,\r\n.leaflet-container .leaflet-tile {\r\n\tmax-width: none !important;\r\n\tmax-height: none !important;\r\n\twidth: auto;\r\n\tpadding: 0;\r\n\t}\r\n\r\n.leaflet-container img.leaflet-tile {\r\n\t/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */\r\n\tmix-blend-mode: plus-lighter;\r\n}\r\n\r\n.leaflet-container.leaflet-touch-zoom {\r\n\t-ms-touch-action: pan-x pan-y;\r\n\ttouch-action: pan-x pan-y;\r\n\t}\r\n.leaflet-container.leaflet-touch-drag {\r\n\t-ms-touch-action: pinch-zoom;\r\n\t/* Fallback for FF which doesn't support pinch-zoom */\r\n\ttouch-action: none;\r\n\ttouch-action: pinch-zoom;\r\n}\r\n.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {\r\n\t-ms-touch-action: none;\r\n\ttouch-action: none;\r\n}\r\n.leaflet-container {\r\n\t-webkit-tap-highlight-color: transparent;\r\n}\r\n.leaflet-container a {\r\n\t-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);\r\n}\r\n.leaflet-tile {\r\n\tfilter: inherit;\r\n\tvisibility: hidden;\r\n\t}\r\n.leaflet-tile-loaded {\r\n\tvisibility: inherit;\r\n\t}\r\n.leaflet-zoom-box {\r\n\twidth: 0;\r\n\theight: 0;\r\n\t-moz-box-sizing: border-box;\r\n\t     box-sizing: border-box;\r\n\tz-index: 800;\r\n\t}\r\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\r\n.leaflet-overlay-pane svg {\r\n\t-moz-user-select: none;\r\n\t}\r\n\r\n.leaflet-pane         { z-index: 400; }\r\n\r\n.leaflet-tile-pane    { z-index: 200; }\r\n.leaflet-overlay-pane { z-index: 400; }\r\n.leaflet-shadow-pane  { z-index: 500; }\r\n.leaflet-marker-pane  { z-index: 600; }\r\n.leaflet-tooltip-pane   { z-index: 650; }\r\n.leaflet-popup-pane   { z-index: 700; }\r\n\r\n.leaflet-map-pane canvas { z-index: 100; }\r\n.leaflet-map-pane svg    { z-index: 200; }\r\n\r\n.leaflet-vml-shape {\r\n\twidth: 1px;\r\n\theight: 1px;\r\n\t}\r\n.lvml {\r\n\tbehavior: url(#default#VML);\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\t}\r\n\r\n\r\n/* control positioning */\r\n\r\n.leaflet-control {\r\n\tposition: relative;\r\n\tz-index: 800;\r\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-top,\r\n.leaflet-bottom {\r\n\tposition: absolute;\r\n\tz-index: 1000;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-top {\r\n\ttop: 0;\r\n\t}\r\n.leaflet-right {\r\n\tright: 0;\r\n\t}\r\n.leaflet-bottom {\r\n\tbottom: 0;\r\n\t}\r\n.leaflet-left {\r\n\tleft: 0;\r\n\t}\r\n.leaflet-control {\r\n\tfloat: left;\r\n\tclear: both;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tfloat: right;\r\n\t}\r\n.leaflet-top .leaflet-control {\r\n\tmargin-top: 10px;\r\n\t}\r\n.leaflet-bottom .leaflet-control {\r\n\tmargin-bottom: 10px;\r\n\t}\r\n.leaflet-left .leaflet-control {\r\n\tmargin-left: 10px;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tmargin-right: 10px;\r\n\t}\r\n\r\n\r\n/* zoom and fade animations */\r\n\r\n.leaflet-fade-anim .leaflet-popup {\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.2s linear;\r\n\t   -moz-transition: opacity 0.2s linear;\r\n\t        transition: opacity 0.2s linear;\r\n\t}\r\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\r\n\topacity: 1;\r\n\t}\r\n.leaflet-zoom-animated {\r\n\t-webkit-transform-origin: 0 0;\r\n\t    -ms-transform-origin: 0 0;\r\n\t        transform-origin: 0 0;\r\n\t}\r\nsvg.leaflet-zoom-animated {\r\n\twill-change: transform;\r\n}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-animated {\r\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t}\r\n.leaflet-zoom-anim .leaflet-tile,\r\n.leaflet-pan-anim .leaflet-tile {\r\n\t-webkit-transition: none;\r\n\t   -moz-transition: none;\r\n\t        transition: none;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-hide {\r\n\tvisibility: hidden;\r\n\t}\r\n\r\n\r\n/* cursors */\r\n\r\n.leaflet-interactive {\r\n\tcursor: pointer;\r\n\t}\r\n.leaflet-grab {\r\n\tcursor: -webkit-grab;\r\n\tcursor:    -moz-grab;\r\n\tcursor:         grab;\r\n\t}\r\n.leaflet-crosshair,\r\n.leaflet-crosshair .leaflet-interactive {\r\n\tcursor: crosshair;\r\n\t}\r\n.leaflet-popup-pane,\r\n.leaflet-control {\r\n\tcursor: auto;\r\n\t}\r\n.leaflet-dragging .leaflet-grab,\r\n.leaflet-dragging .leaflet-grab .leaflet-interactive,\r\n.leaflet-dragging .leaflet-marker-draggable {\r\n\tcursor: move;\r\n\tcursor: -webkit-grabbing;\r\n\tcursor:    -moz-grabbing;\r\n\tcursor:         grabbing;\r\n\t}\r\n\r\n/* marker & overlays interactivity */\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-image-layer,\r\n.leaflet-pane > svg path,\r\n.leaflet-tile-container {\r\n\tpointer-events: none;\r\n\t}\r\n\r\n.leaflet-marker-icon.leaflet-interactive,\r\n.leaflet-image-layer.leaflet-interactive,\r\n.leaflet-pane > svg path.leaflet-interactive,\r\nsvg.leaflet-image-layer.leaflet-interactive path {\r\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\r\n\tpointer-events: auto;\r\n\t}\r\n\r\n/* visual tweaks */\r\n\r\n.leaflet-container {\r\n\tbackground: #ddd;\r\n\toutline-offset: 1px;\r\n\t}\r\n.leaflet-container a {\r\n\tcolor: #0078A8;\r\n\t}\r\n.leaflet-zoom-box {\r\n\tborder: 2px dotted #38f;\r\n\tbackground: rgba(255,255,255,0.5);\r\n\t}\r\n\r\n\r\n/* general typography */\r\n.leaflet-container {\r\n\tfont-family: \"Helvetica Neue\", Arial, Helvetica, sans-serif;\r\n\tfont-size: 12px;\r\n\tfont-size: 0.75rem;\r\n\tline-height: 1.5;\r\n\t}\r\n\r\n\r\n/* general toolbar styles */\r\n\r\n.leaflet-bar {\r\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.65);\r\n\tborder-radius: 4px;\r\n\t}\r\n.leaflet-bar a {\r\n\tbackground-color: #fff;\r\n\tborder-bottom: 1px solid #ccc;\r\n\twidth: 26px;\r\n\theight: 26px;\r\n\tline-height: 26px;\r\n\tdisplay: block;\r\n\ttext-align: center;\r\n\ttext-decoration: none;\r\n\tcolor: black;\r\n\t}\r\n.leaflet-bar a,\r\n.leaflet-control-layers-toggle {\r\n\tbackground-position: 50% 50%;\r\n\tbackground-repeat: no-repeat;\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-bar a:hover,\r\n.leaflet-bar a:focus {\r\n\tbackground-color: #f4f4f4;\r\n\t}\r\n.leaflet-bar a:first-child {\r\n\tborder-top-left-radius: 4px;\r\n\tborder-top-right-radius: 4px;\r\n\t}\r\n.leaflet-bar a:last-child {\r\n\tborder-bottom-left-radius: 4px;\r\n\tborder-bottom-right-radius: 4px;\r\n\tborder-bottom: none;\r\n\t}\r\n.leaflet-bar a.leaflet-disabled {\r\n\tcursor: default;\r\n\tbackground-color: #f4f4f4;\r\n\tcolor: #bbb;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-bar a {\r\n\twidth: 30px;\r\n\theight: 30px;\r\n\tline-height: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:first-child {\r\n\tborder-top-left-radius: 2px;\r\n\tborder-top-right-radius: 2px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:last-child {\r\n\tborder-bottom-left-radius: 2px;\r\n\tborder-bottom-right-radius: 2px;\r\n\t}\r\n\r\n/* zoom control */\r\n\r\n.leaflet-control-zoom-in,\r\n.leaflet-control-zoom-out {\r\n\tfont: bold 18px 'Lucida Console', Monaco, monospace;\r\n\ttext-indent: 1px;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {\r\n\tfont-size: 22px;\r\n\t}\r\n\r\n\r\n/* layers control */\r\n\r\n.leaflet-control-layers {\r\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.4);\r\n\tbackground: #fff;\r\n\tborder-radius: 5px;\r\n\t}\r\n.leaflet-control-layers-toggle {\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAQAAAADQ4RFAAACf0lEQVR4AY1UM3gkARTePdvdoTxXKc+qTl3aU5U6b2Kbkz3Gtq3Zw6ziLGNPzrYx7946Tr6/ee/XeCQ4D3ykPtL5tHno4n0d/h3+xfuWHGLX81cn7r0iTNzjr7LrlxCqPtkbTQEHeqOrTy4Yyt3VCi/IOB0v7rVC7q45Q3Gr5K6jt+3Gl5nCoDD4MtO+j96Wu8atmhGqcNGHObuf8OM/x3AMx38+4Z2sPqzCxRFK2aF2e5Jol56XTLyggAMTL56XOMoS1W4pOyjUcGGQdZxU6qRh7B9Zp+PfpOFlqt0zyDZckPi1ttmIp03jX8gyJ8a/PG2yutpS/Vol7peZIbZcKBAEEheEIAgFbDkz5H6Zrkm2hVWGiXKiF4Ycw0RWKdtC16Q7qe3X4iOMxruonzegJzWaXFrU9utOSsLUmrc0YjeWYjCW4PDMADElpJSSQ0vQvA1Tm6/JlKnqFs1EGyZiFCqnRZTEJJJiKRYzVYzJck2Rm6P4iH+cmSY0YzimYa8l0EtTODFWhcMIMVqdsI2uiTvKmTisIDHJ3od5GILVhBCarCfVRmo4uTjkhrhzkiBV7SsaqS+TzrzM1qpGGUFt28pIySQHR6h7F6KSwGWm97ay+Z+ZqMcEjEWebE7wxCSQwpkhJqoZA5ivCdZDjJepuJ9IQjGGUmuXJdBFUygxVqVsxFsLMbDe8ZbDYVCGKxs+W080max1hFCarCfV+C1KATwcnvE9gRRuMP2prdbWGowm1KB1y+zwMMENkM755cJ2yPDtqhTI6ED1M/82yIDtC/4j4BijjeObflpO9I9MwXTCsSX8jWAFeHr05WoLTJ5G8IQVS/7vwR6ohirYM7f6HzYpogfS3R2OAAAAAElFTkSuQmCC);\r\n\twidth: 36px;\r\n\theight: 36px;\r\n\t}\r\n.leaflet-retina .leaflet-control-layers-toggle {\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAQAAABvcdNgAAAEsklEQVR4AWL4TydIhpZK1kpWOlg0w3ZXP6D2soBtG42jeI6ZmQTHzAxiTbSJsYLjO9HhP+WOmcuhciVnmHVQcJnp7DFvScowZorad/+V/fVzMdMT2g9Cv9guXGv/7pYOrXh2U+RRR3dSd9JRx6bIFc/ekqHI29JC6pJ5ZEh1yWkhkbcFeSjxgx3L2m1cb1C7bceyxA+CNjT/Ifff+/kDk2u/w/33/IeCMOSaWZ4glosqT3DNnNZQ7Cs58/3Ce5HL78iZH/vKVIaYlqzfdLu8Vi7dnvUbEza5Idt36tquZFldl6N5Z/POLof0XLK61mZCmJSWjVF9tEjUluu74IUXvgttuVIHE7YxSkaYhJZam7yiM9Pv82JYfl9nptxZaxMJE4YSPty+vF0+Y2up9d3wwijfjZbabqm/3bZ9ecKHsiGmRflnn1MW4pjHf9oLufyn2z3y1D6n8g8TZhxyzipLNPnAUpsOiuWimg52psrTZYnOWYNDTMuWBWa0tJb4rgq1UvmutpaYEbZlwU3CLJm/ayYjHW5/h7xWLn9Hh1vepDkyf7dE7MtT5LR4e7yYpHrkhOUpEfssBLq2pPhAqoSWKUkk7EDqkmK6RrCEzqDjhNDWNE+XSMvkJRDWlZTmCW0l0PHQGRZY5t1L83kT0Y3l2SItk5JAWHl2dCOBm+fPu3fo5/3v61RMCO9Jx2EEYYhb0rmNQMX/vm7gqOEJLcXTGw3CAuRNeyaPWwjR8PRqKQ1PDA/dpv+on9Shox52WFnx0KY8onHayrJzm87i5h9xGw/tfkev0jGsQizqezUKjk12hBMKJ4kbCqGPVNXudyyrShovGw5CgxsRICxF6aRmSjlBnHRzg7Gx8fKqEubI2rahQYdR1YgDIRQO7JvQyD52hoIQx0mxa0ODtW2Iozn1le2iIRdzwWewedyZzewidueOGqlsn1MvcnQpuVwLGG3/IR1hIKxCjelIDZ8ldqWz25jWAsnldEnK0Zxro19TGVb2ffIZEsIO89EIEDvKMPrzmBOQcKQ+rroye6NgRRxqR4U8EAkz0CL6uSGOm6KQCdWjvjRiSP1BPalCRS5iQYiEIvxuBMJEWgzSoHADcVMuN7IuqqTeyUPq22qFimFtxDyBBJEwNyt6TM88blFHao/6tWWhuuOM4SAK4EI4QmFHA+SEyWlp4EQoJ13cYGzMu7yszEIBOm2rVmHUNqwAIQabISNMRstmdhNWcFLsSm+0tjJH1MdRxO5Nx0WDMhCtgD6OKgZeljJqJKc9po8juskR9XN0Y1lZ3mWjLR9JCO1jRDMd0fpYC2VnvjBSEFg7wBENc0R9HFlb0xvF1+TBEpF68d+DHR6IOWVv2BECtxo46hOFUBd/APU57WIoEwJhIi2CdpyZX0m93BZicktMj1AS9dClteUFAUNUIEygRZCtik5zSxI9MubTBH1GOiHsiLJ3OCoSZkILa9PxiN0EbvhsAo8tdAf9Seepd36lGWHmtNANTv5Jd0z4QYyeo/UEJqxKRpg5LZx6btLPsOaEmdMyxYdlc8LMaJnikDlhclqmPiQnTEpLUIZEwkRagjYkEibQErwhkTAKCLQEbUgkzJQWc/0PstHHcfEdQ+UAAAAASUVORK5CYII=);\r\n\tbackground-size: 26px 26px;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers-toggle {\r\n\twidth: 44px;\r\n\theight: 44px;\r\n\t}\r\n.leaflet-control-layers .leaflet-control-layers-list,\r\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\r\n\tdisplay: none;\r\n\t}\r\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\r\n\tdisplay: block;\r\n\tposition: relative;\r\n\t}\r\n.leaflet-control-layers-expanded {\r\n\tpadding: 6px 10px 6px 6px;\r\n\tcolor: #333;\r\n\tbackground: #fff;\r\n\t}\r\n.leaflet-control-layers-scrollbar {\r\n\toverflow-y: scroll;\r\n\toverflow-x: hidden;\r\n\tpadding-right: 5px;\r\n\t}\r\n.leaflet-control-layers-selector {\r\n\tmargin-top: 2px;\r\n\tposition: relative;\r\n\ttop: 1px;\r\n\t}\r\n.leaflet-control-layers label {\r\n\tdisplay: block;\r\n\tfont-size: 13px;\r\n\tfont-size: 1.08333em;\r\n\t}\r\n.leaflet-control-layers-separator {\r\n\theight: 0;\r\n\tborder-top: 1px solid #ddd;\r\n\tmargin: 5px -10px 5px -6px;\r\n\t}\r\n\r\n/* Default icon URLs */\r\n.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */\r\n\tbackground-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=);\r\n\t}\r\n\r\n\r\n/* attribution and scale controls */\r\n\r\n.leaflet-container .leaflet-control-attribution {\r\n\tbackground: #fff;\r\n\tbackground: rgba(255, 255, 255, 0.8);\r\n\tmargin: 0;\r\n\t}\r\n.leaflet-control-attribution,\r\n.leaflet-control-scale-line {\r\n\tpadding: 0 5px;\r\n\tcolor: #333;\r\n\tline-height: 1.4;\r\n\t}\r\n.leaflet-control-attribution a {\r\n\ttext-decoration: none;\r\n\t}\r\n.leaflet-control-attribution a:hover,\r\n.leaflet-control-attribution a:focus {\r\n\ttext-decoration: underline;\r\n\t}\r\n.leaflet-attribution-flag {\r\n\tdisplay: inline !important;\r\n\tvertical-align: baseline !important;\r\n\twidth: 1em;\r\n\theight: 0.6669em;\r\n\t}\r\n.leaflet-left .leaflet-control-scale {\r\n\tmargin-left: 5px;\r\n\t}\r\n.leaflet-bottom .leaflet-control-scale {\r\n\tmargin-bottom: 5px;\r\n\t}\r\n.leaflet-control-scale-line {\r\n\tborder: 2px solid #777;\r\n\tborder-top: none;\r\n\tline-height: 1.1;\r\n\tpadding: 2px 5px 1px;\r\n\twhite-space: nowrap;\r\n\t-moz-box-sizing: border-box;\r\n\t     box-sizing: border-box;\r\n\tbackground: rgba(255, 255, 255, 0.8);\r\n\ttext-shadow: 1px 1px #fff;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child) {\r\n\tborder-top: 2px solid #777;\r\n\tborder-bottom: none;\r\n\tmargin-top: -2px;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\r\n\tborder-bottom: 2px solid #777;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-attribution,\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tbox-shadow: none;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tborder: 2px solid rgba(0,0,0,0.2);\r\n\tbackground-clip: padding-box;\r\n\t}\r\n\r\n\r\n/* popup */\r\n\r\n.leaflet-popup {\r\n\tposition: absolute;\r\n\ttext-align: center;\r\n\tmargin-bottom: 20px;\r\n\t}\r\n.leaflet-popup-content-wrapper {\r\n\tpadding: 1px;\r\n\ttext-align: left;\r\n\tborder-radius: 12px;\r\n\t}\r\n.leaflet-popup-content {\r\n\tmargin: 13px 24px 13px 20px;\r\n\tline-height: 1.3;\r\n\tfont-size: 13px;\r\n\tfont-size: 1.08333em;\r\n\tmin-height: 1px;\r\n\t}\r\n.leaflet-popup-content p {\r\n\tmargin: 17px 0;\r\n\tmargin: 1.3em 0;\r\n\t}\r\n.leaflet-popup-tip-container {\r\n\twidth: 40px;\r\n\theight: 20px;\r\n\tposition: absolute;\r\n\tleft: 50%;\r\n\tmargin-top: -1px;\r\n\tmargin-left: -20px;\r\n\toverflow: hidden;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-popup-tip {\r\n\twidth: 17px;\r\n\theight: 17px;\r\n\tpadding: 1px;\r\n\r\n\tmargin: -10px auto 0;\r\n\tpointer-events: auto;\r\n\r\n\t-webkit-transform: rotate(45deg);\r\n\t   -moz-transform: rotate(45deg);\r\n\t    -ms-transform: rotate(45deg);\r\n\t        transform: rotate(45deg);\r\n\t}\r\n.leaflet-popup-content-wrapper,\r\n.leaflet-popup-tip {\r\n\tbackground: white;\r\n\tcolor: #333;\r\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\tborder: none;\r\n\ttext-align: center;\r\n\twidth: 24px;\r\n\theight: 24px;\r\n\tfont: 16px/24px Tahoma, Verdana, sans-serif;\r\n\tcolor: #757575;\r\n\ttext-decoration: none;\r\n\tbackground: transparent;\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button:hover,\r\n.leaflet-container a.leaflet-popup-close-button:focus {\r\n\tcolor: #585858;\r\n\t}\r\n.leaflet-popup-scrolled {\r\n\toverflow: auto;\r\n\t}\r\n\r\n.leaflet-oldie .leaflet-popup-content-wrapper {\r\n\t-ms-zoom: 1;\r\n\t}\r\n.leaflet-oldie .leaflet-popup-tip {\r\n\twidth: 24px;\r\n\tmargin: 0 auto;\r\n\r\n\t-ms-filter: \"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";\r\n\tfilter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);\r\n\t}\r\n\r\n.leaflet-oldie .leaflet-control-zoom,\r\n.leaflet-oldie .leaflet-control-layers,\r\n.leaflet-oldie .leaflet-popup-content-wrapper,\r\n.leaflet-oldie .leaflet-popup-tip {\r\n\tborder: 1px solid #999;\r\n\t}\r\n\r\n\r\n/* div icon */\r\n\r\n.leaflet-div-icon {\r\n\tbackground: #fff;\r\n\tborder: 1px solid #666;\r\n\t}\r\n\r\n\r\n/* Tooltip */\r\n/* Base styles for the element that has a tooltip */\r\n.leaflet-tooltip {\r\n\tposition: absolute;\r\n\tpadding: 6px;\r\n\tbackground-color: #fff;\r\n\tborder: 1px solid #fff;\r\n\tborder-radius: 3px;\r\n\tcolor: #222;\r\n\twhite-space: nowrap;\r\n\t-webkit-user-select: none;\r\n\t-moz-user-select: none;\r\n\t-ms-user-select: none;\r\n\tuser-select: none;\r\n\tpointer-events: none;\r\n\tbox-shadow: 0 1px 3px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-tooltip.leaflet-interactive {\r\n\tcursor: pointer;\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-tooltip-top:before,\r\n.leaflet-tooltip-bottom:before,\r\n.leaflet-tooltip-left:before,\r\n.leaflet-tooltip-right:before {\r\n\tposition: absolute;\r\n\tpointer-events: none;\r\n\tborder: 6px solid transparent;\r\n\tbackground: transparent;\r\n\tcontent: \"\";\r\n\t}\r\n\r\n/* Directions */\r\n\r\n.leaflet-tooltip-bottom {\r\n\tmargin-top: 6px;\r\n}\r\n.leaflet-tooltip-top {\r\n\tmargin-top: -6px;\r\n}\r\n.leaflet-tooltip-bottom:before,\r\n.leaflet-tooltip-top:before {\r\n\tleft: 50%;\r\n\tmargin-left: -6px;\r\n\t}\r\n.leaflet-tooltip-top:before {\r\n\tbottom: 0;\r\n\tmargin-bottom: -12px;\r\n\tborder-top-color: #fff;\r\n\t}\r\n.leaflet-tooltip-bottom:before {\r\n\ttop: 0;\r\n\tmargin-top: -12px;\r\n\tmargin-left: -6px;\r\n\tborder-bottom-color: #fff;\r\n\t}\r\n.leaflet-tooltip-left {\r\n\tmargin-left: -6px;\r\n}\r\n.leaflet-tooltip-right {\r\n\tmargin-left: 6px;\r\n}\r\n.leaflet-tooltip-left:before,\r\n.leaflet-tooltip-right:before {\r\n\ttop: 50%;\r\n\tmargin-top: -6px;\r\n\t}\r\n.leaflet-tooltip-left:before {\r\n\tright: 0;\r\n\tmargin-right: -12px;\r\n\tborder-left-color: #fff;\r\n\t}\r\n.leaflet-tooltip-right:before {\r\n\tleft: 0;\r\n\tmargin-left: -12px;\r\n\tborder-right-color: #fff;\r\n\t}\r\n\r\n/* Printing */\r\n\r\n@media print {\r\n\t/* Prevent printers from removing background-images of controls. */\r\n\t.leaflet-control {\r\n\t\t-webkit-print-color-adjust: exact;\r\n\t\tprint-color-adjust: exact;\r\n\t\t}\r\n\t}\r\n\n.pin {\n&[data-v-dc572ab0] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #00000008;\n}\n&.round[data-v-dc572ab0] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.solid {\n.inner[data-v-dc572ab0] {\n      background: transparent;\n}\n}\n&.contain {\n&[data-v-dc572ab0] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n}\n.inner[data-v-dc572ab0] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n.datapoint[data-v-dc572ab0] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 50px;\n    left: 0;\n    margin: 0;\n}\n.observation-slot[data-v-dc572ab0] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 0px;\n    left: 0;\n}\n&.marker {\n&[data-v-dc572ab0]::before {\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-dc572ab0] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.image-marker[data-v-dc572ab0] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n\n.text-container[data-v-dc42236a] {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  height: 100%;\n  gap: 1rem;\n  align-items: stretch;\n}\n.pin {\n&[data-v-dc42236a] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n\n\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #0000005c;\n  }\n&.round[data-v-dc42236a] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.contain {\n&[data-v-dc42236a] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n    }\n.inner[data-v-dc42236a] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n.datapoint[data-v-dc42236a] {\n    transform: rotate(45deg);\n    position: absolute;\n    top: 50px;\n    left: 0;\n    margin: 0;\n}\n&.marker {\n&[data-v-dc42236a]::before {\n\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-dc42236a] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.component[data-v-dc42236a] {\n  overflow: hidden;\n}\n.cmap_container[data-v-dc42236a] {\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.image-marker[data-v-dc42236a] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n\n.row {\n  align-items: flex-start;\n  display: flex;\n  flex: 1 1 auto;\n  flex-wrap: wrap;\n  min-width: 0;\n  flex-direction: row;\n}\n.table-inline__cell{\n  padding: 0;\n}\n#proptableConditions{\n.va-data-table__table-td{\n    padding: 0;\n    margin: 7px 0px 7px 0;\n}\n}\n\n\n.pmap_container[data-v-c72cb17a] {\n  width: 100%;\n  /*height: 100%;*/\n  min-height: 250px;\n}\n\n\n\n.pin {\n&[data-v-27027675] {\n  width: 45px;\n  height: 45px;\n  border-radius: 50% 50% 50% 0;\n\n  background: var(--v11ef15f9);\n  transform: rotate(-45deg);\n  left: 50%;\n  top: 50%;\n  margin: -15px 71px 0 -15px;\n  box-shadow: -4px -6px 8px #00000008;\n}\n&.round[data-v-27027675] {\n    border-radius: 50% 50% 50% 50%;\n}\n&.solid {\n.inner[data-v-27027675] {\n      background: transparent;\n}\n}\n&.contain {\n&[data-v-27027675] {\n    width: auto;\n    height: auto;\n    border-radius: 25%;\n    display: inline-block;\n    transform: rotate(0deg);\n    padding: 4px;\n    margin: 0px;\n}\n.inner[data-v-27027675] {\n      width: auto;\n      height: auto;\n      margin: 0;\n      position: relative;\n      transform: rotate(0deg);\n      border-radius: 17%;\n      display: inline-block;\n      font-size: 13px;\n      padding: 3px;\n}\n}\n&.marker {\n&[data-v-27027675]::before {\n\n      content: \" \";\n      width: 20px;\n      height: 20px;\n      display: block;\n      position: absolute;\n      background: var(--v11ef15f9);\n      transform: rotate(-45deg);\n      border-radius: 50% 50% 50% 0;\n      top: 14px;\n      left: 5px;\n      z-index: -24;\n}\n}\n.inner[data-v-27027675] {\n    padding: 5px 0 0 0;\n    width: 37px;\n    height: 37px;\n    margin: 3px 0 0 4px;\n    background: #fff;\n    position: absolute;\n    transform: rotate(45deg);\n    border-radius: 50%;\n}\n}\n.flex[data-v-27027675] {\n  display: flex;\n}\n.image-marker[data-v-27027675] {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: -50%;\n  margin-top: -50%;\n}\n.placeholder[data-v-27027675] {\n  background: #ccc;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 10px;\n  border: 1px dashed #999;\n}\n\n.pmap_container[data-v-77cbf15c] {\n  width: 100%;\n  height: 250px;\n}\n\n\n.settings-container[data-v-65a760a2] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-65a760a2] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-65a760a2] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-65a760a2]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-65a760a2] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-65a760a2] {\n  padding: 0 10px;\n}\n\n.auto-update-settings[data-v-bf0c06f4] {\n  padding: 1rem;\n  display: flex;\n  flex-direction: column;\n  gap: 1.5rem;\n}\n.auto-update-settings h3[data-v-bf0c06f4] {\n  margin: 0;\n  color: var(--va-text-primary);\n  font-size: 1.1rem;\n  font-weight: 600;\n}\n.refresh-setting[data-v-bf0c06f4] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n}\n.refresh-setting label[data-v-bf0c06f4] {\n  font-weight: 500;\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n}\n.refresh-slider[data-v-bf0c06f4] {\n  margin: 0.5rem 0;\n}\n.slider-labels[data-v-bf0c06f4] {\n  display: flex;\n  justify-content: space-between;\n  font-size: 0.8rem;\n  color: var(--va-text-secondary);\n  margin-top: 0.5rem;\n}\n.refresh-info[data-v-bf0c06f4] {\n  background: var(--va-background-secondary);\n  border: 1px solid var(--va-background-border);\n  border-radius: 6px;\n  padding: 1rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n}\n.info-item[data-v-bf0c06f4] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.info-item .label[data-v-bf0c06f4] {\n  font-weight: 500;\n  color: var(--va-text-secondary);\n  font-size: 0.9rem;\n}\n.info-item .value[data-v-bf0c06f4] {\n  font-weight: 600;\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n}\n\n.full[data-v-17c997bf]{\n  position:relative;\n}\n.tree_detail[data-v-17c997bf] {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n  align-content: flex-start;\n  gap: 5px;\n}\n.tree[data-v-17c997bf] {\n  width: 300px;\n  max-height: 500px;\n  overflow-y: auto;\n}\n.detail[data-v-17c997bf] {\n  border-left: 1px solid #ccc;\n}\n.menuitem {\n&[data-v-17c997bf]{\n  display: grid;\n  grid-template-columns: 25px 35px 1fr  min-content;\n  align-items: center;\n  padding-top: 2px;\n  padding-bottom: 2px;\n  padding-left: 5px;\n  cursor: pointer;\n  }\n.checked[data-v-17c997bf] {\n    margin-top: -5px;\n}\n&.active[data-v-17c997bf] {\n    background-color: #e5e7eb;\n}\n.options[data-v-17c997bf] {\n    display: flex;\n    flex-direction: row;\n}\n}\n.childs[data-v-17c997bf] {\n  grid-column: span 4;\n  padding-left: 15px;\n}\n.content {\n&[data-v-17c997bf]{\n  width: 846px;\n  height: 500px;\n  padding: 0 0 0 15px;\n  }\n.scroller[data-v-17c997bf] {\n    min-height: 100%;\n}\n&.center[data-v-17c997bf] {\n    display: flex;\n    flex-direction: column;\n    align-content: center;\n    justify-content: center;\n    align-items: center;\n    color: #8f8f8f;\n}\n}\n.underline[data-v-17c997bf] {\n  cursor: pointer;\n}\n.blue[data-v-17c997bf] {\n  color: rgb(19, 51, 112);\n}\n.rowlayout[data-v-17c997bf] {\n  display: grid;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  width: 100%;\n  grid-template-columns: 66% 1fr;\n  gap: 15px;\n}\n\n\n.settings-container[data-v-5f131b6e] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n  padding: 15px;\n}\n.hint-text[data-v-5f131b6e] {\n  font-size: 12px;\n  color: var(--va-text-secondary);\n  margin: -8px 0 0 0;\n  padding-left: 4px;\n}\n.list-group-item {\n&[data-v-5f131b6e] {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n\n  cursor: move;\n  padding: var(--va-tree-node-padding);\n  list-style: none;\n  }\n.row[data-v-5f131b6e] {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: nowrap;\n    gap: 6px;\n    align-items: center;\n}\n&[data-v-5f131b6e]:hover {\n    background-color: #d6dde3;\n    border-radius: var(--va-tree-node-border-radius);\n}\n}\n.empty[data-v-5f131b6e] {\n  display: block;\n  width: 100%;\n  vertical-align: middle;\n  text-align: center;\n  font-variant: small-caps;\n  font-style: italic;\n  color: #5d5d5d;\n}\n.bottomframe[data-v-5f131b6e] {\n  border-bottom: 1px solid var(--va-background-border);\n}\n#header-va-4[data-v-5f131b6e] {\n  padding: 6px 12px 6px 12px;\n}\n.options[data-v-5f131b6e] {\n  padding-top: 6px;\n  padding-left: 12px;\n  border-top: 1px dotted #00000047;\n}\n.row.nhidden[data-v-5f131b6e] {\n  display: none;\n}\n.dragIcon[data-v-5f131b6e] {\n  cursor: n-resize;\n}\n\n.button {\n  margin-top: 35px;\n}\n.flip-list-move {\n  transition: transform 0.5s;\n}\n.no-move {\n  transition: transform 0s;\n}\n.ghost {\n  opacity: 0.5;\n  background: #c8ebfb;\n}\n.list-group {\n  min-height: 20px;\n}\n.list-group-item {\n  cursor: move;\n}\n.list-group-item i {\n  cursor: pointer;\n}\n.nhidden, .row.nhidden {\n  display: none;\n}\n.va-tree-node-root {\n&:hover {\n    cursor: pointer;\n.nhidden {\n      display: inline;\n}\n.nsee {\n      display: none;\n}\n}\n}\n.list-group-item {\n&:hover {\n    cursor: pointer;\n.nhidden {\n      display: flex;\n}\n}\n}\n.sliderPopOver {\n  /*background-color: #fefefe99 !important;*/\n  padding: 2px 7px;\n.va-slider__handler {\n    left: 51%;\n    background-color: rgb(255 255 255) !important;\n    border-color: rgb(153 169 200) !important;\n    border-radius: 6px !important;\n    border-width: 1px !important;\n    width: 11px;\n    height: 20px;\n.va-slider__handler__dot--focus {\n      margin-top: 4px;\n}\n}\n}\n.mt4{\n  margin-top: 4px;\n}\n\n.datapoint-wrapper[data-v-2eb55b7f] {\n  position: relative;\n  display: inline-block;\n}\n.tlc[data-v-2eb55b7f] {\n  position: absolute;\n  border: 4px solid #f8f6f6;\n  background: #6a6a6a;\n  padding: 3px;\n  border-radius: 12px;\n  text-wrap: nowrap;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%) rotate(-90deg);\n  margin-top: 5px;\n  box-shadow: -3px 5px 6px #1919192b;\n  font-size: 12px;\n  white-space: nowrap;\n}\n\n\n.settings-container[data-v-ca2b9f21] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-ca2b9f21] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-ca2b9f21] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-ca2b9f21]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-ca2b9f21] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-ca2b9f21] {\n  padding: 0 10px;\n}\n\n.datapoint-wrapper[data-v-a78b518d] {\n  position: relative;\n  display: inline-block;\n}\n.datapoint[data-v-a78b518d] {\n  display: inline-block;\n  text-wrap: nowrap;\n  position: absolute;\n  border: 1px solid #ccc;\n  background: #fff;\n  padding: 4px;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-top: 5px;\n  border-radius: 21px;\n  white-space: nowrap;\n}\n\n\n.settings-container[data-v-39ec496f] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.icons-container[data-v-39ec496f] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n  max-height: 220px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  width: 100%;\n  cursor: pointer;\n  padding: 10px;\n}\n.material-symbols-outlined[data-v-39ec496f] {\n  font-family: Material Symbols Outlined sans-serif;\n  font-weight: normal;\n  font-style: inherit;\n  font-size: 40px;\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  border: 2px solid transparent;\n  border-radius: 5px;\n  transition: border-color 0.5s ease, transform 0.5s ease;\n}\n.material-symbols-outlined[data-v-39ec496f]:hover {\n  transform: scale(1.1);\n}\n.active-icon[data-v-39ec496f] {\n  border: 2px solid rgb(0, 121, 0);\n}\n.slider[data-v-39ec496f] {\n  padding: 0 10px;\n}\n";})();
+const { defineComponent, h: h$1, ref, reactive, provide, computed, onMounted, markRaw, nextTick, onBeforeUnmount, inject: inject$1, watch, onUnmounted, render, createElementBlock, openBlock, Fragment, renderList, createBlock, createCommentVNode, unref, renderSlot, normalizeClass, normalizeStyle, createElementVNode, toDisplayString, withCtx, createVNode, createTextVNode, resolveDynamicComponent, mergeModels, toRefs, useModel, toRaw, resolveComponent, TransitionGroup, useCssVars, mergeProps, isRef, shallowRef, watchEffect, withDirectives, vModelText, getCurrentInstance, withModifiers } = __tsm__.require("vue");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { identifier: identifier$2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { identifiers: identifiers$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { IconWidget, IconWidgetSettings } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.widget.icon");
+const { Payload, EVENT_ACTIONS_REGISTRY, WidgetAction, WidgetActionInterface } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { Documentation, Attribute, Reference, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
+const { loggerFactory } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
 const { useRoute } = __tsm__.require("vue-router");
 function _mergeNamespaces(n, m2) {
-  for (var i2 = 0; i2 < m2.length; i2++) {
-    const e = m2[i2];
+  for (var i = 0; i < m2.length; i++) {
+    const e = m2[i];
     if (typeof e !== "string" && !Array.isArray(e)) {
       for (const k2 in e) {
         if (k2 !== "default" && !(k2 in n)) {
@@ -72,13 +72,13 @@ function require_Reflect() {
       function functionThis() {
         try {
           return Function("return this;")();
-        } catch (_2) {
+        } catch (_) {
         }
       }
       function indirectEvalThis() {
         try {
           return (void 0, eval)("(function() { return this; })()");
-        } catch (_2) {
+        } catch (_) {
         }
       }
       function sloppyModeThis() {
@@ -228,8 +228,8 @@ function require_Reflect() {
       }
       exporter("deleteMetadata", deleteMetadata);
       function DecorateConstructor(decorators, target) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
           var decorated = decorator(target);
           if (!IsUndefined(decorated) && !IsNull(decorated)) {
             if (!IsConstructor(decorated))
@@ -240,8 +240,8 @@ function require_Reflect() {
         return target;
       }
       function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
           var decorated = decorator(target, propertyKey, descriptor);
           if (!IsUndefined(decorated) && !IsNull(decorated)) {
             if (!IsObject(decorated))
@@ -251,58 +251,58 @@ function require_Reflect() {
         }
         return descriptor;
       }
-      function OrdinaryHasMetadata(MetadataKey, O2, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
+      function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
         if (hasOwn2)
           return true;
-        var parent = OrdinaryGetPrototypeOf(O2);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (!IsNull(parent))
           return OrdinaryHasMetadata(MetadataKey, parent, P);
         return false;
       }
-      function OrdinaryHasOwnMetadata(MetadataKey, O2, P) {
+      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           false
         );
         if (IsUndefined(provider))
           return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O2, P));
+        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
       }
-      function OrdinaryGetMetadata(MetadataKey, O2, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
+      function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
         if (hasOwn2)
-          return OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
+          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (!IsNull(parent))
           return OrdinaryGetMetadata(MetadataKey, parent, P);
         return void 0;
       }
-      function OrdinaryGetOwnMetadata(MetadataKey, O2, P) {
+      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           false
         );
         if (IsUndefined(provider))
           return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O2, P);
+        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
       }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P) {
+      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*Create*/
           true
         );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P);
+        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
       }
-      function OrdinaryMetadataKeys(O2, P) {
-        var ownKeys2 = OrdinaryOwnMetadataKeys(O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
+      function OrdinaryMetadataKeys(O, P) {
+        var ownKeys2 = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
         if (parent === null)
           return ownKeys2;
         var parentKeys = OrdinaryMetadataKeys(parent, P);
@@ -330,9 +330,9 @@ function require_Reflect() {
         }
         return keys;
       }
-      function OrdinaryOwnMetadataKeys(O2, P) {
+      function OrdinaryOwnMetadataKeys(O, P) {
         var provider = GetMetadataProvider(
-          O2,
+          O,
           P,
           /*create*/
           false
@@ -340,7 +340,7 @@ function require_Reflect() {
         if (!provider) {
           return [];
         }
-        return provider.OrdinaryOwnMetadataKeys(O2, P);
+        return provider.OrdinaryOwnMetadataKeys(O, P);
       }
       function Type(x2) {
         if (x2 === null)
@@ -399,18 +399,18 @@ function require_Reflect() {
         }
         return OrdinaryToPrimitive(input);
       }
-      function OrdinaryToPrimitive(O2, hint) {
+      function OrdinaryToPrimitive(O, hint) {
         var valueOf, result, toString_2;
         {
-          var toString_1 = O2.toString;
+          var toString_1 = O.toString;
           if (IsCallable(toString_1)) {
-            var result = toString_1.call(O2);
+            var result = toString_1.call(O);
             if (!IsObject(result))
               return result;
           }
-          var valueOf = O2.valueOf;
+          var valueOf = O.valueOf;
           if (IsCallable(valueOf)) {
-            var result = valueOf.call(O2);
+            var result = valueOf.call(O);
             if (!IsObject(result))
               return result;
           }
@@ -448,8 +448,8 @@ function require_Reflect() {
             return false;
         }
       }
-      function SameValueZero(x2, y2) {
-        return x2 === y2 || x2 !== x2 && y2 !== y2;
+      function SameValueZero(x2, y) {
+        return x2 === y || x2 !== x2 && y !== y;
       }
       function GetMethod(V2, P) {
         var func = V2[P];
@@ -480,20 +480,20 @@ function require_Reflect() {
         if (f2)
           f2.call(iterator);
       }
-      function OrdinaryGetPrototypeOf(O2) {
-        var proto = Object.getPrototypeOf(O2);
-        if (typeof O2 !== "function" || O2 === functionPrototype)
+      function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
           return proto;
         if (proto !== functionPrototype)
           return proto;
-        var prototype = O2.prototype;
+        var prototype = O.prototype;
         var prototypeProto = prototype && Object.getPrototypeOf(prototype);
         if (prototypeProto == null || prototypeProto === Object.prototype)
           return proto;
         var constructor = prototypeProto.constructor;
         if (typeof constructor !== "function")
           return proto;
-        if (constructor === O2)
+        if (constructor === O)
           return proto;
         return constructor;
       }
@@ -536,12 +536,12 @@ function require_Reflect() {
               break;
           }
         }
-        function getProviderNoCache(O2, P) {
+        function getProviderNoCache(O, P) {
           if (!IsUndefined(first)) {
-            if (first.isProviderFor(O2, P))
+            if (first.isProviderFor(O, P))
               return first;
             if (!IsUndefined(second)) {
-              if (second.isProviderFor(O2, P))
+              if (second.isProviderFor(O, P))
                 return first;
               if (!IsUndefined(rest)) {
                 var iterator = GetIterator(rest);
@@ -551,7 +551,7 @@ function require_Reflect() {
                     return void 0;
                   }
                   var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O2, P)) {
+                  if (provider.isProviderFor(O, P)) {
                     IteratorClose(iterator);
                     return provider;
                   }
@@ -559,13 +559,13 @@ function require_Reflect() {
               }
             }
           }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O2, P)) {
+          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
             return fallback;
           }
           return void 0;
         }
-        function getProvider(O2, P) {
-          var providerMap = targetProviderMap.get(O2);
+        function getProvider(O, P) {
+          var providerMap = targetProviderMap.get(O);
           var provider;
           if (!IsUndefined(providerMap)) {
             provider = providerMap.get(P);
@@ -573,11 +573,11 @@ function require_Reflect() {
           if (!IsUndefined(provider)) {
             return provider;
           }
-          provider = getProviderNoCache(O2, P);
+          provider = getProviderNoCache(O, P);
           if (!IsUndefined(provider)) {
             if (IsUndefined(providerMap)) {
               providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
+              targetProviderMap.set(O, providerMap);
             }
             providerMap.set(P, provider);
           }
@@ -588,19 +588,19 @@ function require_Reflect() {
             throw new TypeError();
           return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
         }
-        function setProvider(O2, P, provider) {
+        function setProvider(O, P, provider) {
           if (!hasProvider(provider)) {
             throw new Error("Metadata provider not registered.");
           }
-          var existingProvider = getProvider(O2, P);
+          var existingProvider = getProvider(O, P);
           if (existingProvider !== provider) {
             if (!IsUndefined(existingProvider)) {
               return false;
             }
-            var providerMap = targetProviderMap.get(O2);
+            var providerMap = targetProviderMap.get(O);
             if (IsUndefined(providerMap)) {
               providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
+              targetProviderMap.set(O, providerMap);
             }
             providerMap.set(P, provider);
           }
@@ -628,8 +628,8 @@ function require_Reflect() {
       function CreateMetadataProvider(registry) {
         var metadata2 = new _WeakMap();
         var provider = {
-          isProviderFor: function(O2, P) {
-            var targetMetadata = metadata2.get(O2);
+          isProviderFor: function(O, P) {
+            var targetMetadata = metadata2.get(O);
             if (IsUndefined(targetMetadata))
               return false;
             return targetMetadata.has(P);
@@ -642,14 +642,14 @@ function require_Reflect() {
         };
         metadataRegistry.registerProvider(provider);
         return provider;
-        function GetOrCreateMetadataMap(O2, P, Create) {
-          var targetMetadata = metadata2.get(O2);
+        function GetOrCreateMetadataMap(O, P, Create) {
+          var targetMetadata = metadata2.get(O);
           var createdTargetMetadata = false;
           if (IsUndefined(targetMetadata)) {
             if (!Create)
               return void 0;
             targetMetadata = new _Map();
-            metadata2.set(O2, targetMetadata);
+            metadata2.set(O, targetMetadata);
             createdTargetMetadata = true;
           }
           var metadataMap = targetMetadata.get(P);
@@ -658,19 +658,19 @@ function require_Reflect() {
               return void 0;
             metadataMap = new _Map();
             targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O2, P, provider)) {
+            if (!registry.setProvider(O, P, provider)) {
               targetMetadata.delete(P);
               if (createdTargetMetadata) {
-                metadata2.delete(O2);
+                metadata2.delete(O);
               }
               throw new Error("Wrong provider for target.");
             }
           }
           return metadataMap;
         }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O2, P) {
+        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -679,9 +679,9 @@ function require_Reflect() {
             return false;
           return ToBoolean(metadataMap.has(MetadataKey));
         }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O2, P) {
+        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -690,19 +690,19 @@ function require_Reflect() {
             return void 0;
           return metadataMap.get(MetadataKey);
         }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O2, P) {
+        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             true
           );
           metadataMap.set(MetadataKey, MetadataValue);
         }
-        function OrdinaryOwnMetadataKeys2(O2, P) {
+        function OrdinaryOwnMetadataKeys2(O, P) {
           var keys = [];
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -731,9 +731,9 @@ function require_Reflect() {
             k2++;
           }
         }
-        function OrdinaryDeleteMetadata(MetadataKey, O2, P) {
+        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
           var metadataMap = GetOrCreateMetadataMap(
-            O2,
+            O,
             P,
             /*Create*/
             false
@@ -743,7 +743,7 @@ function require_Reflect() {
           if (!metadataMap.delete(MetadataKey))
             return false;
           if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O2);
+            var targetMetadata = metadata2.get(O);
             if (!IsUndefined(targetMetadata)) {
               targetMetadata.delete(P);
               if (targetMetadata.size === 0) {
@@ -758,15 +758,15 @@ function require_Reflect() {
         var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
         var metadataOwner = new _WeakMap();
         var provider = {
-          isProviderFor: function(O2, P) {
-            var metadataPropertySet = metadataOwner.get(O2);
+          isProviderFor: function(O, P) {
+            var metadataPropertySet = metadataOwner.get(O);
             if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
               return true;
             }
-            if (getOwnMetadataKeys2(O2, P).length) {
+            if (getOwnMetadataKeys2(O, P).length) {
               if (IsUndefined(metadataPropertySet)) {
                 metadataPropertySet = new _Set();
-                metadataOwner.set(O2, metadataPropertySet);
+                metadataOwner.set(O, metadataPropertySet);
               }
               metadataPropertySet.add(P);
               return true;
@@ -781,13 +781,13 @@ function require_Reflect() {
         };
         return provider;
       }
-      function GetMetadataProvider(O2, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O2, P);
+      function GetMetadataProvider(O, P, Create) {
+        var registeredProvider = metadataRegistry.getProvider(O, P);
         if (!IsUndefined(registeredProvider)) {
           return registeredProvider;
         }
         if (Create) {
-          if (metadataRegistry.setProvider(O2, P, metadataProvider)) {
+          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
             return metadataProvider;
           }
           throw new Error("Illegal state.");
@@ -894,9 +894,9 @@ function require_Reflect() {
               );
               if (index2 >= 0) {
                 var size = this._keys.length;
-                for (var i2 = index2 + 1; i2 < size; i2++) {
-                  this._keys[i2 - 1] = this._keys[i2];
-                  this._values[i2 - 1] = this._values[i2];
+                for (var i = index2 + 1; i < size; i++) {
+                  this._keys[i - 1] = this._keys[i];
+                  this._values[i - 1] = this._values[i];
                 }
                 this._keys.length--;
                 this._values.length--;
@@ -932,9 +932,9 @@ function require_Reflect() {
             Map3.prototype._find = function(key, insert) {
               if (!SameValueZero(this._cacheKey, key)) {
                 this._cacheIndex = -1;
-                for (var i2 = 0; i2 < this._keys.length; i2++) {
-                  if (SameValueZero(this._keys[i2], key)) {
-                    this._cacheIndex = i2;
+                for (var i = 0; i < this._keys.length; i++) {
+                  if (SameValueZero(this._keys[i], key)) {
+                    this._cacheIndex = i;
                     break;
                   }
                 }
@@ -950,10 +950,10 @@ function require_Reflect() {
           })()
         );
         return Map2;
-        function getKey(key, _2) {
+        function getKey(key, _) {
           return key;
         }
-        function getValue(_2, value) {
+        function getValue(_, value) {
           return value;
         }
         function getEntry(key, value) {
@@ -1072,8 +1072,8 @@ function require_Reflect() {
           return target[rootKey];
         }
         function FillRandomBytes(buffer, size) {
-          for (var i2 = 0; i2 < size; ++i2)
-            buffer[i2] = Math.random() * 255 | 0;
+          for (var i = 0; i < size; ++i)
+            buffer[i] = Math.random() * 255 | 0;
           return buffer;
         }
         function GenRandomBytes(size) {
@@ -1225,7 +1225,7 @@ function requireRe() {
     const safeRe = exports$1.safeRe = [];
     const src = exports$1.src = [];
     const safeSrc = exports$1.safeSrc = [];
-    const t2 = exports$1.t = {};
+    const t = exports$1.t = {};
     let R = 0;
     const LETTERDASHNUMBER = "[a-zA-Z0-9-]";
     const safeRegexReplacements = [
@@ -1243,7 +1243,7 @@ function requireRe() {
       const safe = makeSafeRegex(value);
       const index2 = R++;
       debug2(name, index2, value);
-      t2[name] = index2;
+      t[name] = index2;
       src[index2] = value;
       safeSrc[index2] = safe;
       re2[index2] = new RegExp(value, isGlobal ? "g" : void 0);
@@ -1252,46 +1252,46 @@ function requireRe() {
     createToken("NUMERICIDENTIFIER", "0|[1-9]\\d*");
     createToken("NUMERICIDENTIFIERLOOSE", "\\d+");
     createToken("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
-    createToken("MAINVERSION", `(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})`);
-    createToken("MAINVERSIONLOOSE", `(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASEIDENTIFIER", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIER]})`);
-    createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASE", `(?:-(${src[t2.PRERELEASEIDENTIFIER]}(?:\\.${src[t2.PRERELEASEIDENTIFIER]})*))`);
-    createToken("PRERELEASELOOSE", `(?:-?(${src[t2.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t2.PRERELEASEIDENTIFIERLOOSE]})*))`);
+    createToken("MAINVERSION", `(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})`);
+    createToken("MAINVERSIONLOOSE", `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})`);
+    createToken("PRERELEASEIDENTIFIER", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIER]})`);
+    createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIERLOOSE]})`);
+    createToken("PRERELEASE", `(?:-(${src[t.PRERELEASEIDENTIFIER]}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`);
+    createToken("PRERELEASELOOSE", `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`);
     createToken("BUILDIDENTIFIER", `${LETTERDASHNUMBER}+`);
-    createToken("BUILD", `(?:\\+(${src[t2.BUILDIDENTIFIER]}(?:\\.${src[t2.BUILDIDENTIFIER]})*))`);
-    createToken("FULLPLAIN", `v?${src[t2.MAINVERSION]}${src[t2.PRERELEASE]}?${src[t2.BUILD]}?`);
-    createToken("FULL", `^${src[t2.FULLPLAIN]}$`);
-    createToken("LOOSEPLAIN", `[v=\\s]*${src[t2.MAINVERSIONLOOSE]}${src[t2.PRERELEASELOOSE]}?${src[t2.BUILD]}?`);
-    createToken("LOOSE", `^${src[t2.LOOSEPLAIN]}$`);
+    createToken("BUILD", `(?:\\+(${src[t.BUILDIDENTIFIER]}(?:\\.${src[t.BUILDIDENTIFIER]})*))`);
+    createToken("FULLPLAIN", `v?${src[t.MAINVERSION]}${src[t.PRERELEASE]}?${src[t.BUILD]}?`);
+    createToken("FULL", `^${src[t.FULLPLAIN]}$`);
+    createToken("LOOSEPLAIN", `[v=\\s]*${src[t.MAINVERSIONLOOSE]}${src[t.PRERELEASELOOSE]}?${src[t.BUILD]}?`);
+    createToken("LOOSE", `^${src[t.LOOSEPLAIN]}$`);
     createToken("GTLT", "((?:<|>)?=?)");
-    createToken("XRANGEIDENTIFIERLOOSE", `${src[t2.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-    createToken("XRANGEIDENTIFIER", `${src[t2.NUMERICIDENTIFIER]}|x|X|\\*`);
-    createToken("XRANGEPLAIN", `[v=\\s]*(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:${src[t2.PRERELEASE]})?${src[t2.BUILD]}?)?)?`);
-    createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:${src[t2.PRERELEASELOOSE]})?${src[t2.BUILD]}?)?)?`);
-    createToken("XRANGE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAIN]}$`);
-    createToken("XRANGELOOSE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAINLOOSE]}$`);
+    createToken("XRANGEIDENTIFIERLOOSE", `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
+    createToken("XRANGEIDENTIFIER", `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`);
+    createToken("XRANGEPLAIN", `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:${src[t.PRERELEASE]})?${src[t.BUILD]}?)?)?`);
+    createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:${src[t.PRERELEASELOOSE]})?${src[t.BUILD]}?)?)?`);
+    createToken("XRANGE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`);
+    createToken("XRANGELOOSE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`);
     createToken("COERCEPLAIN", `${"(^|[^\\d])(\\d{1,"}${MAX_SAFE_COMPONENT_LENGTH}})(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`);
-    createToken("COERCE", `${src[t2.COERCEPLAIN]}(?:$|[^\\d])`);
-    createToken("COERCEFULL", src[t2.COERCEPLAIN] + `(?:${src[t2.PRERELEASE]})?(?:${src[t2.BUILD]})?(?:$|[^\\d])`);
-    createToken("COERCERTL", src[t2.COERCE], true);
-    createToken("COERCERTLFULL", src[t2.COERCEFULL], true);
+    createToken("COERCE", `${src[t.COERCEPLAIN]}(?:$|[^\\d])`);
+    createToken("COERCEFULL", src[t.COERCEPLAIN] + `(?:${src[t.PRERELEASE]})?(?:${src[t.BUILD]})?(?:$|[^\\d])`);
+    createToken("COERCERTL", src[t.COERCE], true);
+    createToken("COERCERTLFULL", src[t.COERCEFULL], true);
     createToken("LONETILDE", "(?:~>?)");
-    createToken("TILDETRIM", `(\\s*)${src[t2.LONETILDE]}\\s+`, true);
+    createToken("TILDETRIM", `(\\s*)${src[t.LONETILDE]}\\s+`, true);
     exports$1.tildeTrimReplace = "$1~";
-    createToken("TILDE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAIN]}$`);
-    createToken("TILDELOOSE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAINLOOSE]}$`);
+    createToken("TILDE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`);
+    createToken("TILDELOOSE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`);
     createToken("LONECARET", "(?:\\^)");
-    createToken("CARETTRIM", `(\\s*)${src[t2.LONECARET]}\\s+`, true);
+    createToken("CARETTRIM", `(\\s*)${src[t.LONECARET]}\\s+`, true);
     exports$1.caretTrimReplace = "$1^";
-    createToken("CARET", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAIN]}$`);
-    createToken("CARETLOOSE", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAINLOOSE]}$`);
-    createToken("COMPARATORLOOSE", `^${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]})$|^$`);
-    createToken("COMPARATOR", `^${src[t2.GTLT]}\\s*(${src[t2.FULLPLAIN]})$|^$`);
-    createToken("COMPARATORTRIM", `(\\s*)${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]}|${src[t2.XRANGEPLAIN]})`, true);
+    createToken("CARET", `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`);
+    createToken("CARETLOOSE", `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`);
+    createToken("COMPARATORLOOSE", `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`);
+    createToken("COMPARATOR", `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`);
+    createToken("COMPARATORTRIM", `(\\s*)${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true);
     exports$1.comparatorTrimReplace = "$1$2$3";
-    createToken("HYPHENRANGE", `^\\s*(${src[t2.XRANGEPLAIN]})\\s+-\\s+(${src[t2.XRANGEPLAIN]})\\s*$`);
-    createToken("HYPHENRANGELOOSE", `^\\s*(${src[t2.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t2.XRANGEPLAINLOOSE]})\\s*$`);
+    createToken("HYPHENRANGE", `^\\s*(${src[t.XRANGEPLAIN]})\\s+-\\s+(${src[t.XRANGEPLAIN]})\\s*$`);
+    createToken("HYPHENRANGELOOSE", `^\\s*(${src[t.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t.XRANGEPLAINLOOSE]})\\s*$`);
     createToken("STAR", "(<|>)?=?\\s*\\*");
     createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
     createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
@@ -1349,7 +1349,7 @@ function requireSemver$1() {
   hasRequiredSemver$1 = 1;
   const debug2 = requireDebug();
   const { MAX_LENGTH, MAX_SAFE_INTEGER } = requireConstants();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const parseOptions = requireParseOptions();
   const { compareIdentifiers } = requireIdentifiers();
   class SemVer {
@@ -1373,7 +1373,7 @@ function requireSemver$1() {
       this.options = options;
       this.loose = !!options.loose;
       this.includePrerelease = !!options.includePrerelease;
-      const m2 = version2.trim().match(options.loose ? re2[t2.LOOSE] : re2[t2.FULL]);
+      const m2 = version2.trim().match(options.loose ? re2[t.LOOSE] : re2[t.FULL]);
       if (!m2) {
         throw new TypeError(`Invalid Version: ${version2}`);
       }
@@ -1464,11 +1464,11 @@ function requireSemver$1() {
       } else if (!this.prerelease.length && !other.prerelease.length) {
         return 0;
       }
-      let i2 = 0;
+      let i = 0;
       do {
-        const a = this.prerelease[i2];
-        const b2 = other.prerelease[i2];
-        debug2("prerelease compare", i2, a, b2);
+        const a = this.prerelease[i];
+        const b2 = other.prerelease[i];
+        debug2("prerelease compare", i, a, b2);
         if (a === void 0 && b2 === void 0) {
           return 0;
         } else if (b2 === void 0) {
@@ -1480,17 +1480,17 @@ function requireSemver$1() {
         } else {
           return compareIdentifiers(a, b2);
         }
-      } while (++i2);
+      } while (++i);
     }
     compareBuild(other) {
       if (!(other instanceof SemVer)) {
         other = new SemVer(other, this.options);
       }
-      let i2 = 0;
+      let i = 0;
       do {
-        const a = this.build[i2];
-        const b2 = other.build[i2];
-        debug2("build compare", i2, a, b2);
+        const a = this.build[i];
+        const b2 = other.build[i];
+        debug2("build compare", i, a, b2);
         if (a === void 0 && b2 === void 0) {
           return 0;
         } else if (b2 === void 0) {
@@ -1502,7 +1502,7 @@ function requireSemver$1() {
         } else {
           return compareIdentifiers(a, b2);
         }
-      } while (++i2);
+      } while (++i);
     }
     // preminor will bump the version up to the next minor release, and immediately
     // down to pre-release. premajor and prepatch work the same way.
@@ -1512,7 +1512,7 @@ function requireSemver$1() {
           throw new Error("invalid increment argument: identifier is empty");
         }
         if (identifier2) {
-          const match = `-${identifier2}`.match(this.options.loose ? re2[t2.PRERELEASELOOSE] : re2[t2.PRERELEASE]);
+          const match = `-${identifier2}`.match(this.options.loose ? re2[t.PRERELEASELOOSE] : re2[t.PRERELEASE]);
           if (!match || match[1] !== identifier2) {
             throw new Error(`invalid identifier: ${identifier2}`);
           }
@@ -1579,14 +1579,14 @@ function requireSemver$1() {
           if (this.prerelease.length === 0) {
             this.prerelease = [base];
           } else {
-            let i2 = this.prerelease.length;
-            while (--i2 >= 0) {
-              if (typeof this.prerelease[i2] === "number") {
-                this.prerelease[i2]++;
-                i2 = -2;
+            let i = this.prerelease.length;
+            while (--i >= 0) {
+              if (typeof this.prerelease[i] === "number") {
+                this.prerelease[i]++;
+                i = -2;
               }
             }
-            if (i2 === -1) {
+            if (i === -1) {
               if (identifier2 === this.prerelease.join(".") && identifierBase === false) {
                 throw new Error("invalid increment argument: identifier already exists");
               }
@@ -1961,7 +1961,7 @@ function requireCoerce() {
   hasRequiredCoerce = 1;
   const SemVer = requireSemver$1();
   const parse = requireParse();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const coerce = (version2, options) => {
     if (version2 instanceof SemVer) {
       return version2;
@@ -1975,9 +1975,9 @@ function requireCoerce() {
     options = options || {};
     let match = null;
     if (!options.rtl) {
-      match = version2.match(options.includePrerelease ? re2[t2.COERCEFULL] : re2[t2.COERCE]);
+      match = version2.match(options.includePrerelease ? re2[t.COERCEFULL] : re2[t.COERCE]);
     } else {
-      const coerceRtlRegex = options.includePrerelease ? re2[t2.COERCERTLFULL] : re2[t2.COERCERTL];
+      const coerceRtlRegex = options.includePrerelease ? re2[t.COERCERTLFULL] : re2[t.COERCERTL];
       let next;
       while ((next = coerceRtlRegex.exec(version2)) && (!match || match.index + match[0].length !== version2.length)) {
         if (!match || next.index + next[0].length !== match.index + match[0].length) {
@@ -2064,19 +2064,19 @@ function requireRange() {
       this.loose = !!options.loose;
       this.includePrerelease = !!options.includePrerelease;
       this.raw = range2.trim().replace(SPACE_CHARACTERS, " ");
-      this.set = this.raw.split("||").map((r) => this.parseRange(r.trim())).filter((c2) => c2.length);
+      this.set = this.raw.split("||").map((r) => this.parseRange(r.trim())).filter((c) => c.length);
       if (!this.set.length) {
         throw new TypeError(`Invalid SemVer Range: ${this.raw}`);
       }
       if (this.set.length > 1) {
         const first = this.set[0];
-        this.set = this.set.filter((c2) => !isNullSet(c2[0]));
+        this.set = this.set.filter((c) => !isNullSet(c[0]));
         if (this.set.length === 0) {
           this.set = [first];
         } else if (this.set.length > 1) {
-          for (const c2 of this.set) {
-            if (c2.length === 1 && isAny(c2[0])) {
-              this.set = [c2];
+          for (const c of this.set) {
+            if (c.length === 1 && isAny(c[0])) {
+              this.set = [c];
               break;
             }
           }
@@ -2087,11 +2087,11 @@ function requireRange() {
     get range() {
       if (this.formatted === void 0) {
         this.formatted = "";
-        for (let i2 = 0; i2 < this.set.length; i2++) {
-          if (i2 > 0) {
+        for (let i = 0; i < this.set.length; i++) {
+          if (i > 0) {
             this.formatted += "||";
           }
-          const comps = this.set[i2];
+          const comps = this.set[i];
           for (let k2 = 0; k2 < comps.length; k2++) {
             if (k2 > 0) {
               this.formatted += " ";
@@ -2116,20 +2116,20 @@ function requireRange() {
         return cached2;
       }
       const loose = this.options.loose;
-      const hr = loose ? re2[t2.HYPHENRANGELOOSE] : re2[t2.HYPHENRANGE];
+      const hr = loose ? re2[t.HYPHENRANGELOOSE] : re2[t.HYPHENRANGE];
       range2 = range2.replace(hr, hyphenReplace(this.options.includePrerelease));
       debug2("hyphen replace", range2);
-      range2 = range2.replace(re2[t2.COMPARATORTRIM], comparatorTrimReplace);
+      range2 = range2.replace(re2[t.COMPARATORTRIM], comparatorTrimReplace);
       debug2("comparator trim", range2);
-      range2 = range2.replace(re2[t2.TILDETRIM], tildeTrimReplace);
+      range2 = range2.replace(re2[t.TILDETRIM], tildeTrimReplace);
       debug2("tilde trim", range2);
-      range2 = range2.replace(re2[t2.CARETTRIM], caretTrimReplace);
+      range2 = range2.replace(re2[t.CARETTRIM], caretTrimReplace);
       debug2("caret trim", range2);
       let rangeList = range2.split(" ").map((comp) => parseComparator(comp, this.options)).join(" ").split(/\s+/).map((comp) => replaceGTE0(comp, this.options));
       if (loose) {
         rangeList = rangeList.filter((comp) => {
           debug2("loose invalid filter", comp, this.options);
-          return !!comp.match(re2[t2.COMPARATORLOOSE]);
+          return !!comp.match(re2[t.COMPARATORLOOSE]);
         });
       }
       debug2("range list", rangeList);
@@ -2174,8 +2174,8 @@ function requireRange() {
           return false;
         }
       }
-      for (let i2 = 0; i2 < this.set.length; i2++) {
-        if (testSet(this.set[i2], version2, this.options)) {
+      for (let i = 0; i < this.set.length; i++) {
+        if (testSet(this.set[i], version2, this.options)) {
           return true;
         }
       }
@@ -2191,14 +2191,14 @@ function requireRange() {
   const SemVer = requireSemver$1();
   const {
     safeRe: re2,
-    t: t2,
+    t,
     comparatorTrimReplace,
     tildeTrimReplace,
     caretTrimReplace
   } = requireRe();
   const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = requireConstants();
-  const isNullSet = (c2) => c2.value === "<0.0.0-0";
-  const isAny = (c2) => c2.value === "";
+  const isNullSet = (c) => c.value === "<0.0.0-0";
+  const isAny = (c) => c.value === "";
   const isSatisfiable = (comparators, options) => {
     let result = true;
     const remainingComparators = comparators.slice();
@@ -2212,7 +2212,7 @@ function requireRange() {
     return result;
   };
   const parseComparator = (comp, options) => {
-    comp = comp.replace(re2[t2.BUILD], "");
+    comp = comp.replace(re2[t.BUILD], "");
     debug2("comp", comp, options);
     comp = replaceCarets(comp, options);
     debug2("caret", comp);
@@ -2226,12 +2226,12 @@ function requireRange() {
   };
   const isX = (id) => !id || id.toLowerCase() === "x" || id === "*";
   const replaceTildes = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c2) => replaceTilde(c2, options)).join(" ");
+    return comp.trim().split(/\s+/).map((c) => replaceTilde(c, options)).join(" ");
   };
   const replaceTilde = (comp, options) => {
-    const r = options.loose ? re2[t2.TILDELOOSE] : re2[t2.TILDE];
-    return comp.replace(r, (_2, M2, m2, p, pr) => {
-      debug2("tilde", comp, _2, M2, m2, p, pr);
+    const r = options.loose ? re2[t.TILDELOOSE] : re2[t.TILDE];
+    return comp.replace(r, (_, M2, m2, p, pr) => {
+      debug2("tilde", comp, _, M2, m2, p, pr);
       let ret;
       if (isX(M2)) {
         ret = "";
@@ -2250,24 +2250,24 @@ function requireRange() {
     });
   };
   const replaceCarets = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c2) => replaceCaret(c2, options)).join(" ");
+    return comp.trim().split(/\s+/).map((c) => replaceCaret(c, options)).join(" ");
   };
   const replaceCaret = (comp, options) => {
     debug2("caret", comp, options);
-    const r = options.loose ? re2[t2.CARETLOOSE] : re2[t2.CARET];
-    const z2 = options.includePrerelease ? "-0" : "";
-    return comp.replace(r, (_2, M2, m2, p, pr) => {
-      debug2("caret", comp, _2, M2, m2, p, pr);
+    const r = options.loose ? re2[t.CARETLOOSE] : re2[t.CARET];
+    const z = options.includePrerelease ? "-0" : "";
+    return comp.replace(r, (_, M2, m2, p, pr) => {
+      debug2("caret", comp, _, M2, m2, p, pr);
       let ret;
       if (isX(M2)) {
         ret = "";
       } else if (isX(m2)) {
-        ret = `>=${M2}.0.0${z2} <${+M2 + 1}.0.0-0`;
+        ret = `>=${M2}.0.0${z} <${+M2 + 1}.0.0-0`;
       } else if (isX(p)) {
         if (M2 === "0") {
-          ret = `>=${M2}.${m2}.0${z2} <${M2}.${+m2 + 1}.0-0`;
+          ret = `>=${M2}.${m2}.0${z} <${M2}.${+m2 + 1}.0-0`;
         } else {
-          ret = `>=${M2}.${m2}.0${z2} <${+M2 + 1}.0.0-0`;
+          ret = `>=${M2}.${m2}.0${z} <${+M2 + 1}.0.0-0`;
         }
       } else if (pr) {
         debug2("replaceCaret pr", pr);
@@ -2284,9 +2284,9 @@ function requireRange() {
         debug2("no pr");
         if (M2 === "0") {
           if (m2 === "0") {
-            ret = `>=${M2}.${m2}.${p}${z2} <${M2}.${m2}.${+p + 1}-0`;
+            ret = `>=${M2}.${m2}.${p}${z} <${M2}.${m2}.${+p + 1}-0`;
           } else {
-            ret = `>=${M2}.${m2}.${p}${z2} <${M2}.${+m2 + 1}.0-0`;
+            ret = `>=${M2}.${m2}.${p}${z} <${M2}.${+m2 + 1}.0-0`;
           }
         } else {
           ret = `>=${M2}.${m2}.${p} <${+M2 + 1}.0.0-0`;
@@ -2298,11 +2298,11 @@ function requireRange() {
   };
   const replaceXRanges = (comp, options) => {
     debug2("replaceXRanges", comp, options);
-    return comp.split(/\s+/).map((c2) => replaceXRange(c2, options)).join(" ");
+    return comp.split(/\s+/).map((c) => replaceXRange(c, options)).join(" ");
   };
   const replaceXRange = (comp, options) => {
     comp = comp.trim();
-    const r = options.loose ? re2[t2.XRANGELOOSE] : re2[t2.XRANGE];
+    const r = options.loose ? re2[t.XRANGELOOSE] : re2[t.XRANGE];
     return comp.replace(r, (ret, gtlt, M2, m2, p, pr) => {
       debug2("xRange", comp, ret, gtlt, M2, m2, p, pr);
       const xM = isX(M2);
@@ -2357,11 +2357,11 @@ function requireRange() {
   };
   const replaceStars = (comp, options) => {
     debug2("replaceStars", comp, options);
-    return comp.trim().replace(re2[t2.STAR], "");
+    return comp.trim().replace(re2[t.STAR], "");
   };
   const replaceGTE0 = (comp, options) => {
     debug2("replaceGTE0", comp, options);
-    return comp.trim().replace(re2[options.includePrerelease ? t2.GTE0PRE : t2.GTE0], "");
+    return comp.trim().replace(re2[options.includePrerelease ? t.GTE0PRE : t.GTE0], "");
   };
   const hyphenReplace = (incPr) => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr) => {
     if (isX(fM)) {
@@ -2391,19 +2391,19 @@ function requireRange() {
     return `${from} ${to}`.trim();
   };
   const testSet = (set, version2, options) => {
-    for (let i2 = 0; i2 < set.length; i2++) {
-      if (!set[i2].test(version2)) {
+    for (let i = 0; i < set.length; i++) {
+      if (!set[i].test(version2)) {
         return false;
       }
     }
     if (version2.prerelease.length && !options.includePrerelease) {
-      for (let i2 = 0; i2 < set.length; i2++) {
-        debug2(set[i2].semver);
-        if (set[i2].semver === Comparator.ANY) {
+      for (let i = 0; i < set.length; i++) {
+        debug2(set[i].semver);
+        if (set[i].semver === Comparator.ANY) {
           continue;
         }
-        if (set[i2].semver.prerelease.length > 0) {
-          const allowed = set[i2].semver;
+        if (set[i].semver.prerelease.length > 0) {
+          const allowed = set[i].semver;
           if (allowed.major === version2.major && allowed.minor === version2.minor && allowed.patch === version2.patch) {
             return true;
           }
@@ -2447,7 +2447,7 @@ function requireComparator() {
       debug2("comp", this);
     }
     parse(comp) {
-      const r = this.options.loose ? re2[t2.COMPARATORLOOSE] : re2[t2.COMPARATOR];
+      const r = this.options.loose ? re2[t.COMPARATORLOOSE] : re2[t.COMPARATOR];
       const m2 = comp.match(r);
       if (!m2) {
         throw new TypeError(`Invalid comparator: ${comp}`);
@@ -2521,7 +2521,7 @@ function requireComparator() {
   }
   comparator = Comparator;
   const parseOptions = requireParseOptions();
-  const { safeRe: re2, t: t2 } = requireRe();
+  const { safeRe: re2, t } = requireRe();
   const cmp = requireCmp();
   const debug2 = requireDebug();
   const SemVer = requireSemver$1();
@@ -2551,7 +2551,7 @@ function requireToComparators() {
   if (hasRequiredToComparators) return toComparators_1;
   hasRequiredToComparators = 1;
   const Range = requireRange();
-  const toComparators = (range2, options) => new Range(range2, options).set.map((comp) => comp.map((c2) => c2.value).join(" ").trim().split(" "));
+  const toComparators = (range2, options) => new Range(range2, options).set.map((comp) => comp.map((c) => c.value).join(" ").trim().split(" "));
   toComparators_1 = toComparators;
   return toComparators_1;
 }
@@ -2632,8 +2632,8 @@ function requireMinVersion() {
       return minver;
     }
     minver = null;
-    for (let i2 = 0; i2 < range2.set.length; ++i2) {
-      const comparators = range2.set[i2];
+    for (let i = 0; i < range2.set.length; ++i) {
+      const comparators = range2.set[i];
       let setMin = null;
       comparators.forEach((comparator2) => {
         const compver = new SemVer(comparator2.semver.version);
@@ -2727,8 +2727,8 @@ function requireOutside() {
     if (satisfies(version2, range2, options)) {
       return false;
     }
-    for (let i2 = 0; i2 < range2.set.length; ++i2) {
-      const comparators = range2.set[i2];
+    for (let i = 0; i < range2.set.length; ++i) {
+      const comparators = range2.set[i];
       let high = null;
       let low = null;
       comparators.forEach((comparator2) => {
@@ -2896,13 +2896,13 @@ function requireSubset() {
     }
     const eqSet = /* @__PURE__ */ new Set();
     let gt, lt2;
-    for (const c2 of sub) {
-      if (c2.operator === ">" || c2.operator === ">=") {
-        gt = higherGT(gt, c2, options);
-      } else if (c2.operator === "<" || c2.operator === "<=") {
-        lt2 = lowerLT(lt2, c2, options);
+    for (const c of sub) {
+      if (c.operator === ">" || c.operator === ">=") {
+        gt = higherGT(gt, c, options);
+      } else if (c.operator === "<" || c.operator === "<=") {
+        lt2 = lowerLT(lt2, c, options);
       } else {
-        eqSet.add(c2.semver);
+        eqSet.add(c.semver);
       }
     }
     if (eqSet.size > 1) {
@@ -2924,8 +2924,8 @@ function requireSubset() {
       if (lt2 && !satisfies(eq, String(lt2), options)) {
         return null;
       }
-      for (const c2 of dom) {
-        if (!satisfies(eq, String(c2), options)) {
+      for (const c of dom) {
+        if (!satisfies(eq, String(c), options)) {
           return false;
         }
       }
@@ -2938,40 +2938,40 @@ function requireSubset() {
     if (needDomLTPre && needDomLTPre.prerelease.length === 1 && lt2.operator === "<" && needDomLTPre.prerelease[0] === 0) {
       needDomLTPre = false;
     }
-    for (const c2 of dom) {
-      hasDomGT = hasDomGT || c2.operator === ">" || c2.operator === ">=";
-      hasDomLT = hasDomLT || c2.operator === "<" || c2.operator === "<=";
+    for (const c of dom) {
+      hasDomGT = hasDomGT || c.operator === ">" || c.operator === ">=";
+      hasDomLT = hasDomLT || c.operator === "<" || c.operator === "<=";
       if (gt) {
         if (needDomGTPre) {
-          if (c2.semver.prerelease && c2.semver.prerelease.length && c2.semver.major === needDomGTPre.major && c2.semver.minor === needDomGTPre.minor && c2.semver.patch === needDomGTPre.patch) {
+          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomGTPre.major && c.semver.minor === needDomGTPre.minor && c.semver.patch === needDomGTPre.patch) {
             needDomGTPre = false;
           }
         }
-        if (c2.operator === ">" || c2.operator === ">=") {
-          higher = higherGT(gt, c2, options);
-          if (higher === c2 && higher !== gt) {
+        if (c.operator === ">" || c.operator === ">=") {
+          higher = higherGT(gt, c, options);
+          if (higher === c && higher !== gt) {
             return false;
           }
-        } else if (gt.operator === ">=" && !satisfies(gt.semver, String(c2), options)) {
+        } else if (gt.operator === ">=" && !satisfies(gt.semver, String(c), options)) {
           return false;
         }
       }
       if (lt2) {
         if (needDomLTPre) {
-          if (c2.semver.prerelease && c2.semver.prerelease.length && c2.semver.major === needDomLTPre.major && c2.semver.minor === needDomLTPre.minor && c2.semver.patch === needDomLTPre.patch) {
+          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomLTPre.major && c.semver.minor === needDomLTPre.minor && c.semver.patch === needDomLTPre.patch) {
             needDomLTPre = false;
           }
         }
-        if (c2.operator === "<" || c2.operator === "<=") {
-          lower = lowerLT(lt2, c2, options);
-          if (lower === c2 && lower !== lt2) {
+        if (c.operator === "<" || c.operator === "<=") {
+          lower = lowerLT(lt2, c, options);
+          if (lower === c && lower !== lt2) {
             return false;
           }
-        } else if (lt2.operator === "<=" && !satisfies(lt2.semver, String(c2), options)) {
+        } else if (lt2.operator === "<=" && !satisfies(lt2.semver, String(c), options)) {
           return false;
         }
       }
-      if (!c2.operator && (lt2 || gt) && gtltComp !== 0) {
+      if (!c.operator && (lt2 || gt) && gtltComp !== 0) {
         return false;
       }
     }
@@ -3180,44 +3180,44 @@ function initTsmRuntime() {
 }
 const Icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M60%2020C45.088%2020%2033%2031.588%2033%2045.88C33%2065.16%2060%20100%2060%20100C60%20100%2087%2065.16%2087%2045.88C87%2031.588%2074.912%2020%2060%2020ZM60%2056.2C54.036%2056.2%2049.2%2051.484%2049.2%2045.68C49.2%2039.876%2054.036%2035.16%2060%2035.16C65.964%2035.16%2070.8%2039.876%2070.8%2045.68C70.8%2051.484%2065.964%2056.2%2060%2056.2Z'%20fill='%23606060'/%3e%3c/svg%3e";
 const ce = (e, o) => {
-  for (const t2 of Object.keys(o))
-    e.on(t2, o[t2]);
+  for (const t of Object.keys(o))
+    e.on(t, o[t]);
 }, ye = (e) => {
   for (const o of Object.keys(e)) {
-    const t2 = e[o];
-    t2 && k$1(t2.cancel) && t2.cancel();
+    const t = e[o];
+    t && k(t.cancel) && t.cancel();
   }
-}, Je = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), k$1 = (e) => typeof e == "function", L$3 = (e, o, t2) => {
-  for (const n in t2) {
+}, Je = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), k = (e) => typeof e == "function", L$2 = (e, o, t) => {
+  for (const n in t) {
     const s = "set" + Je(n);
     e[s] ? watch(
-      () => t2[n],
-      (r, l2) => {
-        e[s](r, l2);
+      () => t[n],
+      (r, l) => {
+        e[s](r, l);
       }
     ) : o[s] && watch(
-      () => t2[n],
+      () => t[n],
       (r) => {
         o[s](r);
       }
     );
   }
-}, f$1 = (e, o, t2 = {}) => {
-  const n = { ...t2 };
+}, f = (e, o, t = {}) => {
+  const n = { ...t };
   for (const s in e) {
-    const r = o[s], l2 = e[s];
-    r && (r && r.custom === true || l2 !== void 0 && (n[s] = l2));
+    const r = o[s], l = e[s];
+    r && (r && r.custom === true || l !== void 0 && (n[s] = l));
   }
   return n;
 }, T = (e) => {
-  const o = {}, t2 = {};
+  const o = {}, t = {};
   for (const n in e)
     if (n.startsWith("on") && !n.startsWith("onUpdate") && n !== "onReady") {
       const s = n.slice(2).toLocaleLowerCase();
       o[s] = e[n];
     } else
-      t2[n] = e[n];
-  return { listeners: o, attrs: t2 };
+      t[n] = e[n];
+  return { listeners: o, attrs: t };
 }, qe = async (e) => {
   const o = await Promise.all([
     import("./marker-icon-2x-DN7sBQTc.js"),
@@ -3229,33 +3229,33 @@ const ce = (e, o) => {
     iconUrl: o[1].default,
     shadowUrl: o[2].default
   });
-}, Y$1 = (e) => {
+}, Y = (e) => {
   const o = ref(
     (...n) => console.warn(`Method ${e} has been invoked without being replaced`)
-  ), t2 = (...n) => o.value(...n);
-  return t2.wrapped = o, provide(e, t2), t2;
-}, V$1 = (e, o) => e.wrapped.value = o, b$1 = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, m$1 = (e) => {
+  ), t = (...n) => o.value(...n);
+  return t.wrapped = o, provide(e, t), t;
+}, V = (e, o) => e.wrapped.value = o, b = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, m = (e) => {
   const o = inject$1(e);
   if (o === void 0)
     throw new Error(
       `Attempt to inject ${e.description} before it was provided.`
     );
   return o;
-}, h$1 = Symbol(
+}, h = Symbol(
   "useGlobalLeaflet"
-), M$1 = Symbol("addLayer"), ee = Symbol("removeLayer"), H$1 = Symbol(
+), M = Symbol("addLayer"), ee = Symbol("removeLayer"), H = Symbol(
   "registerControl"
 ), me = Symbol(
   "registerLayerControl"
 ), ve = Symbol(
   "canSetParentHtml"
-), be = Symbol("setParentHtml"), fe$1 = Symbol("setIcon"), ge = Symbol("bindPopup"), Le = Symbol("bindTooltip"), he = Symbol("unbindPopup"), Oe = Symbol("unbindTooltip"), W = {
+), be = Symbol("setParentHtml"), fe = Symbol("setIcon"), ge = Symbol("bindPopup"), Le = Symbol("bindTooltip"), he = Symbol("unbindPopup"), Oe = Symbol("unbindTooltip"), W = {
   options: {
     type: Object,
     default: () => ({}),
     custom: true
   }
-}, J$1 = (e) => ({ options: e.options, methods: {} }), D$2 = {
+}, J = (e) => ({ options: e.options, methods: {} }), D$1 = {
   ...W,
   pane: {
     type: String
@@ -3276,51 +3276,51 @@ const ce = (e, o) => {
     custom: true,
     default: true
   }
-}, q = (e, o, t2) => {
-  const n = m$1(M$1), s = m$1(ee), { options: r, methods: l2 } = J$1(e), a = f$1(
+}, q = (e, o, t) => {
+  const n = m(M), s = m(ee), { options: r, methods: l } = J(e), a = f(
     e,
-    D$2,
+    D$1,
     r
-  ), i2 = () => n({ leafletObject: o.value }), u2 = () => s({ leafletObject: o.value }), d = {
-    ...l2,
-    setAttribution(y2) {
-      u2(), o.value.options.attribution = y2, e.visible && i2();
+  ), i = () => n({ leafletObject: o.value }), u2 = () => s({ leafletObject: o.value }), d = {
+    ...l,
+    setAttribution(y) {
+      u2(), o.value.options.attribution = y, e.visible && i();
     },
     setName() {
-      u2(), e.visible && i2();
+      u2(), e.visible && i();
     },
     setLayerType() {
-      u2(), e.visible && i2();
+      u2(), e.visible && i();
     },
-    setVisible(y2) {
-      o.value && (y2 ? i2() : u2());
+    setVisible(y) {
+      o.value && (y ? i() : u2());
     },
-    bindPopup(y2) {
-      if (!o.value || !k$1(o.value.bindPopup)) {
+    bindPopup(y) {
+      if (!o.value || !k(o.value.bindPopup)) {
         console.warn(
           "Attempt to bind popup before bindPopup method available on layer."
         );
         return;
       }
-      o.value.bindPopup(y2);
+      o.value.bindPopup(y);
     },
-    bindTooltip(y2) {
-      if (!o.value || !k$1(o.value.bindTooltip)) {
+    bindTooltip(y) {
+      if (!o.value || !k(o.value.bindTooltip)) {
         console.warn(
           "Attempt to bind tooltip before bindTooltip method available on layer."
         );
         return;
       }
-      o.value.bindTooltip(y2);
+      o.value.bindTooltip(y);
     },
     unbindTooltip() {
-      o.value && (k$1(o.value.closeTooltip) && o.value.closeTooltip(), k$1(o.value.unbindTooltip) && o.value.unbindTooltip());
+      o.value && (k(o.value.closeTooltip) && o.value.closeTooltip(), k(o.value.unbindTooltip) && o.value.unbindTooltip());
     },
     unbindPopup() {
-      o.value && (k$1(o.value.closePopup) && o.value.closePopup(), k$1(o.value.unbindPopup) && o.value.unbindPopup());
+      o.value && (k(o.value.closePopup) && o.value.closePopup(), k(o.value.unbindPopup) && o.value.unbindPopup());
     },
-    updateVisibleProp(y2) {
-      t2.emit("update:visible", y2);
+    updateVisibleProp(y) {
+      t.emit("update:visible", y);
     }
   };
   return provide(ge, d.bindPopup), provide(Le, d.bindTooltip), provide(he, d.unbindPopup), provide(Oe, d.unbindTooltip), onUnmounted(() => {
@@ -3328,9 +3328,9 @@ const ce = (e, o) => {
   }), { options: a, methods: d };
 }, G = (e, o) => {
   if (e && o.default)
-    return h$2("div", { style: { display: "none" } }, o.default());
+    return h$1("div", { style: { display: "none" } }, o.default());
 }, Se = {
-  ...D$2,
+  ...D$1,
   interactive: {
     type: Boolean,
     default: void 0
@@ -3339,13 +3339,13 @@ const ce = (e, o) => {
     type: Boolean,
     default: void 0
   }
-}, Ke = (e, o, t2) => {
+}, Ke = (e, o, t) => {
   const { options: n, methods: s } = q(
     e,
     o,
-    t2
+    t
   );
-  return { options: f$1(
+  return { options: f(
     e,
     Se,
     n
@@ -3393,55 +3393,55 @@ const ce = (e, o) => {
   className: {
     type: String
   }
-}, _e = (e, o, t2) => {
-  const { options: n, methods: s } = Ke(e, o, t2), r = f$1(
+}, _e = (e, o, t) => {
+  const { options: n, methods: s } = Ke(e, o, t), r = f(
     e,
     ne,
     n
-  ), l2 = m$1(ee), a = {
+  ), l = m(ee), a = {
     ...s,
-    setStroke(i2) {
-      o.value.setStyle({ stroke: i2 });
+    setStroke(i) {
+      o.value.setStyle({ stroke: i });
     },
-    setColor(i2) {
-      o.value.setStyle({ color: i2 });
+    setColor(i) {
+      o.value.setStyle({ color: i });
     },
-    setWeight(i2) {
-      o.value.setStyle({ weight: i2 });
+    setWeight(i) {
+      o.value.setStyle({ weight: i });
     },
-    setOpacity(i2) {
-      o.value.setStyle({ opacity: i2 });
+    setOpacity(i) {
+      o.value.setStyle({ opacity: i });
     },
-    setLineCap(i2) {
-      o.value.setStyle({ lineCap: i2 });
+    setLineCap(i) {
+      o.value.setStyle({ lineCap: i });
     },
-    setLineJoin(i2) {
-      o.value.setStyle({ lineJoin: i2 });
+    setLineJoin(i) {
+      o.value.setStyle({ lineJoin: i });
     },
-    setDashArray(i2) {
-      o.value.setStyle({ dashArray: i2 });
+    setDashArray(i) {
+      o.value.setStyle({ dashArray: i });
     },
-    setDashOffset(i2) {
-      o.value.setStyle({ dashOffset: i2 });
+    setDashOffset(i) {
+      o.value.setStyle({ dashOffset: i });
     },
-    setFill(i2) {
-      o.value.setStyle({ fill: i2 });
+    setFill(i) {
+      o.value.setStyle({ fill: i });
     },
-    setFillColor(i2) {
-      o.value.setStyle({ fillColor: i2 });
+    setFillColor(i) {
+      o.value.setStyle({ fillColor: i });
     },
-    setFillOpacity(i2) {
-      o.value.setStyle({ fillOpacity: i2 });
+    setFillOpacity(i) {
+      o.value.setStyle({ fillOpacity: i });
     },
-    setFillRule(i2) {
-      o.value.setStyle({ fillRule: i2 });
+    setFillRule(i) {
+      o.value.setStyle({ fillRule: i });
     },
-    setClassName(i2) {
-      o.value.setStyle({ className: i2 });
+    setClassName(i) {
+      o.value.setStyle({ className: i });
     }
   };
   return onBeforeUnmount(() => {
-    l2({ leafletObject: o.value });
+    l({ leafletObject: o.value });
   }), { options: r, methods: a };
 }, re = {
   ...ne,
@@ -3456,16 +3456,16 @@ const ce = (e, o) => {
     required: true,
     custom: true
   }
-}, je = (e, o, t2) => {
+}, je = (e, o, t) => {
   const { options: n, methods: s } = _e(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     re,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     setRadius(a) {
       o.value.setRadius(a);
@@ -3474,7 +3474,7 @@ const ce = (e, o) => {
       o.value.setLatLng(a);
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 }, Pe = {
   ...re,
   /**
@@ -3483,31 +3483,31 @@ const ce = (e, o) => {
   radius: {
     type: Number
   }
-}, Qe = (e, o, t2) => {
-  const { options: n, methods: s } = je(e, o, t2), r = f$1(
+}, Qe = (e, o, t) => {
+  const { options: n, methods: s } = je(e, o, t), r = f(
     e,
     Pe,
     n
-  ), l2 = {
+  ), l = {
     ...s
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 };
 defineComponent({
   name: "LCircle",
   props: Pe,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = Qe(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = Qe(e, t, o);
     return onMounted(async () => {
-      const { circle: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(i2(e.latLng, l2));
+      const { circle: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(i(e.latLng, l));
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(a, t2.value, e), r({
+      t.value.on(u2), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -3517,51 +3517,51 @@ const Yt = defineComponent({
   name: "LCircleMarker",
   props: re,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = je(
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = je(
       e,
-      t2,
+      t,
       o
     );
     return onMounted(async () => {
-      const { circleMarker: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
-        i2(e.latLng, l2)
+      const { circleMarker: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
+        i(e.latLng, l)
       );
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(a, t2.value, e), r({
+      t.value.on(u2), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
   }
-}), F$1 = {
+}), F = {
   ...W,
   position: {
     type: String
   }
 }, K = (e, o) => {
-  const { options: t2, methods: n } = J$1(e), s = f$1(
+  const { options: t, methods: n } = J(e), s = f(
     e,
-    F$1,
-    t2
+    F,
+    t
   ), r = {
     ...n,
-    setPosition(l2) {
-      o.value && o.value.setPosition(l2);
+    setPosition(l) {
+      o.value && o.value.setPosition(l);
     }
   };
   return onUnmounted(() => {
     o.value && o.value.remove();
   }), { options: s, methods: r };
-}, Xe = (e) => e.default ? h$2("div", { ref: "root" }, e.default()) : null;
+}, Xe = (e) => e.default ? h$1("div", { ref: "root" }, e.default()) : null;
 defineComponent({
   name: "LControl",
   props: {
-    ...F$1,
+    ...F,
     disableClickPropagation: {
       type: Boolean,
       custom: true,
@@ -3574,37 +3574,37 @@ defineComponent({
     }
   },
   setup(e, o) {
-    const t2 = ref(), n = ref(), s = inject$1(h$1), r = m$1(H$1), { options: l2, methods: a } = K(e, t2);
+    const t = ref(), n = ref(), s = inject$1(h), r = m(H), { options: l, methods: a } = K(e, t);
     return onMounted(async () => {
-      const { Control: i2, DomEvent: u2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = i2.extend({
+      const { Control: i, DomEvent: u2 } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = i.extend({
         onAdd() {
           return n.value;
         }
       });
-      t2.value = markRaw(new d(l2)), L$3(a, t2.value, e), r({ leafletObject: t2.value }), e.disableClickPropagation && n.value && u2.disableClickPropagation(n.value), e.disableScrollPropagation && n.value && u2.disableScrollPropagation(n.value), nextTick(() => o.emit("ready", t2.value));
-    }), { root: n, leafletObject: t2 };
+      t.value = markRaw(new d(l)), L$2(a, t.value, e), r({ leafletObject: t.value }), e.disableClickPropagation && n.value && u2.disableClickPropagation(n.value), e.disableScrollPropagation && n.value && u2.disableScrollPropagation(n.value), nextTick(() => o.emit("ready", t.value));
+    }), { root: n, leafletObject: t };
   },
   render() {
     return Xe(this.$slots);
   }
 });
 const Ce = {
-  ...F$1,
+  ...F,
   prefix: {
     type: String
   }
 }, Ye = (e, o) => {
-  const { options: t2, methods: n } = K(
+  const { options: t, methods: n } = K(
     e,
     o
-  ), s = f$1(
+  ), s = f(
     e,
     Ce,
-    t2
+    t
   ), r = {
     ...n,
-    setPrefix(l2) {
-      o.value.setPrefix(l2);
+    setPrefix(l) {
+      o.value.setPrefix(l);
     }
   };
   return { options: s, methods: r };
@@ -3613,20 +3613,20 @@ defineComponent({
   name: "LControlAttribution",
   props: Ce,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(H$1), { options: r, methods: l2 } = Ye(e, t2);
+    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = Ye(e, t);
     return onMounted(async () => {
-      const { control: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
+      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
         a.attribution(r)
-      ), L$3(l2, t2.value, e), s({ leafletObject: t2.value }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+      ), L$2(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
 const Te = {
-  ...F$1,
+  ...F,
   collapsed: {
     type: Boolean,
     default: void 0
@@ -3647,11 +3647,11 @@ const Te = {
     type: Function
   }
 }, Ve = (e, o) => {
-  const { options: t2 } = K(e, o);
-  return { options: f$1(
+  const { options: t } = K(e, o);
+  return { options: f(
     e,
     Te,
-    t2
+    t
   ), methods: {
     addLayer(r) {
       r.layerType === "base" ? o.value.addBaseLayer(r.leafletObject, r.name) : r.layerType === "overlay" && o.value.addOverlay(r.leafletObject, r.name);
@@ -3665,24 +3665,24 @@ defineComponent({
   name: "LControlLayers",
   props: Te,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(me), { options: r, methods: l2 } = Ve(e, t2);
+    const t = ref(), n = inject$1(h), s = m(me), { options: r, methods: l } = Ve(e, t);
     return onMounted(async () => {
-      const { control: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
+      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
         a.layers(void 0, void 0, r)
-      ), L$3(l2, t2.value, e), s({
+      ), L$2(l, t.value, e), s({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
 const Me = {
-  ...F$1,
+  ...F,
   maxWidth: {
     type: Number
   },
@@ -3699,32 +3699,32 @@ const Me = {
     default: void 0
   }
 }, xe = (e, o) => {
-  const { options: t2, methods: n } = K(
+  const { options: t, methods: n } = K(
     e,
     o
   );
-  return { options: f$1(
+  return { options: f(
     e,
     Me,
-    t2
+    t
   ), methods: n };
 };
 defineComponent({
   name: "LControlScale",
   props: Me,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(H$1), { options: r, methods: l2 } = xe(e, t2);
+    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = xe(e, t);
     return onMounted(async () => {
-      const { control: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(a.scale(r)), L$3(l2, t2.value, e), s({ leafletObject: t2.value }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(a.scale(r)), L$2(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
 const Be = {
-  ...F$1,
+  ...F,
   zoomInText: {
     type: String
   },
@@ -3738,42 +3738,42 @@ const Be = {
     type: String
   }
 }, Re = (e, o) => {
-  const { options: t2, methods: n } = K(
+  const { options: t, methods: n } = K(
     e,
     o
   );
-  return { options: f$1(
+  return { options: f(
     e,
     Be,
-    t2
+    t
   ), methods: n };
 };
 defineComponent({
   name: "LControlZoom",
   props: Be,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(H$1), { options: r, methods: l2 } = Re(e, t2);
+    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = Re(e, t);
     return onMounted(async () => {
-      const { control: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(a.zoom(r)), L$3(l2, t2.value, e), s({ leafletObject: t2.value }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(a.zoom(r)), L$2(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
   }
 });
 const te = {
-  ...D$2
-}, se = (e, o, t2) => {
+  ...D$1
+}, se = (e, o, t) => {
   const { options: n, methods: s } = q(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     te,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     addLayer(a) {
       o.value.addLayer(a.leafletObject);
@@ -3782,43 +3782,43 @@ const te = {
       o.value.removeLayer(a.leafletObject);
     }
   };
-  return provide(M$1, l2.addLayer), provide(ee, l2.removeLayer), { options: r, methods: l2 };
+  return provide(M, l.addLayer), provide(ee, l.removeLayer), { options: r, methods: l };
 }, we = {
   ...te
-}, et = (e, o, t2) => {
+}, et = (e, o, t) => {
   const { options: n, methods: s } = se(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     we,
     n
-  ), l2 = {
+  ), l = {
     ...s
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 };
 defineComponent({
   props: we,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { methods: l2, options: a } = et(
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l, options: a } = et(
       e,
-      t2,
+      t,
       o
     );
     return onMounted(async () => {
-      const { featureGroup: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
-        i2(void 0, a)
+      const { featureGroup: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
+        i(void 0, a)
       );
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(l2, t2.value, e), r({
+      t.value.on(u2), L$2(l, t.value, e), r({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -3834,18 +3834,18 @@ const Ie = {
     type: Function,
     custom: true
   }
-}, tt = (e, o, t2) => {
+}, tt = (e, o, t) => {
   const { options: n, methods: s } = se(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     Ie,
     n
   );
   Object.prototype.hasOwnProperty.call(e, "optionsStyle") && (r.style = e.optionsStyle);
-  const l2 = {
+  const l = {
     ...s,
     setGeojson(a) {
       o.value.clearLayers(), o.value.addData(a);
@@ -3860,27 +3860,27 @@ const Ie = {
       return o.value.getBounds();
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 }, no = defineComponent({
   props: Ie,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { methods: l2, options: a } = tt(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l, options: a } = tt(e, t, o);
     return onMounted(async () => {
-      const { geoJSON: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(i2(e.geojson, a));
+      const { geoJSON: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(i(e.geojson, a));
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(l2, t2.value, e), r({
+      t.value.on(u2), L$2(l, t.value, e), r({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
   }
 }), ae = {
-  ...D$2,
+  ...D$1,
   opacity: {
     type: Number
   },
@@ -3903,16 +3903,16 @@ const Ie = {
   className: {
     type: String
   }
-}, Ae = (e, o, t2) => {
+}, Ae = (e, o, t) => {
   const { options: n, methods: s } = q(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     ae,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     setTileComponent() {
       var a;
@@ -3921,16 +3921,16 @@ const Ie = {
   };
   return onUnmounted(() => {
     o.value.off();
-  }), { options: r, methods: l2 };
-}, ot = (e, o, t2, n) => e.extend({
+  }), { options: r, methods: l };
+}, ot = (e, o, t, n) => e.extend({
   initialize(s) {
-    this.tileComponents = {}, this.on("tileunload", this._unloadTile), t2.setOptions(this, s);
+    this.tileComponents = {}, this.on("tileunload", this._unloadTile), t.setOptions(this, s);
   },
   createTile(s) {
     const r = this._tileCoordsToKey(s);
     this.tileComponents[r] = o.create("div");
-    const l2 = h$2({ setup: n, props: ["coords"] }, { coords: s });
-    return render(l2, this.tileComponents[r]), this.tileComponents[r];
+    const l = h$1({ setup: n, props: ["coords"] }, { coords: s });
+    return render(l, this.tileComponents[r]), this.tileComponents[r];
   },
   _unloadTile(s) {
     const r = this._tileCoordsToKey(s.coords);
@@ -3946,25 +3946,25 @@ defineComponent({
     }
   },
   setup(e, o) {
-    const t2 = ref(), n = ref(null), s = ref(false), r = inject$1(h$1), l2 = m$1(M$1), { options: a, methods: i2 } = Ae(e, t2, o);
+    const t = ref(), n = ref(null), s = ref(false), r = inject$1(h), l = m(M), { options: a, methods: i } = Ae(e, t, o);
     return onMounted(async () => {
-      const { GridLayer: u2, DomUtil: d, Util: y2 } = r ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js"), w2 = ot(
+      const { GridLayer: u2, DomUtil: d, Util: y } = r ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), w = ot(
         u2,
         d,
-        y2,
+        y,
         e.childRender
       );
-      t2.value = markRaw(new w2(a));
+      t.value = markRaw(new w(a));
       const { listeners: v } = T(o.attrs);
-      t2.value.on(v), L$3(i2, t2.value, e), l2({
+      t.value.on(v), L$2(i, t.value, e), l({
         ...e,
-        ...i2,
-        leafletObject: t2.value
-      }), s.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { root: n, ready: s, leafletObject: t2 };
+        ...i,
+        leafletObject: t.value
+      }), s.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { root: n, ready: s, leafletObject: t };
   },
   render() {
-    return this.ready ? h$2("div", { style: { display: "none" }, ref: "root" }) : null;
+    return this.ready ? h$1("div", { style: { display: "none" }, ref: "root" }) : null;
   }
 });
 const de = {
@@ -4011,27 +4011,27 @@ const de = {
     ...W
   },
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(ve), r = m$1(be), l2 = m$1(fe$1);
-    let a, i2, u2, d, y2;
-    const w2 = (N2, P, B2) => {
-      const I2 = N2 && N2.innerHTML;
+    const t = ref(), n = inject$1(h), s = m(ve), r = m(be), l = m(fe);
+    let a, i, u2, d, y;
+    const w = (N, P, B2) => {
+      const I = N && N.innerHTML;
       if (!P) {
-        B2 && y2 && s() && r(I2);
+        B2 && y && s() && r(I);
         return;
       }
-      const { listeners: E2 } = T(o.attrs);
-      y2 && i2(y2, E2);
-      const { options: ue } = J$1(e), $2 = f$1(
+      const { listeners: E } = T(o.attrs);
+      y && i(y, E);
+      const { options: ue } = J(e), $ = f(
         e,
         de,
         ue
       );
-      I2 && ($2.html = I2), y2 = $2.html ? u2($2) : d($2), a(y2, E2), l2(y2);
+      I && ($.html = I), y = $.html ? u2($) : d($), a(y, E), l(y);
     }, v = () => {
-      nextTick(() => w2(t2.value, true, false));
-    }, z2 = () => {
-      nextTick(() => w2(t2.value, false, true));
-    }, Z2 = {
+      nextTick(() => w(t.value, true, false));
+    }, z = () => {
+      nextTick(() => w(t.value, false, true));
+    }, Z = {
       setIconUrl: v,
       setIconRetinaUrl: v,
       setIconSize: v,
@@ -4047,24 +4047,24 @@ const de = {
     };
     return onMounted(async () => {
       const {
-        DomEvent: N2,
+        DomEvent: N,
         divIcon: P,
         icon: B2
-      } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      a = N2.on, i2 = N2.off, u2 = P, d = B2, L$3(Z2, {}, e), new MutationObserver(z2).observe(t2.value, {
+      } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      a = N.on, i = N.off, u2 = P, d = B2, L$2(Z, {}, e), new MutationObserver(z).observe(t.value, {
         attributes: true,
         childList: true,
         characterData: true,
         subtree: true
       }), v();
-    }), { root: t2 };
+    }), { root: t };
   },
   render() {
     const e = this.$slots.default ? this.$slots.default() : void 0;
-    return h$2("div", { ref: "root" }, e);
+    return h$1("div", { ref: "root" }, e);
   }
 }), Ge = {
-  ...D$2,
+  ...D$1,
   opacity: {
     type: Number
   },
@@ -4098,16 +4098,16 @@ const de = {
     required: true,
     custom: true
   }
-}, nt = (e, o, t2) => {
+}, nt = (e, o, t) => {
   const { options: n, methods: s } = q(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     Ge,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     /**
      * Sets the opacity of the overlay.
@@ -4164,29 +4164,29 @@ const de = {
       return o.value.setZIndex(a);
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 };
 defineComponent({
   name: "LImageOverlay",
   props: Ge,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = nt(
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = nt(
       e,
-      t2,
+      t,
       o
     );
     return onMounted(async () => {
-      const { imageOverlay: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
-        i2(e.url, e.bounds, l2)
+      const { imageOverlay: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
+        i(e.url, e.bounds, l)
       );
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(a, t2.value, e), r({
+      t.value.on(u2), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -4195,61 +4195,61 @@ defineComponent({
 defineComponent({
   props: te,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { methods: l2 } = se(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l } = se(e, t, o);
     return onMounted(async () => {
-      const { layerGroup: a } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
+      const { layerGroup: a } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
         a(void 0, e.options)
       );
-      const { listeners: i2 } = T(o.attrs);
-      t2.value.on(i2), L$3(l2, t2.value, e), r({
+      const { listeners: i } = T(o.attrs);
+      t.value.on(i), L$2(l, t.value, e), r({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
   }
 });
-function rt(e, o, t2) {
+function rt(e, o, t) {
   var n, s, r;
-  o === void 0 && (o = 50), t2 === void 0 && (t2 = {});
-  var l2 = (n = t2.isImmediate) != null && n, a = (s = t2.callback) != null && s, i2 = t2.maxWait, u2 = Date.now(), d = [];
-  function y2() {
-    if (i2 !== void 0) {
+  o === void 0 && (o = 50), t === void 0 && (t = {});
+  var l = (n = t.isImmediate) != null && n, a = (s = t.callback) != null && s, i = t.maxWait, u2 = Date.now(), d = [];
+  function y() {
+    if (i !== void 0) {
       var v = Date.now() - u2;
-      if (v + o >= i2)
-        return i2 - v;
+      if (v + o >= i)
+        return i - v;
     }
     return o;
   }
-  var w2 = function() {
-    var v = [].slice.call(arguments), z2 = this;
-    return new Promise(function(Z2, N2) {
-      var P = l2 && r === void 0;
+  var w = function() {
+    var v = [].slice.call(arguments), z = this;
+    return new Promise(function(Z, N) {
+      var P = l && r === void 0;
       if (r !== void 0 && clearTimeout(r), r = setTimeout(function() {
-        if (r = void 0, u2 = Date.now(), !l2) {
-          var I2 = e.apply(z2, v);
-          a && a(I2), d.forEach(function(E2) {
-            return (0, E2.resolve)(I2);
+        if (r = void 0, u2 = Date.now(), !l) {
+          var I = e.apply(z, v);
+          a && a(I), d.forEach(function(E) {
+            return (0, E.resolve)(I);
           }), d = [];
         }
-      }, y2()), P) {
-        var B2 = e.apply(z2, v);
-        return a && a(B2), Z2(B2);
+      }, y()), P) {
+        var B2 = e.apply(z, v);
+        return a && a(B2), Z(B2);
       }
-      d.push({ resolve: Z2, reject: N2 });
+      d.push({ resolve: Z, reject: N });
     });
   };
-  return w2.cancel = function(v) {
-    r !== void 0 && clearTimeout(r), d.forEach(function(z2) {
-      return (0, z2.reject)(v);
+  return w.cancel = function(v) {
+    r !== void 0 && clearTimeout(r), d.forEach(function(z) {
+      return (0, z.reject)(v);
     }), d = [];
-  }, w2;
+  }, w;
 }
-const We$1 = {
+const We = {
   ...W,
   /**
    * The center of the map, supports .sync modifier
@@ -4364,42 +4364,42 @@ const We$1 = {
 }, io = defineComponent({
   inheritAttrs: false,
   emits: ["ready", "update:zoom", "update:center", "update:bounds"],
-  props: We$1,
+  props: We,
   setup(e, o) {
-    const t2 = ref(), n = reactive({
+    const t = ref(), n = reactive({
       ready: false,
       layersToAdd: [],
       layersInControl: []
-    }), { options: s } = J$1(e), r = f$1(
+    }), { options: s } = J(e), r = f(
       e,
-      We$1,
+      We,
       s
-    ), { listeners: l2, attrs: a } = T(o.attrs), i2 = Y$1(M$1), u2 = Y$1(ee), d = Y$1(H$1), y2 = Y$1(
+    ), { listeners: l, attrs: a } = T(o.attrs), i = Y(M), u2 = Y(ee), d = Y(H), y = Y(
       me
     );
-    provide(h$1, e.useGlobalLeaflet);
-    const w2 = computed(() => {
+    provide(h, e.useGlobalLeaflet);
+    const w = computed(() => {
       const P = {};
       return e.noBlockingAnimations && (P.animate = false), P;
     }), v = computed(() => {
-      const P = w2.value;
+      const P = w.value;
       return e.padding && (P.padding = e.padding), e.paddingTopLeft && (P.paddingTopLeft = e.paddingTopLeft), e.paddingBottomRight && (P.paddingBottomRight = e.paddingBottomRight), P;
-    }), z2 = {
+    }), z = {
       moveend: rt((P) => {
         n.leafletRef && (o.emit("update:zoom", n.leafletRef.getZoom()), o.emit("update:center", n.leafletRef.getCenter()), o.emit("update:bounds", n.leafletRef.getBounds()));
       }),
       overlayadd(P) {
-        const B2 = n.layersInControl.find((I2) => I2.name === P.name);
+        const B2 = n.layersInControl.find((I) => I.name === P.name);
         B2 && B2.updateVisibleProp(true);
       },
       overlayremove(P) {
-        const B2 = n.layersInControl.find((I2) => I2.name === P.name);
+        const B2 = n.layersInControl.find((I) => I.name === P.name);
         B2 && B2.updateVisibleProp(false);
       }
     };
     onMounted(async () => {
-      e.useGlobalLeaflet && (b$1.L = b$1.L || await Promise.resolve().then(() => leafletSrc));
-      const { map: P, CRS: B2, Icon: I2, latLngBounds: E2, latLng: ue, stamp: $2 } = e.useGlobalLeaflet ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      e.useGlobalLeaflet && (b.L = b.L || await Promise.resolve().then(() => leafletSrc));
+      const { map: P, CRS: B2, Icon: I, latLngBounds: E, latLng: ue, stamp: $ } = e.useGlobalLeaflet ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
       try {
         r.beforeMapMount && await r.beforeMapMount();
       } catch (p) {
@@ -4407,37 +4407,37 @@ const We$1 = {
           `The following error occurred running the provided beforeMapMount hook ${p.message}`
         );
       }
-      await qe(I2);
+      await qe(I);
       const yt = typeof r.crs == "string" ? B2[r.crs] : r.crs;
       r.crs = yt || B2.EPSG3857;
-      const Q2 = {
+      const Q = {
         addLayer(p) {
           p.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd.push(p) : n.layersInControl.find(
-            (X2) => $2(X2.leafletObject) === $2(p.leafletObject)
+            (X) => $(X.leafletObject) === $(p.leafletObject)
           ) || (n.layerControl.addLayer(p), n.layersInControl.push(p))), p.visible !== false && n.leafletRef.addLayer(p.leafletObject);
         },
         removeLayer(p) {
           p.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd = n.layersToAdd.filter(
-            (C3) => C3.name !== p.name
+            (C) => C.name !== p.name
           ) : (n.layerControl.removeLayer(p.leafletObject), n.layersInControl = n.layersInControl.filter(
-            (C3) => $2(C3.leafletObject) !== $2(p.leafletObject)
+            (C) => $(C.leafletObject) !== $(p.leafletObject)
           ))), n.leafletRef.removeLayer(p.leafletObject);
         },
         registerLayerControl(p) {
-          n.layerControl = p, n.layersToAdd.forEach((C3) => {
-            n.layerControl.addLayer(C3);
+          n.layerControl = p, n.layersToAdd.forEach((C) => {
+            n.layerControl.addLayer(C);
           }), n.layersToAdd = [], d(p);
         },
         registerControl(p) {
           n.leafletRef.addControl(p.leafletObject);
         },
         setZoom(p) {
-          const C3 = n.leafletRef.getZoom();
-          p !== C3 && n.leafletRef.setZoom(p, w2.value);
+          const C = n.leafletRef.getZoom();
+          p !== C && n.leafletRef.setZoom(p, w.value);
         },
         setCrs(p) {
-          const C3 = n.leafletRef.getBounds();
-          n.leafletRef.options.crs = p, n.leafletRef.fitBounds(C3, {
+          const C = n.leafletRef.getBounds();
+          n.leafletRef.options.crs = p, n.leafletRef.fitBounds(C, {
             animate: false,
             padding: [0, 0]
           });
@@ -4448,27 +4448,27 @@ const We$1 = {
         setBounds(p) {
           if (!p)
             return;
-          const C3 = E2(p);
-          if (!C3.isValid())
+          const C = E(p);
+          if (!C.isValid())
             return;
-          !(n.lastSetBounds || n.leafletRef.getBounds()).equals(C3, 0) && (n.lastSetBounds = C3, n.leafletRef.fitBounds(C3));
+          !(n.lastSetBounds || n.leafletRef.getBounds()).equals(C, 0) && (n.lastSetBounds = C, n.leafletRef.fitBounds(C));
         },
         setCenter(p) {
           if (p == null)
             return;
-          const C3 = ue(p), X2 = n.lastSetCenter || n.leafletRef.getCenter();
-          (X2.lat !== C3.lat || X2.lng !== C3.lng) && (n.lastSetCenter = C3, n.leafletRef.panTo(C3, w2.value));
+          const C = ue(p), X = n.lastSetCenter || n.leafletRef.getCenter();
+          (X.lat !== C.lat || X.lng !== C.lng) && (n.lastSetCenter = C, n.leafletRef.panTo(C, w.value));
         }
       };
-      V$1(i2, Q2.addLayer), V$1(u2, Q2.removeLayer), V$1(d, Q2.registerControl), V$1(y2, Q2.registerLayerControl), n.leafletRef = markRaw(P(t2.value, r)), L$3(Q2, n.leafletRef, e), ce(n.leafletRef, z2), ce(n.leafletRef, l2), n.ready = true, nextTick(() => o.emit("ready", n.leafletRef));
+      V(i, Q.addLayer), V(u2, Q.removeLayer), V(d, Q.registerControl), V(y, Q.registerLayerControl), n.leafletRef = markRaw(P(t.value, r)), L$2(Q, n.leafletRef, e), ce(n.leafletRef, z), ce(n.leafletRef, l), n.ready = true, nextTick(() => o.emit("ready", n.leafletRef));
     }), onBeforeUnmount(() => {
-      ye(z2), n.leafletRef && (n.leafletRef.off(), n.leafletRef.remove());
+      ye(z), n.leafletRef && (n.leafletRef.off(), n.leafletRef.remove());
     });
-    const Z2 = computed(() => n.leafletRef), N2 = computed(() => n.ready);
-    return { root: t2, ready: N2, leafletObject: Z2, attrs: a };
+    const Z = computed(() => n.leafletRef), N = computed(() => n.ready);
+    return { root: t, ready: N, leafletObject: Z, attrs: a };
   },
   render({ attrs: e }) {
-    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), h$2(
+    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), h$1(
       "div",
       {
         ...e,
@@ -4478,7 +4478,7 @@ const We$1 = {
     );
   }
 }), Gt = ["Symbol(Comment)", "Symbol(Text)"], zt = ["LTooltip", "LPopup"], ze = {
-  ...D$2,
+  ...D$1,
   draggable: {
     type: Boolean,
     default: void 0
@@ -4494,34 +4494,34 @@ const We$1 = {
     custom: true,
     required: true
   }
-}, st = (e, o, t2) => {
+}, st = (e, o, t) => {
   const { options: n, methods: s } = q(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     ze,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     setDraggable(a) {
       o.value.dragging && (a ? o.value.dragging.enable() : o.value.dragging.disable());
     },
     latLngSync(a) {
-      t2.emit("update:latLng", a.latlng), t2.emit("update:lat-lng", a.latlng);
+      t.emit("update:latLng", a.latlng), t.emit("update:lat-lng", a.latlng);
     },
     setLatLng(a) {
       if (a != null && o.value) {
-        const i2 = o.value.getLatLng();
-        (!i2 || !i2.equals(a)) && o.value.setLatLng(a);
+        const i = o.value.getLatLng();
+        (!i || !i.equals(a)) && o.value.setLatLng(a);
       }
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 }, at = (e, o) => {
-  const t2 = o.slots.default && o.slots.default();
-  return t2 && t2.length && t2.some(Nt);
+  const t = o.slots.default && o.slots.default();
+  return t && t.length && t.some(Nt);
 };
 function Nt(e) {
   return !(Gt.includes(e.type.toString()) || zt.includes(e.type.name));
@@ -4530,37 +4530,37 @@ const uo = defineComponent({
   name: "LMarker",
   props: ze,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M);
     provide(
       ve,
       () => {
         var u2;
-        return !!((u2 = t2.value) != null && u2.getElement());
+        return !!((u2 = t.value) != null && u2.getElement());
       }
     ), provide(be, (u2) => {
-      var y2, w2;
-      const d = k$1((y2 = t2.value) == null ? void 0 : y2.getElement) && ((w2 = t2.value) == null ? void 0 : w2.getElement());
+      var y, w;
+      const d = k((y = t.value) == null ? void 0 : y.getElement) && ((w = t.value) == null ? void 0 : w.getElement());
       d && (d.innerHTML = u2);
     }), provide(
-      fe$1,
+      fe,
       (u2) => {
         var d;
-        return ((d = t2.value) == null ? void 0 : d.setIcon) && t2.value.setIcon(u2);
+        return ((d = t.value) == null ? void 0 : d.setIcon) && t.value.setIcon(u2);
       }
     );
-    const { options: l2, methods: a } = st(e, t2, o), i2 = {
+    const { options: l, methods: a } = st(e, t, o), i = {
       moveHandler: rt(a.latLngSync)
     };
     return onMounted(async () => {
-      const { marker: u2, divIcon: d } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      at(l2, o) && (l2.icon = d({ className: "" })), t2.value = markRaw(u2(e.latLng, l2));
-      const { listeners: y2 } = T(o.attrs);
-      t2.value.on(y2), t2.value.on("move", i2.moveHandler), L$3(a, t2.value, e), r({
+      const { marker: u2, divIcon: d } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      at(l, o) && (l.icon = d({ className: "" })), t.value = markRaw(u2(e.latLng, l));
+      const { listeners: y } = T(o.attrs);
+      t.value.on(y), t.value.on("move", i.moveHandler), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), onBeforeUnmount(() => ye(i2)), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), onBeforeUnmount(() => ye(i)), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -4579,16 +4579,16 @@ const uo = defineComponent({
     required: true,
     custom: true
   }
-}, Ne = (e, o, t2) => {
+}, Ne = (e, o, t) => {
   const { options: n, methods: s } = _e(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     le,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     setSmoothFactor(a) {
       o.value.setStyle({ smoothFactor: a });
@@ -4600,41 +4600,41 @@ const uo = defineComponent({
       o.value.addLatLng(a);
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 }, x = {
   ...le
-}, $e = (e, o, t2) => {
+}, $e = (e, o, t) => {
   const { options: n, methods: s } = Ne(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     x,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     toGeoJSON(a) {
       return o.value.toGeoJSON(a);
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 };
 defineComponent({
   name: "LPolygon",
   props: x,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = $e(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = $e(e, t, o);
     return onMounted(async () => {
-      const { polygon: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(i2(e.latLngs, l2));
+      const { polygon: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(i(e.latLngs, l));
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(a, t2.value, e), r({
+      t.value.on(u2), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -4644,19 +4644,19 @@ defineComponent({
   name: "LPolyline",
   props: le,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = Ne(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = Ne(e, t, o);
     return onMounted(async () => {
-      const { polyline: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
-        i2(e.latLngs, l2)
+      const { polyline: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
+        i(e.latLngs, l)
       );
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), L$3(a, t2.value, e), r({
+      t.value.on(u2), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -4669,36 +4669,36 @@ const ke = {
     default: null
   }
 }, Ue = (e, o) => {
-  const { options: t2, methods: n } = J$1(e), s = {
+  const { options: t, methods: n } = J(e), s = {
     ...n,
     setContent(r) {
       o.value && r !== null && r !== void 0 && o.value.setContent(r);
     }
   };
-  return { options: t2, methods: s };
-}, De = (e) => e.default ? h$2("div", { ref: "root" }, e.default()) : null, lt = {
+  return { options: t, methods: s };
+}, De = (e) => e.default ? h$1("div", { ref: "root" }, e.default()) : null, lt = {
   ...ke,
   latLng: {
     type: [Object, Array],
     default: () => []
   }
 }, it = (e, o) => {
-  const { options: t2, methods: n } = Ue(e, o);
-  return { options: t2, methods: n };
+  const { options: t, methods: n } = Ue(e, o);
+  return { options: t, methods: n };
 };
 defineComponent({
   name: "LPopup",
   props: lt,
   setup(e, o) {
-    const t2 = ref(), n = ref(null), s = inject$1(h$1), r = m$1(ge), l2 = m$1(he), { options: a, methods: i2 } = it(e, t2);
+    const t = ref(), n = ref(null), s = inject$1(h), r = m(ge), l = m(he), { options: a, methods: i } = it(e, t);
     return onMounted(async () => {
-      const { popup: u2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(u2(a)), e.latLng !== void 0 && t2.value.setLatLng(e.latLng), L$3(i2, t2.value, e);
+      const { popup: u2 } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(u2(a)), e.latLng !== void 0 && t.value.setLatLng(e.latLng), L$2(i, t.value, e);
       const { listeners: d } = T(o.attrs);
-      t2.value.on(d), t2.value.setContent(e.content || n.value || ""), r(t2.value), nextTick(() => o.emit("ready", t2.value));
+      t.value.on(d), t.value.setContent(e.content || n.value || ""), r(t.value), nextTick(() => o.emit("ready", t.value));
     }), onBeforeUnmount(() => {
-      l2();
-    }), { root: n, leafletObject: t2 };
+      l();
+    }), { root: n, leafletObject: t };
   },
   render() {
     return De(this.$slots);
@@ -4714,16 +4714,16 @@ const Fe = {
     type: Object,
     custom: true
   }
-}, ut = (e, o, t2) => {
+}, ut = (e, o, t) => {
   const { options: n, methods: s } = $e(
     e,
     o,
-    t2
-  ), r = f$1(
+    t
+  ), r = f(
     e,
     Fe,
     n
-  ), l2 = {
+  ), l = {
     ...s,
     setBounds(a) {
       o.value.setBounds(a);
@@ -4732,23 +4732,23 @@ const Fe = {
       o.value.setBounds(a);
     }
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 };
 defineComponent({
   name: "LRectangle",
   props: Fe,
   setup(e, o) {
-    const t2 = ref(), n = ref(false), s = inject$1(h$1), r = m$1(M$1), { options: l2, methods: a } = ut(e, t2, o);
+    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = ut(e, t, o);
     return onMounted(async () => {
-      const { rectangle: i2, latLngBounds: u2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = e.bounds ? u2(e.bounds) : u2(e.latLngs || []);
-      t2.value = markRaw(i2(d, l2));
-      const { listeners: y2 } = T(o.attrs);
-      t2.value.on(y2), L$3(a, t2.value, e), r({
+      const { rectangle: i, latLngBounds: u2 } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = e.bounds ? u2(e.bounds) : u2(e.latLngs || []);
+      t.value = markRaw(i(d, l));
+      const { listeners: y } = T(o.attrs);
+      t.value.on(y), L$2(a, t.value, e), r({
         ...e,
         ...a,
-        leafletObject: t2.value
-      }), n.value = true, nextTick(() => o.emit("ready", t2.value));
-    }), { ready: n, leafletObject: t2 };
+        leafletObject: t.value
+      }), n.value = true, nextTick(() => o.emit("ready", t.value));
+    }), { ready: n, leafletObject: t };
   },
   render() {
     return G(this.ready, this.$slots);
@@ -4773,29 +4773,29 @@ const ie = {
     required: true,
     custom: true
   }
-}, Ze = (e, o, t2) => {
-  const { options: n, methods: s } = Ae(e, o, t2), r = f$1(
+}, Ze = (e, o, t) => {
+  const { options: n, methods: s } = Ae(e, o, t), r = f(
     e,
     ie,
     n
-  ), l2 = {
+  ), l = {
     ...s
   };
-  return { options: r, methods: l2 };
+  return { options: r, methods: l };
 }, vo = defineComponent({
   props: ie,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(M$1), { options: r, methods: l2 } = Ze(e, t2, o);
+    const t = ref(), n = inject$1(h), s = m(M), { options: r, methods: l } = Ze(e, t, o);
     return onMounted(async () => {
-      const { tileLayer: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(a(e.url, r));
-      const { listeners: i2 } = T(o.attrs);
-      t2.value.on(i2), L$3(l2, t2.value, e), s({
+      const { tileLayer: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(a(e.url, r));
+      const { listeners: i } = T(o.attrs);
+      t.value.on(i), L$2(l, t.value, e), s({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
@@ -4803,21 +4803,21 @@ const ie = {
 }), ct = {
   ...ke
 }, dt = (e, o) => {
-  const { options: t2, methods: n } = Ue(e, o), s = m$1(Oe);
+  const { options: t, methods: n } = Ue(e, o), s = m(Oe);
   return onBeforeUnmount(() => {
     s();
-  }), { options: t2, methods: n };
+  }), { options: t, methods: n };
 }, bo = defineComponent({
   name: "LTooltip",
   props: ct,
   setup(e, o) {
-    const t2 = ref(), n = ref(null), s = inject$1(h$1), r = m$1(Le), { options: l2, methods: a } = dt(e, t2);
+    const t = ref(), n = ref(null), s = inject$1(h), r = m(Le), { options: l, methods: a } = dt(e, t);
     return onMounted(async () => {
-      const { tooltip: i2 } = s ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(i2(l2)), L$3(a, t2.value, e);
+      const { tooltip: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(i(l)), L$2(a, t.value, e);
       const { listeners: u2 } = T(o.attrs);
-      t2.value.on(u2), t2.value.setContent(e.content || n.value || ""), r(t2.value), nextTick(() => o.emit("ready", t2.value));
-    }), { root: n, leafletObject: t2 };
+      t.value.on(u2), t.value.setContent(e.content || n.value || ""), r(t.value), nextTick(() => o.emit("ready", t.value));
+    }), { root: n, leafletObject: t };
   },
   render() {
     return De(this.$slots);
@@ -4848,10 +4848,10 @@ const ie = {
     type: Boolean,
     default: void 0
   }
-}, pt = (e, o, t2) => {
-  const { options: n, methods: s } = Ze(e, o, t2);
+}, pt = (e, o, t) => {
+  const { options: n, methods: s } = Ze(e, o, t);
   return {
-    options: f$1(
+    options: f(
       e,
       Ee,
       n
@@ -4863,23 +4863,23 @@ const ie = {
 }, fo = defineComponent({
   props: Ee,
   setup(e, o) {
-    const t2 = ref(), n = inject$1(h$1), s = m$1(M$1), { options: r, methods: l2 } = pt(
+    const t = ref(), n = inject$1(h), s = m(M), { options: r, methods: l } = pt(
       e,
-      t2,
+      t,
       o
     );
     return onMounted(async () => {
-      const { tileLayer: a } = n ? b$1.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t2.value = markRaw(
+      const { tileLayer: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+      t.value = markRaw(
         a.wms(e.url, r)
       );
-      const { listeners: i2 } = T(o.attrs);
-      t2.value.on(i2), L$3(l2, t2.value, e), s({
+      const { listeners: i } = T(o.attrs);
+      t.value.on(i), L$2(l, t.value, e), s({
         ...e,
-        ...l2,
-        leafletObject: t2.value
-      }), nextTick(() => o.emit("ready", t2.value));
-    }), { leafletObject: t2 };
+        ...l,
+        leafletObject: t.value
+      }), nextTick(() => o.emit("ready", t.value));
+    }), { leafletObject: t };
   },
   render() {
     return null;
@@ -5587,7 +5587,7 @@ function requireLodash() {
         return string.match(reUnicodeWord) || [];
       }
       var runInContext = (function runInContext2(context) {
-        context = context == null ? root : _2.defaults(root.Object(), context, _2.pick(root, contextProps));
+        context = context == null ? root : _.defaults(root.Object(), context, _.pick(root, contextProps));
         var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String2 = context.String, TypeError2 = context.TypeError;
         var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
         var coreJsData = context["__core-js_shared__"];
@@ -6918,8 +6918,8 @@ function requireLodash() {
           result2.lastIndex = regexp.lastIndex;
           return result2;
         }
-        function cloneSymbol(symbol2) {
-          return symbolValueOf ? Object2(symbolValueOf.call(symbol2)) : {};
+        function cloneSymbol(symbol) {
+          return symbolValueOf ? Object2(symbolValueOf.call(symbol)) : {};
         }
         function cloneTypedArray(typedArray, isDeep) {
           var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
@@ -7659,8 +7659,8 @@ function requireLodash() {
             return [];
           }
           object = Object2(object);
-          return arrayFilter(nativeGetSymbols(object), function(symbol2) {
-            return propertyIsEnumerable.call(object, symbol2);
+          return arrayFilter(nativeGetSymbols(object), function(symbol) {
+            return propertyIsEnumerable.call(object, symbol);
           });
         };
         var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
@@ -10361,12 +10361,12 @@ function requireLodash() {
         }
         return lodash2;
       });
-      var _2 = runInContext();
+      var _ = runInContext();
       if (freeModule) {
-        (freeModule.exports = _2)._ = _2;
-        freeExports._ = _2;
+        (freeModule.exports = _)._ = _;
+        freeExports._ = _;
       } else {
-        root._ = _2;
+        root._ = _;
       }
     }).call(lodash);
   })(lodash$1, lodash$1.exports);
@@ -10381,12 +10381,12 @@ function resolve(start, ...args) {
 function resolveObj(obj, dotNotatedstring) {
   const replace = dotNotatedstring.replace("\\.", "<|>");
   try {
-    return replace.split(".").reduce((o, i2) => {
-      const aNumber = parseInt(i2);
+    return replace.split(".").reduce((o, i) => {
+      const aNumber = parseInt(i);
       if (isFinite(aNumber) && Array.isArray(o)) {
         return o[aNumber];
       }
-      return o[i2.replace("<|>", ".")];
+      return o[i.replace("<|>", ".")];
     }, obj);
   } catch (e) {
     return null;
@@ -10579,11 +10579,11 @@ function requireLeafletSrc() {
     })(leafletSrc$1, (function(exports$12) {
       var version2 = "1.9.4";
       function extend2(dest) {
-        var i2, j, len, src;
+        var i, j, len, src;
         for (j = 1, len = arguments.length; j < len; j++) {
           src = arguments[j];
-          for (i2 in src) {
-            dest[i2] = src[i2];
+          for (i in src) {
+            dest[i] = src[i];
           }
         }
         return dest;
@@ -10657,15 +10657,15 @@ function requireLeafletSrc() {
         if (!Object.prototype.hasOwnProperty.call(obj, "options")) {
           obj.options = obj.options ? create$2(obj.options) : {};
         }
-        for (var i2 in options) {
-          obj.options[i2] = options[i2];
+        for (var i in options) {
+          obj.options[i] = options[i];
         }
         return obj.options;
       }
       function getParamString(obj, existingUrl, uppercase) {
         var params = [];
-        for (var i2 in obj) {
-          params.push(encodeURIComponent(uppercase ? i2.toUpperCase() : i2) + "=" + encodeURIComponent(obj[i2]));
+        for (var i in obj) {
+          params.push(encodeURIComponent(uppercase ? i.toUpperCase() : i) + "=" + encodeURIComponent(obj[i]));
         }
         return (!existingUrl || existingUrl.indexOf("?") === -1 ? "?" : "&") + params.join("&");
       }
@@ -10685,9 +10685,9 @@ function requireLeafletSrc() {
         return Object.prototype.toString.call(obj) === "[object Array]";
       };
       function indexOf(array, el) {
-        for (var i2 = 0; i2 < array.length; i2++) {
-          if (array[i2] === el) {
-            return i2;
+        for (var i = 0; i < array.length; i++) {
+          if (array[i] === el) {
+            return i;
           }
         }
         return -1;
@@ -10758,9 +10758,9 @@ function requireLeafletSrc() {
         var proto = create$2(parentProto);
         proto.constructor = NewClass;
         NewClass.prototype = proto;
-        for (var i2 in this) {
-          if (Object.prototype.hasOwnProperty.call(this, i2) && i2 !== "prototype" && i2 !== "__super__") {
-            NewClass[i2] = this[i2];
+        for (var i in this) {
+          if (Object.prototype.hasOwnProperty.call(this, i) && i !== "prototype" && i !== "__super__") {
+            NewClass[i] = this[i];
           }
         }
         if (props2.statics) {
@@ -10786,8 +10786,8 @@ function requireLeafletSrc() {
             parentProto.callInitHooks.call(this);
           }
           this._initHooksCalled = true;
-          for (var i3 = 0, len = proto._initHooks.length; i3 < len; i3++) {
-            proto._initHooks[i3].call(this);
+          for (var i2 = 0, len = proto._initHooks.length; i2 < len; i2++) {
+            proto._initHooks[i2].call(this);
           }
         };
         return NewClass;
@@ -10819,8 +10819,8 @@ function requireLeafletSrc() {
           return;
         }
         includes = isArray(includes) ? includes : [includes];
-        for (var i2 = 0; i2 < includes.length; i2++) {
-          if (includes[i2] === L.Mixin.Events) {
+        for (var i = 0; i < includes.length; i++) {
+          if (includes[i] === L.Mixin.Events) {
             console.warn("Deprecated include of L.Mixin.Events: this property will be removed in future releases, please inherit from L.Evented instead.", new Error().stack);
           }
         }
@@ -10840,8 +10840,8 @@ function requireLeafletSrc() {
             }
           } else {
             types = splitWords(types);
-            for (var i2 = 0, len = types.length; i2 < len; i2++) {
-              this._on(types[i2], fn, context);
+            for (var i = 0, len = types.length; i < len; i++) {
+              this._on(types[i], fn, context);
             }
           }
           return this;
@@ -10867,11 +10867,11 @@ function requireLeafletSrc() {
           } else {
             types = splitWords(types);
             var removeAll = arguments.length === 1;
-            for (var i2 = 0, len = types.length; i2 < len; i2++) {
+            for (var i = 0, len = types.length; i < len; i++) {
               if (removeAll) {
-                this._off(types[i2]);
+                this._off(types[i]);
               } else {
-                this._off(types[i2], fn, context);
+                this._off(types[i], fn, context);
               }
             }
           }
@@ -10898,7 +10898,7 @@ function requireLeafletSrc() {
           this._events[type2].push(newListener);
         },
         _off: function(type2, fn, context) {
-          var listeners, i2, len;
+          var listeners, i, len;
           if (!this._events) {
             return;
           }
@@ -10908,8 +10908,8 @@ function requireLeafletSrc() {
           }
           if (arguments.length === 1) {
             if (this._firingCount) {
-              for (i2 = 0, len = listeners.length; i2 < len; i2++) {
-                listeners[i2].fn = falseFn;
+              for (i = 0, len = listeners.length; i < len; i++) {
+                listeners[i].fn = falseFn;
               }
             }
             delete this._events[type2];
@@ -10946,13 +10946,13 @@ function requireLeafletSrc() {
             var listeners = this._events[type2];
             if (listeners) {
               this._firingCount = this._firingCount + 1 || 1;
-              for (var i2 = 0, len = listeners.length; i2 < len; i2++) {
-                var l2 = listeners[i2];
-                var fn = l2.fn;
-                if (l2.once) {
-                  this.off(type2, fn, l2.ctx);
+              for (var i = 0, len = listeners.length; i < len; i++) {
+                var l = listeners[i];
+                var fn = l.fn;
+                if (l.once) {
+                  this.off(type2, fn, l.ctx);
                 }
-                fn.call(l2.ctx || this, event);
+                fn.call(l.ctx || this, event);
               }
               this._firingCount--;
             }
@@ -11003,9 +11003,9 @@ function requireLeafletSrc() {
           if (context === this) {
             context = void 0;
           }
-          for (var i2 = 0, len = listeners.length; i2 < len; i2++) {
-            if (listeners[i2].fn === fn && listeners[i2].ctx === context) {
-              return i2;
+          for (var i = 0, len = listeners.length; i < len; i++) {
+            if (listeners[i].fn === fn && listeners[i].ctx === context) {
+              return i;
             }
           }
           return false;
@@ -11019,8 +11019,8 @@ function requireLeafletSrc() {
             }
           } else {
             types = splitWords(types);
-            for (var i2 = 0, len = types.length; i2 < len; i2++) {
-              this._on(types[i2], fn, context, true);
+            for (var i = 0, len = types.length; i < len; i++) {
+              this._on(types[i], fn, context, true);
             }
           }
           return this;
@@ -11055,9 +11055,9 @@ function requireLeafletSrc() {
       Events.fireEvent = Events.fire;
       Events.hasEventListeners = Events.listens;
       var Evented = Class.extend(Events);
-      function Point(x2, y2, round) {
+      function Point(x2, y, round) {
         this.x = round ? Math.round(x2) : x2;
-        this.y = round ? Math.round(y2) : y2;
+        this.y = round ? Math.round(y) : y;
       }
       var trunc = Math.trunc || function(v) {
         return v > 0 ? Math.floor(v) : Math.ceil(v);
@@ -11166,8 +11166,8 @@ function requireLeafletSrc() {
         // Returns the cartesian distance between the current and the given points.
         distanceTo: function(point2) {
           point2 = toPoint(point2);
-          var x2 = point2.x - this.x, y2 = point2.y - this.y;
-          return Math.sqrt(x2 * x2 + y2 * y2);
+          var x2 = point2.x - this.x, y = point2.y - this.y;
+          return Math.sqrt(x2 * x2 + y * y);
         },
         // @method equals(otherPoint: Point): Boolean
         // Returns `true` if the given point has the same coordinates.
@@ -11187,7 +11187,7 @@ function requireLeafletSrc() {
           return "Point(" + formatNum(this.x) + ", " + formatNum(this.y) + ")";
         }
       };
-      function toPoint(x2, y2, round) {
+      function toPoint(x2, y, round) {
         if (x2 instanceof Point) {
           return x2;
         }
@@ -11200,15 +11200,15 @@ function requireLeafletSrc() {
         if (typeof x2 === "object" && "x" in x2 && "y" in x2) {
           return new Point(x2.x, x2.y);
         }
-        return new Point(x2, y2, round);
+        return new Point(x2, y, round);
       }
       function Bounds(a, b2) {
         if (!a) {
           return;
         }
         var points = b2 ? [a, b2] : a;
-        for (var i2 = 0, len = points.length; i2 < len; i2++) {
-          this.extend(points[i2]);
+        for (var i = 0, len = points.length; i < len; i++) {
+          this.extend(points[i]);
         }
       }
       Bounds.prototype = {
@@ -11350,8 +11350,8 @@ function requireLeafletSrc() {
           return;
         }
         var latlngs = corner2 ? [corner1, corner2] : corner1;
-        for (var i2 = 0, len = latlngs.length; i2 < len; i2++) {
-          this.extend(latlngs[i2]);
+        for (var i = 0, len = latlngs.length; i < len; i++) {
+          this.extend(latlngs[i]);
         }
       }
       LatLngBounds.prototype = {
@@ -11556,7 +11556,7 @@ function requireLeafletSrc() {
           return new LatLng(this.lat, this.lng, this.alt);
         }
       };
-      function toLatLng(a, b2, c2) {
+      function toLatLng(a, b2, c) {
         if (a instanceof LatLng) {
           return a;
         }
@@ -11578,7 +11578,7 @@ function requireLeafletSrc() {
         if (b2 === void 0) {
           return null;
         }
-        return new LatLng(a, b2, c2);
+        return new LatLng(a, b2, c);
       }
       var CRS = {
         // @method latLngToPoint(latlng: LatLng, zoom: Number): Point
@@ -11673,8 +11673,8 @@ function requireLeafletSrc() {
         R: 6371e3,
         // distance between two geographical points using spherical law of cosines approximation
         distance: function(latlng1, latlng2) {
-          var rad = Math.PI / 180, lat1 = latlng1.lat * rad, lat2 = latlng2.lat * rad, sinDLat = Math.sin((latlng2.lat - latlng1.lat) * rad / 2), sinDLon = Math.sin((latlng2.lng - latlng1.lng) * rad / 2), a = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLon * sinDLon, c2 = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          return this.R * c2;
+          var rad = Math.PI / 180, lat1 = latlng1.lat * rad, lat2 = latlng2.lat * rad, sinDLat = Math.sin((latlng2.lat - latlng1.lat) * rad / 2), sinDLon = Math.sin((latlng2.lng - latlng1.lng) * rad / 2), a = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLon * sinDLon, c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          return this.R * c;
         }
       });
       var earthRadius2 = 6378137;
@@ -11700,7 +11700,7 @@ function requireLeafletSrc() {
           return new Bounds([-d, -d], [d, d]);
         })()
       };
-      function Transformation(a, b2, c2, d) {
+      function Transformation(a, b2, c, d) {
         if (isArray(a)) {
           this._a = a[0];
           this._b = a[1];
@@ -11710,7 +11710,7 @@ function requireLeafletSrc() {
         }
         this._a = a;
         this._b = b2;
-        this._c = c2;
+        this._c = c;
         this._d = d;
       }
       Transformation.prototype = {
@@ -11738,8 +11738,8 @@ function requireLeafletSrc() {
           );
         }
       };
-      function toTransformation(a, b2, c2, d) {
-        return new Transformation(a, b2, c2, d);
+      function toTransformation(a, b2, c, d) {
+        return new Transformation(a, b2, c, d);
       }
       var EPSG3857 = extend2({}, Earth, {
         code: "EPSG:3857",
@@ -11756,9 +11756,9 @@ function requireLeafletSrc() {
         return document.createElementNS("http://www.w3.org/2000/svg", name);
       }
       function pointsToPath(rings, closed) {
-        var str = "", i2, j, len, len2, points, p;
-        for (i2 = 0, len = rings.length; i2 < len; i2++) {
-          points = rings[i2];
+        var str = "", i, j, len, len2, points, p;
+        for (i = 0, len = rings.length; i < len; i++) {
+          points = rings[i];
           for (j = 0, len2 = points.length; j < len2; j++) {
             p = points[j];
             str += (j ? "L" : "M") + p.x + " " + p.y;
@@ -11935,8 +11935,8 @@ function requireLeafletSrc() {
           return;
         }
         e.touches = [];
-        for (var i2 in _pointers) {
-          e.touches.push(_pointers[i2]);
+        for (var i in _pointers) {
+          e.touches.push(_pointers[i]);
         }
         e.changedTouches = [e];
         handler(e);
@@ -11948,10 +11948,10 @@ function requireLeafletSrc() {
         _handlePointer(handler, e);
       }
       function makeDblclick(event) {
-        var newEvent = {}, prop, i2;
-        for (i2 in event) {
-          prop = event[i2];
-          newEvent[i2] = prop && prop.bind ? prop.bind(event) : prop;
+        var newEvent = {}, prop, i;
+        for (i in event) {
+          prop = event[i];
+          newEvent[i] = prop && prop.bind ? prop.bind(event) : prop;
         }
         event = newEvent;
         newEvent.type = "dblclick";
@@ -12019,11 +12019,11 @@ function requireLeafletSrc() {
         }
         return value === "auto" ? null : value;
       }
-      function create$1(tagName, className, container2) {
+      function create$1(tagName, className, container) {
         var el = document.createElement(tagName);
         el.className = className || "";
-        if (container2) {
-          container2.appendChild(el);
+        if (container) {
+          container.appendChild(el);
         }
         return el;
       }
@@ -12060,8 +12060,8 @@ function requireLeafletSrc() {
       function addClass(el, name) {
         if (el.classList !== void 0) {
           var classes = splitWords(name);
-          for (var i2 = 0, len = classes.length; i2 < len; i2++) {
-            el.classList.add(classes[i2]);
+          for (var i = 0, len = classes.length; i < len; i++) {
+            el.classList.add(classes[i]);
           }
         } else if (!hasClass(el, name)) {
           var className = getClass(el);
@@ -12114,9 +12114,9 @@ function requireLeafletSrc() {
       }
       function testProp(props2) {
         var style2 = document.documentElement.style;
-        for (var i2 = 0; i2 < props2.length; i2++) {
-          if (props2[i2] in style2) {
-            return props2[i2];
+        for (var i = 0; i < props2.length; i++) {
+          if (props2[i] in style2) {
+            return props2[i];
           }
         }
         return false;
@@ -12250,8 +12250,8 @@ function requireLeafletSrc() {
           }
         } else {
           types = splitWords(types);
-          for (var i2 = 0, len = types.length; i2 < len; i2++) {
-            addOne(obj, types[i2], fn, context);
+          for (var i = 0, len = types.length; i < len; i++) {
+            addOne(obj, types[i], fn, context);
           }
         }
         return this;
@@ -12272,8 +12272,8 @@ function requireLeafletSrc() {
               return indexOf(types, type3) !== -1;
             });
           } else {
-            for (var i2 = 0, len = types.length; i2 < len; i2++) {
-              removeOne(obj, types[i2], fn, context);
+            for (var i = 0, len = types.length; i < len; i++) {
+              removeOne(obj, types[i], fn, context);
             }
           }
         }
@@ -12386,16 +12386,16 @@ function requireLeafletSrc() {
         }
         return path;
       }
-      function getMousePosition(e, container2) {
-        if (!container2) {
+      function getMousePosition(e, container) {
+        if (!container) {
           return new Point(e.clientX, e.clientY);
         }
-        var scale2 = getScale(container2), offset = scale2.boundingClientRect;
+        var scale2 = getScale(container), offset = scale2.boundingClientRect;
         return new Point(
           // offset.left/top values are in page scale (like clientX/Y),
           // whereas clientLeft/Top (border width) values are the original values (before CSS scale applies).
-          (e.clientX - offset.left) / scale2.x - container2.clientLeft,
-          (e.clientY - offset.top) / scale2.y - container2.clientTop
+          (e.clientX - offset.left) / scale2.x - container.clientLeft,
+          (e.clientY - offset.top) / scale2.y - container.clientTop
         );
       }
       var wheelPxFactor = Browser.linux && Browser.chrome ? window.devicePixelRatio : Browser.mac ? window.devicePixelRatio * 3 : window.devicePixelRatio > 0 ? 2 * window.devicePixelRatio : 1;
@@ -12509,8 +12509,8 @@ function requireLeafletSrc() {
           this._inProgress = false;
           this.fire("end");
         },
-        _easeOut: function(t2) {
-          return 1 - Math.pow(1 - t2, this._easeOutPower);
+        _easeOut: function(t) {
+          return 1 - Math.pow(1 - t, this._easeOutPower);
         }
       });
       var Map2 = Evented.extend({
@@ -12755,8 +12755,8 @@ function requireLeafletSrc() {
           targetCenter = toLatLng(targetCenter);
           targetZoom = targetZoom === void 0 ? startZoom : targetZoom;
           var w0 = Math.max(size.x, size.y), w1 = w0 * this.getZoomScale(startZoom, targetZoom), u1 = to.distanceTo(from) || 1, rho = 1.42, rho2 = rho * rho;
-          function r(i2) {
-            var s1 = i2 ? -1 : 1, s2 = i2 ? w1 : w0, t1 = w1 * w1 - w0 * w0 + s1 * rho2 * rho2 * u1 * u1, b1 = 2 * s2 * rho2 * u1, b2 = t1 / b1, sq = Math.sqrt(b2 * b2 + 1) - b2;
+          function r(i) {
+            var s1 = i ? -1 : 1, s2 = i ? w1 : w0, t1 = w1 * w1 - w0 * w0 + s1 * rho2 * rho2 * u1 * u1, b1 = 2 * s2 * rho2 * u1, b2 = t1 / b1, sq = Math.sqrt(b2 * b2 + 1) - b2;
             var log = sq < 1e-9 ? -18 : Math.log(sq);
             return log;
           }
@@ -12770,23 +12770,23 @@ function requireLeafletSrc() {
             return sinh(n) / cosh(n);
           }
           var r0 = r(0);
-          function w2(s) {
+          function w(s) {
             return w0 * (cosh(r0) / cosh(r0 + rho * s));
           }
           function u2(s) {
             return w0 * (cosh(r0) * tanh(r0 + rho * s) - sinh(r0)) / rho2;
           }
-          function easeOut(t2) {
-            return 1 - Math.pow(1 - t2, 1.5);
+          function easeOut(t) {
+            return 1 - Math.pow(1 - t, 1.5);
           }
-          var start = Date.now(), S2 = (r(1) - r0) / rho, duration = options.duration ? 1e3 * options.duration : 1e3 * S2 * 0.8;
+          var start = Date.now(), S = (r(1) - r0) / rho, duration = options.duration ? 1e3 * options.duration : 1e3 * S * 0.8;
           function frame() {
-            var t2 = (Date.now() - start) / duration, s = easeOut(t2) * S2;
-            if (t2 <= 1) {
+            var t = (Date.now() - start) / duration, s = easeOut(t) * S;
+            if (t <= 1) {
               this._flyToFrame = requestAnimFrame(frame, this);
               this._move(
                 this.unproject(from.add(to.subtract(from).multiplyBy(u2(s) / u1)), startZoom),
-                this.getScaleZoom(w0 / w2(s), startZoom),
+                this.getScaleZoom(w0 / w(s), startZoom),
                 { flyTo: true }
               );
             } else {
@@ -12983,12 +12983,12 @@ function requireLeafletSrc() {
           if (!this._container._leaflet_id) {
             return;
           }
-          var c2 = error.code, message = error.message || (c2 === 1 ? "permission denied" : c2 === 2 ? "position unavailable" : "timeout");
+          var c = error.code, message = error.message || (c === 1 ? "permission denied" : c === 2 ? "position unavailable" : "timeout");
           if (this._locateOptions.setView && !this._loaded) {
             this.fitWorld();
           }
           this.fire("locationerror", {
-            code: c2,
+            code: c,
             message: "Geolocation error: " + message + "."
           });
         },
@@ -13006,9 +13006,9 @@ function requireLeafletSrc() {
             bounds,
             timestamp: pos.timestamp
           };
-          for (var i2 in pos.coords) {
-            if (typeof pos.coords[i2] === "number") {
-              data[i2] = pos.coords[i2];
+          for (var i in pos.coords) {
+            if (typeof pos.coords[i] === "number") {
+              data[i] = pos.coords[i];
             }
           }
           this.fire("locationfound", data);
@@ -13061,12 +13061,12 @@ function requireLeafletSrc() {
           if (this._loaded) {
             this.fire("unload");
           }
-          var i2;
-          for (i2 in this._layers) {
-            this._layers[i2].remove();
+          var i;
+          for (i in this._layers) {
+            this._layers[i].remove();
           }
-          for (i2 in this._panes) {
-            remove(this._panes[i2]);
+          for (i in this._panes) {
+            remove(this._panes[i]);
           }
           this._layers = [];
           this._panes = [];
@@ -13079,8 +13079,8 @@ function requireLeafletSrc() {
         // Creates a new [map pane](#map-pane) with the given name if it doesn't exist already,
         // then returns it. The pane is created as a child of `container`, or
         // as a child of the main map pane if not set.
-        createPane: function(name, container2) {
-          var className = "leaflet-pane" + (name ? " leaflet-" + name.replace("Pane", "") + "-pane" : ""), pane = create$1("div", className, container2 || this._mapPane);
+        createPane: function(name, container) {
+          var className = "leaflet-pane" + (name ? " leaflet-" + name.replace("Pane", "") + "-pane" : ""), pane = create$1("div", className, container || this._mapPane);
           if (name) {
             this._panes[name] = pane;
           }
@@ -13302,22 +13302,22 @@ function requireLeafletSrc() {
         },
         // map initialization methods
         _initContainer: function(id) {
-          var container2 = this._container = get(id);
-          if (!container2) {
+          var container = this._container = get(id);
+          if (!container) {
             throw new Error("Map container not found.");
-          } else if (container2._leaflet_id) {
+          } else if (container._leaflet_id) {
             throw new Error("Map container is already initialized.");
           }
-          on2(container2, "scroll", this._onScroll, this);
-          this._containerId = stamp(container2);
+          on2(container, "scroll", this._onScroll, this);
+          this._containerId = stamp(container);
         },
         _initLayout: function() {
-          var container2 = this._container;
+          var container = this._container;
           this._fadeAnimated = this.options.fadeAnimation && Browser.any3d;
-          addClass(container2, "leaflet-container" + (Browser.touch ? " leaflet-touch" : "") + (Browser.retina ? " leaflet-retina" : "") + (Browser.ielt9 ? " leaflet-oldie" : "") + (Browser.safari ? " leaflet-safari" : "") + (this._fadeAnimated ? " leaflet-fade-anim" : ""));
-          var position = getStyle(container2, "position");
+          addClass(container, "leaflet-container" + (Browser.touch ? " leaflet-touch" : "") + (Browser.retina ? " leaflet-retina" : "") + (Browser.ielt9 ? " leaflet-oldie" : "") + (Browser.safari ? " leaflet-safari" : "") + (this._fadeAnimated ? " leaflet-fade-anim" : ""));
+          var position = getStyle(container, "position");
           if (position !== "absolute" && position !== "relative" && position !== "fixed" && position !== "sticky") {
-            container2.style.position = "relative";
+            container.style.position = "relative";
           }
           this._initPanes();
           if (this._initControlPos) {
@@ -13500,9 +13500,9 @@ function requireLeafletSrc() {
           var targets = this._findEventTargets(e, type2);
           if (canvasTargets) {
             var filtered = [];
-            for (var i2 = 0; i2 < canvasTargets.length; i2++) {
-              if (canvasTargets[i2].listens(type2, true)) {
-                filtered.push(canvasTargets[i2]);
+            for (var i = 0; i < canvasTargets.length; i++) {
+              if (canvasTargets[i].listens(type2, true)) {
+                filtered.push(canvasTargets[i]);
               }
             }
             targets = filtered.concat(targets);
@@ -13523,9 +13523,9 @@ function requireLeafletSrc() {
             data.layerPoint = this.containerPointToLayerPoint(data.containerPoint);
             data.latlng = isMarker ? target.getLatLng() : this.layerPointToLatLng(data.layerPoint);
           }
-          for (i2 = 0; i2 < targets.length; i2++) {
-            targets[i2].fire(type2, data, true);
-            if (data.originalEvent._stopped || targets[i2].options.bubblingMouseEvents === false && indexOf(this._mouseEvents, type2) !== -1) {
+          for (i = 0; i < targets.length; i++) {
+            targets[i].fire(type2, data, true);
+            if (data.originalEvent._stopped || targets[i].options.bubblingMouseEvents === false && indexOf(this._mouseEvents, type2) !== -1) {
               return;
             }
           }
@@ -13535,8 +13535,8 @@ function requireLeafletSrc() {
           return obj.dragging && obj.dragging.moved() || this.boxZoom && this.boxZoom.moved();
         },
         _clearHandlers: function() {
-          for (var i2 = 0, len = this._handlers.length; i2 < len; i2++) {
-            this._handlers[i2].disable();
+          for (var i = 0, len = this._handlers.length; i < len; i++) {
+            this._handlers[i].disable();
           }
         },
         // @section Other Methods
@@ -13660,8 +13660,8 @@ function requireLeafletSrc() {
           delete this._proxy;
         },
         _animMoveEnd: function() {
-          var c2 = this.getCenter(), z2 = this.getZoom();
-          setTransform(this._proxy, this.project(c2, z2), this.getZoomScale(z2, 1));
+          var c = this.getCenter(), z = this.getZoom();
+          setTransform(this._proxy, this.project(c, z), this.getZoomScale(z, 1));
         },
         _catchTransitionEnd: function(e) {
           if (this._animatingZoom && e.propertyName.indexOf("transform") >= 0) {
@@ -13773,12 +13773,12 @@ function requireLeafletSrc() {
         addTo: function(map) {
           this.remove();
           this._map = map;
-          var container2 = this._container = this.onAdd(map), pos = this.getPosition(), corner = map._controlCorners[pos];
-          addClass(container2, "leaflet-control");
+          var container = this._container = this.onAdd(map), pos = this.getPosition(), corner = map._controlCorners[pos];
+          addClass(container, "leaflet-control");
           if (pos.indexOf("bottom") !== -1) {
-            corner.insertBefore(container2, corner.firstChild);
+            corner.insertBefore(container, corner.firstChild);
           } else {
-            corner.appendChild(container2);
+            corner.appendChild(container);
           }
           this._map.on("unload", this.remove, this);
           return this;
@@ -13820,10 +13820,10 @@ function requireLeafletSrc() {
           return this;
         },
         _initControlPos: function() {
-          var corners = this._controlCorners = {}, l2 = "leaflet-", container2 = this._controlContainer = create$1("div", l2 + "control-container", this._container);
+          var corners = this._controlCorners = {}, l = "leaflet-", container = this._controlContainer = create$1("div", l + "control-container", this._container);
           function createCorner(vSide, hSide) {
-            var className = l2 + vSide + " " + l2 + hSide;
-            corners[vSide + hSide] = create$1("div", className, container2);
+            var className = l + vSide + " " + l + hSide;
+            corners[vSide + hSide] = create$1("div", className, container);
           }
           createCorner("top", "left");
           createCorner("top", "right");
@@ -13831,8 +13831,8 @@ function requireLeafletSrc() {
           createCorner("bottom", "right");
         },
         _clearControlPos: function() {
-          for (var i2 in this._controlCorners) {
-            remove(this._controlCorners[i2]);
+          for (var i in this._controlCorners) {
+            remove(this._controlCorners[i]);
           }
           remove(this._controlContainer);
           delete this._controlCorners;
@@ -13874,11 +13874,11 @@ function requireLeafletSrc() {
           this._lastZIndex = 0;
           this._handlingClick = false;
           this._preventClick = false;
-          for (var i2 in baseLayers) {
-            this._addLayer(baseLayers[i2], i2);
+          for (var i in baseLayers) {
+            this._addLayer(baseLayers[i], i);
           }
-          for (i2 in overlays) {
-            this._addLayer(overlays[i2], i2, true);
+          for (i in overlays) {
+            this._addLayer(overlays[i], i, true);
           }
         },
         onAdd: function(map) {
@@ -13886,8 +13886,8 @@ function requireLeafletSrc() {
           this._update();
           this._map = map;
           map.on("zoomend", this._checkDisabledLayers, this);
-          for (var i2 = 0; i2 < this._layers.length; i2++) {
-            this._layers[i2].layer.on("add remove", this._onLayerChange, this);
+          for (var i = 0; i < this._layers.length; i++) {
+            this._layers[i].layer.on("add remove", this._onLayerChange, this);
           }
           return this._container;
         },
@@ -13897,8 +13897,8 @@ function requireLeafletSrc() {
         },
         onRemove: function() {
           this._map.off("zoomend", this._checkDisabledLayers, this);
-          for (var i2 = 0; i2 < this._layers.length; i2++) {
-            this._layers[i2].layer.off("add remove", this._onLayerChange, this);
+          for (var i = 0; i < this._layers.length; i++) {
+            this._layers[i].layer.off("add remove", this._onLayerChange, this);
           }
         },
         // @method addBaseLayer(layer: Layer, name: String): this
@@ -13945,19 +13945,19 @@ function requireLeafletSrc() {
           return this;
         },
         _initLayout: function() {
-          var className = "leaflet-control-layers", container2 = this._container = create$1("div", className), collapsed = this.options.collapsed;
-          container2.setAttribute("aria-haspopup", true);
-          disableClickPropagation(container2);
-          disableScrollPropagation(container2);
+          var className = "leaflet-control-layers", container = this._container = create$1("div", className), collapsed = this.options.collapsed;
+          container.setAttribute("aria-haspopup", true);
+          disableClickPropagation(container);
+          disableScrollPropagation(container);
           var section = this._section = create$1("section", className + "-list");
           if (collapsed) {
             this._map.on("click", this.collapse, this);
-            on2(container2, {
+            on2(container, {
               mouseenter: this._expandSafely,
               mouseleave: this.collapse
             }, this);
           }
-          var link = this._layersLink = create$1("a", className + "-toggle", container2);
+          var link = this._layersLink = create$1("a", className + "-toggle", container);
           link.href = "#";
           link.title = "Layers";
           link.setAttribute("role", "button");
@@ -13979,12 +13979,12 @@ function requireLeafletSrc() {
           this._baseLayersList = create$1("div", className + "-base", section);
           this._separator = create$1("div", className + "-separator", section);
           this._overlaysList = create$1("div", className + "-overlays", section);
-          container2.appendChild(section);
+          container.appendChild(section);
         },
         _getLayer: function(id) {
-          for (var i2 = 0; i2 < this._layers.length; i2++) {
-            if (this._layers[i2] && stamp(this._layers[i2].layer) === id) {
-              return this._layers[i2];
+          for (var i = 0; i < this._layers.length; i++) {
+            if (this._layers[i] && stamp(this._layers[i].layer) === id) {
+              return this._layers[i];
             }
           }
         },
@@ -14015,9 +14015,9 @@ function requireLeafletSrc() {
           empty(this._baseLayersList);
           empty(this._overlaysList);
           this._layerControlInputs = [];
-          var baseLayersPresent, overlaysPresent, i2, obj, baseLayersCount = 0;
-          for (i2 = 0; i2 < this._layers.length; i2++) {
-            obj = this._layers[i2];
+          var baseLayersPresent, overlaysPresent, i, obj, baseLayersCount = 0;
+          for (i = 0; i < this._layers.length; i++) {
+            obj = this._layers[i];
             this._addItem(obj);
             overlaysPresent = overlaysPresent || obj.overlay;
             baseLayersPresent = baseLayersPresent || !obj.overlay;
@@ -14066,8 +14066,8 @@ function requireLeafletSrc() {
           label.appendChild(holder);
           holder.appendChild(input);
           holder.appendChild(name);
-          var container2 = obj.overlay ? this._overlaysList : this._baseLayersList;
-          container2.appendChild(label);
+          var container = obj.overlay ? this._overlaysList : this._baseLayersList;
+          container.appendChild(label);
           this._checkDisabledLayers();
           return label;
         },
@@ -14078,8 +14078,8 @@ function requireLeafletSrc() {
           var inputs = this._layerControlInputs, input, layer;
           var addedLayers = [], removedLayers = [];
           this._handlingClick = true;
-          for (var i2 = inputs.length - 1; i2 >= 0; i2--) {
-            input = inputs[i2];
+          for (var i = inputs.length - 1; i >= 0; i--) {
+            input = inputs[i];
             layer = this._getLayer(input.layerId).layer;
             if (input.checked) {
               addedLayers.push(layer);
@@ -14087,14 +14087,14 @@ function requireLeafletSrc() {
               removedLayers.push(layer);
             }
           }
-          for (i2 = 0; i2 < removedLayers.length; i2++) {
-            if (this._map.hasLayer(removedLayers[i2])) {
-              this._map.removeLayer(removedLayers[i2]);
+          for (i = 0; i < removedLayers.length; i++) {
+            if (this._map.hasLayer(removedLayers[i])) {
+              this._map.removeLayer(removedLayers[i]);
             }
           }
-          for (i2 = 0; i2 < addedLayers.length; i2++) {
-            if (!this._map.hasLayer(addedLayers[i2])) {
-              this._map.addLayer(addedLayers[i2]);
+          for (i = 0; i < addedLayers.length; i++) {
+            if (!this._map.hasLayer(addedLayers[i])) {
+              this._map.addLayer(addedLayers[i]);
             }
           }
           this._handlingClick = false;
@@ -14102,8 +14102,8 @@ function requireLeafletSrc() {
         },
         _checkDisabledLayers: function() {
           var inputs = this._layerControlInputs, input, layer, zoom3 = this._map.getZoom();
-          for (var i2 = inputs.length - 1; i2 >= 0; i2--) {
-            input = inputs[i2];
+          for (var i = inputs.length - 1; i >= 0; i--) {
+            input = inputs[i];
             layer = this._getLayer(input.layerId).layer;
             input.disabled = layer.options.minZoom !== void 0 && zoom3 < layer.options.minZoom || layer.options.maxZoom !== void 0 && zoom3 > layer.options.maxZoom;
           }
@@ -14148,24 +14148,24 @@ function requireLeafletSrc() {
           zoomOutTitle: "Zoom out"
         },
         onAdd: function(map) {
-          var zoomName = "leaflet-control-zoom", container2 = create$1("div", zoomName + " leaflet-bar"), options = this.options;
+          var zoomName = "leaflet-control-zoom", container = create$1("div", zoomName + " leaflet-bar"), options = this.options;
           this._zoomInButton = this._createButton(
             options.zoomInText,
             options.zoomInTitle,
             zoomName + "-in",
-            container2,
+            container,
             this._zoomIn
           );
           this._zoomOutButton = this._createButton(
             options.zoomOutText,
             options.zoomOutTitle,
             zoomName + "-out",
-            container2,
+            container,
             this._zoomOut
           );
           this._updateDisabled();
           map.on("zoomend zoomlevelschange", this._updateDisabled, this);
-          return container2;
+          return container;
         },
         onRemove: function(map) {
           map.off("zoomend zoomlevelschange", this._updateDisabled, this);
@@ -14190,8 +14190,8 @@ function requireLeafletSrc() {
             this._map.zoomOut(this._map.options.zoomDelta * (e.shiftKey ? 3 : 1));
           }
         },
-        _createButton: function(html, title, className, container2, fn) {
-          var link = create$1("a", className, container2);
+        _createButton: function(html, title, className, container, fn) {
+          var link = create$1("a", className, container);
           link.innerHTML = html;
           link.href = "#";
           link.title = title;
@@ -14249,28 +14249,28 @@ function requireLeafletSrc() {
           // If `true`, the control is updated on [`moveend`](#map-moveend), otherwise it's always up-to-date (updated on [`move`](#map-move)).
         },
         onAdd: function(map) {
-          var className = "leaflet-control-scale", container2 = create$1("div", className), options = this.options;
-          this._addScales(options, className + "-line", container2);
+          var className = "leaflet-control-scale", container = create$1("div", className), options = this.options;
+          this._addScales(options, className + "-line", container);
           map.on(options.updateWhenIdle ? "moveend" : "move", this._update, this);
           map.whenReady(this._update, this);
-          return container2;
+          return container;
         },
         onRemove: function(map) {
           map.off(this.options.updateWhenIdle ? "moveend" : "move", this._update, this);
         },
-        _addScales: function(options, className, container2) {
+        _addScales: function(options, className, container) {
           if (options.metric) {
-            this._mScale = create$1("div", className, container2);
+            this._mScale = create$1("div", className, container);
           }
           if (options.imperial) {
-            this._iScale = create$1("div", className, container2);
+            this._iScale = create$1("div", className, container);
           }
         },
         _update: function() {
-          var map = this._map, y2 = map.getSize().y / 2;
+          var map = this._map, y = map.getSize().y / 2;
           var maxMeters = map.distance(
-            map.containerPointToLatLng([0, y2]),
-            map.containerPointToLatLng([this.options.maxWidth, y2])
+            map.containerPointToLatLng([0, y]),
+            map.containerPointToLatLng([this.options.maxWidth, y])
           );
           this._updateScales(maxMeters);
         },
@@ -14328,9 +14328,9 @@ function requireLeafletSrc() {
           map.attributionControl = this;
           this._container = create$1("div", "leaflet-control-attribution");
           disableClickPropagation(this._container);
-          for (var i2 in map._layers) {
-            if (map._layers[i2].getAttribution) {
-              this.addAttribution(map._layers[i2].getAttribution());
+          for (var i in map._layers) {
+            if (map._layers[i].getAttribution) {
+              this.addAttribution(map._layers[i].getAttribution());
             }
           }
           this._update();
@@ -14385,9 +14385,9 @@ function requireLeafletSrc() {
             return;
           }
           var attribs = [];
-          for (var i2 in this._attributions) {
-            if (this._attributions[i2]) {
-              attribs.push(i2);
+          for (var i in this._attributions) {
+            if (this._attributions[i]) {
+              attribs.push(i);
             }
           }
           var prefixAndAttribs = [];
@@ -14602,15 +14602,15 @@ function requireLeafletSrc() {
         }
       });
       function clipPolygon(points, bounds, round) {
-        var clippedPoints, edges = [1, 4, 2, 8], i2, j, k2, a, b2, len, edge2, p;
-        for (i2 = 0, len = points.length; i2 < len; i2++) {
-          points[i2]._code = _getBitCode(points[i2], bounds);
+        var clippedPoints, edges = [1, 4, 2, 8], i, j, k2, a, b2, len, edge2, p;
+        for (i = 0, len = points.length; i < len; i++) {
+          points[i]._code = _getBitCode(points[i], bounds);
         }
         for (k2 = 0; k2 < 4; k2++) {
           edge2 = edges[k2];
           clippedPoints = [];
-          for (i2 = 0, len = points.length, j = len - 1; i2 < len; j = i2++) {
-            a = points[i2];
+          for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+            a = points[i];
             b2 = points[j];
             if (!(a._code & edge2)) {
               if (b2._code & edge2) {
@@ -14630,7 +14630,7 @@ function requireLeafletSrc() {
         return points;
       }
       function polygonCenter(latlngs, crs) {
-        var i2, j, p1, p2, f2, area, x2, y2, center2;
+        var i, j, p1, p2, f2, area, x2, y, center2;
         if (!latlngs || latlngs.length === 0) {
           throw new Error("latlngs not passed");
         }
@@ -14646,23 +14646,23 @@ function requireLeafletSrc() {
         }
         var len = latlngs.length;
         var points = [];
-        for (i2 = 0; i2 < len; i2++) {
-          var latlng = toLatLng(latlngs[i2]);
+        for (i = 0; i < len; i++) {
+          var latlng = toLatLng(latlngs[i]);
           points.push(crs.project(toLatLng([latlng.lat - centroidLatLng.lat, latlng.lng - centroidLatLng.lng])));
         }
-        area = x2 = y2 = 0;
-        for (i2 = 0, j = len - 1; i2 < len; j = i2++) {
-          p1 = points[i2];
+        area = x2 = y = 0;
+        for (i = 0, j = len - 1; i < len; j = i++) {
+          p1 = points[i];
           p2 = points[j];
           f2 = p1.y * p2.x - p2.y * p1.x;
           x2 += (p1.x + p2.x) * f2;
-          y2 += (p1.y + p2.y) * f2;
+          y += (p1.y + p2.y) * f2;
           area += f2 * 3;
         }
         if (area === 0) {
           center2 = points[0];
         } else {
-          center2 = [x2 / area, y2 / area];
+          center2 = [x2 / area, y / area];
         }
         var latlngCenter = crs.unproject(toPoint(center2));
         return toLatLng([latlngCenter.lat + centroidLatLng.lat, latlngCenter.lng + centroidLatLng.lng]);
@@ -14671,8 +14671,8 @@ function requireLeafletSrc() {
         var latSum = 0;
         var lngSum = 0;
         var len = 0;
-        for (var i2 = 0; i2 < coords.length; i2++) {
-          var latlng = toLatLng(coords[i2]);
+        for (var i = 0; i < coords.length; i++) {
+          var latlng = toLatLng(coords[i]);
           latSum += latlng.lat;
           lngSum += latlng.lng;
           len++;
@@ -14704,20 +14704,20 @@ function requireLeafletSrc() {
         var len = points.length, ArrayConstructor = typeof Uint8Array !== "undefined" ? Uint8Array : Array, markers = new ArrayConstructor(len);
         markers[0] = markers[len - 1] = 1;
         _simplifyDPStep(points, markers, sqTolerance, 0, len - 1);
-        var i2, newPoints = [];
-        for (i2 = 0; i2 < len; i2++) {
-          if (markers[i2]) {
-            newPoints.push(points[i2]);
+        var i, newPoints = [];
+        for (i = 0; i < len; i++) {
+          if (markers[i]) {
+            newPoints.push(points[i]);
           }
         }
         return newPoints;
       }
       function _simplifyDPStep(points, markers, sqTolerance, first, last) {
-        var maxSqDist = 0, index3, i2, sqDist;
-        for (i2 = first + 1; i2 <= last - 1; i2++) {
-          sqDist = _sqClosestPointOnSegment(points[i2], points[first], points[last], true);
+        var maxSqDist = 0, index3, i, sqDist;
+        for (i = first + 1; i <= last - 1; i++) {
+          sqDist = _sqClosestPointOnSegment(points[i], points[first], points[last], true);
           if (sqDist > maxSqDist) {
-            index3 = i2;
+            index3 = i;
             maxSqDist = sqDist;
           }
         }
@@ -14729,10 +14729,10 @@ function requireLeafletSrc() {
       }
       function _reducePoints(points, sqTolerance) {
         var reducedPoints = [points[0]];
-        for (var i2 = 1, prev = 0, len = points.length; i2 < len; i2++) {
-          if (_sqDist(points[i2], points[prev]) > sqTolerance) {
-            reducedPoints.push(points[i2]);
-            prev = i2;
+        for (var i = 1, prev = 0, len = points.length; i < len; i++) {
+          if (_sqDist(points[i], points[prev]) > sqTolerance) {
+            reducedPoints.push(points[i]);
+            prev = i;
           }
         }
         if (prev < len - 1) {
@@ -14764,21 +14764,21 @@ function requireLeafletSrc() {
         }
       }
       function _getEdgeIntersection(a, b2, code, bounds, round) {
-        var dx = b2.x - a.x, dy = b2.y - a.y, min = bounds.min, max = bounds.max, x2, y2;
+        var dx = b2.x - a.x, dy = b2.y - a.y, min = bounds.min, max = bounds.max, x2, y;
         if (code & 8) {
           x2 = a.x + dx * (max.y - a.y) / dy;
-          y2 = max.y;
+          y = max.y;
         } else if (code & 4) {
           x2 = a.x + dx * (min.y - a.y) / dy;
-          y2 = min.y;
+          y = min.y;
         } else if (code & 2) {
           x2 = max.x;
-          y2 = a.y + dy * (max.x - a.x) / dx;
+          y = a.y + dy * (max.x - a.x) / dx;
         } else if (code & 1) {
           x2 = min.x;
-          y2 = a.y + dy * (min.x - a.x) / dx;
+          y = a.y + dy * (min.x - a.x) / dx;
         }
-        return new Point(x2, y2, round);
+        return new Point(x2, y, round);
       }
       function _getBitCode(p, bounds) {
         var code = 0;
@@ -14799,20 +14799,20 @@ function requireLeafletSrc() {
         return dx * dx + dy * dy;
       }
       function _sqClosestPointOnSegment(p, p1, p2, sqDist) {
-        var x2 = p1.x, y2 = p1.y, dx = p2.x - x2, dy = p2.y - y2, dot = dx * dx + dy * dy, t2;
+        var x2 = p1.x, y = p1.y, dx = p2.x - x2, dy = p2.y - y, dot = dx * dx + dy * dy, t;
         if (dot > 0) {
-          t2 = ((p.x - x2) * dx + (p.y - y2) * dy) / dot;
-          if (t2 > 1) {
+          t = ((p.x - x2) * dx + (p.y - y) * dy) / dot;
+          if (t > 1) {
             x2 = p2.x;
-            y2 = p2.y;
-          } else if (t2 > 0) {
-            x2 += dx * t2;
-            y2 += dy * t2;
+            y = p2.y;
+          } else if (t > 0) {
+            x2 += dx * t;
+            y += dy * t;
           }
         }
         dx = p.x - x2;
-        dy = p.y - y2;
-        return sqDist ? dx * dx + dy * dy : new Point(x2, y2);
+        dy = p.y - y;
+        return sqDist ? dx * dx + dy * dy : new Point(x2, y);
       }
       function isFlat(latlngs) {
         return !isArray(latlngs[0]) || typeof latlngs[0][0] !== "object" && typeof latlngs[0][0] !== "undefined";
@@ -14822,7 +14822,7 @@ function requireLeafletSrc() {
         return isFlat(latlngs);
       }
       function polylineCenter(latlngs, crs) {
-        var i2, halfDist, segDist, dist, p1, p2, ratio, center2;
+        var i, halfDist, segDist, dist, p1, p2, ratio, center2;
         if (!latlngs || latlngs.length === 0) {
           throw new Error("latlngs not passed");
         }
@@ -14838,19 +14838,19 @@ function requireLeafletSrc() {
         }
         var len = latlngs.length;
         var points = [];
-        for (i2 = 0; i2 < len; i2++) {
-          var latlng = toLatLng(latlngs[i2]);
+        for (i = 0; i < len; i++) {
+          var latlng = toLatLng(latlngs[i]);
           points.push(crs.project(toLatLng([latlng.lat - centroidLatLng.lat, latlng.lng - centroidLatLng.lng])));
         }
-        for (i2 = 0, halfDist = 0; i2 < len - 1; i2++) {
-          halfDist += points[i2].distanceTo(points[i2 + 1]) / 2;
+        for (i = 0, halfDist = 0; i < len - 1; i++) {
+          halfDist += points[i].distanceTo(points[i + 1]) / 2;
         }
         if (halfDist === 0) {
           center2 = points[0];
         } else {
-          for (i2 = 0, dist = 0; i2 < len - 1; i2++) {
-            p1 = points[i2];
-            p2 = points[i2 + 1];
+          for (i = 0, dist = 0; i < len - 1; i++) {
+            p1 = points[i];
+            p2 = points[i + 1];
             segDist = p1.distanceTo(p2);
             dist += segDist;
             if (dist > halfDist) {
@@ -14893,14 +14893,14 @@ function requireLeafletSrc() {
         R_MINOR: 6356752314245179e-9,
         bounds: new Bounds([-2003750834279e-5, -1549657073972e-5], [2003750834279e-5, 1876465623138e-5]),
         project: function(latlng) {
-          var d = Math.PI / 180, r = this.R, y2 = latlng.lat * d, tmp = this.R_MINOR / r, e = Math.sqrt(1 - tmp * tmp), con = e * Math.sin(y2);
-          var ts = Math.tan(Math.PI / 4 - y2 / 2) / Math.pow((1 - con) / (1 + con), e / 2);
-          y2 = -r * Math.log(Math.max(ts, 1e-10));
-          return new Point(latlng.lng * d * r, y2);
+          var d = Math.PI / 180, r = this.R, y = latlng.lat * d, tmp = this.R_MINOR / r, e = Math.sqrt(1 - tmp * tmp), con = e * Math.sin(y);
+          var ts = Math.tan(Math.PI / 4 - y / 2) / Math.pow((1 - con) / (1 + con), e / 2);
+          y = -r * Math.log(Math.max(ts, 1e-10));
+          return new Point(latlng.lng * d * r, y);
         },
         unproject: function(point2) {
           var d = 180 / Math.PI, r = this.R, tmp = this.R_MINOR / r, e = Math.sqrt(1 - tmp * tmp), ts = Math.exp(-point2.y / r), phi = Math.PI / 2 - 2 * Math.atan(ts);
-          for (var i2 = 0, dphi = 0.1, con; i2 < 15 && Math.abs(dphi) > 1e-7; i2++) {
+          for (var i = 0, dphi = 0.1, con; i < 15 && Math.abs(dphi) > 1e-7; i++) {
             con = e * Math.sin(phi);
             con = Math.pow((1 - con) / (1 + con), e / 2);
             dphi = Math.PI / 2 - 2 * Math.atan(ts * con) - phi;
@@ -15075,15 +15075,15 @@ function requireLeafletSrc() {
          * ```
          */
         eachLayer: function(method, context) {
-          for (var i2 in this._layers) {
-            method.call(context, this._layers[i2]);
+          for (var i in this._layers) {
+            method.call(context, this._layers[i]);
           }
           return this;
         },
         _addLayers: function(layers2) {
           layers2 = layers2 ? isArray(layers2) ? layers2 : [layers2] : [];
-          for (var i2 = 0, len = layers2.length; i2 < len; i2++) {
-            this.addLayer(layers2[i2]);
+          for (var i = 0, len = layers2.length; i < len; i++) {
+            this.addLayer(layers2[i]);
           }
         },
         _addZoomLimit: function(layer) {
@@ -15101,8 +15101,8 @@ function requireLeafletSrc() {
         },
         _updateZoomLevels: function() {
           var minZoom = Infinity, maxZoom = -Infinity, oldZoomSpan = this._getZoomSpan();
-          for (var i2 in this._zoomBoundLayers) {
-            var options = this._zoomBoundLayers[i2].options;
+          for (var i in this._zoomBoundLayers) {
+            var options = this._zoomBoundLayers[i].options;
             minZoom = options.minZoom === void 0 ? minZoom : Math.min(minZoom, options.minZoom);
             maxZoom = options.maxZoom === void 0 ? maxZoom : Math.max(maxZoom, options.maxZoom);
           }
@@ -15123,10 +15123,10 @@ function requireLeafletSrc() {
         initialize: function(layers2, options) {
           setOptions(this, options);
           this._layers = {};
-          var i2, len;
+          var i, len;
           if (layers2) {
-            for (i2 = 0, len = layers2.length; i2 < len; i2++) {
-              this.addLayer(layers2[i2]);
+            for (i = 0, len = layers2.length; i < len; i++) {
+              this.addLayer(layers2[i]);
             }
           }
         },
@@ -15172,9 +15172,9 @@ function requireLeafletSrc() {
         // additional parameters. Has no effect if the layers contained do not
         // implement `methodName`.
         invoke: function(methodName) {
-          var args = Array.prototype.slice.call(arguments, 1), i2, layer;
-          for (i2 in this._layers) {
-            layer = this._layers[i2];
+          var args = Array.prototype.slice.call(arguments, 1), i, layer;
+          for (i in this._layers) {
+            layer = this._layers[i];
             if (layer[methodName]) {
               layer[methodName].apply(layer, args);
             }
@@ -15195,8 +15195,8 @@ function requireLeafletSrc() {
         // });
         // ```
         eachLayer: function(method, context) {
-          for (var i2 in this._layers) {
-            method.call(context, this._layers[i2]);
+          for (var i in this._layers) {
+            method.call(context, this._layers[i]);
           }
           return this;
         },
@@ -15954,7 +15954,7 @@ function requireLeafletSrc() {
           this._updateBounds();
         },
         _updateBounds: function() {
-          var r = this._radius, r2 = this._radiusY || r, w2 = this._clickTolerance(), p = [r + w2, r2 + w2];
+          var r = this._radius, r2 = this._radiusY || r, w = this._clickTolerance(), p = [r + w, r2 + w];
           this._pxBounds = new Bounds(this._point.subtract(p), this._point.add(p));
         },
         _update: function() {
@@ -16068,9 +16068,9 @@ function requireLeafletSrc() {
           var minDistance = Infinity, minPoint = null, closest2 = _sqClosestPointOnSegment, p1, p2;
           for (var j = 0, jLen = this._parts.length; j < jLen; j++) {
             var points = this._parts[j];
-            for (var i2 = 1, len = points.length; i2 < len; i2++) {
-              p1 = points[i2 - 1];
-              p2 = points[i2];
+            for (var i = 1, len = points.length; i < len; i++) {
+              p1 = points[i - 1];
+              p2 = points[i];
               var sqDist = closest2(p, p1, p2, true);
               if (sqDist < minDistance) {
                 minDistance = sqDist;
@@ -16117,12 +16117,12 @@ function requireLeafletSrc() {
         // recursively convert latlngs input into actual LatLng instances; calculate bounds along the way
         _convertLatLngs: function(latlngs) {
           var result = [], flat = isFlat(latlngs);
-          for (var i2 = 0, len = latlngs.length; i2 < len; i2++) {
+          for (var i = 0, len = latlngs.length; i < len; i++) {
             if (flat) {
-              result[i2] = toLatLng(latlngs[i2]);
-              this._bounds.extend(result[i2]);
+              result[i] = toLatLng(latlngs[i]);
+              this._bounds.extend(result[i]);
             } else {
-              result[i2] = this._convertLatLngs(latlngs[i2]);
+              result[i] = this._convertLatLngs(latlngs[i]);
             }
           }
           return result;
@@ -16137,7 +16137,7 @@ function requireLeafletSrc() {
           }
         },
         _updateBounds: function() {
-          var w2 = this._clickTolerance(), p = new Point(w2, w2);
+          var w = this._clickTolerance(), p = new Point(w, w);
           if (!this._rawPxBounds) {
             return;
           }
@@ -16148,17 +16148,17 @@ function requireLeafletSrc() {
         },
         // recursively turns latlngs into a set of rings with projected coordinates
         _projectLatlngs: function(latlngs, result, projectedBounds) {
-          var flat = latlngs[0] instanceof LatLng, len = latlngs.length, i2, ring;
+          var flat = latlngs[0] instanceof LatLng, len = latlngs.length, i, ring;
           if (flat) {
             ring = [];
-            for (i2 = 0; i2 < len; i2++) {
-              ring[i2] = this._map.latLngToLayerPoint(latlngs[i2]);
-              projectedBounds.extend(ring[i2]);
+            for (i = 0; i < len; i++) {
+              ring[i] = this._map.latLngToLayerPoint(latlngs[i]);
+              projectedBounds.extend(ring[i]);
             }
             result.push(ring);
           } else {
-            for (i2 = 0; i2 < len; i2++) {
-              this._projectLatlngs(latlngs[i2], result, projectedBounds);
+            for (i = 0; i < len; i++) {
+              this._projectLatlngs(latlngs[i], result, projectedBounds);
             }
           }
         },
@@ -16173,9 +16173,9 @@ function requireLeafletSrc() {
             this._parts = this._rings;
             return;
           }
-          var parts = this._parts, i2, j, k2, len, len2, segment, points;
-          for (i2 = 0, k2 = 0, len = this._rings.length; i2 < len; i2++) {
-            points = this._rings[i2];
+          var parts = this._parts, i, j, k2, len, len2, segment, points;
+          for (i = 0, k2 = 0, len = this._rings.length; i < len; i++) {
+            points = this._rings[i];
             for (j = 0, len2 = points.length; j < len2 - 1; j++) {
               segment = clipSegment(points[j], points[j + 1], bounds, j, true);
               if (!segment) {
@@ -16193,8 +16193,8 @@ function requireLeafletSrc() {
         // simplify each clipped part of the polyline for performance
         _simplifyPoints: function() {
           var parts = this._parts, tolerance = this.options.smoothFactor;
-          for (var i2 = 0, len = parts.length; i2 < len; i2++) {
-            parts[i2] = simplify2(parts[i2], tolerance);
+          for (var i = 0, len = parts.length; i < len; i++) {
+            parts[i] = simplify2(parts[i], tolerance);
           }
         },
         _update: function() {
@@ -16210,17 +16210,17 @@ function requireLeafletSrc() {
         },
         // Needed by the `Canvas` renderer for interactivity
         _containsPoint: function(p, closed) {
-          var i2, j, k2, len, len2, part, w2 = this._clickTolerance();
+          var i, j, k2, len, len2, part, w = this._clickTolerance();
           if (!this._pxBounds || !this._pxBounds.contains(p)) {
             return false;
           }
-          for (i2 = 0, len = this._parts.length; i2 < len; i2++) {
-            part = this._parts[i2];
+          for (i = 0, len = this._parts.length; i < len; i++) {
+            part = this._parts[i];
             for (j = 0, len2 = part.length, k2 = len2 - 1; j < len2; k2 = j++) {
               if (!closed && j === 0) {
                 continue;
               }
-              if (pointToSegmentDistance(p, part[k2], part[j]) <= w2) {
+              if (pointToSegmentDistance(p, part[k2], part[j]) <= w) {
                 return true;
               }
             }
@@ -16264,7 +16264,7 @@ function requireLeafletSrc() {
           return isFlat(this._latlngs[0]) ? this._latlngs[0] : this._latlngs[0][0];
         },
         _clipPoints: function() {
-          var bounds = this._renderer._bounds, w2 = this.options.weight, p = new Point(w2, w2);
+          var bounds = this._renderer._bounds, w = this.options.weight, p = new Point(w, w);
           bounds = new Bounds(bounds.min.subtract(p), bounds.max.add(p));
           this._parts = [];
           if (!this._pxBounds || !this._pxBounds.intersects(bounds)) {
@@ -16274,8 +16274,8 @@ function requireLeafletSrc() {
             this._parts = this._rings;
             return;
           }
-          for (var i2 = 0, len = this._rings.length, clipped; i2 < len; i2++) {
-            clipped = clipPolygon(this._rings[i2], bounds, true);
+          for (var i = 0, len = this._rings.length, clipped; i < len; i++) {
+            clipped = clipPolygon(this._rings[i], bounds, true);
             if (clipped.length) {
               this._parts.push(clipped);
             }
@@ -16286,12 +16286,12 @@ function requireLeafletSrc() {
         },
         // Needed by the `Canvas` renderer for interactivity
         _containsPoint: function(p) {
-          var inside = false, part, p1, p2, i2, j, k2, len, len2;
+          var inside = false, part, p1, p2, i, j, k2, len, len2;
           if (!this._pxBounds || !this._pxBounds.contains(p)) {
             return false;
           }
-          for (i2 = 0, len = this._parts.length; i2 < len; i2++) {
-            part = this._parts[i2];
+          for (i = 0, len = this._parts.length; i < len; i++) {
+            part = this._parts[i];
             for (j = 0, len2 = part.length, k2 = len2 - 1; j < len2; k2 = j++) {
               p1 = part[j];
               p2 = part[k2];
@@ -16366,10 +16366,10 @@ function requireLeafletSrc() {
         // @method addData( <GeoJSON> data ): this
         // Adds a GeoJSON object to the layer.
         addData: function(geojson) {
-          var features2 = isArray(geojson) ? geojson : geojson.features, i2, len, feature2;
+          var features2 = isArray(geojson) ? geojson : geojson.features, i, len, feature2;
           if (features2) {
-            for (i2 = 0, len = features2.length; i2 < len; i2++) {
-              feature2 = features2[i2];
+            for (i = 0, len = features2.length; i < len; i++) {
+              feature2 = features2[i];
               if (feature2.geometries || feature2.geometry || feature2.features || feature2.coordinates) {
                 this.addData(feature2);
               }
@@ -16420,7 +16420,7 @@ function requireLeafletSrc() {
         }
       });
       function geometryToLayer(geojson, options) {
-        var geometry = geojson.type === "Feature" ? geojson.geometry : geojson, coords = geometry ? geometry.coordinates : null, layers2 = [], pointToLayer = options && options.pointToLayer, _coordsToLatLng = options && options.coordsToLatLng || coordsToLatLng, latlng, latlngs, i2, len;
+        var geometry = geojson.type === "Feature" ? geojson.geometry : geojson, coords = geometry ? geometry.coordinates : null, layers2 = [], pointToLayer = options && options.pointToLayer, _coordsToLatLng = options && options.coordsToLatLng || coordsToLatLng, latlng, latlngs, i, len;
         if (!coords && !geometry) {
           return null;
         }
@@ -16429,8 +16429,8 @@ function requireLeafletSrc() {
             latlng = _coordsToLatLng(coords);
             return _pointToLayer(pointToLayer, geojson, latlng, options);
           case "MultiPoint":
-            for (i2 = 0, len = coords.length; i2 < len; i2++) {
-              latlng = _coordsToLatLng(coords[i2]);
+            for (i = 0, len = coords.length; i < len; i++) {
+              latlng = _coordsToLatLng(coords[i]);
               layers2.push(_pointToLayer(pointToLayer, geojson, latlng, options));
             }
             return new FeatureGroup(layers2);
@@ -16443,9 +16443,9 @@ function requireLeafletSrc() {
             latlngs = coordsToLatLngs(coords, geometry.type === "Polygon" ? 1 : 2, _coordsToLatLng);
             return new Polygon(latlngs, options);
           case "GeometryCollection":
-            for (i2 = 0, len = geometry.geometries.length; i2 < len; i2++) {
+            for (i = 0, len = geometry.geometries.length; i < len; i++) {
               var geoLayer = geometryToLayer({
-                geometry: geometry.geometries[i2],
+                geometry: geometry.geometries[i],
                 type: "Feature",
                 properties: geojson.properties
               }, options);
@@ -16455,8 +16455,8 @@ function requireLeafletSrc() {
             }
             return new FeatureGroup(layers2);
           case "FeatureCollection":
-            for (i2 = 0, len = geometry.features.length; i2 < len; i2++) {
-              var featureLayer = geometryToLayer(geometry.features[i2], options);
+            for (i = 0, len = geometry.features.length; i < len; i++) {
+              var featureLayer = geometryToLayer(geometry.features[i], options);
               if (featureLayer) {
                 layers2.push(featureLayer);
               }
@@ -16474,8 +16474,8 @@ function requireLeafletSrc() {
       }
       function coordsToLatLngs(coords, levelsDeep, _coordsToLatLng) {
         var latlngs = [];
-        for (var i2 = 0, len = coords.length, latlng; i2 < len; i2++) {
-          latlng = levelsDeep ? coordsToLatLngs(coords[i2], levelsDeep - 1, _coordsToLatLng) : (_coordsToLatLng || coordsToLatLng)(coords[i2]);
+        for (var i = 0, len = coords.length, latlng; i < len; i++) {
+          latlng = levelsDeep ? coordsToLatLngs(coords[i], levelsDeep - 1, _coordsToLatLng) : (_coordsToLatLng || coordsToLatLng)(coords[i]);
           latlngs.push(latlng);
         }
         return latlngs;
@@ -16486,8 +16486,8 @@ function requireLeafletSrc() {
       }
       function latLngsToCoords(latlngs, levelsDeep, closed, precision) {
         var coords = [];
-        for (var i2 = 0, len = latlngs.length; i2 < len; i2++) {
-          coords.push(levelsDeep ? latLngsToCoords(latlngs[i2], isFlat(latlngs[i2]) ? 0 : levelsDeep - 1, closed, precision) : latLngToCoords(latlngs[i2], precision));
+        for (var i = 0, len = latlngs.length; i < len; i++) {
+          coords.push(levelsDeep ? latLngsToCoords(latlngs[i], isFlat(latlngs[i]) ? 0 : levelsDeep - 1, closed, precision) : latLngToCoords(latlngs[i], precision));
         }
         if (!levelsDeep && closed && coords.length > 0) {
           coords.push(coords[0].slice());
@@ -16841,9 +16841,9 @@ function requireLeafletSrc() {
           vid.loop = !!this.options.loop;
           vid.muted = !!this.options.muted;
           vid.playsInline = !!this.options.playsInline;
-          for (var i2 = 0; i2 < this._url.length; i2++) {
+          for (var i = 0; i < this._url.length; i++) {
             var source = create$1("source");
-            source.src = this._url[i2];
+            source.src = this._url[i];
             vid.appendChild(source);
           }
         }
@@ -17253,19 +17253,19 @@ function requireLeafletSrc() {
           return events2;
         },
         _initLayout: function() {
-          var prefix = "leaflet-popup", container2 = this._container = create$1(
+          var prefix = "leaflet-popup", container = this._container = create$1(
             "div",
             prefix + " " + (this.options.className || "") + " leaflet-zoom-animated"
           );
-          var wrapper = this._wrapper = create$1("div", prefix + "-content-wrapper", container2);
+          var wrapper = this._wrapper = create$1("div", prefix + "-content-wrapper", container);
           this._contentNode = create$1("div", prefix + "-content", wrapper);
-          disableClickPropagation(container2);
+          disableClickPropagation(container);
           disableScrollPropagation(this._contentNode);
-          on2(container2, "contextmenu", stopPropagation);
-          this._tipContainer = create$1("div", prefix + "-tip-container", container2);
+          on2(container, "contextmenu", stopPropagation);
+          this._tipContainer = create$1("div", prefix + "-tip-container", container);
           this._tip = create$1("div", prefix + "-tip", this._tipContainer);
           if (this.options.closeButton) {
-            var closeButton = this._closeButton = create$1("a", prefix + "-close-button", container2);
+            var closeButton = this._closeButton = create$1("a", prefix + "-close-button", container);
             closeButton.setAttribute("role", "button");
             closeButton.setAttribute("aria-label", "Close popup");
             closeButton.href = "#close";
@@ -17277,21 +17277,21 @@ function requireLeafletSrc() {
           }
         },
         _updateLayout: function() {
-          var container2 = this._contentNode, style2 = container2.style;
+          var container = this._contentNode, style2 = container.style;
           style2.width = "";
           style2.whiteSpace = "nowrap";
-          var width = container2.offsetWidth;
+          var width = container.offsetWidth;
           width = Math.min(width, this.options.maxWidth);
           width = Math.max(width, this.options.minWidth);
           style2.width = width + 1 + "px";
           style2.whiteSpace = "";
           style2.height = "";
-          var height = container2.offsetHeight, maxHeight = this.options.maxHeight, scrolledClass = "leaflet-popup-scrolled";
+          var height = container.offsetHeight, maxHeight = this.options.maxHeight, scrolledClass = "leaflet-popup-scrolled";
           if (maxHeight && height > maxHeight) {
             style2.height = maxHeight + "px";
-            addClass(container2, scrolledClass);
+            addClass(container, scrolledClass);
           } else {
-            removeClass(container2, scrolledClass);
+            removeClass(container, scrolledClass);
           }
           this._containerWidth = this._container.offsetWidth;
         },
@@ -17529,7 +17529,7 @@ function requireLeafletSrc() {
         _adjustPan: function() {
         },
         _setPosition: function(pos) {
-          var subX, subY, map = this._map, container2 = this._container, centerPoint = map.latLngToContainerPoint(map.getCenter()), tooltipPoint = map.layerPointToContainerPoint(pos), direction = this.options.direction, tooltipWidth = container2.offsetWidth, tooltipHeight = container2.offsetHeight, offset = toPoint(this.options.offset), anchor = this._getAnchor();
+          var subX, subY, map = this._map, container = this._container, centerPoint = map.latLngToContainerPoint(map.getCenter()), tooltipPoint = map.layerPointToContainerPoint(pos), direction = this.options.direction, tooltipWidth = container.offsetWidth, tooltipHeight = container.offsetHeight, offset = toPoint(this.options.offset), anchor = this._getAnchor();
           if (direction === "top") {
             subX = tooltipWidth / 2;
             subY = tooltipHeight;
@@ -17555,12 +17555,12 @@ function requireLeafletSrc() {
             subY = tooltipHeight / 2;
           }
           pos = pos.subtract(toPoint(subX, subY, true)).add(offset).add(anchor);
-          removeClass(container2, "leaflet-tooltip-right");
-          removeClass(container2, "leaflet-tooltip-left");
-          removeClass(container2, "leaflet-tooltip-top");
-          removeClass(container2, "leaflet-tooltip-bottom");
-          addClass(container2, "leaflet-tooltip-" + direction);
-          setPosition(container2, pos);
+          removeClass(container, "leaflet-tooltip-right");
+          removeClass(container, "leaflet-tooltip-left");
+          removeClass(container, "leaflet-tooltip-top");
+          removeClass(container, "leaflet-tooltip-bottom");
+          addClass(container, "leaflet-tooltip-" + direction);
+          setPosition(container, pos);
         },
         _updatePosition: function() {
           var pos = this._map.latLngToLayerPoint(this._latlng);
@@ -17969,9 +17969,9 @@ function requireLeafletSrc() {
         },
         _setAutoZIndex: function(compare) {
           var layers2 = this.getPane().children, edgeZIndex = -compare(-Infinity, Infinity);
-          for (var i2 = 0, len = layers2.length, zIndex; i2 < len; i2++) {
-            zIndex = layers2[i2].style.zIndex;
-            if (layers2[i2] !== this._container && zIndex) {
+          for (var i = 0, len = layers2.length, zIndex; i < len; i++) {
+            zIndex = layers2[i].style.zIndex;
+            if (layers2[i] !== this._container && zIndex) {
               edgeZIndex = compare(edgeZIndex, +zIndex);
             }
           }
@@ -18032,16 +18032,16 @@ function requireLeafletSrc() {
           if (zoom3 === void 0) {
             return void 0;
           }
-          for (var z2 in this._levels) {
-            z2 = Number(z2);
-            if (this._levels[z2].el.children.length || z2 === zoom3) {
-              this._levels[z2].el.style.zIndex = maxZoom - Math.abs(zoom3 - z2);
-              this._onUpdateLevel(z2);
+          for (var z in this._levels) {
+            z = Number(z);
+            if (this._levels[z].el.children.length || z === zoom3) {
+              this._levels[z].el.style.zIndex = maxZoom - Math.abs(zoom3 - z);
+              this._onUpdateLevel(z);
             } else {
-              remove(this._levels[z2].el);
-              this._removeTilesAtZoom(z2);
-              this._onRemoveLevel(z2);
-              delete this._levels[z2];
+              remove(this._levels[z].el);
+              this._removeTilesAtZoom(z);
+              this._onRemoveLevel(z);
+              delete this._levels[z];
             }
           }
           var level = this._levels[zoom3], map = this._map;
@@ -18104,17 +18104,17 @@ function requireLeafletSrc() {
           }
         },
         _invalidateAll: function() {
-          for (var z2 in this._levels) {
-            remove(this._levels[z2].el);
-            this._onRemoveLevel(Number(z2));
-            delete this._levels[z2];
+          for (var z in this._levels) {
+            remove(this._levels[z].el);
+            this._onRemoveLevel(Number(z));
+            delete this._levels[z];
           }
           this._removeAllTiles();
           this._tileZoom = void 0;
         },
-        _retainParent: function(x2, y2, z2, minZoom) {
-          var x22 = Math.floor(x2 / 2), y22 = Math.floor(y2 / 2), z22 = z2 - 1, coords2 = new Point(+x22, +y22);
-          coords2.z = +z22;
+        _retainParent: function(x2, y, z, minZoom) {
+          var x22 = Math.floor(x2 / 2), y2 = Math.floor(y / 2), z2 = z - 1, coords2 = new Point(+x22, +y2);
+          coords2.z = +z2;
           var key = this._tileCoordsToKey(coords2), tile = this._tiles[key];
           if (tile && tile.active) {
             tile.retain = true;
@@ -18122,16 +18122,16 @@ function requireLeafletSrc() {
           } else if (tile && tile.loaded) {
             tile.retain = true;
           }
-          if (z22 > minZoom) {
-            return this._retainParent(x22, y22, z22, minZoom);
+          if (z2 > minZoom) {
+            return this._retainParent(x22, y2, z2, minZoom);
           }
           return false;
         },
-        _retainChildren: function(x2, y2, z2, maxZoom) {
-          for (var i2 = 2 * x2; i2 < 2 * x2 + 2; i2++) {
-            for (var j = 2 * y2; j < 2 * y2 + 2; j++) {
-              var coords = new Point(i2, j);
-              coords.z = z2 + 1;
+        _retainChildren: function(x2, y, z, maxZoom) {
+          for (var i = 2 * x2; i < 2 * x2 + 2; i++) {
+            for (var j = 2 * y; j < 2 * y + 2; j++) {
+              var coords = new Point(i, j);
+              coords.z = z + 1;
               var key = this._tileCoordsToKey(coords), tile = this._tiles[key];
               if (tile && tile.active) {
                 tile.retain = true;
@@ -18139,8 +18139,8 @@ function requireLeafletSrc() {
               } else if (tile && tile.loaded) {
                 tile.retain = true;
               }
-              if (z2 + 1 < maxZoom) {
-                this._retainChildren(i2, j, z2 + 1, maxZoom);
+              if (z + 1 < maxZoom) {
+                this._retainChildren(i, j, z + 1, maxZoom);
               }
             }
           }
@@ -18188,8 +18188,8 @@ function requireLeafletSrc() {
           this._setZoomTransforms(center2, zoom3);
         },
         _setZoomTransforms: function(center2, zoom3) {
-          for (var i2 in this._levels) {
-            this._setZoomTransform(this._levels[i2], center2, zoom3);
+          for (var i in this._levels) {
+            this._setZoomTransform(this._levels[i], center2, zoom3);
           }
         },
         _setZoomTransform: function(level, center2, zoom3) {
@@ -18246,8 +18246,8 @@ function requireLeafletSrc() {
             throw new Error("Attempted to load an infinite number of tiles");
           }
           for (var key in this._tiles) {
-            var c2 = this._tiles[key].coords;
-            if (c2.z !== this._tileZoom || !noPruneRange.contains(new Point(c2.x, c2.y))) {
+            var c = this._tiles[key].coords;
+            if (c.z !== this._tileZoom || !noPruneRange.contains(new Point(c.x, c.y))) {
               this._tiles[key].current = false;
             }
           }
@@ -18256,8 +18256,8 @@ function requireLeafletSrc() {
             return;
           }
           for (var j = tileRange.min.y; j <= tileRange.max.y; j++) {
-            for (var i2 = tileRange.min.x; i2 <= tileRange.max.x; i2++) {
-              var coords = new Point(i2, j);
+            for (var i = tileRange.min.x; i <= tileRange.max.x; i++) {
+              var coords = new Point(i, j);
               coords.z = this._tileZoom;
               if (!this._isValidTile(coords)) {
                 continue;
@@ -18279,8 +18279,8 @@ function requireLeafletSrc() {
               this.fire("loading");
             }
             var fragment = document.createDocumentFragment();
-            for (i2 = 0; i2 < queue.length; i2++) {
-              this._addTile(queue[i2], fragment);
+            for (i = 0; i < queue.length; i++) {
+              this._addTile(queue[i], fragment);
             }
             this._level.el.appendChild(fragment);
           }
@@ -18347,7 +18347,7 @@ function requireLeafletSrc() {
             setOpacity(tile, this.options.opacity);
           }
         },
-        _addTile: function(coords, container2) {
+        _addTile: function(coords, container) {
           var tilePos = this._getTilePos(coords), key = this._tileCoordsToKey(coords);
           var tile = this.createTile(this._wrapCoords(coords), bind(this._tileReady, this, coords));
           this._initTile(tile);
@@ -18360,7 +18360,7 @@ function requireLeafletSrc() {
             coords,
             current: true
           };
-          container2.appendChild(tile);
+          container.appendChild(tile);
           this.fire("tileloadstart", {
             tile,
             coords
@@ -18584,17 +18584,17 @@ function requireLeafletSrc() {
         },
         // stops loading all tiles in the background layer
         _abortLoading: function() {
-          var i2, tile;
-          for (i2 in this._tiles) {
-            if (this._tiles[i2].coords.z !== this._tileZoom) {
-              tile = this._tiles[i2].el;
+          var i, tile;
+          for (i in this._tiles) {
+            if (this._tiles[i].coords.z !== this._tileZoom) {
+              tile = this._tiles[i].el;
               tile.onload = falseFn;
               tile.onerror = falseFn;
               if (!tile.complete) {
                 tile.src = emptyImageUrl;
-                var coords = this._tiles[i2].coords;
+                var coords = this._tiles[i].coords;
                 remove(tile);
-                delete this._tiles[i2];
+                delete this._tiles[i];
                 this.fire("tileabort", {
                   tile,
                   coords
@@ -18658,9 +18658,9 @@ function requireLeafletSrc() {
         initialize: function(url, options) {
           this._url = url;
           var wmsParams = extend2({}, this.defaultWmsParams);
-          for (var i2 in options) {
-            if (!(i2 in this.options)) {
-              wmsParams[i2] = options[i2];
+          for (var i in options) {
+            if (!(i in this.options)) {
+              wmsParams[i] = options[i];
             }
           }
           options = setOptions(this, options);
@@ -18794,12 +18794,12 @@ function requireLeafletSrc() {
           this._draw();
         },
         _initContainer: function() {
-          var container2 = this._container = document.createElement("canvas");
-          on2(container2, "mousemove", this._onMouseMove, this);
-          on2(container2, "click dblclick mousedown mouseup contextmenu", this._onClick, this);
-          on2(container2, "mouseout", this._handleMouseOut, this);
-          container2["_leaflet_disable_events"] = true;
-          this._ctx = container2.getContext("2d");
+          var container = this._container = document.createElement("canvas");
+          on2(container, "mousemove", this._onMouseMove, this);
+          on2(container, "click dblclick mousedown mouseup contextmenu", this._onClick, this);
+          on2(container, "mouseout", this._handleMouseOut, this);
+          container["_leaflet_disable_events"] = true;
+          this._ctx = container.getContext("2d");
         },
         _destroyContainer: function() {
           cancelAnimFrame(this._redrawRequest);
@@ -18825,12 +18825,12 @@ function requireLeafletSrc() {
             return;
           }
           Renderer.prototype._update.call(this);
-          var b2 = this._bounds, container2 = this._container, size = b2.getSize(), m2 = Browser.retina ? 2 : 1;
-          setPosition(container2, b2.min);
-          container2.width = m2 * size.x;
-          container2.height = m2 * size.y;
-          container2.style.width = size.x + "px";
-          container2.style.height = size.y + "px";
+          var b2 = this._bounds, container = this._container, size = b2.getSize(), m2 = Browser.retina ? 2 : 1;
+          setPosition(container, b2.min);
+          container.width = m2 * size.x;
+          container.height = m2 * size.y;
+          container.style.width = size.x + "px";
+          container.style.height = size.y + "px";
           if (Browser.retina) {
             this._ctx.scale(2, 2);
           }
@@ -18891,9 +18891,9 @@ function requireLeafletSrc() {
         },
         _updateDashArray: function(layer) {
           if (typeof layer.options.dashArray === "string") {
-            var parts = layer.options.dashArray.split(/[, ]+/), dashArray = [], dashValue, i2;
-            for (i2 = 0; i2 < parts.length; i2++) {
-              dashValue = Number(parts[i2]);
+            var parts = layer.options.dashArray.split(/[, ]+/), dashArray = [], dashValue, i;
+            for (i = 0; i < parts.length; i++) {
+              dashValue = Number(parts[i]);
               if (isNaN(dashValue)) {
                 return;
               }
@@ -18964,14 +18964,14 @@ function requireLeafletSrc() {
           if (!this._drawing) {
             return;
           }
-          var i2, j, len2, p, parts = layer._parts, len = parts.length, ctx = this._ctx;
+          var i, j, len2, p, parts = layer._parts, len = parts.length, ctx = this._ctx;
           if (!len) {
             return;
           }
           ctx.beginPath();
-          for (i2 = 0; i2 < len; i2++) {
-            for (j = 0, len2 = parts[i2].length; j < len2; j++) {
-              p = parts[i2][j];
+          for (i = 0; i < len; i++) {
+            for (j = 0, len2 = parts[i].length; j < len2; j++) {
+              p = parts[i][j];
               ctx[j ? "lineTo" : "moveTo"](p.x, p.y);
             }
             if (closed) {
@@ -19147,36 +19147,36 @@ function requireLeafletSrc() {
           this.fire("update");
         },
         _initPath: function(layer) {
-          var container2 = layer._container = vmlCreate("shape");
-          addClass(container2, "leaflet-vml-shape " + (this.options.className || ""));
-          container2.coordsize = "1 1";
+          var container = layer._container = vmlCreate("shape");
+          addClass(container, "leaflet-vml-shape " + (this.options.className || ""));
+          container.coordsize = "1 1";
           layer._path = vmlCreate("path");
-          container2.appendChild(layer._path);
+          container.appendChild(layer._path);
           this._updateStyle(layer);
           this._layers[stamp(layer)] = layer;
         },
         _addPath: function(layer) {
-          var container2 = layer._container;
-          this._container.appendChild(container2);
+          var container = layer._container;
+          this._container.appendChild(container);
           if (layer.options.interactive) {
-            layer.addInteractiveTarget(container2);
+            layer.addInteractiveTarget(container);
           }
         },
         _removePath: function(layer) {
-          var container2 = layer._container;
-          remove(container2);
-          layer.removeInteractiveTarget(container2);
+          var container = layer._container;
+          remove(container);
+          layer.removeInteractiveTarget(container);
           delete this._layers[stamp(layer)];
         },
         _updateStyle: function(layer) {
-          var stroke = layer._stroke, fill = layer._fill, options = layer.options, container2 = layer._container;
-          container2.stroked = !!options.stroke;
-          container2.filled = !!options.fill;
+          var stroke = layer._stroke, fill = layer._fill, options = layer.options, container = layer._container;
+          container.stroked = !!options.stroke;
+          container.filled = !!options.fill;
           if (options.stroke) {
             if (!stroke) {
               stroke = layer._stroke = vmlCreate("stroke");
             }
-            container2.appendChild(stroke);
+            container.appendChild(stroke);
             stroke.weight = options.weight + "px";
             stroke.color = options.color;
             stroke.opacity = options.opacity;
@@ -19188,18 +19188,18 @@ function requireLeafletSrc() {
             stroke.endcap = options.lineCap.replace("butt", "flat");
             stroke.joinstyle = options.lineJoin;
           } else if (stroke) {
-            container2.removeChild(stroke);
+            container.removeChild(stroke);
             layer._stroke = null;
           }
           if (options.fill) {
             if (!fill) {
               fill = layer._fill = vmlCreate("fill");
             }
-            container2.appendChild(fill);
+            container.appendChild(fill);
             fill.color = options.fillColor || options.color;
             fill.opacity = options.fillOpacity;
           } else if (fill) {
-            container2.removeChild(fill);
+            container.removeChild(fill);
             layer._fill = null;
           }
         },
@@ -19237,14 +19237,14 @@ function requireLeafletSrc() {
             return;
           }
           Renderer.prototype._update.call(this);
-          var b2 = this._bounds, size = b2.getSize(), container2 = this._container;
+          var b2 = this._bounds, size = b2.getSize(), container = this._container;
           if (!this._svgSize || !this._svgSize.equals(size)) {
             this._svgSize = size;
-            container2.setAttribute("width", size.x);
-            container2.setAttribute("height", size.y);
+            container.setAttribute("width", size.x);
+            container.setAttribute("height", size.y);
           }
-          setPosition(container2, b2.min);
-          container2.setAttribute("viewBox", [b2.min.x, b2.min.y, size.x, size.y].join(" "));
+          setPosition(container, b2.min);
+          container.setAttribute("viewBox", [b2.min.x, b2.min.y, size.x, size.y].join(" "));
           this.fire("update");
         },
         // methods below are called by vector layers implementations
@@ -19707,11 +19707,11 @@ function requireLeafletSrc() {
           this._setZoomDelta(map.options.zoomDelta);
         },
         addHooks: function() {
-          var container2 = this._map._container;
-          if (container2.tabIndex <= 0) {
-            container2.tabIndex = "0";
+          var container = this._map._container;
+          if (container.tabIndex <= 0) {
+            container.tabIndex = "0";
           }
-          on2(container2, {
+          on2(container, {
             focus: this._onFocus,
             blur: this._onBlur,
             mousedown: this._onMouseDown
@@ -19750,27 +19750,27 @@ function requireLeafletSrc() {
           this._map.fire("blur");
         },
         _setPanDelta: function(panDelta) {
-          var keys = this._panKeys = {}, codes = this.keyCodes, i2, len;
-          for (i2 = 0, len = codes.left.length; i2 < len; i2++) {
-            keys[codes.left[i2]] = [-1 * panDelta, 0];
+          var keys = this._panKeys = {}, codes = this.keyCodes, i, len;
+          for (i = 0, len = codes.left.length; i < len; i++) {
+            keys[codes.left[i]] = [-1 * panDelta, 0];
           }
-          for (i2 = 0, len = codes.right.length; i2 < len; i2++) {
-            keys[codes.right[i2]] = [panDelta, 0];
+          for (i = 0, len = codes.right.length; i < len; i++) {
+            keys[codes.right[i]] = [panDelta, 0];
           }
-          for (i2 = 0, len = codes.down.length; i2 < len; i2++) {
-            keys[codes.down[i2]] = [0, panDelta];
+          for (i = 0, len = codes.down.length; i < len; i++) {
+            keys[codes.down[i]] = [0, panDelta];
           }
-          for (i2 = 0, len = codes.up.length; i2 < len; i2++) {
-            keys[codes.up[i2]] = [0, -1 * panDelta];
+          for (i = 0, len = codes.up.length; i < len; i++) {
+            keys[codes.up[i]] = [0, -1 * panDelta];
           }
         },
         _setZoomDelta: function(zoomDelta) {
-          var keys = this._zoomKeys = {}, codes = this.keyCodes, i2, len;
-          for (i2 = 0, len = codes.zoomIn.length; i2 < len; i2++) {
-            keys[codes.zoomIn[i2]] = zoomDelta;
+          var keys = this._zoomKeys = {}, codes = this.keyCodes, i, len;
+          for (i = 0, len = codes.zoomIn.length; i < len; i++) {
+            keys[codes.zoomIn[i]] = zoomDelta;
           }
-          for (i2 = 0, len = codes.zoomOut.length; i2 < len; i2++) {
-            keys[codes.zoomOut[i2]] = -zoomDelta;
+          for (i = 0, len = codes.zoomOut.length; i < len; i++) {
+            keys[codes.zoomOut[i]] = -zoomDelta;
           }
         },
         _addHooks: function() {
@@ -20121,10 +20121,10 @@ function requireLeafletSrc() {
   return leafletSrc$2.exports;
 }
 var leafletSrcExports = requireLeafletSrc();
-const L$2 = /* @__PURE__ */ getDefaultExportFromCjs(leafletSrcExports);
+const L$1 = /* @__PURE__ */ getDefaultExportFromCjs(leafletSrcExports);
 const leafletSrc = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
-  default: L$2
+  default: L$1
 }, [leafletSrcExports]);
 class Task {
   constructor() {
@@ -20138,7 +20138,7 @@ class Task {
 function useTaskManager() {
   const timer = ref(/* @__PURE__ */ new Map());
   const addTasksAndIvnoke = async (tasks) => {
-    const newTaskIds = new Set(tasks.map((t2) => t2.id));
+    const newTaskIds = new Set(tasks.map((t) => t.id));
     timer.value.forEach((task, key) => {
       if (!newTaskIds.has(key)) {
         task.invoke();
@@ -20147,10 +20147,10 @@ function useTaskManager() {
     });
     const BATCH_SIZE = 10;
     let count = 0;
-    for (const t2 of tasks) {
-      if (!timer.value.has(t2.id)) {
-        timer.value.set(t2.id, t2);
-        t2.run();
+    for (const t of tasks) {
+      if (!timer.value.has(t.id)) {
+        timer.value.set(t.id, t);
+        t.run();
         count++;
         if (count % BATCH_SIZE === 0) {
           await new Promise((resolve2) => setTimeout(resolve2, 0));
@@ -20182,1238 +20182,9 @@ function useTaskManager() {
     clearAll
   };
 }
-var ReflectLite = {};
-/*! *****************************************************************************
-Copyright (C) Microsoft. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-var hasRequiredReflectLite;
-function requireReflectLite() {
-  if (hasRequiredReflectLite) return ReflectLite;
-  hasRequiredReflectLite = 1;
-  var Reflect2;
-  (function(Reflect3) {
-    (function(factory) {
-      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
-      var exporter = makeExporter(Reflect3);
-      if (typeof root.Reflect !== "undefined") {
-        exporter = makeExporter(root.Reflect, exporter);
-      }
-      factory(exporter, root);
-      if (typeof root.Reflect === "undefined") {
-        root.Reflect = Reflect3;
-      }
-      function makeExporter(target, previous) {
-        return function(key, value) {
-          Object.defineProperty(target, key, { configurable: true, writable: true, value });
-          if (previous)
-            previous(key, value);
-        };
-      }
-      function sloppyModeThis() {
-        throw new ReferenceError("globalThis could not be found. Please polyfill globalThis before loading this module.");
-      }
-    })(function(exporter, root) {
-      var supportsSymbol = typeof Symbol === "function";
-      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : fail("Symbol.toPrimitive not found.");
-      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : fail("Symbol.iterator not found.");
-      var functionPrototype = Object.getPrototypeOf(Function);
-      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : fail("A valid Map constructor could not be found.");
-      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : fail("A valid Set constructor could not be found.");
-      var _WeakMap = typeof WeakMap === "function" ? WeakMap : fail("A valid WeakMap constructor could not be found.");
-      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
-      var metadataRegistry = GetOrCreateMetadataRegistry();
-      var metadataProvider = CreateMetadataProvider(metadataRegistry);
-      function decorate(decorators, target, propertyKey, attributes) {
-        if (!IsUndefined(propertyKey)) {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
-            throw new TypeError();
-          if (IsNull(attributes))
-            attributes = void 0;
-          propertyKey = ToPropertyKey(propertyKey);
-          return DecorateProperty(decorators, target, propertyKey, attributes);
-        } else {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsConstructor(target))
-            throw new TypeError();
-          return DecorateConstructor(decorators, target);
-        }
-      }
-      exporter("decorate", decorate);
-      function metadata(metadataKey, metadataValue) {
-        function decorator(target, propertyKey) {
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
-            throw new TypeError();
-          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-        }
-        return decorator;
-      }
-      exporter("metadata", metadata);
-      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-      }
-      exporter("defineMetadata", defineMetadata);
-      function hasMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasMetadata", hasMetadata);
-      function hasOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasOwnMetadata", hasOwnMetadata);
-      function getMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getMetadata", getMetadata);
-      function getOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getOwnMetadata", getOwnMetadata);
-      function getMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryMetadataKeys(target, propertyKey);
-      }
-      exporter("getMetadataKeys", getMetadataKeys);
-      function getOwnMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryOwnMetadataKeys(target, propertyKey);
-      }
-      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
-      function deleteMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        var provider = GetMetadataProvider(
-          target,
-          propertyKey,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("deleteMetadata", deleteMetadata);
-      function DecorateConstructor(decorators, target) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
-          var decorated = decorator(target);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsConstructor(decorated))
-              throw new TypeError();
-            target = decorated;
-          }
-        }
-        return target;
-      }
-      function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i2 = decorators.length - 1; i2 >= 0; --i2) {
-          var decorator = decorators[i2];
-          var decorated = decorator(target, propertyKey, descriptor);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsObject(decorated))
-              throw new TypeError();
-            descriptor = decorated;
-          }
-        }
-        return descriptor;
-      }
-      function OrdinaryHasMetadata(MetadataKey, O2, P) {
-        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
-        if (hasOwn)
-          return true;
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (!IsNull(parent))
-          return OrdinaryHasMetadata(MetadataKey, parent, P);
-        return false;
-      }
-      function OrdinaryHasOwnMetadata(MetadataKey, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O2, P));
-      }
-      function OrdinaryGetMetadata(MetadataKey, O2, P) {
-        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O2, P);
-        if (hasOwn)
-          return OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (!IsNull(parent))
-          return OrdinaryGetMetadata(MetadataKey, parent, P);
-        return void 0;
-      }
-      function OrdinaryGetOwnMetadata(MetadataKey, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O2, P);
-      }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*Create*/
-          true
-        );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O2, P);
-      }
-      function OrdinaryMetadataKeys(O2, P) {
-        var ownKeys2 = OrdinaryOwnMetadataKeys(O2, P);
-        var parent = OrdinaryGetPrototypeOf(O2);
-        if (parent === null)
-          return ownKeys2;
-        var parentKeys = OrdinaryMetadataKeys(parent, P);
-        if (parentKeys.length <= 0)
-          return ownKeys2;
-        if (ownKeys2.length <= 0)
-          return parentKeys;
-        var set = new _Set();
-        var keys = [];
-        for (var _i = 0, ownKeys_1 = ownKeys2; _i < ownKeys_1.length; _i++) {
-          var key = ownKeys_1[_i];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-          var key = parentKeys_1[_a];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        return keys;
-      }
-      function OrdinaryOwnMetadataKeys(O2, P) {
-        var provider = GetMetadataProvider(
-          O2,
-          P,
-          /*create*/
-          false
-        );
-        if (!provider) {
-          return [];
-        }
-        return provider.OrdinaryOwnMetadataKeys(O2, P);
-      }
-      function Type(x2) {
-        if (x2 === null)
-          return 1;
-        switch (typeof x2) {
-          case "undefined":
-            return 0;
-          case "boolean":
-            return 2;
-          case "string":
-            return 3;
-          case "symbol":
-            return 4;
-          case "number":
-            return 5;
-          case "object":
-            return x2 === null ? 1 : 6;
-          default:
-            return 6;
-        }
-      }
-      function IsUndefined(x2) {
-        return x2 === void 0;
-      }
-      function IsNull(x2) {
-        return x2 === null;
-      }
-      function IsSymbol(x2) {
-        return typeof x2 === "symbol";
-      }
-      function IsObject(x2) {
-        return typeof x2 === "object" ? x2 !== null : typeof x2 === "function";
-      }
-      function ToPrimitive(input, PreferredType) {
-        switch (Type(input)) {
-          case 0:
-            return input;
-          case 1:
-            return input;
-          case 2:
-            return input;
-          case 3:
-            return input;
-          case 4:
-            return input;
-          case 5:
-            return input;
-        }
-        var hint = "string";
-        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-        if (exoticToPrim !== void 0) {
-          var result = exoticToPrim.call(input, hint);
-          if (IsObject(result))
-            throw new TypeError();
-          return result;
-        }
-        return OrdinaryToPrimitive(input);
-      }
-      function OrdinaryToPrimitive(O2, hint) {
-        var valueOf, result, toString_2;
-        {
-          var toString_1 = O2.toString;
-          if (IsCallable(toString_1)) {
-            var result = toString_1.call(O2);
-            if (!IsObject(result))
-              return result;
-          }
-          var valueOf = O2.valueOf;
-          if (IsCallable(valueOf)) {
-            var result = valueOf.call(O2);
-            if (!IsObject(result))
-              return result;
-          }
-        }
-        throw new TypeError();
-      }
-      function ToBoolean(argument) {
-        return !!argument;
-      }
-      function ToString(argument) {
-        return "" + argument;
-      }
-      function ToPropertyKey(argument) {
-        var key = ToPrimitive(argument);
-        if (IsSymbol(key))
-          return key;
-        return ToString(key);
-      }
-      function IsArray(argument) {
-        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
-      }
-      function IsCallable(argument) {
-        return typeof argument === "function";
-      }
-      function IsConstructor(argument) {
-        return typeof argument === "function";
-      }
-      function IsPropertyKey(argument) {
-        switch (Type(argument)) {
-          case 3:
-            return true;
-          case 4:
-            return true;
-          default:
-            return false;
-        }
-      }
-      function GetMethod(V2, P) {
-        var func = V2[P];
-        if (func === void 0 || func === null)
-          return void 0;
-        if (!IsCallable(func))
-          throw new TypeError();
-        return func;
-      }
-      function GetIterator(obj) {
-        var method = GetMethod(obj, iteratorSymbol);
-        if (!IsCallable(method))
-          throw new TypeError();
-        var iterator = method.call(obj);
-        if (!IsObject(iterator))
-          throw new TypeError();
-        return iterator;
-      }
-      function IteratorValue(iterResult) {
-        return iterResult.value;
-      }
-      function IteratorStep(iterator) {
-        var result = iterator.next();
-        return result.done ? false : result;
-      }
-      function IteratorClose(iterator) {
-        var f2 = iterator["return"];
-        if (f2)
-          f2.call(iterator);
-      }
-      function OrdinaryGetPrototypeOf(O2) {
-        var proto = Object.getPrototypeOf(O2);
-        if (typeof O2 !== "function" || O2 === functionPrototype)
-          return proto;
-        if (proto !== functionPrototype)
-          return proto;
-        var prototype = O2.prototype;
-        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
-        if (prototypeProto == null || prototypeProto === Object.prototype)
-          return proto;
-        var constructor = prototypeProto.constructor;
-        if (typeof constructor !== "function")
-          return proto;
-        if (constructor === O2)
-          return proto;
-        return constructor;
-      }
-      function fail(e) {
-        throw e;
-      }
-      function CreateMetadataRegistry() {
-        var fallback;
-        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
-          fallback = CreateFallbackProvider(root.Reflect);
-        }
-        var first;
-        var second;
-        var rest;
-        var targetProviderMap = new _WeakMap();
-        var registry = {
-          registerProvider,
-          getProvider,
-          setProvider
-        };
-        return registry;
-        function registerProvider(provider) {
-          if (!Object.isExtensible(registry)) {
-            throw new Error("Cannot add provider to a frozen registry.");
-          }
-          switch (true) {
-            case fallback === provider:
-              break;
-            case IsUndefined(first):
-              first = provider;
-              break;
-            case first === provider:
-              break;
-            case IsUndefined(second):
-              second = provider;
-              break;
-            case second === provider:
-              break;
-            default:
-              if (rest === void 0)
-                rest = new _Set();
-              rest.add(provider);
-              break;
-          }
-        }
-        function getProviderNoCache(O2, P) {
-          if (!IsUndefined(first)) {
-            if (first.isProviderFor(O2, P))
-              return first;
-            if (!IsUndefined(second)) {
-              if (second.isProviderFor(O2, P))
-                return first;
-              if (!IsUndefined(rest)) {
-                var iterator = GetIterator(rest);
-                while (true) {
-                  var next = IteratorStep(iterator);
-                  if (!next) {
-                    return void 0;
-                  }
-                  var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O2, P)) {
-                    IteratorClose(iterator);
-                    return provider;
-                  }
-                }
-              }
-            }
-          }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O2, P)) {
-            return fallback;
-          }
-          return void 0;
-        }
-        function getProvider(O2, P) {
-          var providerMap = targetProviderMap.get(O2);
-          var provider;
-          if (!IsUndefined(providerMap)) {
-            provider = providerMap.get(P);
-          }
-          if (!IsUndefined(provider)) {
-            return provider;
-          }
-          provider = getProviderNoCache(O2, P);
-          if (!IsUndefined(provider)) {
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return provider;
-        }
-        function hasProvider(provider) {
-          if (IsUndefined(provider))
-            throw new TypeError();
-          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
-        }
-        function setProvider(O2, P, provider) {
-          if (!hasProvider(provider)) {
-            throw new Error("Metadata provider not registered.");
-          }
-          var existingProvider = getProvider(O2, P);
-          if (existingProvider !== provider) {
-            if (!IsUndefined(existingProvider)) {
-              return false;
-            }
-            var providerMap = targetProviderMap.get(O2);
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O2, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return true;
-        }
-      }
-      function GetOrCreateMetadataRegistry() {
-        var metadataRegistry2;
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          metadataRegistry2 = root.Reflect[registrySymbol];
-        }
-        if (IsUndefined(metadataRegistry2)) {
-          metadataRegistry2 = CreateMetadataRegistry();
-        }
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          Object.defineProperty(root.Reflect, registrySymbol, {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: metadataRegistry2
-          });
-        }
-        return metadataRegistry2;
-      }
-      function CreateMetadataProvider(registry) {
-        var metadata2 = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O2, P) {
-            var targetMetadata = metadata2.get(O2);
-            if (IsUndefined(targetMetadata))
-              return false;
-            return targetMetadata.has(P);
-          },
-          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
-          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
-          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
-          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
-          OrdinaryDeleteMetadata
-        };
-        metadataRegistry.registerProvider(provider);
-        return provider;
-        function GetOrCreateMetadataMap(O2, P, Create) {
-          var targetMetadata = metadata2.get(O2);
-          var createdTargetMetadata = false;
-          if (IsUndefined(targetMetadata)) {
-            if (!Create)
-              return void 0;
-            targetMetadata = new _Map();
-            metadata2.set(O2, targetMetadata);
-            createdTargetMetadata = true;
-          }
-          var metadataMap = targetMetadata.get(P);
-          if (IsUndefined(metadataMap)) {
-            if (!Create)
-              return void 0;
-            metadataMap = new _Map();
-            targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O2, P, provider)) {
-              targetMetadata.delete(P);
-              if (createdTargetMetadata) {
-                metadata2.delete(O2);
-              }
-              throw new Error("Wrong provider for target.");
-            }
-          }
-          return metadataMap;
-        }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          return ToBoolean(metadataMap.has(MetadataKey));
-        }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return void 0;
-          return metadataMap.get(MetadataKey);
-        }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            true
-          );
-          metadataMap.set(MetadataKey, MetadataValue);
-        }
-        function OrdinaryOwnMetadataKeys2(O2, P) {
-          var keys = [];
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return keys;
-          var keysObj = metadataMap.keys();
-          var iterator = GetIterator(keysObj);
-          var k2 = 0;
-          while (true) {
-            var next = IteratorStep(iterator);
-            if (!next) {
-              keys.length = k2;
-              return keys;
-            }
-            var nextValue = IteratorValue(next);
-            try {
-              keys[k2] = nextValue;
-            } catch (e) {
-              try {
-                IteratorClose(iterator);
-              } finally {
-                throw e;
-              }
-            }
-            k2++;
-          }
-        }
-        function OrdinaryDeleteMetadata(MetadataKey, O2, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O2,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          if (!metadataMap.delete(MetadataKey))
-            return false;
-          if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O2);
-            if (!IsUndefined(targetMetadata)) {
-              targetMetadata.delete(P);
-              if (targetMetadata.size === 0) {
-                metadata2.delete(targetMetadata);
-              }
-            }
-          }
-          return true;
-        }
-      }
-      function CreateFallbackProvider(reflect) {
-        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
-        var metadataOwner = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O2, P) {
-            var metadataPropertySet = metadataOwner.get(O2);
-            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
-              return true;
-            }
-            if (getOwnMetadataKeys2(O2, P).length) {
-              if (IsUndefined(metadataPropertySet)) {
-                metadataPropertySet = new _Set();
-                metadataOwner.set(O2, metadataPropertySet);
-              }
-              metadataPropertySet.add(P);
-              return true;
-            }
-            return false;
-          },
-          OrdinaryDefineOwnMetadata: defineMetadata2,
-          OrdinaryHasOwnMetadata: hasOwnMetadata2,
-          OrdinaryGetOwnMetadata: getOwnMetadata2,
-          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
-          OrdinaryDeleteMetadata: deleteMetadata2
-        };
-        return provider;
-      }
-      function GetMetadataProvider(O2, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O2, P);
-        if (!IsUndefined(registeredProvider)) {
-          return registeredProvider;
-        }
-        if (Create) {
-          if (metadataRegistry.setProvider(O2, P, metadataProvider)) {
-            return metadataProvider;
-          }
-          throw new Error("Illegal state.");
-        }
-        return void 0;
-      }
-    });
-  })(Reflect2 || (Reflect2 = {}));
-  return ReflectLite;
-}
-requireReflectLite();
-function c(t2, n, e) {
-  return Reflect.getOwnMetadata(n, t2, e);
-}
-function i(t2, n, e, u2, f2) {
-  const r = u2(c(t2, n, f2) ?? e());
-  Reflect.defineMetadata(n, r, t2, f2);
-}
-function t(t2) {
-  const o = Object.getPrototypeOf(t2.prototype), r = o?.constructor;
-  return r;
-}
-function* l(...e) {
-  for (const t2 of e) yield* t2;
-}
-var f;
-!(function(e) {
-  e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(f || (f = {}));
-const h = "@inversifyjs/core/classMetadataReflectKey";
-function g() {
-  return { constructorArguments: [], lifecycle: { postConstructMethodNames: /* @__PURE__ */ new Set(), preDestroyMethodNames: /* @__PURE__ */ new Set() }, properties: /* @__PURE__ */ new Map(), scope: void 0 };
-}
-const m = "@inversifyjs/core/pendingClassMetadataCountReflectKey";
-const y = Symbol.for("@inversifyjs/core/InversifyCoreError");
-class M extends Error {
-  [y];
-  kind;
-  constructor(e, t2, n) {
-    super(t2, n), this[y] = true, this.kind = e;
-  }
-  static is(e) {
-    return "object" == typeof e && null !== e && true === e[y];
-  }
-  static isErrorOfKind(e, t2) {
-    return M.is(e) && e.kind === t2;
-  }
-}
-var I, b, w, C, S;
-function N(t2) {
-  const n = c(t2, h) ?? g();
-  if (!(function(t3) {
-    const n2 = c(t3, m);
-    return void 0 !== n2 && 0 !== n2;
-  })(t2)) return (function(e, t3) {
-    const n2 = [];
-    if (t3.length < e.length) throw new M(I.missingInjectionDecorator, `Found unexpected missing metadata on type "${e.name}". "${e.name}" constructor requires at least ${e.length.toString()} arguments, found ${t3.length.toString()} instead.
-Are you using @inject, @multiInject or @unmanaged decorators in every non optional constructor argument?
-
-If you're using typescript and want to rely on auto injection, set "emitDecoratorMetadata" compiler option to true`);
-    for (let e2 = 0; e2 < t3.length; ++e2) void 0 === t3[e2] && n2.push(e2);
-    if (n2.length > 0) throw new M(I.missingInjectionDecorator, `Found unexpected missing metadata on type "${e.name}" at constructor indexes "${n2.join('", "')}".
-
-Are you using @inject, @multiInject or @unmanaged decorators at those indexes?
-
-If you're using typescript and want to rely on auto injection, set "emitDecoratorMetadata" compiler option to true`);
-  })(t2, n.constructorArguments), n;
-  !(function(e, t3) {
-    const n2 = [];
-    for (let i2 = 0; i2 < t3.constructorArguments.length; ++i2) {
-      const o = t3.constructorArguments[i2];
-      void 0 !== o && o.kind !== b.unknown || n2.push(`  - Missing or incomplete metadata for type "${e.name}" at constructor argument with index ${i2.toString()}.
-Every constructor parameter must be decorated either with @inject, @multiInject or @unmanaged decorator.`);
-    }
-    for (const [i2, o] of t3.properties) o.kind === b.unknown && n2.push(`  - Missing or incomplete metadata for type "${e.name}" at property "${i2.toString()}".
-This property must be decorated either with @inject or @multiInject decorator.`);
-    if (0 === n2.length) throw new M(I.unknown, `Unexpected class metadata for type "${e.name}" with uncompletion traces.
-This might be caused by one of the following reasons:
-
-1. A third party library is targeting inversify reflection metadata.
-2. A bug is causing the issue. Consider submiting an issue to fix it.`);
-    throw new M(I.missingInjectionDecorator, `Invalid class metadata at type ${e.name}:
-
-${n2.join("\n\n")}`);
-  })(t2, n);
-}
-!(function(e) {
-  e[e.injectionDecoratorConflict = 0] = "injectionDecoratorConflict", e[e.missingInjectionDecorator = 1] = "missingInjectionDecorator", e[e.planning = 2] = "planning", e[e.resolution = 3] = "resolution", e[e.unknown = 4] = "unknown";
-})(I || (I = {})), (function(e) {
-  e[e.unknown = 32] = "unknown";
-})(b || (b = {})), (function(e) {
-  e.id = "id", e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(w || (w = {}));
-!(function(e) {
-  e.moduleId = "moduleId", e.serviceId = "serviceId";
-})(C || (C = {}));
-function F() {
-  return 0;
-}
-function k(e) {
-  return (t2) => {
-    void 0 !== t2 && t2.kind === b.unknown && i(e, m, F, (e2) => e2 - 1);
-  };
-}
-function $(e, t2) {
-  return (...n) => (i2) => {
-    if (void 0 === i2) return e(...n);
-    if (i2.kind === S.unmanaged) throw new M(I.injectionDecoratorConflict, "Unexpected injection found. Multiple @inject, @multiInject or @unmanaged decorators found");
-    return t2(i2, ...n);
-  };
-}
-function D$1(e) {
-  if (e.kind !== b.unknown && true !== e.isFromTypescriptParamType) throw new M(I.injectionDecoratorConflict, "Unexpected injection found. Multiple @inject, @multiInject or @unmanaged decorators found");
-}
-!(function(e) {
-  e[e.multipleInjection = 0] = "multipleInjection", e[e.singleInjection = 1] = "singleInjection", e[e.unmanaged = 2] = "unmanaged";
-})(S || (S = {}));
-const V = $(function(e, t2, n) {
-  return e === S.multipleInjection ? { chained: n?.chained ?? false, kind: e, name: void 0, optional: false, tags: /* @__PURE__ */ new Map(), value: t2 } : { kind: e, name: void 0, optional: false, tags: /* @__PURE__ */ new Map(), value: t2 };
-}, function(e, t2, n, i2) {
-  return D$1(e), t2 === S.multipleInjection ? { ...e, chained: i2?.chained ?? false, kind: t2, value: n } : { ...e, kind: t2, value: n };
-});
-function O$1(e, t2) {
-  return (n) => {
-    const i2 = n.properties.get(t2);
-    return n.properties.set(t2, e(i2)), n;
-  };
-}
-var E;
-function _(e, t2, n, i2) {
-  if (M.isErrorOfKind(i2, I.injectionDecoratorConflict)) {
-    const o = (function(e2, t3, n2) {
-      if (void 0 === n2) {
-        if (void 0 === t3) throw new M(I.unknown, "Unexpected undefined property and index values");
-        return { kind: E.property, property: t3, targetClass: e2.constructor };
-      }
-      return "number" == typeof n2 ? { index: n2, kind: E.parameter, targetClass: e2 } : { kind: E.method, method: t3, targetClass: e2 };
-    })(e, t2, n);
-    throw new M(I.injectionDecoratorConflict, `Unexpected injection error.
-
-Cause:
-
-${i2.message}
-
-Details
-
-${(function(e2) {
-      switch (e2.kind) {
-        case E.method:
-          return `[class: "${e2.targetClass.name}", method: "${e2.method.toString()}"]`;
-        case E.parameter:
-          return `[class: "${e2.targetClass.name}", index: "${e2.index.toString()}"]`;
-        case E.property:
-          return `[class: "${e2.targetClass.name}", property: "${e2.property.toString()}"]`;
-      }
-    })(o)}`, { cause: i2 });
-  }
-  throw i2;
-}
-function z(e, t2) {
-  return (i$1, o, r) => {
-    try {
-      void 0 === r ? (function(e2, t3) {
-        const i$12 = L$1(e2, t3);
-        return (e3, t4) => {
-          i(e3.constructor, h, g, O$1(i$12(e3), t4));
-        };
-      })(e, t2)(i$1, o) : "number" == typeof r ? (function(e2, t3) {
-        const i$12 = L$1(e2, t3);
-        return (e3, t4, o2) => {
-          if (!/* @__PURE__ */ (function(e4, t5) {
-            return "function" == typeof e4 && void 0 === t5;
-          })(e3, t4)) throw new M(I.injectionDecoratorConflict, `Found an @inject decorator in a non constructor parameter.
-Found @inject decorator at method "${t4?.toString() ?? ""}" at class "${e3.constructor.name}"`);
-          i(e3, h, g, /* @__PURE__ */ (function(e4, t5) {
-            return (n) => {
-              const i2 = n.constructorArguments[t5];
-              return n.constructorArguments[t5] = e4(i2), n;
-            };
-          })(i$12(e3), o2));
-        };
-      })(e, t2)(i$1, o, r) : (function(e2, t3) {
-        const i$12 = L$1(e2, t3);
-        return (e3, t4, o2) => {
-          if (!(function(e4) {
-            return void 0 !== e4.set;
-          })(o2)) throw new M(I.injectionDecoratorConflict, `Found an @inject decorator in a non setter property method.
-Found @inject decorator at method "${t4.toString()}" at class "${e3.constructor.name}"`);
-          i(e3.constructor, h, g, O$1(i$12(e3), t4));
-        };
-      })(e, t2)(i$1, o, r);
-    } catch (e2) {
-      _(i$1, o, r, e2);
-    }
-  };
-}
-function L$1(e, t2) {
-  return (n) => {
-    const i2 = t2(n);
-    return (t3) => (i2(t3), e(t3));
-  };
-}
-function U(e) {
-  return z(V(S.singleInjection, e), k);
-}
-!(function(e) {
-  e[e.method = 0] = "method", e[e.parameter = 1] = "parameter", e[e.property = 2] = "property";
-})(E || (E = {}));
-function X(e, t2, n) {
-  let i2;
-  return e.extendConstructorArguments ?? true ? (i2 = [...t2.constructorArguments], n.constructorArguments.map((e2, t3) => {
-    i2[t3] = e2;
-  })) : i2 = n.constructorArguments, i2;
-}
-function H(e, t2, n) {
-  return e ? /* @__PURE__ */ new Set([...t2, ...n]) : n;
-}
-function J(e, t2, n) {
-  const i2 = e.lifecycle?.extendPostConstructMethods ?? true, o = H(e.lifecycle?.extendPreDestroyMethods ?? true, t2.lifecycle.preDestroyMethodNames, n.lifecycle.preDestroyMethodNames);
-  return { postConstructMethodNames: H(i2, t2.lifecycle.postConstructMethodNames, n.lifecycle.postConstructMethodNames), preDestroyMethodNames: o };
-}
-function Q(e, t2, n) {
-  let i2;
-  return i2 = e.extendProperties ?? true ? new Map(l(t2.properties, n.properties)) : n.properties, i2;
-}
-function Y(e) {
-  return (t2) => {
-    const i$1 = N(e.type);
-    i(t2, h, g, /* @__PURE__ */ (function(e2, t3) {
-      const n = (n2) => ({ constructorArguments: X(e2, t3, n2), lifecycle: J(e2, t3, n2), properties: Q(e2, t3, n2), scope: n2.scope });
-      return n;
-    })(e, i$1));
-  };
-}
-function Z(e) {
-  return (t$1) => {
-    const n = t(t$1);
-    if (void 0 === n) throw new M(I.injectionDecoratorConflict, `Expected base type for type "${t$1.name}", none found.`);
-    Y({ ...e, type: n })(t$1);
-  };
-}
-var fe;
-!(function(e) {
-  e[e.multipleInjection = 0] = "multipleInjection", e[e.singleInjection = 1] = "singleInjection";
-})(fe || (fe = {}));
-var We;
-!(function(e) {
-  e.bindingAdded = "bindingAdded", e.bindingRemoved = "bindingRemoved";
-})(We || (We = {}));
-var O;
-!(function(e) {
-  e[e.invalidOperation = 0] = "invalidOperation";
-})(O || (O = {}));
-var __defProp$c = Object.defineProperty;
-var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$c(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$2 = (obj, key, value) => __defNormalProp$4(obj, typeof key !== "symbol" ? key + "" : key, value);
-var __defProp2$2 = Object.defineProperty;
-var __getOwnPropDesc$a = Object.getOwnPropertyDescriptor;
-var __decorateClass$a = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$a(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp2$2(target, key, result);
-  return result;
-};
-let VariableRepository = class {
-  constructor() {
-    __publicField$2(this, "availableVariables", /* @__PURE__ */ new Map());
-    __publicField$2(this, "availableVariablesByScope", /* @__PURE__ */ new Map());
-    __publicField$2(this, "availableVariablesTypes", /* @__PURE__ */ new Map());
-    __publicField$2(this, "tinyEmitter");
-  }
-  registerVariableType(type2, identifiers2) {
-    if (this.availableVariablesTypes.has(type2)) {
-      throw Error("Multiple registration of the same variable type");
-    }
-    this.availableVariablesTypes.set(type2, identifiers2);
-  }
-  /**
-   * Nimmt die Registrierung eines Variablentyps zurück.
-   *
-   * Gegenstück zu registerVariableType, damit ein Modul seine Registrierung
-   * in deactivate() wieder aufheben kann. Betrifft nur den Typ; angelegte
-   * Variablen werden über removeVariable entfernt.
-   *
-   * @returns ob der Typ registriert war
-   */
-  unregisterVariableType(type2) {
-    return this.availableVariablesTypes.delete(type2);
-  }
-  getRegisteredVariableTypes() {
-    return Array.from(this.availableVariablesTypes.keys());
-  }
-  getVariableIdentifiers(type2) {
-    return this.availableVariablesTypes.get(type2);
-  }
-  registerVariable(name, type2, config) {
-    const identifiers2 = this.availableVariablesTypes.get(type2);
-    if (identifiers2) {
-      const variableFactory = container.get(identifiers2.Variable);
-      const variable = variableFactory(name, config);
-      const scope = config.scope || "global";
-      const scopeKey = config.pageId && scope === "page" ? `${scope}-${config.pageId}` : scope;
-      if (!this.availableVariablesByScope.has(scopeKey)) {
-        this.availableVariablesByScope.set(scopeKey, /* @__PURE__ */ new Map());
-      }
-      this.availableVariablesByScope.get(scopeKey).set(name, variable);
-      if (!config.scope || config.scope === "global") {
-        this.availableVariables.set(name, variable);
-      }
-    }
-  }
-  getVariable(name) {
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(name)) {
-        return scopeMap.get(name);
-      }
-    }
-    if (this.availableVariables.has(name)) {
-      return this.availableVariables.get(name);
-    }
-    return void 0;
-  }
-  getVariableWithContext(name, pageId) {
-    if (pageId) {
-      const pageScopeKey = `page-${pageId}`;
-      const pageScope = this.availableVariablesByScope.get(pageScopeKey);
-      if (pageScope && pageScope.has(name)) {
-        return pageScope.get(name);
-      }
-    }
-    const globalScope = this.availableVariablesByScope.get("global");
-    if (globalScope && globalScope.has(name)) {
-      return globalScope.get(name);
-    }
-    return this.availableVariables.get(name);
-  }
-  getVariableById(id) {
-    for (const scopeMap of this.availableVariablesByScope.values()) {
-      for (const variable of scopeMap.values()) {
-        if (variable.id === id) {
-          return variable;
-        }
-      }
-    }
-    for (const variable of this.availableVariables.values()) {
-      if (variable.id === id) {
-        return variable;
-      }
-    }
-    return void 0;
-  }
-  removeVariable(nameOrId) {
-    let variableToRemove = this.getVariableById(nameOrId);
-    let nameToRemove = nameOrId;
-    if (variableToRemove) {
-      nameToRemove = variableToRemove.name;
-      const scope = variableToRemove.scope || "global";
-      const scopeKey = variableToRemove.pageId && scope === "page" ? `page-${variableToRemove.pageId}` : scope;
-      const scopeMap = this.availableVariablesByScope.get(scopeKey);
-      if (scopeMap) {
-        scopeMap.delete(nameToRemove);
-      }
-    }
-    if (this.availableVariables.has(nameToRemove)) {
-      this.availableVariables.delete(nameToRemove);
-    }
-  }
-  getAllVariables() {
-    const allVariables = /* @__PURE__ */ new Map();
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        allVariables.set(variable.id, [variable.name, variable]);
-      }
-    }
-    for (const [name, variable] of this.availableVariables) {
-      if (variable.id && !allVariables.has(variable.id)) {
-        allVariables.set(variable.id, [name, variable]);
-      }
-    }
-    return Array.from(allVariables.values());
-  }
-  renameVariable(newname, oldname) {
-    let avar = null;
-    let foundScopeKey = null;
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      if (scopeMap.has(oldname)) {
-        avar = scopeMap.get(oldname);
-        foundScopeKey = scopeKey;
-        break;
-      }
-    }
-    if (!avar) {
-      avar = this.availableVariables.get(oldname);
-      if (avar) {
-        foundScopeKey = "old-system";
-      }
-    }
-    if (avar && foundScopeKey) {
-      if (foundScopeKey !== "old-system") {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
-        if (scopeMap) {
-          scopeMap.set(newname, avar);
-          scopeMap.delete(oldname);
-        }
-      }
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar);
-        this.availableVariables.delete(oldname);
-      }
-    }
-  }
-  renameVariableById(id, newname) {
-    let avar = null;
-    let foundScopeKey = null;
-    let oldname = null;
-    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
-      for (const [name, variable] of scopeMap) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = scopeKey;
-          oldname = name;
-          break;
-        }
-      }
-      if (avar) break;
-    }
-    if (!avar) {
-      for (const [name, variable] of this.availableVariables) {
-        if (variable.id === id) {
-          avar = variable;
-          foundScopeKey = "old-system";
-          oldname = name;
-          break;
-        }
-      }
-    }
-    if (avar && foundScopeKey && oldname) {
-      if (foundScopeKey !== "old-system") {
-        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
-        if (scopeMap) {
-          scopeMap.set(newname, avar);
-          scopeMap.delete(oldname);
-        }
-      }
-      if (this.availableVariables.has(oldname)) {
-        this.availableVariables.set(newname, avar);
-        this.availableVariables.delete(oldname);
-      }
-    }
-  }
-  getVariablesByScope(scope, pageId) {
-    const allVars = Array.from(this.availableVariables);
-    return allVars.filter(([name, variable]) => {
-      if (scope === "global") {
-        return variable.scope === "global";
-      } else {
-        return variable.scope === "page" && variable.pageId === pageId;
-      }
-    });
-  }
-  getVariableWithPageContext(pageId, name) {
-    const pageVar = this.getVariablesByScope("page", pageId).find(([varName]) => varName === name);
-    if (pageVar) {
-      return pageVar[1];
-    }
-    return this.getVariable(name);
-  }
-  /**
-   * Sets or updates a global variable (Action method)
-   */
-  setGlobalVariable(variableName, value) {
-    const existingVar = this.getVariable(variableName);
-    if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "global"
-      });
-    }
-  }
-  /**
-   * Sets or updates a page-scoped variable (Action method)
-   */
-  setPageVariable(variableName, value, pageId) {
-    const existingVar = this.getVariableWithContext(variableName, pageId);
-    if (existingVar && typeof existingVar.set === "function") {
-      existingVar.set(value);
-    } else if (existingVar) {
-      existingVar.value = value;
-    } else {
-      this.registerVariable(variableName, "constant", {
-        value,
-        scope: "page",
-        pageId
-      });
-    }
-  }
-};
-__decorateClass$a([
-  inject("TINY_EMITTER")
-], VariableRepository.prototype, "tinyEmitter", 2);
-VariableRepository = __decorateClass$a([
-  injectable()
-], VariableRepository);
-loggerFactory.createLogger("daanse:variable:actions");
-const VARIABLE_REPOSITORY = "VariableRepository";
-const identifier$1 = Symbol.for(VARIABLE_REPOSITORY);
-const PAGE_CONTEXT = "PageContext";
-const identifier = Symbol.for(PAGE_CONTEXT);
 const byteToHex = [];
-for (let i2 = 0; i2 < 256; ++i2) {
-  byteToHex.push((i2 + 256).toString(16).slice(1));
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 256).toString(16).slice(1));
 }
 function unsafeStringify(arr, offset = 0) {
   return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
@@ -21440,605 +20211,11 @@ function _v4(options, buf, offset) {
 }
 var __defProp$b = Object.defineProperty;
 var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$b(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$3(obj, typeof key !== "symbol" ? key + "" : key, value);
-class AccessError extends Error {
-  constructor(name) {
-    super();
-    __publicField$1(this, "name");
-    __publicField$1(this, "message", "Access Error on Variable Scope");
-    this.name = name;
+var __publicField$1 = (obj, key, value) => __defNormalProp$3(obj, key + "", value);
+function requireParameterFactory() {
+  {
+    throw new Error("ComputedStoreParameter factory not provided - is lib.variables active?");
   }
-}
-var __defProp$1$1 = Object.defineProperty;
-var __decorateClass$5$1 = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp$1$1(target, key, result);
-  return result;
-};
-class Variable {
-  constructor() {
-    __publicField$1(this, "subscribers", []);
-    __publicField$1(this, "innerValue");
-    __publicField$1(this, "intervalFn", () => {
-    });
-    __publicField$1(this, "description", "");
-    __publicField$1(this, "refreshInterval", 0);
-    __publicField$1(this, "refreshType", RefreshType.None);
-    __publicField$1(this, "refreshIntervalId", 0);
-    __publicField$1(this, "refreshTrigger", null);
-    __publicField$1(this, "id", v4());
-    __publicField$1(this, "type", null);
-    __publicField$1(this, "name", null);
-    __publicField$1(this, "scope", "global");
-    __publicField$1(this, "accessMode", "external-writable");
-    __publicField$1(this, "pageId");
-    __publicField$1(this, "eventBus");
-    __publicField$1(this, "pageContextService");
-    __publicField$1(this, "storage");
-  }
-  init(name, config) {
-    this.name = name;
-    this.scope = config.scope || "global";
-    this.accessMode = config.accessMode || "external-writable";
-    this.pageId = config.pageId;
-    this.update(config);
-  }
-  rename(newName) {
-    this.name = newName;
-  }
-  update(config) {
-    var _a, _b;
-    this.description = config.description;
-    this.refreshInterval = config.refreshInterval || 0;
-    this.refreshInterval = Math.max(this.refreshInterval, 300);
-    this.refreshType = config.refreshType || RefreshType.None;
-    this.refreshTrigger = config.refreshTrigger || null;
-    if (this.refreshType === RefreshType.Interval) {
-      if (this.refreshInterval) {
-        this.refreshIntervalId = setInterval(() => {
-          this.intervalFn();
-        }, this.refreshInterval);
-      }
-    } else if (this.refreshType === RefreshType.Trigger) {
-      if (this.refreshTrigger) {
-        (_a = this.eventBus) == null ? void 0 : _a.on(this.refreshTrigger, () => {
-          this.intervalFn();
-        });
-      }
-    }
-    (_b = this.eventBus) == null ? void 0 : _b.emit(VariableEvents.VariableUpdated);
-  }
-  set onInterval(onInterval) {
-    this.intervalFn = onInterval;
-  }
-  get value() {
-    var _a;
-    const currentPageId = (_a = this.pageContextService) == null ? void 0 : _a.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
-    return this.innerValue;
-  }
-  set value(value) {
-    var _a;
-    const currentPageId = (_a = this.pageContextService) == null ? void 0 : _a.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
-    if (this.accessMode == "readonly") {
-      throw new AccessError(this.name);
-    }
-    console.log("Setting value, current page:", currentPageId);
-    this.innerValue = value;
-    console.log("Value changed");
-    console.log(this.subscribers[0]);
-    this.subscribers.forEach((subscriber) => subscriber());
-  }
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
-  }
-  unsubscribe(subscriber) {
-    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
-  }
-  getSubscriptions() {
-    return this.subscribers;
-  }
-  notyfy() {
-    var _a;
-    (_a = this.eventBus) == null ? void 0 : _a.emit(VariableEvents.VariableUpdated);
-    this.subscribers.forEach((subscriber) => subscriber());
-  }
-  forceUpdate() {
-  }
-  clearInterval() {
-    clearInterval(this.refreshIntervalId);
-  }
-  clearTrigger() {
-    var _a;
-    if (this.refreshTrigger) {
-      (_a = this.eventBus) == null ? void 0 : _a.off(this.refreshTrigger);
-    }
-  }
-  canWriteFromPage() {
-    return this.accessMode === "page-only" || this.accessMode === "external-writable";
-  }
-  canWriteFromExternal() {
-    return this.accessMode === "external-writable";
-  }
-  serialize() {
-    const ret = {
-      id: this.id,
-      name: this.name,
-      description: this.description,
-      refreshType: this.refreshType,
-      refreshInterval: this.refreshInterval ?? void 0,
-      type: this.type,
-      scope: this.scope,
-      accessMode: this.accessMode,
-      pageId: this.pageId
-    };
-    return ret;
-  }
-}
-__decorateClass$5$1([
-  U(identifiers$1.TINY_EMITTER)
-], Variable.prototype, "eventBus");
-__decorateClass$5$1([
-  U(identifier)
-], Variable.prototype, "pageContextService");
-var __getOwnPropDesc$3$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$4$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const TYPE$3 = "ComputedVariable";
-const symbol$5 = Symbol.for(TYPE$3);
-let ComputedVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerExpression", "");
-    __publicField$1(this, "type", TYPE$3);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.innerExpression = config.expression;
-    this.initSubscriptions();
-  }
-  update(config) {
-    super.update(config);
-    this.expression = config.expression;
-    this.initSubscriptions();
-  }
-  get expression() {
-    return this.innerExpression;
-  }
-  set expression(expression) {
-    this.innerExpression = expression;
-    this.initSubscriptions();
-  }
-  // TODO: Think if the inner value is necessary
-  get value() {
-    try {
-      return this.computeValue();
-    } catch (e) {
-      return `Incorrect expression: ${this.innerExpression}`;
-    }
-  }
-  getDependencies() {
-    const regexp = /\$(\S+)*/gm;
-    const dependencies = [];
-    let m2;
-    while ((m2 = regexp.exec(this.innerExpression)) !== null) {
-      if (m2.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m2[1]);
-    }
-    return dependencies;
-  }
-  computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    dependencies.forEach((dep) => {
-      var _a, _b, _c, _d, _e2, _f;
-      result = result.replace(
-        `$${dep}`,
-        typeof ((_b = (_a = this.storage) == null ? void 0 : _a.getVariable(dep)) == null ? void 0 : _b.value) === "number" ? (_d = (_c = this.storage) == null ? void 0 : _c.getVariable(dep)) == null ? void 0 : _d.value : `'${(_f = (_e2 = this.storage) == null ? void 0 : _e2.getVariable(dep)) == null ? void 0 : _f.value}'`
-      );
-    });
-    const execFn = new Function(`return ${result}`);
-    return execFn();
-  }
-  initSubscriptions() {
-    const dependencies = this.getDependencies();
-    dependencies.forEach((dep) => {
-      var _a;
-      console.log(dep);
-      const depencencyVariable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (depencencyVariable) {
-        depencencyVariable.subscribe(() => {
-          console.log("dep changed", dep);
-          this.notyfy();
-          console.log("Variable changed");
-        });
-      } else {
-        console.log("dep pending:", dep);
-      }
-    });
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.expression = this.innerExpression;
-    ret.type = this.type;
-    return ret;
-  }
-};
-ComputedVariable = __decorateClass$4$1([
-  Z({
-    extendProperties: true
-  })
-], ComputedVariable);
-if (!container.isBound(ComputedVariable)) {
-  container.bind(ComputedVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$5)) {
-  container.bind(symbol$5).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(ComputedVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-const TYPE$2 = "ConstantVariable";
-const symbol$4 = Symbol.for(TYPE$2);
-class ConstantVariable extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", TYPE$2);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.value = config.value;
-  }
-  update(config) {
-    super.update(config);
-    this.value = config.value;
-  }
-  get value() {
-    return super.value;
-  }
-  set value(value) {
-    super.value = value;
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.type = this.type;
-    return ret;
-  }
-}
-if (!container.isBound(ConstantVariable)) {
-  container.bind(ConstantVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$4)) {
-  container.bind(symbol$4).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(ConstantVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$2$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$3$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$3 = Symbol.for("QueryVariable");
-let QueryVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerQueryParam", "");
-    __publicField$1(this, "type", "query");
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.parameter = config.queryParam;
-  }
-  get parameter() {
-    return this.innerQueryParam;
-  }
-  set parameter(parameter) {
-    this.innerQueryParam = parameter;
-    const paramValue = new URLSearchParams(window.location.search).get(
-      this.innerQueryParam
-    );
-    super.value = paramValue;
-  }
-  get value() {
-    return super.value;
-  }
-};
-QueryVariable = __decorateClass$3$1([
-  Z({
-    extendProperties: true
-  })
-], QueryVariable);
-if (!container.isBound(QueryVariable)) {
-  container.bind(QueryVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$3)) {
-  container.bind(symbol$3).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(QueryVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$1$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$2$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$2 = Symbol.for("RequestVariable");
-let RequestVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "innerRequest", "");
-    __publicField$1(this, "type", "request");
-    __publicField$1(this, "time", 0);
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.request = config.request;
-    super.onInterval = () => {
-      this.request = config.request;
-    };
-  }
-  get request() {
-    return this.innerRequest;
-  }
-  set request(request) {
-    this.innerRequest = request;
-    fetch(this.innerRequest).then((response) => response.json()).then((data) => {
-      super.value = data;
-    });
-  }
-  get value() {
-    return JSON.stringify(super.value);
-  }
-  set value(value) {
-  }
-};
-RequestVariable = __decorateClass$2$1([
-  Z({
-    extendProperties: true
-  })
-], RequestVariable);
-if (!container.isBound(RequestVariable)) {
-  container.bind(RequestVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$2)) {
-  container.bind(symbol$2).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(RequestVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __getOwnPropDesc$9 = Object.getOwnPropertyDescriptor;
-var __decorateClass$1$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$9(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(result) || result;
-  return result;
-};
-const symbol$1 = Symbol.for("TimeVariable");
-let TimeVariable = class extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", "time");
-  }
-  init(name, config) {
-    super.init(name, config);
-    super.value = Date.now();
-    super.onInterval = () => {
-      super.value = Date.now();
-    };
-  }
-  get value() {
-    return super.value;
-  }
-  set value(value) {
-  }
-};
-TimeVariable = __decorateClass$1$1([
-  Z({
-    extendProperties: true
-  })
-], TimeVariable);
-if (!container.isBound(TimeVariable)) {
-  container.bind(TimeVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol$1)) {
-  container.bind(symbol$1).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(TimeVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-const TYPE$1 = "DateTimePickerVariable";
-const symbol = Symbol.for(TYPE$1);
-class DateTimePickerVariable extends Variable {
-  constructor() {
-    super(...arguments);
-    __publicField$1(this, "type", TYPE$1);
-    __publicField$1(this, "innerDatetime", "");
-  }
-  init(name, config) {
-    super.init(name, config);
-    this.innerDatetime = config.datetime || "";
-  }
-  update(config) {
-    super.update(config);
-    this.innerDatetime = config.datetime || "";
-  }
-  get datetime() {
-    return this.innerDatetime;
-  }
-  set datetime(value) {
-    this.innerDatetime = value;
-    this.notyfy();
-  }
-  get value() {
-    return this.innerDatetime;
-  }
-  set value(value) {
-    this.innerDatetime = value;
-    this.notyfy();
-  }
-  serialize() {
-    const ret = super.serialize();
-    ret.datetime = this.innerDatetime;
-    ret.type = this.type;
-    return ret;
-  }
-}
-if (!container.isBound(DateTimePickerVariable)) {
-  container.bind(DateTimePickerVariable).toSelf().inTransientScope();
-}
-if (!container.isBound(symbol)) {
-  container.bind(symbol).toFactory(() => {
-    return (name, config) => {
-      const variable = container.get(DateTimePickerVariable);
-      variable.init(name, config);
-      return variable;
-    };
-  });
-}
-var __defProp2$1 = Object.defineProperty;
-var __decorateClass$9 = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp2$1(target, key, result);
-  return result;
-};
-class ComputedStoreParameter {
-  constructor() {
-    __publicField$1(this, "innerExpression", "");
-    __publicField$1(this, "currentSubscriptions", /* @__PURE__ */ new Map());
-    __publicField$1(this, "refreshCb", () => {
-    });
-    __publicField$1(this, "eventBus");
-    __publicField$1(this, "storage");
-  }
-  init(expression, refreshCb) {
-    var _a, _b, _c, _d, _e2;
-    this.innerExpression = expression;
-    this.refreshCb = refreshCb;
-    (_a = this.eventBus) == null ? void 0 : _a.on(VariableEvents.VariableCreated, () => {
-      refreshCb();
-    });
-    (_b = this.eventBus) == null ? void 0 : _b.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
-    });
-    (_c = this.eventBus) == null ? void 0 : _c.on(VariableEvents.VariableUpdated, () => {
-      console.log("Variable updated");
-      refreshCb();
-    });
-    (_d = this.eventBus) == null ? void 0 : _d.on(VariableEvents.VariablesCleared, () => {
-      refreshCb();
-    });
-    (_e2 = this.eventBus) == null ? void 0 : _e2.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
-    });
-  }
-  // Case 1: Static string
-  // Case 2: Computed string with variables
-  //      - updated when variables change
-  //      - updated when variables are added or removed
-  getDependencies() {
-    const regexp = /\$([a-zA-Z_][\w]*)/g;
-    const dependencies = [];
-    let m2;
-    while ((m2 = regexp.exec(this.innerExpression)) !== null) {
-      if (m2.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m2[1]);
-    }
-    return dependencies;
-  }
-  computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    if (dependencies.length === 0) {
-      return result;
-    }
-    this.currentSubscriptions.forEach((subFn, key) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(key);
-      if (variable) {
-        variable.unsubscribe(subFn);
-      }
-    });
-    this.currentSubscriptions.clear();
-    dependencies.forEach((dep) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (variable) {
-        const subFn = () => {
-          this.refreshCb();
-        };
-        this.currentSubscriptions.set(dep, subFn);
-        variable.subscribe(subFn);
-      }
-    });
-    dependencies.forEach((dep) => {
-      var _a;
-      const variable = (_a = this.storage) == null ? void 0 : _a.getVariable(dep);
-      if (variable && variable.value !== void 0) {
-        result = result.replace(
-          `$${dep}`,
-          typeof variable.value === "number" ? variable.value.toString() : `${variable.value}`
-        );
-      }
-    });
-    return result;
-  }
-  get value() {
-    return this.computeValue();
-  }
-}
-__decorateClass$9([
-  U(identifiers$1.TINY_EMITTER)
-], ComputedStoreParameter.prototype, "eventBus");
-__decorateClass$9([
-  U(identifier$1)
-], ComputedStoreParameter.prototype, "storage");
-if (!container.isBound(ComputedStoreParameter)) {
-  container.bind(ComputedStoreParameter).toSelf().inTransientScope();
 }
 class UsesComputedVariable {
   constructor() {
@@ -22049,30 +20226,13 @@ class UsesComputedVariable {
     this.updateCb = cb;
   }
   initVariable(expression) {
-    const computedStoreParameter = container.get(
-      ComputedStoreParameter
-    );
+    const computedStoreParameter = requireParameterFactory()();
     computedStoreParameter.init(expression, () => {
       this.updateCb();
     });
     return computedStoreParameter;
   }
 }
-var VariableEvents = /* @__PURE__ */ ((VariableEvents2) => {
-  VariableEvents2["VariableUpdated"] = "VariableUpdated";
-  VariableEvents2["VariableDeleted"] = "VariableDeleted";
-  VariableEvents2["VariableCreated"] = "VariableCreated";
-  VariableEvents2["VariablesCleared"] = "VariablesCleared";
-  VariableEvents2["VariableRemoved"] = "VariableRemoved";
-  return VariableEvents2;
-})(VariableEvents || {});
-var RefreshType = /* @__PURE__ */ ((RefreshType2) => {
-  RefreshType2["None"] = "None";
-  RefreshType2["Reactive"] = "Reactive";
-  RefreshType2["Interval"] = "Interval";
-  RefreshType2["Trigger"] = "Trigger";
-  return RefreshType2;
-})(RefreshType || {});
 class BaseDatasource extends UsesComputedVariable {
   constructor() {
     super(...arguments);
@@ -23922,9 +22082,9 @@ const transformFromThingLocationDastreamToLocationThingDatastream = (things) => 
       if (!location.things) {
         location.things = [];
       }
-      const isAlreadyinLocation = locations.find((l2) => l2.iotId === location.iotId);
+      const isAlreadyinLocation = locations.find((l) => l.iotId === location.iotId);
       if (isAlreadyinLocation) {
-        const allredyexistingThing = isAlreadyinLocation.Things ?? [].find((t2) => t2.iotId == thing.iotId);
+        const allredyexistingThing = isAlreadyinLocation.Things ?? [].find((t) => t.iotId == thing.iotId);
         if (!allredyexistingThing) {
           if (!isAlreadyinLocation.Things) {
             isAlreadyinLocation.Things = [];
@@ -24113,8 +22273,8 @@ var __defProp2 = Object.defineProperty;
 var __getOwnPropDesc$8 = Object.getOwnPropertyDescriptor;
 var __decorateClass$8 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$8(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp2(target, key, result);
   return result;
@@ -24348,7 +22508,7 @@ let OgcStaStore = class extends BaseDatasource {
         }
         if (type2 == "OGCSTAData") {
           return {
-            things: isolatedData.things ? isolatedData.things.map((t2) => ({ ...t2 })) : [],
+            things: isolatedData.things ? isolatedData.things.map((t) => ({ ...t })) : [],
             datastreams: isolatedData.datastreams ? [...isolatedData.datastreams] : [],
             observations: isolatedData.observations ? [...isolatedData.observations] : [],
             locations: isolatedData.locations ? isolatedData.locations.map((loc) => ({ ...loc })) : []
@@ -24404,7 +22564,7 @@ let OgcStaStore = class extends BaseDatasource {
     }
     if (type2 == "OGCSTAData") {
       return {
-        things: this.resultMap.things ? this.resultMap.things.map((t2) => ({ ...t2 })) : [],
+        things: this.resultMap.things ? this.resultMap.things.map((t) => ({ ...t })) : [],
         datastreams: this.resultMap.datastreams ? [...this.resultMap.datastreams] : [],
         observations: this.resultMap.observations ? [...this.resultMap.observations] : [],
         locations: this.resultMap.locations ? this.resultMap.locations.map((loc) => ({ ...loc })) : []
@@ -24840,7 +23000,7 @@ let OgcStaStore = class extends BaseDatasource {
           const locations = historicalLocation.Locations;
           if (locations && locations.length > 0) {
             this.logHistory(`📍 Found historical location for thing ${thingId}:`, locations[0]);
-            const thing = (_n = this.resultMap.things) == null ? void 0 : _n.find((t2) => t2.iotId === thingId);
+            const thing = (_n = this.resultMap.things) == null ? void 0 : _n.find((t) => t.iotId === thingId);
             if (thing) {
               this.logHistory(`🔵 BEFORE UPDATE - Thing ${thingId} current location:`, JSON.stringify(thing.locations));
             }
@@ -24866,7 +23026,7 @@ let OgcStaStore = class extends BaseDatasource {
                 if (!existingLocation.things) {
                   existingLocation.things = [];
                 }
-                if (thing && !existingLocation.things.find((t2) => t2.iotId === thingId)) {
+                if (thing && !existingLocation.things.find((t) => t.iotId === thingId)) {
                   existingLocation.things.push(thing);
                   this.logHistory(`📍 Added thing ${thingId} back to location ${location.iotId}`);
                 }
@@ -24879,7 +23039,7 @@ let OgcStaStore = class extends BaseDatasource {
           }
         } else {
           this.logHistory(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
-          const thing = (_r = this.resultMap.things) == null ? void 0 : _r.find((t2) => t2.iotId === thingId);
+          const thing = (_r = this.resultMap.things) == null ? void 0 : _r.find((t) => t.iotId === thingId);
           for (const datastream of this.resultMap.datastreams || []) {
             if (datastream.thing && datastream.thing.iotId === thingId) {
               datastream.thing.locations = [];
@@ -24892,7 +23052,7 @@ let OgcStaStore = class extends BaseDatasource {
           }
           for (const location of this.resultMap.locations || []) {
             if (location.things) {
-              const thingIndex = location.things.findIndex((t2) => t2.iotId === thingId);
+              const thingIndex = location.things.findIndex((t) => t.iotId === thingId);
               if (thingIndex !== -1) {
                 location.things.splice(thingIndex, 1);
                 this.logHistory(`📍 Removed thing ${thingId} from location ${location.iotId}`);
@@ -24959,7 +23119,7 @@ let OgcStaStore = class extends BaseDatasource {
                 if (locations && locations.length > 0) {
                   const location = locations[0];
                   this.logHistory(`📍 Found historical location for thing ${thingId}:`, location);
-                  const thingInMap = (_i = this.resultMap.things) == null ? void 0 : _i.find((t2) => t2.iotId === thingId);
+                  const thingInMap = (_i = this.resultMap.things) == null ? void 0 : _i.find((t) => t.iotId === thingId);
                   if (thingInMap) {
                     thingInMap.locations = [location];
                   }
@@ -24973,7 +23133,7 @@ let OgcStaStore = class extends BaseDatasource {
                   const existingLocation = (_k = this.resultMap.locations) == null ? void 0 : _k.find(
                     (loc) => {
                       var _a3;
-                      return (_a3 = loc.things) == null ? void 0 : _a3.some((t2) => t2.iotId === thingId);
+                      return (_a3 = loc.things) == null ? void 0 : _a3.some((t) => t.iotId === thingId);
                     }
                   );
                   if (existingLocation) {
@@ -25313,7 +23473,7 @@ function isNumber(num) {
 }
 function coordEach(geojson, callback, excludeWrapCoord) {
   if (geojson === null) return;
-  var j, k2, l2, geometry, stopG, coords, geometryMaybeCollection, wrapShrink = 0, coordIndex = 0, isGeometryCollection, type2 = geojson.type, isFeatureCollection = type2 === "FeatureCollection", isFeature = type2 === "Feature", stop = isFeatureCollection ? geojson.features.length : 1;
+  var j, k2, l, geometry, stopG, coords, geometryMaybeCollection, wrapShrink = 0, coordIndex = 0, isGeometryCollection, type2 = geojson.type, isFeatureCollection = type2 === "FeatureCollection", isFeature = type2 === "Feature", stop = isFeatureCollection ? geojson.features.length : 1;
   for (var featureIndex = 0; featureIndex < stop; featureIndex++) {
     geometryMaybeCollection = isFeatureCollection ? geojson.features[featureIndex].geometry : isFeature ? geojson.geometry : geojson;
     isGeometryCollection = geometryMaybeCollection ? geometryMaybeCollection.type === "GeometryCollection" : false;
@@ -25380,9 +23540,9 @@ function coordEach(geojson, callback, excludeWrapCoord) {
           for (j = 0; j < coords.length; j++) {
             geometryIndex = 0;
             for (k2 = 0; k2 < coords[j].length; k2++) {
-              for (l2 = 0; l2 < coords[j][k2].length - wrapShrink; l2++) {
+              for (l = 0; l < coords[j][k2].length - wrapShrink; l++) {
                 if (callback(
-                  coords[j][k2][l2],
+                  coords[j][k2][l],
                   coordIndex,
                   featureIndex,
                   multiFeatureIndex,
@@ -25411,8 +23571,8 @@ function featureEach(geojson, callback) {
   if (geojson.type === "Feature") {
     callback(geojson, 0);
   } else if (geojson.type === "FeatureCollection") {
-    for (var i2 = 0; i2 < geojson.features.length; i2++) {
-      if (callback(geojson.features[i2], i2) === false) break;
+    for (var i = 0; i < geojson.features.length; i++) {
+      if (callback(geojson.features[i], i) === false) break;
     }
   }
 }
@@ -25441,80 +23601,80 @@ const epsilon = 11102230246251565e-32;
 const splitter = 134217729;
 const resulterrbound = (3 + 8 * epsilon) * epsilon;
 function sum(elen, e, flen, f2, h2) {
-  let Q2, Qnew, hh, bvirt;
+  let Q, Qnew, hh, bvirt;
   let enow = e[0];
   let fnow = f2[0];
   let eindex = 0;
   let findex = 0;
   if (fnow > enow === fnow > -enow) {
-    Q2 = enow;
+    Q = enow;
     enow = e[++eindex];
   } else {
-    Q2 = fnow;
+    Q = fnow;
     fnow = f2[++findex];
   }
   let hindex = 0;
   if (eindex < elen && findex < flen) {
     if (fnow > enow === fnow > -enow) {
-      Qnew = enow + Q2;
-      hh = Q2 - (Qnew - enow);
+      Qnew = enow + Q;
+      hh = Q - (Qnew - enow);
       enow = e[++eindex];
     } else {
-      Qnew = fnow + Q2;
-      hh = Q2 - (Qnew - fnow);
+      Qnew = fnow + Q;
+      hh = Q - (Qnew - fnow);
       fnow = f2[++findex];
     }
-    Q2 = Qnew;
+    Q = Qnew;
     if (hh !== 0) {
       h2[hindex++] = hh;
     }
     while (eindex < elen && findex < flen) {
       if (fnow > enow === fnow > -enow) {
-        Qnew = Q2 + enow;
-        bvirt = Qnew - Q2;
-        hh = Q2 - (Qnew - bvirt) + (enow - bvirt);
+        Qnew = Q + enow;
+        bvirt = Qnew - Q;
+        hh = Q - (Qnew - bvirt) + (enow - bvirt);
         enow = e[++eindex];
       } else {
-        Qnew = Q2 + fnow;
-        bvirt = Qnew - Q2;
-        hh = Q2 - (Qnew - bvirt) + (fnow - bvirt);
+        Qnew = Q + fnow;
+        bvirt = Qnew - Q;
+        hh = Q - (Qnew - bvirt) + (fnow - bvirt);
         fnow = f2[++findex];
       }
-      Q2 = Qnew;
+      Q = Qnew;
       if (hh !== 0) {
         h2[hindex++] = hh;
       }
     }
   }
   while (eindex < elen) {
-    Qnew = Q2 + enow;
-    bvirt = Qnew - Q2;
-    hh = Q2 - (Qnew - bvirt) + (enow - bvirt);
+    Qnew = Q + enow;
+    bvirt = Qnew - Q;
+    hh = Q - (Qnew - bvirt) + (enow - bvirt);
     enow = e[++eindex];
-    Q2 = Qnew;
+    Q = Qnew;
     if (hh !== 0) {
       h2[hindex++] = hh;
     }
   }
   while (findex < flen) {
-    Qnew = Q2 + fnow;
-    bvirt = Qnew - Q2;
-    hh = Q2 - (Qnew - bvirt) + (fnow - bvirt);
+    Qnew = Q + fnow;
+    bvirt = Qnew - Q;
+    hh = Q - (Qnew - bvirt) + (fnow - bvirt);
     fnow = f2[++findex];
-    Q2 = Qnew;
+    Q = Qnew;
     if (hh !== 0) {
       h2[hindex++] = hh;
     }
   }
-  if (Q2 !== 0 || hindex === 0) {
-    h2[hindex++] = Q2;
+  if (Q !== 0 || hindex === 0) {
+    h2[hindex++] = Q;
   }
   return hindex;
 }
 function estimate(elen, e) {
-  let Q2 = e[0];
-  for (let i2 = 1; i2 < elen; i2++) Q2 += e[i2];
-  return Q2;
+  let Q = e[0];
+  for (let i = 1; i < elen; i++) Q += e[i];
+  return Q;
 }
 function vec(n) {
   return new Float64Array(n);
@@ -25529,25 +23689,25 @@ const D = vec(16);
 const u = vec(4);
 function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
   let acxtail, acytail, bcxtail, bcytail;
-  let bvirt, c2, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
+  let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
   const acx = ax - cx;
   const bcx = bx - cx;
   const acy = ay - cy;
   const bcy = by - cy;
   s1 = acx * bcy;
-  c2 = splitter * acx;
-  ahi = c2 - (c2 - acx);
+  c = splitter * acx;
+  ahi = c - (c - acx);
   alo = acx - ahi;
-  c2 = splitter * bcy;
-  bhi = c2 - (c2 - bcy);
+  c = splitter * bcy;
+  bhi = c - (c - bcy);
   blo = bcy - bhi;
   s0 = alo * blo - (s1 - ahi * bhi - alo * bhi - ahi * blo);
   t1 = acy * bcx;
-  c2 = splitter * acy;
-  ahi = c2 - (c2 - acy);
+  c = splitter * acy;
+  ahi = c - (c - acy);
   alo = acy - ahi;
-  c2 = splitter * bcx;
-  bhi = c2 - (c2 - bcx);
+  c = splitter * bcx;
+  bhi = c - (c - bcx);
   blo = bcx - bhi;
   t0 = alo * blo - (t1 - ahi * bhi - alo * bhi - ahi * blo);
   _i = s0 - t0;
@@ -25583,19 +23743,19 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
   det += acx * bcytail + bcy * acxtail - (acy * bcxtail + bcx * acytail);
   if (det >= errbound || -det >= errbound) return det;
   s1 = acxtail * bcy;
-  c2 = splitter * acxtail;
-  ahi = c2 - (c2 - acxtail);
+  c = splitter * acxtail;
+  ahi = c - (c - acxtail);
   alo = acxtail - ahi;
-  c2 = splitter * bcy;
-  bhi = c2 - (c2 - bcy);
+  c = splitter * bcy;
+  bhi = c - (c - bcy);
   blo = bcy - bhi;
   s0 = alo * blo - (s1 - ahi * bhi - alo * bhi - ahi * blo);
   t1 = acytail * bcx;
-  c2 = splitter * acytail;
-  ahi = c2 - (c2 - acytail);
+  c = splitter * acytail;
+  ahi = c - (c - acytail);
   alo = acytail - ahi;
-  c2 = splitter * bcx;
-  bhi = c2 - (c2 - bcx);
+  c = splitter * bcx;
+  bhi = c - (c - bcx);
   blo = bcx - bhi;
   t0 = alo * blo - (t1 - ahi * bhi - alo * bhi - ahi * blo);
   _i = s0 - t0;
@@ -25613,19 +23773,19 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
   u[3] = u3;
   const C1len = sum(4, B, 4, u, C1);
   s1 = acx * bcytail;
-  c2 = splitter * acx;
-  ahi = c2 - (c2 - acx);
+  c = splitter * acx;
+  ahi = c - (c - acx);
   alo = acx - ahi;
-  c2 = splitter * bcytail;
-  bhi = c2 - (c2 - bcytail);
+  c = splitter * bcytail;
+  bhi = c - (c - bcytail);
   blo = bcytail - bhi;
   s0 = alo * blo - (s1 - ahi * bhi - alo * bhi - ahi * blo);
   t1 = acy * bcxtail;
-  c2 = splitter * acy;
-  ahi = c2 - (c2 - acy);
+  c = splitter * acy;
+  ahi = c - (c - acy);
   alo = acy - ahi;
-  c2 = splitter * bcxtail;
-  bhi = c2 - (c2 - bcxtail);
+  c = splitter * bcxtail;
+  bhi = c - (c - bcxtail);
   blo = bcxtail - bhi;
   t0 = alo * blo - (t1 - ahi * bhi - alo * bhi - ahi * blo);
   _i = s0 - t0;
@@ -25643,19 +23803,19 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
   u[3] = u3;
   const C2len = sum(C1len, C1, 4, u, C2);
   s1 = acxtail * bcytail;
-  c2 = splitter * acxtail;
-  ahi = c2 - (c2 - acxtail);
+  c = splitter * acxtail;
+  ahi = c - (c - acxtail);
   alo = acxtail - ahi;
-  c2 = splitter * bcytail;
-  bhi = c2 - (c2 - bcytail);
+  c = splitter * bcytail;
+  bhi = c - (c - bcytail);
   blo = bcytail - bhi;
   s0 = alo * blo - (s1 - ahi * bhi - alo * bhi - ahi * blo);
   t1 = acytail * bcxtail;
-  c2 = splitter * acytail;
-  ahi = c2 - (c2 - acytail);
+  c = splitter * acytail;
+  ahi = c - (c - acytail);
   alo = acytail - ahi;
-  c2 = splitter * bcxtail;
-  bhi = c2 - (c2 - bcxtail);
+  c = splitter * bcxtail;
+  bhi = c - (c - bcxtail);
   blo = bcxtail - bhi;
   t0 = alo * blo - (t1 - ahi * bhi - alo * bhi - ahi * blo);
   _i = s0 - t0;
@@ -25683,7 +23843,7 @@ function orient2d(ax, ay, bx, by, cx, cy) {
   return -orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }
 function pointInPolygon(p, polygon) {
-  var i2;
+  var i;
   var ii;
   var k2 = 0;
   var f2;
@@ -25694,22 +23854,22 @@ function pointInPolygon(p, polygon) {
   var currentP;
   var nextP;
   var x2 = p[0];
-  var y2 = p[1];
+  var y = p[1];
   var numContours = polygon.length;
-  for (i2 = 0; i2 < numContours; i2++) {
+  for (i = 0; i < numContours; i++) {
     ii = 0;
-    var contour = polygon[i2];
+    var contour = polygon[i];
     var contourLen = contour.length - 1;
     currentP = contour[0];
     if (currentP[0] !== contour[contourLen][0] && currentP[1] !== contour[contourLen][1]) {
       throw new Error("First and last coordinates in a ring must be the same");
     }
     u1 = currentP[0] - x2;
-    v1 = currentP[1] - y2;
+    v1 = currentP[1] - y;
     for (ii; ii < contourLen; ii++) {
       nextP = contour[ii + 1];
       u2 = nextP[0] - x2;
-      v2 = nextP[1] - y2;
+      v2 = nextP[1] - y;
       if (v1 === 0 && v2 === 0) {
         if (u2 <= 0 && u1 >= 0 || u1 <= 0 && u2 >= 0) {
           return 0;
@@ -25775,8 +23935,8 @@ function booleanPointInPolygon(point2, polygon, options = {}) {
     polys = [polys];
   }
   let result = false;
-  for (var i2 = 0; i2 < polys.length; ++i2) {
-    const polyResult = pointInPolygon(pt2, polys[i2]);
+  for (var i = 0; i < polys.length; ++i) {
+    const polyResult = pointInPolygon(pt2, polys[i]);
     if (polyResult === 0) return options.ignoreBoundary ? false : true;
     else if (polyResult) result = true;
   }
@@ -25828,22 +23988,22 @@ function getGeom(geojson) {
 function booleanPointOnLine(pt2, line, options = {}) {
   const ptCoords = getCoord(pt2);
   const lineCoords = getCoords(line);
-  for (let i2 = 0; i2 < lineCoords.length - 1; i2++) {
+  for (let i = 0; i < lineCoords.length - 1; i++) {
     let ignoreBoundary = false;
     if (options.ignoreEndVertices) {
-      if (i2 === 0) {
+      if (i === 0) {
         ignoreBoundary = "start";
       }
-      if (i2 === lineCoords.length - 2) {
+      if (i === lineCoords.length - 2) {
         ignoreBoundary = "end";
       }
-      if (i2 === 0 && i2 + 1 === lineCoords.length - 1) {
+      if (i === 0 && i + 1 === lineCoords.length - 1) {
         ignoreBoundary = "both";
       }
     }
     if (isPointOnLineSegment(
-      lineCoords[i2],
-      lineCoords[i2 + 1],
+      lineCoords[i],
+      lineCoords[i + 1],
       ptCoords,
       ignoreBoundary,
       typeof options.epsilon === "undefined" ? null : options.epsilon
@@ -25855,15 +24015,15 @@ function booleanPointOnLine(pt2, line, options = {}) {
 }
 function isPointOnLineSegment(lineSegmentStart, lineSegmentEnd, pt2, excludeBoundary, epsilon2) {
   const x2 = pt2[0];
-  const y2 = pt2[1];
+  const y = pt2[1];
   const x1 = lineSegmentStart[0];
   const y1 = lineSegmentStart[1];
   const x22 = lineSegmentEnd[0];
-  const y22 = lineSegmentEnd[1];
+  const y2 = lineSegmentEnd[1];
   const dxc = pt2[0] - x1;
   const dyc = pt2[1] - y1;
   const dxl = x22 - x1;
-  const dyl = y22 - y1;
+  const dyl = y2 - y1;
   const cross = dxc * dyl - dyc * dxl;
   if (epsilon2 !== null) {
     if (Math.abs(cross) > epsilon2) {
@@ -25886,22 +24046,22 @@ function isPointOnLineSegment(lineSegmentStart, lineSegmentEnd, pt2, excludeBoun
     if (Math.abs(dxl) >= Math.abs(dyl)) {
       return dxl > 0 ? x1 <= x2 && x2 <= x22 : x22 <= x2 && x2 <= x1;
     }
-    return dyl > 0 ? y1 <= y2 && y2 <= y22 : y22 <= y2 && y2 <= y1;
+    return dyl > 0 ? y1 <= y && y <= y2 : y2 <= y && y <= y1;
   } else if (excludeBoundary === "start") {
     if (Math.abs(dxl) >= Math.abs(dyl)) {
       return dxl > 0 ? x1 < x2 && x2 <= x22 : x22 <= x2 && x2 < x1;
     }
-    return dyl > 0 ? y1 < y2 && y2 <= y22 : y22 <= y2 && y2 < y1;
+    return dyl > 0 ? y1 < y && y <= y2 : y2 <= y && y < y1;
   } else if (excludeBoundary === "end") {
     if (Math.abs(dxl) >= Math.abs(dyl)) {
       return dxl > 0 ? x1 <= x2 && x2 < x22 : x22 < x2 && x2 <= x1;
     }
-    return dyl > 0 ? y1 <= y2 && y2 < y22 : y22 < y2 && y2 <= y1;
+    return dyl > 0 ? y1 <= y && y < y2 : y2 < y && y <= y1;
   } else if (excludeBoundary === "both") {
     if (Math.abs(dxl) >= Math.abs(dyl)) {
       return dxl > 0 ? x1 < x2 && x2 < x22 : x22 < x2 && x2 < x1;
     }
-    return dyl > 0 ? y1 < y2 && y2 < y22 : y22 < y2 && y2 < y1;
+    return dyl > 0 ? y1 < y && y < y2 : y2 < y && y < y1;
   }
   return false;
 }
@@ -25970,10 +24130,10 @@ function isPolygonInMultiPolygon(multiPolygon, polygon) {
   );
 }
 function isPointInMultiPoint(multiPoint, pt2) {
-  let i2;
+  let i;
   let output = false;
-  for (i2 = 0; i2 < multiPoint.coordinates.length; i2++) {
-    if (compareCoords(multiPoint.coordinates[i2], pt2.coordinates)) {
+  for (i = 0; i < multiPoint.coordinates.length; i++) {
+    if (compareCoords(multiPoint.coordinates[i], pt2.coordinates)) {
       output = true;
       break;
     }
@@ -26036,16 +24196,16 @@ function isLineOnLine(lineString1, lineString2) {
 }
 function isLineInPoly(polygon, linestring) {
   let output = false;
-  let i2 = 0;
+  let i = 0;
   const polyBbox = bbox(polygon);
   const lineBbox = bbox(linestring);
   if (!doBBoxOverlap(polyBbox, lineBbox)) {
     return false;
   }
-  for (i2; i2 < linestring.coordinates.length - 1; i2++) {
+  for (i; i < linestring.coordinates.length - 1; i++) {
     const midPoint = getMidpoint(
-      linestring.coordinates[i2],
-      linestring.coordinates[i2 + 1]
+      linestring.coordinates[i],
+      linestring.coordinates[i + 1]
     );
     if (booleanPointInPolygon({ type: "Point", coordinates: midPoint }, polygon, {
       ignoreBoundary: true
@@ -26122,8 +24282,8 @@ function explode(geojson) {
 function center(geojson, options = {}) {
   const ext = bbox(geojson);
   const x2 = (ext[0] + ext[2]) / 2;
-  const y2 = (ext[1] + ext[3]) / 2;
-  return point([x2, y2], options.properties, options);
+  const y = (ext[1] + ext[3]) / 2;
+  return point([x2, y], options.properties, options);
 }
 function clone$1(geojson) {
   if (!geojson) {
@@ -26211,8 +24371,8 @@ function cloneGeometry(geometry) {
     geom.bbox = geometry.bbox;
   }
   if (geometry.type === "GeometryCollection") {
-    geom.geometries = geometry.geometries.map((g2) => {
-      return cloneGeometry(g2);
+    geom.geometries = geometry.geometries.map((g) => {
+      return cloneGeometry(g);
     });
     return geom;
   }
@@ -26284,10 +24444,10 @@ function pointOnFeature(geojson) {
   const fc = normalize(geojson);
   const cent = center(fc);
   let onSurface = false;
-  let i2 = 0;
-  while (!onSurface && i2 < fc.features.length) {
-    const geom = fc.features[i2].geometry;
-    let x2, y2, x1, y1, x22, y22;
+  let i = 0;
+  while (!onSurface && i < fc.features.length) {
+    const geom = fc.features[i].geometry;
+    let x2, y, x1, y1, x22, y2;
     let onLine = false;
     if (geom.type === "Point") {
       if (cent.geometry.coordinates[0] === geom.coordinates[0] && cent.geometry.coordinates[1] === geom.coordinates[1]) {
@@ -26307,12 +24467,12 @@ function pointOnFeature(geojson) {
       let k2 = 0;
       while (!onLine && k2 < geom.coordinates.length - 1) {
         x2 = cent.geometry.coordinates[0];
-        y2 = cent.geometry.coordinates[1];
+        y = cent.geometry.coordinates[1];
         x1 = geom.coordinates[k2][0];
         y1 = geom.coordinates[k2][1];
         x22 = geom.coordinates[k2 + 1][0];
-        y22 = geom.coordinates[k2 + 1][1];
-        if (pointOnSegment(x2, y2, x1, y1, x22, y22)) {
+        y2 = geom.coordinates[k2 + 1][1];
+        if (pointOnSegment(x2, y, x1, y1, x22, y2)) {
           onLine = true;
           onSurface = true;
         }
@@ -26326,12 +24486,12 @@ function pointOnFeature(geojson) {
         const line = geom.coordinates[j];
         while (!onLine && k2 < line.length - 1) {
           x2 = cent.geometry.coordinates[0];
-          y2 = cent.geometry.coordinates[1];
+          y = cent.geometry.coordinates[1];
           x1 = line[k2][0];
           y1 = line[k2][1];
           x22 = line[k2 + 1][0];
-          y22 = line[k2 + 1][1];
-          if (pointOnSegment(x2, y2, x1, y1, x22, y22)) {
+          y2 = line[k2 + 1][1];
+          if (pointOnSegment(x2, y, x1, y1, x22, y2)) {
             onLine = true;
             onSurface = true;
           }
@@ -26344,7 +24504,7 @@ function pointOnFeature(geojson) {
         onSurface = true;
       }
     }
-    i2++;
+    i++;
   }
   if (onSurface) {
     return cent;
@@ -26367,10 +24527,10 @@ function normalize(geojson) {
   }
   return geojson;
 }
-function pointOnSegment(x2, y2, x1, y1, x22, y22) {
-  const ab = Math.sqrt((x22 - x1) * (x22 - x1) + (y22 - y1) * (y22 - y1));
-  const ap = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-  const pb = Math.sqrt((x22 - x2) * (x22 - x2) + (y22 - y2) * (y22 - y2));
+function pointOnSegment(x2, y, x1, y1, x22, y2) {
+  const ab = Math.sqrt((x22 - x1) * (x22 - x1) + (y2 - y1) * (y2 - y1));
+  const ap = Math.sqrt((x2 - x1) * (x2 - x1) + (y - y1) * (y - y1));
+  const pb = Math.sqrt((x22 - x2) * (x22 - x2) + (y2 - y) * (y2 - y));
   return ab === ap + pb;
 }
 var index_default = pointOnFeature;
@@ -26647,8 +24807,8 @@ var __defProp$8 = Object.defineProperty;
 var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
 var __decorateClass$7 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$8(target, key, result);
   return result;
@@ -26693,8 +24853,8 @@ var __defProp$7 = Object.defineProperty;
 var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
 var __decorateClass$6 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$7(target, key, result);
   return result;
@@ -26736,8 +24896,8 @@ var __defProp$6 = Object.defineProperty;
 var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
 var __decorateClass$5 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$6(target, key, result);
   return result;
@@ -26793,7 +24953,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     const log = loggerFactory.createLogger("daanse:maps:click");
     const props2 = __props;
     const openThing = ref({});
-    const eventBus = container.get(identifiers$1.TINY_EMITTER);
+    const eventBus = inject$1(identifiers$1.TINY_EMITTER);
     const matchedItems = computed(() => {
       const things = [];
       const datastreams = [];
@@ -27175,7 +25335,7 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     async function loadData() {
       if (!props2.datasourceId) return;
       try {
-        const dsRepo = container.get(identifier$2);
+        const dsRepo = inject$1(identifier);
         const ds = dsRepo.getDatasource(
           props2.datasourceId
         );
@@ -27207,9 +25367,9 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           geojson: lineGeoJson.value,
           "options-style": lineStyle
         }, null, 8, ["geojson"])) : createCommentVNode("", true),
-        (openBlock(true), createElementBlock(Fragment, null, renderList(waypointFeatures.value, (wp, i2) => {
+        (openBlock(true), createElementBlock(Fragment, null, renderList(waypointFeatures.value, (wp, i) => {
           return openBlock(), createBlock(unref(Yt), {
-            key: "wp-" + i2,
+            key: "wp-" + i,
             "lat-lng": waypointLatLng(wp),
             radius: 8,
             "fill-color": waypointColor(wp),
@@ -27413,8 +25573,8 @@ function requireMs() {
   var m2 = s * 60;
   var h2 = m2 * 60;
   var d = h2 * 24;
-  var w2 = d * 7;
-  var y2 = d * 365.25;
+  var w = d * 7;
+  var y = d * 365.25;
   ms = function(val, options) {
     options = options || {};
     var type2 = typeof val;
@@ -27446,11 +25606,11 @@ function requireMs() {
       case "yrs":
       case "yr":
       case "y":
-        return n * y2;
+        return n * y;
       case "weeks":
       case "week":
       case "w":
-        return n * w2;
+        return n * w;
       case "days":
       case "day":
       case "d":
@@ -27543,8 +25703,8 @@ function requireCommon() {
     createDebug.formatters = {};
     function selectColor(namespace) {
       let hash = 0;
-      for (let i2 = 0; i2 < namespace.length; i2++) {
-        hash = (hash << 5) - hash + namespace.charCodeAt(i2);
+      for (let i = 0; i < namespace.length; i++) {
+        hash = (hash << 5) - hash + namespace.charCodeAt(i);
         hash |= 0;
       }
       return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
@@ -27816,8 +25976,8 @@ function requireBrowser() {
       if (!this.useColors) {
         return;
       }
-      const c2 = "color: " + this.color;
-      args.splice(1, 0, c2, "color: inherit");
+      const c = "color: " + this.color;
+      args.splice(1, 0, c, "color: inherit");
       let index2 = 0;
       let lastC = 0;
       args[0].replace(/%[a-zA-Z%]/g, (match) => {
@@ -27829,7 +25989,7 @@ function requireBrowser() {
           lastC = index2;
         }
       });
-      args.splice(lastC, 0, c2);
+      args.splice(lastC, 0, c);
     }
     exports$1.log = console.debug || console.log || (() => {
     });
@@ -27891,8 +26051,8 @@ var __defProp$5 = Object.defineProperty;
 var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
 var __decorateClass$4 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$5(target, key, result);
   return result;
@@ -27969,8 +26129,8 @@ var __defProp$4 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
 var __decorateClass$3 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$4(target, key, result);
   return result;
@@ -28011,8 +26171,8 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     const config = useModel(__props, "configv");
     const map = ref(null);
     const defaultConfig = new MapSettings$1();
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
-    const eventBus = container.get(identifiers$1.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers$1.TINY_EMITTER);
     function handleMapClick(e) {
       if (!widgetId?.value) return;
       const { lat, lng } = e.latlng;
@@ -28058,14 +26218,14 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       const YIELD_MS = 4;
       let lastYield = performance.now();
       for (const [dsId, datastreams] of sources) {
-        for (let i2 = 0; i2 < datastreams.length; i2++) {
+        for (let i = 0; i < datastreams.length; i++) {
           const now = performance.now();
           if (now - lastYield > YIELD_MS) {
             if (currentSession !== buildIndexSessionId) return;
             await new Promise((resolve2) => setTimeout(resolve2, 0));
             lastYield = performance.now();
           }
-          const ds = datastreams[i2];
+          const ds = datastreams[i];
           if (ds.observedArea) {
             if (!geoJsonCache.has(ds.observedArea)) {
               geoJsonCache.set(ds.observedArea, transformToGeoJson(toRaw(ds.observedArea)));
@@ -28092,7 +26252,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     const datasourceType = computed(() => {
       try {
         if (!datasourceId.value) return "ogcsta";
-        const dsRepository = container.get(identifier$2);
+        const dsRepository = inject$1(identifier);
         const datasource = dsRepository.getDatasource(datasourceId.value);
         return datasource.type || "ogcsta";
       } catch (e) {
@@ -28115,7 +26275,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       }
       loadingDatasources.add(dsId);
       try {
-        const dsRepository = container.get(identifier$2);
+        const dsRepository = inject$1(identifier);
         const datasource = dsRepository.getDatasource(dsId);
         const dsType = dsRepository.getDatasourceType(dsId);
         const requestType = dataTypeMapping[dsType] || "OGCSTAData";
@@ -28331,7 +26491,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
         callEvent(FILTER, { historicalLocations: matchingThings }, false);
         for (const dsId of additionalDatasourcesData.value.keys()) {
           try {
-            const dsRepository = container.get(identifier$2);
+            const dsRepository = inject$1(identifier);
             const datasource = dsRepository.getDatasource(dsId);
             if (datasource && typeof datasource.callEvent === "function") {
               datasource.callEvent(FILTER, { historicalLocations: matchingThings }, false);
@@ -28387,7 +26547,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     const options = computed(() => {
       return {
         pointToLayer: (feature2, latlng) => {
-          return L$2.circleMarker(latlng, {
+          return L$1.circleMarker(latlng, {
             radius: 0,
             fillColor: "#ff7800",
             color: "#000",
@@ -28399,7 +26559,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       };
     });
     const getOriginalLayerIndex = (layer) => {
-      return config.value.layers.findIndex((l2) => l2 === layer);
+      return config.value.layers.findIndex((l) => l === layer);
     };
     const getLayerOptions = (layer) => {
       const originalIndex = getOriginalLayerIndex(layer);
@@ -28551,7 +26711,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       const index2 = spatialIndex;
       const YIELD_MS = 4;
       let lastYield = performance.now();
-      for (let i2 = 0; i2 < index2.length; i2++) {
+      for (let i = 0; i < index2.length; i++) {
         const now = performance.now();
         if (now - lastYield > YIELD_MS) {
           if (currentSessionId !== loadObservationsSessionId || isMapInteracting) {
@@ -28560,7 +26720,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
           await new Promise((resolve2) => setTimeout(resolve2, 0));
           lastYield = performance.now();
         }
-        const entry = index2[i2];
+        const entry = index2[i];
         let inView;
         if (entry.geoJsonFeature) {
           inView = index_default$1(getBboxFeature(), entry.geoJsonFeature);
@@ -28599,8 +26759,8 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
             let hash = 0;
             for (const item of items) {
               const id = String(item.iotId || item["@iot.id"] || "");
-              for (let c2 = 0; c2 < id.length; c2++) {
-                hash = (hash << 5) - hash + id.charCodeAt(c2) | 0;
+              for (let c = 0; c < id.length; c++) {
+                hash = (hash << 5) - hash + id.charCodeAt(c) | 0;
               }
             }
             const taskId = `obs-${dsId}-${refreshTime}-${items.length}-${hash >>> 0}`;
@@ -28617,7 +26777,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
                   callEvent(FILTER, { observations: items }, false);
                 } else {
                   try {
-                    const dsRepository = container.get(identifier$2);
+                    const dsRepository = inject$1(identifier);
                     const datasource = dsRepository.getDatasource(dsId);
                     if (datasource && typeof datasource.callEvent === "function") {
                       datasource.callEvent(FILTER, { observations: items }, false);
@@ -28632,7 +26792,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
                       callEvent(FILTER, { observations: items }, false);
                     } else {
                       try {
-                        const dsRepository = container.get(identifier$2);
+                        const dsRepository = inject$1(identifier);
                         const datasource = dsRepository.getDatasource(dsId);
                         if (datasource && typeof datasource.callEvent === "function") {
                           datasource.callEvent(FILTER, { observations: items }, false);
@@ -28666,7 +26826,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       for (const dsId of additionalDatasourcesData.value.keys()) {
         const observations = observationsByDatasource.get(dsId) || [];
         try {
-          const dsRepository = container.get(identifier$2);
+          const dsRepository = inject$1(identifier);
           const datasource = dsRepository.getDatasource(dsId);
           if (datasource && typeof datasource.callEvent === "function") {
             datasource.callEvent(UPDATE_MQTT_SUBSCRIPTIONS, { observations: lodashExports.uniqBy(observations, "iotId") });
@@ -28708,11 +26868,11 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
             console.warn("Map instance not available. Cannot zoom to thing.");
             return;
           }
-          let thing = (data.value?.things || []).find((t2) => t2.iotId === thingId || t2["@iot.id"] === thingId);
+          let thing = (data.value?.things || []).find((t) => t.iotId === thingId || t["@iot.id"] === thingId);
           if (!thing) {
             for (const [dsId, dsData] of additionalDatasourcesData.value.entries()) {
               const additionalThings = dsData?.things || [];
-              thing = additionalThings.find((t2) => t2.iotId === thingId || t2["@iot.id"] === thingId);
+              thing = additionalThings.find((t) => t.iotId === thingId || t["@iot.id"] === thingId);
               if (thing) break;
             }
           }
@@ -28801,13 +26961,13 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
             routeLayerGroup = null;
           }
           if (!geojson || !geojson.features) return;
-          routeLayerGroup = L$2.layerGroup();
+          routeLayerGroup = L$1.layerGroup();
           for (const feature2 of geojson.features) {
             if (feature2.geometry.type === "LineString") {
               const coords = feature2.geometry.coordinates.map(
-                (c2) => [c2[1], c2[0]]
+                (c) => [c[1], c[0]]
               );
-              const polyline = L$2.polyline(coords, {
+              const polyline = L$1.polyline(coords, {
                 color,
                 weight: width,
                 opacity: 0.8
@@ -28819,7 +26979,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
               let markerColor = "#2196f3";
               if (role === "start") markerColor = "#4caf50";
               else if (role === "end") markerColor = "#f44336";
-              const circle = L$2.circleMarker([lat, lon], {
+              const circle = L$1.circleMarker([lat, lon], {
                 radius: 8,
                 fillColor: markerColor,
                 color: "#fff",
@@ -28839,11 +26999,11 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
           if (lineFeatures.length > 0) {
             const allCoords = lineFeatures.flatMap(
               (f2) => f2.geometry.coordinates.map(
-                (c2) => [c2[1], c2[0]]
+                (c) => [c[1], c[0]]
               )
             );
             if (allCoords.length > 0) {
-              mapInstance.fitBounds(L$2.latLngBounds(allCoords), {
+              mapInstance.fitBounds(L$1.latLngBounds(allCoords), {
                 padding: [50, 50]
               });
             }
@@ -28886,7 +27046,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       }
       for (const dsId of additionalDatasourcesData.value.keys()) {
         try {
-          const dsRepository = container.get(identifier$2);
+          const dsRepository = inject$1(identifier);
           const datasource = dsRepository.getDatasource(dsId);
           if (datasource && typeof datasource.callEvent === "function") {
             datasource.callEvent(MQTT_UNSUBSCRIBE_ALL, {});
@@ -29024,7 +27184,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const MapsWidget = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-b7343795"]]);
+const MapsWidget = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-dc42236a"]]);
 /**!
  * Sortable 1.14.0
  * @author	RubaXa   <trash@rubaxa.org>
@@ -29045,9 +27205,9 @@ function ownKeys(object, enumerableOnly) {
   return keys;
 }
 function _objectSpread2(target) {
-  for (var i2 = 1; i2 < arguments.length; i2++) {
-    var source = arguments[i2] != null ? arguments[i2] : {};
-    if (i2 % 2) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    if (i % 2) {
       ownKeys(Object(source), true).forEach(function(key) {
         _defineProperty(target, key, source[key]);
       });
@@ -29089,8 +27249,8 @@ function _defineProperty(obj, key, value) {
 }
 function _extends() {
   _extends = Object.assign || function(target) {
-    for (var i2 = 1; i2 < arguments.length; i2++) {
-      var source = arguments[i2];
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
@@ -29105,9 +27265,9 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
   var target = {};
   var sourceKeys = Object.keys(source);
-  var key, i2;
-  for (i2 = 0; i2 < sourceKeys.length; i2++) {
-    key = sourceKeys[i2];
+  var key, i;
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
     if (excluded.indexOf(key) >= 0) continue;
     target[key] = source[key];
   }
@@ -29116,11 +27276,11 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 function _objectWithoutProperties(source, excluded) {
   if (source == null) return {};
   var target = _objectWithoutPropertiesLoose(source, excluded);
-  var key, i2;
+  var key, i;
   if (Object.getOwnPropertySymbols) {
     var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-    for (i2 = 0; i2 < sourceSymbolKeys.length; i2++) {
-      key = sourceSymbolKeys[i2];
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
       if (excluded.indexOf(key) >= 0) continue;
       if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
       target[key] = source[key];
@@ -29162,7 +27322,7 @@ function matches(el, selector) {
       } else if (el.webkitMatchesSelector) {
         return el.webkitMatchesSelector(selector);
       }
-    } catch (_2) {
+    } catch (_) {
       return false;
     }
   }
@@ -29229,10 +27389,10 @@ function matrix(el, selfOnly) {
 }
 function find(ctx, tagName, iterator) {
   if (ctx) {
-    var list = ctx.getElementsByTagName(tagName), i2 = 0, n = list.length;
+    var list = ctx.getElementsByTagName(tagName), i = 0, n = list.length;
     if (iterator) {
-      for (; i2 < n; i2++) {
-        iterator(list[i2], i2);
+      for (; i < n; i++) {
+        iterator(list[i], i);
       }
     }
     return list;
@@ -29247,7 +27407,7 @@ function getWindowScrollingElement() {
     return document.documentElement;
   }
 }
-function getRect(el, relativeToContainingBlock, relativeToNonStaticParent, undoScale, container2) {
+function getRect(el, relativeToContainingBlock, relativeToNonStaticParent, undoScale, container) {
   if (!el.getBoundingClientRect && el !== window) return;
   var elRect, top, left, bottom, right, height, width;
   if (el !== window && el.parentNode && el !== getWindowScrollingElement()) {
@@ -29267,22 +27427,22 @@ function getRect(el, relativeToContainingBlock, relativeToNonStaticParent, undoS
     width = window.innerWidth;
   }
   if ((relativeToContainingBlock || relativeToNonStaticParent) && el !== window) {
-    container2 = container2 || el.parentNode;
+    container = container || el.parentNode;
     if (!IE11OrLess) {
       do {
-        if (container2 && container2.getBoundingClientRect && (css(container2, "transform") !== "none" || relativeToNonStaticParent && css(container2, "position") !== "static")) {
-          var containerRect = container2.getBoundingClientRect();
-          top -= containerRect.top + parseInt(css(container2, "border-top-width"));
-          left -= containerRect.left + parseInt(css(container2, "border-left-width"));
+        if (container && container.getBoundingClientRect && (css(container, "transform") !== "none" || relativeToNonStaticParent && css(container, "position") !== "static")) {
+          var containerRect = container.getBoundingClientRect();
+          top -= containerRect.top + parseInt(css(container, "border-top-width"));
+          left -= containerRect.left + parseInt(css(container, "border-left-width"));
           bottom = top + elRect.height;
           right = left + elRect.width;
           break;
         }
-      } while (container2 = container2.parentNode);
+      } while (container = container.parentNode);
     }
   }
   if (undoScale && el !== window) {
-    var elMatrix = matrix(container2 || el), scaleX = elMatrix && elMatrix.a, scaleY = elMatrix && elMatrix.d;
+    var elMatrix = matrix(container || el), scaleX = elMatrix && elMatrix.a, scaleY = elMatrix && elMatrix.d;
     if (elMatrix) {
       top /= scaleY;
       left /= scaleX;
@@ -29315,15 +27475,15 @@ function isScrolledPast(el, elSide, parentSide) {
   return false;
 }
 function getChild(el, childNum, options, includeDragEl) {
-  var currentChild = 0, i2 = 0, children = el.children;
-  while (i2 < children.length) {
-    if (children[i2].style.display !== "none" && children[i2] !== Sortable.ghost && (includeDragEl || children[i2] !== Sortable.dragged) && closest(children[i2], options.draggable, el, false)) {
+  var currentChild = 0, i = 0, children = el.children;
+  while (i < children.length) {
+    if (children[i].style.display !== "none" && children[i] !== Sortable.ghost && (includeDragEl || children[i] !== Sortable.dragged) && closest(children[i], options.draggable, el, false)) {
       if (currentChild === childNum) {
-        return children[i2];
+        return children[i];
       }
       currentChild++;
     }
-    i2++;
+    i++;
   }
   return null;
 }
@@ -29358,10 +27518,10 @@ function getRelativeScrollOffset(el) {
   return [offsetLeft, offsetTop];
 }
 function indexOfObject(arr, obj) {
-  for (var i2 in arr) {
-    if (!arr.hasOwnProperty(i2)) continue;
+  for (var i in arr) {
+    if (!arr.hasOwnProperty(i)) continue;
     for (var key in obj) {
-      if (obj.hasOwnProperty(key) && obj[key] === arr[i2][key]) return Number(i2);
+      if (obj.hasOwnProperty(key) && obj[key] === arr[i][key]) return Number(i);
     }
   }
   return -1;
@@ -29415,17 +27575,17 @@ function cancelThrottle() {
   clearTimeout(_throttleTimeout);
   _throttleTimeout = void 0;
 }
-function scrollBy(el, x2, y2) {
+function scrollBy(el, x2, y) {
   el.scrollLeft += x2;
-  el.scrollTop += y2;
+  el.scrollTop += y;
 }
 function clone(el) {
   var Polymer = window.Polymer;
-  var $2 = window.jQuery || window.Zepto;
+  var $ = window.jQuery || window.Zepto;
   if (Polymer && Polymer.dom) {
     return Polymer.dom(el).cloneNode(true);
-  } else if ($2) {
-    return $2(el).clone(true)[0];
+  } else if ($) {
+    return $(el).clone(true)[0];
   } else {
     return el.cloneNode(true);
   }
@@ -29730,12 +27890,12 @@ var documentExists = typeof document !== "undefined", PositionGhostAbsolutely = 
 }, _dragElInRowColumn = function _dragElInRowColumn2(dragRect, targetRect, vertical) {
   var dragElS1Opp = vertical ? dragRect.left : dragRect.top, dragElS2Opp = vertical ? dragRect.right : dragRect.bottom, dragElOppLength = vertical ? dragRect.width : dragRect.height, targetS1Opp = vertical ? targetRect.left : targetRect.top, targetS2Opp = vertical ? targetRect.right : targetRect.bottom, targetOppLength = vertical ? targetRect.width : targetRect.height;
   return dragElS1Opp === targetS1Opp || dragElS2Opp === targetS2Opp || dragElS1Opp + dragElOppLength / 2 === targetS1Opp + targetOppLength / 2;
-}, _detectNearestEmptySortable = function _detectNearestEmptySortable2(x2, y2) {
+}, _detectNearestEmptySortable = function _detectNearestEmptySortable2(x2, y) {
   var ret;
   sortables.some(function(sortable) {
     var threshold = sortable[expando].options.emptyInsertThreshold;
     if (!threshold || lastChild(sortable)) return;
-    var rect = getRect(sortable), insideHorizontally = x2 >= rect.left - threshold && x2 <= rect.right + threshold, insideVertically = y2 >= rect.top - threshold && y2 <= rect.bottom + threshold;
+    var rect = getRect(sortable), insideHorizontally = x2 >= rect.left - threshold && x2 <= rect.right + threshold, insideVertically = y >= rect.top - threshold && y <= rect.bottom + threshold;
     if (insideHorizontally && insideVertically) {
       return ret = sortable;
     }
@@ -29797,9 +27957,9 @@ var nearestEmptyInsertDetectEvent = function nearestEmptyInsertDetectEvent2(evt)
     var nearest = _detectNearestEmptySortable(evt.clientX, evt.clientY);
     if (nearest) {
       var event = {};
-      for (var i2 in evt) {
-        if (evt.hasOwnProperty(i2)) {
-          event[i2] = evt[i2];
+      for (var i in evt) {
+        if (evt.hasOwnProperty(i)) {
+          event[i] = evt[i];
         }
       }
       event.target = event.rootEl = nearest;
@@ -30186,9 +28346,9 @@ Sortable.prototype = /** @lends Sortable.prototype */
   },
   _appendGhost: function _appendGhost() {
     if (!ghostEl) {
-      var container2 = this.options.fallbackOnBody ? document.body : rootEl, rect = getRect(dragEl, true, PositionGhostAbsolutely, true, container2), options = this.options;
+      var container = this.options.fallbackOnBody ? document.body : rootEl, rect = getRect(dragEl, true, PositionGhostAbsolutely, true, container), options = this.options;
       if (PositionGhostAbsolutely) {
-        ghostRelativeParent = container2;
+        ghostRelativeParent = container;
         while (css(ghostRelativeParent, "position") === "static" && css(ghostRelativeParent, "transform") === "none" && ghostRelativeParent !== document) {
           ghostRelativeParent = ghostRelativeParent.parentNode;
         }
@@ -30218,7 +28378,7 @@ Sortable.prototype = /** @lends Sortable.prototype */
       css(ghostEl, "zIndex", "100000");
       css(ghostEl, "pointerEvents", "none");
       Sortable.ghost = ghostEl;
-      container2.appendChild(ghostEl);
+      container.appendChild(ghostEl);
       css(ghostEl, "transform-origin", tapDistanceLeft / parseInt(ghostEl.style.width) * 100 + "% " + tapDistanceTop / parseInt(ghostEl.style.height) * 100 + "%");
     }
   },
@@ -30645,9 +28805,9 @@ Sortable.prototype = /** @lends Sortable.prototype */
    * @returns {String[]}
    */
   toArray: function toArray() {
-    var order = [], el, children = this.el.children, i2 = 0, n = children.length, options = this.options;
-    for (; i2 < n; i2++) {
-      el = children[i2];
+    var order = [], el, children = this.el.children, i = 0, n = children.length, options = this.options;
+    for (; i < n; i++) {
+      el = children[i];
       if (closest(el, options.draggable, this.el, false)) {
         order.push(el.getAttribute(options.dataIdAttr) || _generateId(el));
       }
@@ -30660,8 +28820,8 @@ Sortable.prototype = /** @lends Sortable.prototype */
    */
   sort: function sort(order, useAnimation) {
     var items = {}, rootEl2 = this.el;
-    this.toArray().forEach(function(id, i2) {
-      var el = rootEl2.children[i2];
+    this.toArray().forEach(function(id, i) {
+      var el = rootEl2.children[i];
       if (closest(el, this.options.draggable, rootEl2, false)) {
         items[id] = el;
       }
@@ -30852,9 +29012,9 @@ function _getInsertDirection(target) {
   }
 }
 function _generateId(el) {
-  var str = el.tagName + el.className + el.src + el.href + el.textContent, i2 = str.length, sum2 = 0;
-  while (i2--) {
-    sum2 += str.charCodeAt(i2);
+  var str = el.tagName + el.className + el.src + el.href + el.textContent, i = str.length, sum2 = 0;
+  while (i--) {
+    sum2 += str.charCodeAt(i);
   }
   return sum2.toString(36);
 }
@@ -30977,15 +29137,15 @@ function AutoScrollPlugin() {
     },
     _handleAutoScroll: function _handleAutoScroll(evt, fallback) {
       var _this = this;
-      var x2 = (evt.touches ? evt.touches[0] : evt).clientX, y2 = (evt.touches ? evt.touches[0] : evt).clientY, elem = document.elementFromPoint(x2, y2);
+      var x2 = (evt.touches ? evt.touches[0] : evt).clientX, y = (evt.touches ? evt.touches[0] : evt).clientY, elem = document.elementFromPoint(x2, y);
       touchEvt$1 = evt;
       if (fallback || this.options.forceAutoScrollFallback || Edge || IE11OrLess || Safari) {
         autoScroll(evt, this.options, elem, fallback);
         var ogElemScroller = getParentAutoScrollElement(elem, true);
-        if (scrolling && (!pointerElemChangedInterval || x2 !== lastAutoScrollX || y2 !== lastAutoScrollY)) {
+        if (scrolling && (!pointerElemChangedInterval || x2 !== lastAutoScrollX || y !== lastAutoScrollY)) {
           pointerElemChangedInterval && clearPointerElemChangedInterval();
           pointerElemChangedInterval = setInterval(function() {
-            var newElem = getParentAutoScrollElement(document.elementFromPoint(x2, y2), true);
+            var newElem = getParentAutoScrollElement(document.elementFromPoint(x2, y), true);
             if (newElem !== ogElemScroller) {
               ogElemScroller = newElem;
               clearAutoScrolls();
@@ -30993,7 +29153,7 @@ function AutoScrollPlugin() {
             autoScroll(evt, _this.options, newElem, fallback);
           }, 10);
           lastAutoScrollX = x2;
-          lastAutoScrollY = y2;
+          lastAutoScrollY = y;
         }
       } else {
         if (!this.options.bubbleScroll || getParentAutoScrollElement(elem, true) === getWindowScrollingElement()) {
@@ -31020,7 +29180,7 @@ function clearPointerElemChangedInterval() {
 }
 var autoScroll = throttle(function(evt, options, rootEl2, isFallback) {
   if (!options.scroll) return;
-  var x2 = (evt.touches ? evt.touches[0] : evt).clientX, y2 = (evt.touches ? evt.touches[0] : evt).clientY, sens = options.scrollSensitivity, speed = options.scrollSpeed, winScroller = getWindowScrollingElement();
+  var x2 = (evt.touches ? evt.touches[0] : evt).clientX, y = (evt.touches ? evt.touches[0] : evt).clientY, sens = options.scrollSensitivity, speed = options.scrollSpeed, winScroller = getWindowScrollingElement();
   var scrollThisInstance = false, scrollCustomFn;
   if (scrollRootEl !== rootEl2) {
     scrollRootEl = rootEl2;
@@ -31043,11 +29203,11 @@ var autoScroll = throttle(function(evt, options, rootEl2, isFallback) {
       canScrollY = height < scrollHeight && (elCSS.overflowY === "auto" || elCSS.overflowY === "scroll");
     }
     var vx = canScrollX && (Math.abs(right - x2) <= sens && scrollPosX + width < scrollWidth) - (Math.abs(left - x2) <= sens && !!scrollPosX);
-    var vy = canScrollY && (Math.abs(bottom - y2) <= sens && scrollPosY + height < scrollHeight) - (Math.abs(top - y2) <= sens && !!scrollPosY);
+    var vy = canScrollY && (Math.abs(bottom - y) <= sens && scrollPosY + height < scrollHeight) - (Math.abs(top - y) <= sens && !!scrollPosY);
     if (!autoScrolls[layersOut]) {
-      for (var i2 = 0; i2 <= layersOut; i2++) {
-        if (!autoScrolls[i2]) {
-          autoScrolls[i2] = {};
+      for (var i = 0; i <= layersOut; i++) {
+        if (!autoScrolls[i]) {
+          autoScrolls[i] = {};
         }
       }
     }
@@ -31185,7 +29345,7 @@ function cached(fn) {
   };
 }
 const regex = /-(\w)/g;
-const camelize = cached((str) => str.replace(regex, (_2, c2) => c2.toUpperCase()));
+const camelize = cached((str) => str.replace(regex, (_, c) => c.toUpperCase()));
 const manageAndEmit$1 = ["Start", "Add", "Remove", "Update", "End"];
 const emit$1 = ["Choose", "Unchoose", "Sort", "Filter", "Clone"];
 const manage$1 = ["Move"];
@@ -31333,7 +29493,7 @@ function project(entries) {
   }, {});
 }
 function getComponentAttributes({ $attrs, componentData = {} }) {
-  const attributes = project(Object.entries($attrs).filter(([key, _2]) => isHtmlAttribute(key)));
+  const attributes = project(Object.entries($attrs).filter(([key, _]) => isHtmlAttribute(key)));
   return __spreadValues(__spreadValues({}, attributes), componentData);
 }
 function createSortableOption({ $attrs, callBackBuilder }) {
@@ -31349,7 +29509,7 @@ function createSortableOption({ $attrs, callBackBuilder }) {
   });
 }
 function getValidSortableEntries(value) {
-  return Object.entries(value).filter(([key, _2]) => !isHtmlAttribute(key)).map(([key, value2]) => [camelize(key), value2]).filter(([key, _2]) => !isReadOnly(key));
+  return Object.entries(value).filter(([key, _]) => !isHtmlAttribute(key)).map(([key, value2]) => [camelize(key), value2]).filter(([key, _]) => !isReadOnly(key));
 }
 const getHtmlElementFromNode = (node) => {
   const el = node.el || Array.isArray(node.children) && node.children[0].el.parentNode;
@@ -31532,10 +29692,10 @@ const draggableComponent = defineComponent({
       });
       this.componentStructure = componentStructure;
       const attributes = getComponentAttributes({ $attrs, componentData });
-      return componentStructure.render(h$2, attributes);
+      return componentStructure.render(h$1, attributes);
     } catch (err) {
       this.error = true;
-      return h$2("pre", { style: { color: "red" } }, err.stack);
+      return h$1("pre", { style: { color: "red" } }, err.stack);
     }
   },
   created() {
@@ -33459,7 +31619,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   }),
   emits: ["update:modelValue"],
   setup(__props) {
-    const container2 = inject$1("container");
+    inject$1("container");
     getCurrentInstance();
     const props2 = __props;
     const opened = ref({
@@ -33540,16 +31700,16 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
     const addChilds = (layer, service) => {
       const ret = [];
-      if (layer) layer.forEach((l2) => {
+      if (layer) layer.forEach((l) => {
         ret.push({
           "id": v4(),
           "opacity": 1,
           "service": service,
           "type": "WMSLayer",
-          "name": l2.name,
-          "title": l2.title,
-          "attribution": l2.attribution,
-          "childs": addChilds(l2.children, service)
+          "name": l.name,
+          "title": l.title,
+          "attribution": l.attribution,
+          "childs": addChilds(l.children, service)
         });
       });
       return ret;
@@ -33623,7 +31783,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       const allDatasourceIds = [widgetSettings.value.datasourceId, ...widgetSettings.value.datasourceIds].filter(Boolean);
       for (const id of allDatasourceIds) {
         if (!id) continue;
-        const datasourceRepository = container2.get(identifier$2);
+        const datasourceRepository = inject$1(identifier);
         try {
           const OGCStore = datasourceRepository.getDatasource(id);
           logDatasource("Datasource type:", datasourceRepository.getDatasourceType(id));
@@ -34127,7 +32287,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const MapsWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-a4a6bfa8"]]);
+const MapsWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-5f131b6e"]]);
 const _hoisted_1$2 = {
   key: 0,
   class: "datapoint tlc"
@@ -34268,8 +32428,8 @@ var __defProp$2 = Object.defineProperty;
 var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
 var __decorateClass$2 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$2(target, key, result);
   return result;
@@ -34347,8 +32507,8 @@ var __defProp$1 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
 var __decorateClass$1 = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp$1(target, key, result);
   return result;
@@ -35286,8 +33446,8 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i2 = decorators.length - 1, decorator; i2 >= 0; i2--)
-    if (decorator = decorators[i2])
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result) __defProp(target, key, result);
   return result;

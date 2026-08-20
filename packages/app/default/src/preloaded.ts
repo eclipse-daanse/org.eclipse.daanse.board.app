@@ -13,6 +13,9 @@
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import appPages from './app-modules/pages/manifest.json'
+import libVariables from 'org.eclipse.daanse.board.app.lib.variables/manifest.json'
+import storesConnection from 'org.eclipse.daanse.board.app.ui.vue.stores.connection/manifest.json'
+import storesDatasource from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce/manifest.json'
 import m0 from 'org.eclipse.daanse.board.app.lib.composer.chart/manifest.json'
 import m1 from 'org.eclipse.daanse.board.app.lib.composer.datatable/manifest.json'
 import m2 from 'org.eclipse.daanse.board.app.lib.composer.kpi/manifest.json'
@@ -90,6 +93,11 @@ import m62 from 'org.eclipse.daanse.board.app.ui.vue.variable.timepicker/manifes
 export const preloadedModules: Array<[ModuleManifest, () => Promise<unknown>]> = [
   // The application's own contributions, a module like any other
   [appPages as ModuleManifest, () => import('./app-modules/pages')],
+  // Freed from import-time bindings in the service-locator cleanup
+  [libVariables as ModuleManifest, () => import('org.eclipse.daanse.board.app.lib.variables')],
+  // Store packages: their activate hands the repositories into the pinia closures
+  [storesConnection as ModuleManifest, () => import('org.eclipse.daanse.board.app.ui.vue.stores.connection')],
+  [storesDatasource as ModuleManifest, () => import('org.eclipse.daanse.board.app.ui.vue.stores.datasouce')],
   [m0 as ModuleManifest, () => import('org.eclipse.daanse.board.app.lib.composer.chart')],
   [m1 as ModuleManifest, () => import('org.eclipse.daanse.board.app.lib.composer.datatable')],
   [m2 as ModuleManifest, () => import('org.eclipse.daanse.board.app.lib.composer.kpi')],

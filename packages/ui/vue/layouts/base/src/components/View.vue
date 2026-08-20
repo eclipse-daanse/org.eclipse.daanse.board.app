@@ -13,7 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 
-import { onMounted, nextTick } from 'vue'
+import { inject, onMounted, nextTick } from 'vue'
 import { useMoveableLayout } from '../composables/useMovableLayout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
@@ -33,7 +33,7 @@ const {
 } = useMoveableLayout(pageID as string || '');
 
 // Get EventBus for page loaded event
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
 onMounted(async () => {
   console.log('Base View component mounted for page:', pageID)

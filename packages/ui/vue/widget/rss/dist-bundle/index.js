@@ -1,8 +1,8 @@
-(function(){var i="ui.vue.widget.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-3bd79679] {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-container[data-v-3bd79679] {\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-item[data-v-3bd79679] {\n  border: 1px solid #000;\n  border-radius: 8px;\n}\n.preview-item-title[data-v-3bd79679] {\n  background-color: #f0f0f0;\n  font-size: 1.25rem;\n  font-weight: bold;\n  padding: 8px;\n  border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-3bd79679] {\n  padding: 8px;\n}\n";})();
-const { defineComponent, toRefs, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, withModifiers, createCommentVNode, Fragment, renderList, createElementVNode, toDisplayString } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-3b5c01fc] {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-container[data-v-3b5c01fc] {\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-item[data-v-3b5c01fc] {\n  border: 1px solid #000;\n  border-radius: 8px;\n}\n.preview-item-title[data-v-3b5c01fc] {\n  background-color: #f0f0f0;\n  font-size: 1.25rem;\n  font-weight: bold;\n  padding: 8px;\n  border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-3b5c01fc] {\n  padding: 8px;\n}\n";})();
+const { defineComponent, toRefs, inject: inject$1, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, withModifiers, createCommentVNode, Fragment, renderList, createElementVNode, toDisplayString } = __tsm__.require("vue");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { useRoute } = __tsm__.require("vue-router");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var _Reflect = {};
@@ -1165,8 +1165,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   setup(__props, { expose: __expose }) {
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     class RssWidgetApi extends RssWidgetInterface {
@@ -1229,7 +1229,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const RssWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-3bd79679"]]);
+const RssWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-3b5c01fc"]]);
 const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {
   return null;

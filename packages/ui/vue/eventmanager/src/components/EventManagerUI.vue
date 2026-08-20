@@ -10,8 +10,7 @@
 -->
 <script lang="ts" setup>
 import 'reflect-metadata'
-import { ref, computed, onMounted } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
+import { inject, ref, computed, onMounted } from 'vue'
 import { EventManager, EVENT_MANAGER, type EventActionMapping, type ActionDefinition, EventRegistry, EVENT_REGISTRY, type WidgetEventDefinition, EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext, type WidgetTypeRegistration, Condition, Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
 
@@ -525,12 +524,17 @@ const formatConditions = (conditions?: Condition[]) => {
   return conditions.map(c => `${c.prop} ${c.comperator} ${c.value}`).join(' AND ')
 }
 
+const injectedEventManager = inject<EventManager>(EVENT_MANAGER)!
+const injectedEventRegistry = inject<EventRegistry>(EVENT_REGISTRY)!
+const injectedActionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
+const injectedPageRegistry = inject<PageRegistryI>(PageIdentifier)!
+
 onMounted(() => {
-  // Get container instances after mount, when EventRegistry is registered
-  eventManager = container.get<EventManager>(EVENT_MANAGER)
-  eventRegistry = container.get<EventRegistry>(EVENT_REGISTRY)
-  actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
-  pageRegistry = container.get<PageRegistryI>(PageIdentifier)
+  // Injected at setup below; by mount time the loader has long registered them
+  eventManager = injectedEventManager
+  eventRegistry = injectedEventRegistry
+  actionsRegistry = injectedActionsRegistry
+  pageRegistry = injectedPageRegistry
 
   loadMappings()
   loadEvents()

@@ -16,7 +16,6 @@ import {
   DatasourceRepository,
   identifier,
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 export interface DataSourceDTO {
   uid: string
@@ -28,6 +27,20 @@ export interface DataSourceDTO {
     type?:string
     uid?:string
   }
+}
+
+let repository: DatasourceRepository | undefined
+
+/** Called by this package's activate - dependency injection at the module boundary. */
+export function provideRepository(instance: DatasourceRepository): void {
+  repository = instance
+}
+
+function requireRepository(): DatasourceRepository {
+  if (!repository) {
+    throw new Error('DatasourceRepository not provided - is the ui.vue.stores.datasouce module active?')
+  }
+  return repository
 }
 
 export const useDataSourcesStore = defineStore('datasource', () => {
@@ -42,7 +55,12 @@ export const useDataSourcesStore = defineStore('datasource', () => {
       },
     },
   ] as DataSourceDTO[])
-  const datasourceRepository = container.get<DatasourceRepository>(identifier)
+  /*
+   * Injected at module activation (see ../index.ts). The store is a global
+   * singleton and may be first used outside component setup, so Vue's
+   * inject() is not available here.
+   */
+  const datasourceRepository = requireRepository()
 
   const createDataSource = (type: any, config: any = {}) => {
     const uid = Math.random().toString(36).substring(7)

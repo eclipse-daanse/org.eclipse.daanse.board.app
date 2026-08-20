@@ -1,7 +1,7 @@
-(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-9b14054a] {\n  padding: 12px;\n}\n";})();
-const { defineComponent, toRefs, ref, watch, createElementBlock, openBlock, withModifiers, toDisplayString } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-8ebfb61e] {\n  padding: 12px;\n}\n";})();
+const { defineComponent, toRefs, inject: inject$1, ref, watch, createElementBlock, openBlock, withModifiers, toDisplayString } = __tsm__.require("vue");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var _Reflect = {};
@@ -1143,7 +1143,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
-    const eventBus = container.get(identifiers.TINY_EMITTER);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
     const emitClick = () => {
       if (!widgetId?.value) return;
       eventBus.emit("widget:SampleWidget:click", {
@@ -1181,7 +1181,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const SampleWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-9b14054a"]]);
+const SampleWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-8ebfb61e"]]);
 const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {
   return null;

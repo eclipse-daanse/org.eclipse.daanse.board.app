@@ -19,7 +19,7 @@ import {
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
+import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChartSettings } from './gen/ChartSettings';
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
@@ -37,8 +37,8 @@ const config = defineModel<ChartSettings>('configv', { required: true });
 const defaultConfig = new ChartSettings();
 const data = ref(null as any);
 
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

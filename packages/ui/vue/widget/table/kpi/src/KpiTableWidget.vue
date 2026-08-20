@@ -12,7 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { toRefs, ref, watch, computed, provide, onMounted, onUnmounted } from 'vue';
+import { inject, toRefs, ref, watch, computed, provide, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVariableRepository } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { KpiTable } from 'org.eclipse.daanse.board.app.ui.vue.common.kpi';
@@ -27,8 +27,8 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface';
 
-const eventBus = coreContainer.get<TinyEmitter>(identifiers.TINY_EMITTER);
-const actionsRegistry = coreContainer.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY);
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!;
 
 const route = useRoute();
 const pageId = (route.params.pageid as string) || '';

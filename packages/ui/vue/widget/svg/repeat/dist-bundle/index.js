@@ -1,9 +1,9 @@
-(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.repeatable-svg-container[data-v-b2944047] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    object-fit: contain;\n}\n\n.settings-container[data-v-20524639] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.colors[data-v-20524639] {\n    display: flex;\n    justify-content: space-between;\n}\n.color-input[data-v-20524639] {\n    width: 49%;\n}\n.loading[data-v-20524639] {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
-const { defineComponent, mergeModels, toRefs, useModel, ref, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, withModifiers, createElementVNode, Fragment, renderList, inject: inject$1, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
+(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.repeatable-svg-container[data-v-1c1a34f8] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    object-fit: contain;\n}\n\n.settings-container[data-v-20524639] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.colors[data-v-20524639] {\n    display: flex;\n    justify-content: space-between;\n}\n.color-input[data-v-20524639] {\n    width: 49%;\n}\n.loading[data-v-20524639] {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
+const { defineComponent, mergeModels, toRefs, useModel, inject: inject$1, ref, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, withModifiers, createElementVNode, Fragment, renderList, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
 const { VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { Reference, Documentation, Attribute, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 const { useRoute } = __tsm__.require("vue-router");
-const { container, identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -1244,8 +1244,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const props = __props;
     const { id: widgetId } = toRefs(props);
     const config = useModel(__props, "configv");
-    const eventBus = container.get(identifiers.TINY_EMITTER);
-    const actionsRegistry = container.get(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject$1(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const rsvgZoomLevel = ref(1);
@@ -1422,7 +1422,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const RepeatableSvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-b2944047"]]);
+const RepeatableSvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-1c1a34f8"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "RepeatableSvgWidgetSettings",

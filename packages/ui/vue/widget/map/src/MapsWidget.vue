@@ -9,7 +9,7 @@ Contributors: Smart City Jena
 
 -->
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, reactive, ref, toRaw, toRefs, watch } from 'vue'
+import { inject, computed, onMounted, onUnmounted, reactive, ref, toRaw, toRefs, watch } from 'vue'
 import type { IMapSettings } from './Settings'
 import 'leaflet/dist/leaflet.css'
 
@@ -59,8 +59,8 @@ const map = ref(null)
 const defaultConfig = new MapSettings()
 
 // Get EventActionsRegistry
-const actionsRegistry = container.get<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
 function handleMapClick(e: any) {
   if (!widgetId?.value) return
@@ -176,7 +176,7 @@ const buildSpatialIndex = async () => {
 const datasourceType = computed(() => {
   try {
     if (!datasourceId.value) return 'ogcsta'
-    const dsRepository = container.get<DatasourceRepository>(identifier)
+    const dsRepository = inject<DatasourceRepository>(identifier)!
     const datasource = dsRepository.getDatasource(datasourceId.value)
     return (datasource as any).type || 'ogcsta'
   } catch (e) {
@@ -209,7 +209,7 @@ const loadDatasourceData = async (dsId: string) => {
   loadingDatasources.add(dsId)
 
   try {
-    const dsRepository = container.get<DatasourceRepository>(identifier)
+    const dsRepository = inject<DatasourceRepository>(identifier)!
     const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
     const dsType = dsRepository.getDatasourceType(dsId)
 
@@ -493,7 +493,7 @@ const loadHistoricalLocationsForAllThings = () => {
     // Set filter for additional datasources
     for (const dsId of additionalDatasourcesData.value.keys()) {
       try {
-        const dsRepository = container.get<DatasourceRepository>(identifier)
+        const dsRepository = inject<DatasourceRepository>(identifier)!
         const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
         if (datasource && typeof datasource.callEvent === 'function') {
           datasource.callEvent(FILTER, { historicalLocations: matchingThings }, false)
@@ -888,7 +888,7 @@ const loadObservationsInView = async () => {
             } else {
               // For additional datasources, call event directly on the datasource
               try {
-                const dsRepository = container.get<DatasourceRepository>(identifier)
+                const dsRepository = inject<DatasourceRepository>(identifier)!
                 const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
                 if (datasource && typeof datasource.callEvent === 'function') {
                   datasource.callEvent(FILTER, { observations: items }, false)
@@ -904,7 +904,7 @@ const loadObservationsInView = async () => {
                   callEvent(FILTER, { observations: items }, false)
                 } else {
                   try {
-                    const dsRepository = container.get<DatasourceRepository>(identifier)
+                    const dsRepository = inject<DatasourceRepository>(identifier)!
                     const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
                     if (datasource && typeof datasource.callEvent === 'function') {
                       datasource.callEvent(FILTER, { observations: items }, false)
@@ -949,7 +949,7 @@ const loadObservationsInView = async () => {
   for (const dsId of additionalDatasourcesData.value.keys()) {
     const observations = observationsByDatasource.get(dsId) || []
     try {
-      const dsRepository = container.get<DatasourceRepository>(identifier)
+      const dsRepository = inject<DatasourceRepository>(identifier)!
       const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
       if (datasource && typeof datasource.callEvent === 'function') {
         datasource.callEvent(UPDATE_MQTT_SUBSCRIPTIONS, { observations: uniqBy(observations, 'iotId') })
@@ -1238,7 +1238,7 @@ onUnmounted(() => {
 
   for (const dsId of additionalDatasourcesData.value.keys()) {
     try {
-      const dsRepository = container.get<DatasourceRepository>(identifier)
+      const dsRepository = inject<DatasourceRepository>(identifier)!
       const datasource = dsRepository.getDatasource(dsId) as IDataRetrieveable
       if (datasource && typeof datasource.callEvent === 'function') {
         datasource.callEvent(MQTT_UNSUBSCRIBE_ALL, {})

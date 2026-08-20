@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import {
   OgcFeatureComposer,
   type IOgcFeatureComposerConfiguration,
@@ -29,21 +30,28 @@ const symbol = Symbol.for(OGC_FEATURE_COMPOSER)
  * Jeder Aufruf liefert eine eigene Instanz - vorher ueber inTransientScope,
  * jetzt schlicht ueber `new`.
  */
-function createOgcFeatureComposer(config: any) {
+/**
+ * Factory factory: the repository is closed over once, at activation - the
+ * config-taking function the registry hands out carries its dependency
+ * instead of looking anything up.
+ */
+function createOgcFeatureComposer(repository: DatasourceRepository) {
+  return (config: any) => {
   if (!OgcFeatureComposer.validateConfiguration(config)) {
     throw new Error(
       'Invalid OgcFeatureComposer configuration. Please provide a valid configuration.',
     )
   }
 
-  const composer = new OgcFeatureComposer()
+  const composer = new OgcFeatureComposer(repository)
   composer.init(config)
 
   return composer
+  }
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer)
+  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer(services.getRequired('DatasourceRepository')))
 }
 
 export function deactivate({ services }: ActivationContext) {

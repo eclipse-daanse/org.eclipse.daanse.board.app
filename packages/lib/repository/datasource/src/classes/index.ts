@@ -10,7 +10,6 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 
 
@@ -41,11 +40,25 @@ export interface StoreConstructor<T> {
 
 const datasources = new Map<string, IDataRetrieveable>()
 
+/**
+ * The slice of the service registry a repository needs: resolving the
+ * identifiers its type entries carry. Injected through the constructor -
+ * the repository names its dependency instead of reaching for a global.
+ */
+export interface IdentifierResolver {
+  getRequired<T>(id: string): T
+}
+
 export class DatasourceRepository implements IDatasourceRepository {
   private availableDatasources: Record<string, StoreIdentifiers> = {}
   private datasourcesByType: Record<string, string> = {}
 
-  constructor() {}
+  constructor(private readonly resolver: IdentifierResolver) {}
+
+  /** See IdentifierResolver: symbol description is the service id. */
+  resolveIdentifier<T>(identifier: symbol): T {
+    return this.resolver.getRequired<T>(identifier.description as string)
+  }
 
   removeDatasource(datasourceId: string): void {
     if (datasources.has(datasourceId)) {
@@ -99,7 +112,7 @@ export class DatasourceRepository implements IDatasourceRepository {
     const identifiers = this.availableDatasources[type]
 
     if (identifiers) {
-      const datasourceFactory = container.get(identifiers.Store) as any
+      const datasourceFactory = this.resolveIdentifier<(c: unknown) => IDataRetrieveable>(identifiers.Store)
       const datasource = datasourceFactory(config)
       datasources.set(datasourceId, datasource)
       this.datasourcesByType[datasourceId] = type

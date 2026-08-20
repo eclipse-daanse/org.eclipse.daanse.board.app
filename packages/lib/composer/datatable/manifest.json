@@ -9,5 +9,10 @@
     {
       "id": "DataTableComposer"
     }
+  ],
+  "requiresService": [
+    {
+      "id": "DatasourceRepository"
+    }
   ]
 }

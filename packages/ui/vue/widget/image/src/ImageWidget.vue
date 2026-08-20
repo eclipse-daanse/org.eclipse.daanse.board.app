@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
+import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
 import { ImageSettings } from './gen/ImageSettings'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
@@ -21,7 +21,7 @@ const props = defineProps<{ datasourceId: string, id?: string }>()
 const { id: widgetId } = toRefs(props)
 const config = defineModel<ImageSettings>('configv', { required: true })
 
-const eventBus = container.get<TinyEmitter>(identifiers.TINY_EMITTER)
+const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 
 const handleClick = (url: string) => {
   if (!widgetId?.value) return;
