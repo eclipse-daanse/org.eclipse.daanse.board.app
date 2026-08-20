@@ -50,7 +50,7 @@ const { update } = useDatasourceRepository(datasourceId, 'string', data)
 
 <template>
   <div class="widget" @click="emitClick" @contextmenu.prevent="emitRightClick">
-    {{ data ?? 'Data do not created' }}
+    {{ data ?? 'Data do not created!!' }}
   </div>
 </template>
 
