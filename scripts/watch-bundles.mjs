@@ -46,8 +46,11 @@ function schedule(dir) {
         console.log(`rebuilt in ${((Date.now() - start) / 1000).toFixed(1)}s`)
       } catch (error) {
         console.log('FAILED')
-        console.error(String(error.stdout ?? error).split('\n')
-          .filter((l) => l.includes('ERROR') || l.includes('error during')).join('\n'))
+        // vite prints build errors on stderr; keep the message, drop the stack
+        const output = `${error.stdout ?? ''}\n${error.stderr ?? ''}`
+        const lines = output.split('\n').filter((l) => l.trim() && !l.trim().startsWith('at '))
+        const from = lines.findIndex((l) => l.includes('error during build'))
+        console.error((from >= 0 ? lines.slice(from) : lines.slice(-10)).join('\n'))
       }
     })
   }, 300))
