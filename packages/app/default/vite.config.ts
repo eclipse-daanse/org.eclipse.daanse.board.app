@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { createReadStream, existsSync, statSync, watch } from 'node:fs'
+import { cpSync, createReadStream, existsSync, statSync, watch } from 'node:fs'
 import { extname, join, normalize } from 'node:path'
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -98,6 +98,29 @@ const BUNDLE_TYPES: Record<string, string> = {
 function tsmBundles(): Plugin {
   return {
     name: 'serve-tsm-bundles',
+
+    /*
+     * Production: the bundles are finished artefacts - copy them into the
+     * build output under /bundles/<id>/, the same URLs the manifests name.
+     * Any static file server then serves them exactly like the dev
+     * middleware below does; no import map and no extra server logic needed,
+     * because shared dependencies travel through the __tsm__ runtime.
+     */
+    closeBundle() {
+      const outDir = resolve(__dirname, 'dist')
+      if (!existsSync(outDir)) return
+      let copied = 0
+      for (const [id, dir] of Object.entries(bundleDirs)) {
+        if (!existsSync(dir)) {
+          console.warn(`[tsm-bundles] missing build output for ${id} - run its bundle build`)
+          continue
+        }
+        cpSync(dir, join(outDir, 'bundles', id), { recursive: true })
+        copied += 1
+      }
+      console.log(`[tsm-bundles] ${copied} bundle(s) copied into dist/bundles`)
+    },
+
     configureServer(server) {
       server.middlewares.use('/bundles', (request, response, next) => {
         const relative = normalize(decodeURIComponent((request.url ?? '/').split('?')[0]))
