@@ -203,9 +203,17 @@ Sortierung — ein Modul mit fehlendem Pflichtdienst parkt als `unsatisfied`
 und aktiviert in der Kaskade, wenn der Anbieter registriert (tsm#18 im
 Groß-Einsatz).
 
-**Noch offen aus B5.4:** Host-Restbestand in `main.ts` (Container-Bindungen,
-Seiten-Einrichtung), Inversify-Brücke, und die URL-isierung der
-lib-Schicht von unten nach oben.
+**Teil 2 ✔ — der Host ist ein Launcher.** `main.ts`: 335 → 155 Zeilen.
+Die anwendungseigenen Beiträge (Seiten, Navigation, Aktionen) sind das Modul
+`app.pages` mit eigenem Manifest und `deactivate`; der Launcher bootet nur
+noch den Rahmen. Ein tragender Seiteneffekt-Import bleibt markiert:
+`lib.variables` bindet beim Import (letzter Klasse-C-Rest, gehört zur
+Service-Locator-Baustelle).
+
+**Noch offen aus B5.4:** Inversify-Brücke (fällt mit dem
+Service-Locator-Rest: 30 Dateien `container.get`, `lib.variables`),
+URL-isierung der lib-Schicht von unten nach oben, Produktionsbuild des
+Bundle-Servings (heute Dev-Middleware).
 
 Ursprünglicher Text:
 
