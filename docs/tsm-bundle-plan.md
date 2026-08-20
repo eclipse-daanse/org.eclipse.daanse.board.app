@@ -228,7 +228,26 @@ gedeckt, Modulabhängigkeiten registriert, Bundle-URLs konventionstreu,
 geteilte Bibliotheken angeboten. Der Nachfolger des mit dem Bootstrapper
 gestorbenen `modules.test.ts`, bis tsm#17 den Kern in den Build zieht.
 
-**Noch offen aus B5.4:** URL-isierung der lib-Schicht von unten nach oben.
+**Der Shell-Schritt ist getan.** Die Oberfläche selbst — Rahmen, Router,
+Editoren, eingebaute Seiten — ist das Bundle `app.shell` (1,8 MB, Vuestic
+eingebettet, 24 geteilte Abhängigkeiten). Es erzeugt die Vue-App in seinem
+`activate`, installiert die DI-Bridge, registriert `App` als Dienst und
+mountet; `deactivate` räumt ab. Nachgewiesen live: `tsm.unload('app.shell')`
+nimmt die komplette Oberfläche vom Bildschirm, `load` bringt sie zurück.
+`main.ts` ist ein ~100-Zeilen-Launcher ohne ein einziges UI-Import — das
+OSGi-Pendant des Framework-Launchers, der selbst kein Bundle ist.
+
+Dabei: `platform.vue` teilt jetzt auch `pinia`; `platform.compat` wuchs um
+die vier letzten Repositories; und der #20-Workaround wurde zum vollen
+Chunk-Rewriter ausgebaut, weil Vuestics `import Default, { named }`-Form
+weder vom tsm-Plugin noch vom einfachen Strip erfasst war — exakt die
+`renderChunk`-Hälfte, die das Issue vorschlägt, und damit die fertige
+PR-Vorlage.
+
+**Noch offen:** URL-isierung der lib-Schicht von unten nach oben
+(66 vorgeladene Module); Import-Map-Umstellung, sobald der Host kein Vue
+mehr bündeln soll (heute liefert der statische `platform.vue`-Container die
+Instanz, die Shell konsumiert sie via `__tsm__`).
 
 Ursprünglicher Text:
 

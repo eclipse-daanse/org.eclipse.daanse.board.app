@@ -85,7 +85,7 @@ const navigateToLoad = () => {
       <div class="welcome-content">
         <div class="logo-container">
           <div class="logo-bg"></div>
-          <img src="/LogoDaanse.svg" alt="Daanse Logo" class="welcome-logo" />
+          <img :src="'/LogoDaanse.svg'" alt="Daanse Logo" class="welcome-logo" />
         </div>
         <h1>Welcome to Daanse Dashboard</h1>
         <p>Select a page to view or get started with the options below.</p>

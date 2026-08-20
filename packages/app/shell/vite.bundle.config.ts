@@ -120,11 +120,15 @@ function inlineCss() {
   } as import('vite').Plugin
 }
 
-const sharedModules = ['vue', 'vue-router', ...manifest.sharedDependencies
-  .map((dependency) => dependency.id)
-  .filter((id) => id.startsWith('org.eclipse.daanse'))]
+// The manifest is the single source: everything it declares shared is
+// rewritten to __tsm__.require and must not end up in the bundle.
+const sharedModules = manifest.sharedDependencies.map((dependency) => dependency.id)
 
 export default defineConfig({
+  resolve: {
+    // The moved sources keep their '@/' imports
+    alias: { '@': resolve(__dirname, 'src') },
+  },
   // Bundles run in the browser; embedded third-party code still probing
   // process.env must see a value instead of throwing.
   define: {

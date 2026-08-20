@@ -57,6 +57,10 @@ export async function activate({ log }: ActivationContext) {
     'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart': () => import('org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'),
     'org.eclipse.daanse.board.app.ui.vue.stores.connection': () => import('org.eclipse.daanse.board.app.ui.vue.stores.connection'),
     'org.eclipse.daanse.board.app.ui.vue.stores.datasouce': () => import('org.eclipse.daanse.board.app.ui.vue.stores.datasouce'),
+    'org.eclipse.daanse.board.app.lib.repository.navigation': () => import('org.eclipse.daanse.board.app.lib.repository.navigation'),
+    'org.eclipse.daanse.board.app.lib.repository.route': () => import('org.eclipse.daanse.board.app.lib.repository.route'),
+    'org.eclipse.daanse.board.app.lib.repository.persistence': () => import('org.eclipse.daanse.board.app.lib.repository.persistence'),
+    'org.eclipse.daanse.board.app.lib.factory.variableWrapper': () => import('org.eclipse.daanse.board.app.lib.factory.variableWrapper'),
   }
 
   for (const [id, load] of Object.entries(libraries)) {

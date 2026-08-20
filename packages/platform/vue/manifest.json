@@ -9,11 +9,24 @@
   "capabilities": [
     {
       "namespace": "tsm.library",
-      "attributes": { "library": "vue", "version": "3.5.24" }
+      "attributes": {
+        "library": "vue",
+        "version": "3.5.24"
+      }
     },
     {
       "namespace": "tsm.library",
-      "attributes": { "library": "vue-router", "version": "5.0.6" }
+      "attributes": {
+        "library": "vue-router",
+        "version": "5.0.6"
+      }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "pinia",
+        "version": "3.0.4"
+      }
     }
   ]
 }

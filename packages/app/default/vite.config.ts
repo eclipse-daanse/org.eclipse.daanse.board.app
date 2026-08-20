@@ -23,6 +23,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 /** Where the separately built tsm bundles live, keyed by module id. */
 const bundleDirs: Record<string, string> = {
+  'app.shell': resolve(__dirname, '../shell/dist-bundle'),
   'ui.vue.widget.progress': resolve(__dirname, '../../ui/vue/widget/progress/dist-bundle'),
   'ui.vue.widget.map': resolve(__dirname, '../../ui/vue/widget/map/dist-bundle'),
   'ui.vue.plugins.geojson_renderer': resolve(__dirname, '../../ui/vue/plugins/geojson_renderer/dist-bundle'),

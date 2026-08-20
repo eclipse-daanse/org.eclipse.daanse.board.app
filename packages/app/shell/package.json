@@ -1,0 +1,17 @@
+{
+  "name": "org.eclipse.daanse.board.app.shell",
+  "version": "0.0.1-next.1",
+  "description": "The application shell as a tsm bundle: frame, router, editors, pages",
+  "license": "EPL-2.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": { "types": "./src/index.ts", "import": "./src/index.ts" },
+    "./manifest.json": "./manifest.json"
+  },
+  "scripts": {
+    "build": "vite build --config vite.bundle.config.ts"
+  },
+  "publishConfig": { "access": "public" }
+}

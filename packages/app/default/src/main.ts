@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,85 +12,22 @@
  **********************************************************************/
 
 /*
- * The host launcher. Everything the application contributes - pages,
- * navigation, actions - lives in modules (see preloaded.ts and bundles.ts);
- * what remains here is bootstrapping the frame: Vue app, UI kit, router,
- * store, the legacy container bridge, and the tsm ModuleLoader.
+ * The launcher - all that is left of the host.
+ *
+ * It owns nothing the user sees: the user interface is the app.shell
+ * bundle, activated by the loader like every widget. What remains here is
+ * what a framework launcher legitimately is: create the registry and the
+ * loader, hand over the still-statically-bundled module containers, name
+ * the manifests, start. The OSGi analogue is the framework launcher, which
+ * is itself not a bundle.
  */
 
 import 'reflect-metadata'
-import { createVuestic } from 'vuestic-ui'
-import 'vuestic-ui/styles/essential.css'
-import 'vuestic-ui/styles/typography.css'
-import { createApp } from 'vue'
-import { createPinia, setActivePinia } from 'pinia'
 import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import { services } from 'org.eclipse.daanse.board.app.lib.core'
-import App from './App.vue'
-import router from './router'
 import { preloadedModules } from './preloaded'
 import { bundles } from './bundles'
-
-const app = createApp(App)
-
-app.use(createVuestic({
-  config: {
-    colors: {
-      presets: {
-        light: {
-          primary: '#606060',
-          lightPrim: '#cbcbcb',
-          orange: '#c29803',
-          active: 'rgba(147,147,147,0.25)',
-          textPrimary: '#3a3a3a',
-        },
-      },
-    },
-  },
-}))
-
-const pinia = createPinia()
-setActivePinia(pinia)
-app.use(pinia)
-app.use(router)
-
-/*
- * Vue DI bridge: every service is provided into the Vue app under its
- * string id AND under Symbol.for(id) - which is exactly the `identifier`
- * constant the packages already export. A component declares its dependency
- * with plain Vue means:
- *
- *   const repo = inject<WidgetRepository>(identifier)
- *
- * No container object, no registry object, no lookup API in components -
- * the dependency is named at the consumption site and Vue delivers it.
- * Services registered later (bundle loads, reloads) become visible to
- * components created after that point; components track liveness through
- * the repositories' own change notifications where they need it.
- */
-function bridgeServicesIntoVue() {
-  const provide = (id: string) => {
-    const service = services.get(id)
-    app.provide(id, service)
-    app.provide(Symbol.for(id), service)
-  }
-  for (const id of services.getServiceIds()) provide(id)
-  services.addListener({
-    onServiceEvent(event) {
-      provide(event.serviceId)
-    },
-  })
-}
-
-app.provide('codeEditorType', 'monaco')
-
-function hidePreloader() {
-  const preloader = document.getElementById('preloader')
-  if (preloader) preloader.style.display = 'none'
-}
-if (document.readyState === 'complete') hidePreloader()
-else window.addEventListener('load', hidePreloader)
 
 const resolvedContainers = new Map<string, unknown>()
 
@@ -101,15 +38,13 @@ const loader = new ModuleLoader({
   entryResolver: (manifest) => resolvedContainers.get(manifest.id),
 })
 
-// The tsm console: tsm.lb(), tsm.services() and friends become available in
-// the browser devtools - insight into modules, services and their states.
+// The tsm console: tsm.lb(), tsm.services() and friends in the devtools
 installDevtools({ loader })
 
 /*
  * Dev reload bridge: the vite plugin in vite.config.ts watches the built
- * bundles and sends this event after every rebuild. A save in a bundle
- * (with `vite build --watch` running there) swaps the module live -
- * a real restart with deactivate/activate, not a component patch.
+ * bundles and sends this event after every rebuild. This includes the
+ * shell - saving in app.shell swaps the whole user interface live.
  */
 if (import.meta.hot) {
   import.meta.hot.on('tsm:bundle-changed', ({ id }: { id: string }) => {
@@ -119,12 +54,14 @@ if (import.meta.hot) {
   })
 }
 
-async function start() {
-  // The single service the host itself provides: its Vue app instance.
-  // Only the composition root can construct it; everything else that used
-  // to be registered here has an owning module now (platform.system).
-  services.register('App', app)
+function hidePreloader() {
+  const preloader = document.getElementById('preloader')
+  if (preloader) preloader.style.display = 'none'
+}
+if (document.readyState === 'complete') hidePreloader()
+else window.addEventListener('load', hidePreloader)
 
+async function start() {
   const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
     [
       (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
@@ -143,11 +80,6 @@ async function start() {
     resolvedContainers.set(manifest.id, await load())
   }
 
-  // Before loadAll: modules may mount components during their activate
-  // (the endpoint finder does), and those components inject services - the
-  // bridge's listener has to be feeding the provides while loading runs.
-  bridgeServicesIntoVue()
-
   loader.register([...preloaded.map(([manifest]) => manifest), ...bundles])
   await loader.loadAll()
 
@@ -160,10 +92,6 @@ async function start() {
   }
 }
 
-start()
-  .catch((err) => {
-    console.error('❌ start failed:', err, '\ncause:', err?.cause ?? '(none)')
-  })
-  .finally(() => {
-    app.mount('#app')
-  })
+start().catch((err) => {
+  console.error('❌ start failed:', err, '\ncause:', err?.cause ?? '(none)')
+})

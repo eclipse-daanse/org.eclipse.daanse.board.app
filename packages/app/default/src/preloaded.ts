@@ -13,7 +13,6 @@
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import platformSystem from 'org.eclipse.daanse.board.app.platform.system/manifest.json'
-import appPages from './app-modules/pages/manifest.json'
 import libVariables from 'org.eclipse.daanse.board.app.lib.variables/manifest.json'
 import storesConnection from 'org.eclipse.daanse.board.app.ui.vue.stores.connection/manifest.json'
 import storesDatasource from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce/manifest.json'
@@ -94,8 +93,6 @@ import m62 from 'org.eclipse.daanse.board.app.ui.vue.variable.timepicker/manifes
 export const preloadedModules: Array<[ModuleManifest, () => Promise<unknown>]> = [
   // System bundle: owns the application-wide base services (event bus)
   [platformSystem as ModuleManifest, () => import('org.eclipse.daanse.board.app.platform.system')],
-  // The application's own contributions, a module like any other
-  [appPages as ModuleManifest, () => import('./app-modules/pages')],
   // Freed from import-time bindings in the service-locator cleanup
   [libVariables as ModuleManifest, () => import('org.eclipse.daanse.board.app.lib.variables')],
   // Store packages: their activate hands the repositories into the pinia closures

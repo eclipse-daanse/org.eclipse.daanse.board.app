@@ -12,11 +12,18 @@
  **********************************************************************/
 
 /*
- * The application's own contributions - pages, navigation entries, actions -
- * packaged as a module like everything else. The host launcher no longer
- * calls any of this; the loader runs it once its required registries exist.
+ * The application shell as a bundle: the frame (App.vue), navigation,
+ * router, editors and built-in pages. The host launcher no longer creates
+ * a Vue app at all - the shell does, when the loader activates it, and
+ * withdraws it on deactivate. `tsm.unload('app.shell')` takes the whole
+ * user interface down and `load` brings it back, exactly like any widget.
  */
 
+import { createApp, type App as VueApp } from 'vue'
+import { createPinia, setActivePinia } from 'pinia'
+import { createVuestic } from 'vuestic-ui'
+import 'vuestic-ui/styles/essential.css'
+import 'vuestic-ui/styles/typography.css'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   NAVIGATION_REGISTRY_ID,
@@ -29,21 +36,70 @@ import {
   RouteDefinition,
 } from 'org.eclipse.daanse.board.app.lib.repository.route'
 import type { VariableWrapperFactory } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
+import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { TinyEmitter } from 'tiny-emitter'
 import {
   VariableComplexStringWrapper,
   VARIABLECOMPLEXSTRINGWRAPPER,
 } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import Configuration from '../../pages/Configuration.vue'
-import SaveLoad from '../../pages/SaveLoad.vue'
-import router from '../../router'
-import { provideVariablesStoreDependencies } from '../../stores/VariablesPinia'
-import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import type { TinyEmitter } from 'tiny-emitter'
-import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import { registerSystemActions } from '../../systemActions'
-import { registerTestActions } from '../../testActions'
+import App from './App.vue'
+import router from './router'
+import Configuration from './pages/Configuration.vue'
+import SaveLoad from './pages/SaveLoad.vue'
+import { registerSystemActions } from './systemActions'
+import { registerTestActions } from './testActions'
+import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
+
+let app: VueApp | undefined
 
 export async function activate({ services, log }: ActivationContext) {
+  app = createApp(App)
+
+  app.use(createVuestic({
+    config: {
+      colors: {
+        presets: {
+          light: {
+            primary: '#606060',
+            lightPrim: '#cbcbcb',
+            orange: '#c29803',
+            active: 'rgba(147,147,147,0.25)',
+            textPrimary: '#3a3a3a',
+          },
+        },
+      },
+    },
+  }))
+
+  const pinia = createPinia()
+  setActivePinia(pinia)
+  app.use(pinia)
+  app.use(router)
+  app.provide('codeEditorType', 'monaco')
+
+  /*
+   * Vue DI bridge: every service is provided into this app under its string
+   * id AND under Symbol.for(id) - the identifier constants the packages
+   * export. Components declare dependencies with plain inject(). Installed
+   * before mount and kept live through the registry listener, so components
+   * created later see services registered later.
+   */
+  const registry = services as ActivationContext['services'] & {
+    addListener?(l: { onServiceEvent(e: { serviceId: string }): void }): void
+  }
+  const provide = (id: string) => {
+    const service = services.get(id)
+    app?.provide(id, service)
+    app?.provide(Symbol.for(id), service)
+  }
+  for (const id of services.getServiceIds()) provide(id)
+  registry.addListener?.({ onServiceEvent: (event) => provide(event.serviceId) })
+
+  // The one service the shell owns: the app instance it just created.
+  services.register('App', app)
+
+  // Store dependencies, closed over at the module boundary
   provideVariablesStoreDependencies({
     repository: services.getRequired<VariableRepository>('VariableRepository'),
     eventBus: services.getRequired<TinyEmitter>('TINY_EMITTER'),
@@ -58,6 +114,7 @@ export async function activate({ services, log }: ActivationContext) {
       create: (value: unknown) => new VariableComplexStringWrapper<string>(value as string),
     })
 
+  // Built-in pages and their navigation entries
   const routeRegistry = services.getRequired<RouteRegistry>(ROUTE_REGISTRY_ID)
 
   const configRoute = new RouteDefinition()
@@ -94,8 +151,7 @@ export async function activate({ services, log }: ActivationContext) {
   saveNav.visible = true
   navRegistry.registerNavigationItem(saveNav)
 
-  // Everything registered so far - including routes other modules
-  // contributed - goes into the router.
+  // Routes other modules contributed before the shell came up
   const dynamic = routeRegistry as unknown as {
     getAllRoutesArray?: () => Array<Record<string, unknown>>
   }
@@ -108,8 +164,7 @@ export async function activate({ services, log }: ActivationContext) {
     } as Parameters<typeof router.addRoute>[0])
   }
 
-  // One failing action set must not take the other down; both used to be
-  // fire-and-forget next to the mount and hid their timing behind the race.
+  // One failing action set must not take the other down
   try {
     await registerSystemActions(
       router,
@@ -126,6 +181,9 @@ export async function activate({ services, log }: ActivationContext) {
   } catch (error) {
     log.error('test actions failed', error)
   }
+
+  app.mount('#app')
+  log.info('shell mounted')
 }
 
 export function deactivate({ services }: ActivationContext) {
@@ -136,4 +194,9 @@ export function deactivate({ services }: ActivationContext) {
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
   navRegistry.unregisterNavigationItem('config')
   navRegistry.unregisterNavigationItem('save')
+
+  // 'App' was registered through the scoped context and is withdrawn by the
+  // loader; unmounting is ours.
+  app?.unmount()
+  app = undefined
 }
