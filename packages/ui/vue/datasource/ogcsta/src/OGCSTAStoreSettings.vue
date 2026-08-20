@@ -11,7 +11,6 @@ Contributors: Smart City Jena
 <script setup lang="ts">
 import { inject, computed, reactive, watch, ref } from 'vue';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   identifier as variableIdentifier,
   type VariableRepository

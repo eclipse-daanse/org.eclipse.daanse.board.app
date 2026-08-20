@@ -12,7 +12,6 @@ Contributors:
 -->
 <script setup lang="ts">
 import { inject, computed, onMounted, ref } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   identifier,

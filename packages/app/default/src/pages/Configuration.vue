@@ -184,7 +184,6 @@ Contributors:
 import { inject, onMounted, ref, computed } from 'vue'
 import { type VariableRepository, identifier }
   from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { useVariablesStore } from '@/stores/VariablesPinia'
 import {
   VariableScope,

@@ -13,12 +13,10 @@
 
 <script setup lang="ts">
 // TODO: fix when testing widget repository
-// import container from "@/config/inversify";
 // import type { IWidget } from "@/types/Widgets";
 // import { WidgetRepository } from "@/plugins/data/WidgetRepository";
 // import SERVICE_IDENTIFIER from "@/config/identifiers/services";
 import { inject, computed, ref, onUnmounted } from 'vue'
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
   WidgetRepository,
   identifier as WidgetIdentifier,

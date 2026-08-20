@@ -38,7 +38,7 @@ import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widg
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'

@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-3b5c01fc] {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-container[data-v-3b5c01fc] {\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-item[data-v-3b5c01fc] {\n  border: 1px solid #000;\n  border-radius: 8px;\n}\n.preview-item-title[data-v-3b5c01fc] {\n  background-color: #f0f0f0;\n  font-size: 1.25rem;\n  font-weight: bold;\n  padding: 8px;\n  border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-3b5c01fc] {\n  padding: 8px;\n}\n";})();
+(function(){var i="ui.vue.widget.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-cc472b41] {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-container[data-v-cc472b41] {\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-item[data-v-cc472b41] {\n  border: 1px solid #000;\n  border-radius: 8px;\n}\n.preview-item-title[data-v-cc472b41] {\n  background-color: #f0f0f0;\n  font-size: 1.25rem;\n  font-weight: bold;\n  padding: 8px;\n  border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-cc472b41] {\n  padding: 8px;\n}\n";})();
 const { defineComponent, toRefs, inject: inject$1, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, withModifiers, createCommentVNode, Fragment, renderList, createElementVNode, toDisplayString } = __tsm__.require("vue");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { useRoute } = __tsm__.require("vue-router");
@@ -1229,7 +1229,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const RssWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-3b5c01fc"]]);
+const RssWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-cc472b41"]]);
 const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {
   return null;

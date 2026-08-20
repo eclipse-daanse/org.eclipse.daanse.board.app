@@ -210,10 +210,25 @@ noch den Rahmen. Ein tragender Seiteneffekt-Import bleibt markiert:
 `lib.variables` bindet beim Import (letzter Klasse-C-Rest, gehört zur
 Service-Locator-Baustelle).
 
-**Noch offen aus B5.4:** Inversify-Brücke (fällt mit dem
-Service-Locator-Rest: 30 Dateien `container.get`, `lib.variables`),
-URL-isierung der lib-Schicht von unten nach oben, Produktionsbuild des
-Bundle-Servings (heute Dev-Middleware).
+**Inversify ist entfernt.** Mit der Service-Locator-Auflösung verlor der
+Container seinen letzten Konsumenten; gefallen sind die Spiegelung und der
+Rückfallweg in der `BoardServiceRegistry` (Klasse gelöscht — `services` ist
+jetzt eine reine `DefaultServiceRegistry`), der Container samt Bindungen in
+`lib.core` und `main.ts`, die `provide('container')`-Brücke, `inversify` aus
+105 `package.json`s und 47 tote Alt-Testdateien aus der Vor-B3-Zeit.
+`reflect-metadata` bleibt — die tsm-Decorators brauchen es.
+
+**Produktionsbuild verifiziert:** `vite build` läuft durch, ein
+`closeBundle`-Hook kopiert die 49 Bundles nach `dist/bundles/<id>/`, und
+unter `vite preview` startet die volle Architektur aus dem statischen Build.
+
+**Manifest-Lint:** `test/manifest-lint.spec.ts` prüft die 118 Manifeste als
+Ganzes — eindeutige IDs, genau ein Anbieter je Dienst, jede Anforderung
+gedeckt, Modulabhängigkeiten registriert, Bundle-URLs konventionstreu,
+geteilte Bibliotheken angeboten. Der Nachfolger des mit dem Bootstrapper
+gestorbenen `modules.test.ts`, bis tsm#17 den Kern in den Build zieht.
+
+**Noch offen aus B5.4:** URL-isierung der lib-Schicht von unten nach oben.
 
 Ursprünglicher Text:
 

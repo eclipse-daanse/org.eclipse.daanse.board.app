@@ -16,7 +16,6 @@ import { OGCSTAToChartComposer } from 'org.eclipse.daanse.board.app.lib.composer
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const { config, dataSources } = defineProps<{
   config: any

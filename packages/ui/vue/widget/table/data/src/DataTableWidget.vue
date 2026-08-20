@@ -21,7 +21,7 @@ const { wrapParameters } = useVariableRepository();
 const props = defineProps<{ datasourceId: string, config: any, id?: string }>();
 const { datasourceId, config, id: widgetId } = toRefs(props);
 
-import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface';

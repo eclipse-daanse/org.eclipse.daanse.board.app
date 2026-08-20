@@ -22,10 +22,7 @@ import { inject,
 } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import {
-  container as coreContainer,
-  identifiers,
-} from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
   EventActionsRegistry,

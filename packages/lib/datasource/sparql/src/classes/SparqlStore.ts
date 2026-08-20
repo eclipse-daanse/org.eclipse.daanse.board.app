@@ -21,7 +21,6 @@ import {
   ISparqlStoreConfiguration,
   SparqlResponse,
 } from '../interfaces/ISparqlStoreConfiguration'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 @injectable()
 export default class SparqlStore extends BaseDatasource {

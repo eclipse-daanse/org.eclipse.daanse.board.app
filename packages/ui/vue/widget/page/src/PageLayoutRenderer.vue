@@ -16,7 +16,6 @@ import { computed, ref, watch, onMounted, onErrorCaptured, inject, shallowRef } 
 import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
-import type { Container } from 'inversify'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
@@ -36,9 +35,8 @@ const props = defineProps<{
 const emit = defineEmits(['openWidgetSettings', 'removeWidget'])
 
 // Dependency Injection
-const container = inject<Container>('container')
-const layoutRepo = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
-const pageRepo = container?.get<PageRegistryI>(PageIdentifier)
+const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const pageRepo = inject<PageRegistryI>(PageIdentifier)
 
 // Layout Engine Components
 const currentPage = ref<RepositoryPageI | null>(null)

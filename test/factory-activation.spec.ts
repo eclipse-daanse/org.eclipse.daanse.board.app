@@ -19,15 +19,14 @@
  * Konstruktoren haben und keine Decorators tragen, war die Klassenbindung ein
  * Umweg über den Container — sie entfällt, die Factory ruft direkt `new`.
  *
- * Entscheidend ist die Kette bis zum Konsumenten: das DatasourceRepository
- * löst den Eintrag über `container.get(identifiers.Store)` auf und ruft ihn
- * als Funktion. Das funktioniert nur, weil die Registry ihre Einträge in den
- * Container spiegelt.
+ * The chain to the consumer: the DatasourceRepository resolves the entry
+ * through its injected registry (resolveIdentifier) and calls it as a
+ * function. No container, no mirror - those died with the migration.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
-import { container, BoardServiceRegistry } from 'org.eclipse.daanse.board.app.lib.core'
+import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
+import { DefaultServiceRegistry, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 
 /** Minimal gueltige Konfiguration - validateConfiguration prueft genau diese vier Felder. */
 const GUELTIG = {
@@ -42,7 +41,7 @@ const stilleAusgabe = () => ({
 })
 
 describe('Composer-Factory', () => {
-  let services: BoardServiceRegistry
+  let services: DefaultServiceRegistry
   let loader: ModuleLoader
 
   const chartModul = {
@@ -73,7 +72,7 @@ describe('Composer-Factory', () => {
      * Import global band — es war also immer der globale im Spiel, nur
      * unsichtbar.
      */
-    services = new BoardServiceRegistry(container)
+    services = new DefaultServiceRegistry()
     loader = new ModuleLoader({ serviceRegistry: services, logger: stilleAusgabe() })
   })
 
@@ -100,18 +99,17 @@ describe('Composer-Factory', () => {
     expect(typeof services.get('ChartComposer')).toBe('function')
   })
 
-  it('ist ueber das Symbol im Container auffindbar', async () => {
-    // Genau so löst das DatasourceRepository den 'Store'-Eintrag auf
+  it('is resolvable through the repository, the way consumers reach it', async () => {
     await activateAll()
 
     const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
-    expect(typeof container.get(symbol)).toBe('function')
+    const repository = services.getRequired<{ resolveIdentifier<T>(s: symbol): T }>('DatasourceRepository')
+    expect(typeof repository.resolveIdentifier(symbol)).toBe('function')
   })
 
   it('laesst eine gueltige Konfiguration die Validierung passieren', async () => {
     await activateAll()
-    const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
-    const factory = container.get(symbol) as (c: unknown) => unknown
+    const factory = services.getRequired<(c: unknown) => unknown>('ChartComposer')
 
     // Die Instanziierung selbst braucht angemeldete Datenquellen; hier zaehlt,
     // dass die Factory die Konfiguration annimmt und bis init() kommt, statt
@@ -121,22 +119,18 @@ describe('Composer-Factory', () => {
 
   it('weist eine ungueltige Konfiguration zurueck', async () => {
     await activateAll()
-    const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
 
-    const factory = container.get(symbol) as (c: unknown) => unknown
+    const factory = services.getRequired<(c: unknown) => unknown>('ChartComposer')
     // validateConfiguration prueft nur einzelne Felder - fehlen sie, meldet
     // die Factory das mit ihrer eigenen Meldung
     expect(() => factory({})).toThrow(/Invalid ChartComposer configuration/)
   })
 
   it('withdraws the registration on unload', async () => {
-    const { symbol } = await import('org.eclipse.daanse.board.app.lib.composer.chart')
-
     await activateAll()
     await loader.unloadModule('lib.composer.chart')
 
     expect(services.has('ChartComposer')).toBe(false)
-    expect(container.isBound(symbol)).toBe(false)
   })
 
   it('has no effect on import alone', async () => {

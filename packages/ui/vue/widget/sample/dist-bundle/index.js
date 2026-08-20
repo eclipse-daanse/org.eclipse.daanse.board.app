@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-8ebfb61e] {\n  padding: 12px;\n}\n";})();
+(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-4037cc7e] {\n  padding: 12px;\n}\n";})();
 const { defineComponent, toRefs, inject: inject$1, ref, watch, createElementBlock, openBlock, withModifiers, toDisplayString } = __tsm__.require("vue");
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
@@ -1181,7 +1181,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const SampleWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-8ebfb61e"]]);
+const SampleWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-4037cc7e"]]);
 const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {
   return null;

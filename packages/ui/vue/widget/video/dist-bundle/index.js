@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-a0ab759e] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-a0ab759e] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--v4584ae86);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
+(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-f965dc7c] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-f965dc7c] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--v03022de9);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
 const { defineComponent, mergeModels, useCssVars, computed, toRefs, useModel, inject: inject$1, ref, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { Documentation, Attribute, ModelClass, Reference } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
@@ -1246,7 +1246,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "v4584ae86": videoFit.value
+      "v03022de9": videoFit.value
     }));
     const props = __props;
     const { id: widgetId } = toRefs(props);
@@ -1398,7 +1398,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const VideoWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-a0ab759e"]]);
+const VideoWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-f965dc7c"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "VideoWidgetSettings",

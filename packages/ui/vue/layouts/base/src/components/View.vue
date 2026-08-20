@@ -17,7 +17,7 @@ import { inject, onMounted, nextTick } from 'vue'
 import { useMoveableLayout } from '../composables/useMovableLayout'
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useRoute } from 'vue-router'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
 const props = defineProps<{

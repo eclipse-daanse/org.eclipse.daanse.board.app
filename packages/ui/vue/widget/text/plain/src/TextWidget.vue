@@ -22,7 +22,7 @@ import 'reflect-metadata';
 const props = defineProps<{ datasourceId: string; id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 
-import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { TextWidgetInterface } from './api/TextWidgetInterface';

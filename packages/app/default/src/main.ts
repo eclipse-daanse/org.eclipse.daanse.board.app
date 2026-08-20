@@ -26,11 +26,7 @@ import { createApp } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
-import {
-  container,
-  identifiers,
-  services,
-} from 'org.eclipse.daanse.board.app.lib.core'
+import { services } from 'org.eclipse.daanse.board.app.lib.core'
 import App from './App.vue'
 import router from './router'
 import { preloadedModules } from './preloaded'
@@ -87,15 +83,6 @@ function bridgeServicesIntoVue() {
   })
 }
 
-/*
- * Legacy container bridge: the few remaining non-Vue call sites and the
- * composition root itself. Dies together with the Inversify fallback once
- * the last container.get is gone.
- */
-container.bind(identifiers.CONTAINER).toDynamicValue((ctx: unknown) => ctx)
-container.bind('App').toConstantValue(app)
-app.config.globalProperties.$container = container
-app.provide('container', container)
 app.provide('codeEditorType', 'monaco')
 
 function hidePreloader() {

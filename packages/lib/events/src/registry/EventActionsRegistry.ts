@@ -10,7 +10,6 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
-import { injectable, inject } from 'inversify';
 import { getWidgetActions, type WidgetActionMetadata } from '../decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, type EcoreActionMetadata } from './EcoreMetadataService';
 
@@ -52,7 +51,6 @@ export interface RegisteredInstance {
 /**
  * Registry für Event-Aktionen in verschiedenen Kontexten
  */
-@injectable()
 export class EventActionsRegistry {
   private actions: Map<string, EventAction[]> = new Map();
   private widgetTypes: Map<string, WidgetTypeRegistration> = new Map();

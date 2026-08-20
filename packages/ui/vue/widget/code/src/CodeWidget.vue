@@ -16,7 +16,7 @@ import { codeToHtml } from 'shiki'
 import { inject, ref, watch, toRefs, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { ICodeSettings } from '.';
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { CodeWidgetInterface } from './api/CodeWidgetInterface';

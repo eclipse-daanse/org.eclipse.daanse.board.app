@@ -17,7 +17,6 @@ import { inject, onMounted, ref, computed } from 'vue'
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import { PageI } from './interface/PageI'
 import { useRoute } from 'vue-router'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 import { type PageRegistryI, identifier } from 'org.eclipse.daanse.board.app.lib.repository.page'
 
 const i18n:i18n|undefined = inject('i18n');

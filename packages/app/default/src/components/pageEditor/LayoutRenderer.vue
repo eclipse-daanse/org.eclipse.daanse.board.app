@@ -13,7 +13,6 @@ Contributors:
 <script setup lang="ts">
 import { inject, ref, computed, watchEffect, onMounted, onUnmounted, shallowRef, nextTick }
   from 'vue'
-import type { Container } from 'inversify'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
@@ -32,9 +31,8 @@ const props = defineProps<{
 
 const emit = defineEmits(['openWidgetSettings', 'removeWidget'])
 
-const container = inject<Container>('container')
-const layoutRepo = container?.get<LayoutRepositoryI>(LayoutRepositoryIdentifier)
-const pageRepo = container?.get<PageRegistryI>(PageIdentifier)
+const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+const pageRepo = inject<PageRegistryI>(PageIdentifier)
 
 const currentPage = ref<PageI | null>(null)
 const currentLayout = ref<LayoutI | null>(null)

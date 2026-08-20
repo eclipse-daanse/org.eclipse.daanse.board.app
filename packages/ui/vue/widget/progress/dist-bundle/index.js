@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.progress",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-21120415] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.grid-layout[data-v-21120415] {\n  display: grid;\n  grid-template-columns: auto 1fr auto;\n  grid-template-rows:  1fr auto 1fr;\n\n  gap: 0.5em;\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.grid-layout.vertical[data-v-21120415] {\n  grid-template-columns: 1fr auto 1fr;\n  grid-template-rows: auto 1fr auto;\n}\n\n/* Zentrale Progressbar */\n.progress-bar[data-v-21120415] {\n  grid-column: 2;\n  grid-row: 2;\n  background: var(--v5dda8957);\n  border-radius: var(--v37995687);\n  justify-self: center;\n  position: relative;\n  display: flex;\n  align-items: end;\n  justify-content: start;\n  height: var(--v0c2f4a68);\n  width: var(--v8b2b8d54);\n}\n.progress-percent[data-v-21120415] {\n  height: var(--v81865766);\n  width: var(--v3a2f4e0a);\n  background: var(--v83f211ac);\n  transition: var(--v78f85cda);\n  border-radius: var(--v37995687);\n}\n\n/* Text */\n.progress-value[data-v-21120415] {\n  font-weight: 600;\n  white-space: nowrap;\n  align-self: center;\n  justify-self: center;\n  color: var(--v8c936b90);\n  z-index: 1000;\n}\n\n/* Grid-Zuweisung */\n.align-left[data-v-21120415]   { grid-column: 1;\n}\n.align-center[data-v-21120415] { grid-column: 2;\n}\n.align-right[data-v-21120415]  { grid-column: 3;\n}\n.justify-top[data-v-21120415]    { grid-row: 1;\n}\n.justify-center[data-v-21120415] { grid-row: 2;\n}\n.justify-bottom[data-v-21120415] { grid-row: 3;\n}\n\n.settings-container[data-v-e12619d5] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.add-btn[data-v-e12619d5] {\n  width: 150px;\n}\n.input[data-v-e12619d5] {\n  width: 100px;\n}\n.loading[data-v-e12619d5] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n";})();
+(function(){var i="ui.vue.widget.progress",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-ac2e41b4] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.grid-layout[data-v-ac2e41b4] {\n  display: grid;\n  grid-template-columns: auto 1fr auto;\n  grid-template-rows:  1fr auto 1fr;\n\n  gap: 0.5em;\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.grid-layout.vertical[data-v-ac2e41b4] {\n  grid-template-columns: 1fr auto 1fr;\n  grid-template-rows: auto 1fr auto;\n}\n\n/* Zentrale Progressbar */\n.progress-bar[data-v-ac2e41b4] {\n  grid-column: 2;\n  grid-row: 2;\n  background: var(--v265f6a8a);\n  border-radius: var(--c6761a2a);\n  justify-self: center;\n  position: relative;\n  display: flex;\n  align-items: end;\n  justify-content: start;\n  height: var(--v7e04c268);\n  width: var(--v06ca56ba);\n}\n.progress-percent[data-v-ac2e41b4] {\n  height: var(--v8d1d0b2e);\n  width: var(--v228be817);\n  background: var(--v0a67148e);\n  transition: var(--v03cbc1af);\n  border-radius: var(--c6761a2a);\n}\n\n/* Text */\n.progress-value[data-v-ac2e41b4] {\n  font-weight: 600;\n  white-space: nowrap;\n  align-self: center;\n  justify-self: center;\n  color: var(--v1ee1e69c);\n  z-index: 1000;\n}\n\n/* Grid-Zuweisung */\n.align-left[data-v-ac2e41b4]   { grid-column: 1;\n}\n.align-center[data-v-ac2e41b4] { grid-column: 2;\n}\n.align-right[data-v-ac2e41b4]  { grid-column: 3;\n}\n.justify-top[data-v-ac2e41b4]    { grid-row: 1;\n}\n.justify-center[data-v-ac2e41b4] { grid-row: 2;\n}\n.justify-bottom[data-v-ac2e41b4] { grid-row: 3;\n}\n\n.settings-container[data-v-e12619d5] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.add-btn[data-v-e12619d5] {\n  width: 150px;\n}\n.input[data-v-e12619d5] {\n  width: 100px;\n}\n.loading[data-v-e12619d5] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n";})();
 const { defineComponent, mergeModels, useCssVars, computed, toRefs, inject: inject$1, onUnmounted, useModel, ref, watch, onMounted, createElementBlock, openBlock, withModifiers, createElementVNode, normalizeClass, toDisplayString, resolveComponent, createBlock, withCtx, createCommentVNode, createVNode, unref, createTextVNode } = __tsm__.require("vue");
 const { useRoute } = __tsm__.require("vue-router");
 const { VariableWrapper, useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
@@ -1260,15 +1260,15 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "v5dda8957": backgroundColor.value,
-      "v37995687": barRadius.value,
-      "v0c2f4a68": horizontalPositionWrapper.value,
-      "v8b2b8d54": verticalPositionWrapper.value,
-      "v81865766": verticalPositionFiller.value,
-      "v3a2f4e0a": horizontalPositionFiller.value,
-      "v83f211ac": backgroundProgressColor.value,
-      "v78f85cda": transition.value,
-      "v8c936b90": textColor.value
+      "v265f6a8a": backgroundColor.value,
+      "c6761a2a": barRadius.value,
+      "v7e04c268": horizontalPositionWrapper.value,
+      "v06ca56ba": verticalPositionWrapper.value,
+      "v8d1d0b2e": verticalPositionFiller.value,
+      "v228be817": horizontalPositionFiller.value,
+      "v0a67148e": backgroundProgressColor.value,
+      "v03cbc1af": transition.value,
+      "v1ee1e69c": textColor.value
     }));
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
@@ -1454,7 +1454,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const ProgressWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-21120415"]]);
+const ProgressWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-ac2e41b4"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _hoisted_2 = {
   key: 0,

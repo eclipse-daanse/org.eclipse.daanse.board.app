@@ -231,9 +231,10 @@ die Startreihenfolge explizit sein.
 
 `lib.variables` hat seine Import-Zeit-Bindungen verloren: jede Variablenklasse
 entsteht über eine typbezogene Factory aus dem neuen `activate` des Pakets.
-Verbleibende Container-Nutzer: die Composition-Root (`main.ts`) und die
-Spiegelung in der `BoardServiceRegistry` — beide fallen gemeinsam mit dem
-Container selbst, der jetzt entfernbar geworden ist.
+**Nachtrag, selber Tag: Der Container ist entfernt.** `BoardServiceRegistry`
+(Spiegelung + Rückfallweg) gelöscht, `services` ist eine reine
+`DefaultServiceRegistry`, `inversify` aus 105 `package.json`s ausgetragen.
+Der Übergangsmechanismus starb, wie er entworfen war: durch Unbenutztheit.
 
 Ursprünglicher Befund:
 

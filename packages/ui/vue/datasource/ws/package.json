@@ -40,7 +40,6 @@
     "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
   },
   "devDependencies": {
-    "inversify": "7.11.0",
     "typescript": "^5.8.2",
     "vite": "^6.4.1",
     "vite-plugin-dts": "4.5.4",

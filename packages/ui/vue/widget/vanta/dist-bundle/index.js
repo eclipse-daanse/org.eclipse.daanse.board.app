@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.vanta",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vanta-container[data-v-f66900e3] {\n  width: 100%;\n  height: 100%;\n}\n.widget-container[data-v-f66900e3] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}";})();
+(function(){var i="ui.vue.widget.vanta",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vanta-container[data-v-47c01c22] {\n  width: 100%;\n  height: 100%;\n}\n.widget-container[data-v-47c01c22] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}";})();
 const { defineComponent, ref, toRefs, inject: inject$1, watch, nextTick, onMounted, onBeforeUnmount, createElementBlock, openBlock, withModifiers, createElementVNode, useModel, resolveComponent, createBlock, withCtx, createVNode, createCommentVNode, Fragment } = __tsm__.require("vue");
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
@@ -47850,7 +47850,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const VantaWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-f66900e3"]]);
+const VantaWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-47c01c22"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "VantaWidgetSettings",

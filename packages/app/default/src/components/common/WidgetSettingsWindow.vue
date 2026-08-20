@@ -17,7 +17,6 @@ import { ref, inject } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const emit = defineEmits(['saveWidgetSettings', 'close'])
 const widget = defineModel<IWidget>()

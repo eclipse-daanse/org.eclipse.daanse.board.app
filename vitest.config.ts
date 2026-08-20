@@ -76,11 +76,24 @@ const brokenThirdPartyEntries = {
   'vuedraggable-es': join(root, 'node_modules/vuedraggable-es/dist/index.es.js'),
 }
 
+/**
+ * Exact-match aliases: a bare string alias substitutes as a prefix, which
+ * would also rewrite 'pkg/manifest.json' onto the src entry FILE and break
+ * every manifest subpath import. The regex anchors leave subpaths to normal
+ * node resolution through the workspace symlinks.
+ */
+function exactAliases(entries: Record<string, string>) {
+  return Object.entries(entries).map(([find, replacement]) => ({
+    find: new RegExp('^' + find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'),
+    replacement,
+  }))
+}
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     resolve: {
-      alias: { ...workspaceSourceAliases(), ...brokenThirdPartyEntries },
+      alias: exactAliases({ ...workspaceSourceAliases(), ...brokenThirdPartyEntries }),
     },
     test: {
       environment: 'jsdom',

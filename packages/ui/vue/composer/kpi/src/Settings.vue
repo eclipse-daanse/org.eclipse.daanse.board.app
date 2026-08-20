@@ -16,7 +16,6 @@ import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
 } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { watch, ref, computed } from "vue";
-import { container } from 'org.eclipse.daanse.board.app.lib.core'
 
 const { config, dataSources } = defineProps<{
   config: any;

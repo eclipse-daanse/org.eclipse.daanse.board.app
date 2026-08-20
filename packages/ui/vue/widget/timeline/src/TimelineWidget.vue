@@ -114,7 +114,6 @@ import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { container } from 'org.eclipse.daanse.board.app.lib.core';
 import {
     identifier as variableIdentifier,
     type VariableRepository
@@ -162,7 +161,7 @@ import { toRefs } from 'vue';
 const { id: widgetId } = toRefs(props);
 const config = defineModel<TimelineSettings>('configv', { required: true });
 
-import { container as coreContainer, identifiers } from 'org.eclipse.daanse.board.app.lib.core';
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface';

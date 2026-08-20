@@ -15,7 +15,7 @@ import { inject } from 'vue'
 import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import { IconSettings } from './gen/IconSettings'
-import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
+import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
 const props = defineProps<{ id?: string }>();
