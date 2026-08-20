@@ -27,6 +27,13 @@
         "library": "pinia",
         "version": "3.0.4"
       }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "vuedraggable",
+        "version": "4.1.0"
+      }
     }
   ]
 }

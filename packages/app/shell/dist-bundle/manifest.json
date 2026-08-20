@@ -54,6 +54,10 @@
       "versionRange": "^3.0.0"
     },
     {
+      "id": "vuedraggable",
+      "versionRange": "^4.0.0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },

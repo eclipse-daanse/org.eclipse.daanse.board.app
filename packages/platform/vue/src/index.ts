@@ -14,6 +14,7 @@
 import * as Vue from 'vue'
 import * as VueRouter from 'vue-router'
 import * as Pinia from 'pinia'
+import * as VueDraggable from 'vuedraggable'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
@@ -43,6 +44,12 @@ const VERSIONS = {
   vue: '3.5.24',
   'vue-router': '5.0.6',
   pinia: '3.0.4',
+  /*
+   * Shared because Sortable keeps its drag context in module state: the
+   * palette (shell bundle) starts a drag that the grid's drop zone (host
+   * graph) must recognise - two copies are two drag worlds and drops die.
+   */
+  vuedraggable: '4.1.0',
 } as const
 
 export function activate({ log }: ActivationContext) {
@@ -51,6 +58,7 @@ export function activate({ log }: ActivationContext) {
   runtime.register('vue', Vue, VERSIONS.vue, 'platform.vue')
   runtime.register('vue-router', VueRouter, VERSIONS['vue-router'], 'platform.vue')
   runtime.register('pinia', Pinia, VERSIONS.pinia, 'platform.vue')
+  runtime.register('vuedraggable', VueDraggable, VERSIONS.vuedraggable, 'platform.vue')
 
   log.info(`shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}, pinia@${VERSIONS.pinia}`)
 }
