@@ -13,6 +13,10 @@
 @import
 url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+/* The old host build scanned '../../**' for utility classes; the shell owns
+ * the global sheet now, so the scan has to cover the whole workspace - the
+ * widget bundles use the same utilities. */
+@source "../../../../../packages";
 @source "../../../ui/vue/**/*.vue";
 @source inline("top-[-25px] right-0");
 @source inline("object-contain object-cover object-fill object-scale-down");

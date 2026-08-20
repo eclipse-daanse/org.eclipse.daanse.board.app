@@ -28,6 +28,7 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import { tsmPlugin } from '@eclipse-daanse/tsm/vite'
 import manifest from './manifest.json'
 
@@ -137,6 +138,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    // The shell owns the application-wide stylesheet; main.css pulls
+    // tailwind in and @source widens the scan across the workspace, since
+    // widget bundles use the same utility classes.
+    tailwindcss(),
     inlineCss(),
     rewriteSharedImportsInChunks(),
     tsmPlugin({
