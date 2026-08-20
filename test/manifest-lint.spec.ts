@@ -27,16 +27,18 @@ import { bundles } from '../packages/app/default/src/bundles'
 import { preloadedModules } from '../packages/app/default/src/preloaded'
 import platformVue from '../packages/platform/vue/manifest.json'
 import platformCompat from '../packages/platform/compat/manifest.json'
+import platformBoot from '../packages/platform/boot/manifest.json'
 
-const platform = [platformVue as ModuleManifest, platformCompat as ModuleManifest]
+const platform = [platformVue as ModuleManifest, platformCompat as ModuleManifest, platformBoot as ModuleManifest]
 const preloaded = preloadedModules.map(([manifest]) => manifest)
 const all: ModuleManifest[] = [...platform, ...preloaded, ...bundles]
 
 /**
- * Services the host itself registers before loadAll. Empty since the shell
- * step: even the Vue app instance is provided by a bundle (app.shell).
+ * Services the host itself registers. Exactly one since the shell step: the
+ * ModuleLoader publishing itself, the way the OSGi system bundle registers
+ * the framework's own services. Everything else comes from bundles.
  */
-const HOST_PROVIDED = new Set<string>()
+const HOST_PROVIDED = new Set<string>(['ModuleLoader'])
 
 describe('manifest lint', () => {
   it('module ids are unique', () => {

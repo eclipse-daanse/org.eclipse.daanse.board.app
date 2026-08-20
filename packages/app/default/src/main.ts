@@ -62,6 +62,25 @@ if (document.readyState === 'complete') hidePreloader()
 else window.addEventListener('load', hidePreloader)
 
 async function start() {
+  /*
+   * The framework publishes itself: the boot screen (and any diagnostic
+   * bundle) consumes the loader as a service. The OSGi analogue is the
+   * system bundle registering the framework's own services - the one
+   * registration a launcher legitimately makes.
+   */
+  services.register('ModuleLoader', loader)
+
+  /*
+   * Boot screen first, explicitly, before anything else is even registered:
+   * a progress display that loads after the modules it should show would
+   * miss its own point. Plain DOM, dependency-free by design.
+   */
+  await loader.loadModule(
+    (await import('org.eclipse.daanse.board.app.platform.boot/manifest.json'))
+      .default as ModuleManifest,
+    { container: await import('org.eclipse.daanse.board.app.platform.boot') },
+  )
+
   const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
     [
       (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
