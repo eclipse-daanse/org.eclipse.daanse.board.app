@@ -1,0 +1,27 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.common.kpi",
+  "name": "ui.vue.common.kpi",
+  "version": "0.0.1-next.1",
+  "exports": {},
+  "entry": "/bundles/ui.vue.common.kpi/index.js",
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.common.kpi",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "platform.vue"
+  ],
+  "provides": []
+}

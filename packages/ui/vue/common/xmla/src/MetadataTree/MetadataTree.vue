@@ -16,7 +16,7 @@ import { ref, onMounted } from 'vue';
 import { getTreeViewNodes } from './XMLAMetadataTree';
 import { TreeItemTypesEnum } from './TreeViewItems';
 import XMLAIconVue from './XMLAIcon.vue';
-import draggable from 'vuedraggable/src/vuedraggable'
+import draggable from 'vuedraggable'
 
 const { metadata } = defineProps(['metadata'])
 

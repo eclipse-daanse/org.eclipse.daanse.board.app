@@ -10,6 +10,8 @@
     "lib.repository.connection",
     "lib.repository.datasource",
     "platform.vue",
+    "ui.vue.common.monaco",
+    "ui.vue.common.xmla",
     "ui.vue.composables"
   ],
   "requiresService": [
@@ -26,10 +28,6 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.core",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.datasource.xmla",
       "versionRange": ">=0.0.1-0"
     },
@@ -39,6 +37,14 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.monaco",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.xmla",
       "versionRange": ">=0.0.1-0"
     },
     {

@@ -6,8 +6,7 @@
   "entry": "/bundles/ui.vue.connection.graphql/index.js",
   "exports": {},
   "dependencies": [
-    "lib.repository.connection",
-    "platform.vue"
+    "lib.repository.connection"
   ],
   "requiresService": [
     {
@@ -18,14 +17,6 @@
     }
   ],
   "sharedDependencies": [
-    {
-      "id": "vue",
-      "versionRange": "^3.5.0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.core",
-      "versionRange": ">=0.0.1-0"
-    },
     {
       "id": "org.eclipse.daanse.board.app.lib.repository.connection",
       "versionRange": ">=0.0.1-0"

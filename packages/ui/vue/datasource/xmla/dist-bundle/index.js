@@ -1,6 +1,5790 @@
-(function(){var i="ui.vue.datasource.xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.icon-container {\n  height: var(--v74a9a266);\n  width: var(--v6a4e4360);\n  margin-right: 4px;\n}\n.stPrimary {\n  fill: var(--v2f5e1248);\n}\n.stSecondary {\n  fill: var(--v1f17802c);\n}\n.st0 {\n  fill: none;\n}\n\n.area-header[data-v-262aa663] {\n  font-size: 18px;\n  font-weight: 500;\n  margin: 0rem 1rem 1rem 1rem;\n}\n.tree-container[data-v-262aa663] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  overflow: hidden;\n}\n.tree-container .tree-view[data-v-262aa663] {\n  overflow: auto;\n}\n.tree-container .va-tree-node-content__body svg[data-v-262aa663] {\n  vertical-align: baseline;\n}\n.progress-circle[data-v-262aa663] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.filter-input[data-v-262aa663] {\n  width: 100%;\n  padding: 0 1rem;\n}\n.metadata_tree-container[data-v-262aa663] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.filter-tree-view .va-tree-node-root {\n  padding-top: 0;\n  padding-bottom: 0;\n}\n.filter-tree-view .va-tree-node-content__body > div {\n  padding-top: 8px;\n  padding-bottom: 8px;\n}\n.selectAll label {\n  font-weight: 600;\n}.filter-modal .va-modal--fixed-layout .va-modal__inner {\n  height: calc(100vh - 2rem);\n}\n.filter-modal .va-modal__container {\n  width: 100%;\n}\n.filter-modal .va-modal__dialog {\n  margin: auto;\n}\n.filter-modal .va-modal__inner > div {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n.filter-modal .va-card__content {\n  overflow: hidden;\n  display: flex;\n  width: 100%;\n  height: 100%;\n}\n.filter-modal .va-card__content > div {\n  flex-direction: column;\n  overflow: hidden;\n  width: 100%;\n}\n.filter-modal .actions {\n  display: flex;\n  justify-content: space-between !important;\n}\n.filter-modal .reset-button {\n  margin-top: 0.25rem;\n  color: var(--va-primary);\n  text-decoration: underline;\n  user-select: none;\n  cursor: pointer;\n}\n.queryDesigner {\n&[data-v-0edc4c07] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  width: 100%;\n  overflow: hidden;\n\n  padding: 1rem;\n}\n.update_container[data-v-0edc4c07] {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n}\n.areas {\n&[data-v-0edc4c07] {\n    height: 100%;\n    overflow: hidden;\n    display: flex;\n    flex-direction: column;\n}\n.queryDesignerArea {\n&[data-v-0edc4c07] {\n      display: flex;\n      flex-direction: column;\n      height: 100%;\n}\n.queryDesingnerArea_container {\n&[data-v-0edc4c07] {\n        height: 100%;\n        width: 100%;\n\n        border: 1px solid #9ea3ac;\n        margin: 0.25rem 0 1rem;\n}\n.list-group {\n&[data-v-0edc4c07] {\n          height: 100%;\n          width: 100%;\n          padding: 0.5rem;\n          display: flex;\n          flex-direction: column;\n          gap: 0.25rem;\n          align-items: baseline;\n\n          --va-chip-content-display: inline;\n}\n.va-chip[data-v-0edc4c07] {\n            max-width: 100%;\n}\n.va-chip__content[data-v-0edc4c07] {\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n}\ndiv.sortable-ghost[data-v-0edc4c07] {\n            border: var(--va-chip-border, var(--va-control-border));\n            position: var(--va-chip-position);\n            border-radius: var(--va-chip-border-radius);\n            width: var(--va-chip-width);\n            height: var(--va-chip-height);\n            min-width: var(--va-chip-min-width);\n            min-height: var(--va-chip-min-height);\n            padding: 0 0.6rem;\n            cursor: var(--va-chip-cursor);\n            font-size: var(--va-chip-font-size);\n            font-family: var(--va-font-family);\n            vertical-align: var(--va-chip-vertical-align);\n            color: rgb(255, 255, 255);\n            background: #4e81e9;\n            line-height: var(--va-chip-content-line-height);\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n            max-width: 100%;\n            display: inline;\n}\n.chip_caption {\n&[data-v-0edc4c07] {\n            width: 100%;\n            gap: 4px;\n}\n.chip_caption_text[data-v-0edc4c07] {\n              overflow: hidden;\n              white-space: nowrap;\n              text-overflow: ellipsis;\n}\n.filter-icon[data-v-0edc4c07] {\n              cursor: pointer;\n              line-height: 14px !important;\n}\n}\n}\n}\n}\n}\n}\n.split.vertical .queryDesigner {\n.areas {\n&[data-v-0edc4c07] {\n    flex-direction: row;\n    flex-wrap: wrap;\n}\n.queryDesignerArea[data-v-0edc4c07] {\n      width: 50%;\n      height: 50%;\n      padding: 5px;\n}\n}\n}\n\n.dropdown_button-group[data-v-391484e9] {\n  display: flex;\n  flex-direction: column;\n  padding: 0;\n  margin: 0;\n  width: 100%;\n}\n.dropdown_button[data-v-391484e9] {\n  text-align: left;\n  justify-content: flex-start;\n  border: 1px solid silver !important;\n  border-bottom: 0 !important;\n  border-radius: 0 !important;\n  padding: 0.25rem !important;\n}\n.dropdown_button .va-button__content[data-v-391484e9]  {\n  color: #000;\n}\n.dropdown_button:hover .va-button__content[data-v-391484e9]  {\n  color: #555;\n}\n.dropdown_button[data-v-391484e9]:last-child {\n  border-bottom: 1px solid silver !important;\n}\n\n.rowsHeader[data-v-6e2160ac]:last-child {\n    border-bottom: 1px var(--d4f586a8) solid;\n}\n.rowsHeader_container[data-v-6e2160ac] {\n    height: 100%;\n    font-size: var(--v47715e33);\n    color: var(--v585fe7da);\n}\n.rowsHeader[data-v-6e2160ac] {\n    display: flex;\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    border-right: 0;\n    border-left: 0;\n    height: var(--v287a6d0e);\n    line-height: var(--v287a6d0e);\n    padding-right: 10px;\n    border-top: 1px var(--d4f586a8) solid;\n    background-color: var(--v4ac5fdca);\n}\n.rowMemberOffsetContainer .rowMemberOffset[data-v-6e2160ac] {\n    width: 30px;\n    height: 100%;\n    border-right: 1px dashed lightgrey;\n}\n.rowMemberContentWrapper[data-v-6e2160ac] {\n    display: flex;\n    flex-direction: row;\n    height: 100%;\n}\n.rowMemberOffsetContainer[data-v-6e2160ac] {\n    display: flex;\n    flex-direction: row;\n    height: 100%;\n}\n.row_dragAreaTop[data-v-6e2160ac] {\n    position: absolute;\n    width: 100%;\n    height: 5px;\n    left: 0;\n    top: 0;\n    cursor: ns-resize;\n    z-index: 1;\n}\n.row_dragAreaBottom[data-v-6e2160ac] {\n    position: absolute;\n    height: 5px;\n    width: 100%;\n    bottom: -1px;\n    left: 0;\n    cursor: ns-resize;\n    z-index: 1;\n}\n.rowMember[data-v-6e2160ac] {\n    display: flex;\n    border-left: 1px var(--d4f586a8) solid;\n    align-items: flex-start;\n}\n.rowMemberCaption[data-v-6e2160ac] {\n    font-weight: var(--v039e72e2);\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    height: 100%;\n}\n.rowMemberContent[data-v-6e2160ac] {\n    width: 150px;\n    padding-left: 5px;\n    display: flex;\n}\n.expandIcon[data-v-6e2160ac] {\n    flex-grow: 0;\n}\n.propertyRow[data-v-6e2160ac] {\n    width: 100%;\n    min-width: 150px;\n    font-style: italic;\n    font-weight: 500;\n}\n\n.columnHeader_container[data-v-481e50e7] {\n    overflow: hidden;\n    flex-shrink: 0;\n    font-size: var(--a5d15c10);\n    color: var(--v260bc716);\n}\n.columnScroller[data-v-481e50e7] {\n    display: flex;\n}\n.columnHeader[data-v-481e50e7] {\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    flex-shrink: 0;\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    background-color: var(--v41b3d514);\n}\n.columnHeader[data-v-481e50e7]:last-child {\n    border-right: 1px var(--fee01272) solid;\n}\n.columnMemberWrapper[data-v-481e50e7] {\n    height: 100%;\n}\n.columnMember[data-v-481e50e7] {\n    display: flex;\n    border-top: 1px var(--fee01272) solid;\n    border-left: 1px var(--fee01272) solid;\n    width: 100%;\n    height: 100%;\n}\n.columnMemberContent[data-v-481e50e7] {\n    display: flex;\n    padding-left: 3px;\n    height: var(--v753a47ae);\n}\n.columnMemberContentWrapper[data-v-481e50e7] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n}\n.columnMemberOffset[data-v-481e50e7] {\n    height: var(--v753a47ae);\n    border-bottom: 1px dashed lightgray;\n}\n.columnMemberHeader[data-v-481e50e7] {\n    font-weight: var(--v0645b558);\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n}\n.col_dragAreaLeft[data-v-481e50e7] {\n    position: absolute;\n    height: 100%;\n    width: 5px;\n    left: 0;\n    top: 0;\n    cursor: ew-resize;\n    z-index: 1;\n}\n.col_dragAreaRight[data-v-481e50e7] {\n    position: absolute;\n    height: 100%;\n    width: 5px;\n    right: -1px;\n    top: 0;\n    cursor: ew-resize;\n    z-index: 1;\n}\n.propertyColumn[data-v-481e50e7] {\n    font-style: italic;\n    height: 100%;\n    font-weight: 500;\n}\n\n.dropdown_button-group[data-v-8eaba967] {\n  display: flex;\n  flex-direction: column;\n  padding: 0;\n  margin: 0;\n  width: 100%;\n}\n.dropdown_button[data-v-8eaba967] {\n  text-align: left;\n  justify-content: flex-start;\n  border: 1px solid silver !important;\n  border-bottom: 0 !important;\n  border-radius: 0 !important;\n  padding: 0.25rem !important;\n}\n.dropdown_button[data-v-8eaba967]  .va-button__content {\n  color: #000;\n}\n.dropdown_button[data-v-8eaba967]:hover  .va-button__content {\n  color: #555;\n}\n.dropdown_button[data-v-8eaba967]:last-child {\n  border-bottom: 1px solid silver !important;\n}\n\n.cells_container[data-v-95ee701c] {\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  font-size: var(--v59d89b36);\n}\n.cell_row[data-v-95ee701c] {\n  display: flex;\n}\n.cell[data-v-95ee701c] {\n  border: 1px var(--v317a3cc9) solid;\n  border-right: 0;\n  border-bottom: 0;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  flex-shrink: 0;\n  width: 150px;\n  height: var(--v699fffaa);\n  line-height: var(--v699fffaa);\n  padding: 3px;\n}\n.cell[data-v-95ee701c]:last-child {\n  border-right: 1px var(--v317a3cc9) solid;\n}\n.cell_row:last-child>.cell[data-v-95ee701c] {\n  border-bottom: 1px var(--v317a3cc9) solid;\n}\n.virtual-scroll-container[data-v-95ee701c] {\n  overflow: hidden;\n}\n\n.pivotTable_container {\n&[data-v-a445539c] {\n    padding: var(--v4e9016e0);\n    height: 100%;\n    overflow: hidden;\n    display: flex;\n    flex-direction: column;\n}\n.bar[data-v-a445539c] {\n        position: absolute;\n        margin-top: -29px;\n        width: 100%;\n        height: auto;\n        display: flex;\n        flex-direction: row;\n        flex-wrap: nowrap;\n        align-content: center;\n        justify-content: flex-end;\n}\n.placeholder[data-v-a445539c] {\n        height: 8px;\n}\n}\n.pivotTable[data-v-a445539c] {\n    overflow: hidden;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.vertical-scroll[data-v-a445539c] {\n    height: 100%;\n}\n\n.header-container[data-v-8ca31f8c] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n}\n.editor-page[data-v-8ca31f8c] {\n    display: flex;\n    flex-direction: column;\n    /* height: 100%; */\n}\n.monaco-editor[data-v-8ca31f8c] {\n    height: 100%;\n    border: 1px solid #ccc;\n}\n.visual-editor-container[data-v-8ca31f8c] {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    height: 100%;\n}\n.toolbar[data-v-8ca31f8c] {\n    margin-bottom: 10px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n\n/* Default standalone editor fonts */\n.monaco-editor {\n\tfont-family: -apple-system, BlinkMacSystemFont, \"Segoe WPC\", \"Segoe UI\", \"HelveticaNeue-Light\", system-ui, \"Ubuntu\", \"Droid Sans\", sans-serif;\n\t--monaco-monospace-font: \"SF Mono\", Monaco, Menlo, Consolas, \"Ubuntu Mono\", \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace;\n}\n\n.monaco-menu .monaco-action-bar.vertical .action-item .action-menu-item:focus .action-label {\n\tstroke-width: 1.2px;\n}\n\n.monaco-editor.vs-dark .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label,\n.monaco-editor.hc-black .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label,\n.monaco-editor.hc-light .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label {\n\tstroke-width: 1.2px;\n}\n\n.monaco-hover p {\n\tmargin: 0;\n}\n\n/* See https://github.com/microsoft/monaco-editor/issues/2168#issuecomment-780078600 */\n.monaco-aria-container {\n\tposition: absolute !important;\n\ttop: 0; /* avoid being placed underneath a sibling element */\n\theight: 1px;\n\twidth: 1px;\n\tmargin: -1px;\n\toverflow: hidden;\n\tpadding: 0;\n\tclip: rect(1px, 1px, 1px, 1px);\n\tclip-path: inset(50%);\n}\n\n.monaco-editor, .monaco-diff-editor .synthetic-focus,\n.monaco-editor, .monaco-diff-editor [tabindex=\"0\"]:focus,\n.monaco-editor, .monaco-diff-editor [tabindex=\"-1\"]:focus,\n.monaco-editor, .monaco-diff-editor button:focus,\n.monaco-editor, .monaco-diff-editor input[type=button]:focus,\n.monaco-editor, .monaco-diff-editor input[type=checkbox]:focus,\n.monaco-editor, .monaco-diff-editor input[type=search]:focus,\n.monaco-editor, .monaco-diff-editor input[type=text]:focus,\n.monaco-editor, .monaco-diff-editor select:focus,\n.monaco-editor, .monaco-diff-editor textarea:focus {\n\toutline-width: 1px;\n\toutline-style: solid;\n\toutline-offset: -1px;\n\toutline-color: var(--vscode-focusBorder);\n\topacity: 1\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-workbench .workbench-hover {\n\tposition: relative;\n\tfont-size: 13px;\n\tline-height: 19px;\n\t/* Must be higher than sash's z-index and terminal canvases */\n\tz-index: 40;\n\toverflow: hidden;\n\tmax-width: 700px;\n\tbackground: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n\tborder-radius: 3px;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbox-shadow: 0 2px 8px var(--vscode-widget-shadow);\n}\n\n.monaco-workbench .workbench-hover hr {\n\tborder-bottom: none;\n}\n\n.monaco-workbench .workbench-hover:not(.skip-fade-in) {\n\tanimation: fadein 100ms linear;\n}\n\n.monaco-workbench .workbench-hover.compact {\n\tfont-size: 12px;\n}\n\n.monaco-workbench .workbench-hover.compact .hover-contents {\n\tpadding: 2px 8px;\n}\n\n.monaco-workbench .workbench-hover-container.locked .workbench-hover {\n\toutline: 1px solid var(--vscode-editorHoverWidget-border);\n}\n.monaco-workbench .workbench-hover-container.locked .workbench-hover:focus,\n.monaco-workbench .workbench-hover-lock:focus {\n\toutline: 1px solid var(--vscode-focusBorder);\n}\n.monaco-workbench .workbench-hover-container.locked .workbench-hover-lock:hover {\n\tbackground: var(--vscode-toolbar-hoverBackground);\n}\n\n.monaco-workbench .workbench-hover-pointer {\n\tposition: absolute;\n\t/* Must be higher than workbench hover z-index */\n\tz-index: 41;\n\tpointer-events: none;\n}\n\n.monaco-workbench .workbench-hover-pointer:after {\n\tcontent: '';\n\tposition: absolute;\n\twidth: 5px;\n\theight: 5px;\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder-right: 1px solid var(--vscode-editorHoverWidget-border);\n\tborder-bottom: 1px solid var(--vscode-editorHoverWidget-border);\n}\n.monaco-workbench .locked .workbench-hover-pointer:after {\n\twidth: 4px;\n\theight: 4px;\n\tborder-right-width: 2px;\n\tborder-bottom-width: 2px;\n}\n\n.monaco-workbench .workbench-hover-pointer.left   { left: -3px; }\n.monaco-workbench .workbench-hover-pointer.right  { right: 3px; }\n.monaco-workbench .workbench-hover-pointer.top    { top: -3px; }\n.monaco-workbench .workbench-hover-pointer.bottom { bottom: 3px; }\n\n.monaco-workbench .workbench-hover-pointer.left:after {\n\ttransform: rotate(135deg);\n}\n\n.monaco-workbench .workbench-hover-pointer.right:after {\n\ttransform: rotate(315deg);\n}\n\n.monaco-workbench .workbench-hover-pointer.top:after {\n\ttransform: rotate(225deg);\n}\n\n.monaco-workbench .workbench-hover-pointer.bottom:after {\n\ttransform: rotate(45deg);\n}\n\n.monaco-workbench .workbench-hover a {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-workbench .workbench-hover a:focus {\n\toutline: 1px solid;\n\toutline-offset: -1px;\n\ttext-decoration: underline;\n\toutline-color: var(--vscode-focusBorder);\n}\n\n.monaco-workbench .workbench-hover a:hover,\n.monaco-workbench .workbench-hover a:active {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n.monaco-workbench .workbench-hover code {\n\tbackground: var(--vscode-textCodeBlock-background);\n}\n\n.monaco-workbench .workbench-hover .hover-row .actions {\n\tbackground: var(--vscode-editorHoverWidget-statusBarBackground);\n}\n\n.monaco-workbench .workbench-hover.right-aligned {\n\t/* The context view service wraps strangely when it's right up against the edge without this */\n\tleft: 1px;\n}\n\n.monaco-workbench .workbench-hover.right-aligned .hover-row.status-bar .actions {\n\tflex-direction: row-reverse;\n}\n\n.monaco-workbench .workbench-hover.right-aligned .hover-row.status-bar .actions .action-container {\n\tmargin-right: 0;\n\tmargin-left: 16px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* Arrows */\n.monaco-scrollable-element > .scrollbar > .scra {\n\tcursor: pointer;\n\tfont-size: 11px !important;\n}\n\n.monaco-scrollable-element > .visible {\n\topacity: 1;\n\n\t/* Background rule added for IE9 - to allow clicks on dom node */\n\tbackground:rgba(0,0,0,0);\n\n\ttransition: opacity 100ms linear;\n\t/* In front of peek view */\n\tz-index: 11;\n}\n.monaco-scrollable-element > .invisible {\n\topacity: 0;\n\tpointer-events: none;\n}\n.monaco-scrollable-element > .invisible.fade {\n\ttransition: opacity 800ms linear;\n}\n\n/* Scrollable Content Inset Shadow */\n.monaco-scrollable-element > .shadow {\n\tposition: absolute;\n\tdisplay: none;\n}\n.monaco-scrollable-element > .shadow.top {\n\tdisplay: block;\n\ttop: 0;\n\tleft: 3px;\n\theight: 3px;\n\twidth: 100%;\n\tbox-shadow: var(--vscode-scrollbar-shadow) 0 6px 6px -6px inset;\n}\n.monaco-scrollable-element > .shadow.left {\n\tdisplay: block;\n\ttop: 3px;\n\tleft: 0;\n\theight: 100%;\n\twidth: 3px;\n\tbox-shadow: var(--vscode-scrollbar-shadow) 6px 0 6px -6px inset;\n}\n.monaco-scrollable-element > .shadow.top-left-corner {\n\tdisplay: block;\n\ttop: 0;\n\tleft: 0;\n\theight: 3px;\n\twidth: 3px;\n}\n.monaco-scrollable-element > .shadow.top.left {\n\tbox-shadow: var(--vscode-scrollbar-shadow) 6px 0 6px -6px inset;\n}\n\n.monaco-scrollable-element > .scrollbar > .slider {\n\tbackground: var(--vscode-scrollbarSlider-background);\n}\n\n.monaco-scrollable-element > .scrollbar > .slider:hover {\n\tbackground: var(--vscode-scrollbarSlider-hoverBackground);\n}\n\n.monaco-scrollable-element > .scrollbar > .slider.active {\n\tbackground: var(--vscode-scrollbarSlider-activeBackground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-hover {\n\tcursor: default;\n\tposition: absolute;\n\toverflow: hidden;\n\tuser-select: text;\n\t-webkit-user-select: text;\n\tbox-sizing: border-box;\n\tanimation: fadein 100ms linear;\n\tline-height: 1.5em;\n\twhite-space: var(--vscode-hover-whiteSpace, normal);\n}\n\n.monaco-hover.hidden {\n\tdisplay: none;\n}\n\n.monaco-hover a:hover:not(.disabled) {\n\tcursor: pointer;\n}\n\n.monaco-hover .hover-contents:not(.html-hover-contents) {\n\tpadding: 4px 8px;\n}\n\n.monaco-hover .markdown-hover > .hover-contents:not(.code-hover-contents) {\n\tmax-width: var(--vscode-hover-maxWidth, 500px);\n\tword-wrap: break-word;\n}\n\n.monaco-hover .markdown-hover > .hover-contents:not(.code-hover-contents) hr {\n\tmin-width: 100%;\n}\n\n.monaco-hover p,\n.monaco-hover .code,\n.monaco-hover ul,\n.monaco-hover h1,\n.monaco-hover h2,\n.monaco-hover h3,\n.monaco-hover h4,\n.monaco-hover h5,\n.monaco-hover h6 {\n\tmargin: 8px 0;\n}\n\n.monaco-hover h1,\n.monaco-hover h2,\n.monaco-hover h3,\n.monaco-hover h4,\n.monaco-hover h5,\n.monaco-hover h6 {\n\tline-height: 1.1;\n}\n\n.monaco-hover code {\n\tfont-family: var(--monaco-monospace-font);\n}\n\n.monaco-hover hr {\n\tbox-sizing: border-box;\n\tborder-left: 0px;\n\tborder-right: 0px;\n\tmargin-top: 4px;\n\tmargin-bottom: -4px;\n\tmargin-left: -8px;\n\tmargin-right: -8px;\n\theight: 1px;\n}\n\n.monaco-hover p:first-child,\n.monaco-hover .code:first-child,\n.monaco-hover ul:first-child {\n\tmargin-top: 0;\n}\n\n.monaco-hover p:last-child,\n.monaco-hover .code:last-child,\n.monaco-hover ul:last-child {\n\tmargin-bottom: 0;\n}\n\n/* MarkupContent Layout */\n.monaco-hover ul {\n\tpadding-left: 20px;\n}\n.monaco-hover ol {\n\tpadding-left: 20px;\n}\n\n.monaco-hover li > p {\n\tmargin-bottom: 0;\n}\n\n.monaco-hover li > ul {\n\tmargin-top: 0;\n}\n\n.monaco-hover code {\n\tborder-radius: 3px;\n\tpadding: 0 0.4em;\n}\n\n.monaco-hover .monaco-tokenized-source {\n\twhite-space: var(--vscode-hover-sourceWhiteSpace, pre-wrap);\n}\n\n.monaco-hover .hover-row.status-bar {\n\tfont-size: 12px;\n\tline-height: 22px;\n}\n\n.monaco-hover .hover-row.status-bar .info {\n\tfont-style: italic;\n\tpadding: 0px 8px;\n}\n\n.monaco-hover .hover-row.status-bar .actions {\n\tdisplay: flex;\n\tpadding: 0px 8px;\n\twidth: 100%;\n}\n\n.monaco-hover .hover-row.status-bar .actions .action-container {\n\tmargin-right: 16px;\n\tcursor: pointer;\n}\n\n.monaco-hover .hover-row.status-bar .actions .action-container .action .icon {\n\tpadding-right: 4px;\n}\n\n.monaco-hover .hover-row.status-bar .actions .action-container a {\n\tcolor: var(--vscode-textLink-foreground);\n\ttext-decoration: var(--text-link-decoration);\n}\n\n.monaco-hover .markdown-hover .hover-contents .codicon {\n\tcolor: inherit;\n\tfont-size: inherit;\n\tvertical-align: middle;\n}\n\n.monaco-hover .hover-contents a.code-link:hover,\n.monaco-hover .hover-contents a.code-link {\n\tcolor: inherit;\n}\n\n.monaco-hover .hover-contents a.code-link:before {\n\tcontent: '(';\n}\n\n.monaco-hover .hover-contents a.code-link:after {\n\tcontent: ')';\n}\n\n.monaco-hover .hover-contents a.code-link > span {\n\ttext-decoration: underline;\n\t/** Hack to force underline to show **/\n\tborder-bottom: 1px solid transparent;\n\ttext-underline-position: under;\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-hover .hover-contents a.code-link > span:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n/** Spans in markdown hovers need a margin-bottom to avoid looking cramped: https://github.com/microsoft/vscode/issues/101496 **/\n.monaco-hover .markdown-hover .hover-contents:not(.code-hover-contents):not(.html-hover-contents) span {\n\tmargin-bottom: 4px;\n\tdisplay: inline-block;\n}\n\n.monaco-hover .markdown-hover .hover-contents:not(.code-hover-contents):not(.html-hover-contents) span.codicon {\n\tmargin-bottom: 2px;\n}\n\n.monaco-hover-content .action-container a {\n\t-webkit-user-select: none;\n\tuser-select: none;\n}\n\n.monaco-hover-content .action-container.disabled {\n\tpointer-events: none;\n\topacity: 0.4;\n\tcursor: default;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .rendered-markdown kbd {\n\tbackground-color: var(--vscode-keybindingLabel-background);\n\tcolor: var(--vscode-keybindingLabel-foreground);\n\tborder-style: solid;\n\tborder-width: 1px;\n\tborder-radius: 3px;\n\tborder-color: var(--vscode-keybindingLabel-border);\n\tborder-bottom-color: var(--vscode-keybindingLabel-bottomBorder);\n\tbox-shadow: inset 0 -1px 0 var(--vscode-widget-shadow);\n\tvertical-align: middle;\n\tpadding: 1px 3px;\n}\n\n.rendered-markdown li:has(input[type=checkbox]) {\n\tlist-style-type: none;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-aria-container {\n\tposition: absolute; /* try to hide from window but not from screen readers */\n\tleft:-999em;\n}/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.context-view {\n\tposition: absolute;\n}\n\n.context-view.fixed {\n\tall: initial;\n\tfont-family: inherit;\n\tfont-size: 13px;\n\tposition: fixed;\n\tcolor: inherit;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-list {\n\tposition: relative;\n\theight: 100%;\n\twidth: 100%;\n\twhite-space: nowrap;\n}\n\n.monaco-list.mouse-support {\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n\n.monaco-list > .monaco-scrollable-element {\n\theight: 100%;\n}\n\n.monaco-list-rows {\n\tposition: relative;\n\twidth: 100%;\n\theight: 100%;\n}\n\n.monaco-list.horizontal-scrolling .monaco-list-rows {\n\twidth: auto;\n\tmin-width: 100%;\n}\n\n.monaco-list-row {\n\tposition: absolute;\n\tbox-sizing: border-box;\n\toverflow: hidden;\n\twidth: 100%;\n}\n\n.monaco-list.mouse-support .monaco-list-row {\n\tcursor: pointer;\n\ttouch-action: none;\n}\n\n/* Make sure the scrollbar renders above overlays (sticky scroll) */\n.monaco-list .monaco-scrollable-element > .scrollbar.vertical,\n.monaco-pane-view > .monaco-split-view2.vertical > .monaco-scrollable-element > .scrollbar.vertical {\n\tz-index: 14;\n}\n\n/* for OS X ballistic scrolling */\n.monaco-list-row.scrolling {\n\tdisplay: none !important;\n}\n\n/* Focus */\n.monaco-list.element-focused,\n.monaco-list.selection-single,\n.monaco-list.selection-multiple {\n\toutline: 0 !important;\n}\n\n/* Dnd */\n.monaco-drag-image {\n\tdisplay: inline-block;\n\tpadding: 1px 7px;\n\tborder-radius: 10px;\n\tfont-size: 12px;\n\tposition: absolute;\n\tz-index: 1000;\n}\n\n/* Filter */\n\n.monaco-list-type-filter-message {\n\tposition: absolute;\n\tbox-sizing: border-box;\n\twidth: 100%;\n\theight: 100%;\n\ttop: 0;\n\tleft: 0;\n\tpadding: 40px 1em 1em 1em;\n\ttext-align: center;\n\twhite-space: normal;\n\topacity: 0.7;\n\tpointer-events: none;\n}\n\n.monaco-list-type-filter-message:empty {\n\tdisplay: none;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* Use custom CSS vars to expose padding into parent select for padding calculation */\n.monaco-select-box-dropdown-padding {\n\t--dropdown-padding-top: 1px;\n\t--dropdown-padding-bottom: 1px;\n}\n\n.hc-black .monaco-select-box-dropdown-padding,\n.hc-light .monaco-select-box-dropdown-padding {\n\t--dropdown-padding-top: 3px;\n\t--dropdown-padding-bottom: 4px;\n}\n\n.monaco-select-box-dropdown-container {\n\tdisplay: none;\n\tbox-sizing:\tborder-box;\n}\n\n.monaco-select-box-dropdown-container > .select-box-details-pane > .select-box-description-markdown * {\n\tmargin: 0;\n}\n\n.monaco-select-box-dropdown-container > .select-box-details-pane > .select-box-description-markdown a:focus {\n\toutline: 1px solid -webkit-focus-ring-color;\n\toutline-offset: -1px;\n}\n\n.monaco-select-box-dropdown-container > .select-box-details-pane > .select-box-description-markdown code {\n\tline-height: 15px; /** For some reason, this is needed, otherwise <code> will take up 20px height */\n\tfont-family: var(--monaco-monospace-font);\n}\n\n\n.monaco-select-box-dropdown-container.visible {\n\tdisplay: flex;\n\tflex-direction: column;\n\ttext-align: left;\n\twidth: 1px;\n\toverflow: hidden;\n\tborder-bottom-left-radius: 3px;\n\tborder-bottom-right-radius: 3px;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container {\n\tflex: 0 0 auto;\n\talign-self: flex-start;\n\tpadding-top: var(--dropdown-padding-top);\n\tpadding-bottom: var(--dropdown-padding-bottom);\n\tpadding-left: 1px;\n\tpadding-right: 1px;\n\twidth: 100%;\n\toverflow: hidden;\n\tbox-sizing:\tborder-box;\n}\n\n.monaco-select-box-dropdown-container > .select-box-details-pane {\n\tpadding: 5px;\n}\n\n.hc-black .monaco-select-box-dropdown-container > .select-box-dropdown-list-container {\n\tpadding-top: var(--dropdown-padding-top);\n\tpadding-bottom: var(--dropdown-padding-bottom);\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container .monaco-list .monaco-list-row {\n\tcursor: pointer;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container .monaco-list .monaco-list-row > .option-text {\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\tpadding-left: 3.5px;\n\twhite-space: nowrap;\n\tfloat: left;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container .monaco-list .monaco-list-row > .option-detail {\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\tpadding-left: 3.5px;\n\twhite-space: nowrap;\n\tfloat: left;\n\topacity: 0.7;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container .monaco-list .monaco-list-row > .option-decorator-right {\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\tpadding-right: 10px;\n\twhite-space: nowrap;\n\tfloat: right;\n}\n\n\n/* Accepted CSS hiding technique for accessibility reader text  */\n/* https://webaim.org/techniques/css/invisiblecontent/ */\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-list-container .monaco-list .monaco-list-row > .visually-hidden {\n\t\tposition: absolute;\n\t\tleft: -10000px;\n\t\ttop: auto;\n\t\twidth: 1px;\n\t\theight: 1px;\n\t\toverflow: hidden;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-container-width-control {\n\tflex: 1 1 auto;\n\talign-self: flex-start;\n\topacity: 0;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-container-width-control > .width-control-div {\n\toverflow: hidden;\n\tmax-height: 0px;\n}\n\n.monaco-select-box-dropdown-container > .select-box-dropdown-container-width-control > .width-control-div > .option-text-width-control {\n\tpadding-left: 4px;\n\tpadding-right: 8px;\n\twhite-space: nowrap;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-select-box {\n\twidth: 100%;\n\tcursor: pointer;\n\tborder-radius: 2px;\n}\n\n.monaco-select-box-dropdown-container {\n\tfont-size: 13px;\n\tfont-weight: normal;\n\ttext-transform: none;\n}\n\n/** Actions */\n\n.monaco-action-bar .action-item.select-container {\n\tcursor: default;\n}\n\n.monaco-action-bar .action-item .monaco-select-box {\n\tcursor: pointer;\n\tmin-width: 100px;\n\tmin-height: 18px;\n\tpadding: 2px 23px 2px 8px;\n}\n\n.mac .monaco-action-bar .action-item .monaco-select-box {\n\tfont-size: 11px;\n\tborder-radius: 5px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-action-bar {\n\twhite-space: nowrap;\n\theight: 100%;\n}\n\n.monaco-action-bar .actions-container {\n\tdisplay: flex;\n\tmargin: 0 auto;\n\tpadding: 0;\n\theight: 100%;\n\twidth: 100%;\n\talign-items: center;\n}\n\n.monaco-action-bar.vertical .actions-container {\n\tdisplay: inline-block;\n}\n\n.monaco-action-bar .action-item {\n\tdisplay: block;\n\talign-items: center;\n\tjustify-content: center;\n\tcursor: pointer;\n\tposition: relative;  /* DO NOT REMOVE - this is the key to preventing the ghosting icon bug in Chrome 42 */\n}\n\n.monaco-action-bar .action-item.disabled {\n\tcursor: default;\n}\n\n.monaco-action-bar .action-item .icon,\n.monaco-action-bar .action-item .codicon {\n\tdisplay: block;\n}\n\n.monaco-action-bar .action-item .codicon {\n\tdisplay: flex;\n\talign-items: center;\n\twidth: 16px;\n\theight: 16px;\n}\n\n.monaco-action-bar .action-label {\n\tdisplay: flex;\n\tfont-size: 11px;\n\tpadding: 3px;\n\tborder-radius: 5px;\n}\n\n.monaco-action-bar .action-item.disabled .action-label,\n.monaco-action-bar .action-item.disabled .action-label::before,\n.monaco-action-bar .action-item.disabled .action-label:hover {\n\tcolor: var(--vscode-disabledForeground);\n}\n\n/* Vertical actions */\n\n.monaco-action-bar.vertical {\n\ttext-align: left;\n}\n\n.monaco-action-bar.vertical .action-item {\n\tdisplay: block;\n}\n\n.monaco-action-bar.vertical .action-label.separator {\n\tdisplay: block;\n\tborder-bottom: 1px solid #bbb;\n\tpadding-top: 1px;\n\tmargin-left: .8em;\n\tmargin-right: .8em;\n}\n\n.monaco-action-bar .action-item .action-label.separator {\n\twidth: 1px;\n\theight: 16px;\n\tmargin: 5px 4px !important;\n\tcursor: default;\n\tmin-width: 1px;\n\tpadding: 0;\n\tbackground-color: #bbb;\n}\n\n.secondary-actions .monaco-action-bar .action-label {\n\tmargin-left: 6px;\n}\n\n/* Action Items */\n.monaco-action-bar .action-item.select-container {\n\toverflow: hidden; /* somehow the dropdown overflows its container, we prevent it here to not push */\n\tflex: 1;\n\tmax-width: 170px;\n\tmin-width: 60px;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tmargin-right: 10px;\n}\n\n.monaco-action-bar .action-item.action-dropdown-item {\n\tdisplay: flex;\n}\n\n.monaco-action-bar .action-item.action-dropdown-item > .action-dropdown-item-separator {\n\tdisplay: flex;\n\talign-items: center;\n\tcursor: default;\n}\n\n.monaco-action-bar .action-item.action-dropdown-item > .action-dropdown-item-separator > div {\n\twidth: 1px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-dropdown {\n\theight: 100%;\n\tpadding: 0;\n}\n\n.monaco-dropdown > .dropdown-label {\n\tcursor: pointer;\n\theight: 100%;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n.monaco-dropdown > .dropdown-label > .action-label.disabled {\n\tcursor: default;\n}\n\n.monaco-dropdown-with-primary {\n\tdisplay: flex !important;\n\tflex-direction: row;\n\tborder-radius: 5px;\n}\n\n.monaco-dropdown-with-primary > .action-container > .action-label {\n\tmargin-right: 0;\n}\n\n.monaco-dropdown-with-primary > .dropdown-action-container > .monaco-dropdown > .dropdown-label .codicon[class*='codicon-'] {\n\tfont-size: 12px;\n\tpadding-left: 0px;\n\tpadding-right: 0px;\n\tline-height: 16px;\n\tmargin-left: -3px;\n}\n\n.monaco-dropdown-with-primary > .dropdown-action-container > .monaco-dropdown > .dropdown-label > .action-label {\n\tdisplay: block;\n\tbackground-size: 16px;\n\tbackground-position: center center;\n\tbackground-repeat: no-repeat;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-action-bar .action-item.menu-entry .action-label.icon {\n\twidth: 16px;\n\theight: 16px;\n\tbackground-repeat: no-repeat;\n\tbackground-position: 50%;\n\tbackground-size: 16px;\n}\n\n.monaco-action-bar .action-item.menu-entry.text-only .action-label {\n\tcolor: var(--vscode-descriptionForeground);\n\toverflow: hidden;\n\tborder-radius: 2px;\n}\n\n.monaco-action-bar .action-item.menu-entry.text-only.use-comma:not(:last-of-type) .action-label::after {\n\tcontent: ', ';\n}\n\n.monaco-action-bar .action-item.menu-entry.text-only + .action-item:not(.text-only) > .monaco-dropdown .action-label {\n\tcolor: var(--vscode-descriptionForeground);\n}\n\n.monaco-dropdown-with-default {\n\tdisplay: flex !important;\n\tflex-direction: row;\n\tborder-radius: 5px;\n}\n\n.monaco-dropdown-with-default > .action-container > .action-label {\n\tmargin-right: 0;\n}\n\n.monaco-dropdown-with-default > .action-container.menu-entry > .action-label.icon {\n\twidth: 16px;\n\theight: 16px;\n\tbackground-repeat: no-repeat;\n\tbackground-position: 50%;\n\tbackground-size: 16px;\n}\n\n.monaco-dropdown-with-default:hover {\n\tbackground-color: var(--vscode-toolbar-hoverBackground);\n}\n\n.monaco-dropdown-with-default > .dropdown-action-container > .monaco-dropdown > .dropdown-label .codicon[class*='codicon-'] {\n\tfont-size: 12px;\n\tpadding-left: 0px;\n\tpadding-right: 0px;\n\tline-height: 16px;\n\tmargin-left: -3px;\n}\n\n.monaco-dropdown-with-default > .dropdown-action-container > .monaco-dropdown > .dropdown-label > .action-label {\n\tdisplay: block;\n\tbackground-size: 16px;\n\tbackground-position: center center;\n\tbackground-repeat: no-repeat;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.quick-input-widget {\n\tfont-size: 13px;\n}\n\n.quick-input-widget .monaco-highlighted-label .highlight,\n.quick-input-widget .monaco-highlighted-label .highlight {\n\tcolor: #0066BF;\n}\n\n.vs .quick-input-widget .monaco-list-row.focused .monaco-highlighted-label .highlight,\n.vs .quick-input-widget .monaco-list-row.focused .monaco-highlighted-label .highlight {\n\tcolor: #9DDDFF;\n}\n\n.vs-dark .quick-input-widget .monaco-highlighted-label .highlight,\n.vs-dark .quick-input-widget .monaco-highlighted-label .highlight {\n\tcolor: #0097fb;\n}\n\n.hc-black .quick-input-widget .monaco-highlighted-label .highlight,\n.hc-black .quick-input-widget .monaco-highlighted-label .highlight {\n\tcolor: #F38518;\n}\n\n.hc-light .quick-input-widget .monaco-highlighted-label .highlight,\n.hc-light .quick-input-widget .monaco-highlighted-label .highlight {\n\tcolor: #0F4A85;\n}\n\n.monaco-keybinding > .monaco-keybinding-key {\n\tbackground-color: rgba(221, 221, 221, 0.4);\n\tborder: solid 1px rgba(204, 204, 204, 0.4);\n\tborder-bottom-color: rgba(187, 187, 187, 0.4);\n\tbox-shadow: inset 0 -1px 0 rgba(187, 187, 187, 0.4);\n\tcolor: #555;\n}\n\n.hc-black .monaco-keybinding > .monaco-keybinding-key {\n\tbackground-color: transparent;\n\tborder: solid 1px rgb(111, 195, 223);\n\tbox-shadow: none;\n\tcolor: #fff;\n}\n\n.hc-light .monaco-keybinding > .monaco-keybinding-key {\n\tbackground-color: transparent;\n\tborder: solid 1px #0F4A85;\n\tbox-shadow: none;\n\tcolor: #292929;\n}\n\n.vs-dark .monaco-keybinding > .monaco-keybinding-key {\n\tbackground-color: rgba(128, 128, 128, 0.17);\n\tborder: solid 1px rgba(51, 51, 51, 0.6);\n\tborder-bottom-color: rgba(68, 68, 68, 0.6);\n\tbox-shadow: inset 0 -1px 0 rgba(68, 68, 68, 0.6);\n\tcolor: #ccc;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-custom-toggle {\n\tmargin-left: 2px;\n\tfloat: left;\n\tcursor: pointer;\n\toverflow: hidden;\n\twidth: 20px;\n\theight: 20px;\n\tborder-radius: 3px;\n\tborder: 1px solid transparent;\n\tpadding: 1px;\n\tbox-sizing:\tborder-box;\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n\n.monaco-custom-toggle:hover {\n\tbackground-color: var(--vscode-inputOption-hoverBackground);\n}\n\n.hc-black .monaco-custom-toggle:hover,\n.hc-light .monaco-custom-toggle:hover {\n\tborder: 1px dashed var(--vscode-focusBorder);\n}\n\n.hc-black .monaco-custom-toggle,\n.hc-light .monaco-custom-toggle {\n\tbackground: none;\n}\n\n.hc-black .monaco-custom-toggle:hover,\n.hc-light .monaco-custom-toggle:hover {\n\tbackground: none;\n}\n\n.monaco-custom-toggle.monaco-checkbox {\n\theight: 18px;\n\twidth: 18px;\n\tborder: 1px solid transparent;\n\tborder-radius: 3px;\n\tmargin-right: 9px;\n\tmargin-left: 0px;\n\tpadding: 0px;\n\topacity: 1;\n\tbackground-size: 16px !important;\n}\n\n.monaco-action-bar .checkbox-action-item {\n\tdisplay: flex;\n\talign-items: center;\n\tborder-radius: 2px;\n\tpadding-right: 2px;\n}\n\n.monaco-action-bar .checkbox-action-item:hover {\n\tbackground-color: var(--vscode-toolbar-hoverBackground);\n}\n\n.monaco-action-bar .checkbox-action-item > .monaco-custom-toggle.monaco-checkbox {\n\tmargin-right: 4px;\n}\n\n.monaco-action-bar .checkbox-action-item > .checkbox-label {\n\tfont-size: 12px;\n}\n\n/* hide check when unchecked */\n.monaco-custom-toggle.monaco-checkbox:not(.checked)::before {\n\tvisibility: hidden;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.quick-input-widget {\n\tposition: absolute;\n\twidth: 600px;\n\tz-index: 2550;\n\tleft: 50%;\n\tmargin-left: -300px;\n\t-webkit-app-region: no-drag;\n\tborder-radius: 6px;\n}\n\n.quick-input-titlebar {\n\tdisplay: flex;\n\talign-items: center;\n\tborder-top-right-radius: 5px;\n\tborder-top-left-radius: 5px;\n}\n\n.quick-input-left-action-bar {\n\tdisplay: flex;\n\tmargin-left: 4px;\n\tflex: 1;\n}\n\n.quick-input-inline-action-bar {\n\tmargin: 2px 0 0 5px;\n}\n\n.quick-input-title {\n\tpadding: 3px 0px;\n\ttext-align: center;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n}\n\n.quick-input-right-action-bar {\n\tdisplay: flex;\n\tmargin-right: 4px;\n\tflex: 1;\n}\n\n.quick-input-right-action-bar > .actions-container {\n\tjustify-content: flex-end;\n}\n\n.quick-input-titlebar .monaco-action-bar .action-label.codicon {\n\tbackground-position: center;\n\tbackground-repeat: no-repeat;\n\tpadding: 2px;\n}\n\n.quick-input-description {\n\tmargin: 6px 6px 6px 11px;\n}\n\n.quick-input-header .quick-input-description {\n\tmargin: 4px 2px;\n\tflex: 1;\n}\n\n.quick-input-header {\n\tdisplay: flex;\n\tpadding: 8px 6px 2px 6px;\n}\n\n.quick-input-widget.hidden-input .quick-input-header {\n\t/* reduce margins and paddings when input box hidden */\n\tpadding: 0;\n\tmargin-bottom: 0;\n}\n\n.quick-input-and-message {\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-grow: 1;\n\tmin-width: 0;\n\tposition: relative;\n}\n\n.quick-input-check-all {\n\talign-self: center;\n\tmargin: 0;\n}\n\n.quick-input-filter {\n\tflex-grow: 1;\n\tdisplay: flex;\n\tposition: relative;\n}\n\n.quick-input-box {\n\tflex-grow: 1;\n}\n\n.quick-input-widget.show-checkboxes .quick-input-box,\n.quick-input-widget.show-checkboxes .quick-input-message {\n\tmargin-left: 5px;\n}\n\n.quick-input-visible-count {\n\tposition: absolute;\n\tleft: -10000px;\n}\n\n.quick-input-count {\n\talign-self: center;\n\tposition: absolute;\n\tright: 4px;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n.quick-input-count .monaco-count-badge {\n\tvertical-align: middle;\n\tpadding: 2px 4px;\n\tborder-radius: 2px;\n\tmin-height: auto;\n\tline-height: normal;\n}\n\n.quick-input-action {\n\tmargin-left: 6px;\n}\n\n.quick-input-action .monaco-text-button {\n\tfont-size: 11px;\n\tpadding: 0 6px;\n\tdisplay: flex;\n\theight: 25px;\n\talign-items: center;\n}\n\n.quick-input-message {\n\tmargin-top: -1px;\n\tpadding: 5px;\n\toverflow-wrap: break-word;\n}\n\n.quick-input-message > .codicon {\n\tmargin: 0 0.2em;\n\tvertical-align: text-bottom;\n}\n\n/* Links in descriptions & validations */\n.quick-input-message a {\n\tcolor: inherit;\n}\n\n.quick-input-progress.monaco-progress-container {\n\tposition: relative;\n}\n\n.quick-input-list {\n\tline-height: 22px;\n}\n\n.quick-input-widget.hidden-input .quick-input-list {\n\tmargin-top: 4px; /* reduce margins when input box hidden */\n\tpadding-bottom: 4px;\n}\n\n.quick-input-list .monaco-list {\n\toverflow: hidden;\n\tmax-height: calc(20 * 22px);\n\tpadding-bottom: 5px;\n}\n\n.quick-input-list .monaco-scrollable-element {\n\tpadding: 0px 5px;\n}\n\n.quick-input-list .quick-input-list-entry {\n\tbox-sizing: border-box;\n\toverflow: hidden;\n\tdisplay: flex;\n\tpadding: 0 6px;\n}\n\n.quick-input-list .quick-input-list-entry.quick-input-list-separator-border {\n\tborder-top-width: 1px;\n\tborder-top-style: solid;\n}\n\n.quick-input-list .monaco-list-row {\n\tborder-radius: 3px;\n}\n\n.quick-input-list .monaco-list-row[data-index=\"0\"] .quick-input-list-entry.quick-input-list-separator-border {\n\tborder-top-style: none;\n}\n\n.quick-input-list .quick-input-list-label {\n\toverflow: hidden;\n\tdisplay: flex;\n\theight: 100%;\n\tflex: 1;\n}\n\n.quick-input-list .quick-input-list-checkbox {\n\talign-self: center;\n\tmargin: 0;\n}\n\n.quick-input-list .quick-input-list-icon {\n\tbackground-size: 16px;\n\tbackground-position: left center;\n\tbackground-repeat: no-repeat;\n\tpadding-right: 6px;\n\twidth: 16px;\n\theight: 22px;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n.quick-input-list .quick-input-list-rows {\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tdisplay: flex;\n\tflex-direction: column;\n\theight: 100%;\n\tflex: 1;\n\tmargin-left: 5px;\n}\n\n.quick-input-widget.show-checkboxes .quick-input-list .quick-input-list-rows {\n\tmargin-left: 10px;\n}\n\n.quick-input-widget .quick-input-list .quick-input-list-checkbox {\n\tdisplay: none;\n}\n.quick-input-widget.show-checkboxes .quick-input-list .quick-input-list-checkbox {\n\tdisplay: inline;\n}\n\n.quick-input-list .quick-input-list-rows > .quick-input-list-row {\n\tdisplay: flex;\n\talign-items: center;\n}\n\n.quick-input-list .quick-input-list-rows > .quick-input-list-row .monaco-icon-label,\n.quick-input-list .quick-input-list-rows > .quick-input-list-row .monaco-icon-label .monaco-icon-label-container > .monaco-icon-name-container {\n\tflex: 1; /* make sure the icon label grows within the row */\n}\n\n.quick-input-list .quick-input-list-rows > .quick-input-list-row .codicon[class*='codicon-'] {\n\tvertical-align: text-bottom;\n}\n\n.quick-input-list .quick-input-list-rows .monaco-highlighted-label > span {\n\topacity: 1;\n}\n\n.quick-input-list .quick-input-list-entry .quick-input-list-entry-keybinding {\n\tmargin-right: 8px; /* separate from the separator label or scrollbar if any */\n}\n\n.quick-input-list .quick-input-list-label-meta {\n\topacity: 0.7;\n\tline-height: normal;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n}\n\n/* preserve list-like styling instead of tree-like styling */\n.quick-input-list .monaco-list .monaco-list-row .monaco-highlighted-label .highlight {\n\tfont-weight: bold;\n\tbackground-color: unset;\n\tcolor: var(--vscode-list-highlightForeground) !important;\n}\n\n/* preserve list-like styling instead of tree-like styling */\n.quick-input-list .monaco-list .monaco-list-row.focused .monaco-highlighted-label .highlight {\n\tcolor: var(--vscode-list-focusHighlightForeground) !important;\n}\n\n.quick-input-list .quick-input-list-entry .quick-input-list-separator {\n\tmargin-right: 4px; /* separate from keybindings or actions */\n}\n\n.quick-input-list .quick-input-list-entry-action-bar {\n\tdisplay: flex;\n\tflex: 0;\n\toverflow: visible;\n}\n\n.quick-input-list .quick-input-list-entry-action-bar .action-label {\n\t/*\n\t * By default, actions in the quick input action bar are hidden\n\t * until hovered over them or selected.\n\t */\n\tdisplay: none;\n}\n\n.quick-input-list .quick-input-list-entry-action-bar .action-label.codicon {\n\tmargin-right: 4px;\n\tpadding: 2px;\n}\n\n.quick-input-list .quick-input-list-entry-action-bar {\n\tmargin-top: 1px;\n}\n\n.quick-input-list .quick-input-list-entry-action-bar {\n\tmargin-right: 4px; /* separate from scrollbar */\n}\n\n.quick-input-list .quick-input-list-entry .quick-input-list-entry-action-bar .action-label.always-visible,\n.quick-input-list .quick-input-list-entry:hover .quick-input-list-entry-action-bar .action-label,\n.quick-input-list .quick-input-list-entry.focus-inside .quick-input-list-entry-action-bar .action-label,\n.quick-input-list .monaco-list-row.focused .quick-input-list-entry-action-bar .action-label,\n.quick-input-list .monaco-list-row.passive-focused .quick-input-list-entry-action-bar .action-label {\n\tdisplay: flex;\n}\n\n/* focused items in quick pick */\n.quick-input-list .monaco-list-row.focused .monaco-keybinding-key,\n.quick-input-list .monaco-list-row.focused .quick-input-list-entry .quick-input-list-separator {\n\tcolor: inherit\n}\n.quick-input-list .monaco-list-row.focused .monaco-keybinding-key {\n\tbackground: none;\n}\n\n.quick-input-list .quick-input-list-separator-as-item {\n\tpadding: 4px 6px;\n\tfont-size: 12px;\n}\n\n/* Quick input separators as full-row item */\n.quick-input-list .quick-input-list-separator-as-item .label-name {\n\tfont-weight: 600;\n}\n\n.quick-input-list .quick-input-list-separator-as-item .label-description {\n\t/* Override default description opacity so we don't have a contrast ratio issue. */\n\topacity: 1 !important;\n}\n\n/* Hide border when the item becomes the sticky one */\n.quick-input-list .monaco-tree-sticky-row .quick-input-list-entry.quick-input-list-separator-as-item.quick-input-list-separator-border {\n\tborder-top-style: none;\n}\n\n/* Give sticky row the same padding as the scrollable list */\n.quick-input-list .monaco-tree-sticky-row {\n\tpadding: 0 5px;\n}\n\n/* Hide the twistie containers so that there isn't blank indent */\n.quick-input-list .monaco-tl-twistie {\n\tdisplay: none !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-text-button {\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\twidth: 100%;\n\tpadding: 4px;\n\tborder-radius: 2px;\n\ttext-align: center;\n\tcursor: pointer;\n\tjustify-content: center;\n\talign-items: center;\n\tborder: 1px solid var(--vscode-button-border, transparent);\n\tline-height: 18px;\n}\n\n.monaco-text-button:focus {\n\toutline-offset: 2px !important;\n}\n\n.monaco-text-button:hover {\n\ttext-decoration: none !important;\n}\n\n.monaco-button.disabled:focus,\n.monaco-button.disabled {\n\topacity: 0.4 !important;\n\tcursor: default;\n}\n\n.monaco-text-button .codicon {\n\tmargin: 0 0.2em;\n\tcolor: inherit !important;\n}\n\n.monaco-text-button.monaco-text-button-with-short-label {\n\tflex-direction: row;\n\tflex-wrap: wrap;\n\tpadding: 0 4px;\n\toverflow: hidden;\n\theight: 28px;\n}\n\n.monaco-text-button.monaco-text-button-with-short-label > .monaco-button-label {\n\tflex-basis: 100%;\n}\n\n.monaco-text-button.monaco-text-button-with-short-label > .monaco-button-label-short {\n\tflex-grow: 1;\n\twidth: 0;\n\toverflow: hidden;\n}\n\n.monaco-text-button.monaco-text-button-with-short-label > .monaco-button-label,\n.monaco-text-button.monaco-text-button-with-short-label > .monaco-button-label-short {\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tfont-weight: normal;\n\tfont-style: inherit;\n\tpadding: 4px 0;\n}\n\n.monaco-button-dropdown {\n\tdisplay: flex;\n\tcursor: pointer;\n}\n\n.monaco-button-dropdown.disabled {\n\tcursor: default;\n}\n\n.monaco-button-dropdown > .monaco-button:focus {\n\toutline-offset: -1px !important;\n}\n\n.monaco-button-dropdown.disabled > .monaco-button.disabled,\n.monaco-button-dropdown.disabled > .monaco-button.disabled:focus,\n.monaco-button-dropdown.disabled > .monaco-button-dropdown-separator {\n\topacity: 0.4 !important;\n}\n\n.monaco-button-dropdown > .monaco-button.monaco-text-button {\n\tborder-right-width: 0 !important;\n}\n\n.monaco-button-dropdown .monaco-button-dropdown-separator {\n\tpadding: 4px 0;\n\tcursor: default;\n}\n\n.monaco-button-dropdown .monaco-button-dropdown-separator > div {\n\theight: 100%;\n\twidth: 1px;\n}\n\n.monaco-button-dropdown > .monaco-button.monaco-dropdown-button {\n\tborder: 1px solid var(--vscode-button-border, transparent);\n\tborder-left-width: 0 !important;\n\tborder-radius: 0 2px 2px 0;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n.monaco-button-dropdown > .monaco-button.monaco-text-button {\n\tborder-radius: 2px 0 0 2px;\n}\n\n.monaco-description-button {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: center;\n\tmargin: 4px 5px; /* allows button focus outline to be visible */\n}\n\n.monaco-description-button .monaco-button-description {\n\tfont-style: italic;\n\tfont-size: 11px;\n\tpadding: 4px 20px;\n}\n\n.monaco-description-button .monaco-button-label,\n.monaco-description-button .monaco-button-description {\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n}\n\n.monaco-description-button .monaco-button-label > .codicon,\n.monaco-description-button .monaco-button-description > .codicon {\n\tmargin: 0 0.2em;\n\tcolor: inherit !important;\n}\n\n/* default color styles - based on CSS variables */\n\n.monaco-button.default-colors,\n.monaco-button-dropdown.default-colors > .monaco-button{\n\tcolor: var(--vscode-button-foreground);\n\tbackground-color: var(--vscode-button-background);\n}\n\n.monaco-button.default-colors:hover,\n.monaco-button-dropdown.default-colors > .monaco-button:hover {\n\tbackground-color: var(--vscode-button-hoverBackground);\n}\n\n.monaco-button.default-colors.secondary,\n.monaco-button-dropdown.default-colors > .monaco-button.secondary {\n\tcolor: var(--vscode-button-secondaryForeground);\n\tbackground-color: var(--vscode-button-secondaryBackground);\n}\n\n.monaco-button.default-colors.secondary:hover,\n.monaco-button-dropdown.default-colors > .monaco-button.secondary:hover {\n\tbackground-color: var(--vscode-button-secondaryHoverBackground);\n}\n\n.monaco-button-dropdown.default-colors .monaco-button-dropdown-separator {\n\tbackground-color: var(--vscode-button-background);\n\tborder-top: 1px solid var(--vscode-button-border);\n\tborder-bottom: 1px solid var(--vscode-button-border);\n}\n\n.monaco-button-dropdown.default-colors .monaco-button.secondary + .monaco-button-dropdown-separator {\n\tbackground-color: var(--vscode-button-secondaryBackground);\n}\n\n.monaco-button-dropdown.default-colors .monaco-button-dropdown-separator > div {\n\tbackground-color: var(--vscode-button-separator);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-count-badge {\n\tpadding: 3px 6px;\n\tborder-radius: 11px;\n\tfont-size: 11px;\n\tmin-width: 18px;\n\tmin-height: 18px;\n\tline-height: 11px;\n\tfont-weight: normal;\n\ttext-align: center;\n\tdisplay: inline-block;\n\tbox-sizing: border-box;\n}\n\n.monaco-count-badge.long {\n\tpadding: 2px 3px;\n\tborder-radius: 2px;\n\tmin-height: auto;\n\tline-height: normal;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-progress-container {\n\twidth: 100%;\n\theight: 2px;\n\toverflow: hidden; /* keep progress bit in bounds */\n}\n\n.monaco-progress-container .progress-bit {\n\twidth: 2%;\n\theight: 2px;\n\tposition: absolute;\n\tleft: 0;\n\tdisplay: none;\n}\n\n.monaco-progress-container.active .progress-bit {\n\tdisplay: inherit;\n}\n\n.monaco-progress-container.discrete .progress-bit {\n\tleft: 0;\n\ttransition: width 100ms linear;\n}\n\n.monaco-progress-container.discrete.done .progress-bit {\n\twidth: 100%;\n}\n\n.monaco-progress-container.infinite .progress-bit {\n\tanimation-name: progress;\n\tanimation-duration: 4s;\n\tanimation-iteration-count: infinite;\n\ttransform: translate3d(0px, 0px, 0px);\n\tanimation-timing-function: linear;\n}\n\n.monaco-progress-container.infinite.infinite-long-running .progress-bit {\n\t/*\n\t\tThe more smooth `linear` timing function can cause\n\t\thigher GPU consumption as indicated in\n\t\thttps://github.com/microsoft/vscode/issues/97900 &\n\t\thttps://github.com/microsoft/vscode/issues/138396\n\t*/\n\tanimation-timing-function: steps(100);\n}\n\n/**\n * The progress bit has a width: 2% (1/50) of the parent container. The animation moves it from 0% to 100% of\n * that container. Since translateX is relative to the progress bit size, we have to multiple it with\n * its relative size to the parent container:\n * parent width: 5000%\n *    bit width: 100%\n * translateX should be as follow:\n *  50%: 5000% * 50% - 50% (set to center) = 2450%\n * 100%: 5000% * 100% - 100% (do not overflow) = 4900%\n */\n@keyframes progress { from { transform: translateX(0%) scaleX(1) } 50% { transform: translateX(2500%) scaleX(3) } to { transform: translateX(4900%) scaleX(1) } }\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-inputbox {\n\tposition: relative;\n\tdisplay: block;\n\tpadding: 0;\n\tbox-sizing:\tborder-box;\n\tborder-radius: 2px;\n\n\t/* Customizable */\n\tfont-size: inherit;\n}\n\n.monaco-inputbox > .ibwrapper > .input,\n.monaco-inputbox > .ibwrapper > .mirror {\n\n\t/* Customizable */\n\tpadding: 4px 6px;\n}\n\n.monaco-inputbox > .ibwrapper {\n\tposition: relative;\n\twidth: 100%;\n\theight: 100%;\n}\n\n.monaco-inputbox > .ibwrapper > .input {\n\tdisplay: inline-block;\n\tbox-sizing:\tborder-box;\n\twidth: 100%;\n\theight: 100%;\n\tline-height: inherit;\n\tborder: none;\n\tfont-family: inherit;\n\tfont-size: inherit;\n\tresize: none;\n\tcolor: inherit;\n}\n\n.monaco-inputbox > .ibwrapper > input {\n\ttext-overflow: ellipsis;\n}\n\n.monaco-inputbox > .ibwrapper > textarea.input {\n\tdisplay: block;\n\tscrollbar-width: none; /* Firefox: hide scrollbars */\n\toutline: none;\n}\n\n.monaco-inputbox > .ibwrapper > textarea.input::-webkit-scrollbar {\n\tdisplay: none; /* Chrome + Safari: hide scrollbar */\n}\n\n.monaco-inputbox > .ibwrapper > textarea.input.empty {\n\twhite-space: nowrap;\n}\n\n.monaco-inputbox > .ibwrapper > .mirror {\n\tposition: absolute;\n\tdisplay: inline-block;\n\twidth: 100%;\n\ttop: 0;\n\tleft: 0;\n\tbox-sizing: border-box;\n\twhite-space: pre-wrap;\n\tvisibility: hidden;\n\tword-wrap: break-word;\n}\n\n/* Context view */\n\n.monaco-inputbox-container {\n\ttext-align: right;\n}\n\n.monaco-inputbox-container .monaco-inputbox-message {\n\tdisplay: inline-block;\n\toverflow: hidden;\n\ttext-align: left;\n\twidth: 100%;\n\tbox-sizing:\tborder-box;\n\tpadding: 0.4em;\n\tfont-size: 12px;\n\tline-height: 17px;\n\tmargin-top: -1px;\n\tword-wrap: break-word;\n}\n\n/* Action bar support */\n.monaco-inputbox .monaco-action-bar {\n\tposition: absolute;\n\tright: 2px;\n\ttop: 4px;\n}\n\n.monaco-inputbox .monaco-action-bar .action-item {\n\tmargin-left: 2px;\n}\n\n.monaco-inputbox .monaco-action-bar .action-item .codicon {\n\tbackground-repeat: no-repeat;\n\twidth: 16px;\n\theight: 16px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n/* ---------- Find input ---------- */\n\n.monaco-findInput {\n\tposition: relative;\n}\n\n.monaco-findInput .monaco-inputbox {\n\tfont-size: 13px;\n\twidth: 100%;\n}\n\n.monaco-findInput > .controls {\n\tposition: absolute;\n\ttop: 3px;\n\tright: 2px;\n}\n\n.vs .monaco-findInput.disabled {\n\tbackground-color: #E1E1E1;\n}\n\n/* Theming */\n.vs-dark .monaco-findInput.disabled {\n\tbackground-color: #333;\n}\n\n/* Highlighting */\n.monaco-findInput.highlight-0 .controls,\n.hc-light .monaco-findInput.highlight-0 .controls {\n\tanimation: monaco-findInput-highlight-0 100ms linear 0s;\n}\n\n.monaco-findInput.highlight-1 .controls,\n.hc-light .monaco-findInput.highlight-1 .controls {\n\tanimation: monaco-findInput-highlight-1 100ms linear 0s;\n}\n\n.hc-black .monaco-findInput.highlight-0 .controls,\n.vs-dark  .monaco-findInput.highlight-0 .controls {\n\tanimation: monaco-findInput-highlight-dark-0 100ms linear 0s;\n}\n\n.hc-black .monaco-findInput.highlight-1 .controls,\n.vs-dark  .monaco-findInput.highlight-1 .controls {\n\tanimation: monaco-findInput-highlight-dark-1 100ms linear 0s;\n}\n\n@keyframes monaco-findInput-highlight-0 {\n\t0% { background: rgba(253, 255, 0, 0.8); }\n\t100% { background: transparent; }\n}\n@keyframes monaco-findInput-highlight-1 {\n\t0% { background: rgba(253, 255, 0, 0.8); }\n\t/* Made intentionally different such that the CSS minifier does not collapse the two animations into a single one*/\n\t99% { background: transparent; }\n}\n\n@keyframes monaco-findInput-highlight-dark-0 {\n\t0% { background: rgba(255, 255, 255, 0.44); }\n\t100% { background: transparent; }\n}\n@keyframes monaco-findInput-highlight-dark-1 {\n\t0% { background: rgba(255, 255, 255, 0.44); }\n\t/* Made intentionally different such that the CSS minifier does not collapse the two animations into a single one*/\n\t99% { background: transparent; }\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n:root {\n\t--vscode-sash-size: 4px;\n\t--vscode-sash-hover-size: 4px;\n}\n\n.monaco-sash {\n\tposition: absolute;\n\tz-index: 35;\n\ttouch-action: none;\n}\n\n.monaco-sash.disabled {\n\tpointer-events: none;\n}\n\n.monaco-sash.mac.vertical {\n\tcursor: col-resize;\n}\n\n.monaco-sash.vertical.minimum {\n\tcursor: e-resize;\n}\n\n.monaco-sash.vertical.maximum {\n\tcursor: w-resize;\n}\n\n.monaco-sash.mac.horizontal {\n\tcursor: row-resize;\n}\n\n.monaco-sash.horizontal.minimum {\n\tcursor: s-resize;\n}\n\n.monaco-sash.horizontal.maximum {\n\tcursor: n-resize;\n}\n\n.monaco-sash.disabled {\n\tcursor: default !important;\n\tpointer-events: none !important;\n}\n\n.monaco-sash.vertical {\n\tcursor: ew-resize;\n\ttop: 0;\n\twidth: var(--vscode-sash-size);\n\theight: 100%;\n}\n\n.monaco-sash.horizontal {\n\tcursor: ns-resize;\n\tleft: 0;\n\twidth: 100%;\n\theight: var(--vscode-sash-size);\n}\n\n.monaco-sash:not(.disabled) > .orthogonal-drag-handle {\n\tcontent: \" \";\n\theight: calc(var(--vscode-sash-size) * 2);\n\twidth: calc(var(--vscode-sash-size) * 2);\n\tz-index: 100;\n\tdisplay: block;\n\tcursor: all-scroll;\n\tposition: absolute;\n}\n\n.monaco-sash.horizontal.orthogonal-edge-north:not(.disabled)\n\t> .orthogonal-drag-handle.start,\n.monaco-sash.horizontal.orthogonal-edge-south:not(.disabled)\n\t> .orthogonal-drag-handle.end {\n\tcursor: nwse-resize;\n}\n\n.monaco-sash.horizontal.orthogonal-edge-north:not(.disabled)\n\t> .orthogonal-drag-handle.end,\n.monaco-sash.horizontal.orthogonal-edge-south:not(.disabled)\n\t> .orthogonal-drag-handle.start {\n\tcursor: nesw-resize;\n}\n\n.monaco-sash.vertical > .orthogonal-drag-handle.start {\n\tleft: calc(var(--vscode-sash-size) * -0.5);\n\ttop: calc(var(--vscode-sash-size) * -1);\n}\n.monaco-sash.vertical > .orthogonal-drag-handle.end {\n\tleft: calc(var(--vscode-sash-size) * -0.5);\n\tbottom: calc(var(--vscode-sash-size) * -1);\n}\n.monaco-sash.horizontal > .orthogonal-drag-handle.start {\n\ttop: calc(var(--vscode-sash-size) * -0.5);\n\tleft: calc(var(--vscode-sash-size) * -1);\n}\n.monaco-sash.horizontal > .orthogonal-drag-handle.end {\n\ttop: calc(var(--vscode-sash-size) * -0.5);\n\tright: calc(var(--vscode-sash-size) * -1);\n}\n\n.monaco-sash:before {\n\tcontent: '';\n\tpointer-events: none;\n\tposition: absolute;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: transparent;\n}\n\n.monaco-workbench:not(.reduce-motion) .monaco-sash:before {\n\ttransition: background-color 0.1s ease-out;\n}\n\n.monaco-sash.hover:before,\n.monaco-sash.active:before {\n\tbackground: var(--vscode-sash-hoverBorder);\n}\n\n.monaco-sash.vertical:before {\n\twidth: var(--vscode-sash-hover-size);\n\tleft: calc(50% - (var(--vscode-sash-hover-size) / 2));\n}\n\n.monaco-sash.horizontal:before {\n\theight: var(--vscode-sash-hover-size);\n\ttop: calc(50% - (var(--vscode-sash-hover-size) / 2));\n}\n\n.pointer-events-disabled {\n\tpointer-events: none !important;\n}\n\n/** Debug **/\n\n.monaco-sash.debug {\n\tbackground: cyan;\n}\n\n.monaco-sash.debug.disabled {\n\tbackground: rgba(0, 255, 255, 0.2);\n}\n\n.monaco-sash.debug:not(.disabled) > .orthogonal-drag-handle {\n\tbackground: red;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-split-view2 {\n\tposition: relative;\n\twidth: 100%;\n\theight: 100%;\n}\n\n.monaco-split-view2 > .sash-container {\n\tposition: absolute;\n\twidth: 100%;\n\theight: 100%;\n\tpointer-events: none;\n}\n\n.monaco-split-view2 > .sash-container > .monaco-sash {\n\tpointer-events: initial;\n}\n\n.monaco-split-view2 > .monaco-scrollable-element {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.monaco-split-view2 > .monaco-scrollable-element > .split-view-container {\n\twidth: 100%;\n\theight: 100%;\n\twhite-space: nowrap;\n\tposition: relative;\n}\n\n.monaco-split-view2 > .monaco-scrollable-element > .split-view-container > .split-view-view {\n\twhite-space: initial;\n\tposition: absolute;\n}\n\n.monaco-split-view2 > .monaco-scrollable-element > .split-view-container > .split-view-view:not(.visible) {\n\tdisplay: none;\n}\n\n.monaco-split-view2.vertical > .monaco-scrollable-element > .split-view-container > .split-view-view {\n\twidth: 100%;\n}\n\n.monaco-split-view2.horizontal > .monaco-scrollable-element > .split-view-container > .split-view-view {\n\theight: 100%;\n}\n\n.monaco-split-view2.separator-border > .monaco-scrollable-element > .split-view-container > .split-view-view:not(:first-child)::before {\n\tcontent: ' ';\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 5;\n\tpointer-events: none;\n\tbackground-color: var(--separator-border);\n}\n\n.monaco-split-view2.separator-border.horizontal > .monaco-scrollable-element > .split-view-container > .split-view-view:not(:first-child)::before {\n\theight: 100%;\n\twidth: 1px;\n}\n\n.monaco-split-view2.separator-border.vertical > .monaco-scrollable-element > .split-view-container > .split-view-view:not(:first-child)::before {\n\theight: 1px;\n\twidth: 100%;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-table {\n\tdisplay: flex;\n\tflex-direction: column;\n\tposition: relative;\n\theight: 100%;\n\twidth: 100%;\n\twhite-space: nowrap;\n\toverflow: hidden;\n}\n\n.monaco-table > .monaco-split-view2 {\n\tborder-bottom: 1px solid transparent;\n}\n\n.monaco-table > .monaco-list {\n\tflex: 1;\n}\n\n.monaco-table-tr {\n\tdisplay: flex;\n\theight: 100%;\n}\n\n.monaco-table-th {\n\twidth: 100%;\n\theight: 100%;\n\tfont-weight: bold;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n}\n\n.monaco-table-th,\n.monaco-table-td {\n\tbox-sizing: border-box;\n\tflex-shrink: 0;\n\toverflow: hidden;\n\twhite-space: nowrap;\n\ttext-overflow: ellipsis;\n}\n\n.monaco-table > .monaco-split-view2 .monaco-sash.vertical::before {\n\tcontent: \"\";\n\tposition: absolute;\n\tleft: calc(var(--vscode-sash-size) / 2);\n\twidth: 0;\n\tborder-left: 1px solid transparent;\n}\n\n.monaco-workbench:not(.reduce-motion) .monaco-table > .monaco-split-view2,\n.monaco-workbench:not(.reduce-motion) .monaco-table > .monaco-split-view2 .monaco-sash.vertical::before {\n\ttransition: border-color 0.2s ease-out;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-tl-row {\n\tdisplay: flex;\n\theight: 100%;\n\talign-items: center;\n\tposition: relative;\n}\n\n.monaco-tl-row.disabled {\n\tcursor: default;\n}\n.monaco-tl-indent {\n\theight: 100%;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 16px;\n\tpointer-events: none;\n}\n\n.hide-arrows .monaco-tl-indent {\n\tleft: 12px;\n}\n\n.monaco-tl-indent > .indent-guide {\n\tdisplay: inline-block;\n\tbox-sizing: border-box;\n\theight: 100%;\n\tborder-left: 1px solid transparent;\n}\n\n.monaco-workbench:not(.reduce-motion) .monaco-tl-indent > .indent-guide {\n\ttransition: border-color 0.1s linear;\n}\n\n.monaco-tl-twistie,\n.monaco-tl-contents {\n\theight: 100%;\n}\n\n.monaco-tl-twistie {\n\tfont-size: 10px;\n\ttext-align: right;\n\tpadding-right: 6px;\n\tflex-shrink: 0;\n\twidth: 16px;\n\tdisplay: flex !important;\n\talign-items: center;\n\tjustify-content: center;\n\ttransform: translateX(3px);\n}\n\n.monaco-tl-contents {\n\tflex: 1;\n\toverflow: hidden;\n}\n\n.monaco-tl-twistie::before {\n\tborder-radius: 20px;\n}\n\n.monaco-tl-twistie.collapsed::before {\n\ttransform: rotate(-90deg);\n}\n\n.monaco-tl-twistie.codicon-tree-item-loading::before {\n\t/* Use steps to throttle FPS to reduce CPU usage */\n\tanimation: codicon-spin 1.25s steps(30) infinite;\n}\n\n.monaco-tree-type-filter {\n\tposition: absolute;\n\ttop: 0;\n\tdisplay: flex;\n\tpadding: 3px;\n\tmax-width: 200px;\n\tz-index: 100;\n\tmargin: 0 6px;\n\tborder: 1px solid var(--vscode-widget-border);\n\tborder-bottom-left-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n}\n\n.monaco-workbench:not(.reduce-motion) .monaco-tree-type-filter {\n\ttransition: top 0.3s;\n}\n\n.monaco-tree-type-filter.disabled {\n\ttop: -40px !important;\n}\n\n.monaco-tree-type-filter-grab {\n\tdisplay: flex !important;\n\talign-items: center;\n\tjustify-content: center;\n\tcursor: grab;\n\tmargin-right: 2px;\n}\n\n.monaco-tree-type-filter-grab.grabbing {\n\tcursor: grabbing;\n}\n\n.monaco-tree-type-filter-input {\n\tflex: 1;\n}\n\n.monaco-tree-type-filter-input .monaco-inputbox {\n\theight: 23px;\n}\n\n.monaco-tree-type-filter-input .monaco-inputbox > .ibwrapper > .input,\n.monaco-tree-type-filter-input .monaco-inputbox > .ibwrapper > .mirror {\n\tpadding: 2px 4px;\n}\n\n.monaco-tree-type-filter-input .monaco-findInput > .controls {\n\ttop: 2px;\n}\n\n.monaco-tree-type-filter-actionbar {\n\tmargin-left: 4px;\n}\n\n.monaco-tree-type-filter-actionbar .monaco-action-bar .action-label {\n\tpadding: 2px;\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container{\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 0;\n\tz-index: 13; /* Settings editor uses z-index: 12 */\n\n\t/* Backup color in case the tree does not provide the background color */\n\tbackground-color: var(--vscode-sideBar-background);\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container .monaco-tree-sticky-row.monaco-list-row{\n\tposition: absolute;\n\twidth: 100%;\n\topacity: 1 !important; /* Settings editor uses opacity < 1 */\n\toverflow: hidden;\n\n\t/* Backup color in case the tree does not provide the background color */\n\tbackground-color: var(--vscode-sideBar-background);\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container .monaco-tree-sticky-row:hover{\n\tbackground-color: var(--vscode-list-hoverBackground) !important;\n\tcursor: pointer;\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container.empty,\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container.empty .monaco-tree-sticky-container-shadow {\n\tdisplay: none;\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container .monaco-tree-sticky-container-shadow {\n\tposition: absolute;\n\tbottom: -3px;\n\tleft: 0px;\n\theight: 0px; /* heigt is 3px and only set when there is a treeStickyScrollShadow color */\n\twidth: 100%;\n}\n\n.monaco-list .monaco-scrollable-element .monaco-tree-sticky-container[tabindex=\"0\"]:focus{\n\toutline: none;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* ---------- Icon label ---------- */\n\n.monaco-icon-label {\n\tdisplay: flex; /* required for icons support :before rule */\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n}\n\n.monaco-icon-label::before {\n\n\t/* svg icons rendered as background image */\n\tbackground-size: 16px;\n\tbackground-position: left center;\n\tbackground-repeat: no-repeat;\n\tpadding-right: 6px;\n\twidth: 16px;\n\theight: 22px;\n\tline-height: inherit !important;\n\tdisplay: inline-block;\n\n\t/* fonts icons */\n\t-webkit-font-smoothing: antialiased;\n\t-moz-osx-font-smoothing: grayscale;\n\tvertical-align: top;\n\n\tflex-shrink: 0; /* fix for https://github.com/microsoft/vscode/issues/13787 */\n}\n\n.monaco-icon-label-iconpath {\n\twidth: 16px;\n\theight: 16px;\n\tpadding-left: 2px;\n\tmargin-top: 2px;\n\tdisplay: flex;\n}\n\n.monaco-icon-label-container.disabled {\n\tcolor: var(--vscode-disabledForeground);\n}\n.monaco-icon-label > .monaco-icon-label-container {\n\tmin-width: 0;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tflex: 1;\n}\n\n.monaco-icon-label > .monaco-icon-label-container > .monaco-icon-name-container > .label-name {\n\tcolor: inherit;\n\twhite-space: pre; /* enable to show labels that include multiple whitespaces */\n}\n\n.monaco-icon-label > .monaco-icon-label-container > .monaco-icon-name-container > .label-name > .label-separator {\n\tmargin: 0 2px;\n\topacity: 0.5;\n}\n\n.monaco-icon-label > .monaco-icon-label-container > .monaco-icon-suffix-container > .label-suffix {\n\topacity: .7;\n\twhite-space: pre;\n}\n\n.monaco-icon-label > .monaco-icon-label-container > .monaco-icon-description-container > .label-description {\n\topacity: .7;\n\tmargin-left: 0.5em;\n\tfont-size: 0.9em;\n\twhite-space: pre; /* enable to show labels that include multiple whitespaces */\n}\n\n.monaco-icon-label.nowrap > .monaco-icon-label-container > .monaco-icon-description-container > .label-description{\n\twhite-space: nowrap\n}\n\n.vs .monaco-icon-label > .monaco-icon-label-container > .monaco-icon-description-container > .label-description {\n\topacity: .95;\n}\n\n.monaco-icon-label.italic > .monaco-icon-label-container > .monaco-icon-name-container > .label-name,\n.monaco-icon-label.italic > .monaco-icon-label-container > .monaco-icon-description-container > .label-description {\n\tfont-style: italic;\n}\n\n.monaco-icon-label.deprecated {\n\ttext-decoration: line-through;\n\topacity: 0.66;\n}\n\n/* make sure apply italic font style to decorations as well */\n.monaco-icon-label.italic::after {\n\tfont-style: italic;\n}\n\n.monaco-icon-label.strikethrough > .monaco-icon-label-container > .monaco-icon-name-container > .label-name,\n.monaco-icon-label.strikethrough > .monaco-icon-label-container > .monaco-icon-description-container > .label-description {\n\ttext-decoration: line-through;\n}\n\n.monaco-icon-label::after {\n\topacity: 0.75;\n\tfont-size: 90%;\n\tfont-weight: 600;\n\tmargin: auto 16px 0 5px; /* https://github.com/microsoft/vscode/issues/113223 */\n\ttext-align: center;\n}\n\n/* make sure selection color wins when a label is being selected */\n.monaco-list:focus .selected .monaco-icon-label, /* list */\n.monaco-list:focus .selected .monaco-icon-label::after\n{\n\tcolor: inherit !important;\n}\n\n.monaco-list-row.focused.selected .label-description,\n.monaco-list-row.selected .label-description {\n\topacity: .8;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-keybinding {\n\tdisplay: flex;\n\talign-items: center;\n\tline-height: 10px;\n}\n\n.monaco-keybinding > .monaco-keybinding-key {\n\tdisplay: inline-block;\n\tborder-style: solid;\n\tborder-width: 1px;\n\tborder-radius: 3px;\n\tvertical-align: middle;\n\tfont-size: 11px;\n\tpadding: 3px 5px;\n\tmargin: 0 2px;\n}\n\n.monaco-keybinding > .monaco-keybinding-key:first-child {\n\tmargin-left: 0;\n}\n\n.monaco-keybinding > .monaco-keybinding-key:last-child {\n\tmargin-right: 0;\n}\n\n.monaco-keybinding > .monaco-keybinding-key-separator {\n\tdisplay: inline-block;\n}\n\n.monaco-keybinding > .monaco-keybinding-key-chord-separator {\n\twidth: 6px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* -------------------- IE10 remove auto clear button -------------------- */\n\n::-ms-clear {\n\tdisplay: none;\n}\n\n/* All widgets */\n/* I am not a big fan of this rule */\n.monaco-editor .editor-widget input {\n\tcolor: inherit;\n}\n\n/* -------------------- Editor -------------------- */\n\n.monaco-editor {\n\tposition: relative;\n\toverflow: visible;\n\t-webkit-text-size-adjust: 100%;\n\tcolor: var(--vscode-editor-foreground);\n\tbackground-color: var(--vscode-editor-background);\n\toverflow-wrap: initial;\n}\n.monaco-editor-background {\n\tbackground-color: var(--vscode-editor-background);\n}\n.monaco-editor .rangeHighlight {\n\tbackground-color: var(--vscode-editor-rangeHighlightBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-rangeHighlightBorder);\n}\n.monaco-editor.hc-black .rangeHighlight, .monaco-editor.hc-light .rangeHighlight {\n\tborder-style: dotted;\n}\n.monaco-editor .symbolHighlight {\n\tbackground-color: var(--vscode-editor-symbolHighlightBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-symbolHighlightBorder);\n}\n.monaco-editor.hc-black .symbolHighlight, .monaco-editor.hc-light .symbolHighlight {\n\tborder-style: dotted;\n}\n\n/* -------------------- Misc -------------------- */\n\n.monaco-editor .overflow-guard {\n\tposition: relative;\n\toverflow: hidden;\n}\n\n.monaco-editor .view-overlays {\n\tposition: absolute;\n\ttop: 0;\n}\n\n.monaco-editor .view-overlays > div, .monaco-editor .margin-view-overlays > div {\n\tposition: absolute;\n\twidth: 100%;\n}\n\n/*\n.monaco-editor .auto-closed-character {\n\topacity: 0.3;\n}\n*/\n\n\n.monaco-editor .squiggly-error {\n\tborder-bottom: 4px double var(--vscode-editorError-border);\n}\n.monaco-editor .squiggly-error::before {\n\tdisplay: block;\n\tcontent: '';\n\twidth: 100%;\n\theight: 100%;\n\tbackground: var(--vscode-editorError-background);\n}\n.monaco-editor .squiggly-warning {\n\tborder-bottom: 4px double var(--vscode-editorWarning-border);\n}\n.monaco-editor .squiggly-warning::before {\n\tdisplay: block;\n\tcontent: '';\n\twidth: 100%;\n\theight: 100%;\n\tbackground: var(--vscode-editorWarning-background);\n}\n.monaco-editor .squiggly-info {\n\tborder-bottom: 4px double var(--vscode-editorInfo-border);\n}\n.monaco-editor .squiggly-info::before {\n\tdisplay: block;\n\tcontent: '';\n\twidth: 100%;\n\theight: 100%;\n\tbackground: var(--vscode-editorInfo-background);\n}\n.monaco-editor .squiggly-hint {\n\tborder-bottom: 2px dotted var(--vscode-editorHint-border);\n}\n.monaco-editor.showUnused .squiggly-unnecessary {\n\tborder-bottom: 2px dashed var(--vscode-editorUnnecessaryCode-border);\n}\n.monaco-editor.showDeprecated .squiggly-inline-deprecated {\n\ttext-decoration: line-through;\n\ttext-decoration-color: var(--vscode-editor-foreground, inherit);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .inputarea {\n\tmin-width: 0;\n\tmin-height: 0;\n\tmargin: 0;\n\tpadding: 0;\n\tposition: absolute;\n\toutline: none !important;\n\tresize: none;\n\tborder: none;\n\toverflow: hidden;\n\tcolor: transparent;\n\tbackground-color: transparent;\n\tz-index: -10;\n}\n/*.monaco-editor .inputarea {\n\tposition: fixed !important;\n\twidth: 800px !important;\n\theight: 500px !important;\n\ttop: initial !important;\n\tleft: initial !important;\n\tbottom: 0 !important;\n\tright: 0 !important;\n\tcolor: black !important;\n\tbackground: white !important;\n\tline-height: 15px !important;\n\tfont-size: 14px !important;\n\tz-index: 10 !important;\n}*/\n.monaco-editor .inputarea.ime-input {\n\tz-index: 10;\n\tcaret-color: var(--vscode-editorCursor-foreground);\n\tcolor: var(--vscode-editor-foreground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .margin-view-overlays .line-numbers {\n\tbottom: 0;\n\tfont-variant-numeric: tabular-nums;\n\tposition: absolute;\n\ttext-align: right;\n\tdisplay: inline-block;\n\tvertical-align: middle;\n\tbox-sizing: border-box;\n\tcursor: default;\n}\n\n.monaco-editor .relative-current-line-number {\n\ttext-align: left;\n\tdisplay: inline-block;\n\twidth: 100%;\n}\n\n.monaco-editor .margin-view-overlays .line-numbers.lh-odd {\n\tmargin-top: 1px;\n}\n\n.monaco-editor .line-numbers {\n\tcolor: var(--vscode-editorLineNumber-foreground);\n}\n\n.monaco-editor .line-numbers.active-line-number {\n\tcolor: var(--vscode-editorLineNumber-activeForeground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .margin {\n\tbackground-color: var(--vscode-editorGutter-background);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-mouse-cursor-text {\n\tcursor: text;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .blockDecorations-container {\n\tposition: absolute;\n\ttop: 0;\n\tpointer-events: none;\n}\n\n.monaco-editor .blockDecorations-block {\n\tposition: absolute;\n\tbox-sizing: border-box;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .view-overlays .current-line {\n\tdisplay: block;\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tbox-sizing: border-box;\n\theight: 100%;\n}\n\n.monaco-editor .margin-view-overlays .current-line {\n\tdisplay: block;\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tbox-sizing: border-box;\n\theight: 100%;\n}\n\n.monaco-editor\n\t.margin-view-overlays\n\t.current-line.current-line-margin.current-line-margin-both {\n\tborder-right: 0;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/*\n\tKeeping name short for faster parsing.\n\tcdr = core decorations rendering (div)\n*/\n.monaco-editor .lines-content .cdr {\n\tposition: absolute;\n\theight: 100%;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .glyph-margin {\n\tposition: absolute;\n\ttop: 0;\n}\n\n/*\n\tKeeping name short for faster parsing.\n\tcgmr = core glyph margin rendering (div)\n*/\n.monaco-editor .glyph-margin-widgets .cgmr {\n\tposition: absolute;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n/*\n\tEnsure spinning icons are pixel-perfectly centered and avoid wobble.\n\tThis is only applied to icons that spin to avoid unnecessary\n\tGPU layers and blurry subpixel AA.\n*/\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-modifier-spin::before  {\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .lines-content .core-guide {\n\tposition: absolute;\n\tbox-sizing: border-box;\n\theight: 100%;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* Uncomment to see lines flashing when they're painted */\n/*.monaco-editor .view-lines > .view-line {\n\tbackground-color: none;\n\tanimation-name: flash-background;\n\tanimation-duration: 800ms;\n}\n@keyframes flash-background {\n\t0%   { background-color: lightgreen; }\n\t100% { background-color: none }\n}*/\n\n.mtkcontrol {\n\tcolor: rgb(255, 255, 255) !important;\n\tbackground: rgb(150, 0, 0) !important;\n}\n\n.mtkoverflow {\n\tbackground-color: var(--vscode-button-background, var(--vscode-editor-background));\n\tcolor: var(--vscode-button-foreground, var(--vscode-editor-foreground));\n\tborder-width: 1px;\n\tborder-style: solid;\n\tborder-color: var(--vscode-contrastBorder);\n\tborder-radius: 2px;\n\tpadding: 4px;\n\tcursor: pointer;\n}\n.mtkoverflow:hover {\n\tbackground-color: var(--vscode-button-hoverBackground);\n}\n\n.monaco-editor.no-user-select .lines-content,\n.monaco-editor.no-user-select .view-line,\n.monaco-editor.no-user-select .view-lines {\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n/* Use user-select: text for lookup feature on macOS */\n/* https://github.com/microsoft/vscode/issues/85632 */\n.monaco-editor.mac .lines-content:hover,\n.monaco-editor.mac .view-line:hover,\n.monaco-editor.mac .view-lines:hover {\n\tuser-select: text;\n\t-webkit-user-select: text;\n\t-ms-user-select: text;\n}\n\n.monaco-editor.enable-user-select {\n\tuser-select: initial;\n\t-webkit-user-select: initial;\n}\n\n.monaco-editor .view-lines {\n\twhite-space: nowrap;\n}\n\n.monaco-editor .view-line {\n\tposition: absolute;\n\twidth: 100%;\n}\n\n/* There are view-lines in view-zones. We have to make sure this rule does not apply to them, as they don't set a line height */\n.monaco-editor .lines-content > .view-lines > .view-line > span {\n\ttop: 0;\n\tbottom: 0;\n\tposition: absolute;\n}\n\n.monaco-editor .mtkw {\n\tcolor: var(--vscode-editorWhitespace-foreground) !important;\n}\n\n.monaco-editor .mtkz {\n\tdisplay: inline-block;\n\tcolor: var(--vscode-editorWhitespace-foreground) !important;\n}\n\n/* TODO@tokenization bootstrap fix */\n/*.monaco-editor .view-line > span > span {\n\tfloat: none;\n\tmin-height: inherit;\n\tmargin-left: inherit;\n}*/\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .lines-decorations {\n\tposition: absolute;\n\ttop: 0;\n\tbackground: white;\n}\n\n/*\n\tKeeping name short for faster parsing.\n\tcldr = core lines decorations rendering (div)\n*/\n.monaco-editor .margin-view-overlays .cldr {\n\tposition: absolute;\n\theight: 100%;\n}/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/*\n\tKeeping name short for faster parsing.\n\tcmdr = core margin decorations rendering (div)\n*/\n.monaco-editor .margin-view-overlays .cmdr {\n\tposition: absolute;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* START cover the case that slider is visible on mouseover */\n.monaco-editor .minimap.slider-mouseover .minimap-slider {\n\topacity: 0;\n\ttransition: opacity 100ms linear;\n}\n.monaco-editor .minimap.slider-mouseover:hover .minimap-slider {\n\topacity: 1;\n}\n.monaco-editor .minimap.slider-mouseover .minimap-slider.active {\n\topacity: 1;\n}\n/* END cover the case that slider is visible on mouseover */\n.monaco-editor .minimap-slider .minimap-slider-horizontal {\n\tbackground: var(--vscode-minimapSlider-background);\n}\n.monaco-editor .minimap-slider:hover .minimap-slider-horizontal {\n\tbackground: var(--vscode-minimapSlider-hoverBackground);\n}\n.monaco-editor .minimap-slider.active .minimap-slider-horizontal {\n\tbackground: var(--vscode-minimapSlider-activeBackground);\n}\n.monaco-editor .minimap-shadow-visible {\n\tbox-shadow: var(--vscode-scrollbar-shadow) -6px 0 6px -6px inset;\n}\n.monaco-editor .minimap-shadow-hidden {\n\tposition: absolute;\n\twidth: 0;\n}\n.monaco-editor .minimap-shadow-visible {\n\tposition: absolute;\n\tleft: -6px;\n\twidth: 6px;\n}\n.monaco-editor.no-minimap-shadow .minimap-shadow-visible {\n\tposition: absolute;\n\tleft: -1px;\n\twidth: 1px;\n}\n\n/* 0.5s fade in/out for the minimap */\n.minimap.autohide {\n\topacity: 0;\n\ttransition: opacity 0.5s;\n}\n.minimap.autohide:hover {\n\topacity: 1;\n}\n\n.monaco-editor .minimap {\n\tz-index: 5;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .overlayWidgets {\n\tposition: absolute;\n\ttop: 0;\n\tleft:0;\n}/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .view-ruler {\n\tposition: absolute;\n\ttop: 0;\n\tbox-shadow: 1px 0 0 0 var(--vscode-editorRuler-foreground) inset;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .scroll-decoration {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\theight: 6px;\n\tbox-shadow: var(--vscode-scrollbar-shadow) 0 6px 6px -6px inset;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/*\n\tKeeping name short for faster parsing.\n\tcslr = core selections layer rendering (div)\n*/\n.monaco-editor .lines-content .cslr {\n\tposition: absolute;\n}\n\n.monaco-editor .focused .selected-text {\n\tbackground-color: var(--vscode-editor-selectionBackground);\n}\n\n.monaco-editor .selected-text {\n\tbackground-color: var(--vscode-editor-inactiveSelectionBackground);\n}\n\n.monaco-editor\t\t\t.top-left-radius\t\t{ border-top-left-radius: 3px; }\n.monaco-editor\t\t\t.bottom-left-radius\t\t{ border-bottom-left-radius: 3px; }\n.monaco-editor\t\t\t.top-right-radius\t\t{ border-top-right-radius: 3px; }\n.monaco-editor\t\t\t.bottom-right-radius\t{ border-bottom-right-radius: 3px; }\n\n.monaco-editor.hc-black .top-left-radius\t\t{ border-top-left-radius: 0; }\n.monaco-editor.hc-black .bottom-left-radius\t\t{ border-bottom-left-radius: 0; }\n.monaco-editor.hc-black .top-right-radius\t\t{ border-top-right-radius: 0; }\n.monaco-editor.hc-black .bottom-right-radius\t{ border-bottom-right-radius: 0; }\n\n.monaco-editor.hc-light .top-left-radius\t\t{ border-top-left-radius: 0; }\n.monaco-editor.hc-light .bottom-left-radius\t\t{ border-bottom-left-radius: 0; }\n.monaco-editor.hc-light .top-right-radius\t\t{ border-top-right-radius: 0; }\n.monaco-editor.hc-light .bottom-right-radius\t{ border-bottom-right-radius: 0; }\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .cursors-layer {\n\tposition: absolute;\n\ttop: 0;\n}\n\n.monaco-editor .cursors-layer > .cursor {\n\tposition: absolute;\n\toverflow: hidden;\n\tbox-sizing: border-box;\n}\n\n/* -- smooth-caret-animation -- */\n.monaco-editor .cursors-layer.cursor-smooth-caret-animation > .cursor {\n\ttransition: all 80ms;\n}\n\n/* -- block-outline-style -- */\n.monaco-editor .cursors-layer.cursor-block-outline-style > .cursor {\n\tbackground: transparent !important;\n\tborder-style: solid;\n\tborder-width: 1px;\n}\n\n/* -- underline-style -- */\n.monaco-editor .cursors-layer.cursor-underline-style > .cursor {\n\tborder-bottom-width: 2px;\n\tborder-bottom-style: solid;\n\tbackground: transparent !important;\n}\n\n/* -- underline-thin-style -- */\n.monaco-editor .cursors-layer.cursor-underline-thin-style > .cursor {\n\tborder-bottom-width: 1px;\n\tborder-bottom-style: solid;\n\tbackground: transparent !important;\n}\n\n@keyframes monaco-cursor-smooth {\n\t0%,\n\t20% {\n\t\topacity: 1;\n\t}\n\t60%,\n\t100% {\n\t\topacity: 0;\n\t}\n}\n\n@keyframes monaco-cursor-phase {\n\t0%,\n\t20% {\n\t\topacity: 1;\n\t}\n\t90%,\n\t100% {\n\t\topacity: 0;\n\t}\n}\n\n@keyframes monaco-cursor-expand {\n\t0%,\n\t20% {\n\t\ttransform: scaleY(1);\n\t}\n\t80%,\n\t100% {\n\t\ttransform: scaleY(0);\n\t}\n}\n\n.cursor-smooth {\n\tanimation: monaco-cursor-smooth 0.5s ease-in-out 0s 20 alternate;\n}\n\n.cursor-phase {\n\tanimation: monaco-cursor-phase 0.5s ease-in-out 0s 20 alternate;\n}\n\n.cursor-expand > .cursor {\n\tanimation: monaco-cursor-expand 0.5s ease-in-out 0s 20 alternate;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .mwh {\n\tposition: absolute;\n\tcolor: var(--vscode-editorWhitespace-foreground) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .diff-hidden-lines-widget {\n\twidth: 100%;\n}\n\n.monaco-editor .diff-hidden-lines {\n\theight: 0px; /* The children each have a fixed height, the transform confuses the browser */\n\ttransform: translate(0px, -10px);\n\tfont-size: 13px;\n\tline-height: 14px;\n}\n\n.monaco-editor .diff-hidden-lines:not(.dragging) .top:hover,\n.monaco-editor .diff-hidden-lines:not(.dragging) .bottom:hover,\n.monaco-editor .diff-hidden-lines .top.dragging,\n.monaco-editor .diff-hidden-lines .bottom.dragging {\n\tbackground-color: var(--vscode-focusBorder);\n}\n\n.monaco-editor .diff-hidden-lines .top,\n.monaco-editor .diff-hidden-lines .bottom {\n\ttransition: background-color 0.1s ease-out;\n\theight: 4px;\n\tbackground-color: transparent;\n\tbackground-clip: padding-box;\n\tborder-bottom: 2px solid transparent;\n\tborder-top: 4px solid transparent;\n\t/*cursor: n-resize;*/\n}\n\n.monaco-editor.draggingUnchangedRegion.canMoveTop:not(.canMoveBottom) *,\n.monaco-editor .diff-hidden-lines .top.canMoveTop:not(.canMoveBottom),\n.monaco-editor .diff-hidden-lines .bottom.canMoveTop:not(.canMoveBottom) {\n\tcursor: n-resize !important;\n}\n\n.monaco-editor.draggingUnchangedRegion:not(.canMoveTop).canMoveBottom *,\n.monaco-editor .diff-hidden-lines .top:not(.canMoveTop).canMoveBottom,\n.monaco-editor .diff-hidden-lines .bottom:not(.canMoveTop).canMoveBottom {\n\tcursor: s-resize !important;\n}\n\n.monaco-editor.draggingUnchangedRegion.canMoveTop.canMoveBottom *,\n.monaco-editor .diff-hidden-lines .top.canMoveTop.canMoveBottom,\n.monaco-editor .diff-hidden-lines .bottom.canMoveTop.canMoveBottom {\n\tcursor: ns-resize !important;\n}\n\n.monaco-editor .diff-hidden-lines .top {\n\ttransform: translate(0px, 4px);\n}\n\n.monaco-editor .diff-hidden-lines .bottom {\n\ttransform: translate(0px, -6px);\n}\n\n.monaco-editor .diff-unchanged-lines {\n\tbackground: var(--vscode-diffEditor-unchangedCodeBackground);\n}\n\n.monaco-editor .noModificationsOverlay {\n\tz-index: 1;\n\tbackground: var(--vscode-editor-background);\n\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n}\n\n\n.monaco-editor .diff-hidden-lines .center {\n\tbackground: var(--vscode-diffEditor-unchangedRegionBackground);\n\tcolor: var(--vscode-diffEditor-unchangedRegionForeground);\n\toverflow: hidden;\n\tdisplay: block;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n\n\theight: 24px;\n\tbox-shadow: inset 0 -5px 5px -7px var(--vscode-diffEditor-unchangedRegionShadow), inset 0 5px 5px -7px var(--vscode-diffEditor-unchangedRegionShadow);\n}\n\n.monaco-editor .diff-hidden-lines .center span.codicon {\n\tvertical-align: middle;\n}\n\n.monaco-editor .diff-hidden-lines .center a:hover .codicon {\n\tcursor: pointer;\n\tcolor: var(--vscode-editorLink-activeForeground) !important;\n}\n\n.monaco-editor .diff-hidden-lines div.breadcrumb-item {\n\tcursor: pointer;\n}\n\n.monaco-editor .diff-hidden-lines div.breadcrumb-item:hover {\n\tcolor: var(--vscode-editorLink-activeForeground);\n}\n\n.monaco-editor .movedOriginal {\n\tborder: 2px solid var(--vscode-diffEditor-move-border);\n}\n\n.monaco-editor .movedModified {\n\tborder: 2px solid var(--vscode-diffEditor-move-border);\n}\n\n.monaco-editor .movedOriginal.currentMove, .monaco-editor .movedModified.currentMove {\n\tborder: 2px solid var(--vscode-diffEditor-moveActive-border);\n}\n\n.monaco-diff-editor .moved-blocks-lines path.currentMove {\n\tstroke: var(--vscode-diffEditor-moveActive-border);\n}\n\n.monaco-diff-editor .moved-blocks-lines path {\n\tpointer-events: visiblestroke;\n}\n\n.monaco-diff-editor .moved-blocks-lines .arrow {\n\tfill: var(--vscode-diffEditor-move-border);\n}\n\n.monaco-diff-editor .moved-blocks-lines .arrow.currentMove {\n\tfill: var(--vscode-diffEditor-moveActive-border);\n}\n\n.monaco-diff-editor .moved-blocks-lines .arrow-rectangle {\n\tfill: var(--vscode-editor-background);\n}\n\n.monaco-diff-editor .moved-blocks-lines {\n\tposition: absolute;\n\tpointer-events: none;\n}\n\n.monaco-diff-editor .moved-blocks-lines path {\n\tfill: none;\n\tstroke: var(--vscode-diffEditor-move-border);\n\tstroke-width: 2;\n}\n\n.monaco-editor .char-delete.diff-range-empty {\n\tmargin-left: -1px;\n\tborder-left: solid var(--vscode-diffEditor-removedTextBackground) 3px;\n}\n\n.monaco-editor .char-insert.diff-range-empty {\n\tborder-left: solid var(--vscode-diffEditor-insertedTextBackground) 3px;\n}\n\n.monaco-editor .fold-unchanged {\n\tcursor: pointer;\n}\n\n.monaco-diff-editor .diff-moved-code-block {\n\tdisplay: flex;\n\tjustify-content: flex-end;\n\tmargin-top: -4px;\n}\n\n.monaco-diff-editor .diff-moved-code-block .action-bar .action-label.codicon {\n\twidth: 12px;\n\theight: 12px;\n\tfont-size: 12px;\n}\n\n/* ---------- DiffEditor ---------- */\n\n.monaco-diff-editor .diffOverview {\n\tz-index: 9;\n}\n\n.monaco-diff-editor .diffOverview .diffViewport {\n\tz-index: 10;\n}\n\n/* colors not externalized: using transparancy on background */\n.monaco-diff-editor.vs\t\t\t.diffOverview { background: rgba(0, 0, 0, 0.03); }\n.monaco-diff-editor.vs-dark\t\t.diffOverview { background: rgba(255, 255, 255, 0.01); }\n\n.monaco-scrollable-element.modified-in-monaco-diff-editor.vs\t\t.scrollbar { background: rgba(0,0,0,0); }\n.monaco-scrollable-element.modified-in-monaco-diff-editor.vs-dark\t.scrollbar { background: rgba(0,0,0,0); }\n.monaco-scrollable-element.modified-in-monaco-diff-editor.hc-black\t.scrollbar { background: none; }\n.monaco-scrollable-element.modified-in-monaco-diff-editor.hc-light\t.scrollbar { background: none; }\n\n.monaco-scrollable-element.modified-in-monaco-diff-editor .slider {\n\tz-index: 10;\n}\n.modified-in-monaco-diff-editor\t\t\t\t.slider.active { background: rgba(171, 171, 171, .4); }\n.modified-in-monaco-diff-editor.hc-black\t.slider.active { background: none; }\n.modified-in-monaco-diff-editor.hc-light\t.slider.active { background: none; }\n\n/* ---------- Diff ---------- */\n\n.monaco-editor .insert-sign,\n.monaco-diff-editor .insert-sign,\n.monaco-editor .delete-sign,\n.monaco-diff-editor .delete-sign {\n\tfont-size: 11px !important;\n\topacity: 0.7 !important;\n\tdisplay: flex !important;\n\talign-items: center;\n}\n.monaco-editor.hc-black .insert-sign,\n.monaco-diff-editor.hc-black .insert-sign,\n.monaco-editor.hc-black .delete-sign,\n.monaco-diff-editor.hc-black .delete-sign,\n.monaco-editor.hc-light .insert-sign,\n.monaco-diff-editor.hc-light .insert-sign,\n.monaco-editor.hc-light .delete-sign,\n.monaco-diff-editor.hc-light .delete-sign {\n\topacity: 1;\n}\n\n.monaco-editor .inline-deleted-margin-view-zone {\n\ttext-align: right;\n}\n.monaco-editor .inline-added-margin-view-zone {\n\ttext-align: right;\n}\n\n.monaco-editor .arrow-revert-change {\n\tz-index: 10;\n\tposition: absolute;\n}\n\n.monaco-editor .arrow-revert-change:hover {\n\tcursor: pointer;\n}\n\n/* ---------- Inline Diff ---------- */\n\n.monaco-editor .view-zones .view-lines .view-line span {\n\tdisplay: inline-block;\n}\n\n.monaco-editor .margin-view-zones .lightbulb-glyph:hover {\n\tcursor: pointer;\n}\n\n.monaco-editor .char-insert, .monaco-diff-editor .char-insert {\n\tbackground-color: var(--vscode-diffEditor-insertedTextBackground);\n}\n\n.monaco-editor .line-insert, .monaco-diff-editor .line-insert {\n\tbackground-color: var(--vscode-diffEditor-insertedLineBackground, var(--vscode-diffEditor-insertedTextBackground));\n}\n\n.monaco-editor .line-insert,\n.monaco-editor .char-insert {\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-diffEditor-insertedTextBorder);\n}\n.monaco-editor.hc-black .line-insert, .monaco-editor.hc-light .line-insert,\n.monaco-editor.hc-black .char-insert, .monaco-editor.hc-light .char-insert {\n\tborder-style: dashed;\n}\n\n.monaco-editor .line-delete,\n.monaco-editor .char-delete {\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-diffEditor-removedTextBorder);\n}\n.monaco-editor.hc-black .line-delete, .monaco-editor.hc-light .line-delete,\n.monaco-editor.hc-black .char-delete, .monaco-editor.hc-light .char-delete {\n\tborder-style: dashed;\n}\n\n.monaco-editor .inline-added-margin-view-zone,\n.monaco-editor .gutter-insert, .monaco-diff-editor .gutter-insert {\n\tbackground-color: var(--vscode-diffEditorGutter-insertedLineBackground, var(--vscode-diffEditor-insertedLineBackground), var(--vscode-diffEditor-insertedTextBackground));\n}\n\n.monaco-editor .char-delete, .monaco-diff-editor .char-delete, .monaco-editor .inline-deleted-text {\n\tbackground-color: var(--vscode-diffEditor-removedTextBackground);\n}\n\n.monaco-editor .inline-deleted-text {\n\ttext-decoration: line-through;\n}\n\n.monaco-editor .line-delete, .monaco-diff-editor .line-delete {\n\tbackground-color: var(--vscode-diffEditor-removedLineBackground, var(--vscode-diffEditor-removedTextBackground));\n}\n\n.monaco-editor .inline-deleted-margin-view-zone,\n.monaco-editor .gutter-delete, .monaco-diff-editor .gutter-delete {\n\tbackground-color: var(--vscode-diffEditorGutter-removedLineBackground, var(--vscode-diffEditor-removedLineBackground), var(--vscode-diffEditor-removedTextBackground));\n}\n\n.monaco-diff-editor.side-by-side .editor.modified {\n\tbox-shadow: -6px 0 5px -5px var(--vscode-scrollbar-shadow);\n\tborder-left: 1px solid var(--vscode-diffEditor-border);\n}\n\n.monaco-diff-editor.side-by-side .editor.original {\n\tbox-shadow: 6px 0 5px -5px var(--vscode-scrollbar-shadow);\n\tborder-right: 1px solid var(--vscode-diffEditor-border);\n}\n\n.monaco-diff-editor .diffViewport {\n\tbackground: var(--vscode-scrollbarSlider-background);\n}\n\n.monaco-diff-editor .diffViewport:hover {\n\tbackground: var(--vscode-scrollbarSlider-hoverBackground);\n}\n\n.monaco-diff-editor .diffViewport:active {\n\tbackground: var(--vscode-scrollbarSlider-activeBackground);\n}\n\n.monaco-editor .diagonal-fill {\n\tbackground-image: linear-gradient(\n\t\t-45deg,\n\t\tvar(--vscode-diffEditor-diagonalFill) 12.5%,\n\t\t#0000 12.5%, #0000 50%,\n\t\tvar(--vscode-diffEditor-diagonalFill) 50%, var(--vscode-diffEditor-diagonalFill) 62.5%,\n\t\t#0000 62.5%, #0000 100%\n\t);\n\tbackground-size: 8px 8px;\n}\n\n.monaco-diff-editor .gutter {\n\tposition: relative;\n\toverflow: hidden;\n\tflex-shrink: 0;\n\tflex-grow: 0;\n\n\t& > div {\n\t\tposition: absolute;\n\t}\n\n\t.gutterItem {\n\t\topacity: 0;\n\t\ttransition: opacity 0.7s;\n\n\t\t&.showAlways {\n\t\t\topacity: 1;\n\t\t\ttransition: none;\n\t\t}\n\n\t\t&.noTransition {\n\t\t\ttransition: none;\n\t\t}\n\t}\n\n\t&:hover .gutterItem {\n\t\topacity: 1;\n\t\ttransition: opacity 0.1s ease-in-out;\n\t}\n\n\t.gutterItem {\n\t\t.background {\n\t\t\tposition: absolute;\n\t\t\theight: 100%;\n\t\t\tleft: 50%;\n\t\t\twidth: 1px;\n\n\t\t\tborder-left: 2px var(--vscode-menu-border) solid;\n\t\t}\n\n\t\t.buttons {\n\t\t\tposition: absolute;\n\t\t\t/*height: 100%;*/\n\t\t\twidth: 100%;\n\n\t\t\tdisplay: flex;\n\t\t\tjustify-content: center;\n\t\t\talign-items: center;\n\n\t\t\t.monaco-toolbar {\n\t\t\t\theight: fit-content;\n\t\t\t\t.monaco-action-bar  {\n\t\t\t\t\tline-height: 1;\n\n\t\t\t\t\t.actions-container {\n\t\t\t\t\t\twidth: fit-content;\n\t\t\t\t\t\tborder-radius: 4px;\n\t\t\t\t\t\tbackground: var(--vscode-editorGutter-commentRangeForeground);\n\n\t\t\t\t\t\t.action-item {\n\t\t\t\t\t\t\t&:hover {\n\t\t\t\t\t\t\t\tbackground: var(--vscode-toolbar-hoverBackground);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t.action-label {\n\t\t\t\t\t\t\t\tpadding: 1px 2px;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n\n\n.monaco-diff-editor .diff-hidden-lines-compact {\n\tdisplay: flex;\n\theight: 11px;\n\t.line-left, .line-right {\n\t\theight: 1px;\n\t\tborder-top: 1px solid;\n\t\tborder-color: var(--vscode-editorCodeLens-foreground);\n\t\topacity: 0.5;\n\t\tmargin: auto;\n\t\twidth: 100%;\n\t}\n\n\t.line-left {\n\t\twidth: 20px;\n\t}\n\n\t.text {\n\t\tcolor: var(--vscode-editorCodeLens-foreground);\n\t\ttext-wrap: nowrap;\n\t\tfont-size: 11px;\n\t\tline-height: 11px;\n\t\tmargin: 0 4px;\n\t}\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-component.diff-review {\n\tuser-select: none;\n\t-webkit-user-select: none;\n\tz-index: 99;\n}\n\n.monaco-diff-editor .diff-review {\n\tposition: absolute;\n\n}\n\n.monaco-component.diff-review .diff-review-line-number {\n\ttext-align: right;\n\tdisplay: inline-block;\n\tcolor: var(--vscode-editorLineNumber-foreground);\n}\n\n.monaco-component.diff-review .diff-review-summary {\n\tpadding-left: 10px;\n}\n\n.monaco-component.diff-review .diff-review-shadow {\n\tposition: absolute;\n\tbox-shadow: var(--vscode-scrollbar-shadow) 0 -6px 6px -6px inset;\n}\n\n.monaco-component.diff-review .diff-review-row {\n\twhite-space: pre;\n}\n\n.monaco-component.diff-review .diff-review-table {\n\tdisplay: table;\n\tmin-width: 100%;\n}\n\n.monaco-component.diff-review .diff-review-row {\n\tdisplay: table-row;\n\twidth: 100%;\n}\n\n.monaco-component.diff-review .diff-review-spacer {\n\tdisplay: inline-block;\n\twidth: 10px;\n\tvertical-align: middle;\n}\n\n.monaco-component.diff-review .diff-review-spacer > .codicon {\n\tfont-size: 9px !important;\n}\n\n.monaco-component.diff-review .diff-review-actions {\n\tdisplay: inline-block;\n\tposition: absolute;\n\tright: 10px;\n\ttop: 2px;\n\tz-index: 100;\n}\n\n.monaco-component.diff-review .diff-review-actions .action-label {\n\twidth: 16px;\n\theight: 16px;\n\tmargin: 2px 0;\n}\n\n.monaco-component.diff-review .revertButton {\n\tcursor: pointer;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-toolbar {\n\theight: 100%;\n}\n\n.monaco-toolbar .toolbar-toggle-more {\n\tdisplay: inline-block;\n\tpadding: 0;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-component.multiDiffEditor {\n\tbackground: var(--vscode-multiDiffEditor-background);\n\n\tposition: relative;\n\n\theight: 100%;\n\twidth: 100%;\n\n\toverflow-y: hidden;\n\n\t> div {\n\t\tposition: absolute;\n\t\ttop: 0px;\n\t\tleft: 0px;\n\n\t\theight: 100%;\n\t\twidth: 100%;\n\n\t\t&.placeholder {\n\t\t\tvisibility: hidden;\n\n\t\t\t&.visible {\n\t\t\t\tvisibility: visible;\n\t\t\t}\n\n\t\t\tdisplay: grid;\n\t\t\tplace-items: center;\n\t\t\tplace-content: center;\n\t\t}\n\t}\n\n\t.active {\n\t\t--vscode-multiDiffEditor-border: var(--vscode-focusBorder);\n\t}\n\n\t.multiDiffEntry {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tflex: 1;\n\t\toverflow: hidden;\n\n\n\t\t.collapse-button {\n\t\t\tmargin: 0 5px;\n\t\t\tcursor: pointer;\n\n\t\t\ta {\n\t\t\t\tdisplay: block;\n\t\t\t}\n\t\t}\n\n\t\t.header {\n\t\t\tz-index: 1000;\n\t\t\tbackground: var(--vscode-editor-background);\n\n\t\t\t&:not(.collapsed) .header-content {\n\t\t\t\tborder-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);\n\t\t\t}\n\n\t\t\t.header-content {\n\t\t\t\tmargin: 8px 0px 0px 0px;\n\t\t\t\tpadding: 4px 5px;\n\n\t\t\t\tborder-top: 1px solid var(--vscode-multiDiffEditor-border);\n\n\t\t\t\tdisplay: flex;\n\t\t\t\talign-items: center;\n\n\t\t\t\tcolor: var(--vscode-foreground);\n\t\t\t\tbackground: var(--vscode-multiDiffEditor-headerBackground);\n\n\t\t\t\t&.shadow {\n\t\t\t\t\tbox-shadow: var(--vscode-scrollbar-shadow) 0px 6px 6px -6px;\n\t\t\t\t}\n\n\t\t\t\t.file-path {\n\t\t\t\t\tdisplay: flex;\n\t\t\t\t\tflex: 1;\n\t\t\t\t\tmin-width: 0;\n\n\t\t\t\t\t.title {\n\t\t\t\t\t\tfont-size: 14px;\n\t\t\t\t\t\tline-height: 22px;\n\n\t\t\t\t\t\t&.original {\n\t\t\t\t\t\t\tflex: 1;\n\t\t\t\t\t\t\tmin-width: 0;\n\t\t\t\t\t\t\ttext-overflow: ellipsis;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t.status {\n\t\t\t\t\t\tfont-weight: 600;\n\t\t\t\t\t\topacity: 0.75;\n\t\t\t\t\t\tmargin: 0px 10px;\n\t\t\t\t\t\tline-height: 22px;\n\n\t\t\t\t\t\t/*\n\t\t\t\t\t\t\tTODO@hediet: move colors from git extension to core!\n\t\t\t\t\t\t&.renamed {\n\t\t\t\t\t\t\tcolor: v ar(--vscode-gitDecoration-renamedResourceForeground);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t&.deleted {\n\t\t\t\t\t\t\tcolor: v ar(--vscode-gitDecoration-deletedResourceForeground);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t&.added {\n\t\t\t\t\t\t\tcolor: v ar(--vscode-gitDecoration-addedResourceForeground);\n\t\t\t\t\t\t}\n\t\t\t\t\t\t*/\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t.actions {\n\t\t\t\t\tpadding: 0 8px;\n\t\t\t\t}\n\t\t\t}\n\n\n\t\t}\n\n\t\t.editorParent {\n\t\t\tflex: 1;\n\t\t\tdisplay: flex;\n\t\t\tflex-direction: column;\n\n\t\t\tborder-bottom: 1px solid var(--vscode-multiDiffEditor-border);\n\t\t\toverflow: hidden;\n\t\t}\n\n\t\t.editorContainer {\n\t\t\tflex: 1;\n\t\t}\n\t}\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .selection-anchor {\n\tbackground-color: #007ACC;\n\twidth: 2px !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .bracket-match {\n\tbox-sizing: border-box;\n\tbackground-color: var(--vscode-editorBracketMatch-background);\n\tborder: 1px solid var(--vscode-editorBracketMatch-border);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.inline-editor-progress-decoration {\n\tdisplay: inline-block;\n\twidth: 1em;\n\theight: 1em;\n}\n\n.inline-progress-widget  {\n\tdisplay: flex !important;\n\tjustify-content: center;\n\talign-items: center;\n}\n\n.inline-progress-widget .icon {\n\tfont-size: 80% !important;\n}\n\n.inline-progress-widget:hover .icon {\n\tfont-size: 90% !important;\n\tanimation: none;\n}\n\n.inline-progress-widget:hover .icon::before {\n\tcontent: var(--vscode-icon-x-content);\n\tfont-family: var(--vscode-icon-x-font-family);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .monaco-editor-overlaymessage {\n\tpadding-bottom: 8px;\n\tz-index: 10000;\n}\n\n.monaco-editor .monaco-editor-overlaymessage.below {\n\tpadding-bottom: 0;\n\tpadding-top: 8px;\n\tz-index: 10000;\n}\n\n@keyframes fadeIn {\n\tfrom { opacity: 0; }\n\tto { opacity: 1; }\n}\n.monaco-editor .monaco-editor-overlaymessage.fadeIn {\n\tanimation: fadeIn 150ms ease-out;\n}\n\n@keyframes fadeOut {\n\tfrom { opacity: 1; }\n\tto { opacity: 0; }\n}\n.monaco-editor .monaco-editor-overlaymessage.fadeOut {\n\tanimation: fadeOut 100ms ease-out;\n}\n\n.monaco-editor .monaco-editor-overlaymessage .message {\n\tpadding: 2px 4px;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-inputValidation-infoBorder);\n\tborder-radius: 3px;\n}\n\n.monaco-editor .monaco-editor-overlaymessage .message p {\n\tmargin-block: 0px;\n}\n\n.monaco-editor .monaco-editor-overlaymessage .message a {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-editor .monaco-editor-overlaymessage .message a:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n.monaco-editor.hc-black .monaco-editor-overlaymessage .message,\n.monaco-editor.hc-light .monaco-editor-overlaymessage .message {\n\tborder-width: 2px;\n}\n\n.monaco-editor .monaco-editor-overlaymessage .anchor {\n\twidth: 0 !important;\n\theight: 0 !important;\n\tborder-color: transparent;\n\tborder-style: solid;\n\tz-index: 1000;\n\tborder-width: 8px;\n\tposition: absolute;\n\tleft: 2px;\n}\n\n.monaco-editor .monaco-editor-overlaymessage .anchor.top {\n\tborder-bottom-color: var(--vscode-inputValidation-infoBorder);\n}\n\n.monaco-editor .monaco-editor-overlaymessage .anchor.below {\n\tborder-top-color: var(--vscode-inputValidation-infoBorder);\n}\n\n.monaco-editor .monaco-editor-overlaymessage:not(.below) .anchor.top,\n.monaco-editor .monaco-editor-overlaymessage.below .anchor.below {\n\tdisplay: none;\n}\n\n.monaco-editor .monaco-editor-overlaymessage.below .anchor.top {\n\tdisplay: inherit;\n\ttop: -8px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.post-edit-widget {\n\tbox-shadow: 0 0 8px 2px var(--vscode-widget-shadow);\n\tborder: 1px solid var(--vscode-widget-border, transparent);\n\tborder-radius: 4px;\n\tbackground-color: var(--vscode-editorWidget-background);\n\toverflow: hidden;\n}\n\n.post-edit-widget .monaco-button {\n\tpadding: 2px;\n\tborder: none;\n\tborder-radius: 0;\n}\n\n.post-edit-widget .monaco-button:hover {\n\tbackground-color: var(--vscode-button-secondaryHoverBackground) !important;\n}\n\n.post-edit-widget .monaco-button .codicon {\n\tmargin: 0;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n@font-face {\n\tfont-family: \"codicon\";\n\tfont-display: block;\n\tsrc: url(data:font/ttf;base64,AAEAAAALAIAAAwAwR1NVQiCLJXoAAAE4AAAAVE9TLzI3T0tHAAABjAAAAGBjbWFwQ5s/ewAACSQAABreZ2x5ZvJtKHkAACekAAD3FGhlYWRYl6BTAAAA4AAAADZoaGVhAlsC+QAAALwAAAAkaG10eBxB//oAAAHsAAAHOGxvY2EFi8dWAAAkBAAAA55tYXhwAu8BgQAAARgAAAAgbmFtZZP3uUsAAR64AAAB+HBvc3RjGEbCAAEgsAAAGSQAAQAAASwAAAAAASz////+AS4AAQAAAAAAAAAAAAAAAAAAAc4AAQAAAAEAAFT7+XFfDzz1AAsBLAAAAAB8JbCAAAAAAHwlsID////9AS4BLQAAAAgAAgAAAAAAAAABAAABzgF1ABcAAAAAAAIAAAAKAAoAAAD/AAAAAAAAAAEAAAAKADAAPgACREZMVAAObGF0bgAaAAQAAAAAAAAAAQAAAAQAAAAAAAAAAQAAAAFsaWdhAAgAAAABAAAAAQAEAAQAAAABAAgAAQAGAAAAAQAAAAQBKwGQAAUAAADLANIAAAAqAMsA0gAAAJAADgBNAAACAAUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFBmRWQAwOpg8QEBLAAAABsBRwADAAAAAQAAAAAAAAAAAAAAAAACAAAAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEs//8BLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLP//ASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEs//8BLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASz//wEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASz//wEsAAABLAAAASwAAAEs//8BLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAASwAAAEsAAABLAAAAAAABQAAAAMAAAAsAAAABAAABSYAAQAAAAAEIAADAAEAAAAsAAMACgAABSYABAP0AAAAEgAQAAMAAuqI6ozqx+rJ6wnrTuw08QH//wAA6mDqiuqP6snqzOsL61DxAf//AAAAAAAAAAAAAAAAAAAAAAABABIAYgBmANYA1gFQAdYDngAAAAMA8QFKAUcAtAE3AZUBJQFuAQ4BdABOAcMBYAFqAWkAkQA2ATAAhgDPAP4AQQGTAHkAFwG+AJsAiAFDAR0BFAEVAagAyQCmALwBoAGAAIsBkQF5AYgBhgF6AYkBkAGLAYQAvgF/AY0AAgAEAAUACgALAAwADQAOAA8AEAASABsAHQAeAB8AXABdAF4AXwBiAGMAIgAjACQAJQAmACkAKwAsAC0ALgAvADAAMgAzADQANQA8ADkAPQA+AD8AQABCAEMARgBIAEkASwBVAFYAVwBYAGcAaQBrAG4AcgB0AHUAdgB3AHgAegB7AHwAfQB+AH8AgQCCAIQAhQCHAIkAjACPAJAAkwCUAJUAlgCXAJgAmQCaAJwAngCfAKAAoQCiAKMApQCoAKkAqgCUAKsArACuALgAuQC9AMAAxADFAMgAygDLAMwAzQDTANQA1QDWANcA2ADZANoA7wDyAPMA9gD5APoA+wD8AQABAQEGAQcBCAENAQ8BEAERARMBFwEYARsBHAEfASABKAEsAS0BLgEvATEBMgEzATQBNQE2ATsBPAE9AT4BPwFAAUEBQgFEAUYBSAFJAUsBTAFOAU8BUAFRAVIBWQFaAVsBXAFdAV8BZAFlAWYBaAFrAW0BcQFyAXMBdQF2AXsBfAF9AX4BgQGCAYMBhQGHAYoBjAGOAZcBmAGhAaIBpAGmAacBqQGqAasBrAGtAbEBswG0AbUBuAG5AboBvAG9AcQBxQHGAccByAHMAc0A9AD1APcA+ABgAGEAcAA6AHEAZAGPAG8AcwBtAFsAJwAoAQkAjQCSAMYBsgABABgAZQDuAR4BVQGSASoAugFjAWIBIgF3ASsBOQBaAbsARAEKAI4AwQD/ARoBOgAqASkBIQA3ADgASgGUAbYBsAGuAa8AsAFTAVYBGQBsAckBywHKAZoBmwGcAZ0BngGfAZkAEQBTASQAnQHCAGoA0QDdANwA2wBRAFAATwAVANIArwCxAFkAaAFYAKQAZgAWAMIAwwEnACAAIQD9ABQBtwEWAO0A3gDfAOQA4gDjAOYA5wDpAOsA7ADhAOABlgDOATgAigAGAAcACAAJAOoA5QDoABwAxwEFAQIAOwAaABkATQCyALMBXgBMAWEBcADQAQwBowGlAEcBbACnAb8AMQEmARIBCwFFAFIA8AFNAW8AgwCAAXgBZwC3ALUAtgHBAcAARQFXAVQAVAC7AQQBAwC/ASMAEwCtAAABBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAABW4AAAAAAAAAc4AAOpgAADqYAAAAAMAAOphAADqYQAAAPEAAOpiAADqYgAAAUoAAOpjAADqYwAAAUcAAOpkAADqZAAAALQAAOplAADqZQAAATcAAOpmAADqZgAAAZUAAOpnAADqZwAAASUAAOpoAADqaAAAAW4AAOppAADqaQAAAQ4AAOpqAADqagAAAXQAAOprAADqawAAAE4AAOpsAADqbAAAAcMAAOptAADqbQAAAWAAAOpuAADqbgAAAWoAAOpvAADqbwAAAWkAAOpwAADqcAAAAJEAAOpxAADqcQAAADYAAOpyAADqcgAAATAAAOpzAADqcwAAAIYAAOp0AADqdAAAAM8AAOp1AADqdQAAAP4AAOp2AADqdgAAAEEAAOp3AADqdwAAAZMAAOp4AADqeAAAAHkAAOp5AADqeQAAABcAAOp6AADqegAAAb4AAOp7AADqewAAAJsAAOp8AADqfAAAAIgAAOp9AADqfQAAAUMAAOp+AADqfgAAAR0AAOp/AADqfwAAARQAAOqAAADqgAAAARUAAOqBAADqgQAAAagAAOqCAADqggAAAMkAAOqDAADqgwAAAKYAAOqEAADqhAAAALwAAOqFAADqhQAAAaAAAOqGAADqhgAAAYAAAOqHAADqhwAAAIsAAOqIAADqiAAAAZEAAOqKAADqigAAAXkAAOqLAADqiwAAAYgAAOqMAADqjAAAAYYAAOqPAADqjwAAAXoAAOqQAADqkAAAAYkAAOqRAADqkQAAAZAAAOqSAADqkgAAAYsAAOqTAADqkwAAAYQAAOqUAADqlAAAAL4AAOqVAADqlQAAAX8AAOqWAADqlgAAAY0AAOqXAADqlwAAAAIAAOqYAADqmAAAAAQAAOqZAADqmQAAAAUAAOqaAADqmgAAAAoAAOqbAADqmwAAAAsAAOqcAADqnAAAAAwAAOqdAADqnQAAAA0AAOqeAADqngAAAA4AAOqfAADqnwAAAA8AAOqgAADqoAAAABAAAOqhAADqoQAAABIAAOqiAADqogAAABsAAOqjAADqowAAAB0AAOqkAADqpAAAAB4AAOqlAADqpQAAAB8AAOqmAADqpgAAAFwAAOqnAADqpwAAAF0AAOqoAADqqAAAAF4AAOqpAADqqQAAAF8AAOqqAADqqgAAAGIAAOqrAADqqwAAAGMAAOqsAADqrAAAACIAAOqtAADqrQAAACMAAOquAADqrgAAACQAAOqvAADqrwAAACUAAOqwAADqsAAAACYAAOqxAADqsQAAACkAAOqyAADqsgAAACsAAOqzAADqswAAACwAAOq0AADqtAAAAC0AAOq1AADqtQAAAC4AAOq2AADqtgAAAC8AAOq3AADqtwAAADAAAOq4AADquAAAADIAAOq5AADquQAAADMAAOq6AADqugAAADQAAOq7AADquwAAADUAAOq8AADqvAAAADwAAOq9AADqvQAAADkAAOq+AADqvgAAAD0AAOq/AADqvwAAAD4AAOrAAADqwAAAAD8AAOrBAADqwQAAAEAAAOrCAADqwgAAAEIAAOrDAADqwwAAAEMAAOrEAADqxAAAAEYAAOrFAADqxQAAAEgAAOrGAADqxgAAAEkAAOrHAADqxwAAAEsAAOrJAADqyQAAAFUAAOrMAADqzAAAAFYAAOrNAADqzQAAAFcAAOrOAADqzgAAAFgAAOrPAADqzwAAAGcAAOrQAADq0AAAAGkAAOrRAADq0QAAAGsAAOrSAADq0gAAAG4AAOrTAADq0wAAAHIAAOrUAADq1AAAAHQAAOrVAADq1QAAAHUAAOrWAADq1gAAAHYAAOrXAADq1wAAAHcAAOrYAADq2AAAAHgAAOrZAADq2QAAAHoAAOraAADq2gAAAHsAAOrbAADq2wAAAHwAAOrcAADq3AAAAH0AAOrdAADq3QAAAH4AAOreAADq3gAAAH8AAOrfAADq3wAAAIEAAOrgAADq4AAAAIIAAOrhAADq4QAAAIQAAOriAADq4gAAAIUAAOrjAADq4wAAAIcAAOrkAADq5AAAAIkAAOrlAADq5QAAAIwAAOrmAADq5gAAAI8AAOrnAADq5wAAAJAAAOroAADq6AAAAJMAAOrpAADq6QAAAJQAAOrqAADq6gAAAJUAAOrrAADq6wAAAJYAAOrsAADq7AAAAJcAAOrtAADq7QAAAJgAAOruAADq7gAAAJkAAOrvAADq7wAAAJoAAOrwAADq8AAAAJwAAOrxAADq8QAAAJ4AAOryAADq8gAAAJ8AAOrzAADq8wAAAKAAAOr0AADq9AAAAKEAAOr1AADq9QAAAKIAAOr2AADq9gAAAKMAAOr3AADq9wAAAKUAAOr4AADq+AAAAKgAAOr5AADq+QAAAKkAAOr6AADq+gAAAKoAAOr7AADq+wAAAJQAAOr8AADq/AAAAKsAAOr9AADq/QAAAKwAAOr+AADq/gAAAK4AAOr/AADq/wAAALgAAOsAAADrAAAAALkAAOsBAADrAQAAAL0AAOsCAADrAgAAAMAAAOsDAADrAwAAAMQAAOsEAADrBAAAAMUAAOsFAADrBQAAAMgAAOsGAADrBgAAAMoAAOsHAADrBwAAAMsAAOsIAADrCAAAAMwAAOsJAADrCQAAAM0AAOsLAADrCwAAANMAAOsMAADrDAAAANQAAOsNAADrDQAAANUAAOsOAADrDgAAANYAAOsPAADrDwAAANcAAOsQAADrEAAAANgAAOsRAADrEQAAANkAAOsSAADrEgAAANoAAOsTAADrEwAAAO8AAOsUAADrFAAAAPIAAOsVAADrFQAAAPMAAOsWAADrFgAAAPYAAOsXAADrFwAAAPkAAOsYAADrGAAAAPoAAOsZAADrGQAAAPsAAOsaAADrGgAAAPwAAOsbAADrGwAAAQAAAOscAADrHAAAAQEAAOsdAADrHQAAAQYAAOseAADrHgAAAQcAAOsfAADrHwAAAQgAAOsgAADrIAAAAQ0AAOshAADrIQAAAQ8AAOsiAADrIgAAARAAAOsjAADrIwAAAREAAOskAADrJAAAARMAAOslAADrJQAAARcAAOsmAADrJgAAARgAAOsnAADrJwAAARsAAOsoAADrKAAAARwAAOspAADrKQAAAR8AAOsqAADrKgAAASAAAOsrAADrKwAAASgAAOssAADrLAAAASwAAOstAADrLQAAAS0AAOsuAADrLgAAAS4AAOsvAADrLwAAAS8AAOswAADrMAAAATEAAOsxAADrMQAAATIAAOsyAADrMgAAATMAAOszAADrMwAAATQAAOs0AADrNAAAATUAAOs1AADrNQAAATYAAOs2AADrNgAAATsAAOs3AADrNwAAATwAAOs4AADrOAAAAT0AAOs5AADrOQAAAT4AAOs6AADrOgAAAT8AAOs7AADrOwAAAUAAAOs8AADrPAAAAUEAAOs9AADrPQAAAUIAAOs+AADrPgAAAUQAAOs/AADrPwAAAUYAAOtAAADrQAAAAUgAAOtBAADrQQAAAUkAAOtCAADrQgAAAUsAAOtDAADrQwAAAUwAAOtEAADrRAAAAU4AAOtFAADrRQAAAU8AAOtGAADrRgAAAVAAAOtHAADrRwAAAVEAAOtIAADrSAAAAVIAAOtJAADrSQAAAVkAAOtKAADrSgAAAVoAAOtLAADrSwAAAVsAAOtMAADrTAAAAVwAAOtNAADrTQAAAV0AAOtOAADrTgAAAV8AAOtQAADrUAAAAWQAAOtRAADrUQAAAWUAAOtSAADrUgAAAWYAAOtTAADrUwAAAWgAAOtUAADrVAAAAWsAAOtVAADrVQAAAW0AAOtWAADrVgAAAXEAAOtXAADrVwAAAXIAAOtYAADrWAAAAXMAAOtZAADrWQAAAXUAAOtaAADrWgAAAXYAAOtbAADrWwAAAXsAAOtcAADrXAAAAXwAAOtdAADrXQAAAX0AAOteAADrXgAAAX4AAOtfAADrXwAAAYEAAOtgAADrYAAAAYIAAOthAADrYQAAAYMAAOtiAADrYgAAAYUAAOtjAADrYwAAAYcAAOtkAADrZAAAAYoAAOtlAADrZQAAAYwAAOtmAADrZgAAAY4AAOtnAADrZwAAAZcAAOtoAADraAAAAZgAAOtpAADraQAAAaEAAOtqAADragAAAaIAAOtrAADrawAAAaQAAOtsAADrbAAAAaYAAOttAADrbQAAAacAAOtuAADrbgAAAakAAOtvAADrbwAAAaoAAOtwAADrcAAAAasAAOtxAADrcQAAAawAAOtyAADrcgAAAa0AAOtzAADrcwAAAbEAAOt0AADrdAAAAbMAAOt1AADrdQAAAbQAAOt2AADrdgAAAbUAAOt3AADrdwAAAbgAAOt4AADreAAAAbkAAOt5AADreQAAAboAAOt6AADregAAAbwAAOt7AADrewAAAb0AAOt8AADrfAAAAcQAAOt9AADrfQAAAcUAAOt+AADrfgAAAcYAAOt/AADrfwAAAccAAOuAAADrgAAAAcgAAOuBAADrgQAAAcwAAOuCAADrggAAAc0AAOuDAADrgwAAAPQAAOuEAADrhAAAAPUAAOuFAADrhQAAAPcAAOuGAADrhgAAAPgAAOuHAADrhwAAAGAAAOuIAADriAAAAGEAAOuJAADriQAAAHAAAOuKAADrigAAADoAAOuLAADriwAAAHEAAOuMAADrjAAAAGQAAOuNAADrjQAAAY8AAOuOAADrjgAAAG8AAOuPAADrjwAAAHMAAOuQAADrkAAAAG0AAOuRAADrkQAAAFsAAOuSAADrkgAAACcAAOuTAADrkwAAACgAAOuUAADrlAAAAQkAAOuVAADrlQAAAI0AAOuWAADrlgAAAJIAAOuXAADrlwAAAMYAAOuYAADrmAAAAbIAAOuZAADrmQAAAAEAAOuaAADrmgAAABgAAOubAADrmwAAAGUAAOucAADrnAAAAO4AAOudAADrnQAAAR4AAOueAADrngAAAVUAAOufAADrnwAAAZIAAOugAADroAAAASoAAOuhAADroQAAALoAAOuiAADrogAAAWMAAOujAADrowAAAWIAAOukAADrpAAAASIAAOulAADrpQAAAXcAAOumAADrpgAAASsAAOunAADrpwAAATkAAOuoAADrqAAAAFoAAOupAADrqQAAAbsAAOuqAADrqgAAAEQAAOurAADrqwAAAQoAAOusAADrrAAAAI4AAOutAADrrQAAAMEAAOuuAADrrgAAAP8AAOuvAADrrwAAARoAAOuwAADrsAAAAToAAOuxAADrsQAAACoAAOuyAADrsgAAASkAAOuzAADrswAAASEAAOu0AADrtAAAADcAAOu1AADrtQAAADgAAOu2AADrtgAAAEoAAOu3AADrtwAAAZQAAOu4AADruAAAAbYAAOu5AADruQAAAbAAAOu6AADrugAAAa4AAOu7AADruwAAAa8AAOu8AADrvAAAALAAAOu9AADrvQAAAVMAAOu+AADrvgAAAVYAAOu/AADrvwAAARkAAOvAAADrwAAAAGwAAOvBAADrwQAAAckAAOvCAADrwgAAAcsAAOvDAADrwwAAAcoAAOvEAADrxAAAAZoAAOvFAADrxQAAAZsAAOvGAADrxgAAAZwAAOvHAADrxwAAAZ0AAOvIAADryAAAAZ4AAOvJAADryQAAAZ8AAOvKAADrygAAAZkAAOvLAADrywAAABEAAOvMAADrzAAAAFMAAOvNAADrzQAAASQAAOvOAADrzgAAAJ0AAOvPAADrzwAAAcIAAOvQAADr0AAAAGoAAOvRAADr0QAAANEAAOvSAADr0gAAAN0AAOvTAADr0wAAANwAAOvUAADr1AAAANsAAOvVAADr1QAAAFEAAOvWAADr1gAAAFAAAOvXAADr1wAAAE8AAOvYAADr2AAA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ACAAaQBjAG8AbgAgAGYAbwBuAHQAIABmAG8AcgAgAFYAaQBzAHUAYQBsACAAUwB0AHUAZABpAG8AIABDAG8AZABlAGgAdAB0AHAAOgAvAC8AZgBvAG4AdABlAGwAbABvAC4AYwBvAG0AAgAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHOAQIBAwEEAQUBBgEHAQgBCQEKAQsBDAENAQ4BDwEQAREBEgETARQBFQEWARcBGAEZARoBGwEcAR0BHgEfASABIQEiASMBJAElASYBJwEoASkBKgErASwBLQEuAS8BMAExATIBMwE0ATUBNgE3ATgBOQE6ATsBPAE9AT4BPwFAAUEBQgFDAUQBRQFGAUcBSAFJAUoBSwFMAU0BTgFPAVABUQFSAVMBVAFVAVYBVwFYAVkBWgFbAVwBXQFeAV8BYAFhAWIBYwFkAWUBZgFnAWgBaQFqAWsBbAFtAW4BbwFwAXEBcgFzAXQBdQF2AXcBeAF5AXoBewF8AX0BfgF/AYABgQGCAYMBhAGFAYYBhwGIAYkBigGLAYwBjQGOAY8BkAGRAZIBkwGUAZUBlgGXAZgBmQGaAZsBnAGdAZ4BnwGgAaEBogGjAaQBpQGmAacBqAGpAaoBqwGsAa0BrgGvAbABsQGyAbMBtAG1AbYBtwG4AbkBugG7AbwBvQG+Ab8BwAHBAcIBwwHEAcUBxgHHAcgByQHKAcsBzAHNAc4BzwHQAdEB0gHTAdQB1QHWAdcB2AHZAdoB2wHcAd0B3gHfAeAB4QHiAeMB5AHlAeYB5wHoAekB6gHrAewB7QHuAe8B8AHxAfIB8wH0AfUB9gH3AfgB+QH6AfsB/AH9Af4B/wIAAgECAgIDAgQCBQIGAgcCCAIJAgoCCwIMAg0CDgIPAhACEQISAhMCFAIVAhYCFwIYAhkCGgIbAhwCHQIeAh8CIAIhAiICIwIkAiUCJgInAigCKQIqAisCLAItAi4CLwIwAjECMgIzAjQCNQI2AjcCOAI5AjoCOwI8Aj0CPgI/AkACQQJCAkMCRAJFAkYCRwJIAkkCSgJLAkwCTQJOAk8CUAJRAlICUwJUAlUCVgJXAlgCWQJaAlsCXAJdAl4CXwJgAmECYgJjAmQCZQJmAmcCaAJpAmoCawJsAm0CbgJvAnACcQJyAnMCdAJ1AnYCdwJ4AnkCegJ7AnwCfQJ+An8CgAKBAoICgwKEAoUChgKHAogCiQKKAosCjAKNAo4CjwKQApECkgKTApQClQKWApcCmAKZApoCmwKcAp0CngKfAqACoQKiAqMCpAKlAqYCpwKoAqkCqgKrAqwCrQKuAq8CsAKxArICswK0ArUCtgK3ArgCuQK6ArsCvAK9Ar4CvwLAAsECwgLDAsQCxQLGAscCyALJAsoCywLMAs0CzgLPAAdhY2NvdW50FGFjdGl2YXRlLWJyZWFrcG9pbnRzA2FkZAdhcmNoaXZlCmFycm93LWJvdGgRYXJyb3ctY2lyY2xlLWRvd24RYXJyb3ctY2lyY2xlLWxlZnQSYXJyb3ctY2lyY2xlLXJpZ2h0D2Fycm93LWNpcmNsZS11cAphcnJvdy1kb3duCmFycm93LWxlZnQLYXJyb3ctcmlnaHQQYXJyb3ctc21hbGwtZG93bhBhcnJvdy1zbWFsbC1sZWZ0EWFycm93LXNtYWxsLXJpZ2h0DmFycm93LXNtYWxsLXVwCmFycm93LXN3YXAIYXJyb3ctdXAGYXR0YWNoDGF6dXJlLWRldm9wcwVhenVyZQtiZWFrZXItc3RvcAZiZWFrZXIIYmVsbC1kb3QOYmVsbC1zbGFzaC1kb3QKYmVsbC1zbGFzaARiZWxsBWJsYW5rBGJvbGQEYm9vawhib29rbWFyawticmFja2V0LWRvdA1icmFja2V0LWVycm9yCWJyaWVmY2FzZQlicm9hZGNhc3QHYnJvd3NlcgNidWcIY2FsZW5kYXINY2FsbC1pbmNvbWluZw1jYWxsLW91dGdvaW5nDmNhc2Utc2Vuc2l0aXZlCWNoZWNrLWFsbAVjaGVjawljaGVja2xpc3QMY2hldnJvbi1kb3duDGNoZXZyb24tbGVmdA1jaGV2cm9uLXJpZ2h0CmNoZXZyb24tdXAEY2hpcAxjaHJvbWUtY2xvc2UPY2hyb21lLW1heGltaXplD2Nocm9tZS1taW5pbWl6ZQ5jaHJvbWUtcmVzdG9yZQ1jaXJjbGUtZmlsbGVkE2NpcmNsZS1sYXJnZS1maWxsZWQMY2lyY2xlLWxhcmdlDGNpcmNsZS1zbGFzaBNjaXJjbGUtc21hbGwtZmlsbGVkDGNpcmNsZS1zbWFsbAZjaXJjbGUNY2lyY3VpdC1ib2FyZAljbGVhci1hbGwGY2xpcHB5CWNsb3NlLWFsbAVjbG9zZQ5jbG91ZC1kb3dubG9hZAxjbG91ZC11cGxvYWQFY2xvdWQIY29kZS1vc3MEY29kZQZjb2ZmZWUMY29sbGFwc2UtYWxsCmNvbG9yLW1vZGUHY29tYmluZRJjb21tZW50LWRpc2N1c3Npb24NY29tbWVudC1kcmFmdBJjb21tZW50LXVucmVzb2x2ZWQHY29tbWVudA5jb21wYXNzLWFjdGl2ZQtjb21wYXNzLWRvdAdjb21wYXNzB2NvcGlsb3QEY29weQhjb3ZlcmFnZQtjcmVkaXQtY2FyZARkYXNoCWRhc2hib2FyZAhkYXRhYmFzZQlkZWJ1Zy1hbGwPZGVidWctYWx0LXNtYWxsCWRlYnVnLWFsdCdkZWJ1Zy1icmVha3BvaW50LWNvbmRpdGlvbmFsLXVudmVyaWZpZWQcZGVidWctYnJlYWtwb2ludC1jb25kaXRpb25hbCBkZWJ1Zy1icmVha3BvaW50LWRhdGEtdW52ZXJpZmllZBVkZWJ1Zy1icmVha3BvaW50LWRhdGEkZGVidWctYnJlYWtwb2ludC1mdW5jdGlvbi11bnZlcmlmaWVkGWRlYnVnLWJyZWFrcG9pbnQtZnVuY3Rpb24fZGVidWctYnJlYWtwb2ludC1sb2ctdW52ZXJpZmllZBRkZWJ1Zy1icmVha3BvaW50LWxvZxxkZWJ1Zy1icmVha3BvaW50LXVuc3VwcG9ydGVkDWRlYnVnLWNvbnNvbGUUZGVidWctY29udGludWUtc21hbGwOZGVidWctY29udGludWUOZGVidWctY292ZXJhZ2UQZGVidWctZGlzY29ubmVjdBJkZWJ1Zy1saW5lLWJ5LWxpbmULZGVidWctcGF1c2ULZGVidWctcmVydW4TZGVidWctcmVzdGFydC1mcmFtZQ1kZWJ1Zy1yZXN0YXJ0FmRlYnVnLXJldmVyc2UtY29udGludWUXZGVidWctc3RhY2tmcmFtZS1hY3RpdmUQZGVidWctc3RhY2tmcmFtZQtkZWJ1Zy1zdGFydA9kZWJ1Zy1zdGVwLWJhY2sPZGVidWctc3RlcC1pbnRvDmRlYnVnLXN0ZXAtb3V0D2RlYnVnLXN0ZXAtb3ZlcgpkZWJ1Zy1zdG9wBWRlYnVnEGRlc2t0b3AtZG93bmxvYWQTZGV2aWNlLWNhbWVyYS12aWRlbw1kZXZpY2UtY2FtZXJhDWRldmljZS1tb2JpbGUKZGlmZi1hZGRlZAxkaWZmLWlnbm9yZWQNZGlmZi1tb2RpZmllZA1kaWZmLW11bHRpcGxlDGRpZmYtcmVtb3ZlZAxkaWZmLXJlbmFtZWQLZGlmZi1zaW5nbGUEZGlmZgdkaXNjYXJkBGVkaXQNZWRpdG9yLWxheW91dAhlbGxpcHNpcwxlbXB0eS13aW5kb3cLZXJyb3Itc21hbGwFZXJyb3IHZXhjbHVkZQpleHBhbmQtYWxsBmV4cG9ydApleHRlbnNpb25zCmV5ZS1jbG9zZWQDZXllCGZlZWRiYWNrC2ZpbGUtYmluYXJ5CWZpbGUtY29kZQpmaWxlLW1lZGlhCGZpbGUtcGRmDmZpbGUtc3VibW9kdWxlFmZpbGUtc3ltbGluay1kaXJlY3RvcnkRZmlsZS1zeW1saW5rLWZpbGUIZmlsZS16aXAEZmlsZQVmaWxlcw1maWx0ZXItZmlsbGVkBmZpbHRlcgVmbGFtZQlmb2xkLWRvd24HZm9sZC11cARmb2xkDWZvbGRlci1hY3RpdmUOZm9sZGVyLWxpYnJhcnkNZm9sZGVyLW9wZW5lZAZmb2xkZXIEZ2FtZQRnZWFyBGdpZnQLZ2lzdC1zZWNyZXQKZ2l0LWNvbW1pdAtnaXQtY29tcGFyZQlnaXQtZmV0Y2gJZ2l0LW1lcmdlF2dpdC1wdWxsLXJlcXVlc3QtY2xvc2VkF2dpdC1wdWxsLXJlcXVlc3QtY3JlYXRlFmdpdC1wdWxsLXJlcXVlc3QtZHJhZnQeZ2l0LXB1bGwtcmVxdWVzdC1nby10by1jaGFuZ2VzHGdpdC1wdWxsLXJlcXVlc3QtbmV3LWNoYW5nZXMQZ2l0LXB1bGwtcmVxdWVzdA9naXQtc3Rhc2gtYXBwbHkNZ2l0LXN0YXNoLXBvcAlnaXQtc3Rhc2gNZ2l0aHViLWFjdGlvbgpnaXRodWItYWx0D2dpdGh1Yi1pbnZlcnRlZA5naXRodWItcHJvamVjdAZnaXRodWIFZ2xvYmUKZ28tdG8tZmlsZQxnby10by1zZWFyY2gHZ3JhYmJlcgpncmFwaC1sZWZ0CmdyYXBoLWxpbmUNZ3JhcGgtc2NhdHRlcgVncmFwaAdncmlwcGVyEWdyb3VwLWJ5LXJlZi10eXBlDGhlYXJ0LWZpbGxlZAVoZWFydAdoaXN0b3J5BGhvbWUPaG9yaXpvbnRhbC1ydWxlBWh1Ym90BWluYm94BmluZGVudARpbmZvBmluc2VydAdpbnNwZWN0C2lzc3VlLWRyYWZ0Dmlzc3VlLXJlb3BlbmVkBmlzc3VlcwZpdGFsaWMGamVyc2V5BGpzb24Oa2ViYWItdmVydGljYWwDa2V5A2xhdw1sYXllcnMtYWN0aXZlCmxheWVycy1kb3QGbGF5ZXJzF2xheW91dC1hY3Rpdml0eWJhci1sZWZ0GGxheW91dC1hY3Rpdml0eWJhci1yaWdodA9sYXlvdXQtY2VudGVyZWQObGF5b3V0LW1lbnViYXITbGF5b3V0LXBhbmVsLWNlbnRlchRsYXlvdXQtcGFuZWwtanVzdGlmeRFsYXlvdXQtcGFuZWwtbGVmdBBsYXlvdXQtcGFuZWwtb2ZmEmxheW91dC1wYW5lbC1yaWdodAxsYXlvdXQtcGFuZWwXbGF5b3V0LXNpZGViYXItbGVmdC1vZmYTbGF5b3V0LXNpZGViYXItbGVmdBhsYXlvdXQtc2lkZWJhci1yaWdodC1vZmYUbGF5b3V0LXNpZGViYXItcmlnaHQQbGF5b3V0LXN0YXR1c2JhcgZsYXlvdXQHbGlicmFyeRFsaWdodGJ1bGItYXV0b2ZpeBFsaWdodGJ1bGItc3BhcmtsZQlsaWdodGJ1bGINbGluay1leHRlcm5hbARsaW5rC2xpc3QtZmlsdGVyCWxpc3QtZmxhdAxsaXN0LW9yZGVyZWQObGlzdC1zZWxlY3Rpb24JbGlzdC10cmVlDmxpc3QtdW5vcmRlcmVkCmxpdmUtc2hhcmUHbG9hZGluZwhsb2NhdGlvbgpsb2NrLXNtYWxsBGxvY2sGbWFnbmV0CW1haWwtcmVhZARtYWlsCm1hcC1maWxsZWQTbWFwLXZlcnRpY2FsLWZpbGxlZAxtYXAtdmVydGljYWwDbWFwCG1hcmtkb3duCW1lZ2FwaG9uZQdtZW50aW9uBG1lbnUFbWVyZ2UKbWljLWZpbGxlZANtaWMJbWlsZXN0b25lBm1pcnJvcgxtb3J0YXItYm9hcmQEbW92ZRBtdWx0aXBsZS13aW5kb3dzBW11c2ljBG11dGUIbmV3LWZpbGUKbmV3LWZvbGRlcgduZXdsaW5lCm5vLW5ld2xpbmUEbm90ZRFub3RlYm9vay10ZW1wbGF0ZQhub3RlYm9vawhvY3RvZmFjZQxvcGVuLXByZXZpZXcMb3JnYW5pemF0aW9uBm91dHB1dAdwYWNrYWdlCHBhaW50Y2FuC3Bhc3MtZmlsbGVkBHBhc3MKcGVyY2VudGFnZQpwZXJzb24tYWRkBnBlcnNvbgVwaWFubwlwaWUtY2hhcnQDcGluDHBpbm5lZC1kaXJ0eQZwaW5uZWQLcGxheS1jaXJjbGUEcGxheQRwbHVnDXByZXNlcnZlLWNhc2UHcHJldmlldxBwcmltaXRpdmUtc3F1YXJlB3Byb2plY3QFcHVsc2UIcXVlc3Rpb24FcXVvdGULcmFkaW8tdG93ZXIJcmVhY3Rpb25zC3JlY29yZC1rZXlzDHJlY29yZC1zbWFsbAZyZWNvcmQEcmVkbwpyZWZlcmVuY2VzB3JlZnJlc2gFcmVnZXgPcmVtb3RlLWV4cGxvcmVyBnJlbW90ZQZyZW1vdmULcmVwbGFjZS1hbGwHcmVwbGFjZQVyZXBseQpyZXBvLWNsb25lCnJlcG8tZmV0Y2gPcmVwby1mb3JjZS1wdXNoC3JlcG8tZm9ya2VkCXJlcG8tcHVsbAlyZXBvLXB1c2gEcmVwbwZyZXBvcnQPcmVxdWVzdC1jaGFuZ2VzBXJvYm90BnJvY2tldBJyb290LWZvbGRlci1vcGVuZWQLcm9vdC1mb2xkZXIDcnNzBHJ1YnkJcnVuLWFib3ZlEHJ1bi1hbGwtY292ZXJhZ2UHcnVuLWFsbAlydW4tYmVsb3cMcnVuLWNvdmVyYWdlCnJ1bi1lcnJvcnMIc2F2ZS1hbGwHc2F2ZS1hcwRzYXZlC3NjcmVlbi1mdWxsDXNjcmVlbi1ub3JtYWwMc2VhcmNoLWZ1enp5C3NlYXJjaC1zdG9wBnNlYXJjaARzZW5kEnNlcnZlci1lbnZpcm9ubWVudA5zZXJ2ZXItcHJvY2VzcwZzZXJ2ZXINc2V0dGluZ3MtZ2VhcghzZXR0aW5ncwVzaGFyZQZzaGllbGQHc2lnbi1pbghzaWduLW91dAZzbWlsZXkFc25ha2UPc29ydC1wcmVjZWRlbmNlDnNvdXJjZS1jb250cm9sDnNwYXJrbGUtZmlsbGVkB3NwYXJrbGUQc3BsaXQtaG9yaXpvbnRhbA5zcGxpdC12ZXJ0aWNhbAhzcXVpcnJlbApzdGFyLWVtcHR5CXN0YXItZnVsbAlzdGFyLWhhbGYLc3RvcC1jaXJjbGUNc3Vycm91bmQtd2l0aAxzeW1ib2wtYXJyYXkOc3ltYm9sLWJvb2xlYW4Mc3ltYm9sLWNsYXNzDHN5bWJvbC1jb2xvcg9zeW1ib2wtY29uc3RhbnQSc3ltYm9sLWVudW0tbWVtYmVyC3N5bWJvbC1lbnVtDHN5bWJvbC1ldmVudAxzeW1ib2wtZmllbGQLc3ltYm9sLWZpbGUQc3ltYm9sLWludGVyZmFjZQpzeW1ib2wta2V5DnN5bWJvbC1rZXl3b3JkDXN5bWJvbC1tZXRob2QLc3ltYm9sLW1pc2MQc3ltYm9sLW5hbWVzcGFjZQ5zeW1ib2wtbnVtZXJpYw9zeW1ib2wtb3BlcmF0b3IQc3ltYm9sLXBhcmFtZXRlcg9zeW1ib2wtcHJvcGVydHkMc3ltYm9sLXJ1bGVyDnN5bWJvbC1zbmlwcGV0DXN5bWJvbC1zdHJpbmcQc3ltYm9sLXN0cnVjdHVyZQ9zeW1ib2wtdmFyaWFibGUMc3luYy1pZ25vcmVkBHN5bmMFdGFibGUDdGFnBnRhcmdldAh0YXNrbGlzdAl0ZWxlc2NvcGUNdGVybWluYWwtYmFzaAx0ZXJtaW5hbC1jbWQPdGVybWluYWwtZGViaWFuDnRlcm1pbmFsLWxpbnV4E3Rlcm1pbmFsLXBvd2Vyc2hlbGwNdGVybWluYWwtdG11eA90ZXJtaW5hbC11YnVudHUIdGVybWluYWwJdGV4dC1zaXplCnRocmVlLWJhcnMRdGh1bWJzZG93bi1maWxsZWQKdGh1bWJzZG93bg90aHVtYnN1cC1maWxsZWQIdGh1bWJzdXAFdG9vbHMFdHJhc2gNdHJpYW5nbGUtZG93bg10cmlhbmdsZS1sZWZ0DnRyaWFuZ2xlLXJpZ2h0C3RyaWFuZ2xlLXVwB3R3aXR0ZXISdHlwZS1oaWVyYXJjaHktc3ViFHR5cGUtaGllcmFyY2h5LXN1cGVyDnR5cGUtaGllcmFyY2h5BnVuZm9sZBN1bmdyb3VwLWJ5LXJlZi10eXBlBnVubG9jawZ1bm11dGUKdW52ZXJpZmllZA52YXJpYWJsZS1ncm91cA92ZXJpZmllZC1maWxsZWQIdmVyaWZpZWQIdmVyc2lvbnMJdm0tYWN0aXZlCnZtLWNvbm5lY3QKdm0tb3V0bGluZQp2bS1ydW5uaW5nAnZtAnZyD3ZzY29kZS1pbnNpZGVycwZ2c2NvZGUEd2FuZAd3YXJuaW5nBXdhdGNoCndoaXRlc3BhY2UKd2hvbGUtd29yZAZ3aW5kb3cJd29yZC13cmFwEXdvcmtzcGFjZS10cnVzdGVkEXdvcmtzcGFjZS11bmtub3duE3dvcmtzcGFjZS11bnRydXN0ZWQHem9vbS1pbgh6b29tLW91dAAA) format(\"truetype\");\n}\n\n.codicon[class*='codicon-'] {\n\tfont: normal normal normal 16px/1 codicon;\n\tdisplay: inline-block;\n\ttext-decoration: none;\n\ttext-rendering: auto;\n\ttext-align: center;\n\ttext-transform: none;\n\t-webkit-font-smoothing: antialiased;\n\t-moz-osx-font-smoothing: grayscale;\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n\n/* icon rules are dynamically created by the platform theme service (see iconsStyleSheet.ts) */\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.codicon-wrench-subaction {\n\topacity: 0.5;\n}\n\n@keyframes codicon-spin {\n\t100% {\n\t\ttransform:rotate(360deg);\n\t}\n}\n\n.codicon-sync.codicon-modifier-spin,\n.codicon-loading.codicon-modifier-spin,\n.codicon-gear.codicon-modifier-spin,\n.codicon-notebook-state-executing.codicon-modifier-spin {\n\t/* Use steps to throttle FPS to reduce CPU usage */\n\tanimation: codicon-spin 1.5s steps(30) infinite;\n}\n\n.codicon-modifier-disabled {\n\topacity: 0.4;\n}\n\n/* custom speed & easing for loading icon */\n.codicon-loading,\n.codicon-tree-item-loading::before {\n\tanimation-duration: 1s !important;\n\tanimation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .codicon.codicon-symbol-array,\n.monaco-workbench .codicon.codicon-symbol-array { color: var(--vscode-symbolIcon-arrayForeground); }\n.monaco-editor .codicon.codicon-symbol-boolean,\n.monaco-workbench .codicon.codicon-symbol-boolean { color: var(--vscode-symbolIcon-booleanForeground); }\n.monaco-editor .codicon.codicon-symbol-class,\n.monaco-workbench .codicon.codicon-symbol-class { color: var(--vscode-symbolIcon-classForeground); }\n.monaco-editor .codicon.codicon-symbol-method,\n.monaco-workbench .codicon.codicon-symbol-method { color: var(--vscode-symbolIcon-methodForeground); }\n.monaco-editor .codicon.codicon-symbol-color,\n.monaco-workbench .codicon.codicon-symbol-color { color: var(--vscode-symbolIcon-colorForeground); }\n.monaco-editor .codicon.codicon-symbol-constant,\n.monaco-workbench .codicon.codicon-symbol-constant { color: var(--vscode-symbolIcon-constantForeground); }\n.monaco-editor .codicon.codicon-symbol-constructor,\n.monaco-workbench .codicon.codicon-symbol-constructor { color: var(--vscode-symbolIcon-constructorForeground); }\n.monaco-editor .codicon.codicon-symbol-value,\n.monaco-workbench .codicon.codicon-symbol-value,\n.monaco-editor .codicon.codicon-symbol-enum,\n.monaco-workbench .codicon.codicon-symbol-enum { color: var(--vscode-symbolIcon-enumeratorForeground); }\n.monaco-editor .codicon.codicon-symbol-enum-member,\n.monaco-workbench .codicon.codicon-symbol-enum-member { color: var(--vscode-symbolIcon-enumeratorMemberForeground); }\n.monaco-editor .codicon.codicon-symbol-event,\n.monaco-workbench .codicon.codicon-symbol-event { color: var(--vscode-symbolIcon-eventForeground); }\n.monaco-editor .codicon.codicon-symbol-field,\n.monaco-workbench .codicon.codicon-symbol-field { color: var(--vscode-symbolIcon-fieldForeground); }\n.monaco-editor .codicon.codicon-symbol-file,\n.monaco-workbench .codicon.codicon-symbol-file { color: var(--vscode-symbolIcon-fileForeground); }\n.monaco-editor .codicon.codicon-symbol-folder,\n.monaco-workbench .codicon.codicon-symbol-folder { color: var(--vscode-symbolIcon-folderForeground); }\n.monaco-editor .codicon.codicon-symbol-function,\n.monaco-workbench .codicon.codicon-symbol-function { color: var(--vscode-symbolIcon-functionForeground); }\n.monaco-editor .codicon.codicon-symbol-interface,\n.monaco-workbench .codicon.codicon-symbol-interface { color: var(--vscode-symbolIcon-interfaceForeground); }\n.monaco-editor .codicon.codicon-symbol-key,\n.monaco-workbench .codicon.codicon-symbol-key { color: var(--vscode-symbolIcon-keyForeground); }\n.monaco-editor .codicon.codicon-symbol-keyword,\n.monaco-workbench .codicon.codicon-symbol-keyword { color: var(--vscode-symbolIcon-keywordForeground); }\n.monaco-editor .codicon.codicon-symbol-module,\n.monaco-workbench .codicon.codicon-symbol-module { color: var(--vscode-symbolIcon-moduleForeground); }\n.monaco-editor .codicon.codicon-symbol-namespace,\n.monaco-workbench .codicon.codicon-symbol-namespace { color: var(--vscode-symbolIcon-namespaceForeground); }\n.monaco-editor .codicon.codicon-symbol-null,\n.monaco-workbench .codicon.codicon-symbol-null { color: var(--vscode-symbolIcon-nullForeground); }\n.monaco-editor .codicon.codicon-symbol-number,\n.monaco-workbench .codicon.codicon-symbol-number { color: var(--vscode-symbolIcon-numberForeground); }\n.monaco-editor .codicon.codicon-symbol-object,\n.monaco-workbench .codicon.codicon-symbol-object { color: var(--vscode-symbolIcon-objectForeground); }\n.monaco-editor .codicon.codicon-symbol-operator,\n.monaco-workbench .codicon.codicon-symbol-operator { color: var(--vscode-symbolIcon-operatorForeground); }\n.monaco-editor .codicon.codicon-symbol-package,\n.monaco-workbench .codicon.codicon-symbol-package { color: var(--vscode-symbolIcon-packageForeground); }\n.monaco-editor .codicon.codicon-symbol-property,\n.monaco-workbench .codicon.codicon-symbol-property { color: var(--vscode-symbolIcon-propertyForeground); }\n.monaco-editor .codicon.codicon-symbol-reference,\n.monaco-workbench .codicon.codicon-symbol-reference { color: var(--vscode-symbolIcon-referenceForeground); }\n.monaco-editor .codicon.codicon-symbol-snippet,\n.monaco-workbench .codicon.codicon-symbol-snippet { color: var(--vscode-symbolIcon-snippetForeground); }\n.monaco-editor .codicon.codicon-symbol-string,\n.monaco-workbench .codicon.codicon-symbol-string { color: var(--vscode-symbolIcon-stringForeground); }\n.monaco-editor .codicon.codicon-symbol-struct,\n.monaco-workbench .codicon.codicon-symbol-struct { color: var(--vscode-symbolIcon-structForeground); }\n.monaco-editor .codicon.codicon-symbol-text,\n.monaco-workbench .codicon.codicon-symbol-text { color: var(--vscode-symbolIcon-textForeground); }\n.monaco-editor .codicon.codicon-symbol-type-parameter,\n.monaco-workbench .codicon.codicon-symbol-type-parameter { color: var(--vscode-symbolIcon-typeParameterForeground); }\n.monaco-editor .codicon.codicon-symbol-unit,\n.monaco-workbench .codicon.codicon-symbol-unit { color: var(--vscode-symbolIcon-unitForeground); }\n.monaco-editor .codicon.codicon-symbol-variable,\n.monaco-workbench .codicon.codicon-symbol-variable { color: var(--vscode-symbolIcon-variableForeground); }\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .lightBulbWidget {\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n.monaco-editor .lightBulbWidget:hover{\n\tcursor: pointer;\n}\n\n.monaco-editor .lightBulbWidget.codicon-light-bulb,\n.monaco-editor .lightBulbWidget.codicon-lightbulb-sparkle {\n\tcolor: var(--vscode-editorLightBulb-foreground);\n}\n\n.monaco-editor .lightBulbWidget.codicon-lightbulb-autofix,\n.monaco-editor .lightBulbWidget.codicon-lightbulb-sparkle-autofix {\n\tcolor: var(--vscode-editorLightBulbAutoFix-foreground, var(--vscode-editorLightBulb-foreground));\n}\n\n.monaco-editor .lightBulbWidget.codicon-sparkle-filled {\n\tcolor: var(--vscode-editorLightBulbAi-foreground, var(--vscode-icon-foreground));\n}\n\n.monaco-editor .lightBulbWidget:before {\n\tposition: relative;\n\tz-index: 2;\n}\n\n.monaco-editor .lightBulbWidget:after {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tcontent: '';\n\tdisplay: block;\n\twidth: 100%;\n\theight: 100%;\n\topacity: 0.3;\n\tz-index: 1;\n}\n\n/* gutter decoration */\n.monaco-editor .glyph-margin-widgets .cgmr[class*=\"codicon-gutter-lightbulb\"] {\n\tdisplay: block;\n\tcursor: pointer;\n}\n\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-gutter-lightbulb,\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-gutter-lightbulb-sparkle {\n\tcolor: var(--vscode-editorLightBulb-foreground);\n}\n\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-gutter-lightbulb-auto-fix,\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-gutter-lightbulb-aifix-auto-fix {\n\tcolor: var(--vscode-editorLightBulbAutoFix-foreground, var(--vscode-editorLightBulb-foreground));\n}\n\n.monaco-editor .glyph-margin-widgets .cgmr.codicon-gutter-lightbulb-sparkle-filled {\n\tcolor: var(--vscode-editorLightBulbAi-foreground, var(--vscode-icon-foreground));\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.action-widget {\n\tfont-size: 13px;\n\tborder-radius: 0;\n\tmin-width: 160px;\n\tmax-width: 80vw;\n\tz-index: 40;\n\tdisplay: block;\n\twidth: 100%;\n\tborder: 1px solid var(--vscode-editorWidget-border) !important;\n\tborder-radius: 5px;\n\tbackground-color: var(--vscode-editorActionList-background);\n\tcolor: var(--vscode-editorActionList-foreground);\n\tpadding: 4px;\n\tbox-shadow: 0 2px 8px var(--vscode-widget-shadow);\n}\n\n.context-view-block {\n\tposition: fixed;\n\tcursor: initial;\n\tleft: 0;\n\ttop: 0;\n\twidth: 100%;\n\theight: 100%;\n\tz-index: -1;\n}\n\n.context-view-pointerBlock {\n\tposition: fixed;\n\tcursor: initial;\n\tleft: 0;\n\ttop: 0;\n\twidth: 100%;\n\theight: 100%;\n\tz-index: 2;\n}\n\n.action-widget .monaco-list {\n\tuser-select: none;\n\t-webkit-user-select: none;\n\tborder: none !important;\n\tborder-width: 0 !important;\n}\n\n.action-widget .monaco-list:focus:before {\n\toutline: 0 !important;\n}\n\n.action-widget .monaco-list .monaco-scrollable-element {\n\toverflow: visible;\n}\n\n/** Styles for each row in the list element **/\n.action-widget .monaco-list .monaco-list-row {\n\tpadding: 0 10px;\n\twhite-space: nowrap;\n\tcursor: pointer;\n\ttouch-action: none;\n\twidth: 100%;\n\tborder-radius: 4px;\n}\n\n.action-widget .monaco-list .monaco-list-row.action.focused:not(.option-disabled) {\n\tbackground-color: var(--vscode-editorActionList-focusBackground) !important;\n\tcolor: var(--vscode-editorActionList-focusForeground);\n\toutline: 1px solid var(--vscode-menu-selectionBorder, transparent);\n\toutline-offset: -1px;\n}\n\n.action-widget .monaco-list-row.group-header {\n\tcolor: var(--vscode-descriptionForeground) !important;\n\tfont-weight: 600;\n\tfont-size: 12px;\n}\n\n.action-widget .monaco-list-row.group-header:not(:first-of-type) {\n\tmargin-top: 2px;\n}\n\n.action-widget .monaco-list .group-header,\n.action-widget .monaco-list .option-disabled,\n.action-widget .monaco-list .option-disabled:before,\n.action-widget .monaco-list .option-disabled .focused,\n.action-widget .monaco-list .option-disabled .focused:before {\n\tcursor: default !important;\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\tuser-select: none;\n\tbackground-color: transparent !important;\n\toutline: 0 solid !important;\n}\n\n.action-widget .monaco-list-row.action {\n\tdisplay: flex;\n\tgap: 8px;\n\talign-items: center;\n}\n\n.action-widget .monaco-list-row.action.option-disabled,\n.action-widget .monaco-list:focus .monaco-list-row.focused.action.option-disabled,\n.action-widget .monaco-list-row.action.option-disabled .codicon,\n.action-widget .monaco-list:not(.drop-target):not(.dragging) .monaco-list-row:hover:not(.selected):not(.focused).option-disabled {\n\tcolor: var(--vscode-disabledForeground);\n}\n\n\n.action-widget .monaco-list-row.action:not(.option-disabled) .codicon {\n\tcolor: inherit;\n}\n\n.action-widget .monaco-list-row.action .title {\n\tflex: 1;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n}\n\n.action-widget .monaco-list-row.action .monaco-keybinding > .monaco-keybinding-key {\n\t\tbackground-color: var(--vscode-keybindingLabel-background);\n\t\tcolor: var(--vscode-keybindingLabel-foreground);\n\t\tborder-style: solid;\n\t\tborder-width: 1px;\n\t\tborder-radius: 3px;\n\t\tborder-color: var(--vscode-keybindingLabel-border);\n\t\tborder-bottom-color: var(--vscode-keybindingLabel-bottomBorder);\n\t\tbox-shadow: inset 0 -1px 0 var(--vscode-widget-shadow);\n}\n\n/* Action bar */\n\n.action-widget .action-widget-action-bar {\n\tbackground-color: var(--vscode-editorActionList-background);\n\tborder-top: 1px solid var(--vscode-editorHoverWidget-border);\n\tmargin-top: 2px;\n}\n\n.action-widget .action-widget-action-bar::before {\n\tdisplay: block;\n\tcontent: \"\";\n\twidth: 100%;\n}\n\n.action-widget .action-widget-action-bar .actions-container {\n\tpadding: 3px 8px 0;\n}\n\n.action-widget-action-bar .action-label {\n\tcolor: var(--vscode-textLink-activeForeground);\n\tfont-size: 12px;\n\tline-height: 22px;\n\tpadding: 0;\n\tpointer-events: all;\n}\n\n.action-widget-action-bar .action-item {\n\tmargin-right: 16px;\n\tpointer-events: none;\n}\n\n.action-widget-action-bar .action-label:hover {\n\tbackground-color: transparent !important;\n}\n\n.monaco-action-bar .actions-container.highlight-toggled .action-label.checked {\n\t/* The important gives this rule precedence over the hover rule. */\n\tbackground: var(--vscode-actionBar-toggledBackground) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .codelens-decoration {\n\toverflow: hidden;\n\tdisplay: inline-block;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n\tcolor: var(--vscode-editorCodeLens-foreground);\n\tline-height: var(--vscode-editorCodeLens-lineHeight);\n\tfont-size: var(--vscode-editorCodeLens-fontSize);\n\tpadding-right: calc(var(--vscode-editorCodeLens-fontSize)*0.5);\n\tfont-feature-settings: var(--vscode-editorCodeLens-fontFeatureSettings);\n\tfont-family: var(--vscode-editorCodeLens-fontFamily), var(--vscode-editorCodeLens-fontFamilyDefault);\n}\n\n.monaco-editor .codelens-decoration > span,\n.monaco-editor .codelens-decoration > a {\n\tuser-select: none;\n\t-webkit-user-select: none;\n\twhite-space: nowrap;\n\tvertical-align: sub;\n}\n\n.monaco-editor .codelens-decoration > a {\n\ttext-decoration: none;\n}\n\n.monaco-editor .codelens-decoration > a:hover {\n\tcursor: pointer;\n\tcolor: var(--vscode-editorLink-activeForeground) !important;\n}\n\n.monaco-editor .codelens-decoration > a:hover .codicon {\n\tcolor: var(--vscode-editorLink-activeForeground) !important;\n}\n\n.monaco-editor .codelens-decoration .codicon {\n\tvertical-align: middle;\n\tcolor: currentColor !important;\n\tcolor: var(--vscode-editorCodeLens-foreground);\n\tline-height: var(--vscode-editorCodeLens-lineHeight);\n\tfont-size: var(--vscode-editorCodeLens-fontSize);\n}\n\n.monaco-editor .codelens-decoration > a:hover .codicon::before {\n\tcursor: pointer;\n}\n\n@keyframes fadein {\n\t0% {\n\t\topacity: 0;\n\t\tvisibility: visible;\n\t}\n\n\t100% {\n\t\topacity: 1;\n\t}\n}\n\n.monaco-editor .codelens-decoration.fadein {\n\tanimation: fadein 0.1s linear;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.colorpicker-widget {\n\theight: 190px;\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n\n/* Decoration */\n\n.colorpicker-color-decoration,\n.hc-light .colorpicker-color-decoration {\n\tborder: solid 0.1em #000;\n\tbox-sizing: border-box;\n\tmargin: 0.1em 0.2em 0 0.2em;\n\twidth: 0.8em;\n\theight: 0.8em;\n\tline-height: 0.8em;\n\tdisplay: inline-block;\n\tcursor: pointer;\n}\n\n.hc-black .colorpicker-color-decoration,\n.vs-dark .colorpicker-color-decoration {\n\tborder: solid 0.1em #eee;\n}\n\n/* Header */\n\n.colorpicker-header {\n\tdisplay: flex;\n\theight: 24px;\n\tposition: relative;\n\tbackground: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTZEaa/1AAAAHUlEQVQYV2PYvXu3JAi7uLiAMaYAjAGTQBPYLQkAa/0Zef3qRswAAAAASUVORK5CYII=\");\n\tbackground-size: 9px 9px;\n\timage-rendering: pixelated;\n}\n\n.colorpicker-header .picked-color {\n\twidth: 240px;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tline-height: 24px;\n\tcursor: pointer;\n\tcolor: white;\n\tflex: 1;\n\twhite-space: nowrap;\n\toverflow: hidden;\n}\n\n.colorpicker-header .picked-color .picked-color-presentation {\n\twhite-space: nowrap;\n\tmargin-left: 5px;\n\tmargin-right: 5px;\n}\n\n.colorpicker-header .picked-color .codicon {\n\tcolor: inherit;\n\tfont-size: 14px;\n}\n\n.colorpicker-header .picked-color.light {\n\tcolor: black;\n}\n\n.colorpicker-header .original-color {\n\twidth: 74px;\n\tz-index: inherit;\n\tcursor: pointer;\n}\n\n.standalone-colorpicker {\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.colorpicker-header.standalone-colorpicker {\n\tborder-bottom: none;\n}\n\n.colorpicker-header .close-button {\n\tcursor: pointer;\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder-left: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.colorpicker-header .close-button-inner-div {\n\twidth: 100%;\n\theight: 100%;\n\ttext-align: center;\n}\n\n.colorpicker-header .close-button-inner-div:hover {\n\tbackground-color: var(--vscode-toolbar-hoverBackground);\n}\n\n.colorpicker-header .close-icon {\n\tpadding: 3px;\n}\n\n/* Body */\n\n.colorpicker-body {\n\tdisplay: flex;\n\tpadding: 8px;\n\tposition: relative;\n}\n\n.colorpicker-body .saturation-wrap {\n\toverflow: hidden;\n\theight: 150px;\n\tposition: relative;\n\tmin-width: 220px;\n\tflex: 1;\n}\n\n.colorpicker-body .saturation-box {\n\theight: 150px;\n\tposition: absolute;\n}\n\n.colorpicker-body .saturation-selection {\n\twidth: 9px;\n\theight: 9px;\n\tmargin: -5px 0 0 -5px;\n\tborder: 1px solid rgb(255, 255, 255);\n\tborder-radius: 100%;\n\tbox-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);\n\tposition: absolute;\n}\n\n.colorpicker-body .strip {\n\twidth: 25px;\n\theight: 150px;\n}\n\n.colorpicker-body .standalone-strip {\n\twidth: 25px;\n\theight: 122px;\n}\n\n.colorpicker-body .hue-strip {\n\tposition: relative;\n\tmargin-left: 8px;\n\tcursor: grab;\n\tbackground: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);\n}\n\n.colorpicker-body .opacity-strip {\n\tposition: relative;\n\tmargin-left: 8px;\n\tcursor: grab;\n\tbackground: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTZEaa/1AAAAHUlEQVQYV2PYvXu3JAi7uLiAMaYAjAGTQBPYLQkAa/0Zef3qRswAAAAASUVORK5CYII=\");\n\tbackground-size: 9px 9px;\n\timage-rendering: pixelated;\n}\n\n.colorpicker-body .strip.grabbing {\n\tcursor: grabbing;\n}\n\n.colorpicker-body .slider {\n\tposition: absolute;\n\ttop: 0;\n\tleft: -2px;\n\twidth: calc(100% + 4px);\n\theight: 4px;\n\tbox-sizing: border-box;\n\tborder: 1px solid rgba(255, 255, 255, 0.71);\n\tbox-shadow: 0px 0px 1px rgba(0, 0, 0, 0.85);\n}\n\n.colorpicker-body .strip .overlay {\n\theight: 150px;\n\tpointer-events: none;\n}\n\n.colorpicker-body .standalone-strip .standalone-overlay {\n\theight: 122px;\n\tpointer-events: none;\n}\n\n.standalone-colorpicker-body {\n\tdisplay: block;\n\tborder: 1px solid transparent;\n\tborder-bottom: 1px solid var(--vscode-editorHoverWidget-border);\n\toverflow: hidden;\n}\n\n.colorpicker-body .insert-button {\n\tposition: absolute;\n\theight: 20px;\n\twidth: 58px;\n\tpadding: 0px;\n\tright: 8px;\n\tbottom: 8px;\n\tbackground: var(--vscode-button-background);\n\tcolor: var(--vscode-button-foreground);\n\tborder-radius: 2px;\n\tborder: none;\n\tcursor: pointer;\n}\n\n.colorpicker-body .insert-button:hover{\n\tbackground: var(--vscode-button-hoverBackground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .inlineSuggestionsHints.withBorder {\n\tz-index: 39;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .inlineSuggestionsHints a {\n\tcolor: var(--vscode-foreground);\n}\n\n.monaco-editor .inlineSuggestionsHints a:hover {\n\tcolor: var(--vscode-foreground);\n}\n\n.monaco-editor .inlineSuggestionsHints .keybinding {\n\tdisplay: flex;\n\tmargin-left: 4px;\n\topacity: 0.6;\n}\n\n.monaco-editor .inlineSuggestionsHints .keybinding .monaco-keybinding-key {\n\tfont-size: 8px;\n\tpadding: 2px 3px;\n}\n\n.monaco-editor .inlineSuggestionsHints .availableSuggestionCount a {\n\tdisplay: flex;\n\tmin-width: 19px;\n\tjustify-content: center;\n}\n\n.monaco-editor .inlineSuggestionStatusBarItemLabel {\n\tmargin-right: 2px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .peekview-widget .head {\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tjustify-content: space-between;\n\tflex-wrap: nowrap;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title {\n\tdisplay: flex;\n\talign-items: baseline;\n\tfont-size: 13px;\n\tmargin-left: 20px;\n\tmin-width: 0;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title.clickable {\n\tcursor: pointer;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .dirname:not(:empty) {\n\tfont-size: 0.9em;\n\tmargin-left: 0.5em;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .meta {\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .dirname {\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .filename {\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .meta:not(:empty)::before {\n\tcontent: '-';\n\tpadding: 0 0.3em;\n}\n\n.monaco-editor .peekview-widget .head .peekview-actions {\n\tflex: 1;\n\ttext-align: right;\n\tpadding-right: 2px;\n}\n\n.monaco-editor .peekview-widget .head .peekview-actions > .monaco-action-bar {\n\tdisplay: inline-block;\n}\n\n.monaco-editor .peekview-widget .head .peekview-actions > .monaco-action-bar,\n.monaco-editor .peekview-widget .head .peekview-actions > .monaco-action-bar > .actions-container {\n\theight: 100%;\n}\n\n.monaco-editor .peekview-widget > .body {\n\tborder-top: 1px solid;\n\tposition: relative;\n}\n\n.monaco-editor .peekview-widget .head .peekview-title .codicon {\n\tmargin-right: 4px;\n\talign-self: center;\n}\n\n.monaco-editor .peekview-widget .monaco-list .monaco-list-row.focused .codicon {\n\tcolor: inherit !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .zone-widget {\n\tposition: absolute;\n\tz-index: 10;\n}\n\n\n.monaco-editor .zone-widget .zone-widget-container {\n\tborder-top-style: solid;\n\tborder-bottom-style: solid;\n\tborder-top-width: 0;\n\tborder-bottom-width: 0;\n\tposition: relative;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* -- zone widget */\n.monaco-editor .zone-widget .zone-widget-container.reference-zone-widget {\n\tborder-top-width: 1px;\n\tborder-bottom-width: 1px;\n}\n\n.monaco-editor .reference-zone-widget .inline {\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n\n.monaco-editor .reference-zone-widget .messages {\n\theight: 100%;\n\twidth: 100%;\n\ttext-align: center;\n\tpadding: 3em 0;\n}\n\n.monaco-editor .reference-zone-widget .ref-tree {\n\tline-height: 23px;\n\tbackground-color: var(--vscode-peekViewResult-background);\n\tcolor: var(--vscode-peekViewResult-lineForeground);\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .reference {\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .reference-file {\n\tdisplay: inline-flex;\n\twidth: 100%;\n\theight: 100%;\n\tcolor: var(--vscode-peekViewResult-fileForeground);\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .selected .reference-file {\n\tcolor: inherit !important;\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-list-rows > .monaco-list-row.selected:not(.highlighted) {\n\tbackground-color: var(--vscode-peekViewResult-selectionBackground);\n\tcolor: var(--vscode-peekViewResult-selectionForeground) !important;\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .reference-file .count {\n\tmargin-right: 12px;\n\tmargin-left: auto;\n}\n\n.monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {\n\tbackground-color: var(--vscode-peekViewResult-matchHighlightBackground);\n}\n\n.monaco-editor .reference-zone-widget .preview .reference-decoration {\n\tbackground-color: var(--vscode-peekViewEditor-matchHighlightBackground);\n\tborder: 2px solid var(--vscode-peekViewEditor-matchHighlightBorder);\n\tbox-sizing: border-box;\n}\n\n.monaco-editor .reference-zone-widget .preview .monaco-editor .monaco-editor-background,\n.monaco-editor .reference-zone-widget .preview .monaco-editor .inputarea.ime-input {\n\tbackground-color: var(--vscode-peekViewEditor-background);\n}\n\n.monaco-editor .reference-zone-widget .preview .monaco-editor .margin {\n\tbackground-color: var(--vscode-peekViewEditorGutter-background);\n}\n\n/* High Contrast Theming */\n\n.monaco-editor.hc-black .reference-zone-widget .ref-tree .reference-file,\n.monaco-editor.hc-light .reference-zone-widget .ref-tree .reference-file {\n\tfont-weight: bold;\n}\n\n.monaco-editor.hc-black .reference-zone-widget .ref-tree .referenceMatch .highlight,\n.monaco-editor.hc-light .reference-zone-widget .ref-tree .referenceMatch .highlight {\n\tborder: 1px dotted var(--vscode-contrastActiveBorder, transparent);\n\tbox-sizing: border-box;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .hoverHighlight {\n\tbackground-color: var(--vscode-editor-hoverHighlightBackground);\n}\n\n.monaco-editor .monaco-hover-content {\n\tpadding-right: 2px;\n\tpadding-bottom: 2px;\n\tbox-sizing: border-box;\n}\n\n.monaco-editor .monaco-hover {\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n\tborder-radius: 3px;\n}\n\n.monaco-editor .monaco-hover a {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-editor .monaco-hover a:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n.monaco-editor .monaco-hover .hover-row {\n\tdisplay: flex;\n}\n\n.monaco-editor .monaco-hover .hover-row .hover-row-contents {\n\tmin-width:0;\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n.monaco-editor .monaco-hover .hover-row .verbosity-actions {\n\tdisplay: flex;\n\tflex-direction: column;\n\tpadding-left: 5px;\n\tpadding-right: 5px;\n\tjustify-content: end;\n\tborder-right: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .monaco-hover .hover-row .verbosity-actions .codicon {\n\tcursor: pointer;\n\tfont-size: 11px;\n}\n\n.monaco-editor .monaco-hover .hover-row .verbosity-actions .codicon.enabled {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-editor .monaco-hover .hover-row .verbosity-actions .codicon.disabled {\n\topacity: 0.6;\n}\n\n.monaco-editor .monaco-hover .hover-row .actions {\n\tbackground-color: var(--vscode-editorHoverWidget-statusBarBackground);\n}\n\n.monaco-editor .monaco-hover code {\n\tbackground-color: var(--vscode-textCodeBlock-background);\n}\n\n\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor.vs .dnd-target,\n.monaco-editor.hc-light .dnd-target {\n\tborder-right: 2px dotted black;\n\tcolor: white; /* opposite of black */\n}\n.monaco-editor.vs-dark .dnd-target {\n\tborder-right: 2px dotted #AEAFAD;\n\tcolor: #51504f; /* opposite of #AEAFAD */\n}\n.monaco-editor.hc-black .dnd-target {\n\tborder-right: 2px dotted #fff;\n\tcolor: #000; /* opposite of #fff */\n}\n\n.monaco-editor.mouse-default .view-lines,\n.monaco-editor.vs-dark.mac.mouse-default .view-lines,\n.monaco-editor.hc-black.mac.mouse-default .view-lines,\n.monaco-editor.hc-light.mac.mouse-default .view-lines {\n\tcursor: default;\n}\n.monaco-editor.mouse-copy .view-lines,\n.monaco-editor.vs-dark.mac.mouse-copy .view-lines,\n.monaco-editor.hc-black.mac.mouse-copy .view-lines,\n.monaco-editor.hc-light.mac.mouse-copy .view-lines {\n\tcursor: copy;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .findOptionsWidget {\n\tbackground-color: var(--vscode-editorWidget-background);\n\tcolor: var(--vscode-editorWidget-foreground);\n\tbox-shadow: 0 0 8px 2px var(--vscode-widget-shadow);\n\tborder: 2px solid var(--vscode-contrastBorder);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* Find widget */\n.monaco-editor .find-widget {\n\tposition: absolute;\n\tz-index: 35;\n\theight: 33px;\n\toverflow: hidden;\n\tline-height: 19px;\n\ttransition: transform 200ms linear;\n\tpadding: 0 4px;\n\tbox-sizing: border-box;\n\ttransform: translateY(calc(-100% - 10px)); /* shadow (10px) */\n\tbox-shadow: 0 0 8px 2px var(--vscode-widget-shadow);\n\tcolor: var(--vscode-editorWidget-foreground);\n\tborder-left: 1px solid var(--vscode-widget-border);\n\tborder-right: 1px solid var(--vscode-widget-border);\n\tborder-bottom: 1px solid var(--vscode-widget-border);\n\tborder-bottom-left-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n\tbackground-color: var(--vscode-editorWidget-background);\n}\n\n.monaco-workbench.reduce-motion .monaco-editor .find-widget {\n\ttransition: transform 0ms linear;\n}\n\n.monaco-editor .find-widget textarea {\n\tmargin: 0px;\n}\n\n.monaco-editor .find-widget.hiddenEditor {\n\tdisplay: none;\n}\n\n/* Find widget when replace is toggled on */\n.monaco-editor .find-widget.replaceToggled > .replace-part {\n\tdisplay: flex;\n}\n\n.monaco-editor .find-widget.visible  {\n\ttransform: translateY(0);\n}\n\n/* This outline-color rule is used to override the outline color for synthetic-focus find input. */\n.monaco-editor .find-widget .monaco-inputbox.synthetic-focus {\n\toutline: 1px solid -webkit-focus-ring-color;\n\toutline-offset: -1px;\n\toutline-color: var(--vscode-focusBorder);\n}\n\n.monaco-editor .find-widget .monaco-inputbox .input {\n\tbackground-color: transparent;\n\tmin-height: 0;\n}\n\n.monaco-editor .find-widget .monaco-findInput .input {\n\tfont-size: 13px;\n}\n\n.monaco-editor .find-widget > .find-part,\n.monaco-editor .find-widget > .replace-part {\n\tmargin: 3px 25px 0 17px;\n\tfont-size: 12px;\n\tdisplay: flex;\n}\n\n.monaco-editor .find-widget > .find-part .monaco-inputbox,\n.monaco-editor .find-widget > .replace-part .monaco-inputbox {\n\tmin-height: 25px;\n}\n\n\n.monaco-editor .find-widget > .replace-part .monaco-inputbox > .ibwrapper > .mirror {\n\tpadding-right: 22px;\n}\n\n.monaco-editor .find-widget > .find-part .monaco-inputbox > .ibwrapper > .input,\n.monaco-editor .find-widget > .find-part .monaco-inputbox > .ibwrapper > .mirror,\n.monaco-editor .find-widget > .replace-part .monaco-inputbox > .ibwrapper > .input,\n.monaco-editor .find-widget > .replace-part .monaco-inputbox > .ibwrapper > .mirror {\n\tpadding-top: 2px;\n\tpadding-bottom: 2px;\n}\n\n.monaco-editor .find-widget > .find-part .find-actions {\n\theight: 25px;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n.monaco-editor .find-widget > .replace-part .replace-actions {\n\theight: 25px;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n.monaco-editor .find-widget .monaco-findInput {\n\tvertical-align: middle;\n\tdisplay: flex;\n\tflex:1;\n}\n\n.monaco-editor .find-widget .monaco-findInput .monaco-scrollable-element {\n\t/* Make sure textarea inherits the width correctly */\n\twidth: 100%;\n}\n\n.monaco-editor .find-widget .monaco-findInput .monaco-scrollable-element .scrollbar.vertical {\n\t/* Hide vertical scrollbar */\n\topacity: 0;\n}\n\n.monaco-editor .find-widget .matchesCount {\n\tdisplay: flex;\n\tflex: initial;\n\tmargin: 0 0 0 3px;\n\tpadding: 2px 0 0 2px;\n\theight: 25px;\n\tvertical-align: middle;\n\tbox-sizing: border-box;\n\ttext-align: center;\n\tline-height: 23px;\n}\n\n.monaco-editor .find-widget .button {\n\twidth: 16px;\n\theight: 16px;\n\tpadding: 3px;\n\tborder-radius: 5px;\n\tdisplay: flex;\n\tflex: initial;\n\tmargin-left: 3px;\n\tbackground-position: center center;\n\tbackground-repeat: no-repeat;\n\tcursor: pointer;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n/* find in selection button */\n.monaco-editor .find-widget .codicon-find-selection {\n\twidth: 22px;\n\theight: 22px;\n\tpadding: 3px;\n\tborder-radius: 5px;\n}\n\n.monaco-editor .find-widget .button.left {\n\tmargin-left: 0;\n\tmargin-right: 3px;\n}\n\n.monaco-editor .find-widget .button.wide {\n\twidth: auto;\n\tpadding: 1px 6px;\n\ttop: -1px;\n}\n\n.monaco-editor .find-widget .button.toggle {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 3px;\n\twidth: 18px;\n\theight: 100%;\n\tborder-radius: 0;\n\tbox-sizing: border-box;\n}\n\n.monaco-editor .find-widget .button.toggle.disabled {\n\tdisplay: none;\n}\n\n.monaco-editor .find-widget .disabled {\n\tcolor: var(--vscode-disabledForeground);\n\tcursor: default;\n}\n\n.monaco-editor .find-widget > .replace-part {\n\tdisplay: none;\n}\n\n.monaco-editor .find-widget > .replace-part > .monaco-findInput {\n\tposition: relative;\n\tdisplay: flex;\n\tvertical-align: middle;\n\tflex: auto;\n\tflex-grow: 0;\n\tflex-shrink: 0;\n}\n\n.monaco-editor .find-widget > .replace-part > .monaco-findInput > .controls {\n\tposition: absolute;\n\ttop: 3px;\n\tright: 2px;\n}\n\n/* REDUCED */\n.monaco-editor .find-widget.reduced-find-widget .matchesCount {\n\tdisplay:none;\n}\n\n/* NARROW (SMALLER THAN REDUCED) */\n.monaco-editor .find-widget.narrow-find-widget {\n\tmax-width: 257px !important;\n}\n\n/* COLLAPSED (SMALLER THAN NARROW) */\n.monaco-editor .find-widget.collapsed-find-widget {\n\tmax-width: 170px !important;\n}\n\n.monaco-editor .find-widget.collapsed-find-widget .button.previous,\n.monaco-editor .find-widget.collapsed-find-widget .button.next,\n.monaco-editor .find-widget.collapsed-find-widget .button.replace,\n.monaco-editor .find-widget.collapsed-find-widget .button.replace-all,\n.monaco-editor .find-widget.collapsed-find-widget > .find-part .monaco-findInput .controls {\n\tdisplay:none;\n}\n\n.monaco-editor .find-widget.no-results .matchesCount {\n\tcolor: var(--vscode-errorForeground);\n}\n\n.monaco-editor .findMatch {\n\tanimation-duration: 0;\n\tanimation-name: inherit !important;\n\tbackground-color: var(--vscode-editor-findMatchHighlightBackground);\n}\n\n.monaco-editor .currentFindMatch {\n\tbackground-color: var(--vscode-editor-findMatchBackground);\n\tborder: 2px solid var(--vscode-editor-findMatchBorder);\n\tpadding: 1px;\n\tbox-sizing: border-box;\n}\n\n.monaco-editor .findScope {\n\tbackground-color: var(--vscode-editor-findRangeHighlightBackground);\n}\n\n.monaco-editor .find-widget .monaco-sash {\n\tleft: 0 !important;\n\tbackground-color: var(--vscode-editorWidget-resizeBorder, var(--vscode-editorWidget-border));\n}\n\n.monaco-editor.hc-black .find-widget .button:before {\n\tposition: relative;\n\ttop: 1px;\n\tleft: 2px;\n}\n\n/* Action bars */\n.monaco-editor .find-widget .button:not(.disabled):hover,\n.monaco-editor .find-widget .codicon-find-selection:hover {\n\tbackground-color: var(--vscode-toolbar-hoverBackground) !important;\n}\n\n.monaco-editor.findMatch {\n\tbackground-color: var(--vscode-editor-findMatchHighlightBackground);\n}\n\n.monaco-editor.currentFindMatch {\n\tbackground-color: var(--vscode-editor-findMatchBackground);\n}\n\n.monaco-editor.findScope {\n\tbackground-color: var(--vscode-editor-findRangeHighlightBackground);\n}\n\n.monaco-editor.findMatch {\n\tbackground-color: var(--vscode-editorWidget-background);\n}\n\n/* Close button position. */\n.monaco-editor .find-widget > .button.codicon-widget-close {\n\tposition: absolute;\n\ttop: 5px;\n\tright: 4px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .margin-view-overlays .codicon-folding-manual-collapsed,\n.monaco-editor .margin-view-overlays .codicon-folding-manual-expanded,\n.monaco-editor .margin-view-overlays .codicon-folding-expanded,\n.monaco-editor .margin-view-overlays .codicon-folding-collapsed {\n\tcursor: pointer;\n\topacity: 0;\n\ttransition: opacity 0.5s;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tfont-size: 140%;\n\tmargin-left: 2px;\n}\n\n.monaco-workbench.reduce-motion .monaco-editor .margin-view-overlays .codicon-folding-manual-collapsed,\n.monaco-workbench.reduce-motion .monaco-editor .margin-view-overlays .codicon-folding-manual-expanded,\n.monaco-workbench.reduce-motion .monaco-editor .margin-view-overlays .codicon-folding-expanded,\n.monaco-workbench.reduce-motion .monaco-editor .margin-view-overlays .codicon-folding-collapsed {\n\ttransition: initial;\n}\n\n.monaco-editor .margin-view-overlays:hover .codicon,\n.monaco-editor .margin-view-overlays .codicon.codicon-folding-collapsed,\n.monaco-editor .margin-view-overlays .codicon.codicon-folding-manual-collapsed,\n.monaco-editor .margin-view-overlays .codicon.alwaysShowFoldIcons {\n\topacity: 1;\n}\n\n.monaco-editor .inline-folded:after {\n\tcolor: var(--vscode-editor-foldPlaceholderForeground);\n\tmargin: 0.1em 0.2em 0 0.2em;\n\tcontent: \"\\22EF\"; /* ellipses unicode character */\n\tdisplay: inline;\n\tline-height: 1em;\n\tcursor: pointer;\n}\n\n.monaco-editor .folded-background {\n\tbackground-color: var(--vscode-editor-foldBackground);\n}\n\n.monaco-editor .cldr.codicon.codicon-folding-expanded,\n.monaco-editor .cldr.codicon.codicon-folding-collapsed,\n.monaco-editor .cldr.codicon.codicon-folding-manual-expanded,\n.monaco-editor .cldr.codicon.codicon-folding-manual-collapsed {\n\tcolor: var(--vscode-editorGutter-foldingControlForeground) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .suggest-preview-additional-widget {\n\twhite-space: nowrap;\n}\n\n.monaco-editor .suggest-preview-additional-widget .content-spacer {\n\tcolor: transparent;\n\twhite-space: pre;\n}\n\n.monaco-editor .suggest-preview-additional-widget .button {\n\tdisplay: inline-block;\n\tcursor: pointer;\n\ttext-decoration: underline;\n\ttext-underline-position: under;\n}\n\n.monaco-editor .ghost-text-hidden {\n\topacity: 0;\n\tfont-size: 0;\n}\n\n.monaco-editor .ghost-text-decoration, .monaco-editor .suggest-preview-text .ghost-text {\n\tfont-style: italic;\n}\n\n.monaco-editor .inline-completion-text-to-replace {\n\ttext-decoration: underline;\n\ttext-underline-position: under;\n}\n\n.monaco-editor .ghost-text-decoration,\n.monaco-editor .ghost-text-decoration-preview,\n.monaco-editor .suggest-preview-text .ghost-text {\n\tcolor: var(--vscode-editorGhostText-foreground) !important;\n\tbackground-color: var(--vscode-editorGhostText-background);\n\tborder: 1px solid var(--vscode-editorGhostText-border);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .snippet-placeholder {\n\tmin-width: 2px;\n\toutline-style: solid;\n\toutline-width: 1px;\n\tbackground-color: var(--vscode-editor-snippetTabstopHighlightBackground, transparent);\n\toutline-color: var(--vscode-editor-snippetTabstopHighlightBorder, transparent);\n}\n\n.monaco-editor .finish-snippet-placeholder {\n\toutline-style: solid;\n\toutline-width: 1px;\n\tbackground-color: var(--vscode-editor-snippetFinalTabstopHighlightBackground, transparent);\n\toutline-color: var(--vscode-editor-snippetFinalTabstopHighlightBorder, transparent);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* Suggest widget*/\n\n.monaco-editor .suggest-widget {\n\twidth: 430px;\n\tz-index: 40;\n\tdisplay: flex;\n\tflex-direction: column;\n\tborder-radius: 3px;\n}\n\n.monaco-editor .suggest-widget.message {\n\tflex-direction: row;\n\talign-items: center;\n}\n\n.monaco-editor .suggest-widget,\n.monaco-editor .suggest-details {\n\tflex: 0 1 auto;\n\twidth: 100%;\n\tborder-style: solid;\n\tborder-width: 1px;\n\tborder-color: var(--vscode-editorSuggestWidget-border);\n\tbackground-color: var(--vscode-editorSuggestWidget-background);\n}\n\n.monaco-editor.hc-black .suggest-widget,\n.monaco-editor.hc-black .suggest-details,\n.monaco-editor.hc-light .suggest-widget,\n.monaco-editor.hc-light .suggest-details {\n\tborder-width: 2px;\n}\n\n/* Styles for status bar part */\n\n\n.monaco-editor .suggest-widget .suggest-status-bar {\n\tbox-sizing: border-box;\n\tdisplay: none;\n\tflex-flow: row nowrap;\n\tjustify-content: space-between;\n\twidth: 100%;\n\tfont-size: 80%;\n\tpadding: 0 4px 0 4px;\n\tborder-top: 1px solid var(--vscode-editorSuggestWidget-border);\n\toverflow: hidden;\n}\n\n.monaco-editor .suggest-widget.with-status-bar .suggest-status-bar {\n\tdisplay: flex;\n}\n\n.monaco-editor .suggest-widget .suggest-status-bar .left {\n\tpadding-right: 8px;\n}\n\n.monaco-editor .suggest-widget.with-status-bar .suggest-status-bar .action-label {\n\tcolor: var(--vscode-editorSuggestWidgetStatus-foreground);\n}\n\n.monaco-editor .suggest-widget.with-status-bar .suggest-status-bar .action-item:not(:last-of-type) .action-label {\n\tmargin-right: 0;\n}\n\n.monaco-editor .suggest-widget.with-status-bar .suggest-status-bar .action-item:not(:last-of-type) .action-label::after {\n\tcontent: ', ';\n\tmargin-right: 0.3em;\n}\n\n.monaco-editor .suggest-widget.with-status-bar .monaco-list .monaco-list-row > .contents > .main > .right > .readMore,\n.monaco-editor .suggest-widget.with-status-bar .monaco-list .monaco-list-row.focused.string-label > .contents > .main > .right > .readMore {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-widget.with-status-bar:not(.docs-side) .monaco-list .monaco-list-row:hover > .contents > .main > .right.can-expand-details > .details-label {\n\twidth: 100%;\n}\n\n/* Styles for Message element for when widget is loading or is empty */\n\n.monaco-editor .suggest-widget > .message {\n\tpadding-left: 22px;\n}\n\n/** Styles for the list element **/\n\n.monaco-editor .suggest-widget > .tree {\n\theight: 100%;\n\twidth: 100%;\n}\n\n.monaco-editor .suggest-widget .monaco-list {\n\tuser-select: none;\n\t-webkit-user-select: none;\n}\n\n/** Styles for each row in the list element **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row {\n\tdisplay: flex;\n\t-mox-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tpadding-right: 10px;\n\tbackground-repeat: no-repeat;\n\tbackground-position: 2px 2px;\n\twhite-space: nowrap;\n\tcursor: pointer;\n\ttouch-action: none;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused {\n\tcolor: var(--vscode-editorSuggestWidget-selectedForeground);\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused .codicon {\n\tcolor: var(--vscode-editorSuggestWidget-selectedIconForeground);\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents {\n\tflex: 1;\n\theight: 100%;\n\toverflow: hidden;\n\tpadding-left: 2px;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main {\n\tdisplay: flex;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\twhite-space: pre;\n\tjustify-content: space-between;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .left,\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right {\n\tdisplay: flex;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row:not(.focused) > .contents > .main .monaco-icon-label {\n\tcolor: var(--vscode-editorSuggestWidget-foreground);\n}\n\n.monaco-editor .suggest-widget:not(.frozen) .monaco-highlighted-label .highlight {\n\tfont-weight: bold;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main .monaco-highlighted-label .highlight {\n\tcolor: var(--vscode-editorSuggestWidget-highlightForeground);\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused > .contents > .main .monaco-highlighted-label .highlight {\n\tcolor: var(--vscode-editorSuggestWidget-focusHighlightForeground);\n}\n\n/** ReadMore Icon styles **/\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .header > .codicon-close,\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .readMore::before {\n\tcolor: inherit;\n\topacity: 1;\n\tfont-size: 14px;\n\tcursor: pointer;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .header > .codicon-close {\n\tposition: absolute;\n\ttop: 6px;\n\tright: 2px;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .header > .codicon-close:hover,\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .readMore:hover {\n\topacity: 1;\n}\n\n/** signature, qualifier, type/details opacity **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .details-label {\n\topacity: 0.7;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .left > .signature-label {\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\topacity: 0.6;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .left > .qualifier-label {\n\tmargin-left: 12px;\n\topacity: 0.4;\n\tfont-size: 85%;\n\tline-height: initial;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\talign-self: center;\n}\n\n/** Type Info and icon next to the label in the focused completion item **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .details-label {\n\tfont-size: 85%;\n\tmargin-left: 1.1em;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .details-label > .monaco-tokenized-source {\n\tdisplay: inline;\n}\n\n/** Details: if using CompletionItem#details, show on focus **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .details-label {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-widget:not(.shows-details) .monaco-list .monaco-list-row.focused > .contents > .main > .right > .details-label {\n\tdisplay: inline;\n}\n\n/** Details: if using CompletionItemLabel#details, always show **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row:not(.string-label) > .contents > .main > .right > .details-label,\n.monaco-editor .suggest-widget.docs-side .monaco-list .monaco-list-row.focused:not(.string-label) > .contents > .main > .right > .details-label {\n\tdisplay: inline;\n}\n\n/** Ellipsis on hover **/\n\n.monaco-editor .suggest-widget:not(.docs-side) .monaco-list .monaco-list-row.focused:hover > .contents > .main > .right.can-expand-details > .details-label {\n\twidth: calc(100% - 26px);\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .left {\n\tflex-shrink: 1;\n\tflex-grow: 1;\n\toverflow: hidden;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .left > .monaco-icon-label {\n\tflex-shrink: 0;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row:not(.string-label) > .contents > .main > .left > .monaco-icon-label {\n\tmax-width: 100%;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.string-label > .contents > .main > .left > .monaco-icon-label {\n\tflex-shrink: 1;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right {\n\toverflow: hidden;\n\tflex-shrink: 4;\n\tmax-width: 70%;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main > .right > .readMore {\n\tdisplay: inline-block;\n\tposition: absolute;\n\tright: 10px;\n\twidth: 18px;\n\theight: 18px;\n\tvisibility: hidden;\n}\n\n/** Do NOT display ReadMore when docs is side/below **/\n\n.monaco-editor .suggest-widget.docs-side .monaco-list .monaco-list-row > .contents > .main > .right > .readMore {\n\tdisplay: none !important;\n}\n\n/** Do NOT display ReadMore when using plain CompletionItemLabel (details/documentation might not be resolved) **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.string-label > .contents > .main > .right > .readMore {\n\tdisplay: none;\n}\n\n/** Focused item can show ReadMore, but can't when docs is side/below **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused.string-label > .contents > .main > .right > .readMore {\n\tdisplay: inline-block;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused:hover > .contents > .main > .right > .readMore {\n\tvisibility: visible;\n}\n\n/** Styles for each row in the list **/\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .monaco-icon-label.deprecated {\n\topacity: 0.66;\n\ttext-decoration: unset;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .monaco-icon-label.deprecated > .monaco-icon-label-container > .monaco-icon-name-container {\n\ttext-decoration: line-through;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .monaco-icon-label::before {\n\theight: 100%;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .icon {\n\tdisplay: block;\n\theight: 16px;\n\twidth: 16px;\n\tmargin-left: 2px;\n\tbackground-repeat: no-repeat;\n\tbackground-size: 80%;\n\tbackground-position: center;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .icon.hide {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .suggest-icon {\n\tdisplay: flex;\n\talign-items: center;\n\tmargin-right: 4px;\n}\n\n.monaco-editor .suggest-widget.no-icons .monaco-list .monaco-list-row .icon,\n.monaco-editor .suggest-widget.no-icons .monaco-list .monaco-list-row .suggest-icon::before {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-widget .monaco-list .monaco-list-row .icon.customcolor .colorspan {\n\tmargin: 0 0 0 0.3em;\n\tborder: 0.1em solid #000;\n\twidth: 0.7em;\n\theight: 0.7em;\n\tdisplay: inline-block;\n}\n\n/** Styles for the docs of the completion item in focus **/\n\n.monaco-editor .suggest-details-container {\n\tz-index: 41;\n}\n\n.monaco-editor .suggest-details {\n\tdisplay: flex;\n\tflex-direction: column;\n\tcursor: default;\n\tcolor: var(--vscode-editorSuggestWidget-foreground);\n}\n\n.monaco-editor .suggest-details.focused {\n\tborder-color: var(--vscode-focusBorder);\n}\n\n.monaco-editor .suggest-details a {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-editor .suggest-details a:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n.monaco-editor .suggest-details code {\n\tbackground-color: var(--vscode-textCodeBlock-background);\n}\n\n.monaco-editor .suggest-details.no-docs {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element {\n\tflex: 1;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body {\n\tbox-sizing: border-box;\n\theight: 100%;\n\twidth: 100%;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .header > .type {\n\tflex: 2;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\topacity: 0.7;\n\twhite-space: pre;\n\tmargin: 0 24px 0 0;\n\tpadding: 4px 0 12px 5px;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .header > .type.auto-wrap {\n\twhite-space: normal;\n\tword-break: break-all;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs {\n\tmargin: 0;\n\tpadding: 4px 5px;\n\twhite-space: pre-wrap;\n}\n\n.monaco-editor .suggest-details.no-type > .monaco-scrollable-element > .body > .docs {\n\tmargin-right: 24px;\n\toverflow: hidden;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs {\n\tpadding: 0;\n\twhite-space: initial;\n\tmin-height: calc(1rem + 8px);\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs > div,\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs > span:not(:empty) {\n\tpadding: 4px 5px;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs > div > p:first-child {\n\tmargin-top: 0;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs > div > p:last-child {\n\tmargin-bottom: 0;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs .monaco-tokenized-source {\n\twhite-space: pre;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs .code {\n\twhite-space: pre-wrap;\n\tword-wrap: break-word;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > .docs.markdown-docs .codicon {\n\tvertical-align: sub;\n}\n\n.monaco-editor .suggest-details > .monaco-scrollable-element > .body > p:empty {\n\tdisplay: none;\n}\n\n.monaco-editor .suggest-details code {\n\tborder-radius: 3px;\n\tpadding: 0 0.4em;\n}\n\n.monaco-editor .suggest-details ul {\n\tpadding-left: 20px;\n}\n\n.monaco-editor .suggest-details ol {\n\tpadding-left: 20px;\n}\n\n.monaco-editor .suggest-details p code {\n\tfont-family: var(--monaco-monospace-font);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .goto-definition-link {\n\ttext-decoration: underline;\n\tcursor: pointer;\n\tcolor: var(--vscode-editorLink-activeForeground) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n/* marker zone */\n\n.monaco-editor .peekview-widget .head .peekview-title .severity-icon {\n\tdisplay: inline-block;\n\tvertical-align: text-top;\n\tmargin-right: 4px;\n}\n\n.monaco-editor .marker-widget {\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n}\n\n.monaco-editor .marker-widget > .stale {\n\topacity: 0.6;\n\tfont-style: italic;\n}\n\n.monaco-editor .marker-widget .title {\n\tdisplay: inline-block;\n\tpadding-right: 5px;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer {\n\tposition: absolute;\n\twhite-space: pre;\n\tuser-select: text;\n\t-webkit-user-select: text;\n\tpadding: 8px 12px 0 20px;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message {\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message .details {\n\tpadding-left: 6px;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message .source,\n.monaco-editor .marker-widget .descriptioncontainer .message span.code {\n\topacity: 0.6;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message a.code-link {\n\topacity: 0.6;\n\tcolor: inherit;\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message a.code-link:before {\n\tcontent: '(';\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message a.code-link:after {\n\tcontent: ')';\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .message a.code-link > span {\n\ttext-decoration: underline;\n\t/** Hack to force underline to show **/\n\tborder-bottom: 1px solid transparent;\n\ttext-underline-position: under;\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n.monaco-editor .marker-widget .descriptioncontainer .filename {\n\tcursor: pointer;\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .zone-widget .codicon.codicon-error,\n.markers-panel .marker-icon.error, .markers-panel .marker-icon .codicon.codicon-error,\n.text-search-provider-messages .providerMessage .codicon.codicon-error,\n.extensions-viewlet > .extensions .codicon.codicon-error,\n.extension-editor .codicon.codicon-error,\n.preferences-editor .codicon.codicon-error {\n\tcolor: var(--vscode-problemsErrorIcon-foreground);\n}\n\n.monaco-editor .zone-widget .codicon.codicon-warning,\n.markers-panel .marker-icon.warning, .markers-panel .marker-icon .codicon.codicon-warning,\n.text-search-provider-messages .providerMessage .codicon.codicon-warning,\n.extensions-viewlet > .extensions .codicon.codicon-warning,\n.extension-editor .codicon.codicon-warning,\n.preferences-editor .codicon.codicon-warning {\n\tcolor: var(--vscode-problemsWarningIcon-foreground);\n}\n\n.monaco-editor .zone-widget .codicon.codicon-info,\n.markers-panel .marker-icon.info, .markers-panel .marker-icon .codicon.codicon-info,\n.text-search-provider-messages .providerMessage .codicon.codicon-info,\n.extensions-viewlet > .extensions .codicon.codicon-info,\n.extension-editor .codicon.codicon-info,\n.preferences-editor .codicon.codicon-info {\n\tcolor: var(--vscode-problemsInfoIcon-foreground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n\n.monaco-editor.vs .valueSetReplacement {\n\toutline: solid 2px var(--vscode-editorBracketMatch-border);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .linked-editing-decoration {\n\tbackground-color: var(--vscode-editor-linkedEditingBackground);\n\n\t/* Ensure decoration is visible even if range is empty */\n\tmin-width: 1px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n.monaco-editor .detected-link,\n.monaco-editor .detected-link-active {\n\ttext-decoration: underline;\n\ttext-underline-position: under;\n}\n\n.monaco-editor .detected-link-active {\n\tcursor: pointer;\n\tcolor: var(--vscode-editorLink-activeForeground) !important;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .focused .selectionHighlight {\n\tbackground-color: var(--vscode-editor-selectionHighlightBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-selectionHighlightBorder);\n}\n.monaco-editor.hc-black .focused .selectionHighlight, .monaco-editor.hc-light .focused .selectionHighlight {\n\tborder-style: dotted;\n}\n\n.monaco-editor .wordHighlight {\n\tbackground-color: var(--vscode-editor-wordHighlightBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-wordHighlightBorder);\n}\n.monaco-editor.hc-black .wordHighlight, .monaco-editor.hc-light .wordHighlight {\n\tborder-style: dotted;\n}\n\n.monaco-editor .wordHighlightStrong {\n\tbackground-color: var(--vscode-editor-wordHighlightStrongBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-wordHighlightStrongBorder);\n}\n.monaco-editor.hc-black .wordHighlightStrong, .monaco-editor.hc-light .wordHighlightStrong {\n\tborder-style: dotted;\n}\n\n.monaco-editor .wordHighlightText {\n\tbackground-color: var(--vscode-editor-wordHighlightTextBackground);\n\tbox-sizing: border-box;\n\tborder: 1px solid var(--vscode-editor-wordHighlightTextBorder);\n}\n.monaco-editor.hc-black .wordHighlightText, .monaco-editor.hc-light .wordHighlightText {\n\tborder-style: dotted;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .inline-edit-remove {\n\tbackground-color: var(--vscode-editorGhostText-background);\n\tfont-style: italic;\n}\n\n.monaco-editor .inline-edit-hidden {\n\topacity: 0;\n\tfont-size: 0;\n}\n\n.monaco-editor .inline-edit-decoration, .monaco-editor .suggest-preview-text .inline-edit {\n\tfont-style: italic;\n}\n\n.monaco-editor .inline-completion-text-to-replace {\n\ttext-decoration: underline;\n\ttext-underline-position: under;\n}\n\n.monaco-editor .inline-edit-decoration,\n.monaco-editor .inline-edit-decoration-preview,\n.monaco-editor .suggest-preview-text .inline-edit {\n\tcolor: var(--vscode-editorGhostText-foreground) !important;\n\tbackground-color: var(--vscode-editorGhostText-background);\n\tborder: 1px solid var(--vscode-editorGhostText-border);\n}\n\n\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .inlineEditHints.withBorder {\n\tz-index: 39;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .inlineEditHints a {\n\tcolor: var(--vscode-foreground);\n}\n\n.monaco-editor .inlineEditHints a:hover {\n\tcolor: var(--vscode-foreground);\n}\n\n.monaco-editor .inlineEditHints .keybinding {\n\tdisplay: flex;\n\tmargin-left: 4px;\n\topacity: 0.6;\n}\n\n.monaco-editor .inlineEditHints .keybinding .monaco-keybinding-key {\n\tfont-size: 8px;\n\tpadding: 2px 3px;\n}\n\n.monaco-editor .inlineEditStatusBarItemLabel {\n\tmargin-right: 2px;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .inlineEditSideBySide {\n\tz-index: 39;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n\twhite-space: pre;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor div.inline-edits-widget {\n\t--widget-color: var(--vscode-notifications-background);\n\n\t.promptEditor .monaco-editor {\n\t\t--vscode-editor-placeholder-foreground: var(--vscode-editorGhostText-foreground);\n\t}\n\n\t.toolbar, .promptEditor {\n\t\topacity: 0;\n\t\ttransition: opacity 0.2s ease-in-out;\n\t}\n\t&:hover, &.focused {\n\t\t.toolbar, .promptEditor {\n\t\t\topacity: 1;\n\t\t}\n\t}\n\n\t.preview .monaco-editor {\n\n\t\t.mtk1 {\n\t\t\t/*color: rgba(215, 215, 215, 0.452);*/\n\t\t\tcolor: var(--vscode-editorGhostText-foreground);\n\t\t}\n\t\t.view-overlays .current-line-exact {\n\t\t\tborder: none;\n\t\t}\n\n\t\t.current-line-margin {\n\t\t\tborder: none;\n\t\t}\n\n\t\t--vscode-editor-background: var(--widget-color);\n\t}\n\n\tsvg {\n\t\t.gradient-start {\n\t\t\tstop-color: var(--vscode-editor-background);\n\t\t}\n\n\t\t.gradient-stop {\n\t\t\tstop-color: var(--widget-color);\n\t\t}\n\t}\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .parameter-hints-widget {\n\t/* Must be higher than the sash's z-index and terminal canvases but lower than the suggest widget */\n\tz-index: 39;\n\tdisplay: flex;\n\tflex-direction: column;\n\tline-height: 1.5em;\n\tcursor: default;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.hc-black .monaco-editor .parameter-hints-widget,\n.hc-light .monaco-editor .parameter-hints-widget {\n\tborder-width: 2px;\n}\n\n.monaco-editor .parameter-hints-widget > .phwrapper {\n\tmax-width: 440px;\n\tdisplay: flex;\n\tflex-direction: row;\n}\n\n.monaco-editor .parameter-hints-widget.multiple {\n\tmin-height: 3.3em;\n\tpadding: 0;\n}\n\n.monaco-editor .parameter-hints-widget.multiple .body::before {\n\tcontent: \"\";\n\tdisplay: block;\n\theight: 100%;\n\tposition: absolute;\n\topacity: 0.5;\n\tborder-left: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .parameter-hints-widget p,\n.monaco-editor .parameter-hints-widget ul {\n\tmargin: 8px 0;\n}\n\n.monaco-editor .parameter-hints-widget .monaco-scrollable-element,\n.monaco-editor .parameter-hints-widget .body {\n\tdisplay: flex;\n\tflex: 1;\n\tflex-direction: column;\n\tmin-height: 100%;\n}\n\n.monaco-editor .parameter-hints-widget .signature {\n\tpadding: 4px 5px;\n\tposition: relative;\n}\n\n.monaco-editor .parameter-hints-widget .signature.has-docs::after {\n\tcontent: \"\";\n\tdisplay: block;\n\tposition: absolute;\n\tleft: 0;\n\twidth: 100%;\n\tpadding-top: 4px;\n\topacity: 0.5;\n\tborder-bottom: 1px solid var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .parameter-hints-widget .code {\n\tfont-family: var(--vscode-parameterHintsWidget-editorFontFamily), var(--vscode-parameterHintsWidget-editorFontFamilyDefault);\n}\n\n.monaco-editor .parameter-hints-widget .docs {\n\tpadding: 0 10px 0 5px;\n\twhite-space: pre-wrap;\n}\n\n.monaco-editor .parameter-hints-widget .docs.empty {\n\tdisplay: none;\n}\n\n.monaco-editor .parameter-hints-widget .docs a {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-editor .parameter-hints-widget .docs a:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n\tcursor: pointer;\n}\n\n.monaco-editor .parameter-hints-widget .docs .markdown-docs {\n\twhite-space: initial;\n}\n\n.monaco-editor .parameter-hints-widget .docs code {\n\tfont-family: var(--monaco-monospace-font);\n\tborder-radius: 3px;\n\tpadding: 0 0.4em;\n\tbackground-color: var(--vscode-textCodeBlock-background);\n}\n\n.monaco-editor .parameter-hints-widget .docs .monaco-tokenized-source,\n.monaco-editor .parameter-hints-widget .docs .code {\n\twhite-space: pre-wrap;\n}\n\n.monaco-editor .parameter-hints-widget .controls {\n\tdisplay: none;\n\tflex-direction: column;\n\talign-items: center;\n\tmin-width: 22px;\n\tjustify-content: flex-end;\n}\n\n.monaco-editor .parameter-hints-widget.multiple .controls {\n\tdisplay: flex;\n\tpadding: 0 2px;\n}\n\n.monaco-editor .parameter-hints-widget.multiple .button {\n\twidth: 16px;\n\theight: 16px;\n\tbackground-repeat: no-repeat;\n\tcursor: pointer;\n}\n\n.monaco-editor .parameter-hints-widget .button.previous {\n\tbottom: 24px;\n}\n\n.monaco-editor .parameter-hints-widget .overloads {\n\ttext-align: center;\n\theight: 12px;\n\tline-height: 12px;\n\tfont-family: var(--monaco-monospace-font);\n}\n\n.monaco-editor .parameter-hints-widget .signature .parameter.active {\n\tcolor: var(--vscode-editorHoverWidget-highlightForeground);\n\tfont-weight: bold;\n}\n\n.monaco-editor .parameter-hints-widget .documentation-parameter > .parameter {\n\tfont-weight: bold;\n\tmargin-right: 0.5em;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor {\n\t--vscode-editor-placeholder-foreground: var(--vscode-editorGhostText-foreground);\n\n\t.editorPlaceholder {\n\t\ttop: 0px;\n\t\tposition: absolute;\n\t\toverflow: hidden;\n\t\ttext-overflow: ellipsis;\n\t\ttext-wrap: nowrap;\n\t\tpointer-events: none;\n\n\t\tcolor: var(--vscode-editor-placeholder-foreground);\n\t}\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .rename-box {\n\tz-index: 100;\n\tcolor: inherit;\n\tborder-radius: 4px;\n}\n\n.monaco-editor .rename-box.preview {\n\tpadding: 4px 4px 0 4px;\n}\n\n.monaco-editor .rename-box .rename-input-with-button {\n\tpadding: 3px;\n\tborder-radius: 2px;\n\twidth: calc(100% - 8px); /* 4px padding on each side */\n}\n\n.monaco-editor .rename-box .rename-input {\n\twidth: calc(100% - 8px); /* 4px padding on each side */\n\tpadding: 0;\n}\n\n.monaco-editor .rename-box .rename-input:focus {\n\toutline: none;\n}\n\n.monaco-editor .rename-box .rename-suggestions-button {\n\tdisplay: flex;\n\talign-items: center;\n\tpadding: 3px;\n\tbackground-color: transparent;\n\tborder: none;\n\tborder-radius: 5px;\n\tcursor: pointer;\n}\n\n.monaco-editor .rename-box .rename-suggestions-button:hover {\n\tbackground-color: var(--vscode-toolbar-hoverBackground)\n}\n\n.monaco-editor .rename-box .rename-candidate-list-container .monaco-list-row {\n\tborder-radius: 2px;\n}\n\n.monaco-editor .rename-box .rename-label {\n\tdisplay: none;\n\topacity: .8;\n}\n\n.monaco-editor .rename-box.preview .rename-label {\n\tdisplay: inherit;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .sticky-widget {\n\toverflow: hidden;\n}\n\n.monaco-editor .sticky-widget-line-numbers {\n\tfloat: left;\n\tbackground-color: inherit;\n}\n\n.monaco-editor .sticky-widget-lines-scrollable {\n\tdisplay: inline-block;\n\tposition: absolute;\n\toverflow: hidden;\n\twidth: var(--vscode-editorStickyScroll-scrollableWidth);\n\tbackground-color: inherit;\n}\n\n.monaco-editor .sticky-widget-lines {\n\tposition: absolute;\n\tbackground-color: inherit;\n}\n\n.monaco-editor .sticky-line-number, .monaco-editor .sticky-line-content {\n\tcolor: var(--vscode-editorLineNumber-foreground);\n\twhite-space: nowrap;\n\tdisplay: inline-block;\n\tposition: absolute;\n\tbackground-color: inherit;\n}\n\n.monaco-editor .sticky-line-number .codicon-folding-expanded,\n.monaco-editor .sticky-line-number .codicon-folding-collapsed {\n\tfloat: right;\n\ttransition: var(--vscode-editorStickyScroll-foldingOpacityTransition);\n}\n\n.monaco-editor .sticky-line-content {\n\twidth: var(--vscode-editorStickyScroll-scrollableWidth);\n\tbackground-color: inherit;\n\twhite-space: nowrap;\n}\n\n.monaco-editor .sticky-line-number-inner {\n\tdisplay: inline-block;\n\ttext-align: right;\n}\n\n.monaco-editor .sticky-widget {\n\tborder-bottom: 1px solid var(--vscode-editorStickyScroll-border);\n}\n\n.monaco-editor .sticky-line-content:hover {\n\tbackground-color: var(--vscode-editorStickyScrollHover-background);\n\tcursor: pointer;\n}\n\n.monaco-editor .sticky-widget {\n\twidth: 100%;\n\tbox-shadow: var(--vscode-editorStickyScroll-shadow) 0 4px 2px -2px;\n\tz-index: 4;\n\tbackground-color: var(--vscode-editorStickyScroll-background);\n\tright: initial !important;\n}\n\n.monaco-editor .sticky-widget.peek {\n\tbackground-color: var(--vscode-peekViewEditorStickyScroll-background);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .unicode-highlight {\n\tborder: 1px solid var(--vscode-editorUnicodeHighlight-border);\n\tbackground-color: var(--vscode-editorUnicodeHighlight-background);\n\tbox-sizing: border-box;\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.editor-banner {\n\tbox-sizing: border-box;\n\tcursor: default;\n\twidth: 100%;\n\tfont-size: 12px;\n\tdisplay: flex;\n\toverflow: visible;\n\n\theight: 26px;\n\n\tbackground: var(--vscode-banner-background);\n}\n\n\n.editor-banner .icon-container {\n\tdisplay: flex;\n\tflex-shrink: 0;\n\talign-items: center;\n\tpadding: 0 6px 0 10px;\n}\n\n.editor-banner .icon-container.custom-icon {\n\tbackground-repeat: no-repeat;\n\tbackground-position: center center;\n\tbackground-size: 16px;\n\twidth: 16px;\n\tpadding: 0;\n\tmargin: 0 6px 0 10px;\n}\n\n.editor-banner .message-container {\n\tdisplay: flex;\n\talign-items: center;\n\tline-height: 26px;\n\ttext-overflow: ellipsis;\n\twhite-space: nowrap;\n\toverflow: hidden;\n}\n\n.editor-banner .message-container p {\n\tmargin-block-start: 0;\n\tmargin-block-end: 0;\n}\n\n.editor-banner .message-actions-container {\n\tflex-grow: 1;\n\tflex-shrink: 0;\n\tline-height: 26px;\n\tmargin: 0 4px;\n}\n\n.editor-banner .message-actions-container a.monaco-button {\n\twidth: inherit;\n\tmargin: 2px 8px;\n\tpadding: 0px 12px;\n}\n\n.editor-banner .message-actions-container a {\n\tpadding: 3px;\n\tmargin-left: 12px;\n\ttext-decoration: underline;\n}\n\n.editor-banner .action-container {\n\tpadding: 0 10px 0 6px;\n}\n\n.editor-banner {\n\tbackground-color: var(--vscode-banner-background);\n}\n\n.editor-banner,\n.editor-banner .action-container .codicon,\n.editor-banner .message-actions-container .monaco-link {\n\tcolor: var(--vscode-banner-foreground);\n}\n\n.editor-banner .icon-container .codicon {\n\tcolor: var(--vscode-banner-iconForeground);\n}\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-link {\n\tcolor: var(--vscode-textLink-foreground);\n}\n\n.monaco-link:hover {\n\tcolor: var(--vscode-textLink-activeForeground);\n}\n\n/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .iPadShowKeyboard {\n\twidth: 58px;\n\tmin-width: 0;\n\theight: 36px;\n\tmin-height: 0;\n\tmargin: 0;\n\tpadding: 0;\n\tposition: absolute;\n\tresize: none;\n\toverflow: hidden;\n\tbackground: url(\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTMiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCA1MyAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwKSI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNDguMDM2NCA0LjAxMDQySDQuMDA3NzlMNC4wMDc3OSAzMi4wMjg2SDQ4LjAzNjRWNC4wMTA0MlpNNC4wMDc3OSAwLjAwNzgxMjVDMS43OTcyMSAwLjAwNzgxMjUgMC4wMDUxODc5OSAxLjc5OTg0IDAuMDA1MTg3OTkgNC4wMTA0MlYzMi4wMjg2QzAuMDA1MTg3OTkgMzQuMjM5MiAxLjc5NzIxIDM2LjAzMTIgNC4wMDc3OSAzNi4wMzEySDQ4LjAzNjRDNTAuMjQ3IDM2LjAzMTIgNTIuMDM5IDM0LjIzOTIgNTIuMDM5IDMyLjAyODZWNC4wMTA0MkM1Mi4wMzkgMS43OTk4NCA1MC4yNDcgMC4wMDc4MTI1IDQ4LjAzNjQgMC4wMDc4MTI1SDQuMDA3NzlaTTguMDEwNDIgOC4wMTMwMkgxMi4wMTNWMTIuMDE1Nkg4LjAxMDQyVjguMDEzMDJaTTIwLjAxODIgOC4wMTMwMkgxNi4wMTU2VjEyLjAxNTZIMjAuMDE4MlY4LjAxMzAyWk0yNC4wMjA4IDguMDEzMDJIMjguMDIzNFYxMi4wMTU2SDI0LjAyMDhWOC4wMTMwMlpNMzYuMDI4NiA4LjAxMzAySDMyLjAyNlYxMi4wMTU2SDM2LjAyODZWOC4wMTMwMlpNNDAuMDMxMiA4LjAxMzAySDQ0LjAzMzlWMTIuMDE1Nkg0MC4wMzEyVjguMDEzMDJaTTE2LjAxNTYgMTYuMDE4Mkg4LjAxMDQyVjIwLjAyMDhIMTYuMDE1NlYxNi4wMTgyWk0yMC4wMTgyIDE2LjAxODJIMjQuMDIwOFYyMC4wMjA4SDIwLjAxODJWMTYuMDE4MlpNMzIuMDI2IDE2LjAxODJIMjguMDIzNFYyMC4wMjA4SDMyLjAyNlYxNi4wMTgyWk00NC4wMzM5IDE2LjAxODJWMjAuMDIwOEgzNi4wMjg2VjE2LjAxODJINDQuMDMzOVpNMTIuMDEzIDI0LjAyMzRIOC4wMTA0MlYyOC4wMjZIMTIuMDEzVjI0LjAyMzRaTTE2LjAxNTYgMjQuMDIzNEgzNi4wMjg2VjI4LjAyNkgxNi4wMTU2VjI0LjAyMzRaTTQ0LjAzMzkgMjQuMDIzNEg0MC4wMzEyVjI4LjAyNkg0NC4wMzM5VjI0LjAyMzRaIiBmaWxsPSIjNDI0MjQyIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDAiPgo8cmVjdCB3aWR0aD0iNTMiIGhlaWdodD0iMzYiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==\") center center no-repeat;\n\tborder: 4px solid #F6F6F6;\n\tborder-radius: 4px;\n}\n\n.monaco-editor.vs-dark .iPadShowKeyboard {\n\tbackground: url(\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTMiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCA1MyAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwKSI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNDguMDM2NCA0LjAxMDQySDQuMDA3NzlMNC4wMDc3OSAzMi4wMjg2SDQ4LjAzNjRWNC4wMTA0MlpNNC4wMDc3OSAwLjAwNzgxMjVDMS43OTcyMSAwLjAwNzgxMjUgMC4wMDUxODc5OSAxLjc5OTg0IDAuMDA1MTg3OTkgNC4wMTA0MlYzMi4wMjg2QzAuMDA1MTg3OTkgMzQuMjM5MiAxLjc5NzIxIDM2LjAzMTIgNC4wMDc3OSAzNi4wMzEySDQ4LjAzNjRDNTAuMjQ3IDM2LjAzMTIgNTIuMDM5IDM0LjIzOTIgNTIuMDM5IDMyLjAyODZWNC4wMTA0MkM1Mi4wMzkgMS43OTk4NCA1MC4yNDcgMC4wMDc4MTI1IDQ4LjAzNjQgMC4wMDc4MTI1SDQuMDA3NzlaTTguMDEwNDIgOC4wMTMwMkgxMi4wMTNWMTIuMDE1Nkg4LjAxMDQyVjguMDEzMDJaTTIwLjAxODIgOC4wMTMwMkgxNi4wMTU2VjEyLjAxNTZIMjAuMDE4MlY4LjAxMzAyWk0yNC4wMjA4IDguMDEzMDJIMjguMDIzNFYxMi4wMTU2SDI0LjAyMDhWOC4wMTMwMlpNMzYuMDI4NiA4LjAxMzAySDMyLjAyNlYxMi4wMTU2SDM2LjAyODZWOC4wMTMwMlpNNDAuMDMxMiA4LjAxMzAySDQ0LjAzMzlWMTIuMDE1Nkg0MC4wMzEyVjguMDEzMDJaTTE2LjAxNTYgMTYuMDE4Mkg4LjAxMDQyVjIwLjAyMDhIMTYuMDE1NlYxNi4wMTgyWk0yMC4wMTgyIDE2LjAxODJIMjQuMDIwOFYyMC4wMjA4SDIwLjAxODJWMTYuMDE4MlpNMzIuMDI2IDE2LjAxODJIMjguMDIzNFYyMC4wMjA4SDMyLjAyNlYxNi4wMTgyWk00NC4wMzM5IDE2LjAxODJWMjAuMDIwOEgzNi4wMjg2VjE2LjAxODJINDQuMDMzOVpNMTIuMDEzIDI0LjAyMzRIOC4wMTA0MlYyOC4wMjZIMTIuMDEzVjI0LjAyMzRaTTE2LjAxNTYgMjQuMDIzNEgzNi4wMjg2VjI4LjAyNkgxNi4wMTU2VjI0LjAyMzRaTTQ0LjAzMzkgMjQuMDIzNEg0MC4wMzEyVjI4LjAyNkg0NC4wMzM5VjI0LjAyMzRaIiBmaWxsPSIjQzVDNUM1Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDAiPgo8cmVjdCB3aWR0aD0iNTMiIGhlaWdodD0iMzYiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==\") center center no-repeat;\n\tborder: 4px solid #252526;\n}/*---------------------------------------------------------------------------------------------\n *  Copyright (c) Microsoft Corporation. All rights reserved.\n *  Licensed under the MIT License. See License.txt in the project root for license information.\n *--------------------------------------------------------------------------------------------*/\n\n.monaco-editor .tokens-inspect-widget {\n\tz-index: 50;\n\tuser-select: text;\n\t-webkit-user-select: text;\n\tpadding: 10px;\n\tcolor: var(--vscode-editorHoverWidget-foreground);\n\tbackground-color: var(--vscode-editorHoverWidget-background);\n\tborder: 1px solid var(--vscode-editorHoverWidget-border);\n}\n.monaco-editor.hc-black .tokens-inspect-widget, .monaco-editor.hc-light .tokens-inspect-widget {\n\tborder-width: 2px;\n}\n\n.monaco-editor .tokens-inspect-widget .tokens-inspect-separator {\n\theight: 1px;\n\tborder: 0;\n\tbackground-color: var(--vscode-editorHoverWidget-border);\n}\n\n.monaco-editor .tokens-inspect-widget .tm-token {\n\tfont-family: var(--monaco-monospace-font);\n}\n\n.monaco-editor .tokens-inspect-widget .tm-token-length {\n\tfont-weight: normal;\n\tfont-size: 60%;\n\tfloat: right;\n}\n\n.monaco-editor .tokens-inspect-widget .tm-metadata-table {\n\twidth: 100%;\n}\n\n.monaco-editor .tokens-inspect-widget .tm-metadata-value {\n\tfont-family: var(--monaco-monospace-font);\n\ttext-align: right;\n}\n\n.monaco-editor .tokens-inspect-widget .tm-token-type {\n\tfont-family: var(--monaco-monospace-font);\n}\n\n.va-tabs {\n  height: 100% !important;\n  width: 100% !important;\n}\n.va-tabs__content {\n  height: 100% !important;\n  width: 100% !important;\n}\n.metadata-container {\n  flex-grow: 0;\n  flex-shrink: 0;\n  min-width: 300px;\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-designer {\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-preview {\n  border-top: 1px dashed #ccc;\n  padding-top: 8px;\n}\n.monaco-container {\n  height: 500px;\n}\n";})();
-import { a, d } from "./index-BJgIXF5y.js";
+(function(){var i="ui.vue.datasource.xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.va-tabs {\n  height: 100% !important;\n  width: 100% !important;\n}\n.va-tabs__content {\n  height: 100% !important;\n  width: 100% !important;\n}\n.metadata-container {\n  flex-grow: 0;\n  flex-shrink: 0;\n  min-width: 300px;\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-designer {\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-preview {\n  border-top: 1px dashed #ccc;\n  padding-top: 8px;\n}\n.monaco-container {\n  height: 500px;\n}\n";})();
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { XmlaStore, factorySymbol } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.xmla");
+import { defineComponent, ref, shallowRef, watch, onMounted, inject, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, withCtx, createBlock, createCommentVNode, unref, Fragment, renderList, createTextVNode, toDisplayString, computed } from "vue";
+const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
+const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
+const { MetadataTree, QueryDesigner, PivotTable } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.common.xmla");
+const { MonacoEditor } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.common.monaco");
+const _hoisted_1 = { class: "flex w-full h-full rounded gap-4 overflow-hidden" };
+const _hoisted_2 = { class: "flex flex-col w-full h-full overflow-hidden flex-grow data-designer" };
+const _hoisted_3 = { class: "flex justify-between w-full" };
+const _hoisted_4 = {
+  key: 1,
+  class: "w-full h-full"
+};
+const _hoisted_5 = { class: "h-full w-full flex flex-col data-preview" };
+const _hoisted_6 = { class: "w-full h-full overflow-auto" };
+const _hoisted_7 = { class: "h-full metadata-container" };
+const _hoisted_8 = {
+  key: 1,
+  class: "h-full w-full flex items-center justify-center"
+};
+const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  __name: "Preview",
+  props: {
+    dataSource: {}
+  },
+  emits: ["updateConfig"],
+  setup(__props, { emit: __emit }) {
+    const props = __props;
+    console.log(MetadataTree);
+    const data = ref(null);
+    const connection = ref(null);
+    const query = ref(props.dataSource.config.mdx || "");
+    const emit = __emit;
+    const tempStore = shallowRef(null);
+    const settingsRef = ref(props.dataSource);
+    const metadata = ref(null);
+    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
+    console.log(props.dataSource);
+    const tabs = ["Visual Editor", "Code Editor"];
+    const currentTab = ref(0);
+    const api = ref(null);
+    const catalog = ref(null);
+    const queryConfig = ref({
+      filters: props.dataSource.config.requestParams?.filters || [],
+      rows: props.dataSource.config.requestParams?.rows || [],
+      columns: props.dataSource.config.requestParams?.columns || [],
+      measures: props.dataSource.config.requestParams?.measures || []
+    });
+    const drilldownState = ref(props.dataSource.config.drilldownState || {});
+    console.log(props.dataSource);
+    watch(() => props.dataSource.config.connection, async () => {
+      console.log("connection updated", props.dataSource);
+      const newStore = await update();
+      metadata.value = await newStore.getMetadata();
+      console.log(newStore);
+    });
+    watch(() => props.dataSource.config.cube, async () => {
+      console.log("connection updated", props.dataSource);
+      const newStore = await update();
+      metadata.value = await newStore.getMetadata();
+      console.log(newStore);
+    });
+    const updateData = async () => {
+      console.log("updateData called");
+      const req = await tempStore.value.getData("PivotTable");
+      data.value = req;
+      console.log("data", data.value);
+      if (props.dataSource.config.useVisualEditor) {
+        query.value = await tempStore.value.getMdxRequest();
+      }
+    };
+    onMounted(async () => {
+    });
+    watch(tempStore, async () => {
+      if (!tempStore.value) return;
+      const connectionId = tempStore.value.connection;
+      const connectionRepo = inject(identifier);
+      connection.value = await connectionRepo.getConnection(connectionId);
+      api.value = await connection.value.getApi();
+      catalog.value = await connection.value.catalogName;
+      metadata.value = await tempStore.value.getMetadata();
+      updateData();
+    }, { deep: true });
+    watch(() => queryConfig, async () => {
+      emit("updateConfig", {
+        ...props.dataSource.config,
+        requestParams: queryConfig.value
+      });
+      tempStore.value?.setRequestParams(queryConfig.value);
+      updateData();
+    }, { deep: true });
+    watch(() => query, async () => {
+      emit("updateConfig", {
+        ...props.dataSource.config,
+        mdx: query.value
+      });
+      console.log("query changed", query.value);
+      updateData();
+    }, { deep: true });
+    const onExpand = async (e) => {
+      drilldownState.value = tempStore.value.expand(e);
+      emit("updateConfig", {
+        ...props.dataSource.config,
+        drilldownState: drilldownState.value
+      });
+      updateData();
+    };
+    const onCollapse = async (e) => {
+      drilldownState.value = tempStore.value.collapse(e);
+      emit("updateConfig", {
+        ...props.dataSource.config,
+        drilldownState: drilldownState.value
+      });
+      updateData();
+    };
+    const getSettingsHash = (obj) => {
+      const str = JSON.stringify(obj);
+      if (!str) return 0;
+      let hash = 0;
+      for (let i = 0, len = str.length; i < len; i++) {
+        let chr = str.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        hash |= 0;
+      }
+      return hash;
+    };
+    return (_ctx, _cache) => {
+      const _component_va_tab = resolveComponent("va-tab");
+      const _component_VaCheckbox = resolveComponent("VaCheckbox");
+      const _component_va_tabs = resolveComponent("va-tabs");
+      return openBlock(), createElementBlock("div", _hoisted_1, [
+        createElementVNode("div", _hoisted_2, [
+          createVNode(_component_va_tabs, {
+            modelValue: currentTab.value,
+            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => currentTab.value = $event),
+            hidePagination: "",
+            color: "info",
+            grow: ""
+          }, {
+            tabs: withCtx(() => [
+              createElementVNode("div", _hoisted_3, [
+                createElementVNode("div", null, [
+                  (openBlock(), createElementBlock(Fragment, null, renderList(tabs, (tab) => {
+                    return createVNode(_component_va_tab, { key: tab }, {
+                      default: withCtx(() => [
+                        createTextVNode(toDisplayString(tab), 1)
+                      ]),
+                      _: 2
+                    }, 1024);
+                  }), 64))
+                ])
+              ])
+            ]),
+            default: withCtx(() => [
+              currentTab.value === 1 && connection.value ? (openBlock(), createBlock(unref(MonacoEditor), {
+                key: 0,
+                modelValue: query.value,
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => query.value = $event),
+                class: "monaco-container",
+                language: "mdx",
+                "supported-languages": ["mdx"]
+              }, {
+                actions: withCtx(() => [
+                  createVNode(_component_VaCheckbox, {
+                    modelValue: props.dataSource.config.useMdx,
+                    "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => props.dataSource.config.useMdx = $event),
+                    class: "mt-2",
+                    label: "Use mdx request"
+                  }, null, 8, ["modelValue"])
+                ]),
+                _: 1
+              }, 8, ["modelValue"])) : createCommentVNode("", true),
+              currentTab.value === 0 ? (openBlock(), createElementBlock("div", _hoisted_4, [
+                createVNode(unref(QueryDesigner), {
+                  modelValue: queryConfig.value,
+                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => queryConfig.value = $event),
+                  api: api.value,
+                  catalog: catalog.value
+                }, null, 8, ["modelValue", "api", "catalog"])
+              ])) : createCommentVNode("", true)
+            ]),
+            _: 1
+          }, 8, ["modelValue"]),
+          createElementVNode("div", _hoisted_5, [
+            _cache[5] || (_cache[5] = createElementVNode("h4", null, " Data Preview ", -1)),
+            createElementVNode("div", _hoisted_6, [
+              data.value ? (openBlock(), createBlock(unref(PivotTable), {
+                key: 0,
+                modelValue: data.value,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => data.value = $event),
+                onOnExpand: onExpand,
+                onOnCollapse: onCollapse,
+                rowsExpandedMembers: data.value.tableState.rowsExpandedMembers,
+                columnsExpandedMembers: data.value.tableState.columnsExpandedMembers
+              }, null, 8, ["modelValue", "rowsExpandedMembers", "columnsExpandedMembers"])) : createCommentVNode("", true)
+            ])
+          ])
+        ]),
+        createElementVNode("div", _hoisted_7, [
+          metadata.value ? (openBlock(), createBlock(unref(MetadataTree), {
+            metadata: metadata.value,
+            key: getSettingsHash(metadata.value)
+          }, null, 8, ["metadata"])) : (openBlock(), createElementBlock("div", _hoisted_8, " Select connection to load metadata "))
+        ])
+      ]);
+    };
+  }
+});
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+var lodash$1 = { exports: {} };
+/**
+ * @license
+ * Lodash <https://lodash.com/>
+ * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+var lodash = lodash$1.exports;
+var hasRequiredLodash;
+function requireLodash() {
+  if (hasRequiredLodash) return lodash$1.exports;
+  hasRequiredLodash = 1;
+  (function(module, exports$1) {
+    (function() {
+      var undefined$1;
+      var VERSION = "4.17.21";
+      var LARGE_ARRAY_SIZE = 200;
+      var CORE_ERROR_TEXT = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", FUNC_ERROR_TEXT = "Expected a function", INVALID_TEMPL_VAR_ERROR_TEXT = "Invalid `variable` option passed into `_.template`";
+      var HASH_UNDEFINED = "__lodash_hash_undefined__";
+      var MAX_MEMOIZE_SIZE = 500;
+      var PLACEHOLDER = "__lodash_placeholder__";
+      var CLONE_DEEP_FLAG = 1, CLONE_FLAT_FLAG = 2, CLONE_SYMBOLS_FLAG = 4;
+      var COMPARE_PARTIAL_FLAG = 1, COMPARE_UNORDERED_FLAG = 2;
+      var WRAP_BIND_FLAG = 1, WRAP_BIND_KEY_FLAG = 2, WRAP_CURRY_BOUND_FLAG = 4, WRAP_CURRY_FLAG = 8, WRAP_CURRY_RIGHT_FLAG = 16, WRAP_PARTIAL_FLAG = 32, WRAP_PARTIAL_RIGHT_FLAG = 64, WRAP_ARY_FLAG = 128, WRAP_REARG_FLAG = 256, WRAP_FLIP_FLAG = 512;
+      var DEFAULT_TRUNC_LENGTH = 30, DEFAULT_TRUNC_OMISSION = "...";
+      var HOT_COUNT = 800, HOT_SPAN = 16;
+      var LAZY_FILTER_FLAG = 1, LAZY_MAP_FLAG = 2, LAZY_WHILE_FLAG = 3;
+      var INFINITY = 1 / 0, MAX_SAFE_INTEGER = 9007199254740991, MAX_INTEGER = 17976931348623157e292, NAN = 0 / 0;
+      var MAX_ARRAY_LENGTH = 4294967295, MAX_ARRAY_INDEX = MAX_ARRAY_LENGTH - 1, HALF_MAX_ARRAY_LENGTH = MAX_ARRAY_LENGTH >>> 1;
+      var wrapFlags = [
+        ["ary", WRAP_ARY_FLAG],
+        ["bind", WRAP_BIND_FLAG],
+        ["bindKey", WRAP_BIND_KEY_FLAG],
+        ["curry", WRAP_CURRY_FLAG],
+        ["curryRight", WRAP_CURRY_RIGHT_FLAG],
+        ["flip", WRAP_FLIP_FLAG],
+        ["partial", WRAP_PARTIAL_FLAG],
+        ["partialRight", WRAP_PARTIAL_RIGHT_FLAG],
+        ["rearg", WRAP_REARG_FLAG]
+      ];
+      var argsTag = "[object Arguments]", arrayTag = "[object Array]", asyncTag = "[object AsyncFunction]", boolTag = "[object Boolean]", dateTag = "[object Date]", domExcTag = "[object DOMException]", errorTag = "[object Error]", funcTag = "[object Function]", genTag = "[object GeneratorFunction]", mapTag = "[object Map]", numberTag = "[object Number]", nullTag = "[object Null]", objectTag = "[object Object]", promiseTag = "[object Promise]", proxyTag = "[object Proxy]", regexpTag = "[object RegExp]", setTag = "[object Set]", stringTag = "[object String]", symbolTag = "[object Symbol]", undefinedTag = "[object Undefined]", weakMapTag = "[object WeakMap]", weakSetTag = "[object WeakSet]";
+      var arrayBufferTag = "[object ArrayBuffer]", dataViewTag = "[object DataView]", float32Tag = "[object Float32Array]", float64Tag = "[object Float64Array]", int8Tag = "[object Int8Array]", int16Tag = "[object Int16Array]", int32Tag = "[object Int32Array]", uint8Tag = "[object Uint8Array]", uint8ClampedTag = "[object Uint8ClampedArray]", uint16Tag = "[object Uint16Array]", uint32Tag = "[object Uint32Array]";
+      var reEmptyStringLeading = /\b__p \+= '';/g, reEmptyStringMiddle = /\b(__p \+=) '' \+/g, reEmptyStringTrailing = /(__e\(.*?\)|\b__t\)) \+\n'';/g;
+      var reEscapedHtml = /&(?:amp|lt|gt|quot|#39);/g, reUnescapedHtml = /[&<>"']/g, reHasEscapedHtml = RegExp(reEscapedHtml.source), reHasUnescapedHtml = RegExp(reUnescapedHtml.source);
+      var reEscape = /<%-([\s\S]+?)%>/g, reEvaluate = /<%([\s\S]+?)%>/g, reInterpolate = /<%=([\s\S]+?)%>/g;
+      var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, reIsPlainProp = /^\w*$/, rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+      var reRegExpChar = /[\\^$.*+?()[\]{}|]/g, reHasRegExpChar = RegExp(reRegExpChar.source);
+      var reTrimStart = /^\s+/;
+      var reWhitespace = /\s/;
+      var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/, reWrapDetails = /\{\n\/\* \[wrapped with (.+)\] \*/, reSplitDetails = /,? & /;
+      var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+      var reForbiddenIdentifierChars = /[()=,{}\[\]\/\s]/;
+      var reEscapeChar = /\\(\\)?/g;
+      var reEsTemplate = /\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
+      var reFlags = /\w*$/;
+      var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+      var reIsBinary = /^0b[01]+$/i;
+      var reIsHostCtor = /^\[object .+?Constructor\]$/;
+      var reIsOctal = /^0o[0-7]+$/i;
+      var reIsUint = /^(?:0|[1-9]\d*)$/;
+      var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+      var reNoMatch = /($^)/;
+      var reUnescapedString = /['\n\r\u2028\u2029\\]/g;
+      var rsAstralRange = "\\ud800-\\udfff", rsComboMarksRange = "\\u0300-\\u036f", reComboHalfMarksRange = "\\ufe20-\\ufe2f", rsComboSymbolsRange = "\\u20d0-\\u20ff", rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange, rsDingbatRange = "\\u2700-\\u27bf", rsLowerRange = "a-z\\xdf-\\xf6\\xf8-\\xff", rsMathOpRange = "\\xac\\xb1\\xd7\\xf7", rsNonCharRange = "\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf", rsPunctuationRange = "\\u2000-\\u206f", rsSpaceRange = " \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000", rsUpperRange = "A-Z\\xc0-\\xd6\\xd8-\\xde", rsVarRange = "\\ufe0e\\ufe0f", rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
+      var rsApos = "['’]", rsAstral = "[" + rsAstralRange + "]", rsBreak = "[" + rsBreakRange + "]", rsCombo = "[" + rsComboRange + "]", rsDigits = "\\d+", rsDingbat = "[" + rsDingbatRange + "]", rsLower = "[" + rsLowerRange + "]", rsMisc = "[^" + rsAstralRange + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + "]", rsFitz = "\\ud83c[\\udffb-\\udfff]", rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")", rsNonAstral = "[^" + rsAstralRange + "]", rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}", rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]", rsUpper = "[" + rsUpperRange + "]", rsZWJ = "\\u200d";
+      var rsMiscLower = "(?:" + rsLower + "|" + rsMisc + ")", rsMiscUpper = "(?:" + rsUpper + "|" + rsMisc + ")", rsOptContrLower = "(?:" + rsApos + "(?:d|ll|m|re|s|t|ve))?", rsOptContrUpper = "(?:" + rsApos + "(?:D|LL|M|RE|S|T|VE))?", reOptMod = rsModifier + "?", rsOptVar = "[" + rsVarRange + "]?", rsOptJoin = "(?:" + rsZWJ + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*", rsOrdLower = "\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])", rsOrdUpper = "\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])", rsSeq = rsOptVar + reOptMod + rsOptJoin, rsEmoji = "(?:" + [rsDingbat, rsRegional, rsSurrPair].join("|") + ")" + rsSeq, rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
+      var reApos = RegExp(rsApos, "g");
+      var reComboMark = RegExp(rsCombo, "g");
+      var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
+      var reUnicodeWord = RegExp([
+        rsUpper + "?" + rsLower + "+" + rsOptContrLower + "(?=" + [rsBreak, rsUpper, "$"].join("|") + ")",
+        rsMiscUpper + "+" + rsOptContrUpper + "(?=" + [rsBreak, rsUpper + rsMiscLower, "$"].join("|") + ")",
+        rsUpper + "?" + rsMiscLower + "+" + rsOptContrLower,
+        rsUpper + "+" + rsOptContrUpper,
+        rsOrdUpper,
+        rsOrdLower,
+        rsDigits,
+        rsEmoji
+      ].join("|"), "g");
+      var reHasUnicode = RegExp("[" + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + "]");
+      var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
+      var contextProps = [
+        "Array",
+        "Buffer",
+        "DataView",
+        "Date",
+        "Error",
+        "Float32Array",
+        "Float64Array",
+        "Function",
+        "Int8Array",
+        "Int16Array",
+        "Int32Array",
+        "Map",
+        "Math",
+        "Object",
+        "Promise",
+        "RegExp",
+        "Set",
+        "String",
+        "Symbol",
+        "TypeError",
+        "Uint8Array",
+        "Uint8ClampedArray",
+        "Uint16Array",
+        "Uint32Array",
+        "WeakMap",
+        "_",
+        "clearTimeout",
+        "isFinite",
+        "parseInt",
+        "setTimeout"
+      ];
+      var templateCounter = -1;
+      var typedArrayTags = {};
+      typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+      typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+      var cloneableTags = {};
+      cloneableTags[argsTag] = cloneableTags[arrayTag] = cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] = cloneableTags[boolTag] = cloneableTags[dateTag] = cloneableTags[float32Tag] = cloneableTags[float64Tag] = cloneableTags[int8Tag] = cloneableTags[int16Tag] = cloneableTags[int32Tag] = cloneableTags[mapTag] = cloneableTags[numberTag] = cloneableTags[objectTag] = cloneableTags[regexpTag] = cloneableTags[setTag] = cloneableTags[stringTag] = cloneableTags[symbolTag] = cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] = cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+      cloneableTags[errorTag] = cloneableTags[funcTag] = cloneableTags[weakMapTag] = false;
+      var deburredLetters = {
+        // Latin-1 Supplement block.
+        "À": "A",
+        "Á": "A",
+        "Â": "A",
+        "Ã": "A",
+        "Ä": "A",
+        "Å": "A",
+        "à": "a",
+        "á": "a",
+        "â": "a",
+        "ã": "a",
+        "ä": "a",
+        "å": "a",
+        "Ç": "C",
+        "ç": "c",
+        "Ð": "D",
+        "ð": "d",
+        "È": "E",
+        "É": "E",
+        "Ê": "E",
+        "Ë": "E",
+        "è": "e",
+        "é": "e",
+        "ê": "e",
+        "ë": "e",
+        "Ì": "I",
+        "Í": "I",
+        "Î": "I",
+        "Ï": "I",
+        "ì": "i",
+        "í": "i",
+        "î": "i",
+        "ï": "i",
+        "Ñ": "N",
+        "ñ": "n",
+        "Ò": "O",
+        "Ó": "O",
+        "Ô": "O",
+        "Õ": "O",
+        "Ö": "O",
+        "Ø": "O",
+        "ò": "o",
+        "ó": "o",
+        "ô": "o",
+        "õ": "o",
+        "ö": "o",
+        "ø": "o",
+        "Ù": "U",
+        "Ú": "U",
+        "Û": "U",
+        "Ü": "U",
+        "ù": "u",
+        "ú": "u",
+        "û": "u",
+        "ü": "u",
+        "Ý": "Y",
+        "ý": "y",
+        "ÿ": "y",
+        "Æ": "Ae",
+        "æ": "ae",
+        "Þ": "Th",
+        "þ": "th",
+        "ß": "ss",
+        // Latin Extended-A block.
+        "Ā": "A",
+        "Ă": "A",
+        "Ą": "A",
+        "ā": "a",
+        "ă": "a",
+        "ą": "a",
+        "Ć": "C",
+        "Ĉ": "C",
+        "Ċ": "C",
+        "Č": "C",
+        "ć": "c",
+        "ĉ": "c",
+        "ċ": "c",
+        "č": "c",
+        "Ď": "D",
+        "Đ": "D",
+        "ď": "d",
+        "đ": "d",
+        "Ē": "E",
+        "Ĕ": "E",
+        "Ė": "E",
+        "Ę": "E",
+        "Ě": "E",
+        "ē": "e",
+        "ĕ": "e",
+        "ė": "e",
+        "ę": "e",
+        "ě": "e",
+        "Ĝ": "G",
+        "Ğ": "G",
+        "Ġ": "G",
+        "Ģ": "G",
+        "ĝ": "g",
+        "ğ": "g",
+        "ġ": "g",
+        "ģ": "g",
+        "Ĥ": "H",
+        "Ħ": "H",
+        "ĥ": "h",
+        "ħ": "h",
+        "Ĩ": "I",
+        "Ī": "I",
+        "Ĭ": "I",
+        "Į": "I",
+        "İ": "I",
+        "ĩ": "i",
+        "ī": "i",
+        "ĭ": "i",
+        "į": "i",
+        "ı": "i",
+        "Ĵ": "J",
+        "ĵ": "j",
+        "Ķ": "K",
+        "ķ": "k",
+        "ĸ": "k",
+        "Ĺ": "L",
+        "Ļ": "L",
+        "Ľ": "L",
+        "Ŀ": "L",
+        "Ł": "L",
+        "ĺ": "l",
+        "ļ": "l",
+        "ľ": "l",
+        "ŀ": "l",
+        "ł": "l",
+        "Ń": "N",
+        "Ņ": "N",
+        "Ň": "N",
+        "Ŋ": "N",
+        "ń": "n",
+        "ņ": "n",
+        "ň": "n",
+        "ŋ": "n",
+        "Ō": "O",
+        "Ŏ": "O",
+        "Ő": "O",
+        "ō": "o",
+        "ŏ": "o",
+        "ő": "o",
+        "Ŕ": "R",
+        "Ŗ": "R",
+        "Ř": "R",
+        "ŕ": "r",
+        "ŗ": "r",
+        "ř": "r",
+        "Ś": "S",
+        "Ŝ": "S",
+        "Ş": "S",
+        "Š": "S",
+        "ś": "s",
+        "ŝ": "s",
+        "ş": "s",
+        "š": "s",
+        "Ţ": "T",
+        "Ť": "T",
+        "Ŧ": "T",
+        "ţ": "t",
+        "ť": "t",
+        "ŧ": "t",
+        "Ũ": "U",
+        "Ū": "U",
+        "Ŭ": "U",
+        "Ů": "U",
+        "Ű": "U",
+        "Ų": "U",
+        "ũ": "u",
+        "ū": "u",
+        "ŭ": "u",
+        "ů": "u",
+        "ű": "u",
+        "ų": "u",
+        "Ŵ": "W",
+        "ŵ": "w",
+        "Ŷ": "Y",
+        "ŷ": "y",
+        "Ÿ": "Y",
+        "Ź": "Z",
+        "Ż": "Z",
+        "Ž": "Z",
+        "ź": "z",
+        "ż": "z",
+        "ž": "z",
+        "Ĳ": "IJ",
+        "ĳ": "ij",
+        "Œ": "Oe",
+        "œ": "oe",
+        "ŉ": "'n",
+        "ſ": "s"
+      };
+      var htmlEscapes = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      };
+      var htmlUnescapes = {
+        "&amp;": "&",
+        "&lt;": "<",
+        "&gt;": ">",
+        "&quot;": '"',
+        "&#39;": "'"
+      };
+      var stringEscapes = {
+        "\\": "\\",
+        "'": "'",
+        "\n": "n",
+        "\r": "r",
+        "\u2028": "u2028",
+        "\u2029": "u2029"
+      };
+      var freeParseFloat = parseFloat, freeParseInt = parseInt;
+      var freeGlobal = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+      var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+      var root = freeGlobal || freeSelf || Function("return this")();
+      var freeExports = exports$1 && !exports$1.nodeType && exports$1;
+      var freeModule = freeExports && true && module && !module.nodeType && module;
+      var moduleExports = freeModule && freeModule.exports === freeExports;
+      var freeProcess = moduleExports && freeGlobal.process;
+      var nodeUtil = (function() {
+        try {
+          var types = freeModule && freeModule.require && freeModule.require("util").types;
+          if (types) {
+            return types;
+          }
+          return freeProcess && freeProcess.binding && freeProcess.binding("util");
+        } catch (e) {
+        }
+      })();
+      var nodeIsArrayBuffer = nodeUtil && nodeUtil.isArrayBuffer, nodeIsDate = nodeUtil && nodeUtil.isDate, nodeIsMap = nodeUtil && nodeUtil.isMap, nodeIsRegExp = nodeUtil && nodeUtil.isRegExp, nodeIsSet = nodeUtil && nodeUtil.isSet, nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+      function apply(func, thisArg, args) {
+        switch (args.length) {
+          case 0:
+            return func.call(thisArg);
+          case 1:
+            return func.call(thisArg, args[0]);
+          case 2:
+            return func.call(thisArg, args[0], args[1]);
+          case 3:
+            return func.call(thisArg, args[0], args[1], args[2]);
+        }
+        return func.apply(thisArg, args);
+      }
+      function arrayAggregator(array, setter, iteratee, accumulator) {
+        var index = -1, length = array == null ? 0 : array.length;
+        while (++index < length) {
+          var value = array[index];
+          setter(accumulator, value, iteratee(value), array);
+        }
+        return accumulator;
+      }
+      function arrayEach(array, iteratee) {
+        var index = -1, length = array == null ? 0 : array.length;
+        while (++index < length) {
+          if (iteratee(array[index], index, array) === false) {
+            break;
+          }
+        }
+        return array;
+      }
+      function arrayEachRight(array, iteratee) {
+        var length = array == null ? 0 : array.length;
+        while (length--) {
+          if (iteratee(array[length], length, array) === false) {
+            break;
+          }
+        }
+        return array;
+      }
+      function arrayEvery(array, predicate) {
+        var index = -1, length = array == null ? 0 : array.length;
+        while (++index < length) {
+          if (!predicate(array[index], index, array)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      function arrayFilter(array, predicate) {
+        var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result = [];
+        while (++index < length) {
+          var value = array[index];
+          if (predicate(value, index, array)) {
+            result[resIndex++] = value;
+          }
+        }
+        return result;
+      }
+      function arrayIncludes(array, value) {
+        var length = array == null ? 0 : array.length;
+        return !!length && baseIndexOf(array, value, 0) > -1;
+      }
+      function arrayIncludesWith(array, value, comparator) {
+        var index = -1, length = array == null ? 0 : array.length;
+        while (++index < length) {
+          if (comparator(value, array[index])) {
+            return true;
+          }
+        }
+        return false;
+      }
+      function arrayMap(array, iteratee) {
+        var index = -1, length = array == null ? 0 : array.length, result = Array(length);
+        while (++index < length) {
+          result[index] = iteratee(array[index], index, array);
+        }
+        return result;
+      }
+      function arrayPush(array, values) {
+        var index = -1, length = values.length, offset = array.length;
+        while (++index < length) {
+          array[offset + index] = values[index];
+        }
+        return array;
+      }
+      function arrayReduce(array, iteratee, accumulator, initAccum) {
+        var index = -1, length = array == null ? 0 : array.length;
+        if (initAccum && length) {
+          accumulator = array[++index];
+        }
+        while (++index < length) {
+          accumulator = iteratee(accumulator, array[index], index, array);
+        }
+        return accumulator;
+      }
+      function arrayReduceRight(array, iteratee, accumulator, initAccum) {
+        var length = array == null ? 0 : array.length;
+        if (initAccum && length) {
+          accumulator = array[--length];
+        }
+        while (length--) {
+          accumulator = iteratee(accumulator, array[length], length, array);
+        }
+        return accumulator;
+      }
+      function arraySome(array, predicate) {
+        var index = -1, length = array == null ? 0 : array.length;
+        while (++index < length) {
+          if (predicate(array[index], index, array)) {
+            return true;
+          }
+        }
+        return false;
+      }
+      var asciiSize = baseProperty("length");
+      function asciiToArray(string) {
+        return string.split("");
+      }
+      function asciiWords(string) {
+        return string.match(reAsciiWord) || [];
+      }
+      function baseFindKey(collection, predicate, eachFunc) {
+        var result;
+        eachFunc(collection, function(value, key, collection2) {
+          if (predicate(value, key, collection2)) {
+            result = key;
+            return false;
+          }
+        });
+        return result;
+      }
+      function baseFindIndex(array, predicate, fromIndex, fromRight) {
+        var length = array.length, index = fromIndex + (fromRight ? 1 : -1);
+        while (fromRight ? index-- : ++index < length) {
+          if (predicate(array[index], index, array)) {
+            return index;
+          }
+        }
+        return -1;
+      }
+      function baseIndexOf(array, value, fromIndex) {
+        return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
+      }
+      function baseIndexOfWith(array, value, fromIndex, comparator) {
+        var index = fromIndex - 1, length = array.length;
+        while (++index < length) {
+          if (comparator(array[index], value)) {
+            return index;
+          }
+        }
+        return -1;
+      }
+      function baseIsNaN(value) {
+        return value !== value;
+      }
+      function baseMean(array, iteratee) {
+        var length = array == null ? 0 : array.length;
+        return length ? baseSum(array, iteratee) / length : NAN;
+      }
+      function baseProperty(key) {
+        return function(object) {
+          return object == null ? undefined$1 : object[key];
+        };
+      }
+      function basePropertyOf(object) {
+        return function(key) {
+          return object == null ? undefined$1 : object[key];
+        };
+      }
+      function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
+        eachFunc(collection, function(value, index, collection2) {
+          accumulator = initAccum ? (initAccum = false, value) : iteratee(accumulator, value, index, collection2);
+        });
+        return accumulator;
+      }
+      function baseSortBy(array, comparer) {
+        var length = array.length;
+        array.sort(comparer);
+        while (length--) {
+          array[length] = array[length].value;
+        }
+        return array;
+      }
+      function baseSum(array, iteratee) {
+        var result, index = -1, length = array.length;
+        while (++index < length) {
+          var current = iteratee(array[index]);
+          if (current !== undefined$1) {
+            result = result === undefined$1 ? current : result + current;
+          }
+        }
+        return result;
+      }
+      function baseTimes(n, iteratee) {
+        var index = -1, result = Array(n);
+        while (++index < n) {
+          result[index] = iteratee(index);
+        }
+        return result;
+      }
+      function baseToPairs(object, props) {
+        return arrayMap(props, function(key) {
+          return [key, object[key]];
+        });
+      }
+      function baseTrim(string) {
+        return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
+      }
+      function baseUnary(func) {
+        return function(value) {
+          return func(value);
+        };
+      }
+      function baseValues(object, props) {
+        return arrayMap(props, function(key) {
+          return object[key];
+        });
+      }
+      function cacheHas(cache, key) {
+        return cache.has(key);
+      }
+      function charsStartIndex(strSymbols, chrSymbols) {
+        var index = -1, length = strSymbols.length;
+        while (++index < length && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+        }
+        return index;
+      }
+      function charsEndIndex(strSymbols, chrSymbols) {
+        var index = strSymbols.length;
+        while (index-- && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+        }
+        return index;
+      }
+      function countHolders(array, placeholder) {
+        var length = array.length, result = 0;
+        while (length--) {
+          if (array[length] === placeholder) {
+            ++result;
+          }
+        }
+        return result;
+      }
+      var deburrLetter = basePropertyOf(deburredLetters);
+      var escapeHtmlChar = basePropertyOf(htmlEscapes);
+      function escapeStringChar(chr) {
+        return "\\" + stringEscapes[chr];
+      }
+      function getValue(object, key) {
+        return object == null ? undefined$1 : object[key];
+      }
+      function hasUnicode(string) {
+        return reHasUnicode.test(string);
+      }
+      function hasUnicodeWord(string) {
+        return reHasUnicodeWord.test(string);
+      }
+      function iteratorToArray(iterator) {
+        var data, result = [];
+        while (!(data = iterator.next()).done) {
+          result.push(data.value);
+        }
+        return result;
+      }
+      function mapToArray(map) {
+        var index = -1, result = Array(map.size);
+        map.forEach(function(value, key) {
+          result[++index] = [key, value];
+        });
+        return result;
+      }
+      function overArg(func, transform) {
+        return function(arg) {
+          return func(transform(arg));
+        };
+      }
+      function replaceHolders(array, placeholder) {
+        var index = -1, length = array.length, resIndex = 0, result = [];
+        while (++index < length) {
+          var value = array[index];
+          if (value === placeholder || value === PLACEHOLDER) {
+            array[index] = PLACEHOLDER;
+            result[resIndex++] = index;
+          }
+        }
+        return result;
+      }
+      function setToArray(set) {
+        var index = -1, result = Array(set.size);
+        set.forEach(function(value) {
+          result[++index] = value;
+        });
+        return result;
+      }
+      function setToPairs(set) {
+        var index = -1, result = Array(set.size);
+        set.forEach(function(value) {
+          result[++index] = [value, value];
+        });
+        return result;
+      }
+      function strictIndexOf(array, value, fromIndex) {
+        var index = fromIndex - 1, length = array.length;
+        while (++index < length) {
+          if (array[index] === value) {
+            return index;
+          }
+        }
+        return -1;
+      }
+      function strictLastIndexOf(array, value, fromIndex) {
+        var index = fromIndex + 1;
+        while (index--) {
+          if (array[index] === value) {
+            return index;
+          }
+        }
+        return index;
+      }
+      function stringSize(string) {
+        return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
+      }
+      function stringToArray(string) {
+        return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
+      }
+      function trimmedEndIndex(string) {
+        var index = string.length;
+        while (index-- && reWhitespace.test(string.charAt(index))) {
+        }
+        return index;
+      }
+      var unescapeHtmlChar = basePropertyOf(htmlUnescapes);
+      function unicodeSize(string) {
+        var result = reUnicode.lastIndex = 0;
+        while (reUnicode.test(string)) {
+          ++result;
+        }
+        return result;
+      }
+      function unicodeToArray(string) {
+        return string.match(reUnicode) || [];
+      }
+      function unicodeWords(string) {
+        return string.match(reUnicodeWord) || [];
+      }
+      var runInContext = (function runInContext2(context) {
+        context = context == null ? root : _.defaults(root.Object(), context, _.pick(root, contextProps));
+        var Array2 = context.Array, Date = context.Date, Error = context.Error, Function2 = context.Function, Math = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError = context.TypeError;
+        var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
+        var coreJsData = context["__core-js_shared__"];
+        var funcToString = funcProto.toString;
+        var hasOwnProperty = objectProto.hasOwnProperty;
+        var idCounter = 0;
+        var maskSrcKey = (function() {
+          var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+          return uid ? "Symbol(src)_1." + uid : "";
+        })();
+        var nativeObjectToString = objectProto.toString;
+        var objectCtorString = funcToString.call(Object2);
+        var oldDash = root._;
+        var reIsNative = RegExp2(
+          "^" + funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+        );
+        var Buffer = moduleExports ? context.Buffer : undefined$1, Symbol2 = context.Symbol, Uint8Array = context.Uint8Array, allocUnsafe = Buffer ? Buffer.allocUnsafe : undefined$1, getPrototype = overArg(Object2.getPrototypeOf, Object2), objectCreate = Object2.create, propertyIsEnumerable = objectProto.propertyIsEnumerable, splice = arrayProto.splice, spreadableSymbol = Symbol2 ? Symbol2.isConcatSpreadable : undefined$1, symIterator = Symbol2 ? Symbol2.iterator : undefined$1, symToStringTag = Symbol2 ? Symbol2.toStringTag : undefined$1;
+        var defineProperty = (function() {
+          try {
+            var func = getNative(Object2, "defineProperty");
+            func({}, "", {});
+            return func;
+          } catch (e) {
+          }
+        })();
+        var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date && Date.now !== root.Date.now && Date.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
+        var nativeCeil = Math.ceil, nativeFloor = Math.floor, nativeGetSymbols = Object2.getOwnPropertySymbols, nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined$1, nativeIsFinite = context.isFinite, nativeJoin = arrayProto.join, nativeKeys = overArg(Object2.keys, Object2), nativeMax = Math.max, nativeMin = Math.min, nativeNow = Date.now, nativeParseInt = context.parseInt, nativeRandom = Math.random, nativeReverse = arrayProto.reverse;
+        var DataView = getNative(context, "DataView"), Map = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
+        var metaMap = WeakMap && new WeakMap();
+        var realNames = {};
+        var dataViewCtorString = toSource(DataView), mapCtorString = toSource(Map), promiseCtorString = toSource(Promise2), setCtorString = toSource(Set), weakMapCtorString = toSource(WeakMap);
+        var symbolProto = Symbol2 ? Symbol2.prototype : undefined$1, symbolValueOf = symbolProto ? symbolProto.valueOf : undefined$1, symbolToString = symbolProto ? symbolProto.toString : undefined$1;
+        function lodash2(value) {
+          if (isObjectLike(value) && !isArray(value) && !(value instanceof LazyWrapper)) {
+            if (value instanceof LodashWrapper) {
+              return value;
+            }
+            if (hasOwnProperty.call(value, "__wrapped__")) {
+              return wrapperClone(value);
+            }
+          }
+          return new LodashWrapper(value);
+        }
+        var baseCreate = /* @__PURE__ */ (function() {
+          function object() {
+          }
+          return function(proto) {
+            if (!isObject(proto)) {
+              return {};
+            }
+            if (objectCreate) {
+              return objectCreate(proto);
+            }
+            object.prototype = proto;
+            var result2 = new object();
+            object.prototype = undefined$1;
+            return result2;
+          };
+        })();
+        function baseLodash() {
+        }
+        function LodashWrapper(value, chainAll) {
+          this.__wrapped__ = value;
+          this.__actions__ = [];
+          this.__chain__ = !!chainAll;
+          this.__index__ = 0;
+          this.__values__ = undefined$1;
+        }
+        lodash2.templateSettings = {
+          /**
+           * Used to detect `data` property values to be HTML-escaped.
+           *
+           * @memberOf _.templateSettings
+           * @type {RegExp}
+           */
+          "escape": reEscape,
+          /**
+           * Used to detect code to be evaluated.
+           *
+           * @memberOf _.templateSettings
+           * @type {RegExp}
+           */
+          "evaluate": reEvaluate,
+          /**
+           * Used to detect `data` property values to inject.
+           *
+           * @memberOf _.templateSettings
+           * @type {RegExp}
+           */
+          "interpolate": reInterpolate,
+          /**
+           * Used to reference the data object in the template text.
+           *
+           * @memberOf _.templateSettings
+           * @type {string}
+           */
+          "variable": "",
+          /**
+           * Used to import variables into the compiled template.
+           *
+           * @memberOf _.templateSettings
+           * @type {Object}
+           */
+          "imports": {
+            /**
+             * A reference to the `lodash` function.
+             *
+             * @memberOf _.templateSettings.imports
+             * @type {Function}
+             */
+            "_": lodash2
+          }
+        };
+        lodash2.prototype = baseLodash.prototype;
+        lodash2.prototype.constructor = lodash2;
+        LodashWrapper.prototype = baseCreate(baseLodash.prototype);
+        LodashWrapper.prototype.constructor = LodashWrapper;
+        function LazyWrapper(value) {
+          this.__wrapped__ = value;
+          this.__actions__ = [];
+          this.__dir__ = 1;
+          this.__filtered__ = false;
+          this.__iteratees__ = [];
+          this.__takeCount__ = MAX_ARRAY_LENGTH;
+          this.__views__ = [];
+        }
+        function lazyClone() {
+          var result2 = new LazyWrapper(this.__wrapped__);
+          result2.__actions__ = copyArray(this.__actions__);
+          result2.__dir__ = this.__dir__;
+          result2.__filtered__ = this.__filtered__;
+          result2.__iteratees__ = copyArray(this.__iteratees__);
+          result2.__takeCount__ = this.__takeCount__;
+          result2.__views__ = copyArray(this.__views__);
+          return result2;
+        }
+        function lazyReverse() {
+          if (this.__filtered__) {
+            var result2 = new LazyWrapper(this);
+            result2.__dir__ = -1;
+            result2.__filtered__ = true;
+          } else {
+            result2 = this.clone();
+            result2.__dir__ *= -1;
+          }
+          return result2;
+        }
+        function lazyValue() {
+          var array = this.__wrapped__.value(), dir = this.__dir__, isArr = isArray(array), isRight = dir < 0, arrLength = isArr ? array.length : 0, view = getView(0, arrLength, this.__views__), start = view.start, end = view.end, length = end - start, index = isRight ? end : start - 1, iteratees = this.__iteratees__, iterLength = iteratees.length, resIndex = 0, takeCount = nativeMin(length, this.__takeCount__);
+          if (!isArr || !isRight && arrLength == length && takeCount == length) {
+            return baseWrapperValue(array, this.__actions__);
+          }
+          var result2 = [];
+          outer:
+            while (length-- && resIndex < takeCount) {
+              index += dir;
+              var iterIndex = -1, value = array[index];
+              while (++iterIndex < iterLength) {
+                var data = iteratees[iterIndex], iteratee2 = data.iteratee, type = data.type, computed2 = iteratee2(value);
+                if (type == LAZY_MAP_FLAG) {
+                  value = computed2;
+                } else if (!computed2) {
+                  if (type == LAZY_FILTER_FLAG) {
+                    continue outer;
+                  } else {
+                    break outer;
+                  }
+                }
+              }
+              result2[resIndex++] = value;
+            }
+          return result2;
+        }
+        LazyWrapper.prototype = baseCreate(baseLodash.prototype);
+        LazyWrapper.prototype.constructor = LazyWrapper;
+        function Hash(entries) {
+          var index = -1, length = entries == null ? 0 : entries.length;
+          this.clear();
+          while (++index < length) {
+            var entry = entries[index];
+            this.set(entry[0], entry[1]);
+          }
+        }
+        function hashClear() {
+          this.__data__ = nativeCreate ? nativeCreate(null) : {};
+          this.size = 0;
+        }
+        function hashDelete(key) {
+          var result2 = this.has(key) && delete this.__data__[key];
+          this.size -= result2 ? 1 : 0;
+          return result2;
+        }
+        function hashGet(key) {
+          var data = this.__data__;
+          if (nativeCreate) {
+            var result2 = data[key];
+            return result2 === HASH_UNDEFINED ? undefined$1 : result2;
+          }
+          return hasOwnProperty.call(data, key) ? data[key] : undefined$1;
+        }
+        function hashHas(key) {
+          var data = this.__data__;
+          return nativeCreate ? data[key] !== undefined$1 : hasOwnProperty.call(data, key);
+        }
+        function hashSet(key, value) {
+          var data = this.__data__;
+          this.size += this.has(key) ? 0 : 1;
+          data[key] = nativeCreate && value === undefined$1 ? HASH_UNDEFINED : value;
+          return this;
+        }
+        Hash.prototype.clear = hashClear;
+        Hash.prototype["delete"] = hashDelete;
+        Hash.prototype.get = hashGet;
+        Hash.prototype.has = hashHas;
+        Hash.prototype.set = hashSet;
+        function ListCache(entries) {
+          var index = -1, length = entries == null ? 0 : entries.length;
+          this.clear();
+          while (++index < length) {
+            var entry = entries[index];
+            this.set(entry[0], entry[1]);
+          }
+        }
+        function listCacheClear() {
+          this.__data__ = [];
+          this.size = 0;
+        }
+        function listCacheDelete(key) {
+          var data = this.__data__, index = assocIndexOf(data, key);
+          if (index < 0) {
+            return false;
+          }
+          var lastIndex = data.length - 1;
+          if (index == lastIndex) {
+            data.pop();
+          } else {
+            splice.call(data, index, 1);
+          }
+          --this.size;
+          return true;
+        }
+        function listCacheGet(key) {
+          var data = this.__data__, index = assocIndexOf(data, key);
+          return index < 0 ? undefined$1 : data[index][1];
+        }
+        function listCacheHas(key) {
+          return assocIndexOf(this.__data__, key) > -1;
+        }
+        function listCacheSet(key, value) {
+          var data = this.__data__, index = assocIndexOf(data, key);
+          if (index < 0) {
+            ++this.size;
+            data.push([key, value]);
+          } else {
+            data[index][1] = value;
+          }
+          return this;
+        }
+        ListCache.prototype.clear = listCacheClear;
+        ListCache.prototype["delete"] = listCacheDelete;
+        ListCache.prototype.get = listCacheGet;
+        ListCache.prototype.has = listCacheHas;
+        ListCache.prototype.set = listCacheSet;
+        function MapCache(entries) {
+          var index = -1, length = entries == null ? 0 : entries.length;
+          this.clear();
+          while (++index < length) {
+            var entry = entries[index];
+            this.set(entry[0], entry[1]);
+          }
+        }
+        function mapCacheClear() {
+          this.size = 0;
+          this.__data__ = {
+            "hash": new Hash(),
+            "map": new (Map || ListCache)(),
+            "string": new Hash()
+          };
+        }
+        function mapCacheDelete(key) {
+          var result2 = getMapData(this, key)["delete"](key);
+          this.size -= result2 ? 1 : 0;
+          return result2;
+        }
+        function mapCacheGet(key) {
+          return getMapData(this, key).get(key);
+        }
+        function mapCacheHas(key) {
+          return getMapData(this, key).has(key);
+        }
+        function mapCacheSet(key, value) {
+          var data = getMapData(this, key), size2 = data.size;
+          data.set(key, value);
+          this.size += data.size == size2 ? 0 : 1;
+          return this;
+        }
+        MapCache.prototype.clear = mapCacheClear;
+        MapCache.prototype["delete"] = mapCacheDelete;
+        MapCache.prototype.get = mapCacheGet;
+        MapCache.prototype.has = mapCacheHas;
+        MapCache.prototype.set = mapCacheSet;
+        function SetCache(values2) {
+          var index = -1, length = values2 == null ? 0 : values2.length;
+          this.__data__ = new MapCache();
+          while (++index < length) {
+            this.add(values2[index]);
+          }
+        }
+        function setCacheAdd(value) {
+          this.__data__.set(value, HASH_UNDEFINED);
+          return this;
+        }
+        function setCacheHas(value) {
+          return this.__data__.has(value);
+        }
+        SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
+        SetCache.prototype.has = setCacheHas;
+        function Stack(entries) {
+          var data = this.__data__ = new ListCache(entries);
+          this.size = data.size;
+        }
+        function stackClear() {
+          this.__data__ = new ListCache();
+          this.size = 0;
+        }
+        function stackDelete(key) {
+          var data = this.__data__, result2 = data["delete"](key);
+          this.size = data.size;
+          return result2;
+        }
+        function stackGet(key) {
+          return this.__data__.get(key);
+        }
+        function stackHas(key) {
+          return this.__data__.has(key);
+        }
+        function stackSet(key, value) {
+          var data = this.__data__;
+          if (data instanceof ListCache) {
+            var pairs = data.__data__;
+            if (!Map || pairs.length < LARGE_ARRAY_SIZE - 1) {
+              pairs.push([key, value]);
+              this.size = ++data.size;
+              return this;
+            }
+            data = this.__data__ = new MapCache(pairs);
+          }
+          data.set(key, value);
+          this.size = data.size;
+          return this;
+        }
+        Stack.prototype.clear = stackClear;
+        Stack.prototype["delete"] = stackDelete;
+        Stack.prototype.get = stackGet;
+        Stack.prototype.has = stackHas;
+        Stack.prototype.set = stackSet;
+        function arrayLikeKeys(value, inherited) {
+          var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result2 = skipIndexes ? baseTimes(value.length, String) : [], length = result2.length;
+          for (var key in value) {
+            if ((inherited || hasOwnProperty.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
+            (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
+            isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
+            isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
+            isIndex(key, length)))) {
+              result2.push(key);
+            }
+          }
+          return result2;
+        }
+        function arraySample(array) {
+          var length = array.length;
+          return length ? array[baseRandom(0, length - 1)] : undefined$1;
+        }
+        function arraySampleSize(array, n) {
+          return shuffleSelf(copyArray(array), baseClamp(n, 0, array.length));
+        }
+        function arrayShuffle(array) {
+          return shuffleSelf(copyArray(array));
+        }
+        function assignMergeValue(object, key, value) {
+          if (value !== undefined$1 && !eq(object[key], value) || value === undefined$1 && !(key in object)) {
+            baseAssignValue(object, key, value);
+          }
+        }
+        function assignValue(object, key, value) {
+          var objValue = object[key];
+          if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) || value === undefined$1 && !(key in object)) {
+            baseAssignValue(object, key, value);
+          }
+        }
+        function assocIndexOf(array, key) {
+          var length = array.length;
+          while (length--) {
+            if (eq(array[length][0], key)) {
+              return length;
+            }
+          }
+          return -1;
+        }
+        function baseAggregator(collection, setter, iteratee2, accumulator) {
+          baseEach(collection, function(value, key, collection2) {
+            setter(accumulator, value, iteratee2(value), collection2);
+          });
+          return accumulator;
+        }
+        function baseAssign(object, source) {
+          return object && copyObject(source, keys(source), object);
+        }
+        function baseAssignIn(object, source) {
+          return object && copyObject(source, keysIn(source), object);
+        }
+        function baseAssignValue(object, key, value) {
+          if (key == "__proto__" && defineProperty) {
+            defineProperty(object, key, {
+              "configurable": true,
+              "enumerable": true,
+              "value": value,
+              "writable": true
+            });
+          } else {
+            object[key] = value;
+          }
+        }
+        function baseAt(object, paths) {
+          var index = -1, length = paths.length, result2 = Array2(length), skip = object == null;
+          while (++index < length) {
+            result2[index] = skip ? undefined$1 : get(object, paths[index]);
+          }
+          return result2;
+        }
+        function baseClamp(number, lower, upper) {
+          if (number === number) {
+            if (upper !== undefined$1) {
+              number = number <= upper ? number : upper;
+            }
+            if (lower !== undefined$1) {
+              number = number >= lower ? number : lower;
+            }
+          }
+          return number;
+        }
+        function baseClone(value, bitmask, customizer, key, object, stack) {
+          var result2, isDeep = bitmask & CLONE_DEEP_FLAG, isFlat = bitmask & CLONE_FLAT_FLAG, isFull = bitmask & CLONE_SYMBOLS_FLAG;
+          if (customizer) {
+            result2 = object ? customizer(value, key, object, stack) : customizer(value);
+          }
+          if (result2 !== undefined$1) {
+            return result2;
+          }
+          if (!isObject(value)) {
+            return value;
+          }
+          var isArr = isArray(value);
+          if (isArr) {
+            result2 = initCloneArray(value);
+            if (!isDeep) {
+              return copyArray(value, result2);
+            }
+          } else {
+            var tag = getTag(value), isFunc = tag == funcTag || tag == genTag;
+            if (isBuffer(value)) {
+              return cloneBuffer(value, isDeep);
+            }
+            if (tag == objectTag || tag == argsTag || isFunc && !object) {
+              result2 = isFlat || isFunc ? {} : initCloneObject(value);
+              if (!isDeep) {
+                return isFlat ? copySymbolsIn(value, baseAssignIn(result2, value)) : copySymbols(value, baseAssign(result2, value));
+              }
+            } else {
+              if (!cloneableTags[tag]) {
+                return object ? value : {};
+              }
+              result2 = initCloneByTag(value, tag, isDeep);
+            }
+          }
+          stack || (stack = new Stack());
+          var stacked = stack.get(value);
+          if (stacked) {
+            return stacked;
+          }
+          stack.set(value, result2);
+          if (isSet(value)) {
+            value.forEach(function(subValue) {
+              result2.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
+            });
+          } else if (isMap(value)) {
+            value.forEach(function(subValue, key2) {
+              result2.set(key2, baseClone(subValue, bitmask, customizer, key2, value, stack));
+            });
+          }
+          var keysFunc = isFull ? isFlat ? getAllKeysIn : getAllKeys : isFlat ? keysIn : keys;
+          var props = isArr ? undefined$1 : keysFunc(value);
+          arrayEach(props || value, function(subValue, key2) {
+            if (props) {
+              key2 = subValue;
+              subValue = value[key2];
+            }
+            assignValue(result2, key2, baseClone(subValue, bitmask, customizer, key2, value, stack));
+          });
+          return result2;
+        }
+        function baseConforms(source) {
+          var props = keys(source);
+          return function(object) {
+            return baseConformsTo(object, source, props);
+          };
+        }
+        function baseConformsTo(object, source, props) {
+          var length = props.length;
+          if (object == null) {
+            return !length;
+          }
+          object = Object2(object);
+          while (length--) {
+            var key = props[length], predicate = source[key], value = object[key];
+            if (value === undefined$1 && !(key in object) || !predicate(value)) {
+              return false;
+            }
+          }
+          return true;
+        }
+        function baseDelay(func, wait, args) {
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          return setTimeout(function() {
+            func.apply(undefined$1, args);
+          }, wait);
+        }
+        function baseDifference(array, values2, iteratee2, comparator) {
+          var index = -1, includes2 = arrayIncludes, isCommon = true, length = array.length, result2 = [], valuesLength = values2.length;
+          if (!length) {
+            return result2;
+          }
+          if (iteratee2) {
+            values2 = arrayMap(values2, baseUnary(iteratee2));
+          }
+          if (comparator) {
+            includes2 = arrayIncludesWith;
+            isCommon = false;
+          } else if (values2.length >= LARGE_ARRAY_SIZE) {
+            includes2 = cacheHas;
+            isCommon = false;
+            values2 = new SetCache(values2);
+          }
+          outer:
+            while (++index < length) {
+              var value = array[index], computed2 = iteratee2 == null ? value : iteratee2(value);
+              value = comparator || value !== 0 ? value : 0;
+              if (isCommon && computed2 === computed2) {
+                var valuesIndex = valuesLength;
+                while (valuesIndex--) {
+                  if (values2[valuesIndex] === computed2) {
+                    continue outer;
+                  }
+                }
+                result2.push(value);
+              } else if (!includes2(values2, computed2, comparator)) {
+                result2.push(value);
+              }
+            }
+          return result2;
+        }
+        var baseEach = createBaseEach(baseForOwn);
+        var baseEachRight = createBaseEach(baseForOwnRight, true);
+        function baseEvery(collection, predicate) {
+          var result2 = true;
+          baseEach(collection, function(value, index, collection2) {
+            result2 = !!predicate(value, index, collection2);
+            return result2;
+          });
+          return result2;
+        }
+        function baseExtremum(array, iteratee2, comparator) {
+          var index = -1, length = array.length;
+          while (++index < length) {
+            var value = array[index], current = iteratee2(value);
+            if (current != null && (computed2 === undefined$1 ? current === current && !isSymbol(current) : comparator(current, computed2))) {
+              var computed2 = current, result2 = value;
+            }
+          }
+          return result2;
+        }
+        function baseFill(array, value, start, end) {
+          var length = array.length;
+          start = toInteger(start);
+          if (start < 0) {
+            start = -start > length ? 0 : length + start;
+          }
+          end = end === undefined$1 || end > length ? length : toInteger(end);
+          if (end < 0) {
+            end += length;
+          }
+          end = start > end ? 0 : toLength(end);
+          while (start < end) {
+            array[start++] = value;
+          }
+          return array;
+        }
+        function baseFilter(collection, predicate) {
+          var result2 = [];
+          baseEach(collection, function(value, index, collection2) {
+            if (predicate(value, index, collection2)) {
+              result2.push(value);
+            }
+          });
+          return result2;
+        }
+        function baseFlatten(array, depth, predicate, isStrict, result2) {
+          var index = -1, length = array.length;
+          predicate || (predicate = isFlattenable);
+          result2 || (result2 = []);
+          while (++index < length) {
+            var value = array[index];
+            if (depth > 0 && predicate(value)) {
+              if (depth > 1) {
+                baseFlatten(value, depth - 1, predicate, isStrict, result2);
+              } else {
+                arrayPush(result2, value);
+              }
+            } else if (!isStrict) {
+              result2[result2.length] = value;
+            }
+          }
+          return result2;
+        }
+        var baseFor = createBaseFor();
+        var baseForRight = createBaseFor(true);
+        function baseForOwn(object, iteratee2) {
+          return object && baseFor(object, iteratee2, keys);
+        }
+        function baseForOwnRight(object, iteratee2) {
+          return object && baseForRight(object, iteratee2, keys);
+        }
+        function baseFunctions(object, props) {
+          return arrayFilter(props, function(key) {
+            return isFunction(object[key]);
+          });
+        }
+        function baseGet(object, path) {
+          path = castPath(path, object);
+          var index = 0, length = path.length;
+          while (object != null && index < length) {
+            object = object[toKey(path[index++])];
+          }
+          return index && index == length ? object : undefined$1;
+        }
+        function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+          var result2 = keysFunc(object);
+          return isArray(object) ? result2 : arrayPush(result2, symbolsFunc(object));
+        }
+        function baseGetTag(value) {
+          if (value == null) {
+            return value === undefined$1 ? undefinedTag : nullTag;
+          }
+          return symToStringTag && symToStringTag in Object2(value) ? getRawTag(value) : objectToString(value);
+        }
+        function baseGt(value, other) {
+          return value > other;
+        }
+        function baseHas(object, key) {
+          return object != null && hasOwnProperty.call(object, key);
+        }
+        function baseHasIn(object, key) {
+          return object != null && key in Object2(object);
+        }
+        function baseInRange(number, start, end) {
+          return number >= nativeMin(start, end) && number < nativeMax(start, end);
+        }
+        function baseIntersection(arrays, iteratee2, comparator) {
+          var includes2 = comparator ? arrayIncludesWith : arrayIncludes, length = arrays[0].length, othLength = arrays.length, othIndex = othLength, caches = Array2(othLength), maxLength = Infinity, result2 = [];
+          while (othIndex--) {
+            var array = arrays[othIndex];
+            if (othIndex && iteratee2) {
+              array = arrayMap(array, baseUnary(iteratee2));
+            }
+            maxLength = nativeMin(array.length, maxLength);
+            caches[othIndex] = !comparator && (iteratee2 || length >= 120 && array.length >= 120) ? new SetCache(othIndex && array) : undefined$1;
+          }
+          array = arrays[0];
+          var index = -1, seen = caches[0];
+          outer:
+            while (++index < length && result2.length < maxLength) {
+              var value = array[index], computed2 = iteratee2 ? iteratee2(value) : value;
+              value = comparator || value !== 0 ? value : 0;
+              if (!(seen ? cacheHas(seen, computed2) : includes2(result2, computed2, comparator))) {
+                othIndex = othLength;
+                while (--othIndex) {
+                  var cache = caches[othIndex];
+                  if (!(cache ? cacheHas(cache, computed2) : includes2(arrays[othIndex], computed2, comparator))) {
+                    continue outer;
+                  }
+                }
+                if (seen) {
+                  seen.push(computed2);
+                }
+                result2.push(value);
+              }
+            }
+          return result2;
+        }
+        function baseInverter(object, setter, iteratee2, accumulator) {
+          baseForOwn(object, function(value, key, object2) {
+            setter(accumulator, iteratee2(value), key, object2);
+          });
+          return accumulator;
+        }
+        function baseInvoke(object, path, args) {
+          path = castPath(path, object);
+          object = parent(object, path);
+          var func = object == null ? object : object[toKey(last(path))];
+          return func == null ? undefined$1 : apply(func, object, args);
+        }
+        function baseIsArguments(value) {
+          return isObjectLike(value) && baseGetTag(value) == argsTag;
+        }
+        function baseIsArrayBuffer(value) {
+          return isObjectLike(value) && baseGetTag(value) == arrayBufferTag;
+        }
+        function baseIsDate(value) {
+          return isObjectLike(value) && baseGetTag(value) == dateTag;
+        }
+        function baseIsEqual(value, other, bitmask, customizer, stack) {
+          if (value === other) {
+            return true;
+          }
+          if (value == null || other == null || !isObjectLike(value) && !isObjectLike(other)) {
+            return value !== value && other !== other;
+          }
+          return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
+        }
+        function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
+          var objIsArr = isArray(object), othIsArr = isArray(other), objTag = objIsArr ? arrayTag : getTag(object), othTag = othIsArr ? arrayTag : getTag(other);
+          objTag = objTag == argsTag ? objectTag : objTag;
+          othTag = othTag == argsTag ? objectTag : othTag;
+          var objIsObj = objTag == objectTag, othIsObj = othTag == objectTag, isSameTag = objTag == othTag;
+          if (isSameTag && isBuffer(object)) {
+            if (!isBuffer(other)) {
+              return false;
+            }
+            objIsArr = true;
+            objIsObj = false;
+          }
+          if (isSameTag && !objIsObj) {
+            stack || (stack = new Stack());
+            return objIsArr || isTypedArray(object) ? equalArrays(object, other, bitmask, customizer, equalFunc, stack) : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+          }
+          if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
+            var objIsWrapped = objIsObj && hasOwnProperty.call(object, "__wrapped__"), othIsWrapped = othIsObj && hasOwnProperty.call(other, "__wrapped__");
+            if (objIsWrapped || othIsWrapped) {
+              var objUnwrapped = objIsWrapped ? object.value() : object, othUnwrapped = othIsWrapped ? other.value() : other;
+              stack || (stack = new Stack());
+              return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
+            }
+          }
+          if (!isSameTag) {
+            return false;
+          }
+          stack || (stack = new Stack());
+          return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
+        }
+        function baseIsMap(value) {
+          return isObjectLike(value) && getTag(value) == mapTag;
+        }
+        function baseIsMatch(object, source, matchData, customizer) {
+          var index = matchData.length, length = index, noCustomizer = !customizer;
+          if (object == null) {
+            return !length;
+          }
+          object = Object2(object);
+          while (index--) {
+            var data = matchData[index];
+            if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
+              return false;
+            }
+          }
+          while (++index < length) {
+            data = matchData[index];
+            var key = data[0], objValue = object[key], srcValue = data[1];
+            if (noCustomizer && data[2]) {
+              if (objValue === undefined$1 && !(key in object)) {
+                return false;
+              }
+            } else {
+              var stack = new Stack();
+              if (customizer) {
+                var result2 = customizer(objValue, srcValue, key, object, source, stack);
+              }
+              if (!(result2 === undefined$1 ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack) : result2)) {
+                return false;
+              }
+            }
+          }
+          return true;
+        }
+        function baseIsNative(value) {
+          if (!isObject(value) || isMasked(value)) {
+            return false;
+          }
+          var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
+          return pattern.test(toSource(value));
+        }
+        function baseIsRegExp(value) {
+          return isObjectLike(value) && baseGetTag(value) == regexpTag;
+        }
+        function baseIsSet(value) {
+          return isObjectLike(value) && getTag(value) == setTag;
+        }
+        function baseIsTypedArray(value) {
+          return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+        }
+        function baseIteratee(value) {
+          if (typeof value == "function") {
+            return value;
+          }
+          if (value == null) {
+            return identity;
+          }
+          if (typeof value == "object") {
+            return isArray(value) ? baseMatchesProperty(value[0], value[1]) : baseMatches(value);
+          }
+          return property(value);
+        }
+        function baseKeys(object) {
+          if (!isPrototype(object)) {
+            return nativeKeys(object);
+          }
+          var result2 = [];
+          for (var key in Object2(object)) {
+            if (hasOwnProperty.call(object, key) && key != "constructor") {
+              result2.push(key);
+            }
+          }
+          return result2;
+        }
+        function baseKeysIn(object) {
+          if (!isObject(object)) {
+            return nativeKeysIn(object);
+          }
+          var isProto = isPrototype(object), result2 = [];
+          for (var key in object) {
+            if (!(key == "constructor" && (isProto || !hasOwnProperty.call(object, key)))) {
+              result2.push(key);
+            }
+          }
+          return result2;
+        }
+        function baseLt(value, other) {
+          return value < other;
+        }
+        function baseMap(collection, iteratee2) {
+          var index = -1, result2 = isArrayLike(collection) ? Array2(collection.length) : [];
+          baseEach(collection, function(value, key, collection2) {
+            result2[++index] = iteratee2(value, key, collection2);
+          });
+          return result2;
+        }
+        function baseMatches(source) {
+          var matchData = getMatchData(source);
+          if (matchData.length == 1 && matchData[0][2]) {
+            return matchesStrictComparable(matchData[0][0], matchData[0][1]);
+          }
+          return function(object) {
+            return object === source || baseIsMatch(object, source, matchData);
+          };
+        }
+        function baseMatchesProperty(path, srcValue) {
+          if (isKey(path) && isStrictComparable(srcValue)) {
+            return matchesStrictComparable(toKey(path), srcValue);
+          }
+          return function(object) {
+            var objValue = get(object, path);
+            return objValue === undefined$1 && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+          };
+        }
+        function baseMerge(object, source, srcIndex, customizer, stack) {
+          if (object === source) {
+            return;
+          }
+          baseFor(source, function(srcValue, key) {
+            stack || (stack = new Stack());
+            if (isObject(srcValue)) {
+              baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
+            } else {
+              var newValue = customizer ? customizer(safeGet(object, key), srcValue, key + "", object, source, stack) : undefined$1;
+              if (newValue === undefined$1) {
+                newValue = srcValue;
+              }
+              assignMergeValue(object, key, newValue);
+            }
+          }, keysIn);
+        }
+        function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
+          var objValue = safeGet(object, key), srcValue = safeGet(source, key), stacked = stack.get(srcValue);
+          if (stacked) {
+            assignMergeValue(object, key, stacked);
+            return;
+          }
+          var newValue = customizer ? customizer(objValue, srcValue, key + "", object, source, stack) : undefined$1;
+          var isCommon = newValue === undefined$1;
+          if (isCommon) {
+            var isArr = isArray(srcValue), isBuff = !isArr && isBuffer(srcValue), isTyped = !isArr && !isBuff && isTypedArray(srcValue);
+            newValue = srcValue;
+            if (isArr || isBuff || isTyped) {
+              if (isArray(objValue)) {
+                newValue = objValue;
+              } else if (isArrayLikeObject(objValue)) {
+                newValue = copyArray(objValue);
+              } else if (isBuff) {
+                isCommon = false;
+                newValue = cloneBuffer(srcValue, true);
+              } else if (isTyped) {
+                isCommon = false;
+                newValue = cloneTypedArray(srcValue, true);
+              } else {
+                newValue = [];
+              }
+            } else if (isPlainObject(srcValue) || isArguments(srcValue)) {
+              newValue = objValue;
+              if (isArguments(objValue)) {
+                newValue = toPlainObject(objValue);
+              } else if (!isObject(objValue) || isFunction(objValue)) {
+                newValue = initCloneObject(srcValue);
+              }
+            } else {
+              isCommon = false;
+            }
+          }
+          if (isCommon) {
+            stack.set(srcValue, newValue);
+            mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
+            stack["delete"](srcValue);
+          }
+          assignMergeValue(object, key, newValue);
+        }
+        function baseNth(array, n) {
+          var length = array.length;
+          if (!length) {
+            return;
+          }
+          n += n < 0 ? length : 0;
+          return isIndex(n, length) ? array[n] : undefined$1;
+        }
+        function baseOrderBy(collection, iteratees, orders) {
+          if (iteratees.length) {
+            iteratees = arrayMap(iteratees, function(iteratee2) {
+              if (isArray(iteratee2)) {
+                return function(value) {
+                  return baseGet(value, iteratee2.length === 1 ? iteratee2[0] : iteratee2);
+                };
+              }
+              return iteratee2;
+            });
+          } else {
+            iteratees = [identity];
+          }
+          var index = -1;
+          iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
+          var result2 = baseMap(collection, function(value, key, collection2) {
+            var criteria = arrayMap(iteratees, function(iteratee2) {
+              return iteratee2(value);
+            });
+            return { "criteria": criteria, "index": ++index, "value": value };
+          });
+          return baseSortBy(result2, function(object, other) {
+            return compareMultiple(object, other, orders);
+          });
+        }
+        function basePick(object, paths) {
+          return basePickBy(object, paths, function(value, path) {
+            return hasIn(object, path);
+          });
+        }
+        function basePickBy(object, paths, predicate) {
+          var index = -1, length = paths.length, result2 = {};
+          while (++index < length) {
+            var path = paths[index], value = baseGet(object, path);
+            if (predicate(value, path)) {
+              baseSet(result2, castPath(path, object), value);
+            }
+          }
+          return result2;
+        }
+        function basePropertyDeep(path) {
+          return function(object) {
+            return baseGet(object, path);
+          };
+        }
+        function basePullAll(array, values2, iteratee2, comparator) {
+          var indexOf2 = comparator ? baseIndexOfWith : baseIndexOf, index = -1, length = values2.length, seen = array;
+          if (array === values2) {
+            values2 = copyArray(values2);
+          }
+          if (iteratee2) {
+            seen = arrayMap(array, baseUnary(iteratee2));
+          }
+          while (++index < length) {
+            var fromIndex = 0, value = values2[index], computed2 = iteratee2 ? iteratee2(value) : value;
+            while ((fromIndex = indexOf2(seen, computed2, fromIndex, comparator)) > -1) {
+              if (seen !== array) {
+                splice.call(seen, fromIndex, 1);
+              }
+              splice.call(array, fromIndex, 1);
+            }
+          }
+          return array;
+        }
+        function basePullAt(array, indexes) {
+          var length = array ? indexes.length : 0, lastIndex = length - 1;
+          while (length--) {
+            var index = indexes[length];
+            if (length == lastIndex || index !== previous) {
+              var previous = index;
+              if (isIndex(index)) {
+                splice.call(array, index, 1);
+              } else {
+                baseUnset(array, index);
+              }
+            }
+          }
+          return array;
+        }
+        function baseRandom(lower, upper) {
+          return lower + nativeFloor(nativeRandom() * (upper - lower + 1));
+        }
+        function baseRange(start, end, step, fromRight) {
+          var index = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result2 = Array2(length);
+          while (length--) {
+            result2[fromRight ? length : ++index] = start;
+            start += step;
+          }
+          return result2;
+        }
+        function baseRepeat(string, n) {
+          var result2 = "";
+          if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
+            return result2;
+          }
+          do {
+            if (n % 2) {
+              result2 += string;
+            }
+            n = nativeFloor(n / 2);
+            if (n) {
+              string += string;
+            }
+          } while (n);
+          return result2;
+        }
+        function baseRest(func, start) {
+          return setToString(overRest(func, start, identity), func + "");
+        }
+        function baseSample(collection) {
+          return arraySample(values(collection));
+        }
+        function baseSampleSize(collection, n) {
+          var array = values(collection);
+          return shuffleSelf(array, baseClamp(n, 0, array.length));
+        }
+        function baseSet(object, path, value, customizer) {
+          if (!isObject(object)) {
+            return object;
+          }
+          path = castPath(path, object);
+          var index = -1, length = path.length, lastIndex = length - 1, nested = object;
+          while (nested != null && ++index < length) {
+            var key = toKey(path[index]), newValue = value;
+            if (key === "__proto__" || key === "constructor" || key === "prototype") {
+              return object;
+            }
+            if (index != lastIndex) {
+              var objValue = nested[key];
+              newValue = customizer ? customizer(objValue, key, nested) : undefined$1;
+              if (newValue === undefined$1) {
+                newValue = isObject(objValue) ? objValue : isIndex(path[index + 1]) ? [] : {};
+              }
+            }
+            assignValue(nested, key, newValue);
+            nested = nested[key];
+          }
+          return object;
+        }
+        var baseSetData = !metaMap ? identity : function(func, data) {
+          metaMap.set(func, data);
+          return func;
+        };
+        var baseSetToString = !defineProperty ? identity : function(func, string) {
+          return defineProperty(func, "toString", {
+            "configurable": true,
+            "enumerable": false,
+            "value": constant(string),
+            "writable": true
+          });
+        };
+        function baseShuffle(collection) {
+          return shuffleSelf(values(collection));
+        }
+        function baseSlice(array, start, end) {
+          var index = -1, length = array.length;
+          if (start < 0) {
+            start = -start > length ? 0 : length + start;
+          }
+          end = end > length ? length : end;
+          if (end < 0) {
+            end += length;
+          }
+          length = start > end ? 0 : end - start >>> 0;
+          start >>>= 0;
+          var result2 = Array2(length);
+          while (++index < length) {
+            result2[index] = array[index + start];
+          }
+          return result2;
+        }
+        function baseSome(collection, predicate) {
+          var result2;
+          baseEach(collection, function(value, index, collection2) {
+            result2 = predicate(value, index, collection2);
+            return !result2;
+          });
+          return !!result2;
+        }
+        function baseSortedIndex(array, value, retHighest) {
+          var low = 0, high = array == null ? low : array.length;
+          if (typeof value == "number" && value === value && high <= HALF_MAX_ARRAY_LENGTH) {
+            while (low < high) {
+              var mid = low + high >>> 1, computed2 = array[mid];
+              if (computed2 !== null && !isSymbol(computed2) && (retHighest ? computed2 <= value : computed2 < value)) {
+                low = mid + 1;
+              } else {
+                high = mid;
+              }
+            }
+            return high;
+          }
+          return baseSortedIndexBy(array, value, identity, retHighest);
+        }
+        function baseSortedIndexBy(array, value, iteratee2, retHighest) {
+          var low = 0, high = array == null ? 0 : array.length;
+          if (high === 0) {
+            return 0;
+          }
+          value = iteratee2(value);
+          var valIsNaN = value !== value, valIsNull = value === null, valIsSymbol = isSymbol(value), valIsUndefined = value === undefined$1;
+          while (low < high) {
+            var mid = nativeFloor((low + high) / 2), computed2 = iteratee2(array[mid]), othIsDefined = computed2 !== undefined$1, othIsNull = computed2 === null, othIsReflexive = computed2 === computed2, othIsSymbol = isSymbol(computed2);
+            if (valIsNaN) {
+              var setLow = retHighest || othIsReflexive;
+            } else if (valIsUndefined) {
+              setLow = othIsReflexive && (retHighest || othIsDefined);
+            } else if (valIsNull) {
+              setLow = othIsReflexive && othIsDefined && (retHighest || !othIsNull);
+            } else if (valIsSymbol) {
+              setLow = othIsReflexive && othIsDefined && !othIsNull && (retHighest || !othIsSymbol);
+            } else if (othIsNull || othIsSymbol) {
+              setLow = false;
+            } else {
+              setLow = retHighest ? computed2 <= value : computed2 < value;
+            }
+            if (setLow) {
+              low = mid + 1;
+            } else {
+              high = mid;
+            }
+          }
+          return nativeMin(high, MAX_ARRAY_INDEX);
+        }
+        function baseSortedUniq(array, iteratee2) {
+          var index = -1, length = array.length, resIndex = 0, result2 = [];
+          while (++index < length) {
+            var value = array[index], computed2 = iteratee2 ? iteratee2(value) : value;
+            if (!index || !eq(computed2, seen)) {
+              var seen = computed2;
+              result2[resIndex++] = value === 0 ? 0 : value;
+            }
+          }
+          return result2;
+        }
+        function baseToNumber(value) {
+          if (typeof value == "number") {
+            return value;
+          }
+          if (isSymbol(value)) {
+            return NAN;
+          }
+          return +value;
+        }
+        function baseToString(value) {
+          if (typeof value == "string") {
+            return value;
+          }
+          if (isArray(value)) {
+            return arrayMap(value, baseToString) + "";
+          }
+          if (isSymbol(value)) {
+            return symbolToString ? symbolToString.call(value) : "";
+          }
+          var result2 = value + "";
+          return result2 == "0" && 1 / value == -INFINITY ? "-0" : result2;
+        }
+        function baseUniq(array, iteratee2, comparator) {
+          var index = -1, includes2 = arrayIncludes, length = array.length, isCommon = true, result2 = [], seen = result2;
+          if (comparator) {
+            isCommon = false;
+            includes2 = arrayIncludesWith;
+          } else if (length >= LARGE_ARRAY_SIZE) {
+            var set2 = iteratee2 ? null : createSet(array);
+            if (set2) {
+              return setToArray(set2);
+            }
+            isCommon = false;
+            includes2 = cacheHas;
+            seen = new SetCache();
+          } else {
+            seen = iteratee2 ? [] : result2;
+          }
+          outer:
+            while (++index < length) {
+              var value = array[index], computed2 = iteratee2 ? iteratee2(value) : value;
+              value = comparator || value !== 0 ? value : 0;
+              if (isCommon && computed2 === computed2) {
+                var seenIndex = seen.length;
+                while (seenIndex--) {
+                  if (seen[seenIndex] === computed2) {
+                    continue outer;
+                  }
+                }
+                if (iteratee2) {
+                  seen.push(computed2);
+                }
+                result2.push(value);
+              } else if (!includes2(seen, computed2, comparator)) {
+                if (seen !== result2) {
+                  seen.push(computed2);
+                }
+                result2.push(value);
+              }
+            }
+          return result2;
+        }
+        function baseUnset(object, path) {
+          path = castPath(path, object);
+          object = parent(object, path);
+          return object == null || delete object[toKey(last(path))];
+        }
+        function baseUpdate(object, path, updater, customizer) {
+          return baseSet(object, path, updater(baseGet(object, path)), customizer);
+        }
+        function baseWhile(array, predicate, isDrop, fromRight) {
+          var length = array.length, index = fromRight ? length : -1;
+          while ((fromRight ? index-- : ++index < length) && predicate(array[index], index, array)) {
+          }
+          return isDrop ? baseSlice(array, fromRight ? 0 : index, fromRight ? index + 1 : length) : baseSlice(array, fromRight ? index + 1 : 0, fromRight ? length : index);
+        }
+        function baseWrapperValue(value, actions) {
+          var result2 = value;
+          if (result2 instanceof LazyWrapper) {
+            result2 = result2.value();
+          }
+          return arrayReduce(actions, function(result3, action) {
+            return action.func.apply(action.thisArg, arrayPush([result3], action.args));
+          }, result2);
+        }
+        function baseXor(arrays, iteratee2, comparator) {
+          var length = arrays.length;
+          if (length < 2) {
+            return length ? baseUniq(arrays[0]) : [];
+          }
+          var index = -1, result2 = Array2(length);
+          while (++index < length) {
+            var array = arrays[index], othIndex = -1;
+            while (++othIndex < length) {
+              if (othIndex != index) {
+                result2[index] = baseDifference(result2[index] || array, arrays[othIndex], iteratee2, comparator);
+              }
+            }
+          }
+          return baseUniq(baseFlatten(result2, 1), iteratee2, comparator);
+        }
+        function baseZipObject(props, values2, assignFunc) {
+          var index = -1, length = props.length, valsLength = values2.length, result2 = {};
+          while (++index < length) {
+            var value = index < valsLength ? values2[index] : undefined$1;
+            assignFunc(result2, props[index], value);
+          }
+          return result2;
+        }
+        function castArrayLikeObject(value) {
+          return isArrayLikeObject(value) ? value : [];
+        }
+        function castFunction(value) {
+          return typeof value == "function" ? value : identity;
+        }
+        function castPath(value, object) {
+          if (isArray(value)) {
+            return value;
+          }
+          return isKey(value, object) ? [value] : stringToPath(toString(value));
+        }
+        var castRest = baseRest;
+        function castSlice(array, start, end) {
+          var length = array.length;
+          end = end === undefined$1 ? length : end;
+          return !start && end >= length ? array : baseSlice(array, start, end);
+        }
+        var clearTimeout = ctxClearTimeout || function(id) {
+          return root.clearTimeout(id);
+        };
+        function cloneBuffer(buffer, isDeep) {
+          if (isDeep) {
+            return buffer.slice();
+          }
+          var length = buffer.length, result2 = allocUnsafe ? allocUnsafe(length) : new buffer.constructor(length);
+          buffer.copy(result2);
+          return result2;
+        }
+        function cloneArrayBuffer(arrayBuffer) {
+          var result2 = new arrayBuffer.constructor(arrayBuffer.byteLength);
+          new Uint8Array(result2).set(new Uint8Array(arrayBuffer));
+          return result2;
+        }
+        function cloneDataView(dataView, isDeep) {
+          var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
+          return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
+        }
+        function cloneRegExp(regexp) {
+          var result2 = new regexp.constructor(regexp.source, reFlags.exec(regexp));
+          result2.lastIndex = regexp.lastIndex;
+          return result2;
+        }
+        function cloneSymbol(symbol) {
+          return symbolValueOf ? Object2(symbolValueOf.call(symbol)) : {};
+        }
+        function cloneTypedArray(typedArray, isDeep) {
+          var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
+          return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
+        }
+        function compareAscending(value, other) {
+          if (value !== other) {
+            var valIsDefined = value !== undefined$1, valIsNull = value === null, valIsReflexive = value === value, valIsSymbol = isSymbol(value);
+            var othIsDefined = other !== undefined$1, othIsNull = other === null, othIsReflexive = other === other, othIsSymbol = isSymbol(other);
+            if (!othIsNull && !othIsSymbol && !valIsSymbol && value > other || valIsSymbol && othIsDefined && othIsReflexive && !othIsNull && !othIsSymbol || valIsNull && othIsDefined && othIsReflexive || !valIsDefined && othIsReflexive || !valIsReflexive) {
+              return 1;
+            }
+            if (!valIsNull && !valIsSymbol && !othIsSymbol && value < other || othIsSymbol && valIsDefined && valIsReflexive && !valIsNull && !valIsSymbol || othIsNull && valIsDefined && valIsReflexive || !othIsDefined && valIsReflexive || !othIsReflexive) {
+              return -1;
+            }
+          }
+          return 0;
+        }
+        function compareMultiple(object, other, orders) {
+          var index = -1, objCriteria = object.criteria, othCriteria = other.criteria, length = objCriteria.length, ordersLength = orders.length;
+          while (++index < length) {
+            var result2 = compareAscending(objCriteria[index], othCriteria[index]);
+            if (result2) {
+              if (index >= ordersLength) {
+                return result2;
+              }
+              var order = orders[index];
+              return result2 * (order == "desc" ? -1 : 1);
+            }
+          }
+          return object.index - other.index;
+        }
+        function composeArgs(args, partials, holders, isCurried) {
+          var argsIndex = -1, argsLength = args.length, holdersLength = holders.length, leftIndex = -1, leftLength = partials.length, rangeLength = nativeMax(argsLength - holdersLength, 0), result2 = Array2(leftLength + rangeLength), isUncurried = !isCurried;
+          while (++leftIndex < leftLength) {
+            result2[leftIndex] = partials[leftIndex];
+          }
+          while (++argsIndex < holdersLength) {
+            if (isUncurried || argsIndex < argsLength) {
+              result2[holders[argsIndex]] = args[argsIndex];
+            }
+          }
+          while (rangeLength--) {
+            result2[leftIndex++] = args[argsIndex++];
+          }
+          return result2;
+        }
+        function composeArgsRight(args, partials, holders, isCurried) {
+          var argsIndex = -1, argsLength = args.length, holdersIndex = -1, holdersLength = holders.length, rightIndex = -1, rightLength = partials.length, rangeLength = nativeMax(argsLength - holdersLength, 0), result2 = Array2(rangeLength + rightLength), isUncurried = !isCurried;
+          while (++argsIndex < rangeLength) {
+            result2[argsIndex] = args[argsIndex];
+          }
+          var offset = argsIndex;
+          while (++rightIndex < rightLength) {
+            result2[offset + rightIndex] = partials[rightIndex];
+          }
+          while (++holdersIndex < holdersLength) {
+            if (isUncurried || argsIndex < argsLength) {
+              result2[offset + holders[holdersIndex]] = args[argsIndex++];
+            }
+          }
+          return result2;
+        }
+        function copyArray(source, array) {
+          var index = -1, length = source.length;
+          array || (array = Array2(length));
+          while (++index < length) {
+            array[index] = source[index];
+          }
+          return array;
+        }
+        function copyObject(source, props, object, customizer) {
+          var isNew = !object;
+          object || (object = {});
+          var index = -1, length = props.length;
+          while (++index < length) {
+            var key = props[index];
+            var newValue = customizer ? customizer(object[key], source[key], key, object, source) : undefined$1;
+            if (newValue === undefined$1) {
+              newValue = source[key];
+            }
+            if (isNew) {
+              baseAssignValue(object, key, newValue);
+            } else {
+              assignValue(object, key, newValue);
+            }
+          }
+          return object;
+        }
+        function copySymbols(source, object) {
+          return copyObject(source, getSymbols(source), object);
+        }
+        function copySymbolsIn(source, object) {
+          return copyObject(source, getSymbolsIn(source), object);
+        }
+        function createAggregator(setter, initializer) {
+          return function(collection, iteratee2) {
+            var func = isArray(collection) ? arrayAggregator : baseAggregator, accumulator = initializer ? initializer() : {};
+            return func(collection, setter, getIteratee(iteratee2, 2), accumulator);
+          };
+        }
+        function createAssigner(assigner) {
+          return baseRest(function(object, sources) {
+            var index = -1, length = sources.length, customizer = length > 1 ? sources[length - 1] : undefined$1, guard = length > 2 ? sources[2] : undefined$1;
+            customizer = assigner.length > 3 && typeof customizer == "function" ? (length--, customizer) : undefined$1;
+            if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+              customizer = length < 3 ? undefined$1 : customizer;
+              length = 1;
+            }
+            object = Object2(object);
+            while (++index < length) {
+              var source = sources[index];
+              if (source) {
+                assigner(object, source, index, customizer);
+              }
+            }
+            return object;
+          });
+        }
+        function createBaseEach(eachFunc, fromRight) {
+          return function(collection, iteratee2) {
+            if (collection == null) {
+              return collection;
+            }
+            if (!isArrayLike(collection)) {
+              return eachFunc(collection, iteratee2);
+            }
+            var length = collection.length, index = fromRight ? length : -1, iterable = Object2(collection);
+            while (fromRight ? index-- : ++index < length) {
+              if (iteratee2(iterable[index], index, iterable) === false) {
+                break;
+              }
+            }
+            return collection;
+          };
+        }
+        function createBaseFor(fromRight) {
+          return function(object, iteratee2, keysFunc) {
+            var index = -1, iterable = Object2(object), props = keysFunc(object), length = props.length;
+            while (length--) {
+              var key = props[fromRight ? length : ++index];
+              if (iteratee2(iterable[key], key, iterable) === false) {
+                break;
+              }
+            }
+            return object;
+          };
+        }
+        function createBind(func, bitmask, thisArg) {
+          var isBind = bitmask & WRAP_BIND_FLAG, Ctor = createCtor(func);
+          function wrapper() {
+            var fn = this && this !== root && this instanceof wrapper ? Ctor : func;
+            return fn.apply(isBind ? thisArg : this, arguments);
+          }
+          return wrapper;
+        }
+        function createCaseFirst(methodName) {
+          return function(string) {
+            string = toString(string);
+            var strSymbols = hasUnicode(string) ? stringToArray(string) : undefined$1;
+            var chr = strSymbols ? strSymbols[0] : string.charAt(0);
+            var trailing = strSymbols ? castSlice(strSymbols, 1).join("") : string.slice(1);
+            return chr[methodName]() + trailing;
+          };
+        }
+        function createCompounder(callback) {
+          return function(string) {
+            return arrayReduce(words(deburr(string).replace(reApos, "")), callback, "");
+          };
+        }
+        function createCtor(Ctor) {
+          return function() {
+            var args = arguments;
+            switch (args.length) {
+              case 0:
+                return new Ctor();
+              case 1:
+                return new Ctor(args[0]);
+              case 2:
+                return new Ctor(args[0], args[1]);
+              case 3:
+                return new Ctor(args[0], args[1], args[2]);
+              case 4:
+                return new Ctor(args[0], args[1], args[2], args[3]);
+              case 5:
+                return new Ctor(args[0], args[1], args[2], args[3], args[4]);
+              case 6:
+                return new Ctor(args[0], args[1], args[2], args[3], args[4], args[5]);
+              case 7:
+                return new Ctor(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            }
+            var thisBinding = baseCreate(Ctor.prototype), result2 = Ctor.apply(thisBinding, args);
+            return isObject(result2) ? result2 : thisBinding;
+          };
+        }
+        function createCurry(func, bitmask, arity) {
+          var Ctor = createCtor(func);
+          function wrapper() {
+            var length = arguments.length, args = Array2(length), index = length, placeholder = getHolder(wrapper);
+            while (index--) {
+              args[index] = arguments[index];
+            }
+            var holders = length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder ? [] : replaceHolders(args, placeholder);
+            length -= holders.length;
+            if (length < arity) {
+              return createRecurry(
+                func,
+                bitmask,
+                createHybrid,
+                wrapper.placeholder,
+                undefined$1,
+                args,
+                holders,
+                undefined$1,
+                undefined$1,
+                arity - length
+              );
+            }
+            var fn = this && this !== root && this instanceof wrapper ? Ctor : func;
+            return apply(fn, this, args);
+          }
+          return wrapper;
+        }
+        function createFind(findIndexFunc) {
+          return function(collection, predicate, fromIndex) {
+            var iterable = Object2(collection);
+            if (!isArrayLike(collection)) {
+              var iteratee2 = getIteratee(predicate, 3);
+              collection = keys(collection);
+              predicate = function(key) {
+                return iteratee2(iterable[key], key, iterable);
+              };
+            }
+            var index = findIndexFunc(collection, predicate, fromIndex);
+            return index > -1 ? iterable[iteratee2 ? collection[index] : index] : undefined$1;
+          };
+        }
+        function createFlow(fromRight) {
+          return flatRest(function(funcs) {
+            var length = funcs.length, index = length, prereq = LodashWrapper.prototype.thru;
+            if (fromRight) {
+              funcs.reverse();
+            }
+            while (index--) {
+              var func = funcs[index];
+              if (typeof func != "function") {
+                throw new TypeError(FUNC_ERROR_TEXT);
+              }
+              if (prereq && !wrapper && getFuncName(func) == "wrapper") {
+                var wrapper = new LodashWrapper([], true);
+              }
+            }
+            index = wrapper ? index : length;
+            while (++index < length) {
+              func = funcs[index];
+              var funcName = getFuncName(func), data = funcName == "wrapper" ? getData(func) : undefined$1;
+              if (data && isLaziable(data[0]) && data[1] == (WRAP_ARY_FLAG | WRAP_CURRY_FLAG | WRAP_PARTIAL_FLAG | WRAP_REARG_FLAG) && !data[4].length && data[9] == 1) {
+                wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
+              } else {
+                wrapper = func.length == 1 && isLaziable(func) ? wrapper[funcName]() : wrapper.thru(func);
+              }
+            }
+            return function() {
+              var args = arguments, value = args[0];
+              if (wrapper && args.length == 1 && isArray(value)) {
+                return wrapper.plant(value).value();
+              }
+              var index2 = 0, result2 = length ? funcs[index2].apply(this, args) : value;
+              while (++index2 < length) {
+                result2 = funcs[index2].call(this, result2);
+              }
+              return result2;
+            };
+          });
+        }
+        function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary2, arity) {
+          var isAry = bitmask & WRAP_ARY_FLAG, isBind = bitmask & WRAP_BIND_FLAG, isBindKey = bitmask & WRAP_BIND_KEY_FLAG, isCurried = bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG), isFlip = bitmask & WRAP_FLIP_FLAG, Ctor = isBindKey ? undefined$1 : createCtor(func);
+          function wrapper() {
+            var length = arguments.length, args = Array2(length), index = length;
+            while (index--) {
+              args[index] = arguments[index];
+            }
+            if (isCurried) {
+              var placeholder = getHolder(wrapper), holdersCount = countHolders(args, placeholder);
+            }
+            if (partials) {
+              args = composeArgs(args, partials, holders, isCurried);
+            }
+            if (partialsRight) {
+              args = composeArgsRight(args, partialsRight, holdersRight, isCurried);
+            }
+            length -= holdersCount;
+            if (isCurried && length < arity) {
+              var newHolders = replaceHolders(args, placeholder);
+              return createRecurry(
+                func,
+                bitmask,
+                createHybrid,
+                wrapper.placeholder,
+                thisArg,
+                args,
+                newHolders,
+                argPos,
+                ary2,
+                arity - length
+              );
+            }
+            var thisBinding = isBind ? thisArg : this, fn = isBindKey ? thisBinding[func] : func;
+            length = args.length;
+            if (argPos) {
+              args = reorder(args, argPos);
+            } else if (isFlip && length > 1) {
+              args.reverse();
+            }
+            if (isAry && ary2 < length) {
+              args.length = ary2;
+            }
+            if (this && this !== root && this instanceof wrapper) {
+              fn = Ctor || createCtor(fn);
+            }
+            return fn.apply(thisBinding, args);
+          }
+          return wrapper;
+        }
+        function createInverter(setter, toIteratee) {
+          return function(object, iteratee2) {
+            return baseInverter(object, setter, toIteratee(iteratee2), {});
+          };
+        }
+        function createMathOperation(operator, defaultValue) {
+          return function(value, other) {
+            var result2;
+            if (value === undefined$1 && other === undefined$1) {
+              return defaultValue;
+            }
+            if (value !== undefined$1) {
+              result2 = value;
+            }
+            if (other !== undefined$1) {
+              if (result2 === undefined$1) {
+                return other;
+              }
+              if (typeof value == "string" || typeof other == "string") {
+                value = baseToString(value);
+                other = baseToString(other);
+              } else {
+                value = baseToNumber(value);
+                other = baseToNumber(other);
+              }
+              result2 = operator(value, other);
+            }
+            return result2;
+          };
+        }
+        function createOver(arrayFunc) {
+          return flatRest(function(iteratees) {
+            iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
+            return baseRest(function(args) {
+              var thisArg = this;
+              return arrayFunc(iteratees, function(iteratee2) {
+                return apply(iteratee2, thisArg, args);
+              });
+            });
+          });
+        }
+        function createPadding(length, chars) {
+          chars = chars === undefined$1 ? " " : baseToString(chars);
+          var charsLength = chars.length;
+          if (charsLength < 2) {
+            return charsLength ? baseRepeat(chars, length) : chars;
+          }
+          var result2 = baseRepeat(chars, nativeCeil(length / stringSize(chars)));
+          return hasUnicode(chars) ? castSlice(stringToArray(result2), 0, length).join("") : result2.slice(0, length);
+        }
+        function createPartial(func, bitmask, thisArg, partials) {
+          var isBind = bitmask & WRAP_BIND_FLAG, Ctor = createCtor(func);
+          function wrapper() {
+            var argsIndex = -1, argsLength = arguments.length, leftIndex = -1, leftLength = partials.length, args = Array2(leftLength + argsLength), fn = this && this !== root && this instanceof wrapper ? Ctor : func;
+            while (++leftIndex < leftLength) {
+              args[leftIndex] = partials[leftIndex];
+            }
+            while (argsLength--) {
+              args[leftIndex++] = arguments[++argsIndex];
+            }
+            return apply(fn, isBind ? thisArg : this, args);
+          }
+          return wrapper;
+        }
+        function createRange(fromRight) {
+          return function(start, end, step) {
+            if (step && typeof step != "number" && isIterateeCall(start, end, step)) {
+              end = step = undefined$1;
+            }
+            start = toFinite(start);
+            if (end === undefined$1) {
+              end = start;
+              start = 0;
+            } else {
+              end = toFinite(end);
+            }
+            step = step === undefined$1 ? start < end ? 1 : -1 : toFinite(step);
+            return baseRange(start, end, step, fromRight);
+          };
+        }
+        function createRelationalOperation(operator) {
+          return function(value, other) {
+            if (!(typeof value == "string" && typeof other == "string")) {
+              value = toNumber(value);
+              other = toNumber(other);
+            }
+            return operator(value, other);
+          };
+        }
+        function createRecurry(func, bitmask, wrapFunc, placeholder, thisArg, partials, holders, argPos, ary2, arity) {
+          var isCurry = bitmask & WRAP_CURRY_FLAG, newHolders = isCurry ? holders : undefined$1, newHoldersRight = isCurry ? undefined$1 : holders, newPartials = isCurry ? partials : undefined$1, newPartialsRight = isCurry ? undefined$1 : partials;
+          bitmask |= isCurry ? WRAP_PARTIAL_FLAG : WRAP_PARTIAL_RIGHT_FLAG;
+          bitmask &= ~(isCurry ? WRAP_PARTIAL_RIGHT_FLAG : WRAP_PARTIAL_FLAG);
+          if (!(bitmask & WRAP_CURRY_BOUND_FLAG)) {
+            bitmask &= -4;
+          }
+          var newData = [
+            func,
+            bitmask,
+            thisArg,
+            newPartials,
+            newHolders,
+            newPartialsRight,
+            newHoldersRight,
+            argPos,
+            ary2,
+            arity
+          ];
+          var result2 = wrapFunc.apply(undefined$1, newData);
+          if (isLaziable(func)) {
+            setData(result2, newData);
+          }
+          result2.placeholder = placeholder;
+          return setWrapToString(result2, func, bitmask);
+        }
+        function createRound(methodName) {
+          var func = Math[methodName];
+          return function(number, precision) {
+            number = toNumber(number);
+            precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
+            if (precision && nativeIsFinite(number)) {
+              var pair = (toString(number) + "e").split("e"), value = func(pair[0] + "e" + (+pair[1] + precision));
+              pair = (toString(value) + "e").split("e");
+              return +(pair[0] + "e" + (+pair[1] - precision));
+            }
+            return func(number);
+          };
+        }
+        var createSet = !(Set && 1 / setToArray(new Set([, -0]))[1] == INFINITY) ? noop : function(values2) {
+          return new Set(values2);
+        };
+        function createToPairs(keysFunc) {
+          return function(object) {
+            var tag = getTag(object);
+            if (tag == mapTag) {
+              return mapToArray(object);
+            }
+            if (tag == setTag) {
+              return setToPairs(object);
+            }
+            return baseToPairs(object, keysFunc(object));
+          };
+        }
+        function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary2, arity) {
+          var isBindKey = bitmask & WRAP_BIND_KEY_FLAG;
+          if (!isBindKey && typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          var length = partials ? partials.length : 0;
+          if (!length) {
+            bitmask &= -97;
+            partials = holders = undefined$1;
+          }
+          ary2 = ary2 === undefined$1 ? ary2 : nativeMax(toInteger(ary2), 0);
+          arity = arity === undefined$1 ? arity : toInteger(arity);
+          length -= holders ? holders.length : 0;
+          if (bitmask & WRAP_PARTIAL_RIGHT_FLAG) {
+            var partialsRight = partials, holdersRight = holders;
+            partials = holders = undefined$1;
+          }
+          var data = isBindKey ? undefined$1 : getData(func);
+          var newData = [
+            func,
+            bitmask,
+            thisArg,
+            partials,
+            holders,
+            partialsRight,
+            holdersRight,
+            argPos,
+            ary2,
+            arity
+          ];
+          if (data) {
+            mergeData(newData, data);
+          }
+          func = newData[0];
+          bitmask = newData[1];
+          thisArg = newData[2];
+          partials = newData[3];
+          holders = newData[4];
+          arity = newData[9] = newData[9] === undefined$1 ? isBindKey ? 0 : func.length : nativeMax(newData[9] - length, 0);
+          if (!arity && bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG)) {
+            bitmask &= -25;
+          }
+          if (!bitmask || bitmask == WRAP_BIND_FLAG) {
+            var result2 = createBind(func, bitmask, thisArg);
+          } else if (bitmask == WRAP_CURRY_FLAG || bitmask == WRAP_CURRY_RIGHT_FLAG) {
+            result2 = createCurry(func, bitmask, arity);
+          } else if ((bitmask == WRAP_PARTIAL_FLAG || bitmask == (WRAP_BIND_FLAG | WRAP_PARTIAL_FLAG)) && !holders.length) {
+            result2 = createPartial(func, bitmask, thisArg, partials);
+          } else {
+            result2 = createHybrid.apply(undefined$1, newData);
+          }
+          var setter = data ? baseSetData : setData;
+          return setWrapToString(setter(result2, newData), func, bitmask);
+        }
+        function customDefaultsAssignIn(objValue, srcValue, key, object) {
+          if (objValue === undefined$1 || eq(objValue, objectProto[key]) && !hasOwnProperty.call(object, key)) {
+            return srcValue;
+          }
+          return objValue;
+        }
+        function customDefaultsMerge(objValue, srcValue, key, object, source, stack) {
+          if (isObject(objValue) && isObject(srcValue)) {
+            stack.set(srcValue, objValue);
+            baseMerge(objValue, srcValue, undefined$1, customDefaultsMerge, stack);
+            stack["delete"](srcValue);
+          }
+          return objValue;
+        }
+        function customOmitClone(value) {
+          return isPlainObject(value) ? undefined$1 : value;
+        }
+        function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+          var isPartial = bitmask & COMPARE_PARTIAL_FLAG, arrLength = array.length, othLength = other.length;
+          if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+            return false;
+          }
+          var arrStacked = stack.get(array);
+          var othStacked = stack.get(other);
+          if (arrStacked && othStacked) {
+            return arrStacked == other && othStacked == array;
+          }
+          var index = -1, result2 = true, seen = bitmask & COMPARE_UNORDERED_FLAG ? new SetCache() : undefined$1;
+          stack.set(array, other);
+          stack.set(other, array);
+          while (++index < arrLength) {
+            var arrValue = array[index], othValue = other[index];
+            if (customizer) {
+              var compared = isPartial ? customizer(othValue, arrValue, index, other, array, stack) : customizer(arrValue, othValue, index, array, other, stack);
+            }
+            if (compared !== undefined$1) {
+              if (compared) {
+                continue;
+              }
+              result2 = false;
+              break;
+            }
+            if (seen) {
+              if (!arraySome(other, function(othValue2, othIndex) {
+                if (!cacheHas(seen, othIndex) && (arrValue === othValue2 || equalFunc(arrValue, othValue2, bitmask, customizer, stack))) {
+                  return seen.push(othIndex);
+                }
+              })) {
+                result2 = false;
+                break;
+              }
+            } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+              result2 = false;
+              break;
+            }
+          }
+          stack["delete"](array);
+          stack["delete"](other);
+          return result2;
+        }
+        function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
+          switch (tag) {
+            case dataViewTag:
+              if (object.byteLength != other.byteLength || object.byteOffset != other.byteOffset) {
+                return false;
+              }
+              object = object.buffer;
+              other = other.buffer;
+            case arrayBufferTag:
+              if (object.byteLength != other.byteLength || !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
+                return false;
+              }
+              return true;
+            case boolTag:
+            case dateTag:
+            case numberTag:
+              return eq(+object, +other);
+            case errorTag:
+              return object.name == other.name && object.message == other.message;
+            case regexpTag:
+            case stringTag:
+              return object == other + "";
+            case mapTag:
+              var convert = mapToArray;
+            case setTag:
+              var isPartial = bitmask & COMPARE_PARTIAL_FLAG;
+              convert || (convert = setToArray);
+              if (object.size != other.size && !isPartial) {
+                return false;
+              }
+              var stacked = stack.get(object);
+              if (stacked) {
+                return stacked == other;
+              }
+              bitmask |= COMPARE_UNORDERED_FLAG;
+              stack.set(object, other);
+              var result2 = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
+              stack["delete"](object);
+              return result2;
+            case symbolTag:
+              if (symbolValueOf) {
+                return symbolValueOf.call(object) == symbolValueOf.call(other);
+              }
+          }
+          return false;
+        }
+        function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+          var isPartial = bitmask & COMPARE_PARTIAL_FLAG, objProps = getAllKeys(object), objLength = objProps.length, othProps = getAllKeys(other), othLength = othProps.length;
+          if (objLength != othLength && !isPartial) {
+            return false;
+          }
+          var index = objLength;
+          while (index--) {
+            var key = objProps[index];
+            if (!(isPartial ? key in other : hasOwnProperty.call(other, key))) {
+              return false;
+            }
+          }
+          var objStacked = stack.get(object);
+          var othStacked = stack.get(other);
+          if (objStacked && othStacked) {
+            return objStacked == other && othStacked == object;
+          }
+          var result2 = true;
+          stack.set(object, other);
+          stack.set(other, object);
+          var skipCtor = isPartial;
+          while (++index < objLength) {
+            key = objProps[index];
+            var objValue = object[key], othValue = other[key];
+            if (customizer) {
+              var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
+            }
+            if (!(compared === undefined$1 ? objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack) : compared)) {
+              result2 = false;
+              break;
+            }
+            skipCtor || (skipCtor = key == "constructor");
+          }
+          if (result2 && !skipCtor) {
+            var objCtor = object.constructor, othCtor = other.constructor;
+            if (objCtor != othCtor && ("constructor" in object && "constructor" in other) && !(typeof objCtor == "function" && objCtor instanceof objCtor && typeof othCtor == "function" && othCtor instanceof othCtor)) {
+              result2 = false;
+            }
+          }
+          stack["delete"](object);
+          stack["delete"](other);
+          return result2;
+        }
+        function flatRest(func) {
+          return setToString(overRest(func, undefined$1, flatten), func + "");
+        }
+        function getAllKeys(object) {
+          return baseGetAllKeys(object, keys, getSymbols);
+        }
+        function getAllKeysIn(object) {
+          return baseGetAllKeys(object, keysIn, getSymbolsIn);
+        }
+        var getData = !metaMap ? noop : function(func) {
+          return metaMap.get(func);
+        };
+        function getFuncName(func) {
+          var result2 = func.name + "", array = realNames[result2], length = hasOwnProperty.call(realNames, result2) ? array.length : 0;
+          while (length--) {
+            var data = array[length], otherFunc = data.func;
+            if (otherFunc == null || otherFunc == func) {
+              return data.name;
+            }
+          }
+          return result2;
+        }
+        function getHolder(func) {
+          var object = hasOwnProperty.call(lodash2, "placeholder") ? lodash2 : func;
+          return object.placeholder;
+        }
+        function getIteratee() {
+          var result2 = lodash2.iteratee || iteratee;
+          result2 = result2 === iteratee ? baseIteratee : result2;
+          return arguments.length ? result2(arguments[0], arguments[1]) : result2;
+        }
+        function getMapData(map2, key) {
+          var data = map2.__data__;
+          return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+        }
+        function getMatchData(object) {
+          var result2 = keys(object), length = result2.length;
+          while (length--) {
+            var key = result2[length], value = object[key];
+            result2[length] = [key, value, isStrictComparable(value)];
+          }
+          return result2;
+        }
+        function getNative(object, key) {
+          var value = getValue(object, key);
+          return baseIsNative(value) ? value : undefined$1;
+        }
+        function getRawTag(value) {
+          var isOwn = hasOwnProperty.call(value, symToStringTag), tag = value[symToStringTag];
+          try {
+            value[symToStringTag] = undefined$1;
+            var unmasked = true;
+          } catch (e) {
+          }
+          var result2 = nativeObjectToString.call(value);
+          if (unmasked) {
+            if (isOwn) {
+              value[symToStringTag] = tag;
+            } else {
+              delete value[symToStringTag];
+            }
+          }
+          return result2;
+        }
+        var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
+          if (object == null) {
+            return [];
+          }
+          object = Object2(object);
+          return arrayFilter(nativeGetSymbols(object), function(symbol) {
+            return propertyIsEnumerable.call(object, symbol);
+          });
+        };
+        var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
+          var result2 = [];
+          while (object) {
+            arrayPush(result2, getSymbols(object));
+            object = getPrototype(object);
+          }
+          return result2;
+        };
+        var getTag = baseGetTag;
+        if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map && getTag(new Map()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+          getTag = function(value) {
+            var result2 = baseGetTag(value), Ctor = result2 == objectTag ? value.constructor : undefined$1, ctorString = Ctor ? toSource(Ctor) : "";
+            if (ctorString) {
+              switch (ctorString) {
+                case dataViewCtorString:
+                  return dataViewTag;
+                case mapCtorString:
+                  return mapTag;
+                case promiseCtorString:
+                  return promiseTag;
+                case setCtorString:
+                  return setTag;
+                case weakMapCtorString:
+                  return weakMapTag;
+              }
+            }
+            return result2;
+          };
+        }
+        function getView(start, end, transforms) {
+          var index = -1, length = transforms.length;
+          while (++index < length) {
+            var data = transforms[index], size2 = data.size;
+            switch (data.type) {
+              case "drop":
+                start += size2;
+                break;
+              case "dropRight":
+                end -= size2;
+                break;
+              case "take":
+                end = nativeMin(end, start + size2);
+                break;
+              case "takeRight":
+                start = nativeMax(start, end - size2);
+                break;
+            }
+          }
+          return { "start": start, "end": end };
+        }
+        function getWrapDetails(source) {
+          var match = source.match(reWrapDetails);
+          return match ? match[1].split(reSplitDetails) : [];
+        }
+        function hasPath(object, path, hasFunc) {
+          path = castPath(path, object);
+          var index = -1, length = path.length, result2 = false;
+          while (++index < length) {
+            var key = toKey(path[index]);
+            if (!(result2 = object != null && hasFunc(object, key))) {
+              break;
+            }
+            object = object[key];
+          }
+          if (result2 || ++index != length) {
+            return result2;
+          }
+          length = object == null ? 0 : object.length;
+          return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isArguments(object));
+        }
+        function initCloneArray(array) {
+          var length = array.length, result2 = new array.constructor(length);
+          if (length && typeof array[0] == "string" && hasOwnProperty.call(array, "index")) {
+            result2.index = array.index;
+            result2.input = array.input;
+          }
+          return result2;
+        }
+        function initCloneObject(object) {
+          return typeof object.constructor == "function" && !isPrototype(object) ? baseCreate(getPrototype(object)) : {};
+        }
+        function initCloneByTag(object, tag, isDeep) {
+          var Ctor = object.constructor;
+          switch (tag) {
+            case arrayBufferTag:
+              return cloneArrayBuffer(object);
+            case boolTag:
+            case dateTag:
+              return new Ctor(+object);
+            case dataViewTag:
+              return cloneDataView(object, isDeep);
+            case float32Tag:
+            case float64Tag:
+            case int8Tag:
+            case int16Tag:
+            case int32Tag:
+            case uint8Tag:
+            case uint8ClampedTag:
+            case uint16Tag:
+            case uint32Tag:
+              return cloneTypedArray(object, isDeep);
+            case mapTag:
+              return new Ctor();
+            case numberTag:
+            case stringTag:
+              return new Ctor(object);
+            case regexpTag:
+              return cloneRegExp(object);
+            case setTag:
+              return new Ctor();
+            case symbolTag:
+              return cloneSymbol(object);
+          }
+        }
+        function insertWrapDetails(source, details) {
+          var length = details.length;
+          if (!length) {
+            return source;
+          }
+          var lastIndex = length - 1;
+          details[lastIndex] = (length > 1 ? "& " : "") + details[lastIndex];
+          details = details.join(length > 2 ? ", " : " ");
+          return source.replace(reWrapComment, "{\n/* [wrapped with " + details + "] */\n");
+        }
+        function isFlattenable(value) {
+          return isArray(value) || isArguments(value) || !!(spreadableSymbol && value && value[spreadableSymbol]);
+        }
+        function isIndex(value, length) {
+          var type = typeof value;
+          length = length == null ? MAX_SAFE_INTEGER : length;
+          return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+        }
+        function isIterateeCall(value, index, object) {
+          if (!isObject(object)) {
+            return false;
+          }
+          var type = typeof index;
+          if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
+            return eq(object[index], value);
+          }
+          return false;
+        }
+        function isKey(value, object) {
+          if (isArray(value)) {
+            return false;
+          }
+          var type = typeof value;
+          if (type == "number" || type == "symbol" || type == "boolean" || value == null || isSymbol(value)) {
+            return true;
+          }
+          return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object2(object);
+        }
+        function isKeyable(value) {
+          var type = typeof value;
+          return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+        }
+        function isLaziable(func) {
+          var funcName = getFuncName(func), other = lodash2[funcName];
+          if (typeof other != "function" || !(funcName in LazyWrapper.prototype)) {
+            return false;
+          }
+          if (func === other) {
+            return true;
+          }
+          var data = getData(other);
+          return !!data && func === data[0];
+        }
+        function isMasked(func) {
+          return !!maskSrcKey && maskSrcKey in func;
+        }
+        var isMaskable = coreJsData ? isFunction : stubFalse;
+        function isPrototype(value) {
+          var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto;
+          return value === proto;
+        }
+        function isStrictComparable(value) {
+          return value === value && !isObject(value);
+        }
+        function matchesStrictComparable(key, srcValue) {
+          return function(object) {
+            if (object == null) {
+              return false;
+            }
+            return object[key] === srcValue && (srcValue !== undefined$1 || key in Object2(object));
+          };
+        }
+        function memoizeCapped(func) {
+          var result2 = memoize(func, function(key) {
+            if (cache.size === MAX_MEMOIZE_SIZE) {
+              cache.clear();
+            }
+            return key;
+          });
+          var cache = result2.cache;
+          return result2;
+        }
+        function mergeData(data, source) {
+          var bitmask = data[1], srcBitmask = source[1], newBitmask = bitmask | srcBitmask, isCommon = newBitmask < (WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG | WRAP_ARY_FLAG);
+          var isCombo = srcBitmask == WRAP_ARY_FLAG && bitmask == WRAP_CURRY_FLAG || srcBitmask == WRAP_ARY_FLAG && bitmask == WRAP_REARG_FLAG && data[7].length <= source[8] || srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG) && source[7].length <= source[8] && bitmask == WRAP_CURRY_FLAG;
+          if (!(isCommon || isCombo)) {
+            return data;
+          }
+          if (srcBitmask & WRAP_BIND_FLAG) {
+            data[2] = source[2];
+            newBitmask |= bitmask & WRAP_BIND_FLAG ? 0 : WRAP_CURRY_BOUND_FLAG;
+          }
+          var value = source[3];
+          if (value) {
+            var partials = data[3];
+            data[3] = partials ? composeArgs(partials, value, source[4]) : value;
+            data[4] = partials ? replaceHolders(data[3], PLACEHOLDER) : source[4];
+          }
+          value = source[5];
+          if (value) {
+            partials = data[5];
+            data[5] = partials ? composeArgsRight(partials, value, source[6]) : value;
+            data[6] = partials ? replaceHolders(data[5], PLACEHOLDER) : source[6];
+          }
+          value = source[7];
+          if (value) {
+            data[7] = value;
+          }
+          if (srcBitmask & WRAP_ARY_FLAG) {
+            data[8] = data[8] == null ? source[8] : nativeMin(data[8], source[8]);
+          }
+          if (data[9] == null) {
+            data[9] = source[9];
+          }
+          data[0] = source[0];
+          data[1] = newBitmask;
+          return data;
+        }
+        function nativeKeysIn(object) {
+          var result2 = [];
+          if (object != null) {
+            for (var key in Object2(object)) {
+              result2.push(key);
+            }
+          }
+          return result2;
+        }
+        function objectToString(value) {
+          return nativeObjectToString.call(value);
+        }
+        function overRest(func, start, transform2) {
+          start = nativeMax(start === undefined$1 ? func.length - 1 : start, 0);
+          return function() {
+            var args = arguments, index = -1, length = nativeMax(args.length - start, 0), array = Array2(length);
+            while (++index < length) {
+              array[index] = args[start + index];
+            }
+            index = -1;
+            var otherArgs = Array2(start + 1);
+            while (++index < start) {
+              otherArgs[index] = args[index];
+            }
+            otherArgs[start] = transform2(array);
+            return apply(func, this, otherArgs);
+          };
+        }
+        function parent(object, path) {
+          return path.length < 2 ? object : baseGet(object, baseSlice(path, 0, -1));
+        }
+        function reorder(array, indexes) {
+          var arrLength = array.length, length = nativeMin(indexes.length, arrLength), oldArray = copyArray(array);
+          while (length--) {
+            var index = indexes[length];
+            array[length] = isIndex(index, arrLength) ? oldArray[index] : undefined$1;
+          }
+          return array;
+        }
+        function safeGet(object, key) {
+          if (key === "constructor" && typeof object[key] === "function") {
+            return;
+          }
+          if (key == "__proto__") {
+            return;
+          }
+          return object[key];
+        }
+        var setData = shortOut(baseSetData);
+        var setTimeout = ctxSetTimeout || function(func, wait) {
+          return root.setTimeout(func, wait);
+        };
+        var setToString = shortOut(baseSetToString);
+        function setWrapToString(wrapper, reference, bitmask) {
+          var source = reference + "";
+          return setToString(wrapper, insertWrapDetails(source, updateWrapDetails(getWrapDetails(source), bitmask)));
+        }
+        function shortOut(func) {
+          var count = 0, lastCalled = 0;
+          return function() {
+            var stamp = nativeNow(), remaining = HOT_SPAN - (stamp - lastCalled);
+            lastCalled = stamp;
+            if (remaining > 0) {
+              if (++count >= HOT_COUNT) {
+                return arguments[0];
+              }
+            } else {
+              count = 0;
+            }
+            return func.apply(undefined$1, arguments);
+          };
+        }
+        function shuffleSelf(array, size2) {
+          var index = -1, length = array.length, lastIndex = length - 1;
+          size2 = size2 === undefined$1 ? length : size2;
+          while (++index < size2) {
+            var rand = baseRandom(index, lastIndex), value = array[rand];
+            array[rand] = array[index];
+            array[index] = value;
+          }
+          array.length = size2;
+          return array;
+        }
+        var stringToPath = memoizeCapped(function(string) {
+          var result2 = [];
+          if (string.charCodeAt(0) === 46) {
+            result2.push("");
+          }
+          string.replace(rePropName, function(match, number, quote, subString) {
+            result2.push(quote ? subString.replace(reEscapeChar, "$1") : number || match);
+          });
+          return result2;
+        });
+        function toKey(value) {
+          if (typeof value == "string" || isSymbol(value)) {
+            return value;
+          }
+          var result2 = value + "";
+          return result2 == "0" && 1 / value == -INFINITY ? "-0" : result2;
+        }
+        function toSource(func) {
+          if (func != null) {
+            try {
+              return funcToString.call(func);
+            } catch (e) {
+            }
+            try {
+              return func + "";
+            } catch (e) {
+            }
+          }
+          return "";
+        }
+        function updateWrapDetails(details, bitmask) {
+          arrayEach(wrapFlags, function(pair) {
+            var value = "_." + pair[0];
+            if (bitmask & pair[1] && !arrayIncludes(details, value)) {
+              details.push(value);
+            }
+          });
+          return details.sort();
+        }
+        function wrapperClone(wrapper) {
+          if (wrapper instanceof LazyWrapper) {
+            return wrapper.clone();
+          }
+          var result2 = new LodashWrapper(wrapper.__wrapped__, wrapper.__chain__);
+          result2.__actions__ = copyArray(wrapper.__actions__);
+          result2.__index__ = wrapper.__index__;
+          result2.__values__ = wrapper.__values__;
+          return result2;
+        }
+        function chunk(array, size2, guard) {
+          if (guard ? isIterateeCall(array, size2, guard) : size2 === undefined$1) {
+            size2 = 1;
+          } else {
+            size2 = nativeMax(toInteger(size2), 0);
+          }
+          var length = array == null ? 0 : array.length;
+          if (!length || size2 < 1) {
+            return [];
+          }
+          var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size2));
+          while (index < length) {
+            result2[resIndex++] = baseSlice(array, index, index += size2);
+          }
+          return result2;
+        }
+        function compact(array) {
+          var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result2 = [];
+          while (++index < length) {
+            var value = array[index];
+            if (value) {
+              result2[resIndex++] = value;
+            }
+          }
+          return result2;
+        }
+        function concat() {
+          var length = arguments.length;
+          if (!length) {
+            return [];
+          }
+          var args = Array2(length - 1), array = arguments[0], index = length;
+          while (index--) {
+            args[index - 1] = arguments[index];
+          }
+          return arrayPush(isArray(array) ? copyArray(array) : [array], baseFlatten(args, 1));
+        }
+        var difference = baseRest(function(array, values2) {
+          return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true)) : [];
+        });
+        var differenceBy = baseRest(function(array, values2) {
+          var iteratee2 = last(values2);
+          if (isArrayLikeObject(iteratee2)) {
+            iteratee2 = undefined$1;
+          }
+          return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true), getIteratee(iteratee2, 2)) : [];
+        });
+        var differenceWith = baseRest(function(array, values2) {
+          var comparator = last(values2);
+          if (isArrayLikeObject(comparator)) {
+            comparator = undefined$1;
+          }
+          return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true), undefined$1, comparator) : [];
+        });
+        function drop(array, n, guard) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          n = guard || n === undefined$1 ? 1 : toInteger(n);
+          return baseSlice(array, n < 0 ? 0 : n, length);
+        }
+        function dropRight(array, n, guard) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          n = guard || n === undefined$1 ? 1 : toInteger(n);
+          n = length - n;
+          return baseSlice(array, 0, n < 0 ? 0 : n);
+        }
+        function dropRightWhile(array, predicate) {
+          return array && array.length ? baseWhile(array, getIteratee(predicate, 3), true, true) : [];
+        }
+        function dropWhile(array, predicate) {
+          return array && array.length ? baseWhile(array, getIteratee(predicate, 3), true) : [];
+        }
+        function fill(array, value, start, end) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          if (start && typeof start != "number" && isIterateeCall(array, value, start)) {
+            start = 0;
+            end = length;
+          }
+          return baseFill(array, value, start, end);
+        }
+        function findIndex(array, predicate, fromIndex) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return -1;
+          }
+          var index = fromIndex == null ? 0 : toInteger(fromIndex);
+          if (index < 0) {
+            index = nativeMax(length + index, 0);
+          }
+          return baseFindIndex(array, getIteratee(predicate, 3), index);
+        }
+        function findLastIndex(array, predicate, fromIndex) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return -1;
+          }
+          var index = length - 1;
+          if (fromIndex !== undefined$1) {
+            index = toInteger(fromIndex);
+            index = fromIndex < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+          }
+          return baseFindIndex(array, getIteratee(predicate, 3), index, true);
+        }
+        function flatten(array) {
+          var length = array == null ? 0 : array.length;
+          return length ? baseFlatten(array, 1) : [];
+        }
+        function flattenDeep(array) {
+          var length = array == null ? 0 : array.length;
+          return length ? baseFlatten(array, INFINITY) : [];
+        }
+        function flattenDepth(array, depth) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          depth = depth === undefined$1 ? 1 : toInteger(depth);
+          return baseFlatten(array, depth);
+        }
+        function fromPairs(pairs) {
+          var index = -1, length = pairs == null ? 0 : pairs.length, result2 = {};
+          while (++index < length) {
+            var pair = pairs[index];
+            result2[pair[0]] = pair[1];
+          }
+          return result2;
+        }
+        function head(array) {
+          return array && array.length ? array[0] : undefined$1;
+        }
+        function indexOf(array, value, fromIndex) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return -1;
+          }
+          var index = fromIndex == null ? 0 : toInteger(fromIndex);
+          if (index < 0) {
+            index = nativeMax(length + index, 0);
+          }
+          return baseIndexOf(array, value, index);
+        }
+        function initial(array) {
+          var length = array == null ? 0 : array.length;
+          return length ? baseSlice(array, 0, -1) : [];
+        }
+        var intersection = baseRest(function(arrays) {
+          var mapped = arrayMap(arrays, castArrayLikeObject);
+          return mapped.length && mapped[0] === arrays[0] ? baseIntersection(mapped) : [];
+        });
+        var intersectionBy = baseRest(function(arrays) {
+          var iteratee2 = last(arrays), mapped = arrayMap(arrays, castArrayLikeObject);
+          if (iteratee2 === last(mapped)) {
+            iteratee2 = undefined$1;
+          } else {
+            mapped.pop();
+          }
+          return mapped.length && mapped[0] === arrays[0] ? baseIntersection(mapped, getIteratee(iteratee2, 2)) : [];
+        });
+        var intersectionWith = baseRest(function(arrays) {
+          var comparator = last(arrays), mapped = arrayMap(arrays, castArrayLikeObject);
+          comparator = typeof comparator == "function" ? comparator : undefined$1;
+          if (comparator) {
+            mapped.pop();
+          }
+          return mapped.length && mapped[0] === arrays[0] ? baseIntersection(mapped, undefined$1, comparator) : [];
+        });
+        function join(array, separator) {
+          return array == null ? "" : nativeJoin.call(array, separator);
+        }
+        function last(array) {
+          var length = array == null ? 0 : array.length;
+          return length ? array[length - 1] : undefined$1;
+        }
+        function lastIndexOf(array, value, fromIndex) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return -1;
+          }
+          var index = length;
+          if (fromIndex !== undefined$1) {
+            index = toInteger(fromIndex);
+            index = index < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+          }
+          return value === value ? strictLastIndexOf(array, value, index) : baseFindIndex(array, baseIsNaN, index, true);
+        }
+        function nth(array, n) {
+          return array && array.length ? baseNth(array, toInteger(n)) : undefined$1;
+        }
+        var pull = baseRest(pullAll);
+        function pullAll(array, values2) {
+          return array && array.length && values2 && values2.length ? basePullAll(array, values2) : array;
+        }
+        function pullAllBy(array, values2, iteratee2) {
+          return array && array.length && values2 && values2.length ? basePullAll(array, values2, getIteratee(iteratee2, 2)) : array;
+        }
+        function pullAllWith(array, values2, comparator) {
+          return array && array.length && values2 && values2.length ? basePullAll(array, values2, undefined$1, comparator) : array;
+        }
+        var pullAt = flatRest(function(array, indexes) {
+          var length = array == null ? 0 : array.length, result2 = baseAt(array, indexes);
+          basePullAt(array, arrayMap(indexes, function(index) {
+            return isIndex(index, length) ? +index : index;
+          }).sort(compareAscending));
+          return result2;
+        });
+        function remove(array, predicate) {
+          var result2 = [];
+          if (!(array && array.length)) {
+            return result2;
+          }
+          var index = -1, indexes = [], length = array.length;
+          predicate = getIteratee(predicate, 3);
+          while (++index < length) {
+            var value = array[index];
+            if (predicate(value, index, array)) {
+              result2.push(value);
+              indexes.push(index);
+            }
+          }
+          basePullAt(array, indexes);
+          return result2;
+        }
+        function reverse(array) {
+          return array == null ? array : nativeReverse.call(array);
+        }
+        function slice(array, start, end) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          if (end && typeof end != "number" && isIterateeCall(array, start, end)) {
+            start = 0;
+            end = length;
+          } else {
+            start = start == null ? 0 : toInteger(start);
+            end = end === undefined$1 ? length : toInteger(end);
+          }
+          return baseSlice(array, start, end);
+        }
+        function sortedIndex(array, value) {
+          return baseSortedIndex(array, value);
+        }
+        function sortedIndexBy(array, value, iteratee2) {
+          return baseSortedIndexBy(array, value, getIteratee(iteratee2, 2));
+        }
+        function sortedIndexOf(array, value) {
+          var length = array == null ? 0 : array.length;
+          if (length) {
+            var index = baseSortedIndex(array, value);
+            if (index < length && eq(array[index], value)) {
+              return index;
+            }
+          }
+          return -1;
+        }
+        function sortedLastIndex(array, value) {
+          return baseSortedIndex(array, value, true);
+        }
+        function sortedLastIndexBy(array, value, iteratee2) {
+          return baseSortedIndexBy(array, value, getIteratee(iteratee2, 2), true);
+        }
+        function sortedLastIndexOf(array, value) {
+          var length = array == null ? 0 : array.length;
+          if (length) {
+            var index = baseSortedIndex(array, value, true) - 1;
+            if (eq(array[index], value)) {
+              return index;
+            }
+          }
+          return -1;
+        }
+        function sortedUniq(array) {
+          return array && array.length ? baseSortedUniq(array) : [];
+        }
+        function sortedUniqBy(array, iteratee2) {
+          return array && array.length ? baseSortedUniq(array, getIteratee(iteratee2, 2)) : [];
+        }
+        function tail(array) {
+          var length = array == null ? 0 : array.length;
+          return length ? baseSlice(array, 1, length) : [];
+        }
+        function take(array, n, guard) {
+          if (!(array && array.length)) {
+            return [];
+          }
+          n = guard || n === undefined$1 ? 1 : toInteger(n);
+          return baseSlice(array, 0, n < 0 ? 0 : n);
+        }
+        function takeRight(array, n, guard) {
+          var length = array == null ? 0 : array.length;
+          if (!length) {
+            return [];
+          }
+          n = guard || n === undefined$1 ? 1 : toInteger(n);
+          n = length - n;
+          return baseSlice(array, n < 0 ? 0 : n, length);
+        }
+        function takeRightWhile(array, predicate) {
+          return array && array.length ? baseWhile(array, getIteratee(predicate, 3), false, true) : [];
+        }
+        function takeWhile(array, predicate) {
+          return array && array.length ? baseWhile(array, getIteratee(predicate, 3)) : [];
+        }
+        var union = baseRest(function(arrays) {
+          return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true));
+        });
+        var unionBy = baseRest(function(arrays) {
+          var iteratee2 = last(arrays);
+          if (isArrayLikeObject(iteratee2)) {
+            iteratee2 = undefined$1;
+          }
+          return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), getIteratee(iteratee2, 2));
+        });
+        var unionWith = baseRest(function(arrays) {
+          var comparator = last(arrays);
+          comparator = typeof comparator == "function" ? comparator : undefined$1;
+          return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), undefined$1, comparator);
+        });
+        function uniq(array) {
+          return array && array.length ? baseUniq(array) : [];
+        }
+        function uniqBy(array, iteratee2) {
+          return array && array.length ? baseUniq(array, getIteratee(iteratee2, 2)) : [];
+        }
+        function uniqWith(array, comparator) {
+          comparator = typeof comparator == "function" ? comparator : undefined$1;
+          return array && array.length ? baseUniq(array, undefined$1, comparator) : [];
+        }
+        function unzip(array) {
+          if (!(array && array.length)) {
+            return [];
+          }
+          var length = 0;
+          array = arrayFilter(array, function(group) {
+            if (isArrayLikeObject(group)) {
+              length = nativeMax(group.length, length);
+              return true;
+            }
+          });
+          return baseTimes(length, function(index) {
+            return arrayMap(array, baseProperty(index));
+          });
+        }
+        function unzipWith(array, iteratee2) {
+          if (!(array && array.length)) {
+            return [];
+          }
+          var result2 = unzip(array);
+          if (iteratee2 == null) {
+            return result2;
+          }
+          return arrayMap(result2, function(group) {
+            return apply(iteratee2, undefined$1, group);
+          });
+        }
+        var without = baseRest(function(array, values2) {
+          return isArrayLikeObject(array) ? baseDifference(array, values2) : [];
+        });
+        var xor = baseRest(function(arrays) {
+          return baseXor(arrayFilter(arrays, isArrayLikeObject));
+        });
+        var xorBy = baseRest(function(arrays) {
+          var iteratee2 = last(arrays);
+          if (isArrayLikeObject(iteratee2)) {
+            iteratee2 = undefined$1;
+          }
+          return baseXor(arrayFilter(arrays, isArrayLikeObject), getIteratee(iteratee2, 2));
+        });
+        var xorWith = baseRest(function(arrays) {
+          var comparator = last(arrays);
+          comparator = typeof comparator == "function" ? comparator : undefined$1;
+          return baseXor(arrayFilter(arrays, isArrayLikeObject), undefined$1, comparator);
+        });
+        var zip = baseRest(unzip);
+        function zipObject(props, values2) {
+          return baseZipObject(props || [], values2 || [], assignValue);
+        }
+        function zipObjectDeep(props, values2) {
+          return baseZipObject(props || [], values2 || [], baseSet);
+        }
+        var zipWith = baseRest(function(arrays) {
+          var length = arrays.length, iteratee2 = length > 1 ? arrays[length - 1] : undefined$1;
+          iteratee2 = typeof iteratee2 == "function" ? (arrays.pop(), iteratee2) : undefined$1;
+          return unzipWith(arrays, iteratee2);
+        });
+        function chain(value) {
+          var result2 = lodash2(value);
+          result2.__chain__ = true;
+          return result2;
+        }
+        function tap(value, interceptor) {
+          interceptor(value);
+          return value;
+        }
+        function thru(value, interceptor) {
+          return interceptor(value);
+        }
+        var wrapperAt = flatRest(function(paths) {
+          var length = paths.length, start = length ? paths[0] : 0, value = this.__wrapped__, interceptor = function(object) {
+            return baseAt(object, paths);
+          };
+          if (length > 1 || this.__actions__.length || !(value instanceof LazyWrapper) || !isIndex(start)) {
+            return this.thru(interceptor);
+          }
+          value = value.slice(start, +start + (length ? 1 : 0));
+          value.__actions__.push({
+            "func": thru,
+            "args": [interceptor],
+            "thisArg": undefined$1
+          });
+          return new LodashWrapper(value, this.__chain__).thru(function(array) {
+            if (length && !array.length) {
+              array.push(undefined$1);
+            }
+            return array;
+          });
+        });
+        function wrapperChain() {
+          return chain(this);
+        }
+        function wrapperCommit() {
+          return new LodashWrapper(this.value(), this.__chain__);
+        }
+        function wrapperNext() {
+          if (this.__values__ === undefined$1) {
+            this.__values__ = toArray(this.value());
+          }
+          var done = this.__index__ >= this.__values__.length, value = done ? undefined$1 : this.__values__[this.__index__++];
+          return { "done": done, "value": value };
+        }
+        function wrapperToIterator() {
+          return this;
+        }
+        function wrapperPlant(value) {
+          var result2, parent2 = this;
+          while (parent2 instanceof baseLodash) {
+            var clone2 = wrapperClone(parent2);
+            clone2.__index__ = 0;
+            clone2.__values__ = undefined$1;
+            if (result2) {
+              previous.__wrapped__ = clone2;
+            } else {
+              result2 = clone2;
+            }
+            var previous = clone2;
+            parent2 = parent2.__wrapped__;
+          }
+          previous.__wrapped__ = value;
+          return result2;
+        }
+        function wrapperReverse() {
+          var value = this.__wrapped__;
+          if (value instanceof LazyWrapper) {
+            var wrapped = value;
+            if (this.__actions__.length) {
+              wrapped = new LazyWrapper(this);
+            }
+            wrapped = wrapped.reverse();
+            wrapped.__actions__.push({
+              "func": thru,
+              "args": [reverse],
+              "thisArg": undefined$1
+            });
+            return new LodashWrapper(wrapped, this.__chain__);
+          }
+          return this.thru(reverse);
+        }
+        function wrapperValue() {
+          return baseWrapperValue(this.__wrapped__, this.__actions__);
+        }
+        var countBy = createAggregator(function(result2, value, key) {
+          if (hasOwnProperty.call(result2, key)) {
+            ++result2[key];
+          } else {
+            baseAssignValue(result2, key, 1);
+          }
+        });
+        function every(collection, predicate, guard) {
+          var func = isArray(collection) ? arrayEvery : baseEvery;
+          if (guard && isIterateeCall(collection, predicate, guard)) {
+            predicate = undefined$1;
+          }
+          return func(collection, getIteratee(predicate, 3));
+        }
+        function filter(collection, predicate) {
+          var func = isArray(collection) ? arrayFilter : baseFilter;
+          return func(collection, getIteratee(predicate, 3));
+        }
+        var find = createFind(findIndex);
+        var findLast = createFind(findLastIndex);
+        function flatMap(collection, iteratee2) {
+          return baseFlatten(map(collection, iteratee2), 1);
+        }
+        function flatMapDeep(collection, iteratee2) {
+          return baseFlatten(map(collection, iteratee2), INFINITY);
+        }
+        function flatMapDepth(collection, iteratee2, depth) {
+          depth = depth === undefined$1 ? 1 : toInteger(depth);
+          return baseFlatten(map(collection, iteratee2), depth);
+        }
+        function forEach(collection, iteratee2) {
+          var func = isArray(collection) ? arrayEach : baseEach;
+          return func(collection, getIteratee(iteratee2, 3));
+        }
+        function forEachRight(collection, iteratee2) {
+          var func = isArray(collection) ? arrayEachRight : baseEachRight;
+          return func(collection, getIteratee(iteratee2, 3));
+        }
+        var groupBy = createAggregator(function(result2, value, key) {
+          if (hasOwnProperty.call(result2, key)) {
+            result2[key].push(value);
+          } else {
+            baseAssignValue(result2, key, [value]);
+          }
+        });
+        function includes(collection, value, fromIndex, guard) {
+          collection = isArrayLike(collection) ? collection : values(collection);
+          fromIndex = fromIndex && !guard ? toInteger(fromIndex) : 0;
+          var length = collection.length;
+          if (fromIndex < 0) {
+            fromIndex = nativeMax(length + fromIndex, 0);
+          }
+          return isString(collection) ? fromIndex <= length && collection.indexOf(value, fromIndex) > -1 : !!length && baseIndexOf(collection, value, fromIndex) > -1;
+        }
+        var invokeMap = baseRest(function(collection, path, args) {
+          var index = -1, isFunc = typeof path == "function", result2 = isArrayLike(collection) ? Array2(collection.length) : [];
+          baseEach(collection, function(value) {
+            result2[++index] = isFunc ? apply(path, value, args) : baseInvoke(value, path, args);
+          });
+          return result2;
+        });
+        var keyBy = createAggregator(function(result2, value, key) {
+          baseAssignValue(result2, key, value);
+        });
+        function map(collection, iteratee2) {
+          var func = isArray(collection) ? arrayMap : baseMap;
+          return func(collection, getIteratee(iteratee2, 3));
+        }
+        function orderBy(collection, iteratees, orders, guard) {
+          if (collection == null) {
+            return [];
+          }
+          if (!isArray(iteratees)) {
+            iteratees = iteratees == null ? [] : [iteratees];
+          }
+          orders = guard ? undefined$1 : orders;
+          if (!isArray(orders)) {
+            orders = orders == null ? [] : [orders];
+          }
+          return baseOrderBy(collection, iteratees, orders);
+        }
+        var partition = createAggregator(function(result2, value, key) {
+          result2[key ? 0 : 1].push(value);
+        }, function() {
+          return [[], []];
+        });
+        function reduce(collection, iteratee2, accumulator) {
+          var func = isArray(collection) ? arrayReduce : baseReduce, initAccum = arguments.length < 3;
+          return func(collection, getIteratee(iteratee2, 4), accumulator, initAccum, baseEach);
+        }
+        function reduceRight(collection, iteratee2, accumulator) {
+          var func = isArray(collection) ? arrayReduceRight : baseReduce, initAccum = arguments.length < 3;
+          return func(collection, getIteratee(iteratee2, 4), accumulator, initAccum, baseEachRight);
+        }
+        function reject(collection, predicate) {
+          var func = isArray(collection) ? arrayFilter : baseFilter;
+          return func(collection, negate(getIteratee(predicate, 3)));
+        }
+        function sample(collection) {
+          var func = isArray(collection) ? arraySample : baseSample;
+          return func(collection);
+        }
+        function sampleSize(collection, n, guard) {
+          if (guard ? isIterateeCall(collection, n, guard) : n === undefined$1) {
+            n = 1;
+          } else {
+            n = toInteger(n);
+          }
+          var func = isArray(collection) ? arraySampleSize : baseSampleSize;
+          return func(collection, n);
+        }
+        function shuffle(collection) {
+          var func = isArray(collection) ? arrayShuffle : baseShuffle;
+          return func(collection);
+        }
+        function size(collection) {
+          if (collection == null) {
+            return 0;
+          }
+          if (isArrayLike(collection)) {
+            return isString(collection) ? stringSize(collection) : collection.length;
+          }
+          var tag = getTag(collection);
+          if (tag == mapTag || tag == setTag) {
+            return collection.size;
+          }
+          return baseKeys(collection).length;
+        }
+        function some(collection, predicate, guard) {
+          var func = isArray(collection) ? arraySome : baseSome;
+          if (guard && isIterateeCall(collection, predicate, guard)) {
+            predicate = undefined$1;
+          }
+          return func(collection, getIteratee(predicate, 3));
+        }
+        var sortBy = baseRest(function(collection, iteratees) {
+          if (collection == null) {
+            return [];
+          }
+          var length = iteratees.length;
+          if (length > 1 && isIterateeCall(collection, iteratees[0], iteratees[1])) {
+            iteratees = [];
+          } else if (length > 2 && isIterateeCall(iteratees[0], iteratees[1], iteratees[2])) {
+            iteratees = [iteratees[0]];
+          }
+          return baseOrderBy(collection, baseFlatten(iteratees, 1), []);
+        });
+        var now = ctxNow || function() {
+          return root.Date.now();
+        };
+        function after(n, func) {
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          n = toInteger(n);
+          return function() {
+            if (--n < 1) {
+              return func.apply(this, arguments);
+            }
+          };
+        }
+        function ary(func, n, guard) {
+          n = guard ? undefined$1 : n;
+          n = func && n == null ? func.length : n;
+          return createWrap(func, WRAP_ARY_FLAG, undefined$1, undefined$1, undefined$1, undefined$1, n);
+        }
+        function before(n, func) {
+          var result2;
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          n = toInteger(n);
+          return function() {
+            if (--n > 0) {
+              result2 = func.apply(this, arguments);
+            }
+            if (n <= 1) {
+              func = undefined$1;
+            }
+            return result2;
+          };
+        }
+        var bind = baseRest(function(func, thisArg, partials) {
+          var bitmask = WRAP_BIND_FLAG;
+          if (partials.length) {
+            var holders = replaceHolders(partials, getHolder(bind));
+            bitmask |= WRAP_PARTIAL_FLAG;
+          }
+          return createWrap(func, bitmask, thisArg, partials, holders);
+        });
+        var bindKey = baseRest(function(object, key, partials) {
+          var bitmask = WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG;
+          if (partials.length) {
+            var holders = replaceHolders(partials, getHolder(bindKey));
+            bitmask |= WRAP_PARTIAL_FLAG;
+          }
+          return createWrap(key, bitmask, object, partials, holders);
+        });
+        function curry(func, arity, guard) {
+          arity = guard ? undefined$1 : arity;
+          var result2 = createWrap(func, WRAP_CURRY_FLAG, undefined$1, undefined$1, undefined$1, undefined$1, undefined$1, arity);
+          result2.placeholder = curry.placeholder;
+          return result2;
+        }
+        function curryRight(func, arity, guard) {
+          arity = guard ? undefined$1 : arity;
+          var result2 = createWrap(func, WRAP_CURRY_RIGHT_FLAG, undefined$1, undefined$1, undefined$1, undefined$1, undefined$1, arity);
+          result2.placeholder = curryRight.placeholder;
+          return result2;
+        }
+        function debounce(func, wait, options) {
+          var lastArgs, lastThis, maxWait, result2, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          wait = toNumber(wait) || 0;
+          if (isObject(options)) {
+            leading = !!options.leading;
+            maxing = "maxWait" in options;
+            maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+            trailing = "trailing" in options ? !!options.trailing : trailing;
+          }
+          function invokeFunc(time) {
+            var args = lastArgs, thisArg = lastThis;
+            lastArgs = lastThis = undefined$1;
+            lastInvokeTime = time;
+            result2 = func.apply(thisArg, args);
+            return result2;
+          }
+          function leadingEdge(time) {
+            lastInvokeTime = time;
+            timerId = setTimeout(timerExpired, wait);
+            return leading ? invokeFunc(time) : result2;
+          }
+          function remainingWait(time) {
+            var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
+            return maxing ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+          }
+          function shouldInvoke(time) {
+            var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime;
+            return lastCallTime === undefined$1 || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+          }
+          function timerExpired() {
+            var time = now();
+            if (shouldInvoke(time)) {
+              return trailingEdge(time);
+            }
+            timerId = setTimeout(timerExpired, remainingWait(time));
+          }
+          function trailingEdge(time) {
+            timerId = undefined$1;
+            if (trailing && lastArgs) {
+              return invokeFunc(time);
+            }
+            lastArgs = lastThis = undefined$1;
+            return result2;
+          }
+          function cancel() {
+            if (timerId !== undefined$1) {
+              clearTimeout(timerId);
+            }
+            lastInvokeTime = 0;
+            lastArgs = lastCallTime = lastThis = timerId = undefined$1;
+          }
+          function flush() {
+            return timerId === undefined$1 ? result2 : trailingEdge(now());
+          }
+          function debounced() {
+            var time = now(), isInvoking = shouldInvoke(time);
+            lastArgs = arguments;
+            lastThis = this;
+            lastCallTime = time;
+            if (isInvoking) {
+              if (timerId === undefined$1) {
+                return leadingEdge(lastCallTime);
+              }
+              if (maxing) {
+                clearTimeout(timerId);
+                timerId = setTimeout(timerExpired, wait);
+                return invokeFunc(lastCallTime);
+              }
+            }
+            if (timerId === undefined$1) {
+              timerId = setTimeout(timerExpired, wait);
+            }
+            return result2;
+          }
+          debounced.cancel = cancel;
+          debounced.flush = flush;
+          return debounced;
+        }
+        var defer = baseRest(function(func, args) {
+          return baseDelay(func, 1, args);
+        });
+        var delay = baseRest(function(func, wait, args) {
+          return baseDelay(func, toNumber(wait) || 0, args);
+        });
+        function flip(func) {
+          return createWrap(func, WRAP_FLIP_FLAG);
+        }
+        function memoize(func, resolver) {
+          if (typeof func != "function" || resolver != null && typeof resolver != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          var memoized = function() {
+            var args = arguments, key = resolver ? resolver.apply(this, args) : args[0], cache = memoized.cache;
+            if (cache.has(key)) {
+              return cache.get(key);
+            }
+            var result2 = func.apply(this, args);
+            memoized.cache = cache.set(key, result2) || cache;
+            return result2;
+          };
+          memoized.cache = new (memoize.Cache || MapCache)();
+          return memoized;
+        }
+        memoize.Cache = MapCache;
+        function negate(predicate) {
+          if (typeof predicate != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          return function() {
+            var args = arguments;
+            switch (args.length) {
+              case 0:
+                return !predicate.call(this);
+              case 1:
+                return !predicate.call(this, args[0]);
+              case 2:
+                return !predicate.call(this, args[0], args[1]);
+              case 3:
+                return !predicate.call(this, args[0], args[1], args[2]);
+            }
+            return !predicate.apply(this, args);
+          };
+        }
+        function once(func) {
+          return before(2, func);
+        }
+        var overArgs = castRest(function(func, transforms) {
+          transforms = transforms.length == 1 && isArray(transforms[0]) ? arrayMap(transforms[0], baseUnary(getIteratee())) : arrayMap(baseFlatten(transforms, 1), baseUnary(getIteratee()));
+          var funcsLength = transforms.length;
+          return baseRest(function(args) {
+            var index = -1, length = nativeMin(args.length, funcsLength);
+            while (++index < length) {
+              args[index] = transforms[index].call(this, args[index]);
+            }
+            return apply(func, this, args);
+          });
+        });
+        var partial = baseRest(function(func, partials) {
+          var holders = replaceHolders(partials, getHolder(partial));
+          return createWrap(func, WRAP_PARTIAL_FLAG, undefined$1, partials, holders);
+        });
+        var partialRight = baseRest(function(func, partials) {
+          var holders = replaceHolders(partials, getHolder(partialRight));
+          return createWrap(func, WRAP_PARTIAL_RIGHT_FLAG, undefined$1, partials, holders);
+        });
+        var rearg = flatRest(function(func, indexes) {
+          return createWrap(func, WRAP_REARG_FLAG, undefined$1, undefined$1, undefined$1, indexes);
+        });
+        function rest(func, start) {
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          start = start === undefined$1 ? start : toInteger(start);
+          return baseRest(func, start);
+        }
+        function spread(func, start) {
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          start = start == null ? 0 : nativeMax(toInteger(start), 0);
+          return baseRest(function(args) {
+            var array = args[start], otherArgs = castSlice(args, 0, start);
+            if (array) {
+              arrayPush(otherArgs, array);
+            }
+            return apply(func, this, otherArgs);
+          });
+        }
+        function throttle(func, wait, options) {
+          var leading = true, trailing = true;
+          if (typeof func != "function") {
+            throw new TypeError(FUNC_ERROR_TEXT);
+          }
+          if (isObject(options)) {
+            leading = "leading" in options ? !!options.leading : leading;
+            trailing = "trailing" in options ? !!options.trailing : trailing;
+          }
+          return debounce(func, wait, {
+            "leading": leading,
+            "maxWait": wait,
+            "trailing": trailing
+          });
+        }
+        function unary(func) {
+          return ary(func, 1);
+        }
+        function wrap(value, wrapper) {
+          return partial(castFunction(wrapper), value);
+        }
+        function castArray() {
+          if (!arguments.length) {
+            return [];
+          }
+          var value = arguments[0];
+          return isArray(value) ? value : [value];
+        }
+        function clone(value) {
+          return baseClone(value, CLONE_SYMBOLS_FLAG);
+        }
+        function cloneWith(value, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          return baseClone(value, CLONE_SYMBOLS_FLAG, customizer);
+        }
+        function cloneDeep(value) {
+          return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
+        }
+        function cloneDeepWith(value, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
+        }
+        function conformsTo(object, source) {
+          return source == null || baseConformsTo(object, source, keys(source));
+        }
+        function eq(value, other) {
+          return value === other || value !== value && other !== other;
+        }
+        var gt = createRelationalOperation(baseGt);
+        var gte = createRelationalOperation(function(value, other) {
+          return value >= other;
+        });
+        var isArguments = baseIsArguments(/* @__PURE__ */ (function() {
+          return arguments;
+        })()) ? baseIsArguments : function(value) {
+          return isObjectLike(value) && hasOwnProperty.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
+        };
+        var isArray = Array2.isArray;
+        var isArrayBuffer = nodeIsArrayBuffer ? baseUnary(nodeIsArrayBuffer) : baseIsArrayBuffer;
+        function isArrayLike(value) {
+          return value != null && isLength(value.length) && !isFunction(value);
+        }
+        function isArrayLikeObject(value) {
+          return isObjectLike(value) && isArrayLike(value);
+        }
+        function isBoolean(value) {
+          return value === true || value === false || isObjectLike(value) && baseGetTag(value) == boolTag;
+        }
+        var isBuffer = nativeIsBuffer || stubFalse;
+        var isDate = nodeIsDate ? baseUnary(nodeIsDate) : baseIsDate;
+        function isElement(value) {
+          return isObjectLike(value) && value.nodeType === 1 && !isPlainObject(value);
+        }
+        function isEmpty(value) {
+          if (value == null) {
+            return true;
+          }
+          if (isArrayLike(value) && (isArray(value) || typeof value == "string" || typeof value.splice == "function" || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+            return !value.length;
+          }
+          var tag = getTag(value);
+          if (tag == mapTag || tag == setTag) {
+            return !value.size;
+          }
+          if (isPrototype(value)) {
+            return !baseKeys(value).length;
+          }
+          for (var key in value) {
+            if (hasOwnProperty.call(value, key)) {
+              return false;
+            }
+          }
+          return true;
+        }
+        function isEqual(value, other) {
+          return baseIsEqual(value, other);
+        }
+        function isEqualWith(value, other, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          var result2 = customizer ? customizer(value, other) : undefined$1;
+          return result2 === undefined$1 ? baseIsEqual(value, other, undefined$1, customizer) : !!result2;
+        }
+        function isError(value) {
+          if (!isObjectLike(value)) {
+            return false;
+          }
+          var tag = baseGetTag(value);
+          return tag == errorTag || tag == domExcTag || typeof value.message == "string" && typeof value.name == "string" && !isPlainObject(value);
+        }
+        function isFinite(value) {
+          return typeof value == "number" && nativeIsFinite(value);
+        }
+        function isFunction(value) {
+          if (!isObject(value)) {
+            return false;
+          }
+          var tag = baseGetTag(value);
+          return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+        }
+        function isInteger(value) {
+          return typeof value == "number" && value == toInteger(value);
+        }
+        function isLength(value) {
+          return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+        }
+        function isObject(value) {
+          var type = typeof value;
+          return value != null && (type == "object" || type == "function");
+        }
+        function isObjectLike(value) {
+          return value != null && typeof value == "object";
+        }
+        var isMap = nodeIsMap ? baseUnary(nodeIsMap) : baseIsMap;
+        function isMatch(object, source) {
+          return object === source || baseIsMatch(object, source, getMatchData(source));
+        }
+        function isMatchWith(object, source, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          return baseIsMatch(object, source, getMatchData(source), customizer);
+        }
+        function isNaN2(value) {
+          return isNumber(value) && value != +value;
+        }
+        function isNative(value) {
+          if (isMaskable(value)) {
+            throw new Error(CORE_ERROR_TEXT);
+          }
+          return baseIsNative(value);
+        }
+        function isNull(value) {
+          return value === null;
+        }
+        function isNil(value) {
+          return value == null;
+        }
+        function isNumber(value) {
+          return typeof value == "number" || isObjectLike(value) && baseGetTag(value) == numberTag;
+        }
+        function isPlainObject(value) {
+          if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+            return false;
+          }
+          var proto = getPrototype(value);
+          if (proto === null) {
+            return true;
+          }
+          var Ctor = hasOwnProperty.call(proto, "constructor") && proto.constructor;
+          return typeof Ctor == "function" && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
+        }
+        var isRegExp = nodeIsRegExp ? baseUnary(nodeIsRegExp) : baseIsRegExp;
+        function isSafeInteger(value) {
+          return isInteger(value) && value >= -MAX_SAFE_INTEGER && value <= MAX_SAFE_INTEGER;
+        }
+        var isSet = nodeIsSet ? baseUnary(nodeIsSet) : baseIsSet;
+        function isString(value) {
+          return typeof value == "string" || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag;
+        }
+        function isSymbol(value) {
+          return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
+        }
+        var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+        function isUndefined(value) {
+          return value === undefined$1;
+        }
+        function isWeakMap(value) {
+          return isObjectLike(value) && getTag(value) == weakMapTag;
+        }
+        function isWeakSet(value) {
+          return isObjectLike(value) && baseGetTag(value) == weakSetTag;
+        }
+        var lt = createRelationalOperation(baseLt);
+        var lte = createRelationalOperation(function(value, other) {
+          return value <= other;
+        });
+        function toArray(value) {
+          if (!value) {
+            return [];
+          }
+          if (isArrayLike(value)) {
+            return isString(value) ? stringToArray(value) : copyArray(value);
+          }
+          if (symIterator && value[symIterator]) {
+            return iteratorToArray(value[symIterator]());
+          }
+          var tag = getTag(value), func = tag == mapTag ? mapToArray : tag == setTag ? setToArray : values;
+          return func(value);
+        }
+        function toFinite(value) {
+          if (!value) {
+            return value === 0 ? value : 0;
+          }
+          value = toNumber(value);
+          if (value === INFINITY || value === -INFINITY) {
+            var sign = value < 0 ? -1 : 1;
+            return sign * MAX_INTEGER;
+          }
+          return value === value ? value : 0;
+        }
+        function toInteger(value) {
+          var result2 = toFinite(value), remainder = result2 % 1;
+          return result2 === result2 ? remainder ? result2 - remainder : result2 : 0;
+        }
+        function toLength(value) {
+          return value ? baseClamp(toInteger(value), 0, MAX_ARRAY_LENGTH) : 0;
+        }
+        function toNumber(value) {
+          if (typeof value == "number") {
+            return value;
+          }
+          if (isSymbol(value)) {
+            return NAN;
+          }
+          if (isObject(value)) {
+            var other = typeof value.valueOf == "function" ? value.valueOf() : value;
+            value = isObject(other) ? other + "" : other;
+          }
+          if (typeof value != "string") {
+            return value === 0 ? value : +value;
+          }
+          value = baseTrim(value);
+          var isBinary = reIsBinary.test(value);
+          return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
+        }
+        function toPlainObject(value) {
+          return copyObject(value, keysIn(value));
+        }
+        function toSafeInteger(value) {
+          return value ? baseClamp(toInteger(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER) : value === 0 ? value : 0;
+        }
+        function toString(value) {
+          return value == null ? "" : baseToString(value);
+        }
+        var assign = createAssigner(function(object, source) {
+          if (isPrototype(source) || isArrayLike(source)) {
+            copyObject(source, keys(source), object);
+            return;
+          }
+          for (var key in source) {
+            if (hasOwnProperty.call(source, key)) {
+              assignValue(object, key, source[key]);
+            }
+          }
+        });
+        var assignIn = createAssigner(function(object, source) {
+          copyObject(source, keysIn(source), object);
+        });
+        var assignInWith = createAssigner(function(object, source, srcIndex, customizer) {
+          copyObject(source, keysIn(source), object, customizer);
+        });
+        var assignWith = createAssigner(function(object, source, srcIndex, customizer) {
+          copyObject(source, keys(source), object, customizer);
+        });
+        var at = flatRest(baseAt);
+        function create(prototype, properties) {
+          var result2 = baseCreate(prototype);
+          return properties == null ? result2 : baseAssign(result2, properties);
+        }
+        var defaults = baseRest(function(object, sources) {
+          object = Object2(object);
+          var index = -1;
+          var length = sources.length;
+          var guard = length > 2 ? sources[2] : undefined$1;
+          if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+            length = 1;
+          }
+          while (++index < length) {
+            var source = sources[index];
+            var props = keysIn(source);
+            var propsIndex = -1;
+            var propsLength = props.length;
+            while (++propsIndex < propsLength) {
+              var key = props[propsIndex];
+              var value = object[key];
+              if (value === undefined$1 || eq(value, objectProto[key]) && !hasOwnProperty.call(object, key)) {
+                object[key] = source[key];
+              }
+            }
+          }
+          return object;
+        });
+        var defaultsDeep = baseRest(function(args) {
+          args.push(undefined$1, customDefaultsMerge);
+          return apply(mergeWith, undefined$1, args);
+        });
+        function findKey(object, predicate) {
+          return baseFindKey(object, getIteratee(predicate, 3), baseForOwn);
+        }
+        function findLastKey(object, predicate) {
+          return baseFindKey(object, getIteratee(predicate, 3), baseForOwnRight);
+        }
+        function forIn(object, iteratee2) {
+          return object == null ? object : baseFor(object, getIteratee(iteratee2, 3), keysIn);
+        }
+        function forInRight(object, iteratee2) {
+          return object == null ? object : baseForRight(object, getIteratee(iteratee2, 3), keysIn);
+        }
+        function forOwn(object, iteratee2) {
+          return object && baseForOwn(object, getIteratee(iteratee2, 3));
+        }
+        function forOwnRight(object, iteratee2) {
+          return object && baseForOwnRight(object, getIteratee(iteratee2, 3));
+        }
+        function functions(object) {
+          return object == null ? [] : baseFunctions(object, keys(object));
+        }
+        function functionsIn(object) {
+          return object == null ? [] : baseFunctions(object, keysIn(object));
+        }
+        function get(object, path, defaultValue) {
+          var result2 = object == null ? undefined$1 : baseGet(object, path);
+          return result2 === undefined$1 ? defaultValue : result2;
+        }
+        function has(object, path) {
+          return object != null && hasPath(object, path, baseHas);
+        }
+        function hasIn(object, path) {
+          return object != null && hasPath(object, path, baseHasIn);
+        }
+        var invert = createInverter(function(result2, value, key) {
+          if (value != null && typeof value.toString != "function") {
+            value = nativeObjectToString.call(value);
+          }
+          result2[value] = key;
+        }, constant(identity));
+        var invertBy = createInverter(function(result2, value, key) {
+          if (value != null && typeof value.toString != "function") {
+            value = nativeObjectToString.call(value);
+          }
+          if (hasOwnProperty.call(result2, value)) {
+            result2[value].push(key);
+          } else {
+            result2[value] = [key];
+          }
+        }, getIteratee);
+        var invoke = baseRest(baseInvoke);
+        function keys(object) {
+          return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+        }
+        function keysIn(object) {
+          return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);
+        }
+        function mapKeys(object, iteratee2) {
+          var result2 = {};
+          iteratee2 = getIteratee(iteratee2, 3);
+          baseForOwn(object, function(value, key, object2) {
+            baseAssignValue(result2, iteratee2(value, key, object2), value);
+          });
+          return result2;
+        }
+        function mapValues(object, iteratee2) {
+          var result2 = {};
+          iteratee2 = getIteratee(iteratee2, 3);
+          baseForOwn(object, function(value, key, object2) {
+            baseAssignValue(result2, key, iteratee2(value, key, object2));
+          });
+          return result2;
+        }
+        var merge = createAssigner(function(object, source, srcIndex) {
+          baseMerge(object, source, srcIndex);
+        });
+        var mergeWith = createAssigner(function(object, source, srcIndex, customizer) {
+          baseMerge(object, source, srcIndex, customizer);
+        });
+        var omit = flatRest(function(object, paths) {
+          var result2 = {};
+          if (object == null) {
+            return result2;
+          }
+          var isDeep = false;
+          paths = arrayMap(paths, function(path) {
+            path = castPath(path, object);
+            isDeep || (isDeep = path.length > 1);
+            return path;
+          });
+          copyObject(object, getAllKeysIn(object), result2);
+          if (isDeep) {
+            result2 = baseClone(result2, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG, customOmitClone);
+          }
+          var length = paths.length;
+          while (length--) {
+            baseUnset(result2, paths[length]);
+          }
+          return result2;
+        });
+        function omitBy(object, predicate) {
+          return pickBy(object, negate(getIteratee(predicate)));
+        }
+        var pick = flatRest(function(object, paths) {
+          return object == null ? {} : basePick(object, paths);
+        });
+        function pickBy(object, predicate) {
+          if (object == null) {
+            return {};
+          }
+          var props = arrayMap(getAllKeysIn(object), function(prop) {
+            return [prop];
+          });
+          predicate = getIteratee(predicate);
+          return basePickBy(object, props, function(value, path) {
+            return predicate(value, path[0]);
+          });
+        }
+        function result(object, path, defaultValue) {
+          path = castPath(path, object);
+          var index = -1, length = path.length;
+          if (!length) {
+            length = 1;
+            object = undefined$1;
+          }
+          while (++index < length) {
+            var value = object == null ? undefined$1 : object[toKey(path[index])];
+            if (value === undefined$1) {
+              index = length;
+              value = defaultValue;
+            }
+            object = isFunction(value) ? value.call(object) : value;
+          }
+          return object;
+        }
+        function set(object, path, value) {
+          return object == null ? object : baseSet(object, path, value);
+        }
+        function setWith(object, path, value, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          return object == null ? object : baseSet(object, path, value, customizer);
+        }
+        var toPairs = createToPairs(keys);
+        var toPairsIn = createToPairs(keysIn);
+        function transform(object, iteratee2, accumulator) {
+          var isArr = isArray(object), isArrLike = isArr || isBuffer(object) || isTypedArray(object);
+          iteratee2 = getIteratee(iteratee2, 4);
+          if (accumulator == null) {
+            var Ctor = object && object.constructor;
+            if (isArrLike) {
+              accumulator = isArr ? new Ctor() : [];
+            } else if (isObject(object)) {
+              accumulator = isFunction(Ctor) ? baseCreate(getPrototype(object)) : {};
+            } else {
+              accumulator = {};
+            }
+          }
+          (isArrLike ? arrayEach : baseForOwn)(object, function(value, index, object2) {
+            return iteratee2(accumulator, value, index, object2);
+          });
+          return accumulator;
+        }
+        function unset(object, path) {
+          return object == null ? true : baseUnset(object, path);
+        }
+        function update(object, path, updater) {
+          return object == null ? object : baseUpdate(object, path, castFunction(updater));
+        }
+        function updateWith(object, path, updater, customizer) {
+          customizer = typeof customizer == "function" ? customizer : undefined$1;
+          return object == null ? object : baseUpdate(object, path, castFunction(updater), customizer);
+        }
+        function values(object) {
+          return object == null ? [] : baseValues(object, keys(object));
+        }
+        function valuesIn(object) {
+          return object == null ? [] : baseValues(object, keysIn(object));
+        }
+        function clamp(number, lower, upper) {
+          if (upper === undefined$1) {
+            upper = lower;
+            lower = undefined$1;
+          }
+          if (upper !== undefined$1) {
+            upper = toNumber(upper);
+            upper = upper === upper ? upper : 0;
+          }
+          if (lower !== undefined$1) {
+            lower = toNumber(lower);
+            lower = lower === lower ? lower : 0;
+          }
+          return baseClamp(toNumber(number), lower, upper);
+        }
+        function inRange(number, start, end) {
+          start = toFinite(start);
+          if (end === undefined$1) {
+            end = start;
+            start = 0;
+          } else {
+            end = toFinite(end);
+          }
+          number = toNumber(number);
+          return baseInRange(number, start, end);
+        }
+        function random(lower, upper, floating) {
+          if (floating && typeof floating != "boolean" && isIterateeCall(lower, upper, floating)) {
+            upper = floating = undefined$1;
+          }
+          if (floating === undefined$1) {
+            if (typeof upper == "boolean") {
+              floating = upper;
+              upper = undefined$1;
+            } else if (typeof lower == "boolean") {
+              floating = lower;
+              lower = undefined$1;
+            }
+          }
+          if (lower === undefined$1 && upper === undefined$1) {
+            lower = 0;
+            upper = 1;
+          } else {
+            lower = toFinite(lower);
+            if (upper === undefined$1) {
+              upper = lower;
+              lower = 0;
+            } else {
+              upper = toFinite(upper);
+            }
+          }
+          if (lower > upper) {
+            var temp = lower;
+            lower = upper;
+            upper = temp;
+          }
+          if (floating || lower % 1 || upper % 1) {
+            var rand = nativeRandom();
+            return nativeMin(lower + rand * (upper - lower + freeParseFloat("1e-" + ((rand + "").length - 1))), upper);
+          }
+          return baseRandom(lower, upper);
+        }
+        var camelCase = createCompounder(function(result2, word, index) {
+          word = word.toLowerCase();
+          return result2 + (index ? capitalize(word) : word);
+        });
+        function capitalize(string) {
+          return upperFirst(toString(string).toLowerCase());
+        }
+        function deburr(string) {
+          string = toString(string);
+          return string && string.replace(reLatin, deburrLetter).replace(reComboMark, "");
+        }
+        function endsWith(string, target, position) {
+          string = toString(string);
+          target = baseToString(target);
+          var length = string.length;
+          position = position === undefined$1 ? length : baseClamp(toInteger(position), 0, length);
+          var end = position;
+          position -= target.length;
+          return position >= 0 && string.slice(position, end) == target;
+        }
+        function escape(string) {
+          string = toString(string);
+          return string && reHasUnescapedHtml.test(string) ? string.replace(reUnescapedHtml, escapeHtmlChar) : string;
+        }
+        function escapeRegExp(string) {
+          string = toString(string);
+          return string && reHasRegExpChar.test(string) ? string.replace(reRegExpChar, "\\$&") : string;
+        }
+        var kebabCase = createCompounder(function(result2, word, index) {
+          return result2 + (index ? "-" : "") + word.toLowerCase();
+        });
+        var lowerCase = createCompounder(function(result2, word, index) {
+          return result2 + (index ? " " : "") + word.toLowerCase();
+        });
+        var lowerFirst = createCaseFirst("toLowerCase");
+        function pad(string, length, chars) {
+          string = toString(string);
+          length = toInteger(length);
+          var strLength = length ? stringSize(string) : 0;
+          if (!length || strLength >= length) {
+            return string;
+          }
+          var mid = (length - strLength) / 2;
+          return createPadding(nativeFloor(mid), chars) + string + createPadding(nativeCeil(mid), chars);
+        }
+        function padEnd(string, length, chars) {
+          string = toString(string);
+          length = toInteger(length);
+          var strLength = length ? stringSize(string) : 0;
+          return length && strLength < length ? string + createPadding(length - strLength, chars) : string;
+        }
+        function padStart(string, length, chars) {
+          string = toString(string);
+          length = toInteger(length);
+          var strLength = length ? stringSize(string) : 0;
+          return length && strLength < length ? createPadding(length - strLength, chars) + string : string;
+        }
+        function parseInt2(string, radix, guard) {
+          if (guard || radix == null) {
+            radix = 0;
+          } else if (radix) {
+            radix = +radix;
+          }
+          return nativeParseInt(toString(string).replace(reTrimStart, ""), radix || 0);
+        }
+        function repeat(string, n, guard) {
+          if (guard ? isIterateeCall(string, n, guard) : n === undefined$1) {
+            n = 1;
+          } else {
+            n = toInteger(n);
+          }
+          return baseRepeat(toString(string), n);
+        }
+        function replace() {
+          var args = arguments, string = toString(args[0]);
+          return args.length < 3 ? string : string.replace(args[1], args[2]);
+        }
+        var snakeCase = createCompounder(function(result2, word, index) {
+          return result2 + (index ? "_" : "") + word.toLowerCase();
+        });
+        function split(string, separator, limit) {
+          if (limit && typeof limit != "number" && isIterateeCall(string, separator, limit)) {
+            separator = limit = undefined$1;
+          }
+          limit = limit === undefined$1 ? MAX_ARRAY_LENGTH : limit >>> 0;
+          if (!limit) {
+            return [];
+          }
+          string = toString(string);
+          if (string && (typeof separator == "string" || separator != null && !isRegExp(separator))) {
+            separator = baseToString(separator);
+            if (!separator && hasUnicode(string)) {
+              return castSlice(stringToArray(string), 0, limit);
+            }
+          }
+          return string.split(separator, limit);
+        }
+        var startCase = createCompounder(function(result2, word, index) {
+          return result2 + (index ? " " : "") + upperFirst(word);
+        });
+        function startsWith(string, target, position) {
+          string = toString(string);
+          position = position == null ? 0 : baseClamp(toInteger(position), 0, string.length);
+          target = baseToString(target);
+          return string.slice(position, position + target.length) == target;
+        }
+        function template(string, options, guard) {
+          var settings = lodash2.templateSettings;
+          if (guard && isIterateeCall(string, options, guard)) {
+            options = undefined$1;
+          }
+          string = toString(string);
+          options = assignInWith({}, options, settings, customDefaultsAssignIn);
+          var imports = assignInWith({}, options.imports, settings.imports, customDefaultsAssignIn), importsKeys = keys(imports), importsValues = baseValues(imports, importsKeys);
+          var isEscaping, isEvaluating, index = 0, interpolate = options.interpolate || reNoMatch, source = "__p += '";
+          var reDelimiters = RegExp2(
+            (options.escape || reNoMatch).source + "|" + interpolate.source + "|" + (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + "|" + (options.evaluate || reNoMatch).source + "|$",
+            "g"
+          );
+          var sourceURL = "//# sourceURL=" + (hasOwnProperty.call(options, "sourceURL") ? (options.sourceURL + "").replace(/\s/g, " ") : "lodash.templateSources[" + ++templateCounter + "]") + "\n";
+          string.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
+            interpolateValue || (interpolateValue = esTemplateValue);
+            source += string.slice(index, offset).replace(reUnescapedString, escapeStringChar);
+            if (escapeValue) {
+              isEscaping = true;
+              source += "' +\n__e(" + escapeValue + ") +\n'";
+            }
+            if (evaluateValue) {
+              isEvaluating = true;
+              source += "';\n" + evaluateValue + ";\n__p += '";
+            }
+            if (interpolateValue) {
+              source += "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'";
+            }
+            index = offset + match.length;
+            return match;
+          });
+          source += "';\n";
+          var variable = hasOwnProperty.call(options, "variable") && options.variable;
+          if (!variable) {
+            source = "with (obj) {\n" + source + "\n}\n";
+          } else if (reForbiddenIdentifierChars.test(variable)) {
+            throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+          }
+          source = (isEvaluating ? source.replace(reEmptyStringLeading, "") : source).replace(reEmptyStringMiddle, "$1").replace(reEmptyStringTrailing, "$1;");
+          source = "function(" + (variable || "obj") + ") {\n" + (variable ? "" : "obj || (obj = {});\n") + "var __t, __p = ''" + (isEscaping ? ", __e = _.escape" : "") + (isEvaluating ? ", __j = Array.prototype.join;\nfunction print() { __p += __j.call(arguments, '') }\n" : ";\n") + source + "return __p\n}";
+          var result2 = attempt(function() {
+            return Function2(importsKeys, sourceURL + "return " + source).apply(undefined$1, importsValues);
+          });
+          result2.source = source;
+          if (isError(result2)) {
+            throw result2;
+          }
+          return result2;
+        }
+        function toLower(value) {
+          return toString(value).toLowerCase();
+        }
+        function toUpper(value) {
+          return toString(value).toUpperCase();
+        }
+        function trim(string, chars, guard) {
+          string = toString(string);
+          if (string && (guard || chars === undefined$1)) {
+            return baseTrim(string);
+          }
+          if (!string || !(chars = baseToString(chars))) {
+            return string;
+          }
+          var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
+          return castSlice(strSymbols, start, end).join("");
+        }
+        function trimEnd(string, chars, guard) {
+          string = toString(string);
+          if (string && (guard || chars === undefined$1)) {
+            return string.slice(0, trimmedEndIndex(string) + 1);
+          }
+          if (!string || !(chars = baseToString(chars))) {
+            return string;
+          }
+          var strSymbols = stringToArray(string), end = charsEndIndex(strSymbols, stringToArray(chars)) + 1;
+          return castSlice(strSymbols, 0, end).join("");
+        }
+        function trimStart(string, chars, guard) {
+          string = toString(string);
+          if (string && (guard || chars === undefined$1)) {
+            return string.replace(reTrimStart, "");
+          }
+          if (!string || !(chars = baseToString(chars))) {
+            return string;
+          }
+          var strSymbols = stringToArray(string), start = charsStartIndex(strSymbols, stringToArray(chars));
+          return castSlice(strSymbols, start).join("");
+        }
+        function truncate(string, options) {
+          var length = DEFAULT_TRUNC_LENGTH, omission = DEFAULT_TRUNC_OMISSION;
+          if (isObject(options)) {
+            var separator = "separator" in options ? options.separator : separator;
+            length = "length" in options ? toInteger(options.length) : length;
+            omission = "omission" in options ? baseToString(options.omission) : omission;
+          }
+          string = toString(string);
+          var strLength = string.length;
+          if (hasUnicode(string)) {
+            var strSymbols = stringToArray(string);
+            strLength = strSymbols.length;
+          }
+          if (length >= strLength) {
+            return string;
+          }
+          var end = length - stringSize(omission);
+          if (end < 1) {
+            return omission;
+          }
+          var result2 = strSymbols ? castSlice(strSymbols, 0, end).join("") : string.slice(0, end);
+          if (separator === undefined$1) {
+            return result2 + omission;
+          }
+          if (strSymbols) {
+            end += result2.length - end;
+          }
+          if (isRegExp(separator)) {
+            if (string.slice(end).search(separator)) {
+              var match, substring = result2;
+              if (!separator.global) {
+                separator = RegExp2(separator.source, toString(reFlags.exec(separator)) + "g");
+              }
+              separator.lastIndex = 0;
+              while (match = separator.exec(substring)) {
+                var newEnd = match.index;
+              }
+              result2 = result2.slice(0, newEnd === undefined$1 ? end : newEnd);
+            }
+          } else if (string.indexOf(baseToString(separator), end) != end) {
+            var index = result2.lastIndexOf(separator);
+            if (index > -1) {
+              result2 = result2.slice(0, index);
+            }
+          }
+          return result2 + omission;
+        }
+        function unescape(string) {
+          string = toString(string);
+          return string && reHasEscapedHtml.test(string) ? string.replace(reEscapedHtml, unescapeHtmlChar) : string;
+        }
+        var upperCase = createCompounder(function(result2, word, index) {
+          return result2 + (index ? " " : "") + word.toUpperCase();
+        });
+        var upperFirst = createCaseFirst("toUpperCase");
+        function words(string, pattern, guard) {
+          string = toString(string);
+          pattern = guard ? undefined$1 : pattern;
+          if (pattern === undefined$1) {
+            return hasUnicodeWord(string) ? unicodeWords(string) : asciiWords(string);
+          }
+          return string.match(pattern) || [];
+        }
+        var attempt = baseRest(function(func, args) {
+          try {
+            return apply(func, undefined$1, args);
+          } catch (e) {
+            return isError(e) ? e : new Error(e);
+          }
+        });
+        var bindAll = flatRest(function(object, methodNames) {
+          arrayEach(methodNames, function(key) {
+            key = toKey(key);
+            baseAssignValue(object, key, bind(object[key], object));
+          });
+          return object;
+        });
+        function cond(pairs) {
+          var length = pairs == null ? 0 : pairs.length, toIteratee = getIteratee();
+          pairs = !length ? [] : arrayMap(pairs, function(pair) {
+            if (typeof pair[1] != "function") {
+              throw new TypeError(FUNC_ERROR_TEXT);
+            }
+            return [toIteratee(pair[0]), pair[1]];
+          });
+          return baseRest(function(args) {
+            var index = -1;
+            while (++index < length) {
+              var pair = pairs[index];
+              if (apply(pair[0], this, args)) {
+                return apply(pair[1], this, args);
+              }
+            }
+          });
+        }
+        function conforms(source) {
+          return baseConforms(baseClone(source, CLONE_DEEP_FLAG));
+        }
+        function constant(value) {
+          return function() {
+            return value;
+          };
+        }
+        function defaultTo(value, defaultValue) {
+          return value == null || value !== value ? defaultValue : value;
+        }
+        var flow = createFlow();
+        var flowRight = createFlow(true);
+        function identity(value) {
+          return value;
+        }
+        function iteratee(func) {
+          return baseIteratee(typeof func == "function" ? func : baseClone(func, CLONE_DEEP_FLAG));
+        }
+        function matches(source) {
+          return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
+        }
+        function matchesProperty(path, srcValue) {
+          return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
+        }
+        var method = baseRest(function(path, args) {
+          return function(object) {
+            return baseInvoke(object, path, args);
+          };
+        });
+        var methodOf = baseRest(function(object, args) {
+          return function(path) {
+            return baseInvoke(object, path, args);
+          };
+        });
+        function mixin(object, source, options) {
+          var props = keys(source), methodNames = baseFunctions(source, props);
+          if (options == null && !(isObject(source) && (methodNames.length || !props.length))) {
+            options = source;
+            source = object;
+            object = this;
+            methodNames = baseFunctions(source, keys(source));
+          }
+          var chain2 = !(isObject(options) && "chain" in options) || !!options.chain, isFunc = isFunction(object);
+          arrayEach(methodNames, function(methodName) {
+            var func = source[methodName];
+            object[methodName] = func;
+            if (isFunc) {
+              object.prototype[methodName] = function() {
+                var chainAll = this.__chain__;
+                if (chain2 || chainAll) {
+                  var result2 = object(this.__wrapped__), actions = result2.__actions__ = copyArray(this.__actions__);
+                  actions.push({ "func": func, "args": arguments, "thisArg": object });
+                  result2.__chain__ = chainAll;
+                  return result2;
+                }
+                return func.apply(object, arrayPush([this.value()], arguments));
+              };
+            }
+          });
+          return object;
+        }
+        function noConflict() {
+          if (root._ === this) {
+            root._ = oldDash;
+          }
+          return this;
+        }
+        function noop() {
+        }
+        function nthArg(n) {
+          n = toInteger(n);
+          return baseRest(function(args) {
+            return baseNth(args, n);
+          });
+        }
+        var over = createOver(arrayMap);
+        var overEvery = createOver(arrayEvery);
+        var overSome = createOver(arraySome);
+        function property(path) {
+          return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
+        }
+        function propertyOf(object) {
+          return function(path) {
+            return object == null ? undefined$1 : baseGet(object, path);
+          };
+        }
+        var range = createRange();
+        var rangeRight = createRange(true);
+        function stubArray() {
+          return [];
+        }
+        function stubFalse() {
+          return false;
+        }
+        function stubObject() {
+          return {};
+        }
+        function stubString() {
+          return "";
+        }
+        function stubTrue() {
+          return true;
+        }
+        function times(n, iteratee2) {
+          n = toInteger(n);
+          if (n < 1 || n > MAX_SAFE_INTEGER) {
+            return [];
+          }
+          var index = MAX_ARRAY_LENGTH, length = nativeMin(n, MAX_ARRAY_LENGTH);
+          iteratee2 = getIteratee(iteratee2);
+          n -= MAX_ARRAY_LENGTH;
+          var result2 = baseTimes(length, iteratee2);
+          while (++index < n) {
+            iteratee2(index);
+          }
+          return result2;
+        }
+        function toPath(value) {
+          if (isArray(value)) {
+            return arrayMap(value, toKey);
+          }
+          return isSymbol(value) ? [value] : copyArray(stringToPath(toString(value)));
+        }
+        function uniqueId(prefix) {
+          var id = ++idCounter;
+          return toString(prefix) + id;
+        }
+        var add = createMathOperation(function(augend, addend) {
+          return augend + addend;
+        }, 0);
+        var ceil = createRound("ceil");
+        var divide = createMathOperation(function(dividend, divisor) {
+          return dividend / divisor;
+        }, 1);
+        var floor = createRound("floor");
+        function max(array) {
+          return array && array.length ? baseExtremum(array, identity, baseGt) : undefined$1;
+        }
+        function maxBy(array, iteratee2) {
+          return array && array.length ? baseExtremum(array, getIteratee(iteratee2, 2), baseGt) : undefined$1;
+        }
+        function mean(array) {
+          return baseMean(array, identity);
+        }
+        function meanBy(array, iteratee2) {
+          return baseMean(array, getIteratee(iteratee2, 2));
+        }
+        function min(array) {
+          return array && array.length ? baseExtremum(array, identity, baseLt) : undefined$1;
+        }
+        function minBy(array, iteratee2) {
+          return array && array.length ? baseExtremum(array, getIteratee(iteratee2, 2), baseLt) : undefined$1;
+        }
+        var multiply = createMathOperation(function(multiplier, multiplicand) {
+          return multiplier * multiplicand;
+        }, 1);
+        var round = createRound("round");
+        var subtract = createMathOperation(function(minuend, subtrahend) {
+          return minuend - subtrahend;
+        }, 0);
+        function sum(array) {
+          return array && array.length ? baseSum(array, identity) : 0;
+        }
+        function sumBy(array, iteratee2) {
+          return array && array.length ? baseSum(array, getIteratee(iteratee2, 2)) : 0;
+        }
+        lodash2.after = after;
+        lodash2.ary = ary;
+        lodash2.assign = assign;
+        lodash2.assignIn = assignIn;
+        lodash2.assignInWith = assignInWith;
+        lodash2.assignWith = assignWith;
+        lodash2.at = at;
+        lodash2.before = before;
+        lodash2.bind = bind;
+        lodash2.bindAll = bindAll;
+        lodash2.bindKey = bindKey;
+        lodash2.castArray = castArray;
+        lodash2.chain = chain;
+        lodash2.chunk = chunk;
+        lodash2.compact = compact;
+        lodash2.concat = concat;
+        lodash2.cond = cond;
+        lodash2.conforms = conforms;
+        lodash2.constant = constant;
+        lodash2.countBy = countBy;
+        lodash2.create = create;
+        lodash2.curry = curry;
+        lodash2.curryRight = curryRight;
+        lodash2.debounce = debounce;
+        lodash2.defaults = defaults;
+        lodash2.defaultsDeep = defaultsDeep;
+        lodash2.defer = defer;
+        lodash2.delay = delay;
+        lodash2.difference = difference;
+        lodash2.differenceBy = differenceBy;
+        lodash2.differenceWith = differenceWith;
+        lodash2.drop = drop;
+        lodash2.dropRight = dropRight;
+        lodash2.dropRightWhile = dropRightWhile;
+        lodash2.dropWhile = dropWhile;
+        lodash2.fill = fill;
+        lodash2.filter = filter;
+        lodash2.flatMap = flatMap;
+        lodash2.flatMapDeep = flatMapDeep;
+        lodash2.flatMapDepth = flatMapDepth;
+        lodash2.flatten = flatten;
+        lodash2.flattenDeep = flattenDeep;
+        lodash2.flattenDepth = flattenDepth;
+        lodash2.flip = flip;
+        lodash2.flow = flow;
+        lodash2.flowRight = flowRight;
+        lodash2.fromPairs = fromPairs;
+        lodash2.functions = functions;
+        lodash2.functionsIn = functionsIn;
+        lodash2.groupBy = groupBy;
+        lodash2.initial = initial;
+        lodash2.intersection = intersection;
+        lodash2.intersectionBy = intersectionBy;
+        lodash2.intersectionWith = intersectionWith;
+        lodash2.invert = invert;
+        lodash2.invertBy = invertBy;
+        lodash2.invokeMap = invokeMap;
+        lodash2.iteratee = iteratee;
+        lodash2.keyBy = keyBy;
+        lodash2.keys = keys;
+        lodash2.keysIn = keysIn;
+        lodash2.map = map;
+        lodash2.mapKeys = mapKeys;
+        lodash2.mapValues = mapValues;
+        lodash2.matches = matches;
+        lodash2.matchesProperty = matchesProperty;
+        lodash2.memoize = memoize;
+        lodash2.merge = merge;
+        lodash2.mergeWith = mergeWith;
+        lodash2.method = method;
+        lodash2.methodOf = methodOf;
+        lodash2.mixin = mixin;
+        lodash2.negate = negate;
+        lodash2.nthArg = nthArg;
+        lodash2.omit = omit;
+        lodash2.omitBy = omitBy;
+        lodash2.once = once;
+        lodash2.orderBy = orderBy;
+        lodash2.over = over;
+        lodash2.overArgs = overArgs;
+        lodash2.overEvery = overEvery;
+        lodash2.overSome = overSome;
+        lodash2.partial = partial;
+        lodash2.partialRight = partialRight;
+        lodash2.partition = partition;
+        lodash2.pick = pick;
+        lodash2.pickBy = pickBy;
+        lodash2.property = property;
+        lodash2.propertyOf = propertyOf;
+        lodash2.pull = pull;
+        lodash2.pullAll = pullAll;
+        lodash2.pullAllBy = pullAllBy;
+        lodash2.pullAllWith = pullAllWith;
+        lodash2.pullAt = pullAt;
+        lodash2.range = range;
+        lodash2.rangeRight = rangeRight;
+        lodash2.rearg = rearg;
+        lodash2.reject = reject;
+        lodash2.remove = remove;
+        lodash2.rest = rest;
+        lodash2.reverse = reverse;
+        lodash2.sampleSize = sampleSize;
+        lodash2.set = set;
+        lodash2.setWith = setWith;
+        lodash2.shuffle = shuffle;
+        lodash2.slice = slice;
+        lodash2.sortBy = sortBy;
+        lodash2.sortedUniq = sortedUniq;
+        lodash2.sortedUniqBy = sortedUniqBy;
+        lodash2.split = split;
+        lodash2.spread = spread;
+        lodash2.tail = tail;
+        lodash2.take = take;
+        lodash2.takeRight = takeRight;
+        lodash2.takeRightWhile = takeRightWhile;
+        lodash2.takeWhile = takeWhile;
+        lodash2.tap = tap;
+        lodash2.throttle = throttle;
+        lodash2.thru = thru;
+        lodash2.toArray = toArray;
+        lodash2.toPairs = toPairs;
+        lodash2.toPairsIn = toPairsIn;
+        lodash2.toPath = toPath;
+        lodash2.toPlainObject = toPlainObject;
+        lodash2.transform = transform;
+        lodash2.unary = unary;
+        lodash2.union = union;
+        lodash2.unionBy = unionBy;
+        lodash2.unionWith = unionWith;
+        lodash2.uniq = uniq;
+        lodash2.uniqBy = uniqBy;
+        lodash2.uniqWith = uniqWith;
+        lodash2.unset = unset;
+        lodash2.unzip = unzip;
+        lodash2.unzipWith = unzipWith;
+        lodash2.update = update;
+        lodash2.updateWith = updateWith;
+        lodash2.values = values;
+        lodash2.valuesIn = valuesIn;
+        lodash2.without = without;
+        lodash2.words = words;
+        lodash2.wrap = wrap;
+        lodash2.xor = xor;
+        lodash2.xorBy = xorBy;
+        lodash2.xorWith = xorWith;
+        lodash2.zip = zip;
+        lodash2.zipObject = zipObject;
+        lodash2.zipObjectDeep = zipObjectDeep;
+        lodash2.zipWith = zipWith;
+        lodash2.entries = toPairs;
+        lodash2.entriesIn = toPairsIn;
+        lodash2.extend = assignIn;
+        lodash2.extendWith = assignInWith;
+        mixin(lodash2, lodash2);
+        lodash2.add = add;
+        lodash2.attempt = attempt;
+        lodash2.camelCase = camelCase;
+        lodash2.capitalize = capitalize;
+        lodash2.ceil = ceil;
+        lodash2.clamp = clamp;
+        lodash2.clone = clone;
+        lodash2.cloneDeep = cloneDeep;
+        lodash2.cloneDeepWith = cloneDeepWith;
+        lodash2.cloneWith = cloneWith;
+        lodash2.conformsTo = conformsTo;
+        lodash2.deburr = deburr;
+        lodash2.defaultTo = defaultTo;
+        lodash2.divide = divide;
+        lodash2.endsWith = endsWith;
+        lodash2.eq = eq;
+        lodash2.escape = escape;
+        lodash2.escapeRegExp = escapeRegExp;
+        lodash2.every = every;
+        lodash2.find = find;
+        lodash2.findIndex = findIndex;
+        lodash2.findKey = findKey;
+        lodash2.findLast = findLast;
+        lodash2.findLastIndex = findLastIndex;
+        lodash2.findLastKey = findLastKey;
+        lodash2.floor = floor;
+        lodash2.forEach = forEach;
+        lodash2.forEachRight = forEachRight;
+        lodash2.forIn = forIn;
+        lodash2.forInRight = forInRight;
+        lodash2.forOwn = forOwn;
+        lodash2.forOwnRight = forOwnRight;
+        lodash2.get = get;
+        lodash2.gt = gt;
+        lodash2.gte = gte;
+        lodash2.has = has;
+        lodash2.hasIn = hasIn;
+        lodash2.head = head;
+        lodash2.identity = identity;
+        lodash2.includes = includes;
+        lodash2.indexOf = indexOf;
+        lodash2.inRange = inRange;
+        lodash2.invoke = invoke;
+        lodash2.isArguments = isArguments;
+        lodash2.isArray = isArray;
+        lodash2.isArrayBuffer = isArrayBuffer;
+        lodash2.isArrayLike = isArrayLike;
+        lodash2.isArrayLikeObject = isArrayLikeObject;
+        lodash2.isBoolean = isBoolean;
+        lodash2.isBuffer = isBuffer;
+        lodash2.isDate = isDate;
+        lodash2.isElement = isElement;
+        lodash2.isEmpty = isEmpty;
+        lodash2.isEqual = isEqual;
+        lodash2.isEqualWith = isEqualWith;
+        lodash2.isError = isError;
+        lodash2.isFinite = isFinite;
+        lodash2.isFunction = isFunction;
+        lodash2.isInteger = isInteger;
+        lodash2.isLength = isLength;
+        lodash2.isMap = isMap;
+        lodash2.isMatch = isMatch;
+        lodash2.isMatchWith = isMatchWith;
+        lodash2.isNaN = isNaN2;
+        lodash2.isNative = isNative;
+        lodash2.isNil = isNil;
+        lodash2.isNull = isNull;
+        lodash2.isNumber = isNumber;
+        lodash2.isObject = isObject;
+        lodash2.isObjectLike = isObjectLike;
+        lodash2.isPlainObject = isPlainObject;
+        lodash2.isRegExp = isRegExp;
+        lodash2.isSafeInteger = isSafeInteger;
+        lodash2.isSet = isSet;
+        lodash2.isString = isString;
+        lodash2.isSymbol = isSymbol;
+        lodash2.isTypedArray = isTypedArray;
+        lodash2.isUndefined = isUndefined;
+        lodash2.isWeakMap = isWeakMap;
+        lodash2.isWeakSet = isWeakSet;
+        lodash2.join = join;
+        lodash2.kebabCase = kebabCase;
+        lodash2.last = last;
+        lodash2.lastIndexOf = lastIndexOf;
+        lodash2.lowerCase = lowerCase;
+        lodash2.lowerFirst = lowerFirst;
+        lodash2.lt = lt;
+        lodash2.lte = lte;
+        lodash2.max = max;
+        lodash2.maxBy = maxBy;
+        lodash2.mean = mean;
+        lodash2.meanBy = meanBy;
+        lodash2.min = min;
+        lodash2.minBy = minBy;
+        lodash2.stubArray = stubArray;
+        lodash2.stubFalse = stubFalse;
+        lodash2.stubObject = stubObject;
+        lodash2.stubString = stubString;
+        lodash2.stubTrue = stubTrue;
+        lodash2.multiply = multiply;
+        lodash2.nth = nth;
+        lodash2.noConflict = noConflict;
+        lodash2.noop = noop;
+        lodash2.now = now;
+        lodash2.pad = pad;
+        lodash2.padEnd = padEnd;
+        lodash2.padStart = padStart;
+        lodash2.parseInt = parseInt2;
+        lodash2.random = random;
+        lodash2.reduce = reduce;
+        lodash2.reduceRight = reduceRight;
+        lodash2.repeat = repeat;
+        lodash2.replace = replace;
+        lodash2.result = result;
+        lodash2.round = round;
+        lodash2.runInContext = runInContext2;
+        lodash2.sample = sample;
+        lodash2.size = size;
+        lodash2.snakeCase = snakeCase;
+        lodash2.some = some;
+        lodash2.sortedIndex = sortedIndex;
+        lodash2.sortedIndexBy = sortedIndexBy;
+        lodash2.sortedIndexOf = sortedIndexOf;
+        lodash2.sortedLastIndex = sortedLastIndex;
+        lodash2.sortedLastIndexBy = sortedLastIndexBy;
+        lodash2.sortedLastIndexOf = sortedLastIndexOf;
+        lodash2.startCase = startCase;
+        lodash2.startsWith = startsWith;
+        lodash2.subtract = subtract;
+        lodash2.sum = sum;
+        lodash2.sumBy = sumBy;
+        lodash2.template = template;
+        lodash2.times = times;
+        lodash2.toFinite = toFinite;
+        lodash2.toInteger = toInteger;
+        lodash2.toLength = toLength;
+        lodash2.toLower = toLower;
+        lodash2.toNumber = toNumber;
+        lodash2.toSafeInteger = toSafeInteger;
+        lodash2.toString = toString;
+        lodash2.toUpper = toUpper;
+        lodash2.trim = trim;
+        lodash2.trimEnd = trimEnd;
+        lodash2.trimStart = trimStart;
+        lodash2.truncate = truncate;
+        lodash2.unescape = unescape;
+        lodash2.uniqueId = uniqueId;
+        lodash2.upperCase = upperCase;
+        lodash2.upperFirst = upperFirst;
+        lodash2.each = forEach;
+        lodash2.eachRight = forEachRight;
+        lodash2.first = head;
+        mixin(lodash2, (function() {
+          var source = {};
+          baseForOwn(lodash2, function(func, methodName) {
+            if (!hasOwnProperty.call(lodash2.prototype, methodName)) {
+              source[methodName] = func;
+            }
+          });
+          return source;
+        })(), { "chain": false });
+        lodash2.VERSION = VERSION;
+        arrayEach(["bind", "bindKey", "curry", "curryRight", "partial", "partialRight"], function(methodName) {
+          lodash2[methodName].placeholder = lodash2;
+        });
+        arrayEach(["drop", "take"], function(methodName, index) {
+          LazyWrapper.prototype[methodName] = function(n) {
+            n = n === undefined$1 ? 1 : nativeMax(toInteger(n), 0);
+            var result2 = this.__filtered__ && !index ? new LazyWrapper(this) : this.clone();
+            if (result2.__filtered__) {
+              result2.__takeCount__ = nativeMin(n, result2.__takeCount__);
+            } else {
+              result2.__views__.push({
+                "size": nativeMin(n, MAX_ARRAY_LENGTH),
+                "type": methodName + (result2.__dir__ < 0 ? "Right" : "")
+              });
+            }
+            return result2;
+          };
+          LazyWrapper.prototype[methodName + "Right"] = function(n) {
+            return this.reverse()[methodName](n).reverse();
+          };
+        });
+        arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
+          var type = index + 1, isFilter = type == LAZY_FILTER_FLAG || type == LAZY_WHILE_FLAG;
+          LazyWrapper.prototype[methodName] = function(iteratee2) {
+            var result2 = this.clone();
+            result2.__iteratees__.push({
+              "iteratee": getIteratee(iteratee2, 3),
+              "type": type
+            });
+            result2.__filtered__ = result2.__filtered__ || isFilter;
+            return result2;
+          };
+        });
+        arrayEach(["head", "last"], function(methodName, index) {
+          var takeName = "take" + (index ? "Right" : "");
+          LazyWrapper.prototype[methodName] = function() {
+            return this[takeName](1).value()[0];
+          };
+        });
+        arrayEach(["initial", "tail"], function(methodName, index) {
+          var dropName = "drop" + (index ? "" : "Right");
+          LazyWrapper.prototype[methodName] = function() {
+            return this.__filtered__ ? new LazyWrapper(this) : this[dropName](1);
+          };
+        });
+        LazyWrapper.prototype.compact = function() {
+          return this.filter(identity);
+        };
+        LazyWrapper.prototype.find = function(predicate) {
+          return this.filter(predicate).head();
+        };
+        LazyWrapper.prototype.findLast = function(predicate) {
+          return this.reverse().find(predicate);
+        };
+        LazyWrapper.prototype.invokeMap = baseRest(function(path, args) {
+          if (typeof path == "function") {
+            return new LazyWrapper(this);
+          }
+          return this.map(function(value) {
+            return baseInvoke(value, path, args);
+          });
+        });
+        LazyWrapper.prototype.reject = function(predicate) {
+          return this.filter(negate(getIteratee(predicate)));
+        };
+        LazyWrapper.prototype.slice = function(start, end) {
+          start = toInteger(start);
+          var result2 = this;
+          if (result2.__filtered__ && (start > 0 || end < 0)) {
+            return new LazyWrapper(result2);
+          }
+          if (start < 0) {
+            result2 = result2.takeRight(-start);
+          } else if (start) {
+            result2 = result2.drop(start);
+          }
+          if (end !== undefined$1) {
+            end = toInteger(end);
+            result2 = end < 0 ? result2.dropRight(-end) : result2.take(end - start);
+          }
+          return result2;
+        };
+        LazyWrapper.prototype.takeRightWhile = function(predicate) {
+          return this.reverse().takeWhile(predicate).reverse();
+        };
+        LazyWrapper.prototype.toArray = function() {
+          return this.take(MAX_ARRAY_LENGTH);
+        };
+        baseForOwn(LazyWrapper.prototype, function(func, methodName) {
+          var checkIteratee = /^(?:filter|find|map|reject)|While$/.test(methodName), isTaker = /^(?:head|last)$/.test(methodName), lodashFunc = lodash2[isTaker ? "take" + (methodName == "last" ? "Right" : "") : methodName], retUnwrapped = isTaker || /^find/.test(methodName);
+          if (!lodashFunc) {
+            return;
+          }
+          lodash2.prototype[methodName] = function() {
+            var value = this.__wrapped__, args = isTaker ? [1] : arguments, isLazy = value instanceof LazyWrapper, iteratee2 = args[0], useLazy = isLazy || isArray(value);
+            var interceptor = function(value2) {
+              var result3 = lodashFunc.apply(lodash2, arrayPush([value2], args));
+              return isTaker && chainAll ? result3[0] : result3;
+            };
+            if (useLazy && checkIteratee && typeof iteratee2 == "function" && iteratee2.length != 1) {
+              isLazy = useLazy = false;
+            }
+            var chainAll = this.__chain__, isHybrid = !!this.__actions__.length, isUnwrapped = retUnwrapped && !chainAll, onlyLazy = isLazy && !isHybrid;
+            if (!retUnwrapped && useLazy) {
+              value = onlyLazy ? value : new LazyWrapper(this);
+              var result2 = func.apply(value, args);
+              result2.__actions__.push({ "func": thru, "args": [interceptor], "thisArg": undefined$1 });
+              return new LodashWrapper(result2, chainAll);
+            }
+            if (isUnwrapped && onlyLazy) {
+              return func.apply(this, args);
+            }
+            result2 = this.thru(interceptor);
+            return isUnwrapped ? isTaker ? result2.value()[0] : result2.value() : result2;
+          };
+        });
+        arrayEach(["pop", "push", "shift", "sort", "splice", "unshift"], function(methodName) {
+          var func = arrayProto[methodName], chainName = /^(?:push|sort|unshift)$/.test(methodName) ? "tap" : "thru", retUnwrapped = /^(?:pop|shift)$/.test(methodName);
+          lodash2.prototype[methodName] = function() {
+            var args = arguments;
+            if (retUnwrapped && !this.__chain__) {
+              var value = this.value();
+              return func.apply(isArray(value) ? value : [], args);
+            }
+            return this[chainName](function(value2) {
+              return func.apply(isArray(value2) ? value2 : [], args);
+            });
+          };
+        });
+        baseForOwn(LazyWrapper.prototype, function(func, methodName) {
+          var lodashFunc = lodash2[methodName];
+          if (lodashFunc) {
+            var key = lodashFunc.name + "";
+            if (!hasOwnProperty.call(realNames, key)) {
+              realNames[key] = [];
+            }
+            realNames[key].push({ "name": methodName, "func": lodashFunc });
+          }
+        });
+        realNames[createHybrid(undefined$1, WRAP_BIND_KEY_FLAG).name] = [{
+          "name": "wrapper",
+          "func": undefined$1
+        }];
+        LazyWrapper.prototype.clone = lazyClone;
+        LazyWrapper.prototype.reverse = lazyReverse;
+        LazyWrapper.prototype.value = lazyValue;
+        lodash2.prototype.at = wrapperAt;
+        lodash2.prototype.chain = wrapperChain;
+        lodash2.prototype.commit = wrapperCommit;
+        lodash2.prototype.next = wrapperNext;
+        lodash2.prototype.plant = wrapperPlant;
+        lodash2.prototype.reverse = wrapperReverse;
+        lodash2.prototype.toJSON = lodash2.prototype.valueOf = lodash2.prototype.value = wrapperValue;
+        lodash2.prototype.first = lodash2.prototype.head;
+        if (symIterator) {
+          lodash2.prototype[symIterator] = wrapperToIterator;
+        }
+        return lodash2;
+      });
+      var _ = runInContext();
+      if (freeModule) {
+        (freeModule.exports = _)._ = _;
+        freeExports._ = _;
+      } else {
+        root._ = _;
+      }
+    }).call(lodash);
+  })(lodash$1, lodash$1.exports);
+  return lodash$1.exports;
+}
+var lodashExports = requireLodash();
+const _sfc_main = /* @__PURE__ */ defineComponent({
+  __name: "Settings",
+  props: {
+    config: {},
+    connections: {},
+    dataSources: {}
+  },
+  setup(__props) {
+    const connectionRepository = inject(identifier);
+    const innerInterval = ref(__props.config.pollingInterval ?? 5e3);
+    const cubes = ref([]);
+    const connectionsFiltered = computed(() => {
+      return __props.connections.filter((c) => c.type === "xmla");
+    });
+    const intervalDebounce = lodashExports.debounce((interval) => {
+      if (!interval) return;
+      const parsedInterval = parseInt(interval);
+      __props.config.pollingInterval = parsedInterval;
+    }, 700);
+    watch(() => innerInterval.value, (nv) => {
+      if (!nv || isNaN(parseInt(nv))) {
+        innerInterval.value = "5000";
+      }
+      intervalDebounce(nv);
+    });
+    watch(async () => __props.config.connection, async () => {
+      if (__props.config.connection) {
+        cubes.value = await XmlaStore.fetchCubes(__props.config.connection, connectionRepository);
+      }
+    });
+    onMounted(async () => {
+      if (__props.config.connection) {
+        cubes.value = await XmlaStore.fetchCubes(__props.config.connection, connectionRepository);
+      }
+    });
+    return (_ctx, _cache) => {
+      const _component_VaSelect = resolveComponent("VaSelect");
+      const _component_VaSwitch = resolveComponent("VaSwitch");
+      const _component_VaInput = resolveComponent("VaInput");
+      return openBlock(), createElementBlock(Fragment, null, [
+        createVNode(_component_VaSelect, {
+          modelValue: __props.config.connection,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connection = $event),
+          label: "Connection",
+          options: connectionsFiltered.value,
+          "text-by": "name",
+          "value-by": "uid"
+        }, null, 8, ["modelValue", "options"]),
+        createVNode(_component_VaSelect, {
+          modelValue: __props.config.cube,
+          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.cube = $event),
+          label: "Cube",
+          options: cubes.value,
+          "text-by": "CUBE_NAME",
+          "value-by": "CUBE_NAME"
+        }, null, 8, ["modelValue", "options"]),
+        createVNode(_component_VaSwitch, {
+          modelValue: __props.config.pollingEnabled,
+          "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => __props.config.pollingEnabled = $event),
+          label: "Enable Long Polling"
+        }, null, 8, ["modelValue"]),
+        __props.config.pollingEnabled ? (openBlock(), createBlock(_component_VaInput, {
+          key: 0,
+          modelValue: innerInterval.value,
+          "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => innerInterval.value = $event),
+          label: "Polling Interval (ms)"
+        }, null, 8, ["modelValue"])) : createCommentVNode("", true)
+      ], 64);
+    };
+  }
+});
+const previewSymbol = Symbol.for("XmlaPreview");
+const settingsSymbol = Symbol.for("XmlaSettings");
+function activate({ services }) {
+  services.register("XmlaPreview", _sfc_main$1);
+  services.register("XmlaSettings", _sfc_main);
+  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("xmla", {
+    Store: factorySymbol,
+    Preview: previewSymbol,
+    Settings: settingsSymbol
+  });
+}
+function deactivate({ services }) {
+  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("xmla");
+  services.unregister("XmlaPreview");
+  services.unregister("XmlaSettings");
+}
 export {
-  a as activate,
-  d as deactivate
+  activate,
+  deactivate
 };

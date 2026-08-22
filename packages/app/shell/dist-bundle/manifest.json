@@ -9,7 +9,6 @@
   "dependencies": [
     "lib.events",
     "lib.factory.variableWrapper",
-    "lib.i18next",
     "lib.logger",
     "lib.repository.connection",
     "lib.repository.datasource",
@@ -85,27 +84,19 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.logger",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.i18next",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.variables",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.factory.variableWrapper",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
+      "id": "org.eclipse.daanse.board.app.lib.logger",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.page",
+      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -117,6 +108,14 @@
       "versionRange": ">=0.0.1-0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.repository.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.repository.route",
       "versionRange": ">=0.0.1-0"
     },
@@ -125,15 +124,11 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
+      "id": "org.eclipse.daanse.board.app.lib.variables",
       "versionRange": ">=0.0.1-0"
     },
     {

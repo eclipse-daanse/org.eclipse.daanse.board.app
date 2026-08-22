@@ -12,7 +12,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import draggable from 'vuedraggable/src/vuedraggable';
+import draggable from 'vuedraggable';
 import { ref } from "vue";
 import { HierarchyTreeItem, MeasureTreeItem } from '../MetadataTree/TreeViewItems';
 import FilterModal from '../Modals/FiltersModal.vue';

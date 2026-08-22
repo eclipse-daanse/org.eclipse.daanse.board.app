@@ -7,9 +7,8 @@
   "exports": {},
   "dependencies": [
     "lib.events",
-    "lib.i18next",
-    "lib.repository.widget",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.common.monaco"
   ],
   "requiresService": [
     {
@@ -37,11 +36,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.i18next",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
+      "id": "org.eclipse.daanse.board.app.ui.vue.common.monaco",
       "versionRange": ">=0.0.1-0"
     }
   ]

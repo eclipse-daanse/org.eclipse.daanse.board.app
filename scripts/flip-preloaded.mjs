@@ -58,9 +58,11 @@ const HEADER = `/***************************************************************
 
 const dry = process.argv.includes('--dry')
 const recomputeOnly = process.argv.includes('--recompute')
+const resync = process.argv.includes('--resync')
+const libifyMode = process.argv.includes('--libify')
 const libMode = process.argv.includes('--lib')
-const args = process.argv.slice(2).filter((a) => a !== '--dry' && a !== '--lib' && a !== '--recompute')
-if (args.length === 0 && !recomputeOnly) {
+const args = process.argv.slice(2).filter((a) => !a.startsWith('--'))
+if (args.length === 0 && !recomputeOnly && !resync) {
   console.error('usage: node scripts/flip-preloaded.mjs [--dry] [--lib] <package-suffix>...')
   console.error('  --lib: the packages are not preloaded modules but pure static')
   console.error('         libraries; create a self-registering library bundle each')
@@ -86,7 +88,7 @@ const compatNow = existsSync(COMPAT_TS)
   ? [...readFileSync(COMPAT_TS, 'utf-8').matchAll(/'(org\.eclipse[^']+)':/g)].map((m) => m[1])
   : []
 
-const pool = libMode ? Object.keys(packages) : preloadedNow
+const pool = libMode || libifyMode ? Object.keys(packages) : preloadedNow
 const flips = args.map((suffix) => {
   const hits = pool.filter((p) => p === suffix || p === WS + suffix)
   if (hits.length !== 1) {
@@ -107,8 +109,11 @@ function scanImports(dir) {
   const other = new Set()
   for (const file of globSync(join(dir, 'src/**/*.{ts,tsx,vue}'))) {
     // Type-only imports vanish at build time and must not force a runtime
-    // library requirement.
-    const text = readFileSync(file, 'utf-8').replace(/^\s*(?:import|export)\s+type\s[^\n]*$/gm, '')
+    // library requirement; commented-out imports never existed.
+    const text = readFileSync(file, 'utf-8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/[^\n]*$/gm, '')
+      .replace(/^\s*(?:import|export)\s+type\s[^\n]*$/gm, '')
     const specs = [
       ...[...text.matchAll(/from\s+['"]([^'"]+)['"]/g)].map((m) => m[1]),
       ...[...text.matchAll(/import\s*\(\s*['"]([^'"]+)['"]/g)].map((m) => m[1]),
@@ -329,7 +334,7 @@ const report = []
 const problems = []
 const flippedLibs = []
 
-for (const full of recomputeOnly ? [] : flips) {
+for (const full of recomputeOnly || resync || libifyMode ? [] : flips) {
   const pkg = packages[full]
   if (!pkg) { problems.push(`${full}: no workspace package found`); continue }
   const manifest = existsSync(join(pkg.dir, 'manifest.json'))
@@ -381,6 +386,73 @@ for (const full of recomputeOnly ? [] : flips) {
     `${shortId}${isLib ? ' [LIB]' : ''}: shared=[${shared.map((s) => s.id.replace(WS, '')).join(', ')}]` +
       (other.size ? ` bundled-npm=[${[...other].sort().join(', ')}]` : ''),
   )
+}
+
+// ------------------------------------------------------------------ libify
+// An existing bundle that other bundles import at runtime additionally
+// becomes a shared library: capability, self-registering entry, config entry.
+if (libifyMode && !dry) {
+  for (const full of flips) {
+    const pkg = packages[full]
+    const manifest = readManifest(full)
+    const caps = manifest.capabilities ?? []
+    if (!caps.some((c) => c.namespace === 'tsm.library' && c.attributes?.library === full)) {
+      caps.push({ namespace: 'tsm.library', attributes: { library: full, version: pkg.version } })
+      manifest.capabilities = caps
+      writeJson(join(pkg.dir, 'manifest.json'), manifest)
+    }
+    if (!existsSync(join(pkg.dir, 'src/bundle.ts'))) {
+      writeFileSync(join(pkg.dir, 'src/bundle.ts'), libEntry(full, manifest.id, pkg.version))
+    }
+    const configPath = join(pkg.dir, 'vite.bundle.config.ts')
+    const config = readFileSync(configPath, 'utf-8')
+    if (config.includes("'src/index.ts'")) {
+      writeFileSync(configPath, config.replace("'src/index.ts'", "'src/bundle.ts'"))
+    }
+    console.log(`libified ${manifest.id}`)
+  }
+}
+
+// ------------------------------------------------------------------- resync
+// Re-derives every bundle manifest's sharedDependencies from its actual
+// runtime imports - undeclared imports are silently bundled copies, declared
+// but unused ones are stale edges. Version ranges are preserved.
+if (resync && !dry) {
+  const compatRemainingForScan = new Set(compatNow)
+  for (const [full, pkg] of Object.entries(packages)) {
+    const manifestPath = join(pkg.dir, 'manifest.json')
+    if (!existsSync(manifestPath) || !existsSync(join(pkg.dir, 'vite.bundle.config.ts'))) continue
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
+    if (!manifest.entry?.startsWith('/bundles/')) continue
+    const { npm, ws } = scanImports(pkg.dir)
+    const previous = new Map((manifest.sharedDependencies ?? []).map((d) => [d.id, d.versionRange]))
+    // What a package offers as a capability is its own product, never its
+    // own requirement - platform.vue imports vue to BE the vue provider.
+    const offersItself = new Set(
+      (manifest.capabilities ?? [])
+        .filter((c) => c.namespace === 'tsm.library')
+        .map((c) => c.attributes?.library),
+    )
+    const shared = []
+    for (const [id, range] of Object.entries(NPM_SHARED)) {
+      if (npm.has(id) && !offersItself.has(id)) shared.push({ id, versionRange: previous.get(id) ?? range })
+    }
+    for (const w of [...ws].sort()) {
+      if (w === full) continue
+      if (!HOST_LIBS.has(w) && providerOf(w, compatRemainingForScan) === null) {
+        problems.push(`${manifest.id}: imports ${w}, which no module shares - would be bundled (identity risk)`)
+        continue
+      }
+      shared.push({ id: w, versionRange: previous.get(w) ?? '>=0.0.1-0' })
+    }
+    const before = JSON.stringify(manifest.sharedDependencies ?? [])
+    if (shared.length > 0) manifest.sharedDependencies = shared
+    else delete manifest.sharedDependencies
+    if (JSON.stringify(manifest.sharedDependencies ?? []) !== before) {
+      writeJson(manifestPath, manifest)
+      console.log(`resynced ${manifest.id}`)
+    }
+  }
 }
 
 // ------------------------------------------- global dependency recomputation

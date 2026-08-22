@@ -7,9 +7,7 @@
   "exports": {},
   "dependencies": [
     "lib.events",
-    "lib.i18next",
     "lib.repository.variable",
-    "lib.repository.widget",
     "platform.vue",
     "ui.vue.composables"
   ],
@@ -39,15 +37,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.i18next",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.repository.variable",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

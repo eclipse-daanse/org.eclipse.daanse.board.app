@@ -9,8 +9,6 @@
   "dependencies": [
     "lib.annotations",
     "lib.events",
-    "lib.i18next",
-    "lib.repository.widget",
     "lib.utils.helpers",
     "platform.vue",
     "ui.vue.composables",
@@ -34,6 +32,10 @@
       "versionRange": "^5.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.annotations",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
@@ -42,19 +44,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.annotations",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.utils.helpers",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.i18next",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {
