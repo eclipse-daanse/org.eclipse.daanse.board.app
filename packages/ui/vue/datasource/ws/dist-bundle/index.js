@@ -1,5 +1,5 @@
 const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
-const { defineComponent, shallowRef, ref, watch, createElementBlock, createCommentVNode, openBlock, toDisplayString, computed, resolveComponent, Fragment, createVNode } = __tsm__.require("vue");
+import { defineComponent, shallowRef, ref, watch, createElementBlock, createCommentVNode, openBlock, toDisplayString, computed, resolveComponent, Fragment, createVNode } from "vue";
 const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const _hoisted_1 = {
   key: 0,

@@ -8,7 +8,6 @@
   "dependencies": [
     "lib.connection.xmla",
     "lib.repository.connection",
-    "platform.compat",
     "platform.vue"
   ],
   "requiresService": [

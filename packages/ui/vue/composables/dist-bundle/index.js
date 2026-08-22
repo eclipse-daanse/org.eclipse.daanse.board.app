@@ -1,5 +1,5 @@
 const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
-const { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount } = __tsm__.require("vue");
+import { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
 const { identifier: identifier$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
 const { identifier: identifier$2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service");
 const { VariableWrapper, VARIABLEWRAPPER } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");

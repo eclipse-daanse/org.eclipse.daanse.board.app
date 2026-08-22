@@ -1,5 +1,5 @@
-const { ref } = __tsm__.require("vue");
-const { defineStore } = __tsm__.require("pinia");
+import { ref } from "vue";
+import { defineStore } from "pinia";
 const useLayoutStore = (pageId = "") => {
   const storeCaller = defineStore("layout" + pageId, () => {
     const layout = ref([]);

@@ -1,5 +1,5 @@
 const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
-const { defineComponent, ref, computed, watch, onMounted, resolveComponent, createElementBlock, openBlock, Fragment, createVNode, createCommentVNode, createElementVNode, normalizeClass, toDisplayString } = __tsm__.require("vue");
+import { defineComponent, ref, computed, watch, onMounted, resolveComponent, createElementBlock, openBlock, Fragment, createVNode, createCommentVNode, createElementVNode, normalizeClass, toDisplayString } from "vue";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var lodash$1 = { exports: {} };
 /**

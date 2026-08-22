@@ -43,9 +43,10 @@
     }
   ],
   "dependencies": [
+    "lib.annotations",
     "lib.datasource.base",
     "lib.repository.connection",
-    "lib.variables",
-    "platform.compat"
+    "lib.utils.helpers",
+    "lib.variables"
   ]
 }

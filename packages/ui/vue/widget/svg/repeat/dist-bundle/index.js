@@ -1,8 +1,8 @@
 (function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.repeatable-svg-container[data-v-59b28a03] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    object-fit: contain;\n}\n\n.settings-container[data-v-20524639] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.colors[data-v-20524639] {\n    display: flex;\n    justify-content: space-between;\n}\n.color-input[data-v-20524639] {\n    width: 49%;\n}\n.loading[data-v-20524639] {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
-const { defineComponent, mergeModels, toRefs, useModel, inject: inject$1, ref, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, withModifiers, createElementVNode, Fragment, renderList, resolveComponent, createBlock, withCtx, createVNode, unref } = __tsm__.require("vue");
+import { defineComponent, mergeModels, toRefs, useModel, inject as inject$1, ref, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, withModifiers, createElementVNode, Fragment, renderList, resolveComponent, createBlock, withCtx, createVNode, unref } from "vue";
 const { VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { Reference, Documentation, Attribute, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
-const { useRoute } = __tsm__.require("vue-router");
+import { useRoute } from "vue-router";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");

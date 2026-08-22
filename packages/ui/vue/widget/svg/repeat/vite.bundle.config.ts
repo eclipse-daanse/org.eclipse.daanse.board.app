@@ -49,7 +49,7 @@ import manifest from './manifest.json'
  * a PR and this helper disappears.
  */
 function rewriteSharedImportsInChunks() {
-  const ids = ['vue', 'vue-router', ...manifest.sharedDependencies.map((d) => d.id)]
+  const ids = sharedModules
   const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const bindings = (inner: string) =>
     inner
@@ -74,13 +74,13 @@ function rewriteSharedImportsInChunks() {
           const q = `["']${esc(id)}["']`
           // import Default, { named } from 'id'
           code = code.replace(
-            new RegExp(`import\\s+([\\w$]+)\\s*,\\s*\\{([\\s\\S]*?)\\}\\s*from\\s*${q};?`, 'g'),
+            new RegExp(`import\\s+([\\w$]+)\\s*,\\s*\\{([^}]*?)\\}\\s*from\\s*${q};?`, 'g'),
             (_, def, inner) =>
               `const __tsm_m = __tsm__.require('${id}'); const ${def} = (__tsm_m && __tsm_m.default) ?? __tsm_m; const { ${bindings(inner)} } = __tsm_m;`,
           )
           // import { named } from 'id'
           code = code.replace(
-            new RegExp(`import\\s*\\{([\\s\\S]*?)\\}\\s*from\\s*${q};?`, 'g'),
+            new RegExp(`import\\s*\\{([^}]*?)\\}\\s*from\\s*${q};?`, 'g'),
             (_, inner) => `const { ${bindings(inner)} } = __tsm__.require('${id}');`,
           )
           // import * as ns from 'id'
@@ -120,9 +120,12 @@ function inlineCss() {
   } as import('vite').Plugin
 }
 
-const sharedModules = ['vue', 'vue-router', ...manifest.sharedDependencies
-  .map((dependency) => dependency.id)
-  .filter((id) => id.startsWith('org.eclipse.daanse'))]
+const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
+// Workspace libraries resolve through __tsm__.require; browser-standard
+// libraries (vue and friends) stay bare imports, resolved by the import map
+// in the host page - platform.vue serves the artefacts they point at.
+const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
+const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
 
 export default defineConfig({
   // Bundles run in the browser; embedded third-party code still probing
@@ -145,6 +148,7 @@ export default defineConfig({
   ],
   build: {
     target: 'es2022',
+    rollupOptions: { external: importMapLibraries },
     minify: false,
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,

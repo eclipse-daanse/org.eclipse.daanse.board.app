@@ -35,7 +35,7 @@
     }
   ],
   "dependencies": [
-    "lib.logger",
-    "platform.compat"
+    "lib.annotations",
+    "lib.logger"
   ]
 }

@@ -40,8 +40,8 @@
   "dependencies": [
     "lib.persistence.git",
     "lib.repository.persistence",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables"
   ],
   "provides": []
 }

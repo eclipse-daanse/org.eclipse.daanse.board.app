@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
+import platformVue from 'org.eclipse.daanse.board.app.platform.vue/manifest.json'
 import b0 from 'org.eclipse.daanse.board.app.shell/manifest.json'
 import b1 from 'org.eclipse.daanse.board.app.ui.vue.widget.progress/manifest.json'
 import b2 from 'org.eclipse.daanse.board.app.ui.vue.widget.map/manifest.json'
@@ -147,6 +148,7 @@ import b127 from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper/manifest.js
  * the production build copies them into dist/bundles/.
  */
 export const bundles: ModuleManifest[] = [
+  platformVue as ModuleManifest,
   b0 as ModuleManifest,
   b1 as ModuleManifest,
   b2 as ModuleManifest,

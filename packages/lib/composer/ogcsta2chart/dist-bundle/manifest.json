@@ -42,9 +42,9 @@
     }
   ],
   "dependencies": [
+    "lib.annotations",
     "lib.datasource.base",
     "lib.events",
-    "lib.repository.datasource",
-    "platform.compat"
+    "lib.repository.datasource"
   ]
 }

@@ -1,7 +1,7 @@
 (function(){var i="ui.vue.widget.chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.settings-container[data-v-7701abd6] {\n  padding: 16px;\n}\n.settings-block[data-v-7701abd6] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.settings-block h3[data-v-7701abd6] {\n  margin: 0 0 8px 0;\n  font-size: 14px;\n  font-weight: 600;\n  color: var(--va-primary);\n}\n";})();
-const { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version: version$2, isProxy, mergeModels, toRefs, useModel, inject: inject$1, computed, createElementBlock, openBlock, withModifiers, createBlock, createCommentVNode, resolveDynamicComponent, resolveComponent, Fragment, createVNode, withCtx, createElementVNode, createTextVNode, renderList, toDisplayString, unref } = __tsm__.require("vue");
+import { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version as version$2, isProxy, mergeModels, toRefs, useModel, inject as inject$1, computed, createElementBlock, openBlock, withModifiers, createBlock, createCommentVNode, resolveDynamicComponent, resolveComponent, Fragment, createVNode, withCtx, createElementVNode, createTextVNode, renderList, toDisplayString, unref } from "vue";
 const { VariableWrapper, useVariableRepository, useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { useRoute } = __tsm__.require("vue-router");
+import { useRoute } from "vue-router";
 const { Documentation, Attribute, Reference, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");

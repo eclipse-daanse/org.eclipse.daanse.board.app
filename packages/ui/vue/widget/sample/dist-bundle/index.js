@@ -1,5 +1,5 @@
 (function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-4037cc7e] {\n  padding: 12px;\n}\n";})();
-const { defineComponent, toRefs, inject: inject$1, ref, watch, createElementBlock, openBlock, withModifiers, toDisplayString } = __tsm__.require("vue");
+import { defineComponent, toRefs, inject as inject$1, ref, watch, createElementBlock, openBlock, withModifiers, toDisplayString } from "vue";
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");

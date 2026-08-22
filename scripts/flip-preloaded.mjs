@@ -158,7 +158,12 @@ import vue from '@vitejs/plugin-vue'
 import { tsmPlugin } from '@eclipse-daanse/tsm/vite'
 import manifest from './manifest.json'
 
-const sharedModules = (manifest.sharedDependencies ?? []).map((d) => d.id)
+const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
+// Workspace libraries resolve through __tsm__.require; browser-standard
+// libraries (vue and friends) stay bare imports, resolved by the import map
+// in the host page - platform.vue serves the artefacts they point at.
+const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
+const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
 
 /**
  * WORKAROUND (tsm#20): rewrites every import form of a shared module that
@@ -189,12 +194,12 @@ function rewriteSharedImportsInChunks() {
         for (const id of sharedModules) {
           const q = \`["']\${esc(id)}["']\`
           code = code.replace(
-            new RegExp(\`import\\\\s+([\\\\w$]+)\\\\s*,\\\\s*\\\\{([\\\\s\\\\S]*?)\\\\}\\\\s*from\\\\s*\${q};?\`, 'g'),
+            new RegExp(\`import\\\\s+([\\\\w$]+)\\\\s*,\\\\s*\\\\{([^}]*?)\\\\}\\\\s*from\\\\s*\${q};?\`, 'g'),
             (_, def, inner) =>
               \`const __tsm_m = __tsm__.require('\${id}'); const \${def} = (__tsm_m && __tsm_m.default) ?? __tsm_m; const { \${bindings(inner)} } = __tsm_m;\`,
           )
           code = code.replace(
-            new RegExp(\`import\\\\s*\\\\{([\\\\s\\\\S]*?)\\\\}\\\\s*from\\\\s*\${q};?\`, 'g'),
+            new RegExp(\`import\\\\s*\\\\{([^}]*?)\\\\}\\\\s*from\\\\s*\${q};?\`, 'g'),
             (_, inner) => \`const { \${bindings(inner)} } = __tsm__.require('\${id}');\`,
           )
           code = code.replace(
@@ -257,6 +262,7 @@ export default defineConfig({
   ],
   build: {
     target: 'es2022',
+    rollupOptions: { external: importMapLibraries },
     minify: false,
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,

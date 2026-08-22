@@ -1,7 +1,7 @@
 (function(){var i="ui.vue.variable.timepicker",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.datetime-group[data-v-7a419d93] {\n  display: flex;\n  gap: 1rem;\n}\n.datetime-group[data-v-7a419d93] > * {\n  flex: 1;\n}\n";})();
 const { VARIABLE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
 const { DATETIME_PICKER_VARIABLE, DateTimePickerVariableSymbol } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");
-const { defineComponent, useModel, computed, resolveComponent, createElementBlock, openBlock, createVNode, createElementVNode } = __tsm__.require("vue");
+import { defineComponent, useModel, computed, resolveComponent, createElementBlock, openBlock, createVNode, createElementVNode } from "vue";
 const _hoisted_1 = { class: "flex flex-col gap-4" };
 const _hoisted_2 = { class: "datetime-group" };
 const _sfc_main = /* @__PURE__ */ defineComponent({

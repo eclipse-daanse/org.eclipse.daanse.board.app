@@ -35,8 +35,8 @@
     }
   ],
   "dependencies": [
+    "lib.annotations",
     "lib.datasource.base",
-    "lib.repository.connection",
-    "platform.compat"
+    "lib.repository.connection"
   ]
 }

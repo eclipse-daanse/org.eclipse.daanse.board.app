@@ -1,7 +1,7 @@
 (function(){var i="ui.vue.widget.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.widget[data-v-cc472b41] {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-container[data-v-cc472b41] {\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.preview-item[data-v-cc472b41] {\n  border: 1px solid #000;\n  border-radius: 8px;\n}\n.preview-item-title[data-v-cc472b41] {\n  background-color: #f0f0f0;\n  font-size: 1.25rem;\n  font-weight: bold;\n  padding: 8px;\n  border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-cc472b41] {\n  padding: 8px;\n}\n";})();
-const { defineComponent, toRefs, inject: inject$1, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, withModifiers, createCommentVNode, Fragment, renderList, createElementVNode, toDisplayString } = __tsm__.require("vue");
+import { defineComponent, toRefs, inject as inject$1, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, withModifiers, createCommentVNode, Fragment, renderList, createElementVNode, toDisplayString } from "vue";
 const { useDatasourceRepository } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { useRoute } = __tsm__.require("vue-router");
+import { useRoute } from "vue-router";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};

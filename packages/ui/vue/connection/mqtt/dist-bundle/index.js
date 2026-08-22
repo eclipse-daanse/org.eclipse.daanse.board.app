@@ -1,5 +1,5 @@
 const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
-const { defineComponent, resolveComponent, createBlock, openBlock } = __tsm__.require("vue");
+import { defineComponent, resolveComponent, createBlock, openBlock } from "vue";
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "Settings",
   props: {

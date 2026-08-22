@@ -10,8 +10,8 @@
     "lib.i18next",
     "lib.repository.variable",
     "lib.repository.widget",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables"
   ],
   "requiresService": [
     {

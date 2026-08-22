@@ -25,8 +25,8 @@
     }
   ],
   "dependencies": [
-    "lib.variables",
-    "platform.compat"
+    "lib.annotations",
+    "lib.variables"
   ],
   "provides": []
 }

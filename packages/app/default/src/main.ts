@@ -29,13 +29,10 @@ import * as libCore from 'org.eclipse.daanse.board.app.lib.core'
 import { services } from 'org.eclipse.daanse.board.app.lib.core'
 import { bundles } from './bundles'
 
-const resolvedContainers = new Map<string, unknown>()
-
 const loader = new ModuleLoader({
   serviceRegistry: services,
   hotReload: import.meta.env.DEV,
   continueOnError: true,
-  entryResolver: (manifest) => resolvedContainers.get(manifest.id),
 })
 
 // The tsm console: tsm.lb(), tsm.services() and friends in the devtools
@@ -95,22 +92,11 @@ async function start() {
   )
 
   /*
-   * The last statically bundled module: the shared vue stack. Everything
-   * else arrives per URL.
+   * Nothing else is statically bundled: platform.vue is a URL bundle in
+   * bundles.ts like everything else, and the vue stack itself arrives
+   * through the import map in index.html pointing at its artefacts.
    */
-  const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
-    [
-      (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
-        .default as ModuleManifest,
-      () => import('org.eclipse.daanse.board.app.platform.vue'),
-    ],
-  ]
-
-  for (const [manifest, load] of platform) {
-    resolvedContainers.set(manifest.id, await load())
-  }
-
-  loader.register([...platform.map(([manifest]) => manifest), ...bundles])
+  loader.register(bundles)
   await loader.loadAll()
 
   const all = loader.getManifests()

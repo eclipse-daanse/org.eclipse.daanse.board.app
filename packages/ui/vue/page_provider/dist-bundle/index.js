@@ -1,4 +1,4 @@
-const { useRoute } = __tsm__.require("vue-router");
+import { useRoute } from "vue-router";
 class VuePageProvider {
   constructor() {
     this.currentPageId = void 0;

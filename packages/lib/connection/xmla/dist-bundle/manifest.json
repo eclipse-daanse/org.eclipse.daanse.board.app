@@ -26,7 +26,7 @@
     }
   ],
   "dependencies": [
-    "lib.connection.base",
-    "platform.compat"
+    "lib.annotations",
+    "lib.connection.base"
   ]
 }

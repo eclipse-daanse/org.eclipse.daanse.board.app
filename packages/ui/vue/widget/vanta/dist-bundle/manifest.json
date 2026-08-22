@@ -8,7 +8,6 @@
   "dependencies": [
     "lib.events",
     "lib.repository.widget",
-    "platform.compat",
     "platform.vue"
   ],
   "requiresService": [

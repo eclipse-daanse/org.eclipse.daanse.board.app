@@ -24,10 +24,9 @@
 import { describe, it, expect } from 'vitest'
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import { bundles } from '../packages/app/default/src/bundles'
-import platformVue from '../packages/platform/vue/manifest.json'
 import platformBoot from '../packages/platform/boot/manifest.json'
 
-const platform = [platformVue as ModuleManifest, platformBoot as ModuleManifest]
+const platform = [platformBoot as ModuleManifest]
 const all: ModuleManifest[] = [...platform, ...bundles]
 
 /**
