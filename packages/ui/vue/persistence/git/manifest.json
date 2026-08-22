@@ -3,11 +3,44 @@
   "id": "ui.vue.persistence.git",
   "name": "ui.vue.persistence.git",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/ui.vue.persistence.git/index.js",
   "exports": {},
   "requiresService": [
     {
       "id": "RepositoryRegistry"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.persistence.git",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.persistence.git",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.persistence.git",
+    "lib.repository.persistence",
+    "platform.compat",
+    "platform.vue"
   ]
 }

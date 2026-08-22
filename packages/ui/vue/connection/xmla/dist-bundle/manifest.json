@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.connection.xmla/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.connection.xmla",
+    "lib.repository.connection",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

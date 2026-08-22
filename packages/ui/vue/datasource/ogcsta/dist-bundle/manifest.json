@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.datasource.ogcsta/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.repository.datasource",
+    "lib.repository.variable",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

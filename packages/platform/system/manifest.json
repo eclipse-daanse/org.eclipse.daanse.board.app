@@ -4,9 +4,21 @@
   "name": "System Services",
   "version": "0.0.1-next.1",
   "description": "Owns the application-wide base services: the event bus",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/platform.system/index.js",
   "exports": {},
   "provides": [
-    { "id": "TINY_EMITTER", "description": "Application-wide event bus (tiny-emitter)" }
+    {
+      "id": "TINY_EMITTER",
+      "description": "Application-wide event bus (tiny-emitter)"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.platform.system",
+        "version": "0.0.1-next.1"
+      }
+    }
   ]
 }

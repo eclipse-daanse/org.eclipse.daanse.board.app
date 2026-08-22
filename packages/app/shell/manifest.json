@@ -7,8 +7,24 @@
   "entry": "/bundles/app.shell/index.js",
   "exports": {},
   "dependencies": [
+    "lib.events",
+    "lib.factory.variableWrapper",
+    "lib.i18next",
+    "lib.logger",
+    "lib.repository.connection",
+    "lib.repository.datasource",
+    "lib.repository.layout.page",
+    "lib.repository.navigation",
+    "lib.repository.page",
+    "lib.repository.persistence",
+    "lib.repository.route",
+    "lib.repository.variable",
+    "lib.repository.widget",
+    "lib.variables",
+    "platform.compat",
     "platform.vue",
-    "platform.compat"
+    "ui.vue.stores.connection",
+    "ui.vue.stores.datasouce"
   ],
   "provides": [
     {

@@ -24,14 +24,12 @@
 import { describe, it, expect } from 'vitest'
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import { bundles } from '../packages/app/default/src/bundles'
-import { preloadedModules } from '../packages/app/default/src/preloaded'
 import platformVue from '../packages/platform/vue/manifest.json'
 import platformCompat from '../packages/platform/compat/manifest.json'
 import platformBoot from '../packages/platform/boot/manifest.json'
 
 const platform = [platformVue as ModuleManifest, platformCompat as ModuleManifest, platformBoot as ModuleManifest]
-const preloaded = preloadedModules.map(([manifest]) => manifest)
-const all: ModuleManifest[] = [...platform, ...preloaded, ...bundles]
+const all: ModuleManifest[] = [...platform, ...bundles]
 
 /**
  * Services the host itself registers. Exactly one since the shell step: the
@@ -113,11 +111,11 @@ describe('manifest lint', () => {
     expect(missing).toEqual([])
   })
 
-  it('preloaded modules keep the placeholder entry, bundles a real URL', () => {
+  it('every bundle carries a real URL entry', () => {
     const wrong: string[] = []
-    for (const m of preloaded) {
-      if (m.entry.startsWith('/bundles/')) {
-        wrong.push(`${m.id} is preloaded but has a bundle URL - move it to bundles.ts`)
+    for (const m of bundles) {
+      if (!m.entry.startsWith('/bundles/')) {
+        wrong.push(`${m.id} is registered as a bundle but its entry is ${m.entry}`)
       }
     }
     expect(wrong).toEqual([])

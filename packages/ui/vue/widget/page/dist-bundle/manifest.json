@@ -6,8 +6,13 @@
   "entry": "/bundles/ui.vue.widget.page/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.i18next",
+    "lib.repository.layout.page",
+    "lib.repository.page",
+    "lib.repository.widget",
+    "lib.variables",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [],
   "sharedDependencies": [

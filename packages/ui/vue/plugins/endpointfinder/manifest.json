@@ -6,10 +6,13 @@
   "entry": "/bundles/ui.vue.plugins.endpointfinder/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
+    "lib.repository.connection",
+    "lib.repository.datasource",
+    "lib.repository.widget",
     "platform.compat",
-    "ui.vue.connection.rest",
-    "ui.vue.stores.connection"
+    "platform.vue",
+    "ui.vue.stores.connection",
+    "ui.vue.stores.datasouce"
   ],
   "requiresService": [
     {

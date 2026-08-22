@@ -6,8 +6,9 @@
   "entry": "/bundles/ui.vue.composer.datatable/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.repository.datasource",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

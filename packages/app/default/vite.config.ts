@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { cpSync, createReadStream, existsSync, statSync, watch } from 'node:fs'
+import { cpSync, createReadStream, existsSync, globSync, readFileSync, statSync, watch } from 'node:fs'
 import { extname, join, normalize } from 'node:path'
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -21,59 +21,20 @@ import { resolve } from 'path'
 
 const isDev = process.env.NODE_ENV !== 'production'
 
-/** Where the separately built tsm bundles live, keyed by module id. */
-const bundleDirs: Record<string, string> = {
-  'app.shell': resolve(__dirname, '../shell/dist-bundle'),
-  'ui.vue.widget.progress': resolve(__dirname, '../../ui/vue/widget/progress/dist-bundle'),
-  'ui.vue.widget.map': resolve(__dirname, '../../ui/vue/widget/map/dist-bundle'),
-  'ui.vue.plugins.geojson_renderer': resolve(__dirname, '../../ui/vue/plugins/geojson_renderer/dist-bundle'),
-  'ui.vue.plugins.endpointfinder': resolve(__dirname, '../../ui/vue/plugins/endpointfinder/dist-bundle'),
-  'ui.vue.composer.chart': resolve(__dirname, '../../ui/vue/composer/chart/dist-bundle'),
-  'ui.vue.composer.datatable': resolve(__dirname, '../../ui/vue/composer/datatable/dist-bundle'),
-  'ui.vue.composer.kpi': resolve(__dirname, '../../ui/vue/composer/kpi/dist-bundle'),
-  'ui.vue.composer.ogc': resolve(__dirname, '../../ui/vue/composer/ogc/dist-bundle'),
-  'ui.vue.composer.ogcsta2chart': resolve(__dirname, '../../ui/vue/composer/ogcsta2chart/dist-bundle'),
-  'ui.vue.composer.weather': resolve(__dirname, '../../ui/vue/composer/weather/dist-bundle'),
-  'ui.vue.connection.graphql': resolve(__dirname, '../../ui/vue/connection/graphql/dist-bundle'),
-  'ui.vue.connection.mqtt': resolve(__dirname, '../../ui/vue/connection/mqtt/dist-bundle'),
-  'ui.vue.connection.rest': resolve(__dirname, '../../ui/vue/connection/rest/dist-bundle'),
-  'ui.vue.connection.rss': resolve(__dirname, '../../ui/vue/connection/rss/dist-bundle'),
-  'ui.vue.connection.ws': resolve(__dirname, '../../ui/vue/connection/ws/dist-bundle'),
-  'ui.vue.connection.xmla': resolve(__dirname, '../../ui/vue/connection/xmla/dist-bundle'),
-  'ui.vue.datasource.csv': resolve(__dirname, '../../ui/vue/datasource/csv/dist-bundle'),
-  'ui.vue.datasource.graphql': resolve(__dirname, '../../ui/vue/datasource/graphql/dist-bundle'),
-  'ui.vue.datasource.kpi': resolve(__dirname, '../../ui/vue/datasource/kpi/dist-bundle'),
-  'ui.vue.datasource.ogcsta': resolve(__dirname, '../../ui/vue/datasource/ogcsta/dist-bundle'),
-  'ui.vue.datasource.rest': resolve(__dirname, '../../ui/vue/datasource/rest/dist-bundle'),
-  'ui.vue.datasource.rss': resolve(__dirname, '../../ui/vue/datasource/rss/dist-bundle'),
-  'ui.vue.datasource.sparql': resolve(__dirname, '../../ui/vue/datasource/sparql/dist-bundle'),
-  'ui.vue.datasource.sql_xmla': resolve(__dirname, '../../ui/vue/datasource/sql_xmla/dist-bundle'),
-  'ui.vue.datasource.valhalla': resolve(__dirname, '../../ui/vue/datasource/valhalla/dist-bundle'),
-  'ui.vue.datasource.ws': resolve(__dirname, '../../ui/vue/datasource/ws/dist-bundle'),
-  'ui.vue.datasource.xmla': resolve(__dirname, '../../ui/vue/datasource/xmla/dist-bundle'),
-  'ui.vue.widget.chart': resolve(__dirname, '../../ui/vue/widget/chart/dist-bundle'),
-  'ui.vue.widget.code': resolve(__dirname, '../../ui/vue/widget/code/dist-bundle'),
-  'ui.vue.widget.icon': resolve(__dirname, '../../ui/vue/widget/icon/dist-bundle'),
-  'ui.vue.widget.image': resolve(__dirname, '../../ui/vue/widget/image/dist-bundle'),
-  'ui.vue.widget.markdown': resolve(__dirname, '../../ui/vue/widget/markdown/dist-bundle'),
-  'ui.vue.widget.mermaid': resolve(__dirname, '../../ui/vue/widget/mermaid/dist-bundle'),
-  'ui.vue.widget.page': resolve(__dirname, '../../ui/vue/widget/page/dist-bundle'),
-  'ui.vue.widget.routing': resolve(__dirname, '../../ui/vue/widget/routing/dist-bundle'),
-  'ui.vue.widget.rss': resolve(__dirname, '../../ui/vue/widget/rss/dist-bundle'),
-  'ui.vue.widget.sample': resolve(__dirname, '../../ui/vue/widget/sample/dist-bundle'),
-  'ui.vue.widget.svg.base': resolve(__dirname, '../../ui/vue/widget/svg/base/dist-bundle'),
-  'ui.vue.widget.svg.repeat': resolve(__dirname, '../../ui/vue/widget/svg/repeat/dist-bundle'),
-  'ui.vue.widget.table.data': resolve(__dirname, '../../ui/vue/widget/table/data/dist-bundle'),
-  'ui.vue.widget.table.kpi': resolve(__dirname, '../../ui/vue/widget/table/kpi/dist-bundle'),
-  'ui.vue.widget.table.pivot': resolve(__dirname, '../../ui/vue/widget/table/pivot/dist-bundle'),
-  'ui.vue.widget.text.plain': resolve(__dirname, '../../ui/vue/widget/text/plain/dist-bundle'),
-  'ui.vue.widget.text.rich': resolve(__dirname, '../../ui/vue/widget/text/rich/dist-bundle'),
-  'ui.vue.widget.timeline': resolve(__dirname, '../../ui/vue/widget/timeline/dist-bundle'),
-  'ui.vue.widget.vanta': resolve(__dirname, '../../ui/vue/widget/vanta/dist-bundle'),
-  'ui.vue.widget.video': resolve(__dirname, '../../ui/vue/widget/video/dist-bundle'),
-  'ui.vue.widget.weather': resolve(__dirname, '../../ui/vue/widget/weather/dist-bundle'),
-  'ui.vue.widget.xmla.filters': resolve(__dirname, '../../ui/vue/widget/xmla/filters/dist-bundle'),
-}
+/**
+ * Where the separately built tsm bundles live, keyed by module id: every
+ * workspace package carrying a vite.bundle.config.ts, discovered at config
+ * load. A new bundle package appears here by existing.
+ */
+const bundleDirs: Record<string, string> = Object.fromEntries(
+  globSync(resolve(__dirname, '../../**/vite.bundle.config.ts'))
+    .filter((configPath) => !configPath.includes('node_modules'))
+    .map((configPath) => {
+      const dir = join(configPath, '..')
+      const manifest = JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf-8'))
+      return [manifest.id, join(dir, 'dist-bundle')]
+    }),
+)
 
 const BUNDLE_TYPES: Record<string, string> = {
   '.js': 'text/javascript',

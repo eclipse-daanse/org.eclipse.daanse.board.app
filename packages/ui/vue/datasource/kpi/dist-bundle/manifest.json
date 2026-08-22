@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.datasource.kpi/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.datasource.xmla",
+    "lib.repository.datasource",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

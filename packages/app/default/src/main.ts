@@ -26,7 +26,6 @@ import 'reflect-metadata'
 import { ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import { services } from 'org.eclipse.daanse.board.app.lib.core'
-import { preloadedModules } from './preloaded'
 import { bundles } from './bundles'
 
 const resolvedContainers = new Map<string, unknown>()
@@ -81,6 +80,10 @@ async function start() {
     { container: await import('org.eclipse.daanse.board.app.platform.boot') },
   )
 
+  /*
+   * The last two statically bundled modules: the shared vue stack and the
+   * shrinking compat library bridge. Everything else arrives per URL.
+   */
   const platform: Array<[ModuleManifest, () => Promise<unknown>]> = [
     [
       (await import('org.eclipse.daanse.board.app.platform.vue/manifest.json'))
@@ -94,12 +97,11 @@ async function start() {
     ],
   ]
 
-  const preloaded = [...platform, ...preloadedModules]
-  for (const [manifest, load] of preloaded) {
+  for (const [manifest, load] of platform) {
     resolvedContainers.set(manifest.id, await load())
   }
 
-  loader.register([...preloaded.map(([manifest]) => manifest), ...bundles])
+  loader.register([...platform.map(([manifest]) => manifest), ...bundles])
   await loader.loadAll()
 
   const all = loader.getManifests()

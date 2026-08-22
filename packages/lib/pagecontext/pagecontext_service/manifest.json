@@ -3,11 +3,20 @@
   "id": "lib.pagecontext.pagecontext_service",
   "name": "lib.pagecontext.pagecontext_service",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.pagecontext.pagecontext_service/index.js",
   "exports": {},
   "provides": [
     {
       "id": "PageContext"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service",
+        "version": "0.0.1-next.1"
+      }
     }
   ]
 }

@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.widget.weather/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.events",
+    "lib.repository.widget",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

@@ -6,8 +6,11 @@
   "entry": "/bundles/ui.vue.datasource.xmla/index.js",
   "exports": {},
   "dependencies": [
-    "platform.vue",
-    "platform.compat"
+    "lib.datasource.xmla",
+    "lib.repository.connection",
+    "lib.repository.datasource",
+    "platform.compat",
+    "platform.vue"
   ],
   "requiresService": [
     {

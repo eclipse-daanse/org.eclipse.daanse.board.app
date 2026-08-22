@@ -3,11 +3,34 @@
   "id": "lib.connection.graphql",
   "name": "lib.connection.graphql",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.connection.graphql/index.js",
   "exports": {},
   "provides": [
     {
       "id": "GraphQLConnectionFactory"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.annotations",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.connection.base",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.connection.graphql",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.connection.base",
+    "platform.compat"
   ]
 }

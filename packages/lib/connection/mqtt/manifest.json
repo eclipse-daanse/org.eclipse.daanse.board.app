@@ -3,7 +3,7 @@
   "id": "lib.connection.mqtt",
   "name": "lib.connection.mqtt",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.connection.mqtt/index.js",
   "exports": {},
   "provides": [
     {
@@ -14,5 +14,38 @@
     {
       "id": "LoggerFactory"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.annotations",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.connection.base",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.connection.twowayconnection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.logger",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.connection.mqtt",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.connection.base",
+    "lib.connection.twowayconnection",
+    "lib.logger",
+    "platform.compat"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "name": "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service",
   "version": "0.0.1-next.1",
+  "type": "module",
   "description": "Page context service for Eclipse Daanse Board",
   "main": "./dist/lib.pagecontext.pagecontext_service.umd.js",
   "module": "./dist/lib.pagecontext.pagecontext_service.mjs",

@@ -3,7 +3,7 @@
   "id": "lib.persistence.local",
   "name": "lib.persistence.local",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/lib.persistence.local/index.js",
   "exports": {},
   "provides": [
     {
@@ -17,5 +17,28 @@
     {
       "id": "ValidityCheck"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.persistence.util",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.lib.persistence.local",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.persistence.util",
+    "lib.repository.persistence"
   ]
 }

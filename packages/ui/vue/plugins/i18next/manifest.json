@@ -3,7 +3,7 @@
   "id": "ui.vue.plugins.i18next",
   "name": "ui.vue.plugins.i18next",
   "version": "0.0.1-next.1",
-  "entry": "./src/index.ts",
+  "entry": "/bundles/ui.vue.plugins.i18next/index.js",
   "exports": {},
   "requiresService": [
     {
@@ -12,5 +12,28 @@
     {
       "id": "I18next"
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.i18next",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.plugins.i18next",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "lib.i18next",
+    "platform.vue"
   ]
 }
