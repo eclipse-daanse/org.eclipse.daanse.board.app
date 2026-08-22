@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const PageSettings = { "title": "Page Settings", "id": "ID", "name": "Name", "icon": "Icon", "description": "Description", "layout": "Layout", "backgroundColor": "Background Color", "backgroundImage": "Background Image", "backgroundSize": "Background Size", "backgroundRepeat": "Background Repeat", "backgroundPosition": "Background Position", "visibleInNavigation": "Visible in Navigation" };
 const pageWidget = { "title": "Page Widget Settings", "selectPage": "Select Page", "selectPagePlaceholder": "Choose a page...", "selfReferenceWarning": "A page cannot reference itself.", "backgroundColor": "Background Color", "manualPath": "Manual Path", "path": "Path" };
 const en = {

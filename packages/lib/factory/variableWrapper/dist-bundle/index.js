@@ -1,7 +1,7 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { injectable, inject } from "@eclipse-daanse/tsm";
-const { VARIABLEWRAPPER, VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");
-const { VARIABLE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
+import { VARIABLEWRAPPER, VariableWrapper } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.variable";
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;

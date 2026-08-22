@@ -1,9 +1,9 @@
-const { identifier } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
-const { identifier: identifier$1 } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
-const { identifier: identifier$2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service");
-const { VariableWrapper, VARIABLEWRAPPER } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");
-const { VARIABLEWRAPPER: VARIABLEWRAPPER2, VariableWrapper: VariableWrapper2 } = __tsm__.require('org.eclipse.daanse.board.app.lib.variables');
+import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service";
+import { VariableWrapper, VARIABLEWRAPPER } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLEWRAPPER as VARIABLEWRAPPER2, VariableWrapper as VariableWrapper2 } from "org.eclipse.daanse.board.app.lib.variables";
 const activeLoadingCount = ref(0);
 function useGlobalLoading() {
   const isLoading = computed(() => activeLoadingCount.value > 0);

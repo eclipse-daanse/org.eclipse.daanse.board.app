@@ -1,5 +1,5 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { Reference, ModelClass, Documentation, Attribute } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
+import { Reference, ModelClass, Documentation, Attribute } from "org.eclipse.daanse.board.app.lib.annotations";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var _Reflect = {};
 /*! *****************************************************************************

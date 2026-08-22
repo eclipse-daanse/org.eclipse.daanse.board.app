@@ -1,4 +1,4 @@
-const { BaseRepository, REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
+import { BaseRepository, REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.repository.persistence";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 function getUserAgent() {
   if (typeof navigator === "object" && "userAgent" in navigator) {

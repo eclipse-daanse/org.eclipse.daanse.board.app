@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const TextWidget = { "title": "Text widget settings", "label": "Title", "fontSize": "Font Size", "fontColor": "Font Color" };
 const en = {
   TextWidget

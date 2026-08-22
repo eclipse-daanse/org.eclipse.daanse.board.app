@@ -1,8 +1,8 @@
 import { inject, injectable } from "@eclipse-daanse/tsm";
-const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
-const { VARIABLE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
-const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
-const { LOGGER_FACTORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { LOGGER_FACTORY } from "org.eclipse.daanse.board.app.lib.logger";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const BASE_PATH = "https://sensors.bgs.ac.uk/FROST-Server".replace(/\/+$/, "");
 class Configuration {

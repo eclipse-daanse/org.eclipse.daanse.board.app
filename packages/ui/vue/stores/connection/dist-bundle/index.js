@@ -1,4 +1,4 @@
-const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 let repository;

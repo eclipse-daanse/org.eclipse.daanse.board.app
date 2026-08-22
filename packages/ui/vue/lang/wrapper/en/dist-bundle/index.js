@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const WidgetWrapper = { "title": "Title", "label": "Title", "fontSize": "Title Font size", "fontColor": "Font Color", "background": "Background", "backgroundColor": "Background Color", "backgroundColorTrancparency": "Background Color Transparency", "border": "Border", "borderSize": "Border Size", "borderColor": "Border Color", "borderRadius": "Border Radius", "fullScreen": "Full Screen", "showFullScreen": "Show fullscreen button", "shadow": "Shadow", "shadowX": "Shadow x", "shadowY": "Shadow y", "shadowBlur": "Shadow blur", "shadowTransparence": "Shadow Color Transparency", "shadowColor": "Shadow Color", "transparence": "Transparence", "transparency": "Transparency", "padding": "Padding", "blur": "Blur" };
 const en = {
   WidgetWrapper

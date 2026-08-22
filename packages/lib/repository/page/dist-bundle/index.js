@@ -1,4 +1,4 @@
-const { SubscribeNotifyImpl } = __tsm__.require("org.eclipse.daanse.board.app.lib.utils.subscriber");
+import { SubscribeNotifyImpl } from "org.eclipse.daanse.board.app.lib.utils.subscriber";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const events = {
   PAGE_REGISTRATION: "PAGE_REGISTRATION",

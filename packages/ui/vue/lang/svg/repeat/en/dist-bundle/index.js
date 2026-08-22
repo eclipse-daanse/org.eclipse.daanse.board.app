@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const RepeatableSvgWidget = { "title": "Repeatable SVG widget settings", "svgSrc": "Svg src", "repeations": "Repeations", "progress": "Progress", "activeItemFill": "Active item fill", "activeItemStroke": "Active item stroke", "defaultItemFill": "Default item fill", "defaultItemStroke": "Default item stroke" };
 const en = {
   RepeatableSvgWidget

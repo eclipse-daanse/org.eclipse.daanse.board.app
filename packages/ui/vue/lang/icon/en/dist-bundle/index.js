@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const IconWidget = { "title": "Icon widget settings", "iconSearch": "Search icon", "iconFilled": "Icon filled", "iconColor": "Icon color", "iconSize": "Icon size", "strokeWeight": "Stroke weight", "opticSize": "Optic size", "grade": "Grade" };
 const en = {
   IconWidget

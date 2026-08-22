@@ -1,8 +1,8 @@
 (function(){var i="ui.vue.composer.chart",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.h50[data-v-3662bbd8]{\n  height: 50%;\n}\n";})();
-const { identifier, DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { identifier, DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { defineComponent, shallowRef, h, ref, onMounted, onUnmounted, watch, toRaw, nextTick, version as version$1, isProxy, resolveComponent, createElementBlock, createCommentVNode, openBlock, createElementVNode, createVNode, createBlock, unref, inject, computed, Fragment } from "vue";
-const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { ChartComposer } = __tsm__.require("org.eclipse.daanse.board.app.lib.composer.chart");
+import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { ChartComposer } from "org.eclipse.daanse.board.app.lib.composer.chart";
 /*!
  * @kurkle/color v0.3.4
  * https://github.com/kurkle/color#readme

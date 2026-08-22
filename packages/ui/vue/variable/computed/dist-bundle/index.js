@@ -1,5 +1,5 @@
-const { VARIABLE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
-const { COMPUTED_VARIABLE, ComputedVariableSymbol } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");
+import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { COMPUTED_VARIABLE, ComputedVariableSymbol } from "org.eclipse.daanse.board.app.lib.variables";
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors

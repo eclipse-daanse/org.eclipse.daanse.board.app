@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const SvgWidget = { "title": "SVG widget settings", "svgSrc": "SVG src", "addButton": "Add items" };
 const en = {
   SvgWidget

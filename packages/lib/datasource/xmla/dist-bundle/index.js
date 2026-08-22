@@ -1,5 +1,5 @@
-const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
-const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
 import { inject } from "@eclipse-daanse/tsm";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const byteToHex = [];

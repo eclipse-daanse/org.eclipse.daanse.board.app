@@ -1,5 +1,5 @@
-const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
-const { XmlaConnection, factorySymbol } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.xmla");
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { XmlaConnection, factorySymbol } from "org.eclipse.daanse.board.app.lib.connection.xmla";
 import { defineComponent, ref, onMounted, watch, resolveComponent, createElementBlock, openBlock, Fragment, createVNode, createBlock, createCommentVNode } from "vue";
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "Settings",

@@ -1,7 +1,7 @@
 import { inject } from "@eclipse-daanse/tsm";
-const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
-const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
-const helpers = __tsm__.require("org.eclipse.daanse.board.app.lib.utils.helpers").default;
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var __defProp = Object.defineProperty;
 var __decorateClass = (decorators, target, key, kind) => {

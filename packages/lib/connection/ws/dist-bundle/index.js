@@ -1,4 +1,4 @@
-const { TwoWayConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.twowayconnection");
+import { TwoWayConnection } from "org.eclipse.daanse.board.app.lib.connection.twowayconnection";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class WSConnection extends TwoWayConnection {
   socket = null;

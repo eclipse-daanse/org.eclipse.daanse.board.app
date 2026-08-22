@@ -167,9 +167,12 @@ const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
 // Workspace libraries resolve through __tsm__.require; browser-standard
 // libraries (vue and friends) stay bare imports, resolved by the import map
 // in the host page - platform.vue serves the artefacts they point at.
-const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
+// Only the host library stays on __tsm__.require: lib.core carries the
+// service registry singleton and can never arrive by URL. Every other
+// library is a bare import, resolved by the import map.
+const sharedModules = allShared.filter((id) => id === 'org.eclipse.daanse.board.app.lib.core')
 // The framework API rides the import map too - the system bundle serves it.
-const importMapLibraries = [...allShared.filter((id) => !id.startsWith('org.eclipse.daanse')), '@eclipse-daanse/tsm']
+const importMapLibraries = [...allShared.filter((id) => id !== 'org.eclipse.daanse.board.app.lib.core'), '@eclipse-daanse/tsm']
 
 /**
  * WORKAROUND (tsm#20): rewrites every import form of a shared module that

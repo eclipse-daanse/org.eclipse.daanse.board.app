@@ -1,6 +1,6 @@
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { defineComponent, shallowRef, ref, watch, resolveComponent, createElementBlock, createCommentVNode, openBlock, createVNode, reactive, computed, onMounted, Fragment, createBlock, withCtx } from "vue";
-const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
+import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const _hoisted_1 = {
   key: 0,
   style: { "overflow": "hidden", "height": "100%", "width": "100%" }

@@ -1,6 +1,6 @@
-const { Documentation, Attribute, ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
+import { Documentation, Attribute, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { loggerFactory } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
+import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
 import { injectable, inject } from "@eclipse-daanse/tsm";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;

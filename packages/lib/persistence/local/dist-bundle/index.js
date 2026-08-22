@@ -1,6 +1,6 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { BaseRepository, REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
-const { VALIDITY_CHECK } = __tsm__.require("org.eclipse.daanse.board.app.lib.persistence.util");
+import { BaseRepository, REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+import { VALIDITY_CHECK } from "org.eclipse.daanse.board.app.lib.persistence.util";
 import { inject, injectable } from "@eclipse-daanse/tsm";
 const { parse: $parse } = JSON;
 const { keys } = Object;

@@ -1,5 +1,5 @@
-const { SETTINGS_MANAGER } = __tsm__.require("org.eclipse.daanse.board.app.lib.settings.manager");
-const { REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
+import { SETTINGS_MANAGER } from "org.eclipse.daanse.board.app.lib.settings.manager";
+import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.repository.persistence";
 async function activate$1({ services, log }) {
   const settingsManager = services.get(SETTINGS_MANAGER);
   if (!settingsManager) {

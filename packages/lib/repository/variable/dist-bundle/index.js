@@ -1,6 +1,6 @@
-const { EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
 const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { loggerFactory } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
+import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
 class VariableRepository {
   constructor(resolver, tinyEmitter) {
     this.resolver = resolver;

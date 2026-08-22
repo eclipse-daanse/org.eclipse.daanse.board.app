@@ -1,4 +1,4 @@
-const { BaseConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.base");
+import { BaseConnection } from "org.eclipse.daanse.board.app.lib.connection.base";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;

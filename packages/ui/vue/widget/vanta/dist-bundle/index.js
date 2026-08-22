@@ -1,5 +1,5 @@
 (function(){var i="ui.vue.widget.vanta",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vanta-container[data-v-47c01c22] {\n  width: 100%;\n  height: 100%;\n}\n.widget-container[data-v-47c01c22] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}";})();
-const { Payload, EVENT_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+import { Payload, EVENT_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
 import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
 import { defineComponent, ref, toRefs, inject, watch, nextTick, onMounted, onBeforeUnmount, createElementBlock, openBlock, withModifiers, createElementVNode, useModel, resolveComponent, createBlock, withCtx, createVNode, createCommentVNode, Fragment } from "vue";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");

@@ -1,6 +1,6 @@
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
 class OgcFeatureComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this

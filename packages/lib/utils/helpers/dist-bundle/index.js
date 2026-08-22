@@ -5945,5 +5945,6 @@ async function deactivate(context) {
 }
 export {
   activate,
-  deactivate
+  deactivate,
+  index as default
 };

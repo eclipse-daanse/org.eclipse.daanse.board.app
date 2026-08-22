@@ -1,8 +1,8 @@
 (function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.va-tabs__wrapper {\n  overflow: visible;\n}\n.va-tabs__content {\n  overflow: hidden;\n}\n";})();
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { defineComponent, shallowRef, ref, watch, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, unref, withCtx, createTextVNode, createBlock, createCommentVNode, Fragment, renderList, normalizeStyle, toDisplayString, computed } from "vue";
-const { MonacoEditor } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.common.monaco");
-const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
+import { MonacoEditor } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
+import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const _hoisted_1 = {
   class: "flex gap-4",
   style: { "overflow": "hidden", "height": "100%", "width": "100%" }

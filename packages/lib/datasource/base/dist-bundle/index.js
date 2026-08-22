@@ -1,4 +1,4 @@
-const { UsesComputedVariable } = __tsm__.require("org.eclipse.daanse.board.app.lib.variables");
+import { UsesComputedVariable } from "org.eclipse.daanse.board.app.lib.variables";
 class BaseDatasource extends UsesComputedVariable {
   constructor() {
     super(...arguments);

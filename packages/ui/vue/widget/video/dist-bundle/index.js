@@ -1,12 +1,12 @@
 (function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-f965dc7c] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-f965dc7c] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--v03022de9);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
-const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+import { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
 import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
 import { defineComponent, mergeModels, useCssVars, computed, toRefs, useModel, inject, ref, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, resolveComponent, createBlock, withCtx, createVNode, unref } from "vue";
 import { useRoute } from "vue-router";
-const { Documentation, Attribute, ModelClass, Reference } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
-const { VariableWrapper } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
+import { Documentation, Attribute, ModelClass, Reference } from "org.eclipse.daanse.board.app.lib.annotations";
+import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { VariableInput } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.variable.components");
+import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 var __defProp$3 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
 var __decorateClass$3 = (decorators, target, key, kind) => {

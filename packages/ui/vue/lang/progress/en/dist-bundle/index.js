@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const ProgressWidget = { "title": "Progress widget settings", "progress": "Progress", "fillColor": "Progress fill color", "backgroundColor": "Progress background color", "isVertical": "Vertical", "isGradient": "Gradient", "addButton": "Add color", "rotation": "Rotation" };
 const en = {
   ProgressWidget

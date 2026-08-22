@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const MainLayout = { "loading": "Loading", "connect": "Connect to the cube" };
 const DashboardNavigation = { "designer": "Designer", "dashboard": "Dashboard", "multilevelDashboard": "Multilevel Dashboard" };
 const MultilevelDashboardNavigation = { "edit": "Edit Mode", "save": "Save", "loadLayout": "Load Layout", "storeList": "Store List", "appSettings": "App settings", "addWidgetButton": "Add", "dataSourceList": "Store list" };

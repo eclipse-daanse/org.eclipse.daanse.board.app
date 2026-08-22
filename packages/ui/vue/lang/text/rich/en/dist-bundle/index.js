@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const RichTextWidget = { "title": "Rich text widget settings", "bold": "Bold", "italic": "italic", "strike": "strike", "underline": "underline", "code": "code", "clearMarks": "clear marks", "clearNodes": "clear nodes", "paragraph": "paragraph", "bulletList": "bullet list", "orderedList": "ordered list", "codeBlock": "code block", "blockQuote": "block quote", "horizontalRule": "horizontal rule", "hardBreak": "hard break", "undo": "undo", "redo": "redo" };
 const en = {
   RichTextWidget

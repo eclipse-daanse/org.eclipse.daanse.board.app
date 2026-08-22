@@ -57,9 +57,55 @@ const BUNDLE_TYPES: Record<string, string> = {
  * Save in the bundle -> `vite build --watch` rebuilds -> this fires -> the
  * widget swaps live, lifecycle included.
  */
+/**
+ * The workspace half of the import map, generated from the manifests: every
+ * bundle offering a `tsm.library` capability for a workspace package is a
+ * library bundle, and its entry URL IS the package. Consumers write plain
+ * bare imports; who serves them is wiring, not code.
+ *
+ * The vue stack and the tsm API keep their hand-written entries in
+ * index.html - their capabilities name artefact files, not the entry.
+ * lib.core never appears here: it carries the host's service registry
+ * singleton and travels through __tsm__.require by design.
+ */
+function workspaceImportMapEntries(): Record<string, string> {
+  const entries: Record<string, string> = {}
+  for (const configPath of globSync(resolve(__dirname, '../../**/vite.bundle.config.ts'))) {
+    if (configPath.includes('node_modules')) continue
+    const manifestPath = join(configPath, '..', 'manifest.json')
+    if (!existsSync(manifestPath)) continue
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
+    if (!manifest.entry?.startsWith('/bundles/')) continue
+    for (const capability of manifest.capabilities ?? []) {
+      const library = capability?.attributes?.library
+      if (capability?.namespace === 'tsm.library' && typeof library === 'string'
+          && library.startsWith('org.eclipse.daanse.board.app.')) {
+        entries[library] = manifest.entry
+      }
+    }
+  }
+  return entries
+}
+
 function tsmBundles(): Plugin {
   return {
     name: 'serve-tsm-bundles',
+
+    /*
+     * Both dev and build: merge the generated workspace entries into the
+     * static import map in index.html. In dev this runs per request, so a
+     * freshly added library bundle appears on reload.
+     */
+    transformIndexHtml(html) {
+      return html.replace(
+        /(<script type="importmap">\s*)([\s\S]*?)(\s*<\/script>)/,
+        (_match, open, json, close) => {
+          const map = JSON.parse(json)
+          map.imports = { ...workspaceImportMapEntries(), ...map.imports }
+          return open + JSON.stringify(map, null, 2) + close
+        },
+      )
+    },
 
     /*
      * Production: the bundles are finished artefacts - copy them into the

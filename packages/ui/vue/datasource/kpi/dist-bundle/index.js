@@ -1,9 +1,9 @@
 (function(){var i="ui.vue.datasource.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.add_kpi[data-v-869dc0ea] {\n  display: flex;\n  flex-direction: row;\n  gap: 10px;\n  margin-bottom: 10px;\n  align-items: end;\n}\n.added_kpis[data-v-869dc0ea] {\n  display: flex;\n  flex-direction: row;\n  gap: 10px;\n  margin-bottom: 10px;\n  align-items: center;\n}\n";})();
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { defineComponent, shallowRef, ref, computed, watch, createElementBlock, createCommentVNode, openBlock, createElementVNode, createVNode, unref, onMounted, resolveComponent, Fragment } from "vue";
-const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { KpiTable } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.common.kpi");
-const { XmlaStore } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.xmla");
+import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { KpiTable } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { XmlaStore } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
 const _hoisted_1 = {
   key: 0,
   style: { "overflow": "hidden", "height": "100%", "width": "100%" },

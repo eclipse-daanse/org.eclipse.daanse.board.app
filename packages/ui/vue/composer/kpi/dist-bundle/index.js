@@ -1,8 +1,8 @@
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 import { defineComponent, ref, watch, shallowRef, createElementBlock, createCommentVNode, openBlock, createVNode, unref, computed, resolveComponent, createBlock } from "vue";
-const { useTemporaryStore } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.composables");
-const { KpiTable } = __tsm__.require("org.eclipse.daanse.board.app.ui.vue.common.kpi");
-const { KpiComposer } = __tsm__.require("org.eclipse.daanse.board.app.lib.composer.kpi");
+import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { KpiTable } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { KpiComposer } from "org.eclipse.daanse.board.app.lib.composer.kpi";
 const _hoisted_1 = {
   key: 0,
   style: { "overflow": "hidden", "height": "100%", "width": "100%" }

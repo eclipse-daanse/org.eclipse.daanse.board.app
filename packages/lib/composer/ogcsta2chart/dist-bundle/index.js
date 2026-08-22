@@ -1,8 +1,8 @@
-const { WidgetAction, ActionParameter, EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
-const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+import { WidgetAction, ActionParameter, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
-const { ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 class OGCSTAToChartComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this

@@ -1,4 +1,4 @@
-const { I18NEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.i18next");
+import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
 const ImageWidget = { "title": "Image widget settings", "imageUrl": "Image src", "addButton": "Add image", "imageFit": "Fit", "imageDiashowInterval": "Diashow interval" };
 const en = {
   ImageWidget

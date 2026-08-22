@@ -21,6 +21,8 @@
 import * as library from './index'
 
 export * from './index'
+// `export *` never forwards a default export; consumers default-import this package.
+export { default } from './index'
 
 const LIBRARY_ID = 'org.eclipse.daanse.board.app.lib.utils.helpers'
 const VERSION = '0.0.1-next.1'
