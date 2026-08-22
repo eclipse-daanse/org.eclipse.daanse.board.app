@@ -1,4 +1,6 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class KpiComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this
@@ -89,7 +91,7 @@ class KpiComposer extends BaseDatasource {
     return true;
   }
 }
-const KPI_COMPOSER = "KpiComposer";
+const KPI_COMPOSER = serviceId("KpiComposer");
 const symbol = Symbol.for(KPI_COMPOSER);
 function createKpiComposer(repository) {
   return (config) => {
@@ -104,7 +106,7 @@ function createKpiComposer(repository) {
   };
 }
 function activate$1({ services }) {
-  services.register(KPI_COMPOSER, createKpiComposer(services.getRequired("DatasourceRepository")));
+  services.register(KPI_COMPOSER, createKpiComposer(services.getRequired(DATASOURCE_REPOSITORY)));
 }
 function deactivate$1({ services }) {
   services.unregister(KPI_COMPOSER);

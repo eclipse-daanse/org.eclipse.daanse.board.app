@@ -12,13 +12,14 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ValhallaStore,
   type IValhallaStoreConfiguration,
 } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const VALHALLA_STORE_FACTORY = 'ValhallaStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const VALHALLA_STORE_FACTORY = serviceId<(config: any) => ValhallaStore>('ValhallaStoreFactory')
 
 const factorySymbol = Symbol.for(VALHALLA_STORE_FACTORY)
 

@@ -11,15 +11,17 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import {
   OgcFeatureComposer,
   type IOgcFeatureComposerConfiguration,
 } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
-const OGC_FEATURE_COMPOSER = 'OgcFeatureComposer'
+/** Typed service id - the name and the contract declared once, here. */
+const OGC_FEATURE_COMPOSER = serviceId<ReturnType<typeof createOgcFeatureComposer>>('OgcFeatureComposer')
 
 const symbol = Symbol.for(OGC_FEATURE_COMPOSER)
 
@@ -51,7 +53,7 @@ function createOgcFeatureComposer(repository: DatasourceRepository) {
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer(services.getRequired('DatasourceRepository')))
+  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer(services.getRequired(DATASOURCE_REPOSITORY)))
 }
 
 export function deactivate({ services }: ActivationContext) {

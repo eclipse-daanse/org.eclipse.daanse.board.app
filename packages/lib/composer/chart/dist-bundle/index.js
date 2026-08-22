@@ -1,3 +1,5 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
 class ChartComposer extends BaseDatasource {
   /**
@@ -133,7 +135,7 @@ class ChartComposer extends BaseDatasource {
     return true;
   }
 }
-const CHART_COMPOSER = "ChartComposer";
+const CHART_COMPOSER = serviceId("ChartComposer");
 const symbol = Symbol.for(CHART_COMPOSER);
 function createChartComposer(repository) {
   return (config) => {
@@ -148,7 +150,7 @@ function createChartComposer(repository) {
   };
 }
 function activate$1({ services }) {
-  services.register(CHART_COMPOSER, createChartComposer(services.getRequired("DatasourceRepository")));
+  services.register(CHART_COMPOSER, createChartComposer(services.getRequired(DATASOURCE_REPOSITORY)));
 }
 function deactivate$1({ services }) {
   services.unregister(CHART_COMPOSER);

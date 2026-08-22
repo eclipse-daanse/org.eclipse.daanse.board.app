@@ -1,3 +1,5 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
 class OgcFeatureComposer extends BaseDatasource {
   /**
@@ -180,7 +182,7 @@ class OgcFeatureComposer extends BaseDatasource {
     console.log("Destroying OgcFeatureComposer");
   }
 }
-const OGC_FEATURE_COMPOSER = "OgcFeatureComposer";
+const OGC_FEATURE_COMPOSER = serviceId("OgcFeatureComposer");
 const symbol = Symbol.for(OGC_FEATURE_COMPOSER);
 function createOgcFeatureComposer(repository) {
   return (config) => {
@@ -195,7 +197,7 @@ function createOgcFeatureComposer(repository) {
   };
 }
 function activate$1({ services }) {
-  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer(services.getRequired("DatasourceRepository")));
+  services.register(OGC_FEATURE_COMPOSER, createOgcFeatureComposer(services.getRequired(DATASOURCE_REPOSITORY)));
 }
 function deactivate$1({ services }) {
   services.unregister(OGC_FEATURE_COMPOSER);

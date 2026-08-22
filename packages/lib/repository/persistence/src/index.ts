@@ -13,8 +13,9 @@ import type { RepositoryRegistryI,WritableRepository,Entity,Repository } from '.
 import {BaseRepository} from './api/BaseRepository'
 import { RepositoryRegistry } from './RepositoryRegistry/RepositoryRegistryImpl'
 import type {RepositoryObserver} from './api/RepositoryObserverI';
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const REPOSITORY_REGISTRY = 'RepositoryRegistry'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+/** Typed service id - the name and the contract declared once, here. */
+const REPOSITORY_REGISTRY = serviceId<RepositoryRegistry>('RepositoryRegistry')
 
 const identifier = Symbol.for(REPOSITORY_REGISTRY)
 

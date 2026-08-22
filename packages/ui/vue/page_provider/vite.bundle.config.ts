@@ -30,7 +30,8 @@ const allShared = (manifest.sharedDependencies ?? []).map((d) => d.id)
 // libraries (vue and friends) stay bare imports, resolved by the import map
 // in the host page - platform.vue serves the artefacts they point at.
 const sharedModules = allShared.filter((id) => id.startsWith('org.eclipse.daanse'))
-const importMapLibraries = allShared.filter((id) => !id.startsWith('org.eclipse.daanse'))
+// The framework API rides the import map too - the system bundle serves it.
+const importMapLibraries = [...allShared.filter((id) => !id.startsWith('org.eclipse.daanse')), '@eclipse-daanse/tsm']
 
 /**
  * WORKAROUND (tsm#20): rewrites every import form of a shared module that

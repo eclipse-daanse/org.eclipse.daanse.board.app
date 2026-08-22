@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const datasources = /* @__PURE__ */ new Map();
 class DatasourceRepository {
   constructor(resolver) {
@@ -77,7 +78,7 @@ class DatasourceRepository {
     return this.getDatasourceType(id);
   }
 }
-const DATASOURCE_REPOSITORY = "DatasourceRepository";
+const DATASOURCE_REPOSITORY = serviceId("DatasourceRepository");
 const identifier = Symbol.for(DATASOURCE_REPOSITORY);
 function activate$1({ services }) {
   services.register(DATASOURCE_REPOSITORY, new DatasourceRepository(services));

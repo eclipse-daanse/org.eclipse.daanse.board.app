@@ -8,12 +8,14 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
+import { PAGE_CONTEXT } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {identifier as pagecontext_service_id,type PageContextServiceI } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service"
 import { VuePageProvider } from './classes/VuePageProvider'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const VUE_PAGE_PROVIDER = 'VuePageProvider'
+/** Typed service id - the name and the contract declared once, here. */
+const VUE_PAGE_PROVIDER = serviceId<VuePageProvider>('VuePageProvider')
 
 const identifier = Symbol.for(VUE_PAGE_PROVIDER)
 
@@ -28,7 +30,7 @@ const vuePageProvider = new VuePageProvider()
  */
 export function activate({ services }: ActivationContext) {
   services.register(VUE_PAGE_PROVIDER, vuePageProvider)
-  services.getRequired<PageContextServiceI>('PageContext').setProvider(vuePageProvider)
+  services.getRequired(PAGE_CONTEXT).setProvider(vuePageProvider)
 }
 
 export function deactivate({ services }: ActivationContext) {

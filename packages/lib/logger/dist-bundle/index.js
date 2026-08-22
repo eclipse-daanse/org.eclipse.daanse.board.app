@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -516,7 +517,7 @@ class LoggerFactory {
   }
 }
 const loggerFactory = new LoggerFactory();
-const LOGGER_FACTORY = "LoggerFactory";
+const LOGGER_FACTORY = serviceId("LoggerFactory");
 const identifier = Symbol.for(LOGGER_FACTORY);
 function activate$1({ services }) {
   services.register(LOGGER_FACTORY, loggerFactory);

@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -846,7 +847,7 @@ class SettingsManager {
     return get(settings, path);
   }
 }
-const SETTINGS_MANAGER = "SettingsManager";
+const SETTINGS_MANAGER = serviceId("SettingsManager");
 const identifier = Symbol.for(SETTINGS_MANAGER);
 function activate$1({ services }) {
   services.register(SETTINGS_MANAGER, new SettingsManager());

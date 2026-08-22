@@ -12,9 +12,10 @@ import SparqlStore from './classes/SparqlStore'
 import type { ISparqlStoreConfiguration } from './interfaces/ISparqlStoreConfiguration'
 import { symbol } from './interfaces/Constances'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
-const SPARQL_STORE = 'SparqlStore'
+/** Typed service id - the name and the contract declared once, here. */
+const SPARQL_STORE = serviceId<(config: ISparqlStoreConfiguration) => SparqlStore>('SparqlStore')
 
 /**
  * Erzeugt einen Store aus einer Konfiguration.

@@ -1,3 +1,5 @@
+const { EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { loggerFactory } = __tsm__.require("org.eclipse.daanse.board.app.lib.logger");
 class VariableRepository {
   constructor(resolver, tinyEmitter) {
@@ -261,16 +263,16 @@ function registerVariableActions(actionsRegistry, variableRepository) {
   actionsRegistry.registerInstance("VariableRepository", variableRepository);
   log("Variable actions registered");
 }
-const VARIABLE_REPOSITORY = "VariableRepository";
+const VARIABLE_REPOSITORY = serviceId("VariableRepository");
 const identifier = Symbol.for(VARIABLE_REPOSITORY);
 function activate$1({ services }) {
   const repository = new VariableRepository(
     services,
-    services.get("TINY_EMITTER")
+    services.get(TINY_EMITTER)
   );
   services.register(VARIABLE_REPOSITORY, repository);
   registerVariableActions(
-    services.getRequired("EventActionsRegistry"),
+    services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
     repository
   );
 }

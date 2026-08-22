@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, activate } from '@eclipse-daanse/tsm/decorators'
+import { component, activate } from '@eclipse-daanse/tsm'
 import { useDataPointRegistry } from 'org.eclipse.daanse.board.app.ui.vue.widget.map'
 import GeoJsonDataRendererDescription from './GeoJsonDataRendererDescription'
 

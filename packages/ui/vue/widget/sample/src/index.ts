@@ -11,7 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
 import SampleWidgetSettings from './SampleWidgetSettings.vue'
@@ -41,7 +42,7 @@ export class SampleWidgetProvider implements WidgetProvider {
   readonly name = 'Sample'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
   ) {}
 
   @activate()

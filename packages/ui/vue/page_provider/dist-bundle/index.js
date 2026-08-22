@@ -1,3 +1,5 @@
+const { PAGE_CONTEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { useRoute } from "vue-router";
 class VuePageProvider {
   constructor() {
@@ -27,12 +29,12 @@ class VuePageProvider {
     this.currentPageId = pageId;
   }
 }
-const VUE_PAGE_PROVIDER = "VuePageProvider";
+const VUE_PAGE_PROVIDER = serviceId("VuePageProvider");
 const identifier = Symbol.for(VUE_PAGE_PROVIDER);
 const vuePageProvider = new VuePageProvider();
 function activate$1({ services }) {
   services.register(VUE_PAGE_PROVIDER, vuePageProvider);
-  services.getRequired("PageContext").setProvider(vuePageProvider);
+  services.getRequired(PAGE_CONTEXT).setProvider(vuePageProvider);
 }
 function deactivate$1({ services }) {
   services.unregister(VUE_PAGE_PROVIDER);

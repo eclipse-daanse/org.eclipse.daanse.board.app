@@ -14,6 +14,7 @@
 import { Variable } from './Variable'
 import { type IQueryVariableConfig } from '..'
 import type { VariableDependencies } from './Variable'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 const symbol = Symbol.for('QueryVariable')
 
@@ -60,4 +61,7 @@ export function createQueryVariableFactory(deps: VariableDependencies) {
   }
 }
 
-export { QueryVariable, symbol }
+/** Typed service id of this variable type's factory. */
+const TYPE = serviceId<ReturnType<typeof createQueryVariableFactory>>('QueryVariable')
+
+export { QueryVariable, symbol, TYPE as QUERY_VARIABLE }

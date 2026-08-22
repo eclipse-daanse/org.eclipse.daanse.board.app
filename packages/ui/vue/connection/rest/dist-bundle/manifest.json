@@ -6,6 +6,7 @@
   "entry": "/bundles/ui.vue.connection.rest/index.js",
   "exports": {},
   "dependencies": [
+    "lib.connection.rest",
     "lib.repository.connection",
     "platform.vue"
   ],
@@ -21,6 +22,10 @@
     {
       "id": "vue",
       "versionRange": "^3.5.0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.connection.rest",
+      "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.repository.connection",

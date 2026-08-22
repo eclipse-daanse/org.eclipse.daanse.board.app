@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   type StoreIdentifiers,
@@ -21,8 +22,8 @@ import {
   type IDatasourceRepository,
 } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const DATASOURCE_REPOSITORY = 'DatasourceRepository'
+/** Typed service id - the name and the contract declared once, here. */
+const DATASOURCE_REPOSITORY = serviceId<DatasourceRepository>('DatasourceRepository')
 
 const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 

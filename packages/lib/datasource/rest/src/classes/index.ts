@@ -17,11 +17,10 @@ import {
   BaseDatasource,
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 
@@ -38,7 +37,7 @@ export class RestStore extends BaseDatasource {
   private resourceUrl: ComputedStoreParameter | null = null
   private selectedJSONValue?: string
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IRestStoreConfiguration) {

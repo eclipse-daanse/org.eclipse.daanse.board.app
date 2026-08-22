@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class LayoutRepository {
   constructor() {
     this.availableLayouts = /* @__PURE__ */ new Map();
@@ -18,7 +19,7 @@ class LayoutRepository {
     return this.availableLayouts.has(layoutId);
   }
 }
-const LAYOUT_REPOSITORY = "LayoutRepository";
+const LAYOUT_REPOSITORY = serviceId("LayoutRepository");
 const identifier = Symbol.for(LAYOUT_REPOSITORY);
 function activate$1({ services }) {
   services.register(

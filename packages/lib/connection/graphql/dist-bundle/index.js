@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.base");
 var __defProp = Object.defineProperty, __defProps = Object.defineProperties;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
@@ -694,7 +695,7 @@ class GraphQLConnection extends BaseConnection {
     return true;
   }
 }
-const GRAPHQL_CONNECTION_FACTORY = "GraphQLConnectionFactory";
+const GRAPHQL_CONNECTION_FACTORY = serviceId("GraphQLConnectionFactory");
 const factorySymbol = Symbol.for(GRAPHQL_CONNECTION_FACTORY);
 function activate$1({ services }) {
   services.register(GRAPHQL_CONNECTION_FACTORY, (config) => {

@@ -13,9 +13,10 @@
 
 import { RssStore, type IRssStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const RSS_STORE_FACTORY = 'RssStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const RSS_STORE_FACTORY = serviceId<(config: IRssStoreConfiguration) => RssStore>('RssStoreFactory')
 
 const factorySymbol = Symbol.for(RSS_STORE_FACTORY)
 

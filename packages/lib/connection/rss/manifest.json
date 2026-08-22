@@ -18,6 +18,10 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.connection.base",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [

@@ -1,3 +1,6 @@
+const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { PAGE_CONTEXT } = __tsm__.require("org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service");
+const { VARIABLE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.variable");
 class AccessError extends Error {
   name;
   message = "Access Error on Variable Scope";
@@ -169,11 +172,11 @@ class Variable {
     return ret;
   }
 }
-const TYPE$3 = "ComputedVariable";
-const symbol$5 = Symbol.for(TYPE$3);
+const TYPE$6 = serviceId("ComputedVariable");
+const symbol$5 = Symbol.for(TYPE$6);
 class ComputedVariable extends Variable {
   innerExpression = "";
-  type = TYPE$3;
+  type = TYPE$6;
   init(name, config) {
     super.init(name, config);
     this.innerExpression = config.expression;
@@ -256,10 +259,10 @@ function createComputedVariableFactory(deps) {
     return variable;
   };
 }
-const TYPE$2 = "ConstantVariable";
-const symbol$4 = Symbol.for(TYPE$2);
+const TYPE$5 = serviceId("ConstantVariable");
+const symbol$4 = Symbol.for(TYPE$5);
 class ConstantVariable extends Variable {
-  type = TYPE$2;
+  type = TYPE$5;
   init(name, config) {
     super.init(name, config);
     this.value = config.value;
@@ -321,6 +324,7 @@ function createQueryVariableFactory(deps) {
     return variable;
   };
 }
+const TYPE$4 = serviceId("QueryVariable");
 const symbol$2 = Symbol.for("RequestVariable");
 class RequestVariable extends Variable {
   innerRequest = "";
@@ -357,6 +361,7 @@ function createRequestVariableFactory(deps) {
     return variable;
   };
 }
+const TYPE$3 = serviceId("RequestVariable");
 const symbol$1 = Symbol.for("TimeVariable");
 class TimeVariable extends Variable {
   type = "time";
@@ -382,7 +387,8 @@ function createTimeVariableFactory(deps) {
     return variable;
   };
 }
-const TYPE$1 = "DateTimePickerVariable";
+const TYPE$2 = serviceId("TimeVariable");
+const TYPE$1 = serviceId("DateTimePickerVariable");
 const symbol = Symbol.for(TYPE$1);
 class DateTimePickerVariable extends Variable {
   type = TYPE$1;
@@ -595,26 +601,26 @@ var RefreshType = /* @__PURE__ */ ((RefreshType2) => {
 })(RefreshType || {});
 function activate$1({ services }) {
   const deps = {
-    eventBus: services.get("TINY_EMITTER"),
-    pageContextService: services.get("PageContext")
+    eventBus: services.get(TINY_EMITTER),
+    pageContextService: services.get(PAGE_CONTEXT)
   };
-  services.register(TYPE$2, createConstantVariableFactory(deps));
-  services.register(TYPE$3, createComputedVariableFactory(deps));
-  services.register("QueryVariable", createQueryVariableFactory(deps));
-  services.register("RequestVariable", createRequestVariableFactory(deps));
-  services.register("TimeVariable", createTimeVariableFactory(deps));
+  services.register(TYPE$5, createConstantVariableFactory(deps));
+  services.register(TYPE$6, createComputedVariableFactory(deps));
+  services.register(TYPE$4, createQueryVariableFactory(deps));
+  services.register(TYPE$3, createRequestVariableFactory(deps));
+  services.register(TYPE$2, createTimeVariableFactory(deps));
   services.register(TYPE$1, createDateTimePickerVariableFactory(deps));
   provideComputedStoreParameterFactory(() => {
     const parameter = new ComputedStoreParameter();
     parameter.eventBus = deps.eventBus;
-    parameter.storage = services.get("VariableRepository");
+    parameter.storage = services.get(VARIABLE_REPOSITORY);
     return parameter;
   });
 }
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  COMPUTED_VARIABLE: TYPE$3,
-  CONSTANT_VARIABLE: TYPE$2,
+  COMPUTED_VARIABLE: TYPE$6,
+  CONSTANT_VARIABLE: TYPE$5,
   ComputedStoreParameter,
   ComputedVariable,
   ComputedVariableSymbol: symbol$5,
@@ -654,8 +660,8 @@ async function deactivate(context) {
   await void 0;
 }
 export {
-  TYPE$3 as COMPUTED_VARIABLE,
-  TYPE$2 as CONSTANT_VARIABLE,
+  TYPE$6 as COMPUTED_VARIABLE,
+  TYPE$5 as CONSTANT_VARIABLE,
   ComputedStoreParameter,
   ComputedVariable,
   symbol$5 as ComputedVariableSymbol,

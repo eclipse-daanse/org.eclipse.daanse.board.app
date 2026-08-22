@@ -16,10 +16,9 @@ import {
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { type TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {
@@ -34,7 +33,7 @@ export class WSStore extends BaseDatasource {
   private accumulate: boolean = false
   private topic = ''
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IWSStoreConfiguration) {

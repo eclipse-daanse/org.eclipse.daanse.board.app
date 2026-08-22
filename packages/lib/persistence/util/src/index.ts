@@ -9,11 +9,12 @@
 */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { type ValidityCheckI } from './api/ValidityCheckI'
 import ValidityCheck from './utils/ValidityCheck'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const VALIDITY_CHECK = 'ValidityCheck'
+/** Typed service id - the name and the contract declared once, here. */
+const VALIDITY_CHECK = serviceId<ValidityCheck>('ValidityCheck')
 
 const identifier = Symbol.for(VALIDITY_CHECK)
 

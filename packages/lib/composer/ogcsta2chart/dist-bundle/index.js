@@ -1,5 +1,7 @@
+const { WidgetAction, ActionParameter, EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
-const { WidgetAction, ActionParameter } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
 const { ModelClass } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 class OGCSTAToChartComposer extends BaseDatasource {
   /**
@@ -676,9 +678,9 @@ OGCSTAToChartComposerInterface = __decorateClass([
 ], OGCSTAToChartComposerInterface);
 const symbol = Symbol.for("OGCSTAToChartComposer");
 const WIDGET_TYPE = "OGCSTAToChartComposer";
-const OGCSTA_TO_CHART_COMPOSER = "OGCSTAToChartComposer";
+const OGCSTA_TO_CHART_COMPOSER = serviceId("OGCSTAToChartComposer");
 function activate$1({ services, log }) {
-  const actionsRegistry = services.getRequired("EventActionsRegistry");
+  const actionsRegistry = services.getRequired(EVENT_ACTIONS_REGISTRY_ID);
   services.register(OGCSTA_TO_CHART_COMPOSER, (config) => {
     if (!OGCSTAToChartComposer.validateConfiguration(config)) {
       throw new Error(
@@ -686,7 +688,7 @@ function activate$1({ services, log }) {
       );
     }
     const composer = new OGCSTAToChartComposer(
-      services.getRequired("DatasourceRepository"),
+      services.getRequired(DATASOURCE_REPOSITORY),
       actionsRegistry
     );
     composer.init(config);

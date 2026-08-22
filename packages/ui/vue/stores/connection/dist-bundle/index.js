@@ -1,3 +1,4 @@
+const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
 import { ref } from "vue";
 import { defineStore } from "pinia";
 let repository;
@@ -68,7 +69,7 @@ const useConnectionsStore = defineStore("connections", () => {
   return { connections, createConnection, removeConnection, updateConnection, updateConnections };
 });
 function activate$1({ services }) {
-  provideRepository(services.getRequired("ConnectionRepository"));
+  provideRepository(services.getRequired(CONNECTION_REPOSITORY));
 }
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,

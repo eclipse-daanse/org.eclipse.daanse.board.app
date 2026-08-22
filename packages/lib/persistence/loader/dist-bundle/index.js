@@ -1,10 +1,12 @@
+const { SETTINGS_MANAGER } = __tsm__.require("org.eclipse.daanse.board.app.lib.settings.manager");
+const { REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
 async function activate$1({ services, log }) {
-  const settingsManager = services.get("SettingsManager");
+  const settingsManager = services.get(SETTINGS_MANAGER);
   if (!settingsManager) {
     log.info("SettingsManager nicht vorhanden - nichts wiederherzustellen");
     return;
   }
-  const repoManager = services.getRequired("RepositoryRegistry");
+  const repoManager = services.getRequired(REPOSITORY_REGISTRY);
   const gespeicherte = await settingsManager.getSettings(["persistanceRepositories"]);
   if (!gespeicherte) return;
   for (const [type, instances] of Object.entries(gespeicherte)) {

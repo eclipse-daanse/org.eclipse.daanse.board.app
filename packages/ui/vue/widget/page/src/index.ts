@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component } from '@eclipse-daanse/tsm/decorators'
+import { component } from '@eclipse-daanse/tsm'
 //@ts-ignore
 import Icon from './assets/progress.svg'
 import PageWidget from './PageWidget.vue'

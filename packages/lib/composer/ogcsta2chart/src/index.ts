@@ -11,7 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { OGCSTAToChartComposer } from './classes'
 import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
 import ecoreModelContent from '../model/OGCSTAToChartActions.ecore?raw'
@@ -27,7 +30,8 @@ export const symbol = Symbol.for('OGCSTAToChartComposer')
 export const WIDGET_TYPE = 'OGCSTAToChartComposer'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
-export const OGCSTA_TO_CHART_COMPOSER = 'OGCSTAToChartComposer'
+/** Typed service id - the name and the contract declared once, here. */
+export const OGCSTA_TO_CHART_COMPOSER = serviceId<(config: unknown) => OGCSTAToChartComposer>('OGCSTAToChartComposer')
 
 /**
  * Meldet die Composer-Fabrik an und traegt die Aktionen aus dem Ecore-Modell
@@ -39,7 +43,7 @@ export const OGCSTA_TO_CHART_COMPOSER = 'OGCSTAToChartComposer'
  * ohne dass etwas darauf hinwies. Jetzt steht die Registry in `requires`.
  */
 export function activate({ services, log }: ActivationContext) {
-  const actionsRegistry = services.getRequired<EventActionsRegistry>('EventActionsRegistry')
+  const actionsRegistry = services.getRequired(EVENT_ACTIONS_REGISTRY_ID)
 
   services.register(OGCSTA_TO_CHART_COMPOSER, (config: any) => {
     if (!OGCSTAToChartComposer.validateConfiguration(config)) {
@@ -49,7 +53,7 @@ export function activate({ services, log }: ActivationContext) {
     }
 
     const composer = new OGCSTAToChartComposer(
-      services.getRequired('DatasourceRepository'),
+      services.getRequired(DATASOURCE_REPOSITORY),
       actionsRegistry,
     )
     composer.init(config)

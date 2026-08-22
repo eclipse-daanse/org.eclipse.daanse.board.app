@@ -16,11 +16,10 @@ import {
   BaseDatasource,
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
 export const SET_WAYPOINTS = 'SET_WAYPOINTS'
 export const SET_COSTING = 'SET_COSTING'
@@ -173,7 +172,7 @@ export class ValhallaStore extends BaseDatasource {
   private waypoints: Waypoint[] = []
   private lastResult: ValhallaRouteResult | null = null
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IValhallaStoreConfiguration) {

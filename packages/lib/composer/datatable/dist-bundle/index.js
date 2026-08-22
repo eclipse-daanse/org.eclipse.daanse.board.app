@@ -1,4 +1,6 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class DataTableComposer extends BaseDatasource {
   /**
    * Dependencies arrive through the constructor - the factory in this
@@ -125,7 +127,7 @@ class DataTableComposer extends BaseDatasource {
     return true;
   }
 }
-const DATA_TABLE_COMPOSER = "DataTableComposer";
+const DATA_TABLE_COMPOSER = serviceId("DataTableComposer");
 const symbol = Symbol.for(DATA_TABLE_COMPOSER);
 function createDataTableComposer(repository) {
   return (config) => {
@@ -140,7 +142,7 @@ function createDataTableComposer(repository) {
   };
 }
 function activate$1({ services }) {
-  services.register(DATA_TABLE_COMPOSER, createDataTableComposer(services.getRequired("DatasourceRepository")));
+  services.register(DATA_TABLE_COMPOSER, createDataTableComposer(services.getRequired(DATASOURCE_REPOSITORY)));
 }
 function deactivate$1({ services }) {
   services.unregister(DATA_TABLE_COMPOSER);

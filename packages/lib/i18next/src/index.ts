@@ -10,8 +10,10 @@ Contributors: Smart City Jena
 import i18next from "i18next";
 import type {i18n} from "i18next";
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core';
-/** Dienst-ID im Namensraum der ServiceRegistry; `symbolForI18n` ist das dazu passende Symbol. */
-const I18NEXT = 'I18next'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+/** Typed service id - the name and the contract declared once, here. */
+/** Typed service id - the name and the contract declared once, here. */
+const I18NEXT = serviceId<typeof i18next>('I18next')
 
 const symbolForI18n = Symbol.for(I18NEXT)
 

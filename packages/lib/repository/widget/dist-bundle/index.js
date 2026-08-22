@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const WIDGET_SERVICE_ID = "daanse.widget";
 class WidgetRepository {
   availableWidgets = {};
@@ -48,7 +49,7 @@ class WidgetRepository {
     return this.availableWidgets;
   }
 }
-const WIDGET_REPOSITORY = "WidgetRepository";
+const WIDGET_REPOSITORY = serviceId("WidgetRepository");
 const identifier = Symbol.for(WIDGET_REPOSITORY);
 let tracker;
 function observable(services) {

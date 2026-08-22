@@ -1,4 +1,5 @@
-const { BaseRepository } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
+const { BaseRepository, REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 function getUserAgent() {
   if (typeof navigator === "object" && "userAgent" in navigator) {
     return navigator.userAgent;
@@ -6083,12 +6084,12 @@ class GitRepositoryImpl extends BaseRepository {
     return file;
   }
 }
-const GIT_REPOSITORY = "GitRepository";
+const GIT_REPOSITORY = serviceId("GitRepository");
 const identifier = Symbol.for(GIT_REPOSITORY);
 const type = GitRepositoryImpl.type;
 function activate$1({ services }) {
   services.register(GIT_REPOSITORY, new GitRepositoryImpl());
-  const repoRegistry = services.getRequired("RepositoryRegistry");
+  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY);
   repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier);
 }
 function deactivate$1({ services }) {
@@ -6097,6 +6098,7 @@ function deactivate$1({ services }) {
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   AuthentificationError,
+  GIT_REPOSITORY,
   activate: activate$1,
   deactivate: deactivate$1,
   identifier,
@@ -6117,6 +6119,7 @@ async function deactivate(context) {
 }
 export {
   AuthentificationError,
+  GIT_REPOSITORY,
   activate,
   deactivate,
   identifier,

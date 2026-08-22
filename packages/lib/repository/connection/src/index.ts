@@ -12,6 +12,7 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   type ConnectionIdentifiers,
@@ -20,8 +21,8 @@ import {
   type PubSubEvents,
 } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const CONNECTION_REPOSITORY = 'ConnectionRepository'
+/** Typed service id - the name and the contract declared once, here. */
+const CONNECTION_REPOSITORY = serviceId<ConnectionRepository>('ConnectionRepository')
 
 const identifier = Symbol.for(CONNECTION_REPOSITORY)
 

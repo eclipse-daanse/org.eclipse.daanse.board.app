@@ -10,7 +10,7 @@
 */
 import { injectable, inject } from '@eclipse-daanse/tsm'
 import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
-import {identifier as IDVariableRepo,VariableRepository} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { VARIABLE_REPOSITORY, identifier as IDVariableRepo,VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 type SearchResult = {
   path: string;
   value: any;
@@ -34,7 +34,7 @@ export interface WrapperTypeI {
 export class VariableWrapperFactory {
   private readonly wrapperTypes = new Map<string, WrapperTypeI>()
 
-  constructor(@inject('VariableRepository') private variables: VariableRepository) {
+  constructor(@inject(VARIABLE_REPOSITORY) private variables: VariableRepository) {
   }
 
   /**

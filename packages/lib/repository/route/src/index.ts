@@ -9,6 +9,7 @@
 */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { RouteRegistryImpl } from './RouteRegistryImpl'
 import { RouteRegistry } from './gen/RouteRegistry'
 
@@ -16,8 +17,8 @@ export { RouteDefinition } from './gen/RouteDefinition'
 export { RouteRegistry } from './gen/RouteRegistry'
 export { RouteRegistryImpl } from './RouteRegistryImpl'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `ROUTE_REGISTRY` ist das dazu passende Symbol. */
-export const ROUTE_REGISTRY_ID = 'RouteRegistry'
+/** Typed service id - the name and the contract declared once, here. */
+export const ROUTE_REGISTRY_ID = serviceId<RouteRegistryImpl>('RouteRegistry')
 
 export const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID)
 

@@ -13,9 +13,10 @@
 
 import { SqlXmlaStore, type ISqlXmlaStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const SQL_XMLA_STORE_FACTORY = 'SqlXmlaStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const SQL_XMLA_STORE_FACTORY = serviceId<(config: any) => SqlXmlaStore>('SqlXmlaStoreFactory')
 
 const factorySymbol = Symbol.for(SQL_XMLA_STORE_FACTORY)
 

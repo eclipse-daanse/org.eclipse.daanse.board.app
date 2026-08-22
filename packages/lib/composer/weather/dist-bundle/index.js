@@ -1,3 +1,5 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseDatasource } = __tsm__.require("org.eclipse.daanse.board.app.lib.datasource.base");
 class WeatherComposer extends BaseDatasource {
   /**
@@ -591,7 +593,7 @@ class WeatherComposer extends BaseDatasource {
     return set1.size === set2.size && [...set1].every((x) => set2.has(x));
   }
 }
-const WEATHER_COMPOSER = "WeatherComposer";
+const WEATHER_COMPOSER = serviceId("WeatherComposer");
 const symbol = Symbol.for(WEATHER_COMPOSER);
 function createWeatherComposer(repository) {
   return (config) => {
@@ -606,7 +608,7 @@ function createWeatherComposer(repository) {
   };
 }
 function activate$1({ services }) {
-  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired("DatasourceRepository")));
+  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired(DATASOURCE_REPOSITORY)));
 }
 function deactivate$1({ services }) {
   services.unregister(WEATHER_COMPOSER);

@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class ValidityCheck {
   checkContent(json) {
     const keys = Object.keys(json);
@@ -7,7 +8,7 @@ class ValidityCheck {
     return false;
   }
 }
-const VALIDITY_CHECK = "ValidityCheck";
+const VALIDITY_CHECK = serviceId("ValidityCheck");
 const identifier = Symbol.for(VALIDITY_CHECK);
 function activate$1({ services }) {
   services.register(VALIDITY_CHECK, new ValidityCheck());

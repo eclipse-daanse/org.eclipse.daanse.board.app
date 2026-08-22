@@ -14,6 +14,7 @@
 import { Variable } from './Variable'
 import { type IRequestVaribleConfig } from '..'
 import type { VariableDependencies } from './Variable'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 const symbol = Symbol.for('RequestVariable')
@@ -70,4 +71,7 @@ export function createRequestVariableFactory(deps: VariableDependencies) {
   }
 }
 
-export { RequestVariable, symbol }
+/** Typed service id of this variable type's factory. */
+const TYPE = serviceId<ReturnType<typeof createRequestVariableFactory>>('RequestVariable')
+
+export { RequestVariable, symbol, TYPE as REQUEST_VARIABLE }

@@ -12,7 +12,7 @@
 import type { Entity, Repository, WritableRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 import { BaseRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
-import { identifier, ValidityCheckI } from 'org.eclipse.daanse.board.app.lib.persistence.util'
+import { VALIDITY_CHECK, identifier, ValidityCheckI } from 'org.eclipse.daanse.board.app.lib.persistence.util'
 
 import { injectable, inject } from '@eclipse-daanse/tsm'
 import {parse} from 'flatted';
@@ -22,7 +22,7 @@ export default class LocalRepositoryImpl extends BaseRepository implements Writa
 
   public static readonly type = 'localRepositories'
   /* tsm fuehrt das optionale Nachschlagen als Option statt als zweiten Decorator. */
-  @inject('ValidityCheck', { optional: true })
+  @inject(VALIDITY_CHECK, { optional: true })
   private readonly ValidityCheck!: ValidityCheckI
 
   init(url: URL, name: string) {

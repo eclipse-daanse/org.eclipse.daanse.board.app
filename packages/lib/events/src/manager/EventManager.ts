@@ -15,6 +15,7 @@ import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY, type EventActionContext }
 import { Condition } from './Condition';
 import { Comperator } from './Comperator';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 const log = loggerFactory.createLogger('daanse:events:manager');
 
@@ -387,6 +388,7 @@ export class EventManager {
 
 // Symbol für Dependency Injection
 /** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_MANAGER` ist das dazu passende Symbol. */
-export const EVENT_MANAGER_ID = 'EventManager';
+/** Typed service id - the name and the contract declared once, here. */
+export const EVENT_MANAGER_ID = serviceId<EventManager>('EventManager');
 
 export const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);

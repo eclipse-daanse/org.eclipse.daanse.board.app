@@ -9,14 +9,15 @@
 */
 
 
-import { Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { REPOSITORY_REGISTRY, Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 import GitRepositoryImpl from './GitRepository/GitRepositoryImpl'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type {GitWritableRepository} from './git_api/api/GitWritableRepsitory';
 import {AuthentificationError} from "./git_api/services/common/CastError";
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const GIT_REPOSITORY = 'GitRepository'
+/** Typed service id - the name and the contract declared once, here. */
+export const GIT_REPOSITORY = serviceId<GitRepositoryImpl>('GitRepository')
 
 const identifier = Symbol.for(GIT_REPOSITORY)
 
@@ -33,7 +34,7 @@ const type = GitRepositoryImpl.type;
 export function activate({ services }: ActivationContext) {
   services.register(GIT_REPOSITORY, new GitRepositoryImpl())
 
-  const repoRegistry = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY)
   repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier)
 }
 

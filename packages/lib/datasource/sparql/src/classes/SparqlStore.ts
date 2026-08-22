@@ -12,11 +12,10 @@
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { inject, injectable } from '@eclipse-daanse/tsm'
 import { QUERY } from '../interfaces/Constances'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import {
   ISparqlStoreConfiguration,
   SparqlResponse,
@@ -27,7 +26,7 @@ export default class SparqlStore extends BaseDatasource {
   private connection: any
   private query: string = ''
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: ISparqlStoreConfiguration) {

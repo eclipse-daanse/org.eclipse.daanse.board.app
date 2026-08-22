@@ -15,5 +15,11 @@
         "version": "0.0.1-next.1"
       }
     }
+  ],
+  "sharedDependencies": [
+    {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    }
   ]
 }

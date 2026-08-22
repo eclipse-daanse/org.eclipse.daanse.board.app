@@ -14,11 +14,10 @@
 // import { extractDataByPath } from "@/utils/helpers";
 import { inject } from '@eclipse-daanse/tsm'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { ComputedStoreParameter } from 'org.eclipse.daanse.board.app.lib.variables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
 import { ParseOptions } from 'org.eclipse.daanse.board.app.lib.utils.helpers'
@@ -49,7 +48,7 @@ export class CsvStore extends BaseDatasource {
   private skipRowsFromStart: number = 0
   private skipRowsFromEnd: number = 0
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: ICsvStoreConfiguration) {

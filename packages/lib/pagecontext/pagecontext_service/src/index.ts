@@ -15,9 +15,10 @@ import type { ActivationContext } from "org.eclipse.daanse.board.app.lib.core"
 import {type PageContextServiceI } from './api/PageContextServiceI'
 import {type PageContextProviderI } from './api/PageContextProviderI'
 import { PageContextService } from './classes/PageContextService'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const PAGE_CONTEXT = 'PageContext'
+/** Typed service id - the name and the contract declared once, here. */
+const PAGE_CONTEXT = serviceId<PageContextService>('PageContext')
 
 const identifier = Symbol.for(PAGE_CONTEXT)
 

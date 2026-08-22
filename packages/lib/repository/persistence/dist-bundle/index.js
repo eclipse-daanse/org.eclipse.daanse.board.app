@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class BaseRepository {
   init(url, name) {
     this.uri = url;
@@ -63,7 +64,7 @@ class RepositoryRegistry {
     }
   }
 }
-const REPOSITORY_REGISTRY = "RepositoryRegistry";
+const REPOSITORY_REGISTRY = serviceId("RepositoryRegistry");
 const identifier = Symbol.for(REPOSITORY_REGISTRY);
 function activate$1({ services, log }) {
   services.register(REPOSITORY_REGISTRY, new RepositoryRegistry());

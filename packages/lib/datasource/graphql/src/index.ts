@@ -13,9 +13,10 @@
 
 import { GraphQLStore, type IGraphQLStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const GRAPHQL_STORE_FACTORY = 'GraphQLStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const GRAPHQL_STORE_FACTORY = serviceId<(config: IGraphQLStoreConfiguration) => GraphQLStore>('GraphQLStoreFactory')
 
 const factorySymbol = Symbol.for(GRAPHQL_STORE_FACTORY)
 

@@ -1,4 +1,5 @@
 const { SubscribeNotifyImpl } = __tsm__.require("org.eclipse.daanse.board.app.lib.utils.subscriber");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const events = {
   PAGE_REGISTRATION: "PAGE_REGISTRATION",
   PAGE_UPDATE: "PAGE_UPDATE",
@@ -47,7 +48,7 @@ class PageRegistryImpl extends SubscribeNotifyImpl {
     this.notify(events.PAGE_UPDATE);
   }
 }
-const PAGE_REPOSITORY = "PageRepository";
+const PAGE_REPOSITORY = serviceId("PageRepository");
 const identifier = Symbol.for(PAGE_REPOSITORY);
 function activate$1({ services }) {
   services.register(PAGE_REPOSITORY, new PageRegistryImpl());

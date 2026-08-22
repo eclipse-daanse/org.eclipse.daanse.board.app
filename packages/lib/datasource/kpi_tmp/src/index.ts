@@ -13,9 +13,10 @@
 
 import { KpiStore, type IKpiStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const KPI_STORE_FACTORY = 'KpiStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const KPI_STORE_FACTORY = serviceId<(config: IKpiStoreConfiguration) => KpiStore>('KpiStoreFactory')
 
 const factorySymbol = Symbol.for(KPI_STORE_FACTORY)
 

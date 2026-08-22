@@ -21,6 +21,7 @@
  * libraries, no stylesheet from the shell.
  */
 
+import { MODULE_LOADER } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ModuleLoader, ModuleEvent } from '@eclipse-daanse/tsm'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
@@ -83,7 +84,7 @@ function hide() {
 }
 
 export function activate({ services }: ActivationContext) {
-  const loader = services.getRequired<ModuleLoader>('ModuleLoader')
+  const loader = services.getRequired(MODULE_LOADER)
   loaderRef = loader
 
   overlay = document.createElement('div')

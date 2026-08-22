@@ -19,10 +19,9 @@ import {
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
 
 export interface IGraphQLStoreConfiguration
@@ -37,7 +36,7 @@ export class GraphQLStore extends BaseDatasource {
   private connection: any
   private query: string = ''
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IGraphQLStoreConfiguration) {

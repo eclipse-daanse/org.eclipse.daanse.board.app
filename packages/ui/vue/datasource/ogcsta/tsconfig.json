@@ -14,5 +14,11 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "moduleResolution": "bundler"
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "vite.bundle.config.ts",
+    "dist",
+    "dist-bundle"
+  ]
 }

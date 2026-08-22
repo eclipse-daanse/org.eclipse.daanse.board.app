@@ -15,10 +15,9 @@ import {
   BaseDatasource,
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
 export interface IKpiStoreConfiguration extends IBaseConnectionConfiguration {
@@ -37,7 +36,7 @@ export class KpiStore extends BaseDatasource {
   private cube: string = ''
   // private computedUrl: ComputedVariable;
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IKpiStoreConfiguration) {

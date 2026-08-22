@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { Reference, ModelClass, Documentation, Attribute } = __tsm__.require("org.eclipse.daanse.board.app.lib.annotations");
 var __defProp$1 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
@@ -104,7 +105,7 @@ class RouteRegistryImpl extends RouteRegistry {
     return Array.from(this.routesMap.values());
   }
 }
-const ROUTE_REGISTRY_ID = "RouteRegistry";
+const ROUTE_REGISTRY_ID = serviceId("RouteRegistry");
 const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID);
 function activate$1({ services }) {
   services.register(ROUTE_REGISTRY_ID, new RouteRegistryImpl());

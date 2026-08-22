@@ -1,4 +1,5 @@
 const { BaseConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.base");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -13477,7 +13478,7 @@ class RssConnection extends BaseConnection {
     return true;
   }
 }
-const RSS_CONNECTION_FACTORY = "RssConnectionFactory";
+const RSS_CONNECTION_FACTORY = serviceId("RssConnectionFactory");
 const factorySymbol = Symbol.for(RSS_CONNECTION_FACTORY);
 function createRssConnection(config) {
   if (!RssConnection.validateConfiguration(config)) {

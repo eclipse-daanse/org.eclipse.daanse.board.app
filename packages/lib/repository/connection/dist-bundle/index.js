@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const connections = /* @__PURE__ */ new Map();
 class ConnectionRepository {
   constructor(resolver) {
@@ -79,7 +80,7 @@ class ConnectionRepository {
     }
   }
 }
-const CONNECTION_REPOSITORY = "ConnectionRepository";
+const CONNECTION_REPOSITORY = serviceId("ConnectionRepository");
 const identifier = Symbol.for(CONNECTION_REPOSITORY);
 function activate$1({ services }) {
   services.register(CONNECTION_REPOSITORY, new ConnectionRepository(services));

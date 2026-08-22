@@ -26,7 +26,7 @@ import 'reflect-metadata'
 import { initTsmRuntime, ModuleLoader, type ModuleManifest } from '@eclipse-daanse/tsm'
 import { installDevtools } from '@eclipse-daanse/tsm/devtools'
 import * as libCore from 'org.eclipse.daanse.board.app.lib.core'
-import { services } from 'org.eclipse.daanse.board.app.lib.core'
+import { MODULE_LOADER, services } from 'org.eclipse.daanse.board.app.lib.core'
 import { bundles } from './bundles'
 
 const loader = new ModuleLoader({
@@ -65,7 +65,7 @@ async function start() {
    * system bundle registering the framework's own services - the one
    * registration a launcher legitimately makes.
    */
-  services.register('ModuleLoader', loader)
+  services.register(MODULE_LOADER, loader)
 
   /*
    * The system library: lib.core is the bridge to this very registry, so it

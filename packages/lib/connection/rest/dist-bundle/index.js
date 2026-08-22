@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const { BaseConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.base");
 class RestConnection extends BaseConnection {
   url = "";
@@ -89,7 +90,7 @@ class RestConnection extends BaseConnection {
     return true;
   }
 }
-const REST_CONNECTION_FACTORY = "RestConnectionFactory";
+const REST_CONNECTION_FACTORY = serviceId("RestConnectionFactory");
 const factorySymbol = Symbol.for(REST_CONNECTION_FACTORY);
 function createRestConnection(config) {
   if (!RestConnection.validateConfiguration(config)) {

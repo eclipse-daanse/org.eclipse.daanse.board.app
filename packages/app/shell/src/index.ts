@@ -19,6 +19,10 @@
  * user interface down and `load` brings it back, exactly like any widget.
  */
 
+import { APP, TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
+import { VARIABLE_WRAPPER_FACTORY } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { createApp, type App as VueApp } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { createVuestic } from 'vuestic-ui'
@@ -97,18 +101,18 @@ export async function activate({ services, log }: ActivationContext) {
   registry.addListener?.({ onServiceEvent: (event) => provide(event.serviceId) })
 
   // The one service the shell owns: the app instance it just created.
-  services.register('App', app)
+  services.register(APP, app)
 
   // Store dependencies, closed over at the module boundary
   provideVariablesStoreDependencies({
-    repository: services.getRequired<VariableRepository>('VariableRepository'),
-    eventBus: services.getRequired<TinyEmitter>('TINY_EMITTER'),
+    repository: services.getRequired(VARIABLE_REPOSITORY),
+    eventBus: services.getRequired(TINY_EMITTER),
   })
 
   // VariableComplexStringWrapper depends on Vue and therefore lives in the
   // UI layer; the factory in lib only knows it through this registration.
   services
-    .getRequired<VariableWrapperFactory>('VariableWrapperFactory')
+    .getRequired(VARIABLE_WRAPPER_FACTORY)
     .registerWrapperType({
       type: VARIABLECOMPLEXSTRINGWRAPPER,
       create: (value: unknown) => new VariableComplexStringWrapper<string>(value as string),
@@ -168,15 +172,15 @@ export async function activate({ services, log }: ActivationContext) {
   try {
     await registerSystemActions(
       router,
-      services.getRequired<EventActionsRegistry>('EventActionsRegistry'),
-      services.getRequired<TinyEmitter>('TINY_EMITTER'),
+      services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
+      services.getRequired(TINY_EMITTER),
     )
     log.info('system actions registered')
   } catch (error) {
     log.error('system actions failed', error)
   }
   try {
-    await registerTestActions(services.getRequired<EventActionsRegistry>('EventActionsRegistry'))
+    await registerTestActions(services.getRequired(EVENT_ACTIONS_REGISTRY_ID))
     log.info('test actions registered')
   } catch (error) {
     log.error('test actions failed', error)

@@ -12,9 +12,10 @@ Contributors: Smart City Jena
 import { OgcStaStore } from './classes/OgcSta'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from './interfaces/Constances'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const OGC_STA_STORE_FACTORY = 'OgcStaStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const OGC_STA_STORE_FACTORY = serviceId<(config: any) => OgcStaStore>('OgcStaStoreFactory')
 
 const factorySymbol = Symbol.for(OGC_STA_STORE_FACTORY)
 

@@ -20,6 +20,10 @@
   ],
   "sharedDependencies": [
     {
+      "id": "org.eclipse.daanse.board.app.lib.core",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.persistence.util",
       "versionRange": ">=0.0.1-0"
     },

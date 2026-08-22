@@ -15,6 +15,7 @@ import { EventManager, EVENT_MANAGER } from '../manager/EventManager';
 import { EventRegistry, EVENT_REGISTRY } from '../registry/EventRegistry';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from '../registry/EventActionsRegistry';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
+import { TINY_EMITTER, serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 const log = loggerFactory.createLogger('daanse:events:bridge');
 
@@ -54,7 +55,7 @@ export class EventBusBridge {
     }
 
     try {
-      this.eventBus = services.getRequired<TinyEmitter>('TINY_EMITTER');
+      this.eventBus = services.getRequired(TINY_EMITTER);
 
       // Registriere Callback beim EventManager
       this.eventManager.onMappingsChanged(() => {
@@ -195,6 +196,7 @@ export class EventBusBridge {
 }
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `EVENT_BUS_BRIDGE` ist das dazu passende Symbol. */
-export const EVENT_BUS_BRIDGE_ID = 'EventBusBridge';
+/** Typed service id - the name and the contract declared once, here. */
+export const EVENT_BUS_BRIDGE_ID = serviceId<EventBusBridge>('EventBusBridge');
 
 export const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);

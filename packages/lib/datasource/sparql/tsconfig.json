@@ -11,8 +11,13 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true
-,
+    "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "vite.bundle.config.ts",
+    "dist",
+    "dist-bundle"
+  ]
 }

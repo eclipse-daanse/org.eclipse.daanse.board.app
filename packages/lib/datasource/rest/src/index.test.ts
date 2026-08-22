@@ -22,6 +22,9 @@
  * Datenabruf um, weit weg von der Ursache.
  */
 
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.connection'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import { activate, deactivate, REST_STORE_FACTORY } from './index'
@@ -46,7 +49,7 @@ describe('lib.datasource.rest', () => {
      */
     services = new DefaultServiceRegistry()
     repositoryAttrappe = { getConnection: () => ({ getData: async () => ({}) }) }
-    services.register('ConnectionRepository', repositoryAttrappe)
+    services.register(CONNECTION_REPOSITORY, repositoryAttrappe)
     /*
      * `init` legt über `super.initVariable` einen ComputedStoreParameter an,
      * der seinerseits VariableRepository und den Emitter auflöst - noch über
@@ -54,8 +57,8 @@ describe('lib.datasource.rest', () => {
      * Service-Locator im Klassenrumpf steht, gehören beide zum Aufbau des
      * Tests.
      */
-    services.register('VariableRepository', { getVariable: () => undefined })
-    services.register('TINY_EMITTER', { on() {}, off() {}, emit() {} })
+    services.register(VARIABLE_REPOSITORY, { getVariable: () => undefined })
+    services.register(TINY_EMITTER, { on() {}, off() {}, emit() {} })
     // Since the locator cleanup, ComputedStoreParameter instances come from
     // lib.variables' activate - the test boots it like the runtime does.
     const variables = await import('org.eclipse.daanse.board.app.lib.variables')

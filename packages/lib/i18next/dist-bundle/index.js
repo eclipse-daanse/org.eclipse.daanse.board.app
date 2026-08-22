@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const isString = (obj) => typeof obj === "string";
 const defer = () => {
   let res;
@@ -2192,7 +2193,7 @@ instance.setDefaultNamespace;
 instance.hasLoadedNamespace;
 instance.loadNamespaces;
 instance.loadLanguages;
-const I18NEXT = "I18next";
+const I18NEXT = serviceId("I18next");
 const symbolForI18n = Symbol.for(I18NEXT);
 function activate$1({ services }) {
   instance.init({ fallbackLng: "en", resources: {} });

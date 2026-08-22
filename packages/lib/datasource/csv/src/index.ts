@@ -13,9 +13,10 @@
 
 import { CsvStore, type ICsvStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const CSV_STORE_FACTORY = 'CsvStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const CSV_STORE_FACTORY = serviceId<(config: any) => CsvStore>('CsvStoreFactory')
 
 const factorySymbol = Symbol.for(CSV_STORE_FACTORY)
 

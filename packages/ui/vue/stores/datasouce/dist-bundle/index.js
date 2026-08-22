@@ -1,3 +1,4 @@
+const { DATASOURCE_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.datasource");
 import { ref } from "vue";
 import { defineStore } from "pinia";
 let repository;
@@ -72,7 +73,7 @@ const useDataSourcesStore = defineStore("datasource", () => {
   return { dataSources, createDataSource, removeDataSource, updateDataSource, updateDataSources };
 });
 function activate$1({ services }) {
-  provideRepository(services.getRequired("DatasourceRepository"));
+  provideRepository(services.getRequired(DATASOURCE_REPOSITORY));
 }
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,

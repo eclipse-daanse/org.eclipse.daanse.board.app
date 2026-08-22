@@ -1,4 +1,5 @@
-const { BaseRepository } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { BaseRepository, REPOSITORY_REGISTRY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.persistence");
 class RestRepositoryImpl extends BaseRepository {
   static {
     this.type = "restRepositories";
@@ -138,11 +139,11 @@ class RestRepositoryImpl extends BaseRepository {
     }
   }
 }
-const REST_REPOSITORY = "RestRepository";
+const REST_REPOSITORY = serviceId("RestRepository");
 const identifier = Symbol.for(REST_REPOSITORY);
 function activate$1({ services }) {
   services.register(REST_REPOSITORY, new RestRepositoryImpl());
-  const repoRegistry = services.getRequired("RepositoryRegistry");
+  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY);
   repoRegistry.registerRepoType(RestRepositoryImpl.type, identifier);
 }
 function deactivate$1({ services }) {
@@ -150,6 +151,7 @@ function deactivate$1({ services }) {
 }
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
+  REST_REPOSITORY,
   activate: activate$1,
   deactivate: deactivate$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -167,6 +169,7 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
+  REST_REPOSITORY,
   activate,
   deactivate
 };

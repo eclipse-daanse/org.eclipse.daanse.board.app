@@ -13,9 +13,10 @@
 
 import { WSStore, type IWSStoreConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `factorySymbol` ist das dazu passende Symbol. */
-const WS_STORE_FACTORY = 'WSStoreFactory'
+/** Typed service id - the name and the contract declared once, here. */
+const WS_STORE_FACTORY = serviceId<(config: IWSStoreConfiguration) => WSStore>('WSStoreFactory')
 
 const factorySymbol = Symbol.for(WS_STORE_FACTORY)
 

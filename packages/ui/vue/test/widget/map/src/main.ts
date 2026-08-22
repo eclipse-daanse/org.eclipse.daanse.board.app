@@ -18,7 +18,7 @@ import 'vuestic-ui/styles/typography.css'
 import App from './App.vue'
 import 'leaflet/dist/leaflet.css'
 
-import { services } from 'org.eclipse.daanse.board.app.lib.core'
+import { APP, services } from 'org.eclipse.daanse.board.app.lib.core'
 
 
 // Import required modules for Maps Widget
@@ -32,7 +32,7 @@ const app = createApp(App)
 app.use(createVuestic())
 
 // Setup global properties
-services.register('App', app)
+services.register(APP, app)
 
 // Setup pinia
 const pinia = createPinia()

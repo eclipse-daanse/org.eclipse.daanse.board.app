@@ -1,1165 +1,9 @@
 (function(){var i="ui.vue.widget.markdown",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="/**\n * easymde v2.20.0\n * Copyright Jeroen Akkerman\n * @link https://github.com/ionaru/easy-markdown-editor\n * @license MIT\n */\n.CodeMirror{font-family:monospace;height:300px;color:#000;direction:ltr}.CodeMirror-lines{padding:4px 0}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{padding:0 4px}.CodeMirror-gutter-filler,.CodeMirror-scrollbar-filler{background-color:#fff}.CodeMirror-gutters{border-right:1px solid #ddd;background-color:#f7f7f7;white-space:nowrap}.CodeMirror-linenumber{padding:0 3px 0 5px;min-width:20px;text-align:right;color:#999;white-space:nowrap}.CodeMirror-guttermarker{color:#000}.CodeMirror-guttermarker-subtle{color:#999}.CodeMirror-cursor{border-left:1px solid #000;border-right:none;width:0}.CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver}.cm-fat-cursor .CodeMirror-cursor{width:auto;border:0!important;background:#7e7}.cm-fat-cursor div.CodeMirror-cursors{z-index:1}.cm-fat-cursor .CodeMirror-line::selection,.cm-fat-cursor .CodeMirror-line>span::selection,.cm-fat-cursor .CodeMirror-line>span>span::selection{background:0 0}.cm-fat-cursor .CodeMirror-line::-moz-selection,.cm-fat-cursor .CodeMirror-line>span::-moz-selection,.cm-fat-cursor .CodeMirror-line>span>span::-moz-selection{background:0 0}.cm-fat-cursor{caret-color:transparent}@-moz-keyframes blink{50%{background-color:transparent}}@-webkit-keyframes blink{50%{background-color:transparent}}@keyframes blink{50%{background-color:transparent}}.cm-tab{display:inline-block;text-decoration:inherit}.CodeMirror-rulers{position:absolute;left:0;right:0;top:-50px;bottom:0;overflow:hidden}.CodeMirror-ruler{border-left:1px solid #ccc;top:0;bottom:0;position:absolute}.cm-s-default .cm-header{color:#00f}.cm-s-default .cm-quote{color:#090}.cm-negative{color:#d44}.cm-positive{color:#292}.cm-header,.cm-strong{font-weight:700}.cm-em{font-style:italic}.cm-link{text-decoration:underline}.cm-strikethrough{text-decoration:line-through}.cm-s-default .cm-keyword{color:#708}.cm-s-default .cm-atom{color:#219}.cm-s-default .cm-number{color:#164}.cm-s-default .cm-def{color:#00f}.cm-s-default .cm-variable-2{color:#05a}.cm-s-default .cm-type,.cm-s-default .cm-variable-3{color:#085}.cm-s-default .cm-comment{color:#a50}.cm-s-default .cm-string{color:#a11}.cm-s-default .cm-string-2{color:#f50}.cm-s-default .cm-meta{color:#555}.cm-s-default .cm-qualifier{color:#555}.cm-s-default .cm-builtin{color:#30a}.cm-s-default .cm-bracket{color:#997}.cm-s-default .cm-tag{color:#170}.cm-s-default .cm-attribute{color:#00c}.cm-s-default .cm-hr{color:#999}.cm-s-default .cm-link{color:#00c}.cm-s-default .cm-error{color:red}.cm-invalidchar{color:red}.CodeMirror-composing{border-bottom:2px solid}div.CodeMirror span.CodeMirror-matchingbracket{color:#0b0}div.CodeMirror span.CodeMirror-nonmatchingbracket{color:#a22}.CodeMirror-matchingtag{background:rgba(255,150,0,.3)}.CodeMirror-activeline-background{background:#e8f2ff}.CodeMirror{position:relative;overflow:hidden;background:#fff}.CodeMirror-scroll{overflow:scroll!important;margin-bottom:-50px;margin-right:-50px;padding-bottom:50px;height:100%;outline:0;position:relative;z-index:0}.CodeMirror-sizer{position:relative;border-right:50px solid transparent}.CodeMirror-gutter-filler,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-vscrollbar{position:absolute;z-index:6;display:none;outline:0}.CodeMirror-vscrollbar{right:0;top:0;overflow-x:hidden;overflow-y:scroll}.CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}.CodeMirror-scrollbar-filler{right:0;bottom:0}.CodeMirror-gutter-filler{left:0;bottom:0}.CodeMirror-gutters{position:absolute;left:0;top:0;min-height:100%;z-index:3}.CodeMirror-gutter{white-space:normal;height:100%;display:inline-block;vertical-align:top;margin-bottom:-50px}.CodeMirror-gutter-wrapper{position:absolute;z-index:4;background:0 0!important;border:none!important}.CodeMirror-gutter-background{position:absolute;top:0;bottom:0;z-index:4}.CodeMirror-gutter-elt{position:absolute;cursor:default;z-index:4}.CodeMirror-gutter-wrapper ::selection{background-color:transparent}.CodeMirror-gutter-wrapper ::-moz-selection{background-color:transparent}.CodeMirror-lines{cursor:text;min-height:1px}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;border-width:0;background:0 0;font-family:inherit;font-size:inherit;margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;z-index:2;position:relative;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-font-variant-ligatures:contextual;font-variant-ligatures:contextual}.CodeMirror-wrap pre.CodeMirror-line,.CodeMirror-wrap pre.CodeMirror-line-like{word-wrap:break-word;white-space:pre-wrap;word-break:normal}.CodeMirror-linebackground{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0}.CodeMirror-linewidget{position:relative;z-index:2;padding:.1px}.CodeMirror-rtl pre{direction:rtl}.CodeMirror-code{outline:0}.CodeMirror-gutter,.CodeMirror-gutters,.CodeMirror-linenumber,.CodeMirror-scroll,.CodeMirror-sizer{-moz-box-sizing:content-box;box-sizing:content-box}.CodeMirror-measure{position:absolute;width:100%;height:0;overflow:hidden;visibility:hidden}.CodeMirror-cursor{position:absolute;pointer-events:none}.CodeMirror-measure pre{position:static}div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}div.CodeMirror-dragcursors{visibility:visible}.CodeMirror-focused div.CodeMirror-cursors{visibility:visible}.CodeMirror-selected{background:#d9d9d9}.CodeMirror-focused .CodeMirror-selected{background:#d7d4f0}.CodeMirror-crosshair{cursor:crosshair}.CodeMirror-line::selection,.CodeMirror-line>span::selection,.CodeMirror-line>span>span::selection{background:#d7d4f0}.CodeMirror-line::-moz-selection,.CodeMirror-line>span::-moz-selection,.CodeMirror-line>span>span::-moz-selection{background:#d7d4f0}.cm-searching{background-color:#ffa;background-color:rgba(255,255,0,.4)}.cm-force-border{padding-right:.1px}@media print{.CodeMirror div.CodeMirror-cursors{visibility:hidden}}.cm-tab-wrap-hack:after{content:''}span.CodeMirror-selectedtext{background:0 0}.EasyMDEContainer{display:block}.CodeMirror-rtl pre{direction:rtl}.EasyMDEContainer.sided--no-fullscreen{display:flex;flex-direction:row;flex-wrap:wrap}.EasyMDEContainer .CodeMirror{box-sizing:border-box;height:auto;border:1px solid #ced4da;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:10px;font:inherit;z-index:0;word-wrap:break-word}.EasyMDEContainer .CodeMirror-scroll{cursor:text}.EasyMDEContainer .CodeMirror-fullscreen{background:#fff;position:fixed!important;top:50px;left:0;right:0;bottom:0;height:auto;z-index:8;border-right:none!important;border-bottom-right-radius:0!important}.EasyMDEContainer .CodeMirror-sided{width:50%!important}.EasyMDEContainer.sided--no-fullscreen .CodeMirror-sided{border-right:none!important;border-bottom-right-radius:0;position:relative;flex:1 1 auto}.EasyMDEContainer .CodeMirror-placeholder{opacity:.5}.EasyMDEContainer .CodeMirror-focused .CodeMirror-selected{background:#d9d9d9}.editor-toolbar{position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;padding:9px 10px;border-top:1px solid #ced4da;border-left:1px solid #ced4da;border-right:1px solid #ced4da;border-top-left-radius:4px;border-top-right-radius:4px}.editor-toolbar.fullscreen{width:100%;height:50px;padding-top:10px;padding-bottom:10px;box-sizing:border-box;background:#fff;border:0;position:fixed;top:0;left:0;opacity:1;z-index:9}.editor-toolbar.fullscreen::before{width:20px;height:50px;background:-moz-linear-gradient(left,#fff 0,rgba(255,255,255,0) 100%);background:-webkit-gradient(linear,left top,right top,color-stop(0,#fff),color-stop(100%,rgba(255,255,255,0)));background:-webkit-linear-gradient(left,#fff 0,rgba(255,255,255,0) 100%);background:-o-linear-gradient(left,#fff 0,rgba(255,255,255,0) 100%);background:-ms-linear-gradient(left,#fff 0,rgba(255,255,255,0) 100%);background:linear-gradient(to right,#fff 0,rgba(255,255,255,0) 100%);position:fixed;top:0;left:0;margin:0;padding:0}.editor-toolbar.fullscreen::after{width:20px;height:50px;background:-moz-linear-gradient(left,rgba(255,255,255,0) 0,#fff 100%);background:-webkit-gradient(linear,left top,right top,color-stop(0,rgba(255,255,255,0)),color-stop(100%,#fff));background:-webkit-linear-gradient(left,rgba(255,255,255,0) 0,#fff 100%);background:-o-linear-gradient(left,rgba(255,255,255,0) 0,#fff 100%);background:-ms-linear-gradient(left,rgba(255,255,255,0) 0,#fff 100%);background:linear-gradient(to right,rgba(255,255,255,0) 0,#fff 100%);position:fixed;top:0;right:0;margin:0;padding:0}.EasyMDEContainer.sided--no-fullscreen .editor-toolbar{width:100%}.editor-toolbar .easymde-dropdown,.editor-toolbar button{background:0 0;display:inline-block;text-align:center;text-decoration:none!important;height:30px;margin:0;padding:0;border:1px solid transparent;border-radius:3px;cursor:pointer}.editor-toolbar button{font-weight:700;min-width:30px;padding:0 6px;white-space:nowrap}.editor-toolbar button.active,.editor-toolbar button:hover{background:#fcfcfc;border-color:#95a5a6}.editor-toolbar i.separator{display:inline-block;width:0;border-left:1px solid #d9d9d9;border-right:1px solid #fff;color:transparent;text-indent:-10px;margin:0 6px}.editor-toolbar button:after{font-family:Arial,\"Helvetica Neue\",Helvetica,sans-serif;font-size:65%;vertical-align:text-bottom;position:relative;top:2px}.editor-toolbar button.heading-1:after{content:\"1\"}.editor-toolbar button.heading-2:after{content:\"2\"}.editor-toolbar button.heading-3:after{content:\"3\"}.editor-toolbar button.heading-bigger:after{content:\"▲\"}.editor-toolbar button.heading-smaller:after{content:\"▼\"}.editor-toolbar.disabled-for-preview button:not(.no-disable){opacity:.6;pointer-events:none}@media only screen and (max-width:700px){.editor-toolbar i.no-mobile{display:none}}.editor-statusbar{padding:8px 10px;font-size:12px;color:#959694;text-align:right}.EasyMDEContainer.sided--no-fullscreen .editor-statusbar{width:100%}.editor-statusbar span{display:inline-block;min-width:4em;margin-left:1em}.editor-statusbar .lines:before{content:'lines: '}.editor-statusbar .words:before{content:'words: '}.editor-statusbar .characters:before{content:'characters: '}.editor-preview-full{position:absolute;width:100%;height:100%;top:0;left:0;z-index:7;overflow:auto;display:none;box-sizing:border-box}.editor-preview-side{position:fixed;bottom:0;width:50%;top:50px;right:0;z-index:9;overflow:auto;display:none;box-sizing:border-box;border:1px solid #ddd;word-wrap:break-word}.editor-preview-active-side{display:block}.EasyMDEContainer.sided--no-fullscreen .editor-preview-active-side{flex:1 1 auto;height:auto;position:static}.editor-preview-active{display:block}.editor-preview{padding:10px;background:#fafafa}.editor-preview>p{margin-top:0}.editor-preview pre{background:#eee;margin-bottom:10px}.editor-preview table td,.editor-preview table th{border:1px solid #ddd;padding:5px}.cm-s-easymde .cm-tag{color:#63a35c}.cm-s-easymde .cm-attribute{color:#795da3}.cm-s-easymde .cm-string{color:#183691}.cm-s-easymde .cm-header-1{font-size:calc(1.375rem + 1.5vw)}.cm-s-easymde .cm-header-2{font-size:calc(1.325rem + .9vw)}.cm-s-easymde .cm-header-3{font-size:calc(1.3rem + .6vw)}.cm-s-easymde .cm-header-4{font-size:calc(1.275rem + .3vw)}.cm-s-easymde .cm-header-5{font-size:1.25rem}.cm-s-easymde .cm-header-6{font-size:1rem}.cm-s-easymde .cm-header-1,.cm-s-easymde .cm-header-2,.cm-s-easymde .cm-header-3,.cm-s-easymde .cm-header-4,.cm-s-easymde .cm-header-5,.cm-s-easymde .cm-header-6{margin-bottom:.5rem;line-height:1.2}.cm-s-easymde .cm-comment{background:rgba(0,0,0,.05);border-radius:2px}.cm-s-easymde .cm-link{color:#7f8c8d}.cm-s-easymde .cm-url{color:#aab2b3}.cm-s-easymde .cm-quote{color:#7f8c8d;font-style:italic}.editor-toolbar .easymde-dropdown{position:relative;background:linear-gradient(to bottom right,#fff 0,#fff 84%,#333 50%,#333 100%);border-radius:0;border:1px solid #fff}.editor-toolbar .easymde-dropdown:hover{background:linear-gradient(to bottom right,#fff 0,#fff 84%,#333 50%,#333 100%)}.easymde-dropdown-content{display:block;visibility:hidden;position:absolute;background-color:#f9f9f9;box-shadow:0 8px 16px 0 rgba(0,0,0,.2);padding:8px;z-index:2;top:30px}.easymde-dropdown:active .easymde-dropdown-content,.easymde-dropdown:focus .easymde-dropdown-content,.easymde-dropdown:focus-within .easymde-dropdown-content{visibility:visible}.easymde-dropdown-content button{display:block}span[data-img-src]::after{content:'';background-image:var(--bg-image);display:block;max-height:100%;max-width:100%;background-size:contain;height:0;padding-top:var(--height);width:var(--width);background-repeat:no-repeat}.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word){background:rgba(255,0,0,.15)}.markdown-body {\n  --base-size-4: 0.25rem;\n  --base-size-8: 0.5rem;\n  --base-size-16: 1rem;\n  --base-size-24: 1.5rem;\n  --base-size-40: 2.5rem;\n  --base-text-weight-normal: 400;\n  --base-text-weight-medium: 500;\n  --base-text-weight-semibold: 600;\n  --fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;\n  --fgColor-accent: Highlight;\n}\n@media (prefers-color-scheme: dark) {\n  .markdown-body, [data-theme=\"dark\"] {\n    /* dark */\n    color-scheme: dark;\n    --focus-outlineColor: #1f6feb;\n    --fgColor-default: #f0f6fc;\n    --fgColor-muted: #9198a1;\n    --fgColor-accent: #4493f8;\n    --fgColor-success: #3fb950;\n    --fgColor-attention: #d29922;\n    --fgColor-danger: #f85149;\n    --fgColor-done: #ab7df8;\n    --bgColor-default: #0d1117;\n    --bgColor-muted: #151b23;\n    --bgColor-neutral-muted: #656c7633;\n    --bgColor-attention-muted: #bb800926;\n    --borderColor-default: #3d444d;\n    --borderColor-muted: #3d444db3;\n    --borderColor-neutral-muted: #3d444db3;\n    --borderColor-accent-emphasis: #1f6feb;\n    --borderColor-success-emphasis: #238636;\n    --borderColor-attention-emphasis: #9e6a03;\n    --borderColor-danger-emphasis: #da3633;\n    --borderColor-done-emphasis: #8957e5;\n    --color-prettylights-syntax-comment: #9198a1;\n    --color-prettylights-syntax-constant: #79c0ff;\n    --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;\n    --color-prettylights-syntax-entity: #d2a8ff;\n    --color-prettylights-syntax-storage-modifier-import: #f0f6fc;\n    --color-prettylights-syntax-entity-tag: #7ee787;\n    --color-prettylights-syntax-keyword: #ff7b72;\n    --color-prettylights-syntax-string: #a5d6ff;\n    --color-prettylights-syntax-variable: #ffa657;\n    --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;\n    --color-prettylights-syntax-brackethighlighter-angle: #9198a1;\n    --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;\n    --color-prettylights-syntax-invalid-illegal-bg: #8e1519;\n    --color-prettylights-syntax-carriage-return-text: #f0f6fc;\n    --color-prettylights-syntax-carriage-return-bg: #b62324;\n    --color-prettylights-syntax-string-regexp: #7ee787;\n    --color-prettylights-syntax-markup-list: #f2cc60;\n    --color-prettylights-syntax-markup-heading: #1f6feb;\n    --color-prettylights-syntax-markup-italic: #f0f6fc;\n    --color-prettylights-syntax-markup-bold: #f0f6fc;\n    --color-prettylights-syntax-markup-deleted-text: #ffdcd7;\n    --color-prettylights-syntax-markup-deleted-bg: #67060c;\n    --color-prettylights-syntax-markup-inserted-text: #aff5b4;\n    --color-prettylights-syntax-markup-inserted-bg: #033a16;\n    --color-prettylights-syntax-markup-changed-text: #ffdfb6;\n    --color-prettylights-syntax-markup-changed-bg: #5a1e02;\n    --color-prettylights-syntax-markup-ignored-text: #f0f6fc;\n    --color-prettylights-syntax-markup-ignored-bg: #1158c7;\n    --color-prettylights-syntax-meta-diff-range: #d2a8ff;\n    --color-prettylights-syntax-sublimelinter-gutter-mark: #3d444d;\n  }\n}\n@media (prefers-color-scheme: light) {\n  .markdown-body, [data-theme=\"light\"] {\n    /* light */\n    color-scheme: light;\n    --focus-outlineColor: #0969da;\n    --fgColor-default: #1f2328;\n    --fgColor-muted: #59636e;\n    --fgColor-accent: #0969da;\n    --fgColor-success: #1a7f37;\n    --fgColor-attention: #9a6700;\n    --fgColor-danger: #d1242f;\n    --fgColor-done: #8250df;\n    --bgColor-default: #ffffff;\n    --bgColor-muted: #f6f8fa;\n    --bgColor-neutral-muted: #818b981f;\n    --bgColor-attention-muted: #fff8c5;\n    --borderColor-default: #d1d9e0;\n    --borderColor-muted: #d1d9e0b3;\n    --borderColor-neutral-muted: #d1d9e0b3;\n    --borderColor-accent-emphasis: #0969da;\n    --borderColor-success-emphasis: #1a7f37;\n    --borderColor-attention-emphasis: #9a6700;\n    --borderColor-danger-emphasis: #cf222e;\n    --borderColor-done-emphasis: #8250df;\n    --color-prettylights-syntax-comment: #59636e;\n    --color-prettylights-syntax-constant: #0550ae;\n    --color-prettylights-syntax-constant-other-reference-link: #0a3069;\n    --color-prettylights-syntax-entity: #6639ba;\n    --color-prettylights-syntax-storage-modifier-import: #1f2328;\n    --color-prettylights-syntax-entity-tag: #0550ae;\n    --color-prettylights-syntax-keyword: #cf222e;\n    --color-prettylights-syntax-string: #0a3069;\n    --color-prettylights-syntax-variable: #953800;\n    --color-prettylights-syntax-brackethighlighter-unmatched: #82071e;\n    --color-prettylights-syntax-brackethighlighter-angle: #59636e;\n    --color-prettylights-syntax-invalid-illegal-text: #f6f8fa;\n    --color-prettylights-syntax-invalid-illegal-bg: #82071e;\n    --color-prettylights-syntax-carriage-return-text: #f6f8fa;\n    --color-prettylights-syntax-carriage-return-bg: #cf222e;\n    --color-prettylights-syntax-string-regexp: #116329;\n    --color-prettylights-syntax-markup-list: #3b2300;\n    --color-prettylights-syntax-markup-heading: #0550ae;\n    --color-prettylights-syntax-markup-italic: #1f2328;\n    --color-prettylights-syntax-markup-bold: #1f2328;\n    --color-prettylights-syntax-markup-deleted-text: #82071e;\n    --color-prettylights-syntax-markup-deleted-bg: #ffebe9;\n    --color-prettylights-syntax-markup-inserted-text: #116329;\n    --color-prettylights-syntax-markup-inserted-bg: #dafbe1;\n    --color-prettylights-syntax-markup-changed-text: #953800;\n    --color-prettylights-syntax-markup-changed-bg: #ffd8b5;\n    --color-prettylights-syntax-markup-ignored-text: #d1d9e0;\n    --color-prettylights-syntax-markup-ignored-bg: #0550ae;\n    --color-prettylights-syntax-meta-diff-range: #8250df;\n    --color-prettylights-syntax-sublimelinter-gutter-mark: #818b98;\n  }\n}\n\n.markdown-body {\n  -ms-text-size-adjust: 100%;\n  -webkit-text-size-adjust: 100%;\n  margin: 0;\n  color: var(--fgColor-default);\n  background-color: var(--bgColor-default);\n  font-family: -apple-system,BlinkMacSystemFont,\"Segoe UI\",\"Noto Sans\",Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\";\n  font-size: 16px;\n  line-height: 1.5;\n  word-wrap: break-word;\n}\n\n.markdown-body .octicon {\n  display: inline-block;\n  fill: currentColor;\n  vertical-align: text-bottom;\n}\n\n.markdown-body h1:hover .anchor .octicon-link:before,\n.markdown-body h2:hover .anchor .octicon-link:before,\n.markdown-body h3:hover .anchor .octicon-link:before,\n.markdown-body h4:hover .anchor .octicon-link:before,\n.markdown-body h5:hover .anchor .octicon-link:before,\n.markdown-body h6:hover .anchor .octicon-link:before {\n  width: 16px;\n  height: 16px;\n  content: ' ';\n  display: inline-block;\n  background-color: currentColor;\n  -webkit-mask-image: url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>\");\n  mask-image: url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>\");\n}\n\n.markdown-body details,\n.markdown-body figcaption,\n.markdown-body figure {\n  display: block;\n}\n\n.markdown-body summary {\n  display: list-item;\n}\n\n.markdown-body [hidden] {\n  display: none !important;\n}\n\n.markdown-body a {\n  background-color: transparent;\n  color: var(--fgColor-accent);\n  text-decoration: none;\n}\n\n.markdown-body abbr[title] {\n  border-bottom: none;\n  -webkit-text-decoration: underline dotted;\n  text-decoration: underline dotted;\n}\n\n.markdown-body b,\n.markdown-body strong {\n  font-weight: var(--base-text-weight-semibold, 600);\n}\n\n.markdown-body dfn {\n  font-style: italic;\n}\n\n.markdown-body h1 {\n  margin: .67em 0;\n  font-weight: var(--base-text-weight-semibold, 600);\n  padding-bottom: .3em;\n  font-size: 2em;\n  border-bottom: 1px solid var(--borderColor-muted);\n}\n\n.markdown-body mark {\n  background-color: var(--bgColor-attention-muted);\n  color: var(--fgColor-default);\n}\n\n.markdown-body small {\n  font-size: 90%;\n}\n\n.markdown-body sub,\n.markdown-body sup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\n.markdown-body sub {\n  bottom: -0.25em;\n}\n\n.markdown-body sup {\n  top: -0.5em;\n}\n\n.markdown-body img {\n  border-style: none;\n  max-width: 100%;\n  box-sizing: content-box;\n}\n\n.markdown-body code,\n.markdown-body kbd,\n.markdown-body pre,\n.markdown-body samp {\n  font-family: monospace;\n  font-size: 1em;\n}\n\n.markdown-body figure {\n  margin: 1em var(--base-size-40);\n}\n\n.markdown-body hr {\n  box-sizing: content-box;\n  overflow: hidden;\n  background: transparent;\n  border-bottom: 1px solid var(--borderColor-muted);\n  height: .25em;\n  padding: 0;\n  margin: var(--base-size-24) 0;\n  background-color: var(--borderColor-default);\n  border: 0;\n}\n\n.markdown-body input {\n  font: inherit;\n  margin: 0;\n  overflow: visible;\n  font-family: inherit;\n  font-size: inherit;\n  line-height: inherit;\n}\n\n.markdown-body [type=button],\n.markdown-body [type=reset],\n.markdown-body [type=submit] {\n  -webkit-appearance: button;\n  appearance: button;\n}\n\n.markdown-body [type=checkbox],\n.markdown-body [type=radio] {\n  box-sizing: border-box;\n  padding: 0;\n}\n\n.markdown-body [type=number]::-webkit-inner-spin-button,\n.markdown-body [type=number]::-webkit-outer-spin-button {\n  height: auto;\n}\n\n.markdown-body [type=search]::-webkit-search-cancel-button,\n.markdown-body [type=search]::-webkit-search-decoration {\n  -webkit-appearance: none;\n  appearance: none;\n}\n\n.markdown-body ::-webkit-input-placeholder {\n  color: inherit;\n  opacity: .54;\n}\n\n.markdown-body ::-webkit-file-upload-button {\n  -webkit-appearance: button;\n  appearance: button;\n  font: inherit;\n}\n\n.markdown-body a:hover {\n  text-decoration: underline;\n}\n\n.markdown-body ::placeholder {\n  color: var(--fgColor-muted);\n  opacity: 1;\n}\n\n.markdown-body hr::before {\n  display: table;\n  content: \"\";\n}\n\n.markdown-body hr::after {\n  display: table;\n  clear: both;\n  content: \"\";\n}\n\n.markdown-body table {\n  border-spacing: 0;\n  border-collapse: collapse;\n  display: block;\n  width: max-content;\n  max-width: 100%;\n  overflow: auto;\n  font-variant: tabular-nums;\n}\n\n.markdown-body td,\n.markdown-body th {\n  padding: 0;\n}\n\n.markdown-body details summary {\n  cursor: pointer;\n}\n\n.markdown-body a:focus,\n.markdown-body [role=button]:focus,\n.markdown-body input[type=radio]:focus,\n.markdown-body input[type=checkbox]:focus {\n  outline: 2px solid var(--focus-outlineColor);\n  outline-offset: -2px;\n  box-shadow: none;\n}\n\n.markdown-body a:focus:not(:focus-visible),\n.markdown-body [role=button]:focus:not(:focus-visible),\n.markdown-body input[type=radio]:focus:not(:focus-visible),\n.markdown-body input[type=checkbox]:focus:not(:focus-visible) {\n  outline: solid 1px transparent;\n}\n\n.markdown-body a:focus-visible,\n.markdown-body [role=button]:focus-visible,\n.markdown-body input[type=radio]:focus-visible,\n.markdown-body input[type=checkbox]:focus-visible {\n  outline: 2px solid var(--focus-outlineColor);\n  outline-offset: -2px;\n  box-shadow: none;\n}\n\n.markdown-body a:not([class]):focus,\n.markdown-body a:not([class]):focus-visible,\n.markdown-body input[type=radio]:focus,\n.markdown-body input[type=radio]:focus-visible,\n.markdown-body input[type=checkbox]:focus,\n.markdown-body input[type=checkbox]:focus-visible {\n  outline-offset: 0;\n}\n\n.markdown-body kbd {\n  display: inline-block;\n  padding: var(--base-size-4);\n  font: 11px var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);\n  line-height: 10px;\n  color: var(--fgColor-default);\n  vertical-align: middle;\n  background-color: var(--bgColor-muted);\n  border: solid 1px var(--borderColor-neutral-muted);\n  border-bottom-color: var(--borderColor-neutral-muted);\n  border-radius: 6px;\n  box-shadow: inset 0 -1px 0 var(--borderColor-neutral-muted);\n}\n\n.markdown-body h1,\n.markdown-body h2,\n.markdown-body h3,\n.markdown-body h4,\n.markdown-body h5,\n.markdown-body h6 {\n  margin-top: var(--base-size-24);\n  margin-bottom: var(--base-size-16);\n  font-weight: var(--base-text-weight-semibold, 600);\n  line-height: 1.25;\n}\n\n.markdown-body h2 {\n  font-weight: var(--base-text-weight-semibold, 600);\n  padding-bottom: .3em;\n  font-size: 1.5em;\n  border-bottom: 1px solid var(--borderColor-muted);\n}\n\n.markdown-body h3 {\n  font-weight: var(--base-text-weight-semibold, 600);\n  font-size: 1.25em;\n}\n\n.markdown-body h4 {\n  font-weight: var(--base-text-weight-semibold, 600);\n  font-size: 1em;\n}\n\n.markdown-body h5 {\n  font-weight: var(--base-text-weight-semibold, 600);\n  font-size: .875em;\n}\n\n.markdown-body h6 {\n  font-weight: var(--base-text-weight-semibold, 600);\n  font-size: .85em;\n  color: var(--fgColor-muted);\n}\n\n.markdown-body p {\n  margin-top: 0;\n  margin-bottom: 10px;\n}\n\n.markdown-body blockquote {\n  margin: 0;\n  padding: 0 1em;\n  color: var(--fgColor-muted);\n  border-left: .25em solid var(--borderColor-default);\n}\n\n.markdown-body ul,\n.markdown-body ol {\n  margin-top: 0;\n  margin-bottom: 0;\n  padding-left: 2em;\n}\n\n.markdown-body ol ol,\n.markdown-body ul ol {\n  list-style-type: lower-roman;\n}\n\n.markdown-body ul ul ol,\n.markdown-body ul ol ol,\n.markdown-body ol ul ol,\n.markdown-body ol ol ol {\n  list-style-type: lower-alpha;\n}\n\n.markdown-body dd {\n  margin-left: 0;\n}\n\n.markdown-body tt,\n.markdown-body code,\n.markdown-body samp {\n  font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);\n  font-size: 12px;\n}\n\n.markdown-body pre {\n  margin-top: 0;\n  margin-bottom: 0;\n  font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);\n  font-size: 12px;\n  word-wrap: normal;\n}\n\n.markdown-body .octicon {\n  display: inline-block;\n  overflow: visible !important;\n  vertical-align: text-bottom;\n  fill: currentColor;\n}\n\n.markdown-body input::-webkit-outer-spin-button,\n.markdown-body input::-webkit-inner-spin-button {\n  margin: 0;\n  appearance: none;\n}\n\n.markdown-body .mr-2 {\n  margin-right: var(--base-size-8, 8px) !important;\n}\n\n.markdown-body::before {\n  display: table;\n  content: \"\";\n}\n\n.markdown-body::after {\n  display: table;\n  clear: both;\n  content: \"\";\n}\n\n.markdown-body>*:first-child {\n  margin-top: 0 !important;\n}\n\n.markdown-body>*:last-child {\n  margin-bottom: 0 !important;\n}\n\n.markdown-body a:not([href]) {\n  color: inherit;\n  text-decoration: none;\n}\n\n.markdown-body .absent {\n  color: var(--fgColor-danger);\n}\n\n.markdown-body .anchor {\n  float: left;\n  padding-right: var(--base-size-4);\n  margin-left: -20px;\n  line-height: 1;\n}\n\n.markdown-body .anchor:focus {\n  outline: none;\n}\n\n.markdown-body p,\n.markdown-body blockquote,\n.markdown-body ul,\n.markdown-body ol,\n.markdown-body dl,\n.markdown-body table,\n.markdown-body pre,\n.markdown-body details {\n  margin-top: 0;\n  margin-bottom: var(--base-size-16);\n}\n\n.markdown-body blockquote>:first-child {\n  margin-top: 0;\n}\n\n.markdown-body blockquote>:last-child {\n  margin-bottom: 0;\n}\n\n.markdown-body h1 .octicon-link,\n.markdown-body h2 .octicon-link,\n.markdown-body h3 .octicon-link,\n.markdown-body h4 .octicon-link,\n.markdown-body h5 .octicon-link,\n.markdown-body h6 .octicon-link {\n  color: var(--fgColor-default);\n  vertical-align: middle;\n  visibility: hidden;\n}\n\n.markdown-body h1:hover .anchor,\n.markdown-body h2:hover .anchor,\n.markdown-body h3:hover .anchor,\n.markdown-body h4:hover .anchor,\n.markdown-body h5:hover .anchor,\n.markdown-body h6:hover .anchor {\n  text-decoration: none;\n}\n\n.markdown-body h1:hover .anchor .octicon-link,\n.markdown-body h2:hover .anchor .octicon-link,\n.markdown-body h3:hover .anchor .octicon-link,\n.markdown-body h4:hover .anchor .octicon-link,\n.markdown-body h5:hover .anchor .octicon-link,\n.markdown-body h6:hover .anchor .octicon-link {\n  visibility: visible;\n}\n\n.markdown-body h1 tt,\n.markdown-body h1 code,\n.markdown-body h2 tt,\n.markdown-body h2 code,\n.markdown-body h3 tt,\n.markdown-body h3 code,\n.markdown-body h4 tt,\n.markdown-body h4 code,\n.markdown-body h5 tt,\n.markdown-body h5 code,\n.markdown-body h6 tt,\n.markdown-body h6 code {\n  padding: 0 .2em;\n  font-size: inherit;\n}\n\n.markdown-body summary h1,\n.markdown-body summary h2,\n.markdown-body summary h3,\n.markdown-body summary h4,\n.markdown-body summary h5,\n.markdown-body summary h6 {\n  display: inline-block;\n}\n\n.markdown-body summary h1 .anchor,\n.markdown-body summary h2 .anchor,\n.markdown-body summary h3 .anchor,\n.markdown-body summary h4 .anchor,\n.markdown-body summary h5 .anchor,\n.markdown-body summary h6 .anchor {\n  margin-left: -40px;\n}\n\n.markdown-body summary h1,\n.markdown-body summary h2 {\n  padding-bottom: 0;\n  border-bottom: 0;\n}\n\n.markdown-body ul.no-list,\n.markdown-body ol.no-list {\n  padding: 0;\n  list-style-type: none;\n}\n\n.markdown-body ol[type=\"a s\"] {\n  list-style-type: lower-alpha;\n}\n\n.markdown-body ol[type=\"A s\"] {\n  list-style-type: upper-alpha;\n}\n\n.markdown-body ol[type=\"i s\"] {\n  list-style-type: lower-roman;\n}\n\n.markdown-body ol[type=\"I s\"] {\n  list-style-type: upper-roman;\n}\n\n.markdown-body ol[type=\"1\"] {\n  list-style-type: decimal;\n}\n\n.markdown-body div>ol:not([type]) {\n  list-style-type: decimal;\n}\n\n.markdown-body ul ul,\n.markdown-body ul ol,\n.markdown-body ol ol,\n.markdown-body ol ul {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n\n.markdown-body li>p {\n  margin-top: var(--base-size-16);\n}\n\n.markdown-body li+li {\n  margin-top: .25em;\n}\n\n.markdown-body dl {\n  padding: 0;\n}\n\n.markdown-body dl dt {\n  padding: 0;\n  margin-top: var(--base-size-16);\n  font-size: 1em;\n  font-style: italic;\n  font-weight: var(--base-text-weight-semibold, 600);\n}\n\n.markdown-body dl dd {\n  padding: 0 var(--base-size-16);\n  margin-bottom: var(--base-size-16);\n}\n\n.markdown-body table th {\n  font-weight: var(--base-text-weight-semibold, 600);\n}\n\n.markdown-body table th,\n.markdown-body table td {\n  padding: 6px 13px;\n  border: 1px solid var(--borderColor-default);\n}\n\n.markdown-body table td>:last-child {\n  margin-bottom: 0;\n}\n\n.markdown-body table tr {\n  background-color: var(--bgColor-default);\n  border-top: 1px solid var(--borderColor-muted);\n}\n\n.markdown-body table tr:nth-child(2n) {\n  background-color: var(--bgColor-muted);\n}\n\n.markdown-body table img {\n  background-color: transparent;\n}\n\n.markdown-body img[align=right] {\n  padding-left: 20px;\n}\n\n.markdown-body img[align=left] {\n  padding-right: 20px;\n}\n\n.markdown-body .emoji {\n  max-width: none;\n  vertical-align: text-top;\n  background-color: transparent;\n}\n\n.markdown-body span.frame {\n  display: block;\n  overflow: hidden;\n}\n\n.markdown-body span.frame>span {\n  display: block;\n  float: left;\n  width: auto;\n  padding: 7px;\n  margin: 13px 0 0;\n  overflow: hidden;\n  border: 1px solid var(--borderColor-default);\n}\n\n.markdown-body span.frame span img {\n  display: block;\n  float: left;\n}\n\n.markdown-body span.frame span span {\n  display: block;\n  padding: 5px 0 0;\n  clear: both;\n  color: var(--fgColor-default);\n}\n\n.markdown-body span.align-center {\n  display: block;\n  overflow: hidden;\n  clear: both;\n}\n\n.markdown-body span.align-center>span {\n  display: block;\n  margin: 13px auto 0;\n  overflow: hidden;\n  text-align: center;\n}\n\n.markdown-body span.align-center span img {\n  margin: 0 auto;\n  text-align: center;\n}\n\n.markdown-body span.align-right {\n  display: block;\n  overflow: hidden;\n  clear: both;\n}\n\n.markdown-body span.align-right>span {\n  display: block;\n  margin: 13px 0 0;\n  overflow: hidden;\n  text-align: right;\n}\n\n.markdown-body span.align-right span img {\n  margin: 0;\n  text-align: right;\n}\n\n.markdown-body span.float-left {\n  display: block;\n  float: left;\n  margin-right: 13px;\n  overflow: hidden;\n}\n\n.markdown-body span.float-left span {\n  margin: 13px 0 0;\n}\n\n.markdown-body span.float-right {\n  display: block;\n  float: right;\n  margin-left: 13px;\n  overflow: hidden;\n}\n\n.markdown-body span.float-right>span {\n  display: block;\n  margin: 13px auto 0;\n  overflow: hidden;\n  text-align: right;\n}\n\n.markdown-body code,\n.markdown-body tt {\n  padding: .2em .4em;\n  margin: 0;\n  font-size: 85%;\n  white-space: break-spaces;\n  background-color: var(--bgColor-neutral-muted);\n  border-radius: 6px;\n}\n\n.markdown-body code br,\n.markdown-body tt br {\n  display: none;\n}\n\n.markdown-body del code {\n  text-decoration: inherit;\n}\n\n.markdown-body samp {\n  font-size: 85%;\n}\n\n.markdown-body pre code {\n  font-size: 100%;\n}\n\n.markdown-body pre>code {\n  padding: 0;\n  margin: 0;\n  word-break: normal;\n  white-space: pre;\n  background: transparent;\n  border: 0;\n}\n\n.markdown-body .highlight {\n  margin-bottom: var(--base-size-16);\n}\n\n.markdown-body .highlight pre {\n  margin-bottom: 0;\n  word-break: normal;\n}\n\n.markdown-body .highlight pre,\n.markdown-body pre {\n  padding: var(--base-size-16);\n  overflow: auto;\n  font-size: 85%;\n  line-height: 1.45;\n  color: var(--fgColor-default);\n  background-color: var(--bgColor-muted);\n  border-radius: 6px;\n}\n\n.markdown-body pre code,\n.markdown-body pre tt {\n  display: inline;\n  max-width: auto;\n  padding: 0;\n  margin: 0;\n  overflow: visible;\n  line-height: inherit;\n  word-wrap: normal;\n  background-color: transparent;\n  border: 0;\n}\n\n.markdown-body .csv-data td,\n.markdown-body .csv-data th {\n  padding: 5px;\n  overflow: hidden;\n  font-size: 12px;\n  line-height: 1;\n  text-align: left;\n  white-space: nowrap;\n}\n\n.markdown-body .csv-data .blob-num {\n  padding: 10px var(--base-size-8) 9px;\n  text-align: right;\n  background: var(--bgColor-default);\n  border: 0;\n}\n\n.markdown-body .csv-data tr {\n  border-top: 0;\n}\n\n.markdown-body .csv-data th {\n  font-weight: var(--base-text-weight-semibold, 600);\n  background: var(--bgColor-muted);\n  border-top: 0;\n}\n\n.markdown-body [data-footnote-ref]::before {\n  content: \"[\";\n}\n\n.markdown-body [data-footnote-ref]::after {\n  content: \"]\";\n}\n\n.markdown-body .footnotes {\n  font-size: 12px;\n  color: var(--fgColor-muted);\n  border-top: 1px solid var(--borderColor-default);\n}\n\n.markdown-body .footnotes ol {\n  padding-left: var(--base-size-16);\n}\n\n.markdown-body .footnotes ol ul {\n  display: inline-block;\n  padding-left: var(--base-size-16);\n  margin-top: var(--base-size-16);\n}\n\n.markdown-body .footnotes li {\n  position: relative;\n}\n\n.markdown-body .footnotes li:target::before {\n  position: absolute;\n  top: calc(var(--base-size-8)*-1);\n  right: calc(var(--base-size-8)*-1);\n  bottom: calc(var(--base-size-8)*-1);\n  left: calc(var(--base-size-24)*-1);\n  pointer-events: none;\n  content: \"\";\n  border: 2px solid var(--borderColor-accent-emphasis);\n  border-radius: 6px;\n}\n\n.markdown-body .footnotes li:target {\n  color: var(--fgColor-default);\n}\n\n.markdown-body .footnotes .data-footnote-backref g-emoji {\n  font-family: monospace;\n}\n\n.markdown-body body:has(:modal) {\n  padding-right: var(--dialog-scrollgutter) !important;\n}\n\n.markdown-body .pl-c {\n  color: var(--color-prettylights-syntax-comment);\n}\n\n.markdown-body .pl-c1,\n.markdown-body .pl-s .pl-v {\n  color: var(--color-prettylights-syntax-constant);\n}\n\n.markdown-body .pl-e,\n.markdown-body .pl-en {\n  color: var(--color-prettylights-syntax-entity);\n}\n\n.markdown-body .pl-smi,\n.markdown-body .pl-s .pl-s1 {\n  color: var(--color-prettylights-syntax-storage-modifier-import);\n}\n\n.markdown-body .pl-ent {\n  color: var(--color-prettylights-syntax-entity-tag);\n}\n\n.markdown-body .pl-k {\n  color: var(--color-prettylights-syntax-keyword);\n}\n\n.markdown-body .pl-s,\n.markdown-body .pl-pds,\n.markdown-body .pl-s .pl-pse .pl-s1,\n.markdown-body .pl-sr,\n.markdown-body .pl-sr .pl-cce,\n.markdown-body .pl-sr .pl-sre,\n.markdown-body .pl-sr .pl-sra {\n  color: var(--color-prettylights-syntax-string);\n}\n\n.markdown-body .pl-v,\n.markdown-body .pl-smw {\n  color: var(--color-prettylights-syntax-variable);\n}\n\n.markdown-body .pl-bu {\n  color: var(--color-prettylights-syntax-brackethighlighter-unmatched);\n}\n\n.markdown-body .pl-ii {\n  color: var(--color-prettylights-syntax-invalid-illegal-text);\n  background-color: var(--color-prettylights-syntax-invalid-illegal-bg);\n}\n\n.markdown-body .pl-c2 {\n  color: var(--color-prettylights-syntax-carriage-return-text);\n  background-color: var(--color-prettylights-syntax-carriage-return-bg);\n}\n\n.markdown-body .pl-sr .pl-cce {\n  font-weight: bold;\n  color: var(--color-prettylights-syntax-string-regexp);\n}\n\n.markdown-body .pl-ml {\n  color: var(--color-prettylights-syntax-markup-list);\n}\n\n.markdown-body .pl-mh,\n.markdown-body .pl-mh .pl-en,\n.markdown-body .pl-ms {\n  font-weight: bold;\n  color: var(--color-prettylights-syntax-markup-heading);\n}\n\n.markdown-body .pl-mi {\n  font-style: italic;\n  color: var(--color-prettylights-syntax-markup-italic);\n}\n\n.markdown-body .pl-mb {\n  font-weight: bold;\n  color: var(--color-prettylights-syntax-markup-bold);\n}\n\n.markdown-body .pl-md {\n  color: var(--color-prettylights-syntax-markup-deleted-text);\n  background-color: var(--color-prettylights-syntax-markup-deleted-bg);\n}\n\n.markdown-body .pl-mi1 {\n  color: var(--color-prettylights-syntax-markup-inserted-text);\n  background-color: var(--color-prettylights-syntax-markup-inserted-bg);\n}\n\n.markdown-body .pl-mc {\n  color: var(--color-prettylights-syntax-markup-changed-text);\n  background-color: var(--color-prettylights-syntax-markup-changed-bg);\n}\n\n.markdown-body .pl-mi2 {\n  color: var(--color-prettylights-syntax-markup-ignored-text);\n  background-color: var(--color-prettylights-syntax-markup-ignored-bg);\n}\n\n.markdown-body .pl-mdr {\n  font-weight: bold;\n  color: var(--color-prettylights-syntax-meta-diff-range);\n}\n\n.markdown-body .pl-ba {\n  color: var(--color-prettylights-syntax-brackethighlighter-angle);\n}\n\n.markdown-body .pl-sg {\n  color: var(--color-prettylights-syntax-sublimelinter-gutter-mark);\n}\n\n.markdown-body .pl-corl {\n  text-decoration: underline;\n  color: var(--color-prettylights-syntax-constant-other-reference-link);\n}\n\n.markdown-body [role=button]:focus:not(:focus-visible),\n.markdown-body [role=tabpanel][tabindex=\"0\"]:focus:not(:focus-visible),\n.markdown-body button:focus:not(:focus-visible),\n.markdown-body summary:focus:not(:focus-visible),\n.markdown-body a:focus:not(:focus-visible) {\n  outline: none;\n  box-shadow: none;\n}\n\n.markdown-body [tabindex=\"0\"]:focus:not(:focus-visible),\n.markdown-body details-dialog:focus:not(:focus-visible) {\n  outline: none;\n}\n\n.markdown-body g-emoji {\n  display: inline-block;\n  min-width: 1ch;\n  font-family: \"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\";\n  font-size: 1em;\n  font-style: normal !important;\n  font-weight: var(--base-text-weight-normal, 400);\n  line-height: 1;\n  vertical-align: -0.075em;\n}\n\n.markdown-body g-emoji img {\n  width: 1em;\n  height: 1em;\n}\n\n.markdown-body .task-list-item {\n  list-style-type: none;\n}\n\n.markdown-body .task-list-item label {\n  font-weight: var(--base-text-weight-normal, 400);\n}\n\n.markdown-body .task-list-item.enabled label {\n  cursor: pointer;\n}\n\n.markdown-body .task-list-item+.task-list-item {\n  margin-top: var(--base-size-4);\n}\n\n.markdown-body .task-list-item .handle {\n  display: none;\n}\n\n.markdown-body .task-list-item-checkbox {\n  margin: 0 .2em .25em -1.4em;\n  vertical-align: middle;\n}\n\n.markdown-body ul:dir(rtl) .task-list-item-checkbox {\n  margin: 0 -1.6em .25em .2em;\n}\n\n.markdown-body ol:dir(rtl) .task-list-item-checkbox {\n  margin: 0 -1.6em .25em .2em;\n}\n\n.markdown-body .contains-task-list:hover .task-list-item-convert-container,\n.markdown-body .contains-task-list:focus-within .task-list-item-convert-container {\n  display: block;\n  width: auto;\n  height: 24px;\n  overflow: visible;\n  clip: auto;\n}\n\n.markdown-body ::-webkit-calendar-picker-indicator {\n  filter: invert(50%);\n}\n\n.markdown-body .markdown-alert {\n  padding: var(--base-size-8) var(--base-size-16);\n  margin-bottom: var(--base-size-16);\n  color: inherit;\n  border-left: .25em solid var(--borderColor-default);\n}\n\n.markdown-body .markdown-alert>:first-child {\n  margin-top: 0;\n}\n\n.markdown-body .markdown-alert>:last-child {\n  margin-bottom: 0;\n}\n\n.markdown-body .markdown-alert .markdown-alert-title {\n  display: flex;\n  font-weight: var(--base-text-weight-medium, 500);\n  align-items: center;\n  line-height: 1;\n}\n\n.markdown-body .markdown-alert.markdown-alert-note {\n  border-left-color: var(--borderColor-accent-emphasis);\n}\n\n.markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {\n  color: var(--fgColor-accent);\n}\n\n.markdown-body .markdown-alert.markdown-alert-important {\n  border-left-color: var(--borderColor-done-emphasis);\n}\n\n.markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {\n  color: var(--fgColor-done);\n}\n\n.markdown-body .markdown-alert.markdown-alert-warning {\n  border-left-color: var(--borderColor-attention-emphasis);\n}\n\n.markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {\n  color: var(--fgColor-attention);\n}\n\n.markdown-body .markdown-alert.markdown-alert-tip {\n  border-left-color: var(--borderColor-success-emphasis);\n}\n\n.markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {\n  color: var(--fgColor-success);\n}\n\n.markdown-body .markdown-alert.markdown-alert-caution {\n  border-left-color: var(--borderColor-danger-emphasis);\n}\n\n.markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {\n  color: var(--fgColor-danger);\n}\n\n.markdown-body>*:first-child>.heading-element:first-child {\n  margin-top: 0 !important;\n}\n\n.markdown-body .highlight pre:has(+.zeroclipboard-container) {\n  min-height: 52px;\n}\n\n\n.CodeMirror {\n    height: 100% !important;\n    width: 100%;\n}\n.EasyMDEContainer {\n    height: 100%;\n    width: 100%;\n}\n.markdown-wrapper[data-v-7829a943] {\n    width: 100%;\n    height: 100%;\n}\n\n.settings_container[data-v-23d61fea] {\n    display: flex;\n    flex-direction: column;\n    gap: 0.25rem;\n    padding: 0.5rem;\n}\n";})();
-import { defineComponent, mergeModels, useModel, toRefs, inject as inject$1, ref, onUnmounted, onMounted, watch, createElementBlock, openBlock, withModifiers, createElementVNode, toDisplayString } from "vue";
+const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
+import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
+import { defineComponent, mergeModels, useModel, toRefs, inject, ref, onUnmounted, onMounted, watch, createElementBlock, openBlock, withModifiers, createElementVNode, toDisplayString } from "vue";
 import { useRoute } from "vue-router";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload } = __tsm__.require("org.eclipse.daanse.board.app.lib.events");
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
-function getAugmentedNamespace(n) {
-  if (Object.prototype.hasOwnProperty.call(n, "__esModule")) return n;
-  var f = n.default;
-  if (typeof f == "function") {
-    var a = function a2() {
-      if (this instanceof a2) {
-        return Reflect.construct(f, arguments, this.constructor);
-      }
-      return f.apply(this, arguments);
-    };
-    a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, "__esModule", { value: true });
-  Object.keys(n).forEach(function(k) {
-    var d = Object.getOwnPropertyDescriptor(n, k);
-    Object.defineProperty(a, k, d.get ? d : {
-      enumerable: true,
-      get: function() {
-        return n[k];
-      }
-    });
-  });
-  return a;
-}
-var _Reflect = {};
-/*! *****************************************************************************
-Copyright (C) Microsoft. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-var hasRequired_Reflect;
-function require_Reflect() {
-  if (hasRequired_Reflect) return _Reflect;
-  hasRequired_Reflect = 1;
-  var Reflect2;
-  (function(Reflect3) {
-    (function(factory) {
-      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
-      var exporter = makeExporter(Reflect3);
-      if (typeof root.Reflect !== "undefined") {
-        exporter = makeExporter(root.Reflect, exporter);
-      }
-      factory(exporter, root);
-      if (typeof root.Reflect === "undefined") {
-        root.Reflect = Reflect3;
-      }
-      function makeExporter(target, previous) {
-        return function(key, value) {
-          Object.defineProperty(target, key, { configurable: true, writable: true, value });
-          if (previous)
-            previous(key, value);
-        };
-      }
-      function functionThis() {
-        try {
-          return Function("return this;")();
-        } catch (_) {
-        }
-      }
-      function indirectEvalThis() {
-        try {
-          return (void 0, eval)("(function() { return this; })()");
-        } catch (_) {
-        }
-      }
-      function sloppyModeThis() {
-        return functionThis() || indirectEvalThis();
-      }
-    })(function(exporter, root) {
-      var hasOwn = Object.prototype.hasOwnProperty;
-      var supportsSymbol = typeof Symbol === "function";
-      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
-      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
-      var supportsCreate = typeof Object.create === "function";
-      var supportsProto = { __proto__: [] } instanceof Array;
-      var downLevel = !supportsCreate && !supportsProto;
-      var HashMap = {
-        // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: supportsCreate ? function() {
-          return MakeDictionary(/* @__PURE__ */ Object.create(null));
-        } : supportsProto ? function() {
-          return MakeDictionary({ __proto__: null });
-        } : function() {
-          return MakeDictionary({});
-        },
-        has: downLevel ? function(map, key) {
-          return hasOwn.call(map, key);
-        } : function(map, key) {
-          return key in map;
-        },
-        get: downLevel ? function(map, key) {
-          return hasOwn.call(map, key) ? map[key] : void 0;
-        } : function(map, key) {
-          return map[key];
-        }
-      };
-      var functionPrototype = Object.getPrototypeOf(Function);
-      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
-      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
-      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
-      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
-      var metadataRegistry = GetOrCreateMetadataRegistry();
-      var metadataProvider = CreateMetadataProvider(metadataRegistry);
-      function decorate(decorators, target, propertyKey, attributes) {
-        if (!IsUndefined(propertyKey)) {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
-            throw new TypeError();
-          if (IsNull(attributes))
-            attributes = void 0;
-          propertyKey = ToPropertyKey(propertyKey);
-          return DecorateProperty(decorators, target, propertyKey, attributes);
-        } else {
-          if (!IsArray(decorators))
-            throw new TypeError();
-          if (!IsConstructor(target))
-            throw new TypeError();
-          return DecorateConstructor(decorators, target);
-        }
-      }
-      exporter("decorate", decorate);
-      function metadata(metadataKey, metadataValue) {
-        function decorator(target, propertyKey) {
-          if (!IsObject(target))
-            throw new TypeError();
-          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
-            throw new TypeError();
-          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-        }
-        return decorator;
-      }
-      exporter("metadata", metadata);
-      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-      }
-      exporter("defineMetadata", defineMetadata);
-      function hasMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasMetadata", hasMetadata);
-      function hasOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("hasOwnMetadata", hasOwnMetadata);
-      function getMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getMetadata", getMetadata);
-      function getOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("getOwnMetadata", getOwnMetadata);
-      function getMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryMetadataKeys(target, propertyKey);
-      }
-      exporter("getMetadataKeys", getMetadataKeys);
-      function getOwnMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryOwnMetadataKeys(target, propertyKey);
-      }
-      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
-      function deleteMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        if (!IsObject(target))
-          throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        var provider = GetMetadataProvider(
-          target,
-          propertyKey,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
-      }
-      exporter("deleteMetadata", deleteMetadata);
-      function DecorateConstructor(decorators, target) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsConstructor(decorated))
-              throw new TypeError();
-            target = decorated;
-          }
-        }
-        return target;
-      }
-      function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target, propertyKey, descriptor);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsObject(decorated))
-              throw new TypeError();
-            descriptor = decorated;
-          }
-        }
-        return descriptor;
-      }
-      function OrdinaryHasMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return true;
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryHasMetadata(MetadataKey, parent, P);
-        return false;
-      }
-      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
-      }
-      function OrdinaryGetMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryGetMetadata(MetadataKey, parent, P);
-        return void 0;
-      }
-      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
-          /*Create*/
-          false
-        );
-        if (IsUndefined(provider))
-          return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
-      }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
-          /*Create*/
-          true
-        );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
-      }
-      function OrdinaryMetadataKeys(O, P) {
-        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (parent === null)
-          return ownKeys;
-        var parentKeys = OrdinaryMetadataKeys(parent, P);
-        if (parentKeys.length <= 0)
-          return ownKeys;
-        if (ownKeys.length <= 0)
-          return parentKeys;
-        var set = new _Set();
-        var keys = [];
-        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
-          var key = ownKeys_1[_i];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-          var key = parentKeys_1[_a];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
-        }
-        return keys;
-      }
-      function OrdinaryOwnMetadataKeys(O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
-          /*create*/
-          false
-        );
-        if (!provider) {
-          return [];
-        }
-        return provider.OrdinaryOwnMetadataKeys(O, P);
-      }
-      function Type(x) {
-        if (x === null)
-          return 1;
-        switch (typeof x) {
-          case "undefined":
-            return 0;
-          case "boolean":
-            return 2;
-          case "string":
-            return 3;
-          case "symbol":
-            return 4;
-          case "number":
-            return 5;
-          case "object":
-            return x === null ? 1 : 6;
-          default:
-            return 6;
-        }
-      }
-      function IsUndefined(x) {
-        return x === void 0;
-      }
-      function IsNull(x) {
-        return x === null;
-      }
-      function IsSymbol(x) {
-        return typeof x === "symbol";
-      }
-      function IsObject(x) {
-        return typeof x === "object" ? x !== null : typeof x === "function";
-      }
-      function ToPrimitive(input, PreferredType) {
-        switch (Type(input)) {
-          case 0:
-            return input;
-          case 1:
-            return input;
-          case 2:
-            return input;
-          case 3:
-            return input;
-          case 4:
-            return input;
-          case 5:
-            return input;
-        }
-        var hint = "string";
-        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-        if (exoticToPrim !== void 0) {
-          var result = exoticToPrim.call(input, hint);
-          if (IsObject(result))
-            throw new TypeError();
-          return result;
-        }
-        return OrdinaryToPrimitive(input);
-      }
-      function OrdinaryToPrimitive(O, hint) {
-        var valueOf, result, toString_2;
-        {
-          var toString_1 = O.toString;
-          if (IsCallable(toString_1)) {
-            var result = toString_1.call(O);
-            if (!IsObject(result))
-              return result;
-          }
-          var valueOf = O.valueOf;
-          if (IsCallable(valueOf)) {
-            var result = valueOf.call(O);
-            if (!IsObject(result))
-              return result;
-          }
-        }
-        throw new TypeError();
-      }
-      function ToBoolean(argument) {
-        return !!argument;
-      }
-      function ToString(argument) {
-        return "" + argument;
-      }
-      function ToPropertyKey(argument) {
-        var key = ToPrimitive(argument);
-        if (IsSymbol(key))
-          return key;
-        return ToString(key);
-      }
-      function IsArray(argument) {
-        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
-      }
-      function IsCallable(argument) {
-        return typeof argument === "function";
-      }
-      function IsConstructor(argument) {
-        return typeof argument === "function";
-      }
-      function IsPropertyKey(argument) {
-        switch (Type(argument)) {
-          case 3:
-            return true;
-          case 4:
-            return true;
-          default:
-            return false;
-        }
-      }
-      function SameValueZero(x, y) {
-        return x === y || x !== x && y !== y;
-      }
-      function GetMethod(V, P) {
-        var func = V[P];
-        if (func === void 0 || func === null)
-          return void 0;
-        if (!IsCallable(func))
-          throw new TypeError();
-        return func;
-      }
-      function GetIterator(obj) {
-        var method = GetMethod(obj, iteratorSymbol);
-        if (!IsCallable(method))
-          throw new TypeError();
-        var iterator = method.call(obj);
-        if (!IsObject(iterator))
-          throw new TypeError();
-        return iterator;
-      }
-      function IteratorValue(iterResult) {
-        return iterResult.value;
-      }
-      function IteratorStep(iterator) {
-        var result = iterator.next();
-        return result.done ? false : result;
-      }
-      function IteratorClose(iterator) {
-        var f = iterator["return"];
-        if (f)
-          f.call(iterator);
-      }
-      function OrdinaryGetPrototypeOf(O) {
-        var proto = Object.getPrototypeOf(O);
-        if (typeof O !== "function" || O === functionPrototype)
-          return proto;
-        if (proto !== functionPrototype)
-          return proto;
-        var prototype = O.prototype;
-        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
-        if (prototypeProto == null || prototypeProto === Object.prototype)
-          return proto;
-        var constructor = prototypeProto.constructor;
-        if (typeof constructor !== "function")
-          return proto;
-        if (constructor === O)
-          return proto;
-        return constructor;
-      }
-      function CreateMetadataRegistry() {
-        var fallback;
-        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
-          fallback = CreateFallbackProvider(root.Reflect);
-        }
-        var first;
-        var second;
-        var rest;
-        var targetProviderMap = new _WeakMap();
-        var registry = {
-          registerProvider,
-          getProvider,
-          setProvider
-        };
-        return registry;
-        function registerProvider(provider) {
-          if (!Object.isExtensible(registry)) {
-            throw new Error("Cannot add provider to a frozen registry.");
-          }
-          switch (true) {
-            case fallback === provider:
-              break;
-            case IsUndefined(first):
-              first = provider;
-              break;
-            case first === provider:
-              break;
-            case IsUndefined(second):
-              second = provider;
-              break;
-            case second === provider:
-              break;
-            default:
-              if (rest === void 0)
-                rest = new _Set();
-              rest.add(provider);
-              break;
-          }
-        }
-        function getProviderNoCache(O, P) {
-          if (!IsUndefined(first)) {
-            if (first.isProviderFor(O, P))
-              return first;
-            if (!IsUndefined(second)) {
-              if (second.isProviderFor(O, P))
-                return first;
-              if (!IsUndefined(rest)) {
-                var iterator = GetIterator(rest);
-                while (true) {
-                  var next = IteratorStep(iterator);
-                  if (!next) {
-                    return void 0;
-                  }
-                  var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O, P)) {
-                    IteratorClose(iterator);
-                    return provider;
-                  }
-                }
-              }
-            }
-          }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
-            return fallback;
-          }
-          return void 0;
-        }
-        function getProvider(O, P) {
-          var providerMap = targetProviderMap.get(O);
-          var provider;
-          if (!IsUndefined(providerMap)) {
-            provider = providerMap.get(P);
-          }
-          if (!IsUndefined(provider)) {
-            return provider;
-          }
-          provider = getProviderNoCache(O, P);
-          if (!IsUndefined(provider)) {
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return provider;
-        }
-        function hasProvider(provider) {
-          if (IsUndefined(provider))
-            throw new TypeError();
-          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
-        }
-        function setProvider(O, P, provider) {
-          if (!hasProvider(provider)) {
-            throw new Error("Metadata provider not registered.");
-          }
-          var existingProvider = getProvider(O, P);
-          if (existingProvider !== provider) {
-            if (!IsUndefined(existingProvider)) {
-              return false;
-            }
-            var providerMap = targetProviderMap.get(O);
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return true;
-        }
-      }
-      function GetOrCreateMetadataRegistry() {
-        var metadataRegistry2;
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          metadataRegistry2 = root.Reflect[registrySymbol];
-        }
-        if (IsUndefined(metadataRegistry2)) {
-          metadataRegistry2 = CreateMetadataRegistry();
-        }
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          Object.defineProperty(root.Reflect, registrySymbol, {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: metadataRegistry2
-          });
-        }
-        return metadataRegistry2;
-      }
-      function CreateMetadataProvider(registry) {
-        var metadata2 = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var targetMetadata = metadata2.get(O);
-            if (IsUndefined(targetMetadata))
-              return false;
-            return targetMetadata.has(P);
-          },
-          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
-          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
-          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
-          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
-          OrdinaryDeleteMetadata
-        };
-        metadataRegistry.registerProvider(provider);
-        return provider;
-        function GetOrCreateMetadataMap(O, P, Create) {
-          var targetMetadata = metadata2.get(O);
-          var createdTargetMetadata = false;
-          if (IsUndefined(targetMetadata)) {
-            if (!Create)
-              return void 0;
-            targetMetadata = new _Map();
-            metadata2.set(O, targetMetadata);
-            createdTargetMetadata = true;
-          }
-          var metadataMap = targetMetadata.get(P);
-          if (IsUndefined(metadataMap)) {
-            if (!Create)
-              return void 0;
-            metadataMap = new _Map();
-            targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O, P, provider)) {
-              targetMetadata.delete(P);
-              if (createdTargetMetadata) {
-                metadata2.delete(O);
-              }
-              throw new Error("Wrong provider for target.");
-            }
-          }
-          return metadataMap;
-        }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          return ToBoolean(metadataMap.has(MetadataKey));
-        }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return void 0;
-          return metadataMap.get(MetadataKey);
-        }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
-            /*Create*/
-            true
-          );
-          metadataMap.set(MetadataKey, MetadataValue);
-        }
-        function OrdinaryOwnMetadataKeys2(O, P) {
-          var keys = [];
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return keys;
-          var keysObj = metadataMap.keys();
-          var iterator = GetIterator(keysObj);
-          var k = 0;
-          while (true) {
-            var next = IteratorStep(iterator);
-            if (!next) {
-              keys.length = k;
-              return keys;
-            }
-            var nextValue = IteratorValue(next);
-            try {
-              keys[k] = nextValue;
-            } catch (e) {
-              try {
-                IteratorClose(iterator);
-              } finally {
-                throw e;
-              }
-            }
-            k++;
-          }
-        }
-        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
-            /*Create*/
-            false
-          );
-          if (IsUndefined(metadataMap))
-            return false;
-          if (!metadataMap.delete(MetadataKey))
-            return false;
-          if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O);
-            if (!IsUndefined(targetMetadata)) {
-              targetMetadata.delete(P);
-              if (targetMetadata.size === 0) {
-                metadata2.delete(targetMetadata);
-              }
-            }
-          }
-          return true;
-        }
-      }
-      function CreateFallbackProvider(reflect) {
-        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
-        var metadataOwner = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var metadataPropertySet = metadataOwner.get(O);
-            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
-              return true;
-            }
-            if (getOwnMetadataKeys2(O, P).length) {
-              if (IsUndefined(metadataPropertySet)) {
-                metadataPropertySet = new _Set();
-                metadataOwner.set(O, metadataPropertySet);
-              }
-              metadataPropertySet.add(P);
-              return true;
-            }
-            return false;
-          },
-          OrdinaryDefineOwnMetadata: defineMetadata2,
-          OrdinaryHasOwnMetadata: hasOwnMetadata2,
-          OrdinaryGetOwnMetadata: getOwnMetadata2,
-          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
-          OrdinaryDeleteMetadata: deleteMetadata2
-        };
-        return provider;
-      }
-      function GetMetadataProvider(O, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O, P);
-        if (!IsUndefined(registeredProvider)) {
-          return registeredProvider;
-        }
-        if (Create) {
-          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
-            return metadataProvider;
-          }
-          throw new Error("Illegal state.");
-        }
-        return void 0;
-      }
-      function CreateMapPolyfill() {
-        var cacheSentinel = {};
-        var arraySentinel = [];
-        var MapIterator = (
-          /** @class */
-          (function() {
-            function MapIterator2(keys, values, selector) {
-              this._index = 0;
-              this._keys = keys;
-              this._values = values;
-              this._selector = selector;
-            }
-            MapIterator2.prototype["@@iterator"] = function() {
-              return this;
-            };
-            MapIterator2.prototype[iteratorSymbol] = function() {
-              return this;
-            };
-            MapIterator2.prototype.next = function() {
-              var index = this._index;
-              if (index >= 0 && index < this._keys.length) {
-                var result = this._selector(this._keys[index], this._values[index]);
-                if (index + 1 >= this._keys.length) {
-                  this._index = -1;
-                  this._keys = arraySentinel;
-                  this._values = arraySentinel;
-                } else {
-                  this._index++;
-                }
-                return { value: result, done: false };
-              }
-              return { value: void 0, done: true };
-            };
-            MapIterator2.prototype.throw = function(error) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              throw error;
-            };
-            MapIterator2.prototype.return = function(value) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              return { value, done: true };
-            };
-            return MapIterator2;
-          })()
-        );
-        var Map2 = (
-          /** @class */
-          (function() {
-            function Map3() {
-              this._keys = [];
-              this._values = [];
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
-            }
-            Object.defineProperty(Map3.prototype, "size", {
-              get: function() {
-                return this._keys.length;
-              },
-              enumerable: true,
-              configurable: true
-            });
-            Map3.prototype.has = function(key) {
-              return this._find(
-                key,
-                /*insert*/
-                false
-              ) >= 0;
-            };
-            Map3.prototype.get = function(key) {
-              var index = this._find(
-                key,
-                /*insert*/
-                false
-              );
-              return index >= 0 ? this._values[index] : void 0;
-            };
-            Map3.prototype.set = function(key, value) {
-              var index = this._find(
-                key,
-                /*insert*/
-                true
-              );
-              this._values[index] = value;
-              return this;
-            };
-            Map3.prototype.delete = function(key) {
-              var index = this._find(
-                key,
-                /*insert*/
-                false
-              );
-              if (index >= 0) {
-                var size = this._keys.length;
-                for (var i = index + 1; i < size; i++) {
-                  this._keys[i - 1] = this._keys[i];
-                  this._values[i - 1] = this._values[i];
-                }
-                this._keys.length--;
-                this._values.length--;
-                if (SameValueZero(key, this._cacheKey)) {
-                  this._cacheKey = cacheSentinel;
-                  this._cacheIndex = -2;
-                }
-                return true;
-              }
-              return false;
-            };
-            Map3.prototype.clear = function() {
-              this._keys.length = 0;
-              this._values.length = 0;
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
-            };
-            Map3.prototype.keys = function() {
-              return new MapIterator(this._keys, this._values, getKey);
-            };
-            Map3.prototype.values = function() {
-              return new MapIterator(this._keys, this._values, getValue);
-            };
-            Map3.prototype.entries = function() {
-              return new MapIterator(this._keys, this._values, getEntry);
-            };
-            Map3.prototype["@@iterator"] = function() {
-              return this.entries();
-            };
-            Map3.prototype[iteratorSymbol] = function() {
-              return this.entries();
-            };
-            Map3.prototype._find = function(key, insert) {
-              if (!SameValueZero(this._cacheKey, key)) {
-                this._cacheIndex = -1;
-                for (var i = 0; i < this._keys.length; i++) {
-                  if (SameValueZero(this._keys[i], key)) {
-                    this._cacheIndex = i;
-                    break;
-                  }
-                }
-              }
-              if (this._cacheIndex < 0 && insert) {
-                this._cacheIndex = this._keys.length;
-                this._keys.push(key);
-                this._values.push(void 0);
-              }
-              return this._cacheIndex;
-            };
-            return Map3;
-          })()
-        );
-        return Map2;
-        function getKey(key, _) {
-          return key;
-        }
-        function getValue(_, value) {
-          return value;
-        }
-        function getEntry(key, value) {
-          return [key, value];
-        }
-      }
-      function CreateSetPolyfill() {
-        var Set2 = (
-          /** @class */
-          (function() {
-            function Set3() {
-              this._map = new _Map();
-            }
-            Object.defineProperty(Set3.prototype, "size", {
-              get: function() {
-                return this._map.size;
-              },
-              enumerable: true,
-              configurable: true
-            });
-            Set3.prototype.has = function(value) {
-              return this._map.has(value);
-            };
-            Set3.prototype.add = function(value) {
-              return this._map.set(value, value), this;
-            };
-            Set3.prototype.delete = function(value) {
-              return this._map.delete(value);
-            };
-            Set3.prototype.clear = function() {
-              this._map.clear();
-            };
-            Set3.prototype.keys = function() {
-              return this._map.keys();
-            };
-            Set3.prototype.values = function() {
-              return this._map.keys();
-            };
-            Set3.prototype.entries = function() {
-              return this._map.entries();
-            };
-            Set3.prototype["@@iterator"] = function() {
-              return this.keys();
-            };
-            Set3.prototype[iteratorSymbol] = function() {
-              return this.keys();
-            };
-            return Set3;
-          })()
-        );
-        return Set2;
-      }
-      function CreateWeakMapPolyfill() {
-        var UUID_SIZE = 16;
-        var keys = HashMap.create();
-        var rootKey = CreateUniqueKey();
-        return (
-          /** @class */
-          (function() {
-            function WeakMap2() {
-              this._key = CreateUniqueKey();
-            }
-            WeakMap2.prototype.has = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
-                /*create*/
-                false
-              );
-              return table !== void 0 ? HashMap.has(table, this._key) : false;
-            };
-            WeakMap2.prototype.get = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
-                /*create*/
-                false
-              );
-              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
-            };
-            WeakMap2.prototype.set = function(target, value) {
-              var table = GetOrCreateWeakMapTable(
-                target,
-                /*create*/
-                true
-              );
-              table[this._key] = value;
-              return this;
-            };
-            WeakMap2.prototype.delete = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
-                /*create*/
-                false
-              );
-              return table !== void 0 ? delete table[this._key] : false;
-            };
-            WeakMap2.prototype.clear = function() {
-              this._key = CreateUniqueKey();
-            };
-            return WeakMap2;
-          })()
-        );
-        function CreateUniqueKey() {
-          var key;
-          do
-            key = "@@WeakMap@@" + CreateUUID();
-          while (HashMap.has(keys, key));
-          keys[key] = true;
-          return key;
-        }
-        function GetOrCreateWeakMapTable(target, create) {
-          if (!hasOwn.call(target, rootKey)) {
-            if (!create)
-              return void 0;
-            Object.defineProperty(target, rootKey, { value: HashMap.create() });
-          }
-          return target[rootKey];
-        }
-        function FillRandomBytes(buffer, size) {
-          for (var i = 0; i < size; ++i)
-            buffer[i] = Math.random() * 255 | 0;
-          return buffer;
-        }
-        function GenRandomBytes(size) {
-          if (typeof Uint8Array === "function") {
-            var array = new Uint8Array(size);
-            if (typeof crypto !== "undefined") {
-              crypto.getRandomValues(array);
-            } else if (typeof msCrypto !== "undefined") {
-              msCrypto.getRandomValues(array);
-            } else {
-              FillRandomBytes(array, size);
-            }
-            return array;
-          }
-          return FillRandomBytes(new Array(size), size);
-        }
-        function CreateUUID() {
-          var data = GenRandomBytes(UUID_SIZE);
-          data[6] = data[6] & 79 | 64;
-          data[8] = data[8] & 191 | 128;
-          var result = "";
-          for (var offset = 0; offset < UUID_SIZE; ++offset) {
-            var byte = data[offset];
-            if (offset === 4 || offset === 6 || offset === 8)
-              result += "-";
-            if (byte < 16)
-              result += "0";
-            result += byte.toString(16).toLowerCase();
-          }
-          return result;
-        }
-      }
-      function MakeDictionary(obj) {
-        obj.__ = void 0;
-        delete obj.__;
-        return obj;
-      }
-    });
-  })(Reflect2 || (Reflect2 = {}));
-  return _Reflect;
-}
-require_Reflect();
-const INJECTABLE_KEY = Symbol.for("tsm:injectable");
-const INJECT_KEY = Symbol.for("tsm:inject");
-const INJECT_PROPERTY_KEY = Symbol.for("tsm:inject:property");
-const COMPONENT_KEY = Symbol.for("tsm:component");
-const ACTIVATE_KEY = Symbol.for("tsm:component:activate");
-const DEACTIVATE_KEY = Symbol.for("tsm:component:deactivate");
-function inject(serviceId, options) {
-  return (target, propertyKey, parameterIndex) => {
-    if (parameterIndex !== void 0) {
-      const existing = Reflect.getOwnMetadata(INJECT_KEY, target) ?? [];
-      existing.push({
-        index: parameterIndex,
-        serviceId,
-        optional: false
-      });
-      Reflect.defineMetadata(INJECT_KEY, existing, target);
-    } else {
-      const ctor = target.constructor;
-      const existing = Reflect.getOwnMetadata(INJECT_PROPERTY_KEY, ctor) ?? [];
-      existing.push({
-        propertyKey,
-        serviceId,
-        optional: false
-      });
-      Reflect.defineMetadata(INJECT_PROPERTY_KEY, existing, ctor);
-    }
-  };
-}
-function component(options = {}) {
-  return (target) => {
-    Reflect.defineMetadata(COMPONENT_KEY, options, target);
-    Reflect.defineMetadata(INJECTABLE_KEY, true, target);
-  };
-}
-function activate() {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(ACTIVATE_KEY, propertyKey, target.constructor);
-  };
-}
-function deactivate() {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(DEACTIVATE_KEY, propertyKey, target.constructor);
-  };
-}
 const Icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var __defProp$1 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
@@ -1197,6 +41,33 @@ __decorateClass$1([
 __decorateClass$1([
   WidgetAction({ eventType: "markdown.copyContent" })
 ], MarkdownWidgetInterface.prototype, "copyContent");
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+}
+function getAugmentedNamespace(n) {
+  if (Object.prototype.hasOwnProperty.call(n, "__esModule")) return n;
+  var f = n.default;
+  if (typeof f == "function") {
+    var a = function a2() {
+      if (this instanceof a2) {
+        return Reflect.construct(f, arguments, this.constructor);
+      }
+      return f.apply(this, arguments);
+    };
+    a.prototype = f.prototype;
+  } else a = {};
+  Object.defineProperty(a, "__esModule", { value: true });
+  Object.keys(n).forEach(function(k) {
+    var d = Object.getOwnPropertyDescriptor(n, k);
+    Object.defineProperty(a, k, d.get ? d : {
+      enumerable: true,
+      get: function() {
+        return n[k];
+      }
+    });
+  });
+  return a;
+}
 var codemirror$1 = { exports: {} };
 var codemirror = codemirror$1.exports;
 var hasRequiredCodemirror;
@@ -1204,7 +75,7 @@ function requireCodemirror() {
   if (hasRequiredCodemirror) return codemirror$1.exports;
   hasRequiredCodemirror = 1;
   (function(module, exports$1) {
-    (function(global2, factory) {
+    (function(global, factory) {
       module.exports = factory();
     })(codemirror, (function() {
       var userAgent = navigator.userAgent;
@@ -1415,12 +286,12 @@ function requireCodemirror() {
         this.time = 0;
         this.handler = bind(this.onTimeout, this);
       };
-      Delayed.prototype.onTimeout = function(self2) {
-        self2.id = 0;
-        if (self2.time <= +/* @__PURE__ */ new Date()) {
-          self2.f();
+      Delayed.prototype.onTimeout = function(self) {
+        self.id = 0;
+        if (self.time <= +/* @__PURE__ */ new Date()) {
+          self.f();
         } else {
-          setTimeout(self2.handler, self2.time - +/* @__PURE__ */ new Date());
+          setTimeout(self.handler, self.time - +/* @__PURE__ */ new Date());
         }
       };
       Delayed.prototype.set = function(ms, f) {
@@ -14251,11 +13122,11 @@ function requireTypo() {
         this.flags = settings.flags || {};
         this.memoized = {};
         this.loaded = false;
-        var self2 = this;
+        var self = this;
         var path;
         var i, j, _len, _jlen;
         if (dictionary) {
-          self2.dictionary = dictionary;
+          self.dictionary = dictionary;
           if (affData && wordsData) {
             setup();
           } else if (typeof window !== "undefined" && (window.chrome && window.chrome.runtime || window.browser && window.browser.runtime)) {
@@ -14284,7 +13155,7 @@ function requireTypo() {
           }
         }
         function readDataFile(url, setFunc) {
-          var response = self2._readFile(url, null, settings === null || settings === void 0 ? void 0 : settings.asyncLoad);
+          var response = self._readFile(url, null, settings === null || settings === void 0 ? void 0 : settings.asyncLoad);
           if (settings === null || settings === void 0 ? void 0 : settings.asyncLoad) {
             response.then(function(data) {
               setFunc(data);
@@ -14306,39 +13177,39 @@ function requireTypo() {
           }
         }
         function setup() {
-          self2.rules = self2._parseAFF(affData);
-          self2.compoundRuleCodes = {};
-          for (i = 0, _len = self2.compoundRules.length; i < _len; i++) {
-            var rule = self2.compoundRules[i];
+          self.rules = self._parseAFF(affData);
+          self.compoundRuleCodes = {};
+          for (i = 0, _len = self.compoundRules.length; i < _len; i++) {
+            var rule = self.compoundRules[i];
             for (j = 0, _jlen = rule.length; j < _jlen; j++) {
-              self2.compoundRuleCodes[rule[j]] = [];
+              self.compoundRuleCodes[rule[j]] = [];
             }
           }
-          if ("ONLYINCOMPOUND" in self2.flags) {
-            self2.compoundRuleCodes[self2.flags.ONLYINCOMPOUND] = [];
+          if ("ONLYINCOMPOUND" in self.flags) {
+            self.compoundRuleCodes[self.flags.ONLYINCOMPOUND] = [];
           }
-          self2.dictionaryTable = self2._parseDIC(wordsData);
-          for (i in self2.compoundRuleCodes) {
-            if (self2.compoundRuleCodes[i].length === 0) {
-              delete self2.compoundRuleCodes[i];
+          self.dictionaryTable = self._parseDIC(wordsData);
+          for (i in self.compoundRuleCodes) {
+            if (self.compoundRuleCodes[i].length === 0) {
+              delete self.compoundRuleCodes[i];
             }
           }
-          for (i = 0, _len = self2.compoundRules.length; i < _len; i++) {
-            var ruleText = self2.compoundRules[i];
+          for (i = 0, _len = self.compoundRules.length; i < _len; i++) {
+            var ruleText = self.compoundRules[i];
             var expressionText = "";
             for (j = 0, _jlen = ruleText.length; j < _jlen; j++) {
               var character = ruleText[j];
-              if (character in self2.compoundRuleCodes) {
-                expressionText += "(" + self2.compoundRuleCodes[character].join("|") + ")";
+              if (character in self.compoundRuleCodes) {
+                expressionText += "(" + self.compoundRuleCodes[character].join("|") + ")";
               } else {
                 expressionText += character;
               }
             }
-            self2.compoundRules[i] = new RegExp("^" + expressionText + "$", "i");
+            self.compoundRules[i] = new RegExp("^" + expressionText + "$", "i");
           }
-          self2.loaded = true;
+          self.loaded = true;
           if ((settings === null || settings === void 0 ? void 0 : settings.asyncLoad) && (settings === null || settings === void 0 ? void 0 : settings.loadedCallback)) {
-            settings.loadedCallback(self2);
+            settings.loadedCallback(self);
           }
         }
         return this;
@@ -14778,17 +13649,17 @@ function requireTypo() {
               this.alphabet += i;
             }
           }
-          var self2 = this;
+          var self = this;
           function edits1(words, known_only) {
             var rv = {};
             var i2, j, _len2, _edit;
-            var alphabetLength = self2.alphabet.length;
+            var alphabetLength = self.alphabet.length;
             for (var word_1 in words) {
               for (i2 = 0, _len2 = word_1.length + 1; i2 < _len2; i2++) {
                 var s = [word_1.substring(0, i2), word_1.substring(i2)];
                 if (s[1]) {
                   _edit = s[0] + s[1].substring(1);
-                  if (!known_only || self2.check(_edit)) {
+                  if (!known_only || self.check(_edit)) {
                     if (!(_edit in rv)) {
                       rv[_edit] = 1;
                     } else {
@@ -14798,7 +13669,7 @@ function requireTypo() {
                 }
                 if (s[1].length > 1 && s[1][1] !== s[1][0]) {
                   _edit = s[0] + s[1][1] + s[1][0] + s[1].substring(2);
-                  if (!known_only || self2.check(_edit)) {
+                  if (!known_only || self.check(_edit)) {
                     if (!(_edit in rv)) {
                       rv[_edit] = 1;
                     } else {
@@ -14809,13 +13680,13 @@ function requireTypo() {
                 if (s[1]) {
                   var lettercase = s[1].substring(0, 1).toUpperCase() === s[1].substring(0, 1) ? "uppercase" : "lowercase";
                   for (j = 0; j < alphabetLength; j++) {
-                    var replacementLetter = self2.alphabet[j];
+                    var replacementLetter = self.alphabet[j];
                     if ("uppercase" === lettercase) {
                       replacementLetter = replacementLetter.toUpperCase();
                     }
                     if (replacementLetter != s[1].substring(0, 1)) {
                       _edit = s[0] + replacementLetter + s[1].substring(1);
-                      if (!known_only || self2.check(_edit)) {
+                      if (!known_only || self.check(_edit)) {
                         if (!(_edit in rv)) {
                           rv[_edit] = 1;
                         } else {
@@ -14828,12 +13699,12 @@ function requireTypo() {
                 if (s[1]) {
                   for (j = 0; j < alphabetLength; j++) {
                     var lettercase = s[0].substring(-1).toUpperCase() === s[0].substring(-1) && s[1].substring(0, 1).toUpperCase() === s[1].substring(0, 1) ? "uppercase" : "lowercase";
-                    var replacementLetter = self2.alphabet[j];
+                    var replacementLetter = self.alphabet[j];
                     if ("uppercase" === lettercase) {
                       replacementLetter = replacementLetter.toUpperCase();
                     }
                     _edit = s[0] + replacementLetter + s[1];
-                    if (!known_only || self2.check(_edit)) {
+                    if (!known_only || self.check(_edit)) {
                       if (!(_edit in rv)) {
                         rv[_edit] = 1;
                       } else {
@@ -14852,7 +13723,7 @@ function requireTypo() {
             var ed2 = edits1(ed1, true);
             var weighted_corrections = ed2;
             for (var ed1word in ed1) {
-              if (!self2.check(ed1word)) {
+              if (!self.check(ed1word)) {
                 continue;
               }
               if (ed1word in weighted_corrections) {
@@ -14865,7 +13736,7 @@ function requireTypo() {
             var sorted_corrections = [];
             for (i2 in weighted_corrections) {
               if (weighted_corrections.hasOwnProperty(i2)) {
-                if (self2.hasFlag(i2, "PRIORITYSUGGEST")) {
+                if (self.hasFlag(i2, "PRIORITYSUGGEST")) {
                   weighted_corrections[i2] += 1e3;
                 }
                 sorted_corrections.push([i2, weighted_corrections[i2]]);
@@ -14896,7 +13767,7 @@ function requireTypo() {
               } else if ("capitalized" === capitalization_scheme) {
                 sorted_corrections[i2][0] = sorted_corrections[i2][0].substr(0, 1).toUpperCase() + sorted_corrections[i2][0].substr(1);
               }
-              if (!self2.hasFlag(sorted_corrections[i2][0], "NOSUGGEST") && rv.indexOf(sorted_corrections[i2][0]) === -1) {
+              if (!self.hasFlag(sorted_corrections[i2][0], "NOSUGGEST") && rv.indexOf(sorted_corrections[i2][0]) === -1) {
                 rv.push(sorted_corrections[i2][0]);
               } else {
                 working_limit++;
@@ -18694,24 +17565,24 @@ function requireEasymde() {
       this.value(options.initialValue);
     }
     if (options.uploadImage) {
-      var self2 = this;
+      var self = this;
       this.codemirror.on("dragenter", function(cm, event) {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbOnDragEnter);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbOnDragEnter);
         event.stopPropagation();
         event.preventDefault();
       });
       this.codemirror.on("dragend", function(cm, event) {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbInit);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbInit);
         event.stopPropagation();
         event.preventDefault();
       });
       this.codemirror.on("dragleave", function(cm, event) {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbInit);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbInit);
         event.stopPropagation();
         event.preventDefault();
       });
       this.codemirror.on("dragover", function(cm, event) {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbOnDragEnter);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbOnDragEnter);
         event.stopPropagation();
         event.preventDefault();
       });
@@ -18719,16 +17590,16 @@ function requireEasymde() {
         event.stopPropagation();
         event.preventDefault();
         if (options.imageUploadFunction) {
-          self2.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.dataTransfer.files);
+          self.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.dataTransfer.files);
         } else {
-          self2.uploadImages(event.dataTransfer.files);
+          self.uploadImages(event.dataTransfer.files);
         }
       });
       this.codemirror.on("paste", function(cm, event) {
         if (options.imageUploadFunction) {
-          self2.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.clipboardData.files);
+          self.uploadImagesUsingCustomFunction(options.imageUploadFunction, event.clipboardData.files);
         } else {
-          self2.uploadImages(event.clipboardData.files);
+          self.uploadImages(event.clipboardData.files);
         }
       });
     }
@@ -18812,7 +17683,7 @@ function requireEasymde() {
     }
     this.element = el;
     var options = this.options;
-    var self2 = this;
+    var self = this;
     var keyMaps = {};
     for (var key in options.shortcuts) {
       if (options.shortcuts[key] !== null && bindings[key] !== null) {
@@ -18820,7 +17691,7 @@ function requireEasymde() {
           keyMaps[fixShortcut(options.shortcuts[key2])] = function() {
             var action = bindings[key2];
             if (typeof action === "function") {
-              action(self2);
+              action(self);
             } else if (typeof action === "string") {
               window.open(action, "_blank");
             }
@@ -18832,12 +17703,12 @@ function requireEasymde() {
     keyMaps["Tab"] = "tabAndIndentMarkdownList";
     keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
     keyMaps["Esc"] = function(cm2) {
-      if (cm2.getOption("fullScreen")) toggleFullScreen(self2);
+      if (cm2.getOption("fullScreen")) toggleFullScreen(self);
     };
     this.documentOnKeyDown = function(e) {
       e = e || window.event;
       if (e.keyCode == 27) {
-        if (self2.codemirror.getOption("fullScreen")) toggleFullScreen(self2);
+        if (self.codemirror.getOption("fullScreen")) toggleFullScreen(self);
       }
     };
     document.addEventListener("keydown", this.documentOnKeyDown, false);
@@ -18921,10 +17792,10 @@ function requireEasymde() {
     if (options.autosave != void 0 && options.autosave.enabled === true) {
       this.autosave();
       this.codemirror.on("change", function() {
-        clearTimeout(self2._autosave_timeout);
-        self2._autosave_timeout = setTimeout(function() {
-          self2.autosave();
-        }, self2.options.autosave.submit_delay || self2.options.autosave.delay || 1e3);
+        clearTimeout(self._autosave_timeout);
+        self._autosave_timeout = setTimeout(function() {
+          self.autosave();
+        }, self.options.autosave.submit_delay || self.options.autosave.delay || 1e3);
       });
     }
     function calcHeight(naturalWidth, naturalHeight) {
@@ -19067,37 +17938,37 @@ function requireEasymde() {
     }
   };
   EasyMDE2.prototype.openBrowseFileWindow = function(onSuccess, onError) {
-    var self2 = this;
+    var self = this;
     var imageInput = this.gui.toolbar.getElementsByClassName("imageInput")[0];
     imageInput.click();
     function onChange(event) {
-      if (self2.options.imageUploadFunction) {
-        self2.uploadImagesUsingCustomFunction(self2.options.imageUploadFunction, event.target.files);
+      if (self.options.imageUploadFunction) {
+        self.uploadImagesUsingCustomFunction(self.options.imageUploadFunction, event.target.files);
       } else {
-        self2.uploadImages(event.target.files, onSuccess, onError);
+        self.uploadImages(event.target.files, onSuccess, onError);
       }
       imageInput.removeEventListener("change", onChange);
     }
     imageInput.addEventListener("change", onChange);
   };
   EasyMDE2.prototype.uploadImage = function(file, onSuccess, onError) {
-    var self2 = this;
+    var self = this;
     onSuccess = onSuccess || function onSuccess2(imageUrl) {
-      afterImageUploaded(self2, imageUrl);
+      afterImageUploaded(self, imageUrl);
     };
     function onErrorSup(errorMessage) {
-      self2.updateStatusBar("upload-image", errorMessage);
+      self.updateStatusBar("upload-image", errorMessage);
       setTimeout(function() {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbInit);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbInit);
       }, 1e4);
       if (onError && typeof onError === "function") {
         onError(errorMessage);
       }
-      self2.options.errorCallback(errorMessage);
+      self.options.errorCallback(errorMessage);
     }
     function fillErrorMessage(errorMessage) {
-      var units = self2.options.imageTexts.sizeUnits.split(",");
-      return errorMessage.replace("#image_name#", file.name).replace("#image_size#", humanFileSize(file.size, units)).replace("#image_max_size#", humanFileSize(self2.options.imageMaxSize, units));
+      var units = self.options.imageTexts.sizeUnits.split(",");
+      return errorMessage.replace("#image_name#", file.name).replace("#image_size#", humanFileSize(file.size, units)).replace("#image_max_size#", humanFileSize(self.options.imageMaxSize, units));
     }
     if (file.size > this.options.imageMaxSize) {
       onErrorSup(fillErrorMessage(this.options.errorMessages.fileTooLarge));
@@ -19105,63 +17976,63 @@ function requireEasymde() {
     }
     var formData = new FormData();
     formData.append("image", file);
-    if (self2.options.imageCSRFToken && !self2.options.imageCSRFHeader) {
-      formData.append(self2.options.imageCSRFName, self2.options.imageCSRFToken);
+    if (self.options.imageCSRFToken && !self.options.imageCSRFHeader) {
+      formData.append(self.options.imageCSRFName, self.options.imageCSRFToken);
     }
     var request = new XMLHttpRequest();
     request.upload.onprogress = function(event) {
       if (event.lengthComputable) {
         var progress = "" + Math.round(event.loaded * 100 / event.total);
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbProgress.replace("#file_name#", file.name).replace("#progress#", progress));
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbProgress.replace("#file_name#", file.name).replace("#progress#", progress));
       }
     };
     request.open("POST", this.options.imageUploadEndpoint);
-    if (self2.options.imageCSRFToken && self2.options.imageCSRFHeader) {
-      request.setRequestHeader(self2.options.imageCSRFName, self2.options.imageCSRFToken);
+    if (self.options.imageCSRFToken && self.options.imageCSRFHeader) {
+      request.setRequestHeader(self.options.imageCSRFName, self.options.imageCSRFToken);
     }
     request.onload = function() {
       try {
         var response = JSON.parse(this.responseText);
       } catch (error) {
         console.error("EasyMDE: The server did not return a valid json.");
-        onErrorSup(fillErrorMessage(self2.options.errorMessages.importError));
+        onErrorSup(fillErrorMessage(self.options.errorMessages.importError));
         return;
       }
       if (this.status === 200 && response && !response.error && response.data && response.data.filePath) {
-        onSuccess((self2.options.imagePathAbsolute ? "" : window.location.origin + "/") + response.data.filePath);
+        onSuccess((self.options.imagePathAbsolute ? "" : window.location.origin + "/") + response.data.filePath);
       } else {
-        if (response.error && response.error in self2.options.errorMessages) {
-          onErrorSup(fillErrorMessage(self2.options.errorMessages[response.error]));
+        if (response.error && response.error in self.options.errorMessages) {
+          onErrorSup(fillErrorMessage(self.options.errorMessages[response.error]));
         } else if (response.error) {
           onErrorSup(fillErrorMessage(response.error));
         } else {
           console.error("EasyMDE: Received an unexpected response after uploading the image." + this.status + " (" + this.statusText + ")");
-          onErrorSup(fillErrorMessage(self2.options.errorMessages.importError));
+          onErrorSup(fillErrorMessage(self.options.errorMessages.importError));
         }
       }
     };
     request.onerror = function(event) {
       console.error("EasyMDE: An unexpected error occurred when trying to upload the image." + event.target.status + " (" + event.target.statusText + ")");
-      onErrorSup(self2.options.errorMessages.importError);
+      onErrorSup(self.options.errorMessages.importError);
     };
     request.send(formData);
   };
   EasyMDE2.prototype.uploadImageUsingCustomFunction = function(imageUploadFunction, file) {
-    var self2 = this;
+    var self = this;
     function onSuccess(imageUrl) {
-      afterImageUploaded(self2, imageUrl);
+      afterImageUploaded(self, imageUrl);
     }
     function onError(errorMessage) {
       var filledErrorMessage = fillErrorMessage(errorMessage);
-      self2.updateStatusBar("upload-image", filledErrorMessage);
+      self.updateStatusBar("upload-image", filledErrorMessage);
       setTimeout(function() {
-        self2.updateStatusBar("upload-image", self2.options.imageTexts.sbInit);
+        self.updateStatusBar("upload-image", self.options.imageTexts.sbInit);
       }, 1e4);
-      self2.options.errorCallback(filledErrorMessage);
+      self.options.errorCallback(filledErrorMessage);
     }
     function fillErrorMessage(errorMessage) {
-      var units = self2.options.imageTexts.sizeUnits.split(",");
-      return errorMessage.replace("#image_name#", file.name).replace("#image_size#", humanFileSize(file.size, units)).replace("#image_max_size#", humanFileSize(self2.options.imageMaxSize, units));
+      var units = self.options.imageTexts.sizeUnits.split(",");
+      return errorMessage.replace("#image_name#", file.name).replace("#image_size#", humanFileSize(file.size, units)).replace("#image_max_size#", humanFileSize(self.options.imageMaxSize, units));
     }
     imageUploadFunction.apply(this, [file, onSuccess, onError]);
   };
@@ -19238,20 +18109,20 @@ function requireEasymde() {
     var bar = document.createElement("div");
     bar.className = "editor-toolbar";
     bar.setAttribute("role", "toolbar");
-    var self2 = this;
+    var self = this;
     var toolbarData = {};
-    self2.toolbar = items;
+    self.toolbar = items;
     for (i = 0; i < items.length; i++) {
-      if (items[i].name == "guide" && self2.options.toolbarGuideIcon === false)
+      if (items[i].name == "guide" && self.options.toolbarGuideIcon === false)
         continue;
-      if (self2.options.hideIcons && self2.options.hideIcons.indexOf(items[i].name) != -1)
+      if (self.options.hideIcons && self.options.hideIcons.indexOf(items[i].name) != -1)
         continue;
       if ((items[i].name == "fullscreen" || items[i].name == "side-by-side") && isMobile())
         continue;
       if (items[i] === "|") {
         var nonSeparatorIconsFollow = false;
         for (var x = i + 1; x < items.length; x++) {
-          if (items[x] !== "|" && (!self2.options.hideIcons || self2.options.hideIcons.indexOf(items[x].name) == -1)) {
+          if (items[x] !== "|" && (!self.options.hideIcons || self.options.hideIcons.indexOf(items[x].name) == -1)) {
             nonSeparatorIconsFollow = true;
           }
         }
@@ -19263,9 +18134,9 @@ function requireEasymde() {
         if (item === "|") {
           el = createSep();
         } else if (item.children) {
-          el = createToolbarDropdown(item, self2.options.toolbarTips, self2.options.shortcuts, self2);
+          el = createToolbarDropdown(item, self.options.toolbarTips, self.options.shortcuts, self);
         } else {
-          el = createToolbarButton(item, true, self2.options.toolbarTips, self2.options.shortcuts, "button", self2);
+          el = createToolbarButton(item, true, self.options.toolbarTips, self.options.shortcuts, "button", self);
         }
         toolbarData[item.name || item] = el;
         bar.appendChild(el);
@@ -19274,16 +18145,16 @@ function requireEasymde() {
           imageInput.className = "imageInput";
           imageInput.type = "file";
           imageInput.multiple = true;
-          imageInput.name = self2.options.imageInputName;
-          imageInput.accept = self2.options.imageAccept;
+          imageInput.name = self.options.imageInputName;
+          imageInput.accept = self.options.imageAccept;
           imageInput.style.display = "none";
           imageInput.style.opacity = 0;
           bar.appendChild(imageInput);
         }
       })(items[i]);
     }
-    self2.toolbar_div = bar;
-    self2.toolbarElements = toolbarData;
+    self.toolbar_div = bar;
+    self.toolbarElements = toolbarData;
     var cm = this.codemirror;
     cm.on("cursorActivity", function() {
       var stat = getState(cm);
@@ -19579,8 +18450,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const config = useModel(__props, "configv");
     const props = __props;
     const { id: widgetId } = toRefs(props);
-    const eventBus = inject$1(identifiers.TINY_EMITTER);
-    const actionsRegistry = inject$1(EVENT_ACTIONS_REGISTRY);
+    const eventBus = inject(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject(EVENT_ACTIONS_REGISTRY);
     const route = useRoute();
     const pageId = route.params.pageid || "";
     const wrapperRef = ref(null);
@@ -19784,8 +18655,8 @@ MarkdownWidgetProvider = __decorateClass([
     service: [WIDGET_SERVICE],
     properties: { "widget.type": WIDGET_TYPE }
   }),
-  __decorateParam(0, inject("EventRegistry")),
-  __decorateParam(1, inject("EventActionsRegistry"))
+  __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),
+  __decorateParam(1, inject$1(EVENT_ACTIONS_REGISTRY_ID))
 ], MarkdownWidgetProvider);
 export {
   MarkdownWidget,

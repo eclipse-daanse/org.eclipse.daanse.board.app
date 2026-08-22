@@ -13,6 +13,7 @@
 
 import { TinyEmitter } from 'tiny-emitter'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 
 /**
  * The system bundle: owner of the application-wide base services that no
@@ -29,7 +30,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
  */
 
 export function activate({ services, log }: ActivationContext) {
-  services.register('TINY_EMITTER', new TinyEmitter())
+  services.register(TINY_EMITTER, new TinyEmitter())
   log.info('system services ready: TINY_EMITTER')
 }
 

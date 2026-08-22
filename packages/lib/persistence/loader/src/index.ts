@@ -8,8 +8,8 @@
  */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { identifier, SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.settings.manager'
-import { identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { SETTINGS_MANAGER, identifier, SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.settings.manager'
+import { REPOSITORY_REGISTRY, identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 
 /**
@@ -21,13 +21,13 @@ import { identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'or
  * die Anwendung lud dieses Paket darum in einer eigenen Nachlaufphase.
  */
 export async function activate({ services, log }: ActivationContext) {
-  const settingsManager = services.get<SettingsManagerI>('SettingsManager')
+  const settingsManager = services.get(SETTINGS_MANAGER)
   if (!settingsManager) {
     log.info('SettingsManager nicht vorhanden - nichts wiederherzustellen')
     return
   }
 
-  const repoManager = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  const repoManager = services.getRequired(REPOSITORY_REGISTRY)
   const gespeicherte = await settingsManager.getSettings(['persistanceRepositories'])
   if (!gespeicherte) return
 

@@ -1,3 +1,4 @@
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class PageContextService {
   setProvider(provider) {
     this.provider = provider;
@@ -6,7 +7,7 @@ class PageContextService {
     return this.provider?.getCurrentPageId();
   }
 }
-const PAGE_CONTEXT = "PageContext";
+const PAGE_CONTEXT = serviceId("PageContext");
 const identifier = Symbol.for(PAGE_CONTEXT);
 function activate$1({ services }) {
   services.register(PAGE_CONTEXT, new PageContextService());

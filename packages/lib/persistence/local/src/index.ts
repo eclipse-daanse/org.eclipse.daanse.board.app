@@ -9,11 +9,12 @@
 */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { identifier as persistenceIdentifieer, Repository, type RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { REPOSITORY_REGISTRY, identifier as persistenceIdentifieer, Repository, type RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 import LocalRepositoryImpl from './classes/LocalRepositoryImpl'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const LOCAL_REPOSITORY = 'LocalRepository'
+/** Typed service id - the name and the contract declared once, here. */
+export const LOCAL_REPOSITORY = serviceId<LocalRepositoryImpl>('LocalRepository')
 
 const identifier = Symbol.for(LOCAL_REPOSITORY)
 
@@ -28,7 +29,7 @@ const identifier = Symbol.for(LOCAL_REPOSITORY)
 export function activate({ services }: ActivationContext) {
   services.register(LOCAL_REPOSITORY, services.construct(LocalRepositoryImpl))
 
-  const repoRegistry = services.getRequired<RepositoryRegistryI>('RepositoryRegistry')
+  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY)
   repoRegistry.registerRepoType(LocalRepositoryImpl.type, identifier)
 }
 

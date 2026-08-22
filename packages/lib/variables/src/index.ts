@@ -13,9 +13,9 @@
 
 import { ComputedVariable, symbol as ComputedVariableSymbol,COMPUTED_VARIABLE } from './classes/ComputedVariable'
 import { ConstantVariable, symbol as ConstantVariableSymbol,CONSTANT_VARIABLE } from './classes/ConstantVariable'
-import { QueryVariable, symbol as QueryVariableSymbol } from './classes/QueryVariable'
-import { RequestVariable, symbol as RequestVariableSymbol } from './classes/RequestVariable'
-import { TimeVariable, symbol as TimeVariableSymbol } from './classes/TimeVariable'
+import { QueryVariable, symbol as QueryVariableSymbol, QUERY_VARIABLE } from './classes/QueryVariable'
+import { RequestVariable, symbol as RequestVariableSymbol, REQUEST_VARIABLE } from './classes/RequestVariable'
+import { TimeVariable, symbol as TimeVariableSymbol, TIME_VARIABLE } from './classes/TimeVariable'
 import { DateTimePickerVariable, symbol as DateTimePickerVariableSymbol, DATETIME_PICKER_VARIABLE, type IDateTimePickerVariableConfig } from './classes/DateTimePickerVariable'
 import { UsesComputedVariable } from './utils/UsesComputedVariable'
 import { ComputedStoreParameter } from './classes/ComputedStoreParameter'
@@ -128,9 +128,10 @@ export {
 }
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
-import type { PageContextServiceI } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
-import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { PAGE_CONTEXT, type PageContextServiceI } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import { VARIABLE_REPOSITORY, type VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import type { VariableDependencies } from './classes/Variable'
 import { createConstantVariableFactory } from './classes/ConstantVariable'
 import { createComputedVariableFactory } from './classes/ComputedVariable'
@@ -150,21 +151,21 @@ import { provideComputedStoreParameterFactory } from './utils/UsesComputedVariab
  */
 export function activate({ services }: ActivationContext) {
   const deps: VariableDependencies = {
-    eventBus: services.get<TinyEmitter>('TINY_EMITTER'),
-    pageContextService: services.get<PageContextServiceI>('PageContext'),
+    eventBus: services.get(TINY_EMITTER),
+    pageContextService: services.get(PAGE_CONTEXT),
   }
 
   services.register(CONSTANT_VARIABLE, createConstantVariableFactory(deps))
   services.register(COMPUTED_VARIABLE, createComputedVariableFactory(deps))
-  services.register('QueryVariable', createQueryVariableFactory(deps))
-  services.register('RequestVariable', createRequestVariableFactory(deps))
-  services.register('TimeVariable', createTimeVariableFactory(deps))
+  services.register(QUERY_VARIABLE, createQueryVariableFactory(deps))
+  services.register(REQUEST_VARIABLE, createRequestVariableFactory(deps))
+  services.register(TIME_VARIABLE, createTimeVariableFactory(deps))
   services.register(DATETIME_PICKER_VARIABLE, createDateTimePickerVariableFactory(deps))
 
   provideComputedStoreParameterFactory(() => {
     const parameter = new ComputedStoreParameter()
     parameter.eventBus = deps.eventBus
-    parameter.storage = services.get<VariableRepository>('VariableRepository')
+    parameter.storage = services.get(VARIABLE_REPOSITORY)
     return parameter
   })
 }

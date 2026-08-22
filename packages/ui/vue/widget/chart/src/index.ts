@@ -11,7 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm/decorators'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
@@ -47,8 +48,8 @@ export class ChartWidgetProvider implements WidgetProvider {
   readonly name = 'Chart'
 
   constructor(
-    @inject('EventRegistry') private readonly events: EventRegistry,
-    @inject('EventActionsRegistry') private readonly actions: EventActionsRegistry,
+    @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
+    @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
   ) {}
 
   @activate()

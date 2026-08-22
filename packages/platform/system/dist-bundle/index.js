@@ -1,3 +1,4 @@
+const { TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var tinyEmitter = { exports: {} };
 var hasRequiredTinyEmitter;
 function requireTinyEmitter() {
@@ -52,28 +53,10 @@ function requireTinyEmitter() {
   return tinyEmitter.exports;
 }
 var tinyEmitterExports = requireTinyEmitter();
-function activate$1({ services, log }) {
-  services.register("TINY_EMITTER", new tinyEmitterExports.TinyEmitter());
+function activate({ services, log }) {
+  services.register(TINY_EMITTER, new tinyEmitterExports.TinyEmitter());
   log.info("system services ready: TINY_EMITTER");
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  activate: activate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.platform.system";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "platform.system");
-  await activate$1?.(context);
-}
-async function deactivate(context) {
-  await void 0;
-}
 export {
-  activate,
-  deactivate
+  activate
 };

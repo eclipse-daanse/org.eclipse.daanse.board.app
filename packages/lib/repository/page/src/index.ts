@@ -16,9 +16,10 @@ import { PageRegistryImpl } from './classes/PageRegistryImpl'
 import type { PageRegistryI } from './api/PageRegistryI'
 import { events } from './api/Events'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const PAGE_REPOSITORY = 'PageRepository'
+const PAGE_REPOSITORY = serviceId<PageRegistryI>('PageRepository')
 
 const identifier = Symbol.for(PAGE_REPOSITORY)
 

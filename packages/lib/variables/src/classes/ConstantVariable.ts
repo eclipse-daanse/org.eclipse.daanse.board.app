@@ -15,8 +15,10 @@ import { Variable } from './Variable'
 import { type IConstantVariableConfig, RefreshType } from '..'
 import type { VariableDependencies } from './Variable'
 import { Serializable } from '../interface/JSONSerializableI'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-const TYPE = 'ConstantVariable'
+/** Typed service id of this variable type's factory. */
+const TYPE = serviceId<ReturnType<typeof createConstantVariableFactory>>('ConstantVariable')
 const symbol = Symbol.for(TYPE)
 
 

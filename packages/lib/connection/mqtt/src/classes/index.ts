@@ -16,11 +16,9 @@ import { type MqttClient } from 'mqtt'
 import mqtt from 'mqtt'
 import type { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { inject, injectable } from '@eclipse-daanse/tsm'
-import {
-  LoggerFactory,
+import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
-  type ILogger
-} from 'org.eclipse.daanse.board.app.lib.logger'
+  type ILogger } from 'org.eclipse.daanse.board.app.lib.logger'
 
 export interface IMQTTConnectionConfiguration extends BaseConnectionConfig{
   url: string
@@ -29,7 +27,7 @@ export interface IMQTTConnectionConfiguration extends BaseConnectionConfig{
 
 @injectable()
 export class MQTTConnection extends TwoWayConnection {
-  @inject('LoggerFactory')
+  @inject(LOGGER_FACTORY)
   private loggerFactory!: LoggerFactory
 
   private logMqtt!: ILogger

@@ -15,8 +15,10 @@ import { Variable } from './Variable'
 import { type IVariableConfig } from '..'
 import { Serializable } from '../interface/JSONSerializableI'
 import type { VariableDependencies } from './Variable'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
-const TYPE = 'DateTimePickerVariable'
+/** Typed service id of this variable type's factory. */
+const TYPE = serviceId<ReturnType<typeof createDateTimePickerVariableFactory>>('DateTimePickerVariable')
 const symbol = Symbol.for(TYPE)
 
 export interface IDateTimePickerVariableConfig extends IVariableConfig {

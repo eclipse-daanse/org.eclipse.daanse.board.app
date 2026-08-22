@@ -16,11 +16,10 @@ import {
   BaseDatasource,
   IBaseConnectionConfiguration,
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
+import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
 
 export interface IRssStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl: string
@@ -37,7 +36,7 @@ export interface IRssParseResult {
 export class RssStore extends BaseDatasource {
   private connection: any
 
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
   init(configuration: IRssStoreConfiguration) {

@@ -8,6 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { useDataSourcesStore ,type DataSourceDTO} from './store/DatasourcePinia'
 
 // Diese Zeile im globalen Kontext aufrufen, z. B. einmalig in main.ts
@@ -22,5 +23,5 @@ import { provideRepository } from './store/DatasourcePinia'
 import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 
 export function activate({ services }: ActivationContext) {
-  provideRepository(services.getRequired<DatasourceRepository>('DatasourceRepository'))
+  provideRepository(services.getRequired(DATASOURCE_REPOSITORY))
 }

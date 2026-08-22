@@ -1,4 +1,5 @@
 const { TwoWayConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.twowayconnection");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class WSConnection extends TwoWayConnection {
   socket = null;
   constructor() {
@@ -32,7 +33,7 @@ class WSConnection extends TwoWayConnection {
     return false;
   }
 }
-const WSCONNECTION_FACTORY = "WSConnectionFactory";
+const WSCONNECTION_FACTORY = serviceId("WSConnectionFactory");
 const factorySymbol = Symbol.for(WSCONNECTION_FACTORY);
 function createWSConnection(config) {
   if (!WSConnection.validateConfiguration(config)) {

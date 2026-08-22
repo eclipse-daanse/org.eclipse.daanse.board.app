@@ -15,9 +15,10 @@ import { LayoutRepository } from './classes/LayoutRepository'
 import type { LayoutRepositoryI } from './interfaces/LayoutRepositoryI'
 import type { LayoutI } from './interfaces/LayoutI'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const LAYOUT_REPOSITORY = 'LayoutRepository'
+const LAYOUT_REPOSITORY = serviceId<LayoutRepository>('LayoutRepository')
 
 const identifier = Symbol.for(LAYOUT_REPOSITORY)
 

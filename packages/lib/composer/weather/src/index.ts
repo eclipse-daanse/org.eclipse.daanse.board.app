@@ -11,7 +11,9 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { WeatherComposer } from './classes'
 
@@ -19,8 +21,8 @@ export * from './classes/index'
 export * from './interfaces/WeatherData'
 
 // Export symbol for dependency injection
-/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
-export const WEATHER_COMPOSER = 'WeatherComposer'
+/** Typed service id - the name and the contract declared once, here. */
+export const WEATHER_COMPOSER = serviceId<ReturnType<typeof createWeatherComposer>>('WeatherComposer')
 
 export const symbol = Symbol.for(WEATHER_COMPOSER)
 
@@ -52,7 +54,7 @@ function createWeatherComposer(repository: DatasourceRepository) {
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired('DatasourceRepository')))
+  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired(DATASOURCE_REPOSITORY)))
 }
 
 export function deactivate({ services }: ActivationContext) {

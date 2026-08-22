@@ -10,6 +10,7 @@
 
 import 'reflect-metadata'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { NavigationRegistryImpl } from './NavigationRegistryImpl'
 import { NavigationRegistry } from './gen/NavigationRegistry'
 
@@ -17,8 +18,8 @@ export { NavigationItem } from './gen/NavigationItem'
 export { NavigationRegistry } from './gen/NavigationRegistry'
 export { NavigationRegistryImpl } from './NavigationRegistryImpl'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `NAVIGATION_REGISTRY` ist das dazu passende Symbol. */
-export const NAVIGATION_REGISTRY_ID = 'NavigationRegistry'
+/** Typed service id - the name and the contract declared once, here. */
+export const NAVIGATION_REGISTRY_ID = serviceId<NavigationRegistryImpl>('NavigationRegistry')
 
 export const NAVIGATION_REGISTRY = Symbol.for(NAVIGATION_REGISTRY_ID)
 

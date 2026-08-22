@@ -1,3 +1,4 @@
+const { REST_CONNECTION_FACTORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.rest");
 const { CONNECTION_REPOSITORY } = __tsm__.require("org.eclipse.daanse.board.app.lib.repository.connection");
 import { defineComponent, ref, computed, watch, onMounted, resolveComponent, createElementBlock, openBlock, Fragment, createVNode, createCommentVNode, createElementVNode, normalizeClass, toDisplayString } from "vue";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -5614,7 +5615,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const RestConnectionIdentifier = Symbol.for("RestConnectionFactory");
+const RestConnectionIdentifier = Symbol.for(REST_CONNECTION_FACTORY);
 const settingsSymbol = Symbol.for("RestConnectionSettings");
 function activate({ services }) {
   services.register("RestConnectionSettings", _sfc_main);

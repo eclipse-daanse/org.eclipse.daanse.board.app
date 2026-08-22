@@ -27,36 +27,31 @@ import {
 } from '../client'
 import { getSharedCachingFetch } from '../client/CachingMiddleware'
 import { inject, injectable } from '@eclipse-daanse/tsm'
-import {
+import { CONNECTION_REPOSITORY,
   ConnectionRepository,
   type IConnection,
-  identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
-import {
-  type VariableRepository,
-  identifier as variableIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+  identifier,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { VARIABLE_REPOSITORY, type VariableRepository,
+  identifier as variableIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
 import { type IRequestParams } from 'org.eclipse.daanse.board.app.lib.connection.base'
 import { transformFromThingLocationDastreamToLocationThingDatastream } from '../util/transformThings'
 import { FILTER, FILTERRESET, NOACTION, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from '../interfaces/Constances'
 import { OgcStaStoreI } from '../interface/OgcStaI'
 import { BaseDatasource } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import {
-  LoggerFactory,
+import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
-  type ILogger
-} from 'org.eclipse.daanse.board.app.lib.logger'
+  type ILogger } from 'org.eclipse.daanse.board.app.lib.logger'
 import { getObservationsWorkerManager, type ObservationsWorkerManager } from '../workers/ObservationsWorkerManager'
 
 @injectable()
 export class OgcStaStore extends BaseDatasource implements OgcStaStoreI {
-  @inject('ConnectionRepository')
+  @inject(CONNECTION_REPOSITORY)
   private connectionRepository!: ConnectionRepository
 
-  @inject('VariableRepository')
+  @inject(VARIABLE_REPOSITORY)
   private variableRepository!: VariableRepository
 
-  @inject('LoggerFactory')
+  @inject(LOGGER_FACTORY)
   private loggerFactory!: LoggerFactory
 
   // Create loggers

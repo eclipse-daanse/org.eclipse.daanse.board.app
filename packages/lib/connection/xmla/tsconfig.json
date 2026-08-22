@@ -3,18 +3,19 @@
     "target": "ESNext",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
     "module": "commonjs",
-
     "declaration": true,
     "outDir": "./dist/types",
-
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-
     "strict": true,
-
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "vite.bundle.config.ts",
+    "dist",
+    "dist-bundle"
+  ]
 }

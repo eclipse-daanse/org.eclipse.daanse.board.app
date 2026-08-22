@@ -14,6 +14,7 @@
 import { Variable } from './Variable'
 import { type IVariableConfig } from '..'
 import type { VariableDependencies } from './Variable'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 
 const symbol = Symbol.for('TimeVariable')
 
@@ -52,4 +53,7 @@ export function createTimeVariableFactory(deps: VariableDependencies) {
   }
 }
 
-export { TimeVariable, symbol }
+/** Typed service id of this variable type's factory. */
+const TYPE = serviceId<ReturnType<typeof createTimeVariableFactory>>('TimeVariable')
+
+export { TimeVariable, symbol, TYPE as TIME_VARIABLE }

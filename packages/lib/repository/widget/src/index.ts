@@ -18,10 +18,11 @@ import {
   type WidgetProvider,
 } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ServiceRegistryListener, ServiceRegistryEvent } from '@eclipse-daanse/tsm'
 
-/** Service ID in the ServiceRegistry namespace; `identifier` is the matching symbol. */
-const WIDGET_REPOSITORY = 'WidgetRepository'
+/** Typed service id - the name and the contract declared once, here. */
+const WIDGET_REPOSITORY = serviceId<WidgetRepository>('WidgetRepository')
 
 const identifier = Symbol.for(WIDGET_REPOSITORY)
 

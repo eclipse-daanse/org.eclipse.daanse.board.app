@@ -1,4 +1,5 @@
 const { BaseConnection } = __tsm__.require("org.eclipse.daanse.board.app.lib.connection.base");
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 class XMLAApi {
   url;
   sessionId = "";
@@ -2884,7 +2885,7 @@ class XmlaConnection extends BaseConnection {
     return this.api;
   }
 }
-const XMLA_CONNECTION_FACTORY = "XmlaConnectionFactory";
+const XMLA_CONNECTION_FACTORY = serviceId("XmlaConnectionFactory");
 const factorySymbol = Symbol.for(XMLA_CONNECTION_FACTORY);
 function createXmlaConnection(config) {
   if (!XmlaConnection.validateConfiguration(config)) {

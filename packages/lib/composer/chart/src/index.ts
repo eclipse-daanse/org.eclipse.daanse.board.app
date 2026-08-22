@@ -11,12 +11,14 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
 import { ChartComposer, type IChartComposerConfiguration } from './classes'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `symbol` ist das dazu passende Symbol. */
-const CHART_COMPOSER = 'ChartComposer'
+/** Typed service id - the name and the contract declared once, here. */
+const CHART_COMPOSER = serviceId<ReturnType<typeof createChartComposer>>('ChartComposer')
 
 const symbol = Symbol.for(CHART_COMPOSER)
 
@@ -47,7 +49,7 @@ function createChartComposer(repository: DatasourceRepository) {
 }
 
 export function activate({ services }: ActivationContext) {
-  services.register(CHART_COMPOSER, createChartComposer(services.getRequired('DatasourceRepository')))
+  services.register(CHART_COMPOSER, createChartComposer(services.getRequired(DATASOURCE_REPOSITORY)))
 }
 
 export function deactivate({ services }: ActivationContext) {

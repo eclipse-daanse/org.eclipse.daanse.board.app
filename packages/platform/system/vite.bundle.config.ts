@@ -122,6 +122,10 @@ export default defineConfig({
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
       components: 'derive',
+      // The tsm.js artefact bundles the framework API on purpose - this is
+      // the system bundle exporting org.osgi.framework. The path is the
+      // symlinked tsm workspace, which the boundary check sees as outside.
+      boundary: { allow: ['../../../../EMFTs/tsm'] },
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally
       // incompatible with the workspace's - same shape, different identity.
@@ -129,14 +133,24 @@ export default defineConfig({
   ],
   build: {
     target: 'es2022',
-    rollupOptions: { external: importMapLibraries },
+    rollupOptions: {
+      external: (source: string, importer: string | undefined) => {
+        if (source !== '@eclipse-daanse/tsm') return false
+        // The artefact bundles the framework API itself; everything else
+        // references it bare, for the import map.
+        return !importer?.includes('artifacts/tsm.ts') && !importer?.endsWith('artifacts/tsm.ts')
+      },
+    },
     minify: false,
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, 'src/bundle.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        tsm: resolve(__dirname, 'src/artifacts/tsm.ts'),
+      },
       formats: ['es'],
-      fileName: () => 'index.js',
+      fileName: (_format, entryName) => `${entryName}.js`,
     },
   },
 })
