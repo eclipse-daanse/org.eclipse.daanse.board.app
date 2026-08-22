@@ -21,6 +21,6 @@
     }
   ],
   "dependencies": [
-    "platform.compat"
+    "lib.annotations"
   ]
 }

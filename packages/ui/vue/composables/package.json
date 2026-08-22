@@ -17,7 +17,8 @@
       "import": "./dist/lib.core.js",
       "require": "./dist/lib.core.umd.cjs",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./manifest.json": "./manifest.json"
   },
   "repository": {
     "type": "git",

@@ -25,10 +25,9 @@ import { describe, it, expect } from 'vitest'
 import type { ModuleManifest } from '@eclipse-daanse/tsm'
 import { bundles } from '../packages/app/default/src/bundles'
 import platformVue from '../packages/platform/vue/manifest.json'
-import platformCompat from '../packages/platform/compat/manifest.json'
 import platformBoot from '../packages/platform/boot/manifest.json'
 
-const platform = [platformVue as ModuleManifest, platformCompat as ModuleManifest, platformBoot as ModuleManifest]
+const platform = [platformVue as ModuleManifest, platformBoot as ModuleManifest]
 const all: ModuleManifest[] = [...platform, ...bundles]
 
 /**
@@ -37,6 +36,13 @@ const all: ModuleManifest[] = [...platform, ...bundles]
  * the framework's own services. Everything else comes from bundles.
  */
 const HOST_PROVIDED = new Set<string>(['ModuleLoader'])
+
+/**
+ * Libraries the launcher registers into the tsm runtime before loadAll -
+ * the system bundle exporting the framework packages. lib.core is the
+ * bridge to the host's service registry and can only come from the host.
+ */
+const HOST_PROVIDED_LIBRARIES = new Set<string>(['org.eclipse.daanse.board.app.lib.core'])
 
 describe('manifest lint', () => {
   it('module ids are unique', () => {
@@ -96,7 +102,7 @@ describe('manifest lint', () => {
   })
 
   it('every shared dependency is offered as a tsm.library capability or by platform.vue', () => {
-    const offered = new Set<string>()
+    const offered = new Set<string>(HOST_PROVIDED_LIBRARIES)
     for (const m of all) {
       for (const c of m.capabilities ?? []) {
         if (c.namespace === 'tsm.library') offered.add(String(c.attributes?.library))

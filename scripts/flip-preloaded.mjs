@@ -34,6 +34,9 @@ import { dirname, join, relative } from 'node:path'
 
 const WS = 'org.eclipse.daanse.board.app.'
 const NPM_SHARED = { vue: '^3.5.0', 'vue-router': '^5.0.0', pinia: '^3.0.0', vuedraggable: '^4.0.0' }
+// Libraries the launcher itself registers before loadAll - the OSGi system
+// bundle exporting the framework packages. No module dependency edge needed.
+const HOST_LIBS = new Set(['org.eclipse.daanse.board.app.lib.core'])
 const PRELOADED_TS = 'packages/app/default/src/preloaded.ts'
 const BUNDLES_TS = 'packages/app/default/src/bundles.ts'
 const COMPAT_TS = 'packages/platform/compat/src/index.ts'
@@ -54,9 +57,10 @@ const HEADER = `/***************************************************************
 `
 
 const dry = process.argv.includes('--dry')
+const recomputeOnly = process.argv.includes('--recompute')
 const libMode = process.argv.includes('--lib')
-const args = process.argv.slice(2).filter((a) => a !== '--dry' && a !== '--lib')
-if (args.length === 0) {
+const args = process.argv.slice(2).filter((a) => a !== '--dry' && a !== '--lib' && a !== '--recompute')
+if (args.length === 0 && !recomputeOnly) {
   console.error('usage: node scripts/flip-preloaded.mjs [--dry] [--lib] <package-suffix>...')
   console.error('  --lib: the packages are not preloaded modules but pure static')
   console.error('         libraries; create a self-registering library bundle each')
@@ -75,9 +79,12 @@ for (const pkgJson of globSync('packages/**/package.json')) {
 const parseManifestImports = (file) =>
   [...readFileSync(file, 'utf-8').matchAll(/from '([^']+)\/manifest\.json'/g)].map((m) => m[1])
 
-const preloadedNow = parseManifestImports(PRELOADED_TS)
+// preloaded.ts is deleted once its list is empty; --lib runs continue after that
+const preloadedNow = existsSync(PRELOADED_TS) ? parseManifestImports(PRELOADED_TS) : []
 const bundlesNow = parseManifestImports(BUNDLES_TS)
-const compatNow = [...readFileSync(COMPAT_TS, 'utf-8').matchAll(/'(org\.eclipse[^']+)':/g)].map((m) => m[1])
+const compatNow = existsSync(COMPAT_TS)
+  ? [...readFileSync(COMPAT_TS, 'utf-8').matchAll(/'(org\.eclipse[^']+)':/g)].map((m) => m[1])
+  : []
 
 const pool = libMode ? Object.keys(packages) : preloadedNow
 const flips = args.map((suffix) => {
@@ -120,6 +127,7 @@ function scanImports(dir) {
 
 /** Which module must be active for library `full` to be require-able. */
 function providerOf(full, compatRemaining) {
+  if (HOST_LIBS.has(full)) return 'host'
   const pkg = packages[full]
   if (pkg) {
     const manifestPath = join(pkg.dir, 'manifest.json')
@@ -315,7 +323,7 @@ const report = []
 const problems = []
 const flippedLibs = []
 
-for (const full of flips) {
+for (const full of recomputeOnly ? [] : flips) {
   const pkg = packages[full]
   if (!pkg) { problems.push(`${full}: no workspace package found`); continue }
   const manifest = existsSync(join(pkg.dir, 'manifest.json'))
@@ -337,7 +345,7 @@ for (const full of flips) {
   for (const w of [...ws].sort()) {
     if (w === full) continue
     const available =
-      compatRemaining.has(w) || flipSet.has(w) || providerOf(w, compatRemaining) !== null
+      HOST_LIBS.has(w) || compatRemaining.has(w) || flipSet.has(w) || providerOf(w, compatRemaining) !== null
     if (!available) {
       problems.push(`${full}: imports ${w}, which no module shares - would be bundled (identity risk)`)
       continue
@@ -385,7 +393,7 @@ if (!dry) {
     for (const sd of manifest.sharedDependencies ?? []) {
       const provider = sd.id in NPM_SHARED ? 'platform.vue' : providerOf(sd.id, compatRemaining)
       if (!provider) problems.push(`${manifest.id}: no provider for shared dependency ${sd.id}`)
-      else if (provider !== manifest.id) providers.add(provider)
+      else if (provider !== 'host' && provider !== manifest.id) providers.add(provider)
     }
     manifest.dependencies = [...providers].sort()
     if (manifest.dependencies.length === 0) delete manifest.dependencies
@@ -408,7 +416,7 @@ if (!dry) {
 
   // ------------------------------------------------- regenerate the two lists
   const remainingPreloaded = preloadedNow.filter((p) => !flipSet.has(p))
-  writeFileSync(
+  if (remainingPreloaded.length > 0) writeFileSync(
     PRELOADED_TS,
     `${HEADER}
 import type { ModuleManifest } from '@eclipse-daanse/tsm'

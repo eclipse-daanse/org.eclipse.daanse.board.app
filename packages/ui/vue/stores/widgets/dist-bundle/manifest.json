@@ -1,0 +1,31 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.stores.widgets",
+  "name": "ui.vue.stores.widgets",
+  "version": "0.0.1-next.1",
+  "exports": {},
+  "entry": "/bundles/ui.vue.stores.widgets/index.js",
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "pinia",
+      "versionRange": "^3.0.0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.stores.widgets",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "platform.vue"
+  ],
+  "provides": []
+}

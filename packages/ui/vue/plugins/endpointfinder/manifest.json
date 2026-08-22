@@ -9,8 +9,8 @@
     "lib.repository.connection",
     "lib.repository.datasource",
     "lib.repository.widget",
-    "platform.compat",
     "platform.vue",
+    "ui.vue.composables",
     "ui.vue.stores.connection",
     "ui.vue.stores.datasouce"
   ],

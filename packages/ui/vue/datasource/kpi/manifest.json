@@ -8,8 +8,8 @@
   "dependencies": [
     "lib.datasource.xmla",
     "lib.repository.datasource",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables"
   ],
   "requiresService": [
     {

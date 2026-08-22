@@ -59,7 +59,9 @@
   ],
   "dependencies": [
     "lib.repository.layout.page",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.stores.layout",
+    "ui.vue.stores.widgets",
+    "ui.vue.widget.wrapper"
   ]
 }

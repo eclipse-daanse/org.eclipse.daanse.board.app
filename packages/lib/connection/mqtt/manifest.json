@@ -43,9 +43,9 @@
     }
   ],
   "dependencies": [
+    "lib.annotations",
     "lib.connection.base",
     "lib.connection.twowayconnection",
-    "lib.logger",
-    "platform.compat"
+    "lib.logger"
   ]
 }

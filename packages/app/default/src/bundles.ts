@@ -133,6 +133,13 @@ import b117 from 'org.eclipse.daanse.board.app.ui.vue.plugins.i18next/manifest.j
 import b118 from 'org.eclipse.daanse.board.app.ui.vue.variable.computed/manifest.json'
 import b119 from 'org.eclipse.daanse.board.app.ui.vue.variable.constant/manifest.json'
 import b120 from 'org.eclipse.daanse.board.app.ui.vue.variable.timepicker/manifest.json'
+import b121 from 'org.eclipse.daanse.board.app.lib.annotations/manifest.json'
+import b122 from 'org.eclipse.daanse.board.app.lib.utils.helpers/manifest.json'
+import b123 from 'org.eclipse.daanse.board.app.ui.vue.composables/manifest.json'
+import b124 from 'org.eclipse.daanse.board.app.ui.vue.variable.components/manifest.json'
+import b125 from 'org.eclipse.daanse.board.app.ui.vue.stores.layout/manifest.json'
+import b126 from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets/manifest.json'
+import b127 from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper/manifest.json'
 
 /**
  * The URL bundles: modules the loader fetches through their manifest entry.
@@ -261,4 +268,11 @@ export const bundles: ModuleManifest[] = [
   b118 as ModuleManifest,
   b119 as ModuleManifest,
   b120 as ModuleManifest,
+  b121 as ModuleManifest,
+  b122 as ModuleManifest,
+  b123 as ModuleManifest,
+  b124 as ModuleManifest,
+  b125 as ModuleManifest,
+  b126 as ModuleManifest,
+  b127 as ModuleManifest,
 ]

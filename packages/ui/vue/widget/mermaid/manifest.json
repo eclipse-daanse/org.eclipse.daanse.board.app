@@ -6,10 +6,11 @@
   "entry": "/bundles/ui.vue.widget.mermaid/index.js",
   "exports": {},
   "dependencies": [
+    "lib.annotations",
     "lib.events",
     "lib.repository.widget",
-    "platform.compat",
-    "platform.vue"
+    "platform.vue",
+    "ui.vue.composables"
   ],
   "requiresService": [
     {
