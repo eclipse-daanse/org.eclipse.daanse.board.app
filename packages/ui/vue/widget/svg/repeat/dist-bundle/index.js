@@ -8,6 +8,7 @@ import { useRoute } from "vue-router";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
 var __defProp$3 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
 var __decorateClass$3 = (decorators, target, key, kind) => {
@@ -453,7 +454,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "RepeatableSVGWidget";
 let RepeatableSVGWidgetProvider = class {
   constructor(events, actions) {
@@ -483,7 +483,7 @@ __decorateClass([
 ], RepeatableSVGWidgetProvider.prototype, "unregister", 1);
 RepeatableSVGWidgetProvider = __decorateClass([
   component({
-    service: [WIDGET_SERVICE],
+    service: [WIDGET_SERVICE_ID],
     properties: { "widget.type": WIDGET_TYPE }
   }),
   __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),

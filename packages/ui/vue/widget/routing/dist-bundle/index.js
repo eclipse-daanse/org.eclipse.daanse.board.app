@@ -8,6 +8,7 @@ const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core")
 import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
 import { ModelClass, Documentation, Attribute } from "org.eclipse.daanse.board.app.lib.annotations";
 import { SET_WAYPOINTS } from "org.eclipse.daanse.board.app.lib.datasource.valhalla";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
 const Icon = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3ccircle%20cx='6'%20cy='19'%20r='3'/%3e%3ccircle%20cx='18'%20cy='5'%20r='3'/%3e%3cpath%20d='M12%2019h4.5a3.5%203.5%200%200%200%200-7h-9a3.5%203.5%200%200%201%200-7H12'/%3e%3c/svg%3e";
 var __defProp$3 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
@@ -6126,7 +6127,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "RoutingWidget";
 let RoutingWidgetProvider = class {
   constructor(events) {
@@ -6153,7 +6153,7 @@ __decorateClass([
 ], RoutingWidgetProvider.prototype, "unregister", 1);
 RoutingWidgetProvider = __decorateClass([
   component({
-    service: [WIDGET_SERVICE],
+    service: [WIDGET_SERVICE_ID],
     properties: { "widget.type": WIDGET_TYPE }
   }),
   __decorateParam(0, inject$1(EVENT_REGISTRY_ID))

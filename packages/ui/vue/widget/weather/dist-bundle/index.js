@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import { useDatasourceRepository } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
 const Icon = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='currentColor'%3e%3cpath%20d='M12.5%206.5C10.8%206.5%209.5%207.8%209.5%209.5c0%20.3.1.6.2.9C7.6%2011.2%206%2012.9%206%2015c0%202.2%201.8%204%204%204h8c1.7%200%203-1.3%203-3%200-1.4-1-2.6-2.4-2.9.1-.4.4-.6.4-1.1%200-1.9-1.6-3.5-3.5-3.5-.8%200-1.5.3-2.1.7-.4-1.8-2-3.2-3.9-3.2v.5zm0%201c1.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.2.4.4.2c.3.2.6.3%201%20.3%201.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.1.3.3.1c1%20.3%201.8%201.2%201.8%202.3%200%201.4-1.1%202.5-2.5%202.5H10c-1.9%200-3.5-1.6-3.5-3.5s1.6-3.5%203.5-3.5c.3%200%20.6%200%20.9.1l.4.1.1-.4c.1-.3.2-.6.2-.9%200-1.4%201.1-2.5%202.5-2.5z'/%3e%3ccircle%20cx='7'%20cy='8'%20r='1'/%3e%3ccircle%20cx='17'%20cy='7'%20r='1'/%3e%3ccircle%20cx='14'%20cy='4'%20r='1'/%3e%3c/svg%3e";
 function useWeatherData(settings, datasourceId) {
   const weatherData = ref(null);
@@ -13038,7 +13039,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 var __decorateParam = (index2, decorator) => (target, key) => decorator(target, key, index2);
-const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "WeatherWidget";
 let WeatherWidgetProvider = class {
   constructor(events, actions) {
@@ -13068,7 +13068,7 @@ __decorateClass([
 ], WeatherWidgetProvider.prototype, "unregister", 1);
 WeatherWidgetProvider = __decorateClass([
   component({
-    service: [WIDGET_SERVICE],
+    service: [WIDGET_SERVICE_ID],
     properties: { "widget.type": WIDGET_TYPE }
   }),
   __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),

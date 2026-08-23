@@ -29,22 +29,14 @@ interface IVideoSettings {
   videoUrl: string
 }
 
-/*
- * Literal on purpose (tsm#21): the build-time component scan cannot yet read
- * a constant behind a bare import, so the contract's WIDGET_SERVICE_ID from
- * lib.repository.widget cannot appear in @component directly. The type
- * annotation ties this literal to the same contract; the value must match.
- */
-const WIDGET_SERVICE: typeof WIDGET_SERVICE_ID = 'daanse.widget'
-
 const WIDGET_TYPE = 'VideoWidget'
 
 /**
- * Declared component: the loader registers it under WIDGET_SERVICE, the
+ * Declared component: the loader registers it under WIDGET_SERVICE_ID, the
  * WidgetRepository tracks it into the palette, unloading withdraws it.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class VideoWidgetProvider implements WidgetProvider {

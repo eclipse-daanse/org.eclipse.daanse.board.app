@@ -7,6 +7,7 @@ import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables
 import { identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
 var __defProp$1 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
 var __decorateClass$1 = (decorators, target, key, kind) => {
@@ -1455,7 +1456,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "TimelineWidget";
 let TimelineWidgetProvider = class {
   constructor(events, actions) {
@@ -1485,7 +1485,7 @@ __decorateClass([
 ], TimelineWidgetProvider.prototype, "unregister", 1);
 TimelineWidgetProvider = __decorateClass([
   component({
-    service: [WIDGET_SERVICE],
+    service: [WIDGET_SERVICE_ID],
     properties: { "widget.type": WIDGET_TYPE }
   }),
   __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),

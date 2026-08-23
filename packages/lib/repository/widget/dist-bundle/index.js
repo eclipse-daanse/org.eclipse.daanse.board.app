@@ -11,7 +11,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   if (kind && result) __defProp(target, key, result);
   return result;
 };
-const WIDGET_REPOSITORY_SERVICE = "WidgetRepository";
 let TrackedWidgetRepository = class {
   tracked = [];
   manual = {};
@@ -76,7 +75,7 @@ __decorateClass([
 ], TrackedWidgetRepository.prototype, "providers", 1);
 TrackedWidgetRepository = __decorateClass([
   component({
-    service: [WIDGET_REPOSITORY_SERVICE]
+    service: [WIDGET_REPOSITORY]
   })
 ], TrackedWidgetRepository);
 const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({

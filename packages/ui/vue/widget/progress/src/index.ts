@@ -18,13 +18,6 @@ import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
 import Icon from './assets/progress.svg'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-/*
- * Literal on purpose (tsm#21): the build-time component scan cannot yet read
- * a constant behind a bare import, so the contract's WIDGET_SERVICE_ID from
- * lib.repository.widget cannot appear in @component directly. The type
- * annotation ties this literal to the same contract; the value must match.
- */
-const WIDGET_SERVICE: typeof WIDGET_SERVICE_ID = 'daanse.widget'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
 import { ProgressWidgetInterface } from './api/ProgressWidgetInterface'
@@ -59,7 +52,7 @@ const WIDGET_TYPE = 'ProgressWidget'
  * provider.
  */
 @component({
-  service: [WIDGET_SERVICE],
+  service: [WIDGET_SERVICE_ID],
   properties: { 'widget.type': WIDGET_TYPE },
 })
 export class ProgressWidgetProvider implements WidgetProvider {

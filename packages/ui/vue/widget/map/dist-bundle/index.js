@@ -11,6 +11,7 @@ import { Payload, WidgetAction, WidgetActionInterface } from "org.eclipse.daanse
 import { Documentation, Attribute, Reference, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
 import { useRoute } from "vue-router";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
 function _mergeNamespaces(n, m2) {
   for (var i = 0; i < m2.length; i++) {
     const e = m2[i];
@@ -27120,7 +27121,6 @@ var __decorateClass = (decorators, target, key, kind) => {
   return result;
 };
 var __decorateParam = (index2, decorator) => (target, key) => decorator(target, key, index2);
-const WIDGET_SERVICE = "daanse.widget";
 const WIDGET_TYPE = "MapWidget";
 let MapWidgetProvider = class {
   constructor(events2, actions) {
@@ -27171,7 +27171,7 @@ __decorateClass([
 ], MapWidgetProvider.prototype, "unregister", 1);
 MapWidgetProvider = __decorateClass([
   component({
-    service: [WIDGET_SERVICE],
+    service: [WIDGET_SERVICE_ID],
     properties: { "widget.type": WIDGET_TYPE }
   }),
   __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),

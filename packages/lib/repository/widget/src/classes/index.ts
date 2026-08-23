@@ -33,13 +33,6 @@ export {
   type WidgetRepository,
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-/*
- * Literal on purpose (tsm#21): the build-time component scan cannot yet read
- * a constant behind a bare import. The type annotation ties this literal to
- * the contract; the value must match WIDGET_REPOSITORY in lib.api.widget.
- */
-const WIDGET_REPOSITORY_SERVICE: typeof WIDGET_REPOSITORY = 'WidgetRepository'
-
 /**
  * The palette as a whiteboard consumer, in the declarative form: one
  * dynamic 0..n reference instead of a hand-written tracker. The OSGi
@@ -56,7 +49,7 @@ const WIDGET_REPOSITORY_SERVICE: typeof WIDGET_REPOSITORY = 'WidgetRepository'
  * entry of the same type.
  */
 @component({
-  service: [WIDGET_REPOSITORY_SERVICE],
+  service: [WIDGET_REPOSITORY],
 })
 export class TrackedWidgetRepository implements WidgetRepository {
   private tracked: WidgetProvider[] = []
