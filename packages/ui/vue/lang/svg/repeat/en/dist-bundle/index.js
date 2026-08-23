@@ -1,35 +1,28 @@
-import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
-const RepeatableSvgWidget = { "title": "Repeatable SVG widget settings", "svgSrc": "Svg src", "repeations": "Repeations", "progress": "Progress", "activeItemFill": "Active item fill", "activeItemStroke": "Active item stroke", "defaultItemFill": "Default item fill", "defaultItemStroke": "Default item stroke" };
-const en = {
-  RepeatableSvgWidget
-};
-const SPRACHE = "en";
-const NAMENSRAUM = "svgRepeat";
-function activate$1({ services }) {
-  services.getRequired(I18NEXT).addResourceBundle(SPRACHE, NAMENSRAUM, en);
+import { I18NEXT as a } from "org.eclipse.daanse.board.app.lib.i18next";
+const c = { title: "Repeatable SVG widget settings", svgSrc: "Svg src", repeations: "Repeations", progress: "Progress", activeItemFill: "Active item fill", activeItemStroke: "Active item stroke", defaultItemFill: "Default item fill", defaultItemStroke: "Default item stroke" }, l = {
+  RepeatableSvgWidget: c
+}, n = "en", o = "svgRepeat";
+function r({ services: e }) {
+  e.getRequired(a).addResourceBundle(n, o, l);
 }
-function deactivate$1({ services }) {
-  services.getRequired(I18NEXT).removeResourceBundle(SPRACHE, NAMENSRAUM);
+function s({ services: e }) {
+  e.getRequired(a).removeResourceBundle(n, o);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const u = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.lang.svg.repeat.en";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.lang.svg.repeat.en");
-  await activate$1?.(context);
+  activate: r,
+  deactivate: s
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.ui.vue.lang.svg.repeat.en", g = "0.0.1-next.1";
+async function d(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, u, g, "ui.vue.lang.svg.repeat.en"), await r?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function m(e) {
+  await s?.(e);
 }
 export {
-  activate,
-  deactivate
+  d as activate,
+  m as deactivate
 };

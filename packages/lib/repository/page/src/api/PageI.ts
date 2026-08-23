@@ -9,17 +9,10 @@
 
 */
 import {LayoutI} from "org.eclipse.daanse.board.app.lib.repository.layout.page"
-export interface PageI{
-  id: string,
-  name: string,
-  icon: string,
-  description: string,
-  visibleInNavigation: boolean,
-  backgroundColor?: string,
-  backgroundImage?: string,
-  backgroundSize?: 'auto' | 'cover' | 'contain',
-  backgroundPosition?: string,
-  backgroundRepeat?: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y',
-  layoutSettings?: Record<string, any>,
-  layout:LayoutI
-}
+
+/*
+ * The contract lives in lib.api.page - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import type { PageI } from 'org.eclipse.daanse.board.app.lib.api.page'

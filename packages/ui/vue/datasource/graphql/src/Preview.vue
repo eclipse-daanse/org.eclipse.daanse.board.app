@@ -13,10 +13,23 @@ Contributors:
 <script setup lang="ts">
 import { onMounted, watch, ref, onBeforeUnmount, shallowRef } from 'vue';
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import {GraphiQL} from 'graphiql';
-import 'graphiql/style.css';
+/*
+ * GraphiQL is an embedded React IDE with its own monaco stack - megabytes
+ * nobody needs at boot. Loaded on demand, the first time a preview mounts;
+ * the static imports would put all of it into the module graph of every
+ * board start.
+ */
+const editorStack = () =>
+  Promise.all([
+    import('react'),
+    import('react-dom/client'),
+    import('graphiql'),
+    import('graphiql/style.css'),
+  ]).then(([react, reactDom, graphiql]) => ({
+    React: react.default,
+    createRoot: reactDom.createRoot,
+    GraphiQL: graphiql.GraphiQL,
+  }))
 
 const props = defineProps<{ dataSource: any }>();
 const data = ref(null as any);
@@ -66,7 +79,8 @@ onBeforeUnmount(() => {
     console.log('GraphQLPreview unmounted');
 });
 
-const mountGraphiQL = () => {
+const mountGraphiQL = async () => {
+    const { React, createRoot, GraphiQL } = await editorStack();
     const container = document.getElementById('preview');
     const root = createRoot(container!);
     const graphiql = React.createElement(GraphiQL, {

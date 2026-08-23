@@ -1,922 +1,550 @@
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+var yr = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function _i(i) {
+  return i && i.__esModule && Object.prototype.hasOwnProperty.call(i, "default") ? i.default : i;
 }
-var re = { exports: {} };
-var constants;
-var hasRequiredConstants;
-function requireConstants() {
-  if (hasRequiredConstants) return constants;
-  hasRequiredConstants = 1;
-  const SEMVER_SPEC_VERSION = "2.0.0";
-  const MAX_LENGTH = 256;
-  const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || /* istanbul ignore next */
-  9007199254740991;
-  const MAX_SAFE_COMPONENT_LENGTH = 16;
-  const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6;
-  const RELEASE_TYPES = [
-    "major",
-    "premajor",
-    "minor",
-    "preminor",
-    "patch",
-    "prepatch",
-    "prerelease"
-  ];
-  constants = {
-    MAX_LENGTH,
-    MAX_SAFE_COMPONENT_LENGTH,
-    MAX_SAFE_BUILD_LENGTH,
-    MAX_SAFE_INTEGER,
-    RELEASE_TYPES,
-    SEMVER_SPEC_VERSION,
+var Ie = { exports: {} }, Ge, wr;
+function Ne() {
+  if (wr) return Ge;
+  wr = 1;
+  const i = "2.0.0", e = 256, t = Number.MAX_SAFE_INTEGER || /* istanbul ignore next */
+  9007199254740991, r = 16, n = e - 6;
+  return Ge = {
+    MAX_LENGTH: e,
+    MAX_SAFE_COMPONENT_LENGTH: r,
+    MAX_SAFE_BUILD_LENGTH: n,
+    MAX_SAFE_INTEGER: t,
+    RELEASE_TYPES: [
+      "major",
+      "premajor",
+      "minor",
+      "preminor",
+      "patch",
+      "prepatch",
+      "prerelease"
+    ],
+    SEMVER_SPEC_VERSION: i,
     FLAG_INCLUDE_PRERELEASE: 1,
     FLAG_LOOSE: 2
-  };
-  return constants;
+  }, Ge;
 }
-var debug_1;
-var hasRequiredDebug;
-function requireDebug() {
-  if (hasRequiredDebug) return debug_1;
-  hasRequiredDebug = 1;
-  var define_process_env_default = {};
-  const debug = typeof process === "object" && define_process_env_default && define_process_env_default.NODE_DEBUG && /\bsemver\b/i.test(define_process_env_default.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
-  };
-  debug_1 = debug;
-  return debug_1;
+var ze, Er;
+function _e() {
+  if (Er) return ze;
+  Er = 1;
+  var i = {};
+  return ze = typeof process == "object" && i && i.NODE_DEBUG && /\bsemver\b/i.test(i.NODE_DEBUG) ? (...t) => console.error("SEMVER", ...t) : () => {
+  }, ze;
 }
-var hasRequiredRe;
-function requireRe() {
-  if (hasRequiredRe) return re.exports;
-  hasRequiredRe = 1;
-  (function(module, exports$1) {
+var Rr;
+function Re() {
+  return Rr || (Rr = 1, (function(i, e) {
     const {
-      MAX_SAFE_COMPONENT_LENGTH,
-      MAX_SAFE_BUILD_LENGTH,
-      MAX_LENGTH
-    } = requireConstants();
-    const debug = requireDebug();
-    exports$1 = module.exports = {};
-    const re2 = exports$1.re = [];
-    const safeRe = exports$1.safeRe = [];
-    const src = exports$1.src = [];
-    const safeSrc = exports$1.safeSrc = [];
-    const t = exports$1.t = {};
-    let R = 0;
-    const LETTERDASHNUMBER = "[a-zA-Z0-9-]";
-    const safeRegexReplacements = [
+      MAX_SAFE_COMPONENT_LENGTH: t,
+      MAX_SAFE_BUILD_LENGTH: r,
+      MAX_LENGTH: n
+    } = Ne(), s = _e();
+    e = i.exports = {};
+    const o = e.re = [], a = e.safeRe = [], f = e.src = [], d = e.safeSrc = [], c = e.t = {};
+    let l = 0;
+    const p = "[a-zA-Z0-9-]", m = [
       ["\\s", 1],
-      ["\\d", MAX_LENGTH],
-      [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH]
-    ];
-    const makeSafeRegex = (value) => {
-      for (const [token, max] of safeRegexReplacements) {
-        value = value.split(`${token}*`).join(`${token}{0,${max}}`).split(`${token}+`).join(`${token}{1,${max}}`);
-      }
-      return value;
+      ["\\d", n],
+      [p, r]
+    ], j = (N) => {
+      for (const [q, W] of m)
+        N = N.split(`${q}*`).join(`${q}{0,${W}}`).split(`${q}+`).join(`${q}{1,${W}}`);
+      return N;
+    }, w = (N, q, W) => {
+      const x = j(q), Z = l++;
+      s(N, Z, q), c[N] = Z, f[Z] = q, d[Z] = x, o[Z] = new RegExp(q, W ? "g" : void 0), a[Z] = new RegExp(x, W ? "g" : void 0);
     };
-    const createToken = (name, value, isGlobal) => {
-      const safe = makeSafeRegex(value);
-      const index = R++;
-      debug(name, index, value);
-      t[name] = index;
-      src[index] = value;
-      safeSrc[index] = safe;
-      re2[index] = new RegExp(value, isGlobal ? "g" : void 0);
-      safeRe[index] = new RegExp(safe, isGlobal ? "g" : void 0);
-    };
-    createToken("NUMERICIDENTIFIER", "0|[1-9]\\d*");
-    createToken("NUMERICIDENTIFIERLOOSE", "\\d+");
-    createToken("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
-    createToken("MAINVERSION", `(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})\\.(${src[t.NUMERICIDENTIFIER]})`);
-    createToken("MAINVERSIONLOOSE", `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})\\.(${src[t.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASEIDENTIFIER", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIER]})`);
-    createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t.NONNUMERICIDENTIFIER]}|${src[t.NUMERICIDENTIFIERLOOSE]})`);
-    createToken("PRERELEASE", `(?:-(${src[t.PRERELEASEIDENTIFIER]}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`);
-    createToken("PRERELEASELOOSE", `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`);
-    createToken("BUILDIDENTIFIER", `${LETTERDASHNUMBER}+`);
-    createToken("BUILD", `(?:\\+(${src[t.BUILDIDENTIFIER]}(?:\\.${src[t.BUILDIDENTIFIER]})*))`);
-    createToken("FULLPLAIN", `v?${src[t.MAINVERSION]}${src[t.PRERELEASE]}?${src[t.BUILD]}?`);
-    createToken("FULL", `^${src[t.FULLPLAIN]}$`);
-    createToken("LOOSEPLAIN", `[v=\\s]*${src[t.MAINVERSIONLOOSE]}${src[t.PRERELEASELOOSE]}?${src[t.BUILD]}?`);
-    createToken("LOOSE", `^${src[t.LOOSEPLAIN]}$`);
-    createToken("GTLT", "((?:<|>)?=?)");
-    createToken("XRANGEIDENTIFIERLOOSE", `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-    createToken("XRANGEIDENTIFIER", `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`);
-    createToken("XRANGEPLAIN", `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:\\.(${src[t.XRANGEIDENTIFIER]})(?:${src[t.PRERELEASE]})?${src[t.BUILD]}?)?)?`);
-    createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})(?:${src[t.PRERELEASELOOSE]})?${src[t.BUILD]}?)?)?`);
-    createToken("XRANGE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`);
-    createToken("XRANGELOOSE", `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`);
-    createToken("COERCEPLAIN", `${"(^|[^\\d])(\\d{1,"}${MAX_SAFE_COMPONENT_LENGTH}})(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`);
-    createToken("COERCE", `${src[t.COERCEPLAIN]}(?:$|[^\\d])`);
-    createToken("COERCEFULL", src[t.COERCEPLAIN] + `(?:${src[t.PRERELEASE]})?(?:${src[t.BUILD]})?(?:$|[^\\d])`);
-    createToken("COERCERTL", src[t.COERCE], true);
-    createToken("COERCERTLFULL", src[t.COERCEFULL], true);
-    createToken("LONETILDE", "(?:~>?)");
-    createToken("TILDETRIM", `(\\s*)${src[t.LONETILDE]}\\s+`, true);
-    exports$1.tildeTrimReplace = "$1~";
-    createToken("TILDE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`);
-    createToken("TILDELOOSE", `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`);
-    createToken("LONECARET", "(?:\\^)");
-    createToken("CARETTRIM", `(\\s*)${src[t.LONECARET]}\\s+`, true);
-    exports$1.caretTrimReplace = "$1^";
-    createToken("CARET", `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`);
-    createToken("CARETLOOSE", `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`);
-    createToken("COMPARATORLOOSE", `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`);
-    createToken("COMPARATOR", `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`);
-    createToken("COMPARATORTRIM", `(\\s*)${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true);
-    exports$1.comparatorTrimReplace = "$1$2$3";
-    createToken("HYPHENRANGE", `^\\s*(${src[t.XRANGEPLAIN]})\\s+-\\s+(${src[t.XRANGEPLAIN]})\\s*$`);
-    createToken("HYPHENRANGELOOSE", `^\\s*(${src[t.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t.XRANGEPLAINLOOSE]})\\s*$`);
-    createToken("STAR", "(<|>)?=?\\s*\\*");
-    createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
-    createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
-  })(re, re.exports);
-  return re.exports;
+    w("NUMERICIDENTIFIER", "0|[1-9]\\d*"), w("NUMERICIDENTIFIERLOOSE", "\\d+"), w("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${p}*`), w("MAINVERSION", `(${f[c.NUMERICIDENTIFIER]})\\.(${f[c.NUMERICIDENTIFIER]})\\.(${f[c.NUMERICIDENTIFIER]})`), w("MAINVERSIONLOOSE", `(${f[c.NUMERICIDENTIFIERLOOSE]})\\.(${f[c.NUMERICIDENTIFIERLOOSE]})\\.(${f[c.NUMERICIDENTIFIERLOOSE]})`), w("PRERELEASEIDENTIFIER", `(?:${f[c.NONNUMERICIDENTIFIER]}|${f[c.NUMERICIDENTIFIER]})`), w("PRERELEASEIDENTIFIERLOOSE", `(?:${f[c.NONNUMERICIDENTIFIER]}|${f[c.NUMERICIDENTIFIERLOOSE]})`), w("PRERELEASE", `(?:-(${f[c.PRERELEASEIDENTIFIER]}(?:\\.${f[c.PRERELEASEIDENTIFIER]})*))`), w("PRERELEASELOOSE", `(?:-?(${f[c.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${f[c.PRERELEASEIDENTIFIERLOOSE]})*))`), w("BUILDIDENTIFIER", `${p}+`), w("BUILD", `(?:\\+(${f[c.BUILDIDENTIFIER]}(?:\\.${f[c.BUILDIDENTIFIER]})*))`), w("FULLPLAIN", `v?${f[c.MAINVERSION]}${f[c.PRERELEASE]}?${f[c.BUILD]}?`), w("FULL", `^${f[c.FULLPLAIN]}$`), w("LOOSEPLAIN", `[v=\\s]*${f[c.MAINVERSIONLOOSE]}${f[c.PRERELEASELOOSE]}?${f[c.BUILD]}?`), w("LOOSE", `^${f[c.LOOSEPLAIN]}$`), w("GTLT", "((?:<|>)?=?)"), w("XRANGEIDENTIFIERLOOSE", `${f[c.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`), w("XRANGEIDENTIFIER", `${f[c.NUMERICIDENTIFIER]}|x|X|\\*`), w("XRANGEPLAIN", `[v=\\s]*(${f[c.XRANGEIDENTIFIER]})(?:\\.(${f[c.XRANGEIDENTIFIER]})(?:\\.(${f[c.XRANGEIDENTIFIER]})(?:${f[c.PRERELEASE]})?${f[c.BUILD]}?)?)?`), w("XRANGEPLAINLOOSE", `[v=\\s]*(${f[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${f[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${f[c.XRANGEIDENTIFIERLOOSE]})(?:${f[c.PRERELEASELOOSE]})?${f[c.BUILD]}?)?)?`), w("XRANGE", `^${f[c.GTLT]}\\s*${f[c.XRANGEPLAIN]}$`), w("XRANGELOOSE", `^${f[c.GTLT]}\\s*${f[c.XRANGEPLAINLOOSE]}$`), w("COERCEPLAIN", `(^|[^\\d])(\\d{1,${t}})(?:\\.(\\d{1,${t}}))?(?:\\.(\\d{1,${t}}))?`), w("COERCE", `${f[c.COERCEPLAIN]}(?:$|[^\\d])`), w("COERCEFULL", f[c.COERCEPLAIN] + `(?:${f[c.PRERELEASE]})?(?:${f[c.BUILD]})?(?:$|[^\\d])`), w("COERCERTL", f[c.COERCE], !0), w("COERCERTLFULL", f[c.COERCEFULL], !0), w("LONETILDE", "(?:~>?)"), w("TILDETRIM", `(\\s*)${f[c.LONETILDE]}\\s+`, !0), e.tildeTrimReplace = "$1~", w("TILDE", `^${f[c.LONETILDE]}${f[c.XRANGEPLAIN]}$`), w("TILDELOOSE", `^${f[c.LONETILDE]}${f[c.XRANGEPLAINLOOSE]}$`), w("LONECARET", "(?:\\^)"), w("CARETTRIM", `(\\s*)${f[c.LONECARET]}\\s+`, !0), e.caretTrimReplace = "$1^", w("CARET", `^${f[c.LONECARET]}${f[c.XRANGEPLAIN]}$`), w("CARETLOOSE", `^${f[c.LONECARET]}${f[c.XRANGEPLAINLOOSE]}$`), w("COMPARATORLOOSE", `^${f[c.GTLT]}\\s*(${f[c.LOOSEPLAIN]})$|^$`), w("COMPARATOR", `^${f[c.GTLT]}\\s*(${f[c.FULLPLAIN]})$|^$`), w("COMPARATORTRIM", `(\\s*)${f[c.GTLT]}\\s*(${f[c.LOOSEPLAIN]}|${f[c.XRANGEPLAIN]})`, !0), e.comparatorTrimReplace = "$1$2$3", w("HYPHENRANGE", `^\\s*(${f[c.XRANGEPLAIN]})\\s+-\\s+(${f[c.XRANGEPLAIN]})\\s*$`), w("HYPHENRANGELOOSE", `^\\s*(${f[c.XRANGEPLAINLOOSE]})\\s+-\\s+(${f[c.XRANGEPLAINLOOSE]})\\s*$`), w("STAR", "(<|>)?=?\\s*\\*"), w("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$"), w("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
+  })(Ie, Ie.exports)), Ie.exports;
 }
-var parseOptions_1;
-var hasRequiredParseOptions;
-function requireParseOptions() {
-  if (hasRequiredParseOptions) return parseOptions_1;
-  hasRequiredParseOptions = 1;
-  const looseOption = Object.freeze({ loose: true });
-  const emptyOpts = Object.freeze({});
-  const parseOptions = (options) => {
-    if (!options) {
-      return emptyOpts;
-    }
-    if (typeof options !== "object") {
-      return looseOption;
-    }
-    return options;
-  };
-  parseOptions_1 = parseOptions;
-  return parseOptions_1;
+var We, br;
+function Ht() {
+  if (br) return We;
+  br = 1;
+  const i = Object.freeze({ loose: !0 }), e = Object.freeze({});
+  return We = (r) => r ? typeof r != "object" ? i : r : e, We;
 }
-var identifiers;
-var hasRequiredIdentifiers;
-function requireIdentifiers() {
-  if (hasRequiredIdentifiers) return identifiers;
-  hasRequiredIdentifiers = 1;
-  const numeric2 = /^[0-9]+$/;
-  const compareIdentifiers = (a, b) => {
-    if (typeof a === "number" && typeof b === "number") {
-      return a === b ? 0 : a < b ? -1 : 1;
-    }
-    const anum = numeric2.test(a);
-    const bnum = numeric2.test(b);
-    if (anum && bnum) {
-      a = +a;
-      b = +b;
-    }
-    return a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
+var Xe, $r;
+function bn() {
+  if ($r) return Xe;
+  $r = 1;
+  const i = /^[0-9]+$/, e = (r, n) => {
+    if (typeof r == "number" && typeof n == "number")
+      return r === n ? 0 : r < n ? -1 : 1;
+    const s = i.test(r), o = i.test(n);
+    return s && o && (r = +r, n = +n), r === n ? 0 : s && !o ? -1 : o && !s ? 1 : r < n ? -1 : 1;
   };
-  const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a);
-  identifiers = {
-    compareIdentifiers,
-    rcompareIdentifiers
-  };
-  return identifiers;
+  return Xe = {
+    compareIdentifiers: e,
+    rcompareIdentifiers: (r, n) => e(n, r)
+  }, Xe;
 }
-var semver$2;
-var hasRequiredSemver$1;
-function requireSemver$1() {
-  if (hasRequiredSemver$1) return semver$2;
-  hasRequiredSemver$1 = 1;
-  const debug = requireDebug();
-  const { MAX_LENGTH, MAX_SAFE_INTEGER } = requireConstants();
-  const { safeRe: re2, t } = requireRe();
-  const parseOptions = requireParseOptions();
-  const { compareIdentifiers } = requireIdentifiers();
-  class SemVer {
-    constructor(version, options) {
-      options = parseOptions(options);
-      if (version instanceof SemVer) {
-        if (version.loose === !!options.loose && version.includePrerelease === !!options.includePrerelease) {
-          return version;
-        } else {
-          version = version.version;
-        }
-      } else if (typeof version !== "string") {
-        throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`);
-      }
-      if (version.length > MAX_LENGTH) {
+var Ye, Ir;
+function ee() {
+  if (Ir) return Ye;
+  Ir = 1;
+  const i = _e(), { MAX_LENGTH: e, MAX_SAFE_INTEGER: t } = Ne(), { safeRe: r, t: n } = Re(), s = Ht(), { compareIdentifiers: o } = bn();
+  class a {
+    constructor(d, c) {
+      if (c = s(c), d instanceof a) {
+        if (d.loose === !!c.loose && d.includePrerelease === !!c.includePrerelease)
+          return d;
+        d = d.version;
+      } else if (typeof d != "string")
+        throw new TypeError(`Invalid version. Must be a string. Got type "${typeof d}".`);
+      if (d.length > e)
         throw new TypeError(
-          `version is longer than ${MAX_LENGTH} characters`
+          `version is longer than ${e} characters`
         );
-      }
-      debug("SemVer", version, options);
-      this.options = options;
-      this.loose = !!options.loose;
-      this.includePrerelease = !!options.includePrerelease;
-      const m = version.trim().match(options.loose ? re2[t.LOOSE] : re2[t.FULL]);
-      if (!m) {
-        throw new TypeError(`Invalid Version: ${version}`);
-      }
-      this.raw = version;
-      this.major = +m[1];
-      this.minor = +m[2];
-      this.patch = +m[3];
-      if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+      i("SemVer", d, c), this.options = c, this.loose = !!c.loose, this.includePrerelease = !!c.includePrerelease;
+      const l = d.trim().match(c.loose ? r[n.LOOSE] : r[n.FULL]);
+      if (!l)
+        throw new TypeError(`Invalid Version: ${d}`);
+      if (this.raw = d, this.major = +l[1], this.minor = +l[2], this.patch = +l[3], this.major > t || this.major < 0)
         throw new TypeError("Invalid major version");
-      }
-      if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+      if (this.minor > t || this.minor < 0)
         throw new TypeError("Invalid minor version");
-      }
-      if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+      if (this.patch > t || this.patch < 0)
         throw new TypeError("Invalid patch version");
-      }
-      if (!m[4]) {
-        this.prerelease = [];
-      } else {
-        this.prerelease = m[4].split(".").map((id) => {
-          if (/^[0-9]+$/.test(id)) {
-            const num = +id;
-            if (num >= 0 && num < MAX_SAFE_INTEGER) {
-              return num;
-            }
-          }
-          return id;
-        });
-      }
-      this.build = m[5] ? m[5].split(".") : [];
-      this.format();
+      l[4] ? this.prerelease = l[4].split(".").map((p) => {
+        if (/^[0-9]+$/.test(p)) {
+          const m = +p;
+          if (m >= 0 && m < t)
+            return m;
+        }
+        return p;
+      }) : this.prerelease = [], this.build = l[5] ? l[5].split(".") : [], this.format();
     }
     format() {
-      this.version = `${this.major}.${this.minor}.${this.patch}`;
-      if (this.prerelease.length) {
-        this.version += `-${this.prerelease.join(".")}`;
-      }
-      return this.version;
+      return this.version = `${this.major}.${this.minor}.${this.patch}`, this.prerelease.length && (this.version += `-${this.prerelease.join(".")}`), this.version;
     }
     toString() {
       return this.version;
     }
-    compare(other) {
-      debug("SemVer.compare", this.version, this.options, other);
-      if (!(other instanceof SemVer)) {
-        if (typeof other === "string" && other === this.version) {
+    compare(d) {
+      if (i("SemVer.compare", this.version, this.options, d), !(d instanceof a)) {
+        if (typeof d == "string" && d === this.version)
           return 0;
-        }
-        other = new SemVer(other, this.options);
+        d = new a(d, this.options);
       }
-      if (other.version === this.version) {
+      return d.version === this.version ? 0 : this.compareMain(d) || this.comparePre(d);
+    }
+    compareMain(d) {
+      return d instanceof a || (d = new a(d, this.options)), this.major < d.major ? -1 : this.major > d.major ? 1 : this.minor < d.minor ? -1 : this.minor > d.minor ? 1 : this.patch < d.patch ? -1 : this.patch > d.patch ? 1 : 0;
+    }
+    comparePre(d) {
+      if (d instanceof a || (d = new a(d, this.options)), this.prerelease.length && !d.prerelease.length)
+        return -1;
+      if (!this.prerelease.length && d.prerelease.length)
+        return 1;
+      if (!this.prerelease.length && !d.prerelease.length)
         return 0;
-      }
-      return this.compareMain(other) || this.comparePre(other);
-    }
-    compareMain(other) {
-      if (!(other instanceof SemVer)) {
-        other = new SemVer(other, this.options);
-      }
-      if (this.major < other.major) {
-        return -1;
-      }
-      if (this.major > other.major) {
-        return 1;
-      }
-      if (this.minor < other.minor) {
-        return -1;
-      }
-      if (this.minor > other.minor) {
-        return 1;
-      }
-      if (this.patch < other.patch) {
-        return -1;
-      }
-      if (this.patch > other.patch) {
-        return 1;
-      }
-      return 0;
-    }
-    comparePre(other) {
-      if (!(other instanceof SemVer)) {
-        other = new SemVer(other, this.options);
-      }
-      if (this.prerelease.length && !other.prerelease.length) {
-        return -1;
-      } else if (!this.prerelease.length && other.prerelease.length) {
-        return 1;
-      } else if (!this.prerelease.length && !other.prerelease.length) {
-        return 0;
-      }
-      let i = 0;
+      let c = 0;
       do {
-        const a = this.prerelease[i];
-        const b = other.prerelease[i];
-        debug("prerelease compare", i, a, b);
-        if (a === void 0 && b === void 0) {
+        const l = this.prerelease[c], p = d.prerelease[c];
+        if (i("prerelease compare", c, l, p), l === void 0 && p === void 0)
           return 0;
-        } else if (b === void 0) {
+        if (p === void 0)
           return 1;
-        } else if (a === void 0) {
+        if (l === void 0)
           return -1;
-        } else if (a === b) {
+        if (l === p)
           continue;
-        } else {
-          return compareIdentifiers(a, b);
-        }
-      } while (++i);
+        return o(l, p);
+      } while (++c);
     }
-    compareBuild(other) {
-      if (!(other instanceof SemVer)) {
-        other = new SemVer(other, this.options);
-      }
-      let i = 0;
+    compareBuild(d) {
+      d instanceof a || (d = new a(d, this.options));
+      let c = 0;
       do {
-        const a = this.build[i];
-        const b = other.build[i];
-        debug("build compare", i, a, b);
-        if (a === void 0 && b === void 0) {
+        const l = this.build[c], p = d.build[c];
+        if (i("build compare", c, l, p), l === void 0 && p === void 0)
           return 0;
-        } else if (b === void 0) {
+        if (p === void 0)
           return 1;
-        } else if (a === void 0) {
+        if (l === void 0)
           return -1;
-        } else if (a === b) {
+        if (l === p)
           continue;
-        } else {
-          return compareIdentifiers(a, b);
-        }
-      } while (++i);
+        return o(l, p);
+      } while (++c);
     }
     // preminor will bump the version up to the next minor release, and immediately
     // down to pre-release. premajor and prepatch work the same way.
-    inc(release, identifier, identifierBase) {
-      if (release.startsWith("pre")) {
-        if (!identifier && identifierBase === false) {
+    inc(d, c, l) {
+      if (d.startsWith("pre")) {
+        if (!c && l === !1)
           throw new Error("invalid increment argument: identifier is empty");
-        }
-        if (identifier) {
-          const match = `-${identifier}`.match(this.options.loose ? re2[t.PRERELEASELOOSE] : re2[t.PRERELEASE]);
-          if (!match || match[1] !== identifier) {
-            throw new Error(`invalid identifier: ${identifier}`);
-          }
+        if (c) {
+          const p = `-${c}`.match(this.options.loose ? r[n.PRERELEASELOOSE] : r[n.PRERELEASE]);
+          if (!p || p[1] !== c)
+            throw new Error(`invalid identifier: ${c}`);
         }
       }
-      switch (release) {
+      switch (d) {
         case "premajor":
-          this.prerelease.length = 0;
-          this.patch = 0;
-          this.minor = 0;
-          this.major++;
-          this.inc("pre", identifier, identifierBase);
+          this.prerelease.length = 0, this.patch = 0, this.minor = 0, this.major++, this.inc("pre", c, l);
           break;
         case "preminor":
-          this.prerelease.length = 0;
-          this.patch = 0;
-          this.minor++;
-          this.inc("pre", identifier, identifierBase);
+          this.prerelease.length = 0, this.patch = 0, this.minor++, this.inc("pre", c, l);
           break;
         case "prepatch":
-          this.prerelease.length = 0;
-          this.inc("patch", identifier, identifierBase);
-          this.inc("pre", identifier, identifierBase);
+          this.prerelease.length = 0, this.inc("patch", c, l), this.inc("pre", c, l);
           break;
         // If the input is a non-prerelease version, this acts the same as
         // prepatch.
         case "prerelease":
-          if (this.prerelease.length === 0) {
-            this.inc("patch", identifier, identifierBase);
-          }
-          this.inc("pre", identifier, identifierBase);
+          this.prerelease.length === 0 && this.inc("patch", c, l), this.inc("pre", c, l);
           break;
         case "release":
-          if (this.prerelease.length === 0) {
+          if (this.prerelease.length === 0)
             throw new Error(`version ${this.raw} is not a prerelease`);
-          }
           this.prerelease.length = 0;
           break;
         case "major":
-          if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) {
-            this.major++;
-          }
-          this.minor = 0;
-          this.patch = 0;
-          this.prerelease = [];
+          (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) && this.major++, this.minor = 0, this.patch = 0, this.prerelease = [];
           break;
         case "minor":
-          if (this.patch !== 0 || this.prerelease.length === 0) {
-            this.minor++;
-          }
-          this.patch = 0;
-          this.prerelease = [];
+          (this.patch !== 0 || this.prerelease.length === 0) && this.minor++, this.patch = 0, this.prerelease = [];
           break;
         case "patch":
-          if (this.prerelease.length === 0) {
-            this.patch++;
-          }
-          this.prerelease = [];
+          this.prerelease.length === 0 && this.patch++, this.prerelease = [];
           break;
         // This probably shouldn't be used publicly.
         // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
         case "pre": {
-          const base = Number(identifierBase) ? 1 : 0;
-          if (this.prerelease.length === 0) {
-            this.prerelease = [base];
-          } else {
-            let i = this.prerelease.length;
-            while (--i >= 0) {
-              if (typeof this.prerelease[i] === "number") {
-                this.prerelease[i]++;
-                i = -2;
-              }
-            }
-            if (i === -1) {
-              if (identifier === this.prerelease.join(".") && identifierBase === false) {
+          const p = Number(l) ? 1 : 0;
+          if (this.prerelease.length === 0)
+            this.prerelease = [p];
+          else {
+            let m = this.prerelease.length;
+            for (; --m >= 0; )
+              typeof this.prerelease[m] == "number" && (this.prerelease[m]++, m = -2);
+            if (m === -1) {
+              if (c === this.prerelease.join(".") && l === !1)
                 throw new Error("invalid increment argument: identifier already exists");
-              }
-              this.prerelease.push(base);
+              this.prerelease.push(p);
             }
           }
-          if (identifier) {
-            let prerelease = [identifier, base];
-            if (identifierBase === false) {
-              prerelease = [identifier];
-            }
-            if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
-              if (isNaN(this.prerelease[1])) {
-                this.prerelease = prerelease;
-              }
-            } else {
-              this.prerelease = prerelease;
-            }
+          if (c) {
+            let m = [c, p];
+            l === !1 && (m = [c]), o(this.prerelease[0], c) === 0 ? isNaN(this.prerelease[1]) && (this.prerelease = m) : this.prerelease = m;
           }
           break;
         }
         default:
-          throw new Error(`invalid increment argument: ${release}`);
+          throw new Error(`invalid increment argument: ${d}`);
       }
-      this.raw = this.format();
-      if (this.build.length) {
-        this.raw += `+${this.build.join(".")}`;
-      }
-      return this;
+      return this.raw = this.format(), this.build.length && (this.raw += `+${this.build.join(".")}`), this;
     }
   }
-  semver$2 = SemVer;
-  return semver$2;
+  return Ye = a, Ye;
 }
-var parse_1;
-var hasRequiredParse;
-function requireParse() {
-  if (hasRequiredParse) return parse_1;
-  hasRequiredParse = 1;
-  const SemVer = requireSemver$1();
-  const parse = (version, options, throwErrors = false) => {
-    if (version instanceof SemVer) {
-      return version;
-    }
+var He, Or;
+function he() {
+  if (Or) return He;
+  Or = 1;
+  const i = ee();
+  return He = (t, r, n = !1) => {
+    if (t instanceof i)
+      return t;
     try {
-      return new SemVer(version, options);
-    } catch (er) {
-      if (!throwErrors) {
+      return new i(t, r);
+    } catch (s) {
+      if (!n)
         return null;
-      }
-      throw er;
+      throw s;
     }
-  };
-  parse_1 = parse;
-  return parse_1;
+  }, He;
 }
-var valid_1;
-var hasRequiredValid$1;
-function requireValid$1() {
-  if (hasRequiredValid$1) return valid_1;
-  hasRequiredValid$1 = 1;
-  const parse = requireParse();
-  const valid2 = (version, options) => {
-    const v = parse(version, options);
-    return v ? v.version : null;
-  };
-  valid_1 = valid2;
-  return valid_1;
+var Ke, Sr;
+function Pi() {
+  if (Sr) return Ke;
+  Sr = 1;
+  const i = he();
+  return Ke = (t, r) => {
+    const n = i(t, r);
+    return n ? n.version : null;
+  }, Ke;
 }
-var clean_1;
-var hasRequiredClean;
-function requireClean() {
-  if (hasRequiredClean) return clean_1;
-  hasRequiredClean = 1;
-  const parse = requireParse();
-  const clean = (version, options) => {
-    const s = parse(version.trim().replace(/^[=v]+/, ""), options);
-    return s ? s.version : null;
-  };
-  clean_1 = clean;
-  return clean_1;
+var Je, Cr;
+function ji() {
+  if (Cr) return Je;
+  Cr = 1;
+  const i = he();
+  return Je = (t, r) => {
+    const n = i(t.trim().replace(/^[=v]+/, ""), r);
+    return n ? n.version : null;
+  }, Je;
 }
-var inc_1;
-var hasRequiredInc;
-function requireInc() {
-  if (hasRequiredInc) return inc_1;
-  hasRequiredInc = 1;
-  const SemVer = requireSemver$1();
-  const inc = (version, release, options, identifier, identifierBase) => {
-    if (typeof options === "string") {
-      identifierBase = identifier;
-      identifier = options;
-      options = void 0;
-    }
+var Ze, Ar;
+function ki() {
+  if (Ar) return Ze;
+  Ar = 1;
+  const i = ee();
+  return Ze = (t, r, n, s, o) => {
+    typeof n == "string" && (o = s, s = n, n = void 0);
     try {
-      return new SemVer(
-        version instanceof SemVer ? version.version : version,
-        options
-      ).inc(release, identifier, identifierBase).version;
-    } catch (er) {
+      return new i(
+        t instanceof i ? t.version : t,
+        n
+      ).inc(r, s, o).version;
+    } catch {
       return null;
     }
-  };
-  inc_1 = inc;
-  return inc_1;
+  }, Ze;
 }
-var diff_1;
-var hasRequiredDiff;
-function requireDiff() {
-  if (hasRequiredDiff) return diff_1;
-  hasRequiredDiff = 1;
-  const parse = requireParse();
-  const diff = (version1, version2) => {
-    const v1 = parse(version1, null, true);
-    const v2 = parse(version2, null, true);
-    const comparison = v1.compare(v2);
-    if (comparison === 0) {
+var Qe, Mr;
+function Di() {
+  if (Mr) return Qe;
+  Mr = 1;
+  const i = he();
+  return Qe = (t, r) => {
+    const n = i(t, null, !0), s = i(r, null, !0), o = n.compare(s);
+    if (o === 0)
       return null;
-    }
-    const v1Higher = comparison > 0;
-    const highVersion = v1Higher ? v1 : v2;
-    const lowVersion = v1Higher ? v2 : v1;
-    const highHasPre = !!highVersion.prerelease.length;
-    const lowHasPre = !!lowVersion.prerelease.length;
-    if (lowHasPre && !highHasPre) {
-      if (!lowVersion.patch && !lowVersion.minor) {
+    const a = o > 0, f = a ? n : s, d = a ? s : n, c = !!f.prerelease.length;
+    if (!!d.prerelease.length && !c) {
+      if (!d.patch && !d.minor)
         return "major";
-      }
-      if (lowVersion.compareMain(highVersion) === 0) {
-        if (lowVersion.minor && !lowVersion.patch) {
-          return "minor";
-        }
-        return "patch";
-      }
+      if (d.compareMain(f) === 0)
+        return d.minor && !d.patch ? "minor" : "patch";
     }
-    const prefix = highHasPre ? "pre" : "";
-    if (v1.major !== v2.major) {
-      return prefix + "major";
-    }
-    if (v1.minor !== v2.minor) {
-      return prefix + "minor";
-    }
-    if (v1.patch !== v2.patch) {
-      return prefix + "patch";
-    }
-    return "prerelease";
-  };
-  diff_1 = diff;
-  return diff_1;
+    const p = c ? "pre" : "";
+    return n.major !== s.major ? p + "major" : n.minor !== s.minor ? p + "minor" : n.patch !== s.patch ? p + "patch" : "prerelease";
+  }, Qe;
 }
-var major_1;
-var hasRequiredMajor;
-function requireMajor() {
-  if (hasRequiredMajor) return major_1;
-  hasRequiredMajor = 1;
-  const SemVer = requireSemver$1();
-  const major = (a, loose) => new SemVer(a, loose).major;
-  major_1 = major;
-  return major_1;
+var et, Tr;
+function qi() {
+  if (Tr) return et;
+  Tr = 1;
+  const i = ee();
+  return et = (t, r) => new i(t, r).major, et;
 }
-var minor_1;
-var hasRequiredMinor;
-function requireMinor() {
-  if (hasRequiredMinor) return minor_1;
-  hasRequiredMinor = 1;
-  const SemVer = requireSemver$1();
-  const minor = (a, loose) => new SemVer(a, loose).minor;
-  minor_1 = minor;
-  return minor_1;
+var tt, Lr;
+function Fi() {
+  if (Lr) return tt;
+  Lr = 1;
+  const i = ee();
+  return tt = (t, r) => new i(t, r).minor, tt;
 }
-var patch_1;
-var hasRequiredPatch;
-function requirePatch() {
-  if (hasRequiredPatch) return patch_1;
-  hasRequiredPatch = 1;
-  const SemVer = requireSemver$1();
-  const patch = (a, loose) => new SemVer(a, loose).patch;
-  patch_1 = patch;
-  return patch_1;
+var rt, Nr;
+function xi() {
+  if (Nr) return rt;
+  Nr = 1;
+  const i = ee();
+  return rt = (t, r) => new i(t, r).patch, rt;
 }
-var prerelease_1;
-var hasRequiredPrerelease;
-function requirePrerelease() {
-  if (hasRequiredPrerelease) return prerelease_1;
-  hasRequiredPrerelease = 1;
-  const parse = requireParse();
-  const prerelease = (version, options) => {
-    const parsed = parse(version, options);
-    return parsed && parsed.prerelease.length ? parsed.prerelease : null;
-  };
-  prerelease_1 = prerelease;
-  return prerelease_1;
+var nt, _r;
+function Bi() {
+  if (_r) return nt;
+  _r = 1;
+  const i = he();
+  return nt = (t, r) => {
+    const n = i(t, r);
+    return n && n.prerelease.length ? n.prerelease : null;
+  }, nt;
 }
-var compare_1;
-var hasRequiredCompare;
-function requireCompare() {
-  if (hasRequiredCompare) return compare_1;
-  hasRequiredCompare = 1;
-  const SemVer = requireSemver$1();
-  const compare2 = (a, b, loose) => new SemVer(a, loose).compare(new SemVer(b, loose));
-  compare_1 = compare2;
-  return compare_1;
+var it, Pr;
+function re() {
+  if (Pr) return it;
+  Pr = 1;
+  const i = ee();
+  return it = (t, r, n) => new i(t, n).compare(new i(r, n)), it;
 }
-var rcompare_1;
-var hasRequiredRcompare;
-function requireRcompare() {
-  if (hasRequiredRcompare) return rcompare_1;
-  hasRequiredRcompare = 1;
-  const compare2 = requireCompare();
-  const rcompare = (a, b, loose) => compare2(b, a, loose);
-  rcompare_1 = rcompare;
-  return rcompare_1;
+var st, jr;
+function Vi() {
+  if (jr) return st;
+  jr = 1;
+  const i = re();
+  return st = (t, r, n) => i(r, t, n), st;
 }
-var compareLoose_1;
-var hasRequiredCompareLoose;
-function requireCompareLoose() {
-  if (hasRequiredCompareLoose) return compareLoose_1;
-  hasRequiredCompareLoose = 1;
-  const compare2 = requireCompare();
-  const compareLoose = (a, b) => compare2(a, b, true);
-  compareLoose_1 = compareLoose;
-  return compareLoose_1;
+var ot, kr;
+function Ui() {
+  if (kr) return ot;
+  kr = 1;
+  const i = re();
+  return ot = (t, r) => i(t, r, !0), ot;
 }
-var compareBuild_1;
-var hasRequiredCompareBuild;
-function requireCompareBuild() {
-  if (hasRequiredCompareBuild) return compareBuild_1;
-  hasRequiredCompareBuild = 1;
-  const SemVer = requireSemver$1();
-  const compareBuild = (a, b, loose) => {
-    const versionA = new SemVer(a, loose);
-    const versionB = new SemVer(b, loose);
-    return versionA.compare(versionB) || versionA.compareBuild(versionB);
-  };
-  compareBuild_1 = compareBuild;
-  return compareBuild_1;
+var at, Dr;
+function Kt() {
+  if (Dr) return at;
+  Dr = 1;
+  const i = ee();
+  return at = (t, r, n) => {
+    const s = new i(t, n), o = new i(r, n);
+    return s.compare(o) || s.compareBuild(o);
+  }, at;
 }
-var sort_1;
-var hasRequiredSort;
-function requireSort() {
-  if (hasRequiredSort) return sort_1;
-  hasRequiredSort = 1;
-  const compareBuild = requireCompareBuild();
-  const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
-  sort_1 = sort;
-  return sort_1;
+var ct, qr;
+function Gi() {
+  if (qr) return ct;
+  qr = 1;
+  const i = Kt();
+  return ct = (t, r) => t.sort((n, s) => i(n, s, r)), ct;
 }
-var rsort_1;
-var hasRequiredRsort;
-function requireRsort() {
-  if (hasRequiredRsort) return rsort_1;
-  hasRequiredRsort = 1;
-  const compareBuild = requireCompareBuild();
-  const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
-  rsort_1 = rsort;
-  return rsort_1;
+var ft, Fr;
+function zi() {
+  if (Fr) return ft;
+  Fr = 1;
+  const i = Kt();
+  return ft = (t, r) => t.sort((n, s) => i(s, n, r)), ft;
 }
-var gt_1;
-var hasRequiredGt;
-function requireGt() {
-  if (hasRequiredGt) return gt_1;
-  hasRequiredGt = 1;
-  const compare2 = requireCompare();
-  const gt = (a, b, loose) => compare2(a, b, loose) > 0;
-  gt_1 = gt;
-  return gt_1;
+var dt, xr;
+function Pe() {
+  if (xr) return dt;
+  xr = 1;
+  const i = re();
+  return dt = (t, r, n) => i(t, r, n) > 0, dt;
 }
-var lt_1;
-var hasRequiredLt;
-function requireLt() {
-  if (hasRequiredLt) return lt_1;
-  hasRequiredLt = 1;
-  const compare2 = requireCompare();
-  const lt = (a, b, loose) => compare2(a, b, loose) < 0;
-  lt_1 = lt;
-  return lt_1;
+var ut, Br;
+function Jt() {
+  if (Br) return ut;
+  Br = 1;
+  const i = re();
+  return ut = (t, r, n) => i(t, r, n) < 0, ut;
 }
-var eq_1;
-var hasRequiredEq;
-function requireEq() {
-  if (hasRequiredEq) return eq_1;
-  hasRequiredEq = 1;
-  const compare2 = requireCompare();
-  const eq = (a, b, loose) => compare2(a, b, loose) === 0;
-  eq_1 = eq;
-  return eq_1;
+var lt, Vr;
+function $n() {
+  if (Vr) return lt;
+  Vr = 1;
+  const i = re();
+  return lt = (t, r, n) => i(t, r, n) === 0, lt;
 }
-var neq_1;
-var hasRequiredNeq;
-function requireNeq() {
-  if (hasRequiredNeq) return neq_1;
-  hasRequiredNeq = 1;
-  const compare2 = requireCompare();
-  const neq = (a, b, loose) => compare2(a, b, loose) !== 0;
-  neq_1 = neq;
-  return neq_1;
+var ht, Ur;
+function In() {
+  if (Ur) return ht;
+  Ur = 1;
+  const i = re();
+  return ht = (t, r, n) => i(t, r, n) !== 0, ht;
 }
-var gte_1;
-var hasRequiredGte;
-function requireGte() {
-  if (hasRequiredGte) return gte_1;
-  hasRequiredGte = 1;
-  const compare2 = requireCompare();
-  const gte = (a, b, loose) => compare2(a, b, loose) >= 0;
-  gte_1 = gte;
-  return gte_1;
+var pt, Gr;
+function Zt() {
+  if (Gr) return pt;
+  Gr = 1;
+  const i = re();
+  return pt = (t, r, n) => i(t, r, n) >= 0, pt;
 }
-var lte_1;
-var hasRequiredLte;
-function requireLte() {
-  if (hasRequiredLte) return lte_1;
-  hasRequiredLte = 1;
-  const compare2 = requireCompare();
-  const lte = (a, b, loose) => compare2(a, b, loose) <= 0;
-  lte_1 = lte;
-  return lte_1;
+var gt, zr;
+function Qt() {
+  if (zr) return gt;
+  zr = 1;
+  const i = re();
+  return gt = (t, r, n) => i(t, r, n) <= 0, gt;
 }
-var cmp_1;
-var hasRequiredCmp;
-function requireCmp() {
-  if (hasRequiredCmp) return cmp_1;
-  hasRequiredCmp = 1;
-  const eq = requireEq();
-  const neq = requireNeq();
-  const gt = requireGt();
-  const gte = requireGte();
-  const lt = requireLt();
-  const lte = requireLte();
-  const cmp = (a, op, b, loose) => {
-    switch (op) {
+var mt, Wr;
+function On() {
+  if (Wr) return mt;
+  Wr = 1;
+  const i = $n(), e = In(), t = Pe(), r = Zt(), n = Jt(), s = Qt();
+  return mt = (a, f, d, c) => {
+    switch (f) {
       case "===":
-        if (typeof a === "object") {
-          a = a.version;
-        }
-        if (typeof b === "object") {
-          b = b.version;
-        }
-        return a === b;
+        return typeof a == "object" && (a = a.version), typeof d == "object" && (d = d.version), a === d;
       case "!==":
-        if (typeof a === "object") {
-          a = a.version;
-        }
-        if (typeof b === "object") {
-          b = b.version;
-        }
-        return a !== b;
+        return typeof a == "object" && (a = a.version), typeof d == "object" && (d = d.version), a !== d;
       case "":
       case "=":
       case "==":
-        return eq(a, b, loose);
+        return i(a, d, c);
       case "!=":
-        return neq(a, b, loose);
+        return e(a, d, c);
       case ">":
-        return gt(a, b, loose);
+        return t(a, d, c);
       case ">=":
-        return gte(a, b, loose);
+        return r(a, d, c);
       case "<":
-        return lt(a, b, loose);
+        return n(a, d, c);
       case "<=":
-        return lte(a, b, loose);
+        return s(a, d, c);
       default:
-        throw new TypeError(`Invalid operator: ${op}`);
+        throw new TypeError(`Invalid operator: ${f}`);
     }
-  };
-  cmp_1 = cmp;
-  return cmp_1;
+  }, mt;
 }
-var coerce_1;
-var hasRequiredCoerce;
-function requireCoerce() {
-  if (hasRequiredCoerce) return coerce_1;
-  hasRequiredCoerce = 1;
-  const SemVer = requireSemver$1();
-  const parse = requireParse();
-  const { safeRe: re2, t } = requireRe();
-  const coerce = (version, options) => {
-    if (version instanceof SemVer) {
-      return version;
-    }
-    if (typeof version === "number") {
-      version = String(version);
-    }
-    if (typeof version !== "string") {
+var vt, Xr;
+function Wi() {
+  if (Xr) return vt;
+  Xr = 1;
+  const i = ee(), e = he(), { safeRe: t, t: r } = Re();
+  return vt = (s, o) => {
+    if (s instanceof i)
+      return s;
+    if (typeof s == "number" && (s = String(s)), typeof s != "string")
       return null;
+    o = o || {};
+    let a = null;
+    if (!o.rtl)
+      a = s.match(o.includePrerelease ? t[r.COERCEFULL] : t[r.COERCE]);
+    else {
+      const m = o.includePrerelease ? t[r.COERCERTLFULL] : t[r.COERCERTL];
+      let j;
+      for (; (j = m.exec(s)) && (!a || a.index + a[0].length !== s.length); )
+        (!a || j.index + j[0].length !== a.index + a[0].length) && (a = j), m.lastIndex = j.index + j[1].length + j[2].length;
+      m.lastIndex = -1;
     }
-    options = options || {};
-    let match = null;
-    if (!options.rtl) {
-      match = version.match(options.includePrerelease ? re2[t.COERCEFULL] : re2[t.COERCE]);
-    } else {
-      const coerceRtlRegex = options.includePrerelease ? re2[t.COERCERTLFULL] : re2[t.COERCERTL];
-      let next;
-      while ((next = coerceRtlRegex.exec(version)) && (!match || match.index + match[0].length !== version.length)) {
-        if (!match || next.index + next[0].length !== match.index + match[0].length) {
-          match = next;
-        }
-        coerceRtlRegex.lastIndex = next.index + next[1].length + next[2].length;
-      }
-      coerceRtlRegex.lastIndex = -1;
-    }
-    if (match === null) {
+    if (a === null)
       return null;
-    }
-    const major = match[2];
-    const minor = match[3] || "0";
-    const patch = match[4] || "0";
-    const prerelease = options.includePrerelease && match[5] ? `-${match[5]}` : "";
-    const build = options.includePrerelease && match[6] ? `+${match[6]}` : "";
-    return parse(`${major}.${minor}.${patch}${prerelease}${build}`, options);
-  };
-  coerce_1 = coerce;
-  return coerce_1;
+    const f = a[2], d = a[3] || "0", c = a[4] || "0", l = o.includePrerelease && a[5] ? `-${a[5]}` : "", p = o.includePrerelease && a[6] ? `+${a[6]}` : "";
+    return e(`${f}.${d}.${c}${l}${p}`, o);
+  }, vt;
 }
-var lrucache;
-var hasRequiredLrucache;
-function requireLrucache() {
-  if (hasRequiredLrucache) return lrucache;
-  hasRequiredLrucache = 1;
-  class LRUCache {
+var yt, Yr;
+function Xi() {
+  if (Yr) return yt;
+  Yr = 1;
+  class i {
     constructor() {
-      this.max = 1e3;
-      this.map = /* @__PURE__ */ new Map();
+      this.max = 1e3, this.map = /* @__PURE__ */ new Map();
     }
-    get(key) {
-      const value = this.map.get(key);
-      if (value === void 0) {
-        return void 0;
-      } else {
-        this.map.delete(key);
-        this.map.set(key, value);
-        return value;
-      }
+    get(t) {
+      const r = this.map.get(t);
+      if (r !== void 0)
+        return this.map.delete(t), this.map.set(t, r), r;
     }
-    delete(key) {
-      return this.map.delete(key);
+    delete(t) {
+      return this.map.delete(t);
     }
-    set(key, value) {
-      const deleted = this.delete(key);
-      if (!deleted && value !== void 0) {
+    set(t, r) {
+      if (!this.delete(t) && r !== void 0) {
         if (this.map.size >= this.max) {
-          const firstKey = this.map.keys().next().value;
-          this.delete(firstKey);
+          const s = this.map.keys().next().value;
+          this.delete(s);
         }
-        this.map.set(key, value);
+        this.map.set(t, r);
       }
       return this;
     }
   }
-  lrucache = LRUCache;
-  return lrucache;
+  return yt = i, yt;
 }
-var range;
-var hasRequiredRange;
-function requireRange() {
-  if (hasRequiredRange) return range;
-  hasRequiredRange = 1;
-  const SPACE_CHARACTERS = /\s+/g;
-  class Range {
-    constructor(range2, options) {
-      options = parseOptions(options);
-      if (range2 instanceof Range) {
-        if (range2.loose === !!options.loose && range2.includePrerelease === !!options.includePrerelease) {
-          return range2;
-        } else {
-          return new Range(range2.raw, options);
-        }
-      }
-      if (range2 instanceof Comparator) {
-        this.raw = range2.value;
-        this.set = [[range2]];
-        this.formatted = void 0;
-        return this;
-      }
-      this.options = options;
-      this.loose = !!options.loose;
-      this.includePrerelease = !!options.includePrerelease;
-      this.raw = range2.trim().replace(SPACE_CHARACTERS, " ");
-      this.set = this.raw.split("||").map((r) => this.parseRange(r.trim())).filter((c) => c.length);
-      if (!this.set.length) {
+var wt, Hr;
+function ne() {
+  if (Hr) return wt;
+  Hr = 1;
+  const i = /\s+/g;
+  class e {
+    constructor(v, A) {
+      if (A = n(A), v instanceof e)
+        return v.loose === !!A.loose && v.includePrerelease === !!A.includePrerelease ? v : new e(v.raw, A);
+      if (v instanceof s)
+        return this.raw = v.value, this.set = [[v]], this.formatted = void 0, this;
+      if (this.options = A, this.loose = !!A.loose, this.includePrerelease = !!A.includePrerelease, this.raw = v.trim().replace(i, " "), this.set = this.raw.split("||").map((S) => this.parseRange(S.trim())).filter((S) => S.length), !this.set.length)
         throw new TypeError(`Invalid SemVer Range: ${this.raw}`);
-      }
       if (this.set.length > 1) {
-        const first = this.set[0];
-        this.set = this.set.filter((c) => !isNullSet(c[0]));
-        if (this.set.length === 0) {
-          this.set = [first];
-        } else if (this.set.length > 1) {
-          for (const c of this.set) {
-            if (c.length === 1 && isAny(c[0])) {
-              this.set = [c];
+        const S = this.set[0];
+        if (this.set = this.set.filter((M) => !w(M[0])), this.set.length === 0)
+          this.set = [S];
+        else if (this.set.length > 1) {
+          for (const M of this.set)
+            if (M.length === 1 && N(M[0])) {
+              this.set = [M];
               break;
             }
-          }
         }
       }
       this.formatted = void 0;
@@ -924,17 +552,11 @@ function requireRange() {
     get range() {
       if (this.formatted === void 0) {
         this.formatted = "";
-        for (let i = 0; i < this.set.length; i++) {
-          if (i > 0) {
-            this.formatted += "||";
-          }
-          const comps = this.set[i];
-          for (let k = 0; k < comps.length; k++) {
-            if (k > 0) {
-              this.formatted += " ";
-            }
-            this.formatted += comps[k].toString().trim();
-          }
+        for (let v = 0; v < this.set.length; v++) {
+          v > 0 && (this.formatted += "||");
+          const A = this.set[v];
+          for (let S = 0; S < A.length; S++)
+            S > 0 && (this.formatted += " "), this.formatted += A[S].toString().trim();
         }
       }
       return this.formatted;
@@ -945,1111 +567,541 @@ function requireRange() {
     toString() {
       return this.range;
     }
-    parseRange(range2) {
-      const memoOpts = (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) | (this.options.loose && FLAG_LOOSE);
-      const memoKey = memoOpts + ":" + range2;
-      const cached = cache.get(memoKey);
-      if (cached) {
-        return cached;
+    parseRange(v) {
+      const S = ((this.options.includePrerelease && m) | (this.options.loose && j)) + ":" + v, M = r.get(S);
+      if (M)
+        return M;
+      const C = this.options.loose, L = C ? f[d.HYPHENRANGELOOSE] : f[d.HYPHENRANGE];
+      v = v.replace(L, me(this.options.includePrerelease)), o("hyphen replace", v), v = v.replace(f[d.COMPARATORTRIM], c), o("comparator trim", v), v = v.replace(f[d.TILDETRIM], l), o("tilde trim", v), v = v.replace(f[d.CARETTRIM], p), o("caret trim", v);
+      let F = v.split(" ").map((z) => W(z, this.options)).join(" ").split(/\s+/).map((z) => ge(z, this.options));
+      C && (F = F.filter((z) => (o("loose invalid filter", z, this.options), !!z.match(f[d.COMPARATORLOOSE])))), o("range list", F);
+      const P = /* @__PURE__ */ new Map(), E = F.map((z) => new s(z, this.options));
+      for (const z of E) {
+        if (w(z))
+          return [z];
+        P.set(z.value, z);
       }
-      const loose = this.options.loose;
-      const hr = loose ? re2[t.HYPHENRANGELOOSE] : re2[t.HYPHENRANGE];
-      range2 = range2.replace(hr, hyphenReplace(this.options.includePrerelease));
-      debug("hyphen replace", range2);
-      range2 = range2.replace(re2[t.COMPARATORTRIM], comparatorTrimReplace);
-      debug("comparator trim", range2);
-      range2 = range2.replace(re2[t.TILDETRIM], tildeTrimReplace);
-      debug("tilde trim", range2);
-      range2 = range2.replace(re2[t.CARETTRIM], caretTrimReplace);
-      debug("caret trim", range2);
-      let rangeList = range2.split(" ").map((comp) => parseComparator(comp, this.options)).join(" ").split(/\s+/).map((comp) => replaceGTE0(comp, this.options));
-      if (loose) {
-        rangeList = rangeList.filter((comp) => {
-          debug("loose invalid filter", comp, this.options);
-          return !!comp.match(re2[t.COMPARATORLOOSE]);
-        });
-      }
-      debug("range list", rangeList);
-      const rangeMap = /* @__PURE__ */ new Map();
-      const comparators = rangeList.map((comp) => new Comparator(comp, this.options));
-      for (const comp of comparators) {
-        if (isNullSet(comp)) {
-          return [comp];
-        }
-        rangeMap.set(comp.value, comp);
-      }
-      if (rangeMap.size > 1 && rangeMap.has("")) {
-        rangeMap.delete("");
-      }
-      const result = [...rangeMap.values()];
-      cache.set(memoKey, result);
-      return result;
+      P.size > 1 && P.has("") && P.delete("");
+      const G = [...P.values()];
+      return r.set(S, G), G;
     }
-    intersects(range2, options) {
-      if (!(range2 instanceof Range)) {
+    intersects(v, A) {
+      if (!(v instanceof e))
         throw new TypeError("a Range is required");
-      }
-      return this.set.some((thisComparators) => {
-        return isSatisfiable(thisComparators, options) && range2.set.some((rangeComparators) => {
-          return isSatisfiable(rangeComparators, options) && thisComparators.every((thisComparator) => {
-            return rangeComparators.every((rangeComparator) => {
-              return thisComparator.intersects(rangeComparator, options);
-            });
-          });
-        });
-      });
+      return this.set.some((S) => q(S, A) && v.set.some((M) => q(M, A) && S.every((C) => M.every((L) => C.intersects(L, A)))));
     }
     // if ANY of the sets match ALL of its comparators, then pass
-    test(version) {
-      if (!version) {
-        return false;
-      }
-      if (typeof version === "string") {
+    test(v) {
+      if (!v)
+        return !1;
+      if (typeof v == "string")
         try {
-          version = new SemVer(version, this.options);
-        } catch (er) {
-          return false;
+          v = new a(v, this.options);
+        } catch {
+          return !1;
         }
-      }
-      for (let i = 0; i < this.set.length; i++) {
-        if (testSet(this.set[i], version, this.options)) {
-          return true;
-        }
-      }
-      return false;
+      for (let A = 0; A < this.set.length; A++)
+        if (ve(this.set[A], v, this.options))
+          return !0;
+      return !1;
     }
   }
-  range = Range;
-  const LRU = requireLrucache();
-  const cache = new LRU();
-  const parseOptions = requireParseOptions();
-  const Comparator = requireComparator();
-  const debug = requireDebug();
-  const SemVer = requireSemver$1();
-  const {
-    safeRe: re2,
-    t,
-    comparatorTrimReplace,
-    tildeTrimReplace,
-    caretTrimReplace
-  } = requireRe();
-  const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = requireConstants();
-  const isNullSet = (c) => c.value === "<0.0.0-0";
-  const isAny = (c) => c.value === "";
-  const isSatisfiable = (comparators, options) => {
-    let result = true;
-    const remainingComparators = comparators.slice();
-    let testComparator = remainingComparators.pop();
-    while (result && remainingComparators.length) {
-      result = remainingComparators.every((otherComparator) => {
-        return testComparator.intersects(otherComparator, options);
-      });
-      testComparator = remainingComparators.pop();
-    }
-    return result;
-  };
-  const parseComparator = (comp, options) => {
-    comp = comp.replace(re2[t.BUILD], "");
-    debug("comp", comp, options);
-    comp = replaceCarets(comp, options);
-    debug("caret", comp);
-    comp = replaceTildes(comp, options);
-    debug("tildes", comp);
-    comp = replaceXRanges(comp, options);
-    debug("xrange", comp);
-    comp = replaceStars(comp, options);
-    debug("stars", comp);
-    return comp;
-  };
-  const isX = (id) => !id || id.toLowerCase() === "x" || id === "*";
-  const replaceTildes = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c) => replaceTilde(c, options)).join(" ");
-  };
-  const replaceTilde = (comp, options) => {
-    const r = options.loose ? re2[t.TILDELOOSE] : re2[t.TILDE];
-    return comp.replace(r, (_, M, m, p, pr) => {
-      debug("tilde", comp, _, M, m, p, pr);
-      let ret;
-      if (isX(M)) {
-        ret = "";
-      } else if (isX(m)) {
-        ret = `>=${M}.0.0 <${+M + 1}.0.0-0`;
-      } else if (isX(p)) {
-        ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`;
-      } else if (pr) {
-        debug("replaceTilde pr", pr);
-        ret = `>=${M}.${m}.${p}-${pr} <${M}.${+m + 1}.0-0`;
-      } else {
-        ret = `>=${M}.${m}.${p} <${M}.${+m + 1}.0-0`;
-      }
-      debug("tilde return", ret);
-      return ret;
+  wt = e;
+  const t = Xi(), r = new t(), n = Ht(), s = je(), o = _e(), a = ee(), {
+    safeRe: f,
+    t: d,
+    comparatorTrimReplace: c,
+    tildeTrimReplace: l,
+    caretTrimReplace: p
+  } = Re(), { FLAG_INCLUDE_PRERELEASE: m, FLAG_LOOSE: j } = Ne(), w = (b) => b.value === "<0.0.0-0", N = (b) => b.value === "", q = (b, v) => {
+    let A = !0;
+    const S = b.slice();
+    let M = S.pop();
+    for (; A && S.length; )
+      A = S.every((C) => M.intersects(C, v)), M = S.pop();
+    return A;
+  }, W = (b, v) => (b = b.replace(f[d.BUILD], ""), o("comp", b, v), b = B(b, v), o("caret", b), b = Z(b, v), o("tildes", b), b = _(b, v), o("xrange", b), b = pe(b, v), o("stars", b), b), x = (b) => !b || b.toLowerCase() === "x" || b === "*", Z = (b, v) => b.trim().split(/\s+/).map((A) => Q(A, v)).join(" "), Q = (b, v) => {
+    const A = v.loose ? f[d.TILDELOOSE] : f[d.TILDE];
+    return b.replace(A, (S, M, C, L, F) => {
+      o("tilde", b, S, M, C, L, F);
+      let P;
+      return x(M) ? P = "" : x(C) ? P = `>=${M}.0.0 <${+M + 1}.0.0-0` : x(L) ? P = `>=${M}.${C}.0 <${M}.${+C + 1}.0-0` : F ? (o("replaceTilde pr", F), P = `>=${M}.${C}.${L}-${F} <${M}.${+C + 1}.0-0`) : P = `>=${M}.${C}.${L} <${M}.${+C + 1}.0-0`, o("tilde return", P), P;
     });
-  };
-  const replaceCarets = (comp, options) => {
-    return comp.trim().split(/\s+/).map((c) => replaceCaret(c, options)).join(" ");
-  };
-  const replaceCaret = (comp, options) => {
-    debug("caret", comp, options);
-    const r = options.loose ? re2[t.CARETLOOSE] : re2[t.CARET];
-    const z = options.includePrerelease ? "-0" : "";
-    return comp.replace(r, (_, M, m, p, pr) => {
-      debug("caret", comp, _, M, m, p, pr);
-      let ret;
-      if (isX(M)) {
-        ret = "";
-      } else if (isX(m)) {
-        ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`;
-      } else if (isX(p)) {
-        if (M === "0") {
-          ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`;
-        } else {
-          ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`;
-        }
-      } else if (pr) {
-        debug("replaceCaret pr", pr);
-        if (M === "0") {
-          if (m === "0") {
-            ret = `>=${M}.${m}.${p}-${pr} <${M}.${m}.${+p + 1}-0`;
-          } else {
-            ret = `>=${M}.${m}.${p}-${pr} <${M}.${+m + 1}.0-0`;
-          }
-        } else {
-          ret = `>=${M}.${m}.${p}-${pr} <${+M + 1}.0.0-0`;
-        }
-      } else {
-        debug("no pr");
-        if (M === "0") {
-          if (m === "0") {
-            ret = `>=${M}.${m}.${p}${z} <${M}.${m}.${+p + 1}-0`;
-          } else {
-            ret = `>=${M}.${m}.${p}${z} <${M}.${+m + 1}.0-0`;
-          }
-        } else {
-          ret = `>=${M}.${m}.${p} <${+M + 1}.0.0-0`;
-        }
-      }
-      debug("caret return", ret);
-      return ret;
+  }, B = (b, v) => b.trim().split(/\s+/).map((A) => X(A, v)).join(" "), X = (b, v) => {
+    o("caret", b, v);
+    const A = v.loose ? f[d.CARETLOOSE] : f[d.CARET], S = v.includePrerelease ? "-0" : "";
+    return b.replace(A, (M, C, L, F, P) => {
+      o("caret", b, M, C, L, F, P);
+      let E;
+      return x(C) ? E = "" : x(L) ? E = `>=${C}.0.0${S} <${+C + 1}.0.0-0` : x(F) ? C === "0" ? E = `>=${C}.${L}.0${S} <${C}.${+L + 1}.0-0` : E = `>=${C}.${L}.0${S} <${+C + 1}.0.0-0` : P ? (o("replaceCaret pr", P), C === "0" ? L === "0" ? E = `>=${C}.${L}.${F}-${P} <${C}.${L}.${+F + 1}-0` : E = `>=${C}.${L}.${F}-${P} <${C}.${+L + 1}.0-0` : E = `>=${C}.${L}.${F}-${P} <${+C + 1}.0.0-0`) : (o("no pr"), C === "0" ? L === "0" ? E = `>=${C}.${L}.${F}${S} <${C}.${L}.${+F + 1}-0` : E = `>=${C}.${L}.${F}${S} <${C}.${+L + 1}.0-0` : E = `>=${C}.${L}.${F} <${+C + 1}.0.0-0`), o("caret return", E), E;
     });
-  };
-  const replaceXRanges = (comp, options) => {
-    debug("replaceXRanges", comp, options);
-    return comp.split(/\s+/).map((c) => replaceXRange(c, options)).join(" ");
-  };
-  const replaceXRange = (comp, options) => {
-    comp = comp.trim();
-    const r = options.loose ? re2[t.XRANGELOOSE] : re2[t.XRANGE];
-    return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
-      debug("xRange", comp, ret, gtlt, M, m, p, pr);
-      const xM = isX(M);
-      const xm = xM || isX(m);
-      const xp = xm || isX(p);
-      const anyX = xp;
-      if (gtlt === "=" && anyX) {
-        gtlt = "";
-      }
-      pr = options.includePrerelease ? "-0" : "";
-      if (xM) {
-        if (gtlt === ">" || gtlt === "<") {
-          ret = "<0.0.0-0";
-        } else {
-          ret = "*";
-        }
-      } else if (gtlt && anyX) {
-        if (xm) {
-          m = 0;
-        }
-        p = 0;
-        if (gtlt === ">") {
-          gtlt = ">=";
-          if (xm) {
-            M = +M + 1;
-            m = 0;
-            p = 0;
-          } else {
-            m = +m + 1;
-            p = 0;
-          }
-        } else if (gtlt === "<=") {
-          gtlt = "<";
-          if (xm) {
-            M = +M + 1;
-          } else {
-            m = +m + 1;
-          }
-        }
-        if (gtlt === "<") {
-          pr = "-0";
-        }
-        ret = `${gtlt + M}.${m}.${p}${pr}`;
-      } else if (xm) {
-        ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`;
-      } else if (xp) {
-        ret = `>=${M}.${m}.0${pr} <${M}.${+m + 1}.0-0`;
-      }
-      debug("xRange return", ret);
-      return ret;
+  }, _ = (b, v) => (o("replaceXRanges", b, v), b.split(/\s+/).map((A) => ae(A, v)).join(" ")), ae = (b, v) => {
+    b = b.trim();
+    const A = v.loose ? f[d.XRANGELOOSE] : f[d.XRANGE];
+    return b.replace(A, (S, M, C, L, F, P) => {
+      o("xRange", b, S, M, C, L, F, P);
+      const E = x(C), G = E || x(L), z = G || x(F), V = z;
+      return M === "=" && V && (M = ""), P = v.includePrerelease ? "-0" : "", E ? M === ">" || M === "<" ? S = "<0.0.0-0" : S = "*" : M && V ? (G && (L = 0), F = 0, M === ">" ? (M = ">=", G ? (C = +C + 1, L = 0, F = 0) : (L = +L + 1, F = 0)) : M === "<=" && (M = "<", G ? C = +C + 1 : L = +L + 1), M === "<" && (P = "-0"), S = `${M + C}.${L}.${F}${P}`) : G ? S = `>=${C}.0.0${P} <${+C + 1}.0.0-0` : z && (S = `>=${C}.${L}.0${P} <${C}.${+L + 1}.0-0`), o("xRange return", S), S;
     });
-  };
-  const replaceStars = (comp, options) => {
-    debug("replaceStars", comp, options);
-    return comp.trim().replace(re2[t.STAR], "");
-  };
-  const replaceGTE0 = (comp, options) => {
-    debug("replaceGTE0", comp, options);
-    return comp.trim().replace(re2[options.includePrerelease ? t.GTE0PRE : t.GTE0], "");
-  };
-  const hyphenReplace = (incPr) => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr) => {
-    if (isX(fM)) {
-      from = "";
-    } else if (isX(fm)) {
-      from = `>=${fM}.0.0${incPr ? "-0" : ""}`;
-    } else if (isX(fp)) {
-      from = `>=${fM}.${fm}.0${incPr ? "-0" : ""}`;
-    } else if (fpr) {
-      from = `>=${from}`;
-    } else {
-      from = `>=${from}${incPr ? "-0" : ""}`;
-    }
-    if (isX(tM)) {
-      to = "";
-    } else if (isX(tm)) {
-      to = `<${+tM + 1}.0.0-0`;
-    } else if (isX(tp)) {
-      to = `<${tM}.${+tm + 1}.0-0`;
-    } else if (tpr) {
-      to = `<=${tM}.${tm}.${tp}-${tpr}`;
-    } else if (incPr) {
-      to = `<${tM}.${tm}.${+tp + 1}-0`;
-    } else {
-      to = `<=${to}`;
-    }
-    return `${from} ${to}`.trim();
-  };
-  const testSet = (set, version, options) => {
-    for (let i = 0; i < set.length; i++) {
-      if (!set[i].test(version)) {
-        return false;
-      }
-    }
-    if (version.prerelease.length && !options.includePrerelease) {
-      for (let i = 0; i < set.length; i++) {
-        debug(set[i].semver);
-        if (set[i].semver === Comparator.ANY) {
-          continue;
+  }, pe = (b, v) => (o("replaceStars", b, v), b.trim().replace(f[d.STAR], "")), ge = (b, v) => (o("replaceGTE0", b, v), b.trim().replace(f[v.includePrerelease ? d.GTE0PRE : d.GTE0], "")), me = (b) => (v, A, S, M, C, L, F, P, E, G, z, V) => (x(S) ? A = "" : x(M) ? A = `>=${S}.0.0${b ? "-0" : ""}` : x(C) ? A = `>=${S}.${M}.0${b ? "-0" : ""}` : L ? A = `>=${A}` : A = `>=${A}${b ? "-0" : ""}`, x(E) ? P = "" : x(G) ? P = `<${+E + 1}.0.0-0` : x(z) ? P = `<${E}.${+G + 1}.0-0` : V ? P = `<=${E}.${G}.${z}-${V}` : b ? P = `<${E}.${G}.${+z + 1}-0` : P = `<=${P}`, `${A} ${P}`.trim()), ve = (b, v, A) => {
+    for (let S = 0; S < b.length; S++)
+      if (!b[S].test(v))
+        return !1;
+    if (v.prerelease.length && !A.includePrerelease) {
+      for (let S = 0; S < b.length; S++)
+        if (o(b[S].semver), b[S].semver !== s.ANY && b[S].semver.prerelease.length > 0) {
+          const M = b[S].semver;
+          if (M.major === v.major && M.minor === v.minor && M.patch === v.patch)
+            return !0;
         }
-        if (set[i].semver.prerelease.length > 0) {
-          const allowed = set[i].semver;
-          if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
-            return true;
-          }
-        }
-      }
-      return false;
+      return !1;
     }
-    return true;
+    return !0;
   };
-  return range;
+  return wt;
 }
-var comparator;
-var hasRequiredComparator;
-function requireComparator() {
-  if (hasRequiredComparator) return comparator;
-  hasRequiredComparator = 1;
-  const ANY = Symbol("SemVer ANY");
-  class Comparator {
+var Et, Kr;
+function je() {
+  if (Kr) return Et;
+  Kr = 1;
+  const i = Symbol("SemVer ANY");
+  class e {
     static get ANY() {
-      return ANY;
+      return i;
     }
-    constructor(comp, options) {
-      options = parseOptions(options);
-      if (comp instanceof Comparator) {
-        if (comp.loose === !!options.loose) {
-          return comp;
-        } else {
-          comp = comp.value;
-        }
+    constructor(c, l) {
+      if (l = t(l), c instanceof e) {
+        if (c.loose === !!l.loose)
+          return c;
+        c = c.value;
       }
-      comp = comp.trim().split(/\s+/).join(" ");
-      debug("comparator", comp, options);
-      this.options = options;
-      this.loose = !!options.loose;
-      this.parse(comp);
-      if (this.semver === ANY) {
-        this.value = "";
-      } else {
-        this.value = this.operator + this.semver.version;
-      }
-      debug("comp", this);
+      c = c.trim().split(/\s+/).join(" "), o("comparator", c, l), this.options = l, this.loose = !!l.loose, this.parse(c), this.semver === i ? this.value = "" : this.value = this.operator + this.semver.version, o("comp", this);
     }
-    parse(comp) {
-      const r = this.options.loose ? re2[t.COMPARATORLOOSE] : re2[t.COMPARATOR];
-      const m = comp.match(r);
-      if (!m) {
-        throw new TypeError(`Invalid comparator: ${comp}`);
-      }
-      this.operator = m[1] !== void 0 ? m[1] : "";
-      if (this.operator === "=") {
-        this.operator = "";
-      }
-      if (!m[2]) {
-        this.semver = ANY;
-      } else {
-        this.semver = new SemVer(m[2], this.options.loose);
-      }
+    parse(c) {
+      const l = this.options.loose ? r[n.COMPARATORLOOSE] : r[n.COMPARATOR], p = c.match(l);
+      if (!p)
+        throw new TypeError(`Invalid comparator: ${c}`);
+      this.operator = p[1] !== void 0 ? p[1] : "", this.operator === "=" && (this.operator = ""), p[2] ? this.semver = new a(p[2], this.options.loose) : this.semver = i;
     }
     toString() {
       return this.value;
     }
-    test(version) {
-      debug("Comparator.test", version, this.options.loose);
-      if (this.semver === ANY || version === ANY) {
-        return true;
-      }
-      if (typeof version === "string") {
+    test(c) {
+      if (o("Comparator.test", c, this.options.loose), this.semver === i || c === i)
+        return !0;
+      if (typeof c == "string")
         try {
-          version = new SemVer(version, this.options);
-        } catch (er) {
-          return false;
+          c = new a(c, this.options);
+        } catch {
+          return !1;
         }
-      }
-      return cmp(version, this.operator, this.semver, this.options);
+      return s(c, this.operator, this.semver, this.options);
     }
-    intersects(comp, options) {
-      if (!(comp instanceof Comparator)) {
+    intersects(c, l) {
+      if (!(c instanceof e))
         throw new TypeError("a Comparator is required");
-      }
-      if (this.operator === "") {
-        if (this.value === "") {
-          return true;
-        }
-        return new Range(comp.value, options).test(this.value);
-      } else if (comp.operator === "") {
-        if (comp.value === "") {
-          return true;
-        }
-        return new Range(this.value, options).test(comp.semver);
-      }
-      options = parseOptions(options);
-      if (options.includePrerelease && (this.value === "<0.0.0-0" || comp.value === "<0.0.0-0")) {
-        return false;
-      }
-      if (!options.includePrerelease && (this.value.startsWith("<0.0.0") || comp.value.startsWith("<0.0.0"))) {
-        return false;
-      }
-      if (this.operator.startsWith(">") && comp.operator.startsWith(">")) {
-        return true;
-      }
-      if (this.operator.startsWith("<") && comp.operator.startsWith("<")) {
-        return true;
-      }
-      if (this.semver.version === comp.semver.version && this.operator.includes("=") && comp.operator.includes("=")) {
-        return true;
-      }
-      if (cmp(this.semver, "<", comp.semver, options) && this.operator.startsWith(">") && comp.operator.startsWith("<")) {
-        return true;
-      }
-      if (cmp(this.semver, ">", comp.semver, options) && this.operator.startsWith("<") && comp.operator.startsWith(">")) {
-        return true;
-      }
-      return false;
+      return this.operator === "" ? this.value === "" ? !0 : new f(c.value, l).test(this.value) : c.operator === "" ? c.value === "" ? !0 : new f(this.value, l).test(c.semver) : (l = t(l), l.includePrerelease && (this.value === "<0.0.0-0" || c.value === "<0.0.0-0") || !l.includePrerelease && (this.value.startsWith("<0.0.0") || c.value.startsWith("<0.0.0")) ? !1 : !!(this.operator.startsWith(">") && c.operator.startsWith(">") || this.operator.startsWith("<") && c.operator.startsWith("<") || this.semver.version === c.semver.version && this.operator.includes("=") && c.operator.includes("=") || s(this.semver, "<", c.semver, l) && this.operator.startsWith(">") && c.operator.startsWith("<") || s(this.semver, ">", c.semver, l) && this.operator.startsWith("<") && c.operator.startsWith(">")));
     }
   }
-  comparator = Comparator;
-  const parseOptions = requireParseOptions();
-  const { safeRe: re2, t } = requireRe();
-  const cmp = requireCmp();
-  const debug = requireDebug();
-  const SemVer = requireSemver$1();
-  const Range = requireRange();
-  return comparator;
+  Et = e;
+  const t = Ht(), { safeRe: r, t: n } = Re(), s = On(), o = _e(), a = ee(), f = ne();
+  return Et;
 }
-var satisfies_1;
-var hasRequiredSatisfies;
-function requireSatisfies() {
-  if (hasRequiredSatisfies) return satisfies_1;
-  hasRequiredSatisfies = 1;
-  const Range = requireRange();
-  const satisfies2 = (version, range2, options) => {
+var Rt, Jr;
+function ke() {
+  if (Jr) return Rt;
+  Jr = 1;
+  const i = ne();
+  return Rt = (t, r, n) => {
     try {
-      range2 = new Range(range2, options);
-    } catch (er) {
-      return false;
+      r = new i(r, n);
+    } catch {
+      return !1;
     }
-    return range2.test(version);
-  };
-  satisfies_1 = satisfies2;
-  return satisfies_1;
+    return r.test(t);
+  }, Rt;
 }
-var toComparators_1;
-var hasRequiredToComparators;
-function requireToComparators() {
-  if (hasRequiredToComparators) return toComparators_1;
-  hasRequiredToComparators = 1;
-  const Range = requireRange();
-  const toComparators = (range2, options) => new Range(range2, options).set.map((comp) => comp.map((c) => c.value).join(" ").trim().split(" "));
-  toComparators_1 = toComparators;
-  return toComparators_1;
+var bt, Zr;
+function Yi() {
+  if (Zr) return bt;
+  Zr = 1;
+  const i = ne();
+  return bt = (t, r) => new i(t, r).set.map((n) => n.map((s) => s.value).join(" ").trim().split(" ")), bt;
 }
-var maxSatisfying_1;
-var hasRequiredMaxSatisfying;
-function requireMaxSatisfying() {
-  if (hasRequiredMaxSatisfying) return maxSatisfying_1;
-  hasRequiredMaxSatisfying = 1;
-  const SemVer = requireSemver$1();
-  const Range = requireRange();
-  const maxSatisfying = (versions, range2, options) => {
-    let max = null;
-    let maxSV = null;
-    let rangeObj = null;
+var $t, Qr;
+function Hi() {
+  if (Qr) return $t;
+  Qr = 1;
+  const i = ee(), e = ne();
+  return $t = (r, n, s) => {
+    let o = null, a = null, f = null;
     try {
-      rangeObj = new Range(range2, options);
-    } catch (er) {
+      f = new e(n, s);
+    } catch {
       return null;
     }
-    versions.forEach((v) => {
-      if (rangeObj.test(v)) {
-        if (!max || maxSV.compare(v) === -1) {
-          max = v;
-          maxSV = new SemVer(max, options);
-        }
-      }
-    });
-    return max;
-  };
-  maxSatisfying_1 = maxSatisfying;
-  return maxSatisfying_1;
+    return r.forEach((d) => {
+      f.test(d) && (!o || a.compare(d) === -1) && (o = d, a = new i(o, s));
+    }), o;
+  }, $t;
 }
-var minSatisfying_1;
-var hasRequiredMinSatisfying;
-function requireMinSatisfying() {
-  if (hasRequiredMinSatisfying) return minSatisfying_1;
-  hasRequiredMinSatisfying = 1;
-  const SemVer = requireSemver$1();
-  const Range = requireRange();
-  const minSatisfying = (versions, range2, options) => {
-    let min = null;
-    let minSV = null;
-    let rangeObj = null;
+var It, en;
+function Ki() {
+  if (en) return It;
+  en = 1;
+  const i = ee(), e = ne();
+  return It = (r, n, s) => {
+    let o = null, a = null, f = null;
     try {
-      rangeObj = new Range(range2, options);
-    } catch (er) {
+      f = new e(n, s);
+    } catch {
       return null;
     }
-    versions.forEach((v) => {
-      if (rangeObj.test(v)) {
-        if (!min || minSV.compare(v) === 1) {
-          min = v;
-          minSV = new SemVer(min, options);
-        }
-      }
-    });
-    return min;
-  };
-  minSatisfying_1 = minSatisfying;
-  return minSatisfying_1;
+    return r.forEach((d) => {
+      f.test(d) && (!o || a.compare(d) === 1) && (o = d, a = new i(o, s));
+    }), o;
+  }, It;
 }
-var minVersion_1;
-var hasRequiredMinVersion;
-function requireMinVersion() {
-  if (hasRequiredMinVersion) return minVersion_1;
-  hasRequiredMinVersion = 1;
-  const SemVer = requireSemver$1();
-  const Range = requireRange();
-  const gt = requireGt();
-  const minVersion = (range2, loose) => {
-    range2 = new Range(range2, loose);
-    let minver = new SemVer("0.0.0");
-    if (range2.test(minver)) {
-      return minver;
-    }
-    minver = new SemVer("0.0.0-0");
-    if (range2.test(minver)) {
-      return minver;
-    }
-    minver = null;
-    for (let i = 0; i < range2.set.length; ++i) {
-      const comparators = range2.set[i];
-      let setMin = null;
-      comparators.forEach((comparator2) => {
-        const compver = new SemVer(comparator2.semver.version);
-        switch (comparator2.operator) {
+var Ot, tn;
+function Ji() {
+  if (tn) return Ot;
+  tn = 1;
+  const i = ee(), e = ne(), t = Pe();
+  return Ot = (n, s) => {
+    n = new e(n, s);
+    let o = new i("0.0.0");
+    if (n.test(o) || (o = new i("0.0.0-0"), n.test(o)))
+      return o;
+    o = null;
+    for (let a = 0; a < n.set.length; ++a) {
+      const f = n.set[a];
+      let d = null;
+      f.forEach((c) => {
+        const l = new i(c.semver.version);
+        switch (c.operator) {
           case ">":
-            if (compver.prerelease.length === 0) {
-              compver.patch++;
-            } else {
-              compver.prerelease.push(0);
-            }
-            compver.raw = compver.format();
+            l.prerelease.length === 0 ? l.patch++ : l.prerelease.push(0), l.raw = l.format();
           /* fallthrough */
           case "":
           case ">=":
-            if (!setMin || gt(compver, setMin)) {
-              setMin = compver;
-            }
+            (!d || t(l, d)) && (d = l);
             break;
           case "<":
           case "<=":
             break;
           /* istanbul ignore next */
           default:
-            throw new Error(`Unexpected operation: ${comparator2.operator}`);
+            throw new Error(`Unexpected operation: ${c.operator}`);
         }
-      });
-      if (setMin && (!minver || gt(minver, setMin))) {
-        minver = setMin;
-      }
+      }), d && (!o || t(o, d)) && (o = d);
     }
-    if (minver && range2.test(minver)) {
-      return minver;
-    }
-    return null;
-  };
-  minVersion_1 = minVersion;
-  return minVersion_1;
+    return o && n.test(o) ? o : null;
+  }, Ot;
 }
-var valid;
-var hasRequiredValid;
-function requireValid() {
-  if (hasRequiredValid) return valid;
-  hasRequiredValid = 1;
-  const Range = requireRange();
-  const validRange = (range2, options) => {
+var St, rn;
+function Zi() {
+  if (rn) return St;
+  rn = 1;
+  const i = ne();
+  return St = (t, r) => {
     try {
-      return new Range(range2, options).range || "*";
-    } catch (er) {
+      return new i(t, r).range || "*";
+    } catch {
       return null;
     }
-  };
-  valid = validRange;
-  return valid;
+  }, St;
 }
-var outside_1;
-var hasRequiredOutside;
-function requireOutside() {
-  if (hasRequiredOutside) return outside_1;
-  hasRequiredOutside = 1;
-  const SemVer = requireSemver$1();
-  const Comparator = requireComparator();
-  const { ANY } = Comparator;
-  const Range = requireRange();
-  const satisfies2 = requireSatisfies();
-  const gt = requireGt();
-  const lt = requireLt();
-  const lte = requireLte();
-  const gte = requireGte();
-  const outside = (version, range2, hilo, options) => {
-    version = new SemVer(version, options);
-    range2 = new Range(range2, options);
-    let gtfn, ltefn, ltfn, comp, ecomp;
-    switch (hilo) {
+var Ct, nn;
+function er() {
+  if (nn) return Ct;
+  nn = 1;
+  const i = ee(), e = je(), { ANY: t } = e, r = ne(), n = ke(), s = Pe(), o = Jt(), a = Qt(), f = Zt();
+  return Ct = (c, l, p, m) => {
+    c = new i(c, m), l = new r(l, m);
+    let j, w, N, q, W;
+    switch (p) {
       case ">":
-        gtfn = gt;
-        ltefn = lte;
-        ltfn = lt;
-        comp = ">";
-        ecomp = ">=";
+        j = s, w = a, N = o, q = ">", W = ">=";
         break;
       case "<":
-        gtfn = lt;
-        ltefn = gte;
-        ltfn = gt;
-        comp = "<";
-        ecomp = "<=";
+        j = o, w = f, N = s, q = "<", W = "<=";
         break;
       default:
         throw new TypeError('Must provide a hilo val of "<" or ">"');
     }
-    if (satisfies2(version, range2, options)) {
-      return false;
+    if (n(c, l, m))
+      return !1;
+    for (let x = 0; x < l.set.length; ++x) {
+      const Z = l.set[x];
+      let Q = null, B = null;
+      if (Z.forEach((X) => {
+        X.semver === t && (X = new e(">=0.0.0")), Q = Q || X, B = B || X, j(X.semver, Q.semver, m) ? Q = X : N(X.semver, B.semver, m) && (B = X);
+      }), Q.operator === q || Q.operator === W || (!B.operator || B.operator === q) && w(c, B.semver))
+        return !1;
+      if (B.operator === W && N(c, B.semver))
+        return !1;
     }
-    for (let i = 0; i < range2.set.length; ++i) {
-      const comparators = range2.set[i];
-      let high = null;
-      let low = null;
-      comparators.forEach((comparator2) => {
-        if (comparator2.semver === ANY) {
-          comparator2 = new Comparator(">=0.0.0");
-        }
-        high = high || comparator2;
-        low = low || comparator2;
-        if (gtfn(comparator2.semver, high.semver, options)) {
-          high = comparator2;
-        } else if (ltfn(comparator2.semver, low.semver, options)) {
-          low = comparator2;
-        }
-      });
-      if (high.operator === comp || high.operator === ecomp) {
-        return false;
-      }
-      if ((!low.operator || low.operator === comp) && ltefn(version, low.semver)) {
-        return false;
-      } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-        return false;
-      }
-    }
-    return true;
-  };
-  outside_1 = outside;
-  return outside_1;
+    return !0;
+  }, Ct;
 }
-var gtr_1;
-var hasRequiredGtr;
-function requireGtr() {
-  if (hasRequiredGtr) return gtr_1;
-  hasRequiredGtr = 1;
-  const outside = requireOutside();
-  const gtr = (version, range2, options) => outside(version, range2, ">", options);
-  gtr_1 = gtr;
-  return gtr_1;
+var At, sn;
+function Qi() {
+  if (sn) return At;
+  sn = 1;
+  const i = er();
+  return At = (t, r, n) => i(t, r, ">", n), At;
 }
-var ltr_1;
-var hasRequiredLtr;
-function requireLtr() {
-  if (hasRequiredLtr) return ltr_1;
-  hasRequiredLtr = 1;
-  const outside = requireOutside();
-  const ltr = (version, range2, options) => outside(version, range2, "<", options);
-  ltr_1 = ltr;
-  return ltr_1;
+var Mt, on;
+function es() {
+  if (on) return Mt;
+  on = 1;
+  const i = er();
+  return Mt = (t, r, n) => i(t, r, "<", n), Mt;
 }
-var intersects_1;
-var hasRequiredIntersects;
-function requireIntersects() {
-  if (hasRequiredIntersects) return intersects_1;
-  hasRequiredIntersects = 1;
-  const Range = requireRange();
-  const intersects = (r1, r2, options) => {
-    r1 = new Range(r1, options);
-    r2 = new Range(r2, options);
-    return r1.intersects(r2, options);
-  };
-  intersects_1 = intersects;
-  return intersects_1;
+var Tt, an;
+function ts() {
+  if (an) return Tt;
+  an = 1;
+  const i = ne();
+  return Tt = (t, r, n) => (t = new i(t, n), r = new i(r, n), t.intersects(r, n)), Tt;
 }
-var simplify;
-var hasRequiredSimplify;
-function requireSimplify() {
-  if (hasRequiredSimplify) return simplify;
-  hasRequiredSimplify = 1;
-  const satisfies2 = requireSatisfies();
-  const compare2 = requireCompare();
-  simplify = (versions, range2, options) => {
-    const set = [];
-    let first = null;
-    let prev = null;
-    const v = versions.sort((a, b) => compare2(a, b, options));
-    for (const version of v) {
-      const included = satisfies2(version, range2, options);
-      if (included) {
-        prev = version;
-        if (!first) {
-          first = version;
-        }
-      } else {
-        if (prev) {
-          set.push([first, prev]);
-        }
-        prev = null;
-        first = null;
-      }
-    }
-    if (first) {
-      set.push([first, null]);
-    }
-    const ranges = [];
-    for (const [min, max] of set) {
-      if (min === max) {
-        ranges.push(min);
-      } else if (!max && min === v[0]) {
-        ranges.push("*");
-      } else if (!max) {
-        ranges.push(`>=${min}`);
-      } else if (min === v[0]) {
-        ranges.push(`<=${max}`);
-      } else {
-        ranges.push(`${min} - ${max}`);
-      }
-    }
-    const simplified = ranges.join(" || ");
-    const original = typeof range2.raw === "string" ? range2.raw : String(range2);
-    return simplified.length < original.length ? simplified : range2;
-  };
-  return simplify;
+var Lt, cn;
+function rs() {
+  if (cn) return Lt;
+  cn = 1;
+  const i = ke(), e = re();
+  return Lt = (t, r, n) => {
+    const s = [];
+    let o = null, a = null;
+    const f = t.sort((p, m) => e(p, m, n));
+    for (const p of f)
+      i(p, r, n) ? (a = p, o || (o = p)) : (a && s.push([o, a]), a = null, o = null);
+    o && s.push([o, null]);
+    const d = [];
+    for (const [p, m] of s)
+      p === m ? d.push(p) : !m && p === f[0] ? d.push("*") : m ? p === f[0] ? d.push(`<=${m}`) : d.push(`${p} - ${m}`) : d.push(`>=${p}`);
+    const c = d.join(" || "), l = typeof r.raw == "string" ? r.raw : String(r);
+    return c.length < l.length ? c : r;
+  }, Lt;
 }
-var subset_1;
-var hasRequiredSubset;
-function requireSubset() {
-  if (hasRequiredSubset) return subset_1;
-  hasRequiredSubset = 1;
-  const Range = requireRange();
-  const Comparator = requireComparator();
-  const { ANY } = Comparator;
-  const satisfies2 = requireSatisfies();
-  const compare2 = requireCompare();
-  const subset = (sub, dom, options = {}) => {
-    if (sub === dom) {
-      return true;
-    }
-    sub = new Range(sub, options);
-    dom = new Range(dom, options);
-    let sawNonNull = false;
-    OUTER: for (const simpleSub of sub.set) {
-      for (const simpleDom of dom.set) {
-        const isSub = simpleSubset(simpleSub, simpleDom, options);
-        sawNonNull = sawNonNull || isSub !== null;
-        if (isSub) {
-          continue OUTER;
-        }
+var Nt, fn;
+function ns() {
+  if (fn) return Nt;
+  fn = 1;
+  const i = ne(), e = je(), { ANY: t } = e, r = ke(), n = re(), s = (l, p, m = {}) => {
+    if (l === p)
+      return !0;
+    l = new i(l, m), p = new i(p, m);
+    let j = !1;
+    e: for (const w of l.set) {
+      for (const N of p.set) {
+        const q = f(w, N, m);
+        if (j = j || q !== null, q)
+          continue e;
       }
-      if (sawNonNull) {
-        return false;
-      }
+      if (j)
+        return !1;
     }
-    return true;
-  };
-  const minimumVersionWithPreRelease = [new Comparator(">=0.0.0-0")];
-  const minimumVersion = [new Comparator(">=0.0.0")];
-  const simpleSubset = (sub, dom, options) => {
-    if (sub === dom) {
-      return true;
+    return !0;
+  }, o = [new e(">=0.0.0-0")], a = [new e(">=0.0.0")], f = (l, p, m) => {
+    if (l === p)
+      return !0;
+    if (l.length === 1 && l[0].semver === t) {
+      if (p.length === 1 && p[0].semver === t)
+        return !0;
+      m.includePrerelease ? l = o : l = a;
     }
-    if (sub.length === 1 && sub[0].semver === ANY) {
-      if (dom.length === 1 && dom[0].semver === ANY) {
-        return true;
-      } else if (options.includePrerelease) {
-        sub = minimumVersionWithPreRelease;
-      } else {
-        sub = minimumVersion;
-      }
+    if (p.length === 1 && p[0].semver === t) {
+      if (m.includePrerelease)
+        return !0;
+      p = a;
     }
-    if (dom.length === 1 && dom[0].semver === ANY) {
-      if (options.includePrerelease) {
-        return true;
-      } else {
-        dom = minimumVersion;
-      }
-    }
-    const eqSet = /* @__PURE__ */ new Set();
-    let gt, lt;
-    for (const c of sub) {
-      if (c.operator === ">" || c.operator === ">=") {
-        gt = higherGT(gt, c, options);
-      } else if (c.operator === "<" || c.operator === "<=") {
-        lt = lowerLT(lt, c, options);
-      } else {
-        eqSet.add(c.semver);
-      }
-    }
-    if (eqSet.size > 1) {
+    const j = /* @__PURE__ */ new Set();
+    let w, N;
+    for (const _ of l)
+      _.operator === ">" || _.operator === ">=" ? w = d(w, _, m) : _.operator === "<" || _.operator === "<=" ? N = c(N, _, m) : j.add(_.semver);
+    if (j.size > 1)
       return null;
-    }
-    let gtltComp;
-    if (gt && lt) {
-      gtltComp = compare2(gt.semver, lt.semver, options);
-      if (gtltComp > 0) {
+    let q;
+    if (w && N) {
+      if (q = n(w.semver, N.semver, m), q > 0)
         return null;
-      } else if (gtltComp === 0 && (gt.operator !== ">=" || lt.operator !== "<=")) {
+      if (q === 0 && (w.operator !== ">=" || N.operator !== "<="))
         return null;
-      }
     }
-    for (const eq of eqSet) {
-      if (gt && !satisfies2(eq, String(gt), options)) {
+    for (const _ of j) {
+      if (w && !r(_, String(w), m) || N && !r(_, String(N), m))
         return null;
-      }
-      if (lt && !satisfies2(eq, String(lt), options)) {
-        return null;
-      }
-      for (const c of dom) {
-        if (!satisfies2(eq, String(c), options)) {
-          return false;
-        }
-      }
-      return true;
+      for (const ae of p)
+        if (!r(_, String(ae), m))
+          return !1;
+      return !0;
     }
-    let higher, lower;
-    let hasDomLT, hasDomGT;
-    let needDomLTPre = lt && !options.includePrerelease && lt.semver.prerelease.length ? lt.semver : false;
-    let needDomGTPre = gt && !options.includePrerelease && gt.semver.prerelease.length ? gt.semver : false;
-    if (needDomLTPre && needDomLTPre.prerelease.length === 1 && lt.operator === "<" && needDomLTPre.prerelease[0] === 0) {
-      needDomLTPre = false;
-    }
-    for (const c of dom) {
-      hasDomGT = hasDomGT || c.operator === ">" || c.operator === ">=";
-      hasDomLT = hasDomLT || c.operator === "<" || c.operator === "<=";
-      if (gt) {
-        if (needDomGTPre) {
-          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomGTPre.major && c.semver.minor === needDomGTPre.minor && c.semver.patch === needDomGTPre.patch) {
-            needDomGTPre = false;
-          }
-        }
-        if (c.operator === ">" || c.operator === ">=") {
-          higher = higherGT(gt, c, options);
-          if (higher === c && higher !== gt) {
-            return false;
-          }
-        } else if (gt.operator === ">=" && !satisfies2(gt.semver, String(c), options)) {
-          return false;
-        }
+    let W, x, Z, Q, B = N && !m.includePrerelease && N.semver.prerelease.length ? N.semver : !1, X = w && !m.includePrerelease && w.semver.prerelease.length ? w.semver : !1;
+    B && B.prerelease.length === 1 && N.operator === "<" && B.prerelease[0] === 0 && (B = !1);
+    for (const _ of p) {
+      if (Q = Q || _.operator === ">" || _.operator === ">=", Z = Z || _.operator === "<" || _.operator === "<=", w) {
+        if (X && _.semver.prerelease && _.semver.prerelease.length && _.semver.major === X.major && _.semver.minor === X.minor && _.semver.patch === X.patch && (X = !1), _.operator === ">" || _.operator === ">=") {
+          if (W = d(w, _, m), W === _ && W !== w)
+            return !1;
+        } else if (w.operator === ">=" && !r(w.semver, String(_), m))
+          return !1;
       }
-      if (lt) {
-        if (needDomLTPre) {
-          if (c.semver.prerelease && c.semver.prerelease.length && c.semver.major === needDomLTPre.major && c.semver.minor === needDomLTPre.minor && c.semver.patch === needDomLTPre.patch) {
-            needDomLTPre = false;
-          }
-        }
-        if (c.operator === "<" || c.operator === "<=") {
-          lower = lowerLT(lt, c, options);
-          if (lower === c && lower !== lt) {
-            return false;
-          }
-        } else if (lt.operator === "<=" && !satisfies2(lt.semver, String(c), options)) {
-          return false;
-        }
+      if (N) {
+        if (B && _.semver.prerelease && _.semver.prerelease.length && _.semver.major === B.major && _.semver.minor === B.minor && _.semver.patch === B.patch && (B = !1), _.operator === "<" || _.operator === "<=") {
+          if (x = c(N, _, m), x === _ && x !== N)
+            return !1;
+        } else if (N.operator === "<=" && !r(N.semver, String(_), m))
+          return !1;
       }
-      if (!c.operator && (lt || gt) && gtltComp !== 0) {
-        return false;
-      }
+      if (!_.operator && (N || w) && q !== 0)
+        return !1;
     }
-    if (gt && hasDomLT && !lt && gtltComp !== 0) {
-      return false;
-    }
-    if (lt && hasDomGT && !gt && gtltComp !== 0) {
-      return false;
-    }
-    if (needDomGTPre || needDomLTPre) {
-      return false;
-    }
-    return true;
+    return !(w && Z && !N && q !== 0 || N && Q && !w && q !== 0 || X || B);
+  }, d = (l, p, m) => {
+    if (!l)
+      return p;
+    const j = n(l.semver, p.semver, m);
+    return j > 0 ? l : j < 0 || p.operator === ">" && l.operator === ">=" ? p : l;
+  }, c = (l, p, m) => {
+    if (!l)
+      return p;
+    const j = n(l.semver, p.semver, m);
+    return j < 0 ? l : j > 0 || p.operator === "<" && l.operator === "<=" ? p : l;
   };
-  const higherGT = (a, b, options) => {
-    if (!a) {
-      return b;
-    }
-    const comp = compare2(a.semver, b.semver, options);
-    return comp > 0 ? a : comp < 0 ? b : b.operator === ">" && a.operator === ">=" ? b : a;
-  };
-  const lowerLT = (a, b, options) => {
-    if (!a) {
-      return b;
-    }
-    const comp = compare2(a.semver, b.semver, options);
-    return comp < 0 ? a : comp > 0 ? b : b.operator === "<" && a.operator === "<=" ? b : a;
-  };
-  subset_1 = subset;
-  return subset_1;
+  return Nt = s, Nt;
 }
-var semver$1;
-var hasRequiredSemver;
-function requireSemver() {
-  if (hasRequiredSemver) return semver$1;
-  hasRequiredSemver = 1;
-  const internalRe = requireRe();
-  const constants2 = requireConstants();
-  const SemVer = requireSemver$1();
-  const identifiers2 = requireIdentifiers();
-  const parse = requireParse();
-  const valid2 = requireValid$1();
-  const clean = requireClean();
-  const inc = requireInc();
-  const diff = requireDiff();
-  const major = requireMajor();
-  const minor = requireMinor();
-  const patch = requirePatch();
-  const prerelease = requirePrerelease();
-  const compare2 = requireCompare();
-  const rcompare = requireRcompare();
-  const compareLoose = requireCompareLoose();
-  const compareBuild = requireCompareBuild();
-  const sort = requireSort();
-  const rsort = requireRsort();
-  const gt = requireGt();
-  const lt = requireLt();
-  const eq = requireEq();
-  const neq = requireNeq();
-  const gte = requireGte();
-  const lte = requireLte();
-  const cmp = requireCmp();
-  const coerce = requireCoerce();
-  const Comparator = requireComparator();
-  const Range = requireRange();
-  const satisfies2 = requireSatisfies();
-  const toComparators = requireToComparators();
-  const maxSatisfying = requireMaxSatisfying();
-  const minSatisfying = requireMinSatisfying();
-  const minVersion = requireMinVersion();
-  const validRange = requireValid();
-  const outside = requireOutside();
-  const gtr = requireGtr();
-  const ltr = requireLtr();
-  const intersects = requireIntersects();
-  const simplifyRange = requireSimplify();
-  const subset = requireSubset();
-  semver$1 = {
-    parse,
-    valid: valid2,
-    clean,
-    inc,
-    diff,
-    major,
-    minor,
-    patch,
-    prerelease,
-    compare: compare2,
-    rcompare,
-    compareLoose,
-    compareBuild,
-    sort,
-    rsort,
-    gt,
-    lt,
-    eq,
-    neq,
-    gte,
-    lte,
-    cmp,
-    coerce,
-    Comparator,
-    Range,
-    satisfies: satisfies2,
-    toComparators,
-    maxSatisfying,
-    minSatisfying,
-    minVersion,
-    validRange,
-    outside,
-    gtr,
-    ltr,
-    intersects,
-    simplifyRange,
-    subset,
-    SemVer,
-    re: internalRe.re,
-    src: internalRe.src,
-    tokens: internalRe.t,
-    SEMVER_SPEC_VERSION: constants2.SEMVER_SPEC_VERSION,
-    RELEASE_TYPES: constants2.RELEASE_TYPES,
-    compareIdentifiers: identifiers2.compareIdentifiers,
-    rcompareIdentifiers: identifiers2.rcompareIdentifiers
-  };
-  return semver$1;
+var _t, dn;
+function is() {
+  if (dn) return _t;
+  dn = 1;
+  const i = Re(), e = Ne(), t = ee(), r = bn(), n = he(), s = Pi(), o = ji(), a = ki(), f = Di(), d = qi(), c = Fi(), l = xi(), p = Bi(), m = re(), j = Vi(), w = Ui(), N = Kt(), q = Gi(), W = zi(), x = Pe(), Z = Jt(), Q = $n(), B = In(), X = Zt(), _ = Qt(), ae = On(), pe = Wi(), ge = je(), me = ne(), ve = ke(), b = Yi(), v = Hi(), A = Ki(), S = Ji(), M = Zi(), C = er(), L = Qi(), F = es(), P = ts(), E = rs(), G = ns();
+  return _t = {
+    parse: n,
+    valid: s,
+    clean: o,
+    inc: a,
+    diff: f,
+    major: d,
+    minor: c,
+    patch: l,
+    prerelease: p,
+    compare: m,
+    rcompare: j,
+    compareLoose: w,
+    compareBuild: N,
+    sort: q,
+    rsort: W,
+    gt: x,
+    lt: Z,
+    eq: Q,
+    neq: B,
+    gte: X,
+    lte: _,
+    cmp: ae,
+    coerce: pe,
+    Comparator: ge,
+    Range: me,
+    satisfies: ve,
+    toComparators: b,
+    maxSatisfying: v,
+    minSatisfying: A,
+    minVersion: S,
+    validRange: M,
+    outside: C,
+    gtr: L,
+    ltr: F,
+    intersects: P,
+    simplifyRange: E,
+    subset: G,
+    SemVer: t,
+    re: i.re,
+    src: i.src,
+    tokens: i.t,
+    SEMVER_SPEC_VERSION: e.SEMVER_SPEC_VERSION,
+    RELEASE_TYPES: e.RELEASE_TYPES,
+    compareIdentifiers: r.compareIdentifiers,
+    rcompareIdentifiers: r.rcompareIdentifiers
+  }, _t;
 }
-var semverExports = requireSemver();
-const semver = /* @__PURE__ */ getDefaultExportFromCjs(semverExports);
-function requiresAtLeastOne(requirement) {
-  if (requirement.cardinality) {
-    return requirement.cardinality.startsWith("1..");
-  }
-  return requirement.optional !== true;
+var K = is();
+const le = /* @__PURE__ */ _i(K);
+function Sn(i) {
+  return i.cardinality ? i.cardinality.startsWith("1..") : i.optional !== !0;
 }
-function collectsMany(requirement) {
-  return requirement.cardinality?.endsWith("..n") === true;
+function Cn(i) {
+  return i.cardinality?.endsWith("..n") === !0;
 }
-function normalizeDependency(dep) {
-  if (typeof dep === "string") {
-    return { id: dep };
-  }
-  return dep;
+function un(i) {
+  return typeof i == "string" ? { id: i } : i;
 }
-function getDependencyId(dep) {
-  return typeof dep === "string" ? dep : dep.id;
+function Pt(i) {
+  return typeof i == "string" ? i : i.id;
 }
-class DependencyResolver {
+class An {
   /**
    * Resolve dependencies and return load order
    * Uses Kahn's algorithm for topological sorting
    * Validates version compatibility using semver
    */
-  resolve(modules) {
-    const result = {
+  resolve(e) {
+    const t = {
       loadOrder: [],
       circular: [],
       missing: [],
       versionConflicts: [],
       resolvedVersions: /* @__PURE__ */ new Map()
-    };
-    const moduleVersionsMap = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      const existing = moduleVersionsMap.get(mod.id) ?? [];
-      existing.push(mod);
-      moduleVersionsMap.set(mod.id, existing);
+    }, r = /* @__PURE__ */ new Map();
+    for (const s of e) {
+      const o = r.get(s.id) ?? [];
+      o.push(s), r.set(s.id, o);
     }
-    const moduleMap = /* @__PURE__ */ new Map();
-    for (const [id, versions] of moduleVersionsMap) {
-      const sorted = [...versions].sort((a, b) => semverExports.rcompare(a.version, b.version));
-      moduleMap.set(id, sorted[0]);
-      result.resolvedVersions.set(id, sorted[0].version);
+    const n = /* @__PURE__ */ new Map();
+    for (const [s, o] of r) {
+      const a = [...o].sort((f, d) => K.rcompare(f.version, d.version));
+      n.set(s, a[0]), t.resolvedVersions.set(s, a[0].version);
     }
-    for (const mod of modules) {
-      for (const dep of mod.dependencies ?? []) {
-        const depSpec = normalizeDependency(dep);
-        const availableModule = moduleMap.get(depSpec.id);
-        if (!availableModule) {
-          result.missing.push({ moduleId: mod.id, missingDep: depSpec.id });
-        } else if (depSpec.versionRange) {
-          if (!semverExports.satisfies(availableModule.version, depSpec.versionRange)) {
-            let conflict = result.versionConflicts.find((c) => c.moduleId === depSpec.id);
-            if (!conflict) {
-              conflict = {
-                moduleId: depSpec.id,
-                availableVersion: availableModule.version,
-                requirements: []
-              };
-              result.versionConflicts.push(conflict);
-            }
-            conflict.requirements.push({
-              requiredBy: mod.id,
-              versionRange: depSpec.versionRange
-            });
-          }
+    for (const s of e)
+      for (const o of s.dependencies ?? []) {
+        const a = un(o), f = n.get(a.id);
+        if (!f)
+          t.missing.push({ moduleId: s.id, missingDep: a.id });
+        else if (a.versionRange && !K.satisfies(f.version, a.versionRange)) {
+          let d = t.versionConflicts.find((c) => c.moduleId === a.id);
+          d || (d = {
+            moduleId: a.id,
+            availableVersion: f.version,
+            requirements: []
+          }, t.versionConflicts.push(d)), d.requirements.push({
+            requiredBy: s.id,
+            versionRange: a.versionRange
+          });
         }
       }
-    }
-    result.circular = this.detectCycles(modules);
-    if (result.circular.length > 0) {
-      result.loadOrder = this.fallbackSort(modules);
-      return result;
-    }
-    result.loadOrder = this.topologicalSort(modules, moduleMap);
-    return result;
+    return t.circular = this.detectCycles(e), t.circular.length > 0 ? (t.loadOrder = this.fallbackSort(e), t) : (t.loadOrder = this.topologicalSort(e, n), t);
   }
   /**
    * Find the best matching version for a dependency spec
    * Returns undefined if no matching version exists
    */
-  findMatchingVersion(depSpec, modules) {
-    const candidates = modules.filter((m) => m.id === depSpec.id);
-    if (candidates.length === 0) {
-      return void 0;
-    }
-    if (!depSpec.versionRange) {
-      return candidates.sort((a, b) => semverExports.rcompare(a.version, b.version))[0];
-    }
-    const matching = candidates.filter((m) => semverExports.satisfies(m.version, depSpec.versionRange)).sort((a, b) => semverExports.rcompare(a.version, b.version));
-    return matching[0];
+  findMatchingVersion(e, t) {
+    const r = t.filter((s) => s.id === e.id);
+    return r.length === 0 ? void 0 : e.versionRange ? r.filter((s) => K.satisfies(s.version, e.versionRange)).sort((s, o) => K.rcompare(s.version, o.version))[0] : r.sort((s, o) => K.rcompare(s.version, o.version))[0];
   }
   /**
    * Check if a specific version satisfies a dependency spec
    */
-  satisfies(version, depSpec) {
-    if (!depSpec.versionRange) {
-      return true;
-    }
-    return semverExports.satisfies(version, depSpec.versionRange);
+  satisfies(e, t) {
+    return t.versionRange ? K.satisfies(e, t.versionRange) : !0;
   }
   /**
    * Find the maximum version that satisfies all given constraints
    */
-  findCompatibleVersion(moduleId, constraints, modules) {
-    const candidates = modules.filter((m) => m.id === moduleId).map((m) => m.version).sort((a, b) => semverExports.rcompare(a, b));
-    for (const version of candidates) {
-      const satisfiesAll = constraints.every((range2) => semverExports.satisfies(version, range2));
-      if (satisfiesAll) {
-        return version;
-      }
-    }
-    return void 0;
+  findCompatibleVersion(e, t, r) {
+    const n = r.filter((s) => s.id === e).map((s) => s.version).sort((s, o) => K.rcompare(s, o));
+    for (const s of n)
+      if (t.every((a) => K.satisfies(s, a)))
+        return s;
   }
   /**
    * Which module provides which service, by service ID.
@@ -2060,18 +1112,14 @@ class DependencyResolver {
    * runtime, and an edge per provider would turn ordinary fan-in into
    * artificial cycles.
    */
-  serviceProviders(modules) {
-    const providers = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      for (const service of mod.provides ?? []) {
-        const ranking = service.ranking ?? 0;
-        const incumbent = providers.get(service.id);
-        if (!incumbent || ranking > incumbent.ranking) {
-          providers.set(service.id, { moduleId: mod.id, ranking });
-        }
+  serviceProviders(e) {
+    const t = /* @__PURE__ */ new Map();
+    for (const r of e)
+      for (const n of r.provides ?? []) {
+        const s = n.ranking ?? 0, o = t.get(n.id);
+        (!o || s > o.ranking) && t.set(n.id, { moduleId: r.id, ranking: s });
       }
-    }
-    return new Map([...providers].map(([serviceId2, best2]) => [serviceId2, best2.moduleId]));
+    return new Map([...t].map(([r, n]) => [r, n.moduleId]));
   }
   /**
    * Module IDs a module has to be ordered after: its declared dependencies plus
@@ -2080,167 +1128,116 @@ class DependencyResolver {
    * Without the service edges, load order has to be maintained by hand even
    * though the manifests already say what a module needs.
    */
-  effectiveDependencyIds(mod, providers) {
-    const ids = /* @__PURE__ */ new Set();
-    for (const dep of mod.dependencies ?? []) {
-      ids.add(getDependencyId(dep));
-    }
-    for (const requirement of mod.requiresService ?? []) {
-      if (!requiresAtLeastOne(requirement))
+  effectiveDependencyIds(e, t) {
+    const r = /* @__PURE__ */ new Set();
+    for (const n of e.dependencies ?? [])
+      r.add(Pt(n));
+    for (const n of e.requiresService ?? []) {
+      if (!Sn(n) || Cn(n))
         continue;
-      if (collectsMany(requirement))
-        continue;
-      const providerId = providers.get(requirement.id);
-      if (providerId && providerId !== mod.id) {
-        ids.add(providerId);
-      }
+      const s = t.get(n.id);
+      s && s !== e.id && r.add(s);
     }
-    return [...ids];
+    return [...r];
   }
   /**
    * Detect circular dependencies using DFS
    */
-  detectCycles(modules) {
-    const cycles = [];
-    const visited = /* @__PURE__ */ new Set();
-    const recursionStack = /* @__PURE__ */ new Set();
-    const path = [];
-    const moduleMap = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      if (!moduleMap.has(mod.id)) {
-        moduleMap.set(mod.id, mod);
+  detectCycles(e) {
+    const t = [], r = /* @__PURE__ */ new Set(), n = /* @__PURE__ */ new Set(), s = [], o = /* @__PURE__ */ new Map();
+    for (const d of e)
+      o.has(d.id) || o.set(d.id, d);
+    const a = this.serviceProviders(o.values()), f = (d) => {
+      r.add(d), n.add(d), s.push(d);
+      const c = o.get(d);
+      if (c) {
+        for (const l of this.effectiveDependencyIds(c, a))
+          if (r.has(l)) {
+            if (n.has(l)) {
+              const p = s.indexOf(l), m = s.slice(p);
+              return m.push(l), t.push(m), !0;
+            }
+          } else if (f(l))
+            return !0;
       }
-    }
-    const providers = this.serviceProviders(moduleMap.values());
-    const dfs = (moduleId) => {
-      visited.add(moduleId);
-      recursionStack.add(moduleId);
-      path.push(moduleId);
-      const mod = moduleMap.get(moduleId);
-      if (mod) {
-        for (const depId of this.effectiveDependencyIds(mod, providers)) {
-          if (!visited.has(depId)) {
-            if (dfs(depId))
-              return true;
-          } else if (recursionStack.has(depId)) {
-            const cycleStart = path.indexOf(depId);
-            const cycle = path.slice(cycleStart);
-            cycle.push(depId);
-            cycles.push(cycle);
-            return true;
-          }
-        }
-      }
-      path.pop();
-      recursionStack.delete(moduleId);
-      return false;
+      return s.pop(), n.delete(d), !1;
     };
-    for (const mod of modules) {
-      if (!visited.has(mod.id)) {
-        dfs(mod.id);
-      }
-    }
-    return cycles;
+    for (const d of e)
+      r.has(d.id) || f(d.id);
+    return t;
   }
   /**
    * Topological sort using Kahn's algorithm
    */
-  topologicalSort(_modules, moduleMap) {
-    const uniqueModules = Array.from(moduleMap.values());
-    const providers = this.serviceProviders(uniqueModules);
-    const edges = /* @__PURE__ */ new Map();
-    for (const mod of uniqueModules) {
-      edges.set(mod.id, this.effectiveDependencyIds(mod, providers));
-    }
-    const inDegree = /* @__PURE__ */ new Map();
-    for (const mod of uniqueModules) {
-      inDegree.set(mod.id, 0);
-    }
-    for (const mod of uniqueModules) {
-      for (const depId of edges.get(mod.id) ?? []) {
-        if (moduleMap.has(depId)) {
-          inDegree.set(mod.id, (inDegree.get(mod.id) ?? 0) + 1);
+  topologicalSort(e, t) {
+    const r = Array.from(t.values()), n = this.serviceProviders(r), s = /* @__PURE__ */ new Map();
+    for (const d of r)
+      s.set(d.id, this.effectiveDependencyIds(d, n));
+    const o = /* @__PURE__ */ new Map();
+    for (const d of r)
+      o.set(d.id, 0);
+    for (const d of r)
+      for (const c of s.get(d.id) ?? [])
+        t.has(c) && o.set(d.id, (o.get(d.id) ?? 0) + 1);
+    const a = [];
+    for (const d of r)
+      o.get(d.id) === 0 && a.push(d);
+    a.sort((d, c) => (c.priority ?? 0) - (d.priority ?? 0));
+    const f = [];
+    for (; a.length > 0; ) {
+      a.sort((c, l) => (l.priority ?? 0) - (c.priority ?? 0));
+      const d = a.shift();
+      f.push(d);
+      for (const c of r)
+        if (s.get(c.id)?.includes(d.id)) {
+          const p = (o.get(c.id) ?? 1) - 1;
+          o.set(c.id, p), p === 0 && a.push(c);
         }
-      }
     }
-    const queue = [];
-    for (const mod of uniqueModules) {
-      if (inDegree.get(mod.id) === 0) {
-        queue.push(mod);
-      }
-    }
-    queue.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-    const result = [];
-    while (queue.length > 0) {
-      queue.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-      const mod = queue.shift();
-      result.push(mod);
-      for (const otherMod of uniqueModules) {
-        const dependsOnMod = edges.get(otherMod.id)?.includes(mod.id);
-        if (dependsOnMod) {
-          const newDegree = (inDegree.get(otherMod.id) ?? 1) - 1;
-          inDegree.set(otherMod.id, newDegree);
-          if (newDegree === 0) {
-            queue.push(otherMod);
-          }
-        }
-      }
-    }
-    return result;
+    return f;
   }
   /**
    * Fallback sorting when cycles exist
    */
-  fallbackSort(modules) {
-    const moduleMap = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      const existing = moduleMap.get(mod.id);
-      if (!existing || semverExports.gt(mod.version, existing.version)) {
-        moduleMap.set(mod.id, mod);
-      }
+  fallbackSort(e) {
+    const t = /* @__PURE__ */ new Map();
+    for (const r of e) {
+      const n = t.get(r.id);
+      (!n || K.gt(r.version, n.version)) && t.set(r.id, r);
     }
-    return [...moduleMap.values()].sort((a, b) => {
-      const priorityDiff = (b.priority ?? 0) - (a.priority ?? 0);
-      if (priorityDiff !== 0)
-        return priorityDiff;
-      const aDeps = a.dependencies?.length ?? 0;
-      const bDeps = b.dependencies?.length ?? 0;
-      return aDeps - bDeps;
+    return [...t.values()].sort((r, n) => {
+      const s = (n.priority ?? 0) - (r.priority ?? 0);
+      if (s !== 0)
+        return s;
+      const o = r.dependencies?.length ?? 0, a = n.dependencies?.length ?? 0;
+      return o - a;
     });
   }
   /**
    * Get all transitive dependencies of a module
    */
-  getTransitiveDependencies(moduleId, modules) {
-    const moduleMap = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      if (!moduleMap.has(mod.id)) {
-        moduleMap.set(mod.id, mod);
-      }
-    }
-    const result = /* @__PURE__ */ new Set();
-    const visited = /* @__PURE__ */ new Set();
-    const collect = (id) => {
-      if (visited.has(id))
+  getTransitiveDependencies(e, t) {
+    const r = /* @__PURE__ */ new Map();
+    for (const a of t)
+      r.has(a.id) || r.set(a.id, a);
+    const n = /* @__PURE__ */ new Set(), s = /* @__PURE__ */ new Set(), o = (a) => {
+      if (s.has(a))
         return;
-      visited.add(id);
-      const mod = moduleMap.get(id);
-      if (mod) {
-        for (const dep of mod.dependencies ?? []) {
-          const depId = getDependencyId(dep);
-          result.add(depId);
-          collect(depId);
+      s.add(a);
+      const f = r.get(a);
+      if (f)
+        for (const d of f.dependencies ?? []) {
+          const c = Pt(d);
+          n.add(c), o(c);
         }
-      }
     };
-    collect(moduleId);
-    return Array.from(result);
+    return o(e), Array.from(n);
   }
   /**
    * Get modules that depend on the given module
    */
-  getDependents(moduleId, modules) {
-    return modules.filter((mod) => mod.dependencies?.some((dep) => getDependencyId(dep) === moduleId)).map((mod) => mod.id);
+  getDependents(e, t) {
+    return t.filter((r) => r.dependencies?.some((n) => Pt(n) === e)).map((r) => r.id);
   }
   /**
    * Every module that depends on the given one, directly or through others,
@@ -2250,74 +1247,61 @@ class DependencyResolver {
    * the whole chain, or a module two steps away keeps running against code that
    * was replaced.
    */
-  getTransitiveDependents(moduleId, modules) {
-    const found = [];
-    const seen = /* @__PURE__ */ new Set([moduleId]);
-    let frontier = [moduleId];
-    while (frontier.length > 0) {
-      const next = [];
-      for (const current of frontier) {
-        for (const dependent of this.getDependents(current, modules)) {
-          if (seen.has(dependent))
-            continue;
-          seen.add(dependent);
-          found.push(dependent);
-          next.push(dependent);
-        }
-      }
-      frontier = next;
+  getTransitiveDependents(e, t) {
+    const r = [], n = /* @__PURE__ */ new Set([e]);
+    let s = [e];
+    for (; s.length > 0; ) {
+      const o = [];
+      for (const a of s)
+        for (const f of this.getDependents(a, t))
+          n.has(f) || (n.add(f), r.push(f), o.push(f));
+      s = o;
     }
-    return found;
+    return r;
   }
   /**
    * Check if all version constraints can be satisfied
    * Returns list of modules with unsatisfiable constraints
    */
-  validateVersionConstraints(modules) {
-    const conflicts = [];
-    const requirements = /* @__PURE__ */ new Map();
-    for (const mod of modules) {
-      for (const dep of mod.dependencies ?? []) {
-        const depSpec = normalizeDependency(dep);
-        if (depSpec.versionRange) {
-          const existing = requirements.get(depSpec.id) ?? [];
-          existing.push({ requiredBy: mod.id, versionRange: depSpec.versionRange });
-          requirements.set(depSpec.id, existing);
+  validateVersionConstraints(e) {
+    const t = [], r = /* @__PURE__ */ new Map();
+    for (const n of e)
+      for (const s of n.dependencies ?? []) {
+        const o = un(s);
+        if (o.versionRange) {
+          const a = r.get(o.id) ?? [];
+          a.push({ requiredBy: n.id, versionRange: o.versionRange }), r.set(o.id, a);
         }
       }
-    }
-    for (const [moduleId, reqs] of requirements) {
-      const available = modules.filter((m) => m.id === moduleId);
-      if (available.length === 0)
+    for (const [n, s] of r) {
+      const o = e.filter((f) => f.id === n);
+      if (o.length === 0)
         continue;
-      const satisfyingVersion = available.find((m) => reqs.every((r) => semverExports.satisfies(m.version, r.versionRange)));
-      if (!satisfyingVersion) {
-        const highest = available.sort((a, b) => semverExports.rcompare(a.version, b.version))[0];
-        conflicts.push({
-          moduleId,
-          availableVersion: highest.version,
-          requirements: reqs
+      if (!o.find((f) => s.every((d) => K.satisfies(f.version, d.versionRange)))) {
+        const f = o.sort((d, c) => K.rcompare(d.version, c.version))[0];
+        t.push({
+          moduleId: n,
+          availableVersion: f.version,
+          requirements: s
         });
       }
     }
-    return conflicts;
+    return t;
   }
   /**
    * Suggest version ranges that could resolve conflicts
    */
-  suggestResolution(conflict) {
-    const ranges = conflict.requirements.map((r) => r.versionRange);
+  suggestResolution(e) {
+    const t = e.requirements.map((r) => r.versionRange);
     try {
-      const intersection = semverExports.intersects(ranges[0], ranges[1]);
-      if (intersection) {
-        return `Consider using version range that satisfies: ${ranges.join(" AND ")}`;
-      }
+      if (K.intersects(t[0], t[1]))
+        return `Consider using version range that satisfies: ${t.join(" AND ")}`;
     } catch {
     }
-    return `No compatible version found. Required: ${ranges.join(", ")}`;
+    return `No compatible version found. Required: ${t.join(", ")}`;
   }
 }
-var _Reflect = {};
+var ln = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -2332,306 +1316,239 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var hasRequired_Reflect;
-function require_Reflect() {
-  if (hasRequired_Reflect) return _Reflect;
-  hasRequired_Reflect = 1;
-  var Reflect2;
-  (function(Reflect3) {
-    (function(factory) {
-      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
-      var exporter = makeExporter(Reflect3);
-      if (typeof root.Reflect !== "undefined") {
-        exporter = makeExporter(root.Reflect, exporter);
-      }
-      factory(exporter, root);
-      if (typeof root.Reflect === "undefined") {
-        root.Reflect = Reflect3;
-      }
-      function makeExporter(target, previous) {
-        return function(key, value) {
-          Object.defineProperty(target, key, { configurable: true, writable: true, value });
-          if (previous)
-            previous(key, value);
+var hn;
+function ss() {
+  if (hn) return ln;
+  hn = 1;
+  var i;
+  return (function(e) {
+    (function(t) {
+      var r = typeof globalThis == "object" ? globalThis : typeof yr == "object" ? yr : typeof self == "object" ? self : typeof this == "object" ? this : f(), n = s(e);
+      typeof r.Reflect < "u" && (n = s(r.Reflect, n)), t(n, r), typeof r.Reflect > "u" && (r.Reflect = e);
+      function s(d, c) {
+        return function(l, p) {
+          Object.defineProperty(d, l, { configurable: !0, writable: !0, value: p }), c && c(l, p);
         };
       }
-      function functionThis() {
+      function o() {
         try {
           return Function("return this;")();
-        } catch (_) {
+        } catch {
         }
       }
-      function indirectEvalThis() {
+      function a() {
         try {
-          return (void 0, eval)("(function() { return this; })()");
-        } catch (_) {
+          return (0, eval)("(function() { return this; })()");
+        } catch {
         }
       }
-      function sloppyModeThis() {
-        return functionThis() || indirectEvalThis();
+      function f() {
+        return o() || a();
       }
-    })(function(exporter, root) {
-      var hasOwn = Object.prototype.hasOwnProperty;
-      var supportsSymbol = typeof Symbol === "function";
-      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
-      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
-      var supportsCreate = typeof Object.create === "function";
-      var supportsProto = { __proto__: [] } instanceof Array;
-      var downLevel = !supportsCreate && !supportsProto;
-      var HashMap = {
+    })(function(t, r) {
+      var n = Object.prototype.hasOwnProperty, s = typeof Symbol == "function", o = s && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", a = s && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", f = typeof Object.create == "function", d = { __proto__: [] } instanceof Array, c = !f && !d, l = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: supportsCreate ? function() {
-          return MakeDictionary(/* @__PURE__ */ Object.create(null));
-        } : supportsProto ? function() {
-          return MakeDictionary({ __proto__: null });
+        create: f ? function() {
+          return Ue(/* @__PURE__ */ Object.create(null));
+        } : d ? function() {
+          return Ue({ __proto__: null });
         } : function() {
-          return MakeDictionary({});
+          return Ue({});
         },
-        has: downLevel ? function(map, key) {
-          return hasOwn.call(map, key);
-        } : function(map, key) {
-          return key in map;
+        has: c ? function(u, h) {
+          return n.call(u, h);
+        } : function(u, h) {
+          return h in u;
         },
-        get: downLevel ? function(map, key) {
-          return hasOwn.call(map, key) ? map[key] : void 0;
-        } : function(map, key) {
-          return map[key];
+        get: c ? function(u, h) {
+          return n.call(u, h) ? u[h] : void 0;
+        } : function(u, h) {
+          return u[h];
         }
-      };
-      var functionPrototype = Object.getPrototypeOf(Function);
-      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
-      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
-      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
-      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
-      var metadataRegistry = GetOrCreateMetadataRegistry();
-      var metadataProvider = CreateMetadataProvider(metadataRegistry);
-      function decorate(decorators, target, propertyKey, attributes) {
-        if (!IsUndefined(propertyKey)) {
-          if (!IsArray(decorators))
+      }, p = Object.getPrototypeOf(Function), m = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Ai(), j = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Mi(), w = typeof WeakMap == "function" ? WeakMap : Ti(), N = s ? Symbol.for("@reflect-metadata:registry") : void 0, q = Oi(), W = Si(q);
+      function x(u, h, g, y) {
+        if (E(g)) {
+          if (!dr(u))
             throw new TypeError();
-          if (!IsObject(target))
+          if (!ur(h))
             throw new TypeError();
-          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
-            throw new TypeError();
-          if (IsNull(attributes))
-            attributes = void 0;
-          propertyKey = ToPropertyKey(propertyKey);
-          return DecorateProperty(decorators, target, propertyKey, attributes);
+          return ve(u, h);
         } else {
-          if (!IsArray(decorators))
+          if (!dr(u))
             throw new TypeError();
-          if (!IsConstructor(target))
+          if (!V(h))
             throw new TypeError();
-          return DecorateConstructor(decorators, target);
+          if (!V(y) && !E(y) && !G(y))
+            throw new TypeError();
+          return G(y) && (y = void 0), g = ie(g), b(u, h, g, y);
         }
       }
-      exporter("decorate", decorate);
-      function metadata(metadataKey, metadataValue) {
-        function decorator(target, propertyKey) {
-          if (!IsObject(target))
+      t("decorate", x);
+      function Z(u, h) {
+        function g(y, T) {
+          if (!V(y))
             throw new TypeError();
-          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
+          if (!E(T) && !$i(T))
             throw new TypeError();
-          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+          C(u, h, y, T);
         }
-        return decorator;
+        return g;
       }
-      exporter("metadata", metadata);
-      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-        if (!IsObject(target))
+      t("metadata", Z);
+      function Q(u, h, g, y) {
+        if (!V(g))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+        return E(y) || (y = ie(y)), C(u, h, g, y);
       }
-      exporter("defineMetadata", defineMetadata);
-      function hasMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      t("defineMetadata", Q);
+      function B(u, h, g) {
+        if (!V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
+        return E(g) || (g = ie(g)), v(u, h, g);
       }
-      exporter("hasMetadata", hasMetadata);
-      function hasOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      t("hasMetadata", B);
+      function X(u, h, g) {
+        if (!V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
+        return E(g) || (g = ie(g)), A(u, h, g);
       }
-      exporter("hasOwnMetadata", hasOwnMetadata);
-      function getMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      t("hasOwnMetadata", X);
+      function _(u, h, g) {
+        if (!V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
+        return E(g) || (g = ie(g)), S(u, h, g);
       }
-      exporter("getMetadata", getMetadata);
-      function getOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      t("getMetadata", _);
+      function ae(u, h, g) {
+        if (!V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
+        return E(g) || (g = ie(g)), M(u, h, g);
       }
-      exporter("getOwnMetadata", getOwnMetadata);
-      function getMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
+      t("getOwnMetadata", ae);
+      function pe(u, h) {
+        if (!V(u))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryMetadataKeys(target, propertyKey);
+        return E(h) || (h = ie(h)), L(u, h);
       }
-      exporter("getMetadataKeys", getMetadataKeys);
-      function getOwnMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
+      t("getMetadataKeys", pe);
+      function ge(u, h) {
+        if (!V(u))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryOwnMetadataKeys(target, propertyKey);
+        return E(h) || (h = ie(h)), F(u, h);
       }
-      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
-      function deleteMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      t("getOwnMetadataKeys", ge);
+      function me(u, h, g) {
+        if (!V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        if (!IsObject(target))
+        if (E(g) || (g = ie(g)), !V(h))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        var provider = GetMetadataProvider(
-          target,
-          propertyKey,
+        E(g) || (g = ie(g));
+        var y = ye(
+          h,
+          g,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return false;
-        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
+        return E(y) ? !1 : y.OrdinaryDeleteMetadata(u, h, g);
       }
-      exporter("deleteMetadata", deleteMetadata);
-      function DecorateConstructor(decorators, target) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsConstructor(decorated))
+      t("deleteMetadata", me);
+      function ve(u, h) {
+        for (var g = u.length - 1; g >= 0; --g) {
+          var y = u[g], T = y(h);
+          if (!E(T) && !G(T)) {
+            if (!ur(T))
               throw new TypeError();
-            target = decorated;
+            h = T;
           }
         }
-        return target;
+        return h;
       }
-      function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target, propertyKey, descriptor);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsObject(decorated))
+      function b(u, h, g, y) {
+        for (var T = u.length - 1; T >= 0; --T) {
+          var Y = u[T], J = Y(h, g, y);
+          if (!E(J) && !G(J)) {
+            if (!V(J))
               throw new TypeError();
-            descriptor = decorated;
+            y = J;
           }
         }
-        return descriptor;
+        return y;
       }
-      function OrdinaryHasMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return true;
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryHasMetadata(MetadataKey, parent, P);
-        return false;
+      function v(u, h, g) {
+        var y = A(u, h, g);
+        if (y)
+          return !0;
+        var T = Ve(h);
+        return G(T) ? !1 : v(u, T, g);
       }
-      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function A(u, h, g) {
+        var y = ye(
+          h,
+          g,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
+        return E(y) ? !1 : fr(y.OrdinaryHasOwnMetadata(u, h, g));
       }
-      function OrdinaryGetMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryGetMetadata(MetadataKey, parent, P);
-        return void 0;
+      function S(u, h, g) {
+        var y = A(u, h, g);
+        if (y)
+          return M(u, h, g);
+        var T = Ve(h);
+        if (!G(T))
+          return S(u, T, g);
       }
-      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function M(u, h, g) {
+        var y = ye(
+          h,
+          g,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        if (!E(y))
+          return y.OrdinaryGetOwnMetadata(u, h, g);
       }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function C(u, h, g, y) {
+        var T = ye(
+          g,
+          y,
           /*Create*/
-          true
+          !0
         );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
+        T.OrdinaryDefineOwnMetadata(u, h, g, y);
       }
-      function OrdinaryMetadataKeys(O, P) {
-        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (parent === null)
-          return ownKeys;
-        var parentKeys = OrdinaryMetadataKeys(parent, P);
-        if (parentKeys.length <= 0)
-          return ownKeys;
-        if (ownKeys.length <= 0)
-          return parentKeys;
-        var set = new _Set();
-        var keys = [];
-        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
-          var key = ownKeys_1[_i];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
+      function L(u, h) {
+        var g = F(u, h), y = Ve(u);
+        if (y === null)
+          return g;
+        var T = L(y, h);
+        if (T.length <= 0)
+          return g;
+        if (g.length <= 0)
+          return T;
+        for (var Y = new j(), J = [], k = 0, R = g; k < R.length; k++) {
+          var $ = R[k], I = Y.has($);
+          I || (Y.add($), J.push($));
         }
-        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-          var key = parentKeys_1[_a];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
+        for (var O = 0, D = T; O < D.length; O++) {
+          var $ = D[O], I = Y.has($);
+          I || (Y.add($), J.push($));
         }
-        return keys;
+        return J;
       }
-      function OrdinaryOwnMetadataKeys(O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function F(u, h) {
+        var g = ye(
+          u,
+          h,
           /*create*/
-          false
+          !1
         );
-        if (!provider) {
-          return [];
-        }
-        return provider.OrdinaryOwnMetadataKeys(O, P);
+        return g ? g.OrdinaryOwnMetadataKeys(u, h) : [];
       }
-      function Type(x) {
-        if (x === null)
+      function P(u) {
+        if (u === null)
           return 1;
-        switch (typeof x) {
+        switch (typeof u) {
           case "undefined":
             return 0;
           case "boolean":
@@ -2643,1008 +1560,766 @@ function require_Reflect() {
           case "number":
             return 5;
           case "object":
-            return x === null ? 1 : 6;
+            return u === null ? 1 : 6;
           default:
             return 6;
         }
       }
-      function IsUndefined(x) {
-        return x === void 0;
+      function E(u) {
+        return u === void 0;
       }
-      function IsNull(x) {
-        return x === null;
+      function G(u) {
+        return u === null;
       }
-      function IsSymbol(x) {
-        return typeof x === "symbol";
+      function z(u) {
+        return typeof u == "symbol";
       }
-      function IsObject(x) {
-        return typeof x === "object" ? x !== null : typeof x === "function";
+      function V(u) {
+        return typeof u == "object" ? u !== null : typeof u == "function";
       }
-      function ToPrimitive(input, PreferredType) {
-        switch (Type(input)) {
+      function Ei(u, h) {
+        switch (P(u)) {
           case 0:
-            return input;
+            return u;
           case 1:
-            return input;
+            return u;
           case 2:
-            return input;
+            return u;
           case 3:
-            return input;
+            return u;
           case 4:
-            return input;
+            return u;
           case 5:
-            return input;
+            return u;
         }
-        var hint = "string";
-        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-        if (exoticToPrim !== void 0) {
-          var result = exoticToPrim.call(input, hint);
-          if (IsObject(result))
+        var g = "string", y = lr(u, o);
+        if (y !== void 0) {
+          var T = y.call(u, g);
+          if (V(T))
             throw new TypeError();
-          return result;
+          return T;
         }
-        return OrdinaryToPrimitive(input);
+        return Ri(u);
       }
-      function OrdinaryToPrimitive(O, hint) {
-        var valueOf, result, toString_2;
+      function Ri(u, h) {
+        var g, y, T;
         {
-          var toString_1 = O.toString;
-          if (IsCallable(toString_1)) {
-            var result = toString_1.call(O);
-            if (!IsObject(result))
-              return result;
+          var Y = u.toString;
+          if ($e(Y)) {
+            var y = Y.call(u);
+            if (!V(y))
+              return y;
           }
-          var valueOf = O.valueOf;
-          if (IsCallable(valueOf)) {
-            var result = valueOf.call(O);
-            if (!IsObject(result))
-              return result;
+          var g = u.valueOf;
+          if ($e(g)) {
+            var y = g.call(u);
+            if (!V(y))
+              return y;
           }
         }
         throw new TypeError();
       }
-      function ToBoolean(argument) {
-        return !!argument;
+      function fr(u) {
+        return !!u;
       }
-      function ToString(argument) {
-        return "" + argument;
+      function bi(u) {
+        return "" + u;
       }
-      function ToPropertyKey(argument) {
-        var key = ToPrimitive(argument);
-        if (IsSymbol(key))
-          return key;
-        return ToString(key);
+      function ie(u) {
+        var h = Ei(u);
+        return z(h) ? h : bi(h);
       }
-      function IsArray(argument) {
-        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
+      function dr(u) {
+        return Array.isArray ? Array.isArray(u) : u instanceof Object ? u instanceof Array : Object.prototype.toString.call(u) === "[object Array]";
       }
-      function IsCallable(argument) {
-        return typeof argument === "function";
+      function $e(u) {
+        return typeof u == "function";
       }
-      function IsConstructor(argument) {
-        return typeof argument === "function";
+      function ur(u) {
+        return typeof u == "function";
       }
-      function IsPropertyKey(argument) {
-        switch (Type(argument)) {
+      function $i(u) {
+        switch (P(u)) {
           case 3:
-            return true;
+            return !0;
           case 4:
-            return true;
+            return !0;
           default:
-            return false;
+            return !1;
         }
       }
-      function SameValueZero(x, y) {
-        return x === y || x !== x && y !== y;
+      function Be(u, h) {
+        return u === h || u !== u && h !== h;
       }
-      function GetMethod(V, P) {
-        var func = V[P];
-        if (func === void 0 || func === null)
-          return void 0;
-        if (!IsCallable(func))
-          throw new TypeError();
-        return func;
-      }
-      function GetIterator(obj) {
-        var method = GetMethod(obj, iteratorSymbol);
-        if (!IsCallable(method))
-          throw new TypeError();
-        var iterator = method.call(obj);
-        if (!IsObject(iterator))
-          throw new TypeError();
-        return iterator;
-      }
-      function IteratorValue(iterResult) {
-        return iterResult.value;
-      }
-      function IteratorStep(iterator) {
-        var result = iterator.next();
-        return result.done ? false : result;
-      }
-      function IteratorClose(iterator) {
-        var f = iterator["return"];
-        if (f)
-          f.call(iterator);
-      }
-      function OrdinaryGetPrototypeOf(O) {
-        var proto = Object.getPrototypeOf(O);
-        if (typeof O !== "function" || O === functionPrototype)
-          return proto;
-        if (proto !== functionPrototype)
-          return proto;
-        var prototype = O.prototype;
-        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
-        if (prototypeProto == null || prototypeProto === Object.prototype)
-          return proto;
-        var constructor = prototypeProto.constructor;
-        if (typeof constructor !== "function")
-          return proto;
-        if (constructor === O)
-          return proto;
-        return constructor;
-      }
-      function CreateMetadataRegistry() {
-        var fallback;
-        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
-          fallback = CreateFallbackProvider(root.Reflect);
+      function lr(u, h) {
+        var g = u[h];
+        if (g != null) {
+          if (!$e(g))
+            throw new TypeError();
+          return g;
         }
-        var first;
-        var second;
-        var rest;
-        var targetProviderMap = new _WeakMap();
-        var registry = {
-          registerProvider,
-          getProvider,
-          setProvider
+      }
+      function hr(u) {
+        var h = lr(u, a);
+        if (!$e(h))
+          throw new TypeError();
+        var g = h.call(u);
+        if (!V(g))
+          throw new TypeError();
+        return g;
+      }
+      function pr(u) {
+        return u.value;
+      }
+      function gr(u) {
+        var h = u.next();
+        return h.done ? !1 : h;
+      }
+      function mr(u) {
+        var h = u.return;
+        h && h.call(u);
+      }
+      function Ve(u) {
+        var h = Object.getPrototypeOf(u);
+        if (typeof u != "function" || u === p || h !== p)
+          return h;
+        var g = u.prototype, y = g && Object.getPrototypeOf(g);
+        if (y == null || y === Object.prototype)
+          return h;
+        var T = y.constructor;
+        return typeof T != "function" || T === u ? h : T;
+      }
+      function Ii() {
+        var u;
+        !E(N) && typeof r.Reflect < "u" && !(N in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (u = Ci(r.Reflect));
+        var h, g, y, T = new w(), Y = {
+          registerProvider: J,
+          getProvider: R,
+          setProvider: I
         };
-        return registry;
-        function registerProvider(provider) {
-          if (!Object.isExtensible(registry)) {
+        return Y;
+        function J(O) {
+          if (!Object.isExtensible(Y))
             throw new Error("Cannot add provider to a frozen registry.");
-          }
-          switch (true) {
-            case fallback === provider:
+          switch (!0) {
+            case u === O:
               break;
-            case IsUndefined(first):
-              first = provider;
+            case E(h):
+              h = O;
               break;
-            case first === provider:
+            case h === O:
               break;
-            case IsUndefined(second):
-              second = provider;
+            case E(g):
+              g = O;
               break;
-            case second === provider:
+            case g === O:
               break;
             default:
-              if (rest === void 0)
-                rest = new _Set();
-              rest.add(provider);
+              y === void 0 && (y = new j()), y.add(O);
               break;
           }
         }
-        function getProviderNoCache(O, P) {
-          if (!IsUndefined(first)) {
-            if (first.isProviderFor(O, P))
-              return first;
-            if (!IsUndefined(second)) {
-              if (second.isProviderFor(O, P))
-                return first;
-              if (!IsUndefined(rest)) {
-                var iterator = GetIterator(rest);
-                while (true) {
-                  var next = IteratorStep(iterator);
-                  if (!next) {
-                    return void 0;
-                  }
-                  var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O, P)) {
-                    IteratorClose(iterator);
-                    return provider;
-                  }
+        function k(O, D) {
+          if (!E(h)) {
+            if (h.isProviderFor(O, D))
+              return h;
+            if (!E(g)) {
+              if (g.isProviderFor(O, D))
+                return h;
+              if (!E(y))
+                for (var U = hr(y); ; ) {
+                  var H = gr(U);
+                  if (!H)
+                    return;
+                  var te = pr(H);
+                  if (te.isProviderFor(O, D))
+                    return mr(U), te;
                 }
-              }
             }
           }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
-            return fallback;
-          }
-          return void 0;
+          if (!E(u) && u.isProviderFor(O, D))
+            return u;
         }
-        function getProvider(O, P) {
-          var providerMap = targetProviderMap.get(O);
-          var provider;
-          if (!IsUndefined(providerMap)) {
-            provider = providerMap.get(P);
-          }
-          if (!IsUndefined(provider)) {
-            return provider;
-          }
-          provider = getProviderNoCache(O, P);
-          if (!IsUndefined(provider)) {
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return provider;
+        function R(O, D) {
+          var U = T.get(O), H;
+          return E(U) || (H = U.get(D)), E(H) && (H = k(O, D), E(H) || (E(U) && (U = new m(), T.set(O, U)), U.set(D, H))), H;
         }
-        function hasProvider(provider) {
-          if (IsUndefined(provider))
+        function $(O) {
+          if (E(O))
             throw new TypeError();
-          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
+          return h === O || g === O || !E(y) && y.has(O);
         }
-        function setProvider(O, P, provider) {
-          if (!hasProvider(provider)) {
+        function I(O, D, U) {
+          if (!$(U))
             throw new Error("Metadata provider not registered.");
+          var H = R(O, D);
+          if (H !== U) {
+            if (!E(H))
+              return !1;
+            var te = T.get(O);
+            E(te) && (te = new m(), T.set(O, te)), te.set(D, U);
           }
-          var existingProvider = getProvider(O, P);
-          if (existingProvider !== provider) {
-            if (!IsUndefined(existingProvider)) {
-              return false;
-            }
-            var providerMap = targetProviderMap.get(O);
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return true;
+          return !0;
         }
       }
-      function GetOrCreateMetadataRegistry() {
-        var metadataRegistry2;
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          metadataRegistry2 = root.Reflect[registrySymbol];
-        }
-        if (IsUndefined(metadataRegistry2)) {
-          metadataRegistry2 = CreateMetadataRegistry();
-        }
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          Object.defineProperty(root.Reflect, registrySymbol, {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: metadataRegistry2
-          });
-        }
-        return metadataRegistry2;
+      function Oi() {
+        var u;
+        return !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && (u = r.Reflect[N]), E(u) && (u = Ii()), !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, N, {
+          enumerable: !1,
+          configurable: !1,
+          writable: !1,
+          value: u
+        }), u;
       }
-      function CreateMetadataProvider(registry) {
-        var metadata2 = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var targetMetadata = metadata2.get(O);
-            if (IsUndefined(targetMetadata))
-              return false;
-            return targetMetadata.has(P);
+      function Si(u) {
+        var h = new w(), g = {
+          isProviderFor: function($, I) {
+            var O = h.get($);
+            return E(O) ? !1 : O.has(I);
           },
-          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
-          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
-          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
-          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
-          OrdinaryDeleteMetadata
+          OrdinaryDefineOwnMetadata: J,
+          OrdinaryHasOwnMetadata: T,
+          OrdinaryGetOwnMetadata: Y,
+          OrdinaryOwnMetadataKeys: k,
+          OrdinaryDeleteMetadata: R
         };
-        metadataRegistry.registerProvider(provider);
-        return provider;
-        function GetOrCreateMetadataMap(O, P, Create) {
-          var targetMetadata = metadata2.get(O);
-          var createdTargetMetadata = false;
-          if (IsUndefined(targetMetadata)) {
-            if (!Create)
-              return void 0;
-            targetMetadata = new _Map();
-            metadata2.set(O, targetMetadata);
-            createdTargetMetadata = true;
+        return q.registerProvider(g), g;
+        function y($, I, O) {
+          var D = h.get($), U = !1;
+          if (E(D)) {
+            if (!O)
+              return;
+            D = new m(), h.set($, D), U = !0;
           }
-          var metadataMap = targetMetadata.get(P);
-          if (IsUndefined(metadataMap)) {
-            if (!Create)
-              return void 0;
-            metadataMap = new _Map();
-            targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O, P, provider)) {
-              targetMetadata.delete(P);
-              if (createdTargetMetadata) {
-                metadata2.delete(O);
-              }
-              throw new Error("Wrong provider for target.");
-            }
+          var H = D.get(I);
+          if (E(H)) {
+            if (!O)
+              return;
+            if (H = new m(), D.set(I, H), !u.setProvider($, I, g))
+              throw D.delete(I), U && h.delete($), new Error("Wrong provider for target.");
           }
-          return metadataMap;
+          return H;
         }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
+        function T($, I, O) {
+          var D = y(
+            I,
             O,
-            P,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return false;
-          return ToBoolean(metadataMap.has(MetadataKey));
+          return E(D) ? !1 : fr(D.has($));
         }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
+        function Y($, I, O) {
+          var D = y(
+            I,
             O,
-            P,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return void 0;
-          return metadataMap.get(MetadataKey);
+          if (!E(D))
+            return D.get($);
         }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
+        function J($, I, O, D) {
+          var U = y(
             O,
-            P,
+            D,
             /*Create*/
-            true
+            !0
           );
-          metadataMap.set(MetadataKey, MetadataValue);
+          U.set($, I);
         }
-        function OrdinaryOwnMetadataKeys2(O, P) {
-          var keys = [];
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function k($, I) {
+          var O = [], D = y(
+            $,
+            I,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return keys;
-          var keysObj = metadataMap.keys();
-          var iterator = GetIterator(keysObj);
-          var k = 0;
-          while (true) {
-            var next = IteratorStep(iterator);
-            if (!next) {
-              keys.length = k;
-              return keys;
-            }
-            var nextValue = IteratorValue(next);
+          if (E(D))
+            return O;
+          for (var U = D.keys(), H = hr(U), te = 0; ; ) {
+            var vr = gr(H);
+            if (!vr)
+              return O.length = te, O;
+            var Li = pr(vr);
             try {
-              keys[k] = nextValue;
-            } catch (e) {
+              O[te] = Li;
+            } catch (Ni) {
               try {
-                IteratorClose(iterator);
+                mr(H);
               } finally {
-                throw e;
+                throw Ni;
               }
             }
-            k++;
+            te++;
           }
         }
-        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
+        function R($, I, O) {
+          var D = y(
+            I,
             O,
-            P,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return false;
-          if (!metadataMap.delete(MetadataKey))
-            return false;
-          if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O);
-            if (!IsUndefined(targetMetadata)) {
-              targetMetadata.delete(P);
-              if (targetMetadata.size === 0) {
-                metadata2.delete(targetMetadata);
-              }
-            }
+          if (E(D) || !D.delete($))
+            return !1;
+          if (D.size === 0) {
+            var U = h.get(I);
+            E(U) || (U.delete(O), U.size === 0 && h.delete(U));
           }
-          return true;
+          return !0;
         }
       }
-      function CreateFallbackProvider(reflect) {
-        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
-        var metadataOwner = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var metadataPropertySet = metadataOwner.get(O);
-            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
-              return true;
-            }
-            if (getOwnMetadataKeys2(O, P).length) {
-              if (IsUndefined(metadataPropertySet)) {
-                metadataPropertySet = new _Set();
-                metadataOwner.set(O, metadataPropertySet);
-              }
-              metadataPropertySet.add(P);
-              return true;
-            }
-            return false;
+      function Ci(u) {
+        var h = u.defineMetadata, g = u.hasOwnMetadata, y = u.getOwnMetadata, T = u.getOwnMetadataKeys, Y = u.deleteMetadata, J = new w(), k = {
+          isProviderFor: function(R, $) {
+            var I = J.get(R);
+            return !E(I) && I.has($) ? !0 : T(R, $).length ? (E(I) && (I = new j(), J.set(R, I)), I.add($), !0) : !1;
           },
-          OrdinaryDefineOwnMetadata: defineMetadata2,
-          OrdinaryHasOwnMetadata: hasOwnMetadata2,
-          OrdinaryGetOwnMetadata: getOwnMetadata2,
-          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
-          OrdinaryDeleteMetadata: deleteMetadata2
+          OrdinaryDefineOwnMetadata: h,
+          OrdinaryHasOwnMetadata: g,
+          OrdinaryGetOwnMetadata: y,
+          OrdinaryOwnMetadataKeys: T,
+          OrdinaryDeleteMetadata: Y
         };
-        return provider;
+        return k;
       }
-      function GetMetadataProvider(O, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O, P);
-        if (!IsUndefined(registeredProvider)) {
-          return registeredProvider;
-        }
-        if (Create) {
-          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
-            return metadataProvider;
-          }
+      function ye(u, h, g) {
+        var y = q.getProvider(u, h);
+        if (!E(y))
+          return y;
+        if (g) {
+          if (q.setProvider(u, h, W))
+            return W;
           throw new Error("Illegal state.");
         }
-        return void 0;
       }
-      function CreateMapPolyfill() {
-        var cacheSentinel = {};
-        var arraySentinel = [];
-        var MapIterator = (
+      function Ai() {
+        var u = {}, h = [], g = (
           /** @class */
           (function() {
-            function MapIterator2(keys, values, selector) {
-              this._index = 0;
-              this._keys = keys;
-              this._values = values;
-              this._selector = selector;
+            function k(R, $, I) {
+              this._index = 0, this._keys = R, this._values = $, this._selector = I;
             }
-            MapIterator2.prototype["@@iterator"] = function() {
+            return k.prototype["@@iterator"] = function() {
               return this;
-            };
-            MapIterator2.prototype[iteratorSymbol] = function() {
+            }, k.prototype[a] = function() {
               return this;
-            };
-            MapIterator2.prototype.next = function() {
-              var index = this._index;
-              if (index >= 0 && index < this._keys.length) {
-                var result = this._selector(this._keys[index], this._values[index]);
-                if (index + 1 >= this._keys.length) {
-                  this._index = -1;
-                  this._keys = arraySentinel;
-                  this._values = arraySentinel;
-                } else {
-                  this._index++;
-                }
-                return { value: result, done: false };
+            }, k.prototype.next = function() {
+              var R = this._index;
+              if (R >= 0 && R < this._keys.length) {
+                var $ = this._selector(this._keys[R], this._values[R]);
+                return R + 1 >= this._keys.length ? (this._index = -1, this._keys = h, this._values = h) : this._index++, { value: $, done: !1 };
               }
-              return { value: void 0, done: true };
-            };
-            MapIterator2.prototype.throw = function(error) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              throw error;
-            };
-            MapIterator2.prototype.return = function(value) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              return { value, done: true };
-            };
-            return MapIterator2;
+              return { value: void 0, done: !0 };
+            }, k.prototype.throw = function(R) {
+              throw this._index >= 0 && (this._index = -1, this._keys = h, this._values = h), R;
+            }, k.prototype.return = function(R) {
+              return this._index >= 0 && (this._index = -1, this._keys = h, this._values = h), { value: R, done: !0 };
+            }, k;
           })()
-        );
-        var Map2 = (
+        ), y = (
           /** @class */
           (function() {
-            function Map3() {
-              this._keys = [];
-              this._values = [];
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
+            function k() {
+              this._keys = [], this._values = [], this._cacheKey = u, this._cacheIndex = -2;
             }
-            Object.defineProperty(Map3.prototype, "size", {
+            return Object.defineProperty(k.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
-              enumerable: true,
-              configurable: true
-            });
-            Map3.prototype.has = function(key) {
+              enumerable: !0,
+              configurable: !0
+            }), k.prototype.has = function(R) {
               return this._find(
-                key,
+                R,
                 /*insert*/
-                false
+                !1
               ) >= 0;
-            };
-            Map3.prototype.get = function(key) {
-              var index = this._find(
-                key,
+            }, k.prototype.get = function(R) {
+              var $ = this._find(
+                R,
                 /*insert*/
-                false
+                !1
               );
-              return index >= 0 ? this._values[index] : void 0;
-            };
-            Map3.prototype.set = function(key, value) {
-              var index = this._find(
-                key,
+              return $ >= 0 ? this._values[$] : void 0;
+            }, k.prototype.set = function(R, $) {
+              var I = this._find(
+                R,
                 /*insert*/
-                true
+                !0
               );
-              this._values[index] = value;
-              return this;
-            };
-            Map3.prototype.delete = function(key) {
-              var index = this._find(
-                key,
+              return this._values[I] = $, this;
+            }, k.prototype.delete = function(R) {
+              var $ = this._find(
+                R,
                 /*insert*/
-                false
+                !1
               );
-              if (index >= 0) {
-                var size = this._keys.length;
-                for (var i = index + 1; i < size; i++) {
-                  this._keys[i - 1] = this._keys[i];
-                  this._values[i - 1] = this._values[i];
-                }
-                this._keys.length--;
-                this._values.length--;
-                if (SameValueZero(key, this._cacheKey)) {
-                  this._cacheKey = cacheSentinel;
-                  this._cacheIndex = -2;
-                }
-                return true;
+              if ($ >= 0) {
+                for (var I = this._keys.length, O = $ + 1; O < I; O++)
+                  this._keys[O - 1] = this._keys[O], this._values[O - 1] = this._values[O];
+                return this._keys.length--, this._values.length--, Be(R, this._cacheKey) && (this._cacheKey = u, this._cacheIndex = -2), !0;
               }
-              return false;
-            };
-            Map3.prototype.clear = function() {
-              this._keys.length = 0;
-              this._values.length = 0;
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
-            };
-            Map3.prototype.keys = function() {
-              return new MapIterator(this._keys, this._values, getKey);
-            };
-            Map3.prototype.values = function() {
-              return new MapIterator(this._keys, this._values, getValue);
-            };
-            Map3.prototype.entries = function() {
-              return new MapIterator(this._keys, this._values, getEntry);
-            };
-            Map3.prototype["@@iterator"] = function() {
+              return !1;
+            }, k.prototype.clear = function() {
+              this._keys.length = 0, this._values.length = 0, this._cacheKey = u, this._cacheIndex = -2;
+            }, k.prototype.keys = function() {
+              return new g(this._keys, this._values, T);
+            }, k.prototype.values = function() {
+              return new g(this._keys, this._values, Y);
+            }, k.prototype.entries = function() {
+              return new g(this._keys, this._values, J);
+            }, k.prototype["@@iterator"] = function() {
               return this.entries();
-            };
-            Map3.prototype[iteratorSymbol] = function() {
+            }, k.prototype[a] = function() {
               return this.entries();
-            };
-            Map3.prototype._find = function(key, insert) {
-              if (!SameValueZero(this._cacheKey, key)) {
+            }, k.prototype._find = function(R, $) {
+              if (!Be(this._cacheKey, R)) {
                 this._cacheIndex = -1;
-                for (var i = 0; i < this._keys.length; i++) {
-                  if (SameValueZero(this._keys[i], key)) {
-                    this._cacheIndex = i;
+                for (var I = 0; I < this._keys.length; I++)
+                  if (Be(this._keys[I], R)) {
+                    this._cacheIndex = I;
                     break;
                   }
-                }
               }
-              if (this._cacheIndex < 0 && insert) {
-                this._cacheIndex = this._keys.length;
-                this._keys.push(key);
-                this._values.push(void 0);
-              }
-              return this._cacheIndex;
-            };
-            return Map3;
+              return this._cacheIndex < 0 && $ && (this._cacheIndex = this._keys.length, this._keys.push(R), this._values.push(void 0)), this._cacheIndex;
+            }, k;
           })()
         );
-        return Map2;
-        function getKey(key, _) {
-          return key;
+        return y;
+        function T(k, R) {
+          return k;
         }
-        function getValue(_, value) {
-          return value;
+        function Y(k, R) {
+          return R;
         }
-        function getEntry(key, value) {
-          return [key, value];
+        function J(k, R) {
+          return [k, R];
         }
       }
-      function CreateSetPolyfill() {
-        var Set2 = (
+      function Mi() {
+        var u = (
           /** @class */
           (function() {
-            function Set3() {
-              this._map = new _Map();
+            function h() {
+              this._map = new m();
             }
-            Object.defineProperty(Set3.prototype, "size", {
+            return Object.defineProperty(h.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
-              enumerable: true,
-              configurable: true
-            });
-            Set3.prototype.has = function(value) {
-              return this._map.has(value);
-            };
-            Set3.prototype.add = function(value) {
-              return this._map.set(value, value), this;
-            };
-            Set3.prototype.delete = function(value) {
-              return this._map.delete(value);
-            };
-            Set3.prototype.clear = function() {
+              enumerable: !0,
+              configurable: !0
+            }), h.prototype.has = function(g) {
+              return this._map.has(g);
+            }, h.prototype.add = function(g) {
+              return this._map.set(g, g), this;
+            }, h.prototype.delete = function(g) {
+              return this._map.delete(g);
+            }, h.prototype.clear = function() {
               this._map.clear();
-            };
-            Set3.prototype.keys = function() {
+            }, h.prototype.keys = function() {
               return this._map.keys();
-            };
-            Set3.prototype.values = function() {
+            }, h.prototype.values = function() {
               return this._map.keys();
-            };
-            Set3.prototype.entries = function() {
+            }, h.prototype.entries = function() {
               return this._map.entries();
-            };
-            Set3.prototype["@@iterator"] = function() {
+            }, h.prototype["@@iterator"] = function() {
               return this.keys();
-            };
-            Set3.prototype[iteratorSymbol] = function() {
+            }, h.prototype[a] = function() {
               return this.keys();
-            };
-            return Set3;
+            }, h;
           })()
         );
-        return Set2;
+        return u;
       }
-      function CreateWeakMapPolyfill() {
-        var UUID_SIZE = 16;
-        var keys = HashMap.create();
-        var rootKey = CreateUniqueKey();
+      function Ti() {
+        var u = 16, h = l.create(), g = y();
         return (
           /** @class */
           (function() {
-            function WeakMap2() {
-              this._key = CreateUniqueKey();
+            function R() {
+              this._key = y();
             }
-            WeakMap2.prototype.has = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+            return R.prototype.has = function($) {
+              var I = T(
+                $,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? HashMap.has(table, this._key) : false;
-            };
-            WeakMap2.prototype.get = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return I !== void 0 ? l.has(I, this._key) : !1;
+            }, R.prototype.get = function($) {
+              var I = T(
+                $,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
-            };
-            WeakMap2.prototype.set = function(target, value) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return I !== void 0 ? l.get(I, this._key) : void 0;
+            }, R.prototype.set = function($, I) {
+              var O = T(
+                $,
                 /*create*/
-                true
+                !0
               );
-              table[this._key] = value;
-              return this;
-            };
-            WeakMap2.prototype.delete = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return O[this._key] = I, this;
+            }, R.prototype.delete = function($) {
+              var I = T(
+                $,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? delete table[this._key] : false;
-            };
-            WeakMap2.prototype.clear = function() {
-              this._key = CreateUniqueKey();
-            };
-            return WeakMap2;
+              return I !== void 0 ? delete I[this._key] : !1;
+            }, R.prototype.clear = function() {
+              this._key = y();
+            }, R;
           })()
         );
-        function CreateUniqueKey() {
-          var key;
+        function y() {
+          var R;
           do
-            key = "@@WeakMap@@" + CreateUUID();
-          while (HashMap.has(keys, key));
-          keys[key] = true;
-          return key;
+            R = "@@WeakMap@@" + k();
+          while (l.has(h, R));
+          return h[R] = !0, R;
         }
-        function GetOrCreateWeakMapTable(target, create) {
-          if (!hasOwn.call(target, rootKey)) {
-            if (!create)
-              return void 0;
-            Object.defineProperty(target, rootKey, { value: HashMap.create() });
+        function T(R, $) {
+          if (!n.call(R, g)) {
+            if (!$)
+              return;
+            Object.defineProperty(R, g, { value: l.create() });
           }
-          return target[rootKey];
+          return R[g];
         }
-        function FillRandomBytes(buffer, size) {
-          for (var i = 0; i < size; ++i)
-            buffer[i] = Math.random() * 255 | 0;
-          return buffer;
+        function Y(R, $) {
+          for (var I = 0; I < $; ++I)
+            R[I] = Math.random() * 255 | 0;
+          return R;
         }
-        function GenRandomBytes(size) {
-          if (typeof Uint8Array === "function") {
-            var array = new Uint8Array(size);
-            if (typeof crypto !== "undefined") {
-              crypto.getRandomValues(array);
-            } else if (typeof msCrypto !== "undefined") {
-              msCrypto.getRandomValues(array);
-            } else {
-              FillRandomBytes(array, size);
-            }
-            return array;
+        function J(R) {
+          if (typeof Uint8Array == "function") {
+            var $ = new Uint8Array(R);
+            return typeof crypto < "u" ? crypto.getRandomValues($) : typeof msCrypto < "u" ? msCrypto.getRandomValues($) : Y($, R), $;
           }
-          return FillRandomBytes(new Array(size), size);
+          return Y(new Array(R), R);
         }
-        function CreateUUID() {
-          var data = GenRandomBytes(UUID_SIZE);
-          data[6] = data[6] & 79 | 64;
-          data[8] = data[8] & 191 | 128;
-          var result = "";
-          for (var offset = 0; offset < UUID_SIZE; ++offset) {
-            var byte = data[offset];
-            if (offset === 4 || offset === 6 || offset === 8)
-              result += "-";
-            if (byte < 16)
-              result += "0";
-            result += byte.toString(16).toLowerCase();
+        function k() {
+          var R = J(u);
+          R[6] = R[6] & 79 | 64, R[8] = R[8] & 191 | 128;
+          for (var $ = "", I = 0; I < u; ++I) {
+            var O = R[I];
+            (I === 4 || I === 6 || I === 8) && ($ += "-"), O < 16 && ($ += "0"), $ += O.toString(16).toLowerCase();
           }
-          return result;
+          return $;
         }
       }
-      function MakeDictionary(obj) {
-        obj.__ = void 0;
-        delete obj.__;
-        return obj;
+      function Ue(u) {
+        return u.__ = void 0, delete u.__, u;
       }
     });
-  })(Reflect2 || (Reflect2 = {}));
-  return _Reflect;
+  })(i || (i = {})), ln;
 }
-require_Reflect();
-const INJECTABLE_KEY = Symbol.for("tsm:injectable");
-const INJECT_KEY = Symbol.for("tsm:inject");
-const INJECT_PROPERTY_KEY = Symbol.for("tsm:inject:property");
-const SCOPE_KEY = Symbol.for("tsm:scope");
-const COMPONENT_KEY = Symbol.for("tsm:component");
-const ACTIVATE_KEY = Symbol.for("tsm:component:activate");
-const DEACTIVATE_KEY = Symbol.for("tsm:component:deactivate");
-const MODIFIED_KEY = Symbol.for("tsm:component:modified");
-const INJECT_ALL_KEY = Symbol.for("tsm:inject:all");
-const BIND_KEY = Symbol.for("tsm:component:bind");
-const UNBIND_KEY = Symbol.for("tsm:component:unbind");
-function injectAll(serviceId2, options = {}) {
-  return (target, propertyKey) => {
-    const ctor = target.constructor;
-    const existing = Reflect.getOwnMetadata(INJECT_ALL_KEY, ctor) ?? [];
-    Reflect.defineMetadata(INJECT_ALL_KEY, [...existing, {
-      propertyKey,
-      serviceId: serviceId2,
-      target: options.target,
-      fieldOption: options.fieldOption ?? "replace"
-    }], ctor);
+ss();
+const tr = Symbol.for("tsm:injectable"), Ft = Symbol.for("tsm:inject"), xt = Symbol.for("tsm:inject:property"), De = Symbol.for("tsm:scope"), rr = Symbol.for("tsm:component"), Mn = Symbol.for("tsm:component:activate"), Tn = Symbol.for("tsm:component:deactivate"), Ln = Symbol.for("tsm:component:modified"), Bt = Symbol.for("tsm:inject:all"), Vt = Symbol.for("tsm:component:bind"), Ut = Symbol.for("tsm:component:unbind");
+function os(i, e = {}) {
+  return (t, r) => {
+    const n = t.constructor, s = Reflect.getOwnMetadata(Bt, n) ?? [];
+    Reflect.defineMetadata(Bt, [...s, {
+      propertyKey: r,
+      serviceId: i,
+      target: e.target,
+      fieldOption: e.fieldOption ?? "replace"
+    }], n);
   };
 }
-function getInjectAllMetadata(target) {
-  return Reflect.getOwnMetadata(INJECT_ALL_KEY, target) ?? [];
+function jt(i) {
+  return Reflect.getOwnMetadata(Bt, i) ?? [];
 }
-function injectable() {
-  return (target) => {
-    Reflect.defineMetadata(INJECTABLE_KEY, true, target);
+function as() {
+  return (i) => {
+    Reflect.defineMetadata(tr, !0, i);
   };
 }
-function inject(serviceId2, options) {
-  return (target, propertyKey, parameterIndex) => {
-    if (parameterIndex !== void 0) {
-      const existing = Reflect.getOwnMetadata(INJECT_KEY, target) ?? [];
-      existing.push({
-        index: parameterIndex,
-        serviceId: serviceId2,
-        optional: options?.optional ?? false
-      });
-      Reflect.defineMetadata(INJECT_KEY, existing, target);
+function cs(i, e) {
+  return (t, r, n) => {
+    if (n !== void 0) {
+      const s = Reflect.getOwnMetadata(Ft, t) ?? [];
+      s.push({
+        index: n,
+        serviceId: i,
+        optional: e?.optional ?? !1
+      }), Reflect.defineMetadata(Ft, s, t);
     } else {
-      const ctor = target.constructor;
-      const existing = Reflect.getOwnMetadata(INJECT_PROPERTY_KEY, ctor) ?? [];
-      existing.push({
-        propertyKey,
-        serviceId: serviceId2,
-        optional: options?.optional ?? false
-      });
-      Reflect.defineMetadata(INJECT_PROPERTY_KEY, existing, ctor);
+      const s = t.constructor, o = Reflect.getOwnMetadata(xt, s) ?? [];
+      o.push({
+        propertyKey: r,
+        serviceId: i,
+        optional: e?.optional ?? !1
+      }), Reflect.defineMetadata(xt, o, s);
     }
   };
 }
-function singleton() {
-  return (target) => {
-    Reflect.defineMetadata(SCOPE_KEY, "singleton", target);
+function fs() {
+  return (i) => {
+    Reflect.defineMetadata(De, "singleton", i);
   };
 }
-function perModule() {
-  return (target) => {
-    Reflect.defineMetadata(SCOPE_KEY, "module", target);
+function ds() {
+  return (i) => {
+    Reflect.defineMetadata(De, "module", i);
   };
 }
-function transient() {
-  return (target) => {
-    Reflect.defineMetadata(SCOPE_KEY, "transient", target);
+function us() {
+  return (i) => {
+    Reflect.defineMetadata(De, "transient", i);
   };
 }
-function getInjectMetadata(target) {
-  const metadata = Reflect.getOwnMetadata(INJECT_KEY, target) ?? [];
-  return metadata.sort((a, b) => a.index - b.index);
+function Gt(i) {
+  return (Reflect.getOwnMetadata(Ft, i) ?? []).sort((t, r) => t.index - r.index);
 }
-function getPropertyInjectMetadata(target) {
-  return Reflect.getOwnMetadata(INJECT_PROPERTY_KEY, target) ?? [];
+function zt(i) {
+  return Reflect.getOwnMetadata(xt, i) ?? [];
 }
-function component(options = {}) {
-  return (target) => {
-    Reflect.defineMetadata(COMPONENT_KEY, options, target);
-    Reflect.defineMetadata(INJECTABLE_KEY, true, target);
+function ls(i = {}) {
+  return (e) => {
+    Reflect.defineMetadata(rr, i, e), Reflect.defineMetadata(tr, !0, e);
   };
 }
-function activate() {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(ACTIVATE_KEY, propertyKey, target.constructor);
+function hs() {
+  return (i, e) => {
+    Reflect.defineMetadata(Mn, e, i.constructor);
   };
 }
-function deactivate() {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(DEACTIVATE_KEY, propertyKey, target.constructor);
+function ps() {
+  return (i, e) => {
+    Reflect.defineMetadata(Tn, e, i.constructor);
   };
 }
-function modified() {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(MODIFIED_KEY, propertyKey, target.constructor);
+function gs() {
+  return (i, e) => {
+    Reflect.defineMetadata(Ln, e, i.constructor);
   };
 }
-function getComponentMetadata(target) {
-  return Reflect.getOwnMetadata(COMPONENT_KEY, target);
+function ms(i) {
+  return Reflect.getOwnMetadata(rr, i);
 }
-function getActivateMethod(target) {
-  return Reflect.getOwnMetadata(ACTIVATE_KEY, target);
+function vs(i) {
+  return Reflect.getOwnMetadata(rr, i) !== void 0;
 }
-function getDeactivateMethod(target) {
-  return Reflect.getOwnMetadata(DEACTIVATE_KEY, target);
+function pn(i) {
+  return Reflect.getOwnMetadata(Mn, i);
 }
-function bind(serviceId2, options) {
-  return (target, propertyKey) => {
-    const existing = Reflect.getOwnMetadata(BIND_KEY, target.constructor) ?? [];
-    Reflect.defineMetadata(BIND_KEY, [...existing, { serviceId: serviceId2, method: propertyKey, optional: options?.optional === true }], target.constructor);
+function gn(i) {
+  return Reflect.getOwnMetadata(Tn, i);
+}
+function ys(i, e) {
+  return (t, r) => {
+    const n = Reflect.getOwnMetadata(Vt, t.constructor) ?? [];
+    Reflect.defineMetadata(Vt, [...n, { serviceId: i, method: r, optional: e?.optional === !0 }], t.constructor);
   };
 }
-function unbind(serviceId2) {
-  return (target, propertyKey) => {
-    const existing = Reflect.getOwnMetadata(UNBIND_KEY, target.constructor) ?? [];
-    Reflect.defineMetadata(UNBIND_KEY, [...existing, { serviceId: serviceId2, method: propertyKey, optional: false }], target.constructor);
+function ws(i) {
+  return (e, t) => {
+    const r = Reflect.getOwnMetadata(Ut, e.constructor) ?? [];
+    Reflect.defineMetadata(Ut, [...r, { serviceId: i, method: t, optional: !1 }], e.constructor);
   };
 }
-function getBindMethods(target) {
-  return Reflect.getOwnMetadata(BIND_KEY, target) ?? [];
+function Ce(i) {
+  return Reflect.getOwnMetadata(Vt, i) ?? [];
 }
-function getUnbindMethods(target) {
-  return Reflect.getOwnMetadata(UNBIND_KEY, target) ?? [];
+function mn(i) {
+  return Reflect.getOwnMetadata(Ut, i) ?? [];
 }
-function getModifiedMethod(target) {
-  return Reflect.getOwnMetadata(MODIFIED_KEY, target);
+function vn(i) {
+  return Reflect.getOwnMetadata(Ln, i);
 }
-function isInjectable(target) {
-  return Reflect.getOwnMetadata(INJECTABLE_KEY, target) === true;
+function yn(i) {
+  return Reflect.getOwnMetadata(tr, i) === !0;
 }
-function getScopeMetadata(target) {
-  return Reflect.getOwnMetadata(SCOPE_KEY, target);
+function Es(i) {
+  return Reflect.getOwnMetadata(De, i);
 }
-class FilterParser {
+class Rs {
   source;
   read;
   position = 0;
-  constructor(source, read) {
-    this.source = source;
-    this.read = read;
+  constructor(e, t) {
+    this.source = e, this.read = t;
   }
   parse() {
-    const filter = this.parseFilter();
-    this.skipWhitespace();
-    if (this.position < this.source.length) {
-      throw this.error(`unexpected trailing input`);
-    }
-    return filter;
+    const e = this.parseFilter();
+    if (this.skipWhitespace(), this.position < this.source.length)
+      throw this.error("unexpected trailing input");
+    return e;
   }
   parseFilter() {
-    this.skipWhitespace();
-    this.expect("(");
-    this.skipWhitespace();
-    const operator = this.source[this.position];
-    let filter;
-    if ((operator === "&" || operator === "|") && this.filterFollows(1)) {
+    this.skipWhitespace(), this.expect("("), this.skipWhitespace();
+    const e = this.source[this.position];
+    let t;
+    if ((e === "&" || e === "|") && this.filterFollows(1)) {
       this.position++;
-      const operands = this.parseOperands();
-      filter = operator === "&" ? (properties) => operands.every((operand) => operand(properties)) : (properties) => operands.some((operand) => operand(properties));
-    } else if (operator === "!" && this.filterFollows(1)) {
+      const r = this.parseOperands();
+      t = e === "&" ? (n) => r.every((s) => s(n)) : (n) => r.some((s) => s(n));
+    } else if (e === "!" && this.filterFollows(1)) {
       this.position++;
-      const operand = this.parseFilter();
-      filter = (properties) => !operand(properties);
-    } else {
-      filter = this.parseItem();
-    }
-    this.skipWhitespace();
-    this.expect(")");
-    return filter;
+      const r = this.parseFilter();
+      t = (n) => !r(n);
+    } else
+      t = this.parseItem();
+    return this.skipWhitespace(), this.expect(")"), t;
   }
   /** Whether the next non-whitespace character after an offset opens a filter */
-  filterFollows(offset) {
-    let lookahead = this.position + offset;
-    while (lookahead < this.source.length && /\s/.test(this.source[lookahead])) {
-      lookahead++;
-    }
-    return this.source[lookahead] === "(";
+  filterFollows(e) {
+    let t = this.position + e;
+    for (; t < this.source.length && /\s/.test(this.source[t]); )
+      t++;
+    return this.source[t] === "(";
   }
   parseOperands() {
-    const operands = [];
-    this.skipWhitespace();
-    while (this.source[this.position] === "(") {
-      operands.push(this.parseFilter());
-      this.skipWhitespace();
-    }
-    if (operands.length === 0) {
+    const e = [];
+    for (this.skipWhitespace(); this.source[this.position] === "("; )
+      e.push(this.parseFilter()), this.skipWhitespace();
+    if (e.length === 0)
       throw this.error("operator without operands");
-    }
-    return operands;
+    return e;
   }
   parseItem() {
-    const attribute = this.readAttribute();
-    const operator = this.readOperator();
-    const { parts, wildcards } = this.readValue();
-    if (operator === "~=") {
-      const approximate = approximately(parts.join(""));
-      return (properties) => matches(this.read(properties, attribute), (actual) => typeof actual === "string" || typeof actual === "number" ? approximately(String(actual)) === approximate : false);
+    const e = this.readAttribute(), t = this.readOperator(), { parts: r, wildcards: n } = this.readValue();
+    if (t === "~=") {
+      const o = wn(r.join(""));
+      return (a) => Oe(this.read(a, e), (f) => typeof f == "string" || typeof f == "number" ? wn(String(f)) === o : !1);
     }
-    if (operator === "=" && wildcards) {
-      if (parts.every((part) => part.length === 0)) {
-        return (properties) => this.read(properties, attribute) !== void 0;
-      }
-      const pattern = substringPattern(parts);
-      return (properties) => matches(
-        this.read(properties, attribute),
+    if (t === "=" && n) {
+      if (r.every((a) => a.length === 0))
+        return (a) => this.read(a, e) !== void 0;
+      const o = bs(r);
+      return (a) => Oe(
+        this.read(a, e),
         // A wildcard is a string operation: OSGi does not apply it to numbers
         // or booleans, so (intvalue=100*) does not match 1000
-        (actual) => typeof actual === "string" && pattern.test(actual)
+        (f) => typeof f == "string" && o.test(f)
       );
     }
-    const value = parts.join("");
-    if (operator === "=") {
-      return (properties) => matches(this.read(properties, attribute), (actual) => equals(actual, value));
-    }
-    return (properties) => matches(this.read(properties, attribute), (actual) => compare(actual, value, operator));
+    const s = r.join("");
+    return t === "=" ? (o) => Oe(this.read(o, e), (a) => Os(a, s)) : (o) => Oe(this.read(o, e), (a) => Ss(a, s, t));
   }
   readAttribute() {
-    const start = this.position;
-    while (this.position < this.source.length && !"=<>()~".includes(this.source[this.position])) {
+    const e = this.position;
+    for (; this.position < this.source.length && !"=<>()~".includes(this.source[this.position]); )
       this.position++;
-    }
-    const attribute = this.source.slice(start, this.position).trim();
-    if (attribute.length === 0) {
+    const t = this.source.slice(e, this.position).trim();
+    if (t.length === 0)
       throw this.error("missing attribute name");
-    }
-    return attribute;
+    return t;
   }
   readOperator() {
-    if (this.source.startsWith(">=", this.position)) {
-      this.position += 2;
-      return ">=";
-    }
-    if (this.source.startsWith("<=", this.position)) {
-      this.position += 2;
-      return "<=";
-    }
-    if (this.source[this.position] === "=") {
-      this.position++;
-      return "=";
-    }
-    if (this.source.startsWith("~=", this.position)) {
-      this.position += 2;
-      return "~=";
-    }
+    if (this.source.startsWith(">=", this.position))
+      return this.position += 2, ">=";
+    if (this.source.startsWith("<=", this.position))
+      return this.position += 2, "<=";
+    if (this.source[this.position] === "=")
+      return this.position++, "=";
+    if (this.source.startsWith("~=", this.position))
+      return this.position += 2, "~=";
     throw this.error("expected =, >=, <= or ~=");
   }
   /**
@@ -3654,111 +2329,86 @@ class FilterParser {
    * is dropped, a literal asterisk is indistinguishable from a wildcard.
    */
   readValue() {
-    const parts = [""];
-    let wildcards = false;
-    while (this.position < this.source.length) {
-      const character = this.source[this.position];
-      if (character === ")")
+    const e = [""];
+    let t = !1;
+    for (; this.position < this.source.length; ) {
+      const r = this.source[this.position];
+      if (r === ")")
         break;
-      if (character === "\\") {
-        const escaped = this.source[this.position + 1];
-        if (escaped === void 0) {
+      if (r === "\\") {
+        const n = this.source[this.position + 1];
+        if (n === void 0)
           throw this.error("trailing escape character");
-        }
-        parts[parts.length - 1] += escaped;
-        this.position += 2;
+        e[e.length - 1] += n, this.position += 2;
         continue;
       }
-      if (character === "*") {
-        wildcards = true;
-        parts.push("");
-        this.position++;
+      if (r === "*") {
+        t = !0, e.push(""), this.position++;
         continue;
       }
-      parts[parts.length - 1] += character;
-      this.position++;
+      e[e.length - 1] += r, this.position++;
     }
-    return { parts, wildcards };
+    return { parts: e, wildcards: t };
   }
   skipWhitespace() {
-    while (this.position < this.source.length && /\s/.test(this.source[this.position])) {
+    for (; this.position < this.source.length && /\s/.test(this.source[this.position]); )
       this.position++;
-    }
   }
-  expect(character) {
-    if (this.source[this.position] !== character) {
-      throw this.error(`expected '${character}'`);
-    }
+  expect(e) {
+    if (this.source[this.position] !== e)
+      throw this.error(`expected '${e}'`);
     this.position++;
   }
-  error(message) {
-    return new Error(`Invalid service filter at position ${this.position}: ${message} — '${this.source}'`);
+  error(e) {
+    return new Error(`Invalid service filter at position ${this.position}: ${e} — '${this.source}'`);
   }
 }
-function substringPattern(parts) {
-  const escaped = parts.map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join(".*");
-  return new RegExp(`^${escaped}$`);
+function bs(i) {
+  const e = i.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join(".*");
+  return new RegExp(`^${e}$`);
 }
-const ignoringCase = (properties, attribute) => {
-  const direct = properties[attribute];
-  if (direct !== void 0)
-    return direct;
-  const wanted = attribute.toLowerCase();
-  for (const [key, value] of Object.entries(properties)) {
-    if (key.toLowerCase() === wanted)
-      return value;
+const $s = (i, e) => {
+  const t = i[e];
+  if (t !== void 0)
+    return t;
+  const r = e.toLowerCase();
+  for (const [n, s] of Object.entries(i))
+    if (n.toLowerCase() === r)
+      return s;
+}, Is = (i, e) => i[e];
+function Oe(i, e) {
+  return i === void 0 ? !1 : Array.isArray(i) ? i.some((t) => e(t)) : e(i);
+}
+function Os(i, e) {
+  return typeof i == "boolean" ? String(i) === e.trim() : typeof i == "number" ? Nn(e) === i : i === e;
+}
+function Nn(i) {
+  const e = i.trim();
+  return e.length === 0 ? Number.NaN : Number(e);
+}
+function Ss(i, e, t) {
+  if (typeof i == "boolean")
+    return !1;
+  if (typeof i == "number") {
+    const r = Nn(e);
+    return Number.isNaN(r) ? !1 : t === ">=" ? i >= r : i <= r;
   }
-  return void 0;
-};
-const exactly = (properties, attribute) => properties[attribute];
-function matches(actual, test) {
-  if (actual === void 0)
-    return false;
-  if (Array.isArray(actual))
-    return actual.some((element) => test(element));
-  return test(actual);
+  return t === ">=" ? i >= e : i <= e;
 }
-function equals(actual, expected) {
-  if (typeof actual === "boolean")
-    return String(actual) === expected.trim();
-  if (typeof actual === "number")
-    return numeric(expected) === actual;
-  return actual === expected;
+function wn(i) {
+  return i.replace(/\s+/g, "").toLowerCase();
 }
-function numeric(value) {
-  const trimmed = value.trim();
-  return trimmed.length === 0 ? Number.NaN : Number(trimmed);
+function qe(i, e = {}) {
+  return new Rs(i, e.caseSensitive === !0 ? Is : $s).parse();
 }
-function compare(actual, expected, operator) {
-  if (typeof actual === "boolean") {
-    return false;
-  }
-  if (typeof actual === "number") {
-    const expectedNumber = numeric(expected);
-    if (Number.isNaN(expectedNumber))
-      return false;
-    return operator === ">=" ? actual >= expectedNumber : actual <= expectedNumber;
-  }
-  return operator === ">=" ? actual >= expected : actual <= expected;
+function se(i) {
+  const e = { ...i.properties };
+  return e["service.ranking"] = i.ranking, i.providedBy !== void 0 && (e["service.providedBy"] = i.providedBy), e;
 }
-function approximately(value) {
-  return value.replace(/\s+/g, "").toLowerCase();
+function kt(i, e) {
+  return `${i}#${e.seq}`;
 }
-function createServiceFilter(expression, options = {}) {
-  return new FilterParser(expression, options.caseSensitive === true ? exactly : ignoringCase).parse();
-}
-function propertiesOf(binding) {
-  const properties = { ...binding.properties };
-  properties["service.ranking"] = binding.ranking;
-  if (binding.providedBy !== void 0) {
-    properties["service.providedBy"] = binding.providedBy;
-  }
-  return properties;
-}
-function referenceKey(id, binding) {
-  return `${id}#${binding.seq}`;
-}
-class DefaultServiceRegistry {
+class _n {
   services = /* @__PURE__ */ new Map();
   bindings = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
@@ -3790,94 +2440,55 @@ class DefaultServiceRegistry {
    * A registration from the same provider replaces its own earlier one, so
    * registering twice under one ID does not accumulate.
    */
-  addRegistration(id, binding) {
-    const previouslyKnown = this.bindings.has(id);
-    const visible = this.bindings.get(id);
-    const sameSource = (candidate) => candidate.providedBy === binding.providedBy && candidate.origin === binding.origin && candidate.instanceKey === binding.instanceKey;
-    this.removeShadowed(id, sameSource);
-    const replacesVisible = visible !== void 0 && sameSource(visible);
-    if (!visible || replacesVisible || this.outranks(binding, visible)) {
-      if (visible && !replacesVisible) {
-        this.pushShadowed(id, visible);
-      }
-      if (replacesVisible) {
-        this.dropAliasesOf(id, visible.seq);
-        this.dropInjectionEdges(id);
-      }
-      this.setVisible(id, binding);
-      this.notify({
-        type: previouslyKnown ? "updated" : "registered",
-        serviceId: id,
-        service: binding.instance,
-        properties: propertiesOf(binding)
-      });
-    } else {
-      this.pushShadowed(id, binding);
-      this.notify({
-        type: "registered",
-        serviceId: id,
-        service: binding.instance,
-        properties: propertiesOf(binding)
-      });
-    }
-    return this.createHandle(id, binding);
+  addRegistration(e, t) {
+    const r = this.bindings.has(e), n = this.bindings.get(e), s = (a) => a.providedBy === t.providedBy && a.origin === t.origin && a.instanceKey === t.instanceKey;
+    this.removeShadowed(e, s);
+    const o = n !== void 0 && s(n);
+    return !n || o || this.outranks(t, n) ? (n && !o && this.pushShadowed(e, n), o && (this.dropAliasesOf(e, n.seq), this.dropInjectionEdges(e)), this.setVisible(e, t), this.notify({
+      type: r ? "updated" : "registered",
+      serviceId: e,
+      service: t.instance,
+      properties: se(t)
+    })) : (this.pushShadowed(e, t), this.notify({
+      type: "registered",
+      serviceId: e,
+      service: t.instance,
+      properties: se(t)
+    })), this.createHandle(e, t);
   }
-  outranks(candidate, incumbent) {
-    if (candidate.ranking !== incumbent.ranking) {
-      return candidate.ranking > incumbent.ranking;
-    }
-    return candidate.seq > incumbent.seq;
+  outranks(e, t) {
+    return e.ranking !== t.ranking ? e.ranking > t.ranking : e.seq < t.seq;
   }
-  setVisible(id, binding) {
-    this.invalidateInjectors(id, /* @__PURE__ */ new Set());
-    this.bindings.set(id, binding);
-    if (binding.instance !== void 0) {
-      this.services.set(id, binding.instance);
-    } else {
-      this.services.delete(id);
-    }
+  setVisible(e, t) {
+    this.invalidateInjectors(e, /* @__PURE__ */ new Set()), this.bindings.set(e, t), t.instance !== void 0 ? this.services.set(e, t.instance) : this.services.delete(e);
   }
-  pushShadowed(id, binding) {
-    const bench = this.shadowed.get(id);
-    if (bench) {
-      bench.push(binding);
-    } else {
-      this.shadowed.set(id, [binding]);
-    }
+  pushShadowed(e, t) {
+    const r = this.shadowed.get(e);
+    r ? r.push(t) : this.shadowed.set(e, [t]);
   }
-  removeShadowed(id, matches2) {
-    const bench = this.shadowed.get(id);
-    if (!bench)
-      return false;
-    const kept = bench.filter((binding) => !matches2(binding));
-    if (kept.length === bench.length)
-      return false;
-    if (kept.length === 0) {
-      this.shadowed.delete(id);
-    } else {
-      this.shadowed.set(id, kept);
-    }
-    return true;
+  removeShadowed(e, t) {
+    const r = this.shadowed.get(e);
+    if (!r)
+      return !1;
+    const n = r.filter((s) => !t(s));
+    return n.length === r.length ? !1 : (n.length === 0 ? this.shadowed.delete(e) : this.shadowed.set(e, n), !0);
   }
   /** All registrations for an ID, best first */
-  registrationsOf(id) {
-    const visible = this.bindings.get(id);
-    const bench = [...this.shadowed.get(id) ?? []].sort((a, b) => a.ranking !== b.ranking ? b.ranking - a.ranking : b.seq - a.seq);
-    return visible ? [visible, ...bench] : bench;
+  registrationsOf(e) {
+    const t = this.bindings.get(e), r = [...this.shadowed.get(e) ?? []].sort((n, s) => n.ranking !== s.ranking ? s.ranking - n.ranking : n.seq - s.seq);
+    return t ? [t, ...r] : r;
   }
-  createHandle(id, binding) {
+  createHandle(e, t) {
     return {
-      serviceId: id,
-      providedBy: binding.providedBy,
-      ranking: binding.ranking,
-      key: referenceKey(id, binding),
-      unregister: () => this.unregisterRegistration(id, binding.seq),
-      setProperties: (properties, options = {}) => this.updateProperties(id, binding, properties, options),
+      serviceId: e,
+      providedBy: t.providedBy,
+      ranking: t.ranking,
+      key: kt(e, t),
+      unregister: () => this.unregisterRegistration(e, t.seq),
+      setProperties: (r, n = {}) => this.updateProperties(e, t, r, n),
       resolve: () => {
-        if (!this.registrationsOf(id).some((candidate) => candidate.seq === binding.seq)) {
-          return void 0;
-        }
-        return this.instantiate(id, binding, /* @__PURE__ */ new Set());
+        if (this.registrationsOf(e).some((r) => r.seq === t.seq))
+          return this.instantiate(e, t, /* @__PURE__ */ new Set());
       }
     };
   }
@@ -3889,34 +2500,21 @@ class DefaultServiceRegistry {
    * manifest describes where a service belongs, the new properties — in practice
    * a component's configuration — win over that per key.
    */
-  updateProperties(id, binding, properties, options) {
-    const live = this.registrationsOf(id).find((candidate) => candidate.seq === binding.seq);
-    if (!live)
-      return false;
-    const before = propertiesOf(live);
-    const { ranking, propertiesById } = options;
-    const apply = (target, serviceId2) => {
-      target.properties = { ...propertiesById?.[serviceId2] ?? properties };
-      if (ranking !== void 0) {
-        target.ranking = ranking;
-      }
+  updateProperties(e, t, r, n) {
+    const s = this.registrationsOf(e).find((l) => l.seq === t.seq);
+    if (!s)
+      return !1;
+    const o = se(s), { ranking: a, propertiesById: f } = n, d = (l, p) => {
+      l.properties = { ...f?.[p] ?? r }, a !== void 0 && (l.ranking = a);
     };
-    apply(live, id);
-    for (const aliasId of this.aliasesOf.get(id) ?? []) {
-      const alias = this.registrationsOf(aliasId).find((candidate) => candidate.aliasSeq === binding.seq);
-      if (alias) {
-        apply(alias, aliasId);
-        if (ranking !== void 0)
-          this.reevaluateVisibility(aliasId);
-      }
+    d(s, e);
+    for (const l of this.aliasesOf.get(e) ?? []) {
+      const p = this.registrationsOf(l).find((m) => m.aliasSeq === t.seq);
+      p && (d(p, l), a !== void 0 && this.reevaluateVisibility(l));
     }
-    if (ranking !== void 0) {
-      this.reevaluateVisibility(id);
-    }
-    const after = propertiesOf(live);
-    this.notify({ type: "updated", serviceId: id, service: live.instance, properties: after });
-    this.notifyEndMatch(id, live.instance, before, after);
-    return true;
+    a !== void 0 && this.reevaluateVisibility(e);
+    const c = se(s);
+    return this.notify({ type: "updated", serviceId: e, service: s.instance, properties: c }), this.notifyEndMatch(e, s.instance, o, c), !0;
   }
   /**
    * Decide again which registration for an ID is the visible one.
@@ -3924,81 +2522,61 @@ class DefaultServiceRegistry {
    * Only needed after a ranking changed underneath: registration order alone
    * cannot have moved anything, so nothing else disturbs the bench.
    */
-  reevaluateVisibility(id) {
-    const all = this.registrationsOf(id);
-    if (all.length < 2)
+  reevaluateVisibility(e) {
+    const t = this.registrationsOf(e);
+    if (t.length < 2)
       return;
-    const best2 = all.reduce((winner, candidate) => this.outranks(candidate, winner) ? candidate : winner);
-    const visible = this.bindings.get(id);
-    if (visible === best2)
-      return;
-    this.removeShadowed(id, (candidate) => candidate.seq === best2.seq);
-    if (visible)
-      this.pushShadowed(id, visible);
-    this.setVisible(id, best2);
+    const r = t.reduce((s, o) => this.outranks(o, s) ? o : s), n = this.bindings.get(e);
+    n !== r && (this.removeShadowed(e, (s) => s.seq === r.seq), n && this.pushShadowed(e, n), this.setVisible(e, r));
   }
   /**
    * Withdraw one specific registration. When it was the visible one, the best
    * remaining registration takes over instead of the ID falling silent.
    */
-  unregisterRegistration(id, seq) {
-    const visible = this.bindings.get(id);
-    if (visible?.seq !== seq) {
-      const going = this.registrationsOf(id).find((binding) => binding.seq === seq);
-      const removed = this.removeShadowed(id, (binding) => binding.seq === seq);
-      if (removed) {
-        this.dropAliasesOf(id, seq);
-        this.notify({
-          type: "unregistered",
-          serviceId: id,
-          service: going?.instance,
-          properties: going ? propertiesOf(going) : void 0
-        });
-      }
-      return removed;
+  unregisterRegistration(e, t) {
+    if (this.bindings.get(e)?.seq !== t) {
+      const s = this.registrationsOf(e).find((a) => a.seq === t), o = this.removeShadowed(e, (a) => a.seq === t);
+      return o && (this.dropAliasesOf(e, t), this.notify({
+        type: "unregistered",
+        serviceId: e,
+        service: s?.instance,
+        properties: s ? se(s) : void 0
+      })), o;
     }
-    const successor = this.registrationsOf(id).find((binding) => binding.seq !== seq);
-    if (!successor) {
-      return this.unregister(id);
-    }
-    this.removeShadowed(id, (binding) => binding.seq === successor.seq);
-    this.dropAliasesOf(id, seq);
-    this.dropInjectionEdges(id);
-    this.setVisible(id, successor);
-    this.notify({
+    const n = this.registrationsOf(e).find((s) => s.seq !== t);
+    return n ? (this.removeShadowed(e, (s) => s.seq === n.seq), this.dropAliasesOf(e, t), this.dropInjectionEdges(e), this.setVisible(e, n), this.notify({
       type: "updated",
-      serviceId: id,
-      service: successor.instance,
-      properties: propertiesOf(successor)
-    });
-    return true;
+      serviceId: e,
+      service: n.instance,
+      properties: se(n)
+    }), !0) : this.unregister(e);
   }
   /**
    * Register a service instance directly
    */
-  register(id, service, options = {}) {
-    return this.addRegistration(id, {
-      instance: service,
+  register(e, t, r = {}) {
+    return this.addRegistration(e, {
+      instance: t,
       scope: "singleton",
-      providedBy: options.providedBy,
-      ranking: options.ranking ?? 0,
+      providedBy: r.providedBy,
+      ranking: r.ranking ?? 0,
       seq: this.nextSeq++,
-      properties: options.properties,
-      instanceKey: options.instanceKey
+      properties: r.properties,
+      instanceKey: r.instanceKey
     });
   }
   /**
    * Bind a factory function for lazy instantiation
    */
-  bind(id, factory, options = {}) {
-    return this.addRegistration(id, {
-      factory,
-      scope: options.scope ?? "singleton",
-      providedBy: options.providedBy,
-      ranking: options.ranking ?? 0,
+  bind(e, t, r = {}) {
+    return this.addRegistration(e, {
+      factory: t,
+      scope: r.scope ?? "singleton",
+      providedBy: r.providedBy,
+      ranking: r.ranking ?? 0,
       seq: this.nextSeq++,
-      properties: options.properties,
-      instanceKey: options.instanceKey
+      properties: r.properties,
+      instanceKey: r.instanceKey
     });
   }
   /**
@@ -4010,64 +2588,48 @@ class DefaultServiceRegistry {
    * If options.implements is provided, additional alias bindings are created that
    * delegate to the primary ID, so the same singleton is shared.
    */
-  bindClass(id, ctor, options = {}) {
-    if (!isInjectable(ctor)) {
-      throw new Error(`Class '${ctor.name}' is not decorated with @injectable(). Add @injectable() to use bindClass().`);
+  bindClass(e, t, r = {}) {
+    if (!yn(t))
+      throw new Error(`Class '${t.name}' is not decorated with @injectable(). Add @injectable() to use bindClass().`);
+    const n = Gt(t), s = zt(t), o = Es(t), a = r.scope ?? o ?? "singleton";
+    for (const c of [...n, ...s]) {
+      let l = this.injectedInto.get(c.serviceId);
+      l || (l = /* @__PURE__ */ new Set(), this.injectedInto.set(c.serviceId, l)), l.add(e);
     }
-    const metadata = getInjectMetadata(ctor);
-    const propertyMetadata = getPropertyInjectMetadata(ctor);
-    const decoratorScope = getScopeMetadata(ctor);
-    const scope = options.scope ?? decoratorScope ?? "singleton";
-    for (const dependency of [...metadata, ...propertyMetadata]) {
-      let injectors = this.injectedInto.get(dependency.serviceId);
-      if (!injectors) {
-        injectors = /* @__PURE__ */ new Set();
-        this.injectedInto.set(dependency.serviceId, injectors);
-      }
-      injectors.add(id);
-    }
-    const primarySeq = this.nextSeq++;
-    const registration = this.addRegistration(id, {
-      factory: (...resolvedDeps) => new ctor(...resolvedDeps),
-      scope,
+    const f = this.nextSeq++, d = this.addRegistration(e, {
+      factory: (...c) => new t(...c),
+      scope: a,
       // The class identifies the registration, so a second class from the same
       // module does not replace this one
-      origin: ctor,
-      providedBy: options.providedBy,
-      ranking: options.ranking ?? 0,
-      seq: primarySeq,
-      properties: options.propertiesById?.[id] ?? options.properties,
-      instanceKey: options.instanceKey,
-      deps: metadata.map((m) => ({ serviceId: m.serviceId, optional: m.optional })),
-      propertyDeps: propertyMetadata.length > 0 ? propertyMetadata : void 0
+      origin: t,
+      providedBy: r.providedBy,
+      ranking: r.ranking ?? 0,
+      seq: f,
+      properties: r.propertiesById?.[e] ?? r.properties,
+      instanceKey: r.instanceKey,
+      deps: n.map((c) => ({ serviceId: c.serviceId, optional: c.optional })),
+      propertyDeps: s.length > 0 ? s : void 0
     });
-    if (options.implements) {
-      let aliases = this.aliasesOf.get(id);
-      if (!aliases) {
-        aliases = /* @__PURE__ */ new Set();
-        this.aliasesOf.set(id, aliases);
-      }
-      for (const interfaceId of options.implements) {
-        const previous = this.bindings.get(interfaceId);
-        if (previous?.aliasOf && previous.aliasOf !== id) {
-          this.aliasesOf.get(previous.aliasOf)?.delete(interfaceId);
-        }
-        this.addRegistration(interfaceId, {
-          scope,
-          aliasOf: id,
-          aliasSeq: primarySeq,
-          origin: ctor,
-          providedBy: options.providedBy,
-          ranking: options.ranking ?? 0,
+    if (r.implements) {
+      let c = this.aliasesOf.get(e);
+      c || (c = /* @__PURE__ */ new Set(), this.aliasesOf.set(e, c));
+      for (const l of r.implements) {
+        const p = this.bindings.get(l);
+        p?.aliasOf && p.aliasOf !== e && this.aliasesOf.get(p.aliasOf)?.delete(l), this.addRegistration(l, {
+          scope: a,
+          aliasOf: e,
+          aliasSeq: f,
+          origin: t,
+          providedBy: r.providedBy,
+          ranking: r.ranking ?? 0,
           seq: this.nextSeq++,
-          instanceKey: options.instanceKey,
+          instanceKey: r.instanceKey,
           // The interface is what consumers filter on, so it may carry its own
-          properties: options.propertiesById?.[interfaceId] ?? options.properties
-        });
-        aliases.add(interfaceId);
+          properties: r.propertiesById?.[l] ?? r.properties
+        }), c.add(l);
       }
     }
-    return registration;
+    return d;
   }
   /**
    * Get a service by ID
@@ -4079,8 +2641,8 @@ class DefaultServiceRegistry {
    * Construct an injectable class with its dependencies injected, without
    * registering it: the same resolution as `bindClass()`, minus the registration.
    */
-  construct(ctor) {
-    return this.constructFor(void 0, ctor);
+  construct(e) {
+    return this.constructFor(void 0, e);
   }
   /**
    * Construct a class on behalf of a module, so a `module`-scoped dependency is
@@ -4091,54 +2653,45 @@ class DefaultServiceRegistry {
    * silently share one instance with every other module, which is the one case
    * where the scope would be wrong rather than merely absent.
    */
-  constructFor(consumer, ctor) {
-    if (!isInjectable(ctor)) {
-      throw new Error(`Class '${ctor.name}' is not decorated with @injectable() or @component(), so its dependencies are unknown`);
+  constructFor(e, t) {
+    if (!yn(t))
+      throw new Error(`Class '${t.name}' is not decorated with @injectable() or @component(), so its dependencies are unknown`);
+    const r = /* @__PURE__ */ new Set(), n = Gt(t).map((o) => {
+      const a = this.resolveFor(e, o.serviceId, r);
+      if (a === void 0 && !o.optional)
+        throw new Error(`Dependency '${o.serviceId}' not found (required by '${t.name}')`);
+      return a;
+    }), s = new t(...n);
+    for (const o of zt(t)) {
+      const a = this.resolveFor(e, o.serviceId, r);
+      if (a === void 0 && !o.optional)
+        throw new Error(`Property dependency '${o.serviceId}' not found (required by '${t.name}' on property '${String(o.propertyKey)}')`);
+      s[o.propertyKey] = a;
     }
-    const resolving = /* @__PURE__ */ new Set();
-    const args = getInjectMetadata(ctor).map((dependency) => {
-      const resolved = this.resolveFor(consumer, dependency.serviceId, resolving);
-      if (resolved === void 0 && !dependency.optional) {
-        throw new Error(`Dependency '${dependency.serviceId}' not found (required by '${ctor.name}')`);
-      }
-      return resolved;
-    });
-    const instance = new ctor(...args);
-    for (const property of getPropertyInjectMetadata(ctor)) {
-      const resolved = this.resolveFor(consumer, property.serviceId, resolving);
-      if (resolved === void 0 && !property.optional) {
-        throw new Error(`Property dependency '${property.serviceId}' not found (required by '${ctor.name}' on property '${String(property.propertyKey)}')`);
-      }
-      instance[property.propertyKey] = resolved;
-    }
-    return instance;
+    return s;
   }
-  get(id, _resolving) {
-    return this.resolveFor(void 0, id, _resolving);
+  get(e, t) {
+    return this.resolveFor(void 0, e, t);
   }
   /**
    * Resolve a service on behalf of a module, so a `module`-scoped registration
    * can hand that module its own instance.
    */
-  getFor(consumer, id) {
-    return this.resolveFor(consumer, id);
+  getFor(e, t) {
+    return this.resolveFor(e, t);
   }
-  resolveFor(consumer, id, resolving) {
-    if (this.services.has(id)) {
-      return this.services.get(id);
-    }
-    const binding = this.bindings.get(id);
-    if (!binding) {
-      return void 0;
-    }
-    return this.instantiate(id, binding, resolving ?? /* @__PURE__ */ new Set(), consumer);
+  resolveFor(e, t, r) {
+    if (this.services.has(t))
+      return this.services.get(t);
+    const n = this.bindings.get(t);
+    if (n)
+      return this.instantiate(t, n, r ?? /* @__PURE__ */ new Set(), e);
   }
   /** Resolve one reference on behalf of a module — see {@link getFor} */
-  resolveReferenceFor(consumer, reference) {
-    const binding = this.registrationsOf(reference.serviceId).find((candidate) => referenceKey(reference.serviceId, candidate) === reference.key);
-    if (!binding)
-      return void 0;
-    return this.instantiate(reference.serviceId, binding, /* @__PURE__ */ new Set(), consumer);
+  resolveReferenceFor(e, t) {
+    const r = this.registrationsOf(t.serviceId).find((n) => kt(t.serviceId, n) === t.key);
+    if (r)
+      return this.instantiate(t.serviceId, r, /* @__PURE__ */ new Set(), e);
   }
   /**
    * Drop what a module holds under `module` scope.
@@ -4147,26 +2700,23 @@ class DefaultServiceRegistry {
    * would otherwise introduce, so the teardown has to reach it. An instance with
    * a `dispose()` method is told, which is the counterpart of `ungetService`.
    */
-  releaseConsumer(consumer) {
-    const released = [];
-    for (const [id, binding] of this.bindings) {
-      for (const candidate of [binding, ...this.shadowed.get(id) ?? []]) {
-        const held = candidate.perConsumer?.get(consumer);
-        if (held === void 0)
+  releaseConsumer(e) {
+    const t = [];
+    for (const [r, n] of this.bindings)
+      for (const s of [n, ...this.shadowed.get(r) ?? []]) {
+        const o = s.perConsumer?.get(e);
+        if (o === void 0)
           continue;
-        candidate.perConsumer.delete(consumer);
-        released.push(id);
-        const disposable = held;
-        if (typeof disposable.dispose === "function") {
+        s.perConsumer.delete(e), t.push(r);
+        const a = o;
+        if (typeof a.dispose == "function")
           try {
-            disposable.dispose();
-          } catch (error) {
-            console.error(`Disposing ${id} for ${consumer} failed:`, error);
+            a.dispose();
+          } catch (f) {
+            console.error(`Disposing ${r} for ${e} failed:`, f);
           }
-        }
       }
-    }
-    return [...new Set(released)];
+    return [...new Set(t)];
   }
   /**
    * Resolve one binding: follow an alias, reuse a singleton, or build via the
@@ -4175,59 +2725,40 @@ class DefaultServiceRegistry {
    * Split out of `get()` because an outranked registration has to be
    * resolvable too, even though the ID answers with a different one.
    */
-  instantiate(id, binding, resolving, consumer) {
-    if (binding.aliasOf) {
-      const target = this.aliasTarget(binding);
-      if (!target)
-        return void 0;
-      return this.instantiate(binding.aliasOf, target, resolving, consumer);
+  instantiate(e, t, r, n) {
+    if (t.aliasOf) {
+      const c = this.aliasTarget(t);
+      return c ? this.instantiate(t.aliasOf, c, r, n) : void 0;
     }
-    const perConsumer = binding.scope === "module" ? consumer : void 0;
-    const shared = binding.scope === "singleton" || binding.scope === "module" && !consumer;
-    if (shared && binding.instance !== void 0) {
-      return binding.instance;
+    const s = t.scope === "module" ? n : void 0, o = t.scope === "singleton" || t.scope === "module" && !n;
+    if (o && t.instance !== void 0)
+      return t.instance;
+    if (s !== void 0) {
+      const c = t.perConsumer?.get(s);
+      if (c !== void 0)
+        return c;
     }
-    if (perConsumer !== void 0) {
-      const held = binding.perConsumer?.get(perConsumer);
-      if (held !== void 0)
-        return held;
+    if (!t.factory)
+      return;
+    if (r.has(e)) {
+      const c = [...r, e].join(" → ");
+      throw new Error(`Circular dependency detected: ${c}`);
     }
-    if (!binding.factory) {
-      return void 0;
-    }
-    if (resolving.has(id)) {
-      const chain = [...resolving, id].join(" → ");
-      throw new Error(`Circular dependency detected: ${chain}`);
-    }
-    resolving.add(id);
-    const on = binding.providedBy ?? consumer;
-    const args = (binding.deps ?? []).map((dep) => {
-      const resolved = this.resolveFor(on, dep.serviceId, resolving);
-      if (resolved === void 0 && !dep.optional) {
-        throw new Error(`Dependency '${dep.serviceId}' not found (required by '${id}')`);
+    r.add(e);
+    const a = t.providedBy ?? n, f = (t.deps ?? []).map((c) => {
+      const l = this.resolveFor(a, c.serviceId, r);
+      if (l === void 0 && !c.optional)
+        throw new Error(`Dependency '${c.serviceId}' not found (required by '${e}')`);
+      return l;
+    }), d = t.factory(...f);
+    if (t.propertyDeps)
+      for (const c of t.propertyDeps) {
+        const l = this.resolveFor(a, c.serviceId, r);
+        if (l === void 0 && !c.optional)
+          throw new Error(`Property dependency '${c.serviceId}' not found (required by '${e}' on property '${String(c.propertyKey)}')`);
+        d[c.propertyKey] = l;
       }
-      return resolved;
-    });
-    const instance = binding.factory(...args);
-    if (binding.propertyDeps) {
-      for (const prop of binding.propertyDeps) {
-        const resolved = this.resolveFor(on, prop.serviceId, resolving);
-        if (resolved === void 0 && !prop.optional) {
-          throw new Error(`Property dependency '${prop.serviceId}' not found (required by '${id}' on property '${String(prop.propertyKey)}')`);
-        }
-        instance[prop.propertyKey] = resolved;
-      }
-    }
-    if (shared) {
-      binding.instance = instance;
-      if (binding.scope === "singleton" && this.bindings.get(id) === binding) {
-        this.services.set(id, instance);
-      }
-    } else if (perConsumer !== void 0) {
-      binding.perConsumer ??= /* @__PURE__ */ new Map();
-      binding.perConsumer.set(perConsumer, instance);
-    }
-    return instance;
+    return o ? (t.instance = d, t.scope === "singleton" && this.bindings.get(e) === t && this.services.set(e, d)) : s !== void 0 && (t.perConsumer ??= /* @__PURE__ */ new Map(), t.perConsumer.set(s, d)), d;
   }
   /**
    * Get all instantiated services whose ID matches a wildcard pattern.
@@ -4235,80 +2766,68 @@ class DefaultServiceRegistry {
    * @deprecated Matches ID names rather than registrations, and only sees what
    * has already been instantiated. Use `getServiceReferences(id, target?)`.
    */
-  getAll(idPattern) {
-    const regex = new RegExp("^" + idPattern.replace(/\*/g, ".*") + "$");
-    const result = [];
-    for (const [id, service] of this.services) {
-      if (regex.test(id)) {
-        result.push(service);
-      }
-    }
-    return result;
+  getAll(e) {
+    const t = new RegExp("^" + e.replace(/\*/g, ".*") + "$"), r = [];
+    for (const [n, s] of this.services)
+      t.test(n) && r.push(s);
+    return r;
   }
   /**
    * Check if a service exists (registered or bound)
    */
-  has(id) {
-    return this.resolveExisting(id, /* @__PURE__ */ new Set()) !== void 0;
+  has(e) {
+    return this.resolveExisting(e, /* @__PURE__ */ new Set()) !== void 0;
   }
   /**
    * Resolve an ID to the binding that would actually serve it.
    * Follows aliases, so an alias whose target is gone resolves to undefined.
    */
-  resolveExisting(id, seen) {
-    if (seen.has(id))
-      return void 0;
-    seen.add(id);
-    if (this.services.has(id)) {
-      return this.bindings.get(id);
+  resolveExisting(e, t) {
+    if (t.has(e))
+      return;
+    if (t.add(e), this.services.has(e))
+      return this.bindings.get(e);
+    const r = this.bindings.get(e);
+    if (r) {
+      if (r.aliasOf) {
+        const n = this.aliasTarget(r);
+        return n ? this.resolveExisting(r.aliasOf, t) && n : void 0;
+      }
+      return r;
     }
-    const binding = this.bindings.get(id);
-    if (!binding)
-      return void 0;
-    if (binding.aliasOf) {
-      const target = this.aliasTarget(binding);
-      return target ? this.resolveExisting(binding.aliasOf, seen) && target : void 0;
-    }
-    return binding;
   }
   /**
    * The registration an alias stands for: the one it was created with, not
    * whatever is visible under that ID now.
    */
-  aliasTarget(alias) {
-    if (alias.aliasOf === void 0)
-      return void 0;
-    const candidates = this.registrationsOf(alias.aliasOf);
-    if (alias.aliasSeq === void 0)
-      return candidates[0];
-    return candidates.find((candidate) => candidate.seq === alias.aliasSeq);
+  aliasTarget(e) {
+    if (e.aliasOf === void 0)
+      return;
+    const t = this.registrationsOf(e.aliasOf);
+    return e.aliasSeq === void 0 ? t[0] : t.find((r) => r.seq === e.aliasSeq);
   }
   /**
    * Get a required service - throws if not available
    */
-  getRequired(id) {
-    const service = this.get(id);
-    if (service === void 0) {
-      throw new Error(`Required service not found: ${id}`);
-    }
-    return service;
+  getRequired(e) {
+    const t = this.get(e);
+    if (t === void 0)
+      throw new Error(`Required service not found: ${e}`);
+    return t;
   }
   /**
    * Check if all required services are available
    */
-  checkRequirements(requirements) {
-    const missing = [];
-    for (const req of requirements) {
-      if (!requiresAtLeastOne(req))
+  checkRequirements(e) {
+    const t = [];
+    for (const r of e) {
+      if (!Sn(r))
         continue;
-      const available = req.target !== void 0 ? this.countProviders(req.id, req.target) > 0 : this.has(req.id);
-      if (!available) {
-        missing.push(req.id);
-      }
+      (r.target !== void 0 ? this.countProviders(r.id, r.target) > 0 : this.has(r.id)) || t.push(r.id);
     }
     return {
-      satisfied: missing.length === 0,
-      missing
+      satisfied: t.length === 0,
+      missing: t
     };
   }
   /**
@@ -4317,16 +2836,16 @@ class DefaultServiceRegistry {
    * Collecting must not build objects nobody asked for, which is why this
    * returns references rather than services.
    */
-  getServiceReferences(id, target) {
-    const filter = target !== void 0 ? this.filterFor(target) : void 0;
-    return this.registrationsOf(id).filter((binding) => !filter || filter(propertiesOf(binding))).map((binding) => ({
-      serviceId: id,
-      providedBy: binding.providedBy,
-      ranking: binding.ranking,
-      scope: binding.scope,
-      instantiated: binding.instance !== void 0,
-      properties: propertiesOf(binding),
-      key: referenceKey(id, binding)
+  getServiceReferences(e, t) {
+    const r = t !== void 0 ? this.filterFor(t) : void 0;
+    return this.registrationsOf(e).filter((n) => !r || r(se(n))).map((n) => ({
+      serviceId: e,
+      providedBy: n.providedBy,
+      ranking: n.ranking,
+      scope: n.scope,
+      instantiated: n.instance !== void 0,
+      properties: se(n),
+      key: kt(e, n)
     }));
   }
   /**
@@ -4335,21 +2854,20 @@ class DefaultServiceRegistry {
    * `get(id)` answers with the highest-ranked registration regardless of
    * properties; a consumer that declared a target needs this one.
    */
-  getMatching(id, target) {
-    const [reference] = this.getServiceReferences(id, target);
-    return reference ? this.resolveReference(reference) : void 0;
+  getMatching(e, t) {
+    const [r] = this.getServiceReferences(e, t);
+    return r ? this.resolveReference(r) : void 0;
   }
   /**
    * Parse a filter once and remember it. An invalid filter throws here rather
    * than quietly matching nothing.
    */
-  filterFor(target) {
-    const cached = this.filterCache.get(target);
-    if (cached)
-      return cached;
-    const filter = createServiceFilter(target);
-    this.filterCache.set(target, filter);
-    return filter;
+  filterFor(e) {
+    const t = this.filterCache.get(e);
+    if (t)
+      return t;
+    const r = qe(e);
+    return this.filterCache.set(e, r), r;
   }
   /**
    * Every service registered under an id, best first.
@@ -4359,8 +2877,8 @@ class DefaultServiceRegistry {
    * fails to instantiate is left out rather than appearing as `undefined` — a
    * collection of services should not need a null check per element.
    */
-  getServices(id, target) {
-    return this.getServiceReferences(id, target).map((reference) => this.resolveReference(reference)).filter((service) => service !== void 0);
+  getServices(e, t) {
+    return this.getServiceReferences(e, t).map((r) => this.resolveReference(r)).filter((r) => r !== void 0);
   }
   /**
    * Resolve one reference from getServiceReferences().
@@ -4369,60 +2887,37 @@ class DefaultServiceRegistry {
    * from its own binding, so a collection can use every provider even though
    * only one of them answers to the ID.
    */
-  resolveReference(reference) {
-    const seq = Number(reference.key.slice(reference.key.lastIndexOf("#") + 1));
-    const binding = this.registrationsOf(reference.serviceId).find((candidate) => candidate.seq === seq);
-    if (!binding)
-      return void 0;
-    if (this.bindings.get(reference.serviceId)?.seq === seq) {
-      return this.get(reference.serviceId);
-    }
-    return this.instantiate(reference.serviceId, binding, /* @__PURE__ */ new Set());
+  resolveReference(e) {
+    const t = Number(e.key.slice(e.key.lastIndexOf("#") + 1)), r = this.registrationsOf(e.serviceId).find((n) => n.seq === t);
+    if (r)
+      return this.bindings.get(e.serviceId)?.seq === t ? this.get(e.serviceId) : this.instantiate(e.serviceId, r, /* @__PURE__ */ new Set());
   }
   /** How many registrations an ID carries, optionally matching a target filter */
-  countProviders(id, target) {
-    return this.getServiceReferences(id, target).length;
+  countProviders(e, t) {
+    return this.getServiceReferences(e, t).length;
   }
   /**
    * Unregister a service
    */
-  unregister(id) {
-    const service = this.services.get(id);
-    const binding = this.bindings.get(id);
-    const hadBinding = binding !== void 0;
-    if (service === void 0 && !hadBinding) {
-      return false;
-    }
-    for (const registration of this.registrationsOf(id)) {
-      if (registration.aliasOf) {
-        this.aliasesOf.get(registration.aliasOf)?.delete(id);
-      }
-    }
-    this.shadowed.delete(id);
-    this.services.delete(id);
-    this.bindings.delete(id);
-    this.notify({
+  unregister(e) {
+    const t = this.services.get(e), r = this.bindings.get(e);
+    if (t === void 0 && !(r !== void 0))
+      return !1;
+    for (const s of this.registrationsOf(e))
+      s.aliasOf && this.aliasesOf.get(s.aliasOf)?.delete(e);
+    return this.shadowed.delete(e), this.services.delete(e), this.bindings.delete(e), this.notify({
       type: "unregistered",
-      serviceId: id,
-      service,
-      properties: binding ? propertiesOf(binding) : void 0
-    });
-    this.dropAliasesOf(id);
-    this.dropInjectionEdges(id);
-    this.invalidateInjectors(id, /* @__PURE__ */ new Set());
-    return true;
+      serviceId: e,
+      service: t,
+      properties: r ? se(r) : void 0
+    }), this.dropAliasesOf(e), this.dropInjectionEdges(e), this.invalidateInjectors(e, /* @__PURE__ */ new Set()), !0;
   }
   /**
    * Forget which services a binding injects
    */
-  dropInjectionEdges(id) {
-    for (const [serviceId2, injectors] of this.injectedInto) {
-      if (!injectors.delete(id))
-        continue;
-      if (injectors.size === 0) {
-        this.injectedInto.delete(serviceId2);
-      }
-    }
+  dropInjectionEdges(e) {
+    for (const [t, r] of this.injectedInto)
+      r.delete(e) && r.size === 0 && this.injectedInto.delete(t);
   }
   /**
    * Discard singleton instances built with a service that changed, transitively.
@@ -4436,17 +2931,13 @@ class DefaultServiceRegistry {
    * is invisible here and cannot be invalidated — see the notes on dynamic
    * requirements in the README.
    */
-  invalidateInjectors(serviceId2, seen) {
-    if (seen.has(serviceId2))
-      return;
-    seen.add(serviceId2);
-    for (const injectorId of this.injectedInto.get(serviceId2) ?? []) {
-      const binding = this.bindings.get(injectorId);
-      if (!binding?.factory || binding.instance === void 0)
-        continue;
-      binding.instance = void 0;
-      this.services.delete(injectorId);
-      this.invalidateInjectors(injectorId, seen);
+  invalidateInjectors(e, t) {
+    if (!t.has(e)) {
+      t.add(e);
+      for (const r of this.injectedInto.get(e) ?? []) {
+        const n = this.bindings.get(r);
+        !n?.factory || n.instance === void 0 || (n.instance = void 0, this.services.delete(r), this.invalidateInjectors(r, t));
+      }
     }
   }
   /**
@@ -4461,42 +2952,33 @@ class DefaultServiceRegistry {
    *   would take another instance's interface with it. Without it, every alias
    *   of the ID goes, which is what withdrawing the ID itself means.
    */
-  dropAliasesOf(primaryId, primarySeq) {
-    const aliases = this.aliasesOf.get(primaryId);
-    if (!aliases)
+  dropAliasesOf(e, t) {
+    const r = this.aliasesOf.get(e);
+    if (!r)
       return;
-    const remaining = /* @__PURE__ */ new Set();
-    for (const aliasId of aliases) {
-      const own = this.registrationsOf(aliasId).filter((registration) => registration.aliasOf === primaryId && (primarySeq === void 0 || registration.aliasSeq === primarySeq));
-      if (own.length === 0) {
-        if (primarySeq !== void 0)
-          remaining.add(aliasId);
+    const n = /* @__PURE__ */ new Set();
+    for (const s of r) {
+      const o = this.registrationsOf(s).filter((a) => a.aliasOf === e && (t === void 0 || a.aliasSeq === t));
+      if (o.length === 0) {
+        t !== void 0 && n.add(s);
         continue;
       }
-      for (const alias of own) {
-        this.unregisterRegistration(aliasId, alias.seq);
-      }
-      if (primarySeq !== void 0 && this.registrationsOf(aliasId).some((registration) => registration.aliasOf === primaryId)) {
-        remaining.add(aliasId);
-      }
+      for (const a of o)
+        this.unregisterRegistration(s, a.seq);
+      t !== void 0 && this.registrationsOf(s).some((a) => a.aliasOf === e) && n.add(s);
     }
-    if (remaining.size > 0) {
-      this.aliasesOf.set(primaryId, remaining);
-    } else {
-      this.aliasesOf.delete(primaryId);
-    }
+    n.size > 0 ? this.aliasesOf.set(e, n) : this.aliasesOf.delete(e);
   }
   /**
    * Get information about a binding
    */
-  getBindingInfo(id) {
-    const binding = this.bindings.get(id);
-    if (!binding)
-      return void 0;
-    return {
-      scope: binding.scope,
-      providedBy: binding.providedBy
-    };
+  getBindingInfo(e) {
+    const t = this.bindings.get(e);
+    if (t)
+      return {
+        scope: t.scope,
+        providedBy: t.providedBy
+      };
   }
   /**
    * Get all registered service IDs
@@ -4509,10 +2991,9 @@ class DefaultServiceRegistry {
    */
   clear() {
     this.injectedInto.clear();
-    const ids = /* @__PURE__ */ new Set([...this.services.keys(), ...this.bindings.keys()]);
-    for (const id of ids) {
-      this.unregister(id);
-    }
+    const e = /* @__PURE__ */ new Set([...this.services.keys(), ...this.bindings.keys()]);
+    for (const t of e)
+      this.unregister(t);
   }
   /**
    * Resolve once a service is available.
@@ -4522,33 +3003,21 @@ class DefaultServiceRegistry {
    *
    * @param options.timeoutMs Reject after this long instead of waiting forever
    */
-  whenAvailable(id, options = {}) {
-    const existing = this.get(id);
-    if (existing !== void 0) {
-      return Promise.resolve(existing);
-    }
-    return new Promise((resolve, reject) => {
-      let timer;
-      const listener = {
-        onServiceEvent: (event) => {
-          if (event.serviceId !== id || event.type === "unregistered")
+  whenAvailable(e, t = {}) {
+    const r = this.get(e);
+    return r !== void 0 ? Promise.resolve(r) : new Promise((n, s) => {
+      let o;
+      const a = {
+        onServiceEvent: (f) => {
+          if (f.serviceId !== e || f.type === "unregistered")
             return;
-          const service = this.get(id);
-          if (service === void 0)
-            return;
-          if (timer !== void 0)
-            clearTimeout(timer);
-          this.removeListener(listener);
-          resolve(service);
+          const d = this.get(e);
+          d !== void 0 && (o !== void 0 && clearTimeout(o), this.removeListener(a), n(d));
         }
       };
-      this.addListener(listener);
-      if (options.timeoutMs !== void 0) {
-        timer = setTimeout(() => {
-          this.removeListener(listener);
-          reject(new Error(`Service ${id} did not become available within ${options.timeoutMs}ms`));
-        }, options.timeoutMs);
-      }
+      this.addListener(a), t.timeoutMs !== void 0 && (o = setTimeout(() => {
+        this.removeListener(a), s(new Error(`Service ${e} did not become available within ${t.timeoutMs}ms`));
+      }, t.timeoutMs));
     });
   }
   /**
@@ -4558,34 +3027,26 @@ class DefaultServiceRegistry {
    * An invalid filter is rejected here rather than quietly matching nothing —
    * the same choice `getServiceReferences` makes.
    */
-  addListener(listener, options = {}) {
-    this.listeners.add(listener);
-    if (options.filter !== void 0) {
-      this.listenerFilters.set(listener, this.filterFor(options.filter));
-    }
+  addListener(e, t = {}) {
+    this.listeners.add(e), t.filter !== void 0 && this.listenerFilters.set(e, this.filterFor(t.filter));
   }
   /**
    * Remove a listener
    */
-  removeListener(listener) {
-    this.listeners.delete(listener);
-    this.listenerFilters.delete(listener);
+  removeListener(e) {
+    this.listeners.delete(e), this.listenerFilters.delete(e);
   }
-  notify(event) {
-    for (const listener of this.listeners) {
-      const filter = this.listenerFilters.get(listener);
-      if (filter && event.type !== "modified-endmatch") {
-        if (!event.properties || !filter(event.properties))
-          continue;
-      }
-      this.deliver(listener, event);
+  notify(e) {
+    for (const t of this.listeners) {
+      const r = this.listenerFilters.get(t);
+      r && e.type !== "modified-endmatch" && (!e.properties || !r(e.properties)) || this.deliver(t, e);
     }
   }
-  deliver(listener, event) {
+  deliver(e, t) {
     try {
-      listener.onServiceEvent(event);
-    } catch (error) {
-      console.error("Service registry listener error:", error);
+      e.onServiceEvent(t);
+    } catch (r) {
+      console.error("Service registry listener error:", r);
     }
   }
   /**
@@ -4595,22 +3056,17 @@ class DefaultServiceRegistry {
    * new ones: a listener that never accepted the service has nothing to
    * withdraw, and one that still accepts it got `updated` already.
    */
-  notifyEndMatch(id, service, before, after) {
-    for (const [listener, filter] of this.listenerFilters) {
-      if (!this.listeners.has(listener))
-        continue;
-      if (!filter(before) || filter(after))
-        continue;
-      this.deliver(listener, {
+  notifyEndMatch(e, t, r, n) {
+    for (const [s, o] of this.listenerFilters)
+      this.listeners.has(s) && (!o(r) || o(n) || this.deliver(s, {
         type: "modified-endmatch",
-        serviceId: id,
-        service,
-        properties: after
-      });
-    }
+        serviceId: e,
+        service: t,
+        properties: n
+      }));
   }
 }
-class ScopedServiceRegistry {
+class Pn {
   moduleId;
   target;
   declaredRankings;
@@ -4623,14 +3079,11 @@ class ScopedServiceRegistry {
    * @param declaredRankings Rankings from the manifest's `provides`, applied when
    *   a registration passes none of its own
    */
-  constructor(moduleId, target, declaredRankings = /* @__PURE__ */ new Map(), declaredProperties = /* @__PURE__ */ new Map()) {
-    this.moduleId = moduleId;
-    this.target = target;
-    this.declaredRankings = declaredRankings;
-    this.declaredProperties = declaredProperties;
+  constructor(e, t, r = /* @__PURE__ */ new Map(), n = /* @__PURE__ */ new Map()) {
+    this.moduleId = e, this.target = t, this.declaredRankings = r, this.declaredProperties = n;
   }
-  rankingFor(id, given) {
-    return given ?? this.declaredRankings.get(id);
+  rankingFor(e, t) {
+    return t ?? this.declaredRankings.get(e);
   }
   /**
    * Merge the manifest's declared properties with the ones passed at
@@ -4641,43 +3094,38 @@ class ScopedServiceRegistry {
    * adds what only it knows. Replacing wholesale would silently drop a declared
    * property as soon as the code passes any property at all.
    */
-  propertiesFor(id, given) {
-    const declared = this.declaredProperties.get(id);
-    if (!declared)
-      return given;
-    if (!given)
-      return declared;
-    return { ...declared, ...given };
+  propertiesFor(e, t) {
+    const r = this.declaredProperties.get(e);
+    return r ? t ? { ...r, ...t } : r : t;
   }
-  register(id, service, options = {}) {
-    return this.track(this.target.register(id, service, {
-      ...options,
-      providedBy: options.providedBy ?? this.moduleId,
-      ranking: this.rankingFor(id, options.ranking),
-      properties: this.propertiesFor(id, options.properties)
+  register(e, t, r = {}) {
+    return this.track(this.target.register(e, t, {
+      ...r,
+      providedBy: r.providedBy ?? this.moduleId,
+      ranking: this.rankingFor(e, r.ranking),
+      properties: this.propertiesFor(e, r.properties)
     }));
   }
-  bind(id, factory, options = {}) {
-    return this.track(this.target.bind(id, factory, {
-      ...options,
-      providedBy: options.providedBy ?? this.moduleId,
-      ranking: this.rankingFor(id, options.ranking),
-      properties: this.propertiesFor(id, options.properties)
+  bind(e, t, r = {}) {
+    return this.track(this.target.bind(e, t, {
+      ...r,
+      providedBy: r.providedBy ?? this.moduleId,
+      ranking: this.rankingFor(e, r.ranking),
+      properties: this.propertiesFor(e, r.properties)
     }));
   }
-  bindClass(id, ctor, options = {}) {
-    const propertiesById = {};
-    for (const serviceId2 of [id, ...options.implements ?? []]) {
-      const properties = this.propertiesFor(serviceId2, options.propertiesById?.[serviceId2]);
-      if (properties)
-        propertiesById[serviceId2] = properties;
+  bindClass(e, t, r = {}) {
+    const n = {};
+    for (const s of [e, ...r.implements ?? []]) {
+      const o = this.propertiesFor(s, r.propertiesById?.[s]);
+      o && (n[s] = o);
     }
-    return this.track(this.target.bindClass(id, ctor, {
-      ...options,
-      providedBy: options.providedBy ?? this.moduleId,
-      ranking: this.rankingFor(id, options.ranking),
-      properties: this.propertiesFor(id, options.properties),
-      propertiesById
+    return this.track(this.target.bindClass(e, t, {
+      ...r,
+      providedBy: r.providedBy ?? this.moduleId,
+      ranking: this.rankingFor(e, r.ranking),
+      properties: this.propertiesFor(e, r.properties),
+      propertiesById: n
     }));
   }
   /**
@@ -4688,23 +3136,21 @@ class ScopedServiceRegistry {
    * its configuration know; where the service belongs is still the manifest's
    * business, exactly as at registration time.
    */
-  track(registration) {
-    const scoped = {
-      ...registration,
-      unregister: () => registration.unregister(),
-      resolve: () => registration.resolve(),
-      setProperties: (properties, options = {}) => {
-        const byId = {};
-        for (const [serviceId2, own] of Object.entries(options.propertiesById ?? {})) {
-          const merged = this.propertiesFor(serviceId2, own);
-          if (merged)
-            byId[serviceId2] = merged;
+  track(e) {
+    const t = {
+      ...e,
+      unregister: () => e.unregister(),
+      resolve: () => e.resolve(),
+      setProperties: (r, n = {}) => {
+        const s = {};
+        for (const [o, a] of Object.entries(n.propertiesById ?? {})) {
+          const f = this.propertiesFor(o, a);
+          f && (s[o] = f);
         }
-        return registration.setProperties(this.propertiesFor(registration.serviceId, properties) ?? properties, { ...options, propertiesById: byId });
+        return e.setProperties(this.propertiesFor(e.serviceId, r) ?? r, { ...n, propertiesById: s });
       }
     };
-    this.ownRegistrations.push(scoped);
-    return scoped;
+    return this.ownRegistrations.push(t), t;
   }
   /**
    * Construct a class for this module, so a `module`-scoped dependency is this
@@ -4713,9 +3159,9 @@ class ScopedServiceRegistry {
    * The path a component without a service of its own takes, which makes it the
    * one that must not lose the consumer.
    */
-  construct(ctor) {
-    const target = this.target;
-    return typeof target.constructFor === "function" ? target.constructFor(this.moduleId, ctor) : this.target.construct(ctor);
+  construct(e) {
+    const t = this.target;
+    return typeof t.constructFor == "function" ? t.constructFor(this.moduleId, e) : this.target.construct(e);
   }
   /**
    * Reads pass through, but no longer anonymously: the facade knows which module
@@ -4724,45 +3170,42 @@ class ScopedServiceRegistry {
    * A target registry without `getFor` falls back to the plain read, where a
    * `module`-scoped registration behaves as a singleton.
    */
-  get(id) {
-    const target = this.target;
-    return typeof target.getFor === "function" ? target.getFor(this.moduleId, id) : this.target.get(id);
+  get(e) {
+    const t = this.target;
+    return typeof t.getFor == "function" ? t.getFor(this.moduleId, e) : this.target.get(e);
   }
-  getRequired(id) {
-    const service = this.get(id);
-    if (service === void 0) {
-      return this.target.getRequired(id);
-    }
-    return service;
+  getRequired(e) {
+    const t = this.get(e);
+    return t === void 0 ? this.target.getRequired(e) : t;
   }
-  getAll(idPattern) {
-    return this.target.getAll(idPattern);
+  getAll(e) {
+    return this.target.getAll(e);
   }
-  has(id) {
-    return this.target.has(id);
+  has(e) {
+    return this.target.has(e);
   }
-  checkRequirements(requirements) {
-    return this.target.checkRequirements(requirements);
+  checkRequirements(e) {
+    return this.target.checkRequirements(e);
   }
-  getServiceReferences(id, target) {
-    return this.target.getServiceReferences(id, target);
+  getServiceReferences(e, t) {
+    return this.target.getServiceReferences(e, t);
   }
   /**
    * Every service under an id, best first — resolved as this module, so a
    * `module`-scoped provider hands over this module's own instance.
    */
-  getServices(id, target) {
-    return this.getServiceReferences(id, target).map((reference) => this.resolveReference(reference)).filter((service) => service !== void 0);
+  getServices(e, t) {
+    return this.getServiceReferences(e, t).map((r) => this.resolveReference(r)).filter((r) => r !== void 0);
   }
-  resolveReference(reference) {
-    const target = this.target;
-    return typeof target.resolveReferenceFor === "function" ? target.resolveReferenceFor(this.moduleId, reference) : this.target.resolveReference(reference);
+  resolveReference(e) {
+    const t = this.target;
+    return typeof t.resolveReferenceFor == "function" ? t.resolveReferenceFor(this.moduleId, e) : this.target.resolveReference(e);
   }
-  countProviders(id, target) {
-    return this.target.countProviders(id, target);
+  countProviders(e, t) {
+    return this.target.countProviders(e, t);
   }
-  getMatching(id, target) {
-    return this.target.getMatching(id, target);
+  getMatching(e, t) {
+    return this.target.getMatching(e, t);
   }
   /**
    * Withdraw this module's registrations for an ID.
@@ -4771,16 +3214,12 @@ class ScopedServiceRegistry {
    * `unregister(id)` would take other modules' registrations along. An ID this
    * module never registered still falls through to the shared registry.
    */
-  unregister(id) {
-    const mine = this.ownRegistrations.filter((registration) => registration.serviceId === id);
-    if (mine.length === 0) {
-      return this.target.unregister(id);
-    }
-    this.ownRegistrations = this.ownRegistrations.filter((registration) => registration.serviceId !== id);
-    return mine.map((registration) => registration.unregister()).some((removed) => removed);
+  unregister(e) {
+    const t = this.ownRegistrations.filter((r) => r.serviceId === e);
+    return t.length === 0 ? this.target.unregister(e) : (this.ownRegistrations = this.ownRegistrations.filter((r) => r.serviceId !== e), t.map((r) => r.unregister()).some((r) => r));
   }
-  getBindingInfo(id) {
-    return this.target.getBindingInfo(id);
+  getBindingInfo(e) {
+    return this.target.getBindingInfo(e);
   }
   getServiceIds() {
     return this.target.getServiceIds();
@@ -4794,13 +3233,11 @@ class ScopedServiceRegistry {
    * Requires an observable target registry; a custom `ServiceRegistry` without
    * listener support cannot provide this.
    */
-  addListener(listener, options = {}) {
-    const target = this.target;
-    if (typeof target.addListener !== "function") {
+  addListener(e, t = {}) {
+    const r = this.target;
+    if (typeof r.addListener != "function")
       throw new Error(`Service registry does not support listeners, so module ${this.moduleId} cannot observe it`);
-    }
-    this.ownListeners.add(listener);
-    target.addListener(listener, options);
+    this.ownListeners.add(e), r.addListener(e, t);
   }
   /**
    * Resolve once a service is available.
@@ -4808,479 +3245,367 @@ class ScopedServiceRegistry {
    * A pending wait is not cancelled when the module is deactivated; keep the
    * `timeoutMs` in mind if the service may never arrive.
    */
-  whenAvailable(id, options = {}) {
-    const target = this.target;
-    if (typeof target.whenAvailable !== "function") {
-      return Promise.reject(new Error(`Service registry does not support waiting, so module ${this.moduleId} cannot await ${id}`));
-    }
-    return target.whenAvailable(id, options);
+  whenAvailable(e, t = {}) {
+    const r = this.target;
+    return typeof r.whenAvailable != "function" ? Promise.reject(new Error(`Service registry does not support waiting, so module ${this.moduleId} cannot await ${e}`)) : r.whenAvailable(e, t);
   }
-  removeListener(listener) {
-    const target = this.target;
-    this.ownListeners.delete(listener);
-    if (typeof target.removeListener === "function") {
-      target.removeListener(listener);
-    }
+  removeListener(e) {
+    const t = this.target;
+    this.ownListeners.delete(e), typeof t.removeListener == "function" && t.removeListener(e);
   }
   /** IDs this module registered and has not withdrawn itself */
   getOwnServiceIds() {
-    return [...new Set(this.ownRegistrations.map((registration) => registration.serviceId))];
+    return [...new Set(this.ownRegistrations.map((e) => e.serviceId))];
   }
   /**
    * Withdraw everything this module registered.
    * Returns the IDs that were actually removed.
    */
   releaseAll() {
-    const target = this.target;
-    for (const listener of this.ownListeners) {
-      target.removeListener?.(listener);
-    }
+    const e = this.target;
+    for (const r of this.ownListeners)
+      e.removeListener?.(r);
     this.ownListeners.clear();
-    const released = [];
-    for (const registration of [...this.ownRegistrations].reverse()) {
-      if (registration.unregister()) {
-        released.push(registration.serviceId);
-      }
-    }
-    this.ownRegistrations = [];
-    target.releaseConsumer?.(this.moduleId);
-    return released;
+    const t = [];
+    for (const r of [...this.ownRegistrations].reverse())
+      r.unregister() && t.push(r.serviceId);
+    return this.ownRegistrations = [], e.releaseConsumer?.(this.moduleId), t;
   }
 }
-const COMPONENT_RUNTIME_SERVICE_ID = "tsm.component.runtime";
-const EXTENDER_NAMESPACE = "osgi.extender";
-const COMPONENT_EXTENDER = "osgi.component";
-const METATYPE_EXTENDER = "osgi.metatype";
-const IMPLEMENTATION_NAMESPACE = "osgi.implementation";
-const CONFIGURATION_IMPLEMENTATION = "osgi.cm";
-const FEATURE_SERVICE_ID = "tsm.feature.service";
-const FEATURE_IMPLEMENTATION = "osgi.feature";
-const FEATURE_VERSION = "1.0.0";
-const FEATURE_RESOURCE_VERSION = "1.0";
-function stripComments(text) {
-  let out = "";
-  let at = 0;
-  while (at < text.length) {
-    const char = text[at];
-    if (char === '"') {
-      out += char;
-      at++;
-      while (at < text.length) {
-        out += text[at];
-        if (text[at] === "\\") {
-          out += text[at + 1] ?? "";
-          at += 2;
+const jn = "tsm.component.runtime", we = "osgi.extender", kn = "osgi.component", Dn = "osgi.metatype", Ee = "osgi.implementation", qn = "osgi.cm", Fn = "tsm.feature.service", xn = "osgi.feature", Bn = "1.0.0", Me = "1.0";
+function Vn(i) {
+  let e = "", t = 0;
+  for (; t < i.length; ) {
+    const r = i[t];
+    if (r === '"') {
+      for (e += r, t++; t < i.length; ) {
+        if (e += i[t], i[t] === "\\") {
+          e += i[t + 1] ?? "", t += 2;
           continue;
         }
-        if (text[at] === '"') {
-          at++;
+        if (i[t] === '"') {
+          t++;
           break;
         }
-        at++;
+        t++;
       }
       continue;
     }
-    if (char === "/" && text[at + 1] === "/") {
-      while (at < text.length && text[at] !== "\n")
-        at++;
+    if (r === "/" && i[t + 1] === "/") {
+      for (; t < i.length && i[t] !== `
+`; )
+        t++;
       continue;
     }
-    if (char === "/" && text[at + 1] === "*") {
-      at += 2;
-      while (at < text.length && !(text[at] === "*" && text[at + 1] === "/"))
-        at++;
-      at += 2;
+    if (r === "/" && i[t + 1] === "*") {
+      for (t += 2; t < i.length && !(i[t] === "*" && i[t + 1] === "/"); )
+        t++;
+      t += 2;
       continue;
     }
-    out += char;
-    at++;
+    e += r, t++;
   }
-  return out;
+  return e;
 }
-function parseFeatureId(id) {
-  const at = id.lastIndexOf("@");
-  if (at <= 0) {
-    throw new Error(`Feature id '${id}' has no version — expected 'name@version'`);
-  }
-  const name = id.slice(0, at);
-  const version = id.slice(at + 1);
-  if (name.length === 0 || version.length === 0) {
-    throw new Error(`Feature id '${id}' has an empty name or version`);
-  }
-  return { name, version };
+function Fe(i) {
+  const e = i.lastIndexOf("@");
+  if (e <= 0)
+    throw new Error(`Feature id '${i}' has no version — expected 'name@version'`);
+  const t = i.slice(0, e), r = i.slice(e + 1);
+  if (t.length === 0 || r.length === 0)
+    throw new Error(`Feature id '${i}' has an empty name or version`);
+  return { name: t, version: r };
 }
-function formatFeatureId(id) {
-  return `${id.name}@${id.version}`;
+function fe(i) {
+  return `${i.name}@${i.version}`;
 }
-const CONVERSIONS = {
-  String: (raw) => raw,
-  Integer: (raw) => Number.parseInt(raw, 10),
-  Long: (raw) => Number.parseInt(raw, 10),
-  Float: (raw) => Number.parseFloat(raw),
-  Double: (raw) => Number.parseFloat(raw),
-  Boolean: (raw) => raw === "true"
+const Cs = {
+  String: (i) => i,
+  Integer: (i) => Number.parseInt(i, 10),
+  Long: (i) => Number.parseInt(i, 10),
+  Float: (i) => Number.parseFloat(i),
+  Double: (i) => Number.parseFloat(i),
+  Boolean: (i) => i === "true"
 };
-function substitute(value, variables) {
-  return value.replace(/\$\{([^}]*)\}/g, (whole, name) => {
-    const replacement = variables[name];
-    return replacement === void 0 || replacement === null ? whole : String(replacement);
+function As(i, e) {
+  return i.replace(/\$\{([^}]*)\}/g, (t, r) => {
+    const n = e[r];
+    return n == null ? t : String(n);
   });
 }
-function resolveConfigurations(feature, supplied = {}) {
-  const variables = { ...feature.variables, ...supplied };
-  const resolved = {};
-  for (const [pid, properties] of Object.entries(feature.configurations)) {
-    const values = {};
-    for (const [key, value] of Object.entries(properties)) {
-      const colon = key.lastIndexOf(":");
-      const declaredType = colon > 0 ? key.slice(colon + 1) : void 0;
-      const convert = declaredType === void 0 ? void 0 : CONVERSIONS[declaredType];
-      const name = convert === void 0 ? key : key.slice(0, colon);
-      const substituted = typeof value === "string" ? substitute(value, variables) : value;
-      values[name] = convert !== void 0 && typeof substituted === "string" ? convert(substituted) : substituted;
+function nr(i, e = {}) {
+  const t = { ...i.variables, ...e }, r = {};
+  for (const [n, s] of Object.entries(i.configurations)) {
+    const o = {};
+    for (const [a, f] of Object.entries(s)) {
+      const d = a.lastIndexOf(":"), c = d > 0 ? a.slice(d + 1) : void 0, l = c === void 0 ? void 0 : Cs[c], p = l === void 0 ? a : a.slice(0, d), m = typeof f == "string" ? As(f, t) : f;
+      o[p] = l !== void 0 && typeof m == "string" ? l(m) : m;
     }
-    resolved[pid] = values;
+    r[n] = o;
   }
-  return resolved;
+  return r;
 }
-function missingVariables(feature, supplied = {}) {
-  return Object.entries(feature.variables).filter(([name, value]) => value === null && supplied[name] === void 0).map(([name]) => name);
+function ir(i, e = {}) {
+  return Object.entries(i.variables).filter(([t, r]) => r === null && e[t] === void 0).map(([t]) => t);
 }
-function readFeature(document2) {
-  const raw = typeof document2 === "string" ? JSON.parse(stripComments(document2)) : document2;
-  if (typeof raw !== "object" || raw === null) {
+function Un(i) {
+  const e = typeof i == "string" ? JSON.parse(Vn(i)) : i;
+  if (typeof e != "object" || e === null)
     throw new Error("A feature document has to be a JSON object");
-  }
-  if (typeof raw.id !== "string") {
+  if (typeof e.id != "string")
     throw new Error('A feature needs an "id" of the form "name@version"');
-  }
-  const version = raw["feature-resource-version"];
-  if (version !== void 0 && version !== FEATURE_RESOURCE_VERSION) {
-    throw new Error(`Unsupported feature-resource-version '${String(version)}' — this reads ${FEATURE_RESOURCE_VERSION}`);
-  }
+  const t = e["feature-resource-version"];
+  if (t !== void 0 && t !== Me)
+    throw new Error(`Unsupported feature-resource-version '${String(t)}' — this reads ${Me}`);
   return Object.freeze({
-    id: parseFeatureId(raw.id),
-    name: optionalString(raw.name, "name"),
-    description: optionalString(raw.description, "description"),
-    categories: Object.freeze(readCategories(raw.categories)),
-    complete: raw.complete === true,
-    docURL: optionalString(raw.docURL, "docURL"),
-    license: optionalString(raw.license, "license"),
-    scm: optionalString(raw.scm, "scm"),
-    vendor: optionalString(raw.vendor, "vendor"),
-    bundles: Object.freeze(readBundles(raw.bundles)),
-    configurations: Object.freeze(readConfigurations(raw.configurations)),
-    variables: Object.freeze(readVariables(raw.variables)),
-    extensions: Object.freeze(readExtensions(raw.extensions))
+    id: Fe(e.id),
+    name: de(e.name, "name"),
+    description: de(e.description, "description"),
+    categories: Object.freeze(Ms(e.categories)),
+    complete: e.complete === !0,
+    docURL: de(e.docURL, "docURL"),
+    license: de(e.license, "license"),
+    scm: de(e.scm, "scm"),
+    vendor: de(e.vendor, "vendor"),
+    bundles: Object.freeze(Gn(e.bundles)),
+    configurations: Object.freeze(Ts(e.configurations)),
+    variables: Object.freeze(Ls(e.variables)),
+    extensions: Object.freeze(Ns(e.extensions))
   });
 }
-function optionalString(value, key) {
-  if (value === void 0)
-    return void 0;
-  if (typeof value !== "string")
-    throw new Error(`Feature "${key}" has to be a string`);
-  return value;
-}
-function readCategories(value) {
-  if (value === void 0)
-    return [];
-  if (!Array.isArray(value) || value.some((entry) => typeof entry !== "string")) {
-    throw new Error('Feature "categories" has to be an array of strings');
+function de(i, e) {
+  if (i !== void 0) {
+    if (typeof i != "string")
+      throw new Error(`Feature "${e}" has to be a string`);
+    return i;
   }
-  return [...value];
 }
-function readBundles(value) {
-  if (value === void 0)
+function Ms(i) {
+  if (i === void 0)
     return [];
-  if (!Array.isArray(value))
+  if (!Array.isArray(i) || i.some((e) => typeof e != "string"))
+    throw new Error('Feature "categories" has to be an array of strings');
+  return [...i];
+}
+function Gn(i) {
+  if (i === void 0)
+    return [];
+  if (!Array.isArray(i))
     throw new Error('Feature "bundles" has to be an array');
-  return value.map((entry) => {
-    if (typeof entry !== "object" || entry === null) {
+  return i.map((e) => {
+    if (typeof e != "object" || e === null)
       throw new Error('Every entry in "bundles" has to be an object with an "id"');
-    }
-    const { id, ...rest } = entry;
-    if (typeof id !== "string") {
+    const { id: t, ...r } = e;
+    if (typeof t != "string")
       throw new Error('Every entry in "bundles" needs a string "id"');
-    }
-    const metadata = {};
-    for (const [key, own] of Object.entries(rest)) {
-      if (typeof own !== "string" && typeof own !== "number" && typeof own !== "boolean") {
-        throw new Error(`Bundle metadata '${key}' of '${id}' is a ${typeof own}; only strings, numbers and booleans are allowed`);
-      }
-      metadata[key] = own;
+    const n = {};
+    for (const [s, o] of Object.entries(r)) {
+      if (typeof o != "string" && typeof o != "number" && typeof o != "boolean")
+        throw new Error(`Bundle metadata '${s}' of '${t}' is a ${typeof o}; only strings, numbers and booleans are allowed`);
+      n[s] = o;
     }
     return Object.freeze({
-      id: parseFeatureId(id),
-      ...Object.keys(metadata).length > 0 ? { metadata: Object.freeze(metadata) } : {}
+      id: Fe(t),
+      ...Object.keys(n).length > 0 ? { metadata: Object.freeze(n) } : {}
     });
   });
 }
-function readConfigurations(value) {
-  if (value === void 0)
+function Ts(i) {
+  if (i === void 0)
     return {};
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+  if (typeof i != "object" || i === null || Array.isArray(i))
     throw new Error('Feature "configurations" has to be an object keyed by PID');
+  const e = {};
+  for (const [t, r] of Object.entries(i)) {
+    if (typeof r != "object" || r === null || Array.isArray(r))
+      throw new Error(`Configuration '${t}' has to be an object of properties`);
+    e[t] = Object.freeze({ ...r });
   }
-  const configurations = {};
-  for (const [pid, properties] of Object.entries(value)) {
-    if (typeof properties !== "object" || properties === null || Array.isArray(properties)) {
-      throw new Error(`Configuration '${pid}' has to be an object of properties`);
-    }
-    configurations[pid] = Object.freeze({ ...properties });
-  }
-  return configurations;
+  return e;
 }
-function readVariables(value) {
-  if (value === void 0)
+function Ls(i) {
+  if (i === void 0)
     return {};
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+  if (typeof i != "object" || i === null || Array.isArray(i))
     throw new Error('Feature "variables" has to be an object');
+  const e = {};
+  for (const [t, r] of Object.entries(i)) {
+    if (r !== null && typeof r != "string" && typeof r != "number" && typeof r != "boolean")
+      throw new Error(`Variable '${t}' is a ${typeof r}; a default has to be a string, a number, a boolean, or null for "the launcher must supply this"`);
+    e[t] = r;
   }
-  const variables = {};
-  for (const [name, own] of Object.entries(value)) {
-    if (own !== null && typeof own !== "string" && typeof own !== "number" && typeof own !== "boolean") {
-      throw new Error(`Variable '${name}' is a ${typeof own}; a default has to be a string, a number, a boolean, or null for "the launcher must supply this"`);
-    }
-    variables[name] = own;
-  }
-  return variables;
+  return e;
 }
-function readExtensions(value) {
-  if (value === void 0)
+function Ns(i) {
+  if (i === void 0)
     return {};
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+  if (typeof i != "object" || i === null || Array.isArray(i))
     throw new Error('Feature "extensions" has to be an object');
-  }
-  const extensions = {};
-  for (const [name, own] of Object.entries(value)) {
-    if (typeof own !== "object" || own === null) {
-      throw new Error(`Extension '${name}' has to be an object`);
-    }
-    const entry = own;
-    const kind = readKind(entry.kind, name);
-    switch (entry.type) {
+  const e = {};
+  for (const [t, r] of Object.entries(i)) {
+    if (typeof r != "object" || r === null)
+      throw new Error(`Extension '${t}' has to be an object`);
+    const n = r, s = _s(n.kind, t);
+    switch (n.type) {
       case "text":
-        if (!Array.isArray(entry.text) || entry.text.some((line) => typeof line !== "string")) {
-          throw new Error(`Text extension '${name}' needs a "text" array of strings`);
-        }
-        extensions[name] = Object.freeze({
+        if (!Array.isArray(n.text) || n.text.some((o) => typeof o != "string"))
+          throw new Error(`Text extension '${t}' needs a "text" array of strings`);
+        e[t] = Object.freeze({
           type: "text",
-          kind,
-          text: Object.freeze([...entry.text])
+          kind: s,
+          text: Object.freeze([...n.text])
         });
         break;
       case "json":
-        if (!("json" in entry)) {
-          throw new Error(`JSON extension '${name}' needs a "json" value`);
-        }
-        extensions[name] = Object.freeze({ type: "json", kind, json: entry.json });
+        if (!("json" in n))
+          throw new Error(`JSON extension '${t}' needs a "json" value`);
+        e[t] = Object.freeze({ type: "json", kind: s, json: n.json });
         break;
       case "artifacts":
-        extensions[name] = Object.freeze({
+        e[t] = Object.freeze({
           type: "artifacts",
-          kind,
-          artifacts: Object.freeze(readBundles(entry.artifacts))
+          kind: s,
+          artifacts: Object.freeze(Gn(n.artifacts))
         });
         break;
       default:
-        throw new Error(`Extension '${name}' has type '${String(entry.type)}'; expected 'text', 'json' or 'artifacts'`);
+        throw new Error(`Extension '${t}' has type '${String(n.type)}'; expected 'text', 'json' or 'artifacts'`);
     }
   }
-  return extensions;
+  return e;
 }
-function readKind(value, name) {
-  if (value === void 0)
+function _s(i, e) {
+  if (i === void 0)
     return "optional";
-  if (value !== "mandatory" && value !== "optional" && value !== "transient") {
-    throw new Error(`Extension '${name}' has kind '${String(value)}'; expected 'mandatory', 'optional' or 'transient'`);
-  }
-  return value;
+  if (i !== "mandatory" && i !== "optional" && i !== "transient")
+    throw new Error(`Extension '${e}' has kind '${String(i)}'; expected 'mandatory', 'optional' or 'transient'`);
+  return i;
 }
-function writeFeature(feature, options = {}) {
-  const document2 = {
-    "feature-resource-version": FEATURE_RESOURCE_VERSION,
-    id: formatFeatureId(feature.id)
+function zn(i, e = {}) {
+  const t = {
+    "feature-resource-version": Me,
+    id: fe(i.id)
   };
-  if (feature.name !== void 0)
-    document2.name = feature.name;
-  if (feature.description !== void 0)
-    document2.description = feature.description;
-  if (feature.categories.length > 0)
-    document2.categories = [...feature.categories];
-  if (feature.complete)
-    document2.complete = true;
-  if (feature.docURL !== void 0)
-    document2.docURL = feature.docURL;
-  if (feature.license !== void 0)
-    document2.license = feature.license;
-  if (feature.scm !== void 0)
-    document2.scm = feature.scm;
-  if (feature.vendor !== void 0)
-    document2.vendor = feature.vendor;
-  if (feature.bundles.length > 0) {
-    document2.bundles = feature.bundles.map((bundle) => ({
-      id: formatFeatureId(bundle.id),
-      ...bundle.metadata
-    }));
-  }
-  if (Object.keys(feature.configurations).length > 0) {
-    document2.configurations = feature.configurations;
-  }
-  if (Object.keys(feature.variables).length > 0) {
-    document2.variables = feature.variables;
-  }
-  if (Object.keys(feature.extensions).length > 0) {
-    document2.extensions = feature.extensions;
-  }
-  return JSON.stringify(document2, void 0, options.indent ?? 2);
+  return i.name !== void 0 && (t.name = i.name), i.description !== void 0 && (t.description = i.description), i.categories.length > 0 && (t.categories = [...i.categories]), i.complete && (t.complete = !0), i.docURL !== void 0 && (t.docURL = i.docURL), i.license !== void 0 && (t.license = i.license), i.scm !== void 0 && (t.scm = i.scm), i.vendor !== void 0 && (t.vendor = i.vendor), i.bundles.length > 0 && (t.bundles = i.bundles.map((r) => ({
+    id: fe(r.id),
+    ...r.metadata
+  }))), Object.keys(i.configurations).length > 0 && (t.configurations = i.configurations), Object.keys(i.variables).length > 0 && (t.variables = i.variables), Object.keys(i.extensions).length > 0 && (t.extensions = i.extensions), JSON.stringify(t, void 0, e.indent ?? 2);
 }
-function validateFeature(feature, options = {}) {
-  const problems = [];
-  const seen = /* @__PURE__ */ new Map();
-  feature.bundles.forEach((bundle, at) => {
-    const key = formatFeatureId(bundle.id);
-    const first = seen.get(key);
-    if (first !== void 0) {
-      problems.push({ at: `bundles[${at}]`, problem: `'${key}' is already listed at ${first}` });
-    } else {
-      seen.set(key, at);
-    }
+function sr(i, e = {}) {
+  const t = [], r = /* @__PURE__ */ new Map();
+  i.bundles.forEach((s, o) => {
+    const a = fe(s.id), f = r.get(a);
+    f !== void 0 ? t.push({ at: `bundles[${o}]`, problem: `'${a}' is already listed at ${f}` }) : r.set(a, o);
   });
-  for (const name of missingVariables(feature, options.supplied)) {
-    problems.push({
-      at: `variables.${name}`,
+  for (const s of ir(i, e.supplied))
+    t.push({
+      at: `variables.${s}`,
       problem: "declared without a default, so a value has to be supplied"
     });
-  }
-  const handles = new Set(options.handles ?? []);
-  for (const [name, extension] of Object.entries(feature.extensions)) {
-    if (extension.kind === "mandatory" && !handles.has(name)) {
-      problems.push({
-        at: `extensions.${name}`,
-        problem: "is mandatory, and this consumer does not handle it"
-      });
-    }
-  }
-  return problems;
+  const n = new Set(e.handles ?? []);
+  for (const [s, o] of Object.entries(i.extensions))
+    o.kind === "mandatory" && !n.has(s) && t.push({
+      at: `extensions.${s}`,
+      problem: "is mandatory, and this consumer does not handle it"
+    });
+  return t;
 }
-const featureService = Object.freeze({
-  readFeature,
-  writeFeature,
-  validateFeature,
-  resolveConfigurations,
-  missingVariables,
-  getId: (name, version) => ({ name, version }),
-  parseId: parseFeatureId,
-  formatId: formatFeatureId
-});
-const IDENTITY_NAMESPACE = "osgi.identity";
-const SERVICE_NAMESPACE = "osgi.service";
-const LIBRARY_NAMESPACE = "tsm.library";
-const DS_VERSION = "1.5.0";
-const METATYPE_VERSION = "1.4.0";
-const CM_VERSION = "1.6.0";
-const MODULE_TYPE = "tsm.module";
-const RESOLVE = "resolve";
-const SYSTEM_BUNDLE_ID = "system.bundle";
-const ENVIRONMENT = "environment";
-function isEffectiveAtResolve(effective) {
-  return effective === void 0 || effective === RESOLVE;
+const Wn = Object.freeze({
+  readFeature: Un,
+  writeFeature: zn,
+  validateFeature: sr,
+  resolveConfigurations: nr,
+  missingVariables: ir,
+  getId: (i, e) => ({ name: i, version: e }),
+  parseId: Fe,
+  formatId: fe
+}), ce = "osgi.identity", or = "osgi.service", xe = "tsm.library", Xn = "1.5.0", Yn = "1.4.0", Hn = "1.6.0", Kn = "tsm.module", Ps = "resolve", Te = "system.bundle", Jn = "environment";
+function Zn(i) {
+  return i === void 0 || i === Ps;
 }
-function capabilitiesOf(manifest) {
-  const derived = [
+function Qn(i) {
+  const e = [
     {
-      namespace: IDENTITY_NAMESPACE,
+      namespace: ce,
       attributes: {
-        [IDENTITY_NAMESPACE]: manifest.id,
-        type: MODULE_TYPE,
-        version: manifest.version
+        [ce]: i.id,
+        type: Kn,
+        version: i.version
       }
     }
   ];
-  for (const service of manifest.provides ?? []) {
-    derived.push({
-      namespace: SERVICE_NAMESPACE,
+  for (const t of i.provides ?? [])
+    e.push({
+      namespace: or,
       attributes: {
         // A list, as in the specification: one capability may cover several IDs
-        objectClass: [service.id],
-        ...service.properties
+        objectClass: [t.id],
+        ...t.properties
       }
     });
-  }
-  return [...derived, ...manifest.capabilities ?? []];
+  return [...e, ...i.capabilities ?? []];
 }
-function requirementsOf(manifest) {
-  const derived = [];
-  for (const dependency of manifest.dependencies ?? []) {
-    const spec = typeof dependency === "string" ? { id: dependency } : dependency;
-    derived.push({
-      namespace: IDENTITY_NAMESPACE,
-      filter: `(${IDENTITY_NAMESPACE}=${escapeValue(spec.id)})`,
-      versionRange: spec.versionRange,
-      resolution: spec.optional === true ? "optional" : "mandatory"
+function ei(i) {
+  const e = [];
+  for (const t of i.dependencies ?? []) {
+    const r = typeof t == "string" ? { id: t } : t;
+    e.push({
+      namespace: ce,
+      filter: `(${ce}=${Se(r.id)})`,
+      versionRange: r.versionRange,
+      resolution: r.optional === !0 ? "optional" : "mandatory"
     });
   }
-  for (const dependency of manifest.optionalDependencies ?? []) {
-    const spec = typeof dependency === "string" ? { id: dependency } : dependency;
-    derived.push({
-      namespace: IDENTITY_NAMESPACE,
-      filter: `(${IDENTITY_NAMESPACE}=${escapeValue(spec.id)})`,
-      versionRange: spec.versionRange,
+  for (const t of i.optionalDependencies ?? []) {
+    const r = typeof t == "string" ? { id: t } : t;
+    e.push({
+      namespace: ce,
+      filter: `(${ce}=${Se(r.id)})`,
+      versionRange: r.versionRange,
       resolution: "optional"
     });
   }
-  for (const requirement of manifest.requiresService ?? []) {
-    derived.push({
-      namespace: SERVICE_NAMESPACE,
-      filter: `(objectClass=${escapeValue(requirement.id)})`,
+  for (const t of i.requiresService ?? [])
+    e.push({
+      namespace: or,
+      filter: `(objectClass=${Se(t.id)})`,
       // The runtime requirement may be mandatory while the resolution is not:
       // cardinality 0..n means the module runs with no provider at all
-      resolution: requirement.optional === true || requirement.cardinality?.startsWith("0") ? "optional" : "mandatory"
+      resolution: t.optional === !0 || t.cardinality?.startsWith("0") ? "optional" : "mandatory"
     });
-  }
-  for (const library of manifest.sharedDependencies ?? []) {
-    derived.push({
-      namespace: LIBRARY_NAMESPACE,
-      filter: `(library=${escapeValue(library.id)})`,
-      versionRange: library.versionRange
+  for (const t of i.sharedDependencies ?? [])
+    e.push({
+      namespace: xe,
+      filter: `(library=${Se(t.id)})`,
+      versionRange: t.versionRange
     });
+  return [...e, ...i.requirements ?? []];
+}
+function Se(i) {
+  return i.replace(/[\\()*]/g, (e) => `\\${e}`);
+}
+function ti(i, e) {
+  if (e.namespace !== i.namespace || !Zn(e.directives?.effective))
+    return !1;
+  const t = e.attributes ?? {};
+  if (i.versionRange !== void 0) {
+    const r = t.version;
+    if (typeof r != "string" || !le.validRange(i.versionRange) || !le.satisfies(r, i.versionRange, { includePrerelease: !0 }))
+      return !1;
   }
-  return [...derived, ...manifest.requirements ?? []];
+  return i.filter === void 0 ? !0 : qe(i.filter, { caseSensitive: !0 })(t);
 }
-function escapeValue(value) {
-  return value.replace(/[\\()*]/g, (character) => `\\${character}`);
-}
-function satisfies(requirement, capability) {
-  if (capability.namespace !== requirement.namespace)
-    return false;
-  if (!isEffectiveAtResolve(capability.directives?.effective))
-    return false;
-  const attributes = capability.attributes ?? {};
-  if (requirement.versionRange !== void 0) {
-    const version = attributes.version;
-    if (typeof version !== "string" || !semver.validRange(requirement.versionRange)) {
-      return false;
-    }
-    if (!semver.satisfies(version, requirement.versionRange, { includePrerelease: true })) {
-      return false;
-    }
-  }
-  if (requirement.filter === void 0)
-    return true;
-  return createServiceFilter(requirement.filter, { caseSensitive: true })(attributes);
-}
-function libraryCapabilities(libraries) {
-  const entries = libraries instanceof Map ? [...libraries].map(([library, entry]) => [library, entry.version]) : Object.entries(libraries);
-  return entries.map(([library, version]) => ({
-    namespace: LIBRARY_NAMESPACE,
-    attributes: { library, version }
+function ri(i) {
+  return (i instanceof Map ? [...i].map(([t, r]) => [t, r.version]) : Object.entries(i)).map(([t, r]) => ({
+    namespace: xe,
+    attributes: { library: t, version: r }
   }));
 }
-function systemBundle(options = {}) {
+function ni(i = {}) {
   return {
-    id: SYSTEM_BUNDLE_ID,
+    id: Te,
     name: "System Bundle",
-    version: options.version ?? "0.0.0",
+    version: i.version ?? "0.0.0",
     entry: "System Bundle",
     exports: {},
     capabilities: [
@@ -5289,202 +3614,168 @@ function systemBundle(options = {}) {
       // so the system bundle is where it belongs — and a module can require it
       // exactly as it would require Felix SCR
       {
-        namespace: EXTENDER_NAMESPACE,
-        attributes: { [EXTENDER_NAMESPACE]: COMPONENT_EXTENDER, version: DS_VERSION }
+        namespace: we,
+        attributes: { [we]: kn, version: Xn }
       },
       // These two only when they are really there: a capability nobody can rely
       // on is worse than none, because a module would resolve and then find
       // nothing behind it
-      ...options.metatype === true ? [{
-        namespace: EXTENDER_NAMESPACE,
-        attributes: { [EXTENDER_NAMESPACE]: METATYPE_EXTENDER, version: METATYPE_VERSION }
+      ...i.metatype === !0 ? [{
+        namespace: we,
+        attributes: { [we]: Dn, version: Yn }
       }] : [],
       // Always there, as the feature service needs nothing from the application
       {
-        namespace: IMPLEMENTATION_NAMESPACE,
+        namespace: Ee,
         attributes: {
-          [IMPLEMENTATION_NAMESPACE]: FEATURE_IMPLEMENTATION,
-          version: FEATURE_VERSION
+          [Ee]: xn,
+          version: Bn
         }
       },
-      ...options.configurationAdmin === true ? [{
-        namespace: IMPLEMENTATION_NAMESPACE,
+      ...i.configurationAdmin === !0 ? [{
+        namespace: Ee,
         attributes: {
-          [IMPLEMENTATION_NAMESPACE]: CONFIGURATION_IMPLEMENTATION,
-          version: CM_VERSION
+          [Ee]: qn,
+          version: Hn
         }
       }] : [],
-      ...options.libraries ? libraryCapabilities(options.libraries) : [],
-      ...options.capabilities ?? []
+      ...i.libraries ? ri(i.libraries) : [],
+      ...i.capabilities ?? []
     ]
   };
 }
-function resolveWiring(manifests, options = {}) {
-  const offered = [
-    ...manifests.flatMap((manifest) => capabilitiesOf(manifest).map((capability) => ({ provider: manifest.id, capability }))),
-    ...(options.offered ?? []).map((capability) => ({ provider: ENVIRONMENT, capability }))
-  ];
-  const wires = [];
-  const unresolved = [];
-  const requirements = [];
-  const failed = /* @__PURE__ */ new Set();
-  for (const manifest of manifests) {
-    for (const requirement of requirementsOf(manifest)) {
-      if (!isEffectiveAtResolve(requirement.effective))
+function ii(i, e = {}) {
+  const t = [
+    ...i.flatMap((a) => Qn(a).map((f) => ({ provider: a.id, capability: f }))),
+    ...(e.offered ?? []).map((a) => ({ provider: Jn, capability: a }))
+  ], r = [], n = [], s = [], o = /* @__PURE__ */ new Set();
+  for (const a of i)
+    for (const f of ei(a)) {
+      if (!Zn(f.effective))
         continue;
-      const matches2 = offered.filter((entry) => satisfies(requirement, entry.capability));
-      const report = { moduleId: manifest.id, requirement, wires: [] };
-      requirements.push(report);
-      if (matches2.length === 0) {
-        if ((requirement.resolution ?? "mandatory") === "optional")
+      const d = t.filter((p) => ti(f, p.capability)), c = { moduleId: a.id, requirement: f, wires: [] };
+      if (s.push(c), d.length === 0) {
+        if ((f.resolution ?? "mandatory") === "optional")
           continue;
-        const anyInNamespace = offered.some((entry) => entry.capability.namespace === requirement.namespace);
-        const failure = {
-          moduleId: manifest.id,
-          requirement,
-          reason: anyInNamespace ? "no-match" : "no-capability"
+        const p = t.some((j) => j.capability.namespace === f.namespace), m = {
+          moduleId: a.id,
+          requirement: f,
+          reason: p ? "no-match" : "no-capability"
         };
-        unresolved.push(failure);
-        report.failure = failure;
-        failed.add(manifest.id);
+        n.push(m), c.failure = m, o.add(a.id);
         continue;
       }
-      const chosen = (requirement.cardinality ?? "single") === "multiple" ? matches2 : [best(matches2)];
-      for (const entry of chosen) {
-        const wire = {
-          requirer: manifest.id,
-          requirement,
-          provider: entry.provider,
-          capability: entry.capability
+      const l = (f.cardinality ?? "single") === "multiple" ? d : [js(d)];
+      for (const p of l) {
+        const m = {
+          requirer: a.id,
+          requirement: f,
+          provider: p.provider,
+          capability: p.capability
         };
-        wires.push(wire);
-        report.wires.push(wire);
+        r.push(m), c.wires.push(m);
       }
     }
-  }
   return {
-    wires,
-    unresolved,
-    requirements,
-    resolved: manifests.map((manifest) => manifest.id).filter((id) => !failed.has(id))
+    wires: r,
+    unresolved: n,
+    requirements: s,
+    resolved: i.map((a) => a.id).filter((a) => !o.has(a))
   };
 }
-function best(matches2) {
-  return matches2.reduce((winner, candidate) => {
-    const left = versionOf(candidate.capability);
-    const right = versionOf(winner.capability);
-    if (left === void 0 || right === void 0)
-      return winner;
-    return semver.gt(left, right) ? candidate : winner;
+function js(i) {
+  return i.reduce((e, t) => {
+    const r = En(t.capability), n = En(e.capability);
+    return r === void 0 || n === void 0 ? e : le.gt(r, n) ? t : e;
   });
 }
-function versionOf(capability) {
-  const version = capability.attributes?.version;
-  return typeof version === "string" && semver.valid(version) ? version : void 0;
+function En(i) {
+  const e = i.attributes?.version;
+  return typeof e == "string" && le.valid(e) ? e : void 0;
 }
-function wiringOf(resolution, moduleId) {
+function si(i, e) {
   return {
-    requires: resolution.wires.filter((wire) => wire.requirer === moduleId),
-    provides: resolution.wires.filter((wire) => wire.provider === moduleId)
+    requires: i.wires.filter((t) => t.requirer === e),
+    provides: i.wires.filter((t) => t.provider === e)
   };
 }
-const CONFIGURATION_ADMIN_SERVICE_ID = "tsm.configuration.admin";
-const FACTORY_PID_SEPARATOR = "~";
-const TARGETED_PID_SEPARATOR = "|";
-function targetedPids(pid, target) {
-  if (!target)
-    return [pid];
-  const candidates = [pid + TARGETED_PID_SEPARATOR + target.id];
-  if (target.version !== void 0) {
-    candidates.unshift(pid + TARGETED_PID_SEPARATOR + target.id + TARGETED_PID_SEPARATOR + target.version);
-  }
-  candidates.push(pid);
-  return candidates;
+const oi = "tsm.configuration.admin", Wt = "~", Ae = "|";
+function Le(i, e) {
+  if (!e)
+    return [i];
+  const t = [i + Ae + e.id];
+  return e.version !== void 0 && t.unshift(i + Ae + e.id + Ae + e.version), t.push(i), t;
 }
-const SERVICE_PID = "service.pid";
-const SERVICE_FACTORY_PID = "service.factoryPid";
-class MemoryConfigurationStore {
+const ai = "service.pid", ci = "service.factoryPid";
+class fi {
   records = /* @__PURE__ */ new Map();
-  constructor(initial = []) {
-    for (const record of initial) {
-      this.records.set(record.pid, record);
-    }
+  constructor(e = []) {
+    for (const t of e)
+      this.records.set(t.pid, t);
   }
   load() {
     return [...this.records.values()];
   }
-  save(record) {
-    this.records.set(record.pid, record);
+  save(e) {
+    this.records.set(e.pid, e);
   }
-  remove(pid) {
-    this.records.delete(pid);
+  remove(e) {
+    this.records.delete(e);
   }
 }
-class LocalStorageConfigurationStore {
+class ks {
   prefix;
-  constructor(prefix = "tsm.config.") {
-    this.prefix = prefix;
-    if (typeof localStorage === "undefined") {
+  constructor(e = "tsm.config.") {
+    if (this.prefix = e, typeof localStorage > "u")
       throw new Error("LocalStorageConfigurationStore needs localStorage; use MemoryConfigurationStore or a store of your own outside the browser");
-    }
   }
   load() {
-    const records = [];
-    for (let index = 0; index < localStorage.length; index++) {
-      const key = localStorage.key(index);
-      if (key === null || !key.startsWith(this.prefix))
+    const e = [];
+    for (let t = 0; t < localStorage.length; t++) {
+      const r = localStorage.key(t);
+      if (r === null || !r.startsWith(this.prefix))
         continue;
-      const raw = localStorage.getItem(key);
-      if (raw === null)
-        continue;
-      try {
-        records.push(JSON.parse(raw));
-      } catch {
-      }
+      const n = localStorage.getItem(r);
+      if (n !== null)
+        try {
+          e.push(JSON.parse(n));
+        } catch {
+        }
     }
-    return records;
+    return e;
   }
-  save(record) {
-    localStorage.setItem(this.prefix + record.pid, JSON.stringify(record));
+  save(e) {
+    localStorage.setItem(this.prefix + e.pid, JSON.stringify(e));
   }
-  remove(pid) {
-    localStorage.removeItem(this.prefix + pid);
+  remove(e) {
+    localStorage.removeItem(this.prefix + e);
   }
 }
-function assertValidProperties(pid, properties) {
-  const seen = /* @__PURE__ */ new Map();
-  for (const [key, value] of Object.entries(properties)) {
-    const lower = key.toLowerCase();
-    const clash = seen.get(lower);
-    if (clash !== void 0) {
-      throw new Error(`Configuration '${pid}' has the keys '${clash}' and '${key}', which differ only in case`);
-    }
-    seen.set(lower, key);
-    const values = Array.isArray(value) ? value : [value];
-    for (const entry of values) {
-      const type = typeof entry;
-      if (type !== "string" && type !== "number" && type !== "boolean") {
-        throw new Error(`Configuration '${pid}' property '${key}' is ${entry === null ? "null" : type}; only strings, numbers, booleans and arrays of those can be stored and filtered on`);
-      }
+function Ds(i, e) {
+  const t = /* @__PURE__ */ new Map();
+  for (const [r, n] of Object.entries(e)) {
+    const s = r.toLowerCase(), o = t.get(s);
+    if (o !== void 0)
+      throw new Error(`Configuration '${i}' has the keys '${o}' and '${r}', which differ only in case`);
+    t.set(s, r);
+    const a = Array.isArray(n) ? n : [n];
+    for (const f of a) {
+      const d = typeof f;
+      if (d !== "string" && d !== "number" && d !== "boolean")
+        throw new Error(`Configuration '${i}' property '${r}' is ${f === null ? "null" : d}; only strings, numbers, booleans and arrays of those can be stored and filtered on`);
     }
   }
 }
-function sameProperties$1(left, right) {
-  if (left === void 0)
-    return false;
-  const leftKeys = Object.keys(left);
-  if (leftKeys.length !== Object.keys(right).length)
-    return false;
-  return leftKeys.every((key) => {
-    const a = left[key];
-    const b = right[key];
-    if (Array.isArray(a) && Array.isArray(b)) {
-      return a.length === b.length && a.every((entry, index) => entry === b[index]);
-    }
-    return a === b;
+function qs(i, e) {
+  if (i === void 0)
+    return !1;
+  const t = Object.keys(i);
+  return t.length !== Object.keys(e).length ? !1 : t.every((r) => {
+    const n = i[r], s = e[r];
+    return Array.isArray(n) && Array.isArray(s) ? n.length === s.length && n.every((o, a) => o === s[a]) : n === s;
   });
 }
-class ConfigurationAdmin {
+class Fs {
   entries = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
   store;
@@ -5499,10 +3790,8 @@ class ConfigurationAdmin {
    * worth more than the symmetry — and without a registry nothing changes.
    */
   metatype;
-  constructor(options = {}) {
-    this.store = options.store ?? new MemoryConfigurationStore();
-    this.metatype = options.metatype;
-    this.loaded = this.load();
+  constructor(e = {}) {
+    this.store = e.store ?? new fi(), this.metatype = e.metatype, this.loaded = this.load();
   }
   /**
    * Refuse values a schema says are wrong.
@@ -5510,30 +3799,24 @@ class ConfigurationAdmin {
    * A PID without a schema passes: a configuration nobody described is not
    * thereby invalid.
    */
-  assertValidAgainstSchema(pid, properties) {
-    const errors = this.metatype?.validate(pid, properties) ?? [];
-    if (errors.length === 0)
+  assertValidAgainstSchema(e, t) {
+    const r = this.metatype?.validate(e, t) ?? [];
+    if (r.length === 0)
       return;
-    const detail = errors.map((error) => `${error.attribute} ${error.message}`).join("; ");
-    throw new Error(`Configuration '${pid}' does not match its schema: ${detail}`);
+    const n = r.map((s) => `${s.attribute} ${s.message}`).join("; ");
+    throw new Error(`Configuration '${e}' does not match its schema: ${n}`);
   }
   async load() {
-    const records = await this.store.load();
-    for (const record of records) {
-      if (this.entries.has(record.pid))
-        continue;
-      this.entries.set(record.pid, {
-        pid: record.pid,
-        factoryPid: record.factoryPid,
-        properties: record.properties,
-        changeCount: record.changeCount
+    const e = await this.store.load();
+    for (const t of e)
+      this.entries.has(t.pid) || this.entries.set(t.pid, {
+        pid: t.pid,
+        factoryPid: t.factoryPid,
+        properties: t.properties,
+        changeCount: t.changeCount
       });
-    }
-    for (const entry of this.entries.values()) {
-      if (entry.properties !== void 0) {
-        this.notify({ type: "updated", pid: entry.pid, factoryPid: entry.factoryPid });
-      }
-    }
+    for (const t of this.entries.values())
+      t.properties !== void 0 && this.notify({ type: "updated", pid: t.pid, factoryPid: t.factoryPid });
   }
   /**
    * Resolves once the store's contents are available.
@@ -5544,19 +3827,18 @@ class ConfigurationAdmin {
   async ready() {
     await this.loaded;
   }
-  addListener(listener) {
-    this.listeners.add(listener);
+  addListener(e) {
+    this.listeners.add(e);
   }
-  removeListener(listener) {
-    this.listeners.delete(listener);
+  removeListener(e) {
+    this.listeners.delete(e);
   }
-  notify(event) {
-    for (const listener of this.listeners) {
+  notify(e) {
+    for (const t of this.listeners)
       try {
-        listener.onConfigurationEvent(event);
+        t.onConfigurationEvent(e);
       } catch {
       }
-    }
   }
   /**
    * The configuration for a PID, created empty if it does not exist yet — the
@@ -5566,13 +3848,13 @@ class ConfigurationAdmin {
    * makes it count. That is what lets a management UI list a PID it has never
    * configured.
    */
-  getConfiguration(pid) {
-    return this.handleFor(this.entryFor(pid));
+  getConfiguration(e) {
+    return this.handleFor(this.entryFor(e));
   }
   /** The configuration for a PID, or undefined when there is none */
-  findConfiguration(pid) {
-    const entry = this.entries.get(pid);
-    return entry ? this.handleFor(entry) : void 0;
+  findConfiguration(e) {
+    const t = this.entries.get(e);
+    return t ? this.handleFor(t) : void 0;
   }
   /**
    * The configuration for a PID as seen by one module, following the targeted
@@ -5582,13 +3864,12 @@ class ConfigurationAdmin {
    * single PID mean different things to two versions of a module — the reason
    * targeted PIDs exist (CM 104.3.2).
    */
-  findTargetedConfiguration(pid, target) {
-    for (const candidate of targetedPids(pid, target)) {
-      const entry = this.entries.get(candidate);
-      if (entry?.properties !== void 0)
-        return this.handleFor(entry);
+  findTargetedConfiguration(e, t) {
+    for (const r of Le(e, t)) {
+      const n = this.entries.get(r);
+      if (n?.properties !== void 0)
+        return this.handleFor(n);
     }
-    return void 0;
   }
   /**
    * The factory configurations of a PID as seen by one module.
@@ -5598,11 +3879,11 @@ class ConfigurationAdmin {
    * PID replaces the less specific set rather than adding to it, since a merge
    * would give the module instances it was targeted away from.
    */
-  listTargetedFactoryConfigurations(pid, target) {
-    for (const candidate of targetedPids(pid, target)) {
-      const configurations = this.listFactoryConfigurations(candidate);
-      if (configurations.length > 0)
-        return configurations;
+  listTargetedFactoryConfigurations(e, t) {
+    for (const r of Le(e, t)) {
+      const n = this.listFactoryConfigurations(r);
+      if (n.length > 0)
+        return n;
     }
     return [];
   }
@@ -5612,11 +3893,10 @@ class ConfigurationAdmin {
    * The resulting PID is `factoryPid~name`, so it stays stable across restarts —
    * unlike {@link createFactoryConfiguration}, which generates one.
    */
-  getFactoryConfiguration(factoryPid, name) {
-    if (name.length === 0) {
-      throw new Error(`Factory configuration of '${factoryPid}' needs a name`);
-    }
-    return this.handleFor(this.entryFor(factoryPid + FACTORY_PID_SEPARATOR + name, factoryPid));
+  getFactoryConfiguration(e, t) {
+    if (t.length === 0)
+      throw new Error(`Factory configuration of '${e}' needs a name`);
+    return this.handleFor(this.entryFor(e + Wt + t, e));
   }
   /**
    * A configuration of a factory PID under a generated name.
@@ -5624,12 +3904,12 @@ class ConfigurationAdmin {
    * Convenient for a configuration nobody has to find again; prefer
    * {@link getFactoryConfiguration} when it should survive a restart as itself.
    */
-  createFactoryConfiguration(factoryPid) {
-    let name;
-    do {
-      name = String(++this.generated);
-    } while (this.entries.has(factoryPid + FACTORY_PID_SEPARATOR + name));
-    return this.getFactoryConfiguration(factoryPid, name);
+  createFactoryConfiguration(e) {
+    let t;
+    do
+      t = String(++this.generated);
+    while (this.entries.has(e + Wt + t));
+    return this.getFactoryConfiguration(e, t);
   }
   /**
    * Every configuration that has values, optionally narrowed by an LDAP-style
@@ -5638,94 +3918,68 @@ class ConfigurationAdmin {
    * Returns an empty array when nothing matches. OSGi returns `null` here; that
    * is a documented wart of the API, not something worth copying.
    */
-  listConfigurations(filter) {
-    const matches2 = filter === void 0 ? void 0 : createServiceFilter(filter);
-    return [...this.entries.values()].filter((entry) => entry.properties !== void 0).filter((entry) => matches2 === void 0 || matches2(this.effectiveProperties(entry))).map((entry) => this.handleFor(entry));
+  listConfigurations(e) {
+    const t = e === void 0 ? void 0 : qe(e);
+    return [...this.entries.values()].filter((r) => r.properties !== void 0).filter((r) => t === void 0 || t(this.effectiveProperties(r))).map((r) => this.handleFor(r));
   }
   /** The configurations belonging to a factory PID, in creation order */
-  listFactoryConfigurations(factoryPid) {
-    return [...this.entries.values()].filter((entry) => entry.factoryPid === factoryPid && entry.properties !== void 0).map((entry) => this.handleFor(entry));
+  listFactoryConfigurations(e) {
+    return [...this.entries.values()].filter((t) => t.factoryPid === e && t.properties !== void 0).map((t) => this.handleFor(t));
   }
-  entryFor(pid, factoryPid) {
-    let entry = this.entries.get(pid);
-    if (!entry) {
-      entry = { pid, factoryPid, changeCount: 0 };
-      this.entries.set(pid, entry);
-    }
-    return entry;
+  entryFor(e, t) {
+    let r = this.entries.get(e);
+    return r || (r = { pid: e, factoryPid: t, changeCount: 0 }, this.entries.set(e, r)), r;
   }
   /**
    * What a consumer sees: the stored values plus the PID properties the admin
    * knows itself, as Config Admin adds `service.pid`.
    */
-  effectiveProperties(entry) {
-    const properties = { ...entry.properties };
-    properties[SERVICE_PID] = entry.pid;
-    if (entry.factoryPid !== void 0) {
-      properties[SERVICE_FACTORY_PID] = entry.factoryPid;
-    }
-    return properties;
+  effectiveProperties(e) {
+    const t = { ...e.properties };
+    return t[ai] = e.pid, e.factoryPid !== void 0 && (t[ci] = e.factoryPid), t;
   }
-  handleFor(entry) {
-    const assertAlive = () => {
-      if (entry.deleted) {
-        throw new Error(`Configuration '${entry.pid}' has been deleted`);
-      }
+  handleFor(e) {
+    const t = () => {
+      if (e.deleted)
+        throw new Error(`Configuration '${e.pid}' has been deleted`);
     };
     return {
-      pid: entry.pid,
-      factoryPid: entry.factoryPid,
+      pid: e.pid,
+      factoryPid: e.factoryPid,
       get changeCount() {
-        return entry.changeCount;
+        return e.changeCount;
       },
-      getProperties: () => entry.properties === void 0 || entry.deleted ? void 0 : this.effectiveProperties(entry),
-      update: async (properties) => {
-        assertAlive();
-        if (properties !== void 0) {
-          assertValidProperties(entry.pid, properties);
-          this.assertValidAgainstSchema(entry.pid, properties);
-          entry.properties = { ...properties };
-        } else if (entry.properties === void 0) {
-          throw new Error(`Configuration '${entry.pid}' has no properties to re-deliver; call update(properties) first`);
-        }
-        entry.changeCount++;
-        await this.store.save({
-          pid: entry.pid,
-          factoryPid: entry.factoryPid,
-          properties: entry.properties,
-          changeCount: entry.changeCount
-        });
-        this.notify({ type: "updated", pid: entry.pid, factoryPid: entry.factoryPid });
+      getProperties: () => e.properties === void 0 || e.deleted ? void 0 : this.effectiveProperties(e),
+      update: async (r) => {
+        if (t(), r !== void 0)
+          Ds(e.pid, r), this.assertValidAgainstSchema(e.pid, r), e.properties = { ...r };
+        else if (e.properties === void 0)
+          throw new Error(`Configuration '${e.pid}' has no properties to re-deliver; call update(properties) first`);
+        e.changeCount++, await this.store.save({
+          pid: e.pid,
+          factoryPid: e.factoryPid,
+          properties: e.properties,
+          changeCount: e.changeCount
+        }), this.notify({ type: "updated", pid: e.pid, factoryPid: e.factoryPid });
       },
-      updateIfDifferent: async (properties) => {
-        assertAlive();
-        if (sameProperties$1(entry.properties, properties))
-          return false;
-        await this.handleFor(entry).update(properties);
-        return true;
-      },
+      updateIfDifferent: async (r) => (t(), qs(e.properties, r) ? !1 : (await this.handleFor(e).update(r), !0)),
       delete: async () => {
-        assertAlive();
-        entry.deleted = true;
-        this.entries.delete(entry.pid);
-        await this.store.remove(entry.pid);
-        this.notify({ type: "deleted", pid: entry.pid, factoryPid: entry.factoryPid });
+        t(), e.deleted = !0, this.entries.delete(e.pid), await this.store.remove(e.pid), this.notify({ type: "deleted", pid: e.pid, factoryPid: e.factoryPid });
       }
     };
   }
 }
-function objectClass(definition) {
-  return definition;
+function xs(i) {
+  return i;
 }
-const FACTORY_SEPARATOR = "~";
-function isMultiValued(attribute) {
-  const cardinality = attribute.cardinality ?? "single";
-  return cardinality !== "single";
+const Bs = "~";
+function Vs(i) {
+  return (i.cardinality ?? "single") !== "single";
 }
-function maxLength(attribute) {
-  return typeof attribute.cardinality === "number" ? attribute.cardinality : void 0;
+function Us(i) {
+  return typeof i.cardinality == "number" ? i.cardinality : void 0;
 }
-class MetatypeRegistry {
+class Gs {
   singletons = /* @__PURE__ */ new Map();
   factories = /* @__PURE__ */ new Map();
   /** Which module registered a PID, so a teardown can take its schemas with it */
@@ -5738,22 +3992,13 @@ class MetatypeRegistry {
    *   to offer "add another one".
    * @param options.providedBy Module the declaration came from
    */
-  designate(pid, definition, options = {}) {
-    const target = options.factory === true ? this.factories : this.singletons;
-    target.set(pid, definition);
-    if (options.providedBy !== void 0) {
-      this.owners.set(pid, options.providedBy);
-    }
+  designate(e, t, r = {}) {
+    (r.factory === !0 ? this.factories : this.singletons).set(e, t), r.providedBy !== void 0 && this.owners.set(e, r.providedBy);
   }
   /** Withdraw the descriptions a module registered */
-  removeAllOf(moduleId) {
-    for (const [pid, owner] of [...this.owners]) {
-      if (owner !== moduleId)
-        continue;
-      this.singletons.delete(pid);
-      this.factories.delete(pid);
-      this.owners.delete(pid);
-    }
+  removeAllOf(e) {
+    for (const [t, r] of [...this.owners])
+      r === e && (this.singletons.delete(t), this.factories.delete(t), this.owners.delete(t));
   }
   /** PIDs with a description of their own */
   getPids() {
@@ -5770,24 +4015,22 @@ class MetatypeRegistry {
    * description: that is what a user interface editing the instance needs, and
    * the instance has no description of its own.
    */
-  getObjectClassDefinition(pid, locale) {
-    const found = this.definitionFor(pid);
-    if (!found)
-      return void 0;
-    return locale === void 0 ? found : localizeDefinition(found, locale);
+  getObjectClassDefinition(e, t) {
+    const r = this.definitionFor(e);
+    if (r)
+      return t === void 0 ? r : di(r, t);
   }
-  definitionFor(pid) {
-    const direct = this.singletons.get(pid) ?? this.factories.get(pid);
-    if (direct)
-      return direct;
-    const separator = pid.indexOf(FACTORY_SEPARATOR);
-    if (separator < 0)
-      return void 0;
-    return this.factories.get(pid.slice(0, separator));
+  definitionFor(e) {
+    const t = this.singletons.get(e) ?? this.factories.get(e);
+    if (t)
+      return t;
+    const r = e.indexOf(Bs);
+    if (!(r < 0))
+      return this.factories.get(e.slice(0, r));
   }
   /** The locales a description has translations for */
-  getLocales(pid) {
-    return Object.keys(this.definitionFor(pid)?.localization ?? {});
+  getLocales(e) {
+    return Object.keys(this.definitionFor(e)?.localization ?? {});
   }
   /**
    * The declared default values of a PID.
@@ -5795,17 +4038,14 @@ class MetatypeRegistry {
    * The loader merges these underneath a component's properties, so a component
    * reads a configured value or the declared default and never has to invent one.
    */
-  defaults(pid) {
-    const definition = this.definitionFor(pid);
-    if (!definition)
+  defaults(e) {
+    const t = this.definitionFor(e);
+    if (!t)
       return {};
-    const values = {};
-    for (const [id, attribute] of Object.entries(definition.attributes)) {
-      if (attribute.default !== void 0) {
-        values[id] = attribute.default;
-      }
-    }
-    return values;
+    const r = {};
+    for (const [n, s] of Object.entries(t.attributes))
+      s.default !== void 0 && (r[n] = s.default);
+    return r;
   }
   /**
    * What is wrong with these values, according to the description.
@@ -5816,252 +4056,197 @@ class MetatypeRegistry {
    * Attributes the description does not mention are left alone: a configuration
    * may carry more than a schema knows, and `service.pid` always does.
    */
-  validate(pid, values) {
-    const definition = this.definitionFor(pid);
-    if (!definition)
+  validate(e, t) {
+    const r = this.definitionFor(e);
+    if (!r)
       return [];
-    const errors = [];
-    for (const [id, attribute] of Object.entries(definition.attributes)) {
-      const value = values[id];
-      if (value === void 0) {
-        if (attribute.required !== false && attribute.default === void 0) {
-          errors.push({ attribute: id, message: "is required" });
-        }
+    const n = [];
+    for (const [s, o] of Object.entries(r.attributes)) {
+      const a = t[s];
+      if (a === void 0) {
+        o.required !== !1 && o.default === void 0 && n.push({ attribute: s, message: "is required" });
         continue;
       }
-      errors.push(...checkAttribute(id, attribute, value));
+      n.push(...zs(s, o, a));
     }
-    return errors;
+    return n;
   }
   /**
    * The values, with defaults filled in, or an error listing everything wrong.
    *
    * One call for the usual sequence a form goes through before writing.
    */
-  coerce(pid, values) {
-    const complete = { ...this.defaults(pid), ...values };
-    return { values: complete, errors: this.validate(pid, complete) };
+  coerce(e, t) {
+    const r = { ...this.defaults(e), ...t };
+    return { values: r, errors: this.validate(e, r) };
   }
 }
-function checkAttribute(id, attribute, value) {
-  const errors = [];
-  const many = isMultiValued(attribute);
-  if (many !== Array.isArray(value)) {
-    errors.push({
-      attribute: id,
-      message: many ? "expects a list of values" : "expects a single value"
-    });
-    return errors;
+function zs(i, e, t) {
+  const r = [], n = Vs(e);
+  if (n !== Array.isArray(t))
+    return r.push({
+      attribute: i,
+      message: n ? "expects a list of values" : "expects a single value"
+    }), r;
+  const s = Array.isArray(t) ? [...t] : [t], o = Us(e);
+  o !== void 0 && s.length > o && r.push({ attribute: i, message: `takes at most ${o} value(s)` });
+  for (const a of s)
+    r.push(...Ws(i, e, a));
+  if (e.validate) {
+    const a = e.validate(t);
+    a !== void 0 && r.push({ attribute: i, message: a });
   }
-  const entries = Array.isArray(value) ? [...value] : [value];
-  const limit = maxLength(attribute);
-  if (limit !== void 0 && entries.length > limit) {
-    errors.push({ attribute: id, message: `takes at most ${limit} value(s)` });
-  }
-  for (const entry of entries) {
-    errors.push(...checkValue(id, attribute, entry));
-  }
-  if (attribute.validate) {
-    const message = attribute.validate(value);
-    if (message !== void 0) {
-      errors.push({ attribute: id, message });
-    }
-  }
-  return errors;
+  return r;
 }
-function checkValue(id, attribute, value) {
-  const errors = [];
-  switch (attribute.type) {
+function Ws(i, e, t) {
+  const r = [];
+  switch (e.type) {
     case "boolean":
-      if (typeof value !== "boolean") {
-        errors.push({ attribute: id, message: "expects true or false" });
-      }
+      typeof t != "boolean" && r.push({ attribute: i, message: "expects true or false" });
       break;
     case "number":
     case "integer":
-      if (typeof value !== "number" || Number.isNaN(value)) {
-        errors.push({ attribute: id, message: "expects a number" });
+      if (typeof t != "number" || Number.isNaN(t)) {
+        r.push({ attribute: i, message: "expects a number" });
         break;
       }
-      if (attribute.type === "integer" && !Number.isInteger(value)) {
-        errors.push({ attribute: id, message: "expects a whole number" });
-      }
-      if (attribute.min !== void 0 && value < attribute.min) {
-        errors.push({ attribute: id, message: `must be at least ${attribute.min}` });
-      }
-      if (attribute.max !== void 0 && value > attribute.max) {
-        errors.push({ attribute: id, message: `must be at most ${attribute.max}` });
-      }
+      e.type === "integer" && !Number.isInteger(t) && r.push({ attribute: i, message: "expects a whole number" }), e.min !== void 0 && t < e.min && r.push({ attribute: i, message: `must be at least ${e.min}` }), e.max !== void 0 && t > e.max && r.push({ attribute: i, message: `must be at most ${e.max}` });
       break;
     case "string":
     case "password":
-      if (typeof value !== "string") {
-        errors.push({ attribute: id, message: "expects text" });
+      if (typeof t != "string") {
+        r.push({ attribute: i, message: "expects text" });
         break;
       }
-      if (attribute.minLength !== void 0 && value.length < attribute.minLength) {
-        errors.push({
-          attribute: id,
-          message: `must be at least ${attribute.minLength} character(s)`
-        });
-      }
-      if (attribute.maxLength !== void 0 && value.length > attribute.maxLength) {
-        errors.push({
-          attribute: id,
-          message: `must be at most ${attribute.maxLength} character(s)`
-        });
-      }
+      e.minLength !== void 0 && t.length < e.minLength && r.push({
+        attribute: i,
+        message: `must be at least ${e.minLength} character(s)`
+      }), e.maxLength !== void 0 && t.length > e.maxLength && r.push({
+        attribute: i,
+        message: `must be at most ${e.maxLength} character(s)`
+      });
       break;
   }
-  if (attribute.options && !attribute.options.some((option) => option.value === value)) {
-    const allowed = attribute.options.map((option) => String(option.value)).join(", ");
-    errors.push({ attribute: id, message: `must be one of: ${allowed}` });
+  if (e.options && !e.options.some((n) => n.value === t)) {
+    const n = e.options.map((s) => String(s.value)).join(", ");
+    r.push({ attribute: i, message: `must be one of: ${n}` });
   }
-  return errors;
+  return r;
 }
-function localizeDefinition(definition, locale) {
-  const table = definition.localization?.[locale];
-  if (!table)
-    return definition;
-  const translate = (text) => text !== void 0 && text.startsWith("%") ? table[text.slice(1)] ?? text : text;
-  const attributes = {};
-  for (const [id, attribute] of Object.entries(definition.attributes)) {
-    attributes[id] = {
-      ...attribute,
-      name: translate(attribute.name),
-      description: translate(attribute.description),
-      options: attribute.options?.map((option) => ({
-        ...option,
-        label: translate(option.label)
+function di(i, e) {
+  const t = i.localization?.[e];
+  if (!t)
+    return i;
+  const r = (s) => s !== void 0 && s.startsWith("%") ? t[s.slice(1)] ?? s : s, n = {};
+  for (const [s, o] of Object.entries(i.attributes))
+    n[s] = {
+      ...o,
+      name: r(o.name),
+      description: r(o.description),
+      options: o.options?.map((a) => ({
+        ...a,
+        label: r(a.label)
       }))
     };
-  }
   return {
-    ...definition,
-    name: translate(definition.name),
-    description: translate(definition.description),
-    attributes
+    ...i,
+    name: r(i.name),
+    description: r(i.description),
+    attributes: n
   };
 }
-const METATYPE_SERVICE_ID = "tsm.metatype";
-const COMPONENT_FACTORY_SERVICE_ID = "tsm.component.factory";
-const COMPONENT_FACTORY = "component.factory";
-const COMPONENT_NAME = "component.name";
-function componentFactoryFilter(name) {
-  return `(${COMPONENT_FACTORY}=${name})`;
+const ui = "tsm.metatype", li = "tsm.component.factory", ar = "component.factory", hi = "component.name";
+function Xs(i) {
+  return `(${ar}=${i})`;
 }
-const CONDITION_SERVICE_ID = "tsm.condition";
-const CONDITION_ID = "condition.id";
-const TRUE_CONDITION_ID = "true";
-const TRUE_CONDITION = Object.freeze({});
-const TRUE_CONDITION_FILTER = `(${CONDITION_ID}=${TRUE_CONDITION_ID})`;
-function conditionProperties(id, extra) {
-  return { ...extra, [CONDITION_ID]: id };
+const Xt = "tsm.condition", be = "condition.id", cr = "true", pi = Object.freeze({}), Ys = `(${be}=${cr})`;
+function Hs(i, e) {
+  return { ...e, [be]: i };
 }
-function conditionFilter(id) {
-  return `(${CONDITION_ID}=${id})`;
+function Ks(i) {
+  return `(${be}=${i})`;
 }
-const sharedLibraries = /* @__PURE__ */ new Map();
-const tsmRuntime = {
-  require(moduleId) {
-    const lib = sharedLibraries.get(moduleId);
-    if (!lib) {
-      const available = Array.from(sharedLibraries.keys());
-      throw new Error(`[TSM] Shared library not found: '${moduleId}'
-Available libraries: ${available.length > 0 ? available.join(", ") : "none"}
+const oe = /* @__PURE__ */ new Map(), ue = {
+  require(i) {
+    const e = oe.get(i);
+    if (!e) {
+      const t = Array.from(oe.keys());
+      throw new Error(`[TSM] Shared library not found: '${i}'
+Available libraries: ${t.length > 0 ? t.join(", ") : "none"}
 Make sure the host application has registered this library.`);
     }
-    return lib.exports;
+    return e.exports;
   },
-  register(moduleId, exports$1, version, providedBy) {
-    if (!semverExports.valid(version)) {
-      throw new Error(`[TSM] Invalid version '${version}' for library '${moduleId}'. Must be valid semver (e.g., '3.4.0').`);
-    }
-    const existing = sharedLibraries.get(moduleId);
-    if (existing) {
-      console.warn(`[TSM] Overwriting shared library '${moduleId}' (${existing.version} → ${version})`);
-    }
-    sharedLibraries.set(moduleId, {
-      exports: exports$1,
-      version,
-      providedBy
-    });
-    console.debug(`[TSM] Registered: ${moduleId}@${version}${providedBy ? ` (by ${providedBy})` : ""}`);
+  register(i, e, t, r) {
+    if (!K.valid(t))
+      throw new Error(`[TSM] Invalid version '${t}' for library '${i}'. Must be valid semver (e.g., '3.4.0').`);
+    const n = oe.get(i);
+    n && console.warn(`[TSM] Overwriting shared library '${i}' (${n.version} → ${t})`), oe.set(i, {
+      exports: e,
+      version: t,
+      providedBy: r
+    }), console.debug(`[TSM] Registered: ${i}@${t}${r ? ` (by ${r})` : ""}`);
   },
-  has(moduleId) {
-    return sharedLibraries.has(moduleId);
+  has(i) {
+    return oe.has(i);
   },
-  getVersion(moduleId) {
-    return sharedLibraries.get(moduleId)?.version;
+  getVersion(i) {
+    return oe.get(i)?.version;
   },
-  satisfies(moduleId, versionRange) {
-    const lib = sharedLibraries.get(moduleId);
-    if (!lib)
-      return false;
-    return semverExports.satisfies(lib.version, versionRange);
+  satisfies(i, e) {
+    const t = oe.get(i);
+    return t ? K.satisfies(t.version, e) : !1;
   },
   getRegistered() {
-    const result = /* @__PURE__ */ new Map();
-    for (const [id, lib] of sharedLibraries) {
-      result.set(id, { version: lib.version, providedBy: lib.providedBy });
-    }
-    return result;
+    const i = /* @__PURE__ */ new Map();
+    for (const [e, t] of oe)
+      i.set(e, { version: t.version, providedBy: t.providedBy });
+    return i;
   },
-  validate(requirements) {
-    const result = {
-      valid: true,
+  validate(i) {
+    const e = {
+      valid: !0,
       missing: [],
       incompatible: []
     };
-    for (const req of requirements) {
-      const lib = sharedLibraries.get(req.id);
-      if (!lib) {
-        result.valid = false;
-        result.missing.push(req.id);
-      } else if (!semverExports.satisfies(lib.version, req.versionRange)) {
-        result.valid = false;
-        result.incompatible.push({
-          id: req.id,
-          required: req.versionRange,
-          available: lib.version
-        });
-      }
+    for (const t of i) {
+      const r = oe.get(t.id);
+      r ? K.satisfies(r.version, t.versionRange) || (e.valid = !1, e.incompatible.push({
+        id: t.id,
+        required: t.versionRange,
+        available: r.version
+      })) : (e.valid = !1, e.missing.push(t.id));
     }
-    return result;
+    return e;
   }
 };
-function initTsmRuntime() {
-  if (typeof window !== "undefined") {
-    if (window.__tsm__) {
-      console.warn("[TSM] Runtime already initialized, returning existing instance");
-      return window.__tsm__;
-    }
-    window.__tsm__ = tsmRuntime;
+function Js() {
+  if (typeof window < "u") {
+    if (window.__tsm__)
+      return console.warn("[TSM] Runtime already initialized, returning existing instance"), window.__tsm__;
+    window.__tsm__ = ue;
   }
-  return tsmRuntime;
+  return ue;
 }
-function isTsmRuntimeAvailable() {
-  return typeof window !== "undefined" && !!window.__tsm__;
+function Yt() {
+  return typeof window < "u" && !!window.__tsm__;
 }
-function assertContainer(value, moduleId) {
-  if (value === null || typeof value !== "object" && typeof value !== "function") {
-    throw new Error(`Container for module '${moduleId}' is ${value === null ? "null" : typeof value}; expected a module namespace, as an import() resolves to`);
-  }
+function Zs(i, e) {
+  if (i === null || typeof i != "object" && typeof i != "function")
+    throw new Error(`Container for module '${e}' is ${i === null ? "null" : typeof i}; expected a module namespace, as an import() resolves to`);
 }
-const MAX_ACTIVATIONS_PER_CASCADE = 10;
-const IN_FLIGHT_STATES = /* @__PURE__ */ new Set([
+const Rn = 10, Qs = /* @__PURE__ */ new Set([
   "resolving",
   "loading",
   "activating",
   "active",
   "unsatisfied"
-]);
-const DEFAULT_OPTIONS$1 = {
+]), eo = {
   loadTimeout: 1e4,
-  continueOnError: true,
-  hotReload: false,
+  continueOnError: !0,
+  hotReload: !1,
   serviceRegistry: void 0,
-  strictRequirements: false,
+  strictRequirements: !1,
   logger: void 0,
   configurationAdmin: void 0,
   metatype: void 0,
@@ -6069,89 +4254,84 @@ const DEFAULT_OPTIONS$1 = {
   sharedLibraries: "runtime",
   entryResolver: void 0
 };
-let ConsoleLogger$1 = class ConsoleLogger {
+let Dt = class {
   prefix;
-  constructor(prefix = "[TSM]") {
-    this.prefix = prefix;
+  constructor(e = "[TSM]") {
+    this.prefix = e;
   }
-  debug(message, ...args) {
-    console.debug(`${this.prefix} ${message}`, ...args);
+  debug(e, ...t) {
+    console.debug(`${this.prefix} ${e}`, ...t);
   }
-  info(message, ...args) {
-    console.info(`${this.prefix} ${message}`, ...args);
+  info(e, ...t) {
+    console.info(`${this.prefix} ${e}`, ...t);
   }
-  warn(message, ...args) {
-    console.warn(`${this.prefix} ${message}`, ...args);
+  warn(e, ...t) {
+    console.warn(`${this.prefix} ${e}`, ...t);
   }
-  error(message, ...args) {
-    console.error(`${this.prefix} ${message}`, ...args);
+  error(e, ...t) {
+    console.error(`${this.prefix} ${e}`, ...t);
   }
 };
-function referencesOf(ctor) {
+function to(i) {
   return [
-    ...getInjectMetadata(ctor).map((entry) => ({
-      serviceId: entry.serviceId,
-      optional: entry.optional
+    ...Gt(i).map((e) => ({
+      serviceId: e.serviceId,
+      optional: e.optional
     })),
-    ...getPropertyInjectMetadata(ctor).map((entry) => ({
-      serviceId: entry.serviceId,
-      optional: entry.optional
+    ...zt(i).map((e) => ({
+      serviceId: e.serviceId,
+      optional: e.optional
     })),
     // A bound service is a reference too — the difference is only what a change
     // does: a method call instead of a rebuild
-    ...getBindMethods(ctor).map((entry) => ({
-      serviceId: entry.serviceId,
-      optional: entry.optional
+    ...Ce(i).map((e) => ({
+      serviceId: e.serviceId,
+      optional: e.optional
     }))
   ];
 }
-function sameServices(held, fresh) {
-  return held.length === fresh.length && held.every((service, at) => service === fresh[at]);
+function ro(i, e) {
+  return i.length === e.length && i.every((t, r) => t === e[r]);
 }
-const SINGLETON = "\0singleton";
-const FACTORY_INSTANCE = "\0factory:";
-function instanceKeyOf(wanted) {
-  return wanted.factory && wanted.pid !== void 0 ? wanted.pid : SINGLETON;
+const no = "\0singleton", io = "\0factory:";
+function qt(i) {
+  return i.factory && i.pid !== void 0 ? i.pid : no;
 }
-function sameProperties(left, right) {
-  const keys = Object.keys(left);
-  if (keys.length !== Object.keys(right).length)
-    return false;
-  return keys.every((key) => {
-    const a = left[key];
-    const b = right[key];
-    if (Array.isArray(a) && Array.isArray(b)) {
-      return a.length === b.length && a.every((entry, index) => entry === b[index]);
-    }
-    return a === b;
+function so(i, e) {
+  const t = Object.keys(i);
+  return t.length !== Object.keys(e).length ? !1 : t.every((r) => {
+    const n = i[r], s = e[r];
+    return Array.isArray(n) && Array.isArray(s) ? n.length === s.length && n.every((o, a) => o === s[a]) : n === s;
   });
 }
-const importOutsideBundler = new Function("specifier", "return import(specifier)");
-async function nativeImport(specifier) {
+const oo = new Function("specifier", "return import(specifier)");
+function ao(i) {
+  return typeof i.activate == "function" || typeof i.deactivate == "function" ? !0 : Object.entries(i).some(([e, t]) => e !== "default" && typeof t == "function" && vs(t));
+}
+async function co(i) {
   try {
-    return await importOutsideBundler(specifier);
-  } catch (error) {
-    if (error?.code === "ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING") {
+    return await oo(i);
+  } catch (e) {
+    if (e?.code === "ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING")
       return await import(
         /* @vite-ignore */
-        specifier
+        i
       );
-    }
-    throw error;
+    throw e;
   }
 }
-class ModuleLoader {
+class fo {
   modules = /* @__PURE__ */ new Map();
   manifests = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
-  resolver = new DependencyResolver();
+  resolver = new An();
   options;
   services;
   logger;
   serviceListener;
   /** Activations per cascade, to catch a module that flips between states forever */
   cascadeActivations = /* @__PURE__ */ new Map();
-  disposed = false;
+  disposed = !1;
   /**
    * Per module: how many providers each of its dynamic requirements had at the
    * last check. A count, not a flag, so a module consuming cardinality 0..n
@@ -6207,16 +4387,8 @@ class ModuleLoader {
   /** Serializes reactions to registry events; they are async, the events are not */
   queue = Promise.resolve();
   pendingTasks = 0;
-  constructor(options = {}) {
-    this.options = { ...DEFAULT_OPTIONS$1, ...options };
-    this.services = options.serviceRegistry ?? new DefaultServiceRegistry();
-    this.logger = options.logger ?? new ConsoleLogger$1();
-    this.publishTrueCondition();
-    this.publishComponentRuntime();
-    this.publishFeatureService();
-    this.observeServiceRegistry();
-    this.observeConfigurations(options.configurationAdmin);
-    this.publishMetatype(options.metatype);
+  constructor(e = {}) {
+    this.options = { ...eo, ...e }, this.services = e.serviceRegistry ?? new _n(), this.logger = e.logger ?? new Dt(), this.publishTrueCondition(), this.publishComponentRuntime(), this.publishFeatureService(), this.observeServiceRegistry(), this.observeConfigurations(e.configurationAdmin), this.publishMetatype(e.metatype);
   }
   /**
    * Register the condition that always holds.
@@ -6228,9 +4400,9 @@ class ModuleLoader {
    * whether some other component asked first.
    */
   publishTrueCondition() {
-    this.services.register(CONDITION_SERVICE_ID, TRUE_CONDITION, {
+    this.services.register(Xt, pi, {
       providedBy: "tsm",
-      properties: { [CONDITION_ID]: TRUE_CONDITION_ID }
+      properties: { [be]: cr }
     });
   }
   /**
@@ -6246,15 +4418,15 @@ class ModuleLoader {
    * implementation and not two that can disagree.
    */
   publishComponentRuntime() {
-    const runtime = {
-      getComponentDescriptions: (moduleId) => this.getComponents(moduleId),
-      getComponentDescription: (moduleId, className) => this.getComponents(moduleId).find((entry) => entry.className === className),
-      isComponentEnabled: (moduleId, className) => !this.isComponentDisabled(moduleId, className),
-      disableComponent: (moduleId, className) => this.disableComponent(moduleId, className),
-      enableComponent: (moduleId, className) => this.enableComponent(moduleId, className),
+    const e = {
+      getComponentDescriptions: (t) => this.getComponents(t),
+      getComponentDescription: (t, r) => this.getComponents(t).find((n) => n.className === r),
+      isComponentEnabled: (t, r) => !this.isComponentDisabled(t, r),
+      disableComponent: (t, r) => this.disableComponent(t, r),
+      enableComponent: (t, r) => this.enableComponent(t, r),
       getDisabledComponents: () => this.getDisabledComponents()
     };
-    this.services.register(COMPONENT_RUNTIME_SERVICE_ID, runtime, { providedBy: "tsm" });
+    this.services.register(jn, e, { providedBy: "tsm" });
   }
   /**
    * Publish the feature service, as OSGi has it in the registry (159.11).
@@ -6265,17 +4437,14 @@ class ModuleLoader {
    * launcher and not here, which is the line the specification draws too.
    */
   publishFeatureService() {
-    this.services.register(FEATURE_SERVICE_ID, featureService, { providedBy: "tsm" });
+    this.services.register(Fn, Wn, { providedBy: "tsm" });
   }
   /**
    * Take the schema registry and publish it, as the Metatype Service is a service
    * in OSGi too — so a configuration user interface can be a module.
    */
-  publishMetatype(metatype) {
-    if (!metatype)
-      return;
-    this.metatype = metatype;
-    this.services.register(METATYPE_SERVICE_ID, metatype, { providedBy: "tsm" });
+  publishMetatype(e) {
+    e && (this.metatype = e, this.services.register(ui, e, { providedBy: "tsm" }));
   }
   /**
    * Watch configuration, and publish the admin as a service.
@@ -6284,17 +4453,12 @@ class ModuleLoader {
    * than part of it: everything the loader does with configuration goes through
    * PIDs and these events.
    */
-  observeConfigurations(admin) {
-    if (!admin)
-      return;
-    this.configurations = admin;
-    this.configurationListener = {
-      onConfigurationEvent: (event) => {
-        this.enqueue(() => this.applyConfiguration(event));
+  observeConfigurations(e) {
+    e && (this.configurations = e, this.configurationListener = {
+      onConfigurationEvent: (t) => {
+        this.enqueue(() => this.applyConfiguration(t));
       }
-    };
-    admin.addListener(this.configurationListener);
-    this.services.register(CONFIGURATION_ADMIN_SERVICE_ID, admin, { providedBy: "tsm" });
+    }, e.addListener(this.configurationListener), this.services.register(oi, e, { providedBy: "tsm" }));
   }
   /**
    * Watch the registry for services that active modules depend on.
@@ -6304,16 +4468,12 @@ class ModuleLoader {
    * `unsatisfied` state, not here.
    */
   observeServiceRegistry() {
-    const registry = this.services;
-    if (typeof registry.addListener !== "function") {
-      return;
-    }
-    this.serviceListener = {
+    const e = this.services;
+    typeof e.addListener == "function" && (this.serviceListener = {
       onServiceEvent: () => {
         this.enqueue(() => this.reconcile());
       }
-    };
-    registry.addListener(this.serviceListener);
+    }, e.addListener(this.serviceListener));
   }
   /**
    * Queue a reaction to a registry event.
@@ -6322,18 +4482,12 @@ class ModuleLoader {
    * cannot run inside the event. Serializing them also keeps a cascade in
    * order when a teardown withdraws further services.
    */
-  enqueue(task) {
-    if (this.disposed)
-      return;
-    if (this.pendingTasks === 0) {
-      this.cascadeActivations.clear();
-    }
-    this.pendingTasks++;
-    this.queue = this.queue.then(task).catch((error) => {
-      this.logger.error("Service event reaction failed:", error);
+  enqueue(e) {
+    this.disposed || (this.pendingTasks === 0 && this.cascadeActivations.clear(), this.pendingTasks++, this.queue = this.queue.then(e).catch((t) => {
+      this.logger.error("Service event reaction failed:", t);
     }).finally(() => {
       this.pendingTasks--;
-    });
+    }));
   }
   /**
    * Wait until every queued reaction has run, including those a reaction caused.
@@ -6349,9 +4503,8 @@ class ModuleLoader {
    * this is a rule rather than a guard.
    */
   async settle() {
-    while (this.pendingTasks > 0) {
+    for (; this.pendingTasks > 0; )
       await this.queue;
-    }
   }
   /**
    * Why a module cannot run right now: missing services, and dependencies
@@ -6360,43 +4513,33 @@ class ModuleLoader {
    * A module whose dependency is parked must wait too, otherwise it activates
    * against code that is not running.
    */
-  unsatisfiedReasons(manifest, mode = "activation") {
-    const requirements = (manifest.requiresService ?? []).filter((requirement) => mode === "activation" || requirement.policy !== "dynamic");
-    const services = requirements.length > 0 ? this.services.checkRequirements(requirements).missing : [];
-    const modules = [];
-    for (const dep of manifest.dependencies ?? []) {
-      const depSpec = typeof dep === "string" ? { id: dep } : dep;
-      if (depSpec.optional)
-        continue;
-      if (!this.isLoaded(depSpec.id)) {
-        modules.push(depSpec.id);
-      }
+  unsatisfiedReasons(e, t = "activation") {
+    const r = (e.requiresService ?? []).filter((o) => t === "activation" || o.policy !== "dynamic"), n = r.length > 0 ? this.services.checkRequirements(r).missing : [], s = [];
+    for (const o of e.dependencies ?? []) {
+      const a = typeof o == "string" ? { id: o } : o;
+      a.optional || this.isLoaded(a.id) || s.push(a.id);
     }
-    return { services, modules };
+    return { services: n, modules: s };
   }
-  isSatisfied(manifest) {
-    const reasons = this.unsatisfiedReasons(manifest);
-    return reasons.services.length === 0 && reasons.modules.length === 0;
+  isSatisfied(e) {
+    const t = this.unsatisfiedReasons(e);
+    return t.services.length === 0 && t.modules.length === 0;
   }
   /**
    * Park a loaded module until what it needs is available.
    *
    * Kept apart from 'error': nothing failed, the module is simply not due yet.
    */
-  park(loadedModule, reasons) {
-    const { manifest } = loadedModule;
-    const waitingFor = [
-      ...reasons.services,
-      ...reasons.modules.map((id) => `module ${id}`)
+  park(e, t) {
+    const { manifest: r } = e, n = [
+      ...t.services,
+      ...t.modules.map((s) => `module ${s}`)
     ];
-    loadedModule.state = "unsatisfied";
-    loadedModule.error = void 0;
-    this.logger.info(`Module ${manifest.id} waits for: ${waitingFor.join(", ")}`);
-    this.emit({
+    e.state = "unsatisfied", e.error = void 0, this.logger.info(`Module ${r.id} waits for: ${n.join(", ")}`), this.emit({
       type: "unsatisfied",
-      moduleId: manifest.id,
-      manifest,
-      serviceIds: reasons.services,
+      moduleId: r.id,
+      manifest: r,
+      serviceIds: t.services,
       timestamp: /* @__PURE__ */ new Date()
     });
   }
@@ -6409,13 +4552,7 @@ class ModuleLoader {
    * registry events — that is what carries a cascade to indirect consumers.
    */
   async reconcile() {
-    if (this.disposed)
-      return;
-    await this.parkUnsatisfiedActive();
-    await this.rebindGreedyRequirements();
-    await this.notifyDynamicChanges();
-    await this.activateSatisfiedPending();
-    await this.reconcileComponentReferences();
+    this.disposed || (await this.parkUnsatisfiedActive(), await this.rebindGreedyRequirements(), await this.notifyDynamicChanges(), await this.activateSatisfiedPending(), await this.reconcileComponentReferences());
   }
   /**
    * Move active modules to a better-ranked provider where they asked for it.
@@ -6425,56 +4562,46 @@ class ModuleLoader {
    * what a later lookup gets. This is DS' reluctant/greedy distinction.
    */
   async rebindGreedyRequirements() {
-    for (const loadedModule of [...this.modules.values()]) {
-      if (loadedModule.state !== "active")
+    for (const e of [...this.modules.values()]) {
+      if (e.state !== "active")
         continue;
-      const greedy = (loadedModule.manifest.requiresService ?? []).filter((requirement) => requirement.policyOption === "greedy");
-      if (greedy.length === 0)
+      const t = (e.manifest.requiresService ?? []).filter((s) => s.policyOption === "greedy");
+      if (t.length === 0)
         continue;
-      const moduleId = loadedModule.manifest.id;
-      const bound = this.boundRegistrations.get(moduleId);
-      if (!bound)
-        continue;
-      for (const requirement of greedy) {
-        const current = this.visibleRegistrationKey(requirement.id, requirement.target);
-        const inUse = bound.get(requirement.id);
-        if (current === void 0 || inUse === void 0 || current === inUse)
-          continue;
-        if (requirement.policy === "dynamic") {
-          await this.callDynamicHook(loadedModule, "onServiceUnbound", requirement.id);
-          await this.callDynamicHook(loadedModule, "onServiceBound", requirement.id);
-          bound.set(requirement.id, current);
-          continue;
+      const r = e.manifest.id, n = this.boundRegistrations.get(r);
+      if (n)
+        for (const s of t) {
+          const o = this.visibleRegistrationKey(s.id, s.target), a = n.get(s.id);
+          if (!(o === void 0 || a === void 0 || o === a)) {
+            if (s.policy === "dynamic") {
+              await this.callDynamicHook(e, "onServiceUnbound", s.id), await this.callDynamicHook(e, "onServiceBound", s.id), n.set(s.id, o);
+              continue;
+            }
+            this.logger.info(`Rebuilding ${r}: a better provider for ${s.id} appeared`), await this.deactivate(e), await this.activateLoaded(e);
+            break;
+          }
         }
-        this.logger.info(`Rebuilding ${moduleId}: a better provider for ${requirement.id} appeared`);
-        await this.deactivate(loadedModule);
-        await this.activateLoaded(loadedModule);
-        break;
-      }
     }
   }
   /**
    * Identity of the registration currently serving an ID, without resolving it.
    * Undefined when the registry predates references or nothing serves the ID.
    */
-  visibleRegistrationKey(serviceId2, target) {
-    const registry = this.services;
-    if (typeof registry.getServiceReferences !== "function")
-      return void 0;
-    return registry.getServiceReferences(serviceId2, target)[0]?.key;
+  visibleRegistrationKey(e, t) {
+    const r = this.services;
+    if (typeof r.getServiceReferences == "function")
+      return r.getServiceReferences(e, t)[0]?.key;
   }
-  captureBoundRegistrations(manifest) {
-    const requirements = manifest.requiresService ?? [];
-    if (requirements.length === 0)
+  captureBoundRegistrations(e) {
+    const t = e.requiresService ?? [];
+    if (t.length === 0)
       return;
-    const bound = /* @__PURE__ */ new Map();
-    for (const requirement of requirements) {
-      const key = this.visibleRegistrationKey(requirement.id, requirement.target);
-      if (key !== void 0) {
-        bound.set(requirement.id, key);
-      }
+    const r = /* @__PURE__ */ new Map();
+    for (const n of t) {
+      const s = this.visibleRegistrationKey(n.id, n.target);
+      s !== void 0 && r.set(n.id, s);
     }
-    this.boundRegistrations.set(manifest.id, bound);
+    this.boundRegistrations.set(e.id, r);
   }
   /**
    * Tell active modules about dynamic requirements that came or went.
@@ -6483,46 +4610,36 @@ class ModuleLoader {
    * contract `policy: 'dynamic'` expresses.
    */
   async notifyDynamicChanges() {
-    for (const loadedModule of [...this.modules.values()]) {
-      if (loadedModule.state !== "active")
+    for (const e of [...this.modules.values()]) {
+      if (e.state !== "active")
         continue;
-      const dynamic = (loadedModule.manifest.requiresService ?? []).filter((requirement) => requirement.policy === "dynamic");
-      if (dynamic.length === 0)
+      const t = (e.manifest.requiresService ?? []).filter((o) => o.policy === "dynamic");
+      if (t.length === 0)
         continue;
-      const moduleId = loadedModule.manifest.id;
-      const previous = this.dynamicBindings.get(moduleId) ?? /* @__PURE__ */ new Map();
-      const current = this.countDynamicProviders(dynamic);
-      this.dynamicBindings.set(moduleId, current);
-      for (const requirement of dynamic) {
-        const before = previous.get(requirement.id) ?? 0;
-        const now = current.get(requirement.id) ?? 0;
-        if (now < before) {
-          await this.callDynamicHook(loadedModule, "onServiceUnbound", requirement.id);
-        } else if (now > before) {
-          await this.callDynamicHook(loadedModule, "onServiceBound", requirement.id);
-        }
+      const r = e.manifest.id, n = this.dynamicBindings.get(r) ?? /* @__PURE__ */ new Map(), s = this.countDynamicProviders(t);
+      this.dynamicBindings.set(r, s);
+      for (const o of t) {
+        const a = n.get(o.id) ?? 0, f = s.get(o.id) ?? 0;
+        f < a ? await this.callDynamicHook(e, "onServiceUnbound", o.id) : f > a && await this.callDynamicHook(e, "onServiceBound", o.id);
       }
     }
   }
-  async callDynamicHook(loadedModule, hook, serviceId2) {
-    const handler = loadedModule.lifecycle?.[hook];
-    if (!handler)
-      return;
-    try {
-      await handler.call(loadedModule.lifecycle, this.createContext(loadedModule), serviceId2);
-    } catch (error) {
-      this.logger.error(`${hook} of ${loadedModule.manifest.id} failed for service ${serviceId2}:`, error);
-    }
+  async callDynamicHook(e, t, r) {
+    const n = e.lifecycle?.[t];
+    if (n)
+      try {
+        await n.call(e.lifecycle, this.createContext(e), r);
+      } catch (s) {
+        this.logger.error(`${t} of ${e.manifest.id} failed for service ${r}:`, s);
+      }
   }
   /**
    * Record which dynamic requirements are available, so the first reconcile
    * after activation does not report them as newly bound
    */
-  captureDynamicBindings(manifest) {
-    const dynamic = (manifest.requiresService ?? []).filter((requirement) => requirement.policy === "dynamic");
-    if (dynamic.length === 0)
-      return;
-    this.dynamicBindings.set(manifest.id, this.countDynamicProviders(dynamic));
+  captureDynamicBindings(e) {
+    const t = (e.requiresService ?? []).filter((r) => r.policy === "dynamic");
+    t.length !== 0 && this.dynamicBindings.set(e.id, this.countDynamicProviders(t));
   }
   /**
    * What each dynamic requirement currently sees.
@@ -6532,124 +4649,87 @@ class ModuleLoader {
    * waits on the bench is none of its business, and reporting it would double
    * up with the greedy swap.
    */
-  countDynamicProviders(requirements) {
-    const counts = /* @__PURE__ */ new Map();
-    for (const requirement of requirements) {
-      const providers = this.countProviders(requirement.id, requirement.target);
-      counts.set(requirement.id, collectsMany(requirement) ? providers : Math.min(providers, 1));
+  countDynamicProviders(e) {
+    const t = /* @__PURE__ */ new Map();
+    for (const r of e) {
+      const n = this.countProviders(r.id, r.target);
+      t.set(r.id, Cn(r) ? n : Math.min(n, 1));
     }
-    return counts;
+    return t;
   }
-  countProviders(serviceId2, target) {
-    const registry = this.services;
-    if (typeof registry.countProviders === "function") {
-      return registry.countProviders(serviceId2, target);
-    }
-    return this.services.has(serviceId2) ? 1 : 0;
+  countProviders(e, t) {
+    const r = this.services;
+    return typeof r.countProviders == "function" ? r.countProviders(e, t) : this.services.has(e) ? 1 : 0;
   }
   async parkUnsatisfiedActive() {
-    let changed = true;
-    while (changed) {
-      changed = await this.parkUnsatisfiedActiveOnce();
-    }
+    let e = !0;
+    for (; e; )
+      e = await this.parkUnsatisfiedActiveOnce();
   }
   async parkUnsatisfiedActiveOnce() {
-    let changed = false;
-    for (const loadedModule of [...this.modules.values()]) {
-      if (loadedModule.state !== "active")
+    let e = !1;
+    for (const t of [...this.modules.values()]) {
+      if (t.state !== "active")
         continue;
-      const reasons = this.unsatisfiedReasons(loadedModule.manifest, "runtime");
-      if (reasons.services.length === 0 && reasons.modules.length === 0)
-        continue;
-      if (reasons.services.length > 0) {
-        this.logger.warn(`Service(s) ${reasons.services.join(", ")} withdrawn while ${loadedModule.manifest.id} is active and requires them`);
-        this.emit({
-          type: "service-withdrawn",
-          moduleId: loadedModule.manifest.id,
-          manifest: loadedModule.manifest,
-          serviceIds: reasons.services,
-          timestamp: /* @__PURE__ */ new Date()
-        });
-      }
-      await this.deactivate(loadedModule);
-      this.park(loadedModule, reasons);
-      changed = true;
+      const r = this.unsatisfiedReasons(t.manifest, "runtime");
+      r.services.length === 0 && r.modules.length === 0 || (r.services.length > 0 && (this.logger.warn(`Service(s) ${r.services.join(", ")} withdrawn while ${t.manifest.id} is active and requires them`), this.emit({
+        type: "service-withdrawn",
+        moduleId: t.manifest.id,
+        manifest: t.manifest,
+        serviceIds: r.services,
+        timestamp: /* @__PURE__ */ new Date()
+      })), await this.deactivate(t), this.park(t, r), e = !0);
     }
-    return changed;
+    return e;
   }
   async activateSatisfiedPending() {
-    let changed = true;
-    while (changed) {
-      changed = await this.activateSatisfiedPendingOnce();
-    }
+    let e = !0;
+    for (; e; )
+      e = await this.activateSatisfiedPendingOnce();
   }
   async activateSatisfiedPendingOnce() {
-    let changed = false;
-    for (const loadedModule of [...this.modules.values()]) {
-      if (loadedModule.state !== "unsatisfied")
-        continue;
-      if (this.disabled.has(loadedModule.manifest.id))
-        continue;
-      if (!this.isSatisfied(loadedModule.manifest))
-        continue;
-      if (this.exceedsCascadeBudget(loadedModule))
-        continue;
-      await this.activateLoaded(loadedModule);
-      changed = true;
-    }
-    return changed;
+    let e = !1;
+    for (const t of [...this.modules.values()])
+      t.state === "unsatisfied" && (this.disabled.has(t.manifest.id) || this.isSatisfied(t.manifest) && (this.exceedsCascadeBudget(t) || (await this.activateLoaded(t), e = !0)));
+    return e;
   }
   /**
    * Guard against a module that keeps activating and parking within one cascade
    * (for instance one that registers a service on activate and withdraws the
    * same service on deactivate while requiring it).
    */
-  exceedsCascadeBudget(loadedModule) {
-    const moduleId = loadedModule.manifest.id;
-    const attempts = (this.cascadeActivations.get(moduleId) ?? 0) + 1;
-    this.cascadeActivations.set(moduleId, attempts);
-    if (attempts <= MAX_ACTIVATIONS_PER_CASCADE) {
-      return false;
-    }
-    const error = new Error(`Module ${moduleId} activated and parked ${MAX_ACTIVATIONS_PER_CASCADE} times in one cascade; giving up to avoid an endless loop`);
-    loadedModule.state = "error";
-    loadedModule.error = error;
-    this.logger.error(error.message);
-    this.emit({
+  exceedsCascadeBudget(e) {
+    const t = e.manifest.id, r = (this.cascadeActivations.get(t) ?? 0) + 1;
+    if (this.cascadeActivations.set(t, r), r <= Rn)
+      return !1;
+    const n = new Error(`Module ${t} activated and parked ${Rn} times in one cascade; giving up to avoid an endless loop`);
+    return e.state = "error", e.error = n, this.logger.error(n.message), this.emit({
       type: "error",
-      moduleId,
-      manifest: loadedModule.manifest,
-      error,
+      moduleId: t,
+      manifest: e.manifest,
+      error: n,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    return true;
+    }), !0;
   }
   /**
    * Run activation for an already loaded module and record the outcome
    */
-  async activateLoaded(loadedModule) {
-    const { manifest } = loadedModule;
-    loadedModule.state = "activating";
+  async activateLoaded(e) {
+    const { manifest: t } = e;
+    e.state = "activating";
     try {
-      await this.activate(loadedModule);
-      this.captureDynamicBindings(manifest);
-      this.captureBoundRegistrations(manifest);
-      loadedModule.state = "active";
-      this.emit({
+      await this.activate(e), this.captureDynamicBindings(t), this.captureBoundRegistrations(t), e.state = "active", this.emit({
         type: "activated",
-        moduleId: manifest.id,
-        manifest,
+        moduleId: t.id,
+        manifest: t,
         timestamp: /* @__PURE__ */ new Date()
-      });
-      this.logger.info(`Module ${manifest.id} activated`);
-    } catch (error) {
-      loadedModule.state = "error";
-      loadedModule.error = error;
-      this.emit({
+      }), this.logger.info(`Module ${t.id} activated`);
+    } catch (r) {
+      e.state = "error", e.error = r, this.emit({
         type: "error",
-        moduleId: manifest.id,
-        manifest,
-        error,
+        moduleId: t.id,
+        manifest: t,
+        error: r,
         timestamp: /* @__PURE__ */ new Date()
       });
     }
@@ -6659,79 +4739,46 @@ class ModuleLoader {
    * otherwise its listener outlives it.
    */
   dispose() {
-    this.disposed = true;
-    const registry = this.services;
-    if (this.serviceListener && typeof registry.removeListener === "function") {
-      registry.removeListener(this.serviceListener);
-    }
-    this.serviceListener = void 0;
-    this.scopes.clear();
-    this.cascadeActivations.clear();
-    this.dynamicBindings.clear();
-    this.boundRegistrations.clear();
-    this.declarationMismatches.clear();
-    this.disabled.clear();
-    this.disabledComponents.clear();
-    this.preloaded.clear();
-    this.componentRuntimes.clear();
-    if (this.configurationListener) {
-      this.configurations?.removeListener(this.configurationListener);
-      this.configurationListener = void 0;
-    }
-    this.configurations = void 0;
-    this.metatype = void 0;
+    this.disposed = !0;
+    const e = this.services;
+    this.serviceListener && typeof e.removeListener == "function" && e.removeListener(this.serviceListener), this.serviceListener = void 0, this.scopes.clear(), this.cascadeActivations.clear(), this.dynamicBindings.clear(), this.boundRegistrations.clear(), this.declarationMismatches.clear(), this.disabled.clear(), this.disabledComponents.clear(), this.preloaded.clear(), this.componentRuntimes.clear(), this.configurationListener && (this.configurations?.removeListener(this.configurationListener), this.configurationListener = void 0), this.configurations = void 0, this.metatype = void 0;
   }
   /**
    * Register module manifests
    */
-  register(manifests) {
-    for (const manifest of manifests) {
-      this.manifests.set(manifest.id, manifest);
-      this.emit({
+  register(e) {
+    for (const t of e)
+      this.manifests.set(t.id, t), this.emit({
         type: "registering",
-        moduleId: manifest.id,
-        manifest,
+        moduleId: t.id,
+        manifest: t,
         timestamp: /* @__PURE__ */ new Date()
       });
-    }
   }
   /**
    * Load all registered modules in dependency order
    */
   async loadAll() {
     await this.configurations?.ready();
-    const manifests = Array.from(this.manifests.values());
-    const resolution = this.resolver.resolve(manifests);
-    if (resolution.circular.length > 0) {
-      this.logger.warn("Circular dependencies detected:", resolution.circular);
-    }
-    if (resolution.missing.length > 0) {
-      this.logger.warn("Missing dependencies:", resolution.missing);
-    }
-    this.logger.info(`Loading ${resolution.loadOrder.length} module(s)...`);
-    for (const manifest of resolution.loadOrder) {
-      if (this.disabled.has(manifest.id)) {
-        this.logger.debug(`Skipping disabled module: ${manifest.id}`);
+    const e = Array.from(this.manifests.values()), t = this.resolver.resolve(e);
+    t.circular.length > 0 && this.logger.warn("Circular dependencies detected:", t.circular), t.missing.length > 0 && this.logger.warn("Missing dependencies:", t.missing), this.logger.info(`Loading ${t.loadOrder.length} module(s)...`);
+    for (const s of t.loadOrder) {
+      if (this.disabled.has(s.id)) {
+        this.logger.debug(`Skipping disabled module: ${s.id}`);
         continue;
       }
       try {
-        await this.loadModule(manifest);
-      } catch (error) {
-        this.logger.error(`Failed to load module ${manifest.id}:`, error);
-        if (!this.options.continueOnError) {
-          throw error;
-        }
+        await this.loadModule(s);
+      } catch (o) {
+        if (this.logger.error(`Failed to load module ${s.id}:`, o), !this.options.continueOnError)
+          throw o;
       }
     }
     await this.settle();
-    const mismatches = this.getDeclarationMismatches();
-    if (mismatches.length > 0) {
-      this.logger.warn(`${mismatches.length} module(s) declared services they did not register:`, mismatches.map((entry) => `${entry.moduleId} -> ${entry.serviceIds.join(", ")}`));
-    }
-    const pending = this.getUnsatisfiedModules();
-    if (pending.length > 0) {
-      this.logger.warn(`${pending.length} module(s) waiting for dependencies:`, pending.map((entry) => `${entry.moduleId} <- ${entry.waitingFor.join(", ")}`));
-    }
+    const r = this.getDeclarationMismatches();
+    r.length > 0 && this.logger.warn(`${r.length} module(s) declared services they did not register:`, r.map((s) => `${s.moduleId} -> ${s.serviceIds.join(", ")}`));
+    const n = this.getUnsatisfiedModules();
+    n.length > 0 && this.logger.warn(`${n.length} module(s) waiting for dependencies:`, n.map((s) => `${s.moduleId} <- ${s.waitingFor.join(", ")}`));
   }
   /**
    * What the loaded modules declared as `@component()` classes, and what became
@@ -6745,45 +4792,43 @@ class ModuleLoader {
    *
    * @param moduleId Restricts the listing to one module
    */
-  getComponents(moduleId) {
-    const entries = moduleId !== void 0 ? [[moduleId, this.componentRuntimes.get(moduleId) ?? []]] : [...this.componentRuntimes.entries()];
-    return entries.flatMap(([id, runtimes]) => runtimes.map((runtime) => this.describeComponent(id, runtime)));
+  getComponents(e) {
+    return (e !== void 0 ? [[e, this.componentRuntimes.get(e) ?? []]] : [...this.componentRuntimes.entries()]).flatMap(([r, n]) => n.map((s) => this.describeComponent(r, s)));
   }
-  describeComponent(moduleId, runtime) {
-    const activateMethod = getActivateMethod(runtime.ctor);
-    const configurations = [...runtime.instances.values()].map((instance) => ({
-      pid: instance.pid,
-      state: instance.instance !== void 0 || this.isInstantiated(instance) ? "active" : "satisfied",
-      properties: instance.properties
+  describeComponent(e, t) {
+    const r = pn(t.ctor), n = [...t.instances.values()].map((s) => ({
+      pid: s.pid,
+      state: s.instance !== void 0 || this.isInstantiated(s) ? "active" : "satisfied",
+      properties: s.properties
     }));
-    if (configurations.length === 0) {
-      const missing = this.missingReferences(runtime);
-      configurations.push(missing.length > 0 ? { state: "unsatisfied-reference", waitingFor: missing, properties: {} } : runtime.factory !== void 0 ? { state: "satisfied", properties: {} } : { state: "unsatisfied-configuration", properties: {} });
+    if (n.length === 0) {
+      const s = this.missingReferences(t);
+      n.push(s.length > 0 ? { state: "unsatisfied-reference", waitingFor: s, properties: {} } : t.factory !== void 0 ? { state: "satisfied", properties: {} } : { state: "unsatisfied-configuration", properties: {} });
     }
     return {
-      moduleId,
-      className: runtime.className,
-      disabled: this.isComponentDisabled(moduleId, runtime.className),
-      services: [...runtime.options.service ?? []],
-      immediate: runtime.options.immediate ?? activateMethod !== void 0,
-      hasActivate: activateMethod !== void 0,
-      hasDeactivate: getDeactivateMethod(runtime.ctor) !== void 0,
-      hasModified: getModifiedMethod(runtime.ctor) !== void 0,
-      references: runtime.references,
-      collections: getInjectAllMetadata(runtime.ctor).map((entry) => ({
-        serviceId: entry.serviceId,
-        target: entry.target,
-        fieldOption: entry.fieldOption
+      moduleId: e,
+      className: t.className,
+      disabled: this.isComponentDisabled(e, t.className),
+      services: [...t.options.service ?? []],
+      immediate: t.options.immediate ?? r !== void 0,
+      hasActivate: r !== void 0,
+      hasDeactivate: gn(t.ctor) !== void 0,
+      hasModified: vn(t.ctor) !== void 0,
+      references: t.references,
+      collections: jt(t.ctor).map((s) => ({
+        serviceId: s.serviceId,
+        target: s.target,
+        fieldOption: s.fieldOption
       })),
-      satisfyingCondition: runtime.options.satisfyingCondition,
-      factory: runtime.options.factory === void 0 ? void 0 : {
-        name: runtime.options.factory,
-        registered: runtime.factory !== void 0,
-        instances: runtime.instances.size
+      satisfyingCondition: t.options.satisfyingCondition,
+      factory: t.options.factory === void 0 ? void 0 : {
+        name: t.options.factory,
+        registered: t.factory !== void 0,
+        instances: t.instances.size
       },
-      configurationPid: runtime.pids,
-      configurationPolicy: runtime.policy,
-      configurations
+      configurationPid: t.pids,
+      configurationPolicy: t.policy,
+      configurations: n
     };
   }
   /**
@@ -6795,9 +4840,9 @@ class ModuleLoader {
    * this in CI to catch the drift where it is cheap to fix.
    */
   getDeclarationMismatches() {
-    return [...this.declarationMismatches].map(([moduleId, serviceIds]) => ({
-      moduleId,
-      serviceIds
+    return [...this.declarationMismatches].map(([e, t]) => ({
+      moduleId: e,
+      serviceIds: t
     }));
   }
   /**
@@ -6805,20 +4850,20 @@ class ModuleLoader {
    * The answer to "why is this module not running?".
    */
   getUnsatisfiedModules() {
-    const result = [];
-    for (const loadedModule of this.modules.values()) {
-      if (loadedModule.state !== "unsatisfied")
+    const e = [];
+    for (const t of this.modules.values()) {
+      if (t.state !== "unsatisfied")
         continue;
-      const reasons = this.unsatisfiedReasons(loadedModule.manifest);
-      result.push({
-        moduleId: loadedModule.manifest.id,
+      const r = this.unsatisfiedReasons(t.manifest);
+      e.push({
+        moduleId: t.manifest.id,
         waitingFor: [
-          ...reasons.services,
-          ...reasons.modules.map((id) => `module ${id}`)
+          ...r.services,
+          ...r.modules.map((n) => `module ${n}`)
         ]
       });
     }
-    return result;
+    return e;
   }
   /**
    * Load a single module.
@@ -6838,100 +4883,70 @@ class ModuleLoader {
    *   its modules with the host, and for tests, which then need no URL at all.
    *   `ModuleLoaderOptions.entryResolver` does the same for many modules at once.
    */
-  async loadModule(manifest, options = {}) {
-    if (manifest.id === SYSTEM_BUNDLE_ID) {
-      throw new Error(`'${SYSTEM_BUNDLE_ID}' stands for the runtime itself and cannot be loaded`);
+  async loadModule(e, t = {}) {
+    if (e.id === Te)
+      throw new Error(`'${Te}' stands for the runtime itself and cannot be loaded`);
+    if (this.manifests.has(e.id) || this.register([e]), this.disabled.has(e.id)) {
+      const s = this.modules.get(e.id);
+      if (s)
+        return this.logger.warn(`Module ${e.id} is disabled — enableModule() first`), s;
+      throw new Error(`Module ${e.id} is disabled — enableModule() first`);
     }
-    if (!this.manifests.has(manifest.id)) {
-      this.register([manifest]);
-    }
-    if (this.disabled.has(manifest.id)) {
-      const existing2 = this.modules.get(manifest.id);
-      if (existing2) {
-        this.logger.warn(`Module ${manifest.id} is disabled — enableModule() first`);
-        return existing2;
-      }
-      throw new Error(`Module ${manifest.id} is disabled — enableModule() first`);
-    }
-    const existing = this.modules.get(manifest.id);
-    if (existing && IN_FLIGHT_STATES.has(existing.state)) {
-      return existing;
-    }
-    const loadedModule = {
-      manifest,
+    const r = this.modules.get(e.id);
+    if (r && Qs.has(r.state))
+      return r;
+    const n = {
+      manifest: e,
       state: "resolving",
       exports: /* @__PURE__ */ new Map(),
       loadedAt: /* @__PURE__ */ new Date()
     };
-    this.modules.set(manifest.id, loadedModule);
+    this.modules.set(e.id, n);
     try {
-      await this.ensureDependencies(manifest);
-      this.validateSharedDependencies(manifest);
-      loadedModule.state = "loading";
-      this.emit({
+      await this.ensureDependencies(e), this.validateSharedDependencies(e), n.state = "loading", this.emit({
         type: "loading",
-        moduleId: manifest.id,
-        manifest,
+        moduleId: e.id,
+        manifest: e,
         timestamp: /* @__PURE__ */ new Date()
-      });
-      await this.doLoad(loadedModule, options.container);
-      loadedModule.state = "activating";
-      this.emit({
+      }), await this.doLoad(n, t.container), n.state = "activating", this.emit({
         type: "loaded",
-        moduleId: manifest.id,
-        manifest,
+        moduleId: e.id,
+        manifest: e,
         timestamp: /* @__PURE__ */ new Date()
       });
-      const reasons = this.unsatisfiedReasons(manifest);
-      if (reasons.services.length > 0 || reasons.modules.length > 0) {
-        if (this.options.strictRequirements && reasons.services.length > 0) {
-          throw new Error(`Module ${manifest.id} requires services that are not available: ${reasons.services.join(", ")}`);
-        }
-        this.park(loadedModule, reasons);
-        if (options.awaitCascade)
-          await this.settle();
-        return loadedModule;
+      const s = this.unsatisfiedReasons(e);
+      if (s.services.length > 0 || s.modules.length > 0) {
+        if (this.options.strictRequirements && s.services.length > 0)
+          throw new Error(`Module ${e.id} requires services that are not available: ${s.services.join(", ")}`);
+        return this.park(n, s), t.awaitCascade && await this.settle(), n;
       }
-      await this.activate(loadedModule);
-      this.captureDynamicBindings(manifest);
-      this.captureBoundRegistrations(manifest);
-      loadedModule.state = "active";
-      this.emit({
+      return await this.activate(n), this.captureDynamicBindings(e), this.captureBoundRegistrations(e), n.state = "active", this.emit({
         type: "activated",
-        moduleId: manifest.id,
-        manifest,
+        moduleId: e.id,
+        manifest: e,
         timestamp: /* @__PURE__ */ new Date()
-      });
-      this.logger.info(`Module ${manifest.id} activated`);
-      this.enqueue(() => this.reconcile());
-      if (options.awaitCascade)
-        await this.settle();
-      return loadedModule;
-    } catch (error) {
-      loadedModule.state = "error";
-      loadedModule.error = error;
-      this.emit({
+      }), this.logger.info(`Module ${e.id} activated`), this.enqueue(() => this.reconcile()), t.awaitCascade && await this.settle(), n;
+    } catch (s) {
+      throw n.state = "error", n.error = s, this.emit({
         type: "error",
-        moduleId: manifest.id,
-        manifest,
-        error,
+        moduleId: e.id,
+        manifest: e,
+        error: s,
         timestamp: /* @__PURE__ */ new Date()
-      });
-      throw error;
+      }), s;
     }
   }
   /**
    * Ensure all dependencies are loaded
    */
-  async ensureDependencies(manifest) {
-    for (const dep of manifest.dependencies ?? []) {
-      const depId = typeof dep === "string" ? dep : dep.id;
-      if (!this.isLoaded(depId)) {
-        const depManifest = this.manifests.get(depId);
-        if (!depManifest) {
-          throw new Error(`Missing dependency: ${depId}`);
-        }
-        await this.loadModule(depManifest);
+  async ensureDependencies(e) {
+    for (const t of e.dependencies ?? []) {
+      const r = typeof t == "string" ? t : t.id;
+      if (!this.isLoaded(r)) {
+        const n = this.manifests.get(r);
+        if (!n)
+          throw new Error(`Missing dependency: ${r}`);
+        await this.loadModule(n);
       }
     }
   }
@@ -6939,63 +4954,47 @@ class ModuleLoader {
    * Validate that all shared library dependencies are available
    * Shared libraries are provided by the host via __tsm__.register()
    */
-  validateSharedDependencies(manifest) {
-    const sharedDeps = manifest.sharedDependencies;
-    if (!sharedDeps || sharedDeps.length === 0) {
+  validateSharedDependencies(e) {
+    const t = e.sharedDependencies;
+    if (!t || t.length === 0 || this.options.sharedLibraries === "import-map")
       return;
-    }
-    if (this.options.sharedLibraries === "import-map") {
-      return;
-    }
-    if (!isTsmRuntimeAvailable()) {
-      throw new Error(`Module '${manifest.id}' requires shared libraries (${sharedDeps.map((d) => d.id).join(", ")}), but TSM runtime is not initialized. Call initTsmRuntime() and register shared libraries before loading modules.`);
-    }
-    const validation = tsmRuntime.validate(sharedDeps);
-    if (!validation.valid) {
-      const errors = [];
-      if (validation.missing.length > 0) {
-        errors.push(`Missing shared libraries: ${validation.missing.join(", ")}`);
-      }
-      if (validation.incompatible.length > 0) {
-        for (const inc of validation.incompatible) {
-          errors.push(`Incompatible version for '${inc.id}': requires ${inc.required}, but ${inc.available} is available`);
-        }
-      }
-      throw new Error(`Module '${manifest.id}' has unmet shared library dependencies:
-` + errors.map((e) => `  - ${e}`).join("\n") + `
+    if (!Yt())
+      throw new Error(`Module '${e.id}' requires shared libraries (${t.map((n) => n.id).join(", ")}), but TSM runtime is not initialized. Call initTsmRuntime() and register shared libraries before loading modules.`);
+    const r = ue.validate(t);
+    if (!r.valid) {
+      const n = [];
+      if (r.missing.length > 0 && n.push(`Missing shared libraries: ${r.missing.join(", ")}`), r.incompatible.length > 0)
+        for (const s of r.incompatible)
+          n.push(`Incompatible version for '${s.id}': requires ${s.required}, but ${s.available} is available`);
+      throw new Error(`Module '${e.id}' has unmet shared library dependencies:
+` + n.map((s) => `  - ${s}`).join(`
+`) + `
 
 Available shared libraries:
-` + Array.from(tsmRuntime.getRegistered().entries()).map(([id, info]) => `  - ${id}@${info.version}`).join("\n"));
+` + Array.from(ue.getRegistered().entries()).map(([s, o]) => `  - ${s}@${o.version}`).join(`
+`));
     }
-    this.logger.debug(`Module ${manifest.id}: shared dependencies validated`, sharedDeps.map((d) => `${d.id}@${d.versionRange}`));
+    this.logger.debug(`Module ${e.id}: shared dependencies validated`, t.map((n) => `${n.id}@${n.versionRange}`));
   }
   /**
    * Actually load the module entry point
    */
-  async doLoad(loadedModule, container) {
-    const { manifest } = loadedModule;
-    const entryModule = await this.loadEntry(manifest, container);
-    loadedModule.container = entryModule;
-    if (entryModule && typeof entryModule === "object") {
-      const moduleObj = entryModule;
-      if (typeof moduleObj.activate === "function" || typeof moduleObj.deactivate === "function") {
-        loadedModule.lifecycle = moduleObj;
-      }
-      if (moduleObj.default && typeof moduleObj.default === "object") {
-        const defaultExport = moduleObj.default;
-        if (typeof defaultExport.activate === "function" || typeof defaultExport.deactivate === "function") {
-          loadedModule.lifecycle = defaultExport;
-        }
+  async doLoad(e, t) {
+    const { manifest: r } = e, n = await this.loadEntry(r, t);
+    if (e.container = n, n && typeof n == "object") {
+      const s = n;
+      if ((typeof s.activate == "function" || typeof s.deactivate == "function") && (e.lifecycle = s), s.default && typeof s.default == "object") {
+        const o = s.default;
+        (typeof o.activate == "function" || typeof o.deactivate == "function") && (e.lifecycle = o);
       }
     }
-    for (const [exportPath] of Object.entries(manifest.exports ?? {})) {
+    for (const [s] of Object.entries(r.exports ?? {}))
       try {
-        const exported = await this.loadExport(manifest.id, exportPath);
-        loadedModule.exports.set(exportPath, exported);
-      } catch (error) {
-        this.logger.warn(`Failed to load export ${exportPath} from ${manifest.id}:`, error);
+        const o = await this.loadExport(r.id, s);
+        e.exports.set(s, o);
+      } catch (o) {
+        this.logger.warn(`Failed to load export ${s} from ${r.id}:`, o);
       }
-    }
   }
   /**
    * Load module entry point via dynamic import
@@ -7009,75 +5008,51 @@ Available shared libraries:
    * over through `window[moduleId]`, which cost collisions with DOM ids and made
    * the loader unusable in Node, where `window` does not exist.
    */
-  async loadEntry(manifest, container) {
-    const handed = container !== void 0 ? container : this.preloaded.get(manifest.id) ?? this.options.entryResolver?.(manifest);
-    if (handed !== void 0) {
-      assertContainer(handed, manifest.id);
-      this.preloaded.set(manifest.id, handed);
-      return handed;
-    }
+  async loadEntry(e, t) {
+    const r = t !== void 0 ? t : this.preloaded.get(e.id) ?? this.options.entryResolver?.(e);
+    if (r !== void 0)
+      return Zs(r, e.id), this.preloaded.set(e.id, r), r;
     try {
-      const module = await nativeImport(manifest.entry);
-      const namespace = module;
-      if (typeof namespace.activate === "function" || typeof namespace.deactivate === "function") {
-        return namespace;
-      }
-      return namespace.default ?? namespace;
-    } catch (error) {
-      throw new Error(`Failed to load module entry: ${manifest.entry} - ${error}`);
+      const s = await co(e.entry);
+      return ao(s) ? s : s.default ?? s;
+    } catch (n) {
+      throw new Error(`Failed to load module entry: ${e.entry} - ${n}`);
     }
   }
   /**
    * Load a specific export from a module
    */
-  async loadExport(moduleId, exportPath) {
-    const loadedModule = this.modules.get(moduleId);
-    if (loadedModule?.exports.has(exportPath)) {
-      return loadedModule.exports.get(exportPath);
-    }
-    throw new Error(`Export ${exportPath} not found in module ${moduleId}`);
+  async loadExport(e, t) {
+    const r = this.modules.get(e);
+    if (r?.exports.has(t))
+      return r.exports.get(t);
+    throw new Error(`Export ${t} not found in module ${e}`);
   }
   /**
    * Activate a module (call lifecycle hook)
    */
-  async activate(loadedModule) {
-    const manifest = loadedModule.manifest;
-    this.emit({
+  async activate(e) {
+    const t = e.manifest;
+    if (this.emit({
       type: "activating",
-      moduleId: manifest.id,
-      manifest,
+      moduleId: t.id,
+      manifest: t,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    if (loadedModule.lifecycle?.activate) {
-      const context = this.createContext(loadedModule);
-      await loadedModule.lifecycle.activate(context);
+    }), e.lifecycle?.activate) {
+      const r = this.createContext(e);
+      await e.lifecycle.activate(r);
     }
-    await this.startComponents(loadedModule);
-    if (manifest.provides && manifest.provides.length > 0) {
-      const undelivered = [];
-      const awaitingConfiguration = this.servicesAwaitingConfiguration(manifest.id);
-      for (const service of manifest.provides) {
-        if (awaitingConfiguration.has(service.id)) {
-          this.logger.info(`Module ${manifest.id} does not provide ${service.id} yet: its component waits for configuration`);
-        } else if (this.services.has(service.id)) {
-          this.logger.info(`Module ${manifest.id} provides service: ${service.id} (${service.scope ?? "singleton"})`);
-        } else {
-          undelivered.push(service.id);
-        }
-      }
-      if (undelivered.length > 0) {
-        this.declarationMismatches.set(manifest.id, undelivered);
-        this.logger.warn(`Module ${manifest.id} declared service(s) it did not register: ${undelivered.join(", ")}`);
-        this.emit({
-          type: "declaration-mismatch",
-          moduleId: manifest.id,
-          manifest,
-          serviceIds: undelivered,
-          timestamp: /* @__PURE__ */ new Date()
-        });
-      } else {
-        this.declarationMismatches.delete(manifest.id);
-      }
+    if (await this.startComponents(e), t.provides && t.provides.length > 0) {
+      const r = [], n = this.servicesAwaitingConfiguration(t.id);
+      for (const s of t.provides)
+        n.has(s.id) ? this.logger.info(`Module ${t.id} does not provide ${s.id} yet: its component waits for configuration`) : this.services.has(s.id) ? this.logger.info(`Module ${t.id} provides service: ${s.id} (${s.scope ?? "singleton"})`) : r.push(s.id);
+      r.length > 0 ? (this.declarationMismatches.set(t.id, r), this.logger.warn(`Module ${t.id} declared service(s) it did not register: ${r.join(", ")}`), this.emit({
+        type: "declaration-mismatch",
+        moduleId: t.id,
+        manifest: t,
+        serviceIds: r,
+        timestamp: /* @__PURE__ */ new Date()
+      })) : this.declarationMismatches.delete(t.id);
     }
   }
   /**
@@ -7091,63 +5066,52 @@ Available shared libraries:
    * set up what a component needs injected, whereas the reverse — a component
    * preparing something for `activate` — is what a declared service is for.
    */
-  async startComponents(loadedModule) {
-    const components = this.findComponents(loadedModule);
-    if (components.length === 0)
+  async startComponents(e) {
+    const t = this.findComponents(e);
+    if (t.length === 0)
       return;
-    const target = {
-      id: loadedModule.manifest.id,
-      version: loadedModule.manifest.version
-    };
-    const runtimes = components.map(({ ctor, options }) => ({
-      ctor,
-      options,
-      className: ctor.name,
-      target,
-      references: referencesOf(ctor),
-      pids: this.pidsOf(ctor, options),
-      policy: options.configurationPolicy ?? "optional",
+    const r = {
+      id: e.manifest.id,
+      version: e.manifest.version
+    }, n = t.map(({ ctor: a, options: f }) => ({
+      ctor: a,
+      options: f,
+      className: a.name,
+      target: r,
+      references: to(a),
+      pids: this.pidsOf(a, f),
+      policy: f.configurationPolicy ?? "optional",
       instances: /* @__PURE__ */ new Map()
     }));
-    this.componentRuntimes.set(loadedModule.manifest.id, runtimes);
-    this.designateSchemas(loadedModule.manifest.id, runtimes);
-    const registered = [];
-    let registeredSomething = true;
-    while (registeredSomething) {
-      registeredSomething = false;
-      for (const runtime of runtimes) {
-        if (this.isComponentDisabled(loadedModule.manifest.id, runtime.className))
-          continue;
-        if (this.missingReferences(runtime).length > 0)
-          continue;
-        if (runtime.options.factory !== void 0) {
-          if (runtime.factory)
+    this.componentRuntimes.set(e.manifest.id, n), this.designateSchemas(e.manifest.id, n);
+    const s = [];
+    let o = !0;
+    for (; o; ) {
+      o = !1;
+      for (const a of n)
+        if (!this.isComponentDisabled(e.manifest.id, a.className) && !(this.missingReferences(a).length > 0)) {
+          if (a.options.factory !== void 0) {
+            if (a.factory)
+              continue;
+            this.registerComponentFactory(e, a), o = !0;
             continue;
-          this.registerComponentFactory(loadedModule, runtime);
-          registeredSomething = true;
-          continue;
+          }
+          if (!(a.instances.size > 0)) {
+            for (const f of this.configurationsFor(a))
+              this.registerInstance(e, a, f), o = !0;
+            a.instances.size > 0 && s.push(a);
+          }
         }
-        if (runtime.instances.size > 0)
-          continue;
-        for (const wanted of this.configurationsFor(runtime)) {
-          this.registerInstance(loadedModule, runtime, wanted);
-          registeredSomething = true;
-        }
-        if (runtime.instances.size > 0)
-          registered.push(runtime);
-      }
     }
-    for (const runtime of runtimes) {
-      if (runtime.instances.size > 0 || runtime.factory)
+    for (const a of n) {
+      if (a.instances.size > 0 || a.factory)
         continue;
-      const missing = this.missingReferences(runtime);
-      this.logger.info(missing.length > 0 ? `Component ${runtime.className} of ${loadedModule.manifest.id} waits for service(s): ${missing.join(", ")}` : `Component ${runtime.className} of ${loadedModule.manifest.id} waits for configuration: ${runtime.pids.join(", ")}`);
+      const f = this.missingReferences(a);
+      this.logger.info(f.length > 0 ? `Component ${a.className} of ${e.manifest.id} waits for service(s): ${f.join(", ")}` : `Component ${a.className} of ${e.manifest.id} waits for configuration: ${a.pids.join(", ")}`);
     }
-    for (const runtime of registered) {
-      for (const instance of [...runtime.instances.values()]) {
-        await this.activateInstance(loadedModule, runtime, instance);
-      }
-    }
+    for (const a of s)
+      for (const f of [...a.instances.values()])
+        await this.activateInstance(e, a, f);
   }
   /**
    * The configuration PIDs a component reads.
@@ -7156,11 +5120,9 @@ Available shared libraries:
    * component is configurable without declaring anything, and the PID is
    * something a person can guess.
    */
-  pidsOf(ctor, options) {
-    const declared = options.configurationPid;
-    if (declared === void 0)
-      return [ctor.name];
-    return Array.isArray(declared) ? declared : [declared];
+  pidsOf(e, t) {
+    const r = t.configurationPid;
+    return r === void 0 ? [e.name] : Array.isArray(r) ? r : [r];
   }
   /**
    * Publish what each component declared about the shape of its configuration.
@@ -7169,38 +5131,32 @@ Available shared libraries:
    * descriptor: nothing in the running system needs it, and a user interface
    * cannot be written without it.
    */
-  designateSchemas(moduleId, runtimes) {
-    const metatype = this.metatype;
-    if (!metatype)
-      return;
-    for (const runtime of runtimes) {
-      const schema = runtime.options.configurationSchema;
-      if (!schema || runtime.policy === "ignore")
-        continue;
-      for (const pid of runtime.pids) {
-        const existing = metatype.getObjectClassDefinition(pid);
-        if (existing !== void 0 && existing !== schema) {
-          this.logger.warn(`Component ${runtime.className} describes ${pid} as '${schema.id}', which is already described as '${existing.id}' — the later one wins`);
-        }
-        metatype.designate(pid, schema, {
-          factory: runtime.options.configurationFactory,
-          providedBy: moduleId
-        });
+  designateSchemas(e, t) {
+    const r = this.metatype;
+    if (r)
+      for (const n of t) {
+        const s = n.options.configurationSchema;
+        if (!(!s || n.policy === "ignore"))
+          for (const o of n.pids) {
+            const a = r.getObjectClassDefinition(o);
+            a !== void 0 && a !== s && this.logger.warn(`Component ${n.className} describes ${o} as '${s.id}', which is already described as '${a.id}' — the later one wins`), r.designate(o, s, {
+              factory: n.options.configurationFactory,
+              providedBy: e
+            });
+          }
       }
-    }
   }
   /**
    * The declared defaults for a component's PIDs, in the same order the PIDs
    * merge, so a specific PID's default beats a shared one's.
    */
-  declaredDefaults(runtime) {
+  declaredDefaults(e) {
     if (!this.metatype)
       return {};
-    let defaults = {};
-    for (const pid of runtime.pids) {
-      defaults = { ...defaults, ...this.metatype.defaults(pid) };
-    }
-    return defaults;
+    let t = {};
+    for (const r of e.pids)
+      t = { ...t, ...this.metatype.defaults(r) };
+    return t;
   }
   /**
    * Which instances of a component its configuration calls for.
@@ -7210,39 +5166,27 @@ Available shared libraries:
    * one per configuration when a PID turns out to be a factory PID. In DS the
    * last one is not a separate feature either — it follows from the PID.
    */
-  configurationsFor(runtime) {
-    const defaults = runtime.policy === "ignore" ? {} : this.declaredDefaults(runtime);
-    const unconfigured = () => runtime.policy === "require" ? [] : [{ factory: false, values: { ...defaults } }];
-    if (runtime.policy === "ignore" || !this.configurations) {
-      return unconfigured();
+  configurationsFor(e) {
+    const t = e.policy === "ignore" ? {} : this.declaredDefaults(e), r = () => e.policy === "require" ? [] : [{ factory: !1, values: { ...t } }];
+    if (e.policy === "ignore" || !this.configurations)
+      return r();
+    let n = { ...t }, s;
+    for (const a of e.pids) {
+      const f = this.configurations.findTargetedConfiguration(a, e.target), d = f?.getProperties();
+      d && (n = { ...n, ...d }, s ??= f.pid);
     }
-    let values = { ...defaults };
-    let pid;
-    for (const candidate of runtime.pids) {
-      const configuration = this.configurations.findTargetedConfiguration(candidate, runtime.target);
-      const properties = configuration?.getProperties();
-      if (!properties)
-        continue;
-      values = { ...values, ...properties };
-      pid ??= configuration.pid;
-    }
-    const declaredFactory = runtime.options.configurationFactory;
-    if (declaredFactory !== false) {
-      for (const candidate of runtime.pids) {
-        const factoryConfigurations = this.configurations.listTargetedFactoryConfigurations(candidate, runtime.target);
-        if (factoryConfigurations.length === 0)
-          continue;
-        return factoryConfigurations.map((configuration) => ({
-          pid: configuration.pid,
-          factory: true,
-          values: { ...values, ...configuration.getProperties() }
-        }));
+    const o = e.options.configurationFactory;
+    if (o !== !1)
+      for (const a of e.pids) {
+        const f = this.configurations.listTargetedFactoryConfigurations(a, e.target);
+        if (f.length !== 0)
+          return f.map((d) => ({
+            pid: d.pid,
+            factory: !0,
+            values: { ...n, ...d.getProperties() }
+          }));
       }
-    }
-    if (declaredFactory !== true && pid !== void 0) {
-      return [{ pid, factory: false, values }];
-    }
-    return unconfigured();
+    return o !== !0 && s !== void 0 ? [{ pid: s, factory: !1, values: n }] : r();
   }
   /**
    * What the services of one instance publish: what the component declared, with
@@ -7252,14 +5196,11 @@ Available shared libraries:
    * same question. Keys starting with a dot stay private to the component and
    * out of the service properties, also as in DS.
    */
-  propertiesFor(declared, configuration) {
-    const properties = { ...declared };
-    for (const [key, value] of Object.entries(configuration)) {
-      if (key.startsWith("."))
-        continue;
-      properties[key] = value;
-    }
-    return properties;
+  propertiesFor(e, t) {
+    const r = { ...e };
+    for (const [n, s] of Object.entries(t))
+      n.startsWith(".") || (r[n] = s);
+    return r;
   }
   /**
    * The ranking one instance registers with.
@@ -7267,9 +5208,9 @@ Available shared libraries:
    * `service.ranking` from configuration overrides what the class declared,
    * which is how DS lets deployment re-order providers without touching code.
    */
-  rankingFor(options, configuration) {
-    const configured = configuration["service.ranking"];
-    return typeof configured === "number" ? configured : options.ranking;
+  rankingFor(e, t) {
+    const r = t["service.ranking"];
+    return typeof r == "number" ? r : e.ranking;
   }
   /**
    * The mandatory references of a component that nothing provides.
@@ -7278,17 +5219,9 @@ Available shared libraries:
    * service used to throw and take the module's start with it — now the component
    * waits and the module keeps running, as DS has it (112.5.2).
    */
-  missingReferences(runtime) {
-    const absorbed = new Set(getUnbindMethods(runtime.ctor).filter((entry) => {
-      const reference = runtime.references.find((candidate) => candidate.serviceId === entry.serviceId);
-      return reference?.optional === true;
-    }).map((entry) => entry.serviceId));
-    const missing = runtime.references.filter((reference) => !reference.optional && !absorbed.has(reference.serviceId) && !this.services.has(reference.serviceId)).map((reference) => reference.serviceId);
-    const condition = runtime.options.satisfyingCondition;
-    if (condition !== void 0 && this.matchingConditions(condition) === 0) {
-      missing.push(`condition ${condition}`);
-    }
-    return missing;
+  missingReferences(e) {
+    const t = new Set(mn(e.ctor).filter((s) => e.references.find((a) => a.serviceId === s.serviceId)?.optional === !0).map((s) => s.serviceId)), r = e.references.filter((s) => !s.optional && !t.has(s.serviceId) && !this.services.has(s.serviceId)).map((s) => s.serviceId), n = e.options.satisfyingCondition;
+    return n !== void 0 && this.matchingConditions(n) === 0 && r.push(`condition ${n}`), r;
   }
   /**
    * How many registered conditions match a filter.
@@ -7297,12 +5230,11 @@ Available shared libraries:
    * whose condition cannot be parsed must not start as though it had none, and
    * throwing here would take the whole module's start with it.
    */
-  matchingConditions(filter) {
+  matchingConditions(e) {
     try {
-      return this.services.countProviders(CONDITION_SERVICE_ID, filter);
-    } catch (error) {
-      this.logger.error(`Invalid satisfying condition '${filter}':`, error);
-      return 0;
+      return this.services.countProviders(Xt, e);
+    } catch (t) {
+      return this.logger.error(`Invalid satisfying condition '${e}':`, t), 0;
     }
   }
   /**
@@ -7313,40 +5245,31 @@ Available shared libraries:
    * cascade on — and the queue keeps that in order.
    */
   async reconcileComponentReferences() {
-    for (const [moduleId, runtimes] of [...this.componentRuntimes]) {
-      const loadedModule = this.modules.get(moduleId);
-      if (!loadedModule || loadedModule.state !== "active")
-        continue;
-      for (const runtime of runtimes) {
-        if (this.isComponentDisabled(moduleId, runtime.className))
-          continue;
-        for (const instance of [...runtime.instances.values()]) {
-          this.applyCollections(loadedModule, runtime, instance);
-          await this.applyBindings(loadedModule, runtime, instance);
-        }
-        const missing = this.missingReferences(runtime);
-        if (missing.length > 0) {
-          if (runtime.factory) {
-            this.logger.info(`Component factory ${runtime.options.factory} of ${moduleId} goes: service(s) gone: ${missing.join(", ")}`);
-            await this.withdrawComponentFactory(loadedModule, runtime);
+    for (const [e, t] of [...this.componentRuntimes]) {
+      const r = this.modules.get(e);
+      if (!(!r || r.state !== "active"))
+        for (const n of t) {
+          if (this.isComponentDisabled(e, n.className))
+            continue;
+          for (const o of [...n.instances.values()])
+            this.applyCollections(r, n, o), await this.applyBindings(r, n, o);
+          const s = this.missingReferences(n);
+          if (s.length > 0) {
+            n.factory && (this.logger.info(`Component factory ${n.options.factory} of ${e} goes: service(s) gone: ${s.join(", ")}`), await this.withdrawComponentFactory(r, n));
+            for (const [o, a] of [...n.instances])
+              this.logger.info(`Component ${n.className} of ${e} stops: service(s) gone: ${s.join(", ")}`), await this.stopInstance(r, n, o, a);
+            continue;
           }
-          for (const [key, instance] of [...runtime.instances]) {
-            this.logger.info(`Component ${runtime.className} of ${moduleId} stops: service(s) gone: ${missing.join(", ")}`);
-            await this.stopInstance(loadedModule, runtime, key, instance);
+          if (n.options.factory !== void 0) {
+            this.registerComponentFactory(r, n);
+            continue;
           }
-          continue;
+          if (!(n.instances.size > 0))
+            for (const o of this.configurationsFor(n)) {
+              const a = this.registerInstance(r, n, o);
+              await this.activateInstance(r, n, a);
+            }
         }
-        if (runtime.options.factory !== void 0) {
-          this.registerComponentFactory(loadedModule, runtime);
-          continue;
-        }
-        if (runtime.instances.size > 0)
-          continue;
-        for (const wanted of this.configurationsFor(runtime)) {
-          const created = this.registerInstance(loadedModule, runtime, wanted);
-          await this.activateInstance(loadedModule, runtime, created);
-        }
-      }
     }
   }
   /**
@@ -7356,31 +5279,30 @@ Available shared libraries:
    * than the moment the component was built. Which is the point: cardinality
    * 0..n is not a snapshot.
    */
-  applyCollections(loadedModule, runtime, instance) {
-    const object = instance.instance;
-    if (!object)
+  applyCollections(e, t, r) {
+    const n = r.instance;
+    if (!n)
       return;
-    const scope = this.scopeFor(loadedModule.manifest.id);
-    for (const collection of getInjectAllMetadata(runtime.ctor)) {
-      let services;
+    const s = this.scopeFor(e.manifest.id);
+    for (const o of jt(t.ctor)) {
+      let a;
       try {
-        services = scope.getServiceReferences(collection.serviceId, collection.target).map((reference) => scope.resolveReference(reference)).filter((service) => service !== void 0);
-      } catch (error) {
-        this.logger.error(`Invalid target on ${runtime.className}.${String(collection.propertyKey)}:`, error);
+        a = s.getServiceReferences(o.serviceId, o.target).map((d) => s.resolveReference(d)).filter((d) => d !== void 0);
+      } catch (d) {
+        this.logger.error(`Invalid target on ${t.className}.${String(o.propertyKey)}:`, d);
         continue;
       }
-      const held = object[collection.propertyKey];
-      if (Array.isArray(held) && sameServices(held, services))
-        continue;
-      if (collection.fieldOption === "update") {
-        if (Array.isArray(held)) {
-          held.length = 0;
-          held.push(...services);
-          continue;
+      const f = n[o.propertyKey];
+      if (!(Array.isArray(f) && ro(f, a))) {
+        if (o.fieldOption === "update") {
+          if (Array.isArray(f)) {
+            f.length = 0, f.push(...a);
+            continue;
+          }
+          this.logger.warn(`${t.className}.${String(o.propertyKey)} declares fieldOption 'update' but is not an array, so it is replaced instead — initialise it with '= []'`);
         }
-        this.logger.warn(`${runtime.className}.${String(collection.propertyKey)} declares fieldOption 'update' but is not an array, so it is replaced instead — initialise it with '= []'`);
+        n[o.propertyKey] = a;
       }
-      object[collection.propertyKey] = services;
     }
   }
   /**
@@ -7394,26 +5316,20 @@ Available shared libraries:
    * reference into a mandatory one, so the choice is the component's — a mandatory
    * reference does go down, since nothing could keep it consistent.
    */
-  async applyBindings(loadedModule, runtime, instance) {
-    if (instance.instance === void 0)
+  async applyBindings(e, t, r) {
+    if (r.instance === void 0)
       return;
-    const unbinds = new Map(getUnbindMethods(runtime.ctor).map((entry) => [entry.serviceId, entry.method]));
-    for (const binding of getBindMethods(runtime.ctor)) {
-      const present = this.services.has(binding.serviceId);
-      const held = instance.bound.has(binding.serviceId);
-      if (present && !held) {
-        instance.bound.add(binding.serviceId);
-        await this.callBinding(loadedModule, runtime, instance, binding.method, binding.serviceId);
+    const n = new Map(mn(t.ctor).map((s) => [s.serviceId, s.method]));
+    for (const s of Ce(t.ctor)) {
+      const o = this.services.has(s.serviceId), a = r.bound.has(s.serviceId);
+      if (o && !a) {
+        r.bound.add(s.serviceId), await this.callBinding(e, t, r, s.method, s.serviceId);
         continue;
       }
-      if (!present && held) {
-        instance.bound.delete(binding.serviceId);
-        const method = unbinds.get(binding.serviceId);
-        if (method !== void 0) {
-          await this.callBinding(loadedModule, runtime, instance, method, binding.serviceId);
-        } else {
-          this.logger.warn(`Component ${runtime.className} has no @unbind for ${binding.serviceId}, so it still holds a service that is gone`);
-        }
+      if (!o && a) {
+        r.bound.delete(s.serviceId);
+        const f = n.get(s.serviceId);
+        f !== void 0 ? await this.callBinding(e, t, r, f, s.serviceId) : this.logger.warn(`Component ${t.className} has no @unbind for ${s.serviceId}, so it still holds a service that is gone`);
       }
     }
   }
@@ -7426,60 +5342,49 @@ Available shared libraries:
    * factory in the registry, nobody can ask for an instance of something that
    * cannot run, which is what DS means by the factory tracking satisfaction.
    */
-  registerComponentFactory(loadedModule, runtime) {
-    if (runtime.factory)
+  registerComponentFactory(e, t) {
+    if (t.factory)
       return;
-    const name = runtime.options.factory;
-    if (name === void 0)
+    const r = t.options.factory;
+    if (r === void 0)
       return;
-    if (runtime.policy === "require") {
-      this.logger.warn(`Component ${runtime.className} is a factory component, so configurationPolicy 'require' does not apply — its instances are configured by whoever calls newInstance()`);
-    }
-    const scope = this.scopeFor(loadedModule.manifest.id);
-    const built = /* @__PURE__ */ new Map();
-    let nextInstance = 0;
-    const factory = {
-      name,
+    t.policy === "require" && this.logger.warn(`Component ${t.className} is a factory component, so configurationPolicy 'require' does not apply — its instances are configured by whoever calls newInstance()`);
+    const n = this.scopeFor(e.manifest.id), s = /* @__PURE__ */ new Map();
+    let o = 0;
+    const a = {
+      name: r,
       get instances() {
-        return [...built.values()];
+        return [...s.values()];
       },
-      newInstance: async (properties = {}) => {
-        const key = FACTORY_INSTANCE + String(++nextInstance);
-        const values = { ...this.declaredDefaults(runtime), ...properties };
-        const instance = this.registerInstance(loadedModule, runtime, { factory: true, values }, key);
-        await this.activateInstance(loadedModule, runtime, instance, { force: true });
-        const handle = {
+      newInstance: async (d = {}) => {
+        const c = io + String(++o), l = { ...this.declaredDefaults(t), ...d }, p = this.registerInstance(e, t, { factory: !0, values: l }, c);
+        await this.activateInstance(e, t, p, { force: !0 });
+        const m = {
           get instance() {
-            return instance.instance;
+            return p.instance;
           },
-          properties: { ...values },
+          properties: { ...l },
           dispose: async () => {
-            if (!built.delete(key))
-              return;
-            await this.stopInstance(loadedModule, runtime, key, instance);
+            s.delete(c) && await this.stopInstance(e, t, c, p);
           }
         };
-        built.set(key, handle);
-        return handle;
+        return s.set(c, m), m;
       }
-    };
-    const registration = scope.register(COMPONENT_FACTORY_SERVICE_ID, factory, {
-      ranking: runtime.options.ranking,
+    }, f = n.register(li, a, {
+      ranking: t.options.ranking,
       properties: {
-        ...runtime.options.properties,
-        [COMPONENT_FACTORY]: name,
-        [COMPONENT_NAME]: runtime.className
+        ...t.options.properties,
+        [ar]: r,
+        [hi]: t.className
       }
     });
-    runtime.factory = {
-      registration,
+    t.factory = {
+      registration: f,
       disposeAll: async () => {
-        for (const handle of [...built.values()].reverse()) {
-          await handle.dispose();
-        }
+        for (const d of [...s.values()].reverse())
+          await d.dispose();
       }
-    };
-    this.logger.info(`Component factory ${name} of ${loadedModule.manifest.id} registered (${runtime.className})`);
+    }, this.logger.info(`Component factory ${r} of ${e.manifest.id} registered (${t.className})`);
   }
   /**
    * Withdraw a factory and everything it built.
@@ -7488,45 +5393,33 @@ Available shared libraries:
    * run, and nothing would ever reclaim them — their lifetime was the caller's
    * business only while the component was satisfied.
    */
-  async withdrawComponentFactory(loadedModule, runtime) {
-    const factory = runtime.factory;
-    if (!factory)
-      return;
-    runtime.factory = void 0;
-    await factory.disposeAll();
-    factory.registration.unregister();
-    this.logger.info(`Component factory ${runtime.options.factory} of ${loadedModule.manifest.id} withdrawn`);
+  async withdrawComponentFactory(e, t) {
+    const r = t.factory;
+    r && (t.factory = void 0, await r.disposeAll(), r.registration.unregister(), this.logger.info(`Component factory ${t.options.factory} of ${e.manifest.id} withdrawn`));
   }
   /** Register the services of one component instance, without creating it yet */
-  registerInstance(loadedModule, runtime, wanted, key = instanceKeyOf(wanted)) {
-    const scope = this.scopeFor(loadedModule.manifest.id);
-    const { options } = runtime;
-    const [primary, ...aliases] = options.service ?? [];
-    const properties = this.propertiesFor(options.properties, wanted.values);
-    const propertiesById = {};
-    for (const serviceId2 of options.service ?? []) {
-      propertiesById[serviceId2] = this.propertiesFor(options.propertiesById?.[serviceId2] ?? options.properties, wanted.values);
-    }
-    const registration = primary === void 0 ? void 0 : scope.bindClass(primary, runtime.ctor, {
-      implements: aliases,
-      properties,
-      propertiesById,
-      ranking: this.rankingFor(options, wanted.values),
-      scope: options.scope,
+  registerInstance(e, t, r, n = qt(r)) {
+    const s = this.scopeFor(e.manifest.id), { options: o } = t, [a, ...f] = o.service ?? [], d = this.propertiesFor(o.properties, r.values), c = {};
+    for (const m of o.service ?? [])
+      c[m] = this.propertiesFor(o.propertiesById?.[m] ?? o.properties, r.values);
+    const l = a === void 0 ? void 0 : s.bindClass(a, t.ctor, {
+      implements: f,
+      properties: d,
+      propertiesById: c,
+      ranking: this.rankingFor(o, r.values),
+      scope: o.scope,
       // Only a factory configuration or a factory component makes this one of
       // several registrations of the class; for an ordinary PID it is the
       // class's one registration, and a repeated one should replace it
-      instanceKey: wanted.factory ? wanted.pid ?? key : void 0
-    });
-    const instance = {
-      pid: wanted.pid,
-      configuration: wanted.values,
-      properties,
-      registration,
+      instanceKey: r.factory ? r.pid ?? n : void 0
+    }), p = {
+      pid: r.pid,
+      configuration: r.values,
+      properties: d,
+      registration: l,
       bound: /* @__PURE__ */ new Set()
     };
-    runtime.instances.set(key, instance);
-    return instance;
+    return t.instances.set(n, p), p;
   }
   /**
    * Create a component instance and run its `@activate` method.
@@ -7534,36 +5427,21 @@ Available shared libraries:
    * Only for immediate components: one that merely offers a service waits until
    * somebody resolves it, and then the registry creates it.
    */
-  async activateInstance(loadedModule, runtime, instance, options = {}) {
-    if (instance.instance !== void 0)
+  async activateInstance(e, t, r, n = {}) {
+    if (r.instance !== void 0)
       return;
-    const activateMethod = getActivateMethod(runtime.ctor);
-    const binds = getBindMethods(runtime.ctor);
-    const immediate = options.force === true || (runtime.options.immediate ?? (activateMethod !== void 0 || binds.length > 0));
-    if (!immediate)
+    const s = pn(t.ctor), o = Ce(t.ctor), a = jt(t.ctor);
+    if (!(n.force === !0 || (t.options.immediate ?? (s !== void 0 || o.length > 0 || a.length > 0))))
       return;
-    const object = instance.registration ? instance.registration.resolve() : this.scopeFor(loadedModule.manifest.id).construct(runtime.ctor);
-    if (!object)
-      return;
-    instance.instance = object;
-    this.applyCollections(loadedModule, runtime, instance);
-    await this.bindAvailable(loadedModule, runtime, instance);
-    if (activateMethod !== void 0) {
-      await this.callComponentMethod(loadedModule, runtime, instance, activateMethod);
-    }
+    const d = r.registration ? r.registration.resolve() : this.scopeFor(e.manifest.id).construct(t.ctor);
+    d && (r.instance = d, this.applyCollections(e, t, r), await this.bindAvailable(e, t, r), s !== void 0 && await this.callComponentMethod(e, t, r, s));
   }
   /**
    * Hand the instance every `@bind()` service that is there, in declaration order.
    */
-  async bindAvailable(loadedModule, runtime, instance) {
-    for (const binding of getBindMethods(runtime.ctor)) {
-      if (instance.bound.has(binding.serviceId))
-        continue;
-      if (!this.services.has(binding.serviceId))
-        continue;
-      instance.bound.add(binding.serviceId);
-      await this.callBinding(loadedModule, runtime, instance, binding.method, binding.serviceId);
-    }
+  async bindAvailable(e, t, r) {
+    for (const n of Ce(t.ctor))
+      r.bound.has(n.serviceId) || this.services.has(n.serviceId) && (r.bound.add(n.serviceId), await this.callBinding(e, t, r, n.method, n.serviceId));
   }
   /**
    * Call one bind or unbind method with the service and the component's context.
@@ -7571,42 +5449,39 @@ Available shared libraries:
    * A failure is logged and does not stop the rest: the component stays as it is,
    * which is what a dynamic reference promises.
    */
-  async callBinding(loadedModule, runtime, instance, methodName, serviceId2) {
-    const object = instance.instance;
-    if (!object)
+  async callBinding(e, t, r, n, s) {
+    const o = r.instance;
+    if (!o)
       return;
-    const method = object[methodName];
-    if (typeof method !== "function")
-      return;
-    try {
-      await method.call(object, this.services.get(serviceId2), this.componentContext(loadedModule, runtime, instance));
-    } catch (error) {
-      this.logger.error(`${String(methodName)} of ${runtime.className} failed for ${serviceId2}:`, error);
-    }
+    const a = o[n];
+    if (typeof a == "function")
+      try {
+        await a.call(o, this.services.get(s), this.componentContext(e, t, r));
+      } catch (f) {
+        this.logger.error(`${String(n)} of ${t.className} failed for ${s}:`, f);
+      }
   }
   /** Run one of a component's lifecycle methods with its context */
-  async callComponentMethod(loadedModule, runtime, instance, methodName) {
-    const object = instance.instance;
-    if (!object)
+  async callComponentMethod(e, t, r, n) {
+    const s = r.instance;
+    if (!s)
       return;
-    const method = object[methodName];
-    if (typeof method !== "function")
-      return;
-    await method.call(object, this.componentContext(loadedModule, runtime, instance));
+    const o = s[n];
+    typeof o == "function" && await o.call(s, this.componentContext(e, t, r));
   }
-  componentContext(loadedModule, runtime, instance) {
+  componentContext(e, t, r) {
     return {
-      ...this.createContext(loadedModule),
+      ...this.createContext(e),
       // A logger named after the component, not just its module: with several
       // components in one module, a line saying only which module it came from
       // makes the reader grep for the message. DS 112.3.12 gives a component a
       // logger under the component's own name for the same reason.
       // For a factory instance the PID is part of the name — one line per
       // instance is otherwise indistinguishable from the same line four times
-      log: new ConsoleLogger$1(instance.pid !== void 0 && instance.pid !== runtime.className ? `[${loadedModule.manifest.id}/${runtime.className}(${instance.pid})]` : `[${loadedModule.manifest.id}/${runtime.className}]`),
-      configuration: instance.configuration,
-      properties: instance.properties,
-      configurationPid: instance.pid
+      log: new Dt(r.pid !== void 0 && r.pid !== t.className ? `[${e.manifest.id}/${t.className}(${r.pid})]` : `[${e.manifest.id}/${t.className}]`),
+      configuration: r.configuration,
+      properties: r.properties,
+      configurationPid: r.pid
     };
   }
   /**
@@ -7617,42 +5492,34 @@ Available shared libraries:
    * is rebuilt, or gains a second instance. In OSGi that separation is the line
    * between the framework and SCR.
    */
-  async applyConfiguration(event) {
-    if (this.disposed || !this.configurations)
-      return;
-    for (const [moduleId, runtimes] of [...this.componentRuntimes]) {
-      const loadedModule = this.modules.get(moduleId);
-      if (!loadedModule || loadedModule.state !== "active")
-        continue;
-      for (const runtime of runtimes) {
-        if (!this.affects(runtime, event))
-          continue;
-        await this.reconcileComponent(loadedModule, runtime);
+  async applyConfiguration(e) {
+    if (!(this.disposed || !this.configurations))
+      for (const [t, r] of [...this.componentRuntimes]) {
+        const n = this.modules.get(t);
+        if (!(!n || n.state !== "active"))
+          for (const s of r)
+            this.affects(s, e) && await this.reconcileComponent(n, s);
       }
-    }
   }
   /** Whether an event concerns a component: its own PID, or its factory PID */
-  affects(runtime, event) {
-    if (runtime.policy === "ignore")
-      return false;
-    const candidates = new Set(runtime.pids.flatMap((pid) => targetedPids(pid, runtime.target)));
-    return candidates.has(event.pid) || event.factoryPid !== void 0 && candidates.has(event.factoryPid);
+  affects(e, t) {
+    if (e.policy === "ignore")
+      return !1;
+    const r = new Set(e.pids.flatMap((n) => Le(n, e.target)));
+    return r.has(t.pid) || t.factoryPid !== void 0 && r.has(t.factoryPid);
   }
-  async reconcileComponent(loadedModule, runtime) {
-    const wanted = new Map(this.configurationsFor(runtime).map((entry) => [instanceKeyOf(entry), entry]));
-    for (const [key, instance] of [...runtime.instances]) {
-      if (!wanted.has(key)) {
-        await this.stopInstance(loadedModule, runtime, key, instance);
-      }
-    }
-    for (const [key, entry] of wanted) {
-      const existing = runtime.instances.get(key);
-      if (!existing) {
-        const created = this.registerInstance(loadedModule, runtime, entry);
-        await this.activateInstance(loadedModule, runtime, created);
+  async reconcileComponent(e, t) {
+    const r = new Map(this.configurationsFor(t).map((n) => [qt(n), n]));
+    for (const [n, s] of [...t.instances])
+      r.has(n) || await this.stopInstance(e, t, n, s);
+    for (const [n, s] of r) {
+      const o = t.instances.get(n);
+      if (!o) {
+        const a = this.registerInstance(e, t, s);
+        await this.activateInstance(e, t, a);
         continue;
       }
-      await this.updateInstance(loadedModule, runtime, existing, entry);
+      await this.updateInstance(e, t, o, s);
     }
   }
   /**
@@ -7662,65 +5529,55 @@ Available shared libraries:
    * only needs its properties updated, one with a `@modified()` method is handed
    * the new values, and one without is torn down and built again.
    */
-  async updateInstance(loadedModule, runtime, instance, wanted) {
-    const properties = this.propertiesFor(runtime.options.properties, wanted.values);
-    if (sameProperties(instance.properties, properties))
+  async updateInstance(e, t, r, n) {
+    const s = this.propertiesFor(t.options.properties, n.values);
+    if (so(r.properties, s))
       return;
-    const modifiedMethod = getModifiedMethod(runtime.ctor);
-    const created = instance.instance !== void 0 || this.isInstantiated(instance);
-    if (created && modifiedMethod === void 0) {
-      await this.stopInstance(loadedModule, runtime, instanceKeyOf(wanted), instance);
-      const rebuilt = this.registerInstance(loadedModule, runtime, wanted);
-      await this.activateInstance(loadedModule, runtime, rebuilt);
+    const o = vn(t.ctor), a = r.instance !== void 0 || this.isInstantiated(r);
+    if (a && o === void 0) {
+      await this.stopInstance(e, t, qt(n), r);
+      const d = this.registerInstance(e, t, n);
+      await this.activateInstance(e, t, d);
       return;
     }
-    instance.pid = wanted.pid;
-    instance.configuration = wanted.values;
-    instance.properties = properties;
-    const propertiesById = {};
-    for (const serviceId2 of runtime.options.service ?? []) {
-      propertiesById[serviceId2] = this.propertiesFor(runtime.options.propertiesById?.[serviceId2] ?? runtime.options.properties, wanted.values);
-    }
-    instance.registration?.setProperties(properties, {
-      ranking: this.rankingFor(runtime.options, wanted.values),
-      propertiesById
-    });
-    if (created && modifiedMethod !== void 0) {
-      await this.callComponentMethod(loadedModule, runtime, instance, modifiedMethod);
-    }
+    r.pid = n.pid, r.configuration = n.values, r.properties = s;
+    const f = {};
+    for (const d of t.options.service ?? [])
+      f[d] = this.propertiesFor(t.options.propertiesById?.[d] ?? t.options.properties, n.values);
+    r.registration?.setProperties(s, {
+      ranking: this.rankingFor(t.options, n.values),
+      propertiesById: f
+    }), a && o !== void 0 && await this.callComponentMethod(e, t, r, o);
   }
   /**
    * Whether the registry has built this instance, which it does for a delayed
    * component the moment a consumer resolves it — without telling the loader.
    */
-  isInstantiated(instance) {
-    const registration = instance.registration;
-    if (!registration)
-      return false;
-    const registry = this.services;
-    if (typeof registry.getServiceReferences !== "function")
-      return false;
-    return registry.getServiceReferences(registration.serviceId).some((reference) => reference.key === registration.key && reference.instantiated);
+  isInstantiated(e) {
+    const t = e.registration;
+    if (!t)
+      return !1;
+    const r = this.services;
+    return typeof r.getServiceReferences != "function" ? !1 : r.getServiceReferences(t.serviceId).some((n) => n.key === t.key && n.instantiated);
   }
   /** Run one instance's `@deactivate` method and withdraw its services */
-  async stopInstance(loadedModule, runtime, key, instance) {
-    runtime.instances.delete(key);
-    const deactivateMethod = getDeactivateMethod(runtime.ctor);
-    if (deactivateMethod !== void 0 && instance.instance) {
+  async stopInstance(e, t, r, n) {
+    t.instances.delete(r);
+    const s = gn(t.ctor);
+    if (s !== void 0 && n.instance)
       try {
-        await this.callComponentMethod(loadedModule, runtime, instance, deactivateMethod);
-      } catch (error) {
-        this.logger.error(`@deactivate of ${runtime.className} in ${loadedModule.manifest.id} failed:`, error);
+        await this.callComponentMethod(e, t, n, s);
+      } catch (o) {
+        this.logger.error(`@deactivate of ${t.className} in ${e.manifest.id} failed:`, o);
       }
-    }
-    instance.registration?.unregister();
+    n.registration?.unregister();
   }
   /** The key a component is switched off under */
-  componentKey(moduleId, className) {
-    return `${moduleId}/${className}`;
+  componentKey(e, t) {
+    return `${e}/${t}`;
   }
-  isComponentDisabled(moduleId, className) {
-    return this.disabledComponents.has(this.componentKey(moduleId, className));
+  isComponentDisabled(e, t) {
+    return this.disabledComponents.has(this.componentKey(e, t));
   }
   /**
    * Switch off one component, leaving its module and its siblings running.
@@ -7730,28 +5587,18 @@ Available shared libraries:
    * waiting — it is off, and only `enableComponent()` brings it back. Whatever
    * consumed its services reacts as it would to any withdrawal.
    */
-  async disableComponent(moduleId, className) {
-    this.disabledComponents.add(this.componentKey(moduleId, className));
-    const loadedModule = this.modules.get(moduleId);
-    const runtime = this.componentRuntimes.get(moduleId)?.find((candidate) => candidate.className === className);
-    if (!loadedModule || !runtime)
-      return false;
-    for (const [key, instance] of [...runtime.instances]) {
-      await this.stopInstance(loadedModule, runtime, key, instance);
-    }
-    this.logger.info(`Component ${className} of ${moduleId} disabled`);
-    await this.settle();
-    return true;
+  async disableComponent(e, t) {
+    this.disabledComponents.add(this.componentKey(e, t));
+    const r = this.modules.get(e), n = this.componentRuntimes.get(e)?.find((s) => s.className === t);
+    if (!r || !n)
+      return !1;
+    for (const [s, o] of [...n.instances])
+      await this.stopInstance(r, n, s, o);
+    return this.logger.info(`Component ${t} of ${e} disabled`), await this.settle(), !0;
   }
   /** Let a component run again, if what it needs is there */
-  async enableComponent(moduleId, className) {
-    if (!this.disabledComponents.delete(this.componentKey(moduleId, className))) {
-      return false;
-    }
-    this.logger.info(`Component ${className} of ${moduleId} enabled`);
-    this.enqueue(() => this.reconcile());
-    await this.settle();
-    return true;
+  async enableComponent(e, t) {
+    return this.disabledComponents.delete(this.componentKey(e, t)) ? (this.logger.info(`Component ${t} of ${e} enabled`), this.enqueue(() => this.reconcile()), await this.settle(), !0) : !1;
   }
   /** Components switched off individually, as `moduleId/ClassName` */
   getDisabledComponents() {
@@ -7761,204 +5608,148 @@ Available shared libraries:
    * Services a module declares but cannot register yet, because the components
    * offering them require configuration that does not exist.
    */
-  servicesAwaitingConfiguration(moduleId) {
-    const pending = /* @__PURE__ */ new Set();
-    for (const runtime of this.componentRuntimes.get(moduleId) ?? []) {
-      if (runtime.instances.size > 0)
-        continue;
-      for (const serviceId2 of runtime.options.service ?? []) {
-        pending.add(serviceId2);
-      }
-    }
-    return pending;
+  servicesAwaitingConfiguration(e) {
+    const t = /* @__PURE__ */ new Set();
+    for (const r of this.componentRuntimes.get(e) ?? [])
+      if (!(r.instances.size > 0))
+        for (const n of r.options.service ?? [])
+          t.add(n);
+    return t;
   }
   /** The exported classes of a module that declare `@component()` */
-  findComponents(loadedModule) {
-    const container = loadedModule.container;
-    if (container === null || typeof container !== "object")
+  findComponents(e) {
+    const t = e.container;
+    if (t === null || typeof t != "object")
       return [];
-    const found = [];
-    for (const exported of Object.values(container)) {
-      if (typeof exported !== "function")
+    const r = [];
+    for (const n of Object.values(t)) {
+      if (typeof n != "function")
         continue;
-      const options = getComponentMetadata(exported);
-      if (options === void 0)
-        continue;
-      found.push({ ctor: exported, options });
+      const s = ms(n);
+      s !== void 0 && r.push({ ctor: n, options: s });
     }
-    return found;
+    return r;
   }
   /** Run the `@deactivate` methods of a module's components, newest first */
-  async stopComponents(loadedModule) {
-    const moduleId = loadedModule.manifest.id;
-    const runtimes = this.componentRuntimes.get(moduleId);
-    if (!runtimes)
-      return;
-    this.componentRuntimes.delete(moduleId);
-    this.metatype?.removeAllOf(moduleId);
-    for (const runtime of [...runtimes].reverse()) {
-      await this.withdrawComponentFactory(loadedModule, runtime);
-      for (const [key, instance] of [...runtime.instances].reverse()) {
-        await this.stopInstance(loadedModule, runtime, key, instance);
+  async stopComponents(e) {
+    const t = e.manifest.id, r = this.componentRuntimes.get(t);
+    if (r) {
+      this.componentRuntimes.delete(t), this.metatype?.removeAllOf(t);
+      for (const n of [...r].reverse()) {
+        await this.withdrawComponentFactory(e, n);
+        for (const [s, o] of [...n.instances].reverse())
+          await this.stopInstance(e, n, s, o);
       }
     }
   }
   /**
    * Deactivate a module
    */
-  async deactivate(loadedModule) {
-    this.emit({
+  async deactivate(e) {
+    if (this.emit({
       type: "deactivating",
-      moduleId: loadedModule.manifest.id,
-      manifest: loadedModule.manifest,
+      moduleId: e.manifest.id,
+      manifest: e.manifest,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    loadedModule.state = "deactivating";
-    if (loadedModule.lifecycle?.deactivate) {
-      const context = this.createContext(loadedModule);
-      await loadedModule.lifecycle.deactivate(context);
+    }), e.state = "deactivating", e.lifecycle?.deactivate) {
+      const r = this.createContext(e);
+      await e.lifecycle.deactivate(r);
     }
-    await this.stopComponents(loadedModule);
-    const released = this.scopes.get(loadedModule.manifest.id)?.releaseAll() ?? [];
-    if (released.length > 0) {
-      this.logger.debug(`Withdrew service(s) of ${loadedModule.manifest.id}: ${released.join(", ")}`);
-    }
-    this.dynamicBindings.delete(loadedModule.manifest.id);
-    this.boundRegistrations.delete(loadedModule.manifest.id);
-    this.declarationMismatches.delete(loadedModule.manifest.id);
-    loadedModule.state = "stopped";
-    this.emit({
+    await this.stopComponents(e);
+    const t = this.scopes.get(e.manifest.id)?.releaseAll() ?? [];
+    t.length > 0 && this.logger.debug(`Withdrew service(s) of ${e.manifest.id}: ${t.join(", ")}`), this.dynamicBindings.delete(e.manifest.id), this.boundRegistrations.delete(e.manifest.id), this.declarationMismatches.delete(e.manifest.id), e.state = "stopped", this.emit({
       type: "deactivated",
-      moduleId: loadedModule.manifest.id,
-      manifest: loadedModule.manifest,
+      moduleId: e.manifest.id,
+      manifest: e.manifest,
       timestamp: /* @__PURE__ */ new Date()
     });
   }
   /**
    * Create module context for lifecycle hooks
    */
-  createContext(loadedModule) {
+  createContext(e) {
     return {
-      manifest: loadedModule.manifest,
-      getModule: (moduleId) => this.getModuleExports(moduleId),
-      isModuleLoaded: (moduleId) => this.isLoaded(moduleId),
-      services: this.scopeFor(loadedModule.manifest.id),
-      log: new ConsoleLogger$1(`[${loadedModule.manifest.id}]`)
+      manifest: e.manifest,
+      getModule: (t) => this.getModuleExports(t),
+      isModuleLoaded: (t) => this.isLoaded(t),
+      services: this.scopeFor(e.manifest.id),
+      log: new Dt(`[${e.manifest.id}]`)
     };
   }
   /**
    * The registry facade a module registers through
    */
-  scopeFor(moduleId) {
-    let scope = this.scopes.get(moduleId);
-    if (!scope) {
-      const declaredRankings = /* @__PURE__ */ new Map();
-      const declaredProperties = /* @__PURE__ */ new Map();
-      for (const service of this.manifests.get(moduleId)?.provides ?? []) {
-        if (service.ranking !== void 0) {
-          declaredRankings.set(service.id, service.ranking);
-        }
-        if (service.properties !== void 0) {
-          declaredProperties.set(service.id, service.properties);
-        }
-      }
-      scope = new ScopedServiceRegistry(moduleId, this.services, declaredRankings, declaredProperties);
-      this.scopes.set(moduleId, scope);
+  scopeFor(e) {
+    let t = this.scopes.get(e);
+    if (!t) {
+      const r = /* @__PURE__ */ new Map(), n = /* @__PURE__ */ new Map();
+      for (const s of this.manifests.get(e)?.provides ?? [])
+        s.ranking !== void 0 && r.set(s.id, s.ranking), s.properties !== void 0 && n.set(s.id, s.properties);
+      t = new Pn(e, this.services, r, n), this.scopes.set(e, t);
     }
-    return scope;
+    return t;
   }
   /**
    * Unload a module
    */
-  async unloadModule(moduleId) {
-    const loadedModule = this.modules.get(moduleId);
-    if (!loadedModule)
-      return false;
-    const dependents = this.resolver.getDependents(moduleId, Array.from(this.manifests.values()));
-    const loadedDependents = dependents.filter((d) => this.isLoaded(d));
-    if (loadedDependents.length > 0) {
-      this.logger.warn(`Cannot unload ${moduleId}: modules depend on it:`, loadedDependents);
-      return false;
-    }
-    if (loadedModule.state === "active") {
-      await this.deactivate(loadedModule);
-    }
-    this.modules.delete(moduleId);
-    this.scopes.delete(moduleId);
-    this.disabled.delete(moduleId);
-    this.preloaded.delete(moduleId);
-    this.emit({
+  async unloadModule(e) {
+    const t = this.modules.get(e);
+    if (!t)
+      return !1;
+    const n = this.resolver.getDependents(e, Array.from(this.manifests.values())).filter((s) => this.isLoaded(s));
+    return n.length > 0 ? (this.logger.warn(`Cannot unload ${e}: modules depend on it:`, n), !1) : (t.state === "active" && await this.deactivate(t), this.modules.delete(e), this.scopes.delete(e), this.disabled.delete(e), this.preloaded.delete(e), this.emit({
       type: "unloaded",
-      moduleId,
-      manifest: loadedModule.manifest,
+      moduleId: e,
+      manifest: t.manifest,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    this.enqueue(() => this.reconcile());
-    await this.settle();
-    this.logger.info(`Module ${moduleId} unloaded`);
-    return true;
+    }), this.enqueue(() => this.reconcile()), await this.settle(), this.logger.info(`Module ${e} unloaded`), !0);
   }
   /**
    * Reload a module (hot reload)
    */
-  async reloadModule(moduleId) {
-    if (!this.options.hotReload) {
+  async reloadModule(e) {
+    if (!this.options.hotReload)
       throw new Error("Hot reload is not enabled");
+    if (!this.modules.get(e))
+      throw new Error(`Module not loaded: ${e}`);
+    this.logger.info(`Reloading module ${e}...`);
+    const r = new Map([e, ...this.resolver.getTransitiveDependents(e, Array.from(this.manifests.values()))].filter((o) => this.preloaded.has(o)).map((o) => [o, this.preloaded.get(o)])), n = this.resolver.getTransitiveDependents(e, Array.from(this.manifests.values())).filter((o) => this.modules.has(o));
+    for (const o of [...n].reverse())
+      if (!await this.unloadModule(o))
+        throw new Error(`Cannot reload ${e}: dependent ${o} could not be unloaded`);
+    if (!await this.unloadModule(e))
+      throw new Error(`Cannot reload ${e}: it could not be unloaded`);
+    const s = this.manifests.get(e);
+    r.has(e) || (s.entry = `${s.entry.split("?")[0]}?t=${Date.now()}`), await this.loadModule(s, { container: r.get(e) });
+    for (const o of n) {
+      const a = this.manifests.get(o);
+      a && await this.loadModule(a, { container: r.get(o) });
     }
-    const loadedModule = this.modules.get(moduleId);
-    if (!loadedModule) {
-      throw new Error(`Module not loaded: ${moduleId}`);
-    }
-    this.logger.info(`Reloading module ${moduleId}...`);
-    const handedOver = new Map([moduleId, ...this.resolver.getTransitiveDependents(moduleId, Array.from(this.manifests.values()))].filter((id) => this.preloaded.has(id)).map((id) => [id, this.preloaded.get(id)]));
-    const affected = this.resolver.getTransitiveDependents(moduleId, Array.from(this.manifests.values())).filter((dependentId) => this.modules.has(dependentId));
-    for (const dependentId of [...affected].reverse()) {
-      if (!await this.unloadModule(dependentId)) {
-        throw new Error(`Cannot reload ${moduleId}: dependent ${dependentId} could not be unloaded`);
-      }
-    }
-    if (!await this.unloadModule(moduleId)) {
-      throw new Error(`Cannot reload ${moduleId}: it could not be unloaded`);
-    }
-    const manifest = this.manifests.get(moduleId);
-    if (!handedOver.has(moduleId)) {
-      manifest.entry = `${manifest.entry.split("?")[0]}?t=${Date.now()}`;
-    }
-    await this.loadModule(manifest, { container: handedOver.get(moduleId) });
-    for (const dependentId of affected) {
-      const dependentManifest = this.manifests.get(dependentId);
-      if (dependentManifest) {
-        await this.loadModule(dependentManifest, { container: handedOver.get(dependentId) });
-      }
-    }
-    await this.settle();
-    this.logger.info(`Module ${moduleId} reloaded`);
+    await this.settle(), this.logger.info(`Module ${e} reloaded`);
   }
   /**
    * Check if a module is loaded
    */
-  isLoaded(moduleId) {
-    const mod = this.modules.get(moduleId);
-    return mod?.state === "active";
+  isLoaded(e) {
+    return this.modules.get(e)?.state === "active";
   }
   /**
    * Get a loaded module
    */
-  getModule(moduleId) {
-    return this.modules.get(moduleId);
+  getModule(e) {
+    return this.modules.get(e);
   }
   /**
    * Get exports from a loaded module
    */
-  getModuleExports(moduleId) {
-    const mod = this.modules.get(moduleId);
-    if (!mod)
-      return void 0;
-    const exports$1 = {};
-    for (const [path, value] of mod.exports) {
-      exports$1[path] = value;
-    }
-    return exports$1;
+  getModuleExports(e) {
+    const t = this.modules.get(e);
+    if (!t)
+      return;
+    const r = {};
+    for (const [n, s] of t.exports)
+      r[n] = s;
+    return r;
   }
   /**
    * Stop a module and keep it stopped.
@@ -7970,44 +5761,29 @@ Available shared libraries:
    *
    * Its services are withdrawn, so consumers are parked in the usual cascade.
    */
-  async disableModule(moduleId) {
-    if (!this.manifests.has(moduleId))
-      return false;
-    this.disabled.add(moduleId);
-    const loadedModule = this.modules.get(moduleId);
-    if (loadedModule && loadedModule.state === "active") {
-      await this.deactivate(loadedModule);
-    }
-    this.enqueue(() => this.reconcile());
-    await this.settle();
-    this.logger.info(`Module ${moduleId} disabled`);
-    return true;
+  async disableModule(e) {
+    if (!this.manifests.has(e))
+      return !1;
+    this.disabled.add(e);
+    const t = this.modules.get(e);
+    return t && t.state === "active" && await this.deactivate(t), this.enqueue(() => this.reconcile()), await this.settle(), this.logger.info(`Module ${e} disabled`), !0;
   }
   /**
    * Allow a disabled module to run again. It activates as soon as what it needs
    * is available — immediately, if that is already the case.
    */
-  async enableModule(moduleId) {
-    if (!this.disabled.delete(moduleId))
-      return false;
-    const manifest = this.manifests.get(moduleId);
-    if (manifest && !this.modules.has(moduleId)) {
-      await this.loadModule(manifest, { awaitCascade: true });
-      this.logger.info(`Module ${moduleId} enabled`);
-      return true;
-    }
-    const loadedModule = this.modules.get(moduleId);
-    if (loadedModule && loadedModule.state === "stopped") {
-      this.park(loadedModule, this.unsatisfiedReasons(loadedModule.manifest));
-    }
-    this.enqueue(() => this.reconcile());
-    await this.settle();
-    this.logger.info(`Module ${moduleId} enabled`);
-    return true;
+  async enableModule(e) {
+    if (!this.disabled.delete(e))
+      return !1;
+    const t = this.manifests.get(e);
+    if (t && !this.modules.has(e))
+      return await this.loadModule(t, { awaitCascade: !0 }), this.logger.info(`Module ${e} enabled`), !0;
+    const r = this.modules.get(e);
+    return r && r.state === "stopped" && this.park(r, this.unsatisfiedReasons(r.manifest)), this.enqueue(() => this.reconcile()), await this.settle(), this.logger.info(`Module ${e} enabled`), !0;
   }
   /** Whether a module is switched off */
-  isDisabled(moduleId) {
-    return this.disabled.has(moduleId);
+  isDisabled(e) {
+    return this.disabled.has(e);
   }
   /** Every module that is currently switched off */
   getDisabledModules() {
@@ -8020,19 +5796,17 @@ Available shared libraries:
    * service, this answers who asked for it — `inspect service` in OSGi terms.
    * Derived from the manifests, so it also covers modules that are not running.
    */
-  getServiceConsumers(serviceId2) {
-    const consumers = [];
-    for (const manifest of this.manifests.values()) {
-      const requirement = manifest.requiresService?.find((entry) => entry.id === serviceId2);
-      if (!requirement)
-        continue;
-      consumers.push({
-        moduleId: manifest.id,
-        state: this.modules.get(manifest.id)?.state ?? "not loaded",
-        requirement
+  getServiceConsumers(e) {
+    const t = [];
+    for (const r of this.manifests.values()) {
+      const n = r.requiresService?.find((s) => s.id === e);
+      n && t.push({
+        moduleId: r.id,
+        state: this.modules.get(r.id)?.state ?? "not loaded",
+        requirement: n
       });
     }
-    return consumers;
+    return t;
   }
   /**
    * Every registered manifest, whether the module is loaded or not.
@@ -8048,7 +5822,7 @@ Available shared libraries:
    * is kept is what `requiresService` checks at runtime.
    */
   getWiring() {
-    return resolveWiring([...this.getManifests(), this.getSystemBundle()]);
+    return ii([...this.getManifests(), this.getSystemBundle()]);
   }
   /**
    * The module standing for the runtime itself, as OSGi's system bundle does.
@@ -8066,9 +5840,9 @@ Available shared libraries:
    * exist; `generateImportMap()` checks them instead.
    */
   getSystemBundle() {
-    const libraries = this.options.sharedLibraries !== "import-map" && isTsmRuntimeAvailable() ? tsmRuntime.getRegistered() : void 0;
-    return systemBundle({
-      libraries,
+    const e = this.options.sharedLibraries !== "import-map" && Yt() ? ue.getRegistered() : void 0;
+    return ni({
+      libraries: e,
       capabilities: this.options.systemCapabilities,
       // What this loader was actually given, so a module requiring it resolves
       // against the truth rather than against the package's feature list
@@ -8079,8 +5853,8 @@ Available shared libraries:
   /**
    * What a module is wired to, and what is wired to it — Gogo's `inspect`.
    */
-  getModuleWiring(moduleId) {
-    return wiringOf(this.getWiring(), moduleId);
+  getModuleWiring(e) {
+    return si(this.getWiring(), e);
   }
   /**
    * Requirements that no registered manifest can ever satisfy.
@@ -8099,7 +5873,7 @@ Available shared libraries:
    * Get all loaded module IDs
    */
   getLoadedModuleIds() {
-    return Array.from(this.modules.keys()).filter((id) => this.isLoaded(id));
+    return Array.from(this.modules.keys()).filter((e) => this.isLoaded(e));
   }
   /**
    * Get service registry
@@ -8110,54 +5884,53 @@ Available shared libraries:
   /**
    * Add event listener
    */
-  addEventListener(listener) {
-    this.listeners.add(listener);
+  addEventListener(e) {
+    this.listeners.add(e);
   }
   /**
    * Remove event listener
    */
-  removeEventListener(listener) {
-    this.listeners.delete(listener);
+  removeEventListener(e) {
+    this.listeners.delete(e);
   }
   /**
    * Emit an event
    */
-  emit(event) {
-    for (const listener of this.listeners) {
+  emit(e) {
+    for (const t of this.listeners)
       try {
-        listener.onModuleEvent(event);
-      } catch (error) {
-        this.logger.error("Event listener error:", error);
+        t.onModuleEvent(e);
+      } catch (r) {
+        this.logger.error("Event listener error:", r);
       }
-    }
   }
 }
-const DEFAULT_OPTIONS = {
+const uo = {
   fetchTimeout: 1e4,
-  fetchFn: (input, init) => fetch(input, init),
+  fetchFn: (i, e) => fetch(i, e),
   logger: void 0,
-  cacheTtl: 5 * 60 * 1e3
+  cacheTtl: 300 * 1e3
   // 5 minutes
 };
-class ConsoleLogger2 {
+class lo {
   prefix;
-  constructor(prefix = "[TSM Registry]") {
-    this.prefix = prefix;
+  constructor(e = "[TSM Registry]") {
+    this.prefix = e;
   }
-  debug(message, ...args) {
-    console.debug(`${this.prefix} ${message}`, ...args);
+  debug(e, ...t) {
+    console.debug(`${this.prefix} ${e}`, ...t);
   }
-  info(message, ...args) {
-    console.info(`${this.prefix} ${message}`, ...args);
+  info(e, ...t) {
+    console.info(`${this.prefix} ${e}`, ...t);
   }
-  warn(message, ...args) {
-    console.warn(`${this.prefix} ${message}`, ...args);
+  warn(e, ...t) {
+    console.warn(`${this.prefix} ${e}`, ...t);
   }
-  error(message, ...args) {
-    console.error(`${this.prefix} ${message}`, ...args);
+  error(e, ...t) {
+    console.error(`${this.prefix} ${e}`, ...t);
   }
 }
-class PluginRegistry {
+class ho {
   repositories = /* @__PURE__ */ new Map();
   discovered = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
@@ -8166,44 +5939,35 @@ class PluginRegistry {
   // Caches
   indexCache = /* @__PURE__ */ new Map();
   manifestCache = /* @__PURE__ */ new Map();
-  constructor(options = {}) {
-    this.options = { ...DEFAULT_OPTIONS, ...options };
-    this.logger = options.logger ?? new ConsoleLogger2();
+  constructor(e = {}) {
+    this.options = { ...uo, ...e }, this.logger = e.logger ?? new lo();
   }
   /**
    * Add a plugin repository
    */
-  addRepository(repo) {
-    const normalizedRepo = {
-      ...repo,
-      url: repo.url.replace(/\/$/, ""),
-      enabled: repo.enabled ?? true,
-      priority: repo.priority ?? 0
+  addRepository(e) {
+    const t = {
+      ...e,
+      url: e.url.replace(/\/$/, ""),
+      enabled: e.enabled ?? !0,
+      priority: e.priority ?? 0
     };
-    this.repositories.set(repo.id, normalizedRepo);
-    this.logger.info(`Added repository: ${repo.name} (${repo.url})`);
-    this.emit({
+    this.repositories.set(e.id, t), this.logger.info(`Added repository: ${e.name} (${e.url})`), this.emit({
       type: "repository-added",
-      repository: normalizedRepo,
+      repository: t,
       timestamp: /* @__PURE__ */ new Date()
     });
   }
   /**
    * Remove a plugin repository
    */
-  removeRepository(repoId) {
-    const repo = this.repositories.get(repoId);
-    if (!repo)
-      return false;
-    this.repositories.delete(repoId);
-    this.discovered.delete(repoId);
-    this.emit({
+  removeRepository(e) {
+    const t = this.repositories.get(e);
+    return t ? (this.repositories.delete(e), this.discovered.delete(e), this.emit({
       type: "repository-removed",
-      repository: repo,
+      repository: t,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    this.logger.info(`Removed repository: ${repo.name}`);
-    return true;
+    }), this.logger.info(`Removed repository: ${t.name}`), !0) : !1;
   }
   /**
    * Get all configured repositories
@@ -8214,693 +5978,548 @@ class PluginRegistry {
   /**
    * Get a specific repository
    */
-  getRepository(repoId) {
-    return this.repositories.get(repoId);
+  getRepository(e) {
+    return this.repositories.get(e);
   }
   /**
    * Discover all modules from all enabled repositories
    */
   async discoverAll() {
-    const allDiscovered = [];
-    const enabledRepos = Array.from(this.repositories.values()).filter((r) => r.enabled).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-    for (const repo of enabledRepos) {
+    const e = [], t = Array.from(this.repositories.values()).filter((r) => r.enabled).sort((r, n) => (n.priority ?? 0) - (r.priority ?? 0));
+    for (const r of t)
       try {
-        const modules = await this.discoverFromRepository(repo);
-        allDiscovered.push(...modules);
-      } catch (error) {
-        this.logger.error(`Failed to discover from ${repo.name}:`, error);
-        this.emit({
+        const n = await this.discoverFromRepository(r);
+        e.push(...n);
+      } catch (n) {
+        this.logger.error(`Failed to discover from ${r.name}:`, n), this.emit({
           type: "discovery-error",
-          repository: repo,
-          error,
+          repository: r,
+          error: n,
           timestamp: /* @__PURE__ */ new Date()
         });
       }
-    }
-    return allDiscovered;
+    return e;
   }
   /**
    * Discover modules from a specific repository
    */
-  async discoverFromRepository(repo) {
-    this.logger.debug(`Discovering modules from ${repo.name}...`);
-    const index = await this.fetchIndex(repo);
-    this.logger.debug(`Found ${index.modules.length} modules in ${repo.name}`);
-    const discovered = [];
-    for (const moduleId of index.modules) {
+  async discoverFromRepository(e) {
+    this.logger.debug(`Discovering modules from ${e.name}...`);
+    const t = await this.fetchIndex(e);
+    this.logger.debug(`Found ${t.modules.length} modules in ${e.name}`);
+    const r = [];
+    for (const n of t.modules)
       try {
-        const manifest = await this.fetchManifest(repo, moduleId);
-        if (!manifest.entry.startsWith("http")) {
-          manifest.entry = `${repo.url}/${moduleId}/${manifest.entry}`;
-        }
-        const discoveredModule = {
-          manifest,
-          repository: repo,
-          manifestUrl: `${repo.url}/${moduleId}/manifest.json`
+        const s = await this.fetchManifest(e, n);
+        s.entry.startsWith("http") || (s.entry = `${e.url}/${n}/${s.entry}`);
+        const o = {
+          manifest: s,
+          repository: e,
+          manifestUrl: `${e.url}/${n}/manifest.json`
         };
-        discovered.push(discoveredModule);
-      } catch (error) {
-        this.logger.warn(`Failed to fetch manifest for ${moduleId}:`, error);
+        r.push(o);
+      } catch (s) {
+        this.logger.warn(`Failed to fetch manifest for ${n}:`, s);
       }
-    }
-    this.discovered.set(repo.id, discovered);
-    this.emit({
+    return this.discovered.set(e.id, r), this.emit({
       type: "modules-discovered",
-      repository: repo,
-      modules: discovered,
+      repository: e,
+      modules: r,
       timestamp: /* @__PURE__ */ new Date()
-    });
-    this.logger.info(`Discovered ${discovered.length} modules from ${repo.name}`);
-    return discovered;
+    }), this.logger.info(`Discovered ${r.length} modules from ${e.name}`), r;
   }
   /**
    * Get all discovered modules (from cache)
    */
   getDiscoveredModules() {
-    const all = [];
-    for (const modules of this.discovered.values()) {
-      all.push(...modules);
-    }
-    return all;
+    const e = [];
+    for (const t of this.discovered.values())
+      e.push(...t);
+    return e;
   }
   /**
    * Get manifests for all discovered modules
    * Deduplicates by ID, keeping highest version from highest priority repo
    */
   getManifests() {
-    const moduleMap = /* @__PURE__ */ new Map();
-    const sortedRepos = Array.from(this.repositories.values()).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-    for (const repo of sortedRepos) {
-      const modules = this.discovered.get(repo.id) ?? [];
-      for (const { manifest } of modules) {
-        const existing = moduleMap.get(manifest.id);
-        if (!existing) {
-          moduleMap.set(manifest.id, { manifest, priority: repo.priority ?? 0 });
-        } else if (repo.priority === existing.priority) {
-          if (semverExports.gt(manifest.version, existing.manifest.version)) {
-            moduleMap.set(manifest.id, { manifest, priority: repo.priority ?? 0 });
-          }
-        }
+    const e = /* @__PURE__ */ new Map(), t = Array.from(this.repositories.values()).sort((r, n) => (n.priority ?? 0) - (r.priority ?? 0));
+    for (const r of t) {
+      const n = this.discovered.get(r.id) ?? [];
+      for (const { manifest: s } of n) {
+        const o = e.get(s.id);
+        o ? r.priority === o.priority && K.gt(s.version, o.manifest.version) && e.set(s.id, { manifest: s, priority: r.priority ?? 0 }) : e.set(s.id, { manifest: s, priority: r.priority ?? 0 });
       }
     }
-    return Array.from(moduleMap.values()).map((e) => e.manifest);
+    return Array.from(e.values()).map((r) => r.manifest);
   }
   /**
    * Find a specific module by ID
    */
-  findModule(moduleId, versionRange) {
-    const candidates = [];
-    for (const modules of this.discovered.values()) {
-      for (const discovered of modules) {
-        if (discovered.manifest.id === moduleId) {
-          if (!versionRange || semverExports.satisfies(discovered.manifest.version, versionRange)) {
-            candidates.push(discovered);
-          }
-        }
-      }
-    }
-    if (candidates.length === 0)
-      return void 0;
-    return candidates.sort((a, b) => semverExports.rcompare(a.manifest.version, b.manifest.version))[0];
+  findModule(e, t) {
+    const r = [];
+    for (const n of this.discovered.values())
+      for (const s of n)
+        s.manifest.id === e && (!t || K.satisfies(s.manifest.version, t)) && r.push(s);
+    if (r.length !== 0)
+      return r.sort((n, s) => K.rcompare(n.manifest.version, s.manifest.version))[0];
   }
   /**
    * Find all versions of a module
    */
-  findModuleVersions(moduleId) {
-    const versions = [];
-    for (const modules of this.discovered.values()) {
-      for (const discovered of modules) {
-        if (discovered.manifest.id === moduleId) {
-          versions.push(discovered);
-        }
-      }
-    }
-    return versions.sort((a, b) => semverExports.rcompare(a.manifest.version, b.manifest.version));
+  findModuleVersions(e) {
+    const t = [];
+    for (const r of this.discovered.values())
+      for (const n of r)
+        n.manifest.id === e && t.push(n);
+    return t.sort((r, n) => K.rcompare(r.manifest.version, n.manifest.version));
   }
   /**
    * Check for updates to currently loaded modules
    */
-  async checkUpdates(loadedManifests) {
+  async checkUpdates(e) {
     await this.discoverAll();
-    const updates = [];
-    for (const loaded of loadedManifests) {
-      const available = this.findModule(loaded.id);
-      if (available && semverExports.gt(available.manifest.version, loaded.version)) {
-        updates.push({
-          moduleId: loaded.id,
-          currentVersion: loaded.version,
-          availableVersion: available.manifest.version,
-          repository: available.repository
-        });
-      }
-    }
-    if (updates.length > 0) {
-      this.emit({
-        type: "update-available",
-        updates,
-        timestamp: /* @__PURE__ */ new Date()
+    const t = [];
+    for (const r of e) {
+      const n = this.findModule(r.id);
+      n && K.gt(n.manifest.version, r.version) && t.push({
+        moduleId: r.id,
+        currentVersion: r.version,
+        availableVersion: n.manifest.version,
+        repository: n.repository
       });
     }
-    return updates;
+    return t.length > 0 && this.emit({
+      type: "update-available",
+      updates: t,
+      timestamp: /* @__PURE__ */ new Date()
+    }), t;
   }
   /**
    * Fetch repository index
    */
-  async fetchIndex(repo) {
-    const url = `${repo.url}/index.json`;
-    const cached = this.indexCache.get(url);
-    if (cached && this.isCacheValid(cached)) {
-      return cached.data;
-    }
-    const response = await this.fetchWithTimeout(url, repo.token);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch index: ${response.status} ${response.statusText}`);
-    }
-    const index = await response.json();
-    if (!index.modules || !Array.isArray(index.modules)) {
+  async fetchIndex(e) {
+    const t = `${e.url}/index.json`, r = this.indexCache.get(t);
+    if (r && this.isCacheValid(r))
+      return r.data;
+    const n = await this.fetchWithTimeout(t, e.token);
+    if (!n.ok)
+      throw new Error(`Failed to fetch index: ${n.status} ${n.statusText}`);
+    const s = await n.json();
+    if (!s.modules || !Array.isArray(s.modules))
       throw new Error("Invalid repository index: missing modules array");
-    }
-    this.indexCache.set(url, { data: index, timestamp: Date.now() });
-    return index;
+    return this.indexCache.set(t, { data: s, timestamp: Date.now() }), s;
   }
   /**
    * Fetch module manifest
    */
-  async fetchManifest(repo, moduleId) {
-    const url = `${repo.url}/${moduleId}/manifest.json`;
-    const cached = this.manifestCache.get(url);
-    if (cached && this.isCacheValid(cached)) {
-      return cached.data;
-    }
-    const response = await this.fetchWithTimeout(url, repo.token);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch manifest: ${response.status} ${response.statusText}`);
-    }
-    const manifest = await response.json();
-    if (!manifest.id || !manifest.name || !manifest.version || !manifest.entry) {
-      throw new Error(`Invalid manifest for ${moduleId}: missing required fields`);
-    }
-    this.manifestCache.set(url, { data: manifest, timestamp: Date.now() });
-    return manifest;
+  async fetchManifest(e, t) {
+    const r = `${e.url}/${t}/manifest.json`, n = this.manifestCache.get(r);
+    if (n && this.isCacheValid(n))
+      return n.data;
+    const s = await this.fetchWithTimeout(r, e.token);
+    if (!s.ok)
+      throw new Error(`Failed to fetch manifest: ${s.status} ${s.statusText}`);
+    const o = await s.json();
+    if (!o.id || !o.name || !o.version || !o.entry)
+      throw new Error(`Invalid manifest for ${t}: missing required fields`);
+    return this.manifestCache.set(r, { data: o, timestamp: Date.now() }), o;
   }
   /**
    * Fetch with timeout and optional auth
    */
-  async fetchWithTimeout(url, token) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.options.fetchTimeout);
+  async fetchWithTimeout(e, t) {
+    const r = new AbortController(), n = setTimeout(() => r.abort(), this.options.fetchTimeout);
     try {
-      const headers = {};
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-      return await this.options.fetchFn(url, {
-        headers,
-        signal: controller.signal
+      const s = {};
+      return t && (s.Authorization = `Bearer ${t}`), await this.options.fetchFn(e, {
+        headers: s,
+        signal: r.signal
       });
     } finally {
-      clearTimeout(timeout);
+      clearTimeout(n);
     }
   }
   /**
    * Check if cache entry is still valid
    */
-  isCacheValid(entry) {
-    if (this.options.cacheTtl === 0)
-      return false;
-    return Date.now() - entry.timestamp < this.options.cacheTtl;
+  isCacheValid(e) {
+    return this.options.cacheTtl === 0 ? !1 : Date.now() - e.timestamp < this.options.cacheTtl;
   }
   /**
    * Clear all caches
    */
   clearCache() {
-    this.indexCache.clear();
-    this.manifestCache.clear();
-    this.logger.debug("Cache cleared");
+    this.indexCache.clear(), this.manifestCache.clear(), this.logger.debug("Cache cleared");
   }
   /**
    * Add event listener
    */
-  addEventListener(listener) {
-    this.listeners.add(listener);
+  addEventListener(e) {
+    this.listeners.add(e);
   }
   /**
    * Remove event listener
    */
-  removeEventListener(listener) {
-    this.listeners.delete(listener);
+  removeEventListener(e) {
+    this.listeners.delete(e);
   }
   /**
    * Emit event to listeners
    */
-  emit(event) {
-    for (const listener of this.listeners) {
+  emit(e) {
+    for (const t of this.listeners)
       try {
-        listener.onRegistryEvent(event);
-      } catch (error) {
-        this.logger.error("Registry event listener error:", error);
+        t.onRegistryEvent(e);
+      } catch (r) {
+        this.logger.error("Registry event listener error:", r);
       }
-    }
   }
 }
-function serviceId(id) {
-  return id;
+function po(i) {
+  return i;
 }
-function offeredByModules(manifests) {
-  const offered = {};
-  for (const manifest of manifests) {
-    for (const capability of manifest.capabilities ?? []) {
-      if (capability.namespace !== LIBRARY_NAMESPACE)
+function gi(i) {
+  const e = {};
+  for (const t of i)
+    for (const r of t.capabilities ?? []) {
+      if (r.namespace !== xe)
         continue;
-      const library = capability.attributes?.library;
-      if (typeof library !== "string")
+      const n = r.attributes?.library;
+      if (typeof n != "string")
         continue;
-      const version = capability.attributes?.version;
-      offered[library] = {
+      const s = r.attributes?.version;
+      e[n] = {
         // The module's own entry is where the package lives: a library bundle is
         // the package, so there is nothing else it could point at
-        url: manifest.entry,
-        version: typeof version === "string" ? version : void 0,
-        moduleId: manifest.id
+        url: t.entry,
+        version: typeof s == "string" ? s : void 0,
+        moduleId: t.id
       };
     }
-  }
-  return offered;
+  return e;
 }
-function generateImportMap(manifests, offered = {}) {
-  const imports = {};
-  const missing = [];
-  const incompatible = [];
-  const shadowed = [];
-  const fromModules = offeredByModules(manifests);
-  for (const [library, entry] of Object.entries(fromModules)) {
-    if (offered[library] === void 0)
+function go(i, e = {}) {
+  const t = {}, r = [], n = [], s = [], o = gi(i);
+  for (const [a, f] of Object.entries(o)) {
+    if (e[a] === void 0)
       continue;
-    const host = offered[library];
-    shadowed.push({
-      library,
-      moduleId: entry.moduleId,
-      moduleVersion: entry.version,
-      hostVersion: typeof host === "string" ? void 0 : host.version
+    const d = e[a];
+    s.push({
+      library: a,
+      moduleId: f.moduleId,
+      moduleVersion: f.version,
+      hostVersion: typeof d == "string" ? void 0 : d.version
     });
   }
-  for (const manifest of manifests) {
-    for (const dependency of manifest.sharedDependencies ?? []) {
-      const entry = offered[dependency.id] ?? fromModules[dependency.id];
-      if (entry === void 0) {
-        missing.push({
-          moduleId: manifest.id,
-          library: dependency.id,
-          versionRange: dependency.versionRange
+  for (const a of i)
+    for (const f of a.sharedDependencies ?? []) {
+      const d = e[f.id] ?? o[f.id];
+      if (d === void 0) {
+        r.push({
+          moduleId: a.id,
+          library: f.id,
+          versionRange: f.versionRange
         });
         continue;
       }
-      const library = typeof entry === "string" ? { url: entry } : entry;
-      if (library.version !== void 0 && semver.validRange(dependency.versionRange) && !semver.satisfies(library.version, dependency.versionRange, { includePrerelease: true })) {
-        incompatible.push({
-          moduleId: manifest.id,
-          library: dependency.id,
-          versionRange: dependency.versionRange,
-          offered: library.version
+      const c = typeof d == "string" ? { url: d } : d;
+      if (c.version !== void 0 && le.validRange(f.versionRange) && !le.satisfies(c.version, f.versionRange, { includePrerelease: !0 })) {
+        n.push({
+          moduleId: a.id,
+          library: f.id,
+          versionRange: f.versionRange,
+          offered: c.version
         });
         continue;
       }
-      imports[dependency.id] = library.url;
+      t[f.id] = c.url;
     }
-  }
-  return { importMap: { imports }, missing, incompatible, shadowed };
+  return { importMap: { imports: t }, missing: r, incompatible: n, shadowed: s };
 }
-function importMapScript(map) {
-  const json = JSON.stringify(map, null, 2).replace(/<\/script/gi, "<\\/script");
+function mo(i) {
   return `<script type="importmap">
-${json}
+${JSON.stringify(i, null, 2).replace(/<\/script/gi, "<\\/script")}
 <\/script>`;
 }
-function installImportMap(map, target = document) {
-  if (target.querySelector('script[type="importmap"]') !== null)
-    return false;
-  const script = target.createElement("script");
-  script.type = "importmap";
-  script.textContent = JSON.stringify(map);
-  target.head.appendChild(script);
-  return true;
+function vo(i, e = document) {
+  if (e.querySelector('script[type="importmap"]') !== null)
+    return !1;
+  const t = e.createElement("script");
+  return t.type = "importmap", t.textContent = JSON.stringify(i), e.head.appendChild(t), !0;
 }
-async function installFeature(feature, options) {
-  const { loader, configurationAdmin, resolve } = options;
-  const label = formatFeatureId(feature.id);
-  const problems = validateFeature(feature, {
-    supplied: options.variables,
-    handles: options.handles
+async function yo(i, e) {
+  const { loader: t, configurationAdmin: r, resolve: n } = e, s = fe(i.id), o = sr(i, {
+    supplied: e.variables,
+    handles: e.handles
   });
-  if (problems.length > 0) {
-    throw new Error(`Feature ${label} cannot be installed:
-` + problems.map((entry) => `  ${entry.at}: ${entry.problem}`).join("\n"));
+  if (o.length > 0)
+    throw new Error(`Feature ${s} cannot be installed:
+` + o.map((p) => `  ${p.at}: ${p.problem}`).join(`
+`));
+  const a = nr(i, e.variables), f = Object.keys(a);
+  if (f.length > 0 && !r)
+    throw new Error(`Feature ${s} carries configuration for ${f.length} PID(s) but no Configuration Admin was given — its components would start on defaults`);
+  const d = [], c = [];
+  for (const p of i.bundles) {
+    const m = await n(p.id);
+    m ? d.push(m) : c.push(fe(p.id));
   }
-  const configurations = resolveConfigurations(feature, options.variables);
-  const pids = Object.keys(configurations);
-  if (pids.length > 0 && !configurationAdmin) {
-    throw new Error(`Feature ${label} carries configuration for ${pids.length} PID(s) but no Configuration Admin was given — its components would start on defaults`);
-  }
-  const manifests = [];
-  const unavailable = [];
-  for (const bundle of feature.bundles) {
-    const manifest = await resolve(bundle.id);
-    if (manifest)
-      manifests.push(manifest);
-    else
-      unavailable.push(formatFeatureId(bundle.id));
-  }
-  if (unavailable.length > 0) {
-    throw new Error(`Feature ${label} lists module(s) nothing provides: ${unavailable.join(", ")}`);
-  }
-  for (const [pid, properties] of Object.entries(configurations)) {
-    await configurationAdmin.getConfiguration(pid).update(properties);
-  }
-  loader.register(manifests);
-  if (options.load !== false) {
-    await loader.loadAll();
-  }
-  await loader.settle();
-  const loaded = options.load === false ? [] : manifests.map((manifest) => manifest.id).filter((id) => loader.getModule(id)?.state === "active");
-  return { feature, manifests, loaded, configured: pids };
+  if (c.length > 0)
+    throw new Error(`Feature ${s} lists module(s) nothing provides: ${c.join(", ")}`);
+  for (const [p, m] of Object.entries(a))
+    await r.getConfiguration(p).update(m);
+  t.register(d), e.load !== !1 && await t.loadAll(), await t.settle();
+  const l = e.load === !1 ? [] : d.map((p) => p.id).filter((p) => t.getModule(p)?.state === "active");
+  return { feature: i, manifests: d, loaded: l, configured: f };
 }
-function unsatisfiedRequirements(feature, options) {
-  const inFeature = new Set(feature.bundles.map((bundle) => bundle.id.name));
-  const wiring = options.loader.getWiring();
-  return wiring.unresolved.filter((entry) => inFeature.has(entry.moduleId)).map((entry) => `${entry.moduleId}: ${entry.requirement.namespace}` + (entry.requirement.filter ? ` ${entry.requirement.filter}` : "") + ` (${entry.reason})`);
+function mi(i, e) {
+  const t = new Set(i.bundles.map((n) => n.id.name));
+  return e.loader.getWiring().unresolved.filter((n) => t.has(n.moduleId)).map((n) => `${n.moduleId}: ${n.requirement.namespace}` + (n.requirement.filter ? ` ${n.requirement.filter}` : "") + ` (${n.reason})`);
 }
-function isComplete(feature, options) {
-  return unsatisfiedRequirements(feature, options).length === 0;
+function wo(i, e) {
+  return mi(i, e).length === 0;
 }
-const DRAFT = "https://json-schema.org/draft/2020-12/schema";
-function toJsonSchema(definition, options = {}) {
-  const source = options.locale === void 0 ? definition : localizeDefinition(definition, options.locale);
-  const properties = {};
-  const required = [];
-  const validated = [];
-  for (const [id, attribute] of Object.entries(source.attributes)) {
-    properties[id] = propertyFor(attribute);
-    if (attribute.required !== false && attribute.default === void 0) {
-      required.push(id);
-    }
-    if (attribute.validate !== void 0) {
-      validated.push(id);
-    }
-  }
-  const schema = {
-    $schema: DRAFT,
+const vi = "https://json-schema.org/draft/2020-12/schema";
+function yi(i, e = {}) {
+  const t = e.locale === void 0 ? i : di(i, e.locale), r = {}, n = [], s = [];
+  for (const [a, f] of Object.entries(t.attributes))
+    r[a] = $o(f), f.required !== !1 && f.default === void 0 && n.push(a), f.validate !== void 0 && s.push(a);
+  const o = {
+    $schema: vi,
     type: "object",
-    "x-tsm-object-class": source.id,
-    properties
+    "x-tsm-object-class": t.id,
+    properties: r
   };
-  if (options.id !== void 0)
-    schema.$id = options.id;
-  if (source.name !== void 0)
-    schema.title = source.name;
-  if (source.description !== void 0)
-    schema.description = source.description;
-  if (required.length > 0)
-    schema.required = required;
-  if (validated.length > 0)
-    schema["x-tsm-validated"] = validated;
-  if (options.locale === void 0 && definition.localization !== void 0) {
-    schema["x-tsm-localization"] = definition.localization;
-  }
-  return schema;
+  return e.id !== void 0 && (o.$id = e.id), t.name !== void 0 && (o.title = t.name), t.description !== void 0 && (o.description = t.description), n.length > 0 && (o.required = n), s.length > 0 && (o["x-tsm-validated"] = s), e.locale === void 0 && i.localization !== void 0 && (o["x-tsm-localization"] = i.localization), o;
 }
-function toMetamodelSchema(source, options = {}) {
-  const definitions = Array.isArray(source) ? [...source] : collectDefinitions(source, options.locale);
-  const defs = {};
-  const taken = /* @__PURE__ */ new Set();
-  for (const definition of definitions) {
-    const schema = toJsonSchema(definition, options);
-    delete schema.$schema;
-    delete schema.$id;
-    const className = uniqueClassName(definition.id, taken);
-    extractEnumerations(className, schema, defs, taken);
-    defs[className] = schema;
+function Eo(i, e = {}) {
+  const t = Array.isArray(i) ? [...i] : bo(i, e.locale), r = {}, n = /* @__PURE__ */ new Set();
+  for (const o of t) {
+    const a = yi(o, e);
+    delete a.$schema, delete a.$id;
+    const f = wi(o.id, n);
+    Ro(f, a, r, n), r[f] = a;
   }
-  const bundle = { $schema: DRAFT, $defs: defs };
-  if (options.id !== void 0)
-    bundle.$id = options.id;
-  if (options.name !== void 0)
-    bundle.title = options.name;
-  return bundle;
+  const s = { $schema: vi, $defs: r };
+  return e.id !== void 0 && (s.$id = e.id), e.name !== void 0 && (s.title = e.name), s;
 }
-function extractEnumerations(className, schema, defs, taken) {
-  for (const [id, property] of Object.entries(schema.properties ?? {})) {
-    const holder = property.type === "array" && property.items ? property.items : property;
-    if (holder.enum === void 0)
+function Ro(i, e, t, r) {
+  for (const [n, s] of Object.entries(e.properties ?? {})) {
+    const o = s.type === "array" && s.items ? s.items : s;
+    if (o.enum === void 0)
       continue;
-    const name = uniqueClassName(`${className} ${id}`, taken);
-    defs[name] = { enum: holder.enum };
-    if (holder["x-tsm-option-labels"] !== void 0) {
-      defs[name]["x-tsm-option-labels"] = holder["x-tsm-option-labels"];
-    }
-    delete holder.enum;
-    delete holder["x-tsm-option-labels"];
-    delete holder.type;
-    holder.$ref = `#/$defs/${name}`;
+    const a = wi(`${i} ${n}`, r);
+    t[a] = { enum: o.enum }, o["x-tsm-option-labels"] !== void 0 && (t[a]["x-tsm-option-labels"] = o["x-tsm-option-labels"]), delete o.enum, delete o["x-tsm-option-labels"], delete o.type, o.$ref = `#/$defs/${a}`;
   }
 }
-function collectDefinitions(registry, locale) {
-  return [...registry.getPids(), ...registry.getFactoryPids()].map((pid) => registry.getObjectClassDefinition(pid, locale)).filter((definition) => definition !== void 0);
+function bo(i, e) {
+  return [...i.getPids(), ...i.getFactoryPids()].map((t) => i.getObjectClassDefinition(t, e)).filter((t) => t !== void 0);
 }
-function uniqueClassName(id, taken) {
-  const base = id.split(/[^A-Za-z0-9]+/).filter((part) => part.length > 0).map((part) => part[0].toUpperCase() + part.slice(1)).join("") || "Configuration";
-  let name = base;
-  let counter = 1;
-  while (taken.has(name)) {
-    name = `${base}${++counter}`;
-  }
-  taken.add(name);
-  return name;
+function wi(i, e) {
+  const t = i.split(/[^A-Za-z0-9]+/).filter((s) => s.length > 0).map((s) => s[0].toUpperCase() + s.slice(1)).join("") || "Configuration";
+  let r = t, n = 1;
+  for (; e.has(r); )
+    r = `${t}${++n}`;
+  return e.add(r), r;
 }
-function propertyFor(attribute) {
-  const value = valueSchema(attribute);
-  const cardinality = attribute.cardinality ?? "single";
-  const property = cardinality === "single" ? value : { type: "array", items: value };
-  if (typeof cardinality === "number") {
-    property.maxItems = cardinality;
-  }
-  if (attribute.name !== void 0)
-    property.title = attribute.name;
-  if (attribute.description !== void 0)
-    property.description = attribute.description;
-  if (attribute.default !== void 0)
-    property.default = attribute.default;
-  return property;
+function $o(i) {
+  const e = Io(i), t = i.cardinality ?? "single", r = t === "single" ? e : { type: "array", items: e };
+  return typeof t == "number" && (r.maxItems = t), i.name !== void 0 && (r.title = i.name), i.description !== void 0 && (r.description = i.description), i.default !== void 0 && (r.default = i.default), r;
 }
-function valueSchema(attribute) {
-  const schema = {
-    type: attribute.type === "password" ? "string" : attribute.type
+function Io(i) {
+  const e = {
+    type: i.type === "password" ? "string" : i.type
   };
-  if (attribute.type === "password") {
-    schema.format = "password";
+  if (i.type === "password" && (e.format = "password"), i.min !== void 0 && (e.minimum = i.min), i.max !== void 0 && (e.maximum = i.max), i.minLength !== void 0 && (e.minLength = i.minLength), i.maxLength !== void 0 && (e.maxLength = i.maxLength), i.options) {
+    e.enum = i.options.map((r) => r.value);
+    const t = {};
+    for (const r of i.options)
+      r.label !== void 0 && (t[String(r.value)] = r.label);
+    Object.keys(t).length > 0 && (e["x-tsm-option-labels"] = t);
   }
-  if (attribute.min !== void 0)
-    schema.minimum = attribute.min;
-  if (attribute.max !== void 0)
-    schema.maximum = attribute.max;
-  if (attribute.minLength !== void 0)
-    schema.minLength = attribute.minLength;
-  if (attribute.maxLength !== void 0)
-    schema.maxLength = attribute.maxLength;
-  if (attribute.options) {
-    schema.enum = attribute.options.map((option) => option.value);
-    const labels = {};
-    for (const option of attribute.options) {
-      if (option.label !== void 0) {
-        labels[String(option.value)] = option.label;
-      }
-    }
-    if (Object.keys(labels).length > 0) {
-      schema["x-tsm-option-labels"] = labels;
-    }
-  }
-  return schema;
+  return e;
 }
-const tsm = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const So = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CM_VERSION,
-  COMPONENT_EXTENDER,
-  COMPONENT_FACTORY,
-  COMPONENT_FACTORY_SERVICE_ID,
-  COMPONENT_NAME,
-  COMPONENT_RUNTIME_SERVICE_ID,
-  CONDITION_ID,
-  CONDITION_SERVICE_ID,
-  CONFIGURATION_ADMIN_SERVICE_ID,
-  CONFIGURATION_IMPLEMENTATION,
-  ConfigurationAdmin,
-  DS_VERSION,
-  DefaultServiceRegistry,
-  DependencyResolver,
-  ENVIRONMENT,
-  EXTENDER_NAMESPACE,
-  FACTORY_PID_SEPARATOR,
-  FEATURE_IMPLEMENTATION,
-  FEATURE_RESOURCE_VERSION,
-  FEATURE_SERVICE_ID,
-  FEATURE_VERSION,
-  IDENTITY_NAMESPACE,
-  IMPLEMENTATION_NAMESPACE,
-  LIBRARY_NAMESPACE,
-  LocalStorageConfigurationStore,
-  METATYPE_EXTENDER,
-  METATYPE_SERVICE_ID,
-  METATYPE_VERSION,
-  MODULE_TYPE,
-  MemoryConfigurationStore,
-  MetatypeRegistry,
-  ModuleLoader,
-  PluginRegistry,
-  SERVICE_FACTORY_PID,
-  SERVICE_NAMESPACE,
-  SERVICE_PID,
-  SYSTEM_BUNDLE_ID,
-  ScopedServiceRegistry,
-  TARGETED_PID_SEPARATOR,
-  TRUE_CONDITION,
-  TRUE_CONDITION_FILTER,
-  TRUE_CONDITION_ID,
-  activate,
-  bind,
-  capabilitiesOf,
-  component,
-  componentFactoryFilter,
-  conditionFilter,
-  conditionProperties,
-  createServiceFilter,
-  deactivate,
-  featureService,
-  formatFeatureId,
-  generateImportMap,
-  importMapScript,
-  initTsmRuntime,
-  inject,
-  injectAll,
-  injectable,
-  installFeature,
-  installImportMap,
-  isComplete,
-  isTsmRuntimeAvailable,
-  libraryCapabilities,
-  missingVariables,
-  modified,
-  objectClass,
-  offeredByModules,
-  parseFeatureId,
-  perModule,
-  readFeature,
-  requirementsOf,
-  resolveConfigurations,
-  resolveWiring,
-  satisfies,
-  serviceId,
-  singleton,
-  stripComments,
-  systemBundle,
-  targetedPids,
-  toJsonSchema,
-  toMetamodelSchema,
-  transient,
-  tsmRuntime,
-  unbind,
-  unsatisfiedRequirements,
-  validateFeature,
-  wiringOf,
-  writeFeature
+  CM_VERSION: Hn,
+  COMPONENT_EXTENDER: kn,
+  COMPONENT_FACTORY: ar,
+  COMPONENT_FACTORY_SERVICE_ID: li,
+  COMPONENT_NAME: hi,
+  COMPONENT_RUNTIME_SERVICE_ID: jn,
+  CONDITION_ID: be,
+  CONDITION_SERVICE_ID: Xt,
+  CONFIGURATION_ADMIN_SERVICE_ID: oi,
+  CONFIGURATION_IMPLEMENTATION: qn,
+  ConfigurationAdmin: Fs,
+  DS_VERSION: Xn,
+  DefaultServiceRegistry: _n,
+  DependencyResolver: An,
+  ENVIRONMENT: Jn,
+  EXTENDER_NAMESPACE: we,
+  FACTORY_PID_SEPARATOR: Wt,
+  FEATURE_IMPLEMENTATION: xn,
+  FEATURE_RESOURCE_VERSION: Me,
+  FEATURE_SERVICE_ID: Fn,
+  FEATURE_VERSION: Bn,
+  IDENTITY_NAMESPACE: ce,
+  IMPLEMENTATION_NAMESPACE: Ee,
+  LIBRARY_NAMESPACE: xe,
+  LocalStorageConfigurationStore: ks,
+  METATYPE_EXTENDER: Dn,
+  METATYPE_SERVICE_ID: ui,
+  METATYPE_VERSION: Yn,
+  MODULE_TYPE: Kn,
+  MemoryConfigurationStore: fi,
+  MetatypeRegistry: Gs,
+  ModuleLoader: fo,
+  PluginRegistry: ho,
+  SERVICE_FACTORY_PID: ci,
+  SERVICE_NAMESPACE: or,
+  SERVICE_PID: ai,
+  SYSTEM_BUNDLE_ID: Te,
+  ScopedServiceRegistry: Pn,
+  TARGETED_PID_SEPARATOR: Ae,
+  TRUE_CONDITION: pi,
+  TRUE_CONDITION_FILTER: Ys,
+  TRUE_CONDITION_ID: cr,
+  activate: hs,
+  bind: ys,
+  capabilitiesOf: Qn,
+  component: ls,
+  componentFactoryFilter: Xs,
+  conditionFilter: Ks,
+  conditionProperties: Hs,
+  createServiceFilter: qe,
+  deactivate: ps,
+  featureService: Wn,
+  formatFeatureId: fe,
+  generateImportMap: go,
+  importMapScript: mo,
+  initTsmRuntime: Js,
+  inject: cs,
+  injectAll: os,
+  injectable: as,
+  installFeature: yo,
+  installImportMap: vo,
+  isComplete: wo,
+  isTsmRuntimeAvailable: Yt,
+  libraryCapabilities: ri,
+  missingVariables: ir,
+  modified: gs,
+  objectClass: xs,
+  offeredByModules: gi,
+  parseFeatureId: Fe,
+  perModule: ds,
+  readFeature: Un,
+  requirementsOf: ei,
+  resolveConfigurations: nr,
+  resolveWiring: ii,
+  satisfies: ti,
+  serviceId: po,
+  singleton: fs,
+  stripComments: Vn,
+  systemBundle: ni,
+  targetedPids: Le,
+  toJsonSchema: yi,
+  toMetamodelSchema: Eo,
+  transient: us,
+  tsmRuntime: ue,
+  unbind: ws,
+  unsatisfiedRequirements: mi,
+  validateFeature: sr,
+  wiringOf: si,
+  writeFeature: zn
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  CM_VERSION,
-  COMPONENT_EXTENDER,
-  COMPONENT_FACTORY,
-  COMPONENT_FACTORY_SERVICE_ID,
-  COMPONENT_NAME,
-  COMPONENT_RUNTIME_SERVICE_ID,
-  CONDITION_ID,
-  CONDITION_SERVICE_ID,
-  CONFIGURATION_ADMIN_SERVICE_ID,
-  CONFIGURATION_IMPLEMENTATION,
-  ConfigurationAdmin,
-  DS_VERSION,
-  DefaultServiceRegistry,
-  DependencyResolver,
-  ENVIRONMENT,
-  EXTENDER_NAMESPACE,
-  FACTORY_PID_SEPARATOR,
-  FEATURE_IMPLEMENTATION,
-  FEATURE_RESOURCE_VERSION,
-  FEATURE_SERVICE_ID,
-  FEATURE_VERSION,
-  IDENTITY_NAMESPACE,
-  IMPLEMENTATION_NAMESPACE,
-  LIBRARY_NAMESPACE,
-  LocalStorageConfigurationStore,
-  METATYPE_EXTENDER,
-  METATYPE_SERVICE_ID,
-  METATYPE_VERSION,
-  MODULE_TYPE,
-  MemoryConfigurationStore,
-  MetatypeRegistry,
-  ModuleLoader,
-  PluginRegistry,
-  SERVICE_FACTORY_PID,
-  SERVICE_NAMESPACE,
-  SERVICE_PID,
-  SYSTEM_BUNDLE_ID,
-  ScopedServiceRegistry,
-  TARGETED_PID_SEPARATOR,
-  TRUE_CONDITION,
-  TRUE_CONDITION_FILTER,
-  TRUE_CONDITION_ID,
-  activate,
-  bind,
-  capabilitiesOf,
-  component,
-  componentFactoryFilter,
-  conditionFilter,
-  conditionProperties,
-  createServiceFilter,
-  deactivate,
-  tsm as default,
-  featureService,
-  formatFeatureId,
-  generateImportMap,
-  importMapScript,
-  initTsmRuntime,
-  inject,
-  injectAll,
-  injectable,
-  installFeature,
-  installImportMap,
-  isComplete,
-  isTsmRuntimeAvailable,
-  libraryCapabilities,
-  missingVariables,
-  modified,
-  objectClass,
-  offeredByModules,
-  parseFeatureId,
-  perModule,
-  readFeature,
-  requirementsOf,
-  resolveConfigurations,
-  resolveWiring,
-  satisfies,
-  serviceId,
-  singleton,
-  stripComments,
-  systemBundle,
-  targetedPids,
-  toJsonSchema,
-  toMetamodelSchema,
-  transient,
-  tsmRuntime,
-  unbind,
-  unsatisfiedRequirements,
-  validateFeature,
-  wiringOf,
-  writeFeature
+  Hn as CM_VERSION,
+  kn as COMPONENT_EXTENDER,
+  ar as COMPONENT_FACTORY,
+  li as COMPONENT_FACTORY_SERVICE_ID,
+  hi as COMPONENT_NAME,
+  jn as COMPONENT_RUNTIME_SERVICE_ID,
+  be as CONDITION_ID,
+  Xt as CONDITION_SERVICE_ID,
+  oi as CONFIGURATION_ADMIN_SERVICE_ID,
+  qn as CONFIGURATION_IMPLEMENTATION,
+  Fs as ConfigurationAdmin,
+  Xn as DS_VERSION,
+  _n as DefaultServiceRegistry,
+  An as DependencyResolver,
+  Jn as ENVIRONMENT,
+  we as EXTENDER_NAMESPACE,
+  Wt as FACTORY_PID_SEPARATOR,
+  xn as FEATURE_IMPLEMENTATION,
+  Me as FEATURE_RESOURCE_VERSION,
+  Fn as FEATURE_SERVICE_ID,
+  Bn as FEATURE_VERSION,
+  ce as IDENTITY_NAMESPACE,
+  Ee as IMPLEMENTATION_NAMESPACE,
+  xe as LIBRARY_NAMESPACE,
+  ks as LocalStorageConfigurationStore,
+  Dn as METATYPE_EXTENDER,
+  ui as METATYPE_SERVICE_ID,
+  Yn as METATYPE_VERSION,
+  Kn as MODULE_TYPE,
+  fi as MemoryConfigurationStore,
+  Gs as MetatypeRegistry,
+  fo as ModuleLoader,
+  ho as PluginRegistry,
+  ci as SERVICE_FACTORY_PID,
+  or as SERVICE_NAMESPACE,
+  ai as SERVICE_PID,
+  Te as SYSTEM_BUNDLE_ID,
+  Pn as ScopedServiceRegistry,
+  Ae as TARGETED_PID_SEPARATOR,
+  pi as TRUE_CONDITION,
+  Ys as TRUE_CONDITION_FILTER,
+  cr as TRUE_CONDITION_ID,
+  hs as activate,
+  ys as bind,
+  Qn as capabilitiesOf,
+  ls as component,
+  Xs as componentFactoryFilter,
+  Ks as conditionFilter,
+  Hs as conditionProperties,
+  qe as createServiceFilter,
+  ps as deactivate,
+  So as default,
+  Wn as featureService,
+  fe as formatFeatureId,
+  go as generateImportMap,
+  mo as importMapScript,
+  Js as initTsmRuntime,
+  cs as inject,
+  os as injectAll,
+  as as injectable,
+  yo as installFeature,
+  vo as installImportMap,
+  wo as isComplete,
+  Yt as isTsmRuntimeAvailable,
+  ri as libraryCapabilities,
+  ir as missingVariables,
+  gs as modified,
+  xs as objectClass,
+  gi as offeredByModules,
+  Fe as parseFeatureId,
+  ds as perModule,
+  Un as readFeature,
+  ei as requirementsOf,
+  nr as resolveConfigurations,
+  ii as resolveWiring,
+  ti as satisfies,
+  po as serviceId,
+  fs as singleton,
+  Vn as stripComments,
+  ni as systemBundle,
+  Le as targetedPids,
+  yi as toJsonSchema,
+  Eo as toMetamodelSchema,
+  us as transient,
+  ue as tsmRuntime,
+  ws as unbind,
+  mi as unsatisfiedRequirements,
+  sr as validateFeature,
+  si as wiringOf,
+  zn as writeFeature
 };

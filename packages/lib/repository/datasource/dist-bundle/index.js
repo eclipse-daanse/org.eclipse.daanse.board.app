@@ -1,31 +1,29 @@
-import { DATASOURCE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { DATASOURCE_REPOSITORY as DATASOURCE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.datasource";
-const datasources = /* @__PURE__ */ new Map();
-class DatasourceRepository {
-  constructor(resolver) {
-    this.resolver = resolver;
+import { DATASOURCE_REPOSITORY as i, identifier as D } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { DATASOURCE_REPOSITORY as O, identifier as R } from "org.eclipse.daanse.board.app.lib.api.datasource";
+const a = /* @__PURE__ */ new Map();
+class n {
+  constructor(e) {
+    this.resolver = e;
   }
   availableDatasources = {};
   datasourcesByType = {};
   /** See IdentifierResolver: symbol description is the service id. */
-  resolveIdentifier(identifier3) {
-    return this.resolver.getRequired(identifier3.description);
+  resolveIdentifier(e) {
+    return this.resolver.getRequired(e.description);
   }
-  removeDatasource(datasourceId) {
-    if (datasources.has(datasourceId)) {
-      const datasource = datasources.get(datasourceId);
-      console.log(datasource);
-      datasource?.destroy();
-      datasources.delete(datasourceId);
+  removeDatasource(e) {
+    if (a.has(e)) {
+      const t = a.get(e);
+      console.log(t), t?.destroy(), a.delete(e);
     }
   }
-  getDatasource(datasourceId) {
-    const datasource = datasources.get(datasourceId);
-    if (!datasource) throw new Error(`Store with id ${datasourceId} not found`);
-    return datasource;
+  getDatasource(e) {
+    const t = a.get(e);
+    if (!t) throw new Error(`Store with id ${e} not found`);
+    return t;
   }
-  registerDatasourceType(name, identifiers) {
-    this.availableDatasources[name] = identifiers;
+  registerDatasourceType(e, t) {
+    this.availableDatasources[e] = t;
   }
   /**
    * Nimmt die Registrierung eines Datenquellen-Typs zurück.
@@ -36,12 +34,8 @@ class DatasourceRepository {
    *
    * @returns ob der Typ registriert war
    */
-  unregisterDatasourceType(name) {
-    if (!(name in this.availableDatasources)) {
-      return false;
-    }
-    delete this.availableDatasources[name];
-    return true;
+  unregisterDatasourceType(e) {
+    return e in this.availableDatasources ? (delete this.availableDatasources[e], !0) : !1;
   }
   getDataSourceTypes() {
     return Object.keys(this.availableDatasources);
@@ -49,67 +43,58 @@ class DatasourceRepository {
   get registeredDatasources() {
     return Object.keys(this.availableDatasources);
   }
-  getDatasourceIdentifiers(type) {
-    return this.availableDatasources[type];
+  getDatasourceIdentifiers(e) {
+    return this.availableDatasources[e];
   }
-  registerDatasource(datasourceId, type, config) {
-    const identifiers = this.availableDatasources[type];
-    if (identifiers) {
-      const datasourceFactory = this.resolveIdentifier(identifiers.Store);
-      const datasource = datasourceFactory(config);
-      datasources.set(datasourceId, datasource);
-      this.datasourcesByType[datasourceId] = type;
+  registerDatasource(e, t, o) {
+    const s = this.availableDatasources[t];
+    if (s) {
+      const d = this.resolveIdentifier(s.Store)(o);
+      a.set(e, d), this.datasourcesByType[e] = t;
     }
   }
-  getDatasourceType(datasourceId) {
-    return this.datasourcesByType[datasourceId];
+  getDatasourceType(e) {
+    return this.datasourcesByType[e];
   }
-  getDatasourceId(dataSource) {
-    let key;
-    datasources.forEach((aDataSource, akey) => {
-      if (dataSource === aDataSource) {
-        key = akey;
-      }
-    });
-    return key;
+  getDatasourceId(e) {
+    let t;
+    return a.forEach((o, s) => {
+      e === o && (t = s);
+    }), t;
   }
-  getDatasourceTypeFromDatasource(dataSource) {
-    const id = this.getDatasourceId(dataSource);
-    if (!id) return void 0;
-    return this.getDatasourceType(id);
+  getDatasourceTypeFromDatasource(e) {
+    const t = this.getDatasourceId(e);
+    if (t)
+      return this.getDatasourceType(t);
   }
 }
-function activate$1({ services }) {
-  services.register(DATASOURCE_REPOSITORY, new DatasourceRepository(services));
+function u({ services: r }) {
+  r.register(i, new n(r));
 }
-function deactivate$1({ services }) {
-  services.unregister(DATASOURCE_REPOSITORY);
+function l({ services: r }) {
+  r.unregister(i);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  DATASOURCE_REPOSITORY,
-  DatasourceRepository,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.datasource";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.datasource");
-  await activate$1?.(context);
+  DATASOURCE_REPOSITORY: i,
+  DatasourceRepository: n,
+  activate: u,
+  deactivate: l,
+  identifier: D
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.datasource", f = "0.0.1-next.1";
+async function h(r) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, y, f, "lib.repository.datasource"), await u?.(r);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function v(r) {
+  await l?.(r);
 }
 export {
-  DATASOURCE_REPOSITORY2 as DATASOURCE_REPOSITORY,
-  DatasourceRepository,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  O as DATASOURCE_REPOSITORY,
+  n as DatasourceRepository,
+  h as activate,
+  v as deactivate,
+  R as identifier
 };

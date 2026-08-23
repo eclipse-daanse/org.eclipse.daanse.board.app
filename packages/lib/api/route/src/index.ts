@@ -14,27 +14,20 @@
 /**
  * The route registry contract.
  *
- * The contract and nothing else - the OSGi API bundle. Implementations
- * and consumers both depend on this package; neither depends on the other.
+ * The contract and nothing else - the OSGi API bundle. The Ecore model
+ * lives here too (model/, generated into src/gen): model classes are part
+ * of a contract the way DTOs are part of an OSGi API package. The
+ * implementation extends RouteRegistry and provides the service.
  */
 
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-/*
- * Ecore-generated model classes live in the implementation package; the
- * types travel with the contract, the constructors do not. Moving the
- * models is a generator concern, noted as follow-up.
- */
-import type { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.repository.route'
+import { RouteRegistry } from './gen/RouteRegistry'
 
-export type { RouteDefinition }
+export { RouteRegistry } from './gen/RouteRegistry'
+export { RouteDefinition } from './gen/RouteDefinition'
 
-export interface RouteRegistry {
-  registerRoute(route: RouteDefinition): boolean;
-  unregisterRoute(name?: string): boolean;
-  getRoute(name?: string): RouteDefinition;
-  getAllRoutes(): RouteDefinition;
-  getAllRoutesArray(): RouteDefinition[];
-}
-
+/** Typed service id - the name and the contract declared once, here. */
 export const ROUTE_REGISTRY_ID = serviceId<RouteRegistry>('RouteRegistry')
+
+/** The matching symbol for Vue-side injection (Symbol.for of the id). */
 export const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID)

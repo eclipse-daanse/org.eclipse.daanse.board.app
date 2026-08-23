@@ -32,7 +32,7 @@ const doRemoveDataSource = () => {
   dsToDelete.value = null
 }
 
-const endpointfinder = inject('endpointfinder');
+const endpointfinder = inject('endpointfinder', null);
 const addDataSource = () => {
   createDataSource(null)
 }

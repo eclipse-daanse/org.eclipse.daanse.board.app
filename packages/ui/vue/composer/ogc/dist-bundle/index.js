@@ -1,828 +1,801 @@
-(function(){var i="ui.vue.composer.ogc",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vjs-tree-brackets{cursor:pointer}.vjs-tree-brackets:hover{color:#1890ff}.vjs-check-controller{position:absolute;left:0}.vjs-check-controller.is-checked .vjs-check-controller-inner{background-color:#1890ff;border-color:#0076e4}.vjs-check-controller.is-checked .vjs-check-controller-inner.is-checkbox:after{transform:rotate(45deg) scaleY(1)}.vjs-check-controller.is-checked .vjs-check-controller-inner.is-radio:after{transform:translate(-50%,-50%) scale(1)}.vjs-check-controller .vjs-check-controller-inner{display:inline-block;position:relative;border:1px solid #bfcbd9;border-radius:2px;vertical-align:middle;box-sizing:border-box;width:16px;height:16px;background-color:#fff;z-index:1;cursor:pointer;transition:border-color .25s cubic-bezier(.71,-.46,.29,1.46),background-color .25s cubic-bezier(.71,-.46,.29,1.46)}.vjs-check-controller .vjs-check-controller-inner:after{box-sizing:content-box;content:\"\";border:2px solid #fff;border-left:0;border-top:0;height:8px;left:4px;position:absolute;top:1px;transform:rotate(45deg) scaleY(0);width:4px;transition:transform .15s cubic-bezier(.71,-.46,.88,.6) .05s;transform-origin:center}.vjs-check-controller .vjs-check-controller-inner.is-radio{border-radius:100%}.vjs-check-controller .vjs-check-controller-inner.is-radio:after{border-radius:100%;height:4px;background-color:#fff;left:50%;top:50%}.vjs-check-controller .vjs-check-controller-original{opacity:0;outline:none;position:absolute;z-index:-1;top:0;left:0;right:0;bottom:0;margin:0}.vjs-carets{position:absolute;right:0;cursor:pointer}.vjs-carets svg{transition:transform .3s}.vjs-carets:hover{color:#1890ff}.vjs-carets-close{transform:rotate(-90deg)}.vjs-tree-node{display:flex;position:relative;line-height:20px}.vjs-tree-node.has-carets{padding-left:15px}.vjs-tree-node.has-carets.has-selector,.vjs-tree-node.has-selector{padding-left:30px}.vjs-tree-node.is-highlight,.vjs-tree-node:hover{background-color:#e6f7ff;border-radius:4px}.vjs-tree-node.is-highlight .vjs-tree-node-actions,.vjs-tree-node:hover .vjs-tree-node-actions{display:block}.vjs-tree-node .vjs-indent{display:flex;position:relative}.vjs-tree-node .vjs-indent-unit.has-line{border-left:1px dashed #bfcbd9}.vjs-tree-node .vjs-tree-node-actions{display:none;position:absolute;right:0;top:0;padding:0 4px;background-color:#e6f7ff;border-radius:4px}.vjs-tree-node .vjs-tree-node-actions .vjs-tree-node-actions-item{cursor:pointer}.vjs-tree-node .vjs-tree-node-actions .vjs-tree-node-actions-item:hover{color:#1890ff}.vjs-tree-node.dark.is-highlight,.vjs-tree-node.dark .vjs-tree-node-actions,.vjs-tree-node.dark:hover{background-color:#2e4558}.vjs-node-index{position:absolute;right:100%;margin-right:4px;user-select:none}.vjs-colon{white-space:pre}.vjs-comment{color:#bfcbd9}.vjs-key{white-space:nowrap}.vjs-value{word-break:break-word}.vjs-tree-node.dynamic-height .vjs-value{white-space:pre-wrap}.vjs-value-null,.vjs-value-undefined{color:#d55fde}.vjs-value-boolean,.vjs-value-number{color:#1d8ce0}.vjs-value-string{color:#13ce66}.vjs-tree{font-family:Monaco,Menlo,Consolas,Bitstream Vera Sans Mono,monospace;font-size:14px;text-align:left}.vjs-tree.is-virtual{overflow:auto}.vjs-tree.is-virtual .vjs-tree-node{white-space:nowrap}";})();
-import * as e from "vue";
-import { defineComponent, ref, shallowRef, watch, createElementBlock, openBlock, createVNode, unref, createElementVNode, inject, computed, resolveComponent, Fragment, createBlock } from "vue";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { OgcFeatureComposer } from "org.eclipse.daanse.board.app.lib.composer.ogc";
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-var t = { 207: (e2, t2, n2) => {
-  e2.exports = n2(452);
-}, 452: (e2) => {
-  var t2 = (function(e3) {
-    var t3, n2 = Object.prototype, r2 = n2.hasOwnProperty, o2 = "function" == typeof Symbol ? Symbol : {}, a2 = o2.iterator || "@@iterator", i2 = o2.asyncIterator || "@@asyncIterator", c2 = o2.toStringTag || "@@toStringTag";
-    function l2(e4, t4, n3) {
-      return Object.defineProperty(e4, t4, { value: n3, enumerable: true, configurable: true, writable: true }), e4[t4];
+(function(){var i="ui.vue.composer.ogc",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".vjs-tree-brackets{cursor:pointer}.vjs-tree-brackets:hover{color:#1890ff}.vjs-check-controller{position:absolute;left:0}.vjs-check-controller.is-checked .vjs-check-controller-inner{background-color:#1890ff;border-color:#0076e4}.vjs-check-controller.is-checked .vjs-check-controller-inner.is-checkbox:after{transform:rotate(45deg) scaleY(1)}.vjs-check-controller.is-checked .vjs-check-controller-inner.is-radio:after{transform:translate(-50%,-50%) scale(1)}.vjs-check-controller .vjs-check-controller-inner{display:inline-block;position:relative;border:1px solid #bfcbd9;border-radius:2px;vertical-align:middle;box-sizing:border-box;width:16px;height:16px;background-color:#fff;z-index:1;cursor:pointer;transition:border-color .25s cubic-bezier(.71,-.46,.29,1.46),background-color .25s cubic-bezier(.71,-.46,.29,1.46)}.vjs-check-controller .vjs-check-controller-inner:after{box-sizing:content-box;content:\"\";border:2px solid #fff;border-left:0;border-top:0;height:8px;left:4px;position:absolute;top:1px;transform:rotate(45deg) scaleY(0);width:4px;transition:transform .15s cubic-bezier(.71,-.46,.88,.6) .05s;transform-origin:center}.vjs-check-controller .vjs-check-controller-inner.is-radio{border-radius:100%}.vjs-check-controller .vjs-check-controller-inner.is-radio:after{border-radius:100%;height:4px;background-color:#fff;left:50%;top:50%}.vjs-check-controller .vjs-check-controller-original{opacity:0;outline:none;position:absolute;z-index:-1;inset:0;margin:0}.vjs-carets{position:absolute;right:0;cursor:pointer}.vjs-carets svg{transition:transform .3s}.vjs-carets:hover{color:#1890ff}.vjs-carets-close{transform:rotate(-90deg)}.vjs-tree-node{display:flex;position:relative;line-height:20px}.vjs-tree-node.has-carets{padding-left:15px}.vjs-tree-node.has-carets.has-selector,.vjs-tree-node.has-selector{padding-left:30px}.vjs-tree-node.is-highlight,.vjs-tree-node:hover{background-color:#e6f7ff;border-radius:4px}.vjs-tree-node.is-highlight .vjs-tree-node-actions,.vjs-tree-node:hover .vjs-tree-node-actions{display:block}.vjs-tree-node .vjs-indent{display:flex;position:relative}.vjs-tree-node .vjs-indent-unit.has-line{border-left:1px dashed #bfcbd9}.vjs-tree-node .vjs-tree-node-actions{display:none;position:absolute;right:0;top:0;padding:0 4px;background-color:#e6f7ff;border-radius:4px}.vjs-tree-node .vjs-tree-node-actions .vjs-tree-node-actions-item{cursor:pointer}.vjs-tree-node .vjs-tree-node-actions .vjs-tree-node-actions-item:hover{color:#1890ff}.vjs-tree-node.dark.is-highlight,.vjs-tree-node.dark .vjs-tree-node-actions,.vjs-tree-node.dark:hover{background-color:#2e4558}.vjs-node-index{position:absolute;right:100%;margin-right:4px;user-select:none}.vjs-colon{white-space:pre}.vjs-comment{color:#bfcbd9}.vjs-key{white-space:nowrap}.vjs-value{word-break:break-word}.vjs-tree-node.dynamic-height .vjs-value{white-space:pre-wrap}.vjs-value-null,.vjs-value-undefined{color:#d55fde}.vjs-value-boolean,.vjs-value-number{color:#1d8ce0}.vjs-value-string{color:#13ce66}.vjs-tree{font-family:Monaco,Menlo,Consolas,Bitstream Vera Sans Mono,monospace;font-size:14px;text-align:left}.vjs-tree.is-virtual{overflow:auto}.vjs-tree.is-virtual .vjs-tree-node{white-space:nowrap}\n";})();
+import * as Q from "vue";
+import { defineComponent as Ne, ref as ee, shallowRef as Pe, watch as ce, createElementBlock as te, openBlock as X, createVNode as J, unref as Le, createElementVNode as Te, inject as Fe, computed as Ee, resolveComponent as fe, Fragment as ie, createBlock as he } from "vue";
+import { useTemporaryStore as Ae } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { OgcFeatureComposer as pe } from "org.eclipse.daanse.board.app.lib.composer.ogc";
+import { identifier as De } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY as Se } from "org.eclipse.daanse.board.app.lib.api.datasource";
+var Ie = { 207: (e, n, r) => {
+  e.exports = r(452);
+}, 452: (e) => {
+  var n = (function(r) {
+    var a, N = Object.prototype, x = N.hasOwnProperty, O = typeof Symbol == "function" ? Symbol : {}, s = O.iterator || "@@iterator", w = O.asyncIterator || "@@asyncIterator", k = O.toStringTag || "@@toStringTag";
+    function m(t, o, c) {
+      return Object.defineProperty(t, o, { value: c, enumerable: !0, configurable: !0, writable: !0 }), t[o];
     }
     try {
-      l2({}, "");
-    } catch (e4) {
-      l2 = function(e5, t4, n3) {
-        return e5[t4] = n3;
+      m({}, "");
+    } catch {
+      m = function(o, c, h) {
+        return o[c] = h;
       };
     }
-    function u2(e4, t4, n3, r3) {
-      var o3 = t4 && t4.prototype instanceof y2 ? t4 : y2, a3 = Object.create(o3.prototype), i3 = new V2(r3 || []);
-      return a3._invoke = /* @__PURE__ */ (function(e5, t5, n4) {
-        var r4 = s2;
-        return function(o4, a4) {
-          if (r4 === f2) throw new Error("Generator is already running");
-          if (r4 === p2) {
-            if ("throw" === o4) throw a4;
-            return P2();
+    function I(t, o, c, h) {
+      var u = o && o.prototype instanceof R ? o : R, v = Object.create(u.prototype), S = new d(h || []);
+      return v._invoke = /* @__PURE__ */ (function(j, T, f) {
+        var V = $;
+        return function(E, Z) {
+          if (V === H) throw new Error("Generator is already running");
+          if (V === L) {
+            if (E === "throw") throw Z;
+            return g();
           }
-          for (n4.method = o4, n4.arg = a4; ; ) {
-            var i4 = n4.delegate;
-            if (i4) {
-              var c3 = j2(i4, n4);
-              if (c3) {
-                if (c3 === v2) continue;
-                return c3;
+          for (f.method = E, f.arg = Z; ; ) {
+            var re = f.delegate;
+            if (re) {
+              var ae = q(re, f);
+              if (ae) {
+                if (ae === P) continue;
+                return ae;
               }
             }
-            if ("next" === n4.method) n4.sent = n4._sent = n4.arg;
-            else if ("throw" === n4.method) {
-              if (r4 === s2) throw r4 = p2, n4.arg;
-              n4.dispatchException(n4.arg);
-            } else "return" === n4.method && n4.abrupt("return", n4.arg);
-            r4 = f2;
-            var l3 = d2(e5, t5, n4);
-            if ("normal" === l3.type) {
-              if (r4 = n4.done ? p2 : h2, l3.arg === v2) continue;
-              return { value: l3.arg, done: n4.done };
+            if (f.method === "next") f.sent = f._sent = f.arg;
+            else if (f.method === "throw") {
+              if (V === $) throw V = L, f.arg;
+              f.dispatchException(f.arg);
+            } else f.method === "return" && f.abrupt("return", f.arg);
+            V = H;
+            var _ = G(j, T, f);
+            if (_.type === "normal") {
+              if (V = f.done ? L : K, _.arg === P) continue;
+              return { value: _.arg, done: f.done };
             }
-            "throw" === l3.type && (r4 = p2, n4.method = "throw", n4.arg = l3.arg);
+            _.type === "throw" && (V = L, f.method = "throw", f.arg = _.arg);
           }
         };
-      })(e4, n3, i3), a3;
+      })(t, c, S), v;
     }
-    function d2(e4, t4, n3) {
+    function G(t, o, c) {
       try {
-        return { type: "normal", arg: e4.call(t4, n3) };
-      } catch (e5) {
-        return { type: "throw", arg: e5 };
+        return { type: "normal", arg: t.call(o, c) };
+      } catch (h) {
+        return { type: "throw", arg: h };
       }
     }
-    e3.wrap = u2;
-    var s2 = "suspendedStart", h2 = "suspendedYield", f2 = "executing", p2 = "completed", v2 = {};
-    function y2() {
+    r.wrap = I;
+    var $ = "suspendedStart", K = "suspendedYield", H = "executing", L = "completed", P = {};
+    function R() {
     }
-    function g2() {
+    function Y() {
     }
-    function m2() {
+    function B() {
     }
-    var b2 = {};
-    l2(b2, a2, (function() {
+    var z = {};
+    m(z, s, (function() {
       return this;
     }));
-    var w2 = Object.getPrototypeOf, N2 = w2 && w2(w2(L2([])));
-    N2 && N2 !== n2 && r2.call(N2, a2) && (b2 = N2);
-    var k2 = m2.prototype = y2.prototype = Object.create(b2);
-    function C2(e4) {
-      ["next", "throw", "return"].forEach((function(t4) {
-        l2(e4, t4, (function(e5) {
-          return this._invoke(t4, e5);
+    var C = Object.getPrototypeOf, y = C && C(C(p([])));
+    y && y !== N && x.call(y, s) && (z = y);
+    var b = B.prototype = R.prototype = Object.create(z);
+    function D(t) {
+      ["next", "throw", "return"].forEach((function(o) {
+        m(t, o, (function(c) {
+          return this._invoke(o, c);
         }));
       }));
     }
-    function x2(e4, t4) {
-      function n3(o4, a3, i3, c3) {
-        var l3 = d2(e4[o4], e4, a3);
-        if ("throw" !== l3.type) {
-          var u3 = l3.arg, s3 = u3.value;
-          return s3 && "object" == typeof s3 && r2.call(s3, "__await") ? t4.resolve(s3.__await).then((function(e5) {
-            n3("next", e5, i3, c3);
-          }), (function(e5) {
-            n3("throw", e5, i3, c3);
-          })) : t4.resolve(s3).then((function(e5) {
-            u3.value = e5, i3(u3);
-          }), (function(e5) {
-            return n3("throw", e5, i3, c3);
+    function F(t, o) {
+      function c(u, v, S, j) {
+        var T = G(t[u], t, v);
+        if (T.type !== "throw") {
+          var f = T.arg, V = f.value;
+          return V && typeof V == "object" && x.call(V, "__await") ? o.resolve(V.__await).then((function(E) {
+            c("next", E, S, j);
+          }), (function(E) {
+            c("throw", E, S, j);
+          })) : o.resolve(V).then((function(E) {
+            f.value = E, S(f);
+          }), (function(E) {
+            return c("throw", E, S, j);
           }));
         }
-        c3(l3.arg);
+        j(T.arg);
       }
-      var o3;
-      this._invoke = function(e5, r3) {
-        function a3() {
-          return new t4((function(t5, o4) {
-            n3(e5, r3, t5, o4);
+      var h;
+      this._invoke = function(u, v) {
+        function S() {
+          return new o((function(j, T) {
+            c(u, v, j, T);
           }));
         }
-        return o3 = o3 ? o3.then(a3, a3) : a3();
+        return h = h ? h.then(S, S) : S();
       };
     }
-    function j2(e4, n3) {
-      var r3 = e4.iterator[n3.method];
-      if (r3 === t3) {
-        if (n3.delegate = null, "throw" === n3.method) {
-          if (e4.iterator.return && (n3.method = "return", n3.arg = t3, j2(e4, n3), "throw" === n3.method)) return v2;
-          n3.method = "throw", n3.arg = new TypeError("The iterator does not provide a 'throw' method");
+    function q(t, o) {
+      var c = t.iterator[o.method];
+      if (c === a) {
+        if (o.delegate = null, o.method === "throw") {
+          if (t.iterator.return && (o.method = "return", o.arg = a, q(t, o), o.method === "throw")) return P;
+          o.method = "throw", o.arg = new TypeError("The iterator does not provide a 'throw' method");
         }
-        return v2;
+        return P;
       }
-      var o3 = d2(r3, e4.iterator, n3.arg);
-      if ("throw" === o3.type) return n3.method = "throw", n3.arg = o3.arg, n3.delegate = null, v2;
-      var a3 = o3.arg;
-      return a3 ? a3.done ? (n3[e4.resultName] = a3.value, n3.next = e4.nextLoc, "return" !== n3.method && (n3.method = "next", n3.arg = t3), n3.delegate = null, v2) : a3 : (n3.method = "throw", n3.arg = new TypeError("iterator result is not an object"), n3.delegate = null, v2);
+      var h = G(c, t.iterator, o.arg);
+      if (h.type === "throw") return o.method = "throw", o.arg = h.arg, o.delegate = null, P;
+      var u = h.arg;
+      return u ? u.done ? (o[t.resultName] = u.value, o.next = t.nextLoc, o.method !== "return" && (o.method = "next", o.arg = a), o.delegate = null, P) : u : (o.method = "throw", o.arg = new TypeError("iterator result is not an object"), o.delegate = null, P);
     }
-    function S2(e4) {
-      var t4 = { tryLoc: e4[0] };
-      1 in e4 && (t4.catchLoc = e4[1]), 2 in e4 && (t4.finallyLoc = e4[2], t4.afterLoc = e4[3]), this.tryEntries.push(t4);
+    function A(t) {
+      var o = { tryLoc: t[0] };
+      1 in t && (o.catchLoc = t[1]), 2 in t && (o.finallyLoc = t[2], o.afterLoc = t[3]), this.tryEntries.push(o);
     }
-    function O2(e4) {
-      var t4 = e4.completion || {};
-      t4.type = "normal", delete t4.arg, e4.completion = t4;
+    function i(t) {
+      var o = t.completion || {};
+      o.type = "normal", delete o.arg, t.completion = o;
     }
-    function V2(e4) {
-      this.tryEntries = [{ tryLoc: "root" }], e4.forEach(S2, this), this.reset(true);
+    function d(t) {
+      this.tryEntries = [{ tryLoc: "root" }], t.forEach(A, this), this.reset(!0);
     }
-    function L2(e4) {
-      if (e4) {
-        var n3 = e4[a2];
-        if (n3) return n3.call(e4);
-        if ("function" == typeof e4.next) return e4;
-        if (!isNaN(e4.length)) {
-          var o3 = -1, i3 = function n4() {
-            for (; ++o3 < e4.length; ) if (r2.call(e4, o3)) return n4.value = e4[o3], n4.done = false, n4;
-            return n4.value = t3, n4.done = true, n4;
+    function p(t) {
+      if (t) {
+        var o = t[s];
+        if (o) return o.call(t);
+        if (typeof t.next == "function") return t;
+        if (!isNaN(t.length)) {
+          var c = -1, h = function u() {
+            for (; ++c < t.length; ) if (x.call(t, c)) return u.value = t[c], u.done = !1, u;
+            return u.value = a, u.done = !0, u;
           };
-          return i3.next = i3;
+          return h.next = h;
         }
       }
-      return { next: P2 };
+      return { next: g };
     }
-    function P2() {
-      return { value: t3, done: true };
+    function g() {
+      return { value: a, done: !0 };
     }
-    return g2.prototype = m2, l2(k2, "constructor", m2), l2(m2, "constructor", g2), g2.displayName = l2(m2, c2, "GeneratorFunction"), e3.isGeneratorFunction = function(e4) {
-      var t4 = "function" == typeof e4 && e4.constructor;
-      return !!t4 && (t4 === g2 || "GeneratorFunction" === (t4.displayName || t4.name));
-    }, e3.mark = function(e4) {
-      return Object.setPrototypeOf ? Object.setPrototypeOf(e4, m2) : (e4.__proto__ = m2, l2(e4, c2, "GeneratorFunction")), e4.prototype = Object.create(k2), e4;
-    }, e3.awrap = function(e4) {
-      return { __await: e4 };
-    }, C2(x2.prototype), l2(x2.prototype, i2, (function() {
+    return Y.prototype = B, m(b, "constructor", B), m(B, "constructor", Y), Y.displayName = m(B, k, "GeneratorFunction"), r.isGeneratorFunction = function(t) {
+      var o = typeof t == "function" && t.constructor;
+      return !!o && (o === Y || (o.displayName || o.name) === "GeneratorFunction");
+    }, r.mark = function(t) {
+      return Object.setPrototypeOf ? Object.setPrototypeOf(t, B) : (t.__proto__ = B, m(t, k, "GeneratorFunction")), t.prototype = Object.create(b), t;
+    }, r.awrap = function(t) {
+      return { __await: t };
+    }, D(F.prototype), m(F.prototype, w, (function() {
       return this;
-    })), e3.AsyncIterator = x2, e3.async = function(t4, n3, r3, o3, a3) {
-      void 0 === a3 && (a3 = Promise);
-      var i3 = new x2(u2(t4, n3, r3, o3), a3);
-      return e3.isGeneratorFunction(n3) ? i3 : i3.next().then((function(e4) {
-        return e4.done ? e4.value : i3.next();
+    })), r.AsyncIterator = F, r.async = function(t, o, c, h, u) {
+      u === void 0 && (u = Promise);
+      var v = new F(I(t, o, c, h), u);
+      return r.isGeneratorFunction(o) ? v : v.next().then((function(S) {
+        return S.done ? S.value : v.next();
       }));
-    }, C2(k2), l2(k2, c2, "Generator"), l2(k2, a2, (function() {
+    }, D(b), m(b, k, "Generator"), m(b, s, (function() {
       return this;
-    })), l2(k2, "toString", (function() {
+    })), m(b, "toString", (function() {
       return "[object Generator]";
-    })), e3.keys = function(e4) {
-      var t4 = [];
-      for (var n3 in e4) t4.push(n3);
-      return t4.reverse(), function n4() {
-        for (; t4.length; ) {
-          var r3 = t4.pop();
-          if (r3 in e4) return n4.value = r3, n4.done = false, n4;
+    })), r.keys = function(t) {
+      var o = [];
+      for (var c in t) o.push(c);
+      return o.reverse(), function h() {
+        for (; o.length; ) {
+          var u = o.pop();
+          if (u in t) return h.value = u, h.done = !1, h;
         }
-        return n4.done = true, n4;
+        return h.done = !0, h;
       };
-    }, e3.values = L2, V2.prototype = { constructor: V2, reset: function(e4) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = t3, this.done = false, this.delegate = null, this.method = "next", this.arg = t3, this.tryEntries.forEach(O2), !e4) for (var n3 in this) "t" === n3.charAt(0) && r2.call(this, n3) && !isNaN(+n3.slice(1)) && (this[n3] = t3);
+    }, r.values = p, d.prototype = { constructor: d, reset: function(t) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = a, this.done = !1, this.delegate = null, this.method = "next", this.arg = a, this.tryEntries.forEach(i), !t) for (var o in this) o.charAt(0) === "t" && x.call(this, o) && !isNaN(+o.slice(1)) && (this[o] = a);
     }, stop: function() {
-      this.done = true;
-      var e4 = this.tryEntries[0].completion;
-      if ("throw" === e4.type) throw e4.arg;
+      this.done = !0;
+      var t = this.tryEntries[0].completion;
+      if (t.type === "throw") throw t.arg;
       return this.rval;
-    }, dispatchException: function(e4) {
-      if (this.done) throw e4;
-      var n3 = this;
-      function o3(r3, o4) {
-        return c3.type = "throw", c3.arg = e4, n3.next = r3, o4 && (n3.method = "next", n3.arg = t3), !!o4;
+    }, dispatchException: function(t) {
+      if (this.done) throw t;
+      var o = this;
+      function c(T, f) {
+        return v.type = "throw", v.arg = t, o.next = T, f && (o.method = "next", o.arg = a), !!f;
       }
-      for (var a3 = this.tryEntries.length - 1; a3 >= 0; --a3) {
-        var i3 = this.tryEntries[a3], c3 = i3.completion;
-        if ("root" === i3.tryLoc) return o3("end");
-        if (i3.tryLoc <= this.prev) {
-          var l3 = r2.call(i3, "catchLoc"), u3 = r2.call(i3, "finallyLoc");
-          if (l3 && u3) {
-            if (this.prev < i3.catchLoc) return o3(i3.catchLoc, true);
-            if (this.prev < i3.finallyLoc) return o3(i3.finallyLoc);
-          } else if (l3) {
-            if (this.prev < i3.catchLoc) return o3(i3.catchLoc, true);
+      for (var h = this.tryEntries.length - 1; h >= 0; --h) {
+        var u = this.tryEntries[h], v = u.completion;
+        if (u.tryLoc === "root") return c("end");
+        if (u.tryLoc <= this.prev) {
+          var S = x.call(u, "catchLoc"), j = x.call(u, "finallyLoc");
+          if (S && j) {
+            if (this.prev < u.catchLoc) return c(u.catchLoc, !0);
+            if (this.prev < u.finallyLoc) return c(u.finallyLoc);
+          } else if (S) {
+            if (this.prev < u.catchLoc) return c(u.catchLoc, !0);
           } else {
-            if (!u3) throw new Error("try statement without catch or finally");
-            if (this.prev < i3.finallyLoc) return o3(i3.finallyLoc);
+            if (!j) throw new Error("try statement without catch or finally");
+            if (this.prev < u.finallyLoc) return c(u.finallyLoc);
           }
         }
       }
-    }, abrupt: function(e4, t4) {
-      for (var n3 = this.tryEntries.length - 1; n3 >= 0; --n3) {
-        var o3 = this.tryEntries[n3];
-        if (o3.tryLoc <= this.prev && r2.call(o3, "finallyLoc") && this.prev < o3.finallyLoc) {
-          var a3 = o3;
+    }, abrupt: function(t, o) {
+      for (var c = this.tryEntries.length - 1; c >= 0; --c) {
+        var h = this.tryEntries[c];
+        if (h.tryLoc <= this.prev && x.call(h, "finallyLoc") && this.prev < h.finallyLoc) {
+          var u = h;
           break;
         }
       }
-      a3 && ("break" === e4 || "continue" === e4) && a3.tryLoc <= t4 && t4 <= a3.finallyLoc && (a3 = null);
-      var i3 = a3 ? a3.completion : {};
-      return i3.type = e4, i3.arg = t4, a3 ? (this.method = "next", this.next = a3.finallyLoc, v2) : this.complete(i3);
-    }, complete: function(e4, t4) {
-      if ("throw" === e4.type) throw e4.arg;
-      return "break" === e4.type || "continue" === e4.type ? this.next = e4.arg : "return" === e4.type ? (this.rval = this.arg = e4.arg, this.method = "return", this.next = "end") : "normal" === e4.type && t4 && (this.next = t4), v2;
-    }, finish: function(e4) {
-      for (var t4 = this.tryEntries.length - 1; t4 >= 0; --t4) {
-        var n3 = this.tryEntries[t4];
-        if (n3.finallyLoc === e4) return this.complete(n3.completion, n3.afterLoc), O2(n3), v2;
+      u && (t === "break" || t === "continue") && u.tryLoc <= o && o <= u.finallyLoc && (u = null);
+      var v = u ? u.completion : {};
+      return v.type = t, v.arg = o, u ? (this.method = "next", this.next = u.finallyLoc, P) : this.complete(v);
+    }, complete: function(t, o) {
+      if (t.type === "throw") throw t.arg;
+      return t.type === "break" || t.type === "continue" ? this.next = t.arg : t.type === "return" ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : t.type === "normal" && o && (this.next = o), P;
+    }, finish: function(t) {
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var c = this.tryEntries[o];
+        if (c.finallyLoc === t) return this.complete(c.completion, c.afterLoc), i(c), P;
       }
-    }, catch: function(e4) {
-      for (var t4 = this.tryEntries.length - 1; t4 >= 0; --t4) {
-        var n3 = this.tryEntries[t4];
-        if (n3.tryLoc === e4) {
-          var r3 = n3.completion;
-          if ("throw" === r3.type) {
-            var o3 = r3.arg;
-            O2(n3);
+    }, catch: function(t) {
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var c = this.tryEntries[o];
+        if (c.tryLoc === t) {
+          var h = c.completion;
+          if (h.type === "throw") {
+            var u = h.arg;
+            i(c);
           }
-          return o3;
+          return u;
         }
       }
       throw new Error("illegal catch attempt");
-    }, delegateYield: function(e4, n3, r3) {
-      return this.delegate = { iterator: L2(e4), resultName: n3, nextLoc: r3 }, "next" === this.method && (this.arg = t3), v2;
-    } }, e3;
-  })(e2.exports);
+    }, delegateYield: function(t, o, c) {
+      return this.delegate = { iterator: p(t), resultName: o, nextLoc: c }, this.method === "next" && (this.arg = a), P;
+    } }, r;
+  })(e.exports);
   try {
-    regeneratorRuntime = t2;
-  } catch (e3) {
-    "object" == typeof globalThis ? globalThis.regeneratorRuntime = t2 : Function("r", "regeneratorRuntime = r")(t2);
+    regeneratorRuntime = n;
+  } catch {
+    typeof globalThis == "object" ? globalThis.regeneratorRuntime = n : Function("r", "regeneratorRuntime = r")(n);
   }
-} }, n = {};
-function r(e2) {
-  var o2 = n[e2];
-  if (void 0 !== o2) return o2.exports;
-  var a2 = n[e2] = { exports: {} };
-  return t[e2](a2, a2.exports, r), a2.exports;
+} }, ye = {};
+function U(e) {
+  var n = ye[e];
+  if (n !== void 0) return n.exports;
+  var r = ye[e] = { exports: {} };
+  return Ie[e](r, r.exports, U), r.exports;
 }
-r.n = (e2) => {
-  var t2 = e2 && e2.__esModule ? () => e2.default : () => e2;
-  return r.d(t2, { a: t2 }), t2;
-}, r.d = (e2, t2) => {
-  for (var n2 in t2) r.o(t2, n2) && !r.o(e2, n2) && Object.defineProperty(e2, n2, { enumerable: true, get: t2[n2] });
-}, r.o = (e2, t2) => Object.prototype.hasOwnProperty.call(e2, t2);
-var o = {};
-function a(e2, t2) {
-  (null == t2 || t2 > e2.length) && (t2 = e2.length);
-  for (var n2 = 0, r2 = new Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-  return r2;
+U.n = (e) => {
+  var n = e && e.__esModule ? () => e.default : () => e;
+  return U.d(n, { a: n }), n;
+}, U.d = (e, n) => {
+  for (var r in n) U.o(n, r) && !U.o(e, r) && Object.defineProperty(e, r, { enumerable: !0, get: n[r] });
+}, U.o = (e, n) => Object.prototype.hasOwnProperty.call(e, n);
+var xe = {};
+function ue(e, n) {
+  (n == null || n > e.length) && (n = e.length);
+  for (var r = 0, a = new Array(n); r < n; r++) a[r] = e[r];
+  return a;
 }
-function i(e2, t2) {
-  if (e2) {
-    if ("string" == typeof e2) return a(e2, t2);
-    var n2 = Object.prototype.toString.call(e2).slice(8, -1);
-    return "Object" === n2 && e2.constructor && (n2 = e2.constructor.name), "Map" === n2 || "Set" === n2 ? Array.from(e2) : "Arguments" === n2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2) ? a(e2, t2) : void 0;
+function Ve(e, n) {
+  if (e) {
+    if (typeof e == "string") return ue(e, n);
+    var r = Object.prototype.toString.call(e).slice(8, -1);
+    return r === "Object" && e.constructor && (r = e.constructor.name), r === "Map" || r === "Set" ? Array.from(e) : r === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r) ? ue(e, n) : void 0;
   }
 }
-function c(e2) {
-  return (function(e3) {
-    if (Array.isArray(e3)) return a(e3);
-  })(e2) || (function(e3) {
-    if ("undefined" != typeof Symbol && null != e3[Symbol.iterator] || null != e3["@@iterator"]) return Array.from(e3);
-  })(e2) || i(e2) || (function() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+function oe(e) {
+  return (function(n) {
+    if (Array.isArray(n)) return ue(n);
+  })(e) || (function(n) {
+    if (typeof Symbol < "u" && n[Symbol.iterator] != null || n["@@iterator"] != null) return Array.from(n);
+  })(e) || Ve(e) || (function() {
+    throw new TypeError(`Invalid attempt to spread non-iterable instance.
+In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
   })();
 }
-function l(e2, t2, n2) {
-  return t2 in e2 ? Object.defineProperty(e2, t2, { value: n2, enumerable: true, configurable: true, writable: true }) : e2[t2] = n2, e2;
+function ne(e, n, r) {
+  return n in e ? Object.defineProperty(e, n, { value: r, enumerable: !0, configurable: !0, writable: !0 }) : e[n] = r, e;
 }
-r.d(o, { A: () => L });
-const u = (f = { Fragment: () => e.Fragment, computed: () => e.computed, createTextVNode: () => e.createTextVNode, createVNode: () => e.createVNode, defineComponent: () => e.defineComponent, nextTick: () => e.nextTick, reactive: () => e.reactive, ref: () => e.ref, watch: () => e.watch, watchEffect: () => e.watchEffect }, p = {}, r.d(p, f), p), d = (0, u.defineComponent)({ props: { data: { required: true, type: String }, onClick: Function }, render: function() {
-  var e2 = this.data, t2 = this.onClick;
-  return (0, u.createVNode)("span", { class: "vjs-tree-brackets", onClick: t2 }, [e2]);
-} }), s = (0, u.defineComponent)({ emits: ["change", "update:modelValue"], props: { checked: { type: Boolean, default: false }, isMultiple: Boolean, onChange: Function }, setup: function(e2, t2) {
-  var n2 = t2.emit;
-  return { uiType: (0, u.computed)((function() {
-    return e2.isMultiple ? "checkbox" : "radio";
-  })), model: (0, u.computed)({ get: function() {
-    return e2.checked;
-  }, set: function(e3) {
-    return n2("update:modelValue", e3);
+U.d(xe, { A: () => Ue });
+const l = (me = { Fragment: () => Q.Fragment, computed: () => Q.computed, createTextVNode: () => Q.createTextVNode, createVNode: () => Q.createVNode, defineComponent: () => Q.defineComponent, nextTick: () => Q.nextTick, reactive: () => Q.reactive, ref: () => Q.ref, watch: () => Q.watch, watchEffect: () => Q.watchEffect }, le = {}, U.d(le, me), le), Be = (0, l.defineComponent)({ props: { data: { required: !0, type: String }, onClick: Function }, render: function() {
+  var e = this.data, n = this.onClick;
+  return (0, l.createVNode)("span", { class: "vjs-tree-brackets", onClick: n }, [e]);
+} }), He = (0, l.defineComponent)({ emits: ["change", "update:modelValue"], props: { checked: { type: Boolean, default: !1 }, isMultiple: Boolean, onChange: Function }, setup: function(e, n) {
+  var r = n.emit;
+  return { uiType: (0, l.computed)((function() {
+    return e.isMultiple ? "checkbox" : "radio";
+  })), model: (0, l.computed)({ get: function() {
+    return e.checked;
+  }, set: function(a) {
+    return r("update:modelValue", a);
   } }) };
 }, render: function() {
-  var e2 = this.uiType, t2 = this.model, n2 = this.$emit;
-  return (0, u.createVNode)("label", { class: ["vjs-check-controller", t2 ? "is-checked" : ""], onClick: function(e3) {
-    return e3.stopPropagation();
-  } }, [(0, u.createVNode)("span", { class: "vjs-check-controller-inner is-".concat(e2) }, null), (0, u.createVNode)("input", { checked: t2, class: "vjs-check-controller-original is-".concat(e2), type: e2, onChange: function() {
-    return n2("change", t2);
+  var e = this.uiType, n = this.model, r = this.$emit;
+  return (0, l.createVNode)("label", { class: ["vjs-check-controller", n ? "is-checked" : ""], onClick: function(a) {
+    return a.stopPropagation();
+  } }, [(0, l.createVNode)("span", { class: "vjs-check-controller-inner is-".concat(e) }, null), (0, l.createVNode)("input", { checked: n, class: "vjs-check-controller-original is-".concat(e), type: e, onChange: function() {
+    return r("change", n);
   } }, null)]);
-} }), h = (0, u.defineComponent)({ props: { nodeType: { required: true, type: String }, onClick: Function }, render: function() {
-  var e2 = this.nodeType, t2 = this.onClick, n2 = "objectStart" === e2 || "arrayStart" === e2;
-  return n2 || "objectCollapsed" === e2 || "arrayCollapsed" === e2 ? (0, u.createVNode)("span", { class: "vjs-carets vjs-carets-".concat(n2 ? "open" : "close"), onClick: t2 }, [(0, u.createVNode)("svg", { viewBox: "0 0 1024 1024", focusable: "false", "data-icon": "caret-down", width: "1em", height: "1em", fill: "currentColor", "aria-hidden": "true" }, [(0, u.createVNode)("path", { d: "M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z" }, null)])]) : null;
+} }), Me = (0, l.defineComponent)({ props: { nodeType: { required: !0, type: String }, onClick: Function }, render: function() {
+  var e = this.nodeType, n = this.onClick, r = e === "objectStart" || e === "arrayStart";
+  return r || e === "objectCollapsed" || e === "arrayCollapsed" ? (0, l.createVNode)("span", { class: "vjs-carets vjs-carets-".concat(r ? "open" : "close"), onClick: n }, [(0, l.createVNode)("svg", { viewBox: "0 0 1024 1024", focusable: "false", "data-icon": "caret-down", width: "1em", height: "1em", fill: "currentColor", "aria-hidden": "true" }, [(0, l.createVNode)("path", { d: "M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z" }, null)])]) : null;
 } });
-var f, p;
-function v(e2) {
-  return v = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-    return typeof e3;
-  } : function(e3) {
-    return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-  }, v(e2);
+var me, le;
+function se(e) {
+  return se = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(n) {
+    return typeof n;
+  } : function(n) {
+    return n && typeof Symbol == "function" && n.constructor === Symbol && n !== Symbol.prototype ? "symbol" : typeof n;
+  }, se(e);
 }
-function y(e2) {
-  return Object.prototype.toString.call(e2).slice(8, -1).toLowerCase();
+function Oe(e) {
+  return Object.prototype.toString.call(e).slice(8, -1).toLowerCase();
 }
-function g(e2) {
-  var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "root", n2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0, r2 = (arguments.length > 3 ? arguments[3] : void 0) || {}, o2 = r2.key, a2 = r2.index, i2 = r2.type, c2 = void 0 === i2 ? "content" : i2, l2 = r2.showComma, u2 = void 0 !== l2 && l2, d2 = r2.length, s2 = void 0 === d2 ? 1 : d2, h2 = y(e2);
-  if ("array" === h2) {
-    var f2 = m(e2.map((function(e3, r3, o3) {
-      return g(e3, "".concat(t2, "[").concat(r3, "]"), n2 + 1, { index: r3, showComma: r3 !== o3.length - 1, length: s2, type: c2 });
+function W(e) {
+  var n = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "root", r = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : 0, a = (arguments.length > 3 ? arguments[3] : void 0) || {}, N = a.key, x = a.index, O = a.type, s = O === void 0 ? "content" : O, w = a.showComma, k = w !== void 0 && w, m = a.length, I = m === void 0 ? 1 : m, G = Oe(e);
+  if (G === "array") {
+    var $ = ge(e.map((function(L, P, R) {
+      return W(L, "".concat(n, "[").concat(P, "]"), r + 1, { index: P, showComma: P !== R.length - 1, length: I, type: s });
     })));
-    return [g("[", t2, n2, { showComma: false, key: o2, length: e2.length, type: "arrayStart" })[0]].concat(f2, g("]", t2, n2, { showComma: u2, length: e2.length, type: "arrayEnd" })[0]);
+    return [W("[", n, r, { showComma: !1, key: N, length: e.length, type: "arrayStart" })[0]].concat($, W("]", n, r, { showComma: k, length: e.length, type: "arrayEnd" })[0]);
   }
-  if ("object" === h2) {
-    var p2 = Object.keys(e2), v2 = m(p2.map((function(r3, o3, a3) {
-      return g(e2[r3], /^[a-zA-Z_]\w*$/.test(r3) ? "".concat(t2, ".").concat(r3) : "".concat(t2, '["').concat(r3, '"]'), n2 + 1, { key: r3, showComma: o3 !== a3.length - 1, length: s2, type: c2 });
+  if (G === "object") {
+    var K = Object.keys(e), H = ge(K.map((function(L, P, R) {
+      return W(e[L], /^[a-zA-Z_]\w*$/.test(L) ? "".concat(n, ".").concat(L) : "".concat(n, '["').concat(L, '"]'), r + 1, { key: L, showComma: P !== R.length - 1, length: I, type: s });
     })));
-    return [g("{", t2, n2, { showComma: false, key: o2, index: a2, length: p2.length, type: "objectStart" })[0]].concat(v2, g("}", t2, n2, { showComma: u2, length: p2.length, type: "objectEnd" })[0]);
+    return [W("{", n, r, { showComma: !1, key: N, index: x, length: K.length, type: "objectStart" })[0]].concat(H, W("}", n, r, { showComma: k, length: K.length, type: "objectEnd" })[0]);
   }
-  return [{ content: e2, level: n2, key: o2, index: a2, path: t2, showComma: u2, length: s2, type: c2 }];
+  return [{ content: e, level: r, key: N, index: x, path: n, showComma: k, length: I, type: s }];
 }
-function m(e2) {
-  if ("function" == typeof Array.prototype.flat) return e2.flat();
-  for (var t2 = c(e2), n2 = []; t2.length; ) {
-    var r2 = t2.shift();
-    Array.isArray(r2) ? t2.unshift.apply(t2, c(r2)) : n2.push(r2);
+function ge(e) {
+  if (typeof Array.prototype.flat == "function") return e.flat();
+  for (var n = oe(e), r = []; n.length; ) {
+    var a = n.shift();
+    Array.isArray(a) ? n.unshift.apply(n, oe(a)) : r.push(a);
   }
-  return n2;
+  return r;
 }
-function b(e2) {
-  var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : /* @__PURE__ */ new WeakMap();
-  if (null == e2) return e2;
-  if (e2 instanceof Date) return new Date(e2);
-  if (e2 instanceof RegExp) return new RegExp(e2);
-  if ("object" !== v(e2)) return e2;
-  if (t2.get(e2)) return t2.get(e2);
-  if (Array.isArray(e2)) {
-    var n2 = e2.map((function(e3) {
-      return b(e3, t2);
+function de(e) {
+  var n = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : /* @__PURE__ */ new WeakMap();
+  if (e == null) return e;
+  if (e instanceof Date) return new Date(e);
+  if (e instanceof RegExp) return new RegExp(e);
+  if (se(e) !== "object") return e;
+  if (n.get(e)) return n.get(e);
+  if (Array.isArray(e)) {
+    var r = e.map((function(x) {
+      return de(x, n);
     }));
-    return t2.set(e2, n2), n2;
+    return n.set(e, r), r;
   }
-  var r2 = {};
-  for (var o2 in e2) r2[o2] = b(e2[o2], t2);
-  return t2.set(e2, r2), r2;
+  var a = {};
+  for (var N in e) a[N] = de(e[N], n);
+  return n.set(e, a), a;
 }
-function w(e2, t2, n2, r2, o2, a2, i2) {
+function ve(e, n, r, a, N, x, O) {
   try {
-    var c2 = e2[a2](i2), l2 = c2.value;
-  } catch (e3) {
-    return void n2(e3);
+    var s = e[x](O), w = s.value;
+  } catch (k) {
+    return void r(k);
   }
-  c2.done ? t2(l2) : Promise.resolve(l2).then(r2, o2);
+  s.done ? n(w) : Promise.resolve(w).then(a, N);
 }
-var N = r(207), k = r.n(N);
-function C(e2, t2) {
-  var n2 = Object.keys(e2);
+var Ge = U(207), be = U.n(Ge);
+function we(e, n) {
+  var r = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var r2 = Object.getOwnPropertySymbols(e2);
-    t2 && (r2 = r2.filter((function(t3) {
-      return Object.getOwnPropertyDescriptor(e2, t3).enumerable;
-    }))), n2.push.apply(n2, r2);
+    var a = Object.getOwnPropertySymbols(e);
+    n && (a = a.filter((function(N) {
+      return Object.getOwnPropertyDescriptor(e, N).enumerable;
+    }))), r.push.apply(r, a);
   }
-  return n2;
+  return r;
 }
-function x(e2) {
-  for (var t2 = 1; t2 < arguments.length; t2++) {
-    var n2 = null != arguments[t2] ? arguments[t2] : {};
-    t2 % 2 ? C(Object(n2), true).forEach((function(t3) {
-      l(e2, t3, n2[t3]);
-    })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(n2)) : C(Object(n2)).forEach((function(t3) {
-      Object.defineProperty(e2, t3, Object.getOwnPropertyDescriptor(n2, t3));
+function Ce(e) {
+  for (var n = 1; n < arguments.length; n++) {
+    var r = arguments[n] != null ? arguments[n] : {};
+    n % 2 ? we(Object(r), !0).forEach((function(a) {
+      ne(e, a, r[a]);
+    })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(r)) : we(Object(r)).forEach((function(a) {
+      Object.defineProperty(e, a, Object.getOwnPropertyDescriptor(r, a));
     }));
   }
-  return e2;
+  return e;
 }
-var j = { data: { type: [String, Number, Boolean, Array, Object], default: null }, rootPath: { type: String, default: "root" }, indent: { type: Number, default: 2 }, showLength: { type: Boolean, default: false }, showDoubleQuotes: { type: Boolean, default: true }, renderNodeKey: Function, renderNodeValue: Function, renderNodeActions: { type: [Boolean, Function], default: void 0 }, selectableType: String, showSelectController: { type: Boolean, default: false }, showLine: { type: Boolean, default: true }, showLineNumber: { type: Boolean, default: false }, selectOnClickNode: { type: Boolean, default: true }, nodeSelectable: { type: Function, default: function() {
-  return true;
-} }, highlightSelectedNode: { type: Boolean, default: true }, showIcon: { type: Boolean, default: false }, theme: { type: String, default: "light" }, showKeyValueSpace: { type: Boolean, default: true }, editable: { type: Boolean, default: false }, editableTrigger: { type: String, default: "click" }, onNodeClick: { type: Function }, onNodeMouseover: { type: Function }, onBracketsClick: { type: Function }, onIconClick: { type: Function }, onValueChange: { type: Function } };
-const S = (0, u.defineComponent)({ name: "TreeNode", props: x(x({}, j), {}, { node: { type: Object, required: true }, collapsed: Boolean, checked: Boolean, style: Object, onSelectedChange: { type: Function } }), emits: ["nodeClick", "nodeMouseover", "bracketsClick", "iconClick", "selectedChange", "valueChange"], setup: function(e2, t2) {
-  var n2 = t2.emit, r2 = (0, u.computed)((function() {
-    return y(e2.node.content);
-  })), o2 = (0, u.computed)((function() {
-    return "vjs-value vjs-value-".concat(r2.value);
-  })), a2 = (0, u.computed)((function() {
-    return e2.showDoubleQuotes ? '"'.concat(e2.node.key, '"') : e2.node.key;
-  })), i2 = (0, u.computed)((function() {
-    return "multiple" === e2.selectableType;
-  })), c2 = (0, u.computed)((function() {
-    return "single" === e2.selectableType;
-  })), f2 = (0, u.computed)((function() {
-    return e2.nodeSelectable(e2.node) && (i2.value || c2.value);
-  })), p2 = (0, u.reactive)({ editing: false }), v2 = function(t3) {
-    var r3, o3, a3 = "null" === (o3 = null === (r3 = t3.target) || void 0 === r3 ? void 0 : r3.value) ? null : "undefined" === o3 ? void 0 : "true" === o3 || "false" !== o3 && (o3[0] + o3[o3.length - 1] === '""' || o3[0] + o3[o3.length - 1] === "''" ? o3.slice(1, -1) : "number" == typeof Number(o3) && !isNaN(Number(o3)) || "NaN" === o3 ? Number(o3) : o3);
-    n2("valueChange", a3, e2.node.path);
-  }, g2 = (0, u.computed)((function() {
-    var t3, n3 = null === (t3 = e2.node) || void 0 === t3 ? void 0 : t3.content;
-    return null === n3 ? n3 = "null" : void 0 === n3 && (n3 = "undefined"), "string" === r2.value ? '"'.concat(n3, '"') : n3 + "";
-  })), m2 = function() {
-    var t3 = e2.renderNodeValue;
-    return t3 ? t3({ node: e2.node, defaultValue: g2.value }) : g2.value;
-  }, b2 = function() {
-    n2("bracketsClick", !e2.collapsed, e2.node);
-  }, N2 = function() {
-    n2("iconClick", !e2.collapsed, e2.node);
-  }, C2 = function() {
-    n2("selectedChange", e2.node);
-  }, x2 = function() {
-    n2("nodeClick", e2.node), f2.value && e2.selectOnClickNode && n2("selectedChange", e2.node);
-  }, j2 = function() {
-    n2("nodeMouseover", e2.node);
-  }, S2 = function(t3) {
-    if (e2.editable && !p2.editing) {
-      p2.editing = true;
-      var n3 = function e3(n4) {
-        var r3;
-        n4.target !== t3.target && (null === (r3 = n4.target) || void 0 === r3 ? void 0 : r3.parentElement) !== t3.target && (p2.editing = false, document.removeEventListener("click", e3));
+var je = { data: { type: [String, Number, Boolean, Array, Object], default: null }, rootPath: { type: String, default: "root" }, indent: { type: Number, default: 2 }, showLength: { type: Boolean, default: !1 }, showDoubleQuotes: { type: Boolean, default: !0 }, renderNodeKey: Function, renderNodeValue: Function, renderNodeActions: { type: [Boolean, Function], default: void 0 }, selectableType: String, showSelectController: { type: Boolean, default: !1 }, showLine: { type: Boolean, default: !0 }, showLineNumber: { type: Boolean, default: !1 }, selectOnClickNode: { type: Boolean, default: !0 }, nodeSelectable: { type: Function, default: function() {
+  return !0;
+} }, highlightSelectedNode: { type: Boolean, default: !0 }, showIcon: { type: Boolean, default: !1 }, theme: { type: String, default: "light" }, showKeyValueSpace: { type: Boolean, default: !0 }, editable: { type: Boolean, default: !1 }, editableTrigger: { type: String, default: "click" }, onNodeClick: { type: Function }, onNodeMouseover: { type: Function }, onBracketsClick: { type: Function }, onIconClick: { type: Function }, onValueChange: { type: Function } };
+const Re = (0, l.defineComponent)({ name: "TreeNode", props: Ce(Ce({}, je), {}, { node: { type: Object, required: !0 }, collapsed: Boolean, checked: Boolean, style: Object, onSelectedChange: { type: Function } }), emits: ["nodeClick", "nodeMouseover", "bracketsClick", "iconClick", "selectedChange", "valueChange"], setup: function(e, n) {
+  var r = n.emit, a = (0, l.computed)((function() {
+    return Oe(e.node.content);
+  })), N = (0, l.computed)((function() {
+    return "vjs-value vjs-value-".concat(a.value);
+  })), x = (0, l.computed)((function() {
+    return e.showDoubleQuotes ? '"'.concat(e.node.key, '"') : e.node.key;
+  })), O = (0, l.computed)((function() {
+    return e.selectableType === "multiple";
+  })), s = (0, l.computed)((function() {
+    return e.selectableType === "single";
+  })), w = (0, l.computed)((function() {
+    return e.nodeSelectable(e.node) && (O.value || s.value);
+  })), k = (0, l.reactive)({ editing: !1 }), m = function(C) {
+    var y, b, D = (b = (y = C.target) === null || y === void 0 ? void 0 : y.value) === "null" ? null : b === "undefined" ? void 0 : b === "true" || b !== "false" && (b[0] + b[b.length - 1] === '""' || b[0] + b[b.length - 1] === "''" ? b.slice(1, -1) : typeof Number(b) == "number" && !isNaN(Number(b)) || b === "NaN" ? Number(b) : b);
+    r("valueChange", D, e.node.path);
+  }, I = (0, l.computed)((function() {
+    var C, y = (C = e.node) === null || C === void 0 ? void 0 : C.content;
+    return y === null ? y = "null" : y === void 0 && (y = "undefined"), a.value === "string" ? '"'.concat(y, '"') : y + "";
+  })), G = function() {
+    var C = e.renderNodeValue;
+    return C ? C({ node: e.node, defaultValue: I.value }) : I.value;
+  }, $ = function() {
+    r("bracketsClick", !e.collapsed, e.node);
+  }, K = function() {
+    r("iconClick", !e.collapsed, e.node);
+  }, H = function() {
+    r("selectedChange", e.node);
+  }, L = function() {
+    r("nodeClick", e.node), w.value && e.selectOnClickNode && r("selectedChange", e.node);
+  }, P = function() {
+    r("nodeMouseover", e.node);
+  }, R = function(C) {
+    if (e.editable && !k.editing) {
+      k.editing = !0;
+      var y = function b(D) {
+        var F;
+        D.target !== C.target && ((F = D.target) === null || F === void 0 ? void 0 : F.parentElement) !== C.target && (k.editing = !1, document.removeEventListener("click", b));
       };
-      document.removeEventListener("click", n3), document.addEventListener("click", n3);
+      document.removeEventListener("click", y), document.addEventListener("click", y);
     }
-  }, O2 = (function() {
-    var e3 = (0, u.ref)(false), t3 = (function() {
-      var t4, n3 = (t4 = k().mark((function t5(n4) {
-        return k().wrap((function(t6) {
-          for (; ; ) switch (t6.prev = t6.next) {
+  }, Y = (function() {
+    var C = (0, l.ref)(!1), y = (function() {
+      var b, D = (b = be().mark((function F(q) {
+        return be().wrap((function(A) {
+          for (; ; ) switch (A.prev = A.next) {
             case 0:
-              return t6.prev = 0, t6.next = 3, navigator.clipboard.writeText(n4);
+              return A.prev = 0, A.next = 3, navigator.clipboard.writeText(q);
             case 3:
-              e3.value = true, setTimeout((function() {
-                e3.value = false;
-              }), 300), t6.next = 10;
+              C.value = !0, setTimeout((function() {
+                C.value = !1;
+              }), 300), A.next = 10;
               break;
             case 7:
-              t6.prev = 7, t6.t0 = t6.catch(0), console.error("[vue-json-pretty] Copy failed: ", t6.t0);
+              A.prev = 7, A.t0 = A.catch(0), console.error("[vue-json-pretty] Copy failed: ", A.t0);
             case 10:
             case "end":
-              return t6.stop();
+              return A.stop();
           }
-        }), t5, null, [[0, 7]]);
+        }), F, null, [[0, 7]]);
       })), function() {
-        var e4 = this, n4 = arguments;
-        return new Promise((function(r3, o3) {
-          var a3 = t4.apply(e4, n4);
-          function i3(e5) {
-            w(a3, r3, o3, i3, c3, "next", e5);
+        var F = this, q = arguments;
+        return new Promise((function(A, i) {
+          var d = b.apply(F, q);
+          function p(t) {
+            ve(d, A, i, p, g, "next", t);
           }
-          function c3(e5) {
-            w(a3, r3, o3, i3, c3, "throw", e5);
+          function g(t) {
+            ve(d, A, i, p, g, "throw", t);
           }
-          i3(void 0);
+          p(void 0);
         }));
       });
-      return function(e4) {
-        return n3.apply(this, arguments);
+      return function(F) {
+        return D.apply(this, arguments);
       };
     })();
-    return { copy: t3 };
-  })().copy, V2 = function() {
-    var t3 = e2.node, n3 = t3.key, r3 = t3.path, o3 = e2.rootPath, a3 = new Function("data", "return data".concat(r3.slice(o3.length)))(e2.data), i3 = JSON.stringify(n3 ? l({}, n3, a3) : a3, null, 2);
-    O2(i3);
-  }, L2 = function() {
-    var t3 = e2.renderNodeActions;
-    if (!t3) return null;
-    var n3 = { copy: V2 };
-    return "function" == typeof t3 ? t3({ node: e2.node, defaultActions: n3 }) : (0, u.createVNode)("span", { onClick: V2, class: "vjs-tree-node-actions-item" }, [(0, u.createTextVNode)("copy")]);
+    return { copy: y };
+  })().copy, B = function() {
+    var C = e.node, y = C.key, b = C.path, D = e.rootPath, F = new Function("data", "return data".concat(b.slice(D.length)))(e.data), q = JSON.stringify(y ? ne({}, y, F) : F, null, 2);
+    Y(q);
+  }, z = function() {
+    var C = e.renderNodeActions;
+    if (!C) return null;
+    var y = { copy: B };
+    return typeof C == "function" ? C({ node: e.node, defaultActions: y }) : (0, l.createVNode)("span", { onClick: B, class: "vjs-tree-node-actions-item" }, [(0, l.createTextVNode)("copy")]);
   };
   return function() {
-    var t3, n3 = e2.node;
-    return (0, u.createVNode)("div", { class: { "vjs-tree-node": true, "has-selector": e2.showSelectController, "has-carets": e2.showIcon, "is-highlight": e2.highlightSelectedNode && e2.checked, dark: "dark" === e2.theme }, onClick: x2, onMouseover: j2, style: e2.style }, [e2.showLineNumber && (0, u.createVNode)("span", { class: "vjs-node-index" }, [n3.id + 1]), e2.showSelectController && f2.value && "objectEnd" !== n3.type && "arrayEnd" !== n3.type && (0, u.createVNode)(s, { isMultiple: i2.value, checked: e2.checked, onChange: C2 }, null), (0, u.createVNode)("div", { class: "vjs-indent" }, [Array.from(Array(n3.level)).map((function(t4, n4) {
-      return (0, u.createVNode)("div", { key: n4, class: { "vjs-indent-unit": true, "has-line": e2.showLine } }, [Array.from(Array(e2.indent)).map((function() {
-        return (0, u.createVNode)(u.Fragment, null, [(0, u.createTextVNode)(" ")]);
+    var C, y = e.node;
+    return (0, l.createVNode)("div", { class: { "vjs-tree-node": !0, "has-selector": e.showSelectController, "has-carets": e.showIcon, "is-highlight": e.highlightSelectedNode && e.checked, dark: e.theme === "dark" }, onClick: L, onMouseover: P, style: e.style }, [e.showLineNumber && (0, l.createVNode)("span", { class: "vjs-node-index" }, [y.id + 1]), e.showSelectController && w.value && y.type !== "objectEnd" && y.type !== "arrayEnd" && (0, l.createVNode)(He, { isMultiple: O.value, checked: e.checked, onChange: H }, null), (0, l.createVNode)("div", { class: "vjs-indent" }, [Array.from(Array(y.level)).map((function(b, D) {
+      return (0, l.createVNode)("div", { key: D, class: { "vjs-indent-unit": !0, "has-line": e.showLine } }, [Array.from(Array(e.indent)).map((function() {
+        return (0, l.createVNode)(l.Fragment, null, [(0, l.createTextVNode)(" ")]);
       }))]);
-    })), e2.showIcon && (0, u.createVNode)(h, { nodeType: n3.type, onClick: N2 }, null)]), n3.key && (0, u.createVNode)("span", { class: "vjs-key" }, [(t3 = e2.renderNodeKey, t3 ? t3({ node: e2.node, defaultKey: a2.value || "" }) : a2.value), (0, u.createVNode)("span", { class: "vjs-colon" }, [":".concat(e2.showKeyValueSpace ? " " : "")])]), (0, u.createVNode)("span", null, ["content" !== n3.type && n3.content ? (0, u.createVNode)(d, { data: n3.content.toString(), onClick: b2 }, null) : (0, u.createVNode)("span", { class: o2.value, onClick: !e2.editable || e2.editableTrigger && "click" !== e2.editableTrigger ? void 0 : S2, onDblclick: e2.editable && "dblclick" === e2.editableTrigger ? S2 : void 0 }, [e2.editable && p2.editing ? (0, u.createVNode)("input", { value: g2.value, onChange: v2, style: { padding: "3px 8px", border: "1px solid #eee", boxShadow: "none", boxSizing: "border-box", borderRadius: 5, fontFamily: "inherit" } }, null) : m2()]), n3.showComma && (0, u.createVNode)("span", null, [","]), e2.showLength && e2.collapsed && (0, u.createVNode)("span", { class: "vjs-comment" }, [(0, u.createTextVNode)(" // "), n3.length, (0, u.createTextVNode)(" items ")])]), e2.renderNodeActions && (0, u.createVNode)("span", { class: "vjs-tree-node-actions" }, [L2()])]);
+    })), e.showIcon && (0, l.createVNode)(Me, { nodeType: y.type, onClick: K }, null)]), y.key && (0, l.createVNode)("span", { class: "vjs-key" }, [(C = e.renderNodeKey, C ? C({ node: e.node, defaultKey: x.value || "" }) : x.value), (0, l.createVNode)("span", { class: "vjs-colon" }, [":".concat(e.showKeyValueSpace ? " " : "")])]), (0, l.createVNode)("span", null, [y.type !== "content" && y.content ? (0, l.createVNode)(Be, { data: y.content.toString(), onClick: $ }, null) : (0, l.createVNode)("span", { class: N.value, onClick: !e.editable || e.editableTrigger && e.editableTrigger !== "click" ? void 0 : R, onDblclick: e.editable && e.editableTrigger === "dblclick" ? R : void 0 }, [e.editable && k.editing ? (0, l.createVNode)("input", { value: I.value, onChange: m, style: { padding: "3px 8px", border: "1px solid #eee", boxShadow: "none", boxSizing: "border-box", borderRadius: 5, fontFamily: "inherit" } }, null) : G()]), y.showComma && (0, l.createVNode)("span", null, [","]), e.showLength && e.collapsed && (0, l.createVNode)("span", { class: "vjs-comment" }, [(0, l.createTextVNode)(" // "), y.length, (0, l.createTextVNode)(" items ")])]), e.renderNodeActions && (0, l.createVNode)("span", { class: "vjs-tree-node-actions" }, [z()])]);
   };
 } });
-function O(e2, t2) {
-  var n2 = Object.keys(e2);
+function ke(e, n) {
+  var r = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var r2 = Object.getOwnPropertySymbols(e2);
-    t2 && (r2 = r2.filter((function(t3) {
-      return Object.getOwnPropertyDescriptor(e2, t3).enumerable;
-    }))), n2.push.apply(n2, r2);
+    var a = Object.getOwnPropertySymbols(e);
+    n && (a = a.filter((function(N) {
+      return Object.getOwnPropertyDescriptor(e, N).enumerable;
+    }))), r.push.apply(r, a);
   }
-  return n2;
+  return r;
 }
-function V(e2) {
-  for (var t2 = 1; t2 < arguments.length; t2++) {
-    var n2 = null != arguments[t2] ? arguments[t2] : {};
-    t2 % 2 ? O(Object(n2), true).forEach((function(t3) {
-      l(e2, t3, n2[t3]);
-    })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(n2)) : O(Object(n2)).forEach((function(t3) {
-      Object.defineProperty(e2, t3, Object.getOwnPropertyDescriptor(n2, t3));
+function M(e) {
+  for (var n = 1; n < arguments.length; n++) {
+    var r = arguments[n] != null ? arguments[n] : {};
+    n % 2 ? ke(Object(r), !0).forEach((function(a) {
+      ne(e, a, r[a]);
+    })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(r)) : ke(Object(r)).forEach((function(a) {
+      Object.defineProperty(e, a, Object.getOwnPropertyDescriptor(r, a));
     }));
   }
-  return e2;
+  return e;
 }
-const L = (0, u.defineComponent)({ name: "Tree", props: V(V({}, j), {}, { collapsedNodeLength: { type: Number, default: 1 / 0 }, deep: { type: Number, default: 1 / 0 }, pathCollapsible: { type: Function, default: function() {
-  return false;
-} }, virtual: { type: Boolean, default: false }, height: { type: Number, default: 400 }, itemHeight: { type: Number, default: 20 }, dynamicHeight: { type: Boolean, default: true }, selectedValue: { type: [String, Array], default: function() {
+const Ue = (0, l.defineComponent)({ name: "Tree", props: M(M({}, je), {}, { collapsedNodeLength: { type: Number, default: 1 / 0 }, deep: { type: Number, default: 1 / 0 }, pathCollapsible: { type: Function, default: function() {
+  return !1;
+} }, virtual: { type: Boolean, default: !1 }, height: { type: Number, default: 400 }, itemHeight: { type: Number, default: 20 }, dynamicHeight: { type: Boolean, default: !0 }, selectedValue: { type: [String, Array], default: function() {
   return "";
-} }, collapsedOnClickBrackets: { type: Boolean, default: true }, style: Object, onSelectedChange: { type: Function }, theme: { type: String, default: "light" } }), slots: ["renderNodeKey", "renderNodeValue", "renderNodeActions"], emits: ["nodeClick", "nodeMouseover", "bracketsClick", "iconClick", "selectedChange", "update:selectedValue", "update:data"], setup: function(e2, t2) {
-  var n2 = t2.emit, r2 = t2.slots, o2 = (0, u.ref)(), a2 = (0, u.computed)((function() {
-    return g(e2.data, e2.rootPath);
-  })), d2 = function(t3, n3) {
-    return a2.value.reduce((function(r3, o3) {
-      var a3, i2 = o3.level >= t3 || o3.length >= n3, c2 = null === (a3 = e2.pathCollapsible) || void 0 === a3 ? void 0 : a3.call(e2, o3);
-      return "objectStart" !== o3.type && "arrayStart" !== o3.type || !i2 && !c2 ? r3 : V(V({}, r3), {}, l({}, o3.path, 1));
+} }, collapsedOnClickBrackets: { type: Boolean, default: !0 }, style: Object, onSelectedChange: { type: Function }, theme: { type: String, default: "light" } }), slots: ["renderNodeKey", "renderNodeValue", "renderNodeActions"], emits: ["nodeClick", "nodeMouseover", "bracketsClick", "iconClick", "selectedChange", "update:selectedValue", "update:data"], setup: function(e, n) {
+  var r = n.emit, a = n.slots, N = (0, l.ref)(), x = (0, l.computed)((function() {
+    return W(e.data, e.rootPath);
+  })), O = function(i, d) {
+    return x.value.reduce((function(p, g) {
+      var t, o = g.level >= i || g.length >= d, c = (t = e.pathCollapsible) === null || t === void 0 ? void 0 : t.call(e, g);
+      return g.type !== "objectStart" && g.type !== "arrayStart" || !o && !c ? p : M(M({}, p), {}, ne({}, g.path, 1));
     }), {});
-  }, s2 = (0, u.reactive)({ translateY: 0, visibleData: null, hiddenPaths: d2(e2.deep, e2.collapsedNodeLength), startIndex: 0, endIndex: 0 }), h2 = [], f2 = [], p2 = 0, v2 = {}, y2 = function(t3) {
-    h2 = Array(t3).fill(0).map((function() {
-      return e2.itemHeight || 20;
-    })), (f2 = new Array(t3 + 1))[0] = 0;
-    for (var n3 = 0; n3 < t3; n3++) f2[n3 + 1] = f2[n3] + h2[n3];
-    p2 = f2[t3] || 0;
-  }, m2 = function(e3) {
-    var t3 = h2.length;
-    e3 < 0 && (e3 = 0), e3 > t3 && (e3 = t3);
-    for (var n3 = e3; n3 < t3; n3++) f2[n3 + 1] = f2[n3] + h2[n3];
-    p2 = f2[t3] || 0;
-  }, w2 = function(e3, t3) {
-    for (var n3 = 0, r3 = e3.length - 1; n3 < r3; ) {
-      var o3 = n3 + r3 >>> 1;
-      e3[o3] < t3 ? n3 = o3 + 1 : r3 = o3;
+  }, s = (0, l.reactive)({ translateY: 0, visibleData: null, hiddenPaths: O(e.deep, e.collapsedNodeLength), startIndex: 0, endIndex: 0 }), w = [], k = [], m = 0, I = {}, G = function(i) {
+    w = Array(i).fill(0).map((function() {
+      return e.itemHeight || 20;
+    })), (k = new Array(i + 1))[0] = 0;
+    for (var d = 0; d < i; d++) k[d + 1] = k[d] + w[d];
+    m = k[i] || 0;
+  }, $ = function(i) {
+    var d = w.length;
+    i < 0 && (i = 0), i > d && (i = d);
+    for (var p = i; p < d; p++) k[p + 1] = k[p] + w[p];
+    m = k[d] || 0;
+  }, K = function(i, d) {
+    for (var p = 0, g = i.length - 1; p < g; ) {
+      var t = p + g >>> 1;
+      i[t] < d ? p = t + 1 : g = t;
     }
-    return n3;
-  }, N2 = (0, u.computed)((function() {
-    for (var e3 = null, t3 = [], n3 = a2.value.length, r3 = 0; r3 < n3; r3++) {
-      var o3 = V(V({}, a2.value[r3]), {}, { id: r3 }), i2 = s2.hiddenPaths[o3.path];
-      if (e3 && e3.path === o3.path) {
-        var c2 = "objectStart" === e3.type, l2 = V(V(V({}, o3), e3), {}, { showComma: o3.showComma, content: c2 ? "{...}" : "[...]", type: c2 ? "objectCollapsed" : "arrayCollapsed" });
-        e3 = null, t3.push(l2);
+    return p;
+  }, H = (0, l.computed)((function() {
+    for (var i = null, d = [], p = x.value.length, g = 0; g < p; g++) {
+      var t = M(M({}, x.value[g]), {}, { id: g }), o = s.hiddenPaths[t.path];
+      if (i && i.path === t.path) {
+        var c = i.type === "objectStart", h = M(M(M({}, t), i), {}, { showComma: t.showComma, content: c ? "{...}" : "[...]", type: c ? "objectCollapsed" : "arrayCollapsed" });
+        i = null, d.push(h);
       } else {
-        if (i2 && !e3) {
-          e3 = o3;
+        if (o && !i) {
+          i = t;
           continue;
         }
-        if (e3) continue;
-        t3.push(o3);
+        if (i) continue;
+        d.push(t);
       }
     }
-    return t3;
-  })), k2 = (0, u.computed)((function() {
-    var t3 = e2.selectedValue;
-    return t3 && "multiple" === e2.selectableType && Array.isArray(t3) ? t3 : [t3];
-  })), C2 = (0, u.computed)((function() {
-    return !e2.selectableType || e2.selectOnClickNode || e2.showSelectController ? "" : "When selectableType is not null, selectOnClickNode and showSelectController cannot be false at the same time, because this will cause the selection to fail.";
-  })), x2 = (0, u.computed)((function() {
-    return e2.dynamicHeight ? p2 || 0 : N2.value.length * e2.itemHeight;
-  })), j2 = function t3() {
-    var n3 = N2.value;
-    if (n3) if (e2.virtual) {
-      var r3, a3 = (null === (r3 = o2.value) || void 0 === r3 ? void 0 : r3.scrollTop) || 0;
-      if (e2.dynamicHeight) {
-        h2.length !== n3.length && y2(n3.length);
-        var i2 = (function(e3) {
-          var t4 = w2(f2, e3 + 1e-4);
-          return Math.max(0, Math.min(t4 - 1, h2.length - 1));
-        })(a3), c2 = (function(e3, t4) {
-          var n4 = w2(f2, e3 + t4);
-          return Math.max(0, Math.min(n4 + 1, h2.length));
-        })(a3, e2.height), l2 = Math.max(0, i2 - 5), d3 = Math.min(n3.length, c2 + 5);
-        s2.startIndex = l2, s2.endIndex = d3, s2.translateY = f2[l2] || 0, s2.visibleData = n3.slice(l2, d3), (0, u.nextTick)().then((function() {
-          for (var e3 = false, n4 = s2.startIndex; n4 < s2.endIndex; n4++) {
-            var r4 = v2[n4];
-            if (r4) {
-              var o3 = r4.offsetHeight;
-              o3 && h2[n4] !== o3 && (h2[n4] = o3, f2[n4 + 1] = f2[n4] + h2[n4], m2(n4 + 1), e3 = true);
+    return d;
+  })), L = (0, l.computed)((function() {
+    var i = e.selectedValue;
+    return i && e.selectableType === "multiple" && Array.isArray(i) ? i : [i];
+  })), P = (0, l.computed)((function() {
+    return !e.selectableType || e.selectOnClickNode || e.showSelectController ? "" : "When selectableType is not null, selectOnClickNode and showSelectController cannot be false at the same time, because this will cause the selection to fail.";
+  })), R = (0, l.computed)((function() {
+    return e.dynamicHeight ? m || 0 : H.value.length * e.itemHeight;
+  })), Y = function i() {
+    var d = H.value;
+    if (d) if (e.virtual) {
+      var p, g = ((p = N.value) === null || p === void 0 ? void 0 : p.scrollTop) || 0;
+      if (e.dynamicHeight) {
+        w.length !== d.length && G(d.length);
+        var t = (function(T) {
+          var f = K(k, T + 1e-4);
+          return Math.max(0, Math.min(f - 1, w.length - 1));
+        })(g), o = (function(T, f) {
+          var V = K(k, T + f);
+          return Math.max(0, Math.min(V + 1, w.length));
+        })(g, e.height), c = Math.max(0, t - 5), h = Math.min(d.length, o + 5);
+        s.startIndex = c, s.endIndex = h, s.translateY = k[c] || 0, s.visibleData = d.slice(c, h), (0, l.nextTick)().then((function() {
+          for (var T = !1, f = s.startIndex; f < s.endIndex; f++) {
+            var V = I[f];
+            if (V) {
+              var E = V.offsetHeight;
+              E && w[f] !== E && (w[f] = E, k[f + 1] = k[f] + w[f], $(f + 1), T = !0);
             }
           }
-          e3 && t3();
+          T && i();
         }));
       } else {
-        var p3 = e2.height / e2.itemHeight, g2 = Math.floor(a3 / e2.itemHeight), b2 = g2 < 0 ? 0 : g2 + p3 > n3.length ? n3.length - p3 : g2;
-        b2 < 0 && (b2 = 0);
-        var k3 = b2 + p3;
-        s2.translateY = b2 * e2.itemHeight, s2.startIndex = b2, s2.endIndex = k3, s2.visibleData = n3.slice(b2, k3);
+        var u = e.height / e.itemHeight, v = Math.floor(g / e.itemHeight), S = v < 0 ? 0 : v + u > d.length ? d.length - u : v;
+        S < 0 && (S = 0);
+        var j = S + u;
+        s.translateY = S * e.itemHeight, s.startIndex = S, s.endIndex = j, s.visibleData = d.slice(S, j);
       }
-    } else s2.translateY = 0, s2.startIndex = 0, s2.endIndex = n3.length, s2.visibleData = n3;
-  }, O2 = null, L2 = function() {
-    O2 && cancelAnimationFrame(O2), O2 = requestAnimationFrame((function() {
-      j2();
+    } else s.translateY = 0, s.startIndex = 0, s.endIndex = d.length, s.visibleData = d;
+  }, B = null, z = function() {
+    B && cancelAnimationFrame(B), B = requestAnimationFrame((function() {
+      Y();
     }));
-  }, P2 = function(t3) {
-    var r3, o3, a3 = t3.path, l2 = e2.selectableType;
-    if ("multiple" === l2) {
-      var u2 = k2.value.findIndex((function(e3) {
-        return e3 === a3;
-      })), d3 = c(k2.value);
-      -1 !== u2 ? d3.splice(u2, 1) : d3.push(a3), n2("update:selectedValue", d3), n2("selectedChange", d3, c(k2.value));
-    } else if ("single" === l2 && k2.value[0] !== a3) {
-      var s3 = (r3 = k2.value, o3 = 1, (function(e3) {
-        if (Array.isArray(e3)) return e3;
-      })(r3) || (function(e3, t4) {
-        var n3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-        if (null != n3) {
-          var r4, o4, a4 = [], i2 = true, c2 = false;
+  }, C = function(i) {
+    var d, p, g = i.path, t = e.selectableType;
+    if (t === "multiple") {
+      var o = L.value.findIndex((function(v) {
+        return v === g;
+      })), c = oe(L.value);
+      o !== -1 ? c.splice(o, 1) : c.push(g), r("update:selectedValue", c), r("selectedChange", c, oe(L.value));
+    } else if (t === "single" && L.value[0] !== g) {
+      var h = (d = L.value, p = 1, (function(v) {
+        if (Array.isArray(v)) return v;
+      })(d) || (function(v, S) {
+        var j = v == null ? null : typeof Symbol < "u" && v[Symbol.iterator] || v["@@iterator"];
+        if (j != null) {
+          var T, f, V = [], E = !0, Z = !1;
           try {
-            for (n3 = n3.call(e3); !(i2 = (r4 = n3.next()).done) && (a4.push(r4.value), !t4 || a4.length !== t4); i2 = true) ;
-          } catch (e4) {
-            c2 = true, o4 = e4;
+            for (j = j.call(v); !(E = (T = j.next()).done) && (V.push(T.value), !S || V.length !== S); E = !0) ;
+          } catch (re) {
+            Z = !0, f = re;
           } finally {
             try {
-              i2 || null == n3.return || n3.return();
+              E || j.return == null || j.return();
             } finally {
-              if (c2) throw o4;
+              if (Z) throw f;
             }
           }
-          return a4;
+          return V;
         }
-      })(r3, o3) || i(r3, o3) || (function() {
-        throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-      })())[0], h3 = a3;
-      n2("update:selectedValue", h3), n2("selectedChange", h3, s3);
+      })(d, p) || Ve(d, p) || (function() {
+        throw new TypeError(`Invalid attempt to destructure non-iterable instance.
+In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
+      })())[0], u = g;
+      r("update:selectedValue", u), r("selectedChange", u, h);
     }
-  }, T = function(e3) {
-    n2("nodeClick", e3);
-  }, E = function(e3) {
-    n2("nodeMouseover", e3);
-  }, A = function(e3, t3) {
-    if (e3) s2.hiddenPaths = V(V({}, s2.hiddenPaths), {}, l({}, t3, 1));
+  }, y = function(i) {
+    r("nodeClick", i);
+  }, b = function(i) {
+    r("nodeMouseover", i);
+  }, D = function(i, d) {
+    if (i) s.hiddenPaths = M(M({}, s.hiddenPaths), {}, ne({}, d, 1));
     else {
-      var n3 = V({}, s2.hiddenPaths);
-      delete n3[t3], s2.hiddenPaths = n3;
+      var p = M({}, s.hiddenPaths);
+      delete p[d], s.hiddenPaths = p;
     }
-  }, F = function(t3, r3) {
-    e2.collapsedOnClickBrackets && A(t3, r3.path), n2("bracketsClick", t3, r3);
-  }, I = function(e3, t3) {
-    A(e3, t3.path), n2("iconClick", e3, t3);
-  }, B = function(t3, r3) {
-    var o3 = b(e2.data), a3 = e2.rootPath;
-    new Function("data", "val", "data".concat(r3.slice(a3.length), "=val"))(o3, t3), n2("update:data", o3);
+  }, F = function(i, d) {
+    e.collapsedOnClickBrackets && D(i, d.path), r("bracketsClick", i, d);
+  }, q = function(i, d) {
+    D(i, d.path), r("iconClick", i, d);
+  }, A = function(i, d) {
+    var p = de(e.data), g = e.rootPath;
+    new Function("data", "val", "data".concat(d.slice(g.length), "=val"))(p, i), r("update:data", p);
   };
-  return (0, u.watchEffect)((function() {
-    C2.value && (function(e3) {
-      throw new Error("[VueJSONPretty] ".concat(e3));
-    })(C2.value);
-  })), (0, u.watchEffect)((function() {
-    N2.value && (e2.virtual && e2.dynamicHeight && h2.length !== N2.value.length && y2(N2.value.length), j2());
-  })), (0, u.watch)((function() {
-    return [e2.dynamicHeight, e2.itemHeight, a2.value.length];
+  return (0, l.watchEffect)((function() {
+    P.value && (function(i) {
+      throw new Error("[VueJSONPretty] ".concat(i));
+    })(P.value);
+  })), (0, l.watchEffect)((function() {
+    H.value && (e.virtual && e.dynamicHeight && w.length !== H.value.length && G(H.value.length), Y());
+  })), (0, l.watch)((function() {
+    return [e.dynamicHeight, e.itemHeight, x.value.length];
   }), (function() {
-    e2.virtual && e2.dynamicHeight && (y2(N2.value.length), (0, u.nextTick)(j2));
-  })), (0, u.watch)((function() {
-    return e2.deep;
-  }), (function(t3) {
-    t3 && (s2.hiddenPaths = d2(t3, e2.collapsedNodeLength));
-  })), (0, u.watch)((function() {
-    return e2.collapsedNodeLength;
-  }), (function(t3) {
-    t3 && (s2.hiddenPaths = d2(e2.deep, t3));
+    e.virtual && e.dynamicHeight && (G(H.value.length), (0, l.nextTick)(Y));
+  })), (0, l.watch)((function() {
+    return e.deep;
+  }), (function(i) {
+    i && (s.hiddenPaths = O(i, e.collapsedNodeLength));
+  })), (0, l.watch)((function() {
+    return e.collapsedNodeLength;
+  }), (function(i) {
+    i && (s.hiddenPaths = O(e.deep, i));
   })), function() {
-    var t3, n3, i2, c2, l2, d3 = null !== (t3 = e2.renderNodeKey) && void 0 !== t3 ? t3 : r2.renderNodeKey, h3 = null !== (n3 = e2.renderNodeValue) && void 0 !== n3 ? n3 : r2.renderNodeValue, f3 = null !== (i2 = null !== (c2 = e2.renderNodeActions) && void 0 !== c2 ? c2 : r2.renderNodeActions) && void 0 !== i2 && i2, p3 = null === (l2 = s2.visibleData) || void 0 === l2 ? void 0 : l2.map((function(t4, n4) {
-      var r3 = s2.startIndex + n4;
-      return (0, u.createVNode)("div", { key: t4.id, ref: function(e3) {
-        return (function(e4, t5) {
-          t5 ? v2[e4] = t5 : delete v2[e4];
-        })(r3, e3 || null);
-      } }, [(0, u.createVNode)(S, { data: e2.data, rootPath: e2.rootPath, indent: e2.indent, node: t4, collapsed: !!s2.hiddenPaths[t4.path], theme: e2.theme, showDoubleQuotes: e2.showDoubleQuotes, showLength: e2.showLength, checked: k2.value.includes(t4.path), selectableType: e2.selectableType, showLine: e2.showLine, showLineNumber: e2.showLineNumber, showSelectController: e2.showSelectController, selectOnClickNode: e2.selectOnClickNode, nodeSelectable: e2.nodeSelectable, highlightSelectedNode: e2.highlightSelectedNode, editable: e2.editable, editableTrigger: e2.editableTrigger, showIcon: e2.showIcon, showKeyValueSpace: e2.showKeyValueSpace, renderNodeKey: d3, renderNodeValue: h3, renderNodeActions: f3, onNodeClick: T, onNodeMouseover: E, onBracketsClick: F, onIconClick: I, onSelectedChange: P2, onValueChange: B, class: e2.dynamicHeight ? "dynamic-height" : void 0, style: e2.dynamicHeight ? {} : e2.itemHeight && 20 !== e2.itemHeight ? { lineHeight: "".concat(e2.itemHeight, "px") } : {} }, null)]);
+    var i, d, p, g, t, o = (i = e.renderNodeKey) !== null && i !== void 0 ? i : a.renderNodeKey, c = (d = e.renderNodeValue) !== null && d !== void 0 ? d : a.renderNodeValue, h = (p = (g = e.renderNodeActions) !== null && g !== void 0 ? g : a.renderNodeActions) !== null && p !== void 0 && p, u = (t = s.visibleData) === null || t === void 0 ? void 0 : t.map((function(v, S) {
+      var j = s.startIndex + S;
+      return (0, l.createVNode)("div", { key: v.id, ref: function(T) {
+        return (function(f, V) {
+          V ? I[f] = V : delete I[f];
+        })(j, T || null);
+      } }, [(0, l.createVNode)(Re, { data: e.data, rootPath: e.rootPath, indent: e.indent, node: v, collapsed: !!s.hiddenPaths[v.path], theme: e.theme, showDoubleQuotes: e.showDoubleQuotes, showLength: e.showLength, checked: L.value.includes(v.path), selectableType: e.selectableType, showLine: e.showLine, showLineNumber: e.showLineNumber, showSelectController: e.showSelectController, selectOnClickNode: e.selectOnClickNode, nodeSelectable: e.nodeSelectable, highlightSelectedNode: e.highlightSelectedNode, editable: e.editable, editableTrigger: e.editableTrigger, showIcon: e.showIcon, showKeyValueSpace: e.showKeyValueSpace, renderNodeKey: o, renderNodeValue: c, renderNodeActions: h, onNodeClick: y, onNodeMouseover: b, onBracketsClick: F, onIconClick: q, onSelectedChange: C, onValueChange: A, class: e.dynamicHeight ? "dynamic-height" : void 0, style: e.dynamicHeight ? {} : e.itemHeight && e.itemHeight !== 20 ? { lineHeight: "".concat(e.itemHeight, "px") } : {} }, null)]);
     }));
-    return (0, u.createVNode)("div", { ref: o2, class: { "vjs-tree": true, "is-virtual": e2.virtual, dark: "dark" === e2.theme }, onScroll: e2.virtual ? L2 : void 0, style: e2.showLineNumber ? V({ paddingLeft: "".concat(12 * Number(a2.value.length.toString().length), "px") }, e2.style) : e2.style }, [e2.virtual ? (0, u.createVNode)("div", { class: "vjs-tree-list", style: { height: "".concat(e2.height, "px") } }, [(0, u.createVNode)("div", { class: "vjs-tree-list-holder", style: { height: "".concat(x2.value, "px") } }, [(0, u.createVNode)("div", { class: "vjs-tree-list-holder-inner", style: { transform: "translateY(".concat(s2.translateY, "px)") } }, [p3])])]) : p3]);
+    return (0, l.createVNode)("div", { ref: N, class: { "vjs-tree": !0, "is-virtual": e.virtual, dark: e.theme === "dark" }, onScroll: e.virtual ? z : void 0, style: e.showLineNumber ? M({ paddingLeft: "".concat(12 * Number(x.value.length.toString().length), "px") }, e.style) : e.style }, [e.virtual ? (0, l.createVNode)("div", { class: "vjs-tree-list", style: { height: "".concat(e.height, "px") } }, [(0, l.createVNode)("div", { class: "vjs-tree-list-holder", style: { height: "".concat(R.value, "px") } }, [(0, l.createVNode)("div", { class: "vjs-tree-list-holder-inner", style: { transform: "translateY(".concat(s.translateY, "px)") } }, [u])])]) : u]);
   };
 } });
-var P = o.A;
-const _hoisted_1 = {
+var Ke = xe.A;
+const Ye = {
   key: 0,
   class: "grid grid-cols-2 grid-rows-4 gap-4 overflow-auto w-full h-full"
-};
-const _hoisted_2 = { key: 1 };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+}, qe = { key: 1 }, Qe = /* @__PURE__ */ Ne({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const data = ref(null);
-    const featureCollection = ref(null);
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    watch(tempStore, async () => {
-      featureCollection.value = await tempStore.value.getData("FeatureCollection");
-      data.value = featureCollection.value?.features || [];
-    }, { deep: true });
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      return tempStore.value ? (openBlock(), createElementBlock("div", _hoisted_1, [
-        createVNode(unref(P), { data: featureCollection.value }, null, 8, ["data"])
-      ])) : (openBlock(), createElementBlock("div", _hoisted_2, [..._cache[0] || (_cache[0] = [
-        createElementVNode("h3", null, "OGC Feature Collection Preview", -1)
-      ])]));
-    };
+  setup(e) {
+    const n = e, r = ee(null), a = ee(null), N = Pe(null), x = ee(n.dataSource), { update: O } = Ae(n.dataSource.type, x, N);
+    return ce(N, async () => {
+      a.value = await N.value.getData("FeatureCollection"), r.value = a.value?.features || [];
+    }, { deep: !0 }), ce(n.dataSource, () => {
+      O();
+    }, { deep: !0 }), (s, w) => N.value ? (X(), te("div", Ye, [
+      J(Le(Ke), { data: a.value }, null, 8, ["data"])
+    ])) : (X(), te("div", qe, [...w[0] || (w[0] = [
+      Te("h3", null, "OGC Feature Collection Preview", -1)
+    ])]));
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), $e = /* @__PURE__ */ Ne({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {},
     connections: {}
   },
-  setup(__props) {
-    const dsRepository = inject(identifier);
-    const datasourcesFiltered = computed(() => {
-      return __props.dataSources.filter((ds) => ds.type === "csv" || ds.type === "xmla");
-    });
-    const headers = ref([]);
-    const properties = ref([]);
-    const geometryTypes = ["Point"];
-    watch(() => __props.config.connectedDatasources, async (newValue) => {
-      headers.value = await OgcFeatureComposer.getHeaders(
-        newValue,
-        dsRepository
+  setup(e) {
+    const n = Fe(De), r = Ee(() => e.dataSources.filter((O) => O.type === "csv" || O.type === "xmla")), a = ee([]), N = ee([]), x = ["Point"];
+    return ce(() => e.config.connectedDatasources, async (O) => {
+      a.value = await pe.getHeaders(
+        O,
+        n
+      ), N.value = await pe.getProperties(
+        O,
+        n
       );
-      properties.value = await OgcFeatureComposer.getProperties(
-        newValue,
-        dsRepository
-      );
-    });
-    return (_ctx, _cache) => {
-      const _component_VaSelect = resolveComponent("VaSelect");
-      const _component_VaCheckbox = resolveComponent("VaCheckbox");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(_component_VaSelect, {
-          modelValue: __props.config.connectedDatasources,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connectedDatasources = $event),
+    }), (O, s) => {
+      const w = fe("VaSelect"), k = fe("VaCheckbox");
+      return X(), te(ie, null, [
+        J(w, {
+          modelValue: e.config.connectedDatasources,
+          "onUpdate:modelValue": s[0] || (s[0] = (m) => e.config.connectedDatasources = m),
           label: "Sources",
-          options: datasourcesFiltered.value,
+          options: r.value,
           multiple: "",
           "text-by": "name",
           "value-by": "uid"
         }, null, 8, ["modelValue", "options"]),
-        createVNode(_component_VaCheckbox, {
-          modelValue: __props.config.useGeometryFromData,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.useGeometryFromData = $event),
+        J(k, {
+          modelValue: e.config.useGeometryFromData,
+          "onUpdate:modelValue": s[1] || (s[1] = (m) => e.config.useGeometryFromData = m),
           label: "Use geometry from data",
-          style: { "margin": "0.5rem 0" }
+          style: { margin: "0.5rem 0" }
         }, null, 8, ["modelValue"]),
-        __props.config.useGeometryFromData ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-          createVNode(_component_VaCheckbox, {
-            modelValue: __props.config.useGeometryFromProps,
-            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => __props.config.useGeometryFromProps = $event),
+        e.config.useGeometryFromData ? (X(), te(ie, { key: 0 }, [
+          J(k, {
+            modelValue: e.config.useGeometryFromProps,
+            "onUpdate:modelValue": s[2] || (s[2] = (m) => e.config.useGeometryFromProps = m),
             label: "Use geometry from properties",
-            style: { "margin": "0.5rem 0" }
+            style: { margin: "0.5rem 0" }
           }, null, 8, ["modelValue"]),
-          __props.config.useGeometryFromProps ? (openBlock(), createBlock(_component_VaSelect, {
+          e.config.useGeometryFromProps ? (X(), he(w, {
             key: 0,
-            modelValue: __props.config.geometryPropsField,
-            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => __props.config.geometryPropsField = $event),
+            modelValue: e.config.geometryPropsField,
+            "onUpdate:modelValue": s[3] || (s[3] = (m) => e.config.geometryPropsField = m),
             label: "Geometry properties field",
-            options: properties.value
-          }, null, 8, ["modelValue", "options"])) : (openBlock(), createBlock(_component_VaSelect, {
+            options: N.value
+          }, null, 8, ["modelValue", "options"])) : (X(), he(w, {
             key: 1,
-            modelValue: __props.config.geometryField,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => __props.config.geometryField = $event),
+            modelValue: e.config.geometryField,
+            "onUpdate:modelValue": s[4] || (s[4] = (m) => e.config.geometryField = m),
             label: "Geometry field",
-            options: headers.value
+            options: a.value
           }, null, 8, ["modelValue", "options"]))
-        ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-          createVNode(_component_VaSelect, {
-            modelValue: __props.config.xField,
-            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => __props.config.xField = $event),
+        ], 64)) : (X(), te(ie, { key: 1 }, [
+          J(w, {
+            modelValue: e.config.xField,
+            "onUpdate:modelValue": s[5] || (s[5] = (m) => e.config.xField = m),
             label: "X Coordinate field",
-            options: headers.value
+            options: a.value
           }, null, 8, ["modelValue", "options"]),
-          createVNode(_component_VaSelect, {
-            modelValue: __props.config.yField,
-            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => __props.config.yField = $event),
+          J(w, {
+            modelValue: e.config.yField,
+            "onUpdate:modelValue": s[6] || (s[6] = (m) => e.config.yField = m),
             label: "Y Coordinate field",
-            options: headers.value
+            options: a.value
           }, null, 8, ["modelValue", "options"]),
-          createVNode(_component_VaSelect, {
-            modelValue: __props.config.geometryType,
-            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => __props.config.geometryType = $event),
+          J(w, {
+            modelValue: e.config.geometryType,
+            "onUpdate:modelValue": s[7] || (s[7] = (m) => e.config.geometryType = m),
             label: "Geometry type",
-            options: geometryTypes
+            options: x
           }, null, 8, ["modelValue"])
         ], 64))
       ], 64);
     };
   }
-});
-const OgcComposerIdentifier = Symbol.for("OgcFeatureComposer");
-const previewSymbol = Symbol.for("OgcComposerPreview");
-const settingsSymbol = Symbol.for("OgcComposerSettings");
-function activate({ services }) {
-  services.register("OgcComposerPreview", _sfc_main$1);
-  services.register("OgcComposerSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("OGC Composer", {
-    Store: OgcComposerIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+}), ze = Symbol.for("OgcFeatureComposer"), Je = Symbol.for("OgcComposerPreview"), We = Symbol.for("OgcComposerSettings");
+function nt({ services: e }) {
+  e.register("OgcComposerPreview", Qe), e.register("OgcComposerSettings", $e), e.getRequired(Se).registerDatasourceType("OGC Composer", {
+    Store: ze,
+    Preview: Je,
+    Settings: We
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("OGC Composer");
-  services.unregister("OgcComposerPreview");
-  services.unregister("OgcComposerSettings");
+function rt({ services: e }) {
+  e.getRequired(Se).unregisterDatasourceType("OGC Composer"), e.unregister("OgcComposerPreview"), e.unregister("OgcComposerSettings");
 }
 export {
-  activate,
-  deactivate
+  nt as activate,
+  rt as deactivate
 };

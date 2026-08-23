@@ -1,27 +1,20 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const SETTINGS_MANAGER = serviceId("SettingsManager");
-const identifier = Symbol.for(SETTINGS_MANAGER);
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const { serviceId: a } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), n = a("SettingsManager"), o = Symbol.for(n), r = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  SETTINGS_MANAGER,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.api.settings";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.api.settings");
-  await void 0;
+  SETTINGS_MANAGER: n,
+  identifier: o
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.lib.api.settings", s = "0.0.1-next.1";
+async function c(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, r, s, "lib.api.settings"), await void 0;
 }
-async function deactivate(context) {
+async function l(e) {
   await void 0;
 }
 export {
-  SETTINGS_MANAGER,
-  activate,
-  deactivate,
-  identifier
+  n as SETTINGS_MANAGER,
+  c as activate,
+  l as deactivate,
+  o as identifier
 };

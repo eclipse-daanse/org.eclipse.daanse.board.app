@@ -1,18 +1,17 @@
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { ref } from "vue";
-import { defineStore } from "pinia";
-let repository;
-function provideRepository(instance) {
-  repository = instance;
+import { CONNECTION_REPOSITORY as c } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { ref as d } from "vue";
+import { defineStore as p } from "pinia";
+let r;
+function f(n) {
+  r = n;
 }
-function requireRepository() {
-  if (!repository) {
+function l() {
+  if (!r)
     throw new Error("ConnectionRepository not provided - is the ui.vue.stores.connection module active?");
-  }
-  return repository;
+  return r;
 }
-const useConnectionsStore = defineStore("connections", () => {
-  const connections = ref([
+const m = p("connections", () => {
+  const n = d([
     {
       uid: "test",
       name: "Test Connection 01",
@@ -21,76 +20,45 @@ const useConnectionsStore = defineStore("connections", () => {
         url: "https://jsonplaceholder.typicode.com/"
       }
     }
-  ]);
-  const connectionRepository = requireRepository();
-  const createConnection = (type, config = {}) => {
-    const uid = Math.random().toString(36).substring(7);
-    const name = "Connection " + uid;
-    config["name"] = name;
-    config["type"] = type;
-    config["uid"] = uid;
-    connectionRepository.registerConnection(uid, type, config);
-    connections.value.push({ uid, type, name, config });
-    return uid;
-  };
-  const removeConnection = (connectionId) => {
-    const index = connections.value.findIndex((c) => c.uid === connectionId);
-    if (index > -1) {
-      connections.value.splice(index, 1);
-    }
-  };
-  const updateConnection = (connectionId, connectionProxy) => {
-    const connection = connections.value.find((c) => c.uid === connectionId);
-    if (!connection) return;
-    connection.uid = connectionProxy.uid;
-    connection.type = connectionProxy.type;
-    connection.name = connectionProxy.name;
-    connection.config = connectionProxy.config;
-    connection.config["name"] = connectionProxy.name;
-    connection.config["type"] = connectionProxy.type;
-    connection.config["uid"] = connectionProxy.uid;
-    connectionRepository.registerConnection(connectionId, connection.type, connection.config);
-    console.log(connectionRepository);
-  };
-  const updateConnections = (connectionProxies) => {
-    connections.value.splice(0);
-    connectionProxies.forEach((connectionProxy) => {
-      connections.value.push(connectionProxy);
-      connectionProxy.config["name"] = connectionProxy.name;
-      connectionProxy.config["type"] = connectionProxy.type;
-      connectionProxy.config["uid"] = connectionProxy.uid;
-      connectionRepository.registerConnection(
-        connectionProxy.uid,
-        connectionProxy.type,
-        connectionProxy.config
+  ]), o = l();
+  return { connections: n, createConnection: (i, e = {}) => {
+    const t = Math.random().toString(36).substring(7), s = "Connection " + t;
+    return e.name = s, e.type = i, e.uid = t, o.registerConnection(t, i, e), n.value.push({ uid: t, type: i, name: s, config: e }), t;
+  }, removeConnection: (i) => {
+    const e = n.value.findIndex((t) => t.uid === i);
+    e > -1 && n.value.splice(e, 1);
+  }, updateConnection: (i, e) => {
+    const t = n.value.find((s) => s.uid === i);
+    t && (t.uid = e.uid, t.type = e.type, t.name = e.name, t.config = e.config, t.config.name = e.name, t.config.type = e.type, t.config.uid = e.uid, o.registerConnection(i, t.type, t.config), console.log(o));
+  }, updateConnections: (i) => {
+    n.value.splice(0), i.forEach((e) => {
+      n.value.push(e), e.config.name = e.name, e.config.type = e.type, e.config.uid = e.uid, o.registerConnection(
+        e.uid,
+        e.type,
+        e.config
       );
     });
-  };
-  return { connections, createConnection, removeConnection, updateConnection, updateConnections };
+  } };
 });
-function activate$1({ services }) {
-  provideRepository(services.getRequired(CONNECTION_REPOSITORY));
+function a({ services: n }) {
+  f(n.getRequired(c));
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const g = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  useConnectionsStore
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.stores.connection";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.stores.connection");
-  await activate$1?.(context);
+  activate: a,
+  useConnectionsStore: m
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.ui.vue.stores.connection", v = "0.0.1-next.1";
+async function w(n) {
+  const o = globalThis.__tsm__;
+  if (!o)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  o.register(u, g, v, "ui.vue.stores.connection"), await a?.(n);
 }
-async function deactivate(context) {
+async function E(n) {
   await void 0;
 }
 export {
-  activate,
-  deactivate,
-  useConnectionsStore
+  w as activate,
+  E as deactivate,
+  m as useConnectionsStore
 };

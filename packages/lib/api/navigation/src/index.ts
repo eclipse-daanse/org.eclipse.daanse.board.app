@@ -14,27 +14,20 @@
 /**
  * The navigation contract.
  *
- * The contract and nothing else - the OSGi API bundle. Implementations
- * and consumers both depend on this package; neither depends on the other.
+ * The contract and nothing else - the OSGi API bundle. The Ecore model
+ * lives here too (model/, generated into src/gen): model classes are part
+ * of a contract the way DTOs are part of an OSGi API package. The
+ * implementation extends NavigationRegistry and provides the service.
  */
 
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-/*
- * Ecore-generated model classes live in the implementation package; the
- * types travel with the contract, the constructors do not. Moving the
- * models is a generator concern, noted as follow-up.
- */
-import type { NavigationItem } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import { NavigationRegistry } from './gen/NavigationRegistry'
 
-export type { NavigationItem }
+export { NavigationRegistry } from './gen/NavigationRegistry'
+export { NavigationItem } from './gen/NavigationItem'
 
-export interface NavigationRegistry {
-  registerNavigationItem(item: NavigationItem): boolean;
-  unregisterNavigationItem(id: string): boolean;
-  getNavigationItem(id?: string): NavigationItem;
-  getAllNavigationItems(): NavigationItem;
-  getAllNavigationItemsArray(): NavigationItem[];
-}
-
+/** Typed service id - the name and the contract declared once, here. */
 export const NAVIGATION_REGISTRY_ID = serviceId<NavigationRegistry>('NavigationRegistry')
+
+/** The matching symbol for Vue-side injection (Symbol.for of the id). */
 export const NAVIGATION_REGISTRY = Symbol.for(NAVIGATION_REGISTRY_ID)

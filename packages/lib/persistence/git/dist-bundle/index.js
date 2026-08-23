@@ -1,344 +1,184 @@
-import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { BaseRepository } from "org.eclipse.daanse.board.app.lib.repository.persistence";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-function getUserAgent() {
-  if (typeof navigator === "object" && "userAgent" in navigator) {
-    return navigator.userAgent;
-  }
-  if (typeof process === "object" && process.version !== void 0) {
-    return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
-  }
-  return "<environment undetectable>";
+import { REPOSITORY_REGISTRY as Vr } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { BaseRepository as Wr } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+const { serviceId: zr } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+function he() {
+  return typeof navigator == "object" && "userAgent" in navigator ? navigator.userAgent : typeof process == "object" && process.version !== void 0 ? `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})` : "<environment undetectable>";
 }
-function register(state, name, method, options) {
-  if (typeof method !== "function") {
+function mr(e, r, t, o) {
+  if (typeof t != "function")
     throw new Error("method for before hook must be a function");
-  }
-  if (!options) {
-    options = {};
-  }
-  if (Array.isArray(name)) {
-    return name.reverse().reduce((callback, name2) => {
-      return register.bind(null, state, name2, callback, options);
-    }, method)();
-  }
-  return Promise.resolve().then(() => {
-    if (!state.registry[name]) {
-      return method(options);
-    }
-    return state.registry[name].reduce((method2, registered) => {
-      return registered.hook.bind(null, method2, options);
-    }, method)();
+  return o || (o = {}), Array.isArray(r) ? r.reverse().reduce((i, n) => mr.bind(null, e, n, i, o), t)() : Promise.resolve().then(() => e.registry[r] ? e.registry[r].reduce((i, n) => n.hook.bind(null, i, o), t)() : t(o));
+}
+function Nr(e, r, t, o) {
+  const i = o;
+  e.registry[t] || (e.registry[t] = []), r === "before" && (o = (n, c) => Promise.resolve().then(i.bind(null, c)).then(n.bind(null, c))), r === "after" && (o = (n, c) => {
+    let l;
+    return Promise.resolve().then(n.bind(null, c)).then((g) => (l = g, i(l, c))).then(() => l);
+  }), r === "error" && (o = (n, c) => Promise.resolve().then(n.bind(null, c)).catch((l) => i(l, c))), e.registry[t].push({
+    hook: o,
+    orig: i
   });
 }
-function addHook(state, kind, name, hook2) {
-  const orig = hook2;
-  if (!state.registry[name]) {
-    state.registry[name] = [];
-  }
-  if (kind === "before") {
-    hook2 = (method, options) => {
-      return Promise.resolve().then(orig.bind(null, options)).then(method.bind(null, options));
-    };
-  }
-  if (kind === "after") {
-    hook2 = (method, options) => {
-      let result;
-      return Promise.resolve().then(method.bind(null, options)).then((result_) => {
-        result = result_;
-        return orig(result, options);
-      }).then(() => {
-        return result;
-      });
-    };
-  }
-  if (kind === "error") {
-    hook2 = (method, options) => {
-      return Promise.resolve().then(method.bind(null, options)).catch((error) => {
-        return orig(error, options);
-      });
-    };
-  }
-  state.registry[name].push({
-    hook: hook2,
-    orig
-  });
-}
-function removeHook(state, name, method) {
-  if (!state.registry[name]) {
+function Mr(e, r, t) {
+  if (!e.registry[r])
     return;
-  }
-  const index = state.registry[name].map((registered) => {
-    return registered.orig;
-  }).indexOf(method);
-  if (index === -1) {
-    return;
-  }
-  state.registry[name].splice(index, 1);
+  const o = e.registry[r].map((i) => i.orig).indexOf(t);
+  o !== -1 && e.registry[r].splice(o, 1);
 }
-const bind = Function.bind;
-const bindable = bind.bind(bind);
-function bindApi(hook2, state, name) {
-  const removeHookRef = bindable(removeHook, null).apply(
+const Je = Function.bind, Qe = Je.bind(Je);
+function Kr(e, r, t) {
+  const o = Qe(Mr, null).apply(
     null,
-    [state]
+    [r]
   );
-  hook2.api = { remove: removeHookRef };
-  hook2.remove = removeHookRef;
-  ["before", "error", "after", "wrap"].forEach((kind) => {
-    const args = [state, kind];
-    hook2[kind] = hook2.api[kind] = bindable(addHook, null).apply(null, args);
+  e.api = { remove: o }, e.remove = o, ["before", "error", "after", "wrap"].forEach((i) => {
+    const n = [r, i];
+    e[i] = e.api[i] = Qe(Nr, null).apply(null, n);
   });
 }
-function Collection() {
-  const state = {
+function Jr() {
+  const e = {
     registry: {}
-  };
-  const hook2 = register.bind(null, state);
-  bindApi(hook2, state);
-  return hook2;
+  }, r = mr.bind(null, e);
+  return Kr(r, e), r;
 }
-const Hook = { Collection };
-var VERSION$9 = "0.0.0-development";
-var userAgent = `octokit-endpoint.js/${VERSION$9} ${getUserAgent()}`;
-var DEFAULTS = {
+const Qr = { Collection: Jr };
+var Yr = "0.0.0-development", Xr = `octokit-endpoint.js/${Yr} ${he()}`, Zr = {
   method: "GET",
   baseUrl: "https://api.github.com",
   headers: {
     accept: "application/vnd.github.v3+json",
-    "user-agent": userAgent
+    "user-agent": Xr
   },
   mediaType: {
     format: ""
   }
 };
-function lowercaseKeys(object) {
-  if (!object) {
-    return {};
-  }
-  return Object.keys(object).reduce((newObj, key) => {
-    newObj[key.toLowerCase()] = object[key];
-    return newObj;
-  }, {});
+function et(e) {
+  return e ? Object.keys(e).reduce((r, t) => (r[t.toLowerCase()] = e[t], r), {}) : {};
 }
-function isPlainObject$1(value) {
-  if (typeof value !== "object" || value === null) return false;
-  if (Object.prototype.toString.call(value) !== "[object Object]") return false;
-  const proto = Object.getPrototypeOf(value);
-  if (proto === null) return true;
-  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
-  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+function rt(e) {
+  if (typeof e != "object" || e === null || Object.prototype.toString.call(e) !== "[object Object]") return !1;
+  const r = Object.getPrototypeOf(e);
+  if (r === null) return !0;
+  const t = Object.prototype.hasOwnProperty.call(r, "constructor") && r.constructor;
+  return typeof t == "function" && t instanceof t && Function.prototype.call(t) === Function.prototype.call(e);
 }
-function mergeDeep(defaults, options) {
-  const result = Object.assign({}, defaults);
-  Object.keys(options).forEach((key) => {
-    if (isPlainObject$1(options[key])) {
-      if (!(key in defaults)) Object.assign(result, { [key]: options[key] });
-      else result[key] = mergeDeep(defaults[key], options[key]);
-    } else {
-      Object.assign(result, { [key]: options[key] });
-    }
-  });
-  return result;
+function hr(e, r) {
+  const t = Object.assign({}, e);
+  return Object.keys(r).forEach((o) => {
+    rt(r[o]) ? o in e ? t[o] = hr(e[o], r[o]) : Object.assign(t, { [o]: r[o] }) : Object.assign(t, { [o]: r[o] });
+  }), t;
 }
-function removeUndefinedProperties(obj) {
-  for (const key in obj) {
-    if (obj[key] === void 0) {
-      delete obj[key];
-    }
-  }
-  return obj;
+function Ye(e) {
+  for (const r in e)
+    e[r] === void 0 && delete e[r];
+  return e;
 }
-function merge(defaults, route, options) {
-  if (typeof route === "string") {
-    let [method, url] = route.split(" ");
-    options = Object.assign(url ? { method, url } : { url: method }, options);
-  } else {
-    options = Object.assign({}, route);
-  }
-  options.headers = lowercaseKeys(options.headers);
-  removeUndefinedProperties(options);
-  removeUndefinedProperties(options.headers);
-  const mergedOptions = mergeDeep(defaults || {}, options);
-  if (options.url === "/graphql") {
-    if (defaults && defaults.mediaType.previews?.length) {
-      mergedOptions.mediaType.previews = defaults.mediaType.previews.filter(
-        (preview) => !mergedOptions.mediaType.previews.includes(preview)
-      ).concat(mergedOptions.mediaType.previews);
-    }
-    mergedOptions.mediaType.previews = (mergedOptions.mediaType.previews || []).map((preview) => preview.replace(/-preview/, ""));
-  }
-  return mergedOptions;
+function ke(e, r, t) {
+  if (typeof r == "string") {
+    let [i, n] = r.split(" ");
+    t = Object.assign(n ? { method: i, url: n } : { url: i }, t);
+  } else
+    t = Object.assign({}, r);
+  t.headers = et(t.headers), Ye(t), Ye(t.headers);
+  const o = hr(e || {}, t);
+  return t.url === "/graphql" && (e && e.mediaType.previews?.length && (o.mediaType.previews = e.mediaType.previews.filter(
+    (i) => !o.mediaType.previews.includes(i)
+  ).concat(o.mediaType.previews)), o.mediaType.previews = (o.mediaType.previews || []).map((i) => i.replace(/-preview/, ""))), o;
 }
-function addQueryParameters(url, parameters) {
-  const separator = /\?/.test(url) ? "&" : "?";
-  const names = Object.keys(parameters);
-  if (names.length === 0) {
-    return url;
-  }
-  return url + separator + names.map((name) => {
-    if (name === "q") {
-      return "q=" + parameters.q.split("+").map(encodeURIComponent).join("+");
-    }
-    return `${name}=${encodeURIComponent(parameters[name])}`;
-  }).join("&");
+function tt(e, r) {
+  const t = /\?/.test(e) ? "&" : "?", o = Object.keys(r);
+  return o.length === 0 ? e : e + t + o.map((i) => i === "q" ? "q=" + r.q.split("+").map(encodeURIComponent).join("+") : `${i}=${encodeURIComponent(r[i])}`).join("&");
 }
-var urlVariableRegex = /\{[^{}}]+\}/g;
-function removeNonChars(variableName) {
-  return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
+var st = /\{[^{}}]+\}/g;
+function ot(e) {
+  return e.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
-function extractUrlVariableNames(url) {
-  const matches = url.match(urlVariableRegex);
-  if (!matches) {
-    return [];
-  }
-  return matches.map(removeNonChars).reduce((a, b) => a.concat(b), []);
+function it(e) {
+  const r = e.match(st);
+  return r ? r.map(ot).reduce((t, o) => t.concat(o), []) : [];
 }
-function omit(object, keysToOmit) {
-  const result = { __proto__: null };
-  for (const key of Object.keys(object)) {
-    if (keysToOmit.indexOf(key) === -1) {
-      result[key] = object[key];
-    }
-  }
-  return result;
+function Xe(e, r) {
+  const t = { __proto__: null };
+  for (const o of Object.keys(e))
+    r.indexOf(o) === -1 && (t[o] = e[o]);
+  return t;
 }
-function encodeReserved(str) {
-  return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
-    if (!/%[0-9A-Fa-f]/.test(part)) {
-      part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]");
-    }
-    return part;
+function fr(e) {
+  return e.split(/(%[0-9A-Fa-f]{2})/g).map(function(r) {
+    return /%[0-9A-Fa-f]/.test(r) || (r = encodeURI(r).replace(/%5B/g, "[").replace(/%5D/g, "]")), r;
   }).join("");
 }
-function encodeUnreserved(str) {
-  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-    return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+function J(e) {
+  return encodeURIComponent(e).replace(/[!'()*]/g, function(r) {
+    return "%" + r.charCodeAt(0).toString(16).toUpperCase();
   });
 }
-function encodeValue(operator, value, key) {
-  value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value);
-  if (key) {
-    return encodeUnreserved(key) + "=" + value;
-  } else {
-    return value;
-  }
+function se(e, r, t) {
+  return r = e === "+" || e === "#" ? fr(r) : J(r), t ? J(t) + "=" + r : r;
 }
-function isDefined(value) {
-  return value !== void 0 && value !== null;
+function M(e) {
+  return e != null;
 }
-function isKeyOperator(operator) {
-  return operator === ";" || operator === "&" || operator === "?";
+function ye(e) {
+  return e === ";" || e === "&" || e === "?";
 }
-function getValues(context, operator, key, modifier) {
-  var value = context[key], result = [];
-  if (isDefined(value) && value !== "") {
-    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-      value = value.toString();
-      if (modifier && modifier !== "*") {
-        value = value.substring(0, parseInt(modifier, 10));
-      }
-      result.push(
-        encodeValue(operator, value, isKeyOperator(operator) ? key : "")
+function nt(e, r, t, o) {
+  var i = e[t], n = [];
+  if (M(i) && i !== "")
+    if (typeof i == "string" || typeof i == "number" || typeof i == "boolean")
+      i = i.toString(), o && o !== "*" && (i = i.substring(0, parseInt(o, 10))), n.push(
+        se(r, i, ye(r) ? t : "")
       );
-    } else {
-      if (modifier === "*") {
-        if (Array.isArray(value)) {
-          value.filter(isDefined).forEach(function(value2) {
-            result.push(
-              encodeValue(operator, value2, isKeyOperator(operator) ? key : "")
-            );
-          });
-        } else {
-          Object.keys(value).forEach(function(k) {
-            if (isDefined(value[k])) {
-              result.push(encodeValue(operator, value[k], k));
-            }
-          });
-        }
-      } else {
-        const tmp = [];
-        if (Array.isArray(value)) {
-          value.filter(isDefined).forEach(function(value2) {
-            tmp.push(encodeValue(operator, value2));
-          });
-        } else {
-          Object.keys(value).forEach(function(k) {
-            if (isDefined(value[k])) {
-              tmp.push(encodeUnreserved(k));
-              tmp.push(encodeValue(operator, value[k].toString()));
-            }
-          });
-        }
-        if (isKeyOperator(operator)) {
-          result.push(encodeUnreserved(key) + "=" + tmp.join(","));
-        } else if (tmp.length !== 0) {
-          result.push(tmp.join(","));
-        }
-      }
+    else if (o === "*")
+      Array.isArray(i) ? i.filter(M).forEach(function(c) {
+        n.push(
+          se(r, c, ye(r) ? t : "")
+        );
+      }) : Object.keys(i).forEach(function(c) {
+        M(i[c]) && n.push(se(r, i[c], c));
+      });
+    else {
+      const c = [];
+      Array.isArray(i) ? i.filter(M).forEach(function(l) {
+        c.push(se(r, l));
+      }) : Object.keys(i).forEach(function(l) {
+        M(i[l]) && (c.push(J(l)), c.push(se(r, i[l].toString())));
+      }), ye(r) ? n.push(J(t) + "=" + c.join(",")) : c.length !== 0 && n.push(c.join(","));
     }
-  } else {
-    if (operator === ";") {
-      if (isDefined(value)) {
-        result.push(encodeUnreserved(key));
-      }
-    } else if (value === "" && (operator === "&" || operator === "?")) {
-      result.push(encodeUnreserved(key) + "=");
-    } else if (value === "") {
-      result.push("");
-    }
-  }
-  return result;
+  else
+    r === ";" ? M(i) && n.push(J(t)) : i === "" && (r === "&" || r === "?") ? n.push(J(t) + "=") : i === "" && n.push("");
+  return n;
 }
-function parseUrl(template) {
+function at(e) {
   return {
-    expand: expand.bind(null, template)
+    expand: ct.bind(null, e)
   };
 }
-function expand(template, context) {
-  var operators = ["+", "#", ".", "/", ";", "?", "&"];
-  template = template.replace(
+function ct(e, r) {
+  var t = ["+", "#", ".", "/", ";", "?", "&"];
+  return e = e.replace(
     /\{([^\{\}]+)\}|([^\{\}]+)/g,
-    function(_, expression, literal) {
-      if (expression) {
-        let operator = "";
-        const values = [];
-        if (operators.indexOf(expression.charAt(0)) !== -1) {
-          operator = expression.charAt(0);
-          expression = expression.substr(1);
-        }
-        expression.split(/,/g).forEach(function(variable) {
-          var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-          values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
-        });
-        if (operator && operator !== "+") {
-          var separator = ",";
-          if (operator === "?") {
-            separator = "&";
-          } else if (operator !== "#") {
-            separator = operator;
-          }
-          return (values.length !== 0 ? operator : "") + values.join(separator);
-        } else {
-          return values.join(",");
-        }
-      } else {
-        return encodeReserved(literal);
-      }
+    function(o, i, n) {
+      if (i) {
+        let l = "";
+        const g = [];
+        if (t.indexOf(i.charAt(0)) !== -1 && (l = i.charAt(0), i = i.substr(1)), i.split(/,/g).forEach(function(f) {
+          var E = /([^:\*]*)(?::(\d+)|(\*))?/.exec(f);
+          g.push(nt(r, l, E[1], E[2] || E[3]));
+        }), l && l !== "+") {
+          var c = ",";
+          return l === "?" ? c = "&" : l !== "#" && (c = l), (g.length !== 0 ? l : "") + g.join(c);
+        } else
+          return g.join(",");
+      } else
+        return fr(n);
     }
-  );
-  if (template === "/") {
-    return template;
-  } else {
-    return template.replace(/\/$/, "");
-  }
+  ), e === "/" ? e : e.replace(/\/$/, "");
 }
-function parse(options) {
-  let method = options.method.toUpperCase();
-  let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
-  let headers = Object.assign({}, options.headers);
-  let body;
-  let parameters = omit(options, [
+function Er(e) {
+  let r = e.method.toUpperCase(), t = (e.url || "/").replace(/:([a-z]\w+)/g, "{$1}"), o = Object.assign({}, e.headers), i, n = Xe(e, [
     "method",
     "baseUrl",
     "url",
@@ -346,172 +186,100 @@ function parse(options) {
     "request",
     "mediaType"
   ]);
-  const urlVariableNames = extractUrlVariableNames(url);
-  url = parseUrl(url).expand(parameters);
-  if (!/^http/.test(url)) {
-    url = options.baseUrl + url;
+  const c = it(t);
+  t = at(t).expand(n), /^http/.test(t) || (t = e.baseUrl + t);
+  const l = Object.keys(e).filter((E) => c.includes(E)).concat("baseUrl"), g = Xe(n, l);
+  if (!/application\/octet-stream/i.test(o.accept) && (e.mediaType.format && (o.accept = o.accept.split(/,/).map(
+    (E) => E.replace(
+      /application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,
+      `application/vnd$1$2.${e.mediaType.format}`
+    )
+  ).join(",")), t.endsWith("/graphql") && e.mediaType.previews?.length)) {
+    const E = o.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
+    o.accept = E.concat(e.mediaType.previews).map((m) => {
+      const T = e.mediaType.format ? `.${e.mediaType.format}` : "+json";
+      return `application/vnd.github.${m}-preview${T}`;
+    }).join(",");
   }
-  const omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl");
-  const remainingParameters = omit(parameters, omittedParameters);
-  const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
-  if (!isBinaryRequest) {
-    if (options.mediaType.format) {
-      headers.accept = headers.accept.split(/,/).map(
-        (format) => format.replace(
-          /application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,
-          `application/vnd$1$2.${options.mediaType.format}`
-        )
-      ).join(",");
-    }
-    if (url.endsWith("/graphql")) {
-      if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/(?<![\w-])[\w-]+(?=-preview)/g) || [];
-        headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-          const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-          return `application/vnd.github.${preview}-preview${format}`;
-        }).join(",");
-      }
-    }
-  }
-  if (["GET", "HEAD"].includes(method)) {
-    url = addQueryParameters(url, remainingParameters);
-  } else {
-    if ("data" in remainingParameters) {
-      body = remainingParameters.data;
-    } else {
-      if (Object.keys(remainingParameters).length) {
-        body = remainingParameters;
-      }
-    }
-  }
-  if (!headers["content-type"] && typeof body !== "undefined") {
-    headers["content-type"] = "application/json; charset=utf-8";
-  }
-  if (["PATCH", "PUT"].includes(method) && typeof body === "undefined") {
-    body = "";
-  }
-  return Object.assign(
-    { method, url, headers },
-    typeof body !== "undefined" ? { body } : null,
-    options.request ? { request: options.request } : null
+  return ["GET", "HEAD"].includes(r) ? t = tt(t, g) : "data" in g ? i = g.data : Object.keys(g).length && (i = g), !o["content-type"] && typeof i < "u" && (o["content-type"] = "application/json; charset=utf-8"), ["PATCH", "PUT"].includes(r) && typeof i > "u" && (i = ""), Object.assign(
+    { method: r, url: t, headers: o },
+    typeof i < "u" ? { body: i } : null,
+    e.request ? { request: e.request } : null
   );
 }
-function endpointWithDefaults(defaults, route, options) {
-  return parse(merge(defaults, route, options));
+function ut(e, r, t) {
+  return Er(ke(e, r, t));
 }
-function withDefaults$2(oldDefaults, newDefaults) {
-  const DEFAULTS2 = merge(oldDefaults, newDefaults);
-  const endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
-  return Object.assign(endpoint2, {
-    DEFAULTS: DEFAULTS2,
-    defaults: withDefaults$2.bind(null, DEFAULTS2),
-    merge: merge.bind(null, DEFAULTS2),
-    parse
+function Tr(e, r) {
+  const t = ke(e, r), o = ut.bind(null, t);
+  return Object.assign(o, {
+    DEFAULTS: t,
+    defaults: Tr.bind(null, t),
+    merge: ke.bind(null, t),
+    parse: Er
   });
 }
-var endpoint = withDefaults$2(null, DEFAULTS);
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+var lt = Tr(null, Zr), Ze = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function _r(e) {
+  return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
 }
-var fastContentTypeParse = {};
-var hasRequiredFastContentTypeParse;
-function requireFastContentTypeParse() {
-  if (hasRequiredFastContentTypeParse) return fastContentTypeParse;
-  hasRequiredFastContentTypeParse = 1;
-  const NullObject = function NullObject2() {
+var K = {}, er;
+function pt() {
+  if (er) return K;
+  er = 1;
+  const e = function() {
   };
-  NullObject.prototype = /* @__PURE__ */ Object.create(null);
-  const paramRE = /; *([!#$%&'*+.^\w`|~-]+)=("(?:[\v\u0020\u0021\u0023-\u005b\u005d-\u007e\u0080-\u00ff]|\\[\v\u0020-\u00ff])*"|[!#$%&'*+.^\w`|~-]+) */gu;
-  const quotedPairRE = /\\([\v\u0020-\u00ff])/gu;
-  const mediaTypeRE = /^[!#$%&'*+.^\w|~-]+\/[!#$%&'*+.^\w|~-]+$/u;
-  const defaultContentType = { type: "", parameters: new NullObject() };
-  Object.freeze(defaultContentType.parameters);
-  Object.freeze(defaultContentType);
-  function parse2(header) {
-    if (typeof header !== "string") {
+  e.prototype = /* @__PURE__ */ Object.create(null);
+  const r = /; *([!#$%&'*+.^\w`|~-]+)=("(?:[\v\u0020\u0021\u0023-\u005b\u005d-\u007e\u0080-\u00ff]|\\[\v\u0020-\u00ff])*"|[!#$%&'*+.^\w`|~-]+) */gu, t = /\\([\v\u0020-\u00ff])/gu, o = /^[!#$%&'*+.^\w|~-]+\/[!#$%&'*+.^\w|~-]+$/u, i = { type: "", parameters: new e() };
+  Object.freeze(i.parameters), Object.freeze(i);
+  function n(l) {
+    if (typeof l != "string")
       throw new TypeError("argument header is required and must be a string");
-    }
-    let index = header.indexOf(";");
-    const type2 = index !== -1 ? header.slice(0, index).trim() : header.trim();
-    if (mediaTypeRE.test(type2) === false) {
+    let g = l.indexOf(";");
+    const f = g !== -1 ? l.slice(0, g).trim() : l.trim();
+    if (o.test(f) === !1)
       throw new TypeError("invalid media type");
-    }
-    const result = {
-      type: type2.toLowerCase(),
-      parameters: new NullObject()
+    const E = {
+      type: f.toLowerCase(),
+      parameters: new e()
     };
-    if (index === -1) {
-      return result;
-    }
-    let key;
-    let match;
-    let value;
-    paramRE.lastIndex = index;
-    while (match = paramRE.exec(header)) {
-      if (match.index !== index) {
+    if (g === -1)
+      return E;
+    let m, T, b;
+    for (r.lastIndex = g; T = r.exec(l); ) {
+      if (T.index !== g)
         throw new TypeError("invalid parameter format");
-      }
-      index += match[0].length;
-      key = match[1].toLowerCase();
-      value = match[2];
-      if (value[0] === '"') {
-        value = value.slice(1, value.length - 1);
-        quotedPairRE.test(value) && (value = value.replace(quotedPairRE, "$1"));
-      }
-      result.parameters[key] = value;
+      g += T[0].length, m = T[1].toLowerCase(), b = T[2], b[0] === '"' && (b = b.slice(1, b.length - 1), t.test(b) && (b = b.replace(t, "$1"))), E.parameters[m] = b;
     }
-    if (index !== header.length) {
+    if (g !== l.length)
       throw new TypeError("invalid parameter format");
-    }
-    return result;
+    return E;
   }
-  function safeParse(header) {
-    if (typeof header !== "string") {
-      return defaultContentType;
-    }
-    let index = header.indexOf(";");
-    const type2 = index !== -1 ? header.slice(0, index).trim() : header.trim();
-    if (mediaTypeRE.test(type2) === false) {
-      return defaultContentType;
-    }
-    const result = {
-      type: type2.toLowerCase(),
-      parameters: new NullObject()
+  function c(l) {
+    if (typeof l != "string")
+      return i;
+    let g = l.indexOf(";");
+    const f = g !== -1 ? l.slice(0, g).trim() : l.trim();
+    if (o.test(f) === !1)
+      return i;
+    const E = {
+      type: f.toLowerCase(),
+      parameters: new e()
     };
-    if (index === -1) {
-      return result;
+    if (g === -1)
+      return E;
+    let m, T, b;
+    for (r.lastIndex = g; T = r.exec(l); ) {
+      if (T.index !== g)
+        return i;
+      g += T[0].length, m = T[1].toLowerCase(), b = T[2], b[0] === '"' && (b = b.slice(1, b.length - 1), t.test(b) && (b = b.replace(t, "$1"))), E.parameters[m] = b;
     }
-    let key;
-    let match;
-    let value;
-    paramRE.lastIndex = index;
-    while (match = paramRE.exec(header)) {
-      if (match.index !== index) {
-        return defaultContentType;
-      }
-      index += match[0].length;
-      key = match[1].toLowerCase();
-      value = match[2];
-      if (value[0] === '"') {
-        value = value.slice(1, value.length - 1);
-        quotedPairRE.test(value) && (value = value.replace(quotedPairRE, "$1"));
-      }
-      result.parameters[key] = value;
-    }
-    if (index !== header.length) {
-      return defaultContentType;
-    }
-    return result;
+    return g !== l.length ? i : E;
   }
-  fastContentTypeParse.default = { parse: parse2, safeParse };
-  fastContentTypeParse.parse = parse2;
-  fastContentTypeParse.safeParse = safeParse;
-  fastContentTypeParse.defaultContentType = defaultContentType;
-  return fastContentTypeParse;
+  return K.default = { parse: n, safeParse: c }, K.parse = n, K.safeParse = c, K.defaultContentType = i, K;
 }
-var fastContentTypeParseExports = requireFastContentTypeParse();
-class RequestError extends Error {
+var gt = pt();
+class ne extends Error {
   name;
   /**
    * http status code
@@ -525,223 +293,162 @@ class RequestError extends Error {
    * Response object if a response was received
    */
   response;
-  constructor(message, statusCode, options) {
-    super(message);
-    this.name = "HttpError";
-    this.status = Number.parseInt(statusCode);
-    if (Number.isNaN(this.status)) {
-      this.status = 0;
-    }
-    if ("response" in options) {
-      this.response = options.response;
-    }
-    const requestCopy = Object.assign({}, options.request);
-    if (options.request.headers.authorization) {
-      requestCopy.headers = Object.assign({}, options.request.headers, {
-        authorization: options.request.headers.authorization.replace(
-          /(?<! ) .*$/,
-          " [REDACTED]"
-        )
-      });
-    }
-    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
-    this.request = requestCopy;
+  constructor(r, t, o) {
+    super(r), this.name = "HttpError", this.status = Number.parseInt(t), Number.isNaN(this.status) && (this.status = 0), "response" in o && (this.response = o.response);
+    const i = Object.assign({}, o.request);
+    o.request.headers.authorization && (i.headers = Object.assign({}, o.request.headers, {
+      authorization: o.request.headers.authorization.replace(
+        /(?<! ) .*$/,
+        " [REDACTED]"
+      )
+    })), i.url = i.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]"), this.request = i;
   }
 }
-var VERSION$8 = "10.0.6";
-var defaults_default = {
+var dt = "10.0.6", mt = {
   headers: {
-    "user-agent": `octokit-request.js/${VERSION$8} ${getUserAgent()}`
+    "user-agent": `octokit-request.js/${dt} ${he()}`
   }
 };
-function isPlainObject(value) {
-  if (typeof value !== "object" || value === null) return false;
-  if (Object.prototype.toString.call(value) !== "[object Object]") return false;
-  const proto = Object.getPrototypeOf(value);
-  if (proto === null) return true;
-  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
-  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+function ht(e) {
+  if (typeof e != "object" || e === null || Object.prototype.toString.call(e) !== "[object Object]") return !1;
+  const r = Object.getPrototypeOf(e);
+  if (r === null) return !0;
+  const t = Object.prototype.hasOwnProperty.call(r, "constructor") && r.constructor;
+  return typeof t == "function" && t instanceof t && Function.prototype.call(t) === Function.prototype.call(e);
 }
-async function fetchWrapper(requestOptions) {
-  const fetch = requestOptions.request?.fetch || globalThis.fetch;
-  if (!fetch) {
+async function rr(e) {
+  const r = e.request?.fetch || globalThis.fetch;
+  if (!r)
     throw new Error(
       "fetch is not set. Please pass a fetch implementation as new Octokit({ request: { fetch }}). Learn more at https://github.com/octokit/octokit.js/#fetch-missing"
     );
-  }
-  const log = requestOptions.request?.log || console;
-  const parseSuccessResponseBody = requestOptions.request?.parseSuccessResponseBody !== false;
-  const body = isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? JSON.stringify(requestOptions.body) : requestOptions.body;
-  const requestHeaders = Object.fromEntries(
-    Object.entries(requestOptions.headers).map(([name, value]) => [
-      name,
-      String(value)
+  const t = e.request?.log || console, o = e.request?.parseSuccessResponseBody !== !1, i = ht(e.body) || Array.isArray(e.body) ? JSON.stringify(e.body) : e.body, n = Object.fromEntries(
+    Object.entries(e.headers).map(([m, T]) => [
+      m,
+      String(T)
     ])
   );
-  let fetchResponse;
+  let c;
   try {
-    fetchResponse = await fetch(requestOptions.url, {
-      method: requestOptions.method,
-      body,
-      redirect: requestOptions.request?.redirect,
-      headers: requestHeaders,
-      signal: requestOptions.request?.signal,
+    c = await r(e.url, {
+      method: e.method,
+      body: i,
+      redirect: e.request?.redirect,
+      headers: n,
+      signal: e.request?.signal,
       // duplex must be set if request.body is ReadableStream or Async Iterables.
       // See https://fetch.spec.whatwg.org/#dom-requestinit-duplex.
-      ...requestOptions.body && { duplex: "half" }
+      ...e.body && { duplex: "half" }
     });
-  } catch (error) {
-    let message = "Unknown Error";
-    if (error instanceof Error) {
-      if (error.name === "AbortError") {
-        error.status = 500;
-        throw error;
-      }
-      message = error.message;
-      if (error.name === "TypeError" && "cause" in error) {
-        if (error.cause instanceof Error) {
-          message = error.cause.message;
-        } else if (typeof error.cause === "string") {
-          message = error.cause;
-        }
-      }
+  } catch (m) {
+    let T = "Unknown Error";
+    if (m instanceof Error) {
+      if (m.name === "AbortError")
+        throw m.status = 500, m;
+      T = m.message, m.name === "TypeError" && "cause" in m && (m.cause instanceof Error ? T = m.cause.message : typeof m.cause == "string" && (T = m.cause));
     }
-    const requestError = new RequestError(message, 500, {
-      request: requestOptions
+    const b = new ne(T, 500, {
+      request: e
     });
-    requestError.cause = error;
-    throw requestError;
+    throw b.cause = m, b;
   }
-  const status = fetchResponse.status;
-  const url = fetchResponse.url;
-  const responseHeaders = {};
-  for (const [key, value] of fetchResponse.headers) {
-    responseHeaders[key] = value;
-  }
-  const octokitResponse = {
-    url,
-    status,
-    headers: responseHeaders,
+  const l = c.status, g = c.url, f = {};
+  for (const [m, T] of c.headers)
+    f[m] = T;
+  const E = {
+    url: g,
+    status: l,
+    headers: f,
     data: ""
   };
-  if ("deprecation" in responseHeaders) {
-    const matches = responseHeaders.link && responseHeaders.link.match(/<([^<>]+)>; rel="deprecation"/);
-    const deprecationLink = matches && matches.pop();
-    log.warn(
-      `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${responseHeaders.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
+  if ("deprecation" in f) {
+    const m = f.link && f.link.match(/<([^<>]+)>; rel="deprecation"/), T = m && m.pop();
+    t.warn(
+      `[@octokit/request] "${e.method} ${e.url}" is deprecated. It is scheduled to be removed on ${f.sunset}${T ? `. See ${T}` : ""}`
     );
   }
-  if (status === 204 || status === 205) {
-    return octokitResponse;
-  }
-  if (requestOptions.method === "HEAD") {
-    if (status < 400) {
-      return octokitResponse;
-    }
-    throw new RequestError(fetchResponse.statusText, status, {
-      response: octokitResponse,
-      request: requestOptions
+  if (l === 204 || l === 205)
+    return E;
+  if (e.method === "HEAD") {
+    if (l < 400)
+      return E;
+    throw new ne(c.statusText, l, {
+      response: E,
+      request: e
     });
   }
-  if (status === 304) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new RequestError("Not modified", status, {
-      response: octokitResponse,
-      request: requestOptions
+  if (l === 304)
+    throw E.data = await ve(c), new ne("Not modified", l, {
+      response: E,
+      request: e
     });
-  }
-  if (status >= 400) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new RequestError(toErrorMessage(octokitResponse.data), status, {
-      response: octokitResponse,
-      request: requestOptions
+  if (l >= 400)
+    throw E.data = await ve(c), new ne(Et(E.data), l, {
+      response: E,
+      request: e
     });
-  }
-  octokitResponse.data = parseSuccessResponseBody ? await getResponseData(fetchResponse) : fetchResponse.body;
-  return octokitResponse;
+  return E.data = o ? await ve(c) : c.body, E;
 }
-async function getResponseData(response) {
-  const contentType = response.headers.get("content-type");
-  if (!contentType) {
-    return response.text().catch(() => "");
-  }
-  const mimetype = fastContentTypeParseExports.safeParse(contentType);
-  if (isJSONResponse(mimetype)) {
-    let text = "";
+async function ve(e) {
+  const r = e.headers.get("content-type");
+  if (!r)
+    return e.text().catch(() => "");
+  const t = gt.safeParse(r);
+  if (ft(t)) {
+    let o = "";
     try {
-      text = await response.text();
-      return JSON.parse(text);
-    } catch (err) {
-      return text;
+      return o = await e.text(), JSON.parse(o);
+    } catch {
+      return o;
     }
-  } else if (mimetype.type.startsWith("text/") || mimetype.parameters.charset?.toLowerCase() === "utf-8") {
-    return response.text().catch(() => "");
-  } else {
-    return response.arrayBuffer().catch(() => new ArrayBuffer(0));
-  }
+  } else return t.type.startsWith("text/") || t.parameters.charset?.toLowerCase() === "utf-8" ? e.text().catch(() => "") : e.arrayBuffer().catch(() => new ArrayBuffer(0));
 }
-function isJSONResponse(mimetype) {
-  return mimetype.type === "application/json" || mimetype.type === "application/scim+json";
+function ft(e) {
+  return e.type === "application/json" || e.type === "application/scim+json";
 }
-function toErrorMessage(data) {
-  if (typeof data === "string") {
-    return data;
-  }
-  if (data instanceof ArrayBuffer) {
+function Et(e) {
+  if (typeof e == "string")
+    return e;
+  if (e instanceof ArrayBuffer)
     return "Unknown error";
+  if ("message" in e) {
+    const r = "documentation_url" in e ? ` - ${e.documentation_url}` : "";
+    return Array.isArray(e.errors) ? `${e.message}: ${e.errors.map((t) => JSON.stringify(t)).join(", ")}${r}` : `${e.message}${r}`;
   }
-  if ("message" in data) {
-    const suffix = "documentation_url" in data ? ` - ${data.documentation_url}` : "";
-    return Array.isArray(data.errors) ? `${data.message}: ${data.errors.map((v) => JSON.stringify(v)).join(", ")}${suffix}` : `${data.message}${suffix}`;
-  }
-  return `Unknown error: ${JSON.stringify(data)}`;
+  return `Unknown error: ${JSON.stringify(e)}`;
 }
-function withDefaults$1(oldEndpoint, newDefaults) {
-  const endpoint2 = oldEndpoint.defaults(newDefaults);
-  const newApi = function(route, parameters) {
-    const endpointOptions = endpoint2.merge(route, parameters);
-    if (!endpointOptions.request || !endpointOptions.request.hook) {
-      return fetchWrapper(endpoint2.parse(endpointOptions));
-    }
-    const request2 = (route2, parameters2) => {
-      return fetchWrapper(
-        endpoint2.parse(endpoint2.merge(route2, parameters2))
-      );
-    };
-    Object.assign(request2, {
-      endpoint: endpoint2,
-      defaults: withDefaults$1.bind(null, endpoint2)
-    });
-    return endpointOptions.request.hook(request2, endpointOptions);
-  };
-  return Object.assign(newApi, {
-    endpoint: endpoint2,
-    defaults: withDefaults$1.bind(null, endpoint2)
+function Re(e, r) {
+  const t = e.defaults(r);
+  return Object.assign(function(i, n) {
+    const c = t.merge(i, n);
+    if (!c.request || !c.request.hook)
+      return rr(t.parse(c));
+    const l = (g, f) => rr(
+      t.parse(t.merge(g, f))
+    );
+    return Object.assign(l, {
+      endpoint: t,
+      defaults: Re.bind(null, t)
+    }), c.request.hook(l, c);
+  }, {
+    endpoint: t,
+    defaults: Re.bind(null, t)
   });
 }
-var request = withDefaults$1(endpoint, defaults_default);
-var VERSION$7 = "0.0.0-development";
-function _buildMessageForResponseErrors(data) {
+var Ae = Re(lt, mt), Tt = "0.0.0-development";
+function _t(e) {
   return `Request failed due to following response errors:
-` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+` + e.errors.map((r) => ` - ${r.message}`).join(`
+`);
 }
-var GraphqlResponseError = class extends Error {
-  constructor(request2, headers, response) {
-    super(_buildMessageForResponseErrors(response));
-    this.request = request2;
-    this.headers = headers;
-    this.response = response;
-    this.errors = response.errors;
-    this.data = response.data;
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
+var wt = class extends Error {
+  constructor(e, r, t) {
+    super(_t(t)), this.request = e, this.headers = r, this.response = t, this.errors = t.errors, this.data = t.data, Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
   }
   name = "GraphqlResponseError";
   errors;
   data;
-};
-var NON_VARIABLE_OPTIONS = [
+}, bt = [
   "method",
   "baseUrl",
   "url",
@@ -750,168 +457,116 @@ var NON_VARIABLE_OPTIONS = [
   "query",
   "mediaType",
   "operationName"
-];
-var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
-var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
-function graphql(request2, query, options) {
-  if (options) {
-    if (typeof query === "string" && "query" in options) {
+], yt = ["query", "method", "url"], tr = /\/api\/v3\/?$/;
+function vt(e, r, t) {
+  if (t) {
+    if (typeof r == "string" && "query" in t)
       return Promise.reject(
-        new Error(`[@octokit/graphql] "query" cannot be used as variable name`)
+        new Error('[@octokit/graphql] "query" cannot be used as variable name')
       );
-    }
-    for (const key in options) {
-      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
-      return Promise.reject(
-        new Error(
-          `[@octokit/graphql] "${key}" cannot be used as variable name`
-        )
-      );
-    }
+    for (const c in t)
+      if (yt.includes(c))
+        return Promise.reject(
+          new Error(
+            `[@octokit/graphql] "${c}" cannot be used as variable name`
+          )
+        );
   }
-  const parsedOptions = typeof query === "string" ? Object.assign({ query }, options) : query;
-  const requestOptions = Object.keys(
-    parsedOptions
-  ).reduce((result, key) => {
-    if (NON_VARIABLE_OPTIONS.includes(key)) {
-      result[key] = parsedOptions[key];
-      return result;
-    }
-    if (!result.variables) {
-      result.variables = {};
-    }
-    result.variables[key] = parsedOptions[key];
-    return result;
-  }, {});
-  const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
-  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
-    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
-  }
-  return request2(requestOptions).then((response) => {
-    if (response.data.errors) {
-      const headers = {};
-      for (const key of Object.keys(response.headers)) {
-        headers[key] = response.headers[key];
-      }
-      throw new GraphqlResponseError(
-        requestOptions,
-        headers,
-        response.data
+  const o = typeof r == "string" ? Object.assign({ query: r }, t) : r, i = Object.keys(
+    o
+  ).reduce((c, l) => bt.includes(l) ? (c[l] = o[l], c) : (c.variables || (c.variables = {}), c.variables[l] = o[l], c), {}), n = o.baseUrl || e.endpoint.DEFAULTS.baseUrl;
+  return tr.test(n) && (i.url = n.replace(tr, "/api/graphql")), e(i).then((c) => {
+    if (c.data.errors) {
+      const l = {};
+      for (const g of Object.keys(c.headers))
+        l[g] = c.headers[g];
+      throw new wt(
+        i,
+        l,
+        c.data
       );
     }
-    return response.data.data;
+    return c.data.data;
   });
 }
-function withDefaults(request2, newDefaults) {
-  const newRequest = request2.defaults(newDefaults);
-  const newApi = (query, options) => {
-    return graphql(newRequest, query, options);
-  };
-  return Object.assign(newApi, {
-    defaults: withDefaults.bind(null, newRequest),
-    endpoint: newRequest.endpoint
+function Fe(e, r) {
+  const t = e.defaults(r);
+  return Object.assign((i, n) => vt(t, i, n), {
+    defaults: Fe.bind(null, t),
+    endpoint: t.endpoint
   });
 }
-withDefaults(request, {
+Fe(Ae, {
   headers: {
-    "user-agent": `octokit-graphql.js/${VERSION$7} ${getUserAgent()}`
+    "user-agent": `octokit-graphql.js/${Tt} ${he()}`
   },
   method: "POST",
   url: "/graphql"
 });
-function withCustomRequest(customRequest) {
-  return withDefaults(customRequest, {
+function Pt(e) {
+  return Fe(e, {
     method: "POST",
     url: "/graphql"
   });
 }
-var b64url = "(?:[a-zA-Z0-9_-]+)";
-var sep = "\\.";
-var jwtRE = new RegExp(`^${b64url}${sep}${b64url}${sep}${b64url}$`);
-var isJWT = jwtRE.test.bind(jwtRE);
-async function auth(token) {
-  const isApp = isJWT(token);
-  const isInstallation = token.startsWith("v1.") || token.startsWith("ghs_");
-  const isUserToServer = token.startsWith("ghu_");
-  const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
+var Pe = "(?:[a-zA-Z0-9_-]+)", sr = "\\.", or = new RegExp(`^${Pe}${sr}${Pe}${sr}${Pe}$`), Gt = or.test.bind(or);
+async function Ot(e) {
+  const r = Gt(e), t = e.startsWith("v1.") || e.startsWith("ghs_"), o = e.startsWith("ghu_");
   return {
     type: "token",
-    token,
-    tokenType
+    token: e,
+    tokenType: r ? "app" : t ? "installation" : o ? "user-to-server" : "oauth"
   };
 }
-function withAuthorizationPrefix(token) {
-  if (token.split(/\./).length === 3) {
-    return `bearer ${token}`;
-  }
-  return `token ${token}`;
+function kt(e) {
+  return e.split(/\./).length === 3 ? `bearer ${e}` : `token ${e}`;
 }
-async function hook(token, request2, route, parameters) {
-  const endpoint2 = request2.endpoint.merge(
-    route,
-    parameters
+async function Rt(e, r, t, o) {
+  const i = r.endpoint.merge(
+    t,
+    o
   );
-  endpoint2.headers.authorization = withAuthorizationPrefix(token);
-  return request2(endpoint2);
+  return i.headers.authorization = kt(e), r(i);
 }
-var createTokenAuth = function createTokenAuth2(token) {
-  if (!token) {
+var At = function(r) {
+  if (!r)
     throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
-  }
-  if (typeof token !== "string") {
+  if (typeof r != "string")
     throw new Error(
       "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
     );
-  }
-  token = token.replace(/^(token|bearer) +/i, "");
-  return Object.assign(auth.bind(null, token), {
-    hook: hook.bind(null, token)
+  return r = r.replace(/^(token|bearer) +/i, ""), Object.assign(Ot.bind(null, r), {
+    hook: Rt.bind(null, r)
   });
 };
-const VERSION$6 = "7.0.6";
-const noop$1 = () => {
-};
-const consoleWarn = console.warn.bind(console);
-const consoleError = console.error.bind(console);
-function createLogger(logger = {}) {
-  if (typeof logger.debug !== "function") {
-    logger.debug = noop$1;
-  }
-  if (typeof logger.info !== "function") {
-    logger.info = noop$1;
-  }
-  if (typeof logger.warn !== "function") {
-    logger.warn = consoleWarn;
-  }
-  if (typeof logger.error !== "function") {
-    logger.error = consoleError;
-  }
-  return logger;
+const wr = "7.0.6", ir = () => {
+}, St = console.warn.bind(console), Ft = console.error.bind(console);
+function Ct(e = {}) {
+  return typeof e.debug != "function" && (e.debug = ir), typeof e.info != "function" && (e.info = ir), typeof e.warn != "function" && (e.warn = St), typeof e.error != "function" && (e.error = Ft), e;
 }
-const userAgentTrail = `octokit-core.js/${VERSION$6} ${getUserAgent()}`;
-let Octokit$1 = class Octokit {
-  static VERSION = VERSION$6;
-  static defaults(defaults) {
-    const OctokitWithDefaults = class extends this {
-      constructor(...args) {
-        const options = args[0] || {};
-        if (typeof defaults === "function") {
-          super(defaults(options));
+const nr = `octokit-core.js/${wr} ${he()}`;
+let Dt = class {
+  static VERSION = wr;
+  static defaults(r) {
+    return class extends this {
+      constructor(...o) {
+        const i = o[0] || {};
+        if (typeof r == "function") {
+          super(r(i));
           return;
         }
         super(
           Object.assign(
             {},
-            defaults,
-            options,
-            options.userAgent && defaults.userAgent ? {
-              userAgent: `${options.userAgent} ${defaults.userAgent}`
+            r,
+            i,
+            i.userAgent && r.userAgent ? {
+              userAgent: `${i.userAgent} ${r.userAgent}`
             } : null
           )
         );
       }
     };
-    return OctokitWithDefaults;
   }
   static plugins = [];
   /**
@@ -920,56 +575,29 @@ let Octokit$1 = class Octokit {
    * @example
    * const API = Octokit.plugin(plugin1, plugin2, plugin3, ...)
    */
-  static plugin(...newPlugins) {
-    const currentPlugins = this.plugins;
-    const NewOctokit = class extends this {
-      static plugins = currentPlugins.concat(
-        newPlugins.filter((plugin) => !currentPlugins.includes(plugin))
+  static plugin(...r) {
+    const t = this.plugins;
+    return class extends this {
+      static plugins = t.concat(
+        r.filter((i) => !t.includes(i))
       );
     };
-    return NewOctokit;
   }
-  constructor(options = {}) {
-    const hook2 = new Hook.Collection();
-    const requestDefaults = {
-      baseUrl: request.endpoint.DEFAULTS.baseUrl,
+  constructor(r = {}) {
+    const t = new Qr.Collection(), o = {
+      baseUrl: Ae.endpoint.DEFAULTS.baseUrl,
       headers: {},
-      request: Object.assign({}, options.request, {
+      request: Object.assign({}, r.request, {
         // @ts-ignore internal usage only, no need to type
-        hook: hook2.bind(null, "request")
+        hook: t.bind(null, "request")
       }),
       mediaType: {
         previews: [],
         format: ""
       }
     };
-    requestDefaults.headers["user-agent"] = options.userAgent ? `${options.userAgent} ${userAgentTrail}` : userAgentTrail;
-    if (options.baseUrl) {
-      requestDefaults.baseUrl = options.baseUrl;
-    }
-    if (options.previews) {
-      requestDefaults.mediaType.previews = options.previews;
-    }
-    if (options.timeZone) {
-      requestDefaults.headers["time-zone"] = options.timeZone;
-    }
-    this.request = request.defaults(requestDefaults);
-    this.graphql = withCustomRequest(this.request).defaults(requestDefaults);
-    this.log = createLogger(options.log);
-    this.hook = hook2;
-    if (!options.authStrategy) {
-      if (!options.auth) {
-        this.auth = async () => ({
-          type: "unauthenticated"
-        });
-      } else {
-        const auth2 = createTokenAuth(options.auth);
-        hook2.wrap("request", auth2.hook);
-        this.auth = auth2;
-      }
-    } else {
-      const { authStrategy, ...otherOptions } = options;
-      const auth2 = authStrategy(
+    if (o.headers["user-agent"] = r.userAgent ? `${r.userAgent} ${nr}` : nr, r.baseUrl && (o.baseUrl = r.baseUrl), r.previews && (o.mediaType.previews = r.previews), r.timeZone && (o.headers["time-zone"] = r.timeZone), this.request = Ae.defaults(o), this.graphql = Pt(this.request).defaults(o), this.log = Ct(r.log), this.hook = t, r.authStrategy) {
+      const { authStrategy: n, ...c } = r, l = n(
         Object.assign(
           {
             request: this.request,
@@ -980,18 +608,23 @@ let Octokit$1 = class Octokit {
             // requirement for this was the "event-octokit" authentication strategy
             // of https://github.com/probot/octokit-auth-probot.
             octokit: this,
-            octokitOptions: otherOptions
+            octokitOptions: c
           },
-          options.auth
+          r.auth
         )
       );
-      hook2.wrap("request", auth2.hook);
-      this.auth = auth2;
+      t.wrap("request", l.hook), this.auth = l;
+    } else if (!r.auth)
+      this.auth = async () => ({
+        type: "unauthenticated"
+      });
+    else {
+      const n = At(r.auth);
+      t.wrap("request", n.hook), this.auth = n;
     }
-    const classConstructor = this.constructor;
-    for (let i = 0; i < classConstructor.plugins.length; ++i) {
-      Object.assign(this, classConstructor.plugins[i](this, options));
-    }
+    const i = this.constructor;
+    for (let n = 0; n < i.plugins.length; ++n)
+      Object.assign(this, i.plugins[n](this, r));
   }
   // assigned during constructor
   request;
@@ -1001,68 +634,38 @@ let Octokit$1 = class Octokit {
   // TODO: type `octokit.auth` based on passed options.authStrategy
   auth;
 };
-var VERSION$5 = "0.0.0-development";
-function normalizePaginatedListResponse(response) {
-  if (!response.data) {
+var Ut = "0.0.0-development";
+function Lt(e) {
+  if (!e.data)
     return {
-      ...response,
+      ...e,
       data: []
     };
-  }
-  const responseNeedsNormalization = ("total_count" in response.data || "total_commits" in response.data) && !("url" in response.data);
-  if (!responseNeedsNormalization) return response;
-  const incompleteResults = response.data.incomplete_results;
-  const repositorySelection = response.data.repository_selection;
-  const totalCount = response.data.total_count;
-  const totalCommits = response.data.total_commits;
-  delete response.data.incomplete_results;
-  delete response.data.repository_selection;
-  delete response.data.total_count;
-  delete response.data.total_commits;
-  const namespaceKey = Object.keys(response.data)[0];
-  const data = response.data[namespaceKey];
-  response.data = data;
-  if (typeof incompleteResults !== "undefined") {
-    response.data.incomplete_results = incompleteResults;
-  }
-  if (typeof repositorySelection !== "undefined") {
-    response.data.repository_selection = repositorySelection;
-  }
-  response.data.total_count = totalCount;
-  response.data.total_commits = totalCommits;
-  return response;
+  if (!(("total_count" in e.data || "total_commits" in e.data) && !("url" in e.data))) return e;
+  const t = e.data.incomplete_results, o = e.data.repository_selection, i = e.data.total_count, n = e.data.total_commits;
+  delete e.data.incomplete_results, delete e.data.repository_selection, delete e.data.total_count, delete e.data.total_commits;
+  const c = Object.keys(e.data)[0], l = e.data[c];
+  return e.data = l, typeof t < "u" && (e.data.incomplete_results = t), typeof o < "u" && (e.data.repository_selection = o), e.data.total_count = i, e.data.total_commits = n, e;
 }
-function iterator(octokit, route, parameters) {
-  const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
-  const requestMethod = typeof route === "function" ? route : octokit.request;
-  const method = options.method;
-  const headers = options.headers;
-  let url = options.url;
+function Ce(e, r, t) {
+  const o = typeof r == "function" ? r.endpoint(t) : e.request.endpoint(r, t), i = typeof r == "function" ? r : e.request, n = o.method, c = o.headers;
+  let l = o.url;
   return {
     [Symbol.asyncIterator]: () => ({
       async next() {
-        if (!url) return { done: true };
+        if (!l) return { done: !0 };
         try {
-          const response = await requestMethod({ method, url, headers });
-          const normalizedResponse = normalizePaginatedListResponse(response);
-          url = ((normalizedResponse.headers.link || "").match(
+          const g = await i({ method: n, url: l, headers: c }), f = Lt(g);
+          if (l = ((f.headers.link || "").match(
             /<([^<>]+)>;\s*rel="next"/
-          ) || [])[1];
-          if (!url && "total_commits" in normalizedResponse.data) {
-            const parsedUrl = new URL(normalizedResponse.url);
-            const params = parsedUrl.searchParams;
-            const page = parseInt(params.get("page") || "1", 10);
-            const per_page = parseInt(params.get("per_page") || "250", 10);
-            if (page * per_page < normalizedResponse.data.total_commits) {
-              params.set("page", String(page + 1));
-              url = parsedUrl.toString();
-            }
+          ) || [])[1], !l && "total_commits" in f.data) {
+            const E = new URL(f.url), m = E.searchParams, T = parseInt(m.get("page") || "1", 10), b = parseInt(m.get("per_page") || "250", 10);
+            T * b < f.data.total_commits && (m.set("page", String(T + 1)), l = E.toString());
           }
-          return { value: normalizedResponse };
-        } catch (error) {
-          if (error.status !== 409) throw error;
-          url = "";
-          return {
+          return { value: f };
+        } catch (g) {
+          if (g.status !== 409) throw g;
+          return l = "", {
             value: {
               status: 200,
               headers: {},
@@ -1074,208 +677,141 @@ function iterator(octokit, route, parameters) {
     })
   };
 }
-function paginate(octokit, route, parameters, mapFn) {
-  if (typeof parameters === "function") {
-    mapFn = parameters;
-    parameters = void 0;
-  }
-  return gather(
-    octokit,
+function br(e, r, t, o) {
+  return typeof t == "function" && (o = t, t = void 0), yr(
+    e,
     [],
-    iterator(octokit, route, parameters)[Symbol.asyncIterator](),
-    mapFn
+    Ce(e, r, t)[Symbol.asyncIterator](),
+    o
   );
 }
-function gather(octokit, results, iterator2, mapFn) {
-  return iterator2.next().then((result) => {
-    if (result.done) {
-      return results;
+function yr(e, r, t, o) {
+  return t.next().then((i) => {
+    if (i.done)
+      return r;
+    let n = !1;
+    function c() {
+      n = !0;
     }
-    let earlyExit = false;
-    function done() {
-      earlyExit = true;
-    }
-    results = results.concat(
-      mapFn ? mapFn(result.value, done) : result.value.data
-    );
-    if (earlyExit) {
-      return results;
-    }
-    return gather(octokit, results, iterator2, mapFn);
+    return r = r.concat(
+      o ? o(i.value, c) : i.value.data
+    ), n ? r : yr(e, r, t, o);
   });
 }
-Object.assign(paginate, {
-  iterator
+Object.assign(br, {
+  iterator: Ce
 });
-function paginateRest(octokit) {
+function vr(e) {
   return {
-    paginate: Object.assign(paginate.bind(null, octokit), {
-      iterator: iterator.bind(null, octokit)
+    paginate: Object.assign(br.bind(null, e), {
+      iterator: Ce.bind(null, e)
     })
   };
 }
-paginateRest.VERSION = VERSION$5;
-var generateMessage = (path, cursorValue) => `The cursor at "${path.join(
+vr.VERSION = Ut;
+var It = (e, r) => `The cursor at "${e.join(
   ","
-)}" did not change its value "${cursorValue}" after a page transition. Please make sure your that your query is set up correctly.`;
-var MissingCursorChange = class extends Error {
-  constructor(pageInfo, cursorValue) {
-    super(generateMessage(pageInfo.pathInQuery, cursorValue));
-    this.pageInfo = pageInfo;
-    this.cursorValue = cursorValue;
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
+)}" did not change its value "${r}" after a page transition. Please make sure your that your query is set up correctly.`, qt = class extends Error {
+  constructor(e, r) {
+    super(It(e.pathInQuery, r)), this.pageInfo = e, this.cursorValue = r, Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
   }
   name = "MissingCursorChangeError";
-};
-var MissingPageInfo = class extends Error {
-  constructor(response) {
+}, jt = class extends Error {
+  constructor(e) {
     super(
       `No pageInfo property found in response. Please make sure to specify the pageInfo in your query. Response-Data: ${JSON.stringify(
-        response,
+        e,
         null,
         2
       )}`
-    );
-    this.response = response;
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    ), this.response = e, Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
   }
   name = "MissingPageInfo";
-};
-var isObject = (value) => Object.prototype.toString.call(value) === "[object Object]";
-function findPaginatedResourcePath(responseData) {
-  const paginatedResourcePath = deepFindPathToProperty(
-    responseData,
+}, xt = (e) => Object.prototype.toString.call(e) === "[object Object]";
+function Pr(e) {
+  const r = Gr(
+    e,
     "pageInfo"
   );
-  if (paginatedResourcePath.length === 0) {
-    throw new MissingPageInfo(responseData);
-  }
-  return paginatedResourcePath;
+  if (r.length === 0)
+    throw new jt(e);
+  return r;
 }
-var deepFindPathToProperty = (object, searchProp, path = []) => {
-  for (const key of Object.keys(object)) {
-    const currentPath = [...path, key];
-    const currentValue = object[key];
-    if (isObject(currentValue)) {
-      if (currentValue.hasOwnProperty(searchProp)) {
-        return currentPath;
-      }
-      const result = deepFindPathToProperty(
-        currentValue,
-        searchProp,
-        currentPath
+var Gr = (e, r, t = []) => {
+  for (const o of Object.keys(e)) {
+    const i = [...t, o], n = e[o];
+    if (xt(n)) {
+      if (n.hasOwnProperty(r))
+        return i;
+      const c = Gr(
+        n,
+        r,
+        i
       );
-      if (result.length > 0) {
-        return result;
-      }
+      if (c.length > 0)
+        return c;
     }
   }
   return [];
-};
-var get = (object, path) => {
-  return path.reduce((current, nextProperty) => current[nextProperty], object);
-};
-var set = (object, path, mutator) => {
-  const lastProperty = path[path.length - 1];
-  const parentPath = [...path].slice(0, -1);
-  const parent = get(object, parentPath);
-  if (typeof mutator === "function") {
-    parent[lastProperty] = mutator(parent[lastProperty]);
-  } else {
-    parent[lastProperty] = mutator;
-  }
-};
-var extractPageInfos = (responseData) => {
-  const pageInfoPath = findPaginatedResourcePath(responseData);
+}, ae = (e, r) => r.reduce((t, o) => t[o], e), Ge = (e, r, t) => {
+  const o = r[r.length - 1], i = [...r].slice(0, -1), n = ae(e, i);
+  typeof t == "function" ? n[o] = t(n[o]) : n[o] = t;
+}, $t = (e) => {
+  const r = Pr(e);
   return {
-    pathInQuery: pageInfoPath,
-    pageInfo: get(responseData, [...pageInfoPath, "pageInfo"])
+    pathInQuery: r,
+    pageInfo: ae(e, [...r, "pageInfo"])
   };
-};
-var isForwardSearch = (givenPageInfo) => {
-  return givenPageInfo.hasOwnProperty("hasNextPage");
-};
-var getCursorFrom = (pageInfo) => isForwardSearch(pageInfo) ? pageInfo.endCursor : pageInfo.startCursor;
-var hasAnotherPage = (pageInfo) => isForwardSearch(pageInfo) ? pageInfo.hasNextPage : pageInfo.hasPreviousPage;
-var createIterator = (octokit) => {
-  return (query, initialParameters = {}) => {
-    let nextPageExists = true;
-    let parameters = { ...initialParameters };
-    return {
-      [Symbol.asyncIterator]: () => ({
-        async next() {
-          if (!nextPageExists) return { done: true, value: {} };
-          const response = await octokit.graphql(
-            query,
-            parameters
-          );
-          const pageInfoContext = extractPageInfos(response);
-          const nextCursorValue = getCursorFrom(pageInfoContext.pageInfo);
-          nextPageExists = hasAnotherPage(pageInfoContext.pageInfo);
-          if (nextPageExists && nextCursorValue === parameters.cursor) {
-            throw new MissingCursorChange(pageInfoContext, nextCursorValue);
-          }
-          parameters = {
-            ...parameters,
-            cursor: nextCursorValue
-          };
-          return { done: false, value: response };
-        }
-      })
-    };
-  };
-};
-var mergeResponses = (response1, response2) => {
-  if (Object.keys(response1).length === 0) {
-    return Object.assign(response1, response2);
-  }
-  const path = findPaginatedResourcePath(response1);
-  const nodesPath = [...path, "nodes"];
-  const newNodes = get(response2, nodesPath);
-  if (newNodes) {
-    set(response1, nodesPath, (values) => {
-      return [...values, ...newNodes];
-    });
-  }
-  const edgesPath = [...path, "edges"];
-  const newEdges = get(response2, edgesPath);
-  if (newEdges) {
-    set(response1, edgesPath, (values) => {
-      return [...values, ...newEdges];
-    });
-  }
-  const pageInfoPath = [...path, "pageInfo"];
-  set(response1, pageInfoPath, get(response2, pageInfoPath));
-  return response1;
-};
-var createPaginate = (octokit) => {
-  const iterator2 = createIterator(octokit);
-  return async (query, initialParameters = {}) => {
-    let mergedResponse = {};
-    for await (const response of iterator2(
-      query,
-      initialParameters
-    )) {
-      mergedResponse = mergeResponses(mergedResponse, response);
-    }
-    return mergedResponse;
-  };
-};
-function paginateGraphQL(octokit) {
+}, Or = (e) => e.hasOwnProperty("hasNextPage"), Bt = (e) => Or(e) ? e.endCursor : e.startCursor, Ht = (e) => Or(e) ? e.hasNextPage : e.hasPreviousPage, kr = (e) => (r, t = {}) => {
+  let o = !0, i = { ...t };
   return {
-    graphql: Object.assign(octokit.graphql, {
-      paginate: Object.assign(createPaginate(octokit), {
-        iterator: createIterator(octokit)
+    [Symbol.asyncIterator]: () => ({
+      async next() {
+        if (!o) return { done: !0, value: {} };
+        const n = await e.graphql(
+          r,
+          i
+        ), c = $t(n), l = Bt(c.pageInfo);
+        if (o = Ht(c.pageInfo), o && l === i.cursor)
+          throw new qt(c, l);
+        return i = {
+          ...i,
+          cursor: l
+        }, { done: !1, value: n };
+      }
+    })
+  };
+}, Vt = (e, r) => {
+  if (Object.keys(e).length === 0)
+    return Object.assign(e, r);
+  const t = Pr(e), o = [...t, "nodes"], i = ae(r, o);
+  i && Ge(e, o, (g) => [...g, ...i]);
+  const n = [...t, "edges"], c = ae(r, n);
+  c && Ge(e, n, (g) => [...g, ...c]);
+  const l = [...t, "pageInfo"];
+  return Ge(e, l, ae(r, l)), e;
+}, Wt = (e) => {
+  const r = kr(e);
+  return async (t, o = {}) => {
+    let i = {};
+    for await (const n of r(
+      t,
+      o
+    ))
+      i = Vt(i, n);
+    return i;
+  };
+};
+function zt(e) {
+  return {
+    graphql: Object.assign(e.graphql, {
+      paginate: Object.assign(Wt(e), {
+        iterator: kr(e)
       })
     })
   };
 }
-const VERSION$4 = "17.0.0";
-const Endpoints = {
+const Nt = "17.0.0", Mt = {
   actions: {
     addCustomLabelsToSelfHostedRunnerForOrg: [
       "POST /orgs/{org}/actions/runners/{runner_id}/labels"
@@ -3564,1080 +3100,606 @@ const Endpoints = {
     updateAuthenticated: ["PATCH /user"]
   }
 };
-var endpoints_default = Endpoints;
-const endpointMethodsMap = /* @__PURE__ */ new Map();
-for (const [scope, endpoints] of Object.entries(endpoints_default)) {
-  for (const [methodName, endpoint2] of Object.entries(endpoints)) {
-    const [route, defaults, decorations] = endpoint2;
-    const [method, url] = route.split(/ /);
-    const endpointDefaults = Object.assign(
+var Kt = Mt;
+const V = /* @__PURE__ */ new Map();
+for (const [e, r] of Object.entries(Kt))
+  for (const [t, o] of Object.entries(r)) {
+    const [i, n, c] = o, [l, g] = i.split(/ /), f = Object.assign(
       {
-        method,
-        url
+        method: l,
+        url: g
       },
-      defaults
+      n
     );
-    if (!endpointMethodsMap.has(scope)) {
-      endpointMethodsMap.set(scope, /* @__PURE__ */ new Map());
-    }
-    endpointMethodsMap.get(scope).set(methodName, {
-      scope,
-      methodName,
-      endpointDefaults,
-      decorations
+    V.has(e) || V.set(e, /* @__PURE__ */ new Map()), V.get(e).set(t, {
+      scope: e,
+      methodName: t,
+      endpointDefaults: f,
+      decorations: c
     });
   }
-}
-const handler = {
-  has({ scope }, methodName) {
-    return endpointMethodsMap.get(scope).has(methodName);
+const Jt = {
+  has({ scope: e }, r) {
+    return V.get(e).has(r);
   },
-  getOwnPropertyDescriptor(target, methodName) {
+  getOwnPropertyDescriptor(e, r) {
     return {
-      value: this.get(target, methodName),
+      value: this.get(e, r),
       // ensures method is in the cache
-      configurable: true,
-      writable: true,
-      enumerable: true
+      configurable: !0,
+      writable: !0,
+      enumerable: !0
     };
   },
-  defineProperty(target, methodName, descriptor) {
-    Object.defineProperty(target.cache, methodName, descriptor);
-    return true;
+  defineProperty(e, r, t) {
+    return Object.defineProperty(e.cache, r, t), !0;
   },
-  deleteProperty(target, methodName) {
-    delete target.cache[methodName];
-    return true;
+  deleteProperty(e, r) {
+    return delete e.cache[r], !0;
   },
-  ownKeys({ scope }) {
-    return [...endpointMethodsMap.get(scope).keys()];
+  ownKeys({ scope: e }) {
+    return [...V.get(e).keys()];
   },
-  set(target, methodName, value) {
-    return target.cache[methodName] = value;
+  set(e, r, t) {
+    return e.cache[r] = t;
   },
-  get({ octokit, scope, cache }, methodName) {
-    if (cache[methodName]) {
-      return cache[methodName];
-    }
-    const method = endpointMethodsMap.get(scope).get(methodName);
-    if (!method) {
-      return void 0;
-    }
-    const { endpointDefaults, decorations } = method;
-    if (decorations) {
-      cache[methodName] = decorate(
-        octokit,
-        scope,
-        methodName,
-        endpointDefaults,
-        decorations
-      );
-    } else {
-      cache[methodName] = octokit.request.defaults(endpointDefaults);
-    }
-    return cache[methodName];
+  get({ octokit: e, scope: r, cache: t }, o) {
+    if (t[o])
+      return t[o];
+    const i = V.get(r).get(o);
+    if (!i)
+      return;
+    const { endpointDefaults: n, decorations: c } = i;
+    return c ? t[o] = Yt(
+      e,
+      r,
+      o,
+      n,
+      c
+    ) : t[o] = e.request.defaults(n), t[o];
   }
 };
-function endpointsToMethods(octokit) {
-  const newMethods = {};
-  for (const scope of endpointMethodsMap.keys()) {
-    newMethods[scope] = new Proxy({ octokit, scope, cache: {} }, handler);
-  }
-  return newMethods;
+function Qt(e) {
+  const r = {};
+  for (const t of V.keys())
+    r[t] = new Proxy({ octokit: e, scope: t, cache: {} }, Jt);
+  return r;
 }
-function decorate(octokit, scope, methodName, defaults, decorations) {
-  const requestWithDefaults = octokit.request.defaults(defaults);
-  function withDecorations(...args) {
-    let options = requestWithDefaults.endpoint.merge(...args);
-    if (decorations.mapToData) {
-      options = Object.assign({}, options, {
-        data: options[decorations.mapToData],
-        [decorations.mapToData]: void 0
-      });
-      return requestWithDefaults(options);
-    }
-    if (decorations.renamed) {
-      const [newScope, newMethodName] = decorations.renamed;
-      octokit.log.warn(
-        `octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`
+function Yt(e, r, t, o, i) {
+  const n = e.request.defaults(o);
+  function c(...l) {
+    let g = n.endpoint.merge(...l);
+    if (i.mapToData)
+      return g = Object.assign({}, g, {
+        data: g[i.mapToData],
+        [i.mapToData]: void 0
+      }), n(g);
+    if (i.renamed) {
+      const [f, E] = i.renamed;
+      e.log.warn(
+        `octokit.${r}.${t}() has been renamed to octokit.${f}.${E}()`
       );
     }
-    if (decorations.deprecated) {
-      octokit.log.warn(decorations.deprecated);
+    if (i.deprecated && e.log.warn(i.deprecated), i.renamedParameters) {
+      const f = n.endpoint.merge(...l);
+      for (const [E, m] of Object.entries(
+        i.renamedParameters
+      ))
+        E in f && (e.log.warn(
+          `"${E}" parameter is deprecated for "octokit.${r}.${t}()". Use "${m}" instead`
+        ), m in f || (f[m] = f[E]), delete f[E]);
+      return n(f);
     }
-    if (decorations.renamedParameters) {
-      const options2 = requestWithDefaults.endpoint.merge(...args);
-      for (const [name, alias] of Object.entries(
-        decorations.renamedParameters
-      )) {
-        if (name in options2) {
-          octokit.log.warn(
-            `"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`
-          );
-          if (!(alias in options2)) {
-            options2[alias] = options2[name];
-          }
-          delete options2[name];
-        }
-      }
-      return requestWithDefaults(options2);
-    }
-    return requestWithDefaults(...args);
+    return n(...l);
   }
-  return Object.assign(withDecorations, requestWithDefaults);
+  return Object.assign(c, n);
 }
-function restEndpointMethods(octokit) {
-  const api = endpointsToMethods(octokit);
+function Rr(e) {
   return {
-    rest: api
+    rest: Qt(e)
   };
 }
-restEndpointMethods.VERSION = VERSION$4;
-var light$1 = { exports: {} };
-var light = light$1.exports;
-var hasRequiredLight;
-function requireLight() {
-  if (hasRequiredLight) return light$1.exports;
-  hasRequiredLight = 1;
-  (function(module, exports$1) {
-    (function(global2, factory) {
-      module.exports = factory();
-    })(light, (function() {
-      var commonjsGlobal$1 = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof commonjsGlobal !== "undefined" ? commonjsGlobal : typeof self !== "undefined" ? self : {};
-      function getCjsExportFromNamespace(n) {
-        return n && n["default"] || n;
+Rr.VERSION = Nt;
+var ge = { exports: {} }, Xt = ge.exports, ar;
+function Zt() {
+  return ar || (ar = 1, (function(e, r) {
+    (function(t, o) {
+      e.exports = o();
+    })(Xt, (function() {
+      var t = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof Ze < "u" ? Ze : typeof self < "u" ? self : {};
+      function o(w) {
+        return w && w.default || w;
       }
-      var load = function(received, defaults, onto = {}) {
-        var k, ref, v;
-        for (k in defaults) {
-          v = defaults[k];
-          onto[k] = (ref = received[k]) != null ? ref : v;
+      var i = function(w, a, s = {}) {
+        var u, p, d;
+        for (u in a)
+          d = a[u], s[u] = (p = w[u]) != null ? p : d;
+        return s;
+      }, n = function(w, a, s = {}) {
+        var u, p;
+        for (u in w)
+          p = w[u], a[u] !== void 0 && (s[u] = p);
+        return s;
+      }, c = {
+        load: i,
+        overwrite: n
+      }, l;
+      l = class {
+        constructor(a, s) {
+          this.incr = a, this.decr = s, this._first = null, this._last = null, this.length = 0;
         }
-        return onto;
-      };
-      var overwrite = function(received, defaults, onto = {}) {
-        var k, v;
-        for (k in received) {
-          v = received[k];
-          if (defaults[k] !== void 0) {
-            onto[k] = v;
-          }
-        }
-        return onto;
-      };
-      var parser = {
-        load,
-        overwrite
-      };
-      var DLList;
-      DLList = class DLList {
-        constructor(incr, decr) {
-          this.incr = incr;
-          this.decr = decr;
-          this._first = null;
-          this._last = null;
-          this.length = 0;
-        }
-        push(value) {
-          var node;
-          this.length++;
-          if (typeof this.incr === "function") {
-            this.incr();
-          }
-          node = {
-            value,
+        push(a) {
+          var s;
+          this.length++, typeof this.incr == "function" && this.incr(), s = {
+            value: a,
             prev: this._last,
             next: null
-          };
-          if (this._last != null) {
-            this._last.next = node;
-            this._last = node;
-          } else {
-            this._first = this._last = node;
-          }
-          return void 0;
+          }, this._last != null ? (this._last.next = s, this._last = s) : this._first = this._last = s;
         }
         shift() {
-          var value;
-          if (this._first == null) {
-            return;
-          } else {
-            this.length--;
-            if (typeof this.decr === "function") {
-              this.decr();
-            }
-          }
-          value = this._first.value;
-          if ((this._first = this._first.next) != null) {
-            this._first.prev = null;
-          } else {
-            this._last = null;
-          }
-          return value;
+          var a;
+          if (this._first != null)
+            return this.length--, typeof this.decr == "function" && this.decr(), a = this._first.value, (this._first = this._first.next) != null ? this._first.prev = null : this._last = null, a;
         }
         first() {
-          if (this._first != null) {
+          if (this._first != null)
             return this._first.value;
-          }
         }
         getArray() {
-          var node, ref, results;
-          node = this._first;
-          results = [];
-          while (node != null) {
-            results.push((ref = node, node = node.next, ref.value));
-          }
-          return results;
+          var a, s, u;
+          for (a = this._first, u = []; a != null; )
+            u.push((s = a, a = a.next, s.value));
+          return u;
         }
-        forEachShift(cb) {
-          var node;
-          node = this.shift();
-          while (node != null) {
-            cb(node), node = this.shift();
-          }
-          return void 0;
+        forEachShift(a) {
+          var s;
+          for (s = this.shift(); s != null; )
+            a(s), s = this.shift();
         }
         debug() {
-          var node, ref, ref1, ref2, results;
-          node = this._first;
-          results = [];
-          while (node != null) {
-            results.push((ref = node, node = node.next, {
-              value: ref.value,
-              prev: (ref1 = ref.prev) != null ? ref1.value : void 0,
-              next: (ref2 = ref.next) != null ? ref2.value : void 0
+          var a, s, u, p, d;
+          for (a = this._first, d = []; a != null; )
+            d.push((s = a, a = a.next, {
+              value: s.value,
+              prev: (u = s.prev) != null ? u.value : void 0,
+              next: (p = s.next) != null ? p.value : void 0
             }));
-          }
-          return results;
+          return d;
         }
       };
-      var DLList_1 = DLList;
-      var Events;
-      Events = class Events {
-        constructor(instance) {
-          this.instance = instance;
-          this._events = {};
-          if (this.instance.on != null || this.instance.once != null || this.instance.removeAllListeners != null) {
+      var g = l, f;
+      f = class {
+        constructor(a) {
+          if (this.instance = a, this._events = {}, this.instance.on != null || this.instance.once != null || this.instance.removeAllListeners != null)
             throw new Error("An Emitter already exists for this object");
-          }
-          this.instance.on = (name, cb) => {
-            return this._addListener(name, "many", cb);
-          };
-          this.instance.once = (name, cb) => {
-            return this._addListener(name, "once", cb);
-          };
-          this.instance.removeAllListeners = (name = null) => {
-            if (name != null) {
-              return delete this._events[name];
-            } else {
-              return this._events = {};
-            }
-          };
+          this.instance.on = (s, u) => this._addListener(s, "many", u), this.instance.once = (s, u) => this._addListener(s, "once", u), this.instance.removeAllListeners = (s = null) => s != null ? delete this._events[s] : this._events = {};
         }
-        _addListener(name, status, cb) {
-          var base;
-          if ((base = this._events)[name] == null) {
-            base[name] = [];
-          }
-          this._events[name].push({ cb, status });
-          return this.instance;
+        _addListener(a, s, u) {
+          var p;
+          return (p = this._events)[a] == null && (p[a] = []), this._events[a].push({ cb: u, status: s }), this.instance;
         }
-        listenerCount(name) {
-          if (this._events[name] != null) {
-            return this._events[name].length;
-          } else {
-            return 0;
-          }
+        listenerCount(a) {
+          return this._events[a] != null ? this._events[a].length : 0;
         }
-        async trigger(name, ...args) {
-          var e, promises;
+        async trigger(a, ...s) {
+          var u, p;
           try {
-            if (name !== "debug") {
-              this.trigger("debug", `Event triggered: ${name}`, args);
-            }
-            if (this._events[name] == null) {
-              return;
-            }
-            this._events[name] = this._events[name].filter(function(listener) {
-              return listener.status !== "none";
-            });
-            promises = this._events[name].map(async (listener) => {
-              var e2, returned;
-              if (listener.status === "none") {
-                return;
-              }
-              if (listener.status === "once") {
-                listener.status = "none";
-              }
-              try {
-                returned = typeof listener.cb === "function" ? listener.cb(...args) : void 0;
-                if (typeof (returned != null ? returned.then : void 0) === "function") {
-                  return await returned;
-                } else {
-                  return returned;
+            return a !== "debug" && this.trigger("debug", `Event triggered: ${a}`, s), this._events[a] == null ? void 0 : (this._events[a] = this._events[a].filter(function(d) {
+              return d.status !== "none";
+            }), p = this._events[a].map(async (d) => {
+              var h, _;
+              if (d.status !== "none") {
+                d.status === "once" && (d.status = "none");
+                try {
+                  return _ = typeof d.cb == "function" ? d.cb(...s) : void 0, typeof _?.then == "function" ? await _ : _;
+                } catch (y) {
+                  return h = y, this.trigger("error", h), null;
                 }
-              } catch (error) {
-                e2 = error;
-                {
-                  this.trigger("error", e2);
-                }
-                return null;
               }
-            });
-            return (await Promise.all(promises)).find(function(x) {
-              return x != null;
-            });
-          } catch (error) {
-            e = error;
-            {
-              this.trigger("error", e);
-            }
-            return null;
+            }), (await Promise.all(p)).find(function(d) {
+              return d != null;
+            }));
+          } catch (d) {
+            return u = d, this.trigger("error", u), null;
           }
         }
       };
-      var Events_1 = Events;
-      var DLList$1, Events$1, Queues;
-      DLList$1 = DLList_1;
-      Events$1 = Events_1;
-      Queues = class Queues {
-        constructor(num_priorities) {
-          this.Events = new Events$1(this);
-          this._length = 0;
-          this._lists = (function() {
-            var j, ref, results;
-            results = [];
-            for (j = 1, ref = num_priorities; 1 <= ref ? j <= ref : j >= ref; 1 <= ref ? ++j : --j) {
-              results.push(new DLList$1((() => {
-                return this.incr();
-              }), (() => {
-                return this.decr();
-              })));
-            }
-            return results;
+      var E = f, m, T, b;
+      m = g, T = E, b = class {
+        constructor(a) {
+          this.Events = new T(this), this._length = 0, this._lists = (function() {
+            var s, u, p;
+            for (p = [], s = 1, u = a; 1 <= u ? s <= u : s >= u; 1 <= u ? ++s : --s)
+              p.push(new m((() => this.incr()), (() => this.decr())));
+            return p;
           }).call(this);
         }
         incr() {
-          if (this._length++ === 0) {
+          if (this._length++ === 0)
             return this.Events.trigger("leftzero");
-          }
         }
         decr() {
-          if (--this._length === 0) {
+          if (--this._length === 0)
             return this.Events.trigger("zero");
-          }
         }
-        push(job) {
-          return this._lists[job.options.priority].push(job);
+        push(a) {
+          return this._lists[a.options.priority].push(a);
         }
-        queued(priority) {
-          if (priority != null) {
-            return this._lists[priority].length;
-          } else {
-            return this._length;
-          }
+        queued(a) {
+          return a != null ? this._lists[a].length : this._length;
         }
-        shiftAll(fn) {
-          return this._lists.forEach(function(list) {
-            return list.forEachShift(fn);
+        shiftAll(a) {
+          return this._lists.forEach(function(s) {
+            return s.forEachShift(a);
           });
         }
-        getFirst(arr = this._lists) {
-          var j, len, list;
-          for (j = 0, len = arr.length; j < len; j++) {
-            list = arr[j];
-            if (list.length > 0) {
-              return list;
-            }
-          }
+        getFirst(a = this._lists) {
+          var s, u, p;
+          for (s = 0, u = a.length; s < u; s++)
+            if (p = a[s], p.length > 0)
+              return p;
           return [];
         }
-        shiftLastFrom(priority) {
-          return this.getFirst(this._lists.slice(priority).reverse()).shift();
+        shiftLastFrom(a) {
+          return this.getFirst(this._lists.slice(a).reverse()).shift();
         }
       };
-      var Queues_1 = Queues;
-      var BottleneckError;
-      BottleneckError = class BottleneckError extends Error {
+      var k = b, R;
+      R = class extends Error {
       };
-      var BottleneckError_1 = BottleneckError;
-      var BottleneckError$1, DEFAULT_PRIORITY, Job, NUM_PRIORITIES, parser$1;
-      NUM_PRIORITIES = 10;
-      DEFAULT_PRIORITY = 5;
-      parser$1 = parser;
-      BottleneckError$1 = BottleneckError_1;
-      Job = class Job {
-        constructor(task, args, options, jobDefaults, rejectOnDrop, Events2, _states, Promise2) {
-          this.task = task;
-          this.args = args;
-          this.rejectOnDrop = rejectOnDrop;
-          this.Events = Events2;
-          this._states = _states;
-          this.Promise = Promise2;
-          this.options = parser$1.load(options, jobDefaults);
-          this.options.priority = this._sanitizePriority(this.options.priority);
-          if (this.options.id === jobDefaults.id) {
-            this.options.id = `${this.options.id}-${this._randomIndex()}`;
-          }
-          this.promise = new this.Promise((_resolve, _reject) => {
-            this._resolve = _resolve;
-            this._reject = _reject;
-          });
-          this.retryCount = 0;
+      var L = R, j, D, z, I, S;
+      I = 10, D = 5, S = c, j = L, z = class {
+        constructor(a, s, u, p, d, h, _, y) {
+          this.task = a, this.args = s, this.rejectOnDrop = d, this.Events = h, this._states = _, this.Promise = y, this.options = S.load(u, p), this.options.priority = this._sanitizePriority(this.options.priority), this.options.id === p.id && (this.options.id = `${this.options.id}-${this._randomIndex()}`), this.promise = new this.Promise((v, P) => {
+            this._resolve = v, this._reject = P;
+          }), this.retryCount = 0;
         }
-        _sanitizePriority(priority) {
-          var sProperty;
-          sProperty = ~~priority !== priority ? DEFAULT_PRIORITY : priority;
-          if (sProperty < 0) {
-            return 0;
-          } else if (sProperty > NUM_PRIORITIES - 1) {
-            return NUM_PRIORITIES - 1;
-          } else {
-            return sProperty;
-          }
+        _sanitizePriority(a) {
+          var s;
+          return s = ~~a !== a ? D : a, s < 0 ? 0 : s > I - 1 ? I - 1 : s;
         }
         _randomIndex() {
           return Math.random().toString(36).slice(2);
         }
-        doDrop({ error, message = "This job has been dropped by Bottleneck" } = {}) {
-          if (this._states.remove(this.options.id)) {
-            if (this.rejectOnDrop) {
-              this._reject(error != null ? error : new BottleneckError$1(message));
-            }
-            this.Events.trigger("dropped", { args: this.args, options: this.options, task: this.task, promise: this.promise });
-            return true;
-          } else {
-            return false;
-          }
+        doDrop({ error: a, message: s = "This job has been dropped by Bottleneck" } = {}) {
+          return this._states.remove(this.options.id) ? (this.rejectOnDrop && this._reject(a ?? new j(s)), this.Events.trigger("dropped", { args: this.args, options: this.options, task: this.task, promise: this.promise }), !0) : !1;
         }
-        _assertStatus(expected) {
-          var status;
-          status = this._states.jobStatus(this.options.id);
-          if (!(status === expected || expected === "DONE" && status === null)) {
-            throw new BottleneckError$1(`Invalid job status ${status}, expected ${expected}. Please open an issue at https://github.com/SGrondin/bottleneck/issues`);
-          }
+        _assertStatus(a) {
+          var s;
+          if (s = this._states.jobStatus(this.options.id), !(s === a || a === "DONE" && s === null))
+            throw new j(`Invalid job status ${s}, expected ${a}. Please open an issue at https://github.com/SGrondin/bottleneck/issues`);
         }
         doReceive() {
-          this._states.start(this.options.id);
-          return this.Events.trigger("received", { args: this.args, options: this.options });
+          return this._states.start(this.options.id), this.Events.trigger("received", { args: this.args, options: this.options });
         }
-        doQueue(reachedHWM, blocked) {
-          this._assertStatus("RECEIVED");
-          this._states.next(this.options.id);
-          return this.Events.trigger("queued", { args: this.args, options: this.options, reachedHWM, blocked });
+        doQueue(a, s) {
+          return this._assertStatus("RECEIVED"), this._states.next(this.options.id), this.Events.trigger("queued", { args: this.args, options: this.options, reachedHWM: a, blocked: s });
         }
         doRun() {
-          if (this.retryCount === 0) {
-            this._assertStatus("QUEUED");
-            this._states.next(this.options.id);
-          } else {
-            this._assertStatus("EXECUTING");
-          }
-          return this.Events.trigger("scheduled", { args: this.args, options: this.options });
+          return this.retryCount === 0 ? (this._assertStatus("QUEUED"), this._states.next(this.options.id)) : this._assertStatus("EXECUTING"), this.Events.trigger("scheduled", { args: this.args, options: this.options });
         }
-        async doExecute(chained, clearGlobalState, run, free) {
-          var error, eventInfo, passed;
-          if (this.retryCount === 0) {
-            this._assertStatus("RUNNING");
-            this._states.next(this.options.id);
-          } else {
-            this._assertStatus("EXECUTING");
-          }
-          eventInfo = { args: this.args, options: this.options, retryCount: this.retryCount };
-          this.Events.trigger("executing", eventInfo);
+        async doExecute(a, s, u, p) {
+          var d, h, _;
+          this.retryCount === 0 ? (this._assertStatus("RUNNING"), this._states.next(this.options.id)) : this._assertStatus("EXECUTING"), h = { args: this.args, options: this.options, retryCount: this.retryCount }, this.Events.trigger("executing", h);
           try {
-            passed = await (chained != null ? chained.schedule(this.options, this.task, ...this.args) : this.task(...this.args));
-            if (clearGlobalState()) {
-              this.doDone(eventInfo);
-              await free(this.options, eventInfo);
-              this._assertStatus("DONE");
-              return this._resolve(passed);
-            }
-          } catch (error1) {
-            error = error1;
-            return this._onFailure(error, eventInfo, clearGlobalState, run, free);
+            if (_ = await (a != null ? a.schedule(this.options, this.task, ...this.args) : this.task(...this.args)), s())
+              return this.doDone(h), await p(this.options, h), this._assertStatus("DONE"), this._resolve(_);
+          } catch (y) {
+            return d = y, this._onFailure(d, h, s, u, p);
           }
         }
-        doExpire(clearGlobalState, run, free) {
-          var error, eventInfo;
-          if (this._states.jobStatus(this.options.id === "RUNNING")) {
-            this._states.next(this.options.id);
-          }
-          this._assertStatus("EXECUTING");
-          eventInfo = { args: this.args, options: this.options, retryCount: this.retryCount };
-          error = new BottleneckError$1(`This job timed out after ${this.options.expiration} ms.`);
-          return this._onFailure(error, eventInfo, clearGlobalState, run, free);
+        doExpire(a, s, u) {
+          var p, d;
+          return this._states.jobStatus(this.options.id === "RUNNING") && this._states.next(this.options.id), this._assertStatus("EXECUTING"), d = { args: this.args, options: this.options, retryCount: this.retryCount }, p = new j(`This job timed out after ${this.options.expiration} ms.`), this._onFailure(p, d, a, s, u);
         }
-        async _onFailure(error, eventInfo, clearGlobalState, run, free) {
-          var retry2, retryAfter;
-          if (clearGlobalState()) {
-            retry2 = await this.Events.trigger("failed", error, eventInfo);
-            if (retry2 != null) {
-              retryAfter = ~~retry2;
-              this.Events.trigger("retry", `Retrying ${this.options.id} after ${retryAfter} ms`, eventInfo);
-              this.retryCount++;
-              return run(retryAfter);
-            } else {
-              this.doDone(eventInfo);
-              await free(this.options, eventInfo);
-              this._assertStatus("DONE");
-              return this._reject(error);
-            }
-          }
+        async _onFailure(a, s, u, p, d) {
+          var h, _;
+          if (u())
+            return h = await this.Events.trigger("failed", a, s), h != null ? (_ = ~~h, this.Events.trigger("retry", `Retrying ${this.options.id} after ${_} ms`, s), this.retryCount++, p(_)) : (this.doDone(s), await d(this.options, s), this._assertStatus("DONE"), this._reject(a));
         }
-        doDone(eventInfo) {
-          this._assertStatus("EXECUTING");
-          this._states.next(this.options.id);
-          return this.Events.trigger("done", eventInfo);
+        doDone(a) {
+          return this._assertStatus("EXECUTING"), this._states.next(this.options.id), this.Events.trigger("done", a);
         }
       };
-      var Job_1 = Job;
-      var BottleneckError$2, LocalDatastore, parser$2;
-      parser$2 = parser;
-      BottleneckError$2 = BottleneckError_1;
-      LocalDatastore = class LocalDatastore {
-        constructor(instance, storeOptions, storeInstanceOptions) {
-          this.instance = instance;
-          this.storeOptions = storeOptions;
-          this.clientId = this.instance._randomIndex();
-          parser$2.load(storeInstanceOptions, storeInstanceOptions, this);
-          this._nextRequest = this._lastReservoirRefresh = this._lastReservoirIncrease = Date.now();
-          this._running = 0;
-          this._done = 0;
-          this._unblockTime = 0;
-          this.ready = this.Promise.resolve();
-          this.clients = {};
-          this._startHeartbeat();
+      var q = z, G, Q, N;
+      N = c, G = L, Q = class {
+        constructor(a, s, u) {
+          this.instance = a, this.storeOptions = s, this.clientId = this.instance._randomIndex(), N.load(u, u, this), this._nextRequest = this._lastReservoirRefresh = this._lastReservoirIncrease = Date.now(), this._running = 0, this._done = 0, this._unblockTime = 0, this.ready = this.Promise.resolve(), this.clients = {}, this._startHeartbeat();
         }
         _startHeartbeat() {
-          var base;
-          if (this.heartbeat == null && (this.storeOptions.reservoirRefreshInterval != null && this.storeOptions.reservoirRefreshAmount != null || this.storeOptions.reservoirIncreaseInterval != null && this.storeOptions.reservoirIncreaseAmount != null)) {
-            return typeof (base = this.heartbeat = setInterval(() => {
-              var amount, incr, maximum, now, reservoir;
-              now = Date.now();
-              if (this.storeOptions.reservoirRefreshInterval != null && now >= this._lastReservoirRefresh + this.storeOptions.reservoirRefreshInterval) {
-                this._lastReservoirRefresh = now;
-                this.storeOptions.reservoir = this.storeOptions.reservoirRefreshAmount;
-                this.instance._drainAll(this.computeCapacity());
-              }
-              if (this.storeOptions.reservoirIncreaseInterval != null && now >= this._lastReservoirIncrease + this.storeOptions.reservoirIncreaseInterval) {
-                ({
-                  reservoirIncreaseAmount: amount,
-                  reservoirIncreaseMaximum: maximum,
-                  reservoir
-                } = this.storeOptions);
-                this._lastReservoirIncrease = now;
-                incr = maximum != null ? Math.min(amount, maximum - reservoir) : amount;
-                if (incr > 0) {
-                  this.storeOptions.reservoir += incr;
-                  return this.instance._drainAll(this.computeCapacity());
-                }
-              }
-            }, this.heartbeatInterval)).unref === "function" ? base.unref() : void 0;
-          } else {
-            return clearInterval(this.heartbeat);
-          }
+          var a;
+          return this.heartbeat == null && (this.storeOptions.reservoirRefreshInterval != null && this.storeOptions.reservoirRefreshAmount != null || this.storeOptions.reservoirIncreaseInterval != null && this.storeOptions.reservoirIncreaseAmount != null) ? typeof (a = this.heartbeat = setInterval(() => {
+            var s, u, p, d, h;
+            if (d = Date.now(), this.storeOptions.reservoirRefreshInterval != null && d >= this._lastReservoirRefresh + this.storeOptions.reservoirRefreshInterval && (this._lastReservoirRefresh = d, this.storeOptions.reservoir = this.storeOptions.reservoirRefreshAmount, this.instance._drainAll(this.computeCapacity())), this.storeOptions.reservoirIncreaseInterval != null && d >= this._lastReservoirIncrease + this.storeOptions.reservoirIncreaseInterval && ({
+              reservoirIncreaseAmount: s,
+              reservoirIncreaseMaximum: p,
+              reservoir: h
+            } = this.storeOptions, this._lastReservoirIncrease = d, u = p != null ? Math.min(s, p - h) : s, u > 0))
+              return this.storeOptions.reservoir += u, this.instance._drainAll(this.computeCapacity());
+          }, this.heartbeatInterval)).unref == "function" ? a.unref() : void 0 : clearInterval(this.heartbeat);
         }
-        async __publish__(message) {
-          await this.yieldLoop();
-          return this.instance.Events.trigger("message", message.toString());
+        async __publish__(a) {
+          return await this.yieldLoop(), this.instance.Events.trigger("message", a.toString());
         }
-        async __disconnect__(flush) {
-          await this.yieldLoop();
-          clearInterval(this.heartbeat);
-          return this.Promise.resolve();
+        async __disconnect__(a) {
+          return await this.yieldLoop(), clearInterval(this.heartbeat), this.Promise.resolve();
         }
-        yieldLoop(t = 0) {
-          return new this.Promise(function(resolve, reject) {
-            return setTimeout(resolve, t);
+        yieldLoop(a = 0) {
+          return new this.Promise(function(s, u) {
+            return setTimeout(s, a);
           });
         }
         computePenalty() {
-          var ref;
-          return (ref = this.storeOptions.penalty) != null ? ref : 15 * this.storeOptions.minTime || 5e3;
+          var a;
+          return (a = this.storeOptions.penalty) != null ? a : 15 * this.storeOptions.minTime || 5e3;
         }
-        async __updateSettings__(options) {
-          await this.yieldLoop();
-          parser$2.overwrite(options, options, this.storeOptions);
-          this._startHeartbeat();
-          this.instance._drainAll(this.computeCapacity());
-          return true;
+        async __updateSettings__(a) {
+          return await this.yieldLoop(), N.overwrite(a, a, this.storeOptions), this._startHeartbeat(), this.instance._drainAll(this.computeCapacity()), !0;
         }
         async __running__() {
-          await this.yieldLoop();
-          return this._running;
+          return await this.yieldLoop(), this._running;
         }
         async __queued__() {
-          await this.yieldLoop();
-          return this.instance.queued();
+          return await this.yieldLoop(), this.instance.queued();
         }
         async __done__() {
-          await this.yieldLoop();
-          return this._done;
+          return await this.yieldLoop(), this._done;
         }
-        async __groupCheck__(time) {
-          await this.yieldLoop();
-          return this._nextRequest + this.timeout < time;
+        async __groupCheck__(a) {
+          return await this.yieldLoop(), this._nextRequest + this.timeout < a;
         }
         computeCapacity() {
-          var maxConcurrent, reservoir;
-          ({ maxConcurrent, reservoir } = this.storeOptions);
-          if (maxConcurrent != null && reservoir != null) {
-            return Math.min(maxConcurrent - this._running, reservoir);
-          } else if (maxConcurrent != null) {
-            return maxConcurrent - this._running;
-          } else if (reservoir != null) {
-            return reservoir;
-          } else {
-            return null;
-          }
+          var a, s;
+          return { maxConcurrent: a, reservoir: s } = this.storeOptions, a != null && s != null ? Math.min(a - this._running, s) : a != null ? a - this._running : s ?? null;
         }
-        conditionsCheck(weight) {
-          var capacity;
-          capacity = this.computeCapacity();
-          return capacity == null || weight <= capacity;
+        conditionsCheck(a) {
+          var s;
+          return s = this.computeCapacity(), s == null || a <= s;
         }
-        async __incrementReservoir__(incr) {
-          var reservoir;
-          await this.yieldLoop();
-          reservoir = this.storeOptions.reservoir += incr;
-          this.instance._drainAll(this.computeCapacity());
-          return reservoir;
+        async __incrementReservoir__(a) {
+          var s;
+          return await this.yieldLoop(), s = this.storeOptions.reservoir += a, this.instance._drainAll(this.computeCapacity()), s;
         }
         async __currentReservoir__() {
-          await this.yieldLoop();
-          return this.storeOptions.reservoir;
+          return await this.yieldLoop(), this.storeOptions.reservoir;
         }
-        isBlocked(now) {
-          return this._unblockTime >= now;
+        isBlocked(a) {
+          return this._unblockTime >= a;
         }
-        check(weight, now) {
-          return this.conditionsCheck(weight) && this._nextRequest - now <= 0;
+        check(a, s) {
+          return this.conditionsCheck(a) && this._nextRequest - s <= 0;
         }
-        async __check__(weight) {
-          var now;
-          await this.yieldLoop();
-          now = Date.now();
-          return this.check(weight, now);
+        async __check__(a) {
+          var s;
+          return await this.yieldLoop(), s = Date.now(), this.check(a, s);
         }
-        async __register__(index, weight, expiration) {
-          var now, wait;
-          await this.yieldLoop();
-          now = Date.now();
-          if (this.conditionsCheck(weight)) {
-            this._running += weight;
-            if (this.storeOptions.reservoir != null) {
-              this.storeOptions.reservoir -= weight;
-            }
-            wait = Math.max(this._nextRequest - now, 0);
-            this._nextRequest = now + wait + this.storeOptions.minTime;
-            return {
-              success: true,
-              wait,
-              reservoir: this.storeOptions.reservoir
-            };
-          } else {
-            return {
-              success: false
-            };
-          }
+        async __register__(a, s, u) {
+          var p, d;
+          return await this.yieldLoop(), p = Date.now(), this.conditionsCheck(s) ? (this._running += s, this.storeOptions.reservoir != null && (this.storeOptions.reservoir -= s), d = Math.max(this._nextRequest - p, 0), this._nextRequest = p + d + this.storeOptions.minTime, {
+            success: !0,
+            wait: d,
+            reservoir: this.storeOptions.reservoir
+          }) : {
+            success: !1
+          };
         }
         strategyIsBlock() {
           return this.storeOptions.strategy === 3;
         }
-        async __submit__(queueLength, weight) {
-          var blocked, now, reachedHWM;
-          await this.yieldLoop();
-          if (this.storeOptions.maxConcurrent != null && weight > this.storeOptions.maxConcurrent) {
-            throw new BottleneckError$2(`Impossible to add a job having a weight of ${weight} to a limiter having a maxConcurrent setting of ${this.storeOptions.maxConcurrent}`);
-          }
-          now = Date.now();
-          reachedHWM = this.storeOptions.highWater != null && queueLength === this.storeOptions.highWater && !this.check(weight, now);
-          blocked = this.strategyIsBlock() && (reachedHWM || this.isBlocked(now));
-          if (blocked) {
-            this._unblockTime = now + this.computePenalty();
-            this._nextRequest = this._unblockTime + this.storeOptions.minTime;
-            this.instance._dropAllQueued();
-          }
-          return {
-            reachedHWM,
-            blocked,
+        async __submit__(a, s) {
+          var u, p, d;
+          if (await this.yieldLoop(), this.storeOptions.maxConcurrent != null && s > this.storeOptions.maxConcurrent)
+            throw new G(`Impossible to add a job having a weight of ${s} to a limiter having a maxConcurrent setting of ${this.storeOptions.maxConcurrent}`);
+          return p = Date.now(), d = this.storeOptions.highWater != null && a === this.storeOptions.highWater && !this.check(s, p), u = this.strategyIsBlock() && (d || this.isBlocked(p)), u && (this._unblockTime = p + this.computePenalty(), this._nextRequest = this._unblockTime + this.storeOptions.minTime, this.instance._dropAllQueued()), {
+            reachedHWM: d,
+            blocked: u,
             strategy: this.storeOptions.strategy
           };
         }
-        async __free__(index, weight) {
-          await this.yieldLoop();
-          this._running -= weight;
-          this._done += weight;
-          this.instance._drainAll(this.computeCapacity());
-          return {
+        async __free__(a, s) {
+          return await this.yieldLoop(), this._running -= s, this._done += s, this.instance._drainAll(this.computeCapacity()), {
             running: this._running
           };
         }
       };
-      var LocalDatastore_1 = LocalDatastore;
-      var BottleneckError$3, States;
-      BottleneckError$3 = BottleneckError_1;
-      States = class States {
-        constructor(status1) {
-          this.status = status1;
-          this._jobs = {};
-          this.counts = this.status.map(function() {
+      var ce = Q, O, Y;
+      O = L, Y = class {
+        constructor(a) {
+          this.status = a, this._jobs = {}, this.counts = this.status.map(function() {
             return 0;
           });
         }
-        next(id) {
-          var current, next;
-          current = this._jobs[id];
-          next = current + 1;
-          if (current != null && next < this.status.length) {
-            this.counts[current]--;
-            this.counts[next]++;
-            return this._jobs[id]++;
-          } else if (current != null) {
-            this.counts[current]--;
-            return delete this._jobs[id];
-          }
+        next(a) {
+          var s, u;
+          if (s = this._jobs[a], u = s + 1, s != null && u < this.status.length)
+            return this.counts[s]--, this.counts[u]++, this._jobs[a]++;
+          if (s != null)
+            return this.counts[s]--, delete this._jobs[a];
         }
-        start(id) {
-          var initial;
-          initial = 0;
-          this._jobs[id] = initial;
-          return this.counts[initial]++;
+        start(a) {
+          var s;
+          return s = 0, this._jobs[a] = s, this.counts[s]++;
         }
-        remove(id) {
-          var current;
-          current = this._jobs[id];
-          if (current != null) {
-            this.counts[current]--;
-            delete this._jobs[id];
-          }
-          return current != null;
+        remove(a) {
+          var s;
+          return s = this._jobs[a], s != null && (this.counts[s]--, delete this._jobs[a]), s != null;
         }
-        jobStatus(id) {
-          var ref;
-          return (ref = this.status[this._jobs[id]]) != null ? ref : null;
+        jobStatus(a) {
+          var s;
+          return (s = this.status[this._jobs[a]]) != null ? s : null;
         }
-        statusJobs(status) {
-          var k, pos, ref, results, v;
-          if (status != null) {
-            pos = this.status.indexOf(status);
-            if (pos < 0) {
-              throw new BottleneckError$3(`status must be one of ${this.status.join(", ")}`);
-            }
-            ref = this._jobs;
-            results = [];
-            for (k in ref) {
-              v = ref[k];
-              if (v === pos) {
-                results.push(k);
-              }
-            }
-            return results;
-          } else {
+        statusJobs(a) {
+          var s, u, p, d, h;
+          if (a != null) {
+            if (u = this.status.indexOf(a), u < 0)
+              throw new O(`status must be one of ${this.status.join(", ")}`);
+            p = this._jobs, d = [];
+            for (s in p)
+              h = p[s], h === u && d.push(s);
+            return d;
+          } else
             return Object.keys(this._jobs);
-          }
         }
         statusCounts() {
-          return this.counts.reduce(((acc, v, i) => {
-            acc[this.status[i]] = v;
-            return acc;
-          }), {});
+          return this.counts.reduce(((a, s, u) => (a[this.status[u]] = s, a)), {});
         }
       };
-      var States_1 = States;
-      var DLList$2, Sync;
-      DLList$2 = DLList_1;
-      Sync = class Sync {
-        constructor(name, Promise2) {
-          this.schedule = this.schedule.bind(this);
-          this.name = name;
-          this.Promise = Promise2;
-          this._running = 0;
-          this._queue = new DLList$2();
+      var ue = Y, X, x;
+      X = g, x = class {
+        constructor(a, s) {
+          this.schedule = this.schedule.bind(this), this.name = a, this.Promise = s, this._running = 0, this._queue = new X();
         }
         isEmpty() {
           return this._queue.length === 0;
         }
         async _tryToRun() {
-          var args, cb, error, reject, resolve, returned, task;
-          if (this._running < 1 && this._queue.length > 0) {
-            this._running++;
-            ({ task, args, resolve, reject } = this._queue.shift());
-            cb = await (async function() {
+          var a, s, u, p, d, h, _;
+          if (this._running < 1 && this._queue.length > 0)
+            return this._running++, { task: _, args: a, resolve: d, reject: p } = this._queue.shift(), s = await (async function() {
               try {
-                returned = await task(...args);
-                return function() {
-                  return resolve(returned);
+                return h = await _(...a), function() {
+                  return d(h);
                 };
-              } catch (error1) {
-                error = error1;
-                return function() {
-                  return reject(error);
+              } catch (y) {
+                return u = y, function() {
+                  return p(u);
                 };
               }
-            })();
-            this._running--;
-            this._tryToRun();
-            return cb();
-          }
+            })(), this._running--, this._tryToRun(), s();
         }
-        schedule(task, ...args) {
-          var promise, reject, resolve;
-          resolve = reject = null;
-          promise = new this.Promise(function(_resolve, _reject) {
-            resolve = _resolve;
-            return reject = _reject;
-          });
-          this._queue.push({ task, args, resolve, reject });
-          this._tryToRun();
-          return promise;
+        schedule(a, ...s) {
+          var u, p, d;
+          return d = p = null, u = new this.Promise(function(h, _) {
+            return d = h, p = _;
+          }), this._queue.push({ task: a, args: s, resolve: d, reject: p }), this._tryToRun(), u;
         }
       };
-      var Sync_1 = Sync;
-      var version = "2.19.5";
-      var version$1 = {
-        version
-      };
-      var version$2 = /* @__PURE__ */ Object.freeze({
-        version,
-        default: version$1
-      });
-      var require$$2 = () => console.log("You must import the full version of Bottleneck in order to use this feature.");
-      var require$$3 = () => console.log("You must import the full version of Bottleneck in order to use this feature.");
-      var require$$4 = () => console.log("You must import the full version of Bottleneck in order to use this feature.");
-      var Events$2, Group, IORedisConnection$1, RedisConnection$1, Scripts$1, parser$3;
-      parser$3 = parser;
-      Events$2 = Events_1;
-      RedisConnection$1 = require$$2;
-      IORedisConnection$1 = require$$3;
-      Scripts$1 = require$$4;
-      Group = (function() {
-        class Group2 {
-          constructor(limiterOptions = {}) {
-            this.deleteKey = this.deleteKey.bind(this);
-            this.limiterOptions = limiterOptions;
-            parser$3.load(this.limiterOptions, this.defaults, this);
-            this.Events = new Events$2(this);
-            this.instances = {};
-            this.Bottleneck = Bottleneck_1;
-            this._startAutoCleanup();
-            this.sharedConnection = this.connection != null;
-            if (this.connection == null) {
-              if (this.limiterOptions.datastore === "redis") {
-                this.connection = new RedisConnection$1(Object.assign({}, this.limiterOptions, { Events: this.Events }));
-              } else if (this.limiterOptions.datastore === "ioredis") {
-                this.connection = new IORedisConnection$1(Object.assign({}, this.limiterOptions, { Events: this.Events }));
-              }
-            }
+      var Ee = x, Z = "2.19.5", ee = {
+        version: Z
+      }, U = /* @__PURE__ */ Object.freeze({
+        version: Z,
+        default: ee
+      }), A = () => console.log("You must import the full version of Bottleneck in order to use this feature."), $ = () => console.log("You must import the full version of Bottleneck in order to use this feature."), re = () => console.log("You must import the full version of Bottleneck in order to use this feature."), B, le, Ue, Le, Ie, pe;
+      pe = c, B = E, Le = A, Ue = $, Ie = re, le = (function() {
+        class w {
+          constructor(s = {}) {
+            this.deleteKey = this.deleteKey.bind(this), this.limiterOptions = s, pe.load(this.limiterOptions, this.defaults, this), this.Events = new B(this), this.instances = {}, this.Bottleneck = Me, this._startAutoCleanup(), this.sharedConnection = this.connection != null, this.connection == null && (this.limiterOptions.datastore === "redis" ? this.connection = new Le(Object.assign({}, this.limiterOptions, { Events: this.Events })) : this.limiterOptions.datastore === "ioredis" && (this.connection = new Ue(Object.assign({}, this.limiterOptions, { Events: this.Events }))));
           }
-          key(key = "") {
-            var ref;
-            return (ref = this.instances[key]) != null ? ref : (() => {
-              var limiter;
-              limiter = this.instances[key] = new this.Bottleneck(Object.assign(this.limiterOptions, {
-                id: `${this.id}-${key}`,
+          key(s = "") {
+            var u;
+            return (u = this.instances[s]) != null ? u : (() => {
+              var p;
+              return p = this.instances[s] = new this.Bottleneck(Object.assign(this.limiterOptions, {
+                id: `${this.id}-${s}`,
                 timeout: this.timeout,
                 connection: this.connection
-              }));
-              this.Events.trigger("created", limiter, key);
-              return limiter;
+              })), this.Events.trigger("created", p, s), p;
             })();
           }
-          async deleteKey(key = "") {
-            var deleted, instance;
-            instance = this.instances[key];
-            if (this.connection) {
-              deleted = await this.connection.__runCommand__(["del", ...Scripts$1.allKeys(`${this.id}-${key}`)]);
-            }
-            if (instance != null) {
-              delete this.instances[key];
-              await instance.disconnect();
-            }
-            return instance != null || deleted > 0;
+          async deleteKey(s = "") {
+            var u, p;
+            return p = this.instances[s], this.connection && (u = await this.connection.__runCommand__(["del", ...Ie.allKeys(`${this.id}-${s}`)])), p != null && (delete this.instances[s], await p.disconnect()), p != null || u > 0;
           }
           limiters() {
-            var k, ref, results, v;
-            ref = this.instances;
-            results = [];
-            for (k in ref) {
-              v = ref[k];
-              results.push({
-                key: k,
-                limiter: v
+            var s, u, p, d;
+            u = this.instances, p = [];
+            for (s in u)
+              d = u[s], p.push({
+                key: s,
+                limiter: d
               });
-            }
-            return results;
+            return p;
           }
           keys() {
             return Object.keys(this.instances);
           }
           async clusterKeys() {
-            var cursor, end, found, i, k, keys, len, next, start;
-            if (this.connection == null) {
+            var s, u, p, d, h, _, y, v, P;
+            if (this.connection == null)
               return this.Promise.resolve(this.keys());
-            }
-            keys = [];
-            cursor = null;
-            start = `b_${this.id}-`.length;
-            end = "_settings".length;
-            while (cursor !== 0) {
-              [next, found] = await this.connection.__runCommand__(["scan", cursor != null ? cursor : 0, "match", `b_${this.id}-*_settings`, "count", 1e4]);
-              cursor = ~~next;
-              for (i = 0, len = found.length; i < len; i++) {
-                k = found[i];
-                keys.push(k.slice(start, -end));
-              }
-            }
-            return keys;
+            for (_ = [], s = null, P = `b_${this.id}-`.length, u = 9; s !== 0; )
+              for ([v, p] = await this.connection.__runCommand__(["scan", s ?? 0, "match", `b_${this.id}-*_settings`, "count", 1e4]), s = ~~v, d = 0, y = p.length; d < y; d++)
+                h = p[d], _.push(h.slice(P, -u));
+            return _;
           }
           _startAutoCleanup() {
-            var base;
-            clearInterval(this.interval);
-            return typeof (base = this.interval = setInterval(async () => {
-              var e, k, ref, results, time, v;
-              time = Date.now();
-              ref = this.instances;
-              results = [];
-              for (k in ref) {
-                v = ref[k];
+            var s;
+            return clearInterval(this.interval), typeof (s = this.interval = setInterval(async () => {
+              var u, p, d, h, _, y;
+              _ = Date.now(), d = this.instances, h = [];
+              for (p in d) {
+                y = d[p];
                 try {
-                  if (await v._store.__groupCheck__(time)) {
-                    results.push(this.deleteKey(k));
-                  } else {
-                    results.push(void 0);
-                  }
-                } catch (error) {
-                  e = error;
-                  results.push(v.Events.trigger("error", e));
+                  await y._store.__groupCheck__(_) ? h.push(this.deleteKey(p)) : h.push(void 0);
+                } catch (v) {
+                  u = v, h.push(y.Events.trigger("error", u));
                 }
               }
-              return results;
-            }, this.timeout / 2)).unref === "function" ? base.unref() : void 0;
+              return h;
+            }, this.timeout / 2)).unref == "function" ? s.unref() : void 0;
           }
-          updateSettings(options = {}) {
-            parser$3.overwrite(options, this.defaults, this);
-            parser$3.overwrite(options, options, this.limiterOptions);
-            if (options.timeout != null) {
+          updateSettings(s = {}) {
+            if (pe.overwrite(s, this.defaults, this), pe.overwrite(s, s, this.limiterOptions), s.timeout != null)
               return this._startAutoCleanup();
-            }
           }
-          disconnect(flush = true) {
-            var ref;
-            if (!this.sharedConnection) {
-              return (ref = this.connection) != null ? ref.disconnect(flush) : void 0;
-            }
+          disconnect(s = !0) {
+            var u;
+            if (!this.sharedConnection)
+              return (u = this.connection) != null ? u.disconnect(s) : void 0;
           }
         }
-        Group2.prototype.defaults = {
+        return w.prototype.defaults = {
           timeout: 1e3 * 60 * 5,
           connection: null,
           Promise,
           id: "group-key"
-        };
-        return Group2;
-      }).call(commonjsGlobal$1);
-      var Group_1 = Group;
-      var Batcher, Events$3, parser$4;
-      parser$4 = parser;
-      Events$3 = Events_1;
-      Batcher = (function() {
-        class Batcher2 {
-          constructor(options = {}) {
-            this.options = options;
-            parser$4.load(this.options, this.defaults, this);
-            this.Events = new Events$3(this);
-            this._arr = [];
-            this._resetPromise();
-            this._lastFlush = Date.now();
+        }, w;
+      }).call(t);
+      var qr = le, qe, je, xe;
+      xe = c, je = E, qe = (function() {
+        class w {
+          constructor(s = {}) {
+            this.options = s, xe.load(this.options, this.defaults, this), this.Events = new je(this), this._arr = [], this._resetPromise(), this._lastFlush = Date.now();
           }
           _resetPromise() {
-            return this._promise = new this.Promise((res, rej) => {
-              return this._resolve = res;
-            });
+            return this._promise = new this.Promise((s, u) => this._resolve = s);
           }
           _flush() {
-            clearTimeout(this._timeout);
-            this._lastFlush = Date.now();
-            this._resolve();
-            this.Events.trigger("batch", this._arr);
-            this._arr = [];
-            return this._resetPromise();
+            return clearTimeout(this._timeout), this._lastFlush = Date.now(), this._resolve(), this.Events.trigger("batch", this._arr), this._arr = [], this._resetPromise();
           }
-          add(data) {
-            var ret;
-            this._arr.push(data);
-            ret = this._promise;
-            if (this._arr.length === this.maxSize) {
-              this._flush();
-            } else if (this.maxTime != null && this._arr.length === 1) {
-              this._timeout = setTimeout(() => {
-                return this._flush();
-              }, this.maxTime);
-            }
-            return ret;
+          add(s) {
+            var u;
+            return this._arr.push(s), u = this._promise, this._arr.length === this.maxSize ? this._flush() : this.maxTime != null && this._arr.length === 1 && (this._timeout = setTimeout(() => this._flush(), this.maxTime)), u;
           }
         }
-        Batcher2.prototype.defaults = {
+        return w.prototype.defaults = {
           maxTime: null,
           maxSize: null,
           Promise
-        };
-        return Batcher2;
-      }).call(commonjsGlobal$1);
-      var Batcher_1 = Batcher;
-      var require$$4$1 = () => console.log("You must import the full version of Bottleneck in order to use this feature.");
-      var require$$8 = getCjsExportFromNamespace(version$2);
-      var Bottleneck, DEFAULT_PRIORITY$1, Events$4, Job$1, LocalDatastore$1, NUM_PRIORITIES$1, Queues$1, RedisDatastore$1, States$1, Sync$1, parser$5, splice = [].splice;
-      NUM_PRIORITIES$1 = 10;
-      DEFAULT_PRIORITY$1 = 5;
-      parser$5 = parser;
-      Queues$1 = Queues_1;
-      Job$1 = Job_1;
-      LocalDatastore$1 = LocalDatastore_1;
-      RedisDatastore$1 = require$$4$1;
-      Events$4 = Events_1;
-      States$1 = States_1;
-      Sync$1 = Sync_1;
-      Bottleneck = (function() {
-        class Bottleneck2 {
-          constructor(options = {}, ...invalid) {
-            var storeInstanceOptions, storeOptions;
-            this._addToQueue = this._addToQueue.bind(this);
-            this._validateOptions(options, invalid);
-            parser$5.load(options, this.instanceDefaults, this);
-            this._queues = new Queues$1(NUM_PRIORITIES$1);
-            this._scheduled = {};
-            this._states = new States$1(["RECEIVED", "QUEUED", "RUNNING", "EXECUTING"].concat(this.trackDoneStatus ? ["DONE"] : []));
-            this._limiter = null;
-            this.Events = new Events$4(this);
-            this._submitLock = new Sync$1("submit", this.Promise);
-            this._registerLock = new Sync$1("register", this.Promise);
-            storeOptions = parser$5.load(options, this.storeDefaults, {});
-            this._store = (function() {
-              if (this.datastore === "redis" || this.datastore === "ioredis" || this.connection != null) {
-                storeInstanceOptions = parser$5.load(options, this.redisStoreDefaults, {});
-                return new RedisDatastore$1(this, storeOptions, storeInstanceOptions);
-              } else if (this.datastore === "local") {
-                storeInstanceOptions = parser$5.load(options, this.localStoreDefaults, {});
-                return new LocalDatastore$1(this, storeOptions, storeInstanceOptions);
-              } else {
-                throw new Bottleneck2.prototype.BottleneckError(`Invalid datastore type: ${this.datastore}`);
-              }
-            }).call(this);
-            this._queues.on("leftzero", () => {
-              var ref;
-              return (ref = this._store.heartbeat) != null ? typeof ref.ref === "function" ? ref.ref() : void 0 : void 0;
-            });
-            this._queues.on("zero", () => {
-              var ref;
-              return (ref = this._store.heartbeat) != null ? typeof ref.unref === "function" ? ref.unref() : void 0 : void 0;
+        }, w;
+      }).call(t);
+      var jr = qe, xr = () => console.log("You must import the full version of Bottleneck in order to use this feature."), $r = o(U), $e, Be, Te, _e, He, we, Ve, We, ze, be, F, Ne = [].splice;
+      we = 10, Be = 5, F = c, Ve = k, _e = q, He = ce, We = xr, Te = E, ze = ue, be = Ee, $e = (function() {
+        class w {
+          constructor(s = {}, ...u) {
+            var p, d;
+            this._addToQueue = this._addToQueue.bind(this), this._validateOptions(s, u), F.load(s, this.instanceDefaults, this), this._queues = new Ve(we), this._scheduled = {}, this._states = new ze(["RECEIVED", "QUEUED", "RUNNING", "EXECUTING"].concat(this.trackDoneStatus ? ["DONE"] : [])), this._limiter = null, this.Events = new Te(this), this._submitLock = new be("submit", this.Promise), this._registerLock = new be("register", this.Promise), d = F.load(s, this.storeDefaults, {}), this._store = (function() {
+              if (this.datastore === "redis" || this.datastore === "ioredis" || this.connection != null)
+                return p = F.load(s, this.redisStoreDefaults, {}), new We(this, d, p);
+              if (this.datastore === "local")
+                return p = F.load(s, this.localStoreDefaults, {}), new He(this, d, p);
+              throw new w.prototype.BottleneckError(`Invalid datastore type: ${this.datastore}`);
+            }).call(this), this._queues.on("leftzero", () => {
+              var h;
+              return (h = this._store.heartbeat) != null && typeof h.ref == "function" ? h.ref() : void 0;
+            }), this._queues.on("zero", () => {
+              var h;
+              return (h = this._store.heartbeat) != null && typeof h.unref == "function" ? h.unref() : void 0;
             });
           }
-          _validateOptions(options, invalid) {
-            if (!(options != null && typeof options === "object" && invalid.length === 0)) {
-              throw new Bottleneck2.prototype.BottleneckError("Bottleneck v2 takes a single object argument. Refer to https://github.com/SGrondin/bottleneck#upgrading-to-v2 if you're upgrading from Bottleneck v1.");
-            }
+          _validateOptions(s, u) {
+            if (!(s != null && typeof s == "object" && u.length === 0))
+              throw new w.prototype.BottleneckError("Bottleneck v2 takes a single object argument. Refer to https://github.com/SGrondin/bottleneck#upgrading-to-v2 if you're upgrading from Bottleneck v1.");
           }
           ready() {
             return this._store.ready;
@@ -4651,18 +3713,17 @@ function requireLight() {
           channel_client() {
             return `b_${this.id}_${this._store.clientId}`;
           }
-          publish(message) {
-            return this._store.__publish__(message);
+          publish(s) {
+            return this._store.__publish__(s);
           }
-          disconnect(flush = true) {
-            return this._store.__disconnect__(flush);
+          disconnect(s = !0) {
+            return this._store.__disconnect__(s);
           }
-          chain(_limiter) {
-            this._limiter = _limiter;
-            return this;
+          chain(s) {
+            return this._limiter = s, this;
           }
-          queued(priority) {
-            return this._queues.queued(priority);
+          queued(s) {
+            return this._queues.queued(s);
           }
           clusterQueued() {
             return this._store.__queued__();
@@ -4676,11 +3737,11 @@ function requireLight() {
           done() {
             return this._store.__done__();
           }
-          jobStatus(id) {
-            return this._states.jobStatus(id);
+          jobStatus(s) {
+            return this._states.jobStatus(s);
           }
-          jobs(status) {
-            return this._states.statusJobs(status);
+          jobs(s) {
+            return this._states.statusJobs(s);
           }
           counts() {
             return this._states.statusCounts();
@@ -4688,286 +3749,143 @@ function requireLight() {
           _randomIndex() {
             return Math.random().toString(36).slice(2);
           }
-          check(weight = 1) {
-            return this._store.__check__(weight);
+          check(s = 1) {
+            return this._store.__check__(s);
           }
-          _clearGlobalState(index) {
-            if (this._scheduled[index] != null) {
-              clearTimeout(this._scheduled[index].expiration);
-              delete this._scheduled[index];
-              return true;
-            } else {
-              return false;
-            }
+          _clearGlobalState(s) {
+            return this._scheduled[s] != null ? (clearTimeout(this._scheduled[s].expiration), delete this._scheduled[s], !0) : !1;
           }
-          async _free(index, job, options, eventInfo) {
-            var e, running;
+          async _free(s, u, p, d) {
+            var h, _;
             try {
-              ({ running } = await this._store.__free__(index, options.weight));
-              this.Events.trigger("debug", `Freed ${options.id}`, eventInfo);
-              if (running === 0 && this.empty()) {
+              if ({ running: _ } = await this._store.__free__(s, p.weight), this.Events.trigger("debug", `Freed ${p.id}`, d), _ === 0 && this.empty())
                 return this.Events.trigger("idle");
-              }
-            } catch (error1) {
-              e = error1;
-              return this.Events.trigger("error", e);
+            } catch (y) {
+              return h = y, this.Events.trigger("error", h);
             }
           }
-          _run(index, job, wait) {
-            var clearGlobalState, free, run;
-            job.doRun();
-            clearGlobalState = this._clearGlobalState.bind(this, index);
-            run = this._run.bind(this, index, job);
-            free = this._free.bind(this, index, job);
-            return this._scheduled[index] = {
-              timeout: setTimeout(() => {
-                return job.doExecute(this._limiter, clearGlobalState, run, free);
-              }, wait),
-              expiration: job.options.expiration != null ? setTimeout(function() {
-                return job.doExpire(clearGlobalState, run, free);
-              }, wait + job.options.expiration) : void 0,
-              job
+          _run(s, u, p) {
+            var d, h, _;
+            return u.doRun(), d = this._clearGlobalState.bind(this, s), _ = this._run.bind(this, s, u), h = this._free.bind(this, s, u), this._scheduled[s] = {
+              timeout: setTimeout(() => u.doExecute(this._limiter, d, _, h), p),
+              expiration: u.options.expiration != null ? setTimeout(function() {
+                return u.doExpire(d, _, h);
+              }, p + u.options.expiration) : void 0,
+              job: u
             };
           }
-          _drainOne(capacity) {
+          _drainOne(s) {
             return this._registerLock.schedule(() => {
-              var args, index, next, options, queue;
-              if (this.queued() === 0) {
-                return this.Promise.resolve(null);
-              }
-              queue = this._queues.getFirst();
-              ({ options, args } = next = queue.first());
-              if (capacity != null && options.weight > capacity) {
-                return this.Promise.resolve(null);
-              }
-              this.Events.trigger("debug", `Draining ${options.id}`, { args, options });
-              index = this._randomIndex();
-              return this._store.__register__(index, options.weight, options.expiration).then(({ success, wait, reservoir }) => {
-                var empty;
-                this.Events.trigger("debug", `Drained ${options.id}`, { success, args, options });
-                if (success) {
-                  queue.shift();
-                  empty = this.empty();
-                  if (empty) {
-                    this.Events.trigger("empty");
-                  }
-                  if (reservoir === 0) {
-                    this.Events.trigger("depleted", empty);
-                  }
-                  this._run(index, next, wait);
-                  return this.Promise.resolve(options.weight);
-                } else {
-                  return this.Promise.resolve(null);
-                }
-              });
+              var u, p, d, h, _;
+              return this.queued() === 0 ? this.Promise.resolve(null) : (_ = this._queues.getFirst(), { options: h, args: u } = d = _.first(), s != null && h.weight > s ? this.Promise.resolve(null) : (this.Events.trigger("debug", `Draining ${h.id}`, { args: u, options: h }), p = this._randomIndex(), this._store.__register__(p, h.weight, h.expiration).then(({ success: y, wait: v, reservoir: P }) => {
+                var te;
+                return this.Events.trigger("debug", `Drained ${h.id}`, { success: y, args: u, options: h }), y ? (_.shift(), te = this.empty(), te && this.Events.trigger("empty"), P === 0 && this.Events.trigger("depleted", te), this._run(p, d, v), this.Promise.resolve(h.weight)) : this.Promise.resolve(null);
+              })));
             });
           }
-          _drainAll(capacity, total = 0) {
-            return this._drainOne(capacity).then((drained) => {
-              var newCapacity;
-              if (drained != null) {
-                newCapacity = capacity != null ? capacity - drained : capacity;
-                return this._drainAll(newCapacity, total + drained);
-              } else {
-                return this.Promise.resolve(total);
-              }
-            }).catch((e) => {
-              return this.Events.trigger("error", e);
+          _drainAll(s, u = 0) {
+            return this._drainOne(s).then((p) => {
+              var d;
+              return p != null ? (d = s != null ? s - p : s, this._drainAll(d, u + p)) : this.Promise.resolve(u);
+            }).catch((p) => this.Events.trigger("error", p));
+          }
+          _dropAllQueued(s) {
+            return this._queues.shiftAll(function(u) {
+              return u.doDrop({ message: s });
             });
           }
-          _dropAllQueued(message) {
-            return this._queues.shiftAll(function(job) {
-              return job.doDrop({ message });
-            });
-          }
-          stop(options = {}) {
-            var done, waitForExecuting;
-            options = parser$5.load(options, this.stopDefaults);
-            waitForExecuting = (at) => {
-              var finished;
-              finished = () => {
-                var counts;
-                counts = this._states.counts;
-                return counts[0] + counts[1] + counts[2] + counts[3] === at;
-              };
-              return new this.Promise((resolve, reject) => {
-                if (finished()) {
-                  return resolve();
-                } else {
-                  return this.on("done", () => {
-                    if (finished()) {
-                      this.removeAllListeners("done");
-                      return resolve();
-                    }
-                  });
-                }
+          stop(s = {}) {
+            var u, p;
+            return s = F.load(s, this.stopDefaults), p = (d) => {
+              var h;
+              return h = () => {
+                var _;
+                return _ = this._states.counts, _[0] + _[1] + _[2] + _[3] === d;
+              }, new this.Promise((_, y) => h() ? _() : this.on("done", () => {
+                if (h())
+                  return this.removeAllListeners("done"), _();
+              }));
+            }, u = s.dropWaitingJobs ? (this._run = function(d, h) {
+              return h.doDrop({
+                message: s.dropErrorMessage
               });
-            };
-            done = options.dropWaitingJobs ? (this._run = function(index, next) {
-              return next.doDrop({
-                message: options.dropErrorMessage
-              });
-            }, this._drainOne = () => {
-              return this.Promise.resolve(null);
-            }, this._registerLock.schedule(() => {
-              return this._submitLock.schedule(() => {
-                var k, ref, v;
-                ref = this._scheduled;
-                for (k in ref) {
-                  v = ref[k];
-                  if (this.jobStatus(v.job.options.id) === "RUNNING") {
-                    clearTimeout(v.timeout);
-                    clearTimeout(v.expiration);
-                    v.job.doDrop({
-                      message: options.dropErrorMessage
-                    });
-                  }
-                }
-                this._dropAllQueued(options.dropErrorMessage);
-                return waitForExecuting(0);
-              });
-            })) : this.schedule({
-              priority: NUM_PRIORITIES$1 - 1,
+            }, this._drainOne = () => this.Promise.resolve(null), this._registerLock.schedule(() => this._submitLock.schedule(() => {
+              var d, h, _;
+              h = this._scheduled;
+              for (d in h)
+                _ = h[d], this.jobStatus(_.job.options.id) === "RUNNING" && (clearTimeout(_.timeout), clearTimeout(_.expiration), _.job.doDrop({
+                  message: s.dropErrorMessage
+                }));
+              return this._dropAllQueued(s.dropErrorMessage), p(0);
+            }))) : this.schedule({
+              priority: we - 1,
               weight: 0
-            }, () => {
-              return waitForExecuting(1);
-            });
-            this._receive = function(job) {
-              return job._reject(new Bottleneck2.prototype.BottleneckError(options.enqueueErrorMessage));
-            };
-            this.stop = () => {
-              return this.Promise.reject(new Bottleneck2.prototype.BottleneckError("stop() has already been called"));
-            };
-            return done;
+            }, () => p(1)), this._receive = function(d) {
+              return d._reject(new w.prototype.BottleneckError(s.enqueueErrorMessage));
+            }, this.stop = () => this.Promise.reject(new w.prototype.BottleneckError("stop() has already been called")), u;
           }
-          async _addToQueue(job) {
-            var args, blocked, error, options, reachedHWM, shifted, strategy;
-            ({ args, options } = job);
+          async _addToQueue(s) {
+            var u, p, d, h, _, y, v;
+            ({ args: u, options: h } = s);
             try {
-              ({ reachedHWM, blocked, strategy } = await this._store.__submit__(this.queued(), options.weight));
-            } catch (error1) {
-              error = error1;
-              this.Events.trigger("debug", `Could not queue ${options.id}`, { args, options, error });
-              job.doDrop({ error });
-              return false;
+              ({ reachedHWM: _, blocked: p, strategy: v } = await this._store.__submit__(this.queued(), h.weight));
+            } catch (P) {
+              return d = P, this.Events.trigger("debug", `Could not queue ${h.id}`, { args: u, options: h, error: d }), s.doDrop({ error: d }), !1;
             }
-            if (blocked) {
-              job.doDrop();
-              return true;
-            } else if (reachedHWM) {
-              shifted = strategy === Bottleneck2.prototype.strategy.LEAK ? this._queues.shiftLastFrom(options.priority) : strategy === Bottleneck2.prototype.strategy.OVERFLOW_PRIORITY ? this._queues.shiftLastFrom(options.priority + 1) : strategy === Bottleneck2.prototype.strategy.OVERFLOW ? job : void 0;
-              if (shifted != null) {
-                shifted.doDrop();
-              }
-              if (shifted == null || strategy === Bottleneck2.prototype.strategy.OVERFLOW) {
-                if (shifted == null) {
-                  job.doDrop();
-                }
-                return reachedHWM;
-              }
-            }
-            job.doQueue(reachedHWM, blocked);
-            this._queues.push(job);
-            await this._drainAll();
-            return reachedHWM;
+            return p ? (s.doDrop(), !0) : _ && (y = v === w.prototype.strategy.LEAK ? this._queues.shiftLastFrom(h.priority) : v === w.prototype.strategy.OVERFLOW_PRIORITY ? this._queues.shiftLastFrom(h.priority + 1) : v === w.prototype.strategy.OVERFLOW ? s : void 0, y?.doDrop(), y == null || v === w.prototype.strategy.OVERFLOW) ? (y == null && s.doDrop(), _) : (s.doQueue(_, p), this._queues.push(s), await this._drainAll(), _);
           }
-          _receive(job) {
-            if (this._states.jobStatus(job.options.id) != null) {
-              job._reject(new Bottleneck2.prototype.BottleneckError(`A job with the same id already exists (id=${job.options.id})`));
-              return false;
-            } else {
-              job.doReceive();
-              return this._submitLock.schedule(this._addToQueue, job);
-            }
+          _receive(s) {
+            return this._states.jobStatus(s.options.id) != null ? (s._reject(new w.prototype.BottleneckError(`A job with the same id already exists (id=${s.options.id})`)), !1) : (s.doReceive(), this._submitLock.schedule(this._addToQueue, s));
           }
-          submit(...args) {
-            var cb, fn, job, options, ref, ref1, task;
-            if (typeof args[0] === "function") {
-              ref = args, [fn, ...args] = ref, [cb] = splice.call(args, -1);
-              options = parser$5.load({}, this.jobDefaults);
-            } else {
-              ref1 = args, [options, fn, ...args] = ref1, [cb] = splice.call(args, -1);
-              options = parser$5.load(options, this.jobDefaults);
-            }
-            task = (...args2) => {
-              return new this.Promise(function(resolve, reject) {
-                return fn(...args2, function(...args3) {
-                  return (args3[0] != null ? reject : resolve)(args3);
-                });
+          submit(...s) {
+            var u, p, d, h, _, y, v;
+            return typeof s[0] == "function" ? (_ = s, [p, ...s] = _, [u] = Ne.call(s, -1), h = F.load({}, this.jobDefaults)) : (y = s, [h, p, ...s] = y, [u] = Ne.call(s, -1), h = F.load(h, this.jobDefaults)), v = (...P) => new this.Promise(function(te, Hr) {
+              return p(...P, function(...Ke) {
+                return (Ke[0] != null ? Hr : te)(Ke);
               });
-            };
-            job = new Job$1(task, args, options, this.jobDefaults, this.rejectOnDrop, this.Events, this._states, this.Promise);
-            job.promise.then(function(args2) {
-              return typeof cb === "function" ? cb(...args2) : void 0;
-            }).catch(function(args2) {
-              if (Array.isArray(args2)) {
-                return typeof cb === "function" ? cb(...args2) : void 0;
-              } else {
-                return typeof cb === "function" ? cb(args2) : void 0;
-              }
-            });
-            return this._receive(job);
+            }), d = new _e(v, s, h, this.jobDefaults, this.rejectOnDrop, this.Events, this._states, this.Promise), d.promise.then(function(P) {
+              return typeof u == "function" ? u(...P) : void 0;
+            }).catch(function(P) {
+              return Array.isArray(P) ? typeof u == "function" ? u(...P) : void 0 : typeof u == "function" ? u(P) : void 0;
+            }), this._receive(d);
           }
-          schedule(...args) {
-            var job, options, task;
-            if (typeof args[0] === "function") {
-              [task, ...args] = args;
-              options = {};
-            } else {
-              [options, task, ...args] = args;
-            }
-            job = new Job$1(task, args, options, this.jobDefaults, this.rejectOnDrop, this.Events, this._states, this.Promise);
-            this._receive(job);
-            return job.promise;
+          schedule(...s) {
+            var u, p, d;
+            return typeof s[0] == "function" ? ([d, ...s] = s, p = {}) : [p, d, ...s] = s, u = new _e(d, s, p, this.jobDefaults, this.rejectOnDrop, this.Events, this._states, this.Promise), this._receive(u), u.promise;
           }
-          wrap(fn) {
-            var schedule, wrapped;
-            schedule = this.schedule.bind(this);
-            wrapped = function(...args) {
-              return schedule(fn.bind(this), ...args);
-            };
-            wrapped.withOptions = function(options, ...args) {
-              return schedule(options, fn, ...args);
-            };
-            return wrapped;
+          wrap(s) {
+            var u, p;
+            return u = this.schedule.bind(this), p = function(...d) {
+              return u(s.bind(this), ...d);
+            }, p.withOptions = function(d, ...h) {
+              return u(d, s, ...h);
+            }, p;
           }
-          async updateSettings(options = {}) {
-            await this._store.__updateSettings__(parser$5.overwrite(options, this.storeDefaults));
-            parser$5.overwrite(options, this.instanceDefaults, this);
-            return this;
+          async updateSettings(s = {}) {
+            return await this._store.__updateSettings__(F.overwrite(s, this.storeDefaults)), F.overwrite(s, this.instanceDefaults, this), this;
           }
           currentReservoir() {
             return this._store.__currentReservoir__();
           }
-          incrementReservoir(incr = 0) {
-            return this._store.__incrementReservoir__(incr);
+          incrementReservoir(s = 0) {
+            return this._store.__incrementReservoir__(s);
           }
         }
-        Bottleneck2.default = Bottleneck2;
-        Bottleneck2.Events = Events$4;
-        Bottleneck2.version = Bottleneck2.prototype.version = require$$8.version;
-        Bottleneck2.strategy = Bottleneck2.prototype.strategy = {
+        return w.default = w, w.Events = Te, w.version = w.prototype.version = $r.version, w.strategy = w.prototype.strategy = {
           LEAK: 1,
           OVERFLOW: 2,
           OVERFLOW_PRIORITY: 4,
           BLOCK: 3
-        };
-        Bottleneck2.BottleneckError = Bottleneck2.prototype.BottleneckError = BottleneckError_1;
-        Bottleneck2.Group = Bottleneck2.prototype.Group = Group_1;
-        Bottleneck2.RedisConnection = Bottleneck2.prototype.RedisConnection = require$$2;
-        Bottleneck2.IORedisConnection = Bottleneck2.prototype.IORedisConnection = require$$3;
-        Bottleneck2.Batcher = Bottleneck2.prototype.Batcher = Batcher_1;
-        Bottleneck2.prototype.jobDefaults = {
-          priority: DEFAULT_PRIORITY$1,
+        }, w.BottleneckError = w.prototype.BottleneckError = L, w.Group = w.prototype.Group = qr, w.RedisConnection = w.prototype.RedisConnection = A, w.IORedisConnection = w.prototype.IORedisConnection = $, w.Batcher = w.prototype.Batcher = jr, w.prototype.jobDefaults = {
+          priority: Be,
           weight: 1,
           expiration: null,
           id: "<no-id>"
-        };
-        Bottleneck2.prototype.storeDefaults = {
+        }, w.prototype.storeDefaults = {
           maxConcurrent: null,
           minTime: 0,
           highWater: null,
-          strategy: Bottleneck2.prototype.strategy.LEAK,
+          strategy: w.prototype.strategy.LEAK,
           penalty: null,
           reservoir: null,
           reservoirRefreshInterval: null,
@@ -4975,13 +3893,11 @@ function requireLight() {
           reservoirIncreaseInterval: null,
           reservoirIncreaseAmount: null,
           reservoirIncreaseMaximum: null
-        };
-        Bottleneck2.prototype.localStoreDefaults = {
+        }, w.prototype.localStoreDefaults = {
           Promise,
           timeout: null,
           heartbeatInterval: 250
-        };
-        Bottleneck2.prototype.redisStoreDefaults = {
+        }, w.prototype.redisStoreDefaults = {
           Promise,
           timeout: null,
           heartbeatInterval: 5e3,
@@ -4989,146 +3905,108 @@ function requireLight() {
           Redis: null,
           clientOptions: {},
           clusterNodes: null,
-          clearDatastore: false,
+          clearDatastore: !1,
           connection: null
-        };
-        Bottleneck2.prototype.instanceDefaults = {
+        }, w.prototype.instanceDefaults = {
           datastore: "local",
           connection: null,
           id: "<no-id>",
-          rejectOnDrop: true,
-          trackDoneStatus: false,
+          rejectOnDrop: !0,
+          trackDoneStatus: !1,
           Promise
-        };
-        Bottleneck2.prototype.stopDefaults = {
+        }, w.prototype.stopDefaults = {
           enqueueErrorMessage: "This limiter has been stopped and cannot accept new jobs.",
-          dropWaitingJobs: true,
+          dropWaitingJobs: !0,
           dropErrorMessage: "This limiter has been stopped."
-        };
-        return Bottleneck2;
-      }).call(commonjsGlobal$1);
-      var Bottleneck_1 = Bottleneck;
-      var lib = Bottleneck_1;
-      return lib;
+        }, w;
+      }).call(t);
+      var Me = $e, Br = Me;
+      return Br;
     }));
-  })(light$1);
-  return light$1.exports;
+  })(ge)), ge.exports;
 }
-var lightExports = requireLight();
-const BottleneckLight = /* @__PURE__ */ getDefaultExportFromCjs(lightExports);
-var VERSION$3 = "0.0.0-development";
-async function errorRequest(state, octokit, error, options) {
-  if (!error.request || !error.request.request) {
-    throw error;
+var es = Zt();
+const Ar = /* @__PURE__ */ _r(es);
+var rs = "0.0.0-development";
+async function Sr(e, r, t, o) {
+  if (!t.request || !t.request.request)
+    throw t;
+  if (t.status >= 400 && !e.doNotRetry.includes(t.status)) {
+    const i = o.request.retries != null ? o.request.retries : e.retries, n = Math.pow((o.request.retryCount || 0) + 1, 2);
+    throw r.retry.retryRequest(t, i, n);
   }
-  if (error.status >= 400 && !state.doNotRetry.includes(error.status)) {
-    const retries = options.request.retries != null ? options.request.retries : state.retries;
-    const retryAfter = Math.pow((options.request.retryCount || 0) + 1, 2);
-    throw octokit.retry.retryRequest(error, retries, retryAfter);
-  }
-  throw error;
+  throw t;
 }
-async function wrapRequest$1(state, octokit, request2, options) {
-  const limiter = new BottleneckLight();
-  limiter.on("failed", function(error, info) {
-    const maxRetries = ~~error.request.request.retries;
-    const after = ~~error.request.request.retryAfter;
-    options.request.retryCount = info.retryCount + 1;
-    if (maxRetries > info.retryCount) {
-      return after * state.retryAfterBaseValue;
-    }
-  });
-  return limiter.schedule(
-    requestWithGraphqlErrorHandling.bind(null, state, octokit, request2),
-    options
+async function ts(e, r, t, o) {
+  const i = new Ar();
+  return i.on("failed", function(n, c) {
+    const l = ~~n.request.request.retries, g = ~~n.request.request.retryAfter;
+    if (o.request.retryCount = c.retryCount + 1, l > c.retryCount)
+      return g * e.retryAfterBaseValue;
+  }), i.schedule(
+    ss.bind(null, e, r, t),
+    o
   );
 }
-async function requestWithGraphqlErrorHandling(state, octokit, request2, options) {
-  const response = await request2(request2, options);
-  if (response.data && response.data.errors && response.data.errors.length > 0 && /Something went wrong while executing your query/.test(
-    response.data.errors[0].message
+async function ss(e, r, t, o) {
+  const i = await t(t, o);
+  if (i.data && i.data.errors && i.data.errors.length > 0 && /Something went wrong while executing your query/.test(
+    i.data.errors[0].message
   )) {
-    const error = new RequestError(response.data.errors[0].message, 500, {
-      request: options,
-      response
+    const n = new ne(i.data.errors[0].message, 500, {
+      request: o,
+      response: i
     });
-    return errorRequest(state, octokit, error, options);
+    return Sr(e, r, n, o);
   }
-  return response;
+  return i;
 }
-function retry(octokit, octokitOptions) {
-  const state = Object.assign(
+function Fr(e, r) {
+  const t = Object.assign(
     {
-      enabled: true,
+      enabled: !0,
       retryAfterBaseValue: 1e3,
       doNotRetry: [400, 401, 403, 404, 410, 422, 451],
       retries: 3
     },
-    octokitOptions.retry
+    r.retry
   );
-  if (state.enabled) {
-    octokit.hook.error("request", errorRequest.bind(null, state, octokit));
-    octokit.hook.wrap("request", wrapRequest$1.bind(null, state, octokit));
-  }
-  return {
+  return t.enabled && (e.hook.error("request", Sr.bind(null, t, e)), e.hook.wrap("request", ts.bind(null, t, e))), {
     retry: {
-      retryRequest: (error, retries, retryAfter) => {
-        error.request.request = Object.assign({}, error.request.request, {
-          retries,
-          retryAfter
-        });
-        return error;
-      }
+      retryRequest: (o, i, n) => (o.request.request = Object.assign({}, o.request.request, {
+        retries: i,
+        retryAfter: n
+      }), o)
     }
   };
 }
-retry.VERSION = VERSION$3;
-var VERSION$2 = "0.0.0-development";
-var noop = () => Promise.resolve();
-function wrapRequest(state, request2, options) {
-  return state.retryLimiter.schedule(doRequest, state, request2, options);
+Fr.VERSION = rs;
+var os = "0.0.0-development", Oe = () => Promise.resolve();
+function is(e, r, t) {
+  return e.retryLimiter.schedule(ns, e, r, t);
 }
-async function doRequest(state, request2, options) {
-  const { pathname } = new URL(options.url, "http://github.test");
-  const isAuth = isAuthRequest(options.method, pathname);
-  const isWrite = !isAuth && options.method !== "GET" && options.method !== "HEAD";
-  const isSearch = options.method === "GET" && pathname.startsWith("/search/");
-  const isGraphQL = pathname.startsWith("/graphql");
-  const retryCount = ~~request2.retryCount;
-  const jobOptions = retryCount > 0 ? { priority: 0, weight: 0 } : {};
-  if (state.clustering) {
-    jobOptions.expiration = 1e3 * 60;
-  }
-  if (isWrite || isGraphQL) {
-    await state.write.key(state.id).schedule(jobOptions, noop);
-  }
-  if (isWrite && state.triggersNotification(pathname)) {
-    await state.notifications.key(state.id).schedule(jobOptions, noop);
-  }
-  if (isSearch) {
-    await state.search.key(state.id).schedule(jobOptions, noop);
-  }
-  const req = (isAuth ? state.auth : state.global).key(state.id).schedule(jobOptions, request2, options);
-  if (isGraphQL) {
-    const res = await req;
-    if (res.data.errors != null && res.data.errors.some((error) => error.type === "RATE_LIMITED")) {
-      const error = Object.assign(new Error("GraphQL Rate Limit Exceeded"), {
-        response: res,
-        data: res.data
+async function ns(e, r, t) {
+  const { pathname: o } = new URL(t.url, "http://github.test"), i = as(t.method, o), n = !i && t.method !== "GET" && t.method !== "HEAD", c = t.method === "GET" && o.startsWith("/search/"), l = o.startsWith("/graphql"), f = ~~r.retryCount > 0 ? { priority: 0, weight: 0 } : {};
+  e.clustering && (f.expiration = 1e3 * 60), (n || l) && await e.write.key(e.id).schedule(f, Oe), n && e.triggersNotification(o) && await e.notifications.key(e.id).schedule(f, Oe), c && await e.search.key(e.id).schedule(f, Oe);
+  const E = (i ? e.auth : e.global).key(e.id).schedule(f, r, t);
+  if (l) {
+    const m = await E;
+    if (m.data.errors != null && m.data.errors.some((T) => T.type === "RATE_LIMITED"))
+      throw Object.assign(new Error("GraphQL Rate Limit Exceeded"), {
+        response: m,
+        data: m.data
       });
-      throw error;
-    }
   }
-  return req;
+  return E;
 }
-function isAuthRequest(method, pathname) {
-  return method === "PATCH" && // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-scoped-access-token
-  /^\/applications\/[^/]+\/token\/scoped$/.test(pathname) || method === "POST" && // https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#reset-a-token
-  (/^\/applications\/[^/]+\/token$/.test(pathname) || // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
-  /^\/app\/installations\/[^/]+\/access_tokens$/.test(pathname) || // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
-  pathname === "/login/oauth/access_token");
+function as(e, r) {
+  return e === "PATCH" && // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-scoped-access-token
+  /^\/applications\/[^/]+\/token\/scoped$/.test(r) || e === "POST" && // https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#reset-a-token
+  (/^\/applications\/[^/]+\/token$/.test(r) || // https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
+  /^\/app\/installations\/[^/]+\/access_tokens$/.test(r) || // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+  r === "/login/oauth/access_token");
 }
-var triggers_notification_paths_default = [
+var cs = [
   "/orgs/{org}/invitations",
   "/orgs/{org}/invitations/{invitation_id}",
   "/orgs/{org}/teams/{team_slug}/discussions",
@@ -5149,78 +4027,64 @@ var triggers_notification_paths_default = [
   "/teams/{team_id}/discussions",
   "/teams/{team_id}/discussions/{discussion_number}/comments"
 ];
-function routeMatcher(paths) {
-  const regexes = paths.map(
-    (path) => path.split("/").map((c) => c.startsWith("{") ? "(?:.+?)" : c).join("/")
-  );
-  const regex2 = `^(?:${regexes.map((r) => `(?:${r})`).join("|")})[^/]*$`;
-  return new RegExp(regex2, "i");
+function us(e) {
+  const t = `^(?:${e.map(
+    (o) => o.split("/").map((i) => i.startsWith("{") ? "(?:.+?)" : i).join("/")
+  ).map((o) => `(?:${o})`).join("|")})[^/]*$`;
+  return new RegExp(t, "i");
 }
-var regex = routeMatcher(triggers_notification_paths_default);
-var triggersNotification = regex.test.bind(regex);
-var groups = {};
-var createGroups = function(Bottleneck, common) {
-  groups.global = new Bottleneck.Group({
+var cr = us(cs), Cr = cr.test.bind(cr), H = {}, ls = function(e, r) {
+  H.global = new e.Group({
     id: "octokit-global",
     maxConcurrent: 10,
-    ...common
-  });
-  groups.auth = new Bottleneck.Group({
+    ...r
+  }), H.auth = new e.Group({
     id: "octokit-auth",
     maxConcurrent: 1,
-    ...common
-  });
-  groups.search = new Bottleneck.Group({
+    ...r
+  }), H.search = new e.Group({
     id: "octokit-search",
     maxConcurrent: 1,
     minTime: 2e3,
-    ...common
-  });
-  groups.write = new Bottleneck.Group({
+    ...r
+  }), H.write = new e.Group({
     id: "octokit-write",
     maxConcurrent: 1,
     minTime: 1e3,
-    ...common
-  });
-  groups.notifications = new Bottleneck.Group({
+    ...r
+  }), H.notifications = new e.Group({
     id: "octokit-notifications",
     maxConcurrent: 1,
     minTime: 3e3,
-    ...common
+    ...r
   });
 };
-function throttling(octokit, octokitOptions) {
+function De(e, r) {
   const {
-    enabled = true,
-    Bottleneck = BottleneckLight,
-    id = "no-id",
-    timeout = 1e3 * 60 * 2,
+    enabled: t = !0,
+    Bottleneck: o = Ar,
+    id: i = "no-id",
+    timeout: n = 1e3 * 60 * 2,
     // Redis TTL: 2 minutes
-    connection
-  } = octokitOptions.throttle || {};
-  if (!enabled) {
+    connection: c
+  } = r.throttle || {};
+  if (!t)
     return {};
-  }
-  const common = { timeout };
-  if (typeof connection !== "undefined") {
-    common.connection = connection;
-  }
-  if (groups.global == null) {
-    createGroups(Bottleneck, common);
-  }
-  const state = Object.assign(
+  const l = { timeout: n };
+  typeof c < "u" && (l.connection = c), H.global == null && ls(o, l);
+  const g = Object.assign(
     {
-      clustering: connection != null,
-      triggersNotification,
+      clustering: c != null,
+      triggersNotification: Cr,
       fallbackSecondaryRateRetryAfter: 60,
       retryAfterBaseValue: 1e3,
-      retryLimiter: new Bottleneck(),
-      id,
-      ...groups
+      retryLimiter: new o(),
+      id: i,
+      ...H
     },
-    octokitOptions.throttle
+    r.throttle
   );
-  if (typeof state.onSecondaryRateLimit !== "function" || typeof state.onRateLimit !== "function") {
+  if (typeof g.onSecondaryRateLimit != "function" || typeof g.onRateLimit != "function")
     throw new Error(`octokit/plugin-throttling error:
         You must pass the onSecondaryRateLimit and onRateLimit error handlers.
         See https://octokit.github.io/rest.js/#throttling
@@ -5232,643 +4096,468 @@ function throttling(octokit, octokitOptions) {
           }
         })
     `);
-  }
-  const events = {};
-  const emitter = new Bottleneck.Events(events);
-  events.on("secondary-limit", state.onSecondaryRateLimit);
-  events.on("rate-limit", state.onRateLimit);
-  events.on(
+  const f = {}, E = new o.Events(f);
+  return f.on("secondary-limit", g.onSecondaryRateLimit), f.on("rate-limit", g.onRateLimit), f.on(
     "error",
-    (e) => octokit.log.warn("Error in throttling-plugin limit handler", e)
-  );
-  state.retryLimiter.on("failed", async function(error, info) {
-    const [state2, request2, options] = info.args;
-    const { pathname } = new URL(options.url, "http://github.test");
-    const shouldRetryGraphQL = pathname.startsWith("/graphql") && error.status !== 401;
-    if (!(shouldRetryGraphQL || error.status === 403 || error.status === 429)) {
+    (m) => e.log.warn("Error in throttling-plugin limit handler", m)
+  ), g.retryLimiter.on("failed", async function(m, T) {
+    const [b, k, R] = T.args, { pathname: L } = new URL(R.url, "http://github.test");
+    if (!(L.startsWith("/graphql") && m.status !== 401 || m.status === 403 || m.status === 429))
       return;
-    }
-    const retryCount = ~~request2.retryCount;
-    request2.retryCount = retryCount;
-    options.request.retryCount = retryCount;
-    const { wantRetry, retryAfter = 0 } = await (async function() {
-      if (/\bsecondary rate\b/i.test(error.message)) {
-        const retryAfter2 = Number(error.response.headers["retry-after"]) || state2.fallbackSecondaryRateRetryAfter;
-        const wantRetry2 = await emitter.trigger(
+    const D = ~~k.retryCount;
+    k.retryCount = D, R.request.retryCount = D;
+    const { wantRetry: z, retryAfter: I = 0 } = await (async function() {
+      if (/\bsecondary rate\b/i.test(m.message)) {
+        const S = Number(m.response.headers["retry-after"]) || b.fallbackSecondaryRateRetryAfter;
+        return { wantRetry: await E.trigger(
           "secondary-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+          S,
+          R,
+          e,
+          D
+        ), retryAfter: S };
       }
-      if (error.response.headers != null && error.response.headers["x-ratelimit-remaining"] === "0" || (error.response.data?.errors ?? []).some(
-        (error2) => error2.type === "RATE_LIMITED"
+      if (m.response.headers != null && m.response.headers["x-ratelimit-remaining"] === "0" || (m.response.data?.errors ?? []).some(
+        (S) => S.type === "RATE_LIMITED"
       )) {
-        const rateLimitReset = new Date(
-          ~~error.response.headers["x-ratelimit-reset"] * 1e3
-        ).getTime();
-        const retryAfter2 = Math.max(
+        const S = new Date(
+          ~~m.response.headers["x-ratelimit-reset"] * 1e3
+        ).getTime(), q = Math.max(
           // Add one second so we retry _after_ the reset time
           // https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#exceeding-the-rate-limit
-          Math.ceil((rateLimitReset - Date.now()) / 1e3) + 1,
+          Math.ceil((S - Date.now()) / 1e3) + 1,
           0
         );
-        const wantRetry2 = await emitter.trigger(
+        return { wantRetry: await E.trigger(
           "rate-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+          q,
+          R,
+          e,
+          D
+        ), retryAfter: q };
       }
       return {};
     })();
-    if (wantRetry) {
-      request2.retryCount++;
-      return retryAfter * state2.retryAfterBaseValue;
-    }
-  });
-  octokit.hook.wrap("request", wrapRequest.bind(null, state));
-  return {};
+    if (z)
+      return k.retryCount++, I * b.retryAfterBaseValue;
+  }), e.hook.wrap("request", is.bind(null, g)), {};
 }
-throttling.VERSION = VERSION$2;
-throttling.triggersNotification = triggersNotification;
-var VERSION$1 = "0.0.0-development";
-var Octokit2 = Octokit$1.plugin(
-  restEndpointMethods,
-  paginateRest,
-  paginateGraphQL,
-  retry,
-  throttling
+De.VERSION = os;
+De.triggersNotification = Cr;
+var ps = "0.0.0-development", W = Dt.plugin(
+  Rr,
+  vr,
+  zt,
+  Fr,
+  De
 ).defaults({
-  userAgent: `octokit.js/${VERSION$1}`,
+  userAgent: `octokit.js/${ps}`,
   throttle: {
-    onRateLimit,
-    onSecondaryRateLimit
+    onRateLimit: gs,
+    onSecondaryRateLimit: ds
   }
 });
-function onRateLimit(retryAfter, options, octokit) {
-  octokit.log.warn(
-    `Request quota exhausted for request ${options.method} ${options.url}`
-  );
-  if (options.request.retryCount === 0) {
-    octokit.log.info(`Retrying after ${retryAfter} seconds!`);
-    return true;
-  }
+function gs(e, r, t) {
+  if (t.log.warn(
+    `Request quota exhausted for request ${r.method} ${r.url}`
+  ), r.request.retryCount === 0)
+    return t.log.info(`Retrying after ${e} seconds!`), !0;
 }
-function onSecondaryRateLimit(retryAfter, options, octokit) {
-  octokit.log.warn(
-    `SecondaryRateLimit detected for request ${options.method} ${options.url}`
-  );
-  if (options.request.retryCount === 0) {
-    octokit.log.info(`Retrying after ${retryAfter} seconds!`);
-    return true;
-  }
+function ds(e, r, t) {
+  if (t.log.warn(
+    `SecondaryRateLimit detected for request ${r.method} ${r.url}`
+  ), r.request.retryCount === 0)
+    return t.log.info(`Retrying after ${e} seconds!`), !0;
 }
 /* v8 ignore next no need to test internals of the throttle plugin -- @preserve */
-class Branch {
-  constructor(owner, repo, name, sha, commitProvider) {
-    this.commits = [];
-    this.owner = owner;
-    this.name = name;
-    this.repo = repo;
-    this.sha = sha;
-    this.commitProvider = commitProvider;
+class ms {
+  constructor(r, t, o, i, n) {
+    this.commits = [], this.owner = r, this.name = o, this.repo = t, this.sha = i, this.commitProvider = n;
   }
   getCommits() {
     return this.commits;
   }
   async fetchCommits() {
-    this.commits = await this.commitProvider.getAllCommits(this.name);
-    return this.commits;
+    return this.commits = await this.commitProvider.getAllCommits(this.name), this.commits;
   }
-  async addCommit(files, msg) {
-    await this.commitProvider.commitFiles(files, this);
+  async addCommit(r, t) {
+    await this.commitProvider.commitFiles(r, this);
   }
 }
-class BranchProvider {
-  constructor(owner, repo, commitProvider, options = void 0) {
-    this.branches = [];
-    this.owner = owner;
-    this.repo = repo;
-    this.commitProivder = commitProvider;
-    this.options = options;
+class hs {
+  constructor(r, t, o, i = void 0) {
+    this.branches = [], this.owner = r, this.repo = t, this.commitProivder = o, this.options = i;
   }
   async fetchBranches() {
     try {
-      this.branches = [];
-      let branches = await new Octokit2(this.options).rest.repos.listBranches({
+      return this.branches = [], (await new W(this.options).rest.repos.listBranches({
         owner: this.owner,
         repo: this.repo
-      });
-      branches.data.map((entry) => {
-        this.branches.push(new Branch(this.owner, this.repo, entry.name, entry.commit.sha, this.commitProivder));
-      });
-      return this.branches;
-    } catch (e) {
-      console.log(e);
-      return [];
+      })).data.map((t) => {
+        this.branches.push(new ms(this.owner, this.repo, t.name, t.commit.sha, this.commitProivder));
+      }), this.branches;
+    } catch (r) {
+      return console.log(r), [];
     }
   }
   getBranches() {
     return this.branches;
   }
-  async addBranch(name, sourceBranch) {
+  async addBranch(r, t) {
     try {
-      const oc = new Octokit2(this.options);
-      const sourcefef = await oc.rest.git.getRef({
+      const o = new W(this.options), i = await o.rest.git.getRef({
         owner: this.owner,
         repo: this.repo,
-        ref: "heads/" + sourceBranch.name
-      });
-      const createResult = await oc.rest.git.createRef({
+        ref: "heads/" + t.name
+      }), n = await o.rest.git.createRef({
         owner: this.owner,
         repo: this.repo,
-        ref: "refs/heads/" + name,
-        sha: sourcefef.data.object.sha
+        ref: "refs/heads/" + r,
+        sha: i.data.object.sha
       });
-      console.log(createResult);
+      console.log(n);
       return;
-    } catch (e) {
-      console.log(e);
+    } catch (o) {
+      console.log(o);
     }
   }
-  setOptions(options) {
-    this.options = options;
+  setOptions(r) {
+    this.options = r;
   }
 }
-class Commit {
-  constructor(name, message, creation_date, hash, fileProvider) {
-    this.files = [];
-    this.name = name;
-    this.fileProvider = fileProvider;
-    this.message = message;
-    this.hash = hash;
-    this.creation_date = creation_date;
+class fs {
+  constructor(r, t, o, i, n) {
+    this.files = [], this.name = r, this.fileProvider = n, this.message = t, this.hash = i, this.creation_date = o;
   }
   async fetchFiles() {
-    this.files = await this.fileProvider.getFiles("", this.hash);
-    return this.files;
+    return this.files = await this.fileProvider.getFiles("", this.hash), this.files;
   }
   getFiles() {
     return this.files;
   }
 }
-var dist = {};
-var createOrUpdateFiles = {};
-var hasRequiredCreateOrUpdateFiles;
-function requireCreateOrUpdateFiles() {
-  if (hasRequiredCreateOrUpdateFiles) return createOrUpdateFiles;
-  hasRequiredCreateOrUpdateFiles = 1;
-  Object.defineProperty(createOrUpdateFiles, "__esModule", { value: true });
-  createOrUpdateFiles.createOrUpdateFiles = void 0;
-  function isBase64(str) {
-    let strValue;
-    if (Buffer.isBuffer(str)) {
-      strValue = str.toString("utf8");
-    } else {
-      strValue = str;
-    }
-    var notBase64 = /[^A-Z0-9+\/=]/i;
-    const len = strValue.length;
-    if (!len || len % 4 !== 0 || notBase64.test(strValue)) {
-      return false;
-    }
-    const firstPaddingChar = strValue.indexOf("=");
-    return firstPaddingChar === -1 || firstPaddingChar === len - 1 || firstPaddingChar === len - 2 && strValue[len - 1] === "=";
+var oe = {}, ie = {}, ur;
+function Es() {
+  if (ur) return ie;
+  ur = 1, Object.defineProperty(ie, "__esModule", { value: !0 }), ie.createOrUpdateFiles = void 0;
+  function e(g) {
+    let f;
+    Buffer.isBuffer(g) ? f = g.toString("utf8") : f = g;
+    var E = /[^A-Z0-9+\/=]/i;
+    const m = f.length;
+    if (!m || m % 4 !== 0 || E.test(f))
+      return !1;
+    const T = f.indexOf("=");
+    return T === -1 || T === m - 1 || T === m - 2 && f[m - 1] === "=";
   }
-  const createOrUpdateFiles$1 = function(octokit, opts) {
-    return new Promise(async (resolve, reject) => {
+  const r = function(g, f) {
+    return new Promise(async (E, m) => {
       try {
-        for (const req of ["owner", "repo", "branch"]) {
-          if (!opts[req]) {
-            return reject(`'${req}' is a required parameter`);
-          }
+        for (const O of ["owner", "repo", "branch"])
+          if (!f[O])
+            return m(`'${O}' is a required parameter`);
+        if (!f.changes || !f.changes.length)
+          return m("No changes provided");
+        if (f.batchSize || (f.batchSize = 1), typeof f.batchSize != "number")
+          return m("batchSize must be a number");
+        let { owner: T, repo: b, base: k, branch: R, createBranch: L, committer: j, author: D, changes: z, batchSize: I, forkFromBaseBranch: S } = f, q = !0, G;
+        if (G = await c(g, T, b, R), !G || S) {
+          if (!L && !G)
+            return m(`The branch '${R}' doesn't exist and createBranch is 'false'`);
+          if (G || (q = !1), k || (k = (await g.rest.repos.get({
+            owner: T,
+            repo: b
+          })).data.default_branch), G = await c(g, T, b, k), !G)
+            return m(`The branch '${k}' doesn't exist`);
         }
-        if (!opts.changes || !opts.changes.length) {
-          return reject("No changes provided");
-        }
-        if (!opts.batchSize) {
-          opts.batchSize = 1;
-        }
-        if (typeof opts.batchSize !== "number") {
-          return reject(`batchSize must be a number`);
-        }
-        let { owner, repo, base, branch: branchName, createBranch, committer, author, changes, batchSize, forkFromBaseBranch } = opts;
-        let branchAlreadyExists = true;
-        let baseTree;
-        baseTree = await loadRef(octokit, owner, repo, branchName);
-        if (!baseTree || forkFromBaseBranch) {
-          if (!createBranch && !baseTree) {
-            return reject(`The branch '${branchName}' doesn't exist and createBranch is 'false'`);
-          }
-          if (!baseTree) {
-            branchAlreadyExists = false;
-          }
-          if (!base) {
-            base = (await octokit.rest.repos.get({
-              owner,
-              repo
-            })).data.default_branch;
-          }
-          baseTree = await loadRef(octokit, owner, repo, base);
-          if (!baseTree) {
-            return reject(`The branch '${base}' doesn't exist`);
-          }
-        }
-        const commits = [];
-        for (const change of changes) {
-          const message = change.message;
-          if (!message) {
-            return reject(`changes[].message is a required parameter`);
-          }
-          const hasFiles = change.files && Object.keys(change.files).length > 0;
-          const hasFilesToDelete = Array.isArray(change.filesToDelete) && change.filesToDelete.length > 0;
-          if (!hasFiles && !hasFilesToDelete) {
-            return reject(`either changes[].files or changes[].filesToDelete are required`);
-          }
-          const treeItems = [];
-          if (hasFilesToDelete) {
-            for (const batch of chunk(change.filesToDelete, batchSize)) {
-              await Promise.all(batch.map(async (fileName) => {
-                const exists = await fileExistsInRepo(octokit, owner, repo, fileName, baseTree);
-                if (!exists && !change.ignoreDeletionFailures) {
-                  return reject(`The file ${fileName} could not be found in the repo`);
-                }
-                if (exists) {
-                  treeItems.push({
-                    path: fileName,
-                    sha: null,
-                    // sha as null implies that the file should be deleted
-                    mode: "100644",
-                    type: "commit"
-                  });
-                }
-              }));
-            }
-          }
-          if (hasFiles) {
-            for (const batch of chunk(Object.keys(change.files), batchSize)) {
-              await Promise.all(batch.map(async (fileName) => {
-                const properties = change.files[fileName] || "";
-                let contents;
-                let mode;
-                let type2;
-                if (typeof properties === "string" || Buffer.isBuffer(properties)) {
-                  contents = properties;
-                  mode = "100644";
-                  type2 = "blob";
-                } else {
-                  contents = properties.contents || "";
-                  mode = properties.mode || "100644";
-                  type2 = properties.type || "blob";
-                }
-                if (!contents) {
-                  return reject(`No file contents provided for ${fileName}`);
-                }
-                const fileSha = await createBlob(octokit, owner, repo, contents, type2);
-                treeItems.push({
-                  path: fileName,
-                  sha: fileSha,
-                  mode,
-                  type: type2
+        const Q = [];
+        for (const O of z) {
+          const Y = O.message;
+          if (!Y)
+            return m("changes[].message is a required parameter");
+          const ue = O.files && Object.keys(O.files).length > 0, X = Array.isArray(O.filesToDelete) && O.filesToDelete.length > 0;
+          if (!ue && !X)
+            return m("either changes[].files or changes[].filesToDelete are required");
+          const x = [];
+          if (X)
+            for (const ee of l(O.filesToDelete, I))
+              await Promise.all(ee.map(async (U) => {
+                const A = await t(g, T, b, U, G);
+                if (!A && !O.ignoreDeletionFailures)
+                  return m(`The file ${U} could not be found in the repo`);
+                A && x.push({
+                  path: U,
+                  sha: null,
+                  // sha as null implies that the file should be deleted
+                  mode: "100644",
+                  type: "commit"
                 });
               }));
-            }
-          }
-          if (treeItems.length === 0) {
+          if (ue)
+            for (const ee of l(Object.keys(O.files), I))
+              await Promise.all(ee.map(async (U) => {
+                const A = O.files[U] || "";
+                let $, re, B;
+                if (typeof A == "string" || Buffer.isBuffer(A) ? ($ = A, re = "100644", B = "blob") : ($ = A.contents || "", re = A.mode || "100644", B = A.type || "blob"), !$)
+                  return m(`No file contents provided for ${U}`);
+                const le = await n(g, T, b, $, B);
+                x.push({
+                  path: U,
+                  sha: le,
+                  mode: re,
+                  type: B
+                });
+              }));
+          if (x.length === 0)
             continue;
-          }
-          const tree = await createTree(octokit, owner, repo, treeItems, baseTree);
-          const commit = await createCommit(octokit, owner, repo, committer, author, message, tree, baseTree);
-          baseTree = commit.sha;
-          commits.push(commit);
+          const Ee = await i(g, T, b, x, G), Z = await o(g, T, b, j, D, Y, Ee, G);
+          G = Z.sha, Q.push(Z);
         }
-        let action = "createRef";
-        let updateRefBase = "refs/";
-        if (branchAlreadyExists) {
-          action = "updateRef";
-          updateRefBase = "";
-        }
-        await octokit.rest.git[action]({
-          owner,
-          repo,
-          force: true,
-          ref: `${updateRefBase}heads/${branchName}`,
-          sha: baseTree
-        });
-        return resolve({ commits });
-      } catch (e) {
-        return reject(e);
+        let N = "createRef", ce = "refs/";
+        return q && (N = "updateRef", ce = ""), await g.rest.git[N]({
+          owner: T,
+          repo: b,
+          force: !0,
+          ref: `${ce}heads/${R}`,
+          sha: G
+        }), E({ commits: Q });
+      } catch (T) {
+        return m(T);
       }
     });
   };
-  createOrUpdateFiles.createOrUpdateFiles = createOrUpdateFiles$1;
-  async function fileExistsInRepo(octokit, owner, repo, path, branch) {
+  ie.createOrUpdateFiles = r;
+  async function t(g, f, E, m, T) {
     try {
-      await octokit.rest.repos.getContent({
+      return await g.rest.repos.getContent({
         method: "HEAD",
-        owner,
-        repo,
-        path,
-        ref: branch
-      });
-      return true;
-    } catch (e) {
-      return false;
+        owner: f,
+        repo: E,
+        path: m,
+        ref: T
+      }), !0;
+    } catch {
+      return !1;
     }
   }
-  async function createCommit(octokit, owner, repo, committer, author, message, tree, baseTree) {
-    return (await octokit.rest.git.createCommit({
-      owner,
-      repo,
-      message,
-      committer,
-      author,
-      tree: tree.sha,
-      parents: [baseTree]
+  async function o(g, f, E, m, T, b, k, R) {
+    return (await g.rest.git.createCommit({
+      owner: f,
+      repo: E,
+      message: b,
+      committer: m,
+      author: T,
+      tree: k.sha,
+      parents: [R]
     })).data;
   }
-  async function createTree(octokit, owner, repo, treeItems, baseTree) {
-    return (await octokit.rest.git.createTree({
-      owner,
-      repo,
-      tree: treeItems,
-      base_tree: baseTree
+  async function i(g, f, E, m, T) {
+    return (await g.rest.git.createTree({
+      owner: f,
+      repo: E,
+      tree: m,
+      base_tree: T
     })).data;
   }
-  async function createBlob(octokit, owner, repo, contents, type2) {
-    if (type2 === "commit") {
-      return typeof contents === "string" ? contents : contents.toString();
-    } else {
-      let content;
-      if (!isBase64(contents)) {
-        content = Buffer.from(contents).toString("base64");
-      } else {
-        content = typeof contents === "string" ? contents : contents.toString("base64");
-      }
-      const file = (await octokit.rest.git.createBlob({
-        owner,
-        repo,
-        content,
+  async function n(g, f, E, m, T) {
+    if (T === "commit")
+      return typeof m == "string" ? m : m.toString();
+    {
+      let b;
+      return e(m) ? b = typeof m == "string" ? m : m.toString("base64") : b = Buffer.from(m).toString("base64"), (await g.rest.git.createBlob({
+        owner: f,
+        repo: E,
+        content: b,
         encoding: "base64"
-      })).data;
-      return file.sha;
+      })).data.sha;
     }
   }
-  async function loadRef(octokit, owner, repo, ref) {
+  async function c(g, f, E, m) {
     try {
-      const x = await octokit.rest.git.getRef({
-        owner,
-        repo,
-        ref: `heads/${ref}`
-      });
-      return x.data.object.sha;
-    } catch (e) {
+      return (await g.rest.git.getRef({
+        owner: f,
+        repo: E,
+        ref: `heads/${m}`
+      })).data.object.sha;
+    } catch {
     }
   }
-  const chunk = (input, size) => {
-    return input.reduce((arr, item, idx) => {
-      return idx % size === 0 ? [...arr, [item]] : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
-    }, []);
-  };
-  return createOrUpdateFiles;
+  const l = (g, f) => g.reduce((E, m, T) => T % f === 0 ? [...E, [m]] : [...E.slice(0, -1), [...E.slice(-1)[0], m]], []);
+  return ie;
 }
-var hasRequiredDist;
-function requireDist() {
-  if (hasRequiredDist) return dist;
-  hasRequiredDist = 1;
-  Object.defineProperty(dist, "__esModule", { value: true });
-  dist.CreateOrUpdateFiles = void 0;
-  const create_or_update_files_1 = requireCreateOrUpdateFiles();
-  const CreateOrUpdateFiles = function(octokit) {
+var lr;
+function Ts() {
+  if (lr) return oe;
+  lr = 1, Object.defineProperty(oe, "__esModule", { value: !0 }), oe.CreateOrUpdateFiles = void 0;
+  const e = Es(), r = function(t) {
     return {
-      createOrUpdateFiles: (opts) => (0, create_or_update_files_1.createOrUpdateFiles)(octokit, opts)
+      createOrUpdateFiles: (o) => (0, e.createOrUpdateFiles)(t, o)
     };
   };
-  dist.CreateOrUpdateFiles = CreateOrUpdateFiles;
-  return dist;
+  return oe.CreateOrUpdateFiles = r, oe;
 }
-var distExports = requireDist();
-const OktokitMultipleFiles = /* @__PURE__ */ getDefaultExportFromCjs(distExports);
-var FileState = /* @__PURE__ */ ((FileState2) => {
-  FileState2[FileState2["NEW"] = 0] = "NEW";
-  FileState2[FileState2["MODIFIED"] = 1] = "MODIFIED";
-  FileState2[FileState2["DELETED"] = 2] = "DELETED";
-  FileState2[FileState2["UNTOUCHED"] = 3] = "UNTOUCHED";
-  FileState2[FileState2["UNLOADED"] = 4] = "UNLOADED";
-  return FileState2;
-})(FileState || {});
-class AuthentificationError extends Error {
-  constructor(message, code) {
-    super(message);
-    this.code = code;
-    this.name = "AuthentificationError";
+var _s = Ts();
+const pr = /* @__PURE__ */ _r(_s);
+var C = /* @__PURE__ */ ((e) => (e[e.NEW = 0] = "NEW", e[e.MODIFIED = 1] = "MODIFIED", e[e.DELETED = 2] = "DELETED", e[e.UNTOUCHED = 3] = "UNTOUCHED", e[e.UNLOADED = 4] = "UNLOADED", e))(C || {});
+class Dr extends Error {
+  constructor(r, t) {
+    super(r), this.code = t, this.name = "AuthentificationError";
   }
 }
-class CommitProvider {
-  constructor(owner, name, fileProvider, options = void 0) {
-    this.fileProvider = fileProvider;
-    this.owner = owner;
-    this.name = name;
-    this.options = options;
-    const oc = Octokit2.plugin(OktokitMultipleFiles);
-    this._oc = new oc(this.options);
+class ws {
+  constructor(r, t, o, i = void 0) {
+    this.fileProvider = o, this.owner = r, this.name = t, this.options = i;
+    const n = W.plugin(pr);
+    this._oc = new n(this.options);
   }
-  async getAllCommits(branch) {
-    let commits_ret = [];
-    const commits = await new Octokit2(this.options).rest.repos.listCommits({
+  async getAllCommits(r) {
+    let t = [];
+    return (await new W(this.options).rest.repos.listCommits({
       owner: this.owner,
       repo: this.name,
-      sha: branch
-    });
-    commits.data.map((commit) => {
-      commits_ret.push(
-        new Commit(
-          commit.author?.name ?? "unknown",
-          commit.commit.message,
-          commit.commit?.author?.date ?? "",
-          commit.sha,
+      sha: r
+    })).data.map((i) => {
+      t.push(
+        new fs(
+          // listCommits: the git author name lives under commit.commit.author;
+          // the top-level author is the GitHub user object, which has a login
+          i.commit?.author?.name ?? i.author?.login ?? "unknown",
+          i.commit.message,
+          i.commit?.author?.date ?? "",
+          i.sha,
           this.fileProvider
         )
       );
-    });
-    return commits_ret;
+    }), t;
   }
-  async commitFiles(files, branch) {
-    let flat = [];
-    const recurse = function(files2) {
-      files2.forEach((fileOrFolder) => {
-        if ("files" in fileOrFolder && fileOrFolder.files != void 0) {
-          recurse(fileOrFolder.files);
-        } else {
-          flat.push(fileOrFolder);
-        }
+  async commitFiles(r, t) {
+    let o = [];
+    const i = function(c) {
+      c.forEach((l) => {
+        "files" in l && l.files != null ? i(l.files) : o.push(l);
       });
     };
-    recurse(files);
-    const listOfDeletions = flat.filter(
-      (file) => file.file_state === FileState.DELETED
+    i(r);
+    const n = o.filter(
+      (c) => c.file_state === C.DELETED
     );
     console.log("commit");
     try {
-      const commitFilesAwns = await this._oc.createOrUpdateFiles({
+      const c = await this._oc.createOrUpdateFiles({
         owner: this.owner,
         repo: this.name,
-        branch: branch.name,
-        createBranch: false,
+        branch: t.name,
+        createBranch: !1,
         changes: [
           {
             message: "Update Files",
-            files: flat.reduce((a, file) => {
-              if (file.file_state === FileState.MODIFIED || file.file_state == FileState.NEW) {
-                a[file.path] = file.content;
-                return a;
-              }
+            files: o.reduce((l, g) => {
+              if (g.file_state === C.MODIFIED || g.file_state == C.NEW)
+                return l[g.path] = g.content, l;
             }, {}),
-            filesToDelete: listOfDeletions.map((f) => f.path),
-            ignoreDeletionFailures: true
+            filesToDelete: n.map((l) => l.path),
+            ignoreDeletionFailures: !0
           }
         ]
       });
       return;
-    } catch (e) {
-      console.log(e.code);
-      if (e.status == 404) {
-        throw new AuthentificationError(e.message, 402);
-      } else {
-        throw e;
-      }
+    } catch (c) {
+      throw console.log(c.code), c.status == 404 ? new Dr(c.message, 402) : c;
     }
   }
-  setOptions(options) {
-    this.options = options;
-    const oc = Octokit2.plugin(OktokitMultipleFiles);
-    this._oc = new oc(this.options);
+  setOptions(r) {
+    this.options = r;
+    const t = W.plugin(pr);
+    this._oc = new t(this.options);
   }
 }
-class Folder {
-  constructor(path, commit, fileProvider) {
-    this.files = [];
-    this.fileProvider = fileProvider;
-    this.path = path;
-    this.commit = commit;
+class de {
+  constructor(r, t, o) {
+    this.files = [], this.fileProvider = o, this.path = r, this.commit = t;
   }
   async fetchFiles() {
     if (!this.commit) throw Error("This Folder istn synced, commit first");
-    this.files = await this.fileProvider.getFiles(this.path, this.commit);
-    return this.files;
+    return this.files = await this.fileProvider.getFiles(this.path, this.commit), this.files;
   }
   getFiles() {
     return this.files;
   }
-  addFiles(listofFiles) {
-    this.files = this.files.concat(listofFiles);
+  addFiles(r) {
+    this.files = this.files.concat(r);
   }
 }
-class FileParseError extends Error {
+class gr extends Error {
   // . declare any additional properties or methods .
 }
-class File {
-  constructor(name, path, hash, contentProvider, exsists = false) {
-    this.file_state = FileState.UNLOADED;
-    console.log(hash);
-    this.name = name;
-    this.path = path;
-    this.hash = hash;
-    this.contentProvider = contentProvider;
-    if (!exsists) {
-      this.file_state = FileState.NEW;
-    }
+class me {
+  constructor(r, t, o, i, n = !1) {
+    this.file_state = C.UNLOADED, console.log(o), this.name = r, this.path = t, this.hash = o, this.contentProvider = i, n || (this.file_state = C.NEW);
   }
   async fetchContent() {
-    if (!this.hash) ;
+    this.hash;
     try {
-      this.content = await this.contentProvider.getContent({ filehash: this.hash });
-      this.file_state = FileState.UNTOUCHED;
-      return this.content;
-    } catch (e) {
-      console.log(e);
-      throw new FileParseError("File not get parsed");
+      return this.content = await this.contentProvider.getContent({ filehash: this.hash }), this.file_state = C.UNTOUCHED, this.content;
+    } catch (r) {
+      throw console.log(r), new gr("File not get parsed");
     }
   }
   getContent() {
     try {
-      const binaryString = atob(this.content);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const content_as_string = new TextDecoder("utf-8").decode(bytes);
-      return JSON.parse(content_as_string);
-    } catch (e) {
+      const r = atob(this.content), t = new Uint8Array(r.length);
+      for (let i = 0; i < r.length; i++)
+        t[i] = r.charCodeAt(i);
+      const o = new TextDecoder("utf-8").decode(t);
+      return JSON.parse(o);
+    } catch {
       return {};
     }
   }
-  setContent(content) {
+  setContent(r) {
     try {
-      const content_as_String = JSON.stringify(content);
-      const bytes = new TextEncoder().encode(content_as_String);
-      let binaryString = "";
-      bytes.forEach((byte) => binaryString += String.fromCharCode(byte));
-      const content_as_base = btoa(binaryString);
-      this.content = content_as_base;
-      if (this.file_state != FileState.NEW) this.file_state = FileState.MODIFIED;
-    } catch (e) {
-      throw new FileParseError("File not get parsed");
+      const t = JSON.stringify(r), o = new TextEncoder().encode(t);
+      let i = "";
+      o.forEach((c) => i += String.fromCharCode(c));
+      const n = btoa(i);
+      this.content = n, this.file_state != C.NEW && (this.file_state = C.MODIFIED);
+    } catch {
+      throw new gr("File not get parsed");
     }
   }
   delete() {
-    this.file_state = FileState.DELETED;
+    this.file_state = C.DELETED;
   }
 }
-class FileProvider {
-  constructor(owner, name, contentProvider, options = void 0) {
-    this.owner = owner;
-    this.name = name;
-    this.contentProvider = contentProvider;
-    this.options = options;
+class bs {
+  constructor(r, t, o, i = void 0) {
+    this.owner = r, this.name = t, this.contentProvider = o, this.options = i;
   }
-  async getFiles(path, commit) {
-    let file_ret = [];
-    const files = await new Octokit2(this.options).rest.repos.getContent({
+  async getFiles(r, t) {
+    let o = [];
+    return (await new W(this.options).rest.repos.getContent({
       owner: this.owner,
-      ref: commit,
+      ref: t,
       repo: this.name,
-      path
-    });
-    files.data.map((fileOrFolder) => {
-      if (fileOrFolder.type == "dir") {
-        file_ret.push(new Folder(fileOrFolder.path, commit, this));
-      } else if (fileOrFolder.type == "file") {
-        file_ret.push(new File(fileOrFolder.name, fileOrFolder.path, fileOrFolder.sha, this.contentProvider));
-      }
-    });
-    return file_ret;
+      path: r
+    })).data.map((n) => {
+      n.type == "dir" ? o.push(new de(n.path, t, this)) : n.type == "file" && o.push(new me(n.name, n.path, n.sha, this.contentProvider));
+    }), o;
   }
 }
-class ContentProvider {
-  constructor(owner, repo, options = void 0) {
-    this.owner = owner;
-    this.repo = repo;
-    this.options = options;
+class ys {
+  constructor(r, t, o = void 0) {
+    this.owner = r, this.repo = t, this.options = o;
   }
-  async getContent(arg) {
-    const blob = await new Octokit2(this.options).rest.git.getBlob({
+  async getContent(r) {
+    return (await new W(this.options).rest.git.getBlob({
       owner: this.owner,
       repo: this.repo,
-      file_sha: arg.filehash
-    });
-    return blob.data.content;
+      file_sha: r.filehash
+    })).data.content;
   }
 }
-class GitRepositoryImpl extends BaseRepository {
+class Se extends Wr {
   constructor() {
-    super(...arguments);
-    this.options = {
+    super(...arguments), this.options = {
       auth: null
       //config.repos[0].token
     };
@@ -5876,149 +4565,108 @@ class GitRepositoryImpl extends BaseRepository {
   static {
     this.type = "gitRepositories";
   }
-  init(url, name, settings = {
+  init(r, t, o = {
     provider: "github",
     owner: ""
   }) {
-    super.init(url, name);
-    switch (url.hostname) {
+    switch (super.init(r, t), r.hostname) {
       case "github.com":
-        const path = this.uri?.pathname.split("/");
-        if (!path || path.length < 2) {
+        const i = this.uri?.pathname.split("/");
+        if (!i || i.length < 2)
           throw new Error("path in github url not completet either owner or repo is missing");
-        }
-        const owner = path[1];
-        const repo = path.slice(2).join("/");
-        console.log("found owner for git repo:" + owner);
-        console.log("on repo:" + repo);
-        this.contentProvider = new ContentProvider(owner, repo);
-        this.fileProvider = new FileProvider(owner, repo, this.contentProvider);
-        this.commitProvider = new CommitProvider(owner, repo, this.fileProvider, this.options);
-        this.provider = new BranchProvider(owner, repo, this.commitProvider, this.options);
-        this.provider.fetchBranches().then(async () => {
+        const n = i[1], c = i.slice(2).join("/");
+        console.log("found owner for git repo:" + n), console.log("on repo:" + c), this.contentProvider = new ys(n, c), this.fileProvider = new bs(n, c, this.contentProvider), this.commitProvider = new ws(n, c, this.fileProvider, this.options), this.provider = new hs(n, c, this.commitProvider, this.options), this.provider.fetchBranches().then(async () => {
           this.branch = this.provider?.getBranches()[0];
-          const branch = this.provider?.getBranches().find((b) => b.name == "main" || b.name == "master");
-          if (branch) this.branch = branch;
-          await this.branch?.fetchCommits();
-          this.commit = await this.branch?.getCommits()[0];
+          const l = this.provider?.getBranches().find((g) => g.name == "main" || g.name == "master");
+          l && (this.branch = l), await this.branch?.fetchCommits(), this.commit = await this.branch?.getCommits()[0];
         });
         break;
       default:
         throw new Error("no Branch provider found");
     }
   }
-  async auth(options) {
-    if (!this.options.auth && options && this.provider) {
-      this.options = options;
-      this.provider.setOptions?.(this.options);
-      this.commitProvider?.setOptions?.(this.options);
-    }
-    return true;
+  async auth(r) {
+    return !this.options.auth && r && this.provider && (this.options = r, this.provider.setOptions?.(this.options), this.commitProvider?.setOptions?.(this.options)), !0;
   }
   sync() {
     throw new Error("Method not implemented.");
   }
-  async create(e) {
+  async create(r) {
     try {
-      let branches = await this.provider?.getBranches();
-      if (!this.branch) {
+      let t = await this.provider?.getBranches();
+      if (!this.branch)
         throw new Error("Main Branch not found");
-      }
-      let fileUrl = new URL(e.uri);
-      const parts = fileUrl.pathname.replace("/", "").split("/");
-      let folder = void 0;
-      for (let i = 0; i < parts.length; i++) {
-        if (i == parts.length - 1) {
-          let file = new File(e.name, parts.join("/"), null, this.contentProvider);
-          file.setContent(e.data);
-          if (folder) folder.addFiles([file]);
-          else {
-            folder = file;
-          }
-        } else {
-          if (folder) {
-            let temp = this.createFolder(parts.slice(0, i).join("/"));
-            if (folder) folder.addFiles([temp]);
-            folder = temp;
-          }
+      let o = new URL(r.uri);
+      const i = o.pathname.replace("/", "").split("/");
+      let n;
+      for (let c = 0; c < i.length; c++)
+        if (c == i.length - 1) {
+          let l = new me(r.name, i.join("/"), null, this.contentProvider);
+          l.setContent(r.data), n ? n.addFiles([l]) : n = l;
+        } else if (n) {
+          let l = this.createFolder(i.slice(0, c).join("/"));
+          n && n.addFiles([l]), n = l;
         }
-      }
-      await this.branch.addCommit([folder], "add File " + fileUrl.pathname);
-    } catch (e2) {
-      console.log(e2);
-      throw e2;
+      await this.branch.addCommit([n], "add File " + o.pathname);
+    } catch (t) {
+      throw console.log(t), t;
     }
   }
-  async delete(e) {
+  async delete(r) {
   }
   async findAll() {
     try {
-      let branches = await this.provider?.getBranches();
-      if (!this.branch) {
+      let r = await this.provider?.getBranches();
+      if (!this.branch)
         throw new Error("Branch not found");
-      }
-      if (!this.commit) {
+      if (!this.commit)
         throw new Error("Commit not found");
-      }
-      const resArr = await this.extractFolder(this.branch, this.commit);
-      return resArr;
-    } catch (e) {
-      console.log(e);
-      throw new Error("Resource could not find entities");
+      return await this.extractFolder(this.branch, this.commit);
+    } catch (r) {
+      throw console.log(r), new Error("Resource could not find entities");
     }
   }
-  findByFragment(pathname) {
+  findByFragment(r) {
     return Promise.resolve([]);
   }
-  findByName(name) {
+  findByName(r) {
     return Promise.resolve([]);
   }
-  findByUri(uri) {
+  findByUri(r) {
     return Promise.resolve([]);
   }
-  async getEntityByUri(uri) {
+  async getEntityByUri(r) {
     try {
-      const partsOfPath = uri.pathname.split("/");
-      if (partsOfPath.length < 5) {
+      const t = r.pathname.split("/");
+      if (t.length < 5)
         throw new Error("cound not find owner branch or commit in the path");
-      }
-      const owner = partsOfPath[1];
-      const branchSha = partsOfPath[2];
-      const commitSha = partsOfPath[3];
-      const path = partsOfPath.slice(4);
-      if (!this.branch) {
+      const o = t[1], i = t[2], n = t[3], c = t.slice(4);
+      if (!this.branch)
         throw new Error("Branch not found");
-      }
-      if (!this.commit) {
+      if (!this.commit)
         throw new Error("Commit not found");
-      }
       await this.branch.fetchCommits();
-      const commits = await this.branch.getCommits();
-      const aCommitThatHasAnHash = commits.find((c) => c.hash == commitSha);
-      if (!aCommitThatHasAnHash) {
-        throw new Error("hash " + aCommitThatHasAnHash + " not found in repo " + owner + branchSha);
-      }
-      this.commit = aCommitThatHasAnHash;
-      const file = await this.findInCommit(path, aCommitThatHasAnHash);
-      await file?.fetchContent();
-      return {
-        name: file?.name,
-        uri,
-        data: file?.getContent()
+      const g = (await this.branch.getCommits()).find((E) => E.hash == n);
+      if (!g)
+        throw new Error("hash " + g + " not found in repo " + o + i);
+      this.commit = g;
+      const f = await this.findInCommit(c, g);
+      return await f?.fetchContent(), {
+        name: f?.name,
+        uri: r,
+        data: f?.getContent()
       };
-    } catch (e) {
-      console.log(e);
-      throw new Error("Resource could not find entities");
+    } catch (t) {
+      throw console.log(t), new Error("Resource could not find entities");
     }
   }
-  async update(e) {
+  async update(r) {
   }
   async getBranches() {
     return this.provider?.getBranches();
   }
-  setBranch(branch) {
-    this.branch = branch;
-    this.branch.fetchCommits();
+  setBranch(r) {
+    this.branch = r, this.branch.fetchCommits();
   }
   getCurrentBranch() {
     return this.branch;
@@ -6026,103 +4674,73 @@ class GitRepositoryImpl extends BaseRepository {
   getCommits() {
     return this.branch?.getCommits();
   }
-  setCommit(commit) {
-    this.commit = commit;
+  setCommit(r) {
+    this.commit = r;
   }
   getCurrentCommit() {
     return this.commit;
   }
-  createFolder(path) {
-    return new Folder(path, null, this.fileProvider);
+  createFolder(r) {
+    return new de(r, null, this.fileProvider);
   }
-  extractFile(branch, commit, entity) {
-    const FileURL = new URL(this.uri ?? "");
-    FileURL.pathname = branch.owner + "/" + branch.sha + "/" + commit.hash + "/" + entity.path;
-    return {
-      name: entity.path,
-      uri: FileURL,
+  extractFile(r, t, o) {
+    const i = new URL(this.uri ?? "");
+    return i.pathname = r.owner + "/" + r.sha + "/" + t.hash + "/" + o.path, {
+      name: o.path,
+      uri: i,
       data: null
     };
   }
-  async extractFolder(branch, commit, entity) {
-    let resArr = [];
-    let files;
-    if (entity) {
-      files = await entity.fetchFiles();
-    } else {
-      files = await commit.fetchFiles();
-    }
-    for (const fileOrFolder of files) {
-      if (fileOrFolder instanceof File) {
-        resArr.push(this.extractFile(branch, commit, fileOrFolder));
-      }
-      if (fileOrFolder instanceof Folder) {
-        resArr = resArr.concat(await this.extractFolder(branch, commit, fileOrFolder));
-      }
-    }
-    return resArr;
+  async extractFolder(r, t, o) {
+    let i = [], n;
+    o ? n = await o.fetchFiles() : n = await t.fetchFiles();
+    for (const c of n)
+      c instanceof me && i.push(this.extractFile(r, t, c)), c instanceof de && (i = i.concat(await this.extractFolder(r, t, c)));
+    return i;
   }
-  async findInCommit(path, commit, entity) {
-    let files;
-    if (!entity) {
-      files = await commit.fetchFiles();
-    } else {
-      files = await entity.fetchFiles();
-    }
-    let file = void 0;
-    const folder = files.find((f) => {
-      let ret = f.path.split("/");
-      return ret[ret.length - 1] == path[0];
+  async findInCommit(r, t, o) {
+    let i;
+    o ? i = await o.fetchFiles() : i = await t.fetchFiles();
+    let n;
+    const c = i.find((l) => {
+      let g = l.path.split("/");
+      return g[g.length - 1] == r[0];
     });
-    if (folder instanceof Folder) {
-      file = await this.findInCommit(path.slice(1), commit, folder);
-    } else if (folder instanceof File) {
-      file = folder;
-    }
-    if (!file) {
-      throw new Error("file " + path + " not found in repo ");
-    }
-    return file;
+    if (c instanceof de ? n = await this.findInCommit(r.slice(1), t, c) : c instanceof me && (n = c), !n)
+      throw new Error("file " + r + " not found in repo ");
+    return n;
   }
 }
-const GIT_REPOSITORY = serviceId("GitRepository");
-const identifier = Symbol.for(GIT_REPOSITORY);
-const type = GitRepositoryImpl.type;
-function activate$1({ services }) {
-  services.register(GIT_REPOSITORY, new GitRepositoryImpl());
-  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY);
-  repoRegistry.registerRepoType(GitRepositoryImpl.type, identifier);
+const fe = zr("GitRepository"), Ur = Symbol.for(fe), vs = Se.type;
+function Lr({ services: e }) {
+  e.register(fe, new Se()), e.getRequired(Vr).registerRepoType(Se.type, Ur);
 }
-function deactivate$1({ services }) {
-  services.unregister(GIT_REPOSITORY);
+function Ir({ services: e }) {
+  e.unregister(fe);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Ps = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  AuthentificationError,
-  GIT_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier,
-  type
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.persistence.git";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.persistence.git");
-  await activate$1?.(context);
+  AuthentificationError: Dr,
+  GIT_REPOSITORY: fe,
+  activate: Lr,
+  deactivate: Ir,
+  identifier: Ur,
+  type: vs
+}, Symbol.toStringTag, { value: "Module" })), dr = "org.eclipse.daanse.board.app.lib.persistence.git", Gs = "0.0.1-next.1";
+async function qs(e) {
+  const r = globalThis.__tsm__;
+  if (!r)
+    throw new Error(`${dr}: tsm runtime is not initialized`);
+  r.register(dr, Ps, Gs, "lib.persistence.git"), await Lr?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function js(e) {
+  await Ir?.(e);
 }
 export {
-  AuthentificationError,
-  GIT_REPOSITORY,
-  activate,
-  deactivate,
-  identifier,
-  type
+  Dr as AuthentificationError,
+  fe as GIT_REPOSITORY,
+  qs as activate,
+  js as deactivate,
+  Ur as identifier,
+  vs as type
 };

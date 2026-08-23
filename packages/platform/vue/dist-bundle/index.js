@@ -1,29 +1,24 @@
-const VERSIONS = {
+const e = {
   vue: "3.5.24",
   "vue-router": "5.0.6",
   pinia: "3.0.4",
   vuedraggable: "4.1.0"
 };
-async function activate({ log }) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
+async function v({ log: i }) {
+  const r = globalThis.__tsm__;
+  if (!r)
     throw new Error("platform.vue: tsm runtime is not initialized");
-  }
-  const [vue, vueRouter, pinia, vuedraggable] = await Promise.all([
+  const [t, a, u, o] = await Promise.all([
     import("./vue.js"),
     import("./vue-router.js"),
     import("./pinia.js"),
     import("./vuedraggable.js")
   ]);
-  runtime.register("vue", vue, VERSIONS.vue, "platform.vue");
-  runtime.register("vue-router", vueRouter, VERSIONS["vue-router"], "platform.vue");
-  runtime.register("pinia", pinia, VERSIONS.pinia, "platform.vue");
-  runtime.register("vuedraggable", vuedraggable, VERSIONS.vuedraggable, "platform.vue");
-  log.info(
-    `shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS["vue-router"]}, pinia@${VERSIONS.pinia}`
+  r.register("vue", t, e.vue, "platform.vue"), r.register("vue-router", a, e["vue-router"], "platform.vue"), r.register("pinia", u, e.pinia, "platform.vue"), r.register("vuedraggable", o, e.vuedraggable, "platform.vue"), i.info(
+    `shared libraries ready: vue@${e.vue}, vue-router@${e["vue-router"]}, pinia@${e.pinia}`
   );
 }
 export {
-  VERSIONS,
-  activate
+  e as VERSIONS,
+  v as activate
 };

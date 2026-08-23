@@ -1,67 +1,54 @@
-const byteToHex = [];
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 256).toString(16).slice(1));
+const e = [];
+for (let n = 0; n < 256; ++n)
+  e.push((n + 256).toString(16).slice(1));
+function c(n, t = 0) {
+  return (e[n[t + 0]] + e[n[t + 1]] + e[n[t + 2]] + e[n[t + 3]] + "-" + e[n[t + 4]] + e[n[t + 5]] + "-" + e[n[t + 6]] + e[n[t + 7]] + "-" + e[n[t + 8]] + e[n[t + 9]] + "-" + e[n[t + 10]] + e[n[t + 11]] + e[n[t + 12]] + e[n[t + 13]] + e[n[t + 14]] + e[n[t + 15]]).toLowerCase();
 }
-function unsafeStringify(arr, offset = 0) {
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+const r = new Uint8Array(16);
+function b() {
+  return crypto.getRandomValues(r);
 }
-const rnds8 = new Uint8Array(16);
-function rng() {
-  return crypto.getRandomValues(rnds8);
+function o(n, t, i) {
+  return crypto.randomUUID ? crypto.randomUUID() : l(n);
 }
-function v4(options, buf, offset) {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return _v4(options);
-}
-function _v4(options, buf, offset) {
-  options = options || {};
-  const rnds = options.random ?? options.rng?.() ?? rng();
-  if (rnds.length < 16) {
+function l(n, t, i) {
+  n = n || {};
+  const s = n.random ?? n.rng?.() ?? b();
+  if (s.length < 16)
     throw new Error("Random bytes length must be >= 16");
-  }
-  rnds[6] = rnds[6] & 15 | 64;
-  rnds[8] = rnds[8] & 63 | 128;
-  return unsafeStringify(rnds);
+  return s[6] = s[6] & 15 | 64, s[8] = s[8] & 63 | 128, c(s);
 }
-class SubscribeNotifyImpl {
+class d {
   constructor() {
     this.subscribers = /* @__PURE__ */ new Map();
   }
-  notify(ev) {
-    for (const sub of this.subscribers.values()) {
-      sub(ev);
-    }
+  notify(t) {
+    for (const i of this.subscribers.values())
+      i(t);
   }
-  subscribe(recall) {
-    const id = v4();
-    this.subscribers.set(id, recall);
-    return id;
+  subscribe(t) {
+    const i = o();
+    return this.subscribers.set(i, t), i;
   }
-  unsubscribe(id) {
-    this.subscribers.delete(id);
+  unsubscribe(t) {
+    this.subscribers.delete(t);
   }
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const a = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  SubscribeNotifyImpl
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.utils.subscriber";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.utils.subscriber");
-  await void 0;
+  SubscribeNotifyImpl: d
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.utils.subscriber", y = "0.0.1-next.1";
+async function g(n) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  t.register(u, a, y, "lib.utils.subscriber"), await void 0;
 }
-async function deactivate(context) {
+async function m(n) {
   await void 0;
 }
 export {
-  SubscribeNotifyImpl,
-  activate,
-  deactivate
+  d as SubscribeNotifyImpl,
+  g as activate,
+  m as deactivate
 };

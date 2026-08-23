@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -23,17 +26,18 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {SystemActionInterface} from 'org.eclipse.daanse.board.app.lib.events'
 import {WidgetAction} from 'org.eclipse.daanse.board.app.lib.events'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.events.systemactions#//SystemActions'})
-export class SystemActions {
-
+export class SystemActions extends SystemActionInterface {
+  
   @WidgetAction({eventType: 'system.changePage'})
   changePage(pageId?: string): void {
         throw new Error("changePage not implemented");
   }
-
+  
   @WidgetAction({eventType: 'system.setGlobalVariable'})
   setGlobalVariable(variableName?: string,value?: any): void {
         throw new Error("setGlobalVariable not implemented");

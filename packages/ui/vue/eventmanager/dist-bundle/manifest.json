@@ -37,14 +37,6 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.events",
       "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.navigation",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.route",
-      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -62,8 +54,6 @@
     "lib.api.page",
     "lib.api.route",
     "lib.events",
-    "lib.repository.navigation",
-    "lib.repository.route",
     "platform.vue"
   ],
   "provides": []

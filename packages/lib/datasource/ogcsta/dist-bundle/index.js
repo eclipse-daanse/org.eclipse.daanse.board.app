@@ -1,19 +1,18 @@
-import { inject, injectable } from "@eclipse-daanse/tsm";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { LOGGER_FACTORY } from "org.eclipse.daanse.board.app.lib.api.logger";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const BASE_PATH = "https://sensors.bgs.ac.uk/FROST-Server".replace(/\/+$/, "");
-class Configuration {
-  constructor(configuration = {}) {
-    this.configuration = configuration;
+import { inject as U, injectable as X } from "@eclipse-daanse/tsm";
+import { CONNECTION_REPOSITORY as P } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { VARIABLE_REPOSITORY as j } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { BaseDatasource as tt } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { LOGGER_FACTORY as et } from "org.eclipse.daanse.board.app.lib.api.logger";
+const { serviceId: it } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), nt = "https://sensors.bgs.ac.uk/FROST-Server".replace(/\/+$/, "");
+class J {
+  constructor(t = {}) {
+    this.configuration = t;
   }
-  set config(configuration) {
-    this.configuration = configuration;
+  set config(t) {
+    this.configuration = t;
   }
   get basePath() {
-    return this.configuration.basePath != null ? this.configuration.basePath : BASE_PATH;
+    return this.configuration.basePath != null ? this.configuration.basePath : nt;
   }
   get fetchApi() {
     return this.configuration.fetchApi;
@@ -22,7 +21,7 @@ class Configuration {
     return this.configuration.middleware || [];
   }
   get queryParamsStringify() {
-    return this.configuration.queryParamsStringify || querystring;
+    return this.configuration.queryParamsStringify || H;
   }
   get username() {
     return this.configuration.username;
@@ -31,18 +30,14 @@ class Configuration {
     return this.configuration.password;
   }
   get apiKey() {
-    const apiKey = this.configuration.apiKey;
-    if (apiKey) {
-      return typeof apiKey === "function" ? apiKey : () => apiKey;
-    }
-    return void 0;
+    const t = this.configuration.apiKey;
+    if (t)
+      return typeof t == "function" ? t : () => t;
   }
   get accessToken() {
-    const accessToken = this.configuration.accessToken;
-    if (accessToken) {
-      return typeof accessToken === "function" ? accessToken : async () => accessToken;
-    }
-    return void 0;
+    const t = this.configuration.accessToken;
+    if (t)
+      return typeof t == "function" ? t : async () => t;
   }
   get headers() {
     return this.configuration.headers;
@@ -51,26 +46,24 @@ class Configuration {
     return this.configuration.credentials;
   }
 }
-const DefaultConfig = new Configuration();
-class BaseAPI {
-  constructor(configuration = DefaultConfig) {
-    this.configuration = configuration;
-    this.middleware = configuration.middleware;
+const st = new J();
+class S {
+  constructor(t = st) {
+    this.configuration = t, this.middleware = t.middleware;
   }
   static jsonRegex = new RegExp("^(:?application/json|[^;/ 	]+/[^;/ 	]+[+]json)[ 	]*(:?;.*)?$", "i");
   middleware;
-  withMiddleware(...middlewares) {
-    const next = this.clone();
-    next.middleware = next.middleware.concat(...middlewares);
-    return next;
+  withMiddleware(...t) {
+    const n = this.clone();
+    return n.middleware = n.middleware.concat(...t), n;
   }
-  withPreMiddleware(...preMiddlewares) {
-    const middlewares = preMiddlewares.map((pre) => ({ pre }));
-    return this.withMiddleware(...middlewares);
+  withPreMiddleware(...t) {
+    const n = t.map((i) => ({ pre: i }));
+    return this.withMiddleware(...n);
   }
-  withPostMiddleware(...postMiddlewares) {
-    const middlewares = postMiddlewares.map((post) => ({ post }));
-    return this.withMiddleware(...middlewares);
+  withPostMiddleware(...t) {
+    const n = t.map((i) => ({ post: i }));
+    return this.withMiddleware(...n);
   }
   /**
    * Check if the given MIME is a JSON MIME.
@@ -82,1746 +75,1192 @@ class BaseAPI {
    * @param mime - MIME (Multipurpose Internet Mail Extensions)
    * @return True if the given MIME is JSON, false otherwise.
    */
-  isJsonMime(mime) {
-    if (!mime) {
-      return false;
-    }
-    return BaseAPI.jsonRegex.test(mime);
+  isJsonMime(t) {
+    return t ? S.jsonRegex.test(t) : !1;
   }
-  async request(context, initOverrides) {
-    const { url, init } = await this.createFetchParams(context, initOverrides);
-    const response = await this.fetchApi(url, init);
-    if (response && (response.status >= 200 && response.status < 300)) {
-      return response;
-    }
-    throw new ResponseError(response, "Response returned an error code");
+  async request(t, n) {
+    const { url: i, init: s } = await this.createFetchParams(t, n), o = await this.fetchApi(i, s);
+    if (o && o.status >= 200 && o.status < 300)
+      return o;
+    throw new rt(o, "Response returned an error code");
   }
-  async createFetchParams(context, initOverrides) {
-    let url = this.configuration.basePath + context.path;
-    if (context.query !== void 0 && Object.keys(context.query).length !== 0) {
-      url += "?" + this.configuration.queryParamsStringify(context.query);
-    }
-    const headers = Object.assign({}, this.configuration.headers, context.headers);
-    Object.keys(headers).forEach((key) => headers[key] === void 0 ? delete headers[key] : {});
-    const initOverrideFn = typeof initOverrides === "function" ? initOverrides : async () => initOverrides;
-    const initParams = {
-      method: context.method,
-      headers,
-      body: context.body,
+  async createFetchParams(t, n) {
+    let i = this.configuration.basePath + t.path;
+    t.query !== void 0 && Object.keys(t.query).length !== 0 && (i += "?" + this.configuration.queryParamsStringify(t.query));
+    const s = Object.assign({}, this.configuration.headers, t.headers);
+    Object.keys(s).forEach((l) => s[l] === void 0 ? delete s[l] : {});
+    const o = typeof n == "function" ? n : async () => n, a = {
+      method: t.method,
+      headers: s,
+      body: t.body,
       credentials: this.configuration.credentials
-    };
-    const overriddenInit = {
-      ...initParams,
-      ...await initOverrideFn({
-        init: initParams,
-        context
+    }, r = {
+      ...a,
+      ...await o({
+        init: a,
+        context: t
       })
     };
-    let body;
-    if (isFormData(overriddenInit.body) || overriddenInit.body instanceof URLSearchParams || isBlob(overriddenInit.body)) {
-      body = overriddenInit.body;
-    } else if (this.isJsonMime(headers["Content-Type"])) {
-      body = JSON.stringify(overriddenInit.body);
-    } else {
-      body = overriddenInit.body;
-    }
-    const init = {
-      ...overriddenInit,
-      body
+    let c;
+    at(r.body) || r.body instanceof URLSearchParams || ot(r.body) ? c = r.body : this.isJsonMime(s["Content-Type"]) ? c = JSON.stringify(r.body) : c = r.body;
+    const h = {
+      ...r,
+      body: c
     };
-    return { url, init };
+    return { url: i, init: h };
   }
-  fetchApi = async (url, init) => {
-    let fetchParams = { url, init };
-    for (const middleware of this.middleware) {
-      if (middleware.pre) {
-        fetchParams = await middleware.pre({
-          fetch: this.fetchApi,
-          ...fetchParams
-        }) || fetchParams;
-      }
-    }
-    let response = void 0;
+  fetchApi = async (t, n) => {
+    let i = { url: t, init: n };
+    for (const o of this.middleware)
+      o.pre && (i = await o.pre({
+        fetch: this.fetchApi,
+        ...i
+      }) || i);
+    let s;
     try {
-      response = await (this.configuration.fetchApi || fetch)(fetchParams.url, fetchParams.init);
-    } catch (e) {
-      for (const middleware of this.middleware) {
-        if (middleware.onError) {
-          response = await middleware.onError({
-            fetch: this.fetchApi,
-            url: fetchParams.url,
-            init: fetchParams.init,
-            error: e,
-            response: response ? response.clone() : void 0
-          }) || response;
-        }
-      }
-      if (response === void 0) {
-        if (e instanceof Error) {
-          throw new FetchError(e, "The request failed and the interceptors did not return an alternative response");
-        } else {
-          throw e;
-        }
-      }
-    }
-    for (const middleware of this.middleware) {
-      if (middleware.post) {
-        response = await middleware.post({
+      s = await (this.configuration.fetchApi || fetch)(i.url, i.init);
+    } catch (o) {
+      for (const a of this.middleware)
+        a.onError && (s = await a.onError({
           fetch: this.fetchApi,
-          url: fetchParams.url,
-          init: fetchParams.init,
-          response: response.clone()
-        }) || response;
-      }
+          url: i.url,
+          init: i.init,
+          error: o,
+          response: s ? s.clone() : void 0
+        }) || s);
+      if (s === void 0)
+        throw o instanceof Error ? new lt(o, "The request failed and the interceptors did not return an alternative response") : o;
     }
-    return response;
+    for (const o of this.middleware)
+      o.post && (s = await o.post({
+        fetch: this.fetchApi,
+        url: i.url,
+        init: i.init,
+        response: s.clone()
+      }) || s);
+    return s;
   };
   /**
    * Create a shallow clone of `this` by constructing a new instance
    * and then shallow cloning data members.
    */
   clone() {
-    const constructor = this.constructor;
-    const next = new constructor(this.configuration);
-    next.middleware = this.middleware.slice();
-    return next;
+    const t = this.constructor, n = new t(this.configuration);
+    return n.middleware = this.middleware.slice(), n;
   }
 }
-function isBlob(value) {
-  return typeof Blob !== "undefined" && value instanceof Blob;
+function ot(e) {
+  return typeof Blob < "u" && e instanceof Blob;
 }
-function isFormData(value) {
-  return typeof FormData !== "undefined" && value instanceof FormData;
+function at(e) {
+  return typeof FormData < "u" && e instanceof FormData;
 }
-class ResponseError extends Error {
-  constructor(response, msg) {
-    super(msg);
-    this.response = response;
+class rt extends Error {
+  constructor(t, n) {
+    super(n), this.response = t;
   }
   name = "ResponseError";
 }
-class FetchError extends Error {
-  constructor(cause, msg) {
-    super(msg);
-    this.cause = cause;
+class lt extends Error {
+  constructor(t, n) {
+    super(n), this.cause = t;
   }
   name = "FetchError";
 }
-class RequiredError extends Error {
-  constructor(field, msg) {
-    super(msg);
-    this.field = field;
+class v extends Error {
+  constructor(t, n) {
+    super(n), this.field = t;
   }
   name = "RequiredError";
 }
-function querystring(params, prefix = "") {
-  return Object.keys(params).map((key) => querystringSingleKey(key, params[key], prefix)).filter((part) => part.length > 0).join("&");
+function H(e, t = "") {
+  return Object.keys(e).map((n) => z(n, e[n], t)).filter((n) => n.length > 0).join("&");
 }
-function querystringSingleKey(key, value, keyPrefix = "") {
-  const fullKey = keyPrefix + (keyPrefix.length ? `[${key}]` : key);
-  if (value instanceof Array) {
-    const multiValue = value.map((singleValue) => encodeURIComponent(String(singleValue))).join(`&${encodeURIComponent(fullKey)}=`);
-    return `${encodeURIComponent(fullKey)}=${multiValue}`;
+function z(e, t, n = "") {
+  const i = n + (n.length ? `[${e}]` : e);
+  if (t instanceof Array) {
+    const s = t.map((o) => encodeURIComponent(String(o))).join(`&${encodeURIComponent(i)}=`);
+    return `${encodeURIComponent(i)}=${s}`;
   }
-  if (value instanceof Set) {
-    const valueAsArray = Array.from(value);
-    return querystringSingleKey(key, valueAsArray, keyPrefix);
+  if (t instanceof Set) {
+    const s = Array.from(t);
+    return z(e, s, n);
   }
-  if (value instanceof Date) {
-    return `${encodeURIComponent(fullKey)}=${encodeURIComponent(value.toISOString())}`;
-  }
-  if (value instanceof Object) {
-    return querystring(value, fullKey);
-  }
-  return `${encodeURIComponent(fullKey)}=${encodeURIComponent(String(value))}`;
+  return t instanceof Date ? `${encodeURIComponent(i)}=${encodeURIComponent(t.toISOString())}` : t instanceof Object ? H(t, i) : `${encodeURIComponent(i)}=${encodeURIComponent(String(t))}`;
 }
-class JSONApiResponse {
-  constructor(raw, transformer = (jsonValue) => jsonValue) {
-    this.raw = raw;
-    this.transformer = transformer;
+class y {
+  constructor(t, n = (i) => i) {
+    this.raw = t, this.transformer = n;
   }
   async value() {
     return this.transformer(await this.raw.json());
   }
 }
-function DatastreamUnitOfMeasurementFromJSON(json) {
-  return DatastreamUnitOfMeasurementFromJSONTyped(json);
+function ct(e) {
+  return dt(e);
 }
-function DatastreamUnitOfMeasurementFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "name": json["name"] == null ? void 0 : json["name"],
-    "symbol": json["symbol"] == null ? void 0 : json["symbol"],
-    "defintion": json["defintion"] == null ? void 0 : json["defintion"]
+function dt(e, t) {
+  return e == null ? e : {
+    name: e.name == null ? void 0 : e.name,
+    symbol: e.symbol == null ? void 0 : e.symbol,
+    defintion: e.defintion == null ? void 0 : e.defintion
   };
 }
-function ObservedPropertyPropertiesFromJSON(json) {
-  return ObservedPropertyPropertiesFromJSONTyped(json);
+function ut(e) {
+  return ht(e);
 }
-function ObservedPropertyPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "dataType": json["data_type"] == null ? void 0 : json["data_type"],
-    "formula": json["formula"] == null ? void 0 : json["formula"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function ht(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    dataType: e.data_type == null ? void 0 : e.data_type,
+    formula: e.formula == null ? void 0 : e.formula,
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function ObservedPropertyFromJSON(json) {
-  return ObservedPropertyFromJSONTyped(json);
+function N(e) {
+  return pt(e);
 }
-function ObservedPropertyFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "definition": json["definition"] == null ? void 0 : json["definition"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "properties": json["properties"] == null ? void 0 : ObservedPropertyPropertiesFromJSON(json["properties"])
+function pt(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    definition: e.definition == null ? void 0 : e.definition,
+    description: e.description == null ? void 0 : e.description,
+    name: e.name == null ? void 0 : e.name,
+    properties: e.properties == null ? void 0 : ut(e.properties)
   };
 }
-function DatastreamPropertiesFromJSON(json) {
-  return DatastreamPropertiesFromJSONTyped(json);
+function ft(e) {
+  return yt(e);
 }
-function DatastreamPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "dataType": json["data_type"] == null ? void 0 : json["data_type"],
-    "accessRestriction": json["access_restriction"] == null ? void 0 : json["access_restriction"],
-    "dataUsage": json["data_usage"] == null ? void 0 : json["data_usage"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function yt(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    dataType: e.data_type == null ? void 0 : e.data_type,
+    accessRestriction: e.access_restriction == null ? void 0 : e.access_restriction,
+    dataUsage: e.data_usage == null ? void 0 : e.data_usage,
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function ObservationParametersFromJSON(json) {
-  return ObservationParametersFromJSONTyped(json);
+function gt(e) {
+  return vt(e);
 }
-function ObservationParametersFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function vt(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function ObservationFromJSON(json) {
-  return ObservationFromJSONTyped(json);
+function k(e) {
+  return mt(e);
 }
-function ObservationFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "parameters": json["parameters"] == null ? void 0 : ObservationParametersFromJSON(json["parameters"]),
-    "phenomenonTime": json["phenomenonTime"] == null ? void 0 : json["phenomenonTime"],
-    "result": json["result"] == null ? void 0 : json["result"],
-    "resultQuality": json["resultQuality"] == null ? void 0 : json["resultQuality"],
-    "resultTime": json["resultTime"] == null ? void 0 : json["resultTime"],
-    "validTime": json["validTime"] == null ? void 0 : json["validTime"]
+function mt(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    parameters: e.parameters == null ? void 0 : gt(e.parameters),
+    phenomenonTime: e.phenomenonTime == null ? void 0 : e.phenomenonTime,
+    result: e.result == null ? void 0 : e.result,
+    resultQuality: e.resultQuality == null ? void 0 : e.resultQuality,
+    resultTime: e.resultTime == null ? void 0 : e.resultTime,
+    validTime: e.validTime == null ? void 0 : e.validTime
   };
 }
-function LocationPropertiesFromJSON(json) {
-  return LocationPropertiesFromJSONTyped(json);
+function bt(e) {
+  return $t(e);
 }
-function LocationPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "site": json["site"] == null ? void 0 : json["site"],
-    "observatory": json["observatory"] == null ? void 0 : json["observatory"],
-    "z": json["z"] == null ? void 0 : json["z"],
-    "zCrs": json["z_crs"] == null ? void 0 : json["z_crs"],
-    "fromDate": json["from_date"] == null ? void 0 : json["from_date"],
-    "toDate": json["to_date"] == null ? void 0 : json["to_date"],
-    "comments": json["comments"] == null ? void 0 : json["comments"],
-    "activeYn": json["active_yn&quot;"] == null ? void 0 : json["active_yn&quot;"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function $t(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    site: e.site == null ? void 0 : e.site,
+    observatory: e.observatory == null ? void 0 : e.observatory,
+    z: e.z == null ? void 0 : e.z,
+    zCrs: e.z_crs == null ? void 0 : e.z_crs,
+    fromDate: e.from_date == null ? void 0 : e.from_date,
+    toDate: e.to_date == null ? void 0 : e.to_date,
+    comments: e.comments == null ? void 0 : e.comments,
+    activeYn: e["active_yn&quot;"] == null ? void 0 : e["active_yn&quot;"],
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function LocationFromJSON(json) {
-  return LocationFromJSONTyped(json);
+function Q(e) {
+  return wt(e);
 }
-function LocationFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "things": json["Things"] == null ? void 0 : json["Things"].map(ThingFromJSON),
-    "thingsiotCount": json["Things@iot.count"] == null ? void 0 : json["Things@iot.count"],
-    "thingsiotNavigationLink": json["Things@iot.navigationLink"] == null ? void 0 : json["Things@iot.navigationLink"],
-    "thingsiotNextLink": json["Things@iot.nextLink"] == null ? void 0 : json["Things@iot.nextLink"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "encodingType": json["encodingType"] == null ? void 0 : json["encodingType"],
-    "location": json["location"] == null ? void 0 : json["location"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "properties": json["properties"] == null ? void 0 : LocationPropertiesFromJSON(json["properties"])
+function wt(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    things: e.Things == null ? void 0 : e.Things.map(D),
+    thingsiotCount: e["Things@iot.count"] == null ? void 0 : e["Things@iot.count"],
+    thingsiotNavigationLink: e["Things@iot.navigationLink"] == null ? void 0 : e["Things@iot.navigationLink"],
+    thingsiotNextLink: e["Things@iot.nextLink"] == null ? void 0 : e["Things@iot.nextLink"],
+    description: e.description == null ? void 0 : e.description,
+    encodingType: e.encodingType == null ? void 0 : e.encodingType,
+    location: e.location == null ? void 0 : e.location,
+    name: e.name == null ? void 0 : e.name,
+    properties: e.properties == null ? void 0 : bt(e.properties)
   };
 }
-function ThingPropertiesFromJSON(json) {
-  return ThingPropertiesFromJSONTyped(json);
+function It(e) {
+  return Tt(e);
 }
-function ThingPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "type": json["type"] == null ? void 0 : json["type"],
-    "serialNo": json["serial_no"] == null ? void 0 : json["serial_no"],
-    "dataCapture": json["data_capture"] == null ? void 0 : json["data_capture"],
-    "observationStartDate": json["observation_start_date"] == null ? void 0 : json["observation_start_date"],
-    "datumZ": json["datum_z"] == null ? void 0 : json["datum_z"],
-    "datumZCrs": json["datum_z_crs"] == null ? void 0 : json["datum_z_crs"],
-    "datumName": json["datum_name"] == null ? void 0 : json["datum_name"],
-    "boreholeReference": json["borehole_reference"] == null ? void 0 : json["borehole_reference"],
-    "accessRestriction": json["access_restriction"] == null ? void 0 : json["access_restriction"],
-    "dataUsage": json["data_usage"] == null ? void 0 : json["data_usage"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function Tt(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    type: e.type == null ? void 0 : e.type,
+    serialNo: e.serial_no == null ? void 0 : e.serial_no,
+    dataCapture: e.data_capture == null ? void 0 : e.data_capture,
+    observationStartDate: e.observation_start_date == null ? void 0 : e.observation_start_date,
+    datumZ: e.datum_z == null ? void 0 : e.datum_z,
+    datumZCrs: e.datum_z_crs == null ? void 0 : e.datum_z_crs,
+    datumName: e.datum_name == null ? void 0 : e.datum_name,
+    boreholeReference: e.borehole_reference == null ? void 0 : e.borehole_reference,
+    accessRestriction: e.access_restriction == null ? void 0 : e.access_restriction,
+    dataUsage: e.data_usage == null ? void 0 : e.data_usage,
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function ThingFromJSON(json) {
-  return ThingFromJSONTyped(json);
+function D(e) {
+  return Ot(e);
 }
-function ThingFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "datastreams": json["Datastreams"] == null ? void 0 : json["Datastreams"].map(DatastreamFromJSON),
-    "datastreamsiotCount": json["Datastreams@iot.count"] == null ? void 0 : json["Datastreams@iot.count"],
-    "datastreamsiotNavigationLink": json["Datastreams@iot.navigationLink"] == null ? void 0 : json["Datastreams@iot.navigationLink"],
-    "datastreamsiotNextLink": json["Datastreams@iot.nextLink"] == null ? void 0 : json["Datastreams@iot.nextLink"],
-    "locations": json["Locations"] == null ? void 0 : json["Locations"].map(LocationFromJSON),
-    "locationsiotCount": json["Locations@iot.count"] == null ? void 0 : json["Locations@iot.count"],
-    "locationsiotNavigationLink": json["Locations@iot.navigationLink"] == null ? void 0 : json["Locations@iot.navigationLink"],
-    "locationsiotNextLink": json["Locations@iot.nextLink"] == null ? void 0 : json["Locations@iot.nextLink"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "properties": json["properties"] == null ? void 0 : ThingPropertiesFromJSON(json["properties"])
+function Ot(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    datastreams: e.Datastreams == null ? void 0 : e.Datastreams.map(G),
+    datastreamsiotCount: e["Datastreams@iot.count"] == null ? void 0 : e["Datastreams@iot.count"],
+    datastreamsiotNavigationLink: e["Datastreams@iot.navigationLink"] == null ? void 0 : e["Datastreams@iot.navigationLink"],
+    datastreamsiotNextLink: e["Datastreams@iot.nextLink"] == null ? void 0 : e["Datastreams@iot.nextLink"],
+    locations: e.Locations == null ? void 0 : e.Locations.map(Q),
+    locationsiotCount: e["Locations@iot.count"] == null ? void 0 : e["Locations@iot.count"],
+    locationsiotNavigationLink: e["Locations@iot.navigationLink"] == null ? void 0 : e["Locations@iot.navigationLink"],
+    locationsiotNextLink: e["Locations@iot.nextLink"] == null ? void 0 : e["Locations@iot.nextLink"],
+    description: e.description == null ? void 0 : e.description,
+    name: e.name == null ? void 0 : e.name,
+    properties: e.properties == null ? void 0 : It(e.properties)
   };
 }
-function SensorPropertiesFromJSON(json) {
-  return SensorPropertiesFromJSONTyped(json);
+function Dt(e) {
+  return Rt(e);
 }
-function SensorPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "complexDataYn": json["complex_data_yn&quot;"] == null ? void 0 : json["complex_data_yn&quot;"],
-    "publishYn": json["publish_yn&quot;"] == null ? void 0 : json["publish_yn&quot;"]
+function Rt(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    complexDataYn: e["complex_data_yn&quot;"] == null ? void 0 : e["complex_data_yn&quot;"],
+    publishYn: e["publish_yn&quot;"] == null ? void 0 : e["publish_yn&quot;"]
   };
 }
-function SensorFromJSON(json) {
-  return SensorFromJSONTyped(json);
+function q(e) {
+  return Et(e);
 }
-function SensorFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "encodingType": json["encodingType"] == null ? void 0 : json["encodingType"],
-    "metadata": json["metadata"] == null ? void 0 : json["metadata"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "properties": json["properties"] == null ? void 0 : SensorPropertiesFromJSON(json["properties"])
+function Et(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    description: e.description == null ? void 0 : e.description,
+    encodingType: e.encodingType == null ? void 0 : e.encodingType,
+    metadata: e.metadata == null ? void 0 : e.metadata,
+    name: e.name == null ? void 0 : e.name,
+    properties: e.properties == null ? void 0 : Dt(e.properties)
   };
 }
-function DatastreamFromJSON(json) {
-  return DatastreamFromJSONTyped(json);
+function G(e) {
+  return St(e);
 }
-function DatastreamFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "observations": json["Observations"] == null ? void 0 : json["Observations"].map(ObservationFromJSON),
-    "observationsiotCount": json["Observations@iot.count"] == null ? void 0 : json["Observations@iot.count"],
-    "observationsiotNavigationLink": json["Observations@iot.navigationLink"] == null ? void 0 : json["Observations@iot.navigationLink"],
-    "observationsiotNextLink": json["Observations@iot.nextLink"] == null ? void 0 : json["Observations@iot.nextLink"],
-    "observedProperty": json["ObservedProperty"] == null ? void 0 : ObservedPropertyFromJSON(json["ObservedProperty"]),
-    "observedPropertyiotNavigationLink": json["ObservedProperty@iot.navigationLink"] == null ? void 0 : json["ObservedProperty@iot.navigationLink"],
-    "sensor": json["Sensor"] == null ? void 0 : SensorFromJSON(json["Sensor"]),
-    "sensoriotNavigationLink": json["Sensor@iot.navigationLink"] == null ? void 0 : json["Sensor@iot.navigationLink"],
-    "thing": json["Thing"] == null ? void 0 : ThingFromJSON(json["Thing"]),
-    "thingiotNavigationLink": json["Thing@iot.navigationLink"] == null ? void 0 : json["Thing@iot.navigationLink"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "observationType": json["observationType"] == null ? void 0 : json["observationType"],
-    "observedArea": json["observedArea"] == null ? void 0 : json["observedArea"],
-    "phenomenonTime": json["phenomenonTime"] == null ? void 0 : json["phenomenonTime"],
-    "properties": json["properties"] == null ? void 0 : DatastreamPropertiesFromJSON(json["properties"]),
-    "resultTime": json["resultTime"] == null ? void 0 : json["resultTime"],
-    "unitOfMeasurement": json["unitOfMeasurement"] == null ? void 0 : DatastreamUnitOfMeasurementFromJSON(json["unitOfMeasurement"])
+function St(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    observations: e.Observations == null ? void 0 : e.Observations.map(k),
+    observationsiotCount: e["Observations@iot.count"] == null ? void 0 : e["Observations@iot.count"],
+    observationsiotNavigationLink: e["Observations@iot.navigationLink"] == null ? void 0 : e["Observations@iot.navigationLink"],
+    observationsiotNextLink: e["Observations@iot.nextLink"] == null ? void 0 : e["Observations@iot.nextLink"],
+    observedProperty: e.ObservedProperty == null ? void 0 : N(e.ObservedProperty),
+    observedPropertyiotNavigationLink: e["ObservedProperty@iot.navigationLink"] == null ? void 0 : e["ObservedProperty@iot.navigationLink"],
+    sensor: e.Sensor == null ? void 0 : q(e.Sensor),
+    sensoriotNavigationLink: e["Sensor@iot.navigationLink"] == null ? void 0 : e["Sensor@iot.navigationLink"],
+    thing: e.Thing == null ? void 0 : D(e.Thing),
+    thingiotNavigationLink: e["Thing@iot.navigationLink"] == null ? void 0 : e["Thing@iot.navigationLink"],
+    description: e.description == null ? void 0 : e.description,
+    name: e.name == null ? void 0 : e.name,
+    observationType: e.observationType == null ? void 0 : e.observationType,
+    observedArea: e.observedArea == null ? void 0 : e.observedArea,
+    phenomenonTime: e.phenomenonTime == null ? void 0 : e.phenomenonTime,
+    properties: e.properties == null ? void 0 : ft(e.properties),
+    resultTime: e.resultTime == null ? void 0 : e.resultTime,
+    unitOfMeasurement: e.unitOfMeasurement == null ? void 0 : ct(e.unitOfMeasurement)
   };
 }
-function DatastreamsFromJSON(json) {
-  return DatastreamsFromJSONTyped(json);
+function w(e) {
+  return Lt(e);
 }
-function DatastreamsFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotCount": json["@iot.count"] == null ? void 0 : json["@iot.count"],
-    "iotNextLink": json["@iot.nextLink"] == null ? void 0 : json["@iot.nextLink"],
-    "value": json["value"] == null ? void 0 : json["value"].map(DatastreamFromJSON)
+function Lt(e, t) {
+  return e == null ? e : {
+    iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
+    iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
+    value: e.value == null ? void 0 : e.value.map(G)
   };
 }
-function FeatureOfInterestPropertiesFromJSON(json) {
-  return FeatureOfInterestPropertiesFromJSONTyped(json);
+function Ct(e) {
+  return kt(e);
 }
-function FeatureOfInterestPropertiesFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "senId": json["sen_id"] == null ? void 0 : json["sen_id"],
-    "type": json["type"] == null ? void 0 : json["type"],
-    "z": json["z"] == null ? void 0 : json["z"],
-    "zCrs": json["z_crs"] == null ? void 0 : json["z_crs"],
-    "fromDate": json["from_date"] == null ? void 0 : json["from_date"],
-    "toDate": json["to_date"] == null ? void 0 : json["to_date"],
-    "activeYn": json["active_yn&quot;"] == null ? void 0 : json["active_yn&quot;"],
-    "sobiBgsId": json["sobi_bgs_id"] == null ? void 0 : json["sobi_bgs_id"],
-    "boreholeId": json["borehole_id"] == null ? void 0 : json["borehole_id"],
-    "drilledLength": json["drilled_length"] == null ? void 0 : json["drilled_length"],
-    "reference": json["reference"] == null ? void 0 : json["reference"],
-    "referenceType": json["reference_type"] == null ? void 0 : json["reference_type"],
-    "publishYn": json["publish_yn"] == null ? void 0 : json["publish_yn"]
+function kt(e, t) {
+  return e == null ? e : {
+    senId: e.sen_id == null ? void 0 : e.sen_id,
+    type: e.type == null ? void 0 : e.type,
+    z: e.z == null ? void 0 : e.z,
+    zCrs: e.z_crs == null ? void 0 : e.z_crs,
+    fromDate: e.from_date == null ? void 0 : e.from_date,
+    toDate: e.to_date == null ? void 0 : e.to_date,
+    activeYn: e["active_yn&quot;"] == null ? void 0 : e["active_yn&quot;"],
+    sobiBgsId: e.sobi_bgs_id == null ? void 0 : e.sobi_bgs_id,
+    boreholeId: e.borehole_id == null ? void 0 : e.borehole_id,
+    drilledLength: e.drilled_length == null ? void 0 : e.drilled_length,
+    reference: e.reference == null ? void 0 : e.reference,
+    referenceType: e.reference_type == null ? void 0 : e.reference_type,
+    publishYn: e.publish_yn == null ? void 0 : e.publish_yn
   };
 }
-function FeatureOfInterestFromJSON(json) {
-  return FeatureOfInterestFromJSONTyped(json);
+function Gt(e) {
+  return xt(e);
 }
-function FeatureOfInterestFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotId": json["@iot.id"] == null ? void 0 : json["@iot.id"],
-    "iotSelfLink": json["@iot.selfLink"] == null ? void 0 : json["@iot.selfLink"],
-    "observations": json["Observations"] == null ? void 0 : json["Observations"].map(ObservationFromJSON),
-    "observationsiotCount": json["Observations@iot.count"] == null ? void 0 : json["Observations@iot.count"],
-    "observationsiotNavigationLink": json["Observations@iot.navigationLink"] == null ? void 0 : json["Observations@iot.navigationLink"],
-    "observationsiotNextLink": json["Observations@iot.nextLink"] == null ? void 0 : json["Observations@iot.nextLink"],
-    "description": json["description"] == null ? void 0 : json["description"],
-    "encodingType": json["encodingType"] == null ? void 0 : json["encodingType"],
-    "feature": json["feature"] == null ? void 0 : json["feature"],
-    "name": json["name"] == null ? void 0 : json["name"],
-    "properties": json["properties"] == null ? void 0 : FeatureOfInterestPropertiesFromJSON(json["properties"])
+function xt(e, t) {
+  return e == null ? e : {
+    iotId: e["@iot.id"] == null ? void 0 : e["@iot.id"],
+    iotSelfLink: e["@iot.selfLink"] == null ? void 0 : e["@iot.selfLink"],
+    observations: e.Observations == null ? void 0 : e.Observations.map(k),
+    observationsiotCount: e["Observations@iot.count"] == null ? void 0 : e["Observations@iot.count"],
+    observationsiotNavigationLink: e["Observations@iot.navigationLink"] == null ? void 0 : e["Observations@iot.navigationLink"],
+    observationsiotNextLink: e["Observations@iot.nextLink"] == null ? void 0 : e["Observations@iot.nextLink"],
+    description: e.description == null ? void 0 : e.description,
+    encodingType: e.encodingType == null ? void 0 : e.encodingType,
+    feature: e.feature == null ? void 0 : e.feature,
+    name: e.name == null ? void 0 : e.name,
+    properties: e.properties == null ? void 0 : Ct(e.properties)
   };
 }
-function LocationsFromJSON(json) {
-  return LocationsFromJSONTyped(json);
+function V(e) {
+  return Ft(e);
 }
-function LocationsFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotCount": json["@iot.count"] == null ? void 0 : json["@iot.count"],
-    "iotNextLink": json["@iot.nextLink"] == null ? void 0 : json["@iot.nextLink"],
-    "value": json["value"] == null ? void 0 : json["value"].map(LocationFromJSON)
+function Ft(e, t) {
+  return e == null ? e : {
+    iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
+    iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
+    value: e.value == null ? void 0 : e.value.map(Q)
   };
 }
-function ObservationsFromJSON(json) {
-  return ObservationsFromJSONTyped(json);
+function C(e) {
+  return Mt(e);
 }
-function ObservationsFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotCount": json["@iot.count"] == null ? void 0 : json["@iot.count"],
-    "iotNextLink": json["@iot.nextLink"] == null ? void 0 : json["@iot.nextLink"],
-    "value": json["value"] == null ? void 0 : json["value"].map(ObservationFromJSON)
+function Mt(e, t) {
+  return e == null ? e : {
+    iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
+    iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
+    value: e.value == null ? void 0 : e.value.map(k)
   };
 }
-function ThingsFromJSON(json) {
-  return ThingsFromJSONTyped(json);
+function _t(e) {
+  return Ut(e);
 }
-function ThingsFromJSONTyped(json, ignoreDiscriminator) {
-  if (json == null) {
-    return json;
-  }
-  return {
-    "iotCount": json["@iot.count"] == null ? void 0 : json["@iot.count"],
-    "iotNextLink": json["@iot.nextLink"] == null ? void 0 : json["@iot.nextLink"],
-    "value": json["value"] == null ? void 0 : json["value"].map(ThingFromJSON)
+function Ut(e, t) {
+  return e == null ? e : {
+    iotCount: e["@iot.count"] == null ? void 0 : e["@iot.count"],
+    iotNextLink: e["@iot.nextLink"] == null ? void 0 : e["@iot.nextLink"],
+    value: e.value == null ? void 0 : e.value.map(D)
   };
 }
-class DatastreamsApi extends BaseAPI {
+class R extends S {
   /**
    * Returns information about the datastream identified by **entityId**
    * Get information about an individual datastream
    */
-  async v11DatastreamsEntityIdGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => G(a));
   }
   /**
    * Returns information about the datastream identified by **entityId**
    * Get information about an individual datastream
    */
-  async v11DatastreamsEntityIdGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdGetRaw(t, n)).value();
   }
   /**
    * Returns all observations for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all observations for a datastream
    */
-  async v11DatastreamsEntityIdObservationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdObservationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdObservationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    if (requestParameters["$orderby"] != null) {
-      queryParameters["$orderby"] = requestParameters["$orderby"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Observations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter), t.$orderby != null && (i.$orderby = t.$orderby);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Observations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => C(a));
   }
   /**
    * Returns all observations for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all observations for a datastream
    */
-  async v11DatastreamsEntityIdObservationsGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdObservationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdObservationsGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdObservationsGetRaw(t, n)).value();
   }
   /**
    * Returns all datastreams that provide the observed property for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams that provide a datastream\'s observed property
    */
-  async v11DatastreamsEntityIdObservedPropertyDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdObservedPropertyDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdObservedPropertyDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/ObservedProperty/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/ObservedProperty/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    * Returns all datastreams that provide the observed property for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams that provide a datastream\'s observed property
    */
-  async v11DatastreamsEntityIdObservedPropertyDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdObservedPropertyDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdObservedPropertyDatastreamsGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdObservedPropertyDatastreamsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the observed property for the datastream identified by **entityId**
    * Get information about a datastream\'s observed property
    */
-  async v11DatastreamsEntityIdObservedPropertyGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdObservedPropertyGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdObservedPropertyGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/ObservedProperty`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/ObservedProperty".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservedPropertyFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => N(a));
   }
   /**
    * Returns information about the observed property for the datastream identified by **entityId**
    * Get information about a datastream\'s observed property
    */
-  async v11DatastreamsEntityIdObservedPropertyGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdObservedPropertyGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdObservedPropertyGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdObservedPropertyGetRaw(t, n)).value();
   }
   /**
    * Returns all datastreams which share the sensor type for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams which share a datastream\'s sensor type
    */
-  async v11DatastreamsEntityIdSensorDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdSensorDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdSensorDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Sensor/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Sensor/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    * Returns all datastreams which share the sensor type for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams which share a datastream\'s sensor type
    */
-  async v11DatastreamsEntityIdSensorDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdSensorDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdSensorDatastreamsGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdSensorDatastreamsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the sensor type for the datastream identified by **entityId**
    * Get information about a datastream\'s sensor type
    */
-  async v11DatastreamsEntityIdSensorGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdSensorGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdSensorGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Sensor`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Sensor".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => SensorFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => q(a));
   }
   /**
    * Returns information about the sensor type for the datastream identified by **entityId**
    * Get information about a datastream\'s sensor type
    */
-  async v11DatastreamsEntityIdSensorGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdSensorGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdSensorGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdSensorGetRaw(t, n)).value();
   }
   /**
    * Returns all datastreams provided by the thing for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams provided by a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdThingDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdThingDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Thing/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Thing/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    * Returns all datastreams provided by the thing for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all datastreams provided by a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdThingDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdThingDatastreamsGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdThingDatastreamsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the thing for the datastream identified by **entityId**
    * Get information about a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdThingGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdThingGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Thing`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Thing".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ThingFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => D(a));
   }
   /**
    * Returns information about the thing for the datastream identified by **entityId**
    * Get information about a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdThingGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdThingGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdThingGetRaw(t, n)).value();
   }
   /**
    * Returns all locations of the thing for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all locations for a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingLocationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11DatastreamsEntityIdThingLocationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11DatastreamsEntityIdThingLocationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams({entityId})/Thing/Locations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams({entityId})/Thing/Locations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => LocationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => V(a));
   }
   /**
    * Returns all locations of the thing for the datastream identified by **entityId** (subject to any other parameters set)
    * Get all locations for a datastream\'s thing
    */
-  async v11DatastreamsEntityIdThingLocationsGet(requestParameters, initOverrides) {
-    const response = await this.v11DatastreamsEntityIdThingLocationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsEntityIdThingLocationsGet(t, n) {
+    return await (await this.v11DatastreamsEntityIdThingLocationsGetRaw(t, n)).value();
   }
   /**
    * Returns all the datastreams provided by this api (subject to any parameters set)
    * Get all datastreams
    */
-  async v11DatastreamsGetRaw(requestParameters, initOverrides) {
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Datastreams`,
+  async v11DatastreamsGetRaw(t, n) {
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Datastreams",
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    * Returns all the datastreams provided by this api (subject to any parameters set)
    * Get all datastreams
    */
-  async v11DatastreamsGet(requestParameters = {}, initOverrides) {
-    const response = await this.v11DatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11DatastreamsGet(t = {}, n) {
+    return await (await this.v11DatastreamsGetRaw(t, n)).value();
   }
 }
-class ObservationsApi extends BaseAPI {
+class Nt extends S {
   /**
    * Returns information about the datastream for the observation identified by **entityId**
    * Get information about an observation\'s datastream
    */
-  async v11ObservationsEntityIdDatastreamGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => G(a));
   }
   /**
    * Returns information about the datastream for the observation identified by **entityId**
    * Get information about an observation\'s datastream
    */
-  async v11ObservationsEntityIdDatastreamGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamGetRaw(t, n)).value();
   }
   /**
    * Returns all observations for the datastream of the observation identified by **entityId** (subject to any other parameters set)
    * Get all observations for an observations\'s datastream
    */
-  async v11ObservationsEntityIdDatastreamObservationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamObservationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamObservationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Observations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Observations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => C(a));
   }
   /**
    * Returns all observations for the datastream of the observation identified by **entityId** (subject to any other parameters set)
    * Get all observations for an observations\'s datastream
    */
-  async v11ObservationsEntityIdDatastreamObservationsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamObservationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamObservationsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamObservationsGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/ObservedProperty/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/ObservedProperty/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamObservedPropertyDatastreamsGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamObservedPropertyGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamObservedPropertyGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamObservedPropertyGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/ObservedProperty`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/ObservedProperty".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservedPropertyFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => N(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamObservedPropertyGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamObservedPropertyGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamObservedPropertyGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamObservedPropertyGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamSensorDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamSensorDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamSensorDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Sensor/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Sensor/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamSensorDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamSensorDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamSensorDatastreamsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamSensorDatastreamsGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamSensorGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamSensorGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamSensorGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Sensor`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Sensor".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => SensorFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => q(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamSensorGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamSensorGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamSensorGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamSensorGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamThingDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamThingDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Thing/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Thing/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamThingDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamThingDatastreamsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamThingDatastreamsGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamThingGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamThingGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Thing`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Thing".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ThingFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => D(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamThingGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamThingGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamThingGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingLocationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdDatastreamThingLocationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdDatastreamThingLocationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/Datastream/Thing/Locations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/Datastream/Thing/Locations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => LocationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => V(a));
   }
   /**
    */
-  async v11ObservationsEntityIdDatastreamThingLocationsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdDatastreamThingLocationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdDatastreamThingLocationsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdDatastreamThingLocationsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the feature of interest for the observation identified by **entityId**
    * Get information about an observation\'s feature of interest
    */
-  async v11ObservationsEntityIdFeatureOfInterestGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdFeatureOfInterestGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdFeatureOfInterestGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/FeatureOfInterest`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/FeatureOfInterest".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => FeatureOfInterestFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => Gt(a));
   }
   /**
    * Returns information about the feature of interest for the observation identified by **entityId**
    * Get information about an observation\'s feature of interest
    */
-  async v11ObservationsEntityIdFeatureOfInterestGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdFeatureOfInterestGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdFeatureOfInterestGet(t, n) {
+    return await (await this.v11ObservationsEntityIdFeatureOfInterestGetRaw(t, n)).value();
   }
   /**
    */
-  async v11ObservationsEntityIdFeatureOfInterestObservationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdFeatureOfInterestObservationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdFeatureOfInterestObservationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})/FeatureOfInterest/Observations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})/FeatureOfInterest/Observations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => C(a));
   }
   /**
    */
-  async v11ObservationsEntityIdFeatureOfInterestObservationsGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdFeatureOfInterestObservationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdFeatureOfInterestObservationsGet(t, n) {
+    return await (await this.v11ObservationsEntityIdFeatureOfInterestObservationsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the observation identified by **entityId**
    * Get information about an individual observation
    */
-  async v11ObservationsEntityIdGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ObservationsEntityIdGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ObservationsEntityIdGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations({entityId})`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations({entityId})".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservationFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => k(a));
   }
   /**
    * Returns information about the observation identified by **entityId**
    * Get information about an individual observation
    */
-  async v11ObservationsEntityIdGet(requestParameters, initOverrides) {
-    const response = await this.v11ObservationsEntityIdGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsEntityIdGet(t, n) {
+    return await (await this.v11ObservationsEntityIdGetRaw(t, n)).value();
   }
   /**
    * Returns all the observations provided by this api (subject to any parameters set)
    * Get all observations
    */
-  async v11ObservationsGetRaw(requestParameters, initOverrides) {
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Observations`,
+  async v11ObservationsGetRaw(t, n) {
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Observations",
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ObservationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => C(a));
   }
   /**
    * Returns all the observations provided by this api (subject to any parameters set)
    * Get all observations
    */
-  async v11ObservationsGet(requestParameters = {}, initOverrides) {
-    const response = await this.v11ObservationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ObservationsGet(t = {}, n) {
+    return await (await this.v11ObservationsGetRaw(t, n)).value();
   }
 }
-class ThingsApi extends BaseAPI {
+class T extends S {
   /**
    * Returns all datastreams for the thing identified by **entityId** (subject to any other parameters set)
    * Get all datastreams for a thing
    */
-  async v11ThingsEntityIdDatastreamsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ThingsEntityIdDatastreamsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ThingsEntityIdDatastreamsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Things({entityId})/Datastreams`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Things({entityId})/Datastreams".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => DatastreamsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => w(a));
   }
   /**
    * Returns all datastreams for the thing identified by **entityId** (subject to any other parameters set)
    * Get all datastreams for a thing
    */
-  async v11ThingsEntityIdDatastreamsGet(requestParameters, initOverrides) {
-    const response = await this.v11ThingsEntityIdDatastreamsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ThingsEntityIdDatastreamsGet(t, n) {
+    return await (await this.v11ThingsEntityIdDatastreamsGetRaw(t, n)).value();
   }
   /**
    * Returns information about the thing identified by **entityId**
    * Get information about an individual thing
    */
-  async v11ThingsEntityIdGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ThingsEntityIdGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ThingsEntityIdGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Things({entityId})`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Things({entityId})".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ThingFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => D(a));
   }
   /**
    * Returns information about the thing identified by **entityId**
    * Get information about an individual thing
    */
-  async v11ThingsEntityIdGet(requestParameters, initOverrides) {
-    const response = await this.v11ThingsEntityIdGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ThingsEntityIdGet(t, n) {
+    return await (await this.v11ThingsEntityIdGetRaw(t, n)).value();
   }
   /**
    * Returns information about the location for the thing identified by **entityId**
    * Get information about a things\'s location
    */
-  async v11ThingsEntityIdLocationsGetRaw(requestParameters, initOverrides) {
-    if (requestParameters["entityId"] == null) {
-      throw new RequiredError(
+  async v11ThingsEntityIdLocationsGetRaw(t, n) {
+    if (t.entityId == null)
+      throw new v(
         "entityId",
         'Required parameter "entityId" was null or undefined when calling v11ThingsEntityIdLocationsGet().'
       );
-    }
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Things({entityId})/Locations`.replace(`{${"entityId"}}`, encodeURIComponent(String(requestParameters["entityId"]))),
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Things({entityId})/Locations".replace("{entityId}", encodeURIComponent(String(t.entityId))),
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => LocationsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => V(a));
   }
   /**
    * Returns information about the location for the thing identified by **entityId**
    * Get information about a things\'s location
    */
-  async v11ThingsEntityIdLocationsGet(requestParameters, initOverrides) {
-    const response = await this.v11ThingsEntityIdLocationsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ThingsEntityIdLocationsGet(t, n) {
+    return await (await this.v11ThingsEntityIdLocationsGetRaw(t, n)).value();
   }
   /**
    * Returns all the things provided by this api (subject to any parameters set)
    * Get all things
    */
-  async v11ThingsGetRaw(requestParameters, initOverrides) {
-    const queryParameters = {};
-    if (requestParameters["$skip"] != null) {
-      queryParameters["$skip"] = requestParameters["$skip"];
-    }
-    if (requestParameters["$top"] != null) {
-      queryParameters["$top"] = requestParameters["$top"];
-    }
-    if (requestParameters["$count"] != null) {
-      queryParameters["$count"] = requestParameters["$count"];
-    }
-    if (requestParameters["$select"] != null) {
-      queryParameters["$select"] = requestParameters["$select"];
-    }
-    if (requestParameters["$expand"] != null) {
-      queryParameters["$expand"] = requestParameters["$expand"];
-    }
-    if (requestParameters["$filter"] != null) {
-      queryParameters["$filter"] = requestParameters["$filter"];
-    }
-    const headerParameters = {};
-    const response = await this.request({
-      path: `/v1.1/Things`,
+  async v11ThingsGetRaw(t, n) {
+    const i = {};
+    t.$skip != null && (i.$skip = t.$skip), t.$top != null && (i.$top = t.$top), t.$count != null && (i.$count = t.$count), t.$select != null && (i.$select = t.$select), t.$expand != null && (i.$expand = t.$expand), t.$filter != null && (i.$filter = t.$filter);
+    const s = {}, o = await this.request({
+      path: "/v1.1/Things",
       method: "GET",
-      headers: headerParameters,
-      query: queryParameters
-    }, initOverrides);
-    return new JSONApiResponse(response, (jsonValue) => ThingsFromJSON(jsonValue));
+      headers: s,
+      query: i
+    }, n);
+    return new y(o, (a) => _t(a));
   }
   /**
    * Returns all the things provided by this api (subject to any parameters set)
    * Get all things
    */
-  async v11ThingsGet(requestParameters = {}, initOverrides) {
-    const response = await this.v11ThingsGetRaw(requestParameters, initOverrides);
-    return await response.value();
+  async v11ThingsGet(t = {}, n) {
+    return await (await this.v11ThingsGetRaw(t, n)).value();
   }
 }
-class CachingFetchWrapper {
+class qt {
   cache = /* @__PURE__ */ new Map();
   pendingRequests = /* @__PURE__ */ new Map();
   ttl;
   maxEntries;
-  constructor(options = {}) {
-    this.ttl = options.ttl ?? 3e4;
-    this.maxEntries = options.maxEntries ?? 200;
+  constructor(t = {}) {
+    this.ttl = t.ttl ?? 3e4, this.maxEntries = t.maxEntries ?? 200;
   }
-  getCacheKey(url, init) {
-    const method = init?.method || "GET";
-    const body = init?.body ? String(init.body) : "";
-    return `${method}:${url}:${body}`;
+  getCacheKey(t, n) {
+    const i = n?.method || "GET", s = n?.body ? String(n.body) : "";
+    return `${i}:${t}:${s}`;
   }
-  isValidCacheEntry(entry) {
-    return Date.now() - entry.timestamp < this.ttl;
+  isValidCacheEntry(t) {
+    return Date.now() - t.timestamp < this.ttl;
   }
   cleanExpiredCache() {
-    const now = Date.now();
-    for (const [key, entry] of this.cache.entries()) {
-      if (now - entry.timestamp >= this.ttl) {
-        this.cache.delete(key);
-      }
-    }
+    const t = Date.now();
+    for (const [n, i] of this.cache.entries())
+      t - i.timestamp >= this.ttl && this.cache.delete(n);
   }
-  createCachedResponse(entry) {
-    return new Response(JSON.stringify(entry.body), {
-      status: entry.status,
-      statusText: entry.statusText,
-      headers: entry.headers
+  createCachedResponse(t) {
+    return new Response(JSON.stringify(t.body), {
+      status: t.status,
+      statusText: t.statusText,
+      headers: t.headers
     });
   }
   clearCache() {
-    this.cache.clear();
-    this.pendingRequests.clear();
+    this.cache.clear(), this.pendingRequests.clear();
   }
-  createCachingFetch(baseFetch) {
-    return async (input, init) => {
-      const url = typeof input === "string" ? input : input.toString();
-      const method = init?.method || "GET";
-      if (method !== "GET") {
-        return baseFetch(input, init);
-      }
-      const cacheKey = this.getCacheKey(url, init);
-      const cachedEntry = this.cache.get(cacheKey);
-      if (cachedEntry && this.isValidCacheEntry(cachedEntry)) {
-        console.log("[OGC STA Cache] Cache HIT:", url.substring(0, 80));
-        return this.createCachedResponse(cachedEntry);
-      }
-      const pendingRequest = this.pendingRequests.get(cacheKey);
-      if (pendingRequest) {
-        console.log("[OGC STA Cache] Dedup - waiting for pending request:", url.substring(0, 80));
-        const response = await pendingRequest;
-        return response.clone();
-      }
-      console.log("[OGC STA Cache] Cache MISS - fetching:", url.substring(0, 80));
-      let resolvePromise;
-      let rejectPromise;
-      const requestPromise = new Promise((resolve, reject) => {
-        resolvePromise = resolve;
-        rejectPromise = reject;
+  createCachingFetch(t) {
+    return async (n, i) => {
+      const s = typeof n == "string" ? n : n.toString();
+      if ((i?.method || "GET") !== "GET")
+        return t(n, i);
+      const a = this.getCacheKey(s, i), r = this.cache.get(a);
+      if (r && this.isValidCacheEntry(r))
+        return console.log("[OGC STA Cache] Cache HIT:", s.substring(0, 80)), this.createCachedResponse(r);
+      const c = this.pendingRequests.get(a);
+      if (c)
+        return console.log("[OGC STA Cache] Dedup - waiting for pending request:", s.substring(0, 80)), (await c).clone();
+      console.log("[OGC STA Cache] Cache MISS - fetching:", s.substring(0, 80));
+      let h, l;
+      const p = new Promise((g, d) => {
+        h = g, l = d;
       });
-      this.pendingRequests.set(cacheKey, requestPromise);
+      this.pendingRequests.set(a, p);
       try {
-        const response = await baseFetch(input, init);
-        if (response.ok) {
-          const clonedResponse = response.clone();
+        const g = await t(n, i);
+        if (g.ok) {
+          const d = g.clone();
           try {
-            const body = await clonedResponse.json();
-            this.cache.set(cacheKey, {
-              body,
-              status: response.status,
-              statusText: response.statusText,
-              headers: response.headers,
+            const f = await d.json();
+            this.cache.set(a, {
+              body: f,
+              status: g.status,
+              statusText: g.statusText,
+              headers: g.headers,
               timestamp: Date.now()
-            });
-            if (this.cache.size > this.maxEntries) {
-              this.cleanExpiredCache();
-            }
+            }), this.cache.size > this.maxEntries && this.cleanExpiredCache();
           } catch {
           }
         }
-        resolvePromise(response.clone());
-        return response;
-      } catch (error) {
-        rejectPromise(error);
-        throw error;
+        return h(g.clone()), g;
+      } catch (g) {
+        throw l(g), g;
       } finally {
-        this.pendingRequests.delete(cacheKey);
+        this.pendingRequests.delete(a);
       }
     };
   }
 }
-let sharedCachingWrapper = null;
-function getSharedCachingFetch(baseFetch, options) {
-  if (!sharedCachingWrapper) {
-    sharedCachingWrapper = new CachingFetchWrapper(options);
-  }
-  return sharedCachingWrapper.createCachingFetch(baseFetch);
+let M = null;
+function Vt(e, t) {
+  return M || (M = new qt(t)), M.createCachingFetch(e);
 }
-const transformFromThingLocationDastreamToLocationThingDatastream = (things) => {
-  const ret = { locations: [], things, datastreams: [] };
-  const locations = [];
-  let datastreams = [];
-  for (const thing of things ?? []) {
-    if (thing.datastreams) {
-      datastreams = [...datastreams, ...thing.datastreams];
-      for (const datastream of thing.datastreams ?? []) {
-        datastream.thing = thing;
-      }
+const L = (e) => {
+  const t = { locations: [], things: e, datastreams: [] }, n = [];
+  let i = [];
+  for (const s of e ?? []) {
+    if (s.datastreams) {
+      i = [...i, ...s.datastreams];
+      for (const o of s.datastreams ?? [])
+        o.thing = s;
     }
-    for (const location of thing.locations ?? []) {
-      if (!location.things) {
-        location.things = [];
-      }
-      const isAlreadyinLocation = locations.find((l) => l.iotId === location.iotId);
-      if (isAlreadyinLocation) {
-        const allredyexistingThing = isAlreadyinLocation.Things ?? [].find((t) => t.iotId == thing.iotId);
-        if (!allredyexistingThing) {
-          if (!isAlreadyinLocation.Things) {
-            isAlreadyinLocation.Things = [];
-          }
-          isAlreadyinLocation.Things.push(thing);
-        }
-      } else {
-        location.things.push(thing);
-        locations.push(location);
-      }
+    for (const o of s.locations ?? []) {
+      o.things || (o.things = []);
+      const a = n.find((r) => r.iotId === o.iotId);
+      a ? (a.Things ?? [].find((c) => c.iotId == s.iotId)) || (a.Things || (a.Things = []), a.Things.push(s)) : (o.things.push(s), n.push(o));
     }
   }
-  ret.datastreams = datastreams;
-  ret.locations = locations;
-  return ret;
-};
-const FILTER = "EFilter";
-const FILTERRESET = "EFilterReset";
-const NOACTION = "ENoAction";
-const MQTT_UNSUBSCRIBE_ALL = "EMqttUnsubscribeAll";
-const UPDATE_MQTT_SUBSCRIPTIONS = "EUpdateMqttSubscriptions";
-class ObservationsWorkerManager {
+  return t.datastreams = i, t.locations = n, t;
+}, $ = "EFilter", E = "EFilterReset", At = "ENoAction", B = "EMqttUnsubscribeAll", W = "EUpdateMqttSubscriptions";
+class Jt {
   worker = null;
   pendingRequests = /* @__PURE__ */ new Map();
   requestCounter = 0;
-  isSupported = typeof Worker !== "undefined";
+  isSupported = typeof Worker < "u";
   constructor() {
-    if (this.isSupported) {
-      this.initWorker();
-    }
+    this.isSupported && this.initWorker();
   }
   initWorker() {
     try {
-      const workerCode = `
+      const t = `
         self.onmessage = async (event) => {
           const { type, requestId, requests } = event.data;
 
@@ -1882,107 +1321,67 @@ class ObservationsWorkerManager {
             });
           }
         };
-      `;
-      const blob = new Blob([workerCode], { type: "application/javascript" });
-      const workerUrl = URL.createObjectURL(blob);
-      this.worker = new Worker(workerUrl);
-      this.worker.onmessage = (event) => {
-        const { requestId, results } = event.data;
-        const pending = this.pendingRequests.get(requestId);
-        if (pending) {
-          this.pendingRequests.delete(requestId);
-          pending.resolve(results);
-        }
+      `, n = new Blob([t], { type: "application/javascript" }), i = URL.createObjectURL(n);
+      this.worker = new Worker(i), this.worker.onmessage = (s) => {
+        const { requestId: o, results: a } = s.data, r = this.pendingRequests.get(o);
+        r && (this.pendingRequests.delete(o), r.resolve(a));
+      }, this.worker.onerror = (s) => {
+        console.error("ObservationsWorker error:", s);
+        for (const [o, a] of this.pendingRequests)
+          a.reject(new Error("Worker error")), this.pendingRequests.delete(o);
       };
-      this.worker.onerror = (error) => {
-        console.error("ObservationsWorker error:", error);
-        for (const [requestId, pending] of this.pendingRequests) {
-          pending.reject(new Error("Worker error"));
-          this.pendingRequests.delete(requestId);
-        }
-      };
-    } catch (e) {
-      console.warn("Could not create ObservationsWorker:", e);
-      this.isSupported = false;
+    } catch (t) {
+      console.warn("Could not create ObservationsWorker:", t), this.isSupported = !1;
     }
   }
-  async fetchObservations(baseUrl, datastreams, historyParams) {
-    if (!this.isSupported || !this.worker) {
-      return this.fetchOnMainThread(baseUrl, datastreams, historyParams);
-    }
-    const requestId = `req_${++this.requestCounter}`;
-    const requests = datastreams.map((ds) => ({
-      baseUrl,
-      datastreamId: ds.iotId || ds["@iot.id"],
-      historyParams
+  async fetchObservations(t, n, i) {
+    if (!this.isSupported || !this.worker)
+      return this.fetchOnMainThread(t, n, i);
+    const s = `req_${++this.requestCounter}`, o = n.map((a) => ({
+      baseUrl: t,
+      datastreamId: a.iotId || a["@iot.id"],
+      historyParams: i
     }));
-    return new Promise((resolve, reject) => {
-      this.pendingRequests.set(requestId, { resolve, reject });
-      this.worker.postMessage({
+    return new Promise((a, r) => {
+      this.pendingRequests.set(s, { resolve: a, reject: r }), this.worker.postMessage({
         type: "fetchObservations",
-        requestId,
-        requests
-      });
-      setTimeout(() => {
-        if (this.pendingRequests.has(requestId)) {
-          this.pendingRequests.delete(requestId);
-          reject(new Error("Worker request timeout"));
-        }
+        requestId: s,
+        requests: o
+      }), setTimeout(() => {
+        this.pendingRequests.has(s) && (this.pendingRequests.delete(s), r(new Error("Worker request timeout")));
       }, 3e4);
     });
   }
-  async fetchOnMainThread(baseUrl, datastreams, historyParams) {
-    const results = [];
-    const promises = datastreams.map(async (ds) => {
-      const datastreamId = ds.iotId || ds["@iot.id"];
+  async fetchOnMainThread(t, n, i) {
+    const s = [], o = n.map(async (r) => {
+      const c = r.iotId || r["@iot.id"];
       try {
-        const params = new URLSearchParams();
-        if (historyParams?.$filter) params.set("$filter", historyParams.$filter);
-        if (historyParams?.$orderby) params.set("$orderby", historyParams.$orderby);
-        else params.set("$orderby", "phenomenonTime desc");
-        if (historyParams?.$top) params.set("$top", historyParams.$top.toString());
-        const url = `${baseUrl}/v1.1/Datastreams(${datastreamId})/Observations?${params.toString()}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        const observations = data.value || [];
-        observations.forEach((obs) => {
-          obs["ds_source"] = datastreamId;
-        });
-        return { datastreamId, observations };
-      } catch (error) {
-        return { datastreamId, observations: [] };
+        const h = new URLSearchParams();
+        i?.$filter && h.set("$filter", i.$filter), i?.$orderby ? h.set("$orderby", i.$orderby) : h.set("$orderby", "phenomenonTime desc"), i?.$top && h.set("$top", i.$top.toString());
+        const l = `${t}/v1.1/Datastreams(${c})/Observations?${h.toString()}`, d = (await (await fetch(l)).json()).value || [];
+        return d.forEach((f) => {
+          f.ds_source = c;
+        }), { datastreamId: c, observations: d };
+      } catch {
+        return { datastreamId: c, observations: [] };
       }
-    });
-    const fetchResults = await Promise.all(promises);
-    results.push(...fetchResults);
-    return results;
+    }), a = await Promise.all(o);
+    return s.push(...a), s;
   }
   terminate() {
-    if (this.worker) {
-      this.worker.terminate();
-      this.worker = null;
-    }
-    this.pendingRequests.clear();
+    this.worker && (this.worker.terminate(), this.worker = null), this.pendingRequests.clear();
   }
 }
-let workerManagerInstance = null;
-function getObservationsWorkerManager() {
-  if (!workerManagerInstance) {
-    workerManagerInstance = new ObservationsWorkerManager();
-  }
-  return workerManagerInstance;
+let _ = null;
+function Ht() {
+  return _ || (_ = new Jt()), _;
 }
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+var zt = Object.defineProperty, Qt = Object.getOwnPropertyDescriptor, x = (e, t, n, i) => {
+  for (var s = i > 1 ? void 0 : i ? Qt(t, n) : t, o = e.length - 1, a; o >= 0; o--)
+    (a = e[o]) && (s = (i ? a(t, n, s) : a(s)) || s);
+  return i && s && zt(t, n, s), s;
 };
-let OgcStaStore = class extends BaseDatasource {
+let O = class extends tt {
   connectionRepository;
   variableRepository;
   loggerFactory;
@@ -1998,11 +1397,11 @@ let OgcStaStore = class extends BaseDatasource {
   // datastreamId -> topic
   subscribedLocations = /* @__PURE__ */ new Map();
   // locationId -> topic
-  initialLoadDone = false;
+  initialLoadDone = !1;
   mqttUpdateTimer = null;
-  hasPendingMqttUpdates = false;
+  hasPendingMqttUpdates = !1;
   requestFlag = {
-    key: FILTERRESET,
+    key: E,
     params: void 0
   };
   baseConfigration;
@@ -2020,1119 +1419,712 @@ let OgcStaStore = class extends BaseDatasource {
   pendingRequestFlag = null;
   workerManager = null;
   connectionBaseUrl = "";
-  init(configuration) {
-    super.init(configuration);
-    this.logMqtt = this.loggerFactory.createLogger("daanse:ogcsta:mqtt");
-    this.logData = this.loggerFactory.createLogger("daanse:ogcsta:data");
-    this.logHistory = this.loggerFactory.createLogger("daanse:ogcsta:history");
-    this.logCore = this.loggerFactory.createLogger("daanse:ogcsta:core");
-    const isReInit = this.configuration !== void 0;
-    if (isReInit && this.mqttConnection) {
-      this.logMqtt("Configuration changed, cleaning up old MQTT subscriptions");
-      this.unsubscribeAll();
-      this.initialLoadDone = false;
-    }
-    this.configuration = configuration;
-    if (!configuration.connection) throw new Error("Connetion must be set");
-    this.connection = configuration.connection;
-    this.requestFlag = { key: FILTERRESET, params: void 0 };
-    if (configuration.history && configuration.history.enabled === void 0) {
-      const hasTimeFilters = configuration.history.timeRange?.start || configuration.history.timeRange?.startVariable || configuration.history.timeRange?.end || configuration.history.timeRange?.endVariable || configuration.history.phenomenonTime?.start || configuration.history.phenomenonTime?.startVariable || configuration.history.phenomenonTime?.end || configuration.history.phenomenonTime?.endVariable || configuration.history.resultTime?.start || configuration.history.resultTime?.startVariable || configuration.history.resultTime?.end || configuration.history.resultTime?.endVariable;
-      if (hasTimeFilters) {
-        this.logHistory("Auto-enabling history due to configured time filters");
-        configuration.history.enabled = true;
-      }
-    }
-    if (configuration.mqttConnection && this.connectionRepository) {
+  init(e) {
+    super.init(e), this.logMqtt = this.loggerFactory.createLogger("daanse:ogcsta:mqtt"), this.logData = this.loggerFactory.createLogger("daanse:ogcsta:data"), this.logHistory = this.loggerFactory.createLogger("daanse:ogcsta:history"), this.logCore = this.loggerFactory.createLogger("daanse:ogcsta:core");
+    const t = this.configuration !== void 0;
+    if (t && this.mqttConnection && (this.logMqtt("Configuration changed, cleaning up old MQTT subscriptions"), this.unsubscribeAll(), this.initialLoadDone = !1), this.configuration = e, !e.connection) throw new Error("Connetion must be set");
+    if (this.connection = e.connection, this.requestFlag = { key: E, params: void 0 }, e.history && e.history.enabled === void 0 && (e.history.timeRange?.start || e.history.timeRange?.startVariable || e.history.timeRange?.end || e.history.timeRange?.endVariable || e.history.phenomenonTime?.start || e.history.phenomenonTime?.startVariable || e.history.phenomenonTime?.end || e.history.phenomenonTime?.endVariable || e.history.resultTime?.start || e.history.resultTime?.startVariable || e.history.resultTime?.end || e.history.resultTime?.endVariable) && (this.logHistory("Auto-enabling history due to configured time filters"), e.history.enabled = !0), e.mqttConnection && this.connectionRepository)
       try {
-        this.mqttConnection = this.connectionRepository.getConnection(configuration.mqttConnection);
-        this.setupMQTTMessageHandler();
-        this.logMqtt("MQTT Connection established:", configuration.mqttConnection);
-      } catch (e) {
-        console.error("OGCSTA: Could not establish MQTT connection:", e);
-        this.mqttConnection = null;
+        this.mqttConnection = this.connectionRepository.getConnection(e.mqttConnection), this.setupMQTTMessageHandler(), this.logMqtt("MQTT Connection established:", e.mqttConnection);
+      } catch (n) {
+        console.error("OGCSTA: Could not establish MQTT connection:", n), this.mqttConnection = null;
       }
-    } else if (isReInit && this.mqttConnection) {
-      this.logMqtt("MQTT Connection removed from configuration");
-      this.mqttConnection = null;
-    }
-    this.setupVariableWatchers();
-    this.workerManager = getObservationsWorkerManager();
+    else t && this.mqttConnection && (this.logMqtt("MQTT Connection removed from configuration"), this.mqttConnection = null);
+    this.setupVariableWatchers(), this.workerManager = Ht();
     try {
-      const connection = this.connectionRepository.getConnection(this.connection);
-      if (connection?.url) {
-        this.connectionBaseUrl = connection.url;
-      }
-    } catch (e) {
-      this.logCore("Could not get connection base URL:", e);
+      const n = this.connectionRepository.getConnection(this.connection);
+      n?.url && (this.connectionBaseUrl = n.url);
+    } catch (n) {
+      this.logCore("Could not get connection base URL:", n);
     }
   }
-  callEvent(event, params, shouldUpdate = true) {
-    if (event == FILTER) {
-      const filterType = Object.keys(params)[0];
-      if (filterType === "observations" && params.observations) {
-        this.lastObservationsParams = params.observations;
-      }
-      if (!shouldUpdate) {
-        if (this.filterDebounceTimer) {
-          clearTimeout(this.filterDebounceTimer);
-          this.filterDebounceTimer = null;
-        }
-        this.requestFlag = { key: FILTER, params };
-        return this.getData("OGCSTAData").then(() => {
-        }).catch((e) => {
-          this.logCore("Silent getData error:", e);
+  callEvent(e, t, n = !0) {
+    if (e == $) {
+      const i = Object.keys(t)[0];
+      if (i === "observations" && t.observations && (this.lastObservationsParams = t.observations), !n)
+        return this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null), this.requestFlag = { key: $, params: t }, this.getData("OGCSTAData").then(() => {
+        }).catch((s) => {
+          this.logCore("Silent getData error:", s);
         });
-      }
-      if (this.filterDebounceTimer && filterType === this.lastFilterType) {
-        clearTimeout(this.filterDebounceTimer);
-      } else if (this.filterDebounceTimer) {
-        clearTimeout(this.filterDebounceTimer);
-        this.filterDebounceTimer = null;
-        this.pendingRequestFlag = { ...this.requestFlag };
-        this.notify();
-      }
-      this.requestFlag = { key: FILTER, params };
-      this.lastFilterType = filterType;
-      this.filterDebounceTimer = setTimeout(() => {
-        this.notify();
-        this.filterDebounceTimer = null;
+      this.filterDebounceTimer && i === this.lastFilterType ? clearTimeout(this.filterDebounceTimer) : this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null, this.pendingRequestFlag = { ...this.requestFlag }, this.notify()), this.requestFlag = { key: $, params: t }, this.lastFilterType = i, this.filterDebounceTimer = setTimeout(() => {
+        this.notify(), this.filterDebounceTimer = null;
       }, 300);
-    } else if (event == UPDATE_MQTT_SUBSCRIPTIONS) {
-      if (this.mqttConnection) {
-        this.logCore("Updating MQTT subscriptions:", params?.observations?.length || 0, "observations");
-        this.subscribeToDatastreams(params?.observations || []);
-        this.subscribeToLocations();
-      }
-    } else if (event == MQTT_UNSUBSCRIBE_ALL) {
-      if (this.mqttConnection) {
-        this.logCore("Unsubscribing from all MQTT topics");
-        this.unsubscribeAll();
-      }
-    } else {
-      this.requestFlag = { key: FILTERRESET, params };
-      this.notify();
-    }
+    } else e == W ? this.mqttConnection && (this.logCore("Updating MQTT subscriptions:", t?.observations?.length || 0, "observations"), this.subscribeToDatastreams(t?.observations || []), this.subscribeToLocations()) : e == B ? this.mqttConnection && (this.logCore("Unsubscribing from all MQTT topics"), this.unsubscribeAll()) : (this.requestFlag = { key: E, params: t }, this.notify());
   }
   destroy() {
-    this.logCore("Store destroy() called");
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = null;
-    }
-    if (this.filterDebounceTimer) {
-      clearTimeout(this.filterDebounceTimer);
-      this.filterDebounceTimer = null;
-    }
-    if (this.mqttUpdateTimer) {
-      clearTimeout(this.mqttUpdateTimer);
-      this.mqttUpdateTimer = null;
-    }
-    if (this.mqttConnection) {
+    if (this.logCore("Store destroy() called"), this.debounceTimer && (clearTimeout(this.debounceTimer), this.debounceTimer = null), this.filterDebounceTimer && (clearTimeout(this.filterDebounceTimer), this.filterDebounceTimer = null), this.mqttUpdateTimer && (clearTimeout(this.mqttUpdateTimer), this.mqttUpdateTimer = null), this.mqttConnection) {
       this.logCore(`Cleaning up MQTT subscriptions on destroy (${this.subscribedDatastreams.size} datastreams, ${this.subscribedLocations.size} locations)`);
-      const client = this.mqttConnection.client;
-      if (client && client.connected) {
-        this.unsubscribeAll();
-      } else {
-        this.logCore("Client not connected, just clearing maps");
-        this.subscribedDatastreams.clear();
-        this.subscribedLocations.clear();
-      }
-      this.mqttConnection = null;
+      const e = this.mqttConnection.client;
+      e && e.connected ? this.unsubscribeAll() : (this.logCore("Client not connected, just clearing maps"), this.subscribedDatastreams.clear(), this.subscribedLocations.clear()), this.mqttConnection = null;
     }
     this.logCore("Store destroyed");
   }
-  async getData(type, options) {
-    const effectiveRequestFlag = this.pendingRequestFlag || this.requestFlag;
-    this.pendingRequestFlag = null;
-    if (!this.connectionRepository) {
+  async getData(e, t) {
+    const n = this.pendingRequestFlag || this.requestFlag;
+    if (this.pendingRequestFlag = null, !this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    const i = this.connectionRepository.getConnection(
       this.connection
-    );
-    const baseFetch = (a, b) => {
-      return connection.fetch({ url: a }, b);
-    };
-    const cachingFetch = getSharedCachingFetch(baseFetch, { ttl: 3e4, maxEntries: 200 });
-    this.baseConfigration = new Configuration({
+    ), o = Vt((h, l) => i.fetch({ url: h }, l), { ttl: 3e4, maxEntries: 200 });
+    this.baseConfigration = new J({
       basePath: "",
-      fetchApi: cachingFetch
+      fetchApi: o
     });
-    const isIsolatedRequest = options?.isolatedRequest === true;
-    const shouldReload = options?.reload || effectiveRequestFlag.key == FILTERRESET || (!this.resultMap.things || this.resultMap.things.length === 0);
-    if (shouldReload && !isIsolatedRequest) {
-      this.resultMap = {
-        things: [],
-        datastreams: [],
-        observations: [],
-        locations: []
-      };
-    }
-    const listOfPromesis = [];
-    if (options?.filter) {
-      const originalRequestFlag = this.requestFlag;
-      this.requestFlag = { key: FILTER, params: options.filter };
-      this.getPartitionalData(listOfPromesis);
-      this.requestFlag = originalRequestFlag;
-    } else if (effectiveRequestFlag.key == FILTER) {
-      const originalRequestFlag = this.requestFlag;
-      this.requestFlag = effectiveRequestFlag;
-      this.getPartitionalData(listOfPromesis);
-      this.requestFlag = originalRequestFlag;
-    } else if (shouldReload) {
-      this.getAllData(listOfPromesis);
-    }
-    if (listOfPromesis.length > 0) {
-      const results = await Promise.all(listOfPromesis);
-      if (isIsolatedRequest) {
-        const isolatedData = {
+    const a = t?.isolatedRequest === !0, r = t?.reload || n.key == E || !this.resultMap.things || this.resultMap.things.length === 0;
+    r && !a && (this.resultMap = {
+      things: [],
+      datastreams: [],
+      observations: [],
+      locations: []
+    });
+    const c = [];
+    if (t?.filter) {
+      const h = this.requestFlag;
+      this.requestFlag = { key: $, params: t.filter }, this.getPartitionalData(c), this.requestFlag = h;
+    } else if (n.key == $) {
+      const h = this.requestFlag;
+      this.requestFlag = n, this.getPartitionalData(c), this.requestFlag = h;
+    } else r && this.getAllData(c);
+    if (c.length > 0) {
+      const h = await Promise.all(c);
+      if (a) {
+        const l = {
           things: [],
           datastreams: [],
           observations: [],
           locations: []
         };
-        for (const result of results) {
-          if (result.datastreams) {
-            isolatedData.datastreams = isolatedData.datastreams?.concat(result.datastreams);
-          }
-          if (result.things) {
-            isolatedData.things = isolatedData.things?.concat(result.things);
-          }
-          if (result.observations) {
-            isolatedData.observations = isolatedData.observations?.concat(result.observations);
-          }
-          if (result.locations) {
-            isolatedData.locations = isolatedData.locations?.concat(result.locations);
-          }
-        }
-        if (type == "OGCSTAData") {
-          return {
-            things: isolatedData.things ? isolatedData.things.map((t) => ({ ...t })) : [],
-            datastreams: isolatedData.datastreams ? [...isolatedData.datastreams] : [],
-            observations: isolatedData.observations ? [...isolatedData.observations] : [],
-            locations: isolatedData.locations ? isolatedData.locations.map((loc) => ({ ...loc })) : []
-          };
-        }
-        return isolatedData;
+        for (const p of h)
+          p.datastreams && (l.datastreams = l.datastreams?.concat(p.datastreams)), p.things && (l.things = l.things?.concat(p.things)), p.observations && (l.observations = l.observations?.concat(p.observations)), p.locations && (l.locations = l.locations?.concat(p.locations));
+        return e == "OGCSTAData" ? {
+          things: l.things ? l.things.map((p) => ({ ...p })) : [],
+          datastreams: l.datastreams ? [...l.datastreams] : [],
+          observations: l.observations ? [...l.observations] : [],
+          locations: l.locations ? l.locations.map((p) => ({ ...p })) : []
+        } : l;
       }
-      for (const result of results) {
-        if (result.datastreams) {
-          this.resultMap.datastreams = this.resultMap.datastreams?.concat(result.datastreams);
-        }
-        if (result.things) {
-          this.resultMap.things = this.resultMap.things?.concat(result.things);
-        }
-        if (result.observations) {
-          this.resultMap.observations = this.resultMap.observations?.concat(result.observations);
-        }
-        if (result.locations) {
-          this.resultMap.locations = this.resultMap.locations?.concat(result.locations);
-        }
-      }
-      if (options?.filter || effectiveRequestFlag.key == FILTER) {
-        const observationsParam = options?.filter?.observations || effectiveRequestFlag.params?.observations;
-        for (const d of observationsParam ?? []) {
-          const ds = this.resultMap.datastreams?.find((s) => s.iotId == d.iotId);
-          if (ds) {
-            const datastreamObservations = this.resultMap.observations?.filter(
-              (o) => o.ds_source == d.iotId
+      for (const l of h)
+        l.datastreams && (this.resultMap.datastreams = this.resultMap.datastreams?.concat(l.datastreams)), l.things && (this.resultMap.things = this.resultMap.things?.concat(l.things)), l.observations && (this.resultMap.observations = this.resultMap.observations?.concat(l.observations)), l.locations && (this.resultMap.locations = this.resultMap.locations?.concat(l.locations));
+      if (t?.filter || n.key == $) {
+        const l = t?.filter?.observations || n.params?.observations;
+        for (const p of l ?? []) {
+          const g = this.resultMap.datastreams?.find((d) => d.iotId == p.iotId);
+          if (g) {
+            const d = this.resultMap.observations?.filter(
+              (f) => f.ds_source == p.iotId
             ) || [];
-            ds.observations = datastreamObservations;
-            for (const thing of this.resultMap.things || []) {
-              const nestedDs = thing.datastreams?.find((tds) => tds.iotId == d.iotId);
-              if (nestedDs) {
-                nestedDs.observations = datastreamObservations;
-              }
+            g.observations = d;
+            for (const f of this.resultMap.things || []) {
+              const u = f.datastreams?.find((m) => m.iotId == p.iotId);
+              u && (u.observations = d);
             }
-            for (const location of this.resultMap.locations || []) {
-              for (const thing of location.things || []) {
-                const locationDs = thing.datastreams?.find((lds) => lds.iotId == d.iotId);
-                if (locationDs) {
-                  locationDs.observations = datastreamObservations;
-                }
+            for (const f of this.resultMap.locations || [])
+              for (const u of f.things || []) {
+                const m = u.datastreams?.find((b) => b.iotId == p.iotId);
+                m && (m.observations = d);
               }
-            }
           }
         }
       }
-      for (const d of effectiveRequestFlag.params?.observations ?? []) {
+      for (const l of n.params?.observations ?? [])
         this.resultMap.observations = this.resultMap.observations?.filter(
-          (o) => o.ds_source !== d.iotId
+          (p) => p.ds_source !== l.iotId
         ) || [];
-      }
     }
-    if (type == "OGCSTAData") {
-      return {
-        things: this.resultMap.things ? this.resultMap.things.map((t) => ({ ...t })) : [],
-        datastreams: this.resultMap.datastreams ? [...this.resultMap.datastreams] : [],
-        observations: this.resultMap.observations ? [...this.resultMap.observations] : [],
-        locations: this.resultMap.locations ? this.resultMap.locations.map((loc) => ({ ...loc })) : []
-      };
-    }
-    return this.resultMap;
+    return e == "OGCSTAData" ? {
+      things: this.resultMap.things ? this.resultMap.things.map((h) => ({ ...h })) : [],
+      datastreams: this.resultMap.datastreams ? [...this.resultMap.datastreams] : [],
+      observations: this.resultMap.observations ? [...this.resultMap.observations] : [],
+      locations: this.resultMap.locations ? this.resultMap.locations.map((h) => ({ ...h })) : []
+    } : this.resultMap;
   }
   getOriginalData() {
   }
-  static validateConfiguration(configuration) {
-    return !!configuration?.connection;
+  static validateConfiguration(e) {
+    return !!e?.connection;
   }
-  getAllData(listOfPromesis) {
-    listOfPromesis.push(
+  getAllData(e) {
+    e.push(
       (async () => {
         try {
-          const things = (await new ThingsApi(this.baseConfigration).v11ThingsGet({
+          const t = (await new T(this.baseConfigration).v11ThingsGet({
             $expand: "Datastreams,Locations"
           })).value;
-          return transformFromThingLocationDastreamToLocationThingDatastream(
-            things
+          return L(
+            t
           );
-        } catch (e) {
-          if (e.response.status == 501) {
+        } catch (t) {
+          if (t.response.status == 501)
             return await this.fallBackSingleRequests();
-          } else {
-            throw e;
-          }
+          throw t;
         }
       })()
     );
   }
   async fallBackSingleRequests() {
-    const things = (await new ThingsApi(this.baseConfigration).v11ThingsGet()).value;
-    for (const thing of things) {
-      if (!thing.locations) {
-        thing.locations = [];
-      }
-      if (!thing.datastreams) {
-        thing.datastreams = [];
-      }
+    const e = (await new T(this.baseConfigration).v11ThingsGet()).value;
+    for (const n of e) {
+      n.locations || (n.locations = []), n.datastreams || (n.datastreams = []);
       try {
-        if (thing.iotId) {
-          const locs = (await new ThingsApi(
+        if (n.iotId) {
+          const i = (await new T(
             this.baseConfigration
-          ).v11ThingsEntityIdLocationsGet({ entityId: thing.iotId })).value;
-          thing.locations = locs;
+          ).v11ThingsEntityIdLocationsGet({ entityId: n.iotId })).value;
+          n.locations = i;
         }
-      } catch (e) {
-        this.logCore("Error:", e);
+      } catch (i) {
+        this.logCore("Error:", i);
       }
       try {
-        const dss = (await new ThingsApi(
+        const i = (await new T(
           this.baseConfigration
-        ).v11ThingsEntityIdDatastreamsGet({ entityId: thing.iotId })).value;
-        thing.datastreams = dss;
-      } catch (e) {
-        this.logCore("Error:", e);
+        ).v11ThingsEntityIdDatastreamsGet({ entityId: n.iotId })).value;
+        n.datastreams = i;
+      } catch (i) {
+        this.logCore("Error:", i);
       }
     }
-    const locations = transformFromThingLocationDastreamToLocationThingDatastream(things);
-    return locations;
+    return L(e);
   }
-  getPartitionalData(listOfPromesis) {
-    this.getThings(listOfPromesis);
-    this.getDataStreams(listOfPromesis);
-    this.getObservations(listOfPromesis);
-    this.getHistoricalLocations(listOfPromesis);
+  getPartitionalData(e) {
+    this.getThings(e), this.getDataStreams(e), this.getObservations(e), this.getHistoricalLocations(e);
   }
-  resolveTimeValue(timeValue, variableName) {
-    if (variableName && this.variableRepository) {
-      const variable = this.variableRepository.getVariable(variableName);
-      if (variable && variable.value) {
-        return variable.value;
-      }
+  resolveTimeValue(e, t) {
+    if (t && this.variableRepository) {
+      const n = this.variableRepository.getVariable(t);
+      if (n && n.value)
+        return n.value;
     }
-    return timeValue;
+    return e;
   }
-  buildHistoryFilter(historyConfig) {
-    if (!historyConfig?.enabled) return "";
-    const filterParts = [];
-    const phenomenonStart = this.resolveTimeValue(
-      historyConfig.phenomenonTime?.start,
-      historyConfig.phenomenonTime?.startVariable
+  buildHistoryFilter(e) {
+    if (!e?.enabled) return "";
+    const t = [], n = this.resolveTimeValue(
+      e.phenomenonTime?.start,
+      e.phenomenonTime?.startVariable
+    ), i = this.resolveTimeValue(
+      e.phenomenonTime?.end,
+      e.phenomenonTime?.endVariable
     );
-    const phenomenonEnd = this.resolveTimeValue(
-      historyConfig.phenomenonTime?.end,
-      historyConfig.phenomenonTime?.endVariable
+    n && t.push(`phenomenonTime gt ${n}`), i && t.push(`phenomenonTime lt ${i}`);
+    const s = this.resolveTimeValue(
+      e.resultTime?.start,
+      e.resultTime?.startVariable
+    ), o = this.resolveTimeValue(
+      e.resultTime?.end,
+      e.resultTime?.endVariable
     );
-    if (phenomenonStart) {
-      filterParts.push(`phenomenonTime gt ${phenomenonStart}`);
-    }
-    if (phenomenonEnd) {
-      filterParts.push(`phenomenonTime lt ${phenomenonEnd}`);
-    }
-    const resultStart = this.resolveTimeValue(
-      historyConfig.resultTime?.start,
-      historyConfig.resultTime?.startVariable
+    s && t.push(`resultTime gt ${s}`), o && t.push(`resultTime lt ${o}`);
+    const a = this.resolveTimeValue(
+      e.timeRange?.start,
+      e.timeRange?.startVariable
+    ), r = this.resolveTimeValue(
+      e.timeRange?.end,
+      e.timeRange?.endVariable
     );
-    const resultEnd = this.resolveTimeValue(
-      historyConfig.resultTime?.end,
-      historyConfig.resultTime?.endVariable
-    );
-    if (resultStart) {
-      filterParts.push(`resultTime gt ${resultStart}`);
-    }
-    if (resultEnd) {
-      filterParts.push(`resultTime lt ${resultEnd}`);
-    }
-    const rangeStart = this.resolveTimeValue(
-      historyConfig.timeRange?.start,
-      historyConfig.timeRange?.startVariable
-    );
-    const rangeEnd = this.resolveTimeValue(
-      historyConfig.timeRange?.end,
-      historyConfig.timeRange?.endVariable
-    );
-    if (rangeStart) {
-      filterParts.push(`phenomenonTime gt ${rangeStart}`);
-    }
-    if (rangeEnd) {
-      filterParts.push(`phenomenonTime lt ${rangeEnd}`);
-    }
-    return filterParts.join(" and ");
+    return a && t.push(`phenomenonTime gt ${a}`), r && t.push(`phenomenonTime lt ${r}`), t.join(" and ");
   }
-  getHistoryQueryParams(historyConfig) {
-    const params = {};
-    if (historyConfig?.enabled) {
-      const filter = this.buildHistoryFilter(historyConfig);
-      if (filter) {
-        params.$filter = filter;
-      }
-      if (historyConfig.orderBy) {
-        params.$orderby = historyConfig.orderBy;
-      }
-      if (historyConfig.limit) {
-        params.$top = historyConfig.limit;
-      }
+  getHistoryQueryParams(e) {
+    const t = {};
+    if (e?.enabled) {
+      const n = this.buildHistoryFilter(e);
+      n && (t.$filter = n), e.orderBy && (t.$orderby = e.orderBy), e.limit && (t.$top = e.limit);
     }
-    return params;
+    return t;
   }
-  async getHistoricalObservations(datastreamId, historyConfig) {
-    if (!this.baseConfigration) {
+  async getHistoricalObservations(e, t) {
+    if (!this.baseConfigration)
       throw new Error("Base configuration not initialized");
-    }
-    const queryParams = this.getHistoryQueryParams(historyConfig);
-    const data = await new DatastreamsApi(this.baseConfigration).v11DatastreamsEntityIdObservationsGet({
-      entityId: datastreamId,
-      ...queryParams
-    });
-    return data.value || [];
+    const n = this.getHistoryQueryParams(t);
+    return (await new R(this.baseConfigration).v11DatastreamsEntityIdObservationsGet({
+      entityId: e,
+      ...n
+    })).value || [];
   }
-  getObservations(listOfPromesis) {
-    const historyConfig = this.configuration?.history;
-    if (this.requestFlag.params && "observations" in this.requestFlag.params) {
-      if ("all" in this.requestFlag.params.observations) {
-        listOfPromesis.push(
+  getObservations(e) {
+    const t = this.configuration?.history;
+    if (this.requestFlag.params && "observations" in this.requestFlag.params)
+      if ("all" in this.requestFlag.params.observations)
+        e.push(
           (async () => {
-            const queryParams = this.getHistoryQueryParams(historyConfig);
-            const data = (await new ObservationsApi(
+            const n = this.getHistoryQueryParams(t);
+            return { observations: (await new Nt(
               this.baseConfigration
-            ).v11ObservationsGet(queryParams)).value;
-            return { observations: data };
+            ).v11ObservationsGet(n)).value };
           })()
         );
-      } else {
-        const useMQTT = this.mqttConnection && !historyConfig?.enabled;
-        if (useMQTT) {
-          if (!this.initialLoadDone) {
-            this.logMqtt("Initial load via HTTP, then switching to MQTT");
-            for (const ds of this.requestFlag.params.observations) {
-              listOfPromesis.push(
-                (async () => {
-                  const baseParams = {
-                    entityId: ds.iotId + "",
-                    $orderby: "phenomenonTime desc",
-                    $top: 1
-                  };
-                  const data = (await new DatastreamsApi(
-                    this.baseConfigration
-                  ).v11DatastreamsEntityIdObservationsGet(baseParams)).value;
-                  if (data && data.length > 0) {
-                    data.forEach((obs) => {
-                      obs["ds_source"] = ds.iotId + "";
-                    });
-                  }
-                  return { observations: data };
-                })()
-              );
-            }
-            this.initialLoadDone = true;
-            setTimeout(() => {
-              this.subscribeToDatastreams(this.requestFlag.params.observations);
-              this.subscribeToLocations();
-            }, 100);
-          } else {
-            this.subscribeToDatastreams(this.requestFlag.params.observations);
-            this.subscribeToLocations();
-          }
-        } else {
-          if (this.workerManager && this.connectionBaseUrl) {
-            const queryParams = this.getHistoryQueryParams(historyConfig);
-            const historyParams = {
-              $orderby: queryParams.$orderby || "phenomenonTime desc"
-            };
-            if (queryParams.$filter) historyParams.$filter = queryParams.$filter;
-            if (!historyConfig?.enabled) {
-              historyParams.$top = 1;
-            } else if (queryParams.$top) {
-              historyParams.$top = queryParams.$top;
-            }
-            listOfPromesis.push(
+      else if (this.mqttConnection && !t?.enabled)
+        if (this.initialLoadDone)
+          this.subscribeToDatastreams(this.requestFlag.params.observations), this.subscribeToLocations();
+        else {
+          this.logMqtt("Initial load via HTTP, then switching to MQTT");
+          for (const i of this.requestFlag.params.observations)
+            e.push(
               (async () => {
-                const results = await this.workerManager.fetchObservations(
-                  this.connectionBaseUrl,
-                  this.requestFlag.params.observations,
-                  historyParams
-                );
-                const allObservations = [];
-                for (const result of results) {
-                  allObservations.push(...result.observations);
-                }
-                return { observations: allObservations };
+                const s = {
+                  entityId: i.iotId + "",
+                  $orderby: "phenomenonTime desc",
+                  $top: 1
+                }, o = (await new R(
+                  this.baseConfigration
+                ).v11DatastreamsEntityIdObservationsGet(s)).value;
+                return o && o.length > 0 && o.forEach((a) => {
+                  a.ds_source = i.iotId + "";
+                }), { observations: o };
               })()
             );
-          } else {
-            for (const ds of this.requestFlag.params.observations) {
-              listOfPromesis.push(
-                (async () => {
-                  const queryParams = this.getHistoryQueryParams(historyConfig);
-                  const baseParams = {
-                    entityId: ds.iotId + "",
-                    $orderby: "phenomenonTime desc"
-                  };
-                  if (!historyConfig?.enabled) {
-                    baseParams.$top = 1;
-                  }
-                  const data = (await new DatastreamsApi(
-                    this.baseConfigration
-                  ).v11DatastreamsEntityIdObservationsGet({
-                    ...baseParams,
-                    ...queryParams
-                  })).value;
-                  if (data && data.length > 0) {
-                    data.forEach((obs) => {
-                      obs["ds_source"] = ds.iotId + "";
-                    });
-                  }
-                  return { observations: data };
-                })()
-              );
-            }
-          }
+          this.initialLoadDone = !0, setTimeout(() => {
+            this.subscribeToDatastreams(this.requestFlag.params.observations), this.subscribeToLocations();
+          }, 100);
         }
-      }
-    } else if (this.mqttConnection && !historyConfig?.enabled) {
-      this.logMqtt("No observations requested, cleaning up subscriptions");
-      this.subscribeToDatastreams([]);
-      this.subscribeToLocations();
-    }
-  }
-  getDataStreams(listOfPromesis) {
-    if (this.requestFlag.params && "datastreams" in this.requestFlag.params) {
-      if ("all" in this.requestFlag.params.datastreams) {
-        listOfPromesis.push(
+      else if (this.workerManager && this.connectionBaseUrl) {
+        const i = this.getHistoryQueryParams(t), s = {
+          $orderby: i.$orderby || "phenomenonTime desc"
+        };
+        i.$filter && (s.$filter = i.$filter), t?.enabled ? i.$top && (s.$top = i.$top) : s.$top = 1, e.push(
           (async () => {
-            const data = (await new DatastreamsApi(
-              this.baseConfigration
-            ).v11DatastreamsGet()).value;
-            return { datastreams: data };
+            const o = await this.workerManager.fetchObservations(
+              this.connectionBaseUrl,
+              this.requestFlag.params.observations,
+              s
+            ), a = [];
+            for (const r of o)
+              a.push(...r.observations);
+            return { observations: a };
           })()
         );
-      } else if ("ids" in this.requestFlag.params.datastreams) {
-        for (const id of this.requestFlag.params.datastreams.ids) {
-          listOfPromesis.push(
+      } else
+        for (const i of this.requestFlag.params.observations)
+          e.push(
             (async () => {
-              const data = (await new DatastreamsApi(
+              const s = this.getHistoryQueryParams(t), o = {
+                entityId: i.iotId + "",
+                $orderby: "phenomenonTime desc"
+              };
+              t?.enabled || (o.$top = 1);
+              const a = (await new R(
                 this.baseConfigration
               ).v11DatastreamsEntityIdObservationsGet({
-                entityId: id,
-                $top: 1
+                ...o,
+                ...s
               })).value;
-              return { observations: data };
+              return a && a.length > 0 && a.forEach((r) => {
+                r.ds_source = i.iotId + "";
+              }), { observations: a };
             })()
           );
-        }
-      }
+    else this.mqttConnection && !t?.enabled && (this.logMqtt("No observations requested, cleaning up subscriptions"), this.subscribeToDatastreams([]), this.subscribeToLocations());
+  }
+  getDataStreams(e) {
+    if (this.requestFlag.params && "datastreams" in this.requestFlag.params) {
+      if ("all" in this.requestFlag.params.datastreams)
+        e.push(
+          (async () => ({ datastreams: (await new R(
+            this.baseConfigration
+          ).v11DatastreamsGet()).value }))()
+        );
+      else if ("ids" in this.requestFlag.params.datastreams)
+        for (const t of this.requestFlag.params.datastreams.ids)
+          e.push(
+            (async () => ({ observations: (await new R(
+              this.baseConfigration
+            ).v11DatastreamsEntityIdObservationsGet({
+              entityId: t,
+              $top: 1
+            })).value }))()
+          );
     }
   }
-  getThings(listOfPromesis) {
+  getThings(e) {
     if (this.requestFlag.params && "things" in this.requestFlag.params) {
       if ("all" in this.requestFlag.params.things) {
-        const includeDatastreams = this.requestFlag.params.things.all?.includeDatastreams;
-        const includeLocations = this.requestFlag.params.things.all?.includeLocations;
-        let expand = [];
-        if (includeDatastreams) expand.push("Datastreams");
-        if (includeLocations) expand.push("Locations");
-        listOfPromesis.push(
+        const t = this.requestFlag.params.things.all?.includeDatastreams, n = this.requestFlag.params.things.all?.includeLocations;
+        let i = [];
+        t && i.push("Datastreams"), n && i.push("Locations"), e.push(
           (async () => {
             try {
-              const expandParam = expand.length > 0 ? expand.join(",") : void 0;
-              const data = (await new ThingsApi(this.baseConfigration).v11ThingsGet({
-                $expand: expandParam
+              const s = i.length > 0 ? i.join(",") : void 0, o = (await new T(this.baseConfigration).v11ThingsGet({
+                $expand: s
               })).value;
-              if (expand.length > 0) {
-                return transformFromThingLocationDastreamToLocationThingDatastream(data);
-              } else {
-                return { things: data };
-              }
-            } catch (e) {
-              if (e.response.status == 501) {
-                if (expand.includes("Datastreams") || expand.includes("Locations")) {
-                  return await this.fallBackSingleRequests();
-                } else {
-                  const data = (await new ThingsApi(this.baseConfigration).v11ThingsGet()).value;
-                  return { things: data };
-                }
-              } else {
-                throw e;
-              }
+              return i.length > 0 ? L(o) : { things: o };
+            } catch (s) {
+              if (s.response.status == 501)
+                return i.includes("Datastreams") || i.includes("Locations") ? await this.fallBackSingleRequests() : { things: (await new T(this.baseConfigration).v11ThingsGet()).value };
+              throw s;
             }
           })()
         );
       } else if ("ids" in this.requestFlag.params.things) {
         this.logData("🔍 OgcSta: Loading things by IDs:", this.requestFlag.params.things.ids);
-        const includeDatastreams = this.requestFlag.params.things.includeDatastreams;
-        const includeLocations = this.requestFlag.params.things.includeLocations;
-        let expand = [];
-        if (includeDatastreams) expand.push("Datastreams");
-        if (includeLocations) expand.push("Locations");
-        this.logData("🔍 OgcSta: Expand params:", expand);
-        for (const id of this.requestFlag.params.things.ids) {
-          listOfPromesis.push(
+        const t = this.requestFlag.params.things.includeDatastreams, n = this.requestFlag.params.things.includeLocations;
+        let i = [];
+        t && i.push("Datastreams"), n && i.push("Locations"), this.logData("🔍 OgcSta: Expand params:", i);
+        for (const s of this.requestFlag.params.things.ids)
+          e.push(
             (async () => {
-              const expandParam = expand.length > 0 ? expand.join(",") : void 0;
-              this.logData(`🔍 OgcSta: Fetching thing ${id} with expand: ${expandParam}`);
-              const thing = await new ThingsApi(
+              const o = i.length > 0 ? i.join(",") : void 0;
+              this.logData(`🔍 OgcSta: Fetching thing ${s} with expand: ${o}`);
+              const a = await new T(
                 this.baseConfigration
-              ).v11ThingsEntityIdGet({ entityId: id, $expand: expandParam });
-              if (expand.length > 0) {
-                return transformFromThingLocationDastreamToLocationThingDatastream([thing]);
-              } else {
-                return { things: [thing] };
-              }
+              ).v11ThingsEntityIdGet({ entityId: s, $expand: o });
+              return i.length > 0 ? L([a]) : { things: [a] };
             })()
           );
-        }
       }
     }
   }
   collectVariableNames() {
-    const variables = [];
-    const historyConfig = this.configuration?.history;
-    if (historyConfig?.enabled) {
-      if (historyConfig.timeRange?.startVariable) variables.push(historyConfig.timeRange.startVariable);
-      if (historyConfig.timeRange?.endVariable) variables.push(historyConfig.timeRange.endVariable);
-      if (historyConfig.phenomenonTime?.startVariable) variables.push(historyConfig.phenomenonTime.startVariable);
-      if (historyConfig.phenomenonTime?.endVariable) variables.push(historyConfig.phenomenonTime.endVariable);
-      if (historyConfig.resultTime?.startVariable) variables.push(historyConfig.resultTime.startVariable);
-      if (historyConfig.resultTime?.endVariable) variables.push(historyConfig.resultTime.endVariable);
-    }
-    return variables;
+    const e = [], t = this.configuration?.history;
+    return t?.enabled && (t.timeRange?.startVariable && e.push(t.timeRange.startVariable), t.timeRange?.endVariable && e.push(t.timeRange.endVariable), t.phenomenonTime?.startVariable && e.push(t.phenomenonTime.startVariable), t.phenomenonTime?.endVariable && e.push(t.phenomenonTime.endVariable), t.resultTime?.startVariable && e.push(t.resultTime.startVariable), t.resultTime?.endVariable && e.push(t.resultTime.endVariable)), e;
   }
   setupVariableWatchers() {
     if (!this.variableRepository) return;
-    const variableNames = this.collectVariableNames();
-    for (const variableName of variableNames) {
-      if (!this.watchedVariables.has(variableName)) {
-        const variable = this.variableRepository.getVariable(variableName);
-        if (variable) {
-          variable.subscribe(() => {
-            this.onVariableChanged();
-          });
-          this.watchedVariables.add(variableName);
-        }
+    const e = this.collectVariableNames();
+    for (const t of e)
+      if (!this.watchedVariables.has(t)) {
+        const n = this.variableRepository.getVariable(t);
+        n && (n.subscribe(() => {
+          this.onVariableChanged();
+        }), this.watchedVariables.add(t));
       }
-    }
   }
   async fetchHistoricalLocations() {
-    const historyConfig = this.configuration?.history;
-    if (!historyConfig?.enabled) return;
+    const e = this.configuration?.history;
+    if (!e?.enabled) return;
     if (this.configuration?.useCurrentLocationInsteadOfHistorical) {
       this.logHistory("📍 Using current locations instead of historical locations (useCurrentLocationInsteadOfHistorical=true)");
       return;
     }
-    const timeStart = this.resolveTimeValue(
-      historyConfig.timeRange?.start,
-      historyConfig.timeRange?.startVariable
+    const t = this.resolveTimeValue(
+      e.timeRange?.start,
+      e.timeRange?.startVariable
     ) || this.resolveTimeValue(
-      historyConfig.phenomenonTime?.start,
-      historyConfig.phenomenonTime?.startVariable
-    );
-    const timeEnd = this.resolveTimeValue(
-      historyConfig.timeRange?.end,
-      historyConfig.timeRange?.endVariable
+      e.phenomenonTime?.start,
+      e.phenomenonTime?.startVariable
+    ), n = this.resolveTimeValue(
+      e.timeRange?.end,
+      e.timeRange?.endVariable
     ) || this.resolveTimeValue(
-      historyConfig.phenomenonTime?.end,
-      historyConfig.phenomenonTime?.endVariable
+      e.phenomenonTime?.end,
+      e.phenomenonTime?.endVariable
     );
-    if (!timeEnd) return;
-    const datastreams = this.requestFlag.params?.observations || [];
-    const thingIds = /* @__PURE__ */ new Set();
-    for (const ds of datastreams) {
-      const datastream = this.resultMap.datastreams?.find((d) => d.iotId === ds.iotId);
-      if (datastream?.thing?.iotId) {
-        thingIds.add(datastream.thing.iotId);
-      }
+    if (!n) return;
+    const i = this.requestFlag.params?.observations || [], s = /* @__PURE__ */ new Set();
+    for (const a of i) {
+      const r = this.resultMap.datastreams?.find((c) => c.iotId === a.iotId);
+      r?.thing?.iotId && s.add(r.thing.iotId);
     }
-    if (thingIds.size === 0) return;
-    this.logHistory(`📍 Fetching historical locations for ${thingIds.size} things at time range: ${timeStart || "none"} to ${timeEnd}`);
-    const connection = this.connectionRepository.getConnection(
+    if (s.size === 0) return;
+    this.logHistory(`📍 Fetching historical locations for ${s.size} things at time range: ${t || "none"} to ${n}`);
+    const o = this.connectionRepository.getConnection(
       this.connection
     );
-    for (const thingId of thingIds) {
+    for (const a of s)
       try {
-        let timeFilter = `time le ${timeEnd}`;
-        if (timeStart) {
-          timeFilter = `time ge ${timeStart} and ${timeFilter}`;
-        }
-        const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=${timeFilter}&$orderby=time desc&$top=1&$expand=Locations`;
-        const response = await connection.fetch({ url }, {
+        let r = `time le ${n}`;
+        t && (r = `time ge ${t} and ${r}`);
+        const c = `/v1.1/Things(${a})/HistoricalLocations?$filter=${r}&$orderby=time desc&$top=1&$expand=Locations`, p = (await (await o.fetch({ url: c }, {
           method: "GET"
-        });
-        const data = await response.json();
-        const historicalLocations = data.value;
-        if (historicalLocations && historicalLocations.length > 0) {
-          const historicalLocation = historicalLocations[0];
-          const locations = historicalLocation.Locations;
-          if (locations && locations.length > 0) {
-            this.logHistory(`📍 Found historical location for thing ${thingId}:`, locations[0]);
-            const thing = this.resultMap.things?.find((t) => t.iotId === thingId);
-            if (thing) {
-              this.logHistory(`🔵 BEFORE UPDATE - Thing ${thingId} current location:`, JSON.stringify(thing.locations));
-            }
-            for (const datastream of this.resultMap.datastreams || []) {
-              if (datastream.thing?.iotId === thingId) {
-                if (datastream.thing.locations) {
-                  datastream.thing.locations = locations;
-                  this.logHistory(`📍 Updated datastream ${datastream.iotId} with historical location`);
-                }
-              }
-            }
-            if (thing && thing.locations) {
-              thing.locations = locations;
-              this.logHistory(`🟢 AFTER UPDATE - Thing ${thingId} new location:`, JSON.stringify(thing.locations));
-            }
-            for (const location of locations) {
-              const existingLocation = this.resultMap.locations?.find((loc) => loc.iotId === location.iotId);
-              if (existingLocation) {
-                existingLocation.location = location.location;
-                existingLocation.encodingType = location.encodingType;
-                if (location.name) existingLocation.name = location.name;
-                if (location.description) existingLocation.description = location.description;
-                if (!existingLocation.things) {
-                  existingLocation.things = [];
-                }
-                if (thing && !existingLocation.things.find((t) => t.iotId === thingId)) {
-                  existingLocation.things.push(thing);
-                  this.logHistory(`📍 Added thing ${thingId} back to location ${location.iotId}`);
-                }
-              } else if (thing) {
-                const newLocation = { ...location, things: [thing] };
-                this.resultMap.locations?.push(newLocation);
-                this.logHistory(`📍 Created new location ${location.iotId} with thing ${thingId}`);
+        })).json()).value;
+        if (p && p.length > 0) {
+          const d = p[0].Locations;
+          if (d && d.length > 0) {
+            this.logHistory(`📍 Found historical location for thing ${a}:`, d[0]);
+            const f = this.resultMap.things?.find((u) => u.iotId === a);
+            f && this.logHistory(`🔵 BEFORE UPDATE - Thing ${a} current location:`, JSON.stringify(f.locations));
+            for (const u of this.resultMap.datastreams || [])
+              u.thing?.iotId === a && u.thing.locations && (u.thing.locations = d, this.logHistory(`📍 Updated datastream ${u.iotId} with historical location`));
+            f && f.locations && (f.locations = d, this.logHistory(`🟢 AFTER UPDATE - Thing ${a} new location:`, JSON.stringify(f.locations)));
+            for (const u of d) {
+              const m = this.resultMap.locations?.find((b) => b.iotId === u.iotId);
+              if (m)
+                m.location = u.location, m.encodingType = u.encodingType, u.name && (m.name = u.name), u.description && (m.description = u.description), m.things || (m.things = []), f && !m.things.find((b) => b.iotId === a) && (m.things.push(f), this.logHistory(`📍 Added thing ${a} back to location ${u.iotId}`));
+              else if (f) {
+                const b = { ...u, things: [f] };
+                this.resultMap.locations?.push(b), this.logHistory(`📍 Created new location ${u.iotId} with thing ${a}`);
               }
             }
           }
         } else {
-          this.logHistory(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
-          const thing = this.resultMap.things?.find((t) => t.iotId === thingId);
-          for (const datastream of this.resultMap.datastreams || []) {
-            if (datastream.thing && datastream.thing.iotId === thingId) {
-              datastream.thing.locations = [];
-              this.logHistory(`📍 Cleared location for datastream ${datastream.iotId}`);
+          this.logHistory(`📍 No historical location found for thing ${a} at time ${n}`);
+          const g = this.resultMap.things?.find((d) => d.iotId === a);
+          for (const d of this.resultMap.datastreams || [])
+            d.thing && d.thing.iotId === a && (d.thing.locations = [], this.logHistory(`📍 Cleared location for datastream ${d.iotId}`));
+          g && g.locations && (g.locations = [], this.logHistory(`🟢 Cleared location for Thing ${a}`));
+          for (const d of this.resultMap.locations || [])
+            if (d.things) {
+              const f = d.things.findIndex((u) => u.iotId === a);
+              f !== -1 && (d.things.splice(f, 1), this.logHistory(`📍 Removed thing ${a} from location ${d.iotId}`));
             }
-          }
-          if (thing && thing.locations) {
-            thing.locations = [];
-            this.logHistory(`🟢 Cleared location for Thing ${thingId}`);
-          }
-          for (const location of this.resultMap.locations || []) {
-            if (location.things) {
-              const thingIndex = location.things.findIndex((t) => t.iotId === thingId);
-              if (thingIndex !== -1) {
-                location.things.splice(thingIndex, 1);
-                this.logHistory(`📍 Removed thing ${thingId} from location ${location.iotId}`);
-              }
-            }
-          }
           this.resultMap.locations = this.resultMap.locations?.filter(
-            (loc) => loc.things && loc.things.length > 0
+            (d) => d.things && d.things.length > 0
           ) || [];
         }
-      } catch (error) {
-        this.logHistory(`❌ Error fetching historical location for thing ${thingId}:`, error);
+      } catch (r) {
+        this.logHistory(`❌ Error fetching historical location for thing ${a}:`, r);
       }
-    }
   }
-  getHistoricalLocations(listOfPromesis) {
+  getHistoricalLocations(e) {
     if (this.configuration?.useCurrentLocationInsteadOfHistorical) {
       this.logHistory("📍 Using current locations instead of historical locations (useCurrentLocationInsteadOfHistorical=true)");
       return;
     }
-    const historyConfig = this.configuration?.history;
+    const t = this.configuration?.history;
     if (this.requestFlag.params && "historicalLocations" in this.requestFlag.params) {
-      const things = this.requestFlag.params.historicalLocations;
-      for (const thing of things) {
-        listOfPromesis.push(
+      const n = this.requestFlag.params.historicalLocations;
+      for (const i of n)
+        e.push(
           (async () => {
-            const thingId = thing.iotId || thing["@iot.id"];
-            const timeStart = this.resolveTimeValue(
-              historyConfig?.timeRange?.start,
-              historyConfig?.timeRange?.startVariable
+            const s = i.iotId || i["@iot.id"], o = this.resolveTimeValue(
+              t?.timeRange?.start,
+              t?.timeRange?.startVariable
             ) || this.resolveTimeValue(
-              historyConfig?.phenomenonTime?.start,
-              historyConfig?.phenomenonTime?.startVariable
-            );
-            const timeEnd = this.resolveTimeValue(
-              historyConfig?.timeRange?.end,
-              historyConfig?.timeRange?.endVariable
+              t?.phenomenonTime?.start,
+              t?.phenomenonTime?.startVariable
+            ), a = this.resolveTimeValue(
+              t?.timeRange?.end,
+              t?.timeRange?.endVariable
             ) || this.resolveTimeValue(
-              historyConfig?.phenomenonTime?.end,
-              historyConfig?.phenomenonTime?.endVariable
+              t?.phenomenonTime?.end,
+              t?.phenomenonTime?.endVariable
             );
-            if (!timeEnd || !thingId) {
+            if (!a || !s)
               return {};
-            }
             try {
-              const connection = this.connectionRepository.getConnection(
+              const r = this.connectionRepository.getConnection(
                 this.connection
               );
-              let timeFilter = `time le ${timeEnd}`;
-              if (timeStart) {
-                timeFilter = `time ge ${timeStart} and ${timeFilter}`;
-              }
-              const url = `/v1.1/Things(${thingId})/HistoricalLocations?$filter=${timeFilter}&$orderby=time desc&$top=1&$expand=Locations`;
-              const response = await connection.fetch({ url }, {
+              let c = `time le ${a}`;
+              o && (c = `time ge ${o} and ${c}`);
+              const h = `/v1.1/Things(${s})/HistoricalLocations?$filter=${c}&$orderby=time desc&$top=1&$expand=Locations`, g = (await (await r.fetch({ url: h }, {
                 method: "GET"
-              });
-              const data = await response.json();
-              const historicalLocations = data.value;
-              if (historicalLocations && historicalLocations.length > 0) {
-                const historicalLocation = historicalLocations[0];
-                const locations = historicalLocation.Locations;
-                if (locations && locations.length > 0) {
-                  const location = locations[0];
-                  this.logHistory(`📍 Found historical location for thing ${thingId}:`, location);
-                  const thingInMap = this.resultMap.things?.find((t) => t.iotId === thingId);
-                  if (thingInMap) {
-                    thingInMap.locations = [location];
-                  }
-                  for (const datastream of this.resultMap.datastreams || []) {
-                    if (datastream.thing?.iotId === thingId) {
-                      if (datastream.thing) {
-                        datastream.thing.locations = [location];
-                      }
-                    }
-                  }
-                  const existingLocation = this.resultMap.locations?.find(
-                    (loc) => loc.things?.some((t) => t.iotId === thingId)
+              })).json()).value;
+              if (g && g.length > 0) {
+                const f = g[0].Locations;
+                if (f && f.length > 0) {
+                  const u = f[0];
+                  this.logHistory(`📍 Found historical location for thing ${s}:`, u);
+                  const m = this.resultMap.things?.find((I) => I.iotId === s);
+                  m && (m.locations = [u]);
+                  for (const I of this.resultMap.datastreams || [])
+                    I.thing?.iotId === s && I.thing && (I.thing.locations = [u]);
+                  const b = this.resultMap.locations?.find(
+                    (I) => I.things?.some((Z) => Z.iotId === s)
                   );
-                  if (existingLocation) {
-                    existingLocation.location = location.location;
-                    existingLocation.encodingType = location.encodingType;
-                    if (location.name) existingLocation.name = location.name;
-                    if (location.description) existingLocation.description = location.description;
-                  }
+                  b && (b.location = u.location, b.encodingType = u.encodingType, u.name && (b.name = u.name), u.description && (b.description = u.description));
                 }
-              } else {
-                this.logHistory(`📍 No historical location found for thing ${thingId} at time ${timeEnd}`);
-              }
-            } catch (error) {
-              this.logHistory(`❌ Error fetching historical location for thing ${thingId}:`, error);
+              } else
+                this.logHistory(`📍 No historical location found for thing ${s} at time ${a}`);
+            } catch (r) {
+              this.logHistory(`❌ Error fetching historical location for thing ${s}:`, r);
             }
             return {};
           })()
         );
-      }
     }
   }
   onVariableChanged() {
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-    }
-    this.debounceTimer = setTimeout(async () => {
+    this.debounceTimer && clearTimeout(this.debounceTimer), this.debounceTimer = setTimeout(async () => {
       try {
-        if (this.lastObservationsParams) {
-          this.requestFlag = { key: FILTER, params: { observations: this.lastObservationsParams } };
-          await this.getData("OGCSTAData");
-          await this.fetchHistoricalLocations();
-          this.requestFlag = { key: NOACTION, params: void 0 };
-        }
-        this.notify();
-      } catch (error) {
-        this.logCore("Error refetching observations after variable change:", error);
+        this.lastObservationsParams && (this.requestFlag = { key: $, params: { observations: this.lastObservationsParams } }, await this.getData("OGCSTAData"), await this.fetchHistoricalLocations(), this.requestFlag = { key: At, params: void 0 }), this.notify();
+      } catch (e) {
+        this.logCore("Error refetching observations after variable change:", e);
       }
     }, 100);
   }
   // ==================== MQTT Methods ====================
   setupMQTTMessageHandler() {
-    if (!this.mqttConnection) return;
-    if (typeof this.mqttConnection.subscribe === "function") {
-      this.logMqtt("Setting up message handler");
-      this.mqttConnection.subscribe((event, data, topic) => {
-        if (event === "message" && topic) {
-          this.logMqtt("Raw message received - topic:", topic, "data:", data);
-          this.onMQTTMessage(data, topic);
-        }
-      });
-    } else {
-      this.logMqtt(" Connection does not have subscribe method");
-    }
+    this.mqttConnection && (typeof this.mqttConnection.subscribe == "function" ? (this.logMqtt("Setting up message handler"), this.mqttConnection.subscribe((e, t, n) => {
+      e === "message" && n && (this.logMqtt("Raw message received - topic:", n, "data:", t), this.onMQTTMessage(t, n));
+    })) : this.logMqtt(" Connection does not have subscribe method"));
   }
-  onMQTTMessage(message, topic) {
+  onMQTTMessage(e, t) {
     try {
-      if (typeof message === "string" && !message.startsWith("{")) {
+      if (typeof e == "string" && !e.startsWith("{"))
+        return;
+      const n = typeof e == "string" ? JSON.parse(e) : e;
+      if (!n || typeof n != "object")
+        return;
+      if (!n["@iot.id"]) {
+        this.logMqtt(" Invalid message (missing @iot.id)", e);
         return;
       }
-      const data = typeof message === "string" ? JSON.parse(message) : message;
-      if (!data || typeof data !== "object") {
+      const i = t.match(/Observations\(([^)]+)\)/);
+      if (i) {
+        this.handleObservationUpdate(i[1], n);
         return;
       }
-      if (!data["@iot.id"]) {
-        this.logMqtt(" Invalid message (missing @iot.id)", message);
+      const s = t.match(/Locations\(([^)]+)\)/);
+      if (s) {
+        this.handleLocationUpdate(s[1], n);
         return;
       }
-      const observationMatch = topic.match(/Observations\(([^)]+)\)/);
-      if (observationMatch) {
-        this.handleObservationUpdate(observationMatch[1], data);
-        return;
-      }
-      const locationMatch = topic.match(/Locations\(([^)]+)\)/);
-      if (locationMatch) {
-        this.handleLocationUpdate(locationMatch[1], data);
-        return;
-      }
-      this.logMqtt(" Unknown topic format:", topic);
-    } catch (e) {
-      this.logMqtt(" Error parsing message:", e, message);
+      this.logMqtt(" Unknown topic format:", t);
+    } catch (n) {
+      this.logMqtt(" Error parsing message:", n, e);
     }
   }
-  handleObservationUpdate(datastreamId, observation) {
-    this.logMqtt(`Received observation for datastream ${datastreamId}:`, observation);
-    const datastream = this.resultMap.datastreams?.find((ds) => ds.iotId === datastreamId);
-    if (datastream) {
-      datastream.observations = [observation];
-      this.logMqtt(`Updated datastream ${datastreamId} observations`);
-      this.triggerDebouncedUpdate();
-    } else {
-      this.logMqtt(
-        `Datastream ${datastreamId} not found in resultMap. Available datastreams:`,
-        this.resultMap.datastreams?.map((ds) => ds.iotId).slice(0, 10)
-      );
-    }
+  handleObservationUpdate(e, t) {
+    this.logMqtt(`Received observation for datastream ${e}:`, t);
+    const n = this.resultMap.datastreams?.find((i) => i.iotId === e);
+    n ? (n.observations = [t], this.logMqtt(`Updated datastream ${e} observations`), this.triggerDebouncedUpdate()) : this.logMqtt(
+      `Datastream ${e} not found in resultMap. Available datastreams:`,
+      this.resultMap.datastreams?.map((i) => i.iotId).slice(0, 10)
+    );
   }
-  handleLocationUpdate(locationId, location) {
-    this.logMqtt(`Received location update for ${locationId}:`, location);
-    const existingLocation = this.resultMap.locations?.find((loc) => loc.iotId === locationId);
-    if (existingLocation) {
-      existingLocation.location = location.location;
-      existingLocation.encodingType = location.encodingType;
-      if (location.name) existingLocation.name = location.name;
-      if (location.description) existingLocation.description = location.description;
-      this.logMqtt(`Updated location ${locationId}`);
-      for (const thing of this.resultMap.things || []) {
-        const thingLocation = thing.locations?.find((loc) => loc.iotId === locationId);
-        if (thingLocation) {
-          thingLocation.location = location.location;
-          thingLocation.encodingType = location.encodingType;
-          if (location.name) thingLocation.name = location.name;
-          if (location.description) thingLocation.description = location.description;
-        }
+  handleLocationUpdate(e, t) {
+    this.logMqtt(`Received location update for ${e}:`, t);
+    const n = this.resultMap.locations?.find((i) => i.iotId === e);
+    if (n) {
+      n.location = t.location, n.encodingType = t.encodingType, t.name && (n.name = t.name), t.description && (n.description = t.description), this.logMqtt(`Updated location ${e}`);
+      for (const i of this.resultMap.things || []) {
+        const s = i.locations?.find((o) => o.iotId === e);
+        s && (s.location = t.location, s.encodingType = t.encodingType, t.name && (s.name = t.name), t.description && (s.description = t.description));
       }
-      for (const datastream of this.resultMap.datastreams || []) {
-        const datastreamLocation = datastream.thing?.locations?.find((loc) => loc.iotId === locationId);
-        if (datastreamLocation) {
-          datastreamLocation.location = location.location;
-          datastreamLocation.encodingType = location.encodingType;
-          if (location.name) datastreamLocation.name = location.name;
-          if (location.description) datastreamLocation.description = location.description;
-        }
+      for (const i of this.resultMap.datastreams || []) {
+        const s = i.thing?.locations?.find((o) => o.iotId === e);
+        s && (s.location = t.location, s.encodingType = t.encodingType, t.name && (s.name = t.name), t.description && (s.description = t.description));
       }
       this.triggerDebouncedUpdate();
-    } else {
-      console.warn(`OGCSTA MQTT: Location ${locationId} not found in resultMap`);
-    }
+    } else
+      console.warn(`OGCSTA MQTT: Location ${e} not found in resultMap`);
   }
   triggerDebouncedUpdate() {
-    this.hasPendingMqttUpdates = true;
-    if (this.mqttUpdateTimer) {
-      clearTimeout(this.mqttUpdateTimer);
-    }
-    this.mqttUpdateTimer = setTimeout(() => {
-      if (this.hasPendingMqttUpdates) {
-        this.notify();
-        this.hasPendingMqttUpdates = false;
-      }
-      this.mqttUpdateTimer = null;
+    this.hasPendingMqttUpdates = !0, this.mqttUpdateTimer && clearTimeout(this.mqttUpdateTimer), this.mqttUpdateTimer = setTimeout(() => {
+      this.hasPendingMqttUpdates && (this.notify(), this.hasPendingMqttUpdates = !1), this.mqttUpdateTimer = null;
     }, 100);
   }
-  subscribeToDatastreams(datastreams) {
+  subscribeToDatastreams(e) {
     if (!this.mqttConnection) return;
-    const client = this.mqttConnection.client;
-    if (!client || !client.connected) {
+    const t = this.mqttConnection.client;
+    if (!t || !t.connected) {
       this.logMqtt("Client not connected, skipping subscription update");
       return;
     }
-    const requestedIds = /* @__PURE__ */ new Set();
-    if (datastreams && datastreams.length > 0) {
-      for (const ds of datastreams) {
-        const datastreamId = ds.iotId || ds["@iot.id"];
-        if (datastreamId) {
-          requestedIds.add(datastreamId);
-        }
+    const n = /* @__PURE__ */ new Set();
+    if (e && e.length > 0)
+      for (const r of e) {
+        const c = r.iotId || r["@iot.id"];
+        c && n.add(c);
       }
-    }
-    const currentIds = new Set(this.subscribedDatastreams.keys());
-    const hasChanges = requestedIds.size !== currentIds.size || Array.from(requestedIds).some((id) => !currentIds.has(id));
-    if (!hasChanges) {
+    const i = new Set(this.subscribedDatastreams.keys());
+    if (!(n.size !== i.size || Array.from(n).some((r) => !i.has(r))))
       return;
-    }
-    this.logMqtt(`Updating subscriptions - current: ${currentIds.size}, requested: ${requestedIds.size}`);
-    const toRemove = Array.from(currentIds).filter((id) => !requestedIds.has(id));
-    const toAdd = Array.from(requestedIds).filter((id) => !currentIds.has(id));
-    if (toRemove.length > 0) {
-      this.logMqtt(`Unsubscribing from ${toRemove.length} topics:`, toRemove.slice(0, 5));
-      for (const datastreamId of toRemove) {
-        const storeKey = `${this.connection}_${datastreamId}`;
-        if (typeof this.mqttConnection.disconnectStore === "function") {
-          this.mqttConnection.disconnectStore(storeKey);
-        }
-        this.subscribedDatastreams.delete(datastreamId);
+    this.logMqtt(`Updating subscriptions - current: ${i.size}, requested: ${n.size}`);
+    const o = Array.from(i).filter((r) => !n.has(r)), a = Array.from(n).filter((r) => !i.has(r));
+    if (o.length > 0) {
+      this.logMqtt(`Unsubscribing from ${o.length} topics:`, o.slice(0, 5));
+      for (const r of o) {
+        const c = `${this.connection}_${r}`;
+        typeof this.mqttConnection.disconnectStore == "function" && this.mqttConnection.disconnectStore(c), this.subscribedDatastreams.delete(r);
       }
     }
-    if (toAdd.length > 0) {
-      this.logMqtt(`Subscribing to ${toAdd.length} new topics`);
-      for (const ds of datastreams) {
-        const datastreamId = ds.iotId || ds["@iot.id"];
-        if (!datastreamId || !toAdd.includes(datastreamId)) continue;
-        const topic = `v1.1/Observations(${datastreamId})`;
-        const storeKey = `${this.connection}_${datastreamId}`;
-        if (typeof this.mqttConnection.connectStore === "function") {
-          this.mqttConnection.connectStore(storeKey, topic);
-          this.subscribedDatastreams.set(datastreamId, topic);
-          this.logMqtt(`Subscribed to ${topic}`);
-        }
+    if (a.length > 0) {
+      this.logMqtt(`Subscribing to ${a.length} new topics`);
+      for (const r of e) {
+        const c = r.iotId || r["@iot.id"];
+        if (!c || !a.includes(c)) continue;
+        const h = `v1.1/Observations(${c})`, l = `${this.connection}_${c}`;
+        typeof this.mqttConnection.connectStore == "function" && (this.mqttConnection.connectStore(l, h), this.subscribedDatastreams.set(c, h), this.logMqtt(`Subscribed to ${h}`));
       }
     }
   }
   subscribeToLocations() {
     if (!this.mqttConnection) return;
-    const client = this.mqttConnection.client;
-    if (!client || !client.connected) {
+    const e = this.mqttConnection.client;
+    if (!e || !e.connected) {
       this.logMqtt("Client not connected, skipping location subscription update");
       return;
     }
-    const locationIds = /* @__PURE__ */ new Set();
-    for (const location of this.resultMap.locations || []) {
-      if (location.iotId) {
-        locationIds.add(location.iotId);
-      }
-    }
-    const currentLocationIds = new Set(this.subscribedLocations.keys());
-    const hasChanges = locationIds.size !== currentLocationIds.size || Array.from(locationIds).some((id) => !currentLocationIds.has(id));
-    if (!hasChanges) {
-      return;
-    }
-    this.logMqtt(`Updating location subscriptions - current: ${currentLocationIds.size}, requested: ${locationIds.size}`);
-    for (const locationId of currentLocationIds) {
-      if (!locationIds.has(locationId)) {
-        const storeKey = `${this.connection}_loc_${locationId}`;
-        if (typeof this.mqttConnection.disconnectStore === "function") {
-          this.mqttConnection.disconnectStore(storeKey);
-          this.logMqtt(`Unsubscribed from v1.1/Locations(${locationId})`);
+    const t = /* @__PURE__ */ new Set();
+    for (const s of this.resultMap.locations || [])
+      s.iotId && t.add(s.iotId);
+    const n = new Set(this.subscribedLocations.keys());
+    if (t.size !== n.size || Array.from(t).some((s) => !n.has(s))) {
+      this.logMqtt(`Updating location subscriptions - current: ${n.size}, requested: ${t.size}`);
+      for (const s of n)
+        if (!t.has(s)) {
+          const o = `${this.connection}_loc_${s}`;
+          typeof this.mqttConnection.disconnectStore == "function" && (this.mqttConnection.disconnectStore(o), this.logMqtt(`Unsubscribed from v1.1/Locations(${s})`));
         }
-      }
-    }
-    this.subscribedLocations.clear();
-    if (locationIds.size > 0) {
-      this.logMqtt(`Subscribing to ${locationIds.size} location topics`);
-      for (const locationId of locationIds) {
-        const topic = `v1.1/Locations(${locationId})`;
-        const storeKey = `${this.connection}_loc_${locationId}`;
-        if (typeof this.mqttConnection.connectStore === "function") {
-          this.mqttConnection.connectStore(storeKey, topic);
-          this.subscribedLocations.set(locationId, topic);
-          this.logMqtt(`Subscribed to ${topic}`);
+      if (this.subscribedLocations.clear(), t.size > 0) {
+        this.logMqtt(`Subscribing to ${t.size} location topics`);
+        for (const s of t) {
+          const o = `v1.1/Locations(${s})`, a = `${this.connection}_loc_${s}`;
+          typeof this.mqttConnection.connectStore == "function" && (this.mqttConnection.connectStore(a, o), this.subscribedLocations.set(s, o), this.logMqtt(`Subscribed to ${o}`));
         }
       }
     }
   }
   unsubscribeAll() {
-    if (!this.mqttConnection) return;
-    this.logMqtt(`Unsubscribing from ${this.subscribedDatastreams.size} datastreams and ${this.subscribedLocations.size} locations`);
-    if (typeof this.mqttConnection.disconnectStore === "function") {
-      for (const datastreamId of this.subscribedDatastreams.keys()) {
-        const storeKey = `${this.connection}_${datastreamId}`;
-        this.mqttConnection.disconnectStore(storeKey);
+    if (this.mqttConnection) {
+      if (this.logMqtt(`Unsubscribing from ${this.subscribedDatastreams.size} datastreams and ${this.subscribedLocations.size} locations`), typeof this.mqttConnection.disconnectStore == "function") {
+        for (const e of this.subscribedDatastreams.keys()) {
+          const t = `${this.connection}_${e}`;
+          this.mqttConnection.disconnectStore(t);
+        }
+        for (const e of this.subscribedLocations.keys()) {
+          const t = `${this.connection}_loc_${e}`;
+          this.mqttConnection.disconnectStore(t);
+        }
       }
-      for (const locationId of this.subscribedLocations.keys()) {
-        const storeKey = `${this.connection}_loc_${locationId}`;
-        this.mqttConnection.disconnectStore(storeKey);
-      }
+      this.subscribedDatastreams.clear(), this.subscribedLocations.clear();
     }
-    this.subscribedDatastreams.clear();
-    this.subscribedLocations.clear();
   }
 };
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], OgcStaStore.prototype, "connectionRepository", 2);
-__decorateClass([
-  inject(VARIABLE_REPOSITORY)
-], OgcStaStore.prototype, "variableRepository", 2);
-__decorateClass([
-  inject(LOGGER_FACTORY)
-], OgcStaStore.prototype, "loggerFactory", 2);
-OgcStaStore = __decorateClass([
-  injectable()
-], OgcStaStore);
-const OGC_STA_STORE_FACTORY = serviceId("OgcStaStoreFactory");
-const factorySymbol = Symbol.for(OGC_STA_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(OGC_STA_STORE_FACTORY, (config) => {
-    if (!OgcStaStore.validateConfiguration(config)) {
+x([
+  U(P)
+], O.prototype, "connectionRepository", 2);
+x([
+  U(j)
+], O.prototype, "variableRepository", 2);
+x([
+  U(et)
+], O.prototype, "loggerFactory", 2);
+O = x([
+  X()
+], O);
+const F = it("OgcStaStoreFactory"), Bt = Symbol.for(F);
+function Y({ services: e }) {
+  e.register(F, (t) => {
+    if (!O.validateConfiguration(t))
       throw new Error(
         "Invalid OgcStaStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(OgcStaStore);
-    store.init(config);
-    return store;
+    const n = e.construct(O);
+    return n.init(t), n;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(OGC_STA_STORE_FACTORY);
+function K({ services: e }) {
+  e.unregister(F);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Wt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  FILTER,
-  FILTERRESET,
-  MQTT_UNSUBSCRIBE_ALL,
-  OGC_STA_STORE_FACTORY,
-  UPDATE_MQTT_SUBSCRIPTIONS,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.ogcsta";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.ogcsta");
-  await activate$1?.(context);
+  FILTER: $,
+  FILTERRESET: E,
+  MQTT_UNSUBSCRIBE_ALL: B,
+  OGC_STA_STORE_FACTORY: F,
+  UPDATE_MQTT_SUBSCRIPTIONS: W,
+  activate: Y,
+  deactivate: K,
+  factorySymbol: Bt
+}, Symbol.toStringTag, { value: "Module" })), A = "org.eclipse.daanse.board.app.lib.datasource.ogcsta", Yt = "0.0.1-next.1";
+async function te(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${A}: tsm runtime is not initialized`);
+  t.register(A, Wt, Yt, "lib.datasource.ogcsta"), await Y?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function ee(e) {
+  await K?.(e);
 }
 export {
-  FILTER,
-  FILTERRESET,
-  MQTT_UNSUBSCRIBE_ALL,
-  OGC_STA_STORE_FACTORY,
-  UPDATE_MQTT_SUBSCRIPTIONS,
-  activate,
-  deactivate,
-  factorySymbol
+  $ as FILTER,
+  E as FILTERRESET,
+  B as MQTT_UNSUBSCRIBE_ALL,
+  F as OGC_STA_STORE_FACTORY,
+  W as UPDATE_MQTT_SUBSCRIPTIONS,
+  te as activate,
+  ee as deactivate,
+  Bt as factorySymbol
 };

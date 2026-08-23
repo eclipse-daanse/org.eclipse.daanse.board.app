@@ -20,6 +20,7 @@ import { KpiTableWidgetEvents } from './events/KpiTableWidgetEvents'
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'KpiTableWidget'
 
@@ -29,8 +30,8 @@ const WIDGET_TYPE = 'KpiTableWidget'
 })
 export class KpiTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = KpiTableWidget
-  readonly settingsComponent = KpiTableWidgetSettings
+  readonly component: Component = KpiTableWidget
+  readonly settingsComponent: Component = KpiTableWidgetSettings
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'KpiTable'

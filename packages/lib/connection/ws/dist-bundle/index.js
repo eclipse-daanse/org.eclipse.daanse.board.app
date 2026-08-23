@@ -1,81 +1,67 @@
-import { TwoWayConnection } from "org.eclipse.daanse.board.app.lib.connection.twowayconnection";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class WSConnection extends TwoWayConnection {
+import { TwoWayConnection as a } from "org.eclipse.daanse.board.app.lib.connection.twowayconnection";
+const { serviceId: l } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class i extends a {
   socket = null;
   constructor() {
     super();
   }
-  init(configuration) {
-    this.socket = new WebSocket(configuration.url);
-    this.socket.onopen = () => {
+  init(t) {
+    this.socket = new WebSocket(t.url), this.socket.onopen = () => {
       super.onConnect();
-    };
-    this.socket.onmessage = (event) => {
-      super.onMessage(event.data);
-    };
-    this.socket.onclose = () => {
+    }, this.socket.onmessage = (n) => {
+      super.onMessage(n.data);
+    }, this.socket.onclose = () => {
       super.onClose();
-    };
-    this.socket.onerror = (error) => {
-      super.onError(error);
+    }, this.socket.onerror = (n) => {
+      super.onError(n);
     };
   }
   setConfig() {
     throw new Error("Method not implemented.");
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.url) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !!t.url;
   }
   hasTopics() {
-    return false;
+    return !1;
   }
 }
-const WSCONNECTION_FACTORY = serviceId("WSConnectionFactory");
-const factorySymbol = Symbol.for(WSCONNECTION_FACTORY);
-function createWSConnection(config) {
-  if (!WSConnection.validateConfiguration(config)) {
+const o = l("WSConnectionFactory"), u = Symbol.for(o);
+function d(e) {
+  if (!i.validateConfiguration(e))
     throw new Error(
       "Invalid WSConnection configuration. Please provide a valid configuration."
     );
-  }
-  const connection = new WSConnection();
-  connection.init(config);
-  return connection;
+  const t = new i();
+  return t.init(e), t;
 }
-function activate$1({ services }) {
-  services.register(WSCONNECTION_FACTORY, createWSConnection);
+function c({ services: e }) {
+  e.register(o, d);
 }
-function deactivate$1({ services }) {
-  services.unregister(WSCONNECTION_FACTORY);
+function s({ services: e }) {
+  e.unregister(o);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const f = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WSCONNECTION_FACTORY,
-  WSConnection,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.connection.websocket";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.connection.websocket");
-  await activate$1?.(context);
+  WSCONNECTION_FACTORY: o,
+  WSConnection: i,
+  activate: c,
+  deactivate: s,
+  factorySymbol: u
+}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.connection.websocket", p = "0.0.1-next.1";
+async function g(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${r}: tsm runtime is not initialized`);
+  t.register(r, f, p, "lib.connection.websocket"), await c?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function _(e) {
+  await s?.(e);
 }
 export {
-  WSCONNECTION_FACTORY,
-  WSConnection,
-  activate,
-  deactivate,
-  factorySymbol
+  o as WSCONNECTION_FACTORY,
+  i as WSConnection,
+  g as activate,
+  _ as deactivate,
+  u as factorySymbol
 };

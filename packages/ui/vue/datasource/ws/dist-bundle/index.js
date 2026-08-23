@@ -1,93 +1,72 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, shallowRef, ref, watch, createElementBlock, createCommentVNode, openBlock, toDisplayString, computed, resolveComponent, Fragment, createVNode } from "vue";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-const _hoisted_1 = {
+import { DATASOURCE_REPOSITORY as d } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as g, shallowRef as f, ref as s, watch as m, createElementBlock as p, createCommentVNode as y, openBlock as S, toDisplayString as v, computed as V, resolveComponent as u, Fragment as w, createVNode as i } from "vue";
+import { useTemporaryStore as b } from "org.eclipse.daanse.board.app.ui.vue.composables";
+const W = {
   key: 0,
-  style: { "overflow": "hidden", "height": "100%" }
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  style: { overflow: "hidden", height: "100%" }
+}, D = /* @__PURE__ */ g({
   __name: "Preview",
   props: {
     dataSource: {}
   },
-  setup(__props) {
-    const props = __props;
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    watch(props.dataSource, () => {
-      update();
-    }, { deep: true });
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    const data = ref(null);
-    watch(tempStore, async () => {
-      console.log("tempStore changed", tempStore.value);
-      data.value = await tempStore.value.getData("object");
-      tempStore.value.subscribe(async () => {
-        const req = await tempStore.value.getData("object");
-        data.value = req;
+  setup(e) {
+    const l = e, t = f(null), o = s(l.dataSource);
+    m(l.dataSource, () => {
+      r();
+    }, { deep: !0 });
+    const { update: r } = b(l.dataSource.type, o, t), n = s(null);
+    return m(t, async () => {
+      console.log("tempStore changed", t.value), n.value = await t.value.getData("object"), t.value.subscribe(async () => {
+        const c = await t.value.getData("object");
+        n.value = c;
       });
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      return tempStore.value && data.value ? (openBlock(), createElementBlock("div", _hoisted_1, toDisplayString(data.value), 1)) : createCommentVNode("", true);
-    };
+    }, { deep: !0 }), (c, a) => t.value && n.value ? (S(), p("div", W, v(n.value), 1)) : y("", !0);
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), R = /* @__PURE__ */ g({
   __name: "Settings",
   props: {
     config: {},
     connections: {},
     dataSources: {}
   },
-  setup(__props) {
-    const connectionsFiltered = computed(() => {
-      return __props.connections.filter((c) => c.type === "ws" || c.type === "mqtt");
-    });
-    return (_ctx, _cache) => {
-      const _component_VaSelect = resolveComponent("VaSelect");
-      const _component_VaSwitch = resolveComponent("VaSwitch");
-      const _component_VaInput = resolveComponent("VaInput");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(_component_VaSelect, {
-          modelValue: __props.config.connection,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connection = $event),
+  setup(e) {
+    const l = V(() => e.connections.filter((t) => t.type === "ws" || t.type === "mqtt"));
+    return (t, o) => {
+      const r = u("VaSelect"), n = u("VaSwitch"), c = u("VaInput");
+      return S(), p(w, null, [
+        i(r, {
+          modelValue: e.config.connection,
+          "onUpdate:modelValue": o[0] || (o[0] = (a) => e.config.connection = a),
           label: "Connection",
-          options: connectionsFiltered.value,
+          options: l.value,
           "text-by": "name",
           "value-by": "uid"
         }, null, 8, ["modelValue", "options"]),
-        createVNode(_component_VaSwitch, {
-          modelValue: __props.config.accumulate,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => __props.config.accumulate = $event),
+        i(n, {
+          modelValue: e.config.accumulate,
+          "onUpdate:modelValue": o[1] || (o[1] = (a) => e.config.accumulate = a),
           label: "Accumulate messages in array"
         }, null, 8, ["modelValue"]),
-        createVNode(_component_VaInput, {
-          modelValue: __props.config.topic,
-          "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => __props.config.topic = $event),
+        i(c, {
+          modelValue: e.config.topic,
+          "onUpdate:modelValue": o[2] || (o[2] = (a) => e.config.topic = a),
           label: "Topic"
         }, null, 8, ["modelValue"])
       ], 64);
     };
   }
-});
-const WSDatasourceIdentifier = Symbol.for("WSStoreFactory");
-const previewSymbol = Symbol.for("WsPreview");
-const settingsSymbol = Symbol.for("WsSettings");
-function activate({ services }) {
-  services.register("WsPreview", _sfc_main$1);
-  services.register("WsSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("ws", {
-    Store: WSDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+}), P = Symbol.for("WSStoreFactory"), T = Symbol.for("WsPreview"), h = Symbol.for("WsSettings");
+function I({ services: e }) {
+  e.register("WsPreview", D), e.register("WsSettings", R), e.getRequired(d).registerDatasourceType("ws", {
+    Store: P,
+    Preview: T,
+    Settings: h
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("ws");
-  services.unregister("WsPreview");
-  services.unregister("WsSettings");
+function U({ services: e }) {
+  e.getRequired(d).unregisterDatasourceType("ws"), e.unregister("WsPreview"), e.unregister("WsSettings");
 }
 export {
-  activate,
-  deactivate
+  I as activate,
+  U as deactivate
 };

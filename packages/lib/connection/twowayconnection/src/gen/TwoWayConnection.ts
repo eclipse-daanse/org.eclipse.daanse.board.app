@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -30,23 +33,23 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 export abstract class TwoWayConnection extends PubSubConnection {
 
   @Attribute() ready?: boolean;
-
+  
   onMessage(data?: any,topic?: string): void {
         throw new Error("onMessage not implemented");
   }
-
+  
   onConnect(): void {
         throw new Error("onConnect not implemented");
   }
-
+  
   onClose(): void {
         throw new Error("onClose not implemented");
   }
-
+  
   onError(error?: any): void {
         throw new Error("onError not implemented");
   }
-
+  
   hasTopics(): boolean {
         throw new Error("hasTopics not implemented");
   }

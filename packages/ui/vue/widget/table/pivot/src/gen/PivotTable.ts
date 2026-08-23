@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -52,6 +55,7 @@ export class PivotTable {
   @Attribute() showRowsProperties: boolean = false;
 
   @Attribute() showColumnsProperties: boolean = false;
+
   @Attribute() showSingleMeasureHeader: boolean = false;
   @Reference('LevelStyle') rowLevelStyles: Array<LevelStyle> = [];
   @Reference('LevelStyle') columnLevelStyles: Array<LevelStyle> = [];

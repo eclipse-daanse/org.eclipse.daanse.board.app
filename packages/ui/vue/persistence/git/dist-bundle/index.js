@@ -1,51 +1,40 @@
-(function(){var i="ui.vue.persistence.git",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=":root,\n:host {\n  --va-icon-vertical-align: middle;\n  --va-icon-user-select: none;\n}\n.va-icon {\n  vertical-align: var(--va-icon-vertical-align);\n  -webkit-user-select: var(--va-icon-user-select);\n     -moz-user-select: var(--va-icon-user-select);\n          user-select: var(--va-icon-user-select);\n}\n.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]) {\n  cursor: pointer;\n}\n.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]):focus-visible {\n  outline: 2px solid var(--va-focus) !important;\n  border-radius: 2px;\n}\n.va-icon.va-icon {\n  font-style: normal;\n}\n.va-icon--spin {\n  animation: va-icon--spin-animation 1500ms linear infinite;\n}\n.va-icon--spin-reverse {\n  animation: va-icon--spin-animation 1500ms linear infinite;\n  animation-direction: reverse;\n}\n@keyframes va-icon--spin-animation {\nfrom {\n    transform: rotate(0deg);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n.va-icon svg {\n  fill: currentColor;\n  height: 100%;\n}:root,\n:host {\n  --va-toast-display: flex;\n  --va-toast-width: 330px;\n  --va-toast-padding: 14px 1.25rem 14px 1.25rem;\n  --va-toast-border-radius: 8px;\n  --va-toast-border-color: transparent;\n  --va-toast-border: 1px solid var(--va-toast-border-color);\n  --va-toast-background-color: var(--va-background-secondary);\n  --va-toast-box-shadow: 0 2px 12px 0 var(--va-shadow);\n  --va-toast-transition: opacity 0.3s, transform 0.3s, left 0.3s, right 0.3s, top 0.4s, bottom 0.3s;\n  --va-toast-z-index: calc(var(--va-z-index-teleport-overlay) + 100);\n  /* Title */\n  --va-toast-title-font-weight: bold;\n  --va-toast-title-font-size: 1rem;\n  --va-toast-title-color: #303133;\n  --va-toast-title-margin: 0 0 6px;\n  /* Content */\n  --va-toast-content-font-size: 1rem;\n  --va-toast-content-line-height: 1.3125;\n  --va-toast-content-padding-right: 20px;\n  /* Icon */\n  --va-toast-icon-height: 24px;\n  --va-toast-icon-width: 24px;\n  --va-toast-icon-font-size: 24px;\n  /* Icon Close */\n  --va-toast-close-icon-top: 18px;\n  --va-toast-close-icon-right: 15px;\n  --va-toast-close-icon-font-size: 1rem;\n}\n.va-toast {\n  --va-toast-x-shift: 0px;\n  --va-toast-animation-x-shift: 0px;\n  --va-toast-animation-y-shift: 100%;\n  position: fixed;\n  box-sizing: border-box;\n  width: var(--va-toast-width);\n  padding: var(--va-toast-padding);\n  display: flex;\n  align-items: center;\n  border-radius: var(--va-toast-border-radius);\n  border: var(--va-toast-border);\n  background-color: var(--va-toast-background-color);\n  box-shadow: var(--va-toast-box-shadow);\n  transition: var(--va-toast-transition);\n  overflow: hidden;\n  z-index: var(--va-toast-z-index);\n  font-family: var(--va-font-family);\n  transform: translateX(var(--va-toast-x-shift));\n}\n.va-toast--top-right, .va-toast--bottom-right {\n  --va-toast-animation-x-shift: 100%;\n}\n.va-toast--top-left, .va-toast--bottom-left {\n  --va-toast-animation-x-shift: -100%;\n}\n.va-toast--top-left, .va-toast--top-center, .va-toast--top-right {\n  --va-toast-animation-y-shift: -100%;\n}\n.va-toast--inline {\n  position: static;\n}\n.va-toast--multiline {\n  min-height: 70px;\n}\n.va-toast__title {\n  font-weight: var(--va-toast-title-font-weight);\n  font-size: var(--va-toast-title-font-size);\n  margin: var(--va-toast-title-margin);\n  font-size: 0.625rem;\n  letter-spacing: 0.6px;\n  line-height: 1.2;\n  font-weight: 700;\n  text-transform: uppercase;\n}\n.va-toast__content {\n  font-size: var(--va-toast-content-font-size);\n  line-height: var(--va-toast-content-line-height);\n  padding-right: var(--va-toast-content-padding-right);\n}\n.va-toast__content p,\n.va-toast__content div {\n  margin: 0;\n}\n.va-toast__icon {\n  height: var(--va-toast-icon-height);\n  width: var(--va-toast-icon-width);\n  font-size: var(--va-toast-icon-font-size);\n}\n.va-toast__close-icon {\n  position: absolute;\n  top: 50%;\n  right: var(--va-toast-close-icon-right);\n  cursor: pointer;\n  transform: translateY(-50%);\n  font-size: var(--va-toast-close-icon-font-siz);\n  opacity: 0.7;\n}\n.va-toast__close-icon:hover {\n  opacity: 1;\n}\n.va-toast-fade-enter-from {\n  transform: translateX(calc(var(--va-toast-animation-x-shift) + var(--va-toast-x-shift)));\n}\n.va-toast-fade-leave-to {\n  transform: translateY(var(--va-toast-animation-y-shift));\n  opacity: 0;\n}.table[data-v-9cab5c48] {\n  min-height: 100px;\n}\n.table[data-v-9cab5c48] th {\n  /* border: 1px solid var(--va-background-border);*/\n}\n.table[data-v-9cab5c48] tr {\n  border-bottom: 1px solid var(--va-background-border);\n}\n.table[data-v-9cab5c48] tr td {\n  /*height: 4rem;*/\n  white-space: normal;\n}\n[data-v-9cab5c48] .additional-class {\n  font-weight: bolder;\n}\n.space[data-v-9cab5c48] {\n  width: 25px;\n}\n.flex-nowrap[data-v-9cab5c48] {\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  align-content: center;\n  align-items: center;\n}\n.minwidth100[data-v-9cab5c48] {\n  min-width: 100%;\n}\n[data-v-9cab5c48] .selected {\n  font-weight: bolder;\n  background-color: var(--va-css-variables-hover-color) !important;\n}\n.va-inner-loading--active {\n  height: auto !important;\n}\n";})();
-import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { AuthentificationError, type } from "org.eclipse.daanse.board.app.lib.persistence.git";
-import { isRef, shallowRef, ref, watchEffect, computed, withCtx, h, Text, createBlock, isVNode, getCurrentInstance, inject as inject$1, normalizeClass, normalizeStyle, shallowReadonly, unref, reactive, capitalize as capitalize$1, defineComponent, useAttrs, openBlock, resolveDynamicComponent, mergeProps, renderSlot, createElementBlock, createCommentVNode, Fragment, createTextVNode, toDisplayString, onMounted, onBeforeUnmount, Transition, withDirectives, createElementVNode, vShow, createVNode, withKeys, withModifiers, render, resolveComponent, Teleport, watch } from "vue";
-import { usePromisifiedModal } from "org.eclipse.daanse.board.app.ui.vue.composables";
-typeof WorkerGlobalScope !== "undefined" && globalThis instanceof WorkerGlobalScope;
-const noop = () => {
+(function(){var i="ui.vue.persistence.git",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=":root,:host{--va-icon-vertical-align: middle;--va-icon-user-select: none}.va-icon{vertical-align:var(--va-icon-vertical-align);-webkit-user-select:var(--va-icon-user-select);-moz-user-select:var(--va-icon-user-select);user-select:var(--va-icon-user-select)}.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]){cursor:pointer}.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]):focus-visible{outline:2px solid var(--va-focus)!important;border-radius:2px}.va-icon.va-icon{font-style:normal}.va-icon--spin{animation:va-icon--spin-animation 1.5s linear infinite}.va-icon--spin-reverse{animation:va-icon--spin-animation 1.5s linear infinite;animation-direction:reverse}@keyframes va-icon--spin-animation{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.va-icon svg{fill:currentColor;height:100%}:root,:host{--va-toast-display: flex;--va-toast-width: 330px;--va-toast-padding: 14px 1.25rem 14px 1.25rem;--va-toast-border-radius: 8px;--va-toast-border-color: transparent;--va-toast-border: 1px solid var(--va-toast-border-color);--va-toast-background-color: var(--va-background-secondary);--va-toast-box-shadow: 0 2px 12px 0 var(--va-shadow);--va-toast-transition: opacity .3s, transform .3s, left .3s, right .3s, top .4s, bottom .3s;--va-toast-z-index: calc(var(--va-z-index-teleport-overlay) + 100);--va-toast-title-font-weight: bold;--va-toast-title-font-size: 1rem;--va-toast-title-color: #303133;--va-toast-title-margin: 0 0 6px;--va-toast-content-font-size: 1rem;--va-toast-content-line-height: 1.3125;--va-toast-content-padding-right: 20px;--va-toast-icon-height: 24px;--va-toast-icon-width: 24px;--va-toast-icon-font-size: 24px;--va-toast-close-icon-top: 18px;--va-toast-close-icon-right: 15px;--va-toast-close-icon-font-size: 1rem}.va-toast{--va-toast-x-shift: 0px;--va-toast-animation-x-shift: 0px;--va-toast-animation-y-shift: 100%;position:fixed;box-sizing:border-box;width:var(--va-toast-width);padding:var(--va-toast-padding);display:flex;align-items:center;border-radius:var(--va-toast-border-radius);border:var(--va-toast-border);background-color:var(--va-toast-background-color);box-shadow:var(--va-toast-box-shadow);transition:var(--va-toast-transition);overflow:hidden;z-index:var(--va-toast-z-index);font-family:var(--va-font-family);transform:translate(var(--va-toast-x-shift))}.va-toast--top-right,.va-toast--bottom-right{--va-toast-animation-x-shift: 100%}.va-toast--top-left,.va-toast--bottom-left{--va-toast-animation-x-shift: -100%}.va-toast--top-left,.va-toast--top-center,.va-toast--top-right{--va-toast-animation-y-shift: -100%}.va-toast--inline{position:static}.va-toast--multiline{min-height:70px}.va-toast__title{font-weight:var(--va-toast-title-font-weight);font-size:var(--va-toast-title-font-size);margin:var(--va-toast-title-margin);font-size:.625rem;letter-spacing:.6px;line-height:1.2;font-weight:700;text-transform:uppercase}.va-toast__content{font-size:var(--va-toast-content-font-size);line-height:var(--va-toast-content-line-height);padding-right:var(--va-toast-content-padding-right)}.va-toast__content p,.va-toast__content div{margin:0}.va-toast__icon{height:var(--va-toast-icon-height);width:var(--va-toast-icon-width);font-size:var(--va-toast-icon-font-size)}.va-toast__close-icon{position:absolute;top:50%;right:var(--va-toast-close-icon-right);cursor:pointer;transform:translateY(-50%);font-size:var(--va-toast-close-icon-font-siz);opacity:.7}.va-toast__close-icon:hover{opacity:1}.va-toast-fade-enter-from{transform:translate(calc(var(--va-toast-animation-x-shift) + var(--va-toast-x-shift)))}.va-toast-fade-leave-to{transform:translateY(var(--va-toast-animation-y-shift));opacity:0}.table[data-v-9cab5c48]{min-height:100px}.table[data-v-9cab5c48] tr{border-bottom:1px solid var(--va-background-border)}.table[data-v-9cab5c48] tr td{white-space:normal}[data-v-9cab5c48] .additional-class{font-weight:bolder}.space[data-v-9cab5c48]{width:25px}.flex-nowrap[data-v-9cab5c48]{display:flex;flex-direction:row;flex-wrap:nowrap;align-content:center;align-items:center}.minwidth100[data-v-9cab5c48]{min-width:100%}[data-v-9cab5c48] .selected{font-weight:bolder;background-color:var(--va-css-variables-hover-color)!important}.va-inner-loading--active{height:auto!important}\n";})();
+import { REPOSITORY_REGISTRY as vt } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { AuthentificationError as mt, type as gt } from "org.eclipse.daanse.board.app.lib.persistence.git";
+import { isRef as Q, shallowRef as le, ref as $, watchEffect as ht, computed as p, withCtx as T, h as yt, Text as bt, createBlock as A, isVNode as Ct, getCurrentInstance as R, inject as he, normalizeClass as je, normalizeStyle as He, shallowReadonly as wt, unref as E, reactive as St, capitalize as xt, defineComponent as Y, useAttrs as _t, openBlock as I, resolveDynamicComponent as Pt, mergeProps as Tt, renderSlot as Ft, createElementBlock as M, createCommentVNode as J, Fragment as Ke, createTextVNode as G, toDisplayString as ce, onMounted as ye, onBeforeUnmount as $t, Transition as It, withDirectives as Fe, createElementVNode as F, vShow as $e, createVNode as x, withKeys as Et, withModifiers as Ie, render as ue, resolveComponent as z, Teleport as de, watch as ne } from "vue";
+import { usePromisifiedModal as Ot } from "org.eclipse.daanse.board.app.ui.vue.composables";
+typeof WorkerGlobalScope < "u" && globalThis instanceof WorkerGlobalScope;
+const Vt = () => {
 };
-function computedAsync(evaluationCallback, initialState, optionsOrRef) {
-  var _globalThis$reportErr;
-  let options;
-  if (isRef(optionsOrRef)) options = { evaluating: optionsOrRef };
-  else options = optionsOrRef || {};
-  const { lazy = false, flush = "sync", evaluating = void 0, shallow = true, onError = (_globalThis$reportErr = globalThis.reportError) !== null && _globalThis$reportErr !== void 0 ? _globalThis$reportErr : noop } = options;
-  const started = shallowRef(!lazy);
-  const current = shallow ? shallowRef(initialState) : ref(initialState);
-  let counter = 0;
-  watchEffect(async (onInvalidate) => {
-    if (!started.value) return;
-    counter++;
-    const counterAtBeginning = counter;
-    let hasFinished = false;
-    if (evaluating) Promise.resolve().then(() => {
-      evaluating.value = true;
+function Rt(e, t, o) {
+  var s;
+  let r;
+  Q(o) ? r = { evaluating: o } : r = o || {};
+  const { lazy: n = !1, flush: i = "sync", evaluating: a = void 0, shallow: u = !0, onError: d = (s = globalThis.reportError) !== null && s !== void 0 ? s : Vt } = r, v = le(!n), g = u ? le(t) : $(t);
+  let f = 0;
+  return ht(async (m) => {
+    if (!v.value) return;
+    f++;
+    const C = f;
+    let y = !1;
+    a && Promise.resolve().then(() => {
+      a.value = !0;
     });
     try {
-      const result = await evaluationCallback((cancelCallback) => {
-        onInvalidate(() => {
-          if (evaluating) evaluating.value = false;
-          if (!hasFinished) cancelCallback();
+      const l = await e((S) => {
+        m(() => {
+          a && (a.value = !1), y || S();
         });
       });
-      if (counterAtBeginning === counter) current.value = result;
-    } catch (e) {
-      onError(e);
+      C === f && (g.value = l);
+    } catch (l) {
+      d(l);
     } finally {
-      if (evaluating && counterAtBeginning === counter) evaluating.value = false;
-      hasFinished = true;
+      a && C === f && (a.value = !1), y = !0;
     }
-  }, { flush });
-  if (lazy) return computed(() => {
-    started.value = true;
-    return current.value;
-  });
-  else return current;
+  }, { flush: i }), n ? p(() => (v.value = !0, g.value)) : g;
 }
-const asyncComputed = computedAsync;
-const presets = {
+const Ee = Rt, Oe = {
   light: {
     // Accent
     primary: "#154EC1",
@@ -88,268 +77,119 @@ const presets = {
     focus: "#49A8FF",
     transparent: "rgba(0, 0, 0, 0)"
   }
-};
-const defaultThresholds = {
+}, kt = {
   xs: 0,
   sm: 640,
   md: 1024,
   lg: 1440,
   xl: 1920
-};
-const getBreakpointDefaultConfig = () => ({
-  enabled: true,
-  bodyClass: true,
-  thresholds: defaultThresholds
-});
-const renderSlotNode = (node, ctx = null) => {
-  return withCtx(() => [node], ctx);
-};
-const makeVNode = (node) => {
-  if (typeof node === "string") {
-    return h(Text, node);
-  }
-  return isVNode(node) ? node : createBlock(node);
-};
-const renderSlots = (slots, ctx = null) => {
-  return Object.keys(slots).reduce((acc, slotName) => {
-    const slot = slots[slotName];
-    acc[slotName] = typeof slot === "function" ? slot : renderSlotNode(slot, ctx);
-    return acc;
-  }, {});
-};
-const createRenderFn = (component) => {
-  const originalRenderFn = component.render || component.ssrRender;
-  if (!originalRenderFn) {
-    return void 0;
-  }
-  const compiledRenderedFn = originalRenderFn.name === "_sfc_render" || originalRenderFn.name === "_sfc_ssrRender";
-  return function(...args) {
-    const ctx = args[0];
-    const slots = ctx.$.slots;
-    const customCtx = new Proxy(ctx, {
-      get(target, key) {
-        if (key === "$slots") {
-          return renderSlots(slots);
-        }
-        return target[key];
+}, zt = () => ({
+  enabled: !0,
+  bodyClass: !0,
+  thresholds: kt
+}), fe = (e, t = null) => T(() => [e], t), Ve = (e) => typeof e == "string" ? yt(bt, e) : Ct(e) ? e : A(e), At = (e, t = null) => Object.keys(e).reduce((o, s) => {
+  const r = e[s];
+  return o[s] = typeof r == "function" ? r : fe(r, t), o;
+}, {}), Bt = (e) => {
+  const t = e.render || e.ssrRender;
+  if (!t)
+    return;
+  const o = t.name === "_sfc_render" || t.name === "_sfc_ssrRender";
+  return function(...s) {
+    const r = s[0], n = r.$.slots, i = new Proxy(r, {
+      get(u, d) {
+        return d === "$slots" ? At(n) : u[d];
       }
-    });
-    const thisArg = compiledRenderedFn ? void 0 : customCtx;
-    return originalRenderFn.call(thisArg, customCtx, ...args.slice(1));
+    }), a = o ? void 0 : i;
+    return t.call(a, i, ...s.slice(1));
   };
-};
-const omit = (o, keys) => {
-  return Object.keys(o).filter((key) => !keys.includes(key)).reduce((acc, key) => {
-    acc[key] = o[key];
-    return acc;
-  }, {});
-};
-const CHILD_COMPONENTS_INJECT_KEY = "$va:childComponents";
-const injectChildPropsFromParent = () => {
-  var _a;
-  const childName = (_a = getCurrentInstance()) == null ? void 0 : _a.attrs["va-child"];
-  if (!childName) {
+}, Ue = (e, t) => Object.keys(e).filter((o) => !t.includes(o)).reduce((o, s) => (o[s] = e[s], o), {}), Nt = "$va:childComponents", be = () => {
+  var e;
+  const t = (e = R()) == null ? void 0 : e.attrs["va-child"];
+  if (!t)
     return null;
-  }
-  const childProps = inject$1(CHILD_COMPONENTS_INJECT_KEY);
-  if (!(childProps == null ? void 0 : childProps.value)) {
-    return null;
-  }
-  return computed(() => childProps.value[childName]);
-};
-const KEBAB_CASE_REGEX = /([a-z0-9])([A-Z])/g;
-const toKebabCase = (str) => str.replace(KEBAB_CASE_REGEX, "$1-$2").toLowerCase();
-const findCamelCased = (obj, key) => {
-  if (key in obj) {
-    return obj[key];
-  }
-  return obj[toKebabCase(key)];
-};
-const createProps = (instance, propsFromConfig) => {
-  const instanceProps = instance.props;
-  const childPropsFromParent = injectChildPropsFromParent();
-  return new Proxy(instanceProps, {
-    get: (target, key) => {
-      var _a, _b;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      const childProp = (_a = childPropsFromParent == null ? void 0 : childPropsFromParent.value) == null ? void 0 : _a[key];
-      if (childProp !== void 0) {
-        return childProp;
-      }
-      const incomingProps = instance.vnode.props || {};
-      const originalProp = target[key];
-      const incomingProp = findCamelCased(incomingProps, key);
-      if (incomingProp !== void 0) {
-        return originalProp;
-      }
-      const propFromConfig = (_b = propsFromConfig.value) == null ? void 0 : _b[key];
-      if (propFromConfig !== void 0) {
-        return propFromConfig;
-      }
-      return originalProp;
+  const o = he(Nt);
+  return o?.value ? p(() => o.value[t]) : null;
+}, Dt = /([a-z0-9])([A-Z])/g, Mt = (e) => e.replace(Dt, "$1-$2").toLowerCase(), Lt = (e, t) => t in e ? e[t] : e[Mt(t)], Gt = (e, t) => {
+  const o = e.props, s = be();
+  return new Proxy(o, {
+    get: (r, n) => {
+      var i, a;
+      if (typeof n != "string")
+        return r[n];
+      const u = (i = s?.value) == null ? void 0 : i[n];
+      if (u !== void 0)
+        return u;
+      const d = e.vnode.props || {}, v = r[n];
+      if (Lt(d, n) !== void 0)
+        return v;
+      const f = (a = t.value) == null ? void 0 : a[n];
+      return f !== void 0 ? f : v;
     }
   });
-};
-const createAttrs = (instance, propsFromConfig) => {
-  const instanceAttrs = instance.attrs;
-  return new Proxy(instanceAttrs, {
-    get: (target, key) => {
-      var _a;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      if (key === "class") {
-        return normalizeClass([propsFromConfig.value.class, instanceAttrs.class]);
-      }
-      if (key === "style") {
-        return normalizeStyle([propsFromConfig.value.style, instanceAttrs.style]);
-      }
-      const attrFromConfig = (_a = propsFromConfig.value) == null ? void 0 : _a[key];
-      if (attrFromConfig !== void 0) {
-        return attrFromConfig;
-      }
-      return target[key];
+}, jt = (e, t) => {
+  const o = e.attrs;
+  return new Proxy(o, {
+    get: (s, r) => {
+      var n;
+      if (typeof r != "string")
+        return s[r];
+      if (r === "class")
+        return je([t.value.class, o.class]);
+      if (r === "style")
+        return He([t.value.style, o.style]);
+      const i = (n = t.value) == null ? void 0 : n[r];
+      return i !== void 0 ? i : s[r];
     },
-    ownKeys(target) {
-      return [.../* @__PURE__ */ new Set([...Object.keys(instanceAttrs), ...Object.keys(propsFromConfig.value)])];
+    ownKeys(s) {
+      return [.../* @__PURE__ */ new Set([...Object.keys(o), ...Object.keys(t.value)])];
     },
-    getOwnPropertyDescriptor(target, key) {
-      return Reflect.getOwnPropertyDescriptor(propsFromConfig.value, key) ?? Reflect.getOwnPropertyDescriptor(instanceAttrs, key);
+    getOwnPropertyDescriptor(s, r) {
+      return Reflect.getOwnPropertyDescriptor(t.value, r) ?? Reflect.getOwnPropertyDescriptor(o, r);
     }
   });
-};
-const SLOT_PREFIX = "slot:";
-const createSlots = (instance, propsFromConfig) => {
-  const instanceSlots = instance.slots;
-  const childPropsFromParent = injectChildPropsFromParent();
-  const slotsFromConfig = computed(() => {
-    return Object.keys(propsFromConfig.value).reduce((acc, key) => {
-      if (key.startsWith(SLOT_PREFIX)) {
-        acc[key.slice(SLOT_PREFIX.length)] = propsFromConfig.value[key];
-      }
-      return acc;
-    }, {});
-  });
-  return new Proxy(instanceSlots, {
-    get: (target, key) => {
-      var _a, _b;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      const prefixedKey = `${SLOT_PREFIX}${key}`;
-      const childSlot = (_a = childPropsFromParent == null ? void 0 : childPropsFromParent.value) == null ? void 0 : _a[prefixedKey];
-      if (childSlot !== void 0) {
-        return renderSlotNode(makeVNode(childSlot));
-      }
-      const originalSlot = target[key];
-      if (originalSlot !== void 0) {
-        return originalSlot;
-      }
-      const propFromConfig = (_b = slotsFromConfig.value) == null ? void 0 : _b[key];
-      if (propFromConfig !== void 0) {
-        return renderSlotNode(makeVNode(propFromConfig));
-      }
-      return originalSlot;
+}, re = "slot:", Ht = (e, t) => {
+  const o = e.slots, s = be(), r = p(() => Object.keys(t.value).reduce((n, i) => (i.startsWith(re) && (n[i.slice(re.length)] = t.value[i]), n), {}));
+  return new Proxy(o, {
+    get: (n, i) => {
+      var a, u;
+      if (typeof i != "string")
+        return n[i];
+      const d = `${re}${i}`, v = (a = s?.value) == null ? void 0 : a[d];
+      if (v !== void 0)
+        return fe(Ve(v));
+      const g = n[i];
+      if (g !== void 0)
+        return g;
+      const f = (u = r.value) == null ? void 0 : u[i];
+      return f !== void 0 ? fe(Ve(f)) : g;
     },
-    ownKeys(target) {
-      return [.../* @__PURE__ */ new Set([...Object.keys(instanceSlots), ...Object.keys(slotsFromConfig.value)])];
+    ownKeys(n) {
+      return [.../* @__PURE__ */ new Set([...Object.keys(o), ...Object.keys(r.value)])];
     },
-    getOwnPropertyDescriptor(target, key) {
-      return Reflect.getOwnPropertyDescriptor(slotsFromConfig.value, key) ?? Reflect.getOwnPropertyDescriptor(instanceSlots, key);
+    getOwnPropertyDescriptor(n, i) {
+      return Reflect.getOwnPropertyDescriptor(r.value, i) ?? Reflect.getOwnPropertyDescriptor(o, i);
     }
   });
-};
-const LocalConfigKey = "VaLocalConfig";
-const CONFIGS_DEFAULT = computed(() => []);
-function useLocalConfig() {
-  return inject$1(LocalConfigKey, CONFIGS_DEFAULT);
+}, Kt = "VaLocalConfig", Ut = p(() => []);
+function Yt() {
+  return he(Kt, Ut);
 }
-const nilValues = [null, void 0, ""];
-const isNilValue = (value) => {
-  return nilValues.includes(value);
+const Xt = [null, void 0, ""], Wt = (e) => Xt.includes(e), Re = (e) => !Wt(e), Zt = typeof process < "u" ? process : {}, qt = Zt.env || {}, Jt = qt.NODE_ENV || "", Qt = typeof __DEV__ < "u" ? __DEV__ : !["prod", "production"].includes(Jt), pe = (...e) => (Qt && console.warn(...e), !1), eo = (e) => {
+  throw new Error(`[Vuestic] ${e}`);
 };
-const notNil = (value) => !isNilValue(value);
-const processShim = typeof process !== "undefined" ? process : {};
-const envShim = processShim.env || {};
-const nodeEnv = envShim.NODE_ENV || "";
-const isDev = typeof __DEV__ !== "undefined" ? __DEV__ : !["prod", "production"].includes(nodeEnv);
-const warn = (...attrs) => {
-  if (isDev) {
-    console.warn(...attrs);
-  }
-  return false;
-};
-const throwError = (message) => {
-  throw new Error(`[Vuestic] ${message}`);
-};
-let currentApp = null;
-const getCurrentApp = () => currentApp;
-const inject = (key, value = void 0) => {
-  var _a;
-  const injectedFromApp = (_a = getCurrentApp()) == null ? void 0 : _a._context.provides[key];
-  const vm = getCurrentInstance();
-  if (vm) {
-    return inject$1(key, value);
-  }
-  return injectedFromApp ?? throwError("You're using Vuestic composable outside Vue app. Since you registered Vuestic in multiple apps, composables can not be used outside setup function anymore.");
-};
-const isObject$1 = (obj) => {
-  return obj !== null && typeof obj === "object";
-};
-const cloneDeep = (source) => {
-  if (source === null || typeof source !== "object") {
-    return source;
-  }
-  if (Array.isArray(source)) {
-    return source.map(cloneDeep);
-  }
-  if (source instanceof Date) {
-    return new Date(source.getTime());
-  }
-  if (source instanceof RegExp) {
-    return new RegExp(source.source, source.flags);
-  }
-  if (source instanceof Map) {
-    return new Map(Array.from(source.entries()).map(([key, value]) => [key, cloneDeep(value)]));
-  }
-  if (source instanceof Set) {
-    return new Set(Array.from(source.values()).map(cloneDeep));
-  }
-  if (isObject$1(source)) {
-    return Object.keys(source).reduce((acc, key) => {
-      acc[key] = cloneDeep(source[key]);
-      return acc;
-    }, {});
-  }
-  if (typeof source === "function") {
-    return source;
-  }
-  return source;
-};
-const isObject = (obj) => obj && typeof obj === "object" && !Array.isArray(obj);
-const mergeDeep = (target, source) => {
-  if (!isObject(target)) {
-    target = {};
-  }
-  Object.keys(source).forEach((key) => {
-    const targetValue = target[key];
-    const sourceValue = source[key];
-    if (sourceValue instanceof RegExp || sourceValue instanceof Date) {
-      target[key] = sourceValue;
-    } else if (isObject(targetValue) && isObject(sourceValue)) {
-      target[key] = mergeDeep(Object.create(
-        Object.getPrototypeOf(targetValue),
-        Object.getOwnPropertyDescriptors(targetValue)
-      ), sourceValue);
-    } else {
-      target[key] = sourceValue;
-    }
-  });
-  return target;
-};
-const ColorsClassesPresets = [
+let to = null;
+const Ce = () => to, Ye = (e, t = void 0) => {
+  var o;
+  const s = (o = Ce()) == null ? void 0 : o._context.provides[e];
+  return R() ? he(e, t) : s ?? eo("You're using Vuestic composable outside Vue app. Since you registered Vuestic in multiple apps, composables can not be used outside setup function anymore.");
+}, oo = (e) => e !== null && typeof e == "object", L = (e) => e === null || typeof e != "object" ? e : Array.isArray(e) ? e.map(L) : e instanceof Date ? new Date(e.getTime()) : e instanceof RegExp ? new RegExp(e.source, e.flags) : e instanceof Map ? new Map(Array.from(e.entries()).map(([t, o]) => [t, L(o)])) : e instanceof Set ? new Set(Array.from(e.values()).map(L)) : oo(e) ? Object.keys(e).reduce((t, o) => (t[o] = L(e[o]), t), {}) : e, se = (e) => e && typeof e == "object" && !Array.isArray(e), X = (e, t) => (se(e) || (e = {}), Object.keys(t).forEach((o) => {
+  const s = e[o], r = t[o];
+  r instanceof RegExp || r instanceof Date ? e[o] = r : se(s) && se(r) ? e[o] = X(Object.create(
+    Object.getPrototypeOf(s),
+    Object.getOwnPropertyDescriptors(s)
+  ), r) : e[o] = r;
+}), e), no = [
   {
     prefix: "bg",
     property: "background-color"
@@ -358,27 +198,22 @@ const ColorsClassesPresets = [
     prefix: "text",
     property: ["color", "fill"]
   }
-];
-const getColorsClassesDefaultConfig = () => ColorsClassesPresets;
-const makeColorsConfig = (values) => ({
-  ...values,
+], ro = () => no, so = (e) => ({
+  ...e,
   get variables() {
     return this.presets[this.currentPresetName];
   },
-  set variables(value) {
-    this.presets[this.currentPresetName] = value;
+  set variables(t) {
+    this.presets[this.currentPresetName] = t;
   }
-});
-const getColorDefaultConfig = () => makeColorsConfig({
+}), ao = () => so({
   threshold: 150,
   presets: {
-    light: presets.light,
-    dark: presets.dark
+    light: Oe.light,
+    dark: Oe.dark
   },
   currentPresetName: "light"
-});
-const defineIconAliases = (aliases) => aliases;
-const VuesticIconAliases = defineIconAliases([
+}), io = (e) => e, lo = io([
   {
     name: "va-unsorted",
     to: "swap_vert"
@@ -455,32 +290,24 @@ const VuesticIconAliases = defineIconAliases([
     name: "va-minus",
     to: "mi-remove"
   }
-]);
-const VuesticIconFonts = [
+]), co = [
   {
     name: "mi-{icon}",
     class: "material-icons",
-    resolve: ({ icon }) => ({ content: icon })
+    resolve: ({ icon: e }) => ({ content: e })
   },
   // Fallback
   {
     name: "{icon}",
     class: "material-icons",
-    resolve: ({ icon }) => ({ content: icon })
+    resolve: ({ icon: e }) => ({ content: e })
   }
-];
-const createIconsConfig = (config) => {
-  config.aliases = config.aliases || [];
-  config.fonts = config.fonts || [];
-  return [
-    ...config.aliases,
-    ...VuesticIconAliases,
-    ...config.fonts,
-    ...VuesticIconFonts
-  ];
-};
-const getIconDefaultConfig = () => createIconsConfig({});
-const getComponentsDefaultConfig = () => (
+], uo = (e) => (e.aliases = e.aliases || [], e.fonts = e.fonts || [], [
+  ...e.aliases,
+  ...lo,
+  ...e.fonts,
+  ...co
+]), fo = () => uo({}), po = () => (
   // TODO: Should be handled in size service
   {
     VaIcon: {
@@ -528,14 +355,14 @@ const getComponentsDefaultConfig = () => (
           pressedOpacity: 0.13
         },
         plain: {
-          plain: true,
+          plain: !0,
           hoverBehavior: "mask",
           hoverOpacity: 0.15,
           pressedBehavior: "mask",
           pressedOpacity: 0.13
         },
         plainOpacity: {
-          plain: true,
+          plain: !0,
           textOpacity: 0.6,
           hoverBehavior: "opacity",
           hoverOpacity: 1,
@@ -564,15 +391,14 @@ const getComponentsDefaultConfig = () => (
       },
       VaMenu: {
         context: {
-          cursor: true,
+          cursor: !0,
           placement: "right-start",
           trigger: "right-click"
         }
       }
     }
   }
-);
-const getI18nConfigDefaults = () => ({
+), vo = () => ({
   // PROPS
   /** Select search field default text */
   search: "Search",
@@ -669,832 +495,423 @@ const getI18nConfigDefaults = () => ({
   fileTypeIncorrect: "File type is incorrect",
   /** Select aria label */
   select: "Select an option"
-});
-const GLOBAL_CONFIG = Symbol("GLOBAL_CONFIG");
-const getDefaultConfig = () => ({
-  colors: getColorDefaultConfig(),
-  icons: getIconDefaultConfig(),
-  components: getComponentsDefaultConfig(),
-  breakpoint: getBreakpointDefaultConfig(),
-  i18n: getI18nConfigDefaults(),
-  colorsClasses: getColorsClassesDefaultConfig(),
+}), Xe = Symbol("GLOBAL_CONFIG"), mo = () => ({
+  colors: ao(),
+  icons: fo(),
+  components: po(),
+  breakpoint: zt(),
+  i18n: vo(),
+  colorsClasses: ro(),
   /**
    * global config variable to pass nuxt-link component to vuestic-ui via @vuestic/nuxt
    * TODO: give a try to integrate inertia js router components via this option
    * TODO: if this try won't be success, may be remake to provide/inject
    */
   routerComponent: void 0
-});
-const createGlobalConfig = (defaultConfig = {}) => {
-  const globalConfig = ref(mergeDeep(getDefaultConfig(), defaultConfig));
-  const getGlobalConfig = () => globalConfig.value;
-  const setGlobalConfig = (updater) => {
-    const config = typeof updater === "function" ? updater(globalConfig.value) : updater;
-    globalConfig.value = cloneDeep(config);
-  };
-  const mergeGlobalConfig = (updater) => {
-    const config = typeof updater === "function" ? updater(globalConfig.value) : updater;
-    globalConfig.value = mergeDeep(cloneDeep(globalConfig.value), config);
-  };
+}), go = (e = {}) => {
+  const t = $(X(mo(), e));
   return {
-    getGlobalConfig,
-    setGlobalConfig,
-    mergeGlobalConfig,
-    globalConfig
+    getGlobalConfig: () => t.value,
+    setGlobalConfig: (n) => {
+      const i = typeof n == "function" ? n(t.value) : n;
+      t.value = L(i);
+    },
+    mergeGlobalConfig: (n) => {
+      const i = typeof n == "function" ? n(t.value) : n;
+      t.value = X(L(t.value), i);
+    },
+    globalConfig: t
   };
-};
-const provideForCurrentApp = (provide) => {
-  var _a, _b;
-  const provides = ((_a = getCurrentInstance()) == null ? void 0 : _a.appContext.provides) || ((_b = getCurrentApp()) == null ? void 0 : _b._context.provides);
-  if (!provides) {
+}, ho = (e) => {
+  var t, o;
+  const s = ((t = R()) == null ? void 0 : t.appContext.provides) || ((o = Ce()) == null ? void 0 : o._context.provides);
+  if (!s)
     throw new Error("Vue app not found for provide");
-  }
-  provides[GLOBAL_CONFIG] = provide;
-  return provide;
+  return s[Xe] = e, e;
 };
-function useGlobalConfig() {
-  let injected = inject(GLOBAL_CONFIG);
-  if (!injected) {
-    injected = createGlobalConfig();
-    provideForCurrentApp(injected);
-  }
-  return injected;
+function Z() {
+  let e = Ye(Xe);
+  return e || (e = go(), ho(e)), e;
 }
-const withPresetProp = (props) => "preset" in props;
-const getPresetProp = (props) => withPresetProp(props) ? props.preset : void 0;
-const useComponentConfigProps = (component, originalProps) => {
-  const localConfig = useLocalConfig();
-  const { globalConfig } = useGlobalConfig();
-  const componentName = component.name;
-  const getPresetProps = (presetPropValue) => {
-    return (presetPropValue instanceof Array ? presetPropValue : [presetPropValue]).reduce((acc, presetName) => {
-      var _a, _b, _c;
-      const presetProps = (_c = (_b = (_a = globalConfig.value.components) == null ? void 0 : _a.presets) == null ? void 0 : _b[componentName]) == null ? void 0 : _c[presetName];
-      if (!presetProps) {
-        return acc;
-      }
-      const extendedPresets = getPresetProp(presetProps);
-      return {
-        ...acc,
-        ...extendedPresets ? getPresetProps(extendedPresets) : void 0,
-        ...presetProps
-      };
-    }, {});
-  };
-  const parentInjectedProps = injectChildPropsFromParent();
-  return computed(() => {
-    var _a, _b;
-    const globalConfigProps = {
-      ...(_a = globalConfig.value.components) == null ? void 0 : _a.all,
-      ...(_b = globalConfig.value.components) == null ? void 0 : _b[componentName]
+const yo = (e) => "preset" in e, ke = (e) => yo(e) ? e.preset : void 0, bo = (e, t) => {
+  const o = Yt(), { globalConfig: s } = Z(), r = e.name, n = (a) => (a instanceof Array ? a : [a]).reduce((u, d) => {
+    var v, g, f;
+    const m = (f = (g = (v = s.value.components) == null ? void 0 : v.presets) == null ? void 0 : g[r]) == null ? void 0 : f[d];
+    if (!m)
+      return u;
+    const C = ke(m);
+    return {
+      ...u,
+      ...C ? n(C) : void 0,
+      ...m
     };
-    const localConfigProps = localConfig.value.reduce((finalConfig, config) => {
-      const componentConfigProps = config[componentName];
-      return componentConfigProps ? { ...finalConfig, ...componentConfigProps } : finalConfig;
-    }, {});
-    const presetProp = [
-      originalProps,
-      parentInjectedProps == null ? void 0 : parentInjectedProps.value,
-      localConfigProps,
-      globalConfigProps
-    ].filter(notNil).map(getPresetProp).filter(notNil).at(0);
-    const presetProps = presetProp ? getPresetProps(presetProp) : void 0;
-    return { ...globalConfigProps, ...localConfigProps, ...presetProps };
+  }, {}), i = be();
+  return p(() => {
+    var a, u;
+    const d = {
+      ...(a = s.value.components) == null ? void 0 : a.all,
+      ...(u = s.value.components) == null ? void 0 : u[r]
+    }, v = o.value.reduce((m, C) => {
+      const y = C[r];
+      return y ? { ...m, ...y } : m;
+    }, {}), g = [
+      t,
+      i?.value,
+      v,
+      d
+    ].filter(Re).map(ke).filter(Re).at(0), f = g ? n(g) : void 0;
+    return { ...d, ...v, ...f };
   });
-};
-const createSetupFn = (component) => {
-  return (originalProps, ctx) => {
-    var _a;
-    const instance = getCurrentInstance();
-    const propsFromConfig = useComponentConfigProps(component, originalProps);
-    const attrsFromConfig = computed(() => {
-      return omit(propsFromConfig.value, Object.keys(originalProps));
-    });
-    const props = createProps(instance, propsFromConfig);
-    const attrs = createAttrs(instance, attrsFromConfig);
-    const slots = createSlots(instance, propsFromConfig);
-    instance.props = props;
-    instance.attrs = attrs;
-    instance.slots = slots;
-    const setupState = (_a = component.setup) == null ? void 0 : _a.call(component, shallowReadonly(props), {
-      ...ctx,
-      attrs,
-      slots
-    });
-    if (typeof setupState === "object" && !instance.exposed) {
-      ctx.expose(setupState);
-    }
-    return setupState;
-  };
-};
-const createProxyComponent = (component) => {
-  const setupFn = createSetupFn(component);
-  const renderFn = createRenderFn(component);
-  return new Proxy(component, {
-    get(target, key) {
-      if (!(key in component)) {
-        return Reflect.get(target, key);
-      }
-      if (key === "setup") {
-        return setupFn;
-      }
-      if (key === "render" || key === "ssrRender") {
-        return renderFn;
-      }
-      return Reflect.get(target, key);
+}, Co = (e) => (t, o) => {
+  var s;
+  const r = R(), n = bo(e, t), i = p(() => Ue(n.value, Object.keys(t))), a = Gt(r, n), u = jt(r, i), d = Ht(r, n);
+  r.props = a, r.attrs = u, r.slots = d;
+  const v = (s = e.setup) == null ? void 0 : s.call(e, wt(a), {
+    ...o,
+    attrs: u,
+    slots: d
+  });
+  return typeof v == "object" && !r.exposed && o.expose(v), v;
+}, ve = (e) => {
+  const t = Co(e), o = Bt(e);
+  return new Proxy(e, {
+    get(s, r) {
+      return r in e ? r === "setup" ? t : r === "render" || r === "ssrRender" ? o : Reflect.get(s, r) : Reflect.get(s, r);
     }
   });
-};
-const CLASS_COMPONENT_KEY = "__c";
-const patchClassComponent = (component) => {
-  component[CLASS_COMPONENT_KEY] = createProxyComponent(component[CLASS_COMPONENT_KEY]);
-  return component;
-};
-const withConfigTransport = (component) => {
-  if ("setup" in component) {
-    return createProxyComponent(component);
-  } else if (CLASS_COMPONENT_KEY in component) {
-    return patchClassComponent(component);
-  } else {
-    component.setup = () => ({
-      /* Fake setup function */
-    });
-    return createProxyComponent(component);
-  }
-};
-const sizesConfig = {
+}, me = "__c", wo = (e) => (e[me] = ve(e[me]), e), So = (e) => "setup" in e ? ve(e) : me in e ? wo(e) : (e.setup = () => ({
+  /* Fake setup function */
+}), ve(e)), xo = {
   defaultSize: 48,
   sizes: {
     small: 32,
     medium: 48,
     large: 64
   }
-};
-const fontSizesConfig = {
+}, _o = {
   defaultSize: 1,
   sizes: {
     small: 0.75,
     medium: 1,
     large: 1.25
   }
-};
-const useSizeProps = {
+}, Po = {
   size: {
     type: [String, Number],
     default: "",
-    validator: (size) => {
-      return typeof size === "string" || typeof size === "number";
-    }
+    validator: (e) => typeof e == "string" || typeof e == "number"
   },
   sizesConfig: {
     type: Object,
-    default: () => sizesConfig
+    default: () => xo
   },
   fontSizesConfig: {
     type: Object,
-    default: () => fontSizesConfig
+    default: () => _o
   }
-};
-const fontRegex = /(?<fontSize>\d+)(?<extension>px|rem)/i;
-const convertToRem = (px) => px / 16 - 0.5;
-const useSize = (props, componentName = ((_a) => (_a = getCurrentInstance()) == null ? void 0 : _a.type.name)()) => {
-  const { getGlobalConfig } = useGlobalConfig();
-  const sizesConfigGlobal = computed(() => {
-    var _a2, _b;
-    return componentName ? (_b = (_a2 = getGlobalConfig().components) == null ? void 0 : _a2[componentName]) == null ? void 0 : _b.sizesConfig : void 0;
-  });
-  const sizeComputed = computed(() => {
-    var _a2, _b, _c;
-    const { defaultSize, sizes } = props.sizesConfig;
-    const defaultSizeGlobal = (_a2 = sizesConfigGlobal.value) == null ? void 0 : _a2.defaultSize;
-    if (!props.size) {
-      return `${defaultSize || defaultSizeGlobal}px`;
+}, To = /(?<fontSize>\d+)(?<extension>px|rem)/i, ze = (e) => e / 16 - 0.5, Fo = (e, t = ((o) => (o = R()) == null ? void 0 : o.type.name)()) => {
+  const { getGlobalConfig: o } = Z(), s = p(() => {
+    var a, u;
+    return t ? (u = (a = o().components) == null ? void 0 : a[t]) == null ? void 0 : u.sizesConfig : void 0;
+  }), r = p(() => {
+    var a, u, d;
+    const { defaultSize: v, sizes: g } = e.sizesConfig, f = (a = s.value) == null ? void 0 : a.defaultSize;
+    if (!e.size)
+      return `${v || f}px`;
+    if (typeof e.size == "string") {
+      const m = (d = (u = s.value) == null ? void 0 : u.sizes) == null ? void 0 : d[e.size], C = g[e.size];
+      return C ? `${C}px` : m ? `${m}px` : e.size;
     }
-    if (typeof props.size === "string") {
-      const sizeFromGlobalConfig = (_c = (_b = sizesConfigGlobal.value) == null ? void 0 : _b.sizes) == null ? void 0 : _c[props.size];
-      const sizeFromProps = sizes[props.size];
-      if (sizeFromProps) {
-        return `${sizeFromProps}px`;
-      }
-      if (sizeFromGlobalConfig) {
-        return `${sizeFromGlobalConfig}px`;
-      }
-      return props.size;
-    }
-    return `${props.size}px`;
-  });
-  const fontSizeInRem = computed(() => {
-    const { defaultSize, sizes } = props.fontSizesConfig;
-    if (!props.size) {
-      return defaultSize;
-    }
-    if (typeof props.size === "string") {
-      if (props.size in sizes) {
-        return sizes[props.size];
-      }
-      const fontSizeParsed = props.size.match(fontRegex);
-      if (!fontSizeParsed || !fontSizeParsed.groups) {
+    return `${e.size}px`;
+  }), n = p(() => {
+    const { defaultSize: a, sizes: u } = e.fontSizesConfig;
+    if (!e.size)
+      return a;
+    if (typeof e.size == "string") {
+      if (e.size in u)
+        return u[e.size];
+      const d = e.size.match(To);
+      if (!d || !d.groups)
         throw new Error("Size prop should be either valid string or number");
-      }
-      const { extension, fontSize } = fontSizeParsed.groups;
-      return extension === "rem" ? +fontSize : convertToRem(+fontSize);
+      const { extension: v, fontSize: g } = d.groups;
+      return v === "rem" ? +g : ze(+g);
     }
-    return convertToRem(props.size);
-  });
-  const fontSizeComputed = computed(() => `${fontSizeInRem.value}rem`);
+    return ze(e.size);
+  }), i = p(() => `${n.value}rem`);
   return {
-    sizeComputed,
-    fontSizeComputed,
-    fontSizeInRem
+    sizeComputed: r,
+    fontSizeComputed: i,
+    fontSizeInRem: n
   };
-};
-const useComponentPresetProp = {
+}, We = {
   preset: {
     type: [String, Array],
     default: void 0
   }
-};
-const isMatchRegex = (str, regex) => {
-  return regex.test(str);
-};
-const regexGroupsValues = (str, regex) => {
-  if (typeof regex !== "string" && regex.global) {
-    return [...str.matchAll(regex)].map((g) => g.slice(1));
-  }
-  const match = str.match(regex) || [];
-  if (!match) {
-    return [];
-  }
-  if (match.length > 1) {
-    return match.slice(1);
-  }
-  return match;
-};
-const dynamicSegmentRegex = /{[^}]*}/g;
-const dynamicSegmentStringToRegex = (template) => {
-  return template.replace(dynamicSegmentRegex, "(.*)");
-};
-const dynamicSegmentsNames = (template) => {
-  return (template.match(dynamicSegmentRegex) || []).map((g) => g.replace(/{|}/g, ""));
-};
-const dynamicSegmentsValues = (str, template) => {
-  return regexGroupsValues(str, dynamicSegmentStringToRegex(template));
-};
-const dynamicSegments = (str, template) => {
-  const params = dynamicSegmentsNames(template);
-  const values = dynamicSegmentsValues(str, template);
-  return params.reduce((acc, paramValue, i) => ({ ...acc, [paramValue]: values[i] }), {});
-};
-const strictMatch = (str, regex) => {
-  return (str.match(regex) || [])[0] === str;
-};
-const isMatchDynamicSegments = (str, template) => {
-  const templateRegex = dynamicSegmentStringToRegex(template);
-  return strictMatch(str, new RegExp(templateRegex));
-};
-const isIconConfigurationString = (config) => {
-  return typeof config.name === "string";
-};
-const isIconConfigurationRegex = (config) => {
-  return config.name instanceof RegExp;
-};
-const isMatchConfiguration = (iconName, iconConfiguration) => {
-  if (isIconConfigurationString(iconConfiguration)) {
-    return isMatchDynamicSegments(iconName, iconConfiguration.name);
-  }
-  if (isIconConfigurationRegex(iconConfiguration)) {
-    return isMatchRegex(iconName, iconConfiguration.name);
-  }
-  return false;
-};
-const resolveIconConfigurationString = (iconName, iconConfiguration) => {
-  const args = dynamicSegments(iconName, iconConfiguration.name);
-  return iconConfiguration.resolve && iconConfiguration.resolve(args);
-};
-const resolveIconConfigurationRegex = (iconName, iconConfig) => {
-  if (iconConfig.name.global) {
-    throw new Error(`Bad icon config with name ${iconConfig.name}. Please, don't use global regex as name.`);
-  }
-  const args = regexGroupsValues(iconName, iconConfig.name);
-  return iconConfig.resolveFromRegex && iconConfig.resolveFromRegex(...args);
-};
-const resolveIconConfiguration = (iconName, iconConfiguration) => {
-  if (isIconConfigurationString(iconConfiguration)) {
-    return resolveIconConfigurationString(iconName, iconConfiguration);
-  }
-  if (isIconConfigurationRegex(iconConfiguration)) {
-    return resolveIconConfigurationRegex(iconName, iconConfiguration);
-  }
+}, $o = (e, t) => t.test(e), Ze = (e, t) => {
+  if (typeof t != "string" && t.global)
+    return [...e.matchAll(t)].map((s) => s.slice(1));
+  const o = e.match(t) || [];
+  return o ? o.length > 1 ? o.slice(1) : o : [];
+}, qe = /{[^}]*}/g, Je = (e) => e.replace(qe, "(.*)"), Io = (e) => (e.match(qe) || []).map((t) => t.replace(/{|}/g, "")), Eo = (e, t) => Ze(e, Je(t)), Oo = (e, t) => {
+  const o = Io(t), s = Eo(e, t);
+  return o.reduce((r, n, i) => ({ ...r, [n]: s[i] }), {});
+}, Vo = (e, t) => (e.match(t) || [])[0] === e, Ro = (e, t) => {
+  const o = Je(t);
+  return Vo(e, new RegExp(o));
+}, Qe = (e) => typeof e.name == "string", et = (e) => e.name instanceof RegExp, ko = (e, t) => Qe(t) ? Ro(e, t.name) : et(t) ? $o(e, t.name) : !1, zo = (e, t) => {
+  const o = Oo(e, t.name);
+  return t.resolve && t.resolve(o);
+}, Ao = (e, t) => {
+  if (t.name.global)
+    throw new Error(`Bad icon config with name ${t.name}. Please, don't use global regex as name.`);
+  const o = Ze(e, t.name);
+  return t.resolveFromRegex && t.resolveFromRegex(...o);
+}, Bo = (e, t) => {
+  if (Qe(t))
+    return zo(e, t);
+  if (et(t))
+    return Ao(e, t);
   throw Error("Unknown icon config");
-};
-const findMatchedIconConfiguration = (iconName, globalIconConfig, namesToIgnore = []) => {
-  const matchedConfig = globalIconConfig.find((config) => {
-    if (namesToIgnore.includes(config.name.toString())) {
-      return false;
-    }
-    return isMatchConfiguration(iconName, config);
-  });
-  if (!matchedConfig) {
-    throw new Error(`Can not find icon config from ${iconName}. Please provide default config.`);
-  }
-  return matchedConfig;
-};
-const findIconConfiguration = (iconName, globalIconConfig, namesToIgnore = []) => {
-  if (!iconName) {
+}, No = (e, t, o = []) => {
+  const s = t.find((r) => o.includes(r.name.toString()) ? !1 : ko(e, r));
+  if (!s)
+    throw new Error(`Can not find icon config from ${e}. Please provide default config.`);
+  return s;
+}, tt = (e, t, o = []) => {
+  if (!e)
     return;
-  }
-  const matchedIconConfiguration = findMatchedIconConfiguration(iconName, globalIconConfig, namesToIgnore);
-  const resolvedIconConfiguration = mergeDeep(resolveIconConfiguration(iconName, matchedIconConfiguration), matchedIconConfiguration);
-  namesToIgnore = [...namesToIgnore, matchedIconConfiguration.name.toString()];
-  return mergeDeep(
-    findIconConfiguration(resolvedIconConfiguration.to, globalIconConfig, namesToIgnore),
-    resolvedIconConfiguration
+  const s = No(e, t, o), r = X(Bo(e, s), s);
+  return o = [...o, s.name.toString()], X(
+    tt(r.to, t, o),
+    r
   );
-};
-const iconPropsFromIconConfiguration = (iconConfiguration) => {
-  const junkKeys = ["name", "to", "resolve", "resolveFromRegex"];
-  const configuration = iconConfiguration;
-  junkKeys.forEach((key) => {
-    delete configuration[key];
-  });
-  return configuration;
-};
-const getIconConfiguration = (name, iconConfig) => {
-  const configuration = findIconConfiguration(name, iconConfig);
-  if (configuration === void 0) {
-    return {};
-  }
-  return iconPropsFromIconConfiguration(configuration);
-};
-const useIcon = () => {
-  const { globalConfig } = useGlobalConfig();
+}, Do = (e) => {
+  const t = ["name", "to", "resolve", "resolveFromRegex"], o = e;
+  return t.forEach((s) => {
+    delete o[s];
+  }), o;
+}, Mo = (e, t) => {
+  const o = tt(e, t);
+  return o === void 0 ? {} : Do(o);
+}, Lo = () => {
+  const { globalConfig: e } = Z();
   return {
-    getIcon: (name) => getIconConfiguration(name, globalConfig.value.icons)
+    getIcon: (t) => Mo(t, e.value.icons)
   };
-};
-const VaAppCachePluginKey = Symbol("VaAppCachePlugin");
-const useCache = () => {
-  const cache = inject(VaAppCachePluginKey);
-  if (!cache) {
-    return {
-      colorContrast: {}
-    };
-  }
-  return cache;
-};
-const useReactiveComputed = (obj) => {
-  const objectRef = typeof obj === "function" ? computed(obj) : computed(obj);
-  const proxy = new Proxy(objectRef, {
-    get(target, p, receiver) {
-      if (typeof objectRef.value !== "object") {
-        return void 0;
-      }
-      return unref(Reflect.get(objectRef.value, p, receiver));
+}, Go = Symbol("VaAppCachePlugin"), jo = () => {
+  const e = Ye(Go);
+  return e || {
+    colorContrast: {}
+  };
+}, Ho = (e) => {
+  const t = typeof e == "function" ? p(e) : p(e), o = new Proxy(t, {
+    get(s, r, n) {
+      if (typeof t.value == "object")
+        return E(Reflect.get(t.value, r, n));
     },
-    set(target, p, value) {
-      if (isRef(objectRef.value[p]) && !isRef(value)) {
-        objectRef.value[p].value = value;
-      } else {
-        objectRef.value[p] = value;
-      }
-      return true;
+    set(s, r, n) {
+      return Q(t.value[r]) && !Q(n) ? t.value[r].value = n : t.value[r] = n, !0;
     },
-    deleteProperty(target, p) {
-      return Reflect.deleteProperty(objectRef.value, p);
+    deleteProperty(s, r) {
+      return Reflect.deleteProperty(t.value, r);
     },
-    has(target, p) {
-      if (typeof objectRef.value !== "object") {
-        return false;
-      }
-      return Reflect.has(objectRef.value, p);
+    has(s, r) {
+      return typeof t.value != "object" ? !1 : Reflect.has(t.value, r);
     },
     ownKeys() {
-      if (typeof objectRef.value !== "object") {
-        return [];
-      }
-      return Object.keys(objectRef.value);
+      return typeof t.value != "object" ? [] : Object.keys(t.value);
     },
     getOwnPropertyDescriptor() {
       return {
-        enumerable: true,
-        configurable: true
+        enumerable: !0,
+        configurable: !0
       };
     }
   });
-  return reactive(proxy);
-};
-const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-const wordsRegex = /[A-Z0-9]*(?:[^\-_|A-Z|\s.])*/gm;
-const getWords = (str) => {
-  var _a;
-  return ((_a = str.match(wordsRegex)) == null ? void 0 : _a.map((word) => word.trim().split(/([0-9]+)|([a-zA-Z]+)/g)).flat().filter(Boolean)) || [];
-};
-const camelCaseToKebabCase = (str) => {
-  return getWords(str).map((word) => word.toLowerCase()).join("-");
-};
-const kebabCaseToCamelCase = (str) => {
-  return getWords(str).map((word, index) => index === 0 ? word.toLowerCase() : capitalize(word)).join("");
-};
-const HEX_TEST_REGEX = /^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6,8})$/;
-const RGB_TEST_REGEX = /^rgba?\(([\d.]+, ?){2}[\d.]+(, ?[\d.]+)?\)$/;
-const HSL_TEST_REGEX = /hsla?\([\d.]+(deg|rad|turn|grad)?(,?\s?[\d.]+%?){2}(,?\s?(\/\s?)?[\d.]+%?)?\)/;
-const isColor = (strColor) => {
-  return HEX_TEST_REGEX.test(strColor) || RGB_TEST_REGEX.test(strColor) || HSL_TEST_REGEX.test(strColor);
-};
-const isHSLObject = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return false;
-  }
-  return "h" in obj && "s" in obj && "l" in obj;
-};
-const isRGBObject = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return false;
-  }
-  return "r" in obj && "g" in obj && "b" in obj;
-};
-const tryParseHex = (color) => {
-  if (!HEX_TEST_REGEX.test(color)) {
+  return St(o);
+}, Ko = (e) => e.charAt(0).toUpperCase() + e.slice(1).toLowerCase(), Uo = /[A-Z0-9]*(?:[^\-_|A-Z|\s.])*/gm, ot = (e) => {
+  var t;
+  return ((t = e.match(Uo)) == null ? void 0 : t.map((o) => o.trim().split(/([0-9]+)|([a-zA-Z]+)/g)).flat().filter(Boolean)) || [];
+}, ge = (e) => ot(e).map((t) => t.toLowerCase()).join("-"), Yo = (e) => ot(e).map((t, o) => o === 0 ? t.toLowerCase() : Ko(t)).join(""), nt = /^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6,8})$/, rt = /^rgba?\(([\d.]+, ?){2}[\d.]+(, ?[\d.]+)?\)$/, st = /hsla?\([\d.]+(deg|rad|turn|grad)?(,?\s?[\d.]+%?){2}(,?\s?(\/\s?)?[\d.]+%?)?\)/, Xo = (e) => nt.test(e) || rt.test(e) || st.test(e), we = (e) => typeof e != "object" || e === null ? !1 : "h" in e && "s" in e && "l" in e, Se = (e) => typeof e != "object" || e === null ? !1 : "r" in e && "g" in e && "b" in e, at = (e) => {
+  if (!nt.test(e))
     return null;
-  }
-  const hex = color.replace("#", "");
-  const isShort = hex.length < 6;
-  const [r, g, b, a] = isShort ? hex.split("").map((char) => parseInt(char + char, 16)) : hex.match(/.{2}/g).map((hex2) => parseInt(hex2, 16));
-  return { r, g, b, a: a ?? 1 };
-};
-const tryParseRgb = (color) => {
-  if (!RGB_TEST_REGEX.test(color)) {
+  const t = e.replace("#", ""), o = t.length < 6, [s, r, n, i] = o ? t.split("").map((a) => parseInt(a + a, 16)) : t.match(/.{2}/g).map((a) => parseInt(a, 16));
+  return { r: s, g: r, b: n, a: i ?? 1 };
+}, it = (e) => {
+  if (!rt.test(e))
     return null;
-  }
-  const [r, g, b, a = 1] = color.match(/[\d.]+/g).map(Number);
-  return { r, g, b, a };
-};
-const tryParseHsla = (color) => {
-  if (!HSL_TEST_REGEX.test(color)) {
+  const [t, o, s, r = 1] = e.match(/[\d.]+/g).map(Number);
+  return { r: t, g: o, b: s, a: r };
+}, lt = (e) => {
+  if (!st.test(e))
     return null;
-  }
-  const [h2, s, l, a = "1"] = color.match(/[\d.]+%?/g);
+  const [t, o, s, r = "1"] = e.match(/[\d.]+%?/g);
   return {
-    h: Number(h2),
-    s: Number(s.replace("%", "")),
-    l: Number(l.replace("%", "")),
-    a: a.endsWith("%") ? Number(a.replace("%", "")) / 100 : Number(a)
+    h: Number(t),
+    s: Number(o.replace("%", "")),
+    l: Number(s.replace("%", "")),
+    a: r.endsWith("%") ? Number(r.replace("%", "")) / 100 : Number(r)
   };
-};
-const rgbaToHsla = (rgba) => {
-  const r = rgba.r / 255;
-  const g = rgba.g / 255;
-  const b = rgba.b / 255;
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h2 = 0;
-  let s = 0;
-  const l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h2 = (g - b) / d + (g < b ? 6 : 0);
+}, Ae = (e) => {
+  const t = e.r / 255, o = e.g / 255, s = e.b / 255, r = Math.max(t, o, s), n = Math.min(t, o, s);
+  let i = 0, a = 0;
+  const u = (r + n) / 2;
+  if (r !== n) {
+    const d = r - n;
+    switch (a = u > 0.5 ? d / (2 - r - n) : d / (r + n), r) {
+      case t:
+        i = (o - s) / d + (o < s ? 6 : 0);
         break;
-      case g:
-        h2 = (b - r) / d + 2;
+      case o:
+        i = (s - t) / d + 2;
         break;
-      case b:
-        h2 = (r - g) / d + 4;
+      case s:
+        i = (t - o) / d + 4;
         break;
     }
-    h2 *= 60;
+    i *= 60;
   }
-  return { h: Math.round(h2), s: Math.round(s * 100), l: Math.round(l * 100), a: rgba.a };
-};
-const hueToRgb = (p, q, t) => {
-  if (t < 0) {
-    t += 1;
-  }
-  if (t > 1) {
-    t -= 1;
-  }
-  if (t < 1 / 6) {
-    return p + (q - p) * 6 * t;
-  }
-  if (t < 1 / 2) {
-    return q;
-  }
-  if (t < 2 / 3) {
-    return p + (q - p) * (2 / 3 - t) * 6;
-  }
-  return p;
-};
-const hslaToRgba = (hsla) => {
-  const h2 = hsla.h / 360;
-  const s = hsla.s / 100;
-  const l = hsla.l / 100;
-  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-  const p = 2 * l - q;
-  const r = hueToRgb(p, q, h2 + 1 / 3);
-  const g = hueToRgb(p, q, h2);
-  const b = hueToRgb(p, q, h2 - 1 / 3);
-  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255), a: hsla.a };
-};
-const parseColorToHSL = (color) => {
-  if (isHSLObject(color)) {
-    return { ...color };
-  }
-  if (isRGBObject(color)) {
-    return rgbaToHsla(color);
-  }
-  const rgb = tryParseHex(color) ?? tryParseRgb(color);
-  if (rgb) {
-    return rgbaToHsla(rgb);
-  }
-  const hsl = tryParseHsla(color);
-  if (hsl) {
-    return hsl;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const hslToString = ({ h: h2, s, l, a }) => {
-  return `hsla(${h2},${s}%,${l}%,${a ?? 1})`;
-};
-const parseColorToRGB = (color) => {
-  if (isRGBObject(color)) {
-    return { ...color };
-  }
-  if (isHSLObject(color)) {
-    return hslaToRgba(color);
-  }
-  const hsl = tryParseHsla(color);
-  if (hsl) {
-    return hslaToRgba(hsl);
-  }
-  const rgb = tryParseHex(color) ?? tryParseRgb(color);
-  if (rgb) {
-    return rgb;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const rgbToString = ({ r, g, b, a }) => {
-  if (a === 1) {
-    return `rgb(${r},${g},${b})`;
-  }
-  return `rgba(${r},${g},${b},${a ?? 1})`;
-};
-const colorToString = (color) => {
-  if (isHSLObject(color)) {
-    return hslToString(color);
-  }
-  if (isRGBObject(color)) {
-    return rgbToString(color);
-  }
-  if (typeof color === "string") {
-    return color;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const setHSLA = (color, { h: h2, s, l, a }) => {
-  const parsedColor = parseColorToHSL(color);
-  parsedColor.a = parsedColor.a ?? 1;
-  parsedColor.h = h2 ?? parsedColor.h;
-  parsedColor.s = s ?? parsedColor.s;
-  parsedColor.l = l ?? parsedColor.l;
-  parsedColor.a = a ?? parsedColor.a;
-  if (parsedColor.h < 0) {
-    parsedColor.h = 360 + parsedColor.h;
-  }
-  if (parsedColor.h > 360) {
-    parsedColor.h = parsedColor.h - 360;
-  }
-  parsedColor.s = Math.max(0, Math.min(100, parsedColor.s));
-  parsedColor.l = Math.max(0, Math.min(100, parsedColor.l));
-  parsedColor.a = Math.max(0, Math.min(1, parsedColor.a));
-  return parsedColor;
-};
-const shiftHSLA = (color, { h: h2, s, l, a }) => {
-  const parsedColor = parseColorToHSL(color);
-  parsedColor.a = parsedColor.a ?? 1;
-  parsedColor.h += h2 ?? 0;
-  parsedColor.s += s ?? 0;
-  parsedColor.l += l ?? 0;
-  parsedColor.a += a ?? 0;
-  if (parsedColor.h < 0) {
-    parsedColor.h = 360 + parsedColor.h;
-  }
-  if (parsedColor.h > 360) {
-    parsedColor.h = parsedColor.h - 360;
-  }
-  parsedColor.s = Math.max(0, Math.min(100, parsedColor.s));
-  parsedColor.l = Math.max(0, Math.min(100, parsedColor.l));
-  parsedColor.a = Math.max(0, Math.min(1, parsedColor.a));
-  return parsedColor;
-};
-const isCSSVariable = (strColor) => /var\(--.+\)/.test(strColor);
-const cssVariableName = (colorName) => `--va-${camelCaseToKebabCase(colorName)}`;
-const normalizeColorName = (colorName) => kebabCaseToCamelCase(colorName);
-const colorToRgba = (color, opacity) => {
-  const { r, g, b } = parseColorToRGB(color);
-  return rgbToString({ r, g, b, a: opacity });
-};
-const getColorLightness = (color) => {
-  const { r, g, b } = parseColorToRGB(color);
-  return Math.sqrt(r * r * 0.241 + g * g * 0.691 + b * b * 0.068);
-};
-const getBoxShadowColor = (color, opacity = 0.4) => {
-  return colorToRgba(color, opacity);
-};
-const getBoxShadowColorFromBg = (background, opacity = 0.4) => {
-  return colorToRgba(background, opacity);
-};
-const getHoverColor = (color, opacity = 0.2) => {
-  return colorToRgba(color, opacity);
-};
-const getFocusColor = (color, opacity = 0.3) => {
-  return colorToRgba(color, opacity);
-};
-const shiftHSLAColor = (color, shift) => {
-  return hslToString(shiftHSLA(parseColorToHSL(color), shift));
-};
-const setHSLAColor = (color, shift) => {
-  return hslToString(setHSLA(parseColorToHSL(color), shift));
-};
-const shiftGradientColor = (color) => {
-  const newColor = parseColorToHSL(color);
-  if (newColor.s < 10) {
-    return shiftHSLAColor(newColor, { h: 2, s: 5, l: 10 });
-  }
-  if (newColor.s < 30) {
-    return shiftHSLAColor(newColor, { s: -14, l: 11 });
-  }
-  if (newColor.h >= 0 && newColor.h < 44 || newColor.h >= 285) {
-    return shiftHSLAColor(newColor, { h: 11, s: 27, l: 8 });
-  }
-  if (newColor.h >= 44 && newColor.h < 85) {
-    return shiftHSLAColor(newColor, { h: 3, l: 9 });
-  }
-  if (newColor.h >= 85 && newColor.h < 165) {
-    return shiftHSLAColor(newColor, { h: 16, l: 14 });
-  }
-  if (newColor.h >= 165 && newColor.h < 285) {
-    return shiftHSLAColor(newColor, { h: -15, s: 3, l: 2 });
-  }
+  return { h: Math.round(i), s: Math.round(a * 100), l: Math.round(u * 100), a: e.a };
+}, ae = (e, t, o) => (o < 0 && (o += 1), o > 1 && (o -= 1), o < 1 / 6 ? e + (t - e) * 6 * o : o < 1 / 2 ? t : o < 2 / 3 ? e + (t - e) * (2 / 3 - o) * 6 : e), Be = (e) => {
+  const t = e.h / 360, o = e.s / 100, s = e.l / 100, r = s < 0.5 ? s * (1 + o) : s + o - s * o, n = 2 * s - r, i = ae(n, r, t + 1 / 3), a = ae(n, r, t), u = ae(n, r, t - 1 / 3);
+  return { r: Math.round(i * 255), g: Math.round(a * 255), b: Math.round(u * 255), a: e.a };
+}, q = (e) => {
+  if (we(e))
+    return { ...e };
+  if (Se(e))
+    return Ae(e);
+  const t = at(e) ?? it(e);
+  if (t)
+    return Ae(t);
+  const o = lt(e);
+  if (o)
+    return o;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, xe = ({ h: e, s: t, l: o, a: s }) => `hsla(${e},${t}%,${o}%,${s ?? 1})`, _e = (e) => {
+  if (Se(e))
+    return { ...e };
+  if (we(e))
+    return Be(e);
+  const t = lt(e);
+  if (t)
+    return Be(t);
+  const o = at(e) ?? it(e);
+  if (o)
+    return o;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, ct = ({ r: e, g: t, b: o, a: s }) => s === 1 ? `rgb(${e},${t},${o})` : `rgba(${e},${t},${o},${s ?? 1})`, Wo = (e) => {
+  if (we(e))
+    return xe(e);
+  if (Se(e))
+    return ct(e);
+  if (typeof e == "string")
+    return e;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, Zo = (e, { h: t, s: o, l: s, a: r }) => {
+  const n = q(e);
+  return n.a = n.a ?? 1, n.h = t ?? n.h, n.s = o ?? n.s, n.l = s ?? n.l, n.a = r ?? n.a, n.h < 0 && (n.h = 360 + n.h), n.h > 360 && (n.h = n.h - 360), n.s = Math.max(0, Math.min(100, n.s)), n.l = Math.max(0, Math.min(100, n.l)), n.a = Math.max(0, Math.min(1, n.a)), n;
+}, qo = (e, { h: t, s: o, l: s, a: r }) => {
+  const n = q(e);
+  return n.a = n.a ?? 1, n.h += t ?? 0, n.s += o ?? 0, n.l += s ?? 0, n.a += r ?? 0, n.h < 0 && (n.h = 360 + n.h), n.h > 360 && (n.h = n.h - 360), n.s = Math.max(0, Math.min(100, n.s)), n.l = Math.max(0, Math.min(100, n.l)), n.a = Math.max(0, Math.min(1, n.a)), n;
+}, Jo = (e) => /var\(--.+\)/.test(e), Qo = (e) => `--va-${ge(e)}`, Ne = (e) => Yo(e), j = (e, t) => {
+  const { r: o, g: s, b: r } = _e(e);
+  return ct({ r: o, g: s, b: r, a: t });
+}, De = (e) => {
+  const { r: t, g: o, b: s } = _e(e);
+  return Math.sqrt(t * t * 0.241 + o * o * 0.691 + s * s * 0.068);
+}, en = (e, t = 0.4) => j(e, t), tn = (e, t = 0.4) => j(e, t), on = (e, t = 0.2) => j(e, t), nn = (e, t = 0.3) => j(e, t), D = (e, t) => xe(qo(q(e), t)), rn = (e, t) => xe(Zo(q(e), t)), sn = (e) => {
+  const t = q(e);
+  if (t.s < 10)
+    return D(t, { h: 2, s: 5, l: 10 });
+  if (t.s < 30)
+    return D(t, { s: -14, l: 11 });
+  if (t.h >= 0 && t.h < 44 || t.h >= 285)
+    return D(t, { h: 11, s: 27, l: 8 });
+  if (t.h >= 44 && t.h < 85)
+    return D(t, { h: 3, l: 9 });
+  if (t.h >= 85 && t.h < 165)
+    return D(t, { h: 16, l: 14 });
+  if (t.h >= 165 && t.h < 285)
+    return D(t, { h: -15, s: 3, l: 2 });
   throw new Error("This method should handle all colors. But it didn't for some reason.");
-};
-const getGradientBackground = (color) => {
-  const colorLeft = shiftGradientColor(color);
-  return `linear-gradient(to right, ${colorLeft}, ${colorToString(color)})`;
-};
-const getStateMaskGradientBackground = (color, maskColor, maskOpacity) => {
-  const mask = colorToRgba(maskColor, maskOpacity);
-  return `linear-gradient(0deg, ${mask}, ${mask}), ${color}`;
-};
-const isColorTransparent = (color) => {
-  if (!color) {
-    return false;
-  }
-  if (color === "transparent") {
-    return true;
-  }
-  return parseColorToRGB(color).a <= 0.1;
-};
-const useColors = () => {
-  const gc = useGlobalConfig();
-  if (!gc) {
+}, an = (e) => `linear-gradient(to right, ${sn(e)}, ${Wo(e)})`, ln = (e, t, o) => {
+  const s = j(t, o);
+  return `linear-gradient(0deg, ${s}, ${s}), ${e}`;
+}, cn = (e) => e ? e === "transparent" ? !0 : _e(e).a <= 0.1 : !1, Pe = () => {
+  const e = Z();
+  if (!e)
     throw new Error("useColors must be used in setup function or Vuestic GlobalConfigPlugin is not registered!");
-  }
-  const { globalConfig } = gc;
-  const colors = useReactiveComputed({
-    get: () => globalConfig.value.colors.presets[globalConfig.value.colors.currentPresetName],
-    set: (v) => {
-      setColors(v);
+  const { globalConfig: t } = e, o = Ho({
+    get: () => t.value.colors.presets[t.value.colors.currentPresetName],
+    set: (l) => {
+      s(l);
     }
-  });
-  const setColors = (colors2) => {
-    globalConfig.value.colors.presets[globalConfig.value.colors.currentPresetName] = {
-      ...globalConfig.value.colors.variables,
-      ...colors2
+  }), s = (l) => {
+    t.value.colors.presets[t.value.colors.currentPresetName] = {
+      ...t.value.colors.variables,
+      ...l
     };
-  };
-  const getColors = () => {
-    return colors;
-  };
-  const getColor = (prop, defaultColor, preferVariables) => {
-    if (!defaultColor) {
-      defaultColor = colors.primary;
-    }
-    if (prop === "transparent") {
+  }, r = () => o, n = (l, S, w) => {
+    if (S || (S = o.primary), l === "transparent")
       return "#ffffff00";
+    if (l === "currentColor")
+      return l;
+    if (l?.startsWith("on")) {
+      const B = l.slice(2);
+      if (o[Ne(B)])
+        return n(f(n(B)), void 0, w);
     }
-    if (prop === "currentColor") {
-      return prop;
+    l || (l = n(S));
+    const _ = o[l] || o[Ne(l)];
+    return _ ? w ? `var(${Qo(l)})` : _ : Xo(l) || w && Jo(l) ? l : (pe(`'${l}' is not a proper color! Use HEX or default color themes
+      names (https://vuestic.dev/en/styles/colors#default-color-themes)`), n(S));
+  }, i = (l) => p({
+    get() {
+      return n(l);
+    },
+    set(S) {
+      s({ [l]: S });
     }
-    if (prop == null ? void 0 : prop.startsWith("on")) {
-      const colorName = prop.slice(2);
-      if (colors[normalizeColorName(colorName)]) {
-        return getColor(getTextColor(getColor(colorName)), void 0, preferVariables);
-      }
+  }), a = (l, S = "va") => Object.keys(l).filter((w) => l[w] !== void 0).reduce((w, _) => (w[`--${S}-${ge(_)}`] = n(l[_], void 0, !0), w[`--${S}-on-${ge(_)}`] = n(f(n(l[_])), void 0, !0), w), {}), u = jo(), d = (l) => typeof l != "string" ? De(l) : (u.colorContrast[l] || (u.colorContrast[l] = De(l)), u.colorContrast[l]), v = p(() => d(n("textPrimary")) > 255 / 2 ? "textInverted" : "textPrimary"), g = p(() => d(n("textPrimary")) > 255 / 2 ? "textPrimary" : "textInverted"), f = (l, S, w) => {
+    const _ = `on${xt(String(l))}`;
+    return o[_] ? o[_] : (S = S || v.value, w = w || g.value, d(l) > t.value.colors.threshold ? S : w);
+  }, m = p({
+    get: () => t.value.colors.currentPresetName,
+    set: (l) => {
+      y(l);
     }
-    if (!prop) {
-      prop = getColor(defaultColor);
-    }
-    const colorValue = colors[prop] || colors[normalizeColorName(prop)];
-    if (colorValue) {
-      return preferVariables ? `var(${cssVariableName(prop)})` : colorValue;
-    }
-    if (isColor(prop)) {
-      return prop;
-    }
-    if (preferVariables && isCSSVariable(prop)) {
-      return prop;
-    }
-    warn(`'${prop}' is not a proper color! Use HEX or default color themes
-      names (https://vuestic.dev/en/styles/colors#default-color-themes)`);
-    return getColor(defaultColor);
-  };
-  const getComputedColor = (color) => {
-    return computed({
-      get() {
-        return getColor(color);
-      },
-      set(v) {
-        setColors({ [color]: v });
-      }
-    });
-  };
-  const colorsToCSSVariable = (colors2, prefix = "va") => {
-    return Object.keys(colors2).filter((key) => colors2[key] !== void 0).reduce((acc, colorName) => {
-      acc[`--${prefix}-${camelCaseToKebabCase(colorName)}`] = getColor(colors2[colorName], void 0, true);
-      acc[`--${prefix}-on-${camelCaseToKebabCase(colorName)}`] = getColor(getTextColor(getColor(colors2[colorName])), void 0, true);
-      return acc;
-    }, {});
-  };
-  const cache = useCache();
-  const getColorLightnessFromCache = (color) => {
-    if (typeof color !== "string") {
-      return getColorLightness(color);
-    }
-    if (!cache.colorContrast[color]) {
-      cache.colorContrast[color] = getColorLightness(color);
-    }
-    return cache.colorContrast[color];
-  };
-  const computedDarkColor = computed(() => {
-    return getColorLightnessFromCache(getColor("textPrimary")) > 255 / 2 ? "textInverted" : "textPrimary";
-  });
-  const computedLightColor = computed(() => {
-    return getColorLightnessFromCache(getColor("textPrimary")) > 255 / 2 ? "textPrimary" : "textInverted";
-  });
-  const getTextColor = (color, darkColor, lightColor) => {
-    const onColorName = `on${capitalize$1(String(color))}`;
-    if (colors[onColorName]) {
-      return colors[onColorName];
-    }
-    darkColor = darkColor || computedDarkColor.value;
-    lightColor = lightColor || computedLightColor.value;
-    return getColorLightnessFromCache(color) > globalConfig.value.colors.threshold ? darkColor : lightColor;
-  };
-  const currentPresetName = computed({
-    get: () => globalConfig.value.colors.currentPresetName,
-    set: (v) => {
-      applyPreset(v);
-    }
-  });
-  const presets2 = computed(() => globalConfig.value.colors.presets);
-  const applyPreset = (presetName) => {
-    globalConfig.value.colors.currentPresetName = presetName;
-    if (!globalConfig.value.colors.presets[presetName]) {
-      return warn(`Preset ${presetName} does not exist`);
-    }
+  }), C = p(() => t.value.colors.presets), y = (l) => {
+    if (t.value.colors.currentPresetName = l, !t.value.colors.presets[l])
+      return pe(`Preset ${l} does not exist`);
   };
   return {
-    colors,
-    currentPresetName,
-    presets: presets2,
-    applyPreset,
-    setColors,
-    getColors,
-    getColor,
-    getComputedColor,
-    getBoxShadowColor,
-    getBoxShadowColorFromBg,
-    getHoverColor,
-    getFocusColor,
-    getGradientBackground,
-    getTextColor,
-    shiftHSLAColor,
-    setHSLAColor,
-    colorsToCSSVariable,
-    colorToRgba,
-    getStateMaskGradientBackground
+    colors: o,
+    currentPresetName: m,
+    presets: C,
+    applyPreset: y,
+    setColors: s,
+    getColors: r,
+    getColor: n,
+    getComputedColor: i,
+    getBoxShadowColor: en,
+    getBoxShadowColorFromBg: tn,
+    getHoverColor: on,
+    getFocusColor: nn,
+    getGradientBackground: an,
+    getTextColor: f,
+    shiftHSLAColor: D,
+    setHSLAColor: rn,
+    colorsToCSSVariable: a,
+    colorToRgba: j,
+    getStateMaskGradientBackground: ln
   };
-};
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaIcon"
-  },
+}, un = /* @__PURE__ */ Y({
+  name: "VaIcon",
   __name: "VaIcon",
   props: {
-    ...useSizeProps,
-    ...useComponentPresetProp,
+    ...Po,
+    ...We,
     name: { type: String, default: "" },
     tag: { type: String },
     component: { type: Object },
@@ -1504,808 +921,496 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     flip: {
       type: String,
       default: "off",
-      validator: (value) => ["off", "horizontal", "vertical", "both"].includes(value)
+      validator: (e) => ["off", "horizontal", "vertical", "both"].includes(e)
     }
   },
-  setup(__props) {
-    const props = __props;
-    const { getColor } = useColors();
-    const { sizeComputed } = useSize(props);
-    const { getIcon } = useIcon();
-    const iconConfig = computed(() => getIcon(props.name));
-    const computedTag = computed(() => props.component || props.tag || iconConfig.value.component || iconConfig.value.tag || "i");
-    const attrs = useAttrs();
-    const computedAttrs = computed(() => ({ ...iconConfig.value.attrs, ...omit(attrs, ["class"]) }));
-    const getSpinClass = (spin) => {
-      if (spin === void 0 || spin === false) {
-        return;
-      }
-      return spin === "counter-clockwise" ? "va-icon--spin-reverse" : "va-icon--spin";
-    };
-    const computedClass = computed(() => [
-      iconConfig.value.class,
-      getSpinClass(props.spin ?? iconConfig.value.spin)
-    ]);
-    const transformStyle = computed(() => {
-      const rotation = props.rotation ? `rotate(${props.rotation}deg)` : "";
-      const flipY = props.flip === "vertical" || props.flip === "both" ? -1 : 1;
-      const flipX = props.flip === "horizontal" || props.flip === "both" ? -1 : 1;
-      const scale = props.flip === "off" ? "" : `scale(${flipY}, ${flipX})`;
-      return `${scale} ${rotation}`.trim();
-    });
-    const computedStyle = computed(() => ({
-      transform: transformStyle.value,
-      cursor: attrs.onClick ? "pointer" : null,
-      color: props.color ? getColor(props.color, void 0, true) : iconConfig.value.color,
-      fontSize: sizeComputed.value,
-      height: sizeComputed.value,
-      lineHeight: sizeComputed.value
-    }));
-    const tabindexComputed = computed(() => attrs.tabindex ?? -1);
-    const ariaHiddenComputed = computed(() => attrs.role !== "button" || tabindexComputed.value < 0);
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(resolveDynamicComponent(computedTag.value), mergeProps({
-        class: ["va-icon", computedClass.value],
-        style: computedStyle.value,
-        "aria-hidden": ariaHiddenComputed.value,
-        notranslate: ""
-      }, computedAttrs.value), {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default", {}, () => [
-            iconConfig.value.content ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              createTextVNode(toDisplayString(iconConfig.value.content), 1)
-            ], 64)) : createCommentVNode("", true)
-          ])
-        ]),
-        _: 3
-      }, 16, ["class", "style", "aria-hidden"]);
-    };
+  setup(e) {
+    const t = e, { getColor: o } = Pe(), { sizeComputed: s } = Fo(t), { getIcon: r } = Lo(), n = p(() => r(t.name)), i = p(() => t.component || t.tag || n.value.component || n.value.tag || "i"), a = _t(), u = p(() => ({ ...n.value.attrs, ...Ue(a, ["class"]) })), d = (y) => {
+      if (!(y === void 0 || y === !1))
+        return y === "counter-clockwise" ? "va-icon--spin-reverse" : "va-icon--spin";
+    }, v = p(() => [
+      n.value.class,
+      d(t.spin ?? n.value.spin)
+    ]), g = p(() => {
+      const y = t.rotation ? `rotate(${t.rotation}deg)` : "", l = t.flip === "vertical" || t.flip === "both" ? -1 : 1, S = t.flip === "horizontal" || t.flip === "both" ? -1 : 1;
+      return `${t.flip === "off" ? "" : `scale(${l}, ${S})`} ${y}`.trim();
+    }), f = p(() => ({
+      transform: g.value,
+      cursor: a.onClick ? "pointer" : null,
+      color: t.color ? o(t.color, void 0, !0) : n.value.color,
+      fontSize: s.value,
+      height: s.value,
+      lineHeight: s.value
+    })), m = p(() => a.tabindex ?? -1), C = p(() => a.role !== "button" || m.value < 0);
+    return (y, l) => (I(), A(Pt(i.value), Tt({
+      class: ["va-icon", v.value],
+      style: f.value,
+      "aria-hidden": C.value,
+      notranslate: ""
+    }, u.value), {
+      default: T(() => [
+        Ft(y.$slots, "default", {}, () => [
+          n.value.content ? (I(), M(Ke, { key: 0 }, [
+            G(ce(n.value.content), 1)
+          ], 64)) : J("", !0)
+        ])
+      ]),
+      _: 3
+    }, 16, ["class", "style", "aria-hidden"]));
   }
-});
-const useNumericProp = (key) => {
-  const props = getCurrentInstance().props;
-  const numericComputed = computed(() => {
-    const numeric = props == null ? void 0 : props[key];
-    if (numeric === void 0) {
-      return numeric;
-    }
-    return Number(numeric);
+}), ie = (e) => {
+  const t = R().props;
+  return p(() => {
+    const s = t?.[e];
+    return s === void 0 ? s : Number(s);
   });
-  return numericComputed;
-};
-const isServer = () => typeof window === "undefined";
-const fakeGlobal = {};
-const getGlobal = () => {
-  if (isServer()) {
-    if (typeof globalThis === "undefined") {
-      return fakeGlobal;
-    }
-    return globalThis;
-  } else {
-    return window;
-  }
-};
-const GAP = 5;
-const toastInstances = ref([]);
-const getNodeProps$1 = (vNode) => {
-  var _a;
-  return ((_a = vNode.component) == null ? void 0 : _a.props) || {};
-};
-const getTranslateValue = (item) => {
-  if (item.el) {
-    return item.el.offsetHeight + GAP;
-  }
-  return 0;
-};
-const useToastService = (props) => {
-  const currentInstance = getCurrentInstance();
-  const yOffset = computed(() => {
-    const currentIndex = toastInstances.value.findIndex((instance) => instance === currentInstance.vnode);
-    if (currentIndex === -1) {
-      return 0;
-    }
-    return toastInstances.value.slice(currentIndex + 1).reduce((acc, instance) => {
+}, dn = () => typeof window > "u", fn = {}, V = () => dn() ? typeof globalThis > "u" ? fn : globalThis : window, pn = 5, N = $([]), vn = (e) => {
+  var t;
+  return ((t = e.component) == null ? void 0 : t.props) || {};
+}, mn = (e) => e.el ? e.el.offsetHeight + pn : 0, gn = (e) => {
+  const t = R(), o = p(() => {
+    const s = N.value.findIndex((r) => r === t.vnode);
+    return s === -1 ? 0 : N.value.slice(s + 1).reduce((r, n) => {
       const {
-        position: itemPosition
-      } = getNodeProps$1(instance);
-      const { position } = props;
-      if (position === itemPosition) {
-        return getTranslateValue(instance) + acc;
-      }
-      return acc;
+        position: i
+      } = vn(n), { position: a } = e;
+      return a === i ? mn(n) + r : r;
     }, 0);
   });
-  onMounted(() => {
-    toastInstances.value.unshift(currentInstance.vnode);
-  });
-  onBeforeUnmount(() => {
-    toastInstances.value = toastInstances.value.filter((item) => item !== currentInstance.vnode);
-  });
-  return {
-    yOffset,
+  return ye(() => {
+    N.value.unshift(t.vnode);
+  }), $t(() => {
+    N.value = N.value.filter((s) => s !== t.vnode);
+  }), {
+    yOffset: o,
     updateYOffset: () => {
-      toastInstances.value = toastInstances.value.filter((item) => item !== currentInstance.vnode);
+      N.value = N.value.filter((s) => s !== t.vnode);
     }
   };
-};
-const useTimer = () => {
-  let timer;
-  const start = (...args) => {
-    timer = window.setTimeout(...args);
-    return timer;
-  };
-  const clear = () => timer && window.clearTimeout(timer);
+}, hn = () => {
+  let e;
   return {
-    start,
-    clear
+    start: (...s) => (e = window.setTimeout(...s), e),
+    clear: () => e && window.clearTimeout(e)
   };
-};
-const isTranslationKey = (value) => value.startsWith("$t:");
-const useTranslationProp = (defaultValue) => {
-  return { type: String, default: defaultValue };
-};
-const applyI18nTemplate = (key, values) => {
-  if (!values) {
-    return key;
+}, yn = (e) => e.startsWith("$t:"), bn = (e) => ({ type: String, default: e }), Me = (e, t) => (t && Object.keys(t).forEach((o) => {
+  e = e.replace(`{${o}}`, String(t[o]));
+}), e), Cn = () => {
+  const { globalConfig: e } = Z(), t = p(() => e.value.i18n);
+  function o(r, n) {
+    var i;
+    const a = (i = R()) == null ? void 0 : i.appContext.config.globalProperties.$t;
+    if (typeof a == "function") {
+      const d = a(`vuestic.${r}`, n);
+      if (d)
+        return d;
+    }
+    const u = t.value[r];
+    return u ? Me(u, n) || r : (pe(`${r} not found in VuesticUI i18n config`), r);
   }
-  Object.keys(values).forEach((valueKey) => {
-    key = key.replace(`{${valueKey}}`, String(values[valueKey]));
-  });
-  return key;
-};
-const useTranslation = () => {
-  const { globalConfig } = useGlobalConfig();
-  const config = computed(() => globalConfig.value.i18n);
-  function t(key, values) {
-    var _a;
-    const $t = (_a = getCurrentInstance()) == null ? void 0 : _a.appContext.config.globalProperties.$t;
-    if (typeof $t === "function") {
-      const translated2 = $t(`vuestic.${key}`, values);
-      if (translated2) {
-        return translated2;
-      }
-    }
-    const translated = config.value[key];
-    if (!translated) {
-      warn(`${key} not found in VuesticUI i18n config`);
-      return key;
-    }
-    return applyI18nTemplate(translated, values) || key;
-  }
-  function tp(key, values) {
-    if (!key) {
-      return "";
-    }
-    if (isTranslationKey(key)) {
-      return t(key.slice(3), values);
-    }
-    return applyI18nTemplate(key, values) || key;
+  function s(r, n) {
+    return r ? yn(r) ? o(r.slice(3), n) : Me(r, n) || r : "";
   }
   return {
-    tp,
-    t
+    tp: s,
+    t: o
   };
-};
-const useTextColor = (componentColor, isTransparent = false) => {
-  const { props } = getCurrentInstance();
-  const { getColor, getTextColor } = useColors();
-  const textColorComputed = computed(() => {
-    if (props.textColor) {
-      return getColor(props.textColor);
-    }
-    const bg = componentColor ? unref(componentColor) : props.color;
-    if (!bg) {
+}, wn = (e, t = !1) => {
+  const { props: o } = R(), { getColor: s, getTextColor: r } = Pe();
+  return { textColorComputed: p(() => {
+    if (o.textColor)
+      return s(o.textColor);
+    const i = e ? E(e) : o.color;
+    if (!i)
       return "currentColor";
-    }
-    const componentColorHex = getColor(bg);
-    if (isColorTransparent(componentColorHex)) {
-      return "currentColor";
-    }
-    return unref(isTransparent) ? componentColorHex : getColor(getTextColor(componentColorHex));
-  });
-  return { textColorComputed };
-};
-const _hoisted_1$2 = ["role", "aria-live"];
-const _hoisted_2$1 = { class: "va-toast__group" };
-const _hoisted_3$1 = ["textContent"];
-const _hoisted_4 = { class: "va-toast__content" };
-const _hoisted_5 = ["innerHTML"];
-const _hoisted_6 = ["textContent"];
-const _hoisted_7 = {
+    const a = s(i);
+    return cn(a) ? "currentColor" : E(t) ? a : s(r(a));
+  }) };
+}, Sn = ["role", "aria-live"], xn = { class: "va-toast__group" }, _n = ["textContent"], Pn = { class: "va-toast__content" }, Tn = ["innerHTML"], Fn = ["textContent"], $n = {
   key: 1,
   class: "va-toast__content"
-};
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaToast"
-  },
+}, In = /* @__PURE__ */ Y({
+  name: "VaToast",
   __name: "VaToast",
   props: {
-    ...useComponentPresetProp,
+    ...We,
     title: { type: String, default: "" },
     offsetY: { type: [Number, String], default: 16 },
     offsetX: { type: [Number, String], default: 16 },
     message: { type: [String, Function], default: "" },
-    dangerouslyUseHtmlString: { type: Boolean, default: false },
+    dangerouslyUseHtmlString: { type: Boolean, default: !1 },
     icon: { type: String, default: "close" },
     customClass: { type: String, default: "" },
     duration: { type: [Number, String], default: 5e3 },
     color: { type: String, default: "primary" },
-    closeable: { type: Boolean, default: true },
+    closeable: { type: Boolean, default: !0 },
     onClose: { type: Function },
     onClick: { type: Function },
-    multiLine: { type: Boolean, default: false },
+    multiLine: { type: Boolean, default: !1 },
     position: {
       type: String,
       default: "top-right",
-      validator: (value) => ["top-right", "top-center", "top-left", "bottom-right", "bottom-center", "bottom-left"].includes(value)
+      validator: (e) => ["top-right", "top-center", "top-left", "bottom-right", "bottom-center", "bottom-left"].includes(e)
     },
     render: { type: Function },
-    ariaCloseLabel: useTranslationProp("$t:close"),
+    ariaCloseLabel: bn("$t:close"),
     role: { type: String, default: void 0 },
-    inline: { type: Boolean, default: false }
+    inline: { type: Boolean, default: !1 }
   },
   emits: ["on-click", "on-close"],
-  setup(__props, { emit: __emit }) {
-    const VaToastRenderer = defineComponent({
+  setup(e, { emit: t }) {
+    const o = Y({
       name: "VaToastRenderer",
       props: {
-        render: { type: Function, required: true }
+        render: { type: Function, required: !0 }
       },
-      setup: (props2) => () => props2.render()
-    });
-    const { tp } = useTranslation();
-    const props = __props;
-    const emit = __emit;
-    const rootElement = shallowRef();
-    const { getColor } = useColors();
-    const { textColorComputed } = useTextColor(computed(() => getColor(props.color)));
-    const offsetYComputed = useNumericProp("offsetY");
-    const offsetXComputed = useNumericProp("offsetX");
-    const durationComputed = useNumericProp("duration");
-    const visible = ref(false);
-    const {
-      yOffset,
-      updateYOffset
-    } = useToastService(props);
-    const positionObject = computed(() => ({
-      vertical: props.position.includes("top") ? "top" : "bottom",
-      horizontal: props.position.includes("center") ? "center" : props.position.includes("right") ? "right" : "left"
-    }));
-    const getPositionStyle = () => {
-      const vertical = positionObject.value.vertical;
-      const horizontal = positionObject.value.horizontal;
-      if (horizontal === "center") {
-        return {
-          [vertical]: `${offsetYComputed.value + yOffset.value}px`,
-          left: "50%",
-          "--va-toast-x-shift": "-50%"
-        };
-      }
-      return {
-        [vertical]: `${offsetYComputed.value + yOffset.value}px`,
-        [horizontal]: `${offsetXComputed.value}px`
+      setup: (b) => () => b.render()
+    }), { tp: s } = Cn(), r = e, n = t, i = le(), { getColor: a } = Pe(), { textColorComputed: u } = wn(p(() => a(r.color))), d = ie("offsetY"), v = ie("offsetX"), g = ie("duration"), f = $(!1), {
+      yOffset: m,
+      updateYOffset: C
+    } = gn(r), y = p(() => ({
+      vertical: r.position.includes("top") ? "top" : "bottom",
+      horizontal: r.position.includes("center") ? "center" : r.position.includes("right") ? "right" : "left"
+    })), l = () => {
+      const b = y.value.vertical, O = y.value.horizontal;
+      return O === "center" ? {
+        [b]: `${d.value + m.value}px`,
+        left: "50%",
+        "--va-toast-x-shift": "-50%"
+      } : {
+        [b]: `${d.value + m.value}px`,
+        [O]: `${v.value}px`
       };
+    }, S = p(() => [
+      r.customClass,
+      r.multiLine ? "va-toast--multiline" : "",
+      r.inline ? "va-toast--inline" : "",
+      [`va-toast--${r.position}`]
+    ]), w = p(() => ({
+      ...l(),
+      backgroundColor: a(r.color),
+      color: u.value
+    })), _ = p(() => r.role === "status" ? "polite" : "assertive"), B = p(() => typeof r.message == "function" ? r.message() : r.message), H = () => {
+      var b, O;
+      (b = i.value) == null || b.removeEventListener("transitionend", H), (O = i.value) == null || O.remove();
+    }, ee = () => {
+      typeof r.onClick == "function" ? r.onClick() : n("on-click");
+    }, K = () => {
+      f.value = !1, C();
+    }, h = () => {
+      typeof r.onClose == "function" ? r.onClose() : n("on-close"), H();
+    }, c = hn(), P = c.clear, U = () => {
+      g.value > 0 && c.start(() => f.value && K(), g.value);
     };
-    const toastClasses = computed(() => [
-      props.customClass,
-      props.multiLine ? "va-toast--multiline" : "",
-      props.inline ? "va-toast--inline" : "",
-      [`va-toast--${props.position}`]
-    ]);
-    const toastStyles = computed(() => ({
-      ...getPositionStyle(),
-      backgroundColor: getColor(props.color),
-      color: textColorComputed.value
-    }));
-    const computedAriaLive = computed(() => {
-      if (props.role === "status") {
-        return "polite";
-      } else {
-        return "assertive";
-      }
-    });
-    const computedMessage = computed(() => typeof props.message === "function" ? props.message() : props.message);
-    const destroyElement = () => {
-      var _a, _b;
-      (_a = rootElement.value) == null ? void 0 : _a.removeEventListener("transitionend", destroyElement);
-      (_b = rootElement.value) == null ? void 0 : _b.remove();
-    };
-    const onToastClick = () => {
-      if (typeof props.onClick === "function") {
-        props.onClick();
-      } else {
-        emit("on-click");
-      }
-    };
-    const onToastClose = () => {
-      visible.value = false;
-      updateYOffset();
-    };
-    const onHidden = () => {
-      if (typeof props.onClose === "function") {
-        props.onClose();
-      } else {
-        emit("on-close");
-      }
-      destroyElement();
-    };
-    const timer = useTimer();
-    const clearTimer = timer.clear;
-    const startTimer = () => {
-      if (durationComputed.value > 0) {
-        timer.start(() => visible.value && onToastClose(), durationComputed.value);
-      }
-    };
-    onMounted(() => {
-      visible.value = true;
-      startTimer();
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(Transition, {
-        name: "va-toast-fade",
-        onAfterLeave: onHidden
-      }, {
-        default: withCtx(() => [
-          withDirectives(createElementVNode("div", {
-            ref_key: "rootElement",
-            ref: rootElement,
-            role: _ctx.$props.role ?? _ctx.$props.closeable ? "alertdialog" : "alert",
-            "aria-live": computedAriaLive.value,
-            "aria-atomic": "true",
-            class: normalizeClass(["va-toast", toastClasses.value]),
-            style: normalizeStyle(toastStyles.value),
-            onMouseenter: _cache[0] || (_cache[0] = //@ts-ignore
-            (...args) => unref(clearTimer) && unref(clearTimer)(...args)),
-            onMouseleave: startTimer,
-            onClick: onToastClick
-          }, [
-            createElementVNode("div", _hoisted_2$1, [
-              _ctx.$props.title ? (openBlock(), createElementBlock("h2", {
+    return ye(() => {
+      f.value = !0, U();
+    }), (b, O) => (I(), A(It, {
+      name: "va-toast-fade",
+      onAfterLeave: h
+    }, {
+      default: T(() => [
+        Fe(F("div", {
+          ref_key: "rootElement",
+          ref: i,
+          role: b.$props.role ?? b.$props.closeable ? "alertdialog" : "alert",
+          "aria-live": _.value,
+          "aria-atomic": "true",
+          class: je(["va-toast", S.value]),
+          style: He(w.value),
+          onMouseenter: O[0] || (O[0] = //@ts-ignore
+          (...te) => E(P) && E(P)(...te)),
+          onMouseleave: U,
+          onClick: ee
+        }, [
+          F("div", xn, [
+            b.$props.title ? (I(), M("h2", {
+              key: 0,
+              class: "va-toast__title",
+              textContent: ce(b.$props.title)
+            }, null, 8, _n)) : J("", !0),
+            Fe(F("div", Pn, [
+              b.$props.dangerouslyUseHtmlString ? (I(), M("div", {
                 key: 0,
-                class: "va-toast__title",
-                textContent: toDisplayString(_ctx.$props.title)
-              }, null, 8, _hoisted_3$1)) : createCommentVNode("", true),
-              withDirectives(createElementVNode("div", _hoisted_4, [
-                _ctx.$props.dangerouslyUseHtmlString ? (openBlock(), createElementBlock("div", {
-                  key: 0,
-                  innerHTML: computedMessage.value
-                }, null, 8, _hoisted_5)) : (openBlock(), createElementBlock("p", {
-                  key: 1,
-                  textContent: toDisplayString(computedMessage.value)
-                }, null, 8, _hoisted_6))
-              ], 512), [
-                [vShow, _ctx.$props.message]
-              ]),
-              _ctx.$props.render ? (openBlock(), createElementBlock("div", _hoisted_7, [
-                createVNode(unref(VaToastRenderer), {
-                  render: _ctx.$props.render
-                }, null, 8, ["render"])
-              ])) : createCommentVNode("", true),
-              _ctx.$props.closeable ? (openBlock(), createBlock(_sfc_main$3, {
-                key: 2,
-                class: "va-toast__close-icon",
-                role: "button",
-                "aria-label": unref(tp)(_ctx.$props.ariaCloseLabel),
-                tabindex: "0",
-                size: "1rem",
-                name: _ctx.$props.icon,
-                onClick: withModifiers(onToastClose, ["stop"]),
-                onKeydown: withKeys(withModifiers(onToastClose, ["stop"]), ["enter"])
-              }, null, 8, ["aria-label", "name", "onKeydown"])) : createCommentVNode("", true)
-            ])
-          ], 46, _hoisted_1$2), [
-            [vShow, visible.value]
+                innerHTML: B.value
+              }, null, 8, Tn)) : (I(), M("p", {
+                key: 1,
+                textContent: ce(B.value)
+              }, null, 8, Fn))
+            ], 512), [
+              [$e, b.$props.message]
+            ]),
+            b.$props.render ? (I(), M("div", $n, [
+              x(E(o), {
+                render: b.$props.render
+              }, null, 8, ["render"])
+            ])) : J("", !0),
+            b.$props.closeable ? (I(), A(un, {
+              key: 2,
+              class: "va-toast__close-icon",
+              role: "button",
+              "aria-label": E(s)(b.$props.ariaCloseLabel),
+              tabindex: "0",
+              size: "1rem",
+              name: b.$props.icon,
+              onClick: Ie(K, ["stop"]),
+              onKeydown: Et(Ie(K, ["stop"]), ["enter"])
+            }, null, 8, ["aria-label", "name", "onKeydown"])) : J("", !0)
           ])
-        ]),
-        _: 1
-      });
-    };
+        ], 46, Sn), [
+          [$e, f.value]
+        ])
+      ]),
+      _: 1
+    }));
   }
-});
-const VaToast = withConfigTransport(_sfc_main$2);
-let seed = 1;
-getGlobal().vaToastInstances = [];
-const getNodeProps = (vNode) => {
-  var _a;
-  return ((_a = vNode.component) == null ? void 0 : _a.props) || {};
-};
-const closeNotification = (targetInstance, destroyElementFn) => {
-  if (!targetInstance) {
+}), En = So(In);
+let W = 1;
+V().vaToastInstances = [];
+const Te = (e) => {
+  var t;
+  return ((t = e.component) == null ? void 0 : t.props) || {};
+}, On = (e, t) => {
+  if (!e)
+    return;
+  if (!V().vaToastInstances.length) {
+    W = 1;
     return;
   }
-  if (!getGlobal().vaToastInstances.length) {
-    seed = 1;
-    return;
-  }
-  const targetInstanceIndex = getGlobal().vaToastInstances.findIndex((instance) => instance === targetInstance);
-  if (targetInstanceIndex < 0) {
-    return;
-  }
-  destroyElementFn();
-  getGlobal().vaToastInstances = getGlobal().vaToastInstances.reduce((acc, instance, index) => {
-    if (instance === targetInstance) {
-      return acc;
-    }
-    return [...acc, instance];
-  }, []);
-  if (!getGlobal().vaToastInstances.length) {
-    seed = 1;
-  }
-};
-const destroy = (el, node) => {
-  if (el) {
-    render(null, el);
-    el.remove();
-  }
-  el = null;
-};
-const mount = (component, {
-  props,
-  children,
-  element,
-  appContext
+  V().vaToastInstances.findIndex((s) => s === e) < 0 || (t(), V().vaToastInstances = V().vaToastInstances.reduce((s, r, n) => r === e ? s : [...s, r], []), V().vaToastInstances.length || (W = 1));
+}, Vn = (e, t) => {
+  e && (ue(null, e), e.remove()), e = null;
+}, Rn = (e, {
+  props: t,
+  children: o,
+  element: s,
+  appContext: r
 } = {}) => {
-  let el = element;
-  let vNode;
-  const onClose = () => {
-    closeNotification(vNode, () => destroy(el));
-    if (props == null ? void 0 : props.onClose) {
-      props.onClose();
-    }
-  };
-  vNode = createVNode(component, { ...props, onClose }, children);
-  if (appContext) {
-    vNode.appContext = appContext;
-  }
-  if (el) {
-    render(vNode, el);
-  } else if (typeof document !== "undefined") {
-    render(vNode, el = document.createElement("div"));
-  }
-  return { vNode, el };
-};
-const closeAllNotifications = (appContext) => {
-  if (!getGlobal().vaToastInstances.length) {
-    seed = 1;
+  let n = s, i;
+  return i = x(e, { ...t, onClose: () => {
+    On(i, () => Vn(n)), t?.onClose && t.onClose();
+  } }, o), r && (i.appContext = r), n ? ue(i, n) : typeof document < "u" && ue(i, n = document.createElement("div")), { vNode: i, el: n };
+}, kn = (e) => {
+  if (!V().vaToastInstances.length) {
+    W = 1;
     return;
   }
-  getGlobal().vaToastInstances.forEach((instance) => {
-    if (appContext && instance.appContext !== appContext) {
-      return;
-    }
-    getNodeProps(instance).onClose();
+  V().vaToastInstances.forEach((t) => {
+    e && t.appContext !== e || Te(t).onClose();
   });
-};
-const closeById = (id) => {
-  const targetInstance = getGlobal().vaToastInstances.find((instance) => {
-    var _a;
-    return ((_a = instance.el) == null ? void 0 : _a.id) === id;
+}, Le = (e) => {
+  const t = V().vaToastInstances.find((o) => {
+    var s;
+    return ((s = o.el) == null ? void 0 : s.id) === e;
   });
-  if (targetInstance) {
-    const nodeProps = getNodeProps(targetInstance);
-    nodeProps.onClose();
-  }
-};
-const getToastOptions = (options) => {
-  if (typeof options === "string") {
-    return {
-      message: options
-    };
-  }
-  return options;
-};
-const createToastInstance = (customProps, appContext) => {
-  const { vNode, el } = mount(VaToast, { appContext, props: getToastOptions(customProps) });
-  const nodeProps = getNodeProps(vNode);
-  if (el && vNode.el && nodeProps) {
-    document.body.appendChild(el.childNodes[0]);
-    vNode.el.id = "notification_" + seed;
-    seed += 1;
-    getGlobal().vaToastInstances.push(vNode);
-    return vNode.el.id;
-  }
-  return null;
-};
-const useAppContext = () => {
-  const currentInstance = getCurrentInstance();
-  return computed(() => {
-    var _a;
-    return ((_a = getCurrentApp()) == null ? void 0 : _a._context) || (currentInstance == null ? void 0 : currentInstance.appContext);
+  t && Te(t).onClose();
+}, zn = (e) => typeof e == "string" ? {
+  message: e
+} : e, An = (e, t) => {
+  const { vNode: o, el: s } = Rn(En, { appContext: t, props: zn(e) }), r = Te(o);
+  return s && o.el && r ? (document.body.appendChild(s.childNodes[0]), o.el.id = "notification_" + W, W += 1, V().vaToastInstances.push(o), o.el.id) : null;
+}, Bn = () => {
+  const e = R();
+  return p(() => {
+    var t;
+    return ((t = Ce()) == null ? void 0 : t._context) || e?.appContext;
   });
-};
-const useToast = () => {
-  const appContext = useAppContext();
-  const createdInThisSetupContext = [];
-  const notify = (options) => {
-    const id = createToastInstance(options, appContext.value);
-    if (id) {
-      createdInThisSetupContext.push(id);
-    }
-    return id;
-  };
-  const init = (options) => {
-    return notify(options);
-  };
-  const close = (id) => closeById(id);
-  const closeAll = (allApps = false) => closeAllNotifications(allApps ? void 0 : appContext.value);
-  const closeAllCreatedInThisHook = () => {
-    createdInThisSetupContext.forEach((id) => closeById(id));
+}, Nn = () => {
+  const e = Bn(), t = [], o = (a) => {
+    const u = An(a, e.value);
+    return u && t.push(u), u;
   };
   return {
-    init,
-    notify,
-    close,
-    closeAll,
-    closeAllCreatedInThisHook
+    init: (a) => o(a),
+    notify: o,
+    close: (a) => Le(a),
+    closeAll: (a = !1) => kn(a ? void 0 : e.value),
+    closeAllCreatedInThisHook: () => {
+      t.forEach((a) => Le(a));
+    }
   };
-};
-const _hoisted_1$1 = { class: "flex-nowrap" };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+}, Dn = { class: "flex-nowrap" }, Mn = /* @__PURE__ */ Y({
   __name: "SaveInputGit",
   props: {
     repo: {}
   },
   emits: ["save", "override"],
-  setup(__props, { expose: __expose, emit: __emit }) {
-    const emits = __emit;
-    const props = __props;
-    const nameForSaving = ref("newFile");
-    const isDisabled = computed(() => {
-      return nameForSaving.value == "";
+  setup(e, { expose: t, emit: o }) {
+    const s = o, r = e, n = $("newFile"), i = p(() => n.value == "");
+    ye(async () => {
+      a.value = await r.repo.findAll();
     });
-    onMounted(async () => {
-      files.value = await props.repo.findAll();
-    });
-    const files = ref();
-    const isSameName = computed(() => {
-      if (files.value == void 0) return false;
-      return files.value.find((f) => f.name == nameForSaving.value) != void 0;
-    });
-    const save = () => {
-      const fu = new URL(props.repo.uri);
-      fu.pathname = nameForSaving.value + ".json";
-      emits("save", {
-        name: nameForSaving.value,
-        uri: fu
+    const a = $(), u = p(() => a.value == null ? !1 : a.value.find((f) => f.name == n.value) != null), d = () => {
+      const f = new URL(r.repo.uri);
+      f.pathname = n.value + ".json", s("save", {
+        name: n.value,
+        uri: f
       });
+    }, v = () => {
+      const f = a.value.find((m) => m.name == n.value);
+      s("override", f);
     };
-    const override = () => {
-      const en = files.value.find((f) => f.name == nameForSaving.value);
-      emits("override", en);
-    };
-    const setNameSuggestion = (name) => {
-      nameForSaving.value = name;
-    };
-    __expose({ setNameSuggestion });
-    return (_ctx, _cache) => {
-      const _component_VaInput = resolveComponent("VaInput");
-      const _component_VaButton = resolveComponent("VaButton");
-      return openBlock(), createBlock(Teleport, {
+    return t({ setNameSuggestion: (f) => {
+      n.value = f;
+    } }), (f, m) => {
+      const C = z("VaInput"), y = z("VaButton");
+      return I(), A(de, {
         defer: "",
         to: "#loadSaveModalFooter"
       }, [
-        createElementVNode("div", _hoisted_1$1, [
-          _cache[1] || (_cache[1] = createElementVNode("span", { class: "va-title" }, "Name: ", -1)),
-          createVNode(_component_VaInput, {
-            modelValue: nameForSaving.value,
-            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => nameForSaving.value = $event),
+        F("div", Dn, [
+          m[1] || (m[1] = F("span", { class: "va-title" }, "Name: ", -1)),
+          x(C, {
+            modelValue: n.value,
+            "onUpdate:modelValue": m[0] || (m[0] = (l) => n.value = l),
             placeholder: "Name"
           }, null, 8, ["modelValue"])
         ]),
-        isSameName.value ? (openBlock(), createBlock(_component_VaButton, {
+        u.value ? (I(), A(y, {
           key: 0,
           color: "danger",
-          onClick: override,
-          disabled: isDisabled.value,
+          onClick: v,
+          disabled: i.value,
           "border-color": "primary",
           preset: "secondary",
           icon: "save"
         }, {
-          default: withCtx(() => [..._cache[2] || (_cache[2] = [
-            createTextVNode(" override ", -1)
+          default: T(() => [...m[2] || (m[2] = [
+            G(" override ", -1)
           ])]),
           _: 1
-        }, 8, ["disabled"])) : (openBlock(), createBlock(_component_VaButton, {
+        }, 8, ["disabled"])) : (I(), A(y, {
           key: 1,
-          onClick: save,
-          disabled: isDisabled.value,
+          onClick: d,
+          disabled: i.value,
           "border-color": "primary",
           preset: "secondary",
           icon: "save"
         }, {
-          default: withCtx(() => [..._cache[3] || (_cache[3] = [
-            createTextVNode(" save", -1)
+          default: T(() => [...m[3] || (m[3] = [
+            G(" save", -1)
           ])]),
           _: 1
         }, 8, ["disabled"]))
       ]);
     };
   }
-});
-const _hoisted_1 = { class: "flex-nowrap" };
-const _hoisted_2 = { class: "commit" };
-const _hoisted_3 = { class: "deleteDailog" };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), Ln = { class: "flex-nowrap" }, Gn = { class: "commit" }, jn = { class: "deleteDailog" }, Hn = /* @__PURE__ */ Y({
   __name: "GitRepositoryV",
   props: {
     repo: {},
     context: {}
   },
   emits: ["close"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const emts = __emit;
-    const columns = ref([
+  setup(e, { emit: t }) {
+    const o = e, s = t, r = $([
       { key: "icon", label: "icon" },
       { key: "name", label: "file" },
       { key: "date", label: "date" },
       { key: "size", label: "size" },
       { key: "options", label: "options" }
-    ]);
-    const savedData = ref([]);
-    const branch = ref("main");
-    const commit = ref("");
-    const isTableLoading = ref(false);
-    ref(false);
-    const token = ref(void 0);
-    const selectedRow = ref(null);
-    watch(() => props.repo, async (_new) => {
-      await getFiles();
-    }, { immediate: true });
-    watch(branch, async (name) => {
-      const branch2 = (await props.repo.getBranches()).find((b) => b.name == name);
-      if (branch2) {
-        props.repo.setBranch(branch2);
-        props.repo.getCommits();
-        getFiles();
-      }
+    ]), n = $([]), i = $("main"), a = $(""), u = $(!1);
+    $(!1);
+    const d = $(void 0), v = $(null);
+    ne(() => o.repo, async (h) => {
+      await C();
+    }, { immediate: !0 }), ne(i, async (h) => {
+      const c = (await o.repo.getBranches()).find((P) => P.name == h);
+      c && (o.repo.setBranch(c), o.repo.getCommits(), C());
+    }), ne(a, async (h) => {
+      const c = (await o.repo.getCommits()).find((P) => P.creation_date == h);
+      c && (o.repo.setCommit(c), C());
     });
-    watch(commit, async (date) => {
-      const commit2 = (await props.repo.getCommits()).find((c) => c.creation_date == date);
-      if (commit2) {
-        props.repo.setCommit(commit2);
-        getFiles();
-      }
-    });
-    const rowClick = async (row) => {
-      selectedRow.value = row;
-    };
-    const branch_options = asyncComputed(async () => {
-      return (await props.repo.getBranches()).map((b) => b.name);
-    });
-    const commit_options = asyncComputed(async () => {
-      console.log("updated");
-      return (await props.repo.getCommits()).map((c) => c.creation_date);
-    });
-    async function getFiles() {
-      console.log("update");
-      if (props.repo != void 0) {
+    const g = async (h) => {
+      v.value = h;
+    }, f = Ee(async () => (await o.repo.getBranches()).map((h) => h.name)), m = Ee(async () => (console.log("updated"), (await o.repo.getCommits()).map((h) => h.creation_date)));
+    async function C() {
+      if (console.log("update"), o.repo != null)
         try {
-          isTableLoading.value = true;
-          savedData.value = await props.repo.findAll();
-        } catch (e) {
-          savedData.value = [];
+          u.value = !0, n.value = await o.repo.findAll();
+        } catch {
+          n.value = [];
         } finally {
-          isTableLoading.value = false;
+          u.value = !1;
         }
-      } else savedData.value = [];
+      else n.value = [];
     }
-    const override = async (e) => {
-      if (!props.context?.state) {
-        console.log("no context");
-        return false;
-      }
-      e.data = props.context.state;
+    const y = async (h) => {
+      if (!o.context?.state)
+        return console.log("no context"), !1;
+      h.data = o.context.state;
       try {
-        await props.repo.update(e);
-        notify({ message: "File saved", color: "#dee5f2", position: "bottom-right", duration: 2e3 });
-      } catch (ee) {
-        let token2 = await run(null);
-        if (!token2) {
-          notify({ title: "Error on saving File", message: ee, color: "#d23a1f", position: "bottom-right", duration: 2e3 });
-        } else {
-          await props.repo.auth({ auth: token2 });
-          override(e);
-        }
+        await o.repo.update(h), w({ message: "File saved", color: "#dee5f2", position: "bottom-right", duration: 2e3 });
+      } catch (c) {
+        let P = await B(null);
+        P ? (await o.repo.auth({ auth: P }), y(h)) : w({ title: "Error on saving File", message: c, color: "#d23a1f", position: "bottom-right", duration: 2e3 });
       } finally {
       }
-    };
-    const save = async (e) => {
-      if (!props.context?.state) {
-        console.log("no context");
-        return false;
-      }
-      e.data = props.context.state;
+    }, l = async (h) => {
+      if (!o.context?.state)
+        return console.log("no context"), !1;
+      h.data = o.context.state;
       try {
-        await props.repo.create(e);
-        notify({ message: "File saved", color: "#dee5f2", position: "bottom-right", duration: 2e3 });
-      } catch (ee) {
-        if (ee instanceof AuthentificationError) {
-          let token2 = await run(null);
-          if (!token2) {
-            notify({ title: "Error on saving File", message: ee, color: "#d23a1f", position: "bottom-right", duration: 2e3 });
-          } else {
-            await props.repo.auth({ auth: token2 });
-            await save(e);
-          }
-        } else {
-          notify({ title: "Error on saving File", message: ee, color: "#d23a1f", position: "bottom-right", duration: 2e3 });
-          console.log(e);
-        }
+        await o.repo.create(h), w({ message: "File saved", color: "#dee5f2", position: "bottom-right", duration: 2e3 });
+      } catch (c) {
+        if (c instanceof mt) {
+          let P = await B(null);
+          P ? (await o.repo.auth({ auth: P }), await l(h)) : w({ title: "Error on saving File", message: c, color: "#d23a1f", position: "bottom-right", duration: 2e3 });
+        } else
+          w({ title: "Error on saving File", message: c, color: "#d23a1f", position: "bottom-right", duration: 2e3 }), console.log(h);
       } finally {
-        await getFiles();
+        await C();
       }
-    };
-    const auth = () => {
-      return token.value;
-    };
-    const { notify } = useToast();
-    const { isOpened, run, close } = usePromisifiedModal(auth);
-    const getRowClass = (item) => {
-      if (!selectedRow.value) return "";
-      return item.name === selectedRow.value.item.name ? { class: ["selected bg-gray-200"] } : "";
-    };
-    const loadFile = async () => {
-      const row = selectedRow.value;
+    }, S = () => d.value, { notify: w } = Nn(), { isOpened: _, run: B, close: H } = Ot(S), ee = (h) => v.value && h.name === v.value.item.name ? { class: ["selected bg-gray-200"] } : "", K = async () => {
+      const h = v.value;
       try {
-        let entity = await props.repo.getEntityByUri(row.item.uri);
-        if (entity && entity.data) {
-          emts("close", entity?.data);
-        }
-        notify({
+        let c = await o.repo.getEntityByUri(h.item.uri);
+        c && c.data && s("close", c?.data), w({
           message: "File loaded",
           color: "#dee5f2",
           position: "bottom-right",
           duration: 2e3
         });
-      } catch (e) {
-        console.log(e);
+      } catch (c) {
+        console.log(c);
       }
     };
-    return (_ctx, _cache) => {
-      const _component_VaMenuList = resolveComponent("VaMenuList");
-      const _component_VaButtonDropdown = resolveComponent("VaButtonDropdown");
-      const _component_VaButton = resolveComponent("VaButton");
-      const _component_VaIcon = resolveComponent("VaIcon");
-      const _component_VaDataTable = resolveComponent("VaDataTable");
-      const _component_VaInput = resolveComponent("VaInput");
-      const _component_VaModal = resolveComponent("VaModal");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createElementVNode("div", _hoisted_1, [
-          (openBlock(), createBlock(Teleport, {
+    return (h, c) => {
+      const P = z("VaMenuList"), U = z("VaButtonDropdown"), b = z("VaButton"), O = z("VaIcon"), te = z("VaDataTable"), dt = z("VaInput"), ft = z("VaModal");
+      return I(), M(Ke, null, [
+        F("div", Ln, [
+          (I(), A(de, {
             defer: "",
             to: "#loadSaveModalFooter"
           }, [
-            _cache[9] || (_cache[9] = createElementVNode("span", { class: "va-title" }, "Branch: ", -1)),
-            createVNode(_component_VaButtonDropdown, {
-              label: branch.value,
+            c[9] || (c[9] = F("span", { class: "va-title" }, "Branch: ", -1)),
+            x(U, {
+              label: i.value,
               preset: "secondary",
               "border-color": "primary"
             }, {
-              default: withCtx(() => [
-                createVNode(_component_VaMenuList, {
-                  options: unref(branch_options),
-                  onSelected: _cache[0] || (_cache[0] = (v) => {
-                    branch.value = v;
+              default: T(() => [
+                x(P, {
+                  options: E(f),
+                  onSelected: c[0] || (c[0] = (k) => {
+                    i.value = k;
                   })
                 }, null, 8, ["options"])
               ]),
               _: 1
             }, 8, ["label"]),
-            _cache[10] || (_cache[10] = createElementVNode("div", { class: "space" }, null, -1)),
-            createElementVNode("div", _hoisted_2, [
-              _cache[8] || (_cache[8] = createElementVNode("span", { class: "va-title" }, "Commit: ", -1)),
-              createVNode(_component_VaButtonDropdown, {
-                label: commit.value,
+            c[10] || (c[10] = F("div", { class: "space" }, null, -1)),
+            F("div", Gn, [
+              c[8] || (c[8] = F("span", { class: "va-title" }, "Commit: ", -1)),
+              x(U, {
+                label: a.value,
                 preset: "secondary",
                 "border-color": "primary"
               }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaMenuList, {
-                    options: unref(commit_options),
-                    onSelected: _cache[1] || (_cache[1] = (v) => {
-                      commit.value = v;
+                default: T(() => [
+                  x(P, {
+                    options: E(m),
+                    onSelected: c[1] || (c[1] = (k) => {
+                      a.value = k;
                     })
                   }, null, 8, ["options"])
                 ]),
@@ -2313,102 +1418,101 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               }, 8, ["label"])
             ])
           ])),
-          createVNode(_sfc_main$1, {
-            repo: __props.repo,
-            onSave: save,
-            onOverride: override
+          x(Mn, {
+            repo: e.repo,
+            onSave: l,
+            onOverride: y
           }, null, 8, ["repo"]),
-          (openBlock(), createBlock(Teleport, {
+          (I(), A(de, {
             defer: "",
             to: "#loadSaveModalFooter"
           }, [
-            createVNode(_component_VaButton, {
-              onClick: loadFile,
-              disabled: !selectedRow.value,
+            x(b, {
+              onClick: K,
+              disabled: !v.value,
               icon: "task",
               "border-color": "primary",
               preset: "secondary"
             }, {
-              default: withCtx(() => [..._cache[11] || (_cache[11] = [
-                createTextVNode(" load", -1)
+              default: T(() => [...c[11] || (c[11] = [
+                G(" load", -1)
               ])]),
               _: 1
             }, 8, ["disabled"])
           ]))
         ]),
-        createVNode(_component_VaDataTable, {
+        x(te, {
           class: "table",
           striped: "",
           "virtual-scroller": "",
-          loading: isTableLoading.value,
-          items: savedData.value,
-          columns: columns.value,
+          loading: u.value,
+          items: n.value,
+          columns: r.value,
           hoverable: "",
-          "onRow:click": rowClick,
-          "row-bind": getRowClass
+          "onRow:click": g,
+          "row-bind": ee
         }, {
-          "cell(options)": withCtx(({ rowIndex, row }) => [
-            createVNode(_component_VaButton, {
+          "cell(options)": T(({ rowIndex: k, row: pt }) => [
+            x(b, {
               preset: "plain",
               icon: "download",
               class: "ml-3",
-              onClick: _cache[2] || (_cache[2] = (ev) => {
-                ev.stopImmediatePropagation();
+              onClick: c[2] || (c[2] = (oe) => {
+                oe.stopImmediatePropagation();
               })
             }),
-            createVNode(_component_VaButton, {
+            x(b, {
               preset: "plain",
               icon: "delete",
               class: "ml-3",
-              onClick: _cache[3] || (_cache[3] = (ev) => {
-                ev.stopImmediatePropagation();
+              onClick: c[3] || (c[3] = (oe) => {
+                oe.stopImmediatePropagation();
               })
             })
           ]),
-          "cell(icon)": withCtx(({ rowIndex, row }) => [
-            createVNode(_component_VaIcon, { name: "newspaper" })
+          "cell(icon)": T(({ rowIndex: k, row: pt }) => [
+            x(O, { name: "newspaper" })
           ]),
           _: 1
         }, 8, ["loading", "items", "columns"]),
-        createVNode(_component_VaModal, {
+        x(ft, {
           size: "auto",
           "hide-default-actions": "",
-          modelValue: unref(isOpened),
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => isRef(isOpened) ? isOpened.value = $event : null)
+          modelValue: E(_),
+          "onUpdate:modelValue": c[7] || (c[7] = (k) => Q(_) ? _.value = k : null)
         }, {
-          footer: withCtx(() => [
-            createVNode(_component_VaButton, {
+          footer: T(() => [
+            x(b, {
               preset: "secondary",
-              onClick: _cache[5] || (_cache[5] = () => {
-                token.value = void 0;
-                unref(close)(null);
+              onClick: c[5] || (c[5] = () => {
+                d.value = void 0, E(H)(null);
               })
             }, {
-              default: withCtx(() => [..._cache[15] || (_cache[15] = [
-                createTextVNode(" cancel ", -1)
+              default: T(() => [...c[15] || (c[15] = [
+                G(" cancel ", -1)
               ])]),
               _: 1
             }),
-            createVNode(_component_VaButton, {
+            x(b, {
               preset: "secondary",
-              onClick: _cache[6] || (_cache[6] = () => {
-                unref(close)(token.value);
+              onClick: c[6] || (c[6] = () => {
+                E(H)(d.value);
               })
             }, {
-              default: withCtx(() => [..._cache[16] || (_cache[16] = [
-                createTextVNode(" ok", -1)
+              default: T(() => [...c[16] || (c[16] = [
+                G(" ok", -1)
               ])]),
               _: 1
             })
           ]),
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_3, [
-              _cache[12] || (_cache[12] = createElementVNode("span", { class: "va-h5" }, " Please provide a token to access the Repo: ", -1)),
-              _cache[13] || (_cache[13] = createElementVNode("br", null, null, -1)),
-              _cache[14] || (_cache[14] = createElementVNode("br", null, null, -1)),
-              createVNode(_component_VaInput, {
-                modelValue: token.value,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => token.value = $event),
+          default: T(() => [
+            F("div", jn, [
+              c[12] || (c[12] = F("span", { class: "va-h5" }, " Please provide a token to access the Repo: ", -1)),
+              c[13] || (c[13] = F("br", null, null, -1)),
+              c[14] || (c[14] = F("br", null, null, -1)),
+              x(dt, {
+                modelValue: d.value,
+                "onUpdate:modelValue": c[4] || (c[4] = (k) => d.value = k),
                 class: "minwidth100",
                 placeholder: "Token"
               }, null, 8, ["modelValue"])
@@ -2419,36 +1523,29 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       ], 64);
     };
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const GitRepositoryV = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-9cab5c48"]]);
-function activate$1({ services }) {
-  services.getRequired(REPOSITORY_REGISTRY).registerViewForRepoType(type, GitRepositoryV);
+}), Kn = (e, t) => {
+  const o = e.__vccOpts || e;
+  for (const [s, r] of t)
+    o[s] = r;
+  return o;
+}, Un = /* @__PURE__ */ Kn(Hn, [["__scopeId", "data-v-9cab5c48"]]);
+function ut({ services: e }) {
+  e.getRequired(vt).registerViewForRepoType(gt, Un);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Yn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.persistence.git";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.persistence.git");
-  await activate$1?.(context);
+  activate: ut
+}, Symbol.toStringTag, { value: "Module" })), Ge = "org.eclipse.daanse.board.app.ui.vue.persistence.git", Xn = "0.0.1-next.1";
+async function Qn(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${Ge}: tsm runtime is not initialized`);
+  t.register(Ge, Yn, Xn, "ui.vue.persistence.git"), await ut?.(e);
 }
-async function deactivate(context) {
+async function er(e) {
   await void 0;
 }
 export {
-  activate,
-  deactivate
+  Qn as activate,
+  er as deactivate
 };

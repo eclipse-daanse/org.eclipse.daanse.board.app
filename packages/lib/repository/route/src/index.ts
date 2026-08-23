@@ -10,12 +10,12 @@
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { RouteRegistryImpl } from './RouteRegistryImpl'
-import { RouteRegistry } from './gen/RouteRegistry'
+import { RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
 import { ROUTE_REGISTRY_ID, ROUTE_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.route'
 export { ROUTE_REGISTRY_ID, ROUTE_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.route'
 
-export { RouteDefinition } from './gen/RouteDefinition'
-export { RouteRegistry } from './gen/RouteRegistry'
+export { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.api.route'
+export { RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
 export { RouteRegistryImpl } from './RouteRegistryImpl'
 
 

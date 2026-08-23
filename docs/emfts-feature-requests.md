@@ -195,6 +195,8 @@ der [Entscheidungsvorlage](./emfts-generator-entscheidung.md).
 
 ### FR-C1 — `decorator`- und `plain`-Modus brechen in der Operations-Schleife ab
 
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/24>
+
 `init --mode decorator` erzeugt eine GenConfig, `generate` damit scheitert:
 
 ```
@@ -217,6 +219,8 @@ Impl-, Factory- und Package-Dateien. Solange nur `emf` läuft, wäre ein
 Wechsel kein Generatorwechsel, sondern ein Umbau der Modellschicht.
 
 ### FR-C2 — `href`-Verweise auf andere Pakete werden in `init` nicht aufgelöst
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/25>
 
 Unsere Modelle bauen über Paketgrenzen hinweg aufeinander auf:
 

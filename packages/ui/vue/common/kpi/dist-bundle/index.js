@@ -1,105 +1,70 @@
-(function(){var i="ui.vue.common.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.folder-row[data-v-876827aa] {\n  background-color: #f8f9fa;\n  font-weight: 500;\n}\n.expandable[data-v-876827aa] {\n  cursor: pointer;\n}\n.expandable[data-v-876827aa]:hover {\n  background-color: #f8f9fa;\n}\n.expanded[data-v-876827aa] {\n  background-color: #e3f2fd;\n}\n.expand-icon[data-v-876827aa] {\n  width: 16px;\n  margin-right: 8px;\n  font-size: 12px;\n}\n.folder-cell[data-v-876827aa] {\n  color: #6c757d;\n  text-align: right;\n  font-style: italic;\n}\n.child-count[data-v-876827aa] {\n  margin-left: 8px;\n  font-size: 0.875em;\n  color: #6c757d;\n}\n.selection-cell[data-v-876827aa] {\n  width: 40px;\n  text-align: center;\n  padding: 8px 4px;\n}\n.selected[data-v-876827aa] {\n  background-color: #e3f2fd;\n}\n\n.va-table[data-v-19bad148] {\n  width: 100%;\n  border-collapse: collapse;\n  border: 1px solid #ddd;\n}\n.kpi-table th[data-v-19bad148] {\n  background-color: #f5f5f5;\n  padding: 12px;\n  text-align: left;\n  border-bottom: 2px solid #ddd;\n  font-weight: 600;\n}\n.kpi-table td[data-v-19bad148] {\n  padding: 8px 12px;\n  border-bottom: 1px solid #eee;\n}\n.kpi-table tr[data-v-19bad148]:hover {\n  background-color: #f9f9f9;\n}\n.selection-header[data-v-19bad148] {\n  width: 40px;\n  text-align: center;\n}\n";})();
-import { defineComponent, computed, createElementBlock, openBlock, createElementVNode, toDisplayString, inject, resolveComponent, createBlock, unref, ref, Fragment, createCommentVNode, normalizeClass, withModifiers, normalizeStyle, createVNode, renderList } from "vue";
-const _sfc_main$5 = /* @__PURE__ */ defineComponent({
+(function(){var i="ui.vue.common.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".folder-row[data-v-876827aa]{background-color:#f8f9fa;font-weight:500}.expandable[data-v-876827aa]{cursor:pointer}.expandable[data-v-876827aa]:hover{background-color:#f8f9fa}.expanded[data-v-876827aa]{background-color:#e3f2fd}.expand-icon[data-v-876827aa]{width:16px;margin-right:8px;font-size:12px}.folder-cell[data-v-876827aa]{color:#6c757d;text-align:right;font-style:italic}.child-count[data-v-876827aa]{margin-left:8px;font-size:.875em;color:#6c757d}.selection-cell[data-v-876827aa]{width:40px;text-align:center;padding:8px 4px}.selected[data-v-876827aa]{background-color:#e3f2fd}.va-table[data-v-19bad148]{width:100%;border-collapse:collapse;border:1px solid #ddd}.kpi-table th[data-v-19bad148]{background-color:#f5f5f5;padding:12px;text-align:left;border-bottom:2px solid #ddd;font-weight:600}.kpi-table td[data-v-19bad148]{padding:8px 12px;border-bottom:1px solid #eee}.kpi-table tr[data-v-19bad148]:hover{background-color:#f9f9f9}.selection-header[data-v-19bad148]{width:40px;text-align:center}\n";})();
+import { defineComponent as y, computed as p, createElementBlock as a, openBlock as s, createElementVNode as r, toDisplayString as v, inject as K, resolveComponent as C, createBlock as x, unref as k, ref as E, Fragment as w, createCommentVNode as f, normalizeClass as A, withModifiers as L, normalizeStyle as j, createVNode as b, renderList as B } from "vue";
+const D = /* @__PURE__ */ y({
   __name: "KpiValueCell",
   props: {
     value: {}
   },
-  setup(__props) {
-    const props = __props;
-    const formattedValue = computed(() => {
-      if (props.value == null) return "-";
-      return typeof props.value === "number" ? props.value.toLocaleString() : props.value.toString();
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("td", null, [
-        createElementVNode("span", null, toDisplayString(formattedValue.value), 1)
-      ]);
-    };
+  setup(t) {
+    const l = t, e = p(() => l.value == null ? "-" : typeof l.value == "number" ? l.value.toLocaleString() : l.value.toString());
+    return (c, u) => (s(), a("td", null, [
+      r("span", null, v(e.value), 1)
+    ]));
   }
-});
-const _sfc_main$4 = /* @__PURE__ */ defineComponent({
+}), O = /* @__PURE__ */ y({
   __name: "KpiGoalCell",
   props: {
     goal: {}
   },
-  setup(__props) {
-    const props = __props;
-    const formattedGoal = computed(() => {
-      if (props.goal == null) return "-";
-      return typeof props.goal === "number" ? props.goal.toLocaleString() : props.goal.toString();
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("td", null, [
-        createElementVNode("span", null, toDisplayString(formattedGoal.value), 1)
-      ]);
-    };
+  setup(t) {
+    const l = t, e = p(() => l.goal == null ? "-" : typeof l.goal == "number" ? l.goal.toLocaleString() : l.goal.toString());
+    return (c, u) => (s(), a("td", null, [
+      r("span", null, v(e.value), 1)
+    ]));
   }
-});
-const _hoisted_1$3 = { key: 0 };
-const _hoisted_2$3 = { key: 1 };
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+}), P = { key: 0 }, z = { key: 1 }, F = /* @__PURE__ */ y({
   __name: "KpiStatusCell",
   props: {
     status: {}
   },
-  setup(__props) {
-    const props = __props;
-    const statusValue = computed(() => {
-      if (props.status == null) return null;
-      return typeof props.status === "string" ? parseInt(props.status) : props.status;
-    });
-    const statusVisualType = inject("statusVisualType", "badge");
-    return (_ctx, _cache) => {
-      const _component_VaBadge = resolveComponent("VaBadge");
-      return openBlock(), createElementBlock("td", null, [
-        unref(statusVisualType) === "Lights" ? (openBlock(), createElementBlock("span", _hoisted_1$3, toDisplayString(statusValue.value > 0.5 ? "🟢" : "🛑"), 1)) : unref(statusVisualType) === "Emoji" ? (openBlock(), createElementBlock("span", _hoisted_2$3, toDisplayString(statusValue.value > 0.5 ? "😊" : "☹️"), 1)) : (openBlock(), createBlock(_component_VaBadge, {
+  setup(t) {
+    const l = t, e = p(() => l.status == null ? null : typeof l.status == "string" ? parseInt(l.status) : l.status), c = K("statusVisualType", "badge");
+    return (u, m) => {
+      const i = C("VaBadge");
+      return s(), a("td", null, [
+        k(c) === "Lights" ? (s(), a("span", P, v(e.value > 0.5 ? "🟢" : "🛑"), 1)) : k(c) === "Emoji" ? (s(), a("span", z, v(e.value > 0.5 ? "😊" : "☹️"), 1)) : (s(), x(i, {
           key: 2,
-          color: statusValue.value > 0.5 ? "success" : "danger",
-          text: statusValue.value
+          color: e.value > 0.5 ? "success" : "danger",
+          text: e.value
         }, null, 8, ["color", "text"]))
       ]);
     };
   }
-});
-const _hoisted_1$2 = { key: 0 };
-const _hoisted_2$2 = { key: 1 };
-const _hoisted_3$2 = { key: 2 };
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+}), G = { key: 0 }, M = { key: 1 }, U = { key: 2 }, Y = /* @__PURE__ */ y({
   __name: "KpiTrendCell",
   props: {
     trend: {}
   },
-  setup(__props) {
-    const props = __props;
-    const trendValue = computed(() => {
-      if (props.trend == null) return null;
-      return typeof props.trend === "string" ? parseInt(props.trend) : props.trend;
-    });
-    const trendVisualType = inject("trendVisualType", "badge");
-    return (_ctx, _cache) => {
-      const _component_VaBadge = resolveComponent("VaBadge");
-      return openBlock(), createElementBlock("td", null, [
-        unref(trendVisualType) === "Chart" ? (openBlock(), createElementBlock("span", _hoisted_1$2, toDisplayString(trendValue.value > 0.5 ? "📈" : "📉"), 1)) : unref(trendVisualType) === "Emoji" ? (openBlock(), createElementBlock("span", _hoisted_2$2, toDisplayString(trendValue.value > 0.5 ? "😊" : "☹️"), 1)) : unref(trendVisualType) === "Arrow" ? (openBlock(), createElementBlock("span", _hoisted_3$2, toDisplayString(trendValue.value > 0.5 ? "⬆️" : "⬇️"), 1)) : (openBlock(), createBlock(_component_VaBadge, {
+  setup(t) {
+    const l = t, e = p(() => l.trend == null ? null : typeof l.trend == "string" ? parseInt(l.trend) : l.trend), c = K("trendVisualType", "badge");
+    return (u, m) => {
+      const i = C("VaBadge");
+      return s(), a("td", null, [
+        k(c) === "Chart" ? (s(), a("span", G, v(e.value > 0.5 ? "📈" : "📉"), 1)) : k(c) === "Emoji" ? (s(), a("span", M, v(e.value > 0.5 ? "😊" : "☹️"), 1)) : k(c) === "Arrow" ? (s(), a("span", U, v(e.value > 0.5 ? "⬆️" : "⬇️"), 1)) : (s(), x(i, {
           key: 3,
-          color: trendValue.value > 0.5 ? "success" : "danger",
-          text: trendValue.value
+          color: e.value > 0.5 ? "success" : "danger",
+          text: e.value
         }, null, 8, ["color", "text"]))
       ]);
     };
   }
-});
-const _hoisted_1$1 = ["checked"];
-const _hoisted_2$1 = {
+}), q = ["checked"], H = {
   key: 0,
   class: "expand-icon"
-};
-const _hoisted_3$1 = {
+}, J = {
   key: 1,
   class: "child-count"
-};
-const _hoisted_4 = ["colspan"];
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+}, Q = ["colspan"], W = /* @__PURE__ */ y({
   __name: "KpiTableRow",
   props: {
     item: {},
@@ -108,110 +73,89 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     showSelection: { type: Boolean }
   },
   emits: ["toggle-select"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const emit = __emit;
-    const isExpanded = ref(false);
-    const isFolder = computed(() => props.item.type === "Folder");
-    const hasChildren = computed(() => props.item.children?.length > 0);
-    const children = computed(() => props.item.children || []);
-    const displayName = computed(
-      () => isFolder.value ? props.item.name : props.item.caption || props.item.name || "Unknown KPI"
-    );
-    const toggleExpand = () => {
-      if (props.item.children && props.item.children.length > 0)
-        isExpanded.value = !isExpanded.value;
+  setup(t, { emit: l }) {
+    const e = t, c = l, u = E(!1), m = p(() => e.item.type === "Folder"), i = p(() => e.item.children?.length > 0), h = p(() => e.item.children || []), I = p(
+      () => m.value ? e.item.name : e.item.caption || e.item.name || "Unknown KPI"
+    ), T = () => {
+      e.item.children && e.item.children.length > 0 && (u.value = !u.value);
+    }, S = p(() => {
+      const o = e.selectedItems || [];
+      return !m.value && o.includes(e.item.name);
+    }), V = () => {
+      m.value || c("toggle-select", e.item.name);
     };
-    const isSelected = computed(() => {
-      const selected = props.selectedItems || [];
-      return !isFolder.value && selected.includes(props.item.name);
-    });
-    const handleSelectionChange = () => {
-      if (!isFolder.value) {
-        emit("toggle-select", props.item.name);
-      }
-    };
-    return (_ctx, _cache) => {
-      const _component_KpiTableRow = resolveComponent("KpiTableRow", true);
-      return openBlock(), createElementBlock(Fragment, null, [
-        createElementVNode("tr", {
-          class: normalizeClass({
-            "folder-row": isFolder.value,
-            "kpi-row": !isFolder.value,
-            "expandable": hasChildren.value,
-            "expanded": isExpanded.value,
-            "selected": isSelected.value
+    return (o, n) => {
+      const d = C("KpiTableRow", !0);
+      return s(), a(w, null, [
+        r("tr", {
+          class: A({
+            "folder-row": m.value,
+            "kpi-row": !m.value,
+            expandable: i.value,
+            expanded: u.value,
+            selected: S.value
           }),
-          onClick: toggleExpand
+          onClick: T
         }, [
-          __props.showSelection ? (openBlock(), createElementBlock("td", {
+          t.showSelection ? (s(), a("td", {
             key: 0,
             class: "selection-cell",
-            onClick: _cache[0] || (_cache[0] = withModifiers(() => {
+            onClick: n[0] || (n[0] = L(() => {
             }, ["stop"]))
           }, [
-            !isFolder.value ? (openBlock(), createElementBlock("input", {
+            m.value ? f("", !0) : (s(), a("input", {
               key: 0,
               type: "checkbox",
-              checked: isSelected.value,
-              onChange: handleSelectionChange
-            }, null, 40, _hoisted_1$1)) : createCommentVNode("", true)
-          ])) : createCommentVNode("", true),
-          createElementVNode("td", {
-            style: normalizeStyle({ paddingLeft: `${__props.level * 20 + 12}px` })
+              checked: S.value,
+              onChange: V
+            }, null, 40, q))
+          ])) : f("", !0),
+          r("td", {
+            style: j({ paddingLeft: `${t.level * 20 + 12}px` })
           }, [
-            hasChildren.value ? (openBlock(), createElementBlock("span", _hoisted_2$1, toDisplayString(isExpanded.value ? "▼" : "▶"), 1)) : createCommentVNode("", true),
-            createElementVNode("span", null, toDisplayString(displayName.value), 1),
-            hasChildren.value && !isFolder.value ? (openBlock(), createElementBlock("span", _hoisted_3$1, "(" + toDisplayString(children.value.length) + ")", 1)) : createCommentVNode("", true)
+            i.value ? (s(), a("span", H, v(u.value ? "▼" : "▶"), 1)) : f("", !0),
+            r("span", null, v(I.value), 1),
+            i.value && !m.value ? (s(), a("span", J, "(" + v(h.value.length) + ")", 1)) : f("", !0)
           ], 4),
-          isFolder.value ? (openBlock(), createElementBlock("td", {
+          m.value ? (s(), a("td", {
             key: 1,
-            colspan: __props.showSelection ? 4 : 4,
+            colspan: (t.showSelection, 4),
             class: "folder-cell"
-          }, toDisplayString(children.value.length) + " items", 9, _hoisted_4)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-            createVNode(_sfc_main$5, {
-              value: props.item.value
+          }, v(h.value.length) + " items", 9, Q)) : (s(), a(w, { key: 2 }, [
+            b(D, {
+              value: e.item.value
             }, null, 8, ["value"]),
-            createVNode(_sfc_main$4, {
-              goal: props.item.goal
+            b(O, {
+              goal: e.item.goal
             }, null, 8, ["goal"]),
-            createVNode(_sfc_main$3, {
-              status: props.item.status
+            b(F, {
+              status: e.item.status
             }, null, 8, ["status"]),
-            createVNode(_sfc_main$2, {
-              trend: props.item.trend
+            b(Y, {
+              trend: e.item.trend
             }, null, 8, ["trend"])
           ], 64))
         ], 2),
-        hasChildren.value && isExpanded.value ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(children.value, (child, index) => {
-          return openBlock(), createBlock(_component_KpiTableRow, {
-            key: index,
-            item: child,
-            level: __props.level + 1,
-            "selected-items": __props.selectedItems,
-            "show-selection": __props.showSelection,
-            onToggleSelect: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("toggle-select", $event))
-          }, null, 8, ["item", "level", "selected-items", "show-selection"]);
-        }), 128)) : createCommentVNode("", true)
+        i.value && u.value ? (s(!0), a(w, { key: 0 }, B(h.value, (g, _) => (s(), x(d, {
+          key: _,
+          item: g,
+          level: t.level + 1,
+          "selected-items": t.selectedItems,
+          "show-selection": t.showSelection,
+          onToggleSelect: n[1] || (n[1] = (R) => o.$emit("toggle-select", R))
+        }, null, 8, ["item", "level", "selected-items", "show-selection"]))), 128)) : f("", !0)
       ], 64);
     };
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const KpiTableRow = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-876827aa"]]);
-const _hoisted_1 = { class: "va-table" };
-const _hoisted_2 = {
+}), N = (t, l) => {
+  const e = t.__vccOpts || t;
+  for (const [c, u] of l)
+    e[c] = u;
+  return e;
+}, X = /* @__PURE__ */ N(W, [["__scopeId", "data-v-876827aa"]]), Z = { class: "va-table" }, ee = {
   key: 0,
   class: "selection-header"
-};
-const _hoisted_3 = ["checked", "indeterminate"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}, te = ["checked", "indeterminate"], le = /* @__PURE__ */ y({
   __name: "KpiTable",
   props: {
     tableData: {},
@@ -219,120 +163,76 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     showSelection: { type: Boolean }
   },
   emits: ["update:selectedItems"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const emit = __emit;
-    const expandedItems = ref(/* @__PURE__ */ new Set());
-    const getAllKpiNames = (items) => {
-      console.log("Extracting KPI names from items:", items);
-      const kpiNames = [];
-      const traverse = (nodes) => {
-        nodes.forEach((node) => {
-          if (node.type === "KPI") {
-            kpiNames.push(node.name);
-          }
-          if (node.children?.length > 0) {
-            traverse(node.children);
-          }
+  setup(t, { emit: l }) {
+    const e = t, c = l, u = E(/* @__PURE__ */ new Set()), m = (o) => {
+      console.log("Extracting KPI names from items:", o);
+      const n = [], d = (g) => {
+        g.forEach((_) => {
+          _.type === "KPI" && n.push(_.name), _.children?.length > 0 && d(_.children);
         });
       };
-      if (items && items.length > 0) {
-        traverse(items);
-      }
-      return kpiNames;
+      return o && o.length > 0 && d(o), n;
+    }, i = p(() => m(e.tableData)), h = p(() => {
+      const o = e.selectedItems || [];
+      return i.value.length > 0 && i.value.every((n) => o.includes(n));
+    }), I = p(() => {
+      console.log("All KPI Names:", i.value);
+      const o = e.selectedItems || [], n = i.value.filter((d) => o.includes(d)).length;
+      return n > 0 && n < i.value.length;
+    }), T = (o) => {
+      u.value.has(o) ? u.value.delete(o) : u.value.add(o);
+    }, S = (o) => {
+      const d = [...e.selectedItems || []], g = d.indexOf(o);
+      g === -1 ? d.push(o) : d.splice(g, 1), c("update:selectedItems", d);
+    }, V = () => {
+      h.value ? c("update:selectedItems", []) : c("update:selectedItems", [...i.value]);
     };
-    const allKpiNames = computed(() => getAllKpiNames(props.tableData));
-    const isAllSelected = computed(() => {
-      const selected = props.selectedItems || [];
-      return allKpiNames.value.length > 0 && allKpiNames.value.every((name) => selected.includes(name));
-    });
-    const isIndeterminate = computed(() => {
-      console.log("All KPI Names:", allKpiNames.value);
-      const selected = props.selectedItems || [];
-      const selectedCount = allKpiNames.value.filter((name) => selected.includes(name)).length;
-      return selectedCount > 0 && selectedCount < allKpiNames.value.length;
-    });
-    const handleToggleExpand = (itemKey) => {
-      if (expandedItems.value.has(itemKey)) {
-        expandedItems.value.delete(itemKey);
-      } else {
-        expandedItems.value.add(itemKey);
-      }
-    };
-    const handleToggleSelect = (kpiName) => {
-      const currentSelection = props.selectedItems || [];
-      const newSelection = [...currentSelection];
-      const index = newSelection.indexOf(kpiName);
-      if (index === -1) {
-        newSelection.push(kpiName);
-      } else {
-        newSelection.splice(index, 1);
-      }
-      emit("update:selectedItems", newSelection);
-    };
-    const toggleSelectAll = () => {
-      if (isAllSelected.value) {
-        emit("update:selectedItems", []);
-      } else {
-        emit("update:selectedItems", [...allKpiNames.value]);
-      }
-    };
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("table", _hoisted_1, [
-        createElementVNode("thead", null, [
-          createElementVNode("tr", null, [
-            __props.showSelection ? (openBlock(), createElementBlock("th", _hoisted_2, [
-              createElementVNode("input", {
-                type: "checkbox",
-                checked: isAllSelected.value,
-                indeterminate: isIndeterminate.value,
-                onChange: toggleSelectAll
-              }, null, 40, _hoisted_3)
-            ])) : createCommentVNode("", true),
-            _cache[0] || (_cache[0] = createElementVNode("th", null, "Name", -1)),
-            _cache[1] || (_cache[1] = createElementVNode("th", null, "Value", -1)),
-            _cache[2] || (_cache[2] = createElementVNode("th", null, "Goal", -1)),
-            _cache[3] || (_cache[3] = createElementVNode("th", null, "Status", -1)),
-            _cache[4] || (_cache[4] = createElementVNode("th", null, "Trend", -1))
-          ])
-        ]),
-        createElementVNode("tbody", null, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(__props.tableData, (item, index) => {
-            return openBlock(), createBlock(KpiTableRow, {
-              key: index,
-              item,
-              level: 0,
-              "selected-items": __props.selectedItems,
-              "show-selection": __props.showSelection,
-              onToggleExpand: handleToggleExpand,
-              onToggleSelect: handleToggleSelect
-            }, null, 8, ["item", "selected-items", "show-selection"]);
-          }), 128))
+    return (o, n) => (s(), a("table", Z, [
+      r("thead", null, [
+        r("tr", null, [
+          t.showSelection ? (s(), a("th", ee, [
+            r("input", {
+              type: "checkbox",
+              checked: h.value,
+              indeterminate: I.value,
+              onChange: V
+            }, null, 40, te)
+          ])) : f("", !0),
+          n[0] || (n[0] = r("th", null, "Name", -1)),
+          n[1] || (n[1] = r("th", null, "Value", -1)),
+          n[2] || (n[2] = r("th", null, "Goal", -1)),
+          n[3] || (n[3] = r("th", null, "Status", -1)),
+          n[4] || (n[4] = r("th", null, "Trend", -1))
         ])
-      ]);
-    };
+      ]),
+      r("tbody", null, [
+        (s(!0), a(w, null, B(t.tableData, (d, g) => (s(), x(X, {
+          key: g,
+          item: d,
+          level: 0,
+          "selected-items": t.selectedItems,
+          "show-selection": t.showSelection,
+          onToggleExpand: T,
+          onToggleSelect: S
+        }, null, 8, ["item", "selected-items", "show-selection"]))), 128))
+      ])
+    ]));
   }
-});
-const KpiTable = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-19bad148"]]);
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}), ne = /* @__PURE__ */ N(le, [["__scopeId", "data-v-19bad148"]]), se = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  KpiTable
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.common.kpi");
-  await void 0;
+  KpiTable: ne
+}, Symbol.toStringTag, { value: "Module" })), $ = "org.eclipse.daanse.board.app.ui.vue.common.kpi", oe = "0.0.1-next.1";
+async function ce(t) {
+  const l = globalThis.__tsm__;
+  if (!l)
+    throw new Error(`${$}: tsm runtime is not initialized`);
+  l.register($, se, oe, "ui.vue.common.kpi"), await void 0;
 }
-async function deactivate(context) {
+async function ue(t) {
   await void 0;
 }
 export {
-  KpiTable,
-  activate,
-  deactivate
+  ne as KpiTable,
+  ce as activate,
+  ue as deactivate
 };

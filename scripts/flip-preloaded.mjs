@@ -272,7 +272,9 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: { external: importMapLibraries },
-    minify: false,
+    // Production artefacts are minified; the dev watcher overrides this
+    // with minify: false for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {

@@ -1,14 +1,13 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-class ChartComposer extends BaseDatasource {
+import { DATASOURCE_REPOSITORY as m } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { BaseDatasource as y } from "org.eclipse.daanse.board.app.lib.datasource.base";
+const { serviceId: h } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class u extends y {
   /**
    * Dependencies arrive through the constructor - the factory in this
    * package's activate passes them from the registry. No global lookups.
    */
-  constructor(datasourceRepository) {
-    super();
-    this.datasourceRepository = datasourceRepository;
+  constructor(t) {
+    super(), this.datasourceRepository = t;
   }
   destroy() {
     console.log("Destroying ChartComposer");
@@ -17,169 +16,122 @@ class ChartComposer extends BaseDatasource {
   composeBy = "";
   usedSets = [];
   labelColumn = "";
-  init(configuration) {
-    super.init(configuration);
-    this.connectedDatasources = configuration.connectedDatasources;
-    const updateFn = async () => {
-      await this.getData("DataTable");
-      this.notify();
-    };
-    const datasourceRepository = this.datasourceRepository;
-    this.connectedDatasources.filter((datasourceId) => datasourceId).forEach(function(ds) {
-      const datasource = datasourceRepository.getDatasource(ds);
-      datasource.subscribe(updateFn);
-    });
-    this.composeBy = configuration.composeBy;
-    this.usedSets = configuration.usedSets;
-    this.labelColumn = configuration.labelColumn;
+  init(t) {
+    super.init(t), this.connectedDatasources = t.connectedDatasources;
+    const e = async () => {
+      await this.getData("DataTable"), this.notify();
+    }, s = this.datasourceRepository;
+    this.connectedDatasources.filter((a) => a).forEach(function(a) {
+      s.getDatasource(a).subscribe(e);
+    }), this.composeBy = t.composeBy, this.usedSets = t.usedSets, this.labelColumn = t.labelColumn;
   }
-  async getData(type) {
+  async getData(t) {
     if (!this.composeBy) return null;
-    const datasourceRepository = this.datasourceRepository;
-    const data = await Promise.all(
-      this.connectedDatasources.filter((datasourceId) => datasourceId).map(async (datasourceId) => {
-        if (!datasourceRepository) {
+    const e = this.datasourceRepository, s = await Promise.all(
+      this.connectedDatasources.filter((a) => a).map(async (a) => {
+        if (!e)
           throw new Error("DatasourceRepository is not provided to DataSource Classes");
-        }
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        return await datasourceInstance.getData("DataTable");
+        return await e.getDatasource(a).getData("DataTable");
       })
     );
-    if (type === "DataTable") {
-      return this.composeArrays(data);
-    } else if (type === "ChartData") {
-      const composedData = this.composeArrays(data);
-      return this.parseToChartData(composedData);
-    } else {
-      console.warn("Invalid data type");
-      return null;
-    }
+    if (t === "DataTable")
+      return this.composeArrays(s);
+    if (t === "ChartData") {
+      const a = this.composeArrays(s);
+      return this.parseToChartData(a);
+    } else
+      return console.warn("Invalid data type"), null;
   }
   async getOriginalData() {
     return [];
   }
-  callEvent(event, params) {
-    console.warn(`Event "${event}" is not available for this type of store`, params);
+  callEvent(t, e) {
+    console.warn(`Event "${t}" is not available for this type of store`, e);
   }
-  static async getHeaders(connectedDatasources, datasourceRepository) {
-    const data = await Promise.all(
-      connectedDatasources.filter((datasourceId) => datasourceId).map(async (datasourceId) => {
-        if (!datasourceRepository) {
+  static async getHeaders(t, e) {
+    return (await Promise.all(
+      t.filter((a) => a).map(async (a) => {
+        if (!e)
           throw new Error("DatasourceRepository is not provided to DataSource Classes");
-        }
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        return await datasourceInstance.getData("DataTable");
+        return await e.getDatasource(a).getData("DataTable");
       })
-    );
-    return data.reduce((acc, table) => {
-      table.headers.forEach((header) => {
-        if (!acc.includes(header)) {
-          acc.push(header);
-        }
-      });
-      return acc;
-    }, []);
+    )).reduce((a, r) => (r.headers.forEach((n) => {
+      a.includes(n) || a.push(n);
+    }), a), []);
   }
-  composeArrays(data) {
-    const resultingDataTable = {
+  composeArrays(t) {
+    const e = {
       headers: [],
       rows: [],
       items: []
-    };
-    const rowMap = /* @__PURE__ */ new Map();
-    data.forEach((table) => {
-      table.items.forEach((row) => {
-        const key = row[this.composeBy];
-        if (!rowMap.has(key)) {
-          rowMap.set(key, {});
-        }
-        rowMap.set(key, {
-          ...rowMap.get(key),
-          ...row
+    }, s = /* @__PURE__ */ new Map();
+    t.forEach((r) => {
+      r.items.forEach((n) => {
+        const i = n[this.composeBy];
+        s.has(i) || s.set(i, {}), s.set(i, {
+          ...s.get(i),
+          ...n
         });
       });
-    });
-    resultingDataTable.items = Array.from(rowMap.values());
-    resultingDataTable.headers = data.reduce((acc, table) => {
-      table.headers.forEach((header) => {
-        if (!acc.includes(header)) {
-          acc.push(header);
-        }
-      });
-      return acc;
-    }, []);
-    const rows = [];
-    resultingDataTable.items.forEach((row) => {
-      const newRow = resultingDataTable.headers.map((header) => {
-        return row[header];
-      });
-      rows.push(newRow);
-    });
-    resultingDataTable.rows = rows;
-    return resultingDataTable;
+    }), e.items = Array.from(s.values()), e.headers = t.reduce((r, n) => (n.headers.forEach((i) => {
+      r.includes(i) || r.push(i);
+    }), r), []);
+    const a = [];
+    return e.items.forEach((r) => {
+      const n = e.headers.map((i) => r[i]);
+      a.push(n);
+    }), e.rows = a, e;
   }
-  parseToChartData(data) {
-    const chartData = {};
-    chartData.labels = data.items.map((e) => e[this.labelColumn]);
-    chartData.datasets = this.usedSets.map((set) => {
-      return {
-        label: set,
-        data: data.items.map((e) => --e[set]),
-        backgroundColor: "red"
-      };
-    });
-    return chartData;
+  parseToChartData(t) {
+    const e = {};
+    return e.labels = t.items.map((s) => s[this.labelColumn]), e.datasets = this.usedSets.map((s) => ({
+      label: s,
+      data: t.items.map((a) => --a[s]),
+      backgroundColor: "red"
+    })), e;
   }
-  static validateConfiguration(config) {
-    if (!config.connectedDatasources || !config.labelColumn || !config.usedSets || !config.composeBy) return false;
-    return true;
+  static validateConfiguration(t) {
+    return !(!t.connectedDatasources || !t.labelColumn || !t.usedSets || !t.composeBy);
   }
 }
-const CHART_COMPOSER = serviceId("ChartComposer");
-const symbol = Symbol.for(CHART_COMPOSER);
-function createChartComposer(repository) {
-  return (config) => {
-    if (!ChartComposer.validateConfiguration(config)) {
+const c = h("ChartComposer"), f = Symbol.for(c);
+function D(o) {
+  return (t) => {
+    if (!u.validateConfiguration(t))
       throw new Error(
         "Invalid ChartComposer configuration. Please provide a valid configuration."
       );
-    }
-    const composer = new ChartComposer(repository);
-    composer.init(config);
-    return composer;
+    const e = new u(o);
+    return e.init(t), e;
   };
 }
-function activate$1({ services }) {
-  services.register(CHART_COMPOSER, createChartComposer(services.getRequired(DATASOURCE_REPOSITORY)));
+function d({ services: o }) {
+  o.register(c, D(o.getRequired(m)));
 }
-function deactivate$1({ services }) {
-  services.unregister(CHART_COMPOSER);
+function p({ services: o }) {
+  o.unregister(c);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const b = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CHART_COMPOSER,
-  ChartComposer,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  symbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.composer.chart";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.composer.chart");
-  await activate$1?.(context);
+  CHART_COMPOSER: c,
+  ChartComposer: u,
+  activate: d,
+  deactivate: p,
+  symbol: f
+}, Symbol.toStringTag, { value: "Module" })), l = "org.eclipse.daanse.board.app.lib.composer.chart", C = "0.0.1-next.1";
+async function v(o) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${l}: tsm runtime is not initialized`);
+  t.register(l, b, C, "lib.composer.chart"), await d?.(o);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function E(o) {
+  await p?.(o);
 }
 export {
-  CHART_COMPOSER,
-  ChartComposer,
-  activate,
-  deactivate,
-  symbol
+  c as CHART_COMPOSER,
+  u as ChartComposer,
+  v as activate,
+  E as deactivate,
+  f as symbol
 };

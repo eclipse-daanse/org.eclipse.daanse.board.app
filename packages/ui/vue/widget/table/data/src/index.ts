@@ -20,6 +20,7 @@ import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'DataTableWidget'
 
@@ -29,8 +30,8 @@ const WIDGET_TYPE = 'DataTableWidget'
 })
 export class DataTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = DataTableWidget
-  readonly settingsComponent = DataTableWidgetSettings
+  readonly component: Component = DataTableWidget
+  readonly settingsComponent: Component = DataTableWidgetSettings
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'DataTable'

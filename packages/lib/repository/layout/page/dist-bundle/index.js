@@ -1,57 +1,53 @@
-import { LAYOUT_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.layout.page";
-import { LAYOUT_REPOSITORY as LAYOUT_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.layout.page";
-class LayoutRepository {
+import { LAYOUT_REPOSITORY as e, identifier as s } from "org.eclipse.daanse.board.app.lib.api.layout.page";
+import { LAYOUT_REPOSITORY as d, identifier as p } from "org.eclipse.daanse.board.app.lib.api.layout.page";
+class n {
   constructor() {
     this.availableLayouts = /* @__PURE__ */ new Map();
   }
-  addLayout(layout) {
-    this.availableLayouts.set(layout.id, layout);
+  addLayout(t) {
+    this.availableLayouts.set(t.id, t);
   }
-  removeLayout(layoutId) {
-    return this.availableLayouts.delete(layoutId);
+  removeLayout(t) {
+    return this.availableLayouts.delete(t);
   }
-  getLayout(layoutId) {
-    return this.availableLayouts.get(layoutId);
+  getLayout(t) {
+    return this.availableLayouts.get(t);
   }
   getAllLayouts() {
     return Array.from(this.availableLayouts.values());
   }
-  hasLayout(layoutId) {
-    return this.availableLayouts.has(layoutId);
+  hasLayout(t) {
+    return this.availableLayouts.has(t);
   }
 }
-function activate$1({ services }) {
-  services.register(
-    LAYOUT_REPOSITORY,
-    new LayoutRepository()
+function o({ services: a }) {
+  a.register(
+    e,
+    new n()
   );
 }
-function deactivate$1({ services }) {
-  services.unregister(LAYOUT_REPOSITORY);
+function r({ services: a }) {
+  a.unregister(e);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const l = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  LAYOUT_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.layout.page";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.layout.page");
-  await activate$1?.(context);
+  LAYOUT_REPOSITORY: e,
+  activate: o,
+  deactivate: r,
+  identifier: s
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.lib.repository.layout.page", u = "0.0.1-next.1";
+async function y(a) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, l, u, "lib.repository.layout.page"), await o?.(a);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function v(a) {
+  await r?.(a);
 }
 export {
-  LAYOUT_REPOSITORY2 as LAYOUT_REPOSITORY,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  d as LAYOUT_REPOSITORY,
+  y as activate,
+  v as deactivate,
+  p as identifier
 };

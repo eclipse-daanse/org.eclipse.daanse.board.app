@@ -1,11 +1,11 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { BaseRepository } from "org.eclipse.daanse.board.app.lib.repository.persistence";
-class RestRepositoryImpl extends BaseRepository {
+import { REPOSITORY_REGISTRY as l } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { BaseRepository as u } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+const { serviceId: p } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class s extends u {
   static {
     this.type = "restRepositories";
   }
-  init(url, name, settings = {
+  init(e, t, n = {
     updateEndpointPath: ":id",
     deleteEndpointPath: ":id",
     findAllEndpointPath: "",
@@ -13,164 +13,127 @@ class RestRepositoryImpl extends BaseRepository {
     findEndpointPath: ":id",
     syncEndpointPath: ""
   }) {
-    super.init(url, name);
-    this.updateEndpointPath = settings.updateEndpointPath || ":id";
-    this.deleteEndpointPath = settings.deleteEndpointPath || ":id";
-    this.findAllEndpointPath = settings.findEndpointPath || "";
-    this.createEndpointPath = settings.createEndpointPath || ":id";
-    this.findEndpointPath = settings.findEndpointPath || ":id";
-    this.syncEndpointPath = settings.syncEndpointPath || "";
+    super.init(e, t), this.updateEndpointPath = n.updateEndpointPath || ":id", this.deleteEndpointPath = n.deleteEndpointPath || ":id", this.findAllEndpointPath = n.findEndpointPath || "", this.createEndpointPath = n.createEndpointPath || ":id", this.findEndpointPath = n.findEndpointPath || ":id", this.syncEndpointPath = n.syncEndpointPath || "";
   }
   async sync() {
     try {
-      const createURL = new URL(this.uri ?? "");
-      createURL.pathname = createURL.pathname + "/" + this.findAllEndpointPath;
-      const res = await fetch(createURL, { method: "HEAD" });
-      if (res.ok) {
-        const resArr = [];
-        const data = await res.json();
-        for (const entity of data) {
-          resArr.push({
-            name: entity.name,
-            uri: new URL(entity.url),
+      const e = new URL(this.uri ?? "");
+      e.pathname = e.pathname + "/" + this.findAllEndpointPath;
+      const t = await fetch(e, { method: "HEAD" });
+      if (t.ok) {
+        const n = [], r = await t.json();
+        for (const a of r)
+          n.push({
+            name: a.name,
+            uri: new URL(a.url),
             data: null
           });
-        }
-        return resArr;
-      } else {
-        throw new Error(res.statusText);
-      }
+        return n;
+      } else
+        throw new Error(t.statusText);
     } catch (e) {
-      console.log(e);
-      throw new Error("Resource could not find entities");
+      throw console.log(e), new Error("Resource could not find entities");
     }
   }
   async create(e) {
     try {
-      const createURL = new URL(this.uri ?? "");
-      const entityPath = e.uri.pathname;
-      createURL.pathname = createURL.pathname + "/" + this.createEndpointPath?.replace(":id", entityPath);
-      const res = await fetch(createURL, { method: "GET", body: e.data });
-      if (res.ok) {
-        return true;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (e2) {
-      console.log(e2);
-      return new Error("Resource could not created");
+      const t = new URL(this.uri ?? ""), n = e.uri.pathname;
+      t.pathname = t.pathname + "/" + this.createEndpointPath?.replace(":id", n);
+      const r = await fetch(t, { method: "GET", body: e.data });
+      if (r.ok)
+        return !0;
+      throw new Error(r.statusText);
+    } catch (t) {
+      return console.log(t), new Error("Resource could not created");
     }
   }
   async delete(e) {
     try {
-      const createURL = new URL(this.uri ?? "");
-      const entityPath = e.uri.pathname;
-      createURL.pathname = createURL.pathname + "/" + this.deleteEndpointPath?.replace(":id", entityPath);
-      const res = await fetch(createURL, { method: "DELETE" });
-      if (res.ok) {
-        return true;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (e2) {
-      console.log(e2);
-      return new Error("Resource could not deleted");
+      const t = new URL(this.uri ?? ""), n = e.uri.pathname;
+      t.pathname = t.pathname + "/" + this.deleteEndpointPath?.replace(":id", n);
+      const r = await fetch(t, { method: "DELETE" });
+      if (r.ok)
+        return !0;
+      throw new Error(r.statusText);
+    } catch (t) {
+      return console.log(t), new Error("Resource could not deleted");
     }
   }
   async findAll() {
     try {
-      const createURL = new URL(this.uri ?? "");
-      createURL.pathname = createURL.pathname + "/" + this.findAllEndpointPath;
-      const res = await fetch(createURL, { method: "GET" });
-      if (res.ok) {
-        const resArr = [];
-        const data = await res.json();
-        for (const entity of data) {
-          resArr.push({
-            name: entity.name,
-            uri: new URL(entity.url),
+      const e = new URL(this.uri ?? "");
+      e.pathname = e.pathname + "/" + this.findAllEndpointPath;
+      const t = await fetch(e, { method: "GET" });
+      if (t.ok) {
+        const n = [], r = await t.json();
+        for (const a of r)
+          n.push({
+            name: a.name,
+            uri: new URL(a.url),
             data: null
           });
-        }
-        return resArr;
-      } else {
-        throw new Error(res.statusText);
-      }
+        return n;
+      } else
+        throw new Error(t.statusText);
     } catch (e) {
-      console.log(e);
-      throw new Error("Resource could not find entities");
+      throw console.log(e), new Error("Resource could not find entities");
     }
   }
-  async getEntityByUri(uri) {
+  async getEntityByUri(e) {
     try {
-      const getURL = new URL(this.uri ?? "");
-      const entityPath = uri.pathname;
-      getURL.pathname = getURL.pathname + "/" + this.findEndpointPath?.replace(":id", entityPath);
-      const res = await fetch(getURL, { method: "GET" });
-      if (res.ok) {
-        const data = await res.json();
-        const resArr = {
-          name: entityPath,
-          uri: getURL,
-          data
+      const t = new URL(this.uri ?? ""), n = e.pathname;
+      t.pathname = t.pathname + "/" + this.findEndpointPath?.replace(":id", n);
+      const r = await fetch(t, { method: "GET" });
+      if (r.ok) {
+        const a = await r.json();
+        return {
+          name: n,
+          uri: t,
+          data: a
         };
-        return resArr;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (e) {
-      console.log(e);
-      throw new Error("Resource could not find entities");
+      } else
+        throw new Error(r.statusText);
+    } catch (t) {
+      throw console.log(t), new Error("Resource could not find entities");
     }
   }
   async update(e) {
     try {
-      const createURL = new URL(this.uri ?? "");
-      const entityPath = e.uri.pathname;
-      createURL.pathname = createURL.pathname + "/" + this.updateEndpointPath?.replace(":id", entityPath);
-      const res = await fetch(createURL, { method: "DELETE" });
-      if (res.ok) {
-        return true;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (e2) {
-      console.log(e2);
-      return new Error("Resource could not deleted");
+      const t = new URL(this.uri ?? ""), n = e.uri.pathname;
+      t.pathname = t.pathname + "/" + this.updateEndpointPath?.replace(":id", n);
+      const r = await fetch(t, { method: "DELETE" });
+      if (r.ok)
+        return !0;
+      throw new Error(r.statusText);
+    } catch (t) {
+      return console.log(t), new Error("Resource could not deleted");
     }
   }
 }
-const REST_REPOSITORY = serviceId("RestRepository");
-const identifier = Symbol.for(REST_REPOSITORY);
-function activate$1({ services }) {
-  services.register(REST_REPOSITORY, new RestRepositoryImpl());
-  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY);
-  repoRegistry.registerRepoType(RestRepositoryImpl.type, identifier);
+const i = p("RestRepository"), E = Symbol.for(i);
+function d({ services: o }) {
+  o.register(i, new s()), o.getRequired(l).registerRepoType(s.type, E);
 }
-function deactivate$1({ services }) {
-  services.unregister(REST_REPOSITORY);
+function h({ services: o }) {
+  o.unregister(i);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const w = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  REST_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.persistence.rest";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.persistence.rest");
-  await activate$1?.(context);
+  REST_REPOSITORY: i,
+  activate: d,
+  deactivate: h
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.persistence.rest", f = "0.0.1-next.1";
+async function P(o) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, w, f, "lib.persistence.rest"), await d?.(o);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function T(o) {
+  await h?.(o);
 }
 export {
-  REST_REPOSITORY,
-  activate,
-  deactivate
+  i as REST_REPOSITORY,
+  P as activate,
+  T as deactivate
 };

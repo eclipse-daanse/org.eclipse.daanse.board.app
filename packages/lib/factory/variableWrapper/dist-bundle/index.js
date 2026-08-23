@@ -1,151 +1,120 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { injectable, inject } from "@eclipse-daanse/tsm";
-import { VARIABLEWRAPPER, VariableWrapper } from "org.eclipse.daanse.board.app.lib.variables";
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(result) || result;
-  return result;
-};
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-let VariableWrapperFactory = class {
-  constructor(variables) {
-    this.variables = variables;
-    this.wrapperTypes = /* @__PURE__ */ new Map();
+import { injectable as _, inject as b } from "@eclipse-daanse/tsm";
+import { VARIABLEWRAPPER as P, VariableWrapper as d } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLE_REPOSITORY as g } from "org.eclipse.daanse.board.app.lib.api.variable";
+const { serviceId: y } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var V = Object.getOwnPropertyDescriptor, A = (e, o, s, t) => {
+  for (var r = t > 1 ? void 0 : t ? V(o, s) : o, i = e.length - 1, a; i >= 0; i--)
+    (a = e[i]) && (r = a(r) || r);
+  return r;
+}, m = (e, o) => (s, t) => o(s, t, e);
+let f = class {
+  constructor(e) {
+    this.variables = e, this.wrapperTypes = /* @__PURE__ */ new Map();
   }
   /**
    * Registriert einen zusaetzlichen Wrapper-Typ. Eine erneute Registrierung
    * desselben Typs ersetzt die vorherige.
    */
-  registerWrapperType(wrapperType) {
-    this.wrapperTypes.set(wrapperType.type, wrapperType);
+  registerWrapperType(e) {
+    this.wrapperTypes.set(e.type, e);
   }
-  initilazeVariableWrappers(json) {
-    const results = this.findPropertyWithValue(json, "type", VARIABLEWRAPPER);
-    if (results) {
-      for (const result of results) {
-        const short = result.path.split(".");
-        short.pop();
-        const upperPath = short.join(".");
-        const originalValue = this.getValueAtPath(json, short.join("."));
-        if (originalValue._value !== void 0 && originalValue._value !== null) {
-          const var1 = new VariableWrapper(originalValue._value);
-          if (originalValue.reference && originalValue.reference.name) {
-            const ref = this.variables.getVariable(originalValue.reference.name);
-            var1.setTo(ref);
+  initilazeVariableWrappers(e) {
+    const o = this.findPropertyWithValue(e, "type", P);
+    if (o)
+      for (const s of o) {
+        const t = s.path.split(".");
+        t.pop();
+        const r = t.join("."), i = this.getValueAtPath(e, t.join("."));
+        if (i._value !== void 0 && i._value !== null) {
+          const a = new d(i._value);
+          if (i.reference && i.reference.name) {
+            const n = this.variables.getVariable(i.reference.name);
+            a.setTo(n);
           }
-          this.setValueAtPath(json, upperPath, var1);
+          this.setValueAtPath(e, r, a);
         }
       }
-    }
-    for (const wrapperType of this.wrapperTypes.values()) {
-      const typeResults = this.findPropertyWithValue(json, "type", wrapperType.type);
-      if (!typeResults) continue;
-      for (const result of typeResults) {
-        const short = result.path.split(".");
-        short.pop();
-        const upperPath = short.join(".");
-        const originalValue = this.getValueAtPath(json, short.join("."));
-        if (originalValue._value !== void 0 && originalValue._value !== null) {
-          this.setValueAtPath(json, upperPath, wrapperType.create(originalValue._value));
+    for (const s of this.wrapperTypes.values()) {
+      const t = this.findPropertyWithValue(e, "type", s.type);
+      if (t)
+        for (const r of t) {
+          const i = r.path.split(".");
+          i.pop();
+          const a = i.join("."), n = this.getValueAtPath(e, i.join("."));
+          n._value !== void 0 && n._value !== null && this.setValueAtPath(e, a, s.create(n._value));
         }
-      }
     }
-    return json;
+    return e;
   }
-  findPropertyWithValue(obj, keyToFind, valueToMatch) {
-    const results = [];
-    const visited = /* @__PURE__ */ new WeakSet();
-    function recurse(current, path) {
-      if (Array.isArray(current)) {
-        current.forEach((item, index) => recurse(item, `${path}[${index}]`));
-      } else if (typeof current === "object" && current !== null) {
-        if (visited.has(current)) {
+  findPropertyWithValue(e, o, s) {
+    const t = [], r = /* @__PURE__ */ new WeakSet();
+    function i(a, n) {
+      if (Array.isArray(a))
+        a.forEach((l, p) => i(l, `${n}[${p}]`));
+      else if (typeof a == "object" && a !== null) {
+        if (r.has(a))
           return;
-        }
-        visited.add(current);
-        for (const key in current) {
-          const newPath = path ? `${path}.${key}` : key;
-          if (key === keyToFind && current[key] === valueToMatch) {
-            results.push({ path: newPath, value: current[key] });
-          }
-          recurse(current[key], newPath);
+        r.add(a);
+        for (const l in a) {
+          const p = n ? `${n}.${l}` : l;
+          l === o && a[l] === s && t.push({ path: p, value: a[l] }), i(a[l], p);
         }
       }
     }
-    recurse(obj, "");
-    return results;
+    return i(e, ""), t;
   }
-  setValueAtPath(obj, path, newValue) {
-    const pathParts = path.replace(/\[(\w+)\]/g, ".$1").replace(/^\./, "").split(".");
-    let current = obj;
-    for (let i = 0; i < pathParts.length - 1; i++) {
-      const part = pathParts[i];
-      if (!(part in current)) {
-        return false;
-      }
-      current = current[part];
-      if (typeof current !== "object" || current === null) {
-        return false;
-      }
+  setValueAtPath(e, o, s) {
+    const t = o.replace(/\[(\w+)\]/g, ".$1").replace(/^\./, "").split(".");
+    let r = e;
+    for (let a = 0; a < t.length - 1; a++) {
+      const n = t[a];
+      if (!(n in r) || (r = r[n], typeof r != "object" || r === null))
+        return !1;
     }
-    const lastPart = pathParts[pathParts.length - 1];
-    if (lastPart in current) {
-      current[lastPart] = newValue;
-      return true;
-    }
-    return false;
+    const i = t[t.length - 1];
+    return i in r ? (r[i] = s, !0) : !1;
   }
-  getValueAtPath(obj, path) {
-    const pathParts = path.replace(/\[(\w+)\]/g, ".$1").replace(/^\./, "").split(".");
-    let current = obj;
-    for (const part of pathParts) {
-      if (current == null || !(part in current)) {
-        return void 0;
-      }
-      current = current[part];
+  getValueAtPath(e, o) {
+    const s = o.replace(/\[(\w+)\]/g, ".$1").replace(/^\./, "").split(".");
+    let t = e;
+    for (const r of s) {
+      if (t == null || !(r in t))
+        return;
+      t = t[r];
     }
-    return current;
+    return t;
   }
 };
-VariableWrapperFactory = __decorateClass([
-  injectable(),
-  __decorateParam(0, inject(VARIABLE_REPOSITORY))
-], VariableWrapperFactory);
-const VARIABLE_WRAPPER_FACTORY = serviceId("VariableWrapperFactory");
-const identifier = Symbol.for(VARIABLE_WRAPPER_FACTORY);
-function activate$1({ services }) {
-  services.register(VARIABLE_WRAPPER_FACTORY, services.construct(VariableWrapperFactory));
+f = A([
+  _(),
+  m(0, b(g))
+], f);
+const c = y("VariableWrapperFactory"), w = Symbol.for(c);
+function h({ services: e }) {
+  e.register(c, e.construct(f));
 }
-function deactivate$1({ services }) {
-  services.unregister(VARIABLE_WRAPPER_FACTORY);
+function v({ services: e }) {
+  e.unregister(c);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const R = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VARIABLE_WRAPPER_FACTORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.factory.variableWrapper";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.factory.variableWrapper");
-  await activate$1?.(context);
+  VARIABLE_WRAPPER_FACTORY: c,
+  activate: h,
+  deactivate: v,
+  identifier: w
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.factory.variableWrapper", W = "0.0.1-next.1";
+async function $(e) {
+  const o = globalThis.__tsm__;
+  if (!o)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  o.register(u, R, W, "lib.factory.variableWrapper"), await h?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function I(e) {
+  await v?.(e);
 }
 export {
-  VARIABLE_WRAPPER_FACTORY,
-  activate,
-  deactivate,
-  identifier
+  c as VARIABLE_WRAPPER_FACTORY,
+  $ as activate,
+  I as deactivate,
+  w as identifier
 };

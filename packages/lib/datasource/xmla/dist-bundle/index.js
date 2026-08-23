@@ -1,1111 +1,703 @@
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { inject } from "@eclipse-daanse/tsm";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const byteToHex = [];
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 256).toString(16).slice(1));
+import { BaseDatasource as q } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as B } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { inject as j } from "@eclipse-daanse/tsm";
+const { serviceId: z } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), M = [];
+for (let i = 0; i < 256; ++i)
+  M.push((i + 256).toString(16).slice(1));
+function G(i, e = 0) {
+  return (M[i[e + 0]] + M[i[e + 1]] + M[i[e + 2]] + M[i[e + 3]] + "-" + M[i[e + 4]] + M[i[e + 5]] + "-" + M[i[e + 6]] + M[i[e + 7]] + "-" + M[i[e + 8]] + M[i[e + 9]] + "-" + M[i[e + 10]] + M[i[e + 11]] + M[i[e + 12]] + M[i[e + 13]] + M[i[e + 14]] + M[i[e + 15]]).toLowerCase();
 }
-function unsafeStringify(arr, offset = 0) {
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+const W = new Uint8Array(16);
+function X() {
+  return crypto.getRandomValues(W);
 }
-const rnds8 = new Uint8Array(16);
-function rng() {
-  return crypto.getRandomValues(rnds8);
+function L(i, e, t) {
+  return crypto.randomUUID ? crypto.randomUUID() : K(i);
 }
-function v4(options, buf, offset) {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return _v4(options);
-}
-function _v4(options, buf, offset) {
-  options = options || {};
-  const rnds = options.random ?? options.rng?.() ?? rng();
-  if (rnds.length < 16) {
+function K(i, e, t) {
+  i = i || {};
+  const o = i.random ?? i.rng?.() ?? X();
+  if (o.length < 16)
     throw new Error("Random bytes length must be >= 16");
-  }
-  rnds[6] = rnds[6] & 15 | 64;
-  rnds[8] = rnds[8] & 63 | 128;
-  return unsafeStringify(rnds);
+  return o[6] = o[6] & 15 | 64, o[8] = o[8] & 63 | 128, G(o);
 }
-async function getRowsDrilldownRequestString(hierarchy, rowsDrilldownMember, expandedMembers, levels) {
-  const metadataLevels = levels;
-  if (rowsDrilldownMember) {
-    const uid = "id" + v4();
-    const setSection = `SET [Row_Dim_${uid}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${rowsDrilldownMember.UName}), Descendants(${rowsDrilldownMember.UName})})))'`;
-    const rowsMemberLevel = metadataLevels.find(
-      (e) => e.LEVEL_UNIQUE_NAME === rowsDrilldownMember.LName
-    );
-    const rowsLevels = metadataLevels.filter((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === rowsMemberLevel?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER <= rowsMemberLevel.LEVEL_NUMBER;
-    });
-    let hierarchizeString = "";
-    for (let i = 0; i < rowsLevels.length; i++) {
-      if (!hierarchizeString.length) {
-        hierarchizeString = `
+async function J(i, e, t, o) {
+  const n = o;
+  if (e) {
+    const s = "id" + L(), r = `SET [Row_Dim_${s}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${e.UName}), Descendants(${e.UName})})))'`, l = n.find(
+      (a) => a.LEVEL_UNIQUE_NAME === e.LName
+    ), d = n.filter((a) => a.HIERARCHY_UNIQUE_NAME === l?.HIERARCHY_UNIQUE_NAME && a.LEVEL_NUMBER <= l.LEVEL_NUMBER);
+    let c = "";
+    for (let a = 0; a < d.length; a++)
+      c.length ? c = `
+          DrilldownLevel({
+            ${c}
+            },
+            ${d[a].LEVEL_UNIQUE_NAME}
+          )
+        ` : c = `
         DrilldownLevel({
-          ${rowsLevels[i].LEVEL_UNIQUE_NAME}
+          ${d[a].LEVEL_UNIQUE_NAME}
         })
         `;
-      } else {
-        hierarchizeString = `
-          DrilldownLevel({
-            ${hierarchizeString}
-            },
-            ${rowsLevels[i].LEVEL_UNIQUE_NAME}
-          )
-        `;
-      }
-    }
-    if (expandedMembers) {
-      const rowsRootLevel = metadataLevels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === expandedMembers[0]?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === "0";
-      });
-      for (let i = 0; i < expandedMembers.length; i++) {
-        if (!hierarchizeString.length) {
-          hierarchizeString = `DrilldownMember({{DrilldownLevel({${rowsRootLevel?.LEVEL_UNIQUE_NAME}})}}, {${expandedMembers[i].UName}})`;
-        } else {
-          hierarchizeString = `
+    if (t) {
+      const a = n.find((m) => m.HIERARCHY_UNIQUE_NAME === t[0]?.HIERARCHY_UNIQUE_NAME && m.LEVEL_NUMBER === "0");
+      for (let m = 0; m < t.length; m++)
+        c.length ? c = `
             DrilldownMember({{
-              ${hierarchizeString}
-            }}, {${expandedMembers[i].UName}})
-          `;
-        }
-      }
+              ${c}
+            }}, {${t[m].UName}})
+          ` : c = `DrilldownMember({{DrilldownLevel({${a?.LEVEL_UNIQUE_NAME}})}}, {${t[m].UName}})`;
     }
-    hierarchizeString = `
+    return c = `
       Hierarchize(Intersect(AddCalculatedMembers({
-        ${hierarchizeString}
-      }), [Row_Dim_${uid}]))
-    `;
-    return {
-      with: setSection,
-      select: hierarchizeString
+        ${c}
+      }), [Row_Dim_${s}]))
+    `, {
+      with: r,
+      select: c
+    };
+  } else if (i.filters?.enabled) {
+    const s = i.filters;
+    let r = "", l = "";
+    const d = [];
+    s?.multipleChoise ? d.push(...s.selectedItems) : d.push(s.selectedItem);
+    const c = [];
+    d.forEach((E) => {
+      const u = E.LNum;
+      c[u] ? c[u].push(E) : c[u] = [E];
+    });
+    const m = n.filter((E) => E.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME).find((E) => E.LEVEL_NUMBER === "0");
+    if (!m)
+      return {
+        select: "",
+        with: ""
+      };
+    const R = `[FILTER_${"id" + L()}]`, N = d.map((E) => `Ascendants(${E.UName}), Descendants(${E.UName})`).join(","), I = [];
+    s.deselectedItems && s.deselectedItems.forEach((E) => {
+      const u = E.LNum;
+      I[u] ? I[u].push(E) : I[u] = [E];
+    });
+    const U = Math.max(
+      c.length,
+      I.length
+    ), h = [];
+    if (t.forEach((E) => {
+      if (E.HIERARCHY_UNIQUE_NAME !== i.originalItem.HIERARCHY_UNIQUE_NAME)
+        return;
+      const u = parseInt(E.LNum);
+      h[u] ? h[u].push(E) : h[u] = [E];
+    }), h.length) {
+      for (let E = 0; E < h.length; E++) {
+        const u = h[E].map((p) => p.UName).join(",");
+        E === 0 ? l = `DrilldownMember({{${m.LEVEL_UNIQUE_NAME}.members}}, {${u}})` : l = `DrilldownMember({{${l}}}, {${u}})`;
+      }
+      l = `Intersect(AddCalculatedMembers(${l}), ${R})`;
+    } else
+      l = `Intersect(AddCalculatedMembers({${m.LEVEL_UNIQUE_NAME}.members}), ${R}))`;
+    for (let E = 0; E < U; E++) {
+      if (c[E]) {
+        const u = c[E].map((p) => `Ascendants(${p.UName}), Descendants(${p.UName})`).join(",");
+        r.length ? r = `Union({${u}}, {${r}})` : r = `{${u}}`;
+      }
+      if (I[E]) {
+        const u = I[E].map((p) => `Descendants(${p.UName})`).join(",");
+        r.length ? r = `Except({${r}}, {${u}})` : r = `{${u}}`;
+      }
+    }
+    return l = `Hierarchize(${l})`, s.selectAll ? r = `SET ${R} AS 'VisualTotals(Distinct(Hierarchize(${r})))' ` : r = `SET ${R} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${N}}, ${r}))))' `, {
+      with: r,
+      select: l
     };
   } else {
-    if (!hierarchy.filters?.enabled) {
-      let hierarchizeString = "";
-      const rowsRootLevel = metadataLevels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === expandedMembers[0]?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === "0";
-      });
-      for (let i = 0; i < expandedMembers.length; i++) {
-        if (i === 0) {
-          if (expandedMembers[i].LNum === "0") {
-            hierarchizeString = `
+    let s = "";
+    const r = n.find((l) => l.HIERARCHY_UNIQUE_NAME === t[0]?.HIERARCHY_UNIQUE_NAME && l.LEVEL_NUMBER === "0");
+    for (let l = 0; l < t.length; l++)
+      l === 0 ? t[l].LNum === "0" ? s = `
               DrilldownMember({{
-                ${rowsRootLevel?.LEVEL_UNIQUE_NAME}.members
-              }}, {${expandedMembers[i].UName}})
-            `;
-          } else {
-            hierarchizeString = `DrilldownMember({{DrilldownLevel({${rowsRootLevel?.LEVEL_UNIQUE_NAME}})}}, {${expandedMembers[i].UName}})`;
-          }
-        } else {
-          hierarchizeString = `
+                ${r?.LEVEL_UNIQUE_NAME}.members
+              }}, {${t[l].UName}})
+            ` : s = `DrilldownMember({{DrilldownLevel({${r?.LEVEL_UNIQUE_NAME}})}}, {${t[l].UName}})` : s = `
             DrilldownMember({{
-              ${hierarchizeString}
-            }}, {${expandedMembers[i].UName}})
+              ${s}
+            }}, {${t[l].UName}})
           `;
-        }
-      }
-      hierarchizeString = `
+    return s = `
         Hierarchize(
-            ${hierarchizeString}
-        )`;
-      return {
-        with: "",
-        select: hierarchizeString
-      };
-    } else {
-      const filter = hierarchy.filters;
-      let withSection = "";
-      let selectSection = "";
-      const selectedFilters = [];
-      if (filter?.multipleChoise) {
-        selectedFilters.push(...filter.selectedItems);
-      } else {
-        selectedFilters.push(filter.selectedItem);
-      }
-      const filtersLevels = [];
-      selectedFilters.forEach((e) => {
-        const levelNum = e.LNum;
-        if (filtersLevels[levelNum]) {
-          filtersLevels[levelNum].push(e);
-        } else {
-          filtersLevels[levelNum] = [e];
-        }
-      });
-      const rowsLevels = metadataLevels.filter((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === hierarchy.originalItem.HIERARCHY_UNIQUE_NAME;
-      });
-      const rootLevel = rowsLevels.find((e) => e.LEVEL_NUMBER === "0");
-      if (!rootLevel)
-        return {
-          select: "",
-          with: ""
-        };
-      const uid = "id" + v4();
-      const filterSetName = `[FILTER_${uid}]`;
-      const set = selectedFilters.map((e) => `Ascendants(${e.UName}), Descendants(${e.UName})`).join(",");
-      const deseclectedFiltersLevels = [];
-      if (filter.deselectedItems) {
-        filter.deselectedItems.forEach((e) => {
-          const levelNum = e.LNum;
-          if (deseclectedFiltersLevels[levelNum]) {
-            deseclectedFiltersLevels[levelNum].push(e);
-          } else {
-            deseclectedFiltersLevels[levelNum] = [e];
-          }
-        });
-      }
-      const filtersDepth = Math.max(
-        filtersLevels.length,
-        deseclectedFiltersLevels.length
-      );
-      const levels2 = [];
-      expandedMembers.forEach((element) => {
-        if (element.HIERARCHY_UNIQUE_NAME !== hierarchy.originalItem.HIERARCHY_UNIQUE_NAME) {
-          return;
-        }
-        const levelNum = parseInt(element.LNum);
-        if (levels2[levelNum]) levels2[levelNum].push(element);
-        else levels2[levelNum] = [element];
-      });
-      if (levels2.length) {
-        for (let i = 0; i < levels2.length; i++) {
-          const joinedMembers = levels2[i].map((e) => e.UName).join(",");
-          if (i === 0) {
-            selectSection = `DrilldownMember({{${rootLevel.LEVEL_UNIQUE_NAME}.members}}, {${joinedMembers}})`;
-          } else {
-            selectSection = `DrilldownMember({{${selectSection}}}, {${joinedMembers}})`;
-          }
-        }
-        selectSection = `Intersect(AddCalculatedMembers(${selectSection}), ${filterSetName})`;
-      } else {
-        selectSection = `Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`;
-      }
-      for (let i = 0; i < filtersDepth; i++) {
-        if (filtersLevels[i]) {
-          const aggregatedFiltersForLevel = filtersLevels[i].map((e) => `Ascendants(${e.UName}), Descendants(${e.UName})`).join(",");
-          if (withSection.length) {
-            withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`;
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`;
-          }
-        }
-        if (deseclectedFiltersLevels[i]) {
-          const aggregatedFiltersForLevel = deseclectedFiltersLevels[i].map((e) => `Descendants(${e.UName})`).join(",");
-          if (withSection.length) {
-            withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`;
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`;
-          }
-        }
-      }
-      selectSection = `Hierarchize(${selectSection})`;
-      if (filter.selectAll) {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `;
-      } else {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `;
-      }
-      return {
-        with: withSection,
-        select: selectSection
-      };
-    }
+            ${s}
+        )`, {
+      with: "",
+      select: s
+    };
   }
 }
-async function getColsDrilldownRequestString(hierarchy, columnsDrilldownMember, expandedMembers, levels) {
-  const metadataLevels = levels;
-  if (columnsDrilldownMember) {
-    const uid = "id" + v4();
-    const setSection = `SET [Col_Dim_${uid}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${columnsDrilldownMember.UName}), Descendants(${columnsDrilldownMember.UName})})))'`;
-    const colsMemberLevel = metadataLevels.find(
-      (e) => e.LEVEL_UNIQUE_NAME === columnsDrilldownMember.LName
-    );
-    const colsLevels = metadataLevels.filter((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === colsMemberLevel?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER <= colsMemberLevel.LEVEL_NUMBER;
-    });
-    let hierarchizeString = "";
-    for (let i = 0; i < colsLevels.length; i++) {
-      if (!hierarchizeString.length) {
-        hierarchizeString = `
+async function k(i, e, t, o) {
+  const n = o;
+  if (e) {
+    const s = "id" + L(), r = `SET [Col_Dim_${s}] AS 'VisualTotals(Distinct(Hierarchize({Ascendants(${e.UName}), Descendants(${e.UName})})))'`, l = n.find(
+      (a) => a.LEVEL_UNIQUE_NAME === e.LName
+    ), d = n.filter((a) => a.HIERARCHY_UNIQUE_NAME === l?.HIERARCHY_UNIQUE_NAME && a.LEVEL_NUMBER <= l.LEVEL_NUMBER);
+    let c = "";
+    for (let a = 0; a < d.length; a++)
+      c.length ? c = `
+          DrilldownLevel({
+            ${c}
+            },
+            ${d[a].LEVEL_UNIQUE_NAME}
+          )
+        ` : c = `
         DrilldownLevel({
-          ${colsLevels[i].LEVEL_UNIQUE_NAME}
+          ${d[a].LEVEL_UNIQUE_NAME}
         })
         `;
-      } else {
-        hierarchizeString = `
-          DrilldownLevel({
-            ${hierarchizeString}
-            },
-            ${colsLevels[i].LEVEL_UNIQUE_NAME}
-          )
-        `;
-      }
-    }
-    if (expandedMembers) {
-      const colsRootLevel = metadataLevels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === expandedMembers[0]?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === "0";
-      });
-      for (let i = 0; i < expandedMembers.length; i++) {
-        if (!hierarchizeString.length) {
-          hierarchizeString = `DrilldownMember({{DrilldownLevel({${colsRootLevel?.LEVEL_UNIQUE_NAME}})}}, {${expandedMembers[i].UName}})`;
-        } else {
-          hierarchizeString = `
+    if (t) {
+      const a = n.find((m) => m.HIERARCHY_UNIQUE_NAME === t[0]?.HIERARCHY_UNIQUE_NAME && m.LEVEL_NUMBER === "0");
+      for (let m = 0; m < t.length; m++)
+        c.length ? c = `
             DrilldownMember({{
-              ${hierarchizeString}
-            }}, {${expandedMembers[i].UName}})
-          `;
-        }
+              ${c}
+            }}, {${t[m].UName}})
+          ` : c = `DrilldownMember({{DrilldownLevel({${a?.LEVEL_UNIQUE_NAME}})}}, {${t[m].UName}})`;
+    }
+    return c = `
+    Hierarchize(Intersect(AddCalculatedMembers({
+      ${c}
+    }), [Col_Dim_${s}]))
+    `, {
+      with: r,
+      select: c
+    };
+  } else if (i.filters?.enabled) {
+    const s = i.filters;
+    let r = "", l = "";
+    const d = [];
+    s?.multipleChoise ? d.push(...s.selectedItems) : d.push(s.selectedItem);
+    const c = [];
+    d.forEach((E) => {
+      const u = E.LNum;
+      c[u] ? c[u].push(E) : c[u] = [E];
+    });
+    const m = n.filter((E) => E.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME).find((E) => E.LEVEL_NUMBER === "0");
+    if (!m)
+      return {
+        select: "",
+        with: ""
+      };
+    const R = `[FILTER_${"id" + L()}]`, N = d.map((E) => `Ascendants(${E.UName}), Descendants(${E.UName})`).join(","), I = [];
+    s.deselectedItems && s.deselectedItems.forEach((E) => {
+      const u = E.LNum;
+      I[u] ? I[u].push(E) : I[u] = [E];
+    });
+    const U = Math.max(
+      c.length,
+      I.length
+    ), h = [];
+    if (t.forEach((E) => {
+      if (E.HIERARCHY_UNIQUE_NAME !== i.originalItem.HIERARCHY_UNIQUE_NAME)
+        return;
+      const u = parseInt(E.LNum);
+      h[u] ? h[u].push(E) : h[u] = [E];
+    }), h.length) {
+      for (let E = 0; E < h.length; E++) {
+        const u = h[E].map((p) => p.UName).join(",");
+        E === 0 ? l = `DrilldownMember({{${m.LEVEL_UNIQUE_NAME}.members}}, {${u}})` : l = `DrilldownMember({{${l}}}, {${u}})`;
+      }
+      l = `Intersect(AddCalculatedMembers(${l}), ${R})`;
+    } else
+      l = `Intersect(AddCalculatedMembers({${m.LEVEL_UNIQUE_NAME}.members}), ${R}))`;
+    for (let E = 0; E < U; E++) {
+      if (c[E]) {
+        const u = c[E].map((p) => `Ascendants(${p.UName}), Descendants(${p.UName})`).join(",");
+        r.length ? r = `Union({${u}}, {${r}})` : r = `{${u}}`;
+      }
+      if (I[E]) {
+        const u = I[E].map((p) => `Descendants(${p.UName})`).join(",");
+        r.length ? r = `Except({${r}}, {${u}})` : r = `{${u}}`;
       }
     }
-    hierarchizeString = `
-    Hierarchize(Intersect(AddCalculatedMembers({
-      ${hierarchizeString}
-    }), [Col_Dim_${uid}]))
-    `;
-    return {
-      with: setSection,
-      select: hierarchizeString
+    return l = `Hierarchize(${l})`, s.selectAll ? r = `SET ${R} AS 'VisualTotals(Distinct(Hierarchize(${r})))' ` : r = `SET ${R} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${N}}, ${r}))))' `, {
+      with: r,
+      select: l
     };
   } else {
-    if (!hierarchy.filters?.enabled) {
-      let hierarchizeString = "";
-      const colsRootLevel = metadataLevels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === expandedMembers[0]?.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === "0";
-      });
-      for (let i = 0; i < expandedMembers.length; i++) {
-        if (i === 0) {
-          if (expandedMembers[i].LNum === "0") {
-            hierarchizeString = `
+    let s = "";
+    const r = n.find((l) => l.HIERARCHY_UNIQUE_NAME === t[0]?.HIERARCHY_UNIQUE_NAME && l.LEVEL_NUMBER === "0");
+    for (let l = 0; l < t.length; l++)
+      l === 0 ? t[l].LNum === "0" ? s = `
               DrilldownMember({{
-                ${colsRootLevel?.LEVEL_UNIQUE_NAME}.members
-              }}, {${expandedMembers[i].UName}})
-            `;
-          } else {
-            hierarchizeString = `DrilldownMember({{DrilldownLevel({${colsRootLevel?.LEVEL_UNIQUE_NAME}})}}, {${expandedMembers[i].UName}})`;
-          }
-        } else {
-          hierarchizeString = `
+                ${r?.LEVEL_UNIQUE_NAME}.members
+              }}, {${t[l].UName}})
+            ` : s = `DrilldownMember({{DrilldownLevel({${r?.LEVEL_UNIQUE_NAME}})}}, {${t[l].UName}})` : s = `
             DrilldownMember({{
-              ${hierarchizeString}
-            }}, {${expandedMembers[i].UName}})
+              ${s}
+            }}, {${t[l].UName}})
           `;
-        }
-      }
-      hierarchizeString = `
+    return s = `
         Hierarchize(
           AddCalculatedMembers
           (
-            ${hierarchizeString}
+            ${s}
           )
-        )`;
-      return {
-        with: "",
-        select: hierarchizeString
-      };
-    } else {
-      const filter = hierarchy.filters;
-      let withSection = "";
-      let selectSection = "";
-      const selectedFilters = [];
-      if (filter?.multipleChoise) {
-        selectedFilters.push(...filter.selectedItems);
-      } else {
-        selectedFilters.push(filter.selectedItem);
-      }
-      const filtersLevels = [];
-      selectedFilters.forEach((e) => {
-        const levelNum = e.LNum;
-        if (filtersLevels[levelNum]) {
-          filtersLevels[levelNum].push(e);
-        } else {
-          filtersLevels[levelNum] = [e];
-        }
-      });
-      const rowsLevels = metadataLevels.filter((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === hierarchy.originalItem.HIERARCHY_UNIQUE_NAME;
-      });
-      const rootLevel = rowsLevels.find((e) => e.LEVEL_NUMBER === "0");
-      if (!rootLevel)
-        return {
-          select: "",
-          with: ""
-        };
-      const uid = "id" + v4();
-      const filterSetName = `[FILTER_${uid}]`;
-      const set = selectedFilters.map((e) => `Ascendants(${e.UName}), Descendants(${e.UName})`).join(",");
-      const deseclectedFiltersLevels = [];
-      if (filter.deselectedItems) {
-        filter.deselectedItems.forEach((e) => {
-          const levelNum = e.LNum;
-          if (deseclectedFiltersLevels[levelNum]) {
-            deseclectedFiltersLevels[levelNum].push(e);
-          } else {
-            deseclectedFiltersLevels[levelNum] = [e];
-          }
-        });
-      }
-      const filtersDepth = Math.max(
-        filtersLevels.length,
-        deseclectedFiltersLevels.length
-      );
-      const levels2 = [];
-      expandedMembers.forEach((element) => {
-        if (element.HIERARCHY_UNIQUE_NAME !== hierarchy.originalItem.HIERARCHY_UNIQUE_NAME) {
-          return;
-        }
-        const levelNum = parseInt(element.LNum);
-        if (levels2[levelNum]) levels2[levelNum].push(element);
-        else levels2[levelNum] = [element];
-      });
-      if (levels2.length) {
-        for (let i = 0; i < levels2.length; i++) {
-          const joinedMembers = levels2[i].map((e) => e.UName).join(",");
-          if (i === 0) {
-            selectSection = `DrilldownMember({{${rootLevel.LEVEL_UNIQUE_NAME}.members}}, {${joinedMembers}})`;
-          } else {
-            selectSection = `DrilldownMember({{${selectSection}}}, {${joinedMembers}})`;
-          }
-        }
-        selectSection = `Intersect(AddCalculatedMembers(${selectSection}), ${filterSetName})`;
-      } else {
-        selectSection = `Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`;
-      }
-      for (let i = 0; i < filtersDepth; i++) {
-        if (filtersLevels[i]) {
-          const aggregatedFiltersForLevel = filtersLevels[i].map((e) => `Ascendants(${e.UName}), Descendants(${e.UName})`).join(",");
-          if (withSection.length) {
-            withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`;
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`;
-          }
-        }
-        if (deseclectedFiltersLevels[i]) {
-          const aggregatedFiltersForLevel = deseclectedFiltersLevels[i].map((e) => `Descendants(${e.UName})`).join(",");
-          if (withSection.length) {
-            withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`;
-          } else {
-            withSection = `{${aggregatedFiltersForLevel}}`;
-          }
-        }
-      }
-      selectSection = `Hierarchize(${selectSection})`;
-      if (filter.selectAll) {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `;
-      } else {
-        withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `;
-      }
-      return {
-        with: withSection,
-        select: selectSection
-      };
-    }
+        )`, {
+      with: "",
+      select: s
+    };
   }
 }
-async function getMdxRequest(cubename, rowsDrilldownMembers, columnsDrilldownMembers, rowsExpandedMembers, columnsExpandedMembers, rows, columns, measures, pivotTableSettings, properties, filters, levels) {
-  if (measures.length === 1 && pivotTableSettings?.showSingleMeasureHeader === false) {
-    rows = rows.filter((e) => e.type !== "Values");
-    columns = columns.filter((e) => e.type !== "Values");
-  }
-  const filtersRequest = getFiltersRequest(filters);
-  if (!rows.length || !columns.length) {
-    return getSingleHierarchyRequest(
-      rows,
-      columns,
-      measures,
-      cubename,
-      rowsDrilldownMembers,
-      columnsDrilldownMembers,
-      rowsExpandedMembers,
-      columnsExpandedMembers,
-      pivotTableSettings,
-      properties,
-      filtersRequest,
-      levels
+async function Z(i, e, t, o, n, s, r, l, d, c, a, m) {
+  l.length === 1 && d?.showSingleMeasureHeader === !1 && (s = s.filter((R) => R.type !== "Values"), r = r.filter((R) => R.type !== "Values"));
+  const _ = ie(a);
+  if (!s.length || !r.length)
+    return se(
+      s,
+      r,
+      l,
+      i,
+      e,
+      t,
+      o,
+      n,
+      d,
+      c,
+      _,
+      m
     );
-  } else {
-    let withSection = "WITH";
-    let selectSection = "SELECT";
-    const hasValues = rows.some((e) => e.type === "Values") || columns.some((e) => e.type === "Values");
-    const fromSection = getFromPart(measures, cubename, filtersRequest.where, hasValues);
-    if (!pivotTableSettings.showEmpty) selectSection += " NON EMPTY";
-    const rowsProperties = getRowsProperies(rows, properties);
-    const rowsRequest = await getRowsRequest(
-      rows,
-      rowsDrilldownMembers,
-      rowsExpandedMembers,
-      measures,
-      levels
+  {
+    let R = "WITH", N = "SELECT";
+    const I = s.some((w) => w.type === "Values") || r.some((w) => w.type === "Values"), U = O(l, i, _.where, I);
+    d.showEmpty || (N += " NON EMPTY");
+    const h = Y(s, c), E = await y(
+      s,
+      e,
+      o,
+      l,
+      m
     );
-    if (rowsRequest.with.length) {
-      withSection = `${withSection} ${rowsRequest.with}`;
-    }
-    selectSection = `${selectSection}
-${rowsRequest.select} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${rowsProperties} ON 1,
+    E.with.length && (R = `${R} ${E.with}`), N = `${N}
+${E.select} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${h} ON 1,
+`, d.showEmpty || (N += " NON EMPTY");
+    const u = v(r, c), p = await S(
+      r,
+      t,
+      n,
+      l,
+      m
+    );
+    p.with.length && (R = `${R} ${p.with}`), N = `${N}
+${p.select} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${u} ON 0
 `;
-    if (!pivotTableSettings.showEmpty) selectSection += " NON EMPTY";
-    const colsProperties = getColumnsProperies(columns, properties);
-    const colsRequest = await getColumnsRequest(
-      columns,
-      columnsDrilldownMembers,
-      columnsExpandedMembers,
-      measures,
-      levels
-    );
-    if (colsRequest.with.length) {
-      withSection = `${withSection} ${colsRequest.with}`;
-    }
-    selectSection = `${selectSection}
-${colsRequest.select} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${colsProperties} ON 0
-`;
-    let resultString = "";
-    if (filtersRequest.with) {
-      withSection += filtersRequest.with;
-    }
-    if (withSection.length > 4) {
-      resultString += withSection;
-    }
-    resultString += "\n";
-    resultString += selectSection;
-    resultString += fromSection;
-    return resultString;
+    let f = "";
+    return _.with && (R += _.with), R.length > 4 && (f += R), f += `
+`, f += N, f += U, f;
   }
 }
-async function getColumnsRequest(columns, columnsDrilldownMembers, colsExpandedMembers, measures, levels) {
-  let columnsSelect = "";
-  let columnsWhere = "";
-  if (columns.length >= 1) {
-    for (let i = 0; i < columns.length; i++) {
-      const e = columns[i];
-      const columnsRequest = await getSingleColumnRequest(
+async function S(i, e, t, o, n) {
+  let s = "", r = "";
+  if (i.length >= 1)
+    for (let l = 0; l < i.length; l++) {
+      const d = i[l], c = await ee(
+        d,
         e,
-        columnsDrilldownMembers,
-        colsExpandedMembers,
-        measures,
-        levels
+        t,
+        o,
+        n
       );
-      if (i === 0) {
-        columnsSelect = columnsRequest.select;
-        columnsWhere = columnsRequest.with;
-      } else {
-        columnsWhere += columnsRequest.with;
-        columnsSelect = `
+      l === 0 ? (s = c.select, r = c.with) : (r += c.with, s = `
           CrossJoin(
-            ${columnsSelect},
-            ${columnsRequest.select}
-          )`;
-      }
+            ${s},
+            ${c.select}
+          )`);
     }
-  } else {
-    columnsSelect = "";
-  }
+  else
+    s = "";
   return {
-    select: columnsSelect,
-    with: columnsWhere
+    select: s,
+    with: r
   };
 }
-async function getSingleColumnRequest(e, columnsDrilldownMembers, colsExpandedMembers, measures, levels) {
-  if (e.type === "Values") {
-    const selectRequest = measures.map((e2) => e2.originalItem.MEASURE_UNIQUE_NAME).join(",");
+async function ee(i, e, t, o, n) {
+  if (i.type === "Values")
     return {
-      select: `{${selectRequest}}`,
+      select: `{${o.map((m) => m.originalItem.MEASURE_UNIQUE_NAME).join(",")}}`,
       with: ""
     };
-  }
-  const filteredRequest = await getAxisFilterRequest(e, levels);
-  const drilledDownMember = columnsDrilldownMembers.find((drilldownedMembers) => {
-    return drilldownedMembers.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME;
-  });
-  const expandedMembers = colsExpandedMembers.filter((drilldownedMembers) => {
-    return drilldownedMembers.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME;
-  });
-  const rootExpanded = expandedMembers.some((member) => member.LNum === "0");
-  if (drilledDownMember || expandedMembers.length && rootExpanded) {
-    const request = await getColsDrilldownRequestString(
-      e,
-      drilledDownMember,
-      colsExpandedMembers,
-      levels
+  const s = await T(i, n), r = e.find((a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME), l = t.filter((a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME), d = l.some((a) => a.LNum === "0");
+  if (r || l.length && d) {
+    const a = await k(
+      i,
+      r,
+      t,
+      n
     );
     return {
-      with: request.with,
-      select: request.select
+      with: a.with,
+      select: a.select
     };
   }
-  if (filteredRequest) {
-    return {
-      select: filteredRequest.select,
-      with: filteredRequest.with
-    };
-  }
-  const rootLevel = levels.find(
-    (l) => l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME && l.LEVEL_NUMBER === "0"
-  );
-  return {
-    select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
+  return s ? {
+    select: s.select,
+    with: s.with
+  } : {
+    select: `Hierarchize(AddCalculatedMembers({${n.find(
+      (a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME && a.LEVEL_NUMBER === "0"
+    )?.LEVEL_UNIQUE_NAME}.members}))`,
     with: ""
   };
 }
-async function getRowsRequest(rows, rowsDrilldownMembers, rowsExpandedMembers, measures, levels) {
-  let rowsSelect = "";
-  let rowsWhere = "";
-  if (rows.length >= 1) {
-    for (let i = 0; i < rows.length; i++) {
-      const e = rows[i];
-      const rowsRequest = await getSingleRowRequest(
+async function y(i, e, t, o, n) {
+  let s = "", r = "";
+  if (i.length >= 1)
+    for (let l = 0; l < i.length; l++) {
+      const d = i[l], c = await te(
+        d,
         e,
-        rowsDrilldownMembers,
-        rowsExpandedMembers,
-        measures,
-        levels
+        t,
+        o,
+        n
       );
-      if (i === 0) {
-        rowsSelect = rowsRequest.select;
-        rowsWhere = rowsRequest.with;
-      } else {
-        rowsWhere += rowsRequest.with;
-        rowsSelect = `
+      l === 0 ? (s = c.select, r = c.with) : (r += c.with, s = `
           CrossJoin(
-            ${rowsSelect},
-            ${rowsRequest.select}
-          )`;
-      }
+            ${s},
+            ${c.select}
+          )`);
     }
-  } else if (rows.length === 1) {
-    rowsSelect = `{ ${rows[0].originalItem.HIERARCHY_UNIQUE_NAME}.Members }`;
-  } else {
-    rowsSelect = "";
-  }
+  else i.length === 1 ? s = `{ ${i[0].originalItem.HIERARCHY_UNIQUE_NAME}.Members }` : s = "";
   return {
-    select: rowsSelect,
-    with: rowsWhere
+    select: s,
+    with: r
   };
 }
-async function getSingleRowRequest(e, rowsDrilldownMembers, rowsExpandedMembers, measures, levels) {
-  if (e.type === "Values") {
-    const selectRequest = measures.map((e2) => e2.originalItem.MEASURE_UNIQUE_NAME).join(",");
+async function te(i, e, t, o, n) {
+  if (i.type === "Values")
     return {
-      select: `{${selectRequest}}`,
+      select: `{${o.map((m) => m.originalItem.MEASURE_UNIQUE_NAME).join(",")}}`,
       with: ""
     };
-  }
-  const filteredRequest = await getAxisFilterRequest(e, levels);
-  const drilledDownMember = rowsDrilldownMembers.find((drilldownedMembers) => {
-    return drilldownedMembers.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME;
-  });
-  const expandedMembers = rowsExpandedMembers.filter((drilldownedMembers) => {
-    return drilldownedMembers.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME;
-  });
-  const rootExpanded = expandedMembers.some((member) => member.LNum === "0");
-  if (drilledDownMember || expandedMembers.length && rootExpanded) {
-    const request = await getRowsDrilldownRequestString(
-      e,
-      drilledDownMember,
-      expandedMembers,
-      levels
+  const s = await T(i, n), r = e.find((a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME), l = t.filter((a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME), d = l.some((a) => a.LNum === "0");
+  if (r || l.length && d) {
+    const a = await J(
+      i,
+      r,
+      l,
+      n
     );
     return {
-      with: request.with,
-      select: request.select
+      with: a.with,
+      select: a.select
     };
   }
-  if (filteredRequest) {
-    return {
-      select: filteredRequest.select,
-      with: filteredRequest.with
-    };
-  }
-  const rootLevel = levels.find(
-    (l) => l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME && l.LEVEL_NUMBER === "0"
-  );
-  return {
-    select: `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`,
+  return s ? {
+    select: s.select,
+    with: s.with
+  } : {
+    select: `Hierarchize(AddCalculatedMembers({${n.find(
+      (a) => a.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME && a.LEVEL_NUMBER === "0"
+    )?.LEVEL_UNIQUE_NAME}.members}))`,
     with: ""
   };
 }
-function getRowsProperies(rows, properties) {
-  const rowsProperties = [];
-  rows.forEach((e) => {
-    rowsProperties.push(
-      properties.filter(
-        (prop) => prop.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME
+function Y(i, e) {
+  const t = [];
+  i.forEach((n) => {
+    t.push(
+      e.filter(
+        (s) => s.HIERARCHY_UNIQUE_NAME === n.originalItem.HIERARCHY_UNIQUE_NAME
       )
     );
   });
-  let rowsPropertiesList = rowsProperties.flat(1).map((e) => `${e.LEVEL_UNIQUE_NAME}.[${e.PROPERTY_NAME}]`).join(",");
-  if (rowsPropertiesList) rowsPropertiesList = `,${rowsPropertiesList}`;
-  return rowsPropertiesList;
+  let o = t.flat(1).map((n) => `${n.LEVEL_UNIQUE_NAME}.[${n.PROPERTY_NAME}]`).join(",");
+  return o && (o = `,${o}`), o;
 }
-function getColumnsProperies(columns, properties) {
-  const columnsProperties = [];
-  columns.forEach((e) => {
-    columnsProperties.push(
-      properties.filter(
-        (prop) => prop.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME
+function v(i, e) {
+  const t = [];
+  i.forEach((n) => {
+    t.push(
+      e.filter(
+        (s) => s.HIERARCHY_UNIQUE_NAME === n.originalItem.HIERARCHY_UNIQUE_NAME
       )
     );
   });
-  let columnsPropertiesList = columnsProperties.flat(1).map((e) => `${e.LEVEL_UNIQUE_NAME}.[${e.PROPERTY_NAME}]`).join(",");
-  if (columnsPropertiesList) columnsPropertiesList = `,${columnsPropertiesList}`;
-  return columnsPropertiesList;
+  let o = t.flat(1).map((n) => `${n.LEVEL_UNIQUE_NAME}.[${n.PROPERTY_NAME}]`).join(",");
+  return o && (o = `,${o}`), o;
 }
-async function getSingleHierarchyRequest(rows, columns, measures, cubename, rowsDrilldownMembers, columnsDrilldownMembers, rowsExpandedMembers, columnsExpandedMembers, pivotTableSettings, properties, filtersRequest, levels) {
-  const forceValues = rows.length === 0 && columns.length === 0 && measures.length > 0 && pivotTableSettings?.showSingleMeasureHeader !== false;
-  const hasValues = rows.some((e) => e.type === "Values") || columns.some((e) => e.type === "Values") || forceValues;
-  const selectPart = getSelectWithOptions(pivotTableSettings);
-  const fromPart = getFromPart(measures, cubename, filtersRequest.where, hasValues);
-  if (rows.length) {
-    const request = await getRowsRequest(
-      rows,
-      rowsDrilldownMembers,
-      rowsExpandedMembers,
-      measures,
-      levels
-    );
-    const rowsSelect = request.select;
-    let rowsWith = request.with ? `WITH ${request.with}` : "";
-    if (filtersRequest.with) {
-      if (rowsWith) rowsWith += filtersRequest.with;
-      else rowsWith = `WITH ${filtersRequest.with}`;
-    }
-    const rowsProperties = getRowsProperies(rows, properties);
+async function se(i, e, t, o, n, s, r, l, d, c, a, m) {
+  const _ = i.length === 0 && e.length === 0 && t.length > 0 && d?.showSingleMeasureHeader !== !1, R = i.some((U) => U.type === "Values") || e.some((U) => U.type === "Values") || _, N = ne(d), I = O(t, o, a.where, R);
+  if (i.length) {
+    const U = await y(
+      i,
+      n,
+      r,
+      t,
+      m
+    ), h = U.select;
+    let E = U.with ? `WITH ${U.with}` : "";
+    a.with && (E ? E += a.with : E = `WITH ${a.with}`);
+    const u = Y(i, c);
     return `
-      ${rowsWith}
-      ${selectPart}
-      ${rowsSelect}
-      DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${rowsProperties} ON 0
-      ${fromPart}
+      ${E}
+      ${N}
+      ${h}
+      DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${u} ON 0
+      ${I}
     `;
-  } else if (columns.length) {
-    const request = await getColumnsRequest(
-      columns,
-      columnsDrilldownMembers,
-      columnsExpandedMembers,
-      measures,
-      levels
-    );
-    const colsSelect = request.select;
-    let colsWith = request.with ? `WITH ${request.with}` : "";
-    if (filtersRequest.with) {
-      if (colsWith) colsWith += filtersRequest.with;
-      else colsWith = `WITH ${filtersRequest.with}`;
-    }
-    const colsProperties = getColumnsProperies(columns, properties);
+  } else if (e.length) {
+    const U = await S(
+      e,
+      s,
+      l,
+      t,
+      m
+    ), h = U.select;
+    let E = U.with ? `WITH ${U.with}` : "";
+    a.with && (E ? E += a.with : E = `WITH ${a.with}`);
+    const u = v(e, c);
     return `
-      ${colsWith}
-      ${selectPart}
-      ${colsSelect}
-      DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${colsProperties} ON 0
-      ${fromPart}
+      ${E}
+      ${N}
+      ${h}
+      DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME${u} ON 0
+      ${I}
     `;
-  } else if (measures.length) {
-    const selectRequest = measures.map((e) => e.originalItem.MEASURE_UNIQUE_NAME).join(",");
+  } else if (t.length) {
+    const U = t.map((h) => h.originalItem.MEASURE_UNIQUE_NAME).join(",");
     return `
-      ${selectPart}
-      {${selectRequest}} ON 0
-      ${fromPart}
+      ${N}
+      {${U}} ON 0
+      ${I}
     `;
   }
   return "";
 }
-function getSelectWithOptions(pivotTableSettings) {
-  let result = "SELECT";
-  if (!pivotTableSettings.showEmpty) result += " NON EMPTY";
-  return result;
+function ne(i) {
+  let e = "SELECT";
+  return i.showEmpty || (e += " NON EMPTY"), e;
 }
-function getFromPart(measures, cubename, filtersWhere, hasValues = false) {
-  let measuresPart = "";
-  if (measures.length === 1 && !hasValues) {
-    measuresPart = `${measures[0].originalItem.MEASURE_UNIQUE_NAME}`;
-  }
-  let result = "";
-  if (filtersWhere) {
-    if (measuresPart) {
-      result = `FROM [${cubename}] WHERE (${filtersWhere},${measuresPart}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`;
-    } else {
-      result = `FROM [${cubename}] WHERE (${filtersWhere}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`;
-    }
-  } else if (measuresPart) {
-    result = `FROM [${cubename}] WHERE ${measuresPart} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`;
-  } else {
-    result = `FROM [${cubename}] CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`;
-  }
-  return result;
+function O(i, e, t, o = !1) {
+  let n = "";
+  i.length === 1 && !o && (n = `${i[0].originalItem.MEASURE_UNIQUE_NAME}`);
+  let s = "";
+  return t ? n ? s = `FROM [${e}] WHERE (${t},${n}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS` : s = `FROM [${e}] WHERE (${t}) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS` : n ? s = `FROM [${e}] WHERE ${n} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS` : s = `FROM [${e}] CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS`, s;
 }
-function getFiltersRequest(filters) {
-  let withSection = "";
-  let whereSection = "";
-  if (!filters) {
-    return {
-      where: null,
-      with: null
-    };
-  }
-  const filtersArray = filters.map((e) => e.filters);
-  filtersArray.forEach((filter) => {
-    if (!filter?.enabled) return;
-    if (filter.multipleChoise) {
-      const uid = "id" + v4();
-      const filterSetName = `${filter.originalItem.DIMENSION_UNIQUE_NAME}.[FILTER_${uid}]`;
-      const selectedItems = filter.selectedItems.map((e) => e.UName).join(",");
-      withSection += ` MEMBER ${filterSetName} AS 'Aggregate({${selectedItems}})'`;
-      if (whereSection.length) whereSection += ",";
-      whereSection += filterSetName;
-    } else {
-      if (whereSection.length) whereSection += ",";
-      whereSection += filter.selectedItem.UName;
-    }
-  });
-  return {
-    where: whereSection,
-    with: withSection
+function ie(i) {
+  let e = "", t = "";
+  return i ? (i.map((n) => n.filters).forEach((n) => {
+    if (n?.enabled)
+      if (n.multipleChoise) {
+        const s = "id" + L(), r = `${n.originalItem.DIMENSION_UNIQUE_NAME}.[FILTER_${s}]`, l = n.selectedItems.map((d) => d.UName).join(",");
+        e += ` MEMBER ${r} AS 'Aggregate({${l}})'`, t.length && (t += ","), t += r;
+      } else
+        t.length && (t += ","), t += n.selectedItem.UName;
+  }), {
+    where: t,
+    with: e
+  }) : {
+    where: null,
+    with: null
   };
 }
-async function getAxisFilterRequest(e, levels) {
-  const filter = e.filters;
-  let withSection = "";
-  let selectSection = "";
-  if (!filter?.enabled) return null;
-  const selectedFilters = [];
-  if (filter.multipleChoise) {
-    selectedFilters.push(...filter.selectedItems);
-  } else {
-    selectedFilters.push(filter.selectedItem);
-  }
-  const filtersLevels = [];
-  selectedFilters.forEach((e2) => {
-    const levelNum = e2.LNum;
-    if (filtersLevels[levelNum]) {
-      filtersLevels[levelNum].push(e2);
-    } else {
-      filtersLevels[levelNum] = [e2];
-    }
+async function T(i, e) {
+  const t = i.filters;
+  let o = "", n = "";
+  if (!t?.enabled) return null;
+  const s = [];
+  t.multipleChoise ? s.push(...t.selectedItems) : s.push(t.selectedItem);
+  const r = [];
+  s.forEach((c) => {
+    const a = c.LNum;
+    r[a] ? r[a].push(c) : r[a] = [c];
   });
-  const deseclectedFiltersLevels = [];
-  if (filter.deselectedItems) {
-    filter.deselectedItems.forEach((e2) => {
-      const levelNum = e2.LNum;
-      if (deseclectedFiltersLevels[levelNum]) {
-        deseclectedFiltersLevels[levelNum].push(e2);
-      } else {
-        deseclectedFiltersLevels[levelNum] = [e2];
-      }
-    });
-  }
-  const filtersDepth = Math.max(
-    filtersLevels.length,
-    deseclectedFiltersLevels.length
+  const l = [];
+  t.deselectedItems && t.deselectedItems.forEach((c) => {
+    const a = c.LNum;
+    l[a] ? l[a].push(c) : l[a] = [c];
+  });
+  const d = Math.max(
+    r.length,
+    l.length
   );
-  if (filter.selectAll && !deseclectedFiltersLevels.length) {
-    const uid = "id" + v4();
-    const filterSetName = `[FILTER_${uid}]`;
-    const rootLevel = levels.find(
-      (l) => l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME && l.LEVEL_NUMBER === "0"
+  if (t.selectAll && !l.length) {
+    const a = `[FILTER_${"id" + L()}]`, m = e.find(
+      (_) => _.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME && _.LEVEL_NUMBER === "0"
     );
-    withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))))' `;
-    selectSection = `Hierarchize(AddCalculatedMembers({${rootLevel?.LEVEL_UNIQUE_NAME}.members}))`;
+    o = `SET ${a} AS 'VisualTotals(Distinct(Hierarchize(AddCalculatedMembers({${m?.LEVEL_UNIQUE_NAME}.members}))))' `, n = `Hierarchize(AddCalculatedMembers({${m?.LEVEL_UNIQUE_NAME}.members}))`;
   } else {
-    const rowsLevels = levels.filter((l) => {
-      return l.HIERARCHY_UNIQUE_NAME === e.originalItem.HIERARCHY_UNIQUE_NAME;
-    });
-    const rootLevel = rowsLevels.find((e2) => e2.LEVEL_NUMBER === "0");
-    if (!rootLevel) return null;
-    const uid = "id" + v4();
-    const filterSetName = `[FILTER_${uid}]`;
-    const set = selectedFilters.map((e2) => `Ascendants(${e2.UName}), Descendants(${e2.UName})`).join(",");
-    for (let i = 0; i < filtersDepth; i++) {
-      if (filtersLevels[i]) {
-        const aggregatedFiltersForLevel = filtersLevels[i].map((e2) => `Ascendants(${e2.UName}), Descendants(${e2.UName})`).join(",");
-        if (withSection.length) {
-          withSection = `Union({${aggregatedFiltersForLevel}}, {${withSection}})`;
-        } else {
-          withSection = `{${aggregatedFiltersForLevel}}`;
-        }
+    const a = e.filter((N) => N.HIERARCHY_UNIQUE_NAME === i.originalItem.HIERARCHY_UNIQUE_NAME).find((N) => N.LEVEL_NUMBER === "0");
+    if (!a) return null;
+    const _ = `[FILTER_${"id" + L()}]`, R = s.map((N) => `Ascendants(${N.UName}), Descendants(${N.UName})`).join(",");
+    for (let N = 0; N < d; N++) {
+      if (r[N]) {
+        const I = r[N].map((U) => `Ascendants(${U.UName}), Descendants(${U.UName})`).join(",");
+        o.length ? o = `Union({${I}}, {${o}})` : o = `{${I}}`;
       }
-      if (deseclectedFiltersLevels[i]) {
-        const aggregatedFiltersForLevel = deseclectedFiltersLevels[i].map((e2) => `Descendants(${e2.UName})`).join(",");
-        if (withSection.length) {
-          withSection = `Except({${withSection}}, {${aggregatedFiltersForLevel}})`;
-        } else {
-          withSection = `{${aggregatedFiltersForLevel}}`;
-        }
+      if (l[N]) {
+        const I = l[N].map((U) => `Descendants(${U.UName})`).join(",");
+        o.length ? o = `Except({${o}}, {${I}})` : o = `{${I}}`;
       }
     }
-    if (filter.selectAll) {
-      withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(${withSection})))' `;
-    } else {
-      withSection = `SET ${filterSetName} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${set}}, ${withSection}))))' `;
-    }
-    selectSection = `Hierarchize(Intersect(AddCalculatedMembers({${rootLevel.LEVEL_UNIQUE_NAME}.members}), ${filterSetName}))`;
+    t.selectAll ? o = `SET ${_} AS 'VisualTotals(Distinct(Hierarchize(${o})))' ` : o = `SET ${_} AS 'VisualTotals(Distinct(Hierarchize(Intersect({${R}}, ${o}))))' `, n = `Hierarchize(Intersect(AddCalculatedMembers({${a.LEVEL_UNIQUE_NAME}.members}), ${_}))`;
   }
   return {
-    with: withSection,
-    select: selectSection
+    with: o,
+    select: n
   };
 }
-function optionalArrayToArray(el) {
-  if (Array.isArray(el)) return el;
-  if (el) {
-    return [el];
-  }
-  return [];
+function A(i) {
+  return Array.isArray(i) ? i : i ? [i] : [];
 }
-const parseMdxRequest = (mdxResponce, params) => {
-  let columns = [];
-  let rows = [];
-  let cells = [];
-  let propertiesRows = [];
-  let propertiesCols = [];
-  if (!mdxResponce.Body.ExecuteResponse) return null;
-  const properties = params.properties;
-  console.log("properties in helper", properties);
-  let tupples = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis
+const re = (i, e) => {
+  let t = [], o = [], n = [], s = [], r = [];
+  if (!i.Body.ExecuteResponse) return null;
+  const l = e.properties;
+  console.log("properties in helper", l);
+  let d = A(
+    i.Body.ExecuteResponse.return?.root.Axes?.Axis
   )?.[0]?.Tuples;
-  const axis0 = Array.isArray(tupples) ? tupples.map((e) => e.Tuple) : optionalArrayToArray(
-    tupples?.Tuple
+  const c = Array.isArray(d) ? d.map((h) => h.Tuple) : A(
+    d?.Tuple
   );
-  tupples = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis
+  d = A(
+    i.Body.ExecuteResponse.return?.root?.Axes?.Axis
   )?.[1]?.Tuples;
-  let axis1 = [];
-  if (mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs.name === "Axis1") {
-    axis1 = Array.isArray(tupples) ? tupples.map((e) => e.Tuple) : optionalArrayToArray(
-      tupples?.Tuple
-    );
-  } else if (mdxResponce.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs.name === "SlicerAxis") {
-    axis1 = Array.isArray(tupples) ? tupples.map((e) => e.Tuple) : optionalArrayToArray(
-      tupples?.Tuple
-    );
-  }
-  const cellsArray = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return.root.CellData?.Cell
+  let a = [];
+  i.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs.name === "Axis1" ? a = Array.isArray(d) ? d.map((h) => h.Tuple) : A(
+    d?.Tuple
+  ) : i.Body.ExecuteResponse.return.root.Axes?.Axis?.[1]?.__attrs.name === "SlicerAxis" && (a = Array.isArray(d) ? d.map((h) => h.Tuple) : A(
+    d?.Tuple
+  ));
+  const m = A(
+    i.Body.ExecuteResponse.return.root.CellData?.Cell
   );
-  if (!params.rows.length && !params.columns.length) {
-    columns = axis0.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    rows = axis1.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    cells = parseCells(cellsArray, columns, rows);
-  } else if (!params.columns.length) {
-    columns = axis1.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    rows = axis0.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    cells = parseCells(cellsArray, columns, rows);
-  } else {
-    columns = axis0.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    rows = axis1.map((e) => {
-      return optionalArrayToArray(e.Member);
-    });
-    cells = parseCells(cellsArray, columns, rows);
-  }
-  const columnProperties = [];
-  const rowsProperties = [];
-  console.log("Params in helper", params);
-  columns[0]?.forEach((col) => {
-    if (!params.showColumnsProperties) return;
-    console.log(col);
-    const colProps = properties.filter(
-      (prop) => prop.HIERARCHY_UNIQUE_NAME === col.HIERARCHY_UNIQUE_NAME
+  !e.rows.length && !e.columns.length ? (t = c.map((h) => A(h.Member)), o = a.map((h) => A(h.Member)), n = b(m, t, o)) : e.columns.length ? (t = c.map((h) => A(h.Member)), o = a.map((h) => A(h.Member)), n = b(m, t, o)) : (t = a.map((h) => A(h.Member)), o = c.map((h) => A(h.Member)), n = b(m, t, o));
+  const _ = [], R = [];
+  console.log("Params in helper", e), t[0]?.forEach((h) => {
+    if (!e.showColumnsProperties) return;
+    console.log(h);
+    const E = l.filter(
+      (u) => u.HIERARCHY_UNIQUE_NAME === h.HIERARCHY_UNIQUE_NAME
     );
-    columnProperties.push(...colProps);
-  });
-  rows[0]?.forEach((row) => {
-    if (!params.showRowsProperties) return;
-    const rowProps = properties.filter(
-      (prop) => prop.HIERARCHY_UNIQUE_NAME === row.HIERARCHY_UNIQUE_NAME
+    _.push(...E);
+  }), o[0]?.forEach((h) => {
+    if (!e.showRowsProperties) return;
+    const E = l.filter(
+      (u) => u.HIERARCHY_UNIQUE_NAME === h.HIERARCHY_UNIQUE_NAME
     );
-    rowsProperties.push(...rowProps);
+    R.push(...E);
   });
-  const colPropertiesDescription = optionalArrayToArray(
-    optionalArrayToArray(
-      mdxResponce.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
+  const N = A(
+    A(
+      i.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
     )[0]?.HierarchyInfo
   );
-  let rowPropertiesDescription = [];
-  if (!params.columns.length) {
-    rowPropertiesDescription = optionalArrayToArray(
-      optionalArrayToArray(
-        mdxResponce.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
-      )[0]?.HierarchyInfo
-    );
-  } else {
-    rowPropertiesDescription = optionalArrayToArray(
-      optionalArrayToArray(
-        mdxResponce.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
-      )[1]?.HierarchyInfo
-    );
-  }
-  propertiesRows = columnProperties.map((e) => ({
-    ...e,
-    isProperty: true
+  let I = [];
+  e.columns.length ? I = A(
+    A(
+      i.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
+    )[1]?.HierarchyInfo
+  ) : I = A(
+    A(
+      i.Body.ExecuteResponse.return.root.OlapInfo?.AxesInfo.AxisInfo
+    )[0]?.HierarchyInfo
+  ), s = _.map((h) => ({
+    ...h,
+    isProperty: !0
+  })), r = R.map((h) => ({
+    ...h,
+    isProperty: !0
   }));
-  propertiesCols = rowsProperties.map((e) => ({
-    ...e,
-    isProperty: true
+  const U = s.map((h) => t.map((E) => {
+    const u = E.find(
+      (H) => H.HIERARCHY_UNIQUE_NAME === h.HIERARCHY_UNIQUE_NAME
+    ), p = E.indexOf(u), f = N[p], w = `${h.HIERARCHY_UNIQUE_NAME}.[${h.PROPERTY_NAME}]`, g = Object.entries(f).find((H) => {
+      if (Array.isArray(H[1])) {
+        const C = H[1].find(($) => $.__attrs?.name === w);
+        if (C) return C;
+      } else
+        return H[1]?.__attrs?.name === w;
+    });
+    return g ? {
+      Value: u[g[0]]
+    } : {
+      Value: ""
+    };
   }));
-  const propertiesCells = propertiesRows.map((prop) => {
-    return columns.map((col) => {
-      const propsOrigin = col.find(
-        (e) => e.HIERARCHY_UNIQUE_NAME === prop.HIERARCHY_UNIQUE_NAME
-      );
-      const colHierarchyIndex = col.indexOf(propsOrigin);
-      const desc = colPropertiesDescription[colHierarchyIndex];
-      const propName = `${prop.HIERARCHY_UNIQUE_NAME}.[${prop.PROPERTY_NAME}]`;
-      const objPropName = Object.entries(desc).find((keyValue) => {
-        if (Array.isArray(keyValue[1])) {
-          const att = keyValue[1].find((entry) => {
-            return entry.__attrs?.name === propName;
-          });
-          if (att) return att;
-        } else {
-          return keyValue[1]?.__attrs?.name === propName;
-        }
-      });
-      if (objPropName) {
-        return {
-          Value: propsOrigin[objPropName[0]]
-        };
-      }
-      return {
+  return e.showColumnsProperties && (n = [...U, ...n]), n = n.map((h, E) => {
+    const u = r.map((p) => {
+      const f = o[E], w = f.find(
+        (Q) => Q.HIERARCHY_UNIQUE_NAME === p.HIERARCHY_UNIQUE_NAME
+      ), g = f.indexOf(w), H = I[g], C = `${p.HIERARCHY_UNIQUE_NAME}.[${p.PROPERTY_NAME}]`, $ = Object.entries(H)?.find((Q) => Q[1]?.__attrs?.name === C);
+      return $ ? {
+        Value: w[$[0]]
+      } : {
         Value: ""
       };
     });
-  });
-  if (params.showColumnsProperties) {
-    cells = [...propertiesCells, ...cells];
-  }
-  cells = cells.map((row, i) => {
-    const propertiesCells2 = propertiesCols.map((prop) => {
-      const rowDesc = rows[i];
-      const propsOrigin = rowDesc.find(
-        (e) => e.HIERARCHY_UNIQUE_NAME === prop.HIERARCHY_UNIQUE_NAME
-      );
-      const rowHierarchyIndex = rowDesc.indexOf(propsOrigin);
-      const desc = rowPropertiesDescription[rowHierarchyIndex];
-      const propName = `${prop.HIERARCHY_UNIQUE_NAME}.[${prop.PROPERTY_NAME}]`;
-      const objPropName = Object.entries(desc)?.find((keyValue) => {
-        return keyValue[1]?.__attrs?.name === propName;
-      });
-      if (objPropName) {
-        return {
-          Value: propsOrigin[objPropName[0]]
-        };
-      }
-      return {
-        Value: ""
-      };
-    });
-    if (params.showRowsProperties) {
-      return [...propertiesCells2, ...row];
-    }
-    return row;
-  });
-  return {
-    columns,
-    rows,
-    cells,
-    propertiesRows,
-    propertiesCols
+    return e.showRowsProperties ? [...u, ...h] : h;
+  }), {
+    columns: t,
+    rows: o,
+    cells: n,
+    propertiesRows: s,
+    propertiesCols: r
   };
-};
-const parseCells = (cells, columns, rows) => {
-  if (!cells.length) return [];
-  if (!rows.length) {
-    return [cells];
-  } else if (!columns.length) {
-    return cells.map((e) => [e]);
-  }
-  const cp = [...cells];
-  const columnsArray = [];
-  const count = columns.length;
-  while (cp.length) {
-    columnsArray.push(cp.splice(0, count));
-  }
-  return columnsArray;
-};
-const parseRequestToTable = (mdxResponce, mainAxis = 0) => {
-  let tupples = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return?.root.Axes?.Axis
+}, b = (i, e, t) => {
+  if (!i.length) return [];
+  if (t.length) {
+    if (!e.length)
+      return i.map((r) => [r]);
+  } else return [i];
+  const o = [...i], n = [], s = e.length;
+  for (; o.length; )
+    n.push(o.splice(0, s));
+  return n;
+}, oe = (i, e = 0) => {
+  let t = A(
+    i.Body.ExecuteResponse.return?.root.Axes?.Axis
   )?.[0]?.Tuples;
-  const axis0 = Array.isArray(tupples) ? tupples.map((e) => e.Tuple) : optionalArrayToArray(
-    tupples?.Tuple
+  const o = Array.isArray(t) ? t.map((d) => d.Tuple) : A(
+    t?.Tuple
   );
-  tupples = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return?.root?.Axes?.Axis
+  t = A(
+    i.Body.ExecuteResponse.return?.root?.Axes?.Axis
   )?.[1]?.Tuples;
-  const axis1 = Array.isArray(tupples) ? tupples.map((e) => e.Tuple) : optionalArrayToArray(
-    tupples?.Tuple
-  );
-  const cellsArray = optionalArrayToArray(
-    mdxResponce.Body.ExecuteResponse.return.root.CellData?.Cell
-  );
-  const table = {
+  const n = Array.isArray(t) ? t.map((d) => d.Tuple) : A(
+    t?.Tuple
+  ), s = A(
+    i.Body.ExecuteResponse.return.root.CellData?.Cell
+  ), r = {
     rows: [],
     items: [],
     headers: ["Caption"],
     rowProperties: {}
-  };
-  const getCaption = (member) => {
-    return optionalArrayToArray(member).map((m) => m.Caption).join(" - ");
-  };
-  if (mainAxis === 0) {
-    axis1.forEach((item, index) => {
-      table.headers.push(getCaption(item.Member));
+  }, l = (d) => A(d).map((c) => c.Caption).join(" - ");
+  return e === 0 ? (n.forEach((d, c) => {
+    r.headers.push(l(d.Member));
+  }), o.forEach((d, c) => {
+    const a = l(d.Member);
+    r.rows[c] = [a], r.rowProperties[a] = d.Member, n.forEach((m, _) => {
+      r.rows[c].push(s[_ * o.length + c]?.Value);
     });
-    axis0.forEach((item, i) => {
-      const caption = getCaption(item.Member);
-      table.rows[i] = [caption];
-      table.rowProperties[caption] = item.Member;
-      axis1.forEach((subItem, j) => {
-        table.rows[i].push(cellsArray[j * axis0.length + i]?.Value);
-      });
+  })) : e === 1 && (o.forEach((d, c) => {
+    r.headers.push(l(d.Member));
+  }), n.forEach((d, c) => {
+    const a = l(d.Member);
+    r.items[c] = [a], r.rowProperties[a] = d.Member, o.forEach((m, _) => {
+      r.items[c].push(s[c * o.length + _]?.Value);
     });
-  } else if (mainAxis === 1) {
-    axis0.forEach((item, index) => {
-      table.headers.push(getCaption(item.Member));
-    });
-    axis1.forEach((item, i) => {
-      const caption = getCaption(item.Member);
-      table.items[i] = [caption];
-      table.rowProperties[caption] = item.Member;
-      axis0.forEach((subItem, j) => {
-        table.items[i].push(cellsArray[i * axis0.length + j]?.Value);
-      });
-    });
-  }
-  table.items = table.rows.map((row, i) => {
-    const mappedItem = {};
-    row.forEach((value, i2) => {
-      mappedItem[table.headers[i2]] = value;
-    });
-    return mappedItem;
-  });
-  return table;
+  })), r.items = r.rows.map((d, c) => {
+    const a = {};
+    return d.forEach((m, _) => {
+      a[r.headers[_]] = m;
+    }), a;
+  }), r;
 };
-class DrilldownHandler {
+class le {
   rowsExpandedMembers = [];
   rowsDrilldownMembers = [];
   columnsExpandedMembers = [];
   columnsDrilldownMembers = [];
   connection;
-  constructor(connection, state) {
-    this.connection = connection;
-    if (state) {
-      this.rowsDrilldownMembers = state.rowsDrilldownMembers || [];
-      this.rowsExpandedMembers = state.rowsExpandedMembers || [];
-      this.columnsDrilldownMembers = state.columnsDrilldownMembers || [];
-      this.columnsExpandedMembers = state.columnsExpandedMembers || [];
-    }
+  constructor(e, t) {
+    this.connection = e, t && (this.rowsDrilldownMembers = t.rowsDrilldownMembers || [], this.rowsExpandedMembers = t.rowsExpandedMembers || [], this.columnsDrilldownMembers = t.columnsDrilldownMembers || [], this.columnsExpandedMembers = t.columnsExpandedMembers || []);
   }
   getDrilldownState() {
     return {
@@ -1115,238 +707,152 @@ class DrilldownHandler {
       columnsDrilldownMembers: this.columnsDrilldownMembers
     };
   }
-  drilldownOnRows(member) {
-    const expandedIndex = this.rowsExpandedMembers.findIndex(
-      (e) => e.UName === member.UName
+  drilldownOnRows(e) {
+    const t = this.rowsExpandedMembers.findIndex(
+      (n) => n.UName === e.UName
     );
-    if (expandedIndex >= 0) this.rowsExpandedMembers.splice(expandedIndex, 1);
-    const sameHierarchyIndex = this.rowsDrilldownMembers.findIndex((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-    });
-    if (member.LNum === "0") {
-      this.rowsDrilldownMembers.splice(sameHierarchyIndex, 1);
-    } else {
-      if (sameHierarchyIndex >= 0) {
-        this.rowsDrilldownMembers.splice(sameHierarchyIndex, 1, member);
-      } else {
-        this.rowsDrilldownMembers.push(member);
-      }
-    }
+    t >= 0 && this.rowsExpandedMembers.splice(t, 1);
+    const o = this.rowsDrilldownMembers.findIndex((n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME);
+    e.LNum === "0" ? this.rowsDrilldownMembers.splice(o, 1) : o >= 0 ? this.rowsDrilldownMembers.splice(o, 1, e) : this.rowsDrilldownMembers.push(e);
   }
-  drilldownOnColumns(member) {
-    const expandedIndex = this.columnsExpandedMembers.findIndex(
-      (e) => e.UName === member.UName
+  drilldownOnColumns(e) {
+    const t = this.columnsExpandedMembers.findIndex(
+      (n) => n.UName === e.UName
     );
-    if (expandedIndex >= 0) this.columnsExpandedMembers.splice(expandedIndex, 1);
-    const sameHierarchyIndex = this.columnsDrilldownMembers.findIndex(
-      (e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      }
+    t >= 0 && this.columnsExpandedMembers.splice(t, 1);
+    const o = this.columnsDrilldownMembers.findIndex(
+      (n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME
     );
-    if (member.LNum === "0") {
-      this.columnsDrilldownMembers.splice(sameHierarchyIndex, 1);
-    } else {
-      if (sameHierarchyIndex >= 0) {
-        this.columnsDrilldownMembers.splice(sameHierarchyIndex, 1, member);
-      } else {
-        this.columnsDrilldownMembers.push(member);
-      }
-    }
+    e.LNum === "0" ? this.columnsDrilldownMembers.splice(o, 1) : o >= 0 ? this.columnsDrilldownMembers.splice(o, 1, e) : this.columnsDrilldownMembers.push(e);
   }
-  async drillupOnRows(member) {
-    const levels = await this.connection.getLevels();
-    const parentLevel = levels.find((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === Math.max(parseInt(member.LNum) - 1, 0).toString();
-    });
-    if (parentLevel) {
-      const parentMember = await this.connection.getMember(
-        parentLevel,
-        member.PARENT_UNIQUE_NAME
-      );
-      const requestParentLevel = levels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === parentMember.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === Math.max(parseInt(parentMember.LEVEL_NUMBER) - 1, 0).toString();
-      });
-      if (requestParentLevel) {
-        const createdMember = {
-          UName: parentMember.PARENT_UNIQUE_NAME,
-          LName: requestParentLevel.LEVEL_UNIQUE_NAME,
-          HIERARCHY_UNIQUE_NAME: requestParentLevel.HIERARCHY_UNIQUE_NAME,
-          LNum: requestParentLevel.LEVEL_NUMBER
+  async drillupOnRows(e) {
+    const t = await this.connection.getLevels(), o = t.find((n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME && n.LEVEL_NUMBER === Math.max(parseInt(e.LNum) - 1, 0).toString());
+    if (o) {
+      const n = await this.connection.getMember(
+        o,
+        e.PARENT_UNIQUE_NAME
+      ), s = t.find((r) => r.HIERARCHY_UNIQUE_NAME === n.HIERARCHY_UNIQUE_NAME && r.LEVEL_NUMBER === Math.max(parseInt(n.LEVEL_NUMBER) - 1, 0).toString());
+      if (s) {
+        const r = {
+          UName: n.PARENT_UNIQUE_NAME,
+          LName: s.LEVEL_UNIQUE_NAME,
+          HIERARCHY_UNIQUE_NAME: s.HIERARCHY_UNIQUE_NAME,
+          LNum: s.LEVEL_NUMBER
         };
-        this.drilldownOnRows(createdMember);
+        this.drilldownOnRows(r);
       }
     }
   }
-  async drillupOnColumns(member) {
-    const levels = await this.connection.getLevels();
-    const parentLevel = levels.find((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === Math.max(parseInt(member.LNum) - 1, 0).toString();
-    });
-    if (parentLevel) {
-      const parentMember = await this.connection.getMember(
-        parentLevel,
-        member.PARENT_UNIQUE_NAME
-      );
-      const requestParentLevel = levels.find((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === parentMember.HIERARCHY_UNIQUE_NAME && e.LEVEL_NUMBER === Math.max(parseInt(parentMember.LEVEL_NUMBER) - 1, 0).toString();
-      });
-      if (requestParentLevel) {
-        const createdMember = {
-          UName: parentMember.PARENT_UNIQUE_NAME,
-          LName: requestParentLevel.LEVEL_UNIQUE_NAME,
-          HIERARCHY_UNIQUE_NAME: requestParentLevel.HIERARCHY_UNIQUE_NAME,
-          LNum: requestParentLevel.LEVEL_NUMBER
+  async drillupOnColumns(e) {
+    const t = await this.connection.getLevels(), o = t.find((n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME && n.LEVEL_NUMBER === Math.max(parseInt(e.LNum) - 1, 0).toString());
+    if (o) {
+      const n = await this.connection.getMember(
+        o,
+        e.PARENT_UNIQUE_NAME
+      ), s = t.find((r) => r.HIERARCHY_UNIQUE_NAME === n.HIERARCHY_UNIQUE_NAME && r.LEVEL_NUMBER === Math.max(parseInt(n.LEVEL_NUMBER) - 1, 0).toString());
+      if (s) {
+        const r = {
+          UName: n.PARENT_UNIQUE_NAME,
+          LName: s.LEVEL_UNIQUE_NAME,
+          HIERARCHY_UNIQUE_NAME: s.HIERARCHY_UNIQUE_NAME,
+          LNum: s.LEVEL_NUMBER
         };
-        this.drilldownOnColumns(createdMember);
+        this.drilldownOnColumns(r);
       }
     }
   }
-  expandOnRows(member) {
-    const currentMemberHierarchyItems = this.rowsExpandedMembers.filter(
-      (e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      }
+  expandOnRows(e) {
+    const t = this.rowsExpandedMembers.filter(
+      (n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME
     );
-    currentMemberHierarchyItems.push(member);
-    currentMemberHierarchyItems.sort(
-      (a, b) => parseInt(a.LNum) - parseInt(b.LNum)
+    t.push(e), t.sort(
+      (n, s) => parseInt(n.LNum) - parseInt(s.LNum)
     );
-    const indexInSorted = currentMemberHierarchyItems.indexOf(member);
-    if (indexInSorted === 0) {
-      if (currentMemberHierarchyItems.length > 1) {
-        const nextItemIndex = this.rowsExpandedMembers.findIndex(
-          (e) => e.UName === currentMemberHierarchyItems[1].UName
+    const o = t.indexOf(e);
+    if (o === 0)
+      if (t.length > 1) {
+        const n = this.rowsExpandedMembers.findIndex(
+          (s) => s.UName === t[1].UName
         );
-        this.rowsExpandedMembers.splice(nextItemIndex, 0, member);
-      } else {
-        this.rowsExpandedMembers.push(member);
-      }
-    } else {
-      const prevItemIndex = this.rowsExpandedMembers.findIndex(
-        (e) => e.UName === currentMemberHierarchyItems[indexInSorted - 1].UName
+        this.rowsExpandedMembers.splice(n, 0, e);
+      } else
+        this.rowsExpandedMembers.push(e);
+    else {
+      const n = this.rowsExpandedMembers.findIndex(
+        (s) => s.UName === t[o - 1].UName
       );
-      this.rowsExpandedMembers.splice(prevItemIndex + 1, 0, member);
+      this.rowsExpandedMembers.splice(n + 1, 0, e);
     }
   }
-  collapseOnRows(member) {
-    const itemIndex = this.rowsExpandedMembers.findIndex(
-      (e) => e.UName === member.UName
+  collapseOnRows(e) {
+    const t = this.rowsExpandedMembers.findIndex(
+      (o) => o.UName === e.UName
     );
-    this.rowsExpandedMembers.splice(itemIndex, 1);
+    this.rowsExpandedMembers.splice(t, 1);
   }
-  expandOnColumns(member) {
-    const currentMemberHierarchyItems = this.columnsExpandedMembers.filter((e) => {
-      return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-    });
-    currentMemberHierarchyItems.push(member);
-    currentMemberHierarchyItems.sort(
-      (a, b) => parseInt(a.LNum) - parseInt(b.LNum)
+  expandOnColumns(e) {
+    const t = this.columnsExpandedMembers.filter((n) => n.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME);
+    t.push(e), t.sort(
+      (n, s) => parseInt(n.LNum) - parseInt(s.LNum)
     );
-    const indexInSorted = currentMemberHierarchyItems.indexOf(member);
-    if (indexInSorted === 0) {
-      if (currentMemberHierarchyItems.length > 1) {
-        const nextItemIndex = this.columnsExpandedMembers.findIndex(
-          (e) => e.UName === currentMemberHierarchyItems[1].UName
+    const o = t.indexOf(e);
+    if (o === 0)
+      if (t.length > 1) {
+        const n = this.columnsExpandedMembers.findIndex(
+          (s) => s.UName === t[1].UName
         );
-        this.columnsExpandedMembers.splice(nextItemIndex, 0, member);
-      } else {
-        this.columnsExpandedMembers.push(member);
-      }
-    } else {
-      const prevItemIndex = this.columnsExpandedMembers.findIndex(
-        (e) => e.UName === currentMemberHierarchyItems[indexInSorted - 1].UName
+        this.columnsExpandedMembers.splice(n, 0, e);
+      } else
+        this.columnsExpandedMembers.push(e);
+    else {
+      const n = this.columnsExpandedMembers.findIndex(
+        (s) => s.UName === t[o - 1].UName
       );
-      this.columnsExpandedMembers.splice(prevItemIndex + 1, 0, member);
+      this.columnsExpandedMembers.splice(n + 1, 0, e);
     }
   }
-  collapseOnColumns(member) {
-    const itemIndex = this.columnsExpandedMembers.findIndex(
-      (e) => e.UName === member.UName
+  collapseOnColumns(e) {
+    const t = this.columnsExpandedMembers.findIndex(
+      (o) => o.UName === e.UName
     );
-    this.columnsExpandedMembers.splice(itemIndex, 1);
+    this.columnsExpandedMembers.splice(t, 1);
   }
-  flushExpands(columns, rows) {
-    const notUsedHierarchiesInDrilldownCols = this.columnsExpandedMembers.filter((e) => {
-      return !columns.some((member) => {
-        return member.originalItem.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME;
-      });
-    });
-    notUsedHierarchiesInDrilldownCols.forEach((member) => {
-      const itemIndex = this.columnsExpandedMembers.findIndex((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      });
-      this.columnsExpandedMembers.splice(itemIndex, 1);
-    });
-    const notUsedHierarchiesInDrilldownRows = this.rowsExpandedMembers.filter(
-      (e) => {
-        return !rows.some((member) => {
-          return member.originalItem.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME;
-        });
-      }
-    );
-    notUsedHierarchiesInDrilldownRows.forEach((member) => {
-      const itemIndex = this.rowsExpandedMembers.findIndex((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      });
-      this.rowsExpandedMembers.splice(itemIndex, 1);
+  flushExpands(e, t) {
+    this.columnsExpandedMembers.filter((s) => !e.some((r) => r.originalItem.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME)).forEach((s) => {
+      const r = this.columnsExpandedMembers.findIndex((l) => l.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME);
+      this.columnsExpandedMembers.splice(r, 1);
+    }), this.rowsExpandedMembers.filter(
+      (s) => !t.some((r) => r.originalItem.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME)
+    ).forEach((s) => {
+      const r = this.rowsExpandedMembers.findIndex((l) => l.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME);
+      this.rowsExpandedMembers.splice(r, 1);
     });
   }
-  flushDrilldowns(columns, rows) {
-    const notUsedHierarchiesInDrilldownCols = this.columnsDrilldownMembers.filter((e) => {
-      return !columns.some((member) => {
-        return member.originalItem.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME;
-      });
-    });
-    notUsedHierarchiesInDrilldownCols.forEach((member) => {
-      const itemIndex = this.columnsDrilldownMembers.findIndex((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      });
-      this.columnsDrilldownMembers.splice(itemIndex, 1);
-    });
-    const notUsedHierarchiesInDrilldownRows = this.rowsDrilldownMembers.filter(
-      (e) => {
-        return !rows.some((member) => {
-          return member.originalItem.HIERARCHY_UNIQUE_NAME === e.HIERARCHY_UNIQUE_NAME;
-        });
-      }
-    );
-    notUsedHierarchiesInDrilldownRows.forEach((member) => {
-      const itemIndex = this.rowsDrilldownMembers.findIndex((e) => {
-        return e.HIERARCHY_UNIQUE_NAME === member.HIERARCHY_UNIQUE_NAME;
-      });
-      this.rowsDrilldownMembers.splice(itemIndex, 1);
+  flushDrilldowns(e, t) {
+    this.columnsDrilldownMembers.filter((s) => !e.some((r) => r.originalItem.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME)).forEach((s) => {
+      const r = this.columnsDrilldownMembers.findIndex((l) => l.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME);
+      this.columnsDrilldownMembers.splice(r, 1);
+    }), this.rowsDrilldownMembers.filter(
+      (s) => !t.some((r) => r.originalItem.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME)
+    ).forEach((s) => {
+      const r = this.rowsDrilldownMembers.findIndex((l) => l.HIERARCHY_UNIQUE_NAME === s.HIERARCHY_UNIQUE_NAME);
+      this.rowsDrilldownMembers.splice(r, 1);
     });
   }
-  handleDrilldown({ value, area }) {
-    if (area === "rows") {
-      this.drilldownOnRows(value);
-    } else if (area === "columns") {
-      this.drilldownOnColumns(value);
-    }
+  handleDrilldown({ value: e, area: t }) {
+    t === "rows" ? this.drilldownOnRows(e) : t === "columns" && this.drilldownOnColumns(e);
   }
-  handleDrillup({ value, area }) {
-    if (area === "rows") {
-      this.drillupOnRows(value);
-    } else if (area === "columns") {
-      this.drillupOnColumns(value);
-    }
+  handleDrillup({ value: e, area: t }) {
+    t === "rows" ? this.drillupOnRows(e) : t === "columns" && this.drillupOnColumns(e);
   }
-  handleExpand({ value, area }) {
-    if (area === "rows") {
-      this.expandOnRows(value);
-    } else if (area === "columns") {
-      this.expandOnColumns(value);
-    }
+  handleExpand({ value: e, area: t }) {
+    t === "rows" ? this.expandOnRows(e) : t === "columns" && this.expandOnColumns(e);
   }
-  handleCollapse({ value, area }) {
-    if (area === "rows") {
-      this.collapseOnRows(value);
-    } else if (area === "columns") {
-      this.collapseOnColumns(value);
-    }
+  handleCollapse({ value: e, area: t }) {
+    t === "rows" ? this.collapseOnRows(e) : t === "columns" && this.collapseOnColumns(e);
   }
 }
-class MetadataStore {
+class ae {
   storage = {
     hierarchies: [],
     dimensions: [],
@@ -1366,47 +872,37 @@ class MetadataStore {
   api = null;
   initPromiseResolve;
   initPromise = null;
-  init(api) {
-    this.api = api;
-    this.initPromise = new Promise((resolve) => {
-      this.initPromiseResolve = resolve;
+  init(e) {
+    this.api = e, this.initPromise = new Promise((t) => {
+      this.initPromiseResolve = t;
     });
   }
   async waitForInit() {
     return this.initPromise;
   }
-  async loadMetadata(catalogName, cubeName) {
+  async loadMetadata(e, t) {
     if (!this.api) throw new Error("API is not initialized");
     const [
-      dimensions,
-      hierarchies,
-      levels,
-      measureGroups,
-      measures,
-      sets,
-      properties
+      o,
+      n,
+      s,
+      r,
+      l,
+      d,
+      c
     ] = await Promise.all([
-      await this.api.getDimensions(catalogName, cubeName),
-      await this.api.getHierarchies(catalogName, cubeName),
-      await this.api.getLevels(catalogName, cubeName),
-      await this.api.getMeasureGroups(catalogName, cubeName),
-      await this.api.getMeasures(catalogName, cubeName),
-      await this.api.getSets(catalogName, cubeName),
-      await this.api.getProperties(catalogName, cubeName)
+      await this.api.getDimensions(e, t),
+      await this.api.getHierarchies(e, t),
+      await this.api.getLevels(e, t),
+      await this.api.getMeasureGroups(e, t),
+      await this.api.getMeasures(e, t),
+      await this.api.getSets(e, t),
+      await this.api.getProperties(e, t)
     ]);
-    this.storage.dimensions = dimensions;
-    this.storage.hierarchies = hierarchies;
-    this.storage.levels = levels;
-    this.storage.measureGroups = measureGroups;
-    this.storage.measures = measures;
-    this.storage.sets = sets;
-    this.storage.properties = properties;
-    this.initPromiseResolve();
-    return this.initPromise;
+    return this.storage.dimensions = o, this.storage.hierarchies = n, this.storage.levels = s, this.storage.measureGroups = r, this.storage.measures = l, this.storage.sets = d, this.storage.properties = c, this.initPromiseResolve(), this.initPromise;
   }
   async getMetadataStorage() {
-    await this.initPromise;
-    return this.storage;
+    return await this.initPromise, this.storage;
   }
   getHierarchies() {
     return this.storage.hierarchies;
@@ -1421,16 +917,12 @@ class MetadataStore {
     return this.storage.levels;
   }
 }
-var __defProp = Object.defineProperty;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp(target, key, result);
-  return result;
+var Ee = Object.defineProperty, ce = (i, e, t, o) => {
+  for (var n = void 0, s = i.length - 1, r; s >= 0; s--)
+    (r = i[s]) && (n = r(e, t, n) || n);
+  return n && Ee(e, t, n), n;
 };
-class XmlaStore extends BaseDatasource {
+class x extends q {
   connection;
   requestParams = {
     rows: [],
@@ -1438,7 +930,7 @@ class XmlaStore extends BaseDatasource {
     measures: [],
     filters: []
   };
-  useMdx = false;
+  useMdx = !1;
   mdx = "";
   drilldownHandler = null;
   metadata = null;
@@ -1451,120 +943,78 @@ class XmlaStore extends BaseDatasource {
   constructor() {
     super();
   }
-  init(configuration) {
-    super.init(configuration);
-    console.log("state of store during creation", JSON.stringify(this.requestParams));
-    this.initPromise = new Promise((resolve) => {
-      this.initPromiseResolve = resolve;
-    });
-    this.metadataPromise = new Promise((resolve) => {
-      this.metadataPromiseResolve = resolve;
-    });
-    this.connection = configuration.connection;
-    this.cube = configuration.cube;
-    if (!this.connectionRepository) {
+  init(e) {
+    if (super.init(e), console.log("state of store during creation", JSON.stringify(this.requestParams)), this.initPromise = new Promise((o) => {
+      this.initPromiseResolve = o;
+    }), this.metadataPromise = new Promise((o) => {
+      this.metadataPromiseResolve = o;
+    }), this.connection = e.connection, this.cube = e.cube, !this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    const t = this.connectionRepository.getConnection(
       this.connection
     );
-    if (!connection) {
+    if (!t)
       throw new Error(`Connection ${this.connection} not found`);
-    }
-    this.drilldownHandler = new DrilldownHandler(
-      connection,
-      configuration.drilldownState
-    );
-    if (configuration.useMdx) {
-      this.useMdx = configuration.useMdx;
-    }
-    if (configuration.mdx) {
-      this.mdx = configuration.mdx;
-    }
-    if (configuration.requestParams) {
-      this.requestParams = configuration.requestParams;
-    }
-    this.pollingInterval = configuration.pollingInterval ?? 5e3;
-    if (this.pollingEnabled) {
-      this.startPolling(this.pollingInterval);
-    }
-    this.initPromiseResolve?.();
+    this.drilldownHandler = new le(
+      t,
+      e.drilldownState
+    ), e.useMdx && (this.useMdx = e.useMdx), e.mdx && (this.mdx = e.mdx), e.requestParams && (this.requestParams = e.requestParams), this.pollingInterval = e.pollingInterval ?? 5e3, this.pollingEnabled && this.startPolling(this.pollingInterval), this.initPromiseResolve?.();
   }
   async loadMetadata() {
-    const connection = this.connectionRepository.getConnection(
+    const e = this.connectionRepository.getConnection(
       this.connection
     );
-    this.metadata = new MetadataStore();
-    const api = await connection.getApi();
-    this.metadata.init(api);
-    await this.metadata.loadMetadata(connection.catalogName, this.cube);
-    this.metadataPromiseResolve?.(this.metadata);
-    return this.metadataPromise;
+    this.metadata = new ae();
+    const t = await e.getApi();
+    return this.metadata.init(t), await this.metadata.loadMetadata(e.catalogName, this.cube), this.metadataPromiseResolve?.(this.metadata), this.metadataPromise;
   }
   /** The repository arrives as a parameter - callers inject it Vue-side. */
-  static async fetchCubes(connection, connectionRepository) {
-    if (!connectionRepository) {
+  static async fetchCubes(e, t) {
+    if (!t)
       throw new Error("ConnectionRepository is required");
-    }
-    const conn = connectionRepository.getConnection(connection);
-    if (!conn) {
-      throw new Error(`Connection ${connection} not found`);
-    }
-    const api = await conn.getApi();
-    const { cubes } = await api.getCubes(conn.catalogName);
-    return cubes;
+    const o = t.getConnection(e);
+    if (!o)
+      throw new Error(`Connection ${e} not found`);
+    const n = await o.getApi(), { cubes: s } = await n.getCubes(o.catalogName);
+    return s;
   }
-  async setRequestParams(requestParams) {
-    this.requestParams = requestParams;
-    this.mdx = await this.getMdxRequest();
+  async setRequestParams(e) {
+    this.requestParams = e, this.mdx = await this.getMdxRequest();
   }
   async getOriginalData() {
     throw new Error("Not Implemented");
   }
-  async getData(type, requestConfig = {}) {
-    let request;
-    let response = null;
-    if (!this.connectionRepository) {
+  async getData(e, t = {}) {
+    let o, n = null;
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    const s = this.connectionRepository.getConnection(
       this.connection
     );
-    if (this.useMdx) {
-      request = this.mdx;
-    } else {
-      request = await this.getMdxRequest(requestConfig);
-    }
-    console.log("MDX Request in store:", request);
-    console.log("Metadata in store:", this.metadata.getProperties());
-    console.log("Metadata in store:", this.metadata.getLevels());
-    const mdxResponse = await connection.fetch({
+    this.useMdx ? o = this.mdx : o = await this.getMdxRequest(t), console.log("MDX Request in store:", o), console.log("Metadata in store:", this.metadata.getProperties()), console.log("Metadata in store:", this.metadata.getLevels());
+    const r = await s.fetch({
       data: {
-        mdx: request
+        mdx: o
       }
     });
-    if (type === "PivotTable") {
-      response = this.parseToPivotTable(mdxResponse, requestConfig);
-      console.log("Parsed responce in datasource", response);
-      if (!response) return null;
-      response.tableState = {
+    if (e === "PivotTable") {
+      if (n = this.parseToPivotTable(r, t), console.log("Parsed responce in datasource", n), !n) return null;
+      n.tableState = {
         rowsExpandedMembers: this.drilldownHandler?.rowsExpandedMembers || [],
         rowsDrilldownMembers: this.drilldownHandler?.rowsDrilldownMembers || [],
         columnsExpandedMembers: this.drilldownHandler?.columnsExpandedMembers || [],
         columnsDrilldownMembers: this.drilldownHandler?.columnsDrilldownMembers || []
       };
-    } else if (type === "DataTable") {
-      response = this.parseToDataTable(mdxResponse);
-    } else {
+    } else if (e === "DataTable")
+      n = this.parseToDataTable(r);
+    else
       throw new Error("Invalid data type");
-    }
-    return response;
+    return n;
   }
-  async getMdxRequest(requestConfig = {}) {
+  async getMdxRequest(e = {}) {
     await this.loadMetadata();
-    const properties = this.metadata.getProperties();
-    const levels = this.metadata.getLevels();
-    const mdxRequest = await getMdxRequest(
+    const t = this.metadata.getProperties(), o = this.metadata.getLevels();
+    return await Z(
       this.cube,
       this.drilldownHandler?.columnsDrilldownMembers || [],
       this.drilldownHandler?.rowsDrilldownMembers || [],
@@ -1573,128 +1023,106 @@ class XmlaStore extends BaseDatasource {
       this.requestParams.rows,
       this.requestParams.columns,
       this.requestParams.measures,
-      requestConfig,
-      properties,
+      e,
+      t,
       this.requestParams.filters,
-      levels
+      o
     );
-    return mdxRequest;
   }
   async getMetadata() {
-    await this.initPromise;
-    await this.loadMetadata();
-    return this.metadata;
+    return await this.initPromise, await this.loadMetadata(), this.metadata;
   }
   expand(e) {
-    this.drilldownHandler?.handleExpand(e);
-    return this.drilldownHandler?.getDrilldownState();
+    return this.drilldownHandler?.handleExpand(e), this.drilldownHandler?.getDrilldownState();
   }
   collapse(e) {
-    this.drilldownHandler?.handleCollapse(e);
-    return this.drilldownHandler?.getDrilldownState();
+    return this.drilldownHandler?.handleCollapse(e), this.drilldownHandler?.getDrilldownState();
   }
   getConnection() {
-    const connectionRepository = this.connectionRepository;
-    return connectionRepository.getConnection(this.connection);
+    return this.connectionRepository.getConnection(this.connection);
   }
   changeFilters(e) {
     console.log("event in the datasource", e);
-    const originalItem = this.requestParams[e.area].find(
-      (item) => item.id === e.id
+    const t = this.requestParams[e.area].find(
+      (o) => o.id === e.id
     );
-    if (originalItem) {
-      originalItem.filters = e.filters;
-    }
+    t && (t.filters = e.filters);
   }
-  callEvent(event, params) {
-    switch (event) {
+  callEvent(e, t) {
+    switch (e) {
       case "expand":
-        this.expand(params);
+        this.expand(t);
         break;
       case "collapse":
-        this.collapse(params);
+        this.collapse(t);
         break;
       case "filterChange":
-        this.changeFilters(params);
+        this.changeFilters(t);
         break;
       default:
         console.warn("Event is not available for this type of store");
     }
     this.notify();
   }
-  parseToPivotTable(mdxResponse, requestConfig = {}) {
-    const properties = this.metadata.getProperties();
-    console.log(requestConfig);
-    return parseMdxRequest(mdxResponse, {
+  parseToPivotTable(e, t = {}) {
+    const o = this.metadata.getProperties();
+    return console.log(t), re(e, {
       rows: this.requestParams.rows,
       columns: this.requestParams.columns,
       measures: this.requestParams.measures,
-      properties,
-      showRowsProperties: requestConfig.showRowsProperties,
-      showColumnsProperties: requestConfig.showColumnsProperties
+      properties: o,
+      showRowsProperties: t.showRowsProperties,
+      showColumnsProperties: t.showColumnsProperties
     });
   }
-  parseToDataTable(mdxResponce) {
-    return parseRequestToTable(mdxResponce, 0);
+  parseToDataTable(e) {
+    return oe(e, 0);
   }
   destroy() {
     this.stopPolling();
   }
-  static validateConfiguration(configuration) {
-    if (!configuration?.connection) {
-      return false;
-    }
-    if (!configuration?.cube) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(e) {
+    return !(!e?.connection || !e?.cube);
   }
 }
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], XmlaStore.prototype, "connectionRepository");
-const XMLA_STORE_FACTORY = serviceId("XmlaStoreFactory");
-const factorySymbol = Symbol.for(XMLA_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(XMLA_STORE_FACTORY, (config) => {
-    if (!XmlaStore.validateConfiguration(config)) {
+ce([
+  j(B)
+], x.prototype, "connectionRepository");
+const P = z("XmlaStoreFactory"), de = Symbol.for(P);
+function V({ services: i }) {
+  i.register(P, (e) => {
+    if (!x.validateConfiguration(e))
       throw new Error(
         "Invalid XmlaStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(XmlaStore);
-    store.init(config);
-    return store;
+    const t = i.construct(x);
+    return t.init(e), t;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(XMLA_STORE_FACTORY);
+function F({ services: i }) {
+  i.unregister(P);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const ue = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  XMLA_STORE_FACTORY,
-  XmlaStore,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.xmla";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.xmla");
-  await activate$1?.(context);
+  XMLA_STORE_FACTORY: P,
+  XmlaStore: x,
+  activate: V,
+  deactivate: F,
+  factorySymbol: de
+}, Symbol.toStringTag, { value: "Module" })), D = "org.eclipse.daanse.board.app.lib.datasource.xmla", he = "0.0.1-next.1";
+async function Re(i) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${D}: tsm runtime is not initialized`);
+  e.register(D, ue, he, "lib.datasource.xmla"), await V?.(i);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function Ue(i) {
+  await F?.(i);
 }
 export {
-  XMLA_STORE_FACTORY,
-  XmlaStore,
-  activate,
-  deactivate,
-  factorySymbol
+  P as XMLA_STORE_FACTORY,
+  x as XmlaStore,
+  Re as activate,
+  Ue as deactivate,
+  de as factorySymbol
 };

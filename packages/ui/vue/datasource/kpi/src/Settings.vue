@@ -11,8 +11,11 @@ Contributors:
     Smart City Jena
 -->
 <script setup lang="ts">
-import { computed, watch, onMounted, ref } from 'vue';
+import { inject, computed, watch, onMounted, ref } from 'vue'
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
+import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
+
+const connectionRepository = inject<ConnectionRepository>(connectionIdentifier)!
 
 const { config, connections } = defineProps<{
   config: any;
@@ -27,13 +30,13 @@ const connectionsFiltered = computed(() => {
 
 watch(async () => config.connection, async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 
 onMounted(async () => {
   if (config.connection) {
-    cubes.value = await XmlaStore.fetchCubes(config.connection);
+    cubes.value = await XmlaStore.fetchCubes(config.connection, connectionRepository);
   }
 });
 </script>

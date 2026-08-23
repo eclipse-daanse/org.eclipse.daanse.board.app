@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -38,6 +41,6 @@ export class ICsvStoreConfiguration extends IBaseConnectionConfiguration {
   @Documentation("The optional interval in milliseconds to poll the CSV resource for updates. If not specified, polling might be disabled or use a default value.")
   @Attribute() pollingInterval?: number;
 
-  @Documentation("A list of possible separator characters used in the CSV file (e.g., ',', ';', '\t').")
+  @Documentation("A list of possible separator characters used in the CSV file (e.g., ',', ';', '\\t').")
   @Attribute() separators: Array<string> = [];
 }

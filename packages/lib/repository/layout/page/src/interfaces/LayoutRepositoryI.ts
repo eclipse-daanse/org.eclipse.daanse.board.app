@@ -11,10 +11,10 @@
 
 import { LayoutI } from './LayoutI'
 
-export interface LayoutRepositoryI {
-  addLayout(layout: LayoutI): void;
-  removeLayout(layoutId: string): boolean;
-  getLayout(layoutId: string): LayoutI | undefined;
-  getAllLayouts(): LayoutI[];
-  hasLayout(layoutId: string): boolean;
-}
+/*
+ * The contract lives in lib.api.layout.page - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import type { LayoutRepositoryI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+

@@ -1,368 +1,286 @@
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
-import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-import { VariableWrapper, VARIABLEWRAPPER } from "org.eclipse.daanse.board.app.lib.variables";
-import { VARIABLEWRAPPER as VARIABLEWRAPPER2, VariableWrapper as VariableWrapper2 } from "org.eclipse.daanse.board.app.lib.variables";
-const activeLoadingCount = ref(0);
-function useGlobalLoading() {
-  const isLoading = computed(() => activeLoadingCount.value > 0);
-  const startLoading = () => {
-    activeLoadingCount.value++;
-  };
-  const stopLoading = () => {
-    if (activeLoadingCount.value > 0) {
-      activeLoadingCount.value--;
-    }
-  };
+import { identifier as E } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { ref as w, computed as D, inject as m, onMounted as _, onUnmounted as O, watch as S, onBeforeUnmount as x } from "vue";
+import { identifier as T } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { identifier as I } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { VariableWrapper as V, VARIABLEWRAPPER as B } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLEWRAPPER as K, VariableWrapper as Q } from "org.eclipse.daanse.board.app.lib.variables";
+const y = w(0);
+function L() {
   return {
-    isLoading,
-    activeLoadingCount,
-    startLoading,
-    stopLoading
+    isLoading: D(() => y.value > 0),
+    activeLoadingCount: y,
+    startLoading: () => {
+      y.value++;
+    },
+    stopLoading: () => {
+      y.value > 0 && y.value--;
+    }
   };
 }
-function useDatasourceRepository(dataSourceId, type, data, subscriptions = [], requestConfig) {
-  const datasourceRepository = inject(identifier);
-  if (!datasourceRepository) {
+function N(r, t, a, c = [], l) {
+  const i = m(E);
+  if (!i)
     throw new Error("DatasourceRepository not provided");
-  }
-  const { startLoading, stopLoading } = useGlobalLoading();
-  const getData = async () => {
-    if (!dataSourceId.value) {
-      data.value = null;
+  const { startLoading: f, stopLoading: n } = L(), u = async () => {
+    if (!r.value) {
+      a.value = null;
       return;
     }
-    console.log("getData", dataSourceId.value);
-    console.log("type", type);
-    startLoading();
+    console.log("getData", r.value), console.log("type", t), f();
     try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, requestConfig?.value || {});
-      if (type === "PivotTable") {
-        data.value = JSON.parse(JSON.stringify(dataRaw));
-      } else {
-        data.value = structuredClone(dataRaw);
-      }
+      const o = await i.getDatasource(r.value).getData(t, l?.value || {});
+      t === "PivotTable" ? a.value = JSON.parse(JSON.stringify(o)) : a.value = structuredClone(o);
     } catch (e) {
-      data.value = null;
-      console.warn(e);
+      a.value = null, console.warn(e);
     } finally {
-      stopLoading();
+      n();
     }
-  };
-  const callEvent = async (event, params, shouldUpdate = true) => {
-    if (dataSourceId.value) {
+  }, b = async (e, o, s = !0) => {
+    if (r.value)
       try {
-        const dataSource = datasourceRepository.getDatasource(
-          dataSourceId.value
-        );
-        const result = dataSource.callEvent(event, params, shouldUpdate);
-        if (!shouldUpdate && result instanceof Promise) {
-          await result;
-          const dataRaw = await dataSource.getData(type);
-          data.value = structuredClone(dataRaw);
+        const v = i.getDatasource(
+          r.value
+        ), R = v.callEvent(e, o, s);
+        if (!s && R instanceof Promise) {
+          await R;
+          const W = await v.getData(t);
+          a.value = structuredClone(W);
         }
-      } catch (e) {
-        console.warn(e);
+      } catch (v) {
+        console.warn(v);
       }
-    }
-  };
-  const getDataWithOptions = async (options) => {
-    if (!dataSourceId.value) {
-      data.value = null;
+  }, p = async (e) => {
+    if (!r.value) {
+      a.value = null;
       return;
     }
-    console.log("getDataWithOptions", dataSourceId.value, options);
-    console.log("type", type);
-    startLoading();
+    console.log("getDataWithOptions", r.value, e), console.log("type", t), f();
     try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      const dataRaw = await dataSource.getData(type, options);
-      data.value = structuredClone(dataRaw);
-    } catch (e) {
-      data.value = null;
-      console.warn(e);
+      const s = await i.getDatasource(r.value).getData(t, e);
+      a.value = structuredClone(s);
+    } catch (o) {
+      a.value = null, console.warn(o);
     } finally {
-      stopLoading();
+      n();
+    }
+  }, g = (e, o) => {
+    try {
+      u();
+    } catch (s) {
+      console.warn(s);
+    }
+    if (!(!e || !o || e === o)) {
+      try {
+        const s = i.getDatasource(o);
+        s.unsubscribe(u), c.forEach((v) => {
+          s.unsubscribe(v);
+        });
+      } catch (s) {
+        console.warn(s);
+      }
+      try {
+        const s = i.getDatasource(e);
+        s.subscribe(() => u()), c.forEach((v) => {
+          s.subscribe(v);
+        });
+      } catch (s) {
+        console.warn(s);
+      }
+    }
+  }, d = () => {
+    try {
+      return i.getDatasource(r.value);
+    } catch (e) {
+      return console.warn(e), null;
     }
   };
-  const update = (newVal, oldVal) => {
+  return _(() => {
+    u();
     try {
-      getData();
-    } catch (e) {
-      console.warn(e);
-    }
-    if (!newVal || !oldVal || newVal === oldVal) return;
-    try {
-      const oldDataSource = datasourceRepository.getDatasource(oldVal);
-      oldDataSource.unsubscribe(getData);
-      subscriptions.forEach((fn) => {
-        oldDataSource.unsubscribe(fn);
+      const e = i.getDatasource(r.value);
+      e.subscribe(u), c.forEach((o) => {
+        e.subscribe(o);
       });
     } catch (e) {
       console.warn(e);
     }
+  }), O(() => {
     try {
-      const dataSource = datasourceRepository.getDatasource(newVal);
-      dataSource.subscribe(() => getData());
-      subscriptions.forEach((fn) => {
-        dataSource.subscribe(fn);
+      const e = i.getDatasource(r.value);
+      e.unsubscribe(u), c.forEach((o) => {
+        e.unsubscribe(o);
       });
     } catch (e) {
       console.warn(e);
     }
-  };
-  const getDatasourceInstance = () => {
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      return dataSource;
-    } catch (e) {
-      console.warn(e);
-      return null;
-    }
-  };
-  onMounted(() => {
-    getData();
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      dataSource.subscribe(getData);
-      subscriptions.forEach((fn) => {
-        dataSource.subscribe(fn);
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-  });
-  onUnmounted(() => {
-    try {
-      const dataSource = datasourceRepository.getDatasource(dataSourceId.value);
-      dataSource.unsubscribe(getData);
-      subscriptions.forEach((fn) => {
-        dataSource.unsubscribe(fn);
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-  });
-  return {
-    data,
-    callEvent,
-    update,
-    getDataWithOptions,
-    getDatasourceInstance
+  }), {
+    data: a,
+    callEvent: b,
+    update: g,
+    getDataWithOptions: p,
+    getDatasourceInstance: d
   };
 }
-function useTemporaryStore(type, settings, tempStore) {
-  const datasourceRepository = inject(identifier);
-  if (!datasourceRepository) {
+function M(r, t, a) {
+  const c = m(E);
+  if (!c)
     throw new Error("DatasourceRepository not provided");
-  }
-  const identifiers = datasourceRepository.getDatasourceIdentifiers(type);
-  console.log("Identifiers for datasource type", type, identifiers);
-  onMounted(async () => {
+  const l = c.getDatasourceIdentifiers(r);
+  console.log("Identifiers for datasource type", r, l), _(async () => {
     console.log(
       "Creating temporary store for type",
-      type,
+      r,
       "with settings",
-      settings.value
+      t.value
     );
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store);
-    tempStore.value = factory({ ...settings.value.config, _isTemporaryPreview: true });
+    const f = c.resolveIdentifier(l.Store);
+    a.value = f({ ...t.value.config, _isTemporaryPreview: !0 });
   });
-  const update = async () => {
-    tempStore.value?.destroy();
-    tempStore.value = null;
-    const factory = datasourceRepository.resolveIdentifier(identifiers.Store);
-    const newStore = factory({ ...settings.value.config, _isTemporaryPreview: true });
-    if (newStore.initPromise) {
-      await newStore.initPromise;
-      tempStore.value = newStore;
-      return newStore;
-    } else {
-      tempStore.value = newStore;
-      return newStore;
-    }
+  const i = async () => {
+    a.value?.destroy(), a.value = null;
+    const n = c.resolveIdentifier(l.Store)({ ...t.value.config, _isTemporaryPreview: !0 });
+    return n.initPromise ? (await n.initPromise, a.value = n, n) : (a.value = n, n);
   };
-  watch(
-    () => settings,
+  return S(
+    () => t,
     async () => {
     },
-    { deep: true }
-  );
-  onBeforeUnmount(() => {
-    console.log("Destroying temporary store");
-    tempStore.value?.destroy();
-  });
-  return {
-    update
+    { deep: !0 }
+  ), x(() => {
+    console.log("Destroying temporary store"), a.value?.destroy();
+  }), {
+    update: i
   };
 }
-function usePromisifiedModal(resetFn, opened = () => {
+function $(r, t = () => {
 }) {
-  const isOpened = ref(false);
-  let resolveFunction = (_val) => {
-  };
-  let runPromise = new Promise((res) => {
-    resolveFunction = res;
+  const a = w(!1);
+  let c = (n) => {
+  }, l = new Promise((n) => {
+    c = n;
   });
-  const run = (data) => {
-    isOpened.value = true;
-    opened(data);
-    return runPromise;
-  };
-  const close = (data) => {
-    resolveFunction(data);
-    runPromise = new Promise((res) => {
-      resolveFunction = res;
-    });
-    isOpened.value = false;
-    resetFn();
-  };
-  return { isOpened, run, close };
+  return { isOpened: a, run: (n) => (a.value = !0, t(n), l), close: (n) => {
+    c(n), l = new Promise((u) => {
+      c = u;
+    }), a.value = !1, r();
+  } };
 }
-function useVariableRepository() {
-  const updateTimestamp = ref(Date.now());
-  const connectedVariables = [];
-  const variableRepository = inject(identifier$1);
-  if (!variableRepository) {
+function h() {
+  const r = w(Date.now()), t = [], a = m(T);
+  if (!a)
     throw new Error("VariableRepository not provided");
-  }
-  let pageContextService = null;
+  let c = null;
   try {
-    pageContextService = inject(identifier$2);
-  } catch (e) {
+    c = m(I);
+  } catch {
     console.warn("PageContextService not available for variable resolution");
   }
-  const subscriptionFn = () => {
-    updateTimestamp.value = Date.now();
-  };
-  const calculateValue = (templateValue, subscription = () => {
+  const l = () => {
+    r.value = Date.now();
+  }, i = (n, u = () => {
   }) => {
-    const regex = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
-    for (const variable of connectedVariables) {
-      variable.unsubscribe(subscriptionFn);
-      variable.unsubscribe(subscription);
-    }
-    connectedVariables.length = 0;
-    const matches = [...templateValue.matchAll(regex)];
-    const listOfVariables = matches.map((match) => match[1]);
-    let result = templateValue;
-    for (const varName of listOfVariables) {
+    const b = /\{\s*([a-zA-Z0-9_]+)\s*\}/g;
+    for (const e of t)
+      e.unsubscribe(l), e.unsubscribe(u);
+    t.length = 0;
+    const g = [...n.matchAll(b)].map((e) => e[1]);
+    let d = n;
+    for (const e of g)
       try {
-        let variable = void 0;
+        let o;
         try {
-          const currentPageId = pageContextService?.getCurrentPageId();
-          variable = variableRepository.getVariableWithContext ? variableRepository.getVariableWithContext(varName, currentPageId) : variableRepository.getVariable(varName);
-        } catch (e) {
-          console.error(e);
+          const s = c?.getCurrentPageId();
+          o = a.getVariableWithContext ? a.getVariableWithContext(e, s) : a.getVariable(e);
+        } catch (s) {
+          console.error(s);
         }
-        if (variable) {
-          variable.subscribe(subscriptionFn);
-          variable.subscribe(subscription);
-          connectedVariables.push(variable);
-          const value = variable.value;
-          const variableRegex = new RegExp(
-            `\\{\\s*${varName}\\s*\\}`,
+        if (o) {
+          o.subscribe(l), o.subscribe(u), t.push(o);
+          const s = o.value, v = new RegExp(
+            `\\{\\s*${e}\\s*\\}`,
             "g"
           );
-          result = result.replace(variableRegex, String(value));
+          d = d.replace(v, String(s));
         }
-      } catch (error) {
-        console.warn(`Error resolving variable ${varName}:`, error);
+      } catch (o) {
+        console.warn(`Error resolving variable ${e}:`, o);
       }
-    }
-    return result;
-  };
-  const wrapParameters = (parameters) => {
-    const wrappedParameters = {};
-    for (const [key, value] of Object.entries(parameters)) {
-      try {
-        const computedValue = computed(() => {
-          updateTimestamp.value;
-          if (value) {
-            return calculateValue(value.value + "");
-          } else {
-            return value;
-          }
-        });
-        wrappedParameters[key] = computedValue;
-      } catch (r) {
-        console.log(r);
-      }
-    }
-    return wrappedParameters;
+    return d;
   };
   return {
-    calculateValue,
-    wrapParameters
+    calculateValue: i,
+    wrapParameters: (n) => {
+      const u = {};
+      for (const [b, p] of Object.entries(n))
+        try {
+          const g = D(() => (r.value, p && i(p.value + "")));
+          u[b] = g;
+        } catch (g) {
+          console.log(g);
+        }
+      return u;
+    }
   };
 }
-const TYPE = "VARIABLECOMPLEXSTRINGWRAPPER";
-class VariableComplexStringWrapper {
-  type = TYPE;
+const A = "VARIABLECOMPLEXSTRINGWRAPPER";
+class C {
+  type = A;
   _value = void 0;
   _computedValue = null;
-  constructor(initValue = "") {
-    this._value = initValue;
+  constructor(t = "") {
+    this._value = t;
   }
   get original() {
     return this._value || "";
   }
   updateFn() {
-    const { calculateValue } = useVariableRepository();
-    this._computedValue = calculateValue(this._value || "");
+    const { calculateValue: t } = h();
+    this._computedValue = t(this._value || "");
   }
   get value() {
-    const { calculateValue } = useVariableRepository();
-    this._computedValue = calculateValue(this._value || "", this.updateFn.bind(this));
-    return this._computedValue;
+    const { calculateValue: t } = h();
+    return this._computedValue = t(this._value || "", this.updateFn.bind(this)), this._computedValue;
   }
-  set value(newValue) {
-    this._value = newValue;
+  set value(t) {
+    this._value = t;
   }
 }
-const WrapperTypes = {
-  "VariableWrapper": VariableWrapper,
-  "VariableComplexStringWrapper": VariableComplexStringWrapper
-};
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const j = {
+  VariableWrapper: V,
+  VariableComplexStringWrapper: C
+}, F = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VARIABLECOMPLEXSTRINGWRAPPER: TYPE,
-  VARIABLEWRAPPER,
-  VariableComplexStringWrapper,
-  VariableWrapper,
-  WrapperTypes,
-  useDatasourceRepository,
-  useGlobalLoading,
-  usePromisifiedModal,
-  useTemporaryStore,
-  useVariableRepository
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.composables";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.composables");
-  await void 0;
+  VARIABLECOMPLEXSTRINGWRAPPER: A,
+  VARIABLEWRAPPER: B,
+  VariableComplexStringWrapper: C,
+  VariableWrapper: V,
+  WrapperTypes: j,
+  useDatasourceRepository: N,
+  useGlobalLoading: L,
+  usePromisifiedModal: $,
+  useTemporaryStore: M,
+  useVariableRepository: h
+}, Symbol.toStringTag, { value: "Module" })), P = "org.eclipse.daanse.board.app.ui.vue.composables", G = "0.0.1-next.1";
+async function U(r) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${P}: tsm runtime is not initialized`);
+  t.register(P, F, G, "ui.vue.composables"), await void 0;
 }
-async function deactivate(context) {
+async function Z(r) {
   await void 0;
 }
 export {
-  TYPE as VARIABLECOMPLEXSTRINGWRAPPER,
-  VARIABLEWRAPPER2 as VARIABLEWRAPPER,
-  VariableComplexStringWrapper,
-  VariableWrapper2 as VariableWrapper,
-  WrapperTypes,
-  activate,
-  deactivate,
-  useDatasourceRepository,
-  useGlobalLoading,
-  usePromisifiedModal,
-  useTemporaryStore,
-  useVariableRepository
+  A as VARIABLECOMPLEXSTRINGWRAPPER,
+  K as VARIABLEWRAPPER,
+  C as VariableComplexStringWrapper,
+  Q as VariableWrapper,
+  j as WrapperTypes,
+  U as activate,
+  Z as deactivate,
+  N as useDatasourceRepository,
+  L as useGlobalLoading,
+  $ as usePromisifiedModal,
+  M as useTemporaryStore,
+  h as useVariableRepository
 };

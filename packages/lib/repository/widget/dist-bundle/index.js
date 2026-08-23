@@ -1,52 +1,36 @@
-import { injectAll, component } from "@eclipse-daanse/tsm";
-import { WIDGET_SERVICE_ID, WIDGET_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.widget";
-import { WIDGET_REPOSITORY as WIDGET_REPOSITORY2, WIDGET_SERVICE_ID as WIDGET_SERVICE_ID2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.widget";
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+import { injectAll as f, component as h } from "@eclipse-daanse/tsm";
+import { WIDGET_SERVICE_ID as d, WIDGET_REPOSITORY as g, identifier as p } from "org.eclipse.daanse.board.app.lib.api.widget";
+import { WIDGET_REPOSITORY as W, WIDGET_SERVICE_ID as b, identifier as T } from "org.eclipse.daanse.board.app.lib.api.widget";
+var u = Object.defineProperty, _ = Object.getOwnPropertyDescriptor, l = (e, t, r, n) => {
+  for (var i = n > 1 ? void 0 : n ? _(t, r) : t, o = e.length - 1, a; o >= 0; o--)
+    (a = e[o]) && (i = (n ? a(t, r, i) : a(i)) || i);
+  return n && i && u(t, r, i), i;
 };
-let TrackedWidgetRepository = class {
+let s = class {
   tracked = [];
   manual = {};
   changeListeners = /* @__PURE__ */ new Set();
-  set providers(providers) {
-    this.tracked = providers;
-    this.notifyChange();
+  set providers(e) {
+    this.tracked = e, this.notifyChange();
   }
   get providers() {
     return this.tracked;
   }
-  registerWidget(typename, config) {
-    this.manual[typename] = config;
-    this.notifyChange();
+  registerWidget(e, t) {
+    this.manual[e] = t, this.notifyChange();
   }
   /** Takes back a manual registration; returns whether the type was known. */
-  unregisterWidget(typename) {
-    if (!(typename in this.manual)) {
-      return false;
-    }
-    delete this.manual[typename];
-    this.notifyChange();
-    return true;
+  unregisterWidget(e) {
+    return e in this.manual ? (delete this.manual[e], this.notifyChange(), !0) : !1;
   }
-  getWidget(typename) {
-    return this.getAllWidgets()[typename];
+  getWidget(e) {
+    return this.getAllWidgets()[e];
   }
   getAllWidgets() {
-    const widgets = { ...this.manual };
-    const seen = /* @__PURE__ */ new Set();
-    for (const provider of this.tracked) {
-      if (seen.has(provider.type)) continue;
-      seen.add(provider.type);
-      widgets[provider.type] = provider;
-    }
-    return widgets;
+    const e = { ...this.manual }, t = /* @__PURE__ */ new Set();
+    for (const r of this.tracked)
+      t.has(r.type) || (t.add(r.type), e[r.type] = r);
+    return e;
   }
   /**
    * Called after every registration change.
@@ -57,54 +41,48 @@ let TrackedWidgetRepository = class {
    * rendering stale code, and flips back when the bundle starts again.
    * Returns the unsubscribe function.
    */
-  onChange(listener) {
-    this.changeListeners.add(listener);
-    return () => this.changeListeners.delete(listener);
+  onChange(e) {
+    return this.changeListeners.add(e), () => this.changeListeners.delete(e);
   }
   notifyChange() {
-    for (const listener of this.changeListeners) {
+    for (const e of this.changeListeners)
       try {
-        listener();
+        e();
       } catch {
       }
-    }
   }
 };
-__decorateClass([
-  injectAll(WIDGET_SERVICE_ID)
-], TrackedWidgetRepository.prototype, "providers", 1);
-TrackedWidgetRepository = __decorateClass([
-  component({
-    service: [WIDGET_REPOSITORY]
+l([
+  f(d)
+], s.prototype, "providers", 1);
+s = l([
+  h({
+    service: [g]
   })
-], TrackedWidgetRepository);
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+], s);
+const y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   get TrackedWidgetRepository() {
-    return TrackedWidgetRepository;
+    return s;
   },
-  WIDGET_REPOSITORY,
-  WIDGET_SERVICE_ID,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.widget";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.widget");
-  await void 0;
+  WIDGET_REPOSITORY: g,
+  WIDGET_SERVICE_ID: d,
+  identifier: p
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.repository.widget", m = "0.0.1-next.1";
+async function E(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  t.register(c, y, m, "lib.repository.widget"), await void 0;
 }
-async function deactivate(context) {
+async function w(e) {
   await void 0;
 }
 export {
-  TrackedWidgetRepository,
-  WIDGET_REPOSITORY2 as WIDGET_REPOSITORY,
-  WIDGET_SERVICE_ID2 as WIDGET_SERVICE_ID,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  s as TrackedWidgetRepository,
+  W as WIDGET_REPOSITORY,
+  b as WIDGET_SERVICE_ID,
+  E as activate,
+  w as deactivate,
+  T as identifier
 };

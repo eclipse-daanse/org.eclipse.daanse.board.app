@@ -1,42 +1,38 @@
-import { PAGE_CONTEXT, identifier } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-import { PAGE_CONTEXT as PAGE_CONTEXT2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-class PageContextService {
-  setProvider(provider) {
-    this.provider = provider;
+import { PAGE_CONTEXT as i, identifier as o } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { PAGE_CONTEXT as _, identifier as f } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+class c {
+  setProvider(t) {
+    this.provider = t;
   }
   getCurrentPageId() {
     return this.provider?.getCurrentPageId();
   }
 }
-function activate$1({ services }) {
-  services.register(PAGE_CONTEXT, new PageContextService());
+function n({ services: e }) {
+  e.register(i, new c());
 }
-function deactivate$1({ services }) {
-  services.unregister(PAGE_CONTEXT);
+function a({ services: e }) {
+  e.unregister(i);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const s = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  PAGE_CONTEXT,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.pagecontext.pagecontext_service");
-  await activate$1?.(context);
+  PAGE_CONTEXT: i,
+  activate: n,
+  deactivate: a,
+  identifier: o
+}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service", g = "0.0.1-next.1";
+async function p(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${r}: tsm runtime is not initialized`);
+  t.register(r, s, g, "lib.pagecontext.pagecontext_service"), await n?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function l(e) {
+  await a?.(e);
 }
 export {
-  PAGE_CONTEXT2 as PAGE_CONTEXT,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  _ as PAGE_CONTEXT,
+  p as activate,
+  l as deactivate,
+  f as identifier
 };

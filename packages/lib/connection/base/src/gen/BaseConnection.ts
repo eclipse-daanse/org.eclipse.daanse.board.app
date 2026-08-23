@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -33,11 +36,11 @@ export abstract class BaseConnection {
   @Attribute() type?: string;
 
   @Attribute() uid?: string;
-
+  
   fetch(config?: IRequestParams): any {
         throw new Error("fetch not implemented");
   }
-
+  
   setConfig(config?: any): void {
         throw new Error("setConfig not implemented");
   }

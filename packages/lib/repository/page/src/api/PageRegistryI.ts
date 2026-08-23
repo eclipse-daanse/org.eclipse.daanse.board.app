@@ -10,22 +10,10 @@
 */
 import { PageI } from './PageI'
 
-export interface PageRegistryI {
-  pages: Record<string, PageI>
+/*
+ * The contract lives in lib.api.page - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
+import type { PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
-  defaultPageId: string | null
-
-  registerPage(page: PageI): void
-
-  getPage(pageId: string): PageI
-
-  getDefaultPage(): PageI | null
-
-  setDefaultPage(pageId: string): void
-
-  unregisterPage(pageId: string): void
-
-  getAllPageIds():string[]
-
-  updatePage(page: PageI): void
-}

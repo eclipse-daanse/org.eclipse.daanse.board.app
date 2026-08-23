@@ -1,35 +1,28 @@
-import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
-const RichTextWidget = { "title": "Rich text widget settings", "bold": "Bold", "italic": "italic", "strike": "strike", "underline": "underline", "code": "code", "clearMarks": "clear marks", "clearNodes": "clear nodes", "paragraph": "paragraph", "bulletList": "bullet list", "orderedList": "ordered list", "codeBlock": "code block", "blockQuote": "block quote", "horizontalRule": "horizontal rule", "hardBreak": "hard break", "undo": "undo", "redo": "redo" };
-const en = {
-  RichTextWidget
-};
-const SPRACHE = "en";
-const NAMENSRAUM = "textRich";
-function activate$1({ services }) {
-  services.getRequired(I18NEXT).addResourceBundle(SPRACHE, NAMENSRAUM, en);
+import { I18NEXT as o } from "org.eclipse.daanse.board.app.lib.i18next";
+const l = { title: "Rich text widget settings", bold: "Bold", italic: "italic", strike: "strike", underline: "underline", code: "code", clearMarks: "clear marks", clearNodes: "clear nodes", paragraph: "paragraph", bulletList: "bullet list", orderedList: "ordered list", codeBlock: "code block", blockQuote: "block quote", horizontalRule: "horizontal rule", hardBreak: "hard break", undo: "undo", redo: "redo" }, d = {
+  RichTextWidget: l
+}, r = "en", a = "textRich";
+function n({ services: e }) {
+  e.getRequired(o).addResourceBundle(r, a, d);
 }
-function deactivate$1({ services }) {
-  services.getRequired(I18NEXT).removeResourceBundle(SPRACHE, NAMENSRAUM);
+function c({ services: e }) {
+  e.getRequired(o).removeResourceBundle(r, a);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const s = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.lang.text.rich.en");
-  await activate$1?.(context);
+  activate: n,
+  deactivate: c
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.ui.vue.lang.text.rich.en", u = "0.0.1-next.1";
+async function b(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, s, u, "ui.vue.lang.text.rich.en"), await n?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function h(e) {
+  await c?.(e);
 }
 export {
-  activate,
-  deactivate
+  b as activate,
+  h as deactivate
 };

@@ -8,8 +8,8 @@
   Contributors: Smart City Jena
 */
 
-import { RouteRegistry } from './gen/RouteRegistry'
-import { RouteDefinition } from './gen/RouteDefinition'
+import { RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
+import { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.api.route'
 
 export class RouteRegistryImpl extends RouteRegistry {
   private routesMap: Map<string, RouteDefinition> = new Map()

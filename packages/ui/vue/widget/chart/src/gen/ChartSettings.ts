@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -32,9 +35,7 @@ export class ChartSettings {
   @Documentation("Per-series configuration (chart type, x-axis assignment, styling)")
   @Attribute() seriesSettings: Array<any> = [];
   @Reference('VariableWrapper') chartType: VariableWrapper<string> = new VariableWrapper<string>();
-  @Documentation("Bar chart orientation: 'vertical' (default) or 'horizontal'")
   @Reference('VariableWrapper') barOrientation: VariableWrapper<string> = new VariableWrapper<string>();
-  @Documentation("Enable stacked mode for bar charts")
   @Reference('VariableWrapper') stacked: VariableWrapper<boolean> = new VariableWrapper<boolean>();
   @Reference('VariableWrapper') borderColor: VariableWrapper<string> = new VariableWrapper<string>();
   @Reference('VariableWrapper') borderWidth: VariableWrapper<number> = new VariableWrapper<number>();

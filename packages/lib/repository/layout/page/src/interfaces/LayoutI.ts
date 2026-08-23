@@ -10,12 +10,10 @@
 */
 import type { Component } from 'vue'
 
-export interface LayoutI{
-  id: string,
-  name: string,
-  description: string,
-  icon?: string,
-  component: Component,
-  settings?: Component
-  editor: Component
-}
+/*
+ * The contract lives in lib.api.layout.page - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { LayoutI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import type { LayoutI } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+

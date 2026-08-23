@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -29,12 +32,9 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.connection.mqtt#//IMQTTConnectionConfiguration'})
 export class IMQTTConnectionConfiguration extends BaseConnectionConfig {
 
-  @Documentation("The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.
-                                            This attribute overrides the 'url' from BaseConnectionConfig
-                                            to emphasize its specific role in MQTT connections.")
+  @Documentation("The URL for the MQTT broker, e.g., 'mqtt://localhost:1883'.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to emphasize its specific role in MQTT connections.")
   @Attribute() url?: string;
 
-  @Documentation("An optional MQTT topic to subscribe or publish to by default.
-                                            If not specified, a connection might use a default topic or require one per operation.")
+  @Documentation("An optional MQTT topic to subscribe or publish to by default.\n                                            If not specified, a connection might use a default topic or require one per operation.")
   @Attribute() topic?: string;
 }

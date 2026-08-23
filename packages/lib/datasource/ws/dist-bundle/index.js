@@ -1,187 +1,139 @@
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { inject } from "@eclipse-daanse/tsm";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var __defProp = Object.defineProperty;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp(target, key, result);
-  return result;
+import { BaseDatasource as d } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as m } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { inject as b } from "@eclipse-daanse/tsm";
+const { serviceId: g } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var y = Object.defineProperty, w = (n, t, e, i) => {
+  for (var r = void 0, o = n.length - 1, a; o >= 0; o--)
+    (a = n[o]) && (r = a(t, e, r) || r);
+  return r && y(t, e, r), r;
 };
-class WSStore extends BaseDatasource {
+class l extends d {
   connection;
   accumulatedData = [];
   lastMessage = null;
-  accumulate = false;
+  accumulate = !1;
   topic = "";
   connectionRepository;
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
-    this.accumulate = configuration.accumulate ?? false;
-    const connection = this.connectionRepository.getConnection(
+  init(t) {
+    super.init(t), this.connection = t.connection, this.accumulate = t.accumulate ?? !1;
+    const e = this.connectionRepository.getConnection(
       this.connection
     );
-    if (configuration.topic && connection.hasTopics()) {
-      this.topic = configuration.topic;
-      connection.connectStore(this, configuration.topic);
-    }
-    connection.subscribe((event, data, topic) => {
-      switch (event) {
+    t.topic && e.hasTopics() && (this.topic = t.topic, e.connectStore(this, t.topic)), e.subscribe((i, r, o) => {
+      switch (i) {
         case "connect":
           this.onConnect();
           break;
         case "message":
-          this.onMessage(data, topic);
+          this.onMessage(r, o);
           break;
         case "close":
           this.onClose();
           break;
         case "error":
-          this.onError(data);
+          this.onError(r);
           break;
       }
     });
   }
-  onError(error) {
+  onError(t) {
   }
   onClose() {
   }
-  onMessage(data, topic) {
-    if (this.topic && topic !== this.topic) return;
-    if (this.accumulate) {
-      this.accumulatedData.push({
-        message: data,
-        timestamp: new Date(Date.now()).toTimeString(),
-        topic: topic || "default"
-      });
-    } else {
-      this.lastMessage = {
-        message: data,
-        timestamp: new Date(Date.now()).toTimeString(),
-        topic: topic || "default"
-      };
-    }
-    this.notify();
+  onMessage(t, e) {
+    this.topic && e !== this.topic || (this.accumulate ? this.accumulatedData.push({
+      message: t,
+      timestamp: new Date(Date.now()).toTimeString(),
+      topic: e || "default"
+    }) : this.lastMessage = {
+      message: t,
+      timestamp: new Date(Date.now()).toTimeString(),
+      topic: e || "default"
+    }, this.notify());
   }
   onConnect() {
   }
   parseToDataTable() {
-    let data = [this.lastMessage];
-    if (this.accumulate) {
-      data = this.accumulatedData;
-    }
-    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
-    const headers = ["index"];
-    const rows = [];
-    const items = data.map((item, index) => {
-      if (typeof item !== "object") return {};
-      const row = {
-        index
+    let t = [this.lastMessage];
+    if (this.accumulate && (t = this.accumulatedData), !Array.isArray(t)) return { items: [], headers: [], rows: [] };
+    const e = ["index"], i = [], r = t.map((o, a) => {
+      if (typeof o != "object") return {};
+      const c = {
+        index: a
       };
-      for (const key in item) {
-        if (typeof item[key] === "object" || Array.isArray(item[key])) continue;
-        if (!headers.includes(key)) {
-          headers.push(key);
-        }
-        row[key] = item[key];
-      }
-      return row;
+      for (const s in o)
+        typeof o[s] == "object" || Array.isArray(o[s]) || (e.includes(s) || e.push(s), c[s] = o[s]);
+      return c;
     });
-    items.forEach((item, index) => {
-      rows[index] = [];
-      headers.forEach((header) => {
-        rows[index].push(item[header]);
+    return r.forEach((o, a) => {
+      i[a] = [], e.forEach((c) => {
+        i[a].push(o[c]);
       });
-    });
-    return { items, headers, rows };
+    }), { items: r, headers: e, rows: i };
   }
   destroy() {
     console.log("Destroying WSStore");
-    const connection = this.connectionRepository.getConnection(
+    const t = this.connectionRepository.getConnection(
       this.connection
     );
-    if (connection && connection.hasTopics()) {
-      connection.disconnectStore(this);
-    }
+    t && t.hasTopics() && t.disconnectStore(this);
   }
-  getData(type) {
-    let data = this.lastMessage;
-    if (this.accumulate) {
-      data = this.accumulatedData;
-    }
-    if (type === "DataTable") {
+  getData(t) {
+    let e = this.lastMessage;
+    if (this.accumulate && (e = this.accumulatedData), t === "DataTable")
       return this.parseToDataTable();
-    }
-    if (type === "object") {
-      return JSON.stringify(data);
-    }
-    if (type === "string") {
-      return JSON.stringify(data);
-    }
+    if (t === "object" || t === "string")
+      return JSON.stringify(e);
     throw new Error("Method not implemented.");
   }
   getOriginalData() {
     throw new Error("Method not implemented.");
   }
-  callEvent(event, params) {
+  callEvent(t, e) {
     throw new Error("Method not implemented.");
   }
-  static validateConfiguration(configuration) {
-    if (!configuration?.connection) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !!t?.connection;
   }
 }
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], WSStore.prototype, "connectionRepository");
-const WS_STORE_FACTORY = serviceId("WSStoreFactory");
-const factorySymbol = Symbol.for(WS_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(WS_STORE_FACTORY, (config) => {
-    if (!WSStore.validateConfiguration(config)) {
+w([
+  b(m)
+], l.prototype, "connectionRepository");
+const u = g("WSStoreFactory"), S = Symbol.for(u);
+function f({ services: n }) {
+  n.register(u, (t) => {
+    if (!l.validateConfiguration(t))
       throw new Error(
         "Invalid WSStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(WSStore);
-    store.init(config);
-    return store;
+    const e = n.construct(l);
+    return e.init(t), e;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(WS_STORE_FACTORY);
+function p({ services: n }) {
+  n.unregister(u);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const _ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WSStore,
-  WS_STORE_FACTORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.websocket";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.websocket");
-  await activate$1?.(context);
+  WSStore: l,
+  WS_STORE_FACTORY: u,
+  activate: f,
+  deactivate: p,
+  factorySymbol: S
+}, Symbol.toStringTag, { value: "Module" })), h = "org.eclipse.daanse.board.app.lib.datasource.websocket", v = "0.0.1-next.1";
+async function O(n) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${h}: tsm runtime is not initialized`);
+  t.register(h, _, v, "lib.datasource.websocket"), await f?.(n);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function C(n) {
+  await p?.(n);
 }
 export {
-  WSStore,
-  WS_STORE_FACTORY,
-  activate,
-  deactivate,
-  factorySymbol
+  l as WSStore,
+  u as WS_STORE_FACTORY,
+  O as activate,
+  C as deactivate,
+  S as factorySymbol
 };

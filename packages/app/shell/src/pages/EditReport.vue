@@ -34,7 +34,7 @@ const { widgets } = useWidgetsStore(pageID as string||'');
 const innerWidgets = ref<IWidget[]>([])
 
 
-const endpointfinder = inject('endpointfinder');
+const endpointfinder = inject('endpointfinder', null);
 const endPointFinder = ()=>{
   (endpointfinder as any)()
 }

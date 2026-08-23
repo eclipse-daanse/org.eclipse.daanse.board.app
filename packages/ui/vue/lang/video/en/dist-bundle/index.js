@@ -1,35 +1,28 @@
-import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
-const VideoWidget = { "title": "Video widget settings", "videoUrl": "Video url", "videoFit": "Fit" };
-const en = {
-  VideoWidget
-};
-const SPRACHE = "en";
-const NAMENSRAUM = "video";
-function activate$1({ services }) {
-  services.getRequired(I18NEXT).addResourceBundle(SPRACHE, NAMENSRAUM, en);
+import { I18NEXT as o } from "org.eclipse.daanse.board.app.lib.i18next";
+const d = { title: "Video widget settings", videoUrl: "Video url", videoFit: "Fit" }, s = {
+  VideoWidget: d
+}, n = "en", a = "video";
+function r({ services: e }) {
+  e.getRequired(o).addResourceBundle(n, a, s);
 }
-function deactivate$1({ services }) {
-  services.getRequired(I18NEXT).removeResourceBundle(SPRACHE, NAMENSRAUM);
+function c({ services: e }) {
+  e.getRequired(o).removeResourceBundle(n, a);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const u = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.lang.video.en";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.lang.video.en");
-  await activate$1?.(context);
+  activate: r,
+  deactivate: c
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.ui.vue.lang.video.en", l = "0.0.1-next.1";
+async function g(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, u, l, "ui.vue.lang.video.en"), await r?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function R(e) {
+  await c?.(e);
 }
 export {
-  activate,
-  deactivate
+  g as activate,
+  R as deactivate
 };

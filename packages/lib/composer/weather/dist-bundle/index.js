@@ -1,14 +1,13 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-class WeatherComposer extends BaseDatasource {
+import { DATASOURCE_REPOSITORY as W } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { BaseDatasource as _ } from "org.eclipse.daanse.board.app.lib.datasource.base";
+const { serviceId: D } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class H extends _ {
   /**
    * Dependencies arrive through the constructor - the factory in this
    * package's activate passes them from the registry. No global lookups.
    */
-  constructor(datasourceRepository) {
-    super();
-    this.datasourceRepository = datasourceRepository;
+  constructor(e) {
+    super(), this.datasourceRepository = e;
   }
   destroy() {
     console.log("Destroying WeatherComposer");
@@ -16,8 +15,8 @@ class WeatherComposer extends BaseDatasource {
   connectedDatasources = [];
   thingId;
   customMapping;
-  isUpdating = false;
-  pendingUpdate = false;
+  isUpdating = !1;
+  pendingUpdate = !1;
   cachedData = null;
   lastRelevantThings = /* @__PURE__ */ new Set();
   // Default mapping for weather data streams
@@ -156,399 +155,298 @@ class WeatherComposer extends BaseDatasource {
     }
   };
   static availableTypes = ["ogcsta"];
-  init(configuration) {
-    super.init(configuration);
-    this.connectedDatasources = configuration.connectedDatasources;
-    this.thingId = configuration.thingId;
-    this.customMapping = configuration.customMapping;
+  init(e) {
+    super.init(e), this.connectedDatasources = e.connectedDatasources, this.thingId = e.thingId, this.customMapping = e.customMapping;
   }
-  async getData(type, options) {
-    const datasourceRepository = this.datasourceRepository;
-    const data = await Promise.all(
-      this.connectedDatasources.filter((datasourceId) => datasourceId).map(async (datasourceId) => {
-        if (!datasourceRepository) {
+  async getData(e, t) {
+    const r = this.datasourceRepository, m = await Promise.all(
+      this.connectedDatasources.filter((o) => o).map(async (o) => {
+        if (!r)
           throw new Error("DatasourceRepository is not provided to DataSource Classes");
-        }
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        const datasourceOptions = this.thingId ? {
-          ...options,
+        const u = r.getDatasource(o), s = this.thingId ? {
+          ...t,
           filter: {
             things: {
               ids: [this.thingId],
-              includeDatastreams: true,
-              includeLocations: true
+              includeDatastreams: !0,
+              includeLocations: !0
             }
           }
         } : {
-          ...options,
+          ...t,
           filter: {
             things: {
               all: {
-                includeDatastreams: true,
-                includeLocations: true
+                includeDatastreams: !0,
+                includeLocations: !0
               }
             }
           }
         };
-        let dat = await datasourceInstance.getData("OGCSTAData", datasourceOptions);
-        console.log("Weather Composer: Things and Datastreams loaded (no observations):", dat);
-        if (dat?.things) {
-          const relevantDatastreams = [];
-          const mapping = { ...this.defaultMapping, ...this.customMapping };
-          const foundParameters = /* @__PURE__ */ new Set();
-          for (const thing of dat.things) {
-            if (thing.datastreams && thing.datastreams.length > 0) {
-              console.log(`🔍 Checking ${thing.datastreams.length} datastreams for thing ${thing.name}`);
-              for (const datastream of thing.datastreams) {
-                if (foundParameters.size >= Object.keys(mapping).length) {
+        let c = await u.getData("OGCSTAData", s);
+        if (console.log("Weather Composer: Things and Datastreams loaded (no observations):", c), c?.things) {
+          const f = [], v = { ...this.defaultMapping, ...this.customMapping }, w = /* @__PURE__ */ new Set();
+          for (const p of c.things)
+            if (p.datastreams && p.datastreams.length > 0) {
+              console.log(`🔍 Checking ${p.datastreams.length} datastreams for thing ${p.name}`);
+              for (const n of p.datastreams) {
+                if (w.size >= Object.keys(v).length) {
                   console.log("🎯 All weather parameters found, stopping search");
                   break;
                 }
-                const name = datastream.name?.toLowerCase() || "";
-                const description = datastream.description?.toLowerCase() || "";
-                const searchText = `${name} ${description}`;
-                const id = datastream.iotId;
-                console.log(`🔍 Available datastream: "${datastream.name}" (ID: ${id}) - searchText: "${searchText}"`);
-                for (const [weatherParam, keywords] of Object.entries(mapping)) {
-                  if (foundParameters.has(weatherParam) && !weatherParam.endsWith("Forecast")) {
-                    continue;
-                  }
-                  if (weatherParam.endsWith("Forecast") && typeof keywords === "object" && !Array.isArray(keywords)) {
-                    for (const [forecastPeriod, forecastKeywords] of Object.entries(keywords)) {
-                      if (Array.isArray(forecastKeywords)) {
-                        if (forecastKeywords.some((keyword) => id.includes(keyword) || searchText.includes(keyword))) {
-                          console.log(`🎯 Found relevant datastream: ${datastream.name} (${id}) for ${weatherParam}.${forecastPeriod}`);
-                          relevantDatastreams.push({
-                            ...datastream,
-                            thingId: thing["@iot.id"] || thing.iotId,
-                            // Add thing reference
-                            weatherParam,
-                            // Track which parameter this is for
-                            forecastPeriod
-                            // Track which forecast period
-                          });
-                        }
-                      }
-                    }
-                  } else if (Array.isArray(keywords)) {
-                    if (keywords.includes(id) || keywords.some((keyword) => searchText.includes(keyword))) {
-                      console.log(`🎯 Found relevant datastream: ${datastream.name} (${id}) for ${weatherParam}`);
-                      relevantDatastreams.push({
-                        ...datastream,
-                        thingId: thing["@iot.id"] || thing.iotId,
+                const h = n.name?.toLowerCase() || "", i = n.description?.toLowerCase() || "", a = `${h} ${i}`, d = n.iotId;
+                console.log(`🔍 Available datastream: "${n.name}" (ID: ${d}) - searchText: "${a}"`);
+                for (const [l, y] of Object.entries(v))
+                  if (!(w.has(l) && !l.endsWith("Forecast"))) {
+                    if (l.endsWith("Forecast") && typeof y == "object" && !Array.isArray(y))
+                      for (const [I, b] of Object.entries(y))
+                        Array.isArray(b) && b.some((S) => d.includes(S) || a.includes(S)) && (console.log(`🎯 Found relevant datastream: ${n.name} (${d}) for ${l}.${I}`), f.push({
+                          ...n,
+                          thingId: p["@iot.id"] || p.iotId,
+                          // Add thing reference
+                          weatherParam: l,
+                          // Track which parameter this is for
+                          forecastPeriod: I
+                          // Track which forecast period
+                        }));
+                    else if (Array.isArray(y) && (y.includes(d) || y.some((I) => a.includes(I)))) {
+                      console.log(`🎯 Found relevant datastream: ${n.name} (${d}) for ${l}`), f.push({
+                        ...n,
+                        thingId: p["@iot.id"] || p.iotId,
                         // Add thing reference
-                        weatherParam
+                        weatherParam: l
                         // Track which parameter this is for
-                      });
-                      foundParameters.add(weatherParam);
+                      }), w.add(l);
                       break;
                     }
                   }
-                }
               }
-              if (foundParameters.size >= Object.keys(mapping).length) {
+              if (w.size >= Object.keys(v).length) {
                 console.log("🎯 All weather parameters found in current thing, stopping thing search");
                 break;
               }
             }
-          }
-          console.log(`🎯 Found weather parameters: ${Array.from(foundParameters).join(", ")}`);
-          if (relevantDatastreams.length > 0) {
-            console.log(`📊 Loading observations for ${relevantDatastreams.length} relevant datastreams (out of total available)`);
-            const datastreamWithoutObs = relevantDatastreams.filter((ds) => {
-              const matchingInThing = dat.things.find(
-                (thing) => thing.datastreams?.find(
-                  (thingDs) => (thingDs["@iot.id"] || thingDs.iotId) == ds["@iot.id"] || ds.iotId
+          if (console.log(`🎯 Found weather parameters: ${Array.from(w).join(", ")}`), f.length > 0) {
+            console.log(`📊 Loading observations for ${f.length} relevant datastreams (out of total available)`);
+            const p = f.filter((n) => {
+              const h = c.things.find(
+                (a) => a.datastreams?.find(
+                  (d) => (d["@iot.id"] || d.iotId) == n["@iot.id"] || n.iotId
                 )
               )?.datastreams?.find(
-                (thingDs) => (thingDs["@iot.id"] || thingDs.iotId) == (ds["@iot.id"] || ds.iotId)
-              );
-              const hasObservations = matchingInThing?.observations && matchingInThing.observations.length > 0;
-              console.log(`🔍 Datastream ${ds.name} has observations: ${hasObservations}`);
-              return !hasObservations;
+                (a) => (a["@iot.id"] || a.iotId) == (n["@iot.id"] || n.iotId)
+              ), i = h?.observations && h.observations.length > 0;
+              return console.log(`🔍 Datastream ${n.name} has observations: ${i}`), !i;
             });
-            if (datastreamWithoutObs.length > 0) {
-              console.log(`📊 Loading observations for ${datastreamWithoutObs.length} datastreams without observations`);
-              const observationsOptions = {
-                ...options,
+            if (p.length > 0) {
+              console.log(`📊 Loading observations for ${p.length} datastreams without observations`);
+              const n = {
+                ...t,
                 filter: {
-                  observations: datastreamWithoutObs.map((ds) => {
-                    const datastreamId = ds["@iot.id"] || ds.iotId || ds.id;
-                    console.log(`🔍 Mapping datastream for observations: ${ds.name} -> ID: ${datastreamId}`);
-                    if (!datastreamId) {
-                      console.error("❌ No datastream ID found for datastream:", ds);
-                    }
-                    return {
-                      iotId: datastreamId,
+                  observations: p.map((i) => {
+                    const a = i["@iot.id"] || i.iotId || i.id;
+                    return console.log(`🔍 Mapping datastream for observations: ${i.name} -> ID: ${a}`), a || console.error("❌ No datastream ID found for datastream:", i), {
+                      iotId: a,
                       // OGC STA expects iotId, not datastreamId
                       $top: 1,
                       $orderby: "phenomenonTime desc"
                     };
-                  }).filter((obs) => obs.iotId !== void 0 && obs.iotId !== null)
+                  }).filter((i) => i.iotId !== void 0 && i.iotId !== null)
                 }
-              };
-              const observationsData = await datasourceInstance.getData("OGCSTAData", observationsOptions);
-              if (observationsData?.observations) {
-                console.log(`✅ Received ${observationsData.observations.length} observations`);
-                dat.things.forEach((thing) => {
-                  if (thing.datastreams) {
-                    thing.datastreams.forEach((ds) => {
-                      const observation = observationsData.observations?.find(
-                        (obs) => obs.ds_source == ds["@iot.id"] || obs.ds_source == ds.iotId
-                      );
-                      if (observation) {
-                        ds.observations = [observation];
-                        console.log(`✅ Added observation to ${ds.name}: ${observation.result}`);
-                      }
-                    });
-                  }
+              }, h = await u.getData("OGCSTAData", n);
+              h?.observations && (console.log(`✅ Received ${h.observations.length} observations`), c.things.forEach((i) => {
+                i.datastreams && i.datastreams.forEach((a) => {
+                  const d = h.observations?.find(
+                    (l) => l.ds_source == a["@iot.id"] || l.ds_source == a.iotId
+                  );
+                  d && (a.observations = [d], console.log(`✅ Added observation to ${a.name}: ${d.result}`));
                 });
-              }
-            } else {
+              }));
+            } else
               console.log("ℹ️ All relevant datastreams already have observations, skipping observation fetch");
-            }
-          } else {
+          } else
             console.log("⚠️ No relevant datastreams found for weather mapping");
-          }
         }
-        console.log(dat);
-        return dat;
+        return console.log(c), c;
       })
     );
-    if (type === "WeatherData") {
-      const weatherData = this.composeWeatherData(data);
-      this.cachedData = weatherData;
-      return weatherData;
-    } else {
-      console.warn("Invalid data type for WeatherComposer");
-      return null;
-    }
+    if (e === "WeatherData") {
+      const o = this.composeWeatherData(m);
+      return this.cachedData = o, o;
+    } else
+      return console.warn("Invalid data type for WeatherComposer"), null;
   }
   async getOriginalData() {
     return [];
   }
-  callEvent(event, params) {
-    console.warn(`Event "${event}" is not available for WeatherComposer`, params);
+  callEvent(e, t) {
+    console.warn(`Event "${e}" is not available for WeatherComposer`, t);
   }
-  composeWeatherData(ogcStaDataArray) {
-    const weatherDataArray = [];
-    console.log("🌤️ WeatherComposer: Starting data composition", ogcStaDataArray);
-    ogcStaDataArray.forEach((ogcStaData, index) => {
-      console.log(`🌤️ Processing datasource ${index}:`, ogcStaData);
-      if (!ogcStaData?.things) {
+  composeWeatherData(e) {
+    const t = [];
+    return console.log("🌤️ WeatherComposer: Starting data composition", e), e.forEach((r, m) => {
+      if (console.log(`🌤️ Processing datasource ${m}:`, r), !r?.things) {
         console.log("❌ No things found in datasource");
         return;
       }
-      console.log(`✅ Found ${ogcStaData.things.length} things`);
-      ogcStaData.things.forEach((thing) => {
-        const thingId = thing["@iot.id"] || thing.iotId || thing.id;
-        console.log(`🏠 Processing thing ${thingId}:`, thing.name);
-        console.log(`    Thing object keys:`, Object.keys(thing));
-        console.log(`    Thing:`, thing);
-        if (this.thingId && thingId != this.thingId && String(thingId) != String(this.thingId)) {
-          console.log(`⏭️ Skipping thing ${thingId} - doesn't match filter ${this.thingId}`);
+      console.log(`✅ Found ${r.things.length} things`), r.things.forEach((o) => {
+        const u = o["@iot.id"] || o.iotId || o.id;
+        if (console.log(`🏠 Processing thing ${u}:`, o.name), console.log("    Thing object keys:", Object.keys(o)), console.log("    Thing:", o), this.thingId && u != this.thingId && String(u) != String(this.thingId)) {
+          console.log(`⏭️ Skipping thing ${u} - doesn't match filter ${this.thingId}`);
           return;
         }
-        const weatherData = {
-          thingId,
-          location: this.extractLocationInfo(thing)
+        const s = {
+          thingId: u,
+          location: this.extractLocationInfo(o)
         };
-        let datastreamCount = 0;
-        if (thing.datastreams && thing.datastreams.length > 0) {
-          datastreamCount = thing.datastreams.length;
-          thing.datastreams.forEach((datastream) => {
-            this.processDatastream(datastream, weatherData);
+        let c = 0;
+        if (o.datastreams && o.datastreams.length > 0)
+          c = o.datastreams.length, o.datastreams.forEach((f) => {
+            this.processDatastream(f, s);
           });
-        } else if (ogcStaData.datastreams) {
-          const matchingDatastreams = ogcStaData.datastreams.filter(
-            (ds) => ds.thing && ds.thing["@iot.id"] == thing["@iot.id"]
+        else if (r.datastreams) {
+          const f = r.datastreams.filter(
+            (v) => v.thing && v.thing["@iot.id"] == o["@iot.id"]
           );
-          datastreamCount = matchingDatastreams.length;
-          matchingDatastreams.forEach((datastream) => {
-            this.processDatastream(datastream, weatherData);
+          c = f.length, f.forEach((v) => {
+            this.processDatastream(v, s);
           });
         }
-        console.log(`🌤️ Weather data after processing:`, weatherData);
-        if (this.hasWeatherMeasurements(weatherData)) {
-          console.log(`✅ Adding weather data for thing ${thingId}`);
-          weatherDataArray.push(weatherData);
-        } else {
-          console.log(`❌ No weather measurements found for thing ${thingId}`);
-          console.log(`   - Processed ${datastreamCount} datastreams`);
-        }
+        console.log("🌤️ Weather data after processing:", s), this.hasWeatherMeasurements(s) ? (console.log(`✅ Adding weather data for thing ${u}`), t.push(s)) : (console.log(`❌ No weather measurements found for thing ${u}`), console.log(`   - Processed ${c} datastreams`));
       });
-    });
-    return weatherDataArray;
+    }), t;
   }
-  extractLocationInfo(thing) {
-    const location = {
-      name: thing.name || "Unknown Location",
-      description: thing.description
+  extractLocationInfo(e) {
+    const t = {
+      name: e.name || "Unknown Location",
+      description: e.description
     };
-    if (thing.locations && thing.locations.length > 0) {
-      const firstLocation = thing.locations[0];
-      if (firstLocation.location?.coordinates) {
-        location.coordinates = {
-          latitude: firstLocation.location.coordinates[1],
-          longitude: firstLocation.location.coordinates[0]
-        };
-      }
+    if (e.locations && e.locations.length > 0) {
+      const r = e.locations[0];
+      r.location?.coordinates && (t.coordinates = {
+        latitude: r.location.coordinates[1],
+        longitude: r.location.coordinates[0]
+      });
     }
-    return location;
+    return t;
   }
-  processDatastream(datastream, weatherData) {
-    if (!datastream.observations || datastream.observations.length === 0) {
+  processDatastream(e, t) {
+    if (!e.observations || e.observations.length === 0)
       return;
-    }
-    const observation = datastream.observations[0];
-    const name = datastream.name?.toLowerCase() || "";
-    const description = datastream.description?.toLowerCase() || "";
-    const searchText = `${name} ${description}`;
-    const id = datastream.iotId;
-    const weatherValue = {
-      value: observation.result,
-      unit: datastream.unitOfMeasurement?.symbol || "",
-      timestamp: observation.phenomenonTime || observation.resultTime || "",
-      quality: observation.resultQuality || void 0
-    };
-    const mapping = { ...this.defaultMapping, ...this.customMapping };
-    const isCurrentWeather = id.includes("~currentWeather~");
-    const forecastMatch = id.match(/~forecast(\d+)H~/);
-    const isForecast = !!forecastMatch;
-    console.log(`      🔍 Processing datastream: ${id}, isCurrentWeather: ${isCurrentWeather}, isForecast: ${isForecast}`);
-    let matched = false;
-    for (const [weatherParam, keywords] of Object.entries(mapping)) {
-      if (weatherParam.endsWith("Forecast") && typeof keywords === "object" && !Array.isArray(keywords) && isForecast) {
-        const forecastHours = forecastMatch[1];
-        const forecastPeriodKey = `forecast${forecastHours}h`;
-        console.log(`      🔍 Looking for forecast period: ${forecastPeriodKey} in ${weatherParam}`);
-        const forecastKeywords = keywords[forecastPeriodKey];
-        const parameterName = id.split("~").pop()?.toLowerCase();
-        let matchesParameter = false;
-        if (Array.isArray(forecastKeywords)) {
-          matchesParameter = forecastKeywords.some(
-            (keyword) => id.includes(keyword) || searchText.includes(keyword) || parameterName && keyword.toLowerCase().includes(parameterName)
+    const r = e.observations[0], m = e.name?.toLowerCase() || "", o = e.description?.toLowerCase() || "", u = `${m} ${o}`, s = e.iotId, c = {
+      value: r.result,
+      unit: e.unitOfMeasurement?.symbol || "",
+      timestamp: r.phenomenonTime || r.resultTime || "",
+      quality: r.resultQuality || void 0
+    }, f = { ...this.defaultMapping, ...this.customMapping }, v = s.includes("~currentWeather~"), w = s.match(/~forecast(\d+)H~/), p = !!w;
+    console.log(`      🔍 Processing datastream: ${s}, isCurrentWeather: ${v}, isForecast: ${p}`);
+    let n = !1;
+    for (const [h, i] of Object.entries(f))
+      if (h.endsWith("Forecast") && typeof i == "object" && !Array.isArray(i) && p) {
+        const d = `forecast${w[1]}h`;
+        console.log(`      🔍 Looking for forecast period: ${d} in ${h}`);
+        const l = i[d], y = s.split("~").pop()?.toLowerCase();
+        let I = !1;
+        if (Array.isArray(l))
+          I = l.some(
+            (b) => s.includes(b) || u.includes(b) || y && b.toLowerCase().includes(y)
           );
-        } else {
-          const baseWeatherParam = weatherParam.replace("Forecast", "").toLowerCase();
-          matchesParameter = parameterName?.includes(baseWeatherParam) || searchText.includes(baseWeatherParam);
+        else {
+          const b = h.replace("Forecast", "").toLowerCase();
+          I = y?.includes(b) || u.includes(b);
         }
-        if (matchesParameter) {
-          console.log(`      ✅ Matched "${weatherParam}.${forecastPeriodKey}" with ID "${id}"`);
-          if (!weatherData[weatherParam]) {
-            weatherData[weatherParam] = {};
-          }
-          weatherData[weatherParam][forecastPeriodKey] = weatherValue;
-          matched = true;
+        if (I) {
+          console.log(`      ✅ Matched "${h}.${d}" with ID "${s}"`), t[h] || (t[h] = {}), t[h][d] = c, n = !0;
           break;
         }
-      } else if (Array.isArray(keywords) && isCurrentWeather) {
-        const parameterName = id.split("~").pop()?.toLowerCase();
-        const matchesParameter = keywords.some(
-          (keyword) => id.includes(keyword) || searchText.includes(keyword) || parameterName && keyword.toLowerCase().includes(parameterName)
-        );
-        if (matchesParameter) {
-          console.log(`      ✅ Matched current "${weatherParam}" with ID "${id}"`);
-          weatherData[weatherParam] = weatherValue;
-          matched = true;
+      } else if (Array.isArray(i) && v) {
+        const a = s.split("~").pop()?.toLowerCase();
+        if (i.some(
+          (l) => s.includes(l) || u.includes(l) || a && l.toLowerCase().includes(a)
+        )) {
+          console.log(`      ✅ Matched current "${h}" with ID "${s}"`), t[h] = c, n = !0;
           break;
         }
       }
-    }
-    if (!matched) {
-      console.log(`      ❌ No match found for "${id}" (searchText: "${searchText}")`);
-    }
+    n || console.log(`      ❌ No match found for "${s}" (searchText: "${u}")`);
   }
-  hasWeatherMeasurements(weatherData) {
+  hasWeatherMeasurements(e) {
     return !!// Current weather measurements
-    (weatherData.temperature || weatherData.humidity || weatherData.pressure || weatherData.windSpeed || weatherData.windDirection || weatherData.precipitation || weatherData.visibility || weatherData.cloudCover || // Forecast measurements
-    weatherData.temperatureForecast || weatherData.humidityForecast || weatherData.pressureForecast || weatherData.windSpeedForecast || weatherData.windDirectionForecast || weatherData.precipitationForecast || weatherData.visibilityForecast || weatherData.cloudCoverForecast);
+    (e.temperature || e.humidity || e.pressure || e.windSpeed || e.windDirection || e.precipitation || e.visibility || e.cloudCover || // Forecast measurements
+    e.temperatureForecast || e.humidityForecast || e.pressureForecast || e.windSpeedForecast || e.windDirectionForecast || e.precipitationForecast || e.visibilityForecast || e.cloudCoverForecast);
   }
-  static validateConfiguration(config) {
-    if (!config.connectedDatasources || !Array.isArray(config.connectedDatasources)) {
-      return false;
-    }
-    if (config.connectedDatasources.length === 0) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(e) {
+    return !(!e.connectedDatasources || !Array.isArray(e.connectedDatasources) || e.connectedDatasources.length === 0);
   }
   // Helper method to get weather data for a specific thing
-  async getWeatherForThing(thingId) {
-    const originalThingId = this.thingId;
-    this.thingId = thingId;
+  async getWeatherForThing(e) {
+    const t = this.thingId;
+    this.thingId = e;
     try {
-      const weatherDataArray = await this.getData("WeatherData");
-      return weatherDataArray.length > 0 ? weatherDataArray[0] : null;
+      const r = await this.getData("WeatherData");
+      return r.length > 0 ? r[0] : null;
     } finally {
-      this.thingId = originalThingId;
+      this.thingId = t;
     }
   }
   // Helper method to get all available weather data
   async getAllWeatherData() {
-    const originalThingId = this.thingId;
+    const e = this.thingId;
     this.thingId = void 0;
     try {
       return await this.getData("WeatherData");
     } finally {
-      this.thingId = originalThingId;
+      this.thingId = e;
     }
   }
   // Helper method to get current weather summary for widget
-  getCurrentWeather(weatherData) {
-    if (!weatherData || !Array.isArray(weatherData) || weatherData.length === 0) {
+  getCurrentWeather(e) {
+    if (!e || !Array.isArray(e) || e.length === 0)
       return null;
-    }
-    let currentStation = weatherData[0];
+    let t = e[0];
     if (this.thingId) {
-      const specificStation = weatherData.find(
-        (station) => station.thingId == this.thingId || String(station.thingId) == String(this.thingId)
+      const r = e.find(
+        (m) => m.thingId == this.thingId || String(m.thingId) == String(this.thingId)
       );
-      if (specificStation) {
-        currentStation = specificStation;
-      }
+      r && (t = r);
     }
     return {
-      location: currentStation.location,
-      thingId: currentStation.thingId,
+      location: t.location,
+      thingId: t.thingId,
       measurements: {
-        temperature: currentStation.temperature,
-        humidity: currentStation.humidity,
-        pressure: currentStation.pressure,
-        windSpeed: currentStation.windSpeed,
-        windDirection: currentStation.windDirection,
-        precipitation: currentStation.precipitation,
-        visibility: currentStation.visibility,
-        cloudCover: currentStation.cloudCover
+        temperature: t.temperature,
+        humidity: t.humidity,
+        pressure: t.pressure,
+        windSpeed: t.windSpeed,
+        windDirection: t.windDirection,
+        precipitation: t.precipitation,
+        visibility: t.visibility,
+        cloudCover: t.cloudCover
       },
-      lastUpdated: this.getLatestTimestamp(currentStation)
+      lastUpdated: this.getLatestTimestamp(t)
     };
   }
   // Helper to get the most recent timestamp from all measurements
-  getLatestTimestamp(weatherData) {
-    const timestamps = [
-      weatherData.temperature?.timestamp,
-      weatherData.humidity?.timestamp,
-      weatherData.pressure?.timestamp,
-      weatherData.windSpeed?.timestamp,
-      weatherData.windDirection?.timestamp,
-      weatherData.precipitation?.timestamp,
-      weatherData.visibility?.timestamp,
-      weatherData.cloudCover?.timestamp
+  getLatestTimestamp(e) {
+    const t = [
+      e.temperature?.timestamp,
+      e.humidity?.timestamp,
+      e.pressure?.timestamp,
+      e.windSpeed?.timestamp,
+      e.windDirection?.timestamp,
+      e.precipitation?.timestamp,
+      e.visibility?.timestamp,
+      e.cloudCover?.timestamp
     ].filter(Boolean);
-    if (timestamps.length === 0) return void 0;
-    return timestamps.reduce((latest, current) => {
-      return new Date(current) > new Date(latest) ? current : latest;
-    });
+    if (t.length !== 0)
+      return t.reduce((r, m) => new Date(m) > new Date(r) ? m : r);
   }
   // Check if relevant things have changed before doing expensive processing
   async checkForRelevantChanges() {
     try {
-      const datasourceRepository = this.datasourceRepository;
-      const currentRelevantThings = /* @__PURE__ */ new Set();
-      for (const datasourceId of this.connectedDatasources.filter((id) => id)) {
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        const datasourceOptions = this.thingId ? {
+      const e = this.datasourceRepository, t = /* @__PURE__ */ new Set();
+      for (const m of this.connectedDatasources.filter((o) => o)) {
+        const o = e.getDatasource(m), u = this.thingId ? {
           filter: {
             things: {
               ids: [this.thingId]
@@ -558,86 +456,67 @@ class WeatherComposer extends BaseDatasource {
           filter: {
             things: {
               all: {
-                includeDatastreams: false,
+                includeDatastreams: !1,
                 // Only get thing metadata
-                includeLocations: false
+                includeLocations: !1
               }
             }
           }
-        };
-        const lightweightData = await datasourceInstance.getData("OGCSTAData", datasourceOptions);
-        if (lightweightData?.things) {
-          lightweightData.things.forEach((thing) => {
-            const thingId = thing["@iot.id"] || thing.iotId || thing.id;
-            if (!this.thingId || thingId == this.thingId || String(thingId) == String(this.thingId)) {
-              currentRelevantThings.add(String(thingId));
-            }
-          });
-        }
+        }, s = await o.getData("OGCSTAData", u);
+        s?.things && s.things.forEach((c) => {
+          const f = c["@iot.id"] || c.iotId || c.id;
+          (!this.thingId || f == this.thingId || String(f) == String(this.thingId)) && t.add(String(f));
+        });
       }
-      const hasChanges = !this.setsEqual(currentRelevantThings, this.lastRelevantThings);
-      if (hasChanges) {
-        console.log(`🔄 Relevant things changed:`);
-        console.log(`   Previous: [${Array.from(this.lastRelevantThings).join(", ")}]`);
-        console.log(`   Current: [${Array.from(currentRelevantThings).join(", ")}]`);
-        this.lastRelevantThings = currentRelevantThings;
-      }
-      return hasChanges;
-    } catch (error) {
-      console.warn("⚠️ Error checking for relevant changes, proceeding with full update:", error);
-      return true;
+      const r = !this.setsEqual(t, this.lastRelevantThings);
+      return r && (console.log("🔄 Relevant things changed:"), console.log(`   Previous: [${Array.from(this.lastRelevantThings).join(", ")}]`), console.log(`   Current: [${Array.from(t).join(", ")}]`), this.lastRelevantThings = t), r;
+    } catch (e) {
+      return console.warn("⚠️ Error checking for relevant changes, proceeding with full update:", e), !0;
     }
   }
   // Helper to compare two sets
-  setsEqual(set1, set2) {
-    return set1.size === set2.size && [...set1].every((x) => set2.has(x));
+  setsEqual(e, t) {
+    return e.size === t.size && [...e].every((r) => t.has(r));
   }
 }
-const WEATHER_COMPOSER = serviceId("WeatherComposer");
-const symbol = Symbol.for(WEATHER_COMPOSER);
-function createWeatherComposer(repository) {
-  return (config) => {
-    if (!WeatherComposer.validateConfiguration(config)) {
+const $ = D("WeatherComposer"), k = Symbol.for($);
+function F(g) {
+  return (e) => {
+    if (!H.validateConfiguration(e))
       throw new Error(
         "Invalid WeatherComposer configuration. Please provide a valid configuration."
       );
-    }
-    const composer = new WeatherComposer(repository);
-    composer.init(config);
-    return composer;
+    const t = new H(g);
+    return t.init(e), t;
   };
 }
-function activate$1({ services }) {
-  services.register(WEATHER_COMPOSER, createWeatherComposer(services.getRequired(DATASOURCE_REPOSITORY)));
+function T({ services: g }) {
+  g.register($, F(g.getRequired(W)));
 }
-function deactivate$1({ services }) {
-  services.unregister(WEATHER_COMPOSER);
+function A({ services: g }) {
+  g.unregister($);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WEATHER_COMPOSER,
-  WeatherComposer,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  symbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.composer.weather";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.composer.weather");
-  await activate$1?.(context);
+  WEATHER_COMPOSER: $,
+  WeatherComposer: H,
+  activate: T,
+  deactivate: A,
+  symbol: k
+}, Symbol.toStringTag, { value: "Module" })), C = "org.eclipse.daanse.board.app.lib.composer.weather", O = "0.0.1-next.1";
+async function L(g) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${C}: tsm runtime is not initialized`);
+  e.register(C, P, O, "lib.composer.weather"), await T?.(g);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function M(g) {
+  await A?.(g);
 }
 export {
-  WEATHER_COMPOSER,
-  WeatherComposer,
-  activate,
-  deactivate,
-  symbol
+  $ as WEATHER_COMPOSER,
+  H as WeatherComposer,
+  L as activate,
+  M as deactivate,
+  k as symbol
 };

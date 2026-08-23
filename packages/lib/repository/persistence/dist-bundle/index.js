@@ -1,9 +1,8 @@
-import { REPOSITORY_REGISTRY, identifier } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { REPOSITORY_REGISTRY as REPOSITORY_REGISTRY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.persistence";
-class BaseRepository {
-  init(url, name) {
-    this.uri = url;
-    this.name = name;
+import { REPOSITORY_REGISTRY as s, identifier as p } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { REPOSITORY_REGISTRY as f, identifier as d } from "org.eclipse.daanse.board.app.lib.api.persistence";
+class l {
+  init(e, t) {
+    this.uri = e, this.name = t;
   }
   getUri() {
     return this.uri;
@@ -12,91 +11,76 @@ class BaseRepository {
     return this.name;
   }
 }
-class RepositoryRegistry {
+class y {
   constructor() {
-    this.availableRepos = /* @__PURE__ */ new Map();
-    this.availableRepoTypes = /* @__PURE__ */ new Map();
-    this.availableRepoTypesViews = /* @__PURE__ */ new Map();
-    this.init = false;
-    this.observers = [];
+    this.availableRepos = /* @__PURE__ */ new Map(), this.availableRepoTypes = /* @__PURE__ */ new Map(), this.availableRepoTypesViews = /* @__PURE__ */ new Map(), this.init = !1, this.observers = [];
   }
-  addObserver(observer) {
-    this.observers.push(observer);
+  addObserver(e) {
+    this.observers.push(e);
   }
-  removeObserver(observer) {
-    this.observers = this.observers.filter((o) => o !== observer);
+  removeObserver(e) {
+    this.observers = this.observers.filter((t) => t !== e);
   }
-  notify(event, repo) {
-    for (const observer of this.observers) {
-      observer.update(event, repo);
-    }
+  notify(e, t) {
+    for (const n of this.observers)
+      n.update(e, t);
   }
-  async findRepositoryByName(name) {
-    return await Array.from(this.availableRepos.values()).find((repo) => repo.name == name);
+  async findRepositoryByName(e) {
+    return await Array.from(this.availableRepos.values()).find((t) => t.name == e);
   }
-  async findRepositoryByUri(uri) {
-    return await this.availableRepos.get(uri.toString());
+  async findRepositoryByUri(e) {
+    return await this.availableRepos.get(e.toString());
   }
   async getAvailableReposetories() {
     return await Array.from(this.availableRepos.values());
   }
-  register(repo) {
-    this.availableRepos.set(repo.uri.toString(), repo);
-    console.info("registered Repo from Type:" + Object.getPrototypeOf(repo).constructor.type + " under " + repo.uri.toString());
-    this.notify("register", repo);
+  register(e) {
+    this.availableRepos.set(e.uri.toString(), e), console.info("registered Repo from Type:" + Object.getPrototypeOf(e).constructor.type + " under " + e.uri.toString()), this.notify("register", e);
   }
-  registerRepoType(type, symbol) {
-    this.availableRepoTypes.set(type, symbol);
+  registerRepoType(e, t) {
+    this.availableRepoTypes.set(e, t);
   }
-  registerViewForRepoType(type, component) {
-    this.availableRepoTypesViews.set(type, component);
+  registerViewForRepoType(e, t) {
+    this.availableRepoTypesViews.set(e, t);
   }
-  getViewForRepoType(type) {
-    return this.availableRepoTypesViews.get(type);
+  getViewForRepoType(e) {
+    return this.availableRepoTypesViews.get(e);
   }
-  isViewForRepoType(type) {
-    return this.availableRepoTypesViews.has(type);
+  isViewForRepoType(e) {
+    return this.availableRepoTypesViews.has(e);
   }
-  unregister(url) {
-    const repo = this.availableRepos.get(url.toString());
-    if (repo) {
-      this.availableRepos.delete(url.toString());
-      this.notify("unregister", repo);
-    }
+  unregister(e) {
+    const t = this.availableRepos.get(e.toString());
+    t && (this.availableRepos.delete(e.toString()), this.notify("unregister", t));
   }
 }
-function activate$1({ services, log }) {
-  services.register(REPOSITORY_REGISTRY, new RepositoryRegistry());
-  log.info("RepositoryRegistry bereit");
+function a({ services: i, log: e }) {
+  i.register(s, new y()), e.info("RepositoryRegistry bereit");
 }
-function deactivate$1({ services }) {
-  services.unregister(REPOSITORY_REGISTRY);
+function o({ services: i }) {
+  i.unregister(s);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const R = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  BaseRepository,
-  REPOSITORY_REGISTRY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.persistence";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.persistence");
-  await activate$1?.(context);
+  BaseRepository: l,
+  REPOSITORY_REGISTRY: s,
+  activate: a,
+  deactivate: o,
+  identifier: p
+}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.repository.persistence", c = "0.0.1-next.1";
+async function v(i) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${r}: tsm runtime is not initialized`);
+  e.register(r, R, c, "lib.repository.persistence"), await a?.(i);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function g(i) {
+  await o?.(i);
 }
 export {
-  BaseRepository,
-  REPOSITORY_REGISTRY2 as REPOSITORY_REGISTRY,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  l as BaseRepository,
+  f as REPOSITORY_REGISTRY,
+  v as activate,
+  g as deactivate,
+  d as identifier
 };

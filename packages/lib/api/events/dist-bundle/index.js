@@ -1,48 +1,34 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const EVENT_REGISTRY_ID = serviceId("EventRegistry");
-const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);
-const EVENT_ACTIONS_REGISTRY_ID = serviceId("EventActionsRegistry");
-const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);
-const EVENT_MANAGER_ID = serviceId("EventManager");
-const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);
-const EVENT_BUS_BRIDGE_ID = serviceId("EventBusBridge");
-const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);
-const ECORE_METADATA_SERVICE_ID = serviceId("EcoreMetadataService");
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const { serviceId: e } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), E = e("EventRegistry"), _ = Symbol.for(E), i = e("EventActionsRegistry"), a = Symbol.for(i), r = e("EventManager"), c = Symbol.for(r), s = e("EventBusBridge"), R = Symbol.for(s), l = e("EcoreMetadataService"), I = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ECORE_METADATA_SERVICE_ID,
-  EVENT_ACTIONS_REGISTRY,
-  EVENT_ACTIONS_REGISTRY_ID,
-  EVENT_BUS_BRIDGE,
-  EVENT_BUS_BRIDGE_ID,
-  EVENT_MANAGER,
-  EVENT_MANAGER_ID,
-  EVENT_REGISTRY,
-  EVENT_REGISTRY_ID
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.api.events";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.api.events");
-  await void 0;
+  ECORE_METADATA_SERVICE_ID: l,
+  EVENT_ACTIONS_REGISTRY: a,
+  EVENT_ACTIONS_REGISTRY_ID: i,
+  EVENT_BUS_BRIDGE: R,
+  EVENT_BUS_BRIDGE_ID: s,
+  EVENT_MANAGER: c,
+  EVENT_MANAGER_ID: r,
+  EVENT_REGISTRY: _,
+  EVENT_REGISTRY_ID: E
+}, Symbol.toStringTag, { value: "Module" })), o = "org.eclipse.daanse.board.app.lib.api.events", T = "0.0.1-next.1";
+async function S(t) {
+  const n = globalThis.__tsm__;
+  if (!n)
+    throw new Error(`${o}: tsm runtime is not initialized`);
+  n.register(o, I, T, "lib.api.events"), await void 0;
 }
-async function deactivate(context) {
+async function d(t) {
   await void 0;
 }
 export {
-  ECORE_METADATA_SERVICE_ID,
-  EVENT_ACTIONS_REGISTRY,
-  EVENT_ACTIONS_REGISTRY_ID,
-  EVENT_BUS_BRIDGE,
-  EVENT_BUS_BRIDGE_ID,
-  EVENT_MANAGER,
-  EVENT_MANAGER_ID,
-  EVENT_REGISTRY,
-  EVENT_REGISTRY_ID,
-  activate,
-  deactivate
+  l as ECORE_METADATA_SERVICE_ID,
+  a as EVENT_ACTIONS_REGISTRY,
+  i as EVENT_ACTIONS_REGISTRY_ID,
+  R as EVENT_BUS_BRIDGE,
+  s as EVENT_BUS_BRIDGE_ID,
+  c as EVENT_MANAGER,
+  r as EVENT_MANAGER_ID,
+  _ as EVENT_REGISTRY,
+  E as EVENT_REGISTRY_ID,
+  S as activate,
+  d as deactivate
 };

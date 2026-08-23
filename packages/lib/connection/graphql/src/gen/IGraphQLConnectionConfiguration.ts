@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -29,8 +32,6 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.connection.graphql#//IGraphQLConnectionConfiguration'})
 export class IGraphQLConnectionConfiguration extends BaseConnectionConfig {
 
-  @Documentation("The specific URL endpoint for the GraphQL API.
-                                            This attribute overrides the 'url' from BaseConnectionConfig
-                                            to emphasize its specific role in GraphQL connections.")
+  @Documentation("The specific URL endpoint for the GraphQL API.\n                                            This attribute overrides the 'url' from BaseConnectionConfig\n                                            to emphasize its specific role in GraphQL connections.")
   @Attribute() url?: string;
 }

@@ -11,32 +11,14 @@
  *   Smart City Jena
  **********************************************************************/
 import { type IDataRetrieveable } from 'org.eclipse.daanse.board.app.lib.datasource.base'
+export type { IDataRetrieveable }
 
-
-
-export interface IDatasourceRepository {
-  getDatasource(datasourceName: string): IDataRetrieveable
-  registerDatasource(datasourceName: string, type: string, config: any): void
-}
-
-export interface DataSourcePlugin<T> {
-  Preview: any
-  Settings: any
-  Store: StoreConstructor<T>
-  Identifiers: StoreIdentifiers
-  Name: string
-}
-
-export interface StoreIdentifiers {
-  Store: symbol
-  Preview: symbol
-  Settings: symbol
-}
-
-export interface StoreConstructor<T> {
-  new (config: any): T
-  validateConfiguration: (config: any) => boolean
-}
+/*
+ * The contract lives in lib.api.datasource - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { IDatasourceRepository, DataSourcePlugin, StoreIdentifiers, StoreConstructor } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+import type { IDatasourceRepository, DataSourcePlugin, StoreIdentifiers, StoreConstructor } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 const datasources = new Map<string, IDataRetrieveable>()
 

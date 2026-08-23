@@ -1,8 +1,8 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { BaseConnection } from "org.eclipse.daanse.board.app.lib.connection.base";
-class RestConnection extends BaseConnection {
+import { BaseConnection as b } from "org.eclipse.daanse.board.app.lib.connection.base";
+const { serviceId: m } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class l extends b {
   url = "";
-  cacheEnabled = false;
+  cacheEnabled = !1;
   cacheTTL = 3e4;
   // 30 seconds default
   cache = /* @__PURE__ */ new Map();
@@ -10,129 +10,102 @@ class RestConnection extends BaseConnection {
   constructor() {
     super();
   }
-  init(configuration) {
-    super.init(configuration);
-    this.url = configuration.url;
-    this.cacheEnabled = configuration.cacheEnabled ?? false;
-    this.cacheTTL = configuration.cacheTTL ?? 3e4;
+  init(e) {
+    super.init(e), this.url = e.url, this.cacheEnabled = e.cacheEnabled ?? !1, this.cacheTTL = e.cacheTTL ?? 3e4;
   }
-  getCacheKey(url, options) {
-    const method = options?.method || "GET";
-    const body = options?.body ? JSON.stringify(options.body) : "";
-    return `${method}:${url}:${body}`;
+  getCacheKey(e, s) {
+    const i = s?.method || "GET", c = s?.body ? JSON.stringify(s.body) : "";
+    return `${i}:${e}:${c}`;
   }
-  isValidCacheEntry(entry) {
-    return Date.now() - entry.timestamp < this.cacheTTL;
+  isValidCacheEntry(e) {
+    return Date.now() - e.timestamp < this.cacheTTL;
   }
   cleanExpiredCache() {
-    const now = Date.now();
-    for (const [key, entry] of this.cache.entries()) {
-      if (now - entry.timestamp >= this.cacheTTL) {
-        this.cache.delete(key);
-      }
-    }
+    const e = Date.now();
+    for (const [s, i] of this.cache.entries())
+      e - i.timestamp >= this.cacheTTL && this.cache.delete(s);
   }
   clearCache() {
     this.cache.clear();
   }
-  fetch(config, options) {
-    const fullUrl = this.url + config.url;
-    const cacheKey = this.getCacheKey(fullUrl, options);
-    const method = options?.method || "GET";
-    const shouldCache = this.cacheEnabled && method === "GET";
-    if (shouldCache) {
-      const cachedEntry = this.cache.get(cacheKey);
-      if (cachedEntry && this.isValidCacheEntry(cachedEntry)) {
-        const clonedResponse = new Response(JSON.stringify(cachedEntry.body), {
-          status: cachedEntry.response.status,
-          statusText: cachedEntry.response.statusText,
-          headers: cachedEntry.response.headers
+  fetch(e, s) {
+    const i = this.url + e.url, c = this.getCacheKey(i, s), p = s?.method || "GET", h = this.cacheEnabled && p === "GET";
+    if (h) {
+      const n = this.cache.get(c);
+      if (n && this.isValidCacheEntry(n)) {
+        const a = new Response(JSON.stringify(n.body), {
+          status: n.response.status,
+          statusText: n.response.statusText,
+          headers: n.response.headers
         });
-        return Promise.resolve(clonedResponse);
+        return Promise.resolve(a);
       }
-      const pendingRequest = this.pendingRequests.get(cacheKey);
-      if (pendingRequest) {
-        return pendingRequest.then((response) => response.clone());
-      }
+      const o = this.pendingRequests.get(c);
+      if (o)
+        return o.then((a) => a.clone());
     }
-    const requestPromise = fetch(fullUrl, options).then(async (response) => {
-      if (shouldCache && response.ok) {
-        const clonedResponse = response.clone();
+    const d = fetch(i, s).then(async (n) => {
+      if (h && n.ok) {
+        const o = n.clone();
         try {
-          const body = await clonedResponse.json();
-          this.cache.set(cacheKey, {
-            response: response.clone(),
-            body,
+          const a = await o.json();
+          this.cache.set(c, {
+            response: n.clone(),
+            body: a,
             timestamp: Date.now()
           });
         } catch {
         }
       }
-      return response;
+      return n;
     }).finally(() => {
-      this.pendingRequests.delete(cacheKey);
-      if (this.cache.size > 100) {
-        this.cleanExpiredCache();
-      }
+      this.pendingRequests.delete(c), this.cache.size > 100 && this.cleanExpiredCache();
     });
-    if (shouldCache) {
-      this.pendingRequests.set(cacheKey, requestPromise);
-    }
-    return requestPromise;
+    return h && this.pendingRequests.set(c, d), d;
   }
   setConfig() {
     throw new Error("Method not implemented.");
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.url) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(e) {
+    return !!e.url;
   }
 }
-const REST_CONNECTION_FACTORY = serviceId("RestConnectionFactory");
-const factorySymbol = Symbol.for(REST_CONNECTION_FACTORY);
-function createRestConnection(config) {
-  if (!RestConnection.validateConfiguration(config)) {
+const r = m("RestConnectionFactory"), g = Symbol.for(r);
+function T(t) {
+  if (!l.validateConfiguration(t))
     throw new Error(
       "Invalid RestConnection configuration. Please provide a valid configuration."
     );
-  }
-  const connection = new RestConnection();
-  connection.init(config);
-  return connection;
+  const e = new l();
+  return e.init(t), e;
 }
-function activate$1({ services }) {
-  services.register(REST_CONNECTION_FACTORY, createRestConnection);
+function f({ services: t }) {
+  t.register(r, T);
 }
-function deactivate$1({ services }) {
-  services.unregister(REST_CONNECTION_FACTORY);
+function y({ services: t }) {
+  t.unregister(r);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const C = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  REST_CONNECTION_FACTORY,
-  RestConnection,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.connection.rest";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.connection.rest");
-  await activate$1?.(context);
+  REST_CONNECTION_FACTORY: r,
+  RestConnection: l,
+  activate: f,
+  deactivate: y,
+  factorySymbol: g
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.connection.rest", E = "0.0.1-next.1";
+async function R(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  e.register(u, C, E, "lib.connection.rest"), await f?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function _(t) {
+  await y?.(t);
 }
 export {
-  REST_CONNECTION_FACTORY,
-  RestConnection,
-  activate,
-  deactivate,
-  factorySymbol
+  r as REST_CONNECTION_FACTORY,
+  l as RestConnection,
+  R as activate,
+  _ as deactivate,
+  g as factorySymbol
 };

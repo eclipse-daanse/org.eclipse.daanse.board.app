@@ -1,71 +1,59 @@
-import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { useRoute } from "vue-router";
-class VuePageProvider {
+import { PAGE_CONTEXT as u } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { useRoute as g } from "vue-router";
+const { serviceId: d } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class o {
   constructor() {
     this.currentPageId = void 0;
   }
   getCurrentPageId() {
     try {
-      const route = useRoute();
-      if (route && route.params && route.params.pageid) {
-        this.currentPageId = route.params.pageid;
-        return this.currentPageId;
-      }
-    } catch (error) {
+      const e = g();
+      if (e && e.params && e.params.pageid)
+        return this.currentPageId = e.params.pageid, this.currentPageId;
+    } catch {
     }
     try {
-      const currentPath = window.location.pathname;
-      const match = currentPath.match(/\/page\/([^\/]+)/);
-      if (match && match[1]) {
-        this.currentPageId = match[1];
-        return this.currentPageId;
-      }
-    } catch (error) {
+      const a = window.location.pathname.match(/\/page\/([^\/]+)/);
+      if (a && a[1])
+        return this.currentPageId = a[1], this.currentPageId;
+    } catch {
     }
     return this.currentPageId;
   }
-  setCurrentPageId(pageId) {
-    this.currentPageId = pageId;
+  setCurrentPageId(e) {
+    this.currentPageId = e;
   }
 }
-const VUE_PAGE_PROVIDER = serviceId("VuePageProvider");
-const identifier = Symbol.for(VUE_PAGE_PROVIDER);
-const vuePageProvider = new VuePageProvider();
-function activate$1({ services }) {
-  services.register(VUE_PAGE_PROVIDER, vuePageProvider);
-  services.getRequired(PAGE_CONTEXT).setProvider(vuePageProvider);
+const r = d("VuePageProvider"), p = Symbol.for(r), i = new o();
+function c({ services: t }) {
+  t.register(r, i), t.getRequired(u).setProvider(i);
 }
-function deactivate$1({ services }) {
-  services.unregister(VUE_PAGE_PROVIDER);
+function s({ services: t }) {
+  t.unregister(r);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VUE_PAGE_PROVIDER,
-  VuePageProvider,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier,
-  vuePageProvider
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.page_provider";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.page_provider");
-  await activate$1?.(context);
+  VUE_PAGE_PROVIDER: r,
+  VuePageProvider: o,
+  activate: c,
+  deactivate: s,
+  identifier: p,
+  vuePageProvider: i
+}, Symbol.toStringTag, { value: "Module" })), n = "org.eclipse.daanse.board.app.ui.vue.page_provider", _ = "0.0.1-next.1";
+async function h(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${n}: tsm runtime is not initialized`);
+  e.register(n, P, _, "ui.vue.page_provider"), await c?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function l(t) {
+  await s?.(t);
 }
 export {
-  VUE_PAGE_PROVIDER,
-  VuePageProvider,
-  activate,
-  deactivate,
-  identifier,
-  vuePageProvider
+  r as VUE_PAGE_PROVIDER,
+  o as VuePageProvider,
+  h as activate,
+  l as deactivate,
+  p as identifier,
+  i as vuePageProvider
 };

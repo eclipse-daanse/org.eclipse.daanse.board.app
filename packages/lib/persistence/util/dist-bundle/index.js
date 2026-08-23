@@ -1,44 +1,36 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class ValidityCheck {
-  checkContent(json) {
-    const keys = Object.keys(json);
-    if (keys.includes("layout") && keys.includes("datasources") && keys.includes("conections") && keys.includes("widgets")) {
-      return true;
-    }
-    return false;
+const { serviceId: r } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class o {
+  checkContent(t) {
+    const i = Object.keys(t);
+    return !!(i.includes("layout") && i.includes("datasources") && i.includes("conections") && i.includes("widgets"));
   }
 }
-const VALIDITY_CHECK = serviceId("ValidityCheck");
-const identifier = Symbol.for(VALIDITY_CHECK);
-function activate$1({ services }) {
-  services.register(VALIDITY_CHECK, new ValidityCheck());
+const n = r("ValidityCheck"), l = Symbol.for(n);
+function s({ services: e }) {
+  e.register(n, new o());
 }
-function deactivate$1({ services }) {
-  services.unregister(VALIDITY_CHECK);
+function a({ services: e }) {
+  e.unregister(n);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const u = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VALIDITY_CHECK,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.persistence.util";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.persistence.util");
-  await activate$1?.(context);
+  VALIDITY_CHECK: n,
+  activate: s,
+  deactivate: a,
+  identifier: l
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.persistence.util", d = "0.0.1-next.1";
+async function _(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  t.register(c, u, d, "lib.persistence.util"), await s?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function b(e) {
+  await a?.(e);
 }
 export {
-  VALIDITY_CHECK,
-  activate,
-  deactivate,
-  identifier
+  n as VALIDITY_CHECK,
+  _ as activate,
+  b as deactivate,
+  l as identifier
 };

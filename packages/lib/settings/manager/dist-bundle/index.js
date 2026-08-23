@@ -1,882 +1,647 @@
-import { SETTINGS_MANAGER, identifier } from "org.eclipse.daanse.board.app.lib.api.settings";
-import { SETTINGS_MANAGER as SETTINGS_MANAGER2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.settings";
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+import { SETTINGS_MANAGER as ve, identifier as Tr } from "org.eclipse.daanse.board.app.lib.api.settings";
+import { SETTINGS_MANAGER as Tt, identifier as Ot } from "org.eclipse.daanse.board.app.lib.api.settings";
+var f = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function Or(e) {
+  return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
 }
-var isArray_1;
-var hasRequiredIsArray;
-function requireIsArray() {
-  if (hasRequiredIsArray) return isArray_1;
-  hasRequiredIsArray = 1;
-  var isArray = Array.isArray;
-  isArray_1 = isArray;
-  return isArray_1;
+var p, qe;
+function de() {
+  if (qe) return p;
+  qe = 1;
+  var e = Array.isArray;
+  return p = e, p;
 }
-var _freeGlobal;
-var hasRequired_freeGlobal;
-function require_freeGlobal() {
-  if (hasRequired_freeGlobal) return _freeGlobal;
-  hasRequired_freeGlobal = 1;
-  var freeGlobal = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
-  _freeGlobal = freeGlobal;
-  return _freeGlobal;
+var g, Ce;
+function jr() {
+  if (Ce) return g;
+  Ce = 1;
+  var e = typeof f == "object" && f && f.Object === Object && f;
+  return g = e, g;
 }
-var _root;
-var hasRequired_root;
-function require_root() {
-  if (hasRequired_root) return _root;
-  hasRequired_root = 1;
-  var freeGlobal = require_freeGlobal();
-  var freeSelf = typeof self == "object" && self && self.Object === Object && self;
-  var root = freeGlobal || freeSelf || Function("return this")();
-  _root = root;
-  return _root;
+var y, me;
+function pe() {
+  if (me) return y;
+  me = 1;
+  var e = jr(), r = typeof self == "object" && self && self.Object === Object && self, t = e || r || Function("return this")();
+  return y = t, y;
 }
-var _Symbol;
-var hasRequired_Symbol;
-function require_Symbol() {
-  if (hasRequired_Symbol) return _Symbol;
-  hasRequired_Symbol = 1;
-  var root = require_root();
-  var Symbol2 = root.Symbol;
-  _Symbol = Symbol2;
-  return _Symbol;
+var b, Se;
+function ge() {
+  if (Se) return b;
+  Se = 1;
+  var e = pe(), r = e.Symbol;
+  return b = r, b;
 }
-var _getRawTag;
-var hasRequired_getRawTag;
-function require_getRawTag() {
-  if (hasRequired_getRawTag) return _getRawTag;
-  hasRequired_getRawTag = 1;
-  var Symbol2 = require_Symbol();
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  var nativeObjectToString = objectProto.toString;
-  var symToStringTag = Symbol2 ? Symbol2.toStringTag : void 0;
-  function getRawTag(value) {
-    var isOwn = hasOwnProperty.call(value, symToStringTag), tag = value[symToStringTag];
+var q, Re;
+function wr() {
+  if (Re) return q;
+  Re = 1;
+  var e = ge(), r = Object.prototype, t = r.hasOwnProperty, n = r.toString, i = e ? e.toStringTag : void 0;
+  function a(u) {
+    var s = t.call(u, i), o = u[i];
     try {
-      value[symToStringTag] = void 0;
-      var unmasked = true;
-    } catch (e) {
+      u[i] = void 0;
+      var c = !0;
+    } catch {
     }
-    var result = nativeObjectToString.call(value);
-    if (unmasked) {
-      if (isOwn) {
-        value[symToStringTag] = tag;
-      } else {
-        delete value[symToStringTag];
-      }
-    }
-    return result;
+    var d = n.call(u);
+    return c && (s ? u[i] = o : delete u[i]), d;
   }
-  _getRawTag = getRawTag;
-  return _getRawTag;
+  return q = a, q;
 }
-var _objectToString;
-var hasRequired_objectToString;
-function require_objectToString() {
-  if (hasRequired_objectToString) return _objectToString;
-  hasRequired_objectToString = 1;
-  var objectProto = Object.prototype;
-  var nativeObjectToString = objectProto.toString;
-  function objectToString(value) {
-    return nativeObjectToString.call(value);
+var C, Te;
+function Ir() {
+  if (Te) return C;
+  Te = 1;
+  var e = Object.prototype, r = e.toString;
+  function t(n) {
+    return r.call(n);
   }
-  _objectToString = objectToString;
-  return _objectToString;
+  return C = t, C;
 }
-var _baseGetTag;
-var hasRequired_baseGetTag;
-function require_baseGetTag() {
-  if (hasRequired_baseGetTag) return _baseGetTag;
-  hasRequired_baseGetTag = 1;
-  var Symbol2 = require_Symbol(), getRawTag = require_getRawTag(), objectToString = require_objectToString();
-  var nullTag = "[object Null]", undefinedTag = "[object Undefined]";
-  var symToStringTag = Symbol2 ? Symbol2.toStringTag : void 0;
-  function baseGetTag(value) {
-    if (value == null) {
-      return value === void 0 ? undefinedTag : nullTag;
-    }
-    return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+var m, Oe;
+function br() {
+  if (Oe) return m;
+  Oe = 1;
+  var e = ge(), r = wr(), t = Ir(), n = "[object Null]", i = "[object Undefined]", a = e ? e.toStringTag : void 0;
+  function u(s) {
+    return s == null ? s === void 0 ? i : n : a && a in Object(s) ? r(s) : t(s);
   }
-  _baseGetTag = baseGetTag;
-  return _baseGetTag;
+  return m = u, m;
 }
-var isObjectLike_1;
-var hasRequiredIsObjectLike;
-function requireIsObjectLike() {
-  if (hasRequiredIsObjectLike) return isObjectLike_1;
-  hasRequiredIsObjectLike = 1;
-  function isObjectLike(value) {
-    return value != null && typeof value == "object";
+var S, je;
+function Gr() {
+  if (je) return S;
+  je = 1;
+  function e(r) {
+    return r != null && typeof r == "object";
   }
-  isObjectLike_1 = isObjectLike;
-  return isObjectLike_1;
+  return S = e, S;
 }
-var isSymbol_1;
-var hasRequiredIsSymbol;
-function requireIsSymbol() {
-  if (hasRequiredIsSymbol) return isSymbol_1;
-  hasRequiredIsSymbol = 1;
-  var baseGetTag = require_baseGetTag(), isObjectLike = requireIsObjectLike();
-  var symbolTag = "[object Symbol]";
-  function isSymbol(value) {
-    return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
+var R, we;
+function ye() {
+  if (we) return R;
+  we = 1;
+  var e = br(), r = Gr(), t = "[object Symbol]";
+  function n(i) {
+    return typeof i == "symbol" || r(i) && e(i) == t;
   }
-  isSymbol_1 = isSymbol;
-  return isSymbol_1;
+  return R = n, R;
 }
-var _isKey;
-var hasRequired_isKey;
-function require_isKey() {
-  if (hasRequired_isKey) return _isKey;
-  hasRequired_isKey = 1;
-  var isArray = requireIsArray(), isSymbol = requireIsSymbol();
-  var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, reIsPlainProp = /^\w*$/;
-  function isKey(value, object) {
-    if (isArray(value)) {
-      return false;
-    }
-    var type = typeof value;
-    if (type == "number" || type == "symbol" || type == "boolean" || value == null || isSymbol(value)) {
-      return true;
-    }
-    return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
+var T, Ie;
+function Mr() {
+  if (Ie) return T;
+  Ie = 1;
+  var e = de(), r = ye(), t = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, n = /^\w*$/;
+  function i(a, u) {
+    if (e(a))
+      return !1;
+    var s = typeof a;
+    return s == "number" || s == "symbol" || s == "boolean" || a == null || r(a) ? !0 : n.test(a) || !t.test(a) || u != null && a in Object(u);
   }
-  _isKey = isKey;
-  return _isKey;
+  return T = i, T;
 }
-var isObject_1;
-var hasRequiredIsObject;
-function requireIsObject() {
-  if (hasRequiredIsObject) return isObject_1;
-  hasRequiredIsObject = 1;
-  function isObject(value) {
-    var type = typeof value;
-    return value != null && (type == "object" || type == "function");
+var O, Ge;
+function qr() {
+  if (Ge) return O;
+  Ge = 1;
+  function e(r) {
+    var t = typeof r;
+    return r != null && (t == "object" || t == "function");
   }
-  isObject_1 = isObject;
-  return isObject_1;
+  return O = e, O;
 }
-var isFunction_1;
-var hasRequiredIsFunction;
-function requireIsFunction() {
-  if (hasRequiredIsFunction) return isFunction_1;
-  hasRequiredIsFunction = 1;
-  var baseGetTag = require_baseGetTag(), isObject = requireIsObject();
-  var asyncTag = "[object AsyncFunction]", funcTag = "[object Function]", genTag = "[object GeneratorFunction]", proxyTag = "[object Proxy]";
-  function isFunction(value) {
-    if (!isObject(value)) {
-      return false;
-    }
-    var tag = baseGetTag(value);
-    return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+var j, Me;
+function Dr() {
+  if (Me) return j;
+  Me = 1;
+  var e = br(), r = qr(), t = "[object AsyncFunction]", n = "[object Function]", i = "[object GeneratorFunction]", a = "[object Proxy]";
+  function u(s) {
+    if (!r(s))
+      return !1;
+    var o = e(s);
+    return o == n || o == i || o == t || o == a;
   }
-  isFunction_1 = isFunction;
-  return isFunction_1;
+  return j = u, j;
 }
-var _coreJsData;
-var hasRequired_coreJsData;
-function require_coreJsData() {
-  if (hasRequired_coreJsData) return _coreJsData;
-  hasRequired_coreJsData = 1;
-  var root = require_root();
-  var coreJsData = root["__core-js_shared__"];
-  _coreJsData = coreJsData;
-  return _coreJsData;
+var w, De;
+function Pr() {
+  if (De) return w;
+  De = 1;
+  var e = pe(), r = e["__core-js_shared__"];
+  return w = r, w;
 }
-var _isMasked;
-var hasRequired_isMasked;
-function require_isMasked() {
-  if (hasRequired_isMasked) return _isMasked;
-  hasRequired_isMasked = 1;
-  var coreJsData = require_coreJsData();
-  var maskSrcKey = (function() {
-    var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
-    return uid ? "Symbol(src)_1." + uid : "";
+var I, Pe;
+function xr() {
+  if (Pe) return I;
+  Pe = 1;
+  var e = Pr(), r = (function() {
+    var n = /[^.]+$/.exec(e && e.keys && e.keys.IE_PROTO || "");
+    return n ? "Symbol(src)_1." + n : "";
   })();
-  function isMasked(func) {
-    return !!maskSrcKey && maskSrcKey in func;
+  function t(n) {
+    return !!r && r in n;
   }
-  _isMasked = isMasked;
-  return _isMasked;
+  return I = t, I;
 }
-var _toSource;
-var hasRequired_toSource;
-function require_toSource() {
-  if (hasRequired_toSource) return _toSource;
-  hasRequired_toSource = 1;
-  var funcProto = Function.prototype;
-  var funcToString = funcProto.toString;
-  function toSource(func) {
-    if (func != null) {
+var G, xe;
+function zr() {
+  if (xe) return G;
+  xe = 1;
+  var e = Function.prototype, r = e.toString;
+  function t(n) {
+    if (n != null) {
       try {
-        return funcToString.call(func);
-      } catch (e) {
+        return r.call(n);
+      } catch {
       }
       try {
-        return func + "";
-      } catch (e) {
+        return n + "";
+      } catch {
       }
     }
     return "";
   }
-  _toSource = toSource;
-  return _toSource;
+  return G = t, G;
 }
-var _baseIsNative;
-var hasRequired_baseIsNative;
-function require_baseIsNative() {
-  if (hasRequired_baseIsNative) return _baseIsNative;
-  hasRequired_baseIsNative = 1;
-  var isFunction = requireIsFunction(), isMasked = require_isMasked(), isObject = requireIsObject(), toSource = require_toSource();
-  var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-  var reIsHostCtor = /^\[object .+?Constructor\]$/;
-  var funcProto = Function.prototype, objectProto = Object.prototype;
-  var funcToString = funcProto.toString;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  var reIsNative = RegExp(
-    "^" + funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+var M, ze;
+function Er() {
+  if (ze) return M;
+  ze = 1;
+  var e = Dr(), r = xr(), t = qr(), n = zr(), i = /[\\^$.*+?()[\]{}|]/g, a = /^\[object .+?Constructor\]$/, u = Function.prototype, s = Object.prototype, o = u.toString, c = s.hasOwnProperty, d = RegExp(
+    "^" + o.call(c).replace(i, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
   );
-  function baseIsNative(value) {
-    if (!isObject(value) || isMasked(value)) {
-      return false;
+  function be(h) {
+    if (!t(h) || r(h))
+      return !1;
+    var Rr = e(h) ? d : a;
+    return Rr.test(n(h));
+  }
+  return M = be, M;
+}
+var D, Ee;
+function Hr() {
+  if (Ee) return D;
+  Ee = 1;
+  function e(r, t) {
+    return r?.[t];
+  }
+  return D = e, D;
+}
+var P, He;
+function Cr() {
+  if (He) return P;
+  He = 1;
+  var e = Er(), r = Hr();
+  function t(n, i) {
+    var a = r(n, i);
+    return e(a) ? a : void 0;
+  }
+  return P = t, P;
+}
+var x, Ne;
+function _() {
+  if (Ne) return x;
+  Ne = 1;
+  var e = Cr(), r = e(Object, "create");
+  return x = r, x;
+}
+var z, Ae;
+function Nr() {
+  if (Ae) return z;
+  Ae = 1;
+  var e = _();
+  function r() {
+    this.__data__ = e ? e(null) : {}, this.size = 0;
+  }
+  return z = r, z;
+}
+var E, Ke;
+function Ar() {
+  if (Ke) return E;
+  Ke = 1;
+  function e(r) {
+    var t = this.has(r) && delete this.__data__[r];
+    return this.size -= t ? 1 : 0, t;
+  }
+  return E = e, E;
+}
+var H, Fe;
+function Kr() {
+  if (Fe) return H;
+  Fe = 1;
+  var e = _(), r = "__lodash_hash_undefined__", t = Object.prototype, n = t.hasOwnProperty;
+  function i(a) {
+    var u = this.__data__;
+    if (e) {
+      var s = u[a];
+      return s === r ? void 0 : s;
     }
-    var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
-    return pattern.test(toSource(value));
+    return n.call(u, a) ? u[a] : void 0;
   }
-  _baseIsNative = baseIsNative;
-  return _baseIsNative;
+  return H = i, H;
 }
-var _getValue;
-var hasRequired_getValue;
-function require_getValue() {
-  if (hasRequired_getValue) return _getValue;
-  hasRequired_getValue = 1;
-  function getValue(object, key) {
-    return object == null ? void 0 : object[key];
+var N, $e;
+function Fr() {
+  if ($e) return N;
+  $e = 1;
+  var e = _(), r = Object.prototype, t = r.hasOwnProperty;
+  function n(i) {
+    var a = this.__data__;
+    return e ? a[i] !== void 0 : t.call(a, i);
   }
-  _getValue = getValue;
-  return _getValue;
+  return N = n, N;
 }
-var _getNative;
-var hasRequired_getNative;
-function require_getNative() {
-  if (hasRequired_getNative) return _getNative;
-  hasRequired_getNative = 1;
-  var baseIsNative = require_baseIsNative(), getValue = require_getValue();
-  function getNative(object, key) {
-    var value = getValue(object, key);
-    return baseIsNative(value) ? value : void 0;
+var A, Le;
+function $r() {
+  if (Le) return A;
+  Le = 1;
+  var e = _(), r = "__lodash_hash_undefined__";
+  function t(n, i) {
+    var a = this.__data__;
+    return this.size += this.has(n) ? 0 : 1, a[n] = e && i === void 0 ? r : i, this;
   }
-  _getNative = getNative;
-  return _getNative;
+  return A = t, A;
 }
-var _nativeCreate;
-var hasRequired_nativeCreate;
-function require_nativeCreate() {
-  if (hasRequired_nativeCreate) return _nativeCreate;
-  hasRequired_nativeCreate = 1;
-  var getNative = require_getNative();
-  var nativeCreate = getNative(Object, "create");
-  _nativeCreate = nativeCreate;
-  return _nativeCreate;
-}
-var _hashClear;
-var hasRequired_hashClear;
-function require_hashClear() {
-  if (hasRequired_hashClear) return _hashClear;
-  hasRequired_hashClear = 1;
-  var nativeCreate = require_nativeCreate();
-  function hashClear() {
-    this.__data__ = nativeCreate ? nativeCreate(null) : {};
-    this.size = 0;
-  }
-  _hashClear = hashClear;
-  return _hashClear;
-}
-var _hashDelete;
-var hasRequired_hashDelete;
-function require_hashDelete() {
-  if (hasRequired_hashDelete) return _hashDelete;
-  hasRequired_hashDelete = 1;
-  function hashDelete(key) {
-    var result = this.has(key) && delete this.__data__[key];
-    this.size -= result ? 1 : 0;
-    return result;
-  }
-  _hashDelete = hashDelete;
-  return _hashDelete;
-}
-var _hashGet;
-var hasRequired_hashGet;
-function require_hashGet() {
-  if (hasRequired_hashGet) return _hashGet;
-  hasRequired_hashGet = 1;
-  var nativeCreate = require_nativeCreate();
-  var HASH_UNDEFINED = "__lodash_hash_undefined__";
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  function hashGet(key) {
-    var data = this.__data__;
-    if (nativeCreate) {
-      var result = data[key];
-      return result === HASH_UNDEFINED ? void 0 : result;
-    }
-    return hasOwnProperty.call(data, key) ? data[key] : void 0;
-  }
-  _hashGet = hashGet;
-  return _hashGet;
-}
-var _hashHas;
-var hasRequired_hashHas;
-function require_hashHas() {
-  if (hasRequired_hashHas) return _hashHas;
-  hasRequired_hashHas = 1;
-  var nativeCreate = require_nativeCreate();
-  var objectProto = Object.prototype;
-  var hasOwnProperty = objectProto.hasOwnProperty;
-  function hashHas(key) {
-    var data = this.__data__;
-    return nativeCreate ? data[key] !== void 0 : hasOwnProperty.call(data, key);
-  }
-  _hashHas = hashHas;
-  return _hashHas;
-}
-var _hashSet;
-var hasRequired_hashSet;
-function require_hashSet() {
-  if (hasRequired_hashSet) return _hashSet;
-  hasRequired_hashSet = 1;
-  var nativeCreate = require_nativeCreate();
-  var HASH_UNDEFINED = "__lodash_hash_undefined__";
-  function hashSet(key, value) {
-    var data = this.__data__;
-    this.size += this.has(key) ? 0 : 1;
-    data[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
-    return this;
-  }
-  _hashSet = hashSet;
-  return _hashSet;
-}
-var _Hash;
-var hasRequired_Hash;
-function require_Hash() {
-  if (hasRequired_Hash) return _Hash;
-  hasRequired_Hash = 1;
-  var hashClear = require_hashClear(), hashDelete = require_hashDelete(), hashGet = require_hashGet(), hashHas = require_hashHas(), hashSet = require_hashSet();
-  function Hash(entries) {
-    var index = -1, length = entries == null ? 0 : entries.length;
-    this.clear();
-    while (++index < length) {
-      var entry = entries[index];
-      this.set(entry[0], entry[1]);
+var K, Ve;
+function Lr() {
+  if (Ve) return K;
+  Ve = 1;
+  var e = Nr(), r = Ar(), t = Kr(), n = Fr(), i = $r();
+  function a(u) {
+    var s = -1, o = u == null ? 0 : u.length;
+    for (this.clear(); ++s < o; ) {
+      var c = u[s];
+      this.set(c[0], c[1]);
     }
   }
-  Hash.prototype.clear = hashClear;
-  Hash.prototype["delete"] = hashDelete;
-  Hash.prototype.get = hashGet;
-  Hash.prototype.has = hashHas;
-  Hash.prototype.set = hashSet;
-  _Hash = Hash;
-  return _Hash;
+  return a.prototype.clear = e, a.prototype.delete = r, a.prototype.get = t, a.prototype.has = n, a.prototype.set = i, K = a, K;
 }
-var _listCacheClear;
-var hasRequired_listCacheClear;
-function require_listCacheClear() {
-  if (hasRequired_listCacheClear) return _listCacheClear;
-  hasRequired_listCacheClear = 1;
-  function listCacheClear() {
-    this.__data__ = [];
-    this.size = 0;
+var F, Je;
+function Vr() {
+  if (Je) return F;
+  Je = 1;
+  function e() {
+    this.__data__ = [], this.size = 0;
   }
-  _listCacheClear = listCacheClear;
-  return _listCacheClear;
+  return F = e, F;
 }
-var eq_1;
-var hasRequiredEq;
-function requireEq() {
-  if (hasRequiredEq) return eq_1;
-  hasRequiredEq = 1;
-  function eq(value, other) {
-    return value === other || value !== value && other !== other;
+var $, Ue;
+function Jr() {
+  if (Ue) return $;
+  Ue = 1;
+  function e(r, t) {
+    return r === t || r !== r && t !== t;
   }
-  eq_1 = eq;
-  return eq_1;
+  return $ = e, $;
 }
-var _assocIndexOf;
-var hasRequired_assocIndexOf;
-function require_assocIndexOf() {
-  if (hasRequired_assocIndexOf) return _assocIndexOf;
-  hasRequired_assocIndexOf = 1;
-  var eq = requireEq();
-  function assocIndexOf(array, key) {
-    var length = array.length;
-    while (length--) {
-      if (eq(array[length][0], key)) {
-        return length;
-      }
-    }
+var L, ke;
+function l() {
+  if (ke) return L;
+  ke = 1;
+  var e = Jr();
+  function r(t, n) {
+    for (var i = t.length; i--; )
+      if (e(t[i][0], n))
+        return i;
     return -1;
   }
-  _assocIndexOf = assocIndexOf;
-  return _assocIndexOf;
+  return L = r, L;
 }
-var _listCacheDelete;
-var hasRequired_listCacheDelete;
-function require_listCacheDelete() {
-  if (hasRequired_listCacheDelete) return _listCacheDelete;
-  hasRequired_listCacheDelete = 1;
-  var assocIndexOf = require_assocIndexOf();
-  var arrayProto = Array.prototype;
-  var splice = arrayProto.splice;
-  function listCacheDelete(key) {
-    var data = this.__data__, index = assocIndexOf(data, key);
-    if (index < 0) {
-      return false;
-    }
-    var lastIndex = data.length - 1;
-    if (index == lastIndex) {
-      data.pop();
-    } else {
-      splice.call(data, index, 1);
-    }
-    --this.size;
-    return true;
+var V, Xe;
+function Ur() {
+  if (Xe) return V;
+  Xe = 1;
+  var e = l(), r = Array.prototype, t = r.splice;
+  function n(i) {
+    var a = this.__data__, u = e(a, i);
+    if (u < 0)
+      return !1;
+    var s = a.length - 1;
+    return u == s ? a.pop() : t.call(a, u, 1), --this.size, !0;
   }
-  _listCacheDelete = listCacheDelete;
-  return _listCacheDelete;
+  return V = n, V;
 }
-var _listCacheGet;
-var hasRequired_listCacheGet;
-function require_listCacheGet() {
-  if (hasRequired_listCacheGet) return _listCacheGet;
-  hasRequired_listCacheGet = 1;
-  var assocIndexOf = require_assocIndexOf();
-  function listCacheGet(key) {
-    var data = this.__data__, index = assocIndexOf(data, key);
-    return index < 0 ? void 0 : data[index][1];
+var J, Ze;
+function kr() {
+  if (Ze) return J;
+  Ze = 1;
+  var e = l();
+  function r(t) {
+    var n = this.__data__, i = e(n, t);
+    return i < 0 ? void 0 : n[i][1];
   }
-  _listCacheGet = listCacheGet;
-  return _listCacheGet;
+  return J = r, J;
 }
-var _listCacheHas;
-var hasRequired_listCacheHas;
-function require_listCacheHas() {
-  if (hasRequired_listCacheHas) return _listCacheHas;
-  hasRequired_listCacheHas = 1;
-  var assocIndexOf = require_assocIndexOf();
-  function listCacheHas(key) {
-    return assocIndexOf(this.__data__, key) > -1;
+var U, Be;
+function Xr() {
+  if (Be) return U;
+  Be = 1;
+  var e = l();
+  function r(t) {
+    return e(this.__data__, t) > -1;
   }
-  _listCacheHas = listCacheHas;
-  return _listCacheHas;
+  return U = r, U;
 }
-var _listCacheSet;
-var hasRequired_listCacheSet;
-function require_listCacheSet() {
-  if (hasRequired_listCacheSet) return _listCacheSet;
-  hasRequired_listCacheSet = 1;
-  var assocIndexOf = require_assocIndexOf();
-  function listCacheSet(key, value) {
-    var data = this.__data__, index = assocIndexOf(data, key);
-    if (index < 0) {
-      ++this.size;
-      data.push([key, value]);
-    } else {
-      data[index][1] = value;
-    }
-    return this;
+var k, Ye;
+function Zr() {
+  if (Ye) return k;
+  Ye = 1;
+  var e = l();
+  function r(t, n) {
+    var i = this.__data__, a = e(i, t);
+    return a < 0 ? (++this.size, i.push([t, n])) : i[a][1] = n, this;
   }
-  _listCacheSet = listCacheSet;
-  return _listCacheSet;
+  return k = r, k;
 }
-var _ListCache;
-var hasRequired_ListCache;
-function require_ListCache() {
-  if (hasRequired_ListCache) return _ListCache;
-  hasRequired_ListCache = 1;
-  var listCacheClear = require_listCacheClear(), listCacheDelete = require_listCacheDelete(), listCacheGet = require_listCacheGet(), listCacheHas = require_listCacheHas(), listCacheSet = require_listCacheSet();
-  function ListCache(entries) {
-    var index = -1, length = entries == null ? 0 : entries.length;
-    this.clear();
-    while (++index < length) {
-      var entry = entries[index];
-      this.set(entry[0], entry[1]);
+var X, Qe;
+function Br() {
+  if (Qe) return X;
+  Qe = 1;
+  var e = Vr(), r = Ur(), t = kr(), n = Xr(), i = Zr();
+  function a(u) {
+    var s = -1, o = u == null ? 0 : u.length;
+    for (this.clear(); ++s < o; ) {
+      var c = u[s];
+      this.set(c[0], c[1]);
     }
   }
-  ListCache.prototype.clear = listCacheClear;
-  ListCache.prototype["delete"] = listCacheDelete;
-  ListCache.prototype.get = listCacheGet;
-  ListCache.prototype.has = listCacheHas;
-  ListCache.prototype.set = listCacheSet;
-  _ListCache = ListCache;
-  return _ListCache;
+  return a.prototype.clear = e, a.prototype.delete = r, a.prototype.get = t, a.prototype.has = n, a.prototype.set = i, X = a, X;
 }
-var _Map;
-var hasRequired_Map;
-function require_Map() {
-  if (hasRequired_Map) return _Map;
-  hasRequired_Map = 1;
-  var getNative = require_getNative(), root = require_root();
-  var Map = getNative(root, "Map");
-  _Map = Map;
-  return _Map;
+var Z, We;
+function Yr() {
+  if (We) return Z;
+  We = 1;
+  var e = Cr(), r = pe(), t = e(r, "Map");
+  return Z = t, Z;
 }
-var _mapCacheClear;
-var hasRequired_mapCacheClear;
-function require_mapCacheClear() {
-  if (hasRequired_mapCacheClear) return _mapCacheClear;
-  hasRequired_mapCacheClear = 1;
-  var Hash = require_Hash(), ListCache = require_ListCache(), Map = require_Map();
-  function mapCacheClear() {
-    this.size = 0;
-    this.__data__ = {
-      "hash": new Hash(),
-      "map": new (Map || ListCache)(),
-      "string": new Hash()
+var B, er;
+function Qr() {
+  if (er) return B;
+  er = 1;
+  var e = Lr(), r = Br(), t = Yr();
+  function n() {
+    this.size = 0, this.__data__ = {
+      hash: new e(),
+      map: new (t || r)(),
+      string: new e()
     };
   }
-  _mapCacheClear = mapCacheClear;
-  return _mapCacheClear;
+  return B = n, B;
 }
-var _isKeyable;
-var hasRequired_isKeyable;
-function require_isKeyable() {
-  if (hasRequired_isKeyable) return _isKeyable;
-  hasRequired_isKeyable = 1;
-  function isKeyable(value) {
-    var type = typeof value;
-    return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+var Y, rr;
+function Wr() {
+  if (rr) return Y;
+  rr = 1;
+  function e(r) {
+    var t = typeof r;
+    return t == "string" || t == "number" || t == "symbol" || t == "boolean" ? r !== "__proto__" : r === null;
   }
-  _isKeyable = isKeyable;
-  return _isKeyable;
+  return Y = e, Y;
 }
-var _getMapData;
-var hasRequired_getMapData;
-function require_getMapData() {
-  if (hasRequired_getMapData) return _getMapData;
-  hasRequired_getMapData = 1;
-  var isKeyable = require_isKeyable();
-  function getMapData(map, key) {
-    var data = map.__data__;
-    return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+var Q, tr;
+function v() {
+  if (tr) return Q;
+  tr = 1;
+  var e = Wr();
+  function r(t, n) {
+    var i = t.__data__;
+    return e(n) ? i[typeof n == "string" ? "string" : "hash"] : i.map;
   }
-  _getMapData = getMapData;
-  return _getMapData;
+  return Q = r, Q;
 }
-var _mapCacheDelete;
-var hasRequired_mapCacheDelete;
-function require_mapCacheDelete() {
-  if (hasRequired_mapCacheDelete) return _mapCacheDelete;
-  hasRequired_mapCacheDelete = 1;
-  var getMapData = require_getMapData();
-  function mapCacheDelete(key) {
-    var result = getMapData(this, key)["delete"](key);
-    this.size -= result ? 1 : 0;
-    return result;
+var W, ar;
+function et() {
+  if (ar) return W;
+  ar = 1;
+  var e = v();
+  function r(t) {
+    var n = e(this, t).delete(t);
+    return this.size -= n ? 1 : 0, n;
   }
-  _mapCacheDelete = mapCacheDelete;
-  return _mapCacheDelete;
+  return W = r, W;
 }
-var _mapCacheGet;
-var hasRequired_mapCacheGet;
-function require_mapCacheGet() {
-  if (hasRequired_mapCacheGet) return _mapCacheGet;
-  hasRequired_mapCacheGet = 1;
-  var getMapData = require_getMapData();
-  function mapCacheGet(key) {
-    return getMapData(this, key).get(key);
+var ee, nr;
+function rt() {
+  if (nr) return ee;
+  nr = 1;
+  var e = v();
+  function r(t) {
+    return e(this, t).get(t);
   }
-  _mapCacheGet = mapCacheGet;
-  return _mapCacheGet;
+  return ee = r, ee;
 }
-var _mapCacheHas;
-var hasRequired_mapCacheHas;
-function require_mapCacheHas() {
-  if (hasRequired_mapCacheHas) return _mapCacheHas;
-  hasRequired_mapCacheHas = 1;
-  var getMapData = require_getMapData();
-  function mapCacheHas(key) {
-    return getMapData(this, key).has(key);
+var re, ir;
+function tt() {
+  if (ir) return re;
+  ir = 1;
+  var e = v();
+  function r(t) {
+    return e(this, t).has(t);
   }
-  _mapCacheHas = mapCacheHas;
-  return _mapCacheHas;
+  return re = r, re;
 }
-var _mapCacheSet;
-var hasRequired_mapCacheSet;
-function require_mapCacheSet() {
-  if (hasRequired_mapCacheSet) return _mapCacheSet;
-  hasRequired_mapCacheSet = 1;
-  var getMapData = require_getMapData();
-  function mapCacheSet(key, value) {
-    var data = getMapData(this, key), size = data.size;
-    data.set(key, value);
-    this.size += data.size == size ? 0 : 1;
-    return this;
+var te, ur;
+function at() {
+  if (ur) return te;
+  ur = 1;
+  var e = v();
+  function r(t, n) {
+    var i = e(this, t), a = i.size;
+    return i.set(t, n), this.size += i.size == a ? 0 : 1, this;
   }
-  _mapCacheSet = mapCacheSet;
-  return _mapCacheSet;
+  return te = r, te;
 }
-var _MapCache;
-var hasRequired_MapCache;
-function require_MapCache() {
-  if (hasRequired_MapCache) return _MapCache;
-  hasRequired_MapCache = 1;
-  var mapCacheClear = require_mapCacheClear(), mapCacheDelete = require_mapCacheDelete(), mapCacheGet = require_mapCacheGet(), mapCacheHas = require_mapCacheHas(), mapCacheSet = require_mapCacheSet();
-  function MapCache(entries) {
-    var index = -1, length = entries == null ? 0 : entries.length;
-    this.clear();
-    while (++index < length) {
-      var entry = entries[index];
-      this.set(entry[0], entry[1]);
+var ae, sr;
+function nt() {
+  if (sr) return ae;
+  sr = 1;
+  var e = Qr(), r = et(), t = rt(), n = tt(), i = at();
+  function a(u) {
+    var s = -1, o = u == null ? 0 : u.length;
+    for (this.clear(); ++s < o; ) {
+      var c = u[s];
+      this.set(c[0], c[1]);
     }
   }
-  MapCache.prototype.clear = mapCacheClear;
-  MapCache.prototype["delete"] = mapCacheDelete;
-  MapCache.prototype.get = mapCacheGet;
-  MapCache.prototype.has = mapCacheHas;
-  MapCache.prototype.set = mapCacheSet;
-  _MapCache = MapCache;
-  return _MapCache;
+  return a.prototype.clear = e, a.prototype.delete = r, a.prototype.get = t, a.prototype.has = n, a.prototype.set = i, ae = a, ae;
 }
-var memoize_1;
-var hasRequiredMemoize;
-function requireMemoize() {
-  if (hasRequiredMemoize) return memoize_1;
-  hasRequiredMemoize = 1;
-  var MapCache = require_MapCache();
-  var FUNC_ERROR_TEXT = "Expected a function";
-  function memoize(func, resolver) {
-    if (typeof func != "function" || resolver != null && typeof resolver != "function") {
-      throw new TypeError(FUNC_ERROR_TEXT);
-    }
-    var memoized = function() {
-      var args = arguments, key = resolver ? resolver.apply(this, args) : args[0], cache = memoized.cache;
-      if (cache.has(key)) {
-        return cache.get(key);
-      }
-      var result = func.apply(this, args);
-      memoized.cache = cache.set(key, result) || cache;
-      return result;
+var ne, or;
+function it() {
+  if (or) return ne;
+  or = 1;
+  var e = nt(), r = "Expected a function";
+  function t(n, i) {
+    if (typeof n != "function" || i != null && typeof i != "function")
+      throw new TypeError(r);
+    var a = function() {
+      var u = arguments, s = i ? i.apply(this, u) : u[0], o = a.cache;
+      if (o.has(s))
+        return o.get(s);
+      var c = n.apply(this, u);
+      return a.cache = o.set(s, c) || o, c;
     };
-    memoized.cache = new (memoize.Cache || MapCache)();
-    return memoized;
+    return a.cache = new (t.Cache || e)(), a;
   }
-  memoize.Cache = MapCache;
-  memoize_1 = memoize;
-  return memoize_1;
+  return t.Cache = e, ne = t, ne;
 }
-var _memoizeCapped;
-var hasRequired_memoizeCapped;
-function require_memoizeCapped() {
-  if (hasRequired_memoizeCapped) return _memoizeCapped;
-  hasRequired_memoizeCapped = 1;
-  var memoize = requireMemoize();
-  var MAX_MEMOIZE_SIZE = 500;
-  function memoizeCapped(func) {
-    var result = memoize(func, function(key) {
-      if (cache.size === MAX_MEMOIZE_SIZE) {
-        cache.clear();
-      }
-      return key;
-    });
-    var cache = result.cache;
-    return result;
+var ie, cr;
+function ut() {
+  if (cr) return ie;
+  cr = 1;
+  var e = it(), r = 500;
+  function t(n) {
+    var i = e(n, function(u) {
+      return a.size === r && a.clear(), u;
+    }), a = i.cache;
+    return i;
   }
-  _memoizeCapped = memoizeCapped;
-  return _memoizeCapped;
+  return ie = t, ie;
 }
-var _stringToPath;
-var hasRequired_stringToPath;
-function require_stringToPath() {
-  if (hasRequired_stringToPath) return _stringToPath;
-  hasRequired_stringToPath = 1;
-  var memoizeCapped = require_memoizeCapped();
-  var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
-  var reEscapeChar = /\\(\\)?/g;
-  var stringToPath = memoizeCapped(function(string) {
-    var result = [];
-    if (string.charCodeAt(0) === 46) {
-      result.push("");
-    }
-    string.replace(rePropName, function(match, number, quote, subString) {
-      result.push(quote ? subString.replace(reEscapeChar, "$1") : number || match);
-    });
-    return result;
+var ue, hr;
+function st() {
+  if (hr) return ue;
+  hr = 1;
+  var e = ut(), r = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g, t = /\\(\\)?/g, n = e(function(i) {
+    var a = [];
+    return i.charCodeAt(0) === 46 && a.push(""), i.replace(r, function(u, s, o, c) {
+      a.push(o ? c.replace(t, "$1") : s || u);
+    }), a;
   });
-  _stringToPath = stringToPath;
-  return _stringToPath;
+  return ue = n, ue;
 }
-var _arrayMap;
-var hasRequired_arrayMap;
-function require_arrayMap() {
-  if (hasRequired_arrayMap) return _arrayMap;
-  hasRequired_arrayMap = 1;
-  function arrayMap(array, iteratee) {
-    var index = -1, length = array == null ? 0 : array.length, result = Array(length);
-    while (++index < length) {
-      result[index] = iteratee(array[index], index, array);
-    }
-    return result;
+var se, fr;
+function ot() {
+  if (fr) return se;
+  fr = 1;
+  function e(r, t) {
+    for (var n = -1, i = r == null ? 0 : r.length, a = Array(i); ++n < i; )
+      a[n] = t(r[n], n, r);
+    return a;
   }
-  _arrayMap = arrayMap;
-  return _arrayMap;
+  return se = e, se;
 }
-var _baseToString;
-var hasRequired_baseToString;
-function require_baseToString() {
-  if (hasRequired_baseToString) return _baseToString;
-  hasRequired_baseToString = 1;
-  var Symbol2 = require_Symbol(), arrayMap = require_arrayMap(), isArray = requireIsArray(), isSymbol = requireIsSymbol();
-  var symbolProto = Symbol2 ? Symbol2.prototype : void 0, symbolToString = symbolProto ? symbolProto.toString : void 0;
-  function baseToString(value) {
-    if (typeof value == "string") {
-      return value;
-    }
-    if (isArray(value)) {
-      return arrayMap(value, baseToString) + "";
-    }
-    if (isSymbol(value)) {
-      return symbolToString ? symbolToString.call(value) : "";
-    }
-    var result = value + "";
-    return result == "0" && 1 / value == -Infinity ? "-0" : result;
+var oe, _r;
+function ct() {
+  if (_r) return oe;
+  _r = 1;
+  var e = ge(), r = ot(), t = de(), n = ye(), i = e ? e.prototype : void 0, a = i ? i.toString : void 0;
+  function u(s) {
+    if (typeof s == "string")
+      return s;
+    if (t(s))
+      return r(s, u) + "";
+    if (n(s))
+      return a ? a.call(s) : "";
+    var o = s + "";
+    return o == "0" && 1 / s == -1 / 0 ? "-0" : o;
   }
-  _baseToString = baseToString;
-  return _baseToString;
+  return oe = u, oe;
 }
-var toString_1;
-var hasRequiredToString;
-function requireToString() {
-  if (hasRequiredToString) return toString_1;
-  hasRequiredToString = 1;
-  var baseToString = require_baseToString();
-  function toString(value) {
-    return value == null ? "" : baseToString(value);
+var ce, lr;
+function ht() {
+  if (lr) return ce;
+  lr = 1;
+  var e = ct();
+  function r(t) {
+    return t == null ? "" : e(t);
   }
-  toString_1 = toString;
-  return toString_1;
+  return ce = r, ce;
 }
-var _castPath;
-var hasRequired_castPath;
-function require_castPath() {
-  if (hasRequired_castPath) return _castPath;
-  hasRequired_castPath = 1;
-  var isArray = requireIsArray(), isKey = require_isKey(), stringToPath = require_stringToPath(), toString = requireToString();
-  function castPath(value, object) {
-    if (isArray(value)) {
-      return value;
-    }
-    return isKey(value, object) ? [value] : stringToPath(toString(value));
+var he, vr;
+function ft() {
+  if (vr) return he;
+  vr = 1;
+  var e = de(), r = Mr(), t = st(), n = ht();
+  function i(a, u) {
+    return e(a) ? a : r(a, u) ? [a] : t(n(a));
   }
-  _castPath = castPath;
-  return _castPath;
+  return he = i, he;
 }
-var _toKey;
-var hasRequired_toKey;
-function require_toKey() {
-  if (hasRequired_toKey) return _toKey;
-  hasRequired_toKey = 1;
-  var isSymbol = requireIsSymbol();
-  function toKey(value) {
-    if (typeof value == "string" || isSymbol(value)) {
-      return value;
-    }
-    var result = value + "";
-    return result == "0" && 1 / value == -Infinity ? "-0" : result;
+var fe, dr;
+function _t() {
+  if (dr) return fe;
+  dr = 1;
+  var e = ye();
+  function r(t) {
+    if (typeof t == "string" || e(t))
+      return t;
+    var n = t + "";
+    return n == "0" && 1 / t == -1 / 0 ? "-0" : n;
   }
-  _toKey = toKey;
-  return _toKey;
+  return fe = r, fe;
 }
-var _baseGet;
-var hasRequired_baseGet;
-function require_baseGet() {
-  if (hasRequired_baseGet) return _baseGet;
-  hasRequired_baseGet = 1;
-  var castPath = require_castPath(), toKey = require_toKey();
-  function baseGet(object, path) {
-    path = castPath(path, object);
-    var index = 0, length = path.length;
-    while (object != null && index < length) {
-      object = object[toKey(path[index++])];
-    }
-    return index && index == length ? object : void 0;
+var _e, pr;
+function lt() {
+  if (pr) return _e;
+  pr = 1;
+  var e = ft(), r = _t();
+  function t(n, i) {
+    i = e(i, n);
+    for (var a = 0, u = i.length; n != null && a < u; )
+      n = n[r(i[a++])];
+    return a && a == u ? n : void 0;
   }
-  _baseGet = baseGet;
-  return _baseGet;
+  return _e = t, _e;
 }
-var get_1;
-var hasRequiredGet;
-function requireGet() {
-  if (hasRequiredGet) return get_1;
-  hasRequiredGet = 1;
-  var baseGet = require_baseGet();
-  function get2(object, path, defaultValue) {
-    var result = object == null ? void 0 : baseGet(object, path);
-    return result === void 0 ? defaultValue : result;
+var le, gr;
+function vt() {
+  if (gr) return le;
+  gr = 1;
+  var e = lt();
+  function r(t, n, i) {
+    var a = t == null ? void 0 : e(t, n);
+    return a === void 0 ? i : a;
   }
-  get_1 = get2;
-  return get_1;
+  return le = r, le;
 }
-var getExports = requireGet();
-const get = /* @__PURE__ */ getDefaultExportFromCjs(getExports);
-class SettingsManager {
+var dt = vt();
+const pt = /* @__PURE__ */ Or(dt);
+class gt {
   constructor() {
-    this.ext_loaded = false;
-    this.path = "/config.json";
+    this.ext_loaded = !1, this.path = "/config.json";
   }
   async loadData() {
     try {
-      const data = await fetch(this.path);
-      const jsonData = await data.json();
-      if (!globalThis.__env) {
-        globalThis.__env = { settings: null };
-      }
-      globalThis.__env.settings = jsonData;
-    } catch (e) {
+      const t = await (await fetch(this.path)).json();
+      globalThis.__env || (globalThis.__env = { settings: null }), globalThis.__env.settings = t;
+    } catch {
       console.log("no external conf found");
     } finally {
-      this.ext_loaded = true;
+      this.ext_loaded = !0;
     }
   }
-  async getSettings(path) {
-    if (!this.ext_loaded) await this.loadData();
-    const settings = globalThis.__env?.settings;
-    if (!settings) return null;
-    return get(settings, path);
+  async getSettings(r) {
+    this.ext_loaded || await this.loadData();
+    const t = globalThis.__env?.settings;
+    return t ? pt(t, r) : null;
   }
 }
-function activate$1({ services }) {
-  services.register(SETTINGS_MANAGER, new SettingsManager());
+function mr({ services: e }) {
+  e.register(ve, new gt());
 }
-function deactivate$1({ services }) {
-  services.unregister(SETTINGS_MANAGER);
+function Sr({ services: e }) {
+  e.unregister(ve);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const yt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  SETTINGS_MANAGER,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.settings.manager";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.settings.manager");
-  await activate$1?.(context);
+  SETTINGS_MANAGER: ve,
+  activate: mr,
+  deactivate: Sr,
+  identifier: Tr
+}, Symbol.toStringTag, { value: "Module" })), yr = "org.eclipse.daanse.board.app.lib.settings.manager", bt = "0.0.1-next.1";
+async function Ct(e) {
+  const r = globalThis.__tsm__;
+  if (!r)
+    throw new Error(`${yr}: tsm runtime is not initialized`);
+  r.register(yr, yt, bt, "lib.settings.manager"), await mr?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function mt(e) {
+  await Sr?.(e);
 }
 export {
-  SETTINGS_MANAGER2 as SETTINGS_MANAGER,
-  activate,
-  deactivate,
-  identifier2 as identifier
+  Tt as SETTINGS_MANAGER,
+  Ct as activate,
+  mt as deactivate,
+  Ot as identifier
 };

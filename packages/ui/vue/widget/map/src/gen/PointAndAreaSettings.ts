@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -39,9 +42,9 @@ export class PointAndAreaSettings {
 
   @Documentation("Optional property to use for point rendering.")
   @Attribute() point_prop?: string;
-  @Reference('IconSettings') point?: IconSettings;
-  @Reference('PointPin') pointPin?: PointPin;
-  @Reference('MapProps') area?: MapProps;
+  @Reference('IconSettings') point: IconSettings = new IconSettings();
+  @Reference('PointPin') pointPin: PointPin = new PointPin();
+  @Reference('MapProps') area: MapProps = new MapProps();
 
   @Documentation("Optional settings for labels. (Mapped from TypeScript 'any' type).")
   @Attribute() label?: any;

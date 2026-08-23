@@ -1,63 +1,45 @@
-const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
-class AccessError extends Error {
+import { PAGE_CONTEXT as B } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { VARIABLE_REPOSITORY as A } from "org.eclipse.daanse.board.app.lib.api.variable";
+const { serviceId: u, TINY_EMITTER: w } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class v extends Error {
   name;
   message = "Access Error on Variable Scope";
-  constructor(name) {
-    super();
-    this.name = name;
+  constructor(e) {
+    super(), this.name = e;
   }
 }
-const byteToHex = [];
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 256).toString(16).slice(1));
+const s = [];
+for (let t = 0; t < 256; ++t)
+  s.push((t + 256).toString(16).slice(1));
+function _(t, e = 0) {
+  return (s[t[e + 0]] + s[t[e + 1]] + s[t[e + 2]] + s[t[e + 3]] + "-" + s[t[e + 4]] + s[t[e + 5]] + "-" + s[t[e + 6]] + s[t[e + 7]] + "-" + s[t[e + 8]] + s[t[e + 9]] + "-" + s[t[e + 10]] + s[t[e + 11]] + s[t[e + 12]] + s[t[e + 13]] + s[t[e + 14]] + s[t[e + 15]]).toLowerCase();
 }
-function unsafeStringify(arr, offset = 0) {
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+const D = new Uint8Array(16);
+function $() {
+  return crypto.getRandomValues(D);
 }
-const rnds8 = new Uint8Array(16);
-function rng() {
-  return crypto.getRandomValues(rnds8);
+function q(t, e, r) {
+  return crypto.randomUUID ? crypto.randomUUID() : F(t);
 }
-function v4(options, buf, offset) {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return _v4(options);
-}
-function _v4(options, buf, offset) {
-  options = options || {};
-  const rnds = options.random ?? options.rng?.() ?? rng();
-  if (rnds.length < 16) {
+function F(t, e, r) {
+  t = t || {};
+  const i = t.random ?? t.rng?.() ?? $();
+  if (i.length < 16)
     throw new Error("Random bytes length must be >= 16");
-  }
-  rnds[6] = rnds[6] & 15 | 64;
-  rnds[8] = rnds[8] & 63 | 128;
-  return unsafeStringify(rnds);
+  return i[6] = i[6] & 15 | 64, i[8] = i[8] & 63 | 128, _(i);
 }
-var VariableScope = /* @__PURE__ */ ((VariableScope2) => {
-  VariableScope2["Global"] = "global";
-  VariableScope2["Page"] = "page";
-  return VariableScope2;
-})(VariableScope || {});
-var VariableAccessMode = /* @__PURE__ */ ((VariableAccessMode2) => {
-  VariableAccessMode2["ReadOnly"] = "readonly";
-  VariableAccessMode2["PageOnly"] = "page-only";
-  VariableAccessMode2["ExternalWritable"] = "external-writable";
-  return VariableAccessMode2;
-})(VariableAccessMode || {});
-class Variable {
+var g = /* @__PURE__ */ ((t) => (t.Global = "global", t.Page = "page", t))(g || {}), y = /* @__PURE__ */ ((t) => (t.ReadOnly = "readonly", t.PageOnly = "page-only", t.ExternalWritable = "external-writable", t))(y || {});
+class o {
   subscribers = [];
   innerValue;
   intervalFn = () => {
   };
   description = "";
   refreshInterval = 0;
-  refreshType = RefreshType.None;
+  refreshType = l.None;
   refreshIntervalId = 0;
   refreshTrigger = null;
-  id = v4();
+  id = q();
   type = null;
   name = null;
   scope = "global";
@@ -73,73 +55,47 @@ class Variable {
   pageContextService;
   // Removed injection to break circular dependency
   storage;
-  init(name, config) {
-    this.name = name;
-    this.scope = config.scope || "global";
-    this.accessMode = config.accessMode || "external-writable";
-    this.pageId = config.pageId;
-    this.update(config);
+  init(e, r) {
+    this.name = e, this.scope = r.scope || "global", this.accessMode = r.accessMode || "external-writable", this.pageId = r.pageId, this.update(r);
   }
-  rename(newName) {
-    this.name = newName;
+  rename(e) {
+    this.name = e;
   }
-  update(config) {
-    this.description = config.description;
-    this.refreshInterval = config.refreshInterval || 0;
-    this.refreshInterval = Math.max(this.refreshInterval, 300);
-    this.refreshType = config.refreshType || RefreshType.None;
-    this.refreshTrigger = config.refreshTrigger || null;
-    if (this.refreshType === RefreshType.Interval) {
-      if (this.refreshInterval) {
-        this.refreshIntervalId = setInterval(() => {
-          this.intervalFn();
-        }, this.refreshInterval);
-      }
-    } else if (this.refreshType === RefreshType.Trigger) {
-      if (this.refreshTrigger) {
-        this.eventBus?.on(this.refreshTrigger, () => {
-          this.intervalFn();
-        });
-      }
-    }
-    this.eventBus?.emit(VariableEvents.VariableUpdated);
+  update(e) {
+    this.description = e.description, this.refreshInterval = e.refreshInterval || 0, this.refreshInterval = Math.max(this.refreshInterval, 300), this.refreshType = e.refreshType || l.None, this.refreshTrigger = e.refreshTrigger || null, this.refreshType === l.Interval ? this.refreshInterval && (this.refreshIntervalId = setInterval(() => {
+      this.intervalFn();
+    }, this.refreshInterval)) : this.refreshType === l.Trigger && this.refreshTrigger && this.eventBus?.on(this.refreshTrigger, () => {
+      this.intervalFn();
+    }), this.eventBus?.emit(n.VariableUpdated);
   }
-  set onInterval(onInterval) {
-    this.intervalFn = onInterval;
+  set onInterval(e) {
+    this.intervalFn = e;
   }
   get value() {
-    const currentPageId = this.pageContextService?.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
+    const e = this.pageContextService?.getCurrentPageId();
+    if (this.scope == "page" && e != this.pageId && this.accessMode == "page-only")
+      throw new v(this.name);
     return this.innerValue;
   }
-  set value(value) {
-    const currentPageId = this.pageContextService?.getCurrentPageId();
-    if (this.scope == "page" && currentPageId != this.pageId && this.accessMode == "page-only") {
-      throw new AccessError(this.name);
-    }
-    if (this.accessMode == "readonly") {
-      throw new AccessError(this.name);
-    }
-    console.log("Setting value, current page:", currentPageId);
-    this.innerValue = value;
-    console.log("Value changed");
-    console.log(this.subscribers[0]);
-    this.subscribers.forEach((subscriber) => subscriber());
+  set value(e) {
+    const r = this.pageContextService?.getCurrentPageId();
+    if (this.scope == "page" && r != this.pageId && this.accessMode == "page-only")
+      throw new v(this.name);
+    if (this.accessMode == "readonly")
+      throw new v(this.name);
+    console.log("Setting value, current page:", r), this.innerValue = e, console.log("Value changed"), console.log(this.subscribers[0]), this.subscribers.forEach((i) => i());
   }
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
+  subscribe(e) {
+    this.subscribers.push(e);
   }
-  unsubscribe(subscriber) {
-    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
+  unsubscribe(e) {
+    this.subscribers = this.subscribers.filter((r) => r !== e);
   }
   getSubscriptions() {
     return this.subscribers;
   }
   notyfy() {
-    this.eventBus?.emit(VariableEvents.VariableUpdated);
-    this.subscribers.forEach((subscriber) => subscriber());
+    this.eventBus?.emit(n.VariableUpdated), this.subscribers.forEach((e) => e());
   }
   forceUpdate() {
   }
@@ -147,9 +103,7 @@ class Variable {
     clearInterval(this.refreshIntervalId);
   }
   clearTrigger() {
-    if (this.refreshTrigger) {
-      this.eventBus?.off(this.refreshTrigger);
-    }
+    this.refreshTrigger && this.eventBus?.off(this.refreshTrigger);
   }
   canWriteFromPage() {
     return this.accessMode === "page-only" || this.accessMode === "external-writable";
@@ -158,7 +112,7 @@ class Variable {
     return this.accessMode === "external-writable";
   }
   serialize() {
-    const ret = {
+    return {
       id: this.id,
       name: this.name,
       description: this.description,
@@ -169,295 +123,230 @@ class Variable {
       accessMode: this.accessMode,
       pageId: this.pageId
     };
-    return ret;
   }
 }
-const TYPE$6 = serviceId("ComputedVariable");
-const symbol$5 = Symbol.for(TYPE$6);
-class ComputedVariable extends Variable {
+const h = u("ComputedVariable"), M = Symbol.for(h);
+class V extends o {
   innerExpression = "";
-  type = TYPE$6;
-  init(name, config) {
-    super.init(name, config);
-    this.innerExpression = config.expression;
-    this.initSubscriptions();
+  type = h;
+  init(e, r) {
+    super.init(e, r), this.innerExpression = r.expression, this.initSubscriptions();
   }
-  update(config) {
-    super.update(config);
-    this.expression = config.expression;
-    this.initSubscriptions();
+  update(e) {
+    super.update(e), this.expression = e.expression, this.initSubscriptions();
   }
   get expression() {
     return this.innerExpression;
   }
-  set expression(expression) {
-    this.innerExpression = expression;
-    this.initSubscriptions();
+  set expression(e) {
+    this.innerExpression = e, this.initSubscriptions();
   }
   // TODO: Think if the inner value is necessary
   get value() {
     try {
       return this.computeValue();
-    } catch (e) {
+    } catch {
       return `Incorrect expression: ${this.innerExpression}`;
     }
   }
   getDependencies() {
-    const regexp = /\$(\S+)*/gm;
-    const dependencies = [];
-    let m;
-    while ((m = regexp.exec(this.innerExpression)) !== null) {
-      if (m.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m[1]);
-    }
-    return dependencies;
+    const e = /\$(\S+)*/gm, r = [];
+    let i;
+    for (; (i = e.exec(this.innerExpression)) !== null; )
+      i.index === e.lastIndex && e.lastIndex++, r.push(i[1]);
+    return r;
   }
   computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    dependencies.forEach((dep) => {
-      result = result.replace(
-        `$${dep}`,
-        typeof this.storage?.getVariable(dep)?.value === "number" ? this.storage?.getVariable(dep)?.value : `'${this.storage?.getVariable(dep)?.value}'`
+    const e = this.getDependencies();
+    let r = this.innerExpression;
+    return e.forEach((a) => {
+      r = r.replace(
+        `$${a}`,
+        typeof this.storage?.getVariable(a)?.value == "number" ? this.storage?.getVariable(a)?.value : `'${this.storage?.getVariable(a)?.value}'`
       );
-    });
-    const execFn = new Function(`return ${result}`);
-    return execFn();
+    }), new Function(`return ${r}`)();
   }
   initSubscriptions() {
-    const dependencies = this.getDependencies();
-    dependencies.forEach((dep) => {
-      console.log(dep);
-      const depencencyVariable = this.storage?.getVariable(dep);
-      if (depencencyVariable) {
-        depencencyVariable.subscribe(() => {
-          console.log("dep changed", dep);
-          this.notyfy();
-          console.log("Variable changed");
-        });
-      } else {
-        console.log("dep pending:", dep);
-      }
+    this.getDependencies().forEach((r) => {
+      console.log(r);
+      const i = this.storage?.getVariable(r);
+      i ? i.subscribe(() => {
+        console.log("dep changed", r), this.notyfy(), console.log("Variable changed");
+      }) : console.log("dep pending:", r);
     });
   }
   serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.expression = this.innerExpression;
-    ret.type = this.type;
-    return ret;
+    const e = super.serialize();
+    return e.value = this.value, e.expression = this.innerExpression, e.type = this.type, e;
   }
 }
-function createComputedVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new ComputedVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function U(t) {
+  return (e, r) => {
+    const i = new V();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-const TYPE$5 = serviceId("ConstantVariable");
-const symbol$4 = Symbol.for(TYPE$5);
-class ConstantVariable extends Variable {
-  type = TYPE$5;
-  init(name, config) {
-    super.init(name, config);
-    this.value = config.value;
+const p = u("ConstantVariable"), L = Symbol.for(p);
+class x extends o {
+  type = p;
+  init(e, r) {
+    super.init(e, r), this.value = r.value;
   }
-  update(config) {
-    super.update(config);
-    this.value = config.value;
+  update(e) {
+    super.update(e), this.value = e.value;
   }
   get value() {
     return super.value;
   }
-  set value(value) {
-    super.value = value;
+  set value(e) {
+    super.value = e;
   }
   serialize() {
-    const ret = super.serialize();
-    ret.value = this.value;
-    ret.type = this.type;
-    return ret;
+    const e = super.serialize();
+    return e.value = this.value, e.type = this.type, e;
   }
 }
-function createConstantVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new ConstantVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function O(t) {
+  return (e, r) => {
+    const i = new x();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-const symbol$3 = Symbol.for("QueryVariable");
-class QueryVariable extends Variable {
+const N = Symbol.for("QueryVariable");
+class I extends o {
   innerQueryParam = "";
   type = "query";
-  init(name, config) {
-    super.init(name, config);
-    this.parameter = config.queryParam;
+  init(e, r) {
+    super.init(e, r), this.parameter = r.queryParam;
   }
   get parameter() {
     return this.innerQueryParam;
   }
-  set parameter(parameter) {
-    this.innerQueryParam = parameter;
-    const paramValue = new URLSearchParams(window.location.search).get(
+  set parameter(e) {
+    this.innerQueryParam = e;
+    const r = new URLSearchParams(window.location.search).get(
       this.innerQueryParam
     );
-    super.value = paramValue;
+    super.value = r;
   }
   get value() {
     return super.value;
   }
 }
-function createQueryVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new QueryVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function Q(t) {
+  return (e, r) => {
+    const i = new I();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-const TYPE$4 = serviceId("QueryVariable");
-const symbol$2 = Symbol.for("RequestVariable");
-class RequestVariable extends Variable {
+const z = u("QueryVariable"), Y = Symbol.for("RequestVariable");
+class f extends o {
   innerRequest = "";
   type = "request";
   time = 0;
-  init(name, config) {
-    super.init(name, config);
-    this.request = config.request;
-    super.onInterval = () => {
-      this.request = config.request;
+  init(e, r) {
+    super.init(e, r), this.request = r.request, super.onInterval = () => {
+      this.request = r.request;
     };
   }
   get request() {
     return this.innerRequest;
   }
-  set request(request) {
-    this.innerRequest = request;
-    fetch(this.innerRequest).then((response) => response.json()).then((data) => {
-      super.value = data;
+  set request(e) {
+    this.innerRequest = e, fetch(this.innerRequest).then((r) => r.json()).then((r) => {
+      super.value = r;
     });
   }
   get value() {
     return JSON.stringify(super.value);
   }
-  set value(value) {
+  set value(e) {
   }
 }
-function createRequestVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new RequestVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function W(t) {
+  return (e, r) => {
+    const i = new f();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-const TYPE$3 = serviceId("RequestVariable");
-const symbol$1 = Symbol.for("TimeVariable");
-class TimeVariable extends Variable {
+const k = u("RequestVariable"), j = Symbol.for("TimeVariable");
+class E extends o {
   type = "time";
-  init(name, config) {
-    super.init(name, config);
-    super.value = Date.now();
-    super.onInterval = () => {
+  init(e, r) {
+    super.init(e, r), super.value = Date.now(), super.onInterval = () => {
       super.value = Date.now();
     };
   }
   get value() {
     return super.value;
   }
-  set value(value) {
+  set value(e) {
   }
 }
-function createTimeVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new TimeVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function G(t) {
+  return (e, r) => {
+    const i = new E();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-const TYPE$2 = serviceId("TimeVariable");
-const TYPE$1 = serviceId("DateTimePickerVariable");
-const symbol = Symbol.for(TYPE$1);
-class DateTimePickerVariable extends Variable {
-  type = TYPE$1;
+const K = u("TimeVariable"), b = u("DateTimePickerVariable"), H = Symbol.for(b);
+class S extends o {
+  type = b;
   innerDatetime = "";
-  init(name, config) {
-    super.init(name, config);
-    this.innerDatetime = config.datetime || "";
+  init(e, r) {
+    super.init(e, r), this.innerDatetime = r.datetime || "";
   }
-  update(config) {
-    super.update(config);
-    this.innerDatetime = config.datetime || "";
+  update(e) {
+    super.update(e), this.innerDatetime = e.datetime || "";
   }
   get datetime() {
     return this.innerDatetime;
   }
-  set datetime(value) {
-    this.innerDatetime = value;
-    this.notyfy();
+  set datetime(e) {
+    this.innerDatetime = e, this.notyfy();
   }
   get value() {
     return this.innerDatetime;
   }
-  set value(value) {
-    this.innerDatetime = value;
-    this.notyfy();
+  set value(e) {
+    this.innerDatetime = e, this.notyfy();
   }
   serialize() {
-    const ret = super.serialize();
-    ret.datetime = this.innerDatetime;
-    ret.type = this.type;
-    return ret;
+    const e = super.serialize();
+    return e.datetime = this.innerDatetime, e.type = this.type, e;
   }
 }
-function createDateTimePickerVariableFactory(deps) {
-  return (name, config) => {
-    const variable = new DateTimePickerVariable();
-    variable.eventBus = deps.eventBus;
-    variable.pageContextService = deps.pageContextService;
-    variable.init(name, config);
-    return variable;
+function J(t) {
+  return (e, r) => {
+    const i = new S();
+    return i.eventBus = t.eventBus, i.pageContextService = t.pageContextService, i.init(e, r), i;
   };
 }
-let parameterFactory;
-function provideComputedStoreParameterFactory(factory) {
-  parameterFactory = factory;
+let d;
+function X(t) {
+  d = t;
 }
-function requireParameterFactory() {
-  if (!parameterFactory) {
+function Z() {
+  if (!d)
     throw new Error("ComputedStoreParameter factory not provided - is lib.variables active?");
-  }
-  return parameterFactory;
+  return d;
 }
-class UsesComputedVariable {
+class ee {
   updateCb = () => {
   };
   constructor() {
   }
-  setUpdateCb(cb) {
-    this.updateCb = cb;
+  setUpdateCb(e) {
+    this.updateCb = e;
   }
-  initVariable(expression) {
-    const computedStoreParameter = requireParameterFactory()();
-    computedStoreParameter.init(expression, () => {
+  initVariable(e) {
+    const r = Z()();
+    return r.init(e, () => {
       this.updateCb();
-    });
-    return computedStoreParameter;
+    }), r;
   }
 }
-class ComputedStoreParameter {
+class C {
   innerExpression = "";
   currentSubscriptions = /* @__PURE__ */ new Map();
   refreshCb = () => {
@@ -466,24 +355,17 @@ class ComputedStoreParameter {
    * properties, no container involved. */
   eventBus;
   storage;
-  init(expression, refreshCb) {
-    this.innerExpression = expression;
-    this.refreshCb = refreshCb;
-    this.eventBus?.on(VariableEvents.VariableCreated, () => {
-      refreshCb();
-    });
-    this.eventBus?.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
-    });
-    this.eventBus?.on(VariableEvents.VariableUpdated, () => {
-      console.log("Variable updated");
-      refreshCb();
-    });
-    this.eventBus?.on(VariableEvents.VariablesCleared, () => {
-      refreshCb();
-    });
-    this.eventBus?.on(VariableEvents.VariableRemoved, () => {
-      refreshCb();
+  init(e, r) {
+    this.innerExpression = e, this.refreshCb = r, this.eventBus?.on(n.VariableCreated, () => {
+      r();
+    }), this.eventBus?.on(n.VariableRemoved, () => {
+      r();
+    }), this.eventBus?.on(n.VariableUpdated, () => {
+      console.log("Variable updated"), r();
+    }), this.eventBus?.on(n.VariablesCleared, () => {
+      r();
+    }), this.eventBus?.on(n.VariableRemoved, () => {
+      r();
     });
   }
   // Case 1: Static string
@@ -491,200 +373,136 @@ class ComputedStoreParameter {
   //      - updated when variables change
   //      - updated when variables are added or removed
   getDependencies() {
-    const regexp = /\$([a-zA-Z_][\w]*)/g;
-    const dependencies = [];
-    let m;
-    while ((m = regexp.exec(this.innerExpression)) !== null) {
-      if (m.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
-      dependencies.push(m[1]);
-    }
-    return dependencies;
+    const e = /\$([a-zA-Z_][\w]*)/g, r = [];
+    let i;
+    for (; (i = e.exec(this.innerExpression)) !== null; )
+      i.index === e.lastIndex && e.lastIndex++, r.push(i[1]);
+    return r;
   }
   computeValue() {
-    const dependencies = this.getDependencies();
-    let result = this.innerExpression;
-    if (dependencies.length === 0) {
-      return result;
-    }
-    this.currentSubscriptions.forEach((subFn, key) => {
-      const variable = this.storage?.getVariable(key);
-      if (variable) {
-        variable.unsubscribe(subFn);
-      }
-    });
-    this.currentSubscriptions.clear();
-    dependencies.forEach((dep) => {
-      const variable = this.storage?.getVariable(dep);
-      if (variable) {
-        const subFn = () => {
+    const e = this.getDependencies();
+    let r = this.innerExpression;
+    return e.length === 0 || (this.currentSubscriptions.forEach((i, a) => {
+      const c = this.storage?.getVariable(a);
+      c && c.unsubscribe(i);
+    }), this.currentSubscriptions.clear(), e.forEach((i) => {
+      const a = this.storage?.getVariable(i);
+      if (a) {
+        const c = () => {
           this.refreshCb();
         };
-        this.currentSubscriptions.set(dep, subFn);
-        variable.subscribe(subFn);
+        this.currentSubscriptions.set(i, c), a.subscribe(c);
       }
-    });
-    dependencies.forEach((dep) => {
-      const variable = this.storage?.getVariable(dep);
-      if (variable && variable.value !== void 0) {
-        result = result.replace(
-          `$${dep}`,
-          typeof variable.value === "number" ? variable.value.toString() : `${variable.value}`
-        );
-      }
-    });
-    return result;
+    }), e.forEach((i) => {
+      const a = this.storage?.getVariable(i);
+      a && a.value !== void 0 && (r = r.replace(
+        `$${i}`,
+        typeof a.value == "number" ? a.value.toString() : `${a.value}`
+      ));
+    })), r;
   }
   get value() {
     return this.computeValue();
   }
 }
-const TYPE = "VARIABLEWRAPPER";
-class VariableWrapper {
-  type = TYPE;
+const P = "VARIABLEWRAPPER";
+class te {
+  type = P;
   _value = void 0;
-  isSet = false;
+  isSet = !1;
   reference;
   variable = null;
-  constructor(init_value = void 0) {
-    this._value = init_value;
+  constructor(e = void 0) {
+    this._value = e;
   }
   setTo(e) {
-    this.reference = e;
-    e.subscribe(() => {
-      console.log("change value");
-      if (this.reference) {
-        this._value = this.reference.value;
-      }
-    });
-    this._value = this.reference.value;
-    this.variable = this.reference.name;
-    this.isSet = true;
+    this.reference = e, e.subscribe(() => {
+      console.log("change value"), this.reference && (this._value = this.reference.value);
+    }), this._value = this.reference.value, this.variable = this.reference.name, this.isSet = !0;
   }
   get value() {
     return this._value;
   }
   // TODO: Memory leak
-  set value(isn) {
-    this.reference = void 0;
-    this.isSet = false;
-    this._value = isn;
+  set value(e) {
+    this.reference = void 0, this.isSet = !1, this._value = e;
   }
 }
-var SourceType = /* @__PURE__ */ ((SourceType2) => {
-  SourceType2["Constant"] = "Constant";
-  SourceType2["QueryParameter"] = "Query parameter";
-  SourceType2["SystemProperties"] = "System properties";
-  SourceType2["EnvironmentVariables"] = "Environment variables";
-  SourceType2["BrowserProperties"] = "Browser properties";
-  SourceType2["Time"] = "Time";
-  SourceType2["Expression"] = "Expression";
-  SourceType2["AsyncParameters"] = "Async parameters";
-  SourceType2["ComputedString"] = "Computed String";
-  return SourceType2;
-})(SourceType || {});
-var VariableEvents = /* @__PURE__ */ ((VariableEvents2) => {
-  VariableEvents2["VariableUpdated"] = "VariableUpdated";
-  VariableEvents2["VariableDeleted"] = "VariableDeleted";
-  VariableEvents2["VariableCreated"] = "VariableCreated";
-  VariableEvents2["VariablesCleared"] = "VariablesCleared";
-  VariableEvents2["VariableRemoved"] = "VariableRemoved";
-  return VariableEvents2;
-})(VariableEvents || {});
-var RefreshType = /* @__PURE__ */ ((RefreshType2) => {
-  RefreshType2["None"] = "None";
-  RefreshType2["Reactive"] = "Reactive";
-  RefreshType2["Interval"] = "Interval";
-  RefreshType2["Trigger"] = "Trigger";
-  return RefreshType2;
-})(RefreshType || {});
-function activate$1({ services }) {
-  const deps = {
-    eventBus: services.get(TINY_EMITTER),
-    pageContextService: services.get(PAGE_CONTEXT)
+var T = /* @__PURE__ */ ((t) => (t.Constant = "Constant", t.QueryParameter = "Query parameter", t.SystemProperties = "System properties", t.EnvironmentVariables = "Environment variables", t.BrowserProperties = "Browser properties", t.Time = "Time", t.Expression = "Expression", t.AsyncParameters = "Async parameters", t.ComputedString = "Computed String", t))(T || {}), n = /* @__PURE__ */ ((t) => (t.VariableUpdated = "VariableUpdated", t.VariableDeleted = "VariableDeleted", t.VariableCreated = "VariableCreated", t.VariablesCleared = "VariablesCleared", t.VariableRemoved = "VariableRemoved", t))(n || {}), l = /* @__PURE__ */ ((t) => (t.None = "None", t.Reactive = "Reactive", t.Interval = "Interval", t.Trigger = "Trigger", t))(l || {});
+function R({ services: t }) {
+  const e = {
+    eventBus: t.get(w),
+    pageContextService: t.get(B)
   };
-  services.register(TYPE$5, createConstantVariableFactory(deps));
-  services.register(TYPE$6, createComputedVariableFactory(deps));
-  services.register(TYPE$4, createQueryVariableFactory(deps));
-  services.register(TYPE$3, createRequestVariableFactory(deps));
-  services.register(TYPE$2, createTimeVariableFactory(deps));
-  services.register(TYPE$1, createDateTimePickerVariableFactory(deps));
-  provideComputedStoreParameterFactory(() => {
-    const parameter = new ComputedStoreParameter();
-    parameter.eventBus = deps.eventBus;
-    parameter.storage = services.get(VARIABLE_REPOSITORY);
-    return parameter;
+  t.register(p, O(e)), t.register(h, U(e)), t.register(z, Q(e)), t.register(k, W(e)), t.register(K, G(e)), t.register(b, J(e)), X(() => {
+    const r = new C();
+    return r.eventBus = e.eventBus, r.storage = t.get(A), r;
   });
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const re = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  COMPUTED_VARIABLE: TYPE$6,
-  CONSTANT_VARIABLE: TYPE$5,
-  ComputedStoreParameter,
-  ComputedVariable,
-  ComputedVariableSymbol: symbol$5,
-  ConstantVariable,
-  ConstantVariableSymbol: symbol$4,
-  DATETIME_PICKER_VARIABLE: TYPE$1,
-  DateTimePickerVariable,
-  DateTimePickerVariableSymbol: symbol,
-  QueryVariable,
-  QueryVariableSymbol: symbol$3,
-  RefreshType,
-  RequestVariable,
-  RequestVariableSymbol: symbol$2,
-  SourceType,
-  TimeVariable,
-  TimeVariableSymbol: symbol$1,
-  UsesComputedVariable,
-  VARIABLEWRAPPER: TYPE,
-  Variable,
-  VariableAccessMode,
-  VariableEvents,
-  VariableScope,
-  VariableWrapper,
-  activate: activate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.variables";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.variables");
-  await activate$1?.(context);
+  COMPUTED_VARIABLE: h,
+  CONSTANT_VARIABLE: p,
+  ComputedStoreParameter: C,
+  ComputedVariable: V,
+  ComputedVariableSymbol: M,
+  ConstantVariable: x,
+  ConstantVariableSymbol: L,
+  DATETIME_PICKER_VARIABLE: b,
+  DateTimePickerVariable: S,
+  DateTimePickerVariableSymbol: H,
+  QueryVariable: I,
+  QueryVariableSymbol: N,
+  RefreshType: l,
+  RequestVariable: f,
+  RequestVariableSymbol: Y,
+  SourceType: T,
+  TimeVariable: E,
+  TimeVariableSymbol: j,
+  UsesComputedVariable: ee,
+  VARIABLEWRAPPER: P,
+  Variable: o,
+  VariableAccessMode: y,
+  VariableEvents: n,
+  VariableScope: g,
+  VariableWrapper: te,
+  activate: R
+}, Symbol.toStringTag, { value: "Module" })), m = "org.eclipse.daanse.board.app.lib.variables", ie = "0.0.1-next.1";
+async function ne(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${m}: tsm runtime is not initialized`);
+  e.register(m, re, ie, "lib.variables"), await R?.(t);
 }
-async function deactivate(context) {
+async function oe(t) {
   await void 0;
 }
 export {
-  TYPE$6 as COMPUTED_VARIABLE,
-  TYPE$5 as CONSTANT_VARIABLE,
-  ComputedStoreParameter,
-  ComputedVariable,
-  symbol$5 as ComputedVariableSymbol,
-  ConstantVariable,
-  symbol$4 as ConstantVariableSymbol,
-  TYPE$1 as DATETIME_PICKER_VARIABLE,
-  DateTimePickerVariable,
-  symbol as DateTimePickerVariableSymbol,
-  QueryVariable,
-  symbol$3 as QueryVariableSymbol,
-  RefreshType,
-  RequestVariable,
-  symbol$2 as RequestVariableSymbol,
-  SourceType,
-  TimeVariable,
-  symbol$1 as TimeVariableSymbol,
-  UsesComputedVariable,
-  TYPE as VARIABLEWRAPPER,
-  Variable,
-  VariableAccessMode,
-  VariableEvents,
-  VariableScope,
-  VariableWrapper,
-  activate,
-  deactivate
+  h as COMPUTED_VARIABLE,
+  p as CONSTANT_VARIABLE,
+  C as ComputedStoreParameter,
+  V as ComputedVariable,
+  M as ComputedVariableSymbol,
+  x as ConstantVariable,
+  L as ConstantVariableSymbol,
+  b as DATETIME_PICKER_VARIABLE,
+  S as DateTimePickerVariable,
+  H as DateTimePickerVariableSymbol,
+  I as QueryVariable,
+  N as QueryVariableSymbol,
+  l as RefreshType,
+  f as RequestVariable,
+  Y as RequestVariableSymbol,
+  T as SourceType,
+  E as TimeVariable,
+  j as TimeVariableSymbol,
+  ee as UsesComputedVariable,
+  P as VARIABLEWRAPPER,
+  o as Variable,
+  y as VariableAccessMode,
+  n as VariableEvents,
+  g as VariableScope,
+  te as VariableWrapper,
+  ne as activate,
+  oe as deactivate
 };

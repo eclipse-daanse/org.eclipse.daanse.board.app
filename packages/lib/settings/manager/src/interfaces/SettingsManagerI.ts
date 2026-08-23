@@ -8,6 +8,10 @@
   Contributors: Smart City Jena
 
 */
-export interface SettingsManagerI{
-  getSettings(path:string[]):Promise<any>
-}
+
+/*
+ * The contract lives in lib.api.settings - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.api.settings'
+import type { SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.api.settings'

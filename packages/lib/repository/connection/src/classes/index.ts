@@ -15,24 +15,12 @@ import {
   type BaseConnectionConfig,
 } from 'org.eclipse.daanse.board.app.lib.connection.base'
 
-export interface IConnection {
-  fetch(config: IRequestParams, options?: any): Promise<any>
-  setConfig(config: any): void
-}
-
-export type PubSubEvents = 'connect' | 'message' | 'close' | 'error'
-
-export interface PubSubConnection {
-  setConfig(config: any): void
-  subscribe(subscriber: (event: PubSubEvents, data?: any) => any): void
-  unsubscribe(subscriber: () => any): void
-  notify(event: PubSubEvents, data?: any): void
-}
-
-export interface ConnectionIdentifiers {
-  Connection: symbol
-  Settings: symbol
-}
+/*
+ * The contract lives in lib.api.connection - re-exported here so old
+ * import paths keep compiling during the transition.
+ */
+export type { IConnection, PubSubEvents, PubSubConnection, ConnectionIdentifiers } from 'org.eclipse.daanse.board.app.lib.api.connection'
+import type { IConnection, PubSubEvents, PubSubConnection, ConnectionIdentifiers } from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 const connections = new Map<string, IConnection | PubSubConnection>()
 

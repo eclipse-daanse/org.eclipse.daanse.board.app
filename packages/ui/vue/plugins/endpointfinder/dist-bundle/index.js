@@ -1,52 +1,39 @@
-(function(){var i="ui.vue.plugins.endpointfinder",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=":root,\n:host {\n  --va-icon-vertical-align: middle;\n  --va-icon-user-select: none;\n}\n.va-icon {\n  vertical-align: var(--va-icon-vertical-align);\n  -webkit-user-select: var(--va-icon-user-select);\n     -moz-user-select: var(--va-icon-user-select);\n          user-select: var(--va-icon-user-select);\n}\n.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]) {\n  cursor: pointer;\n}\n.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]):focus-visible {\n  outline: 2px solid var(--va-focus) !important;\n  border-radius: 2px;\n}\n.va-icon.va-icon {\n  font-style: normal;\n}\n.va-icon--spin {\n  animation: va-icon--spin-animation 1500ms linear infinite;\n}\n.va-icon--spin-reverse {\n  animation: va-icon--spin-animation 1500ms linear infinite;\n  animation-direction: reverse;\n}\n@keyframes va-icon--spin-animation {\nfrom {\n    transform: rotate(0deg);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n.va-icon svg {\n  fill: currentColor;\n  height: 100%;\n}:root,\n:host {\n  /* Circle */\n  --va-progress-circle-position: relative;\n  --va-progress-circle-overflow: hidden;\n  /* Circle Wrapper */\n  --va-progress-circle-width: 80%;\n  --va-progress-circle-height: 80%;\n  /* Circle Overlay */\n  --va-progress-circle-overlay-transition: all ease 2s;\n  /* Circle Info */\n  --va-progress-circle-font-size: 0.75rem;\n}\n.va-progress-circle {\n  position: var(--va-progress-circle-position);\n  overflow: var(--va-progress-circle-overflow);\n  font-family: var(--va-font-family);\n}\n.va-progress-circle__wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  margin: auto;\n  transform: rotate(-90deg);\n  width: var(--va-progress-circle-width);\n  height: var(--va-progress-circle-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.va-progress-circle--indeterminate .va-progress-circle__wrapper {\n  animation: va-progress-circle__wrapper--indeterminate 2s linear infinite;\n}\n.va-progress-circle__overlay {\n  transition: var(--va-progress-circle-overlay-transition);\n}\n.va-progress-circle--indeterminate .va-progress-circle__overlay {\n  animation: va-progress-circle__overlay--indeterminate 2s ease-in-out infinite;\n}\n.va-progress-circle__info {\n  font-size: var(--va-progress-circle-font-size);\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n@keyframes va-progress-circle__wrapper--indeterminate {\n100% {\n    transform: rotate(270deg);\n}\n}\n@keyframes va-progress-circle__overlay--indeterminate {\n0% {\n    stroke-dasharray: 1, 125;\n    stroke-dashoffset: 0;\n}\n50% {\n    stroke-dasharray: 125, 125;\n    stroke-dashoffset: -65px;\n}\n100% {\n    stroke-dasharray: 125, 125;\n    stroke-dashoffset: -125px;\n}\n}:root,\n:host {\n  /* General */\n  --va-button-display: inline-flex;\n  --va-button-justify-content: center;\n  --va-button-align-items: center;\n  --va-button-background-image: none;\n  --va-button-box-shadow: none;\n  --va-button-border-width: 0;\n  --va-button-border-color: unset;\n  --va-button-border-style: none;\n  --va-button-font-weight: 600;\n  --va-button-transition: none;\n  --va-button-padding: 0;\n  --va-button-cursor: pointer;\n  /* Small */\n  --va-button-sm-size: 1.5rem;\n  --va-button-sm-content-py: 0.25rem;\n  --va-button-sm-content-px: 0.375rem;\n  --va-button-sm-only-icon-content-px: 0.25rem;\n  --va-button-sm-font-size: 0.8125rem;\n  --va-button-sm-letter-spacing: 0;\n  --va-button-sm-line-height: 1rem;\n  --va-button-sm-border-radius: 0.125rem;\n  --va-button-sm-icon-side-padding: var(--va-button-sm-content-py);\n  --va-button-sm-icons-spacing: 0.125rem;\n  /* Medium */\n  --va-button-size: 2.25rem;\n  --va-button-content-py: 0.5rem;\n  --va-button-content-px: 0.75rem;\n  --va-button-only-icon-content-px: 0.5rem;\n  --va-button-font-size: 1rem;\n  --va-button-letter-spacing: 0;\n  --va-button-line-height: 1.25rem;\n  --va-button-border-radius: 0.25rem;\n  --va-button-icon-side-padding: var(--va-button-content-py);\n  --va-button-icons-spacing: 0.25rem;\n  /* Large */\n  --va-button-lg-size: 3rem;\n  --va-button-lg-content-py: 0.75rem;\n  --va-button-lg-content-px: 1rem;\n  --va-button-lg-only-icon-content-px: 1rem;\n  --va-button-lg-font-size: 1.05rem;\n  --va-button-lg-letter-spacing: 0;\n  --va-button-lg-line-height: 1.5rem;\n  --va-button-lg-border-radius: 0.5rem;\n  --va-button-lg-icon-side-padding: var(--va-button-lg-content-py);\n  --va-button-lg-icons-spacing: 0.25rem;\n  /* Bordered */\n  --va-button-bordered-border: 1px;\n  --va-button-bordered-style: solid;\n}\n.va-button {\n  position: relative;\n  padding: var(--va-button-padding);\n  display: var(--va-button-display);\n  justify-content: var(--va-button-justify-content);\n  align-items: var(--va-button-align-items);\n  border-width: var(--va-button-border-width);\n  border-color: var(--va-button-border-color);\n  border-style: var(--va-button-border-style);\n  background-image: var(--va-button-background-image);\n  box-shadow: var(--va-button-box-shadow);\n  font-family: var(--va-font-family);\n  font-weight: var(--va-button-font-weight);\n  text-decoration: none;\n  text-transform: initial;\n  transition: var(--va-button-transition);\n  box-sizing: border-box;\n  cursor: var(--va-button-cursor);\n  z-index: 0;\n  vertical-align: top;\n}\n.va-button::after, .va-button::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  border-radius: inherit;\n  left: 0;\n  top: 0;\n  z-index: -1;\n}\n.va-button::before {\n  background: var(--va-background-color);\n  opacity: var(--va-background-color-opacity);\n}\n.va-button::after {\n  background-color: var(--va-background-mask-color);\n  opacity: var(--va-background-mask-opacity);\n}\n.va-button__content {\n  height: 100%;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n}\n.va-button__content--loading {\n  opacity: 0;\n}\n.va-button--small {\n  line-height: var(--va-button-sm-line-height);\n  border-radius: var(--va-button-sm-border-radius);\n  letter-spacing: var(--va-button-sm-letter-spacing);\n  min-height: var(--va-button-sm-size);\n  min-width: var(--va-button-sm-size);\n}\n.va-button--small .va-button__content {\n  font-size: var(--va-button-sm-font-size);\n  padding: var(--va-button-sm-content-py) var(--va-button-sm-content-px);\n}\n.va-button--small .va-button__left-icon {\n  margin-right: var(--va-button-sm-icons-spacing);\n}\n.va-button--small .va-button__right-icon {\n  margin-left: var(--va-button-sm-icons-spacing);\n}\n.va-button--small.va-button--bordered .va-button__content {\n  padding-top: calc(var(--va-button-sm-content-py) - var(--va-button-bordered-border));\n  padding-bottom: calc(var(--va-button-sm-content-py) - var(--va-button-bordered-border));\n}\n.va-button--small.va-button--left-icon .va-button__content {\n  padding-left: var(--va-button-sm-icon-side-padding);\n}\n.va-button--small.va-button--right-icon .va-button__content {\n  padding-right: var(--va-button-sm-icon-side-padding);\n}\n.va-button--normal {\n  line-height: var(--va-button-line-height);\n  border-radius: var(--va-button-border-radius);\n  letter-spacing: var(--va-button-letter-spacing);\n  min-height: var(--va-button-size);\n  min-width: var(--va-button-size);\n}\n.va-button--normal .va-button__content {\n  font-size: var(--va-button-font-size);\n  padding: var(--va-button-content-py) var(--va-button-content-px);\n  line-height: var(--va-button-line-height);\n}\n.va-button--normal .va-button__left-icon {\n  margin-right: var(--va-gap-medium);\n}\n.va-button--normal .va-button__right-icon {\n  margin-left: var(--va-gap-medium);\n}\n.va-button--normal.va-button--bordered .va-button__content {\n  padding-top: calc(var(--va-button-content-py) - var(--va-button-bordered-border));\n  padding-bottom: calc(var(--va-button-content-py) - var(--va-button-bordered-border));\n}\n.va-button--large {\n  line-height: var(--va-button-lg-line-height);\n  border-radius: var(--va-button-lg-border-radius);\n  letter-spacing: var(--va-button-lg-letter-spacing);\n  min-height: var(--va-button-lg-size);\n  min-width: var(--va-button-lg-size);\n}\n.va-button--large .va-button__content {\n  font-size: var(--va-button-lg-font-size);\n  padding: var(--va-button-lg-content-py) var(--va-button-lg-content-px);\n}\n.va-button--large .va-button__left-icon {\n  margin-right: var(--va-button-lg-icons-spacing);\n}\n.va-button--large .va-button__right-icon {\n  margin-left: var(--va-button-lg-icons-spacing);\n}\n.va-button--large.va-button--bordered .va-button__content {\n  padding-top: calc(var(--va-button-lg-content-py) - var(--va-button-bordered-border));\n  padding-bottom: calc(var(--va-button-lg-content-py) - var(--va-button-bordered-border));\n}\n.va-button--large.va-button--left-icon .va-button__content {\n  padding-left: var(--va-button-lg-icon-side-padding);\n}\n.va-button--large.va-button--right-icon .va-button__content {\n  padding-right: var(--va-button-lg-icon-side-padding);\n}\n.va-button--small.va-button--icon-only .va-button__content, .va-button--normal.va-button--icon-only .va-button__content, .va-button--large.va-button--icon-only .va-button__content {\n  padding-right: 0;\n  padding-left: 0;\n}\n.va-button--plain {\n  min-width: auto;\n  min-height: auto;\n}\n.va-button--plain .va-button__content {\n  padding: 0;\n  z-index: unset;\n}\n.va-button--round {\n  border-radius: 999px;\n}\n.va-button--bordered {\n  border-width: var(--va-button-bordered-border);\n  border-style: var(--va-button-bordered-style);\n}\n.va-button.va-button--disabled {\n  cursor: default;\n  opacity: 0.4;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n          user-select: none;\n}\n.va-button--icon-only .va-button__left-icon,\n.va-button--icon-only .va-button__right-icon {\n  margin-left: 0;\n  margin-right: 0;\n}\n.va-button--icon-only .va-button__content {\n  padding: 0;\n}\n.va-button:focus-visible {\n  outline: 2px solid var(--va-focus) !important;\n  border-radius: \"inherit\";\n}\n.va-button--loading {\n  pointer-events: none;\n}\n.va-button--block {\n  display: flex;\n  min-width: 100%;\n}\n.va-button__loader {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}:root,\n:host {\n  /* General */\n  --va-badge-py: 0;\n  --va-badge-font-size: 0.563rem;\n  --va-badge-border: 0.125rem;\n  --va-badge-size: calc(var(--va-badge-font-size) * var(--va-badge-line-height) + var(--va-badge-border) * 2);\n  --va-badge-line-height: 1.4;\n  --va-badge-margin: 0;\n  --va-badge-width: fit-content;\n  /* Dot */\n  --va-badge-dot-size: 0.5rem;\n  /* Text wrapper */\n  --va-badge-text-wrapper-transition: 0.2s cubic-bezier(0.4, 0, 0.6, 1);\n  --va-badge-text-wrapper-display: inline-flex;\n  --va-badge-text-wrapper-border: solid 0.125rem;\n  --va-badge-text-wrapper-border-radius: 0.125rem;\n  --va-badge-text-wrapper-font-weight: 700;\n  --va-badge-text-wrapper-line-height: 1.4;\n  --va-badge-text-wrapper-letter-spacing: 0.0375rem;\n  --va-badge-text-wrapper-justify-content: center;\n  --va-badge-text-wrapper-white-space: nowrap;\n  --va-badge-text-wrapper-width: min-content;\n  --va-badge-text-wrapper-height: auto;\n  --va-badge-text-wrapper-min-width: initial;\n  --va-badge-text-wrapper-min-height: initial;\n  --va-badge-text-wrapper-margin: 0;\n  --va-badge-text-transform: uppercase;\n  /* Text */\n  --va-badge-text-py: 0;\n  --va-badge-text-px: 0.25rem;\n}\n.va-badge {\n  display: inline-flex;\n  position: relative;\n  font-family: var(--va-font-family);\n  width: var(--va-badge-width);\n}\n.va-badge__text-wrapper {\n  transition: var(--va-badge-text-wrapper-transition, var(--va-transition));\n  display: var(--va-badge-text-wrapper-display);\n  border: var(--va-badge-text-wrapper-border, var(--va-control-border));\n  border-radius: var(--va-badge-text-wrapper-border-radius);\n  font-weight: var(--va-badge-text-wrapper-font-weight);\n  line-height: var(--va-badge-text-wrapper-line-height);\n  letter-spacing: var(--va-badge-text-wrapper-letter-spacing, var(--va-letter-spacing));\n  justify-content: var(--va-badge-text-wrapper-justify-content);\n  align-items: center;\n  white-space: var(--va-badge-text-wrapper-white-space);\n  width: var(--va-badge-text-wrapper-width);\n  height: var(--va-badge-text-wrapper-height);\n  min-width: var(--va-badge-text-wrapper-min-width);\n  min-height: var(--va-badge-text-wrapper-min-height);\n  margin: var(--va-badge-text-wrapper-margin);\n}\n.va-badge--visible-empty .va-badge__text-wrapper {\n  min-width: var(--va-badge-size);\n  min-height: var(--va-badge-size);\n}\n.va-badge--dot .va-badge__text-wrapper {\n  min-width: var(--va-badge-dot-size);\n  min-height: var(--va-badge-dot-size);\n  border-width: 0;\n  border-radius: 100%;\n  padding: 0;\n}\n.va-badge--empty .va-badge__text-wrapper {\n  width: 0;\n  height: 0;\n  min-width: 0;\n  min-height: 0;\n  border-width: 0;\n}\n.va-badge--multi-line .va-badge__text-wrapper {\n  white-space: normal;\n}\n.va-badge--floating .va-badge__text-wrapper {\n  position: absolute;\n  z-index: 2;\n}\n.va-badge__text {\n  margin: var(--va-badge-margin);\n  text-transform: var(--va-badge-text-transform);\n  overflow: hidden;\n  min-width: calc(var(--va-badge-font-size) * var(--va-badge-line-height));\n  padding: var(--va-badge-text-py) var(--va-badge-text-px);\n  text-align: center;\n  display: inline-flex;\n  justify-content: center;\n  text-overflow: clip;\n  white-space: nowrap;\n  font-size: var(--va-badge-font-size);\n}\n.va-badge--multi-line .va-badge__text {\n  overflow: auto;\n  max-height: initial;\n  text-align: initial;\n  text-overflow: initial;\n  white-space: normal;\n}\n.va-badge--dot .va-badge__text {\n  display: none;\n}\n.va-badge--floating .va-badge__text {\n  align-items: center;\n  padding: var(--va-badge-py) 0.15rem;\n}:root {\n  --va-stepper-step-button-inactive-color: var(--va-secondary);\n  --va-stepper-step-button-hover-highlight-opacity: 0.1;\n  --va-stepper-step-button-disabled-opacity: 0.5;\n  --va-stepper-step-button-padding: 1rem;\n  --va-stepper-step-button-number-size: 1.2rem;\n  --va-stepper-step-button-icon-size: 2rem;\n  --va-stepper-step-button-gap: 0.5rem;\n  --va-stepper-step-button-icon-border-radius: 100%;\n  --va-stepper-step-border-radius: var(--va-square-border-radius);\n  --va-stepper-divider-color: var(--va-secondary);\n  --va-stepper-divider-length: auto;\n  --va-stepper-divider-min-length: 2rem;\n  --va-stepper-divider-thickness: 1px;\n  --va-stepper-divider-spacing: 0.5rem;\n  --va-stepper-divider-vertical-margin-left: 2rem;\n  --va-stepper-step-content-wrapper-padding: 0.5rem 1rem;\n  --va-stepper-step-content-margin: 0.8rem 0 2rem;\n  --va-stepper-controls-gap: 1rem;\n}\n.va-stepper__default-controls {\n  display: flex;\n  gap: var(--va-stepper-controls-gap);\n}:root {\n  --va-stepper-step-button-inactive-color: var(--va-secondary);\n  --va-stepper-step-button-hover-highlight-opacity: 0.1;\n  --va-stepper-step-button-disabled-opacity: 0.5;\n  --va-stepper-step-button-padding: 1rem;\n  --va-stepper-step-button-number-size: 1.2rem;\n  --va-stepper-step-button-icon-size: 2rem;\n  --va-stepper-step-button-gap: 0.5rem;\n  --va-stepper-step-button-icon-border-radius: 100%;\n  --va-stepper-step-border-radius: var(--va-square-border-radius);\n  --va-stepper-divider-color: var(--va-secondary);\n  --va-stepper-divider-length: auto;\n  --va-stepper-divider-min-length: 2rem;\n  --va-stepper-divider-thickness: 1px;\n  --va-stepper-divider-spacing: 0.5rem;\n  --va-stepper-divider-vertical-margin-left: 2rem;\n  --va-stepper-step-content-wrapper-padding: 0.5rem 1rem;\n  --va-stepper-step-content-margin: 0.8rem 0 2rem;\n  --va-stepper-controls-gap: 1rem;\n}\n.va-stepper__step-button {\n  position: relative;\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--va-stepper-step-button-gap);\n  flex-shrink: 0;\n  padding: var(--va-stepper-step-button-padding);\n}\n.va-stepper__step-button:focus-visible {\n  outline: 2px solid var(--va-focus) !important;\n  border-radius: var(--va-stepper-step-border-radius);\n}\n.va-stepper__step-button::after {\n  content: \"\";\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: var(--va-stepper-color);\n  transition: opacity 0.3s;\n  opacity: 0;\n  border-radius: var(--va-stepper-step-border-radius);\n}\n.va-stepper__step-button__icon {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: var(--va-stepper-step-button-icon-size);\n  width: var(--va-stepper-step-button-icon-size);\n  font-size: var(--va-stepper-step-button-number-size);\n  color: white;\n  background: var(--va-stepper-step-button-inactive-color);\n  border-radius: var(--va-stepper-step-button-icon-border-radius);\n}\n.va-stepper__step-button--active {\n  color: var(--va-stepper-color);\n}\n.va-stepper__step-button--active .va-stepper__step-button__icon {\n  background: var(--va-stepper-color);\n}\n.va-stepper__step-button--disabled {\n  opacity: var(--va-stepper-step-button-disabled-opacity);\n  pointer-events: none;\n}\n.va-stepper__step-button:hover::after {\n  opacity: var(--va-stepper-step-button-hover-highlight-opacity);\n}\n.va-stepper__step-button--navigation-disabled::after {\n  display: none;\n}\n.va-stepper__step-button--error {\n  color: var(--va-danger);\n}\n.va-stepper__step-button--error .va-stepper__step-button__icon {\n  background: var(--va-danger);\n}:root {\n  --va-stepper-step-button-inactive-color: var(--va-secondary);\n  --va-stepper-step-button-hover-highlight-opacity: 0.1;\n  --va-stepper-step-button-disabled-opacity: 0.5;\n  --va-stepper-step-button-padding: 1rem;\n  --va-stepper-step-button-number-size: 1.2rem;\n  --va-stepper-step-button-icon-size: 2rem;\n  --va-stepper-step-button-gap: 0.5rem;\n  --va-stepper-step-button-icon-border-radius: 100%;\n  --va-stepper-step-border-radius: var(--va-square-border-radius);\n  --va-stepper-divider-color: var(--va-secondary);\n  --va-stepper-divider-length: auto;\n  --va-stepper-divider-min-length: 2rem;\n  --va-stepper-divider-thickness: 1px;\n  --va-stepper-divider-spacing: 0.5rem;\n  --va-stepper-divider-vertical-margin-left: 2rem;\n  --va-stepper-step-content-wrapper-padding: 0.5rem 1rem;\n  --va-stepper-step-content-margin: 0.8rem 0 2rem;\n  --va-stepper-controls-gap: 1rem;\n}\n.va-stepper {\n  display: flex;\n  flex-direction: column;\n}\n.va-stepper--vertical {\n  flex-direction: row;\n}\n.va-stepper__navigation {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.va-stepper__navigation--vertical {\n  flex-direction: column;\n  align-items: flex-start;\n  flex-wrap: nowrap;\n}\n.va-stepper__divider {\n  flex-grow: 1;\n  height: var(--va-stepper-divider-thickness);\n  width: var(--va-stepper-divider-length);\n  min-width: var(--va-stepper-divider-min-length);\n  margin: 0 var(--va-stepper-divider-spacing);\n  background: var(--va-stepper-divider-color);\n}\n.va-stepper__divider--vertical {\n  min-height: var(--va-stepper-divider-min-length);\n  height: var(--va-stepper-divider-length);\n  width: var(--va-stepper-divider-thickness);\n  min-width: var(--va-stepper-divider-thickness);\n  margin: var(--va-stepper-divider-spacing) 0;\n  margin-left: var(--va-stepper-divider-vertical-margin-left);\n}\n.va-stepper__step-content-wrapper {\n  padding: var(--va-stepper-step-content-wrapper-padding);\n}\n.va-stepper__step-content {\n  margin: var(--va-stepper-step-content-margin);\n}\n.va-stepper__controls {\n  display: flex;\n  gap: var(--va-stepper-controls-gap);\n}.aellipsis[data-v-69727056] {\n  line-height: 23px;\n  max-height: var(--b40395ae);\n  text-overflow: ellipsis;\n  overflow: hidden;\n  color: #777777;\n}\n.aellipsis.expanded[data-v-69727056] {\n  max-height: 100%;\n}.pointer[data-v-a0a9daed] {\n  cursor: pointer;\n  align-self: start;\n  margin-right: 5px;\n}\n.card[data-v-a0a9daed] {\n  box-shadow: none;\n  border-bottom: 1px solid #e1e1e1;\n  border-radius: 0;\n  cursor: pointer;\n}\n.card[data-v-a0a9daed]:hover, .card.active[data-v-a0a9daed] {\n  background: #f5f8ff !important;\n}\n.card .va-card-title[data-v-a0a9daed] {\n  font-size: 1.25rem;\n}\n.card .aflex[data-v-a0a9daed] {\n  display: flex;\n  margin-top: 15px;\n  flex-direction: row;\n  justify-content: space-between;\n  align-content: center;\n  /* align-items: flex-start; */\n  flex-wrap: nowrap;\n}\n.card .light[data-v-a0a9daed] {\n  color: rgba(108, 106, 106, 0.8666666667);\n}.list_of_formats[data-v-d76f1184] {\n  display: flex;\n  flex-direction: row;\n  gap: 5px;\n  justify-content: flex-start;\n}\n.map[data-v-d76f1184] {\n  width: 100%;\n  height: 250px;\n  position: relative;\n}\n.content[data-v-d76f1184] {\n  margin-top: 25px;\n  margin-bottom: 35px;\n  padding-left: 10px;\n}\n.line[data-v-d76f1184] {\n  overflow: hidden;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  align-content: center;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.line div[data-v-d76f1184] {\n  display: block;\n  width: auto;\n}\n.title[data-v-d76f1184] {\n  font-size: 24px;\n  padding: 23px 10px 0px 15px;\n}\n.pointer[data-v-d76f1184] {\n  cursor: pointer;\n}.filterbox .va-modal__header {\n  background: #f1f1f1;\n  padding-bottom: 15px;\n}.infobox .va-modal__dialog {\n  max-width: 80% !important;\n}\n.infobox .footer, .infobox .va-modal__footer {\n  background: #f7f7f7;\n  padding: 10px 16px;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  justify-content: flex-end;\n}\n.infobox .va-stepper__navigation {\n  padding: 30px 30px 0px 15px;\n  /* border-bottom: 1px solid #ccc; */\n  background: #f7f7f7;\n  margin-bottom: 10px;\n}\n.infobox .va-stepper__step-content-wrapper, .infobox .va-stepper__step-content {\n  padding: 0;\n  margin: 0;\n}\n.infobox .va-modal__message {\n  margin: 0;\n}\n.infobox .aflex {\n  display: flex;\n  flex-direction: row;\n  align-items: flex-start;\n  gap: 9px;\n}\n.infobox .store-item-header {\n  display: none;\n}\n.infobox .store-item-content {\n  border: none;\n  padding: 0;\n}\n.infobox .datasource-list .datasource-list-add-button {\n  display: none;\n}.widgets_grid[data-v-881fad5f] {\n  display: grid;\n  grid-template-columns: repeat(3, 33%);\n  gap: 1rem;\n}\n[data-v-881fad5f]  .widgets_grid-item {\n  height: 50px;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: flex-start;\n}\n.flex[data-v-881fad5f] {\n  width: 100%;\n}\n.flex[data-v-881fad5f] {\n  display: flex;\n  flex-direction: row;\n  align-content: center;\n  align-items: center;\n}\n.buttonbar[data-v-881fad5f] {\n  margin-top: 15px;\n}\n.padd[data-v-881fad5f] {\n  max-height: 75vh;\n  padding: 15px 25px;\n}\n.padd15[data-v-881fad5f] {\n  padding: 10px 25px 30px;\n  border-bottom: 1px solid #e5e5e5;\n}\n.no-padding[data-v-881fad5f] {\n  padding: 0;\n}";})();
-import { withCtx, h as h$1, Text, createBlock, isVNode, getCurrentInstance, inject as inject$1, computed, normalizeClass, normalizeStyle, ref, shallowReadonly, isRef, unref, reactive, capitalize as capitalize$1, defineComponent, useAttrs, openBlock, resolveDynamicComponent, mergeProps, renderSlot, createElementBlock, createCommentVNode, Fragment, createTextVNode, toDisplayString, watch, customRef, onMounted, onUpdated, createElementVNode, onBeforeUnmount, shallowRef, toRefs, normalizeProps, guardReactiveProps, createVNode, useSlots, nextTick, withKeys, renderList, useCssVars, resolveComponent, provide, markRaw, onUnmounted, render, useModel } from "vue";
-import { identifier as identifier$1, CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { useConnectionsStore } from "org.eclipse.daanse.board.app.ui.vue.stores.connection";
-import { useDataSourcesStore } from "org.eclipse.daanse.board.app.ui.vue.stores.datasouce";
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.widget";
-import { useWidgetsStore } from "org.eclipse.daanse.board.app.ui.vue.stores.widgets";
-import { useLayoutStore } from "org.eclipse.daanse.board.app.ui.vue.stores.layout";
-import { useRoute } from "vue-router";
-class QueryBuilder {
+(function(){var i="ui.vue.plugins.endpointfinder",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=":root,:host{--va-icon-vertical-align: middle;--va-icon-user-select: none}.va-icon{vertical-align:var(--va-icon-vertical-align);-webkit-user-select:var(--va-icon-user-select);-moz-user-select:var(--va-icon-user-select);user-select:var(--va-icon-user-select)}.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]){cursor:pointer}.va-icon[role^=button][tabindex]:not([tabindex^=\"-\"]):focus-visible{outline:2px solid var(--va-focus)!important;border-radius:2px}.va-icon.va-icon{font-style:normal}.va-icon--spin{animation:va-icon--spin-animation 1.5s linear infinite}.va-icon--spin-reverse{animation:va-icon--spin-animation 1.5s linear infinite;animation-direction:reverse}@keyframes va-icon--spin-animation{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.va-icon svg{fill:currentColor;height:100%}:root,:host{--va-progress-circle-position: relative;--va-progress-circle-overflow: hidden;--va-progress-circle-width: 80%;--va-progress-circle-height: 80%;--va-progress-circle-overlay-transition: all ease 2s;--va-progress-circle-font-size: .75rem}.va-progress-circle{position:var(--va-progress-circle-position);overflow:var(--va-progress-circle-overflow);font-family:var(--va-font-family)}.va-progress-circle__wrapper{position:absolute;inset:0;margin:auto;transform:rotate(-90deg);width:var(--va-progress-circle-width);height:var(--va-progress-circle-height);display:flex;justify-content:center;align-items:center}.va-progress-circle--indeterminate .va-progress-circle__wrapper{animation:va-progress-circle__wrapper--indeterminate 2s linear infinite}.va-progress-circle__overlay{transition:var(--va-progress-circle-overlay-transition)}.va-progress-circle--indeterminate .va-progress-circle__overlay{animation:va-progress-circle__overlay--indeterminate 2s ease-in-out infinite}.va-progress-circle__info{font-size:var(--va-progress-circle-font-size);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}@keyframes va-progress-circle__wrapper--indeterminate{to{transform:rotate(270deg)}}@keyframes va-progress-circle__overlay--indeterminate{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dasharray:125,125;stroke-dashoffset:-65px}to{stroke-dasharray:125,125;stroke-dashoffset:-125px}}:root,:host{--va-button-display: inline-flex;--va-button-justify-content: center;--va-button-align-items: center;--va-button-background-image: none;--va-button-box-shadow: none;--va-button-border-width: 0;--va-button-border-color: unset;--va-button-border-style: none;--va-button-font-weight: 600;--va-button-transition: none;--va-button-padding: 0;--va-button-cursor: pointer;--va-button-sm-size: 1.5rem;--va-button-sm-content-py: .25rem;--va-button-sm-content-px: .375rem;--va-button-sm-only-icon-content-px: .25rem;--va-button-sm-font-size: .8125rem;--va-button-sm-letter-spacing: 0;--va-button-sm-line-height: 1rem;--va-button-sm-border-radius: .125rem;--va-button-sm-icon-side-padding: var(--va-button-sm-content-py);--va-button-sm-icons-spacing: .125rem;--va-button-size: 2.25rem;--va-button-content-py: .5rem;--va-button-content-px: .75rem;--va-button-only-icon-content-px: .5rem;--va-button-font-size: 1rem;--va-button-letter-spacing: 0;--va-button-line-height: 1.25rem;--va-button-border-radius: .25rem;--va-button-icon-side-padding: var(--va-button-content-py);--va-button-icons-spacing: .25rem;--va-button-lg-size: 3rem;--va-button-lg-content-py: .75rem;--va-button-lg-content-px: 1rem;--va-button-lg-only-icon-content-px: 1rem;--va-button-lg-font-size: 1.05rem;--va-button-lg-letter-spacing: 0;--va-button-lg-line-height: 1.5rem;--va-button-lg-border-radius: .5rem;--va-button-lg-icon-side-padding: var(--va-button-lg-content-py);--va-button-lg-icons-spacing: .25rem;--va-button-bordered-border: 1px;--va-button-bordered-style: solid}.va-button{position:relative;padding:var(--va-button-padding);display:var(--va-button-display);justify-content:var(--va-button-justify-content);align-items:var(--va-button-align-items);border-width:var(--va-button-border-width);border-color:var(--va-button-border-color);border-style:var(--va-button-border-style);background-image:var(--va-button-background-image);box-shadow:var(--va-button-box-shadow);font-family:var(--va-font-family);font-weight:var(--va-button-font-weight);text-decoration:none;text-transform:initial;transition:var(--va-button-transition);box-sizing:border-box;cursor:var(--va-button-cursor);z-index:0;vertical-align:top}.va-button:after,.va-button:before{content:\"\";position:absolute;width:100%;height:100%;border-radius:inherit;left:0;top:0;z-index:-1}.va-button:before{background:var(--va-background-color);opacity:var(--va-background-color-opacity)}.va-button:after{background-color:var(--va-background-mask-color);opacity:var(--va-background-mask-opacity)}.va-button__content{height:100%;display:flex;align-items:center;z-index:1}.va-button__content--loading{opacity:0}.va-button--small{line-height:var(--va-button-sm-line-height);border-radius:var(--va-button-sm-border-radius);letter-spacing:var(--va-button-sm-letter-spacing);min-height:var(--va-button-sm-size);min-width:var(--va-button-sm-size)}.va-button--small .va-button__content{font-size:var(--va-button-sm-font-size);padding:var(--va-button-sm-content-py) var(--va-button-sm-content-px)}.va-button--small .va-button__left-icon{margin-right:var(--va-button-sm-icons-spacing)}.va-button--small .va-button__right-icon{margin-left:var(--va-button-sm-icons-spacing)}.va-button--small.va-button--bordered .va-button__content{padding-top:calc(var(--va-button-sm-content-py) - var(--va-button-bordered-border));padding-bottom:calc(var(--va-button-sm-content-py) - var(--va-button-bordered-border))}.va-button--small.va-button--left-icon .va-button__content{padding-left:var(--va-button-sm-icon-side-padding)}.va-button--small.va-button--right-icon .va-button__content{padding-right:var(--va-button-sm-icon-side-padding)}.va-button--normal{line-height:var(--va-button-line-height);border-radius:var(--va-button-border-radius);letter-spacing:var(--va-button-letter-spacing);min-height:var(--va-button-size);min-width:var(--va-button-size)}.va-button--normal .va-button__content{font-size:var(--va-button-font-size);padding:var(--va-button-content-py) var(--va-button-content-px);line-height:var(--va-button-line-height)}.va-button--normal .va-button__left-icon{margin-right:var(--va-gap-medium)}.va-button--normal .va-button__right-icon{margin-left:var(--va-gap-medium)}.va-button--normal.va-button--bordered .va-button__content{padding-top:calc(var(--va-button-content-py) - var(--va-button-bordered-border));padding-bottom:calc(var(--va-button-content-py) - var(--va-button-bordered-border))}.va-button--large{line-height:var(--va-button-lg-line-height);border-radius:var(--va-button-lg-border-radius);letter-spacing:var(--va-button-lg-letter-spacing);min-height:var(--va-button-lg-size);min-width:var(--va-button-lg-size)}.va-button--large .va-button__content{font-size:var(--va-button-lg-font-size);padding:var(--va-button-lg-content-py) var(--va-button-lg-content-px)}.va-button--large .va-button__left-icon{margin-right:var(--va-button-lg-icons-spacing)}.va-button--large .va-button__right-icon{margin-left:var(--va-button-lg-icons-spacing)}.va-button--large.va-button--bordered .va-button__content{padding-top:calc(var(--va-button-lg-content-py) - var(--va-button-bordered-border));padding-bottom:calc(var(--va-button-lg-content-py) - var(--va-button-bordered-border))}.va-button--large.va-button--left-icon .va-button__content{padding-left:var(--va-button-lg-icon-side-padding)}.va-button--large.va-button--right-icon .va-button__content{padding-right:var(--va-button-lg-icon-side-padding)}.va-button--small.va-button--icon-only .va-button__content,.va-button--normal.va-button--icon-only .va-button__content,.va-button--large.va-button--icon-only .va-button__content{padding-right:0;padding-left:0}.va-button--plain{min-width:auto;min-height:auto}.va-button--plain .va-button__content{padding:0;z-index:unset}.va-button--round{border-radius:999px}.va-button--bordered{border-width:var(--va-button-bordered-border);border-style:var(--va-button-bordered-style)}.va-button.va-button--disabled{cursor:default;opacity:.4;-webkit-user-select:none;-moz-user-select:none;user-select:none}.va-button--icon-only .va-button__left-icon,.va-button--icon-only .va-button__right-icon{margin-left:0;margin-right:0}.va-button--icon-only .va-button__content{padding:0}.va-button:focus-visible{outline:2px solid var(--va-focus)!important;border-radius:\"inherit\"}.va-button--loading{pointer-events:none}.va-button--block{display:flex;min-width:100%}.va-button__loader{position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:center}:root,:host{--va-badge-py: 0;--va-badge-font-size: .563rem;--va-badge-border: .125rem;--va-badge-size: calc(var(--va-badge-font-size) * var(--va-badge-line-height) + var(--va-badge-border) * 2);--va-badge-line-height: 1.4;--va-badge-margin: 0;--va-badge-width: fit-content;--va-badge-dot-size: .5rem;--va-badge-text-wrapper-transition: .2s cubic-bezier(.4, 0, .6, 1);--va-badge-text-wrapper-display: inline-flex;--va-badge-text-wrapper-border: solid .125rem;--va-badge-text-wrapper-border-radius: .125rem;--va-badge-text-wrapper-font-weight: 700;--va-badge-text-wrapper-line-height: 1.4;--va-badge-text-wrapper-letter-spacing: .0375rem;--va-badge-text-wrapper-justify-content: center;--va-badge-text-wrapper-white-space: nowrap;--va-badge-text-wrapper-width: min-content;--va-badge-text-wrapper-height: auto;--va-badge-text-wrapper-min-width: initial;--va-badge-text-wrapper-min-height: initial;--va-badge-text-wrapper-margin: 0;--va-badge-text-transform: uppercase;--va-badge-text-py: 0;--va-badge-text-px: .25rem}.va-badge{display:inline-flex;position:relative;font-family:var(--va-font-family);width:var(--va-badge-width)}.va-badge__text-wrapper{transition:var(--va-badge-text-wrapper-transition, var(--va-transition));display:var(--va-badge-text-wrapper-display);border:var(--va-badge-text-wrapper-border, var(--va-control-border));border-radius:var(--va-badge-text-wrapper-border-radius);font-weight:var(--va-badge-text-wrapper-font-weight);line-height:var(--va-badge-text-wrapper-line-height);letter-spacing:var(--va-badge-text-wrapper-letter-spacing, var(--va-letter-spacing));justify-content:var(--va-badge-text-wrapper-justify-content);align-items:center;white-space:var(--va-badge-text-wrapper-white-space);width:var(--va-badge-text-wrapper-width);height:var(--va-badge-text-wrapper-height);min-width:var(--va-badge-text-wrapper-min-width);min-height:var(--va-badge-text-wrapper-min-height);margin:var(--va-badge-text-wrapper-margin)}.va-badge--visible-empty .va-badge__text-wrapper{min-width:var(--va-badge-size);min-height:var(--va-badge-size)}.va-badge--dot .va-badge__text-wrapper{min-width:var(--va-badge-dot-size);min-height:var(--va-badge-dot-size);border-width:0;border-radius:100%;padding:0}.va-badge--empty .va-badge__text-wrapper{width:0;height:0;min-width:0;min-height:0;border-width:0}.va-badge--multi-line .va-badge__text-wrapper{white-space:normal}.va-badge--floating .va-badge__text-wrapper{position:absolute;z-index:2}.va-badge__text{margin:var(--va-badge-margin);text-transform:var(--va-badge-text-transform);overflow:hidden;min-width:calc(var(--va-badge-font-size) * var(--va-badge-line-height));padding:var(--va-badge-text-py) var(--va-badge-text-px);text-align:center;display:inline-flex;justify-content:center;text-overflow:clip;white-space:nowrap;font-size:var(--va-badge-font-size)}.va-badge--multi-line .va-badge__text{overflow:auto;max-height:initial;text-align:initial;text-overflow:initial;white-space:normal}.va-badge--dot .va-badge__text{display:none}.va-badge--floating .va-badge__text{align-items:center;padding:var(--va-badge-py) .15rem}.va-stepper__default-controls{display:flex;gap:var(--va-stepper-controls-gap)}.va-stepper__step-button{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:var(--va-stepper-step-button-gap);flex-shrink:0;padding:var(--va-stepper-step-button-padding)}.va-stepper__step-button:focus-visible{outline:2px solid var(--va-focus)!important;border-radius:var(--va-stepper-step-border-radius)}.va-stepper__step-button:after{content:\"\";position:absolute;cursor:pointer;top:0;left:0;width:100%;height:100%;background:var(--va-stepper-color);transition:opacity .3s;opacity:0;border-radius:var(--va-stepper-step-border-radius)}.va-stepper__step-button__icon{display:flex;justify-content:center;align-items:center;height:var(--va-stepper-step-button-icon-size);width:var(--va-stepper-step-button-icon-size);font-size:var(--va-stepper-step-button-number-size);color:#fff;background:var(--va-stepper-step-button-inactive-color);border-radius:var(--va-stepper-step-button-icon-border-radius)}.va-stepper__step-button--active{color:var(--va-stepper-color)}.va-stepper__step-button--active .va-stepper__step-button__icon{background:var(--va-stepper-color)}.va-stepper__step-button--disabled{opacity:var(--va-stepper-step-button-disabled-opacity);pointer-events:none}.va-stepper__step-button:hover:after{opacity:var(--va-stepper-step-button-hover-highlight-opacity)}.va-stepper__step-button--navigation-disabled:after{display:none}.va-stepper__step-button--error{color:var(--va-danger)}.va-stepper__step-button--error .va-stepper__step-button__icon{background:var(--va-danger)}:root{--va-stepper-step-button-inactive-color: var(--va-secondary);--va-stepper-step-button-hover-highlight-opacity: .1;--va-stepper-step-button-disabled-opacity: .5;--va-stepper-step-button-padding: 1rem;--va-stepper-step-button-number-size: 1.2rem;--va-stepper-step-button-icon-size: 2rem;--va-stepper-step-button-gap: .5rem;--va-stepper-step-button-icon-border-radius: 100%;--va-stepper-step-border-radius: var(--va-square-border-radius);--va-stepper-divider-color: var(--va-secondary);--va-stepper-divider-length: auto;--va-stepper-divider-min-length: 2rem;--va-stepper-divider-thickness: 1px;--va-stepper-divider-spacing: .5rem;--va-stepper-divider-vertical-margin-left: 2rem;--va-stepper-step-content-wrapper-padding: .5rem 1rem;--va-stepper-step-content-margin: .8rem 0 2rem;--va-stepper-controls-gap: 1rem}.va-stepper{display:flex;flex-direction:column}.va-stepper--vertical{flex-direction:row}.va-stepper__navigation{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}.va-stepper__navigation--vertical{flex-direction:column;align-items:flex-start;flex-wrap:nowrap}.va-stepper__divider{flex-grow:1;height:var(--va-stepper-divider-thickness);width:var(--va-stepper-divider-length);min-width:var(--va-stepper-divider-min-length);margin:0 var(--va-stepper-divider-spacing);background:var(--va-stepper-divider-color)}.va-stepper__divider--vertical{min-height:var(--va-stepper-divider-min-length);height:var(--va-stepper-divider-length);width:var(--va-stepper-divider-thickness);min-width:var(--va-stepper-divider-thickness);margin:var(--va-stepper-divider-spacing) 0;margin-left:var(--va-stepper-divider-vertical-margin-left)}.va-stepper__step-content-wrapper{padding:var(--va-stepper-step-content-wrapper-padding)}.va-stepper__step-content{margin:var(--va-stepper-step-content-margin)}.va-stepper__controls{display:flex;gap:var(--va-stepper-controls-gap)}.aellipsis[data-v-69727056]{line-height:23px;max-height:var(--b40395ae);text-overflow:ellipsis;overflow:hidden;color:#777}.aellipsis.expanded[data-v-69727056]{max-height:100%}.pointer[data-v-a0a9daed]{cursor:pointer;align-self:start;margin-right:5px}.card[data-v-a0a9daed]{box-shadow:none;border-bottom:1px solid #e1e1e1;border-radius:0;cursor:pointer}.card[data-v-a0a9daed]:hover,.card.active[data-v-a0a9daed]{background:#f5f8ff!important}.card .va-card-title[data-v-a0a9daed]{font-size:1.25rem}.card .aflex[data-v-a0a9daed]{display:flex;margin-top:15px;flex-direction:row;justify-content:space-between;align-content:center;flex-wrap:nowrap}.card .light[data-v-a0a9daed]{color:#6c6a6add}.list_of_formats[data-v-d76f1184]{display:flex;flex-direction:row;gap:5px;justify-content:flex-start}.map[data-v-d76f1184]{width:100%;height:250px;position:relative}.content[data-v-d76f1184]{margin-top:25px;margin-bottom:35px;padding-left:10px}.line[data-v-d76f1184]{overflow:hidden;width:100%;display:flex;flex-direction:row;flex-wrap:nowrap;align-content:center;justify-content:space-between;align-items:flex-end}.line div[data-v-d76f1184]{display:block;width:auto}.title[data-v-d76f1184]{font-size:24px;padding:23px 10px 0 15px}.pointer[data-v-d76f1184]{cursor:pointer}.filterbox .va-modal__header{background:#f1f1f1;padding-bottom:15px}.infobox .va-modal__dialog{max-width:80%!important}.infobox .footer,.infobox .va-modal__footer{background:#f7f7f7;padding:10px 16px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-end}.infobox .va-stepper__navigation{padding:30px 30px 0 15px;background:#f7f7f7;margin-bottom:10px}.infobox .va-stepper__step-content-wrapper,.infobox .va-stepper__step-content{padding:0;margin:0}.infobox .va-modal__message{margin:0}.infobox .aflex{display:flex;flex-direction:row;align-items:flex-start;gap:9px}.infobox .store-item-header{display:none}.infobox .store-item-content{border:none;padding:0}.infobox .datasource-list .datasource-list-add-button{display:none}.widgets_grid[data-v-881fad5f]{display:grid;grid-template-columns:repeat(3,33%);gap:1rem}[data-v-881fad5f] .widgets_grid-item{height:50px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start}.flex[data-v-881fad5f]{width:100%}.flex[data-v-881fad5f]{display:flex;flex-direction:row;align-content:center;align-items:center}.buttonbar[data-v-881fad5f]{margin-top:15px}.padd[data-v-881fad5f]{max-height:75vh;padding:15px 25px}.padd15[data-v-881fad5f]{padding:10px 25px 30px;border-bottom:1px solid #e5e5e5}.no-padding[data-v-881fad5f]{padding:0}\n";})();
+import { withCtx as B, h as Oe, Text as $n, createBlock as Y, isVNode as mo, getCurrentInstance as le, inject as I, computed as c, normalizeClass as we, normalizeStyle as Vt, ref as h, shallowReadonly as kn, isRef as St, unref as S, reactive as Le, capitalize as Bn, defineComponent as A, useAttrs as Vn, openBlock as E, resolveDynamicComponent as st, mergeProps as be, renderSlot as de, createElementBlock as U, createCommentVNode as ue, Fragment as pe, createTextVNode as te, toDisplayString as ce, watch as ae, customRef as An, onMounted as F, onUpdated as Rn, createElementVNode as L, onBeforeUnmount as Re, shallowRef as Ue, toRefs as Tn, normalizeProps as xe, guardReactiveProps as De, createVNode as k, useSlots as In, nextTick as D, withKeys as Be, renderList as at, useCssVars as jn, resolveComponent as J, provide as fe, markRaw as Z, onUnmounted as At, render as rt, useModel as Nn } from "vue";
+import { identifier as Fn, CONNECTION_REPOSITORY as Mn } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { identifier as zn } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { useConnectionsStore as go } from "org.eclipse.daanse.board.app.ui.vue.stores.connection";
+import { useDataSourcesStore as Dn } from "org.eclipse.daanse.board.app.ui.vue.stores.datasouce";
+import { identifier as Gn } from "org.eclipse.daanse.board.app.lib.api.widget";
+import { useWidgetsStore as Un } from "org.eclipse.daanse.board.app.ui.vue.stores.widgets";
+import { useLayoutStore as Hn } from "org.eclipse.daanse.board.app.ui.vue.stores.layout";
+import { useRoute as Wn } from "vue-router";
+class qn {
   dss = {};
   filters = [];
   limit = 10;
-  setEndpoints(dss) {
-    this.dss = dss;
-    return this;
+  setEndpoints(t) {
+    return this.dss = t, this;
   }
-  setFilter(filters) {
-    this.filters = filters;
-    return this;
+  setFilter(t) {
+    return this.filters = t, this;
   }
-  setLimit(limit) {
-    if (limit < 1) return this;
-    if (limit > 1e3) return this;
-    this.limit = limit;
-    return this;
+  setLimit(t) {
+    return t < 1 ? this : t > 1e3 ? this : (this.limit = t, this);
   }
-  async query(seachString) {
-    const filterInQuery = [];
-    const sentences = [];
-    const prefixes = [];
-    this.filters.forEach((filter) => {
-      if (filter["mapSection"]) {
-        const map = filter;
-        prefixes.push("PREFIX spatial: <http://geovocab.org/spatial#>");
-        prefixes.push("PREFIX geo: <http://www.opengis.net/ont/geosparql#>");
-        sentences.push("?dataService dct:spatial ?location .");
-        sentences.push("?location geo:lat ?lat ;geo:long ?long .");
-        filterInQuery.push(`FILTER (?lat >= ${map.mapSection._northEast.lat} && ?lat <= ${map.mapSection._southWest.lat})`);
-        filterInQuery.push(`FILTER (?long >= ${map.mapSection._northEast.lng} && ?long <= ${map.mapSection._southWest.lng})`);
+  async query(t) {
+    const o = [], n = [], s = [];
+    this.filters.forEach((l) => {
+      if (l.mapSection) {
+        const i = l;
+        s.push("PREFIX spatial: <http://geovocab.org/spatial#>"), s.push("PREFIX geo: <http://www.opengis.net/ont/geosparql#>"), n.push("?dataService dct:spatial ?location ."), n.push("?location geo:lat ?lat ;geo:long ?long ."), o.push(`FILTER (?lat >= ${i.mapSection._northEast.lat} && ?lat <= ${i.mapSection._southWest.lat})`), o.push(`FILTER (?long >= ${i.mapSection._northEast.lng} && ?long <= ${i.mapSection._southWest.lng})`);
       }
-      if (filter["formats"]) {
-        const format = filter;
-        let filterSubstring = "FILTER (" + format.formats.map((format2) => "?format =" + format2).join("||") + ")";
-        filterInQuery.push(filterSubstring);
+      if (l.formats) {
+        let u = "FILTER (" + l.formats.map((d) => "?format =" + d).join("||") + ")";
+        o.push(u);
       }
     });
-    const query = `
+    const r = `
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX dc: <http://purl.org/dc/elements/1.1/>
             PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -55,7 +42,8 @@ class QueryBuilder {
             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
             PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-            ${prefixes.join("\n")}
+            ${s.join(`
+`)}
 
             SELECT DISTINCT * WHERE {
               ?d a dcat:Dataset .
@@ -78,84 +66,59 @@ class QueryBuilder {
               optional{
                     ?d dct:modified ?date
               }
-              ${sentences.join("\n")}
+              ${n.join(`
+`)}
 
-            FILTER (CONTAINS(LCASE(?title), "${seachString.toLowerCase()}"))
-            ${filterInQuery.join("\n")}
+            FILTER (CONTAINS(LCASE(?title), "${t.toLowerCase()}"))
+            ${o.join(`
+`)}
             }
             LIMIT ${this.limit}
         `;
-    let result = {};
-    for (const ds of Object.entries(this.dss)) {
-      let encodedValue = "query=" + encodeURIComponent(query);
+    let a = {};
+    for (const l of Object.entries(this.dss)) {
+      let i = "query=" + encodeURIComponent(r);
       try {
-        const newData = await ds[1].fetch({ url: "" }, {
+        const u = await l[1].fetch({ url: "" }, {
           method: "POST",
-          body: encodedValue,
+          body: i,
           headers: {
             "User-Agent": "org.eclipse.daanse.datafinder.sparql/1.0",
-            "Accept": "application/json",
+            Accept: "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
           }
         });
-        result[ds[0]] = await newData.json();
-      } catch (e) {
-        console.log(e);
+        a[l[0]] = await u.json();
+      } catch (u) {
+        console.log(u);
       }
     }
-    return result;
+    return a;
   }
 }
-const connections = {};
-const activeConnectionIds = [];
-function useSparQLEndPointManager() {
-  const registerEndpoint = (connection, id) => {
-    connections[id] = connection;
-  };
-  const getEndpointsByName = (name) => {
-    return connections[name];
-  };
-  const getAllActiveEndpoints = () => {
-    return Object.fromEntries(Object.entries(connections).filter((k2) => activeConnectionIds.includes(k2[0])));
-  };
-  const getActiveEndpoints = (id) => {
-    if (activeConnectionIds.includes(id)) {
-      return connections[id];
-    } else {
-      return void 0;
-    }
-  };
-  const setActive = (id) => {
-    if (activeConnectionIds.includes(id)) return;
-    if (!connections[id]) return;
-    activeConnectionIds.push(id);
-  };
-  const setInActive = (id) => {
-    const pos = activeConnectionIds.indexOf(id);
-    if (pos != -1) activeConnectionIds.splice(pos);
-  };
+const ze = {}, $e = [];
+function wt() {
   return {
-    registerEndpoint,
-    getEndpointsByName,
-    getActiveEndpoints,
-    setActive,
-    setInActive,
-    getAllActiveEndpoints
+    registerEndpoint: (a, l) => {
+      ze[l] = a;
+    },
+    getEndpointsByName: (a) => ze[a],
+    getActiveEndpoints: (a) => {
+      if ($e.includes(a))
+        return ze[a];
+    },
+    setActive: (a) => {
+      $e.includes(a) || ze[a] && $e.push(a);
+    },
+    setInActive: (a) => {
+      const l = $e.indexOf(a);
+      l != -1 && $e.splice(l);
+    },
+    getAllActiveEndpoints: () => Object.fromEntries(Object.entries(ze).filter((a) => $e.includes(a[0])))
   };
 }
-var Formats = /* @__PURE__ */ ((Formats2) => {
-  Formats2["XMLA"] = "<http://publications.europa.eu/resource/authority/file-type/XMLA>";
-  Formats2["CSV"] = "<http://publications.europa.eu/resource/authority/file-type/CSV>";
-  Formats2["XML"] = "<http://publications.europa.eu/resource/authority/file-type/XML>";
-  Formats2["WMS"] = "<http://publications.europa.eu/resource/authority/file-type/WMS_SRVC>";
-  Formats2["WFS"] = "<http://publications.europa.eu/resource/authority/file-type/WFS_SRVC>";
-  Formats2["GEOJSON"] = "<http://publications.europa.eu/resource/authority/file-type/GEOJSON>";
-  Formats2["JSON"] = "<http://publications.europa.eu/resource/authority/file-type/JSON>";
-  Formats2["REST"] = "<http://publications.europa.eu/resource/authority/file-type/REST>";
-  Formats2["OGCSTA"] = "???";
-  return Formats2;
-})(Formats || {});
-const presets = {
+var N = /* @__PURE__ */ ((e) => (e.XMLA = "<http://publications.europa.eu/resource/authority/file-type/XMLA>", e.CSV = "<http://publications.europa.eu/resource/authority/file-type/CSV>", e.XML = "<http://publications.europa.eu/resource/authority/file-type/XML>", e.WMS = "<http://publications.europa.eu/resource/authority/file-type/WMS_SRVC>", e.WFS = "<http://publications.europa.eu/resource/authority/file-type/WFS_SRVC>", e.GEOJSON = "<http://publications.europa.eu/resource/authority/file-type/GEOJSON>", e.JSON = "<http://publications.europa.eu/resource/authority/file-type/JSON>", e.REST = "<http://publications.europa.eu/resource/authority/file-type/REST>", e.OGCSTA = "???", e))(N || {});
+const Zt = {
   light: {
     // Accent
     primary: "#154EC1",
@@ -198,268 +161,119 @@ const presets = {
     focus: "#49A8FF",
     transparent: "rgba(0, 0, 0, 0)"
   }
-};
-const defaultThresholds = {
+}, Xn = {
   xs: 0,
   sm: 640,
   md: 1024,
   lg: 1440,
   xl: 1920
-};
-const getBreakpointDefaultConfig = () => ({
-  enabled: true,
-  bodyClass: true,
-  thresholds: defaultThresholds
-});
-const renderSlotNode = (node, ctx = null) => {
-  return withCtx(() => [node], ctx);
-};
-const makeVNode = (node) => {
-  if (typeof node === "string") {
-    return h$1(Text, node);
-  }
-  return isVNode(node) ? node : createBlock(node);
-};
-const renderSlots = (slots, ctx = null) => {
-  return Object.keys(slots).reduce((acc, slotName) => {
-    const slot = slots[slotName];
-    acc[slotName] = typeof slot === "function" ? slot : renderSlotNode(slot, ctx);
-    return acc;
-  }, {});
-};
-const createRenderFn = (component) => {
-  const originalRenderFn = component.render || component.ssrRender;
-  if (!originalRenderFn) {
-    return void 0;
-  }
-  const compiledRenderedFn = originalRenderFn.name === "_sfc_render" || originalRenderFn.name === "_sfc_ssrRender";
-  return function(...args) {
-    const ctx = args[0];
-    const slots = ctx.$.slots;
-    const customCtx = new Proxy(ctx, {
-      get(target, key) {
-        if (key === "$slots") {
-          return renderSlots(slots);
-        }
-        return target[key];
+}, Kn = () => ({
+  enabled: !0,
+  bodyClass: !0,
+  thresholds: Xn
+}), Ot = (e, t = null) => B(() => [e], t), Yt = (e) => typeof e == "string" ? Oe($n, e) : mo(e) ? e : Y(e), Jn = (e, t = null) => Object.keys(e).reduce((o, n) => {
+  const s = e[n];
+  return o[n] = typeof s == "function" ? s : Ot(s, t), o;
+}, {}), Zn = (e) => {
+  const t = e.render || e.ssrRender;
+  if (!t)
+    return;
+  const o = t.name === "_sfc_render" || t.name === "_sfc_ssrRender";
+  return function(...n) {
+    const s = n[0], r = s.$.slots, a = new Proxy(s, {
+      get(i, u) {
+        return u === "$slots" ? Jn(r) : i[u];
       }
-    });
-    const thisArg = compiledRenderedFn ? void 0 : customCtx;
-    return originalRenderFn.call(thisArg, customCtx, ...args.slice(1));
+    }), l = o ? void 0 : a;
+    return t.call(l, a, ...n.slice(1));
   };
-};
-const omit = (o, keys) => {
-  return Object.keys(o).filter((key) => !keys.includes(key)).reduce((acc, key) => {
-    acc[key] = o[key];
-    return acc;
-  }, {});
-};
-const CHILD_COMPONENTS_INJECT_KEY = "$va:childComponents";
-const injectChildPropsFromParent = () => {
-  var _a;
-  const childName = (_a = getCurrentInstance()) == null ? void 0 : _a.attrs["va-child"];
-  if (!childName) {
+}, yo = (e, t) => Object.keys(e).filter((o) => !t.includes(o)).reduce((o, n) => (o[n] = e[n], o), {}), Yn = "$va:childComponents", Rt = () => {
+  var e;
+  const t = (e = le()) == null ? void 0 : e.attrs["va-child"];
+  if (!t)
     return null;
-  }
-  const childProps = inject$1(CHILD_COMPONENTS_INJECT_KEY);
-  if (!(childProps == null ? void 0 : childProps.value)) {
-    return null;
-  }
-  return computed(() => childProps.value[childName]);
-};
-const KEBAB_CASE_REGEX = /([a-z0-9])([A-Z])/g;
-const toKebabCase = (str) => str.replace(KEBAB_CASE_REGEX, "$1-$2").toLowerCase();
-const findCamelCased = (obj, key) => {
-  if (key in obj) {
-    return obj[key];
-  }
-  return obj[toKebabCase(key)];
-};
-const createProps = (instance, propsFromConfig) => {
-  const instanceProps = instance.props;
-  const childPropsFromParent = injectChildPropsFromParent();
-  return new Proxy(instanceProps, {
-    get: (target, key) => {
-      var _a, _b;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      const childProp = (_a = childPropsFromParent == null ? void 0 : childPropsFromParent.value) == null ? void 0 : _a[key];
-      if (childProp !== void 0) {
-        return childProp;
-      }
-      const incomingProps = instance.vnode.props || {};
-      const originalProp = target[key];
-      const incomingProp = findCamelCased(incomingProps, key);
-      if (incomingProp !== void 0) {
-        return originalProp;
-      }
-      const propFromConfig = (_b = propsFromConfig.value) == null ? void 0 : _b[key];
-      if (propFromConfig !== void 0) {
-        return propFromConfig;
-      }
-      return originalProp;
+  const o = I(Yn);
+  return o?.value ? c(() => o.value[t]) : null;
+}, Qn = /([a-z0-9])([A-Z])/g, er = (e) => e.replace(Qn, "$1-$2").toLowerCase(), tr = (e, t) => t in e ? e[t] : e[er(t)], or = (e, t) => {
+  const o = e.props, n = Rt();
+  return new Proxy(o, {
+    get: (s, r) => {
+      var a, l;
+      if (typeof r != "string")
+        return s[r];
+      const i = (a = n?.value) == null ? void 0 : a[r];
+      if (i !== void 0)
+        return i;
+      const u = e.vnode.props || {}, d = s[r];
+      if (tr(u, r) !== void 0)
+        return d;
+      const C = (l = t.value) == null ? void 0 : l[r];
+      return C !== void 0 ? C : d;
     }
   });
-};
-const createAttrs = (instance, propsFromConfig) => {
-  const instanceAttrs = instance.attrs;
-  return new Proxy(instanceAttrs, {
-    get: (target, key) => {
-      var _a;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      if (key === "class") {
-        return normalizeClass([propsFromConfig.value.class, instanceAttrs.class]);
-      }
-      if (key === "style") {
-        return normalizeStyle([propsFromConfig.value.style, instanceAttrs.style]);
-      }
-      const attrFromConfig = (_a = propsFromConfig.value) == null ? void 0 : _a[key];
-      if (attrFromConfig !== void 0) {
-        return attrFromConfig;
-      }
-      return target[key];
+}, nr = (e, t) => {
+  const o = e.attrs;
+  return new Proxy(o, {
+    get: (n, s) => {
+      var r;
+      if (typeof s != "string")
+        return n[s];
+      if (s === "class")
+        return we([t.value.class, o.class]);
+      if (s === "style")
+        return Vt([t.value.style, o.style]);
+      const a = (r = t.value) == null ? void 0 : r[s];
+      return a !== void 0 ? a : n[s];
     },
-    ownKeys(target) {
-      return [.../* @__PURE__ */ new Set([...Object.keys(instanceAttrs), ...Object.keys(propsFromConfig.value)])];
+    ownKeys(n) {
+      return [.../* @__PURE__ */ new Set([...Object.keys(o), ...Object.keys(t.value)])];
     },
-    getOwnPropertyDescriptor(target, key) {
-      return Reflect.getOwnPropertyDescriptor(propsFromConfig.value, key) ?? Reflect.getOwnPropertyDescriptor(instanceAttrs, key);
+    getOwnPropertyDescriptor(n, s) {
+      return Reflect.getOwnPropertyDescriptor(t.value, s) ?? Reflect.getOwnPropertyDescriptor(o, s);
     }
   });
-};
-const SLOT_PREFIX = "slot:";
-const createSlots = (instance, propsFromConfig) => {
-  const instanceSlots = instance.slots;
-  const childPropsFromParent = injectChildPropsFromParent();
-  const slotsFromConfig = computed(() => {
-    return Object.keys(propsFromConfig.value).reduce((acc, key) => {
-      if (key.startsWith(SLOT_PREFIX)) {
-        acc[key.slice(SLOT_PREFIX.length)] = propsFromConfig.value[key];
-      }
-      return acc;
-    }, {});
-  });
-  return new Proxy(instanceSlots, {
-    get: (target, key) => {
-      var _a, _b;
-      if (typeof key !== "string") {
-        return target[key];
-      }
-      const prefixedKey = `${SLOT_PREFIX}${key}`;
-      const childSlot = (_a = childPropsFromParent == null ? void 0 : childPropsFromParent.value) == null ? void 0 : _a[prefixedKey];
-      if (childSlot !== void 0) {
-        return renderSlotNode(makeVNode(childSlot));
-      }
-      const originalSlot = target[key];
-      if (originalSlot !== void 0) {
-        return originalSlot;
-      }
-      const propFromConfig = (_b = slotsFromConfig.value) == null ? void 0 : _b[key];
-      if (propFromConfig !== void 0) {
-        return renderSlotNode(makeVNode(propFromConfig));
-      }
-      return originalSlot;
+}, yt = "slot:", rr = (e, t) => {
+  const o = e.slots, n = Rt(), s = c(() => Object.keys(t.value).reduce((r, a) => (a.startsWith(yt) && (r[a.slice(yt.length)] = t.value[a]), r), {}));
+  return new Proxy(o, {
+    get: (r, a) => {
+      var l, i;
+      if (typeof a != "string")
+        return r[a];
+      const u = `${yt}${a}`, d = (l = n?.value) == null ? void 0 : l[u];
+      if (d !== void 0)
+        return Ot(Yt(d));
+      const f = r[a];
+      if (f !== void 0)
+        return f;
+      const C = (i = s.value) == null ? void 0 : i[a];
+      return C !== void 0 ? Ot(Yt(C)) : f;
     },
-    ownKeys(target) {
-      return [.../* @__PURE__ */ new Set([...Object.keys(instanceSlots), ...Object.keys(slotsFromConfig.value)])];
+    ownKeys(r) {
+      return [.../* @__PURE__ */ new Set([...Object.keys(o), ...Object.keys(s.value)])];
     },
-    getOwnPropertyDescriptor(target, key) {
-      return Reflect.getOwnPropertyDescriptor(slotsFromConfig.value, key) ?? Reflect.getOwnPropertyDescriptor(instanceSlots, key);
+    getOwnPropertyDescriptor(r, a) {
+      return Reflect.getOwnPropertyDescriptor(s.value, a) ?? Reflect.getOwnPropertyDescriptor(o, a);
     }
   });
-};
-const LocalConfigKey = "VaLocalConfig";
-const CONFIGS_DEFAULT = computed(() => []);
-function useLocalConfig() {
-  return inject$1(LocalConfigKey, CONFIGS_DEFAULT);
+}, sr = "VaLocalConfig", ar = c(() => []);
+function lr() {
+  return I(sr, ar);
 }
-const nilValues = [null, void 0, ""];
-const isNilValue = (value) => {
-  return nilValues.includes(value);
+const ir = [null, void 0, ""], _t = (e) => ir.includes(e), Qt = (e) => !_t(e), ur = typeof process < "u" ? process : {}, cr = ur.env || {}, dr = cr.NODE_ENV || "", Tt = typeof __DEV__ < "u" ? __DEV__ : !["prod", "production"].includes(dr), xt = (...e) => (Tt && console.warn(...e), !1), pr = (e) => {
+  throw new Error(`[Vuestic] ${e}`);
 };
-const notNil = (value) => !isNilValue(value);
-const processShim = typeof process !== "undefined" ? process : {};
-const envShim = processShim.env || {};
-const nodeEnv = envShim.NODE_ENV || "";
-const isDev = typeof __DEV__ !== "undefined" ? __DEV__ : !["prod", "production"].includes(nodeEnv);
-const warn = (...attrs) => {
-  if (isDev) {
-    console.warn(...attrs);
-  }
-  return false;
-};
-const throwError = (message) => {
-  throw new Error(`[Vuestic] ${message}`);
-};
-let currentApp = null;
-const getCurrentApp = () => currentApp;
-const inject = (key, value = void 0) => {
-  var _a;
-  const injectedFromApp = (_a = getCurrentApp()) == null ? void 0 : _a._context.provides[key];
-  const vm = getCurrentInstance();
-  if (vm) {
-    return inject$1(key, value);
-  }
-  return injectedFromApp ?? throwError("You're using Vuestic composable outside Vue app. Since you registered Vuestic in multiple apps, composables can not be used outside setup function anymore.");
-};
-const isObject$1 = (obj) => {
-  return obj !== null && typeof obj === "object";
-};
-const cloneDeep = (source) => {
-  if (source === null || typeof source !== "object") {
-    return source;
-  }
-  if (Array.isArray(source)) {
-    return source.map(cloneDeep);
-  }
-  if (source instanceof Date) {
-    return new Date(source.getTime());
-  }
-  if (source instanceof RegExp) {
-    return new RegExp(source.source, source.flags);
-  }
-  if (source instanceof Map) {
-    return new Map(Array.from(source.entries()).map(([key, value]) => [key, cloneDeep(value)]));
-  }
-  if (source instanceof Set) {
-    return new Set(Array.from(source.values()).map(cloneDeep));
-  }
-  if (isObject$1(source)) {
-    return Object.keys(source).reduce((acc, key) => {
-      acc[key] = cloneDeep(source[key]);
-      return acc;
-    }, {});
-  }
-  if (typeof source === "function") {
-    return source;
-  }
-  return source;
-};
-const isObject = (obj) => obj && typeof obj === "object" && !Array.isArray(obj);
-const mergeDeep = (target, source) => {
-  if (!isObject(target)) {
-    target = {};
-  }
-  Object.keys(source).forEach((key) => {
-    const targetValue = target[key];
-    const sourceValue = source[key];
-    if (sourceValue instanceof RegExp || sourceValue instanceof Date) {
-      target[key] = sourceValue;
-    } else if (isObject(targetValue) && isObject(sourceValue)) {
-      target[key] = mergeDeep(Object.create(
-        Object.getPrototypeOf(targetValue),
-        Object.getOwnPropertyDescriptors(targetValue)
-      ), sourceValue);
-    } else {
-      target[key] = sourceValue;
-    }
-  });
-  return target;
-};
-const ColorsClassesPresets = [
+let fr = null;
+const bo = () => fr, ho = (e, t = void 0) => {
+  var o;
+  const n = (o = bo()) == null ? void 0 : o._context.provides[e];
+  return le() ? I(e, t) : n ?? pr("You're using Vuestic composable outside Vue app. Since you registered Vuestic in multiple apps, composables can not be used outside setup function anymore.");
+}, vr = (e) => e !== null && typeof e == "object", Ve = (e) => e === null || typeof e != "object" ? e : Array.isArray(e) ? e.map(Ve) : e instanceof Date ? new Date(e.getTime()) : e instanceof RegExp ? new RegExp(e.source, e.flags) : e instanceof Map ? new Map(Array.from(e.entries()).map(([t, o]) => [t, Ve(o)])) : e instanceof Set ? new Set(Array.from(e.values()).map(Ve)) : vr(e) ? Object.keys(e).reduce((t, o) => (t[o] = Ve(e[o]), t), {}) : e, bt = (e) => e && typeof e == "object" && !Array.isArray(e), Ge = (e, t) => (bt(e) || (e = {}), Object.keys(t).forEach((o) => {
+  const n = e[o], s = t[o];
+  s instanceof RegExp || s instanceof Date ? e[o] = s : bt(n) && bt(s) ? e[o] = Ge(Object.create(
+    Object.getPrototypeOf(n),
+    Object.getOwnPropertyDescriptors(n)
+  ), s) : e[o] = s;
+}), e), mr = [
   {
     prefix: "bg",
     property: "background-color"
@@ -468,27 +282,22 @@ const ColorsClassesPresets = [
     prefix: "text",
     property: ["color", "fill"]
   }
-];
-const getColorsClassesDefaultConfig = () => ColorsClassesPresets;
-const makeColorsConfig = (values) => ({
-  ...values,
+], gr = () => mr, yr = (e) => ({
+  ...e,
   get variables() {
     return this.presets[this.currentPresetName];
   },
-  set variables(value) {
-    this.presets[this.currentPresetName] = value;
+  set variables(t) {
+    this.presets[this.currentPresetName] = t;
   }
-});
-const getColorDefaultConfig = () => makeColorsConfig({
+}), br = () => yr({
   threshold: 150,
   presets: {
-    light: presets.light,
-    dark: presets.dark
+    light: Zt.light,
+    dark: Zt.dark
   },
   currentPresetName: "light"
-});
-const defineIconAliases = (aliases) => aliases;
-const VuesticIconAliases = defineIconAliases([
+}), hr = (e) => e, Cr = hr([
   {
     name: "va-unsorted",
     to: "swap_vert"
@@ -565,32 +374,24 @@ const VuesticIconAliases = defineIconAliases([
     name: "va-minus",
     to: "mi-remove"
   }
-]);
-const VuesticIconFonts = [
+]), Sr = [
   {
     name: "mi-{icon}",
     class: "material-icons",
-    resolve: ({ icon }) => ({ content: icon })
+    resolve: ({ icon: e }) => ({ content: e })
   },
   // Fallback
   {
     name: "{icon}",
     class: "material-icons",
-    resolve: ({ icon }) => ({ content: icon })
+    resolve: ({ icon: e }) => ({ content: e })
   }
-];
-const createIconsConfig = (config) => {
-  config.aliases = config.aliases || [];
-  config.fonts = config.fonts || [];
-  return [
-    ...config.aliases,
-    ...VuesticIconAliases,
-    ...config.fonts,
-    ...VuesticIconFonts
-  ];
-};
-const getIconDefaultConfig = () => createIconsConfig({});
-const getComponentsDefaultConfig = () => (
+], wr = (e) => (e.aliases = e.aliases || [], e.fonts = e.fonts || [], [
+  ...e.aliases,
+  ...Cr,
+  ...e.fonts,
+  ...Sr
+]), Or = () => wr({}), _r = () => (
   // TODO: Should be handled in size service
   {
     VaIcon: {
@@ -638,14 +439,14 @@ const getComponentsDefaultConfig = () => (
           pressedOpacity: 0.13
         },
         plain: {
-          plain: true,
+          plain: !0,
           hoverBehavior: "mask",
           hoverOpacity: 0.15,
           pressedBehavior: "mask",
           pressedOpacity: 0.13
         },
         plainOpacity: {
-          plain: true,
+          plain: !0,
           textOpacity: 0.6,
           hoverBehavior: "opacity",
           hoverOpacity: 1,
@@ -674,15 +475,14 @@ const getComponentsDefaultConfig = () => (
       },
       VaMenu: {
         context: {
-          cursor: true,
+          cursor: !0,
           placement: "right-start",
           trigger: "right-click"
         }
       }
     }
   }
-);
-const getI18nConfigDefaults = () => ({
+), xr = () => ({
   // PROPS
   /** Select search field default text */
   search: "Search",
@@ -779,833 +579,423 @@ const getI18nConfigDefaults = () => ({
   fileTypeIncorrect: "File type is incorrect",
   /** Select aria label */
   select: "Select an option"
-});
-const GLOBAL_CONFIG = Symbol("GLOBAL_CONFIG");
-const getDefaultConfig = () => ({
-  colors: getColorDefaultConfig(),
-  icons: getIconDefaultConfig(),
-  components: getComponentsDefaultConfig(),
-  breakpoint: getBreakpointDefaultConfig(),
-  i18n: getI18nConfigDefaults(),
-  colorsClasses: getColorsClassesDefaultConfig(),
+}), Co = Symbol("GLOBAL_CONFIG"), Lr = () => ({
+  colors: br(),
+  icons: Or(),
+  components: _r(),
+  breakpoint: Kn(),
+  i18n: xr(),
+  colorsClasses: gr(),
   /**
    * global config variable to pass nuxt-link component to vuestic-ui via @vuestic/nuxt
    * TODO: give a try to integrate inertia js router components via this option
    * TODO: if this try won't be success, may be remake to provide/inject
    */
   routerComponent: void 0
-});
-const createGlobalConfig = (defaultConfig = {}) => {
-  const globalConfig = ref(mergeDeep(getDefaultConfig(), defaultConfig));
-  const getGlobalConfig = () => globalConfig.value;
-  const setGlobalConfig = (updater) => {
-    const config = typeof updater === "function" ? updater(globalConfig.value) : updater;
-    globalConfig.value = cloneDeep(config);
-  };
-  const mergeGlobalConfig = (updater) => {
-    const config = typeof updater === "function" ? updater(globalConfig.value) : updater;
-    globalConfig.value = mergeDeep(cloneDeep(globalConfig.value), config);
-  };
+}), Pr = (e = {}) => {
+  const t = h(Ge(Lr(), e));
   return {
-    getGlobalConfig,
-    setGlobalConfig,
-    mergeGlobalConfig,
-    globalConfig
+    getGlobalConfig: () => t.value,
+    setGlobalConfig: (r) => {
+      const a = typeof r == "function" ? r(t.value) : r;
+      t.value = Ve(a);
+    },
+    mergeGlobalConfig: (r) => {
+      const a = typeof r == "function" ? r(t.value) : r;
+      t.value = Ge(Ve(t.value), a);
+    },
+    globalConfig: t
   };
-};
-const provideForCurrentApp = (provide2) => {
-  var _a, _b;
-  const provides = ((_a = getCurrentInstance()) == null ? void 0 : _a.appContext.provides) || ((_b = getCurrentApp()) == null ? void 0 : _b._context.provides);
-  if (!provides) {
+}, Er = (e) => {
+  var t, o;
+  const n = ((t = le()) == null ? void 0 : t.appContext.provides) || ((o = bo()) == null ? void 0 : o._context.provides);
+  if (!n)
     throw new Error("Vue app not found for provide");
-  }
-  provides[GLOBAL_CONFIG] = provide2;
-  return provide2;
+  return n[Co] = e, e;
 };
-function useGlobalConfig() {
-  let injected = inject(GLOBAL_CONFIG);
-  if (!injected) {
-    injected = createGlobalConfig();
-    provideForCurrentApp(injected);
-  }
-  return injected;
+function Te() {
+  let e = ho(Co);
+  return e || (e = Pr(), Er(e)), e;
 }
-const withPresetProp = (props) => "preset" in props;
-const getPresetProp = (props) => withPresetProp(props) ? props.preset : void 0;
-const useComponentConfigProps = (component, originalProps) => {
-  const localConfig = useLocalConfig();
-  const { globalConfig } = useGlobalConfig();
-  const componentName = component.name;
-  const getPresetProps = (presetPropValue) => {
-    return (presetPropValue instanceof Array ? presetPropValue : [presetPropValue]).reduce((acc, presetName) => {
-      var _a, _b, _c;
-      const presetProps = (_c = (_b = (_a = globalConfig.value.components) == null ? void 0 : _a.presets) == null ? void 0 : _b[componentName]) == null ? void 0 : _c[presetName];
-      if (!presetProps) {
-        return acc;
-      }
-      const extendedPresets = getPresetProp(presetProps);
-      return {
-        ...acc,
-        ...extendedPresets ? getPresetProps(extendedPresets) : void 0,
-        ...presetProps
-      };
-    }, {});
-  };
-  const parentInjectedProps = injectChildPropsFromParent();
-  return computed(() => {
-    var _a, _b;
-    const globalConfigProps = {
-      ...(_a = globalConfig.value.components) == null ? void 0 : _a.all,
-      ...(_b = globalConfig.value.components) == null ? void 0 : _b[componentName]
+const $r = (e) => "preset" in e, eo = (e) => $r(e) ? e.preset : void 0, kr = (e, t) => {
+  const o = lr(), { globalConfig: n } = Te(), s = e.name, r = (l) => (l instanceof Array ? l : [l]).reduce((i, u) => {
+    var d, f, C;
+    const b = (C = (f = (d = n.value.components) == null ? void 0 : d.presets) == null ? void 0 : f[s]) == null ? void 0 : C[u];
+    if (!b)
+      return i;
+    const g = eo(b);
+    return {
+      ...i,
+      ...g ? r(g) : void 0,
+      ...b
     };
-    const localConfigProps = localConfig.value.reduce((finalConfig, config) => {
-      const componentConfigProps = config[componentName];
-      return componentConfigProps ? { ...finalConfig, ...componentConfigProps } : finalConfig;
-    }, {});
-    const presetProp = [
-      originalProps,
-      parentInjectedProps == null ? void 0 : parentInjectedProps.value,
-      localConfigProps,
-      globalConfigProps
-    ].filter(notNil).map(getPresetProp).filter(notNil).at(0);
-    const presetProps = presetProp ? getPresetProps(presetProp) : void 0;
-    return { ...globalConfigProps, ...localConfigProps, ...presetProps };
+  }, {}), a = Rt();
+  return c(() => {
+    var l, i;
+    const u = {
+      ...(l = n.value.components) == null ? void 0 : l.all,
+      ...(i = n.value.components) == null ? void 0 : i[s]
+    }, d = o.value.reduce((b, g) => {
+      const v = g[s];
+      return v ? { ...b, ...v } : b;
+    }, {}), f = [
+      t,
+      a?.value,
+      d,
+      u
+    ].filter(Qt).map(eo).filter(Qt).at(0), C = f ? r(f) : void 0;
+    return { ...u, ...d, ...C };
   });
-};
-const createSetupFn = (component) => {
-  return (originalProps, ctx) => {
-    var _a;
-    const instance = getCurrentInstance();
-    const propsFromConfig = useComponentConfigProps(component, originalProps);
-    const attrsFromConfig = computed(() => {
-      return omit(propsFromConfig.value, Object.keys(originalProps));
-    });
-    const props = createProps(instance, propsFromConfig);
-    const attrs = createAttrs(instance, attrsFromConfig);
-    const slots = createSlots(instance, propsFromConfig);
-    instance.props = props;
-    instance.attrs = attrs;
-    instance.slots = slots;
-    const setupState = (_a = component.setup) == null ? void 0 : _a.call(component, shallowReadonly(props), {
-      ...ctx,
-      attrs,
-      slots
-    });
-    if (typeof setupState === "object" && !instance.exposed) {
-      ctx.expose(setupState);
-    }
-    return setupState;
-  };
-};
-const createProxyComponent = (component) => {
-  const setupFn = createSetupFn(component);
-  const renderFn = createRenderFn(component);
-  return new Proxy(component, {
-    get(target, key) {
-      if (!(key in component)) {
-        return Reflect.get(target, key);
-      }
-      if (key === "setup") {
-        return setupFn;
-      }
-      if (key === "render" || key === "ssrRender") {
-        return renderFn;
-      }
-      return Reflect.get(target, key);
+}, Br = (e) => (t, o) => {
+  var n;
+  const s = le(), r = kr(e, t), a = c(() => yo(r.value, Object.keys(t))), l = or(s, r), i = nr(s, a), u = rr(s, r);
+  s.props = l, s.attrs = i, s.slots = u;
+  const d = (n = e.setup) == null ? void 0 : n.call(e, kn(l), {
+    ...o,
+    attrs: i,
+    slots: u
+  });
+  return typeof d == "object" && !s.exposed && o.expose(d), d;
+}, Lt = (e) => {
+  const t = Br(e), o = Zn(e);
+  return new Proxy(e, {
+    get(n, s) {
+      return s in e ? s === "setup" ? t : s === "render" || s === "ssrRender" ? o : Reflect.get(n, s) : Reflect.get(n, s);
     }
   });
-};
-const CLASS_COMPONENT_KEY = "__c";
-const patchClassComponent = (component) => {
-  component[CLASS_COMPONENT_KEY] = createProxyComponent(component[CLASS_COMPONENT_KEY]);
-  return component;
-};
-const withConfigTransport = (component) => {
-  if ("setup" in component) {
-    return createProxyComponent(component);
-  } else if (CLASS_COMPONENT_KEY in component) {
-    return patchClassComponent(component);
-  } else {
-    component.setup = () => ({
-      /* Fake setup function */
-    });
-    return createProxyComponent(component);
-  }
-};
-const withConfigTransport$1 = withConfigTransport;
-const sizesConfig = {
+}, Pt = "__c", Vr = (e) => (e[Pt] = Lt(e[Pt]), e), Ar = (e) => "setup" in e ? Lt(e) : Pt in e ? Vr(e) : (e.setup = () => ({
+  /* Fake setup function */
+}), Lt(e)), He = Ar, Rr = {
   defaultSize: 48,
   sizes: {
     small: 32,
     medium: 48,
     large: 64
   }
-};
-const fontSizesConfig = {
+}, Tr = {
   defaultSize: 1,
   sizes: {
     small: 0.75,
     medium: 1,
     large: 1.25
   }
-};
-const useSizeProps = {
+}, It = {
   size: {
     type: [String, Number],
     default: "",
-    validator: (size) => {
-      return typeof size === "string" || typeof size === "number";
-    }
+    validator: (e) => typeof e == "string" || typeof e == "number"
   },
   sizesConfig: {
     type: Object,
-    default: () => sizesConfig
+    default: () => Rr
   },
   fontSizesConfig: {
     type: Object,
-    default: () => fontSizesConfig
+    default: () => Tr
   }
-};
-const fontRegex = /(?<fontSize>\d+)(?<extension>px|rem)/i;
-const convertToRem = (px) => px / 16 - 0.5;
-const useSize = (props, componentName = ((_a) => (_a = getCurrentInstance()) == null ? void 0 : _a.type.name)()) => {
-  const { getGlobalConfig } = useGlobalConfig();
-  const sizesConfigGlobal = computed(() => {
-    var _a2, _b;
-    return componentName ? (_b = (_a2 = getGlobalConfig().components) == null ? void 0 : _a2[componentName]) == null ? void 0 : _b.sizesConfig : void 0;
-  });
-  const sizeComputed = computed(() => {
-    var _a2, _b, _c;
-    const { defaultSize, sizes } = props.sizesConfig;
-    const defaultSizeGlobal = (_a2 = sizesConfigGlobal.value) == null ? void 0 : _a2.defaultSize;
-    if (!props.size) {
-      return `${defaultSize || defaultSizeGlobal}px`;
+}, Ir = /(?<fontSize>\d+)(?<extension>px|rem)/i, to = (e) => e / 16 - 0.5, jt = (e, t = ((o) => (o = le()) == null ? void 0 : o.type.name)()) => {
+  const { getGlobalConfig: o } = Te(), n = c(() => {
+    var l, i;
+    return t ? (i = (l = o().components) == null ? void 0 : l[t]) == null ? void 0 : i.sizesConfig : void 0;
+  }), s = c(() => {
+    var l, i, u;
+    const { defaultSize: d, sizes: f } = e.sizesConfig, C = (l = n.value) == null ? void 0 : l.defaultSize;
+    if (!e.size)
+      return `${d || C}px`;
+    if (typeof e.size == "string") {
+      const b = (u = (i = n.value) == null ? void 0 : i.sizes) == null ? void 0 : u[e.size], g = f[e.size];
+      return g ? `${g}px` : b ? `${b}px` : e.size;
     }
-    if (typeof props.size === "string") {
-      const sizeFromGlobalConfig = (_c = (_b = sizesConfigGlobal.value) == null ? void 0 : _b.sizes) == null ? void 0 : _c[props.size];
-      const sizeFromProps = sizes[props.size];
-      if (sizeFromProps) {
-        return `${sizeFromProps}px`;
-      }
-      if (sizeFromGlobalConfig) {
-        return `${sizeFromGlobalConfig}px`;
-      }
-      return props.size;
-    }
-    return `${props.size}px`;
-  });
-  const fontSizeInRem = computed(() => {
-    const { defaultSize, sizes } = props.fontSizesConfig;
-    if (!props.size) {
-      return defaultSize;
-    }
-    if (typeof props.size === "string") {
-      if (props.size in sizes) {
-        return sizes[props.size];
-      }
-      const fontSizeParsed = props.size.match(fontRegex);
-      if (!fontSizeParsed || !fontSizeParsed.groups) {
+    return `${e.size}px`;
+  }), r = c(() => {
+    const { defaultSize: l, sizes: i } = e.fontSizesConfig;
+    if (!e.size)
+      return l;
+    if (typeof e.size == "string") {
+      if (e.size in i)
+        return i[e.size];
+      const u = e.size.match(Ir);
+      if (!u || !u.groups)
         throw new Error("Size prop should be either valid string or number");
-      }
-      const { extension, fontSize } = fontSizeParsed.groups;
-      return extension === "rem" ? +fontSize : convertToRem(+fontSize);
+      const { extension: d, fontSize: f } = u.groups;
+      return d === "rem" ? +f : to(+f);
     }
-    return convertToRem(props.size);
-  });
-  const fontSizeComputed = computed(() => `${fontSizeInRem.value}rem`);
+    return to(e.size);
+  }), a = c(() => `${r.value}rem`);
   return {
-    sizeComputed,
-    fontSizeComputed,
-    fontSizeInRem
+    sizeComputed: s,
+    fontSizeComputed: a,
+    fontSizeInRem: r
   };
-};
-const useComponentPresetProp = {
+}, ct = {
   preset: {
     type: [String, Array],
     default: void 0
   }
-};
-const isMatchRegex = (str, regex) => {
-  return regex.test(str);
-};
-const regexGroupsValues = (str, regex) => {
-  if (typeof regex !== "string" && regex.global) {
-    return [...str.matchAll(regex)].map((g) => g.slice(1));
-  }
-  const match = str.match(regex) || [];
-  if (!match) {
-    return [];
-  }
-  if (match.length > 1) {
-    return match.slice(1);
-  }
-  return match;
-};
-const dynamicSegmentRegex = /{[^}]*}/g;
-const dynamicSegmentStringToRegex = (template) => {
-  return template.replace(dynamicSegmentRegex, "(.*)");
-};
-const dynamicSegmentsNames = (template) => {
-  return (template.match(dynamicSegmentRegex) || []).map((g) => g.replace(/{|}/g, ""));
-};
-const dynamicSegmentsValues = (str, template) => {
-  return regexGroupsValues(str, dynamicSegmentStringToRegex(template));
-};
-const dynamicSegments = (str, template) => {
-  const params = dynamicSegmentsNames(template);
-  const values = dynamicSegmentsValues(str, template);
-  return params.reduce((acc, paramValue, i) => ({ ...acc, [paramValue]: values[i] }), {});
-};
-const strictMatch = (str, regex) => {
-  return (str.match(regex) || [])[0] === str;
-};
-const isMatchDynamicSegments = (str, template) => {
-  const templateRegex = dynamicSegmentStringToRegex(template);
-  return strictMatch(str, new RegExp(templateRegex));
-};
-const isIconConfigurationString = (config) => {
-  return typeof config.name === "string";
-};
-const isIconConfigurationRegex = (config) => {
-  return config.name instanceof RegExp;
-};
-const isMatchConfiguration = (iconName, iconConfiguration) => {
-  if (isIconConfigurationString(iconConfiguration)) {
-    return isMatchDynamicSegments(iconName, iconConfiguration.name);
-  }
-  if (isIconConfigurationRegex(iconConfiguration)) {
-    return isMatchRegex(iconName, iconConfiguration.name);
-  }
-  return false;
-};
-const resolveIconConfigurationString = (iconName, iconConfiguration) => {
-  const args = dynamicSegments(iconName, iconConfiguration.name);
-  return iconConfiguration.resolve && iconConfiguration.resolve(args);
-};
-const resolveIconConfigurationRegex = (iconName, iconConfig) => {
-  if (iconConfig.name.global) {
-    throw new Error(`Bad icon config with name ${iconConfig.name}. Please, don't use global regex as name.`);
-  }
-  const args = regexGroupsValues(iconName, iconConfig.name);
-  return iconConfig.resolveFromRegex && iconConfig.resolveFromRegex(...args);
-};
-const resolveIconConfiguration = (iconName, iconConfiguration) => {
-  if (isIconConfigurationString(iconConfiguration)) {
-    return resolveIconConfigurationString(iconName, iconConfiguration);
-  }
-  if (isIconConfigurationRegex(iconConfiguration)) {
-    return resolveIconConfigurationRegex(iconName, iconConfiguration);
-  }
+}, jr = (e, t) => t.test(e), So = (e, t) => {
+  if (typeof t != "string" && t.global)
+    return [...e.matchAll(t)].map((n) => n.slice(1));
+  const o = e.match(t) || [];
+  return o ? o.length > 1 ? o.slice(1) : o : [];
+}, wo = /{[^}]*}/g, Oo = (e) => e.replace(wo, "(.*)"), Nr = (e) => (e.match(wo) || []).map((t) => t.replace(/{|}/g, "")), Fr = (e, t) => So(e, Oo(t)), Mr = (e, t) => {
+  const o = Nr(t), n = Fr(e, t);
+  return o.reduce((s, r, a) => ({ ...s, [r]: n[a] }), {});
+}, zr = (e, t) => (e.match(t) || [])[0] === e, Dr = (e, t) => {
+  const o = Oo(t);
+  return zr(e, new RegExp(o));
+}, _o = (e) => typeof e.name == "string", xo = (e) => e.name instanceof RegExp, Gr = (e, t) => _o(t) ? Dr(e, t.name) : xo(t) ? jr(e, t.name) : !1, Ur = (e, t) => {
+  const o = Mr(e, t.name);
+  return t.resolve && t.resolve(o);
+}, Hr = (e, t) => {
+  if (t.name.global)
+    throw new Error(`Bad icon config with name ${t.name}. Please, don't use global regex as name.`);
+  const o = So(e, t.name);
+  return t.resolveFromRegex && t.resolveFromRegex(...o);
+}, Wr = (e, t) => {
+  if (_o(t))
+    return Ur(e, t);
+  if (xo(t))
+    return Hr(e, t);
   throw Error("Unknown icon config");
-};
-const findMatchedIconConfiguration = (iconName, globalIconConfig, namesToIgnore = []) => {
-  const matchedConfig = globalIconConfig.find((config) => {
-    if (namesToIgnore.includes(config.name.toString())) {
-      return false;
-    }
-    return isMatchConfiguration(iconName, config);
-  });
-  if (!matchedConfig) {
-    throw new Error(`Can not find icon config from ${iconName}. Please provide default config.`);
-  }
-  return matchedConfig;
-};
-const findIconConfiguration = (iconName, globalIconConfig, namesToIgnore = []) => {
-  if (!iconName) {
+}, qr = (e, t, o = []) => {
+  const n = t.find((s) => o.includes(s.name.toString()) ? !1 : Gr(e, s));
+  if (!n)
+    throw new Error(`Can not find icon config from ${e}. Please provide default config.`);
+  return n;
+}, Lo = (e, t, o = []) => {
+  if (!e)
     return;
-  }
-  const matchedIconConfiguration = findMatchedIconConfiguration(iconName, globalIconConfig, namesToIgnore);
-  const resolvedIconConfiguration = mergeDeep(resolveIconConfiguration(iconName, matchedIconConfiguration), matchedIconConfiguration);
-  namesToIgnore = [...namesToIgnore, matchedIconConfiguration.name.toString()];
-  return mergeDeep(
-    findIconConfiguration(resolvedIconConfiguration.to, globalIconConfig, namesToIgnore),
-    resolvedIconConfiguration
+  const n = qr(e, t, o), s = Ge(Wr(e, n), n);
+  return o = [...o, n.name.toString()], Ge(
+    Lo(s.to, t, o),
+    s
   );
-};
-const iconPropsFromIconConfiguration = (iconConfiguration) => {
-  const junkKeys = ["name", "to", "resolve", "resolveFromRegex"];
-  const configuration = iconConfiguration;
-  junkKeys.forEach((key) => {
-    delete configuration[key];
-  });
-  return configuration;
-};
-const getIconConfiguration = (name, iconConfig) => {
-  const configuration = findIconConfiguration(name, iconConfig);
-  if (configuration === void 0) {
-    return {};
-  }
-  return iconPropsFromIconConfiguration(configuration);
-};
-const useIcon = () => {
-  const { globalConfig } = useGlobalConfig();
+}, Xr = (e) => {
+  const t = ["name", "to", "resolve", "resolveFromRegex"], o = e;
+  return t.forEach((n) => {
+    delete o[n];
+  }), o;
+}, Kr = (e, t) => {
+  const o = Lo(e, t);
+  return o === void 0 ? {} : Xr(o);
+}, Jr = () => {
+  const { globalConfig: e } = Te();
   return {
-    getIcon: (name) => getIconConfiguration(name, globalConfig.value.icons)
+    getIcon: (t) => Kr(t, e.value.icons)
   };
-};
-const VaAppCachePluginKey = Symbol("VaAppCachePlugin");
-const useCache = () => {
-  const cache = inject(VaAppCachePluginKey);
-  if (!cache) {
-    return {
-      colorContrast: {}
-    };
-  }
-  return cache;
-};
-const useReactiveComputed = (obj) => {
-  const objectRef = typeof obj === "function" ? computed(obj) : computed(obj);
-  const proxy = new Proxy(objectRef, {
-    get(target, p, receiver) {
-      if (typeof objectRef.value !== "object") {
-        return void 0;
-      }
-      return unref(Reflect.get(objectRef.value, p, receiver));
+}, Zr = Symbol("VaAppCachePlugin"), Yr = () => {
+  const e = ho(Zr);
+  return e || {
+    colorContrast: {}
+  };
+}, Qr = (e) => {
+  const t = typeof e == "function" ? c(e) : c(e), o = new Proxy(t, {
+    get(n, s, r) {
+      if (typeof t.value == "object")
+        return S(Reflect.get(t.value, s, r));
     },
-    set(target, p, value) {
-      if (isRef(objectRef.value[p]) && !isRef(value)) {
-        objectRef.value[p].value = value;
-      } else {
-        objectRef.value[p] = value;
-      }
-      return true;
+    set(n, s, r) {
+      return St(t.value[s]) && !St(r) ? t.value[s].value = r : t.value[s] = r, !0;
     },
-    deleteProperty(target, p) {
-      return Reflect.deleteProperty(objectRef.value, p);
+    deleteProperty(n, s) {
+      return Reflect.deleteProperty(t.value, s);
     },
-    has(target, p) {
-      if (typeof objectRef.value !== "object") {
-        return false;
-      }
-      return Reflect.has(objectRef.value, p);
+    has(n, s) {
+      return typeof t.value != "object" ? !1 : Reflect.has(t.value, s);
     },
     ownKeys() {
-      if (typeof objectRef.value !== "object") {
-        return [];
-      }
-      return Object.keys(objectRef.value);
+      return typeof t.value != "object" ? [] : Object.keys(t.value);
     },
     getOwnPropertyDescriptor() {
       return {
-        enumerable: true,
-        configurable: true
+        enumerable: !0,
+        configurable: !0
       };
     }
   });
-  return reactive(proxy);
-};
-const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-const wordsRegex = /[A-Z0-9]*(?:[^\-_|A-Z|\s.])*/gm;
-const getWords = (str) => {
-  var _a;
-  return ((_a = str.match(wordsRegex)) == null ? void 0 : _a.map((word) => word.trim().split(/([0-9]+)|([a-zA-Z]+)/g)).flat().filter(Boolean)) || [];
-};
-const camelCaseToKebabCase = (str) => {
-  return getWords(str).map((word) => word.toLowerCase()).join("-");
-};
-const kebabCaseToCamelCase = (str) => {
-  return getWords(str).map((word, index) => index === 0 ? word.toLowerCase() : capitalize(word)).join("");
-};
-const HEX_TEST_REGEX = /^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6,8})$/;
-const RGB_TEST_REGEX = /^rgba?\(([\d.]+, ?){2}[\d.]+(, ?[\d.]+)?\)$/;
-const HSL_TEST_REGEX = /hsla?\([\d.]+(deg|rad|turn|grad)?(,?\s?[\d.]+%?){2}(,?\s?(\/\s?)?[\d.]+%?)?\)/;
-const isColor = (strColor) => {
-  return HEX_TEST_REGEX.test(strColor) || RGB_TEST_REGEX.test(strColor) || HSL_TEST_REGEX.test(strColor);
-};
-const isHSLObject = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return false;
-  }
-  return "h" in obj && "s" in obj && "l" in obj;
-};
-const isRGBObject = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return false;
-  }
-  return "r" in obj && "g" in obj && "b" in obj;
-};
-const tryParseHex = (color) => {
-  if (!HEX_TEST_REGEX.test(color)) {
+  return Le(o);
+}, es = (e) => e.charAt(0).toUpperCase() + e.slice(1).toLowerCase(), ts = /[A-Z0-9]*(?:[^\-_|A-Z|\s.])*/gm, Po = (e) => {
+  var t;
+  return ((t = e.match(ts)) == null ? void 0 : t.map((o) => o.trim().split(/([0-9]+)|([a-zA-Z]+)/g)).flat().filter(Boolean)) || [];
+}, lt = (e) => Po(e).map((t) => t.toLowerCase()).join("-"), os = (e) => Po(e).map((t, o) => o === 0 ? t.toLowerCase() : es(t)).join(""), Eo = /^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6,8})$/, $o = /^rgba?\(([\d.]+, ?){2}[\d.]+(, ?[\d.]+)?\)$/, ko = /hsla?\([\d.]+(deg|rad|turn|grad)?(,?\s?[\d.]+%?){2}(,?\s?(\/\s?)?[\d.]+%?)?\)/, ns = (e) => Eo.test(e) || $o.test(e) || ko.test(e), Nt = (e) => typeof e != "object" || e === null ? !1 : "h" in e && "s" in e && "l" in e, Ft = (e) => typeof e != "object" || e === null ? !1 : "r" in e && "g" in e && "b" in e, Bo = (e) => {
+  if (!Eo.test(e))
     return null;
-  }
-  const hex = color.replace("#", "");
-  const isShort = hex.length < 6;
-  const [r, g, b2, a] = isShort ? hex.split("").map((char) => parseInt(char + char, 16)) : hex.match(/.{2}/g).map((hex2) => parseInt(hex2, 16));
-  return { r, g, b: b2, a: a ?? 1 };
-};
-const tryParseRgb = (color) => {
-  if (!RGB_TEST_REGEX.test(color)) {
+  const t = e.replace("#", ""), o = t.length < 6, [n, s, r, a] = o ? t.split("").map((l) => parseInt(l + l, 16)) : t.match(/.{2}/g).map((l) => parseInt(l, 16));
+  return { r: n, g: s, b: r, a: a ?? 1 };
+}, Vo = (e) => {
+  if (!$o.test(e))
     return null;
-  }
-  const [r, g, b2, a = 1] = color.match(/[\d.]+/g).map(Number);
-  return { r, g, b: b2, a };
-};
-const tryParseHsla = (color) => {
-  if (!HSL_TEST_REGEX.test(color)) {
+  const [t, o, n, s = 1] = e.match(/[\d.]+/g).map(Number);
+  return { r: t, g: o, b: n, a: s };
+}, Ao = (e) => {
+  if (!ko.test(e))
     return null;
-  }
-  const [h2, s, l, a = "1"] = color.match(/[\d.]+%?/g);
+  const [t, o, n, s = "1"] = e.match(/[\d.]+%?/g);
   return {
-    h: Number(h2),
-    s: Number(s.replace("%", "")),
-    l: Number(l.replace("%", "")),
-    a: a.endsWith("%") ? Number(a.replace("%", "")) / 100 : Number(a)
+    h: Number(t),
+    s: Number(o.replace("%", "")),
+    l: Number(n.replace("%", "")),
+    a: s.endsWith("%") ? Number(s.replace("%", "")) / 100 : Number(s)
   };
-};
-const rgbaToHsla = (rgba) => {
-  const r = rgba.r / 255;
-  const g = rgba.g / 255;
-  const b2 = rgba.b / 255;
-  const max = Math.max(r, g, b2);
-  const min = Math.min(r, g, b2);
-  let h2 = 0;
-  let s = 0;
-  const l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h2 = (g - b2) / d + (g < b2 ? 6 : 0);
+}, oo = (e) => {
+  const t = e.r / 255, o = e.g / 255, n = e.b / 255, s = Math.max(t, o, n), r = Math.min(t, o, n);
+  let a = 0, l = 0;
+  const i = (s + r) / 2;
+  if (s !== r) {
+    const u = s - r;
+    switch (l = i > 0.5 ? u / (2 - s - r) : u / (s + r), s) {
+      case t:
+        a = (o - n) / u + (o < n ? 6 : 0);
         break;
-      case g:
-        h2 = (b2 - r) / d + 2;
+      case o:
+        a = (n - t) / u + 2;
         break;
-      case b2:
-        h2 = (r - g) / d + 4;
+      case n:
+        a = (t - o) / u + 4;
         break;
     }
-    h2 *= 60;
+    a *= 60;
   }
-  return { h: Math.round(h2), s: Math.round(s * 100), l: Math.round(l * 100), a: rgba.a };
-};
-const hueToRgb = (p, q2, t) => {
-  if (t < 0) {
-    t += 1;
-  }
-  if (t > 1) {
-    t -= 1;
-  }
-  if (t < 1 / 6) {
-    return p + (q2 - p) * 6 * t;
-  }
-  if (t < 1 / 2) {
-    return q2;
-  }
-  if (t < 2 / 3) {
-    return p + (q2 - p) * (2 / 3 - t) * 6;
-  }
-  return p;
-};
-const hslaToRgba = (hsla) => {
-  const h2 = hsla.h / 360;
-  const s = hsla.s / 100;
-  const l = hsla.l / 100;
-  const q2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
-  const p = 2 * l - q2;
-  const r = hueToRgb(p, q2, h2 + 1 / 3);
-  const g = hueToRgb(p, q2, h2);
-  const b2 = hueToRgb(p, q2, h2 - 1 / 3);
-  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b2 * 255), a: hsla.a };
-};
-const parseColorToHSL = (color) => {
-  if (isHSLObject(color)) {
-    return { ...color };
-  }
-  if (isRGBObject(color)) {
-    return rgbaToHsla(color);
-  }
-  const rgb = tryParseHex(color) ?? tryParseRgb(color);
-  if (rgb) {
-    return rgbaToHsla(rgb);
-  }
-  const hsl = tryParseHsla(color);
-  if (hsl) {
-    return hsl;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const hslToString = ({ h: h2, s, l, a }) => {
-  return `hsla(${h2},${s}%,${l}%,${a ?? 1})`;
-};
-const parseColorToRGB = (color) => {
-  if (isRGBObject(color)) {
-    return { ...color };
-  }
-  if (isHSLObject(color)) {
-    return hslaToRgba(color);
-  }
-  const hsl = tryParseHsla(color);
-  if (hsl) {
-    return hslaToRgba(hsl);
-  }
-  const rgb = tryParseHex(color) ?? tryParseRgb(color);
-  if (rgb) {
-    return rgb;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const rgbToString = ({ r, g, b: b2, a }) => {
-  if (a === 1) {
-    return `rgb(${r},${g},${b2})`;
-  }
-  return `rgba(${r},${g},${b2},${a ?? 1})`;
-};
-const colorToString = (color) => {
-  if (isHSLObject(color)) {
-    return hslToString(color);
-  }
-  if (isRGBObject(color)) {
-    return rgbToString(color);
-  }
-  if (typeof color === "string") {
-    return color;
-  }
-  throw new Error(`Color ${color} is not valid. Please, provide valid color.`);
-};
-const setHSLA = (color, { h: h2, s, l, a }) => {
-  const parsedColor = parseColorToHSL(color);
-  parsedColor.a = parsedColor.a ?? 1;
-  parsedColor.h = h2 ?? parsedColor.h;
-  parsedColor.s = s ?? parsedColor.s;
-  parsedColor.l = l ?? parsedColor.l;
-  parsedColor.a = a ?? parsedColor.a;
-  if (parsedColor.h < 0) {
-    parsedColor.h = 360 + parsedColor.h;
-  }
-  if (parsedColor.h > 360) {
-    parsedColor.h = parsedColor.h - 360;
-  }
-  parsedColor.s = Math.max(0, Math.min(100, parsedColor.s));
-  parsedColor.l = Math.max(0, Math.min(100, parsedColor.l));
-  parsedColor.a = Math.max(0, Math.min(1, parsedColor.a));
-  return parsedColor;
-};
-const shiftHSLA = (color, { h: h2, s, l, a }) => {
-  const parsedColor = parseColorToHSL(color);
-  parsedColor.a = parsedColor.a ?? 1;
-  parsedColor.h += h2 ?? 0;
-  parsedColor.s += s ?? 0;
-  parsedColor.l += l ?? 0;
-  parsedColor.a += a ?? 0;
-  if (parsedColor.h < 0) {
-    parsedColor.h = 360 + parsedColor.h;
-  }
-  if (parsedColor.h > 360) {
-    parsedColor.h = parsedColor.h - 360;
-  }
-  parsedColor.s = Math.max(0, Math.min(100, parsedColor.s));
-  parsedColor.l = Math.max(0, Math.min(100, parsedColor.l));
-  parsedColor.a = Math.max(0, Math.min(1, parsedColor.a));
-  return parsedColor;
-};
-const isCSSVariable = (strColor) => /var\(--.+\)/.test(strColor);
-const cssVariableName = (colorName) => `--va-${camelCaseToKebabCase(colorName)}`;
-const normalizeColorName = (colorName) => kebabCaseToCamelCase(colorName);
-const colorToRgba = (color, opacity) => {
-  const { r, g, b: b2 } = parseColorToRGB(color);
-  return rgbToString({ r, g, b: b2, a: opacity });
-};
-const getColorLightness = (color) => {
-  const { r, g, b: b2 } = parseColorToRGB(color);
-  return Math.sqrt(r * r * 0.241 + g * g * 0.691 + b2 * b2 * 0.068);
-};
-const getBoxShadowColor = (color, opacity = 0.4) => {
-  return colorToRgba(color, opacity);
-};
-const getBoxShadowColorFromBg = (background, opacity = 0.4) => {
-  return colorToRgba(background, opacity);
-};
-const getHoverColor = (color, opacity = 0.2) => {
-  return colorToRgba(color, opacity);
-};
-const getFocusColor = (color, opacity = 0.3) => {
-  return colorToRgba(color, opacity);
-};
-const shiftHSLAColor = (color, shift) => {
-  return hslToString(shiftHSLA(parseColorToHSL(color), shift));
-};
-const setHSLAColor = (color, shift) => {
-  return hslToString(setHSLA(parseColorToHSL(color), shift));
-};
-const shiftGradientColor = (color) => {
-  const newColor = parseColorToHSL(color);
-  if (newColor.s < 10) {
-    return shiftHSLAColor(newColor, { h: 2, s: 5, l: 10 });
-  }
-  if (newColor.s < 30) {
-    return shiftHSLAColor(newColor, { s: -14, l: 11 });
-  }
-  if (newColor.h >= 0 && newColor.h < 44 || newColor.h >= 285) {
-    return shiftHSLAColor(newColor, { h: 11, s: 27, l: 8 });
-  }
-  if (newColor.h >= 44 && newColor.h < 85) {
-    return shiftHSLAColor(newColor, { h: 3, l: 9 });
-  }
-  if (newColor.h >= 85 && newColor.h < 165) {
-    return shiftHSLAColor(newColor, { h: 16, l: 14 });
-  }
-  if (newColor.h >= 165 && newColor.h < 285) {
-    return shiftHSLAColor(newColor, { h: -15, s: 3, l: 2 });
-  }
+  return { h: Math.round(a), s: Math.round(l * 100), l: Math.round(i * 100), a: e.a };
+}, ht = (e, t, o) => (o < 0 && (o += 1), o > 1 && (o -= 1), o < 1 / 6 ? e + (t - e) * 6 * o : o < 1 / 2 ? t : o < 2 / 3 ? e + (t - e) * (2 / 3 - o) * 6 : e), no = (e) => {
+  const t = e.h / 360, o = e.s / 100, n = e.l / 100, s = n < 0.5 ? n * (1 + o) : n + o - n * o, r = 2 * n - s, a = ht(r, s, t + 1 / 3), l = ht(r, s, t), i = ht(r, s, t - 1 / 3);
+  return { r: Math.round(a * 255), g: Math.round(l * 255), b: Math.round(i * 255), a: e.a };
+}, We = (e) => {
+  if (Nt(e))
+    return { ...e };
+  if (Ft(e))
+    return oo(e);
+  const t = Bo(e) ?? Vo(e);
+  if (t)
+    return oo(t);
+  const o = Ao(e);
+  if (o)
+    return o;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, Mt = ({ h: e, s: t, l: o, a: n }) => `hsla(${e},${t}%,${o}%,${n ?? 1})`, zt = (e) => {
+  if (Ft(e))
+    return { ...e };
+  if (Nt(e))
+    return no(e);
+  const t = Ao(e);
+  if (t)
+    return no(t);
+  const o = Bo(e) ?? Vo(e);
+  if (o)
+    return o;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, Ro = ({ r: e, g: t, b: o, a: n }) => n === 1 ? `rgb(${e},${t},${o})` : `rgba(${e},${t},${o},${n ?? 1})`, rs = (e) => {
+  if (Nt(e))
+    return Mt(e);
+  if (Ft(e))
+    return Ro(e);
+  if (typeof e == "string")
+    return e;
+  throw new Error(`Color ${e} is not valid. Please, provide valid color.`);
+}, ss = (e, { h: t, s: o, l: n, a: s }) => {
+  const r = We(e);
+  return r.a = r.a ?? 1, r.h = t ?? r.h, r.s = o ?? r.s, r.l = n ?? r.l, r.a = s ?? r.a, r.h < 0 && (r.h = 360 + r.h), r.h > 360 && (r.h = r.h - 360), r.s = Math.max(0, Math.min(100, r.s)), r.l = Math.max(0, Math.min(100, r.l)), r.a = Math.max(0, Math.min(1, r.a)), r;
+}, as = (e, { h: t, s: o, l: n, a: s }) => {
+  const r = We(e);
+  return r.a = r.a ?? 1, r.h += t ?? 0, r.s += o ?? 0, r.l += n ?? 0, r.a += s ?? 0, r.h < 0 && (r.h = 360 + r.h), r.h > 360 && (r.h = r.h - 360), r.s = Math.max(0, Math.min(100, r.s)), r.l = Math.max(0, Math.min(100, r.l)), r.a = Math.max(0, Math.min(1, r.a)), r;
+}, ls = (e) => /var\(--.+\)/.test(e), is = (e) => `--va-${lt(e)}`, ro = (e) => os(e), Ie = (e, t) => {
+  const { r: o, g: n, b: s } = zt(e);
+  return Ro({ r: o, g: n, b: s, a: t });
+}, so = (e) => {
+  const { r: t, g: o, b: n } = zt(e);
+  return Math.sqrt(t * t * 0.241 + o * o * 0.691 + n * n * 0.068);
+}, us = (e, t = 0.4) => Ie(e, t), cs = (e, t = 0.4) => Ie(e, t), ds = (e, t = 0.2) => Ie(e, t), ps = (e, t = 0.3) => Ie(e, t), _e = (e, t) => Mt(as(We(e), t)), fs = (e, t) => Mt(ss(We(e), t)), vs = (e) => {
+  const t = We(e);
+  if (t.s < 10)
+    return _e(t, { h: 2, s: 5, l: 10 });
+  if (t.s < 30)
+    return _e(t, { s: -14, l: 11 });
+  if (t.h >= 0 && t.h < 44 || t.h >= 285)
+    return _e(t, { h: 11, s: 27, l: 8 });
+  if (t.h >= 44 && t.h < 85)
+    return _e(t, { h: 3, l: 9 });
+  if (t.h >= 85 && t.h < 165)
+    return _e(t, { h: 16, l: 14 });
+  if (t.h >= 165 && t.h < 285)
+    return _e(t, { h: -15, s: 3, l: 2 });
   throw new Error("This method should handle all colors. But it didn't for some reason.");
-};
-const getGradientBackground = (color) => {
-  const colorLeft = shiftGradientColor(color);
-  return `linear-gradient(to right, ${colorLeft}, ${colorToString(color)})`;
-};
-const getStateMaskGradientBackground = (color, maskColor, maskOpacity) => {
-  const mask = colorToRgba(maskColor, maskOpacity);
-  return `linear-gradient(0deg, ${mask}, ${mask}), ${color}`;
-};
-const isColorTransparent = (color) => {
-  if (!color) {
-    return false;
-  }
-  if (color === "transparent") {
-    return true;
-  }
-  return parseColorToRGB(color).a <= 0.1;
-};
-const useColors = () => {
-  const gc = useGlobalConfig();
-  if (!gc) {
+}, ms = (e) => `linear-gradient(to right, ${vs(e)}, ${rs(e)})`, gs = (e, t, o) => {
+  const n = Ie(t, o);
+  return `linear-gradient(0deg, ${n}, ${n}), ${e}`;
+}, ys = (e) => e ? e === "transparent" ? !0 : zt(e).a <= 0.1 : !1, Ce = () => {
+  const e = Te();
+  if (!e)
     throw new Error("useColors must be used in setup function or Vuestic GlobalConfigPlugin is not registered!");
-  }
-  const { globalConfig } = gc;
-  const colors = useReactiveComputed({
-    get: () => globalConfig.value.colors.presets[globalConfig.value.colors.currentPresetName],
-    set: (v) => {
-      setColors(v);
+  const { globalConfig: t } = e, o = Qr({
+    get: () => t.value.colors.presets[t.value.colors.currentPresetName],
+    set: (p) => {
+      n(p);
     }
-  });
-  const setColors = (colors2) => {
-    globalConfig.value.colors.presets[globalConfig.value.colors.currentPresetName] = {
-      ...globalConfig.value.colors.variables,
-      ...colors2
+  }), n = (p) => {
+    t.value.colors.presets[t.value.colors.currentPresetName] = {
+      ...t.value.colors.variables,
+      ...p
     };
-  };
-  const getColors = () => {
-    return colors;
-  };
-  const getColor = (prop, defaultColor, preferVariables) => {
-    if (!defaultColor) {
-      defaultColor = colors.primary;
-    }
-    if (prop === "transparent") {
+  }, s = () => o, r = (p, O, _) => {
+    if (O || (O = o.primary), p === "transparent")
       return "#ffffff00";
+    if (p === "currentColor")
+      return p;
+    if (p?.startsWith("on")) {
+      const X = p.slice(2);
+      if (o[ro(X)])
+        return r(C(r(X)), void 0, _);
     }
-    if (prop === "currentColor") {
-      return prop;
+    p || (p = r(O));
+    const P = o[p] || o[ro(p)];
+    return P ? _ ? `var(${is(p)})` : P : ns(p) || _ && ls(p) ? p : (xt(`'${p}' is not a proper color! Use HEX or default color themes
+      names (https://vuestic.dev/en/styles/colors#default-color-themes)`), r(O));
+  }, a = (p) => c({
+    get() {
+      return r(p);
+    },
+    set(O) {
+      n({ [p]: O });
     }
-    if (prop == null ? void 0 : prop.startsWith("on")) {
-      const colorName = prop.slice(2);
-      if (colors[normalizeColorName(colorName)]) {
-        return getColor(getTextColor(getColor(colorName)), void 0, preferVariables);
-      }
+  }), l = (p, O = "va") => Object.keys(p).filter((_) => p[_] !== void 0).reduce((_, P) => (_[`--${O}-${lt(P)}`] = r(p[P], void 0, !0), _[`--${O}-on-${lt(P)}`] = r(C(r(p[P])), void 0, !0), _), {}), i = Yr(), u = (p) => typeof p != "string" ? so(p) : (i.colorContrast[p] || (i.colorContrast[p] = so(p)), i.colorContrast[p]), d = c(() => u(r("textPrimary")) > 255 / 2 ? "textInverted" : "textPrimary"), f = c(() => u(r("textPrimary")) > 255 / 2 ? "textPrimary" : "textInverted"), C = (p, O, _) => {
+    const P = `on${Bn(String(p))}`;
+    return o[P] ? o[P] : (O = O || d.value, _ = _ || f.value, u(p) > t.value.colors.threshold ? O : _);
+  }, b = c({
+    get: () => t.value.colors.currentPresetName,
+    set: (p) => {
+      v(p);
     }
-    if (!prop) {
-      prop = getColor(defaultColor);
-    }
-    const colorValue = colors[prop] || colors[normalizeColorName(prop)];
-    if (colorValue) {
-      return preferVariables ? `var(${cssVariableName(prop)})` : colorValue;
-    }
-    if (isColor(prop)) {
-      return prop;
-    }
-    if (preferVariables && isCSSVariable(prop)) {
-      return prop;
-    }
-    warn(`'${prop}' is not a proper color! Use HEX or default color themes
-      names (https://vuestic.dev/en/styles/colors#default-color-themes)`);
-    return getColor(defaultColor);
-  };
-  const getComputedColor = (color) => {
-    return computed({
-      get() {
-        return getColor(color);
-      },
-      set(v) {
-        setColors({ [color]: v });
-      }
-    });
-  };
-  const colorsToCSSVariable = (colors2, prefix = "va") => {
-    return Object.keys(colors2).filter((key) => colors2[key] !== void 0).reduce((acc, colorName) => {
-      acc[`--${prefix}-${camelCaseToKebabCase(colorName)}`] = getColor(colors2[colorName], void 0, true);
-      acc[`--${prefix}-on-${camelCaseToKebabCase(colorName)}`] = getColor(getTextColor(getColor(colors2[colorName])), void 0, true);
-      return acc;
-    }, {});
-  };
-  const cache = useCache();
-  const getColorLightnessFromCache = (color) => {
-    if (typeof color !== "string") {
-      return getColorLightness(color);
-    }
-    if (!cache.colorContrast[color]) {
-      cache.colorContrast[color] = getColorLightness(color);
-    }
-    return cache.colorContrast[color];
-  };
-  const computedDarkColor = computed(() => {
-    return getColorLightnessFromCache(getColor("textPrimary")) > 255 / 2 ? "textInverted" : "textPrimary";
-  });
-  const computedLightColor = computed(() => {
-    return getColorLightnessFromCache(getColor("textPrimary")) > 255 / 2 ? "textPrimary" : "textInverted";
-  });
-  const getTextColor = (color, darkColor, lightColor) => {
-    const onColorName = `on${capitalize$1(String(color))}`;
-    if (colors[onColorName]) {
-      return colors[onColorName];
-    }
-    darkColor = darkColor || computedDarkColor.value;
-    lightColor = lightColor || computedLightColor.value;
-    return getColorLightnessFromCache(color) > globalConfig.value.colors.threshold ? darkColor : lightColor;
-  };
-  const currentPresetName = computed({
-    get: () => globalConfig.value.colors.currentPresetName,
-    set: (v) => {
-      applyPreset(v);
-    }
-  });
-  const presets2 = computed(() => globalConfig.value.colors.presets);
-  const applyPreset = (presetName) => {
-    globalConfig.value.colors.currentPresetName = presetName;
-    if (!globalConfig.value.colors.presets[presetName]) {
-      return warn(`Preset ${presetName} does not exist`);
-    }
+  }), g = c(() => t.value.colors.presets), v = (p) => {
+    if (t.value.colors.currentPresetName = p, !t.value.colors.presets[p])
+      return xt(`Preset ${p} does not exist`);
   };
   return {
-    colors,
-    currentPresetName,
-    presets: presets2,
-    applyPreset,
-    setColors,
-    getColors,
-    getColor,
-    getComputedColor,
-    getBoxShadowColor,
-    getBoxShadowColorFromBg,
-    getHoverColor,
-    getFocusColor,
-    getGradientBackground,
-    getTextColor,
-    shiftHSLAColor,
-    setHSLAColor,
-    colorsToCSSVariable,
-    colorToRgba,
-    getStateMaskGradientBackground
+    colors: o,
+    currentPresetName: b,
+    presets: g,
+    applyPreset: v,
+    setColors: n,
+    getColors: s,
+    getColor: r,
+    getComputedColor: a,
+    getBoxShadowColor: us,
+    getBoxShadowColorFromBg: cs,
+    getHoverColor: ds,
+    getFocusColor: ps,
+    getGradientBackground: ms,
+    getTextColor: C,
+    shiftHSLAColor: _e,
+    setHSLAColor: fs,
+    colorsToCSSVariable: l,
+    colorToRgba: Ie,
+    getStateMaskGradientBackground: gs
   };
-};
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaIcon"
-  },
+}, bs = /* @__PURE__ */ A({
+  name: "VaIcon",
   __name: "VaIcon",
   props: {
-    ...useSizeProps,
-    ...useComponentPresetProp,
+    ...It,
+    ...ct,
     name: { type: String, default: "" },
     tag: { type: String },
     component: { type: Object },
@@ -1615,282 +1005,138 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     flip: {
       type: String,
       default: "off",
-      validator: (value) => ["off", "horizontal", "vertical", "both"].includes(value)
+      validator: (e) => ["off", "horizontal", "vertical", "both"].includes(e)
     }
   },
-  setup(__props) {
-    const props = __props;
-    const { getColor } = useColors();
-    const { sizeComputed } = useSize(props);
-    const { getIcon } = useIcon();
-    const iconConfig = computed(() => getIcon(props.name));
-    const computedTag = computed(() => props.component || props.tag || iconConfig.value.component || iconConfig.value.tag || "i");
-    const attrs = useAttrs();
-    const computedAttrs = computed(() => ({ ...iconConfig.value.attrs, ...omit(attrs, ["class"]) }));
-    const getSpinClass = (spin) => {
-      if (spin === void 0 || spin === false) {
-        return;
-      }
-      return spin === "counter-clockwise" ? "va-icon--spin-reverse" : "va-icon--spin";
-    };
-    const computedClass = computed(() => [
-      iconConfig.value.class,
-      getSpinClass(props.spin ?? iconConfig.value.spin)
-    ]);
-    const transformStyle = computed(() => {
-      const rotation = props.rotation ? `rotate(${props.rotation}deg)` : "";
-      const flipY = props.flip === "vertical" || props.flip === "both" ? -1 : 1;
-      const flipX = props.flip === "horizontal" || props.flip === "both" ? -1 : 1;
-      const scale = props.flip === "off" ? "" : `scale(${flipY}, ${flipX})`;
-      return `${scale} ${rotation}`.trim();
-    });
-    const computedStyle = computed(() => ({
-      transform: transformStyle.value,
-      cursor: attrs.onClick ? "pointer" : null,
-      color: props.color ? getColor(props.color, void 0, true) : iconConfig.value.color,
-      fontSize: sizeComputed.value,
-      height: sizeComputed.value,
-      lineHeight: sizeComputed.value
-    }));
-    const tabindexComputed = computed(() => attrs.tabindex ?? -1);
-    const ariaHiddenComputed = computed(() => attrs.role !== "button" || tabindexComputed.value < 0);
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(resolveDynamicComponent(computedTag.value), mergeProps({
-        class: ["va-icon", computedClass.value],
-        style: computedStyle.value,
-        "aria-hidden": ariaHiddenComputed.value,
-        notranslate: ""
-      }, computedAttrs.value), {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default", {}, () => [
-            iconConfig.value.content ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              createTextVNode(toDisplayString(iconConfig.value.content), 1)
-            ], 64)) : createCommentVNode("", true)
-          ])
-        ]),
-        _: 3
-      }, 16, ["class", "style", "aria-hidden"]);
-    };
+  setup(e) {
+    const t = e, { getColor: o } = Ce(), { sizeComputed: n } = jt(t), { getIcon: s } = Jr(), r = c(() => s(t.name)), a = c(() => t.component || t.tag || r.value.component || r.value.tag || "i"), l = Vn(), i = c(() => ({ ...r.value.attrs, ...yo(l, ["class"]) })), u = (v) => {
+      if (!(v === void 0 || v === !1))
+        return v === "counter-clockwise" ? "va-icon--spin-reverse" : "va-icon--spin";
+    }, d = c(() => [
+      r.value.class,
+      u(t.spin ?? r.value.spin)
+    ]), f = c(() => {
+      const v = t.rotation ? `rotate(${t.rotation}deg)` : "", p = t.flip === "vertical" || t.flip === "both" ? -1 : 1, O = t.flip === "horizontal" || t.flip === "both" ? -1 : 1;
+      return `${t.flip === "off" ? "" : `scale(${p}, ${O})`} ${v}`.trim();
+    }), C = c(() => ({
+      transform: f.value,
+      cursor: l.onClick ? "pointer" : null,
+      color: t.color ? o(t.color, void 0, !0) : r.value.color,
+      fontSize: n.value,
+      height: n.value,
+      lineHeight: n.value
+    })), b = c(() => l.tabindex ?? -1), g = c(() => l.role !== "button" || b.value < 0);
+    return (v, p) => (E(), Y(st(a.value), be({
+      class: ["va-icon", d.value],
+      style: C.value,
+      "aria-hidden": g.value,
+      notranslate: ""
+    }, i.value), {
+      default: B(() => [
+        de(v.$slots, "default", {}, () => [
+          r.value.content ? (E(), U(pe, { key: 0 }, [
+            te(ce(r.value.content), 1)
+          ], 64)) : ue("", !0)
+        ])
+      ]),
+      _: 3
+    }, 16, ["class", "style", "aria-hidden"]));
   }
-});
-const VaIcon = withConfigTransport$1(_sfc_main$a);
-const useNumericProp = (key) => {
-  const props = getCurrentInstance().props;
-  const numericComputed = computed(() => {
-    const numeric = props == null ? void 0 : props[key];
-    if (numeric === void 0) {
-      return numeric;
-    }
-    return Number(numeric);
+}), Et = He(bs), $t = (e) => {
+  const t = le().props;
+  return c(() => {
+    const n = t?.[e];
+    return n === void 0 ? n : Number(n);
   });
-  return numericComputed;
-};
-const isFunction = (value) => typeof value === "function";
-const isServer = () => typeof window === "undefined";
-const isClient = () => !isServer();
-const useClientOnly = (cb) => {
-  const isMounted = computed(isClient);
-  const result = ref(null);
-  watch(isMounted, () => {
-    if (isMounted.value) {
-      result.value = cb();
+}, To = (e) => typeof e == "function", Io = () => typeof window > "u", hs = () => !Io(), Cs = (e) => {
+  const t = c(hs), o = h(null);
+  return ae(t, () => {
+    t.value && (o.value = e());
+  }, { immediate: !0 }), o;
+}, Ss = () => Cs(() => window), he = (e) => {
+  if (e && typeof e == "object" && (e = S(e), !!e))
+    return typeof e.$el < "u" ? e.$el : e;
+}, kt = (e, ...t) => {
+  if (!(!e || typeof e != "object")) {
+    if ("addEventListener" in e && typeof e.addEventListener == "function") {
+      e.addEventListener(...t);
+      return;
     }
-  }, { immediate: true });
-  return result;
-};
-const useWindow = () => useClientOnly(() => window);
-const unwrapEl = (el) => {
-  if (!el) {
-    return;
+    "parentElement" in e && kt(e.parentElement, ...t);
   }
-  if (typeof el !== "object") {
-    return;
-  }
-  el = unref(el);
-  if (!el) {
-    return;
-  }
-  if (typeof el.$el !== "undefined") {
-    return el.$el;
-  }
-  return el;
-};
-const addEventListener = (target, ...args) => {
-  if (!target || typeof target !== "object") {
-    return;
-  }
-  if ("addEventListener" in target && typeof target.addEventListener === "function") {
-    target.addEventListener(...args);
-    return;
-  }
-  if ("parentElement" in target) {
-    addEventListener(target.parentElement, ...args);
-  }
-};
-const removeEventListener = (target, ...args) => {
-  if (!target || typeof target !== "object") {
-    return;
-  }
-  if ("removeEventListener" in target && typeof target.removeEventListener === "function") {
-    target.removeEventListener(...args);
-    return;
-  }
-  if ("parentElement" in target) {
-    removeEventListener(target.parentElement, ...args);
-  }
-};
-const useEvent = (event, listener, target) => {
-  const source = target && typeof target !== "boolean" ? target : useWindow();
-  const capture = typeof target === "boolean" ? target : false;
-  watch(source, (newValue, oldValue) => {
-    if (!Array.isArray(event)) {
-      addEventListener(unwrapEl(unref(newValue)), event, listener, capture);
-      removeEventListener(unwrapEl(unref(oldValue)), event, listener, capture);
-    } else {
-      event.forEach((e) => {
-        addEventListener(unwrapEl(unref(newValue)), e, listener, capture);
-        removeEventListener(unwrapEl(unref(oldValue)), e, listener, capture);
-      });
+}, Bt = (e, ...t) => {
+  if (!(!e || typeof e != "object")) {
+    if ("removeEventListener" in e && typeof e.removeEventListener == "function") {
+      e.removeEventListener(...t);
+      return;
     }
-  }, { immediate: true });
-};
-const useTemplateRef = (key) => {
-  const vm = getCurrentInstance();
-  let _trigger = () => {
+    "parentElement" in e && Bt(e.parentElement, ...t);
+  }
+}, Ae = (e, t, o) => {
+  const n = o && typeof o != "boolean" ? o : Ss(), s = typeof o == "boolean" ? o : !1;
+  ae(n, (r, a) => {
+    Array.isArray(e) ? e.forEach((l) => {
+      kt(he(S(r)), l, t, s), Bt(he(S(a)), l, t, s);
+    }) : (kt(he(S(r)), e, t, s), Bt(he(S(a)), e, t, s));
+  }, { immediate: !0 });
+}, ws = (e) => {
+  const t = le();
+  let o = () => {
   };
-  const el = customRef((track, trigger) => {
-    _trigger = trigger;
-    return {
-      get() {
-        var _a;
-        track();
-        return (_a = vm.proxy) == null ? void 0 : _a.$refs[key];
-      },
-      set(value) {
-      }
-    };
-  });
-  onMounted(_trigger);
-  onUpdated(_trigger);
-  return el;
-};
-const isTranslationKey = (value) => value.startsWith("$t:");
-const useTranslationProp = (defaultValue) => {
-  return { type: String, default: defaultValue };
-};
-const applyI18nTemplate = (key, values) => {
-  if (!values) {
-    return key;
+  const n = An((s, r) => (o = r, {
+    get() {
+      var a;
+      return s(), (a = t.proxy) == null ? void 0 : a.$refs[e];
+    },
+    set(a) {
+    }
+  }));
+  return F(o), Rn(o), n;
+}, Os = (e) => e.startsWith("$t:"), jo = (e) => ({ type: String, default: e }), ao = (e, t) => (t && Object.keys(t).forEach((o) => {
+  e = e.replace(`{${o}}`, String(t[o]));
+}), e), dt = () => {
+  const { globalConfig: e } = Te(), t = c(() => e.value.i18n);
+  function o(s, r) {
+    var a;
+    const l = (a = le()) == null ? void 0 : a.appContext.config.globalProperties.$t;
+    if (typeof l == "function") {
+      const u = l(`vuestic.${s}`, r);
+      if (u)
+        return u;
+    }
+    const i = t.value[s];
+    return i ? ao(i, r) || s : (xt(`${s} not found in VuesticUI i18n config`), s);
   }
-  Object.keys(values).forEach((valueKey) => {
-    key = key.replace(`{${valueKey}}`, String(values[valueKey]));
-  });
-  return key;
-};
-const useTranslation = () => {
-  const { globalConfig } = useGlobalConfig();
-  const config = computed(() => globalConfig.value.i18n);
-  function t(key, values) {
-    var _a;
-    const $t = (_a = getCurrentInstance()) == null ? void 0 : _a.appContext.config.globalProperties.$t;
-    if (typeof $t === "function") {
-      const translated2 = $t(`vuestic.${key}`, values);
-      if (translated2) {
-        return translated2;
-      }
-    }
-    const translated = config.value[key];
-    if (!translated) {
-      warn(`${key} not found in VuesticUI i18n config`);
-      return key;
-    }
-    return applyI18nTemplate(translated, values) || key;
-  }
-  function tp(key, values) {
-    if (!key) {
-      return "";
-    }
-    if (isTranslationKey(key)) {
-      return t(key.slice(3), values);
-    }
-    return applyI18nTemplate(key, values) || key;
+  function n(s, r) {
+    return s ? Os(s) ? o(s.slice(3), r) : ao(s, r) || s : "";
   }
   return {
-    tp,
-    t
+    tp: n,
+    t: o
   };
-};
-const useTextColor = (componentColor, isTransparent = false) => {
-  const { props } = getCurrentInstance();
-  const { getColor, getTextColor } = useColors();
-  const textColorComputed = computed(() => {
-    if (props.textColor) {
-      return getColor(props.textColor);
-    }
-    const bg = componentColor ? unref(componentColor) : props.color;
-    if (!bg) {
+}, No = (e, t = !1) => {
+  const { props: o } = le(), { getColor: n, getTextColor: s } = Ce();
+  return { textColorComputed: c(() => {
+    if (o.textColor)
+      return n(o.textColor);
+    const a = e ? S(e) : o.color;
+    if (!a)
       return "currentColor";
-    }
-    const componentColorHex = getColor(bg);
-    if (isColorTransparent(componentColorHex)) {
-      return "currentColor";
-    }
-    return unref(isTransparent) ? componentColorHex : getColor(getTextColor(componentColorHex));
-  });
-  return { textColorComputed };
-};
-const useButtonBackground = (colorComputed, isPressed, isHovered) => {
-  const instance = getCurrentInstance();
-  if (!instance) {
+    const l = n(a);
+    return ys(l) ? "currentColor" : S(t) ? l : n(s(l));
+  }) };
+}, _s = (e, t, o) => {
+  const n = le();
+  if (!n)
     throw new Error("`useButtonBackground` hook must be used only inside of setup function!");
-  }
-  const props = instance.props;
-  const { getColor, getGradientBackground: getGradientBackground2 } = useColors();
-  const backgroundColor = computed(() => {
-    if (props.plain) {
-      return "transparent";
-    }
-    return props.gradient ? getGradientBackground2(colorComputed.value) : colorComputed.value;
-  });
-  const hoveredBgState = computed(() => !props.plain && isHovered.value);
-  const pressedBgState = computed(() => !props.plain && isPressed.value);
-  const backgroundColorOpacity = computed(() => {
-    if (pressedBgState.value && props.pressedBehavior === "opacity") {
-      return props.pressedOpacity;
-    }
-    if (hoveredBgState.value && props.hoverBehavior === "opacity") {
-      return Number(props.hoverOpacity);
-    }
-    return Number(props.backgroundOpacity);
-  });
-  const hoveredMaskState = computed(() => hoveredBgState.value && props.hoverBehavior === "mask");
-  const pressedMaskState = computed(() => pressedBgState.value && props.pressedBehavior === "mask");
-  const backgroundMaskOpacity = computed(() => {
-    if (pressedMaskState.value) {
-      return props.pressedOpacity;
-    }
-    if (hoveredMaskState.value) {
-      return Number(props.hoverOpacity);
-    }
-    return 0;
-  });
-  const backgroundMaskColor = computed(() => {
-    if (pressedMaskState.value) {
-      return getColor(props.pressedMaskColor);
-    }
-    if (hoveredMaskState.value) {
-      return getColor(props.hoverMaskColor);
-    }
-    return "transparent";
-  });
+  const s = n.props, { getColor: r, getGradientBackground: a } = Ce(), l = c(() => s.plain ? "transparent" : s.gradient ? a(e.value) : e.value), i = c(() => !s.plain && o.value), u = c(() => !s.plain && t.value), d = c(() => u.value && s.pressedBehavior === "opacity" ? s.pressedOpacity : i.value && s.hoverBehavior === "opacity" ? Number(s.hoverOpacity) : Number(s.backgroundOpacity)), f = c(() => i.value && s.hoverBehavior === "mask"), C = c(() => u.value && s.pressedBehavior === "mask"), b = c(() => C.value ? s.pressedOpacity : f.value ? Number(s.hoverOpacity) : 0), g = c(() => C.value ? r(s.pressedMaskColor) : f.value ? r(s.hoverMaskColor) : "transparent");
   return {
-    backgroundColor,
-    backgroundColorOpacity,
-    backgroundMaskOpacity,
-    backgroundMaskColor
+    backgroundColor: l,
+    backgroundColorOpacity: d,
+    backgroundMaskOpacity: b,
+    backgroundMaskColor: g
   };
-};
-const useRouterLinkProps = {
+}, xs = {
   tag: { type: String, default: "span" },
   to: { type: [String, Object], default: void 0 },
   replace: { type: Boolean, default: void 0 },
@@ -1900,697 +1146,435 @@ const useRouterLinkProps = {
   exactActiveClass: { type: String, default: void 0 },
   href: { type: String, default: void 0 },
   target: { type: String, default: void 0 },
-  disabled: { type: Boolean, default: false }
-};
-const useRouterLink = (props) => {
-  const currentInstance = getCurrentInstance();
-  const globalProperties = computed(() => currentInstance == null ? void 0 : currentInstance.appContext.config.globalProperties);
-  const vueRouter = computed(() => {
-    var _a;
-    return (_a = globalProperties.value) == null ? void 0 : _a.$router;
-  });
-  const vueRoute = computed(() => {
-    var _a;
-    return (_a = globalProperties.value) == null ? void 0 : _a.$route;
-  });
-  const { getGlobalConfig } = useGlobalConfig();
-  const tagComputed = computed(() => {
-    if (props.disabled) {
-      return props.tag;
-    }
-    if (props.href && !props.to) {
+  disabled: { type: Boolean, default: !1 }
+}, Fo = (e) => {
+  const t = le(), o = c(() => t?.appContext.config.globalProperties), n = c(() => {
+    var f;
+    return (f = o.value) == null ? void 0 : f.$router;
+  }), s = c(() => {
+    var f;
+    return (f = o.value) == null ? void 0 : f.$route;
+  }), { getGlobalConfig: r } = Te(), a = c(() => {
+    if (e.disabled)
+      return e.tag;
+    if (e.href && !e.to)
       return "a";
-    }
-    const globalConfig = getGlobalConfig();
-    if (globalConfig.routerComponent && props.to) {
-      return globalConfig.routerComponent;
-    }
-    if (props.to && vueRouter.value !== void 0) {
-      return "router-link";
-    }
-    if (props.to && vueRouter.value === void 0) {
-      return "a";
-    }
-    return props.tag || "div";
-  });
-  const isLinkTag = computed(() => {
-    if (props.disabled) {
-      return false;
-    }
-    return Boolean(props.href || props.to);
-  });
-  const linkAttributesComputed = computed(() => {
-    if (!isLinkTag.value) {
-      return {};
-    }
-    return tagComputed.value === "a" ? {
-      target: props.target,
-      href: hrefComputed.value
-    } : {
-      target: props.target,
-      to: props.to,
-      replace: props.replace,
-      append: props.append,
-      activeClass: props.activeClass,
-      exact: props.exact,
-      exactActiveClass: props.exactActiveClass
-    };
-  });
-  const isActiveRouterLink = computed(() => {
-    if (!vueRouter.value || !props.to) {
-      return false;
-    }
-    const to = vueRouter.value.resolve(props.to).href;
-    const currentHref = vueRouter.value.currentRoute.value.path;
-    return to.replace("#", "") === currentHref.replace("#", "");
-  });
-  const hrefComputed = computed(() => {
-    var _a;
-    if (props.href) {
-      return props.href;
-    }
-    if (vueRoute.value === void 0 && props.to) {
-      return props.to;
-    }
-    return props.to ? (_a = vueRouter.value) == null ? void 0 : _a.resolve(props.to, vueRoute.value).href : void 0;
+    const f = r();
+    return f.routerComponent && e.to ? f.routerComponent : e.to && n.value !== void 0 ? "router-link" : e.to && n.value === void 0 ? "a" : e.tag || "div";
+  }), l = c(() => e.disabled ? !1 : !!(e.href || e.to)), i = c(() => l.value ? a.value === "a" ? {
+    target: e.target,
+    href: d.value
+  } : {
+    target: e.target,
+    to: e.to,
+    replace: e.replace,
+    append: e.append,
+    activeClass: e.activeClass,
+    exact: e.exact,
+    exactActiveClass: e.exactActiveClass
+  } : {}), u = c(() => {
+    if (!n.value || !e.to)
+      return !1;
+    const f = n.value.resolve(e.to).href, C = n.value.currentRoute.value.path;
+    return f.replace("#", "") === C.replace("#", "");
+  }), d = c(() => {
+    var f;
+    return e.href ? e.href : s.value === void 0 && e.to ? e.to : e.to ? (f = n.value) == null ? void 0 : f.resolve(e.to, s.value).href : void 0;
   });
   return {
-    isLinkTag,
-    tagComputed,
-    hrefComputed,
-    isActiveRouterLink,
-    linkAttributesComputed
+    isLinkTag: l,
+    tagComputed: a,
+    hrefComputed: d,
+    isActiveRouterLink: u,
+    linkAttributesComputed: i
   };
-};
-const useButtonAttributes = (props) => {
-  const { linkAttributesComputed, isLinkTag } = useRouterLink(props);
-  const typeComputed = computed(() => isLinkTag.value ? void 0 : props.type);
-  const buttonAttributesComputed = computed(() => {
-    const disabledAttributes = {
-      "aria-disabled": !!props.disabled,
-      disabled: !!props.disabled
+}, Ls = (e) => {
+  const { linkAttributesComputed: t, isLinkTag: o } = Fo(e), n = c(() => o.value ? void 0 : e.type), s = c(() => {
+    const r = {
+      "aria-disabled": !!e.disabled,
+      disabled: !!e.disabled
     };
-    if (isLinkTag.value) {
-      return disabledAttributes;
-    }
-    return {
-      type: typeComputed.value,
-      tabindex: props.loading || props.disabled ? -1 : 0,
-      ...disabledAttributes
+    return o.value ? r : {
+      type: n.value,
+      tabindex: e.loading || e.disabled ? -1 : 0,
+      ...r
     };
   });
-  return computed(() => ({ ...linkAttributesComputed.value, ...buttonAttributesComputed.value }));
-};
-const getOpacity = (opacity) => {
-  var _a, _b, _c;
-  if (isServer()) {
-    return opacity;
+  return c(() => ({ ...t.value, ...s.value }));
+}, Ps = (e) => {
+  var t, o, n;
+  if (Io())
+    return e;
+  if (e > 0) {
+    const s = (t = window?.navigator) == null ? void 0 : t.userAgent, r = s && /^((?!chrome|android).)*safari/i.test((o = window?.navigator) == null ? void 0 : o.userAgent), a = s && /(version.)15|16/i.test((n = window?.navigator) == null ? void 0 : n.userAgent);
+    if (r && !a)
+      return e < 1 ? 1 - e : e;
   }
-  if (opacity > 0) {
-    const userAgent = (_a = window == null ? void 0 : window.navigator) == null ? void 0 : _a.userAgent;
-    const isSafari = userAgent && /^((?!chrome|android).)*safari/i.test((_b = window == null ? void 0 : window.navigator) == null ? void 0 : _b.userAgent);
-    const isLatestSafari = userAgent && /(version.)15|16/i.test((_c = window == null ? void 0 : window.navigator) == null ? void 0 : _c.userAgent);
-    if (isSafari && !isLatestSafari) {
-      return opacity < 1 ? 1 - opacity : opacity;
-    }
-  }
-  return opacity;
-};
-const useButtonTextColor = (textColorComputed, colorComputed, isPressed, isHovered) => {
-  const instance = getCurrentInstance();
-  if (!instance) {
+  return e;
+}, Es = (e, t, o, n) => {
+  const s = le();
+  if (!s)
     throw new Error("`useButtonTextColor` hook must be used only inside of setup function!");
-  }
-  const props = instance.props;
-  const { getColor, colorToRgba: colorToRgba2, getStateMaskGradientBackground: getStateMaskGradientBackground2 } = useColors();
-  const plainColorStyles = computed(() => ({
+  const r = s.props, { getColor: a, colorToRgba: l, getStateMaskGradientBackground: i } = Ce(), u = c(() => ({
     background: "transparent",
-    color: textColorComputed.value,
+    color: e.value,
     "-webkit-background-clip": "text",
     "background-clip": "text",
-    opacity: getPlainTextOpacity.value
-  }));
-  const getStateColor = (maskColor, stateOpacity, stateBehavior) => {
-    const maskStateColor = getColor(maskColor);
-    let stateStyles;
-    if (stateBehavior === "opacity") {
-      stateStyles = { color: colorToRgba2(textColorComputed.value, stateOpacity) };
-    } else {
-      stateStyles = {
-        background: getStateMaskGradientBackground2(colorComputed.value, maskStateColor, stateOpacity),
-        color: stateOpacity < 1 ? colorToRgba2(textColorComputed.value, getOpacity(stateOpacity)) : maskStateColor
-      };
-    }
-    return { ...plainColorStyles.value, ...stateStyles };
-  };
-  const hoverTextColorComputed = computed(() => {
-    return getStateColor(props.hoverMaskColor, Number(props.hoverOpacity), props.hoverBehavior);
+    opacity: b.value
+  })), d = (g, v, p) => {
+    const O = a(g);
+    let _;
+    return p === "opacity" ? _ = { color: l(e.value, v) } : _ = {
+      background: i(t.value, O, v),
+      color: v < 1 ? l(e.value, Ps(v)) : O
+    }, { ...u.value, ..._ };
+  }, f = c(() => d(r.hoverMaskColor, Number(r.hoverOpacity), r.hoverBehavior)), C = c(() => d(r.pressedMaskColor, r.pressedOpacity, r.pressedBehavior)), b = c(() => {
+    if (!r.disabled)
+      return r.textOpacity === 1 || n.value && !o.value ? 1 : o.value ? 0.9 : r.textOpacity;
   });
-  const pressedTextColorComputed = computed(() => {
-    return getStateColor(props.pressedMaskColor, props.pressedOpacity, props.pressedBehavior);
-  });
-  const getPlainTextOpacity = computed(() => {
-    if (props.disabled) {
-      return void 0;
-    }
-    if (props.textOpacity === 1 || isHovered.value && !isPressed.value) {
-      return 1;
-    }
-    return isPressed.value ? 0.9 : props.textOpacity;
-  });
-  return computed(() => {
-    const defaultColorStyles = {
-      color: textColorComputed.value,
+  return c(() => {
+    const g = {
+      color: e.value,
       background: "transparent"
     };
-    props.plain && Object.assign(defaultColorStyles, plainColorStyles.value, { background: textColorComputed.value });
-    if (!props.plain) {
-      return defaultColorStyles;
-    }
-    if (isPressed.value) {
-      return pressedTextColorComputed.value;
-    }
-    if (isHovered.value) {
-      return hoverTextColorComputed.value;
-    }
-    return defaultColorStyles;
+    return r.plain && Object.assign(g, u.value, { background: e.value }), r.plain ? o.value ? C.value : n.value ? f.value : g : g;
   });
-};
-const clamp = (value, min, max) => {
-  return Math.min(Math.max(value, min), max);
-};
-const _hoisted_1$7 = {
+}, lo = (e, t, o) => Math.min(Math.max(e, t), o), $s = {
   class: "va-progress-circle__wrapper",
   viewBox: "0 0 40 40"
-};
-const _hoisted_2$5 = ["r", "stroke", "stroke-width", "stroke-dasharray", "stroke-dashoffset"];
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaProgressCircle"
-  },
+}, ks = ["r", "stroke", "stroke-width", "stroke-dasharray", "stroke-dashoffset"], Bs = /* @__PURE__ */ A({
+  name: "VaProgressCircle",
   __name: "VaProgressCircle",
   props: {
-    ...useSizeProps,
-    ...useComponentPresetProp,
+    ...It,
+    ...ct,
     modelValue: { type: [Number, String], default: 0 },
-    indeterminate: { type: Boolean, default: false },
+    indeterminate: { type: Boolean, default: !1 },
     thickness: { type: [Number, String], default: 0.06 },
     color: { type: String, default: "primary" },
-    ariaLabel: useTranslationProp("$t:progressState")
+    ariaLabel: jo("$t:progressState")
   },
-  setup(__props) {
-    const props = __props;
-    const { getColor } = useColors();
-    const { sizeComputed } = useSize(props);
-    const cappedThickness = computed(() => clamp(Number(props.thickness), 0, 1) / 2 * 100);
-    const radius = computed(() => 20 - 20 * cappedThickness.value / 100);
-    const dasharray = computed(() => 2 * Math.PI * radius.value);
-    const dashoffset = computed(() => dasharray.value * (1 - clamp(Number(props.modelValue), 0, 100) / 100));
-    const colorComputed = computed(() => getColor(props.color, void 0, true));
-    const { tp } = useTranslation();
-    const infoStyle = computed(() => ({ color: colorComputed.value }));
-    const rootStyle = computed(() => ({
-      width: sizeComputed.value,
-      height: sizeComputed.value
-    }));
-    const rootClass = computed(() => ({
-      "va-progress-circle--indeterminate": props.indeterminate
-    }));
-    const ariaAttributesComputed = computed(() => ({
+  setup(e) {
+    const t = e, { getColor: o } = Ce(), { sizeComputed: n } = jt(t), s = c(() => lo(Number(t.thickness), 0, 1) / 2 * 100), r = c(() => 20 - 20 * s.value / 100), a = c(() => 2 * Math.PI * r.value), l = c(() => a.value * (1 - lo(Number(t.modelValue), 0, 100) / 100)), i = c(() => o(t.color, void 0, !0)), { tp: u } = dt(), d = c(() => ({ color: i.value })), f = c(() => ({
+      width: n.value,
+      height: n.value
+    })), C = c(() => ({
+      "va-progress-circle--indeterminate": t.indeterminate
+    })), b = c(() => ({
       role: "progressbar",
-      "aria-label": tp(props.ariaLabel),
-      "aria-valuenow": !props.indeterminate ? props.modelValue : void 0
+      "aria-label": u(t.ariaLabel),
+      "aria-valuenow": t.indeterminate ? void 0 : t.modelValue
     }));
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", mergeProps({
-        class: ["va-progress-circle", rootClass.value],
-        style: rootStyle.value
-      }, ariaAttributesComputed.value), [
-        (openBlock(), createElementBlock("svg", _hoisted_1$7, [
-          createElementVNode("circle", {
-            class: "va-progress-circle__overlay",
-            cx: "50%",
-            cy: "50%",
-            r: radius.value,
-            fill: "none",
-            stroke: colorComputed.value,
-            "stroke-width": cappedThickness.value + "%",
-            "stroke-dasharray": dasharray.value,
-            "stroke-dashoffset": dashoffset.value
-          }, null, 8, _hoisted_2$5)
-        ])),
-        _ctx.$slots.default ? (openBlock(), createElementBlock("div", {
-          key: 0,
-          style: normalizeStyle(infoStyle.value),
-          class: "va-progress-circle__info"
-        }, [
-          renderSlot(_ctx.$slots, "default")
-        ], 4)) : createCommentVNode("", true)
-      ], 16);
-    };
+    return (g, v) => (E(), U("div", be({
+      class: ["va-progress-circle", C.value],
+      style: f.value
+    }, b.value), [
+      (E(), U("svg", $s, [
+        L("circle", {
+          class: "va-progress-circle__overlay",
+          cx: "50%",
+          cy: "50%",
+          r: r.value,
+          fill: "none",
+          stroke: i.value,
+          "stroke-width": s.value + "%",
+          "stroke-dasharray": a.value,
+          "stroke-dashoffset": l.value
+        }, null, 8, ks)
+      ])),
+      g.$slots.default ? (E(), U("div", {
+        key: 0,
+        style: Vt(d.value),
+        class: "va-progress-circle__info"
+      }, [
+        de(g.$slots, "default")
+      ], 4)) : ue("", !0)
+    ], 16));
   }
-});
-const VaProgressCircle = withConfigTransport$1(_sfc_main$9);
-const pick = (o, keys) => {
-  return Object.keys(o).filter((key) => keys.includes(key)).reduce((acc, key) => {
-    acc[key] = o[key];
-    return acc;
-  }, {});
-};
-const useHoverStyleProps = {
+}), Mo = He(Bs), zo = (e, t) => Object.keys(e).filter((o) => t.includes(o)).reduce((o, n) => (o[n] = e[n], o), {}), Vs = {
   hoverBehavior: {
     type: String,
     default: "mask",
-    validator: (value) => ["opacity", "mask"].includes(value)
+    validator: (e) => ["opacity", "mask"].includes(e)
   },
   hoverOpacity: { type: [Number, String], default: 0.15 },
   hoverMaskColor: { type: String, default: "textInverted" }
-};
-const usePressedStyleProps = {
+}, As = {
   pressedBehavior: {
     type: String,
     default: "mask",
-    validator: (value) => ["opacity", "mask"].includes(value)
+    validator: (e) => ["opacity", "mask"].includes(e)
   },
   pressedOpacity: { type: Number, default: 0.13 },
   pressedMaskColor: { type: String, default: "textPrimary" }
-};
-const useLoadingProps = {
-  loading: { type: Boolean, default: false }
-};
-const isHTMLElement = (el) => {
-  return el instanceof HTMLElement;
-};
-const focusElement = (el) => {
-  if (!el || !isHTMLElement(el)) {
-    return;
-  }
-  el.focus();
-  el.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
-};
-const blurElement = (el) => {
-  if (!el || !isHTMLElement(el)) {
-    return;
-  }
-  el.blur();
-  el.dispatchEvent(new Event("blur", { bubbles: true }));
-};
-const useCaptureEvent = (event, cb, options = {}) => {
-  onMounted(() => window.addEventListener(event, cb, { capture: true, ...options }));
-  onBeforeUnmount(() => window.removeEventListener(event, cb, { capture: true, ...options }));
-};
-const useActiveElement = () => {
-  const activeEl = shallowRef();
-  const updateActiveElement = () => {
-    activeEl.value = document.activeElement;
+}, Rs = {
+  loading: { type: Boolean, default: !1 }
+}, Do = (e) => e instanceof HTMLElement, Ts = (e) => {
+  !e || !Do(e) || (e.focus(), e.dispatchEvent(new FocusEvent("focus", { bubbles: !0 })));
+}, Is = (e) => {
+  !e || !Do(e) || (e.blur(), e.dispatchEvent(new Event("blur", { bubbles: !0 })));
+}, io = (e, t, o = {}) => {
+  F(() => window.addEventListener(e, t, { capture: !0, ...o })), Re(() => window.removeEventListener(e, t, { capture: !0, ...o }));
+}, js = () => {
+  const e = Ue(), t = () => {
+    e.value = document.activeElement;
   };
-  onMounted(updateActiveElement);
-  useCaptureEvent("focus", updateActiveElement);
-  useCaptureEvent("blur", updateActiveElement);
-  return activeEl;
+  return F(t), io("focus", t), io("blur", t), e;
 };
-function useFocus(el, emit) {
-  const activeElement = useActiveElement();
-  const isFocused = computed({
-    get: () => {
-      if (isNilValue(activeElement.value)) {
-        return false;
-      }
-      if (isNilValue(el == null ? void 0 : el.value)) {
-        return false;
-      }
-      return activeElement.value === (el == null ? void 0 : el.value);
-    },
-    set: (value) => {
-      if (value) {
-        focus();
-      } else {
-        blur();
-      }
+function Ns(e, t) {
+  const o = js(), n = c({
+    get: () => _t(o.value) || _t(e?.value) ? !1 : o.value === e?.value,
+    set: (i) => {
+      i ? a() : l();
     }
-  });
-  const onFocus = (e) => {
+  }), s = (i) => {
+  }, r = (i) => {
+  }, a = () => {
+    e?.value && Ts(he(e?.value));
+  }, l = () => {
+    e?.value && Is(he(e?.value));
   };
-  const onBlur = (e) => {
-  };
-  const focus = () => {
-    if (!(el == null ? void 0 : el.value)) {
-      return;
-    }
-    focusElement(unwrapEl(el == null ? void 0 : el.value));
-  };
-  const blur = () => {
-    if (!(el == null ? void 0 : el.value)) {
-      return;
-    }
-    blurElement(unwrapEl(el == null ? void 0 : el.value));
-  };
-  useEvent("focus", onFocus, el);
-  useEvent("blur", onBlur, el);
-  return {
-    isFocused,
-    onFocus,
-    onBlur,
-    focus,
-    blur
+  return Ae("focus", s, e), Ae("blur", r, e), {
+    isFocused: n,
+    onFocus: s,
+    onBlur: r,
+    focus: a,
+    blur: l
   };
 }
-const useHTMLElement = (key) => {
-  if (isRef(key)) {
-    return computed({
+const Go = (e) => {
+  if (St(e))
+    return c({
       get() {
-        return unwrapEl(key.value);
+        return he(e.value);
       },
-      set(value) {
-        key.value = value;
+      set(o) {
+        e.value = o;
+      }
+    });
+  if (e) {
+    const o = ws(e);
+    return c({
+      get() {
+        return he(o.value);
+      },
+      set(n) {
+        o.value = n;
       }
     });
   }
-  if (key) {
-    const el2 = useTemplateRef(key);
-    return computed({
-      get() {
-        return unwrapEl(el2.value);
-      },
-      set(value) {
-        el2.value = value;
-      }
-    });
-  }
-  const el = shallowRef();
-  return computed({
-    set(value) {
-      el.value = unwrapEl(value);
+  const t = Ue();
+  return c({
+    set(o) {
+      t.value = he(o);
     },
     get() {
-      return el.value;
+      return t.value;
     }
   });
 };
-function useHover(el, disabled) {
-  const isHovered = ref(false);
-  const onMouseEnter = () => {
-    if (disabled == null ? void 0 : disabled.value) {
-      return;
-    }
-    isHovered.value = true;
+function Fs(e, t) {
+  const o = h(!1), n = () => {
+    t?.value || (o.value = !0);
+  }, s = () => {
+    o.value = !1;
   };
-  const onMouseLeave = () => {
-    isHovered.value = false;
-  };
-  disabled && watch(disabled, (v) => {
-    if (v) {
-      isHovered.value = false;
-    }
+  t && ae(t, (a) => {
+    a && (o.value = !1);
   });
-  const target = useHTMLElement(el);
-  useEvent("mouseenter", onMouseEnter, target);
-  useEvent("mouseleave", onMouseLeave, target);
-  return { isHovered, onMouseEnter, onMouseLeave };
+  const r = Go(e);
+  return Ae("mouseenter", n, r), Ae("mouseleave", s, r), { isHovered: o, onMouseEnter: n, onMouseLeave: s };
 }
-function usePressed(el) {
-  const isPressed = ref(false);
-  const onMouseDown = () => {
-    isPressed.value = true;
-  };
-  const onMouseUp = () => {
-    isPressed.value = false;
-  };
-  const target = useHTMLElement(el);
-  useEvent(["mousedown", "touchstart", "dragstart"], onMouseDown, target);
-  useEvent([
+function Ms(e) {
+  const t = h(!1), o = () => {
+    t.value = !0;
+  }, n = () => {
+    t.value = !1;
+  }, s = Go(e);
+  return Ae(["mousedown", "touchstart", "dragstart"], o, s), Ae([
     "mouseup",
     "mouseleave",
     "touchend",
     "touchcancel",
     "drop",
     "dragend"
-  ], onMouseUp, true);
-  return { isPressed, onMouseDown, onMouseUp };
+  ], n, !0), { isPressed: t, onMouseDown: o, onMouseUp: n };
 }
-const checkSlotChildrenDeep = (v, initial = true) => {
-  var _a;
-  if (isVNode(v)) {
-    return true;
-  }
-  if (!v || initial && (!isFunction(v) || !((_a = v()) == null ? void 0 : _a.length))) {
-    return false;
-  }
-  const slotData = initial ? v() : v;
-  if (Array.isArray(slotData)) {
-    return slotData.some((el) => {
-      return Array.isArray(el.children) ? checkSlotChildrenDeep(el.children, false) : el.children || el.props;
-    });
-  }
-  return !!slotData.children;
-};
-const useSlotPassed = (name = "default") => {
-  const { slots } = getCurrentInstance();
-  return computed(() => checkSlotChildrenDeep(slots[name]));
-};
-const useBem = (prefix, modifiers) => {
-  if (isDev && !prefix) {
-    console.warn('You must pass the @param "prefix" to the useBem hook!');
-  }
-  const modifiersList = computed(() => typeof modifiers === "function" ? modifiers() : unref(modifiers));
-  const computedBemClassesObject = computed(() => {
-    return Object.entries(unref(modifiersList)).reduce((classesObj, [modifierName, value]) => {
-      if (value) {
-        classesObj[`${prefix}--${camelCaseToKebabCase(modifierName)}`] = true;
-      }
-      return classesObj;
-    }, {});
-  });
-  const computedBemClassesArray = computed(() => Object.keys(computedBemClassesObject.value));
-  const computedBemClassesString = computed(() => computedBemClassesArray.value.join(" "));
+const Uo = (e, t = !0) => {
+  var o;
+  if (mo(e))
+    return !0;
+  if (!e || t && (!To(e) || !((o = e()) != null && o.length)))
+    return !1;
+  const n = t ? e() : e;
+  return Array.isArray(n) ? n.some((s) => Array.isArray(s.children) ? Uo(s.children, !1) : s.children || s.props) : !!n.children;
+}, zs = (e = "default") => {
+  const { slots: t } = le();
+  return c(() => Uo(t[e]));
+}, Dt = (e, t) => {
+  Tt && !e && console.warn('You must pass the @param "prefix" to the useBem hook!');
+  const o = c(() => typeof t == "function" ? t() : S(t)), n = c(() => Object.entries(S(o)).reduce((a, [l, i]) => (i && (a[`${e}--${lt(l)}`] = !0), a), {})), s = c(() => Object.keys(n.value)), r = c(() => s.value.join(" "));
   return new Proxy({}, {
     ownKeys() {
-      return Reflect.ownKeys(computedBemClassesObject.value);
+      return Reflect.ownKeys(n.value);
     },
-    getOwnPropertyDescriptor(_, key) {
-      return Reflect.getOwnPropertyDescriptor(computedBemClassesObject.value, key);
+    getOwnPropertyDescriptor(a, l) {
+      return Reflect.getOwnPropertyDescriptor(n.value, l);
     },
-    get(_, key, receiver) {
-      switch (key) {
+    get(a, l, i) {
+      switch (l) {
         case "asArray":
-          return computedBemClassesArray;
+          return s;
         case "asString":
-          return computedBemClassesString;
+          return r;
         case "asObject":
-          return computedBemClassesObject;
+          return n;
         default:
-          return Reflect.get(computedBemClassesObject.value, key, receiver);
+          return Reflect.get(n.value, l, i);
       }
     }
   });
-};
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaButton"
-  },
+}, Ds = /* @__PURE__ */ A({
+  name: "VaButton",
   __name: "VaButton",
   props: {
-    ...useComponentPresetProp,
-    ...useSizeProps,
-    ...useHoverStyleProps,
-    ...usePressedStyleProps,
-    ...useLoadingProps,
-    ...useRouterLinkProps,
+    ...ct,
+    ...It,
+    ...Vs,
+    ...As,
+    ...Rs,
+    ...xs,
     tag: { type: String, default: "button" },
     type: { type: String, default: "button" },
-    block: { type: Boolean, default: false },
-    disabled: { type: Boolean, default: false },
+    block: { type: Boolean, default: !1 },
+    disabled: { type: Boolean, default: !1 },
     color: { type: String, default: "primary" },
     textColor: { type: String, default: "" },
     textOpacity: { type: [Number, String], default: 1 },
     backgroundOpacity: { type: [Number, String], default: 1 },
     borderColor: { type: String, default: "" },
     // only for filled bg state
-    gradient: { type: Boolean, default: false },
-    plain: { type: Boolean, default: false },
-    round: { type: Boolean, default: false },
+    gradient: { type: Boolean, default: !1 },
+    plain: { type: Boolean, default: !1 },
+    round: { type: Boolean, default: !1 },
     size: {
       type: String,
       default: "medium",
-      validator: (v) => ["small", "medium", "large"].includes(v)
+      validator: (e) => ["small", "medium", "large"].includes(e)
     },
     icon: { type: String, default: "" },
     iconRight: { type: String, default: "" },
     iconColor: { type: String, default: "" }
   },
-  setup(__props, { expose: __expose }) {
-    const props = __props;
-    const { getColor } = useColors();
-    const colorComputed = computed(() => getColor(props.color));
-    const { sizeComputed } = useSize(props);
-    const iconSizeComputed = computed(() => {
-      const size = /([0-9]*)(px)/.exec(sizeComputed.value);
-      return size ? `${+size[1] / 2}${size[2]}` : sizeComputed.value;
-    });
-    const { tagComputed } = useRouterLink(props);
-    const attributesComputed = useButtonAttributes(props);
-    const { disabled } = toRefs(props);
-    const button = shallowRef();
-    const { focus, blur } = useFocus(button);
-    const { isHovered } = useHover(button, disabled);
-    const { isPressed } = usePressed(button);
-    const iconColorComputed = computed(() => props.iconColor ? getColor(props.iconColor) : textColorComputed.value);
-    const iconAttributesComputed = computed(() => ({
-      color: iconColorComputed.value,
-      size: props.size
+  setup(e, { expose: t }) {
+    const o = e, { getColor: n } = Ce(), s = c(() => n(o.color)), { sizeComputed: r } = jt(o), a = c(() => {
+      const w = /([0-9]*)(px)/.exec(r.value);
+      return w ? `${+w[1] / 2}${w[2]}` : r.value;
+    }), { tagComputed: l } = Fo(o), i = Ls(o), { disabled: u } = Tn(o), d = Ue(), { focus: f, blur: C } = Ns(d), { isHovered: b } = Fs(d, u), { isPressed: g } = Ms(d), v = c(() => o.iconColor ? n(o.iconColor) : x.value), p = c(() => ({
+      color: v.value,
+      size: o.size
+    })), O = c(() => ({ "va-button__content--loading": o.loading })), _ = zs(), P = c(() => !!(o.iconRight && !o.icon || !o.iconRight && o.icon)), X = c(() => !_.value && P.value), Q = $t("textOpacity"), ne = $t("backgroundOpacity"), K = Dt("va-button", () => ({
+      ...zo(o, ["disabled", "block", "loading", "round", "plain"]),
+      small: o.size === "small",
+      normal: !o.size || o.size === "medium",
+      large: o.size === "large",
+      opacity: Q.value < 1,
+      bordered: !!o.borderColor,
+      iconOnly: X.value,
+      leftIcon: !X.value && !!o.icon && !o.iconRight,
+      rightIcon: !X.value && !o.icon && !!o.iconRight
+    })), ee = c(() => o.plain || ne.value < 0.5), { textColorComputed: x } = No(s, ee), {
+      backgroundColor: R,
+      backgroundColorOpacity: me,
+      backgroundMaskOpacity: Fe,
+      backgroundMaskColor: Pe
+    } = _s(s, g, b), Ee = Es(x, s, g, b), y = c(() => ({
+      borderColor: o.borderColor ? n(o.borderColor) : "transparent",
+      ...Ee.value
     }));
-    const wrapperClassComputed = computed(() => ({ "va-button__content--loading": props.loading }));
-    const isSlotContentPassed = useSlotPassed();
-    const isOneIcon = computed(() => !!(props.iconRight && !props.icon || !props.iconRight && props.icon));
-    const isOnlyIcon = computed(() => !isSlotContentPassed.value && isOneIcon.value);
-    const textOpacityComputed = useNumericProp("textOpacity");
-    const backgroundOpacityComputed = useNumericProp("backgroundOpacity");
-    const computedClass = useBem("va-button", () => ({
-      ...pick(props, ["disabled", "block", "loading", "round", "plain"]),
-      small: props.size === "small",
-      normal: !props.size || props.size === "medium",
-      large: props.size === "large",
-      opacity: textOpacityComputed.value < 1,
-      bordered: !!props.borderColor,
-      iconOnly: isOnlyIcon.value,
-      leftIcon: !isOnlyIcon.value && !!props.icon && !props.iconRight,
-      rightIcon: !isOnlyIcon.value && !props.icon && !!props.iconRight
-    }));
-    const isTransparentBg = computed(() => props.plain || backgroundOpacityComputed.value < 0.5);
-    const { textColorComputed } = useTextColor(colorComputed, isTransparentBg);
-    const {
-      backgroundColor,
-      backgroundColorOpacity,
-      backgroundMaskOpacity,
-      backgroundMaskColor
-    } = useButtonBackground(colorComputed, isPressed, isHovered);
-    const contentColorComputed = useButtonTextColor(textColorComputed, colorComputed, isPressed, isHovered);
-    const computedStyle = computed(() => ({
-      borderColor: props.borderColor ? getColor(props.borderColor) : "transparent",
-      ...contentColorComputed.value
-    }));
-    __expose({
-      focus,
-      blur
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(resolveDynamicComponent(unref(tagComputed)), mergeProps({
-        ref_key: "button",
-        ref: button,
-        class: ["va-button", unref(computedClass)],
-        style: [computedStyle.value, `--va-background-color: ${String(unref(backgroundColor))};--va-background-color-opacity: ${String(unref(backgroundColorOpacity))};--va-background-mask-color: ${String(unref(backgroundMaskColor))};--va-background-mask-opacity: ${String(unref(backgroundMaskOpacity))}`]
-      }, unref(attributesComputed)), {
-        default: withCtx(() => [
-          createElementVNode("span", {
-            class: normalizeClass(["va-button__content", wrapperClassComputed.value])
-          }, [
-            renderSlot(_ctx.$slots, "prepend", normalizeProps(guardReactiveProps({ icon: __props.icon, iconAttributes: iconAttributesComputed.value })), () => [
-              __props.icon ? (openBlock(), createBlock(unref(VaIcon), mergeProps({
-                key: 0,
-                class: "va-button__left-icon",
-                name: __props.icon
-              }, iconAttributesComputed.value), null, 16, ["name"])) : createCommentVNode("", true)
-            ]),
-            renderSlot(_ctx.$slots, "default"),
-            renderSlot(_ctx.$slots, "append", normalizeProps(guardReactiveProps({ icon: __props.iconRight, iconAttributes: iconAttributesComputed.value })), () => [
-              __props.iconRight ? (openBlock(), createBlock(unref(VaIcon), mergeProps({
-                key: 0,
-                class: "va-button__right-icon",
-                name: __props.iconRight
-              }, iconAttributesComputed.value), null, 16, ["name"])) : createCommentVNode("", true)
-            ])
-          ], 2),
-          _ctx.loading ? renderSlot(_ctx.$slots, "loading", normalizeProps(mergeProps({ key: 0 }, {
-            size: iconSizeComputed.value,
-            color: unref(textColorComputed)
-          })), () => [
-            createVNode(unref(VaProgressCircle), {
-              class: "va-button__loader",
-              size: iconSizeComputed.value,
-              color: unref(textColorComputed),
-              thickness: 0.15,
-              indeterminate: ""
-            }, null, 8, ["size", "color"])
-          ]) : createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 16, ["class", "style"]);
-    };
+    return t({
+      focus: f,
+      blur: C
+    }), (w, T) => (E(), Y(st(S(l)), be({
+      ref_key: "button",
+      ref: d,
+      class: ["va-button", S(K)],
+      style: [y.value, `--va-background-color: ${String(S(R))};--va-background-color-opacity: ${String(S(me))};--va-background-mask-color: ${String(S(Pe))};--va-background-mask-opacity: ${String(S(Fe))}`]
+    }, S(i)), {
+      default: B(() => [
+        L("span", {
+          class: we(["va-button__content", O.value])
+        }, [
+          de(w.$slots, "prepend", xe(De({ icon: e.icon, iconAttributes: p.value })), () => [
+            e.icon ? (E(), Y(S(Et), be({
+              key: 0,
+              class: "va-button__left-icon",
+              name: e.icon
+            }, p.value), null, 16, ["name"])) : ue("", !0)
+          ]),
+          de(w.$slots, "default"),
+          de(w.$slots, "append", xe(De({ icon: e.iconRight, iconAttributes: p.value })), () => [
+            e.iconRight ? (E(), Y(S(Et), be({
+              key: 0,
+              class: "va-button__right-icon",
+              name: e.iconRight
+            }, p.value), null, 16, ["name"])) : ue("", !0)
+          ])
+        ], 2),
+        w.loading ? de(w.$slots, "loading", xe(be({ key: 0 }, {
+          size: a.value,
+          color: S(x)
+        })), () => [
+          k(S(Mo), {
+            class: "va-button__loader",
+            size: a.value,
+            color: S(x),
+            thickness: 0.15,
+            indeterminate: ""
+          }, null, 8, ["size", "color"])
+        ]) : ue("", !0)
+      ]),
+      _: 3
+    }, 16, ["class", "style"]));
   }
-});
-const VaButton = withConfigTransport$1(_sfc_main$8);
-const NOT_PROVIDED = Symbol("NOT_PROVIDED");
-const useUserProvidedProp = (propName, props) => {
-  const vm = getCurrentInstance();
-  return computed(() => {
-    if (!(vm == null ? void 0 : vm.vnode.props)) {
-      return NOT_PROVIDED;
-    }
-    const originalProp = props[propName];
-    return propName in vm.vnode.props ? originalProp : NOT_PROVIDED;
+}), Ct = He(Ds), it = Symbol("NOT_PROVIDED"), Gs = (e, t) => {
+  const o = le();
+  return c(() => {
+    if (!o?.vnode.props)
+      return it;
+    const n = t[e];
+    return e in o.vnode.props ? n : it;
   });
-};
-const useStatefulProps = {
-  stateful: { type: Boolean, default: false },
+}, Us = {
+  stateful: { type: Boolean, default: !1 },
   modelValue: { type: void 0 }
-};
-const useStateful = (props, emit, key = "modelValue", options = {}) => {
-  const { eventName, defaultValue } = options;
-  const event = eventName || `update:${key.toString()}`;
-  const passedProp = useUserProvidedProp(key, props);
-  const defaultValuePassed = "defaultValue" in options;
-  const valueState = ref(
-    passedProp.value === NOT_PROVIDED ? defaultValuePassed ? defaultValue : props[key] : passedProp.value
+}, Hs = (e, t, o = "modelValue", n = {}) => {
+  const { eventName: s, defaultValue: r } = n, a = s || `update:${o.toString()}`, l = Gs(o, e), i = "defaultValue" in n, u = h(
+    l.value === it ? i ? r : e[o] : l.value
   );
-  let unwatchModelValue;
-  const watchModelValue = () => {
-    unwatchModelValue = watch(() => props[key], (modelValue) => {
-      valueState.value = modelValue;
+  let d;
+  const f = () => {
+    d = ae(() => e[o], (b) => {
+      u.value = b;
     });
   };
-  watch(() => props.stateful, (stateful) => {
-    stateful ? watchModelValue() : unwatchModelValue == null ? void 0 : unwatchModelValue();
-  }, { immediate: true });
-  const valueComputed = computed({
-    get: () => {
-      if (props.stateful) {
-        return valueState.value;
-      }
-      return props[key];
-    },
-    set: (value) => {
-      if (props.stateful) {
-        valueState.value = value;
-      }
-      emit(event, value);
+  ae(() => e.stateful, (b) => {
+    b ? f() : d?.();
+  }, { immediate: !0 });
+  const C = c({
+    get: () => e.stateful ? u.value : e[o],
+    set: (b) => {
+      e.stateful && (u.value = b), t(a, b);
     }
   });
-  Object.defineProperty(valueComputed, "stateful", {
-    get: () => props.stateful
-  });
-  Object.defineProperty(valueComputed, "userProvided", {
-    get: () => passedProp.value !== NOT_PROVIDED
-  });
-  return { valueComputed };
-};
-const verticalPlacement = ["top", "bottom"];
-const horizontalPlacement = ["left", "right"];
-const placementPosition = [...verticalPlacement, ...horizontalPlacement];
-const placementAlignment = ["start", "end", "center"];
-const placementsPositions = placementPosition.reduce((acc, position) => {
-  acc.push(position);
-  placementAlignment.forEach((alignment) => acc.push(`${position}-${alignment}`));
-  return acc;
-}, ["auto"]);
-const placementAliasesPositions = verticalPlacement.reduce((acc, yPosition) => {
-  horizontalPlacement.forEach((xPosition) => {
-    acc.push(`${yPosition}-${xPosition}`);
-    acc.push(`${xPosition}-${yPosition}`);
-  });
-  return acc;
-}, []);
-const placementsPositionsWithAliases = [...placementsPositions, ...placementAliasesPositions];
-const aliasToPlacement = {
+  return Object.defineProperty(C, "stateful", {
+    get: () => e.stateful
+  }), Object.defineProperty(C, "userProvided", {
+    get: () => l.value !== it
+  }), { valueComputed: C };
+}, Ho = ["top", "bottom"], Wo = ["left", "right"], Ws = [...Ho, ...Wo], qs = ["start", "end", "center"], Xs = Ws.reduce((e, t) => (e.push(t), qs.forEach((o) => e.push(`${t}-${o}`)), e), ["auto"]), Ks = Ho.reduce((e, t) => (Wo.forEach((o) => {
+  e.push(`${t}-${o}`), e.push(`${o}-${t}`);
+}), e), []), Js = [...Xs, ...Ks], Zs = {
   "top-left": "top-start",
   "left-top": "top-start",
   "top-right": "top-end",
@@ -2599,761 +1583,522 @@ const aliasToPlacement = {
   "left-bottom": "bottom-start",
   "bottom-right": "bottom-end",
   "right-bottom": "bottom-end"
-};
-const usePlacementAliases = (props) => {
-  const placementArray = computed(() => {
-    const placement = aliasToPlacement[props.placement] || props.placement;
-    return placement.split("-");
-  });
-  const position = computed(() => {
-    const position2 = placementArray.value[0];
-    return position2 === "auto" ? "bottom" : position2;
-  });
-  const align = computed(() => {
-    return placementArray.value[1] || "center";
-  });
-  return { position, align };
-};
-const useParsableMeasure = () => {
-  const isParsableMeasure2 = (value) => {
-    if (typeof value === "string") {
-      return !isNaN(+value) || value.endsWith("px") || value.endsWith("rem");
+}, Ys = (e) => {
+  const t = c(() => (Zs[e.placement] || e.placement).split("-")), o = c(() => {
+    const s = t.value[0];
+    return s === "auto" ? "bottom" : s;
+  }), n = c(() => t.value[1] || "center");
+  return { position: o, align: n };
+}, Qs = () => {
+  const e = (n) => typeof n == "string" ? !isNaN(+n) || n.endsWith("px") || n.endsWith("rem") : !1;
+  return { isParsableMeasure: e, isParsablePositiveMeasure: (n) => typeof n == "number" ? n >= 0 : e(n) && parseInt(n) >= 0, parseSizeValue: (n, s = 16) => {
+    const r = S(n);
+    if (typeof r == "string") {
+      const a = parseInt(r);
+      return isNaN(a) ? 0 : r.endsWith("rem") ? a * S(s) : a;
     }
-    return false;
-  };
-  const isParsablePositiveMeasure = (value) => {
-    if (typeof value === "number") {
-      return value >= 0;
-    }
-    return isParsableMeasure2(value) && parseInt(value) >= 0;
-  };
-  const parseSizeValue2 = (value, pageFontSize = 16) => {
-    const valueUnref = unref(value);
-    if (typeof valueUnref === "string") {
-      const parsedValue = parseInt(valueUnref);
-      if (isNaN(parsedValue)) {
-        return 0;
-      }
-      return valueUnref.endsWith("rem") ? parsedValue * unref(pageFontSize) : parsedValue;
-    }
-    return valueUnref;
-  };
-  return { isParsableMeasure: isParsableMeasure2, isParsablePositiveMeasure, parseSizeValue: parseSizeValue2 };
-};
-const { isParsableMeasure, parseSizeValue } = useParsableMeasure();
-const useFloatingPositionProps = {
-  overlap: { type: Boolean, default: false },
+    return r;
+  } };
+}, { isParsableMeasure: uo, parseSizeValue: co } = Qs(), ea = {
+  overlap: { type: Boolean, default: !1 },
   placement: {
     type: String,
     default: "top-end",
-    validator: (position) => placementsPositionsWithAliases.includes(position)
+    validator: (e) => Js.includes(e)
   },
   offset: {
     type: [Number, String, Array],
     default: 0,
-    validator: (value) => {
-      if (Array.isArray(value)) {
-        return value.every(isParsableMeasure);
-      }
-      if (typeof value === "string") {
-        return isParsableMeasure(value);
-      }
-      return !isNaN(value);
-    }
+    validator: (e) => Array.isArray(e) ? e.every(uo) : typeof e == "string" ? uo(e) : !isNaN(e)
   }
-};
-const useFloatingPosition = (props, floating) => {
-  if (!floating.value) {
+}, ta = (e, t) => {
+  if (!t.value)
     return {};
-  }
-  const { position, align } = usePlacementAliases(props);
-  const alignmentShiftComputed = computed(() => {
-    const alignOptions = {
-      start: props.overlap ? "-50%" : "-100%",
-      center: "-50%",
-      end: props.overlap ? "-50%" : "0%"
-    };
-    return alignOptions[align.value];
-  });
-  const offsetMarginComputed = computed(() => {
-    if (!props.offset) {
+  const { position: o, align: n } = Ys(e), s = c(() => ({
+    start: e.overlap ? "-50%" : "-100%",
+    center: "-50%",
+    end: e.overlap ? "-50%" : "0%"
+  })[n.value]), r = c(() => {
+    if (!e.offset)
       return {};
-    }
-    const mainAxis = ["left", "right"].includes(position.value) ? "top" : "left";
-    const crossAxis = mainAxis === "top" ? "left" : "top";
-    if (Array.isArray(props.offset)) {
-      const [x2, y] = props.offset.map(parseSizeValue);
+    const i = ["left", "right"].includes(o.value) ? "top" : "left", u = i === "top" ? "left" : "top";
+    if (Array.isArray(e.offset)) {
+      const [f, C] = e.offset.map(co);
       return {
-        [`margin-${mainAxis}`]: `${x2}px`,
-        [`margin-${crossAxis}`]: `${y}px`
+        [`margin-${i}`]: `${f}px`,
+        [`margin-${u}`]: `${C}px`
       };
     }
-    const offset = parseSizeValue(props.offset);
+    const d = co(e.offset);
     return {
-      [`margin-${crossAxis}`]: `${offset}px`
+      [`margin-${u}`]: `${d}px`
     };
-  });
-  const alignmentComputed = computed(() => {
-    const mainAxis = ["left", "right"].includes(position.value) ? "top" : "left";
-    const crossAxis = mainAxis === "top" ? "left" : "top";
-    let shiftValue = "0%";
-    if (crossAxis === "top" && position.value === "bottom") {
-      shiftValue = "100%";
-    }
-    if (crossAxis === "left" && position.value === "right") {
-      shiftValue = "100%";
-    }
-    const alignmentOptions = {
-      start: { [mainAxis]: "0%", [crossAxis]: shiftValue },
-      center: { [mainAxis]: "50%", [crossAxis]: shiftValue },
-      end: { [mainAxis]: "100%", [crossAxis]: shiftValue }
-    };
-    return alignmentOptions[align.value];
-  });
-  const transformComputed = computed(() => {
-    const coords = {
+  }), a = c(() => {
+    const i = ["left", "right"].includes(o.value) ? "top" : "left", u = i === "top" ? "left" : "top";
+    let d = "0%";
+    return u === "top" && o.value === "bottom" && (d = "100%"), u === "left" && o.value === "right" && (d = "100%"), {
+      start: { [i]: "0%", [u]: d },
+      center: { [i]: "50%", [u]: d },
+      end: { [i]: "100%", [u]: d }
+    }[n.value];
+  }), l = c(() => {
+    const i = {
       top: {
-        x: alignmentShiftComputed.value,
-        y: props.overlap ? "-50%" : "-100%"
+        x: s.value,
+        y: e.overlap ? "-50%" : "-100%"
       },
       bottom: {
-        x: alignmentShiftComputed.value,
-        y: props.overlap ? "-50%" : "0%"
+        x: s.value,
+        y: e.overlap ? "-50%" : "0%"
       },
       left: {
-        x: props.overlap ? "-50%" : "-100%",
-        y: alignmentShiftComputed.value
+        x: e.overlap ? "-50%" : "-100%",
+        y: s.value
       },
       right: {
-        x: props.overlap ? "-50%" : "0%",
-        y: alignmentShiftComputed.value
+        x: e.overlap ? "-50%" : "0%",
+        y: s.value
       }
-    };
-    const { x: x2, y } = coords[position.value];
-    return { transform: `translate(${x2}, ${y})` };
+    }, { x: u, y: d } = i[o.value];
+    return { transform: `translate(${u}, ${d})` };
   });
-  return computed(() => ({
-    ...alignmentComputed.value,
-    ...transformComputed.value,
-    ...offsetMarginComputed.value
+  return c(() => ({
+    ...a.value,
+    ...l.value,
+    ...r.value
   }));
-};
-const OPTIONS_LIST = {
+}, oa = {
   props: "prop",
   attrs: "prop",
   slots: "slot"
-};
-const useDeprecated = (deprecatedList, deprecationSource = ["props", "attrs"]) => {
-  if (!isDev) {
-    return void 0;
-  }
-  const instance = getCurrentInstance();
-  if (!instance) {
+}, na = (e, t = ["props", "attrs"]) => {
+  if (!Tt)
+    return;
+  const o = le();
+  if (!o)
     throw new Error("`useDeprecated` hook must be used only inside of setup function!");
-  }
-  const instanceName = instance.type.name;
-  const deprecatedItems = unref(deprecatedList);
-  deprecationSource.every((source) => {
-    var _a;
-    const option = OPTIONS_LIST[source];
-    const throwWarning = (key) => console.warn(`The '${key}' ${option} (${instanceName} component) is deprecated! Please, check the documentation.`);
-    if (source === "props") {
-      const propsOptions = ((_a = instance.propsOptions) == null ? void 0 : _a[0]) || {};
-      const propsValues = instance.props || {};
-      deprecatedItems.forEach((propName) => {
-        propsOptions[propName] && propsValues[propName] !== propsOptions[propName].default && throwWarning(propName);
-      });
-      return true;
+  const n = o.type.name, s = S(e);
+  t.every((r) => {
+    var a;
+    const l = oa[r], i = (u) => console.warn(`The '${u}' ${l} (${n} component) is deprecated! Please, check the documentation.`);
+    if (r === "props") {
+      const u = ((a = o.propsOptions) == null ? void 0 : a[0]) || {}, d = o.props || {};
+      return s.forEach((f) => {
+        u[f] && d[f] !== u[f].default && i(f);
+      }), !0;
     }
-    Object.keys({ ...instance[source] }).forEach((key) => {
-      if (deprecatedItems.includes(key)) {
-        throwWarning(key);
-      }
-    });
-    return true;
+    return Object.keys({ ...o[r] }).forEach((u) => {
+      s.includes(u) && i(u);
+    }), !0;
   });
-};
-const _hoisted_1$6 = ["aria-labelledby"];
-const _hoisted_2$4 = { class: "va-badge__text" };
-const _sfc_main$7 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaBadge"
-  },
+}, ra = ["aria-labelledby"], sa = { class: "va-badge__text" }, aa = /* @__PURE__ */ A({
+  name: "VaBadge",
   __name: "VaBadge",
   props: {
-    ...useComponentPresetProp,
-    ...useFloatingPositionProps,
+    ...ct,
+    ...ea,
     color: { type: String, default: "danger" },
     textColor: { type: String },
     text: { type: [String, Number], default: "" },
-    multiLine: { type: Boolean, default: false },
-    visibleEmpty: { type: Boolean, default: false },
-    dot: { type: Boolean, default: false },
+    multiLine: { type: Boolean, default: !1 },
+    visibleEmpty: { type: Boolean, default: !1 },
+    dot: { type: Boolean, default: !1 },
     // TODO: Remove after 1.8.0
-    transparent: { type: Boolean, default: false }
+    transparent: { type: Boolean, default: !1 }
   },
-  setup(__props) {
-    const props = __props;
-    useDeprecated(["transparent"]);
-    const slots = useSlots();
-    const isEmpty = computed(() => !(props.text || props.visibleEmpty || props.dot || slots.text));
-    const isFloating = computed(() => !!(slots.default || props.dot));
-    const badgeClass = useBem("va-badge", () => ({
-      ...pick(props, ["visibleEmpty", "dot", "multiLine"]),
-      empty: isEmpty.value,
-      floating: isFloating.value
-    }));
-    const { getColor } = useColors();
-    const colorComputed = computed(() => getColor(props.color));
-    const { textColorComputed } = useTextColor(colorComputed);
-    const positionStylesComputed = useFloatingPosition(props, isFloating);
-    const stylesComputed = computed(() => ({
-      color: textColorComputed.value,
-      borderColor: colorComputed.value,
-      backgroundColor: colorComputed.value,
-      opacity: props.transparent ? 0.5 : 1,
-      ...unref(positionStylesComputed)
-    }));
-    const ariaLabelledByComputed = computed(() => props.text ? String(props.text) : void 0);
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", {
-        class: normalizeClass(["va-badge", unref(badgeClass)]),
-        role: "status",
-        "aria-labelledby": ariaLabelledByComputed.value
+  setup(e) {
+    const t = e;
+    na(["transparent"]);
+    const o = In(), n = c(() => !(t.text || t.visibleEmpty || t.dot || o.text)), s = c(() => !!(o.default || t.dot)), r = Dt("va-badge", () => ({
+      ...zo(t, ["visibleEmpty", "dot", "multiLine"]),
+      empty: n.value,
+      floating: s.value
+    })), { getColor: a } = Ce(), l = c(() => a(t.color)), { textColorComputed: i } = No(l), u = ta(t, s), d = c(() => ({
+      color: i.value,
+      borderColor: l.value,
+      backgroundColor: l.value,
+      opacity: t.transparent ? 0.5 : 1,
+      ...S(u)
+    })), f = c(() => t.text ? String(t.text) : void 0);
+    return (C, b) => (E(), U("div", {
+      class: we(["va-badge", S(r)]),
+      role: "status",
+      "aria-labelledby": f.value
+    }, [
+      L("span", {
+        class: "va-badge__text-wrapper",
+        style: Vt(d.value)
       }, [
-        createElementVNode("span", {
-          class: "va-badge__text-wrapper",
-          style: normalizeStyle(stylesComputed.value)
-        }, [
-          createElementVNode("span", _hoisted_2$4, [
-            renderSlot(_ctx.$slots, "text", {}, () => [
-              createTextVNode(toDisplayString(__props.text), 1)
-            ])
+        L("span", sa, [
+          de(C.$slots, "text", {}, () => [
+            te(ce(e.text), 1)
           ])
-        ], 4),
-        renderSlot(_ctx.$slots, "default")
-      ], 10, _hoisted_1$6);
-    };
+        ])
+      ], 4),
+      de(C.$slots, "default")
+    ], 10, ra));
   }
-});
-const VaBadge = withConfigTransport$1(_sfc_main$7);
-const unFunction = (fn, ...args) => {
-  if (isFunction(fn)) {
-    return fn(...args);
-  }
-  return fn;
-};
-const _hoisted_1$5 = { class: "va-stepper__default-controls" };
-const _sfc_main$6 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaStepperControls"
-  },
+}), la = He(aa), Gt = (e, ...t) => To(e) ? e(...t) : e, ia = { class: "va-stepper__default-controls" }, ua = /* @__PURE__ */ A({
+  name: "VaStepperControls",
   __name: "VaStepperControls",
   props: {
-    modelValue: { type: [Number, String], required: true },
+    modelValue: { type: [Number, String], required: !0 },
     steps: {
       type: Array,
-      required: true
+      required: !0
     },
-    nextDisabled: { type: Boolean, required: true },
-    stepControls: { type: Object, required: true },
-    finishButtonHidden: { type: Boolean, default: false }
+    nextDisabled: { type: Boolean, required: !0 },
+    stepControls: { type: Object, required: !0 },
+    finishButtonHidden: { type: Boolean, default: !1 }
   },
-  setup(__props) {
-    const props = __props;
-    const { t } = useTranslation();
-    const isLoading = computed(() => {
-      const currentStep = props.steps[Number(props.modelValue)];
-      return unFunction(currentStep.isLoading) || false;
+  setup(e) {
+    const t = e, { t: o } = dt(), n = c(() => {
+      const r = t.steps[Number(t.modelValue)];
+      return Gt(r.isLoading) || !1;
+    }), s = c(() => {
+      const r = t.steps.length - 1;
+      return Number(t.modelValue) >= r;
     });
-    const isLastStep = computed(() => {
-      const lastEnabledStepIndex = props.steps.length - 1;
-      return Number(props.modelValue) >= lastEnabledStepIndex;
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$5, [
-        createVNode(unref(VaButton), {
-          preset: "primary",
-          disabled: Number(_ctx.$props.modelValue) <= 0,
-          loading: isLoading.value,
-          onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$props.stepControls.prevStep())
-        }, {
-          default: withCtx(() => [
-            createTextVNode(toDisplayString(unref(t)("back")), 1)
-          ]),
-          _: 1
-        }, 8, ["disabled", "loading"]),
-        !isLastStep.value ? (openBlock(), createBlock(unref(VaButton), {
-          key: 0,
-          onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$props.stepControls.nextStep()),
-          disabled: _ctx.$props.nextDisabled,
-          loading: isLoading.value
-        }, {
-          default: withCtx(() => [
-            createTextVNode(toDisplayString(unref(t)("next")), 1)
-          ]),
-          _: 1
-        }, 8, ["disabled", "loading"])) : !_ctx.$props.finishButtonHidden ? (openBlock(), createBlock(unref(VaButton), {
-          key: 1,
-          onClick: _cache[2] || (_cache[2] = ($event) => _ctx.$props.stepControls.finish()),
-          loading: isLoading.value
-        }, {
-          default: withCtx(() => [
-            createTextVNode(toDisplayString(unref(t)("finish")), 1)
-          ]),
-          _: 1
-        }, 8, ["loading"])) : createCommentVNode("", true)
-      ]);
-    };
+    return (r, a) => (E(), U("div", ia, [
+      k(S(Ct), {
+        preset: "primary",
+        disabled: Number(r.$props.modelValue) <= 0,
+        loading: n.value,
+        onClick: a[0] || (a[0] = (l) => r.$props.stepControls.prevStep())
+      }, {
+        default: B(() => [
+          te(ce(S(o)("back")), 1)
+        ]),
+        _: 1
+      }, 8, ["disabled", "loading"]),
+      s.value ? r.$props.finishButtonHidden ? ue("", !0) : (E(), Y(S(Ct), {
+        key: 1,
+        onClick: a[2] || (a[2] = (l) => r.$props.stepControls.finish()),
+        loading: n.value
+      }, {
+        default: B(() => [
+          te(ce(S(o)("finish")), 1)
+        ]),
+        _: 1
+      }, 8, ["loading"])) : (E(), Y(S(Ct), {
+        key: 0,
+        onClick: a[1] || (a[1] = (l) => r.$props.stepControls.nextStep()),
+        disabled: r.$props.nextDisabled,
+        loading: n.value
+      }, {
+        default: B(() => [
+          te(ce(S(o)("next")), 1)
+        ]),
+        _: 1
+      }, 8, ["disabled", "loading"]))
+    ]));
   }
-});
-const isStepHasError = (step) => {
-  return unFunction(step.hasError, step) || false;
-};
-const _hoisted_1$4 = { class: "va-stepper__step-button__icon" };
-const _sfc_main$5 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaStepperStepButton"
-  },
+}), ke = (e) => Gt(e.hasError, e) || !1, ca = { class: "va-stepper__step-button__icon" }, da = /* @__PURE__ */ A({
+  name: "VaStepperStepButton",
   __name: "VaStepperStepButton",
   props: {
-    modelValue: { type: Number, required: true },
+    modelValue: { type: Number, required: !0 },
     step: {
       type: Object,
-      required: true
+      required: !0
     },
-    color: { type: String, required: true },
-    stepIndex: { type: [Number, String], required: true },
-    navigationDisabled: { type: Boolean, required: true },
-    nextDisabled: { type: Boolean, required: true },
-    focus: { type: Object, required: true },
-    stepControls: { type: Object, required: true }
+    color: { type: String, required: !0 },
+    stepIndex: { type: [Number, String], required: !0 },
+    navigationDisabled: { type: Boolean, required: !0 },
+    nextDisabled: { type: Boolean, required: !0 },
+    focus: { type: Object, required: !0 },
+    stepControls: { type: Object, required: !0 }
   },
   emits: ["update:modelValue"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const stepElement = shallowRef();
-    const hasError = computed(() => isStepHasError(props.step));
-    const stepIndexComputed = useNumericProp("stepIndex");
-    const displayError = computed(() => hasError.value && props.modelValue === stepIndexComputed.value);
-    const isLoading = computed(() => unFunction(props.step.isLoading) || false);
-    const { getColor } = useColors();
-    const stepperColor = computed(() => getColor(hasError.value ? "danger" : props.color));
-    const isNextStepDisabled = (index) => props.nextDisabled && index > props.modelValue;
-    const { t } = useTranslation();
-    const computedClass = useBem("va-stepper__step-button", () => ({
-      active: props.modelValue >= stepIndexComputed.value,
-      disabled: props.step.disabled || isNextStepDisabled(stepIndexComputed.value),
-      "navigation-disabled": props.navigationDisabled,
-      error: displayError.value
+  setup(e, { emit: t }) {
+    const o = e, n = Ue(), s = c(() => ke(o.step)), r = $t("stepIndex"), a = c(() => s.value && o.modelValue === r.value), l = c(() => Gt(o.step.isLoading) || !1), { getColor: i } = Ce(), u = c(() => i(s.value ? "danger" : o.color)), d = (g) => o.nextDisabled && g > o.modelValue, { t: f } = dt(), C = Dt("va-stepper__step-button", () => ({
+      active: o.modelValue >= r.value,
+      disabled: o.step.disabled || d(r.value),
+      "navigation-disabled": o.navigationDisabled,
+      error: a.value
     }));
-    watch(() => props.focus, () => {
-      if (props.focus.trigger) {
-        nextTick(() => {
-          var _a;
-          return (_a = stepElement.value) == null ? void 0 : _a.focus();
-        });
-      }
-    }, { deep: true });
-    const ariaAttributesComputed = computed(() => ({
-      tabindex: props.focus.stepIndex === stepIndexComputed.value && !props.navigationDisabled ? 0 : void 0,
-      "aria-disabled": props.step.disabled || isNextStepDisabled(stepIndexComputed.value) ? true : void 0,
-      "aria-current": props.modelValue === props.stepIndex ? t("step") : void 0
+    ae(() => o.focus, () => {
+      o.focus.trigger && D(() => {
+        var g;
+        return (g = n.value) == null ? void 0 : g.focus();
+      });
+    }, { deep: !0 });
+    const b = c(() => ({
+      tabindex: o.focus.stepIndex === r.value && !o.navigationDisabled ? 0 : void 0,
+      "aria-disabled": o.step.disabled || d(r.value) ? !0 : void 0,
+      "aria-current": o.modelValue === o.stepIndex ? f("step") : void 0
     }));
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("li", mergeProps({
-        ref_key: "stepElement",
-        ref: stepElement,
-        class: ["va-stepper__step-button", unref(computedClass)],
-        onClick: _cache[0] || (_cache[0] = ($event) => !_ctx.$props.navigationDisabled && _ctx.$props.stepControls.setStep(unref(stepIndexComputed))),
-        onKeyup: [
-          _cache[1] || (_cache[1] = withKeys(($event) => !_ctx.$props.navigationDisabled && _ctx.$props.stepControls.setStep(unref(stepIndexComputed)), ["enter"])),
-          _cache[2] || (_cache[2] = withKeys(($event) => !_ctx.$props.navigationDisabled && _ctx.$props.stepControls.setStep(unref(stepIndexComputed)), ["space"]))
-        ]
-      }, ariaAttributesComputed.value, {
-        style: `--va-stepper-color: ${String(stepperColor.value)}`
-      }), [
-        createElementVNode("div", _hoisted_1$4, [
-          isLoading.value ? (openBlock(), createBlock(unref(VaProgressCircle), {
-            key: 0,
-            color: "currentColor",
-            indeterminate: "",
-            size: "small"
-          })) : __props.step.icon ? (openBlock(), createBlock(unref(VaIcon), {
-            key: 1,
-            name: __props.step.icon,
-            size: "1.3rem"
-          }, null, 8, ["name"])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-            createTextVNode(toDisplayString(unref(stepIndexComputed) + 1), 1)
-          ], 64))
-        ]),
-        createTextVNode(" " + toDisplayString(__props.step.label), 1)
-      ], 16);
-    };
+    return (g, v) => (E(), U("li", be({
+      ref_key: "stepElement",
+      ref: n,
+      class: ["va-stepper__step-button", S(C)],
+      onClick: v[0] || (v[0] = (p) => !g.$props.navigationDisabled && g.$props.stepControls.setStep(S(r))),
+      onKeyup: [
+        v[1] || (v[1] = Be((p) => !g.$props.navigationDisabled && g.$props.stepControls.setStep(S(r)), ["enter"])),
+        v[2] || (v[2] = Be((p) => !g.$props.navigationDisabled && g.$props.stepControls.setStep(S(r)), ["space"]))
+      ]
+    }, b.value, {
+      style: `--va-stepper-color: ${String(u.value)}`
+    }), [
+      L("div", ca, [
+        l.value ? (E(), Y(S(Mo), {
+          key: 0,
+          color: "currentColor",
+          indeterminate: "",
+          size: "small"
+        })) : e.step.icon ? (E(), Y(S(Et), {
+          key: 1,
+          name: e.step.icon,
+          size: "1.3rem"
+        }, null, 8, ["name"])) : (E(), U(pe, { key: 2 }, [
+          te(ce(S(r) + 1), 1)
+        ], 64))
+      ]),
+      te(" " + ce(e.step.label), 1)
+    ], 16));
   }
-});
-const _hoisted_1$3 = { class: "va-stepper__step-content" };
-const _hoisted_2$3 = { class: "va-stepper__controls" };
-const _sfc_main$4 = /* @__PURE__ */ defineComponent({
-  ...{
-    name: "VaStepper"
-  },
+}), pa = { class: "va-stepper__step-content" }, fa = { class: "va-stepper__controls" }, va = /* @__PURE__ */ A({
+  name: "VaStepper",
   __name: "VaStepper",
   props: {
-    ...useStatefulProps,
+    ...Us,
     modelValue: { type: Number, default: 0 },
     steps: {
       type: Array,
       default: () => [],
-      required: true
+      required: !0
     },
     color: { type: String, default: "primary" },
-    vertical: { type: Boolean, default: false },
-    navigationDisabled: { type: Boolean, default: false },
-    controlsHidden: { type: Boolean, default: false },
-    nextDisabled: { type: Boolean, default: false },
-    nextDisabledOnError: { type: Boolean, default: false },
-    finishButtonHidden: { type: Boolean, default: false },
-    ariaLabel: useTranslationProp("$t:progress"),
-    linear: { type: Boolean, default: false },
+    vertical: { type: Boolean, default: !1 },
+    navigationDisabled: { type: Boolean, default: !1 },
+    controlsHidden: { type: Boolean, default: !1 },
+    nextDisabled: { type: Boolean, default: !1 },
+    nextDisabledOnError: { type: Boolean, default: !1 },
+    finishButtonHidden: { type: Boolean, default: !1 },
+    ariaLabel: jo("$t:progress"),
+    linear: { type: Boolean, default: !1 },
     /** Hidden step shown when all steps complete */
     finishStep: { type: Object }
   },
   emits: ["update:modelValue", "finish", "update:steps"],
-  setup(__props, { expose: __expose, emit: __emit }) {
-    const props = __props;
-    const emit = __emit;
-    const stepperNavigation = shallowRef();
-    const { valueComputed: modelValue } = useStateful(props, emit, "modelValue");
-    const stepsComputed = computed(() => {
-      if (!props.finishStep) {
-        return props.steps;
-      }
-      return [...props.steps, props.finishStep];
-    });
-    const isFinishStep = (index) => {
-      if (!props.finishStep) {
-        return false;
-      }
-      return index === stepsComputed.value.length - 1;
-    };
-    const focusedStep = ref({ trigger: false, stepIndex: props.navigationDisabled ? -1 : props.modelValue });
-    const { getColor } = useColors();
-    const isNextStepDisabled = (index) => {
-      if (props.nextDisabledOnError && isStepHasError(stepsComputed.value[index])) {
-        return true;
-      }
-      return props.nextDisabled;
-    };
-    const findFirstNonDisabled = (from, direction) => {
-      while (from >= 0 && from < stepsComputed.value.length) {
-        from += direction;
-        const step = stepsComputed.value[from];
-        if (!step) {
+  setup(e, { expose: t, emit: o }) {
+    const n = e, s = o, r = Ue(), { valueComputed: a } = Hs(n, s, "modelValue"), l = c(() => n.finishStep ? [...n.steps, n.finishStep] : n.steps), i = (y) => n.finishStep ? y === l.value.length - 1 : !1, u = h({ trigger: !1, stepIndex: n.navigationDisabled ? -1 : n.modelValue }), { getColor: d } = Ce(), f = (y) => n.nextDisabledOnError && ke(l.value[y]) ? !0 : n.nextDisabled, C = (y, w) => {
+      for (; y >= 0 && y < l.value.length; ) {
+        y += w;
+        const T = l.value[y];
+        if (!T)
           return;
-        }
-        if (!step.disabled) {
-          return step;
-        }
+        if (!T.disabled)
+          return T;
       }
-    };
-    const findFirstWithErrorIndex = (from, direction) => {
-      while (from >= 0 && from < stepsComputed.value.length) {
-        from += direction;
-        const step = stepsComputed.value[from];
-        if (!step) {
+    }, b = (y, w) => {
+      for (; y >= 0 && y < l.value.length; ) {
+        y += w;
+        const T = l.value[y];
+        if (!T)
           return;
-        }
-        if (isStepHasError(step) === true) {
-          return from;
-        }
+        if (ke(T) === !0)
+          return y;
       }
-    };
-    const validateMovingToStep = async (stepIndex) => {
-      var _a;
-      const newStep = stepsComputed.value[stepIndex];
-      const currentStep = stepsComputed.value[modelValue.value];
-      const beforeNewStep = findFirstNonDisabled(stepIndex, -1);
-      if (newStep.disabled) {
-        return false;
-      }
-      if (props.linear && stepIndex < modelValue.value) {
-        return true;
-      }
-      const nextNonError = findFirstWithErrorIndex(modelValue.value, 1);
-      if (props.linear && nextNonError !== void 0 && nextNonError < stepIndex) {
-        return false;
-      }
-      let currentStepBeforeLeaveResult;
+    }, g = async (y) => {
+      var w;
+      const T = l.value[y], G = l.value[a.value], Ye = C(y, -1);
+      if (T.disabled)
+        return !1;
+      if (n.linear && y < a.value)
+        return !0;
+      const Qe = b(a.value, 1);
+      if (n.linear && Qe !== void 0 && Qe < y)
+        return !1;
+      let et;
       try {
-        currentStepBeforeLeaveResult = await ((_a = currentStep.beforeLeave) == null ? void 0 : _a.call(currentStep, currentStep, newStep));
-      } catch (e) {
-        throw new Error(`Error in beforeLeave function: ${e}`);
+        et = await ((w = G.beforeLeave) == null ? void 0 : w.call(G, G, T));
+      } catch (mt) {
+        throw new Error(`Error in beforeLeave function: ${mt}`);
       }
-      if (currentStepBeforeLeaveResult === false) {
-        return false;
+      return !(et === !1 || (G.completed === void 0 && (G.completed = !0), n.linear && Ye && !Ye.completed) || n.linear && ke(G));
+    }, v = async (y) => {
+      await g(y) && (a.value = y);
+    }, p = (y) => {
+      n.navigationDisabled || (y === "next" ? O(1) : _(1));
+    }, O = (y = 1) => {
+      const w = u.value.stepIndex + y;
+      if (!f(w)) {
+        if (w < l.value.length) {
+          if (l.value[w].disabled) {
+            O(y + 1);
+            return;
+          }
+          u.value.stepIndex = w, u.value.trigger = !0;
+        } else
+          for (let T = 0; T < l.value.length; T++)
+            if (!l.value[T].disabled) {
+              u.value.stepIndex = T, u.value.trigger = !0;
+              break;
+            }
       }
-      if (currentStep.completed === void 0) {
-        currentStep.completed = true;
-      }
-      if (props.linear && beforeNewStep && !beforeNewStep.completed) {
-        return false;
-      }
-      if (props.linear && isStepHasError(currentStep)) {
-        return false;
-      }
-      return true;
-    };
-    const setStep = async (index) => {
-      if (!await validateMovingToStep(index)) {
-        return;
-      }
-      modelValue.value = index;
-    };
-    const setFocus = (direction) => {
-      if (props.navigationDisabled) {
-        return;
-      }
-      if (direction === "next") {
-        setFocusNextStep(1);
-      } else {
-        setFocusPrevStep(1);
-      }
-    };
-    const setFocusNextStep = (idx = 1) => {
-      const newValue = focusedStep.value.stepIndex + idx;
-      if (isNextStepDisabled(newValue)) {
-        return;
-      }
-      if (newValue < stepsComputed.value.length) {
-        if (stepsComputed.value[newValue].disabled) {
-          setFocusNextStep(idx + 1);
+    }, _ = (y = 1) => {
+      const w = u.value.stepIndex - y;
+      if (w >= 0) {
+        if (l.value[w].disabled) {
+          _(y + 1);
           return;
         }
-        focusedStep.value.stepIndex = newValue;
-        focusedStep.value.trigger = true;
-      } else {
-        for (let availableIdx = 0; availableIdx < stepsComputed.value.length; availableIdx++) {
-          if (!stepsComputed.value[availableIdx].disabled) {
-            focusedStep.value.stepIndex = availableIdx;
-            focusedStep.value.trigger = true;
+        u.value.stepIndex = w, u.value.trigger = !0;
+      } else
+        for (let T = l.value.length - 1; T >= 0; T--)
+          if (!l.value[T].disabled && !f(T)) {
+            u.value.stepIndex = T, u.value.trigger = !0;
             break;
           }
-        }
-      }
-    };
-    const setFocusPrevStep = (idx = 1) => {
-      const newValue = focusedStep.value.stepIndex - idx;
-      if (newValue >= 0) {
-        if (stepsComputed.value[newValue].disabled) {
-          setFocusPrevStep(idx + 1);
-          return;
-        }
-        focusedStep.value.stepIndex = newValue;
-        focusedStep.value.trigger = true;
-      } else {
-        for (let availableIdx = stepsComputed.value.length - 1; availableIdx >= 0; availableIdx--) {
-          if (!stepsComputed.value[availableIdx].disabled && !isNextStepDisabled(availableIdx)) {
-            focusedStep.value.stepIndex = availableIdx;
-            focusedStep.value.trigger = true;
-            break;
-          }
-        }
-      }
-    };
-    const resetFocus = () => {
+    }, P = () => {
       requestAnimationFrame(() => {
-        var _a;
-        if (!((_a = stepperNavigation.value) == null ? void 0 : _a.contains(document.activeElement))) {
-          focusedStep.value.stepIndex = props.modelValue;
-          focusedStep.value.trigger = false;
-        }
+        var y;
+        (y = r.value) != null && y.contains(document.activeElement) || (u.value.stepIndex = n.modelValue, u.value.trigger = !1);
       });
     };
-    watch(() => props.modelValue, () => {
-      focusedStep.value.stepIndex = props.modelValue;
-      focusedStep.value.trigger = false;
+    ae(() => n.modelValue, () => {
+      u.value.stepIndex = n.modelValue, u.value.trigger = !1;
     });
-    const nextStep = (stepsToSkip = 0) => {
-      const targetIndex = modelValue.value + 1 + stepsToSkip;
-      if (!stepsComputed.value[targetIndex]) {
-        return;
-      }
-      if (stepsComputed.value[targetIndex].disabled) {
-        nextStep(stepsToSkip + 1);
-      }
-      setStep(targetIndex);
-    };
-    const prevStep = (stepsToSkip = 0) => {
-      const targetIndex = modelValue.value - 1 - stepsToSkip;
-      if (!stepsComputed.value[targetIndex]) {
-        return;
-      }
-      if (stepsComputed.value[targetIndex].disabled) {
-        prevStep(stepsToSkip + 1);
-      }
-      setStep(targetIndex);
-    };
-    const finish = async () => {
-      if (await validateMovingToStep(props.steps.length - 1)) {
-        emit("finish");
-      }
-    };
-    const stepControls = { setStep, nextStep, prevStep, finish };
-    const getIterableSlotData = (step, index) => ({
-      ...stepControls,
-      focus: focusedStep,
-      isActive: props.modelValue === index,
-      isCompleted: props.modelValue > index,
-      isLastStep: stepsComputed.value.length - 1 === index,
-      isNextStepDisabled: isNextStepDisabled(index),
-      isPrevStepDisabled: index === 0,
-      index,
-      step,
-      hasError: isStepHasError(step)
-    });
-    const { tp } = useTranslation();
-    const onValueChange = () => {
-      focusedStep.value.stepIndex = props.modelValue;
-      focusedStep.value.trigger = true;
-    };
-    const ariaAttributesComputed = computed(() => ({
+    const X = (y = 0) => {
+      const w = a.value + 1 + y;
+      l.value[w] && (l.value[w].disabled && X(y + 1), v(w));
+    }, Q = (y = 0) => {
+      const w = a.value - 1 - y;
+      l.value[w] && (l.value[w].disabled && Q(y + 1), v(w));
+    }, K = { setStep: v, nextStep: X, prevStep: Q, finish: async () => {
+      await g(n.steps.length - 1) && s("finish");
+    } }, ee = (y, w) => ({
+      ...K,
+      focus: u,
+      isActive: n.modelValue === w,
+      isCompleted: n.modelValue > w,
+      isLastStep: l.value.length - 1 === w,
+      isNextStepDisabled: f(w),
+      isPrevStepDisabled: w === 0,
+      index: w,
+      step: y,
+      hasError: ke(y)
+    }), { tp: x } = dt(), R = () => {
+      u.value.stepIndex = n.modelValue, u.value.trigger = !0;
+    }, me = c(() => ({
       role: "group",
-      "aria-label": tp(props.ariaLabel),
-      "aria-orientation": props.vertical ? "vertical" : "horizontal"
+      "aria-label": x(n.ariaLabel),
+      "aria-orientation": n.vertical ? "vertical" : "horizontal"
     }));
-    function getStepperButtonColor(index) {
-      return isStepHasError(stepsComputed.value[index]) ? "danger" : getColor(props.color);
+    function Fe(y) {
+      return ke(l.value[y]) ? "danger" : d(n.color);
     }
-    const completeStep = (shouldCompleteStep) => {
-      const steps = { ...stepsComputed.value };
-      if (shouldCompleteStep === true) {
-        steps[props.modelValue].hasError = false;
+    return t({
+      modelValue: a,
+      focusedStep: u,
+      getIterableSlotData: ee,
+      stepControls: K,
+      nextStep: X,
+      prevStep: Q,
+      setStep: v,
+      setFocus: p,
+      completeStep: (y) => {
+        const w = { ...l.value };
+        y === !0 && (w[n.modelValue].hasError = !1), w[n.modelValue].completed = y ?? !0, s("update:steps", w);
+      },
+      setError: (y) => {
+        const w = { ...l.value };
+        w[n.modelValue].hasError = y ?? !0, w[n.modelValue].completed = !y, s("update:steps", w);
       }
-      steps[props.modelValue].completed = shouldCompleteStep ?? true;
-      emit("update:steps", steps);
-    };
-    const setError = (shouldSetError) => {
-      const steps = { ...stepsComputed.value };
-      steps[props.modelValue].hasError = shouldSetError ?? true;
-      steps[props.modelValue].completed = !shouldSetError;
-      emit("update:steps", steps);
-    };
-    __expose({
-      modelValue,
-      focusedStep,
-      getIterableSlotData,
-      stepControls,
-      nextStep,
-      prevStep,
-      setStep,
-      setFocus,
-      completeStep,
-      setError
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", mergeProps({
-        class: ["va-stepper", { "va-stepper--vertical": _ctx.$props.vertical }]
-      }, ariaAttributesComputed.value), [
-        createElementVNode("ol", {
-          class: normalizeClass(["va-stepper__navigation", { "va-stepper__navigation--vertical": _ctx.$props.vertical }]),
-          ref_key: "stepperNavigation",
-          ref: stepperNavigation,
-          onClick: onValueChange,
-          onKeyup: [
-            withKeys(onValueChange, ["enter"]),
-            withKeys(onValueChange, ["space"]),
-            _cache[0] || (_cache[0] = withKeys(($event) => setFocus("prev"), ["left"])),
-            _cache[1] || (_cache[1] = withKeys(($event) => setFocus("next"), ["right"]))
-          ],
-          onFocusout: resetFocus
+    }), (y, w) => (E(), U("div", be({
+      class: ["va-stepper", { "va-stepper--vertical": y.$props.vertical }]
+    }, me.value), [
+      L("ol", {
+        class: we(["va-stepper__navigation", { "va-stepper__navigation--vertical": y.$props.vertical }]),
+        ref_key: "stepperNavigation",
+        ref: r,
+        onClick: R,
+        onKeyup: [
+          Be(R, ["enter"]),
+          Be(R, ["space"]),
+          w[0] || (w[0] = Be((T) => p("prev"), ["left"])),
+          w[1] || (w[1] = Be((T) => p("next"), ["right"]))
+        ],
+        onFocusout: P
+      }, [
+        (E(!0), U(pe, null, at(l.value, (T, G) => (E(), U(pe, {
+          key: G + T.label
         }, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(stepsComputed.value, (step, i) => {
-            return openBlock(), createElementBlock(Fragment, {
-              key: i + step.label
-            }, [
-              !isFinishStep(i) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-                i > 0 ? renderSlot(_ctx.$slots, "divider", normalizeProps(mergeProps({ key: 0 }, getIterableSlotData(step, i))), () => [
-                  createElementVNode("span", {
-                    class: normalizeClass(["va-stepper__divider", { "va-stepper__divider--vertical": _ctx.$props.vertical }]),
-                    "aria-hidden": "true"
-                  }, null, 2)
-                ]) : createCommentVNode("", true),
-                renderSlot(_ctx.$slots, `step-button-${i}`, normalizeProps(guardReactiveProps(getIterableSlotData(step, i))), () => [
-                  createVNode(_sfc_main$5, {
-                    stepIndex: i,
-                    color: getStepperButtonColor(i),
-                    modelValue: unref(modelValue),
-                    nextDisabled: __props.nextDisabled,
-                    step,
-                    stepControls,
-                    navigationDisabled: __props.navigationDisabled,
-                    focus: focusedStep.value
-                  }, null, 8, ["stepIndex", "color", "modelValue", "nextDisabled", "step", "navigationDisabled", "focus"])
-                ])
-              ], 64)) : createCommentVNode("", true)
-            ], 64);
-          }), 128))
-        ], 34),
-        createElementVNode("div", {
-          class: normalizeClass(["va-stepper__step-content-wrapper", { "va-stepper__step-content-wrapper--vertical": _ctx.$props.vertical }])
-        }, [
-          createElementVNode("div", _hoisted_1$3, [
-            renderSlot(_ctx.$slots, `step-content-${isFinishStep(unref(modelValue)) ? "finish" : unref(modelValue)}`, normalizeProps(guardReactiveProps(getIterableSlotData(stepsComputed.value[unref(modelValue)], unref(modelValue)))))
-          ]),
-          createElementVNode("div", _hoisted_2$3, [
-            renderSlot(_ctx.$slots, "controls", normalizeProps(guardReactiveProps(getIterableSlotData(stepsComputed.value[unref(modelValue)], unref(modelValue)))), () => [
-              !__props.controlsHidden ? (openBlock(), createBlock(_sfc_main$6, {
-                key: 0,
-                modelValue: unref(modelValue),
-                nextDisabled: isNextStepDisabled(unref(modelValue)),
-                steps: stepsComputed.value,
-                stepControls,
-                finishButtonHidden: __props.finishButtonHidden
-              }, null, 8, ["modelValue", "nextDisabled", "steps", "finishButtonHidden"])) : createCommentVNode("", true)
+          i(G) ? ue("", !0) : (E(), U(pe, { key: 0 }, [
+            G > 0 ? de(y.$slots, "divider", xe(be({ key: 0 }, ee(T, G))), () => [
+              L("span", {
+                class: we(["va-stepper__divider", { "va-stepper__divider--vertical": y.$props.vertical }]),
+                "aria-hidden": "true"
+              }, null, 2)
+            ]) : ue("", !0),
+            de(y.$slots, `step-button-${G}`, xe(De(ee(T, G))), () => [
+              k(da, {
+                stepIndex: G,
+                color: Fe(G),
+                modelValue: S(a),
+                nextDisabled: e.nextDisabled,
+                step: T,
+                stepControls: K,
+                navigationDisabled: e.navigationDisabled,
+                focus: u.value
+              }, null, 8, ["stepIndex", "color", "modelValue", "nextDisabled", "step", "navigationDisabled", "focus"])
             ])
+          ], 64))
+        ], 64))), 128))
+      ], 34),
+      L("div", {
+        class: we(["va-stepper__step-content-wrapper", { "va-stepper__step-content-wrapper--vertical": y.$props.vertical }])
+      }, [
+        L("div", pa, [
+          de(y.$slots, `step-content-${i(S(a)) ? "finish" : S(a)}`, xe(De(ee(l.value[S(a)], S(a)))))
+        ]),
+        L("div", fa, [
+          de(y.$slots, "controls", xe(De(ee(l.value[S(a)], S(a)))), () => [
+            e.controlsHidden ? ue("", !0) : (E(), Y(ua, {
+              key: 0,
+              modelValue: S(a),
+              nextDisabled: f(S(a)),
+              steps: l.value,
+              stepControls: K,
+              finishButtonHidden: e.finishButtonHidden
+            }, null, 8, ["modelValue", "nextDisabled", "steps", "finishButtonHidden"]))
           ])
-        ], 2)
-      ], 16);
-    };
+        ])
+      ], 2)
+    ], 16));
   }
-});
-const VaStepper = withConfigTransport$1(_sfc_main$4);
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+}), ma = He(va), ga = /* @__PURE__ */ A({
   __name: "Ellipsis",
   props: {
     lines: { default: 3 }
   },
-  setup(__props) {
-    useCssVars((_ctx) => ({
-      "b40395ae": maxlines.value
+  setup(e) {
+    jn((s) => ({
+      b40395ae: o.value
     }));
-    const props = __props;
-    const maxlines = computed(() => {
-      return props.lines * 23 + "px";
-    });
-    const expanded = ref(false);
-    return (_ctx, _cache) => {
-      const _component_VaButton = resolveComponent("VaButton");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createElementVNode("div", {
-          class: normalizeClass([{ expanded: expanded.value }, "aellipsis"])
+    const t = e, o = c(() => t.lines * 23 + "px"), n = h(!1);
+    return (s, r) => {
+      const a = J("VaButton");
+      return E(), U(pe, null, [
+        L("div", {
+          class: we([{ expanded: n.value }, "aellipsis"])
         }, [
-          renderSlot(_ctx.$slots, "default", {}, void 0, true)
+          de(s.$slots, "default", {}, void 0, !0)
         ], 2),
-        createVNode(_component_VaButton, {
+        k(a, {
           "hover-opacity": 0.4,
           class: "mr-6 mb-2",
           "hover-behavior": "opacity",
           preset: "secondary",
           size: "small",
-          onClick: _cache[0] || (_cache[0] = ($event) => expanded.value = !expanded.value)
+          onClick: r[0] || (r[0] = (l) => n.value = !n.value)
         }, {
-          default: withCtx(() => [
-            expanded.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              createTextVNode("less")
-            ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-              createTextVNode("more")
+          default: B(() => [
+            n.value ? (E(), U(pe, { key: 0 }, [
+              te("less")
+            ], 64)) : (E(), U(pe, { key: 1 }, [
+              te("more")
             ], 64))
           ]),
           _: 1
@@ -3361,81 +2106,60 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
       ], 64);
     };
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const Ellipsis = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-69727056"]]);
-function useFormat() {
-  const colorMap = {};
-  colorMap[Formats.WMS] = "#2c1f90";
-  colorMap[Formats.OGCSTA] = "#1f908c";
-  colorMap[Formats.XMLA] = "#45901f";
-  colorMap[Formats.CSV] = "#90301f";
-  colorMap[Formats.JSON] = "#7f1f90";
-  const getColorForFormat = (format) => {
-    if (!Object.keys(colorMap).includes(format)) return "#ccc";
-    return colorMap[format];
-  };
-  return {
-    getColorForFormat
+}), pt = (e, t) => {
+  const o = e.__vccOpts || e;
+  for (const [n, s] of t)
+    o[n] = s;
+  return o;
+}, ya = /* @__PURE__ */ pt(ga, [["__scopeId", "data-v-69727056"]]);
+function qo() {
+  const e = {};
+  return e[N.WMS] = "#2c1f90", e[N.OGCSTA] = "#1f908c", e[N.XMLA] = "#45901f", e[N.CSV] = "#90301f", e[N.JSON] = "#7f1f90", {
+    getColorForFormat: (o) => Object.keys(e).includes(o) ? e[o] : "#ccc"
   };
 }
-const _hoisted_1$2 = { class: "aflex small light" };
-const _hoisted_2$2 = { class: "right" };
-const _hoisted_3$2 = { class: "left" };
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+const ba = { class: "aflex small light" }, ha = { class: "right" }, Ca = { class: "left" }, Sa = /* @__PURE__ */ A({
   __name: "SearchResultCard",
   props: {
     result: {}
   },
-  setup(__props) {
-    const prop = __props;
-    const color = useFormat().getColorForFormat("<" + prop.result.format.value + ">");
-    const getName = (name) => {
-      const result = Object.entries(Formats).filter((val, index) => val[1] == "<" + name + ">");
-      if (result && result[0]) return result[0][0];
-      return name;
+  setup(e) {
+    const t = e, o = qo().getColorForFormat("<" + t.result.format.value + ">"), n = (s) => {
+      const r = Object.entries(N).filter((a, l) => a[1] == "<" + s + ">");
+      return r && r[0] ? r[0][0] : s;
     };
-    return (_ctx, _cache) => {
-      const _component_VaChip = resolveComponent("VaChip");
-      const _component_VaCardTitle = resolveComponent("VaCardTitle");
-      const _component_VaCardContent = resolveComponent("VaCardContent");
-      const _component_VaCard = resolveComponent("VaCard");
-      return openBlock(), createBlock(_component_VaCard, { class: "card" }, {
-        default: withCtx(() => [
-          createVNode(_component_VaCardTitle, null, {
-            default: withCtx(() => [
-              createVNode(_component_VaChip, {
-                color: unref(color),
+    return (s, r) => {
+      const a = J("VaChip"), l = J("VaCardTitle"), i = J("VaCardContent"), u = J("VaCard");
+      return E(), Y(u, { class: "card" }, {
+        default: B(() => [
+          k(l, null, {
+            default: B(() => [
+              k(a, {
+                color: S(o),
                 class: "pointer",
                 size: "small"
               }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(getName(prop.result.format.value)), 1)
+                default: B(() => [
+                  te(ce(n(t.result.format.value)), 1)
                 ]),
                 _: 1
               }, 8, ["color"]),
-              createTextVNode(" " + toDisplayString(prop.result.title.value), 1)
+              te(" " + ce(t.result.title.value), 1)
             ]),
             _: 1
           }),
-          createVNode(_component_VaCardContent, null, {
-            default: withCtx(() => [
-              createVNode(Ellipsis, { lines: 3 }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(prop.result.description.value), 1)
+          k(i, null, {
+            default: B(() => [
+              k(ya, { lines: 3 }, {
+                default: B(() => [
+                  te(ce(t.result.description.value), 1)
                 ]),
                 _: 1
               }),
-              _cache[0] || (_cache[0] = createElementVNode("br", null, null, -1)),
-              createElementVNode("div", _hoisted_1$2, [
-                createElementVNode("div", _hoisted_2$2, toDisplayString(prop.result.creator_name ? prop.result.creator_name.value : ""), 1),
-                createElementVNode("div", _hoisted_3$2, toDisplayString(prop.result.date ? prop.result.date.value : ""), 1)
+              r[0] || (r[0] = L("br", null, null, -1)),
+              L("div", ba, [
+                L("div", ha, ce(t.result.creator_name ? t.result.creator_name.value : ""), 1),
+                L("div", Ca, ce(t.result.date ? t.result.date.value : ""), 1)
               ])
             ]),
             _: 1
@@ -3445,86 +2169,84 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       });
     };
   }
-});
-const SearchResultCard = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-a0a9daed"]]);
-const ce = (e, o) => {
-  for (const t of Object.keys(o))
-    e.on(t, o[t]);
-}, ye = (e) => {
-  for (const o of Object.keys(e)) {
-    const t = e[o];
-    t && k(t.cancel) && t.cancel();
+}), wa = /* @__PURE__ */ pt(Sa, [["__scopeId", "data-v-a0a9daed"]]), po = (e, t) => {
+  for (const o of Object.keys(t))
+    e.on(o, t[o]);
+}, Xo = (e) => {
+  for (const t of Object.keys(e)) {
+    const o = e[t];
+    o && Se(o.cancel) && o.cancel();
   }
-}, Je = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), k = (e) => typeof e == "function", L = (e, o, t) => {
-  for (const n in t) {
-    const s = "set" + Je(n);
-    e[s] ? watch(
-      () => t[n],
-      (r, l) => {
-        e[s](r, l);
+}, Oa = (e) => !e || typeof e.charAt != "function" ? e : e.charAt(0).toUpperCase() + e.slice(1), Se = (e) => typeof e == "function", W = (e, t, o) => {
+  for (const n in o) {
+    const s = "set" + Oa(n);
+    e[s] ? ae(
+      () => o[n],
+      (r, a) => {
+        e[s](r, a);
       }
-    ) : o[s] && watch(
-      () => t[n],
+    ) : t[s] && ae(
+      () => o[n],
       (r) => {
-        o[s](r);
+        t[s](r);
       }
     );
   }
-}, f = (e, o, t = {}) => {
-  const n = { ...t };
+}, H = (e, t, o = {}) => {
+  const n = { ...o };
   for (const s in e) {
-    const r = o[s], l = e[s];
-    r && (r && r.custom === true || l !== void 0 && (n[s] = l));
+    const r = t[s], a = e[s];
+    r && (r && r.custom === !0 || a !== void 0 && (n[s] = a));
   }
   return n;
-}, T = (e) => {
-  const o = {}, t = {};
+}, oe = (e) => {
+  const t = {}, o = {};
   for (const n in e)
     if (n.startsWith("on") && !n.startsWith("onUpdate") && n !== "onReady") {
       const s = n.slice(2).toLocaleLowerCase();
-      o[s] = e[n];
+      t[s] = e[n];
     } else
-      t[n] = e[n];
-  return { listeners: o, attrs: t };
-}, qe = async (e) => {
-  const o = await Promise.all([
-    import("./marker-icon-2x-DN7sBQTc.js"),
-    import("./marker-icon-Dxo8DtlK.js"),
-    import("./marker-shadow-BWlltkiu.js")
+      o[n] = e[n];
+  return { listeners: t, attrs: o };
+}, _a = async (e) => {
+  const t = await Promise.all([
+    import("./marker-icon-2x-DVSLMKfE.js"),
+    import("./marker-icon-DbhCZIpd.js"),
+    import("./marker-shadow-ZZvxUwqf.js")
   ]);
   delete e.Default.prototype._getIconUrl, e.Default.mergeOptions({
-    iconRetinaUrl: o[0].default,
-    iconUrl: o[1].default,
-    shadowUrl: o[2].default
+    iconRetinaUrl: t[0].default,
+    iconUrl: t[1].default,
+    shadowUrl: t[2].default
   });
-}, Y = (e) => {
-  const o = ref(
+}, ot = (e) => {
+  const t = h(
     (...n) => console.warn(`Method ${e} has been invoked without being replaced`)
-  ), t = (...n) => o.value(...n);
-  return t.wrapped = o, provide(e, t), t;
-}, V = (e, o) => e.wrapped.value = o, b = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, m = (e) => {
-  const o = inject$1(e);
-  if (o === void 0)
+  ), o = (...n) => t.value(...n);
+  return o.wrapped = t, fe(e, o), o;
+}, nt = (e, t) => e.wrapped.value = t, z = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || globalThis, j = (e) => {
+  const t = I(e);
+  if (t === void 0)
     throw new Error(
       `Attempt to inject ${e.description} before it was provided.`
     );
-  return o;
-}, h = Symbol(
+  return t;
+}, q = Symbol(
   "useGlobalLeaflet"
-), M = Symbol("addLayer"), ee = Symbol("removeLayer"), H = Symbol(
+), re = Symbol("addLayer"), ft = Symbol("removeLayer"), qe = Symbol(
   "registerControl"
-), me = Symbol(
+), Ko = Symbol(
   "registerLayerControl"
-), ve = Symbol(
+), Jo = Symbol(
   "canSetParentHtml"
-), be = Symbol("setParentHtml"), fe = Symbol("setIcon"), ge = Symbol("bindPopup"), Le = Symbol("bindTooltip"), he = Symbol("unbindPopup"), Oe = Symbol("unbindTooltip"), W = {
+), Zo = Symbol("setParentHtml"), Yo = Symbol("setIcon"), Qo = Symbol("bindPopup"), en = Symbol("bindTooltip"), tn = Symbol("unbindPopup"), on = Symbol("unbindTooltip"), Xe = {
   options: {
     type: Object,
     default: () => ({}),
-    custom: true
+    custom: !0
   }
-}, J = (e) => ({ options: e.options, methods: {} }), D = {
-  ...W,
+}, Ke = (e) => ({ options: e.options, methods: {} }), je = {
+  ...Xe,
   pane: {
     type: String
   },
@@ -3533,26 +2255,26 @@ const ce = (e, o) => {
   },
   name: {
     type: String,
-    custom: true
+    custom: !0
   },
   layerType: {
     type: String,
-    custom: true
+    custom: !0
   },
   visible: {
     type: Boolean,
-    custom: true,
-    default: true
+    custom: !0,
+    default: !0
   }
-}, q = (e, o, t) => {
-  const n = m(M), s = m(ee), { options: r, methods: l } = J(e), a = f(
+}, Je = (e, t, o) => {
+  const n = j(re), s = j(ft), { options: r, methods: a } = Ke(e), l = H(
     e,
-    D,
+    je,
     r
-  ), i = () => n({ leafletObject: o.value }), u = () => s({ leafletObject: o.value }), d = {
-    ...l,
-    setAttribution(y) {
-      u(), o.value.options.attribution = y, e.visible && i();
+  ), i = () => n({ leafletObject: t.value }), u = () => s({ leafletObject: t.value }), d = {
+    ...a,
+    setAttribution(f) {
+      u(), t.value.options.attribution = f, e.visible && i();
     },
     setName() {
       u(), e.visible && i();
@@ -3560,45 +2282,45 @@ const ce = (e, o) => {
     setLayerType() {
       u(), e.visible && i();
     },
-    setVisible(y) {
-      o.value && (y ? i() : u());
+    setVisible(f) {
+      t.value && (f ? i() : u());
     },
-    bindPopup(y) {
-      if (!o.value || !k(o.value.bindPopup)) {
+    bindPopup(f) {
+      if (!t.value || !Se(t.value.bindPopup)) {
         console.warn(
           "Attempt to bind popup before bindPopup method available on layer."
         );
         return;
       }
-      o.value.bindPopup(y);
+      t.value.bindPopup(f);
     },
-    bindTooltip(y) {
-      if (!o.value || !k(o.value.bindTooltip)) {
+    bindTooltip(f) {
+      if (!t.value || !Se(t.value.bindTooltip)) {
         console.warn(
           "Attempt to bind tooltip before bindTooltip method available on layer."
         );
         return;
       }
-      o.value.bindTooltip(y);
+      t.value.bindTooltip(f);
     },
     unbindTooltip() {
-      o.value && (k(o.value.closeTooltip) && o.value.closeTooltip(), k(o.value.unbindTooltip) && o.value.unbindTooltip());
+      t.value && (Se(t.value.closeTooltip) && t.value.closeTooltip(), Se(t.value.unbindTooltip) && t.value.unbindTooltip());
     },
     unbindPopup() {
-      o.value && (k(o.value.closePopup) && o.value.closePopup(), k(o.value.unbindPopup) && o.value.unbindPopup());
+      t.value && (Se(t.value.closePopup) && t.value.closePopup(), Se(t.value.unbindPopup) && t.value.unbindPopup());
     },
-    updateVisibleProp(y) {
-      t.emit("update:visible", y);
+    updateVisibleProp(f) {
+      o.emit("update:visible", f);
     }
   };
-  return provide(ge, d.bindPopup), provide(Le, d.bindTooltip), provide(he, d.unbindPopup), provide(Oe, d.unbindTooltip), onUnmounted(() => {
+  return fe(Qo, d.bindPopup), fe(en, d.bindTooltip), fe(tn, d.unbindPopup), fe(on, d.unbindTooltip), At(() => {
     d.unbindPopup(), d.unbindTooltip(), u();
-  }), { options: a, methods: d };
-}, G = (e, o) => {
-  if (e && o.default)
-    return h$1("div", { style: { display: "none" } }, o.default());
-}, Se = {
-  ...D,
+  }), { options: l, methods: d };
+}, ve = (e, t) => {
+  if (e && t.default)
+    return Oe("div", { style: { display: "none" } }, t.default());
+}, nn = {
+  ...je,
   interactive: {
     type: Boolean,
     default: void 0
@@ -3607,19 +2329,19 @@ const ce = (e, o) => {
     type: Boolean,
     default: void 0
   }
-}, Ke = (e, o, t) => {
-  const { options: n, methods: s } = q(
+}, xa = (e, t, o) => {
+  const { options: n, methods: s } = Je(
     e,
-    o,
-    t
+    t,
+    o
   );
-  return { options: f(
+  return { options: H(
     e,
-    Se,
+    nn,
     n
   ), methods: s };
-}, ne = {
-  ...Se,
+}, Ut = {
+  ...nn,
   stroke: {
     type: Boolean,
     default: void 0
@@ -3661,58 +2383,58 @@ const ce = (e, o) => {
   className: {
     type: String
   }
-}, _e = (e, o, t) => {
-  const { options: n, methods: s } = Ke(e, o, t), r = f(
+}, rn = (e, t, o) => {
+  const { options: n, methods: s } = xa(e, t, o), r = H(
     e,
-    ne,
+    Ut,
     n
-  ), l = m(ee), a = {
+  ), a = j(ft), l = {
     ...s,
     setStroke(i) {
-      o.value.setStyle({ stroke: i });
+      t.value.setStyle({ stroke: i });
     },
     setColor(i) {
-      o.value.setStyle({ color: i });
+      t.value.setStyle({ color: i });
     },
     setWeight(i) {
-      o.value.setStyle({ weight: i });
+      t.value.setStyle({ weight: i });
     },
     setOpacity(i) {
-      o.value.setStyle({ opacity: i });
+      t.value.setStyle({ opacity: i });
     },
     setLineCap(i) {
-      o.value.setStyle({ lineCap: i });
+      t.value.setStyle({ lineCap: i });
     },
     setLineJoin(i) {
-      o.value.setStyle({ lineJoin: i });
+      t.value.setStyle({ lineJoin: i });
     },
     setDashArray(i) {
-      o.value.setStyle({ dashArray: i });
+      t.value.setStyle({ dashArray: i });
     },
     setDashOffset(i) {
-      o.value.setStyle({ dashOffset: i });
+      t.value.setStyle({ dashOffset: i });
     },
     setFill(i) {
-      o.value.setStyle({ fill: i });
+      t.value.setStyle({ fill: i });
     },
     setFillColor(i) {
-      o.value.setStyle({ fillColor: i });
+      t.value.setStyle({ fillColor: i });
     },
     setFillOpacity(i) {
-      o.value.setStyle({ fillOpacity: i });
+      t.value.setStyle({ fillOpacity: i });
     },
     setFillRule(i) {
-      o.value.setStyle({ fillRule: i });
+      t.value.setStyle({ fillRule: i });
     },
     setClassName(i) {
-      o.value.setStyle({ className: i });
+      t.value.setStyle({ className: i });
     }
   };
-  return onBeforeUnmount(() => {
-    l({ leafletObject: o.value });
-  }), { options: r, methods: a };
-}, re = {
-  ...ne,
+  return Re(() => {
+    a({ leafletObject: t.value });
+  }), { options: r, methods: l };
+}, Ht = {
+  ...Ut,
   /**
    * Radius of the marker in pixels.
    */
@@ -3721,181 +2443,181 @@ const ce = (e, o) => {
   },
   latLng: {
     type: [Object, Array],
-    required: true,
-    custom: true
+    required: !0,
+    custom: !0
   }
-}, je = (e, o, t) => {
-  const { options: n, methods: s } = _e(
+}, sn = (e, t, o) => {
+  const { options: n, methods: s } = rn(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    re,
+    Ht,
     n
-  ), l = {
+  ), a = {
     ...s,
-    setRadius(a) {
-      o.value.setRadius(a);
+    setRadius(l) {
+      t.value.setRadius(l);
     },
-    setLatLng(a) {
-      o.value.setLatLng(a);
+    setLatLng(l) {
+      t.value.setLatLng(l);
     }
   };
-  return { options: r, methods: l };
-}, Pe = {
-  ...re,
+  return { options: r, methods: a };
+}, an = {
+  ...Ht,
   /**
    * Radius of the circle in meters.
    */
   radius: {
     type: Number
   }
-}, Qe = (e, o, t) => {
-  const { options: n, methods: s } = je(e, o, t), r = f(
+}, La = (e, t, o) => {
+  const { options: n, methods: s } = sn(e, t, o), r = H(
     e,
-    Pe,
+    an,
     n
-  ), l = {
+  ), a = {
     ...s
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
+A({
   name: "LCircle",
-  props: Pe,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = Qe(e, t, o);
-    return onMounted(async () => {
-      const { circle: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(i(e.latLng, l));
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(a, t.value, e), r({
+  props: an,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = La(e, o, t);
+    return F(async () => {
+      const { circle: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(i(e.latLng, a));
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-defineComponent({
+A({
   name: "LCircleMarker",
-  props: re,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = je(
+  props: Ht,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = sn(
       e,
-      t,
-      o
+      o,
+      t
     );
-    return onMounted(async () => {
-      const { circleMarker: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        i(e.latLng, l)
+    return F(async () => {
+      const { circleMarker: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        i(e.latLng, a)
       );
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(a, t.value, e), r({
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const F = {
-  ...W,
+const Ne = {
+  ...Xe,
   position: {
     type: String
   }
-}, K = (e, o) => {
-  const { options: t, methods: n } = J(e), s = f(
+}, Ze = (e, t) => {
+  const { options: o, methods: n } = Ke(e), s = H(
     e,
-    F,
-    t
+    Ne,
+    o
   ), r = {
     ...n,
-    setPosition(l) {
-      o.value && o.value.setPosition(l);
+    setPosition(a) {
+      t.value && t.value.setPosition(a);
     }
   };
-  return onUnmounted(() => {
-    o.value && o.value.remove();
+  return At(() => {
+    t.value && t.value.remove();
   }), { options: s, methods: r };
-}, Xe = (e) => e.default ? h$1("div", { ref: "root" }, e.default()) : null;
-defineComponent({
+}, Pa = (e) => e.default ? Oe("div", { ref: "root" }, e.default()) : null;
+A({
   name: "LControl",
   props: {
-    ...F,
+    ...Ne,
     disableClickPropagation: {
       type: Boolean,
-      custom: true,
-      default: true
+      custom: !0,
+      default: !0
     },
     disableScrollPropagation: {
       type: Boolean,
-      custom: true,
-      default: false
+      custom: !0,
+      default: !1
     }
   },
-  setup(e, o) {
-    const t = ref(), n = ref(), s = inject$1(h), r = m(H), { options: l, methods: a } = K(e, t);
-    return onMounted(async () => {
-      const { Control: i, DomEvent: u } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = i.extend({
+  setup(e, t) {
+    const o = h(), n = h(), s = I(q), r = j(qe), { options: a, methods: l } = Ze(e, o);
+    return F(async () => {
+      const { Control: i, DomEvent: u } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js"), d = i.extend({
         onAdd() {
           return n.value;
         }
       });
-      t.value = markRaw(new d(l)), L(a, t.value, e), r({ leafletObject: t.value }), e.disableClickPropagation && n.value && u.disableClickPropagation(n.value), e.disableScrollPropagation && n.value && u.disableScrollPropagation(n.value), nextTick(() => o.emit("ready", t.value));
-    }), { root: n, leafletObject: t };
+      o.value = Z(new d(a)), W(l, o.value, e), r({ leafletObject: o.value }), e.disableClickPropagation && n.value && u.disableClickPropagation(n.value), e.disableScrollPropagation && n.value && u.disableScrollPropagation(n.value), D(() => t.emit("ready", o.value));
+    }), { root: n, leafletObject: o };
   },
   render() {
-    return Xe(this.$slots);
+    return Pa(this.$slots);
   }
 });
-const Ce = {
-  ...F,
+const ln = {
+  ...Ne,
   prefix: {
     type: String
   }
-}, Ye = (e, o) => {
-  const { options: t, methods: n } = K(
+}, Ea = (e, t) => {
+  const { options: o, methods: n } = Ze(
     e,
-    o
-  ), s = f(
-    e,
-    Ce,
     t
+  ), s = H(
+    e,
+    ln,
+    o
   ), r = {
     ...n,
-    setPrefix(l) {
-      o.value.setPrefix(l);
+    setPrefix(a) {
+      t.value.setPrefix(a);
     }
   };
   return { options: s, methods: r };
 };
-defineComponent({
+A({
   name: "LControlAttribution",
-  props: Ce,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = Ye(e, t);
-    return onMounted(async () => {
-      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        a.attribution(r)
-      ), L(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+  props: ln,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(qe), { options: r, methods: a } = Ea(e, o);
+    return F(async () => {
+      const { control: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        l.attribution(r)
+      ), W(a, o.value, e), s({ leafletObject: o.value }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
 });
-const Te = {
-  ...F,
+const un = {
+  ...Ne,
   collapsed: {
     type: Boolean,
     default: void 0
@@ -3915,43 +2637,43 @@ const Te = {
   sortFunction: {
     type: Function
   }
-}, Ve = (e, o) => {
-  const { options: t } = K(e, o);
-  return { options: f(
+}, $a = (e, t) => {
+  const { options: o } = Ze(e, t);
+  return { options: H(
     e,
-    Te,
-    t
+    un,
+    o
   ), methods: {
-    addLayer(r) {
-      r.layerType === "base" ? o.value.addBaseLayer(r.leafletObject, r.name) : r.layerType === "overlay" && o.value.addOverlay(r.leafletObject, r.name);
+    addLayer(n) {
+      n.layerType === "base" ? t.value.addBaseLayer(n.leafletObject, n.name) : n.layerType === "overlay" && t.value.addOverlay(n.leafletObject, n.name);
     },
-    removeLayer(r) {
-      o.value.removeLayer(r.leafletObject);
+    removeLayer(n) {
+      t.value.removeLayer(n.leafletObject);
     }
   } };
 };
-defineComponent({
+A({
   name: "LControlLayers",
-  props: Te,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(me), { options: r, methods: l } = Ve(e, t);
-    return onMounted(async () => {
-      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        a.layers(void 0, void 0, r)
-      ), L(l, t.value, e), s({
+  props: un,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(Ko), { options: r, methods: a } = $a(e, o);
+    return F(async () => {
+      const { control: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        l.layers(void 0, void 0, r)
+      ), W(a, o.value, e), s({
         ...e,
-        ...l,
-        leafletObject: t.value
-      }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+        ...a,
+        leafletObject: o.value
+      }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
 });
-const Me = {
-  ...F,
+const cn = {
+  ...Ne,
   maxWidth: {
     type: Number
   },
@@ -3967,33 +2689,33 @@ const Me = {
     type: Boolean,
     default: void 0
   }
-}, xe = (e, o) => {
-  const { options: t, methods: n } = K(
+}, ka = (e, t) => {
+  const { options: o, methods: n } = Ze(
     e,
-    o
-  );
-  return { options: f(
-    e,
-    Me,
     t
+  );
+  return { options: H(
+    e,
+    cn,
+    o
   ), methods: n };
 };
-defineComponent({
+A({
   name: "LControlScale",
-  props: Me,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = xe(e, t);
-    return onMounted(async () => {
-      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(a.scale(r)), L(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+  props: cn,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(qe), { options: r, methods: a } = ka(e, o);
+    return F(async () => {
+      const { control: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(l.scale(r)), W(a, o.value, e), s({ leafletObject: o.value }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
 });
-const Be = {
-  ...F,
+const dn = {
+  ...Ne,
   zoomInText: {
     type: String
   },
@@ -4006,152 +2728,152 @@ const Be = {
   zoomOutTitle: {
     type: String
   }
-}, Re = (e, o) => {
-  const { options: t, methods: n } = K(
+}, Ba = (e, t) => {
+  const { options: o, methods: n } = Ze(
     e,
-    o
-  );
-  return { options: f(
-    e,
-    Be,
     t
+  );
+  return { options: H(
+    e,
+    dn,
+    o
   ), methods: n };
 };
-defineComponent({
+A({
   name: "LControlZoom",
-  props: Be,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(H), { options: r, methods: l } = Re(e, t);
-    return onMounted(async () => {
-      const { control: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(a.zoom(r)), L(l, t.value, e), s({ leafletObject: t.value }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+  props: dn,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(qe), { options: r, methods: a } = Ba(e, o);
+    return F(async () => {
+      const { control: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(l.zoom(r)), W(a, o.value, e), s({ leafletObject: o.value }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
 });
-const te = {
-  ...D
-}, se = (e, o, t) => {
-  const { options: n, methods: s } = q(
+const vt = {
+  ...je
+}, Wt = (e, t, o) => {
+  const { options: n, methods: s } = Je(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    te,
+    vt,
     n
-  ), l = {
+  ), a = {
     ...s,
-    addLayer(a) {
-      o.value.addLayer(a.leafletObject);
+    addLayer(l) {
+      t.value.addLayer(l.leafletObject);
     },
-    removeLayer(a) {
-      o.value.removeLayer(a.leafletObject);
+    removeLayer(l) {
+      t.value.removeLayer(l.leafletObject);
     }
   };
-  return provide(M, l.addLayer), provide(ee, l.removeLayer), { options: r, methods: l };
-}, we = {
-  ...te
-}, et = (e, o, t) => {
-  const { options: n, methods: s } = se(
+  return fe(re, a.addLayer), fe(ft, a.removeLayer), { options: r, methods: a };
+}, pn = {
+  ...vt
+}, Va = (e, t, o) => {
+  const { options: n, methods: s } = Wt(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    we,
+    pn,
     n
-  ), l = {
+  ), a = {
     ...s
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
-  props: we,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l, options: a } = et(
+A({
+  props: pn,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { methods: a, options: l } = Va(
       e,
-      t,
-      o
+      o,
+      t
     );
-    return onMounted(async () => {
-      const { featureGroup: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        i(void 0, a)
+    return F(async () => {
+      const { featureGroup: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        i(void 0, l)
       );
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(l, t.value, e), r({
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(a, o.value, e), r({
         ...e,
-        ...l,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...a,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const Ie = {
-  ...te,
+const fn = {
+  ...vt,
   geojson: {
     type: [Object, Array],
-    custom: true
+    custom: !0
   },
   optionsStyle: {
     type: Function,
-    custom: true
+    custom: !0
   }
-}, tt = (e, o, t) => {
-  const { options: n, methods: s } = se(
+}, Aa = (e, t, o) => {
+  const { options: n, methods: s } = Wt(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    Ie,
+    fn,
     n
   );
   Object.prototype.hasOwnProperty.call(e, "optionsStyle") && (r.style = e.optionsStyle);
-  const l = {
+  const a = {
     ...s,
-    setGeojson(a) {
-      o.value.clearLayers(), o.value.addData(a);
+    setGeojson(l) {
+      t.value.clearLayers(), t.value.addData(l);
     },
-    setOptionsStyle(a) {
-      o.value.setStyle(a);
+    setOptionsStyle(l) {
+      t.value.setStyle(l);
     },
     getGeoJSONData() {
-      return o.value.toGeoJSON();
+      return t.value.toGeoJSON();
     },
     getBounds() {
-      return o.value.getBounds();
+      return t.value.getBounds();
     }
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
-  props: Ie,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l, options: a } = tt(e, t, o);
-    return onMounted(async () => {
-      const { geoJSON: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(i(e.geojson, a));
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(l, t.value, e), r({
+A({
+  props: fn,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { methods: a, options: l } = Aa(e, o, t);
+    return F(async () => {
+      const { geoJSON: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(i(e.geojson, l));
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(a, o.value, e), r({
         ...e,
-        ...l,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...a,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const ae = {
-  ...D,
+const qt = {
+  ...je,
   opacity: {
     type: Number
   },
@@ -4174,71 +2896,71 @@ const ae = {
   className: {
     type: String
   }
-}, Ae = (e, o, t) => {
-  const { options: n, methods: s } = q(
+}, vn = (e, t, o) => {
+  const { options: n, methods: s } = Je(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    ae,
+    qt,
     n
-  ), l = {
+  ), a = {
     ...s,
     setTileComponent() {
-      var a;
-      (a = o.value) == null || a.redraw();
+      var l;
+      (l = t.value) == null || l.redraw();
     }
   };
-  return onUnmounted(() => {
-    o.value.off();
-  }), { options: r, methods: l };
-}, ot = (e, o, t, n) => e.extend({
+  return At(() => {
+    t.value.off();
+  }), { options: r, methods: a };
+}, Ra = (e, t, o, n) => e.extend({
   initialize(s) {
-    this.tileComponents = {}, this.on("tileunload", this._unloadTile), t.setOptions(this, s);
+    this.tileComponents = {}, this.on("tileunload", this._unloadTile), o.setOptions(this, s);
   },
   createTile(s) {
     const r = this._tileCoordsToKey(s);
-    this.tileComponents[r] = o.create("div");
-    const l = h$1({ setup: n, props: ["coords"] }, { coords: s });
-    return render(l, this.tileComponents[r]), this.tileComponents[r];
+    this.tileComponents[r] = t.create("div");
+    const a = Oe({ setup: n, props: ["coords"] }, { coords: s });
+    return rt(a, this.tileComponents[r]), this.tileComponents[r];
   },
   _unloadTile(s) {
     const r = this._tileCoordsToKey(s.coords);
     this.tileComponents[r] && (this.tileComponents[r].innerHTML = "", this.tileComponents[r] = void 0);
   }
 });
-defineComponent({
+A({
   props: {
-    ...ae,
+    ...qt,
     childRender: {
       type: Function,
-      required: true
+      required: !0
     }
   },
-  setup(e, o) {
-    const t = ref(), n = ref(null), s = ref(false), r = inject$1(h), l = m(M), { options: a, methods: i } = Ae(e, t, o);
-    return onMounted(async () => {
-      const { GridLayer: u, DomUtil: d, Util: y } = r ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), w = ot(
+  setup(e, t) {
+    const o = h(), n = h(null), s = h(!1), r = I(q), a = j(re), { options: l, methods: i } = vn(e, o, t);
+    return F(async () => {
+      const { GridLayer: u, DomUtil: d, Util: f } = r ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js"), C = Ra(
         u,
         d,
-        y,
+        f,
         e.childRender
       );
-      t.value = markRaw(new w(a));
-      const { listeners: v } = T(o.attrs);
-      t.value.on(v), L(i, t.value, e), l({
+      o.value = Z(new C(l));
+      const { listeners: b } = oe(t.attrs);
+      o.value.on(b), W(i, o.value, e), a({
         ...e,
         ...i,
-        leafletObject: t.value
-      }), s.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { root: n, ready: s, leafletObject: t };
+        leafletObject: o.value
+      }), s.value = !0, D(() => t.emit("ready", o.value));
+    }), { root: n, ready: s, leafletObject: o };
   },
   render() {
-    return this.ready ? h$1("div", { style: { display: "none" }, ref: "root" }) : null;
+    return this.ready ? Oe("div", { style: { display: "none" }, ref: "root" }) : null;
   }
 });
-const de = {
+const fo = {
   iconUrl: {
     type: String
   },
@@ -4276,68 +2998,68 @@ const de = {
     type: String
   }
 };
-defineComponent({
+A({
   name: "LIcon",
   props: {
-    ...de,
-    ...W
+    ...fo,
+    ...Xe
   },
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(ve), r = m(be), l = m(fe);
-    let a, i, u, d, y;
-    const w = (N, P, B) => {
-      const I = N && N.innerHTML;
-      if (!P) {
-        B && y && s() && r(I);
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(Jo), r = j(Zo), a = j(Yo);
+    let l, i, u, d, f;
+    const C = (p, O, _) => {
+      const P = p && p.innerHTML;
+      if (!O) {
+        _ && f && s() && r(P);
         return;
       }
-      const { listeners: E } = T(o.attrs);
-      y && i(y, E);
-      const { options: ue } = J(e), $ = f(
+      const { listeners: X } = oe(t.attrs);
+      f && i(f, X);
+      const { options: Q } = Ke(e), ne = H(
         e,
-        de,
-        ue
+        fo,
+        Q
       );
-      I && ($.html = I), y = $.html ? u($) : d($), a(y, E), l(y);
-    }, v = () => {
-      nextTick(() => w(t.value, true, false));
-    }, z = () => {
-      nextTick(() => w(t.value, false, true));
-    }, Z = {
-      setIconUrl: v,
-      setIconRetinaUrl: v,
-      setIconSize: v,
-      setIconAnchor: v,
-      setPopupAnchor: v,
-      setTooltipAnchor: v,
-      setShadowUrl: v,
-      setShadowRetinaUrl: v,
-      setShadowAnchor: v,
-      setBgPos: v,
-      setClassName: v,
-      setHtml: v
+      P && (ne.html = P), f = ne.html ? u(ne) : d(ne), l(f, X), a(f);
+    }, b = () => {
+      D(() => C(o.value, !0, !1));
+    }, g = () => {
+      D(() => C(o.value, !1, !0));
+    }, v = {
+      setIconUrl: b,
+      setIconRetinaUrl: b,
+      setIconSize: b,
+      setIconAnchor: b,
+      setPopupAnchor: b,
+      setTooltipAnchor: b,
+      setShadowUrl: b,
+      setShadowRetinaUrl: b,
+      setShadowAnchor: b,
+      setBgPos: b,
+      setClassName: b,
+      setHtml: b
     };
-    return onMounted(async () => {
+    return F(async () => {
       const {
-        DomEvent: N,
-        divIcon: P,
-        icon: B
-      } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      a = N.on, i = N.off, u = P, d = B, L(Z, {}, e), new MutationObserver(z).observe(t.value, {
-        attributes: true,
-        childList: true,
-        characterData: true,
-        subtree: true
-      }), v();
-    }), { root: t };
+        DomEvent: p,
+        divIcon: O,
+        icon: _
+      } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      l = p.on, i = p.off, u = O, d = _, W(v, {}, e), new MutationObserver(g).observe(o.value, {
+        attributes: !0,
+        childList: !0,
+        characterData: !0,
+        subtree: !0
+      }), b();
+    }), { root: o };
   },
   render() {
     const e = this.$slots.default ? this.$slots.default() : void 0;
-    return h$1("div", { ref: "root" }, e);
+    return Oe("div", { ref: "root" }, e);
   }
 });
-const Ge = {
-  ...D,
+const mn = {
+  ...je,
   opacity: {
     type: Number
   },
@@ -4363,167 +3085,167 @@ const Ge = {
   },
   url: {
     type: String,
-    required: true,
-    custom: true
+    required: !0,
+    custom: !0
   },
   bounds: {
     type: [Array, Object],
-    required: true,
-    custom: true
+    required: !0,
+    custom: !0
   }
-}, nt = (e, o, t) => {
-  const { options: n, methods: s } = q(
+}, Ta = (e, t, o) => {
+  const { options: n, methods: s } = Je(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    Ge,
+    mn,
     n
-  ), l = {
+  ), a = {
     ...s,
     /**
      * Sets the opacity of the overlay.
      * @param {number} opacity
      */
-    setOpacity(a) {
-      return o.value.setOpacity(a);
+    setOpacity(l) {
+      return t.value.setOpacity(l);
     },
     /**
      * Changes the URL of the image.
      * @param {string} url
      */
-    setUrl(a) {
-      return o.value.setUrl(a);
+    setUrl(l) {
+      return t.value.setUrl(l);
     },
     /**
      * Update the bounds that this ImageOverlay covers
      * @param {LatLngBounds | Array<Array<number>>} bounds
      */
-    setBounds(a) {
-      return o.value.setBounds(a);
+    setBounds(l) {
+      return t.value.setBounds(l);
     },
     /**
      * Get the bounds that this ImageOverlay covers
      * @returns {LatLngBounds}
      */
     getBounds() {
-      return o.value.getBounds();
+      return t.value.getBounds();
     },
     /**
      * Returns the instance of HTMLImageElement used by this overlay.
      * @returns {HTMLElement}
      */
     getElement() {
-      return o.value.getElement();
+      return t.value.getElement();
     },
     /**
      * Brings the layer to the top of all overlays.
      */
     bringToFront() {
-      return o.value.bringToFront();
+      return t.value.bringToFront();
     },
     /**
      * Brings the layer to the bottom of all overlays.
      */
     bringToBack() {
-      return o.value.bringToBack();
+      return t.value.bringToBack();
     },
     /**
      * Changes the zIndex of the image overlay.
      * @param {number} zIndex
      */
-    setZIndex(a) {
-      return o.value.setZIndex(a);
+    setZIndex(l) {
+      return t.value.setZIndex(l);
     }
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
+A({
   name: "LImageOverlay",
-  props: Ge,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = nt(
+  props: mn,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = Ta(
       e,
-      t,
-      o
+      o,
+      t
     );
-    return onMounted(async () => {
-      const { imageOverlay: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        i(e.url, e.bounds, l)
+    return F(async () => {
+      const { imageOverlay: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        i(e.url, e.bounds, a)
       );
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(a, t.value, e), r({
-        ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
-  },
-  render() {
-    return G(this.ready, this.$slots);
-  }
-});
-defineComponent({
-  props: te,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { methods: l } = se(e, t, o);
-    return onMounted(async () => {
-      const { layerGroup: a } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        a(void 0, e.options)
-      );
-      const { listeners: i } = T(o.attrs);
-      t.value.on(i), L(l, t.value, e), r({
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(l, o.value, e), r({
         ...e,
         ...l,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-function rt(e, o, t) {
-  var n, s, r;
-  o === void 0 && (o = 50), t === void 0 && (t = {});
-  var l = (n = t.isImmediate) != null && n, a = (s = t.callback) != null && s, i = t.maxWait, u = Date.now(), d = [];
-  function y() {
-    if (i !== void 0) {
-      var v = Date.now() - u;
-      if (v + o >= i)
-        return i - v;
-    }
-    return o;
+A({
+  props: vt,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { methods: a } = Wt(e, o, t);
+    return F(async () => {
+      const { layerGroup: l } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        l(void 0, e.options)
+      );
+      const { listeners: i } = oe(t.attrs);
+      o.value.on(i), W(a, o.value, e), r({
+        ...e,
+        ...a,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
+  },
+  render() {
+    return ve(this.ready, this.$slots);
   }
-  var w = function() {
-    var v = [].slice.call(arguments), z = this;
-    return new Promise(function(Z, N) {
-      var P = l && r === void 0;
+});
+function gn(e, t, o) {
+  var n, s, r;
+  t === void 0 && (t = 50), o === void 0 && (o = {});
+  var a = (n = o.isImmediate) != null && n, l = (s = o.callback) != null && s, i = o.maxWait, u = Date.now(), d = [];
+  function f() {
+    if (i !== void 0) {
+      var b = Date.now() - u;
+      if (b + t >= i)
+        return i - b;
+    }
+    return t;
+  }
+  var C = function() {
+    var b = [].slice.call(arguments), g = this;
+    return new Promise(function(v, p) {
+      var O = a && r === void 0;
       if (r !== void 0 && clearTimeout(r), r = setTimeout(function() {
-        if (r = void 0, u = Date.now(), !l) {
-          var I = e.apply(z, v);
-          a && a(I), d.forEach(function(E) {
-            return (0, E.resolve)(I);
+        if (r = void 0, u = Date.now(), !a) {
+          var P = e.apply(g, b);
+          l && l(P), d.forEach(function(X) {
+            return (0, X.resolve)(P);
           }), d = [];
         }
-      }, y()), P) {
-        var B = e.apply(z, v);
-        return a && a(B), Z(B);
+      }, f()), O) {
+        var _ = e.apply(g, b);
+        return l && l(_), v(_);
       }
-      d.push({ resolve: Z, reject: N });
+      d.push({ resolve: v, reject: p });
     });
   };
-  return w.cancel = function(v) {
-    r !== void 0 && clearTimeout(r), d.forEach(function(z) {
-      return (0, z.reject)(v);
+  return C.cancel = function(b) {
+    r !== void 0 && clearTimeout(r), d.forEach(function(g) {
+      return (0, g.reject)(b);
     }), d = [];
-  }, w;
+  }, C;
 }
-const We = {
-  ...W,
+const vo = {
+  ...Xe,
   /**
    * The center of the map, supports .sync modifier
    */
@@ -4631,117 +3353,115 @@ const We = {
   },
   useGlobalLeaflet: {
     type: Boolean,
-    default: true,
-    custom: true
+    default: !0,
+    custom: !0
   }
-}, io = defineComponent({
-  inheritAttrs: false,
+}, Ia = A({
+  inheritAttrs: !1,
   emits: ["ready", "update:zoom", "update:center", "update:bounds"],
-  props: We,
-  setup(e, o) {
-    const t = ref(), n = reactive({
-      ready: false,
+  props: vo,
+  setup(e, t) {
+    const o = h(), n = Le({
+      ready: !1,
       layersToAdd: [],
       layersInControl: []
-    }), { options: s } = J(e), r = f(
+    }), { options: s } = Ke(e), r = H(
       e,
-      We,
+      vo,
       s
-    ), { listeners: l, attrs: a } = T(o.attrs), i = Y(M), u = Y(ee), d = Y(H), y = Y(
-      me
+    ), { listeners: a, attrs: l } = oe(t.attrs), i = ot(re), u = ot(ft), d = ot(qe), f = ot(
+      Ko
     );
-    provide(h, e.useGlobalLeaflet);
-    const w = computed(() => {
-      const P = {};
-      return e.noBlockingAnimations && (P.animate = false), P;
-    }), v = computed(() => {
-      const P = w.value;
-      return e.padding && (P.padding = e.padding), e.paddingTopLeft && (P.paddingTopLeft = e.paddingTopLeft), e.paddingBottomRight && (P.paddingBottomRight = e.paddingBottomRight), P;
-    }), z = {
-      moveend: rt((P) => {
-        n.leafletRef && (o.emit("update:zoom", n.leafletRef.getZoom()), o.emit("update:center", n.leafletRef.getCenter()), o.emit("update:bounds", n.leafletRef.getBounds()));
+    fe(q, e.useGlobalLeaflet);
+    const C = c(() => {
+      const O = {};
+      return e.noBlockingAnimations && (O.animate = !1), O;
+    }), b = c(() => {
+      const O = C.value;
+      return e.padding && (O.padding = e.padding), e.paddingTopLeft && (O.paddingTopLeft = e.paddingTopLeft), e.paddingBottomRight && (O.paddingBottomRight = e.paddingBottomRight), O;
+    }), g = {
+      moveend: gn((O) => {
+        n.leafletRef && (t.emit("update:zoom", n.leafletRef.getZoom()), t.emit("update:center", n.leafletRef.getCenter()), t.emit("update:bounds", n.leafletRef.getBounds()));
       }),
-      overlayadd(P) {
-        const B = n.layersInControl.find((I) => I.name === P.name);
-        B && B.updateVisibleProp(true);
+      overlayadd(O) {
+        const _ = n.layersInControl.find((P) => P.name === O.name);
+        _ && _.updateVisibleProp(!0);
       },
-      overlayremove(P) {
-        const B = n.layersInControl.find((I) => I.name === P.name);
-        B && B.updateVisibleProp(false);
+      overlayremove(O) {
+        const _ = n.layersInControl.find((P) => P.name === O.name);
+        _ && _.updateVisibleProp(!1);
       }
     };
-    onMounted(async () => {
-      e.useGlobalLeaflet && (b.L = b.L || await import("./leaflet-src-DK7vZj2f.js").then((n2) => n2.l));
-      const { map: P, CRS: B, Icon: I, latLngBounds: E, latLng: ue, stamp: $ } = e.useGlobalLeaflet ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
+    F(async () => {
+      e.useGlobalLeaflet && (z.L = z.L || await import("./leaflet-src-BDi_6Owi.js").then((x) => x.l));
+      const { map: O, CRS: _, Icon: P, latLngBounds: X, latLng: Q, stamp: ne } = e.useGlobalLeaflet ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
       try {
         r.beforeMapMount && await r.beforeMapMount();
-      } catch (p) {
+      } catch (x) {
         console.error(
-          `The following error occurred running the provided beforeMapMount hook ${p.message}`
+          `The following error occurred running the provided beforeMapMount hook ${x.message}`
         );
       }
-      await qe(I);
-      const yt = typeof r.crs == "string" ? B[r.crs] : r.crs;
-      r.crs = yt || B.EPSG3857;
-      const Q = {
-        addLayer(p) {
-          p.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd.push(p) : n.layersInControl.find(
-            (X) => $(X.leafletObject) === $(p.leafletObject)
-          ) || (n.layerControl.addLayer(p), n.layersInControl.push(p))), p.visible !== false && n.leafletRef.addLayer(p.leafletObject);
+      await _a(P);
+      const K = typeof r.crs == "string" ? _[r.crs] : r.crs;
+      r.crs = K || _.EPSG3857;
+      const ee = {
+        addLayer(x) {
+          x.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd.push(x) : n.layersInControl.find(
+            (R) => ne(R.leafletObject) === ne(x.leafletObject)
+          ) || (n.layerControl.addLayer(x), n.layersInControl.push(x))), x.visible !== !1 && n.leafletRef.addLayer(x.leafletObject);
         },
-        removeLayer(p) {
-          p.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd = n.layersToAdd.filter(
-            (C) => C.name !== p.name
-          ) : (n.layerControl.removeLayer(p.leafletObject), n.layersInControl = n.layersInControl.filter(
-            (C) => $(C.leafletObject) !== $(p.leafletObject)
-          ))), n.leafletRef.removeLayer(p.leafletObject);
+        removeLayer(x) {
+          x.layerType !== void 0 && (n.layerControl === void 0 ? n.layersToAdd = n.layersToAdd.filter(
+            (R) => R.name !== x.name
+          ) : (n.layerControl.removeLayer(x.leafletObject), n.layersInControl = n.layersInControl.filter(
+            (R) => ne(R.leafletObject) !== ne(x.leafletObject)
+          ))), n.leafletRef.removeLayer(x.leafletObject);
         },
-        registerLayerControl(p) {
-          n.layerControl = p, n.layersToAdd.forEach((C) => {
-            n.layerControl.addLayer(C);
-          }), n.layersToAdd = [], d(p);
+        registerLayerControl(x) {
+          n.layerControl = x, n.layersToAdd.forEach((R) => {
+            n.layerControl.addLayer(R);
+          }), n.layersToAdd = [], d(x);
         },
-        registerControl(p) {
-          n.leafletRef.addControl(p.leafletObject);
+        registerControl(x) {
+          n.leafletRef.addControl(x.leafletObject);
         },
-        setZoom(p) {
-          const C = n.leafletRef.getZoom();
-          p !== C && n.leafletRef.setZoom(p, w.value);
+        setZoom(x) {
+          const R = n.leafletRef.getZoom();
+          x !== R && n.leafletRef.setZoom(x, C.value);
         },
-        setCrs(p) {
-          const C = n.leafletRef.getBounds();
-          n.leafletRef.options.crs = p, n.leafletRef.fitBounds(C, {
-            animate: false,
+        setCrs(x) {
+          const R = n.leafletRef.getBounds();
+          n.leafletRef.options.crs = x, n.leafletRef.fitBounds(R, {
+            animate: !1,
             padding: [0, 0]
           });
         },
-        fitBounds(p) {
-          n.leafletRef.fitBounds(p, v.value);
+        fitBounds(x) {
+          n.leafletRef.fitBounds(x, b.value);
         },
-        setBounds(p) {
-          if (!p)
+        setBounds(x) {
+          if (!x)
             return;
-          const C = E(p);
-          if (!C.isValid())
-            return;
-          !(n.lastSetBounds || n.leafletRef.getBounds()).equals(C, 0) && (n.lastSetBounds = C, n.leafletRef.fitBounds(C));
+          const R = X(x);
+          R.isValid() && !(n.lastSetBounds || n.leafletRef.getBounds()).equals(R, 0) && (n.lastSetBounds = R, n.leafletRef.fitBounds(R));
         },
-        setCenter(p) {
-          if (p == null)
+        setCenter(x) {
+          if (x == null)
             return;
-          const C = ue(p), X = n.lastSetCenter || n.leafletRef.getCenter();
-          (X.lat !== C.lat || X.lng !== C.lng) && (n.lastSetCenter = C, n.leafletRef.panTo(C, w.value));
+          const R = Q(x), me = n.lastSetCenter || n.leafletRef.getCenter();
+          (me.lat !== R.lat || me.lng !== R.lng) && (n.lastSetCenter = R, n.leafletRef.panTo(R, C.value));
         }
       };
-      V(i, Q.addLayer), V(u, Q.removeLayer), V(d, Q.registerControl), V(y, Q.registerLayerControl), n.leafletRef = markRaw(P(t.value, r)), L(Q, n.leafletRef, e), ce(n.leafletRef, z), ce(n.leafletRef, l), n.ready = true, nextTick(() => o.emit("ready", n.leafletRef));
-    }), onBeforeUnmount(() => {
-      ye(z), n.leafletRef && (n.leafletRef.off(), n.leafletRef.remove());
+      nt(i, ee.addLayer), nt(u, ee.removeLayer), nt(d, ee.registerControl), nt(f, ee.registerLayerControl), n.leafletRef = Z(O(o.value, r)), W(ee, n.leafletRef, e), po(n.leafletRef, g), po(n.leafletRef, a), n.ready = !0, D(() => t.emit("ready", n.leafletRef));
+    }), Re(() => {
+      Xo(g), n.leafletRef && (n.leafletRef.off(), n.leafletRef.remove());
     });
-    const Z = computed(() => n.leafletRef), N = computed(() => n.ready);
-    return { root: t, ready: N, leafletObject: Z, attrs: a };
+    const v = c(() => n.leafletRef), p = c(() => n.ready);
+    return { root: o, ready: p, leafletObject: v, attrs: l };
   },
   render({ attrs: e }) {
-    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), h$1(
+    return e.style || (e.style = {}), e.style.width || (e.style.width = "100%"), e.style.height || (e.style.height = "100%"), Oe(
       "div",
       {
         ...e,
@@ -4750,8 +3470,8 @@ const We = {
       this.ready && this.$slots.default ? this.$slots.default() : {}
     );
   }
-}), Gt = ["Symbol(Comment)", "Symbol(Text)"], zt = ["LTooltip", "LPopup"], ze = {
-  ...D,
+}), ja = ["Symbol(Comment)", "Symbol(Text)"], Na = ["LTooltip", "LPopup"], yn = {
+  ...je,
   draggable: {
     type: Boolean,
     default: void 0
@@ -4764,83 +3484,83 @@ const We = {
   },
   latLng: {
     type: [Object, Array],
-    custom: true,
-    required: true
+    custom: !0,
+    required: !0
   }
-}, st = (e, o, t) => {
-  const { options: n, methods: s } = q(
+}, Fa = (e, t, o) => {
+  const { options: n, methods: s } = Je(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    ze,
+    yn,
     n
-  ), l = {
+  ), a = {
     ...s,
-    setDraggable(a) {
-      o.value.dragging && (a ? o.value.dragging.enable() : o.value.dragging.disable());
+    setDraggable(l) {
+      t.value.dragging && (l ? t.value.dragging.enable() : t.value.dragging.disable());
     },
-    latLngSync(a) {
-      t.emit("update:latLng", a.latlng), t.emit("update:lat-lng", a.latlng);
+    latLngSync(l) {
+      o.emit("update:latLng", l.latlng), o.emit("update:lat-lng", l.latlng);
     },
-    setLatLng(a) {
-      if (a != null && o.value) {
-        const i = o.value.getLatLng();
-        (!i || !i.equals(a)) && o.value.setLatLng(a);
+    setLatLng(l) {
+      if (l != null && t.value) {
+        const i = t.value.getLatLng();
+        (!i || !i.equals(l)) && t.value.setLatLng(l);
       }
     }
   };
-  return { options: r, methods: l };
-}, at = (e, o) => {
-  const t = o.slots.default && o.slots.default();
-  return t && t.length && t.some(Nt);
+  return { options: r, methods: a };
+}, Ma = (e, t) => {
+  const o = t.slots.default && t.slots.default();
+  return o && o.length && o.some(za);
 };
-function Nt(e) {
-  return !(Gt.includes(e.type.toString()) || zt.includes(e.type.name));
+function za(e) {
+  return !(ja.includes(e.type.toString()) || Na.includes(e.type.name));
 }
-defineComponent({
+A({
   name: "LMarker",
-  props: ze,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M);
-    provide(
-      ve,
+  props: yn,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re);
+    fe(
+      Jo,
       () => {
         var u;
-        return !!((u = t.value) != null && u.getElement());
+        return !!((u = o.value) != null && u.getElement());
       }
-    ), provide(be, (u) => {
-      var y, w;
-      const d = k((y = t.value) == null ? void 0 : y.getElement) && ((w = t.value) == null ? void 0 : w.getElement());
-      d && (d.innerHTML = u);
-    }), provide(
-      fe,
+    ), fe(Zo, (u) => {
+      var d, f;
+      const C = Se((d = o.value) == null ? void 0 : d.getElement) && ((f = o.value) == null ? void 0 : f.getElement());
+      C && (C.innerHTML = u);
+    }), fe(
+      Yo,
       (u) => {
         var d;
-        return ((d = t.value) == null ? void 0 : d.setIcon) && t.value.setIcon(u);
+        return ((d = o.value) == null ? void 0 : d.setIcon) && o.value.setIcon(u);
       }
     );
-    const { options: l, methods: a } = st(e, t, o), i = {
-      moveHandler: rt(a.latLngSync)
+    const { options: a, methods: l } = Fa(e, o, t), i = {
+      moveHandler: gn(l.latLngSync)
     };
-    return onMounted(async () => {
-      const { marker: u, divIcon: d } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      at(l, o) && (l.icon = d({ className: "" })), t.value = markRaw(u(e.latLng, l));
-      const { listeners: y } = T(o.attrs);
-      t.value.on(y), t.value.on("move", i.moveHandler), L(a, t.value, e), r({
+    return F(async () => {
+      const { marker: u, divIcon: d } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      Ma(a, t) && (a.icon = d({ className: "" })), o.value = Z(u(e.latLng, a));
+      const { listeners: f } = oe(t.attrs);
+      o.value.on(f), o.value.on("move", i.moveHandler), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), onBeforeUnmount(() => ye(i)), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), Re(() => Xo(i)), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const le = {
-  ...ne,
+const Xt = {
+  ...Ut,
   smoothFactor: {
     type: Number
   },
@@ -4850,193 +3570,193 @@ const le = {
   },
   latLngs: {
     type: Array,
-    required: true,
-    custom: true
+    required: !0,
+    custom: !0
   }
-}, Ne = (e, o, t) => {
-  const { options: n, methods: s } = _e(
+}, bn = (e, t, o) => {
+  const { options: n, methods: s } = rn(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    le,
+    Xt,
     n
-  ), l = {
+  ), a = {
     ...s,
-    setSmoothFactor(a) {
-      o.value.setStyle({ smoothFactor: a });
+    setSmoothFactor(l) {
+      t.value.setStyle({ smoothFactor: l });
     },
-    setNoClip(a) {
-      o.value.setStyle({ noClip: a });
+    setNoClip(l) {
+      t.value.setStyle({ noClip: l });
     },
-    addLatLng(a) {
-      o.value.addLatLng(a);
+    addLatLng(l) {
+      t.value.addLatLng(l);
     }
   };
-  return { options: r, methods: l };
-}, x = {
-  ...le
-}, $e = (e, o, t) => {
-  const { options: n, methods: s } = Ne(
+  return { options: r, methods: a };
+}, ut = {
+  ...Xt
+}, hn = (e, t, o) => {
+  const { options: n, methods: s } = bn(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    x,
+    ut,
     n
-  ), l = {
+  ), a = {
     ...s,
-    toGeoJSON(a) {
-      return o.value.toGeoJSON(a);
+    toGeoJSON(l) {
+      return t.value.toGeoJSON(l);
     }
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
+A({
   name: "LPolygon",
-  props: x,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = $e(e, t, o);
-    return onMounted(async () => {
-      const { polygon: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(i(e.latLngs, l));
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(a, t.value, e), r({
+  props: ut,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = hn(e, o, t);
+    return F(async () => {
+      const { polygon: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(i(e.latLngs, a));
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-defineComponent({
+A({
   name: "LPolyline",
-  props: le,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = Ne(e, t, o);
-    return onMounted(async () => {
-      const { polyline: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        i(e.latLngs, l)
+  props: Xt,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = bn(e, o, t);
+    return F(async () => {
+      const { polyline: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        i(e.latLngs, a)
       );
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), L(a, t.value, e), r({
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const ke = {
-  ...W,
+const Cn = {
+  ...Xe,
   content: {
     type: String,
     default: null
   }
-}, Ue = (e, o) => {
-  const { options: t, methods: n } = J(e), s = {
+}, Sn = (e, t) => {
+  const { options: o, methods: n } = Ke(e), s = {
     ...n,
     setContent(r) {
-      o.value && r !== null && r !== void 0 && o.value.setContent(r);
+      t.value && r !== null && r !== void 0 && t.value.setContent(r);
     }
   };
-  return { options: t, methods: s };
-}, De = (e) => e.default ? h$1("div", { ref: "root" }, e.default()) : null, lt = {
-  ...ke,
+  return { options: o, methods: s };
+}, wn = (e) => e.default ? Oe("div", { ref: "root" }, e.default()) : null, Da = {
+  ...Cn,
   latLng: {
     type: [Object, Array],
     default: () => []
   }
-}, it = (e, o) => {
-  const { options: t, methods: n } = Ue(e, o);
-  return { options: t, methods: n };
+}, Ga = (e, t) => {
+  const { options: o, methods: n } = Sn(e, t);
+  return { options: o, methods: n };
 };
-defineComponent({
+A({
   name: "LPopup",
-  props: lt,
-  setup(e, o) {
-    const t = ref(), n = ref(null), s = inject$1(h), r = m(ge), l = m(he), { options: a, methods: i } = it(e, t);
-    return onMounted(async () => {
-      const { popup: u } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(u(a)), e.latLng !== void 0 && t.value.setLatLng(e.latLng), L(i, t.value, e);
-      const { listeners: d } = T(o.attrs);
-      t.value.on(d), t.value.setContent(e.content || n.value || ""), r(t.value), nextTick(() => o.emit("ready", t.value));
-    }), onBeforeUnmount(() => {
-      l();
-    }), { root: n, leafletObject: t };
+  props: Da,
+  setup(e, t) {
+    const o = h(), n = h(null), s = I(q), r = j(Qo), a = j(tn), { options: l, methods: i } = Ga(e, o);
+    return F(async () => {
+      const { popup: u } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(u(l)), e.latLng !== void 0 && o.value.setLatLng(e.latLng), W(i, o.value, e);
+      const { listeners: d } = oe(t.attrs);
+      o.value.on(d), o.value.setContent(e.content || n.value || ""), r(o.value), D(() => t.emit("ready", o.value));
+    }), Re(() => {
+      a();
+    }), { root: n, leafletObject: o };
   },
   render() {
-    return De(this.$slots);
+    return wn(this.$slots);
   }
 });
-const Fe = {
-  ...x,
+const On = {
+  ...ut,
   latLngs: {
-    ...x.latLngs,
-    required: false
+    ...ut.latLngs,
+    required: !1
   },
   bounds: {
     type: Object,
-    custom: true
+    custom: !0
   }
-}, ut = (e, o, t) => {
-  const { options: n, methods: s } = $e(
+}, Ua = (e, t, o) => {
+  const { options: n, methods: s } = hn(
     e,
-    o,
-    t
-  ), r = f(
+    t,
+    o
+  ), r = H(
     e,
-    Fe,
+    On,
     n
-  ), l = {
+  ), a = {
     ...s,
-    setBounds(a) {
-      o.value.setBounds(a);
+    setBounds(l) {
+      t.value.setBounds(l);
     },
-    setLatLngs(a) {
-      o.value.setBounds(a);
+    setLatLngs(l) {
+      t.value.setBounds(l);
     }
   };
-  return { options: r, methods: l };
+  return { options: r, methods: a };
 };
-defineComponent({
+A({
   name: "LRectangle",
-  props: Fe,
-  setup(e, o) {
-    const t = ref(), n = ref(false), s = inject$1(h), r = m(M), { options: l, methods: a } = ut(e, t, o);
-    return onMounted(async () => {
-      const { rectangle: i, latLngBounds: u } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js"), d = e.bounds ? u(e.bounds) : u(e.latLngs || []);
-      t.value = markRaw(i(d, l));
-      const { listeners: y } = T(o.attrs);
-      t.value.on(y), L(a, t.value, e), r({
+  props: On,
+  setup(e, t) {
+    const o = h(), n = h(!1), s = I(q), r = j(re), { options: a, methods: l } = Ua(e, o, t);
+    return F(async () => {
+      const { rectangle: i, latLngBounds: u } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js"), d = e.bounds ? u(e.bounds) : u(e.latLngs || []);
+      o.value = Z(i(d, a));
+      const { listeners: f } = oe(t.attrs);
+      o.value.on(f), W(l, o.value, e), r({
         ...e,
-        ...a,
-        leafletObject: t.value
-      }), n.value = true, nextTick(() => o.emit("ready", t.value));
-    }), { ready: n, leafletObject: t };
+        ...l,
+        leafletObject: o.value
+      }), n.value = !0, D(() => t.emit("ready", o.value));
+    }), { ready: n, leafletObject: o };
   },
   render() {
-    return G(this.ready, this.$slots);
+    return ve(this.ready, this.$slots);
   }
 });
-const ie = {
-  ...ae,
+const Kt = {
+  ...qt,
   tms: {
     type: Boolean,
     default: void 0
   },
   subdomains: {
     type: [String, Array],
-    validator: (e) => typeof e == "string" ? true : Array.isArray(e) ? e.every((o) => typeof o == "string") : false
+    validator: (e) => typeof e == "string" ? !0 : Array.isArray(e) ? e.every((t) => typeof t == "string") : !1
   },
   detectRetina: {
     type: Boolean,
@@ -5044,65 +3764,65 @@ const ie = {
   },
   url: {
     type: String,
-    required: true,
-    custom: true
+    required: !0,
+    custom: !0
   }
-}, Ze = (e, o, t) => {
-  const { options: n, methods: s } = Ae(e, o, t), r = f(
+}, _n = (e, t, o) => {
+  const { options: n, methods: s } = vn(e, t, o), r = H(
     e,
-    ie,
+    Kt,
     n
-  ), l = {
+  ), a = {
     ...s
   };
-  return { options: r, methods: l };
-}, vo = defineComponent({
-  props: ie,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(M), { options: r, methods: l } = Ze(e, t, o);
-    return onMounted(async () => {
-      const { tileLayer: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(a(e.url, r));
-      const { listeners: i } = T(o.attrs);
-      t.value.on(i), L(l, t.value, e), s({
+  return { options: r, methods: a };
+}, Ha = A({
+  props: Kt,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(re), { options: r, methods: a } = _n(e, o, t);
+    return F(async () => {
+      const { tileLayer: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(l(e.url, r));
+      const { listeners: i } = oe(t.attrs);
+      o.value.on(i), W(a, o.value, e), s({
         ...e,
-        ...l,
-        leafletObject: t.value
-      }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+        ...a,
+        leafletObject: o.value
+      }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
-}), ct = {
-  ...ke
-}, dt = (e, o) => {
-  const { options: t, methods: n } = Ue(e, o), s = m(Oe);
-  return onBeforeUnmount(() => {
+}), Wa = {
+  ...Cn
+}, qa = (e, t) => {
+  const { options: o, methods: n } = Sn(e, t), s = j(on);
+  return Re(() => {
     s();
-  }), { options: t, methods: n };
+  }), { options: o, methods: n };
 };
-defineComponent({
+A({
   name: "LTooltip",
-  props: ct,
-  setup(e, o) {
-    const t = ref(), n = ref(null), s = inject$1(h), r = m(Le), { options: l, methods: a } = dt(e, t);
-    return onMounted(async () => {
-      const { tooltip: i } = s ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(i(l)), L(a, t.value, e);
-      const { listeners: u } = T(o.attrs);
-      t.value.on(u), t.value.setContent(e.content || n.value || ""), r(t.value), nextTick(() => o.emit("ready", t.value));
-    }), { root: n, leafletObject: t };
+  props: Wa,
+  setup(e, t) {
+    const o = h(), n = h(null), s = I(q), r = j(en), { options: a, methods: l } = qa(e, o);
+    return F(async () => {
+      const { tooltip: i } = s ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(i(a)), W(l, o.value, e);
+      const { listeners: u } = oe(t.attrs);
+      o.value.on(u), o.value.setContent(e.content || n.value || ""), r(o.value), D(() => t.emit("ready", o.value));
+    }), { root: n, leafletObject: o };
   },
   render() {
-    return De(this.$slots);
+    return wn(this.$slots);
   }
 });
-const Ee = {
-  ...ie,
+const xn = {
+  ...Kt,
   layers: {
     type: String,
-    required: true
+    required: !0
   },
   styles: {
     type: String
@@ -5124,12 +3844,12 @@ const Ee = {
     type: Boolean,
     default: void 0
   }
-}, pt = (e, o, t) => {
-  const { options: n, methods: s } = Ze(e, o, t);
+}, Xa = (e, t, o) => {
+  const { options: n, methods: s } = _n(e, t, o);
   return {
-    options: f(
+    options: H(
       e,
-      Ee,
+      xn,
       n
     ),
     methods: {
@@ -5137,257 +3857,205 @@ const Ee = {
     }
   };
 };
-defineComponent({
-  props: Ee,
-  setup(e, o) {
-    const t = ref(), n = inject$1(h), s = m(M), { options: r, methods: l } = pt(
+A({
+  props: xn,
+  setup(e, t) {
+    const o = h(), n = I(q), s = j(re), { options: r, methods: a } = Xa(
       e,
-      t,
-      o
+      o,
+      t
     );
-    return onMounted(async () => {
-      const { tileLayer: a } = n ? b.L : await import("./leaflet-src.esm-CZdvXJH9.js");
-      t.value = markRaw(
-        a.wms(e.url, r)
+    return F(async () => {
+      const { tileLayer: l } = n ? z.L : await import("./leaflet-src.esm-BnEQV3J-.js");
+      o.value = Z(
+        l.wms(e.url, r)
       );
-      const { listeners: i } = T(o.attrs);
-      t.value.on(i), L(l, t.value, e), s({
+      const { listeners: i } = oe(t.attrs);
+      o.value.on(i), W(a, o.value, e), s({
         ...e,
-        ...l,
-        leafletObject: t.value
-      }), nextTick(() => o.emit("ready", t.value));
-    }), { leafletObject: t };
+        ...a,
+        leafletObject: o.value
+      }), D(() => t.emit("ready", o.value));
+    }), { leafletObject: o };
   },
   render() {
     return null;
   }
 });
-const _hoisted_1$1 = { class: "line" };
-const _hoisted_2$1 = { class: "right" };
-const _hoisted_3$1 = { class: "content" };
-const _hoisted_4$1 = { class: "list_of_formats" };
-const _hoisted_5$1 = { class: "line" };
-const _hoisted_6$1 = { class: "right" };
-const _hoisted_7$1 = { class: "content" };
-const _hoisted_8$1 = { class: "map" };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const Ka = { class: "line" }, Ja = { class: "right" }, Za = { class: "content" }, Ya = { class: "list_of_formats" }, Qa = { class: "line" }, el = { class: "right" }, tl = { class: "content" }, ol = { class: "map" }, nl = /* @__PURE__ */ A({
   __name: "FilterModal",
   props: {
-    "modelValue": {
-      default: reactive([
+    modelValue: {
+      default: Le([
         { formats: {} },
         { mapSection: {} }
       ])
     },
-    "modelModifiers": {}
+    modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(__props, { expose: __expose }) {
-    const toogle = ref(false);
-    const run = () => {
-      toogle.value = !toogle.value;
-    };
-    __expose({
-      run
+  setup(e, { expose: t }) {
+    const o = h(!1);
+    t({
+      run: () => {
+        o.value = !o.value;
+      }
     });
-    const getColor = useFormat().getColorForFormat;
-    const model = useModel(__props, "modelValue");
-    const formats = ref([
-      { name: "OGC", key: Formats.WMS, color: getColor(Formats.WMS), active: true },
-      { name: "SensorThings", key: Formats.OGCSTA, color: getColor(Formats.OGCSTA), active: true },
-      { name: "XMLA", key: Formats.XMLA, color: getColor(Formats.XMLA), active: true },
-      { name: "CSV", key: Formats.CSV, color: getColor(Formats.CSV), active: true },
-      { name: "JSON", key: Formats.JSON, color: getColor(Formats.JSON), active: true }
-    ]);
-    const formatFilter = ref(false);
-    const map = ref(null);
-    const mapSettings = reactive({
+    const s = qo().getColorForFormat, r = Nn(e, "modelValue"), a = h([
+      { name: "OGC", key: N.WMS, color: s(N.WMS), active: !0 },
+      { name: "SensorThings", key: N.OGCSTA, color: s(N.OGCSTA), active: !0 },
+      { name: "XMLA", key: N.XMLA, color: s(N.XMLA), active: !0 },
+      { name: "CSV", key: N.CSV, color: s(N.CSV), active: !0 },
+      { name: "JSON", key: N.JSON, color: s(N.JSON), active: !0 }
+    ]), l = h(!1), i = h(null), u = Le({
       baseMapUrl: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
       zoom: 14,
       attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       center: [50.93115286, 11.60392726],
-      map_filter_on: false
-    });
-    const init = () => {
-      const mapSection = model.value?.find((f2) => f2["mapSection"]);
-      const formats2 = model.value?.find((f2) => f2["formats"]);
-      if (mapSection) {
-        mapSettings.map_filter_on = true;
+      map_filter_on: !1
+    }), d = () => {
+      const g = r.value?.find((p) => p.mapSection), v = r.value?.find((p) => p.formats);
+      if (g) {
+        u.map_filter_on = !0;
         try {
-          map.value ?? {}.leafletObject.fitBounds(mapSection.mapSection);
-        } catch (e) {
+          i.value ?? {}.leafletObject.fitBounds(g.mapSection);
+        } catch {
         }
       }
-      if (formats2) {
-        formatFilter.value = true;
-      }
+      v && (l.value = !0);
+    }, f = () => {
+      let g = r.value?.find((v) => v.mapSection);
+      g || (g = { mapSection: {} }, r.value.push(g)), g.mapSection = i.value ?? {}.leafletObject.getBounds();
     };
-    const move = () => {
-      let mapSection = model.value?.find((f2) => f2["mapSection"]);
-      if (!mapSection) {
-        mapSection = { mapSection: {} };
-        model.value.push(mapSection);
-      }
-      mapSection.mapSection = map.value ?? {}.leafletObject.getBounds();
-    };
-    watch(() => mapSettings.map_filter_on, (val) => {
-      const mapSection = model.value?.find((f2) => f2["mapSection"]);
-      if (!val) {
-        if (mapSection) {
-          const pos = model.value.indexOf(mapSection);
-          if (pos != -1) model.value.splice(pos);
-        }
+    ae(() => u.map_filter_on, (g) => {
+      const v = r.value?.find((p) => p.mapSection);
+      if (!g && v) {
+        const p = r.value.indexOf(v);
+        p != -1 && r.value.splice(p);
       }
     });
-    const prevented = ref(false);
-    watch(formatFilter, (val) => {
-      const formatsInModel = model.value?.find((f2) => f2["formats"]);
-      if (prevented.value) {
-        prevented.value = false;
+    const C = h(!1);
+    ae(l, (g) => {
+      const v = r.value?.find((p) => p.formats);
+      if (C.value) {
+        C.value = !1;
         return;
       }
-      if (formatsInModel?.formats) {
-        if (val) {
-          formats.value.forEach((e) => e.active = false);
-          formatsInModel.formats.forEach((e) => {
-            formats.value.findLast((f2) => f2.key == e).active = true;
+      if (v?.formats)
+        if (g)
+          a.value.forEach((p) => p.active = !1), v.formats.forEach((p) => {
+            a.value.findLast((O) => O.key == p).active = !0;
           });
-        } else {
-          const pos = model.value.indexOf(formatsInModel);
-          if (pos != -1) model.value.splice(pos);
-          formats.value.forEach((e) => e.active = true);
+        else {
+          const p = r.value.indexOf(v);
+          p != -1 && r.value.splice(p), a.value.forEach((O) => O.active = !0);
         }
-      }
     });
-    const toogleFormat = (format) => {
-      let formatsInModel = model.value?.find((f2) => f2["formats"]);
-      if (!formatsInModel) {
-        formatsInModel = { formats: [] };
-        model.value.push(formatsInModel);
-      }
-      if (formatFilter.value) {
-        format.active = !format.active;
-        const index = formatsInModel.formats.indexOf(format.key);
-        if (index == -1) {
-          formatsInModel.formats?.push(format.key);
-        } else {
-          formatsInModel.formats?.splice(index);
-        }
-        if (formatsInModel.formats.length == 0) {
-          formatFilter.value = false;
-        }
-      } else {
-        prevented.value = true;
-        formats.value.forEach((e) => e.active = false);
-        format.active = true;
-        formatsInModel.formats = [format.key];
-        formatFilter.value = true;
-      }
+    const b = (g) => {
+      let v = r.value?.find((p) => p.formats);
+      if (v || (v = { formats: [] }, r.value.push(v)), l.value) {
+        g.active = !g.active;
+        const p = v.formats.indexOf(g.key);
+        p == -1 ? v.formats?.push(g.key) : v.formats?.splice(p), v.formats.length == 0 && (l.value = !1);
+      } else
+        C.value = !0, a.value.forEach((p) => p.active = !1), g.active = !0, v.formats = [g.key], l.value = !0;
     };
-    return (_ctx, _cache) => {
-      const _component_va_button = resolveComponent("va-button");
-      const _component_VaSwitch = resolveComponent("VaSwitch");
-      const _component_va_divider = resolveComponent("va-divider");
-      const _component_VaChip = resolveComponent("VaChip");
-      const _component_va_card_content = resolveComponent("va-card-content");
-      const _component_va_modal = resolveComponent("va-modal");
-      return openBlock(), createBlock(_component_va_modal, {
-        modelValue: toogle.value,
+    return (g, v) => {
+      const p = J("va-button"), O = J("VaSwitch"), _ = J("va-divider"), P = J("VaChip"), X = J("va-card-content"), Q = J("va-modal");
+      return E(), Y(Q, {
+        modelValue: o.value,
         class: "filterbox",
         "hide-default-actions": "",
         "no-padding": "",
-        onOpen: init
+        onOpen: d
       }, {
-        header: withCtx(() => [..._cache[4] || (_cache[4] = [
-          createElementVNode("h3", { class: "title" }, "Filter", -1)
+        header: B(() => [...v[4] || (v[4] = [
+          L("h3", { class: "title" }, "Filter", -1)
         ])]),
-        default: withCtx(({ ok }) => [
-          createVNode(_component_va_button, {
+        default: B(({ ok: ne }) => [
+          k(p, {
             class: "mr-1 mb-1 close",
             preset: "secondary",
-            style: { "position": "absolute", "right": "0", "top": "0" },
-            onClick: _cache[0] || (_cache[0] = () => {
-              toogle.value = false;
+            style: { position: "absolute", right: "0", top: "0" },
+            onClick: v[0] || (v[0] = () => {
+              o.value = !1;
             })
           }, {
-            default: withCtx(() => [..._cache[5] || (_cache[5] = [
-              createTextVNode(" x ", -1)
+            default: B(() => [...v[5] || (v[5] = [
+              te(" x ", -1)
             ])]),
             _: 1
           }),
-          createVNode(_component_va_card_content, null, {
-            default: withCtx(() => [
-              _cache[8] || (_cache[8] = createElementVNode("div", {
+          k(X, null, {
+            default: B(() => [
+              v[8] || (v[8] = L("div", {
                 class: "spacer",
-                style: { "height": "25px" }
+                style: { height: "25px" }
               }, null, -1)),
-              createElementVNode("div", _hoisted_1$1, [
-                _cache[6] || (_cache[6] = createElementVNode("div", { class: "va-collapse__header__text left" }, "Format", -1)),
-                createElementVNode("div", _hoisted_2$1, [
-                  createVNode(_component_VaSwitch, {
-                    modelValue: formatFilter.value,
-                    "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => formatFilter.value = $event),
+              L("div", Ka, [
+                v[6] || (v[6] = L("div", { class: "va-collapse__header__text left" }, "Format", -1)),
+                L("div", Ja, [
+                  k(O, {
+                    modelValue: l.value,
+                    "onUpdate:modelValue": v[1] || (v[1] = (K) => l.value = K),
                     "false-inner-label": "all",
                     "true-inner-label": "Selection"
                   }, null, 8, ["modelValue"])
                 ])
               ]),
-              createVNode(_component_va_divider),
-              createElementVNode("div", _hoisted_3$1, [
-                createElementVNode("div", _hoisted_4$1, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(formats.value, (format) => {
-                    return openBlock(), createBlock(_component_VaChip, {
-                      key: format.key,
-                      color: format.active ? format.color : "#ccc",
-                      disabled: !format.active,
-                      class: "pointer",
-                      size: "small",
-                      onClick: ($event) => toogleFormat(format)
-                    }, {
-                      default: withCtx(() => [
-                        createTextVNode(toDisplayString(format.name), 1)
-                      ]),
-                      _: 2
-                    }, 1032, ["color", "disabled", "onClick"]);
-                  }), 128))
+              k(_),
+              L("div", Za, [
+                L("div", Ya, [
+                  (E(!0), U(pe, null, at(a.value, (K) => (E(), Y(P, {
+                    key: K.key,
+                    color: K.active ? K.color : "#ccc",
+                    disabled: !K.active,
+                    class: "pointer",
+                    size: "small",
+                    onClick: (ee) => b(K)
+                  }, {
+                    default: B(() => [
+                      te(ce(K.name), 1)
+                    ]),
+                    _: 2
+                  }, 1032, ["color", "disabled", "onClick"]))), 128))
                 ])
               ]),
-              createElementVNode("div", _hoisted_5$1, [
-                _cache[7] || (_cache[7] = createElementVNode("div", { class: "va-collapse__header__text left" }, "Region", -1)),
-                createElementVNode("div", _hoisted_6$1, [
-                  createVNode(_component_VaSwitch, {
-                    modelValue: mapSettings.map_filter_on,
-                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => mapSettings.map_filter_on = $event),
+              L("div", Qa, [
+                v[7] || (v[7] = L("div", { class: "va-collapse__header__text left" }, "Region", -1)),
+                L("div", el, [
+                  k(O, {
+                    modelValue: u.map_filter_on,
+                    "onUpdate:modelValue": v[2] || (v[2] = (K) => u.map_filter_on = K),
                     "false-inner-label": "anywhere",
                     "true-inner-label": "within map section"
                   }, null, 8, ["modelValue"])
                 ])
               ]),
-              createVNode(_component_va_divider),
-              createElementVNode("div", _hoisted_7$1, [
-                createElementVNode("div", _hoisted_8$1, [
-                  createVNode(unref(io), {
+              k(_),
+              L("div", tl, [
+                L("div", ol, [
+                  k(S(Ia), {
                     id: "map",
                     ref_key: "map",
-                    ref: map,
-                    center: mapSettings.center,
+                    ref: i,
+                    center: u.center,
                     "max-zoom": 21,
-                    useGlobalLeaflet: true,
-                    zoom: mapSettings.zoom,
-                    style: { "height": "100%" },
-                    onMove: _cache[3] || (_cache[3] = () => {
-                      move();
-                      mapSettings.map_filter_on = true;
+                    useGlobalLeaflet: !0,
+                    zoom: u.zoom,
+                    style: { height: "100%" },
+                    onMove: v[3] || (v[3] = () => {
+                      f(), u.map_filter_on = !0;
                     })
                   }, {
-                    default: withCtx(() => [
-                      createVNode(unref(vo), {
-                        attribution: mapSettings.attribution,
+                    default: B(() => [
+                      k(S(Ha), {
+                        attribution: u.attribution,
                         options: {
                           maxNativeZoom: 19,
                           maxZoom: 25
                         },
-                        url: mapSettings.baseMapUrl
+                        url: u.baseMapUrl
                       }, null, 8, ["attribution", "url"])
                     ]),
                     _: 1
@@ -5402,386 +4070,300 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       }, 8, ["modelValue"]);
     };
   }
-});
-const FilterModal = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-d76f1184"]]);
-const _hoisted_1 = { class: "flex padd15" };
-const _hoisted_2 = { class: "buttonbar" };
-const _hoisted_3 = { class: "padd" };
-const _hoisted_4 = {
+}), rl = /* @__PURE__ */ pt(nl, [["__scopeId", "data-v-d76f1184"]]), sl = { class: "flex padd15" }, al = { class: "buttonbar" }, ll = { class: "padd" }, il = {
   key: 0,
   class: "title"
-};
-const _hoisted_5 = {
+}, ul = {
   key: 1,
   class: "aflex"
-};
-const _hoisted_6 = { class: "aflex" };
-const _hoisted_7 = { class: "aflex" };
-const _hoisted_8 = { class: "widgets_grid" };
-const _hoisted_9 = ["active", "onClick"];
-const _hoisted_10 = ["src"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}, cl = { class: "aflex" }, dl = { class: "aflex" }, pl = { class: "widgets_grid" }, fl = ["active", "onClick"], vl = ["src"], ml = /* @__PURE__ */ A({
   __name: "EndPointfinderModal",
-  setup(__props, { expose: __expose }) {
-    const route = useRoute();
-    const toogle = ref(false);
-    let createWidget, updateLayout, layout;
-    const run = () => {
-      const pageID = route.params.pageid ?? "";
-      const widgetStore = useWidgetsStore(pageID);
-      const layoutStore = useLayoutStore(pageID);
-      createWidget = widgetStore.createWidget;
-      updateLayout = layoutStore.updateLayout;
-      layout = layoutStore.layout;
-      toogle.value = !toogle.value;
-    };
-    const step = ref(0);
-    const formRef = ref();
-    const connectionForm = ref();
-    const { connections: connections2, createConnection } = useConnectionsStore();
-    const { dataSources, createDataSource, updateDataSource } = useDataSourcesStore();
-    const registeredWidgets = inject$1(identifier);
-    const widgetOptions = ref([]);
-    const selectedWidgets = ref([]);
-    const stepsVailid = reactive({
-      step0: false,
-      step1: true,
-      step2: true,
-      step3: true
-    });
-    const steps = [
+  setup(e, { expose: t }) {
+    const o = Wn(), n = h(!1);
+    let s, r, a;
+    const l = () => {
+      const $ = o.params.pageid ?? "", m = Un($), V = Hn($);
+      s = m.createWidget, r = V.updateLayout, a = V.layout, n.value = !n.value;
+    }, i = h(0), u = h(), d = h(), { connections: f, createConnection: C } = go(), { dataSources: b, createDataSource: g, updateDataSource: v } = Dn(), p = I(Gn), O = h([]), _ = h([]), P = Le({
+      step0: !1,
+      step1: !0,
+      step2: !0,
+      step3: !0
+    }), X = [
       {
         label: "Search",
         icon: "travel_explore",
-        beforeLeave: (step2) => {
-          step2.hasError = !stepsVailid.step0;
+        beforeLeave: ($) => {
+          $.hasError = !P.step0;
         }
       },
       {
         label: "Connection",
         icon: "polyline",
-        beforeLeave: (step2) => {
-          step2.hasError = !stepsVailid.step1;
+        beforeLeave: ($) => {
+          $.hasError = !P.step1;
         }
       },
       {
         label: "Store",
         icon: "store",
-        beforeLeave: (step2) => {
-          step2.hasError = !stepsVailid.step2;
+        beforeLeave: ($) => {
+          $.hasError = !P.step2;
         }
       },
-      { label: "Widgets", icon: "widgets", beforeLeave: (step2) => {
-        step2.hasError = !stepsVailid.step3;
+      { label: "Widgets", icon: "widgets", beforeLeave: ($) => {
+        $.hasError = !P.step3;
       } }
     ];
-    onMounted(() => {
+    F(() => {
       console.log("Mounting endpoint finder");
     });
-    const form = reactive({
+    const Q = Le({
       searchString: "",
-      loading: false
-    });
-    const loadModalref = ref(null);
-    const openFilterModal = async () => {
-      return await loadModalref.value?.run(() => {
-      });
-    };
-    const filterCount = ref("");
-    const filter = ref([]);
-    const results = ref({});
-    watch(filter, () => {
-      if (!filter.value) {
-        filterCount.value = "";
+      loading: !1
+    }), ne = h(null), K = async () => await ne.value?.run(() => {
+    }), ee = h(""), x = h([]), R = h({});
+    ae(x, () => {
+      if (!x.value) {
+        ee.value = "";
         return;
       }
-      const lengthOfNonUndefined = Object.keys(filter.value).reduce((accumulator, currentValue, currentIndex) => filter.value[currentValue] != void 0 ? accumulator + 1 : accumulator, 0);
-      if (lengthOfNonUndefined == 0) {
-        filterCount.value = "";
+      const $ = Object.keys(x.value).reduce((m, V, se) => x.value[V] != null ? m + 1 : m, 0);
+      if ($ == 0) {
+        ee.value = "";
         return;
       }
-      filterCount.value = lengthOfNonUndefined.toString();
-    }, { immediate: true, deep: true });
-    const resultAsTable = computed(() => {
-      let reducedTable = [];
-      for (let resultKey of Object.keys(results.value)) {
-        reducedTable = reducedTable.concat(
-          results.value[resultKey].results?.bindings?.map((b2) => {
-            b2["endpoint"] = { value: resultKey };
-            return b2;
-          })
+      ee.value = $.toString();
+    }, { immediate: !0, deep: !0 });
+    const me = c(() => {
+      let $ = [];
+      for (let m of Object.keys(R.value))
+        $ = $.concat(
+          R.value[m].results?.bindings?.map((V) => (V.endpoint = { value: m }, V))
         );
-      }
-      return reducedTable;
-    });
-    const search = async () => {
-      form.loading = true;
-      const val = form.searchString;
-      const listOfEndPoints = useSparQLEndPointManager().getAllActiveEndpoints();
-      if (listOfEndPoints) {
-        results.value = await new QueryBuilder().setEndpoints(listOfEndPoints).setFilter(filter.value).query(val);
-      }
-      form.loading = false;
-    };
-    const connectionManager = inject$1(identifier$1);
-    const storeManager = inject$1(identifier$2);
-    storeManager.getDataSourceTypes();
-    let ds = ref();
-    ref("rest");
-    let store = ref();
-    const ds_notFountInfo = ref(false);
-    const selectedItemsEmitted = ref();
-    watch(selectedItemsEmitted, () => {
-      ds_notFountInfo.value = false;
-      let uri = null;
+      return $;
+    }), Fe = async () => {
+      Q.loading = !0;
+      const $ = Q.searchString, m = wt().getAllActiveEndpoints();
+      m && (R.value = await new qn().setEndpoints(m).setFilter(x.value).query($)), Q.loading = !1;
+    }, Pe = I(Fn), Ee = I(zn);
+    Ee.getDataSourceTypes();
+    let y = h();
+    h("rest");
+    let w = h();
+    const T = h(!1), G = h();
+    ae(G, () => {
+      T.value = !1;
+      let $ = null;
       try {
-        uri = new URL(selectedItemsEmitted.value?.accessUrl?.value);
-        ds.value = createConnectionFromFormat(selectedItemsEmitted.value?.format?.value, uri.origin);
-      } catch (e) {
-        console.log(e);
+        $ = new URL(G.value?.accessUrl?.value), y.value = Ye(G.value?.format?.value, $.origin);
+      } catch (m) {
+        console.log(m);
       }
-      if (ds.value) {
-        stepsVailid["step0"] = true;
-      } else {
-        ds_notFountInfo.value = true;
-        stepsVailid["step0"] = false;
-      }
-    });
-    watch(step, (val) => {
-      if (val == 2) {
-        let uri = null;
+      y.value ? P.step0 = !0 : (T.value = !0, P.step0 = !1);
+    }), ae(i, ($) => {
+      if ($ == 2) {
+        let m = null;
         try {
-          uri = new URL(selectedItemsEmitted.value?.accessUrl?.value);
-          if (!ds.value) throw new Error("connection not found");
-          const id = ds.value?.uid;
-          if (!id) throw new Error("id not found");
-          store.value = reactive(createStoreFromFormat(selectedItemsEmitted.value?.format?.value, id, uri.pathname));
-        } catch (e) {
-          console.log(e);
+          if (m = new URL(G.value?.accessUrl?.value), !y.value) throw new Error("connection not found");
+          const V = y.value?.uid;
+          if (!V) throw new Error("id not found");
+          w.value = Le(Qe(G.value?.format?.value, V, m.pathname));
+        } catch (V) {
+          console.log(V);
         }
       }
-      if (val === 3) {
-        console.log(registeredWidgets.getAllWidgets());
-        const availableWidgets = Object.entries(registeredWidgets.getAllWidgets()).filter(([_, widget]) => widget.supportedDSTypes.includes(store.value?.type)).filter(([_, widget]) => widget.icon).map(([name, widget]) => ({ type: name, icon: widget.icon }));
-        console.log(availableWidgets);
-        widgetOptions.value = availableWidgets;
+      if ($ === 3) {
+        console.log(p.getAllWidgets());
+        const m = Object.entries(p.getAllWidgets()).filter(([V, se]) => se.supportedDSTypes.includes(w.value?.type)).filter(([V, se]) => se.icon).map(([V, se]) => ({ type: V, icon: se.icon }));
+        console.log(m), O.value = m;
       }
     });
-    const createConnectionFromFormat = (format, url) => {
-      let con = void 0;
-      const availableTypes = connectionManager.getRegisteredTypes();
-      switch ("<" + format + ">") {
-        case Formats.CSV:
-        case Formats.JSON:
-        case Formats.REST:
-        case Formats.OGCSTA:
-          if (availableTypes.includes("rest")) {
-            const id = createConnection("rest", { url });
-            con = connections2.find((con2) => con2.uid === id);
+    const Ye = ($, m) => {
+      let V;
+      const se = Pe.getRegisteredTypes();
+      switch ("<" + $ + ">") {
+        case N.CSV:
+        case N.JSON:
+        case N.REST:
+        case N.OGCSTA:
+          if (se.includes("rest")) {
+            const ge = C("rest", { url: m });
+            V = f.find((ye) => ye.uid === ge);
           }
           break;
-        case Formats.XMLA:
-          if (availableTypes.includes("xmla")) {
-            const id = createConnection("xmla", { url });
-            con = connections2.find((con2) => con2.uid === id);
+        case N.XMLA:
+          if (se.includes("xmla")) {
+            const ge = C("xmla", { url: m });
+            V = f.find((ye) => ye.uid === ge);
           }
           break;
       }
-      return con;
-    };
-    const createStoreFromFormat = (format, aconnection, aresourceUri) => {
-      switch ("<" + format + ">") {
-        case Formats.CSV:
-          const uid = createDataSource("csv", { connection: aconnection, resourceUrl: aresourceUri, separators: "," });
-          return dataSources.find((ds2) => ds2.uid === uid);
-        case Formats.JSON:
-          const uid_rest = createDataSource("rest", { connection: aconnection, resourceUrl: aresourceUri });
-          return dataSources.find((ds2) => ds2.uid === uid_rest);
-        case Formats.REST:
-          const uid_rest2 = createDataSource("rest", { connection: aconnection, resourceUrl: aresourceUri });
-          return dataSources.find((ds2) => ds2.uid === uid_rest2);
-        case Formats.OGCSTA:
-          const uid_ogcsta = createDataSource("ogcsta", { connection: aconnection, resourceUrl: aresourceUri });
-          return dataSources.find((ds2) => ds2.uid === uid_ogcsta);
-        case Formats.XMLA:
-          const uid_xmla = createDataSource("xmla", { connection: aconnection, resourceUrl: aresourceUri });
-          return dataSources.find((ds2) => ds2.uid === uid_xmla);
+      return V;
+    }, Qe = ($, m, V) => {
+      switch ("<" + $ + ">") {
+        case N.CSV:
+          const se = g("csv", { connection: m, resourceUrl: V, separators: "," });
+          return b.find((ie) => ie.uid === se);
+        case N.JSON:
+          const ge = g("rest", { connection: m, resourceUrl: V });
+          return b.find((ie) => ie.uid === ge);
+        case N.REST:
+          const ye = g("rest", { connection: m, resourceUrl: V });
+          return b.find((ie) => ie.uid === ye);
+        case N.OGCSTA:
+          const tt = g("ogcsta", { connection: m, resourceUrl: V });
+          return b.find((ie) => ie.uid === tt);
+        case N.XMLA:
+          const Me = g("xmla", { connection: m, resourceUrl: V });
+          return b.find((ie) => ie.uid === Me);
       }
       return null;
-    };
-    const getComponent = computed(() => {
-      const identifiers = storeManager.getDatasourceIdentifiers(store.value.type);
-      return storeManager.resolveIdentifier(identifiers.Settings);
-    });
-    const getComponentConnection = computed(() => {
-      if (!ds.value) return null;
-      const identifiers = connectionManager.getConnectionIdentifiers(ds.value.type);
-      return connectionManager.resolveIdentifier(identifiers.Settings);
-    });
-    const finish = () => {
-      if (selectedWidgets.value.length > 0) {
-        const newLayoutItems = [];
-        selectedWidgets.value.forEach((widget, index) => {
-          const id = createWidget(
-            widget.type,
-            { datasourceId: store.value?.uid },
-            {
-              title: "",
-              backgroundColor: "#fff",
-              backgroundColorTransparence: 255,
-              titleColor: "#7c7c7c",
-              titleFontSize: 15,
-              borderSize: 0,
-              borderColor: "#ccc",
-              padding: 0,
-              blur: 0,
-              borderRadius: 15,
-              fullscreen: false,
-              shadowColor: "#333",
-              shadowBlur: 12,
-              shadowX: 5,
-              shadowY: 5,
-              shadowTransparence: 25,
-              transparency: 255
-            }
-          );
-          const slayout = {
-            id,
-            x: 50 + index * 300,
+    }, et = c(() => {
+      const $ = Ee.getDatasourceIdentifiers(w.value.type);
+      return Ee.resolveIdentifier($.Settings);
+    }), mt = c(() => {
+      if (!y.value) return null;
+      const $ = Pe.getConnectionIdentifiers(y.value.type);
+      return Pe.resolveIdentifier($.Settings);
+    }), Jt = () => {
+      if (_.value.length > 0) {
+        const $ = [];
+        _.value.forEach((V, se) => {
+          const ye = {
+            id: s(
+              V.type,
+              { datasourceId: w.value?.uid },
+              {
+                title: "",
+                backgroundColor: "#fff",
+                backgroundColorTransparence: 255,
+                titleColor: "#7c7c7c",
+                titleFontSize: 15,
+                borderSize: 0,
+                borderColor: "#ccc",
+                padding: 0,
+                blur: 0,
+                borderRadius: 15,
+                fullscreen: !1,
+                shadowColor: "#333",
+                shadowBlur: 12,
+                shadowX: 5,
+                shadowY: 5,
+                shadowTransparence: 25,
+                transparency: 255
+              }
+            ),
+            x: 50 + se * 300,
             y: 50,
             width: 200,
             height: 100,
             z: 3005
           };
-          newLayoutItems.push(slayout);
-          console.log("Endpointfinder created Widget:" + widget.type);
+          $.push(ye), console.log("Endpointfinder created Widget:" + V.type);
         });
-        const updatedLayout = [...layout, ...newLayoutItems];
-        updateLayout(updatedLayout);
+        const m = [...a, ...$];
+        r(m);
       }
-      selectedWidgets.value = [];
-      ds.value = void 0;
-      store.value = void 0;
-      step.value = 0;
-      filter.value = [];
-      form.searchString = "";
-      results.value = {};
-      stepsVailid.step0 = false;
-      stepsVailid.step1 = true;
-      stepsVailid.step2 = true;
-      stepsVailid.step3 = true;
-      formRef.value?.resetValidation();
-      connectionForm.value?.resetValidation();
-      toogle.value = false;
+      _.value = [], y.value = void 0, w.value = void 0, i.value = 0, x.value = [], Q.searchString = "", R.value = {}, P.step0 = !1, P.step1 = !0, P.step2 = !0, P.step3 = !0, u.value?.resetValidation(), d.value?.resetValidation(), n.value = !1;
     };
-    watch(() => store.value?.config, (config) => {
-      console.log(config);
-    }, { deep: true });
-    __expose({
-      run
-    });
-    return (_ctx, _cache) => {
-      const _component_VaButton = resolveComponent("VaButton");
-      const _component_va_button = resolveComponent("va-button");
-      const _component_VaIcon = resolveComponent("VaIcon");
-      const _component_VaInput = resolveComponent("VaInput");
-      const _component_VaForm = resolveComponent("VaForm");
-      const _component_VaScrollContainer = resolveComponent("VaScrollContainer");
-      const _component_va_input = resolveComponent("va-input");
-      const _component_VaCheckbox = resolveComponent("VaCheckbox");
-      const _component_va_card_content = resolveComponent("va-card-content");
-      const _component_va_modal = resolveComponent("va-modal");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(_component_va_modal, {
-          modelValue: toogle.value,
+    return ae(() => w.value?.config, ($) => {
+      console.log($);
+    }, { deep: !0 }), t({
+      run: l
+    }), ($, m) => {
+      const V = J("VaButton"), se = J("va-button"), ge = J("VaIcon"), ye = J("VaInput"), tt = J("VaForm"), Me = J("VaScrollContainer"), ie = J("va-input"), Ln = J("VaCheckbox"), Pn = J("va-card-content"), En = J("va-modal");
+      return E(), U(pe, null, [
+        k(En, {
+          modelValue: n.value,
           class: "infobox",
           "hide-default-actions": "",
           "no-padding": ""
         }, {
-          footer: withCtx(() => [
-            step.value != 3 ? (openBlock(), createBlock(_component_VaButton, {
+          footer: B(() => [
+            i.value != 3 ? (E(), Y(V, {
               key: 0,
-              disabled: !stepsVailid["step" + step.value],
-              onClick: _cache[0] || (_cache[0] = ($event) => step.value++)
+              disabled: !P["step" + i.value],
+              onClick: m[0] || (m[0] = (gt) => i.value++)
             }, {
-              default: withCtx(() => [..._cache[7] || (_cache[7] = [
-                createTextVNode("next", -1)
+              default: B(() => [...m[7] || (m[7] = [
+                te("next", -1)
               ])]),
               _: 1
-            }, 8, ["disabled"])) : createCommentVNode("", true),
-            step.value == 3 ? (openBlock(), createBlock(_component_VaButton, {
+            }, 8, ["disabled"])) : ue("", !0),
+            i.value == 3 ? (E(), Y(V, {
               key: 1,
-              disabled: !stepsVailid["step" + step.value],
-              onClick: finish
+              disabled: !P["step" + i.value],
+              onClick: Jt
             }, {
-              default: withCtx(() => [..._cache[8] || (_cache[8] = [
-                createTextVNode("finish", -1)
+              default: B(() => [...m[8] || (m[8] = [
+                te("finish", -1)
               ])]),
               _: 1
-            }, 8, ["disabled"])) : createCommentVNode("", true)
+            }, 8, ["disabled"])) : ue("", !0)
           ]),
-          default: withCtx(({ ok }) => [
-            createVNode(_component_va_button, {
+          default: B(({ ok: gt }) => [
+            k(se, {
               class: "mr-1 mb-1 close",
               preset: "secondary",
-              style: { "position": "absolute", "right": "0" },
-              onClick: _cache[1] || (_cache[1] = ($event) => finish())
+              style: { position: "absolute", right: "0" },
+              onClick: m[1] || (m[1] = (M) => Jt())
             }, {
-              default: withCtx(() => [..._cache[9] || (_cache[9] = [
-                createTextVNode(" x ", -1)
+              default: B(() => [...m[9] || (m[9] = [
+                te(" x ", -1)
               ])]),
               _: 1
             }),
-            createVNode(_component_va_card_content, { class: "no-padding" }, {
-              default: withCtx(() => [
-                createVNode(unref(VaStepper), {
+            k(Pn, { class: "no-padding" }, {
+              default: B(() => [
+                k(S(ma), {
                   color: "#c29803",
-                  modelValue: step.value,
-                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => step.value = $event),
-                  steps,
+                  modelValue: i.value,
+                  "onUpdate:modelValue": m[5] || (m[5] = (M) => i.value = M),
+                  steps: X,
                   controlsHidden: "",
                   linear: ""
                 }, {
-                  "step-content-0": withCtx(() => [
-                    createVNode(_component_VaForm, {
+                  "step-content-0": B(() => [
+                    k(tt, {
                       ref_key: "formRef",
-                      ref: formRef,
+                      ref: u,
                       class: "flex flex-col items-baseline gap-6"
                     }, {
-                      default: withCtx(() => [
-                        createElementVNode("div", _hoisted_1, [
-                          createVNode(_component_VaInput, {
-                            modelValue: form.searchString,
-                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => form.searchString = $event),
-                            loading: form.loading,
+                      default: B(() => [
+                        L("div", sl, [
+                          k(ye, {
+                            modelValue: Q.searchString,
+                            "onUpdate:modelValue": m[2] || (m[2] = (M) => Q.searchString = M),
+                            loading: Q.loading,
                             class: "flex",
                             label: "Search String",
-                            onKeyup: _cache[3] || (_cache[3] = (e) => {
-                              if (e.key == "Enter") search();
+                            onKeyup: m[3] || (m[3] = (M) => {
+                              M.key == "Enter" && Fe();
                             })
                           }, {
-                            prependInner: withCtx(() => [
-                              createVNode(_component_VaIcon, {
+                            prependInner: B(() => [
+                              k(ge, {
                                 color: "secondary",
                                 name: "search"
                               })
                             ]),
                             _: 1
                           }, 8, ["modelValue", "loading"]),
-                          createElementVNode("div", _hoisted_2, [
-                            createVNode(unref(VaBadge), {
+                          L("div", al, [
+                            k(S(la), {
                               offset: [-5, 5],
-                              text: filterCount.value,
+                              text: ee.value,
                               class: "mr-6",
                               overlap: "",
                               style: { "--va-badge-text-wrapper-border-radius": "50%" }
                             }, {
-                              default: withCtx(() => [
-                                createVNode(_component_VaButton, {
+                              default: B(() => [
+                                k(V, {
                                   icon: "filter_alt",
                                   preset: "secondary",
                                   round: "",
-                                  onClick: openFilterModal
+                                  onClick: K
                                 })
                               ]),
                               _: 1
@@ -5791,138 +4373,130 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       ]),
                       _: 1
                     }, 512),
-                    resultAsTable.value.length > 0 ? (openBlock(), createBlock(_component_VaScrollContainer, {
+                    me.value.length > 0 ? (E(), Y(Me, {
                       key: 0,
                       class: "padd",
                       vertical: ""
                     }, {
-                      default: withCtx(() => [
-                        (openBlock(true), createElementBlock(Fragment, null, renderList(resultAsTable.value, (result) => {
-                          return openBlock(), createElementBlock(Fragment, null, [
-                            createVNode(SearchResultCard, {
-                              class: normalizeClass({ active: result == selectedItemsEmitted.value }),
-                              result,
-                              onClick: ($event) => selectedItemsEmitted.value = result
-                            }, null, 8, ["class", "result", "onClick"]),
-                            _cache[10] || (_cache[10] = createElementVNode("br", null, null, -1))
-                          ], 64);
-                        }), 256))
+                      default: B(() => [
+                        (E(!0), U(pe, null, at(me.value, (M) => (E(), U(pe, null, [
+                          k(wa, {
+                            class: we({ active: M == G.value }),
+                            result: M,
+                            onClick: (bl) => G.value = M
+                          }, null, 8, ["class", "result", "onClick"]),
+                          m[10] || (m[10] = L("br", null, null, -1))
+                        ], 64))), 256))
                       ]),
                       _: 1
-                    })) : createCommentVNode("", true)
+                    })) : ue("", !0)
                   ]),
-                  "step-content-1": withCtx(() => [
-                    createElementVNode("div", _hoisted_3, [
-                      createVNode(_component_VaForm, {
+                  "step-content-1": B(() => [
+                    L("div", ll, [
+                      k(tt, {
                         ref_key: "connectionForm",
-                        ref: connectionForm,
-                        modelValue: stepsVailid["step1"],
-                        "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => stepsVailid["step1"] = $event),
+                        ref: d,
+                        modelValue: P.step1,
+                        "onUpdate:modelValue": m[4] || (m[4] = (M) => P.step1 = M),
                         immediate: ""
                       }, {
-                        default: withCtx(() => [
-                          !ds_notFountInfo.value ? (openBlock(), createElementBlock("h2", _hoisted_4, " The following Connection will be created:")) : (openBlock(), createElementBlock("div", _hoisted_5, [
-                            createVNode(_component_VaIcon, {
+                        default: B(() => [
+                          T.value ? (E(), U("div", ul, [
+                            k(ge, {
                               class: "mr-2",
                               color: "#ec9c1d",
                               name: "warning",
                               size: "2rem"
                             }),
-                            _cache[11] || (_cache[11] = createElementVNode("h2", { class: "title" }, " The Connection cant be automatic detected, this happens if the Type of Dataset is not known or not supported. Never the less you can try to configure the connection manualy:", -1))
-                          ])),
-                          _cache[14] || (_cache[14] = createElementVNode("br", null, null, -1)),
-                          _cache[15] || (_cache[15] = createElementVNode("br", null, null, -1)),
-                          createElementVNode("div", _hoisted_6, [
-                            unref(ds) ? (openBlock(), createBlock(_component_va_input, {
+                            m[11] || (m[11] = L("h2", { class: "title" }, " The Connection cant be automatic detected, this happens if the Type of Dataset is not known or not supported. Never the less you can try to configure the connection manualy:", -1))
+                          ])) : (E(), U("h2", il, " The following Connection will be created:")),
+                          m[14] || (m[14] = L("br", null, null, -1)),
+                          m[15] || (m[15] = L("br", null, null, -1)),
+                          L("div", cl, [
+                            S(y) ? (E(), Y(ie, {
                               key: 0,
-                              modelValue: unref(ds)?.name,
-                              rules: [(v) => !!v || "Required"],
+                              modelValue: S(y)?.name,
+                              rules: [(M) => !!M || "Required"],
                               label: "Name"
-                            }, null, 8, ["modelValue", "rules"])) : createCommentVNode("", true),
-                            createVNode(_component_va_input, {
-                              modelValue: unref(ds)?.type,
+                            }, null, 8, ["modelValue", "rules"])) : ue("", !0),
+                            k(ie, {
+                              modelValue: S(y)?.type,
                               class: "type-input",
                               label: "Type"
                             }, null, 8, ["modelValue"]),
-                            _cache[12] || (_cache[12] = createElementVNode("br", null, null, -1)),
-                            _cache[13] || (_cache[13] = createElementVNode("br", null, null, -1))
+                            m[12] || (m[12] = L("br", null, null, -1)),
+                            m[13] || (m[13] = L("br", null, null, -1))
                           ]),
-                          _cache[16] || (_cache[16] = createElementVNode("br", null, null, -1)),
-                          (openBlock(), createBlock(resolveDynamicComponent(getComponentConnection.value), {
-                            config: unref(ds)?.config
+                          m[16] || (m[16] = L("br", null, null, -1)),
+                          (E(), Y(st(mt.value), {
+                            config: S(y)?.config
                           }, null, 8, ["config"]))
                         ]),
                         _: 1
                       }, 8, ["modelValue"])
                     ])
                   ]),
-                  "step-content-2": withCtx(() => [
-                    createVNode(_component_VaScrollContainer, {
+                  "step-content-2": B(() => [
+                    k(Me, {
                       class: "padd",
                       vertical: ""
                     }, {
-                      default: withCtx(() => [
-                        _cache[19] || (_cache[19] = createElementVNode("h2", { class: "title" }, " The following Store will be created:", -1)),
-                        _cache[20] || (_cache[20] = createElementVNode("br", null, null, -1)),
-                        createElementVNode("div", _hoisted_7, [
-                          unref(ds) ? (openBlock(), createBlock(_component_va_input, {
+                      default: B(() => [
+                        m[19] || (m[19] = L("h2", { class: "title" }, " The following Store will be created:", -1)),
+                        m[20] || (m[20] = L("br", null, null, -1)),
+                        L("div", dl, [
+                          S(y) ? (E(), Y(ie, {
                             key: 0,
-                            modelValue: unref(store)?.name,
-                            rules: [(v) => !!v || "Required"],
+                            modelValue: S(w)?.name,
+                            rules: [(M) => !!M || "Required"],
                             label: "Name"
-                          }, null, 8, ["modelValue", "rules"])) : createCommentVNode("", true),
-                          createVNode(_component_va_input, {
-                            modelValue: unref(store)?.type,
+                          }, null, 8, ["modelValue", "rules"])) : ue("", !0),
+                          k(ie, {
+                            modelValue: S(w)?.type,
                             class: "type-input",
                             label: "Type"
                           }, null, 8, ["modelValue"]),
-                          _cache[17] || (_cache[17] = createElementVNode("br", null, null, -1)),
-                          _cache[18] || (_cache[18] = createElementVNode("br", null, null, -1))
+                          m[17] || (m[17] = L("br", null, null, -1)),
+                          m[18] || (m[18] = L("br", null, null, -1))
                         ]),
-                        _cache[21] || (_cache[21] = createElementVNode("br", null, null, -1)),
-                        (openBlock(), createBlock(resolveDynamicComponent(getComponent.value), {
-                          config: unref(store).config,
-                          connections: unref(connections2),
-                          dataSources: unref(dataSources)
+                        m[21] || (m[21] = L("br", null, null, -1)),
+                        (E(), Y(st(et.value), {
+                          config: S(w).config,
+                          connections: S(f),
+                          dataSources: S(b)
                         }, null, 8, ["config", "connections", "dataSources"])),
-                        _cache[22] || (_cache[22] = createElementVNode("br", null, null, -1))
+                        m[22] || (m[22] = L("br", null, null, -1))
                       ]),
                       _: 1
                     })
                   ]),
-                  "step-content-3": withCtx(() => [
-                    createVNode(_component_VaScrollContainer, {
+                  "step-content-3": B(() => [
+                    k(Me, {
                       class: "padd",
                       vertical: ""
                     }, {
-                      default: withCtx(() => [
-                        _cache[23] || (_cache[23] = createElementVNode("h2", { class: "title" }, "Widgets zur Datenquelle auswählen", -1)),
-                        _cache[24] || (_cache[24] = createElementVNode("br", null, null, -1)),
-                        createElementVNode("div", _hoisted_8, [
-                          (openBlock(true), createElementBlock(Fragment, null, renderList(widgetOptions.value, (widget) => {
-                            return openBlock(), createElementBlock("div", {
-                              class: "widgets_grid-item",
-                              key: widget.type,
-                              active: selectedWidgets.value.includes(widget),
-                              onClick: () => {
-                                if (selectedWidgets.value.includes(widget)) {
-                                  selectedWidgets.value.splice(selectedWidgets.value.indexOf(widget), 1);
-                                } else {
-                                  selectedWidgets.value.push(widget);
-                                }
-                              }
-                            }, [
-                              createVNode(_component_VaCheckbox, {
-                                "model-value": selectedWidgets.value.includes(widget)
-                              }, null, 8, ["model-value"]),
-                              createElementVNode("img", {
-                                class: "m-2",
-                                src: widget.icon,
-                                style: { "height": "30px" }
-                              }, null, 8, _hoisted_10),
-                              createTextVNode(" " + toDisplayString(widget.type), 1)
-                            ], 8, _hoisted_9);
-                          }), 128))
+                      default: B(() => [
+                        m[23] || (m[23] = L("h2", { class: "title" }, "Widgets zur Datenquelle auswählen", -1)),
+                        m[24] || (m[24] = L("br", null, null, -1)),
+                        L("div", pl, [
+                          (E(!0), U(pe, null, at(O.value, (M) => (E(), U("div", {
+                            class: "widgets_grid-item",
+                            key: M.type,
+                            active: _.value.includes(M),
+                            onClick: () => {
+                              _.value.includes(M) ? _.value.splice(_.value.indexOf(M), 1) : _.value.push(M);
+                            }
+                          }, [
+                            k(Ln, {
+                              "model-value": _.value.includes(M)
+                            }, null, 8, ["model-value"]),
+                            L("img", {
+                              class: "m-2",
+                              src: M.icon,
+                              style: { height: "30px" }
+                            }, null, 8, vl),
+                            te(" " + ce(M.type), 1)
+                          ], 8, fl))), 128))
                         ])
                       ]),
                       _: 1
@@ -5936,49 +4510,36 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ]),
           _: 1
         }, 8, ["modelValue"]),
-        createVNode(FilterModal, {
+        k(rl, {
           ref_key: "loadModalref",
-          ref: loadModalref,
-          modelValue: filter.value,
-          "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => filter.value = $event)
+          ref: ne,
+          modelValue: x.value,
+          "onUpdate:modelValue": m[6] || (m[6] = (gt) => x.value = gt)
         }, null, 8, ["modelValue"])
       ], 64);
     };
   }
-});
-const EndPointfinderModal = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-881fad5f"]]);
-function mount(component, { props, children, element, app } = {}) {
-  let el = element;
-  let vNode = createVNode(component, props, children);
-  if (app && app._context) vNode.appContext = app._context;
-  if (el) render(vNode, el);
-  else if (typeof document !== "undefined") render(vNode, el = document.createElement("div"));
-  const destroy = () => {
-    if (el) render(null, el);
-    el = null;
-    vNode = null;
-  };
-  return { vNode, destroy, el };
+}), gl = /* @__PURE__ */ pt(ml, [["__scopeId", "data-v-881fad5f"]]);
+function yl(e, { props: t, children: o, element: n, app: s } = {}) {
+  let r = n, a = k(e, t, o);
+  return s && s._context && (a.appContext = s._context), r ? rt(a, r) : typeof document < "u" && rt(a, r = document.createElement("div")), { vNode: a, destroy: () => {
+    r && rt(null, r), r = null, a = null;
+  }, el: r };
 }
-function activate({ services, log }) {
-  const endpointFinderPlugin = {
-    install(app) {
-      const { vNode } = mount(EndPointfinderModal, { props: {}, app });
-      app.provide("endpointfinder", async () => {
-        await vNode.component?.exposed?.run(() => {
+function El({ services: e, log: t }) {
+  const o = {
+    install(l) {
+      const { vNode: i } = yl(gl, { props: {}, app: l });
+      l.provide("endpointfinder", async () => {
+        await i.component?.exposed?.run(() => {
         });
       });
     }
   };
-  services.getRequired("App").use(endpointFinderPlugin);
-  const { createConnection } = useConnectionsStore();
-  const conid = createConnection("rest", { url: "https://www.govdata.de/sparql" });
-  const connectionRepository = services.getRequired(CONNECTION_REPOSITORY);
-  const verbindung = connectionRepository.getConnection(conid);
-  useSparQLEndPointManager().registerEndpoint(verbindung, "SparqlDataEurope");
-  useSparQLEndPointManager().setActive("SparqlDataEurope");
-  log.info("Endpointfinder bereit");
+  e.getRequired("App").use(o);
+  const { createConnection: n } = go(), s = n("rest", { url: "https://www.govdata.de/sparql" }), a = e.getRequired(Mn).getConnection(s);
+  wt().registerEndpoint(a, "SparqlDataEurope"), wt().setActive("SparqlDataEurope"), t.info("Endpointfinder bereit");
 }
 export {
-  activate
+  El as activate
 };

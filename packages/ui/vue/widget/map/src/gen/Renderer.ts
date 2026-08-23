@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -34,7 +37,7 @@ export class Renderer {
   @Documentation("The name of the renderer.")
   @Attribute() name?: string;
   @Reference('Condition') thing: Array<Condition> = [];
-  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
+  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
   @Reference('DSRenderer') ds_renderer: Array<DSRenderer> = [];
 
   @Documentation("Optional refresh interval for observation data in milliseconds.")

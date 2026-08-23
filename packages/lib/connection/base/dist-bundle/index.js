@@ -1,46 +1,40 @@
-class BaseConnection {
+class n {
   name = "";
   type = "";
   uid = "";
   constructor() {
   }
-  init(configuration) {
-    this.type = configuration.type;
-    this.name = configuration.name;
-    this.uid = configuration.uid;
+  init(e) {
+    this.type = e.type, this.name = e.name, this.uid = e.uid;
   }
   subscribers = [];
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
+  subscribe(e) {
+    this.subscribers.push(e);
   }
-  unsubscribe(subscriber) {
-    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
+  unsubscribe(e) {
+    this.subscribers = this.subscribers.filter((t) => t !== e);
   }
   notify() {
-    this.subscribers.forEach((subscriber) => {
-      subscriber();
+    this.subscribers.forEach((e) => {
+      e();
     });
   }
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const r = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  BaseConnection
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.connection.base";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.connection.base");
-  await void 0;
+  BaseConnection: n
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.lib.connection.base", c = "0.0.1-next.1";
+async function a(s) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  e.register(i, r, c, "lib.connection.base"), await void 0;
 }
-async function deactivate(context) {
+async function o(s) {
   await void 0;
 }
 export {
-  BaseConnection,
-  activate,
-  deactivate
+  n as BaseConnection,
+  a as activate,
+  o as deactivate
 };

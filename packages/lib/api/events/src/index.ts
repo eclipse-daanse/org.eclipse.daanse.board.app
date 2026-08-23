@@ -21,13 +21,19 @@
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ResourceSet, EPackage } from '@emfts/core'
 /*
- * Ecore-generated model classes live in the implementation package; the
- * types travel with the contract, the constructors do not. Moving the
- * models is a generator concern, noted as follow-up.
+ * The events models stay with the implementation for now: their generated
+ * classes carry implementation-owned decorators (@WidgetAction), and the
+ * generator maps sibling classes by nsURI to the old package - moving them
+ * needs generator support first (follow-up). Their types travel here.
  */
-import type { ActionParameter, Condition, PageActionInterface, Payload, SystemActionInterface, SystemActionsEcoreContent, WidgetAction, WidgetActionInterface, WidgetEventDefinition, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, EventActionMapping, ActionDefinition, EventActionContext, WidgetTypeRegistration, Comperator } from 'org.eclipse.daanse.board.app.lib.events'
 
-export type { ActionParameter, Condition, PageActionInterface, Payload, SystemActionInterface, SystemActionsEcoreContent, WidgetAction, WidgetActionInterface, WidgetEventDefinition, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, EventActionMapping, ActionDefinition, EventActionContext, WidgetTypeRegistration, Comperator }
+/*
+ * Source-declared contract types of the implementation, type-only: their
+ * runtime halves (decorators, the comparator, the raw ecore content) are
+ * behaviour and stay with the implementation.
+ */
+import type { Payload, WidgetActionInterface, SystemActionInterface, PageActionInterface, Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping } from 'org.eclipse.daanse.board.app.lib.events'
+export type { Payload, WidgetActionInterface, SystemActionInterface, PageActionInterface, Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping }
 
 export interface RegisteredInstance {
     instanceId: string;

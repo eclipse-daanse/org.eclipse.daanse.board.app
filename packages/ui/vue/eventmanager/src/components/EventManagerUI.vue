@@ -13,7 +13,8 @@ import 'reflect-metadata'
 import { inject, ref, computed, onMounted } from 'vue'
 import { EventManager, EVENT_MANAGER, EventRegistry, EVENT_REGISTRY, EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { type EventActionMapping, type ActionDefinition, type WidgetEventDefinition, type EventActionContext, type WidgetTypeRegistration } from 'org.eclipse.daanse.board.app.lib.events'
-import { Condition, Comperator } from 'org.eclipse.daanse.board.app.lib.events'
+import { Comperator } from 'org.eclipse.daanse.board.app.lib.events'
+import { Condition } from 'org.eclipse.daanse.board.app.lib.events'
 import { type PageRegistryI, identifier as PageIdentifier } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 let eventManager: EventManager

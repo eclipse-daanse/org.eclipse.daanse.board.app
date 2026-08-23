@@ -1,1095 +1,657 @@
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { COMPUTED_VARIABLE, ComputedVariableSymbol } from "org.eclipse.daanse.board.app.lib.variables";
+import { VARIABLE_REPOSITORY as de } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { COMPUTED_VARIABLE as ge, ComputedVariableSymbol as je } from "org.eclipse.daanse.board.app.lib.variables";
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-const EMPTY_OBJ = {};
-const EMPTY_ARR = [];
-const NOOP = () => {
-};
-const isOn = (key) => key.charCodeAt(0) === 111 && key.charCodeAt(1) === 110 && // uppercase letter
-(key.charCodeAt(2) > 122 || key.charCodeAt(2) < 97);
-const extend = Object.assign;
-const isArray = Array.isArray;
-const isMap = (val) => toTypeString(val) === "[object Map]";
-const isSet = (val) => toTypeString(val) === "[object Set]";
-const isFunction = (val) => typeof val === "function";
-const isString = (val) => typeof val === "string";
-const isSymbol = (val) => typeof val === "symbol";
-const isObject = (val) => val !== null && typeof val === "object";
-const isPromise = (val) => {
-  return (isObject(val) || isFunction(val)) && isFunction(val.then) && isFunction(val.catch);
-};
-const objectToString = Object.prototype.toString;
-const toTypeString = (value) => objectToString.call(value);
-const isPlainObject = (val) => toTypeString(val) === "[object Object]";
-const cacheStringFunction = (fn) => {
-  const cache = /* @__PURE__ */ Object.create(null);
-  return ((str) => {
-    const hit = cache[str];
-    return hit || (cache[str] = fn(str));
-  });
-};
-const camelizeRE = /-\w/g;
-const camelize = cacheStringFunction(
-  (str) => {
-    return str.replace(camelizeRE, (c) => c.slice(1).toUpperCase());
-  }
-);
-const hyphenateRE = /\B([A-Z])/g;
-const hyphenate = cacheStringFunction(
-  (str) => str.replace(hyphenateRE, "-$1").toLowerCase()
-);
-const capitalize = cacheStringFunction((str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-});
-const hasChanged = (value, oldValue) => !Object.is(value, oldValue);
-let _globalThis;
-const getGlobalThis = () => {
-  return _globalThis || (_globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : {});
-};
-function normalizeStyle(value) {
-  if (isArray(value)) {
-    const res = {};
-    for (let i = 0; i < value.length; i++) {
-      const item = value[i];
-      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
-      if (normalized) {
-        for (const key in normalized) {
-          res[key] = normalized[key];
-        }
-      }
+const w = {}, ze = [], L = () => {
+}, Be = (e) => e.charCodeAt(0) === 111 && e.charCodeAt(1) === 110 && // uppercase letter
+(e.charCodeAt(2) > 122 || e.charCodeAt(2) < 97), W = Object.assign, y = Array.isArray, Ue = (e) => te(e) === "[object Map]", $e = (e) => te(e) === "[object Set]", m = (e) => typeof e == "function", D = (e) => typeof e == "string", He = (e) => typeof e == "symbol", O = (e) => e !== null && typeof e == "object", We = (e) => (O(e) || m(e)) && m(e.then) && m(e.catch), qe = Object.prototype.toString, te = (e) => qe.call(e), Je = (e) => te(e) === "[object Object]", ne = (e) => {
+  const t = /* @__PURE__ */ Object.create(null);
+  return ((n) => t[n] || (t[n] = e(n)));
+}, Ye = /-\w/g, k = ne(
+  (e) => e.replace(Ye, (t) => t.slice(1).toUpperCase())
+), Ge = /\B([A-Z])/g, me = ne(
+  (e) => e.replace(Ge, "-$1").toLowerCase()
+), _e = ne((e) => e.charAt(0).toUpperCase() + e.slice(1)), I = (e, t) => !Object.is(e, t);
+let fe;
+const se = () => fe || (fe = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
+function ie(e) {
+  if (y(e)) {
+    const t = {};
+    for (let n = 0; n < e.length; n++) {
+      const s = e[n], i = D(s) ? Xe(s) : ie(s);
+      if (i)
+        for (const l in i)
+          t[l] = i[l];
     }
-    return res;
-  } else if (isString(value) || isObject(value)) {
-    return value;
-  }
+    return t;
+  } else if (D(e) || O(e))
+    return e;
 }
-const listDelimiterRE = /;(?![^(]*\))/g;
-const propertyDelimiterRE = /:([^]+)/;
-const styleCommentRE = /\/\*[^]*?\*\//g;
-function parseStringStyle(cssText) {
-  const ret = {};
-  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
-    if (item) {
-      const tmp = item.split(propertyDelimiterRE);
-      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+const Ke = /;(?![^(]*\))/g, Qe = /:([^]+)/, Ze = /\/\*[^]*?\*\//g;
+function Xe(e) {
+  const t = {};
+  return e.replace(Ze, "").split(Ke).forEach((n) => {
+    if (n) {
+      const s = n.split(Qe);
+      s.length > 1 && (t[s[0].trim()] = s[1].trim());
     }
-  });
-  return ret;
+  }), t;
 }
-function normalizeClass(value) {
-  let res = "";
-  if (isString(value)) {
-    res = value;
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      const normalized = normalizeClass(value[i]);
-      if (normalized) {
-        res += normalized + " ";
-      }
+function le(e) {
+  let t = "";
+  if (D(e))
+    t = e;
+  else if (y(e))
+    for (let n = 0; n < e.length; n++) {
+      const s = le(e[n]);
+      s && (t += s + " ");
     }
-  } else if (isObject(value)) {
-    for (const name in value) {
-      if (value[name]) {
-        res += name + " ";
-      }
-    }
-  }
-  return res.trim();
+  else if (O(e))
+    for (const n in e)
+      e[n] && (t += n + " ");
+  return t.trim();
 }
 /**
 * @vue/reactivity v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-let activeSub;
-const pausedQueueEffects = /* @__PURE__ */ new WeakSet();
-class ReactiveEffect {
-  constructor(fn) {
-    this.fn = fn;
-    this.deps = void 0;
-    this.depsTail = void 0;
-    this.flags = 1 | 4;
-    this.next = void 0;
-    this.cleanup = void 0;
-    this.scheduler = void 0;
+let p;
+const J = /* @__PURE__ */ new WeakSet();
+class et {
+  constructor(t) {
+    this.fn = t, this.deps = void 0, this.depsTail = void 0, this.flags = 5, this.next = void 0, this.cleanup = void 0, this.scheduler = void 0;
   }
   pause() {
     this.flags |= 64;
   }
   resume() {
-    if (this.flags & 64) {
-      this.flags &= -65;
-      if (pausedQueueEffects.has(this)) {
-        pausedQueueEffects.delete(this);
-        this.trigger();
-      }
-    }
+    this.flags & 64 && (this.flags &= -65, J.has(this) && (J.delete(this), this.trigger()));
   }
   /**
    * @internal
    */
   notify() {
-    if (this.flags & 2 && !(this.flags & 32)) {
-      return;
-    }
-    if (!(this.flags & 8)) {
-      batch(this);
-    }
+    this.flags & 2 && !(this.flags & 32) || this.flags & 8 || tt(this);
   }
   run() {
-    if (!(this.flags & 1)) {
+    if (!(this.flags & 1))
       return this.fn();
-    }
-    this.flags |= 2;
-    cleanupEffect(this);
-    prepareDeps(this);
-    const prevEffect = activeSub;
-    const prevShouldTrack = shouldTrack;
-    activeSub = this;
-    shouldTrack = true;
+    this.flags |= 2, ae(this), Se(this);
+    const t = p, n = x;
+    p = this, x = !0;
     try {
       return this.fn();
     } finally {
-      cleanupDeps(this);
-      activeSub = prevEffect;
-      shouldTrack = prevShouldTrack;
-      this.flags &= -3;
+      ye(this), p = t, x = n, this.flags &= -3;
     }
   }
   stop() {
     if (this.flags & 1) {
-      for (let link = this.deps; link; link = link.nextDep) {
-        removeSub(link);
-      }
-      this.deps = this.depsTail = void 0;
-      cleanupEffect(this);
-      this.onStop && this.onStop();
-      this.flags &= -2;
+      for (let t = this.deps; t; t = t.nextDep)
+        re(t);
+      this.deps = this.depsTail = void 0, ae(this), this.onStop && this.onStop(), this.flags &= -2;
     }
   }
   trigger() {
-    if (this.flags & 64) {
-      pausedQueueEffects.add(this);
-    } else if (this.scheduler) {
-      this.scheduler();
-    } else {
-      this.runIfDirty();
-    }
+    this.flags & 64 ? J.add(this) : this.scheduler ? this.scheduler() : this.runIfDirty();
   }
   /**
    * @internal
    */
   runIfDirty() {
-    if (isDirty(this)) {
-      this.run();
-    }
+    G(this) && this.run();
   }
   get dirty() {
-    return isDirty(this);
+    return G(this);
   }
 }
-let batchDepth = 0;
-let batchedSub;
-let batchedComputed;
-function batch(sub, isComputed = false) {
-  sub.flags |= 8;
-  if (isComputed) {
-    sub.next = batchedComputed;
-    batchedComputed = sub;
+let be = 0, A, F;
+function tt(e, t = !1) {
+  if (e.flags |= 8, t) {
+    e.next = F, F = e;
     return;
   }
-  sub.next = batchedSub;
-  batchedSub = sub;
+  e.next = A, A = e;
 }
-function startBatch() {
-  batchDepth++;
+function nt() {
+  be++;
 }
-function endBatch() {
-  if (--batchDepth > 0) {
+function st() {
+  if (--be > 0)
     return;
-  }
-  if (batchedComputed) {
-    let e = batchedComputed;
-    batchedComputed = void 0;
-    while (e) {
-      const next = e.next;
-      e.next = void 0;
-      e.flags &= -9;
-      e = next;
+  if (F) {
+    let t = F;
+    for (F = void 0; t; ) {
+      const n = t.next;
+      t.next = void 0, t.flags &= -9, t = n;
     }
   }
-  let error;
-  while (batchedSub) {
-    let e = batchedSub;
-    batchedSub = void 0;
-    while (e) {
-      const next = e.next;
-      e.next = void 0;
-      e.flags &= -9;
-      if (e.flags & 1) {
+  let e;
+  for (; A; ) {
+    let t = A;
+    for (A = void 0; t; ) {
+      const n = t.next;
+      if (t.next = void 0, t.flags &= -9, t.flags & 1)
         try {
-          ;
-          e.trigger();
-        } catch (err) {
-          if (!error) error = err;
+          t.trigger();
+        } catch (s) {
+          e || (e = s);
         }
-      }
-      e = next;
+      t = n;
     }
   }
-  if (error) throw error;
+  if (e) throw e;
 }
-function prepareDeps(sub) {
-  for (let link = sub.deps; link; link = link.nextDep) {
-    link.version = -1;
-    link.prevActiveLink = link.dep.activeLink;
-    link.dep.activeLink = link;
-  }
+function Se(e) {
+  for (let t = e.deps; t; t = t.nextDep)
+    t.version = -1, t.prevActiveLink = t.dep.activeLink, t.dep.activeLink = t;
 }
-function cleanupDeps(sub) {
-  let head;
-  let tail = sub.depsTail;
-  let link = tail;
-  while (link) {
-    const prev = link.prevDep;
-    if (link.version === -1) {
-      if (link === tail) tail = prev;
-      removeSub(link);
-      removeDep(link);
-    } else {
-      head = link;
-    }
-    link.dep.activeLink = link.prevActiveLink;
-    link.prevActiveLink = void 0;
-    link = prev;
+function ye(e) {
+  let t, n = e.depsTail, s = n;
+  for (; s; ) {
+    const i = s.prevDep;
+    s.version === -1 ? (s === n && (n = i), re(s), lt(s)) : t = s, s.dep.activeLink = s.prevActiveLink, s.prevActiveLink = void 0, s = i;
   }
-  sub.deps = head;
-  sub.depsTail = tail;
+  e.deps = t, e.depsTail = n;
 }
-function isDirty(sub) {
-  for (let link = sub.deps; link; link = link.nextDep) {
-    if (link.dep.version !== link.version || link.dep.computed && (refreshComputed(link.dep.computed) || link.dep.version !== link.version)) {
-      return true;
-    }
-  }
-  if (sub._dirty) {
-    return true;
-  }
-  return false;
+function G(e) {
+  for (let t = e.deps; t; t = t.nextDep)
+    if (t.dep.version !== t.version || t.dep.computed && (it(t.dep.computed) || t.dep.version !== t.version))
+      return !0;
+  return !!e._dirty;
 }
-function refreshComputed(computed2) {
-  if (computed2.flags & 4 && !(computed2.flags & 16)) {
+function it(e) {
+  if (e.flags & 4 && !(e.flags & 16) || (e.flags &= -17, e.globalVersion === K) || (e.globalVersion = K, !e.isSSR && e.flags & 128 && (!e.deps && !e._dirty || !G(e))))
     return;
-  }
-  computed2.flags &= -17;
-  if (computed2.globalVersion === globalVersion) {
-    return;
-  }
-  computed2.globalVersion = globalVersion;
-  if (!computed2.isSSR && computed2.flags & 128 && (!computed2.deps && !computed2._dirty || !isDirty(computed2))) {
-    return;
-  }
-  computed2.flags |= 2;
-  const dep = computed2.dep;
-  const prevSub = activeSub;
-  const prevShouldTrack = shouldTrack;
-  activeSub = computed2;
-  shouldTrack = true;
+  e.flags |= 2;
+  const t = e.dep, n = p, s = x;
+  p = e, x = !0;
   try {
-    prepareDeps(computed2);
-    const value = computed2.fn(computed2._value);
-    if (dep.version === 0 || hasChanged(value, computed2._value)) {
-      computed2.flags |= 128;
-      computed2._value = value;
-      dep.version++;
-    }
-  } catch (err) {
-    dep.version++;
-    throw err;
+    Se(e);
+    const i = e.fn(e._value);
+    (t.version === 0 || I(i, e._value)) && (e.flags |= 128, e._value = i, t.version++);
+  } catch (i) {
+    throw t.version++, i;
   } finally {
-    activeSub = prevSub;
-    shouldTrack = prevShouldTrack;
-    cleanupDeps(computed2);
-    computed2.flags &= -3;
+    p = n, x = s, ye(e), e.flags &= -3;
   }
 }
-function removeSub(link, soft = false) {
-  const { dep, prevSub, nextSub } = link;
-  if (prevSub) {
-    prevSub.nextSub = nextSub;
-    link.prevSub = void 0;
+function re(e, t = !1) {
+  const { dep: n, prevSub: s, nextSub: i } = e;
+  if (s && (s.nextSub = i, e.prevSub = void 0), i && (i.prevSub = s, e.nextSub = void 0), n.subs === e && (n.subs = s, !s && n.computed)) {
+    n.computed.flags &= -5;
+    for (let l = n.computed.deps; l; l = l.nextDep)
+      re(l, !0);
   }
-  if (nextSub) {
-    nextSub.prevSub = prevSub;
-    link.nextSub = void 0;
-  }
-  if (dep.subs === link) {
-    dep.subs = prevSub;
-    if (!prevSub && dep.computed) {
-      dep.computed.flags &= -5;
-      for (let l = dep.computed.deps; l; l = l.nextDep) {
-        removeSub(l, true);
-      }
-    }
-  }
-  if (!soft && !--dep.sc && dep.map) {
-    dep.map.delete(dep.key);
-  }
+  !t && !--n.sc && n.map && n.map.delete(n.key);
 }
-function removeDep(link) {
-  const { prevDep, nextDep } = link;
-  if (prevDep) {
-    prevDep.nextDep = nextDep;
-    link.prevDep = void 0;
-  }
-  if (nextDep) {
-    nextDep.prevDep = prevDep;
-    link.nextDep = void 0;
-  }
+function lt(e) {
+  const { prevDep: t, nextDep: n } = e;
+  t && (t.nextDep = n, e.prevDep = void 0), n && (n.prevDep = t, e.nextDep = void 0);
 }
-let shouldTrack = true;
-const trackStack = [];
-function pauseTracking() {
-  trackStack.push(shouldTrack);
-  shouldTrack = false;
+let x = !0;
+const ve = [];
+function xe() {
+  ve.push(x), x = !1;
 }
-function resetTracking() {
-  const last = trackStack.pop();
-  shouldTrack = last === void 0 ? true : last;
+function Ce() {
+  const e = ve.pop();
+  x = e === void 0 ? !0 : e;
 }
-function cleanupEffect(e) {
-  const { cleanup } = e;
-  e.cleanup = void 0;
-  if (cleanup) {
-    const prevSub = activeSub;
-    activeSub = void 0;
+function ae(e) {
+  const { cleanup: t } = e;
+  if (e.cleanup = void 0, t) {
+    const n = p;
+    p = void 0;
     try {
-      cleanup();
+      t();
     } finally {
-      activeSub = prevSub;
+      p = n;
     }
   }
 }
-let globalVersion = 0;
-class Link {
-  constructor(sub, dep) {
-    this.sub = sub;
-    this.dep = dep;
-    this.version = dep.version;
-    this.nextDep = this.prevDep = this.nextSub = this.prevSub = this.prevActiveLink = void 0;
+let K = 0;
+class rt {
+  constructor(t, n) {
+    this.sub = t, this.dep = n, this.version = n.version, this.nextDep = this.prevDep = this.nextSub = this.prevSub = this.prevActiveLink = void 0;
   }
 }
-class Dep {
+class ot {
   // TODO isolatedDeclarations "__v_skip"
-  constructor(computed2) {
-    this.computed = computed2;
-    this.version = 0;
-    this.activeLink = void 0;
-    this.subs = void 0;
-    this.map = void 0;
-    this.key = void 0;
-    this.sc = 0;
-    this.__v_skip = true;
+  constructor(t) {
+    this.computed = t, this.version = 0, this.activeLink = void 0, this.subs = void 0, this.map = void 0, this.key = void 0, this.sc = 0, this.__v_skip = !0;
   }
-  track(debugInfo) {
-    if (!activeSub || !shouldTrack || activeSub === this.computed) {
+  track(t) {
+    if (!p || !x || p === this.computed)
       return;
+    let n = this.activeLink;
+    if (n === void 0 || n.sub !== p)
+      n = this.activeLink = new rt(p, this), p.deps ? (n.prevDep = p.depsTail, p.depsTail.nextDep = n, p.depsTail = n) : p.deps = p.depsTail = n, Te(n);
+    else if (n.version === -1 && (n.version = this.version, n.nextDep)) {
+      const s = n.nextDep;
+      s.prevDep = n.prevDep, n.prevDep && (n.prevDep.nextDep = s), n.prevDep = p.depsTail, n.nextDep = void 0, p.depsTail.nextDep = n, p.depsTail = n, p.deps === n && (p.deps = s);
     }
-    let link = this.activeLink;
-    if (link === void 0 || link.sub !== activeSub) {
-      link = this.activeLink = new Link(activeSub, this);
-      if (!activeSub.deps) {
-        activeSub.deps = activeSub.depsTail = link;
-      } else {
-        link.prevDep = activeSub.depsTail;
-        activeSub.depsTail.nextDep = link;
-        activeSub.depsTail = link;
-      }
-      addSub(link);
-    } else if (link.version === -1) {
-      link.version = this.version;
-      if (link.nextDep) {
-        const next = link.nextDep;
-        next.prevDep = link.prevDep;
-        if (link.prevDep) {
-          link.prevDep.nextDep = next;
-        }
-        link.prevDep = activeSub.depsTail;
-        link.nextDep = void 0;
-        activeSub.depsTail.nextDep = link;
-        activeSub.depsTail = link;
-        if (activeSub.deps === link) {
-          activeSub.deps = next;
-        }
-      }
-    }
-    return link;
+    return n;
   }
-  trigger(debugInfo) {
-    this.version++;
-    globalVersion++;
-    this.notify(debugInfo);
+  trigger(t) {
+    this.version++, K++, this.notify(t);
   }
-  notify(debugInfo) {
-    startBatch();
+  notify(t) {
+    nt();
     try {
-      if (false) ;
-      for (let link = this.subs; link; link = link.prevSub) {
-        if (link.sub.notify()) {
-          ;
-          link.sub.dep.notify();
-        }
-      }
+      for (let n = this.subs; n; n = n.prevSub)
+        n.sub.notify() && n.sub.dep.notify();
     } finally {
-      endBatch();
+      st();
     }
   }
 }
-function addSub(link) {
-  link.dep.sc++;
-  if (link.sub.flags & 4) {
-    const computed2 = link.dep.computed;
-    if (computed2 && !link.dep.subs) {
-      computed2.flags |= 4 | 16;
-      for (let l = computed2.deps; l; l = l.nextDep) {
-        addSub(l);
-      }
+function Te(e) {
+  if (e.dep.sc++, e.sub.flags & 4) {
+    const t = e.dep.computed;
+    if (t && !e.dep.subs) {
+      t.flags |= 20;
+      for (let s = t.deps; s; s = s.nextDep)
+        Te(s);
     }
-    const currentTail = link.dep.subs;
-    if (currentTail !== link) {
-      link.prevSub = currentTail;
-      if (currentTail) currentTail.nextSub = link;
-    }
-    link.dep.subs = link;
+    const n = e.dep.subs;
+    n !== e && (e.prevSub = n, n && (n.nextSub = e)), e.dep.subs = e;
   }
 }
 new Set(
-  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((key) => key !== "arguments" && key !== "caller").map((key) => Symbol[key]).filter(isSymbol)
+  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((e) => e !== "arguments" && e !== "caller").map((e) => Symbol[e]).filter(He)
 );
-function isReactive(value) {
-  if (isReadonly(value)) {
-    return isReactive(value["__v_raw"]);
-  }
-  return !!(value && value["__v_isReactive"]);
+function j(e) {
+  return ct(e) ? j(e.__v_raw) : !!(e && e.__v_isReactive);
 }
-function isReadonly(value) {
-  return !!(value && value["__v_isReadonly"]);
+function ct(e) {
+  return !!(e && e.__v_isReadonly);
 }
-function isShallow(value) {
-  return !!(value && value["__v_isShallow"]);
+function Y(e) {
+  return !!(e && e.__v_isShallow);
 }
-function isProxy(value) {
-  return value ? !!value["__v_raw"] : false;
+function Ie(e) {
+  return e ? !!e.__v_raw : !1;
 }
-function isRef(r) {
-  return r ? r["__v_isRef"] === true : false;
+function $(e) {
+  return e ? e.__v_isRef === !0 : !1;
 }
-class CustomRefImpl {
-  constructor(factory) {
-    this["__v_isRef"] = true;
-    this._value = void 0;
-    const dep = this.dep = new Dep();
-    const { get, set } = factory(dep.track.bind(dep), dep.trigger.bind(dep));
-    this._get = get;
-    this._set = set;
+class ft {
+  constructor(t) {
+    this.__v_isRef = !0, this._value = void 0;
+    const n = this.dep = new ot(), { get: s, set: i } = t(n.track.bind(n), n.trigger.bind(n));
+    this._get = s, this._set = i;
   }
   get value() {
     return this._value = this._get();
   }
-  set value(newVal) {
-    this._set(newVal);
+  set value(t) {
+    this._set(t);
   }
 }
-function customRef(factory) {
-  return new CustomRefImpl(factory);
+function at(e) {
+  return new ft(e);
 }
-const INITIAL_WATCHER_VALUE = {};
-const cleanupMap = /* @__PURE__ */ new WeakMap();
-let activeWatcher = void 0;
-function onWatcherCleanup(cleanupFn, failSilently = false, owner = activeWatcher) {
-  if (owner) {
-    let cleanups = cleanupMap.get(owner);
-    if (!cleanups) cleanupMap.set(owner, cleanups = []);
-    cleanups.push(cleanupFn);
+const ue = {}, H = /* @__PURE__ */ new WeakMap();
+let z;
+function ut(e, t = !1, n = z) {
+  if (n) {
+    let s = H.get(n);
+    s || H.set(n, s = []), s.push(e);
   }
 }
-function watch(source, cb, options = EMPTY_OBJ) {
-  const { immediate, deep, once, scheduler, augmentJob, call } = options;
-  const reactiveGetter = (source2) => {
-    if (deep) return source2;
-    if (isShallow(source2) || deep === false || deep === 0)
-      return traverse(source2, 1);
-    return traverse(source2);
-  };
-  let effect2;
-  let getter;
-  let cleanup;
-  let boundCleanup;
-  let isMultiSource = false;
-  if (isRef(source)) {
-    getter = () => source.value;
-    isShallow(source);
-  } else if (isReactive(source)) {
-    getter = () => reactiveGetter(source);
-  } else if (isArray(source)) {
-    isMultiSource = true;
-    source.some((s) => isReactive(s) || isShallow(s));
-    getter = () => source.map((s) => {
-      if (isRef(s)) {
-        return s.value;
-      } else if (isReactive(s)) {
-        return reactiveGetter(s);
-      } else if (isFunction(s)) {
-        return call ? call(s, 2) : s();
-      } else ;
-    });
-  } else if (isFunction(source)) {
-    {
-      getter = () => {
-        if (cleanup) {
-          pauseTracking();
-          try {
-            cleanup();
-          } finally {
-            resetTracking();
-          }
-        }
-        const currentEffect = activeWatcher;
-        activeWatcher = effect2;
-        try {
-          return call ? call(source, 3, [boundCleanup]) : source(boundCleanup);
-        } finally {
-          activeWatcher = currentEffect;
-        }
-      };
-    }
-  } else {
-    getter = NOOP;
-  }
-  const watchHandle = () => {
-    effect2.stop();
-  };
-  isMultiSource ? new Array(source.length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE;
-  const job = (immediateFirstRun) => {
-    if (!(effect2.flags & 1) || !effect2.dirty && !immediateFirstRun) {
-      return;
-    }
-    {
-      effect2.run();
-    }
-  };
-  if (augmentJob) {
-    augmentJob(job);
-  }
-  effect2 = new ReactiveEffect(getter);
-  effect2.scheduler = scheduler ? () => scheduler(job, false) : job;
-  boundCleanup = (fn) => onWatcherCleanup(fn, false, effect2);
-  cleanup = effect2.onStop = () => {
-    const cleanups = cleanupMap.get(effect2);
-    if (cleanups) {
-      if (call) {
-        call(cleanups, 4);
-      } else {
-        for (const cleanup2 of cleanups) cleanup2();
-      }
-      cleanupMap.delete(effect2);
-    }
-  };
-  if (scheduler) {
-    scheduler(job.bind(null, true), true);
-  } else {
-    effect2.run();
-  }
-  watchHandle.pause = effect2.pause.bind(effect2);
-  watchHandle.resume = effect2.resume.bind(effect2);
-  watchHandle.stop = watchHandle;
-  return watchHandle;
-}
-function traverse(value, depth = Infinity, seen) {
-  if (depth <= 0 || !isObject(value) || value["__v_skip"]) {
-    return value;
-  }
-  seen = seen || /* @__PURE__ */ new Map();
-  if ((seen.get(value) || 0) >= depth) {
-    return value;
-  }
-  seen.set(value, depth);
-  depth--;
-  if (isRef(value)) {
-    traverse(value.value, depth, seen);
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      traverse(value[i], depth, seen);
-    }
-  } else if (isSet(value) || isMap(value)) {
-    value.forEach((v) => {
-      traverse(v, depth, seen);
-    });
-  } else if (isPlainObject(value)) {
-    for (const key in value) {
-      traverse(value[key], depth, seen);
-    }
-    for (const key of Object.getOwnPropertySymbols(value)) {
-      if (Object.prototype.propertyIsEnumerable.call(value, key)) {
-        traverse(value[key], depth, seen);
+function pt(e, t, n = w) {
+  const { immediate: s, deep: i, once: l, scheduler: a, augmentJob: o, call: c } = n, d = (u) => i ? u : Y(u) || i === !1 || i === 0 ? E(u, 1) : E(u);
+  let r, h, v, f, _ = !1;
+  $(e) ? (h = () => e.value, Y(e)) : j(e) ? h = () => d(e) : y(e) ? (_ = !0, e.some((u) => j(u) || Y(u)), h = () => e.map((u) => {
+    if ($(u))
+      return u.value;
+    if (j(u))
+      return d(u);
+    if (m(u))
+      return c ? c(u, 2) : u();
+  })) : m(e) ? h = () => {
+    if (v) {
+      xe();
+      try {
+        v();
+      } finally {
+        Ce();
       }
     }
+    const u = z;
+    z = r;
+    try {
+      return c ? c(e, 3, [f]) : e(f);
+    } finally {
+      z = u;
+    }
+  } : h = L;
+  const g = () => {
+    r.stop();
+  };
+  _ && new Array(e.length).fill(ue);
+  const M = (u) => {
+    !(r.flags & 1) || !r.dirty && !u || r.run();
+  };
+  return o && o(M), r = new et(h), r.scheduler = a ? () => a(M, !1) : M, f = (u) => ut(u, !1, r), v = r.onStop = () => {
+    const u = H.get(r);
+    if (u) {
+      if (c)
+        c(u, 4);
+      else
+        for (const Le of u) Le();
+      H.delete(r);
+    }
+  }, a ? a(M.bind(null, !0), !0) : r.run(), g.pause = r.pause.bind(r), g.resume = r.resume.bind(r), g.stop = g, g;
+}
+function E(e, t = 1 / 0, n) {
+  if (t <= 0 || !O(e) || e.__v_skip || (n = n || /* @__PURE__ */ new Map(), (n.get(e) || 0) >= t))
+    return e;
+  if (n.set(e, t), t--, $(e))
+    E(e.value, t, n);
+  else if (y(e))
+    for (let s = 0; s < e.length; s++)
+      E(e[s], t, n);
+  else if ($e(e) || Ue(e))
+    e.forEach((s) => {
+      E(s, t, n);
+    });
+  else if (Je(e)) {
+    for (const s in e)
+      E(e[s], t, n);
+    for (const s of Object.getOwnPropertySymbols(e))
+      Object.prototype.propertyIsEnumerable.call(e, s) && E(e[s], t, n);
   }
-  return value;
+  return e;
 }
 /**
 * @vue/runtime-core v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-function callWithErrorHandling(fn, instance, type, args) {
+function oe(e, t, n, s) {
   try {
-    return args ? fn(...args) : fn();
-  } catch (err) {
-    handleError(err, instance, type);
+    return s ? e(...s) : e();
+  } catch (i) {
+    we(i, t, n);
   }
 }
-function callWithAsyncErrorHandling(fn, instance, type, args) {
-  if (isFunction(fn)) {
-    const res = callWithErrorHandling(fn, instance, type, args);
-    if (res && isPromise(res)) {
-      res.catch((err) => {
-        handleError(err, instance, type);
-      });
-    }
-    return res;
+function Ee(e, t, n, s) {
+  if (m(e)) {
+    const i = oe(e, t, n, s);
+    return i && We(i) && i.catch((l) => {
+      we(l, t, n);
+    }), i;
   }
-  if (isArray(fn)) {
-    const values = [];
-    for (let i = 0; i < fn.length; i++) {
-      values.push(callWithAsyncErrorHandling(fn[i], instance, type, args));
-    }
-    return values;
+  if (y(e)) {
+    const i = [];
+    for (let l = 0; l < e.length; l++)
+      i.push(Ee(e[l], t, n, s));
+    return i;
   }
 }
-function handleError(err, instance, type, throwInDev = true) {
-  const contextVNode = instance ? instance.vnode : null;
-  const { errorHandler, throwUnhandledErrorInProduction } = instance && instance.appContext.config || EMPTY_OBJ;
-  if (instance) {
-    let cur = instance.parent;
-    const exposedInstance = instance.proxy;
-    const errorInfo = `https://vuejs.org/error-reference/#runtime-${type}`;
-    while (cur) {
-      const errorCapturedHooks = cur.ec;
-      if (errorCapturedHooks) {
-        for (let i = 0; i < errorCapturedHooks.length; i++) {
-          if (errorCapturedHooks[i](err, exposedInstance, errorInfo) === false) {
+function we(e, t, n, s = !0) {
+  const i = t ? t.vnode : null, { errorHandler: l, throwUnhandledErrorInProduction: a } = t && t.appContext.config || w;
+  if (t) {
+    let o = t.parent;
+    const c = t.proxy, d = `https://vuejs.org/error-reference/#runtime-${n}`;
+    for (; o; ) {
+      const r = o.ec;
+      if (r) {
+        for (let h = 0; h < r.length; h++)
+          if (r[h](e, c, d) === !1)
             return;
-          }
-        }
       }
-      cur = cur.parent;
+      o = o.parent;
     }
-    if (errorHandler) {
-      pauseTracking();
-      callWithErrorHandling(errorHandler, null, 10, [
-        err,
-        exposedInstance,
-        errorInfo
-      ]);
-      resetTracking();
+    if (l) {
+      xe(), oe(l, null, 10, [
+        e,
+        c,
+        d
+      ]), Ce();
       return;
     }
   }
-  logError(err, type, contextVNode, throwInDev, throwUnhandledErrorInProduction);
+  ht(e, n, i, s, a);
 }
-function logError(err, type, contextVNode, throwInDev = true, throwInProd = false) {
-  if (throwInProd) {
-    throw err;
-  } else {
-    console.error(err);
+function ht(e, t, n, s = !0, i = !1) {
+  if (i)
+    throw e;
+  console.error(e);
+}
+const b = [];
+let C = -1;
+const R = [];
+let T = null, V = 0;
+const dt = /* @__PURE__ */ Promise.resolve();
+let Q = null;
+function gt(e) {
+  let t = C + 1, n = b.length;
+  for (; t < n; ) {
+    const s = t + n >>> 1, i = b[s], l = N(i);
+    l < e || l === e && i.flags & 2 ? t = s + 1 : n = s;
+  }
+  return t;
+}
+function mt(e) {
+  if (!(e.flags & 1)) {
+    const t = N(e), n = b[b.length - 1];
+    !n || // fast path when the job id is larger than the tail
+    !(e.flags & 2) && t >= N(n) ? b.push(e) : b.splice(gt(t), 0, e), e.flags |= 1, De();
   }
 }
-const queue = [];
-let flushIndex = -1;
-const pendingPostFlushCbs = [];
-let activePostFlushCbs = null;
-let postFlushIndex = 0;
-const resolvedPromise = /* @__PURE__ */ Promise.resolve();
-let currentFlushPromise = null;
-function findInsertionIndex(id) {
-  let start = flushIndex + 1;
-  let end = queue.length;
-  while (start < end) {
-    const middle = start + end >>> 1;
-    const middleJob = queue[middle];
-    const middleJobId = getId(middleJob);
-    if (middleJobId < id || middleJobId === id && middleJob.flags & 2) {
-      start = middle + 1;
-    } else {
-      end = middle;
-    }
-  }
-  return start;
+function De() {
+  Q || (Q = dt.then(Ve));
 }
-function queueJob(job) {
-  if (!(job.flags & 1)) {
-    const jobId = getId(job);
-    const lastJob = queue[queue.length - 1];
-    if (!lastJob || // fast path when the job id is larger than the tail
-    !(job.flags & 2) && jobId >= getId(lastJob)) {
-      queue.push(job);
-    } else {
-      queue.splice(findInsertionIndex(jobId), 0, job);
-    }
-    job.flags |= 1;
-    queueFlush();
-  }
+function _t(e) {
+  y(e) ? R.push(...e) : T && e.id === -1 ? T.splice(V + 1, 0, e) : e.flags & 1 || (R.push(e), e.flags |= 1), De();
 }
-function queueFlush() {
-  if (!currentFlushPromise) {
-    currentFlushPromise = resolvedPromise.then(flushJobs);
-  }
-}
-function queuePostFlushCb(cb) {
-  if (!isArray(cb)) {
-    if (activePostFlushCbs && cb.id === -1) {
-      activePostFlushCbs.splice(postFlushIndex + 1, 0, cb);
-    } else if (!(cb.flags & 1)) {
-      pendingPostFlushCbs.push(cb);
-      cb.flags |= 1;
-    }
-  } else {
-    pendingPostFlushCbs.push(...cb);
-  }
-  queueFlush();
-}
-function flushPostFlushCbs(seen) {
-  if (pendingPostFlushCbs.length) {
-    const deduped = [...new Set(pendingPostFlushCbs)].sort(
-      (a, b) => getId(a) - getId(b)
+function bt(e) {
+  if (R.length) {
+    const t = [...new Set(R)].sort(
+      (n, s) => N(n) - N(s)
     );
-    pendingPostFlushCbs.length = 0;
-    if (activePostFlushCbs) {
-      activePostFlushCbs.push(...deduped);
+    if (R.length = 0, T) {
+      T.push(...t);
       return;
     }
-    activePostFlushCbs = deduped;
-    for (postFlushIndex = 0; postFlushIndex < activePostFlushCbs.length; postFlushIndex++) {
-      const cb = activePostFlushCbs[postFlushIndex];
-      if (cb.flags & 4) {
-        cb.flags &= -2;
-      }
-      if (!(cb.flags & 8)) cb();
-      cb.flags &= -2;
+    for (T = t, V = 0; V < T.length; V++) {
+      const n = T[V];
+      n.flags & 4 && (n.flags &= -2), n.flags & 8 || n(), n.flags &= -2;
     }
-    activePostFlushCbs = null;
-    postFlushIndex = 0;
+    T = null, V = 0;
   }
 }
-const getId = (job) => job.id == null ? job.flags & 2 ? -1 : Infinity : job.id;
-function flushJobs(seen) {
+const N = (e) => e.id == null ? e.flags & 2 ? -1 : 1 / 0 : e.id;
+function Ve(e) {
   try {
-    for (flushIndex = 0; flushIndex < queue.length; flushIndex++) {
-      const job = queue[flushIndex];
-      if (job && !(job.flags & 8)) {
-        if (false) ;
-        if (job.flags & 4) {
-          job.flags &= ~1;
-        }
-        callWithErrorHandling(
-          job,
-          job.i,
-          job.i ? 15 : 14
-        );
-        if (!(job.flags & 4)) {
-          job.flags &= ~1;
-        }
-      }
+    for (C = 0; C < b.length; C++) {
+      const t = b[C];
+      t && !(t.flags & 8) && (t.flags & 4 && (t.flags &= -2), oe(
+        t,
+        t.i,
+        t.i ? 15 : 14
+      ), t.flags & 4 || (t.flags &= -2));
     }
   } finally {
-    for (; flushIndex < queue.length; flushIndex++) {
-      const job = queue[flushIndex];
-      if (job) {
-        job.flags &= -2;
-      }
+    for (; C < b.length; C++) {
+      const t = b[C];
+      t && (t.flags &= -2);
     }
-    flushIndex = -1;
-    queue.length = 0;
-    flushPostFlushCbs();
-    currentFlushPromise = null;
-    if (queue.length || pendingPostFlushCbs.length) {
-      flushJobs();
-    }
+    C = -1, b.length = 0, bt(), Q = null, (b.length || R.length) && Ve();
   }
 }
-let currentRenderingInstance = null;
-let currentScopeId = null;
-const isTeleport = (type) => type.__isTeleport;
-function setTransitionHooks(vnode, hooks) {
-  if (vnode.shapeFlag & 6 && vnode.component) {
-    vnode.transition = hooks;
-    setTransitionHooks(vnode.component.subTree, hooks);
-  } else if (vnode.shapeFlag & 128) {
-    vnode.ssContent.transition = hooks.clone(vnode.ssContent);
-    vnode.ssFallback.transition = hooks.clone(vnode.ssFallback);
-  } else {
-    vnode.transition = hooks;
-  }
+let P = null, St = null;
+const yt = (e) => e.__isTeleport;
+function Re(e, t) {
+  e.shapeFlag & 6 && e.component ? (e.transition = t, Re(e.component.subTree, t)) : e.shapeFlag & 128 ? (e.ssContent.transition = t.clone(e.ssContent), e.ssFallback.transition = t.clone(e.ssFallback)) : e.transition = t;
 }
 // @__NO_SIDE_EFFECTS__
-function defineComponent(options, extraOptions) {
-  return isFunction(options) ? (
+function vt(e, t) {
+  return m(e) ? (
     // #8236: extend call and options.name access are considered side-effects
     // by Rollup, so we have to wrap it in a pure-annotated IIFE.
-    /* @__PURE__ */ (() => extend({ name: options.name }, extraOptions, { setup: options }))()
-  ) : options;
+    W({ name: e.name }, t, { setup: e })
+  ) : e;
 }
-getGlobalThis().requestIdleCallback || ((cb) => setTimeout(cb, 1));
-getGlobalThis().cancelIdleCallback || ((id) => clearTimeout(id));
-const COMPONENTS = "components";
-function resolveComponent(name, maybeSelfReference) {
-  return resolveAsset(COMPONENTS, name, true, maybeSelfReference) || name;
+se().requestIdleCallback;
+se().cancelIdleCallback;
+const xt = "components";
+function Ct(e, t) {
+  return It(xt, e, !0, t) || e;
 }
-const NULL_DYNAMIC_COMPONENT = Symbol.for("v-ndc");
-function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false) {
-  const instance = currentInstance;
-  if (instance) {
-    const Component = instance.type;
+const Tt = Symbol.for("v-ndc");
+function It(e, t, n = !0, s = !1) {
+  const i = q;
+  if (i) {
+    const l = i.type;
     {
-      const selfName = getComponentName(
-        Component,
-        false
+      const o = Gt(
+        l,
+        !1
       );
-      if (selfName && (selfName === name || selfName === camelize(name) || selfName === capitalize(camelize(name)))) {
-        return Component;
-      }
+      if (o && (o === t || o === k(t) || o === _e(k(t))))
+        return l;
     }
-    const res = (
+    const a = (
       // local registration
       // check instance[type] first which is resolved for options API
-      resolve(instance[type] || Component[type], name) || // global registration
-      resolve(instance.appContext[type], name)
+      pe(i[e] || l[e], t) || // global registration
+      pe(i.appContext[e], t)
     );
-    if (!res && maybeSelfReference) {
-      return Component;
-    }
-    return res;
+    return !a && s ? l : a;
   }
 }
-function resolve(registry, name) {
-  return registry && (registry[name] || registry[camelize(name)] || registry[capitalize(camelize(name))]);
+function pe(e, t) {
+  return e && (e[t] || e[k(t)] || e[_e(k(t))]);
 }
-let currentApp = null;
-function inject(key, defaultValue, treatDefaultAsFactory = false) {
-  const instance = getCurrentInstance();
-  if (instance || currentApp) {
-    let provides = instance ? instance.parent == null || instance.ce ? instance.vnode.appContext && instance.vnode.appContext.provides : instance.parent.provides : void 0;
-    if (provides && key in provides) {
-      return provides[key];
-    } else if (arguments.length > 1) {
-      return treatDefaultAsFactory && isFunction(defaultValue) ? defaultValue.call(instance && instance.proxy) : defaultValue;
-    } else ;
+let Et = null;
+function wt(e, t, n = !1) {
+  const s = Ne();
+  if (s || Et) {
+    let i = s ? s.parent == null || s.ce ? s.vnode.appContext && s.vnode.appContext.provides : s.parent.provides : void 0;
+    if (i && e in i)
+      return i[e];
+    if (arguments.length > 1)
+      return n && m(t) ? t.call(s && s.proxy) : t;
   }
 }
-const internalObjectProto = {};
-const isInternalObject = (obj) => Object.getPrototypeOf(obj) === internalObjectProto;
-const queuePostRenderEffect = queueEffectWithSuspense;
-const ssrContextKey = Symbol.for("v-scx");
-const useSSRContext = () => {
-  {
-    const ctx = inject(ssrContextKey);
-    return ctx;
-  }
-};
-function watchSyncEffect(effect2, options) {
-  return doWatch(
-    effect2,
+const Dt = {}, Oe = (e) => Object.getPrototypeOf(e) === Dt, Vt = Mt, Rt = Symbol.for("v-scx"), Ot = () => wt(Rt);
+function kt(e, t) {
+  return At(
+    e,
     null,
     { flush: "sync" }
   );
 }
-function doWatch(source, cb, options = EMPTY_OBJ) {
-  const { immediate, deep, flush, once } = options;
-  const baseWatchOptions = extend({}, options);
-  const runsImmediately = flush !== "post";
-  let ssrCleanup;
-  if (isInSSRComponentSetup) {
-    if (flush === "sync") {
-      const ctx = useSSRContext();
-      ssrCleanup = ctx.__watcherHandles || (ctx.__watcherHandles = []);
-    } else if (!runsImmediately) {
-      const watchStopHandle = () => {
+function At(e, t, n = w) {
+  const { immediate: s, deep: i, flush: l, once: a } = n, o = W({}, n), c = l !== "post";
+  let d;
+  if (ee) {
+    if (l === "sync") {
+      const f = Ot();
+      d = f.__watcherHandles || (f.__watcherHandles = []);
+    } else if (!c) {
+      const f = () => {
       };
-      watchStopHandle.stop = NOOP;
-      watchStopHandle.resume = NOOP;
-      watchStopHandle.pause = NOOP;
-      return watchStopHandle;
+      return f.stop = L, f.resume = L, f.pause = L, f;
     }
   }
-  const instance = currentInstance;
-  baseWatchOptions.call = (fn, type, args) => callWithAsyncErrorHandling(fn, instance, type, args);
-  let isPre = false;
-  if (flush === "post") {
-    baseWatchOptions.scheduler = (job) => {
-      queuePostRenderEffect(job, instance && instance.suspense);
-    };
-  } else if (flush !== "sync") {
-    isPre = true;
-    baseWatchOptions.scheduler = (job, isFirstRun) => {
-      if (isFirstRun) {
-        job();
-      } else {
-        queueJob(job);
-      }
-    };
-  }
-  baseWatchOptions.augmentJob = (job) => {
-    if (isPre) {
-      job.flags |= 2;
-      if (instance) {
-        job.id = instance.uid;
-        job.i = instance;
-      }
-    }
+  const r = q;
+  o.call = (f, _, g) => Ee(f, r, _, g);
+  let h = !1;
+  l === "post" ? o.scheduler = (f) => {
+    Vt(f, r && r.suspense);
+  } : l !== "sync" && (h = !0, o.scheduler = (f, _) => {
+    _ ? f() : mt(f);
+  }), o.augmentJob = (f) => {
+    h && (f.flags |= 2, r && (f.id = r.uid, f.i = r));
   };
-  const watchHandle = watch(source, cb, baseWatchOptions);
-  if (isInSSRComponentSetup) {
-    if (ssrCleanup) {
-      ssrCleanup.push(watchHandle);
-    } else if (runsImmediately) {
-      watchHandle();
-    }
-  }
-  return watchHandle;
+  const v = pt(e, t, o);
+  return ee && (d ? d.push(v) : c && v()), v;
 }
-function useModel(props, name, options = EMPTY_OBJ) {
-  const i = getCurrentInstance();
-  const camelizedName = camelize(name);
-  const hyphenatedName = hyphenate(name);
-  const modifiers = getModelModifiers(props, camelizedName);
-  const res = customRef((track2, trigger2) => {
-    let localValue;
-    let prevSetValue = EMPTY_OBJ;
-    let prevEmittedValue;
-    watchSyncEffect(() => {
-      const propValue = props[camelizedName];
-      if (hasChanged(localValue, propValue)) {
-        localValue = propValue;
-        trigger2();
-      }
-    });
-    return {
+function Ft(e, t, n = w) {
+  const s = Ne(), i = k(t), l = me(t), a = Nt(e, i), o = at((c, d) => {
+    let r, h = w, v;
+    return kt(() => {
+      const f = e[i];
+      I(r, f) && (r = f, d());
+    }), {
       get() {
-        track2();
-        return options.get ? options.get(localValue) : localValue;
+        return c(), n.get ? n.get(r) : r;
       },
-      set(value) {
-        const emittedValue = options.set ? options.set(value) : value;
-        if (!hasChanged(emittedValue, localValue) && !(prevSetValue !== EMPTY_OBJ && hasChanged(value, prevSetValue))) {
+      set(f) {
+        const _ = n.set ? n.set(f) : f;
+        if (!I(_, r) && !(h !== w && I(f, h)))
           return;
-        }
-        const rawProps = i.vnode.props;
-        if (!(rawProps && // check if parent has passed v-model
-        (name in rawProps || camelizedName in rawProps || hyphenatedName in rawProps) && (`onUpdate:${name}` in rawProps || `onUpdate:${camelizedName}` in rawProps || `onUpdate:${hyphenatedName}` in rawProps))) {
-          localValue = value;
-          trigger2();
-        }
-        i.emit(`update:${name}`, emittedValue);
-        if (hasChanged(value, emittedValue) && hasChanged(value, prevSetValue) && !hasChanged(emittedValue, prevEmittedValue)) {
-          trigger2();
-        }
-        prevSetValue = value;
-        prevEmittedValue = emittedValue;
+        const g = s.vnode.props;
+        g && // check if parent has passed v-model
+        (t in g || i in g || l in g) && (`onUpdate:${t}` in g || `onUpdate:${i}` in g || `onUpdate:${l}` in g) || (r = f, d()), s.emit(`update:${t}`, _), I(f, _) && I(f, h) && !I(_, v) && d(), h = f, v = _;
       }
     };
   });
-  res[Symbol.iterator] = () => {
-    let i2 = 0;
+  return o[Symbol.iterator] = () => {
+    let c = 0;
     return {
       next() {
-        if (i2 < 2) {
-          return { value: i2++ ? modifiers || EMPTY_OBJ : res, done: false };
-        } else {
-          return { done: true };
-        }
+        return c < 2 ? { value: c++ ? a || w : o, done: !1 } : { done: !0 };
       }
     };
-  };
-  return res;
+  }, o;
 }
-const getModelModifiers = (props, modelName) => {
-  return modelName === "modelValue" || modelName === "model-value" ? props.modelModifiers : props[`${modelName}Modifiers`] || props[`${camelize(modelName)}Modifiers`] || props[`${hyphenate(modelName)}Modifiers`];
-};
-const isSuspense = (type) => type.__isSuspense;
-function queueEffectWithSuspense(fn, suspense) {
-  if (suspense && suspense.pendingBranch) {
-    if (isArray(fn)) {
-      suspense.effects.push(...fn);
-    } else {
-      suspense.effects.push(fn);
-    }
-  } else {
-    queuePostFlushCb(fn);
-  }
+const Nt = (e, t) => t === "modelValue" || t === "model-value" ? e.modelModifiers : e[`${t}Modifiers`] || e[`${k(t)}Modifiers`] || e[`${me(t)}Modifiers`], Pt = (e) => e.__isSuspense;
+function Mt(e, t) {
+  t && t.pendingBranch ? y(e) ? t.effects.push(...e) : t.effects.push(e) : _t(e);
 }
-const Fragment = Symbol.for("v-fgt");
-const Text = Symbol.for("v-txt");
-const Comment = Symbol.for("v-cmt");
-const blockStack = [];
-let currentBlock = null;
-function openBlock(disableTracking = false) {
-  blockStack.push(currentBlock = disableTracking ? null : []);
+const ke = Symbol.for("v-fgt"), Lt = Symbol.for("v-txt"), jt = Symbol.for("v-cmt"), B = [];
+let S = null;
+function zt(e = !1) {
+  B.push(S = e ? null : []);
 }
-function closeBlock() {
-  blockStack.pop();
-  currentBlock = blockStack[blockStack.length - 1] || null;
+function Bt() {
+  B.pop(), S = B[B.length - 1] || null;
 }
-function setupBlock(vnode) {
-  vnode.dynamicChildren = currentBlock || EMPTY_ARR;
-  closeBlock();
-  if (currentBlock) {
-    currentBlock.push(vnode);
-  }
-  return vnode;
+function Ut(e) {
+  return e.dynamicChildren = S || ze, Bt(), S && S.push(e), e;
 }
-function createElementBlock(type, props, children, patchFlag, dynamicProps, shapeFlag) {
-  return setupBlock(
-    createBaseVNode(
-      type,
-      props,
-      children,
-      patchFlag,
-      dynamicProps,
-      shapeFlag,
-      true
+function $t(e, t, n, s, i, l) {
+  return Ut(
+    Fe(
+      e,
+      t,
+      n,
+      s,
+      i,
+      l,
+      !0
     )
   );
 }
-function isVNode(value) {
-  return value ? value.__v_isVNode === true : false;
+function Ht(e) {
+  return e ? e.__v_isVNode === !0 : !1;
 }
-const normalizeKey = ({ key }) => key != null ? key : null;
-const normalizeRef = ({
-  ref: ref3,
-  ref_key,
-  ref_for
-}) => {
-  if (typeof ref3 === "number") {
-    ref3 = "" + ref3;
-  }
-  return ref3 != null ? isString(ref3) || isRef(ref3) || isFunction(ref3) ? { i: currentRenderingInstance, r: ref3, k: ref_key, f: !!ref_for } : ref3 : null;
-};
-function createBaseVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, shapeFlag = type === Fragment ? 0 : 1, isBlockNode = false, needFullChildrenNormalization = false) {
-  const vnode = {
-    __v_isVNode: true,
-    __v_skip: true,
-    type,
-    props,
-    key: props && normalizeKey(props),
-    ref: props && normalizeRef(props),
-    scopeId: currentScopeId,
+const Ae = ({ key: e }) => e ?? null, U = ({
+  ref: e,
+  ref_key: t,
+  ref_for: n
+}) => (typeof e == "number" && (e = "" + e), e != null ? D(e) || $(e) || m(e) ? { i: P, r: e, k: t, f: !!n } : e : null);
+function Fe(e, t = null, n = null, s = 0, i = null, l = e === ke ? 0 : 1, a = !1, o = !1) {
+  const c = {
+    __v_isVNode: !0,
+    __v_skip: !0,
+    type: e,
+    props: t,
+    key: t && Ae(t),
+    ref: t && U(t),
+    scopeId: St,
     slotScopeIds: null,
-    children,
+    children: n,
     component: null,
     suspense: null,
     ssContent: null,
@@ -1102,264 +664,185 @@ function createBaseVNode(type, props = null, children = null, patchFlag = 0, dyn
     targetStart: null,
     targetAnchor: null,
     staticCount: 0,
-    shapeFlag,
-    patchFlag,
-    dynamicProps,
+    shapeFlag: l,
+    patchFlag: s,
+    dynamicProps: i,
     dynamicChildren: null,
     appContext: null,
-    ctx: currentRenderingInstance
+    ctx: P
   };
-  if (needFullChildrenNormalization) {
-    normalizeChildren(vnode, children);
-    if (shapeFlag & 128) {
-      type.normalize(vnode);
-    }
-  } else if (children) {
-    vnode.shapeFlag |= isString(children) ? 8 : 16;
-  }
-  if (
-    // avoid a block node from tracking itself
-    !isBlockNode && // has current parent block
-    currentBlock && // presence of a patch flag indicates this node needs patching on updates.
-    // component nodes also should always be patched, because even if the
-    // component doesn't need to update, it needs to persist the instance on to
-    // the next vnode so that it can be properly unmounted later.
-    (vnode.patchFlag > 0 || shapeFlag & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
-    // vnode should not be considered dynamic due to handler caching.
-    vnode.patchFlag !== 32
-  ) {
-    currentBlock.push(vnode);
-  }
-  return vnode;
+  return o ? (ce(c, n), l & 128 && e.normalize(c)) : n && (c.shapeFlag |= D(n) ? 8 : 16), // avoid a block node from tracking itself
+  !a && // has current parent block
+  S && // presence of a patch flag indicates this node needs patching on updates.
+  // component nodes also should always be patched, because even if the
+  // component doesn't need to update, it needs to persist the instance on to
+  // the next vnode so that it can be properly unmounted later.
+  (c.patchFlag > 0 || l & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
+  // vnode should not be considered dynamic due to handler caching.
+  c.patchFlag !== 32 && S.push(c), c;
 }
-const createVNode = _createVNode;
-function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
-  if (!type || type === NULL_DYNAMIC_COMPONENT) {
-    type = Comment;
-  }
-  if (isVNode(type)) {
-    const cloned = cloneVNode(
-      type,
-      props,
-      true
+const Z = Wt;
+function Wt(e, t = null, n = null, s = 0, i = null, l = !1) {
+  if ((!e || e === Tt) && (e = jt), Ht(e)) {
+    const o = X(
+      e,
+      t,
+      !0
       /* mergeRef: true */
     );
-    if (children) {
-      normalizeChildren(cloned, children);
-    }
-    if (!isBlockNode && currentBlock) {
-      if (cloned.shapeFlag & 6) {
-        currentBlock[currentBlock.indexOf(type)] = cloned;
-      } else {
-        currentBlock.push(cloned);
-      }
-    }
-    cloned.patchFlag = -2;
-    return cloned;
+    return n && ce(o, n), !l && S && (o.shapeFlag & 6 ? S[S.indexOf(e)] = o : S.push(o)), o.patchFlag = -2, o;
   }
-  if (isClassComponent(type)) {
-    type = type.__vccOpts;
+  if (Kt(e) && (e = e.__vccOpts), t) {
+    t = qt(t);
+    let { class: o, style: c } = t;
+    o && !D(o) && (t.class = le(o)), O(c) && (Ie(c) && !y(c) && (c = W({}, c)), t.style = ie(c));
   }
-  if (props) {
-    props = guardReactiveProps(props);
-    let { class: klass, style } = props;
-    if (klass && !isString(klass)) {
-      props.class = normalizeClass(klass);
-    }
-    if (isObject(style)) {
-      if (isProxy(style) && !isArray(style)) {
-        style = extend({}, style);
-      }
-      props.style = normalizeStyle(style);
-    }
-  }
-  const shapeFlag = isString(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject(type) ? 4 : isFunction(type) ? 2 : 0;
-  return createBaseVNode(
-    type,
-    props,
-    children,
-    patchFlag,
-    dynamicProps,
-    shapeFlag,
-    isBlockNode,
-    true
+  const a = D(e) ? 1 : Pt(e) ? 128 : yt(e) ? 64 : O(e) ? 4 : m(e) ? 2 : 0;
+  return Fe(
+    e,
+    t,
+    n,
+    s,
+    i,
+    a,
+    l,
+    !0
   );
 }
-function guardReactiveProps(props) {
-  if (!props) return null;
-  return isProxy(props) || isInternalObject(props) ? extend({}, props) : props;
+function qt(e) {
+  return e ? Ie(e) || Oe(e) ? W({}, e) : e : null;
 }
-function cloneVNode(vnode, extraProps, mergeRef = false, cloneTransition = false) {
-  const { props, ref: ref3, patchFlag, children, transition } = vnode;
-  const mergedProps = extraProps ? mergeProps(props || {}, extraProps) : props;
-  const cloned = {
-    __v_isVNode: true,
-    __v_skip: true,
-    type: vnode.type,
-    props: mergedProps,
-    key: mergedProps && normalizeKey(mergedProps),
-    ref: extraProps && extraProps.ref ? (
+function X(e, t, n = !1, s = !1) {
+  const { props: i, ref: l, patchFlag: a, children: o, transition: c } = e, d = t ? Yt(i || {}, t) : i, r = {
+    __v_isVNode: !0,
+    __v_skip: !0,
+    type: e.type,
+    props: d,
+    key: d && Ae(d),
+    ref: t && t.ref ? (
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
       // the refs so the single vnode can be set on multiple refs
-      mergeRef && ref3 ? isArray(ref3) ? ref3.concat(normalizeRef(extraProps)) : [ref3, normalizeRef(extraProps)] : normalizeRef(extraProps)
-    ) : ref3,
-    scopeId: vnode.scopeId,
-    slotScopeIds: vnode.slotScopeIds,
-    children,
-    target: vnode.target,
-    targetStart: vnode.targetStart,
-    targetAnchor: vnode.targetAnchor,
-    staticCount: vnode.staticCount,
-    shapeFlag: vnode.shapeFlag,
+      n && l ? y(l) ? l.concat(U(t)) : [l, U(t)] : U(t)
+    ) : l,
+    scopeId: e.scopeId,
+    slotScopeIds: e.slotScopeIds,
+    children: o,
+    target: e.target,
+    targetStart: e.targetStart,
+    targetAnchor: e.targetAnchor,
+    staticCount: e.staticCount,
+    shapeFlag: e.shapeFlag,
     // if the vnode is cloned with extra props, we can no longer assume its
     // existing patch flag to be reliable and need to add the FULL_PROPS flag.
     // note: preserve flag for fragments since they use the flag for children
     // fast paths only.
-    patchFlag: extraProps && vnode.type !== Fragment ? patchFlag === -1 ? 16 : patchFlag | 16 : patchFlag,
-    dynamicProps: vnode.dynamicProps,
-    dynamicChildren: vnode.dynamicChildren,
-    appContext: vnode.appContext,
-    dirs: vnode.dirs,
-    transition,
+    patchFlag: t && e.type !== ke ? a === -1 ? 16 : a | 16 : a,
+    dynamicProps: e.dynamicProps,
+    dynamicChildren: e.dynamicChildren,
+    appContext: e.appContext,
+    dirs: e.dirs,
+    transition: c,
     // These should technically only be non-null on mounted VNodes. However,
     // they *should* be copied for kept-alive vnodes. So we just always copy
     // them since them being non-null during a mount doesn't affect the logic as
     // they will simply be overwritten.
-    component: vnode.component,
-    suspense: vnode.suspense,
-    ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
-    ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
-    placeholder: vnode.placeholder,
-    el: vnode.el,
-    anchor: vnode.anchor,
-    ctx: vnode.ctx,
-    ce: vnode.ce
+    component: e.component,
+    suspense: e.suspense,
+    ssContent: e.ssContent && X(e.ssContent),
+    ssFallback: e.ssFallback && X(e.ssFallback),
+    placeholder: e.placeholder,
+    el: e.el,
+    anchor: e.anchor,
+    ctx: e.ctx,
+    ce: e.ce
   };
-  if (transition && cloneTransition) {
-    setTransitionHooks(
-      cloned,
-      transition.clone(cloned)
-    );
-  }
-  return cloned;
+  return c && s && Re(
+    r,
+    c.clone(r)
+  ), r;
 }
-function createTextVNode(text = " ", flag = 0) {
-  return createVNode(Text, null, text, flag);
+function Jt(e = " ", t = 0) {
+  return Z(Lt, null, e, t);
 }
-function normalizeChildren(vnode, children) {
-  let type = 0;
-  const { shapeFlag } = vnode;
-  if (children == null) {
-    children = null;
-  } else if (isArray(children)) {
-    type = 16;
-  } else if (typeof children === "object") {
-    if (shapeFlag & (1 | 64)) {
-      const slot = children.default;
-      if (slot) {
-        slot._c && (slot._d = false);
-        normalizeChildren(vnode, slot());
-        slot._c && (slot._d = true);
-      }
+function ce(e, t) {
+  let n = 0;
+  const { shapeFlag: s } = e;
+  if (t == null)
+    t = null;
+  else if (y(t))
+    n = 16;
+  else if (typeof t == "object")
+    if (s & 65) {
+      const i = t.default;
+      i && (i._c && (i._d = !1), ce(e, i()), i._c && (i._d = !0));
       return;
-    } else {
-      type = 32;
-      const slotFlag = children._;
-      if (!slotFlag && !isInternalObject(children)) {
-        children._ctx = currentRenderingInstance;
-      }
-    }
-  } else if (isFunction(children)) {
-    children = { default: children, _ctx: currentRenderingInstance };
-    type = 32;
-  } else {
-    children = String(children);
-    if (shapeFlag & 64) {
-      type = 16;
-      children = [createTextVNode(children)];
-    } else {
-      type = 8;
-    }
-  }
-  vnode.children = children;
-  vnode.shapeFlag |= type;
+    } else
+      n = 32, !t._ && !Oe(t) && (t._ctx = P);
+  else m(t) ? (t = { default: t, _ctx: P }, n = 32) : (t = String(t), s & 64 ? (n = 16, t = [Jt(t)]) : n = 8);
+  e.children = t, e.shapeFlag |= n;
 }
-function mergeProps(...args) {
-  const ret = {};
-  for (let i = 0; i < args.length; i++) {
-    const toMerge = args[i];
-    for (const key in toMerge) {
-      if (key === "class") {
-        if (ret.class !== toMerge.class) {
-          ret.class = normalizeClass([ret.class, toMerge.class]);
-        }
-      } else if (key === "style") {
-        ret.style = normalizeStyle([ret.style, toMerge.style]);
-      } else if (isOn(key)) {
-        const existing = ret[key];
-        const incoming = toMerge[key];
-        if (incoming && existing !== incoming && !(isArray(existing) && existing.includes(incoming))) {
-          ret[key] = existing ? [].concat(existing, incoming) : incoming;
-        }
-      } else if (key !== "") {
-        ret[key] = toMerge[key];
-      }
-    }
+function Yt(...e) {
+  const t = {};
+  for (let n = 0; n < e.length; n++) {
+    const s = e[n];
+    for (const i in s)
+      if (i === "class")
+        t.class !== s.class && (t.class = le([t.class, s.class]));
+      else if (i === "style")
+        t.style = ie([t.style, s.style]);
+      else if (Be(i)) {
+        const l = t[i], a = s[i];
+        a && l !== a && !(y(l) && l.includes(a)) && (t[i] = l ? [].concat(l, a) : a);
+      } else i !== "" && (t[i] = s[i]);
   }
-  return ret;
+  return t;
 }
-let currentInstance = null;
-const getCurrentInstance = () => currentInstance || currentRenderingInstance;
+let q = null;
+const Ne = () => q || P;
 {
-  const g = getGlobalThis();
-  const registerGlobalSetter = (key, setter) => {
-    let setters;
-    if (!(setters = g[key])) setters = g[key] = [];
-    setters.push(setter);
-    return (v) => {
-      if (setters.length > 1) setters.forEach((set) => set(v));
-      else setters[0](v);
+  const e = se(), t = (n, s) => {
+    let i;
+    return (i = e[n]) || (i = e[n] = []), i.push(s), (l) => {
+      i.length > 1 ? i.forEach((a) => a(l)) : i[0](l);
     };
   };
-  registerGlobalSetter(
-    `__VUE_INSTANCE_SETTERS__`,
-    (v) => currentInstance = v
+  t(
+    "__VUE_INSTANCE_SETTERS__",
+    (n) => q = n
+  ), t(
+    "__VUE_SSR_SETTERS__",
+    (n) => ee = n
   );
-  registerGlobalSetter(
-    `__VUE_SSR_SETTERS__`,
-    (v) => isInSSRComponentSetup = v
-  );
 }
-let isInSSRComponentSetup = false;
-function getComponentName(Component, includeInferred = true) {
-  return isFunction(Component) ? Component.displayName || Component.name : Component.name || includeInferred && Component.__name;
+let ee = !1;
+function Gt(e, t = !0) {
+  return m(e) ? e.displayName || e.name : e.name || t && e.__name;
 }
-function isClassComponent(value) {
-  return isFunction(value) && "__vccOpts" in value;
+function Kt(e) {
+  return m(e) && "__vccOpts" in e;
 }
-const _hoisted_1 = { class: "flex flex-col gap-4" };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const Qt = { class: "flex flex-col gap-4" }, Zt = /* @__PURE__ */ vt({
   __name: "Settings",
   props: {
-    "modelValue": {},
-    "modelModifiers": {}
+    modelValue: {},
+    modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(__props) {
-    const variableSettings = useModel(__props, "modelValue");
-    return (_ctx, _cache) => {
-      const _component_VaInput = resolveComponent("VaInput");
-      return openBlock(), createElementBlock("div", _hoisted_1, [
-        createVNode(_component_VaInput, {
-          modelValue: variableSettings.value.name,
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => variableSettings.value.name = $event),
+  setup(e) {
+    const t = Ft(e, "modelValue");
+    return (n, s) => {
+      const i = Ct("VaInput");
+      return zt(), $t("div", Qt, [
+        Z(i, {
+          modelValue: t.value.name,
+          "onUpdate:modelValue": s[0] || (s[0] = (l) => t.value.name = l),
           label: "Variable Name",
           placeholder: "Enter variable name"
         }, null, 8, ["modelValue"]),
-        createVNode(_component_VaInput, {
-          modelValue: variableSettings.value.expression,
-          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => variableSettings.value.expression = $event),
+        Z(i, {
+          modelValue: t.value.expression,
+          "onUpdate:modelValue": s[1] || (s[1] = (l) => t.value.expression = l),
           label: "Expression",
           placeholder: "Enter variable name"
         }, null, 8, ["modelValue"])
@@ -1367,34 +850,30 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-function activate$1({ services }) {
-  services.getRequired(VARIABLE_REPOSITORY).registerVariableType(COMPUTED_VARIABLE, {
-    Variable: ComputedVariableSymbol,
-    Settings: _sfc_main
+function Pe({ services: e }) {
+  e.getRequired(de).registerVariableType(ge, {
+    Variable: je,
+    Settings: Zt
   });
 }
-function deactivate$1({ services }) {
-  services.getRequired(VARIABLE_REPOSITORY).unregisterVariableType(COMPUTED_VARIABLE);
+function Me({ services: e }) {
+  e.getRequired(de).unregisterVariableType(ge);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Xt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.variable.computed";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.variable.computed");
-  await activate$1?.(context);
+  activate: Pe,
+  deactivate: Me
+}, Symbol.toStringTag, { value: "Module" })), he = "org.eclipse.daanse.board.app.ui.vue.variable.computed", en = "0.0.1-next.1";
+async function sn(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${he}: tsm runtime is not initialized`);
+  t.register(he, Xt, en, "ui.vue.variable.computed"), await Pe?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function ln(e) {
+  await Me?.(e);
 }
 export {
-  activate,
-  deactivate
+  sn as activate,
+  ln as deactivate
 };

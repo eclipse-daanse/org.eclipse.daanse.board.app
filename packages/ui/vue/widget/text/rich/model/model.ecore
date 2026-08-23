@@ -23,5 +23,17 @@
                 <details key="documentation" value="An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.)."/>
             </eAnnotations>
         </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fontSize" containment="false" defaultValueLiteral="16">
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fontColor" containment="false" defaultValueLiteral="#000000">
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
     </eClassifiers>
 </ecore:EPackage>

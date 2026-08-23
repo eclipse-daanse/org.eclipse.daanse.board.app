@@ -1,87 +1,54 @@
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { CONNECTION_REPOSITORY as E } from "org.eclipse.daanse.board.app.lib.api.connection";
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-const EMPTY_ARR = [];
-const isOn = (key) => key.charCodeAt(0) === 111 && key.charCodeAt(1) === 110 && // uppercase letter
-(key.charCodeAt(2) > 122 || key.charCodeAt(2) < 97);
-const extend = Object.assign;
-const isArray = Array.isArray;
-const isFunction = (val) => typeof val === "function";
-const isString = (val) => typeof val === "string";
-const isSymbol = (val) => typeof val === "symbol";
-const isObject = (val) => val !== null && typeof val === "object";
-const cacheStringFunction = (fn) => {
-  const cache = /* @__PURE__ */ Object.create(null);
-  return ((str) => {
-    const hit = cache[str];
-    return hit || (cache[str] = fn(str));
-  });
-};
-const camelizeRE = /-\w/g;
-const camelize = cacheStringFunction(
-  (str) => {
-    return str.replace(camelizeRE, (c) => c.slice(1).toUpperCase());
-  }
-);
-const capitalize = cacheStringFunction((str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-});
-let _globalThis;
-const getGlobalThis = () => {
-  return _globalThis || (_globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : {});
-};
-function normalizeStyle(value) {
-  if (isArray(value)) {
-    const res = {};
-    for (let i = 0; i < value.length; i++) {
-      const item = value[i];
-      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
-      if (normalized) {
-        for (const key in normalized) {
-          res[key] = normalized[key];
-        }
-      }
+const P = [], B = (t) => t.charCodeAt(0) === 111 && t.charCodeAt(1) === 110 && // uppercase letter
+(t.charCodeAt(2) > 122 || t.charCodeAt(2) < 97), F = Object.assign, f = Array.isArray, g = (t) => typeof t == "function", u = (t) => typeof t == "string", q = (t) => typeof t == "symbol", p = (t) => t !== null && typeof t == "object", V = (t) => {
+  const n = /* @__PURE__ */ Object.create(null);
+  return ((e) => n[e] || (n[e] = t(e)));
+}, D = /-\w/g, C = V(
+  (t) => t.replace(D, (n) => n.slice(1).toUpperCase())
+), A = V((t) => t.charAt(0).toUpperCase() + t.slice(1));
+let I;
+const R = () => I || (I = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : typeof global < "u" ? global : {});
+function T(t) {
+  if (f(t)) {
+    const n = {};
+    for (let e = 0; e < t.length; e++) {
+      const l = t[e], s = u(l) ? H(l) : T(l);
+      if (s)
+        for (const c in s)
+          n[c] = s[c];
     }
-    return res;
-  } else if (isString(value) || isObject(value)) {
-    return value;
-  }
+    return n;
+  } else if (u(t) || p(t))
+    return t;
 }
-const listDelimiterRE = /;(?![^(]*\))/g;
-const propertyDelimiterRE = /:([^]+)/;
-const styleCommentRE = /\/\*[^]*?\*\//g;
-function parseStringStyle(cssText) {
-  const ret = {};
-  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
-    if (item) {
-      const tmp = item.split(propertyDelimiterRE);
-      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+const L = /;(?![^(]*\))/g, Y = /:([^]+)/, G = /\/\*[^]*?\*\//g;
+function H(t) {
+  const n = {};
+  return t.replace(G, "").split(L).forEach((e) => {
+    if (e) {
+      const l = e.split(Y);
+      l.length > 1 && (n[l[0].trim()] = l[1].trim());
     }
-  });
-  return ret;
+  }), n;
 }
-function normalizeClass(value) {
-  let res = "";
-  if (isString(value)) {
-    res = value;
-  } else if (isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      const normalized = normalizeClass(value[i]);
-      if (normalized) {
-        res += normalized + " ";
-      }
+function N(t) {
+  let n = "";
+  if (u(t))
+    n = t;
+  else if (f(t))
+    for (let e = 0; e < t.length; e++) {
+      const l = N(t[e]);
+      l && (n += l + " ");
     }
-  } else if (isObject(value)) {
-    for (const name in value) {
-      if (value[name]) {
-        res += name + " ";
-      }
-    }
-  }
-  return res.trim();
+  else if (p(t))
+    for (const e in t)
+      t[e] && (n += e + " ");
+  return n.trim();
 }
 /**
 * @vue/reactivity v3.5.24
@@ -89,136 +56,105 @@ function normalizeClass(value) {
 * @license MIT
 **/
 new Set(
-  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((key) => key !== "arguments" && key !== "caller").map((key) => Symbol[key]).filter(isSymbol)
+  /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((t) => t !== "arguments" && t !== "caller").map((t) => Symbol[t]).filter(q)
 );
-function isProxy(value) {
-  return value ? !!value["__v_raw"] : false;
+function k(t) {
+  return t ? !!t.__v_raw : !1;
 }
-function isRef(r) {
-  return r ? r["__v_isRef"] === true : false;
+function K(t) {
+  return t ? t.__v_isRef === !0 : !1;
 }
 /**
 * @vue/runtime-core v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
-let currentRenderingInstance = null;
-let currentScopeId = null;
-const isTeleport = (type) => type.__isTeleport;
-function setTransitionHooks(vnode, hooks) {
-  if (vnode.shapeFlag & 6 && vnode.component) {
-    vnode.transition = hooks;
-    setTransitionHooks(vnode.component.subTree, hooks);
-  } else if (vnode.shapeFlag & 128) {
-    vnode.ssContent.transition = hooks.clone(vnode.ssContent);
-    vnode.ssFallback.transition = hooks.clone(vnode.ssFallback);
-  } else {
-    vnode.transition = hooks;
-  }
+let S = null, J = null;
+const Q = (t) => t.__isTeleport;
+function x(t, n) {
+  t.shapeFlag & 6 && t.component ? (t.transition = n, x(t.component.subTree, n)) : t.shapeFlag & 128 ? (t.ssContent.transition = n.clone(t.ssContent), t.ssFallback.transition = n.clone(t.ssFallback)) : t.transition = n;
 }
 // @__NO_SIDE_EFFECTS__
-function defineComponent(options, extraOptions) {
-  return isFunction(options) ? (
+function W(t, n) {
+  return g(t) ? (
     // #8236: extend call and options.name access are considered side-effects
     // by Rollup, so we have to wrap it in a pure-annotated IIFE.
-    /* @__PURE__ */ (() => extend({ name: options.name }, extraOptions, { setup: options }))()
-  ) : options;
+    F({ name: t.name }, n, { setup: t })
+  ) : t;
 }
-getGlobalThis().requestIdleCallback || ((cb) => setTimeout(cb, 1));
-getGlobalThis().cancelIdleCallback || ((id) => clearTimeout(id));
-const COMPONENTS = "components";
-function resolveComponent(name, maybeSelfReference) {
-  return resolveAsset(COMPONENTS, name, true, maybeSelfReference) || name;
+R().requestIdleCallback;
+R().cancelIdleCallback;
+const X = "components";
+function Z(t, n) {
+  return v(X, t, !0, n) || t;
 }
-const NULL_DYNAMIC_COMPONENT = Symbol.for("v-ndc");
-function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false) {
-  const instance = currentInstance;
-  if (instance) {
-    const Component = instance.type;
+const $ = Symbol.for("v-ndc");
+function v(t, n, e = !0, l = !1) {
+  const s = M;
+  if (s) {
+    const c = s.type;
     {
-      const selfName = getComponentName(
-        Component,
-        false
+      const o = _t(
+        c,
+        !1
       );
-      if (selfName && (selfName === name || selfName === camelize(name) || selfName === capitalize(camelize(name)))) {
-        return Component;
-      }
+      if (o && (o === n || o === C(n) || o === A(C(n))))
+        return c;
     }
-    const res = (
+    const i = (
       // local registration
       // check instance[type] first which is resolved for options API
-      resolve(instance[type] || Component[type], name) || // global registration
-      resolve(instance.appContext[type], name)
+      d(s[t] || c[t], n) || // global registration
+      d(s.appContext[t], n)
     );
-    if (!res && maybeSelfReference) {
-      return Component;
-    }
-    return res;
+    return !i && l ? c : i;
   }
 }
-function resolve(registry, name) {
-  return registry && (registry[name] || registry[camelize(name)] || registry[capitalize(camelize(name))]);
+function d(t, n) {
+  return t && (t[n] || t[C(n)] || t[A(C(n))]);
 }
-const internalObjectProto = {};
-const isInternalObject = (obj) => Object.getPrototypeOf(obj) === internalObjectProto;
-const isSuspense = (type) => type.__isSuspense;
-const Fragment = Symbol.for("v-fgt");
-const Text = Symbol.for("v-txt");
-const Comment = Symbol.for("v-cmt");
-const blockStack = [];
-let currentBlock = null;
-function openBlock(disableTracking = false) {
-  blockStack.push(currentBlock = disableTracking ? null : []);
+const tt = {}, z = (t) => Object.getPrototypeOf(t) === tt, nt = (t) => t.__isSuspense, j = Symbol.for("v-fgt"), et = Symbol.for("v-txt"), st = Symbol.for("v-cmt"), m = [];
+let a = null;
+function lt(t = !1) {
+  m.push(a = t ? null : []);
 }
-function closeBlock() {
-  blockStack.pop();
-  currentBlock = blockStack[blockStack.length - 1] || null;
+function ct() {
+  m.pop(), a = m[m.length - 1] || null;
 }
-function setupBlock(vnode) {
-  vnode.dynamicChildren = currentBlock || EMPTY_ARR;
-  closeBlock();
-  if (currentBlock) {
-    currentBlock.push(vnode);
-  }
-  return vnode;
+function ot(t) {
+  return t.dynamicChildren = a || P, ct(), a && a.push(t), t;
 }
-function createBlock(type, props, children, patchFlag, dynamicProps) {
-  return setupBlock(
-    createVNode(
-      type,
-      props,
-      children,
-      patchFlag,
-      dynamicProps,
-      true
+function it(t, n, e, l, s) {
+  return ot(
+    U(
+      t,
+      n,
+      e,
+      l,
+      s,
+      !0
     )
   );
 }
-function isVNode(value) {
-  return value ? value.__v_isVNode === true : false;
+function rt(t) {
+  return t ? t.__v_isVNode === !0 : !1;
 }
-const normalizeKey = ({ key }) => key != null ? key : null;
-const normalizeRef = ({
-  ref: ref3,
-  ref_key,
-  ref_for
-}) => {
-  if (typeof ref3 === "number") {
-    ref3 = "" + ref3;
-  }
-  return ref3 != null ? isString(ref3) || isRef(ref3) || isFunction(ref3) ? { i: currentRenderingInstance, r: ref3, k: ref_key, f: !!ref_for } : ref3 : null;
-};
-function createBaseVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, shapeFlag = type === Fragment ? 0 : 1, isBlockNode = false, needFullChildrenNormalization = false) {
-  const vnode = {
-    __v_isVNode: true,
-    __v_skip: true,
-    type,
-    props,
-    key: props && normalizeKey(props),
-    ref: props && normalizeRef(props),
-    scopeId: currentScopeId,
+const w = ({ key: t }) => t ?? null, _ = ({
+  ref: t,
+  ref_key: n,
+  ref_for: e
+}) => (typeof t == "number" && (t = "" + t), t != null ? u(t) || K(t) || g(t) ? { i: S, r: t, k: n, f: !!e } : t : null);
+function at(t, n = null, e = null, l = 0, s = null, c = t === j ? 0 : 1, i = !1, o = !1) {
+  const r = {
+    __v_isVNode: !0,
+    __v_skip: !0,
+    type: t,
+    props: n,
+    key: n && w(n),
+    ref: n && _(n),
+    scopeId: J,
     slotScopeIds: null,
-    children,
+    children: e,
     component: null,
     suspense: null,
     ssContent: null,
@@ -231,270 +167,188 @@ function createBaseVNode(type, props = null, children = null, patchFlag = 0, dyn
     targetStart: null,
     targetAnchor: null,
     staticCount: 0,
-    shapeFlag,
-    patchFlag,
-    dynamicProps,
+    shapeFlag: c,
+    patchFlag: l,
+    dynamicProps: s,
     dynamicChildren: null,
     appContext: null,
-    ctx: currentRenderingInstance
+    ctx: S
   };
-  if (needFullChildrenNormalization) {
-    normalizeChildren(vnode, children);
-    if (shapeFlag & 128) {
-      type.normalize(vnode);
-    }
-  } else if (children) {
-    vnode.shapeFlag |= isString(children) ? 8 : 16;
-  }
-  if (
-    // avoid a block node from tracking itself
-    !isBlockNode && // has current parent block
-    currentBlock && // presence of a patch flag indicates this node needs patching on updates.
-    // component nodes also should always be patched, because even if the
-    // component doesn't need to update, it needs to persist the instance on to
-    // the next vnode so that it can be properly unmounted later.
-    (vnode.patchFlag > 0 || shapeFlag & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
-    // vnode should not be considered dynamic due to handler caching.
-    vnode.patchFlag !== 32
-  ) {
-    currentBlock.push(vnode);
-  }
-  return vnode;
+  return o ? (O(r, e), c & 128 && t.normalize(r)) : e && (r.shapeFlag |= u(e) ? 8 : 16), // avoid a block node from tracking itself
+  !i && // has current parent block
+  a && // presence of a patch flag indicates this node needs patching on updates.
+  // component nodes also should always be patched, because even if the
+  // component doesn't need to update, it needs to persist the instance on to
+  // the next vnode so that it can be properly unmounted later.
+  (r.patchFlag > 0 || c & 6) && // the EVENTS flag is only for hydration and if it is the only flag, the
+  // vnode should not be considered dynamic due to handler caching.
+  r.patchFlag !== 32 && a.push(r), r;
 }
-const createVNode = _createVNode;
-function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
-  if (!type || type === NULL_DYNAMIC_COMPONENT) {
-    type = Comment;
-  }
-  if (isVNode(type)) {
-    const cloned = cloneVNode(
-      type,
-      props,
-      true
+const U = ut;
+function ut(t, n = null, e = null, l = 0, s = null, c = !1) {
+  if ((!t || t === $) && (t = st), rt(t)) {
+    const o = h(
+      t,
+      n,
+      !0
       /* mergeRef: true */
     );
-    if (children) {
-      normalizeChildren(cloned, children);
-    }
-    if (!isBlockNode && currentBlock) {
-      if (cloned.shapeFlag & 6) {
-        currentBlock[currentBlock.indexOf(type)] = cloned;
-      } else {
-        currentBlock.push(cloned);
-      }
-    }
-    cloned.patchFlag = -2;
-    return cloned;
+    return e && O(o, e), !c && a && (o.shapeFlag & 6 ? a[a.indexOf(t)] = o : a.push(o)), o.patchFlag = -2, o;
   }
-  if (isClassComponent(type)) {
-    type = type.__vccOpts;
+  if (pt(t) && (t = t.__vccOpts), n) {
+    n = ft(n);
+    let { class: o, style: r } = n;
+    o && !u(o) && (n.class = N(o)), p(r) && (k(r) && !f(r) && (r = F({}, r)), n.style = T(r));
   }
-  if (props) {
-    props = guardReactiveProps(props);
-    let { class: klass, style } = props;
-    if (klass && !isString(klass)) {
-      props.class = normalizeClass(klass);
-    }
-    if (isObject(style)) {
-      if (isProxy(style) && !isArray(style)) {
-        style = extend({}, style);
-      }
-      props.style = normalizeStyle(style);
-    }
-  }
-  const shapeFlag = isString(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject(type) ? 4 : isFunction(type) ? 2 : 0;
-  return createBaseVNode(
-    type,
-    props,
-    children,
-    patchFlag,
-    dynamicProps,
-    shapeFlag,
-    isBlockNode,
-    true
+  const i = u(t) ? 1 : nt(t) ? 128 : Q(t) ? 64 : p(t) ? 4 : g(t) ? 2 : 0;
+  return at(
+    t,
+    n,
+    e,
+    l,
+    s,
+    i,
+    c,
+    !0
   );
 }
-function guardReactiveProps(props) {
-  if (!props) return null;
-  return isProxy(props) || isInternalObject(props) ? extend({}, props) : props;
+function ft(t) {
+  return t ? k(t) || z(t) ? F({}, t) : t : null;
 }
-function cloneVNode(vnode, extraProps, mergeRef = false, cloneTransition = false) {
-  const { props, ref: ref3, patchFlag, children, transition } = vnode;
-  const mergedProps = extraProps ? mergeProps(props || {}, extraProps) : props;
-  const cloned = {
-    __v_isVNode: true,
-    __v_skip: true,
-    type: vnode.type,
-    props: mergedProps,
-    key: mergedProps && normalizeKey(mergedProps),
-    ref: extraProps && extraProps.ref ? (
+function h(t, n, e = !1, l = !1) {
+  const { props: s, ref: c, patchFlag: i, children: o, transition: r } = t, b = n ? mt(s || {}, n) : s, y = {
+    __v_isVNode: !0,
+    __v_skip: !0,
+    type: t.type,
+    props: b,
+    key: b && w(b),
+    ref: n && n.ref ? (
       // #2078 in the case of <component :is="vnode" ref="extra"/>
       // if the vnode itself already has a ref, cloneVNode will need to merge
       // the refs so the single vnode can be set on multiple refs
-      mergeRef && ref3 ? isArray(ref3) ? ref3.concat(normalizeRef(extraProps)) : [ref3, normalizeRef(extraProps)] : normalizeRef(extraProps)
-    ) : ref3,
-    scopeId: vnode.scopeId,
-    slotScopeIds: vnode.slotScopeIds,
-    children,
-    target: vnode.target,
-    targetStart: vnode.targetStart,
-    targetAnchor: vnode.targetAnchor,
-    staticCount: vnode.staticCount,
-    shapeFlag: vnode.shapeFlag,
+      e && c ? f(c) ? c.concat(_(n)) : [c, _(n)] : _(n)
+    ) : c,
+    scopeId: t.scopeId,
+    slotScopeIds: t.slotScopeIds,
+    children: o,
+    target: t.target,
+    targetStart: t.targetStart,
+    targetAnchor: t.targetAnchor,
+    staticCount: t.staticCount,
+    shapeFlag: t.shapeFlag,
     // if the vnode is cloned with extra props, we can no longer assume its
     // existing patch flag to be reliable and need to add the FULL_PROPS flag.
     // note: preserve flag for fragments since they use the flag for children
     // fast paths only.
-    patchFlag: extraProps && vnode.type !== Fragment ? patchFlag === -1 ? 16 : patchFlag | 16 : patchFlag,
-    dynamicProps: vnode.dynamicProps,
-    dynamicChildren: vnode.dynamicChildren,
-    appContext: vnode.appContext,
-    dirs: vnode.dirs,
-    transition,
+    patchFlag: n && t.type !== j ? i === -1 ? 16 : i | 16 : i,
+    dynamicProps: t.dynamicProps,
+    dynamicChildren: t.dynamicChildren,
+    appContext: t.appContext,
+    dirs: t.dirs,
+    transition: r,
     // These should technically only be non-null on mounted VNodes. However,
     // they *should* be copied for kept-alive vnodes. So we just always copy
     // them since them being non-null during a mount doesn't affect the logic as
     // they will simply be overwritten.
-    component: vnode.component,
-    suspense: vnode.suspense,
-    ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
-    ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
-    placeholder: vnode.placeholder,
-    el: vnode.el,
-    anchor: vnode.anchor,
-    ctx: vnode.ctx,
-    ce: vnode.ce
+    component: t.component,
+    suspense: t.suspense,
+    ssContent: t.ssContent && h(t.ssContent),
+    ssFallback: t.ssFallback && h(t.ssFallback),
+    placeholder: t.placeholder,
+    el: t.el,
+    anchor: t.anchor,
+    ctx: t.ctx,
+    ce: t.ce
   };
-  if (transition && cloneTransition) {
-    setTransitionHooks(
-      cloned,
-      transition.clone(cloned)
-    );
-  }
-  return cloned;
+  return r && l && x(
+    y,
+    r.clone(y)
+  ), y;
 }
-function createTextVNode(text = " ", flag = 0) {
-  return createVNode(Text, null, text, flag);
+function gt(t = " ", n = 0) {
+  return U(et, null, t, n);
 }
-function normalizeChildren(vnode, children) {
-  let type = 0;
-  const { shapeFlag } = vnode;
-  if (children == null) {
-    children = null;
-  } else if (isArray(children)) {
-    type = 16;
-  } else if (typeof children === "object") {
-    if (shapeFlag & (1 | 64)) {
-      const slot = children.default;
-      if (slot) {
-        slot._c && (slot._d = false);
-        normalizeChildren(vnode, slot());
-        slot._c && (slot._d = true);
-      }
+function O(t, n) {
+  let e = 0;
+  const { shapeFlag: l } = t;
+  if (n == null)
+    n = null;
+  else if (f(n))
+    e = 16;
+  else if (typeof n == "object")
+    if (l & 65) {
+      const s = n.default;
+      s && (s._c && (s._d = !1), O(t, s()), s._c && (s._d = !0));
       return;
-    } else {
-      type = 32;
-      const slotFlag = children._;
-      if (!slotFlag && !isInternalObject(children)) {
-        children._ctx = currentRenderingInstance;
-      }
-    }
-  } else if (isFunction(children)) {
-    children = { default: children, _ctx: currentRenderingInstance };
-    type = 32;
-  } else {
-    children = String(children);
-    if (shapeFlag & 64) {
-      type = 16;
-      children = [createTextVNode(children)];
-    } else {
-      type = 8;
-    }
-  }
-  vnode.children = children;
-  vnode.shapeFlag |= type;
+    } else
+      e = 32, !n._ && !z(n) && (n._ctx = S);
+  else g(n) ? (n = { default: n, _ctx: S }, e = 32) : (n = String(n), l & 64 ? (e = 16, n = [gt(n)]) : e = 8);
+  t.children = n, t.shapeFlag |= e;
 }
-function mergeProps(...args) {
-  const ret = {};
-  for (let i = 0; i < args.length; i++) {
-    const toMerge = args[i];
-    for (const key in toMerge) {
-      if (key === "class") {
-        if (ret.class !== toMerge.class) {
-          ret.class = normalizeClass([ret.class, toMerge.class]);
-        }
-      } else if (key === "style") {
-        ret.style = normalizeStyle([ret.style, toMerge.style]);
-      } else if (isOn(key)) {
-        const existing = ret[key];
-        const incoming = toMerge[key];
-        if (incoming && existing !== incoming && !(isArray(existing) && existing.includes(incoming))) {
-          ret[key] = existing ? [].concat(existing, incoming) : incoming;
-        }
-      } else if (key !== "") {
-        ret[key] = toMerge[key];
-      }
-    }
+function mt(...t) {
+  const n = {};
+  for (let e = 0; e < t.length; e++) {
+    const l = t[e];
+    for (const s in l)
+      if (s === "class")
+        n.class !== l.class && (n.class = N([n.class, l.class]));
+      else if (s === "style")
+        n.style = T([n.style, l.style]);
+      else if (B(s)) {
+        const c = n[s], i = l[s];
+        i && c !== i && !(f(c) && c.includes(i)) && (n[s] = c ? [].concat(c, i) : i);
+      } else s !== "" && (n[s] = l[s]);
   }
-  return ret;
+  return n;
 }
-let currentInstance = null;
+let M = null;
 {
-  const g = getGlobalThis();
-  const registerGlobalSetter = (key, setter) => {
-    let setters;
-    if (!(setters = g[key])) setters = g[key] = [];
-    setters.push(setter);
-    return (v) => {
-      if (setters.length > 1) setters.forEach((set) => set(v));
-      else setters[0](v);
+  const t = R(), n = (e, l) => {
+    let s;
+    return (s = t[e]) || (s = t[e] = []), s.push(l), (c) => {
+      s.length > 1 ? s.forEach((i) => i(c)) : s[0](c);
     };
   };
-  registerGlobalSetter(
-    `__VUE_INSTANCE_SETTERS__`,
-    (v) => currentInstance = v
+  n(
+    "__VUE_INSTANCE_SETTERS__",
+    (e) => M = e
+  ), n(
+    "__VUE_SSR_SETTERS__",
+    (e) => e
   );
-  registerGlobalSetter(
-    `__VUE_SSR_SETTERS__`,
-    (v) => v
-  );
 }
-function getComponentName(Component, includeInferred = true) {
-  return isFunction(Component) ? Component.displayName || Component.name : Component.name || includeInferred && Component.__name;
+function _t(t, n = !0) {
+  return g(t) ? t.displayName || t.name : t.name || n && t.__name;
 }
-function isClassComponent(value) {
-  return isFunction(value) && "__vccOpts" in value;
+function pt(t) {
+  return g(t) && "__vccOpts" in t;
 }
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const Ct = /* @__PURE__ */ W({
   __name: "Settings",
   props: {
     config: {}
   },
-  setup(__props) {
-    return (_ctx, _cache) => {
-      const _component_VaInput = resolveComponent("VaInput");
-      return openBlock(), createBlock(_component_VaInput, {
-        modelValue: __props.config.url,
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.url = $event),
+  setup(t) {
+    return (n, e) => {
+      const l = Z("VaInput");
+      return lt(), it(l, {
+        modelValue: t.config.url,
+        "onUpdate:modelValue": e[0] || (e[0] = (s) => t.config.url = s),
         label: "URL"
       }, null, 8, ["modelValue"]);
     };
   }
-});
-const RssConnectionIdentifier = Symbol.for("RssConnectionFactory");
-const settingsSymbol = Symbol.for("RssConnectionSettings");
-function activate({ services }) {
-  services.register("RssConnectionSettings", _sfc_main);
-  services.getRequired(CONNECTION_REPOSITORY).registerConnectionType("rss", {
-    Connection: RssConnectionIdentifier,
-    Settings: settingsSymbol
+}), St = Symbol.for("RssConnectionFactory"), bt = Symbol.for("RssConnectionSettings");
+function ht({ services: t }) {
+  t.register("RssConnectionSettings", Ct), t.getRequired(E).registerConnectionType("rss", {
+    Connection: St,
+    Settings: bt
   });
 }
-function deactivate({ services }) {
-  services.getRequired(CONNECTION_REPOSITORY).unregisterConnectionType("rss");
-  services.unregister("RssConnectionSettings");
+function Ft({ services: t }) {
+  t.getRequired(E).unregisterConnectionType("rss"), t.unregister("RssConnectionSettings");
 }
 export {
-  activate,
-  deactivate
+  ht as activate,
+  Ft as deactivate
 };

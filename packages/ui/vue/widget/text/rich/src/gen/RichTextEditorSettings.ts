@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -23,15 +26,14 @@ Contributors: Smart City Jena
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
+import {VariableWrapper} from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings'})
 export class RichTextEditorSettings {
 
   @Documentation("An identifier or type string indicating which rich text editor should be used (e.g., 'TinyMCE', 'Quill', 'ProseMirror' etc.).")
   @Attribute() editor?: string;
-
-  @Attribute() fontSize: VariableWrapper<string> = new VariableWrapper<string>('16');
-  @Attribute() fontColor: VariableWrapper<string> = new VariableWrapper<string>('#000000');
+  @Reference('VariableWrapper') fontSize: VariableWrapper<string> = new VariableWrapper<string>();
+  @Reference('VariableWrapper') fontColor: VariableWrapper<string> = new VariableWrapper<string>();
 }

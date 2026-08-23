@@ -1,15 +1,16 @@
-/*********************************************************************
- * Copyright (c) 2025 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *   Smart City Jena
- **********************************************************************/
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
+/*
+Copyright (c) 2023 Contributors to the  Eclipse Foundation.
+This program and the accompanying materials are made
+available under the terms of the Eclipse Public License 2.0
+which is available at https://www.eclipse.org/legal/epl-2.0/
+SPDX-License-Identifier: EPL-2.0
+
+Contributors: Smart City Jena
+
+*/
 
 /*
 * This is generated code! Please note, that on code generation, these line are erased and generated again.
@@ -25,11 +26,12 @@
 * Default values are set. The '_type' parameter is generated for the
 * Serialization to a backend.
 */
-import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 import {Payload} from 'org.eclipse.daanse.board.app.lib.events'
+import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse.daanse.board.app.lib.annotations'
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageClickPayload'})
 export class ImageClickPayload extends Payload {
+
   @Documentation("URL or ID of the clicked image.")
-  @Attribute() imageUrl: string = '';
+  @Attribute() imageUrl?: string;
 }

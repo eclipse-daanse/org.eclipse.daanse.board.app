@@ -1,218 +1,152 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
-import { BaseRepository } from "org.eclipse.daanse.board.app.lib.repository.persistence";
-import { VALIDITY_CHECK } from "org.eclipse.daanse.board.app.lib.persistence.util";
-import { inject, injectable } from "@eclipse-daanse/tsm";
-const { parse: $parse } = JSON;
-const { keys } = Object;
-const Primitive = String;
-const primitive = "string";
-const ignore = {};
-const object = "object";
-const noop = (_, value) => value;
-const primitives = (value) => value instanceof Primitive ? Primitive(value) : value;
-const Primitives = (_, value) => typeof value === primitive ? new Primitive(value) : value;
-const resolver = (input, lazy, parsed, $) => (output) => {
-  for (let ke = keys(output), { length } = ke, y = 0; y < length; y++) {
-    const k = ke[y];
-    const value = output[k];
-    if (value instanceof Primitive) {
-      const tmp = input[+value];
-      if (typeof tmp === object && !parsed.has(tmp)) {
-        parsed.add(tmp);
-        output[k] = ignore;
-        lazy.push({ o: output, k, r: tmp });
-      } else
-        output[k] = $.call(output, k, tmp);
-    } else if (output[k] !== ignore)
-      output[k] = $.call(output, k, value);
+import { REPOSITORY_REGISTRY as S } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { BaseRepository as I } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+import { VALIDITY_CHECK as _ } from "org.eclipse.daanse.board.app.lib.persistence.util";
+import { inject as b, injectable as O } from "@eclipse-daanse/tsm";
+const { serviceId: R } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), { parse: k } = JSON, { keys: E } = Object, y = String, U = "string", h = {}, g = "object", w = (e, t) => t, B = (e) => e instanceof y ? y(e) : e, C = (e, t) => typeof t === U ? new y(t) : t, A = (e, t, i, n) => (r) => {
+  for (let s = E(r), { length: a } = s, l = 0; l < a; l++) {
+    const o = s[l], m = r[o];
+    if (m instanceof y) {
+      const c = e[+m];
+      typeof c === g && !i.has(c) ? (i.add(c), r[o] = h, t.push({ o: r, k: o, r: c })) : r[o] = n.call(r, o, c);
+    } else r[o] !== h && (r[o] = n.call(r, o, m));
   }
-  return output;
-};
-const parse = (text, reviver) => {
-  const input = $parse(text, Primitives).map(primitives);
-  const $ = noop;
-  let value = input[0];
-  if (typeof value === object && value) {
-    const lazy = [];
-    const revive = resolver(input, lazy, /* @__PURE__ */ new Set(), $);
-    value = revive(value);
-    let i = 0;
-    while (i < lazy.length) {
-      const { o, k, r } = lazy[i++];
-      o[k] = $.call(o, k, revive(r));
+  return r;
+}, u = (e, t) => {
+  const i = k(e, C).map(B), n = w;
+  let r = i[0];
+  if (typeof r === g && r) {
+    const s = [], a = A(i, s, /* @__PURE__ */ new Set(), n);
+    r = a(r);
+    let l = 0;
+    for (; l < s.length; ) {
+      const { o, k: m, r: c } = s[l++];
+      o[m] = n.call(o, m, a(c));
     }
   }
-  return $.call({ "": value }, "", value);
+  return n.call({ "": r }, "", r);
 };
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+var L = Object.defineProperty, T = Object.getOwnPropertyDescriptor, j = (e, t, i, n) => {
+  for (var r = n > 1 ? void 0 : n ? T(t, i) : t, s = e.length - 1, a; s >= 0; s--)
+    (a = e[s]) && (r = (n ? a(t, i, r) : a(r)) || r);
+  return n && r && L(t, i, r), r;
 };
-let LocalRepositoryImpl = class extends BaseRepository {
-  init(url, name) {
-    super.init(url, name);
+let p = class extends I {
+  init(e, t) {
+    super.init(e, t);
   }
   sync() {
     return Promise.resolve([]);
   }
   async findAll() {
-    let ret = [];
-    Object.keys(localStorage).forEach((e, key) => {
+    let e = [];
+    return Object.keys(localStorage).forEach((t, i) => {
       try {
-        let content = JSON.parse(localStorage.getItem(e) ?? "");
-        if (Array.isArray(content)) {
-          content = parse(localStorage.getItem(e) ?? "");
-        }
-        if (this.ValidityCheck.checkContent(content)) {
-          let copyBaseUri = new URL(this.uri ?? "");
-          copyBaseUri.pathname = e + ".json";
-          ret.push({
-            name: e,
-            uri: copyBaseUri,
-            data: content
+        let n = JSON.parse(localStorage.getItem(t) ?? "");
+        if (Array.isArray(n) && (n = u(localStorage.getItem(t) ?? "")), this.ValidityCheck.checkContent(n)) {
+          let r = new URL(this.uri ?? "");
+          r.pathname = t + ".json", e.push({
+            name: t,
+            uri: r,
+            data: n
           });
         }
-      } catch (e2) {
-        console.log(e2);
+      } catch (n) {
+        console.log(n);
       }
-    });
-    return Promise.resolve(ret);
+    }), Promise.resolve(e);
   }
   test() {
     this.ValidityCheck.checkContent({});
   }
-  findByFragment(_pathname) {
-    let pathname = _pathname.charAt(0) == "/" ? _pathname.slice(1) : _pathname;
-    let ret = [];
-    if (Object.keys(localStorage).includes(pathname)) {
-      let content = JSON.parse(localStorage.getItem(pathname) ?? "");
-      if (Array.isArray(content)) {
-        content = parse(localStorage.getItem(pathname) ?? "");
-      }
-      if (this.ValidityCheck.checkContent(content)) {
-        let copyBaseUri = new URL(this.uri ?? "");
-        copyBaseUri.pathname = pathname + ".json";
-        ret.push({
-          name: pathname,
-          uri: copyBaseUri,
-          data: localStorage.getItem(pathname)
+  findByFragment(e) {
+    let t = e.charAt(0) == "/" ? e.slice(1) : e, i = [];
+    if (Object.keys(localStorage).includes(t)) {
+      let n = JSON.parse(localStorage.getItem(t) ?? "");
+      if (Array.isArray(n) && (n = u(localStorage.getItem(t) ?? "")), this.ValidityCheck.checkContent(n)) {
+        let r = new URL(this.uri ?? "");
+        r.pathname = t + ".json", i.push({
+          name: t,
+          uri: r,
+          data: localStorage.getItem(t)
         });
       }
     }
-    return Promise.resolve(ret);
+    return Promise.resolve(i);
   }
-  findByName(name) {
-    return this.findByFragment(name);
+  findByName(e) {
+    return this.findByFragment(e);
   }
-  findByUri(uri) {
-    let path = uri.pathname.replace(".json", "");
-    return this.findByFragment(path);
+  findByUri(e) {
+    let t = e.pathname.replace(".json", "");
+    return this.findByFragment(t);
   }
-  async getEntityByUri(uri) {
-    if (uri.protocol != this.uri?.protocol || uri.hostname != this.uri?.hostname) {
+  async getEntityByUri(e) {
+    if (e.protocol != this.uri?.protocol || e.hostname != this.uri?.hostname)
       return Promise.resolve(null);
-    }
-    let path = uri.pathname.replace(".json", "");
-    let entity = await this.findByFragment(path);
-    return Promise.resolve(entity[0]);
+    let t = e.pathname.replace(".json", ""), i = await this.findByFragment(t);
+    return Promise.resolve(i[0]);
   }
   create(e) {
-    if (this.checkURI(e)) {
+    if (this.checkURI(e))
       return Promise.reject("Entity Uri not set or not in Repo");
-    }
-    const name = e.uri.pathname.replace(".json", "").replace("/", "");
-    if (Object.keys(localStorage).includes(name)) {
-      return Promise.reject("Entity allready exists! use update!");
-    }
-    if (e.name == void 0 || e.name == "") {
-      return Promise.reject("name not set in entity");
-    }
-    if (!e.uri.pathname.includes(".json")) {
-      return Promise.reject("name not contains a .json file type");
-    }
-    localStorage.setItem(name, e.data);
-    return Promise.resolve(true);
+    const t = e.uri.pathname.replace(".json", "").replace("/", "");
+    return Object.keys(localStorage).includes(t) ? Promise.reject("Entity allready exists! use update!") : e.name == null || e.name == "" ? Promise.reject("name not set in entity") : e.uri.pathname.includes(".json") ? (localStorage.setItem(t, e.data), Promise.resolve(!0)) : Promise.reject("name not contains a .json file type");
   }
   delete(e) {
-    if (this.checkURI(e)) {
+    if (this.checkURI(e))
       return Promise.reject("Entity Uri not set or in Repo");
-    }
-    if (e.name == void 0 || e.name == "") {
+    if (e.name == null || e.name == "")
       return Promise.reject("name not set in entity");
-    }
-    if (!e.uri.pathname.includes(".json")) {
+    if (!e.uri.pathname.includes(".json"))
       return Promise.reject("name not contains a .json file type");
-    }
-    const name = e.uri.pathname.replace(".json", "").replace("/", "");
-    localStorage.removeItem(name);
-    return Promise.resolve(true);
+    const t = e.uri.pathname.replace(".json", "").replace("/", "");
+    return localStorage.removeItem(t), Promise.resolve(!0);
   }
   update(e) {
-    if (this.checkURI(e)) {
+    if (this.checkURI(e))
       return Promise.reject("Entity Uri not set or in Repo");
-    }
-    if (e.name == void 0 || e.name == "") {
+    if (e.name == null || e.name == "")
       return Promise.reject("name not set in entity");
-    }
-    if (!e.uri.pathname.includes(".json")) {
+    if (!e.uri.pathname.includes(".json"))
       return Promise.reject("name not contains a .json file type");
-    }
-    const name = e.uri.pathname.replace(".json", "").replace("/", "");
-    if (!Object.keys(localStorage).includes(name)) {
-      return Promise.reject("Entity not exists! use create!");
-    }
-    localStorage.setItem(name, e.data);
-    return Promise.resolve(true);
+    const t = e.uri.pathname.replace(".json", "").replace("/", "");
+    return Object.keys(localStorage).includes(t) ? (localStorage.setItem(t, e.data), Promise.resolve(!0)) : Promise.reject("Entity not exists! use create!");
   }
   checkURI(e) {
     return !e.uri || e.uri.protocol != this.uri?.protocol || e.uri.hostname != this.uri?.hostname;
   }
 };
-LocalRepositoryImpl.type = "localRepositories";
-__decorateClass([
-  inject(VALIDITY_CHECK, { optional: true })
-], LocalRepositoryImpl.prototype, "ValidityCheck", 2);
-LocalRepositoryImpl = __decorateClass([
-  injectable()
-], LocalRepositoryImpl);
-const LOCAL_REPOSITORY = serviceId("LocalRepository");
-const identifier = Symbol.for(LOCAL_REPOSITORY);
-function activate$1({ services }) {
-  services.register(LOCAL_REPOSITORY, services.construct(LocalRepositoryImpl));
-  const repoRegistry = services.getRequired(REPOSITORY_REGISTRY);
-  repoRegistry.registerRepoType(LocalRepositoryImpl.type, identifier);
+p.type = "localRepositories";
+j([
+  b(_, { optional: !0 })
+], p.prototype, "ValidityCheck", 2);
+p = j([
+  O()
+], p);
+const f = R("LocalRepository"), V = Symbol.for(f);
+function v({ services: e }) {
+  e.register(f, e.construct(p)), e.getRequired(S).registerRepoType(p.type, V);
 }
-function deactivate$1({ services }) {
-  services.unregister(LOCAL_REPOSITORY);
+function P({ services: e }) {
+  e.unregister(f);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const x = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  LOCAL_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.persistence.local";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.persistence.local");
-  await activate$1?.(context);
+  LOCAL_REPOSITORY: f,
+  activate: v,
+  deactivate: P
+}, Symbol.toStringTag, { value: "Module" })), d = "org.eclipse.daanse.board.app.lib.persistence.local", N = "0.0.1-next.1";
+async function z(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${d}: tsm runtime is not initialized`);
+  t.register(d, x, N, "lib.persistence.local"), await v?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function J(e) {
+  await P?.(e);
 }
 export {
-  LOCAL_REPOSITORY,
-  activate,
-  deactivate
+  f as LOCAL_REPOSITORY,
+  z as activate,
+  J as deactivate
 };

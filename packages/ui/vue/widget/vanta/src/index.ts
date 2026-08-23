@@ -19,6 +19,7 @@ import VantaWidgetSettings from './VantaWidgetSettings.vue'
 import { VantaWidgetEvents } from './events/VantaWidgetEvents'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 const WIDGET_TYPE = 'VantaWidget'
 
@@ -32,8 +33,8 @@ const WIDGET_TYPE = 'VantaWidget'
 })
 export class VantaWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = VantaWidget
-  readonly settingsComponent = VantaWidgetSettings
+  readonly component: Component = VantaWidget
+  readonly settingsComponent: Component = VantaWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Vanta'

@@ -1,14 +1,11 @@
-(function(){var i="ui.vue.eventmanager",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.event-manager-ui[data-v-ac8c7c5c] {\n  padding: 1.5rem;\n  margin-left: 75px;\n  width: 100%;\n  min-height: 100vh;\n  background: var(--color-backgroundPrimary, #f6f6f6);\n}\n.header-section[data-v-ac8c7c5c] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 1.5rem;\n}\n.page-title[data-v-ac8c7c5c] {\n  font-size: 1.75rem;\n  font-weight: 600;\n  color: #262824;\n  margin: 0;\n}\n.ice[data-v-ac8c7c5c] {\n  background: rgb(247 243 243 / 85%);\n  border-radius: 16px;\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n}\n.space-y-4[data-v-ac8c7c5c] > * + * {\n  margin-top: 1rem;\n}\n.space-y-2[data-v-ac8c7c5c] > * + * {\n  margin-top: 0.5rem;\n}\n.space-y-3[data-v-ac8c7c5c] > * + * {\n  margin-top: 0.75rem;\n}\n.card-section[data-v-ac8c7c5c] {\n  background: rgba(255, 255, 255, 0.6);\n  border-radius: 12px;\n  backdrop-filter: blur(5px);\n  -webkit-backdrop-filter: blur(5px);\n  border: 1px solid rgba(213, 213, 213, 0.3);\n}\n[data-v-ac8c7c5c] .card-section.va-card {\n  box-shadow: none !important;\n}\n[data-v-ac8c7c5c] .card-section .va-card__inner {\n  box-shadow: none !important;\n}\n.section-title[data-v-ac8c7c5c] {\n  font-size: 1rem;\n  font-weight: 500;\n  color: #262824;\n}\n.condition-row[data-v-ac8c7c5c] {\n  display: flex;\n  gap: 0.5rem;\n  align-items: center;\n}\n.parameter-wrapper[data-v-ac8c7c5c] {\n  padding: 1rem;\n  background: rgba(255, 255, 255, 0.8);\n  border-radius: 8px;\n  border: 1px solid rgba(213, 213, 213, 0.4);\n  backdrop-filter: blur(5px);\n  -webkit-backdrop-filter: blur(5px);\n}\n.parameter-header[data-v-ac8c7c5c] {\n  margin-bottom: 0.75rem;\n}\n.parameter-info[data-v-ac8c7c5c] {\n  font-family: 'Monaco', 'Courier New', monospace;\n  font-size: 0.9rem;\n}\n.parameter-name[data-v-ac8c7c5c] {\n  /*font-weight: 600;\n  color: #cc9100;*/\n}\n.parameter-optional[data-v-ac8c7c5c] {\n  color: #666;\n}\n.parameter-separator[data-v-ac8c7c5c] {\n  margin: 0 0.25rem;\n  color: #666;\n}\n.parameter-type[data-v-ac8c7c5c] {\n  color: #008080;\n  font-weight: 500;\n}\n\n/* Modal overlay styling to match feature_menustrckt */\n[data-v-ac8c7c5c] .va-modal__overlay {\n  opacity: 1 !important;\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n  background: rgb(204 204 204 / 55%) !important;\n}\n[data-v-ac8c7c5c] .va-modal {\n  z-index: 3000000 !important;\n}\n[data-v-ac8c7c5c] .va-modal__inner {\n  background: rgb(247 243 243 / 85%) !important;\n  border-radius: 16px;\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n}\n[data-v-ac8c7c5c] .va-modal__dialog {\n  background: transparent !important;\n}\n[data-v-ac8c7c5c] .va-modal__container {\n  background: transparent !important;\n}\n\n/* Table header styling */\n.table-header[data-v-ac8c7c5c] {\n  display: flex;\n  width: 100%;\n  padding: 1rem;\n  border-bottom: 1px solid rgba(213, 213, 213, 0.4);\n  background: rgba(255, 255, 255, 0.4);\n  font-weight: 500;\n  font-size: 0.875rem;\n  color: #262824;\n}\n.header-cell[data-v-ac8c7c5c] {\n  padding: 0 0.5rem;\n  text-align: left;\n}\n.table-content[data-v-ac8c7c5c] {\n  background: white;\n}\n[data-v-ac8c7c5c] .table-content .va-data-table {\n  background: transparent;\n}\n[data-v-ac8c7c5c] .table-content .va-data-table__table {\n  background: white;\n}\n\n/* Event Mapping Grid Layout */\n.event-mapping-grid[data-v-ac8c7c5c] {\n  display: grid;\n  grid-template-columns: 200px 120px 150px 120px 180px 150px 80px;\n}\n\n/* VaDataTable header styling */\n[data-v-ac8c7c5c] .va-data-table__table-thead {\n  background: #f9fafb;\n  font-size: 0.75rem;\n  font-weight: 500;\n  color: #6b7280;\n  text-transform: uppercase;\n  letter-spacing: 0.05em;\n}\n\n/* Table wrapper - constrain height */\n.table-wrapper[data-v-ac8c7c5c] {\n  height: calc(100vh - 130px);\n  background: #fff;\n}\n\n/* Actions list in table */\n.actions-list[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n.action-item[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  gap: 0.25rem;\n  font-size: 0.875rem;\n}\n.mapping-id[data-v-ac8c7c5c] {\n  font-size: 0.8rem;\n  color: #374151;\n  font-family: 'Monaco', 'Courier New', monospace;\n  max-width: 220px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  display: inline-block;\n}\n.uid-badge[data-v-ac8c7c5c] {\n  display: inline-block;\n  font-size: 0.75rem;\n  font-family: 'Monaco', 'Courier New', monospace;\n  color: #1e40af;\n  background-color: #dbeafe;\n  padding: 0.1rem 0.4rem;\n  border-radius: 0.25rem;\n  max-width: 180px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  vertical-align: middle;\n  margin-left: 0.25rem;\n}\n.action-context[data-v-ac8c7c5c] {\n  color: #6b7280;\n  font-size: 0.8rem;\n}\n.action-separator[data-v-ac8c7c5c] {\n  color: #9ca3af;\n}\n.action-name[data-v-ac8c7c5c] {\n  /*font-weight: 500;\n  color: #cc9100;*/\n}\n\n/* Action tabs styling */\n.actions-tabs[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n}\n.action-tabs-header[data-v-ac8c7c5c] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.5rem;\n  padding-bottom: 0.75rem;\n  border-bottom: 1px solid rgba(213, 213, 213, 0.4);\n}\n.action-tab[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  padding: 0.5rem 0.75rem;\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px solid rgba(213, 213, 213, 0.4);\n  border-radius: 8px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  font-size: 0.875rem;\n}\n.action-tab[data-v-ac8c7c5c]:hover {\n  background: rgba(255, 255, 255, 0.9);\n  border-color: rgba(205, 145, 0, 0.3);\n}\n.action-tab.active[data-v-ac8c7c5c] {\n  background: rgba(0, 102, 204, 0.1);\n  border-color: #cc9100;\n  color: #cc9100;\n}\n.action-tab-label[data-v-ac8c7c5c] {\n  max-width: 150px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.action-tab-remove[data-v-ac8c7c5c] {\n  margin-left: 0.25rem;\n}\n.action-editor[data-v-ac8c7c5c] {\n  padding: 1rem;\n  background: rgba(255, 255, 255, 0.4);\n  border-radius: 8px;\n  border: 1px solid rgba(213, 213, 213, 0.3);\n}\n\n/* New compact layout styles */\n.event-source-grid[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n}\n\n/* Action cards list */\n.actions-list-editor[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n}\n.action-card[data-v-ac8c7c5c] {\n  /* border: 1px solid rgba(213, 213, 213, 0.4);*/\n  border-radius: 8px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  box-shadow: 1px 1px 5px #cccccc69;\n}\n.action-card[data-v-ac8c7c5c]:hover {\n  border-color: rgba(149, 149, 149, 0.3);\n}\n.action-card.active[data-v-ac8c7c5c] {\n  border-color: rgba(149, 149, 149, 0.3);\n}\n.action-card-header[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  gap: 0.75rem;\n  padding: 0.75rem 1rem;\n}\n.action-number[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 24px;\n  height: 24px;\n  /* background: #cc9100; */\n  border-radius: 50%;\n  font-size: 0.75rem;\n  font-weight: 600;\n  flex-shrink: 0;\n  border: 1px solid #cc9100;\n  color: #cc9100;\n}\n.action-summary[data-v-ac8c7c5c] {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  min-width: 0;\n}\n.action-context-badge[data-v-ac8c7c5c] {\n  padding: 0.125rem 0.5rem;\n  background: #e5e7eb;\n  color: #4b5563;\n  border-radius: 4px;\n  font-size: 0.7rem;\n  font-weight: 500;\n  text-transform: uppercase;\n  flex-shrink: 0;\n}\n.action-name-text[data-v-ac8c7c5c] {\n  font-weight: 500;\n  /*color: #cc9100;*/\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.action-empty[data-v-ac8c7c5c] {\n  color: #9ca3af;\n  font-style: italic;\n}\n.action-card-body[data-v-ac8c7c5c] {\n  padding: 0 1rem 1rem 1rem;\n  border-top: 1px solid rgba(213, 213, 213, 0.3);\n  margin-top: 0;\n}\n.action-settings-row[data-v-ac8c7c5c] {\n  display: grid;\n  grid-template-columns: 1fr 1fr 2fr;\n  gap: 0.75rem;\n  padding-top: 0.75rem;\n}\n.context-select[data-v-ac8c7c5c] {\n  min-width: 100px;\n}\n.target-select[data-v-ac8c7c5c] {\n  min-width: 120px;\n}\n.action-select[data-v-ac8c7c5c] {\n  min-width: 180px;\n}\n\n/* Inline parameters */\n.action-parameters[data-v-ac8c7c5c] {\n  margin-top: 1rem;\n  padding-top: 0.75rem;\n  border-top: 1px dashed rgba(213, 213, 213, 0.5);\n}\n.parameters-title[data-v-ac8c7c5c] {\n  font-size: 0.75rem;\n  font-weight: 600;\n  color: #6b7280;\n  text-transform: uppercase;\n  letter-spacing: 0.05em;\n  margin-bottom: 0.5rem;\n}\n.parameters-list[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n}\n.parameter-item[data-v-ac8c7c5c] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  /*background: rgba(248, 250, 252, 0.8);\n  border-radius: 6px;\n  border: 1px solid rgba(213, 213, 213, 0.3);*/\n}\n.parameter-label[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  gap: 0.25rem;\n  font-size: 0.8rem;\n}\n.parameter-label .parameter-name[data-v-ac8c7c5c] {\n  font-weight: 600;\n  /*color: #cc9100;*/\n}\n.parameter-label .parameter-optional[data-v-ac8c7c5c] {\n  color: #9ca3af;\n}\n.parameter-type-badge[data-v-ac8c7c5c] {\n  margin-left: 0.25rem;\n  padding: 0.0625rem 0.375rem;\n  /* background: #dbeafe; */\n  /* color: #cc9100; */\n  border-radius: 3px;\n  font-size: 0.65rem;\n  font-weight: 500;\n  /* border-color: #d9d9d9; */\n  border: 1px solid #ddd;\n}\n.parameter-input-row[data-v-ac8c7c5c] {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.source-toggle[data-v-ac8c7c5c] {\n  display: flex;\n  border: 1px solid rgba(213, 213, 213, 0.5);\n  border-radius: 4px;\n  overflow: hidden;\n  flex-shrink: 0;\n}\n.toggle-btn[data-v-ac8c7c5c] {\n  padding: 0.25rem 0.5rem;\n  font-size: 0.7rem;\n  background: white;\n  border: none;\n  cursor: pointer;\n  transition: all 0.15s ease;\n  color: #6b7280;\n}\n.toggle-btn[data-v-ac8c7c5c]:first-child {\n  border-right: 1px solid rgba(213, 213, 213, 0.5);\n}\n.toggle-btn[data-v-ac8c7c5c]:hover {\n  background: #f3f4f6;\n}\n.toggle-btn.active[data-v-ac8c7c5c] {\n  background: #6767676e;\n  color: white;\n}\n.parameter-value-input[data-v-ac8c7c5c] {\n  flex: 1;\n  min-width: 150px;\n}\n";})();
-import { defineComponent, ref, computed, inject, onMounted, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, withCtx, createTextVNode, toDisplayString, Fragment, renderList, createCommentVNode, createBlock, normalizeClass, withModifiers } from "vue";
-import { EVENT_MANAGER, EVENT_REGISTRY, EVENT_ACTIONS_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.events";
-import { Comperator, Condition } from "org.eclipse.daanse.board.app.lib.events";
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.page";
-import { NAVIGATION_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.navigation";
-import { NavigationItem } from "org.eclipse.daanse.board.app.lib.repository.navigation";
-import { ROUTE_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.route";
-import { RouteDefinition } from "org.eclipse.daanse.board.app.lib.repository.route";
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-var _Reflect = {};
+(function(){var i="ui.vue.eventmanager",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".event-manager-ui[data-v-ee120456]{padding:1.5rem;margin-left:75px;width:100%;min-height:100vh;background:var(--color-backgroundPrimary, #f6f6f6)}.header-section[data-v-ee120456]{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.page-title[data-v-ee120456]{font-size:1.75rem;font-weight:600;color:#262824;margin:0}.ice[data-v-ee120456]{background:#f7f3f3d9;border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.space-y-4[data-v-ee120456]>*+*{margin-top:1rem}.space-y-2[data-v-ee120456]>*+*{margin-top:.5rem}.space-y-3[data-v-ee120456]>*+*{margin-top:.75rem}.card-section[data-v-ee120456]{background:#fff9;border-radius:12px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);border:1px solid rgba(213,213,213,.3)}[data-v-ee120456] .card-section.va-card,[data-v-ee120456] .card-section .va-card__inner{box-shadow:none!important}.section-title[data-v-ee120456]{font-size:1rem;font-weight:500;color:#262824}.condition-row[data-v-ee120456]{display:flex;gap:.5rem;align-items:center}.parameter-wrapper[data-v-ee120456]{padding:1rem;background:#fffc;border-radius:8px;border:1px solid rgba(213,213,213,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}.parameter-header[data-v-ee120456]{margin-bottom:.75rem}.parameter-info[data-v-ee120456]{font-family:Monaco,Courier New,monospace;font-size:.9rem}.parameter-optional[data-v-ee120456]{color:#666}.parameter-separator[data-v-ee120456]{margin:0 .25rem;color:#666}.parameter-type[data-v-ee120456]{color:teal;font-weight:500}[data-v-ee120456] .va-modal__overlay{opacity:1!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:#cccccc8c!important}[data-v-ee120456] .va-modal{z-index:3000000!important}[data-v-ee120456] .va-modal__inner{background:#f7f3f3d9!important;border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}[data-v-ee120456] .va-modal__dialog,[data-v-ee120456] .va-modal__container{background:transparent!important}.table-header[data-v-ee120456]{display:flex;width:100%;padding:1rem;border-bottom:1px solid rgba(213,213,213,.4);background:#fff6;font-weight:500;font-size:.875rem;color:#262824}.header-cell[data-v-ee120456]{padding:0 .5rem;text-align:left}.table-content[data-v-ee120456]{background:#fff}[data-v-ee120456] .table-content .va-data-table{background:transparent}[data-v-ee120456] .table-content .va-data-table__table{background:#fff}.event-mapping-grid[data-v-ee120456]{display:grid;grid-template-columns:200px 120px 150px 120px 180px 150px 80px}[data-v-ee120456] .va-data-table__table-thead{background:#f9fafb;font-size:.75rem;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}.table-wrapper[data-v-ee120456]{height:calc(100vh - 130px);background:#fff}.actions-list[data-v-ee120456]{display:flex;flex-direction:column;gap:.25rem}.action-item[data-v-ee120456]{display:flex;align-items:center;gap:.25rem;font-size:.875rem}.mapping-id[data-v-ee120456]{font-size:.8rem;color:#374151;font-family:Monaco,Courier New,monospace;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}.uid-badge[data-v-ee120456]{display:inline-block;font-size:.75rem;font-family:Monaco,Courier New,monospace;color:#1e40af;background-color:#dbeafe;padding:.1rem .4rem;border-radius:.25rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;margin-left:.25rem}.action-context[data-v-ee120456]{color:#6b7280;font-size:.8rem}.action-separator[data-v-ee120456]{color:#9ca3af}.actions-tabs[data-v-ee120456]{display:flex;flex-direction:column;gap:1rem}.action-tabs-header[data-v-ee120456]{display:flex;flex-wrap:wrap;gap:.5rem;padding-bottom:.75rem;border-bottom:1px solid rgba(213,213,213,.4)}.action-tab[data-v-ee120456]{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;background:#fff9;border:1px solid rgba(213,213,213,.4);border-radius:8px;cursor:pointer;transition:all .2s ease;font-size:.875rem}.action-tab[data-v-ee120456]:hover{background:#ffffffe6;border-color:#cd91004d}.action-tab.active[data-v-ee120456]{background:#0066cc1a;border-color:#cc9100;color:#cc9100}.action-tab-label[data-v-ee120456]{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-tab-remove[data-v-ee120456]{margin-left:.25rem}.action-editor[data-v-ee120456]{padding:1rem;background:#fff6;border-radius:8px;border:1px solid rgba(213,213,213,.3)}.event-source-grid[data-v-ee120456],.actions-list-editor[data-v-ee120456]{display:flex;flex-direction:column;gap:.75rem}.action-card[data-v-ee120456]{border-radius:8px;cursor:pointer;transition:all .2s ease;box-shadow:1px 1px 5px #cccccc69}.action-card[data-v-ee120456]:hover,.action-card.active[data-v-ee120456]{border-color:#9595954d}.action-card-header[data-v-ee120456]{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem}.action-number[data-v-ee120456]{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:.75rem;font-weight:600;flex-shrink:0;border:1px solid #cc9100;color:#cc9100}.action-summary[data-v-ee120456]{flex:1;display:flex;align-items:center;gap:.5rem;min-width:0}.action-context-badge[data-v-ee120456]{padding:.125rem .5rem;background:#e5e7eb;color:#4b5563;border-radius:4px;font-size:.7rem;font-weight:500;text-transform:uppercase;flex-shrink:0}.action-name-text[data-v-ee120456]{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.action-empty[data-v-ee120456]{color:#9ca3af;font-style:italic}.action-card-body[data-v-ee120456]{padding:0 1rem 1rem;border-top:1px solid rgba(213,213,213,.3);margin-top:0}.action-settings-row[data-v-ee120456]{display:grid;grid-template-columns:1fr 1fr 2fr;gap:.75rem;padding-top:.75rem}.context-select[data-v-ee120456]{min-width:100px}.target-select[data-v-ee120456]{min-width:120px}.action-select[data-v-ee120456]{min-width:180px}.action-parameters[data-v-ee120456]{margin-top:1rem;padding-top:.75rem;border-top:1px dashed rgba(213,213,213,.5)}.parameters-title[data-v-ee120456]{font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}.parameters-list[data-v-ee120456]{display:flex;flex-direction:column;gap:.5rem}.parameter-item[data-v-ee120456]{display:flex;flex-direction:column;gap:.25rem;padding:.5rem}.parameter-label[data-v-ee120456]{display:flex;align-items:center;gap:.25rem;font-size:.8rem}.parameter-label .parameter-name[data-v-ee120456]{font-weight:600}.parameter-label .parameter-optional[data-v-ee120456]{color:#9ca3af}.parameter-type-badge[data-v-ee120456]{margin-left:.25rem;padding:.0625rem .375rem;border-radius:3px;font-size:.65rem;font-weight:500;border:1px solid #ddd}.parameter-input-row[data-v-ee120456]{display:flex;align-items:center;gap:.5rem}.source-toggle[data-v-ee120456]{display:flex;border:1px solid rgba(213,213,213,.5);border-radius:4px;overflow:hidden;flex-shrink:0}.toggle-btn[data-v-ee120456]{padding:.25rem .5rem;font-size:.7rem;background:#fff;border:none;cursor:pointer;transition:all .15s ease;color:#6b7280}.toggle-btn[data-v-ee120456]:first-child{border-right:1px solid rgba(213,213,213,.5)}.toggle-btn[data-v-ee120456]:hover{background:#f3f4f6}.toggle-btn.active[data-v-ee120456]{background:#6767676e;color:#fff}.parameter-value-input[data-v-ee120456]{flex:1;min-width:150px}\n";})();
+import { defineComponent as st, ref as L, computed as Ee, inject as ze, onMounted as ut, resolveComponent as ne, createElementBlock as k, openBlock as h, createElementVNode as y, createVNode as m, withCtx as w, createTextVNode as ae, toDisplayString as D, Fragment as ce, renderList as fe, createCommentVNode as z, createBlock as q, normalizeClass as _e, withModifiers as xe } from "vue";
+import { EVENT_MANAGER as dt, EVENT_REGISTRY as ct, EVENT_ACTIONS_REGISTRY as ft } from "org.eclipse.daanse.board.app.lib.api.events";
+import { Comperator as be, Condition as vt } from "org.eclipse.daanse.board.app.lib.events";
+import { identifier as pt } from "org.eclipse.daanse.board.app.lib.api.page";
+import { NAVIGATION_REGISTRY_ID as et, NavigationItem as yt } from "org.eclipse.daanse.board.app.lib.api.navigation";
+import { ROUTE_REGISTRY_ID as tt, RouteDefinition as gt } from "org.eclipse.daanse.board.app.lib.api.route";
+var Je = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Qe = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -23,306 +20,239 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var hasRequired_Reflect;
-function require_Reflect() {
-  if (hasRequired_Reflect) return _Reflect;
-  hasRequired_Reflect = 1;
-  var Reflect;
-  (function(Reflect2) {
-    (function(factory) {
-      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
-      var exporter = makeExporter(Reflect2);
-      if (typeof root.Reflect !== "undefined") {
-        exporter = makeExporter(root.Reflect, exporter);
-      }
-      factory(exporter, root);
-      if (typeof root.Reflect === "undefined") {
-        root.Reflect = Reflect2;
-      }
-      function makeExporter(target, previous) {
-        return function(key, value) {
-          Object.defineProperty(target, key, { configurable: true, writable: true, value });
-          if (previous)
-            previous(key, value);
+var Xe;
+function mt() {
+  if (Xe) return Qe;
+  Xe = 1;
+  var G;
+  return (function(F) {
+    (function(I) {
+      var E = typeof globalThis == "object" ? globalThis : typeof Je == "object" ? Je : typeof self == "object" ? self : typeof this == "object" ? this : Z(), O = ee(F);
+      typeof E.Reflect < "u" && (O = ee(E.Reflect, O)), I(O, E), typeof E.Reflect > "u" && (E.Reflect = F);
+      function ee(J, X) {
+        return function(W, j) {
+          Object.defineProperty(J, W, { configurable: !0, writable: !0, value: j }), X && X(W, j);
         };
       }
-      function functionThis() {
+      function ue() {
         try {
           return Function("return this;")();
-        } catch (_) {
+        } catch {
         }
       }
-      function indirectEvalThis() {
+      function Y() {
         try {
-          return (void 0, eval)("(function() { return this; })()");
-        } catch (_) {
+          return (0, eval)("(function() { return this; })()");
+        } catch {
         }
       }
-      function sloppyModeThis() {
-        return functionThis() || indirectEvalThis();
+      function Z() {
+        return ue() || Y();
       }
-    })(function(exporter, root) {
-      var hasOwn = Object.prototype.hasOwnProperty;
-      var supportsSymbol = typeof Symbol === "function";
-      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
-      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
-      var supportsCreate = typeof Object.create === "function";
-      var supportsProto = { __proto__: [] } instanceof Array;
-      var downLevel = !supportsCreate && !supportsProto;
-      var HashMap = {
+    })(function(I, E) {
+      var O = Object.prototype.hasOwnProperty, ee = typeof Symbol == "function", ue = ee && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", Y = ee && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", Z = typeof Object.create == "function", J = { __proto__: [] } instanceof Array, X = !Z && !J, W = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: supportsCreate ? function() {
-          return MakeDictionary(/* @__PURE__ */ Object.create(null));
-        } : supportsProto ? function() {
-          return MakeDictionary({ __proto__: null });
+        create: Z ? function() {
+          return He(/* @__PURE__ */ Object.create(null));
+        } : J ? function() {
+          return He({ __proto__: null });
         } : function() {
-          return MakeDictionary({});
+          return He({});
         },
-        has: downLevel ? function(map, key) {
-          return hasOwn.call(map, key);
-        } : function(map, key) {
-          return key in map;
+        has: X ? function(e, t) {
+          return O.call(e, t);
+        } : function(e, t) {
+          return t in e;
         },
-        get: downLevel ? function(map, key) {
-          return hasOwn.call(map, key) ? map[key] : void 0;
-        } : function(map, key) {
-          return map[key];
+        get: X ? function(e, t) {
+          return O.call(e, t) ? e[t] : void 0;
+        } : function(e, t) {
+          return e[t];
         }
-      };
-      var functionPrototype = Object.getPrototypeOf(Function);
-      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
-      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
-      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
-      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
-      var metadataRegistry = GetOrCreateMetadataRegistry();
-      var metadataProvider = CreateMetadataProvider(metadataRegistry);
-      function decorate(decorators, target, propertyKey, attributes) {
-        if (!IsUndefined(propertyKey)) {
-          if (!IsArray(decorators))
+      }, j = Object.getPrototypeOf(Function), d = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : V(), oe = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : s(), ve = typeof WeakMap == "function" ? WeakMap : B(), le = ee ? Symbol.for("@reflect-metadata:registry") : void 0, N = se(), we = Ie(N);
+      function Ae(e, t, n, i) {
+        if (p(n)) {
+          if (!De(e))
             throw new TypeError();
-          if (!IsObject(target))
+          if (!Ge(t))
             throw new TypeError();
-          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
-            throw new TypeError();
-          if (IsNull(attributes))
-            attributes = void 0;
-          propertyKey = ToPropertyKey(propertyKey);
-          return DecorateProperty(decorators, target, propertyKey, attributes);
+          return Pe(e, t);
         } else {
-          if (!IsArray(decorators))
+          if (!De(e))
             throw new TypeError();
-          if (!IsConstructor(target))
+          if (!A(t))
             throw new TypeError();
-          return DecorateConstructor(decorators, target);
+          if (!A(i) && !p(i) && !$(i))
+            throw new TypeError();
+          return $(i) && (i = void 0), n = H(n), Ue(e, t, n, i);
         }
       }
-      exporter("decorate", decorate);
-      function metadata(metadataKey, metadataValue) {
-        function decorator(target, propertyKey) {
-          if (!IsObject(target))
+      I("decorate", Ae);
+      function Oe(e, t) {
+        function n(i, g) {
+          if (!A(i))
             throw new TypeError();
-          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
+          if (!p(g) && !Be(g))
             throw new TypeError();
-          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+          Ne(e, t, i, g);
         }
-        return decorator;
+        return n;
       }
-      exporter("metadata", metadata);
-      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-        if (!IsObject(target))
+      I("metadata", Oe);
+      function Me(e, t, n, i) {
+        if (!A(n))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+        return p(i) || (i = H(i)), Ne(e, t, n, i);
       }
-      exporter("defineMetadata", defineMetadata);
-      function hasMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      I("defineMetadata", Me);
+      function Fe(e, t, n) {
+        if (!A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
+        return p(n) || (n = H(n)), Re(e, t, n);
       }
-      exporter("hasMetadata", hasMetadata);
-      function hasOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      I("hasMetadata", Fe);
+      function We(e, t, n) {
+        if (!A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
+        return p(n) || (n = H(n)), te(e, t, n);
       }
-      exporter("hasOwnMetadata", hasOwnMetadata);
-      function getMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      I("hasOwnMetadata", We);
+      function qe(e, t, n) {
+        if (!A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
+        return p(n) || (n = H(n)), re(e, t, n);
       }
-      exporter("getMetadata", getMetadata);
-      function getOwnMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      I("getMetadata", qe);
+      function pe(e, t, n) {
+        if (!A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
+        return p(n) || (n = H(n)), Se(e, t, n);
       }
-      exporter("getOwnMetadata", getOwnMetadata);
-      function getMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
+      I("getOwnMetadata", pe);
+      function ke(e, t) {
+        if (!A(e))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryMetadataKeys(target, propertyKey);
+        return p(t) || (t = H(t)), ge(e, t);
       }
-      exporter("getMetadataKeys", getMetadataKeys);
-      function getOwnMetadataKeys(target, propertyKey) {
-        if (!IsObject(target))
+      I("getMetadataKeys", ke);
+      function ye(e, t) {
+        if (!A(e))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        return OrdinaryOwnMetadataKeys(target, propertyKey);
+        return p(t) || (t = H(t)), Ve(e, t);
       }
-      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
-      function deleteMetadata(metadataKey, target, propertyKey) {
-        if (!IsObject(target))
+      I("getOwnMetadataKeys", ye);
+      function de(e, t, n) {
+        if (!A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        if (!IsObject(target))
+        if (p(n) || (n = H(n)), !A(t))
           throw new TypeError();
-        if (!IsUndefined(propertyKey))
-          propertyKey = ToPropertyKey(propertyKey);
-        var provider = GetMetadataProvider(
-          target,
-          propertyKey,
+        p(n) || (n = H(n));
+        var i = o(
+          t,
+          n,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return false;
-        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
+        return p(i) ? !1 : i.OrdinaryDeleteMetadata(e, t, n);
       }
-      exporter("deleteMetadata", deleteMetadata);
-      function DecorateConstructor(decorators, target) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsConstructor(decorated))
+      I("deleteMetadata", de);
+      function Pe(e, t) {
+        for (var n = e.length - 1; n >= 0; --n) {
+          var i = e[n], g = i(t);
+          if (!p(g) && !$(g)) {
+            if (!Ge(g))
               throw new TypeError();
-            target = decorated;
+            t = g;
           }
         }
-        return target;
+        return t;
       }
-      function DecorateProperty(decorators, target, propertyKey, descriptor) {
-        for (var i = decorators.length - 1; i >= 0; --i) {
-          var decorator = decorators[i];
-          var decorated = decorator(target, propertyKey, descriptor);
-          if (!IsUndefined(decorated) && !IsNull(decorated)) {
-            if (!IsObject(decorated))
+      function Ue(e, t, n, i) {
+        for (var g = e.length - 1; g >= 0; --g) {
+          var P = e[g], S = P(t, n, i);
+          if (!p(S) && !$(S)) {
+            if (!A(S))
               throw new TypeError();
-            descriptor = decorated;
+            i = S;
           }
         }
-        return descriptor;
+        return i;
       }
-      function OrdinaryHasMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return true;
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryHasMetadata(MetadataKey, parent, P);
-        return false;
+      function Re(e, t, n) {
+        var i = te(e, t, n);
+        if (i)
+          return !0;
+        var g = R(t);
+        return $(g) ? !1 : Re(e, g, n);
       }
-      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function te(e, t, n) {
+        var i = o(
+          t,
+          n,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return false;
-        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
+        return p(i) ? !1 : Te(i.OrdinaryHasOwnMetadata(e, t, n));
       }
-      function OrdinaryGetMetadata(MetadataKey, O, P) {
-        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
-        if (hasOwn2)
-          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (!IsNull(parent))
-          return OrdinaryGetMetadata(MetadataKey, parent, P);
-        return void 0;
+      function re(e, t, n) {
+        var i = te(e, t, n);
+        if (i)
+          return Se(e, t, n);
+        var g = R(t);
+        if (!$(g))
+          return re(e, g, n);
       }
-      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function Se(e, t, n) {
+        var i = o(
+          t,
+          n,
           /*Create*/
-          false
+          !1
         );
-        if (IsUndefined(provider))
-          return;
-        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        if (!p(i))
+          return i.OrdinaryGetOwnMetadata(e, t, n);
       }
-      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function Ne(e, t, n, i) {
+        var g = o(
+          n,
+          i,
           /*Create*/
-          true
+          !0
         );
-        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
+        g.OrdinaryDefineOwnMetadata(e, t, n, i);
       }
-      function OrdinaryMetadataKeys(O, P) {
-        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
-        var parent = OrdinaryGetPrototypeOf(O);
-        if (parent === null)
-          return ownKeys;
-        var parentKeys = OrdinaryMetadataKeys(parent, P);
-        if (parentKeys.length <= 0)
-          return ownKeys;
-        if (ownKeys.length <= 0)
-          return parentKeys;
-        var set = new _Set();
-        var keys = [];
-        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
-          var key = ownKeys_1[_i];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
+      function ge(e, t) {
+        var n = Ve(e, t), i = R(e);
+        if (i === null)
+          return n;
+        var g = ge(i, t);
+        if (g.length <= 0)
+          return n;
+        if (n.length <= 0)
+          return g;
+        for (var P = new oe(), S = [], _ = 0, u = n; _ < u.length; _++) {
+          var c = u[_], f = P.has(c);
+          f || (P.add(c), S.push(c));
         }
-        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-          var key = parentKeys_1[_a];
-          var hasKey = set.has(key);
-          if (!hasKey) {
-            set.add(key);
-            keys.push(key);
-          }
+        for (var v = 0, x = g; v < x.length; v++) {
+          var c = x[v], f = P.has(c);
+          f || (P.add(c), S.push(c));
         }
-        return keys;
+        return S;
       }
-      function OrdinaryOwnMetadataKeys(O, P) {
-        var provider = GetMetadataProvider(
-          O,
-          P,
+      function Ve(e, t) {
+        var n = o(
+          e,
+          t,
           /*create*/
-          false
+          !1
         );
-        if (!provider) {
-          return [];
-        }
-        return provider.OrdinaryOwnMetadataKeys(O, P);
+        return n ? n.OrdinaryOwnMetadataKeys(e, t) : [];
       }
-      function Type(x) {
-        if (x === null)
+      function Ce(e) {
+        if (e === null)
           return 1;
-        switch (typeof x) {
+        switch (typeof e) {
           case "undefined":
             return 0;
           case "boolean":
@@ -334,891 +264,618 @@ function require_Reflect() {
           case "number":
             return 5;
           case "object":
-            return x === null ? 1 : 6;
+            return e === null ? 1 : 6;
           default:
             return 6;
         }
       }
-      function IsUndefined(x) {
-        return x === void 0;
+      function p(e) {
+        return e === void 0;
       }
-      function IsNull(x) {
-        return x === null;
+      function $(e) {
+        return e === null;
       }
-      function IsSymbol(x) {
-        return typeof x === "symbol";
+      function je(e) {
+        return typeof e == "symbol";
       }
-      function IsObject(x) {
-        return typeof x === "object" ? x !== null : typeof x === "function";
+      function A(e) {
+        return typeof e == "object" ? e !== null : typeof e == "function";
       }
-      function ToPrimitive(input, PreferredType) {
-        switch (Type(input)) {
+      function ie(e, t) {
+        switch (Ce(e)) {
           case 0:
-            return input;
+            return e;
           case 1:
-            return input;
+            return e;
           case 2:
-            return input;
+            return e;
           case 3:
-            return input;
+            return e;
           case 4:
-            return input;
+            return e;
           case 5:
-            return input;
+            return e;
         }
-        var hint = "string";
-        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-        if (exoticToPrim !== void 0) {
-          var result = exoticToPrim.call(input, hint);
-          if (IsObject(result))
+        var n = "string", i = a(e, ue);
+        if (i !== void 0) {
+          var g = i.call(e, n);
+          if (A(g))
             throw new TypeError();
-          return result;
+          return g;
         }
-        return OrdinaryToPrimitive(input);
+        return me(e);
       }
-      function OrdinaryToPrimitive(O, hint) {
-        var valueOf, result, toString_2;
+      function me(e, t) {
+        var n, i, g;
         {
-          var toString_1 = O.toString;
-          if (IsCallable(toString_1)) {
-            var result = toString_1.call(O);
-            if (!IsObject(result))
-              return result;
+          var P = e.toString;
+          if (he(P)) {
+            var i = P.call(e);
+            if (!A(i))
+              return i;
           }
-          var valueOf = O.valueOf;
-          if (IsCallable(valueOf)) {
-            var result = valueOf.call(O);
-            if (!IsObject(result))
-              return result;
+          var n = e.valueOf;
+          if (he(n)) {
+            var i = n.call(e);
+            if (!A(i))
+              return i;
           }
         }
         throw new TypeError();
       }
-      function ToBoolean(argument) {
-        return !!argument;
+      function Te(e) {
+        return !!e;
       }
-      function ToString(argument) {
-        return "" + argument;
+      function $e(e) {
+        return "" + e;
       }
-      function ToPropertyKey(argument) {
-        var key = ToPrimitive(argument);
-        if (IsSymbol(key))
-          return key;
-        return ToString(key);
+      function H(e) {
+        var t = ie(e);
+        return je(t) ? t : $e(t);
       }
-      function IsArray(argument) {
-        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
+      function De(e) {
+        return Array.isArray ? Array.isArray(e) : e instanceof Object ? e instanceof Array : Object.prototype.toString.call(e) === "[object Array]";
       }
-      function IsCallable(argument) {
-        return typeof argument === "function";
+      function he(e) {
+        return typeof e == "function";
       }
-      function IsConstructor(argument) {
-        return typeof argument === "function";
+      function Ge(e) {
+        return typeof e == "function";
       }
-      function IsPropertyKey(argument) {
-        switch (Type(argument)) {
+      function Be(e) {
+        switch (Ce(e)) {
           case 3:
-            return true;
+            return !0;
           case 4:
-            return true;
+            return !0;
           default:
-            return false;
+            return !1;
         }
       }
-      function SameValueZero(x, y) {
-        return x === y || x !== x && y !== y;
+      function r(e, t) {
+        return e === t || e !== e && t !== t;
       }
-      function GetMethod(V, P) {
-        var func = V[P];
-        if (func === void 0 || func === null)
-          return void 0;
-        if (!IsCallable(func))
-          throw new TypeError();
-        return func;
-      }
-      function GetIterator(obj) {
-        var method = GetMethod(obj, iteratorSymbol);
-        if (!IsCallable(method))
-          throw new TypeError();
-        var iterator = method.call(obj);
-        if (!IsObject(iterator))
-          throw new TypeError();
-        return iterator;
-      }
-      function IteratorValue(iterResult) {
-        return iterResult.value;
-      }
-      function IteratorStep(iterator) {
-        var result = iterator.next();
-        return result.done ? false : result;
-      }
-      function IteratorClose(iterator) {
-        var f = iterator["return"];
-        if (f)
-          f.call(iterator);
-      }
-      function OrdinaryGetPrototypeOf(O) {
-        var proto = Object.getPrototypeOf(O);
-        if (typeof O !== "function" || O === functionPrototype)
-          return proto;
-        if (proto !== functionPrototype)
-          return proto;
-        var prototype = O.prototype;
-        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
-        if (prototypeProto == null || prototypeProto === Object.prototype)
-          return proto;
-        var constructor = prototypeProto.constructor;
-        if (typeof constructor !== "function")
-          return proto;
-        if (constructor === O)
-          return proto;
-        return constructor;
-      }
-      function CreateMetadataRegistry() {
-        var fallback;
-        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
-          fallback = CreateFallbackProvider(root.Reflect);
+      function a(e, t) {
+        var n = e[t];
+        if (n != null) {
+          if (!he(n))
+            throw new TypeError();
+          return n;
         }
-        var first;
-        var second;
-        var rest;
-        var targetProviderMap = new _WeakMap();
-        var registry = {
-          registerProvider,
-          getProvider,
-          setProvider
+      }
+      function l(e) {
+        var t = a(e, Y);
+        if (!he(t))
+          throw new TypeError();
+        var n = t.call(e);
+        if (!A(n))
+          throw new TypeError();
+        return n;
+      }
+      function b(e) {
+        return e.value;
+      }
+      function C(e) {
+        var t = e.next();
+        return t.done ? !1 : t;
+      }
+      function M(e) {
+        var t = e.return;
+        t && t.call(e);
+      }
+      function R(e) {
+        var t = Object.getPrototypeOf(e);
+        if (typeof e != "function" || e === j || t !== j)
+          return t;
+        var n = e.prototype, i = n && Object.getPrototypeOf(n);
+        if (i == null || i === Object.prototype)
+          return t;
+        var g = i.constructor;
+        return typeof g != "function" || g === e ? t : g;
+      }
+      function K() {
+        var e;
+        !p(le) && typeof E.Reflect < "u" && !(le in E.Reflect) && typeof E.Reflect.defineMetadata == "function" && (e = Le(E.Reflect));
+        var t, n, i, g = new ve(), P = {
+          registerProvider: S,
+          getProvider: u,
+          setProvider: f
         };
-        return registry;
-        function registerProvider(provider) {
-          if (!Object.isExtensible(registry)) {
+        return P;
+        function S(v) {
+          if (!Object.isExtensible(P))
             throw new Error("Cannot add provider to a frozen registry.");
-          }
-          switch (true) {
-            case fallback === provider:
+          switch (!0) {
+            case e === v:
               break;
-            case IsUndefined(first):
-              first = provider;
+            case p(t):
+              t = v;
               break;
-            case first === provider:
+            case t === v:
               break;
-            case IsUndefined(second):
-              second = provider;
+            case p(n):
+              n = v;
               break;
-            case second === provider:
+            case n === v:
               break;
             default:
-              if (rest === void 0)
-                rest = new _Set();
-              rest.add(provider);
+              i === void 0 && (i = new oe()), i.add(v);
               break;
           }
         }
-        function getProviderNoCache(O, P) {
-          if (!IsUndefined(first)) {
-            if (first.isProviderFor(O, P))
-              return first;
-            if (!IsUndefined(second)) {
-              if (second.isProviderFor(O, P))
-                return first;
-              if (!IsUndefined(rest)) {
-                var iterator = GetIterator(rest);
-                while (true) {
-                  var next = IteratorStep(iterator);
-                  if (!next) {
-                    return void 0;
-                  }
-                  var provider = IteratorValue(next);
-                  if (provider.isProviderFor(O, P)) {
-                    IteratorClose(iterator);
-                    return provider;
-                  }
+        function _(v, x) {
+          if (!p(t)) {
+            if (t.isProviderFor(v, x))
+              return t;
+            if (!p(n)) {
+              if (n.isProviderFor(v, x))
+                return t;
+              if (!p(i))
+                for (var T = l(i); ; ) {
+                  var U = C(T);
+                  if (!U)
+                    return;
+                  var Q = b(U);
+                  if (Q.isProviderFor(v, x))
+                    return M(T), Q;
                 }
-              }
             }
           }
-          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
-            return fallback;
-          }
-          return void 0;
+          if (!p(e) && e.isProviderFor(v, x))
+            return e;
         }
-        function getProvider(O, P) {
-          var providerMap = targetProviderMap.get(O);
-          var provider;
-          if (!IsUndefined(providerMap)) {
-            provider = providerMap.get(P);
-          }
-          if (!IsUndefined(provider)) {
-            return provider;
-          }
-          provider = getProviderNoCache(O, P);
-          if (!IsUndefined(provider)) {
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return provider;
+        function u(v, x) {
+          var T = g.get(v), U;
+          return p(T) || (U = T.get(x)), p(U) && (U = _(v, x), p(U) || (p(T) && (T = new d(), g.set(v, T)), T.set(x, U))), U;
         }
-        function hasProvider(provider) {
-          if (IsUndefined(provider))
+        function c(v) {
+          if (p(v))
             throw new TypeError();
-          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
+          return t === v || n === v || !p(i) && i.has(v);
         }
-        function setProvider(O, P, provider) {
-          if (!hasProvider(provider)) {
+        function f(v, x, T) {
+          if (!c(T))
             throw new Error("Metadata provider not registered.");
+          var U = u(v, x);
+          if (U !== T) {
+            if (!p(U))
+              return !1;
+            var Q = g.get(v);
+            p(Q) && (Q = new d(), g.set(v, Q)), Q.set(x, T);
           }
-          var existingProvider = getProvider(O, P);
-          if (existingProvider !== provider) {
-            if (!IsUndefined(existingProvider)) {
-              return false;
-            }
-            var providerMap = targetProviderMap.get(O);
-            if (IsUndefined(providerMap)) {
-              providerMap = new _Map();
-              targetProviderMap.set(O, providerMap);
-            }
-            providerMap.set(P, provider);
-          }
-          return true;
+          return !0;
         }
       }
-      function GetOrCreateMetadataRegistry() {
-        var metadataRegistry2;
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          metadataRegistry2 = root.Reflect[registrySymbol];
-        }
-        if (IsUndefined(metadataRegistry2)) {
-          metadataRegistry2 = CreateMetadataRegistry();
-        }
-        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
-          Object.defineProperty(root.Reflect, registrySymbol, {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: metadataRegistry2
-          });
-        }
-        return metadataRegistry2;
+      function se() {
+        var e;
+        return !p(le) && A(E.Reflect) && Object.isExtensible(E.Reflect) && (e = E.Reflect[le]), p(e) && (e = K()), !p(le) && A(E.Reflect) && Object.isExtensible(E.Reflect) && Object.defineProperty(E.Reflect, le, {
+          enumerable: !1,
+          configurable: !1,
+          writable: !1,
+          value: e
+        }), e;
       }
-      function CreateMetadataProvider(registry) {
-        var metadata2 = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var targetMetadata = metadata2.get(O);
-            if (IsUndefined(targetMetadata))
-              return false;
-            return targetMetadata.has(P);
+      function Ie(e) {
+        var t = new ve(), n = {
+          isProviderFor: function(c, f) {
+            var v = t.get(c);
+            return p(v) ? !1 : v.has(f);
           },
-          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
-          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
-          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
-          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
-          OrdinaryDeleteMetadata
+          OrdinaryDefineOwnMetadata: S,
+          OrdinaryHasOwnMetadata: g,
+          OrdinaryGetOwnMetadata: P,
+          OrdinaryOwnMetadataKeys: _,
+          OrdinaryDeleteMetadata: u
         };
-        metadataRegistry.registerProvider(provider);
-        return provider;
-        function GetOrCreateMetadataMap(O, P, Create) {
-          var targetMetadata = metadata2.get(O);
-          var createdTargetMetadata = false;
-          if (IsUndefined(targetMetadata)) {
-            if (!Create)
-              return void 0;
-            targetMetadata = new _Map();
-            metadata2.set(O, targetMetadata);
-            createdTargetMetadata = true;
+        return N.registerProvider(n), n;
+        function i(c, f, v) {
+          var x = t.get(c), T = !1;
+          if (p(x)) {
+            if (!v)
+              return;
+            x = new d(), t.set(c, x), T = !0;
           }
-          var metadataMap = targetMetadata.get(P);
-          if (IsUndefined(metadataMap)) {
-            if (!Create)
-              return void 0;
-            metadataMap = new _Map();
-            targetMetadata.set(P, metadataMap);
-            if (!registry.setProvider(O, P, provider)) {
-              targetMetadata.delete(P);
-              if (createdTargetMetadata) {
-                metadata2.delete(O);
-              }
-              throw new Error("Wrong provider for target.");
-            }
+          var U = x.get(f);
+          if (p(U)) {
+            if (!v)
+              return;
+            if (U = new d(), x.set(f, U), !e.setProvider(c, f, n))
+              throw x.delete(f), T && t.delete(c), new Error("Wrong provider for target.");
           }
-          return metadataMap;
+          return U;
         }
-        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function g(c, f, v) {
+          var x = i(
+            f,
+            v,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return false;
-          return ToBoolean(metadataMap.has(MetadataKey));
+          return p(x) ? !1 : Te(x.has(c));
         }
-        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function P(c, f, v) {
+          var x = i(
+            f,
+            v,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return void 0;
-          return metadataMap.get(MetadataKey);
+          if (!p(x))
+            return x.get(c);
         }
-        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function S(c, f, v, x) {
+          var T = i(
+            v,
+            x,
             /*Create*/
-            true
+            !0
           );
-          metadataMap.set(MetadataKey, MetadataValue);
+          T.set(c, f);
         }
-        function OrdinaryOwnMetadataKeys2(O, P) {
-          var keys = [];
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function _(c, f) {
+          var v = [], x = i(
+            c,
+            f,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return keys;
-          var keysObj = metadataMap.keys();
-          var iterator = GetIterator(keysObj);
-          var k = 0;
-          while (true) {
-            var next = IteratorStep(iterator);
-            if (!next) {
-              keys.length = k;
-              return keys;
-            }
-            var nextValue = IteratorValue(next);
+          if (p(x))
+            return v;
+          for (var T = x.keys(), U = l(T), Q = 0; ; ) {
+            var Ze = C(U);
+            if (!Ze)
+              return v.length = Q, v;
+            var rt = b(Ze);
             try {
-              keys[k] = nextValue;
-            } catch (e) {
+              v[Q] = rt;
+            } catch (it) {
               try {
-                IteratorClose(iterator);
+                M(U);
               } finally {
-                throw e;
+                throw it;
               }
             }
-            k++;
+            Q++;
           }
         }
-        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
-          var metadataMap = GetOrCreateMetadataMap(
-            O,
-            P,
+        function u(c, f, v) {
+          var x = i(
+            f,
+            v,
             /*Create*/
-            false
+            !1
           );
-          if (IsUndefined(metadataMap))
-            return false;
-          if (!metadataMap.delete(MetadataKey))
-            return false;
-          if (metadataMap.size === 0) {
-            var targetMetadata = metadata2.get(O);
-            if (!IsUndefined(targetMetadata)) {
-              targetMetadata.delete(P);
-              if (targetMetadata.size === 0) {
-                metadata2.delete(targetMetadata);
-              }
-            }
+          if (p(x) || !x.delete(c))
+            return !1;
+          if (x.size === 0) {
+            var T = t.get(f);
+            p(T) || (T.delete(v), T.size === 0 && t.delete(T));
           }
-          return true;
+          return !0;
         }
       }
-      function CreateFallbackProvider(reflect) {
-        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
-        var metadataOwner = new _WeakMap();
-        var provider = {
-          isProviderFor: function(O, P) {
-            var metadataPropertySet = metadataOwner.get(O);
-            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
-              return true;
-            }
-            if (getOwnMetadataKeys2(O, P).length) {
-              if (IsUndefined(metadataPropertySet)) {
-                metadataPropertySet = new _Set();
-                metadataOwner.set(O, metadataPropertySet);
-              }
-              metadataPropertySet.add(P);
-              return true;
-            }
-            return false;
+      function Le(e) {
+        var t = e.defineMetadata, n = e.hasOwnMetadata, i = e.getOwnMetadata, g = e.getOwnMetadataKeys, P = e.deleteMetadata, S = new ve(), _ = {
+          isProviderFor: function(u, c) {
+            var f = S.get(u);
+            return !p(f) && f.has(c) ? !0 : g(u, c).length ? (p(f) && (f = new oe(), S.set(u, f)), f.add(c), !0) : !1;
           },
-          OrdinaryDefineOwnMetadata: defineMetadata2,
-          OrdinaryHasOwnMetadata: hasOwnMetadata2,
-          OrdinaryGetOwnMetadata: getOwnMetadata2,
-          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
-          OrdinaryDeleteMetadata: deleteMetadata2
+          OrdinaryDefineOwnMetadata: t,
+          OrdinaryHasOwnMetadata: n,
+          OrdinaryGetOwnMetadata: i,
+          OrdinaryOwnMetadataKeys: g,
+          OrdinaryDeleteMetadata: P
         };
-        return provider;
+        return _;
       }
-      function GetMetadataProvider(O, P, Create) {
-        var registeredProvider = metadataRegistry.getProvider(O, P);
-        if (!IsUndefined(registeredProvider)) {
-          return registeredProvider;
-        }
-        if (Create) {
-          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
-            return metadataProvider;
-          }
+      function o(e, t, n) {
+        var i = N.getProvider(e, t);
+        if (!p(i))
+          return i;
+        if (n) {
+          if (N.setProvider(e, t, we))
+            return we;
           throw new Error("Illegal state.");
         }
-        return void 0;
       }
-      function CreateMapPolyfill() {
-        var cacheSentinel = {};
-        var arraySentinel = [];
-        var MapIterator = (
+      function V() {
+        var e = {}, t = [], n = (
           /** @class */
           (function() {
-            function MapIterator2(keys, values, selector) {
-              this._index = 0;
-              this._keys = keys;
-              this._values = values;
-              this._selector = selector;
+            function _(u, c, f) {
+              this._index = 0, this._keys = u, this._values = c, this._selector = f;
             }
-            MapIterator2.prototype["@@iterator"] = function() {
+            return _.prototype["@@iterator"] = function() {
               return this;
-            };
-            MapIterator2.prototype[iteratorSymbol] = function() {
+            }, _.prototype[Y] = function() {
               return this;
-            };
-            MapIterator2.prototype.next = function() {
-              var index = this._index;
-              if (index >= 0 && index < this._keys.length) {
-                var result = this._selector(this._keys[index], this._values[index]);
-                if (index + 1 >= this._keys.length) {
-                  this._index = -1;
-                  this._keys = arraySentinel;
-                  this._values = arraySentinel;
-                } else {
-                  this._index++;
-                }
-                return { value: result, done: false };
+            }, _.prototype.next = function() {
+              var u = this._index;
+              if (u >= 0 && u < this._keys.length) {
+                var c = this._selector(this._keys[u], this._values[u]);
+                return u + 1 >= this._keys.length ? (this._index = -1, this._keys = t, this._values = t) : this._index++, { value: c, done: !1 };
               }
-              return { value: void 0, done: true };
-            };
-            MapIterator2.prototype.throw = function(error) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              throw error;
-            };
-            MapIterator2.prototype.return = function(value) {
-              if (this._index >= 0) {
-                this._index = -1;
-                this._keys = arraySentinel;
-                this._values = arraySentinel;
-              }
-              return { value, done: true };
-            };
-            return MapIterator2;
+              return { value: void 0, done: !0 };
+            }, _.prototype.throw = function(u) {
+              throw this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), u;
+            }, _.prototype.return = function(u) {
+              return this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), { value: u, done: !0 };
+            }, _;
           })()
-        );
-        var Map2 = (
+        ), i = (
           /** @class */
           (function() {
-            function Map3() {
-              this._keys = [];
-              this._values = [];
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
+            function _() {
+              this._keys = [], this._values = [], this._cacheKey = e, this._cacheIndex = -2;
             }
-            Object.defineProperty(Map3.prototype, "size", {
+            return Object.defineProperty(_.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
-              enumerable: true,
-              configurable: true
-            });
-            Map3.prototype.has = function(key) {
+              enumerable: !0,
+              configurable: !0
+            }), _.prototype.has = function(u) {
               return this._find(
-                key,
+                u,
                 /*insert*/
-                false
+                !1
               ) >= 0;
-            };
-            Map3.prototype.get = function(key) {
-              var index = this._find(
-                key,
+            }, _.prototype.get = function(u) {
+              var c = this._find(
+                u,
                 /*insert*/
-                false
+                !1
               );
-              return index >= 0 ? this._values[index] : void 0;
-            };
-            Map3.prototype.set = function(key, value) {
-              var index = this._find(
-                key,
+              return c >= 0 ? this._values[c] : void 0;
+            }, _.prototype.set = function(u, c) {
+              var f = this._find(
+                u,
                 /*insert*/
-                true
+                !0
               );
-              this._values[index] = value;
-              return this;
-            };
-            Map3.prototype.delete = function(key) {
-              var index = this._find(
-                key,
+              return this._values[f] = c, this;
+            }, _.prototype.delete = function(u) {
+              var c = this._find(
+                u,
                 /*insert*/
-                false
+                !1
               );
-              if (index >= 0) {
-                var size = this._keys.length;
-                for (var i = index + 1; i < size; i++) {
-                  this._keys[i - 1] = this._keys[i];
-                  this._values[i - 1] = this._values[i];
-                }
-                this._keys.length--;
-                this._values.length--;
-                if (SameValueZero(key, this._cacheKey)) {
-                  this._cacheKey = cacheSentinel;
-                  this._cacheIndex = -2;
-                }
-                return true;
+              if (c >= 0) {
+                for (var f = this._keys.length, v = c + 1; v < f; v++)
+                  this._keys[v - 1] = this._keys[v], this._values[v - 1] = this._values[v];
+                return this._keys.length--, this._values.length--, r(u, this._cacheKey) && (this._cacheKey = e, this._cacheIndex = -2), !0;
               }
-              return false;
-            };
-            Map3.prototype.clear = function() {
-              this._keys.length = 0;
-              this._values.length = 0;
-              this._cacheKey = cacheSentinel;
-              this._cacheIndex = -2;
-            };
-            Map3.prototype.keys = function() {
-              return new MapIterator(this._keys, this._values, getKey);
-            };
-            Map3.prototype.values = function() {
-              return new MapIterator(this._keys, this._values, getValue);
-            };
-            Map3.prototype.entries = function() {
-              return new MapIterator(this._keys, this._values, getEntry);
-            };
-            Map3.prototype["@@iterator"] = function() {
+              return !1;
+            }, _.prototype.clear = function() {
+              this._keys.length = 0, this._values.length = 0, this._cacheKey = e, this._cacheIndex = -2;
+            }, _.prototype.keys = function() {
+              return new n(this._keys, this._values, g);
+            }, _.prototype.values = function() {
+              return new n(this._keys, this._values, P);
+            }, _.prototype.entries = function() {
+              return new n(this._keys, this._values, S);
+            }, _.prototype["@@iterator"] = function() {
               return this.entries();
-            };
-            Map3.prototype[iteratorSymbol] = function() {
+            }, _.prototype[Y] = function() {
               return this.entries();
-            };
-            Map3.prototype._find = function(key, insert) {
-              if (!SameValueZero(this._cacheKey, key)) {
+            }, _.prototype._find = function(u, c) {
+              if (!r(this._cacheKey, u)) {
                 this._cacheIndex = -1;
-                for (var i = 0; i < this._keys.length; i++) {
-                  if (SameValueZero(this._keys[i], key)) {
-                    this._cacheIndex = i;
+                for (var f = 0; f < this._keys.length; f++)
+                  if (r(this._keys[f], u)) {
+                    this._cacheIndex = f;
                     break;
                   }
-                }
               }
-              if (this._cacheIndex < 0 && insert) {
-                this._cacheIndex = this._keys.length;
-                this._keys.push(key);
-                this._values.push(void 0);
-              }
-              return this._cacheIndex;
-            };
-            return Map3;
+              return this._cacheIndex < 0 && c && (this._cacheIndex = this._keys.length, this._keys.push(u), this._values.push(void 0)), this._cacheIndex;
+            }, _;
           })()
         );
-        return Map2;
-        function getKey(key, _) {
-          return key;
+        return i;
+        function g(_, u) {
+          return _;
         }
-        function getValue(_, value) {
-          return value;
+        function P(_, u) {
+          return u;
         }
-        function getEntry(key, value) {
-          return [key, value];
+        function S(_, u) {
+          return [_, u];
         }
       }
-      function CreateSetPolyfill() {
-        var Set2 = (
+      function s() {
+        var e = (
           /** @class */
           (function() {
-            function Set3() {
-              this._map = new _Map();
+            function t() {
+              this._map = new d();
             }
-            Object.defineProperty(Set3.prototype, "size", {
+            return Object.defineProperty(t.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
-              enumerable: true,
-              configurable: true
-            });
-            Set3.prototype.has = function(value) {
-              return this._map.has(value);
-            };
-            Set3.prototype.add = function(value) {
-              return this._map.set(value, value), this;
-            };
-            Set3.prototype.delete = function(value) {
-              return this._map.delete(value);
-            };
-            Set3.prototype.clear = function() {
+              enumerable: !0,
+              configurable: !0
+            }), t.prototype.has = function(n) {
+              return this._map.has(n);
+            }, t.prototype.add = function(n) {
+              return this._map.set(n, n), this;
+            }, t.prototype.delete = function(n) {
+              return this._map.delete(n);
+            }, t.prototype.clear = function() {
               this._map.clear();
-            };
-            Set3.prototype.keys = function() {
+            }, t.prototype.keys = function() {
               return this._map.keys();
-            };
-            Set3.prototype.values = function() {
+            }, t.prototype.values = function() {
               return this._map.keys();
-            };
-            Set3.prototype.entries = function() {
+            }, t.prototype.entries = function() {
               return this._map.entries();
-            };
-            Set3.prototype["@@iterator"] = function() {
+            }, t.prototype["@@iterator"] = function() {
               return this.keys();
-            };
-            Set3.prototype[iteratorSymbol] = function() {
+            }, t.prototype[Y] = function() {
               return this.keys();
-            };
-            return Set3;
+            }, t;
           })()
         );
-        return Set2;
+        return e;
       }
-      function CreateWeakMapPolyfill() {
-        var UUID_SIZE = 16;
-        var keys = HashMap.create();
-        var rootKey = CreateUniqueKey();
+      function B() {
+        var e = 16, t = W.create(), n = i();
         return (
           /** @class */
           (function() {
-            function WeakMap2() {
-              this._key = CreateUniqueKey();
+            function u() {
+              this._key = i();
             }
-            WeakMap2.prototype.has = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+            return u.prototype.has = function(c) {
+              var f = g(
+                c,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? HashMap.has(table, this._key) : false;
-            };
-            WeakMap2.prototype.get = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return f !== void 0 ? W.has(f, this._key) : !1;
+            }, u.prototype.get = function(c) {
+              var f = g(
+                c,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
-            };
-            WeakMap2.prototype.set = function(target, value) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return f !== void 0 ? W.get(f, this._key) : void 0;
+            }, u.prototype.set = function(c, f) {
+              var v = g(
+                c,
                 /*create*/
-                true
+                !0
               );
-              table[this._key] = value;
-              return this;
-            };
-            WeakMap2.prototype.delete = function(target) {
-              var table = GetOrCreateWeakMapTable(
-                target,
+              return v[this._key] = f, this;
+            }, u.prototype.delete = function(c) {
+              var f = g(
+                c,
                 /*create*/
-                false
+                !1
               );
-              return table !== void 0 ? delete table[this._key] : false;
-            };
-            WeakMap2.prototype.clear = function() {
-              this._key = CreateUniqueKey();
-            };
-            return WeakMap2;
+              return f !== void 0 ? delete f[this._key] : !1;
+            }, u.prototype.clear = function() {
+              this._key = i();
+            }, u;
           })()
         );
-        function CreateUniqueKey() {
-          var key;
+        function i() {
+          var u;
           do
-            key = "@@WeakMap@@" + CreateUUID();
-          while (HashMap.has(keys, key));
-          keys[key] = true;
-          return key;
+            u = "@@WeakMap@@" + _();
+          while (W.has(t, u));
+          return t[u] = !0, u;
         }
-        function GetOrCreateWeakMapTable(target, create) {
-          if (!hasOwn.call(target, rootKey)) {
-            if (!create)
-              return void 0;
-            Object.defineProperty(target, rootKey, { value: HashMap.create() });
+        function g(u, c) {
+          if (!O.call(u, n)) {
+            if (!c)
+              return;
+            Object.defineProperty(u, n, { value: W.create() });
           }
-          return target[rootKey];
+          return u[n];
         }
-        function FillRandomBytes(buffer, size) {
-          for (var i = 0; i < size; ++i)
-            buffer[i] = Math.random() * 255 | 0;
-          return buffer;
+        function P(u, c) {
+          for (var f = 0; f < c; ++f)
+            u[f] = Math.random() * 255 | 0;
+          return u;
         }
-        function GenRandomBytes(size) {
-          if (typeof Uint8Array === "function") {
-            var array = new Uint8Array(size);
-            if (typeof crypto !== "undefined") {
-              crypto.getRandomValues(array);
-            } else if (typeof msCrypto !== "undefined") {
-              msCrypto.getRandomValues(array);
-            } else {
-              FillRandomBytes(array, size);
-            }
-            return array;
+        function S(u) {
+          if (typeof Uint8Array == "function") {
+            var c = new Uint8Array(u);
+            return typeof crypto < "u" ? crypto.getRandomValues(c) : typeof msCrypto < "u" ? msCrypto.getRandomValues(c) : P(c, u), c;
           }
-          return FillRandomBytes(new Array(size), size);
+          return P(new Array(u), u);
         }
-        function CreateUUID() {
-          var data = GenRandomBytes(UUID_SIZE);
-          data[6] = data[6] & 79 | 64;
-          data[8] = data[8] & 191 | 128;
-          var result = "";
-          for (var offset = 0; offset < UUID_SIZE; ++offset) {
-            var byte = data[offset];
-            if (offset === 4 || offset === 6 || offset === 8)
-              result += "-";
-            if (byte < 16)
-              result += "0";
-            result += byte.toString(16).toLowerCase();
+        function _() {
+          var u = S(e);
+          u[6] = u[6] & 79 | 64, u[8] = u[8] & 191 | 128;
+          for (var c = "", f = 0; f < e; ++f) {
+            var v = u[f];
+            (f === 4 || f === 6 || f === 8) && (c += "-"), v < 16 && (c += "0"), c += v.toString(16).toLowerCase();
           }
-          return result;
+          return c;
         }
       }
-      function MakeDictionary(obj) {
-        obj.__ = void 0;
-        delete obj.__;
-        return obj;
+      function He(e) {
+        return e.__ = void 0, delete e.__, e;
       }
     });
-  })(Reflect || (Reflect = {}));
-  return _Reflect;
+  })(G || (G = {})), Qe;
 }
-require_Reflect();
-const _hoisted_1 = { class: "event-manager-ui" };
-const _hoisted_2 = { class: "header-section" };
-const _hoisted_3 = { class: "flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper" };
-const _hoisted_4 = { class: "w-full overflow-auto flex flex-col bg-white" };
-const _hoisted_5 = ["title"];
-const _hoisted_6 = ["title"];
-const _hoisted_7 = { class: "actions-list" };
-const _hoisted_8 = { class: "action-context" };
-const _hoisted_9 = ["title"];
-const _hoisted_10 = { class: "action-name" };
-const _hoisted_11 = { class: "text-xs" };
-const _hoisted_12 = { class: "flex gap-2" };
-const _hoisted_13 = { class: "space-y-4" };
-const _hoisted_14 = { class: "event-source-grid" };
-const _hoisted_15 = {
+mt();
+const ht = { class: "event-manager-ui" }, _t = { class: "header-section" }, xt = { class: "flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full table-wrapper" }, bt = { class: "w-full overflow-auto flex flex-col bg-white" }, wt = ["title"], Mt = ["title"], kt = { class: "actions-list" }, Vt = { class: "action-context" }, Ct = ["title"], Tt = { class: "action-name" }, It = { class: "text-xs" }, Et = { class: "flex gap-2" }, At = { class: "space-y-4" }, Ot = { class: "event-source-grid" }, Pt = {
   key: 0,
   class: "space-y-2"
-};
-const _hoisted_16 = {
+}, Ut = {
   key: 1,
   class: "text-gray-500 italic text-sm"
-};
-const _hoisted_17 = {
+}, Rt = {
   key: 0,
   class: "actions-list-editor"
-};
-const _hoisted_18 = ["onClick"];
-const _hoisted_19 = { class: "action-card-header" };
-const _hoisted_20 = { class: "action-number" };
-const _hoisted_21 = { class: "action-summary" };
-const _hoisted_22 = { class: "action-context-badge" };
-const _hoisted_23 = {
+}, St = ["onClick"], Nt = { class: "action-card-header" }, jt = { class: "action-number" }, $t = { class: "action-summary" }, Dt = { class: "action-context-badge" }, Gt = {
   key: 0,
   class: "action-name-text"
-};
-const _hoisted_24 = {
+}, zt = {
   key: 1,
   class: "action-empty"
-};
-const _hoisted_25 = {
+}, Ft = {
   key: 0,
   class: "action-card-body"
-};
-const _hoisted_26 = { class: "action-settings-row" };
-const _hoisted_27 = {
+}, Wt = { class: "action-settings-row" }, qt = {
   key: 0,
   class: "action-parameters"
-};
-const _hoisted_28 = { class: "parameters-list" };
-const _hoisted_29 = { class: "parameter-label" };
-const _hoisted_30 = { class: "parameter-name" };
-const _hoisted_31 = {
+}, Bt = { class: "parameters-list" }, Lt = { class: "parameter-label" }, Ht = { class: "parameter-name" }, Yt = {
   key: 0,
   class: "parameter-optional"
-};
-const _hoisted_32 = { class: "parameter-type-badge" };
-const _hoisted_33 = { class: "parameter-input-row" };
-const _hoisted_34 = { class: "source-toggle" };
-const _hoisted_35 = ["onClick"];
-const _hoisted_36 = ["onClick"];
-const _hoisted_37 = { class: "space-y-4" };
-const _hoisted_38 = { class: "event-source-grid" };
-const _hoisted_39 = {
+}, Zt = { class: "parameter-type-badge" }, Jt = { class: "parameter-input-row" }, Qt = { class: "source-toggle" }, Xt = ["onClick"], Kt = ["onClick"], en = { class: "space-y-4" }, tn = { class: "event-source-grid" }, nn = {
   key: 0,
   class: "space-y-2"
-};
-const _hoisted_40 = {
+}, an = {
   key: 1,
   class: "text-gray-500 italic text-sm"
-};
-const _hoisted_41 = {
+}, on = {
   key: 0,
   class: "actions-list-editor"
-};
-const _hoisted_42 = ["onClick"];
-const _hoisted_43 = { class: "action-card-header" };
-const _hoisted_44 = { class: "action-number" };
-const _hoisted_45 = { class: "action-summary" };
-const _hoisted_46 = { class: "action-context-badge" };
-const _hoisted_47 = {
+}, ln = ["onClick"], rn = { class: "action-card-header" }, sn = { class: "action-number" }, un = { class: "action-summary" }, dn = { class: "action-context-badge" }, cn = {
   key: 0,
   class: "action-name-text"
-};
-const _hoisted_48 = {
+}, fn = {
   key: 1,
   class: "action-empty"
-};
-const _hoisted_49 = {
+}, vn = {
   key: 0,
   class: "action-card-body"
-};
-const _hoisted_50 = { class: "action-settings-row" };
-const _hoisted_51 = {
+}, pn = { class: "action-settings-row" }, yn = {
   key: 0,
   class: "action-parameters"
-};
-const _hoisted_52 = { class: "parameters-list" };
-const _hoisted_53 = { class: "parameter-label" };
-const _hoisted_54 = { class: "parameter-name" };
-const _hoisted_55 = {
+}, gn = { class: "parameters-list" }, mn = { class: "parameter-label" }, hn = { class: "parameter-name" }, _n = {
   key: 0,
   class: "parameter-optional"
-};
-const _hoisted_56 = { class: "parameter-type-badge" };
-const _hoisted_57 = { class: "parameter-input-row" };
-const _hoisted_58 = { class: "source-toggle" };
-const _hoisted_59 = ["onClick"];
-const _hoisted_60 = ["onClick"];
-const _hoisted_61 = { style: { "text-align": "center", "padding": "1rem" } };
-const _hoisted_62 = { style: { "display": "flex", "justify-content": "flex-end", "gap": "0.5rem" } };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}, xn = { class: "parameter-type-badge" }, bn = { class: "parameter-input-row" }, wn = { class: "source-toggle" }, Mn = ["onClick"], kn = ["onClick"], Vn = { style: { "text-align": "center", padding: "1rem" } }, Cn = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, Tn = /* @__PURE__ */ st({
   __name: "EventManagerUI",
-  setup(__props) {
-    let eventManager;
-    let eventRegistry;
-    let actionsRegistry;
-    let pageRegistry;
-    const mappings = ref([]);
-    const availableEvents = ref([]);
-    const availableWidgetTypes = ref([]);
-    const availablePages = ref([]);
-    const showAddDialog = ref(false);
-    const showEditDialog = ref(false);
-    const editingMappingId = ref(null);
-    const currentActionIndex = ref(0);
-    const newMapping = ref({
+  setup(G) {
+    let F, I, E, O;
+    const ee = L([]), ue = L([]), Y = L([]), Z = L([]), J = L(!1), X = L(!1), W = L(null), j = L(0), d = L({
       context: "widget",
       conditions: [],
       actions: [{
@@ -1227,279 +884,163 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         actionArgs: [],
         payloadMapping: []
       }]
-    });
-    const contextOptions = [
+    }), oe = [
       { text: "System", value: "system" },
       { text: "Page", value: "page" },
       { text: "Widget", value: "widget" }
-    ];
-    const comperatorOptions = [
-      { text: "==", value: Comperator.eq },
-      { text: "!=", value: Comperator.neq },
-      { text: "<", value: Comperator.lt },
-      { text: "<=", value: Comperator.lte },
-      { text: ">", value: Comperator.gt },
-      { text: ">=", value: Comperator.gte }
-    ];
-    const columns = [
-      { key: "id", label: "ID", sortable: true },
-      { key: "context", label: "Event Context", sortable: true },
-      { key: "eventType", label: "Event Type", sortable: true },
-      { key: "actionsCount", label: "Actions", sortable: true },
+    ], ve = [
+      { text: "==", value: be.eq },
+      { text: "!=", value: be.neq },
+      { text: "<", value: be.lt },
+      { text: "<=", value: be.lte },
+      { text: ">", value: be.gt },
+      { text: ">=", value: be.gte }
+    ], le = [
+      { key: "id", label: "ID", sortable: !0 },
+      { key: "context", label: "Event Context", sortable: !0 },
+      { key: "eventType", label: "Event Type", sortable: !0 },
+      { key: "actionsCount", label: "Actions", sortable: !0 },
       { key: "conditions", label: "Conditions" },
       { key: "tableActions", label: "", width: 100 }
-    ];
-    const currentAction = computed(() => {
-      if (!newMapping.value.actions || newMapping.value.actions.length === 0) {
-        return null;
-      }
-      return newMapping.value.actions[currentActionIndex.value];
-    });
-    const addAction = () => {
-      if (!newMapping.value.actions) {
-        newMapping.value.actions = [];
-      }
-      newMapping.value.actions.push({
+    ], N = Ee(() => !d.value.actions || d.value.actions.length === 0 ? null : d.value.actions[j.value]), we = () => {
+      d.value.actions || (d.value.actions = []), d.value.actions.push({
         targetContext: "widget",
         actionName: "",
         actionArgs: [],
         payloadMapping: []
-      });
-      currentActionIndex.value = newMapping.value.actions.length - 1;
-      parameterValueSources.value.clear();
-      manualParameterValues.value.clear();
-    };
-    const removeAction = (index) => {
-      if (!newMapping.value.actions) return;
-      newMapping.value.actions.splice(index, 1);
-      if (currentActionIndex.value >= newMapping.value.actions.length) {
-        currentActionIndex.value = Math.max(0, newMapping.value.actions.length - 1);
-      }
-      parameterValueSources.value.clear();
-      manualParameterValues.value.clear();
-    };
-    const selectAction = (index) => {
-      currentActionIndex.value = index;
-      parameterValueSources.value.clear();
-      manualParameterValues.value.clear();
-      const action = newMapping.value.actions?.[index];
-      if (action) {
-        if (action.payloadMapping) {
-          action.payloadMapping.forEach((pm) => {
-            parameterValueSources.value.set(pm.argIndex, "payload");
-          });
-        }
-        if (action.actionArgs) {
-          action.actionArgs.forEach((arg, idx) => {
-            if (arg !== void 0 && !action.payloadMapping?.some((pm) => pm.argIndex === idx)) {
-              parameterValueSources.value.set(idx, "manual");
-              manualParameterValues.value.set(idx, String(arg));
-            }
-          });
-        }
-      }
-    };
-    const loadMappings = () => {
-      mappings.value = eventManager.getAllMappings();
-    };
-    const loadEvents = () => {
-      availableEvents.value = eventRegistry.getAllEvents();
-    };
-    const loadWidgetTypes = () => {
-      availableWidgetTypes.value = actionsRegistry.getWidgetTypes();
-      console.log("📋 Loaded widget types:", availableWidgetTypes.value);
-    };
-    const loadPages = () => {
-      availablePages.value = pageRegistry.getAllPageIds();
-      console.log("📄 Loaded pages:", availablePages.value);
-    };
-    const availablePayloadProperties = computed(() => {
-      if (!newMapping.value.eventType) return [];
+      }), j.value = d.value.actions.length - 1, p.value.clear(), $.value.clear();
+    }, Ae = (r) => {
+      d.value.actions && (d.value.actions.splice(r, 1), j.value >= d.value.actions.length && (j.value = Math.max(0, d.value.actions.length - 1)), p.value.clear(), $.value.clear());
+    }, Oe = (r) => {
+      j.value = r, p.value.clear(), $.value.clear();
+      const a = d.value.actions?.[r];
+      a && (a.payloadMapping && a.payloadMapping.forEach((l) => {
+        p.value.set(l.argIndex, "payload");
+      }), a.actionArgs && a.actionArgs.forEach((l, b) => {
+        l !== void 0 && !a.payloadMapping?.some((C) => C.argIndex === b) && (p.value.set(b, "manual"), $.value.set(b, String(l)));
+      }));
+    }, Me = () => {
+      ee.value = F.getAllMappings();
+    }, Fe = () => {
+      ue.value = I.getAllEvents();
+    }, We = () => {
+      Y.value = E.getWidgetTypes(), console.log("📋 Loaded widget types:", Y.value);
+    }, qe = () => {
+      Z.value = O.getAllPageIds(), console.log("📄 Loaded pages:", Z.value);
+    }, pe = Ee(() => {
+      if (!d.value.eventType) return [];
       try {
-        const properties = eventRegistry.extractPayloadPropertiesForEvent(newMapping.value.eventType);
-        console.log("📦 Payload properties from Ecore model:", properties);
-        return properties.map((prop) => ({
-          text: `${prop.name}: ${prop.type}${prop.optional ? "?" : ""}`,
-          value: prop.name
+        const r = I.extractPayloadPropertiesForEvent(d.value.eventType);
+        return console.log("📦 Payload properties from Ecore model:", r), r.map((a) => ({
+          text: `${a.name}: ${a.type}${a.optional ? "?" : ""}`,
+          value: a.name
         }));
-      } catch (e) {
-        console.error("❌ Error extracting properties from Ecore:", e);
-        return [];
+      } catch (r) {
+        return console.error("❌ Error extracting properties from Ecore:", r), [];
       }
-    });
-    const availableActions = computed(() => {
-      if (!currentAction.value?.targetContext) return [];
-      const targetContext = currentAction.value.targetContext;
-      const actions = [];
-      for (const widgetType of availableWidgetTypes.value) {
-        const hasExplicitContext = widgetType.context !== void 0;
-        const typeContext = widgetType.context || "widget";
-        let matches = false;
-        if (hasExplicitContext) {
-          matches = typeContext === targetContext;
-        } else {
-          matches = targetContext === "system" && widgetType.widgetType.includes("System") || targetContext === "page" && widgetType.widgetType.includes("Page") || targetContext === "widget" && !widgetType.widgetType.includes("System") && !widgetType.widgetType.includes("Page");
-        }
-        if (matches) {
-          for (const action of widgetType.actions) {
-            const prefix = targetContext === "widget" ? `${widgetType.widgetType}.` : "";
-            actions.push({
-              text: `${prefix}${action.methodName}`,
-              value: action.methodName,
-              parameters: action.parameters,
-              widgetType: widgetType.widgetType
+    }), ke = Ee(() => {
+      if (!N.value?.targetContext) return [];
+      const r = N.value.targetContext, a = [];
+      for (const l of Y.value) {
+        const b = l.context !== void 0, C = l.context || "widget";
+        let M = !1;
+        if (b ? M = C === r : M = r === "system" && l.widgetType.includes("System") || r === "page" && l.widgetType.includes("Page") || r === "widget" && !l.widgetType.includes("System") && !l.widgetType.includes("Page"), M)
+          for (const R of l.actions) {
+            const K = r === "widget" ? `${l.widgetType}.` : "";
+            a.push({
+              text: `${K}${R.methodName}`,
+              value: R.methodName,
+              parameters: R.parameters,
+              widgetType: l.widgetType
             });
           }
-        }
       }
-      return actions;
-    });
-    const availableInstances = computed(() => {
-      if (!currentAction.value?.actionName) return [];
-      const selectedAction = availableActions.value.find((a) => a.value === currentAction.value?.actionName);
-      if (!selectedAction?.widgetType) return [];
-      const instances = actionsRegistry?.getRegisteredInstances(selectedAction.widgetType) || [];
+      return a;
+    }), ye = Ee(() => {
+      if (!N.value?.actionName) return [];
+      const r = ke.value.find((l) => l.value === N.value?.actionName);
+      if (!r?.widgetType) return [];
+      const a = E?.getRegisteredInstances(r.widgetType) || [];
       return [
         { text: "All instances", value: "" },
-        ...instances.map((inst) => ({
-          text: `${inst.instanceId} (${inst.widgetType})`,
-          value: inst.instanceId
+        ...a.map((l) => ({
+          text: `${l.instanceId} (${l.widgetType})`,
+          value: l.instanceId
         }))
       ];
-    });
-    const selectedActionParameters = computed(() => {
-      if (!currentAction.value?.actionName || !currentAction.value?.targetContext) return [];
-      const targetContext = currentAction.value.targetContext;
-      const searchWidgetTypes = availableWidgetTypes.value.filter((wt) => {
-        const hasExplicitContext = wt.context !== void 0;
-        const typeContext = wt.context || "widget";
-        if (hasExplicitContext) {
-          return typeContext === targetContext;
-        } else {
-          return targetContext === "system" && wt.widgetType.includes("System") || targetContext === "page" && wt.widgetType.includes("Page") || targetContext === "widget" && !wt.widgetType.includes("System") && !wt.widgetType.includes("Page");
-        }
+    }), de = Ee(() => {
+      if (!N.value?.actionName || !N.value?.targetContext) return [];
+      const r = N.value.targetContext, a = Y.value.filter((l) => {
+        const b = l.context !== void 0, C = l.context || "widget";
+        return b ? C === r : r === "system" && l.widgetType.includes("System") || r === "page" && l.widgetType.includes("Page") || r === "widget" && !l.widgetType.includes("System") && !l.widgetType.includes("Page");
       });
-      for (const widgetType of searchWidgetTypes) {
-        const action = widgetType.actions.find((a) => a.methodName === currentAction.value?.actionName);
-        console.log("🎯 Looking for action:", currentAction.value?.actionName, "in", widgetType.widgetType);
-        console.log("   Found action:", action);
-        if (action && action.parameters) {
-          console.log("   Action parameters:", action.parameters);
-          return action.parameters.map((param, index) => {
-            const match = param.match(/^(\w+)(\?)?:\s*(.+)$/);
-            console.log("   Parsing param:", param, "Match:", match);
-            if (match) {
-              return {
-                name: match[1],
-                optional: !!match[2],
-                type: match[3],
-                index
-              };
-            }
-            return {
-              name: `arg${index}`,
-              optional: false,
+      for (const l of a) {
+        const b = l.actions.find((C) => C.methodName === N.value?.actionName);
+        if (console.log("🎯 Looking for action:", N.value?.actionName, "in", l.widgetType), console.log("   Found action:", b), b && b.parameters)
+          return console.log("   Action parameters:", b.parameters), b.parameters.map((C, M) => {
+            const R = C.match(/^(\w+)(\?)?:\s*(.+)$/);
+            return console.log("   Parsing param:", C, "Match:", R), R ? {
+              name: R[1],
+              optional: !!R[2],
+              type: R[3],
+              index: M
+            } : {
+              name: `arg${M}`,
+              optional: !1,
               type: "any",
-              index
+              index: M
             };
           });
-        }
       }
       return [];
-    });
-    const getMappingActions = (mapping) => {
-      if (mapping.actions && mapping.actions.length > 0) {
-        return mapping.actions;
-      }
-      if (mapping.actionName) {
-        return [{
-          targetContext: mapping.targetContext,
-          targetContextId: mapping.targetContextId,
-          actionName: mapping.actionName,
-          actionArgs: mapping.actionArgs,
-          payloadMapping: mapping.payloadMapping
-        }];
-      }
-      return [];
-    };
-    const addMapping = () => {
-      if (!newMapping.value.eventType) {
+    }), Pe = (r) => r.actions && r.actions.length > 0 ? r.actions : r.actionName ? [{
+      targetContext: r.targetContext,
+      targetContextId: r.targetContextId,
+      actionName: r.actionName,
+      actionArgs: r.actionArgs,
+      payloadMapping: r.payloadMapping
+    }] : [], Ue = () => {
+      if (!d.value.eventType)
         return;
-      }
-      const validActions = newMapping.value.actions?.filter((a) => a.actionName) || [];
-      if (validActions.length === 0) {
+      const r = d.value.actions?.filter((l) => l.actionName) || [];
+      if (r.length === 0)
         return;
-      }
-      const mapping = {
-        id: editingMappingId.value || `mapping-${Date.now()}`,
-        context: newMapping.value.context,
-        contextId: newMapping.value.contextId,
-        eventType: newMapping.value.eventType,
-        conditions: newMapping.value.conditions || [],
-        actions: validActions
+      const a = {
+        id: W.value || `mapping-${Date.now()}`,
+        context: d.value.context,
+        contextId: d.value.contextId,
+        eventType: d.value.eventType,
+        conditions: d.value.conditions || [],
+        actions: r
       };
-      if (editingMappingId.value) {
-        eventManager.unregisterMapping(editingMappingId.value);
-      }
-      eventManager.registerMapping(mapping);
-      loadMappings();
-      resetForm();
-      showAddDialog.value = false;
-      showEditDialog.value = false;
-      editingMappingId.value = null;
-    };
-    const editMapping = (mapping) => {
-      editingMappingId.value = mapping.id;
-      const actions = getMappingActions(mapping);
-      newMapping.value = {
-        context: mapping.context,
-        contextId: mapping.contextId,
-        eventType: mapping.eventType,
-        conditions: mapping.conditions || [],
-        actions: actions.length > 0 ? actions : [{
+      W.value && F.unregisterMapping(W.value), F.registerMapping(a), Me(), ge(), J.value = !1, X.value = !1, W.value = null;
+    }, Re = (r) => {
+      W.value = r.id;
+      const a = Pe(r);
+      d.value = {
+        context: r.context,
+        contextId: r.contextId,
+        eventType: r.eventType,
+        conditions: r.conditions || [],
+        actions: a.length > 0 ? a : [{
           targetContext: "widget",
           actionName: "",
           actionArgs: [],
           payloadMapping: []
         }]
-      };
-      currentActionIndex.value = 0;
-      parameterValueSources.value.clear();
-      manualParameterValues.value.clear();
-      const firstAction = newMapping.value.actions?.[0];
-      if (firstAction) {
-        if (firstAction.payloadMapping) {
-          firstAction.payloadMapping.forEach((pm) => {
-            parameterValueSources.value.set(pm.argIndex, "payload");
-          });
-        }
-        if (firstAction.actionArgs) {
-          firstAction.actionArgs.forEach((arg, index) => {
-            if (arg !== void 0 && !firstAction.payloadMapping?.some((pm) => pm.argIndex === index)) {
-              parameterValueSources.value.set(index, "manual");
-              manualParameterValues.value.set(index, String(arg));
-            }
-          });
-        }
-      }
-      showEditDialog.value = true;
-    };
-    const showDeleteConfirm = ref(false);
-    const mappingToDelete = ref(null);
-    const removeMapping = (mappingId) => {
-      mappingToDelete.value = mappingId;
-      showDeleteConfirm.value = true;
-    };
-    const confirmRemoveMapping = () => {
-      if (mappingToDelete.value) {
-        eventManager.unregisterMapping(mappingToDelete.value);
-        loadMappings();
-      }
-      showDeleteConfirm.value = false;
-      mappingToDelete.value = null;
-    };
-    const resetForm = () => {
-      newMapping.value = {
+      }, j.value = 0, p.value.clear(), $.value.clear();
+      const l = d.value.actions?.[0];
+      l && (l.payloadMapping && l.payloadMapping.forEach((b) => {
+        p.value.set(b.argIndex, "payload");
+      }), l.actionArgs && l.actionArgs.forEach((b, C) => {
+        b !== void 0 && !l.payloadMapping?.some((M) => M.argIndex === C) && (p.value.set(C, "manual"), $.value.set(C, String(b)));
+      })), X.value = !0;
+    }, te = L(!1), re = L(null), Se = (r) => {
+      re.value = r, te.value = !0;
+    }, Ne = () => {
+      re.value && (F.unregisterMapping(re.value), Me()), te.value = !1, re.value = null;
+    }, ge = () => {
+      d.value = {
         context: "widget",
         conditions: [],
         actions: [{
@@ -1508,184 +1049,106 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           actionArgs: [],
           payloadMapping: []
         }]
-      };
-      editingMappingId.value = null;
-      currentActionIndex.value = 0;
-      parameterValueSources.value.clear();
-      manualParameterValues.value.clear();
-    };
-    const addCondition = () => {
-      if (!newMapping.value.conditions) {
-        newMapping.value.conditions = [];
-      }
-      newMapping.value.conditions.push(new Condition());
-    };
-    const removeCondition = (index) => {
-      newMapping.value.conditions?.splice(index, 1);
-    };
-    const parameterValueSources = ref(/* @__PURE__ */ new Map());
-    const manualParameterValues = ref(/* @__PURE__ */ new Map());
-    const updateParameterMapping = (paramIndex, payloadPath) => {
-      const action = currentAction.value;
-      if (!action) return;
-      if (!action.payloadMapping) {
-        action.payloadMapping = [];
-      }
-      action.payloadMapping = action.payloadMapping.filter(
-        (pm) => pm.argIndex !== paramIndex
-      );
-      if (payloadPath) {
-        action.payloadMapping.push({
-          payloadPath,
-          argIndex: paramIndex
-        });
-      }
-    };
-    const updateManualParameterValue = (paramIndex, value) => {
-      manualParameterValues.value.set(paramIndex, value);
-      const action = currentAction.value;
-      if (!action) return;
-      if (!action.actionArgs) {
-        action.actionArgs = [];
-      }
-      while (action.actionArgs.length <= paramIndex) {
-        action.actionArgs.push(void 0);
-      }
-      const param = selectedActionParameters.value.find((p) => p.index === paramIndex);
-      if (param) {
-        if (param.type === "number" || param.type.includes("number")) {
-          action.actionArgs[paramIndex] = parseFloat(value) || 0;
-        } else if (param.type === "boolean") {
-          action.actionArgs[paramIndex] = value === "true";
-        } else {
-          action.actionArgs[paramIndex] = value;
-        }
-      }
-    };
-    const getParameterValueSource = (paramIndex) => {
-      return parameterValueSources.value.get(paramIndex) || "payload";
-    };
-    const setParameterValueSource = (paramIndex, source) => {
-      parameterValueSources.value.set(paramIndex, source);
-      const action = currentAction.value;
-      if (!action) return;
-      if (source === "manual") {
-        if (action.payloadMapping) {
-          action.payloadMapping = action.payloadMapping.filter(
-            (pm) => pm.argIndex !== paramIndex
-          );
-        }
-      } else {
-        manualParameterValues.value.delete(paramIndex);
-        if (action.actionArgs && action.actionArgs[paramIndex] !== void 0) {
-          action.actionArgs[paramIndex] = void 0;
-        }
-      }
-    };
-    const getPayloadPathForParameter = (paramIndex) => {
-      const action = currentAction.value;
-      if (!action?.payloadMapping) return "";
-      const mapping = action.payloadMapping.find((pm) => pm.argIndex === paramIndex);
-      return mapping?.payloadPath || "";
-    };
-    const getManualValueForParameter = (paramIndex) => {
-      return manualParameterValues.value.get(paramIndex) || "";
-    };
-    const formatConditions = (conditions) => {
-      if (!conditions || conditions.length === 0) return "-";
-      return conditions.map((c) => `${c.prop} ${c.comperator} ${c.value}`).join(" AND ");
-    };
-    const injectedEventManager = inject(EVENT_MANAGER);
-    const injectedEventRegistry = inject(EVENT_REGISTRY);
-    const injectedActionsRegistry = inject(EVENT_ACTIONS_REGISTRY);
-    const injectedPageRegistry = inject(identifier);
-    onMounted(() => {
-      eventManager = injectedEventManager;
-      eventRegistry = injectedEventRegistry;
-      actionsRegistry = injectedActionsRegistry;
-      pageRegistry = injectedPageRegistry;
-      loadMappings();
-      loadEvents();
-      loadWidgetTypes();
-      loadPages();
-    });
-    return (_ctx, _cache) => {
-      const _component_VaButton = resolveComponent("VaButton");
-      const _component_VaDataTable = resolveComponent("VaDataTable");
-      const _component_VaCardTitle = resolveComponent("VaCardTitle");
-      const _component_VaSelect = resolveComponent("VaSelect");
-      const _component_VaInput = resolveComponent("VaInput");
-      const _component_VaCardContent = resolveComponent("VaCardContent");
-      const _component_VaCard = resolveComponent("VaCard");
-      const _component_VaModal = resolveComponent("VaModal");
-      const _component_VaIcon = resolveComponent("VaIcon");
-      return openBlock(), createElementBlock("div", _hoisted_1, [
-        createElementVNode("div", _hoisted_2, [
-          _cache[15] || (_cache[15] = createElementVNode("h2", { class: "page-title" }, "Event Manager", -1)),
-          createVNode(_component_VaButton, {
-            onClick: _cache[0] || (_cache[0] = ($event) => showAddDialog.value = true),
+      }, W.value = null, j.value = 0, p.value.clear(), $.value.clear();
+    }, Ve = () => {
+      d.value.conditions || (d.value.conditions = []), d.value.conditions.push(new vt());
+    }, Ce = (r) => {
+      d.value.conditions?.splice(r, 1);
+    }, p = L(/* @__PURE__ */ new Map()), $ = L(/* @__PURE__ */ new Map()), je = (r, a) => {
+      const l = N.value;
+      l && (l.payloadMapping || (l.payloadMapping = []), l.payloadMapping = l.payloadMapping.filter(
+        (b) => b.argIndex !== r
+      ), a && l.payloadMapping.push({
+        payloadPath: a,
+        argIndex: r
+      }));
+    }, A = (r, a) => {
+      $.value.set(r, a);
+      const l = N.value;
+      if (!l) return;
+      for (l.actionArgs || (l.actionArgs = []); l.actionArgs.length <= r; )
+        l.actionArgs.push(void 0);
+      const b = de.value.find((C) => C.index === r);
+      b && (b.type === "number" || b.type.includes("number") ? l.actionArgs[r] = parseFloat(a) || 0 : b.type === "boolean" ? l.actionArgs[r] = a === "true" : l.actionArgs[r] = a);
+    }, ie = (r) => p.value.get(r) || "payload", me = (r, a) => {
+      p.value.set(r, a);
+      const l = N.value;
+      l && (a === "manual" ? l.payloadMapping && (l.payloadMapping = l.payloadMapping.filter(
+        (b) => b.argIndex !== r
+      )) : ($.value.delete(r), l.actionArgs && l.actionArgs[r] !== void 0 && (l.actionArgs[r] = void 0)));
+    }, Te = (r) => {
+      const a = N.value;
+      return a?.payloadMapping && a.payloadMapping.find((b) => b.argIndex === r)?.payloadPath || "";
+    }, $e = (r) => $.value.get(r) || "", H = (r) => !r || r.length === 0 ? "-" : r.map((a) => `${a.prop} ${a.comperator} ${a.value}`).join(" AND "), De = ze(dt), he = ze(ct), Ge = ze(ft), Be = ze(pt);
+    return ut(() => {
+      F = De, I = he, E = Ge, O = Be, Me(), Fe(), We(), qe();
+    }), (r, a) => {
+      const l = ne("VaButton"), b = ne("VaDataTable"), C = ne("VaCardTitle"), M = ne("VaSelect"), R = ne("VaInput"), K = ne("VaCardContent"), se = ne("VaCard"), Ie = ne("VaModal"), Le = ne("VaIcon");
+      return h(), k("div", ht, [
+        y("div", _t, [
+          a[15] || (a[15] = y("h2", { class: "page-title" }, "Event Manager", -1)),
+          m(l, {
+            onClick: a[0] || (a[0] = (o) => J.value = !0),
             icon: "add"
           }, {
-            default: withCtx(() => [..._cache[14] || (_cache[14] = [
-              createTextVNode("Add Mapping", -1)
+            default: w(() => [...a[14] || (a[14] = [
+              ae("Add Mapping", -1)
             ])]),
             _: 1
           })
         ]),
-        createElementVNode("div", _hoisted_3, [
-          createElementVNode("div", _hoisted_4, [
-            createVNode(_component_VaDataTable, {
-              items: mappings.value,
-              columns,
-              hoverable: true,
+        y("div", xt, [
+          y("div", bt, [
+            m(b, {
+              items: ee.value,
+              columns: le,
+              hoverable: !0,
               class: "w-full"
             }, {
-              "cell(id)": withCtx(({ rowData }) => [
-                createElementVNode("span", {
+              "cell(id)": w(({ rowData: o }) => [
+                y("span", {
                   class: "mapping-id",
-                  title: rowData.id
-                }, toDisplayString(rowData.id), 9, _hoisted_5)
+                  title: o.id
+                }, D(o.id), 9, wt)
               ]),
-              "cell(context)": withCtx(({ rowData }) => [
-                createElementVNode("span", null, toDisplayString(rowData.context), 1),
-                rowData.contextId ? (openBlock(), createElementBlock("span", {
+              "cell(context)": w(({ rowData: o }) => [
+                y("span", null, D(o.context), 1),
+                o.contextId ? (h(), k("span", {
                   key: 0,
                   class: "uid-badge",
-                  title: rowData.contextId
-                }, toDisplayString(rowData.contextId), 9, _hoisted_6)) : createCommentVNode("", true)
+                  title: o.contextId
+                }, D(o.contextId), 9, Mt)) : z("", !0)
               ]),
-              "cell(actionsCount)": withCtx(({ rowData }) => [
-                createElementVNode("div", _hoisted_7, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(getMappingActions(rowData), (action, idx) => {
-                    return openBlock(), createElementBlock("div", {
-                      key: idx,
-                      class: "action-item"
-                    }, [
-                      createElementVNode("span", _hoisted_8, toDisplayString(action.targetContext), 1),
-                      action.targetContextId ? (openBlock(), createElementBlock("span", {
-                        key: 0,
-                        class: "uid-badge",
-                        title: action.targetContextId
-                      }, toDisplayString(action.targetContextId), 9, _hoisted_9)) : createCommentVNode("", true),
-                      _cache[16] || (_cache[16] = createElementVNode("span", { class: "action-separator" }, "→", -1)),
-                      createElementVNode("span", _hoisted_10, toDisplayString(action.actionName), 1)
-                    ]);
-                  }), 128))
+              "cell(actionsCount)": w(({ rowData: o }) => [
+                y("div", kt, [
+                  (h(!0), k(ce, null, fe(Pe(o), (V, s) => (h(), k("div", {
+                    key: s,
+                    class: "action-item"
+                  }, [
+                    y("span", Vt, D(V.targetContext), 1),
+                    V.targetContextId ? (h(), k("span", {
+                      key: 0,
+                      class: "uid-badge",
+                      title: V.targetContextId
+                    }, D(V.targetContextId), 9, Ct)) : z("", !0),
+                    a[16] || (a[16] = y("span", { class: "action-separator" }, "→", -1)),
+                    y("span", Tt, D(V.actionName), 1)
+                  ]))), 128))
                 ])
               ]),
-              "cell(conditions)": withCtx(({ rowData }) => [
-                createElementVNode("span", _hoisted_11, toDisplayString(formatConditions(rowData.conditions)), 1)
+              "cell(conditions)": w(({ rowData: o }) => [
+                y("span", It, D(H(o.conditions)), 1)
               ]),
-              "cell(tableActions)": withCtx(({ rowData }) => [
-                createElementVNode("div", _hoisted_12, [
-                  createVNode(_component_VaButton, {
-                    onClick: ($event) => editMapping(rowData),
+              "cell(tableActions)": w(({ rowData: o }) => [
+                y("div", Et, [
+                  m(l, {
+                    onClick: (V) => Re(o),
                     preset: "plain",
                     icon: "edit",
                     size: "small"
                   }, null, 8, ["onClick"]),
-                  createVNode(_component_VaButton, {
-                    onClick: ($event) => removeMapping(rowData.id),
+                  m(l, {
+                    onClick: (V) => Se(o.id),
                     preset: "plain",
                     icon: "delete",
                     color: "danger",
@@ -1697,60 +1160,60 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }, 8, ["items"])
           ])
         ]),
-        createVNode(_component_VaModal, {
-          modelValue: showAddDialog.value,
-          "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => showAddDialog.value = $event),
+        m(Ie, {
+          modelValue: J.value,
+          "onUpdate:modelValue": a[5] || (a[5] = (o) => J.value = o),
           title: "Add Event-Action Mapping",
           size: "large",
           class: "event-manager-ui_modal",
-          onOk: addMapping,
-          onCancel: resetForm,
+          onOk: Ue,
+          onCancel: ge,
           "ok-text": "Add",
           "cancel-text": "Cancel"
         }, {
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_13, [
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "section-title" }, {
-                    default: withCtx(() => [..._cache[17] || (_cache[17] = [
-                      createTextVNode("1. Event Source", -1)
+          default: w(() => [
+            y("div", At, [
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "section-title" }, {
+                    default: w(() => [...a[17] || (a[17] = [
+                      ae("1. Event Source", -1)
                     ])]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      createElementVNode("div", _hoisted_14, [
-                        createVNode(_component_VaSelect, {
-                          modelValue: newMapping.value.context,
-                          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => newMapping.value.context = $event),
+                  m(K, null, {
+                    default: w(() => [
+                      y("div", Ot, [
+                        m(M, {
+                          modelValue: d.value.context,
+                          "onUpdate:modelValue": a[1] || (a[1] = (o) => d.value.context = o),
                           label: "Context",
-                          options: contextOptions,
+                          options: oe,
                           "text-by": "text",
                           "value-by": "value"
                         }, null, 8, ["modelValue"]),
-                        newMapping.value.context === "page" ? (openBlock(), createBlock(_component_VaSelect, {
+                        d.value.context === "page" ? (h(), q(M, {
                           key: 0,
-                          modelValue: newMapping.value.contextId,
-                          "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => newMapping.value.contextId = $event),
+                          modelValue: d.value.contextId,
+                          "onUpdate:modelValue": a[2] || (a[2] = (o) => d.value.contextId = o),
                           label: "Page ID",
-                          options: [{ text: "Any page", value: "" }, ...availablePages.value.map((p) => ({ text: p, value: p }))],
+                          options: [{ text: "Any page", value: "" }, ...Z.value.map((o) => ({ text: o, value: o }))],
                           "text-by": "text",
                           "value-by": "value",
                           clearable: ""
-                        }, null, 8, ["modelValue", "options"])) : newMapping.value.context === "widget" ? (openBlock(), createBlock(_component_VaInput, {
+                        }, null, 8, ["modelValue", "options"])) : d.value.context === "widget" ? (h(), q(R, {
                           key: 1,
-                          modelValue: newMapping.value.contextId,
-                          "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => newMapping.value.contextId = $event),
+                          modelValue: d.value.contextId,
+                          "onUpdate:modelValue": a[3] || (a[3] = (o) => d.value.contextId = o),
                           label: "Widget ID (optional)",
                           placeholder: "e.g., specific widgetId",
                           clearable: ""
-                        }, null, 8, ["modelValue"])) : createCommentVNode("", true),
-                        createVNode(_component_VaSelect, {
-                          modelValue: newMapping.value.eventType,
-                          "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => newMapping.value.eventType = $event),
+                        }, null, 8, ["modelValue"])) : z("", !0),
+                        m(M, {
+                          modelValue: d.value.eventType,
+                          "onUpdate:modelValue": a[4] || (a[4] = (o) => d.value.eventType = o),
                           label: "Event Type",
-                          options: availableEvents.value,
+                          options: ue.value,
                           "text-by": "type",
                           "value-by": "type"
                         }, null, 8, ["modelValue", "options"])
@@ -1761,210 +1224,204 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 ]),
                 _: 1
               }),
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "flex justify-between items-center" }, {
-                    default: withCtx(() => [
-                      _cache[19] || (_cache[19] = createElementVNode("span", { class: "section-title" }, "2. Conditions", -1)),
-                      createVNode(_component_VaButton, {
-                        onClick: addCondition,
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "flex justify-between items-center" }, {
+                    default: w(() => [
+                      a[19] || (a[19] = y("span", { class: "section-title" }, "2. Conditions", -1)),
+                      m(l, {
+                        onClick: Ve,
                         size: "small",
                         icon: "add",
                         preset: "secondary"
                       }, {
-                        default: withCtx(() => [..._cache[18] || (_cache[18] = [
-                          createTextVNode("Add", -1)
+                        default: w(() => [...a[18] || (a[18] = [
+                          ae("Add", -1)
                         ])]),
                         _: 1
                       })
                     ]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      newMapping.value.conditions && newMapping.value.conditions.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_15, [
-                        (openBlock(true), createElementBlock(Fragment, null, renderList(newMapping.value.conditions, (condition, index) => {
-                          return openBlock(), createElementBlock("div", {
-                            key: index,
-                            class: "condition-row"
-                          }, [
-                            createVNode(_component_VaSelect, {
-                              modelValue: condition.prop,
-                              "onUpdate:modelValue": ($event) => condition.prop = $event,
-                              placeholder: "Property",
-                              options: availablePayloadProperties.value,
-                              "text-by": "text",
-                              "value-by": "value",
-                              class: "flex-1"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
-                            createVNode(_component_VaSelect, {
-                              modelValue: condition.comperator,
-                              "onUpdate:modelValue": ($event) => condition.comperator = $event,
-                              options: comperatorOptions,
-                              "text-by": "text",
-                              "value-by": "value",
-                              class: "w-20"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                            createVNode(_component_VaInput, {
-                              modelValue: condition.value,
-                              "onUpdate:modelValue": ($event) => condition.value = $event,
-                              placeholder: "Value",
-                              class: "flex-1"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                            createVNode(_component_VaButton, {
-                              onClick: ($event) => removeCondition(index),
-                              preset: "plain",
-                              icon: "delete",
-                              color: "danger",
-                              size: "small"
-                            }, null, 8, ["onClick"])
-                          ]);
-                        }), 128))
-                      ])) : (openBlock(), createElementBlock("div", _hoisted_16, " No conditions - action will always execute "))
+                  m(K, null, {
+                    default: w(() => [
+                      d.value.conditions && d.value.conditions.length > 0 ? (h(), k("div", Pt, [
+                        (h(!0), k(ce, null, fe(d.value.conditions, (o, V) => (h(), k("div", {
+                          key: V,
+                          class: "condition-row"
+                        }, [
+                          m(M, {
+                            modelValue: o.prop,
+                            "onUpdate:modelValue": (s) => o.prop = s,
+                            placeholder: "Property",
+                            options: pe.value,
+                            "text-by": "text",
+                            "value-by": "value",
+                            class: "flex-1"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
+                          m(M, {
+                            modelValue: o.comperator,
+                            "onUpdate:modelValue": (s) => o.comperator = s,
+                            options: ve,
+                            "text-by": "text",
+                            "value-by": "value",
+                            class: "w-20"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                          m(R, {
+                            modelValue: o.value,
+                            "onUpdate:modelValue": (s) => o.value = s,
+                            placeholder: "Value",
+                            class: "flex-1"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                          m(l, {
+                            onClick: (s) => Ce(V),
+                            preset: "plain",
+                            icon: "delete",
+                            color: "danger",
+                            size: "small"
+                          }, null, 8, ["onClick"])
+                        ]))), 128))
+                      ])) : (h(), k("div", Ut, " No conditions - action will always execute "))
                     ]),
                     _: 1
                   })
                 ]),
                 _: 1
               }),
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "flex justify-between items-center" }, {
-                    default: withCtx(() => [
-                      _cache[21] || (_cache[21] = createElementVNode("span", { class: "section-title" }, "3. Actions", -1)),
-                      createVNode(_component_VaButton, {
-                        onClick: addAction,
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "flex justify-between items-center" }, {
+                    default: w(() => [
+                      a[21] || (a[21] = y("span", { class: "section-title" }, "3. Actions", -1)),
+                      m(l, {
+                        onClick: we,
                         size: "small",
                         icon: "add",
                         preset: "secondary"
                       }, {
-                        default: withCtx(() => [..._cache[20] || (_cache[20] = [
-                          createTextVNode("Add Action", -1)
+                        default: w(() => [...a[20] || (a[20] = [
+                          ae("Add Action", -1)
                         ])]),
                         _: 1
                       })
                     ]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      newMapping.value.actions && newMapping.value.actions.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_17, [
-                        (openBlock(true), createElementBlock(Fragment, null, renderList(newMapping.value.actions, (action, idx) => {
-                          return openBlock(), createElementBlock("div", {
-                            key: idx,
-                            class: normalizeClass(["action-card", { active: currentActionIndex.value === idx }]),
-                            onClick: ($event) => selectAction(idx)
-                          }, [
-                            createElementVNode("div", _hoisted_19, [
-                              createElementVNode("span", _hoisted_20, toDisplayString(idx + 1), 1),
-                              createElementVNode("span", _hoisted_21, [
-                                createElementVNode("span", _hoisted_22, toDisplayString(action.targetContext), 1),
-                                action.actionName ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(action.actionName), 1)) : (openBlock(), createElementBlock("span", _hoisted_24, "(select action)"))
-                              ]),
-                              newMapping.value.actions.length > 1 ? (openBlock(), createBlock(_component_VaButton, {
-                                key: 0,
-                                onClick: withModifiers(($event) => removeAction(idx), ["stop"]),
-                                preset: "plain",
-                                icon: "close",
-                                color: "danger",
-                                size: "small"
-                              }, null, 8, ["onClick"])) : createCommentVNode("", true)
+                  m(K, null, {
+                    default: w(() => [
+                      d.value.actions && d.value.actions.length > 0 ? (h(), k("div", Rt, [
+                        (h(!0), k(ce, null, fe(d.value.actions, (o, V) => (h(), k("div", {
+                          key: V,
+                          class: _e(["action-card", { active: j.value === V }]),
+                          onClick: (s) => Oe(V)
+                        }, [
+                          y("div", Nt, [
+                            y("span", jt, D(V + 1), 1),
+                            y("span", $t, [
+                              y("span", Dt, D(o.targetContext), 1),
+                              o.actionName ? (h(), k("span", Gt, D(o.actionName), 1)) : (h(), k("span", zt, "(select action)"))
                             ]),
-                            currentActionIndex.value === idx ? (openBlock(), createElementBlock("div", _hoisted_25, [
-                              createElementVNode("div", _hoisted_26, [
-                                createVNode(_component_VaSelect, {
-                                  modelValue: action.targetContext,
-                                  "onUpdate:modelValue": ($event) => action.targetContext = $event,
-                                  label: "Context",
-                                  options: contextOptions,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  class: "context-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                                action.targetContext === "page" ? (openBlock(), createBlock(_component_VaSelect, {
-                                  key: 0,
-                                  modelValue: action.targetContextId,
-                                  "onUpdate:modelValue": ($event) => action.targetContextId = $event,
-                                  label: "Target Page",
-                                  options: [{ text: "Any", value: "" }, ...availablePages.value.map((p) => ({ text: p, value: p }))],
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  clearable: "",
-                                  class: "target-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : action.targetContext === "widget" || action.targetContext === "system" ? (openBlock(), createBlock(_component_VaSelect, {
-                                  key: 1,
-                                  modelValue: action.targetContextId,
-                                  "onUpdate:modelValue": ($event) => action.targetContextId = $event,
-                                  label: "Target Instance",
-                                  options: availableInstances.value,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  clearable: "",
-                                  class: "target-select",
-                                  placeholder: availableInstances.value.length > 1 ? "Select instance" : "All instances"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : createCommentVNode("", true),
-                                createVNode(_component_VaSelect, {
-                                  modelValue: action.actionName,
-                                  "onUpdate:modelValue": ($event) => action.actionName = $event,
-                                  label: "Action",
-                                  options: availableActions.value,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  class: "action-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
-                              ]),
-                              selectedActionParameters.value.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_27, [
-                                _cache[22] || (_cache[22] = createElementVNode("div", { class: "parameters-title" }, "Parameters", -1)),
-                                createElementVNode("div", _hoisted_28, [
-                                  (openBlock(true), createElementBlock(Fragment, null, renderList(selectedActionParameters.value, (param) => {
-                                    return openBlock(), createElementBlock("div", {
-                                      key: param.index,
-                                      class: "parameter-item"
-                                    }, [
-                                      createElementVNode("div", _hoisted_29, [
-                                        createElementVNode("span", _hoisted_30, toDisplayString(param.name), 1),
-                                        param.optional ? (openBlock(), createElementBlock("span", _hoisted_31, "?")) : createCommentVNode("", true),
-                                        createElementVNode("span", _hoisted_32, toDisplayString(param.type), 1)
-                                      ]),
-                                      createElementVNode("div", _hoisted_33, [
-                                        createElementVNode("div", _hoisted_34, [
-                                          createElementVNode("button", {
-                                            class: normalizeClass(["toggle-btn", { active: getParameterValueSource(param.index) === "payload" }]),
-                                            onClick: withModifiers(($event) => setParameterValueSource(param.index, "payload"), ["stop"]),
-                                            type: "button"
-                                          }, "Payload", 10, _hoisted_35),
-                                          createElementVNode("button", {
-                                            class: normalizeClass(["toggle-btn", { active: getParameterValueSource(param.index) === "manual" }]),
-                                            onClick: withModifiers(($event) => setParameterValueSource(param.index, "manual"), ["stop"]),
-                                            type: "button"
-                                          }, "Manual", 10, _hoisted_36)
-                                        ]),
-                                        getParameterValueSource(param.index) === "payload" ? (openBlock(), createBlock(_component_VaSelect, {
-                                          key: 0,
-                                          "model-value": getPayloadPathForParameter(param.index),
-                                          "onUpdate:modelValue": ($event) => updateParameterMapping(param.index, $event),
-                                          placeholder: param.optional ? "(optional)" : "Select property",
-                                          options: availablePayloadProperties.value,
-                                          "text-by": "text",
-                                          "value-by": "value",
-                                          clearable: "",
-                                          class: "parameter-value-input"
-                                        }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (openBlock(), createBlock(_component_VaInput, {
-                                          key: 1,
-                                          "model-value": getManualValueForParameter(param.index),
-                                          "onUpdate:modelValue": ($event) => updateManualParameterValue(param.index, $event),
-                                          placeholder: `Enter ${param.type}`,
-                                          class: "parameter-value-input"
-                                        }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
-                                      ])
-                                    ]);
-                                  }), 128))
-                                ])
-                              ])) : createCommentVNode("", true)
-                            ])) : createCommentVNode("", true)
-                          ], 10, _hoisted_18);
-                        }), 128))
-                      ])) : createCommentVNode("", true)
+                            d.value.actions.length > 1 ? (h(), q(l, {
+                              key: 0,
+                              onClick: xe((s) => Ae(V), ["stop"]),
+                              preset: "plain",
+                              icon: "close",
+                              color: "danger",
+                              size: "small"
+                            }, null, 8, ["onClick"])) : z("", !0)
+                          ]),
+                          j.value === V ? (h(), k("div", Ft, [
+                            y("div", Wt, [
+                              m(M, {
+                                modelValue: o.targetContext,
+                                "onUpdate:modelValue": (s) => o.targetContext = s,
+                                label: "Context",
+                                options: oe,
+                                "text-by": "text",
+                                "value-by": "value",
+                                class: "context-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                              o.targetContext === "page" ? (h(), q(M, {
+                                key: 0,
+                                modelValue: o.targetContextId,
+                                "onUpdate:modelValue": (s) => o.targetContextId = s,
+                                label: "Target Page",
+                                options: [{ text: "Any", value: "" }, ...Z.value.map((s) => ({ text: s, value: s }))],
+                                "text-by": "text",
+                                "value-by": "value",
+                                clearable: "",
+                                class: "target-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : o.targetContext === "widget" || o.targetContext === "system" ? (h(), q(M, {
+                                key: 1,
+                                modelValue: o.targetContextId,
+                                "onUpdate:modelValue": (s) => o.targetContextId = s,
+                                label: "Target Instance",
+                                options: ye.value,
+                                "text-by": "text",
+                                "value-by": "value",
+                                clearable: "",
+                                class: "target-select",
+                                placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : z("", !0),
+                              m(M, {
+                                modelValue: o.actionName,
+                                "onUpdate:modelValue": (s) => o.actionName = s,
+                                label: "Action",
+                                options: ke.value,
+                                "text-by": "text",
+                                "value-by": "value",
+                                class: "action-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
+                            ]),
+                            de.value.length > 0 ? (h(), k("div", qt, [
+                              a[22] || (a[22] = y("div", { class: "parameters-title" }, "Parameters", -1)),
+                              y("div", Bt, [
+                                (h(!0), k(ce, null, fe(de.value, (s) => (h(), k("div", {
+                                  key: s.index,
+                                  class: "parameter-item"
+                                }, [
+                                  y("div", Lt, [
+                                    y("span", Ht, D(s.name), 1),
+                                    s.optional ? (h(), k("span", Yt, "?")) : z("", !0),
+                                    y("span", Zt, D(s.type), 1)
+                                  ]),
+                                  y("div", Jt, [
+                                    y("div", Qt, [
+                                      y("button", {
+                                        class: _e(["toggle-btn", { active: ie(s.index) === "payload" }]),
+                                        onClick: xe((B) => me(s.index, "payload"), ["stop"]),
+                                        type: "button"
+                                      }, "Payload", 10, Xt),
+                                      y("button", {
+                                        class: _e(["toggle-btn", { active: ie(s.index) === "manual" }]),
+                                        onClick: xe((B) => me(s.index, "manual"), ["stop"]),
+                                        type: "button"
+                                      }, "Manual", 10, Kt)
+                                    ]),
+                                    ie(s.index) === "payload" ? (h(), q(M, {
+                                      key: 0,
+                                      "model-value": Te(s.index),
+                                      "onUpdate:modelValue": (B) => je(s.index, B),
+                                      placeholder: s.optional ? "(optional)" : "Select property",
+                                      options: pe.value,
+                                      "text-by": "text",
+                                      "value-by": "value",
+                                      clearable: "",
+                                      class: "parameter-value-input"
+                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (h(), q(R, {
+                                      key: 1,
+                                      "model-value": $e(s.index),
+                                      "onUpdate:modelValue": (B) => A(s.index, B),
+                                      placeholder: `Enter ${s.type}`,
+                                      class: "parameter-value-input"
+                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
+                                  ])
+                                ]))), 128))
+                              ])
+                            ])) : z("", !0)
+                          ])) : z("", !0)
+                        ], 10, St))), 128))
+                      ])) : z("", !0)
                     ]),
                     _: 1
                   })
@@ -1975,59 +1432,59 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ]),
           _: 1
         }, 8, ["modelValue"]),
-        createVNode(_component_VaModal, {
-          modelValue: showEditDialog.value,
-          "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => showEditDialog.value = $event),
+        m(Ie, {
+          modelValue: X.value,
+          "onUpdate:modelValue": a[10] || (a[10] = (o) => X.value = o),
           title: "Edit Event-Action Mapping",
           size: "large",
-          onOk: addMapping,
-          onCancel: resetForm,
+          onOk: Ue,
+          onCancel: ge,
           "ok-text": "Save",
           "cancel-text": "Cancel"
         }, {
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_37, [
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "section-title" }, {
-                    default: withCtx(() => [..._cache[23] || (_cache[23] = [
-                      createTextVNode("1. Event Source", -1)
+          default: w(() => [
+            y("div", en, [
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "section-title" }, {
+                    default: w(() => [...a[23] || (a[23] = [
+                      ae("1. Event Source", -1)
                     ])]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      createElementVNode("div", _hoisted_38, [
-                        createVNode(_component_VaSelect, {
-                          modelValue: newMapping.value.context,
-                          "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => newMapping.value.context = $event),
+                  m(K, null, {
+                    default: w(() => [
+                      y("div", tn, [
+                        m(M, {
+                          modelValue: d.value.context,
+                          "onUpdate:modelValue": a[6] || (a[6] = (o) => d.value.context = o),
                           label: "Context",
-                          options: contextOptions,
+                          options: oe,
                           "text-by": "text",
                           "value-by": "value"
                         }, null, 8, ["modelValue"]),
-                        newMapping.value.context === "page" ? (openBlock(), createBlock(_component_VaSelect, {
+                        d.value.context === "page" ? (h(), q(M, {
                           key: 0,
-                          modelValue: newMapping.value.contextId,
-                          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => newMapping.value.contextId = $event),
+                          modelValue: d.value.contextId,
+                          "onUpdate:modelValue": a[7] || (a[7] = (o) => d.value.contextId = o),
                           label: "Page ID",
-                          options: [{ text: "Any page", value: "" }, ...availablePages.value.map((p) => ({ text: p, value: p }))],
+                          options: [{ text: "Any page", value: "" }, ...Z.value.map((o) => ({ text: o, value: o }))],
                           "text-by": "text",
                           "value-by": "value",
                           clearable: ""
-                        }, null, 8, ["modelValue", "options"])) : newMapping.value.context === "widget" ? (openBlock(), createBlock(_component_VaInput, {
+                        }, null, 8, ["modelValue", "options"])) : d.value.context === "widget" ? (h(), q(R, {
                           key: 1,
-                          modelValue: newMapping.value.contextId,
-                          "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => newMapping.value.contextId = $event),
+                          modelValue: d.value.contextId,
+                          "onUpdate:modelValue": a[8] || (a[8] = (o) => d.value.contextId = o),
                           label: "Widget ID (optional)",
                           placeholder: "e.g., specific widgetId",
                           clearable: ""
-                        }, null, 8, ["modelValue"])) : createCommentVNode("", true),
-                        createVNode(_component_VaSelect, {
-                          modelValue: newMapping.value.eventType,
-                          "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => newMapping.value.eventType = $event),
+                        }, null, 8, ["modelValue"])) : z("", !0),
+                        m(M, {
+                          modelValue: d.value.eventType,
+                          "onUpdate:modelValue": a[9] || (a[9] = (o) => d.value.eventType = o),
                           label: "Event Type",
-                          options: availableEvents.value,
+                          options: ue.value,
                           "text-by": "type",
                           "value-by": "type"
                         }, null, 8, ["modelValue", "options"])
@@ -2038,210 +1495,204 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 ]),
                 _: 1
               }),
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "flex justify-between items-center" }, {
-                    default: withCtx(() => [
-                      _cache[25] || (_cache[25] = createElementVNode("span", { class: "section-title" }, "2. Conditions", -1)),
-                      createVNode(_component_VaButton, {
-                        onClick: addCondition,
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "flex justify-between items-center" }, {
+                    default: w(() => [
+                      a[25] || (a[25] = y("span", { class: "section-title" }, "2. Conditions", -1)),
+                      m(l, {
+                        onClick: Ve,
                         size: "small",
                         icon: "add",
                         preset: "secondary"
                       }, {
-                        default: withCtx(() => [..._cache[24] || (_cache[24] = [
-                          createTextVNode("Add", -1)
+                        default: w(() => [...a[24] || (a[24] = [
+                          ae("Add", -1)
                         ])]),
                         _: 1
                       })
                     ]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      newMapping.value.conditions && newMapping.value.conditions.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_39, [
-                        (openBlock(true), createElementBlock(Fragment, null, renderList(newMapping.value.conditions, (condition, index) => {
-                          return openBlock(), createElementBlock("div", {
-                            key: index,
-                            class: "condition-row"
-                          }, [
-                            createVNode(_component_VaSelect, {
-                              modelValue: condition.prop,
-                              "onUpdate:modelValue": ($event) => condition.prop = $event,
-                              placeholder: "Property",
-                              options: availablePayloadProperties.value,
-                              "text-by": "text",
-                              "value-by": "value",
-                              class: "flex-1"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
-                            createVNode(_component_VaSelect, {
-                              modelValue: condition.comperator,
-                              "onUpdate:modelValue": ($event) => condition.comperator = $event,
-                              options: comperatorOptions,
-                              "text-by": "text",
-                              "value-by": "value",
-                              class: "w-20"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                            createVNode(_component_VaInput, {
-                              modelValue: condition.value,
-                              "onUpdate:modelValue": ($event) => condition.value = $event,
-                              placeholder: "Value",
-                              class: "flex-1"
-                            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                            createVNode(_component_VaButton, {
-                              onClick: ($event) => removeCondition(index),
-                              preset: "plain",
-                              icon: "delete",
-                              color: "danger",
-                              size: "small"
-                            }, null, 8, ["onClick"])
-                          ]);
-                        }), 128))
-                      ])) : (openBlock(), createElementBlock("div", _hoisted_40, " No conditions - action will always execute "))
+                  m(K, null, {
+                    default: w(() => [
+                      d.value.conditions && d.value.conditions.length > 0 ? (h(), k("div", nn, [
+                        (h(!0), k(ce, null, fe(d.value.conditions, (o, V) => (h(), k("div", {
+                          key: V,
+                          class: "condition-row"
+                        }, [
+                          m(M, {
+                            modelValue: o.prop,
+                            "onUpdate:modelValue": (s) => o.prop = s,
+                            placeholder: "Property",
+                            options: pe.value,
+                            "text-by": "text",
+                            "value-by": "value",
+                            class: "flex-1"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue", "options"]),
+                          m(M, {
+                            modelValue: o.comperator,
+                            "onUpdate:modelValue": (s) => o.comperator = s,
+                            options: ve,
+                            "text-by": "text",
+                            "value-by": "value",
+                            class: "w-20"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                          m(R, {
+                            modelValue: o.value,
+                            "onUpdate:modelValue": (s) => o.value = s,
+                            placeholder: "Value",
+                            class: "flex-1"
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                          m(l, {
+                            onClick: (s) => Ce(V),
+                            preset: "plain",
+                            icon: "delete",
+                            color: "danger",
+                            size: "small"
+                          }, null, 8, ["onClick"])
+                        ]))), 128))
+                      ])) : (h(), k("div", an, " No conditions - action will always execute "))
                     ]),
                     _: 1
                   })
                 ]),
                 _: 1
               }),
-              createVNode(_component_VaCard, { class: "card-section" }, {
-                default: withCtx(() => [
-                  createVNode(_component_VaCardTitle, { class: "flex justify-between items-center" }, {
-                    default: withCtx(() => [
-                      _cache[27] || (_cache[27] = createElementVNode("span", { class: "section-title" }, "3. Actions", -1)),
-                      createVNode(_component_VaButton, {
-                        onClick: addAction,
+              m(se, { class: "card-section" }, {
+                default: w(() => [
+                  m(C, { class: "flex justify-between items-center" }, {
+                    default: w(() => [
+                      a[27] || (a[27] = y("span", { class: "section-title" }, "3. Actions", -1)),
+                      m(l, {
+                        onClick: we,
                         size: "small",
                         icon: "add",
                         preset: "secondary"
                       }, {
-                        default: withCtx(() => [..._cache[26] || (_cache[26] = [
-                          createTextVNode("Add Action", -1)
+                        default: w(() => [...a[26] || (a[26] = [
+                          ae("Add Action", -1)
                         ])]),
                         _: 1
                       })
                     ]),
                     _: 1
                   }),
-                  createVNode(_component_VaCardContent, null, {
-                    default: withCtx(() => [
-                      newMapping.value.actions && newMapping.value.actions.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_41, [
-                        (openBlock(true), createElementBlock(Fragment, null, renderList(newMapping.value.actions, (action, idx) => {
-                          return openBlock(), createElementBlock("div", {
-                            key: idx,
-                            class: normalizeClass(["action-card", { active: currentActionIndex.value === idx }]),
-                            onClick: ($event) => selectAction(idx)
-                          }, [
-                            createElementVNode("div", _hoisted_43, [
-                              createElementVNode("span", _hoisted_44, toDisplayString(idx + 1), 1),
-                              createElementVNode("span", _hoisted_45, [
-                                createElementVNode("span", _hoisted_46, toDisplayString(action.targetContext), 1),
-                                action.actionName ? (openBlock(), createElementBlock("span", _hoisted_47, toDisplayString(action.actionName), 1)) : (openBlock(), createElementBlock("span", _hoisted_48, "(select action)"))
-                              ]),
-                              newMapping.value.actions.length > 1 ? (openBlock(), createBlock(_component_VaButton, {
-                                key: 0,
-                                onClick: withModifiers(($event) => removeAction(idx), ["stop"]),
-                                preset: "plain",
-                                icon: "close",
-                                color: "danger",
-                                size: "small"
-                              }, null, 8, ["onClick"])) : createCommentVNode("", true)
+                  m(K, null, {
+                    default: w(() => [
+                      d.value.actions && d.value.actions.length > 0 ? (h(), k("div", on, [
+                        (h(!0), k(ce, null, fe(d.value.actions, (o, V) => (h(), k("div", {
+                          key: V,
+                          class: _e(["action-card", { active: j.value === V }]),
+                          onClick: (s) => Oe(V)
+                        }, [
+                          y("div", rn, [
+                            y("span", sn, D(V + 1), 1),
+                            y("span", un, [
+                              y("span", dn, D(o.targetContext), 1),
+                              o.actionName ? (h(), k("span", cn, D(o.actionName), 1)) : (h(), k("span", fn, "(select action)"))
                             ]),
-                            currentActionIndex.value === idx ? (openBlock(), createElementBlock("div", _hoisted_49, [
-                              createElementVNode("div", _hoisted_50, [
-                                createVNode(_component_VaSelect, {
-                                  modelValue: action.targetContext,
-                                  "onUpdate:modelValue": ($event) => action.targetContext = $event,
-                                  label: "Context",
-                                  options: contextOptions,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  class: "context-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                                action.targetContext === "page" ? (openBlock(), createBlock(_component_VaSelect, {
-                                  key: 0,
-                                  modelValue: action.targetContextId,
-                                  "onUpdate:modelValue": ($event) => action.targetContextId = $event,
-                                  label: "Target Page",
-                                  options: [{ text: "Any", value: "" }, ...availablePages.value.map((p) => ({ text: p, value: p }))],
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  clearable: "",
-                                  class: "target-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : action.targetContext === "widget" || action.targetContext === "system" ? (openBlock(), createBlock(_component_VaSelect, {
-                                  key: 1,
-                                  modelValue: action.targetContextId,
-                                  "onUpdate:modelValue": ($event) => action.targetContextId = $event,
-                                  label: "Target Instance",
-                                  options: availableInstances.value,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  clearable: "",
-                                  class: "target-select",
-                                  placeholder: availableInstances.value.length > 1 ? "Select instance" : "All instances"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : createCommentVNode("", true),
-                                createVNode(_component_VaSelect, {
-                                  modelValue: action.actionName,
-                                  "onUpdate:modelValue": ($event) => action.actionName = $event,
-                                  label: "Action",
-                                  options: availableActions.value,
-                                  "text-by": "text",
-                                  "value-by": "value",
-                                  class: "action-select"
-                                }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
-                              ]),
-                              selectedActionParameters.value.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_51, [
-                                _cache[28] || (_cache[28] = createElementVNode("div", { class: "parameters-title" }, "Parameters", -1)),
-                                createElementVNode("div", _hoisted_52, [
-                                  (openBlock(true), createElementBlock(Fragment, null, renderList(selectedActionParameters.value, (param) => {
-                                    return openBlock(), createElementBlock("div", {
-                                      key: param.index,
-                                      class: "parameter-item"
-                                    }, [
-                                      createElementVNode("div", _hoisted_53, [
-                                        createElementVNode("span", _hoisted_54, toDisplayString(param.name), 1),
-                                        param.optional ? (openBlock(), createElementBlock("span", _hoisted_55, "?")) : createCommentVNode("", true),
-                                        createElementVNode("span", _hoisted_56, toDisplayString(param.type), 1)
-                                      ]),
-                                      createElementVNode("div", _hoisted_57, [
-                                        createElementVNode("div", _hoisted_58, [
-                                          createElementVNode("button", {
-                                            class: normalizeClass(["toggle-btn", { active: getParameterValueSource(param.index) === "payload" }]),
-                                            onClick: withModifiers(($event) => setParameterValueSource(param.index, "payload"), ["stop"]),
-                                            type: "button"
-                                          }, "Payload", 10, _hoisted_59),
-                                          createElementVNode("button", {
-                                            class: normalizeClass(["toggle-btn", { active: getParameterValueSource(param.index) === "manual" }]),
-                                            onClick: withModifiers(($event) => setParameterValueSource(param.index, "manual"), ["stop"]),
-                                            type: "button"
-                                          }, "Manual", 10, _hoisted_60)
-                                        ]),
-                                        getParameterValueSource(param.index) === "payload" ? (openBlock(), createBlock(_component_VaSelect, {
-                                          key: 0,
-                                          "model-value": getPayloadPathForParameter(param.index),
-                                          "onUpdate:modelValue": ($event) => updateParameterMapping(param.index, $event),
-                                          placeholder: param.optional ? "(optional)" : "Select property",
-                                          options: availablePayloadProperties.value,
-                                          "text-by": "text",
-                                          "value-by": "value",
-                                          clearable: "",
-                                          class: "parameter-value-input"
-                                        }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (openBlock(), createBlock(_component_VaInput, {
-                                          key: 1,
-                                          "model-value": getManualValueForParameter(param.index),
-                                          "onUpdate:modelValue": ($event) => updateManualParameterValue(param.index, $event),
-                                          placeholder: `Enter ${param.type}`,
-                                          class: "parameter-value-input"
-                                        }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
-                                      ])
-                                    ]);
-                                  }), 128))
-                                ])
-                              ])) : createCommentVNode("", true)
-                            ])) : createCommentVNode("", true)
-                          ], 10, _hoisted_42);
-                        }), 128))
-                      ])) : createCommentVNode("", true)
+                            d.value.actions.length > 1 ? (h(), q(l, {
+                              key: 0,
+                              onClick: xe((s) => Ae(V), ["stop"]),
+                              preset: "plain",
+                              icon: "close",
+                              color: "danger",
+                              size: "small"
+                            }, null, 8, ["onClick"])) : z("", !0)
+                          ]),
+                          j.value === V ? (h(), k("div", vn, [
+                            y("div", pn, [
+                              m(M, {
+                                modelValue: o.targetContext,
+                                "onUpdate:modelValue": (s) => o.targetContext = s,
+                                label: "Context",
+                                options: oe,
+                                "text-by": "text",
+                                "value-by": "value",
+                                class: "context-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                              o.targetContext === "page" ? (h(), q(M, {
+                                key: 0,
+                                modelValue: o.targetContextId,
+                                "onUpdate:modelValue": (s) => o.targetContextId = s,
+                                label: "Target Page",
+                                options: [{ text: "Any", value: "" }, ...Z.value.map((s) => ({ text: s, value: s }))],
+                                "text-by": "text",
+                                "value-by": "value",
+                                clearable: "",
+                                class: "target-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])) : o.targetContext === "widget" || o.targetContext === "system" ? (h(), q(M, {
+                                key: 1,
+                                modelValue: o.targetContextId,
+                                "onUpdate:modelValue": (s) => o.targetContextId = s,
+                                label: "Target Instance",
+                                options: ye.value,
+                                "text-by": "text",
+                                "value-by": "value",
+                                clearable: "",
+                                class: "target-select",
+                                placeholder: ye.value.length > 1 ? "Select instance" : "All instances"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options", "placeholder"])) : z("", !0),
+                              m(M, {
+                                modelValue: o.actionName,
+                                "onUpdate:modelValue": (s) => o.actionName = s,
+                                label: "Action",
+                                options: ke.value,
+                                "text-by": "text",
+                                "value-by": "value",
+                                class: "action-select"
+                              }, null, 8, ["modelValue", "onUpdate:modelValue", "options"])
+                            ]),
+                            de.value.length > 0 ? (h(), k("div", yn, [
+                              a[28] || (a[28] = y("div", { class: "parameters-title" }, "Parameters", -1)),
+                              y("div", gn, [
+                                (h(!0), k(ce, null, fe(de.value, (s) => (h(), k("div", {
+                                  key: s.index,
+                                  class: "parameter-item"
+                                }, [
+                                  y("div", mn, [
+                                    y("span", hn, D(s.name), 1),
+                                    s.optional ? (h(), k("span", _n, "?")) : z("", !0),
+                                    y("span", xn, D(s.type), 1)
+                                  ]),
+                                  y("div", bn, [
+                                    y("div", wn, [
+                                      y("button", {
+                                        class: _e(["toggle-btn", { active: ie(s.index) === "payload" }]),
+                                        onClick: xe((B) => me(s.index, "payload"), ["stop"]),
+                                        type: "button"
+                                      }, "Payload", 10, Mn),
+                                      y("button", {
+                                        class: _e(["toggle-btn", { active: ie(s.index) === "manual" }]),
+                                        onClick: xe((B) => me(s.index, "manual"), ["stop"]),
+                                        type: "button"
+                                      }, "Manual", 10, kn)
+                                    ]),
+                                    ie(s.index) === "payload" ? (h(), q(M, {
+                                      key: 0,
+                                      "model-value": Te(s.index),
+                                      "onUpdate:modelValue": (B) => je(s.index, B),
+                                      placeholder: s.optional ? "(optional)" : "Select property",
+                                      options: pe.value,
+                                      "text-by": "text",
+                                      "value-by": "value",
+                                      clearable: "",
+                                      class: "parameter-value-input"
+                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder", "options"])) : (h(), q(R, {
+                                      key: 1,
+                                      "model-value": $e(s.index),
+                                      "onUpdate:modelValue": (B) => A(s.index, B),
+                                      placeholder: `Enter ${s.type}`,
+                                      class: "parameter-value-input"
+                                    }, null, 8, ["model-value", "onUpdate:modelValue", "placeholder"]))
+                                  ])
+                                ]))), 128))
+                              ])
+                            ])) : z("", !0)
+                          ])) : z("", !0)
+                        ], 10, ln))), 128))
+                      ])) : z("", !0)
                     ]),
                     _: 1
                   })
@@ -2252,48 +1703,47 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ]),
           _: 1
         }, 8, ["modelValue"]),
-        createVNode(_component_VaModal, {
-          modelValue: showDeleteConfirm.value,
-          "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => showDeleteConfirm.value = $event),
+        m(Ie, {
+          modelValue: te.value,
+          "onUpdate:modelValue": a[13] || (a[13] = (o) => te.value = o),
           size: "small",
           "hide-default-actions": "",
           "overlay-opacity": "0.3"
         }, {
-          footer: withCtx(() => [
-            createElementVNode("div", _hoisted_62, [
-              createVNode(_component_VaButton, {
+          footer: w(() => [
+            y("div", Cn, [
+              m(l, {
                 preset: "secondary",
-                onClick: _cache[11] || (_cache[11] = ($event) => {
-                  showDeleteConfirm.value = false;
-                  mappingToDelete.value = null;
+                onClick: a[11] || (a[11] = (o) => {
+                  te.value = !1, re.value = null;
                 })
               }, {
-                default: withCtx(() => [..._cache[31] || (_cache[31] = [
-                  createTextVNode(" Abbrechen ", -1)
+                default: w(() => [...a[31] || (a[31] = [
+                  ae(" Abbrechen ", -1)
                 ])]),
                 _: 1
               }),
-              createVNode(_component_VaButton, {
+              m(l, {
                 color: "danger",
                 icon: "delete",
-                onClick: _cache[12] || (_cache[12] = ($event) => confirmRemoveMapping())
+                onClick: a[12] || (a[12] = (o) => Ne())
               }, {
-                default: withCtx(() => [..._cache[32] || (_cache[32] = [
-                  createTextVNode(" Löschen ", -1)
+                default: w(() => [...a[32] || (a[32] = [
+                  ae(" Löschen ", -1)
                 ])]),
                 _: 1
               })
             ])
           ]),
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_61, [
-              createVNode(_component_VaIcon, {
+          default: w(() => [
+            y("div", Vn, [
+              m(Le, {
                 name: "warning",
                 color: "danger",
                 size: "2rem"
               }),
-              _cache[29] || (_cache[29] = createElementVNode("h5", { style: { "margin": "0.5rem 0" } }, "Event-Mapping löschen", -1)),
-              _cache[30] || (_cache[30] = createElementVNode("p", null, "Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
+              a[29] || (a[29] = y("h5", { style: { margin: "0.5rem 0" } }, "Event-Mapping löschen", -1)),
+              a[30] || (a[30] = y("p", null, "Möchtest du dieses Event-Mapping wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
             ])
           ]),
           _: 1
@@ -2301,60 +1751,38 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       ]);
     };
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const EventManagerUI = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-ac8c7c5c"]]);
-const ROUTE_NAME = "events";
-const NAV_ID = "events";
-function activate$1({ services }) {
-  const routeRegistry = services.getRequired(ROUTE_REGISTRY_ID);
-  const eventRoute = new RouteDefinition();
-  eventRoute.path = "/events";
-  eventRoute.name = ROUTE_NAME;
-  eventRoute.component = EventManagerUI;
-  routeRegistry.registerRoute(eventRoute);
-  const navRegistry = services.getRequired(NAVIGATION_REGISTRY_ID);
-  const eventManagerNav = new NavigationItem();
-  eventManagerNav.id = NAV_ID;
-  eventManagerNav.label = "Event Manager";
-  eventManagerNav.icon = "event";
-  eventManagerNav.route = "/events";
-  eventManagerNav.routeName = ROUTE_NAME;
-  eventManagerNav.order = 15;
-  eventManagerNav.visible = true;
-  navRegistry.registerNavigationItem(eventManagerNav);
+}), In = (G, F) => {
+  const I = G.__vccOpts || G;
+  for (const [E, O] of F)
+    I[E] = O;
+  return I;
+}, nt = /* @__PURE__ */ In(Tn, [["__scopeId", "data-v-ee120456"]]), Ye = "events", at = "events";
+function ot({ services: G }) {
+  const F = G.getRequired(tt), I = new gt();
+  I.path = "/events", I.name = Ye, I.component = nt, F.registerRoute(I);
+  const E = G.getRequired(et), O = new yt();
+  O.id = at, O.label = "Event Manager", O.icon = "event", O.route = "/events", O.routeName = Ye, O.order = 15, O.visible = !0, E.registerNavigationItem(O);
 }
-function deactivate$1({ services }) {
-  services.getRequired(ROUTE_REGISTRY_ID).unregisterRoute(ROUTE_NAME);
-  services.getRequired(NAVIGATION_REGISTRY_ID).unregisterNavigationItem(NAV_ID);
+function lt({ services: G }) {
+  G.getRequired(tt).unregisterRoute(Ye), G.getRequired(et).unregisterNavigationItem(at);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const En = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  EventManagerUI,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.eventmanager";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.eventmanager");
-  await activate$1?.(context);
+  EventManagerUI: nt,
+  activate: ot,
+  deactivate: lt
+}, Symbol.toStringTag, { value: "Module" })), Ke = "org.eclipse.daanse.board.app.ui.vue.eventmanager", An = "0.0.1-next.1";
+async function jn(G) {
+  const F = globalThis.__tsm__;
+  if (!F)
+    throw new Error(`${Ke}: tsm runtime is not initialized`);
+  F.register(Ke, En, An, "ui.vue.eventmanager"), await ot?.(G);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function $n(G) {
+  await lt?.(G);
 }
 export {
-  EventManagerUI,
-  activate,
-  deactivate
+  nt as EventManagerUI,
+  jn as activate,
+  $n as deactivate
 };

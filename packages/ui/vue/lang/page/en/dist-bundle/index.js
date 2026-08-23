@@ -1,37 +1,29 @@
-import { I18NEXT } from "org.eclipse.daanse.board.app.lib.i18next";
-const PageSettings = { "title": "Page Settings", "id": "ID", "name": "Name", "icon": "Icon", "description": "Description", "layout": "Layout", "backgroundColor": "Background Color", "backgroundImage": "Background Image", "backgroundSize": "Background Size", "backgroundRepeat": "Background Repeat", "backgroundPosition": "Background Position", "visibleInNavigation": "Visible in Navigation" };
-const pageWidget = { "title": "Page Widget Settings", "selectPage": "Select Page", "selectPagePlaceholder": "Choose a page...", "selfReferenceWarning": "A page cannot reference itself.", "backgroundColor": "Background Color", "manualPath": "Manual Path", "path": "Path" };
-const en = {
-  PageSettings,
-  pageWidget
-};
-const SPRACHE = "en";
-const NAMENSRAUM = "page";
-function activate$1({ services }) {
-  services.getRequired(I18NEXT).addResourceBundle(SPRACHE, NAMENSRAUM, en);
+import { I18NEXT as n } from "org.eclipse.daanse.board.app.lib.i18next";
+const g = { title: "Page Settings", id: "ID", name: "Name", icon: "Icon", description: "Description", layout: "Layout", backgroundColor: "Background Color", backgroundImage: "Background Image", backgroundSize: "Background Size", backgroundRepeat: "Background Repeat", backgroundPosition: "Background Position", visibleInNavigation: "Visible in Navigation" }, u = { title: "Page Widget Settings", selectPage: "Select Page", selectPagePlaceholder: "Choose a page...", selfReferenceWarning: "A page cannot reference itself.", backgroundColor: "Background Color", manualPath: "Manual Path", path: "Path" }, s = {
+  PageSettings: g,
+  pageWidget: u
+}, o = "en", i = "page";
+function c({ services: e }) {
+  e.getRequired(n).addResourceBundle(o, i, s);
 }
-function deactivate$1({ services }) {
-  services.getRequired(I18NEXT).removeResourceBundle(SPRACHE, NAMENSRAUM);
+function r({ services: e }) {
+  e.getRequired(n).removeResourceBundle(o, i);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const l = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  activate: activate$1,
-  deactivate: deactivate$1
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.ui.vue.lang.page.en";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "ui.vue.lang.page.en");
-  await activate$1?.(context);
+  activate: c,
+  deactivate: r
+}, Symbol.toStringTag, { value: "Module" })), t = "org.eclipse.daanse.board.app.ui.vue.lang.page.en", d = "0.0.1-next.1";
+async function b(e) {
+  const a = globalThis.__tsm__;
+  if (!a)
+    throw new Error(`${t}: tsm runtime is not initialized`);
+  a.register(t, l, d, "ui.vue.lang.page.en"), await c?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function P(e) {
+  await r?.(e);
 }
 export {
-  activate,
-  deactivate
+  b as activate,
+  P as deactivate
 };

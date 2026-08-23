@@ -40,7 +40,7 @@ _%>
       <%_ if (annotation.details) { _%>
         <%_ Array.from(annotation.details).forEach(detail => { _%>
           <%_ if (detail.key === 'documentation') { _%>
-  @Documentation("<%- detail.value -%>")
+  @Documentation(<%- JSON.stringify(detail.value) -%>)
           <%_ } _%>
         <%_ }); _%>
       <%_ } _%>

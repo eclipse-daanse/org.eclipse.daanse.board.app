@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -36,7 +39,7 @@ export class Layer {
 
   @Documentation("The type of the layer (e.g., 'WMS', 'GeoJSON').")
   @Attribute() type?: string;
-  @Reference('Layer') childs?: Layer;
+  @Reference('Layer') childs: Layer = new Layer();
 
   @Documentation("The hierarchical level of the layer.")
   @Attribute() level?: number;

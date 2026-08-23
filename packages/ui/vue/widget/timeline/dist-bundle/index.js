@@ -1,1434 +1,941 @@
-(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n/* Timeline Widget Hauptcontainer */\n.timeline-widget[data-v-82423c81] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n  padding: 1rem;\n}\n\n/* Timeline Container mit Slider und Zeitachse */\n.timeline-container[data-v-82423c81] {\n  overflow: hidden;\n  position: relative;\n  background: var(--va-background-primary);\n  border: 1px solid var(--va-background-border);\n  border-radius: 8px;\n  padding: 1rem;\n  min-height: 80px;\n}\n\n/* Timeline Track (Slider-Bereich) */\n.timeline-track[data-v-82423c81] {\n  position: relative;\n  height: 40px;\n  /* background wird via computed style gesetzt */\n  border-radius: 20px;\n  margin-bottom: 1rem;\n  cursor: pointer;\n  transition: background-color 0.2s ease;\n}\n\n/* Transparenter Range-Streifen zwischen den Knobs */\n.range-strip[data-v-82423c81] {\n  position: absolute;\n  top: 0;\n  height: 100%;\n  /* background und border werden via computed style gesetzt */\n  border-width: 1px;\n  border-style: solid;\n  border-radius: 20px;\n  cursor: grab;\n  transition: background-color 0.2s ease, border-color 0.2s ease;\n  z-index: 1;\n}\n.range-strip[data-v-82423c81]:hover {\n  filter: brightness(1.1);\n}\n.range-strip[data-v-82423c81]:active {\n  cursor: grabbing;\n}\n\n/* Timeline Knobs (Start und Ende) - relativ zum Range-Strip positioniert */\n.timeline-knob[data-v-82423c81] {\n  position: absolute;\n  top: 50%;\n  width: 24px;\n  height: 24px;\n  background: var(--va-primary);\n  border: 3px solid white;\n  border-radius: 50%;\n  cursor: grab;\n  transform: translate(-50%, -50%);\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);\n  transition: all 0.2s ease;\n  z-index: 3;\n}\n.timeline-knob[data-v-82423c81]:hover {\n  background: var(--va-primary-dark);\n  transform: translate(-50%, -50%) scale(1.1);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n}\n.timeline-knob[data-v-82423c81]:active {\n  cursor: grabbing;\n  transform: translate(-50%, -50%) scale(1.2);\n}\n.start-knob[data-v-82423c81] {\n  left: 0;\n  z-index: 4;\n}\n.fixed-knob[data-v-82423c81] {\n  cursor: not-allowed !important;\n  opacity: 0.7;\n}\n.fixed-knob[data-v-82423c81]:hover {\n  transform: translate(-50%, -50%) !important;\n  background: var(--va-background-border) !important;\n}\n.end-knob[data-v-82423c81] {\n  right: -24px;\n  z-index: 4;\n}\n\n/* Zeitachse unterhalb des Sliders */\n.time-axis[data-v-82423c81] {\n  position: relative;\n  height: 30px;\n  background: var(--va-background-secondary);\n  border-top: 1px solid var(--va-background-border);\n  border-radius: 0 0 8px 8px;\n  margin: 0 -1rem -1rem -1rem;\n  padding: 0 1rem;\n}\n\n/* Zeit-Ticks auf der Zeitachse */\n.time-tick[data-v-82423c81] {\n  position: absolute;\n  top: 0;\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  transform: translateX(-50%);\n  pointer-events: none;\n  z-index: 2;\n}\n.tick-mark[data-v-82423c81] {\n  width: 1px;\n  height: 8px;\n  background: var(--va-text-secondary);\n  margin-top: 2px;\n}\n.tick-label[data-v-82423c81] {\n  font-size: 0.7rem;\n  color: var(--va-text-secondary);\n  margin-top: 4px;\n  white-space: nowrap;\n  user-select: none;\n}\n\n/* Zeitbereich-Info */\n.time-info[data-v-82423c81] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 1rem;\n  font-size: 0.9rem;\n  background: var(--va-background-primary);\n  border: 1px solid var(--va-background-border);\n  border-radius: 6px;\n  padding: 0.75rem;\n}\n.time-display[data-v-82423c81] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n  flex: 1;\n  text-align: center;\n}\n.time-label[data-v-82423c81] {\n  font-size: 0.8rem;\n  font-weight: 500;\n  color: var(--va-text-secondary);\n}\n.time-value[data-v-82423c81] {\n  font-size: 0.9rem;\n  font-weight: 600;\n  color: var(--va-text-primary);\n  word-wrap: break-word;\n}\n\n/* Kontrollen (Play-Button und Geschwindigkeit) */\n.controls[data-v-82423c81] {\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n  justify-content: center;\n  flex-wrap: wrap;\n}\n.play-button[data-v-82423c81] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 56px;\n  height: 56px;\n  border: none;\n  border-radius: 50%;\n  background: var(--play-button-bg, var(--va-primary));\n  color: white;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);\n}\n.play-button[data-v-82423c81]:hover:not(:disabled) {\n  background: var(--va-primary-dark);\n  transform: scale(1.05);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n}\n.play-button[data-v-82423c81]:disabled {\n  background: var(--va-background-border);\n  color: var(--va-text-secondary);\n  cursor: not-allowed;\n  transform: none;\n}\n.play-button.playing[data-v-82423c81] {\n  background: var(--play-button-playing, #ff6b35);\n  animation: pulse-82423c81 2s infinite;\n}\n.play-button.playing[data-v-82423c81]:hover {\n  filter: brightness(0.9);\n}\n@keyframes pulse-82423c81 {\n0% { box-shadow: 0 2px 8px var(--play-button-bg, rgba(255, 107, 53, 0.4));\n}\n50% { box-shadow: 0 4px 16px var(--play-button-bg, rgba(255, 107, 53, 0.8));\n}\n100% { box-shadow: 0 2px 8px var(--play-button-bg, rgba(255, 107, 53, 0.4));\n}\n}\n.speed-control[data-v-82423c81] {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  font-size: 0.9rem;\n}\n.speed-control label[data-v-82423c81] {\n  font-weight: 500;\n  color: var(--va-text-primary);\n  min-width: fit-content;\n}\n.speed-control select[data-v-82423c81] {\n  padding: 0.5rem;\n  border: 1px solid var(--va-background-border);\n  border-radius: 4px;\n  background: var(--va-background-primary);\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n  cursor: pointer;\n}\n\n/* Responsive Design */\n@media (max-width: 768px) {\n.time-info[data-v-82423c81] {\n    flex-direction: column;\n    gap: 0.75rem;\n}\n.time-display[data-v-82423c81] {\n    text-align: left;\n}\n.controls[data-v-82423c81] {\n    flex-direction: column;\n    gap: 0.75rem;\n}\n.timeline-knob[data-v-82423c81] {\n    width: 28px;\n    height: 28px;\n}\n.tick-label[data-v-82423c81] {\n    font-size: 0.6rem;\n}\n.timeline-container[data-v-82423c81] {\n    min-height: 70px;\n}\n.timeline-track[data-v-82423c81] {\n    height: 35px;\n}\n}\n\n.settings-container[data-v-bf68db5d] {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n  padding: 1rem;\n  overflow-x: hidden;\n}\n.setting-group[data-v-bf68db5d] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  min-width: 0;\n}\n.setting-group > label[data-v-bf68db5d] {\n  font-weight: 600;\n  color: var(--va-text-primary);\n  font-size: 0.9rem;\n}\n.datetime-group[data-v-bf68db5d] {\n  display: flex;\n  flex-direction: row;\n  gap: 0.5rem;\n  align-items: flex-start;\n}\n.datetime-group[data-v-bf68db5d] > * {\n  flex: 1;\n  min-width: 0;\n}\n.relative-time-config[data-v-bf68db5d] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n  padding: 0.75rem;\n  background: var(--va-background-element);\n  border-radius: 4px;\n  min-width: 0;\n  overflow: hidden;\n}\n.relative-time-row[data-v-bf68db5d] {\n  display: flex;\n  gap: 0.5rem;\n  align-items: flex-end;\n  min-width: 0;\n}\n.offset-input[data-v-bf68db5d] {\n  flex: 1;\n  min-width: 60px;\n  max-width: 100px;\n}\n.unit-select[data-v-bf68db5d] {\n  flex: 2;\n  min-width: 80px;\n}\n.relative-time-preview[data-v-bf68db5d] {\n  font-size: 0.85rem;\n  color: var(--va-primary);\n  padding: 0.5rem;\n  background: var(--va-background-secondary);\n  border-radius: 4px;\n  text-align: center;\n  word-break: break-word;\n}\n.variable-config[data-v-bf68db5d] {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  margin-bottom: 0.5rem;\n}\n";})();
-import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
-import { defineComponent, mergeModels, inject, toRefs, useModel, ref, computed, watch, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, createCommentVNode, normalizeStyle, Fragment, renderList, toDisplayString, normalizeClass, withDirectives, createStaticVNode, vModelSelect, resolveComponent, createVNode, withCtx, createBlock } from "vue";
-import { useRoute } from "vue-router";
-import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
-const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
-import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
-var __defProp$1 = Object.defineProperty;
-var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$1 = (decorators, target, key, kind) => {
-  var result = __getOwnPropDesc$1(target, key);
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp$1(target, key, result);
-  return result;
+(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-82423c81]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-82423c81]{overflow:hidden;position:relative;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-82423c81]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-82423c81]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-82423c81]:hover{filter:brightness(1.1)}.range-strip[data-v-82423c81]:active{cursor:grabbing}.timeline-knob[data-v-82423c81]{position:absolute;top:50%;width:24px;height:24px;background:var(--va-primary);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-82423c81]:hover{background:var(--va-primary-dark);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-82423c81]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-82423c81]{left:0;z-index:4}.fixed-knob[data-v-82423c81]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-82423c81]:hover{transform:translate(-50%,-50%)!important;background:var(--va-background-border)!important}.end-knob[data-v-82423c81]{right:-24px;z-index:4}.time-axis[data-v-82423c81]{position:relative;height:30px;background:var(--va-background-secondary);border-top:1px solid var(--va-background-border);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-82423c81]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-82423c81]{width:1px;height:8px;background:var(--va-text-secondary);margin-top:2px}.tick-label[data-v-82423c81]{font-size:.7rem;color:var(--va-text-secondary);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-82423c81]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:6px;padding:.75rem}.time-display[data-v-82423c81]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-82423c81]{font-size:.8rem;font-weight:500;color:var(--va-text-secondary)}.time-value[data-v-82423c81]{font-size:.9rem;font-weight:600;color:var(--va-text-primary);word-wrap:break-word}.controls[data-v-82423c81]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-82423c81]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--va-primary));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-82423c81]:hover:not(:disabled){background:var(--va-primary-dark);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-82423c81]:disabled{background:var(--va-background-border);color:var(--va-text-secondary);cursor:not-allowed;transform:none}.play-button.playing[data-v-82423c81]{background:var(--play-button-playing, #ff6b35);animation:pulse-82423c81 2s infinite}.play-button.playing[data-v-82423c81]:hover{filter:brightness(.9)}@keyframes pulse-82423c81{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-82423c81]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-82423c81]{font-weight:500;color:var(--va-text-primary);min-width:fit-content}.speed-control select[data-v-82423c81]{padding:.5rem;border:1px solid var(--va-background-border);border-radius:4px;background:var(--va-background-primary);color:var(--va-text-primary);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-82423c81]{flex-direction:column;gap:.75rem}.time-display[data-v-82423c81]{text-align:left}.controls[data-v-82423c81]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-82423c81]{width:28px;height:28px}.tick-label[data-v-82423c81]{font-size:.6rem}.timeline-container[data-v-82423c81]{min-height:70px}.timeline-track[data-v-82423c81]{height:35px}}.settings-container[data-v-bf68db5d]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-bf68db5d]{font-weight:600;color:var(--va-text-primary);font-size:.9rem}.datetime-group[data-v-bf68db5d]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-bf68db5d]>*{flex:1;min-width:0}.relative-time-config[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--va-background-element);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-bf68db5d]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-bf68db5d]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-bf68db5d]{flex:2;min-width:80px}.relative-time-preview[data-v-bf68db5d]{font-size:.85rem;color:var(--va-primary);padding:.5rem;background:var(--va-background-secondary);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
+import { EVENT_ACTIONS_REGISTRY as lt, EVENT_REGISTRY_ID as it, EVENT_ACTIONS_REGISTRY_ID as ot } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as rt, deactivate as st, component as ut, inject as Fe } from "@eclipse-daanse/tsm";
+import { defineComponent as Ge, mergeModels as vt, inject as de, toRefs as dt, useModel as qe, ref as f, computed as _, watch as pe, onMounted as Ze, onUnmounted as ct, createElementBlock as z, openBlock as C, withModifiers as We, createElementVNode as u, createCommentVNode as ae, normalizeStyle as ue, Fragment as je, renderList as mt, toDisplayString as N, normalizeClass as gt, withDirectives as pt, createStaticVNode as ft, vModelSelect as bt, resolveComponent as te, createVNode as V, withCtx as Ne, createBlock as Ae } from "vue";
+import { useRoute as St } from "vue-router";
+import { VariableWrapper as ye } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { identifier as Je } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { WidgetAction as De, WidgetActionInterface as Tt, Payload as Ye } from "org.eclipse.daanse.board.app.lib.events";
+import { WIDGET_SERVICE_ID as Mt } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: wt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var ht = Object.defineProperty, Vt = Object.getOwnPropertyDescriptor, Ee = (D, h, v, g) => {
+  for (var e = Vt(h, v), y = D.length - 1, j; y >= 0; y--)
+    (j = D[y]) && (e = j(h, v, e) || e);
+  return e && ht(h, v, e), e;
 };
-class TimelineWidgetInterface extends WidgetActionInterface {
+class ce extends Tt {
   zoomIn() {
     throw new Error("zoomIn not implemented");
   }
   zoomOut() {
     throw new Error("zoomOut not implemented");
   }
-  setDateRange(start, end) {
+  setDateRange(h, v) {
     throw new Error("setDateRange not implemented");
   }
   jumpToNow() {
     throw new Error("jumpToNow not implemented");
   }
 }
-__decorateClass$1([
-  WidgetAction({ eventType: "timeline.zoomIn" })
-], TimelineWidgetInterface.prototype, "zoomIn");
-__decorateClass$1([
-  WidgetAction({ eventType: "timeline.zoomOut" })
-], TimelineWidgetInterface.prototype, "zoomOut");
-__decorateClass$1([
-  WidgetAction({ eventType: "timeline.setDateRange" })
-], TimelineWidgetInterface.prototype, "setDateRange");
-__decorateClass$1([
-  WidgetAction({ eventType: "timeline.jumpToNow" })
-], TimelineWidgetInterface.prototype, "jumpToNow");
-const _hoisted_1$1 = { class: "timeline-container" };
-const _hoisted_2$1 = ["title"];
-const _hoisted_3$1 = {
+Ee([
+  De({ eventType: "timeline.zoomIn" })
+], ce.prototype, "zoomIn");
+Ee([
+  De({ eventType: "timeline.zoomOut" })
+], ce.prototype, "zoomOut");
+Ee([
+  De({ eventType: "timeline.setDateRange" })
+], ce.prototype, "setDateRange");
+Ee([
+  De({ eventType: "timeline.jumpToNow" })
+], ce.prototype, "jumpToNow");
+const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
   key: 1,
   class: "timeline-knob start-knob fixed-knob",
   title: "Startzeit (fixiert)"
-};
-const _hoisted_4$1 = { class: "time-axis" };
-const _hoisted_5$1 = { class: "tick-label" };
-const _hoisted_6$1 = {
+}, Et = { class: "time-axis" }, kt = { class: "tick-label" }, It = {
   key: 0,
   class: "time-info"
-};
-const _hoisted_7$1 = { class: "time-display" };
-const _hoisted_8$1 = { class: "time-value" };
-const _hoisted_9$1 = { class: "time-display" };
-const _hoisted_10$1 = { class: "time-value" };
-const _hoisted_11$1 = { class: "time-display" };
-const _hoisted_12$1 = { class: "time-value" };
-const _hoisted_13$1 = {
+}, _t = { class: "time-display" }, Ct = { class: "time-value" }, Ot = { class: "time-display" }, Rt = { class: "time-value" }, Pt = { class: "time-display" }, zt = { class: "time-value" }, $t = {
   key: 1,
   class: "controls"
-};
-const _hoisted_14$1 = ["disabled"];
-const _hoisted_15$1 = {
+}, Ut = ["disabled"], Wt = {
   key: 0,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-};
-const _hoisted_16$1 = {
+}, Nt = {
   key: 1,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-};
-const _hoisted_17$1 = { class: "speed-control" };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+}, jt = { class: "speed-control" }, Kt = /* @__PURE__ */ Ge({
   __name: "TimelineWidget",
-  props: /* @__PURE__ */ mergeModels({
+  props: /* @__PURE__ */ vt({
     datasourceId: {},
     id: {}
   }, {
-    "configv": { required: true },
-    "configvModifiers": {}
+    configv: { required: !0 },
+    configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(__props, { expose: __expose }) {
-    inject("i18n");
-    const props = __props;
-    const { id: widgetId } = toRefs(props);
-    const config = useModel(__props, "configv");
-    const eventBus = inject(identifiers.TINY_EMITTER);
-    const actionsRegistry = inject(EVENT_ACTIONS_REGISTRY);
-    const route = useRoute();
-    const pageId = route.params.pageid || "";
-    class TimelineWidgetApi extends TimelineWidgetInterface {
+  setup(D, { expose: h }) {
+    de("i18n");
+    const v = D, { id: g } = dt(v), e = qe(D, "configv"), y = de(wt.TINY_EMITTER), j = de(lt), ke = St().params.pageid || "";
+    class Ie extends ce {
       zoomIn() {
-        const start = new Date(config.value.rangeStart || Date.now() - 864e5);
-        const end = new Date(config.value.rangeEnd || Date.now());
-        const duration = end.getTime() - start.getTime();
-        const shrink = duration * 0.25;
-        const newStart = new Date(start.getTime() + shrink);
-        const newEnd = new Date(end.getTime() - shrink);
-        if (newEnd.getTime() - newStart.getTime() > 6e4) {
-          config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
-        }
+        const a = new Date(e.value.rangeStart || Date.now() - 864e5), s = new Date(e.value.rangeEnd || Date.now()), o = (s.getTime() - a.getTime()) * 0.25, c = new Date(a.getTime() + o), m = new Date(s.getTime() - o);
+        m.getTime() - c.getTime() > 6e4 && (e.value = { ...e.value, rangeStart: c.toISOString(), rangeEnd: m.toISOString() });
       }
       zoomOut() {
-        const start = new Date(config.value.rangeStart || Date.now() - 864e5);
-        const end = new Date(config.value.rangeEnd || Date.now());
-        const duration = end.getTime() - start.getTime();
-        const expand = duration * 0.5;
-        const newStart = new Date(Math.max(
-          start.getTime() - expand,
-          new Date(config.value.timelineMin || 0).getTime()
+        const a = new Date(e.value.rangeStart || Date.now() - 864e5), s = new Date(e.value.rangeEnd || Date.now()), o = (s.getTime() - a.getTime()) * 0.5, c = new Date(Math.max(
+          a.getTime() - o,
+          new Date(e.value.timelineMin || 0).getTime()
+        )), m = new Date(Math.min(
+          s.getTime() + o,
+          new Date(e.value.timelineMax || Date.now() + 864e5 * 7).getTime()
         ));
-        const newEnd = new Date(Math.min(
-          end.getTime() + expand,
-          new Date(config.value.timelineMax || Date.now() + 864e5 * 7).getTime()
-        ));
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        e.value = { ...e.value, rangeStart: c.toISOString(), rangeEnd: m.toISOString() };
       }
-      setDateRange(start, end) {
-        config.value = { ...config.value, rangeStart: start, rangeEnd: end };
+      setDateRange(a, s) {
+        e.value = { ...e.value, rangeStart: a, rangeEnd: s };
       }
       jumpToNow() {
-        const now = /* @__PURE__ */ new Date();
-        const duration = new Date(config.value.rangeEnd || now).getTime() - new Date(config.value.rangeStart || now).getTime();
-        const newEnd = now;
-        const newStart = new Date(now.getTime() - duration);
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        const a = /* @__PURE__ */ new Date(), s = new Date(e.value.rangeEnd || a).getTime() - new Date(e.value.rangeStart || a).getTime(), i = a, o = new Date(a.getTime() - s);
+        e.value = { ...e.value, rangeStart: o.toISOString(), rangeEnd: i.toISOString() };
       }
     }
-    const api = new TimelineWidgetApi();
-    __expose(api);
-    const emitClick = () => {
-      if (!widgetId?.value) return;
-      eventBus.emit("widget:TimelineWidget:click", {
+    const be = new Ie();
+    h(be);
+    const _e = () => {
+      g?.value && y.emit("widget:TimelineWidget:click", {
         type: "widget:TimelineWidget:click",
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+        widgetId: g.value,
+        payload: { widgetId: g.value, timestamp: Date.now() }
       });
-    };
-    const emitRightClick = () => {
-      if (!widgetId?.value) return;
-      eventBus.emit("widget:TimelineWidget:right_click", {
+    }, t = () => {
+      g?.value && y.emit("widget:TimelineWidget:right_click", {
         type: "widget:TimelineWidget:right_click",
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+        widgetId: g.value,
+        payload: { widgetId: g.value, timestamp: Date.now() }
       });
-    };
-    const variableRepository = ref(null);
-    const rangeStartWrapper = ref(new VariableWrapper(""));
-    const rangeEndWrapper = ref(new VariableWrapper(""));
-    const isPlaying = ref(false);
-    const playbackSpeed = ref(config.value.playbackSpeed || 1);
-    const isDragging = ref(false);
-    const trackRef = ref();
-    const tempStartPosition = ref(null);
-    const tempEndPosition = ref(null);
-    const tempRangeStripStyle = ref(null);
-    let animationFrame = null;
-    let lastStepTime = 0;
-    const defaultTimelineMin = new Date(Date.now() - 30 * 24 * 60 * 60 * 1e3);
-    const defaultTimelineMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1e3);
-    const defaultRangeStart = new Date(Date.now() - 24 * 60 * 60 * 1e3);
-    const defaultRangeEnd = /* @__PURE__ */ new Date();
-    const calculateRelativeTime = (offset, unit) => {
-      const now = /* @__PURE__ */ new Date();
-      const start = new Date(now);
-      const safeOffset = Number(offset) || 24;
-      const unitValue = typeof unit === "object" && unit !== null ? unit.value : unit;
-      switch (unitValue) {
+    }, p = f(null), F = f(new ye("")), A = f(new ye("")), O = f(!1), $ = f(e.value.playbackSpeed || 1), b = f(!1), Y = f(), R = f(null), K = f(null), P = f(null);
+    let Z = null, me = 0;
+    const Se = new Date(Date.now() - 720 * 60 * 60 * 1e3), we = new Date(Date.now() + 10080 * 60 * 1e3), Te = new Date(Date.now() - 1440 * 60 * 1e3), ge = /* @__PURE__ */ new Date(), Ce = (n, a) => {
+      const s = /* @__PURE__ */ new Date(), i = new Date(s), o = Number(n) || 24;
+      switch (typeof a == "object" && a !== null ? a.value : a) {
         case "hours":
-          start.setHours(start.getHours() - safeOffset);
+          i.setHours(i.getHours() - o);
           break;
         case "days":
-          start.setDate(start.getDate() - safeOffset);
+          i.setDate(i.getDate() - o);
           break;
         case "weeks":
-          start.setDate(start.getDate() - safeOffset * 7);
+          i.setDate(i.getDate() - o * 7);
           break;
         case "months":
-          start.setMonth(start.getMonth() - safeOffset);
+          i.setMonth(i.getMonth() - o);
           break;
         case "years":
-          start.setFullYear(start.getFullYear() - safeOffset);
+          i.setFullYear(i.getFullYear() - o);
           break;
         default:
-          start.setHours(start.getHours() - safeOffset);
+          i.setHours(i.getHours() - o);
       }
-      return { start, end: now };
-    };
-    const applyRelativeTime = () => {
-      if (!config.value.relativeTime?.enabled) return;
-      const { start, end } = calculateRelativeTime(
-        config.value.relativeTime.offset,
-        config.value.relativeTime.unit
+      return { start: i, end: s };
+    }, Me = () => {
+      if (!e.value.relativeTime?.enabled) return;
+      const { start: n, end: a } = Ce(
+        e.value.relativeTime.offset,
+        e.value.relativeTime.unit
       );
-      config.value.timelineMin = start.toISOString();
-      config.value.timelineMax = end.toISOString();
-      const frameDuration = end.getTime() - start.getTime();
-      const rangeDuration = frameDuration * 0.2;
-      const newRangeEnd = end;
-      const newRangeStart = new Date(end.getTime() - rangeDuration);
-      config.value.rangeStart = newRangeStart.toISOString();
-      config.value.rangeEnd = newRangeEnd.toISOString();
-      if (config.value.rangeStartVariable && variableRepository.value) {
-        const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
-        if (startVariable) {
-          startVariable.value = newRangeStart.toISOString();
-        }
+      e.value.timelineMin = n.toISOString(), e.value.timelineMax = a.toISOString();
+      const i = (a.getTime() - n.getTime()) * 0.2, o = a, c = new Date(a.getTime() - i);
+      if (e.value.rangeStart = c.toISOString(), e.value.rangeEnd = o.toISOString(), e.value.rangeStartVariable && p.value) {
+        const m = p.value.getVariable(e.value.rangeStartVariable);
+        m && (m.value = c.toISOString());
       }
-      if (config.value.rangeEndVariable && variableRepository.value) {
-        const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
-        if (endVariable) {
-          endVariable.value = newRangeEnd.toISOString();
-        }
+      if (e.value.rangeEndVariable && p.value) {
+        const m = p.value.getVariable(e.value.rangeEndVariable);
+        m && (m.value = o.toISOString());
       }
-    };
-    const timelineMin = computed(() => {
-      return config.value.timelineMin ? new Date(config.value.timelineMin) : defaultTimelineMin;
-    });
-    const timelineMax = computed(() => {
-      return config.value.timelineMax ? new Date(config.value.timelineMax) : defaultTimelineMax;
-    });
-    const rangeStart = computed(() => {
-      if (config.value.rangeStartVariable && variableRepository.value) {
-        const variable = variableRepository.value.getVariable(config.value.rangeStartVariable);
-        if (variable && variable.value) {
-          return new Date(variable.value);
-        }
+    }, X = _(() => e.value.timelineMin ? new Date(e.value.timelineMin) : Se), H = _(() => e.value.timelineMax ? new Date(e.value.timelineMax) : we), U = _(() => {
+      if (e.value.rangeStartVariable && p.value) {
+        const n = p.value.getVariable(e.value.rangeStartVariable);
+        if (n && n.value)
+          return new Date(n.value);
       }
-      return config.value.rangeStart ? new Date(config.value.rangeStart) : defaultRangeStart;
-    });
-    const rangeEnd = computed(() => {
-      if (config.value.rangeEndVariable && variableRepository.value) {
-        const variable = variableRepository.value.getVariable(config.value.rangeEndVariable);
-        if (variable && variable.value) {
-          return new Date(variable.value);
-        }
+      return e.value.rangeStart ? new Date(e.value.rangeStart) : Te;
+    }), I = _(() => {
+      if (e.value.rangeEndVariable && p.value) {
+        const n = p.value.getVariable(e.value.rangeEndVariable);
+        if (n && n.value)
+          return new Date(n.value);
       }
-      return config.value.rangeEnd ? new Date(config.value.rangeEnd) : defaultRangeEnd;
-    });
-    const startKnobPosition = computed(() => {
-      if (config.value.fixStartKnob) {
+      return e.value.rangeEnd ? new Date(e.value.rangeEnd) : ge;
+    }), ne = _(() => {
+      if (e.value.fixStartKnob)
         return 0;
-      }
-      if (tempStartPosition.value !== null) {
-        return tempStartPosition.value;
-      }
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const startMs = rangeStart.value.getTime();
-      return Math.max(0, Math.min(100, (startMs - minMs) / (maxMs - minMs) * 100));
-    });
-    const endKnobPosition = computed(() => {
-      if (tempEndPosition.value !== null) {
-        return tempEndPosition.value;
-      }
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const endMs = rangeEnd.value.getTime();
-      return Math.max(0, Math.min(100, (endMs - minMs) / (maxMs - minMs) * 100));
-    });
-    const rangeStripStyle = computed(() => {
-      if (tempRangeStripStyle.value) {
-        return {
-          ...tempRangeStripStyle.value,
-          background: getRangeStripColor(0.5),
-          borderColor: config.value.rangeStripColor || "#d17600"
-        };
-      }
+      if (R.value !== null)
+        return R.value;
+      const n = X.value.getTime(), a = H.value.getTime(), s = U.value.getTime();
+      return Math.max(0, Math.min(100, (s - n) / (a - n) * 100));
+    }), he = _(() => {
+      if (K.value !== null)
+        return K.value;
+      const n = X.value.getTime(), a = H.value.getTime(), s = I.value.getTime();
+      return Math.max(0, Math.min(100, (s - n) / (a - n) * 100));
+    }), Oe = _(() => P.value ? {
+      ...P.value,
+      background: Ve(0.5),
+      borderColor: e.value.rangeStripColor || "#d17600"
+    } : {
+      left: ne.value + "%",
+      width: he.value - ne.value + "%",
+      background: Ve(0.5),
+      borderColor: e.value.rangeStripColor || "#d17600"
+    }), Ve = (n) => {
+      const s = (e.value.rangeStripColor || "#d17600").replace("#", ""), i = parseInt(s.substr(0, 2), 16), o = parseInt(s.substr(2, 2), 16), c = parseInt(s.substr(4, 2), 16);
+      return `rgba(${i}, ${o}, ${c}, ${n})`;
+    }, w = _(() => {
+      const n = e.value.rangeStripColor || "#d17600";
       return {
-        left: startKnobPosition.value + "%",
-        width: endKnobPosition.value - startKnobPosition.value + "%",
-        background: getRangeStripColor(0.5),
-        borderColor: config.value.rangeStripColor || "#d17600"
+        backgroundColor: Re(n)
       };
-    });
-    const getRangeStripColor = (opacity) => {
-      const color = config.value.rangeStripColor || "#d17600";
-      const hex = color.replace("#", "");
-      const r = parseInt(hex.substr(0, 2), 16);
-      const g = parseInt(hex.substr(2, 2), 16);
-      const b = parseInt(hex.substr(4, 2), 16);
-      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    };
-    const timelineTrackStyle = computed(() => {
-      const baseColor = config.value.rangeStripColor || "#d17600";
-      const trackColor = calculateTrackColor(baseColor);
-      return {
-        backgroundColor: trackColor
-      };
-    });
-    const calculateTrackColor = (hexColor) => {
-      const hex = hexColor.replace("#", "");
-      const r = parseInt(hex.substr(0, 2), 16);
-      const g = parseInt(hex.substr(2, 2), 16);
-      const b = parseInt(hex.substr(4, 2), 16);
-      const deltaFactor = 0.6;
-      const lightR = Math.min(255, Math.round(r + (255 - r) * deltaFactor));
-      const lightG = Math.min(255, Math.round(g + (255 - g) * deltaFactor));
-      const lightB = Math.min(255, Math.round(b + (255 - b) * deltaFactor));
-      return `rgb(${lightR}, ${lightG}, ${lightB})`;
-    };
-    const getStepSizeInMs = () => {
-      const stepSize = config.value.stepSize || "hour";
-      switch (stepSize) {
+    }), Re = (n) => {
+      const a = n.replace("#", ""), s = parseInt(a.substr(0, 2), 16), i = parseInt(a.substr(2, 2), 16), o = parseInt(a.substr(4, 2), 16), c = 0.6, m = Math.min(255, Math.round(s + (255 - s) * c)), M = Math.min(255, Math.round(i + (255 - i) * c)), x = Math.min(255, Math.round(o + (255 - o) * c));
+      return `rgb(${m}, ${M}, ${x})`;
+    }, Pe = () => {
+      switch (e.value.stepSize || "hour") {
         case "minute":
           return 60 * 1e3;
         // 1 Minute = 60 Sekunden
         case "hour":
-          return 60 * 60 * 1e3;
+          return 3600 * 1e3;
         // 1 Stunde = 3600 Sekunden
         case "day":
-          return 24 * 60 * 60 * 1e3;
+          return 1440 * 60 * 1e3;
         // 1 Tag = 86400 Sekunden
         case "week":
-          return 7 * 24 * 60 * 60 * 1e3;
+          return 10080 * 60 * 1e3;
         // 1 Woche
         case "month":
-          return 30 * 24 * 60 * 60 * 1e3;
+          return 720 * 60 * 60 * 1e3;
         // 1 Monat (ca. 30 Tage)
         default:
-          return 60 * 60 * 1e3;
+          return 3600 * 1e3;
       }
-    };
-    const playButtonStyle = computed(() => {
-      const baseColor = config.value.rangeStripColor || "#d17600";
-      const playingColor = calculatePlayingColor(baseColor);
+    }, ze = _(() => {
+      const n = e.value.rangeStripColor || "#d17600", a = r(n);
       return {
-        "--play-button-bg": baseColor,
-        "--play-button-playing": playingColor
+        "--play-button-bg": n,
+        "--play-button-playing": a
       };
-    });
-    const calculatePlayingColor = (hexColor) => {
-      const hex = hexColor.replace("#", "");
-      const r = parseInt(hex.substr(0, 2), 16);
-      const g = parseInt(hex.substr(2, 2), 16);
-      const b = parseInt(hex.substr(4, 2), 16);
-      const darkenFactor = 0.8;
-      const warmFactor = 1.1;
-      const darkR = Math.min(255, Math.round(r * darkenFactor * warmFactor));
-      const darkG = Math.round(g * darkenFactor);
-      const darkB = Math.round(b * darkenFactor);
-      return `rgb(${darkR}, ${darkG}, ${darkB})`;
-    };
-    const isAtEnd = computed(() => {
-      return rangeEnd.value.getTime() >= timelineMax.value.getTime();
-    });
-    const startKnobOnTop = computed(() => {
-      const distance = endKnobPosition.value - startKnobPosition.value;
-      if (distance >= 10) return false;
-      return startKnobPosition.value > 50;
-    });
-    const timeAxisTicks = computed(() => {
-      const ticks = [];
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const totalRange = maxMs - minMs;
-      const tickCount = 8;
-      for (let i = 0; i <= tickCount; i++) {
-        const tickMs = minMs + totalRange / tickCount * i;
-        const tickDate = new Date(tickMs);
-        const position = i / tickCount * 100;
-        const label = tickDate.toLocaleString("de-DE", {
+    }), r = (n) => {
+      const a = n.replace("#", ""), s = parseInt(a.substr(0, 2), 16), i = parseInt(a.substr(2, 2), 16), o = parseInt(a.substr(4, 2), 16), c = 0.8, M = Math.min(255, Math.round(s * c * 1.1)), x = Math.round(i * c), W = Math.round(o * c);
+      return `rgb(${M}, ${x}, ${W})`;
+    }, l = _(() => I.value.getTime() >= H.value.getTime()), S = _(() => he.value - ne.value >= 10 ? !1 : ne.value > 50), T = _(() => {
+      const n = [], a = X.value.getTime(), i = H.value.getTime() - a, o = 8;
+      for (let c = 0; c <= o; c++) {
+        const m = a + i / o * c, M = new Date(m), x = c / o * 100, W = M.toLocaleString("de-DE", {
           day: "2-digit",
           month: "2-digit",
           hour: "2-digit",
           minute: "2-digit"
         });
-        ticks.push({
-          timestamp: tickDate.toISOString(),
-          position,
-          label
+        n.push({
+          timestamp: M.toISOString(),
+          position: x,
+          label: W
         });
       }
-      return ticks;
-    });
-    const formatDateTime = (date) => {
-      return date.toLocaleString("de-DE", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    };
-    const formatDuration = () => {
-      const diffMs = rangeEnd.value.getTime() - rangeStart.value.getTime();
-      const diffHours = Math.floor(diffMs / (1e3 * 60 * 60));
-      const diffDays = Math.floor(diffHours / 24);
-      if (diffDays > 0) return `${diffDays}d ${diffHours % 24}h`;
-      if (diffHours > 0) return `${diffHours}h`;
-      const diffMinutes = Math.floor(diffMs / (1e3 * 60));
-      return `${diffMinutes}min`;
-    };
-    const getTrackRect = () => {
-      return trackRef.value?.getBoundingClientRect();
-    };
-    let updateConfigTimeout = null;
-    const updateConfig = (newStart, newEnd, immediate = false) => {
-      const actualStart = config.value.fixStartKnob ? timelineMin.value : newStart || rangeStart.value;
-      const actualEnd = newEnd || rangeEnd.value;
-      if (!actualStart || isNaN(actualStart.getTime()) || !actualEnd || isNaN(actualEnd.getTime())) {
-        console.warn("Invalid date values in updateConfig:", { actualStart, actualEnd });
+      return n;
+    }), k = (n) => n.toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }), J = () => {
+      const n = I.value.getTime() - U.value.getTime(), a = Math.floor(n / (1e3 * 60 * 60)), s = Math.floor(a / 24);
+      return s > 0 ? `${s}d ${a % 24}h` : a > 0 ? `${a}h` : `${Math.floor(n / (1e3 * 60))}min`;
+    }, E = () => Y.value?.getBoundingClientRect();
+    let B = null;
+    const le = (n, a, s = !1) => {
+      const i = e.value.fixStartKnob ? X.value : n || U.value, o = a || I.value;
+      if (!i || isNaN(i.getTime()) || !o || isNaN(o.getTime())) {
+        console.warn("Invalid date values in updateConfig:", { actualStart: i, actualEnd: o });
         return;
       }
-      const updateFn = () => {
-        config.value = {
-          ...config.value,
-          rangeStart: actualStart.toISOString(),
-          rangeEnd: actualEnd.toISOString(),
-          playbackSpeed: playbackSpeed.value
-        };
-        if (config.value.rangeStartVariable && variableRepository.value) {
-          const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
-          if (startVariable) {
-            startVariable.value = actualStart.toISOString();
-          }
+      const c = () => {
+        if (e.value = {
+          ...e.value,
+          rangeStart: i.toISOString(),
+          rangeEnd: o.toISOString(),
+          playbackSpeed: $.value
+        }, e.value.rangeStartVariable && p.value) {
+          const m = p.value.getVariable(e.value.rangeStartVariable);
+          m && (m.value = i.toISOString());
         }
-        if (config.value.rangeEndVariable && variableRepository.value) {
-          const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
-          if (endVariable) {
-            endVariable.value = actualEnd.toISOString();
-          }
+        if (e.value.rangeEndVariable && p.value) {
+          const m = p.value.getVariable(e.value.rangeEndVariable);
+          m && (m.value = o.toISOString());
         }
       };
-      if (immediate) {
-        if (updateConfigTimeout) {
-          clearTimeout(updateConfigTimeout);
-          updateConfigTimeout = null;
-        }
-        updateFn();
-      } else {
-        if (updateConfigTimeout) {
-          clearTimeout(updateConfigTimeout);
-        }
-        updateConfigTimeout = setTimeout(updateFn, 300);
-      }
-    };
-    const onStartKnobMouseDown = (event) => {
-      if (config.value.fixStartKnob) {
+      s ? (B && (clearTimeout(B), B = null), c()) : (B && clearTimeout(B), B = setTimeout(c, 300));
+    }, d = (n) => {
+      if (e.value.fixStartKnob)
+        return;
+      n.preventDefault(), b.value = !0;
+      const a = E();
+      if (!a) return;
+      const s = n.clientX, i = X.value.getTime(), o = H.value.getTime(), c = (o - i) / a.width, m = U.value.getTime(), M = I.value.getTime(), x = o - i;
+      let W = m;
+      const G = (ie) => {
+        if (!b.value) return;
+        const oe = ie.clientX - s;
+        let L = m + oe * c;
+        L = Math.max(i, Math.min(L, M - 6e4)), W = L;
+        const Q = Math.max(0, Math.min(100, (L - i) / x * 100)), re = Math.max(0, Math.min(100, (M - i) / x * 100));
+        R.value = Q, P.value = {
+          left: Q + "%",
+          width: re - Q + "%"
+        };
+      }, q = () => {
+        b.value = !1, R.value = null, P.value = null, le(new Date(W), new Date(M), !0), document.removeEventListener("mousemove", G), document.removeEventListener("mouseup", q);
+      };
+      document.addEventListener("mousemove", G), document.addEventListener("mouseup", q);
+    }, He = (n) => {
+      n.preventDefault(), b.value = !0;
+      const a = E();
+      if (!a) return;
+      const s = n.clientX, i = X.value.getTime(), o = H.value.getTime(), c = (o - i) / a.width, m = I.value.getTime(), M = U.value.getTime(), x = o - i;
+      let W = m;
+      const G = (ie) => {
+        if (!b.value) return;
+        const oe = ie.clientX - s;
+        let L = m + oe * c;
+        L = Math.min(o, Math.max(L, M + 6e4)), W = L;
+        const Q = Math.max(0, Math.min(100, (M - i) / x * 100)), re = Math.max(0, Math.min(100, (L - i) / x * 100));
+        K.value = re, P.value = {
+          left: Q + "%",
+          width: re - Q + "%"
+        };
+      }, q = () => {
+        b.value = !1, K.value = null, P.value = null, le(new Date(M), new Date(W), !0), document.removeEventListener("mousemove", G), document.removeEventListener("mouseup", q);
+      };
+      document.addEventListener("mousemove", G), document.addEventListener("mouseup", q);
+    }, et = (n) => {
+      if (e.value.fixStartKnob) {
+        He(n);
         return;
       }
-      event.preventDefault();
-      isDragging.value = true;
-      const trackRect = getTrackRect();
-      if (!trackRect) return;
-      const startMouseX = event.clientX;
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const timePerPixel = (maxMs - minMs) / trackRect.width;
-      const initialStartMs = rangeStart.value.getTime();
-      const endMs = rangeEnd.value.getTime();
-      const totalRange = maxMs - minMs;
-      let lastNewStartMs = initialStartMs;
-      const handleMouseMove = (e) => {
-        if (!isDragging.value) return;
-        const deltaPx = e.clientX - startMouseX;
-        let newStartMs = initialStartMs + deltaPx * timePerPixel;
-        newStartMs = Math.max(minMs, Math.min(newStartMs, endMs - 6e4));
-        lastNewStartMs = newStartMs;
-        const newStartPosition = Math.max(0, Math.min(100, (newStartMs - minMs) / totalRange * 100));
-        const endPosition = Math.max(0, Math.min(100, (endMs - minMs) / totalRange * 100));
-        tempStartPosition.value = newStartPosition;
-        tempRangeStripStyle.value = {
-          left: newStartPosition + "%",
-          width: endPosition - newStartPosition + "%"
+      n.preventDefault(), b.value = !0;
+      const a = E();
+      if (!a) return;
+      const s = n.clientX, i = X.value.getTime(), o = H.value.getTime(), c = (o - i) / a.width, m = U.value.getTime(), M = I.value.getTime(), x = M - m, W = o - i;
+      let G = m, q = M;
+      const ie = (L) => {
+        if (!b.value) return;
+        const re = (L.clientX - s) * c;
+        let ee = m + re, se = ee + x;
+        ee < i && (ee = i, se = ee + x), se > o && (se = o, ee = se - x), G = ee, q = se;
+        const Ue = Math.max(0, Math.min(100, (ee - i) / W * 100)), Be = Math.max(0, Math.min(100, (se - i) / W * 100));
+        R.value = Ue, K.value = Be, P.value = {
+          left: Ue + "%",
+          width: Be - Ue + "%"
         };
+      }, oe = () => {
+        b.value = !1, R.value = null, K.value = null, P.value = null, le(new Date(G), new Date(q), !0), document.removeEventListener("mousemove", ie), document.removeEventListener("mouseup", oe);
       };
-      const handleMouseUp = () => {
-        isDragging.value = false;
-        tempStartPosition.value = null;
-        tempRangeStripStyle.value = null;
-        updateConfig(new Date(lastNewStartMs), new Date(endMs), true);
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    };
-    const onEndKnobMouseDown = (event) => {
-      event.preventDefault();
-      isDragging.value = true;
-      const trackRect = getTrackRect();
-      if (!trackRect) return;
-      const startMouseX = event.clientX;
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const timePerPixel = (maxMs - minMs) / trackRect.width;
-      const initialEndMs = rangeEnd.value.getTime();
-      const startMs = rangeStart.value.getTime();
-      const totalRange = maxMs - minMs;
-      let lastNewEndMs = initialEndMs;
-      const handleMouseMove = (e) => {
-        if (!isDragging.value) return;
-        const deltaPx = e.clientX - startMouseX;
-        let newEndMs = initialEndMs + deltaPx * timePerPixel;
-        newEndMs = Math.min(maxMs, Math.max(newEndMs, startMs + 6e4));
-        lastNewEndMs = newEndMs;
-        const startPosition = Math.max(0, Math.min(100, (startMs - minMs) / totalRange * 100));
-        const newEndPosition = Math.max(0, Math.min(100, (newEndMs - minMs) / totalRange * 100));
-        tempEndPosition.value = newEndPosition;
-        tempRangeStripStyle.value = {
-          left: startPosition + "%",
-          width: newEndPosition - startPosition + "%"
-        };
-      };
-      const handleMouseUp = () => {
-        isDragging.value = false;
-        tempEndPosition.value = null;
-        tempRangeStripStyle.value = null;
-        updateConfig(new Date(startMs), new Date(lastNewEndMs), true);
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    };
-    const onRangeStripMouseDown = (event) => {
-      if (config.value.fixStartKnob) {
-        onEndKnobMouseDown(event);
-        return;
-      }
-      event.preventDefault();
-      isDragging.value = true;
-      const trackRect = getTrackRect();
-      if (!trackRect) return;
-      const startMouseX = event.clientX;
-      const minMs = timelineMin.value.getTime();
-      const maxMs = timelineMax.value.getTime();
-      const timePerPixel = (maxMs - minMs) / trackRect.width;
-      const initialStartMs = rangeStart.value.getTime();
-      const initialEndMs = rangeEnd.value.getTime();
-      const rangeDuration = initialEndMs - initialStartMs;
-      const totalRange = maxMs - minMs;
-      let lastNewStartMs = initialStartMs;
-      let lastNewEndMs = initialEndMs;
-      const handleMouseMove = (e) => {
-        if (!isDragging.value) return;
-        const deltaPx = e.clientX - startMouseX;
-        const deltaTime = deltaPx * timePerPixel;
-        let newStartMs = initialStartMs + deltaTime;
-        let newEndMs = newStartMs + rangeDuration;
-        if (newStartMs < minMs) {
-          newStartMs = minMs;
-          newEndMs = newStartMs + rangeDuration;
-        }
-        if (newEndMs > maxMs) {
-          newEndMs = maxMs;
-          newStartMs = newEndMs - rangeDuration;
-        }
-        lastNewStartMs = newStartMs;
-        lastNewEndMs = newEndMs;
-        const newStartPosition = Math.max(0, Math.min(100, (newStartMs - minMs) / totalRange * 100));
-        const newEndPosition = Math.max(0, Math.min(100, (newEndMs - minMs) / totalRange * 100));
-        tempStartPosition.value = newStartPosition;
-        tempEndPosition.value = newEndPosition;
-        tempRangeStripStyle.value = {
-          left: newStartPosition + "%",
-          width: newEndPosition - newStartPosition + "%"
-        };
-      };
-      const handleMouseUp = () => {
-        isDragging.value = false;
-        tempStartPosition.value = null;
-        tempEndPosition.value = null;
-        tempRangeStripStyle.value = null;
-        updateConfig(new Date(lastNewStartMs), new Date(lastNewEndMs), true);
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    };
-    const togglePlay = () => {
-      isPlaying.value = !isPlaying.value;
-      if (isPlaying.value) {
-        startPlayback();
-      } else {
-        stopPlayback();
-      }
-    };
-    const startPlayback = () => {
-      const now = performance.now();
-      lastStepTime = now;
-      animatePlayback();
-    };
-    const stopPlayback = () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-        animationFrame = null;
-      }
-    };
-    const animatePlayback = () => {
-      if (!isPlaying.value) return;
-      const now = performance.now();
-      const timeSinceLastStep = now - lastStepTime;
-      const stepInterval = 1e3 / playbackSpeed.value;
-      if (timeSinceLastStep >= stepInterval) {
-        const currentStartMs = rangeStart.value.getTime();
-        const currentEndMs = rangeEnd.value.getTime();
-        const rangeDuration = currentEndMs - currentStartMs;
-        const stepSizeMs = getStepSizeInMs();
+      document.addEventListener("mousemove", ie), document.addEventListener("mouseup", oe);
+    }, tt = () => {
+      O.value = !O.value, O.value ? at() : $e();
+    }, at = () => {
+      me = performance.now(), Le();
+    }, $e = () => {
+      Z && (cancelAnimationFrame(Z), Z = null);
+    }, Le = () => {
+      if (!O.value) return;
+      const n = performance.now(), a = n - me, s = 1e3 / $.value;
+      if (a >= s) {
+        const i = U.value.getTime(), o = I.value.getTime(), c = o - i, m = Pe();
         console.log("Playback step:", {
-          stepSize: config.value.stepSize,
-          stepSizeMs,
-          currentStart: new Date(currentStartMs).toISOString(),
-          currentEnd: new Date(currentEndMs).toISOString(),
-          rangeDuration
+          stepSize: e.value.stepSize,
+          stepSizeMs: m,
+          currentStart: new Date(i).toISOString(),
+          currentEnd: new Date(o).toISOString(),
+          rangeDuration: c
         });
-        const newStartMs = currentStartMs + stepSizeMs;
-        const newEndMs = newStartMs + rangeDuration;
-        console.log("New times:", {
-          newStart: new Date(newStartMs).toISOString(),
-          newEnd: new Date(newEndMs).toISOString(),
-          timelineMax: timelineMax.value.toISOString()
-        });
-        if (newEndMs >= timelineMax.value.getTime()) {
-          stopPlayback();
-          isPlaying.value = false;
+        const M = i + m, x = M + c;
+        if (console.log("New times:", {
+          newStart: new Date(M).toISOString(),
+          newEnd: new Date(x).toISOString(),
+          timelineMax: H.value.toISOString()
+        }), x >= H.value.getTime()) {
+          $e(), O.value = !1;
           return;
         }
-        updateConfig(new Date(newStartMs), new Date(newEndMs));
-        lastStepTime = now;
+        le(new Date(M), new Date(x)), me = n;
       }
-      animationFrame = requestAnimationFrame(animatePlayback);
+      Z = requestAnimationFrame(Le);
     };
-    watch(() => config.value.rangeStartVariable, (newVariable) => {
-      if (newVariable && variableRepository.value) {
-        const variable = variableRepository.value.getVariable(newVariable);
-        if (variable) {
-          rangeStartWrapper.value.setTo(variable);
-        }
+    pe(() => e.value.rangeStartVariable, (n) => {
+      if (n && p.value) {
+        const a = p.value.getVariable(n);
+        a && F.value.setTo(a);
       }
-    });
-    watch(() => config.value.rangeEndVariable, (newVariable) => {
-      if (newVariable && variableRepository.value) {
-        const variable = variableRepository.value.getVariable(newVariable);
-        if (variable) {
-          rangeEndWrapper.value.setTo(variable);
-        }
+    }), pe(() => e.value.rangeEndVariable, (n) => {
+      if (n && p.value) {
+        const a = p.value.getVariable(n);
+        a && A.value.setTo(a);
       }
+    }), pe(() => F.value.value, (n) => {
+      n && e.value.rangeStartVariable && new Date(n).getTime() !== U.value.getTime() && (e.value.rangeStart = n);
+    }), pe(() => A.value.value, (n) => {
+      n && e.value.rangeEndVariable && new Date(n).getTime() !== I.value.getTime() && (e.value.rangeEnd = n);
     });
-    watch(() => rangeStartWrapper.value.value, (newValue) => {
-      if (newValue && config.value.rangeStartVariable) {
-        const newDate = new Date(newValue);
-        if (newDate.getTime() !== rangeStart.value.getTime()) {
-          config.value.rangeStart = newValue;
-        }
-      }
-    });
-    watch(() => rangeEndWrapper.value.value, (newValue) => {
-      if (newValue && config.value.rangeEndVariable) {
-        const newDate = new Date(newValue);
-        if (newDate.getTime() !== rangeEnd.value.getTime()) {
-          config.value.rangeEnd = newValue;
-        }
-      }
-    });
-    const injectedVariableRepository = inject(identifier);
-    onMounted(() => {
-      if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, "TimelineWidget", pageId);
+    const nt = de(Je);
+    return Ze(() => {
+      g?.value && j.registerInstance(g.value, be, "TimelineWidget", ke);
       try {
-        variableRepository.value = injectedVariableRepository ?? null;
-        if (!variableRepository.value) throw new Error("VariableRepository not provided");
-      } catch (error) {
-        console.warn("VariableRepository not found in container:", error);
+        if (p.value = nt ?? null, !p.value) throw new Error("VariableRepository not provided");
+      } catch (n) {
+        console.warn("VariableRepository not found in container:", n);
       }
-      if (!config.value.timelineMin) {
-        config.value.timelineMin = defaultTimelineMin.toISOString();
+      if (e.value.timelineMin || (e.value.timelineMin = Se.toISOString()), e.value.timelineMax || (e.value.timelineMax = we.toISOString()), e.value.rangeStart || (e.value.rangeStart = Te.toISOString()), e.value.rangeEnd || (e.value.rangeEnd = ge.toISOString()), e.value.playbackSpeed ? $.value = e.value.playbackSpeed : (e.value.playbackSpeed = 1, $.value = 1), e.value.rangeStripColor || (e.value.rangeStripColor = "#d17600"), e.value.fixStartKnob === void 0 && (e.value.fixStartKnob = !1), e.value.showTimeInfo === void 0 && (e.value.showTimeInfo = !0), e.value.showControls === void 0 && (e.value.showControls = !0), e.value.stepSize === void 0 && (e.value.stepSize = "hour"), e.value.rangeStartVariable && p.value) {
+        const n = p.value.getVariable(e.value.rangeStartVariable);
+        n && F.value.setTo(n);
       }
-      if (!config.value.timelineMax) {
-        config.value.timelineMax = defaultTimelineMax.toISOString();
+      if (e.value.rangeEndVariable && p.value) {
+        const n = p.value.getVariable(e.value.rangeEndVariable);
+        n && A.value.setTo(n);
       }
-      if (!config.value.rangeStart) {
-        config.value.rangeStart = defaultRangeStart.toISOString();
-      }
-      if (!config.value.rangeEnd) {
-        config.value.rangeEnd = defaultRangeEnd.toISOString();
-      }
-      if (!config.value.playbackSpeed) {
-        config.value.playbackSpeed = 1;
-        playbackSpeed.value = 1;
-      } else {
-        playbackSpeed.value = config.value.playbackSpeed;
-      }
-      if (!config.value.rangeStripColor) {
-        config.value.rangeStripColor = "#d17600";
-      }
-      if (config.value.fixStartKnob === void 0) {
-        config.value.fixStartKnob = false;
-      }
-      if (config.value.showTimeInfo === void 0) {
-        config.value.showTimeInfo = true;
-      }
-      if (config.value.showControls === void 0) {
-        config.value.showControls = true;
-      }
-      if (config.value.stepSize === void 0) {
-        config.value.stepSize = "hour";
-      }
-      if (config.value.rangeStartVariable && variableRepository.value) {
-        const startVariable = variableRepository.value.getVariable(config.value.rangeStartVariable);
-        if (startVariable) {
-          rangeStartWrapper.value.setTo(startVariable);
-        }
-      }
-      if (config.value.rangeEndVariable && variableRepository.value) {
-        const endVariable = variableRepository.value.getVariable(config.value.rangeEndVariable);
-        if (endVariable) {
-          rangeEndWrapper.value.setTo(endVariable);
-        }
-      }
-      if (config.value.relativeTime?.enabled) {
-        applyRelativeTime();
-      }
-    });
-    onUnmounted(() => {
-      if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
-      stopPlayback();
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", {
-        class: "timeline-widget",
-        onClick: emitClick,
-        onContextmenu: withModifiers(emitRightClick, ["prevent"])
-      }, [
-        createElementVNode("div", _hoisted_1$1, [
-          createElementVNode("div", {
-            class: "timeline-track",
-            ref_key: "trackRef",
-            ref: trackRef,
-            style: normalizeStyle(timelineTrackStyle.value)
+      e.value.relativeTime?.enabled && Me();
+    }), ct(() => {
+      g?.value && j.unregisterInstance(g.value), $e();
+    }), (n, a) => (C(), z("div", {
+      class: "timeline-widget",
+      onClick: _e,
+      onContextmenu: We(t, ["prevent"])
+    }, [
+      u("div", yt, [
+        u("div", {
+          class: "timeline-track",
+          ref_key: "trackRef",
+          ref: Y,
+          style: ue(w.value)
+        }, [
+          u("div", {
+            class: "range-strip",
+            style: ue(Oe.value),
+            onMousedown: et,
+            title: e.value.fixStartKnob ? "Timeline-Bereich (Start fixiert)" : "Timeline-Bereich - ziehen zum Verschieben"
           }, [
-            createElementVNode("div", {
-              class: "range-strip",
-              style: normalizeStyle(rangeStripStyle.value),
-              onMousedown: onRangeStripMouseDown,
-              title: config.value.fixStartKnob ? "Timeline-Bereich (Start fixiert)" : "Timeline-Bereich - ziehen zum Verschieben"
-            }, [
-              !config.value.fixStartKnob ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                class: "timeline-knob start-knob",
-                style: normalizeStyle({ zIndex: startKnobOnTop.value ? 5 : 4 }),
-                onMousedown: withModifiers(onStartKnobMouseDown, ["stop"]),
-                title: "Startzeit"
-              }, null, 36)) : (openBlock(), createElementBlock("div", _hoisted_3$1)),
-              createElementVNode("div", {
-                class: "timeline-knob end-knob",
-                style: normalizeStyle({ zIndex: startKnobOnTop.value ? 3 : 4 }),
-                onMousedown: withModifiers(onEndKnobMouseDown, ["stop"]),
-                title: "Endzeit"
-              }, null, 36)
-            ], 44, _hoisted_2$1)
-          ], 4),
-          createElementVNode("div", _hoisted_4$1, [
-            (openBlock(true), createElementBlock(Fragment, null, renderList(timeAxisTicks.value, (tick) => {
-              return openBlock(), createElementBlock("div", {
-                key: tick.timestamp,
-                class: "time-tick",
-                style: normalizeStyle({ left: tick.position + "%" })
-              }, [
-                _cache[1] || (_cache[1] = createElementVNode("div", { class: "tick-mark" }, null, -1)),
-                createElementVNode("div", _hoisted_5$1, toDisplayString(tick.label), 1)
-              ], 4);
-            }), 128))
-          ])
+            e.value.fixStartKnob ? (C(), z("div", Dt)) : (C(), z("div", {
+              key: 0,
+              class: "timeline-knob start-knob",
+              style: ue({ zIndex: S.value ? 5 : 4 }),
+              onMousedown: We(d, ["stop"]),
+              title: "Startzeit"
+            }, null, 36)),
+            u("div", {
+              class: "timeline-knob end-knob",
+              style: ue({ zIndex: S.value ? 3 : 4 }),
+              onMousedown: We(He, ["stop"]),
+              title: "Endzeit"
+            }, null, 36)
+          ], 44, xt)
+        ], 4),
+        u("div", Et, [
+          (C(!0), z(je, null, mt(T.value, (s) => (C(), z("div", {
+            key: s.timestamp,
+            class: "time-tick",
+            style: ue({ left: s.position + "%" })
+          }, [
+            a[1] || (a[1] = u("div", { class: "tick-mark" }, null, -1)),
+            u("div", kt, N(s.label), 1)
+          ], 4))), 128))
+        ])
+      ]),
+      e.value.showTimeInfo !== !1 ? (C(), z("div", It, [
+        u("div", _t, [
+          a[2] || (a[2] = u("span", { class: "time-label" }, "Start:", -1)),
+          u("span", Ct, N(k(U.value)), 1)
         ]),
-        config.value.showTimeInfo !== false ? (openBlock(), createElementBlock("div", _hoisted_6$1, [
-          createElementVNode("div", _hoisted_7$1, [
-            _cache[2] || (_cache[2] = createElementVNode("span", { class: "time-label" }, "Start:", -1)),
-            createElementVNode("span", _hoisted_8$1, toDisplayString(formatDateTime(rangeStart.value)), 1)
-          ]),
-          createElementVNode("div", _hoisted_9$1, [
-            _cache[3] || (_cache[3] = createElementVNode("span", { class: "time-label" }, "Ende:", -1)),
-            createElementVNode("span", _hoisted_10$1, toDisplayString(formatDateTime(rangeEnd.value)), 1)
-          ]),
-          createElementVNode("div", _hoisted_11$1, [
-            _cache[4] || (_cache[4] = createElementVNode("span", { class: "time-label" }, "Dauer:", -1)),
-            createElementVNode("span", _hoisted_12$1, toDisplayString(formatDuration()), 1)
+        u("div", Ot, [
+          a[3] || (a[3] = u("span", { class: "time-label" }, "Ende:", -1)),
+          u("span", Rt, N(k(I.value)), 1)
+        ]),
+        u("div", Pt, [
+          a[4] || (a[4] = u("span", { class: "time-label" }, "Dauer:", -1)),
+          u("span", zt, N(J()), 1)
+        ])
+      ])) : ae("", !0),
+      e.value.showControls !== !1 ? (C(), z("div", $t, [
+        u("button", {
+          class: gt(["play-button", { playing: O.value }]),
+          style: ue(ze.value),
+          onClick: tt,
+          disabled: l.value
+        }, [
+          O.value ? (C(), z("svg", Nt, [...a[6] || (a[6] = [
+            u("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
+          ])])) : (C(), z("svg", Wt, [...a[5] || (a[5] = [
+            u("path", { d: "M8 5v14l11-7z" }, null, -1)
+          ])]))
+        ], 14, Ut),
+        u("div", jt, [
+          a[8] || (a[8] = u("label", null, "Geschwindigkeit:", -1)),
+          pt(u("select", {
+            "onUpdate:modelValue": a[0] || (a[0] = (s) => $.value = s)
+          }, [...a[7] || (a[7] = [
+            ft('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
+          ])], 512), [
+            [bt, $.value]
           ])
-        ])) : createCommentVNode("", true),
-        config.value.showControls !== false ? (openBlock(), createElementBlock("div", _hoisted_13$1, [
-          createElementVNode("button", {
-            class: normalizeClass(["play-button", { "playing": isPlaying.value }]),
-            style: normalizeStyle(playButtonStyle.value),
-            onClick: togglePlay,
-            disabled: isAtEnd.value
-          }, [
-            !isPlaying.value ? (openBlock(), createElementBlock("svg", _hoisted_15$1, [..._cache[5] || (_cache[5] = [
-              createElementVNode("path", { d: "M8 5v14l11-7z" }, null, -1)
-            ])])) : (openBlock(), createElementBlock("svg", _hoisted_16$1, [..._cache[6] || (_cache[6] = [
-              createElementVNode("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
-            ])]))
-          ], 14, _hoisted_14$1),
-          createElementVNode("div", _hoisted_17$1, [
-            _cache[8] || (_cache[8] = createElementVNode("label", null, "Geschwindigkeit:", -1)),
-            withDirectives(createElementVNode("select", {
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => playbackSpeed.value = $event)
-            }, [..._cache[7] || (_cache[7] = [
-              createStaticVNode('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
-            ])], 512), [
-              [vModelSelect, playbackSpeed.value]
-            ])
-          ])
-        ])) : createCommentVNode("", true)
-      ], 32);
-    };
+        ])
+      ])) : ae("", !0)
+    ], 32));
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const TimelineWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-82423c81"]]);
-const _hoisted_1 = { class: "settings-container" };
-const _hoisted_2 = { class: "setting-group" };
-const _hoisted_3 = {
+}), Qe = (D, h) => {
+  const v = D.__vccOpts || D;
+  for (const [g, e] of h)
+    v[g] = e;
+  return v;
+}, Ht = /* @__PURE__ */ Qe(Kt, [["__scopeId", "data-v-82423c81"]]), Lt = { class: "settings-container" }, Bt = { class: "setting-group" }, Ft = {
   key: 0,
   class: "setting-group"
-};
-const _hoisted_4 = { class: "relative-time-config" };
-const _hoisted_5 = { class: "relative-time-row" };
-const _hoisted_6 = { class: "relative-time-preview" };
-const _hoisted_7 = { class: "setting-group" };
-const _hoisted_8 = { class: "datetime-group" };
-const _hoisted_9 = { class: "setting-group" };
-const _hoisted_10 = {
+}, At = { class: "relative-time-config" }, Yt = { class: "relative-time-row" }, Xt = { class: "relative-time-preview" }, Gt = { class: "setting-group" }, qt = { class: "datetime-group" }, Zt = { class: "setting-group" }, Jt = {
   key: 0,
   class: "datetime-group"
-};
-const _hoisted_11 = { class: "setting-group" };
-const _hoisted_12 = { class: "variable-config" };
-const _hoisted_13 = { class: "variable-config" };
-const _hoisted_14 = { class: "settings-container" };
-const _hoisted_15 = { class: "setting-group" };
-const _hoisted_16 = { class: "setting-group" };
-const _hoisted_17 = { class: "setting-group" };
-const _hoisted_18 = { class: "setting-group" };
-const _hoisted_19 = { class: "setting-group" };
-const _hoisted_20 = { class: "settings-container" };
-const _hoisted_21 = { class: "setting-group" };
-const _hoisted_22 = { class: "setting-group" };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}, Qt = { class: "setting-group" }, ea = { class: "variable-config" }, ta = { class: "variable-config" }, aa = { class: "settings-container" }, na = { class: "setting-group" }, la = { class: "setting-group" }, ia = { class: "setting-group" }, oa = { class: "setting-group" }, ra = { class: "setting-group" }, sa = { class: "settings-container" }, ua = { class: "setting-group" }, va = { class: "setting-group" }, da = /* @__PURE__ */ Ge({
   __name: "TimelineWidgetSettings",
   props: {
-    "modelValue": { required: true },
-    "modelModifiers": {}
+    modelValue: { required: !0 },
+    modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(__props) {
-    const i18n = inject("i18n");
-    const t = (key) => i18n ? i18n.t(key) : key;
-    const widgetSettings = useModel(__props, "modelValue");
-    const opened = ref({
-      timelineSection: false,
-      playbackSection: false,
-      stylingSection: false
-    });
-    const timeRangeMode = ref("absolute");
-    const timeRangeModeOptions = [
+  setup(D) {
+    const h = de("i18n"), v = (r) => h ? h.t(r) : r, g = qe(D, "modelValue"), e = f({
+      timelineSection: !1,
+      playbackSection: !1,
+      stylingSection: !1
+    }), y = f("absolute"), j = [
       { label: "Relative", value: "relative" },
       { label: "Absolute", value: "absolute" }
-    ];
-    const now = /* @__PURE__ */ new Date();
-    const defaultTimelineStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1e3);
-    const defaultTimelineEnd = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1e3);
-    const defaultRangeStart = new Date(now.getTime() - 24 * 60 * 60 * 1e3);
-    const defaultRangeEnd = /* @__PURE__ */ new Date();
-    const settings = ref({
-      timelineMin: defaultTimelineStart.toISOString(),
-      timelineMax: defaultTimelineEnd.toISOString(),
-      rangeStart: defaultRangeStart.toISOString(),
-      rangeEnd: defaultRangeEnd.toISOString(),
+    ], fe = /* @__PURE__ */ new Date(), ke = new Date(fe.getTime() - 720 * 60 * 60 * 1e3), Ie = new Date(fe.getTime() + 10080 * 60 * 1e3), be = new Date(fe.getTime() - 1440 * 60 * 1e3), _e = /* @__PURE__ */ new Date(), t = f({
+      timelineMin: ke.toISOString(),
+      timelineMax: Ie.toISOString(),
+      rangeStart: be.toISOString(),
+      rangeEnd: _e.toISOString(),
       relativeTime: {
-        enabled: false,
+        enabled: !1,
         offset: 24,
         unit: "hours"
       },
       stepSize: "hour",
       playbackSpeed: 1,
-      autoPlay: false,
+      autoPlay: !1,
       rangeStripColor: "#d17600",
-      fixStartKnob: false,
-      showTimeInfo: true,
-      showControls: true
-    });
-    const useCurrentTimeAsMax = ref(false);
-    const timelineMinDate = ref();
-    const timelineMinTime = ref();
-    const timelineMaxDate = ref();
-    const timelineMaxTime = ref();
-    const variableRepository = ref(null);
-    const useStartVariable = ref(false);
-    const useEndVariable = ref(false);
-    const rangeStartWrapper = ref(new VariableWrapper(""));
-    const rangeEndWrapper = ref(new VariableWrapper(""));
-    const availableVariables = computed(() => {
-      if (!variableRepository.value) return [];
-      return variableRepository.value.getAllVariables().map(([name, variable]) => variable).filter((v) => v.value && typeof v.value === "string").map((v) => ({ name: v.name, value: v.value }));
-    });
-    const stepSizeOptions = computed(() => [
+      fixStartKnob: !1,
+      showTimeInfo: !0,
+      showControls: !0
+    }), p = f(!1), F = f(), A = f(), O = f(), $ = f(), b = f(null), Y = f(!1), R = f(!1), K = f(new ye("")), P = f(new ye("")), Z = _(() => b.value ? b.value.getAllVariables().map(([r, l]) => l).filter((r) => r.value && typeof r.value == "string").map((r) => ({ name: r.name, value: r.value })) : []), me = _(() => [
       { text: "1 Minute", value: "minute" },
       { text: "1 Hour", value: "hour" },
       { text: "1 Day", value: "day" },
       { text: "1 Week", value: "week" },
       { text: "1 Month", value: "month" }
-    ]);
-    const speedOptions = computed(() => [
+    ]), Se = _(() => [
       { text: "0.25x", value: 0.25 },
       { text: "0.5x", value: 0.5 },
       { text: "1x", value: 1 },
       { text: "2x", value: 2 },
       { text: "4x", value: 4 }
-    ]);
-    const timeUnitOptions = [
+    ]), we = [
       { text: "Hours", value: "hours" },
       { text: "Days", value: "days" },
       { text: "Weeks", value: "weeks" },
       { text: "Months", value: "months" },
       { text: "Years", value: "years" }
-    ];
-    const onTimeRangeModeChange = () => {
-      if (timeRangeMode.value === "relative") {
-        settings.value.relativeTime.enabled = true;
-        applyRelativeTime();
-      } else {
-        settings.value.relativeTime.enabled = false;
-      }
-      onSettingsChange();
-    };
-    const onRelativeTimeChange = () => {
-      if (settings.value.relativeTime?.enabled) {
-        applyRelativeTime();
-      }
-      onSettingsChange();
-    };
-    const calculateRelativeTime = (offset, unit) => {
-      const now2 = /* @__PURE__ */ new Date();
-      const start = new Date(now2);
-      const safeOffset = Number(offset) || 24;
-      const unitValue = typeof unit === "object" && unit !== null ? unit.value : unit;
-      switch (unitValue) {
+    ], Te = () => {
+      y.value === "relative" ? (t.value.relativeTime.enabled = !0, Me()) : t.value.relativeTime.enabled = !1, w();
+    }, ge = () => {
+      t.value.relativeTime?.enabled && Me(), w();
+    }, Ce = (r, l) => {
+      const S = /* @__PURE__ */ new Date(), T = new Date(S), k = Number(r) || 24;
+      switch (typeof l == "object" && l !== null ? l.value : l) {
         case "hours":
-          start.setHours(start.getHours() - safeOffset);
+          T.setHours(T.getHours() - k);
           break;
         case "days":
-          start.setDate(start.getDate() - safeOffset);
+          T.setDate(T.getDate() - k);
           break;
         case "weeks":
-          start.setDate(start.getDate() - safeOffset * 7);
+          T.setDate(T.getDate() - k * 7);
           break;
         case "months":
-          start.setMonth(start.getMonth() - safeOffset);
+          T.setMonth(T.getMonth() - k);
           break;
         case "years":
-          start.setFullYear(start.getFullYear() - safeOffset);
+          T.setFullYear(T.getFullYear() - k);
           break;
         default:
-          start.setHours(start.getHours() - safeOffset);
+          T.setHours(T.getHours() - k);
       }
-      return { start, end: now2 };
-    };
-    const applyRelativeTime = () => {
-      if (!settings.value.relativeTime?.enabled) return;
-      const { start, end } = calculateRelativeTime(
-        settings.value.relativeTime.offset,
-        settings.value.relativeTime.unit
-      );
-      const frameDuration = end.getTime() - start.getTime();
-      const rangeDuration = frameDuration * 0.2;
-      const newRangeEnd = end;
-      const newRangeStart = new Date(end.getTime() - rangeDuration);
-      settings.value.timelineMin = start.toISOString();
-      settings.value.timelineMax = end.toISOString();
-      settings.value.rangeStart = newRangeStart.toISOString();
-      settings.value.rangeEnd = newRangeEnd.toISOString();
-      widgetSettings.value.timelineMin = settings.value.timelineMin;
-      widgetSettings.value.timelineMax = settings.value.timelineMax;
-      widgetSettings.value.rangeStart = settings.value.rangeStart;
-      widgetSettings.value.rangeEnd = settings.value.rangeEnd;
-      if (settings.value.rangeStartVariable && variableRepository.value) {
-        const startVariable = variableRepository.value.getVariable(settings.value.rangeStartVariable);
-        if (startVariable) {
-          startVariable.value = settings.value.rangeStart;
-        }
+      return { start: T, end: S };
+    }, Me = () => {
+      if (!t.value.relativeTime?.enabled) return;
+      const { start: r, end: l } = Ce(
+        t.value.relativeTime.offset,
+        t.value.relativeTime.unit
+      ), T = (l.getTime() - r.getTime()) * 0.2, k = l, J = new Date(l.getTime() - T);
+      if (t.value.timelineMin = r.toISOString(), t.value.timelineMax = l.toISOString(), t.value.rangeStart = J.toISOString(), t.value.rangeEnd = k.toISOString(), g.value.timelineMin = t.value.timelineMin, g.value.timelineMax = t.value.timelineMax, g.value.rangeStart = t.value.rangeStart, g.value.rangeEnd = t.value.rangeEnd, t.value.rangeStartVariable && b.value) {
+        const E = b.value.getVariable(t.value.rangeStartVariable);
+        E && (E.value = t.value.rangeStart);
       }
-      if (settings.value.rangeEndVariable && variableRepository.value) {
-        const endVariable = variableRepository.value.getVariable(settings.value.rangeEndVariable);
-        if (endVariable) {
-          endVariable.value = settings.value.rangeEnd;
-        }
+      if (t.value.rangeEndVariable && b.value) {
+        const E = b.value.getVariable(t.value.rangeEndVariable);
+        E && (E.value = t.value.rangeEnd);
       }
-    };
-    const onStartVariableToggle = () => {
-      if (!useStartVariable.value) {
-        settings.value.rangeStartVariable = void 0;
+    }, X = () => {
+      Y.value || (t.value.rangeStartVariable = void 0), w();
+    }, H = () => {
+      R.value || (t.value.rangeEndVariable = void 0), w();
+    }, U = () => {
+      if (t.value.rangeStartVariable && b.value) {
+        const r = b.value.getVariable(t.value.rangeStartVariable);
+        r && (K.value.setTo(r), t.value.rangeStart = K.value.value);
       }
-      onSettingsChange();
-    };
-    const onEndVariableToggle = () => {
-      if (!useEndVariable.value) {
-        settings.value.rangeEndVariable = void 0;
+      if (t.value.rangeEndVariable && b.value) {
+        const r = b.value.getVariable(t.value.rangeEndVariable);
+        r && (P.value.setTo(r), t.value.rangeEnd = P.value.value);
       }
-      onSettingsChange();
-    };
-    const onVariableChange = () => {
-      if (settings.value.rangeStartVariable && variableRepository.value) {
-        const startVar = variableRepository.value.getVariable(settings.value.rangeStartVariable);
-        if (startVar) {
-          rangeStartWrapper.value.setTo(startVar);
-          settings.value.rangeStart = rangeStartWrapper.value.value;
-        }
-      }
-      if (settings.value.rangeEndVariable && variableRepository.value) {
-        const endVar = variableRepository.value.getVariable(settings.value.rangeEndVariable);
-        if (endVar) {
-          rangeEndWrapper.value.setTo(endVar);
-          settings.value.rangeEnd = rangeEndWrapper.value.value;
-        }
-      }
-      onSettingsChange();
-    };
-    const combineDateTime = (date, time) => {
-      if (!date) return void 0;
-      const combined = new Date(date);
-      if (time) {
-        combined.setHours(time.getHours());
-        combined.setMinutes(time.getMinutes());
-        combined.setSeconds(time.getSeconds());
-      }
-      return combined.toISOString();
-    };
-    const onTimelineMinDateChange = () => {
-      settings.value.timelineMin = combineDateTime(timelineMinDate.value, timelineMinTime.value);
-      onSettingsChange();
-    };
-    const onTimelineMinTimeChange = () => {
-      settings.value.timelineMin = combineDateTime(timelineMinDate.value, timelineMinTime.value);
-      onSettingsChange();
-    };
-    const onTimelineMaxDateChange = () => {
-      settings.value.timelineMax = combineDateTime(timelineMaxDate.value, timelineMaxTime.value);
-      onSettingsChange();
-    };
-    const onTimelineMaxTimeChange = () => {
-      settings.value.timelineMax = combineDateTime(timelineMaxDate.value, timelineMaxTime.value);
-      onSettingsChange();
-    };
-    const onSettingsChange = () => {
-      let actualRangeStart = settings.value.rangeStart;
-      let actualRangeEnd = settings.value.rangeEnd;
-      if (useStartVariable.value && rangeStartWrapper.value.value) {
-        actualRangeStart = rangeStartWrapper.value.value;
-      }
-      if (useEndVariable.value && rangeEndWrapper.value.value) {
-        actualRangeEnd = rangeEndWrapper.value.value;
-      }
-      const updatedSettings = {
-        ...settings.value,
-        timelineMin: settings.value.timelineMin,
-        timelineMax: useCurrentTimeAsMax.value ? (/* @__PURE__ */ new Date()).toISOString() : settings.value.timelineMax,
-        rangeStart: actualRangeStart,
-        rangeEnd: actualRangeEnd,
-        relativeTime: settings.value.relativeTime,
-        rangeStartVariable: settings.value.rangeStartVariable,
-        rangeEndVariable: settings.value.rangeEndVariable,
-        stepSize: settings.value.stepSize,
-        playbackSpeed: settings.value.playbackSpeed,
-        autoPlay: settings.value.autoPlay,
-        rangeStripColor: settings.value.rangeStripColor,
-        fixStartKnob: settings.value.fixStartKnob,
-        showTimeInfo: settings.value.showTimeInfo,
-        showControls: settings.value.showControls
+      w();
+    }, I = (r, l) => {
+      if (!r) return;
+      const S = new Date(r);
+      return l && (S.setHours(l.getHours()), S.setMinutes(l.getMinutes()), S.setSeconds(l.getSeconds())), S.toISOString();
+    }, ne = () => {
+      t.value.timelineMin = I(F.value, A.value), w();
+    }, he = () => {
+      t.value.timelineMin = I(F.value, A.value), w();
+    }, Oe = () => {
+      t.value.timelineMax = I(O.value, $.value), w();
+    }, Ve = () => {
+      t.value.timelineMax = I(O.value, $.value), w();
+    }, w = () => {
+      let r = t.value.rangeStart, l = t.value.rangeEnd;
+      Y.value && K.value.value && (r = K.value.value), R.value && P.value.value && (l = P.value.value);
+      const S = {
+        ...t.value,
+        timelineMin: t.value.timelineMin,
+        timelineMax: p.value ? (/* @__PURE__ */ new Date()).toISOString() : t.value.timelineMax,
+        rangeStart: r,
+        rangeEnd: l,
+        relativeTime: t.value.relativeTime,
+        rangeStartVariable: t.value.rangeStartVariable,
+        rangeEndVariable: t.value.rangeEndVariable,
+        stepSize: t.value.stepSize,
+        playbackSpeed: t.value.playbackSpeed,
+        autoPlay: t.value.autoPlay,
+        rangeStripColor: t.value.rangeStripColor,
+        fixStartKnob: t.value.fixStartKnob,
+        showTimeInfo: t.value.showTimeInfo,
+        showControls: t.value.showControls
       };
-      Object.assign(widgetSettings.value, updatedSettings);
-    };
-    const onTimelineEndTypeChange = () => {
-      if (useCurrentTimeAsMax.value) ;
-      else {
-        if (!settings.value.timelineMax) {
-          settings.value.timelineMax = new Date(Date.now() + 7 * 24 * 60 * 60 * 1e3).toISOString();
-        }
-      }
-      onSettingsChange();
-    };
-    const resetToDefaults = () => {
-      const now2 = /* @__PURE__ */ new Date();
-      const defaultTimelineStart2 = new Date(now2.getTime() - 30 * 24 * 60 * 60 * 1e3);
-      const defaultTimelineEnd2 = new Date(now2.getTime() + 7 * 24 * 60 * 60 * 1e3);
-      const defaultRangeStart2 = new Date(now2.getTime() - 24 * 60 * 60 * 1e3);
-      const defaultRangeEnd2 = /* @__PURE__ */ new Date();
-      settings.value = {
-        timelineMin: defaultTimelineStart2.toISOString(),
-        timelineMax: defaultTimelineEnd2.toISOString(),
-        rangeStart: defaultRangeStart2.toISOString(),
-        rangeEnd: defaultRangeEnd2.toISOString(),
+      Object.assign(g.value, S);
+    }, Re = () => {
+      p.value || t.value.timelineMax || (t.value.timelineMax = new Date(Date.now() + 10080 * 60 * 1e3).toISOString()), w();
+    }, Pe = () => {
+      const r = /* @__PURE__ */ new Date(), l = new Date(r.getTime() - 720 * 60 * 60 * 1e3), S = new Date(r.getTime() + 10080 * 60 * 1e3), T = new Date(r.getTime() - 1440 * 60 * 1e3), k = /* @__PURE__ */ new Date();
+      t.value = {
+        timelineMin: l.toISOString(),
+        timelineMax: S.toISOString(),
+        rangeStart: T.toISOString(),
+        rangeEnd: k.toISOString(),
         relativeTime: {
-          enabled: false,
+          enabled: !1,
           offset: 24,
           unit: "hours"
         },
         stepSize: "hour",
         playbackSpeed: 1,
-        autoPlay: false,
+        autoPlay: !1,
         rangeStripColor: "#d17600",
-        fixStartKnob: false,
-        showTimeInfo: true,
-        showControls: true
-      };
-      timeRangeMode.value = "absolute";
-      useCurrentTimeAsMax.value = false;
-      onSettingsChange();
-    };
-    const injectedVariableRepository = inject(identifier);
-    onMounted(() => {
+        fixStartKnob: !1,
+        showTimeInfo: !0,
+        showControls: !0
+      }, y.value = "absolute", p.value = !1, w();
+    }, ze = de(Je);
+    return Ze(() => {
       try {
-        variableRepository.value = injectedVariableRepository ?? null;
-        if (!variableRepository.value) throw new Error("VariableRepository not provided");
-      } catch (error) {
-        console.warn("VariableRepository not found in container:", error);
+        if (b.value = ze ?? null, !b.value) throw new Error("VariableRepository not provided");
+      } catch (r) {
+        console.warn("VariableRepository not found in container:", r);
       }
-      if (widgetSettings.value && widgetSettings.value.timelineMin) {
-        Object.assign(settings.value, widgetSettings.value);
-        useCurrentTimeAsMax.value = !widgetSettings.value.timelineMax;
-        useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
-        useEndVariable.value = !!widgetSettings.value.rangeEndVariable;
-        if (!settings.value.relativeTime) {
-          settings.value.relativeTime = {
-            enabled: false,
-            offset: 24,
-            unit: "hours"
-          };
+      if (g.value && g.value.timelineMin) {
+        if (Object.assign(t.value, g.value), p.value = !g.value.timelineMax, Y.value = !!g.value.rangeStartVariable, R.value = !!g.value.rangeEndVariable, t.value.relativeTime || (t.value.relativeTime = {
+          enabled: !1,
+          offset: 24,
+          unit: "hours"
+        }), y.value = t.value.relativeTime.enabled ? "relative" : "absolute", t.value.timelineMin) {
+          const r = new Date(t.value.timelineMin);
+          F.value = r, A.value = r;
         }
-        timeRangeMode.value = settings.value.relativeTime.enabled ? "relative" : "absolute";
-        if (settings.value.timelineMin) {
-          const minDate = new Date(settings.value.timelineMin);
-          timelineMinDate.value = minDate;
-          timelineMinTime.value = minDate;
+        if (t.value.timelineMax) {
+          const r = new Date(t.value.timelineMax);
+          O.value = r, $.value = r;
         }
-        if (settings.value.timelineMax) {
-          const maxDate = new Date(settings.value.timelineMax);
-          timelineMaxDate.value = maxDate;
-          timelineMaxTime.value = maxDate;
-        }
-      } else {
-        resetToDefaults();
-      }
-      onSettingsChange();
-    });
-    watch(() => widgetSettings.value, (newSettings) => {
-      if (newSettings) {
-        Object.assign(settings.value, newSettings);
-        useCurrentTimeAsMax.value = !newSettings.timelineMax;
-        if (newSettings.relativeTime) {
-          timeRangeMode.value = newSettings.relativeTime.enabled ? "relative" : "absolute";
-        }
-      }
-    }, { deep: true });
-    return (_ctx, _cache) => {
-      const _component_va_select = resolveComponent("va-select");
-      const _component_va_input = resolveComponent("va-input");
-      const _component_va_date_input = resolveComponent("va-date-input");
-      const _component_va_time_input = resolveComponent("va-time-input");
-      const _component_va_checkbox = resolveComponent("va-checkbox");
-      const _component_va_collapse = resolveComponent("va-collapse");
-      const _component_va_color_input = resolveComponent("va-color-input");
-      return openBlock(), createElementBlock(Fragment, null, [
-        createVNode(_component_va_collapse, {
-          modelValue: opened.value.timelineSection,
-          "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => opened.value.timelineSection = $event),
+      } else
+        Pe();
+      w();
+    }), pe(() => g.value, (r) => {
+      r && (Object.assign(t.value, r), p.value = !r.timelineMax, r.relativeTime && (y.value = r.relativeTime.enabled ? "relative" : "absolute"));
+    }, { deep: !0 }), (r, l) => {
+      const S = te("va-select"), T = te("va-input"), k = te("va-date-input"), J = te("va-time-input"), E = te("va-checkbox"), B = te("va-collapse"), le = te("va-color-input");
+      return C(), z(je, null, [
+        V(B, {
+          modelValue: e.value.timelineSection,
+          "onUpdate:modelValue": l[12] || (l[12] = (d) => e.value.timelineSection = d),
           icon: "timeline",
-          header: t("Timeline Settings")
+          header: v("Timeline Settings")
         }, {
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_1, [
-              createElementVNode("div", _hoisted_2, [
-                createVNode(_component_va_select, {
-                  modelValue: timeRangeMode.value,
+          default: Ne(() => [
+            u("div", Lt, [
+              u("div", Bt, [
+                V(S, {
+                  modelValue: y.value,
                   "onUpdate:modelValue": [
-                    _cache[0] || (_cache[0] = ($event) => timeRangeMode.value = $event),
-                    onTimeRangeModeChange
+                    l[0] || (l[0] = (d) => y.value = d),
+                    Te
                   ],
-                  label: t("Time Range Mode"),
-                  options: timeRangeModeOptions,
+                  label: v("Time Range Mode"),
+                  options: j,
                   "text-by": "label",
                   "value-by": "value"
                 }, null, 8, ["modelValue", "label"])
               ]),
-              timeRangeMode.value === "relative" && settings.value.relativeTime ? (openBlock(), createElementBlock("div", _hoisted_3, [
-                createElementVNode("label", null, toDisplayString(t("Relative Time Range")), 1),
-                createElementVNode("div", _hoisted_4, [
-                  createElementVNode("div", _hoisted_5, [
-                    createVNode(_component_va_input, {
-                      modelValue: settings.value.relativeTime.offset,
+              y.value === "relative" && t.value.relativeTime ? (C(), z("div", Ft, [
+                u("label", null, N(v("Relative Time Range")), 1),
+                u("div", At, [
+                  u("div", Yt, [
+                    V(T, {
+                      modelValue: t.value.relativeTime.offset,
                       "onUpdate:modelValue": [
-                        _cache[1] || (_cache[1] = ($event) => settings.value.relativeTime.offset = $event),
-                        onRelativeTimeChange
+                        l[1] || (l[1] = (d) => t.value.relativeTime.offset = d),
+                        ge
                       ],
-                      modelModifiers: { number: true },
-                      label: t("Offset"),
+                      modelModifiers: { number: !0 },
+                      label: v("Offset"),
                       type: "number",
                       min: 1,
                       max: 1e4,
                       class: "offset-input"
                     }, null, 8, ["modelValue", "label"]),
-                    createVNode(_component_va_select, {
-                      modelValue: settings.value.relativeTime.unit,
+                    V(S, {
+                      modelValue: t.value.relativeTime.unit,
                       "onUpdate:modelValue": [
-                        _cache[2] || (_cache[2] = ($event) => settings.value.relativeTime.unit = $event),
-                        onRelativeTimeChange
+                        l[2] || (l[2] = (d) => t.value.relativeTime.unit = d),
+                        ge
                       ],
-                      options: timeUnitOptions,
-                      label: t("Unit"),
+                      options: we,
+                      label: v("Unit"),
                       "text-by": "text",
                       "value-by": "value",
                       class: "unit-select"
                     }, null, 8, ["modelValue", "label"])
                   ]),
-                  createElementVNode("div", _hoisted_6, toDisplayString(t("Now")) + " - " + toDisplayString(settings.value.relativeTime.offset) + " " + toDisplayString(t(settings.value.relativeTime.unit)) + " → " + toDisplayString(t("Now")), 1)
+                  u("div", Xt, N(v("Now")) + " - " + N(t.value.relativeTime.offset) + " " + N(v(t.value.relativeTime.unit)) + " → " + N(v("Now")), 1)
                 ])
-              ])) : createCommentVNode("", true),
-              timeRangeMode.value === "absolute" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-                createElementVNode("div", _hoisted_7, [
-                  createElementVNode("label", null, toDisplayString(t("Timeline Start")), 1),
-                  createElementVNode("div", _hoisted_8, [
-                    createVNode(_component_va_date_input, {
-                      modelValue: timelineMinDate.value,
+              ])) : ae("", !0),
+              y.value === "absolute" ? (C(), z(je, { key: 1 }, [
+                u("div", Gt, [
+                  u("label", null, N(v("Timeline Start")), 1),
+                  u("div", qt, [
+                    V(k, {
+                      modelValue: F.value,
                       "onUpdate:modelValue": [
-                        _cache[3] || (_cache[3] = ($event) => timelineMinDate.value = $event),
-                        onTimelineMinDateChange
+                        l[3] || (l[3] = (d) => F.value = d),
+                        ne
                       ],
-                      label: t("Date")
+                      label: v("Date")
                     }, null, 8, ["modelValue", "label"]),
-                    createVNode(_component_va_time_input, {
-                      modelValue: timelineMinTime.value,
+                    V(J, {
+                      modelValue: A.value,
                       "onUpdate:modelValue": [
-                        _cache[4] || (_cache[4] = ($event) => timelineMinTime.value = $event),
-                        onTimelineMinTimeChange
+                        l[4] || (l[4] = (d) => A.value = d),
+                        he
                       ],
-                      label: t("Time")
+                      label: v("Time")
                     }, null, 8, ["modelValue", "label"])
                   ])
                 ]),
-                createElementVNode("div", _hoisted_9, [
-                  createElementVNode("label", null, toDisplayString(t("Timeline End")), 1),
-                  createVNode(_component_va_checkbox, {
-                    modelValue: useCurrentTimeAsMax.value,
+                u("div", Zt, [
+                  u("label", null, N(v("Timeline End")), 1),
+                  V(E, {
+                    modelValue: p.value,
                     "onUpdate:modelValue": [
-                      _cache[5] || (_cache[5] = ($event) => useCurrentTimeAsMax.value = $event),
-                      onTimelineEndTypeChange
+                      l[5] || (l[5] = (d) => p.value = d),
+                      Re
                     ],
-                    label: t("Use current time")
+                    label: v("Use current time")
                   }, null, 8, ["modelValue", "label"]),
-                  !useCurrentTimeAsMax.value ? (openBlock(), createElementBlock("div", _hoisted_10, [
-                    createVNode(_component_va_date_input, {
-                      modelValue: timelineMaxDate.value,
+                  p.value ? ae("", !0) : (C(), z("div", Jt, [
+                    V(k, {
+                      modelValue: O.value,
                       "onUpdate:modelValue": [
-                        _cache[6] || (_cache[6] = ($event) => timelineMaxDate.value = $event),
-                        onTimelineMaxDateChange
+                        l[6] || (l[6] = (d) => O.value = d),
+                        Oe
                       ],
-                      label: t("Date")
+                      label: v("Date")
                     }, null, 8, ["modelValue", "label"]),
-                    createVNode(_component_va_time_input, {
-                      modelValue: timelineMaxTime.value,
+                    V(J, {
+                      modelValue: $.value,
                       "onUpdate:modelValue": [
-                        _cache[7] || (_cache[7] = ($event) => timelineMaxTime.value = $event),
-                        onTimelineMaxTimeChange
+                        l[7] || (l[7] = (d) => $.value = d),
+                        Ve
                       ],
-                      label: t("Time")
+                      label: v("Time")
                     }, null, 8, ["modelValue", "label"])
-                  ])) : createCommentVNode("", true)
+                  ]))
                 ])
-              ], 64)) : createCommentVNode("", true),
-              createElementVNode("div", _hoisted_11, [
-                createElementVNode("label", null, toDisplayString(t("Variable Binding")), 1),
-                createElementVNode("div", _hoisted_12, [
-                  createVNode(_component_va_checkbox, {
-                    modelValue: useStartVariable.value,
+              ], 64)) : ae("", !0),
+              u("div", Qt, [
+                u("label", null, N(v("Variable Binding")), 1),
+                u("div", ea, [
+                  V(E, {
+                    modelValue: Y.value,
                     "onUpdate:modelValue": [
-                      _cache[8] || (_cache[8] = ($event) => useStartVariable.value = $event),
-                      onStartVariableToggle
+                      l[8] || (l[8] = (d) => Y.value = d),
+                      X
                     ],
-                    label: t("Start time from variable")
+                    label: v("Start time from variable")
                   }, null, 8, ["modelValue", "label"]),
-                  useStartVariable.value ? (openBlock(), createBlock(_component_va_select, {
+                  Y.value ? (C(), Ae(S, {
                     key: 0,
-                    modelValue: settings.value.rangeStartVariable,
+                    modelValue: t.value.rangeStartVariable,
                     "onUpdate:modelValue": [
-                      _cache[9] || (_cache[9] = ($event) => settings.value.rangeStartVariable = $event),
-                      onVariableChange
+                      l[9] || (l[9] = (d) => t.value.rangeStartVariable = d),
+                      U
                     ],
-                    options: availableVariables.value,
-                    label: t("Start variable"),
+                    options: Z.value,
+                    label: v("Start variable"),
                     "text-by": "name",
                     "value-by": "name"
-                  }, null, 8, ["modelValue", "options", "label"])) : createCommentVNode("", true)
+                  }, null, 8, ["modelValue", "options", "label"])) : ae("", !0)
                 ]),
-                createElementVNode("div", _hoisted_13, [
-                  createVNode(_component_va_checkbox, {
-                    modelValue: useEndVariable.value,
+                u("div", ta, [
+                  V(E, {
+                    modelValue: R.value,
                     "onUpdate:modelValue": [
-                      _cache[10] || (_cache[10] = ($event) => useEndVariable.value = $event),
-                      onEndVariableToggle
+                      l[10] || (l[10] = (d) => R.value = d),
+                      H
                     ],
-                    label: t("End time from variable")
+                    label: v("End time from variable")
                   }, null, 8, ["modelValue", "label"]),
-                  useEndVariable.value ? (openBlock(), createBlock(_component_va_select, {
+                  R.value ? (C(), Ae(S, {
                     key: 0,
-                    modelValue: settings.value.rangeEndVariable,
+                    modelValue: t.value.rangeEndVariable,
                     "onUpdate:modelValue": [
-                      _cache[11] || (_cache[11] = ($event) => settings.value.rangeEndVariable = $event),
-                      onVariableChange
+                      l[11] || (l[11] = (d) => t.value.rangeEndVariable = d),
+                      U
                     ],
-                    options: availableVariables.value,
-                    label: t("End variable"),
+                    options: Z.value,
+                    label: v("End variable"),
                     "text-by": "name",
                     "value-by": "name"
-                  }, null, 8, ["modelValue", "options", "label"])) : createCommentVNode("", true)
+                  }, null, 8, ["modelValue", "options", "label"])) : ae("", !0)
                 ])
               ])
             ])
           ]),
           _: 1
         }, 8, ["modelValue", "header"]),
-        createVNode(_component_va_collapse, {
-          modelValue: opened.value.playbackSection,
-          "onUpdate:modelValue": _cache[18] || (_cache[18] = ($event) => opened.value.playbackSection = $event),
+        V(B, {
+          modelValue: e.value.playbackSection,
+          "onUpdate:modelValue": l[18] || (l[18] = (d) => e.value.playbackSection = d),
           icon: "play_circle",
-          header: t("Playback")
+          header: v("Playback")
         }, {
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_14, [
-              createElementVNode("div", _hoisted_15, [
-                createVNode(_component_va_select, {
-                  modelValue: settings.value.stepSize,
+          default: Ne(() => [
+            u("div", aa, [
+              u("div", na, [
+                V(S, {
+                  modelValue: t.value.stepSize,
                   "onUpdate:modelValue": [
-                    _cache[13] || (_cache[13] = ($event) => settings.value.stepSize = $event),
-                    onSettingsChange
+                    l[13] || (l[13] = (d) => t.value.stepSize = d),
+                    w
                   ],
-                  label: t("Step Size"),
-                  options: stepSizeOptions.value,
+                  label: v("Step Size"),
+                  options: me.value,
                   "value-by": "value"
                 }, null, 8, ["modelValue", "label", "options"])
               ]),
-              createElementVNode("div", _hoisted_16, [
-                createVNode(_component_va_select, {
-                  modelValue: settings.value.playbackSpeed,
+              u("div", la, [
+                V(S, {
+                  modelValue: t.value.playbackSpeed,
                   "onUpdate:modelValue": [
-                    _cache[14] || (_cache[14] = ($event) => settings.value.playbackSpeed = $event),
-                    onSettingsChange
+                    l[14] || (l[14] = (d) => t.value.playbackSpeed = d),
+                    w
                   ],
-                  label: t("Playback Speed"),
-                  options: speedOptions.value
+                  label: v("Playback Speed"),
+                  options: Se.value
                 }, null, 8, ["modelValue", "label", "options"])
               ]),
-              createElementVNode("div", _hoisted_17, [
-                createVNode(_component_va_checkbox, {
-                  modelValue: settings.value.autoPlay,
+              u("div", ia, [
+                V(E, {
+                  modelValue: t.value.autoPlay,
                   "onUpdate:modelValue": [
-                    _cache[15] || (_cache[15] = ($event) => settings.value.autoPlay = $event),
-                    onSettingsChange
+                    l[15] || (l[15] = (d) => t.value.autoPlay = d),
+                    w
                   ],
-                  label: t("Auto-play on load")
+                  label: v("Auto-play on load")
                 }, null, 8, ["modelValue", "label"])
               ]),
-              createElementVNode("div", _hoisted_18, [
-                createVNode(_component_va_checkbox, {
-                  modelValue: settings.value.fixStartKnob,
+              u("div", oa, [
+                V(E, {
+                  modelValue: t.value.fixStartKnob,
                   "onUpdate:modelValue": [
-                    _cache[16] || (_cache[16] = ($event) => settings.value.fixStartKnob = $event),
-                    onSettingsChange
+                    l[16] || (l[16] = (d) => t.value.fixStartKnob = d),
+                    w
                   ],
-                  label: t("Fix start knob at beginning")
+                  label: v("Fix start knob at beginning")
                 }, null, 8, ["modelValue", "label"])
               ]),
-              createElementVNode("div", _hoisted_19, [
-                createVNode(_component_va_checkbox, {
-                  modelValue: settings.value.showControls,
+              u("div", ra, [
+                V(E, {
+                  modelValue: t.value.showControls,
                   "onUpdate:modelValue": [
-                    _cache[17] || (_cache[17] = ($event) => settings.value.showControls = $event),
-                    onSettingsChange
+                    l[17] || (l[17] = (d) => t.value.showControls = d),
+                    w
                   ],
-                  label: t("Show playback controls")
+                  label: v("Show playback controls")
                 }, null, 8, ["modelValue", "label"])
               ])
             ])
           ]),
           _: 1
         }, 8, ["modelValue", "header"]),
-        createVNode(_component_va_collapse, {
-          modelValue: opened.value.stylingSection,
-          "onUpdate:modelValue": _cache[21] || (_cache[21] = ($event) => opened.value.stylingSection = $event),
+        V(B, {
+          modelValue: e.value.stylingSection,
+          "onUpdate:modelValue": l[21] || (l[21] = (d) => e.value.stylingSection = d),
           icon: "palette",
-          header: t("Styling")
+          header: v("Styling")
         }, {
-          default: withCtx(() => [
-            createElementVNode("div", _hoisted_20, [
-              createElementVNode("div", _hoisted_21, [
-                createVNode(_component_va_color_input, {
-                  modelValue: settings.value.rangeStripColor,
+          default: Ne(() => [
+            u("div", sa, [
+              u("div", ua, [
+                V(le, {
+                  modelValue: t.value.rangeStripColor,
                   "onUpdate:modelValue": [
-                    _cache[19] || (_cache[19] = ($event) => settings.value.rangeStripColor = $event),
-                    onSettingsChange
+                    l[19] || (l[19] = (d) => t.value.rangeStripColor = d),
+                    w
                   ],
-                  label: t("Range Strip Color")
+                  label: v("Range Strip Color")
                 }, null, 8, ["modelValue", "label"])
               ]),
-              createElementVNode("div", _hoisted_22, [
-                createVNode(_component_va_checkbox, {
-                  modelValue: settings.value.showTimeInfo,
+              u("div", va, [
+                V(E, {
+                  modelValue: t.value.showTimeInfo,
                   "onUpdate:modelValue": [
-                    _cache[20] || (_cache[20] = ($event) => settings.value.showTimeInfo = $event),
-                    onSettingsChange
+                    l[20] || (l[20] = (d) => t.value.showTimeInfo = d),
+                    w
                   ],
-                  label: t("Show time information panel")
+                  label: v("Show time information panel")
                 }, null, 8, ["modelValue", "label"])
               ])
             ])
@@ -1438,61 +945,49 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       ], 64);
     };
   }
-});
-const TimelineWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-bf68db5d"]]);
-const icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e";
-const TimelineWidgetEvents = [
-  { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: Payload },
-  { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: Payload }
+}), ca = /* @__PURE__ */ Qe(da, [["__scopeId", "data-v-bf68db5d"]]), ma = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", ga = [
+  { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: Ye },
+  { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: Ye }
 ];
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
-};
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-const WIDGET_TYPE = "TimelineWidget";
-let TimelineWidgetProvider = class {
-  constructor(events, actions) {
-    this.events = events;
-    this.actions = actions;
+var pa = Object.defineProperty, fa = Object.getOwnPropertyDescriptor, Ke = (D, h, v, g) => {
+  for (var e = g > 1 ? void 0 : g ? fa(h, v) : h, y = D.length - 1, j; y >= 0; y--)
+    (j = D[y]) && (e = (g ? j(h, v, e) : j(e)) || e);
+  return g && e && pa(h, v, e), e;
+}, Xe = (D, h) => (v, g) => h(v, g, D);
+const ve = "TimelineWidget";
+let xe = class {
+  constructor(D, h) {
+    this.events = D, this.actions = h;
   }
-  type = WIDGET_TYPE;
-  component = TimelineWidget;
-  settingsComponent = TimelineWidgetSettings;
+  type = ve;
+  component = Ht;
+  settingsComponent = ca;
   supportedDSTypes = [];
-  icon = icon;
+  icon = ma;
   name = "Timeline";
   register() {
-    this.events.registerWidget(WIDGET_TYPE, TimelineWidgetEvents);
-    this.actions.registerWidgetType(WIDGET_TYPE, TimelineWidgetInterface, "widget");
+    this.events.registerWidget(ve, ga), this.actions.registerWidgetType(ve, ce, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(WIDGET_TYPE);
-    this.actions.unregisterWidgetType(WIDGET_TYPE);
+    this.events.unregisterWidget(ve), this.actions.unregisterWidgetType(ve);
   }
 };
-__decorateClass([
-  activate()
-], TimelineWidgetProvider.prototype, "register", 1);
-__decorateClass([
-  deactivate()
-], TimelineWidgetProvider.prototype, "unregister", 1);
-TimelineWidgetProvider = __decorateClass([
-  component({
-    service: [WIDGET_SERVICE_ID],
-    properties: { "widget.type": WIDGET_TYPE }
+Ke([
+  rt()
+], xe.prototype, "register", 1);
+Ke([
+  st()
+], xe.prototype, "unregister", 1);
+xe = Ke([
+  ut({
+    service: [Mt],
+    properties: { "widget.type": ve }
   }),
-  __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),
-  __decorateParam(1, inject$1(EVENT_ACTIONS_REGISTRY_ID))
-], TimelineWidgetProvider);
+  Xe(0, Fe(it)),
+  Xe(1, Fe(ot))
+], xe);
 export {
-  TimelineWidget,
-  TimelineWidgetProvider,
-  TimelineWidgetSettings
+  Ht as TimelineWidget,
+  xe as TimelineWidgetProvider,
+  ca as TimelineWidgetSettings
 };

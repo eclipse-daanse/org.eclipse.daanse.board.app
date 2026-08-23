@@ -1,88 +1,66 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { inject, injectable } from "@eclipse-daanse/tsm";
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+import { inject as S, injectable as b } from "@eclipse-daanse/tsm";
+import { BaseDatasource as v } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as j } from "org.eclipse.daanse.board.app.lib.api.connection";
+const { serviceId: R } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var E = Object.defineProperty, T = Object.getOwnPropertyDescriptor, f = (t, e, s, i) => {
+  for (var n = i > 1 ? void 0 : i ? T(e, s) : e, o = t.length - 1, u; o >= 0; o--)
+    (u = t[o]) && (n = (i ? u(e, s, n) : u(n)) || n);
+  return i && n && E(e, s, n), n;
 };
-const SET_WAYPOINTS = "SET_WAYPOINTS";
-const SET_COSTING = "SET_COSTING";
-const OPTIMIZE_ROUTE = "OPTIMIZE_ROUTE";
-function decodePolyline(encoded, precision = 6) {
-  const factor = Math.pow(10, precision);
-  const coords = [];
-  let index = 0;
-  let lat = 0;
-  let lng = 0;
-  while (index < encoded.length) {
-    let shift = 0;
-    let result = 0;
-    let byte;
-    do {
-      byte = encoded.charCodeAt(index++) - 63;
-      result |= (byte & 31) << shift;
-      shift += 5;
-    } while (byte >= 32);
-    lat += result & 1 ? ~(result >> 1) : result >> 1;
-    shift = 0;
-    result = 0;
-    do {
-      byte = encoded.charCodeAt(index++) - 63;
-      result |= (byte & 31) << shift;
-      shift += 5;
-    } while (byte >= 32);
-    lng += result & 1 ? ~(result >> 1) : result >> 1;
-    coords.push([lng / factor, lat / factor]);
+const m = "SET_WAYPOINTS", d = "SET_COSTING", _ = "OPTIMIZE_ROUTE";
+function I(t, e = 6) {
+  const s = Math.pow(10, e), i = [];
+  let n = 0, o = 0, u = 0;
+  for (; n < t.length; ) {
+    let r = 0, a = 0, l;
+    do
+      l = t.charCodeAt(n++) - 63, a |= (l & 31) << r, r += 5;
+    while (l >= 32);
+    o += a & 1 ? ~(a >> 1) : a >> 1, r = 0, a = 0;
+    do
+      l = t.charCodeAt(n++) - 63, a |= (l & 31) << r, r += 5;
+    while (l >= 32);
+    u += a & 1 ? ~(a >> 1) : a >> 1, i.push([u / s, o / s]);
   }
-  return coords;
+  return i;
 }
-function shapeToGeoJSON(legs, waypoints) {
-  const features = [];
-  for (let i = 0; i < legs.length; i++) {
-    const coords = decodePolyline(legs[i].shape);
-    features.push({
+function P(t, e) {
+  const s = [];
+  for (let i = 0; i < t.length; i++) {
+    const n = I(t[i].shape);
+    s.push({
       type: "Feature",
       properties: {
         legIndex: i,
-        length: legs[i].length,
-        time: legs[i].time
+        length: t[i].length,
+        time: t[i].time
       },
       geometry: {
         type: "LineString",
-        coordinates: coords
+        coordinates: n
       }
     });
   }
-  waypoints.forEach((wp, i) => {
-    let role = "via";
-    if (i === 0) role = "start";
-    else if (i === waypoints.length - 1) role = "end";
-    features.push({
+  return e.forEach((i, n) => {
+    let o = "via";
+    n === 0 ? o = "start" : n === e.length - 1 && (o = "end"), s.push({
       type: "Feature",
       properties: {
-        waypointIndex: i,
-        role,
-        name: wp.name || ""
+        waypointIndex: n,
+        role: o,
+        name: i.name || ""
       },
       geometry: {
         type: "Point",
-        coordinates: [wp.lon, wp.lat]
+        coordinates: [i.lon, i.lat]
       }
     });
-  });
-  return {
+  }), {
     type: "FeatureCollection",
-    features
+    features: s
   };
 }
-let ValhallaStore = class extends BaseDatasource {
+let p = class extends v {
   connection = "";
   costing = "auto";
   units = "kilometers";
@@ -90,85 +68,57 @@ let ValhallaStore = class extends BaseDatasource {
   waypoints = [];
   lastResult = null;
   connectionRepository;
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
-    this.costing = configuration.costing || "auto";
-    this.units = configuration.units || "kilometers";
-    this.language = configuration.language || "de-DE";
+  init(t) {
+    super.init(t), this.connection = t.connection, this.costing = t.costing || "auto", this.units = t.units || "kilometers", this.language = t.language || "de-DE";
   }
-  toPlainObject(obj) {
-    return JSON.parse(JSON.stringify(obj));
+  toPlainObject(t) {
+    return JSON.parse(JSON.stringify(t));
   }
-  async getData(type) {
-    if (!this.lastResult) {
-      return type === "object" ? null : JSON.stringify(null);
-    }
-    const plain = this.toPlainObject({
+  async getData(t) {
+    if (!this.lastResult)
+      return t === "object" ? null : JSON.stringify(null);
+    const e = this.toPlainObject({
       geojson: this.lastResult.geojson,
       summary: this.lastResult.summary,
       legs: this.lastResult.legs,
       waypoints: this.lastResult.waypoints
     });
-    if (type === "object") {
-      return plain;
-    } else if (type === "string") {
-      return JSON.stringify(plain);
-    } else if (type === "geojson") {
-      return plain.geojson;
-    }
-    return plain;
+    return t === "object" ? e : t === "string" ? JSON.stringify(e) : t === "geojson" ? e.geojson : e;
   }
   async getOriginalData() {
-    if (!this.lastResult?.raw) return null;
-    return this.toPlainObject(this.lastResult.raw);
+    return this.lastResult?.raw ? this.toPlainObject(this.lastResult.raw) : null;
   }
-  async callEvent(event, params, shouldUpdate = true) {
-    if (event === SET_WAYPOINTS) {
-      const { waypoints, costing } = params;
-      if (waypoints) this.waypoints = waypoints;
-      if (costing) this.costing = costing;
-      await this.calculateRoute();
-      if (shouldUpdate) this.notify();
-    } else if (event === SET_COSTING) {
-      this.costing = params.costing;
-      if (this.waypoints.length >= 2) {
-        await this.calculateRoute();
-        if (shouldUpdate) this.notify();
-      }
-    } else if (event === OPTIMIZE_ROUTE) {
-      const { waypoints, costing } = params;
-      if (waypoints) this.waypoints = waypoints;
-      if (costing) this.costing = costing;
-      await this.calculateRoute("/optimized_route", true);
-      if (shouldUpdate) this.notify();
+  async callEvent(t, e, s = !0) {
+    if (t === m) {
+      const { waypoints: i, costing: n } = e;
+      i && (this.waypoints = i), n && (this.costing = n), await this.calculateRoute(), s && this.notify();
+    } else if (t === d)
+      this.costing = e.costing, this.waypoints.length >= 2 && (await this.calculateRoute(), s && this.notify());
+    else if (t === _) {
+      const { waypoints: i, costing: n } = e;
+      i && (this.waypoints = i), n && (this.costing = n), await this.calculateRoute("/optimized_route", !0), s && this.notify();
     }
   }
-  findWaypointName(lat, lon, originals) {
-    const threshold = 1e-3;
-    const match = originals.find(
-      (wp) => Math.abs(wp.lat - lat) < threshold && Math.abs(wp.lon - lon) < threshold
-    );
-    return match?.name || `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+  findWaypointName(t, e, s) {
+    return s.find(
+      (o) => Math.abs(o.lat - t) < 1e-3 && Math.abs(o.lon - e) < 1e-3
+    )?.name || `${t.toFixed(4)}, ${e.toFixed(4)}`;
   }
-  async calculateRoute(endpoint = "/route", reorderWaypoints = false) {
+  async calculateRoute(t = "/route", e = !1) {
     if (this.waypoints.length < 2) {
       this.lastResult = null;
       return;
     }
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error(
         "ConnectionRepository is not provided to Store Classes"
       );
-    }
-    const connection = this.connectionRepository.getConnection(
+    const s = this.connectionRepository.getConnection(
       this.connection
-    );
-    const originalWaypoints = [...this.waypoints];
-    const jsonParam = JSON.stringify({
-      locations: this.waypoints.map((wp) => ({
-        lat: wp.lat,
-        lon: wp.lon,
+    ), i = [...this.waypoints], n = JSON.stringify({
+      locations: this.waypoints.map((a) => ({
+        lat: a.lat,
+        lon: a.lon,
         radius: 500
       })),
       costing: this.costing,
@@ -177,114 +127,96 @@ let ValhallaStore = class extends BaseDatasource {
       directions_options: {
         units: this.units
       }
-    });
-    const queryString = "?json=" + encodeURIComponent(jsonParam);
-    const response = await connection.fetch(
-      { url: endpoint + queryString }
-    );
-    const data = await response.json();
-    if (data.trip) {
-      const legs = data.trip.legs.map((leg) => ({
-        maneuvers: leg.maneuvers.map((m) => ({
-          instruction: m.instruction,
-          length: m.length,
-          time: m.time,
-          type: m.type,
-          street_names: m.street_names,
-          begin_shape_index: m.begin_shape_index,
-          end_shape_index: m.end_shape_index
+    }), o = "?json=" + encodeURIComponent(n), r = await (await s.fetch(
+      { url: t + o }
+    )).json();
+    if (r.trip) {
+      const a = r.trip.legs.map((c) => ({
+        maneuvers: c.maneuvers.map((h) => ({
+          instruction: h.instruction,
+          length: h.length,
+          time: h.time,
+          type: h.type,
+          street_names: h.street_names,
+          begin_shape_index: h.begin_shape_index,
+          end_shape_index: h.end_shape_index
         })),
-        length: leg.summary.length,
-        time: leg.summary.time,
-        shape: leg.shape
-      }));
-      const summary = {
-        length: data.trip.summary.length,
-        time: data.trip.summary.time
+        length: c.summary.length,
+        time: c.summary.time,
+        shape: c.shape
+      })), l = {
+        length: r.trip.summary.length,
+        time: r.trip.summary.time
       };
-      if (reorderWaypoints && data.trip.locations) {
-        this.waypoints = data.trip.locations.map((loc) => ({
-          lat: loc.lat,
-          lon: loc.lon,
-          name: this.findWaypointName(loc.lat, loc.lon, originalWaypoints)
-        }));
-      }
-      this.lastResult = {
-        geojson: shapeToGeoJSON(legs, this.waypoints),
+      e && r.trip.locations && (this.waypoints = r.trip.locations.map((c) => ({
+        lat: c.lat,
+        lon: c.lon,
+        name: this.findWaypointName(c.lat, c.lon, i)
+      }))), this.lastResult = {
+        geojson: P(a, this.waypoints),
         summary: {
-          distance_km: summary.length,
-          duration_min: Math.round(summary.time / 60)
+          distance_km: l.length,
+          duration_min: Math.round(l.time / 60)
         },
-        legs,
+        legs: a,
         waypoints: [...this.waypoints],
-        raw: data
+        raw: r
       };
-    } else {
-      console.warn("Valhalla route error:", data);
-      this.lastResult = null;
-    }
+    } else
+      console.warn("Valhalla route error:", r), this.lastResult = null;
   }
   destroy() {
-    this.stopPolling();
-    this.lastResult = null;
-    this.waypoints = [];
+    this.stopPolling(), this.lastResult = null, this.waypoints = [];
   }
-  static validateConfiguration(configuration) {
-    return true;
+  static validateConfiguration(t) {
+    return !0;
   }
 };
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], ValhallaStore.prototype, "connectionRepository", 2);
-ValhallaStore = __decorateClass([
-  injectable()
-], ValhallaStore);
-const VALHALLA_STORE_FACTORY = serviceId("ValhallaStoreFactory");
-const factorySymbol = Symbol.for(VALHALLA_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(VALHALLA_STORE_FACTORY, (config) => {
-    if (!ValhallaStore.validateConfiguration(config)) {
+f([
+  S(j)
+], p.prototype, "connectionRepository", 2);
+p = f([
+  b()
+], p);
+const g = R("ValhallaStoreFactory"), N = Symbol.for(g);
+function w({ services: t }) {
+  t.register(g, (e) => {
+    if (!p.validateConfiguration(e))
       throw new Error(
         "Invalid ValhallaStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(ValhallaStore);
-    store.init(config);
-    return store;
+    const s = t.construct(p);
+    return s.init(e), s;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(VALHALLA_STORE_FACTORY);
+function O({ services: t }) {
+  t.unregister(g);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const C = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  OPTIMIZE_ROUTE,
-  SET_COSTING,
-  SET_WAYPOINTS,
-  VALHALLA_STORE_FACTORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.valhalla";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.valhalla");
-  await activate$1?.(context);
+  OPTIMIZE_ROUTE: _,
+  SET_COSTING: d,
+  SET_WAYPOINTS: m,
+  VALHALLA_STORE_FACTORY: g,
+  activate: w,
+  deactivate: O,
+  factorySymbol: N
+}, Symbol.toStringTag, { value: "Module" })), y = "org.eclipse.daanse.board.app.lib.datasource.valhalla", x = "0.0.1-next.1";
+async function M(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${y}: tsm runtime is not initialized`);
+  e.register(y, C, x, "lib.datasource.valhalla"), await w?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function J(t) {
+  await O?.(t);
 }
 export {
-  OPTIMIZE_ROUTE,
-  SET_COSTING,
-  SET_WAYPOINTS,
-  VALHALLA_STORE_FACTORY,
-  activate,
-  deactivate,
-  factorySymbol
+  _ as OPTIMIZE_ROUTE,
+  d as SET_COSTING,
+  m as SET_WAYPOINTS,
+  g as VALHALLA_STORE_FACTORY,
+  M as activate,
+  J as deactivate,
+  N as factorySymbol
 };

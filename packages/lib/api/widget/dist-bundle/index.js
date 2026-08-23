@@ -1,30 +1,22 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const WIDGET_SERVICE_ID = serviceId("daanse.widget");
-const WIDGET_REPOSITORY = serviceId("WidgetRepository");
-const identifier = Symbol.for(WIDGET_REPOSITORY);
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const { serviceId: n } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), a = n("daanse.widget"), o = n("WidgetRepository"), r = Symbol.for(o), s = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WIDGET_REPOSITORY,
-  WIDGET_SERVICE_ID,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.api.widget";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.api.widget");
-  await void 0;
+  WIDGET_REPOSITORY: o,
+  WIDGET_SERVICE_ID: a,
+  identifier: r
+}, Symbol.toStringTag, { value: "Module" })), i = "org.eclipse.daanse.board.app.lib.api.widget", c = "0.0.1-next.1";
+async function d(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${i}: tsm runtime is not initialized`);
+  t.register(i, s, c, "lib.api.widget"), await void 0;
 }
-async function deactivate(context) {
+async function _(e) {
   await void 0;
 }
 export {
-  WIDGET_REPOSITORY,
-  WIDGET_SERVICE_ID,
-  activate,
-  deactivate,
-  identifier
+  o as WIDGET_REPOSITORY,
+  a as WIDGET_SERVICE_ID,
+  d as activate,
+  _ as deactivate,
+  r as identifier
 };

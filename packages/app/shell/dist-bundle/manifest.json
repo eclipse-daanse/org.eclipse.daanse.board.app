@@ -20,9 +20,7 @@
     "lib.events",
     "lib.factory.variableWrapper",
     "lib.logger",
-    "lib.repository.navigation",
     "lib.repository.page",
-    "lib.repository.route",
     "lib.variables",
     "platform.vue",
     "ui.vue.composables",
@@ -136,15 +134,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.navigation",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.repository.page",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.route",
       "versionRange": ">=0.0.1-0"
     },
     {

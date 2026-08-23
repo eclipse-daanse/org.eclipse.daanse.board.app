@@ -1,142 +1,111 @@
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { inject, injectable } from "@eclipse-daanse/tsm";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const QUERY = "Query";
-const symbol = Symbol.for("SparqlStore");
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+import { BaseDatasource as f } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { inject as h, injectable as m } from "@eclipse-daanse/tsm";
+import { CONNECTION_REPOSITORY as y } from "org.eclipse.daanse.board.app.lib.api.connection";
+const { serviceId: v } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), w = "Query", _ = Symbol.for("SparqlStore");
+var g = Object.defineProperty, S = Object.getOwnPropertyDescriptor, l = (t, e, o, a) => {
+  for (var r = a > 1 ? void 0 : a ? S(e, o) : e, n = t.length - 1, s; n >= 0; n--)
+    (s = t[n]) && (r = (a ? s(e, o, r) : s(r)) || r);
+  return a && r && g(e, o, r), r;
 };
-let SparqlStore = class extends BaseDatasource {
+let i = class extends f {
   constructor() {
-    super(...arguments);
-    this.query = "";
-    this.datasourceId = null;
+    super(...arguments), this.query = "", this.datasourceId = null;
   }
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
-    this.query = configuration.query;
+  init(t) {
+    super.init(t), this.connection = t.connection, this.query = t.query;
   }
-  callEvent(event, params) {
-    if (event == QUERY) {
-      this.query = params;
-    }
-    this.notify();
+  callEvent(t, e) {
+    t == w && (this.query = e), this.notify();
   }
   getOriginalData() {
     throw new Error("not implemented");
   }
   destroy() {
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.connection) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !!t.connection;
   }
-  async getData(type) {
+  async getData(t) {
     try {
-      if (!this.connectionRepository) {
+      if (!this.connectionRepository)
         throw new Error("ConnectionRepository is not provided to Store Classes");
-      }
-      const connection = this.connectionRepository.getConnection(
+      const e = this.connectionRepository.getConnection(
         this.connection
       );
-      let encodedValue = "query=" + encodeURIComponent(this.query);
-      const newData = await connection.fetch(
+      let o = "query=" + encodeURIComponent(this.query);
+      const r = await (await e.fetch(
         { url: "" },
         {
           method: "POST",
-          body: encodedValue,
+          body: o,
           headers: {
             "User-Agent": "org.eclipse.daanse.datafinder.sparql/1.0",
             Accept: "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
           }
         }
-      );
-      const parsed = await newData.json();
-      this.data = parsed;
-    } catch (e) {
+      )).json();
+      this.data = r;
+    } catch {
       this.data = void 0;
     }
-    if (type == "DataTable") {
+    if (t == "DataTable") {
       if (this.data) {
-        const headers = this.data.head.vars;
-        const items = this.data.results.bindings.map((binding) => {
-          const item = {};
-          for (const key of headers) {
-            item[key] = binding[key]?.value ?? null;
-          }
-          return item;
-        });
-        const rows = items.map((item) => headers.map((key) => item[key]));
-        return { headers, items, rows };
+        const e = this.data.head.vars, o = this.data.results.bindings.map((r) => {
+          const n = {};
+          for (const s of e)
+            n[s] = r[s]?.value ?? null;
+          return n;
+        }), a = o.map((r) => e.map((n) => r[n]));
+        return { headers: e, items: o, rows: a };
       }
       return { heders: [], items: [], rows: [] };
     }
-    if (type == "string") {
-      return JSON.stringify(this.data);
-    }
-    return this.data;
+    return t == "string" ? JSON.stringify(this.data) : this.data;
   }
 };
-SparqlStore.TYPE = "sparql";
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], SparqlStore.prototype, "connectionRepository", 2);
-SparqlStore = __decorateClass([
-  injectable()
-], SparqlStore);
-const SPARQL_STORE = serviceId("SparqlStore");
-function activate$1({ services }) {
-  services.register(SPARQL_STORE, (config) => {
-    if (!SparqlStore.validateConfiguration(config)) {
+i.TYPE = "sparql";
+l([
+  h(y)
+], i.prototype, "connectionRepository", 2);
+i = l([
+  m()
+], i);
+const p = v("SparqlStore");
+function u({ services: t }) {
+  t.register(p, (e) => {
+    if (!i.validateConfiguration(e))
       throw new Error(
         "Invalid SparqlStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(SparqlStore);
-    store.init(config);
-    return store;
+    const o = t.construct(i);
+    return o.init(e), o;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(SPARQL_STORE);
+function d({ services: t }) {
+  t.unregister(p);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const b = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   get SparqlStore() {
-    return SparqlStore;
+    return i;
   },
-  activate: activate$1,
-  deactivate: deactivate$1,
-  symbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.sparql";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.sparql");
-  await activate$1?.(context);
+  activate: u,
+  deactivate: d,
+  symbol: _
+}, Symbol.toStringTag, { value: "Module" })), c = "org.eclipse.daanse.board.app.lib.datasource.sparql", q = "0.0.1-next.1";
+async function C(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${c}: tsm runtime is not initialized`);
+  e.register(c, b, q, "lib.datasource.sparql"), await u?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function P(t) {
+  await d?.(t);
 }
 export {
-  SparqlStore,
-  activate,
-  deactivate,
-  symbol
+  i as SparqlStore,
+  C as activate,
+  P as deactivate,
+  _ as symbol
 };

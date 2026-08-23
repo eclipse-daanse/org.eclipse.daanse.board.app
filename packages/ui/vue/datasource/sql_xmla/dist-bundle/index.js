@@ -1,135 +1,83 @@
-(function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.va-tabs__wrapper {\n  overflow: visible;\n}\n.va-tabs__content {\n  overflow: hidden;\n}\n";})();
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { defineComponent, shallowRef, ref, watch, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, unref, withCtx, createTextVNode, createBlock, createCommentVNode, Fragment, renderList, normalizeStyle, toDisplayString, computed } from "vue";
-import { MonacoEditor } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
-import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-const _hoisted_1 = {
+(function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".va-tabs__wrapper{overflow:visible}.va-tabs__content{overflow:hidden}\n";})();
+import { DATASOURCE_REPOSITORY as q } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { defineComponent as O, shallowRef as X, ref as i, watch as V, resolveComponent as u, createElementBlock as f, openBlock as c, createElementVNode as g, createVNode as v, unref as G, withCtx as _, createTextVNode as L, createBlock as R, createCommentVNode as I, Fragment as N, renderList as M, normalizeStyle as F, toDisplayString as D, computed as $ } from "vue";
+import { MonacoEditor as Y } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
+import { useTemporaryStore as H } from "org.eclipse.daanse.board.app.ui.vue.composables";
+const Q = {
   class: "flex gap-4",
-  style: { "overflow": "hidden", "height": "100%", "width": "100%" }
-};
-const _hoisted_2 = {
+  style: { overflow: "hidden", height: "100%", width: "100%" }
+}, z = {
   class: "flex flex-col gap-4 overflow-auto",
-  style: { "width": "550px", "flex-grow": "0" }
-};
-const _hoisted_3 = {
+  style: { width: "550px", "flex-grow": "0" }
+}, j = {
   class: "flex flex-col gap-4",
-  style: { "overflow": "hidden", "height": "100%", "width": "100%" }
-};
-const _hoisted_4 = { class: "h-full" };
-const _hoisted_5 = { style: { "padding-top": "4px", "height": "100%" } };
-const _hoisted_6 = {
+  style: { overflow: "hidden", height: "100%", width: "100%" }
+}, J = { class: "h-full" }, K = { style: { "padding-top": "4px", height: "100%" } }, W = {
   key: 1,
   class: "flex flex-col",
-  style: { "width": "100%", "height": "100%", "overflow": "auto", "border": "1px solid silver", "padding": "0px" }
-};
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  style: { width: "100%", height: "100%", overflow: "auto", border: "1px solid silver", padding: "0px" }
+}, Z = /* @__PURE__ */ O({
   __name: "Preview",
   props: {
     dataSource: {}
   },
   emits: ["updateConfig"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const tempStore = shallowRef(null);
-    const settingsRef = ref(props.dataSource);
-    const { update } = useTemporaryStore(props.dataSource.type, settingsRef, tempStore);
-    const treeData = ref([]);
-    const query = ref(props.dataSource.config.sql || "");
-    const metadata = ref(null);
-    const data = ref([]);
-    const messages = ref([]);
-    watch(props.dataSource.config, () => {
-      update();
-    }, { deep: true });
-    const emit = __emit;
-    const mapDataType = (type) => {
-      const types = {
-        "130": "VARCHAR",
-        // WChar
-        "5": "NUMERIC",
-        // Double
-        "3": "INT",
-        // Integer
-        "11": "BOOLEAN"
-        // Boolean
-      };
-      return types[String(type)] || "VARCHAR";
-    };
-    function transformToSchema(rawData) {
-      const schema = {};
-      rawData.forEach((catalog) => {
-        const tablesFolder = catalog.children?.find((c) => c.label === "Tables");
-        if (!tablesFolder) return;
-        tablesFolder.children.forEach((table) => {
-          if (table.TABLE_TYPE === "SYSTEM TABLE") return;
-          const tableName = table.TABLE_NAME;
-          const columnsFolder = table.children?.find((c) => c.label === "Columns");
-          if (columnsFolder && columnsFolder.children) {
-            schema[tableName] = {
-              name: tableName,
-              description: table.DESCRIPTION || "",
-              columns: columnsFolder.children.map((col) => ({
-                name: col.COLUMN_NAME,
-                type: mapDataType(col.DATA_TYPE)
-              }))
-            };
-          }
+  setup(l, { emit: S }) {
+    const r = l, n = X(null), b = i(r.dataSource), { update: E } = H(r.dataSource.type, b, n), h = i([]), d = i(r.dataSource.config.sql || ""), w = i(null), x = i([]), y = i([]);
+    V(r.dataSource.config, () => {
+      E();
+    }, { deep: !0 });
+    const B = S, k = (s) => ({
+      130: "VARCHAR",
+      // WChar
+      5: "NUMERIC",
+      // Double
+      3: "INT",
+      // Integer
+      11: "BOOLEAN"
+      // Boolean
+    })[String(s)] || "VARCHAR";
+    function P(s) {
+      const o = {};
+      return s.forEach((m) => {
+        const e = m.children?.find((t) => t.label === "Tables");
+        e && e.children.forEach((t) => {
+          if (t.TABLE_TYPE === "SYSTEM TABLE") return;
+          const A = t.TABLE_NAME, p = t.children?.find((a) => a.label === "Columns");
+          p && p.children && (o[A] = {
+            name: A,
+            description: t.DESCRIPTION || "",
+            columns: p.children.map((a) => ({
+              name: a.COLUMN_NAME,
+              type: k(a.DATA_TYPE)
+            }))
+          });
         });
-      });
-      return schema;
+      }), o;
     }
-    watch(tempStore, async () => {
-      const { tables } = await tempStore.value.getTables();
-      const catalogs = await tempStore.value.getCatalogs();
-      const columns = await tempStore.value.getColumns();
-      catalogs.map((catalog) => {
-        catalog.label = catalog.CATALOG_NAME;
-        catalog.id = catalog.CATALOG_NAME;
-        catalog.icon = "storage";
-        return catalog;
+    V(n, async () => {
+      const { tables: s } = await n.value.getTables(), o = await n.value.getCatalogs(), m = await n.value.getColumns();
+      o.map((e) => (e.label = e.CATALOG_NAME, e.id = e.CATALOG_NAME, e.icon = "storage", e));
+      for (const e of s)
+        e.label = e.TABLE_NAME, e.id = e.TABLE_NAME, e.icon = "table_chart", e.children == null && (e.children = [{
+          label: "Columns",
+          icon: "view_column",
+          children: []
+        }]), e.children[0].children = m.filter((t) => t.TABLE_NAME === e.TABLE_NAME && t.TABLE_CATALOG === e.TABLE_CATALOG).map((t) => (t.label = t.COLUMN_NAME, t.id = t.COLUMN_NAME, t.icon = "view_array", t));
+      for (const e of o)
+        e.children == null && (e.children = [{
+          label: "Tables",
+          icon: "backup_table",
+          children: []
+        }]), e.children[0].children = s.filter((t) => t.TABLE_CATALOG === e.CATALOG_NAME);
+      console.log("catalogs", o), h.value = o, console.log("treeData", h.value), w.value = P(h.value), console.log("metadata for autocomplete", w.value), y.value.push({ type: "success", text: `Metadata refreshed at ${(/* @__PURE__ */ new Date()).toLocaleTimeString()}` });
+    }, { deep: !0 }), V(() => d, async () => {
+      B("updateConfig", {
+        ...r.dataSource.config,
+        sql: d.value
       });
-      for (const table of tables) {
-        table.label = table.TABLE_NAME;
-        table.id = table.TABLE_NAME;
-        table.icon = "table_chart";
-        if (table.children == null) {
-          table.children = [{
-            label: "Columns",
-            icon: "view_column",
-            children: []
-          }];
-        }
-        table.children[0].children = columns.filter((column) => column.TABLE_NAME === table.TABLE_NAME && column.TABLE_CATALOG === table.TABLE_CATALOG).map((column) => {
-          column.label = column.COLUMN_NAME;
-          column.id = column.COLUMN_NAME;
-          column.icon = "view_array";
-          return column;
-        });
-      }
-      for (const catalog of catalogs) {
-        if (catalog.children == null) {
-          catalog.children = [{
-            label: "Tables",
-            icon: "backup_table",
-            children: []
-          }];
-        }
-        catalog.children[0].children = tables.filter((table) => table.TABLE_CATALOG === catalog.CATALOG_NAME);
-      }
-      console.log("catalogs", catalogs);
-      treeData.value = catalogs;
-      console.log("treeData", treeData.value);
-      metadata.value = transformToSchema(treeData.value);
-      console.log("metadata for autocomplete", metadata.value);
-      messages.value.push({ type: "success", text: `Metadata refreshed at ${(/* @__PURE__ */ new Date()).toLocaleTimeString()}` });
-    }, { deep: true });
-    watch(() => query, async () => {
-      emit("updateConfig", {
-        ...props.dataSource.config,
-        sql: query.value
-      });
-    }, { deep: true });
-    const tabs = [
+    }, { deep: !0 });
+    const C = [
       {
         title: "Data",
         icon: "table_chart"
@@ -138,89 +86,78 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
         title: "Messages",
         icon: "message"
       }
-    ];
-    const currentTab = ref(tabs[0].title);
-    const run = async () => {
-      console.log(tempStore.value);
-      tempStore.value.sql = query.value;
+    ], T = i(C[0].title), U = async () => {
+      console.log(n.value), n.value.sql = d.value;
       try {
-        const startTime = /* @__PURE__ */ new Date();
-        data.value = (await tempStore.value.getData("DataTable")).items;
-        const now = /* @__PURE__ */ new Date();
-        messages.value.push({ type: "success", text: `Query executed successfully in ${now.getTime() - startTime.getTime()}ms. Returned ${data.value.length} rows.` });
-      } catch (e) {
-        messages.value.push({ type: "error", text: `Query failed: ${e.message}` });
+        const s = /* @__PURE__ */ new Date();
+        x.value = (await n.value.getData("DataTable")).items;
+        const o = /* @__PURE__ */ new Date();
+        y.value.push({ type: "success", text: `Query executed successfully in ${o.getTime() - s.getTime()}ms. Returned ${x.value.length} rows.` });
+      } catch (s) {
+        y.value.push({ type: "error", text: `Query failed: ${s.message}` });
       }
     };
-    return (_ctx, _cache) => {
-      const _component_VaTreeView = resolveComponent("VaTreeView");
-      const _component_va_button = resolveComponent("va-button");
-      const _component_VaTab = resolveComponent("VaTab");
-      const _component_VaDataTable = resolveComponent("VaDataTable");
-      const _component_VaTabs = resolveComponent("VaTabs");
-      return openBlock(), createElementBlock("div", _hoisted_1, [
-        createElementVNode("div", _hoisted_2, [
-          _cache[2] || (_cache[2] = createElementVNode("h4", { class: "" }, "Explorer", -1)),
-          createVNode(_component_VaTreeView, { nodes: treeData.value }, null, 8, ["nodes"])
+    return (s, o) => {
+      const m = u("VaTreeView"), e = u("va-button"), t = u("VaTab"), A = u("VaDataTable"), p = u("VaTabs");
+      return c(), f("div", Q, [
+        g("div", z, [
+          o[2] || (o[2] = g("h4", { class: "" }, "Explorer", -1)),
+          v(m, { nodes: h.value }, null, 8, ["nodes"])
         ]),
-        createElementVNode("div", _hoisted_3, [
-          createVNode(unref(MonacoEditor), {
+        g("div", j, [
+          v(G(Y), {
             class: "h-full",
             supportedLanguages: ["sql"],
             language: "sql",
-            modelValue: query.value,
-            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => query.value = $event),
-            metadata: metadata.value
+            modelValue: d.value,
+            "onUpdate:modelValue": o[0] || (o[0] = (a) => d.value = a),
+            metadata: w.value
           }, {
-            actions: withCtx(() => [
-              createVNode(_component_va_button, {
+            actions: _(() => [
+              v(e, {
                 color: "primary",
-                onClick: run
+                onClick: U
               }, {
-                default: withCtx(() => [..._cache[3] || (_cache[3] = [
-                  createTextVNode("Run Query", -1)
+                default: _(() => [...o[3] || (o[3] = [
+                  L("Run Query", -1)
                 ])]),
                 _: 1
               })
             ]),
             _: 1
           }, 8, ["modelValue", "metadata"]),
-          createElementVNode("div", _hoisted_4, [
-            createVNode(_component_VaTabs, {
-              modelValue: currentTab.value,
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => currentTab.value = $event),
+          g("div", J, [
+            v(p, {
+              modelValue: T.value,
+              "onUpdate:modelValue": o[1] || (o[1] = (a) => T.value = a),
               color: "rgb(33, 150, 243)"
             }, {
-              tabs: withCtx(() => [
-                (openBlock(), createElementBlock(Fragment, null, renderList(tabs, (tab) => {
-                  return createVNode(_component_VaTab, {
-                    key: tab.title,
-                    name: tab.title
-                  }, {
-                    default: withCtx(() => [
-                      createTextVNode(toDisplayString(tab.title), 1)
-                    ]),
-                    _: 2
-                  }, 1032, ["name"]);
-                }), 64))
+              tabs: _(() => [
+                (c(), f(N, null, M(C, (a) => v(t, {
+                  key: a.title,
+                  name: a.title
+                }, {
+                  default: _(() => [
+                    L(D(a.title), 1)
+                  ]),
+                  _: 2
+                }, 1032, ["name"])), 64))
               ]),
-              default: withCtx(() => [
-                createElementVNode("div", _hoisted_5, [
-                  currentTab.value === "Data" ? (openBlock(), createBlock(_component_VaDataTable, {
+              default: _(() => [
+                g("div", K, [
+                  T.value === "Data" ? (c(), R(A, {
                     key: 0,
-                    items: data.value,
-                    stickyHeader: true,
-                    style: { "height": "100%" }
-                  }, null, 8, ["items"])) : currentTab.value === "Messages" ? (openBlock(), createElementBlock("div", _hoisted_6, [
-                    (openBlock(true), createElementBlock(Fragment, null, renderList(messages.value, (message) => {
-                      return openBlock(), createElementBlock("p", {
-                        key: message,
-                        style: normalizeStyle([{ "border-bottom": "1px solid silver", "padding": "8px" }, {
-                          color: message.type === "error" ? "#f00" : message.type === "success" ? "#0f0" : "#000"
-                        }])
-                      }, toDisplayString(message.text), 5);
-                    }), 128))
-                  ])) : createCommentVNode("", true)
+                    items: x.value,
+                    stickyHeader: !0,
+                    style: { height: "100%" }
+                  }, null, 8, ["items"])) : T.value === "Messages" ? (c(), f("div", W, [
+                    (c(!0), f(N, null, M(y.value, (a) => (c(), f("p", {
+                      key: a,
+                      style: F([{ "border-bottom": "1px solid silver", padding: "8px" }, {
+                        color: a.type === "error" ? "#f00" : a.type === "success" ? "#0f0" : "#000"
+                      }])
+                    }, D(a.text), 5))), 128))
+                  ])) : I("", !0)
                 ])
               ]),
               _: 1
@@ -230,49 +167,39 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       ]);
     };
   }
-});
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), ee = /* @__PURE__ */ O({
   __name: "Settings",
   props: {
     config: {},
     dataSources: {},
     connections: {}
   },
-  setup(__props) {
-    const connectionsFiltered = computed(() => {
-      return __props.connections.filter((c) => c.type === "xmla");
-    });
-    return (_ctx, _cache) => {
-      const _component_VaSelect = resolveComponent("VaSelect");
-      return openBlock(), createBlock(_component_VaSelect, {
-        modelValue: __props.config.connection,
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => __props.config.connection = $event),
+  setup(l) {
+    const S = $(() => l.connections.filter((r) => r.type === "xmla"));
+    return (r, n) => {
+      const b = u("VaSelect");
+      return c(), R(b, {
+        modelValue: l.config.connection,
+        "onUpdate:modelValue": n[0] || (n[0] = (E) => l.config.connection = E),
         label: "Connection",
-        options: connectionsFiltered.value,
+        options: S.value,
         "text-by": "name",
         "value-by": "uid"
       }, null, 8, ["modelValue", "options"]);
     };
   }
-});
-const SqlXmlaDatasourceIdentifier = Symbol.for("SqlXmlaStoreFactory");
-const previewSymbol = Symbol.for("SqlXmlaPreview");
-const settingsSymbol = Symbol.for("SqlXmlaSettings");
-function activate({ services }) {
-  services.register("SqlXmlaPreview", _sfc_main$1);
-  services.register("SqlXmlaSettings", _sfc_main);
-  services.getRequired(DATASOURCE_REPOSITORY).registerDatasourceType("sql_xmla", {
-    Store: SqlXmlaDatasourceIdentifier,
-    Preview: previewSymbol,
-    Settings: settingsSymbol
+}), te = Symbol.for("SqlXmlaStoreFactory"), oe = Symbol.for("SqlXmlaPreview"), ae = Symbol.for("SqlXmlaSettings");
+function ie({ services: l }) {
+  l.register("SqlXmlaPreview", Z), l.register("SqlXmlaSettings", ee), l.getRequired(q).registerDatasourceType("sql_xmla", {
+    Store: te,
+    Preview: oe,
+    Settings: ae
   });
 }
-function deactivate({ services }) {
-  services.getRequired(DATASOURCE_REPOSITORY).unregisterDatasourceType("sql_xmla");
-  services.unregister("SqlXmlaPreview");
-  services.unregister("SqlXmlaSettings");
+function ce({ services: l }) {
+  l.getRequired(q).unregisterDatasourceType("sql_xmla"), l.unregister("SqlXmlaPreview"), l.unregister("SqlXmlaSettings");
 }
 export {
-  activate,
-  deactivate
+  ie as activate,
+  ce as deactivate
 };

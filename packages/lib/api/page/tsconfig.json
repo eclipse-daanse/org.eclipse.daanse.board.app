@@ -1,5 +1,10 @@
 {
-  "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-bundle",
+    "vite.bundle.config.ts"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -7,7 +12,11 @@
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

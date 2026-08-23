@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -35,6 +38,6 @@ export class Observation {
 
   @Documentation("The component related to the observation.")
   @Attribute() component?: string;
-  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
+  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
   @Reference('Condition') conditions: Array<Condition> = [];
 }

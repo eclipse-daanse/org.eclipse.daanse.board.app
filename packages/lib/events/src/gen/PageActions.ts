@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -28,7 +31,7 @@ import {Documentation, Attribute, ModelClass, Reference, Enum} from 'org.eclipse
 
 @ModelClass({type:'http://org.eclipse.daanse.board.app.lib.events.systemactions#//PageActions'})
 export class PageActions {
-
+  
   @WidgetAction({eventType: 'page.setPageVariable'})
   setPageVariable(variableName?: string,value?: any,pageId?: string): void {
         throw new Error("setPageVariable not implemented");

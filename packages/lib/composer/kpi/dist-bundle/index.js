@@ -1,141 +1,106 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class KpiComposer extends BaseDatasource {
+import { DATASOURCE_REPOSITORY as y } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { BaseDatasource as f } from "org.eclipse.daanse.board.app.lib.datasource.base";
+const { serviceId: g } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class l extends f {
   /**
    * Dependencies arrive through the constructor - the factory in this
    * package's activate passes them from the registry. No global lookups.
    */
-  constructor(datasourceRepository) {
-    super();
-    this.datasourceRepository = datasourceRepository;
+  constructor(e) {
+    super(), this.datasourceRepository = e;
   }
   configuration;
   connectedDatasources = [];
   static availableTypes = ["KPI"];
-  init(configuration) {
-    this.configuration = configuration;
-    this.connectedDatasources = configuration.connectedDatasources || [];
+  init(e) {
+    this.configuration = e, this.connectedDatasources = e.connectedDatasources || [];
   }
-  async getData(type) {
+  async getData(e) {
     if (this.connectedDatasources.length === 0) return [];
-    const datasourceRepository = this.datasourceRepository;
-    const dataPromises = this.connectedDatasources.filter((datasourceId) => datasourceId).map(async (datasourceId) => {
-      if (!datasourceRepository) {
+    const o = this.datasourceRepository, s = this.connectedDatasources.filter((r) => r).map(async (r) => {
+      if (!o)
         throw new Error("DatasourceRepository is not provided to DataSource Classes");
-      }
-      const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-      return await datasourceInstance.getOriginalData();
-    });
-    const datasourceResults = await Promise.all(dataPromises);
-    console.log("Datasource results:", datasourceResults);
-    const mergedData = this.mergeKpiData(datasourceResults);
-    console.log("Merged KPI data:", mergedData);
-    return mergedData;
+      return await o.getDatasource(r).getOriginalData();
+    }), n = await Promise.all(s);
+    console.log("Datasource results:", n);
+    const t = this.mergeKpiData(n);
+    return console.log("Merged KPI data:", t), t;
   }
   async getOriginalData() {
     return this.getData("KPI");
   }
-  mergeKpiData(dataArrays) {
-    const merged = [];
-    const folderMap = /* @__PURE__ */ new Map();
-    dataArrays.forEach((data) => {
-      if (Array.isArray(data)) {
-        data.forEach((item) => {
-          console.log("Processing item:", item);
-          if (item.type === "Folder") {
-            const folderKey = item.displayFolder || item.name || "Default";
-            if (folderMap.has(folderKey)) {
-              const existingFolder = folderMap.get(folderKey);
-              existingFolder.children = [...existingFolder.children || [], ...item.children || []];
-            } else {
-              folderMap.set(folderKey, { ...item });
-              merged.push(item);
-            }
-          } else {
-            if (item.displayFolder && typeof item.displayFolder === "string" && item.displayFolder.trim() !== "") {
-              let folder = Array.from(folderMap.values()).find((f) => f.displayFolder === item.displayFolder);
-              if (!folder) {
-                folder = {
-                  type: "Folder",
-                  name: item.displayFolder,
-                  displayFolder: item.displayFolder,
-                  children: []
-                };
-                folderMap.set(item.displayFolder, folder);
-                merged.push(folder);
-              }
-              folder.children.push(item);
-            } else {
-              merged.push(item);
-            }
-          }
-        });
-      }
-    });
-    return merged;
+  mergeKpiData(e) {
+    const o = [], s = /* @__PURE__ */ new Map();
+    return e.forEach((n) => {
+      Array.isArray(n) && n.forEach((t) => {
+        if (console.log("Processing item:", t), t.type === "Folder") {
+          const r = t.displayFolder || t.name || "Default";
+          if (s.has(r)) {
+            const i = s.get(r);
+            i.children = [...i.children || [], ...t.children || []];
+          } else
+            s.set(r, { ...t }), o.push(t);
+        } else if (t.displayFolder && typeof t.displayFolder == "string" && t.displayFolder.trim() !== "") {
+          let r = Array.from(s.values()).find((i) => i.displayFolder === t.displayFolder);
+          r || (r = {
+            type: "Folder",
+            name: t.displayFolder,
+            displayFolder: t.displayFolder,
+            children: []
+          }, s.set(t.displayFolder, r), o.push(r)), r.children.push(t);
+        } else
+          o.push(t);
+      });
+    }), o;
   }
-  callEvent(event, params) {
-    console.warn(`Event "${event}" is not available for this type of store`, params);
+  callEvent(e, o) {
+    console.warn(`Event "${e}" is not available for this type of store`, o);
   }
   destroy() {
     this.stopPolling();
   }
-  static validateConfiguration(configuration) {
-    if (typeof configuration !== "object" || configuration === null) {
-      return false;
-    }
-    if (configuration.connectedDatasources !== void 0 && !Array.isArray(configuration.connectedDatasources)) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(e) {
+    return !(typeof e != "object" || e === null || e.connectedDatasources !== void 0 && !Array.isArray(e.connectedDatasources));
   }
 }
-const KPI_COMPOSER = serviceId("KpiComposer");
-const symbol = Symbol.for(KPI_COMPOSER);
-function createKpiComposer(repository) {
-  return (config) => {
-    if (!KpiComposer.validateConfiguration(config)) {
+const c = g("KpiComposer"), h = Symbol.for(c);
+function D(a) {
+  return (e) => {
+    if (!l.validateConfiguration(e))
       throw new Error(
         "Invalid KpiComposer configuration. Please provide a valid configuration."
       );
-    }
-    const composer = new KpiComposer(repository);
-    composer.init(config);
-    return composer;
+    const o = new l(a);
+    return o.init(e), o;
   };
 }
-function activate$1({ services }) {
-  services.register(KPI_COMPOSER, createKpiComposer(services.getRequired(DATASOURCE_REPOSITORY)));
+function p({ services: a }) {
+  a.register(c, D(a.getRequired(y)));
 }
-function deactivate$1({ services }) {
-  services.unregister(KPI_COMPOSER);
+function u({ services: a }) {
+  a.unregister(c);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const v = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  KPI_COMPOSER,
-  KpiComposer,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  symbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.composer.kpi";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.composer.kpi");
-  await activate$1?.(context);
+  KPI_COMPOSER: c,
+  KpiComposer: l,
+  activate: p,
+  deactivate: u,
+  symbol: h
+}, Symbol.toStringTag, { value: "Module" })), d = "org.eclipse.daanse.board.app.lib.composer.kpi", m = "0.0.1-next.1";
+async function w(a) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${d}: tsm runtime is not initialized`);
+  e.register(d, v, m, "lib.composer.kpi"), await p?.(a);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function F(a) {
+  await u?.(a);
 }
 export {
-  KPI_COMPOSER,
-  KpiComposer,
-  activate,
-  deactivate,
-  symbol
+  c as KPI_COMPOSER,
+  l as KpiComposer,
+  w as activate,
+  F as deactivate,
+  h as symbol
 };

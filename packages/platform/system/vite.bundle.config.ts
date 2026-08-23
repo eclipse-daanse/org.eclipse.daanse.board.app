@@ -141,7 +141,9 @@ export default defineConfig({
         return !importer?.includes('artifacts/tsm.ts') && !importer?.endsWith('artifacts/tsm.ts')
       },
     },
-    minify: false,
+    // Production artefacts are minified; the dev watcher overrides this
+    // with `minify: false` for fast incremental rebuilds.
+    minify: 'esbuild',
     outDir: resolve(__dirname, 'dist-bundle'),
     emptyOutDir: true,
     lib: {

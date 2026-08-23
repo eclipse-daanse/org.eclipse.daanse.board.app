@@ -32,7 +32,7 @@ const widgetsTmp = ref([])
 
 const isDragging = ref(false)
 
-const endpointfinder = inject('endpointfinder');
+const endpointfinder = inject('endpointfinder', null);
 const endPointFinder = ()=>{
   (endpointfinder as any)()
 }

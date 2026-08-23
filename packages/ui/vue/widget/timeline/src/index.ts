@@ -20,6 +20,7 @@ import { TimelineWidgetEvents } from './events/TimelineWidgetEvents'
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { Component } from 'vue'
 
 export interface TimelineSettings {
   startTime?: string; // ISO 8601 DateTime
@@ -42,8 +43,8 @@ const WIDGET_TYPE = 'TimelineWidget'
 })
 export class TimelineWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
-  readonly component = TimelineWidget
-  readonly settingsComponent = TimelineWidgetSettings
+  readonly component: Component = TimelineWidget
+  readonly settingsComponent: Component = TimelineWidgetSettings
   readonly supportedDSTypes = []
   readonly icon = icon
   readonly name = 'Timeline'

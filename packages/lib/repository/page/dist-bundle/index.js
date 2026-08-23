@@ -1,85 +1,68 @@
-import { SubscribeNotifyImpl } from "org.eclipse.daanse.board.app.lib.utils.subscriber";
-import { PAGE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.page";
-import { PAGE_REPOSITORY as PAGE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.page";
-const events = {
+import { SubscribeNotifyImpl as o } from "org.eclipse.daanse.board.app.lib.utils.subscriber";
+import { PAGE_REPOSITORY as s, identifier as l } from "org.eclipse.daanse.board.app.lib.api.page";
+import { PAGE_REPOSITORY as A, identifier as R } from "org.eclipse.daanse.board.app.lib.api.page";
+const i = {
   PAGE_REGISTRATION: "PAGE_REGISTRATION",
   PAGE_UPDATE: "PAGE_UPDATE",
   PAGE_UNREGISTRATION: "PAGE_UNREGISTRATION"
 };
-class PageRegistryImpl extends SubscribeNotifyImpl {
+class u extends o {
   constructor() {
-    super(...arguments);
-    this.pages = {};
-    this.defaultPageId = null;
+    super(...arguments), this.pages = {}, this.defaultPageId = null;
   }
-  registerPage(page) {
-    this.pages[page.id] = page;
-    if (this.defaultPageId === null) {
-      this.defaultPageId = page.id;
-    }
-    this.notify(events.PAGE_REGISTRATION);
+  registerPage(e) {
+    this.pages[e.id] = e, this.defaultPageId === null && (this.defaultPageId = e.id), this.notify(i.PAGE_REGISTRATION);
   }
-  getPage(pageId) {
-    return this.pages[pageId];
+  getPage(e) {
+    return this.pages[e];
   }
   getDefaultPage() {
-    if (this.defaultPageId && this.pages[this.defaultPageId]) {
-      return this.pages[this.defaultPageId];
-    }
-    return null;
+    return this.defaultPageId && this.pages[this.defaultPageId] ? this.pages[this.defaultPageId] : null;
   }
-  setDefaultPage(pageId) {
-    if (this.pages[pageId]) {
-      this.defaultPageId = pageId;
-    }
+  setDefaultPage(e) {
+    this.pages[e] && (this.defaultPageId = e);
   }
-  unregisterPage(pageId) {
-    delete this.pages[pageId];
-    if (this.defaultPageId === pageId) {
-      const remainingIds = Object.keys(this.pages);
-      this.defaultPageId = remainingIds.length > 0 ? remainingIds[0] : null;
+  unregisterPage(e) {
+    if (delete this.pages[e], this.defaultPageId === e) {
+      const a = Object.keys(this.pages);
+      this.defaultPageId = a.length > 0 ? a[0] : null;
     }
-    this.notify(events.PAGE_UNREGISTRATION);
+    this.notify(i.PAGE_UNREGISTRATION);
   }
   getAllPageIds() {
     return Object.keys(this.pages);
   }
-  updatePage(page) {
-    this.pages[page.id] = page;
-    this.notify(events.PAGE_UPDATE);
+  updatePage(e) {
+    this.pages[e.id] = e, this.notify(i.PAGE_UPDATE);
   }
 }
-function activate$1({ services }) {
-  services.register(PAGE_REPOSITORY, new PageRegistryImpl());
+function n({ services: t }) {
+  t.register(s, new u());
 }
-function deactivate$1({ services }) {
-  services.unregister(PAGE_REPOSITORY);
+function g({ services: t }) {
+  t.unregister(s);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const d = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  PAGE_REPOSITORY,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  events,
-  identifier
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.page";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.page");
-  await activate$1?.(context);
+  PAGE_REPOSITORY: s,
+  activate: n,
+  deactivate: g,
+  events: i,
+  identifier: l
+}, Symbol.toStringTag, { value: "Module" })), r = "org.eclipse.daanse.board.app.lib.repository.page", P = "0.0.1-next.1";
+async function c(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${r}: tsm runtime is not initialized`);
+  e.register(r, d, P, "lib.repository.page"), await n?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function h(t) {
+  await g?.(t);
 }
 export {
-  PAGE_REPOSITORY2 as PAGE_REPOSITORY,
-  activate,
-  deactivate,
-  events,
-  identifier2 as identifier
+  A as PAGE_REPOSITORY,
+  c as activate,
+  h as deactivate,
+  i as events,
+  R as identifier
 };

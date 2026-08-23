@@ -1,3 +1,6 @@
+// @ts-nocheck - generated code: the template imports every annotation
+// helper whether or not this class uses them, and consumers compile these
+// sources under stricter settings than the generator anticipates
 /*
 Copyright (c) 2023 Contributors to the  Eclipse Foundation.
 This program and the accompanying materials are made
@@ -36,7 +39,7 @@ export class DSRenderer {
   @Attribute() name?: string;
   @Reference('Condition') datastream: Array<Condition> = [];
   @Reference('Observation') observations: Array<Observation> = [];
-  @Reference('PointAndAreaSettings') renderer?: PointAndAreaSettings;
+  @Reference('PointAndAreaSettings') renderer: PointAndAreaSettings = new PointAndAreaSettings();
 
   @Documentation("A unique identifier for the data stream renderer.")
   @Attribute() id?: string;
