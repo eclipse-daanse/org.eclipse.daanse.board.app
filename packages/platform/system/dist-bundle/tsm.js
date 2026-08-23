@@ -6126,6 +6126,20 @@ function sameProperties(left, right) {
     return a === b;
   });
 }
+const importOutsideBundler = new Function("specifier", "return import(specifier)");
+async function nativeImport(specifier) {
+  try {
+    return await importOutsideBundler(specifier);
+  } catch (error) {
+    if (error?.code === "ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING") {
+      return await import(
+        /* @vite-ignore */
+        specifier
+      );
+    }
+    throw error;
+  }
+}
 class ModuleLoader {
   modules = /* @__PURE__ */ new Map();
   manifests = /* @__PURE__ */ new Map();
@@ -7003,11 +7017,12 @@ Available shared libraries:
       return handed;
     }
     try {
-      const module = await import(
-        /* @vite-ignore */
-        manifest.entry
-      );
-      return module.default ?? module;
+      const module = await nativeImport(manifest.entry);
+      const namespace = module;
+      if (typeof namespace.activate === "function" || typeof namespace.deactivate === "function") {
+        return namespace;
+      }
+      return namespace.default ?? namespace;
     } catch (error) {
       throw new Error(`Failed to load module entry: ${manifest.entry} - ${error}`);
     }

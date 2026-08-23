@@ -35,11 +35,12 @@ interface ConfigItem {
 }
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides at
- * build time and cannot evaluate an imported constant. Must match
- * WIDGET_SERVICE_ID in lib.repository.widget.
+ * Literal on purpose (tsm#21): the build-time component scan cannot yet read
+ * a constant behind a bare import, so the contract's WIDGET_SERVICE_ID from
+ * lib.repository.widget cannot appear in @component directly. The type
+ * annotation ties this literal to the same contract; the value must match.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+const WIDGET_SERVICE: typeof WIDGET_SERVICE_ID = 'daanse.widget'
 
 const WIDGET_TYPE = 'SVGWidget'
 

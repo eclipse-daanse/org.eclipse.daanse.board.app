@@ -1,5 +1,5 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const WIDGET_SERVICE_ID = "daanse.widget";
+const WIDGET_SERVICE_ID = serviceId("daanse.widget");
 class WidgetRepository {
   availableWidgets = {};
   changeListeners = /* @__PURE__ */ new Set();

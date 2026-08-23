@@ -11,6 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
+import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+
 export interface WidgetConfig {
   component: any
   settingsComponent?: any
@@ -27,7 +29,7 @@ export interface WidgetConfig {
  * pattern): a bundle that registers appears in the palette, one that goes
  * away disappears - nobody calls registerWidget by hand for bundles.
  */
-export const WIDGET_SERVICE_ID = 'daanse.widget'
+export const WIDGET_SERVICE_ID = serviceId<WidgetProvider>('daanse.widget')
 
 /**
  * What a widget bundle offers as a service: its type key plus the

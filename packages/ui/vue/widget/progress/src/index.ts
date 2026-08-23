@@ -16,15 +16,15 @@ import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import ProgressWidget from './ProgressWidget.vue'
 import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
 import Icon from './assets/progress.svg'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
 
 /*
- * Literal on purpose: the tsm plugin derives the manifest's provides from
- * the @component declaration at build time and cannot evaluate a constant
- * that lives behind a shared-module import. Must match WIDGET_SERVICE_ID in
- * lib.repository.widget.
+ * Literal on purpose (tsm#21): the build-time component scan cannot yet read
+ * a constant behind a bare import, so the contract's WIDGET_SERVICE_ID from
+ * lib.repository.widget cannot appear in @component directly. The type
+ * annotation ties this literal to the same contract; the value must match.
  */
-const WIDGET_SERVICE = 'daanse.widget'
+const WIDGET_SERVICE: typeof WIDGET_SERVICE_ID = 'daanse.widget'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
 import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
 import { ProgressWidgetInterface } from './api/ProgressWidgetInterface'
