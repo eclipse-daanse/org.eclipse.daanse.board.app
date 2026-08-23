@@ -17,6 +17,10 @@
       "versionRange": "^5.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.pagecontext",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
@@ -35,6 +39,7 @@
     }
   ],
   "dependencies": [
+    "lib.api.pagecontext",
     "lib.pagecontext.pagecontext_service",
     "platform.vue"
   ]

@@ -13,7 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
-import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import { inject, ref, computed, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { VaScrollContainer } from 'vuestic-ui'

@@ -19,15 +19,27 @@
       "versionRange": "^3.5.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.navigation",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.route",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.events",
       "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.repository.navigation",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.page",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -45,9 +57,12 @@
     }
   ],
   "dependencies": [
+    "lib.api.events",
+    "lib.api.navigation",
+    "lib.api.page",
+    "lib.api.route",
     "lib.events",
     "lib.repository.navigation",
-    "lib.repository.page",
     "lib.repository.route",
     "platform.vue"
   ],

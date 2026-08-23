@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { WeatherData, WeatherValue, LocationInfo, WeatherMapping, ForecastMapping } from '../interfaces/WeatherData'
 
 export interface IWeatherComposerConfiguration extends IBaseConnectionConfiguration {

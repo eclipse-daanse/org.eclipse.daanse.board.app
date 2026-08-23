@@ -1,9 +1,9 @@
 (function(){var i="ui.vue.datasource.xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.va-tabs {\n  height: 100% !important;\n  width: 100% !important;\n}\n.va-tabs__content {\n  height: 100% !important;\n  width: 100% !important;\n}\n.metadata-container {\n  flex-grow: 0;\n  flex-shrink: 0;\n  min-width: 300px;\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-designer {\n  background-color: #fff;\n  padding: 8px;\n  border-radius: 8px;\n}\n.data-preview {\n  border-top: 1px dashed #ccc;\n  padding-top: 8px;\n}\n.monaco-container {\n  height: 500px;\n}\n";})();
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { XmlaStore, factorySymbol } from "org.eclipse.daanse.board.app.lib.datasource.xmla";
 import { defineComponent, ref, shallowRef, watch, onMounted, inject, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, withCtx, createBlock, createCommentVNode, unref, Fragment, renderList, createTextVNode, toDisplayString, computed } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { identifier } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { MetadataTree, QueryDesigner, PivotTable } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
 import { MonacoEditor } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
 const _hoisted_1 = { class: "flex w-full h-full rounded gap-4 overflow-hidden" };

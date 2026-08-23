@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { LAYOUT_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.layout.page";
+import { LAYOUT_REPOSITORY as LAYOUT_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.layout.page";
 class LayoutRepository {
   constructor() {
     this.availableLayouts = /* @__PURE__ */ new Map();
@@ -19,8 +20,6 @@ class LayoutRepository {
     return this.availableLayouts.has(layoutId);
   }
 }
-const LAYOUT_REPOSITORY = serviceId("LayoutRepository");
-const identifier = Symbol.for(LAYOUT_REPOSITORY);
 function activate$1({ services }) {
   services.register(
     LAYOUT_REPOSITORY,
@@ -51,8 +50,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  LAYOUT_REPOSITORY,
+  LAYOUT_REPOSITORY2 as LAYOUT_REPOSITORY,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

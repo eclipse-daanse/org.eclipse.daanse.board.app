@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { DATASOURCE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { DATASOURCE_REPOSITORY as DATASOURCE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.datasource";
 const datasources = /* @__PURE__ */ new Map();
 class DatasourceRepository {
   constructor(resolver) {
@@ -7,8 +8,8 @@ class DatasourceRepository {
   availableDatasources = {};
   datasourcesByType = {};
   /** See IdentifierResolver: symbol description is the service id. */
-  resolveIdentifier(identifier2) {
-    return this.resolver.getRequired(identifier2.description);
+  resolveIdentifier(identifier3) {
+    return this.resolver.getRequired(identifier3.description);
   }
   removeDatasource(datasourceId) {
     if (datasources.has(datasourceId)) {
@@ -78,8 +79,6 @@ class DatasourceRepository {
     return this.getDatasourceType(id);
   }
 }
-const DATASOURCE_REPOSITORY = serviceId("DatasourceRepository");
-const identifier = Symbol.for(DATASOURCE_REPOSITORY);
 function activate$1({ services }) {
   services.register(DATASOURCE_REPOSITORY, new DatasourceRepository(services));
 }
@@ -108,9 +107,9 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  DATASOURCE_REPOSITORY,
+  DATASOURCE_REPOSITORY2 as DATASOURCE_REPOSITORY,
   DatasourceRepository,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

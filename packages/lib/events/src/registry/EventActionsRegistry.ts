@@ -12,7 +12,8 @@ Contributors: Smart City Jena
 import 'reflect-metadata';
 import { getWidgetActions, type WidgetActionMetadata } from '../decorators/WidgetAction';
 import { EcoreMetadataService, ECORE_METADATA_SERVICE, type EcoreActionMetadata } from './EcoreMetadataService';
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 /**
  * Kontext für Event-Aktionen
@@ -535,7 +536,5 @@ export class EventActionsRegistry {
  * `EVENT_ACTIONS_REGISTRY` ist das dazu passende Symbol für den
  * Inversify-Container; beide bezeichnen denselben Dienst.
  */
-/** Typed service id - the name and the contract declared once, here. */
-export const EVENT_ACTIONS_REGISTRY_ID = serviceId<EventActionsRegistry>('EventActionsRegistry');
 
 export const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);

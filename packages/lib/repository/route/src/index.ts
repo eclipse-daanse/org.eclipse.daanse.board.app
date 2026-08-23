@@ -9,18 +9,16 @@
 */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { RouteRegistryImpl } from './RouteRegistryImpl'
 import { RouteRegistry } from './gen/RouteRegistry'
+import { ROUTE_REGISTRY_ID, ROUTE_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.route'
+export { ROUTE_REGISTRY_ID, ROUTE_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.route'
 
 export { RouteDefinition } from './gen/RouteDefinition'
 export { RouteRegistry } from './gen/RouteRegistry'
 export { RouteRegistryImpl } from './RouteRegistryImpl'
 
-/** Typed service id - the name and the contract declared once, here. */
-export const ROUTE_REGISTRY_ID = serviceId<RouteRegistryImpl>('RouteRegistry')
 
-export const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {

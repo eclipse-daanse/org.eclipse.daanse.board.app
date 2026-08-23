@@ -1,4 +1,4 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
 class WeatherComposer extends BaseDatasource {

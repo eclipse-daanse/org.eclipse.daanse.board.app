@@ -14,7 +14,7 @@
 import {
   identifier,
   DatasourceRepository,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { onMounted, onUnmounted, inject, type Ref, reactive, ComputedRef } from 'vue'
 import { watch, ref } from 'vue'
 import { useGlobalLoading } from './useGlobalLoading'

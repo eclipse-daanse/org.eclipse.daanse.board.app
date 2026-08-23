@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { CONNECTION_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { CONNECTION_REPOSITORY as CONNECTION_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.connection";
 const connections = /* @__PURE__ */ new Map();
 class ConnectionRepository {
   constructor(resolver) {
@@ -9,8 +10,8 @@ class ConnectionRepository {
    * (Connection factory, Settings component). All of them are created with
    * Symbol.for, so the symbol's description IS the service id.
    */
-  resolveIdentifier(identifier2) {
-    return this.resolver.getRequired(identifier2.description);
+  resolveIdentifier(identifier3) {
+    return this.resolver.getRequired(identifier3.description);
   }
   availableConnections = {};
   connectionsByType = {};
@@ -80,8 +81,6 @@ class ConnectionRepository {
     }
   }
 }
-const CONNECTION_REPOSITORY = serviceId("ConnectionRepository");
-const identifier = Symbol.for(CONNECTION_REPOSITORY);
 function activate$1({ services }) {
   services.register(CONNECTION_REPOSITORY, new ConnectionRepository(services));
 }
@@ -109,8 +108,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  CONNECTION_REPOSITORY,
+  CONNECTION_REPOSITORY2 as CONNECTION_REPOSITORY,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

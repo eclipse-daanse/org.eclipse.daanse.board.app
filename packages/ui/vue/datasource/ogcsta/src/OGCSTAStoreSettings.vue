@@ -14,7 +14,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 import {
   identifier as variableIdentifier,
   type VariableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.variable';
+} from 'org.eclipse.daanse.board.app.lib.api.variable';
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components';
 
 const { config, connections } = defineProps<{

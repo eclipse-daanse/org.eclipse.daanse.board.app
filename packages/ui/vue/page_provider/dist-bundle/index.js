@@ -1,4 +1,4 @@
-import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service";
+import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { useRoute } from "vue-router";
 class VuePageProvider {

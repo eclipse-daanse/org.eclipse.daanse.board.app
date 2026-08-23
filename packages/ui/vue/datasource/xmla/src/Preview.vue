@@ -13,7 +13,7 @@ Contributors:
 
 <script setup lang="ts">
 import { useTemporaryStore } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { identifier, ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject, ref, watch, toRef, shallowRef, nextTick, onMounted } from 'vue';
 import { MetadataTree, QueryDesigner, PivotTable } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { MonacoEditor } from 'org.eclipse.daanse.board.app.ui.vue.common.monaco';

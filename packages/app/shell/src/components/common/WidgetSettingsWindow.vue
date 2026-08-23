@@ -16,7 +16,7 @@ import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.
 import { ref, inject } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
-import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WidgetRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 const emit = defineEmits(['saveWidgetSettings', 'close'])
 const widget = defineModel<IWidget>()

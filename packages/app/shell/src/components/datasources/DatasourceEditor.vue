@@ -15,7 +15,7 @@ import { inject, computed, onMounted, ref } from 'vue'
 import {
   DatasourceRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { cloneDeep } from 'lodash'

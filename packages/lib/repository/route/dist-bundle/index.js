@@ -1,5 +1,6 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { Reference, ModelClass, Documentation, Attribute } from "org.eclipse.daanse.board.app.lib.annotations";
+import { ROUTE_REGISTRY, ROUTE_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.route";
+import { ROUTE_REGISTRY as ROUTE_REGISTRY2, ROUTE_REGISTRY_ID as ROUTE_REGISTRY_ID2 } from "org.eclipse.daanse.board.app.lib.api.route";
 var __defProp$1 = Object.defineProperty;
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
 var __decorateClass$1 = (decorators, target, key, kind) => {
@@ -105,8 +106,6 @@ class RouteRegistryImpl extends RouteRegistry {
     return Array.from(this.routesMap.values());
   }
 }
-const ROUTE_REGISTRY_ID = serviceId("RouteRegistry");
-const ROUTE_REGISTRY = Symbol.for(ROUTE_REGISTRY_ID);
 function activate$1({ services }) {
   services.register(ROUTE_REGISTRY_ID, new RouteRegistryImpl());
 }
@@ -143,8 +142,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  ROUTE_REGISTRY,
-  ROUTE_REGISTRY_ID,
+  ROUTE_REGISTRY2 as ROUTE_REGISTRY,
+  ROUTE_REGISTRY_ID2 as ROUTE_REGISTRY_ID,
   RouteDefinition,
   RouteRegistry,
   RouteRegistryImpl,

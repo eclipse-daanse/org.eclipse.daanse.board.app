@@ -1,5 +1,5 @@
 import { REST_CONNECTION_FACTORY } from "org.eclipse.daanse.board.app.lib.connection.rest";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { defineComponent, ref, computed, watch, onMounted, resolveComponent, createElementBlock, openBlock, Fragment, createVNode, createCommentVNode, createElementVNode, normalizeClass, toDisplayString } from "vue";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var lodash$1 = { exports: {} };

@@ -11,12 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
-import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { OGCSTAToChartComposer } from './classes'
-import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import ecoreModelContent from '../model/OGCSTAToChartActions.ecore?raw'
 
 export * from './classes/index'

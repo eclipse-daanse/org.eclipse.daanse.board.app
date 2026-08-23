@@ -27,7 +27,7 @@ import type { TinyEmitter } from 'tiny-emitter'
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY,
-} from 'org.eclipse.daanse.board.app.lib.events'
+} from 'org.eclipse.daanse.board.app.lib.api.events'
 import { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
 import { RouteCalculatedPayload } from './gen/RouteCalculatedPayload'
 import { WaypointPayload } from './gen/WaypointPayload'

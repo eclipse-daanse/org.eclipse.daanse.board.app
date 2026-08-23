@@ -11,15 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import VideoWidget from './VideoWidget.vue'
 import VideoWidgetSettings from './VideoWidgetSettings.vue'
 import Icon from './assets/video.svg'
 import { VideoWidgetEvents } from './events/VideoWidgetEvents'
 import { VideoWidgetInterface } from './api/VideoWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface ObjectFitSetting {
   fit: string

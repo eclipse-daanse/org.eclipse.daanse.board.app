@@ -15,7 +15,7 @@ import { inject, computed, onMounted, ref } from 'vue'
 import {
   ConnectionRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 
 const props = defineProps({

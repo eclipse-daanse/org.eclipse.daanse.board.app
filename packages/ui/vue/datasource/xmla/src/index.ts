@@ -14,7 +14,7 @@
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { factorySymbol as XmlaDatasourceIndentifier } from 'org.eclipse.daanse.board.app.lib.datasource.xmla'
 

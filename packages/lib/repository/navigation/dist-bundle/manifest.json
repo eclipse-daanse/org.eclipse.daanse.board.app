@@ -12,7 +12,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.core",
+      "id": "org.eclipse.daanse.board.app.lib.api.navigation",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -26,6 +26,7 @@
     }
   ],
   "dependencies": [
-    "lib.annotations"
+    "lib.annotations",
+    "lib.api.navigation"
   ]
 }

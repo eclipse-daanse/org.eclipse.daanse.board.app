@@ -18,7 +18,7 @@ import {
 import { type TwoWayConnection } from 'org.eclipse.daanse.board.app.lib.connection.twowayconnection'
 import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { inject } from '@eclipse-daanse/tsm'
 
 export interface IWSStoreConfiguration extends IBaseConnectionConfiguration {

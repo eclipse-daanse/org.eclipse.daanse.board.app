@@ -12,7 +12,6 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   ConnectionRepository,
   type ConnectionIdentifiers,
@@ -20,11 +19,10 @@ import {
   type PubSubConnection,
   type PubSubEvents,
 } from './classes'
+import { CONNECTION_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
+export { CONNECTION_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 
-/** Typed service id - the name and the contract declared once, here. */
-const CONNECTION_REPOSITORY = serviceId<ConnectionRepository>('ConnectionRepository')
 
-const identifier = Symbol.for(CONNECTION_REPOSITORY)
 
 /**
  * Das Repository ist ein Singleton ohne eigene Abhaengigkeiten - eine Instanz
@@ -38,7 +36,9 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(CONNECTION_REPOSITORY)
 }
 
-export { type ConnectionRepository, identifier, CONNECTION_REPOSITORY }
+export {
+  type ConnectionRepository,
+}
 export type {
   ConnectionIdentifiers,
   IConnection,

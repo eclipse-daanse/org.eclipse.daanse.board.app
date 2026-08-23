@@ -15,7 +15,7 @@ import { defineStore } from 'pinia'
 import {
   ConnectionRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {type BaseConnectionConfig} from 'org.eclipse.daanse.board.app.lib.connection.base'
 
 export interface ConnectionDTO {

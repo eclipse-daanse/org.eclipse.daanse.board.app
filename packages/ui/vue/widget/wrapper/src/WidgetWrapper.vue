@@ -20,7 +20,7 @@ import { inject, computed, ref, onUnmounted } from 'vue'
 import {
   WidgetRepository,
   identifier as WidgetIdentifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.widget'
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 

@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {useConnectionsStore,type ConnectionDTO} from './store/ConnectionsPinia'
 
 export {
@@ -18,7 +18,7 @@ export {
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { provideRepository } from './store/ConnectionsPinia'
-import type { ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import type { ConnectionRepository } from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 export function activate({ services }: ActivationContext) {
   provideRepository(services.getRequired(CONNECTION_REPOSITORY))

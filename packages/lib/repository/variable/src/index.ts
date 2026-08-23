@@ -14,15 +14,14 @@
 import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
 import { VariableRepository, type VariableConfig } from './classes/VariableRepository'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { TINY_EMITTER, serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 import { registerVariableActions } from './actions/VariableActions'
 import type { TinyEmitter } from 'tiny-emitter'
 import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import { VARIABLE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
+export { VARIABLE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 
-/** Typed service id - the name and the contract declared once, here. */
-const VARIABLE_REPOSITORY = serviceId<VariableRepository>('VariableRepository')
 
-const identifier = Symbol.for(VARIABLE_REPOSITORY)
 
 /**
  * Singleton mit einer Abhaengigkeit (`TINY_EMITTER`), deshalb `construct`
@@ -45,4 +44,7 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(VARIABLE_REPOSITORY)
 }
 
-export { VariableRepository, type VariableConfig, identifier, VARIABLE_REPOSITORY }
+export {
+  VariableRepository,
+  type VariableConfig,
+}

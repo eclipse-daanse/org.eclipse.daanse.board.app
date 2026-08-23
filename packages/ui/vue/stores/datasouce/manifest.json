@@ -20,7 +20,7 @@
       "versionRange": "^3.0.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -34,7 +34,7 @@
     }
   ],
   "dependencies": [
-    "lib.repository.datasource",
+    "lib.api.datasource",
     "platform.vue"
   ]
 }

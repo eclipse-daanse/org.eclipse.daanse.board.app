@@ -29,7 +29,7 @@ import {
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 } from 'uuid'
 

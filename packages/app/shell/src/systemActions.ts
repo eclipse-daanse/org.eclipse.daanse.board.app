@@ -12,11 +12,8 @@
  **********************************************************************/
 
 import type { Router } from 'vue-router';
-import {
-  EventActionsRegistry,
-  EVENT_ACTIONS_REGISTRY,
-  SystemActionsEcoreContent
-} from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { SystemActionsEcoreContent } from 'org.eclipse.daanse.board.app.lib.events'
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import type { TinyEmitter } from 'tiny-emitter';
 

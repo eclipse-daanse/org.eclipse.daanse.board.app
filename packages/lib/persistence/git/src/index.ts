@@ -9,7 +9,7 @@
 */
 
 
-import { REPOSITORY_REGISTRY, Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { REPOSITORY_REGISTRY, Repository, RepositoryRegistryI, identifier as persistenceIdentifieer } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 import GitRepositoryImpl from './GitRepository/GitRepositoryImpl'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'

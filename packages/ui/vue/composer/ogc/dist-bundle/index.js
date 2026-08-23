@@ -3,7 +3,8 @@ import * as e from "vue";
 import { defineComponent, ref, shallowRef, watch, createElementBlock, openBlock, createVNode, unref, createElementVNode, inject, computed, resolveComponent, Fragment, createBlock } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { OgcFeatureComposer } from "org.eclipse.daanse.board.app.lib.composer.ogc";
-import { identifier, DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 var t = { 207: (e2, t2, n2) => {
   e2.exports = n2(452);
 }, 452: (e2) => {

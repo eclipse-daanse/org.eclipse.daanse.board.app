@@ -12,7 +12,7 @@
  **********************************************************************/
 
 import { BaseDatasource, IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base'
-import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource';
+import { identifier, DatasourceRepository, IDatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource';
 
 export interface IOgcFeatureComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources: string[];

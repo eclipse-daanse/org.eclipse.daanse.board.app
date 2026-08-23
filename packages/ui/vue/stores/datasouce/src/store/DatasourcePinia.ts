@@ -15,7 +15,7 @@ import { defineStore } from 'pinia'
 import {
   DatasourceRepository,
   identifier,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 export interface DataSourceDTO {
   uid: string

@@ -16,7 +16,7 @@ import { debounce } from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import { XmlaStore } from 'org.eclipse.daanse.board.app.lib.datasource.xmla';
 import { inject } from 'vue'
-import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { type ConnectionRepository, identifier as connectionIdentifier } from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 const connectionRepository = inject<ConnectionRepository>(connectionIdentifier)!
 

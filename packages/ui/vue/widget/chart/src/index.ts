@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
@@ -19,8 +19,8 @@ import ChartWidgetSettings from './ChartWidgetSettings.vue'
 import { ChartSettings } from './gen/ChartSettings'
 import { ChartWidgetEvents } from './events/ChartWidgetEvents'
 import { ChartWidgetInterface } from './api/ChartWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /*
  * Literal on purpose (tsm#21): the build-time component scan cannot yet read

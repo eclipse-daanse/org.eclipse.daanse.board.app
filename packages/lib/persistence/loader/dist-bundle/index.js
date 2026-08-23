@@ -1,5 +1,5 @@
-import { SETTINGS_MANAGER } from "org.eclipse.daanse.board.app.lib.settings.manager";
-import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+import { SETTINGS_MANAGER } from "org.eclipse.daanse.board.app.lib.api.settings";
+import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
 async function activate$1({ services, log }) {
   const settingsManager = services.get(SETTINGS_MANAGER);
   if (!settingsManager) {

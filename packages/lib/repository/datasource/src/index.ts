@@ -12,7 +12,6 @@
  **********************************************************************/
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   DatasourceRepository,
   type StoreIdentifiers,
@@ -21,11 +20,10 @@ import {
   type StoreConstructor,
   type IDatasourceRepository,
 } from './classes'
+import { DATASOURCE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
+export { DATASOURCE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
-/** Typed service id - the name and the contract declared once, here. */
-const DATASOURCE_REPOSITORY = serviceId<DatasourceRepository>('DatasourceRepository')
 
-const identifier = Symbol.for(DATASOURCE_REPOSITORY)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {
@@ -36,7 +34,9 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(DATASOURCE_REPOSITORY)
 }
 
-export { DatasourceRepository, identifier, DATASOURCE_REPOSITORY }
+export {
+  DatasourceRepository,
+}
 export type {
   StoreIdentifiers,
   IDataRetrieveable,

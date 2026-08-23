@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { PAGE_CONTEXT } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import { PAGE_CONTEXT } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import {identifier as pagecontext_service_id,type PageContextServiceI } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service"

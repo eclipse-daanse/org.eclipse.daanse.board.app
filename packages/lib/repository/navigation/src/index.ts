@@ -10,18 +10,16 @@
 
 import 'reflect-metadata'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import { NavigationRegistryImpl } from './NavigationRegistryImpl'
 import { NavigationRegistry } from './gen/NavigationRegistry'
+import { NAVIGATION_REGISTRY_ID, NAVIGATION_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+export { NAVIGATION_REGISTRY_ID, NAVIGATION_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.navigation'
 
 export { NavigationItem } from './gen/NavigationItem'
 export { NavigationRegistry } from './gen/NavigationRegistry'
 export { NavigationRegistryImpl } from './NavigationRegistryImpl'
 
-/** Typed service id - the name and the contract declared once, here. */
-export const NAVIGATION_REGISTRY_ID = serviceId<NavigationRegistryImpl>('NavigationRegistry')
 
-export const NAVIGATION_REGISTRY = Symbol.for(NAVIGATION_REGISTRY_ID)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services }: ActivationContext) {

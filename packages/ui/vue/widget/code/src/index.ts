@@ -11,15 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/text.svg'
 import CodeWidget from './CodeWidget.vue'
 import CodeWidgetSettings from './CodeWidgetSettings.vue'
 import { CodeWidgetEvents } from './events/CodeWidgetEvents'
 import { CodeWidgetInterface } from './api/CodeWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface ICodeSettings {
   code: string;

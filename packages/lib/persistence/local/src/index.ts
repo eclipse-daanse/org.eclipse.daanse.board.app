@@ -10,7 +10,7 @@
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-import { REPOSITORY_REGISTRY, identifier as persistenceIdentifieer, Repository, type RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { REPOSITORY_REGISTRY, identifier as persistenceIdentifieer, Repository, type RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import LocalRepositoryImpl from './classes/LocalRepositoryImpl'
 
 /** Typed service id - the name and the contract declared once, here. */

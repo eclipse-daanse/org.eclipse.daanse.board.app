@@ -16,12 +16,10 @@ import { PageRegistryImpl } from './classes/PageRegistryImpl'
 import type { PageRegistryI } from './api/PageRegistryI'
 import { events } from './api/Events'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { PAGE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
+export { PAGE_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.page'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const PAGE_REPOSITORY = serviceId<PageRegistryI>('PageRepository')
 
-const identifier = Symbol.for(PAGE_REPOSITORY)
 
 export function activate({ services }: ActivationContext) {
   services.register<PageRegistryI>(PAGE_REPOSITORY, new PageRegistryImpl())
@@ -36,6 +34,4 @@ export {
   type PageRegistryI,
   type PageRegistryImpl,
   events,
-  identifier,
-  PAGE_REPOSITORY,
 }

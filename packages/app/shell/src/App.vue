@@ -15,11 +15,8 @@ Contributors:
 import Header from './components/common/Header.vue'
 import { VaSpacer } from 'vuestic-ui'
 import { inject, ref, onMounted } from 'vue'
-import {
-  NAVIGATION_REGISTRY,
-  type NavigationRegistry,
-  type NavigationItem
-} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import { NAVIGATION_REGISTRY, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { type NavigationItem } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
 import { useGlobalLoading } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 const navigationItems = ref<NavigationItem[]>([])

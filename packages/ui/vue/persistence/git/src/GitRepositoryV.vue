@@ -15,7 +15,7 @@ import type {
   Repository,
   Entity,
   WritableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+} from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 import { asyncComputed } from '@vueuse/core'
 import { useToast } from 'vuestic-ui'

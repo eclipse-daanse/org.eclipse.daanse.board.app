@@ -1,11 +1,12 @@
-(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.repeatable-svg-container[data-v-59b28a03] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    object-fit: contain;\n}\n\n.settings-container[data-v-20524639] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.colors[data-v-20524639] {\n    display: flex;\n    justify-content: space-between;\n}\n.color-input[data-v-20524639] {\n    width: 49%;\n}\n.loading[data-v-20524639] {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
-import { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
+(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.repeatable-svg-container[data-v-2371f225] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    object-fit: contain;\n}\n\n.settings-container[data-v-20524639] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n.colors[data-v-20524639] {\n    display: flex;\n    justify-content: space-between;\n}\n.color-input[data-v-20524639] {\n    width: 49%;\n}\n.loading[data-v-20524639] {\n    height: 100%;\n    padding: 50px;\n    border-radius: 4px;\n    margin-bottom: 1rem;\n    background-color: var(--app-response-background);\n}\n";})();
+import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
 import { defineComponent, mergeModels, toRefs, useModel, inject, ref, onMounted, onUnmounted, watch, computed, createElementBlock, openBlock, withModifiers, createElementVNode, Fragment, renderList, resolveComponent, createBlock, withCtx, createVNode, unref } from "vue";
 import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { Reference, Documentation, Attribute, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 import { useRoute } from "vue-router";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 var __defProp$3 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
@@ -293,7 +294,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const RepeatableSvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-59b28a03"]]);
+const RepeatableSvgWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-2371f225"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "RepeatableSvgWidgetSettings",

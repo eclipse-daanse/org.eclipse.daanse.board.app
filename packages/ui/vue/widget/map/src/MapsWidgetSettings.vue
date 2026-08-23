@@ -20,7 +20,7 @@ import type { WfsFeatureTypeBrief } from '@camptocamp/ogc-client/src/wfs/model'
 import WFS from './WFS'
 import RendererModal from './parts/RendererModal.vue'
 import { computedAsync } from '@vueuse/core'
-import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { DatasourceRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { logServices, logDatasource } from './utils/logger'
 
 const instance = getCurrentInstance()

@@ -15,7 +15,7 @@ import { QUERY } from '../interfaces/Constances'
 import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import {
   ISparqlStoreConfiguration,
   SparqlResponse,

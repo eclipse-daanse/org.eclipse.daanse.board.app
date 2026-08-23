@@ -1,4 +1,4 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { defineComponent, shallowRef, ref, watch, resolveComponent, createElementBlock, createCommentVNode, openBlock, createVNode, reactive, computed, onMounted, Fragment, createBlock, withCtx } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const _hoisted_1 = {

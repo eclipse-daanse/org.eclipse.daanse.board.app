@@ -7,6 +7,8 @@
   "exports": {},
   "dependencies": [
     "lib.annotations",
+    "lib.api.events",
+    "lib.api.widget",
     "lib.events",
     "platform.vue",
     "ui.vue.composables",
@@ -31,6 +33,14 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.annotations",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

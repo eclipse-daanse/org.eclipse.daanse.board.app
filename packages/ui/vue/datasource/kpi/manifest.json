@@ -6,8 +6,8 @@
   "entry": "/bundles/ui.vue.datasource.kpi/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.datasource",
     "lib.datasource.xmla",
-    "lib.repository.datasource",
     "platform.vue",
     "ui.vue.common.kpi",
     "ui.vue.composables"
@@ -26,11 +26,11 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.datasource.xmla",
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "id": "org.eclipse.daanse.board.app.lib.datasource.xmla",
       "versionRange": ">=0.0.1-0"
     },
     {

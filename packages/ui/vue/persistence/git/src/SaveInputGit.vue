@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import type { Entity, Repository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import type { Entity, Repository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 
 const emits = defineEmits<{

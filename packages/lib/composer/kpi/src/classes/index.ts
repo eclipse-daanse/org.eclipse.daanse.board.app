@@ -15,7 +15,7 @@ import { BaseDatasource, type IBaseConnectionConfiguration } from 'org.eclipse.d
 import {
   DatasourceRepository,
   identifier
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 export interface IKpiComposerConfiguration extends IBaseConnectionConfiguration {
   connectedDatasources?: string[]

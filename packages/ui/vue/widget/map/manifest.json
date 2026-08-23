@@ -7,11 +7,12 @@
   "exports": {},
   "dependencies": [
     "lib.annotations",
+    "lib.api.datasource",
+    "lib.api.events",
+    "lib.api.widget",
     "lib.datasource.ogcsta",
     "lib.events",
     "lib.logger",
-    "lib.repository.datasource",
-    "lib.repository.widget",
     "platform.vue",
     "ui.vue.composables",
     "ui.vue.widget.icon"
@@ -38,6 +39,18 @@
       "versionRange": ">=0.0.1-0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
@@ -51,14 +64,6 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.logger",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

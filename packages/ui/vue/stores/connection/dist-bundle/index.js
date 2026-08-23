@@ -1,4 +1,4 @@
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 let repository;

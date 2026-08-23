@@ -1,5 +1,5 @@
-(function(){var i="ui.vue.widget.progress",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-ac2e41b4] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.grid-layout[data-v-ac2e41b4] {\n  display: grid;\n  grid-template-columns: auto 1fr auto;\n  grid-template-rows:  1fr auto 1fr;\n\n  gap: 0.5em;\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.grid-layout.vertical[data-v-ac2e41b4] {\n  grid-template-columns: 1fr auto 1fr;\n  grid-template-rows: auto 1fr auto;\n}\n\n/* Zentrale Progressbar */\n.progress-bar[data-v-ac2e41b4] {\n  grid-column: 2;\n  grid-row: 2;\n  background: var(--v265f6a8a);\n  border-radius: var(--c6761a2a);\n  justify-self: center;\n  position: relative;\n  display: flex;\n  align-items: end;\n  justify-content: start;\n  height: var(--v7e04c268);\n  width: var(--v06ca56ba);\n}\n.progress-percent[data-v-ac2e41b4] {\n  height: var(--v8d1d0b2e);\n  width: var(--v228be817);\n  background: var(--v0a67148e);\n  transition: var(--v03cbc1af);\n  border-radius: var(--c6761a2a);\n}\n\n/* Text */\n.progress-value[data-v-ac2e41b4] {\n  font-weight: 600;\n  white-space: nowrap;\n  align-self: center;\n  justify-self: center;\n  color: var(--v1ee1e69c);\n  z-index: 1000;\n}\n\n/* Grid-Zuweisung */\n.align-left[data-v-ac2e41b4]   { grid-column: 1;\n}\n.align-center[data-v-ac2e41b4] { grid-column: 2;\n}\n.align-right[data-v-ac2e41b4]  { grid-column: 3;\n}\n.justify-top[data-v-ac2e41b4]    { grid-row: 1;\n}\n.justify-center[data-v-ac2e41b4] { grid-row: 2;\n}\n.justify-bottom[data-v-ac2e41b4] { grid-row: 3;\n}\n\n.settings-container[data-v-e12619d5] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.add-btn[data-v-e12619d5] {\n  width: 150px;\n}\n.input[data-v-e12619d5] {\n  width: 100px;\n}\n.loading[data-v-e12619d5] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n";})();
-import { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
+(function(){var i="ui.vue.widget.progress",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-2f35b34c] {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.grid-layout[data-v-2f35b34c] {\n  display: grid;\n  grid-template-columns: auto 1fr auto;\n  grid-template-rows:  1fr auto 1fr;\n\n  gap: 0.5em;\n  width: 100%;\n  height: 100%;\n  position: relative;\n}\n.grid-layout.vertical[data-v-2f35b34c] {\n  grid-template-columns: 1fr auto 1fr;\n  grid-template-rows: auto 1fr auto;\n}\n\n/* Zentrale Progressbar */\n.progress-bar[data-v-2f35b34c] {\n  grid-column: 2;\n  grid-row: 2;\n  background: var(--v2eeb6fee);\n  border-radius: var(--v75e282b9);\n  justify-self: center;\n  position: relative;\n  display: flex;\n  align-items: end;\n  justify-content: start;\n  height: var(--e8645acc);\n  width: var(--v08112608);\n}\n.progress-percent[data-v-2f35b34c] {\n  height: var(--v08e6ed4a);\n  width: var(--v4a1f0289);\n  background: var(--v0bade3dc);\n  transition: var(--v4e602ba1);\n  border-radius: var(--v75e282b9);\n}\n\n/* Text */\n.progress-value[data-v-2f35b34c] {\n  font-weight: 600;\n  white-space: nowrap;\n  align-self: center;\n  justify-self: center;\n  color: var(--v1001132c);\n  z-index: 1000;\n}\n\n/* Grid-Zuweisung */\n.align-left[data-v-2f35b34c]   { grid-column: 1;\n}\n.align-center[data-v-2f35b34c] { grid-column: 2;\n}\n.align-right[data-v-2f35b34c]  { grid-column: 3;\n}\n.justify-top[data-v-2f35b34c]    { grid-row: 1;\n}\n.justify-center[data-v-2f35b34c] { grid-row: 2;\n}\n.justify-bottom[data-v-2f35b34c] { grid-row: 3;\n}\n\n.settings-container[data-v-e12619d5] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.add-btn[data-v-e12619d5] {\n  width: 150px;\n}\n.input[data-v-e12619d5] {\n  width: 100px;\n}\n.loading[data-v-e12619d5] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n";})();
+import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
 import { defineComponent, mergeModels, useCssVars, computed, toRefs, inject, onUnmounted, useModel, ref, watch, onMounted, createElementBlock, openBlock, withModifiers, createElementVNode, normalizeClass, toDisplayString, resolveComponent, createBlock, withCtx, createCommentVNode, createVNode, unref, createTextVNode } from "vue";
 import { useRoute } from "vue-router";
@@ -7,6 +7,7 @@ import { VariableWrapper, useDatasourceRepository } from "org.eclipse.daanse.boa
 import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
 import { Reference, Documentation, Attribute, Enum, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 var HorizontalAlign = /* @__PURE__ */ ((HorizontalAlign2) => {
   HorizontalAlign2["LEFT"] = "left";
@@ -131,15 +132,15 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "v265f6a8a": backgroundColor.value,
-      "c6761a2a": barRadius.value,
-      "v7e04c268": horizontalPositionWrapper.value,
-      "v06ca56ba": verticalPositionWrapper.value,
-      "v8d1d0b2e": verticalPositionFiller.value,
-      "v228be817": horizontalPositionFiller.value,
-      "v0a67148e": backgroundProgressColor.value,
-      "v03cbc1af": transition.value,
-      "v1ee1e69c": textColor.value
+      "v2eeb6fee": backgroundColor.value,
+      "v75e282b9": barRadius.value,
+      "e8645acc": horizontalPositionWrapper.value,
+      "v08112608": verticalPositionWrapper.value,
+      "v08e6ed4a": verticalPositionFiller.value,
+      "v4a1f0289": horizontalPositionFiller.value,
+      "v0bade3dc": backgroundProgressColor.value,
+      "v4e602ba1": transition.value,
+      "v1001132c": textColor.value
     }));
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
@@ -325,7 +326,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const ProgressWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-ac2e41b4"]]);
+const ProgressWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-2f35b34c"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _hoisted_2 = {
   key: 0,

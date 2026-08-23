@@ -32,7 +32,7 @@ const config = defineModel<SvgSettings>('configv', { required: true });
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { SvgWidgetInterface } from './api/SvgWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;

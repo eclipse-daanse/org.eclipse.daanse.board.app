@@ -15,7 +15,7 @@ import { inject, ref, computed, watch, onMounted } from 'vue'
 import { OGCSTAToChartComposer } from 'org.eclipse.daanse.board.app.lib.composer.ogcsta2chart'
 import {
   DatasourceRepository, identifier as DatasourceRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 const { config, dataSources } = defineProps<{
   config: any

@@ -13,7 +13,7 @@
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY
-} from 'org.eclipse.daanse.board.app.lib.events';
+} from 'org.eclipse.daanse.board.app.lib.api.events';
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger';
 import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 

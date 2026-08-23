@@ -14,7 +14,7 @@
 
 import {  RefreshType, VariableEvents } from '..'
 import { type IVariableConfig } from '..'
-import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service'
+import { type PageContextServiceI, identifier as PAGE_CONTEXT_SERVICE } from 'org.eclipse.daanse.board.app.lib.api.pagecontext'
 
 enum VariableScope {
   Global = 'global',

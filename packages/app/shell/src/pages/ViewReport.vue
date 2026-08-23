@@ -20,11 +20,11 @@ import {
   type PageRegistryI,
   type PageI,
   identifier as PageIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 
 const props = defineProps(['params']);
 const route = useRoute();

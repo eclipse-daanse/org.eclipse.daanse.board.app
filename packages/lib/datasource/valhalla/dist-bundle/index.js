@@ -1,7 +1,7 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { inject, injectable } from "@eclipse-daanse/tsm";
 import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {

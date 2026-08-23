@@ -24,15 +24,15 @@
       "versionRange": "^4.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.layout.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.layout.page",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.page",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -62,8 +62,8 @@
     }
   ],
   "dependencies": [
-    "lib.repository.layout.page",
-    "lib.repository.page",
+    "lib.api.layout.page",
+    "lib.api.page",
     "platform.vue",
     "ui.vue.layouts.base",
     "ui.vue.stores.layout",

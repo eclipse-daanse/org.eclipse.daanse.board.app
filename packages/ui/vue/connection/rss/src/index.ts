@@ -13,7 +13,7 @@
 import {
   type ConnectionRepository,
   CONNECTION_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 
 // Service id of lib.connection.rss; Symbol.for is global, so this literal

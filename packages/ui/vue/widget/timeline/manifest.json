@@ -6,8 +6,10 @@
   "entry": "/bundles/ui.vue.widget.timeline/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.events",
+    "lib.api.variable",
+    "lib.api.widget",
     "lib.events",
-    "lib.repository.variable",
     "platform.vue",
     "ui.vue.composables"
   ],
@@ -29,15 +31,23 @@
       "versionRange": "^5.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.variable",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.events",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
       "versionRange": ">=0.0.1-0"
     },
     {

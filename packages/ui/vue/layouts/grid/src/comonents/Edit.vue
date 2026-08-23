@@ -92,7 +92,7 @@ import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
-import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 /** Grid Settings — direkt aus dem Page Repository lesen */
 const layoutSettingsRef = ref<Record<string, any> | undefined>(undefined)

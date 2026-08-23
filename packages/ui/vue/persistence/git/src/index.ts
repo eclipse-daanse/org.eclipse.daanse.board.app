@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 */
 
-import { REPOSITORY_REGISTRY } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { REPOSITORY_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {identifier,RepositoryRegistryI} from "org.eclipse.daanse.board.app.lib.repository.persistence";
 import {type} from "org.eclipse.daanse.board.app.lib.persistence.git";

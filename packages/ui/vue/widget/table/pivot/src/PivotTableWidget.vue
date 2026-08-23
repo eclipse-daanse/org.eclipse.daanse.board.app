@@ -17,7 +17,7 @@ import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
 import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import { PivotTable } from "./gen/PivotTable";
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events'
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();

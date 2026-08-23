@@ -13,11 +13,9 @@ import type { RepositoryRegistryI,WritableRepository,Entity,Repository } from '.
 import {BaseRepository} from './api/BaseRepository'
 import { RepositoryRegistry } from './RepositoryRegistry/RepositoryRegistryImpl'
 import type {RepositoryObserver} from './api/RepositoryObserverI';
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-/** Typed service id - the name and the contract declared once, here. */
-const REPOSITORY_REGISTRY = serviceId<RepositoryRegistry>('RepositoryRegistry')
+import { REPOSITORY_REGISTRY, identifier } from 'org.eclipse.daanse.board.app.lib.api.persistence'
+export { REPOSITORY_REGISTRY, identifier } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
-const identifier = Symbol.for(REPOSITORY_REGISTRY)
 
 /** Singleton ohne eigene Abhaengigkeiten - siehe lib.repository.connection. */
 export function activate({ services, log }: ActivationContext) {
@@ -31,9 +29,9 @@ export function deactivate({ services }: ActivationContext) {
 
 export {
   RepositoryRegistryI,
-  identifier,
   BaseRepository,
   WritableRepository,
   Entity,
   Repository,
-  RepositoryObserver, REPOSITORY_REGISTRY }
+  RepositoryObserver,
+}

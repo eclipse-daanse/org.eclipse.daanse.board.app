@@ -10,10 +10,10 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
 import { RouteCalculatedPayload } from '../gen/RouteCalculatedPayload';
 import { WaypointPayload } from '../gen/WaypointPayload';
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
 
 export const RoutingWidgetEvents: WidgetEventDefinition[] = [
   {

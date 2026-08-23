@@ -6,8 +6,9 @@
   "entry": "/bundles/ui.vue.widget.page/index.js",
   "exports": {},
   "dependencies": [
-    "lib.repository.layout.page",
-    "lib.repository.page",
+    "lib.api.layout.page",
+    "lib.api.page",
+    "lib.api.widget",
     "lib.variables",
     "platform.vue",
     "ui.vue.stores.layout",
@@ -25,11 +26,15 @@
       "versionRange": "^5.0.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.layout.page",
+      "id": "org.eclipse.daanse.board.app.lib.api.layout.page",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.page",
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

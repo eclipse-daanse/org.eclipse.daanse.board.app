@@ -144,6 +144,19 @@ import b128 from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper/manifest.js
 import b129 from 'org.eclipse.daanse.board.app.ui.vue.common.kpi/manifest.json'
 import b130 from 'org.eclipse.daanse.board.app.ui.vue.common.monaco/manifest.json'
 import b131 from 'org.eclipse.daanse.board.app.ui.vue.common.xmla/manifest.json'
+import b132 from 'org.eclipse.daanse.board.app.lib.api.widget/manifest.json'
+import b133 from 'org.eclipse.daanse.board.app.lib.api.connection/manifest.json'
+import b134 from 'org.eclipse.daanse.board.app.lib.api.datasource/manifest.json'
+import b135 from 'org.eclipse.daanse.board.app.lib.api.variable/manifest.json'
+import b136 from 'org.eclipse.daanse.board.app.lib.api.persistence/manifest.json'
+import b137 from 'org.eclipse.daanse.board.app.lib.api.route/manifest.json'
+import b138 from 'org.eclipse.daanse.board.app.lib.api.navigation/manifest.json'
+import b139 from 'org.eclipse.daanse.board.app.lib.api.layout.page/manifest.json'
+import b140 from 'org.eclipse.daanse.board.app.lib.api.page/manifest.json'
+import b141 from 'org.eclipse.daanse.board.app.lib.api.pagecontext/manifest.json'
+import b142 from 'org.eclipse.daanse.board.app.lib.api.settings/manifest.json'
+import b143 from 'org.eclipse.daanse.board.app.lib.api.logger/manifest.json'
+import b144 from 'org.eclipse.daanse.board.app.lib.api.events/manifest.json'
 
 /**
  * The URL bundles: modules the loader fetches through their manifest entry.
@@ -283,4 +296,17 @@ export const bundles: ModuleManifest[] = [
   b129 as ModuleManifest,
   b130 as ModuleManifest,
   b131 as ModuleManifest,
+  b132 as ModuleManifest,
+  b133 as ModuleManifest,
+  b134 as ModuleManifest,
+  b135 as ModuleManifest,
+  b136 as ModuleManifest,
+  b137 as ModuleManifest,
+  b138 as ModuleManifest,
+  b139 as ModuleManifest,
+  b140 as ModuleManifest,
+  b141 as ModuleManifest,
+  b142 as ModuleManifest,
+  b143 as ModuleManifest,
+  b144 as ModuleManifest,
 ]

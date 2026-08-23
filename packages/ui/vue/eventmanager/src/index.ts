@@ -13,16 +13,10 @@
 
 import EventManagerUI from './components/EventManagerUI.vue'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  NAVIGATION_REGISTRY_ID,
-  type NavigationRegistry,
-  NavigationItem,
-} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
-import {
-  ROUTE_REGISTRY_ID,
-  type RouteRegistry,
-  RouteDefinition,
-} from 'org.eclipse.daanse.board.app.lib.repository.route'
+import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import { ROUTE_REGISTRY_ID, type RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
+import { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.repository.route'
 
 const ROUTE_NAME = 'events'
 const NAV_ID = 'events'

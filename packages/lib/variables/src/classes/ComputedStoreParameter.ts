@@ -13,7 +13,7 @@
 
 import { type Variable } from './Variable'
 import { type TinyEmitter } from 'tiny-emitter'
-import { VariableRepository, identifier } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { VariableRepository, identifier } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { VariableEvents } from '..'
 
 export class ComputedStoreParameter {

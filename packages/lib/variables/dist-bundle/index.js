@@ -1,6 +1,6 @@
 const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service";
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { PAGE_CONTEXT } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
 class AccessError extends Error {
   name;
   message = "Access Error on Variable Scope";

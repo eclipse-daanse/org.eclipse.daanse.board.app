@@ -18,12 +18,12 @@ import {
 import {
   identifier,
   DatasourceRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { DatastreamSelection, OGCSTAToChartData } from '../interfaces/OGCSTAToChartData'
 import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY
-} from 'org.eclipse.daanse.board.app.lib.events'
+} from 'org.eclipse.daanse.board.app.lib.api.events'
 import { OGCSTAToChartComposerActions } from '../gen/OGCSTAToChartComposerActions'
 
 export interface IOGCSTAToChartComposerConfiguration extends IBaseConnectionConfiguration {

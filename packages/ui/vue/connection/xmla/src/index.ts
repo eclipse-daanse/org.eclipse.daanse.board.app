@@ -14,7 +14,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type ConnectionRepository,
   CONNECTION_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 import { factorySymbol as XmlaConnectionIdentifier } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 

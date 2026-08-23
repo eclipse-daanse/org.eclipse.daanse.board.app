@@ -1,5 +1,6 @@
 import { SubscribeNotifyImpl } from "org.eclipse.daanse.board.app.lib.utils.subscriber";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { PAGE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.page";
+import { PAGE_REPOSITORY as PAGE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.page";
 const events = {
   PAGE_REGISTRATION: "PAGE_REGISTRATION",
   PAGE_UPDATE: "PAGE_UPDATE",
@@ -48,8 +49,6 @@ class PageRegistryImpl extends SubscribeNotifyImpl {
     this.notify(events.PAGE_UPDATE);
   }
 }
-const PAGE_REPOSITORY = serviceId("PageRepository");
-const identifier = Symbol.for(PAGE_REPOSITORY);
 function activate$1({ services }) {
   services.register(PAGE_REPOSITORY, new PageRegistryImpl());
 }
@@ -78,9 +77,9 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  PAGE_REPOSITORY,
+  PAGE_REPOSITORY2 as PAGE_REPOSITORY,
   activate,
   deactivate,
   events,
-  identifier
+  identifier2 as identifier
 };

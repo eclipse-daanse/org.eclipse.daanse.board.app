@@ -9,7 +9,7 @@
 
 */
 
-import type { Entity, Repository, WritableRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import type { Entity, Repository, WritableRepository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 import { BaseRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 import { VALIDITY_CHECK, identifier, ValidityCheckI } from 'org.eclipse.daanse.board.app.lib.persistence.util'

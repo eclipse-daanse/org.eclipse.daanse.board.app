@@ -15,7 +15,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
       "versionRange": ">=0.0.1-0"
     },
     {
@@ -38,7 +38,7 @@
   ],
   "dependencies": [
     "lib.annotations",
-    "lib.repository.widget",
+    "lib.api.widget",
     "platform.vue",
     "ui.vue.composables",
     "ui.vue.variable.components"

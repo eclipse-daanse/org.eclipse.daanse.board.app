@@ -14,7 +14,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 // Service id of lib.composer.kpi; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.

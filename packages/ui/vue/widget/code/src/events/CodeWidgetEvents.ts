@@ -10,8 +10,8 @@
  * Contributors:
  *   Smart City Jena
  **********************************************************************/
-import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
+import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
 
 export const CodeWidgetEvents: WidgetEventDefinition[] = [
   {

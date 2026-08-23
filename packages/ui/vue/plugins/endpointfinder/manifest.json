@@ -6,10 +6,10 @@
   "entry": "/bundles/ui.vue.plugins.endpointfinder/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.connection",
+    "lib.api.datasource",
+    "lib.api.widget",
     "lib.connection.rest",
-    "lib.repository.connection",
-    "lib.repository.datasource",
-    "lib.repository.widget",
     "platform.vue",
     "ui.vue.stores.connection",
     "ui.vue.stores.datasouce",
@@ -37,19 +37,19 @@
       "versionRange": "^5.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.connection.rest",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

@@ -183,7 +183,7 @@ Contributors:
 <script setup lang="ts">
 import { inject, onMounted, ref, computed } from 'vue'
 import { type VariableRepository, identifier }
-  from 'org.eclipse.daanse.board.app.lib.repository.variable'
+  from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { useVariablesStore } from '@/stores/VariablesPinia'
 import {
   VariableScope,
@@ -192,7 +192,7 @@ import {
   CONSTANT_VARIABLE
 } from 'org.eclipse.daanse.board.app.lib.variables'
 import { identifier as PageRepoIdentifier, type PageRegistryI }
-  from 'org.eclipse.daanse.board.app.lib.repository.page'
+  from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const store = useVariablesStore()
 

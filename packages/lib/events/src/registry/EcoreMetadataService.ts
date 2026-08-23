@@ -22,7 +22,8 @@ import {
   isEClass
 } from '@emfts/core';
 import eventModelContent from '../../model/EventModel.ecore?raw';
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 const EVENTS_NS_URI = 'http://org.eclipse.daanse.board.app.lib.events';
 
@@ -414,7 +415,5 @@ export class EcoreMetadataService {
 }
 
 /** Dienst-ID im Namensraum der ServiceRegistry; `ECORE_METADATA_SERVICE` ist das dazu passende Symbol. */
-/** Typed service id - the name and the contract declared once, here. */
-export const ECORE_METADATA_SERVICE_ID = serviceId<EcoreMetadataService>('EcoreMetadataService');
 
 export const ECORE_METADATA_SERVICE = Symbol.for(ECORE_METADATA_SERVICE_ID);

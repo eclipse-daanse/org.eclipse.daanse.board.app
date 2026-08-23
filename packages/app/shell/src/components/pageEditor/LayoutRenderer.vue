@@ -17,12 +17,12 @@ import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier,
   type LayoutI
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import {
   type PageRegistryI,
   identifier as PageIdentifier,
   type PageI
-} from 'org.eclipse.daanse.board.app.lib.repository.page'
+} from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
   pageId: string,

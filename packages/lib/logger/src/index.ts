@@ -10,7 +10,8 @@ Contributors: Smart City Jena
 
 import debug from 'debug'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { LOGGER_FACTORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.logger'
+export { LOGGER_FACTORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.logger'
 
 // Force debug to use console.log instead of console.debug
 debug.log = console.log.bind(console)
@@ -73,10 +74,7 @@ export class LoggerFactory {
 // Export singleton instance for direct use (non-injectable)
 export const loggerFactory = new LoggerFactory()
 
-/** Typed service id - the name and the contract declared once, here. */
-export const LOGGER_FACTORY = serviceId<LoggerFactory>('LoggerFactory')
 
-export const identifier = Symbol.for(LOGGER_FACTORY)
 
 /**
  * Meldet die Logger-Fabrik als Dienst an.

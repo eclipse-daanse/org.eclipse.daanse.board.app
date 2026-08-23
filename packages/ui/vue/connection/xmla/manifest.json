@@ -6,8 +6,8 @@
   "entry": "/bundles/ui.vue.connection.xmla/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.connection",
     "lib.connection.xmla",
-    "lib.repository.connection",
     "platform.vue"
   ],
   "requiresService": [
@@ -24,11 +24,11 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.connection.xmla",
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
+      "id": "org.eclipse.daanse.board.app.lib.connection.xmla",
       "versionRange": ">=0.0.1-0"
     }
   ]

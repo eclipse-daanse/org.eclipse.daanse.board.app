@@ -1,5 +1,5 @@
 (function(){var i="ui.vue.datasource.rss",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.preview-container[data-v-99ea3482] {\n    padding: 8px;\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n}\n.preview-item[data-v-99ea3482] {\n    border: 1px solid #000;\n    border-radius: 8px;\n}\n.preview-item-title[data-v-99ea3482] {\n    background-color: #f0f0f0;\n    font-size: 1.25rem;\n    font-weight: bold;\n    padding: 8px;\n    border-radius: 8px 8px 0 0;\n}\n.preview-item-content[data-v-99ea3482] {\n    padding: 8px;\n}\n";})();
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { defineComponent, ref, shallowRef, watch, createElementBlock, createCommentVNode, openBlock, Fragment, renderList, createElementVNode, toDisplayString, computed, resolveComponent, createBlock } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 const _hoisted_1 = {

@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { REPOSITORY_REGISTRY, identifier } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { REPOSITORY_REGISTRY as REPOSITORY_REGISTRY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.persistence";
 class BaseRepository {
   init(url, name) {
     this.uri = url;
@@ -64,8 +65,6 @@ class RepositoryRegistry {
     }
   }
 }
-const REPOSITORY_REGISTRY = serviceId("RepositoryRegistry");
-const identifier = Symbol.for(REPOSITORY_REGISTRY);
 function activate$1({ services, log }) {
   services.register(REPOSITORY_REGISTRY, new RepositoryRegistry());
   log.info("RepositoryRegistry bereit");
@@ -96,8 +95,8 @@ async function deactivate(context) {
 }
 export {
   BaseRepository,
-  REPOSITORY_REGISTRY,
+  REPOSITORY_REGISTRY2 as REPOSITORY_REGISTRY,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

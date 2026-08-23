@@ -41,7 +41,7 @@ import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
-import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.page'
+import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
   pageId?: string,

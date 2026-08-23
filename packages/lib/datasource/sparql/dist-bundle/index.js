@@ -1,6 +1,6 @@
 import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
 import { inject, injectable } from "@eclipse-daanse/tsm";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 const QUERY = "Query";
 const symbol = Symbol.for("SparqlStore");

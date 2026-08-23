@@ -16,6 +16,10 @@
       "versionRange": "^3.5.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.persistence",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.persistence.git",
       "versionRange": ">=0.0.1-0"
     },
@@ -38,6 +42,7 @@
     }
   ],
   "dependencies": [
+    "lib.api.persistence",
     "lib.persistence.git",
     "lib.repository.persistence",
     "platform.vue",

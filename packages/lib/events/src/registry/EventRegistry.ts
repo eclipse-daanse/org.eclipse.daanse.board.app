@@ -10,7 +10,8 @@ Contributors: Smart City Jena
 */
 
 import 'reflect-metadata';
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+export { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 /**
  * Metadaten-Eintrag
@@ -217,8 +218,6 @@ export class EventRegistry {
  * `EVENT_REGISTRY` ist das dazu passende Symbol für den Inversify-Container;
  * beide bezeichnen denselben Dienst, weil `Symbol.for` global registriert.
  */
-/** Typed service id - the name and the contract declared once, here. */
-export const EVENT_REGISTRY_ID = serviceId<EventRegistry>('EventRegistry');
 
 // Symbol für Dependency Injection
 export const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);

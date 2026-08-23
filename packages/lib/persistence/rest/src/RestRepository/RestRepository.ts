@@ -10,7 +10,7 @@
 */
 
 
-import type { Entity, WritableRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import type { Entity, WritableRepository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import { BaseRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
 
 export default class RestRepositoryImpl extends BaseRepository implements WritableRepository {

@@ -1,7 +1,8 @@
-import { identifier, DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { defineComponent, ref, watch, shallowRef, resolveComponent, createElementBlock, createCommentVNode, openBlock, createVNode, inject, computed, Fragment } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { DataTableComposer } from "org.eclipse.daanse.board.app.lib.composer.datatable";
+import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
 const _hoisted_1 = {
   key: 0,
   style: { "overflow": "hidden", "height": "100%", "width": "100%" }

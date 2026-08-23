@@ -15,12 +15,10 @@ import { LayoutRepository } from './classes/LayoutRepository'
 import type { LayoutRepositoryI } from './interfaces/LayoutRepositoryI'
 import type { LayoutI } from './interfaces/LayoutI'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
+import { LAYOUT_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+export { LAYOUT_REPOSITORY, identifier } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 
-/** Dienst-ID im Namensraum der ServiceRegistry; `identifier` ist das dazu passende Symbol. */
-const LAYOUT_REPOSITORY = serviceId<LayoutRepository>('LayoutRepository')
 
-const identifier = Symbol.for(LAYOUT_REPOSITORY)
 
 export function activate({ services }: ActivationContext) {
   services.register<LayoutRepositoryI>(
@@ -33,4 +31,7 @@ export function deactivate({ services }: ActivationContext) {
   services.unregister(LAYOUT_REPOSITORY)
 }
 
-export { identifier, type LayoutI, type LayoutRepositoryI, LAYOUT_REPOSITORY }
+export {
+  type LayoutI,
+  type LayoutRepositoryI,
+}

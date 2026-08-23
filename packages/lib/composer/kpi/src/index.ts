@@ -11,11 +11,11 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { KpiComposer, type IKpiComposerConfiguration } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 /** Typed service id - the name and the contract declared once, here. */
 const KPI_COMPOSER = serviceId<ReturnType<typeof createKpiComposer>>('KpiComposer')

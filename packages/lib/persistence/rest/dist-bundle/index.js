@@ -1,5 +1,6 @@
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { BaseRepository, REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.repository.persistence";
+import { REPOSITORY_REGISTRY } from "org.eclipse.daanse.board.app.lib.api.persistence";
+import { BaseRepository } from "org.eclipse.daanse.board.app.lib.repository.persistence";
 class RestRepositoryImpl extends BaseRepository {
   static {
     this.type = "restRepositories";

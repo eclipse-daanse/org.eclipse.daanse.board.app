@@ -23,8 +23,8 @@
  */
 
 import { TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
-import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import { CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.connection'
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
+import { CONNECTION_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { DefaultServiceRegistry } from '@eclipse-daanse/tsm'
 import { activate, deactivate, REST_STORE_FACTORY } from './index'

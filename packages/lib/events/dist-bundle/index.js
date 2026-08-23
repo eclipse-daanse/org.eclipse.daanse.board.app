@@ -1,7 +1,9 @@
 import { Documentation, Attribute, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
-const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID, EVENT_MANAGER_ID, EVENT_BUS_BRIDGE_ID, ECORE_METADATA_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.events";
+import { EVENT_ACTIONS_REGISTRY_ID as EVENT_ACTIONS_REGISTRY_ID2, EVENT_REGISTRY_ID as EVENT_REGISTRY_ID2 } from "org.eclipse.daanse.board.app.lib.api.events";
 import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
 import { injectable, inject } from "@eclipse-daanse/tsm";
+const { TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
 var __decorateClass$5 = (decorators, target, key, kind) => {
@@ -1325,7 +1327,6 @@ class EventRegistry {
     }
   }
 }
-const EVENT_REGISTRY_ID = serviceId("EventRegistry");
 const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);
 const log$2 = loggerFactory.createLogger("daanse:events:decorator");
 const WIDGET_ACTION_METADATA_KEY = Symbol.for("daanse:widgetAction");
@@ -1829,7 +1830,6 @@ class EventActionsRegistry {
     return this.widgetTypes.get(widgetType);
   }
 }
-const EVENT_ACTIONS_REGISTRY_ID = serviceId("EventActionsRegistry");
 const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);
 var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
 var __decorateClass$1 = (decorators, target, key, kind) => {
@@ -2097,7 +2097,6 @@ EventManager = __decorateClass$1([
   injectable(),
   __decorateParam$1(0, inject("EventActionsRegistry"))
 ], EventManager);
-const EVENT_MANAGER_ID = serviceId("EventManager");
 const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -2247,7 +2246,6 @@ EventBusBridge = __decorateClass([
   __decorateParam(1, inject("EventRegistry")),
   __decorateParam(2, inject("EventActionsRegistry"))
 ], EventBusBridge);
-const EVENT_BUS_BRIDGE_ID = serviceId("EventBusBridge");
 const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);
 function isInternalEObject(obj) {
   return obj && typeof obj.eProxyURI === "function" && typeof obj.eSetProxyURI === "function";
@@ -15762,7 +15760,6 @@ class EcoreMetadataService {
     this.modelCache.clear();
   }
 }
-const ECORE_METADATA_SERVICE_ID = serviceId("EcoreMetadataService");
 const ECORE_METADATA_SERVICE = Symbol.for(ECORE_METADATA_SERVICE_ID);
 const SystemActions = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n  Copyright (c) 2025 Contributors to the Eclipse Foundation.\n\n  This program and the accompanying materials are made\n  available under the terms of the Eclipse Public License 2.0\n  which is available at https://www.eclipse.org/legal/epl-2.0/\n\n  SPDX-License-Identifier: EPL-2.0\n\n  Contributors:\n    Smart City Jena\n-->\n<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="systemactions" nsURI="http://org.eclipse.daanse.board.app.lib.events.systemactions"\n    nsPrefix="systemactions">\n\n  <eClassifiers xsi:type="ecore:EClass" name="SystemActions" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="System-level actions that can be triggered by events"/>\n    </eAnnotations>\n\n    <eOperations name="changePage">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Navigate to a different page"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.changePage"/>\n      </eAnnotations>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="ID of the page to navigate to"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n\n    <eOperations name="setGlobalVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a global variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.setGlobalVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n\n  <eClassifiers xsi:type="ecore:EClass" name="PageActions">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="Page-level actions that can be triggered by events"/>\n    </eAnnotations>\n\n    <eOperations name="setPageVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a page-scoped variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="page.setPageVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Optional page ID (defaults to current page)"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n</ecore:EPackage>';
 loggerFactory.createLogger("daanse:events:registry");
@@ -15861,11 +15858,11 @@ export {
   Condition,
   ECORE_METADATA_SERVICE,
   EVENT_ACTIONS_REGISTRY,
-  EVENT_ACTIONS_REGISTRY_ID,
+  EVENT_ACTIONS_REGISTRY_ID2 as EVENT_ACTIONS_REGISTRY_ID,
   EVENT_BUS_BRIDGE,
   EVENT_MANAGER,
   EVENT_REGISTRY,
-  EVENT_REGISTRY_ID,
+  EVENT_REGISTRY_ID2 as EVENT_REGISTRY_ID,
   EcoreMetadataService,
   EventActionsRegistry,
   EventBusBridge,

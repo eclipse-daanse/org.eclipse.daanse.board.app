@@ -1,4 +1,4 @@
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.connection";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
 /**
 * @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors

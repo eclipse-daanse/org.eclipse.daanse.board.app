@@ -1,7 +1,8 @@
-import { WidgetAction, ActionParameter, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { WidgetAction, ActionParameter } from "org.eclipse.daanse.board.app.lib.events";
 import { ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 class OGCSTAToChartComposer extends BaseDatasource {
   /**

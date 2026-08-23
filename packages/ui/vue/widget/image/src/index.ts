@@ -11,14 +11,14 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/image.svg'
 import ImageWidget from './ImageWidget.vue'
 import ImageWidgetSettings from './ImageWidgetSettings.vue'
 import { ImageWidgetEvents } from './events/ImageWidgetEvents'
-import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface IImageSettings {
   imagesSettings: GallerySettings

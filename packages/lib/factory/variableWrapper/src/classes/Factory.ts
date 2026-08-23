@@ -10,7 +10,7 @@
 */
 import { injectable, inject } from '@eclipse-daanse/tsm'
 import { VariableWrapper, VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
-import { VARIABLE_REPOSITORY, identifier as IDVariableRepo,VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { VARIABLE_REPOSITORY, identifier as IDVariableRepo,VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
 type SearchResult = {
   path: string;
   value: any;

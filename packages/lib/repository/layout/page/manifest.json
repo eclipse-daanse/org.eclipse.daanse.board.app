@@ -21,8 +21,11 @@
   ],
   "sharedDependencies": [
     {
-      "id": "org.eclipse.daanse.board.app.lib.core",
+      "id": "org.eclipse.daanse.board.app.lib.api.layout.page",
       "versionRange": ">=0.0.1-0"
     }
+  ],
+  "dependencies": [
+    "lib.api.layout.page"
   ]
 }

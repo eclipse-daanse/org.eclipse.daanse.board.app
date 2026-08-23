@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
@@ -19,8 +19,8 @@ import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
 import { PivotTableEvents } from './events/PivotTableEvents'
 import { PivotTableInterface } from './gen/PivotTableInterface'
 import ecoreModelContent from '../model/model.ecore?raw'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface IPivotTable {
   rows: any[][]

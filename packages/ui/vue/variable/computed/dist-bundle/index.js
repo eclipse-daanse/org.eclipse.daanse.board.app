@@ -1,4 +1,4 @@
-import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { VARIABLE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { COMPUTED_VARIABLE, ComputedVariableSymbol } from "org.eclipse.daanse.board.app.lib.variables";
 /**
 * @vue/shared v3.5.24

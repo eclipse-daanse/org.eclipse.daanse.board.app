@@ -1,4 +1,4 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { defineComponent, ref, watch, shallowRef, createElementBlock, createCommentVNode, openBlock, createVNode, unref, computed, resolveComponent, createBlock } from "vue";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { KpiTable } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";

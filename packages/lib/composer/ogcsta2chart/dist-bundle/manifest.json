@@ -20,6 +20,14 @@
       "versionRange": ">=0.0.1-0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
@@ -29,10 +37,6 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.events",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -47,8 +51,9 @@
   ],
   "dependencies": [
     "lib.annotations",
+    "lib.api.datasource",
+    "lib.api.events",
     "lib.datasource.base",
-    "lib.events",
-    "lib.repository.datasource"
+    "lib.events"
   ]
 }

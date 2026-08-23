@@ -14,7 +14,7 @@ import type {
   Entity,
   Repository,
   WritableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+} from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import SaveInput from './SaveInput.vue'
 import { useToast } from 'vuestic-ui'
 import { stringify } from 'flatted'

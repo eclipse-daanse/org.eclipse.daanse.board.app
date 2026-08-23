@@ -19,6 +19,18 @@
   ],
   "sharedDependencies": [
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.logger",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.variable",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.connection.base",
       "versionRange": ">=0.0.1-0"
     },
@@ -28,18 +40,6 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.datasource.base",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.logger",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -53,10 +53,10 @@
     }
   ],
   "dependencies": [
+    "lib.api.connection",
+    "lib.api.logger",
+    "lib.api.variable",
     "lib.connection.base",
-    "lib.datasource.base",
-    "lib.logger",
-    "lib.repository.connection",
-    "lib.repository.variable"
+    "lib.datasource.base"
   ]
 }

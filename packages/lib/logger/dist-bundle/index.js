@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { LOGGER_FACTORY, identifier } from "org.eclipse.daanse.board.app.lib.api.logger";
+import { LOGGER_FACTORY as LOGGER_FACTORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.logger";
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -517,8 +518,6 @@ class LoggerFactory {
   }
 }
 const loggerFactory = new LoggerFactory();
-const LOGGER_FACTORY = serviceId("LoggerFactory");
-const identifier = Symbol.for(LOGGER_FACTORY);
 function activate$1({ services }) {
   services.register(LOGGER_FACTORY, loggerFactory);
 }
@@ -552,10 +551,10 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  LOGGER_FACTORY,
+  LOGGER_FACTORY2 as LOGGER_FACTORY,
   LoggerFactory,
   activate,
   deactivate,
-  identifier,
+  identifier2 as identifier,
   loggerFactory
 };

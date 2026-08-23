@@ -21,7 +21,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.datasource.base'
 import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { type XmlaConnection } from 'org.eclipse.daanse.board.app.lib.connection.xmla'
 import { inject } from '@eclipse-daanse/tsm'
 

@@ -11,35 +11,22 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-
-export interface WidgetConfig {
-  component: any
-  settingsComponent?: any
-  supportedDSTypes: string[]
-  icon: string
-  name: string
-  datasource?: string
-}
-
-/**
- * Service ID under which widget bundles register their provider.
- *
- * The repository tracks registrations under this ID (the OSGi ServiceTracker
- * pattern): a bundle that registers appears in the palette, one that goes
- * away disappears - nobody calls registerWidget by hand for bundles.
+/*
+ * The contract lives in lib.api.widget - this package only implements it.
+ * The re-exports keep old import paths compiling during the transition.
  */
-export const WIDGET_SERVICE_ID = serviceId<WidgetProvider>('daanse.widget')
+import type { WidgetConfig, WidgetRepository } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-/**
- * What a widget bundle offers as a service: its type key plus the
- * configuration the palette and the wrapper consume.
- */
-export interface WidgetProvider extends WidgetConfig {
-  readonly type: string
-}
+export {
+  WIDGET_SERVICE_ID,
+  WIDGET_REPOSITORY,
+  identifier,
+  type WidgetConfig,
+  type WidgetProvider,
+  type WidgetRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.widget'
 
-export class WidgetRepository {
+export class WidgetRepositoryImpl implements WidgetRepository {
   private availableWidgets: Record<string, WidgetConfig> = {}
   private changeListeners = new Set<() => void>()
 

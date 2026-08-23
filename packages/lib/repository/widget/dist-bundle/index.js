@@ -1,6 +1,6 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-const WIDGET_SERVICE_ID = serviceId("daanse.widget");
-class WidgetRepository {
+import { WIDGET_REPOSITORY, WIDGET_SERVICE_ID, identifier } from "org.eclipse.daanse.board.app.lib.api.widget";
+import { WIDGET_REPOSITORY as WIDGET_REPOSITORY2, WIDGET_SERVICE_ID as WIDGET_SERVICE_ID2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.widget";
+class WidgetRepositoryImpl {
   availableWidgets = {};
   changeListeners = /* @__PURE__ */ new Set();
   registerWidget(typename, config) {
@@ -49,15 +49,13 @@ class WidgetRepository {
     return this.availableWidgets;
   }
 }
-const WIDGET_REPOSITORY = serviceId("WidgetRepository");
-const identifier = Symbol.for(WIDGET_REPOSITORY);
 let tracker;
 function observable(services) {
   const candidate = services;
   return typeof candidate.addListener === "function" ? candidate : void 0;
 }
 function activate$1({ services, log }) {
-  const repository = new WidgetRepository();
+  const repository = new WidgetRepositoryImpl();
   services.register(WIDGET_REPOSITORY, repository);
   const registry = observable(services);
   if (!registry) {
@@ -107,7 +105,6 @@ const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   __proto__: null,
   WIDGET_REPOSITORY,
   WIDGET_SERVICE_ID,
-  WidgetRepository,
   activate: activate$1,
   deactivate: deactivate$1,
   identifier
@@ -126,10 +123,9 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  WIDGET_REPOSITORY,
-  WIDGET_SERVICE_ID,
-  WidgetRepository,
+  WIDGET_REPOSITORY2 as WIDGET_REPOSITORY,
+  WIDGET_SERVICE_ID2 as WIDGET_SERVICE_ID,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

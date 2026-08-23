@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/icon.svg'
@@ -19,8 +19,8 @@ import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
 import { IconWidgetEvents } from './events/IconWidgetEvents'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface IIconSettings {
   currentIcon: string;

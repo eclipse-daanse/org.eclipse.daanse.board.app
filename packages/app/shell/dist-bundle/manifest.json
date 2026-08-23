@@ -7,18 +7,22 @@
   "entry": "/bundles/app.shell/index.js",
   "exports": {},
   "dependencies": [
+    "lib.api.connection",
+    "lib.api.datasource",
+    "lib.api.events",
+    "lib.api.layout.page",
+    "lib.api.navigation",
+    "lib.api.page",
+    "lib.api.persistence",
+    "lib.api.route",
+    "lib.api.variable",
+    "lib.api.widget",
     "lib.events",
     "lib.factory.variableWrapper",
     "lib.logger",
-    "lib.repository.connection",
-    "lib.repository.datasource",
-    "lib.repository.layout.page",
     "lib.repository.navigation",
     "lib.repository.page",
-    "lib.repository.persistence",
     "lib.repository.route",
-    "lib.repository.variable",
-    "lib.repository.widget",
     "lib.variables",
     "platform.vue",
     "ui.vue.composables",
@@ -76,6 +80,46 @@
       "versionRange": "^4.0.0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.events",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.layout.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.navigation",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.page",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.persistence",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.route",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.variable",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.lib.api.widget",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.core",
       "versionRange": ">=0.0.1-0"
     },
@@ -92,18 +136,6 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.layout.page",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.repository.navigation",
       "versionRange": ">=0.0.1-0"
     },
@@ -112,19 +144,7 @@
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.persistence",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
       "id": "org.eclipse.daanse.board.app.lib.repository.route",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.widget",
       "versionRange": ">=0.0.1-0"
     },
     {

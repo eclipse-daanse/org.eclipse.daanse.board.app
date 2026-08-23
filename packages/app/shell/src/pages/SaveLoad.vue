@@ -19,7 +19,7 @@ import {
   RepositoryRegistryI,
   Entity,
   WritableRepository, type RepositoryObserver
-} from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+} from 'org.eclipse.daanse.board.app.lib.api.persistence'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useConnectionsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.connection'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
@@ -35,29 +35,29 @@ import {
 import { computedAsync } from '@vueuse/core'
 import Default from '@/components/saveLoad/Default.vue'
 import { type ConnectionRepository, identifier as ConnectionRepoId }
-  from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  from 'org.eclipse.daanse.board.app.lib.api.connection'
 import { type DatasourceRepository, identifier as DsRepoId }
-  from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+  from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import { parse, stringify } from 'flatted'
 
 import  {identifier as VariableRepositoryId,type VariableRepository }
-  from 'org.eclipse.daanse.board.app.lib.repository.variable'
+  from 'org.eclipse.daanse.board.app.lib.api.variable'
 import  {identifier as VariableWrapperFactroyId,type VariableWrapperFactory }
   from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
 import {type Variable} from 'org.eclipse.daanse.board.app.lib.variables'
 import { useVariablesStore } from '@/stores/VariablesPinia.ts'
 import  { type PageRegistryI,identifier as PageRegistryIDentifier }
-  from 'org.eclipse.daanse.board.app.lib.repository.page'
+  from 'org.eclipse.daanse.board.app.lib.api.page'
 import {
   type LayoutRepositoryI,
   identifier as LayoutRepositoryIdentifier
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import {
   EventManager,
   EVENT_MANAGER,
   EventBusBridge,
   EVENT_BUS_BRIDGE
-} from 'org.eclipse.daanse.board.app.lib.events'
+} from 'org.eclipse.daanse.board.app.lib.api.events'
 import { useRouter } from 'vue-router'
 
 const {variables, createVariable, removeVariable, updateVariable,updateVariables}

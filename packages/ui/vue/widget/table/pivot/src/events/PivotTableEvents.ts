@@ -11,8 +11,8 @@
  *   Smart City Jena
  **********************************************************************/
 
-import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events';
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
+import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
 import { HeaderExpandedPayload } from '../gen/HeaderExpandedPayload';
 import { HeaderClickedPayload } from '../gen/HeaderClickedPayload';
 

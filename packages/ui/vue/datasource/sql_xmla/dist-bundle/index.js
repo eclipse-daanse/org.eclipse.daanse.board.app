@@ -1,5 +1,5 @@
 (function(){var i="ui.vue.datasource.sql_xmla",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.va-tabs__wrapper {\n  overflow: visible;\n}\n.va-tabs__content {\n  overflow: hidden;\n}\n";})();
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { defineComponent, shallowRef, ref, watch, resolveComponent, createElementBlock, openBlock, createElementVNode, createVNode, unref, withCtx, createTextVNode, createBlock, createCommentVNode, Fragment, renderList, normalizeStyle, toDisplayString, computed } from "vue";
 import { MonacoEditor } from "org.eclipse.daanse.board.app.ui.vue.common.monaco";
 import { useTemporaryStore } from "org.eclipse.daanse.board.app.ui.vue.composables";

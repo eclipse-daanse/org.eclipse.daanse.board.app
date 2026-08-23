@@ -13,7 +13,7 @@
 import {
   type VariableRepository,
   VARIABLE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.variable'
+} from 'org.eclipse.daanse.board.app.lib.api.variable'
 import {
   COMPUTED_VARIABLE,
   ComputedVariableSymbol,

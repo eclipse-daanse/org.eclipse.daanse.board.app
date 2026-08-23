@@ -14,7 +14,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { type VariableRepository, identifier }
-  from 'org.eclipse.daanse.board.app.lib.repository.variable';
+  from 'org.eclipse.daanse.board.app.lib.api.variable';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import { TinyEmitter } from 'tiny-emitter';
 import { type Variable, VariableEvents } from 'org.eclipse.daanse.board.app.lib.variables'

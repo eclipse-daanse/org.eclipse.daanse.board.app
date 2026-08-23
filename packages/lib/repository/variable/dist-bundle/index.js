@@ -1,6 +1,8 @@
 import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
-const { serviceId, TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
+import { VARIABLE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { VARIABLE_REPOSITORY as VARIABLE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.variable";
 class VariableRepository {
   constructor(resolver, tinyEmitter) {
     this.resolver = resolver;
@@ -14,8 +16,8 @@ class VariableRepository {
    * Resolves one of the identifiers a registered variable type carries.
    * All of them are created with Symbol.for, so the description IS the id.
    */
-  resolveIdentifier(identifier2) {
-    return this.resolver.getRequired(identifier2.description);
+  resolveIdentifier(identifier3) {
+    return this.resolver.getRequired(identifier3.description);
   }
   registerVariableType(type, identifiers) {
     if (this.availableVariablesTypes.has(type)) {
@@ -263,8 +265,6 @@ function registerVariableActions(actionsRegistry, variableRepository) {
   actionsRegistry.registerInstance("VariableRepository", variableRepository);
   log("Variable actions registered");
 }
-const VARIABLE_REPOSITORY = serviceId("VariableRepository");
-const identifier = Symbol.for(VARIABLE_REPOSITORY);
 function activate$1({ services }) {
   const repository = new VariableRepository(
     services,
@@ -301,9 +301,9 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  VARIABLE_REPOSITORY,
+  VARIABLE_REPOSITORY2 as VARIABLE_REPOSITORY,
   VariableRepository,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

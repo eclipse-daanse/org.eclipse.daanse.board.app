@@ -503,6 +503,13 @@
   version "0.0.0"
   uid ""
 
+"@eclipse-daanse/tsm@link:EMFTs/tsm":
+  version "0.0.0"
+  uid ""
+
+"@eclipse-daanse/tsm@link:packages/EMFTs/tsm":
+  version "0.0.0"
+
 "@egjs/agent@^2.2.1":
   version "2.4.4"
   resolved "https://registry.npmjs.org/@egjs/agent/-/agent-2.4.4.tgz"
@@ -1403,47 +1410,6 @@
   version "1.10.2"
   resolved "https://registry.npmjs.org/@interactjs/vue/-/vue-1.10.2.tgz"
   integrity sha512-msLdc42DFsCPQZt6YBGZrw8Ro23kQcNnj+iLz2OUQcOrp/lma7WjorUuAwwfyFna2DevLtiYlMLbT0dpO/cVhg==
-
-"@inversifyjs/common@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.npmjs.org/@inversifyjs/common/-/common-1.5.2.tgz"
-  integrity sha512-WlzR9xGadABS9gtgZQ+luoZ8V6qm4Ii6RQfcfC9Ho2SOlE6ZuemFo7PKJvKI0ikm8cmKbU8hw5UK6E4qovH21w==
-
-"@inversifyjs/container@1.15.0":
-  version "1.15.0"
-  resolved "https://registry.npmjs.org/@inversifyjs/container/-/container-1.15.0.tgz"
-  integrity sha512-U2xYsPrJTz5za2TExi5lg8qOWf8TEVBpN+pQM7B8BVA2rajtbRE9A66SLRHk8c1eGXmg+0K4Hdki6tWAsSQBUA==
-  dependencies:
-    "@inversifyjs/common" "1.5.2"
-    "@inversifyjs/core" "9.2.0"
-    "@inversifyjs/plugin" "0.2.0"
-    "@inversifyjs/reflect-metadata-utils" "1.4.1"
-
-"@inversifyjs/core@9.2.0":
-  version "9.2.0"
-  resolved "https://registry.npmjs.org/@inversifyjs/core/-/core-9.2.0.tgz"
-  integrity sha512-Nm7BR6KmpgshIHpVQWuEDehqRVb6GBm8LFEuhc2s4kSZWrArZ15RmXQzROLk4m+hkj4kMXgvMm5Qbopot/D6Sg==
-  dependencies:
-    "@inversifyjs/common" "1.5.2"
-    "@inversifyjs/prototype-utils" "0.1.3"
-    "@inversifyjs/reflect-metadata-utils" "1.4.1"
-
-"@inversifyjs/plugin@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/@inversifyjs/plugin/-/plugin-0.2.0.tgz"
-  integrity sha512-R/JAdkTSD819pV1zi0HP54mWHyX+H2m8SxldXRgPQarS3ySV4KPyRdosWcfB8Se0JJZWZLHYiUNiS6JvMWSPjw==
-
-"@inversifyjs/prototype-utils@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/@inversifyjs/prototype-utils/-/prototype-utils-0.1.3.tgz"
-  integrity sha512-EzRamZzNgE9Sn3QtZ8NncNa2lpPMZfspqbK6BWFguWnOpK8ymp2TUuH46ruFHZhrHKnknPd7fG22ZV7iF517TQ==
-  dependencies:
-    "@inversifyjs/common" "1.5.2"
-
-"@inversifyjs/reflect-metadata-utils@1.4.1":
-  version "1.4.1"
-  resolved "https://registry.npmjs.org/@inversifyjs/reflect-metadata-utils/-/reflect-metadata-utils-1.4.1.tgz"
-  integrity sha512-Cp77C4d2wLaHXiUB7iH6Cxb7i1lD/YDuTIHLTDzKINqGSz0DCSoL/Dg2wVkW/6Qx03r/yQMLJ+32Agl32N2X8g==
 
 "@isaacs/balanced-match@^4.0.1":
   version "4.0.1"
@@ -8129,15 +8095,6 @@ internmap@^1.0.0:
   resolved "https://registry.npmjs.org/internmap/-/internmap-1.0.1.tgz"
   integrity sha512-lDB5YccMydFBtasVtxnZ3MRBHuaoE8GKsppq+EchKL2U4nK/DmEpPHNH8MZe5HkMtpSiTSOZwfN0tzYjO/lJEw==
 
-inversify@7.11.0:
-  version "7.11.0"
-  resolved "https://registry.npmjs.org/inversify/-/inversify-7.11.0.tgz"
-  integrity sha512-yZDprSSr8TyVeMGI/AOV4ws6gwjX22hj9Z8/oHAVpJORY6WRFTcUzhnZtibBUHEw2U8ArvHcR+i863DplQ3Cwg==
-  dependencies:
-    "@inversifyjs/common" "1.5.2"
-    "@inversifyjs/container" "1.15.0"
-    "@inversifyjs/core" "9.2.0"
-
 ip-address@^10.0.1, ip-address@^10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-10.2.0.tgz#805fc178b20c518bd4c8548b24fe30892d7f3206"
@@ -12047,7 +12004,7 @@ timers-ext@^0.1.7:
     es5-ext "^0.10.64"
     next-tick "^1.1.0"
 
-tiny-emitter@2.1.0:
+tiny-emitter@2.1.0, tiny-emitter@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/tiny-emitter/-/tiny-emitter-2.1.0.tgz"
   integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==

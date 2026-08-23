@@ -11,15 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import RepeatableSvgWidget from './RepeatableSvgWidget.vue'
 import RepeatableSvgWidgetSettings from './RepeatableSvgWidgetSettings.vue'
 import Icon from './assets/repeatable_svg.svg'
 import { RepeatableSVGWidgetEvents } from './events/RepeatableSVGWidgetEvents'
 import { RepeatableSvgWidgetInterface } from './api/RepeatableSvgWidgetInterface'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 interface IRepeatableSVGSettings {
   src: string

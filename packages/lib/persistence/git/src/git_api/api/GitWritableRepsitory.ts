@@ -10,7 +10,7 @@ Contributors: Smart City Jena
 */
 import { BranchI } from './Branch'
 import { CommitI } from './Commit'
-import { WritableRepository } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { WritableRepository } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 export interface GitWritableRepository extends WritableRepository{
   getBranches():Promise<BranchI[]>;

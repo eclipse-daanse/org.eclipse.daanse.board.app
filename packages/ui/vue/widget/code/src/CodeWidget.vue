@@ -18,7 +18,7 @@ import { useRoute } from 'vue-router';
 import { ICodeSettings } from '.';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { CodeWidgetInterface } from './api/CodeWidgetInterface';
 
 const props = defineProps<{ config: ICodeSettings, id?: string }>();

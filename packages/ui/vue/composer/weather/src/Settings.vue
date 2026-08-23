@@ -12,7 +12,7 @@ Contributors:
 -->
 <script setup lang="ts">
 import { inject, ref, computed, watch } from 'vue'
-import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { identifier, DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 
 const { config, dataSources } = defineProps<{
   config: any

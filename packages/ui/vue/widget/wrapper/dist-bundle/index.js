@@ -1,6 +1,6 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.absolute[data-v-4d1db270] {\n  position: absolute;\n}\n.wrapper-container[data-v-4d1db270] {\n\n  background-color: var(--v6fe95002);\n  border-color: var(--v5674e8f5);\n  border-width: var(--v1f1018c4);\n  border-style: solid;\n\n\n  width: 100%;\n  height: 100%;\n  box-Shadow: var(--v152bfdf4);\n  border-radius: var(--v0893956d);\n  backdrop-filter: blur(var(--blur-amount));\n}\n.sub[data-v-4d1db270] {\n  border-radius: var(--v0893956d);\n  padding: var(--cfa673a0);\n}\n.wrapper-container:hover .hover[data-v-4d1db270] {\n  display: block;\n}\n.wrapper-container .hover[data-v-4d1db270] {\n  display: none;\n}\n.hightz[data-v-4d1db270] {\n  z-index: 3000;\n}\n\n.settings-container[data-v-b90249f7] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.pad_bottom[data-v-b90249f7] {\n  padding-top: 30px;\n  padding-bottom: 10px;\n}\n";})();
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.absolute[data-v-b0146fb0] {\n  position: absolute;\n}\n.wrapper-container[data-v-b0146fb0] {\n\n  background-color: var(--v511583c2);\n  border-color: var(--dd208b5c);\n  border-width: var(--v9414e98a);\n  border-style: solid;\n\n\n  width: 100%;\n  height: 100%;\n  box-Shadow: var(--v0714fade);\n  border-radius: var(--v6509b9ca);\n  backdrop-filter: blur(var(--blur-amount));\n}\n.sub[data-v-b0146fb0] {\n  border-radius: var(--v6509b9ca);\n  padding: var(--v5daa5dcd);\n}\n.wrapper-container:hover .hover[data-v-b0146fb0] {\n  display: block;\n}\n.wrapper-container .hover[data-v-b0146fb0] {\n  display: none;\n}\n.hightz[data-v-b0146fb0] {\n  z-index: 3000;\n}\n\n.settings-container[data-v-b90249f7] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.pad_bottom[data-v-b90249f7] {\n  padding-top: 30px;\n  padding-bottom: 10px;\n}\n";})();
 import { defineComponent, useCssVars, computed, inject, ref, onUnmounted, resolveComponent, createElementBlock, openBlock, normalizeStyle, createCommentVNode, createVNode, toDisplayString, Fragment, createElementVNode, withCtx, createBlock, resolveDynamicComponent, createTextVNode, useModel, unref } from "vue";
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.widget";
+import { identifier } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { Reference, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
@@ -20,12 +20,12 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["openSettings", "removeWidget"],
   setup(__props, { emit: __emit }) {
     useCssVars((_ctx) => ({
-      "v6fe95002": getBackground.value,
-      "v5674e8f5": borderColor.value,
-      "v1f1018c4": borderSize.value + "px",
-      "v152bfdf4": getShadow.value,
-      "v0893956d": borderRadius.value + "px",
-      "cfa673a0": getpadding.value + "px"
+      "v511583c2": getBackground.value,
+      "dd208b5c": borderColor.value,
+      "v9414e98a": borderSize.value + "px",
+      "v0714fade": getShadow.value,
+      "v6509b9ca": borderRadius.value + "px",
+      "v5daa5dcd": getpadding.value + "px"
     }));
     const emit = __emit;
     const registeredWidgets = inject(identifier);
@@ -288,7 +288,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const WidgetWrapper = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-4d1db270"]]);
+const WidgetWrapper = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-b0146fb0"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _hoisted_2 = { class: "px-2" };
 const _hoisted_3 = { class: "px-2" };

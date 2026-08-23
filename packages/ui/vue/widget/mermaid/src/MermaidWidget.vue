@@ -16,7 +16,7 @@ import { inject, computed, nextTick, onMounted, onUnmounted, ref, watch, toRefs 
 import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface';
 import mermaid from 'mermaid';
 import { IMermaidWidgetSettings } from '.';

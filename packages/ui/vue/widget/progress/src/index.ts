@@ -11,12 +11,12 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
+import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import ProgressWidget from './ProgressWidget.vue'
 import ProgressWidgetSettings from './ProgressWidgetSettings.vue'
 import Icon from './assets/progress.svg'
-import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /*
  * Literal on purpose (tsm#21): the build-time component scan cannot yet read
@@ -25,7 +25,7 @@ import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board
  * annotation ties this literal to the same contract; the value must match.
  */
 const WIDGET_SERVICE: typeof WIDGET_SERVICE_ID = 'daanse.widget'
-import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
 import { ProgressWidgetInterface } from './api/ProgressWidgetInterface'
 

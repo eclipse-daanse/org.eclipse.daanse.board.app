@@ -13,7 +13,7 @@
 import {
   type DatasourceRepository,
   DATASOURCE_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+} from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 // Service id of lib.datasource.websocket; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.

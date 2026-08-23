@@ -18,7 +18,7 @@ import type { BaseConnectionConfig } from 'org.eclipse.daanse.board.app.lib.conn
 import { inject, injectable } from '@eclipse-daanse/tsm'
 import { LOGGER_FACTORY, LoggerFactory,
   identifier as loggerIdentifier,
-  type ILogger } from 'org.eclipse.daanse.board.app.lib.logger'
+  type ILogger } from 'org.eclipse.daanse.board.app.lib.api.logger'
 
 export interface IMQTTConnectionConfiguration extends BaseConnectionConfig{
   url: string

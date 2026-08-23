@@ -8,8 +8,8 @@
  */
 
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { SETTINGS_MANAGER, identifier, SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.settings.manager'
-import { REPOSITORY_REGISTRY, identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.repository.persistence'
+import { SETTINGS_MANAGER, identifier, SettingsManagerI } from 'org.eclipse.daanse.board.app.lib.api.settings'
+import { REPOSITORY_REGISTRY, identifier as RepoManagerId, Repository, RepositoryRegistryI } from 'org.eclipse.daanse.board.app.lib.api.persistence'
 
 
 /**

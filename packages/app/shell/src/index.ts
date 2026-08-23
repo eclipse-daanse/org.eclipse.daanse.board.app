@@ -21,27 +21,21 @@
 
 import { APP, TINY_EMITTER } from 'org.eclipse.daanse.board.app.lib.core'
 import { VARIABLE_WRAPPER_FACTORY } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.events'
-import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.variable'
+import { EVENT_ACTIONS_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { VARIABLE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.variable'
 import { createApp, type App as VueApp } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { createVuestic } from 'vuestic-ui'
 import 'vuestic-ui/styles/essential.css'
 import 'vuestic-ui/styles/typography.css'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import {
-  NAVIGATION_REGISTRY_ID,
-  type NavigationRegistry,
-  NavigationItem,
-} from 'org.eclipse.daanse.board.app.lib.repository.navigation'
-import {
-  ROUTE_REGISTRY_ID,
-  type RouteRegistry,
-  RouteDefinition,
-} from 'org.eclipse.daanse.board.app.lib.repository.route'
+import { NAVIGATION_REGISTRY_ID, type NavigationRegistry } from 'org.eclipse.daanse.board.app.lib.api.navigation'
+import { NavigationItem } from 'org.eclipse.daanse.board.app.lib.repository.navigation'
+import { ROUTE_REGISTRY_ID, type RouteRegistry } from 'org.eclipse.daanse.board.app.lib.api.route'
+import { RouteDefinition } from 'org.eclipse.daanse.board.app.lib.repository.route'
 import type { VariableWrapperFactory } from 'org.eclipse.daanse.board.app.lib.factory.variableWrapper'
-import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.repository.variable'
-import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.events'
+import type { VariableRepository } from 'org.eclipse.daanse.board.app.lib.api.variable'
+import type { EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import type { TinyEmitter } from 'tiny-emitter'
 import {
   VariableComplexStringWrapper,

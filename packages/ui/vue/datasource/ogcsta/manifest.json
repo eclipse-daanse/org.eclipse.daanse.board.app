@@ -6,8 +6,8 @@
   "entry": "/bundles/ui.vue.datasource.ogcsta/index.js",
   "exports": {},
   "dependencies": [
-    "lib.repository.datasource",
-    "lib.repository.variable",
+    "lib.api.datasource",
+    "lib.api.variable",
     "platform.vue",
     "ui.vue.composables",
     "ui.vue.variable.components"
@@ -26,11 +26,11 @@
       "versionRange": "^3.5.0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.datasource",
+      "id": "org.eclipse.daanse.board.app.lib.api.datasource",
       "versionRange": ">=0.0.1-0"
     },
     {
-      "id": "org.eclipse.daanse.board.app.lib.repository.variable",
+      "id": "org.eclipse.daanse.board.app.lib.api.variable",
       "versionRange": ">=0.0.1-0"
     },
     {

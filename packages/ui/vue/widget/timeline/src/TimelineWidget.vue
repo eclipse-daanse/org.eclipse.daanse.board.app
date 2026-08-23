@@ -117,7 +117,7 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 import {
     identifier as variableIdentifier,
     type VariableRepository
-} from 'org.eclipse.daanse.board.app.lib.repository.variable';
+} from 'org.eclipse.daanse.board.app.lib.api.variable';
 
 
 const i18n: i18n | undefined = inject('i18n');
@@ -163,7 +163,7 @@ const config = defineModel<TimelineSettings>('configv', { required: true });
 
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core';
 import type { TinyEmitter } from 'tiny-emitter';
-import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.events';
+import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { TimelineWidgetInterface } from './api/TimelineWidgetInterface';
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;

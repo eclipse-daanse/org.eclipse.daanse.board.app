@@ -1,4 +1,4 @@
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 let repository;

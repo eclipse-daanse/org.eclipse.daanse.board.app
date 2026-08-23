@@ -1,5 +1,6 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 import { Reference, ModelClass, Documentation, Attribute } from "org.eclipse.daanse.board.app.lib.annotations";
+import { NAVIGATION_REGISTRY, NAVIGATION_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.navigation";
+import { NAVIGATION_REGISTRY as NAVIGATION_REGISTRY2, NAVIGATION_REGISTRY_ID as NAVIGATION_REGISTRY_ID2 } from "org.eclipse.daanse.board.app.lib.api.navigation";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var _Reflect = {};
 /*! *****************************************************************************
@@ -1204,8 +1205,6 @@ class NavigationRegistryImpl extends NavigationRegistry {
     return Array.from(this.itemsMap.values()).filter((item) => item.visible !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
   }
 }
-const NAVIGATION_REGISTRY_ID = serviceId("NavigationRegistry");
-const NAVIGATION_REGISTRY = Symbol.for(NAVIGATION_REGISTRY_ID);
 function activate$1({ services }) {
   services.register(NAVIGATION_REGISTRY_ID, new NavigationRegistryImpl());
 }
@@ -1242,8 +1241,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  NAVIGATION_REGISTRY,
-  NAVIGATION_REGISTRY_ID,
+  NAVIGATION_REGISTRY2 as NAVIGATION_REGISTRY,
+  NAVIGATION_REGISTRY_ID2 as NAVIGATION_REGISTRY_ID,
   NavigationItem,
   NavigationRegistry,
   NavigationRegistryImpl,

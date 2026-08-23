@@ -19,7 +19,7 @@ import {
 import { CONNECTION_REPOSITORY,
   identifier,
   type IConnection,
-  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 export interface IRssStoreConfiguration extends IBaseConnectionConfiguration {
   resourceUrl: string

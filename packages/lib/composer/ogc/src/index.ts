@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import { DATASOURCE_REPOSITORY } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
-import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.repository.datasource'
+import type { DatasourceRepository } from 'org.eclipse.daanse.board.app.lib.api.datasource'
 import {
   OgcFeatureComposer,
   type IOgcFeatureComposerConfiguration,

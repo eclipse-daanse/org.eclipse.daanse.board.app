@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { SETTINGS_MANAGER, identifier } from "org.eclipse.daanse.board.app.lib.api.settings";
+import { SETTINGS_MANAGER as SETTINGS_MANAGER2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.settings";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -847,8 +848,6 @@ class SettingsManager {
     return get(settings, path);
   }
 }
-const SETTINGS_MANAGER = serviceId("SettingsManager");
-const identifier = Symbol.for(SETTINGS_MANAGER);
 function activate$1({ services }) {
   services.register(SETTINGS_MANAGER, new SettingsManager());
 }
@@ -876,8 +875,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  SETTINGS_MANAGER,
+  SETTINGS_MANAGER2 as SETTINGS_MANAGER,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

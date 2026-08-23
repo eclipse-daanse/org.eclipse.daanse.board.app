@@ -17,7 +17,7 @@ import Icon from './assets/progress.svg'
 import PageWidget from './PageWidget.vue'
 import PageWidgetSettings from './PageWidgetSettings.vue'
 import { type PageI } from './interface/PageI'
-import type { WidgetProvider } from 'org.eclipse.daanse.board.app.lib.repository.widget'
+import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 /*
  * Literal on purpose (tsm#21): the build-time component scan cannot yet read

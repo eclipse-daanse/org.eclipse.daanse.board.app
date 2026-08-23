@@ -1,5 +1,5 @@
-(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container[data-v-0c65fa06] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.component[data-v-0c65fa06] {\n    font-size: var(--v7536b7d0);\n    color: var(--v150065d8);\n    text-align: var(--v3dd1aafe);\n    font-weight: var(--v1a4b6366);\n    font-style: var(--ad416e3c);\n    text-decoration: var(--v24dbbe63);\n    overflow: hidden;\n}\n\n.settings-container[data-v-86b279c5] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.settings-block[data-v-86b279c5] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 8px;\n}\n.text-title[data-v-86b279c5] {\n  width: 100%;\n}\n.text-size[data-v-86b279c5] {\n  width: 100%;\n  margin-left: 12px;\n}\n.text-weight[data-v-86b279c5] {\n  width: 100px;\n}\n.loading[data-v-86b279c5] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n.toolbar[data-v-86b279c5] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n}\n.toolbar-group[data-v-86b279c5] {\n  display: flex;\n  gap: 2px;\n  padding-right: 0.5rem;\n  margin-right: 0.25rem;\n  border-right: 1px solid #e5e7eb;\n}\n.toolbar-group[data-v-86b279c5]:last-child {\n  border-right: none;\n  padding-right: 0;\n  margin-right: 0;\n}\n.toolbar-btn[data-v-86b279c5] {\n  min-width: 28px !important;\n  height: 28px !important;\n  padding: 0 4px !important;\n  border: 1px solid transparent !important;\n  border-radius: 0.25rem !important;\n}\n.toolbar-btn[data-v-86b279c5]:hover {\n  background-color: #e5e7eb !important;\n}\n.is-active[data-v-86b279c5] {\n  background-color: #fff3e0 !important;\n  border-color: rgb(236, 156, 29) !important;\n  color: #c45e00 !important;\n}\n.toolbar-group--inputs[data-v-86b279c5] {\n  align-items: center;\n  gap: 0.25rem;\n}\n.toolbar-input[data-v-86b279c5] {\n  max-width: 70px;\n}\n";})();
-import { WidgetAction, WidgetActionInterface, EVENT_ACTIONS_REGISTRY, Payload, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
+(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container[data-v-7f505d2d] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.component[data-v-7f505d2d] {\n    font-size: var(--a48f8840);\n    color: var(--v34b31368);\n    text-align: var(--v2c3809b9);\n    font-weight: var(--v0788cc15);\n    font-style: var(--ccf41bcc);\n    text-decoration: var(--v1f06182b);\n    overflow: hidden;\n}\n\n.settings-container[data-v-99382129] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.settings-block[data-v-99382129] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 8px;\n}\n.text-title[data-v-99382129] {\n  width: 100%;\n}\n.text-size[data-v-99382129] {\n  width: 100%;\n  margin-left: 12px;\n}\n.text-weight[data-v-99382129] {\n  width: 100px;\n}\n.loading[data-v-99382129] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n.toolbar[data-v-99382129] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n}\n.toolbar-group[data-v-99382129] {\n  display: flex;\n  gap: 2px;\n  padding-right: 0.5rem;\n  margin-right: 0.25rem;\n  border-right: 1px solid #e5e7eb;\n}\n.toolbar-group[data-v-99382129]:last-child {\n  border-right: none;\n  padding-right: 0;\n  margin-right: 0;\n}\n.toolbar-btn[data-v-99382129] {\n  min-width: 28px !important;\n  height: 28px !important;\n  padding: 0 4px !important;\n  border: 1px solid transparent !important;\n  border-radius: 0.25rem !important;\n}\n.toolbar-btn[data-v-99382129]:hover {\n  background-color: #e5e7eb !important;\n}\n.is-active[data-v-99382129] {\n  background-color: #fff3e0 !important;\n  border-color: rgb(236, 156, 29) !important;\n  color: #c45e00 !important;\n}\n.toolbar-group--inputs[data-v-99382129] {\n  align-items: center;\n  gap: 0.25rem;\n}\n.toolbar-input[data-v-99382129] {\n  max-width: 70px;\n}\n";})();
+import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
 import { defineComponent, mergeModels, useCssVars, useModel, computed, toRefs, inject, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, createElementVNode, toDisplayString, resolveComponent, createBlock, withCtx, createVNode, unref, normalizeClass } from "vue";
 import { useRoute } from "vue-router";
@@ -7,7 +7,8 @@ import { VariableComplexStringWrapper, VariableWrapper, useDatasourceRepository,
 import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
 import { Reference, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
 const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.variable";
+import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
+import { identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { ComplexTextInput, VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 const Icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var __defProp$2 = Object.defineProperty;
@@ -1180,12 +1181,12 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   emits: ["update:configv"],
   setup(__props, { expose: __expose }) {
     useCssVars((_ctx) => ({
-      "v7536b7d0": fontSizeStyle.value,
-      "v150065d8": config.value.fontColor.value,
-      "v3dd1aafe": config.value.horizontalAlign.value,
-      "v1a4b6366": config.value.fontWeight.value,
-      "ad416e3c": config.value.fontStyle.value,
-      "v24dbbe63": config.value.textDecoration.value
+      "a48f8840": fontSizeStyle.value,
+      "v34b31368": config.value.fontColor.value,
+      "v2c3809b9": config.value.horizontalAlign.value,
+      "v0788cc15": config.value.fontWeight.value,
+      "ccf41bcc": config.value.fontStyle.value,
+      "v1f06182b": config.value.textDecoration.value
     }));
     const props = __props;
     const { datasourceId, id: widgetId } = toRefs(props);
@@ -1304,7 +1305,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const TextWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-0c65fa06"]]);
+const TextWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-7f505d2d"]]);
 const _hoisted_1 = { class: "settings-container" };
 const _hoisted_2 = { class: "settings-block" };
 const _hoisted_3 = { class: "toolbar" };
@@ -1479,7 +1480,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const TextWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-86b279c5"]]);
+const TextWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-99382129"]]);
 const TextWidgetEvents = [
   { name: "Text Clicked", type: "click", description: "Triggered when the text widget is clicked", payloadType: Payload },
   { name: "Text Right Clicked", type: "right_click", description: "Triggered when the text widget is right-clicked", payloadType: Payload },

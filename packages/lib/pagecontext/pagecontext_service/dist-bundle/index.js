@@ -1,4 +1,5 @@
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { PAGE_CONTEXT, identifier } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
+import { PAGE_CONTEXT as PAGE_CONTEXT2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
 class PageContextService {
   setProvider(provider) {
     this.provider = provider;
@@ -7,8 +8,6 @@ class PageContextService {
     return this.provider?.getCurrentPageId();
   }
 }
-const PAGE_CONTEXT = serviceId("PageContext");
-const identifier = Symbol.for(PAGE_CONTEXT);
 function activate$1({ services }) {
   services.register(PAGE_CONTEXT, new PageContextService());
 }
@@ -36,8 +35,8 @@ async function deactivate(context) {
   await deactivate$1?.(context);
 }
 export {
-  PAGE_CONTEXT,
+  PAGE_CONTEXT2 as PAGE_CONTEXT,
   activate,
   deactivate,
-  identifier
+  identifier2 as identifier
 };

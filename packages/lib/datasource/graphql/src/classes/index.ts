@@ -21,7 +21,7 @@ import {
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { CONNECTION_REPOSITORY,
   identifier,
-  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+  ConnectionRepository,} from 'org.eclipse.daanse.board.app.lib.api.connection'
 // import type { ComputedString } from "@/plugins/variables/ComputedString";
 
 export interface IGraphQLStoreConfiguration

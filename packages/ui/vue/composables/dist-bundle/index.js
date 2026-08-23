@@ -1,7 +1,7 @@
-import { identifier } from "org.eclipse.daanse.board.app.lib.repository.datasource";
+import { identifier } from "org.eclipse.daanse.board.app.lib.api.datasource";
 import { ref, computed, inject, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
-import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.repository.variable";
-import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.pagecontext.pagecontext_service";
+import { identifier as identifier$1 } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { identifier as identifier$2 } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
 import { VariableWrapper, VARIABLEWRAPPER } from "org.eclipse.daanse.board.app.lib.variables";
 import { VARIABLEWRAPPER as VARIABLEWRAPPER2, VariableWrapper as VariableWrapper2 } from "org.eclipse.daanse.board.app.lib.variables";
 const activeLoadingCount = ref(0);

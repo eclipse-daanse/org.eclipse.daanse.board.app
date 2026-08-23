@@ -14,7 +14,7 @@ import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import {
   type ConnectionRepository,
   CONNECTION_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.connection'
+} from 'org.eclipse.daanse.board.app.lib.api.connection'
 
 // Service id of lib.connection.mqtt; Symbol.for is global, so this literal
 // denotes the same symbol the factory package exports.

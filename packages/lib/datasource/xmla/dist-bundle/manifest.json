@@ -17,6 +17,10 @@
       "versionRange": ">=0.0.1-0"
     },
     {
+      "id": "org.eclipse.daanse.board.app.lib.api.connection",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
       "id": "org.eclipse.daanse.board.app.lib.connection.xmla",
       "versionRange": ">=0.0.1-0"
     },
@@ -26,10 +30,6 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.lib.datasource.base",
-      "versionRange": ">=0.0.1-0"
-    },
-    {
-      "id": "org.eclipse.daanse.board.app.lib.repository.connection",
       "versionRange": ">=0.0.1-0"
     }
   ],
@@ -44,8 +44,8 @@
   ],
   "dependencies": [
     "lib.annotations",
+    "lib.api.connection",
     "lib.connection.xmla",
-    "lib.datasource.base",
-    "lib.repository.connection"
+    "lib.datasource.base"
   ]
 }

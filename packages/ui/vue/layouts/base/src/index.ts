@@ -12,7 +12,7 @@ import {
   type LayoutI,
   type LayoutRepositoryI,
   LAYOUT_REPOSITORY,
-} from 'org.eclipse.daanse.board.app.lib.repository.layout.page'
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import View from './components/View.vue'
 import Edit from './components/Edit.vue'

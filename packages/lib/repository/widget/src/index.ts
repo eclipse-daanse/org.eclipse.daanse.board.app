@@ -12,19 +12,17 @@
  **********************************************************************/
 
 import {
-  WidgetRepository,
+  WidgetRepositoryImpl,
   WIDGET_SERVICE_ID,
+  WIDGET_REPOSITORY,
+  identifier,
   type WidgetConfig,
   type WidgetProvider,
+  type WidgetRepository,
 } from './classes'
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
-import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ServiceRegistryListener, ServiceRegistryEvent } from '@eclipse-daanse/tsm'
 
-/** Typed service id - the name and the contract declared once, here. */
-const WIDGET_REPOSITORY = serviceId<WidgetRepository>('WidgetRepository')
-
-const identifier = Symbol.for(WIDGET_REPOSITORY)
 
 let tracker: ServiceRegistryListener | undefined
 
@@ -48,7 +46,7 @@ function observable(services: ActivationContext['services']) {
 }
 
 export function activate({ services, log }: ActivationContext) {
-  const repository = new WidgetRepository()
+  const repository = new WidgetRepositoryImpl()
   services.register<WidgetRepository>(WIDGET_REPOSITORY, repository)
 
   /*
@@ -116,10 +114,10 @@ export function deactivate({ services }: ActivationContext) {
 }
 
 export {
-  WidgetRepository,
   WIDGET_SERVICE_ID,
+  WIDGET_REPOSITORY,
+  identifier,
   type WidgetConfig,
   type WidgetProvider,
-  identifier,
-  WIDGET_REPOSITORY,
+  type WidgetRepository,
 }
