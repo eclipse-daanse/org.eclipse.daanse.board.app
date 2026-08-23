@@ -5,7 +5,11 @@
   "version": "0.0.1-next.1",
   "entry": "/bundles/lib.repository.widget/index.js",
   "exports": {},
-  "provides": [],
+  "provides": [
+    {
+      "id": "WidgetRepository"
+    }
+  ],
   "capabilities": [
     {
       "namespace": "tsm.library",

@@ -8,6 +8,11 @@
  * graph warm, so every further save of that bundle rebuilds incrementally in
  * a fraction of a second. Untouched bundles cost nothing.
  *
+ * Persistent watchers are capped (WATCH_LIMIT, default 8): each one holds a
+ * warm module graph, and a mass change - a codemod touching two hundred
+ * files - would otherwise accumulate a hundred of them and eat the machine.
+ * Beyond the cap a change gets a one-shot build instead.
+ *
  * Usage: node scripts/watch-bundles.mjs [filter...]
  *   filter: only watch bundles whose path contains one of the terms
  */
@@ -41,12 +46,29 @@ function ownerOf(file) {
 
 const active = new Map() // dir -> vite/rollup watcher
 let starting = Promise.resolve() // serialise the expensive initial builds
+const WATCH_LIMIT = Math.max(1, Number(process.env.WATCH_LIMIT) || 8)
 
 function startBundleWatcher(dir) {
   if (active.has(dir)) return // vite's own watcher handles further changes
-  active.set(dir, null)
+  const persistent = active.size < WATCH_LIMIT
+  if (persistent) active.set(dir, null)
   starting = starting.then(async () => {
     let start = Date.now()
+    if (!persistent) {
+      // Over the cap: build once and let go - no warm graph to keep
+      try {
+        await build({
+          configFile: resolve(dir, 'vite.bundle.config.ts'),
+          root: resolve(dir),
+          logLevel: 'silent',
+          build: { minify: false },
+        })
+        console.log(`[${now()}] ${dir} rebuilt (one-shot) in ${((Date.now() - start) / 1000).toFixed(1)}s`)
+      } catch (error) {
+        console.error(`[${now()}] ${dir} FAILED\n${error.message ?? error}`)
+      }
+      return
+    }
     try {
       const watcher = await build({
         configFile: resolve(dir, 'vite.bundle.config.ts'),
