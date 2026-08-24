@@ -253,7 +253,13 @@ Randfall.
 
 ### FR-C3 — decorator-Modus: Annotationen aus geteiltem Paket importieren
 
-Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/26>
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/26> —
+**umgesetzt, verifiziert am 2026-08-24** gegen lokalen Stand `49f0abc`:
+`-a/--annotations` auf `init` und `generate` importiert aus
+`lib.annotations` (kein ModelAnnotations.ts mehr, Import byte-gleich zu
+unserem Generator), und das Fallback nutzt `Symbol.for('emfts.*')`.
+Damit ist der letzte Adoptions-Blocker weg; offen bleibt nur die
+`@Documentation`-Emission (Notiz auf #24).
 
 Bei der Verifikation von C1 gefunden: der decorator-Modus generiert pro
 Modell ein eigenes `ModelAnnotations.ts` mit `Symbol('…')`-Keys — 41 Modelle
