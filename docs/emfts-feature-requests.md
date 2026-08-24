@@ -289,7 +289,15 @@ Instanziierung (`= 12` an einem `VariableWrapper`), Attribut-Defaults und
 Pflichtigkeit gehen verloren (`comparator?:` statt `= Comparator.eq`),
 mehrwertige Features starten uninitalisiert statt `= []`.
 
-**Probelauf-Fazit:** @Documentation (C1/#27), Cross-Package (C2/#25) und
+**Probelauf bestanden (2026-08-24, Stand `b709b5d`):** Der Volldiff über
+`connection.rest`, `text.plain` und `events/MappingModel` ist **leer** —
+null echte Abweichungen gegen `tools/generator`, modulo der bewusst
+akzeptierten Verbesserungen (`unknown` statt `any`, `T[]` statt
+`Array<T>`, Klassen-/Feature-Doku, `.js`-Import-Endungen). C4 (#28) und
+C5 (#29, inkl. Dekorator-Name- und Import-Mapping-Nachzügler) sind
+verifiziert. Der Vollumstieg der 41 Modelle kann starten.
+
+**Frühere Zwischenfazite:** @Documentation (C1/#27), Cross-Package (C2/#25) und
 geteilte Annotationen (C3/#26) sind verifiziert; Struktur, Imports und
 Doku sind adoptionsreif — Klassen-Doku emittiert der codegen sogar
 zusätzlich, und `.js`-Endungen auf relativen Imports sind ESM-korrekter
