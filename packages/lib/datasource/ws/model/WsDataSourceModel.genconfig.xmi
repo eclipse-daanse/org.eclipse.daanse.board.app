@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genconfig:GenConfig xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genconfig="http://www.emfts.org/genconfig/1.0" ecorePackage="http://org.eclipse.daanse.board.app.lib.datasource.websocket#/">
+  <generation mode="decorator" outputDir="./generated" fileExtension=".ts" annotationsPackage="org.eclipse.daanse.board.app.lib.annotations"/>
+  <package prefix="Wsstore" basePackage="org.example" generateFactory="true" generatePackage="true" generateIndex="true"/>
+  <classDefaults generateInterface="true" generateImpl="true" rootExtendsClass="BasicEObject" rootExtendsInterface="EObject"/>
+  <featureDefaults notify="true" property="editable"/>
+  <referencedPackages nsURI="http://org.eclipse.daanse.board.app.lib.datasource.base" importPath="org.eclipse.daanse.board.app.lib.datasource.base"/>
+</genconfig:GenConfig>

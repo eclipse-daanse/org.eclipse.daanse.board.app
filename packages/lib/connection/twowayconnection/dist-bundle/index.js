@@ -1,47 +1,54 @@
-class r {
-  ready = !1;
+class TwoWayConnection {
+  ready = false;
   subscribers = [];
   constructor() {
   }
-  onMessage(e, t) {
-    this.notify("message", e, t);
+  onMessage(data, topic) {
+    this.notify("message", data, topic);
   }
   onConnect() {
-    this.ready = !0, this.notify("connect");
+    this.ready = true;
+    this.notify("connect");
   }
   onClose() {
-    this.ready = !1, this.notify("close");
+    this.ready = false;
+    this.notify("close");
   }
-  onError(e) {
-    this.ready = !1, this.notify("error", e);
+  onError(error) {
+    this.ready = false;
+    this.notify("error", error);
   }
-  subscribe(e) {
-    this.subscribers.push(e);
+  subscribe(subscriber) {
+    this.subscribers.push(subscriber);
   }
-  unsubscribe(e) {
-    this.subscribers = this.subscribers.filter((t) => t !== e);
+  unsubscribe(subscriber) {
+    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
   }
-  notify(e, t, i) {
-    this.subscribers.forEach((o) => {
-      o(e, t, i);
+  notify(event, data, topic) {
+    this.subscribers.forEach((subscriber) => {
+      subscriber(event, data, topic);
     });
   }
 }
-const c = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  TwoWayConnection: r
-}, Symbol.toStringTag, { value: "Module" })), n = "org.eclipse.daanse.board.app.lib.connection.twowayconnection", a = "0.0.1-next.1";
-async function b(s) {
-  const e = globalThis.__tsm__;
-  if (!e)
-    throw new Error(`${n}: tsm runtime is not initialized`);
-  e.register(n, c, a, "lib.connection.twowayconnection"), await void 0;
+  TwoWayConnection
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.connection.twowayconnection";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.connection.twowayconnection");
+  await void 0;
 }
-async function u(s) {
+async function deactivate(context) {
   await void 0;
 }
 export {
-  r as TwoWayConnection,
-  b as activate,
-  u as deactivate
+  TwoWayConnection,
+  activate,
+  deactivate
 };

@@ -1,113 +1,154 @@
-import { inject as w } from "@eclipse-daanse/tsm";
-import { BaseDatasource as R } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY as y } from "org.eclipse.daanse.board.app.lib.api.connection";
-import m from "org.eclipse.daanse.board.app.lib.utils.helpers";
-const { serviceId: g } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var _ = Object.defineProperty, b = (r, t, n, a) => {
-  for (var s = void 0, e = r.length - 1, o; e >= 0; e--)
-    (o = r[e]) && (s = o(t, n, s) || s);
-  return s && _(t, n, s), s;
+import { inject } from "@eclipse-daanse/tsm";
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
+import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var __defProp = Object.defineProperty;
+var __decorateClass = (decorators, target, key, kind) => {
+  var result = void 0;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(target, key, result) || result;
+  if (result) __defProp(target, key, result);
+  return result;
 };
-class d extends R {
+class CsvStore extends BaseDatasource {
   connection;
   resourceUrl = null;
   parseOptions = null;
   skipRowsFromStart = 0;
   skipRowsFromEnd = 0;
   connectionRepository;
-  init(t) {
-    super.init(t), this.connection = t.connection, this.parseOptions = {
-      separators: t.separators
-    }, this.skipRowsFromStart = t.skipRowsFromStart ?? 0, this.skipRowsFromEnd = t.skipRowsFromEnd ?? 0, this.resourceUrl = super.initVariable(t.resourceUrl), this.pollingInterval = t.pollingInterval ?? 5e3, this.pollingEnabled && this.startPolling(this.pollingInterval);
+  init(configuration) {
+    super.init(configuration);
+    this.connection = configuration.connection;
+    this.parseOptions = {
+      separators: configuration.separators
+    };
+    this.skipRowsFromStart = configuration.skipRowsFromStart ?? 0;
+    this.skipRowsFromEnd = configuration.skipRowsFromEnd ?? 0;
+    this.resourceUrl = super.initVariable(configuration.resourceUrl);
+    this.pollingInterval = configuration.pollingInterval ?? 5e3;
+    if (this.pollingEnabled) {
+      this.startPolling(this.pollingInterval);
+    }
   }
   async getOriginalData() {
-    const n = await this.connectionRepository.getConnection(
+    const connection = this.connectionRepository.getConnection(
       this.connection
-    ).fetch({ url: this.resourceUrl?.value || "" });
-    if (!n.ok) return [];
-    const a = await n.text();
-    return m.csv.parse(a, this.parseOptions || {});
+    );
+    const req = await connection.fetch({ url: this.resourceUrl?.value || "" });
+    if (!req.ok) return [];
+    const text = await req.text();
+    const data = helpers.csv.parse(text, this.parseOptions || {});
+    return data;
   }
-  async getData(t) {
-    const a = await this.connectionRepository.getConnection(
+  async getData(type) {
+    const connection = this.connectionRepository.getConnection(
       this.connection
-    ).fetch({ url: this.resourceUrl?.value || "" });
-    if (!a.ok) return null;
-    let s = await a.text();
+    );
+    const req = await connection.fetch({ url: this.resourceUrl?.value || "" });
+    if (!req.ok) return null;
+    let text = await req.text();
     if (this.skipRowsFromStart > 0 || this.skipRowsFromEnd > 0) {
-      const o = s.split(`
-`), i = this.skipRowsFromStart, c = this.skipRowsFromEnd > 0 ? o.length - this.skipRowsFromEnd : o.length;
-      s = o.slice(i, c).join(`
-`);
+      const lines = text.split("\n");
+      const startIndex = this.skipRowsFromStart;
+      const endIndex = this.skipRowsFromEnd > 0 ? lines.length - this.skipRowsFromEnd : lines.length;
+      text = lines.slice(startIndex, endIndex).join("\n");
     }
-    const e = m.csv.parse(
-      s,
+    const data = helpers.csv.parse(
+      text,
       this.parseOptions || {}
     );
-    return e.header = e.header.map((o) => typeof o == "string" ? o.trim() : o), e.rows = e.rows.map(
-      (o) => o.map((i) => typeof i == "string" ? i.trim() : i)
-    ), e.mappedRows = e.mappedRows.map((o) => {
-      const i = {};
-      for (const [c, p] of Object.entries(o)) {
-        const v = typeof c == "string" ? c.trim() : c;
-        i[v] = typeof p == "string" ? p.trim() : p;
+    data.header = data.header.map((header) => typeof header === "string" ? header.trim() : header);
+    data.rows = data.rows.map(
+      (row) => row.map((value) => typeof value === "string" ? value.trim() : value)
+    );
+    data.mappedRows = data.mappedRows.map((row) => {
+      const trimmedRow = {};
+      for (const [key, value] of Object.entries(row)) {
+        const trimmedKey = typeof key === "string" ? key.trim() : key;
+        trimmedRow[trimmedKey] = typeof value === "string" ? value.trim() : value;
       }
-      return i;
-    }), console.log(e), t === "DataTable" ? {
-      headers: e.header,
-      items: e.mappedRows,
-      rows: e.rows
-    } : t == "string" ? JSON.stringify(e) : (console.warn("Invalid data type"), null);
+      return trimmedRow;
+    });
+    console.log(data);
+    if (type === "DataTable") {
+      return {
+        headers: data.header,
+        items: data.mappedRows,
+        rows: data.rows
+      };
+    }
+    if (type == "string") {
+      return JSON.stringify(data);
+    } else {
+      console.warn("Invalid data type");
+      return null;
+    }
   }
-  callEvent(t, n) {
+  callEvent(event, params) {
     console.warn(
-      `Event "${t}" is not available for this type of store`,
-      n
+      `Event "${event}" is not available for this type of store`,
+      params
     );
   }
   destroy() {
     this.stopPolling();
   }
-  static validateConfiguration(t) {
-    return !(!t.connection || !t.resourceUrl);
+  static validateConfiguration(configuration) {
+    if (!configuration.connection) {
+      return false;
+    }
+    if (!configuration.resourceUrl) {
+      return false;
+    }
+    return true;
   }
 }
-b([
-  w(y)
-], d.prototype, "connectionRepository");
-const l = g("CsvStoreFactory"), O = Symbol.for(l);
-function f({ services: r }) {
-  r.register(l, (t) => {
-    if (!d.validateConfiguration(t))
+__decorateClass([
+  inject(CONNECTION_REPOSITORY)
+], CsvStore.prototype, "connectionRepository");
+const CSV_STORE_FACTORY = serviceId("CsvStoreFactory");
+const factorySymbol = Symbol.for(CSV_STORE_FACTORY);
+function activate$1({ services }) {
+  services.register(CSV_STORE_FACTORY, (config) => {
+    if (!CsvStore.validateConfiguration(config)) {
       throw new Error(
         "Invalid CsvStore configuration. Please provide a valid configuration."
       );
-    const n = r.construct(d);
-    return n.init(t), n;
+    }
+    const store = services.construct(CsvStore);
+    store.init(config);
+    return store;
   });
 }
-function h({ services: r }) {
-  r.unregister(l);
+function deactivate$1({ services }) {
+  services.unregister(CSV_STORE_FACTORY);
 }
-const S = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CSV_STORE_FACTORY: l,
-  activate: f,
-  deactivate: h,
-  factorySymbol: O
-}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.datasource.csv", E = "0.0.1-next.1";
-async function x(r) {
-  const t = globalThis.__tsm__;
-  if (!t)
-    throw new Error(`${u}: tsm runtime is not initialized`);
-  t.register(u, S, E, "lib.datasource.csv"), await f?.(r);
+  CSV_STORE_FACTORY,
+  activate: activate$1,
+  deactivate: deactivate$1,
+  factorySymbol
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.csv";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.csv");
+  await activate$1?.(context);
 }
-async function P(r) {
-  await h?.(r);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  l as CSV_STORE_FACTORY,
-  x as activate,
-  P as deactivate,
-  O as factorySymbol
+  CSV_STORE_FACTORY,
+  activate,
+  deactivate,
+  factorySymbol
 };

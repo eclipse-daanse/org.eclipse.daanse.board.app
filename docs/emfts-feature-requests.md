@@ -289,6 +289,23 @@ Instanziierung (`= 12` an einem `VariableWrapper`), Attribut-Defaults und
 Pflichtigkeit gehen verloren (`comparator?:` statt `= Comparator.eq`),
 mehrwertige Features starten uninitalisiert statt `= []`.
 
+### FR-C6/C7 — Vollmigration blockiert: extends aus Dependency-Modellen und Custom-Dekoratoren
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/30>
+und <https://github.com/eclipse-fennec/emf.ts.codegen/issues/31>
+
+Der Volllauf über alle 41 Modelle (Treiber ist umgestellt, GenConfigs
+liegen bei den Modellen) deckte zwei Lücken auf, die der Drei-Modell-
+Probelauf nicht traf: 17 Klassen verlieren ihr `extends` auf Supertypen
+aus Dependency-/Geschwister-Modellen (`IconClickPayload extends
+Payload`), und die `@WidgetAction`-Custom-Dekoratoren aus
+eAnnotations (`source="<paket>/<Dekorator>"`) samt Options-Objekt aus
+den details werden nicht emittiert (5 Dateien, trägt die
+Action-Metadaten des Event-Systems). Dazu 26 verlorene optionale
+Operationsparameter. Die gen-Ausgaben sind bis dahin auf dem Stand von
+`tools/generator` zurückgehalten; `npm run generate_models` fährt schon
+den neuen Treiber.
+
 **Probelauf bestanden (2026-08-24, Stand `b709b5d`):** Der Volldiff über
 `connection.rest`, `text.plain` und `events/MappingModel` ist **leer** —
 null echte Abweichungen gegen `tools/generator`, modulo der bewusst

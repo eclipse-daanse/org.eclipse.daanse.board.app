@@ -1,11 +1,12 @@
-import { EVENT_ACTIONS_REGISTRY_ID as h } from "org.eclipse.daanse.board.app.lib.events";
-import { loggerFactory as y } from "org.eclipse.daanse.board.app.lib.logger";
-import { VARIABLE_REPOSITORY as c, identifier as V } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { VARIABLE_REPOSITORY as R, identifier as _ } from "org.eclipse.daanse.board.app.lib.api.variable";
-const { TINY_EMITTER: u } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class f {
-  constructor(e, t) {
-    this.resolver = e, this.tinyEmitter = t;
+import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.events";
+const { TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
+import { VARIABLE_REPOSITORY, identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { VARIABLE_REPOSITORY as VARIABLE_REPOSITORY2, identifier as identifier2 } from "org.eclipse.daanse.board.app.lib.api.variable";
+class VariableRepository {
+  constructor(resolver, tinyEmitter) {
+    this.resolver = resolver;
+    this.tinyEmitter = tinyEmitter;
   }
   availableVariables = /* @__PURE__ */ new Map();
   availableVariablesByScope = /* @__PURE__ */ new Map();
@@ -15,13 +16,14 @@ class f {
    * Resolves one of the identifiers a registered variable type carries.
    * All of them are created with Symbol.for, so the description IS the id.
    */
-  resolveIdentifier(e) {
-    return this.resolver.getRequired(e.description);
+  resolveIdentifier(identifier3) {
+    return this.resolver.getRequired(identifier3.description);
   }
-  registerVariableType(e, t) {
-    if (this.availableVariablesTypes.has(e))
+  registerVariableType(type, identifiers) {
+    if (this.availableVariablesTypes.has(type)) {
       throw Error("Multiple registration of the same variable type");
-    this.availableVariablesTypes.set(e, t);
+    }
+    this.availableVariablesTypes.set(type, identifiers);
   }
   /**
    * Nimmt die Registrierung eines Variablentyps zurück.
@@ -32,254 +34,276 @@ class f {
    *
    * @returns ob der Typ registriert war
    */
-  unregisterVariableType(e) {
-    return this.availableVariablesTypes.delete(e);
+  unregisterVariableType(type) {
+    return this.availableVariablesTypes.delete(type);
   }
   getRegisteredVariableTypes() {
     return Array.from(this.availableVariablesTypes.keys());
   }
-  getVariableIdentifiers(e) {
-    return this.availableVariablesTypes.get(e);
+  getVariableIdentifiers(type) {
+    return this.availableVariablesTypes.get(type);
   }
-  registerVariable(e, t, a) {
-    const i = this.availableVariablesTypes.get(t);
-    if (i) {
-      const r = this.resolveIdentifier(i.Variable)(e, a), n = a.scope || "global", l = a.pageId && n === "page" ? `${n}-${a.pageId}` : n;
-      this.availableVariablesByScope.has(l) || this.availableVariablesByScope.set(l, /* @__PURE__ */ new Map()), this.availableVariablesByScope.get(l).set(e, r), (!a.scope || a.scope === "global") && this.availableVariables.set(e, r);
+  registerVariable(name, type, config) {
+    const identifiers = this.availableVariablesTypes.get(type);
+    if (identifiers) {
+      const variableFactory = this.resolveIdentifier(identifiers.Variable);
+      const variable = variableFactory(name, config);
+      const scope = config.scope || "global";
+      const scopeKey = config.pageId && scope === "page" ? `${scope}-${config.pageId}` : scope;
+      if (!this.availableVariablesByScope.has(scopeKey)) {
+        this.availableVariablesByScope.set(scopeKey, /* @__PURE__ */ new Map());
+      }
+      this.availableVariablesByScope.get(scopeKey).set(name, variable);
+      if (!config.scope || config.scope === "global") {
+        this.availableVariables.set(name, variable);
+      }
     }
   }
-  getVariable(e) {
-    for (const [t, a] of this.availableVariablesByScope.entries())
-      if (a.has(e))
-        return a.get(e);
-    if (this.availableVariables.has(e))
-      return this.availableVariables.get(e);
-  }
-  getVariableWithContext(e, t) {
-    if (t) {
-      const i = `page-${t}`, s = this.availableVariablesByScope.get(i);
-      if (s && s.has(e))
-        return s.get(e);
+  getVariable(name) {
+    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
+      if (scopeMap.has(name)) {
+        return scopeMap.get(name);
+      }
     }
-    const a = this.availableVariablesByScope.get("global");
-    return a && a.has(e) ? a.get(e) : this.availableVariables.get(e);
-  }
-  getVariableById(e) {
-    for (const t of this.availableVariablesByScope.values())
-      for (const a of t.values())
-        if (a.id === e)
-          return a;
-    for (const t of this.availableVariables.values())
-      if (t.id === e)
-        return t;
-  }
-  removeVariable(e) {
-    let t = this.getVariableById(e), a = e;
-    if (t) {
-      a = t.name;
-      const i = t.scope || "global", s = t.pageId && i === "page" ? `page-${t.pageId}` : i, r = this.availableVariablesByScope.get(s);
-      r && r.delete(a);
+    if (this.availableVariables.has(name)) {
+      return this.availableVariables.get(name);
     }
-    this.availableVariables.has(a) && this.availableVariables.delete(a);
+    return void 0;
+  }
+  getVariableWithContext(name, pageId) {
+    if (pageId) {
+      const pageScopeKey = `page-${pageId}`;
+      const pageScope = this.availableVariablesByScope.get(pageScopeKey);
+      if (pageScope && pageScope.has(name)) {
+        return pageScope.get(name);
+      }
+    }
+    const globalScope = this.availableVariablesByScope.get("global");
+    if (globalScope && globalScope.has(name)) {
+      return globalScope.get(name);
+    }
+    return this.availableVariables.get(name);
+  }
+  getVariableById(id) {
+    for (const scopeMap of this.availableVariablesByScope.values()) {
+      for (const variable of scopeMap.values()) {
+        if (variable.id === id) {
+          return variable;
+        }
+      }
+    }
+    for (const variable of this.availableVariables.values()) {
+      if (variable.id === id) {
+        return variable;
+      }
+    }
+    return void 0;
+  }
+  removeVariable(nameOrId) {
+    let variableToRemove = this.getVariableById(nameOrId);
+    let nameToRemove = nameOrId;
+    if (variableToRemove) {
+      nameToRemove = variableToRemove.name;
+      const scope = variableToRemove.scope || "global";
+      const scopeKey = variableToRemove.pageId && scope === "page" ? `page-${variableToRemove.pageId}` : scope;
+      const scopeMap = this.availableVariablesByScope.get(scopeKey);
+      if (scopeMap) {
+        scopeMap.delete(nameToRemove);
+      }
+    }
+    if (this.availableVariables.has(nameToRemove)) {
+      this.availableVariables.delete(nameToRemove);
+    }
   }
   getAllVariables() {
-    const e = /* @__PURE__ */ new Map();
-    for (const [t, a] of this.availableVariablesByScope.entries())
-      for (const [i, s] of a)
-        e.set(s.id, [s.name, s]);
-    for (const [t, a] of this.availableVariables)
-      a.id && !e.has(a.id) && e.set(a.id, [t, a]);
-    return Array.from(e.values());
+    const allVariables = /* @__PURE__ */ new Map();
+    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
+      for (const [name, variable] of scopeMap) {
+        allVariables.set(variable.id, [variable.name, variable]);
+      }
+    }
+    for (const [name, variable] of this.availableVariables) {
+      if (variable.id && !allVariables.has(variable.id)) {
+        allVariables.set(variable.id, [name, variable]);
+      }
+    }
+    return Array.from(allVariables.values());
   }
-  renameVariable(e, t) {
-    let a = null, i = null;
-    for (const [s, r] of this.availableVariablesByScope.entries())
-      if (r.has(t)) {
-        a = r.get(t), i = s;
+  renameVariable(newname, oldname) {
+    let avar = null;
+    let foundScopeKey = null;
+    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
+      if (scopeMap.has(oldname)) {
+        avar = scopeMap.get(oldname);
+        foundScopeKey = scopeKey;
         break;
       }
-    if (a || (a = this.availableVariables.get(t), a && (i = "old-system")), a && i) {
-      if (i !== "old-system") {
-        const s = this.availableVariablesByScope.get(i);
-        s && (s.set(e, a), s.delete(t));
+    }
+    if (!avar) {
+      avar = this.availableVariables.get(oldname);
+      if (avar) {
+        foundScopeKey = "old-system";
       }
-      this.availableVariables.has(t) && (this.availableVariables.set(e, a), this.availableVariables.delete(t));
+    }
+    if (avar && foundScopeKey) {
+      if (foundScopeKey !== "old-system") {
+        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
+        if (scopeMap) {
+          scopeMap.set(newname, avar);
+          scopeMap.delete(oldname);
+        }
+      }
+      if (this.availableVariables.has(oldname)) {
+        this.availableVariables.set(newname, avar);
+        this.availableVariables.delete(oldname);
+      }
     }
   }
-  renameVariableById(e, t) {
-    let a = null, i = null, s = null;
-    for (const [r, n] of this.availableVariablesByScope.entries()) {
-      for (const [l, p] of n)
-        if (p.id === e) {
-          a = p, i = r, s = l;
+  renameVariableById(id, newname) {
+    let avar = null;
+    let foundScopeKey = null;
+    let oldname = null;
+    for (const [scopeKey, scopeMap] of this.availableVariablesByScope.entries()) {
+      for (const [name, variable] of scopeMap) {
+        if (variable.id === id) {
+          avar = variable;
+          foundScopeKey = scopeKey;
+          oldname = name;
           break;
         }
-      if (a) break;
+      }
+      if (avar) break;
     }
-    if (!a) {
-      for (const [r, n] of this.availableVariables)
-        if (n.id === e) {
-          a = n, i = "old-system", s = r;
+    if (!avar) {
+      for (const [name, variable] of this.availableVariables) {
+        if (variable.id === id) {
+          avar = variable;
+          foundScopeKey = "old-system";
+          oldname = name;
           break;
         }
-    }
-    if (a && i && s) {
-      if (i !== "old-system") {
-        const r = this.availableVariablesByScope.get(i);
-        r && (r.set(t, a), r.delete(s));
       }
-      this.availableVariables.has(s) && (this.availableVariables.set(t, a), this.availableVariables.delete(s));
+    }
+    if (avar && foundScopeKey && oldname) {
+      if (foundScopeKey !== "old-system") {
+        const scopeMap = this.availableVariablesByScope.get(foundScopeKey);
+        if (scopeMap) {
+          scopeMap.set(newname, avar);
+          scopeMap.delete(oldname);
+        }
+      }
+      if (this.availableVariables.has(oldname)) {
+        this.availableVariables.set(newname, avar);
+        this.availableVariables.delete(oldname);
+      }
     }
   }
-  getVariablesByScope(e, t) {
-    return Array.from(this.availableVariables).filter(([i, s]) => e === "global" ? s.scope === "global" : s.scope === "page" && s.pageId === t);
+  getVariablesByScope(scope, pageId) {
+    const allVars = Array.from(this.availableVariables);
+    return allVars.filter(([name, variable]) => {
+      if (scope === "global") {
+        return variable.scope === "global";
+      } else {
+        return variable.scope === "page" && variable.pageId === pageId;
+      }
+    });
   }
-  getVariableWithPageContext(e, t) {
-    const a = this.getVariablesByScope("page", e).find(([i]) => i === t);
-    return a ? a[1] : this.getVariable(t);
+  getVariableWithPageContext(pageId, name) {
+    const pageVar = this.getVariablesByScope("page", pageId).find(([varName]) => varName === name);
+    if (pageVar) {
+      return pageVar[1];
+    }
+    return this.getVariable(name);
   }
   /**
    * Sets or updates a global variable (Action method)
    */
-  setGlobalVariable(e, t) {
-    const a = this.getVariable(e);
-    a ? a.value = t : this.registerVariable(e, "constant", {
-      value: t,
-      scope: "global"
-    });
+  setGlobalVariable(variableName, value) {
+    const existingVar = this.getVariable(variableName);
+    if (existingVar) {
+      existingVar.value = value;
+    } else {
+      this.registerVariable(variableName, "constant", {
+        value,
+        scope: "global"
+      });
+    }
   }
   /**
    * Sets or updates a page-scoped variable (Action method)
    */
-  setPageVariable(e, t, a) {
-    const i = this.getVariableWithContext(e, a);
-    i && typeof i.set == "function" ? i.set(t) : i ? i.value = t : this.registerVariable(e, "constant", {
-      value: t,
-      scope: "page",
-      pageId: a
-    });
+  setPageVariable(variableName, value, pageId) {
+    const existingVar = this.getVariableWithContext(variableName, pageId);
+    if (existingVar && typeof existingVar.set === "function") {
+      existingVar.set(value);
+    } else if (existingVar) {
+      existingVar.value = value;
+    } else {
+      this.registerVariable(variableName, "constant", {
+        value,
+        scope: "page",
+        pageId
+      });
+    }
   }
 }
-const b = `<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (c) 2025 Contributors to the Eclipse Foundation.
-
-  This program and the accompanying materials are made
-  available under the terms of the Eclipse Public License 2.0
-  which is available at https://www.eclipse.org/legal/epl-2.0/
-
-  SPDX-License-Identifier: EPL-2.0
-
-  Contributors:
-    Smart City Jena
--->
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="variableactions" nsURI="http://org.eclipse.daanse.board.app.lib.repository.variable.actions"
-    nsPrefix="variableactions">
-
-  <!-- Reference to Events package -->
-  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="System-level variable actions"/>
-    </eAnnotations>
-
-    <eOperations name="setGlobalVariable">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Set or update a global variable"/>
-      </eAnnotations>
-      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
-        <details key="eventType" value="system.setGlobalVariable"/>
-      </eAnnotations>
-      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Name of the variable to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Value to set"/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-  </eClassifiers>
-
-  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Page-level variable actions"/>
-    </eAnnotations>
-
-    <eOperations name="setPageVariable">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Set or update a page-scoped variable"/>
-      </eAnnotations>
-      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
-        <details key="eventType" value="page.setPageVariable"/>
-      </eAnnotations>
-      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Name of the variable to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Value to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Optional page ID (defaults to current page)"/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-  </eClassifiers>
-</ecore:EPackage>`, m = y.createLogger("daanse:variable:actions");
-function w(o, e) {
-  o.registerActionsFromEcoreString(
+const VariableActionsModelContent = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n  Copyright (c) 2025 Contributors to the Eclipse Foundation.\n\n  This program and the accompanying materials are made\n  available under the terms of the Eclipse Public License 2.0\n  which is available at https://www.eclipse.org/legal/epl-2.0/\n\n  SPDX-License-Identifier: EPL-2.0\n\n  Contributors:\n    Smart City Jena\n-->\n<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="variableactions" nsURI="http://org.eclipse.daanse.board.app.lib.repository.variable.actions"\n    nsPrefix="variableactions">\n\n  <!-- Reference to Events package -->\n  <eClassifiers xsi:type="ecore:EClass" name="SystemVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="System-level variable actions"/>\n    </eAnnotations>\n\n    <eOperations name="setGlobalVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a global variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.setGlobalVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n\n  <eClassifiers xsi:type="ecore:EClass" name="PageVariableActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="Page-level variable actions"/>\n    </eAnnotations>\n\n    <eOperations name="setPageVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a page-scoped variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="page.setPageVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" lowerBound="0">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Optional page ID (defaults to current page)"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n</ecore:EPackage>';
+const log = loggerFactory.createLogger("daanse:variable:actions");
+function registerVariableActions(actionsRegistry, variableRepository) {
+  actionsRegistry.registerActionsFromEcoreString(
     "SystemVariableActions",
-    b,
+    VariableActionsModelContent,
     "system",
     "VariableActions.ecore"
-  ), o.registerActionsFromEcoreString(
+  );
+  actionsRegistry.registerActionsFromEcoreString(
     "PageVariableActions",
-    b,
+    VariableActionsModelContent,
     "page",
     "VariableActions.ecore"
-  ), o.registerInstance("VariableRepository", e), m("Variable actions registered");
-}
-function v({ services: o }) {
-  const e = new f(
-    o,
-    o.get(u)
   );
-  o.register(c, e), w(
-    o.getRequired(h),
-    e
+  actionsRegistry.registerInstance("VariableRepository", variableRepository);
+  log("Variable actions registered");
+}
+function activate$1({ services }) {
+  const repository = new VariableRepository(
+    services,
+    services.get(TINY_EMITTER)
+  );
+  services.register(VARIABLE_REPOSITORY, repository);
+  registerVariableActions(
+    services.getRequired(EVENT_ACTIONS_REGISTRY_ID),
+    repository
   );
 }
-function d({ services: o }) {
-  o.unregister(c);
+function deactivate$1({ services }) {
+  services.unregister(VARIABLE_REPOSITORY);
 }
-const A = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  VARIABLE_REPOSITORY: c,
-  VariableRepository: f,
-  activate: v,
-  deactivate: d,
-  identifier: V
-}, Symbol.toStringTag, { value: "Module" })), g = "org.eclipse.daanse.board.app.lib.repository.variable", S = "0.0.1-next.1";
-async function M(o) {
-  const e = globalThis.__tsm__;
-  if (!e)
-    throw new Error(`${g}: tsm runtime is not initialized`);
-  e.register(g, A, S, "lib.repository.variable"), await v?.(o);
+  VARIABLE_REPOSITORY,
+  VariableRepository,
+  activate: activate$1,
+  deactivate: deactivate$1,
+  identifier
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.repository.variable";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.repository.variable");
+  await activate$1?.(context);
 }
-async function P(o) {
-  await d?.(o);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  R as VARIABLE_REPOSITORY,
-  f as VariableRepository,
-  M as activate,
-  P as deactivate,
-  _ as identifier
+  VARIABLE_REPOSITORY2 as VARIABLE_REPOSITORY,
+  VariableRepository,
+  activate,
+  deactivate,
+  identifier2 as identifier
 };

@@ -1,95 +1,126 @@
-import { Documentation as yt, Attribute as Et, ModelClass as Ct } from "org.eclipse.daanse.board.app.lib.annotations";
-import { EVENT_REGISTRY_ID as Tt, EVENT_ACTIONS_REGISTRY_ID as St, EVENT_MANAGER_ID as Lt, EVENT_BUS_BRIDGE_ID as jt, ECORE_METADATA_SERVICE_ID as $t } from "org.eclipse.daanse.board.app.lib.api.events";
-import { EVENT_ACTIONS_REGISTRY_ID as ci, EVENT_REGISTRY_ID as ui } from "org.eclipse.daanse.board.app.lib.api.events";
-import { loggerFactory as Nt } from "org.eclipse.daanse.board.app.lib.logger";
-import { injectable as Ts, inject as ft } from "@eclipse-daanse/tsm";
-const { TINY_EMITTER: Hs } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var Vs = Object.defineProperty, Js = Object.getOwnPropertyDescriptor, ut = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? Js(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = (s ? a(e, t, r) : a(r)) || r);
-  return s && r && Vs(e, t, r), r;
+import { Documentation, Attribute, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
+import { EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID, EVENT_MANAGER_ID, EVENT_BUS_BRIDGE_ID, ECORE_METADATA_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.events";
+import { EVENT_ACTIONS_REGISTRY_ID as EVENT_ACTIONS_REGISTRY_ID2, EVENT_REGISTRY_ID as EVENT_REGISTRY_ID2 } from "org.eclipse.daanse.board.app.lib.api.events";
+import { loggerFactory } from "org.eclipse.daanse.board.app.lib.logger";
+import { injectable, inject } from "@eclipse-daanse/tsm";
+const { TINY_EMITTER } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
+var __decorateClass$5 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result) __defProp(target, key, result);
+  return result;
 };
-let qe = class {
+let Payload = class {
 };
-ut([
-  yt("Type of the event (e.g., 'click_on_thing', 'click_on_datastream')."),
-  Et()
-], qe.prototype, "eventType", 2);
-ut([
-  yt("ID of the widget that emitted this event."),
-  Et()
-], qe.prototype, "widgetId", 2);
-ut([
-  yt("Unix timestamp when the event was emitted."),
-  Et()
-], qe.prototype, "timestamp", 2);
-ut([
-  yt("Optional metadata object for additional context."),
-  Et()
-], qe.prototype, "metadata", 2);
-qe = ut([
-  Ct({ type: "http://org.eclipse.daanse.board.app.lib.events#//Payload" })
-], qe);
-var Qs = Object.getOwnPropertyDescriptor, Zs = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? Qs(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = a(r) || r);
-  return r;
+__decorateClass$5([
+  Documentation("Type of the event (e.g., 'click_on_thing', 'click_on_datastream')."),
+  Attribute()
+], Payload.prototype, "eventType", 2);
+__decorateClass$5([
+  Documentation("ID of the widget that emitted this event."),
+  Attribute()
+], Payload.prototype, "widgetId", 2);
+__decorateClass$5([
+  Documentation("Unix timestamp when the event was emitted."),
+  Attribute()
+], Payload.prototype, "timestamp", 2);
+__decorateClass$5([
+  Documentation("Optional metadata object for additional context."),
+  Attribute()
+], Payload.prototype, "metadata", 2);
+Payload = __decorateClass$5([
+  Documentation("Abstract base class for all event payloads."),
+  ModelClass({ type: "http://org.eclipse.daanse.board.app.lib.events#//Payload" })
+], Payload);
+var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
+var __decorateClass$4 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(result) || result;
+  return result;
 };
-let ot = class {
+let WidgetActionInterface = class {
 };
-ot = Zs([
-  Ct({ type: "http://org.eclipse.daanse.board.app.lib.events#//WidgetActionInterface" })
-], ot);
-var er = Object.getOwnPropertyDescriptor, tr = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? er(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = a(r) || r);
-  return r;
+WidgetActionInterface = __decorateClass$4([
+  Documentation("Abstract base class for all widget action interfaces. Widget-specific action interfaces should extend this class."),
+  ModelClass({ type: "http://org.eclipse.daanse.board.app.lib.events#//WidgetActionInterface" })
+], WidgetActionInterface);
+var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
+var __decorateClass$3 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(result) || result;
+  return result;
 };
-let Ft = class extends ot {
+let SystemActionInterface = class extends WidgetActionInterface {
 };
-Ft = tr([
-  Ct({ type: "http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface" })
-], Ft);
-var sr = Object.getOwnPropertyDescriptor, rr = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? sr(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = a(r) || r);
-  return r;
+SystemActionInterface = __decorateClass$3([
+  Documentation("Abstract base class for all system-level action interfaces. System-specific action interfaces should extend this class."),
+  ModelClass({ type: "http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface" })
+], SystemActionInterface);
+var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
+var __decorateClass$2 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(result) || result;
+  return result;
 };
-let kt = class extends ot {
+let PageActionInterface = class extends WidgetActionInterface {
 };
-kt = rr([
-  Ct({ type: "http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface" })
-], kt);
-var Me = /* @__PURE__ */ ((l) => (l.eq = "eq", l.lt = "lt", l.gt = "gt", l.lte = "lte", l.gte = "gte", l.neq = "neq", l))(Me || {});
-class nr {
+PageActionInterface = __decorateClass$2([
+  Documentation("Abstract base class for all page-level action interfaces. Page-specific action interfaces should extend this class."),
+  ModelClass({ type: "http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface" })
+], PageActionInterface);
+var Comperator = /* @__PURE__ */ ((Comperator2) => {
+  Comperator2["eq"] = "eq";
+  Comperator2["lt"] = "lt";
+  Comperator2["gt"] = "gt";
+  Comperator2["lte"] = "lte";
+  Comperator2["gte"] = "gte";
+  Comperator2["neq"] = "neq";
+  return Comperator2;
+})(Comperator || {});
+class Condition {
   constructor() {
-    this.comperator = Me.eq;
+    this.comperator = Comperator.eq;
   }
 }
-var Vt = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function ir(l) {
-  return l && l.__esModule && Object.prototype.hasOwnProperty.call(l, "default") ? l.default : l;
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
-function ar(l) {
-  if (Object.prototype.hasOwnProperty.call(l, "__esModule")) return l;
-  var e = l.default;
-  if (typeof e == "function") {
-    var t = function s() {
-      return this instanceof s ? Reflect.construct(e, arguments, this.constructor) : e.apply(this, arguments);
+function getAugmentedNamespace(n) {
+  if (Object.prototype.hasOwnProperty.call(n, "__esModule")) return n;
+  var f = n.default;
+  if (typeof f == "function") {
+    var a = function a2() {
+      if (this instanceof a2) {
+        return Reflect.construct(f, arguments, this.constructor);
+      }
+      return f.apply(this, arguments);
     };
-    t.prototype = e.prototype;
-  } else t = {};
-  return Object.defineProperty(t, "__esModule", { value: !0 }), Object.keys(l).forEach(function(s) {
-    var r = Object.getOwnPropertyDescriptor(l, s);
-    Object.defineProperty(t, s, r.get ? r : {
-      enumerable: !0,
+    a.prototype = f.prototype;
+  } else a = {};
+  Object.defineProperty(a, "__esModule", { value: true });
+  Object.keys(n).forEach(function(k) {
+    var d = Object.getOwnPropertyDescriptor(n, k);
+    Object.defineProperty(a, k, d.get ? d : {
+      enumerable: true,
       get: function() {
-        return l[s];
+        return n[k];
       }
     });
-  }), t;
+  });
+  return a;
 }
-var Jt = {};
+var _Reflect = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -104,239 +135,306 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var Qt;
-function or() {
-  if (Qt) return Jt;
-  Qt = 1;
-  var l;
-  return (function(e) {
-    (function(t) {
-      var s = typeof globalThis == "object" ? globalThis : typeof Vt == "object" ? Vt : typeof self == "object" ? self : typeof this == "object" ? this : d(), r = n(e);
-      typeof s.Reflect < "u" && (r = n(s.Reflect, r)), t(r, s), typeof s.Reflect > "u" && (s.Reflect = e);
-      function n(y, S) {
-        return function(C, A) {
-          Object.defineProperty(y, C, { configurable: !0, writable: !0, value: A }), S && S(C, A);
+var hasRequired_Reflect;
+function require_Reflect() {
+  if (hasRequired_Reflect) return _Reflect;
+  hasRequired_Reflect = 1;
+  var Reflect2;
+  (function(Reflect3) {
+    (function(factory) {
+      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
+      var exporter = makeExporter(Reflect3);
+      if (typeof root.Reflect !== "undefined") {
+        exporter = makeExporter(root.Reflect, exporter);
+      }
+      factory(exporter, root);
+      if (typeof root.Reflect === "undefined") {
+        root.Reflect = Reflect3;
+      }
+      function makeExporter(target, previous) {
+        return function(key, value) {
+          Object.defineProperty(target, key, { configurable: true, writable: true, value });
+          if (previous)
+            previous(key, value);
         };
       }
-      function a() {
+      function functionThis() {
         try {
           return Function("return this;")();
-        } catch {
+        } catch (_) {
         }
       }
-      function o() {
+      function indirectEvalThis() {
         try {
-          return (0, eval)("(function() { return this; })()");
-        } catch {
+          return (void 0, eval)("(function() { return this; })()");
+        } catch (_) {
         }
       }
-      function d() {
-        return a() || o();
+      function sloppyModeThis() {
+        return functionThis() || indirectEvalThis();
       }
-    })(function(t, s) {
-      var r = Object.prototype.hasOwnProperty, n = typeof Symbol == "function", a = n && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", o = n && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", d = typeof Object.create == "function", y = { __proto__: [] } instanceof Array, S = !d && !y, C = {
+    })(function(exporter, root) {
+      var hasOwn = Object.prototype.hasOwnProperty;
+      var supportsSymbol = typeof Symbol === "function";
+      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
+      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
+      var supportsCreate = typeof Object.create === "function";
+      var supportsProto = { __proto__: [] } instanceof Array;
+      var downLevel = !supportsCreate && !supportsProto;
+      var HashMap = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: d ? function() {
-          return E(/* @__PURE__ */ Object.create(null));
-        } : y ? function() {
-          return E({ __proto__: null });
+        create: supportsCreate ? function() {
+          return MakeDictionary(/* @__PURE__ */ Object.create(null));
+        } : supportsProto ? function() {
+          return MakeDictionary({ __proto__: null });
         } : function() {
-          return E({});
+          return MakeDictionary({});
         },
-        has: S ? function(f, m) {
-          return r.call(f, m);
-        } : function(f, m) {
-          return m in f;
+        has: downLevel ? function(map, key) {
+          return hasOwn.call(map, key);
+        } : function(map, key) {
+          return key in map;
         },
-        get: S ? function(f, m) {
-          return r.call(f, m) ? f[m] : void 0;
-        } : function(f, m) {
-          return f[m];
+        get: downLevel ? function(map, key) {
+          return hasOwn.call(map, key) ? map[key] : void 0;
+        } : function(map, key) {
+          return map[key];
         }
-      }, A = Object.getPrototypeOf(Function), b = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : i(), R = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : c(), M = typeof WeakMap == "function" ? WeakMap : p(), U = n ? Symbol.for("@reflect-metadata:registry") : void 0, _ = wt(), x = Fe(_);
-      function D(f, m, w, v) {
-        if (G(w)) {
-          if (!Z(f))
+      };
+      var functionPrototype = Object.getPrototypeOf(Function);
+      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
+      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
+      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
+      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
+      var metadataRegistry = GetOrCreateMetadataRegistry();
+      var metadataProvider = CreateMetadataProvider(metadataRegistry);
+      function decorate(decorators, target, propertyKey, attributes) {
+        if (!IsUndefined(propertyKey)) {
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!ue(m))
+          if (!IsObject(target))
             throw new TypeError();
-          return Be(f, m);
+          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
+            throw new TypeError();
+          if (IsNull(attributes))
+            attributes = void 0;
+          propertyKey = ToPropertyKey(propertyKey);
+          return DecorateProperty(decorators, target, propertyKey, attributes);
         } else {
-          if (!Z(f))
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!ae(m))
+          if (!IsConstructor(target))
             throw new TypeError();
-          if (!ae(v) && !G(v) && !Ne(v))
-            throw new TypeError();
-          return Ne(v) && (v = void 0), w = q(w), Xe(f, m, w, v);
+          return DecorateConstructor(decorators, target);
         }
       }
-      t("decorate", D);
-      function $(f, m) {
-        function w(v, P) {
-          if (!ae(v))
+      exporter("decorate", decorate);
+      function metadata(metadataKey, metadataValue) {
+        function decorator(target, propertyKey) {
+          if (!IsObject(target))
             throw new TypeError();
-          if (!G(P) && !de(P))
+          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
             throw new TypeError();
-          Ue(f, m, v, P);
+          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
         }
-        return w;
+        return decorator;
       }
-      t("metadata", $);
-      function L(f, m, w, v) {
-        if (!ae(w))
+      exporter("metadata", metadata);
+      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(v) || (v = q(v)), Ue(f, m, w, v);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
       }
-      t("defineMetadata", L);
-      function Ee(f, m, w) {
-        if (!ae(m))
+      exporter("defineMetadata", defineMetadata);
+      function hasMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(w) || (w = q(w)), Ae(f, m, w);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
       }
-      t("hasMetadata", Ee);
-      function fe(f, m, w) {
-        if (!ae(m))
+      exporter("hasMetadata", hasMetadata);
+      function hasOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(w) || (w = q(w)), Oe(f, m, w);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
       }
-      t("hasOwnMetadata", fe);
-      function Pe(f, m, w) {
-        if (!ae(m))
+      exporter("hasOwnMetadata", hasOwnMetadata);
+      function getMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(w) || (w = q(w)), V(f, m, w);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
       }
-      t("getMetadata", Pe);
-      function N(f, m, w) {
-        if (!ae(m))
+      exporter("getMetadata", getMetadata);
+      function getOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(w) || (w = q(w)), ze(f, m, w);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
       }
-      t("getOwnMetadata", N);
-      function Ye(f, m) {
-        if (!ae(f))
+      exporter("getOwnMetadata", getOwnMetadata);
+      function getMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(m) || (m = q(m)), Le(f, m);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryMetadataKeys(target, propertyKey);
       }
-      t("getMetadataKeys", Ye);
-      function ke(f, m) {
-        if (!ae(f))
+      exporter("getMetadataKeys", getMetadataKeys);
+      function getOwnMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return G(m) || (m = q(m)), Q(f, m);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryOwnMetadataKeys(target, propertyKey);
       }
-      t("getOwnMetadataKeys", ke);
-      function ie(f, m, w) {
-        if (!ae(m))
+      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
+      function deleteMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        if (G(w) || (w = q(w)), !ae(m))
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        if (!IsObject(target))
           throw new TypeError();
-        G(w) || (w = q(w));
-        var v = h(
-          m,
-          w,
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        var provider = GetMetadataProvider(
+          target,
+          propertyKey,
           /*Create*/
-          !1
+          false
         );
-        return G(v) ? !1 : v.OrdinaryDeleteMetadata(f, m, w);
+        if (IsUndefined(provider))
+          return false;
+        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
       }
-      t("deleteMetadata", ie);
-      function Be(f, m) {
-        for (var w = f.length - 1; w >= 0; --w) {
-          var v = f[w], P = v(m);
-          if (!G(P) && !Ne(P)) {
-            if (!ue(P))
+      exporter("deleteMetadata", deleteMetadata);
+      function DecorateConstructor(decorators, target) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsConstructor(decorated))
               throw new TypeError();
-            m = P;
+            target = decorated;
           }
         }
-        return m;
+        return target;
       }
-      function Xe(f, m, w, v) {
-        for (var P = f.length - 1; P >= 0; --P) {
-          var X = f[P], W = X(m, w, v);
-          if (!G(W) && !Ne(W)) {
-            if (!ae(W))
+      function DecorateProperty(decorators, target, propertyKey, descriptor) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target, propertyKey, descriptor);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsObject(decorated))
               throw new TypeError();
-            v = W;
+            descriptor = decorated;
           }
         }
-        return v;
+        return descriptor;
       }
-      function Ae(f, m, w) {
-        var v = Oe(f, m, w);
-        if (v)
-          return !0;
-        var P = me(m);
-        return Ne(P) ? !1 : Ae(f, P, w);
+      function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return true;
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryHasMetadata(MetadataKey, parent, P);
+        return false;
       }
-      function Oe(f, m, w) {
-        var v = h(
-          m,
-          w,
+      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        return G(v) ? !1 : I(v.OrdinaryHasOwnMetadata(f, m, w));
+        if (IsUndefined(provider))
+          return false;
+        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
       }
-      function V(f, m, w) {
-        var v = Oe(f, m, w);
-        if (v)
-          return ze(f, m, w);
-        var P = me(m);
-        if (!Ne(P))
-          return V(f, P, w);
+      function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryGetMetadata(MetadataKey, parent, P);
+        return void 0;
       }
-      function ze(f, m, w) {
-        var v = h(
-          m,
-          w,
+      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        if (!G(v))
-          return v.OrdinaryGetOwnMetadata(f, m, w);
+        if (IsUndefined(provider))
+          return;
+        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
       }
-      function Ue(f, m, w, v) {
-        var P = h(
-          w,
-          v,
+      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !0
+          true
         );
-        P.OrdinaryDefineOwnMetadata(f, m, w, v);
+        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
       }
-      function Le(f, m) {
-        var w = Q(f, m), v = me(f);
-        if (v === null)
-          return w;
-        var P = Le(v, m);
-        if (P.length <= 0)
-          return w;
-        if (w.length <= 0)
-          return P;
-        for (var X = new R(), W = [], z = 0, F = w; z < F.length; z++) {
-          var k = F[z], B = X.has(k);
-          B || (X.add(k), W.push(k));
+      function OrdinaryMetadataKeys(O, P) {
+        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (parent === null)
+          return ownKeys;
+        var parentKeys = OrdinaryMetadataKeys(parent, P);
+        if (parentKeys.length <= 0)
+          return ownKeys;
+        if (ownKeys.length <= 0)
+          return parentKeys;
+        var set = new _Set();
+        var keys = [];
+        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
+          var key = ownKeys_1[_i];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        for (var O = 0, K = P; O < K.length; O++) {
-          var k = K[O], B = X.has(k);
-          B || (X.add(k), W.push(k));
+        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
+          var key = parentKeys_1[_a];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        return W;
+        return keys;
       }
-      function Q(f, m) {
-        var w = h(
-          f,
-          m,
+      function OrdinaryOwnMetadataKeys(O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*create*/
-          !1
+          false
         );
-        return w ? w.OrdinaryOwnMetadataKeys(f, m) : [];
+        if (!provider) {
+          return [];
+        }
+        return provider.OrdinaryOwnMetadataKeys(O, P);
       }
-      function ge(f) {
-        if (f === null)
+      function Type(x) {
+        if (x === null)
           return 1;
-        switch (typeof f) {
+        switch (typeof x) {
           case "undefined":
             return 0;
           case "boolean":
@@ -348,585 +446,787 @@ function or() {
           case "number":
             return 5;
           case "object":
-            return f === null ? 1 : 6;
+            return x === null ? 1 : 6;
           default:
             return 6;
         }
       }
-      function G(f) {
-        return f === void 0;
+      function IsUndefined(x) {
+        return x === void 0;
       }
-      function Ne(f) {
-        return f === null;
+      function IsNull(x) {
+        return x === null;
       }
-      function je(f) {
-        return typeof f == "symbol";
+      function IsSymbol(x) {
+        return typeof x === "symbol";
       }
-      function ae(f) {
-        return typeof f == "object" ? f !== null : typeof f == "function";
+      function IsObject(x) {
+        return typeof x === "object" ? x !== null : typeof x === "function";
       }
-      function g(f, m) {
-        switch (ge(f)) {
+      function ToPrimitive(input, PreferredType) {
+        switch (Type(input)) {
           case 0:
-            return f;
+            return input;
           case 1:
-            return f;
+            return input;
           case 2:
-            return f;
+            return input;
           case 3:
-            return f;
+            return input;
           case 4:
-            return f;
+            return input;
           case 5:
-            return f;
+            return input;
         }
-        var w = "string", v = oe(f, a);
-        if (v !== void 0) {
-          var P = v.call(f, w);
-          if (ae(P))
+        var hint = "string";
+        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
+        if (exoticToPrim !== void 0) {
+          var result = exoticToPrim.call(input, hint);
+          if (IsObject(result))
             throw new TypeError();
-          return P;
+          return result;
         }
-        return u(f);
+        return OrdinaryToPrimitive(input);
       }
-      function u(f, m) {
-        var w, v, P;
+      function OrdinaryToPrimitive(O, hint) {
+        var valueOf, result, toString_2;
         {
-          var X = f.toString;
-          if (J(X)) {
-            var v = X.call(f);
-            if (!ae(v))
-              return v;
+          var toString_1 = O.toString;
+          if (IsCallable(toString_1)) {
+            var result = toString_1.call(O);
+            if (!IsObject(result))
+              return result;
           }
-          var w = f.valueOf;
-          if (J(w)) {
-            var v = w.call(f);
-            if (!ae(v))
-              return v;
+          var valueOf = O.valueOf;
+          if (IsCallable(valueOf)) {
+            var result = valueOf.call(O);
+            if (!IsObject(result))
+              return result;
           }
         }
         throw new TypeError();
       }
-      function I(f) {
-        return !!f;
+      function ToBoolean(argument) {
+        return !!argument;
       }
-      function T(f) {
-        return "" + f;
+      function ToString(argument) {
+        return "" + argument;
       }
-      function q(f) {
-        var m = g(f);
-        return je(m) ? m : T(m);
+      function ToPropertyKey(argument) {
+        var key = ToPrimitive(argument);
+        if (IsSymbol(key))
+          return key;
+        return ToString(key);
       }
-      function Z(f) {
-        return Array.isArray ? Array.isArray(f) : f instanceof Object ? f instanceof Array : Object.prototype.toString.call(f) === "[object Array]";
+      function IsArray(argument) {
+        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
       }
-      function J(f) {
-        return typeof f == "function";
+      function IsCallable(argument) {
+        return typeof argument === "function";
       }
-      function ue(f) {
-        return typeof f == "function";
+      function IsConstructor(argument) {
+        return typeof argument === "function";
       }
-      function de(f) {
-        switch (ge(f)) {
+      function IsPropertyKey(argument) {
+        switch (Type(argument)) {
           case 3:
-            return !0;
+            return true;
           case 4:
-            return !0;
+            return true;
           default:
-            return !1;
+            return false;
         }
       }
-      function _e(f, m) {
-        return f === m || f !== f && m !== m;
+      function SameValueZero(x, y) {
+        return x === y || x !== x && y !== y;
       }
-      function oe(f, m) {
-        var w = f[m];
-        if (w != null) {
-          if (!J(w))
-            throw new TypeError();
-          return w;
+      function GetMethod(V, P) {
+        var func = V[P];
+        if (func === void 0 || func === null)
+          return void 0;
+        if (!IsCallable(func))
+          throw new TypeError();
+        return func;
+      }
+      function GetIterator(obj) {
+        var method = GetMethod(obj, iteratorSymbol);
+        if (!IsCallable(method))
+          throw new TypeError();
+        var iterator = method.call(obj);
+        if (!IsObject(iterator))
+          throw new TypeError();
+        return iterator;
+      }
+      function IteratorValue(iterResult) {
+        return iterResult.value;
+      }
+      function IteratorStep(iterator) {
+        var result = iterator.next();
+        return result.done ? false : result;
+      }
+      function IteratorClose(iterator) {
+        var f = iterator["return"];
+        if (f)
+          f.call(iterator);
+      }
+      function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
+          return proto;
+        if (proto !== functionPrototype)
+          return proto;
+        var prototype = O.prototype;
+        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
+        if (prototypeProto == null || prototypeProto === Object.prototype)
+          return proto;
+        var constructor = prototypeProto.constructor;
+        if (typeof constructor !== "function")
+          return proto;
+        if (constructor === O)
+          return proto;
+        return constructor;
+      }
+      function CreateMetadataRegistry() {
+        var fallback;
+        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
+          fallback = CreateFallbackProvider(root.Reflect);
         }
-      }
-      function Te(f) {
-        var m = oe(f, o);
-        if (!J(m))
-          throw new TypeError();
-        var w = m.call(f);
-        if (!ae(w))
-          throw new TypeError();
-        return w;
-      }
-      function Ke(f) {
-        return f.value;
-      }
-      function $e(f) {
-        var m = f.next();
-        return m.done ? !1 : m;
-      }
-      function be(f) {
-        var m = f.return;
-        m && m.call(f);
-      }
-      function me(f) {
-        var m = Object.getPrototypeOf(f);
-        if (typeof f != "function" || f === A || m !== A)
-          return m;
-        var w = f.prototype, v = w && Object.getPrototypeOf(w);
-        if (v == null || v === Object.prototype)
-          return m;
-        var P = v.constructor;
-        return typeof P != "function" || P === f ? m : P;
-      }
-      function tt() {
-        var f;
-        !G(U) && typeof s.Reflect < "u" && !(U in s.Reflect) && typeof s.Reflect.defineMetadata == "function" && (f = It(s.Reflect));
-        var m, w, v, P = new M(), X = {
-          registerProvider: W,
-          getProvider: F,
-          setProvider: B
+        var first;
+        var second;
+        var rest;
+        var targetProviderMap = new _WeakMap();
+        var registry = {
+          registerProvider,
+          getProvider,
+          setProvider
         };
-        return X;
-        function W(O) {
-          if (!Object.isExtensible(X))
+        return registry;
+        function registerProvider(provider) {
+          if (!Object.isExtensible(registry)) {
             throw new Error("Cannot add provider to a frozen registry.");
-          switch (!0) {
-            case f === O:
+          }
+          switch (true) {
+            case fallback === provider:
               break;
-            case G(m):
-              m = O;
+            case IsUndefined(first):
+              first = provider;
               break;
-            case m === O:
+            case first === provider:
               break;
-            case G(w):
-              w = O;
+            case IsUndefined(second):
+              second = provider;
               break;
-            case w === O:
+            case second === provider:
               break;
             default:
-              v === void 0 && (v = new R()), v.add(O);
+              if (rest === void 0)
+                rest = new _Set();
+              rest.add(provider);
               break;
           }
         }
-        function z(O, K) {
-          if (!G(m)) {
-            if (m.isProviderFor(O, K))
-              return m;
-            if (!G(w)) {
-              if (w.isProviderFor(O, K))
-                return m;
-              if (!G(v))
-                for (var se = Te(v); ; ) {
-                  var pe = $e(se);
-                  if (!pe)
-                    return;
-                  var ve = Ke(pe);
-                  if (ve.isProviderFor(O, K))
-                    return be(se), ve;
+        function getProviderNoCache(O, P) {
+          if (!IsUndefined(first)) {
+            if (first.isProviderFor(O, P))
+              return first;
+            if (!IsUndefined(second)) {
+              if (second.isProviderFor(O, P))
+                return first;
+              if (!IsUndefined(rest)) {
+                var iterator = GetIterator(rest);
+                while (true) {
+                  var next = IteratorStep(iterator);
+                  if (!next) {
+                    return void 0;
+                  }
+                  var provider = IteratorValue(next);
+                  if (provider.isProviderFor(O, P)) {
+                    IteratorClose(iterator);
+                    return provider;
+                  }
                 }
-            }
-          }
-          if (!G(f) && f.isProviderFor(O, K))
-            return f;
-        }
-        function F(O, K) {
-          var se = P.get(O), pe;
-          return G(se) || (pe = se.get(K)), G(pe) && (pe = z(O, K), G(pe) || (G(se) && (se = new b(), P.set(O, se)), se.set(K, pe))), pe;
-        }
-        function k(O) {
-          if (G(O))
-            throw new TypeError();
-          return m === O || w === O || !G(v) && v.has(O);
-        }
-        function B(O, K, se) {
-          if (!k(se))
-            throw new Error("Metadata provider not registered.");
-          var pe = F(O, K);
-          if (pe !== se) {
-            if (!G(pe))
-              return !1;
-            var ve = P.get(O);
-            G(ve) && (ve = new b(), P.set(O, ve)), ve.set(K, se);
-          }
-          return !0;
-        }
-      }
-      function wt() {
-        var f;
-        return !G(U) && ae(s.Reflect) && Object.isExtensible(s.Reflect) && (f = s.Reflect[U]), G(f) && (f = tt()), !G(U) && ae(s.Reflect) && Object.isExtensible(s.Reflect) && Object.defineProperty(s.Reflect, U, {
-          enumerable: !1,
-          configurable: !1,
-          writable: !1,
-          value: f
-        }), f;
-      }
-      function Fe(f) {
-        var m = new M(), w = {
-          isProviderFor: function(k, B) {
-            var O = m.get(k);
-            return G(O) ? !1 : O.has(B);
-          },
-          OrdinaryDefineOwnMetadata: W,
-          OrdinaryHasOwnMetadata: P,
-          OrdinaryGetOwnMetadata: X,
-          OrdinaryOwnMetadataKeys: z,
-          OrdinaryDeleteMetadata: F
-        };
-        return _.registerProvider(w), w;
-        function v(k, B, O) {
-          var K = m.get(k), se = !1;
-          if (G(K)) {
-            if (!O)
-              return;
-            K = new b(), m.set(k, K), se = !0;
-          }
-          var pe = K.get(B);
-          if (G(pe)) {
-            if (!O)
-              return;
-            if (pe = new b(), K.set(B, pe), !f.setProvider(k, B, w))
-              throw K.delete(B), se && m.delete(k), new Error("Wrong provider for target.");
-          }
-          return pe;
-        }
-        function P(k, B, O) {
-          var K = v(
-            B,
-            O,
-            /*Create*/
-            !1
-          );
-          return G(K) ? !1 : I(K.has(k));
-        }
-        function X(k, B, O) {
-          var K = v(
-            B,
-            O,
-            /*Create*/
-            !1
-          );
-          if (!G(K))
-            return K.get(k);
-        }
-        function W(k, B, O, K) {
-          var se = v(
-            O,
-            K,
-            /*Create*/
-            !0
-          );
-          se.set(k, B);
-        }
-        function z(k, B) {
-          var O = [], K = v(
-            k,
-            B,
-            /*Create*/
-            !1
-          );
-          if (G(K))
-            return O;
-          for (var se = K.keys(), pe = Te(se), ve = 0; ; ) {
-            var Ht = $e(pe);
-            if (!Ht)
-              return O.length = ve, O;
-            var zs = Ke(Ht);
-            try {
-              O[ve] = zs;
-            } catch (Ks) {
-              try {
-                be(pe);
-              } finally {
-                throw Ks;
               }
             }
-            ve++;
           }
+          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
+            return fallback;
+          }
+          return void 0;
         }
-        function F(k, B, O) {
-          var K = v(
-            B,
-            O,
-            /*Create*/
-            !1
-          );
-          if (G(K) || !K.delete(k))
-            return !1;
-          if (K.size === 0) {
-            var se = m.get(B);
-            G(se) || (se.delete(O), se.size === 0 && m.delete(se));
+        function getProvider(O, P) {
+          var providerMap = targetProviderMap.get(O);
+          var provider;
+          if (!IsUndefined(providerMap)) {
+            provider = providerMap.get(P);
           }
-          return !0;
+          if (!IsUndefined(provider)) {
+            return provider;
+          }
+          provider = getProviderNoCache(O, P);
+          if (!IsUndefined(provider)) {
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return provider;
+        }
+        function hasProvider(provider) {
+          if (IsUndefined(provider))
+            throw new TypeError();
+          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
+        }
+        function setProvider(O, P, provider) {
+          if (!hasProvider(provider)) {
+            throw new Error("Metadata provider not registered.");
+          }
+          var existingProvider = getProvider(O, P);
+          if (existingProvider !== provider) {
+            if (!IsUndefined(existingProvider)) {
+              return false;
+            }
+            var providerMap = targetProviderMap.get(O);
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return true;
         }
       }
-      function It(f) {
-        var m = f.defineMetadata, w = f.hasOwnMetadata, v = f.getOwnMetadata, P = f.getOwnMetadataKeys, X = f.deleteMetadata, W = new M(), z = {
-          isProviderFor: function(F, k) {
-            var B = W.get(F);
-            return !G(B) && B.has(k) ? !0 : P(F, k).length ? (G(B) && (B = new R(), W.set(F, B)), B.add(k), !0) : !1;
+      function GetOrCreateMetadataRegistry() {
+        var metadataRegistry2;
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          metadataRegistry2 = root.Reflect[registrySymbol];
+        }
+        if (IsUndefined(metadataRegistry2)) {
+          metadataRegistry2 = CreateMetadataRegistry();
+        }
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          Object.defineProperty(root.Reflect, registrySymbol, {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: metadataRegistry2
+          });
+        }
+        return metadataRegistry2;
+      }
+      function CreateMetadataProvider(registry) {
+        var metadata2 = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var targetMetadata = metadata2.get(O);
+            if (IsUndefined(targetMetadata))
+              return false;
+            return targetMetadata.has(P);
           },
-          OrdinaryDefineOwnMetadata: m,
-          OrdinaryHasOwnMetadata: w,
-          OrdinaryGetOwnMetadata: v,
-          OrdinaryOwnMetadataKeys: P,
-          OrdinaryDeleteMetadata: X
+          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
+          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
+          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
+          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
+          OrdinaryDeleteMetadata
         };
-        return z;
+        metadataRegistry.registerProvider(provider);
+        return provider;
+        function GetOrCreateMetadataMap(O, P, Create) {
+          var targetMetadata = metadata2.get(O);
+          var createdTargetMetadata = false;
+          if (IsUndefined(targetMetadata)) {
+            if (!Create)
+              return void 0;
+            targetMetadata = new _Map();
+            metadata2.set(O, targetMetadata);
+            createdTargetMetadata = true;
+          }
+          var metadataMap = targetMetadata.get(P);
+          if (IsUndefined(metadataMap)) {
+            if (!Create)
+              return void 0;
+            metadataMap = new _Map();
+            targetMetadata.set(P, metadataMap);
+            if (!registry.setProvider(O, P, provider)) {
+              targetMetadata.delete(P);
+              if (createdTargetMetadata) {
+                metadata2.delete(O);
+              }
+              throw new Error("Wrong provider for target.");
+            }
+          }
+          return metadataMap;
+        }
+        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          return ToBoolean(metadataMap.has(MetadataKey));
+        }
+        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return void 0;
+          return metadataMap.get(MetadataKey);
+        }
+        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            true
+          );
+          metadataMap.set(MetadataKey, MetadataValue);
+        }
+        function OrdinaryOwnMetadataKeys2(O, P) {
+          var keys = [];
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return keys;
+          var keysObj = metadataMap.keys();
+          var iterator = GetIterator(keysObj);
+          var k = 0;
+          while (true) {
+            var next = IteratorStep(iterator);
+            if (!next) {
+              keys.length = k;
+              return keys;
+            }
+            var nextValue = IteratorValue(next);
+            try {
+              keys[k] = nextValue;
+            } catch (e) {
+              try {
+                IteratorClose(iterator);
+              } finally {
+                throw e;
+              }
+            }
+            k++;
+          }
+        }
+        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          if (!metadataMap.delete(MetadataKey))
+            return false;
+          if (metadataMap.size === 0) {
+            var targetMetadata = metadata2.get(O);
+            if (!IsUndefined(targetMetadata)) {
+              targetMetadata.delete(P);
+              if (targetMetadata.size === 0) {
+                metadata2.delete(targetMetadata);
+              }
+            }
+          }
+          return true;
+        }
       }
-      function h(f, m, w) {
-        var v = _.getProvider(f, m);
-        if (!G(v))
-          return v;
-        if (w) {
-          if (_.setProvider(f, m, x))
-            return x;
+      function CreateFallbackProvider(reflect) {
+        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
+        var metadataOwner = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var metadataPropertySet = metadataOwner.get(O);
+            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
+              return true;
+            }
+            if (getOwnMetadataKeys2(O, P).length) {
+              if (IsUndefined(metadataPropertySet)) {
+                metadataPropertySet = new _Set();
+                metadataOwner.set(O, metadataPropertySet);
+              }
+              metadataPropertySet.add(P);
+              return true;
+            }
+            return false;
+          },
+          OrdinaryDefineOwnMetadata: defineMetadata2,
+          OrdinaryHasOwnMetadata: hasOwnMetadata2,
+          OrdinaryGetOwnMetadata: getOwnMetadata2,
+          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
+          OrdinaryDeleteMetadata: deleteMetadata2
+        };
+        return provider;
+      }
+      function GetMetadataProvider(O, P, Create) {
+        var registeredProvider = metadataRegistry.getProvider(O, P);
+        if (!IsUndefined(registeredProvider)) {
+          return registeredProvider;
+        }
+        if (Create) {
+          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
+            return metadataProvider;
+          }
           throw new Error("Illegal state.");
         }
+        return void 0;
       }
-      function i() {
-        var f = {}, m = [], w = (
+      function CreateMapPolyfill() {
+        var cacheSentinel = {};
+        var arraySentinel = [];
+        var MapIterator = (
           /** @class */
           (function() {
-            function z(F, k, B) {
-              this._index = 0, this._keys = F, this._values = k, this._selector = B;
+            function MapIterator2(keys, values, selector) {
+              this._index = 0;
+              this._keys = keys;
+              this._values = values;
+              this._selector = selector;
             }
-            return z.prototype["@@iterator"] = function() {
+            MapIterator2.prototype["@@iterator"] = function() {
               return this;
-            }, z.prototype[o] = function() {
+            };
+            MapIterator2.prototype[iteratorSymbol] = function() {
               return this;
-            }, z.prototype.next = function() {
-              var F = this._index;
-              if (F >= 0 && F < this._keys.length) {
-                var k = this._selector(this._keys[F], this._values[F]);
-                return F + 1 >= this._keys.length ? (this._index = -1, this._keys = m, this._values = m) : this._index++, { value: k, done: !1 };
+            };
+            MapIterator2.prototype.next = function() {
+              var index = this._index;
+              if (index >= 0 && index < this._keys.length) {
+                var result = this._selector(this._keys[index], this._values[index]);
+                if (index + 1 >= this._keys.length) {
+                  this._index = -1;
+                  this._keys = arraySentinel;
+                  this._values = arraySentinel;
+                } else {
+                  this._index++;
+                }
+                return { value: result, done: false };
               }
-              return { value: void 0, done: !0 };
-            }, z.prototype.throw = function(F) {
-              throw this._index >= 0 && (this._index = -1, this._keys = m, this._values = m), F;
-            }, z.prototype.return = function(F) {
-              return this._index >= 0 && (this._index = -1, this._keys = m, this._values = m), { value: F, done: !0 };
-            }, z;
+              return { value: void 0, done: true };
+            };
+            MapIterator2.prototype.throw = function(error) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              throw error;
+            };
+            MapIterator2.prototype.return = function(value) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              return { value, done: true };
+            };
+            return MapIterator2;
           })()
-        ), v = (
+        );
+        var Map2 = (
           /** @class */
           (function() {
-            function z() {
-              this._keys = [], this._values = [], this._cacheKey = f, this._cacheIndex = -2;
+            function Map3() {
+              this._keys = [];
+              this._values = [];
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
             }
-            return Object.defineProperty(z.prototype, "size", {
+            Object.defineProperty(Map3.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
-              enumerable: !0,
-              configurable: !0
-            }), z.prototype.has = function(F) {
+              enumerable: true,
+              configurable: true
+            });
+            Map3.prototype.has = function(key) {
               return this._find(
-                F,
+                key,
                 /*insert*/
-                !1
+                false
               ) >= 0;
-            }, z.prototype.get = function(F) {
-              var k = this._find(
-                F,
+            };
+            Map3.prototype.get = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              return k >= 0 ? this._values[k] : void 0;
-            }, z.prototype.set = function(F, k) {
-              var B = this._find(
-                F,
+              return index >= 0 ? this._values[index] : void 0;
+            };
+            Map3.prototype.set = function(key, value) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !0
+                true
               );
-              return this._values[B] = k, this;
-            }, z.prototype.delete = function(F) {
-              var k = this._find(
-                F,
+              this._values[index] = value;
+              return this;
+            };
+            Map3.prototype.delete = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              if (k >= 0) {
-                for (var B = this._keys.length, O = k + 1; O < B; O++)
-                  this._keys[O - 1] = this._keys[O], this._values[O - 1] = this._values[O];
-                return this._keys.length--, this._values.length--, _e(F, this._cacheKey) && (this._cacheKey = f, this._cacheIndex = -2), !0;
+              if (index >= 0) {
+                var size = this._keys.length;
+                for (var i = index + 1; i < size; i++) {
+                  this._keys[i - 1] = this._keys[i];
+                  this._values[i - 1] = this._values[i];
+                }
+                this._keys.length--;
+                this._values.length--;
+                if (SameValueZero(key, this._cacheKey)) {
+                  this._cacheKey = cacheSentinel;
+                  this._cacheIndex = -2;
+                }
+                return true;
               }
-              return !1;
-            }, z.prototype.clear = function() {
-              this._keys.length = 0, this._values.length = 0, this._cacheKey = f, this._cacheIndex = -2;
-            }, z.prototype.keys = function() {
-              return new w(this._keys, this._values, P);
-            }, z.prototype.values = function() {
-              return new w(this._keys, this._values, X);
-            }, z.prototype.entries = function() {
-              return new w(this._keys, this._values, W);
-            }, z.prototype["@@iterator"] = function() {
+              return false;
+            };
+            Map3.prototype.clear = function() {
+              this._keys.length = 0;
+              this._values.length = 0;
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
+            };
+            Map3.prototype.keys = function() {
+              return new MapIterator(this._keys, this._values, getKey);
+            };
+            Map3.prototype.values = function() {
+              return new MapIterator(this._keys, this._values, getValue);
+            };
+            Map3.prototype.entries = function() {
+              return new MapIterator(this._keys, this._values, getEntry);
+            };
+            Map3.prototype["@@iterator"] = function() {
               return this.entries();
-            }, z.prototype[o] = function() {
+            };
+            Map3.prototype[iteratorSymbol] = function() {
               return this.entries();
-            }, z.prototype._find = function(F, k) {
-              if (!_e(this._cacheKey, F)) {
+            };
+            Map3.prototype._find = function(key, insert) {
+              if (!SameValueZero(this._cacheKey, key)) {
                 this._cacheIndex = -1;
-                for (var B = 0; B < this._keys.length; B++)
-                  if (_e(this._keys[B], F)) {
-                    this._cacheIndex = B;
+                for (var i = 0; i < this._keys.length; i++) {
+                  if (SameValueZero(this._keys[i], key)) {
+                    this._cacheIndex = i;
                     break;
                   }
+                }
               }
-              return this._cacheIndex < 0 && k && (this._cacheIndex = this._keys.length, this._keys.push(F), this._values.push(void 0)), this._cacheIndex;
-            }, z;
+              if (this._cacheIndex < 0 && insert) {
+                this._cacheIndex = this._keys.length;
+                this._keys.push(key);
+                this._values.push(void 0);
+              }
+              return this._cacheIndex;
+            };
+            return Map3;
           })()
         );
-        return v;
-        function P(z, F) {
-          return z;
+        return Map2;
+        function getKey(key, _) {
+          return key;
         }
-        function X(z, F) {
-          return F;
+        function getValue(_, value) {
+          return value;
         }
-        function W(z, F) {
-          return [z, F];
+        function getEntry(key, value) {
+          return [key, value];
         }
       }
-      function c() {
-        var f = (
+      function CreateSetPolyfill() {
+        var Set2 = (
           /** @class */
           (function() {
-            function m() {
-              this._map = new b();
+            function Set3() {
+              this._map = new _Map();
             }
-            return Object.defineProperty(m.prototype, "size", {
+            Object.defineProperty(Set3.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
-              enumerable: !0,
-              configurable: !0
-            }), m.prototype.has = function(w) {
-              return this._map.has(w);
-            }, m.prototype.add = function(w) {
-              return this._map.set(w, w), this;
-            }, m.prototype.delete = function(w) {
-              return this._map.delete(w);
-            }, m.prototype.clear = function() {
+              enumerable: true,
+              configurable: true
+            });
+            Set3.prototype.has = function(value) {
+              return this._map.has(value);
+            };
+            Set3.prototype.add = function(value) {
+              return this._map.set(value, value), this;
+            };
+            Set3.prototype.delete = function(value) {
+              return this._map.delete(value);
+            };
+            Set3.prototype.clear = function() {
               this._map.clear();
-            }, m.prototype.keys = function() {
+            };
+            Set3.prototype.keys = function() {
               return this._map.keys();
-            }, m.prototype.values = function() {
+            };
+            Set3.prototype.values = function() {
               return this._map.keys();
-            }, m.prototype.entries = function() {
+            };
+            Set3.prototype.entries = function() {
               return this._map.entries();
-            }, m.prototype["@@iterator"] = function() {
+            };
+            Set3.prototype["@@iterator"] = function() {
               return this.keys();
-            }, m.prototype[o] = function() {
+            };
+            Set3.prototype[iteratorSymbol] = function() {
               return this.keys();
-            }, m;
+            };
+            return Set3;
           })()
         );
-        return f;
+        return Set2;
       }
-      function p() {
-        var f = 16, m = C.create(), w = v();
+      function CreateWeakMapPolyfill() {
+        var UUID_SIZE = 16;
+        var keys = HashMap.create();
+        var rootKey = CreateUniqueKey();
         return (
           /** @class */
           (function() {
-            function F() {
-              this._key = v();
+            function WeakMap2() {
+              this._key = CreateUniqueKey();
             }
-            return F.prototype.has = function(k) {
-              var B = P(
-                k,
+            WeakMap2.prototype.has = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return B !== void 0 ? C.has(B, this._key) : !1;
-            }, F.prototype.get = function(k) {
-              var B = P(
-                k,
+              return table !== void 0 ? HashMap.has(table, this._key) : false;
+            };
+            WeakMap2.prototype.get = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return B !== void 0 ? C.get(B, this._key) : void 0;
-            }, F.prototype.set = function(k, B) {
-              var O = P(
-                k,
+              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
+            };
+            WeakMap2.prototype.set = function(target, value) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !0
+                true
               );
-              return O[this._key] = B, this;
-            }, F.prototype.delete = function(k) {
-              var B = P(
-                k,
+              table[this._key] = value;
+              return this;
+            };
+            WeakMap2.prototype.delete = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return B !== void 0 ? delete B[this._key] : !1;
-            }, F.prototype.clear = function() {
-              this._key = v();
-            }, F;
+              return table !== void 0 ? delete table[this._key] : false;
+            };
+            WeakMap2.prototype.clear = function() {
+              this._key = CreateUniqueKey();
+            };
+            return WeakMap2;
           })()
         );
-        function v() {
-          var F;
+        function CreateUniqueKey() {
+          var key;
           do
-            F = "@@WeakMap@@" + z();
-          while (C.has(m, F));
-          return m[F] = !0, F;
+            key = "@@WeakMap@@" + CreateUUID();
+          while (HashMap.has(keys, key));
+          keys[key] = true;
+          return key;
         }
-        function P(F, k) {
-          if (!r.call(F, w)) {
-            if (!k)
-              return;
-            Object.defineProperty(F, w, { value: C.create() });
+        function GetOrCreateWeakMapTable(target, create) {
+          if (!hasOwn.call(target, rootKey)) {
+            if (!create)
+              return void 0;
+            Object.defineProperty(target, rootKey, { value: HashMap.create() });
           }
-          return F[w];
+          return target[rootKey];
         }
-        function X(F, k) {
-          for (var B = 0; B < k; ++B)
-            F[B] = Math.random() * 255 | 0;
-          return F;
+        function FillRandomBytes(buffer, size) {
+          for (var i = 0; i < size; ++i)
+            buffer[i] = Math.random() * 255 | 0;
+          return buffer;
         }
-        function W(F) {
-          if (typeof Uint8Array == "function") {
-            var k = new Uint8Array(F);
-            return typeof crypto < "u" ? crypto.getRandomValues(k) : typeof msCrypto < "u" ? msCrypto.getRandomValues(k) : X(k, F), k;
+        function GenRandomBytes(size) {
+          if (typeof Uint8Array === "function") {
+            var array = new Uint8Array(size);
+            if (typeof crypto !== "undefined") {
+              crypto.getRandomValues(array);
+            } else if (typeof msCrypto !== "undefined") {
+              msCrypto.getRandomValues(array);
+            } else {
+              FillRandomBytes(array, size);
+            }
+            return array;
           }
-          return X(new Array(F), F);
+          return FillRandomBytes(new Array(size), size);
         }
-        function z() {
-          var F = W(f);
-          F[6] = F[6] & 79 | 64, F[8] = F[8] & 191 | 128;
-          for (var k = "", B = 0; B < f; ++B) {
-            var O = F[B];
-            (B === 4 || B === 6 || B === 8) && (k += "-"), O < 16 && (k += "0"), k += O.toString(16).toLowerCase();
+        function CreateUUID() {
+          var data = GenRandomBytes(UUID_SIZE);
+          data[6] = data[6] & 79 | 64;
+          data[8] = data[8] & 191 | 128;
+          var result = "";
+          for (var offset = 0; offset < UUID_SIZE; ++offset) {
+            var byte = data[offset];
+            if (offset === 4 || offset === 6 || offset === 8)
+              result += "-";
+            if (byte < 16)
+              result += "0";
+            result += byte.toString(16).toLowerCase();
           }
-          return k;
+          return result;
         }
       }
-      function E(f) {
-        return f.__ = void 0, delete f.__, f;
+      function MakeDictionary(obj) {
+        obj.__ = void 0;
+        delete obj.__;
+        return obj;
       }
     });
-  })(l || (l = {})), Jt;
+  })(Reflect2 || (Reflect2 = {}));
+  return _Reflect;
 }
-or();
-class Ss {
+require_Reflect();
+class EventRegistry {
   constructor() {
-    this.events = /* @__PURE__ */ new Map(), this.widgetTypeMap = /* @__PURE__ */ new Map();
+    this.events = /* @__PURE__ */ new Map();
+    this.widgetTypeMap = /* @__PURE__ */ new Map();
   }
   // EcoreMetadataService instance
   /**
    * Set EcoreMetadataService instance for Ecore-based metadata extraction
    */
-  setEcoreMetadataService(e) {
-    this.ecoreMetadataService = e;
+  setEcoreMetadataService(service) {
+    this.ecoreMetadataService = service;
   }
   /**
    * Registriert alle Events eines Widgets
    */
-  registerWidget(e, t) {
-    for (const s of t) {
-      const r = `${e}:${s.type}`;
-      this.widgetTypeMap.set(r, e), this.events.set(r, {
-        ...s,
-        type: r
+  registerWidget(widgetType, events) {
+    for (const event of events) {
+      const key = `${widgetType}:${event.type}`;
+      this.widgetTypeMap.set(key, widgetType);
+      this.events.set(key, {
+        ...event,
+        type: key
         // z.B. "MapWidget:click_on_datastream"
       });
     }
@@ -940,60 +1240,75 @@ class Ss {
   /**
    * Gibt ein Event zurück
    */
-  getEvent(e, t) {
-    return this.events.get(`${e}:${t}`);
+  getEvent(widgetType, eventType) {
+    return this.events.get(`${widgetType}:${eventType}`);
   }
   /**
    * Gibt alle Events für einen Widget-Typ zurück
    */
-  getWidgetEvents(e) {
-    return Array.from(this.events.entries()).filter(([t]) => t.startsWith(`${e}:`)).map(([, t]) => t);
+  getWidgetEvents(widgetType) {
+    return Array.from(this.events.entries()).filter(([key]) => key.startsWith(`${widgetType}:`)).map(([, event]) => event);
   }
   /**
    * Extrahiert alle Metadaten aus einem Payload-Typ
    */
-  extractPayloadMetadata(e) {
-    const t = e.prototype ?? e, s = {}, r = Reflect.getMetadataKeys(t);
-    s.__class = r.map((o) => ({
-      key: o,
-      value: Reflect.getMetadata(o, t)
+  extractPayloadMetadata(target) {
+    const proto = target.prototype ?? target;
+    const result = {};
+    const ownKeys = Reflect.getMetadataKeys(proto);
+    result["__class"] = ownKeys.map((key) => ({
+      key,
+      value: Reflect.getMetadata(key, proto)
     }));
-    const n = Object.getOwnPropertyNames(t), a = new Set(n);
+    const protoPropertyNames = Object.getOwnPropertyNames(proto);
+    const propertyNamesSet = new Set(protoPropertyNames);
     try {
-      const o = new e();
-      Object.keys(o).forEach((d) => a.add(d));
-    } catch {
+      const instance = new target();
+      Object.keys(instance).forEach((key) => propertyNamesSet.add(key));
+    } catch (e) {
     }
-    for (const o of a) {
-      if (o === "constructor") continue;
-      const d = Reflect.getMetadataKeys(t, o);
-      d.length !== 0 && (s[o] = d.map((y) => ({
-        key: y,
-        value: Reflect.getMetadata(y, t, o)
-      })));
+    for (const property of propertyNamesSet) {
+      if (property === "constructor") continue;
+      const metaKeys = Reflect.getMetadataKeys(proto, property);
+      if (metaKeys.length === 0) continue;
+      result[property] = metaKeys.map((key) => ({
+        key,
+        value: Reflect.getMetadata(key, proto, property)
+      }));
     }
-    return s;
+    return result;
   }
   /**
    * Extract payload properties with type information from Ecore model
    * Falls back to decorator-based extraction if Ecore model is not available
    */
-  extractPayloadPropertiesForEvent(e) {
-    const t = this.widgetTypeMap.get(e);
-    if (!t || !this.ecoreMetadataService)
-      return console.warn(`No widget type or EcoreMetadataService for event: ${e}`), [];
-    const s = this.events.get(e);
-    if (!s || !s.payloadType)
-      return console.warn(`No event or payload type found for: ${e}`), [];
-    const r = s.payloadType.name, n = this.ecoreMetadataService.extractPayloadMetadata(t, r);
-    return n && n.properties ? (console.log(`✅ Extracted ${n.properties.length} properties from Ecore model for ${r}`), n.properties) : (console.warn(`No Ecore metadata found for ${r}, returning empty array`), []);
+  extractPayloadPropertiesForEvent(eventType) {
+    const widgetType = this.widgetTypeMap.get(eventType);
+    if (!widgetType || !this.ecoreMetadataService) {
+      console.warn(`No widget type or EcoreMetadataService for event: ${eventType}`);
+      return [];
+    }
+    const event = this.events.get(eventType);
+    if (!event || !event.payloadType) {
+      console.warn(`No event or payload type found for: ${eventType}`);
+      return [];
+    }
+    const payloadClassName = event.payloadType.name;
+    const ecoreMetadata = this.ecoreMetadataService.extractPayloadMetadata(widgetType, payloadClassName);
+    if (ecoreMetadata && ecoreMetadata.properties) {
+      console.log(`✅ Extracted ${ecoreMetadata.properties.length} properties from Ecore model for ${payloadClassName}`);
+      return ecoreMetadata.properties;
+    }
+    console.warn(`No Ecore metadata found for ${payloadClassName}, returning empty array`);
+    return [];
   }
   /**
    * Extract payload properties with type information (legacy method for backward compatibility)
    * @deprecated Use extractPayloadPropertiesForEvent instead
    */
-  extractPayloadProperties(e) {
-    return console.warn("extractPayloadProperties() called - this method is deprecated, use extractPayloadPropertiesForEvent() instead"), [];
+  extractPayloadProperties(target) {
+    console.warn("extractPayloadProperties() called - this method is deprecated, use extractPayloadPropertiesForEvent() instead");
+    return [];
   }
   /**
    * Löscht alle registrierten Events
@@ -1004,154 +1319,204 @@ class Ss {
   /**
    * Entfernt alle Events eines Widget-Typs
    */
-  unregisterWidget(e) {
-    const t = [];
-    for (const s of this.events.keys())
-      s.startsWith(`${e}:`) && t.push(s);
-    for (const s of t)
-      this.events.delete(s);
+  unregisterWidget(widgetType) {
+    const keysToDelete = [];
+    for (const key of this.events.keys()) {
+      if (key.startsWith(`${widgetType}:`)) {
+        keysToDelete.push(key);
+      }
+    }
+    for (const key of keysToDelete) {
+      this.events.delete(key);
+    }
   }
 }
-const Ns = Symbol.for(Tt), Ve = Nt.createLogger("daanse:events:decorator"), Bt = Symbol.for("daanse:widgetAction"), Mt = Symbol.for("daanse:actionParameter");
-function cr(l) {
-  return function(e, t, s) {
-    const r = Reflect.getMetadata(Bt, e.constructor) || [], n = Reflect.getMetadata("design:paramtypes", e, t) || [];
-    let a = l.parameters;
-    if (!a && s.value) {
-      const d = s.value.toString().match(/\(([^)]*)\)/);
-      d && d[1].trim() && (a = d[1].split(",").map((S) => S.trim()).map((S, C) => {
-        const A = S.match(/^(\w+)(\?)?:\s*(\w+)/);
-        if (A) {
-          const [, R, M, U] = A;
-          return `${R}${M || ""}: ${U}`;
-        }
-        const b = n[C]?.name || "any";
-        return `${S}: ${b}`;
-      }));
+const EVENT_REGISTRY = Symbol.for(EVENT_REGISTRY_ID);
+const log$2 = loggerFactory.createLogger("daanse:events:decorator");
+const WIDGET_ACTION_METADATA_KEY = Symbol.for("daanse:widgetAction");
+const ACTION_PARAMETER_METADATA_KEY = Symbol.for("daanse:actionParameter");
+function WidgetAction(metadata) {
+  return function(target, propertyKey, descriptor) {
+    const existingMetadata = Reflect.getMetadata(WIDGET_ACTION_METADATA_KEY, target.constructor) || [];
+    const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+    let parameters = metadata.parameters;
+    if (!parameters && descriptor.value) {
+      const funcStr = descriptor.value.toString();
+      const paramMatch = funcStr.match(/\(([^)]*)\)/);
+      if (paramMatch && paramMatch[1].trim()) {
+        const paramNames = paramMatch[1].split(",").map((p) => p.trim());
+        parameters = paramNames.map((paramName, index) => {
+          const nameMatch = paramName.match(/^(\w+)(\?)?:\s*(\w+)/);
+          if (nameMatch) {
+            const [, name, optional, type] = nameMatch;
+            return `${name}${optional || ""}: ${type}`;
+          }
+          const typeName = paramTypes[index]?.name || "any";
+          return `${paramName}: ${typeName}`;
+        });
+      }
     }
-    return Reflect.defineMetadata(
-      Bt,
+    Reflect.defineMetadata(
+      WIDGET_ACTION_METADATA_KEY,
       [
-        ...r,
+        ...existingMetadata,
         {
-          methodName: t,
-          ...l,
-          parameters: a
+          methodName: propertyKey,
+          ...metadata,
+          parameters
         }
       ],
-      e.constructor
-    ), s;
+      target.constructor
+    );
+    return descriptor;
   };
 }
-function ur(l) {
-  return function(e, t, s) {
-    const r = String(t), n = Reflect.getMetadata(Mt, e, r) || [], o = (Reflect.getMetadata("design:paramtypes", e, r) || [])[s];
-    let d = l?.name, y = l?.type, S = l?.optional;
-    if (!d || !y) {
-      const A = Object.getOwnPropertyDescriptor(e, r)?.value || e[r];
-      if (A) {
-        const R = A.toString().replace(/\s+/g, " ").match(/^[^(]*\(([^)]*)\)/);
-        if (R && R[1].trim()) {
-          const U = R[1].split(",").map((_) => _.replace(/\/\*.*\*\//, "").trim()).filter((_) => _.length > 0 && !_.startsWith("@"))[s];
-          if (U) {
-            const _ = U.match(/^(\w+)(\?)?(?::\s*(.+?))?(?:\s*=|$)/);
-            _ && (d || (d = _[1]), S || (S = !!_[2]), !y && _[3] && (y = _[3].trim()));
+function ActionParameter(metadata) {
+  return function(target, propertyKey, parameterIndex) {
+    const key = String(propertyKey);
+    const existingParams = Reflect.getMetadata(ACTION_PARAMETER_METADATA_KEY, target, key) || [];
+    const paramTypes = Reflect.getMetadata("design:paramtypes", target, key) || [];
+    const paramType = paramTypes[parameterIndex];
+    let paramName = metadata?.name;
+    let paramTypeStr = metadata?.type;
+    let isOptional = metadata?.optional;
+    if (!paramName || !paramTypeStr) {
+      const func = Object.getOwnPropertyDescriptor(target, key)?.value || target[key];
+      if (func) {
+        const fnStr = func.toString().replace(/\s+/g, " ");
+        const paramMatch = fnStr.match(/^[^(]*\(([^)]*)\)/);
+        if (paramMatch && paramMatch[1].trim()) {
+          const params = paramMatch[1].split(",").map((p) => p.replace(/\/\*.*\*\//, "").trim()).filter((p) => p.length > 0 && !p.startsWith("@"));
+          const param = params[parameterIndex];
+          if (param) {
+            const match = param.match(/^(\w+)(\?)?(?::\s*(.+?))?(?:\s*=|$)/);
+            if (match) {
+              if (!paramName) paramName = match[1];
+              if (!isOptional) isOptional = !!match[2];
+              if (!paramTypeStr && match[3]) paramTypeStr = match[3].trim();
+            }
           }
         }
       }
     }
-    let C = y;
-    !C && o && (C = {
-      String: "string",
-      Number: "number",
-      Boolean: "boolean",
-      Array: "Array<any>",
-      Object: "object"
-    }[o.name] || o.name || "any"), n.push({
-      index: s,
-      name: d || `arg${s}`,
-      type: C || "any",
-      optional: S
-    }), Reflect.defineMetadata(Mt, n, e, r), Ve(
+    let finalType = paramTypeStr;
+    if (!finalType && paramType) {
+      const typeMap = {
+        "String": "string",
+        "Number": "number",
+        "Boolean": "boolean",
+        "Array": "Array<any>",
+        "Object": "object"
+      };
+      finalType = typeMap[paramType.name] || paramType.name || "any";
+    }
+    existingParams.push({
+      index: parameterIndex,
+      name: paramName || `arg${parameterIndex}`,
+      type: finalType || "any",
+      optional: isOptional
+    });
+    Reflect.defineMetadata(ACTION_PARAMETER_METADATA_KEY, existingParams, target, key);
+    log$2(
       "ActionParameter: %s[%d] = %s: %s%s",
-      r,
-      s,
-      d || `arg${s}`,
-      y || o?.name || "any",
-      S ? "?" : ""
+      key,
+      parameterIndex,
+      paramName || `arg${parameterIndex}`,
+      paramTypeStr || paramType?.name || "any",
+      isOptional ? "?" : ""
     );
   };
 }
-function _s(l) {
-  const e = typeof l == "function" ? l : l.constructor;
-  Ve("getWidgetActions called with target: %o", l), Ve("  constructor: %o", e), Ve("  constructor.name: %s", e?.name);
-  const t = Reflect.getMetadataKeys(e);
-  Ve("  All metadata keys: %o", t);
-  let s = Reflect.getMetadata(Bt, e) || [];
-  return s = s.map((r) => {
-    const n = Reflect.getMetadata(Mt, e.prototype, r.methodName) || [];
-    if (n.length > 0 && !r.parameters) {
-      const a = [...n].sort((o, d) => o.index - d.index);
-      r.parameters = a.map(
-        (o) => `${o.name}${o.optional ? "?" : ""}: ${o.type}`
+function getWidgetActions(target) {
+  const constructor = typeof target === "function" ? target : target.constructor;
+  log$2("getWidgetActions called with target: %o", target);
+  log$2("  constructor: %o", constructor);
+  log$2("  constructor.name: %s", constructor?.name);
+  const allKeys = Reflect.getMetadataKeys(constructor);
+  log$2("  All metadata keys: %o", allKeys);
+  let actions = Reflect.getMetadata(WIDGET_ACTION_METADATA_KEY, constructor) || [];
+  actions = actions.map((action) => {
+    const paramMetadata = Reflect.getMetadata(ACTION_PARAMETER_METADATA_KEY, constructor.prototype, action.methodName) || [];
+    if (paramMetadata.length > 0 && !action.parameters) {
+      const sortedParams = [...paramMetadata].sort((a, b) => a.index - b.index);
+      action.parameters = sortedParams.map(
+        (p) => `${p.name}${p.optional ? "?" : ""}: ${p.type}`
       );
     }
-    return r;
-  }), Ve("  Actions found: %o", s), s;
+    return action;
+  });
+  log$2("  Actions found: %o", actions);
+  return actions;
 }
-class ws {
+class EventActionsRegistry {
   constructor() {
-    this.actions = /* @__PURE__ */ new Map(), this.widgetTypes = /* @__PURE__ */ new Map(), this.widgetInstances = /* @__PURE__ */ new Map(), this.instanceTypes = /* @__PURE__ */ new Map(), this.instancePages = /* @__PURE__ */ new Map();
+    this.actions = /* @__PURE__ */ new Map();
+    this.widgetTypes = /* @__PURE__ */ new Map();
+    this.widgetInstances = /* @__PURE__ */ new Map();
+    this.instanceTypes = /* @__PURE__ */ new Map();
+    this.instancePages = /* @__PURE__ */ new Map();
   }
   /**
    * Erstellt einen eindeutigen Key für die Registry
    */
-  createKey(e, t, s) {
-    return s ? `${e}:${s}:${t}` : `${e}:${t}`;
+  createKey(context, eventType, contextId) {
+    if (contextId) {
+      return `${context}:${contextId}:${eventType}`;
+    }
+    return `${context}:${eventType}`;
   }
   /**
    * Registriert eine Aktion für ein Event in einem Kontext
    */
-  register(e, t, s, r) {
-    const n = this.createKey(e, t, r);
-    this.actions.has(n) || this.actions.set(n, []), this.actions.get(n).push({
-      context: e,
-      contextId: r,
-      eventType: t,
-      action: s
+  register(context, eventType, action, contextId) {
+    const key = this.createKey(context, eventType, contextId);
+    if (!this.actions.has(key)) {
+      this.actions.set(key, []);
+    }
+    this.actions.get(key).push({
+      context,
+      contextId,
+      eventType,
+      action
     });
   }
   /**
    * Entfernt alle Aktionen für einen bestimmten Kontext
    */
-  unregister(e, t, s) {
-    const r = this.createKey(e, t, s);
-    this.actions.delete(r);
+  unregister(context, eventType, contextId) {
+    const key = this.createKey(context, eventType, contextId);
+    this.actions.delete(key);
   }
   /**
    * Führt alle registrierten Aktionen für ein Event aus
    */
-  async execute(e, t, ...s) {
-    const r = this.createKey(e, t), n = this.actions.get(r) || [];
-    for (const a of n)
+  async execute(context, eventType, ...args) {
+    const key = this.createKey(context, eventType);
+    const actions = this.actions.get(key) || [];
+    for (const action of actions) {
       try {
-        await a.action(...s);
-      } catch (o) {
-        console.error(`Error executing action for ${r}:`, o);
+        await action.action(...args);
+      } catch (error) {
+        console.error(`Error executing action for ${key}:`, error);
       }
+    }
   }
   /**
    * Gibt alle Aktionen für einen Kontext zurück
    */
-  getActions(e, t, s) {
-    if (t) {
-      const a = this.createKey(e, t, s);
-      return this.actions.get(a) || [];
+  getActions(context, eventType, contextId) {
+    if (eventType) {
+      const key = this.createKey(context, eventType, contextId);
+      return this.actions.get(key) || [];
     }
-    const r = [], n = s ? `${e}:${s}:` : `${e}:`;
-    for (const [a, o] of this.actions.entries())
-      a.startsWith(n) && r.push(...o);
-    return r;
+    const result = [];
+    const prefix = contextId ? `${context}:${contextId}:` : `${context}:`;
+    for (const [key, actions] of this.actions.entries()) {
+      if (key.startsWith(prefix)) {
+        result.push(...actions);
+      }
+    }
+    return result;
   }
   /**
    * Löscht alle registrierten Aktionen
@@ -1162,19 +1527,26 @@ class ws {
   /**
    * Entfernt alle Aktionen für einen bestimmten Context-ID (z.B. beim Unmount eines Widgets)
    */
-  clearContext(e, t) {
-    const s = [], r = `${e}:${t}:`;
-    for (const n of this.actions.keys())
-      n.startsWith(r) && s.push(n);
-    for (const n of s)
-      this.actions.delete(n);
-    e === "widget" && this.widgetInstances.delete(t);
+  clearContext(context, contextId) {
+    const keysToDelete = [];
+    const prefix = `${context}:${contextId}:`;
+    for (const key of this.actions.keys()) {
+      if (key.startsWith(prefix)) {
+        keysToDelete.push(key);
+      }
+    }
+    for (const key of keysToDelete) {
+      this.actions.delete(key);
+    }
+    if (context === "widget") {
+      this.widgetInstances.delete(contextId);
+    }
   }
   /**
    * Set the EcoreMetadataService (injected manually to avoid circular dependency)
    */
-  setEcoreMetadataService(e) {
-    this.ecoreMetadataService = e;
+  setEcoreMetadataService(service) {
+    this.ecoreMetadataService = service;
   }
   /**
    * Registriert einen Widget-Typ mit seinen Actions (aus @WidgetAction Decorators)
@@ -1183,15 +1555,17 @@ class ws {
    * @param baseClass - Die abstrakte Basis-Klasse mit @WidgetAction Decorators
    * @param context - Optional: Kontext für diese Actions (default: 'widget')
    */
-  registerWidgetType(e, t, s) {
-    const r = _s(t);
-    this.widgetTypes.set(e, {
-      widgetType: e,
-      baseClass: t,
-      actions: r,
-      context: s || "widget"
-    }), console.log(`📝 Registered widget type "${e}" (context: ${s || "widget"}) with ${r.length} actions:`), r.forEach((n) => {
-      console.log(`  - ${n.methodName}(${n.parameters?.join(", ") || ""})`, n);
+  registerWidgetType(widgetType, baseClass, context) {
+    const actions = getWidgetActions(baseClass);
+    this.widgetTypes.set(widgetType, {
+      widgetType,
+      baseClass,
+      actions,
+      context: context || "widget"
+    });
+    console.log(`📝 Registered widget type "${widgetType}" (context: ${context || "widget"}) with ${actions.length} actions:`);
+    actions.forEach((action) => {
+      console.log(`  - ${action.methodName}(${action.parameters?.join(", ") || ""})`, action);
     });
   }
   /**
@@ -1203,8 +1577,8 @@ class ws {
    * @param widgetType - Widget type identifier
    * @returns ob der Typ registriert war
    */
-  unregisterWidgetType(e) {
-    return this.widgetTypes.delete(e);
+  unregisterWidgetType(widgetType) {
+    return this.widgetTypes.delete(widgetType);
   }
   /**
    * Registriert Actions aus einem Ecore-Modell
@@ -1212,38 +1586,43 @@ class ws {
    * @param ecoreUri - URI zum Ecore-Model (z.B. "model/model.ecore")
    * @param context - Kontext für diese Actions (default: 'widget')
    */
-  async registerActionsFromEcore(e, t, s) {
+  async registerActionsFromEcore(name, ecoreUri, context) {
     if (!this.ecoreMetadataService) {
       console.error("EcoreMetadataService not set. Cannot register actions from Ecore.");
       return;
     }
     try {
-      await this.ecoreMetadataService.loadModel(e, t);
-      const n = this.ecoreMetadataService.extractActions(e).map((a) => ({
-        methodName: a.methodName,
-        eventType: a.eventType,
-        parameters: a.parameters.map(
-          (o) => `${o.name}${o.optional ? "?" : ""}: ${o.type}`
+      await this.ecoreMetadataService.loadModel(name, ecoreUri);
+      const ecoreActions = this.ecoreMetadataService.extractActions(name);
+      const actions = ecoreActions.map((ecoreAction) => ({
+        methodName: ecoreAction.methodName,
+        eventType: ecoreAction.eventType,
+        parameters: ecoreAction.parameters.map(
+          (p) => `${p.name}${p.optional ? "?" : ""}: ${p.type}`
         )
       }));
-      this.widgetTypes.set(e, {
-        widgetType: e,
+      this.widgetTypes.set(name, {
+        widgetType: name,
         baseClass: null,
         // No base class for Ecore-based actions
-        actions: n,
-        context: s || "widget"
-      }), console.log(`📝 Registered actions "${e}" (context: ${s || "widget"}) from Ecore with ${n.length} actions:`), n.forEach((a) => {
-        console.log(`  - ${a.methodName}(${a.parameters?.join(", ") || ""})`, a);
+        actions,
+        context: context || "widget"
       });
-    } catch (r) {
-      throw console.error(`Failed to register actions "${e}" from Ecore:`, r), r;
+      console.log(`📝 Registered actions "${name}" (context: ${context || "widget"}) from Ecore with ${actions.length} actions:`);
+      actions.forEach((action) => {
+        console.log(`  - ${action.methodName}(${action.parameters?.join(", ") || ""})`, action);
+      });
+    } catch (error) {
+      console.error(`Failed to register actions "${name}" from Ecore:`, error);
+      throw error;
     }
   }
   /**
    * @deprecated Use registerActionsFromEcore instead
    */
-  async registerWidgetTypeFromEcore(e, t) {
-    return console.warn("registerWidgetTypeFromEcore is deprecated. Use registerActionsFromEcore instead."), this.registerActionsFromEcore(e, t, "widget");
+  async registerWidgetTypeFromEcore(widgetType, ecoreUri) {
+    console.warn("registerWidgetTypeFromEcore is deprecated. Use registerActionsFromEcore instead.");
+    return this.registerActionsFromEcore(widgetType, ecoreUri, "widget");
   }
   /**
    * Registriert Actions aus einem Ecore-Modell-String
@@ -1252,38 +1631,43 @@ class ws {
    * @param context - Kontext für diese Actions (default: 'widget')
    * @param uri - Optional URI for the model
    */
-  async registerActionsFromEcoreString(e, t, s, r) {
+  async registerActionsFromEcoreString(name, ecoreContent, context, uri) {
     if (!this.ecoreMetadataService) {
       console.error("EcoreMetadataService not set. Cannot register actions from Ecore.");
       return;
     }
     try {
-      await this.ecoreMetadataService.loadModelFromString(e, t, r);
-      const a = this.ecoreMetadataService.extractActions(e).map((o) => ({
-        methodName: o.methodName,
-        eventType: o.eventType,
-        parameters: o.parameters.map(
-          (d) => `${d.name}${d.optional ? "?" : ""}: ${d.type}`
+      await this.ecoreMetadataService.loadModelFromString(name, ecoreContent, uri);
+      const ecoreActions = this.ecoreMetadataService.extractActions(name);
+      const actions = ecoreActions.map((ecoreAction) => ({
+        methodName: ecoreAction.methodName,
+        eventType: ecoreAction.eventType,
+        parameters: ecoreAction.parameters.map(
+          (p) => `${p.name}${p.optional ? "?" : ""}: ${p.type}`
         )
       }));
-      this.widgetTypes.set(e, {
-        widgetType: e,
+      this.widgetTypes.set(name, {
+        widgetType: name,
         baseClass: null,
         // No base class for Ecore-based actions
-        actions: a,
-        context: s || "widget"
-      }), console.log(`📝 Registered actions "${e}" (context: ${s || "widget"}) from Ecore string with ${a.length} actions:`), a.forEach((o) => {
-        console.log(`  - ${o.methodName}(${o.parameters?.join(", ") || ""})`, o);
+        actions,
+        context: context || "widget"
       });
-    } catch (n) {
-      throw console.error(`Failed to register actions "${e}" from Ecore string:`, n), n;
+      console.log(`📝 Registered actions "${name}" (context: ${context || "widget"}) from Ecore string with ${actions.length} actions:`);
+      actions.forEach((action) => {
+        console.log(`  - ${action.methodName}(${action.parameters?.join(", ") || ""})`, action);
+      });
+    } catch (error) {
+      console.error(`Failed to register actions "${name}" from Ecore string:`, error);
+      throw error;
     }
   }
   /**
    * @deprecated Use registerActionsFromEcoreString instead
    */
-  async registerWidgetTypeFromEcoreString(e, t, s) {
-    return console.warn("registerWidgetTypeFromEcoreString is deprecated. Use registerActionsFromEcoreString instead."), this.registerActionsFromEcoreString(e, t, "widget", s);
+  async registerWidgetTypeFromEcoreString(widgetType, ecoreContent, uri) {
+    console.warn("registerWidgetTypeFromEcoreString is deprecated. Use registerActionsFromEcoreString instead.");
+    return this.registerActionsFromEcoreString(widgetType, ecoreContent, "widget", uri);
   }
   /**
    * Registriert eine Instanz (Widget, Composer, Datasource, etc.)
@@ -1293,55 +1677,70 @@ class ws {
    * @param widgetType - Optional: Widget-Typ für die Instanz (z.B. "OGCSTAToChartComposer")
    * @param pageId - Optional: Page ID auf der die Instanz lebt
    */
-  registerInstance(e, t, s, r) {
-    this.widgetInstances.set(e, t), s && this.instanceTypes.set(e, s), r && this.instancePages.set(e, r), console.log(`Registered instance "${e}"${s ? ` (type: ${s})` : ""}${r ? ` (page: ${r})` : ""}`);
+  registerInstance(instanceId, instanceRef, widgetType, pageId) {
+    this.widgetInstances.set(instanceId, instanceRef);
+    if (widgetType) {
+      this.instanceTypes.set(instanceId, widgetType);
+    }
+    if (pageId) {
+      this.instancePages.set(instanceId, pageId);
+    }
+    console.log(`Registered instance "${instanceId}"${widgetType ? ` (type: ${widgetType})` : ""}${pageId ? ` (page: ${pageId})` : ""}`);
   }
   /**
    * Gibt die pageId für eine Instanz zurück
    * Prüft zuerst die manuelle Registrierung, dann die Lookup-Funktion
    */
-  getInstancePageId(e) {
-    const t = this.instancePages.get(e);
-    if (t) return t;
-    if (this.pageIdLookupFn)
-      return this.pageIdLookupFn(e);
+  getInstancePageId(instanceId) {
+    const manualPageId = this.instancePages.get(instanceId);
+    if (manualPageId) return manualPageId;
+    if (this.pageIdLookupFn) {
+      return this.pageIdLookupFn(instanceId);
+    }
+    return void 0;
   }
   /**
    * Setzt eine Funktion die pageId von widgetId ableiten kann
    * Diese Funktion wird von der Vue-App gesetzt um Zugriff auf die Pinia Stores zu haben
    */
-  setPageIdLookup(e) {
-    this.pageIdLookupFn = e, console.log("📝 PageId lookup function registered");
+  setPageIdLookup(fn) {
+    this.pageIdLookupFn = fn;
+    console.log("📝 PageId lookup function registered");
   }
   /**
    * @deprecated Use registerInstance instead
    */
-  registerWidgetInstance(e, t) {
-    this.registerInstance(e, t);
+  registerWidgetInstance(widgetInstanceId, widgetRef) {
+    this.registerInstance(widgetInstanceId, widgetRef);
   }
   /**
    * Entfernt eine Instanz
    * Wird beim Unmount/Dispose aufgerufen
    * @param instanceId - ID der Instanz
    */
-  unregisterInstance(e) {
-    this.widgetInstances.delete(e), this.instanceTypes.delete(e), this.instancePages.delete(e), console.log(`Unregistered instance "${e}"`);
+  unregisterInstance(instanceId) {
+    this.widgetInstances.delete(instanceId);
+    this.instanceTypes.delete(instanceId);
+    this.instancePages.delete(instanceId);
+    console.log(`Unregistered instance "${instanceId}"`);
   }
   /**
    * Gibt alle registrierten Instanzen zurück
    * @param widgetType - Optional: Filter nach Widget-Typ
    */
-  getRegisteredInstances(e) {
-    const t = [];
-    for (const [s, r] of this.widgetInstances.entries()) {
-      const n = this.instanceTypes.get(s) || "unknown";
-      (!e || n === e) && t.push({
-        instanceId: s,
-        widgetType: n,
-        instanceRef: r
-      });
+  getRegisteredInstances(widgetType) {
+    const result = [];
+    for (const [instanceId, instanceRef] of this.widgetInstances.entries()) {
+      const type = this.instanceTypes.get(instanceId) || "unknown";
+      if (!widgetType || type === widgetType) {
+        result.push({
+          instanceId,
+          widgetType: type,
+          instanceRef
+        });
+      }
     }
-    return t;
+    return result;
   }
   /**
    * Gibt alle Instanz-IDs zurück
@@ -1352,8 +1751,8 @@ class ws {
   /**
    * @deprecated Use unregisterInstance instead
    */
-  unregisterWidgetInstance(e) {
-    this.unregisterInstance(e);
+  unregisterWidgetInstance(widgetInstanceId) {
+    this.unregisterInstance(widgetInstanceId);
   }
   /**
    * Führt eine Action auf einer Instanz aus
@@ -1361,55 +1760,66 @@ class ws {
    * @param actionName - Name der Action-Methode (z.B. 'zoomToThing', 'switchThingByName')
    * @param args - Argumente für die Action
    */
-  async executeInstanceAction(e, t, ...s) {
-    const r = this.widgetInstances.get(e);
-    if (!r) {
-      console.warn(`Instance "${e}" not found.`);
+  async executeInstanceAction(instanceId, actionName, ...args) {
+    const instanceRef = this.widgetInstances.get(instanceId);
+    if (!instanceRef) {
+      console.warn(`Instance "${instanceId}" not found.`);
       return;
     }
-    if (typeof r[t] != "function") {
-      console.warn(`Action "${t}" not found on instance "${e}".`);
+    if (typeof instanceRef[actionName] !== "function") {
+      console.warn(`Action "${actionName}" not found on instance "${instanceId}".`);
       return;
     }
     try {
-      await r[t](...s);
-    } catch (n) {
-      console.error(`Error executing action "${t}" on "${e}":`, n);
+      await instanceRef[actionName](...args);
+    } catch (error) {
+      console.error(`Error executing action "${actionName}" on "${instanceId}":`, error);
     }
   }
   /**
    * @deprecated Use executeInstanceAction instead
    */
-  async executeWidgetAction(e, t, ...s) {
-    return this.executeInstanceAction(e, t, ...s);
+  async executeWidgetAction(widgetInstanceId, actionName, ...args) {
+    return this.executeInstanceAction(widgetInstanceId, actionName, ...args);
   }
   /**
    * Führt eine Action auf allen registrierten Instanzen aus
    * @param actionName - Name der Action-Methode (z.B. 'zoomToThing')
    * @param args - Argumente für die Action
    */
-  async executeActionOnAll(e, ...t) {
-    if (console.log(`🎯 executeActionOnAll: "${e}" with args:`, t), console.log(`🎯 Registered instances: ${this.widgetInstances.size}`), this.widgetInstances.size === 0) {
-      console.warn(`❌ No instances registered to execute action "${e}".`);
+  async executeActionOnAll(actionName, ...args) {
+    console.log(`🎯 executeActionOnAll: "${actionName}" with args:`, args);
+    console.log(`🎯 Registered instances: ${this.widgetInstances.size}`);
+    if (this.widgetInstances.size === 0) {
+      console.warn(`❌ No instances registered to execute action "${actionName}".`);
       return;
     }
-    let s = 0;
-    for (const [r, n] of this.widgetInstances.entries()) {
-      const a = this.instanceTypes.get(r);
-      if (console.log(`🎯 Checking instance "${r}" (type: ${a}), has ${e}: ${typeof n[e]}`), typeof n[e] == "function")
+    let executedCount = 0;
+    for (const [instanceId, instanceRef] of this.widgetInstances.entries()) {
+      const instanceType = this.instanceTypes.get(instanceId);
+      console.log(`🎯 Checking instance "${instanceId}" (type: ${instanceType}), has ${actionName}: ${typeof instanceRef[actionName]}`);
+      if (typeof instanceRef[actionName] === "function") {
         try {
-          console.log(`🎯 Calling ${e} on "${r}"...`), await n[e](...t), s++, console.log(`✅ Executed action "${e}" on instance "${r}"`);
-        } catch (o) {
-          console.error(`❌ Error executing action "${e}" on "${r}":`, o);
+          console.log(`🎯 Calling ${actionName} on "${instanceId}"...`);
+          await instanceRef[actionName](...args);
+          executedCount++;
+          console.log(`✅ Executed action "${actionName}" on instance "${instanceId}"`);
+        } catch (error) {
+          console.error(`❌ Error executing action "${actionName}" on "${instanceId}":`, error);
         }
+      }
     }
-    s === 0 ? console.warn(`❌ Action "${e}" not found on any instances.`) : console.log(`✅ Executed action "${e}" on ${s} instance(s)`);
+    if (executedCount === 0) {
+      console.warn(`❌ Action "${actionName}" not found on any instances.`);
+    } else {
+      console.log(`✅ Executed action "${actionName}" on ${executedCount} instance(s)`);
+    }
   }
   /**
    * @deprecated Use executeActionOnAll instead
    */
-  async executeWidgetActionOnAll(e, ...t) {
-    return this.executeActionOnAll(e, ...t);
+  async executeWidgetActionOnAll(actionName, ...args) {
+    return this.executeActionOnAll(actionName, ...args);
   }
   /**
    * Gibt alle registrierten Widget-Typen zurück
@@ -1420,42 +1830,61 @@ class ws {
   /**
    * Gibt die Registrierung für einen Widget-Typ zurück
    */
-  getWidgetType(e) {
-    return this.widgetTypes.get(e);
+  getWidgetType(widgetType) {
+    return this.widgetTypes.get(widgetType);
   }
 }
-const Is = Symbol.for(St);
-var lr = Object.getOwnPropertyDescriptor, hr = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? lr(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = a(r) || r);
-  return r;
-}, fr = (l, e) => (t, s) => e(t, s, l);
-const Se = Nt.createLogger("daanse:events:manager");
-let gt = class {
-  constructor(l) {
-    this.actionsRegistry = l, this.mappings = /* @__PURE__ */ new Map();
+const EVENT_ACTIONS_REGISTRY = Symbol.for(EVENT_ACTIONS_REGISTRY_ID);
+var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
+var __decorateClass$1 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(result) || result;
+  return result;
+};
+var __decorateParam$1 = (index, decorator) => (target, key) => decorator(target, key, index);
+const log$1 = loggerFactory.createLogger("daanse:events:manager");
+let EventManager = class {
+  constructor(actionsRegistry) {
+    this.actionsRegistry = actionsRegistry;
+    this.mappings = /* @__PURE__ */ new Map();
   }
   /**
    * Erstellt einen Key für die Mapping-Registry
    */
-  createMappingKey(l, e, t) {
-    return t ? `${l}:${t}:${e}` : `${l}:${e}`;
+  createMappingKey(context, eventType, contextId) {
+    if (contextId) {
+      return `${context}:${contextId}:${eventType}`;
+    }
+    return `${context}:${eventType}`;
   }
   /**
    * Registriert ein Event-Action-Mapping
    */
-  registerMapping(l) {
-    const e = this.createMappingKey(l.context, l.eventType, l.contextId);
-    this.mappings.has(e) || this.mappings.set(e, []), this.mappings.get(e).push(l), Se("Registered event-action mapping: %s -> %s", e, l.actionName), this.onMappingsChangedCallback && this.onMappingsChangedCallback();
+  registerMapping(mapping) {
+    const key = this.createMappingKey(mapping.context, mapping.eventType, mapping.contextId);
+    if (!this.mappings.has(key)) {
+      this.mappings.set(key, []);
+    }
+    this.mappings.get(key).push(mapping);
+    log$1("Registered event-action mapping: %s -> %s", key, mapping.actionName);
+    if (this.onMappingsChangedCallback) {
+      this.onMappingsChangedCallback();
+    }
   }
   /**
    * Entfernt ein Event-Action-Mapping
    */
-  unregisterMapping(l) {
-    for (const [e, t] of this.mappings.entries()) {
-      const s = t.findIndex((r) => r.id === l);
-      if (s !== -1) {
-        t.splice(s, 1), t.length === 0 && this.mappings.delete(e), Se("Unregistered event-action mapping: %s", l);
+  unregisterMapping(mappingId) {
+    for (const [key, mappings] of this.mappings.entries()) {
+      const index = mappings.findIndex((m) => m.id === mappingId);
+      if (index !== -1) {
+        mappings.splice(index, 1);
+        if (mappings.length === 0) {
+          this.mappings.delete(key);
+        }
+        log$1("Unregistered event-action mapping: %s", mappingId);
         return;
       }
     }
@@ -1463,159 +1892,203 @@ let gt = class {
   /**
    * Registriert einen Callback der aufgerufen wird wenn Mappings geändert werden
    */
-  onMappingsChanged(l) {
-    this.onMappingsChangedCallback = l;
+  onMappingsChanged(callback) {
+    this.onMappingsChangedCallback = callback;
   }
   /**
    * Setzt alle Mappings (z.B. nach Laden aus Storage)
    */
-  setAllMappings(l) {
+  setAllMappings(mappings) {
     this.mappings.clear();
-    for (const e of l) {
-      const t = this.createMappingKey(e.context, e.eventType, e.contextId);
-      this.mappings.has(t) || this.mappings.set(t, []), this.mappings.get(t).push(e);
+    for (const mapping of mappings) {
+      const key = this.createMappingKey(mapping.context, mapping.eventType, mapping.contextId);
+      if (!this.mappings.has(key)) {
+        this.mappings.set(key, []);
+      }
+      this.mappings.get(key).push(mapping);
     }
-    this.onMappingsChangedCallback && (this.onMappingsChangedCallback(), Se("Notified listeners about %d loaded mappings", l.length));
+    if (this.onMappingsChangedCallback) {
+      this.onMappingsChangedCallback();
+      log$1("Notified listeners about %d loaded mappings", mappings.length);
+    }
   }
   /**
    * Wertet Conditions gegen ein Payload aus
    */
-  evaluateConditions(l, e) {
-    return !l || l.length === 0 ? !0 : l.every((t) => {
-      if (!t.prop)
-        return !0;
-      const s = this.getNestedProperty(e, t.prop), r = t.value;
-      return this.evaluateComparison(s, t.comperator, r);
+  evaluateConditions(conditions, payload) {
+    if (!conditions || conditions.length === 0) {
+      return true;
+    }
+    return conditions.every((condition) => {
+      if (!condition.prop) {
+        return true;
+      }
+      const payloadValue = this.getNestedProperty(payload, condition.prop);
+      const conditionValue = condition.value;
+      return this.evaluateComparison(payloadValue, condition.comperator, conditionValue);
     });
   }
   /**
    * Hilfsfunktion zum Zugriff auf verschachtelte Properties (z.B. "location.coordinates.lat")
    */
-  getNestedProperty(l, e) {
-    return e.split(".").reduce((t, s) => t?.[s], l);
+  getNestedProperty(obj, path) {
+    return path.split(".").reduce((current, prop) => {
+      return current?.[prop];
+    }, obj);
   }
   /**
    * Wertet einen Vergleich aus
    */
-  evaluateComparison(l, e, t) {
-    const s = Number(l), r = Number(t), n = !isNaN(s) && !isNaN(r);
-    switch (e) {
-      case Me.eq:
-        return n ? s === r : l == t;
-      case Me.neq:
-        return n ? s !== r : l != t;
-      case Me.lt:
-        return n ? s < r : l < t;
-      case Me.lte:
-        return n ? s <= r : l <= t;
-      case Me.gt:
-        return n ? s > r : l > t;
-      case Me.gte:
-        return n ? s >= r : l >= t;
+  evaluateComparison(payloadValue, comperator, conditionValue) {
+    const numPayload = Number(payloadValue);
+    const numCondition = Number(conditionValue);
+    const isNumeric = !isNaN(numPayload) && !isNaN(numCondition);
+    switch (comperator) {
+      case Comperator.eq:
+        return isNumeric ? numPayload === numCondition : payloadValue == conditionValue;
+      case Comperator.neq:
+        return isNumeric ? numPayload !== numCondition : payloadValue != conditionValue;
+      case Comperator.lt:
+        return isNumeric ? numPayload < numCondition : payloadValue < conditionValue;
+      case Comperator.lte:
+        return isNumeric ? numPayload <= numCondition : payloadValue <= conditionValue;
+      case Comperator.gt:
+        return isNumeric ? numPayload > numCondition : payloadValue > conditionValue;
+      case Comperator.gte:
+        return isNumeric ? numPayload >= numCondition : payloadValue >= conditionValue;
       default:
-        return console.warn(`Unknown comperator: ${e}`), !1;
+        console.warn(`Unknown comperator: ${comperator}`);
+        return false;
     }
   }
   /**
    * Baut die Action Arguments basierend auf statischen Args und Payload-Mapping
    */
-  buildActionArgs(l, e) {
-    const t = [...l.actionArgs || []];
-    if (l.payloadMapping && l.payloadMapping.length > 0)
-      for (const s of l.payloadMapping) {
-        const r = this.getNestedProperty(e, s.payloadPath);
-        t[s.argIndex] = r, Se("  Mapped payload.%s -> arg[%d] = %o", s.payloadPath, s.argIndex, r);
+  buildActionArgs(action, payload) {
+    const args = [...action.actionArgs || []];
+    if (action.payloadMapping && action.payloadMapping.length > 0) {
+      for (const pm of action.payloadMapping) {
+        const value = this.getNestedProperty(payload, pm.payloadPath);
+        args[pm.argIndex] = value;
+        log$1("  Mapped payload.%s -> arg[%d] = %o", pm.payloadPath, pm.argIndex, value);
       }
-    return t;
+    }
+    return args;
   }
   /**
    * Führt eine einzelne Action aus
    */
-  async executeAction(l, e) {
-    const t = this.buildActionArgs(l, e);
-    l.targetContextId ? await this.actionsRegistry.executeInstanceAction(
-      l.targetContextId,
-      l.actionName,
-      ...t
-    ) : (Se("No targetContextId specified, executing action on all instances"), await this.actionsRegistry.executeActionOnAll(
-      l.actionName,
-      ...t
-    ));
+  async executeAction(action, payload) {
+    const args = this.buildActionArgs(action, payload);
+    if (!action.targetContextId) {
+      log$1("No targetContextId specified, executing action on all instances");
+      await this.actionsRegistry.executeActionOnAll(
+        action.actionName,
+        ...args
+      );
+    } else {
+      await this.actionsRegistry.executeInstanceAction(
+        action.targetContextId,
+        action.actionName,
+        ...args
+      );
+    }
   }
   /**
    * Konvertiert ein legacy Mapping (mit actionName) zu ActionDefinition Array
    */
-  getActionsFromMapping(l) {
-    return l.actions && l.actions.length > 0 ? l.actions : l.actionName ? [{
-      targetContext: l.targetContext,
-      targetContextId: l.targetContextId,
-      actionName: l.actionName,
-      actionArgs: l.actionArgs,
-      payloadMapping: l.payloadMapping
-    }] : [];
+  getActionsFromMapping(mapping) {
+    if (mapping.actions && mapping.actions.length > 0) {
+      return mapping.actions;
+    }
+    if (mapping.actionName) {
+      return [{
+        targetContext: mapping.targetContext,
+        targetContextId: mapping.targetContextId,
+        actionName: mapping.actionName,
+        actionArgs: mapping.actionArgs,
+        payloadMapping: mapping.payloadMapping
+      }];
+    }
+    return [];
   }
   /**
    * Verarbeitet ein Event und führt alle passenden Actions aus
    */
-  async handleEvent(l, e, t, s) {
-    const r = this.createMappingKey(l, e, s);
-    let n = this.mappings.get(r) || [];
-    if (n.length === 0 && s) {
-      const a = this.createMappingKey(l, e);
-      n = this.mappings.get(a) || [], Se("📨 Handling event: %s, no specific mappings, using general mappings: %d", r, n.length);
-    } else
-      Se("📨 Handling event: %s, found %d mapping(s)", r, n.length);
-    Se("  Payload: %o", t);
-    for (const a of n)
+  async handleEvent(context, eventType, payload, contextId) {
+    const keyWithContext = this.createMappingKey(context, eventType, contextId);
+    let mappings = this.mappings.get(keyWithContext) || [];
+    if (mappings.length === 0 && contextId) {
+      const keyWithoutContext = this.createMappingKey(context, eventType);
+      mappings = this.mappings.get(keyWithoutContext) || [];
+      log$1("📨 Handling event: %s, no specific mappings, using general mappings: %d", keyWithContext, mappings.length);
+    } else {
+      log$1("📨 Handling event: %s, found %d mapping(s)", keyWithContext, mappings.length);
+    }
+    log$1("  Payload: %o", payload);
+    for (const mapping of mappings) {
       try {
-        if (!this.evaluateConditions(a.conditions || [], t)) {
-          Se("⏭️  Conditions not met for mapping %s, skipping", a.id);
+        if (!this.evaluateConditions(mapping.conditions || [], payload)) {
+          log$1("⏭️  Conditions not met for mapping %s, skipping", mapping.id);
           continue;
         }
-        const o = this.getActionsFromMapping(a);
-        if (o.length === 0) {
-          Se("⚠️  No actions defined for mapping %s", a.id);
+        const actions = this.getActionsFromMapping(mapping);
+        if (actions.length === 0) {
+          log$1("⚠️  No actions defined for mapping %s", mapping.id);
           continue;
         }
-        Se("▶️  Executing %d action(s) for mapping %s", o.length, a.id);
-        for (const d of o)
-          Se("  → Action: %s on %s", d.actionName, d.targetContextId || "all instances"), await this.executeAction(d, t);
-      } catch (o) {
-        Se("❌ Error executing actions for mapping %s: %o", a.id, o);
+        log$1("▶️  Executing %d action(s) for mapping %s", actions.length, mapping.id);
+        for (const action of actions) {
+          log$1("  → Action: %s on %s", action.actionName, action.targetContextId || "all instances");
+          await this.executeAction(action, payload);
+        }
+      } catch (error) {
+        log$1("❌ Error executing actions for mapping %s: %o", mapping.id, error);
       }
+    }
   }
   /**
    * Gibt alle Mappings zurück
    */
   getAllMappings() {
-    const l = [];
-    for (const e of this.mappings.values())
-      l.push(...e);
-    return l;
+    const result = [];
+    for (const mappings of this.mappings.values()) {
+      result.push(...mappings);
+    }
+    return result;
   }
   /**
    * Gibt Mappings für einen bestimmten Context zurück
    */
-  getMappings(l, e, t) {
-    if (e) {
-      const n = this.createMappingKey(l, e, t);
-      return this.mappings.get(n) || [];
+  getMappings(context, eventType, contextId) {
+    if (eventType) {
+      const key = this.createMappingKey(context, eventType, contextId);
+      return this.mappings.get(key) || [];
     }
-    const s = [], r = t ? `${l}:${t}:` : `${l}:`;
-    for (const [n, a] of this.mappings.entries())
-      n.startsWith(r) && s.push(...a);
-    return s;
+    const result = [];
+    const prefix = contextId ? `${context}:${contextId}:` : `${context}:`;
+    for (const [key, mappings] of this.mappings.entries()) {
+      if (key.startsWith(prefix)) {
+        result.push(...mappings);
+      }
+    }
+    return result;
   }
   /**
    * Löscht alle Mappings für einen Context
    */
-  clearContext(l, e) {
-    const t = [], s = `${l}:${e}:`;
-    for (const r of this.mappings.keys())
-      r.startsWith(s) && t.push(r);
-    for (const r of t)
-      this.mappings.delete(r);
-    console.log(`Cleared event mappings for context ${l}:${e}`);
+  clearContext(context, contextId) {
+    const keysToDelete = [];
+    const prefix = `${context}:${contextId}:`;
+    for (const key of this.mappings.keys()) {
+      if (key.startsWith(prefix)) {
+        keysToDelete.push(key);
+      }
+    }
+    for (const key of keysToDelete) {
+      this.mappings.delete(key);
+    }
+    console.log(`Cleared event mappings for context ${context}:${contextId}`);
   }
   /**
    * Löscht alle Mappings
@@ -1624,20 +2097,28 @@ let gt = class {
     this.mappings.clear();
   }
 };
-gt = hr([
-  Ts(),
-  fr(0, ft("EventActionsRegistry"))
-], gt);
-const As = Symbol.for(Lt);
-var gr = Object.getOwnPropertyDescriptor, pr = (l, e, t, s) => {
-  for (var r = s > 1 ? void 0 : s ? gr(e, t) : e, n = l.length - 1, a; n >= 0; n--)
-    (a = l[n]) && (r = a(r) || r);
-  return r;
-}, At = (l, e) => (t, s) => e(t, s, l);
-const Ce = Nt.createLogger("daanse:events:bridge");
-let pt = class {
-  constructor(l, e, t) {
-    this.eventManager = l, this.eventRegistry = e, this.actionsRegistry = t, this.isSetup = !1, this.registeredListeners = /* @__PURE__ */ new Set();
+EventManager = __decorateClass$1([
+  injectable(),
+  __decorateParam$1(0, inject("EventActionsRegistry"))
+], EventManager);
+const EVENT_MANAGER = Symbol.for(EVENT_MANAGER_ID);
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __decorateClass = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(result) || result;
+  return result;
+};
+var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
+const log = loggerFactory.createLogger("daanse:events:bridge");
+let EventBusBridge = class {
+  constructor(eventManager, eventRegistry, actionsRegistry) {
+    this.eventManager = eventManager;
+    this.eventRegistry = eventRegistry;
+    this.actionsRegistry = actionsRegistry;
+    this.isSetup = false;
+    this.registeredListeners = /* @__PURE__ */ new Set();
   }
   /**
    * Richtet die Bridge ein (muss nach Container-Initialisierung aufgerufen werden)
@@ -1649,104 +2130,131 @@ let pt = class {
    * daraus nur der Emitter, und ueber die Registry ist er unter seiner
    * String-ID erreichbar.
    */
-  setup(l) {
+  setup(services) {
     if (this.isSetup) {
-      Ce("Bridge already setup, skipping");
+      log("Bridge already setup, skipping");
       return;
     }
     try {
-      this.eventBus = l.getRequired(Hs), this.eventManager.onMappingsChanged(() => {
-        Ce("📢 EventManager notified about mapping changes, refreshing listeners"), this.refreshListeners();
-      }), this.setupListeners(), this.isSetup = !0, Ce("✅ EventBus Bridge setup complete");
-    } catch (e) {
-      Ce("❌ Failed to setup EventBus Bridge:", e);
+      this.eventBus = services.getRequired(TINY_EMITTER);
+      this.eventManager.onMappingsChanged(() => {
+        log("📢 EventManager notified about mapping changes, refreshing listeners");
+        this.refreshListeners();
+      });
+      this.setupListeners();
+      this.isSetup = true;
+      log("✅ EventBus Bridge setup complete");
+    } catch (error) {
+      log("❌ Failed to setup EventBus Bridge:", error);
     }
   }
   /**
    * Richtet Listener für alle Events ein die Mappings haben (widget, page, system)
    */
   setupListeners() {
-    const l = this.eventManager.getAllMappings(), e = /* @__PURE__ */ new Set();
-    for (const t of l)
-      if (t.context === "widget") {
-        const s = `widget:${t.eventType}`;
-        e.add(s);
-      } else if (t.context === "page") {
-        const s = `widget:${t.eventType}`;
-        e.add(s);
-      } else if (t.context === "system") {
-        const s = `system:${t.eventType}`;
-        e.add(s);
+    const mappings = this.eventManager.getAllMappings();
+    const eventTypes = /* @__PURE__ */ new Set();
+    for (const mapping of mappings) {
+      if (mapping.context === "widget") {
+        const fullEventType = `widget:${mapping.eventType}`;
+        eventTypes.add(fullEventType);
+      } else if (mapping.context === "page") {
+        const fullEventType = `widget:${mapping.eventType}`;
+        eventTypes.add(fullEventType);
+      } else if (mapping.context === "system") {
+        const fullEventType = `system:${mapping.eventType}`;
+        eventTypes.add(fullEventType);
       }
-    for (const t of e)
-      this.registeredListeners.has(t) || (this.eventBus.on(t, (s) => {
-        Ce("📨 Received event via EventBus: %s", t), this.handleEvent(t, s);
-      }), this.registeredListeners.add(t), Ce("Registered listener for: %s", t));
-    Ce("✅ Bridge listening to %d event types", this.registeredListeners.size);
+    }
+    for (const fullEventType of eventTypes) {
+      if (this.registeredListeners.has(fullEventType)) {
+        continue;
+      }
+      this.eventBus.on(fullEventType, (data) => {
+        log("📨 Received event via EventBus: %s", fullEventType);
+        this.handleEvent(fullEventType, data);
+      });
+      this.registeredListeners.add(fullEventType);
+      log("Registered listener for: %s", fullEventType);
+    }
+    log("✅ Bridge listening to %d event types", this.registeredListeners.size);
   }
   /**
    * Aktualisiert die Listener basierend auf aktuellen Mappings
    * Wird aufgerufen wenn neue Mappings hinzugefügt werden
    */
   refreshListeners() {
-    this.isSetup && this.setupListeners();
+    if (!this.isSetup) return;
+    this.setupListeners();
   }
   /**
    * Verarbeitet ein Event und leitet es an den EventManager weiter
    * Unterstützt widget, page und system Events
    */
-  async handleEvent(l, e) {
+  async handleEvent(fullEventType, data) {
     try {
-      const t = l.split(":");
-      if (t.length < 2) {
-        Ce("Invalid event format: %s", l);
+      const parts = fullEventType.split(":");
+      if (parts.length < 2) {
+        log("Invalid event format: %s", fullEventType);
         return;
       }
-      const s = t[0];
-      if (s === "widget") {
-        if (t.length < 3) {
-          Ce("Invalid widget event format: %s", l);
+      const context = parts[0];
+      if (context === "widget") {
+        if (parts.length < 3) {
+          log("Invalid widget event format: %s", fullEventType);
           return;
         }
-        const r = t[1], n = t[2], a = e.widgetId, o = e.payload;
-        Ce("📨 Widget event received: %s from widget %s", l, a), Ce("  Payload: %o", o), await this.eventManager.handleEvent(
+        const widgetType = parts[1];
+        const eventType = parts[2];
+        const widgetId = data.widgetId;
+        const payload = data.payload;
+        log("📨 Widget event received: %s from widget %s", fullEventType, widgetId);
+        log("  Payload: %o", payload);
+        await this.eventManager.handleEvent(
           "widget",
-          `${r}:${n}`,
-          o,
-          a
+          `${widgetType}:${eventType}`,
+          payload,
+          widgetId
         );
-        const d = this.actionsRegistry.getInstancePageId(a);
-        d && (Ce("📨 Also handling as page event for page: %s", d), await this.eventManager.handleEvent(
-          "page",
-          `${r}:${n}`,
-          o,
-          d
-        ));
-      } else if (s === "system") {
-        const r = t.slice(1).join(":"), n = e.payload || e;
-        Ce("📨 System event received: %s", l), Ce("  Payload: %o", n), await this.eventManager.handleEvent(
+        const widgetPageId = this.actionsRegistry.getInstancePageId(widgetId);
+        if (widgetPageId) {
+          log("📨 Also handling as page event for page: %s", widgetPageId);
+          await this.eventManager.handleEvent(
+            "page",
+            `${widgetType}:${eventType}`,
+            payload,
+            widgetPageId
+          );
+        }
+      } else if (context === "system") {
+        const eventType = parts.slice(1).join(":");
+        const payload = data.payload || data;
+        log("📨 System event received: %s", fullEventType);
+        log("  Payload: %o", payload);
+        await this.eventManager.handleEvent(
           "system",
-          r,
-          n
+          eventType,
+          payload
         );
-      } else
-        Ce("Unknown event context: %s", s);
-    } catch (t) {
-      Ce("❌ Error handling event:", t);
+      } else {
+        log("Unknown event context: %s", context);
+      }
+    } catch (error) {
+      log("❌ Error handling event:", error);
     }
   }
 };
-pt = pr([
-  Ts(),
-  At(0, ft("EventManager")),
-  At(1, ft("EventRegistry")),
-  At(2, ft("EventActionsRegistry"))
-], pt);
-const bs = Symbol.for(jt);
-function We(l) {
-  return l && typeof l.eProxyURI == "function" && typeof l.eSetProxyURI == "function";
+EventBusBridge = __decorateClass([
+  injectable(),
+  __decorateParam(0, inject("EventManager")),
+  __decorateParam(1, inject("EventRegistry")),
+  __decorateParam(2, inject("EventActionsRegistry"))
+], EventBusBridge);
+const EVENT_BUS_BRIDGE = Symbol.for(EVENT_BUS_BRIDGE_ID);
+function isInternalEObject(obj) {
+  return obj && typeof obj.eProxyURI === "function" && typeof obj.eSetProxyURI === "function";
 }
-const H = {
+const NotificationType = {
   /** A feature has been set */
   SET: 1,
   /** A feature has been unset */
@@ -1765,10 +2273,19 @@ const H = {
   REMOVING_ADAPTER: 8,
   /** A proxy has been resolved */
   RESOLVE: 9
-}, Gt = -1, dr = -1;
-class it {
-  constructor(e, t, s, r, n, a = Gt, o = !0) {
-    this.notifier = e, this.eventType = t, this.feature = s, this.featureID = dr, this.oldValue = r, this.newValue = n, this.position = a, this.wasSetFlag = o;
+};
+const NO_INDEX = -1;
+const NO_FEATURE_ID = -1;
+class NotificationImpl {
+  constructor(notifier, eventType, feature, oldValue, newValue, position = NO_INDEX, wasSet = true) {
+    this.notifier = notifier;
+    this.eventType = eventType;
+    this.feature = feature;
+    this.featureID = NO_FEATURE_ID;
+    this.oldValue = oldValue;
+    this.newValue = newValue;
+    this.position = position;
+    this.wasSetFlag = wasSet;
   }
   getNotifier() {
     return this.notifier;
@@ -1793,91 +2310,116 @@ class it {
   }
   isTouch() {
     switch (this.eventType) {
-      case H.RESOLVE:
-      case H.REMOVING_ADAPTER:
-        return !0;
-      case H.ADD:
-      case H.ADD_MANY:
-      case H.REMOVE:
-      case H.REMOVE_MANY:
-      case H.MOVE:
-        return !1;
-      case H.SET:
-      case H.UNSET:
-        return this.oldValue === this.newValue ? !0 : this.oldValue === null || this.newValue === null ? !1 : this.oldValue === this.newValue;
+      case NotificationType.RESOLVE:
+      case NotificationType.REMOVING_ADAPTER:
+        return true;
+      case NotificationType.ADD:
+      case NotificationType.ADD_MANY:
+      case NotificationType.REMOVE:
+      case NotificationType.REMOVE_MANY:
+      case NotificationType.MOVE:
+        return false;
+      case NotificationType.SET:
+      case NotificationType.UNSET:
+        if (this.oldValue === this.newValue) {
+          return true;
+        }
+        if (this.oldValue === null || this.newValue === null) {
+          return false;
+        }
+        return this.oldValue === this.newValue;
       default:
-        return !1;
+        return false;
     }
   }
   isReset() {
     if (this.feature) {
-      const e = this.feature.getDefaultValue();
-      return this.newValue === e;
+      const defaultValue = this.feature.getDefaultValue();
+      return this.newValue === defaultValue;
     }
-    return !1;
+    return false;
   }
   getPosition() {
     return this.position;
   }
-  merge(e) {
-    return !1;
+  merge(notification) {
+    return false;
   }
   toString() {
-    const e = {
-      [H.SET]: "SET",
-      [H.UNSET]: "UNSET",
-      [H.ADD]: "ADD",
-      [H.REMOVE]: "REMOVE",
-      [H.ADD_MANY]: "ADD_MANY",
-      [H.REMOVE_MANY]: "REMOVE_MANY",
-      [H.MOVE]: "MOVE",
-      [H.REMOVING_ADAPTER]: "REMOVING_ADAPTER",
-      [H.RESOLVE]: "RESOLVE"
-    }, t = this.feature?.getName() || "unknown";
-    return `Notification(${e[this.eventType]}, feature=${t}, old=${this.oldValue}, new=${this.newValue})`;
+    const eventNames = {
+      [NotificationType.SET]: "SET",
+      [NotificationType.UNSET]: "UNSET",
+      [NotificationType.ADD]: "ADD",
+      [NotificationType.REMOVE]: "REMOVE",
+      [NotificationType.ADD_MANY]: "ADD_MANY",
+      [NotificationType.REMOVE_MANY]: "REMOVE_MANY",
+      [NotificationType.MOVE]: "MOVE",
+      [NotificationType.REMOVING_ADAPTER]: "REMOVING_ADAPTER",
+      [NotificationType.RESOLVE]: "RESOLVE"
+    };
+    const featureName = this.feature?.getName() || "unknown";
+    return `Notification(${eventNames[this.eventType]}, feature=${featureName}, old=${this.oldValue}, new=${this.newValue})`;
   }
 }
-const bt = /^(?:0|[1-9]\d*)$/, vs = Symbol.for("emfts.indexedList"), xs = {
-  get(l, e, t) {
-    if (e === vs)
-      return !0;
-    if (typeof e == "string" && bt.test(e)) {
-      const s = Number(e), r = l.data;
-      return r !== void 0 ? r[s] : s < l.size() ? l.get(s) : void 0;
+const INDEX_KEY = /^(?:0|[1-9]\d*)$/;
+const IS_INDEXED = Symbol.for("emfts.indexedList");
+const INDEX_ACCESS_HANDLER = {
+  get(target, prop, receiver) {
+    if (prop === IS_INDEXED) {
+      return true;
     }
-    return Reflect.get(l, e, t);
+    if (typeof prop === "string" && INDEX_KEY.test(prop)) {
+      const index = Number(prop);
+      const data = target.data;
+      if (data !== void 0) {
+        return data[index];
+      }
+      return index < target.size() ? target.get(index) : void 0;
+    }
+    return Reflect.get(target, prop, receiver);
   },
-  set(l, e, t, s) {
-    if (e === "length") {
-      const r = typeof t == "number" ? t : parseInt(t, 10);
-      if (isNaN(r) || r < 0)
-        throw new RangeError(`Invalid list length: ${String(t)}`);
-      if (r === 0)
-        l.clear();
-      else
-        for (; l.size() > r; )
-          l.removeAt(l.size() - 1);
-      return !0;
+  set(target, prop, value, receiver) {
+    if (prop === "length") {
+      const newLength = typeof value === "number" ? value : parseInt(value, 10);
+      if (isNaN(newLength) || newLength < 0) {
+        throw new RangeError(`Invalid list length: ${String(value)}`);
+      }
+      if (newLength === 0) {
+        target.clear();
+      } else {
+        while (target.size() > newLength) {
+          target.removeAt(target.size() - 1);
+        }
+      }
+      return true;
     }
-    if (typeof e == "string" && bt.test(e)) {
-      const r = Number(e), n = l.size();
-      if (r < n)
-        l.set(r, t);
-      else if (r === n)
-        l.add(t);
-      else
-        throw new RangeError(`Index ${r} out of bounds for list of size ${n}. ELists do not support sparse assignment - use add() or push().`);
-      return !0;
+    if (typeof prop === "string" && INDEX_KEY.test(prop)) {
+      const index = Number(prop);
+      const size = target.size();
+      if (index < size) {
+        target.set(index, value);
+      } else if (index === size) {
+        target.add(value);
+      } else {
+        throw new RangeError(`Index ${index} out of bounds for list of size ${size}. ELists do not support sparse assignment - use add() or push().`);
+      }
+      return true;
     }
-    return Reflect.set(l, e, t, s);
+    return Reflect.set(target, prop, value, receiver);
   },
-  has(l, e) {
-    return typeof e == "string" && bt.test(e) ? Number(e) < l.size() : Reflect.has(l, e);
+  has(target, prop) {
+    if (typeof prop === "string" && INDEX_KEY.test(prop)) {
+      return Number(prop) < target.size();
+    }
+    return Reflect.has(target, prop);
   }
 };
-class Ie {
-  constructor(e = null, t = null) {
-    return this.data = [], this.owner = e, this.feature = t, new Proxy(this, xs);
+class BasicEList {
+  constructor(owner = null, feature = null) {
+    this.data = [];
+    this.owner = owner;
+    this.feature = feature;
+    return new Proxy(this, INDEX_ACCESS_HANDLER);
   }
   // ===== Array-compatible properties and methods =====
   /**
@@ -1890,114 +2432,147 @@ class Ie {
    * Array-compatible push method. Adds elements to the end of the list.
    * Sends ADD or ADD_MANY notification.
    */
-  push(...e) {
-    return e.length === 0 ? this.data.length : (e.length === 1 ? this.add(e[0]) : this.addAll(e), this.data.length);
+  push(...items) {
+    if (items.length === 0) {
+      return this.data.length;
+    }
+    if (items.length === 1) {
+      this.add(items[0]);
+    } else {
+      this.addAll(items);
+    }
+    return this.data.length;
   }
   /**
    * Array-compatible pop method. Removes and returns the last element.
    * Sends REMOVE notification.
    */
   pop() {
-    if (this.data.length !== 0)
-      return this.removeAt(this.data.length - 1);
+    if (this.data.length === 0) {
+      return void 0;
+    }
+    return this.removeAt(this.data.length - 1);
   }
   /**
    * Array-compatible shift method. Removes and returns the first element.
    * Sends REMOVE notification.
    */
   shift() {
-    if (this.data.length !== 0)
-      return this.removeAt(0);
+    if (this.data.length === 0) {
+      return void 0;
+    }
+    return this.removeAt(0);
   }
   /**
    * Array-compatible unshift method. Adds elements to the beginning of the list.
    * Sends ADD or ADD_MANY notification.
    */
-  unshift(...e) {
-    return e.length === 0 ? this.data.length : (e.length === 1 ? this.addAt(0, e[0]) : this.addAllAt(0, e), this.data.length);
+  unshift(...items) {
+    if (items.length === 0) {
+      return this.data.length;
+    }
+    if (items.length === 1) {
+      this.addAt(0, items[0]);
+    } else {
+      this.addAllAt(0, items);
+    }
+    return this.data.length;
   }
   /**
    * Array-compatible splice method.
    * Removes elements and/or inserts new elements.
    * Sends appropriate notifications.
    */
-  splice(e, t, ...s) {
-    const r = e < 0 ? Math.max(this.data.length + e, 0) : Math.min(e, this.data.length), n = t === void 0 ? this.data.length - r : Math.min(Math.max(t, 0), this.data.length - r), a = [];
-    for (let o = 0; o < n; o++)
-      r < this.data.length && a.push(this.removeAt(r));
-    for (let o = 0; o < s.length; o++)
-      this.addAt(r + o, s[o]);
-    return a;
+  splice(start, deleteCount, ...items) {
+    const actualStart = start < 0 ? Math.max(this.data.length + start, 0) : Math.min(start, this.data.length);
+    const actualDeleteCount = deleteCount === void 0 ? this.data.length - actualStart : Math.min(Math.max(deleteCount, 0), this.data.length - actualStart);
+    const removed = [];
+    for (let i = 0; i < actualDeleteCount; i++) {
+      if (actualStart < this.data.length) {
+        removed.push(this.removeAt(actualStart));
+      }
+    }
+    for (let i = 0; i < items.length; i++) {
+      this.addAt(actualStart + i, items[i]);
+    }
+    return removed;
   }
   /**
    * Array-compatible forEach method.
    */
-  forEach(e, t) {
-    this.data.forEach((s, r) => e.call(t, s, r, this.data));
+  forEach(callback, thisArg) {
+    this.data.forEach((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible map method.
    */
-  map(e, t) {
-    return this.data.map((s, r) => e.call(t, s, r, this.data));
+  map(callback, thisArg) {
+    return this.data.map((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible filter method.
    */
-  filter(e, t) {
-    return this.data.filter((s, r) => e.call(t, s, r, this.data));
+  filter(callback, thisArg) {
+    return this.data.filter((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible find method.
    */
-  find(e, t) {
-    return this.data.find((s, r) => e.call(t, s, r, this.data));
+  find(callback, thisArg) {
+    return this.data.find((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible findIndex method.
    */
-  findIndex(e, t) {
-    return this.data.findIndex((s, r) => e.call(t, s, r, this.data));
+  findIndex(callback, thisArg) {
+    return this.data.findIndex((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible some method.
    */
-  some(e, t) {
-    return this.data.some((s, r) => e.call(t, s, r, this.data));
+  some(callback, thisArg) {
+    return this.data.some((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible every method.
    */
-  every(e, t) {
-    return this.data.every((s, r) => e.call(t, s, r, this.data));
+  every(callback, thisArg) {
+    return this.data.every((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Array-compatible reduce method.
    */
-  reduce(e, t) {
-    return this.data.reduce((s, r, n) => e(s, r, n, this.data), t);
+  reduce(callback, initialValue) {
+    return this.data.reduce((prev, curr, idx) => callback(prev, curr, idx, this.data), initialValue);
   }
   /**
    * Array-compatible includes method.
    */
-  includes(e) {
-    return this.contains(e);
+  includes(element) {
+    return this.contains(element);
   }
   /**
    * Array-compatible slice method. Returns a shallow copy.
    */
-  slice(e, t) {
-    return this.data.slice(e, t);
+  slice(start, end) {
+    return this.data.slice(start, end);
   }
   /**
    * Array-compatible concat method. Returns a new array, list is unchanged.
    * Accepts single values, arrays and other ELists as arguments.
    */
-  concat(...e) {
-    const t = [...this.data];
-    for (const s of e)
-      Array.isArray(s) ? t.push(...s) : s instanceof Ie ? t.push(...s.data) : t.push(s);
-    return t;
+  concat(...items) {
+    const result = [...this.data];
+    for (const item of items) {
+      if (Array.isArray(item)) {
+        result.push(...item);
+      } else if (item instanceof BasicEList) {
+        result.push(...item.data);
+      } else {
+        result.push(item);
+      }
+    }
+    return result;
   }
   /**
    * Array-compatible sort method. Sorts in place and returns the list.
@@ -2006,54 +2581,59 @@ class Ie {
    * MOVE notification. This mirrors ECollections.sort() in Java EMF rather than
    * silently rewriting the backing array.
    */
-  sort(e) {
-    return this.reorderTo([...this.data].sort(e)), this;
+  sort(compareFn) {
+    this.reorderTo([...this.data].sort(compareFn));
+    return this;
   }
   /**
    * Array-compatible reverse method. Reverses in place and returns the list.
    * Emits MOVE notifications, see {@link sort}.
    */
   reverse() {
-    return this.reorderTo([...this.data].reverse()), this;
+    this.reorderTo([...this.data].reverse());
+    return this;
   }
   /**
    * Rearranges the list to match the given order using move(), so that every
    * relocation is observable. The order must be a permutation of the list.
    */
-  reorderTo(e) {
-    for (let t = 0; t < e.length; t++) {
-      if (this.data[t] === e[t])
+  reorderTo(order) {
+    for (let i = 0; i < order.length; i++) {
+      if (this.data[i] === order[i]) {
         continue;
-      const s = this.data.indexOf(e[t], t);
-      s > t && this.move(t, s);
+      }
+      const from = this.data.indexOf(order[i], i);
+      if (from > i) {
+        this.move(i, from);
+      }
     }
   }
   /**
    * Array-compatible join method.
    */
-  join(e) {
-    return this.data.join(e);
+  join(separator) {
+    return this.data.join(separator);
   }
   /**
    * Array-compatible at method. Negative indices count from the end.
    * Implemented directly rather than via Array.prototype.at, which the ES2020
    * target of this project does not provide.
    */
-  at(e) {
-    const t = e < 0 ? this.data.length + e : e;
-    return t >= 0 && t < this.data.length ? this.data[t] : void 0;
+  at(index) {
+    const resolved = index < 0 ? this.data.length + index : index;
+    return resolved >= 0 && resolved < this.data.length ? this.data[resolved] : void 0;
   }
   /**
    * Array-compatible lastIndexOf method.
    */
-  lastIndexOf(e) {
-    return this.data.lastIndexOf(e);
+  lastIndexOf(element) {
+    return this.data.lastIndexOf(element);
   }
   /**
    * Array-compatible flatMap method.
    */
-  flatMap(e, t) {
-    return this.data.flatMap((s, r) => e.call(t, s, r, this.data));
+  flatMap(callback, thisArg) {
+    return this.data.flatMap((value, index) => callback.call(thisArg, value, index, this.data));
   }
   /**
    * Makes JSON.stringify(list) produce a plain array. Without this the internal
@@ -2075,68 +2655,102 @@ class Ie {
   isEmpty() {
     return this.data.length === 0;
   }
-  contains(e) {
-    return this.data.indexOf(e) !== -1;
+  contains(element) {
+    return this.data.indexOf(element) !== -1;
   }
-  indexOf(e) {
-    return this.data.indexOf(e);
+  indexOf(element) {
+    return this.data.indexOf(element);
   }
-  get(e) {
-    if (e < 0 || e >= this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    return this.data[e];
+  get(index) {
+    if (index < 0 || index >= this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
+    }
+    return this.data[index];
   }
-  set(e, t) {
-    if (e < 0 || e >= this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    const s = this.data[e];
-    return s === t || (this.data[e] = t, this.didSet(e, t, s)), s;
+  set(index, element) {
+    if (index < 0 || index >= this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
+    }
+    const oldElement = this.data[index];
+    if (oldElement === element) {
+      return oldElement;
+    }
+    this.data[index] = element;
+    this.didSet(index, element, oldElement);
+    return oldElement;
   }
-  add(e) {
-    const t = this.data.length;
-    return this.data.push(e), this.didAdd(t, e), !0;
+  add(element) {
+    const index = this.data.length;
+    this.data.push(element);
+    this.didAdd(index, element);
+    return true;
   }
-  addAt(e, t) {
-    if (e < 0 || e > this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    this.data.splice(e, 0, t), this.didAdd(e, t);
+  addAt(index, element) {
+    if (index < 0 || index > this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
+    }
+    this.data.splice(index, 0, element);
+    this.didAdd(index, element);
   }
-  addAll(e) {
-    if (e.length === 0)
-      return !1;
-    const t = this.data.length;
-    return this.data.push(...e), this.didAddMany(t, e), !0;
+  addAll(elements) {
+    if (elements.length === 0) {
+      return false;
+    }
+    const index = this.data.length;
+    this.data.push(...elements);
+    this.didAddMany(index, elements);
+    return true;
   }
-  addAllAt(e, t) {
-    if (t.length === 0)
-      return !1;
-    if (e < 0 || e > this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    return this.data.splice(e, 0, ...t), this.didAddMany(e, t), !0;
+  addAllAt(index, elements) {
+    if (elements.length === 0) {
+      return false;
+    }
+    if (index < 0 || index > this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
+    }
+    this.data.splice(index, 0, ...elements);
+    this.didAddMany(index, elements);
+    return true;
   }
-  remove(e) {
-    const t = this.data.indexOf(e);
-    return t === -1 ? !1 : (this.removeAt(t), !0);
+  remove(element) {
+    const index = this.data.indexOf(element);
+    if (index === -1) {
+      return false;
+    }
+    this.removeAt(index);
+    return true;
   }
-  removeAt(e) {
-    if (e < 0 || e >= this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    const t = this.data.splice(e, 1)[0];
-    return this.didRemove(e, t), t;
+  removeAt(index) {
+    if (index < 0 || index >= this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
+    }
+    const removed = this.data.splice(index, 1)[0];
+    this.didRemove(index, removed);
+    return removed;
   }
   clear() {
-    if (this.data.length === 0)
+    if (this.data.length === 0) {
       return;
-    const e = [...this.data];
-    this.data.length = 0, this.didClear(e);
+    }
+    const oldData = [...this.data];
+    this.data.length = 0;
+    this.didClear(oldData);
   }
-  move(e, t) {
-    if (t < 0 || t >= this.data.length)
-      throw new RangeError(`fromIndex ${t} out of bounds for list of size ${this.data.length}`);
-    if (e < 0 || e >= this.data.length)
-      throw new RangeError(`toIndex ${e} out of bounds for list of size ${this.data.length}`);
-    const s = this.data[t];
-    return t === e || (this.data.splice(t, 1), this.data.splice(e, 0, s), this.didMove(e, s, t)), s;
+  move(toIndex, fromIndex) {
+    if (fromIndex < 0 || fromIndex >= this.data.length) {
+      throw new RangeError(`fromIndex ${fromIndex} out of bounds for list of size ${this.data.length}`);
+    }
+    if (toIndex < 0 || toIndex >= this.data.length) {
+      throw new RangeError(`toIndex ${toIndex} out of bounds for list of size ${this.data.length}`);
+    }
+    const element = this.data[fromIndex];
+    if (fromIndex === toIndex) {
+      return element;
+    }
+    this.data.splice(fromIndex, 1);
+    this.data.splice(toIndex, 0, element);
+    this.didMove(toIndex, element, fromIndex);
+    return element;
   }
   toArray() {
     return [...this.data];
@@ -2145,219 +2759,276 @@ class Ie {
     return this.data[Symbol.iterator]();
   }
   // ===== Notification hooks =====
-  didAdd(e, t) {
-    this.dispatchNotification(H.ADD, null, t, e);
+  didAdd(index, element) {
+    this.dispatchNotification(NotificationType.ADD, null, element, index);
   }
-  didAddMany(e, t) {
-    this.dispatchNotification(H.ADD_MANY, null, t, e);
+  didAddMany(index, elements) {
+    this.dispatchNotification(NotificationType.ADD_MANY, null, elements, index);
   }
-  didRemove(e, t) {
-    this.dispatchNotification(H.REMOVE, t, null, e);
+  didRemove(index, element) {
+    this.dispatchNotification(NotificationType.REMOVE, element, null, index);
   }
-  didClear(e) {
-    e.length === 1 ? this.dispatchNotification(H.REMOVE, e[0], null, 0) : this.dispatchNotification(H.REMOVE_MANY, e, null, Gt);
+  didClear(oldData) {
+    if (oldData.length === 1) {
+      this.dispatchNotification(NotificationType.REMOVE, oldData[0], null, 0);
+    } else {
+      this.dispatchNotification(NotificationType.REMOVE_MANY, oldData, null, NO_INDEX);
+    }
   }
-  didSet(e, t, s) {
-    this.dispatchNotification(H.SET, s, t, e);
+  didSet(index, newElement, oldElement) {
+    this.dispatchNotification(NotificationType.SET, oldElement, newElement, index);
   }
-  didMove(e, t, s) {
-    this.dispatchNotification(H.MOVE, s, t, e);
+  didMove(toIndex, element, fromIndex) {
+    this.dispatchNotification(NotificationType.MOVE, fromIndex, element, toIndex);
   }
-  dispatchNotification(e, t, s, r) {
-    const n = this.getFeature();
-    if (!this.owner || !n || "eDeliver" in this.owner && !this.owner.eDeliver())
+  dispatchNotification(eventType, oldValue, newValue, position) {
+    const feature = this.getFeature();
+    if (!this.owner || !feature) {
       return;
+    }
+    if ("eDeliver" in this.owner && !this.owner.eDeliver()) {
+      return;
+    }
     if ("eAdapters" in this.owner) {
-      const o = this.owner.eAdapters();
-      if (!o || o.length === 0)
+      const adapters = this.owner.eAdapters();
+      if (!adapters || adapters.length === 0) {
         return;
-    } else
+      }
+    } else {
       return;
-    const a = new it(this.owner, e, n, t, s, r);
-    "eNotify" in this.owner && this.owner.eNotify(a);
+    }
+    const notification = new NotificationImpl(this.owner, eventType, feature, oldValue, newValue, position);
+    if ("eNotify" in this.owner) {
+      this.owner.eNotify(notification);
+    }
   }
 }
-class Wt extends Ie {
-  constructor(e, t) {
-    super(e, t);
+class EObjectContainmentEList extends BasicEList {
+  constructor(owner, feature) {
+    super(owner, feature);
   }
-  didAdd(e, t) {
-    this.setContainer(t), super.didAdd(e, t);
+  didAdd(index, element) {
+    this.setContainer(element);
+    super.didAdd(index, element);
   }
-  didAddMany(e, t) {
-    for (const s of t)
-      this.setContainer(s);
-    super.didAddMany(e, t);
+  didAddMany(index, elements) {
+    for (const element of elements) {
+      this.setContainer(element);
+    }
+    super.didAddMany(index, elements);
   }
-  didRemove(e, t) {
-    this.unsetContainer(t), super.didRemove(e, t);
+  didRemove(index, element) {
+    this.unsetContainer(element);
+    super.didRemove(index, element);
   }
-  didClear(e) {
-    for (const t of e)
-      this.unsetContainer(t);
-    super.didClear(e);
+  didClear(oldData) {
+    for (const element of oldData) {
+      this.unsetContainer(element);
+    }
+    super.didClear(oldData);
   }
-  didSet(e, t, s) {
-    this.unsetContainer(s), this.setContainer(t), super.didSet(e, t, s);
+  didSet(index, newElement, oldElement) {
+    this.unsetContainer(oldElement);
+    this.setContainer(newElement);
+    super.didSet(index, newElement, oldElement);
   }
-  add(e) {
-    return this.removeFromOldContainer(e), super.add(e);
+  add(element) {
+    this.removeFromOldContainer(element);
+    return super.add(element);
   }
-  addAt(e, t) {
-    this.removeFromOldContainer(t), super.addAt(e, t);
+  addAt(index, element) {
+    this.removeFromOldContainer(element);
+    super.addAt(index, element);
   }
-  addAll(e) {
-    for (const t of e)
-      this.removeFromOldContainer(t);
-    return super.addAll(e);
+  addAll(elements) {
+    for (const element of elements) {
+      this.removeFromOldContainer(element);
+    }
+    return super.addAll(elements);
   }
-  addAllAt(e, t) {
-    for (const s of t)
-      this.removeFromOldContainer(s);
-    return super.addAllAt(e, t);
+  addAllAt(index, elements) {
+    for (const element of elements) {
+      this.removeFromOldContainer(element);
+    }
+    return super.addAllAt(index, elements);
   }
-  set(e, t) {
-    return this.removeFromOldContainer(t), super.set(e, t);
+  set(index, element) {
+    this.removeFromOldContainer(element);
+    return super.set(index, element);
   }
-  setContainer(e) {
-    const t = this.getFeature();
-    e && "eSetContainer" in e && this.owner && e.eSetContainer(this.owner, t);
+  setContainer(element) {
+    const feature = this.getFeature();
+    if (element && "eSetContainer" in element && this.owner) {
+      element.eSetContainer(this.owner, feature);
+    }
   }
-  unsetContainer(e) {
-    e && "eSetContainer" in e && e.eSetContainer(null, null);
+  unsetContainer(element) {
+    if (element && "eSetContainer" in element) {
+      element.eSetContainer(null, null);
+    }
   }
-  removeFromOldContainer(e) {
-    const t = e.eContainer();
-    if (t && t !== this.owner) {
-      const s = e.eContainmentFeature();
-      if (s && s.isMany()) {
-        const r = t.eGet(s);
-        if (r && "remove" in r)
-          r.remove(e);
-        else if (Array.isArray(r)) {
-          const n = r.indexOf(e);
-          n >= 0 && r.splice(n, 1);
+  removeFromOldContainer(element) {
+    const oldContainer = element.eContainer();
+    if (oldContainer && oldContainer !== this.owner) {
+      const oldFeature = element.eContainmentFeature();
+      if (oldFeature && oldFeature.isMany()) {
+        const oldList = oldContainer.eGet(oldFeature);
+        if (oldList && "remove" in oldList) {
+          oldList.remove(element);
+        } else if (Array.isArray(oldList)) {
+          const idx = oldList.indexOf(element);
+          if (idx >= 0) {
+            oldList.splice(idx, 1);
+          }
         }
       }
     }
   }
 }
-class mr extends Wt {
-  constructor(e, t, s) {
-    super(e, null), this.resolvedFeature = void 0, this.featureResolver = t, this.inverseSetter = s;
+class EObjectContainmentWithInverseEListLazy extends EObjectContainmentEList {
+  constructor(owner, featureResolver, inverseSetter) {
+    super(owner, null);
+    this.resolvedFeature = void 0;
+    this.featureResolver = featureResolver;
+    this.inverseSetter = inverseSetter;
   }
   getFeature() {
-    return this.resolvedFeature === void 0 && (this.resolvedFeature = this.featureResolver()), this.resolvedFeature;
+    if (this.resolvedFeature === void 0) {
+      this.resolvedFeature = this.featureResolver();
+    }
+    return this.resolvedFeature;
   }
-  didAdd(e, t) {
-    this.inverseSetter(t, this.owner), super.didAdd(e, t);
+  didAdd(index, element) {
+    this.inverseSetter(element, this.owner);
+    super.didAdd(index, element);
   }
-  didAddMany(e, t) {
-    for (const s of t)
-      this.inverseSetter(s, this.owner);
-    super.didAddMany(e, t);
+  didAddMany(index, elements) {
+    for (const element of elements) {
+      this.inverseSetter(element, this.owner);
+    }
+    super.didAddMany(index, elements);
   }
-  didRemove(e, t) {
-    this.inverseSetter(t, null), super.didRemove(e, t);
+  didRemove(index, element) {
+    this.inverseSetter(element, null);
+    super.didRemove(index, element);
   }
-  didClear(e) {
-    for (const t of e)
-      this.inverseSetter(t, null);
-    super.didClear(e);
+  didClear(oldData) {
+    for (const element of oldData) {
+      this.inverseSetter(element, null);
+    }
+    super.didClear(oldData);
   }
-  didSet(e, t, s) {
-    this.inverseSetter(s, null), this.inverseSetter(t, this.owner), super.didSet(e, t, s);
+  didSet(index, newElement, oldElement) {
+    this.inverseSetter(oldElement, null);
+    this.inverseSetter(newElement, this.owner);
+    super.didSet(index, newElement, oldElement);
   }
   /**
    * This list holds EClass.eStructuralFeatures, which every derived feature list
    * is assembled from, so each change has to invalidate those caches.
    */
-  dispatchNotification(e, t, s, r) {
-    Ps(), super.dispatchNotification(e, t, s, r);
+  dispatchNotification(eventType, oldValue, newValue, position) {
+    bumpMetamodelRevision();
+    super.dispatchNotification(eventType, oldValue, newValue, position);
   }
 }
-class yr extends Ie {
-  constructor(e, t) {
-    super(e, t);
+class EObjectEList extends BasicEList {
+  constructor(owner, feature) {
+    super(owner, feature);
   }
-  get(e) {
-    if (e < 0 || e >= this.data.length)
-      throw new RangeError(`Index ${e} out of bounds for list of size ${this.data.length}`);
-    let t = this.data[e];
-    if (t && We(t) && t.eIsProxy() && this.owner && "eResolveProxy" in this.owner) {
-      const s = this.owner.eResolveProxy(t);
-      s !== t && (this.data[e] = s, t = s);
+  get(index) {
+    if (index < 0 || index >= this.data.length) {
+      throw new RangeError(`Index ${index} out of bounds for list of size ${this.data.length}`);
     }
-    return t;
+    let element = this.data[index];
+    if (element && isInternalEObject(element) && element.eIsProxy()) {
+      if (this.owner && "eResolveProxy" in this.owner) {
+        const resolved = this.owner.eResolveProxy(element);
+        if (resolved !== element) {
+          this.data[index] = resolved;
+          element = resolved;
+        }
+      }
+    }
+    return element;
   }
   [Symbol.iterator]() {
-    const e = this;
-    let t = 0;
+    const self2 = this;
+    let index = 0;
     return {
       next() {
-        return t >= e.data.length ? { done: !0, value: void 0 } : { done: !1, value: e.get(t++) };
+        if (index >= self2.data.length) {
+          return { done: true, value: void 0 };
+        }
+        const value = self2.get(index++);
+        return { done: false, value };
       }
     };
   }
 }
-function ye(l) {
-  return l && typeof l.add == "function" && typeof l.size == "function" && typeof l.get == "function";
+function isEList(obj) {
+  return obj && typeof obj.add === "function" && typeof obj.size === "function" && typeof obj.get === "function";
 }
-function he(l, e) {
-  let t;
-  if (Array.isArray(e))
-    t = e;
-  else if (ye(e))
-    t = e.toArray();
-  else if (e !== null && typeof e == "object" && typeof e[Symbol.iterator] == "function")
-    t = [...e];
-  else
-    return !1;
-  const s = [...t];
-  return l.clear(), l.addAll(s), !0;
+function replaceListContents(list, value) {
+  let items;
+  if (Array.isArray(value)) {
+    items = value;
+  } else if (isEList(value)) {
+    items = value.toArray();
+  } else if (value !== null && typeof value === "object" && typeof value[Symbol.iterator] === "function") {
+    items = [...value];
+  } else {
+    return false;
+  }
+  const snapshot = [...items];
+  list.clear();
+  list.addAll(snapshot);
+  return true;
 }
-class Er extends Ie {
+class UnmodifiableEList extends BasicEList {
   /**
    * @param data the computed contents; used as backing store, not copied
    * @param accessorName name of the accessor, used in the error message
    */
-  constructor(e, t) {
-    super(null, null), this.data = e, this.accessorName = t;
+  constructor(data, accessorName) {
+    super(null, null);
+    this.data = data;
+    this.accessorName = accessorName;
   }
   /**
    * Raises the error every mutating method funnels through.
    */
-  refuse(e) {
-    throw new Error(`Cannot call ${e}() on the result of ${this.accessorName}: it is a derived list and cannot be modified. Modify the owning list instead (e.g. getEStructuralFeatures()).`);
+  refuse(operation) {
+    throw new Error(`Cannot call ${operation}() on the result of ${this.accessorName}: it is a derived list and cannot be modified. Modify the owning list instead (e.g. getEStructuralFeatures()).`);
   }
-  set(e, t) {
+  set(_index, _element) {
     this.refuse("set");
   }
-  add(e) {
+  add(_element) {
     this.refuse("add");
   }
-  addAt(e, t) {
+  addAt(_index, _element) {
     this.refuse("addAt");
   }
-  addAll(e) {
+  addAll(_elements) {
     this.refuse("addAll");
   }
-  addAllAt(e, t) {
+  addAllAt(_index, _elements) {
     this.refuse("addAllAt");
   }
-  remove(e) {
+  remove(_element) {
     this.refuse("remove");
   }
-  removeAt(e) {
+  removeAt(_index) {
     this.refuse("removeAt");
   }
   clear() {
     this.refuse("clear");
   }
-  move(e, t) {
+  move(_toIndex, _fromIndex) {
     this.refuse("move");
   }
-  push(...e) {
+  push(..._items) {
     this.refuse("push");
   }
   pop() {
@@ -2366,207 +3037,285 @@ class Er extends Ie {
   shift() {
     this.refuse("shift");
   }
-  unshift(...e) {
+  unshift(..._items) {
     this.refuse("unshift");
   }
-  splice(e, t, ...s) {
+  splice(_start, _deleteCount, ..._items) {
     this.refuse("splice");
   }
-  sort(e) {
+  sort(_compareFn) {
     this.refuse("sort");
   }
   reverse() {
     this.refuse("reverse");
   }
 }
-function Cr(l, e) {
-  return xe(new Er(l, e));
+function createUnmodifiableEList(data, accessorName) {
+  return createIndexedProxy(new UnmodifiableEList(data, accessorName));
 }
-let Rs = 0;
-function Ps() {
-  Rs++;
+let metamodelRevision = 0;
+function bumpMetamodelRevision() {
+  metamodelRevision++;
 }
-function Tr() {
-  return Rs;
+function currentMetamodelRevision() {
+  return metamodelRevision;
 }
-function Ge(l, e, t) {
-  const s = Tr();
-  if (l.value !== null && l.value.revision === s)
-    return l.value.list;
-  const r = Cr(t(), e);
-  return l.value = { revision: s, list: r }, r;
+function cachedDerivedList(cache, accessorName, compute) {
+  const revision = currentMetamodelRevision();
+  if (cache.value !== null && cache.value.revision === revision) {
+    return cache.value.list;
+  }
+  const list = createUnmodifiableEList(compute(), accessorName);
+  cache.value = { revision, list };
+  return list;
 }
-class Sr extends Ie {
-  constructor(e, t) {
-    super(e, null), this.featureResolver = t ?? null;
+class MetamodelEList extends BasicEList {
+  constructor(owner, featureResolver) {
+    super(owner, null);
+    this.featureResolver = featureResolver ?? null;
   }
   getFeature() {
-    return this.feature === null && this.featureResolver !== null && (this.feature = this.featureResolver()), this.feature;
+    if (this.feature === null && this.featureResolver !== null) {
+      this.feature = this.featureResolver();
+    }
+    return this.feature;
   }
-  dispatchNotification(e, t, s, r) {
-    Ps(), super.dispatchNotification(e, t, s, r);
+  dispatchNotification(eventType, oldValue, newValue, position) {
+    bumpMetamodelRevision();
+    super.dispatchNotification(eventType, oldValue, newValue, position);
   }
 }
-function ce(l, e) {
-  return xe(new Sr(l, e));
+function createMetamodelEList(owner, featureResolver) {
+  return createIndexedProxy(new MetamodelEList(owner, featureResolver));
 }
-function xe(l) {
-  return l[vs] ? l : new Proxy(l, xs);
+function createIndexedProxy(list) {
+  if (list[IS_INDEXED]) {
+    return list;
+  }
+  return new Proxy(list, INDEX_ACCESS_HANDLER);
 }
-function Nr(l, e) {
-  return xe(new Wt(l, e));
+function createContainmentEList(owner, feature) {
+  return createIndexedProxy(new EObjectContainmentEList(owner, feature));
 }
-function _r(l, e) {
-  return xe(new yr(l, e));
+function createEObjectEList(owner, feature) {
+  return createIndexedProxy(new EObjectEList(owner, feature));
 }
-function wr(l, e) {
-  return xe(new Ie(l, e));
+function createBasicEList(owner, feature) {
+  return createIndexedProxy(new BasicEList(owner, feature));
 }
-class Ir extends Ie {
-  constructor(e) {
-    super(null, null), this.resource = e;
+class ResourceContentsEList extends BasicEList {
+  constructor(resource) {
+    super(null, null);
+    this.resource = resource;
   }
-  didAdd(e, t) {
-    this.setResource(t), this.dispatchResourceNotification(H.ADD, null, t, e);
+  didAdd(index, element) {
+    this.setResource(element);
+    this.dispatchResourceNotification(NotificationType.ADD, null, element, index);
   }
-  didAddMany(e, t) {
-    for (const s of t)
-      this.setResource(s);
-    this.dispatchResourceNotification(H.ADD_MANY, null, t, e);
+  didAddMany(index, elements) {
+    for (const element of elements) {
+      this.setResource(element);
+    }
+    this.dispatchResourceNotification(NotificationType.ADD_MANY, null, elements, index);
   }
-  didRemove(e, t) {
-    this.unsetResource(t), this.dispatchResourceNotification(H.REMOVE, t, null, e);
+  didRemove(index, element) {
+    this.unsetResource(element);
+    this.dispatchResourceNotification(NotificationType.REMOVE, element, null, index);
   }
-  didClear(e) {
-    for (const t of e)
-      this.unsetResource(t);
-    e.length === 1 ? this.dispatchResourceNotification(H.REMOVE, e[0], null, 0) : e.length > 1 && this.dispatchResourceNotification(H.REMOVE_MANY, e, null, Gt);
+  didClear(oldData) {
+    for (const element of oldData) {
+      this.unsetResource(element);
+    }
+    if (oldData.length === 1) {
+      this.dispatchResourceNotification(NotificationType.REMOVE, oldData[0], null, 0);
+    } else if (oldData.length > 1) {
+      this.dispatchResourceNotification(NotificationType.REMOVE_MANY, oldData, null, NO_INDEX);
+    }
   }
-  didSet(e, t, s) {
-    this.unsetResource(s), this.setResource(t), this.dispatchResourceNotification(H.SET, s, t, e);
+  didSet(index, newElement, oldElement) {
+    this.unsetResource(oldElement);
+    this.setResource(newElement);
+    this.dispatchResourceNotification(NotificationType.SET, oldElement, newElement, index);
   }
-  setResource(e) {
-    e && "eSetResource" in e && e.eSetResource(this.resource);
+  setResource(element) {
+    if (element && "eSetResource" in element) {
+      element.eSetResource(this.resource);
+    }
   }
-  unsetResource(e) {
-    e && "eSetResource" in e && e.eSetResource(null);
+  unsetResource(element) {
+    if (element && "eSetResource" in element) {
+      element.eSetResource(null);
+    }
   }
   /**
    * Dispatch notification to the Resource (which is a Notifier).
    * Uses a synthetic 'contents' feature for the notification.
    */
-  dispatchResourceNotification(e, t, s, r) {
-    if (!this.resource || "eDeliver" in this.resource && !this.resource.eDeliver())
+  dispatchResourceNotification(eventType, oldValue, newValue, position) {
+    if (!this.resource)
       return;
+    if ("eDeliver" in this.resource && !this.resource.eDeliver()) {
+      return;
+    }
     if ("eAdapters" in this.resource) {
-      const o = this.resource.eAdapters();
-      if (!o || o.length === 0)
+      const adapters = this.resource.eAdapters();
+      if (!adapters || adapters.length === 0) {
         return;
-    } else
+      }
+    } else {
       return;
-    const n = { getName: () => "contents" }, a = new it(this.resource, e, n, t, s, r);
-    "eNotify" in this.resource && this.resource.eNotify(a);
+    }
+    const contentsFeature = { getName: () => "contents" };
+    const notification = new NotificationImpl(this.resource, eventType, contentsFeature, oldValue, newValue, position);
+    if ("eNotify" in this.resource) {
+      this.resource.eNotify(notification);
+    }
   }
 }
-function Ar(l) {
-  return xe(new Ir(l));
+function createResourceContentsEList(resource) {
+  return createIndexedProxy(new ResourceContentsEList(resource));
 }
-var we;
-(function(l) {
-  l.INSTANCE = br();
-})(we || (we = {}));
-function Fs(l, e) {
-  for (const t of e.getESubpackages()) {
-    const s = t.getNsURI();
-    s && l.set(s, t), Fs(l, t);
+var EPackageRegistry;
+(function(EPackageRegistry2) {
+  EPackageRegistry2.INSTANCE = createGlobalRegistry();
+})(EPackageRegistry || (EPackageRegistry = {}));
+function registerSubpackages(map, pkg) {
+  for (const subPkg of pkg.getESubpackages()) {
+    const subNsURI = subPkg.getNsURI();
+    if (subNsURI) {
+      map.set(subNsURI, subPkg);
+    }
+    registerSubpackages(map, subPkg);
   }
 }
-function ks(l) {
-  const e = l.getNsURI();
-  if (!e)
-    throw new Error(`Cannot register package '${l.getName() ?? "<unnamed>"}': it has no nsURI.`);
-  return e;
+function requireNsURI(ePackage) {
+  const nsURI = ePackage.getNsURI();
+  if (!nsURI) {
+    throw new Error(`Cannot register package '${ePackage.getName() ?? "<unnamed>"}': it has no nsURI.`);
+  }
+  return nsURI;
 }
-function br() {
-  const l = /* @__PURE__ */ new Map();
+function createGlobalRegistry() {
+  const map = /* @__PURE__ */ new Map();
   return {
-    getEPackage(e) {
-      const t = l.get(e);
-      return t ? "getEPackage" in t ? t.getEPackage() : t : null;
+    getEPackage(nsURI) {
+      const value = map.get(nsURI);
+      if (!value)
+        return null;
+      if ("getEPackage" in value) {
+        return value.getEPackage();
+      }
+      return value;
     },
-    getEFactory(e) {
-      const t = l.get(e);
-      return t ? "getEFactory" in t ? t.getEFactory() : t.getEFactoryInstance() : null;
+    getEFactory(nsURI) {
+      const value = map.get(nsURI);
+      if (!value)
+        return null;
+      if ("getEFactory" in value) {
+        return value.getEFactory();
+      }
+      return value.getEFactoryInstance();
     },
-    get(e) {
-      return l.get(e) || null;
+    get(nsURI) {
+      return map.get(nsURI) || null;
     },
-    set(e, t) {
-      l.set(e, t), "getEPackage" in t || Fs(l, t);
+    set(nsURI, value) {
+      map.set(nsURI, value);
+      if (!("getEPackage" in value)) {
+        registerSubpackages(map, value);
+      }
     },
-    registerPackage(e) {
-      this.set(ks(e), e);
+    registerPackage(ePackage) {
+      this.set(requireNsURI(ePackage), ePackage);
     },
-    delete(e) {
-      return l.delete(e);
+    delete(nsURI) {
+      return map.delete(nsURI);
     },
-    has(e) {
-      return l.has(e);
+    has(nsURI) {
+      return map.has(nsURI);
     },
     keys() {
-      return l.keys();
+      return map.keys();
     },
     values() {
-      return l.values();
+      return map.values();
     }
   };
 }
-class Y {
-  constructor(e, t, s, r, n) {
-    this._scheme = e, this._authority = t, this._path = s, this._query = r, this._fragment = n;
+class URI {
+  constructor(_scheme, _authority, _path, _query, _fragment) {
+    this._scheme = _scheme;
+    this._authority = _authority;
+    this._path = _path;
+    this._query = _query;
+    this._fragment = _fragment;
   }
   /**
    * Creates a URI from a string.
    */
-  static createURI(e) {
-    if (!e)
-      return new Y(null, null, "", null, null);
-    let t = null, s = null, r = null, n = null, a = null, o = 0;
-    e.length;
-    const d = e.indexOf("#");
-    d >= 0 && (a = e.substring(d + 1), e = e.substring(0, d));
-    const y = e.indexOf("?");
-    y >= 0 && (n = e.substring(y + 1), e = e.substring(0, y));
-    const S = e.indexOf(":");
-    if (S > 0) {
-      let C = !0;
-      for (let A = 0; A < S; A++)
-        if (e.charAt(A) === "/") {
-          C = !1;
+  static createURI(uriString) {
+    if (!uriString) {
+      return new URI(null, null, "", null, null);
+    }
+    let scheme = null;
+    let authority = null;
+    let path = null;
+    let query = null;
+    let fragment = null;
+    let i = 0;
+    uriString.length;
+    const hashIndex = uriString.indexOf("#");
+    if (hashIndex >= 0) {
+      fragment = uriString.substring(hashIndex + 1);
+      uriString = uriString.substring(0, hashIndex);
+    }
+    const questionIndex = uriString.indexOf("?");
+    if (questionIndex >= 0) {
+      query = uriString.substring(questionIndex + 1);
+      uriString = uriString.substring(0, questionIndex);
+    }
+    const colonIndex = uriString.indexOf(":");
+    if (colonIndex > 0) {
+      let isScheme = true;
+      for (let j = 0; j < colonIndex; j++) {
+        const c = uriString.charAt(j);
+        if (c === "/") {
+          isScheme = false;
           break;
         }
-      C && (t = e.substring(0, S), o = S + 1);
+      }
+      if (isScheme) {
+        scheme = uriString.substring(0, colonIndex);
+        i = colonIndex + 1;
+      }
     }
-    if (e.startsWith("//", o)) {
-      const C = o + 2;
-      let A = C;
-      for (; A < e.length && e.charAt(A) !== "/"; )
-        A++;
-      s = e.substring(C, A), o = A;
+    if (uriString.startsWith("//", i)) {
+      const authorityStart = i + 2;
+      let authorityEnd = authorityStart;
+      while (authorityEnd < uriString.length && uriString.charAt(authorityEnd) !== "/") {
+        authorityEnd++;
+      }
+      authority = uriString.substring(authorityStart, authorityEnd);
+      i = authorityEnd;
     }
-    return o < e.length ? r = e.substring(o) : s !== null && (r = ""), new Y(t, s, r, n, a);
+    if (i < uriString.length) {
+      path = uriString.substring(i);
+    } else if (authority !== null) {
+      path = "";
+    }
+    return new URI(scheme, authority, path, query, fragment);
   }
   /**
    * Creates a file URI.
    */
-  static createFileURI(e) {
-    return new Y("file", null, e, null, null);
+  static createFileURI(path) {
+    return new URI("file", null, path, null, null);
   }
   /**
    * Creates a platform resource URI.
    */
-  static createPlatformResourceURI(e, t = !0) {
-    return new Y("platform", null, "/resource" + e, null, null);
+  static createPlatformResourceURI(path, encode = true) {
+    return new URI("platform", null, "/resource" + path, null, null);
   }
   /**
    * Returns the scheme, or null.
@@ -2604,11 +3353,16 @@ class Y {
   host() {
     if (!this._authority)
       return null;
-    let e = this._authority;
-    const t = e.indexOf("@");
-    t >= 0 && (e = e.substring(t + 1));
-    const s = e.lastIndexOf(":");
-    return s >= 0 && (e = e.substring(0, s)), e;
+    let auth = this._authority;
+    const atIndex = auth.indexOf("@");
+    if (atIndex >= 0) {
+      auth = auth.substring(atIndex + 1);
+    }
+    const colonIndex = auth.lastIndexOf(":");
+    if (colonIndex >= 0) {
+      auth = auth.substring(0, colonIndex);
+    }
+    return auth;
   }
   /**
    * Returns the port part of the authority, or null.
@@ -2616,11 +3370,16 @@ class Y {
   port() {
     if (!this._authority)
       return null;
-    let e = this._authority;
-    const t = e.indexOf("@");
-    t >= 0 && (e = e.substring(t + 1));
-    const s = e.lastIndexOf(":");
-    return s >= 0 ? e.substring(s + 1) : null;
+    let auth = this._authority;
+    const atIndex = auth.indexOf("@");
+    if (atIndex >= 0) {
+      auth = auth.substring(atIndex + 1);
+    }
+    const colonIndex = auth.lastIndexOf(":");
+    if (colonIndex >= 0) {
+      return auth.substring(colonIndex + 1);
+    }
+    return null;
   }
   /**
    * Returns the userinfo part of the authority, or null.
@@ -2628,8 +3387,11 @@ class Y {
   userInfo() {
     if (!this._authority)
       return null;
-    const e = this._authority.indexOf("@");
-    return e >= 0 ? this._authority.substring(0, e) : null;
+    const atIndex = this._authority.indexOf("@");
+    if (atIndex >= 0) {
+      return this._authority.substring(0, atIndex);
+    }
+    return null;
   }
   /**
    * Returns the file extension, or null.
@@ -2637,121 +3399,199 @@ class Y {
   fileExtension() {
     if (!this._path)
       return null;
-    const e = this._path.lastIndexOf("."), t = this._path.lastIndexOf("/");
-    return e > t && e > 0 ? this._path.substring(e + 1) : null;
+    const lastDot = this._path.lastIndexOf(".");
+    const lastSlash = this._path.lastIndexOf("/");
+    if (lastDot > lastSlash && lastDot > 0) {
+      return this._path.substring(lastDot + 1);
+    }
+    return null;
   }
   /**
    * Returns a new URI with the given fragment.
    */
-  appendFragment(e) {
-    return new Y(this._scheme, this._authority, this._path, this._query, e);
+  appendFragment(fragment) {
+    return new URI(this._scheme, this._authority, this._path, this._query, fragment);
   }
   /**
    * Returns a new URI with the given path segment appended.
    */
-  appendSegment(e) {
-    let t = this._path || "";
-    return !t && this._authority && (t = "/"), t && !t.endsWith("/") && (t += "/"), t += e, new Y(this._scheme, this._authority, t, this._query, this._fragment);
+  appendSegment(segment) {
+    let newPath = this._path || "";
+    if (!newPath && this._authority) {
+      newPath = "/";
+    }
+    if (newPath && !newPath.endsWith("/")) {
+      newPath += "/";
+    }
+    newPath += segment;
+    return new URI(this._scheme, this._authority, newPath, this._query, this._fragment);
   }
   /**
    * Returns a new URI with the specified number of segments trimmed from the end.
    */
-  trimSegments(e) {
-    if (!this._path || e <= 0)
+  trimSegments(count) {
+    if (!this._path || count <= 0)
       return this;
-    const t = this._path.split("/").filter((n) => n.length > 0), s = t.slice(0, Math.max(0, t.length - e));
-    let r = this._path.startsWith("/") ? "/" : "";
-    return r += s.join("/"), this._path.endsWith("/") && r.length > 0 && (r += "/"), new Y(this._scheme, this._authority, r, this._query, this._fragment);
+    const segments = this._path.split("/").filter((s) => s.length > 0);
+    const newSegments = segments.slice(0, Math.max(0, segments.length - count));
+    let newPath = this._path.startsWith("/") ? "/" : "";
+    newPath += newSegments.join("/");
+    if (this._path.endsWith("/") && newPath.length > 0) {
+      newPath += "/";
+    }
+    return new URI(this._scheme, this._authority, newPath, this._query, this._fragment);
   }
   /**
    * Returns a new URI with the query removed.
    */
   trimQuery() {
-    return new Y(this._scheme, this._authority, this._path, null, this._fragment);
+    return new URI(this._scheme, this._authority, this._path, null, this._fragment);
   }
   /**
    * Returns a new URI with the fragment removed.
    */
   trimFragment() {
-    return new Y(this._scheme, this._authority, this._path, this._query, null);
+    return new URI(this._scheme, this._authority, this._path, this._query, null);
   }
   /**
    * Resolves this URI against a base URI (RFC 3986 with EMF modifications).
    */
-  resolve(e) {
-    if (this._scheme !== null)
+  resolve(base) {
+    if (this._scheme !== null) {
       return this;
-    let t = e._scheme, s = this._authority, r = this._path, n = this._query;
-    if (s !== null)
-      r = this.removeDotSegments(r || "");
-    else if (s = e._authority, !r || r === "") {
-      if (this._query !== null) {
-        if (r = e._path, r) {
-          const a = r.lastIndexOf("/");
-          a >= 0 && (r = r.substring(0, a + 1));
+    }
+    let scheme = base._scheme;
+    let authority = this._authority;
+    let path = this._path;
+    let query = this._query;
+    if (authority !== null) {
+      path = this.removeDotSegments(path || "");
+    } else {
+      authority = base._authority;
+      if (!path || path === "") {
+        if (this._query !== null) {
+          path = base._path;
+          if (path) {
+            const lastSlash = path.lastIndexOf("/");
+            if (lastSlash >= 0) {
+              path = path.substring(0, lastSlash + 1);
+            }
+          }
+        } else {
+          path = base._path;
         }
-      } else
-        r = e._path;
-      n = this._query !== null ? this._query : e._query;
-    } else
-      r.startsWith("/") || (r = this.mergePaths(e._path, r), r = this.removeDotSegments(r));
-    return new Y(t, s, r, n, this._fragment);
+        query = this._query !== null ? this._query : base._query;
+      } else {
+        if (path.startsWith("/")) ;
+        else {
+          path = this.mergePaths(base._path, path);
+          path = this.removeDotSegments(path);
+        }
+      }
+    }
+    return new URI(scheme, authority, path, query, this._fragment);
   }
   /**
    * Deresolves this URI against a base URI.
    */
-  deresolve(e) {
-    if (this._scheme !== e._scheme)
+  deresolve(base) {
+    if (this._scheme !== base._scheme) {
       return this;
-    if (this._authority === null != (e._authority === null))
+    }
+    if (this._authority === null !== (base._authority === null)) {
       return this;
-    if (this._authority !== null && e._authority !== null && this._authority !== e._authority)
-      return new Y(null, this._authority, this._path, this._query, this._fragment);
-    const t = this._path || "", s = e._path || "";
-    if (t === s)
-      return this._query === e._query ? new Y(null, null, null, null, this._fragment) : new Y(null, null, "", this._query, this._fragment);
-    const r = t.split("/"), n = s.split("/");
-    let a = 0;
-    const o = Math.min(r.length, n.length);
-    for (let A = 0; A < o - 1 && r[A] === n[A]; A++)
-      a++;
-    const d = n.length - a - 1, y = t.includes("/./") || t.includes("/../") || t.endsWith("/.") || t.endsWith("/..");
-    if (t.startsWith("/") && (d >= 3 || y && d > 0))
-      return new Y(null, null, t, this._query, this._fragment);
-    const S = [];
-    for (let A = 0; A < d; A++)
-      S.push("..");
-    for (let A = a; A < r.length; A++)
-      S.push(r[A]);
-    let C = S.join("/");
-    return C === "" && t.endsWith("/") && (C = "./"), new Y(null, null, C, this._query, this._fragment);
+    }
+    if (this._authority !== null && base._authority !== null && this._authority !== base._authority) {
+      return new URI(null, this._authority, this._path, this._query, this._fragment);
+    }
+    const thisPath = this._path || "";
+    const basePath = base._path || "";
+    if (thisPath === basePath) {
+      if (this._query === base._query) {
+        return new URI(null, null, null, null, this._fragment);
+      }
+      return new URI(null, null, "", this._query, this._fragment);
+    }
+    const thisSegments = thisPath.split("/");
+    const baseSegments = basePath.split("/");
+    let commonLength = 0;
+    const minLength = Math.min(thisSegments.length, baseSegments.length);
+    for (let i = 0; i < minLength - 1; i++) {
+      if (thisSegments[i] === baseSegments[i]) {
+        commonLength++;
+      } else {
+        break;
+      }
+    }
+    const upCount = baseSegments.length - commonLength - 1;
+    const containsDots = thisPath.includes("/./") || thisPath.includes("/../") || thisPath.endsWith("/.") || thisPath.endsWith("/..");
+    if (thisPath.startsWith("/") && (upCount >= 3 || containsDots && upCount > 0)) {
+      return new URI(null, null, thisPath, this._query, this._fragment);
+    }
+    const relativeSegments = [];
+    for (let i = 0; i < upCount; i++) {
+      relativeSegments.push("..");
+    }
+    for (let i = commonLength; i < thisSegments.length; i++) {
+      relativeSegments.push(thisSegments[i]);
+    }
+    let relativePath = relativeSegments.join("/");
+    if (relativePath === "" && thisPath.endsWith("/")) {
+      relativePath = "./";
+    }
+    return new URI(null, null, relativePath, this._query, this._fragment);
   }
   /**
    * Merges a relative path with a base path.
    */
-  mergePaths(e, t) {
-    if (!e)
-      return "/" + t;
-    const s = e.lastIndexOf("/");
-    return s >= 0 ? e.substring(0, s + 1) + t : t;
+  mergePaths(basePath, relativePath) {
+    if (!basePath) {
+      return "/" + relativePath;
+    }
+    const lastSlash = basePath.lastIndexOf("/");
+    if (lastSlash >= 0) {
+      return basePath.substring(0, lastSlash + 1) + relativePath;
+    }
+    return relativePath;
   }
   /**
    * Removes dot segments from a path (RFC 3986).
    */
-  removeDotSegments(e) {
-    const t = [], s = e.split("/"), r = s.length > 0 && (s[s.length - 1] === "." || s[s.length - 1] === "..");
-    for (let n = 0; n < s.length; n++) {
-      const a = s[n];
-      a === ".." ? t.length > 0 && t[t.length - 1] !== "" && t.pop() : a !== "." && !(a === "" && n > 0 && n < s.length - 1) && t.push(a);
+  removeDotSegments(path) {
+    const output = [];
+    const segments = path.split("/");
+    const hasTrailingDot = segments.length > 0 && (segments[segments.length - 1] === "." || segments[segments.length - 1] === "..");
+    for (let i = 0; i < segments.length; i++) {
+      const segment = segments[i];
+      if (segment === "..") {
+        if (output.length > 0 && output[output.length - 1] !== "") {
+          output.pop();
+        }
+      } else if (segment !== "." && !(segment === "" && i > 0 && i < segments.length - 1)) {
+        output.push(segment);
+      }
     }
-    return r && t.length > 0 && t.push(""), t.join("/");
+    if (hasTrailingDot && output.length > 0) {
+      output.push("");
+    }
+    return output.join("/");
   }
   /**
    * Returns the string representation.
    */
   toString() {
-    let e = "";
-    return this._scheme && (e += this._scheme + ":"), this._authority && (e += "//" + this._authority), this._path && (e += this._path), this._query && (e += "?" + this._query), this._fragment && (e += "#" + this._fragment), e;
+    let result = "";
+    if (this._scheme)
+      result += this._scheme + ":";
+    if (this._authority)
+      result += "//" + this._authority;
+    if (this._path)
+      result += this._path;
+    if (this._query)
+      result += "?" + this._query;
+    if (this._fragment)
+      result += "#" + this._fragment;
+    return result;
   }
   /**
    * Returns whether this URI is hierarchical.
@@ -2790,12 +3630,18 @@ class Y {
     return this._scheme === null;
   }
 }
-function vr(l) {
-  return "unsetTarget" in l && typeof l.unsetTarget == "function";
+function isAdapterInternal(adapter) {
+  return "unsetTarget" in adapter && typeof adapter.unsetTarget === "function";
 }
-class Re {
+class BasicEObject {
   constructor() {
-    this._eResource = null, this._eContainer = null, this._eContainerFeature = null, this._eProxyURI = null, this._eAdapters = [], this._eDeliver = !0, this.eSettings = /* @__PURE__ */ new Map();
+    this._eResource = null;
+    this._eContainer = null;
+    this._eContainerFeature = null;
+    this._eProxyURI = null;
+    this._eAdapters = [];
+    this._eDeliver = true;
+    this.eSettings = /* @__PURE__ */ new Map();
   }
   /**
    * Returns the containing resource
@@ -2806,8 +3652,8 @@ class Re {
   /**
    * Sets the resource (internal use)
    */
-  eSetResource(e) {
-    this._eResource = e;
+  eSetResource(resource) {
+    this._eResource = resource;
   }
   /**
    * Returns the containing object
@@ -2818,8 +3664,9 @@ class Re {
   /**
    * Sets the container (internal use)
    */
-  eSetContainer(e, t) {
-    this._eContainer = e, this._eContainerFeature = t;
+  eSetContainer(container, feature) {
+    this._eContainer = container;
+    this._eContainerFeature = feature;
   }
   /**
    * Returns the containing feature
@@ -2837,30 +3684,38 @@ class Re {
    * Returns all direct contents
    */
   eContents() {
-    const e = [], s = this.eClass().getEAllContainments();
-    for (const r of s) {
-      const n = this.eGet(r);
-      if (n)
-        if (Array.isArray(n) || ye(n))
-          for (const a of n)
-            e.push(a);
-        else
-          e.push(n);
+    const contents = [];
+    const eClass = this.eClass();
+    const features = eClass.getEAllContainments();
+    for (const feature of features) {
+      const value = this.eGet(feature);
+      if (value) {
+        if (Array.isArray(value) || isEList(value)) {
+          for (const item of value) {
+            contents.push(item);
+          }
+        } else {
+          contents.push(value);
+        }
+      }
     }
-    return e;
+    return contents;
   }
   /**
    * Returns an iterator over all contents
    */
   eAllContents() {
-    const e = this.eContents(), t = [...e];
-    for (const s of e) {
-      const r = s.eAllContents();
-      let n = r.next();
-      for (; !n.done; )
-        t.push(n.value), n = r.next();
+    const contents = this.eContents();
+    const allContents = [...contents];
+    for (const content of contents) {
+      const iterator = content.eAllContents();
+      let result = iterator.next();
+      while (!result.done) {
+        allContents.push(result.value);
+        result = iterator.next();
+      }
     }
-    return t[Symbol.iterator]();
+    return allContents[Symbol.iterator]();
   }
   /**
    * Returns whether this object is a proxy
@@ -2877,47 +3732,62 @@ class Re {
   /**
    * Sets the proxy URI
    */
-  eSetProxyURI(e) {
-    this._eProxyURI = e;
+  eSetProxyURI(uri) {
+    this._eProxyURI = uri;
   }
   /**
    * Resolves a proxy to the actual object
    */
-  eResolveProxy(e) {
-    const t = e.eProxyURI();
-    if (!t)
-      return e;
-    const s = this.eResource();
-    if (!s)
-      return e;
-    const r = s.getResourceSet();
-    if (!r)
-      return e;
-    const n = t.toString(), a = n.indexOf("#");
-    if (a > 0) {
-      const o = n.substring(0, a), d = n.substring(a + 1);
-      let y;
-      const S = s.getURI();
-      S && !o.includes("://") ? y = S.resolve(Y.createURI(o)) : y = Y.createURI(o);
-      const C = r.getResource(y, !0);
-      if (C) {
-        const R = C.getEObject(d);
-        if (R)
-          return R;
-      }
-      const A = r.getPackageRegistry(), b = this.resolveFragmentViaPackageRegistry(A, o, d, r);
-      if (b)
-        return b;
-    } else if (a === 0) {
-      const o = n.substring(1), d = s.getEObject(o);
-      if (d)
-        return d;
-    } else {
-      const o = s.getEObject(n);
-      if (o)
-        return o;
+  eResolveProxy(proxy) {
+    const proxyURI = proxy.eProxyURI();
+    if (!proxyURI) {
+      return proxy;
     }
-    return e;
+    const resource = this.eResource();
+    if (!resource) {
+      return proxy;
+    }
+    const resourceSet = resource.getResourceSet();
+    if (!resourceSet) {
+      return proxy;
+    }
+    const uriStr = proxyURI.toString();
+    const hashIndex = uriStr.indexOf("#");
+    if (hashIndex > 0) {
+      const resourceURIStr = uriStr.substring(0, hashIndex);
+      const fragment = uriStr.substring(hashIndex + 1);
+      let resourceURI;
+      const currentURI = resource.getURI();
+      if (currentURI && !resourceURIStr.includes("://")) {
+        resourceURI = currentURI.resolve(URI.createURI(resourceURIStr));
+      } else {
+        resourceURI = URI.createURI(resourceURIStr);
+      }
+      const targetResource = resourceSet.getResource(resourceURI, true);
+      if (targetResource) {
+        const resolved2 = targetResource.getEObject(fragment);
+        if (resolved2) {
+          return resolved2;
+        }
+      }
+      const packageRegistry = resourceSet.getPackageRegistry();
+      const resolved = this.resolveFragmentViaPackageRegistry(packageRegistry, resourceURIStr, fragment, resourceSet);
+      if (resolved) {
+        return resolved;
+      }
+    } else if (hashIndex === 0) {
+      const fragment = uriStr.substring(1);
+      const resolved = resource.getEObject(fragment);
+      if (resolved) {
+        return resolved;
+      }
+    } else {
+      const resolved = resource.getEObject(uriStr);
+      if (resolved) {
+        return resolved;
+      }
+    }
+    return proxy;
   }
   /**
    * Resolve a fragment via the package registry.
@@ -2925,53 +3795,59 @@ class Re {
    * (e.g., because the resource is empty after package registration), try to
    * find the correct package in the registry.
    */
-  resolveFragmentViaPackageRegistry(e, t, s, r) {
-    const n = e.getEPackage(t);
-    if (n) {
-      const y = this.resolveFragmentInPackage(n, s);
-      if (y)
-        return y;
+  resolveFragmentViaPackageRegistry(packageRegistry, resourceURIStr, fragment, resourceSet) {
+    const directPkg = packageRegistry.getEPackage(resourceURIStr);
+    if (directPkg) {
+      const resolved = this.resolveFragmentInPackage(directPkg, fragment);
+      if (resolved)
+        return resolved;
     }
-    let a = t;
-    const o = a.lastIndexOf("/");
-    o >= 0 && (a = a.substring(o + 1));
-    const d = a.indexOf(".");
-    if (d > 0 && (a = a.substring(0, d)), a)
-      for (const y of e.keys()) {
-        const S = e.getEPackage(y);
-        if (S && S.getName() === a) {
-          const C = this.resolveFragmentInPackage(S, s);
-          if (C)
-            return C;
+    let baseName = resourceURIStr;
+    const lastSlash = baseName.lastIndexOf("/");
+    if (lastSlash >= 0)
+      baseName = baseName.substring(lastSlash + 1);
+    const dotIndex = baseName.indexOf(".");
+    if (dotIndex > 0)
+      baseName = baseName.substring(0, dotIndex);
+    if (baseName) {
+      for (const nsKey of packageRegistry.keys()) {
+        const pkg = packageRegistry.getEPackage(nsKey);
+        if (pkg && pkg.getName() === baseName) {
+          const resolved = this.resolveFragmentInPackage(pkg, fragment);
+          if (resolved)
+            return resolved;
         }
       }
+    }
     return null;
   }
   /**
    * Resolve a fragment path (e.g., //Agent or //sub/Agent) within an EPackage.
    */
-  resolveFragmentInPackage(e, t) {
-    let s = t;
-    for (; s.startsWith("/"); )
-      s = s.substring(1);
-    if (!s)
+  resolveFragmentInPackage(pkg, fragment) {
+    let path = fragment;
+    while (path.startsWith("/"))
+      path = path.substring(1);
+    if (!path)
       return null;
-    const r = s.split("/");
-    let n = e;
-    for (let d = 0; d < r.length - 1; d++) {
-      const y = n.getESubpackages();
-      let S = null;
-      for (let C = 0; C < y.length; C++)
-        if (y.get(C).getName() === r[d]) {
-          S = y.get(C);
+    const segments = path.split("/");
+    let currentPkg = pkg;
+    for (let i = 0; i < segments.length - 1; i++) {
+      const subPackages = currentPkg.getESubpackages();
+      let found = null;
+      for (let j = 0; j < subPackages.length; j++) {
+        if (subPackages.get(j).getName() === segments[i]) {
+          found = subPackages.get(j);
           break;
         }
-      if (!S)
+      }
+      if (!found)
         return null;
-      n = S;
+      currentPkg = found;
     }
-    const a = r[r.length - 1];
-    return n.getEClassifier(a) ?? null;
+    const classifierName = segments[segments.length - 1];
+    const classifier = currentPkg.getEClassifier(classifierName);
+    return classifier ?? null;
   }
   /**
    * Returns the internal resource (bypassing container navigation)
@@ -2988,8 +3864,8 @@ class Re {
   /**
    * Sets the container without notification
    */
-  eBasicSetContainer(e, t) {
-    this._eContainer = e;
+  eBasicSetContainer(container, containerFeatureID) {
+    this._eContainer = container;
   }
   // ===== Notifier interface implementation =====
   /**
@@ -3007,108 +3883,146 @@ class Re {
   /**
    * Sets whether this notifier will deliver notifications to the adapters.
    */
-  eSetDeliver(e) {
-    this._eDeliver = e;
+  eSetDeliver(deliver) {
+    this._eDeliver = deliver;
   }
   /**
    * Notifies a change to a feature of this notifier as described by the notification.
    */
-  eNotify(e) {
-    if (this._eDeliver && this._eAdapters.length > 0)
-      for (const t of this._eAdapters)
-        t.notifyChanged(e);
+  eNotify(notification) {
+    if (this._eDeliver && this._eAdapters.length > 0) {
+      for (const adapter of this._eAdapters) {
+        adapter.notifyChanged(notification);
+      }
+    }
   }
   /**
    * Adds an adapter to this notifier.
    */
-  eAdapterAdd(e) {
-    this._eAdapters.push(e), e.setTarget(this);
+  eAdapterAdd(adapter) {
+    this._eAdapters.push(adapter);
+    adapter.setTarget(this);
   }
   /**
    * Removes an adapter from this notifier.
    */
-  eAdapterRemove(e) {
-    const t = this._eAdapters.indexOf(e);
-    if (t !== -1) {
+  eAdapterRemove(adapter) {
+    const index = this._eAdapters.indexOf(adapter);
+    if (index !== -1) {
       if (this._eDeliver) {
-        const s = new it(this, H.REMOVING_ADAPTER, null, e, null);
-        e.notifyChanged(s);
+        const notification = new NotificationImpl(this, NotificationType.REMOVING_ADAPTER, null, adapter, null);
+        adapter.notifyChanged(notification);
       }
-      return this._eAdapters.splice(t, 1), vr(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
+      this._eAdapters.splice(index, 1);
+      if (isAdapterInternal(adapter)) {
+        adapter.unsetTarget(this);
+      } else {
+        adapter.setTarget(null);
+      }
+      return true;
     }
-    return !1;
+    return false;
   }
   // ===== End Notifier interface =====
   /**
    * Returns all cross references
    */
   eCrossReferences() {
-    const e = [], s = this.eClass().getEAllReferences();
-    for (const r of s)
-      if (!r.isContainment()) {
-        const n = this.eGet(r);
-        if (n)
-          if (Array.isArray(n) || ye(n))
-            for (const a of n)
-              e.push(a);
-          else
-            e.push(n);
+    const refs = [];
+    const eClass = this.eClass();
+    const references = eClass.getEAllReferences();
+    for (const ref of references) {
+      if (!ref.isContainment()) {
+        const value = this.eGet(ref);
+        if (value) {
+          if (Array.isArray(value) || isEList(value)) {
+            for (const item of value) {
+              refs.push(item);
+            }
+          } else {
+            refs.push(value);
+          }
+        }
       }
-    return e;
+    }
+    return refs;
   }
   /**
    * Reflective get (default implementation)
    */
-  eGet(e) {
-    const t = e.getName() || "";
-    return this.eSettings.get(t);
+  eGet(feature) {
+    const featureName = feature.getName() || "";
+    return this.eSettings.get(featureName);
   }
   /**
    * Reflective set (default implementation)
    */
-  eSet(e, t) {
-    const s = e.getName() || "", r = this.eSettings.get(s);
-    if (this.eSettings.set(s, t), e instanceof Object && "isContainment" in e) {
-      const n = e;
-      if (n.isContainment() && (r && typeof r == "object" && "eSetContainer" in r && r.eSetContainer(null, null), t && typeof t == "object" && "eSetContainer" in t))
-        if (Array.isArray(t))
-          for (const a of t)
-            a && "eSetContainer" in a && a.eSetContainer(this, n);
-        else
-          t.eSetContainer(this, n);
+  eSet(feature, newValue) {
+    const featureName = feature.getName() || "";
+    const oldValue = this.eSettings.get(featureName);
+    this.eSettings.set(featureName, newValue);
+    if (feature instanceof Object && "isContainment" in feature) {
+      const ref = feature;
+      if (ref.isContainment()) {
+        if (oldValue && typeof oldValue === "object" && "eSetContainer" in oldValue) {
+          oldValue.eSetContainer(null, null);
+        }
+        if (newValue && typeof newValue === "object" && "eSetContainer" in newValue) {
+          if (Array.isArray(newValue)) {
+            for (const obj of newValue) {
+              if (obj && "eSetContainer" in obj) {
+                obj.eSetContainer(this, ref);
+              }
+            }
+          } else {
+            newValue.eSetContainer(this, ref);
+          }
+        }
+      }
     }
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const n = new it(this, H.SET, e, r, t);
-      this.eNotify(n);
+      const notification = new NotificationImpl(this, NotificationType.SET, feature, oldValue, newValue);
+      this.eNotify(notification);
     }
   }
   /**
    * Reflective isSet
    */
-  eIsSet(e) {
-    const t = e.getName() || "";
-    return this.eSettings.has(t);
+  eIsSet(feature) {
+    const featureName = feature.getName() || "";
+    return this.eSettings.has(featureName);
   }
   /**
    * Reflective unset
    */
-  eUnset(e) {
-    const t = e.getName() || "", s = this.eSettings.get(t);
-    if (this.eSettings.delete(t), e instanceof Object && "isContainment" in e && e.isContainment() && s)
-      if (Array.isArray(s))
-        for (const n of s)
-          n && "eSetContainer" in n && n.eSetContainer(null, null);
-      else typeof s == "object" && "eSetContainer" in s && s.eSetContainer(null, null);
+  eUnset(feature) {
+    const featureName = feature.getName() || "";
+    const oldValue = this.eSettings.get(featureName);
+    this.eSettings.delete(featureName);
+    if (feature instanceof Object && "isContainment" in feature) {
+      const ref = feature;
+      if (ref.isContainment() && oldValue) {
+        if (Array.isArray(oldValue)) {
+          for (const obj of oldValue) {
+            if (obj && "eSetContainer" in obj) {
+              obj.eSetContainer(null, null);
+            }
+          }
+        } else if (typeof oldValue === "object" && "eSetContainer" in oldValue) {
+          oldValue.eSetContainer(null, null);
+        }
+      }
+    }
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const r = new it(this, H.UNSET, e, s, e.getDefaultValue());
-      this.eNotify(r);
+      const notification = new NotificationImpl(this, NotificationType.UNSET, feature, oldValue, feature.getDefaultValue());
+      this.eNotify(notification);
     }
   }
   /**
    * Invoke operation
    */
-  eInvoke(e, t) {
-    throw new Error(`Operation ${e.getName()} not implemented`);
+  eInvoke(operation, arguments_) {
+    throw new Error(`Operation ${operation.getName()} not implemented`);
   }
   /**
    * Get direct class (for generated code)
@@ -3119,14 +4033,17 @@ class Re {
   /**
    * Get feature by ID
    */
-  eFeature(e) {
-    return this.eClass().getEStructuralFeature(e);
+  eFeature(featureID) {
+    const eClass = this.eClass();
+    return eClass.getEStructuralFeature(featureID);
   }
   /**
    * String representation
    */
   toString() {
-    return `${this.eClass()?.getName() || "UnknownClass"}@${this.hashCode()}`;
+    const eClass = this.eClass();
+    const className = eClass?.getName() || "UnknownClass";
+    return `${className}@${this.hashCode()}`;
   }
   /**
    * Simple hash code
@@ -3135,9 +4052,10 @@ class Re {
     return Math.random().toString(36).substring(7);
   }
 }
-class Bs extends Re {
-  constructor(e) {
-    super(), this._eClass = e;
+class DynamicEObject extends BasicEObject {
+  constructor(_eClass) {
+    super();
+    this._eClass = _eClass;
   }
   eClass() {
     return this._eClass;
@@ -3146,59 +4064,81 @@ class Bs extends Re {
    * Override eGet to handle dynamic features and proxy resolution.
    * Returns EList for multi-valued features.
    */
-  eGet(e) {
-    const t = e.getName() || "";
-    if (this.eSettings.has(t)) {
-      let r = this.eSettings.get(t);
-      if (!e.isMany() && r && We(r) && r.eIsProxy()) {
-        const n = this.eResolveProxy(r);
-        if (n !== r)
-          return this.eSettings.set(t, n), n;
+  eGet(feature) {
+    const featureName = feature.getName() || "";
+    if (this.eSettings.has(featureName)) {
+      let value = this.eSettings.get(featureName);
+      if (!feature.isMany() && value && isInternalEObject(value) && value.eIsProxy()) {
+        const resolved = this.eResolveProxy(value);
+        if (resolved !== value) {
+          this.eSettings.set(featureName, resolved);
+          return resolved;
+        }
       }
-      return r;
+      return value;
     }
-    if (e.isMany()) {
-      let r;
-      if ("isContainment" in e) {
-        const n = e;
-        n.isContainment() ? r = Nr(this, n) : r = _r(this, n);
-      } else
-        r = wr(this, e);
-      return this.eSettings.set(t, r), r;
+    if (feature.isMany()) {
+      let list;
+      if ("isContainment" in feature) {
+        const ref = feature;
+        if (ref.isContainment()) {
+          list = createContainmentEList(this, ref);
+        } else {
+          list = createEObjectEList(this, ref);
+        }
+      } else {
+        list = createBasicEList(this, feature);
+      }
+      this.eSettings.set(featureName, list);
+      return list;
     }
-    const s = e.getDefaultValue();
-    return s !== void 0 ? s : null;
+    const defaultValue = feature.getDefaultValue();
+    return defaultValue !== void 0 ? defaultValue : null;
   }
 }
-class xr extends Wt {
-  constructor(e, t, s) {
-    super(e, t), this.eMap = s;
+class EMapContainmentEList extends EObjectContainmentEList {
+  constructor(owner, feature, eMap) {
+    super(owner, feature);
+    this.eMap = eMap;
   }
-  didAdd(e, t) {
-    super.didAdd(e, t), this.eMap.entryAdded(t);
+  didAdd(index, element) {
+    super.didAdd(index, element);
+    this.eMap.entryAdded(element);
   }
-  didAddMany(e, t) {
-    super.didAddMany(e, t);
-    for (const s of t)
-      this.eMap.entryAdded(s);
+  didAddMany(index, elements) {
+    super.didAddMany(index, elements);
+    for (const element of elements) {
+      this.eMap.entryAdded(element);
+    }
   }
-  didRemove(e, t) {
-    super.didRemove(e, t), this.eMap.entryRemoved(t);
+  didRemove(index, element) {
+    super.didRemove(index, element);
+    this.eMap.entryRemoved(element);
   }
-  didClear(e) {
-    super.didClear(e), this.eMap.entriesCleared();
+  didClear(oldData) {
+    super.didClear(oldData);
+    this.eMap.entriesCleared();
   }
-  didSet(e, t, s) {
-    super.didSet(e, t, s), this.eMap.entryRemoved(s), this.eMap.entryAdded(t);
+  didSet(index, newElement, oldElement) {
+    super.didSet(index, newElement, oldElement);
+    this.eMap.entryRemoved(oldElement);
+    this.eMap.entryAdded(newElement);
   }
 }
-class Rr {
-  constructor(e, t, s) {
-    this.mapIndex = null, this._owner = e, this.entryEClass = s, this.delegateList = new xr(e, t, this);
-    const r = s.getEStructuralFeature("key"), n = s.getEStructuralFeature("value");
-    if (!r || !n)
-      throw new Error(`Entry EClass '${s.getName()}' must have 'key' and 'value' features`);
-    return this.keyFeature = r, this.valueFeature = n, xe(this);
+class BasicEMap {
+  constructor(owner, feature, entryEClass) {
+    this.mapIndex = null;
+    this._owner = owner;
+    this.entryEClass = entryEClass;
+    this.delegateList = new EMapContainmentEList(owner, feature, this);
+    const keyF = entryEClass.getEStructuralFeature("key");
+    const valueF = entryEClass.getEStructuralFeature("value");
+    if (!keyF || !valueF) {
+      throw new Error(`Entry EClass '${entryEClass.getName()}' must have 'key' and 'value' features`);
+    }
+    this.keyFeature = keyF;
+    this.valueFeature = valueF;
+    return createIndexedProxy(this);
   }
   /**
    * Rebuild map index from the delegate list contents.
@@ -3206,65 +4146,89 @@ class Rr {
    * so we rebuild on every map-method access.
    */
   ensureIndex() {
-    this.mapIndex === null && (this.mapIndex = /* @__PURE__ */ new Map()), this.mapIndex.clear();
-    for (let e = 0; e < this.delegateList.size(); e++) {
-      const t = this.delegateList.get(e), s = t.eGet(this.keyFeature);
-      s != null && this.mapIndex.set(s, t);
+    if (this.mapIndex === null) {
+      this.mapIndex = /* @__PURE__ */ new Map();
+    }
+    this.mapIndex.clear();
+    for (let i = 0; i < this.delegateList.size(); i++) {
+      const entry = this.delegateList.get(i);
+      const key = entry.eGet(this.keyFeature);
+      if (key != null) {
+        this.mapIndex.set(key, entry);
+      }
     }
     return this.mapIndex;
   }
   // ===== Map methods =====
-  getByKey(e) {
-    const s = this.ensureIndex().get(e);
-    if (s)
-      return s.eGet(this.valueFeature);
+  getByKey(key) {
+    const index = this.ensureIndex();
+    const entry = index.get(key);
+    if (!entry)
+      return void 0;
+    return entry.eGet(this.valueFeature);
   }
-  putByKey(e, t) {
-    const r = this.ensureIndex().get(e);
-    if (r) {
-      const o = r.eGet(this.valueFeature);
-      return r.eSet(this.valueFeature, t), o;
+  putByKey(key, value) {
+    const index = this.ensureIndex();
+    const existing = index.get(key);
+    if (existing) {
+      const oldValue = existing.eGet(this.valueFeature);
+      existing.eSet(this.valueFeature, value);
+      return oldValue;
     }
-    const n = this.entryEClass.getEPackage();
-    let a;
-    n && n.getEFactoryInstance() ? a = n.getEFactoryInstance().create(this.entryEClass) : a = new Bs(this.entryEClass), a.eSet(this.keyFeature, e), a.eSet(this.valueFeature, t), this.delegateList.add(a);
+    const pkg = this.entryEClass.getEPackage();
+    let entry;
+    if (pkg && pkg.getEFactoryInstance()) {
+      entry = pkg.getEFactoryInstance().create(this.entryEClass);
+    } else {
+      entry = new DynamicEObject(this.entryEClass);
+    }
+    entry.eSet(this.keyFeature, key);
+    entry.eSet(this.valueFeature, value);
+    this.delegateList.add(entry);
+    return void 0;
   }
-  removeByKey(e) {
-    const s = this.ensureIndex().get(e);
-    if (!s)
-      return;
-    const r = s.eGet(this.valueFeature);
-    return this.delegateList.remove(s), r;
+  removeByKey(key) {
+    const index = this.ensureIndex();
+    const entry = index.get(key);
+    if (!entry)
+      return void 0;
+    const oldValue = entry.eGet(this.valueFeature);
+    this.delegateList.remove(entry);
+    return oldValue;
   }
-  containsKey(e) {
-    return this.ensureIndex().has(e);
+  containsKey(key) {
+    return this.ensureIndex().has(key);
   }
-  containsValue(e) {
-    for (const t of this.ensureIndex().values())
-      if (t.eGet(this.valueFeature) === e)
-        return !0;
-    return !1;
+  containsValue(value) {
+    for (const entry of this.ensureIndex().values()) {
+      if (entry.eGet(this.valueFeature) === value) {
+        return true;
+      }
+    }
+    return false;
   }
   keys() {
     return Array.from(this.ensureIndex().keys());
   }
   mapValues() {
-    const e = [];
-    for (const t of this.ensureIndex().values())
-      e.push(t.eGet(this.valueFeature));
-    return e;
+    const result = [];
+    for (const entry of this.ensureIndex().values()) {
+      result.push(entry.eGet(this.valueFeature));
+    }
+    return result;
   }
   toMap() {
-    const e = /* @__PURE__ */ new Map();
-    for (const [t, s] of this.ensureIndex())
-      e.set(t, s.eGet(this.valueFeature));
-    return e;
+    const result = /* @__PURE__ */ new Map();
+    for (const [key, entry] of this.ensureIndex()) {
+      result.set(key, entry.eGet(this.valueFeature));
+    }
+    return result;
   }
   // ===== Index management callbacks (called by EMapContainmentEList) =====
-  entryAdded(e) {
+  entryAdded(entry) {
     this.mapIndex = null;
   }
-  entryRemoved(e) {
+  entryRemoved(entry) {
     this.mapIndex = null;
   }
   entriesCleared() {
@@ -3280,41 +4244,41 @@ class Rr {
   isEmpty() {
     return this.delegateList.isEmpty();
   }
-  contains(e) {
-    return this.delegateList.contains(e);
+  contains(element) {
+    return this.delegateList.contains(element);
   }
-  indexOf(e) {
-    return this.delegateList.indexOf(e);
+  indexOf(element) {
+    return this.delegateList.indexOf(element);
   }
-  get(e) {
-    return this.delegateList.get(e);
+  get(index) {
+    return this.delegateList.get(index);
   }
-  set(e, t) {
-    return this.delegateList.set(e, t);
+  set(index, element) {
+    return this.delegateList.set(index, element);
   }
-  add(e) {
-    return this.delegateList.add(e);
+  add(element) {
+    return this.delegateList.add(element);
   }
-  addAt(e, t) {
-    this.delegateList.addAt(e, t);
+  addAt(index, element) {
+    this.delegateList.addAt(index, element);
   }
-  addAll(e) {
-    return this.delegateList.addAll(e);
+  addAll(elements) {
+    return this.delegateList.addAll(elements);
   }
-  addAllAt(e, t) {
-    return this.delegateList.addAllAt(e, t);
+  addAllAt(index, elements) {
+    return this.delegateList.addAllAt(index, elements);
   }
-  remove(e) {
-    return this.delegateList.remove(e);
+  remove(element) {
+    return this.delegateList.remove(element);
   }
-  removeAt(e) {
-    return this.delegateList.removeAt(e);
+  removeAt(index) {
+    return this.delegateList.removeAt(index);
   }
   clear() {
     this.delegateList.clear();
   }
-  move(e, t) {
-    return this.delegateList.move(e, t);
+  move(toIndex, fromIndex) {
+    return this.delegateList.move(toIndex, fromIndex);
   }
   toArray() {
     return this.delegateList.toArray();
@@ -3322,92 +4286,108 @@ class Rr {
   [Symbol.iterator]() {
     return this.delegateList[Symbol.iterator]();
   }
-  push(...e) {
-    return this.delegateList.push(...e);
+  push(...items) {
+    return this.delegateList.push(...items);
   }
-  filter(e, t) {
-    return this.delegateList.filter(e, t);
+  filter(callback, thisArg) {
+    return this.delegateList.filter(callback, thisArg);
   }
-  map(e, t) {
-    return this.delegateList.map(e, t);
+  map(callback, thisArg) {
+    return this.delegateList.map(callback, thisArg);
   }
-  forEach(e, t) {
-    this.delegateList.forEach(e, t);
+  forEach(callback, thisArg) {
+    this.delegateList.forEach(callback, thisArg);
   }
-  find(e, t) {
-    return this.delegateList.find(e, t);
+  find(callback, thisArg) {
+    return this.delegateList.find(callback, thisArg);
   }
-  findIndex(e, t) {
-    return this.delegateList.findIndex(e, t);
+  findIndex(callback, thisArg) {
+    return this.delegateList.findIndex(callback, thisArg);
   }
-  some(e, t) {
-    return this.delegateList.some(e, t);
+  some(callback, thisArg) {
+    return this.delegateList.some(callback, thisArg);
   }
-  every(e, t) {
-    return this.delegateList.every(e, t);
+  every(callback, thisArg) {
+    return this.delegateList.every(callback, thisArg);
   }
-  includes(e) {
-    return this.delegateList.includes(e);
+  includes(element) {
+    return this.delegateList.includes(element);
   }
-  slice(e, t) {
-    return this.delegateList.slice(e, t);
+  slice(start, end) {
+    return this.delegateList.slice(start, end);
   }
-  concat(...e) {
-    return this.delegateList.concat(...e);
+  concat(...items) {
+    return this.delegateList.concat(...items);
   }
-  sort(e) {
-    return this.delegateList.sort(e), this;
+  sort(compareFn) {
+    this.delegateList.sort(compareFn);
+    return this;
   }
   reverse() {
-    return this.delegateList.reverse(), this;
+    this.delegateList.reverse();
+    return this;
   }
-  join(e) {
-    return this.delegateList.join(e);
+  join(separator) {
+    return this.delegateList.join(separator);
   }
-  at(e) {
-    return this.delegateList.at(e);
+  at(index) {
+    return this.delegateList.at(index);
   }
-  lastIndexOf(e) {
-    return this.delegateList.lastIndexOf(e);
+  lastIndexOf(element) {
+    return this.delegateList.lastIndexOf(element);
   }
-  flatMap(e, t) {
-    return this.delegateList.flatMap(e, t);
+  flatMap(callback, thisArg) {
+    return this.delegateList.flatMap(callback, thisArg);
   }
   toJSON() {
     return this.delegateList.toJSON();
   }
 }
-function Pr(l, e, t) {
-  return new Rr(l, e, t);
+function createEMap(owner, feature, entryEClass) {
+  return new BasicEMap(owner, feature, entryEClass);
 }
-var ct;
-(function(l) {
-  l.INSTANCE_FACTORY_REGISTRY = Fr();
-})(ct || (ct = {}));
-function Fr() {
-  const l = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map(), t = /* @__PURE__ */ new Map();
+var Resource;
+(function(Resource2) {
+  Resource2.INSTANCE_FACTORY_REGISTRY = createGlobalFactoryRegistry();
+})(Resource || (Resource = {}));
+function createGlobalFactoryRegistry() {
+  const extensionMap2 = /* @__PURE__ */ new Map();
+  const protocolMap = /* @__PURE__ */ new Map();
+  const contentTypeMap = /* @__PURE__ */ new Map();
   return {
-    getFactory(s) {
-      const r = s.scheme();
-      if (r && e.has(r))
-        return e.get(r);
-      const n = s.fileExtension();
-      return n && l.has(n) ? l.get(n) : null;
+    getFactory(uri) {
+      const protocol = uri.scheme();
+      if (protocol && protocolMap.has(protocol)) {
+        return protocolMap.get(protocol);
+      }
+      const extension = uri.fileExtension();
+      if (extension && extensionMap2.has(extension)) {
+        return extensionMap2.get(extension);
+      }
+      return null;
     },
     getExtensionToFactoryMap() {
-      return l;
+      return extensionMap2;
     },
     getProtocolToFactoryMap() {
-      return e;
+      return protocolMap;
     },
     getContentTypeToFactoryMap() {
-      return t;
+      return contentTypeMap;
     }
   };
 }
-class Xt {
-  constructor(e) {
-    this.resourceSet = null, this.loaded = !1, this.modified = !1, this.errors = [], this.warnings = [], this._eAdapters = [], this._eDeliver = !0, this.uri = e || null, this.contents = Ar(this);
+class BasicResource {
+  constructor(uri) {
+    this.resourceSet = null;
+    this.loaded = false;
+    this.modified = false;
+    this.errors = [];
+    this.warnings = [];
+    this._eAdapters = [];
+    this._eDeliver = true;
+    this.uri = uri || null;
+    this.contents = createResourceContentsEList(this);
   }
   // ===== Notifier interface implementation =====
   /**
@@ -3425,67 +4405,107 @@ class Xt {
   /**
    * Sets whether this resource will deliver notifications to adapters.
    */
-  eSetDeliver(e) {
-    this._eDeliver = e;
+  eSetDeliver(deliver) {
+    this._eDeliver = deliver;
   }
   /**
    * Notifies all adapters of a change.
    */
-  eNotify(e) {
-    if (this._eDeliver && this._eAdapters.length > 0)
-      for (const t of this._eAdapters)
-        t.notifyChanged(e);
+  eNotify(notification) {
+    if (this._eDeliver && this._eAdapters.length > 0) {
+      for (const adapter of this._eAdapters) {
+        adapter.notifyChanged(notification);
+      }
+    }
   }
   getResourceSet() {
     return this.resourceSet;
   }
-  setResourceSet(e) {
-    this.resourceSet = e;
+  setResourceSet(resourceSet) {
+    this.resourceSet = resourceSet;
   }
   getURI() {
     return this.uri;
   }
-  setURI(e) {
-    this.uri = e;
+  setURI(uri) {
+    this.uri = uri;
   }
   getContents() {
     return this.contents;
   }
   getAllContents() {
-    const e = [...this.contents];
-    for (const t of this.contents) {
-      const s = t.eAllContents();
-      let r = s.next();
-      for (; !r.done; )
-        e.push(r.value), r = s.next();
-    }
-    return e[Symbol.iterator]();
-  }
-  getEObject(e) {
-    if (e.startsWith("/")) {
-      const t = e.split("/"), s = t.length >= 2 && t[0] === "" && t[1] === "", r = t.filter((o) => o.length > 0);
-      if (r.length === 0)
-        return this.contents.size() > 0 ? this.contents.get(0) : null;
-      let n = null, a = 0;
-      if (s && (n = this.contents.size() > 0 ? this.contents.get(0) : null, !n || (r[0].startsWith("@") ? n = this.eObjectForURIFragmentSegment(n, r[0]) : n = this.findByNameInContents(n, r[0]), a = 1, !n)))
-        return null;
-      for (let o = a; o < r.length; o++) {
-        const d = r[o], y = parseInt(d, 10);
-        if (n === null ? isNaN(y) ? (n = this.findByName(this.contents.toArray(), d), !n && this.contents.size() > 0 && (n = this.findByNameInContents(this.contents.get(0), d))) : n = y < this.contents.size() ? this.contents.get(y) : null : isNaN(y) ? n = this.navigateByNameOrFeature(n, d) : n = n.eContents()[y] || null, !n)
-          return null;
+    const allContents = [...this.contents];
+    for (const root of this.contents) {
+      const iterator = root.eAllContents();
+      let result = iterator.next();
+      while (!result.done) {
+        allContents.push(result.value);
+        result = iterator.next();
       }
-      return n;
     }
-    return this.getEObjectByID(e);
+    return allContents[Symbol.iterator]();
+  }
+  getEObject(uriFragment) {
+    if (uriFragment.startsWith("/")) {
+      const allParts = uriFragment.split("/");
+      const isDoubleSlash = allParts.length >= 2 && allParts[0] === "" && allParts[1] === "";
+      const parts = allParts.filter((p) => p.length > 0);
+      if (parts.length === 0) {
+        return this.contents.size() > 0 ? this.contents.get(0) : null;
+      }
+      let current = null;
+      let startIndex = 0;
+      if (isDoubleSlash) {
+        current = this.contents.size() > 0 ? this.contents.get(0) : null;
+        if (!current) {
+          return null;
+        }
+        if (parts[0].startsWith("@")) {
+          current = this.eObjectForURIFragmentSegment(current, parts[0]);
+        } else {
+          current = this.findByNameInContents(current, parts[0]);
+        }
+        startIndex = 1;
+        if (!current) {
+          return null;
+        }
+      }
+      for (let i = startIndex; i < parts.length; i++) {
+        const part = parts[i];
+        const index = parseInt(part, 10);
+        if (current === null) {
+          if (!isNaN(index)) {
+            current = index < this.contents.size() ? this.contents.get(index) : null;
+          } else {
+            current = this.findByName(this.contents.toArray(), part);
+            if (!current && this.contents.size() > 0) {
+              current = this.findByNameInContents(this.contents.get(0), part);
+            }
+          }
+        } else {
+          if (!isNaN(index)) {
+            const children = current.eContents();
+            current = children[index] || null;
+          } else {
+            current = this.navigateByNameOrFeature(current, part);
+          }
+        }
+        if (!current) {
+          return null;
+        }
+      }
+      return current;
+    }
+    return this.getEObjectByID(uriFragment);
   }
   /**
    * Find a named element in an object's eContents().
    * This is used for EMF-style fragment navigation like //SortOrder
    * which searches for named elements within a container (e.g., EPackage's eClassifiers).
    */
-  findByNameInContents(e, t) {
-    const s = e.eContents();
-    return this.findByName(s, t);
+  findByNameInContents(container, name) {
+    const contents = container.eContents();
+    return this.findByName(contents, name);
   }
   /**
    * Find an object by name in a list of objects.
@@ -3494,40 +4514,54 @@ class Xt {
    * 2. eGet(nameFeature) (for dynamic objects loaded from XMI)
    * 3. Direct name property
    */
-  findByName(e, t) {
-    for (const s of e) {
-      if ("getName" in s && typeof s.getName == "function" && s.getName() === t)
-        return s;
+  findByName(objects, name) {
+    for (const obj of objects) {
+      if ("getName" in obj && typeof obj.getName === "function") {
+        if (obj.getName() === name) {
+          return obj;
+        }
+      }
       try {
-        const r = s.eClass();
-        if (r) {
-          const n = r.getEStructuralFeature("name");
-          if (n && s.eGet(n) === t)
-            return s;
+        const eClass = obj.eClass();
+        if (eClass) {
+          const nameFeature = eClass.getEStructuralFeature("name");
+          if (nameFeature) {
+            const nameValue = obj.eGet(nameFeature);
+            if (nameValue === name) {
+              return obj;
+            }
+          }
         }
       } catch {
       }
-      if ("name" in s && s.name === t)
-        return s;
+      if ("name" in obj && obj.name === name) {
+        return obj;
+      }
     }
     return null;
   }
   /**
    * Navigate from an object to a child by name or feature.
    */
-  navigateByNameOrFeature(e, t) {
-    if (t.startsWith("@"))
-      return this.eObjectForURIFragmentSegment(e, t);
-    const s = e.eContents(), r = this.findByName(s, t);
-    if (r)
-      return r;
-    const a = e.eClass().getEStructuralFeature(t);
-    if (a) {
-      const o = e.eGet(a);
-      if (o && typeof o == "object" && "eClass" in o)
-        return o;
-      if (Array.isArray(o) && o.length > 0)
-        return o[0];
+  navigateByNameOrFeature(obj, nameOrFeature) {
+    if (nameOrFeature.startsWith("@")) {
+      return this.eObjectForURIFragmentSegment(obj, nameOrFeature);
+    }
+    const contents = obj.eContents();
+    const byName = this.findByName(contents, nameOrFeature);
+    if (byName) {
+      return byName;
+    }
+    const eClass = obj.eClass();
+    const feature = eClass.getEStructuralFeature(nameOrFeature);
+    if (feature) {
+      const value = obj.eGet(feature);
+      if (value && typeof value === "object" && "eClass" in value) {
+        return value;
+      }
+      if (Array.isArray(value) && value.length > 0) {
+        return value[0];
+      }
     }
     return null;
   }
@@ -3537,71 +4571,109 @@ class Xt {
    * - @featureName.index → eGet(feature)[index] (multi-valued)
    * - @featureName → eGet(feature) (single-valued)
    */
-  eObjectForURIFragmentSegment(e, t) {
-    const s = t.substring(1), r = e.eClass(), n = s.charAt(s.length - 1);
-    let a, o = -1;
-    if (n >= "0" && n <= "9") {
-      const S = s.lastIndexOf(".");
-      if (S > 0) {
-        const C = parseInt(s.substring(S + 1), 10);
-        isNaN(C) ? a = s : (a = s.substring(0, S), o = C);
-      } else
-        a = s;
-    } else
-      a = s;
-    const d = r.getEStructuralFeature(a);
-    if (!d)
+  eObjectForURIFragmentSegment(obj, segment) {
+    const body = segment.substring(1);
+    const eClass = obj.eClass();
+    const lastChar = body.charAt(body.length - 1);
+    let featureName;
+    let index = -1;
+    if (lastChar >= "0" && lastChar <= "9") {
+      const dotIndex = body.lastIndexOf(".");
+      if (dotIndex > 0) {
+        const possibleIndex = parseInt(body.substring(dotIndex + 1), 10);
+        if (!isNaN(possibleIndex)) {
+          featureName = body.substring(0, dotIndex);
+          index = possibleIndex;
+        } else {
+          featureName = body;
+        }
+      } else {
+        featureName = body;
+      }
+    } else {
+      featureName = body;
+    }
+    const feature = eClass.getEStructuralFeature(featureName);
+    if (!feature)
       return null;
-    const y = e.eGet(d);
-    return y == null ? null : o >= 0 ? Array.isArray(y) ? y[o] ?? null : typeof y == "object" && "get" in y && typeof y.get == "function" ? y.get(o) ?? null : null : typeof y == "object" && "eClass" in y ? y : null;
+    const value = obj.eGet(feature);
+    if (value === null || value === void 0)
+      return null;
+    if (index >= 0) {
+      if (Array.isArray(value)) {
+        return value[index] ?? null;
+      }
+      if (typeof value === "object" && "get" in value && typeof value.get === "function") {
+        return value.get(index) ?? null;
+      }
+      return null;
+    }
+    if (typeof value === "object" && "eClass" in value) {
+      return value;
+    }
+    return null;
   }
-  getURIFragment(e) {
-    const t = [];
-    let s = e;
-    for (; s; ) {
-      const r = s.eContainer();
-      if (!r) {
-        const o = this.contents.indexOf(s);
-        o >= 0 && t.unshift(o);
+  getURIFragment(eObject) {
+    const path = [];
+    let current = eObject;
+    while (current) {
+      const container = current.eContainer();
+      if (!container) {
+        const index2 = this.contents.indexOf(current);
+        if (index2 >= 0) {
+          path.unshift(index2);
+        }
         break;
       }
-      const a = r.eContents().indexOf(s);
-      a >= 0 && t.unshift(a), s = r;
+      const siblings = container.eContents();
+      const index = siblings.indexOf(current);
+      if (index >= 0) {
+        path.unshift(index);
+      }
+      current = container;
     }
-    return "/" + t.join("/");
+    return "/" + path.join("/");
   }
-  async save(e) {
-    this.errors = [], this.warnings = [];
+  async save(options) {
+    this.errors = [];
+    this.warnings = [];
     try {
-      const t = this.serialize();
-      this.modified = !1;
-    } catch (t) {
-      throw this.errors.push({
-        message: t instanceof Error ? t.message : String(t)
-      }), t;
+      const data = this.serialize();
+      this.modified = false;
+    } catch (err) {
+      this.errors.push({
+        message: err instanceof Error ? err.message : String(err)
+      });
+      throw err;
     }
   }
-  async load(e) {
-    this.errors = [], this.warnings = [];
+  async load(options) {
+    this.errors = [];
+    this.warnings = [];
     try {
-      this.loaded = !0;
-    } catch (t) {
-      throw this.errors.push({
-        message: t instanceof Error ? t.message : String(t)
-      }), t;
+      this.loaded = true;
+    } catch (err) {
+      this.errors.push({
+        message: err instanceof Error ? err.message : String(err)
+      });
+      throw err;
     }
   }
   isLoaded() {
     return this.loaded;
   }
   unload() {
-    this.contents.clear(), this.loaded = !1, this.modified = !1, this.errors = [], this.warnings = [];
+    this.contents.clear();
+    this.loaded = false;
+    this.modified = false;
+    this.errors = [];
+    this.warnings = [];
   }
   isModified() {
     return this.modified;
   }
-  setModified(e) {
-    this.modified = e;
+  setModified(isModified) {
+    this.modified = isModified;
   }
   getErrors() {
     return this.errors;
@@ -3612,14 +4684,20 @@ class Xt {
   /**
    * Helper to find object by ID attribute
    */
-  getEObjectByID(e) {
-    const t = this.getAllContents();
-    let s = t.next();
-    for (; !s.done; ) {
-      const r = s.value, a = r.eClass().getEIDAttribute();
-      if (a && r.eGet(a) === e)
-        return r;
-      s = t.next();
+  getEObjectByID(id) {
+    const iterator = this.getAllContents();
+    let result = iterator.next();
+    while (!result.done) {
+      const obj = result.value;
+      const eClass = obj.eClass();
+      const idAttr = eClass.getEIDAttribute();
+      if (idAttr) {
+        const value = obj.eGet(idAttr);
+        if (value === id) {
+          return obj;
+        }
+      }
+      result = iterator.next();
     }
     return null;
   }
@@ -3629,1248 +4707,50 @@ class Xt {
   serialize() {
     return {
       uri: this.uri?.toString(),
-      contents: this.contents.toArray().map((e) => this.serializeObject(e))
+      contents: this.contents.toArray().map((obj) => this.serializeObject(obj))
     };
   }
-  serializeObject(e) {
-    const t = e.eClass(), s = {
-      eClass: t.getName()
+  serializeObject(obj) {
+    const eClass = obj.eClass();
+    const data = {
+      eClass: eClass.getName()
     };
-    for (const r of t.getEAllStructuralFeatures()) {
-      if (r.isTransient())
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      if (feature.isTransient())
         continue;
-      const n = e.eGet(r);
-      n != null && (r.isMany() && Array.isArray(n) ? s[r.getName()] = n.map((a) => typeof a == "object" && "eClass" in a ? this.serializeObject(a) : a) : s[r.getName()] = typeof n == "object" && "eClass" in n ? this.serializeObject(n) : n);
+      const value = obj.eGet(feature);
+      if (value !== null && value !== void 0) {
+        if (feature.isMany() && Array.isArray(value)) {
+          data[feature.getName()] = value.map((v) => typeof v === "object" && "eClass" in v ? this.serializeObject(v) : v);
+        } else {
+          data[feature.getName()] = typeof value === "object" && "eClass" in value ? this.serializeObject(value) : value;
+        }
+      }
     }
-    return s;
+    return data;
   }
 }
-var vt = {};
-const kr = {}, Br = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var sax$1 = {};
+const __viteBrowserExternal = {};
+const __viteBrowserExternal$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: kr
-}, Symbol.toStringTag, { value: "Module" })), Mr = /* @__PURE__ */ ar(Br);
-var xt = {}, lt = { exports: {} }, Rt = {}, st = {}, Zt;
-function Dr() {
-  if (Zt) return st;
-  Zt = 1, st.byteLength = o, st.toByteArray = y, st.fromByteArray = A;
-  for (var l = [], e = [], t = typeof Uint8Array < "u" ? Uint8Array : Array, s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", r = 0, n = s.length; r < n; ++r)
-    l[r] = s[r], e[s.charCodeAt(r)] = r;
-  e[45] = 62, e[95] = 63;
-  function a(b) {
-    var R = b.length;
-    if (R % 4 > 0)
-      throw new Error("Invalid string. Length must be a multiple of 4");
-    var M = b.indexOf("=");
-    M === -1 && (M = R);
-    var U = M === R ? 0 : 4 - M % 4;
-    return [M, U];
-  }
-  function o(b) {
-    var R = a(b), M = R[0], U = R[1];
-    return (M + U) * 3 / 4 - U;
-  }
-  function d(b, R, M) {
-    return (R + M) * 3 / 4 - M;
-  }
-  function y(b) {
-    var R, M = a(b), U = M[0], _ = M[1], x = new t(d(b, U, _)), D = 0, $ = _ > 0 ? U - 4 : U, L;
-    for (L = 0; L < $; L += 4)
-      R = e[b.charCodeAt(L)] << 18 | e[b.charCodeAt(L + 1)] << 12 | e[b.charCodeAt(L + 2)] << 6 | e[b.charCodeAt(L + 3)], x[D++] = R >> 16 & 255, x[D++] = R >> 8 & 255, x[D++] = R & 255;
-    return _ === 2 && (R = e[b.charCodeAt(L)] << 2 | e[b.charCodeAt(L + 1)] >> 4, x[D++] = R & 255), _ === 1 && (R = e[b.charCodeAt(L)] << 10 | e[b.charCodeAt(L + 1)] << 4 | e[b.charCodeAt(L + 2)] >> 2, x[D++] = R >> 8 & 255, x[D++] = R & 255), x;
-  }
-  function S(b) {
-    return l[b >> 18 & 63] + l[b >> 12 & 63] + l[b >> 6 & 63] + l[b & 63];
-  }
-  function C(b, R, M) {
-    for (var U, _ = [], x = R; x < M; x += 3)
-      U = (b[x] << 16 & 16711680) + (b[x + 1] << 8 & 65280) + (b[x + 2] & 255), _.push(S(U));
-    return _.join("");
-  }
-  function A(b) {
-    for (var R, M = b.length, U = M % 3, _ = [], x = 16383, D = 0, $ = M - U; D < $; D += x)
-      _.push(C(b, D, D + x > $ ? $ : D + x));
-    return U === 1 ? (R = b[M - 1], _.push(
-      l[R >> 2] + l[R << 4 & 63] + "=="
-    )) : U === 2 && (R = (b[M - 2] << 8) + b[M - 1], _.push(
-      l[R >> 10] + l[R >> 4 & 63] + l[R << 2 & 63] + "="
-    )), _.join("");
-  }
-  return st;
-}
-var ht = {};
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
-var es;
-function Or() {
-  return es || (es = 1, ht.read = function(l, e, t, s, r) {
-    var n, a, o = r * 8 - s - 1, d = (1 << o) - 1, y = d >> 1, S = -7, C = t ? r - 1 : 0, A = t ? -1 : 1, b = l[e + C];
-    for (C += A, n = b & (1 << -S) - 1, b >>= -S, S += o; S > 0; n = n * 256 + l[e + C], C += A, S -= 8)
-      ;
-    for (a = n & (1 << -S) - 1, n >>= -S, S += s; S > 0; a = a * 256 + l[e + C], C += A, S -= 8)
-      ;
-    if (n === 0)
-      n = 1 - y;
-    else {
-      if (n === d)
-        return a ? NaN : (b ? -1 : 1) * (1 / 0);
-      a = a + Math.pow(2, s), n = n - y;
-    }
-    return (b ? -1 : 1) * a * Math.pow(2, n - s);
-  }, ht.write = function(l, e, t, s, r, n) {
-    var a, o, d, y = n * 8 - r - 1, S = (1 << y) - 1, C = S >> 1, A = r === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, b = s ? 0 : n - 1, R = s ? 1 : -1, M = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
-    for (e = Math.abs(e), isNaN(e) || e === 1 / 0 ? (o = isNaN(e) ? 1 : 0, a = S) : (a = Math.floor(Math.log(e) / Math.LN2), e * (d = Math.pow(2, -a)) < 1 && (a--, d *= 2), a + C >= 1 ? e += A / d : e += A * Math.pow(2, 1 - C), e * d >= 2 && (a++, d /= 2), a + C >= S ? (o = 0, a = S) : a + C >= 1 ? (o = (e * d - 1) * Math.pow(2, r), a = a + C) : (o = e * Math.pow(2, C - 1) * Math.pow(2, r), a = 0)); r >= 8; l[t + b] = o & 255, b += R, o /= 256, r -= 8)
-      ;
-    for (a = a << r | o, y += r; y > 0; l[t + b] = a & 255, b += R, a /= 256, y -= 8)
-      ;
-    l[t + b - R] |= M * 128;
-  }), ht;
-}
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-var ts;
-function Ur() {
-  return ts || (ts = 1, (function(l) {
-    const e = Dr(), t = Or(), s = typeof Symbol == "function" && typeof Symbol.for == "function" ? Symbol.for("nodejs.util.inspect.custom") : null;
-    l.Buffer = o, l.SlowBuffer = x, l.INSPECT_MAX_BYTES = 50;
-    const r = 2147483647;
-    l.kMaxLength = r, o.TYPED_ARRAY_SUPPORT = n(), !o.TYPED_ARRAY_SUPPORT && typeof console < "u" && typeof console.error == "function" && console.error(
-      "This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support."
-    );
-    function n() {
-      try {
-        const h = new Uint8Array(1), i = { foo: function() {
-          return 42;
-        } };
-        return Object.setPrototypeOf(i, Uint8Array.prototype), Object.setPrototypeOf(h, i), h.foo() === 42;
-      } catch {
-        return !1;
-      }
-    }
-    Object.defineProperty(o.prototype, "parent", {
-      enumerable: !0,
-      get: function() {
-        if (o.isBuffer(this))
-          return this.buffer;
-      }
-    }), Object.defineProperty(o.prototype, "offset", {
-      enumerable: !0,
-      get: function() {
-        if (o.isBuffer(this))
-          return this.byteOffset;
-      }
-    });
-    function a(h) {
-      if (h > r)
-        throw new RangeError('The value "' + h + '" is invalid for option "size"');
-      const i = new Uint8Array(h);
-      return Object.setPrototypeOf(i, o.prototype), i;
-    }
-    function o(h, i, c) {
-      if (typeof h == "number") {
-        if (typeof i == "string")
-          throw new TypeError(
-            'The "string" argument must be of type string. Received type number'
-          );
-        return C(h);
-      }
-      return d(h, i, c);
-    }
-    o.poolSize = 8192;
-    function d(h, i, c) {
-      if (typeof h == "string")
-        return A(h, i);
-      if (ArrayBuffer.isView(h))
-        return R(h);
-      if (h == null)
-        throw new TypeError(
-          "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof h
-        );
-      if (me(h, ArrayBuffer) || h && me(h.buffer, ArrayBuffer) || typeof SharedArrayBuffer < "u" && (me(h, SharedArrayBuffer) || h && me(h.buffer, SharedArrayBuffer)))
-        return M(h, i, c);
-      if (typeof h == "number")
-        throw new TypeError(
-          'The "value" argument must not be of type number. Received type number'
-        );
-      const p = h.valueOf && h.valueOf();
-      if (p != null && p !== h)
-        return o.from(p, i, c);
-      const E = U(h);
-      if (E) return E;
-      if (typeof Symbol < "u" && Symbol.toPrimitive != null && typeof h[Symbol.toPrimitive] == "function")
-        return o.from(h[Symbol.toPrimitive]("string"), i, c);
-      throw new TypeError(
-        "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof h
-      );
-    }
-    o.from = function(h, i, c) {
-      return d(h, i, c);
-    }, Object.setPrototypeOf(o.prototype, Uint8Array.prototype), Object.setPrototypeOf(o, Uint8Array);
-    function y(h) {
-      if (typeof h != "number")
-        throw new TypeError('"size" argument must be of type number');
-      if (h < 0)
-        throw new RangeError('The value "' + h + '" is invalid for option "size"');
-    }
-    function S(h, i, c) {
-      return y(h), h <= 0 ? a(h) : i !== void 0 ? typeof c == "string" ? a(h).fill(i, c) : a(h).fill(i) : a(h);
-    }
-    o.alloc = function(h, i, c) {
-      return S(h, i, c);
-    };
-    function C(h) {
-      return y(h), a(h < 0 ? 0 : _(h) | 0);
-    }
-    o.allocUnsafe = function(h) {
-      return C(h);
-    }, o.allocUnsafeSlow = function(h) {
-      return C(h);
-    };
-    function A(h, i) {
-      if ((typeof i != "string" || i === "") && (i = "utf8"), !o.isEncoding(i))
-        throw new TypeError("Unknown encoding: " + i);
-      const c = D(h, i) | 0;
-      let p = a(c);
-      const E = p.write(h, i);
-      return E !== c && (p = p.slice(0, E)), p;
-    }
-    function b(h) {
-      const i = h.length < 0 ? 0 : _(h.length) | 0, c = a(i);
-      for (let p = 0; p < i; p += 1)
-        c[p] = h[p] & 255;
-      return c;
-    }
-    function R(h) {
-      if (me(h, Uint8Array)) {
-        const i = new Uint8Array(h);
-        return M(i.buffer, i.byteOffset, i.byteLength);
-      }
-      return b(h);
-    }
-    function M(h, i, c) {
-      if (i < 0 || h.byteLength < i)
-        throw new RangeError('"offset" is outside of buffer bounds');
-      if (h.byteLength < i + (c || 0))
-        throw new RangeError('"length" is outside of buffer bounds');
-      let p;
-      return i === void 0 && c === void 0 ? p = new Uint8Array(h) : c === void 0 ? p = new Uint8Array(h, i) : p = new Uint8Array(h, i, c), Object.setPrototypeOf(p, o.prototype), p;
-    }
-    function U(h) {
-      if (o.isBuffer(h)) {
-        const i = _(h.length) | 0, c = a(i);
-        return c.length === 0 || h.copy(c, 0, 0, i), c;
-      }
-      if (h.length !== void 0)
-        return typeof h.length != "number" || tt(h.length) ? a(0) : b(h);
-      if (h.type === "Buffer" && Array.isArray(h.data))
-        return b(h.data);
-    }
-    function _(h) {
-      if (h >= r)
-        throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x" + r.toString(16) + " bytes");
-      return h | 0;
-    }
-    function x(h) {
-      return +h != h && (h = 0), o.alloc(+h);
-    }
-    o.isBuffer = function(i) {
-      return i != null && i._isBuffer === !0 && i !== o.prototype;
-    }, o.compare = function(i, c) {
-      if (me(i, Uint8Array) && (i = o.from(i, i.offset, i.byteLength)), me(c, Uint8Array) && (c = o.from(c, c.offset, c.byteLength)), !o.isBuffer(i) || !o.isBuffer(c))
-        throw new TypeError(
-          'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
-        );
-      if (i === c) return 0;
-      let p = i.length, E = c.length;
-      for (let f = 0, m = Math.min(p, E); f < m; ++f)
-        if (i[f] !== c[f]) {
-          p = i[f], E = c[f];
-          break;
-        }
-      return p < E ? -1 : E < p ? 1 : 0;
-    }, o.isEncoding = function(i) {
-      switch (String(i).toLowerCase()) {
-        case "hex":
-        case "utf8":
-        case "utf-8":
-        case "ascii":
-        case "latin1":
-        case "binary":
-        case "base64":
-        case "ucs2":
-        case "ucs-2":
-        case "utf16le":
-        case "utf-16le":
-          return !0;
-        default:
-          return !1;
-      }
-    }, o.concat = function(i, c) {
-      if (!Array.isArray(i))
-        throw new TypeError('"list" argument must be an Array of Buffers');
-      if (i.length === 0)
-        return o.alloc(0);
-      let p;
-      if (c === void 0)
-        for (c = 0, p = 0; p < i.length; ++p)
-          c += i[p].length;
-      const E = o.allocUnsafe(c);
-      let f = 0;
-      for (p = 0; p < i.length; ++p) {
-        let m = i[p];
-        if (me(m, Uint8Array))
-          f + m.length > E.length ? (o.isBuffer(m) || (m = o.from(m)), m.copy(E, f)) : Uint8Array.prototype.set.call(
-            E,
-            m,
-            f
-          );
-        else if (o.isBuffer(m))
-          m.copy(E, f);
-        else
-          throw new TypeError('"list" argument must be an Array of Buffers');
-        f += m.length;
-      }
-      return E;
-    };
-    function D(h, i) {
-      if (o.isBuffer(h))
-        return h.length;
-      if (ArrayBuffer.isView(h) || me(h, ArrayBuffer))
-        return h.byteLength;
-      if (typeof h != "string")
-        throw new TypeError(
-          'The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' + typeof h
-        );
-      const c = h.length, p = arguments.length > 2 && arguments[2] === !0;
-      if (!p && c === 0) return 0;
-      let E = !1;
-      for (; ; )
-        switch (i) {
-          case "ascii":
-          case "latin1":
-          case "binary":
-            return c;
-          case "utf8":
-          case "utf-8":
-            return oe(h).length;
-          case "ucs2":
-          case "ucs-2":
-          case "utf16le":
-          case "utf-16le":
-            return c * 2;
-          case "hex":
-            return c >>> 1;
-          case "base64":
-            return $e(h).length;
-          default:
-            if (E)
-              return p ? -1 : oe(h).length;
-            i = ("" + i).toLowerCase(), E = !0;
-        }
-    }
-    o.byteLength = D;
-    function $(h, i, c) {
-      let p = !1;
-      if ((i === void 0 || i < 0) && (i = 0), i > this.length || ((c === void 0 || c > this.length) && (c = this.length), c <= 0) || (c >>>= 0, i >>>= 0, c <= i))
-        return "";
-      for (h || (h = "utf8"); ; )
-        switch (h) {
-          case "hex":
-            return Ue(this, i, c);
-          case "utf8":
-          case "utf-8":
-            return Xe(this, i, c);
-          case "ascii":
-            return V(this, i, c);
-          case "latin1":
-          case "binary":
-            return ze(this, i, c);
-          case "base64":
-            return Be(this, i, c);
-          case "ucs2":
-          case "ucs-2":
-          case "utf16le":
-          case "utf-16le":
-            return Le(this, i, c);
-          default:
-            if (p) throw new TypeError("Unknown encoding: " + h);
-            h = (h + "").toLowerCase(), p = !0;
-        }
-    }
-    o.prototype._isBuffer = !0;
-    function L(h, i, c) {
-      const p = h[i];
-      h[i] = h[c], h[c] = p;
-    }
-    o.prototype.swap16 = function() {
-      const i = this.length;
-      if (i % 2 !== 0)
-        throw new RangeError("Buffer size must be a multiple of 16-bits");
-      for (let c = 0; c < i; c += 2)
-        L(this, c, c + 1);
-      return this;
-    }, o.prototype.swap32 = function() {
-      const i = this.length;
-      if (i % 4 !== 0)
-        throw new RangeError("Buffer size must be a multiple of 32-bits");
-      for (let c = 0; c < i; c += 4)
-        L(this, c, c + 3), L(this, c + 1, c + 2);
-      return this;
-    }, o.prototype.swap64 = function() {
-      const i = this.length;
-      if (i % 8 !== 0)
-        throw new RangeError("Buffer size must be a multiple of 64-bits");
-      for (let c = 0; c < i; c += 8)
-        L(this, c, c + 7), L(this, c + 1, c + 6), L(this, c + 2, c + 5), L(this, c + 3, c + 4);
-      return this;
-    }, o.prototype.toString = function() {
-      const i = this.length;
-      return i === 0 ? "" : arguments.length === 0 ? Xe(this, 0, i) : $.apply(this, arguments);
-    }, o.prototype.toLocaleString = o.prototype.toString, o.prototype.equals = function(i) {
-      if (!o.isBuffer(i)) throw new TypeError("Argument must be a Buffer");
-      return this === i ? !0 : o.compare(this, i) === 0;
-    }, o.prototype.inspect = function() {
-      let i = "";
-      const c = l.INSPECT_MAX_BYTES;
-      return i = this.toString("hex", 0, c).replace(/(.{2})/g, "$1 ").trim(), this.length > c && (i += " ... "), "<Buffer " + i + ">";
-    }, s && (o.prototype[s] = o.prototype.inspect), o.prototype.compare = function(i, c, p, E, f) {
-      if (me(i, Uint8Array) && (i = o.from(i, i.offset, i.byteLength)), !o.isBuffer(i))
-        throw new TypeError(
-          'The "target" argument must be one of type Buffer or Uint8Array. Received type ' + typeof i
-        );
-      if (c === void 0 && (c = 0), p === void 0 && (p = i ? i.length : 0), E === void 0 && (E = 0), f === void 0 && (f = this.length), c < 0 || p > i.length || E < 0 || f > this.length)
-        throw new RangeError("out of range index");
-      if (E >= f && c >= p)
-        return 0;
-      if (E >= f)
-        return -1;
-      if (c >= p)
-        return 1;
-      if (c >>>= 0, p >>>= 0, E >>>= 0, f >>>= 0, this === i) return 0;
-      let m = f - E, w = p - c;
-      const v = Math.min(m, w), P = this.slice(E, f), X = i.slice(c, p);
-      for (let W = 0; W < v; ++W)
-        if (P[W] !== X[W]) {
-          m = P[W], w = X[W];
-          break;
-        }
-      return m < w ? -1 : w < m ? 1 : 0;
-    };
-    function Ee(h, i, c, p, E) {
-      if (h.length === 0) return -1;
-      if (typeof c == "string" ? (p = c, c = 0) : c > 2147483647 ? c = 2147483647 : c < -2147483648 && (c = -2147483648), c = +c, tt(c) && (c = E ? 0 : h.length - 1), c < 0 && (c = h.length + c), c >= h.length) {
-        if (E) return -1;
-        c = h.length - 1;
-      } else if (c < 0)
-        if (E) c = 0;
-        else return -1;
-      if (typeof i == "string" && (i = o.from(i, p)), o.isBuffer(i))
-        return i.length === 0 ? -1 : fe(h, i, c, p, E);
-      if (typeof i == "number")
-        return i = i & 255, typeof Uint8Array.prototype.indexOf == "function" ? E ? Uint8Array.prototype.indexOf.call(h, i, c) : Uint8Array.prototype.lastIndexOf.call(h, i, c) : fe(h, [i], c, p, E);
-      throw new TypeError("val must be string, number or Buffer");
-    }
-    function fe(h, i, c, p, E) {
-      let f = 1, m = h.length, w = i.length;
-      if (p !== void 0 && (p = String(p).toLowerCase(), p === "ucs2" || p === "ucs-2" || p === "utf16le" || p === "utf-16le")) {
-        if (h.length < 2 || i.length < 2)
-          return -1;
-        f = 2, m /= 2, w /= 2, c /= 2;
-      }
-      function v(X, W) {
-        return f === 1 ? X[W] : X.readUInt16BE(W * f);
-      }
-      let P;
-      if (E) {
-        let X = -1;
-        for (P = c; P < m; P++)
-          if (v(h, P) === v(i, X === -1 ? 0 : P - X)) {
-            if (X === -1 && (X = P), P - X + 1 === w) return X * f;
-          } else
-            X !== -1 && (P -= P - X), X = -1;
-      } else
-        for (c + w > m && (c = m - w), P = c; P >= 0; P--) {
-          let X = !0;
-          for (let W = 0; W < w; W++)
-            if (v(h, P + W) !== v(i, W)) {
-              X = !1;
-              break;
-            }
-          if (X) return P;
-        }
-      return -1;
-    }
-    o.prototype.includes = function(i, c, p) {
-      return this.indexOf(i, c, p) !== -1;
-    }, o.prototype.indexOf = function(i, c, p) {
-      return Ee(this, i, c, p, !0);
-    }, o.prototype.lastIndexOf = function(i, c, p) {
-      return Ee(this, i, c, p, !1);
-    };
-    function Pe(h, i, c, p) {
-      c = Number(c) || 0;
-      const E = h.length - c;
-      p ? (p = Number(p), p > E && (p = E)) : p = E;
-      const f = i.length;
-      p > f / 2 && (p = f / 2);
-      let m;
-      for (m = 0; m < p; ++m) {
-        const w = parseInt(i.substr(m * 2, 2), 16);
-        if (tt(w)) return m;
-        h[c + m] = w;
-      }
-      return m;
-    }
-    function N(h, i, c, p) {
-      return be(oe(i, h.length - c), h, c, p);
-    }
-    function Ye(h, i, c, p) {
-      return be(Te(i), h, c, p);
-    }
-    function ke(h, i, c, p) {
-      return be($e(i), h, c, p);
-    }
-    function ie(h, i, c, p) {
-      return be(Ke(i, h.length - c), h, c, p);
-    }
-    o.prototype.write = function(i, c, p, E) {
-      if (c === void 0)
-        E = "utf8", p = this.length, c = 0;
-      else if (p === void 0 && typeof c == "string")
-        E = c, p = this.length, c = 0;
-      else if (isFinite(c))
-        c = c >>> 0, isFinite(p) ? (p = p >>> 0, E === void 0 && (E = "utf8")) : (E = p, p = void 0);
-      else
-        throw new Error(
-          "Buffer.write(string, encoding, offset[, length]) is no longer supported"
-        );
-      const f = this.length - c;
-      if ((p === void 0 || p > f) && (p = f), i.length > 0 && (p < 0 || c < 0) || c > this.length)
-        throw new RangeError("Attempt to write outside buffer bounds");
-      E || (E = "utf8");
-      let m = !1;
-      for (; ; )
-        switch (E) {
-          case "hex":
-            return Pe(this, i, c, p);
-          case "utf8":
-          case "utf-8":
-            return N(this, i, c, p);
-          case "ascii":
-          case "latin1":
-          case "binary":
-            return Ye(this, i, c, p);
-          case "base64":
-            return ke(this, i, c, p);
-          case "ucs2":
-          case "ucs-2":
-          case "utf16le":
-          case "utf-16le":
-            return ie(this, i, c, p);
-          default:
-            if (m) throw new TypeError("Unknown encoding: " + E);
-            E = ("" + E).toLowerCase(), m = !0;
-        }
-    }, o.prototype.toJSON = function() {
-      return {
-        type: "Buffer",
-        data: Array.prototype.slice.call(this._arr || this, 0)
+  default: __viteBrowserExternal
+}, Symbol.toStringTag, { value: "Module" }));
+const require$$0 = /* @__PURE__ */ getAugmentedNamespace(__viteBrowserExternal$1);
+var hasRequiredSax;
+function requireSax() {
+  if (hasRequiredSax) return sax$1;
+  hasRequiredSax = 1;
+  (function(exports$1) {
+    (function(sax2) {
+      sax2.parser = function(strict, opt) {
+        return new SAXParser(strict, opt);
       };
-    };
-    function Be(h, i, c) {
-      return i === 0 && c === h.length ? e.fromByteArray(h) : e.fromByteArray(h.slice(i, c));
-    }
-    function Xe(h, i, c) {
-      c = Math.min(h.length, c);
-      const p = [];
-      let E = i;
-      for (; E < c; ) {
-        const f = h[E];
-        let m = null, w = f > 239 ? 4 : f > 223 ? 3 : f > 191 ? 2 : 1;
-        if (E + w <= c) {
-          let v, P, X, W;
-          switch (w) {
-            case 1:
-              f < 128 && (m = f);
-              break;
-            case 2:
-              v = h[E + 1], (v & 192) === 128 && (W = (f & 31) << 6 | v & 63, W > 127 && (m = W));
-              break;
-            case 3:
-              v = h[E + 1], P = h[E + 2], (v & 192) === 128 && (P & 192) === 128 && (W = (f & 15) << 12 | (v & 63) << 6 | P & 63, W > 2047 && (W < 55296 || W > 57343) && (m = W));
-              break;
-            case 4:
-              v = h[E + 1], P = h[E + 2], X = h[E + 3], (v & 192) === 128 && (P & 192) === 128 && (X & 192) === 128 && (W = (f & 15) << 18 | (v & 63) << 12 | (P & 63) << 6 | X & 63, W > 65535 && W < 1114112 && (m = W));
-          }
-        }
-        m === null ? (m = 65533, w = 1) : m > 65535 && (m -= 65536, p.push(m >>> 10 & 1023 | 55296), m = 56320 | m & 1023), p.push(m), E += w;
-      }
-      return Oe(p);
-    }
-    const Ae = 4096;
-    function Oe(h) {
-      const i = h.length;
-      if (i <= Ae)
-        return String.fromCharCode.apply(String, h);
-      let c = "", p = 0;
-      for (; p < i; )
-        c += String.fromCharCode.apply(
-          String,
-          h.slice(p, p += Ae)
-        );
-      return c;
-    }
-    function V(h, i, c) {
-      let p = "";
-      c = Math.min(h.length, c);
-      for (let E = i; E < c; ++E)
-        p += String.fromCharCode(h[E] & 127);
-      return p;
-    }
-    function ze(h, i, c) {
-      let p = "";
-      c = Math.min(h.length, c);
-      for (let E = i; E < c; ++E)
-        p += String.fromCharCode(h[E]);
-      return p;
-    }
-    function Ue(h, i, c) {
-      const p = h.length;
-      (!i || i < 0) && (i = 0), (!c || c < 0 || c > p) && (c = p);
-      let E = "";
-      for (let f = i; f < c; ++f)
-        E += wt[h[f]];
-      return E;
-    }
-    function Le(h, i, c) {
-      const p = h.slice(i, c);
-      let E = "";
-      for (let f = 0; f < p.length - 1; f += 2)
-        E += String.fromCharCode(p[f] + p[f + 1] * 256);
-      return E;
-    }
-    o.prototype.slice = function(i, c) {
-      const p = this.length;
-      i = ~~i, c = c === void 0 ? p : ~~c, i < 0 ? (i += p, i < 0 && (i = 0)) : i > p && (i = p), c < 0 ? (c += p, c < 0 && (c = 0)) : c > p && (c = p), c < i && (c = i);
-      const E = this.subarray(i, c);
-      return Object.setPrototypeOf(E, o.prototype), E;
-    };
-    function Q(h, i, c) {
-      if (h % 1 !== 0 || h < 0) throw new RangeError("offset is not uint");
-      if (h + i > c) throw new RangeError("Trying to access beyond buffer length");
-    }
-    o.prototype.readUintLE = o.prototype.readUIntLE = function(i, c, p) {
-      i = i >>> 0, c = c >>> 0, p || Q(i, c, this.length);
-      let E = this[i], f = 1, m = 0;
-      for (; ++m < c && (f *= 256); )
-        E += this[i + m] * f;
-      return E;
-    }, o.prototype.readUintBE = o.prototype.readUIntBE = function(i, c, p) {
-      i = i >>> 0, c = c >>> 0, p || Q(i, c, this.length);
-      let E = this[i + --c], f = 1;
-      for (; c > 0 && (f *= 256); )
-        E += this[i + --c] * f;
-      return E;
-    }, o.prototype.readUint8 = o.prototype.readUInt8 = function(i, c) {
-      return i = i >>> 0, c || Q(i, 1, this.length), this[i];
-    }, o.prototype.readUint16LE = o.prototype.readUInt16LE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 2, this.length), this[i] | this[i + 1] << 8;
-    }, o.prototype.readUint16BE = o.prototype.readUInt16BE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 2, this.length), this[i] << 8 | this[i + 1];
-    }, o.prototype.readUint32LE = o.prototype.readUInt32LE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), (this[i] | this[i + 1] << 8 | this[i + 2] << 16) + this[i + 3] * 16777216;
-    }, o.prototype.readUint32BE = o.prototype.readUInt32BE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), this[i] * 16777216 + (this[i + 1] << 16 | this[i + 2] << 8 | this[i + 3]);
-    }, o.prototype.readBigUInt64LE = Fe(function(i) {
-      i = i >>> 0, J(i, "offset");
-      const c = this[i], p = this[i + 7];
-      (c === void 0 || p === void 0) && ue(i, this.length - 8);
-      const E = c + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + this[++i] * 2 ** 24, f = this[++i] + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + p * 2 ** 24;
-      return BigInt(E) + (BigInt(f) << BigInt(32));
-    }), o.prototype.readBigUInt64BE = Fe(function(i) {
-      i = i >>> 0, J(i, "offset");
-      const c = this[i], p = this[i + 7];
-      (c === void 0 || p === void 0) && ue(i, this.length - 8);
-      const E = c * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + this[++i], f = this[++i] * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + p;
-      return (BigInt(E) << BigInt(32)) + BigInt(f);
-    }), o.prototype.readIntLE = function(i, c, p) {
-      i = i >>> 0, c = c >>> 0, p || Q(i, c, this.length);
-      let E = this[i], f = 1, m = 0;
-      for (; ++m < c && (f *= 256); )
-        E += this[i + m] * f;
-      return f *= 128, E >= f && (E -= Math.pow(2, 8 * c)), E;
-    }, o.prototype.readIntBE = function(i, c, p) {
-      i = i >>> 0, c = c >>> 0, p || Q(i, c, this.length);
-      let E = c, f = 1, m = this[i + --E];
-      for (; E > 0 && (f *= 256); )
-        m += this[i + --E] * f;
-      return f *= 128, m >= f && (m -= Math.pow(2, 8 * c)), m;
-    }, o.prototype.readInt8 = function(i, c) {
-      return i = i >>> 0, c || Q(i, 1, this.length), this[i] & 128 ? (255 - this[i] + 1) * -1 : this[i];
-    }, o.prototype.readInt16LE = function(i, c) {
-      i = i >>> 0, c || Q(i, 2, this.length);
-      const p = this[i] | this[i + 1] << 8;
-      return p & 32768 ? p | 4294901760 : p;
-    }, o.prototype.readInt16BE = function(i, c) {
-      i = i >>> 0, c || Q(i, 2, this.length);
-      const p = this[i + 1] | this[i] << 8;
-      return p & 32768 ? p | 4294901760 : p;
-    }, o.prototype.readInt32LE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), this[i] | this[i + 1] << 8 | this[i + 2] << 16 | this[i + 3] << 24;
-    }, o.prototype.readInt32BE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), this[i] << 24 | this[i + 1] << 16 | this[i + 2] << 8 | this[i + 3];
-    }, o.prototype.readBigInt64LE = Fe(function(i) {
-      i = i >>> 0, J(i, "offset");
-      const c = this[i], p = this[i + 7];
-      (c === void 0 || p === void 0) && ue(i, this.length - 8);
-      const E = this[i + 4] + this[i + 5] * 2 ** 8 + this[i + 6] * 2 ** 16 + (p << 24);
-      return (BigInt(E) << BigInt(32)) + BigInt(c + this[++i] * 2 ** 8 + this[++i] * 2 ** 16 + this[++i] * 2 ** 24);
-    }), o.prototype.readBigInt64BE = Fe(function(i) {
-      i = i >>> 0, J(i, "offset");
-      const c = this[i], p = this[i + 7];
-      (c === void 0 || p === void 0) && ue(i, this.length - 8);
-      const E = (c << 24) + // Overflow
-      this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + this[++i];
-      return (BigInt(E) << BigInt(32)) + BigInt(this[++i] * 2 ** 24 + this[++i] * 2 ** 16 + this[++i] * 2 ** 8 + p);
-    }), o.prototype.readFloatLE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), t.read(this, i, !0, 23, 4);
-    }, o.prototype.readFloatBE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 4, this.length), t.read(this, i, !1, 23, 4);
-    }, o.prototype.readDoubleLE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 8, this.length), t.read(this, i, !0, 52, 8);
-    }, o.prototype.readDoubleBE = function(i, c) {
-      return i = i >>> 0, c || Q(i, 8, this.length), t.read(this, i, !1, 52, 8);
-    };
-    function ge(h, i, c, p, E, f) {
-      if (!o.isBuffer(h)) throw new TypeError('"buffer" argument must be a Buffer instance');
-      if (i > E || i < f) throw new RangeError('"value" argument is out of bounds');
-      if (c + p > h.length) throw new RangeError("Index out of range");
-    }
-    o.prototype.writeUintLE = o.prototype.writeUIntLE = function(i, c, p, E) {
-      if (i = +i, c = c >>> 0, p = p >>> 0, !E) {
-        const w = Math.pow(2, 8 * p) - 1;
-        ge(this, i, c, p, w, 0);
-      }
-      let f = 1, m = 0;
-      for (this[c] = i & 255; ++m < p && (f *= 256); )
-        this[c + m] = i / f & 255;
-      return c + p;
-    }, o.prototype.writeUintBE = o.prototype.writeUIntBE = function(i, c, p, E) {
-      if (i = +i, c = c >>> 0, p = p >>> 0, !E) {
-        const w = Math.pow(2, 8 * p) - 1;
-        ge(this, i, c, p, w, 0);
-      }
-      let f = p - 1, m = 1;
-      for (this[c + f] = i & 255; --f >= 0 && (m *= 256); )
-        this[c + f] = i / m & 255;
-      return c + p;
-    }, o.prototype.writeUint8 = o.prototype.writeUInt8 = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 1, 255, 0), this[c] = i & 255, c + 1;
-    }, o.prototype.writeUint16LE = o.prototype.writeUInt16LE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 2, 65535, 0), this[c] = i & 255, this[c + 1] = i >>> 8, c + 2;
-    }, o.prototype.writeUint16BE = o.prototype.writeUInt16BE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 2, 65535, 0), this[c] = i >>> 8, this[c + 1] = i & 255, c + 2;
-    }, o.prototype.writeUint32LE = o.prototype.writeUInt32LE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 4, 4294967295, 0), this[c + 3] = i >>> 24, this[c + 2] = i >>> 16, this[c + 1] = i >>> 8, this[c] = i & 255, c + 4;
-    }, o.prototype.writeUint32BE = o.prototype.writeUInt32BE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 4, 4294967295, 0), this[c] = i >>> 24, this[c + 1] = i >>> 16, this[c + 2] = i >>> 8, this[c + 3] = i & 255, c + 4;
-    };
-    function G(h, i, c, p, E) {
-      Z(i, p, E, h, c, 7);
-      let f = Number(i & BigInt(4294967295));
-      h[c++] = f, f = f >> 8, h[c++] = f, f = f >> 8, h[c++] = f, f = f >> 8, h[c++] = f;
-      let m = Number(i >> BigInt(32) & BigInt(4294967295));
-      return h[c++] = m, m = m >> 8, h[c++] = m, m = m >> 8, h[c++] = m, m = m >> 8, h[c++] = m, c;
-    }
-    function Ne(h, i, c, p, E) {
-      Z(i, p, E, h, c, 7);
-      let f = Number(i & BigInt(4294967295));
-      h[c + 7] = f, f = f >> 8, h[c + 6] = f, f = f >> 8, h[c + 5] = f, f = f >> 8, h[c + 4] = f;
-      let m = Number(i >> BigInt(32) & BigInt(4294967295));
-      return h[c + 3] = m, m = m >> 8, h[c + 2] = m, m = m >> 8, h[c + 1] = m, m = m >> 8, h[c] = m, c + 8;
-    }
-    o.prototype.writeBigUInt64LE = Fe(function(i, c = 0) {
-      return G(this, i, c, BigInt(0), BigInt("0xffffffffffffffff"));
-    }), o.prototype.writeBigUInt64BE = Fe(function(i, c = 0) {
-      return Ne(this, i, c, BigInt(0), BigInt("0xffffffffffffffff"));
-    }), o.prototype.writeIntLE = function(i, c, p, E) {
-      if (i = +i, c = c >>> 0, !E) {
-        const v = Math.pow(2, 8 * p - 1);
-        ge(this, i, c, p, v - 1, -v);
-      }
-      let f = 0, m = 1, w = 0;
-      for (this[c] = i & 255; ++f < p && (m *= 256); )
-        i < 0 && w === 0 && this[c + f - 1] !== 0 && (w = 1), this[c + f] = (i / m >> 0) - w & 255;
-      return c + p;
-    }, o.prototype.writeIntBE = function(i, c, p, E) {
-      if (i = +i, c = c >>> 0, !E) {
-        const v = Math.pow(2, 8 * p - 1);
-        ge(this, i, c, p, v - 1, -v);
-      }
-      let f = p - 1, m = 1, w = 0;
-      for (this[c + f] = i & 255; --f >= 0 && (m *= 256); )
-        i < 0 && w === 0 && this[c + f + 1] !== 0 && (w = 1), this[c + f] = (i / m >> 0) - w & 255;
-      return c + p;
-    }, o.prototype.writeInt8 = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 1, 127, -128), i < 0 && (i = 255 + i + 1), this[c] = i & 255, c + 1;
-    }, o.prototype.writeInt16LE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 2, 32767, -32768), this[c] = i & 255, this[c + 1] = i >>> 8, c + 2;
-    }, o.prototype.writeInt16BE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 2, 32767, -32768), this[c] = i >>> 8, this[c + 1] = i & 255, c + 2;
-    }, o.prototype.writeInt32LE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 4, 2147483647, -2147483648), this[c] = i & 255, this[c + 1] = i >>> 8, this[c + 2] = i >>> 16, this[c + 3] = i >>> 24, c + 4;
-    }, o.prototype.writeInt32BE = function(i, c, p) {
-      return i = +i, c = c >>> 0, p || ge(this, i, c, 4, 2147483647, -2147483648), i < 0 && (i = 4294967295 + i + 1), this[c] = i >>> 24, this[c + 1] = i >>> 16, this[c + 2] = i >>> 8, this[c + 3] = i & 255, c + 4;
-    }, o.prototype.writeBigInt64LE = Fe(function(i, c = 0) {
-      return G(this, i, c, -BigInt("0x8000000000000000"), BigInt("0x7fffffffffffffff"));
-    }), o.prototype.writeBigInt64BE = Fe(function(i, c = 0) {
-      return Ne(this, i, c, -BigInt("0x8000000000000000"), BigInt("0x7fffffffffffffff"));
-    });
-    function je(h, i, c, p, E, f) {
-      if (c + p > h.length) throw new RangeError("Index out of range");
-      if (c < 0) throw new RangeError("Index out of range");
-    }
-    function ae(h, i, c, p, E) {
-      return i = +i, c = c >>> 0, E || je(h, i, c, 4), t.write(h, i, c, p, 23, 4), c + 4;
-    }
-    o.prototype.writeFloatLE = function(i, c, p) {
-      return ae(this, i, c, !0, p);
-    }, o.prototype.writeFloatBE = function(i, c, p) {
-      return ae(this, i, c, !1, p);
-    };
-    function g(h, i, c, p, E) {
-      return i = +i, c = c >>> 0, E || je(h, i, c, 8), t.write(h, i, c, p, 52, 8), c + 8;
-    }
-    o.prototype.writeDoubleLE = function(i, c, p) {
-      return g(this, i, c, !0, p);
-    }, o.prototype.writeDoubleBE = function(i, c, p) {
-      return g(this, i, c, !1, p);
-    }, o.prototype.copy = function(i, c, p, E) {
-      if (!o.isBuffer(i)) throw new TypeError("argument should be a Buffer");
-      if (p || (p = 0), !E && E !== 0 && (E = this.length), c >= i.length && (c = i.length), c || (c = 0), E > 0 && E < p && (E = p), E === p || i.length === 0 || this.length === 0) return 0;
-      if (c < 0)
-        throw new RangeError("targetStart out of bounds");
-      if (p < 0 || p >= this.length) throw new RangeError("Index out of range");
-      if (E < 0) throw new RangeError("sourceEnd out of bounds");
-      E > this.length && (E = this.length), i.length - c < E - p && (E = i.length - c + p);
-      const f = E - p;
-      return this === i && typeof Uint8Array.prototype.copyWithin == "function" ? this.copyWithin(c, p, E) : Uint8Array.prototype.set.call(
-        i,
-        this.subarray(p, E),
-        c
-      ), f;
-    }, o.prototype.fill = function(i, c, p, E) {
-      if (typeof i == "string") {
-        if (typeof c == "string" ? (E = c, c = 0, p = this.length) : typeof p == "string" && (E = p, p = this.length), E !== void 0 && typeof E != "string")
-          throw new TypeError("encoding must be a string");
-        if (typeof E == "string" && !o.isEncoding(E))
-          throw new TypeError("Unknown encoding: " + E);
-        if (i.length === 1) {
-          const m = i.charCodeAt(0);
-          (E === "utf8" && m < 128 || E === "latin1") && (i = m);
-        }
-      } else typeof i == "number" ? i = i & 255 : typeof i == "boolean" && (i = Number(i));
-      if (c < 0 || this.length < c || this.length < p)
-        throw new RangeError("Out of range index");
-      if (p <= c)
-        return this;
-      c = c >>> 0, p = p === void 0 ? this.length : p >>> 0, i || (i = 0);
-      let f;
-      if (typeof i == "number")
-        for (f = c; f < p; ++f)
-          this[f] = i;
-      else {
-        const m = o.isBuffer(i) ? i : o.from(i, E), w = m.length;
-        if (w === 0)
-          throw new TypeError('The value "' + i + '" is invalid for argument "value"');
-        for (f = 0; f < p - c; ++f)
-          this[f + c] = m[f % w];
-      }
-      return this;
-    };
-    const u = {};
-    function I(h, i, c) {
-      u[h] = class extends c {
-        constructor() {
-          super(), Object.defineProperty(this, "message", {
-            value: i.apply(this, arguments),
-            writable: !0,
-            configurable: !0
-          }), this.name = `${this.name} [${h}]`, this.stack, delete this.name;
-        }
-        get code() {
-          return h;
-        }
-        set code(E) {
-          Object.defineProperty(this, "code", {
-            configurable: !0,
-            enumerable: !0,
-            value: E,
-            writable: !0
-          });
-        }
-        toString() {
-          return `${this.name} [${h}]: ${this.message}`;
-        }
-      };
-    }
-    I(
-      "ERR_BUFFER_OUT_OF_BOUNDS",
-      function(h) {
-        return h ? `${h} is outside of buffer bounds` : "Attempt to access memory outside buffer bounds";
-      },
-      RangeError
-    ), I(
-      "ERR_INVALID_ARG_TYPE",
-      function(h, i) {
-        return `The "${h}" argument must be of type number. Received type ${typeof i}`;
-      },
-      TypeError
-    ), I(
-      "ERR_OUT_OF_RANGE",
-      function(h, i, c) {
-        let p = `The value of "${h}" is out of range.`, E = c;
-        return Number.isInteger(c) && Math.abs(c) > 2 ** 32 ? E = T(String(c)) : typeof c == "bigint" && (E = String(c), (c > BigInt(2) ** BigInt(32) || c < -(BigInt(2) ** BigInt(32))) && (E = T(E)), E += "n"), p += ` It must be ${i}. Received ${E}`, p;
-      },
-      RangeError
-    );
-    function T(h) {
-      let i = "", c = h.length;
-      const p = h[0] === "-" ? 1 : 0;
-      for (; c >= p + 4; c -= 3)
-        i = `_${h.slice(c - 3, c)}${i}`;
-      return `${h.slice(0, c)}${i}`;
-    }
-    function q(h, i, c) {
-      J(i, "offset"), (h[i] === void 0 || h[i + c] === void 0) && ue(i, h.length - (c + 1));
-    }
-    function Z(h, i, c, p, E, f) {
-      if (h > c || h < i) {
-        const m = typeof i == "bigint" ? "n" : "";
-        let w;
-        throw i === 0 || i === BigInt(0) ? w = `>= 0${m} and < 2${m} ** ${(f + 1) * 8}${m}` : w = `>= -(2${m} ** ${(f + 1) * 8 - 1}${m}) and < 2 ** ${(f + 1) * 8 - 1}${m}`, new u.ERR_OUT_OF_RANGE("value", w, h);
-      }
-      q(p, E, f);
-    }
-    function J(h, i) {
-      if (typeof h != "number")
-        throw new u.ERR_INVALID_ARG_TYPE(i, "number", h);
-    }
-    function ue(h, i, c) {
-      throw Math.floor(h) !== h ? (J(h, c), new u.ERR_OUT_OF_RANGE("offset", "an integer", h)) : i < 0 ? new u.ERR_BUFFER_OUT_OF_BOUNDS() : new u.ERR_OUT_OF_RANGE(
-        "offset",
-        `>= 0 and <= ${i}`,
-        h
-      );
-    }
-    const de = /[^+/0-9A-Za-z-_]/g;
-    function _e(h) {
-      if (h = h.split("=")[0], h = h.trim().replace(de, ""), h.length < 2) return "";
-      for (; h.length % 4 !== 0; )
-        h = h + "=";
-      return h;
-    }
-    function oe(h, i) {
-      i = i || 1 / 0;
-      let c;
-      const p = h.length;
-      let E = null;
-      const f = [];
-      for (let m = 0; m < p; ++m) {
-        if (c = h.charCodeAt(m), c > 55295 && c < 57344) {
-          if (!E) {
-            if (c > 56319) {
-              (i -= 3) > -1 && f.push(239, 191, 189);
-              continue;
-            } else if (m + 1 === p) {
-              (i -= 3) > -1 && f.push(239, 191, 189);
-              continue;
-            }
-            E = c;
-            continue;
-          }
-          if (c < 56320) {
-            (i -= 3) > -1 && f.push(239, 191, 189), E = c;
-            continue;
-          }
-          c = (E - 55296 << 10 | c - 56320) + 65536;
-        } else E && (i -= 3) > -1 && f.push(239, 191, 189);
-        if (E = null, c < 128) {
-          if ((i -= 1) < 0) break;
-          f.push(c);
-        } else if (c < 2048) {
-          if ((i -= 2) < 0) break;
-          f.push(
-            c >> 6 | 192,
-            c & 63 | 128
-          );
-        } else if (c < 65536) {
-          if ((i -= 3) < 0) break;
-          f.push(
-            c >> 12 | 224,
-            c >> 6 & 63 | 128,
-            c & 63 | 128
-          );
-        } else if (c < 1114112) {
-          if ((i -= 4) < 0) break;
-          f.push(
-            c >> 18 | 240,
-            c >> 12 & 63 | 128,
-            c >> 6 & 63 | 128,
-            c & 63 | 128
-          );
-        } else
-          throw new Error("Invalid code point");
-      }
-      return f;
-    }
-    function Te(h) {
-      const i = [];
-      for (let c = 0; c < h.length; ++c)
-        i.push(h.charCodeAt(c) & 255);
-      return i;
-    }
-    function Ke(h, i) {
-      let c, p, E;
-      const f = [];
-      for (let m = 0; m < h.length && !((i -= 2) < 0); ++m)
-        c = h.charCodeAt(m), p = c >> 8, E = c % 256, f.push(E), f.push(p);
-      return f;
-    }
-    function $e(h) {
-      return e.toByteArray(_e(h));
-    }
-    function be(h, i, c, p) {
-      let E;
-      for (E = 0; E < p && !(E + c >= i.length || E >= h.length); ++E)
-        i[E + c] = h[E];
-      return E;
-    }
-    function me(h, i) {
-      return h instanceof i || h != null && h.constructor != null && h.constructor.name != null && h.constructor.name === i.name;
-    }
-    function tt(h) {
-      return h !== h;
-    }
-    const wt = (function() {
-      const h = "0123456789abcdef", i = new Array(256);
-      for (let c = 0; c < 16; ++c) {
-        const p = c * 16;
-        for (let E = 0; E < 16; ++E)
-          i[p + E] = h[c] + h[E];
-      }
-      return i;
-    })();
-    function Fe(h) {
-      return typeof BigInt > "u" ? It : h;
-    }
-    function It() {
-      throw new Error("BigInt not supported");
-    }
-  })(Rt)), Rt;
-}
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-var ss;
-function Lr() {
-  return ss || (ss = 1, (function(l, e) {
-    var t = Ur(), s = t.Buffer;
-    function r(a, o) {
-      for (var d in a)
-        o[d] = a[d];
-    }
-    s.from && s.alloc && s.allocUnsafe && s.allocUnsafeSlow ? l.exports = t : (r(t, e), e.Buffer = n);
-    function n(a, o, d) {
-      return s(a, o, d);
-    }
-    n.prototype = Object.create(s.prototype), r(s, n), n.from = function(a, o, d) {
-      if (typeof a == "number")
-        throw new TypeError("Argument must not be a number");
-      return s(a, o, d);
-    }, n.alloc = function(a, o, d) {
-      if (typeof a != "number")
-        throw new TypeError("Argument must be a number");
-      var y = s(a);
-      return o !== void 0 ? typeof d == "string" ? y.fill(o, d) : y.fill(o) : y.fill(0), y;
-    }, n.allocUnsafe = function(a) {
-      if (typeof a != "number")
-        throw new TypeError("Argument must be a number");
-      return s(a);
-    }, n.allocUnsafeSlow = function(a) {
-      if (typeof a != "number")
-        throw new TypeError("Argument must be a number");
-      return t.SlowBuffer(a);
-    };
-  })(lt, lt.exports)), lt.exports;
-}
-var rs;
-function jr() {
-  if (rs) return xt;
-  rs = 1;
-  var l = Lr().Buffer, e = l.isEncoding || function(_) {
-    switch (_ = "" + _, _ && _.toLowerCase()) {
-      case "hex":
-      case "utf8":
-      case "utf-8":
-      case "ascii":
-      case "binary":
-      case "base64":
-      case "ucs2":
-      case "ucs-2":
-      case "utf16le":
-      case "utf-16le":
-      case "raw":
-        return !0;
-      default:
-        return !1;
-    }
-  };
-  function t(_) {
-    if (!_) return "utf8";
-    for (var x; ; )
-      switch (_) {
-        case "utf8":
-        case "utf-8":
-          return "utf8";
-        case "ucs2":
-        case "ucs-2":
-        case "utf16le":
-        case "utf-16le":
-          return "utf16le";
-        case "latin1":
-        case "binary":
-          return "latin1";
-        case "base64":
-        case "ascii":
-        case "hex":
-          return _;
-        default:
-          if (x) return;
-          _ = ("" + _).toLowerCase(), x = !0;
-      }
-  }
-  function s(_) {
-    var x = t(_);
-    if (typeof x != "string" && (l.isEncoding === e || !e(_))) throw new Error("Unknown encoding: " + _);
-    return x || _;
-  }
-  xt.StringDecoder = r;
-  function r(_) {
-    this.encoding = s(_);
-    var x;
-    switch (this.encoding) {
-      case "utf16le":
-        this.text = C, this.end = A, x = 4;
-        break;
-      case "utf8":
-        this.fillLast = d, x = 4;
-        break;
-      case "base64":
-        this.text = b, this.end = R, x = 3;
-        break;
-      default:
-        this.write = M, this.end = U;
-        return;
-    }
-    this.lastNeed = 0, this.lastTotal = 0, this.lastChar = l.allocUnsafe(x);
-  }
-  r.prototype.write = function(_) {
-    if (_.length === 0) return "";
-    var x, D;
-    if (this.lastNeed) {
-      if (x = this.fillLast(_), x === void 0) return "";
-      D = this.lastNeed, this.lastNeed = 0;
-    } else
-      D = 0;
-    return D < _.length ? x ? x + this.text(_, D) : this.text(_, D) : x || "";
-  }, r.prototype.end = S, r.prototype.text = y, r.prototype.fillLast = function(_) {
-    if (this.lastNeed <= _.length)
-      return _.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed), this.lastChar.toString(this.encoding, 0, this.lastTotal);
-    _.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, _.length), this.lastNeed -= _.length;
-  };
-  function n(_) {
-    return _ <= 127 ? 0 : _ >> 5 === 6 ? 2 : _ >> 4 === 14 ? 3 : _ >> 3 === 30 ? 4 : _ >> 6 === 2 ? -1 : -2;
-  }
-  function a(_, x, D) {
-    var $ = x.length - 1;
-    if ($ < D) return 0;
-    var L = n(x[$]);
-    return L >= 0 ? (L > 0 && (_.lastNeed = L - 1), L) : --$ < D || L === -2 ? 0 : (L = n(x[$]), L >= 0 ? (L > 0 && (_.lastNeed = L - 2), L) : --$ < D || L === -2 ? 0 : (L = n(x[$]), L >= 0 ? (L > 0 && (L === 2 ? L = 0 : _.lastNeed = L - 3), L) : 0));
-  }
-  function o(_, x, D) {
-    if ((x[0] & 192) !== 128)
-      return _.lastNeed = 0, "�";
-    if (_.lastNeed > 1 && x.length > 1) {
-      if ((x[1] & 192) !== 128)
-        return _.lastNeed = 1, "�";
-      if (_.lastNeed > 2 && x.length > 2 && (x[2] & 192) !== 128)
-        return _.lastNeed = 2, "�";
-    }
-  }
-  function d(_) {
-    var x = this.lastTotal - this.lastNeed, D = o(this, _);
-    if (D !== void 0) return D;
-    if (this.lastNeed <= _.length)
-      return _.copy(this.lastChar, x, 0, this.lastNeed), this.lastChar.toString(this.encoding, 0, this.lastTotal);
-    _.copy(this.lastChar, x, 0, _.length), this.lastNeed -= _.length;
-  }
-  function y(_, x) {
-    var D = a(this, _, x);
-    if (!this.lastNeed) return _.toString("utf8", x);
-    this.lastTotal = D;
-    var $ = _.length - (D - this.lastNeed);
-    return _.copy(this.lastChar, 0, $), _.toString("utf8", x, $);
-  }
-  function S(_) {
-    var x = _ && _.length ? this.write(_) : "";
-    return this.lastNeed ? x + "�" : x;
-  }
-  function C(_, x) {
-    if ((_.length - x) % 2 === 0) {
-      var D = _.toString("utf16le", x);
-      if (D) {
-        var $ = D.charCodeAt(D.length - 1);
-        if ($ >= 55296 && $ <= 56319)
-          return this.lastNeed = 2, this.lastTotal = 4, this.lastChar[0] = _[_.length - 2], this.lastChar[1] = _[_.length - 1], D.slice(0, -1);
-      }
-      return D;
-    }
-    return this.lastNeed = 1, this.lastTotal = 2, this.lastChar[0] = _[_.length - 1], _.toString("utf16le", x, _.length - 1);
-  }
-  function A(_) {
-    var x = _ && _.length ? this.write(_) : "";
-    if (this.lastNeed) {
-      var D = this.lastTotal - this.lastNeed;
-      return x + this.lastChar.toString("utf16le", 0, D);
-    }
-    return x;
-  }
-  function b(_, x) {
-    var D = (_.length - x) % 3;
-    return D === 0 ? _.toString("base64", x) : (this.lastNeed = 3 - D, this.lastTotal = 3, D === 1 ? this.lastChar[0] = _[_.length - 1] : (this.lastChar[0] = _[_.length - 2], this.lastChar[1] = _[_.length - 1]), _.toString("base64", x, _.length - D));
-  }
-  function R(_) {
-    var x = _ && _.length ? this.write(_) : "";
-    return this.lastNeed ? x + this.lastChar.toString("base64", 0, 3 - this.lastNeed) : x;
-  }
-  function M(_) {
-    return _.toString(this.encoding);
-  }
-  function U(_) {
-    return _ && _.length ? this.write(_) : "";
-  }
-  return xt;
-}
-var ns;
-function $r() {
-  return ns || (ns = 1, (function(l) {
-    (function(e) {
-      e.parser = function(g, u) {
-        return new s(g, u);
-      }, e.SAXParser = s, e.SAXStream = S, e.createStream = y, e.MAX_BUFFER_LENGTH = 64 * 1024;
-      var t = [
+      sax2.SAXParser = SAXParser;
+      sax2.SAXStream = SAXStream;
+      sax2.createStream = createStream;
+      sax2.MAX_BUFFER_LENGTH = 64 * 1024;
+      var buffers = [
         "comment",
         "sgmlDecl",
         "textNode",
@@ -4884,7 +4764,7 @@ function $r() {
         "cdata",
         "script"
       ];
-      e.EVENTS = [
+      sax2.EVENTS = [
         "text",
         "processinginstruction",
         "sgmldeclaration",
@@ -4904,226 +4784,364 @@ function $r() {
         "opennamespace",
         "closenamespace"
       ];
-      function s(g, u) {
-        if (!(this instanceof s))
-          return new s(g, u);
-        var I = this;
-        n(I), I.q = I.c = "", I.bufferCheckPosition = e.MAX_BUFFER_LENGTH, I.opt = u || {}, I.opt.lowercase = I.opt.lowercase || I.opt.lowercasetags, I.looseCase = I.opt.lowercase ? "toLowerCase" : "toUpperCase", I.tags = [], I.closed = I.closedRoot = I.sawRoot = !1, I.tag = I.error = null, I.strict = !!g, I.noscript = !!(g || I.opt.noscript), I.state = N.BEGIN, I.strictEntities = I.opt.strictEntities, I.ENTITIES = I.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), I.attribList = [], I.opt.xmlns && (I.ns = Object.create(M)), I.opt.unquotedAttributeValues === void 0 && (I.opt.unquotedAttributeValues = !g), I.trackPosition = I.opt.position !== !1, I.trackPosition && (I.position = I.line = I.column = 0), ke(I, "onready");
-      }
-      Object.create || (Object.create = function(g) {
-        function u() {
+      function SAXParser(strict, opt) {
+        if (!(this instanceof SAXParser)) {
+          return new SAXParser(strict, opt);
         }
-        u.prototype = g;
-        var I = new u();
-        return I;
-      }), Object.keys || (Object.keys = function(g) {
-        var u = [];
-        for (var I in g) g.hasOwnProperty(I) && u.push(I);
-        return u;
-      });
-      function r(g) {
-        for (var u = Math.max(e.MAX_BUFFER_LENGTH, 10), I = 0, T = 0, q = t.length; T < q; T++) {
-          var Z = g[t[T]].length;
-          if (Z > u)
-            switch (t[T]) {
+        var parser = this;
+        clearBuffers(parser);
+        parser.q = parser.c = "";
+        parser.bufferCheckPosition = sax2.MAX_BUFFER_LENGTH;
+        parser.encoding = null;
+        parser.opt = opt || {};
+        parser.opt.lowercase = parser.opt.lowercase || parser.opt.lowercasetags;
+        parser.looseCase = parser.opt.lowercase ? "toLowerCase" : "toUpperCase";
+        parser.opt.maxEntityCount = parser.opt.maxEntityCount || 512;
+        parser.opt.maxEntityDepth = parser.opt.maxEntityDepth || 4;
+        parser.entityCount = parser.entityDepth = 0;
+        parser.tags = [];
+        parser.closed = parser.closedRoot = parser.sawRoot = false;
+        parser.tag = parser.error = null;
+        parser.strict = !!strict;
+        parser.noscript = !!(strict || parser.opt.noscript);
+        parser.state = S.BEGIN;
+        parser.strictEntities = parser.opt.strictEntities;
+        parser.ENTITIES = parser.strictEntities ? Object.create(sax2.XML_ENTITIES) : Object.create(sax2.ENTITIES);
+        parser.attribList = [];
+        if (parser.opt.xmlns) {
+          parser.ns = Object.create(rootNS);
+        }
+        if (parser.opt.unquotedAttributeValues === void 0) {
+          parser.opt.unquotedAttributeValues = !strict;
+        }
+        parser.trackPosition = parser.opt.position !== false;
+        if (parser.trackPosition) {
+          parser.position = parser.line = parser.column = 0;
+        }
+        emit(parser, "onready");
+      }
+      if (!Object.create) {
+        Object.create = function(o) {
+          function F() {
+          }
+          F.prototype = o;
+          var newf = new F();
+          return newf;
+        };
+      }
+      if (!Object.keys) {
+        Object.keys = function(o) {
+          var a = [];
+          for (var i in o) if (o.hasOwnProperty(i)) a.push(i);
+          return a;
+        };
+      }
+      function checkBufferLength(parser) {
+        var maxAllowed = Math.max(sax2.MAX_BUFFER_LENGTH, 10);
+        var maxActual = 0;
+        for (var i = 0, l = buffers.length; i < l; i++) {
+          var len = parser[buffers[i]].length;
+          if (len > maxAllowed) {
+            switch (buffers[i]) {
               case "textNode":
-                Be(g);
+                closeText(parser);
                 break;
               case "cdata":
-                ie(g, "oncdata", g.cdata), g.cdata = "";
+                emitNode(parser, "oncdata", parser.cdata);
+                parser.cdata = "";
                 break;
               case "script":
-                ie(g, "onscript", g.script), g.script = "";
+                emitNode(parser, "onscript", parser.script);
+                parser.script = "";
                 break;
               default:
-                Ae(g, "Max buffer length exceeded: " + t[T]);
+                error(parser, "Max buffer length exceeded: " + buffers[i]);
             }
-          I = Math.max(I, Z);
+          }
+          maxActual = Math.max(maxActual, len);
         }
-        var J = e.MAX_BUFFER_LENGTH - I;
-        g.bufferCheckPosition = J + g.position;
+        var m = sax2.MAX_BUFFER_LENGTH - maxActual;
+        parser.bufferCheckPosition = m + parser.position;
       }
-      function n(g) {
-        for (var u = 0, I = t.length; u < I; u++)
-          g[t[u]] = "";
+      function clearBuffers(parser) {
+        for (var i = 0, l = buffers.length; i < l; i++) {
+          parser[buffers[i]] = "";
+        }
       }
-      function a(g) {
-        Be(g), g.cdata !== "" && (ie(g, "oncdata", g.cdata), g.cdata = ""), g.script !== "" && (ie(g, "onscript", g.script), g.script = "");
+      function flushBuffers(parser) {
+        closeText(parser);
+        if (parser.cdata !== "") {
+          emitNode(parser, "oncdata", parser.cdata);
+          parser.cdata = "";
+        }
+        if (parser.script !== "") {
+          emitNode(parser, "onscript", parser.script);
+          parser.script = "";
+        }
       }
-      s.prototype = {
+      SAXParser.prototype = {
         end: function() {
-          Oe(this);
+          end(this);
         },
-        write: ae,
+        write,
         resume: function() {
-          return this.error = null, this;
+          this.error = null;
+          return this;
         },
         close: function() {
           return this.write(null);
         },
         flush: function() {
-          a(this);
+          flushBuffers(this);
         }
       };
-      var o;
+      var Stream;
       try {
-        o = Mr.Stream;
-      } catch {
-        o = function() {
+        Stream = require$$0.Stream;
+      } catch (ex) {
+        Stream = function() {
         };
       }
-      o || (o = function() {
+      if (!Stream) Stream = function() {
+      };
+      var streamWraps = sax2.EVENTS.filter(function(ev) {
+        return ev !== "error" && ev !== "end";
       });
-      var d = e.EVENTS.filter(function(g) {
-        return g !== "error" && g !== "end";
-      });
-      function y(g, u) {
-        return new S(g, u);
+      function createStream(strict, opt) {
+        return new SAXStream(strict, opt);
       }
-      function S(g, u) {
-        if (!(this instanceof S))
-          return new S(g, u);
-        o.apply(this), this._parser = new s(g, u), this.writable = !0, this.readable = !0;
-        var I = this;
+      function determineBufferEncoding(data, isEnd) {
+        if (data.length >= 2) {
+          if (data[0] === 255 && data[1] === 254) {
+            return "utf-16le";
+          }
+          if (data[0] === 254 && data[1] === 255) {
+            return "utf-16be";
+          }
+        }
+        if (data.length >= 3 && data[0] === 239 && data[1] === 187 && data[2] === 191) {
+          return "utf8";
+        }
+        if (data.length >= 4) {
+          if (data[0] === 60 && data[1] === 0 && data[2] === 63 && data[3] === 0) {
+            return "utf-16le";
+          }
+          if (data[0] === 0 && data[1] === 60 && data[2] === 0 && data[3] === 63) {
+            return "utf-16be";
+          }
+          return "utf8";
+        }
+        return isEnd ? "utf8" : null;
+      }
+      function SAXStream(strict, opt) {
+        if (!(this instanceof SAXStream)) {
+          return new SAXStream(strict, opt);
+        }
+        Stream.apply(this);
+        this._parser = new SAXParser(strict, opt);
+        this.writable = true;
+        this.readable = true;
+        var me = this;
         this._parser.onend = function() {
-          I.emit("end");
-        }, this._parser.onerror = function(T) {
-          I.emit("error", T), I._parser.error = null;
-        }, this._decoder = null, d.forEach(function(T) {
-          Object.defineProperty(I, "on" + T, {
+          me.emit("end");
+        };
+        this._parser.onerror = function(er) {
+          me.emit("error", er);
+          me._parser.error = null;
+        };
+        this._decoder = null;
+        this._decoderBuffer = null;
+        streamWraps.forEach(function(ev) {
+          Object.defineProperty(me, "on" + ev, {
             get: function() {
-              return I._parser["on" + T];
+              return me._parser["on" + ev];
             },
-            set: function(q) {
-              if (!q)
-                return I.removeAllListeners(T), I._parser["on" + T] = q, q;
-              I.on(T, q);
+            set: function(h) {
+              if (!h) {
+                me.removeAllListeners(ev);
+                me._parser["on" + ev] = h;
+                return h;
+              }
+              me.on(ev, h);
             },
-            enumerable: !0,
-            configurable: !1
+            enumerable: true,
+            configurable: false
           });
         });
       }
-      S.prototype = Object.create(o.prototype, {
+      SAXStream.prototype = Object.create(Stream.prototype, {
         constructor: {
-          value: S
+          value: SAXStream
         }
-      }), S.prototype.write = function(g) {
-        if (typeof Buffer == "function" && typeof Buffer.isBuffer == "function" && Buffer.isBuffer(g)) {
-          if (!this._decoder) {
-            var u = jr().StringDecoder;
-            this._decoder = new u("utf8");
+      });
+      SAXStream.prototype._decodeBuffer = function(data, isEnd) {
+        if (this._decoderBuffer) {
+          data = Buffer.concat([this._decoderBuffer, data]);
+          this._decoderBuffer = null;
+        }
+        if (!this._decoder) {
+          var encoding = determineBufferEncoding(data, isEnd);
+          if (!encoding) {
+            this._decoderBuffer = data;
+            return "";
           }
-          g = this._decoder.write(g);
+          this._parser.encoding = encoding;
+          this._decoder = new TextDecoder(encoding);
         }
-        return this._parser.write(g.toString()), this.emit("data", g), !0;
-      }, S.prototype.end = function(g) {
-        return g && g.length && this.write(g), this._parser.end(), !0;
-      }, S.prototype.on = function(g, u) {
-        var I = this;
-        return !I._parser["on" + g] && d.indexOf(g) !== -1 && (I._parser["on" + g] = function() {
-          var T = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
-          T.splice(0, 0, g), I.emit.apply(I, T);
-        }), o.prototype.on.call(I, g, u);
+        return this._decoder.decode(data, { stream: !isEnd });
       };
-      var C = "[CDATA[", A = "DOCTYPE", b = "http://www.w3.org/XML/1998/namespace", R = "http://www.w3.org/2000/xmlns/", M = { xml: b, xmlns: R }, U = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, _ = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/, x = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/, D = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/;
-      function $(g) {
-        return g === " " || g === `
-` || g === "\r" || g === "	";
+      SAXStream.prototype.write = function(data) {
+        if (typeof Buffer === "function" && typeof Buffer.isBuffer === "function" && Buffer.isBuffer(data)) {
+          data = this._decodeBuffer(data, false);
+        } else if (this._decoderBuffer) {
+          var remaining = this._decodeBuffer(Buffer.alloc(0), true);
+          if (remaining) {
+            this._parser.write(remaining);
+            this.emit("data", remaining);
+          }
+        }
+        this._parser.write(data.toString());
+        this.emit("data", data);
+        return true;
+      };
+      SAXStream.prototype.end = function(chunk) {
+        if (chunk && chunk.length) {
+          this.write(chunk);
+        }
+        if (this._decoderBuffer) {
+          var finalChunk = this._decodeBuffer(Buffer.alloc(0), true);
+          if (finalChunk) {
+            this._parser.write(finalChunk);
+            this.emit("data", finalChunk);
+          }
+        } else if (this._decoder) {
+          var remaining = this._decoder.decode();
+          if (remaining) {
+            this._parser.write(remaining);
+            this.emit("data", remaining);
+          }
+        }
+        this._parser.end();
+        return true;
+      };
+      SAXStream.prototype.on = function(ev, handler) {
+        var me = this;
+        if (!me._parser["on" + ev] && streamWraps.indexOf(ev) !== -1) {
+          me._parser["on" + ev] = function() {
+            var args = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
+            args.splice(0, 0, ev);
+            me.emit.apply(me, args);
+          };
+        }
+        return Stream.prototype.on.call(me, ev, handler);
+      };
+      var CDATAre = /^\[CDATA\[$/i;
+      var DOCTYPEre = /^DOCTYPE$/i;
+      var XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+      var XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
+      var rootNS = { xml: XML_NAMESPACE, xmlns: XMLNS_NAMESPACE };
+      var nameStart = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/;
+      var nameBody = /[:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/;
+      var entityStart = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/;
+      var entityBody = /[#:_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u00B7\u0300-\u036F\u203F-\u2040.\d-]/;
+      function isWhitespace(c) {
+        return c === " " || c === "\n" || c === "\r" || c === "	";
       }
-      function L(g) {
-        return g === '"' || g === "'";
+      function isQuote(c) {
+        return c === '"' || c === "'";
       }
-      function Ee(g) {
-        return g === ">" || $(g);
+      function isAttribEnd(c) {
+        return c === ">" || isWhitespace(c);
       }
-      function fe(g, u) {
-        return g.test(u);
+      function isMatch(regex, c) {
+        return regex.test(c);
       }
-      function Pe(g, u) {
-        return !fe(g, u);
+      function notMatch(regex, c) {
+        return !isMatch(regex, c);
       }
-      var N = 0;
-      e.STATE = {
-        BEGIN: N++,
+      var S = 0;
+      sax2.STATE = {
+        BEGIN: S++,
         // leading byte order mark or whitespace
-        BEGIN_WHITESPACE: N++,
+        BEGIN_WHITESPACE: S++,
         // leading whitespace
-        TEXT: N++,
+        TEXT: S++,
         // general stuff
-        TEXT_ENTITY: N++,
+        TEXT_ENTITY: S++,
         // &amp and such.
-        OPEN_WAKA: N++,
+        OPEN_WAKA: S++,
         // <
-        SGML_DECL: N++,
+        SGML_DECL: S++,
         // <!BLARG
-        SGML_DECL_QUOTED: N++,
+        SGML_DECL_QUOTED: S++,
         // <!BLARG foo "bar
-        DOCTYPE: N++,
+        DOCTYPE: S++,
         // <!DOCTYPE
-        DOCTYPE_QUOTED: N++,
+        DOCTYPE_QUOTED: S++,
         // <!DOCTYPE "//blah
-        DOCTYPE_DTD: N++,
+        DOCTYPE_DTD: S++,
         // <!DOCTYPE "//blah" [ ...
-        DOCTYPE_DTD_QUOTED: N++,
+        DOCTYPE_DTD_QUOTED: S++,
         // <!DOCTYPE "//blah" [ "foo
-        COMMENT_STARTING: N++,
+        COMMENT_STARTING: S++,
         // <!-
-        COMMENT: N++,
+        COMMENT: S++,
         // <!--
-        COMMENT_ENDING: N++,
+        COMMENT_ENDING: S++,
         // <!-- blah -
-        COMMENT_ENDED: N++,
+        COMMENT_ENDED: S++,
         // <!-- blah --
-        CDATA: N++,
+        CDATA: S++,
         // <![CDATA[ something
-        CDATA_ENDING: N++,
+        CDATA_ENDING: S++,
         // ]
-        CDATA_ENDING_2: N++,
+        CDATA_ENDING_2: S++,
         // ]]
-        PROC_INST: N++,
+        PROC_INST: S++,
         // <?hi
-        PROC_INST_BODY: N++,
+        PROC_INST_BODY: S++,
         // <?hi there
-        PROC_INST_ENDING: N++,
+        PROC_INST_ENDING: S++,
         // <?hi "there" ?
-        OPEN_TAG: N++,
+        OPEN_TAG: S++,
         // <strong
-        OPEN_TAG_SLASH: N++,
+        OPEN_TAG_SLASH: S++,
         // <strong /
-        ATTRIB: N++,
+        ATTRIB: S++,
         // <a
-        ATTRIB_NAME: N++,
+        ATTRIB_NAME: S++,
         // <a foo
-        ATTRIB_NAME_SAW_WHITE: N++,
+        ATTRIB_NAME_SAW_WHITE: S++,
         // <a foo _
-        ATTRIB_VALUE: N++,
+        ATTRIB_VALUE: S++,
         // <a foo=
-        ATTRIB_VALUE_QUOTED: N++,
+        ATTRIB_VALUE_QUOTED: S++,
         // <a foo="bar
-        ATTRIB_VALUE_CLOSED: N++,
+        ATTRIB_VALUE_CLOSED: S++,
         // <a foo="bar"
-        ATTRIB_VALUE_UNQUOTED: N++,
+        ATTRIB_VALUE_UNQUOTED: S++,
         // <a foo=bar
-        ATTRIB_VALUE_ENTITY_Q: N++,
+        ATTRIB_VALUE_ENTITY_Q: S++,
         // <foo bar="&quot;"
-        ATTRIB_VALUE_ENTITY_U: N++,
+        ATTRIB_VALUE_ENTITY_U: S++,
         // <foo bar=&quot
-        CLOSE_TAG: N++,
+        CLOSE_TAG: S++,
         // </a
-        CLOSE_TAG_SAW_WHITE: N++,
+        CLOSE_TAG_SAW_WHITE: S++,
         // </a   >
-        SCRIPT: N++,
+        SCRIPT: S++,
         // <script> ...
-        SCRIPT_ENDING: N++
+        SCRIPT_ENDING: S++
         // <script> ... <
-      }, e.XML_ENTITIES = {
+      };
+      sax2.XML_ENTITIES = Object.assign(/* @__PURE__ */ Object.create(null), {
         amp: "&",
         gt: ">",
         lt: "<",
         quot: '"',
         apos: "'"
-      }, e.ENTITIES = {
+      });
+      sax2.ENTITIES = Object.assign(/* @__PURE__ */ Object.create(null), {
         amp: "&",
         gt: ">",
         lt: "<",
@@ -5377,466 +5395,1039 @@ function $r() {
         clubs: 9827,
         hearts: 9829,
         diams: 9830
-      }, Object.keys(e.ENTITIES).forEach(function(g) {
-        var u = e.ENTITIES[g], I = typeof u == "number" ? String.fromCharCode(u) : u;
-        e.ENTITIES[g] = I;
       });
-      for (var Ye in e.STATE)
-        e.STATE[e.STATE[Ye]] = Ye;
-      N = e.STATE;
-      function ke(g, u, I) {
-        g[u] && g[u](I);
+      Object.keys(sax2.ENTITIES).forEach(function(key) {
+        var e = sax2.ENTITIES[key];
+        var s2 = typeof e === "number" ? String.fromCharCode(e) : e;
+        sax2.ENTITIES[key] = s2;
+      });
+      for (var s in sax2.STATE) {
+        sax2.STATE[sax2.STATE[s]] = s;
       }
-      function ie(g, u, I) {
-        g.textNode && Be(g), ke(g, u, I);
+      S = sax2.STATE;
+      function emit(parser, event, data) {
+        parser[event] && parser[event](data);
       }
-      function Be(g) {
-        g.textNode = Xe(g.opt, g.textNode), g.textNode && ke(g, "ontext", g.textNode), g.textNode = "";
+      function getDeclaredEncoding(body) {
+        var match = body && body.match(/(?:^|\s)encoding\s*=\s*(['"])([^'"]+)\1/i);
+        return match ? match[2] : null;
       }
-      function Xe(g, u) {
-        return g.trim && (u = u.trim()), g.normalize && (u = u.replace(/\s+/g, " ")), u;
+      function normalizeEncodingName(encoding) {
+        if (!encoding) {
+          return null;
+        }
+        return encoding.toLowerCase().replace(/[^a-z0-9]/g, "");
       }
-      function Ae(g, u) {
-        return Be(g), g.trackPosition && (u += `
-Line: ` + g.line + `
-Column: ` + g.column + `
-Char: ` + g.c), u = new Error(u), g.error = u, ke(g, "onerror", u), g;
+      function encodingsMatch(detectedEncoding, declaredEncoding) {
+        const detected = normalizeEncodingName(detectedEncoding);
+        const declared = normalizeEncodingName(declaredEncoding);
+        if (!detected || !declared) {
+          return true;
+        }
+        if (declared === "utf16") {
+          return detected === "utf16le" || detected === "utf16be";
+        }
+        return detected === declared;
       }
-      function Oe(g) {
-        return g.sawRoot && !g.closedRoot && V(g, "Unclosed root tag"), g.state !== N.BEGIN && g.state !== N.BEGIN_WHITESPACE && g.state !== N.TEXT && Ae(g, "Unexpected end"), Be(g), g.c = "", g.closed = !0, ke(g, "onend"), s.call(g, g.strict, g.opt), g;
+      function validateXmlDeclarationEncoding(parser, data) {
+        if (!parser.strict || !parser.encoding || !data || data.name !== "xml") {
+          return;
+        }
+        var declaredEncoding = getDeclaredEncoding(data.body);
+        if (declaredEncoding && !encodingsMatch(parser.encoding, declaredEncoding)) {
+          strictFail(
+            parser,
+            "XML declaration encoding " + declaredEncoding + " does not match detected stream encoding " + parser.encoding.toUpperCase()
+          );
+        }
       }
-      function V(g, u) {
-        if (typeof g != "object" || !(g instanceof s))
+      function emitNode(parser, nodeType, data) {
+        if (parser.textNode) closeText(parser);
+        emit(parser, nodeType, data);
+      }
+      function closeText(parser) {
+        parser.textNode = textopts(parser.opt, parser.textNode);
+        if (parser.textNode) emit(parser, "ontext", parser.textNode);
+        parser.textNode = "";
+      }
+      function textopts(opt, text) {
+        if (opt.trim) text = text.trim();
+        if (opt.normalize) text = text.replace(/\s+/g, " ");
+        return text;
+      }
+      function error(parser, er) {
+        closeText(parser);
+        if (parser.trackPosition) {
+          er += "\nLine: " + parser.line + "\nColumn: " + parser.column + "\nChar: " + parser.c;
+        }
+        er = new Error(er);
+        parser.error = er;
+        emit(parser, "onerror", er);
+        return parser;
+      }
+      function end(parser) {
+        if (parser.sawRoot && !parser.closedRoot)
+          strictFail(parser, "Unclosed root tag");
+        if (parser.state !== S.BEGIN && parser.state !== S.BEGIN_WHITESPACE && parser.state !== S.TEXT) {
+          error(parser, "Unexpected end");
+        }
+        closeText(parser);
+        parser.c = "";
+        parser.closed = true;
+        emit(parser, "onend");
+        SAXParser.call(parser, parser.strict, parser.opt);
+        return parser;
+      }
+      function strictFail(parser, message) {
+        if (typeof parser !== "object" || !(parser instanceof SAXParser)) {
           throw new Error("bad call to strictFail");
-        g.strict && Ae(g, u);
+        }
+        if (parser.strict) {
+          error(parser, message);
+        }
       }
-      function ze(g) {
-        g.strict || (g.tagName = g.tagName[g.looseCase]());
-        var u = g.tags[g.tags.length - 1] || g, I = g.tag = { name: g.tagName, attributes: {} };
-        g.opt.xmlns && (I.ns = u.ns), g.attribList.length = 0, ie(g, "onopentagstart", I);
+      function newTag(parser) {
+        if (!parser.strict) parser.tagName = parser.tagName[parser.looseCase]();
+        var parent = parser.tags[parser.tags.length - 1] || parser;
+        var tag = parser.tag = { name: parser.tagName, attributes: {} };
+        if (parser.opt.xmlns) {
+          tag.ns = parent.ns;
+        }
+        parser.attribList.length = 0;
+        emitNode(parser, "onopentagstart", tag);
       }
-      function Ue(g, u) {
-        var I = g.indexOf(":"), T = I < 0 ? ["", g] : g.split(":"), q = T[0], Z = T[1];
-        return u && g === "xmlns" && (q = "xmlns", Z = ""), { prefix: q, local: Z };
+      function qname(name, attribute) {
+        var i = name.indexOf(":");
+        var qualName = i < 0 ? ["", name] : name.split(":");
+        var prefix = qualName[0];
+        var local = qualName[1];
+        if (attribute && name === "xmlns") {
+          prefix = "xmlns";
+          local = "";
+        }
+        return { prefix, local };
       }
-      function Le(g) {
-        if (g.strict || (g.attribName = g.attribName[g.looseCase]()), g.attribList.indexOf(g.attribName) !== -1 || g.tag.attributes.hasOwnProperty(g.attribName)) {
-          g.attribName = g.attribValue = "";
+      function attrib(parser) {
+        if (!parser.strict) {
+          parser.attribName = parser.attribName[parser.looseCase]();
+        }
+        if (parser.attribList.indexOf(parser.attribName) !== -1 || parser.tag.attributes.hasOwnProperty(parser.attribName)) {
+          parser.attribName = parser.attribValue = "";
           return;
         }
-        if (g.opt.xmlns) {
-          var u = Ue(g.attribName, !0), I = u.prefix, T = u.local;
-          if (I === "xmlns")
-            if (T === "xml" && g.attribValue !== b)
-              V(
-                g,
-                "xml: prefix must be bound to " + b + `
-Actual: ` + g.attribValue
+        if (parser.opt.xmlns) {
+          var qn = qname(parser.attribName, true);
+          var prefix = qn.prefix;
+          var local = qn.local;
+          if (prefix === "xmlns") {
+            if (local === "xml" && parser.attribValue !== XML_NAMESPACE) {
+              strictFail(
+                parser,
+                "xml: prefix must be bound to " + XML_NAMESPACE + "\nActual: " + parser.attribValue
               );
-            else if (T === "xmlns" && g.attribValue !== R)
-              V(
-                g,
-                "xmlns: prefix must be bound to " + R + `
-Actual: ` + g.attribValue
+            } else if (local === "xmlns" && parser.attribValue !== XMLNS_NAMESPACE) {
+              strictFail(
+                parser,
+                "xmlns: prefix must be bound to " + XMLNS_NAMESPACE + "\nActual: " + parser.attribValue
               );
-            else {
-              var q = g.tag, Z = g.tags[g.tags.length - 1] || g;
-              q.ns === Z.ns && (q.ns = Object.create(Z.ns)), q.ns[T] = g.attribValue;
+            } else {
+              var tag = parser.tag;
+              var parent = parser.tags[parser.tags.length - 1] || parser;
+              if (tag.ns === parent.ns) {
+                tag.ns = Object.create(parent.ns);
+              }
+              tag.ns[local] = parser.attribValue;
             }
-          g.attribList.push([g.attribName, g.attribValue]);
-        } else
-          g.tag.attributes[g.attribName] = g.attribValue, ie(g, "onattribute", {
-            name: g.attribName,
-            value: g.attribValue
-          });
-        g.attribName = g.attribValue = "";
-      }
-      function Q(g, u) {
-        if (g.opt.xmlns) {
-          var I = g.tag, T = Ue(g.tagName);
-          I.prefix = T.prefix, I.local = T.local, I.uri = I.ns[T.prefix] || "", I.prefix && !I.uri && (V(
-            g,
-            "Unbound namespace prefix: " + JSON.stringify(g.tagName)
-          ), I.uri = T.prefix);
-          var q = g.tags[g.tags.length - 1] || g;
-          I.ns && q.ns !== I.ns && Object.keys(I.ns).forEach(function(me) {
-            ie(g, "onopennamespace", {
-              prefix: me,
-              uri: I.ns[me]
-            });
-          });
-          for (var Z = 0, J = g.attribList.length; Z < J; Z++) {
-            var ue = g.attribList[Z], de = ue[0], _e = ue[1], oe = Ue(de, !0), Te = oe.prefix, Ke = oe.local, $e = Te === "" ? "" : I.ns[Te] || "", be = {
-              name: de,
-              value: _e,
-              prefix: Te,
-              local: Ke,
-              uri: $e
-            };
-            Te && Te !== "xmlns" && !$e && (V(
-              g,
-              "Unbound namespace prefix: " + JSON.stringify(Te)
-            ), be.uri = Te), g.tag.attributes[de] = be, ie(g, "onattribute", be);
           }
-          g.attribList.length = 0;
+          parser.attribList.push([parser.attribName, parser.attribValue]);
+        } else {
+          parser.tag.attributes[parser.attribName] = parser.attribValue;
+          emitNode(parser, "onattribute", {
+            name: parser.attribName,
+            value: parser.attribValue
+          });
         }
-        g.tag.isSelfClosing = !!u, g.sawRoot = !0, g.tags.push(g.tag), ie(g, "onopentag", g.tag), u || (!g.noscript && g.tagName.toLowerCase() === "script" ? g.state = N.SCRIPT : g.state = N.TEXT, g.tag = null, g.tagName = ""), g.attribName = g.attribValue = "", g.attribList.length = 0;
+        parser.attribName = parser.attribValue = "";
       }
-      function ge(g) {
-        if (!g.tagName) {
-          V(g, "Weird empty close tag."), g.textNode += "</>", g.state = N.TEXT;
+      function openTag(parser, selfClosing) {
+        if (parser.opt.xmlns) {
+          var tag = parser.tag;
+          var qn = qname(parser.tagName);
+          tag.prefix = qn.prefix;
+          tag.local = qn.local;
+          tag.uri = tag.ns[qn.prefix] || "";
+          if (tag.prefix && !tag.uri) {
+            strictFail(
+              parser,
+              "Unbound namespace prefix: " + JSON.stringify(parser.tagName)
+            );
+            tag.uri = qn.prefix;
+          }
+          var parent = parser.tags[parser.tags.length - 1] || parser;
+          if (tag.ns && parent.ns !== tag.ns) {
+            Object.keys(tag.ns).forEach(function(p) {
+              emitNode(parser, "onopennamespace", {
+                prefix: p,
+                uri: tag.ns[p]
+              });
+            });
+          }
+          for (var i = 0, l = parser.attribList.length; i < l; i++) {
+            var nv = parser.attribList[i];
+            var name = nv[0];
+            var value = nv[1];
+            var qualName = qname(name, true);
+            var prefix = qualName.prefix;
+            var local = qualName.local;
+            var uri = prefix === "" ? "" : tag.ns[prefix] || "";
+            var a = {
+              name,
+              value,
+              prefix,
+              local,
+              uri
+            };
+            if (prefix && prefix !== "xmlns" && !uri) {
+              strictFail(
+                parser,
+                "Unbound namespace prefix: " + JSON.stringify(prefix)
+              );
+              a.uri = prefix;
+            }
+            parser.tag.attributes[name] = a;
+            emitNode(parser, "onattribute", a);
+          }
+          parser.attribList.length = 0;
+        }
+        parser.tag.isSelfClosing = !!selfClosing;
+        parser.sawRoot = true;
+        parser.tags.push(parser.tag);
+        emitNode(parser, "onopentag", parser.tag);
+        if (!selfClosing) {
+          if (!parser.noscript && parser.tagName.toLowerCase() === "script") {
+            parser.state = S.SCRIPT;
+          } else {
+            parser.state = S.TEXT;
+          }
+          parser.tag = null;
+          parser.tagName = "";
+        }
+        parser.attribName = parser.attribValue = "";
+        parser.attribList.length = 0;
+      }
+      function closeTag(parser) {
+        if (!parser.tagName) {
+          strictFail(parser, "Weird empty close tag.");
+          parser.textNode += "</>";
+          parser.state = S.TEXT;
           return;
         }
-        if (g.script) {
-          if (g.tagName !== "script") {
-            g.script += "</" + g.tagName + ">", g.tagName = "", g.state = N.SCRIPT;
+        if (parser.script) {
+          if (parser.tagName !== "script") {
+            parser.script += "</" + parser.tagName + ">";
+            parser.tagName = "";
+            parser.state = S.SCRIPT;
             return;
           }
-          ie(g, "onscript", g.script), g.script = "";
+          emitNode(parser, "onscript", parser.script);
+          parser.script = "";
         }
-        var u = g.tags.length, I = g.tagName;
-        g.strict || (I = I[g.looseCase]());
-        for (var T = I; u--; ) {
-          var q = g.tags[u];
-          if (q.name !== T)
-            V(g, "Unexpected close tag");
-          else
+        var t = parser.tags.length;
+        var tagName = parser.tagName;
+        if (!parser.strict) {
+          tagName = tagName[parser.looseCase]();
+        }
+        var closeTo = tagName;
+        while (t--) {
+          var close = parser.tags[t];
+          if (close.name !== closeTo) {
+            strictFail(parser, "Unexpected close tag");
+          } else {
             break;
+          }
         }
-        if (u < 0) {
-          V(g, "Unmatched closing tag: " + g.tagName), g.textNode += "</" + g.tagName + ">", g.state = N.TEXT;
+        if (t < 0) {
+          strictFail(parser, "Unmatched closing tag: " + parser.tagName);
+          parser.textNode += "</" + parser.tagName + ">";
+          parser.state = S.TEXT;
           return;
         }
-        g.tagName = I;
-        for (var Z = g.tags.length; Z-- > u; ) {
-          var J = g.tag = g.tags.pop();
-          g.tagName = g.tag.name, ie(g, "onclosetag", g.tagName);
-          var ue = {};
-          for (var de in J.ns)
-            ue[de] = J.ns[de];
-          var _e = g.tags[g.tags.length - 1] || g;
-          g.opt.xmlns && J.ns !== _e.ns && Object.keys(J.ns).forEach(function(oe) {
-            var Te = J.ns[oe];
-            ie(g, "onclosenamespace", { prefix: oe, uri: Te });
-          });
+        parser.tagName = tagName;
+        var s2 = parser.tags.length;
+        while (s2-- > t) {
+          var tag = parser.tag = parser.tags.pop();
+          parser.tagName = parser.tag.name;
+          emitNode(parser, "onclosetag", parser.tagName);
+          var x = {};
+          for (var i in tag.ns) {
+            x[i] = tag.ns[i];
+          }
+          var parent = parser.tags[parser.tags.length - 1] || parser;
+          if (parser.opt.xmlns && tag.ns !== parent.ns) {
+            Object.keys(tag.ns).forEach(function(p) {
+              var n = tag.ns[p];
+              emitNode(parser, "onclosenamespace", { prefix: p, uri: n });
+            });
+          }
         }
-        u === 0 && (g.closedRoot = !0), g.tagName = g.attribValue = g.attribName = "", g.attribList.length = 0, g.state = N.TEXT;
+        if (t === 0) parser.closedRoot = true;
+        parser.tagName = parser.attribValue = parser.attribName = "";
+        parser.attribList.length = 0;
+        parser.state = S.TEXT;
       }
-      function G(g) {
-        var u = g.entity, I = u.toLowerCase(), T, q = "";
-        return g.ENTITIES[u] ? g.ENTITIES[u] : g.ENTITIES[I] ? g.ENTITIES[I] : (u = I, u.charAt(0) === "#" && (u.charAt(1) === "x" ? (u = u.slice(2), T = parseInt(u, 16), q = T.toString(16)) : (u = u.slice(1), T = parseInt(u, 10), q = T.toString(10))), u = u.replace(/^0+/, ""), isNaN(T) || q.toLowerCase() !== u || T < 0 || T > 1114111 ? (V(g, "Invalid character entity"), "&" + g.entity + ";") : String.fromCodePoint(T));
+      function parseEntity(parser) {
+        var entity = parser.entity;
+        var entityLC = entity.toLowerCase();
+        var num;
+        var numStr = "";
+        if (parser.ENTITIES[entity]) {
+          return parser.ENTITIES[entity];
+        }
+        if (parser.ENTITIES[entityLC]) {
+          return parser.ENTITIES[entityLC];
+        }
+        entity = entityLC;
+        if (entity.charAt(0) === "#") {
+          if (entity.charAt(1) === "x") {
+            entity = entity.slice(2);
+            num = parseInt(entity, 16);
+            numStr = num.toString(16);
+          } else {
+            entity = entity.slice(1);
+            num = parseInt(entity, 10);
+            numStr = num.toString(10);
+          }
+        }
+        entity = entity.replace(/^0+/, "");
+        if (isNaN(num) || numStr.toLowerCase() !== entity || num < 0 || num > 1114111 || !isXmlChar(num)) {
+          strictFail(parser, "Invalid character entity");
+          return "&" + parser.entity + ";";
+        }
+        return String.fromCodePoint(num);
       }
-      function Ne(g, u) {
-        u === "<" ? (g.state = N.OPEN_WAKA, g.startTagPosition = g.position) : $(u) || (V(g, "Non-whitespace before first tag."), g.textNode = u, g.state = N.TEXT);
+      function isXmlChar(num) {
+        return num === 9 || num === 10 || num === 13 || num >= 32 && num <= 55295 || num >= 57344 && num <= 65533 || num >= 65536 && num <= 1114111;
       }
-      function je(g, u) {
-        var I = "";
-        return u < g.length && (I = g.charAt(u)), I;
+      function beginWhiteSpace(parser, c) {
+        if (c === "<") {
+          parser.state = S.OPEN_WAKA;
+          parser.startTagPosition = parser.position;
+        } else if (!isWhitespace(c)) {
+          strictFail(parser, "Non-whitespace before first tag.");
+          parser.textNode = c;
+          parser.state = S.TEXT;
+        }
       }
-      function ae(g) {
-        var u = this;
-        if (this.error)
+      function charAt(chunk, i) {
+        var result = "";
+        if (i < chunk.length) {
+          result = chunk.charAt(i);
+        }
+        return result;
+      }
+      function write(chunk) {
+        var parser = this;
+        if (this.error) {
           throw this.error;
-        if (u.closed)
-          return Ae(
-            u,
+        }
+        if (parser.closed) {
+          return error(
+            parser,
             "Cannot write after close. Assign an onready handler."
           );
-        if (g === null)
-          return Oe(u);
-        typeof g == "object" && (g = g.toString());
-        for (var I = 0, T = ""; T = je(g, I++), u.c = T, !!T; )
-          switch (u.trackPosition && (u.position++, T === `
-` ? (u.line++, u.column = 0) : u.column++), u.state) {
-            case N.BEGIN:
-              if (u.state = N.BEGIN_WHITESPACE, T === "\uFEFF")
-                continue;
-              Ne(u, T);
-              continue;
-            case N.BEGIN_WHITESPACE:
-              Ne(u, T);
-              continue;
-            case N.TEXT:
-              if (u.sawRoot && !u.closedRoot) {
-                for (var Z = I - 1; T && T !== "<" && T !== "&"; )
-                  T = je(g, I++), T && u.trackPosition && (u.position++, T === `
-` ? (u.line++, u.column = 0) : u.column++);
-                u.textNode += g.substring(Z, I - 1);
-              }
-              T === "<" && !(u.sawRoot && u.closedRoot && !u.strict) ? (u.state = N.OPEN_WAKA, u.startTagPosition = u.position) : (!$(T) && (!u.sawRoot || u.closedRoot) && V(u, "Text data outside of root node."), T === "&" ? u.state = N.TEXT_ENTITY : u.textNode += T);
-              continue;
-            case N.SCRIPT:
-              T === "<" ? u.state = N.SCRIPT_ENDING : u.script += T;
-              continue;
-            case N.SCRIPT_ENDING:
-              T === "/" ? u.state = N.CLOSE_TAG : (u.script += "<" + T, u.state = N.SCRIPT);
-              continue;
-            case N.OPEN_WAKA:
-              if (T === "!")
-                u.state = N.SGML_DECL, u.sgmlDecl = "";
-              else if (!$(T)) if (fe(U, T))
-                u.state = N.OPEN_TAG, u.tagName = T;
-              else if (T === "/")
-                u.state = N.CLOSE_TAG, u.tagName = "";
-              else if (T === "?")
-                u.state = N.PROC_INST, u.procInstName = u.procInstBody = "";
-              else {
-                if (V(u, "Unencoded <"), u.startTagPosition + 1 < u.position) {
-                  var q = u.position - u.startTagPosition;
-                  T = new Array(q).join(" ") + T;
-                }
-                u.textNode += "<" + T, u.state = N.TEXT;
-              }
-              continue;
-            case N.SGML_DECL:
-              if (u.sgmlDecl + T === "--") {
-                u.state = N.COMMENT, u.comment = "", u.sgmlDecl = "";
-                continue;
-              }
-              u.doctype && u.doctype !== !0 && u.sgmlDecl ? (u.state = N.DOCTYPE_DTD, u.doctype += "<!" + u.sgmlDecl + T, u.sgmlDecl = "") : (u.sgmlDecl + T).toUpperCase() === C ? (ie(u, "onopencdata"), u.state = N.CDATA, u.sgmlDecl = "", u.cdata = "") : (u.sgmlDecl + T).toUpperCase() === A ? (u.state = N.DOCTYPE, (u.doctype || u.sawRoot) && V(
-                u,
-                "Inappropriately located doctype declaration"
-              ), u.doctype = "", u.sgmlDecl = "") : T === ">" ? (ie(u, "onsgmldeclaration", u.sgmlDecl), u.sgmlDecl = "", u.state = N.TEXT) : (L(T) && (u.state = N.SGML_DECL_QUOTED), u.sgmlDecl += T);
-              continue;
-            case N.SGML_DECL_QUOTED:
-              T === u.q && (u.state = N.SGML_DECL, u.q = ""), u.sgmlDecl += T;
-              continue;
-            case N.DOCTYPE:
-              T === ">" ? (u.state = N.TEXT, ie(u, "ondoctype", u.doctype), u.doctype = !0) : (u.doctype += T, T === "[" ? u.state = N.DOCTYPE_DTD : L(T) && (u.state = N.DOCTYPE_QUOTED, u.q = T));
-              continue;
-            case N.DOCTYPE_QUOTED:
-              u.doctype += T, T === u.q && (u.q = "", u.state = N.DOCTYPE);
-              continue;
-            case N.DOCTYPE_DTD:
-              T === "]" ? (u.doctype += T, u.state = N.DOCTYPE) : T === "<" ? (u.state = N.OPEN_WAKA, u.startTagPosition = u.position) : L(T) ? (u.doctype += T, u.state = N.DOCTYPE_DTD_QUOTED, u.q = T) : u.doctype += T;
-              continue;
-            case N.DOCTYPE_DTD_QUOTED:
-              u.doctype += T, T === u.q && (u.state = N.DOCTYPE_DTD, u.q = "");
-              continue;
-            case N.COMMENT:
-              T === "-" ? u.state = N.COMMENT_ENDING : u.comment += T;
-              continue;
-            case N.COMMENT_ENDING:
-              T === "-" ? (u.state = N.COMMENT_ENDED, u.comment = Xe(u.opt, u.comment), u.comment && ie(u, "oncomment", u.comment), u.comment = "") : (u.comment += "-" + T, u.state = N.COMMENT);
-              continue;
-            case N.COMMENT_ENDED:
-              T !== ">" ? (V(u, "Malformed comment"), u.comment += "--" + T, u.state = N.COMMENT) : u.doctype && u.doctype !== !0 ? u.state = N.DOCTYPE_DTD : u.state = N.TEXT;
-              continue;
-            case N.CDATA:
-              for (var Z = I - 1; T && T !== "]"; )
-                T = je(g, I++), T && u.trackPosition && (u.position++, T === `
-` ? (u.line++, u.column = 0) : u.column++);
-              u.cdata += g.substring(Z, I - 1), T === "]" && (u.state = N.CDATA_ENDING);
-              continue;
-            case N.CDATA_ENDING:
-              T === "]" ? u.state = N.CDATA_ENDING_2 : (u.cdata += "]" + T, u.state = N.CDATA);
-              continue;
-            case N.CDATA_ENDING_2:
-              T === ">" ? (u.cdata && ie(u, "oncdata", u.cdata), ie(u, "onclosecdata"), u.cdata = "", u.state = N.TEXT) : T === "]" ? u.cdata += "]" : (u.cdata += "]]" + T, u.state = N.CDATA);
-              continue;
-            case N.PROC_INST:
-              T === "?" ? u.state = N.PROC_INST_ENDING : $(T) ? u.state = N.PROC_INST_BODY : u.procInstName += T;
-              continue;
-            case N.PROC_INST_BODY:
-              if (!u.procInstBody && $(T))
-                continue;
-              T === "?" ? u.state = N.PROC_INST_ENDING : u.procInstBody += T;
-              continue;
-            case N.PROC_INST_ENDING:
-              T === ">" ? (ie(u, "onprocessinginstruction", {
-                name: u.procInstName,
-                body: u.procInstBody
-              }), u.procInstName = u.procInstBody = "", u.state = N.TEXT) : (u.procInstBody += "?" + T, u.state = N.PROC_INST_BODY);
-              continue;
-            case N.OPEN_TAG:
-              fe(_, T) ? u.tagName += T : (ze(u), T === ">" ? Q(u) : T === "/" ? u.state = N.OPEN_TAG_SLASH : ($(T) || V(u, "Invalid character in tag name"), u.state = N.ATTRIB));
-              continue;
-            case N.OPEN_TAG_SLASH:
-              T === ">" ? (Q(u, !0), ge(u)) : (V(
-                u,
-                "Forward-slash in opening tag not followed by >"
-              ), u.state = N.ATTRIB);
-              continue;
-            case N.ATTRIB:
-              if ($(T))
-                continue;
-              T === ">" ? Q(u) : T === "/" ? u.state = N.OPEN_TAG_SLASH : fe(U, T) ? (u.attribName = T, u.attribValue = "", u.state = N.ATTRIB_NAME) : V(u, "Invalid attribute name");
-              continue;
-            case N.ATTRIB_NAME:
-              T === "=" ? u.state = N.ATTRIB_VALUE : T === ">" ? (V(u, "Attribute without value"), u.attribValue = u.attribName, Le(u), Q(u)) : $(T) ? u.state = N.ATTRIB_NAME_SAW_WHITE : fe(_, T) ? u.attribName += T : V(u, "Invalid attribute name");
-              continue;
-            case N.ATTRIB_NAME_SAW_WHITE:
-              if (T === "=")
-                u.state = N.ATTRIB_VALUE;
-              else {
-                if ($(T))
-                  continue;
-                V(u, "Attribute without value"), u.tag.attributes[u.attribName] = "", u.attribValue = "", ie(u, "onattribute", {
-                  name: u.attribName,
-                  value: ""
-                }), u.attribName = "", T === ">" ? Q(u) : fe(U, T) ? (u.attribName = T, u.state = N.ATTRIB_NAME) : (V(u, "Invalid attribute name"), u.state = N.ATTRIB);
-              }
-              continue;
-            case N.ATTRIB_VALUE:
-              if ($(T))
-                continue;
-              L(T) ? (u.q = T, u.state = N.ATTRIB_VALUE_QUOTED) : (u.opt.unquotedAttributeValues || Ae(u, "Unquoted attribute value"), u.state = N.ATTRIB_VALUE_UNQUOTED, u.attribValue = T);
-              continue;
-            case N.ATTRIB_VALUE_QUOTED:
-              if (T !== u.q) {
-                T === "&" ? u.state = N.ATTRIB_VALUE_ENTITY_Q : u.attribValue += T;
-                continue;
-              }
-              Le(u), u.q = "", u.state = N.ATTRIB_VALUE_CLOSED;
-              continue;
-            case N.ATTRIB_VALUE_CLOSED:
-              $(T) ? u.state = N.ATTRIB : T === ">" ? Q(u) : T === "/" ? u.state = N.OPEN_TAG_SLASH : fe(U, T) ? (V(u, "No whitespace between attributes"), u.attribName = T, u.attribValue = "", u.state = N.ATTRIB_NAME) : V(u, "Invalid attribute name");
-              continue;
-            case N.ATTRIB_VALUE_UNQUOTED:
-              if (!Ee(T)) {
-                T === "&" ? u.state = N.ATTRIB_VALUE_ENTITY_U : u.attribValue += T;
-                continue;
-              }
-              Le(u), T === ">" ? Q(u) : u.state = N.ATTRIB;
-              continue;
-            case N.CLOSE_TAG:
-              if (u.tagName)
-                T === ">" ? ge(u) : fe(_, T) ? u.tagName += T : u.script ? (u.script += "</" + u.tagName, u.tagName = "", u.state = N.SCRIPT) : ($(T) || V(u, "Invalid tagname in closing tag"), u.state = N.CLOSE_TAG_SAW_WHITE);
-              else {
-                if ($(T))
-                  continue;
-                Pe(U, T) ? u.script ? (u.script += "</" + T, u.state = N.SCRIPT) : V(u, "Invalid tagname in closing tag.") : u.tagName = T;
-              }
-              continue;
-            case N.CLOSE_TAG_SAW_WHITE:
-              if ($(T))
-                continue;
-              T === ">" ? ge(u) : V(u, "Invalid characters in closing tag");
-              continue;
-            case N.TEXT_ENTITY:
-            case N.ATTRIB_VALUE_ENTITY_Q:
-            case N.ATTRIB_VALUE_ENTITY_U:
-              var J, ue;
-              switch (u.state) {
-                case N.TEXT_ENTITY:
-                  J = N.TEXT, ue = "textNode";
-                  break;
-                case N.ATTRIB_VALUE_ENTITY_Q:
-                  J = N.ATTRIB_VALUE_QUOTED, ue = "attribValue";
-                  break;
-                case N.ATTRIB_VALUE_ENTITY_U:
-                  J = N.ATTRIB_VALUE_UNQUOTED, ue = "attribValue";
-                  break;
-              }
-              if (T === ";") {
-                var de = G(u);
-                u.opt.unparsedEntities && !Object.values(e.XML_ENTITIES).includes(de) ? (u.entity = "", u.state = J, u.write(de)) : (u[ue] += de, u.entity = "", u.state = J);
-              } else fe(u.entity.length ? D : x, T) ? u.entity += T : (V(u, "Invalid character in entity name"), u[ue] += "&" + u.entity + T, u.entity = "", u.state = J);
-              continue;
-            default:
-              throw new Error(u, "Unknown state: " + u.state);
+        }
+        if (chunk === null) {
+          return end(parser);
+        }
+        if (typeof chunk === "object") {
+          chunk = chunk.toString();
+        }
+        var i = 0;
+        var c = "";
+        while (true) {
+          c = charAt(chunk, i++);
+          parser.c = c;
+          if (!c) {
+            break;
           }
-        return u.position >= u.bufferCheckPosition && r(u), u;
+          if (parser.trackPosition) {
+            parser.position++;
+            if (c === "\n") {
+              parser.line++;
+              parser.column = 0;
+            } else {
+              parser.column++;
+            }
+          }
+          switch (parser.state) {
+            case S.BEGIN:
+              parser.state = S.BEGIN_WHITESPACE;
+              if (c === "\uFEFF") {
+                continue;
+              }
+              beginWhiteSpace(parser, c);
+              continue;
+            case S.BEGIN_WHITESPACE:
+              beginWhiteSpace(parser, c);
+              continue;
+            case S.TEXT:
+              if (parser.sawRoot && !parser.closedRoot) {
+                var starti = i - 1;
+                while (c && c !== "<" && c !== "&") {
+                  c = charAt(chunk, i++);
+                  if (c && parser.trackPosition) {
+                    parser.position++;
+                    if (c === "\n") {
+                      parser.line++;
+                      parser.column = 0;
+                    } else {
+                      parser.column++;
+                    }
+                  }
+                }
+                parser.textNode += chunk.substring(starti, i - 1);
+              }
+              if (c === "<" && !(parser.sawRoot && parser.closedRoot && !parser.strict)) {
+                parser.state = S.OPEN_WAKA;
+                parser.startTagPosition = parser.position;
+              } else {
+                if (!isWhitespace(c) && (!parser.sawRoot || parser.closedRoot)) {
+                  strictFail(parser, "Text data outside of root node.");
+                }
+                if (c === "&") {
+                  parser.state = S.TEXT_ENTITY;
+                } else {
+                  parser.textNode += c;
+                }
+              }
+              continue;
+            case S.SCRIPT:
+              if (c === "<") {
+                parser.state = S.SCRIPT_ENDING;
+              } else {
+                parser.script += c;
+              }
+              continue;
+            case S.SCRIPT_ENDING:
+              if (c === "/") {
+                parser.state = S.CLOSE_TAG;
+              } else {
+                parser.script += "<" + c;
+                parser.state = S.SCRIPT;
+              }
+              continue;
+            case S.OPEN_WAKA:
+              if (c === "!") {
+                parser.state = S.SGML_DECL;
+                parser.sgmlDecl = "";
+              } else if (isWhitespace(c)) ;
+              else if (isMatch(nameStart, c)) {
+                parser.state = S.OPEN_TAG;
+                parser.tagName = c;
+              } else if (c === "/") {
+                parser.state = S.CLOSE_TAG;
+                parser.tagName = "";
+              } else if (c === "?") {
+                parser.state = S.PROC_INST;
+                parser.procInstName = parser.procInstBody = "";
+              } else {
+                strictFail(parser, "Unencoded <");
+                if (parser.startTagPosition + 1 < parser.position) {
+                  var pad = parser.position - parser.startTagPosition;
+                  c = new Array(pad).join(" ") + c;
+                }
+                parser.textNode += "<" + c;
+                parser.state = S.TEXT;
+              }
+              continue;
+            case S.SGML_DECL:
+              if (parser.sgmlDecl + c === "--") {
+                parser.state = S.COMMENT;
+                parser.comment = "";
+                parser.sgmlDecl = "";
+                continue;
+              }
+              if (parser.doctype && parser.doctype !== true && parser.sgmlDecl) {
+                parser.state = S.DOCTYPE_DTD;
+                parser.doctype += "<!" + parser.sgmlDecl + c;
+                parser.sgmlDecl = "";
+              } else if (CDATAre.test(parser.sgmlDecl + c)) {
+                emitNode(parser, "onopencdata");
+                parser.state = S.CDATA;
+                parser.sgmlDecl = "";
+                parser.cdata = "";
+              } else if (DOCTYPEre.test(parser.sgmlDecl + c)) {
+                parser.state = S.DOCTYPE;
+                if (parser.doctype || parser.sawRoot) {
+                  strictFail(
+                    parser,
+                    "Inappropriately located doctype declaration"
+                  );
+                }
+                parser.doctype = "";
+                parser.sgmlDecl = "";
+              } else if (c === ">") {
+                emitNode(parser, "onsgmldeclaration", parser.sgmlDecl);
+                parser.sgmlDecl = "";
+                parser.state = S.TEXT;
+              } else if (isQuote(c)) {
+                parser.state = S.SGML_DECL_QUOTED;
+                parser.sgmlDecl += c;
+              } else {
+                parser.sgmlDecl += c;
+              }
+              continue;
+            case S.SGML_DECL_QUOTED:
+              if (c === parser.q) {
+                parser.state = S.SGML_DECL;
+                parser.q = "";
+              }
+              parser.sgmlDecl += c;
+              continue;
+            case S.DOCTYPE:
+              if (c === ">") {
+                parser.state = S.TEXT;
+                emitNode(parser, "ondoctype", parser.doctype);
+                parser.doctype = true;
+              } else {
+                parser.doctype += c;
+                if (c === "[") {
+                  parser.state = S.DOCTYPE_DTD;
+                } else if (isQuote(c)) {
+                  parser.state = S.DOCTYPE_QUOTED;
+                  parser.q = c;
+                }
+              }
+              continue;
+            case S.DOCTYPE_QUOTED:
+              parser.doctype += c;
+              if (c === parser.q) {
+                parser.q = "";
+                parser.state = S.DOCTYPE;
+              }
+              continue;
+            case S.DOCTYPE_DTD:
+              if (c === "]") {
+                parser.doctype += c;
+                parser.state = S.DOCTYPE;
+              } else if (c === "<") {
+                parser.state = S.OPEN_WAKA;
+                parser.startTagPosition = parser.position;
+              } else if (isQuote(c)) {
+                parser.doctype += c;
+                parser.state = S.DOCTYPE_DTD_QUOTED;
+                parser.q = c;
+              } else {
+                parser.doctype += c;
+              }
+              continue;
+            case S.DOCTYPE_DTD_QUOTED:
+              parser.doctype += c;
+              if (c === parser.q) {
+                parser.state = S.DOCTYPE_DTD;
+                parser.q = "";
+              }
+              continue;
+            case S.COMMENT:
+              if (c === "-") {
+                parser.state = S.COMMENT_ENDING;
+              } else {
+                parser.comment += c;
+              }
+              continue;
+            case S.COMMENT_ENDING:
+              if (c === "-") {
+                parser.state = S.COMMENT_ENDED;
+                parser.comment = textopts(parser.opt, parser.comment);
+                if (parser.comment) {
+                  emitNode(parser, "oncomment", parser.comment);
+                }
+                parser.comment = "";
+              } else {
+                parser.comment += "-" + c;
+                parser.state = S.COMMENT;
+              }
+              continue;
+            case S.COMMENT_ENDED:
+              if (c !== ">") {
+                strictFail(parser, "Malformed comment");
+                parser.comment += "--" + c;
+                parser.state = S.COMMENT;
+              } else if (parser.doctype && parser.doctype !== true) {
+                parser.state = S.DOCTYPE_DTD;
+              } else {
+                parser.state = S.TEXT;
+              }
+              continue;
+            case S.CDATA:
+              var starti = i - 1;
+              while (c && c !== "]") {
+                c = charAt(chunk, i++);
+                if (c && parser.trackPosition) {
+                  parser.position++;
+                  if (c === "\n") {
+                    parser.line++;
+                    parser.column = 0;
+                  } else {
+                    parser.column++;
+                  }
+                }
+              }
+              parser.cdata += chunk.substring(starti, i - 1);
+              if (c === "]") {
+                parser.state = S.CDATA_ENDING;
+              }
+              continue;
+            case S.CDATA_ENDING:
+              if (c === "]") {
+                parser.state = S.CDATA_ENDING_2;
+              } else {
+                parser.cdata += "]" + c;
+                parser.state = S.CDATA;
+              }
+              continue;
+            case S.CDATA_ENDING_2:
+              if (c === ">") {
+                if (parser.cdata) {
+                  emitNode(parser, "oncdata", parser.cdata);
+                }
+                emitNode(parser, "onclosecdata");
+                parser.cdata = "";
+                parser.state = S.TEXT;
+              } else if (c === "]") {
+                parser.cdata += "]";
+              } else {
+                parser.cdata += "]]" + c;
+                parser.state = S.CDATA;
+              }
+              continue;
+            case S.PROC_INST:
+              if (c === "?") {
+                parser.state = S.PROC_INST_ENDING;
+              } else if (isWhitespace(c)) {
+                parser.state = S.PROC_INST_BODY;
+              } else {
+                parser.procInstName += c;
+              }
+              continue;
+            case S.PROC_INST_BODY:
+              if (!parser.procInstBody && isWhitespace(c)) {
+                continue;
+              } else if (c === "?") {
+                parser.state = S.PROC_INST_ENDING;
+              } else {
+                parser.procInstBody += c;
+              }
+              continue;
+            case S.PROC_INST_ENDING:
+              if (c === ">") {
+                const procInstEndData = {
+                  name: parser.procInstName,
+                  body: parser.procInstBody
+                };
+                validateXmlDeclarationEncoding(parser, procInstEndData);
+                emitNode(parser, "onprocessinginstruction", procInstEndData);
+                parser.procInstName = parser.procInstBody = "";
+                parser.state = S.TEXT;
+              } else {
+                parser.procInstBody += "?" + c;
+                parser.state = S.PROC_INST_BODY;
+              }
+              continue;
+            case S.OPEN_TAG:
+              if (isMatch(nameBody, c)) {
+                parser.tagName += c;
+              } else {
+                newTag(parser);
+                if (c === ">") {
+                  openTag(parser);
+                } else if (c === "/") {
+                  parser.state = S.OPEN_TAG_SLASH;
+                } else {
+                  if (!isWhitespace(c)) {
+                    strictFail(parser, "Invalid character in tag name");
+                  }
+                  parser.state = S.ATTRIB;
+                }
+              }
+              continue;
+            case S.OPEN_TAG_SLASH:
+              if (c === ">") {
+                openTag(parser, true);
+                closeTag(parser);
+              } else {
+                strictFail(
+                  parser,
+                  "Forward-slash in opening tag not followed by >"
+                );
+                parser.state = S.ATTRIB;
+              }
+              continue;
+            case S.ATTRIB:
+              if (isWhitespace(c)) {
+                continue;
+              } else if (c === ">") {
+                openTag(parser);
+              } else if (c === "/") {
+                parser.state = S.OPEN_TAG_SLASH;
+              } else if (isMatch(nameStart, c)) {
+                parser.attribName = c;
+                parser.attribValue = "";
+                parser.state = S.ATTRIB_NAME;
+              } else {
+                strictFail(parser, "Invalid attribute name");
+              }
+              continue;
+            case S.ATTRIB_NAME:
+              if (c === "=") {
+                parser.state = S.ATTRIB_VALUE;
+              } else if (c === ">") {
+                strictFail(parser, "Attribute without value");
+                parser.attribValue = parser.attribName;
+                attrib(parser);
+                openTag(parser);
+              } else if (isWhitespace(c)) {
+                parser.state = S.ATTRIB_NAME_SAW_WHITE;
+              } else if (isMatch(nameBody, c)) {
+                parser.attribName += c;
+              } else {
+                strictFail(parser, "Invalid attribute name");
+              }
+              continue;
+            case S.ATTRIB_NAME_SAW_WHITE:
+              if (c === "=") {
+                parser.state = S.ATTRIB_VALUE;
+              } else if (isWhitespace(c)) {
+                continue;
+              } else {
+                strictFail(parser, "Attribute without value");
+                parser.tag.attributes[parser.attribName] = "";
+                parser.attribValue = "";
+                emitNode(parser, "onattribute", {
+                  name: parser.attribName,
+                  value: ""
+                });
+                parser.attribName = "";
+                if (c === ">") {
+                  openTag(parser);
+                } else if (isMatch(nameStart, c)) {
+                  parser.attribName = c;
+                  parser.state = S.ATTRIB_NAME;
+                } else {
+                  strictFail(parser, "Invalid attribute name");
+                  parser.state = S.ATTRIB;
+                }
+              }
+              continue;
+            case S.ATTRIB_VALUE:
+              if (isWhitespace(c)) {
+                continue;
+              } else if (isQuote(c)) {
+                parser.q = c;
+                parser.state = S.ATTRIB_VALUE_QUOTED;
+              } else {
+                if (!parser.opt.unquotedAttributeValues) {
+                  error(parser, "Unquoted attribute value");
+                }
+                parser.state = S.ATTRIB_VALUE_UNQUOTED;
+                parser.attribValue = c;
+              }
+              continue;
+            case S.ATTRIB_VALUE_QUOTED:
+              if (c !== parser.q) {
+                if (c === "&") {
+                  parser.state = S.ATTRIB_VALUE_ENTITY_Q;
+                } else {
+                  parser.attribValue += c;
+                }
+                continue;
+              }
+              attrib(parser);
+              parser.q = "";
+              parser.state = S.ATTRIB_VALUE_CLOSED;
+              continue;
+            case S.ATTRIB_VALUE_CLOSED:
+              if (isWhitespace(c)) {
+                parser.state = S.ATTRIB;
+              } else if (c === ">") {
+                openTag(parser);
+              } else if (c === "/") {
+                parser.state = S.OPEN_TAG_SLASH;
+              } else if (isMatch(nameStart, c)) {
+                strictFail(parser, "No whitespace between attributes");
+                parser.attribName = c;
+                parser.attribValue = "";
+                parser.state = S.ATTRIB_NAME;
+              } else {
+                strictFail(parser, "Invalid attribute name");
+              }
+              continue;
+            case S.ATTRIB_VALUE_UNQUOTED:
+              if (!isAttribEnd(c)) {
+                if (c === "&") {
+                  parser.state = S.ATTRIB_VALUE_ENTITY_U;
+                } else {
+                  parser.attribValue += c;
+                }
+                continue;
+              }
+              attrib(parser);
+              if (c === ">") {
+                openTag(parser);
+              } else {
+                parser.state = S.ATTRIB;
+              }
+              continue;
+            case S.CLOSE_TAG:
+              if (!parser.tagName) {
+                if (isWhitespace(c)) {
+                  continue;
+                } else if (notMatch(nameStart, c)) {
+                  if (parser.script) {
+                    parser.script += "</" + c;
+                    parser.state = S.SCRIPT;
+                  } else {
+                    strictFail(parser, "Invalid tagname in closing tag.");
+                  }
+                } else {
+                  parser.tagName = c;
+                }
+              } else if (c === ">") {
+                closeTag(parser);
+              } else if (isMatch(nameBody, c)) {
+                parser.tagName += c;
+              } else if (parser.script) {
+                parser.script += "</" + parser.tagName + c;
+                parser.tagName = "";
+                parser.state = S.SCRIPT;
+              } else {
+                if (!isWhitespace(c)) {
+                  strictFail(parser, "Invalid tagname in closing tag");
+                }
+                parser.state = S.CLOSE_TAG_SAW_WHITE;
+              }
+              continue;
+            case S.CLOSE_TAG_SAW_WHITE:
+              if (isWhitespace(c)) {
+                continue;
+              }
+              if (c === ">") {
+                closeTag(parser);
+              } else {
+                strictFail(parser, "Invalid characters in closing tag");
+              }
+              continue;
+            case S.TEXT_ENTITY:
+            case S.ATTRIB_VALUE_ENTITY_Q:
+            case S.ATTRIB_VALUE_ENTITY_U:
+              var returnState;
+              var buffer;
+              switch (parser.state) {
+                case S.TEXT_ENTITY:
+                  returnState = S.TEXT;
+                  buffer = "textNode";
+                  break;
+                case S.ATTRIB_VALUE_ENTITY_Q:
+                  returnState = S.ATTRIB_VALUE_QUOTED;
+                  buffer = "attribValue";
+                  break;
+                case S.ATTRIB_VALUE_ENTITY_U:
+                  returnState = S.ATTRIB_VALUE_UNQUOTED;
+                  buffer = "attribValue";
+                  break;
+              }
+              if (c === ";") {
+                var parsedEntity = parseEntity(parser);
+                if (parser.opt.unparsedEntities && !Object.values(sax2.XML_ENTITIES).includes(parsedEntity)) {
+                  if ((parser.entityCount += 1) > parser.opt.maxEntityCount) {
+                    error(
+                      parser,
+                      "Parsed entity count exceeds max entity count"
+                    );
+                  }
+                  if ((parser.entityDepth += 1) > parser.opt.maxEntityDepth) {
+                    error(
+                      parser,
+                      "Parsed entity depth exceeds max entity depth"
+                    );
+                  }
+                  parser.entity = "";
+                  parser.state = returnState;
+                  parser.write(parsedEntity);
+                  parser.entityDepth -= 1;
+                } else {
+                  parser[buffer] += parsedEntity;
+                  parser.entity = "";
+                  parser.state = returnState;
+                }
+              } else if (isMatch(parser.entity.length ? entityBody : entityStart, c)) {
+                parser.entity += c;
+              } else {
+                strictFail(parser, "Invalid character in entity name");
+                parser[buffer] += "&" + parser.entity + c;
+                parser.entity = "";
+                parser.state = returnState;
+              }
+              continue;
+            default: {
+              throw new Error(parser, "Unknown state: " + parser.state);
+            }
+          }
+        }
+        if (parser.position >= parser.bufferCheckPosition) {
+          checkBufferLength(parser);
+        }
+        return parser;
       }
       /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
-      String.fromCodePoint || (function() {
-        var g = String.fromCharCode, u = Math.floor, I = function() {
-          var T = 16384, q = [], Z, J, ue = -1, de = arguments.length;
-          if (!de)
-            return "";
-          for (var _e = ""; ++ue < de; ) {
-            var oe = Number(arguments[ue]);
-            if (!isFinite(oe) || // `NaN`, `+Infinity`, or `-Infinity`
-            oe < 0 || // not a valid Unicode code point
-            oe > 1114111 || // not a valid Unicode code point
-            u(oe) !== oe)
-              throw RangeError("Invalid code point: " + oe);
-            oe <= 65535 ? q.push(oe) : (oe -= 65536, Z = (oe >> 10) + 55296, J = oe % 1024 + 56320, q.push(Z, J)), (ue + 1 === de || q.length > T) && (_e += g.apply(null, q), q.length = 0);
+      if (!String.fromCodePoint) {
+        (function() {
+          var stringFromCharCode = String.fromCharCode;
+          var floor = Math.floor;
+          var fromCodePoint = function() {
+            var MAX_SIZE = 16384;
+            var codeUnits = [];
+            var highSurrogate;
+            var lowSurrogate;
+            var index = -1;
+            var length = arguments.length;
+            if (!length) {
+              return "";
+            }
+            var result = "";
+            while (++index < length) {
+              var codePoint = Number(arguments[index]);
+              if (!isFinite(codePoint) || // `NaN`, `+Infinity`, or `-Infinity`
+              codePoint < 0 || // not a valid Unicode code point
+              codePoint > 1114111 || // not a valid Unicode code point
+              floor(codePoint) !== codePoint) {
+                throw RangeError("Invalid code point: " + codePoint);
+              }
+              if (codePoint <= 65535) {
+                codeUnits.push(codePoint);
+              } else {
+                codePoint -= 65536;
+                highSurrogate = (codePoint >> 10) + 55296;
+                lowSurrogate = codePoint % 1024 + 56320;
+                codeUnits.push(highSurrogate, lowSurrogate);
+              }
+              if (index + 1 === length || codeUnits.length > MAX_SIZE) {
+                result += stringFromCharCode.apply(null, codeUnits);
+                codeUnits.length = 0;
+              }
+            }
+            return result;
+          };
+          if (Object.defineProperty) {
+            Object.defineProperty(String, "fromCodePoint", {
+              value: fromCodePoint,
+              configurable: true,
+              writable: true
+            });
+          } else {
+            String.fromCodePoint = fromCodePoint;
           }
-          return _e;
-        };
-        Object.defineProperty ? Object.defineProperty(String, "fromCodePoint", {
-          value: I,
-          configurable: !0,
-          writable: !0
-        }) : String.fromCodePoint = I;
-      })();
-    })(l);
-  })(vt)), vt;
+        })();
+      }
+    })(exports$1);
+  })(sax$1);
+  return sax$1;
 }
-var Gr = $r();
-const Wr = /* @__PURE__ */ ir(Gr), is = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData", Xr = 0, qr = 1, qt = 2, Yr = 3, zr = 4, Kr = 0, Hr = 1, at = 2, as = 3, Vr = 4, Jr = 5, Qr = 6;
-class os {
+var saxExports = requireSax();
+const sax = /* @__PURE__ */ getDefaultExportFromCjs(saxExports);
+const ANNOTATION_URI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+const UNSPECIFIED_CONTENT = 0;
+const EMPTY_CONTENT = 1;
+const SIMPLE_CONTENT = 2;
+const MIXED_CONTENT = 3;
+const ELEMENT_ONLY_CONTENT = 4;
+const UNSPECIFIED_FEATURE = 0;
+const SIMPLE_FEATURE = 1;
+const ELEMENT_FEATURE = 2;
+const ATTRIBUTE_FEATURE = 3;
+const ELEMENT_WILDCARD_FEATURE = 4;
+const ATTRIBUTE_WILDCARD_FEATURE = 5;
+const GROUP_FEATURE = 6;
+class ExtendedMetaData {
   constructor() {
-    this.contentKindCache = /* @__PURE__ */ new Map(), this.featureKindCache = /* @__PURE__ */ new Map(), this.nameCache = /* @__PURE__ */ new Map(), this.namespaceCache = /* @__PURE__ */ new Map(), this.simpleContentFeatureCache = /* @__PURE__ */ new Map();
+    this.contentKindCache = /* @__PURE__ */ new Map();
+    this.featureKindCache = /* @__PURE__ */ new Map();
+    this.nameCache = /* @__PURE__ */ new Map();
+    this.namespaceCache = /* @__PURE__ */ new Map();
+    this.simpleContentFeatureCache = /* @__PURE__ */ new Map();
   }
   /**
    * Get the content kind for a class (class-level annotation).
    */
-  getContentKind(e) {
-    let t = this.contentKindCache.get(e);
-    if (t !== void 0)
-      return t;
-    t = Xr;
-    const s = this.getAnnotationDetail(e, "kind");
-    if (s)
-      switch (s) {
+  getContentKind(eClass) {
+    let kind = this.contentKindCache.get(eClass);
+    if (kind !== void 0)
+      return kind;
+    kind = UNSPECIFIED_CONTENT;
+    const kindStr = this.getAnnotationDetail(eClass, "kind");
+    if (kindStr) {
+      switch (kindStr) {
         case "simple":
-          t = qt;
+          kind = SIMPLE_CONTENT;
           break;
         case "mixed":
-          t = Yr;
+          kind = MIXED_CONTENT;
           break;
         case "empty":
-          t = qr;
+          kind = EMPTY_CONTENT;
           break;
         case "elementOnly":
-          t = zr;
+          kind = ELEMENT_ONLY_CONTENT;
           break;
       }
-    return this.contentKindCache.set(e, t), t;
+    }
+    this.contentKindCache.set(eClass, kind);
+    return kind;
   }
   /**
    * Get the feature kind (element, attribute, simple, etc.)
    */
-  getFeatureKind(e) {
-    let t = this.featureKindCache.get(e);
-    if (t !== void 0)
-      return t;
-    t = Kr;
-    const s = this.getAnnotationDetail(e, "kind");
-    if (s)
-      switch (s) {
+  getFeatureKind(feature) {
+    let kind = this.featureKindCache.get(feature);
+    if (kind !== void 0)
+      return kind;
+    kind = UNSPECIFIED_FEATURE;
+    const kindStr = this.getAnnotationDetail(feature, "kind");
+    if (kindStr) {
+      switch (kindStr) {
         case "simple":
-          t = Hr;
+          kind = SIMPLE_FEATURE;
           break;
         case "element":
-          t = at;
+          kind = ELEMENT_FEATURE;
           break;
         case "attribute":
-          t = as;
+          kind = ATTRIBUTE_FEATURE;
           break;
         case "elementWildcard":
-          t = Vr;
+          kind = ELEMENT_WILDCARD_FEATURE;
           break;
         case "attributeWildcard":
-          t = Jr;
+          kind = ATTRIBUTE_WILDCARD_FEATURE;
           break;
         case "group":
-          t = Qr;
+          kind = GROUP_FEATURE;
           break;
       }
-    return this.featureKindCache.set(e, t), t;
+    }
+    this.featureKindCache.set(feature, kind);
+    return kind;
   }
   /**
    * Get the XML name for a feature from its EMD annotation.
    * Returns null if no annotation is present.
    */
-  getName(e) {
-    if (this.nameCache.has(e))
-      return this.nameCache.get(e);
-    const t = this.getAnnotationDetail(e, "name") ?? null;
-    return this.nameCache.set(e, t), t;
+  getName(feature) {
+    if (this.nameCache.has(feature))
+      return this.nameCache.get(feature);
+    const name = this.getAnnotationDetail(feature, "name") ?? null;
+    this.nameCache.set(feature, name);
+    return name;
   }
   /**
    * Get the namespace URI for a feature from its EMD annotation.
@@ -5844,150 +6435,221 @@ class os {
    * - `##targetNamespace` → owning EPackage's nsURI
    * - `##local` → null (no namespace)
    */
-  getNamespace(e) {
-    if (this.namespaceCache.has(e))
-      return this.namespaceCache.get(e);
-    let s = this.getAnnotationDetail(e, "namespace") ?? null;
-    if (s === "##targetNamespace") {
-      if (s = e.getEContainingClass?.()?.getEPackage?.()?.getNsURI?.() ?? null, s === null)
+  getNamespace(feature) {
+    if (this.namespaceCache.has(feature))
+      return this.namespaceCache.get(feature);
+    const rawNs = this.getAnnotationDetail(feature, "namespace") ?? null;
+    let ns = rawNs;
+    if (ns === "##targetNamespace") {
+      const eClass = feature.getEContainingClass?.();
+      const pkg = eClass?.getEPackage?.();
+      ns = pkg?.getNsURI?.() ?? null;
+      if (ns === null)
         return null;
-    } else s === "##local" && (s = null);
-    return this.namespaceCache.set(e, s), s;
+    } else if (ns === "##local") {
+      ns = null;
+    }
+    this.namespaceCache.set(feature, ns);
+    return ns;
   }
   /**
    * Find the feature that represents simple text content (name=":0", kind="simple").
    */
-  getSimpleContentFeature(e) {
-    if (this.simpleContentFeatureCache.has(e))
-      return this.simpleContentFeatureCache.get(e);
-    let t = null;
-    for (const s of e.getEAllStructuralFeatures())
-      if (this.getName(s) === ":0") {
-        t = s;
+  getSimpleContentFeature(eClass) {
+    if (this.simpleContentFeatureCache.has(eClass)) {
+      return this.simpleContentFeatureCache.get(eClass);
+    }
+    let result = null;
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      const name = this.getName(feature);
+      if (name === ":0") {
+        result = feature;
         break;
       }
-    return this.simpleContentFeatureCache.set(e, t), t;
+    }
+    this.simpleContentFeatureCache.set(eClass, result);
+    return result;
   }
   /**
    * Find a feature by its EMD namespace and name, where the feature kind is "element".
    */
-  getElementFeature(e, t, s) {
-    for (const r of e.getEAllStructuralFeatures()) {
-      if (this.getFeatureKind(r) !== at)
+  getElementFeature(eClass, namespace, name) {
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      const fKind = this.getFeatureKind(feature);
+      if (fKind !== ELEMENT_FEATURE)
         continue;
-      const a = this.getName(r) ?? r.getName();
-      if (a !== s)
+      const fName = this.getName(feature) ?? feature.getName();
+      if (fName !== name)
         continue;
-      const o = this.getNamespace(r);
-      if (t && o && o === t || !t && !o || !o && a === s)
-        return r;
+      const fNs = this.getNamespace(feature);
+      if (namespace && fNs && fNs === namespace)
+        return feature;
+      if (!namespace && !fNs)
+        return feature;
+      if (!fNs && fName === name)
+        return feature;
     }
     return null;
   }
   /**
    * Find a feature by its EMD namespace and name, where the feature kind is "attribute".
    */
-  getAttributeFeature(e, t, s) {
-    for (const r of e.getEAllStructuralFeatures()) {
-      if (this.getFeatureKind(r) !== as)
+  getAttributeFeature(eClass, namespace, name) {
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      const fKind = this.getFeatureKind(feature);
+      if (fKind !== ATTRIBUTE_FEATURE)
         continue;
-      const a = this.getName(r) ?? r.getName();
-      if (a !== s)
+      const fName = this.getName(feature) ?? feature.getName();
+      if (fName !== name)
         continue;
-      const o = this.getNamespace(r);
-      if (t && o && o === t || !t && !o || !o && a === s)
-        return r;
+      const fNs = this.getNamespace(feature);
+      if (namespace && fNs && fNs === namespace)
+        return feature;
+      if (!namespace && !fNs)
+        return feature;
+      if (!fNs && fName === name)
+        return feature;
     }
     return null;
   }
   /**
    * Find any feature by EMD namespace and name (element or attribute).
    */
-  getFeature(e, t, s, r) {
-    return r ? this.getElementFeature(e, t, s) : this.getAttributeFeature(e, t, s);
+  getFeature(eClass, namespace, name, isElement) {
+    if (isElement) {
+      return this.getElementFeature(eClass, namespace, name);
+    }
+    return this.getAttributeFeature(eClass, namespace, name);
   }
   /**
    * Read a detail value from the ExtendedMetaData annotation on a model element.
    */
-  getAnnotationDetail(e, t) {
-    if (!e || typeof e.getEAnnotation != "function")
-      return;
-    const s = e.getEAnnotation(is);
-    if (!s)
-      return;
-    const r = s.getDetails();
-    if (!(!r || typeof r.getByKey != "function"))
-      return r.getByKey(t);
+  getAnnotationDetail(element, key) {
+    if (!element || typeof element.getEAnnotation !== "function")
+      return void 0;
+    const annotation = element.getEAnnotation(ANNOTATION_URI);
+    if (!annotation)
+      return void 0;
+    const details = annotation.getDetails();
+    if (!details || typeof details.getByKey !== "function")
+      return void 0;
+    return details.getByKey(key);
   }
   /**
    * Read the ExtendedMetaData annotation details as a Map.
    */
-  getAnnotation(e) {
-    if (!e || typeof e.getEAnnotation != "function")
+  getAnnotation(element) {
+    if (!element || typeof element.getEAnnotation !== "function")
       return null;
-    const t = e.getEAnnotation(is);
-    if (!t)
+    const annotation = element.getEAnnotation(ANNOTATION_URI);
+    if (!annotation)
       return null;
-    const s = t.getDetails();
-    return s && typeof s.getByKey == "function" ? s.toMap() : null;
+    const details = annotation.getDetails();
+    if (!details)
+      return null;
+    if (typeof details.getByKey === "function") {
+      return details.toMap();
+    }
+    return null;
   }
 }
-const Zr = "FEATURE_NAME_MAP", en = "EXTENDED_META_DATA", Dt = 1, Ot = 2, cs = 3, tn = 4, us = 5;
-class sn {
+const OPTION_FEATURE_NAME_MAP = "FEATURE_NAME_MAP";
+const OPTION_EXTENDED_META_DATA = "EXTENDED_META_DATA";
+const DATATYPE_SINGLE = 1;
+const DATATYPE_IS_MANY = 2;
+const IS_MANY_ADD = 3;
+const IS_MANY_MOVE = 4;
+const OTHER = 5;
+class NamespaceSupport {
   constructor() {
-    this.contexts = [], this.currentContext = /* @__PURE__ */ new Map();
+    this.contexts = [];
+    this.currentContext = /* @__PURE__ */ new Map();
   }
   pushContext() {
     this.contexts.push(new Map(this.currentContext));
   }
   popContext() {
-    const e = this.contexts.pop(), t = /* @__PURE__ */ new Map();
-    if (e) {
-      for (const [s, r] of this.currentContext)
-        (!e.has(s) || e.get(s) !== r) && t.set(s, r);
-      this.currentContext = e;
+    const previous = this.contexts.pop();
+    const popped = /* @__PURE__ */ new Map();
+    if (previous) {
+      for (const [prefix, uri] of this.currentContext) {
+        if (!previous.has(prefix) || previous.get(prefix) !== uri) {
+          popped.set(prefix, uri);
+        }
+      }
+      this.currentContext = previous;
     }
-    return t;
+    return popped;
   }
-  declarePrefix(e, t) {
-    this.currentContext.set(e, t);
+  declarePrefix(prefix, uri) {
+    this.currentContext.set(prefix, uri);
   }
-  getURI(e) {
-    return this.currentContext.get(e) ?? null;
+  getURI(prefix) {
+    return this.currentContext.get(prefix) ?? null;
   }
-  getPrefix(e) {
-    for (const [t, s] of this.currentContext)
-      if (s === e)
-        return t;
+  getPrefix(uri) {
+    for (const [prefix, nsUri] of this.currentContext) {
+      if (nsUri === uri) {
+        return prefix;
+      }
+    }
     return null;
   }
 }
-class _t {
-  constructor(e) {
-    this.noNamespacePackage = null, this.resource = null, this.xmlResource = null, this.resourceURI = null, this.packageRegistry = we.INSTANCE, this.packages = /* @__PURE__ */ new Map(), this.featuresToKinds = /* @__PURE__ */ new Map(), this.prefixesToURIs = /* @__PURE__ */ new Map(), this.urisToPrefixes = /* @__PURE__ */ new Map(), this.namespaceSupport = new sn(), this.allPrefixToURI = [], this.featureNameMap = /* @__PURE__ */ new Map(), this.reverseFeatureNameMap = /* @__PURE__ */ new Map(), this.extendedMetaData = null, e && this.setResource(e);
-  }
-  setResource(e) {
-    if (this.resource = e, this.xmlResource = e && "getID" in e ? e : null, e) {
-      this.resourceURI = e.getURI();
-      const t = e.getResourceSet();
-      t ? this.packageRegistry = t.getPackageRegistry() : this.packageRegistry = we.INSTANCE;
+class XMLHelperImpl {
+  constructor(resource) {
+    this.noNamespacePackage = null;
+    this.resource = null;
+    this.xmlResource = null;
+    this.resourceURI = null;
+    this.packageRegistry = EPackageRegistry.INSTANCE;
+    this.packages = /* @__PURE__ */ new Map();
+    this.featuresToKinds = /* @__PURE__ */ new Map();
+    this.prefixesToURIs = /* @__PURE__ */ new Map();
+    this.urisToPrefixes = /* @__PURE__ */ new Map();
+    this.namespaceSupport = new NamespaceSupport();
+    this.allPrefixToURI = [];
+    this.featureNameMap = /* @__PURE__ */ new Map();
+    this.reverseFeatureNameMap = /* @__PURE__ */ new Map();
+    this.extendedMetaData = null;
+    if (resource) {
+      this.setResource(resource);
     }
   }
-  setOptions(e) {
-    const t = e.get(Zr);
-    if (t) {
-      this.featureNameMap = new Map(t), this.reverseFeatureNameMap = /* @__PURE__ */ new Map();
-      for (const [r, n] of t)
-        this.reverseFeatureNameMap.set(n, r);
+  setResource(resource) {
+    this.resource = resource;
+    this.xmlResource = resource && "getID" in resource ? resource : null;
+    if (resource) {
+      this.resourceURI = resource.getURI();
+      const resourceSet = resource.getResourceSet();
+      if (resourceSet) {
+        this.packageRegistry = resourceSet.getPackageRegistry();
+      } else {
+        this.packageRegistry = EPackageRegistry.INSTANCE;
+      }
     }
-    const s = e.get(en);
-    s instanceof os ? this.extendedMetaData = s : s === !0 && (this.extendedMetaData = new os());
+  }
+  setOptions(options) {
+    const nameMap = options.get(OPTION_FEATURE_NAME_MAP);
+    if (nameMap) {
+      this.featureNameMap = new Map(nameMap);
+      this.reverseFeatureNameMap = /* @__PURE__ */ new Map();
+      for (const [featureName, xmlName] of nameMap) {
+        this.reverseFeatureNameMap.set(xmlName, featureName);
+      }
+    }
+    const emd = options.get(OPTION_EXTENDED_META_DATA);
+    if (emd instanceof ExtendedMetaData) {
+      this.extendedMetaData = emd;
+    } else if (emd === true) {
+      this.extendedMetaData = new ExtendedMetaData();
+    }
   }
   getExtendedMetaData() {
     return this.extendedMetaData;
   }
-  setNoNamespacePackage(e) {
-    this.noNamespacePackage = e;
+  setNoNamespacePackage(pkg) {
+    this.noNamespacePackage = pkg;
   }
   getNoNamespacePackage() {
     return this.noNamespacePackage;
@@ -5995,47 +6657,58 @@ class _t {
   getResource() {
     return this.resource;
   }
-  getName(e) {
-    return e.getName() || "";
+  getName(element) {
+    return element.getName() || "";
   }
-  getQName(e) {
-    const t = e.getEPackage();
-    if (t) {
-      const s = this.getPrefixForPackage(t);
-      if (s && s.length > 0)
-        return s + ":" + e.getName();
+  getQName(classifier) {
+    const ePackage = classifier.getEPackage();
+    if (ePackage) {
+      const prefix = this.getPrefixForPackage(ePackage);
+      if (prefix && prefix.length > 0) {
+        return prefix + ":" + classifier.getName();
+      }
     }
-    return e.getName() || "";
+    return classifier.getName() || "";
   }
-  getPrefix(e) {
-    if (e === null)
+  getPrefix(namespaceURI) {
+    if (namespaceURI === null) {
       return null;
-    const t = this.urisToPrefixes.get(e);
-    return t && t.length > 0 ? t[0] : null;
-  }
-  getPrefixForPackage(e) {
-    let t = this.packages.get(e);
-    if (t === void 0) {
-      const s = e.getNsURI();
-      if (s) {
-        const r = this.getPrefix(s);
-        t = r !== null ? r : e.getNsPrefix() || "";
-      } else
-        t = e.getNsPrefix() || "";
-      this.packages.set(e, t || "");
     }
-    return t || null;
+    const prefixes = this.urisToPrefixes.get(namespaceURI);
+    return prefixes && prefixes.length > 0 ? prefixes[0] : null;
   }
-  getNamespaceURI(e) {
-    return this.prefixesToURIs.get(e) ?? null;
+  getPrefixForPackage(ePackage) {
+    let prefix = this.packages.get(ePackage);
+    if (prefix === void 0) {
+      const nsURI = ePackage.getNsURI();
+      if (nsURI) {
+        const foundPrefix = this.getPrefix(nsURI);
+        prefix = foundPrefix !== null ? foundPrefix : ePackage.getNsPrefix() || "";
+      } else {
+        prefix = ePackage.getNsPrefix() || "";
+      }
+      this.packages.set(ePackage, prefix || "");
+    }
+    return prefix || null;
   }
-  getURI(e) {
-    return this.namespaceSupport.getURI(e);
+  getNamespaceURI(prefix) {
+    return this.prefixesToURIs.get(prefix) ?? null;
   }
-  addPrefix(e, t) {
-    this.namespaceSupport.declarePrefix(e, t), this.prefixesToURIs.set(e, t);
-    let s = this.urisToPrefixes.get(t);
-    s || (s = [], this.urisToPrefixes.set(t, s)), s.includes(e) || s.push(e), this.allPrefixToURI.push(e, t);
+  getURI(prefix) {
+    return this.namespaceSupport.getURI(prefix);
+  }
+  addPrefix(prefix, uri) {
+    this.namespaceSupport.declarePrefix(prefix, uri);
+    this.prefixesToURIs.set(prefix, uri);
+    let prefixes = this.urisToPrefixes.get(uri);
+    if (!prefixes) {
+      prefixes = [];
+      this.urisToPrefixes.set(uri, prefixes);
+    }
+    if (!prefixes.includes(prefix)) {
+      prefixes.push(prefix);
+    }
+    this.allPrefixToURI.push(prefix, uri);
   }
   pushContext() {
     this.namespaceSupport.pushContext();
@@ -6043,163 +6716,238 @@ class _t {
   popContext() {
     this.namespaceSupport.popContext();
   }
-  popContextWithFactories(e) {
-    const t = this.namespaceSupport.popContext();
-    for (const [s] of t)
-      e.delete(s);
+  popContextWithFactories(prefixesToFactories) {
+    const popped = this.namespaceSupport.popContext();
+    for (const [prefix] of popped) {
+      prefixesToFactories.delete(prefix);
+    }
   }
   recordPrefixToURIMapping() {
   }
   getPrefixToNamespaceMap() {
     return new Map(this.prefixesToURIs);
   }
-  createObject(e, t) {
-    return t && "getESuperTypes" in t ? e.create(t) : null;
+  createObject(eFactory, type) {
+    if (type && "getESuperTypes" in type) {
+      return eFactory.create(type);
+    }
+    return null;
   }
-  getType(e, t) {
-    const s = e.getEPackage();
-    return s ? s.getEClassifier(t) : null;
+  getType(eFactory, typeName) {
+    const ePackage = eFactory.getEPackage();
+    if (ePackage) {
+      return ePackage.getEClassifier(typeName);
+    }
+    return null;
   }
-  getFeature(e, t, s) {
+  getFeature(eClass, namespaceURI, name) {
     if (this.extendedMetaData) {
-      const n = this.extendedMetaData.getAttributeFeature(e, t, s);
-      if (n)
-        return this.computeFeatureKind(n), n;
-    }
-    let r = e.getEStructuralFeature(s);
-    if (!r && this.reverseFeatureNameMap.size > 0) {
-      const n = this.reverseFeatureNameMap.get(s);
-      n && (r = e.getEStructuralFeature(n));
-    }
-    return r && this.computeFeatureKind(r), r;
-  }
-  getFeatureWithElement(e, t, s, r) {
-    if (this.extendedMetaData) {
-      const n = this.extendedMetaData.getFeature(e, t, s, r);
-      if (n)
-        return this.computeFeatureKind(n), n;
-    }
-    return this.getFeature(e, t, s);
-  }
-  getSerializedFeatureName(e) {
-    if (this.extendedMetaData) {
-      const s = this.extendedMetaData.getName(e);
-      if (s && !s.startsWith(":"))
-        return s;
-    }
-    const t = e.getName() || "";
-    if (this.featureNameMap.size > 0) {
-      const s = this.featureNameMap.get(t);
-      if (s !== void 0)
-        return s;
-    }
-    return t;
-  }
-  getFeatureKind(e) {
-    let t = this.featuresToKinds.get(e);
-    return t === void 0 && (this.computeFeatureKind(e), t = this.featuresToKinds.get(e)), t ?? us;
-  }
-  computeFeatureKind(e) {
-    const t = e.getEType();
-    if (!("isContainment" in e && typeof e.isContainment == "function") && (!t || !("getESuperTypes" in t)))
-      e.isMany() ? this.featuresToKinds.set(e, Ot) : this.featuresToKinds.set(e, Dt);
-    else if (e.isMany())
-      if ("getEOpposite" in e && typeof e.getEOpposite == "function") {
-        const n = e.getEOpposite();
-        !n || typeof n.isTransient != "function" || n.isTransient() || !n.isMany() ? this.featuresToKinds.set(e, cs) : this.featuresToKinds.set(e, tn);
-      } else
-        this.featuresToKinds.set(e, cs);
-    else
-      this.featuresToKinds.set(e, us);
-  }
-  setValue(e, t, s, r) {
-    if (t.isMany()) {
-      let n = e.eGet(t);
-      n || (n = [], e.eSet(t, n)), r === -1 ? n.push(s) : r === -2 ? n.unshift(s) : n.splice(r, 0, s);
-    } else
-      e.eSet(t, s);
-    if (s && typeof s == "object") {
-      const n = t.getName();
-      n === "eClassifiers" && "setEPackage" in s && s.setEPackage(e), n === "eStructuralFeatures" && "setEContainingClass" in s && s.setEContainingClass(e), n === "eOperations" && "setEContainingClass" in s && s.setEContainingClass(e);
-    }
-  }
-  setManyReference(e, t) {
-    const s = [], r = e.getObject(), n = e.getFeature(), a = e.getValues(), o = e.getPositions();
-    for (let d = 0; d < a.length; d++) {
-      const y = a[d], S = o[d];
-      try {
-        this.setValue(r, n, y, S);
-      } catch (C) {
-        s.push(C instanceof Error ? C : new Error(String(C)));
+      const emdFeature = this.extendedMetaData.getAttributeFeature(eClass, namespaceURI, name);
+      if (emdFeature) {
+        this.computeFeatureKind(emdFeature);
+        return emdFeature;
       }
     }
-    return s;
+    let feature = eClass.getEStructuralFeature(name);
+    if (!feature && this.reverseFeatureNameMap.size > 0) {
+      const featureName = this.reverseFeatureNameMap.get(name);
+      if (featureName) {
+        feature = eClass.getEStructuralFeature(featureName);
+      }
+    }
+    if (feature) {
+      this.computeFeatureKind(feature);
+    }
+    return feature;
   }
-  deresolve(e) {
-    return this.resourceURI && !e.isRelative() ? e.deresolve(this.resourceURI) : e;
+  getFeatureWithElement(eClass, namespaceURI, name, isElement) {
+    if (this.extendedMetaData) {
+      const emdFeature = this.extendedMetaData.getFeature(eClass, namespaceURI, name, isElement);
+      if (emdFeature) {
+        this.computeFeatureKind(emdFeature);
+        return emdFeature;
+      }
+    }
+    return this.getFeature(eClass, namespaceURI, name);
   }
-  resolve(e, t) {
-    return e.resolve(t);
+  getSerializedFeatureName(feature) {
+    if (this.extendedMetaData) {
+      const emdName = this.extendedMetaData.getName(feature);
+      if (emdName && !emdName.startsWith(":")) {
+        return emdName;
+      }
+    }
+    const name = feature.getName() || "";
+    if (this.featureNameMap.size > 0) {
+      const mapped = this.featureNameMap.get(name);
+      if (mapped !== void 0) {
+        return mapped;
+      }
+    }
+    return name;
   }
-  getID(e) {
-    return this.xmlResource ? this.xmlResource.getID(e) : null;
+  getFeatureKind(feature) {
+    let kind = this.featuresToKinds.get(feature);
+    if (kind === void 0) {
+      this.computeFeatureKind(feature);
+      kind = this.featuresToKinds.get(feature);
+    }
+    return kind ?? OTHER;
   }
-  convertToString(e, t, s) {
-    return e.convertToString(t, s);
+  computeFeatureKind(feature) {
+    const eClassifier = feature.getEType();
+    const isReference = "isContainment" in feature && typeof feature.isContainment === "function";
+    if (!isReference && (!eClassifier || !("getESuperTypes" in eClassifier))) {
+      if (feature.isMany()) {
+        this.featuresToKinds.set(feature, DATATYPE_IS_MANY);
+      } else {
+        this.featuresToKinds.set(feature, DATATYPE_SINGLE);
+      }
+    } else {
+      if (feature.isMany()) {
+        if ("getEOpposite" in feature && typeof feature.getEOpposite === "function") {
+          const reference = feature;
+          const opposite = reference.getEOpposite();
+          if (!opposite || typeof opposite.isTransient !== "function" || opposite.isTransient() || !opposite.isMany()) {
+            this.featuresToKinds.set(feature, IS_MANY_ADD);
+          } else {
+            this.featuresToKinds.set(feature, IS_MANY_MOVE);
+          }
+        } else {
+          this.featuresToKinds.set(feature, IS_MANY_ADD);
+        }
+      } else {
+        this.featuresToKinds.set(feature, OTHER);
+      }
+    }
+  }
+  setValue(eObject, feature, value, position) {
+    if (feature.isMany()) {
+      let list = eObject.eGet(feature);
+      if (!list) {
+        list = [];
+        eObject.eSet(feature, list);
+      }
+      if (position === -1) {
+        list.push(value);
+      } else if (position === -2) {
+        list.unshift(value);
+      } else {
+        list.splice(position, 0, value);
+      }
+    } else {
+      eObject.eSet(feature, value);
+    }
+    if (value && typeof value === "object") {
+      const featureName = feature.getName();
+      if (featureName === "eClassifiers" && "setEPackage" in value) {
+        value.setEPackage(eObject);
+      }
+      if (featureName === "eStructuralFeatures" && "setEContainingClass" in value) {
+        value.setEContainingClass(eObject);
+      }
+      if (featureName === "eOperations" && "setEContainingClass" in value) {
+        value.setEContainingClass(eObject);
+      }
+    }
+  }
+  setManyReference(reference, location) {
+    const errors = [];
+    const eObject = reference.getObject();
+    const feature = reference.getFeature();
+    const values = reference.getValues();
+    const positions = reference.getPositions();
+    for (let i = 0; i < values.length; i++) {
+      const value = values[i];
+      const position = positions[i];
+      try {
+        this.setValue(eObject, feature, value, position);
+      } catch (e) {
+        errors.push(e instanceof Error ? e : new Error(String(e)));
+      }
+    }
+    return errors;
+  }
+  deresolve(uri) {
+    if (this.resourceURI && !uri.isRelative()) {
+      return uri.deresolve(this.resourceURI);
+    }
+    return uri;
+  }
+  resolve(relative, base) {
+    return relative.resolve(base);
+  }
+  getID(obj) {
+    return this.xmlResource ? this.xmlResource.getID(obj) : null;
+  }
+  convertToString(factory, dataType, data) {
+    return factory.convertToString(dataType, data);
   }
 }
-class Ms {
-  constructor(e, t) {
-    this._proxyURI = null, this._eClass = null, this._resource = null, this._proxyURI = e, this._eClass = t || null;
+class EProxyImpl {
+  constructor(proxyURI, eClass) {
+    this._proxyURI = null;
+    this._eClass = null;
+    this._resource = null;
+    this._proxyURI = proxyURI;
+    this._eClass = eClass || null;
   }
   // --- Proxy-specific methods ---
   eProxyURI() {
     return this._proxyURI;
   }
-  eSetProxyURI(e) {
-    this._proxyURI = e;
+  eSetProxyURI(uri) {
+    this._proxyURI = uri;
   }
   eIsProxy() {
     return this._proxyURI !== null;
   }
-  eResolveProxy(e) {
-    const t = this._resource || this.eResource();
-    if (t) {
-      const s = t.getResourceSet();
-      if (s && e.eProxyURI()) {
-        const n = e.eProxyURI().toString(), a = n.indexOf("#");
-        if (a > 0) {
-          const o = Y.createURI(n.substring(0, a)), d = n.substring(a + 1), y = s.getResource(o, !0);
-          if (y) {
-            const S = y.getEObject(d);
-            if (S)
-              return S;
+  eResolveProxy(proxy) {
+    const resource = this._resource || this.eResource();
+    if (resource) {
+      const resourceSet = resource.getResourceSet();
+      if (resourceSet && proxy.eProxyURI()) {
+        const proxyURI = proxy.eProxyURI();
+        const uriStr = proxyURI.toString();
+        const hashIndex = uriStr.indexOf("#");
+        if (hashIndex > 0) {
+          const resourceURI = URI.createURI(uriStr.substring(0, hashIndex));
+          const fragment = uriStr.substring(hashIndex + 1);
+          const targetResource = resourceSet.getResource(resourceURI, true);
+          if (targetResource) {
+            const resolved = targetResource.getEObject(fragment);
+            if (resolved) {
+              return resolved;
+            }
           }
-        } else if (a === 0) {
-          const o = n.substring(1), d = t.getEObject(o);
-          if (d)
-            return d;
+        } else if (hashIndex === 0) {
+          const fragment = uriStr.substring(1);
+          const resolved = resource.getEObject(fragment);
+          if (resolved) {
+            return resolved;
+          }
         }
       }
     }
-    return e;
+    return proxy;
   }
   // --- InternalEObject methods ---
   eInternalResource() {
     return this._resource;
   }
-  eSetResource(e) {
-    this._resource = e;
+  eSetResource(resource) {
+    this._resource = resource;
   }
   eInternalContainer() {
     return null;
   }
-  eBasicSetContainer(e, t) {
+  eBasicSetContainer(container, containerFeatureID) {
   }
   // --- EObject interface (minimal implementation) ---
   eClass() {
-    if (this._eClass)
+    if (this._eClass) {
       return this._eClass;
+    }
     throw new Error("Proxy has no EClass - must be resolved first");
   }
   eResource() {
@@ -6223,58 +6971,65 @@ class Ms {
   eCrossReferences() {
     return [];
   }
-  eGet(e) {
-    throw new Error(`Cannot get feature '${e.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
+  eGet(feature) {
+    throw new Error(`Cannot get feature '${feature.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
   }
-  eSet(e, t) {
-    throw new Error(`Cannot set feature '${e.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
+  eSet(feature, newValue) {
+    throw new Error(`Cannot set feature '${feature.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
   }
-  eIsSet(e) {
-    return !1;
+  eIsSet(feature) {
+    return false;
   }
-  eUnset(e) {
-    throw new Error(`Cannot unset feature '${e.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
+  eUnset(feature) {
+    throw new Error(`Cannot unset feature '${feature.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
   }
-  eInvoke(e, t) {
-    throw new Error(`Cannot invoke operation '${e.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
+  eInvoke(operation, arguments_) {
+    throw new Error(`Cannot invoke operation '${operation.getName()}' on unresolved proxy: ${this._proxyURI?.toString()}`);
   }
   toString() {
     return `EProxy(${this._proxyURI?.toString() || "null"})`;
   }
 }
-function Ze(l, e) {
-  let t = e;
-  for (; t.startsWith("/"); )
-    t = t.substring(1);
-  if (!t)
+function resolveClassifierInPackage(pkg, fragment) {
+  let path = fragment;
+  while (path.startsWith("/")) {
+    path = path.substring(1);
+  }
+  if (!path)
     return null;
-  const s = t.split("/");
-  if (s.length === 1)
-    return l.getEClassifier(s[0]);
-  const r = s[s.length - 1];
-  let n = l;
-  for (let a = 0; a < s.length - 1; a++) {
-    const o = s[a], d = n.getESubpackages();
-    n = null;
-    for (let y = 0; y < d.length; y++) {
-      const S = d.get(y);
-      if (S.getName() === o) {
-        n = S;
+  const segments = path.split("/");
+  if (segments.length === 1) {
+    return pkg.getEClassifier(segments[0]);
+  }
+  const classifierName = segments[segments.length - 1];
+  let currentPkg = pkg;
+  for (let i = 0; i < segments.length - 1; i++) {
+    const subPkgName = segments[i];
+    const subPackages = currentPkg.getESubpackages();
+    currentPkg = null;
+    for (let j = 0; j < subPackages.length; j++) {
+      const sp = subPackages.get(j);
+      if (sp.getName() === subPkgName) {
+        currentPkg = sp;
         break;
       }
     }
-    if (!n)
+    if (!currentPkg)
       return null;
   }
-  return n.getEClassifier(r);
+  return currentPkg.getEClassifier(classifierName);
 }
-const rt = "error", He = "object", ls = "reference", Pt = "xmiWrapper", hs = "deferredType";
-class rn {
+const ERROR_TYPE = "error";
+const OBJECT_TYPE = "object";
+const REFERENCE_TYPE = "reference";
+const XMI_WRAPPER_TYPE = "xmiWrapper";
+const DEFERRED_TYPE = "deferredType";
+class AttributesImpl {
   constructor() {
     this.attrs = [];
   }
-  add(e, t, s, r) {
-    this.attrs.push({ qName: e, localName: t, uri: s, value: r });
+  add(qName, localName, uri, value) {
+    this.attrs.push({ qName, localName, uri, value });
   }
   clear() {
     this.attrs = [];
@@ -6282,131 +7037,214 @@ class rn {
   getLength() {
     return this.attrs.length;
   }
-  getQName(e) {
-    return this.attrs[e]?.qName || "";
+  getQName(index) {
+    return this.attrs[index]?.qName || "";
   }
-  getValue(e) {
-    return this.attrs[e]?.value || "";
+  getValue(index) {
+    return this.attrs[index]?.value || "";
   }
-  getLocalName(e) {
-    return this.attrs[e]?.localName || "";
+  getLocalName(index) {
+    return this.attrs[index]?.localName || "";
   }
-  getURI(e) {
-    return this.attrs[e]?.uri || "";
+  getURI(index) {
+    return this.attrs[index]?.uri || "";
   }
-  getValueByQName(e) {
-    return this.attrs.find((s) => s.qName === e)?.value ?? null;
+  getValueByQName(qName) {
+    const attr = this.attrs.find((a) => a.qName === qName);
+    return attr?.value ?? null;
   }
-  getValueByName(e, t) {
-    return this.attrs.find((r) => r.uri === e && r.localName === t)?.value ?? null;
+  getValueByName(uri, localName) {
+    const attr = this.attrs.find((a) => a.uri === uri && a.localName === localName);
+    return attr?.value ?? null;
   }
 }
-const Je = "http://www.w3.org/2001/XMLSchema-instance", Ut = "http://www.omg.org/XMI", fs = "xmlns", nn = "type", an = "nil", on = "schemaLocation", gs = "href", cn = "id";
-class Ds {
-  constructor(e, t, s) {
-    this.elements = [], this.objects = [], this.types = [], this.prefixesToFactories = /* @__PURE__ */ new Map(), this.urisToLocations = /* @__PURE__ */ new Map(), this.forwardSingleReferences = [], this.sameDocumentProxies = [], this.attribs = null, this.text = null, this.isRoot = !0, this.isNamespaceAware = !1, this.needsPushContext = !1, this.deferredFeature = null, this.deferredParent = null, this.deferredExtent = null, this.resolve = !0, this.useNewMethods = !0, this.errors = [], this.lineNumber = 0, this.columnNumber = 0, this.resource = e, this.helper = t, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || we.INSTANCE, this.extent = e.getContents(), s && this.processOptions(s);
+const XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
+const XMI_URI = "http://www.omg.org/XMI";
+const XML_NS = "xmlns";
+const TYPE_ATTRIB = "type";
+const NIL_ATTRIB = "nil";
+const SCHEMA_LOCATION_ATTRIB = "schemaLocation";
+const HREF_ATTRIB = "href";
+const ID_ATTRIB = "id";
+class XMLHandler {
+  constructor(resource, helper, options) {
+    this.elements = [];
+    this.objects = [];
+    this.types = [];
+    this.prefixesToFactories = /* @__PURE__ */ new Map();
+    this.urisToLocations = /* @__PURE__ */ new Map();
+    this.forwardSingleReferences = [];
+    this.sameDocumentProxies = [];
+    this.attribs = null;
+    this.text = null;
+    this.isRoot = true;
+    this.isNamespaceAware = false;
+    this.needsPushContext = false;
+    this.deferredFeature = null;
+    this.deferredParent = null;
+    this.deferredExtent = null;
+    this.resolve = true;
+    this.useNewMethods = true;
+    this.errors = [];
+    this.lineNumber = 0;
+    this.columnNumber = 0;
+    this.resource = resource;
+    this.helper = helper;
+    this.packageRegistry = resource.getResourceSet()?.getPackageRegistry() || EPackageRegistry.INSTANCE;
+    this.extent = resource.getContents();
+    if (options) {
+      this.processOptions(options);
+    }
   }
-  processOptions(e) {
-    this.helper.setOptions(e);
+  processOptions(options) {
+    this.helper.setOptions(options);
   }
   /**
    * Set attributes for current element
    */
-  setAttributes(e) {
-    this.attribs = e;
+  setAttributes(attribs) {
+    this.attribs = attribs;
   }
   /**
    * Handle start of element
    */
-  startElement(e, t, s, r) {
-    this.setAttributes(r), this.startElementInternal(e, t, s);
+  startElement(uri, localName, qName, attributes) {
+    this.setAttributes(attributes);
+    this.startElementInternal(uri, localName, qName);
   }
-  startElementInternal(e, t, s) {
-    this.needsPushContext && this.helper.pushContext(), this.needsPushContext = !0, this.elements.push(s);
-    let r = "";
-    if (this.useNewMethods)
-      this.isRoot && this.handleSchemaLocation(), r = this.helper.getPrefix(e.length === 0 ? null : e) || "";
-    else {
-      this.handleNamespaceAttribs();
-      const n = s.indexOf(":");
-      n !== -1 && (r = s.substring(0, n), t = s.substring(n + 1));
+  startElementInternal(uri, localName, qName) {
+    if (this.needsPushContext) {
+      this.helper.pushContext();
     }
-    this.processElement(s, r, t);
+    this.needsPushContext = true;
+    this.elements.push(qName);
+    let prefix = "";
+    if (this.useNewMethods) {
+      if (this.isRoot) {
+        this.handleSchemaLocation();
+      }
+      prefix = this.helper.getPrefix(uri.length === 0 ? null : uri) || "";
+    } else {
+      this.handleNamespaceAttribs();
+      const index = qName.indexOf(":");
+      if (index !== -1) {
+        prefix = qName.substring(0, index);
+        localName = qName.substring(index + 1);
+      }
+    }
+    this.processElement(qName, prefix, localName);
   }
-  processElement(e, t, s) {
-    if (this.isRoot && (this.isRoot = !1, this.recordHeaderInformation()), t === "xmi" && s === "XMI") {
-      this.objects.push(null), this.types.push(Pt);
+  processElement(name, prefix, localName) {
+    if (this.isRoot) {
+      this.isRoot = false;
+      this.recordHeaderInformation();
+    }
+    if (prefix === "xmi" && localName === "XMI") {
+      this.objects.push(null);
+      this.types.push(XMI_WRAPPER_TYPE);
       return;
     }
-    this.objects.length === 0 || this.objects.length === 1 && this.types[0] === Pt ? this.createTopObject(t, s) : this.handleFeature(t, s);
+    const isTopLevel = this.objects.length === 0 || this.objects.length === 1 && this.types[0] === XMI_WRAPPER_TYPE;
+    if (isTopLevel) {
+      this.createTopObject(prefix, localName);
+    } else {
+      this.handleFeature(prefix, localName);
+    }
   }
   /**
    * Handle end of element
    */
-  endElement(e, t, s) {
+  endElement(uri, localName, qName) {
     this.elements.pop();
-    const r = this.types.pop();
-    if (r === He) {
-      const n = this.objects.pop();
-      if (this.text !== null && this.text.length > 0 && n) {
-        const a = this.text.trim();
-        if (a.length > 0) {
-          const o = this.helper.getExtendedMetaData();
-          if (o) {
-            const d = n.eClass();
-            if (o.getContentKind(d) === qt) {
-              const y = o.getSimpleContentFeature(d);
-              y && this.setFeatureValue(n, y, a);
+    const type = this.types.pop();
+    if (type === OBJECT_TYPE) {
+      const object = this.objects.pop();
+      if (this.text !== null && this.text.length > 0 && object) {
+        const trimmed = this.text.trim();
+        if (trimmed.length > 0) {
+          const emd = this.helper.getExtendedMetaData();
+          if (emd) {
+            const eClass = object.eClass();
+            if (emd.getContentKind(eClass) === SIMPLE_CONTENT) {
+              const simpleFeature = emd.getSimpleContentFeature(eClass);
+              if (simpleFeature) {
+                this.setFeatureValue(object, simpleFeature, trimmed);
+              }
             }
           }
-          this.handleProxy(n, a);
+          this.handleProxy(object, trimmed);
         }
       }
       this.text = null;
-    } else if (r === rt)
-      this.objects.pop(), this.text = null;
-    else if (r === ls)
-      this.objects.pop(), this.text = null;
-    else if (r === hs)
-      this.objects.pop(), this.deferredParent = null, this.deferredFeature = null, this.text = null;
-    else if (r === Pt)
+    } else if (type === ERROR_TYPE) {
       this.objects.pop();
-    else if (r !== void 0) {
-      const n = this.objects.pop() || this.objects[this.objects.length - 1];
-      n && r && this.setFeatureValue(n, r, this.text), this.text = null;
+      this.text = null;
+    } else if (type === REFERENCE_TYPE) {
+      this.objects.pop();
+      this.text = null;
+    } else if (type === DEFERRED_TYPE) {
+      this.objects.pop();
+      this.deferredParent = null;
+      this.deferredFeature = null;
+      this.text = null;
+    } else if (type === XMI_WRAPPER_TYPE) {
+      this.objects.pop();
+    } else if (type !== void 0) {
+      const eObject = this.objects.pop() || this.objects[this.objects.length - 1];
+      if (eObject && type) {
+        this.setFeatureValue(eObject, type, this.text);
+      }
+      this.text = null;
     }
     this.helper.popContextWithFactories(this.prefixesToFactories);
   }
   /**
    * Handle character data
    */
-  characters(e) {
-    this.text === null ? this.text = e : this.text += e;
+  characters(ch) {
+    if (this.text === null) {
+      this.text = ch;
+    } else {
+      this.text += ch;
+    }
   }
   /**
    * Handle start of prefix mapping
    */
-  startPrefixMapping(e, t) {
-    this.isNamespaceAware = !0, this.needsPushContext && (this.helper.pushContext(), this.needsPushContext = !1), this.helper.addPrefix(e, t), this.prefixesToFactories.delete(e);
+  startPrefixMapping(prefix, uri) {
+    this.isNamespaceAware = true;
+    if (this.needsPushContext) {
+      this.helper.pushContext();
+      this.needsPushContext = false;
+    }
+    this.helper.addPrefix(prefix, uri);
+    this.prefixesToFactories.delete(prefix);
   }
   /**
    * Handle end of document
    */
   endDocument() {
-    this.deferredExtent !== null && this.extent.push(...this.deferredExtent), this.helper.recordPrefixToURIMapping(), this.helper.popContext(), this.handleForwardReferences();
+    if (this.deferredExtent !== null) {
+      this.extent.push(...this.deferredExtent);
+    }
+    this.helper.recordPrefixToURIMapping();
+    this.helper.popContext();
+    this.handleForwardReferences();
   }
   /**
    * Handle namespace attributes
    */
   handleNamespaceAttribs() {
-    if (this.attribs)
-      for (let e = 0; e < this.attribs.getLength(); e++) {
-        const t = this.attribs.getQName(e);
-        if (t.startsWith(fs)) {
-          const s = t.length > 5 ? t.substring(6) : "", r = this.attribs.getValue(e);
-          this.startPrefixMapping(s, r);
+    if (this.attribs) {
+      for (let i = 0; i < this.attribs.getLength(); i++) {
+        const qName = this.attribs.getQName(i);
+        if (qName.startsWith(XML_NS)) {
+          const prefix = qName.length > 5 ? qName.substring(6) : "";
+          const value = this.attribs.getValue(i);
+          this.startPrefixMapping(prefix, value);
         }
       }
+    }
   }
   /**
    * Handle schema location
@@ -6414,14 +7252,17 @@ class Ds {
   handleSchemaLocation() {
     if (!this.attribs)
       return;
-    const e = this.attribs.getValueByName(Je, on);
-    e && this.handleXSISchemaLocation(e);
+    const schemaLocation = this.attribs.getValueByName(XSI_URI, SCHEMA_LOCATION_ATTRIB);
+    if (schemaLocation) {
+      this.handleXSISchemaLocation(schemaLocation);
+    }
   }
-  handleXSISchemaLocation(e) {
-    const t = e.trim().split(/\s+/);
-    for (let s = 0; s + 1 < t.length; s += 2) {
-      const r = t[s], n = t[s + 1];
-      this.urisToLocations.set(r, Y.createURI(n));
+  handleXSISchemaLocation(schemaLocation) {
+    const tokens = schemaLocation.trim().split(/\s+/);
+    for (let i = 0; i + 1 < tokens.length; i += 2) {
+      const nsURI = tokens[i];
+      const location = tokens[i + 1];
+      this.urisToLocations.set(nsURI, URI.createURI(location));
     }
   }
   /**
@@ -6432,147 +7273,222 @@ class Ds {
   /**
    * Create top-level object
    */
-  createTopObject(e, t) {
-    const s = this.getFactoryForPrefix(e);
-    if (!s) {
-      this.error(`Package not found for prefix '${e}'`), this.processObject(null);
+  createTopObject(prefix, localName) {
+    const eFactory = this.getFactoryForPrefix(prefix);
+    if (!eFactory) {
+      this.error(`Package not found for prefix '${prefix}'`);
+      this.processObject(null);
       return;
     }
-    const r = this.getXSIType();
-    let n = null;
-    if (r)
-      n = this.createObjectByType(e, r, !0);
-    else {
-      const a = this.helper.getType(s, t);
-      a && (n = this.helper.createObject(s, a));
+    const eType = this.getXSIType();
+    let eObject = null;
+    if (eType) {
+      eObject = this.createObjectByType(prefix, eType, true);
+    } else {
+      const type = this.helper.getType(eFactory, localName);
+      if (type) {
+        eObject = this.helper.createObject(eFactory, type);
+      }
     }
-    n ? (this.processTopObject(n), this.handleObjectAttribs(n)) : (this.error(`Cannot create object for '${t}'`), this.processObject(null));
+    if (eObject) {
+      this.processTopObject(eObject);
+      this.handleObjectAttribs(eObject);
+    } else {
+      this.error(`Cannot create object for '${localName}'`);
+      this.processObject(null);
+    }
   }
   /**
    * Get xsi:type attribute value
    */
   getXSIType() {
-    return this.attribs ? this.attribs.getValueByName(Je, nn) : null;
+    if (!this.attribs)
+      return null;
+    return this.attribs.getValueByName(XSI_URI, TYPE_ATTRIB);
   }
   /**
    * Create object based on xsi:type
    */
-  createObjectByType(e, t, s) {
-    let r = e, n = t;
-    const a = t.indexOf(":");
-    a !== -1 && (r = t.substring(0, a), n = t.substring(a + 1));
-    const o = this.getFactoryForPrefix(r);
-    if (!o)
-      return this.error(`Factory not found for type '${t}'`), null;
-    const d = this.helper.getType(o, n);
-    return d ? this.helper.createObject(o, d) : (this.error(`Type '${n}' not found`), null);
+  createObjectByType(prefix, typeName, isTopObject) {
+    let typePrefix = prefix;
+    let localType = typeName;
+    const colonIndex = typeName.indexOf(":");
+    if (colonIndex !== -1) {
+      typePrefix = typeName.substring(0, colonIndex);
+      localType = typeName.substring(colonIndex + 1);
+    }
+    const eFactory = this.getFactoryForPrefix(typePrefix);
+    if (!eFactory) {
+      this.error(`Factory not found for type '${typeName}'`);
+      return null;
+    }
+    const type = this.helper.getType(eFactory, localType);
+    if (!type) {
+      this.error(`Type '${localType}' not found`);
+      return null;
+    }
+    return this.helper.createObject(eFactory, type);
   }
   /**
    * Process top-level object
    */
-  processTopObject(e) {
-    e && (this.deferredExtent !== null ? this.deferredExtent.push(e) : this.extent.push(e)), this.processObject(e);
+  processTopObject(object) {
+    if (object) {
+      if (this.deferredExtent !== null) {
+        this.deferredExtent.push(object);
+      } else {
+        this.extent.push(object);
+      }
+    }
+    this.processObject(object);
   }
   /**
    * Push object onto stack
    */
-  processObject(e) {
-    this.objects.push(e), this.types.push(e ? He : rt);
+  processObject(object) {
+    this.objects.push(object);
+    this.types.push(object ? OBJECT_TYPE : ERROR_TYPE);
   }
   /**
    * Handle object attributes
    */
-  handleObjectAttribs(e) {
-    if (this.attribs)
-      for (let t = 0; t < this.attribs.getLength(); t++) {
-        const s = this.attribs.getQName(t), r = this.attribs.getValue(t), n = this.attribs.getURI(t), a = this.attribs.getLocalName(t);
-        if (!s.startsWith(fs) && n !== Je) {
-          if (n === Ut) {
-            a === cn && this.handleId(e, r);
-            continue;
-          }
-          this.setAttribValue(e, a || s, r, n || null);
+  handleObjectAttribs(obj) {
+    if (!this.attribs)
+      return;
+    for (let i = 0; i < this.attribs.getLength(); i++) {
+      const qName = this.attribs.getQName(i);
+      const value = this.attribs.getValue(i);
+      const uri = this.attribs.getURI(i);
+      const localName = this.attribs.getLocalName(i);
+      if (qName.startsWith(XML_NS))
+        continue;
+      if (uri === XSI_URI)
+        continue;
+      if (uri === XMI_URI) {
+        if (localName === ID_ATTRIB) {
+          this.handleId(obj, value);
         }
+        continue;
       }
+      this.setAttribValue(obj, localName || qName, value, uri || null);
+    }
   }
   /**
    * Handle ID attribute
    */
-  handleId(e, t) {
+  handleId(obj, id) {
   }
   /**
    * Set attribute value on object
    */
-  setAttribValue(e, t, s, r) {
-    const n = e.eClass(), a = this.helper.getFeature(n, r ?? null, t);
-    a && this.setFeatureValue(e, a, s, -2);
+  setAttribValue(obj, name, value, namespaceURI) {
+    const eClass = obj.eClass();
+    const feature = this.helper.getFeature(eClass, namespaceURI ?? null, name);
+    if (feature) {
+      this.setFeatureValue(obj, feature, value, -2);
+    }
   }
   /**
    * Handle feature (nested element)
    */
-  handleFeature(e, t) {
-    const s = this.objects[this.objects.length - 1];
-    if (!s) {
+  handleFeature(prefix, localName) {
+    const peekObject = this.objects[this.objects.length - 1];
+    if (!peekObject) {
       if (this.deferredParent && this.deferredFeature) {
-        this.handleDeferredType(e, t);
+        this.handleDeferredType(prefix, localName);
         return;
       }
-      this.objects.push(null), this.types.push(rt), this.error(`Feature '${t}' has no parent object`);
+      this.objects.push(null);
+      this.types.push(ERROR_TYPE);
+      this.error(`Feature '${localName}' has no parent object`);
       return;
     }
-    const r = s.eClass(), n = e && this.helper.getURI(e) || null, a = this.helper.getFeatureWithElement(r, n, t, !0);
-    if (a) {
-      const o = this.helper.getFeatureKind(a);
-      o === Dt || o === Ot ? (this.objects.push(null), this.types.push(a), this.isNull() || (this.text = "")) : this.createObject(s, a);
-    } else
-      this.handleUnknownFeature(e, t, s);
+    const eClass = peekObject.eClass();
+    const namespaceURI = prefix ? this.helper.getURI(prefix) || null : null;
+    const feature = this.helper.getFeatureWithElement(eClass, namespaceURI, localName, true);
+    if (feature) {
+      const kind = this.helper.getFeatureKind(feature);
+      if (kind === DATATYPE_SINGLE || kind === DATATYPE_IS_MANY) {
+        this.objects.push(null);
+        this.types.push(feature);
+        if (!this.isNull()) {
+          this.text = "";
+        }
+      } else {
+        this.createObject(peekObject, feature);
+      }
+    } else {
+      this.handleUnknownFeature(prefix, localName, peekObject);
+    }
   }
   /**
    * Check if xsi:nil="true"
    */
   isNull() {
-    return this.attribs ? this.attribs.getValueByName(Je, an) === "true" : !1;
+    if (!this.attribs)
+      return false;
+    const nil = this.attribs.getValueByName(XSI_URI, NIL_ATTRIB);
+    return nil === "true";
   }
   /**
    * Create child object for reference
    */
-  createObject(e, t) {
-    const s = this.attribs?.getValueByQName(gs) || this.attribs?.getValueByName("", gs);
-    if (s) {
-      this.setValueFromId(e, t, s, -1), this.objects.push(null), this.types.push(ls);
+  createObject(parent, feature) {
+    const href = this.attribs?.getValueByQName(HREF_ATTRIB) || this.attribs?.getValueByName("", HREF_ATTRIB);
+    if (href) {
+      this.setValueFromId(parent, feature, href, -1);
+      this.objects.push(null);
+      this.types.push(REFERENCE_TYPE);
       return;
     }
-    const r = this.getXSIType();
-    let n = null;
-    if (r)
-      n = this.createObjectByType("", r, !1);
-    else {
-      let a = t.getEType();
-      if (a && !("getESuperTypes" in a) && typeof a.eIsProxy == "function" && a.eIsProxy()) {
-        const o = a.eProxyURI();
-        if (o) {
-          const d = o.toString(), y = d.indexOf("#");
-          if (y > 0) {
-            const S = d.substring(0, y), C = d.substring(y + 1), A = this.packageRegistry.getEPackage(S);
-            if (A) {
-              const b = Ze(A, C);
-              b && (a = b, typeof t.setEType == "function" && t.setEType(b));
+    const xsiType = this.getXSIType();
+    let eObject = null;
+    if (xsiType) {
+      eObject = this.createObjectByType("", xsiType, false);
+    } else {
+      let eType = feature.getEType();
+      if (eType && !("getESuperTypes" in eType) && typeof eType.eIsProxy === "function" && eType.eIsProxy()) {
+        const proxyURI = eType.eProxyURI();
+        if (proxyURI) {
+          const uriStr = proxyURI.toString();
+          const hashIndex = uriStr.indexOf("#");
+          if (hashIndex > 0) {
+            const nsURI = uriStr.substring(0, hashIndex);
+            const fragment = uriStr.substring(hashIndex + 1);
+            const pkg = this.packageRegistry.getEPackage(nsURI);
+            if (pkg) {
+              const resolved = resolveClassifierInPackage(pkg, fragment);
+              if (resolved) {
+                eType = resolved;
+                if (typeof feature.setEType === "function") {
+                  feature.setEType(resolved);
+                }
+              }
             }
           }
         }
       }
-      if (a && "getESuperTypes" in a) {
-        const o = a;
-        if (o.isAbstract()) {
-          this.deferredParent = e, this.deferredFeature = t, this.objects.push(null), this.types.push(hs);
-          return;
+      if (eType && "getESuperTypes" in eType) {
+        const eClass = eType;
+        if (!eClass.isAbstract()) {
+          const eFactory = eClass.getEPackage()?.getEFactoryInstance();
+          if (eFactory) {
+            eObject = eFactory.create(eClass);
+          }
         } else {
-          const d = o.getEPackage()?.getEFactoryInstance();
-          d && (n = d.create(o));
+          this.deferredParent = parent;
+          this.deferredFeature = feature;
+          this.objects.push(null);
+          this.types.push(DEFERRED_TYPE);
+          return;
         }
       }
     }
-    n && (this.helper.setValue(e, t, n, -1), this.handleObjectAttribs(n)), this.processObject(n);
+    if (eObject) {
+      this.helper.setValue(parent, feature, eObject, -1);
+      this.handleObjectAttribs(eObject);
+    }
+    this.processObject(eObject);
   }
   /**
    * Handle unknown feature.
@@ -6581,78 +7497,100 @@ class Ds {
    * 2. EClassifier match for type replacement (#53)
    * 3. Error
    */
-  handleUnknownFeature(e, t, s) {
-    const r = e && this.helper.getURI(e) || null, n = this.helper.getExtendedMetaData();
-    if (n && r) {
-      const a = s.eClass(), o = n.getElementFeature(a, r, t);
-      if (o) {
-        const d = this.helper.getFeatureKind(o);
-        d === Dt || d === Ot ? (this.objects.push(null), this.types.push(o), this.isNull() || (this.text = "")) : this.createObject(s, o);
+  handleUnknownFeature(prefix, name, parent) {
+    const nsURI = prefix ? this.helper.getURI(prefix) || null : null;
+    const emd = this.helper.getExtendedMetaData();
+    if (emd && nsURI) {
+      const eClass = parent.eClass();
+      const feature = emd.getElementFeature(eClass, nsURI, name);
+      if (feature) {
+        const kind = this.helper.getFeatureKind(feature);
+        if (kind === DATATYPE_SINGLE || kind === DATATYPE_IS_MANY) {
+          this.objects.push(null);
+          this.types.push(feature);
+          if (!this.isNull()) {
+            this.text = "";
+          }
+        } else {
+          this.createObject(parent, feature);
+        }
         return;
       }
     }
-    if (r) {
-      const a = this.packageRegistry.getEPackage(r);
-      if (a) {
-        const o = a.getEClassifier(t);
-        if (o && "getESuperTypes" in o) {
-          const d = o, y = s.eClass();
-          if (d === y) {
-            this.handleObjectAttribs(s), this.objects.push(s), this.types.push(He);
+    if (nsURI) {
+      const pkg = this.packageRegistry.getEPackage(nsURI);
+      if (pkg) {
+        const classifier = pkg.getEClassifier(name);
+        if (classifier && "getESuperTypes" in classifier) {
+          const eClass = classifier;
+          const parentClass = parent.eClass();
+          if (eClass === parentClass) {
+            this.handleObjectAttribs(parent);
+            this.objects.push(parent);
+            this.types.push(OBJECT_TYPE);
             return;
           }
-          if (y.isSuperTypeOf(d) && !d.isAbstract()) {
-            const S = d.getEPackage()?.getEFactoryInstance();
-            if (S) {
-              const C = S.create(d);
-              for (const b of y.getEAllStructuralFeatures()) {
-                if (b.isTransient() || b.isDerived())
+          if (parentClass.isSuperTypeOf(eClass) && !eClass.isAbstract()) {
+            const eFactory = eClass.getEPackage()?.getEFactoryInstance();
+            if (eFactory) {
+              const concreteObject = eFactory.create(eClass);
+              for (const f of parentClass.getEAllStructuralFeatures()) {
+                if (f.isTransient() || f.isDerived())
                   continue;
-                const R = s.eGet(b);
-                if (R != null)
+                const v = parent.eGet(f);
+                if (v !== null && v !== void 0) {
                   try {
-                    C.eSet(b, R);
+                    concreteObject.eSet(f, v);
                   } catch {
                   }
+                }
               }
-              this.replaceInParentContainment(s, C);
-              const A = this.objects.length - 1;
-              this.objects[A] = C, this.handleObjectAttribs(C), this.objects.push(C), this.types.push(He);
+              this.replaceInParentContainment(parent, concreteObject);
+              const parentIndex = this.objects.length - 1;
+              this.objects[parentIndex] = concreteObject;
+              this.handleObjectAttribs(concreteObject);
+              this.objects.push(concreteObject);
+              this.types.push(OBJECT_TYPE);
               return;
             }
           }
         }
       }
     }
-    this.objects.push(null), this.types.push(rt), this.error(`Unknown feature '${t}' for type '${s.eClass().getName()}'`);
+    this.objects.push(null);
+    this.types.push(ERROR_TYPE);
+    this.error(`Unknown feature '${name}' for type '${parent.eClass().getName()}'`);
   }
   /**
    * Replace an object in the grandparent's containment reference.
    */
-  replaceInParentContainment(e, t) {
-    const s = this.objects.length - 1;
-    if (s < 1)
+  replaceInParentContainment(oldObj, newObj) {
+    const parentIndex = this.objects.length - 1;
+    if (parentIndex < 1)
       return;
-    const r = this.objects[s - 1];
-    if (!r)
+    const grandParent = this.objects[parentIndex - 1];
+    if (!grandParent)
       return;
-    const n = r.eClass();
-    for (const a of n.getEAllStructuralFeatures()) {
-      if (!("isContainment" in a))
+    const gpClass = grandParent.eClass();
+    for (const feature of gpClass.getEAllStructuralFeatures()) {
+      if (!("isContainment" in feature))
         continue;
-      const o = a;
-      if (o.isContainment()) {
-        if (o.isMany()) {
-          const d = r.eGet(o);
-          if (d) {
-            for (let y = d.length - 1; y >= 0; y--)
-              if (d[y] === e) {
-                d[y] = t;
-                return;
-              }
+      const ref = feature;
+      if (!ref.isContainment())
+        continue;
+      if (ref.isMany()) {
+        const list = grandParent.eGet(ref);
+        if (list) {
+          for (let i = list.length - 1; i >= 0; i--) {
+            if (list[i] === oldObj) {
+              list[i] = newObj;
+              return;
+            }
           }
-        } else if (r.eGet(o) === e) {
-          r.eSet(o, t);
+        }
+      } else {
+        if (grandParent.eGet(ref) === oldObj) {
+          grandParent.eSet(ref, newObj);
           return;
         }
       }
@@ -6663,75 +7601,99 @@ class Ds {
    * When a containment feature has an abstract type, the inner element
    * specifies the concrete type to instantiate.
    */
-  handleDeferredType(e, t) {
-    const s = this.deferredParent, r = this.deferredFeature;
-    this.deferredParent = null, this.deferredFeature = null;
-    const n = e && this.helper.getURI(e) || null;
-    let a = null;
-    if (n) {
-      const o = this.packageRegistry.getEPackage(n);
-      if (o) {
-        const d = o.getEClassifier(t);
-        if (d && "getESuperTypes" in d) {
-          const y = d;
-          if (!y.isAbstract()) {
-            const S = y.getEPackage()?.getEFactoryInstance();
-            S && (a = S.create(y));
+  handleDeferredType(prefix, localName) {
+    const parent = this.deferredParent;
+    const feature = this.deferredFeature;
+    this.deferredParent = null;
+    this.deferredFeature = null;
+    const nsURI = prefix ? this.helper.getURI(prefix) || null : null;
+    let eObject = null;
+    if (nsURI) {
+      const pkg = this.packageRegistry.getEPackage(nsURI);
+      if (pkg) {
+        const classifier = pkg.getEClassifier(localName);
+        if (classifier && "getESuperTypes" in classifier) {
+          const eClass = classifier;
+          if (!eClass.isAbstract()) {
+            const eFactory = eClass.getEPackage()?.getEFactoryInstance();
+            if (eFactory) {
+              eObject = eFactory.create(eClass);
+            }
           }
         }
       }
     }
-    a ? (this.helper.setValue(s, r, a, -1), this.handleObjectAttribs(a), this.objects[this.objects.length - 1] = a, this.types[this.types.length - 1] = He, this.objects.push(a), this.types.push(He)) : (this.objects.push(null), this.types.push(rt), this.error(`Cannot resolve type '${t}' for deferred containment`));
+    if (eObject) {
+      this.helper.setValue(parent, feature, eObject, -1);
+      this.handleObjectAttribs(eObject);
+      this.objects[this.objects.length - 1] = eObject;
+      this.types[this.types.length - 1] = OBJECT_TYPE;
+      this.objects.push(eObject);
+      this.types.push(OBJECT_TYPE);
+    } else {
+      this.objects.push(null);
+      this.types.push(ERROR_TYPE);
+      this.error(`Cannot resolve type '${localName}' for deferred containment`);
+    }
   }
   /**
    * Set feature value
    */
-  setFeatureValue(e, t, s, r = -1) {
-    if (s == null)
+  setFeatureValue(eObject, feature, value, position = -1) {
+    if (value === null || value === void 0)
       return;
-    if ("isContainment" in t)
-      if (t.isMany()) {
-        const a = s.trim().split(/\s+/);
-        for (const o of a)
-          o && this.setValueFromId(e, t, o, -1);
-      } else
-        this.setValueFromId(e, t, s, r);
-    else {
-      const o = t.getEType();
-      let d = null;
-      if (o && typeof o.getEPackage == "function")
-        d = o.getEPackage()?.getEFactoryInstance() ?? null;
-      else if (o && typeof o.eGet == "function" && typeof o.eClass == "function") {
-        const y = o.eClass();
-        if (y) {
-          const S = y.getEStructuralFeature?.("ePackage");
-          if (S) {
-            const C = o.eGet(S);
-            C?.getEFactoryInstance && (d = C.getEFactoryInstance());
+    const isReference = "isContainment" in feature;
+    if (!isReference) {
+      const eType = feature.getEType();
+      const dataType = eType;
+      let eFactory = null;
+      if (dataType && typeof dataType.getEPackage === "function") {
+        eFactory = dataType.getEPackage()?.getEFactoryInstance() ?? null;
+      } else if (dataType && typeof dataType.eGet === "function" && typeof dataType.eClass === "function") {
+        const dtClass = dataType.eClass();
+        if (dtClass) {
+          const pkgFeature = dtClass.getEStructuralFeature?.("ePackage");
+          if (pkgFeature) {
+            const pkg = dataType.eGet(pkgFeature);
+            if (pkg?.getEFactoryInstance) {
+              eFactory = pkg.getEFactoryInstance();
+            }
           }
         }
       }
       try {
-        if (d && o) {
-          const y = d.createFromString(o, s);
-          this.helper.setValue(e, t, y, r);
-        } else
-          this.helper.setValue(e, t, s, r);
-      } catch (y) {
-        const S = y instanceof Error ? y.message : String(y);
-        this.error(`Invalid value for feature '${t.getName()}': ${S}`);
+        if (eFactory && dataType) {
+          const convertedValue = eFactory.createFromString(dataType, value);
+          this.helper.setValue(eObject, feature, convertedValue, position);
+        } else {
+          this.helper.setValue(eObject, feature, value, position);
+        }
+      } catch (e) {
+        const reason = e instanceof Error ? e.message : String(e);
+        this.error(`Invalid value for feature '${feature.getName()}': ${reason}`);
+      }
+    } else {
+      if (feature.isMany()) {
+        const ids = value.trim().split(/\s+/);
+        for (const id of ids) {
+          if (id) {
+            this.setValueFromId(eObject, feature, id, -1);
+          }
+        }
+      } else {
+        this.setValueFromId(eObject, feature, value, position);
       }
     }
   }
   /**
    * Set reference value from ID
    */
-  setValueFromId(e, t, s, r = -1) {
+  setValueFromId(eObject, feature, idValue, position = -1) {
     this.forwardSingleReferences.push({
-      object: e,
-      feature: t,
-      value: s,
-      position: r,
+      object: eObject,
+      feature,
+      value: idValue,
+      position,
       lineNumber: this.lineNumber,
       columnNumber: this.columnNumber
     });
@@ -6740,14 +7702,18 @@ class Ds {
    * Handle forward references
    */
   handleForwardReferences() {
-    for (const e of this.forwardSingleReferences) {
-      const t = this.resolveReference(e.value);
-      if (t)
-        this.helper.setValue(e.object, e.feature, t, e.position);
-      else {
-        console.warn(`[XMLHandler] Forward ref UNRESOLVED: '${e.value}' on feature '${e.feature?.getName?.()}'`);
-        const s = this.createProxy(e.feature, e.value);
-        s ? this.helper.setValue(e.object, e.feature, s, e.position) : this.error(`Unresolved reference '${e.value}'`);
+    for (const ref of this.forwardSingleReferences) {
+      const resolved = this.resolveReference(ref.value);
+      if (resolved) {
+        this.helper.setValue(ref.object, ref.feature, resolved, ref.position);
+      } else {
+        console.warn(`[XMLHandler] Forward ref UNRESOLVED: '${ref.value}' on feature '${ref.feature?.getName?.()}'`);
+        const proxy = this.createProxy(ref.feature, ref.value);
+        if (proxy) {
+          this.helper.setValue(ref.object, ref.feature, proxy, ref.position);
+        } else {
+          this.error(`Unresolved reference '${ref.value}'`);
+        }
       }
     }
     this.forwardSingleReferences = [];
@@ -6756,26 +7722,52 @@ class Ds {
    * Creates a proxy for an unresolved reference.
    * The proxy will be resolved when accessed.
    */
-  createProxy(e, t) {
-    let s;
-    const r = this.resource.getURI(), n = t.indexOf(" ");
-    n > 0 && (t = t.substring(n + 1));
-    const a = t.indexOf("#");
-    if (a > 0) {
-      const S = t.substring(0, a), C = t.substring(a + 1);
-      if (r && !S.includes("://")) {
-        const A = r.toString();
-        if (S === A || A.endsWith(S) || A.endsWith("/" + S))
-          s = Y.createURI(A + "#" + C);
-        else {
-          const b = Y.createURI(S).resolve(r);
-          s = Y.createURI(b.toString() + "#" + C);
+  createProxy(feature, uriValue) {
+    let proxyURI;
+    const resourceURI = this.resource.getURI();
+    const spaceIndex = uriValue.indexOf(" ");
+    if (spaceIndex > 0) {
+      uriValue = uriValue.substring(spaceIndex + 1);
+    }
+    const hashIndex = uriValue.indexOf("#");
+    if (hashIndex > 0) {
+      const baseUriStr = uriValue.substring(0, hashIndex);
+      const fragment = uriValue.substring(hashIndex + 1);
+      if (resourceURI && !baseUriStr.includes("://")) {
+        const currentStr = resourceURI.toString();
+        if (baseUriStr === currentStr || currentStr.endsWith(baseUriStr) || currentStr.endsWith("/" + baseUriStr)) {
+          proxyURI = URI.createURI(currentStr + "#" + fragment);
+        } else {
+          const resolved = URI.createURI(baseUriStr).resolve(resourceURI);
+          proxyURI = URI.createURI(resolved.toString() + "#" + fragment);
         }
-      } else
-        s = Y.createURI(t);
-    } else a === 0 ? r ? s = Y.createURI(r.toString() + t) : s = Y.createURI(t) : (t.startsWith("/"), r ? s = Y.createURI(r.toString() + "#" + t) : s = Y.createURI("#" + t));
-    const o = e.getEType(), d = o && "getESuperTypes" in o ? o : null, y = new Ms(s, d || void 0);
-    return y.eSetResource(this.resource), y;
+      } else {
+        proxyURI = URI.createURI(uriValue);
+      }
+    } else if (hashIndex === 0) {
+      if (resourceURI) {
+        proxyURI = URI.createURI(resourceURI.toString() + uriValue);
+      } else {
+        proxyURI = URI.createURI(uriValue);
+      }
+    } else if (uriValue.startsWith("/")) {
+      if (resourceURI) {
+        proxyURI = URI.createURI(resourceURI.toString() + "#" + uriValue);
+      } else {
+        proxyURI = URI.createURI("#" + uriValue);
+      }
+    } else {
+      if (resourceURI) {
+        proxyURI = URI.createURI(resourceURI.toString() + "#" + uriValue);
+      } else {
+        proxyURI = URI.createURI("#" + uriValue);
+      }
+    }
+    const eType = feature.getEType();
+    const eClass = eType && "getESuperTypes" in eType ? eType : null;
+    const proxy = new EProxyImpl(proxyURI, eClass || void 0);
+    proxy.eSetResource(this.resource);
+    return proxy;
   }
   /**
    * Resolve a reference string.
@@ -6785,68 +7777,91 @@ class Ds {
    * - Typed references: ecore:EClass audiogram.ecore#//HIMSAAudiometricStandardType
    * - Local IDs: someId
    */
-  resolveReference(e) {
-    const t = e.indexOf(" ");
-    t > 0 && (e = e.substring(t + 1));
-    const s = e.indexOf("#");
-    if (s > 0) {
-      const r = e.substring(0, s), n = e.substring(s + 1), o = this.resource.getURI()?.toString();
-      if (o && (o === r || o.endsWith(r) || o.endsWith("/" + r) || r.endsWith(o)))
-        return this.resource.getEObject(n);
-      const d = this.packageRegistry.getEPackage(r);
-      if (d)
-        return this.resolveFragmentInPackage(d, n);
-      const y = this.resource.getContents();
-      for (let C = 0; C < y.length; C++) {
-        const A = y.get(C);
-        if (A && typeof A.getNsURI == "function") {
-          const b = A;
-          if (b.getNsURI() === r)
-            return this.resolveFragmentInPackage(b, n);
+  resolveReference(ref) {
+    const spaceIndex = ref.indexOf(" ");
+    if (spaceIndex > 0) {
+      ref = ref.substring(spaceIndex + 1);
+    }
+    const hashIndex = ref.indexOf("#");
+    if (hashIndex > 0) {
+      const baseURI = ref.substring(0, hashIndex);
+      const fragment = ref.substring(hashIndex + 1);
+      const currentURI = this.resource.getURI();
+      const currentStr = currentURI?.toString();
+      if (currentStr && (currentStr === baseURI || currentStr.endsWith(baseURI) || currentStr.endsWith("/" + baseURI) || baseURI.endsWith(currentStr))) {
+        return this.resource.getEObject(fragment);
+      }
+      const ePackage = this.packageRegistry.getEPackage(baseURI);
+      if (ePackage) {
+        return this.resolveFragmentInPackage(ePackage, fragment);
+      }
+      const contents = this.resource.getContents();
+      for (let i = 0; i < contents.length; i++) {
+        const root = contents.get(i);
+        if (root && typeof root.getNsURI === "function") {
+          const rootPkg = root;
+          if (rootPkg.getNsURI() === baseURI) {
+            return this.resolveFragmentInPackage(rootPkg, fragment);
+          }
         }
       }
-      const S = this.resource.getResourceSet();
-      if (S) {
-        const C = Y.createURI(r), A = S.getResource(C, !0);
-        if (A)
-          return A.getEObject(n);
+      const resourceSet = this.resource.getResourceSet();
+      if (resourceSet) {
+        const uri = URI.createURI(baseURI);
+        const externalResource = resourceSet.getResource(uri, true);
+        if (externalResource) {
+          return externalResource.getEObject(fragment);
+        }
       }
       return null;
     }
-    return e.startsWith("#") ? this.resource.getEObject(e.substring(1)) : e.startsWith("/") ? this.resource.getEObject(e) : this.resource.getEObject(e);
+    if (ref.startsWith("#")) {
+      return this.resource.getEObject(ref.substring(1));
+    }
+    if (ref.startsWith("/")) {
+      return this.resource.getEObject(ref);
+    }
+    return this.resource.getEObject(ref);
   }
   /**
    * Resolve a fragment path within an EPackage.
    * Handles paths like //EString, //EClass, etc.
    */
-  resolveFragmentInPackage(e, t) {
-    let s = t;
-    for (; s.startsWith("/"); )
-      s = s.substring(1);
-    if (!s)
-      return e;
-    const r = s.split("/"), n = Ze(e, s);
-    if (n)
-      return n;
-    if (r.length >= 2) {
-      let a = e;
-      for (let y = 0; y < r.length - 2; y++) {
-        const S = a.getESubpackages();
-        let C = null;
-        for (let A = 0; A < S.length; A++)
-          if (S.get(A).getName() === r[y]) {
-            C = S.get(A);
+  resolveFragmentInPackage(ePackage, fragment) {
+    let path = fragment;
+    while (path.startsWith("/")) {
+      path = path.substring(1);
+    }
+    if (!path) {
+      return ePackage;
+    }
+    const segments = path.split("/");
+    const classifier = resolveClassifierInPackage(ePackage, path);
+    if (classifier) {
+      return classifier;
+    }
+    if (segments.length >= 2) {
+      let currentPkg = ePackage;
+      for (let i = 0; i < segments.length - 2; i++) {
+        const subPackages = currentPkg.getESubpackages();
+        let found = null;
+        for (let j = 0; j < subPackages.length; j++) {
+          if (subPackages.get(j).getName() === segments[i]) {
+            found = subPackages.get(j);
             break;
           }
-        if (!C)
+        }
+        if (!found)
           return null;
-        a = C;
+        currentPkg = found;
       }
-      const o = r[r.length - 2], d = a.getEClassifier(o);
-      if (d && "getEStructuralFeature" in d) {
-        const y = d.getEStructuralFeature(r[r.length - 1]);
-        if (y)
-          return y;
+      const classifierName = segments[segments.length - 2];
+      const eClassifier = currentPkg.getEClassifier(classifierName);
+      if (eClassifier && "getEStructuralFeature" in eClassifier) {
+        const feature = eClassifier.getEStructuralFeature(segments[segments.length - 1]);
+        if (feature) {
+          return feature;
+        }
       }
     }
     return null;
@@ -6854,29 +7869,36 @@ class Ds {
   /**
    * Handle proxy reference
    */
-  handleProxy(e, t) {
+  handleProxy(object, text) {
   }
   /**
    * Get factory for prefix
    */
-  getFactoryForPrefix(e) {
-    let t = this.prefixesToFactories.get(e);
-    if (t)
-      return t;
-    const s = this.helper.getURI(e);
-    if (s) {
-      const r = this.packageRegistry.getEPackage(s);
-      if (r && (t = r.getEFactoryInstance(), t))
-        return this.prefixesToFactories.set(e, t), t;
+  getFactoryForPrefix(prefix) {
+    let factory = this.prefixesToFactories.get(prefix);
+    if (factory) {
+      return factory;
+    }
+    const nsURI = this.helper.getURI(prefix);
+    if (nsURI) {
+      const ePackage = this.packageRegistry.getEPackage(nsURI);
+      if (ePackage) {
+        factory = ePackage.getEFactoryInstance();
+        if (factory) {
+          this.prefixesToFactories.set(prefix, factory);
+          return factory;
+        }
+      }
     }
     return null;
   }
   /**
    * Report error
    */
-  error(e) {
-    const t = new Error(`[Line ${this.lineNumber}, Col ${this.columnNumber}] ${e}`);
-    this.errors.push(t), console.error(t.message);
+  error(message) {
+    const error = new Error(`[Line ${this.lineNumber}, Col ${this.columnNumber}] ${message}`);
+    this.errors.push(error);
+    console.error(error.message);
   }
   /**
    * Get errors
@@ -6885,337 +7907,482 @@ class Ds {
     return this.errors;
   }
 }
-class Os {
-  constructor(e) {
-    this.helper = e || new _t();
+class XMLLoad {
+  constructor(helper) {
+    this.helper = helper || new XMLHelperImpl();
   }
   /**
    * Load resource from string
    */
-  load(e, t, s) {
-    const r = s || /* @__PURE__ */ new Map(), n = this.makeDefaultHandler(e, r), a = Wr.parser(!0, {
-      xmlns: !0,
-      position: !0,
-      trim: !1
-    }), o = new rn();
-    a.onprocessinginstruction = (y) => {
-      y.name;
-    }, a.onopentag = (y) => {
-      o.clear();
-      const S = y;
-      for (const [C, A] of Object.entries(S.attributes)) {
-        const b = A, R = b.prefix ? `${b.prefix}:${b.local}` : b.local;
-        if (b.prefix === "xmlns" || b.name === "xmlns") {
-          const M = b.prefix === "xmlns" ? b.local : "";
-          n.startPrefixMapping(M, b.value);
+  load(resource, xmlString, options) {
+    const opts = options || /* @__PURE__ */ new Map();
+    const handler = this.makeDefaultHandler(resource, opts);
+    const parser = sax.parser(true, {
+      xmlns: true,
+      position: true,
+      trim: false
+    });
+    const attribs = new AttributesImpl();
+    parser.onprocessinginstruction = (node) => {
+      if (node.name === "xml") ;
+    };
+    parser.onopentag = (tag) => {
+      attribs.clear();
+      const qualifiedTag = tag;
+      for (const [key, attr] of Object.entries(qualifiedTag.attributes)) {
+        const qualifiedAttr = attr;
+        const qName = qualifiedAttr.prefix ? `${qualifiedAttr.prefix}:${qualifiedAttr.local}` : qualifiedAttr.local;
+        if (qualifiedAttr.prefix === "xmlns" || qualifiedAttr.name === "xmlns") {
+          const prefix = qualifiedAttr.prefix === "xmlns" ? qualifiedAttr.local : "";
+          handler.startPrefixMapping(prefix, qualifiedAttr.value);
         }
-        o.add(R, b.local, b.uri, b.value);
+        attribs.add(qName, qualifiedAttr.local, qualifiedAttr.uri, qualifiedAttr.value);
       }
-      n.lineNumber = a.line, n.columnNumber = a.column, n.startElement(S.uri, S.local, S.name, o);
-    }, a.onclosetag = (y) => {
-      const S = y.indexOf(":"), C = S >= 0 ? y.substring(S + 1) : y;
-      n.endElement("", C, y);
-    }, a.ontext = (y) => {
-      y.trim() && n.characters(y);
-    }, a.oncdata = (y) => {
-      n.characters(y);
-    }, a.onerror = (y) => {
-      console.error("XML Parse Error:", y.message), n.error(y.message);
-    }, a.write(t).close(), n.endDocument();
-    const d = n.getErrors();
-    if (d.length > 0 && e.getErrors) {
-      const y = e.getErrors();
-      for (const S of d) {
-        const C = S.message.match(/\[Line\s*(\d+),?\s*Col\s*(\d+)\]\s*(.*)/i);
-        C ? y.push({
-          message: C[3] || S.message,
-          line: parseInt(C[1], 10),
-          column: parseInt(C[2], 10)
-        }) : y.push({ message: S.message });
+      handler.lineNumber = parser.line;
+      handler.columnNumber = parser.column;
+      handler.startElement(qualifiedTag.uri, qualifiedTag.local, qualifiedTag.name, attribs);
+    };
+    parser.onclosetag = (tagName) => {
+      const colonIndex = tagName.indexOf(":");
+      const localName = colonIndex >= 0 ? tagName.substring(colonIndex + 1) : tagName;
+      handler.endElement("", localName, tagName);
+    };
+    parser.ontext = (text) => {
+      if (text.trim()) {
+        handler.characters(text);
+      }
+    };
+    parser.oncdata = (cdata) => {
+      handler.characters(cdata);
+    };
+    parser.onerror = (err) => {
+      console.error("XML Parse Error:", err.message);
+      handler.error(err.message);
+    };
+    parser.write(xmlString).close();
+    handler.endDocument();
+    const handlerErrors = handler.getErrors();
+    if (handlerErrors.length > 0 && resource.getErrors) {
+      const resourceErrors = resource.getErrors();
+      for (const err of handlerErrors) {
+        const match = err.message.match(/\[Line\s*(\d+),?\s*Col\s*(\d+)\]\s*(.*)/i);
+        if (match) {
+          resourceErrors.push({
+            message: match[3] || err.message,
+            line: parseInt(match[1], 10),
+            column: parseInt(match[2], 10)
+          });
+        } else {
+          resourceErrors.push({ message: err.message });
+        }
       }
     }
   }
   /**
    * Create the default handler for loading
    */
-  makeDefaultHandler(e, t) {
-    return new Ds(e, this.helper, t);
+  makeDefaultHandler(resource, options) {
+    return new XMLHandler(resource, this.helper, options);
   }
 }
-class un extends Os {
-  constructor(e) {
-    super(e || new ln());
+class XMILoad extends XMLLoad {
+  constructor(helper) {
+    super(helper || new XMIHelperImpl());
   }
-  makeDefaultHandler(e, t) {
-    return new hn(e, this.helper, t);
+  makeDefaultHandler(resource, options) {
+    return new XMIHandler(resource, this.helper, options);
   }
 }
-class ln extends _t {
+class XMIHelperImpl extends XMLHelperImpl {
 }
-class hn extends Ds {
-  constructor(e, t, s) {
-    super(e, t, s), this.xmiVersion = "2.0";
+class XMIHandler extends XMLHandler {
+  constructor(resource, helper, options) {
+    super(resource, helper, options);
+    this.xmiVersion = "2.0";
   }
   recordHeaderInformation() {
     if (this.attribs) {
-      const e = this.attribs.getValueByQName("xmi:version");
-      e && (this.xmiVersion = e);
+      const version = this.attribs.getValueByQName("xmi:version");
+      if (version) {
+        this.xmiVersion = version;
+      }
     }
   }
   getXSIType() {
-    let e = super.getXSIType();
-    return !e && this.attribs && (e = this.attribs.getValueByQName("xmi:type")), e;
+    let type = super.getXSIType();
+    if (!type && this.attribs) {
+      type = this.attribs.getValueByQName("xmi:type");
+    }
+    return type;
   }
-  handleId(e, t) {
-    this.resource && "setID" in this.resource && this.resource.setID(e, t);
+  handleId(obj, id) {
+    if (this.resource && "setID" in this.resource) {
+      this.resource.setID(obj, id);
+    }
   }
 }
-function ps(l) {
-  return l != null && typeof l.getESuperTypes == "function" && typeof l.getEAllStructuralFeatures == "function";
+function isEClass(classifier) {
+  return classifier !== null && classifier !== void 0 && typeof classifier.getESuperTypes === "function" && typeof classifier.getEAllStructuralFeatures === "function";
 }
-function dt(l) {
-  return l != null && typeof l.getELiterals == "function" && typeof l.getEEnumLiteral == "function";
+function isEEnum(classifier) {
+  return classifier !== null && classifier !== void 0 && typeof classifier.getELiterals === "function" && typeof classifier.getEEnumLiteral === "function";
 }
-class Us {
-  constructor(e) {
-    this.declaredNamespaces = /* @__PURE__ */ new Map(), this.output = [], this.indent = 0, this.indentString = "  ", this.idAttributeName = "id", this.helper = e || new _t(), this.resource = null;
+class XMLSave {
+  constructor(helper) {
+    this.declaredNamespaces = /* @__PURE__ */ new Map();
+    this.output = [];
+    this.indent = 0;
+    this.indentString = "  ";
+    this.idAttributeName = "id";
+    this.helper = helper || new XMLHelperImpl();
+    this.resource = null;
   }
   /**
    * Save resource to string
    */
-  save(e, t) {
-    return this.saveObjects(e, e.getContents(), t);
+  save(resource, options) {
+    return this.saveObjects(resource, resource.getContents(), options);
   }
   /**
    * Save a specific set of objects using the given resource for reference resolution.
    */
-  saveObjects(e, t, s) {
-    this.resource = e, this.output = [], this.declaredNamespaces.clear(), this.indent = 0, s && this.helper.setOptions(s), this.output.push(`<?xml version="1.0" encoding="UTF-8"?>
-`);
-    const r = Array.isArray(t) ? t : [...t];
-    if (r.length > 1)
-      this.saveMultipleRoots(r);
-    else
-      for (const n of r)
-        this.saveObject(n, !0);
+  saveObjects(resource, objects, options) {
+    this.resource = resource;
+    this.output = [];
+    this.declaredNamespaces.clear();
+    this.indent = 0;
+    if (options) {
+      this.helper.setOptions(options);
+    }
+    this.output.push('<?xml version="1.0" encoding="UTF-8"?>\n');
+    const objectArray = Array.isArray(objects) ? objects : [...objects];
+    if (objectArray.length > 1) {
+      this.saveMultipleRoots(objectArray);
+    } else {
+      for (const root of objectArray) {
+        this.saveObject(root, true);
+      }
+    }
     return this.output.join("");
   }
   /**
    * Save multiple root objects wrapped in an <xmi:XMI> container element
    */
-  saveMultipleRoots(e) {
-    const t = /* @__PURE__ */ new Set();
-    for (const r of e)
-      for (const n of this.collectPackages(r))
-        t.add(n);
-    this.output.push("<xmi:XMI"), this.output.push(` xmlns:xmi="${Ut}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${Je}"`);
-    const s = /* @__PURE__ */ new Set();
-    for (const r of t) {
-      const n = r.getNsURI(), a = this.getPrefix(r);
-      n && a && !s.has(a) && (this.output.push(` xmlns:${a}="${n}"`), this.declaredNamespaces.set(n, a), s.add(a));
+  saveMultipleRoots(contents) {
+    const allPackages = /* @__PURE__ */ new Set();
+    for (const root of contents) {
+      for (const pkg of this.collectPackages(root)) {
+        allPackages.add(pkg);
+      }
     }
-    this.output.push(`>
-`), this.indent++;
-    for (const r of e)
-      this.saveObject(r, !1);
-    this.indent--, this.output.push(`</xmi:XMI>
-`);
+    this.output.push(`<xmi:XMI`);
+    this.output.push(` xmlns:xmi="${XMI_URI}"`);
+    this.output.push(` xmi:version="2.0"`);
+    this.output.push(` xmlns:xsi="${XSI_URI}"`);
+    const writtenPrefixes = /* @__PURE__ */ new Set();
+    for (const pkg of allPackages) {
+      const nsURI = pkg.getNsURI();
+      const prefix = this.getPrefix(pkg);
+      if (nsURI && prefix && !writtenPrefixes.has(prefix)) {
+        this.output.push(` xmlns:${prefix}="${nsURI}"`);
+        this.declaredNamespaces.set(nsURI, prefix);
+        writtenPrefixes.add(prefix);
+      }
+    }
+    this.output.push(">\n");
+    this.indent++;
+    for (const root of contents) {
+      this.saveObject(root, false);
+    }
+    this.indent--;
+    this.output.push("</xmi:XMI>\n");
   }
   /**
    * Save a single object
    */
-  saveObject(e, t) {
-    const s = e.eClass(), r = s.getEPackage(), n = r ? this.getPrefix(r) : "", a = s.getName() || "Object", o = n ? `${n}:${a}` : a;
-    this.writeIndent(), this.output.push(`<${o}`), t && this.writeNamespaces(e), t || this.writeTypeAttribute(e), this.saveID(e), this.writeAttributes(e);
-    const d = this.helper.getExtendedMetaData(), y = this.getSimpleContentText(e, d), S = this.hasElementContent(e);
-    y !== null ? (this.output.push(`>${this.escapeXml(y)}`), S && (this.output.push(`
-`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent()), this.output.push(`</${o}>
-`)) : S ? (this.output.push(`>
-`), this.indent++, this.writeElements(e), this.indent--, this.writeIndent(), this.output.push(`</${o}>
-`)) : this.output.push(`/>
+  saveObject(obj, isRoot) {
+    const eClass = obj.eClass();
+    const ePackage = eClass.getEPackage();
+    const prefix = ePackage ? this.getPrefix(ePackage) : "";
+    const localName = eClass.getName() || "Object";
+    const qName = prefix ? `${prefix}:${localName}` : localName;
+    this.writeIndent();
+    this.output.push(`<${qName}`);
+    if (isRoot) {
+      this.writeNamespaces(obj);
+    }
+    if (!isRoot) {
+      this.writeTypeAttribute(obj);
+    }
+    this.saveID(obj);
+    this.writeAttributes(obj);
+    const emd = this.helper.getExtendedMetaData();
+    const simpleText = this.getSimpleContentText(obj, emd);
+    const hasContent = this.hasElementContent(obj);
+    if (simpleText !== null) {
+      this.output.push(`>${this.escapeXml(simpleText)}`);
+      if (hasContent) {
+        this.output.push("\n");
+        this.indent++;
+        this.writeElements(obj);
+        this.indent--;
+        this.writeIndent();
+      }
+      this.output.push(`</${qName}>
 `);
+    } else if (hasContent) {
+      this.output.push(">\n");
+      this.indent++;
+      this.writeElements(obj);
+      this.indent--;
+      this.writeIndent();
+      this.output.push(`</${qName}>
+`);
+    } else {
+      this.output.push("/>\n");
+    }
   }
   /**
    * Write xmi:id attribute if the resource tracks an ID for this object
    */
-  saveID(e) {
-    const t = this.helper.getID(e);
-    t && this.output.push(` ${this.idAttributeName}="${this.escapeXml(t)}"`);
+  saveID(obj) {
+    const id = this.helper.getID(obj);
+    if (id) {
+      this.output.push(` ${this.idAttributeName}="${this.escapeXml(id)}"`);
+    }
   }
   /**
    * Write namespace declarations
    */
-  writeNamespaces(e) {
-    const t = this.collectPackages(e);
-    this.output.push(` xmlns:xmi="${Ut}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${Je}"`);
-    const s = /* @__PURE__ */ new Set();
-    for (const n of t) {
-      const a = n.getNsURI(), o = this.getPrefix(n);
-      a && o && !s.has(o) && (this.output.push(` xmlns:${o}="${a}"`), this.declaredNamespaces.set(a, o), s.add(o));
+  writeNamespaces(obj) {
+    const packages = this.collectPackages(obj);
+    this.output.push(` xmlns:xmi="${XMI_URI}"`);
+    this.output.push(` xmi:version="2.0"`);
+    this.output.push(` xmlns:xsi="${XSI_URI}"`);
+    const writtenPrefixes = /* @__PURE__ */ new Set();
+    for (const pkg of packages) {
+      const nsURI = pkg.getNsURI();
+      const prefix = this.getPrefix(pkg);
+      if (nsURI && prefix && !writtenPrefixes.has(prefix)) {
+        this.output.push(` xmlns:${prefix}="${nsURI}"`);
+        this.declaredNamespaces.set(nsURI, prefix);
+        writtenPrefixes.add(prefix);
+      }
     }
-    const r = this.helper.getExtendedMetaData();
-    r && this.collectEMDNamespaces(e, r, s);
+    const emd = this.helper.getExtendedMetaData();
+    if (emd) {
+      this.collectEMDNamespaces(obj, emd, writtenPrefixes);
+    }
   }
   /**
    * Collect and declare additional namespaces from EMD annotations.
    */
-  collectEMDNamespaces(e, t, s) {
-    const r = (n) => {
-      const a = n.eClass();
-      for (const o of a.getEAllStructuralFeatures()) {
-        const d = t.getNamespace(o);
-        if (d && !this.declaredNamespaces.has(d) && d !== "http://www.w3.org/XML/1998/namespace") {
-          const y = this.generatePrefix(d, s);
-          y && (this.output.push(` xmlns:${y}="${d}"`), this.declaredNamespaces.set(d, y), s.add(y));
+  collectEMDNamespaces(obj, emd, writtenPrefixes) {
+    const collectFromObject = (o) => {
+      const eClass = o.eClass();
+      for (const feature of eClass.getEAllStructuralFeatures()) {
+        const ns = emd.getNamespace(feature);
+        if (ns && !this.declaredNamespaces.has(ns) && ns !== "http://www.w3.org/XML/1998/namespace") {
+          const prefix = this.generatePrefix(ns, writtenPrefixes);
+          if (prefix) {
+            this.output.push(` xmlns:${prefix}="${ns}"`);
+            this.declaredNamespaces.set(ns, prefix);
+            writtenPrefixes.add(prefix);
+          }
         }
       }
-      for (const o of n.eContents())
-        r(o);
+      for (const content of o.eContents()) {
+        collectFromObject(content);
+      }
     };
-    r(e);
+    collectFromObject(obj);
   }
   /**
    * Generate a namespace prefix for a URI.
    */
-  generatePrefix(e, t) {
-    const s = e.lastIndexOf("/");
-    let r = s >= 0 ? e.substring(s + 1) : e;
-    if (r = r.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(), r || (r = "ns"), r.length > 10 && (r = r.substring(0, 10)), !t.has(r))
-      return r;
-    for (let n = 1; n < 100; n++) {
-      const a = `${r}${n}`;
-      if (!t.has(a))
-        return a;
+  generatePrefix(nsURI, usedPrefixes) {
+    const lastSlash = nsURI.lastIndexOf("/");
+    let candidate = lastSlash >= 0 ? nsURI.substring(lastSlash + 1) : nsURI;
+    candidate = candidate.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+    if (!candidate)
+      candidate = "ns";
+    if (candidate.length > 10)
+      candidate = candidate.substring(0, 10);
+    if (!usedPrefixes.has(candidate))
+      return candidate;
+    for (let i = 1; i < 100; i++) {
+      const prefixed = `${candidate}${i}`;
+      if (!usedPrefixes.has(prefixed))
+        return prefixed;
     }
     return null;
   }
   /**
    * Collect all packages used by object tree
    */
-  collectPackages(e) {
-    const t = /* @__PURE__ */ new Set(), s = (r) => {
-      const a = r.eClass().getEPackage();
-      a && t.add(a);
-      for (const o of r.eContents())
-        s(o);
+  collectPackages(obj) {
+    const packages = /* @__PURE__ */ new Set();
+    const collectFromObject = (o) => {
+      const eClass = o.eClass();
+      const pkg = eClass.getEPackage();
+      if (pkg) {
+        packages.add(pkg);
+      }
+      for (const content of o.eContents()) {
+        collectFromObject(content);
+      }
     };
-    return s(e), t;
+    collectFromObject(obj);
+    return packages;
   }
   /**
    * Get prefix for package
    */
-  getPrefix(e) {
-    return e.getNsPrefix() || e.getName() || "ns";
+  getPrefix(pkg) {
+    return pkg.getNsPrefix() || pkg.getName() || "ns";
   }
   /**
    * Write xsi:type attribute if needed
    */
-  writeTypeAttribute(e) {
+  writeTypeAttribute(obj) {
   }
   /**
    * Write attribute values and non-containment references
    */
-  writeAttributes(e) {
-    const t = e.eClass(), s = this.helper.getExtendedMetaData();
-    for (const r of t.getEAllStructuralFeatures())
-      if (!(r.isTransient() || r.isDerived()) && !(s && s.getName(r) === ":0")) {
-        if (this.isAttribute(r)) {
-          if (s && s.getFeatureKind(r) === at)
-            continue;
-          const n = r;
-          let a = e.eGet(n);
-          if (a != null && (a = this.resolveValue(a, e), a != null)) {
-            let o = null;
+  writeAttributes(obj) {
+    const eClass = obj.eClass();
+    const emd = this.helper.getExtendedMetaData();
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      if (feature.isTransient() || feature.isDerived())
+        continue;
+      if (emd) {
+        const emdName = emd.getName(feature);
+        if (emdName === ":0")
+          continue;
+      }
+      if (this.isAttribute(feature)) {
+        if (emd && emd.getFeatureKind(feature) === ELEMENT_FEATURE)
+          continue;
+        const attr = feature;
+        let value = obj.eGet(attr);
+        if (value !== null && value !== void 0) {
+          value = this.resolveValue(value, obj);
+          if (value !== null && value !== void 0) {
+            let defaultValue = null;
             try {
-              o = n.getDefaultValue();
+              defaultValue = attr.getDefaultValue();
             } catch {
             }
-            if (a !== o) {
-              const d = this.convertToString(n, a), y = this.getSerializedAttributeName(n, s);
-              this.output.push(` ${y}="${this.escapeXml(d)}"`);
+            if (value !== defaultValue) {
+              const stringValue = this.convertToString(attr, value);
+              const attrName = this.getSerializedAttributeName(attr, emd);
+              this.output.push(` ${attrName}="${this.escapeXml(stringValue)}"`);
             }
           }
-        } else if ("isContainment" in r) {
-          const n = r;
-          if (!n.isContainment()) {
-            let a = e.eGet(n);
-            if (a != null) {
-              const o = this.helper.getSerializedFeatureName(n);
-              if (r.isMany()) {
-                if (Array.isArray(a) || ye(a)) {
-                  const d = [];
-                  for (const y of a) {
-                    const S = this.resolveValue(y, e);
-                    if (S == null || typeof S == "string")
-                      continue;
-                    const C = S.eResource?.();
-                    if (C && C === this.resource) {
-                      const A = this.getHref(S);
-                      A && d.push(A);
-                    }
+        }
+      } else if ("isContainment" in feature) {
+        const ref = feature;
+        if (!ref.isContainment()) {
+          let value = obj.eGet(ref);
+          if (value !== null && value !== void 0) {
+            const serializedRefName = this.helper.getSerializedFeatureName(ref);
+            if (!feature.isMany()) {
+              value = this.resolveValue(value, obj);
+              if (value !== null && value !== void 0) {
+                if (typeof value === "string") {
+                  this.output.push(` ${serializedRefName}="${this.escapeXml(value)}"`);
+                } else if (typeof value === "boolean") {
+                  this.output.push(` ${serializedRefName}="${value ? "true" : "false"}"`);
+                } else if (typeof value === "number") {
+                  this.output.push(` ${serializedRefName}="${String(value)}"`);
+                } else {
+                  const href = this.getTypePrefixedHref(ref, value);
+                  if (href) {
+                    this.output.push(` ${serializedRefName}="${this.escapeXml(href)}"`);
                   }
-                  d.length > 0 && this.output.push(` ${o}="${this.escapeXml(d.join(" "))}"`);
                 }
-              } else if (a = this.resolveValue(a, e), a != null)
-                if (typeof a == "string")
-                  this.output.push(` ${o}="${this.escapeXml(a)}"`);
-                else if (typeof a == "boolean")
-                  this.output.push(` ${o}="${a ? "true" : "false"}"`);
-                else if (typeof a == "number")
-                  this.output.push(` ${o}="${String(a)}"`);
-                else {
-                  const d = this.getTypePrefixedHref(n, a);
-                  d && this.output.push(` ${o}="${this.escapeXml(d)}"`);
+              }
+            } else if (Array.isArray(value) || isEList(value)) {
+              const sameDocHrefs = [];
+              for (const refObj of value) {
+                const resolved = this.resolveValue(refObj, obj);
+                if (resolved === null || resolved === void 0)
+                  continue;
+                if (typeof resolved === "string")
+                  continue;
+                const refResource = resolved.eResource?.();
+                if (refResource && refResource === this.resource) {
+                  const href = this.getHref(resolved);
+                  if (href)
+                    sameDocHrefs.push(href);
                 }
+              }
+              if (sameDocHrefs.length > 0) {
+                this.output.push(` ${serializedRefName}="${this.escapeXml(sameDocHrefs.join(" "))}"`);
+              }
             }
           }
         }
       }
+    }
   }
   /**
    * Get href for cross-reference
    */
-  getHref(e) {
-    if (We(e) && e.eIsProxy()) {
-      const r = e.eProxyURI();
-      return r ? this.helper.deresolve(r).toString() : null;
+  getHref(obj) {
+    if (isInternalEObject(obj) && obj.eIsProxy()) {
+      const proxyURI = obj.eProxyURI();
+      if (!proxyURI)
+        return null;
+      return this.helper.deresolve(proxyURI).toString();
     }
-    const t = this.getIntraResourceFragment(e);
-    if (t)
-      return t;
-    const s = e.eResource?.();
-    if (s) {
-      const r = s.getURIFragment(e);
-      if (r) {
-        if (s === this.resource)
-          return r;
-        const n = s.getURI();
-        return n ? `${n.toString()}#${r}` : `#${r}`;
+    const intraFragment = this.getIntraResourceFragment(obj);
+    if (intraFragment) {
+      return intraFragment;
+    }
+    const resource = obj.eResource?.();
+    if (resource) {
+      const fragment = resource.getURIFragment(obj);
+      if (fragment) {
+        if (resource === this.resource) {
+          return fragment;
+        }
+        const uri = resource.getURI();
+        if (uri) {
+          return `${uri.toString()}#${fragment}`;
+        }
+        return `#${fragment}`;
       }
     }
-    if ("getEContainingClass" in e && typeof e.getEContainingClass == "function") {
-      const r = e.getEContainingClass();
-      if (r) {
-        const n = r.getEPackage?.(), a = r.getName?.(), o = e.getName?.();
-        if (n && a && o) {
-          const d = n.getNsURI?.();
-          if (d)
-            return `${d}#//${a}/${o}`;
+    if ("getEContainingClass" in obj && typeof obj.getEContainingClass === "function") {
+      const containingClass = obj.getEContainingClass();
+      if (containingClass) {
+        const pkg = containingClass.getEPackage?.();
+        const className = containingClass.getName?.();
+        const featureName = obj.getName?.();
+        if (pkg && className && featureName) {
+          const nsURI = pkg.getNsURI?.();
+          if (nsURI) {
+            return `${nsURI}#//${className}/${featureName}`;
+          }
         }
       }
     }
-    if ("getEPackage" in e && typeof e.getEPackage == "function") {
-      const r = e.getEPackage();
-      if (r) {
-        const n = r.getNsURI?.(), a = e.getName?.();
-        if (n && a)
-          return `${n}#//${a}`;
+    if ("getEPackage" in obj && typeof obj.getEPackage === "function") {
+      const pkg = obj.getEPackage();
+      if (pkg) {
+        const nsURI = pkg.getNsURI?.();
+        const name = obj.getName?.();
+        if (nsURI && name) {
+          return `${nsURI}#//${name}`;
+        }
       }
     }
-    if ("getName" in e) {
-      const r = e.getName?.();
-      if (r)
-        return `//${r}`;
+    if ("getName" in obj) {
+      const name = obj.getName?.();
+      if (name) {
+        return `//${name}`;
+      }
     }
     return null;
   }
@@ -7226,38 +8393,45 @@ class Us {
    * is in this.resource, build a hierarchical fragment path like
    * "//service/base/Service" or "//service/base/Service/id".
    */
-  getIntraResourceFragment(e) {
+  getIntraResourceFragment(obj) {
     if (!this.resource)
       return null;
-    const t = [];
-    let s = null;
-    if ("getEContainingClass" in e && typeof e.getEContainingClass == "function") {
-      const n = e.getEContainingClass();
-      if (!n)
+    const pathSegments = [];
+    let pkg = null;
+    if ("getEContainingClass" in obj && typeof obj.getEContainingClass === "function") {
+      const containingClass = obj.getEContainingClass();
+      if (!containingClass)
         return null;
-      const a = e.getName?.(), o = n.getName?.();
-      if (!a || !o)
+      const featureName = obj.getName?.();
+      const className = containingClass.getName?.();
+      if (!featureName || !className)
         return null;
-      t.push(o, a), s = n.getEPackage?.() ?? null;
-    } else if ("getEPackage" in e && typeof e.getEPackage == "function") {
-      const n = e.getName?.();
-      if (!n)
+      pathSegments.push(className, featureName);
+      pkg = containingClass.getEPackage?.() ?? null;
+    } else if ("getEPackage" in obj && typeof obj.getEPackage === "function") {
+      const name = obj.getName?.();
+      if (!name)
         return null;
-      t.push(n), s = e.getEPackage();
+      pathSegments.push(name);
+      pkg = obj.getEPackage();
     }
-    if (!s)
+    if (!pkg)
       return null;
-    for (; s; ) {
-      const n = typeof s.getESuperPackage == "function" ? s.getESuperPackage() : null;
-      if (!n)
+    while (pkg) {
+      const superPkg = typeof pkg.getESuperPackage === "function" ? pkg.getESuperPackage() : null;
+      if (!superPkg)
         break;
-      const a = s.getName?.();
-      a && t.unshift(a), s = n;
+      const pkgName = pkg.getName?.();
+      if (pkgName)
+        pathSegments.unshift(pkgName);
+      pkg = superPkg;
     }
-    const r = this.resource.getContents();
-    for (const n of r)
-      if (n === s)
-        return "#//" + t.join("/");
+    const contents = this.resource.getContents();
+    for (const root of contents) {
+      if (root === pkg) {
+        return "#//" + pathSegments.join("/");
+      }
+    }
     return null;
   }
   /**
@@ -7265,607 +8439,791 @@ class Us {
    * type is abstract and differs from the actual type.
    * Java EMF format: "prefix:TypeName URI#fragment"
    */
-  getTypePrefixedHref(e, t) {
-    const s = this.getHref(t);
-    if (!s)
+  getTypePrefixedHref(ref, value) {
+    const href = this.getHref(value);
+    if (!href)
       return null;
-    const r = t.eResource?.();
-    if (r && r === this.resource || s.startsWith("/") || s.startsWith("#"))
-      return s;
-    const n = e.getEType(), a = t.eClass();
-    if (n && a && a !== n && "isAbstract" in n && n.isAbstract()) {
-      const o = a.getEPackage();
-      if (o) {
-        const d = this.getPrefix(o), y = a.getName();
-        if (d && y)
-          return `${d}:${y} ${s}`;
+    const valueResource = value.eResource?.();
+    if (valueResource && valueResource === this.resource)
+      return href;
+    if (href.startsWith("/") || href.startsWith("#"))
+      return href;
+    const declaredType = ref.getEType();
+    const actualType = value.eClass();
+    if (declaredType && actualType && actualType !== declaredType && "isAbstract" in declaredType && declaredType.isAbstract()) {
+      const actualPkg = actualType.getEPackage();
+      if (actualPkg) {
+        const prefix = this.getPrefix(actualPkg);
+        const typeName = actualType.getName();
+        if (prefix && typeName) {
+          return `${prefix}:${typeName} ${href}`;
+        }
       }
     }
-    return s;
+    return href;
   }
   /**
    * Check if feature is an attribute (not a reference)
    */
-  isAttribute(e) {
-    return !("isContainment" in e);
+  isAttribute(feature) {
+    return !("isContainment" in feature);
   }
   /**
    * Check if object has element content (containments, multi-valued non-containment refs, or EMD element features)
    */
-  hasElementContent(e) {
-    const s = e.eClass().getEAllStructuralFeatures(), r = this.helper.getExtendedMetaData();
-    if (r)
-      for (const n of s) {
-        if (n.isTransient() || n.isDerived() || !this.isAttribute(n) || r.getFeatureKind(n) !== at)
+  hasElementContent(obj) {
+    const eClass = obj.eClass();
+    const features = eClass.getEAllStructuralFeatures();
+    const emd = this.helper.getExtendedMetaData();
+    if (emd) {
+      for (const feature of features) {
+        if (feature.isTransient() || feature.isDerived())
           continue;
-        const a = e.eGet(n);
-        if (a != null)
-          return !0;
+        if (!this.isAttribute(feature))
+          continue;
+        if (emd.getFeatureKind(feature) !== ELEMENT_FEATURE)
+          continue;
+        const value = obj.eGet(feature);
+        if (value !== null && value !== void 0)
+          return true;
       }
-    for (const n of s)
-      if ("isContainment" in n) {
-        const a = n;
-        if (n.isTransient())
+    }
+    for (const feature of features) {
+      if ("isContainment" in feature) {
+        const ref = feature;
+        if (feature.isTransient())
           continue;
-        const o = e.eGet(a);
-        if (o == null)
+        const value = obj.eGet(ref);
+        if (value === null || value === void 0)
           continue;
-        if (a.isContainment()) {
-          if ((Array.isArray(o) || ye(o)) && o.length > 0 || !Array.isArray(o) && !ye(o))
-            return !0;
-        } else if (n.isMany() && (Array.isArray(o) || ye(o)) && o.length > 0)
-          for (const d of o) {
-            const y = d.eResource?.();
-            if (!y || y !== this.resource)
-              return !0;
+        if (ref.isContainment()) {
+          if ((Array.isArray(value) || isEList(value)) && value.length > 0)
+            return true;
+          if (!Array.isArray(value) && !isEList(value))
+            return true;
+        } else if (feature.isMany() && (Array.isArray(value) || isEList(value)) && value.length > 0) {
+          for (const refObj of value) {
+            const refResource = refObj.eResource?.();
+            if (!refResource || refResource !== this.resource) {
+              return true;
+            }
           }
+        }
       }
-    return !1;
+    }
+    return false;
   }
   /**
    * Write element content (containments and multi-valued non-containment references)
    */
-  writeElements(e) {
-    const t = e.eClass(), s = this.helper.getExtendedMetaData();
-    if (s)
-      for (const r of t.getEAllStructuralFeatures()) {
-        if (r.isTransient() || r.isDerived() || !this.isAttribute(r) || s.getFeatureKind(r) !== at)
+  writeElements(obj) {
+    const eClass = obj.eClass();
+    const emd = this.helper.getExtendedMetaData();
+    if (emd) {
+      for (const feature of eClass.getEAllStructuralFeatures()) {
+        if (feature.isTransient() || feature.isDerived())
           continue;
-        const a = e.eGet(r);
-        if (a == null)
+        if (!this.isAttribute(feature))
           continue;
-        const o = this.getSerializedElementName(r, s), d = r;
-        if (r.isMany() && (Array.isArray(a) || ye(a))) {
-          for (const y of a)
-            if (y != null) {
+        const fKind = emd.getFeatureKind(feature);
+        if (fKind !== ELEMENT_FEATURE)
+          continue;
+        const value = obj.eGet(feature);
+        if (value === null || value === void 0)
+          continue;
+        const elemName = this.getSerializedElementName(feature, emd);
+        const attr = feature;
+        if (feature.isMany() && (Array.isArray(value) || isEList(value))) {
+          for (const item of value) {
+            if (item !== null && item !== void 0) {
               this.writeIndent();
-              const S = this.convertSingleValueToString(d, y);
-              this.output.push(`<${o}>${this.escapeXml(S)}</${o}>
+              const strVal = this.convertSingleValueToString(attr, item);
+              this.output.push(`<${elemName}>${this.escapeXml(strVal)}</${elemName}>
 `);
             }
+          }
         } else {
           this.writeIndent();
-          const y = this.convertToString(d, a);
-          this.output.push(`<${o}>${this.escapeXml(y)}</${o}>
+          const strVal = this.convertToString(attr, value);
+          this.output.push(`<${elemName}>${this.escapeXml(strVal)}</${elemName}>
 `);
         }
       }
-    for (const r of t.getEAllStructuralFeatures())
-      if ("isContainment" in r) {
-        const n = r;
-        if (r.isTransient())
+    }
+    for (const feature of eClass.getEAllStructuralFeatures()) {
+      if ("isContainment" in feature) {
+        const ref = feature;
+        if (feature.isTransient())
           continue;
-        const a = e.eGet(n);
-        if (a == null)
+        const value = obj.eGet(ref);
+        if (value === null || value === void 0)
           continue;
-        if (n.isContainment())
-          if (Array.isArray(a) || ye(a))
-            for (const o of a)
-              this.writeElement(n, o);
-          else
-            this.writeElement(n, a);
-        else if (r.isMany() && (Array.isArray(a) || ye(a)) && a.length > 0)
-          for (const o of a) {
-            const d = this.resolveValue(o, e);
-            if (d == null)
-              continue;
-            const y = typeof d != "string" ? d.eResource?.() : null;
-            if (y && y === this.resource)
-              continue;
-            const S = typeof d == "string" ? d : this.getHref(d);
-            S && (this.writeIndent(), this.output.push(`<${this.helper.getSerializedFeatureName(n)} href="${this.escapeXml(S)}"/>
-`));
+        if (ref.isContainment()) {
+          if (Array.isArray(value) || isEList(value)) {
+            for (const child of value) {
+              this.writeElement(ref, child);
+            }
+          } else {
+            this.writeElement(ref, value);
           }
+        } else if (feature.isMany() && (Array.isArray(value) || isEList(value)) && value.length > 0) {
+          for (const refObj of value) {
+            const resolved = this.resolveValue(refObj, obj);
+            if (resolved === null || resolved === void 0)
+              continue;
+            const refResource = typeof resolved !== "string" ? resolved.eResource?.() : null;
+            if (refResource && refResource === this.resource)
+              continue;
+            const href = typeof resolved === "string" ? resolved : this.getHref(resolved);
+            if (href) {
+              this.writeIndent();
+              this.output.push(`<${this.helper.getSerializedFeatureName(ref)} href="${this.escapeXml(href)}"/>
+`);
+            }
+          }
+        }
       }
+    }
   }
   /**
    * Write a single element
    */
-  writeElement(e, t) {
-    const s = this.helper.getExtendedMetaData(), r = this.getSerializedElementName(e, s) || "element";
-    this.writeIndent(), this.output.push(`<${r}`);
-    const n = e.getEType(), a = t.eClass();
-    if (n && a && a !== n) {
-      const y = a.getEPackage(), S = y ? this.getPrefix(y) : "", C = S ? `${S}:${a.getName()}` : a.getName();
-      this.output.push(` xsi:type="${C}"`);
+  writeElement(feature, value) {
+    const emd = this.helper.getExtendedMetaData();
+    const featureName = this.getSerializedElementName(feature, emd) || "element";
+    this.writeIndent();
+    this.output.push(`<${featureName}`);
+    const declaredType = feature.getEType();
+    const actualType = value.eClass();
+    if (declaredType && actualType && actualType !== declaredType) {
+      const pkg = actualType.getEPackage();
+      const prefix = pkg ? this.getPrefix(pkg) : "";
+      const typeName = prefix ? `${prefix}:${actualType.getName()}` : actualType.getName();
+      this.output.push(` xsi:type="${typeName}"`);
     }
-    this.saveID(t), this.writeAttributes(t);
-    const o = this.getSimpleContentText(t, s), d = this.hasElementContent(t);
-    o !== null ? (this.output.push(`>${this.escapeXml(o)}`), d && (this.output.push(`
-`), this.indent++, this.writeElements(t), this.indent--, this.writeIndent()), this.output.push(`</${r}>
-`)) : d ? (this.output.push(`>
-`), this.indent++, this.writeElements(t), this.indent--, this.writeIndent(), this.output.push(`</${r}>
-`)) : this.output.push(`/>
+    this.saveID(value);
+    this.writeAttributes(value);
+    const simpleText = this.getSimpleContentText(value, emd);
+    const hasContent = this.hasElementContent(value);
+    if (simpleText !== null) {
+      this.output.push(`>${this.escapeXml(simpleText)}`);
+      if (hasContent) {
+        this.output.push("\n");
+        this.indent++;
+        this.writeElements(value);
+        this.indent--;
+        this.writeIndent();
+      }
+      this.output.push(`</${featureName}>
 `);
+    } else if (hasContent) {
+      this.output.push(">\n");
+      this.indent++;
+      this.writeElements(value);
+      this.indent--;
+      this.writeIndent();
+      this.output.push(`</${featureName}>
+`);
+    } else {
+      this.output.push("/>\n");
+    }
   }
   /**
    * Resolve a value if it's a proxy.
    * Returns the resolved value or the original value if not a proxy or cannot be resolved.
    */
-  resolveValue(e, t) {
-    if (e == null)
-      return e;
-    if (We(e) && e.eIsProxy()) {
-      if ("eResolveProxy" in t && typeof t.eResolveProxy == "function") {
-        const r = t.eResolveProxy(e);
-        if (r !== e && !(We(r) && r.eIsProxy()))
-          return r;
+  resolveValue(value, owner) {
+    if (value === null || value === void 0) {
+      return value;
+    }
+    if (isInternalEObject(value) && value.eIsProxy()) {
+      if ("eResolveProxy" in owner && typeof owner.eResolveProxy === "function") {
+        const resolved = owner.eResolveProxy(value);
+        if (resolved !== value && !(isInternalEObject(resolved) && resolved.eIsProxy())) {
+          return resolved;
+        }
       }
-      const s = e.eProxyURI();
-      if (s && this.resource) {
-        const r = this.resource.getResourceSet();
-        if (r) {
-          const n = s.toString(), a = n.indexOf("#");
-          if (a >= 0) {
-            const o = n.substring(a + 1);
-            let d = this.resource;
-            if (a > 0) {
-              const y = Y.createURI(n.substring(0, a));
-              d = r.getResource(y, !0) || this.resource;
+      const proxyURI = value.eProxyURI();
+      if (proxyURI && this.resource) {
+        const resourceSet = this.resource.getResourceSet();
+        if (resourceSet) {
+          const uriStr = proxyURI.toString();
+          const hashIndex = uriStr.indexOf("#");
+          if (hashIndex >= 0) {
+            const fragment = uriStr.substring(hashIndex + 1);
+            let targetResource = this.resource;
+            if (hashIndex > 0) {
+              const resourceURI = URI.createURI(uriStr.substring(0, hashIndex));
+              targetResource = resourceSet.getResource(resourceURI, true) || this.resource;
             }
-            if (d) {
-              const y = d.getEObject(o);
-              if (y)
-                return y;
+            if (targetResource) {
+              const resolved = targetResource.getEObject(fragment);
+              if (resolved) {
+                return resolved;
+              }
             }
           }
         }
       }
-      return s?.toString() || null;
+      return proxyURI?.toString() || null;
     }
-    return e;
+    return value;
   }
   /**
    * Convert value to string
    */
-  convertToString(e, t) {
-    if (t == null)
+  convertToString(attr, value) {
+    if (value === null || value === void 0)
       return "";
-    if (Array.isArray(t) || ye(t)) {
-      const r = [];
-      for (const n of t)
-        n != null && r.push(this.convertSingleValueToString(e, n));
-      return r.join(" ");
+    if (Array.isArray(value) || isEList(value)) {
+      const items = [];
+      for (const item of value) {
+        if (item !== null && item !== void 0) {
+          items.push(this.convertSingleValueToString(attr, item));
+        }
+      }
+      return items.join(" ");
     }
-    if (dt(e.getEType()))
-      return this.convertSingleValueToString(e, t);
-    if (typeof t == "string")
-      return t;
-    if (typeof t == "boolean")
-      return t ? "true" : "false";
-    if (typeof t == "number")
-      return String(t);
-    if (t && typeof t == "object" && "eClass" in t)
-      return "getName" in t && typeof t.getName == "function" && t.getName() || "";
-    const s = e.getEType();
-    if (s && "getEPackage" in s) {
-      const r = s.getEPackage();
-      if (r) {
-        const n = r.getEFactoryInstance();
-        if (n)
-          return n.convertToString(s, t);
+    if (isEEnum(attr.getEType())) {
+      return this.convertSingleValueToString(attr, value);
+    }
+    if (typeof value === "string") {
+      return value;
+    }
+    if (typeof value === "boolean") {
+      return value ? "true" : "false";
+    }
+    if (typeof value === "number") {
+      return String(value);
+    }
+    if (value && typeof value === "object" && "eClass" in value) {
+      if ("getName" in value && typeof value.getName === "function") {
+        return value.getName() || "";
+      }
+      return "";
+    }
+    const eType = attr.getEType();
+    if (eType && "getEPackage" in eType) {
+      const pkg = eType.getEPackage();
+      if (pkg) {
+        const factory = pkg.getEFactoryInstance();
+        if (factory) {
+          return factory.convertToString(eType, value);
+        }
       }
     }
-    return String(t);
+    return String(value);
   }
   /**
    * Convert a single value to string (helper for arrays)
    */
-  convertSingleValueToString(e, t) {
-    if (t == null)
+  convertSingleValueToString(attr, value) {
+    if (value === null || value === void 0)
       return "";
-    if (!dt(e.getEType())) {
-      if (typeof t == "string")
-        return t;
-      if (typeof t == "boolean")
-        return t ? "true" : "false";
-      if (typeof t == "number")
-        return String(t);
+    const isEnum = isEEnum(attr.getEType());
+    if (!isEnum) {
+      if (typeof value === "string")
+        return value;
+      if (typeof value === "boolean")
+        return value ? "true" : "false";
+      if (typeof value === "number")
+        return String(value);
     }
-    const r = e.getEType();
-    if (r && "getEPackage" in r) {
-      const n = r.getEPackage();
-      if (n) {
-        const a = n.getEFactoryInstance();
-        if (a)
-          return a.convertToString(r, t);
+    const eType = attr.getEType();
+    if (eType && "getEPackage" in eType) {
+      const pkg = eType.getEPackage();
+      if (pkg) {
+        const factory = pkg.getEFactoryInstance();
+        if (factory) {
+          return factory.convertToString(eType, value);
+        }
       }
     }
-    return String(t);
+    return String(value);
   }
   /**
    * Get the text content for a simple-content class, or null if not applicable.
    */
-  getSimpleContentText(e, t) {
-    if (!t)
+  getSimpleContentText(obj, emd) {
+    if (!emd)
       return null;
-    const s = e.eClass();
-    if (t.getContentKind(s) !== qt)
+    const eClass = obj.eClass();
+    if (emd.getContentKind(eClass) !== SIMPLE_CONTENT)
       return null;
-    const r = t.getSimpleContentFeature(s);
-    if (!r)
+    const simpleFeature = emd.getSimpleContentFeature(eClass);
+    if (!simpleFeature)
       return null;
-    const n = e.eGet(r);
-    return n == null ? null : typeof n == "string" ? n : typeof n == "boolean" ? n ? "true" : "false" : String(n);
+    const value = obj.eGet(simpleFeature);
+    if (value === null || value === void 0)
+      return null;
+    if (typeof value === "string")
+      return value;
+    if (typeof value === "boolean")
+      return value ? "true" : "false";
+    if (typeof value === "number")
+      return String(value);
+    return String(value);
   }
   /**
    * Get the serialized attribute name, including namespace prefix if EMD specifies one.
    */
-  getSerializedAttributeName(e, t) {
-    if (t) {
-      const s = t.getNamespace(e), r = t.getName(e) ?? e.getName() ?? "";
-      if (s) {
-        const n = this.getNamespacePrefix(s);
-        if (n)
-          return `${n}:${r}`;
+  getSerializedAttributeName(feature, emd) {
+    if (emd) {
+      const ns = emd.getNamespace(feature);
+      const name = emd.getName(feature) ?? feature.getName() ?? "";
+      if (ns) {
+        const prefix = this.getNamespacePrefix(ns);
+        if (prefix) {
+          return `${prefix}:${name}`;
+        }
       }
-      if (r && !r.startsWith(":"))
-        return r;
+      if (name && !name.startsWith(":")) {
+        return name;
+      }
     }
-    return this.helper.getSerializedFeatureName(e);
+    return this.helper.getSerializedFeatureName(feature);
   }
   /**
    * Get the serialized element name, including namespace prefix if EMD specifies one.
    */
-  getSerializedElementName(e, t) {
-    if (t) {
-      const s = t.getNamespace(e), r = t.getName(e) ?? e.getName() ?? "";
-      if (s) {
-        const n = this.getNamespacePrefix(s);
-        if (n)
-          return `${n}:${r}`;
+  getSerializedElementName(feature, emd) {
+    if (emd) {
+      const ns = emd.getNamespace(feature);
+      const name = emd.getName(feature) ?? feature.getName() ?? "";
+      if (ns) {
+        const prefix = this.getNamespacePrefix(ns);
+        if (prefix) {
+          return `${prefix}:${name}`;
+        }
       }
-      if (r && !r.startsWith(":"))
-        return r;
+      if (name && !name.startsWith(":")) {
+        return name;
+      }
     }
-    return this.helper.getSerializedFeatureName(e);
+    return this.helper.getSerializedFeatureName(feature);
   }
   /**
    * Get or create a namespace prefix for the given URI.
    */
-  getNamespacePrefix(e) {
-    const t = this.declaredNamespaces.get(e);
-    return t || (e === "http://www.w3.org/XML/1998/namespace" ? "xml" : null);
+  getNamespacePrefix(nsURI) {
+    const existing = this.declaredNamespaces.get(nsURI);
+    if (existing)
+      return existing;
+    if (nsURI === "http://www.w3.org/XML/1998/namespace")
+      return "xml";
+    return null;
   }
   /**
    * Escape XML special characters
    */
-  escapeXml(e) {
-    return e.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  escapeXml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
   }
   /**
    * Write indentation
    */
   writeIndent() {
-    for (let e = 0; e < this.indent; e++)
+    for (let i = 0; i < this.indent; i++) {
       this.output.push(this.indentString);
+    }
   }
 }
-class fn extends Us {
-  constructor(e) {
-    super(e), this.idAttributeName = "xmi:id";
+class XMISave extends XMLSave {
+  constructor(helper) {
+    super(helper);
+    this.idAttributeName = "xmi:id";
   }
-  writeNamespaces(e) {
-    super.writeNamespaces(e);
+  writeNamespaces(obj) {
+    super.writeNamespaces(obj);
   }
 }
-class Ls extends Xt {
-  constructor(e) {
-    super(e), this.idToEObjectMap = /* @__PURE__ */ new Map(), this.eObjectToIDMap = /* @__PURE__ */ new Map(), this.xmlHelper = this.createXMLHelper();
+class XMLResource extends BasicResource {
+  constructor(uri) {
+    super(uri);
+    this.idToEObjectMap = /* @__PURE__ */ new Map();
+    this.eObjectToIDMap = /* @__PURE__ */ new Map();
+    this.xmlHelper = this.createXMLHelper();
   }
   createXMLHelper() {
-    return new _t(this);
+    return new XMLHelperImpl(this);
   }
   /**
    * Get EObject by ID
    */
-  getEObject(e) {
-    const t = this.idToEObjectMap.get(e);
-    return t || super.getEObject(e);
+  getEObject(uriFragment) {
+    const byId = this.idToEObjectMap.get(uriFragment);
+    if (byId) {
+      return byId;
+    }
+    return super.getEObject(uriFragment);
   }
   /**
    * Get URI fragment for an object
    */
-  getURIFragment(e) {
-    const t = this.eObjectToIDMap.get(e);
-    return t || super.getURIFragment(e);
+  getURIFragment(eObject) {
+    const id = this.eObjectToIDMap.get(eObject);
+    if (id) {
+      return id;
+    }
+    return super.getURIFragment(eObject);
   }
   /**
    * Set ID for an object
    */
-  setID(e, t) {
-    t && (this.idToEObjectMap.set(t, e), this.eObjectToIDMap.set(e, t));
+  setID(eObject, id) {
+    if (id) {
+      this.idToEObjectMap.set(id, eObject);
+      this.eObjectToIDMap.set(eObject, id);
+    }
   }
   /**
    * Get ID for an object
    */
-  getID(e) {
-    return this.eObjectToIDMap.get(e) ?? null;
+  getID(eObject) {
+    return this.eObjectToIDMap.get(eObject) ?? null;
   }
   /**
    * Clear ID maps
    */
   clearIdMaps() {
-    this.idToEObjectMap.clear(), this.eObjectToIDMap.clear();
+    this.idToEObjectMap.clear();
+    this.eObjectToIDMap.clear();
   }
   /**
    * Load resource using URIConverter if available, otherwise no-op.
    * For direct string loading, use loadFromString().
    */
-  async load(e) {
-    const s = this.getResourceSet()?.getURIConverter(), r = this.getURI();
-    if (s && r)
+  async load(options) {
+    const rs = this.getResourceSet();
+    const converter = rs?.getURIConverter();
+    const uri = this.getURI();
+    if (converter && uri) {
       try {
-        const n = await s.createInputStream(r), a = await pn(n);
-        this.loadFromString(a, e);
-      } catch {
-        this.loaded = !0;
+        const stream = await converter.createInputStream(uri);
+        const content = await streamToString(stream);
+        this.loadFromString(content, options);
+      } catch (err) {
+        this.loaded = true;
       }
-    else
-      this.loaded = !0;
+    } else {
+      this.loaded = true;
+    }
   }
   /**
    * Load from XML string
    */
-  loadFromString(e, t) {
+  loadFromString(xmlString, options) {
     this.clearIdMaps();
-    const s = t || /* @__PURE__ */ new Map();
-    this.createXMLLoad().load(this, e, s), this.loaded = !0;
+    const opts = options || /* @__PURE__ */ new Map();
+    const loader = this.createXMLLoad();
+    loader.load(this, xmlString, opts);
+    this.loaded = true;
   }
   /**
    * Create the XML loader
    */
   createXMLLoad() {
-    return new Os(this.xmlHelper);
+    return new XMLLoad(this.xmlHelper);
   }
   /**
    * Create the XML saver
    */
   createXMLSave() {
-    return new Us(this.xmlHelper);
+    return new XMLSave(this.xmlHelper);
   }
   /**
    * Save to XML string
    */
-  saveToString(e) {
-    const t = e || /* @__PURE__ */ new Map();
-    return this.createXMLSave().save(this, t);
+  saveToString(options) {
+    const opts = options || /* @__PURE__ */ new Map();
+    const saver = this.createXMLSave();
+    return saver.save(this, opts);
   }
   /**
    * Save a subset of objects to XML string.
    * Uses this resource's context (IDs, reference resolution) but only
    * serializes the given objects as root elements.
    */
-  saveContents(e, t) {
-    const s = t || /* @__PURE__ */ new Map();
-    return this.createXMLSave().saveObjects(this, e, s);
+  saveContents(objects, options) {
+    const opts = options || /* @__PURE__ */ new Map();
+    const saver = this.createXMLSave();
+    return saver.saveObjects(this, objects, opts);
   }
   /**
    * Unload resource
    */
   unload() {
-    super.unload(), this.clearIdMaps();
+    super.unload();
+    this.clearIdMaps();
   }
 }
-class gn extends Ls {
+class XMIResource extends XMLResource {
   createXMLLoad() {
-    return new un(this.xmlHelper);
+    return new XMILoad(this.xmlHelper);
   }
   createXMLSave() {
-    return new fn(this.xmlHelper);
+    return new XMISave(this.xmlHelper);
   }
 }
-async function pn(l) {
-  const e = l.getReader(), t = new TextDecoder();
-  let s = "";
-  for (; ; ) {
-    const { done: r, value: n } = await e.read();
-    if (r)
+async function streamToString(stream) {
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
+  let result = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done)
       break;
-    s += t.decode(n, { stream: !0 });
+    result += decoder.decode(value, { stream: true });
   }
-  return s += t.decode(), s;
+  result += decoder.decode();
+  return result;
 }
-class dn {
-  createResource(e) {
-    return new Ls(e);
-  }
-}
-class mt {
-  createResource(e) {
-    return new gn(e);
+class XMLResourceFactory {
+  createResource(uri) {
+    return new XMLResource(uri);
   }
 }
-const et = ct.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-et.has("xml") || et.set("xml", new dn());
-et.has("xmi") || et.set("xmi", new mt());
-et.has("ecore") || et.set("ecore", new mt());
-class mn {
+class XMIResourceFactory {
+  createResource(uri) {
+    return new XMIResource(uri);
+  }
+}
+const extensionMap$1 = Resource.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+if (!extensionMap$1.has("xml")) {
+  extensionMap$1.set("xml", new XMLResourceFactory());
+}
+if (!extensionMap$1.has("xmi")) {
+  extensionMap$1.set("xmi", new XMIResourceFactory());
+}
+if (!extensionMap$1.has("ecore")) {
+  extensionMap$1.set("ecore", new XMIResourceFactory());
+}
+class JSONLoad {
   constructor() {
-    this.forwardReferences = [], this.errors = [];
+    this.forwardReferences = [];
+    this.errors = [];
   }
   /**
    * Load a JSON string into the resource.
    */
-  load(e, t, s) {
-    this.resource = e, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || we.INSTANCE, this.forwardReferences = [], this.errors = [];
-    let r;
+  load(resource, jsonString, options) {
+    this.resource = resource;
+    this.packageRegistry = resource.getResourceSet()?.getPackageRegistry() || EPackageRegistry.INSTANCE;
+    this.forwardReferences = [];
+    this.errors = [];
+    let json;
     try {
-      r = JSON.parse(t);
-    } catch (n) {
-      this.error(`Invalid JSON: ${n instanceof Error ? n.message : String(n)}`);
+      json = JSON.parse(jsonString);
+    } catch (e) {
+      this.error(`Invalid JSON: ${e instanceof Error ? e.message : String(e)}`);
       return;
     }
-    if (Array.isArray(r))
-      for (const n of r) {
-        const a = this.loadObject(n);
-        a && e.getContents().push(a);
+    if (Array.isArray(json)) {
+      for (const item of json) {
+        const obj = this.loadObject(item);
+        if (obj) {
+          resource.getContents().push(obj);
+        }
       }
-    else if (r && typeof r == "object") {
-      const n = this.loadObject(r);
-      n && e.getContents().push(n);
+    } else if (json && typeof json === "object") {
+      const obj = this.loadObject(json);
+      if (obj) {
+        resource.getContents().push(obj);
+      }
     }
     this.handleForwardReferences();
   }
   /**
    * Load a single JSON object into an EObject.
    */
-  loadObject(e, t) {
-    const s = this.resolveEClass(e, t);
-    if (!s)
-      return this.error(`Cannot determine type for object: ${JSON.stringify(e).substring(0, 100)}`), null;
-    const r = s.getEPackage();
-    if (!r)
-      return this.error(`No package for class '${s.getName()}'`), null;
-    const a = r.getEFactoryInstance().create(s);
-    for (const [o, d] of Object.entries(e)) {
-      if (o === "eClass" || d == null)
+  loadObject(json, expectedType) {
+    const eClass = this.resolveEClass(json, expectedType);
+    if (!eClass) {
+      this.error(`Cannot determine type for object: ${JSON.stringify(json).substring(0, 100)}`);
+      return null;
+    }
+    const pkg = eClass.getEPackage();
+    if (!pkg) {
+      this.error(`No package for class '${eClass.getName()}'`);
+      return null;
+    }
+    const factory = pkg.getEFactoryInstance();
+    const obj = factory.create(eClass);
+    for (const [key, value] of Object.entries(json)) {
+      if (key === "eClass")
         continue;
-      const y = s.getEStructuralFeature(o);
-      if (!y) {
-        this.error(`Unknown feature '${o}' for type '${s.getName()}'`);
+      if (value === null || value === void 0)
+        continue;
+      const feature = eClass.getEStructuralFeature(key);
+      if (!feature) {
+        this.error(`Unknown feature '${key}' for type '${eClass.getName()}'`);
         continue;
       }
-      if (this.isAttribute(y))
-        this.loadAttribute(a, y, d);
-      else {
-        const S = y;
-        S.isContainment() ? this.loadContainment(a, S, d) : this.loadCrossReference(a, S, d);
+      if (this.isAttribute(feature)) {
+        this.loadAttribute(obj, feature, value);
+      } else {
+        const ref = feature;
+        if (ref.isContainment()) {
+          this.loadContainment(obj, ref, value);
+        } else {
+          this.loadCrossReference(obj, ref, value);
+        }
       }
     }
-    return a;
+    return obj;
   }
   /**
    * Resolve the EClass for a JSON object.
    * Uses `eClass` property if present, otherwise falls back to expectedType.
    */
-  resolveEClass(e, t) {
-    const s = e.eClass;
-    return s ? this.resolveType(s) : t || null;
+  resolveEClass(json, expectedType) {
+    const eClassURI = json["eClass"];
+    if (eClassURI) {
+      return this.resolveType(eClassURI);
+    }
+    return expectedType || null;
   }
   /**
    * Resolve an eClass type URI (`nsURI#//ClassName`) to an EClass.
    */
-  resolveType(e) {
-    const t = e.indexOf("#");
-    if (t < 0)
-      return this.error(`Invalid eClass URI (no '#'): ${e}`), null;
-    const s = e.substring(0, t);
-    let r = e.substring(t + 1);
-    for (; r.startsWith("/"); )
-      r = r.substring(1);
-    const n = this.packageRegistry.getEPackage(s);
-    if (!n)
-      return this.error(`Package not found for nsURI: ${s}`), null;
-    const a = n.getEClassifier(r);
-    return a ? "getESuperTypes" in a ? a : (this.error(`'${r}' is not an EClass`), null) : (this.error(`Classifier '${r}' not found in package '${s}'`), null);
+  resolveType(eClassURI) {
+    const hashIndex = eClassURI.indexOf("#");
+    if (hashIndex < 0) {
+      this.error(`Invalid eClass URI (no '#'): ${eClassURI}`);
+      return null;
+    }
+    const nsURI = eClassURI.substring(0, hashIndex);
+    let fragment = eClassURI.substring(hashIndex + 1);
+    while (fragment.startsWith("/")) {
+      fragment = fragment.substring(1);
+    }
+    const pkg = this.packageRegistry.getEPackage(nsURI);
+    if (!pkg) {
+      this.error(`Package not found for nsURI: ${nsURI}`);
+      return null;
+    }
+    const classifier = pkg.getEClassifier(fragment);
+    if (!classifier) {
+      this.error(`Classifier '${fragment}' not found in package '${nsURI}'`);
+      return null;
+    }
+    if (!("getESuperTypes" in classifier)) {
+      this.error(`'${fragment}' is not an EClass`);
+      return null;
+    }
+    return classifier;
   }
   /**
    * Load an attribute value.
    */
-  loadAttribute(e, t, s) {
-    if (t.isMany()) {
-      const r = Array.isArray(s) ? s : [s], n = e.eGet(t);
-      if (n && (Array.isArray(n) || ye(n)))
-        for (const a of r)
-          n.push(this.convertAttributeValue(t, a));
-      else
-        e.eSet(t, r.map((a) => this.convertAttributeValue(t, a)));
-    } else
-      e.eSet(t, this.convertAttributeValue(t, s));
+  loadAttribute(obj, attr, value) {
+    if (attr.isMany()) {
+      const items = Array.isArray(value) ? value : [value];
+      const list = obj.eGet(attr);
+      if (list && (Array.isArray(list) || isEList(list))) {
+        for (const item of items) {
+          list.push(this.convertAttributeValue(attr, item));
+        }
+      } else {
+        obj.eSet(attr, items.map((v) => this.convertAttributeValue(attr, v)));
+      }
+    } else {
+      obj.eSet(attr, this.convertAttributeValue(attr, value));
+    }
   }
   /**
    * Convert a JSON value to the appropriate attribute type using EFactory.createFromString.
    */
-  convertAttributeValue(e, t) {
-    if (t == null)
+  convertAttributeValue(attr, value) {
+    if (value === null || value === void 0)
       return null;
-    if (typeof t == "string" || typeof t == "number" || typeof t == "boolean") {
-      if (typeof t == "string") {
-        const s = e.getEType();
-        if (s && "getEPackage" in s) {
-          const r = s.getEPackage();
-          if (r) {
-            const n = r.getEFactoryInstance();
-            if (n)
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      if (typeof value === "string") {
+        const eType = attr.getEType();
+        if (eType && "getEPackage" in eType) {
+          const pkg = eType.getEPackage();
+          if (pkg) {
+            const factory = pkg.getEFactoryInstance();
+            if (factory) {
               try {
-                return n.createFromString(s, t);
+                return factory.createFromString(eType, value);
               } catch {
               }
+            }
           }
         }
       }
-      return t;
+      return value;
     }
-    return t;
+    return value;
   }
   /**
    * Load a containment reference value (nested objects).
    */
-  loadContainment(e, t, s) {
-    const r = t.getEType() && "getESuperTypes" in t.getEType() ? t.getEType() : void 0;
-    if (t.isMany()) {
-      const n = Array.isArray(s) ? s : [s], a = e.eGet(t);
-      for (const o of n)
-        if (o && typeof o == "object") {
-          const d = this.loadObject(o, r);
-          d && a && (Array.isArray(a) || ye(a)) && a.push(d);
+  loadContainment(obj, ref, value) {
+    const expectedType = ref.getEType() && "getESuperTypes" in ref.getEType() ? ref.getEType() : void 0;
+    if (ref.isMany()) {
+      const items = Array.isArray(value) ? value : [value];
+      const list = obj.eGet(ref);
+      for (const item of items) {
+        if (item && typeof item === "object") {
+          const child = this.loadObject(item, expectedType);
+          if (child) {
+            if (list && (Array.isArray(list) || isEList(list))) {
+              list.push(child);
+            }
+          }
         }
-    } else if (s && typeof s == "object" && !Array.isArray(s)) {
-      const n = this.loadObject(s, r);
-      n && e.eSet(t, n);
+      }
+    } else {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        const child = this.loadObject(value, expectedType);
+        if (child) {
+          obj.eSet(ref, child);
+        }
+      }
     }
   }
   /**
    * Load a cross-reference value (`{ "$ref": "uri#fragment" }`).
    */
-  loadCrossReference(e, t, s) {
-    if (t.isMany()) {
-      const r = Array.isArray(s) ? s : [s];
-      for (const n of r)
-        n && typeof n == "object" && "$ref" in n && this.forwardReferences.push({
-          object: e,
-          feature: t,
-          value: n.$ref
+  loadCrossReference(obj, ref, value) {
+    if (ref.isMany()) {
+      const items = Array.isArray(value) ? value : [value];
+      for (const item of items) {
+        if (item && typeof item === "object" && "$ref" in item) {
+          this.forwardReferences.push({
+            object: obj,
+            feature: ref,
+            value: item["$ref"]
+          });
+        }
+      }
+    } else {
+      if (value && typeof value === "object" && "$ref" in value) {
+        this.forwardReferences.push({
+          object: obj,
+          feature: ref,
+          value: value["$ref"]
         });
-    } else
-      s && typeof s == "object" && "$ref" in s && this.forwardReferences.push({
-        object: e,
-        feature: t,
-        value: s.$ref
-      });
+      }
+    }
   }
   /**
    * Resolve all forward references collected during loading.
    */
   handleForwardReferences() {
-    for (const e of this.forwardReferences) {
-      const t = this.resolveReference(e.value);
-      if (t)
-        this.setReferenceValue(e.object, e.feature, t);
-      else {
-        const s = this.createProxy(e.feature, e.value);
-        s ? this.setReferenceValue(e.object, e.feature, s) : this.error(`Unresolved reference: ${e.value}`);
+    for (const fwdRef of this.forwardReferences) {
+      const resolved = this.resolveReference(fwdRef.value);
+      if (resolved) {
+        this.setReferenceValue(fwdRef.object, fwdRef.feature, resolved);
+      } else {
+        const proxy = this.createProxy(fwdRef.feature, fwdRef.value);
+        if (proxy) {
+          this.setReferenceValue(fwdRef.object, fwdRef.feature, proxy);
+        } else {
+          this.error(`Unresolved reference: ${fwdRef.value}`);
+        }
       }
     }
     this.forwardReferences = [];
@@ -7873,66 +9231,88 @@ class mn {
   /**
    * Set a reference value on an object (handles single and multi-valued).
    */
-  setReferenceValue(e, t, s) {
-    if (t.isMany()) {
-      const r = e.eGet(t);
-      r && (Array.isArray(r) || ye(r)) && r.push(s);
-    } else
-      e.eSet(t, s);
+  setReferenceValue(obj, feature, value) {
+    if (feature.isMany()) {
+      const list = obj.eGet(feature);
+      if (list && (Array.isArray(list) || isEList(list))) {
+        list.push(value);
+      }
+    } else {
+      obj.eSet(feature, value);
+    }
   }
   /**
    * Resolve a $ref URI to an EObject.
    */
-  resolveReference(e) {
-    const t = e.indexOf("#");
-    if (t > 0) {
-      const s = e.substring(0, t), r = e.substring(t + 1), n = this.resource.getURI();
-      if (n && n.toString() === s)
-        return this.resource.getEObject(r);
-      const a = this.packageRegistry.getEPackage(s);
-      if (a)
-        return this.resolveFragmentInPackage(a, r);
-      const o = this.resource.getResourceSet();
-      if (o) {
-        const d = Y.createURI(s), y = o.getResource(d, !0);
-        if (y)
-          return y.getEObject(r);
+  resolveReference(ref) {
+    const hashIndex = ref.indexOf("#");
+    if (hashIndex > 0) {
+      const baseURI = ref.substring(0, hashIndex);
+      const fragment = ref.substring(hashIndex + 1);
+      const currentURI = this.resource.getURI();
+      if (currentURI && currentURI.toString() === baseURI) {
+        return this.resource.getEObject(fragment);
+      }
+      const ePackage = this.packageRegistry.getEPackage(baseURI);
+      if (ePackage) {
+        return this.resolveFragmentInPackage(ePackage, fragment);
+      }
+      const resourceSet = this.resource.getResourceSet();
+      if (resourceSet) {
+        const uri = URI.createURI(baseURI);
+        const externalResource = resourceSet.getResource(uri, true);
+        if (externalResource) {
+          return externalResource.getEObject(fragment);
+        }
       }
       return null;
     }
-    return e.startsWith("#") ? this.resource.getEObject(e.substring(1)) : e.startsWith("/") ? this.resource.getEObject(e) : this.resource.getEObject(e);
+    if (ref.startsWith("#")) {
+      return this.resource.getEObject(ref.substring(1));
+    }
+    if (ref.startsWith("/")) {
+      return this.resource.getEObject(ref);
+    }
+    return this.resource.getEObject(ref);
   }
   /**
    * Resolve a fragment path within an EPackage.
    */
-  resolveFragmentInPackage(e, t) {
-    let s = t;
-    for (; s.startsWith("/"); )
-      s = s.substring(1);
-    if (!s)
-      return e;
-    const r = s.split("/"), n = Ze(e, s);
-    if (n)
-      return n;
-    if (r.length >= 2) {
-      let a = e;
-      for (let y = 0; y < r.length - 2; y++) {
-        const S = a.getESubpackages();
-        let C = null;
-        for (let A = 0; A < S.length; A++)
-          if (S.get(A).getName() === r[y]) {
-            C = S.get(A);
+  resolveFragmentInPackage(ePackage, fragment) {
+    let path = fragment;
+    while (path.startsWith("/")) {
+      path = path.substring(1);
+    }
+    if (!path) {
+      return ePackage;
+    }
+    const segments = path.split("/");
+    const classifier = resolveClassifierInPackage(ePackage, path);
+    if (classifier) {
+      return classifier;
+    }
+    if (segments.length >= 2) {
+      let currentPkg = ePackage;
+      for (let i = 0; i < segments.length - 2; i++) {
+        const subPackages = currentPkg.getESubpackages();
+        let found = null;
+        for (let j = 0; j < subPackages.length; j++) {
+          if (subPackages.get(j).getName() === segments[i]) {
+            found = subPackages.get(j);
             break;
           }
-        if (!C)
+        }
+        if (!found)
           return null;
-        a = C;
+        currentPkg = found;
       }
-      const o = r[r.length - 2], d = a.getEClassifier(o);
-      if (d && "getEStructuralFeature" in d) {
-        const y = d.getEStructuralFeature(r[r.length - 1]);
-        if (y)
-          return y;
+      const classifierName = segments[segments.length - 2];
+      const eClassifier = currentPkg.getEClassifier(classifierName);
+      if (eClassifier && "getEStructuralFeature" in eClassifier) {
+        const feature = eClassifier.getEStructuralFeature(segments[segments.length - 1]);
+        if (feature) {
+          return feature;
+        }
       }
     }
     return null;
@@ -7940,32 +9320,43 @@ class mn {
   /**
    * Create a proxy for an unresolved reference.
    */
-  createProxy(e, t) {
-    let s;
-    const r = t.indexOf("#");
-    if (r > 0)
-      s = Y.createURI(t);
-    else if (r === 0) {
-      const d = this.resource.getURI();
-      d ? s = Y.createURI(d.toString() + t) : s = Y.createURI(t);
+  createProxy(feature, uriValue) {
+    let proxyURI;
+    const hashIndex = uriValue.indexOf("#");
+    if (hashIndex > 0) {
+      proxyURI = URI.createURI(uriValue);
+    } else if (hashIndex === 0) {
+      const resourceURI = this.resource.getURI();
+      if (resourceURI) {
+        proxyURI = URI.createURI(resourceURI.toString() + uriValue);
+      } else {
+        proxyURI = URI.createURI(uriValue);
+      }
     } else {
-      const d = this.resource.getURI();
-      d ? s = Y.createURI(d.toString() + "#" + t) : s = Y.createURI("#" + t);
+      const resourceURI = this.resource.getURI();
+      if (resourceURI) {
+        proxyURI = URI.createURI(resourceURI.toString() + "#" + uriValue);
+      } else {
+        proxyURI = URI.createURI("#" + uriValue);
+      }
     }
-    const n = e.getEType(), a = n && "getESuperTypes" in n ? n : null, o = new Ms(s, a || void 0);
-    return o.eSetResource(this.resource), o;
+    const eType = feature.getEType();
+    const eClass = eType && "getESuperTypes" in eType ? eType : null;
+    const proxy = new EProxyImpl(proxyURI, eClass || void 0);
+    proxy.eSetResource(this.resource);
+    return proxy;
   }
   /**
    * Check if a feature is an EAttribute (not an EReference).
    */
-  isAttribute(e) {
-    return !("isContainment" in e);
+  isAttribute(feature) {
+    return !("isContainment" in feature);
   }
   /**
    * Report an error.
    */
-  error(e) {
-    this.errors.push(new Error(e));
+  error(message) {
+    this.errors.push(new Error(message));
   }
   /**
    * Get accumulated errors.
@@ -7974,415 +9365,507 @@ class mn {
     return this.errors;
   }
 }
-const ds = "SERIALIZE_TYPE", ms = "INDENT", yn = "always", En = "polymorphic";
-class Cn {
+const OPTION_SERIALIZE_TYPE = "SERIALIZE_TYPE";
+const OPTION_INDENT = "INDENT";
+const SERIALIZE_TYPE_ALWAYS = "always";
+const SERIALIZE_TYPE_POLYMORPHIC = "polymorphic";
+class JSONSave {
   constructor() {
-    this.serializeType = En, this.indent = 2;
+    this.serializeType = SERIALIZE_TYPE_POLYMORPHIC;
+    this.indent = 2;
   }
   /**
    * Serialize resource contents to JSON string.
    */
-  save(e, t) {
-    this.resource = e, t && (t.has(ds) && (this.serializeType = t.get(ds)), t.has(ms) && (this.indent = t.get(ms)));
-    const s = e.getContents();
-    if (s.size() === 0)
-      return "{}";
-    if (s.size() === 1) {
-      const n = this.saveObject(s.get(0), void 0, !0);
-      return JSON.stringify(n, null, this.indent);
+  save(resource, options) {
+    this.resource = resource;
+    if (options) {
+      if (options.has(OPTION_SERIALIZE_TYPE)) {
+        this.serializeType = options.get(OPTION_SERIALIZE_TYPE);
+      }
+      if (options.has(OPTION_INDENT)) {
+        this.indent = options.get(OPTION_INDENT);
+      }
     }
-    const r = [];
-    for (const n of s)
-      r.push(this.saveObject(n, void 0, !0));
-    return JSON.stringify(r, null, this.indent);
+    const contents = resource.getContents();
+    if (contents.size() === 0) {
+      return "{}";
+    }
+    if (contents.size() === 1) {
+      const obj = this.saveObject(contents.get(0), void 0, true);
+      return JSON.stringify(obj, null, this.indent);
+    }
+    const arr = [];
+    for (const root of contents) {
+      arr.push(this.saveObject(root, void 0, true));
+    }
+    return JSON.stringify(arr, null, this.indent);
   }
   /**
    * Convert an EObject to a plain JS object for JSON serialization.
    */
-  saveObject(e, t, s = !1) {
-    const r = {}, n = e.eClass();
-    this.shouldSaveType(e, t, s) && (r.eClass = this.getEClassURI(n));
-    for (const a of n.getEAllStructuralFeatures()) {
-      if (a.isTransient() || a.isDerived())
-        continue;
-      const o = e.eGet(a);
-      if (o != null)
-        if (this.isAttribute(a))
-          this.saveAttribute(r, e, a, o);
-        else {
-          const d = a;
-          d.isContainment() ? this.saveContainment(r, e, d, o) : this.saveCrossReference(r, e, d, o);
-        }
+  saveObject(obj, feature, isRoot = false) {
+    const result = {};
+    const eClass = obj.eClass();
+    if (this.shouldSaveType(obj, feature, isRoot)) {
+      result["eClass"] = this.getEClassURI(eClass);
     }
-    return r;
+    for (const feat of eClass.getEAllStructuralFeatures()) {
+      if (feat.isTransient() || feat.isDerived())
+        continue;
+      const value = obj.eGet(feat);
+      if (value === null || value === void 0)
+        continue;
+      if (this.isAttribute(feat)) {
+        this.saveAttribute(result, obj, feat, value);
+      } else {
+        const ref = feat;
+        if (ref.isContainment()) {
+          this.saveContainment(result, obj, ref, value);
+        } else {
+          this.saveCrossReference(result, obj, ref, value);
+        }
+      }
+    }
+    return result;
   }
   /**
    * Serialize an attribute value.
    */
-  saveAttribute(e, t, s, r) {
+  saveAttribute(result, obj, attr, value) {
     try {
-      const a = s.getDefaultValue();
-      if (r === a)
+      const defaultValue = attr.getDefaultValue();
+      if (value === defaultValue)
         return;
     } catch {
     }
-    const n = s.getName();
-    if (s.isMany()) {
-      const a = Array.isArray(r) || ye(r) ? [...r] : [r];
-      if (a.length === 0)
+    const name = attr.getName();
+    if (attr.isMany()) {
+      const items = Array.isArray(value) || isEList(value) ? [...value] : [value];
+      if (items.length === 0)
         return;
-      e[n] = a.map((o) => this.convertAttributeValue(s, o));
-    } else
-      e[n] = this.convertAttributeValue(s, r);
+      result[name] = items.map((v) => this.convertAttributeValue(attr, v));
+    } else {
+      result[name] = this.convertAttributeValue(attr, value);
+    }
   }
   /**
    * Convert a single attribute value to a JSON-compatible value.
    */
-  convertAttributeValue(e, t) {
-    if (t == null)
+  convertAttributeValue(attr, value) {
+    if (value === null || value === void 0)
       return null;
-    if (typeof t == "string" || typeof t == "number" || typeof t == "boolean")
-      return t;
-    const s = e.getEType();
-    if (s && "getEPackage" in s) {
-      const r = s.getEPackage();
-      if (r) {
-        const n = r.getEFactoryInstance();
-        if (n)
-          return n.convertToString(s, t);
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      return value;
+    }
+    const eType = attr.getEType();
+    if (eType && "getEPackage" in eType) {
+      const pkg = eType.getEPackage();
+      if (pkg) {
+        const factory = pkg.getEFactoryInstance();
+        if (factory) {
+          return factory.convertToString(eType, value);
+        }
       }
     }
-    return String(t);
+    return String(value);
   }
   /**
    * Serialize a containment reference.
    * Proxies inside containment are serialized as `{ "$ref": "uri" }` (emfjson-jackson convention).
    */
-  saveContainment(e, t, s, r) {
-    const n = s.getName();
-    if (s.isMany()) {
-      const a = Array.isArray(r) || ye(r) ? [...r] : [r];
-      if (a.length === 0)
+  saveContainment(result, obj, ref, value) {
+    const name = ref.getName();
+    if (ref.isMany()) {
+      const items = Array.isArray(value) || isEList(value) ? [...value] : [value];
+      if (items.length === 0)
         return;
-      e[n] = a.map((o) => this.saveContainedChild(o, s));
-    } else
-      e[n] = this.saveContainedChild(r, s);
+      result[name] = items.map((child) => this.saveContainedChild(child, ref));
+    } else {
+      result[name] = this.saveContainedChild(value, ref);
+    }
   }
   /**
    * Serialize a single contained child. Proxies become `{ "$ref": "..." }`.
    */
-  saveContainedChild(e, t) {
-    if (We(e) && e.eIsProxy()) {
-      const s = e.eProxyURI()?.toString();
-      if (s)
-        return { $ref: s };
+  saveContainedChild(child, ref) {
+    if (isInternalEObject(child) && child.eIsProxy()) {
+      const href = child.eProxyURI()?.toString();
+      if (href) {
+        return { "$ref": href };
+      }
     }
-    return this.saveObject(e, t);
+    return this.saveObject(child, ref);
   }
   /**
    * Serialize a cross-reference (non-containment) as `{ "$ref": "uri#fragment" }`.
    */
-  saveCrossReference(e, t, s, r) {
-    const n = s.getName();
-    if (s.isMany()) {
-      const a = Array.isArray(r) || ye(r) ? [...r] : [r];
-      if (a.length === 0)
+  saveCrossReference(result, obj, ref, value) {
+    const name = ref.getName();
+    if (ref.isMany()) {
+      const items = Array.isArray(value) || isEList(value) ? [...value] : [value];
+      if (items.length === 0)
         return;
-      const o = [];
-      for (const d of a) {
-        const y = this.getHref(d);
-        y && o.push({ $ref: y });
+      const refs = [];
+      for (const item of items) {
+        const href = this.getHref(item);
+        if (href) {
+          refs.push({ "$ref": href });
+        }
       }
-      o.length > 0 && (e[n] = o);
+      if (refs.length > 0) {
+        result[name] = refs;
+      }
     } else {
-      const a = this.getHref(r);
-      a && (e[n] = { $ref: a });
+      const href = this.getHref(value);
+      if (href) {
+        result[name] = { "$ref": href };
+      }
     }
   }
   /**
    * Determine whether the eClass type URI should be written.
    */
-  shouldSaveType(e, t, s = !1) {
-    if (this.serializeType === yn || s)
-      return !0;
-    if (t && "isContainment" in t) {
-      const n = t.getEType(), a = e.eClass();
-      return !!(n && a && n !== a);
+  shouldSaveType(obj, feature, isRoot = false) {
+    if (this.serializeType === SERIALIZE_TYPE_ALWAYS) {
+      return true;
     }
-    return !1;
+    if (isRoot) {
+      return true;
+    }
+    if (feature && "isContainment" in feature) {
+      const ref = feature;
+      const declaredType = ref.getEType();
+      const actualType = obj.eClass();
+      if (declaredType && actualType && declaredType !== actualType) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
   /**
    * Get the emfjson-style type URI for an EClass: `nsURI#//ClassName`
    */
-  getEClassURI(e) {
-    const s = e.getEPackage()?.getNsURI(), r = e.getName();
-    return s && r ? `${s}#//${r}` : r || "Unknown";
+  getEClassURI(eClass) {
+    const pkg = eClass.getEPackage();
+    const nsURI = pkg?.getNsURI();
+    const name = eClass.getName();
+    if (nsURI && name) {
+      return `${nsURI}#//${name}`;
+    }
+    return name || "Unknown";
   }
   /**
    * Get href for a cross-referenced object.
    * Reuses the pattern from XMLSave.getHref().
    */
-  getHref(e) {
-    if (We(e) && e.eIsProxy())
-      return e.eProxyURI()?.toString() || null;
-    const t = e.eResource?.();
-    if (t) {
-      const s = t.getURIFragment(e), r = t.getURI();
-      if (r && s)
-        return `${r.toString()}#${s}`;
-      if (s)
-        return `#${s}`;
+  getHref(obj) {
+    if (isInternalEObject(obj) && obj.eIsProxy()) {
+      const proxyURI = obj.eProxyURI();
+      return proxyURI?.toString() || null;
     }
-    if ("getEContainingClass" in e && typeof e.getEContainingClass == "function") {
-      const s = e.getEContainingClass();
-      if (s) {
-        const r = s.getEPackage?.(), n = s.getName?.(), a = e.getName?.();
-        if (r && n && a) {
-          const o = r.getNsURI?.();
-          if (o)
-            return `${o}#//${n}/${a}`;
+    const resource = obj.eResource?.();
+    if (resource) {
+      const fragment = resource.getURIFragment(obj);
+      const uri = resource.getURI();
+      if (uri && fragment) {
+        return `${uri.toString()}#${fragment}`;
+      }
+      if (fragment) {
+        return `#${fragment}`;
+      }
+    }
+    if ("getEContainingClass" in obj && typeof obj.getEContainingClass === "function") {
+      const containingClass = obj.getEContainingClass();
+      if (containingClass) {
+        const pkg = containingClass.getEPackage?.();
+        const className = containingClass.getName?.();
+        const featureName = obj.getName?.();
+        if (pkg && className && featureName) {
+          const nsURI = pkg.getNsURI?.();
+          if (nsURI) {
+            return `${nsURI}#//${className}/${featureName}`;
+          }
         }
       }
     }
-    if ("getEPackage" in e && typeof e.getEPackage == "function") {
-      const s = e.getEPackage();
-      if (s) {
-        const r = s.getNsURI?.(), n = e.getName?.();
-        if (r && n)
-          return `${r}#//${n}`;
+    if ("getEPackage" in obj && typeof obj.getEPackage === "function") {
+      const pkg = obj.getEPackage();
+      if (pkg) {
+        const nsURI = pkg.getNsURI?.();
+        const name = obj.getName?.();
+        if (nsURI && name) {
+          return `${nsURI}#//${name}`;
+        }
       }
     }
-    if ("getName" in e) {
-      const s = e.getName?.();
-      if (s)
-        return `//${s}`;
+    if ("getName" in obj) {
+      const name = obj.getName?.();
+      if (name) {
+        return `//${name}`;
+      }
     }
     return null;
   }
   /**
    * Check if a feature is an EAttribute (not an EReference).
    */
-  isAttribute(e) {
-    return !("isContainment" in e);
+  isAttribute(feature) {
+    return !("isContainment" in feature);
   }
 }
-class Tn extends Xt {
-  constructor(e) {
-    super(e), this.idToEObjectMap = /* @__PURE__ */ new Map(), this.eObjectToIDMap = /* @__PURE__ */ new Map();
+class JSONResource extends BasicResource {
+  constructor(uri) {
+    super(uri);
+    this.idToEObjectMap = /* @__PURE__ */ new Map();
+    this.eObjectToIDMap = /* @__PURE__ */ new Map();
   }
   /**
    * Get EObject by ID or path fragment.
    */
-  getEObject(e) {
-    const t = this.idToEObjectMap.get(e);
-    return t || super.getEObject(e);
+  getEObject(uriFragment) {
+    const byId = this.idToEObjectMap.get(uriFragment);
+    if (byId) {
+      return byId;
+    }
+    return super.getEObject(uriFragment);
   }
   /**
    * Get URI fragment for an object.
    */
-  getURIFragment(e) {
-    const t = this.eObjectToIDMap.get(e);
-    return t || super.getURIFragment(e);
+  getURIFragment(eObject) {
+    const id = this.eObjectToIDMap.get(eObject);
+    if (id) {
+      return id;
+    }
+    return super.getURIFragment(eObject);
   }
   /**
    * Set ID for an object.
    */
-  setID(e, t) {
-    t && (this.idToEObjectMap.set(t, e), this.eObjectToIDMap.set(e, t));
+  setID(eObject, id) {
+    if (id) {
+      this.idToEObjectMap.set(id, eObject);
+      this.eObjectToIDMap.set(eObject, id);
+    }
   }
   /**
    * Get ID for an object.
    */
-  getID(e) {
-    return this.eObjectToIDMap.get(e) ?? null;
+  getID(eObject) {
+    return this.eObjectToIDMap.get(eObject) ?? null;
   }
   clearIdMaps() {
-    this.idToEObjectMap.clear(), this.eObjectToIDMap.clear();
+    this.idToEObjectMap.clear();
+    this.eObjectToIDMap.clear();
   }
   /**
    * Load from a JSON string.
    */
-  loadFromString(e, t) {
+  loadFromString(jsonString, options) {
     this.clearIdMaps();
-    const s = t || /* @__PURE__ */ new Map(), r = this.createJSONLoad();
-    r.load(this, e, s);
-    const n = r.getErrors();
-    if (n.length > 0) {
-      const a = this.getErrors();
-      for (const o of n)
-        a.push({ message: o.message });
+    const opts = options || /* @__PURE__ */ new Map();
+    const loader = this.createJSONLoad();
+    loader.load(this, jsonString, opts);
+    const loaderErrors = loader.getErrors();
+    if (loaderErrors.length > 0) {
+      const resourceErrors = this.getErrors();
+      for (const err of loaderErrors) {
+        resourceErrors.push({ message: err.message });
+      }
     }
-    this.loaded = !0;
+    this.loaded = true;
   }
   /**
    * Save to a JSON string.
    */
-  saveToString(e) {
-    const t = e || /* @__PURE__ */ new Map();
-    return this.createJSONSave().save(this, t);
+  saveToString(options) {
+    const opts = options || /* @__PURE__ */ new Map();
+    const saver = this.createJSONSave();
+    return saver.save(this, opts);
   }
   /**
    * Create the JSON loader.
    */
   createJSONLoad() {
-    return new mn();
+    return new JSONLoad();
   }
   /**
    * Create the JSON saver.
    */
   createJSONSave() {
-    return new Cn();
+    return new JSONSave();
   }
   /**
    * Unload resource.
    */
   unload() {
-    super.unload(), this.clearIdMaps();
+    super.unload();
+    this.clearIdMaps();
   }
 }
-class Sn {
-  createResource(e) {
-    return new Tn(e);
+class JSONResourceFactory {
+  createResource(uri) {
+    return new JSONResource(uri);
   }
 }
-const ys = ct.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-ys.has("json") || ys.set("json", new Sn());
-class Nn {
+const extensionMap = Resource.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+if (!extensionMap.has("json")) {
+  extensionMap.set("json", new JSONResourceFactory());
+}
+class EcoreClassRegistry {
   constructor() {
     this._getEcorePackage = null;
   }
   /**
    * Register the getEcorePackage function
    */
-  register(e) {
-    this._getEcorePackage = e;
+  register(getEcorePackage2) {
+    this._getEcorePackage = getEcorePackage2;
   }
   /**
    * Get the EClass for EObject
    */
   getEObjectClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEObjectClass();
   }
   /**
    * Get the EClass for EClass
    */
   getEClassClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEClassClass();
   }
   /**
    * Get the EClass for EPackage
    */
   getEPackageClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEPackageClass();
   }
   /**
    * Get the EClass for EFactory
    */
   getEFactoryClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEFactoryClass();
   }
   /**
    * Get the EClass for EAttribute
    */
   getEAttributeClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEAttributeClass();
   }
   /**
    * Get the EClass for EReference
    */
   getEReferenceClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEReferenceClass();
   }
   /**
    * Get the EClass for EStructuralFeature
    */
   getEStructuralFeatureClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEStructuralFeatureClass();
   }
   /**
    * Get the EClass for EDataType
    */
   getEDataTypeClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEDataTypeClass();
   }
   /**
    * Get the EClass for EOperation
    */
   getEOperationClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEOperationClass();
   }
   /**
    * Get the EClass for EParameter
    */
   getEParameterClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEParameterClass();
   }
   /**
    * Get the EClass for EGenericType
    */
   getEGenericTypeClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEGenericTypeClass();
   }
   /**
    * Get the EClass for ETypeParameter
    */
   getETypeParameterClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getETypeParameterClass();
   }
   /**
    * Get the EClass for EAnnotation
    */
   getEAnnotationClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEAnnotationClass();
   }
   /**
    * Get the EClass for EStringToStringMapEntry
    */
   getEStringToStringMapEntryClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEStringToStringMapEntryClass();
   }
   /**
    * Get the EClass for EEnum
    */
   getEEnumClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEEnumClass();
   }
   /**
    * Get the EClass for EEnumLiteral
    */
   getEEnumLiteralClass() {
-    if (!this._getEcorePackage)
+    if (!this._getEcorePackage) {
       throw new Error("EcorePackage not registered. Import EcorePackage first.");
+    }
     return this._getEcorePackage().getEEnumLiteralClass();
   }
   /**
@@ -8392,10 +9875,32 @@ class Nn {
     return this._getEcorePackage !== null;
   }
 }
-const te = new Nn();
-class re extends Re {
+const ecoreRegistry = new EcoreClassRegistry();
+class BasicEClass extends BasicEObject {
   constructor() {
-    super(...arguments), this._name = null, this.abstract_ = !1, this.interface_ = !1, this._eSuperTypes = null, this._eStructuralFeatures = null, this._eOperations = null, this.ePackage = null, this.instanceClassName = null, this.instanceClass = null, this.featureID = 0, this.eTypeParameters = ce(this), this.eGenericSuperTypes = ce(this), this.eAnnotations = ce(this), this.xmlNameToFeature = /* @__PURE__ */ new Map(), this.allSuperTypesCache = { value: null }, this.allFeaturesCache = { value: null }, this.attributesCache = { value: null }, this.allAttributesCache = { value: null }, this.referencesCache = { value: null }, this.allReferencesCache = { value: null }, this.allContainmentsCache = { value: null }, this.allOperationsCache = { value: null };
+    super(...arguments);
+    this._name = null;
+    this.abstract_ = false;
+    this.interface_ = false;
+    this._eSuperTypes = null;
+    this._eStructuralFeatures = null;
+    this._eOperations = null;
+    this.ePackage = null;
+    this.instanceClassName = null;
+    this.instanceClass = null;
+    this.featureID = 0;
+    this.eTypeParameters = createMetamodelEList(this);
+    this.eGenericSuperTypes = createMetamodelEList(this);
+    this.eAnnotations = createMetamodelEList(this);
+    this.xmlNameToFeature = /* @__PURE__ */ new Map();
+    this.allSuperTypesCache = { value: null };
+    this.allFeaturesCache = { value: null };
+    this.attributesCache = { value: null };
+    this.allAttributesCache = { value: null };
+    this.referencesCache = { value: null };
+    this.allReferencesCache = { value: null };
+    this.allContainmentsCache = { value: null };
+    this.allOperationsCache = { value: null };
   }
   // Public getter for PrimeVue compatibility (optionLabel="name")
   get name() {
@@ -8404,89 +9909,116 @@ class re extends Re {
   getName() {
     return this._name;
   }
-  setName(e) {
-    this._name = e;
+  setName(value) {
+    this._name = value;
   }
   isAbstract() {
     return this.abstract_;
   }
-  setAbstract(e) {
-    this.abstract_ = e;
+  setAbstract(value) {
+    this.abstract_ = value;
   }
   isInterface() {
     return this.interface_;
   }
-  setInterface(e) {
-    this.interface_ = e;
+  setInterface(value) {
+    this.interface_ = value;
   }
   getESuperTypes() {
-    return this._eSuperTypes === null && (this._eSuperTypes = ce(this, () => this.resolveOwnFeature("eSuperTypes"))), this._eSuperTypes;
+    if (this._eSuperTypes === null) {
+      this._eSuperTypes = createMetamodelEList(this, () => this.resolveOwnFeature("eSuperTypes"));
+    }
+    return this._eSuperTypes;
   }
   getEAllSuperTypes() {
-    return Ge(this.allSuperTypesCache, "getEAllSuperTypes", () => {
-      const e = [], t = /* @__PURE__ */ new Set(), s = (r) => {
-        for (const n of r.getESuperTypes())
-          t.has(n) || (t.add(n), s(n), e.push(n));
+    return cachedDerivedList(this.allSuperTypesCache, "getEAllSuperTypes", () => {
+      const all = [];
+      const visited = /* @__PURE__ */ new Set();
+      const collect = (eClass) => {
+        for (const superType of eClass.getESuperTypes()) {
+          if (!visited.has(superType)) {
+            visited.add(superType);
+            collect(superType);
+            all.push(superType);
+          }
+        }
       };
-      return s(this), e;
+      collect(this);
+      return all;
     });
   }
   getEIDAttribute() {
-    for (const e of this.getEAllAttributes())
-      if (e.isID())
-        return e;
+    for (const attr of this.getEAllAttributes()) {
+      if (attr.isID()) {
+        return attr;
+      }
+    }
     return null;
   }
   getEStructuralFeatures() {
     if (this._eStructuralFeatures === null) {
-      const e = this, t = new mr(this, () => {
-        if (te.isRegistered())
+      const self2 = this;
+      const list = new EObjectContainmentWithInverseEListLazy(this, () => {
+        if (ecoreRegistry.isRegistered()) {
           try {
-            const s = te.getEClassClass();
-            if (s !== e && s instanceof re && s._eStructuralFeatures !== null)
-              return s.getEStructuralFeature("eStructuralFeatures");
+            const eClassClass = ecoreRegistry.getEClassClass();
+            if (eClassClass !== self2 && eClassClass instanceof BasicEClass && eClassClass._eStructuralFeatures !== null) {
+              return eClassClass.getEStructuralFeature("eStructuralFeatures");
+            }
           } catch {
           }
+        }
         return null;
-      }, (s, r) => {
-        "setEContainingClass" in s && s.setEContainingClass(r), r && "setFeatureID" in s && s.setFeatureID(this.featureID++);
+      }, (element, owner) => {
+        if ("setEContainingClass" in element) {
+          element.setEContainingClass(owner);
+        }
+        if (owner && "setFeatureID" in element) {
+          element.setFeatureID(this.featureID++);
+        }
       });
-      this._eStructuralFeatures = xe(t);
+      this._eStructuralFeatures = createIndexedProxy(list);
     }
     return this._eStructuralFeatures;
   }
   getEAllStructuralFeatures() {
-    return Ge(this.allFeaturesCache, "getEAllStructuralFeatures", () => {
-      const e = [];
-      for (const t of this.getEAllSuperTypes())
-        e.push(...t.getEStructuralFeatures());
-      return e.push(...this.getEStructuralFeatures()), e;
+    return cachedDerivedList(this.allFeaturesCache, "getEAllStructuralFeatures", () => {
+      const all = [];
+      for (const superType of this.getEAllSuperTypes()) {
+        all.push(...superType.getEStructuralFeatures());
+      }
+      all.push(...this.getEStructuralFeatures());
+      return all;
     });
   }
   getEAttributes() {
-    return Ge(this.attributesCache, "getEAttributes", () => this.getEStructuralFeatures().filter((e) => this.isAttribute(e)));
+    return cachedDerivedList(this.attributesCache, "getEAttributes", () => this.getEStructuralFeatures().filter((f) => this.isAttribute(f)));
   }
   getEAllAttributes() {
-    return Ge(this.allAttributesCache, "getEAllAttributes", () => this.getEAllStructuralFeatures().filter((e) => this.isAttribute(e)));
+    return cachedDerivedList(this.allAttributesCache, "getEAllAttributes", () => this.getEAllStructuralFeatures().filter((f) => this.isAttribute(f)));
   }
   getEReferences() {
-    return Ge(this.referencesCache, "getEReferences", () => this.getEStructuralFeatures().filter((e) => this.isReference(e)));
+    return cachedDerivedList(this.referencesCache, "getEReferences", () => this.getEStructuralFeatures().filter((f) => this.isReference(f)));
   }
   getEAllReferences() {
-    return Ge(this.allReferencesCache, "getEAllReferences", () => this.getEAllStructuralFeatures().filter((e) => this.isReference(e)));
+    return cachedDerivedList(this.allReferencesCache, "getEAllReferences", () => this.getEAllStructuralFeatures().filter((f) => this.isReference(f)));
   }
   getEAllContainments() {
-    return Ge(this.allContainmentsCache, "getEAllContainments", () => this.getEAllReferences().filter((e) => e.isContainment()));
+    return cachedDerivedList(this.allContainmentsCache, "getEAllContainments", () => this.getEAllReferences().filter((ref) => ref.isContainment()));
   }
   getEOperations() {
-    return this._eOperations === null && (this._eOperations = ce(this, () => this.resolveOwnFeature("eOperations"))), this._eOperations;
+    if (this._eOperations === null) {
+      this._eOperations = createMetamodelEList(this, () => this.resolveOwnFeature("eOperations"));
+    }
+    return this._eOperations;
   }
   getEAllOperations() {
-    return Ge(this.allOperationsCache, "getEAllOperations", () => {
-      const e = [...this.getEOperations()];
-      for (const t of this.getEAllSuperTypes())
-        e.push(...t.getEOperations());
-      return e;
+    return cachedDerivedList(this.allOperationsCache, "getEAllOperations", () => {
+      const all = [...this.getEOperations()];
+      for (const superType of this.getEAllSuperTypes()) {
+        all.push(...superType.getEOperations());
+      }
+      return all;
     });
   }
   /**
@@ -8496,71 +10028,76 @@ class re extends Re {
    * Returns null while the Ecore package is still bootstrapping, which is why
    * the lists resolve their feature lazily rather than in the constructor.
    */
-  resolveOwnFeature(e) {
-    if (!te.isRegistered())
+  resolveOwnFeature(name) {
+    if (!ecoreRegistry.isRegistered()) {
       return null;
+    }
     try {
-      const t = te.getEClassClass();
-      if (t !== this && t instanceof re && t._eStructuralFeatures !== null)
-        return t.getEStructuralFeature(e);
+      const eClassClass = ecoreRegistry.getEClassClass();
+      if (eClassClass !== this && eClassClass instanceof BasicEClass && eClassClass._eStructuralFeatures !== null) {
+        return eClassClass.getEStructuralFeature(name);
+      }
     } catch {
     }
     return null;
   }
-  getEStructuralFeature(e) {
-    if (typeof e == "string") {
-      const t = this.getEAllStructuralFeatures().find((r) => r.getName() === e);
-      if (t)
-        return t;
-      const s = this.xmlNameToFeature.get(e);
-      if (s)
-        return s;
-      for (const r of this.getEAllSuperTypes())
-        if (r instanceof re) {
-          const n = r.xmlNameToFeature.get(e);
-          if (n)
-            return n;
+  getEStructuralFeature(featureNameOrID) {
+    if (typeof featureNameOrID === "string") {
+      const byName = this.getEAllStructuralFeatures().find((f) => f.getName() === featureNameOrID);
+      if (byName)
+        return byName;
+      const byXmlName = this.xmlNameToFeature.get(featureNameOrID);
+      if (byXmlName)
+        return byXmlName;
+      for (const superType of this.getEAllSuperTypes()) {
+        if (superType instanceof BasicEClass) {
+          const fromSuper = superType.xmlNameToFeature.get(featureNameOrID);
+          if (fromSuper)
+            return fromSuper;
         }
+      }
       return null;
-    } else
-      return this.getEAllStructuralFeatures()[e] || null;
+    } else {
+      return this.getEAllStructuralFeatures()[featureNameOrID] || null;
+    }
   }
   /**
    * Register an XML serialization name for a feature (from ExtendedMetaData annotations)
    */
-  registerXmlName(e, t) {
-    this.xmlNameToFeature.set(e, t);
+  registerXmlName(xmlName, feature) {
+    this.xmlNameToFeature.set(xmlName, feature);
   }
-  isSuperTypeOf(e) {
-    return e.getEAllSuperTypes().includes(this);
+  isSuperTypeOf(someClass) {
+    return someClass.getEAllSuperTypes().includes(this);
   }
   getFeatureCount() {
     return this.getEAllStructuralFeatures().length;
   }
-  getFeatureID(e) {
-    return this.getEAllStructuralFeatures().indexOf(e);
+  getFeatureID(feature) {
+    const features = this.getEAllStructuralFeatures();
+    return features.indexOf(feature);
   }
-  getEOperation(e) {
-    return this.getEAllOperations()[e] || null;
+  getEOperation(operationID) {
+    return this.getEAllOperations()[operationID] || null;
   }
   getOperationCount() {
     return this.getEAllOperations().length;
   }
-  getOperationID(e) {
-    return this.getEAllOperations().indexOf(e);
+  getOperationID(operation) {
+    return this.getEAllOperations().indexOf(operation);
   }
   // EClassifier methods
   getInstanceClassName() {
     return this.instanceClassName;
   }
-  setInstanceClassName(e) {
-    this.instanceClassName = e;
+  setInstanceClassName(value) {
+    this.instanceClassName = value;
   }
   getInstanceClass() {
     return this.instanceClass;
   }
-  setInstanceClass(e) {
-    this.instanceClass = e;
+  setInstanceClass(value) {
+    this.instanceClass = value;
   }
   getDefaultValue() {
     return null;
@@ -8568,33 +10105,37 @@ class re extends Re {
   getInstanceTypeName() {
     return this.instanceClassName;
   }
-  setInstanceTypeName(e) {
-    this.instanceClassName = e;
+  setInstanceTypeName(value) {
+    this.instanceClassName = value;
   }
   getEPackage() {
     return this.ePackage;
   }
-  setEPackage(e) {
-    this.ePackage = e;
+  setEPackage(pkg) {
+    this.ePackage = pkg;
   }
   getETypeParameters() {
     return this.eTypeParameters;
   }
-  isInstance(e) {
-    if (!e || typeof e != "object" || !("eClass" in e))
-      return !1;
-    const t = e.eClass();
-    return t === this || this.isSuperTypeOf(t);
+  isInstance(object) {
+    if (!object || typeof object !== "object")
+      return false;
+    if (!("eClass" in object))
+      return false;
+    const objectClass = object.eClass();
+    return objectClass === this || this.isSuperTypeOf(objectClass);
   }
   getClassifierID() {
-    return this.ePackage ? this.ePackage.getEClassifiers().indexOf(this) : -1;
+    if (!this.ePackage)
+      return -1;
+    return this.ePackage.getEClassifiers().indexOf(this);
   }
   // Helpers
-  isAttribute(e) {
-    return "getEAttributeType" in e;
+  isAttribute(feature) {
+    return "getEAttributeType" in feature;
   }
-  isReference(e) {
-    return "getEReferenceType" in e;
+  isReference(feature) {
+    return "getEReferenceType" in feature;
   }
   /**
    * Add feature to this class.
@@ -8604,36 +10145,37 @@ class re extends Re {
    * - Fires notifications for adapters
    * - Assigns a featureID
    */
-  addFeature(e) {
-    this.getEStructuralFeatures().add(e);
+  addFeature(feature) {
+    this.getEStructuralFeatures().add(feature);
   }
   /**
    * Add operation to this class
    */
-  addOperation(e) {
-    this.getEOperations().add(e);
+  addOperation(operation) {
+    this.getEOperations().add(operation);
   }
   /**
    * Add super type
    */
-  addSuperType(e) {
-    this.getESuperTypes().add(e);
+  addSuperType(superType) {
+    this.getESuperTypes().add(superType);
   }
   // EObject methods
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEClassClass();
+    return ecoreRegistry.getEClassClass();
   }
   /**
    * Override eGet to handle class-specific features
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
         return this.name;
       case "abstract":
@@ -8655,147 +10197,200 @@ class re extends Re {
       case "instanceClassName":
         return this.instanceClassName;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle class-specific features
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
-        this._name = t, super.eSet(e, t);
+        this._name = newValue;
+        super.eSet(feature, newValue);
         break;
       case "abstract":
-        this.abstract_ = t === !0 || t === "true", super.eSet(e, t);
+        this.abstract_ = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "interface":
-        this.interface_ = t === !0 || t === "true", super.eSet(e, t);
+        this.interface_ = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "eSuperTypes":
-        he(this.getESuperTypes(), t);
+        replaceListContents(this.getESuperTypes(), newValue);
         break;
       case "eStructuralFeatures":
-        he(this.getEStructuralFeatures(), t);
+        replaceListContents(this.getEStructuralFeatures(), newValue);
         break;
       case "eOperations":
-        he(this.getEOperations(), t);
+        replaceListContents(this.getEOperations(), newValue);
         break;
       case "eTypeParameters":
-        he(this.eTypeParameters, t);
+        replaceListContents(this.eTypeParameters, newValue);
         break;
       case "eGenericSuperTypes":
-        he(this.eGenericSuperTypes, t);
+        replaceListContents(this.eGenericSuperTypes, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       case "instanceClassName":
-        this.instanceClassName = t, super.eSet(e, t);
+        this.instanceClassName = newValue;
+        super.eSet(feature, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class _n {
+class DataTypeRegistryImpl {
   constructor() {
-    this.convertersByClassName = /* @__PURE__ */ new Map(), this.convertersByName = /* @__PURE__ */ new Map(), this.registerDefaultConverters();
+    this.convertersByClassName = /* @__PURE__ */ new Map();
+    this.convertersByName = /* @__PURE__ */ new Map();
+    this.registerDefaultConverters();
   }
   /**
    * Register default converters for standard EMF types
    */
   registerDefaultConverters() {
-    const e = {
-      fromString: (C) => C.toLowerCase() === "true",
-      toString: (C) => String(C)
+    const booleanConverter = {
+      fromString: (s) => s.toLowerCase() === "true",
+      toString: (v) => String(v)
     };
-    this.registerByClassName("boolean", e), this.registerByClassName("java.lang.Boolean", e), this.registerByName("EBoolean", e), this.registerByName("EBooleanObject", e);
-    const t = {
-      fromString: (C) => parseInt(C, 10),
-      toString: (C) => String(C)
+    this.registerByClassName("boolean", booleanConverter);
+    this.registerByClassName("java.lang.Boolean", booleanConverter);
+    this.registerByName("EBoolean", booleanConverter);
+    this.registerByName("EBooleanObject", booleanConverter);
+    const intConverter = {
+      fromString: (s) => parseInt(s, 10),
+      toString: (v) => String(v)
     };
-    this.registerByClassName("int", t), this.registerByClassName("java.lang.Integer", t), this.registerByClassName("short", t), this.registerByClassName("java.lang.Short", t), this.registerByClassName("byte", t), this.registerByClassName("java.lang.Byte", t), this.registerByName("EInt", t), this.registerByName("EIntegerObject", t), this.registerByName("EShort", t), this.registerByName("EShortObject", t), this.registerByName("EByte", t), this.registerByName("EByteObject", t);
-    const s = {
-      fromString: (C) => {
-        const A = parseInt(C, 10);
-        return Math.abs(A) > Number.MAX_SAFE_INTEGER ? BigInt(C) : A;
-      },
-      toString: (C) => String(C)
-    };
-    this.registerByClassName("long", s), this.registerByClassName("java.lang.Long", s), this.registerByName("ELong", s), this.registerByName("ELongObject", s);
-    const r = {
-      fromString: (C) => parseFloat(C),
-      toString: (C) => String(C)
-    };
-    this.registerByClassName("float", r), this.registerByClassName("java.lang.Float", r), this.registerByClassName("double", r), this.registerByClassName("java.lang.Double", r), this.registerByName("EFloat", r), this.registerByName("EFloatObject", r), this.registerByName("EDouble", r), this.registerByName("EDoubleObject", r);
-    const n = {
-      fromString: (C) => C,
-      toString: (C) => C ?? ""
-    };
-    this.registerByClassName("java.lang.String", n), this.registerByClassName("java.lang.Object", n), this.registerByName("EString", n);
-    const a = {
-      fromString: (C) => C.charAt(0) || "",
-      toString: (C) => C ?? ""
-    };
-    this.registerByClassName("char", a), this.registerByClassName("java.lang.Character", a), this.registerByName("EChar", a), this.registerByName("ECharacterObject", a);
-    const o = {
-      fromString: (C) => new Date(C),
-      toString: (C) => C?.toISOString() ?? ""
-    };
-    this.registerByClassName("java.util.Date", o), this.registerByName("EDate", o);
-    const d = {
-      fromString: (C) => C,
-      // Keep as string to preserve precision
-      toString: (C) => C ?? "0"
-    };
-    this.registerByClassName("java.math.BigDecimal", d), this.registerByClassName("java.math.BigInteger", d), this.registerByName("EBigDecimal", d), this.registerByName("EBigInteger", d);
-    const y = {
-      fromString: (C) => {
-        if (typeof atob == "function") {
-          const A = atob(C), b = new Uint8Array(A.length);
-          for (let R = 0; R < A.length; R++)
-            b[R] = A.charCodeAt(R);
-          return b;
+    this.registerByClassName("int", intConverter);
+    this.registerByClassName("java.lang.Integer", intConverter);
+    this.registerByClassName("short", intConverter);
+    this.registerByClassName("java.lang.Short", intConverter);
+    this.registerByClassName("byte", intConverter);
+    this.registerByClassName("java.lang.Byte", intConverter);
+    this.registerByName("EInt", intConverter);
+    this.registerByName("EIntegerObject", intConverter);
+    this.registerByName("EShort", intConverter);
+    this.registerByName("EShortObject", intConverter);
+    this.registerByName("EByte", intConverter);
+    this.registerByName("EByteObject", intConverter);
+    const longConverter = {
+      fromString: (s) => {
+        const n = parseInt(s, 10);
+        if (Math.abs(n) > Number.MAX_SAFE_INTEGER) {
+          return BigInt(s);
         }
-        return new Uint8Array(Buffer.from(C, "base64"));
+        return n;
       },
-      toString: (C) => typeof btoa == "function" ? btoa(String.fromCharCode(...C)) : Buffer.from(C).toString("base64")
+      toString: (v) => String(v)
     };
-    this.registerByClassName("byte[]", y), this.registerByName("EByteArray", y);
-    const S = {
-      fromString: (C) => C,
-      toString: (C) => String(C ?? "")
+    this.registerByClassName("long", longConverter);
+    this.registerByClassName("java.lang.Long", longConverter);
+    this.registerByName("ELong", longConverter);
+    this.registerByName("ELongObject", longConverter);
+    const floatConverter = {
+      fromString: (s) => parseFloat(s),
+      toString: (v) => String(v)
     };
-    this.registerByName("EFeatureMapEntry", S);
+    this.registerByClassName("float", floatConverter);
+    this.registerByClassName("java.lang.Float", floatConverter);
+    this.registerByClassName("double", floatConverter);
+    this.registerByClassName("java.lang.Double", floatConverter);
+    this.registerByName("EFloat", floatConverter);
+    this.registerByName("EFloatObject", floatConverter);
+    this.registerByName("EDouble", floatConverter);
+    this.registerByName("EDoubleObject", floatConverter);
+    const stringConverter = {
+      fromString: (s) => s,
+      toString: (v) => v ?? ""
+    };
+    this.registerByClassName("java.lang.String", stringConverter);
+    this.registerByClassName("java.lang.Object", stringConverter);
+    this.registerByName("EString", stringConverter);
+    const charConverter = {
+      fromString: (s) => s.charAt(0) || "",
+      toString: (v) => v ?? ""
+    };
+    this.registerByClassName("char", charConverter);
+    this.registerByClassName("java.lang.Character", charConverter);
+    this.registerByName("EChar", charConverter);
+    this.registerByName("ECharacterObject", charConverter);
+    const dateConverter = {
+      fromString: (s) => new Date(s),
+      toString: (v) => v?.toISOString() ?? ""
+    };
+    this.registerByClassName("java.util.Date", dateConverter);
+    this.registerByName("EDate", dateConverter);
+    const bigDecimalConverter = {
+      fromString: (s) => s,
+      // Keep as string to preserve precision
+      toString: (v) => v ?? "0"
+    };
+    this.registerByClassName("java.math.BigDecimal", bigDecimalConverter);
+    this.registerByClassName("java.math.BigInteger", bigDecimalConverter);
+    this.registerByName("EBigDecimal", bigDecimalConverter);
+    this.registerByName("EBigInteger", bigDecimalConverter);
+    const byteArrayConverter = {
+      fromString: (s) => {
+        if (typeof atob === "function") {
+          const binary = atob(s);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return bytes;
+        }
+        return new Uint8Array(Buffer.from(s, "base64"));
+      },
+      toString: (v) => {
+        if (typeof btoa === "function") {
+          return btoa(String.fromCharCode(...v));
+        }
+        return Buffer.from(v).toString("base64");
+      }
+    };
+    this.registerByClassName("byte[]", byteArrayConverter);
+    this.registerByName("EByteArray", byteArrayConverter);
+    const featureMapConverter = {
+      fromString: (s) => s,
+      toString: (v) => String(v ?? "")
+    };
+    this.registerByName("EFeatureMapEntry", featureMapConverter);
   }
   /**
    * Register a converter by instanceClassName
    */
-  registerByClassName(e, t) {
-    this.convertersByClassName.set(e, t);
+  registerByClassName(className, converter) {
+    this.convertersByClassName.set(className, converter);
   }
   /**
    * Register a converter by DataType name
    */
-  registerByName(e, t) {
-    this.convertersByName.set(e, t);
+  registerByName(name, converter) {
+    this.convertersByName.set(name, converter);
   }
   /**
    * Get converter for a DataType
    */
-  getConverter(e) {
-    const t = e.getInstanceClassName();
-    if (t) {
-      const r = this.convertersByClassName.get(t);
-      if (r)
-        return r;
+  getConverter(dataType) {
+    const className = dataType.getInstanceClassName();
+    if (className) {
+      const converter = this.convertersByClassName.get(className);
+      if (converter) {
+        return converter;
+      }
     }
-    const s = e.getName();
-    if (s) {
-      const r = this.convertersByName.get(s);
-      if (r)
-        return r;
+    const name = dataType.getName();
+    if (name) {
+      const converter = this.convertersByName.get(name);
+      if (converter) {
+        return converter;
+      }
     }
     return null;
   }
@@ -8807,17 +10402,22 @@ class _n {
    * The XMI loader turns that throw into a resource error, so a single bad
    * attribute does not abort the document (see XMLHandler.setFeatureValue).
    */
-  createFromString(e, t) {
-    if (dt(e)) {
-      if (t == null)
+  createFromString(dataType, literal) {
+    if (isEEnum(dataType)) {
+      if (literal === null || literal === void 0) {
         return null;
-      const r = this.resolveEEnumLiteral(e, t);
-      if (!r)
-        throw new Error(`The value '${t}' is not a valid enumerator of '${e.getName()}'`);
-      return r.getInstance() ?? r;
+      }
+      const eEnumLiteral = this.resolveEEnumLiteral(dataType, literal);
+      if (!eEnumLiteral) {
+        throw new Error(`The value '${literal}' is not a valid enumerator of '${dataType.getName()}'`);
+      }
+      return eEnumLiteral.getInstance() ?? eEnumLiteral;
     }
-    const s = this.getConverter(e);
-    return s ? s.fromString(t) : t;
+    const converter = this.getConverter(dataType);
+    if (converter) {
+      return converter.fromString(literal);
+    }
+    return literal;
   }
   /**
    * Convert a value to a string literal using the DataType's converter.
@@ -8825,16 +10425,21 @@ class _n {
    * For an EEnum the literal string is written, not the name - Java EMF
    * serializes enum values via EEnumLiteralImpl.toString(), which is getLiteral().
    */
-  convertToString(e, t) {
-    if (t == null)
+  convertToString(dataType, value) {
+    if (value === null || value === void 0) {
       return "";
-    if (dt(e)) {
-      const r = this.findEEnumLiteral(e, t);
-      if (r)
-        return r.getLiteral() ?? "";
     }
-    const s = this.getConverter(e);
-    return s ? s.toString(t) : String(t);
+    if (isEEnum(dataType)) {
+      const eEnumLiteral = this.findEEnumLiteral(dataType, value);
+      if (eEnumLiteral) {
+        return eEnumLiteral.getLiteral() ?? "";
+      }
+    }
+    const converter = this.getConverter(dataType);
+    if (converter) {
+      return converter.toString(value);
+    }
+    return String(value);
   }
   /**
    * Resolve a serialized enum value to its EEnumLiteral.
@@ -8845,33 +10450,41 @@ class _n {
    * models unloadable for no gain. Saving always writes the literal back, so
    * a load/save cycle normalizes the file.
    */
-  resolveEEnumLiteral(e, t) {
-    const s = e.getEEnumLiteralByLiteral(t);
-    if (s)
-      return s;
-    const r = e.getEEnumLiteral(t);
-    if (r)
-      return r;
-    const n = t.trim();
-    return /^-?\d+$/.test(n) ? e.getEEnumLiteral(Number(n)) : null;
+  resolveEEnumLiteral(eEnum, literal) {
+    const byLiteral = eEnum.getEEnumLiteralByLiteral(literal);
+    if (byLiteral) {
+      return byLiteral;
+    }
+    const byName = eEnum.getEEnumLiteral(literal);
+    if (byName) {
+      return byName;
+    }
+    const trimmed = literal.trim();
+    if (/^-?\d+$/.test(trimmed)) {
+      return eEnum.getEEnumLiteral(Number(trimmed));
+    }
+    return null;
   }
   /**
    * Resolve an enum value to its EEnumLiteral. Accepts the literal itself as
    * well as the `instance` a generated enum carries.
    */
-  findEEnumLiteral(e, t) {
-    if (t && typeof t == "object" && typeof t.getLiteral == "function")
-      return t;
-    for (const s of e.getELiterals())
-      if (s.getInstance() === t)
-        return s;
+  findEEnumLiteral(eEnum, value) {
+    if (value && typeof value === "object" && typeof value.getLiteral === "function") {
+      return value;
+    }
+    for (const eEnumLiteral of eEnum.getELiterals()) {
+      if (eEnumLiteral.getInstance() === value) {
+        return eEnumLiteral;
+      }
+    }
     return null;
   }
   /**
    * Check if a converter is registered for a DataType
    */
-  hasConverter(e) {
-    return this.getConverter(e) !== null;
+  hasConverter(dataType) {
+    return this.getConverter(dataType) !== null;
   }
   /**
    * Get all registered classNames
@@ -8886,54 +10499,65 @@ class _n {
     return Array.from(this.convertersByName.keys());
   }
 }
-const j = new _n();
-class Yt {
+const dataTypeRegistry = new DataTypeRegistryImpl();
+class BasicEFactory {
   constructor() {
-    this.ePackage = null, this.creators = /* @__PURE__ */ new Map(), this.eAnnotations = ce(this);
+    this.ePackage = null;
+    this.creators = /* @__PURE__ */ new Map();
+    this.eAnnotations = createMetamodelEList(this);
   }
   getEPackage() {
-    if (!this.ePackage)
+    if (!this.ePackage) {
       throw new Error("EPackage not set on factory");
+    }
     return this.ePackage;
   }
-  setEPackage(e) {
-    this.ePackage = e, e && typeof e.setEFactoryInstance == "function" && e.setEFactoryInstance(this);
+  setEPackage(value) {
+    this.ePackage = value;
+    if (value && typeof value.setEFactoryInstance === "function") {
+      value.setEFactoryInstance(this);
+    }
   }
-  create(e) {
-    const t = this.creators.get(e);
-    return t ? t() : this.createDynamic(e);
+  create(eClass) {
+    const creator = this.creators.get(eClass);
+    if (creator) {
+      return creator();
+    }
+    return this.createDynamic(eClass);
   }
   /**
    * Create a dynamic EObject instance
    */
-  createDynamic(e) {
-    if (e.isAbstract())
-      throw new Error(`Cannot instantiate abstract class: ${e.getName()}`);
-    if (e.isInterface())
-      throw new Error(`Cannot instantiate interface: ${e.getName()}`);
-    return new Bs(e);
+  createDynamic(eClass) {
+    if (eClass.isAbstract()) {
+      throw new Error(`Cannot instantiate abstract class: ${eClass.getName()}`);
+    }
+    if (eClass.isInterface()) {
+      throw new Error(`Cannot instantiate interface: ${eClass.getName()}`);
+    }
+    return new DynamicEObject(eClass);
   }
-  createFromString(e, t) {
-    return j.createFromString(e, t);
+  createFromString(eDataType, literalValue) {
+    return dataTypeRegistry.createFromString(eDataType, literalValue);
   }
-  convertToString(e, t) {
-    return j.convertToString(e, t);
+  convertToString(eDataType, instanceValue) {
+    return dataTypeRegistry.convertToString(eDataType, instanceValue);
   }
   /**
    * Register a creator function for a specific EClass
    */
-  registerCreator(e, t) {
-    this.creators.set(e, t);
+  registerCreator(eClass, creator) {
+    this.creators.set(eClass, creator);
   }
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
+  getEAnnotation(source) {
     return null;
   }
   // EObject methods
   eClass() {
-    return te.getEFactoryClass();
+    return ecoreRegistry.getEFactoryClass();
   }
   eResource() {
     return null;
@@ -8954,181 +10578,244 @@ class Yt {
     return [][Symbol.iterator]();
   }
   eIsProxy() {
-    return !1;
+    return false;
   }
   eCrossReferences() {
     return [];
   }
-  eGet(e) {
+  eGet(feature) {
     return null;
   }
-  eSet(e, t) {
+  eSet(feature, newValue) {
   }
-  eIsSet(e) {
-    return !1;
+  eIsSet(feature) {
+    return false;
   }
-  eUnset(e) {
+  eUnset(feature) {
   }
-  eInvoke(e, t) {
+  eInvoke(operation, arguments_) {
     return null;
   }
 }
-class wn extends Ie {
-  constructor(e) {
-    super(e, null), this.pkg = e;
+class EClassifiersEList extends BasicEList {
+  constructor(pkg) {
+    super(pkg, null);
+    this.pkg = pkg;
   }
   /**
    * Lazily resolve the eClassifiers feature from EcorePackage.
    * This avoids circular dependency issues during initialization.
    */
   getFeature() {
-    if (!this.feature && te.isRegistered()) {
-      const t = te.getEPackageClass();
-      this.feature = t.getEStructuralFeature("eClassifiers");
+    if (!this.feature) {
+      const isReg = ecoreRegistry.isRegistered();
+      if (isReg) {
+        const ePackageClass = ecoreRegistry.getEPackageClass();
+        this.feature = ePackageClass.getEStructuralFeature("eClassifiers");
+      }
     }
     return this.feature;
   }
-  didAdd(e, t) {
-    "setEPackage" in t && typeof t.setEPackage == "function" && t.setEPackage(this.pkg), super.didAdd(e, t);
+  didAdd(index, element) {
+    if ("setEPackage" in element && typeof element.setEPackage === "function") {
+      element.setEPackage(this.pkg);
+    }
+    super.didAdd(index, element);
   }
-  didAddMany(e, t) {
-    for (const s of t)
-      "setEPackage" in s && typeof s.setEPackage == "function" && s.setEPackage(this.pkg);
-    super.didAddMany(e, t);
+  didAddMany(index, elements) {
+    for (const element of elements) {
+      if ("setEPackage" in element && typeof element.setEPackage === "function") {
+        element.setEPackage(this.pkg);
+      }
+    }
+    super.didAddMany(index, elements);
   }
-  didRemove(e, t) {
-    "setEPackage" in t && typeof t.setEPackage == "function" && t.setEPackage(null), super.didRemove(e, t);
+  didRemove(index, element) {
+    if ("setEPackage" in element && typeof element.setEPackage === "function") {
+      element.setEPackage(null);
+    }
+    super.didRemove(index, element);
   }
-  didClear(e) {
-    for (const t of e)
-      "setEPackage" in t && typeof t.setEPackage == "function" && t.setEPackage(null);
-    super.didClear(e);
+  didClear(oldData) {
+    for (const element of oldData) {
+      if ("setEPackage" in element && typeof element.setEPackage === "function") {
+        element.setEPackage(null);
+      }
+    }
+    super.didClear(oldData);
   }
-  didSet(e, t, s) {
-    "setEPackage" in s && typeof s.setEPackage == "function" && s.setEPackage(null), "setEPackage" in t && typeof t.setEPackage == "function" && t.setEPackage(this.pkg), super.didSet(e, t, s);
+  didSet(index, newElement, oldElement) {
+    if ("setEPackage" in oldElement && typeof oldElement.setEPackage === "function") {
+      oldElement.setEPackage(null);
+    }
+    if ("setEPackage" in newElement && typeof newElement.setEPackage === "function") {
+      newElement.setEPackage(this.pkg);
+    }
+    super.didSet(index, newElement, oldElement);
   }
 }
-class In extends Ie {
-  constructor(e) {
-    super(e, null), this.pkg = e;
+class ESubpackagesEList extends BasicEList {
+  constructor(pkg) {
+    super(pkg, null);
+    this.pkg = pkg;
   }
   /**
    * Lazily resolve the eSubpackages feature from EcorePackage.
    * This avoids circular dependency issues during initialization.
    */
   getFeature() {
-    if (!this.feature && te.isRegistered()) {
-      const e = te.getEPackageClass();
-      this.feature = e.getEStructuralFeature("eSubpackages");
+    if (!this.feature && ecoreRegistry.isRegistered()) {
+      const ePackageClass = ecoreRegistry.getEPackageClass();
+      this.feature = ePackageClass.getEStructuralFeature("eSubpackages");
     }
     return this.feature;
   }
-  didAdd(e, t) {
-    t instanceof De && (t.eSuperPackage = this.pkg), super.didAdd(e, t);
+  didAdd(index, element) {
+    if (element instanceof BasicEPackage) {
+      element.eSuperPackage = this.pkg;
+    }
+    super.didAdd(index, element);
   }
-  didAddMany(e, t) {
-    for (const s of t)
-      s instanceof De && (s.eSuperPackage = this.pkg);
-    super.didAddMany(e, t);
+  didAddMany(index, elements) {
+    for (const element of elements) {
+      if (element instanceof BasicEPackage) {
+        element.eSuperPackage = this.pkg;
+      }
+    }
+    super.didAddMany(index, elements);
   }
-  didRemove(e, t) {
-    t instanceof De && (t.eSuperPackage = null), super.didRemove(e, t);
+  didRemove(index, element) {
+    if (element instanceof BasicEPackage) {
+      element.eSuperPackage = null;
+    }
+    super.didRemove(index, element);
   }
-  didClear(e) {
-    for (const t of e)
-      t instanceof De && (t.eSuperPackage = null);
-    super.didClear(e);
+  didClear(oldData) {
+    for (const element of oldData) {
+      if (element instanceof BasicEPackage) {
+        element.eSuperPackage = null;
+      }
+    }
+    super.didClear(oldData);
   }
-  didSet(e, t, s) {
-    s instanceof De && (s.eSuperPackage = null), t instanceof De && (t.eSuperPackage = this.pkg), super.didSet(e, t, s);
+  didSet(index, newElement, oldElement) {
+    if (oldElement instanceof BasicEPackage) {
+      oldElement.eSuperPackage = null;
+    }
+    if (newElement instanceof BasicEPackage) {
+      newElement.eSuperPackage = this.pkg;
+    }
+    super.didSet(index, newElement, oldElement);
   }
 }
-class De extends Re {
+class BasicEPackage extends BasicEObject {
   /**
    * Constructor
    */
-  constructor(e, t) {
-    super(), this.name = null, this.nsURI = null, this.nsPrefix = null, this.eFactoryInstance = null, this._eClassifiers = null, this._eSubpackages = null, this.eSuperPackage = null, this.eAnnotations = ce(this), e && (this.nsURI = e), t && (this.eFactoryInstance = t);
+  constructor(nsURI, eFactoryInstance) {
+    super();
+    this.name = null;
+    this.nsURI = null;
+    this.nsPrefix = null;
+    this.eFactoryInstance = null;
+    this._eClassifiers = null;
+    this._eSubpackages = null;
+    this.eSuperPackage = null;
+    this.eAnnotations = createMetamodelEList(this);
+    if (nsURI)
+      this.nsURI = nsURI;
+    if (eFactoryInstance)
+      this.eFactoryInstance = eFactoryInstance;
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   getNsURI() {
     return this.nsURI;
   }
-  setNsURI(e) {
-    this.nsURI = e;
+  setNsURI(value) {
+    this.nsURI = value;
   }
   getNsPrefix() {
     return this.nsPrefix;
   }
-  setNsPrefix(e) {
-    this.nsPrefix = e;
+  setNsPrefix(value) {
+    this.nsPrefix = value;
   }
   getEFactoryInstance() {
     if (!this.eFactoryInstance) {
-      const e = new Yt();
-      e.setEPackage(this), this.eFactoryInstance = e;
+      const factory = new BasicEFactory();
+      factory.setEPackage(this);
+      this.eFactoryInstance = factory;
     }
     return this.eFactoryInstance;
   }
-  setEFactoryInstance(e) {
-    this.eFactoryInstance = e;
+  setEFactoryInstance(value) {
+    this.eFactoryInstance = value;
   }
   getEClassifiers() {
-    return this._eClassifiers || (this._eClassifiers = xe(new wn(this))), this._eClassifiers;
+    if (!this._eClassifiers) {
+      this._eClassifiers = createIndexedProxy(new EClassifiersEList(this));
+    }
+    return this._eClassifiers;
   }
   getESubpackages() {
-    return this._eSubpackages || (this._eSubpackages = xe(new In(this))), this._eSubpackages;
+    if (!this._eSubpackages) {
+      this._eSubpackages = createIndexedProxy(new ESubpackagesEList(this));
+    }
+    return this._eSubpackages;
   }
   getESuperPackage() {
     return this.eSuperPackage;
   }
-  getEClassifier(e) {
-    const t = this.getEClassifiers();
-    for (const s of t)
-      if (typeof s.getName == "function") {
-        if (s.getName() === e)
-          return s;
-      } else if (typeof s.eGet == "function" && typeof s.eClass == "function") {
-        const r = s.eClass();
-        if (r) {
-          const n = r.getEStructuralFeature?.("name");
-          if (n && s.eGet(n) === e)
-            return s;
+  getEClassifier(name) {
+    const classifiers = this.getEClassifiers();
+    for (const c of classifiers) {
+      if (typeof c.getName === "function") {
+        if (c.getName() === name)
+          return c;
+      } else if (typeof c.eGet === "function" && typeof c.eClass === "function") {
+        const eClass = c.eClass();
+        if (eClass) {
+          const nameFeature = eClass.getEStructuralFeature?.("name");
+          if (nameFeature && c.eGet(nameFeature) === name) {
+            return c;
+          }
         }
       }
+    }
     return null;
   }
   /**
    * Add classifier to this package
    */
-  addClassifier(e) {
-    this.getEClassifiers().add(e);
+  addClassifier(classifier) {
+    this.getEClassifiers().add(classifier);
   }
   /**
    * Add subpackage
    */
-  addSubpackage(e) {
-    this.getESubpackages().add(e);
+  addSubpackage(pkg) {
+    this.getESubpackages().add(pkg);
   }
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
+  getEAnnotation(source) {
     return null;
   }
   eClass() {
-    return te.getEPackageClass();
+    return ecoreRegistry.getEPackageClass();
   }
   /**
    * Override eGet to handle package-specific features
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
         return this.name;
       case "nsURI":
@@ -9144,161 +10831,201 @@ class De extends Re {
       case "eFactoryInstance":
         return this.eFactoryInstance;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle package-specific features
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
-        this.name = t, super.eSet(e, t);
+        this.name = newValue;
+        super.eSet(feature, newValue);
         break;
       case "nsURI":
-        this.nsURI = t, super.eSet(e, t);
+        this.nsURI = newValue;
+        super.eSet(feature, newValue);
         break;
       case "nsPrefix":
-        this.nsPrefix = t, super.eSet(e, t);
+        this.nsPrefix = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eClassifiers":
-        if (Array.isArray(t) || t && typeof t[Symbol.iterator] == "function") {
-          const r = this.getEClassifiers();
-          r.clear();
-          for (const n of t)
-            r.add(n);
+        if (Array.isArray(newValue) || newValue && typeof newValue[Symbol.iterator] === "function") {
+          const list = this.getEClassifiers();
+          list.clear();
+          for (const item of newValue) {
+            list.add(item);
+          }
         }
         break;
       case "eSubpackages":
-        if (Array.isArray(t) || t && typeof t[Symbol.iterator] == "function") {
-          const r = this.getESubpackages();
-          r.clear();
-          for (const n of t)
-            r.add(n);
+        if (Array.isArray(newValue) || newValue && typeof newValue[Symbol.iterator] === "function") {
+          const list = this.getESubpackages();
+          list.clear();
+          for (const item of newValue) {
+            list.add(item);
+          }
         }
         break;
       case "eSuperPackage":
-        this.eSuperPackage = t, super.eSet(e, t);
+        this.eSuperPackage = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eFactoryInstance":
-        this.eFactoryInstance = t, super.eSet(e, t);
+        this.eFactoryInstance = newValue;
+        super.eSet(feature, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class js extends Re {
+class BasicEStructuralFeature extends BasicEObject {
   constructor() {
-    super(...arguments), this.name = null, this.changeable = !0, this.volatile = !1, this.transient = !1, this.defaultValueLiteral = null, this.unsettable = !1, this.derived = !1, this.eType = null, this.eGenericType = null, this.eContainingClass = null, this.lowerBound = 0, this.upperBound = 1, this.featureID = -1, this.eAnnotations = ce(this);
+    super(...arguments);
+    this.name = null;
+    this.changeable = true;
+    this.volatile = false;
+    this.transient = false;
+    this.defaultValueLiteral = null;
+    this.unsettable = false;
+    this.derived = false;
+    this.eType = null;
+    this.eGenericType = null;
+    this.eContainingClass = null;
+    this.lowerBound = 0;
+    this.upperBound = 1;
+    this.featureID = -1;
+    this.eAnnotations = createMetamodelEList(this);
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   isChangeable() {
     return this.changeable;
   }
-  setChangeable(e) {
-    this.changeable = e;
+  setChangeable(value) {
+    this.changeable = value;
   }
   isVolatile() {
     return this.volatile;
   }
-  setVolatile(e) {
-    this.volatile = e;
+  setVolatile(value) {
+    this.volatile = value;
   }
   isTransient() {
     return this.transient;
   }
-  setTransient(e) {
-    this.transient = e;
+  setTransient(value) {
+    this.transient = value;
   }
   getDefaultValueLiteral() {
     return this.defaultValueLiteral;
   }
-  setDefaultValueLiteral(e) {
-    this.defaultValueLiteral = e;
+  setDefaultValueLiteral(value) {
+    this.defaultValueLiteral = value;
   }
   isUnsettable() {
     return this.unsettable;
   }
-  setUnsettable(e) {
-    this.unsettable = e;
+  setUnsettable(value) {
+    this.unsettable = value;
   }
   isDerived() {
     return this.derived;
   }
-  setDerived(e) {
-    this.derived = e;
+  setDerived(value) {
+    this.derived = value;
   }
   getEType() {
-    if (this.eType && We(this.eType) && this.eType.eIsProxy()) {
-      const e = this.eType, t = e.eProxyURI();
-      if (t) {
-        const s = this.eResolveProxy(e);
-        if (s !== e)
-          return this.eType = s, this.eType;
-        const r = t.toString(), n = r.indexOf("#");
-        if (n > 0) {
-          const a = r.substring(0, n), o = r.substring(n + 1), d = [we.INSTANCE];
-          let y = this.eResource()?.getResourceSet();
-          if (!y) {
-            let S = this.eContainingClass;
-            for (; S; ) {
-              if (typeof S.eResource == "function") {
-                const C = S.eResource();
-                if (C) {
-                  y = C.getResourceSet();
+    if (this.eType && isInternalEObject(this.eType) && this.eType.eIsProxy()) {
+      const proxy = this.eType;
+      const proxyURI = proxy.eProxyURI();
+      if (proxyURI) {
+        const resolved = this.eResolveProxy(proxy);
+        if (resolved !== proxy) {
+          this.eType = resolved;
+          return this.eType;
+        }
+        const uriStr = proxyURI.toString();
+        const hashIndex = uriStr.indexOf("#");
+        if (hashIndex > 0) {
+          const baseURI = uriStr.substring(0, hashIndex);
+          const fragment = uriStr.substring(hashIndex + 1);
+          const registries = [EPackageRegistry.INSTANCE];
+          let rs = this.eResource()?.getResourceSet();
+          if (!rs) {
+            let container = this.eContainingClass;
+            while (container) {
+              if (typeof container.eResource === "function") {
+                const res = container.eResource();
+                if (res) {
+                  rs = res.getResourceSet();
                   break;
                 }
               }
-              S = S.getEPackage?.() ?? S.getESuperPackage?.() ?? S.eContainer?.();
+              container = container.getEPackage?.() ?? container.getESuperPackage?.() ?? container.eContainer?.();
             }
           }
-          y && d.push(y.getPackageRegistry());
-          for (const S of d) {
-            const C = S.getEPackage(a);
-            if (C) {
-              const M = Ze(C, o);
-              if (M)
-                return this.eType = M, this.eType;
+          if (rs)
+            registries.push(rs.getPackageRegistry());
+          for (const registry of registries) {
+            const pkg = registry.getEPackage(baseURI);
+            if (pkg) {
+              const classifier = resolveClassifierInPackage(pkg, fragment);
+              if (classifier) {
+                this.eType = classifier;
+                return this.eType;
+              }
             }
-            let A = a;
-            const b = A.lastIndexOf("/");
-            b >= 0 && (A = A.substring(b + 1));
-            const R = A.indexOf(".");
-            if (R > 0 && (A = A.substring(0, R)), A)
-              for (const M of S.keys()) {
-                const U = S.getEPackage(M);
-                if (U && U.getName() === A) {
-                  const _ = Ze(U, o);
-                  if (_)
-                    return this.eType = _, this.eType;
+            let baseName = baseURI;
+            const lastSlash = baseName.lastIndexOf("/");
+            if (lastSlash >= 0)
+              baseName = baseName.substring(lastSlash + 1);
+            const dotIndex = baseName.indexOf(".");
+            if (dotIndex > 0)
+              baseName = baseName.substring(0, dotIndex);
+            if (baseName) {
+              for (const nsKey of registry.keys()) {
+                const regPkg = registry.getEPackage(nsKey);
+                if (regPkg && regPkg.getName() === baseName) {
+                  const classifier = resolveClassifierInPackage(regPkg, fragment);
+                  if (classifier) {
+                    this.eType = classifier;
+                    return this.eType;
+                  }
                 }
               }
+            }
           }
         }
       }
     }
-    return !this.eType && this.eGenericType ? this.eGenericType.getERawType() : this.eType;
+    if (!this.eType && this.eGenericType) {
+      return this.eGenericType.getERawType();
+    }
+    return this.eType;
   }
-  setEType(e) {
-    this.eType = e;
+  setEType(value) {
+    this.eType = value;
   }
   getEGenericType() {
     return this.eGenericType;
   }
-  setEGenericType(e) {
-    this.eGenericType = e;
+  setEGenericType(value) {
+    this.eGenericType = value;
   }
   getEContainingClass() {
     return this.eContainingClass;
   }
-  setEContainingClass(e) {
-    this.eContainingClass = e;
+  setEContainingClass(value) {
+    this.eContainingClass = value;
   }
   isMany() {
     return this.upperBound < 0 || this.upperBound > 1;
@@ -9309,36 +11036,37 @@ class js extends Re {
   getLowerBound() {
     return this.lowerBound;
   }
-  setLowerBound(e) {
-    this.lowerBound = e;
+  setLowerBound(value) {
+    this.lowerBound = value;
   }
   getUpperBound() {
     return this.upperBound;
   }
-  setUpperBound(e) {
-    this.upperBound = e;
+  setUpperBound(value) {
+    this.upperBound = value;
   }
   getFeatureID() {
     return this.featureID;
   }
-  setFeatureID(e) {
-    this.featureID = e;
+  setFeatureID(value) {
+    this.featureID = value;
   }
   // EObject methods
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEStructuralFeatureClass();
+    return ecoreRegistry.getEStructuralFeatureClass();
   }
   /**
    * Override eGet to handle feature-specific properties
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
         return this.name;
       case "changeable":
@@ -9364,155 +11092,202 @@ class js extends Re {
       case "eAnnotations":
         return this.eAnnotations;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle feature-specific properties
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
-        this.name = t, super.eSet(e, t);
+        this.name = newValue;
+        super.eSet(feature, newValue);
         break;
       case "changeable":
-        this.changeable = t === !0 || t === "true", super.eSet(e, t);
+        this.changeable = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "volatile":
-        this.volatile = t === !0 || t === "true", super.eSet(e, t);
+        this.volatile = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "transient":
-        this.transient = t === !0 || t === "true", super.eSet(e, t);
+        this.transient = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "defaultValueLiteral":
-        this.defaultValueLiteral = t, super.eSet(e, t);
+        this.defaultValueLiteral = newValue;
+        super.eSet(feature, newValue);
         break;
       case "unsettable":
-        this.unsettable = t === !0 || t === "true", super.eSet(e, t);
+        this.unsettable = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "derived":
-        this.derived = t === !0 || t === "true", super.eSet(e, t);
+        this.derived = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "eType":
-        this.eType = t, super.eSet(e, t);
+        this.eType = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eGenericType":
-        this.eGenericType = t, super.eSet(e, t);
+        this.eGenericType = newValue;
+        super.eSet(feature, newValue);
         break;
       case "lowerBound":
-        this.lowerBound = typeof t == "number" ? t : parseInt(t, 10), super.eSet(e, t);
+        this.lowerBound = typeof newValue === "number" ? newValue : parseInt(newValue, 10);
+        super.eSet(feature, newValue);
         break;
       case "upperBound":
-        this.upperBound = typeof t == "number" ? t : parseInt(t, 10), super.eSet(e, t);
+        this.upperBound = typeof newValue === "number" ? newValue : parseInt(newValue, 10);
+        super.eSet(feature, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class ee extends js {
+class BasicEAttribute extends BasicEStructuralFeature {
   constructor() {
-    super(...arguments), this.id = !1;
+    super(...arguments);
+    this.id = false;
   }
   isID() {
     return this.id;
   }
-  setID(e) {
-    this.id = e;
+  setID(value) {
+    this.id = value;
   }
   getEAttributeType() {
-    const e = this.getEType();
-    return !e || !("isSerializable" in e) ? null : e;
+    const type = this.getEType();
+    if (!type) {
+      return null;
+    }
+    if (!("isSerializable" in type)) {
+      return null;
+    }
+    return type;
   }
   getDefaultValue() {
-    const e = this.getDefaultValueLiteral(), t = this.getEAttributeType();
-    if (!t)
+    const literal = this.getDefaultValueLiteral();
+    const dataType = this.getEAttributeType();
+    if (!dataType) {
       return null;
-    if (e === null)
-      return t.getDefaultValue();
-    const s = t.getEPackage()?.getEFactoryInstance();
-    return s ? s.createFromString(t, e) : e;
+    }
+    if (literal === null) {
+      return dataType.getDefaultValue();
+    }
+    const factory = dataType.getEPackage()?.getEFactoryInstance();
+    if (!factory) {
+      return literal;
+    }
+    return factory.createFromString(dataType, literal);
   }
   eClass() {
-    return te.getEAttributeClass();
+    return ecoreRegistry.getEAttributeClass();
   }
   /**
    * Override eGet to handle attribute-specific features
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "iD":
         return this.id;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle attribute-specific features
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "iD":
-        this.id = t === !0 || t === "true", super.eSet(e, t);
+        this.id = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class le extends js {
+class BasicEReference extends BasicEStructuralFeature {
   constructor() {
-    super(...arguments), this.containment = !1, this.resolveProxies = !0, this.eOpposite = null, this.eKeys = ce(this);
+    super(...arguments);
+    this.containment = false;
+    this.resolveProxies = true;
+    this.eOpposite = null;
+    this.eKeys = createMetamodelEList(this);
   }
   isContainment() {
     return this.containment;
   }
-  setContainment(e) {
-    this.containment = e;
+  setContainment(value) {
+    this.containment = value;
   }
   isContainer() {
-    return this.eOpposite ? this.eOpposite.isContainment() : !1;
+    if (this.eOpposite) {
+      return this.eOpposite.isContainment();
+    }
+    return false;
   }
   isResolveProxies() {
     return this.resolveProxies;
   }
-  setResolveProxies(e) {
-    this.resolveProxies = e;
+  setResolveProxies(value) {
+    this.resolveProxies = value;
   }
   getEOpposite() {
     return this.eOpposite;
   }
-  setEOpposite(e) {
-    this.eOpposite !== e && (this.eOpposite && this.eOpposite.getEOpposite() === this && (this.eOpposite.eOpposite = null), this.eOpposite = e, e && e.getEOpposite() !== this && e.setEOpposite(this));
+  setEOpposite(value) {
+    if (this.eOpposite === value) {
+      return;
+    }
+    if (this.eOpposite && this.eOpposite.getEOpposite() === this) {
+      this.eOpposite.eOpposite = null;
+    }
+    this.eOpposite = value;
+    if (value && value.getEOpposite() !== this) {
+      value.setEOpposite(this);
+    }
   }
   getEReferenceType() {
-    const e = this.getEType();
-    if (!e)
+    const type = this.getEType();
+    if (!type) {
       throw new Error("Reference type not set");
-    if (!("getEStructuralFeatures" in e))
+    }
+    if (!("getEStructuralFeatures" in type)) {
       throw new Error("Reference type must be EClass");
-    return e;
+    }
+    return type;
   }
   getEKeys() {
     return this.eKeys;
   }
-  addEKey(e) {
-    this.eKeys.add(e);
+  addEKey(key) {
+    this.eKeys.add(key);
   }
   getDefaultValue() {
     return null;
   }
   eClass() {
-    return te.getEReferenceClass();
+    return ecoreRegistry.getEReferenceClass();
   }
   /**
    * Override eGet to handle reference-specific features
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "containment":
         return this.containment;
       case "resolveProxies":
@@ -9522,58 +11297,69 @@ class le extends js {
       case "eKeys":
         return this.eKeys;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle reference-specific features
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "containment":
-        this.containment = t === !0 || t === "true", super.eSet(e, t);
+        this.containment = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "resolveProxies":
-        this.resolveProxies = t === !0 || t === "true", super.eSet(e, t);
+        this.resolveProxies = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "eOpposite":
-        this.eOpposite = t, super.eSet(e, t);
+        this.eOpposite = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eKeys":
-        he(this.eKeys, t);
+        replaceListContents(this.eKeys, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class ne extends Re {
+class BasicEDataType extends BasicEObject {
   constructor() {
-    super(...arguments), this.name = null, this.instanceClassName = null, this.instanceClass = null, this.ePackage = null, this.serializable = !0, this.eAnnotations = ce(this), this.eTypeParameters = ce(this);
+    super(...arguments);
+    this.name = null;
+    this.instanceClassName = null;
+    this.instanceClass = null;
+    this.ePackage = null;
+    this.serializable = true;
+    this.eAnnotations = createMetamodelEList(this);
+    this.eTypeParameters = createMetamodelEList(this);
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   getInstanceClassName() {
     return this.instanceClassName;
   }
-  setInstanceClassName(e) {
-    this.instanceClassName = e;
+  setInstanceClassName(value) {
+    this.instanceClassName = value;
   }
   getInstanceClass() {
     return this.instanceClass;
   }
-  setInstanceClass(e) {
-    this.instanceClass = e;
+  setInstanceClass(value) {
+    this.instanceClass = value;
   }
   getDefaultValue() {
     switch (this.instanceClassName) {
       case "boolean":
       case "java.lang.Boolean":
-        return !1;
+        return false;
       case "int":
       case "java.lang.Integer":
       case "long":
@@ -9597,24 +11383,24 @@ class ne extends Re {
   getInstanceTypeName() {
     return this.instanceClassName;
   }
-  setInstanceTypeName(e) {
-    this.instanceClassName = e;
+  setInstanceTypeName(value) {
+    this.instanceClassName = value;
   }
   getEPackage() {
     return this.ePackage;
   }
-  setEPackage(e) {
-    this.ePackage = e;
+  setEPackage(pkg) {
+    this.ePackage = pkg;
   }
   getETypeParameters() {
     return this.eTypeParameters;
   }
-  isInstance(e) {
-    const t = typeof e;
+  isInstance(object) {
+    const type = typeof object;
     switch (this.instanceClassName) {
       case "boolean":
       case "java.lang.Boolean":
-        return t === "boolean";
+        return type === "boolean";
       case "int":
       case "java.lang.Integer":
       case "long":
@@ -9627,37 +11413,40 @@ class ne extends Re {
       case "java.lang.Float":
       case "double":
       case "java.lang.Double":
-        return t === "number";
+        return type === "number";
       case "java.lang.String":
-        return t === "string";
+        return type === "string";
       default:
-        return !1;
+        return false;
     }
   }
   getClassifierID() {
-    return this.ePackage ? this.ePackage.getEClassifiers().indexOf(this) : -1;
+    if (!this.ePackage)
+      return -1;
+    return this.ePackage.getEClassifiers().indexOf(this);
   }
   isSerializable() {
     return this.serializable;
   }
-  setSerializable(e) {
-    this.serializable = e;
+  setSerializable(value) {
+    this.serializable = value;
   }
   // EObject methods
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEDataTypeClass();
+    return ecoreRegistry.getEDataTypeClass();
   }
   /**
    * Override eGet to handle datatype-specific features
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
         return this.name;
       case "instanceClassName":
@@ -9669,85 +11458,112 @@ class ne extends Re {
       case "eTypeParameters":
         return this.eTypeParameters;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
   /**
    * Override eSet to handle datatype-specific features
    */
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
-        this.name = t, super.eSet(e, t);
+        this.name = newValue;
+        super.eSet(feature, newValue);
         break;
       case "instanceClassName":
-        this.instanceClassName = t, super.eSet(e, t);
+        this.instanceClassName = newValue;
+        super.eSet(feature, newValue);
         break;
       case "serializable":
-        this.serializable = t === !0 || t === "true", super.eSet(e, t);
+        this.serializable = newValue === true || newValue === "true";
+        super.eSet(feature, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       case "eTypeParameters":
-        he(this.eTypeParameters, t);
+        replaceListContents(this.eTypeParameters, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
 (() => {
-  const l = new ne();
-  return l.setName("EString"), l.setInstanceClassName("java.lang.String"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EString");
+  dt.setInstanceClassName("java.lang.String");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("EInt"), l.setInstanceClassName("int"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EInt");
+  dt.setInstanceClassName("int");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("EBoolean"), l.setInstanceClassName("boolean"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EBoolean");
+  dt.setInstanceClassName("boolean");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("EFloat"), l.setInstanceClassName("float"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EFloat");
+  dt.setInstanceClassName("float");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("EDouble"), l.setInstanceClassName("double"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EDouble");
+  dt.setInstanceClassName("double");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("ELong"), l.setInstanceClassName("long"), l;
+  const dt = new BasicEDataType();
+  dt.setName("ELong");
+  dt.setInstanceClassName("long");
+  return dt;
 })();
 (() => {
-  const l = new ne();
-  return l.setName("EDate"), l.setInstanceClassName("java.util.Date"), l;
+  const dt = new BasicEDataType();
+  dt.setName("EDate");
+  dt.setInstanceClassName("java.util.Date");
+  return dt;
 })();
-class An {
-  constructor(e, t) {
-    this.resources = new Ie(), this.packageRegistry = e || this.createDefaultPackageRegistry(), this.resourceFactoryRegistry = t || ct.INSTANCE_FACTORY_REGISTRY, this.uriConverter = this.createDefaultURIConverter();
+class BasicResourceSet {
+  constructor(packageRegistry, factoryRegistry) {
+    this.resources = new BasicEList();
+    this.packageRegistry = packageRegistry || this.createDefaultPackageRegistry();
+    this.resourceFactoryRegistry = factoryRegistry || Resource.INSTANCE_FACTORY_REGISTRY;
+    this.uriConverter = this.createDefaultURIConverter();
   }
   getResources() {
     return this.resources;
   }
-  getResource(e, t) {
-    const s = this.resources.find((a) => {
-      const o = a.getURI();
-      return o && o.toString() === e.toString();
+  getResource(uri, loadOnDemand) {
+    const existing = this.resources.find((r) => {
+      const resUri = r.getURI();
+      return resUri && resUri.toString() === uri.toString();
     });
-    if (s)
-      return s;
-    const r = this.delegatedGetResource(e, t);
-    if (r)
-      return r;
-    if (!t)
+    if (existing) {
+      return existing;
+    }
+    const delegated = this.delegatedGetResource(uri, loadOnDemand);
+    if (delegated) {
+      return delegated;
+    }
+    if (!loadOnDemand) {
       return null;
-    const n = this.createResource(e);
-    return n && n.load().catch((a) => {
-      console.error(`Failed to load resource ${e}:`, a);
-    }), n;
+    }
+    const resource = this.createResource(uri);
+    if (resource) {
+      resource.load().catch((err) => {
+        console.error(`Failed to load resource ${uri}:`, err);
+      });
+    }
+    return resource;
   }
   /**
    * Returns a resolved resource available outside of the resource set.
@@ -9755,15 +11571,17 @@ class An {
    * This is called by getResource when the URI cannot be resolved
    * based on the existing contents of the resource set.
    */
-  delegatedGetResource(e, t) {
-    const s = e.toString(), r = this.packageRegistry.getEPackage(s);
-    if (r) {
-      if ("eResource" in r && typeof r.eResource == "function") {
-        const n = r.eResource();
-        if (n)
-          return n;
+  delegatedGetResource(uri, loadOnDemand) {
+    const uriString = uri.toString();
+    const ePackage = this.packageRegistry.getEPackage(uriString);
+    if (ePackage) {
+      if ("eResource" in ePackage && typeof ePackage.eResource === "function") {
+        const existingResource = ePackage.eResource();
+        if (existingResource) {
+          return existingResource;
+        }
       }
-      return this.createSyntheticResourceForPackage(r, e);
+      return this.createSyntheticResourceForPackage(ePackage, uri);
     }
     return null;
   }
@@ -9771,124 +11589,168 @@ class An {
    * Creates a synthetic resource for a package that doesn't have one.
    * This allows resolving fragment references like //EString within the package.
    */
-  createSyntheticResourceForPackage(e, t) {
-    const s = this.resources.find((n) => "_syntheticPackage" in n ? n._syntheticPackage === e : !1);
-    if (s)
-      return s;
-    const r = new bn(t, e);
-    return r.setResourceSet(this), this.resources.push(r), r;
+  createSyntheticResourceForPackage(ePackage, uri) {
+    const existing = this.resources.find((r) => {
+      if ("_syntheticPackage" in r) {
+        return r._syntheticPackage === ePackage;
+      }
+      return false;
+    });
+    if (existing) {
+      return existing;
+    }
+    const resource = new SyntheticPackageResource(uri, ePackage);
+    resource.setResourceSet(this);
+    this.resources.push(resource);
+    return resource;
   }
   /**
    * Async version of getResource that awaits resource.load().
    * Uses URIConverter.createInputStream() for loading.
    */
-  async getResourceAsync(e, t) {
-    const s = this.resources.find((a) => {
-      const o = a.getURI();
-      return o && o.toString() === e.toString();
+  async getResourceAsync(uri, loadOnDemand) {
+    const existing = this.resources.find((r) => {
+      const resUri = r.getURI();
+      return resUri && resUri.toString() === uri.toString();
     });
-    if (s)
-      return s;
-    const r = this.delegatedGetResource(e, t);
-    if (r)
-      return r;
-    if (!t)
+    if (existing)
+      return existing;
+    const delegated = this.delegatedGetResource(uri, loadOnDemand);
+    if (delegated)
+      return delegated;
+    if (!loadOnDemand)
       return null;
-    const n = this.createResource(e);
-    return n && await n.load(), n;
+    const resource = this.createResource(uri);
+    if (resource) {
+      await resource.load();
+    }
+    return resource;
   }
-  createResource(e) {
-    const t = this.resourceFactoryRegistry.getFactory(e);
-    let s;
-    return t ? s = t.createResource(e) : s = new Xt(e), "setResourceSet" in s && s.setResourceSet(this), this.resources.push(s), s;
+  createResource(uri) {
+    const factory = this.resourceFactoryRegistry.getFactory(uri);
+    let resource;
+    if (factory) {
+      resource = factory.createResource(uri);
+    } else {
+      resource = new BasicResource(uri);
+    }
+    if ("setResourceSet" in resource) {
+      resource.setResourceSet(this);
+    }
+    this.resources.push(resource);
+    return resource;
   }
-  getEObject(e, t) {
-    const s = e.fragment();
-    if (!s)
+  getEObject(uri, loadOnDemand) {
+    const fragment = uri.fragment();
+    if (!fragment) {
       return null;
-    const r = Y.createURI(e.toString().split("#")[0]), n = this.getResource(r, t);
-    return n ? n.getEObject(s) : null;
+    }
+    const resourceURI = URI.createURI(uri.toString().split("#")[0]);
+    const resource = this.getResource(resourceURI, loadOnDemand);
+    if (!resource) {
+      return null;
+    }
+    return resource.getEObject(fragment);
   }
   getPackageRegistry() {
     return this.packageRegistry;
   }
-  setPackageRegistry(e) {
-    this.packageRegistry = e;
+  setPackageRegistry(registry) {
+    this.packageRegistry = registry;
   }
   getResourceFactoryRegistry() {
     return this.resourceFactoryRegistry;
   }
-  setResourceFactoryRegistry(e) {
-    this.resourceFactoryRegistry = e;
+  setResourceFactoryRegistry(registry) {
+    this.resourceFactoryRegistry = registry;
   }
   getURIConverter() {
     return this.uriConverter;
   }
-  setURIConverter(e) {
-    this.uriConverter = e;
+  setURIConverter(converter) {
+    this.uriConverter = converter;
   }
   /**
    * Iteratively resolves proxy references by loading packages via getResourceAsync.
    * Loops until no more progress is made or maxDepth is reached.
    */
-  async resolveProxiesAsync(e = -1) {
-    let t = 0, s = !0, r = 0;
-    for (; s && !(e >= 0 && r >= e); ) {
-      s = !1;
-      const n = this.collectUnresolvedNsURIs();
-      if (n.size === 0)
+  async resolveProxiesAsync(maxDepth = -1) {
+    let totalResolved = 0;
+    let progress = true;
+    let depth = 0;
+    while (progress) {
+      if (maxDepth >= 0 && depth >= maxDepth)
         break;
-      for (const a of n)
+      progress = false;
+      const proxyNsURIs = this.collectUnresolvedNsURIs();
+      if (proxyNsURIs.size === 0)
+        break;
+      for (const nsURI of proxyNsURIs) {
         try {
-          const o = Y.createURI(a);
-          (await this.getResourceAsync(o, !0))?.isLoaded() && (t++, s = !0);
-        } catch (o) {
-          console.warn(`[resolveProxiesAsync] Failed to resolve ${a}:`, o);
+          const uri = URI.createURI(nsURI);
+          const resource = await this.getResourceAsync(uri, true);
+          if (resource?.isLoaded()) {
+            totalResolved++;
+            progress = true;
+          }
+        } catch (err) {
+          console.warn(`[resolveProxiesAsync] Failed to resolve ${nsURI}:`, err);
         }
-      r++;
+      }
+      depth++;
     }
-    return t;
+    return totalResolved;
   }
   /**
    * Collects nsURIs from unresolved proxy references across all resources.
    */
   collectUnresolvedNsURIs() {
-    const e = /* @__PURE__ */ new Set();
-    for (const t of this.resources)
-      for (const s of t.getContents())
-        this.collectProxyURIs(s, e);
-    return e;
+    const nsURIs = /* @__PURE__ */ new Set();
+    for (const resource of this.resources) {
+      for (const content of resource.getContents()) {
+        this.collectProxyURIs(content, nsURIs);
+      }
+    }
+    return nsURIs;
   }
   /**
    * Recursively walks EObject tree and collects nsURIs from proxy references.
    */
-  collectProxyURIs(e, t) {
-    const s = e.eClass();
-    if (s) {
-      for (const r of s.getEAllReferences())
-        try {
-          const n = e.eGet(r);
-          if (!n)
-            continue;
-          if (r.isMany() && Array.isArray(n))
-            for (const a of n)
-              this.checkProxy(a, t);
-          else typeof n == "object" && "eClass" in n && this.checkProxy(n, t);
-        } catch {
+  collectProxyURIs(obj, nsURIs) {
+    const eClass = obj.eClass();
+    if (!eClass)
+      return;
+    for (const ref of eClass.getEAllReferences()) {
+      try {
+        const value = obj.eGet(ref);
+        if (!value)
+          continue;
+        if (ref.isMany() && Array.isArray(value)) {
+          for (const item of value) {
+            this.checkProxy(item, nsURIs);
+          }
+        } else if (typeof value === "object" && "eClass" in value) {
+          this.checkProxy(value, nsURIs);
         }
-      for (const r of e.eContents())
-        this.collectProxyURIs(r, t);
+      } catch {
+      }
+    }
+    for (const child of obj.eContents()) {
+      this.collectProxyURIs(child, nsURIs);
     }
   }
   /**
    * Checks if an EObject is a proxy and extracts the nsURI.
    */
-  checkProxy(e, t) {
-    if (typeof e.eIsProxy == "function" && e.eIsProxy()) {
-      const s = e.eProxyURI?.();
-      if (s) {
-        const n = (typeof s == "string" ? s : s.toString()).split("#")[0];
-        n && !this.packageRegistry.has(n) && t.add(n);
+  checkProxy(obj, nsURIs) {
+    if (typeof obj.eIsProxy === "function" && obj.eIsProxy()) {
+      const proxyURI = obj.eProxyURI?.();
+      if (proxyURI) {
+        const uriStr = typeof proxyURI === "string" ? proxyURI : proxyURI.toString();
+        const baseUri = uriStr.split("#")[0];
+        if (baseUri && !this.packageRegistry.has(baseUri)) {
+          nsURIs.add(baseUri);
+        }
       }
     }
   }
@@ -9896,42 +11758,53 @@ class An {
    * Create default package registry that delegates to global EPackageRegistry.INSTANCE
    */
   createDefaultPackageRegistry() {
-    const e = /* @__PURE__ */ new Map();
-    function t(s) {
-      for (const r of s.getESubpackages()) {
-        const n = r.getNsURI();
-        n && e.set(n, r), t(r);
+    const map = /* @__PURE__ */ new Map();
+    function registerSubpackages2(pkg) {
+      for (const subPkg of pkg.getESubpackages()) {
+        const subNsURI = subPkg.getNsURI();
+        if (subNsURI) {
+          map.set(subNsURI, subPkg);
+        }
+        registerSubpackages2(subPkg);
       }
     }
     return {
-      getEPackage(s) {
-        const r = e.get(s);
-        return r ? "getEPackage" in r ? r.getEPackage() : r : we.INSTANCE.getEPackage(s);
+      getEPackage(nsURI) {
+        const value = map.get(nsURI);
+        if (value) {
+          if ("getEPackage" in value)
+            return value.getEPackage();
+          return value;
+        }
+        return EPackageRegistry.INSTANCE.getEPackage(nsURI);
       },
-      getEFactory(s) {
-        const r = this.getEPackage(s);
-        return r ? r.getEFactoryInstance() : null;
+      getEFactory(nsURI) {
+        const pkg = this.getEPackage(nsURI);
+        return pkg ? pkg.getEFactoryInstance() : null;
       },
-      get(s) {
-        return e.get(s) || we.INSTANCE.get(s);
+      get(nsURI) {
+        return map.get(nsURI) || EPackageRegistry.INSTANCE.get(nsURI);
       },
-      set(s, r) {
-        e.set(s, r), r && !("getEPackage" in r) && typeof r.getESubpackages == "function" && t(r);
+      set(nsURI, value) {
+        map.set(nsURI, value);
+        if (value && !("getEPackage" in value) && typeof value.getESubpackages === "function") {
+          registerSubpackages2(value);
+        }
       },
-      registerPackage(s) {
-        this.set(ks(s), s);
+      registerPackage(ePackage) {
+        this.set(requireNsURI(ePackage), ePackage);
       },
-      delete(s) {
-        return e.delete(s);
+      delete(nsURI) {
+        return map.delete(nsURI);
       },
-      has(s) {
-        return e.has(s) || we.INSTANCE.has(s);
+      has(nsURI) {
+        return map.has(nsURI) || EPackageRegistry.INSTANCE.has(nsURI);
       },
       keys() {
-        return e.keys();
+        return map.keys();
       },
       values() {
-        return e.values();
+        return map.values();
       }
     };
   }
@@ -9939,113 +11812,129 @@ class An {
    * Create default URI converter
    */
   createDefaultURIConverter() {
-    const e = /* @__PURE__ */ new Map();
+    const uriMap = /* @__PURE__ */ new Map();
     return {
-      normalize(t) {
-        for (const [s, r] of e.entries()) {
-          const n = s.toString(), a = t.toString();
-          if (a.startsWith(n)) {
-            const o = a.substring(n.length);
-            return Y.createURI(r.toString() + o);
+      normalize(uri) {
+        for (const [source, target] of uriMap.entries()) {
+          const sourceStr = source.toString();
+          const uriStr = uri.toString();
+          if (uriStr.startsWith(sourceStr)) {
+            const remainder = uriStr.substring(sourceStr.length);
+            return URI.createURI(target.toString() + remainder);
           }
         }
-        return t;
+        return uri;
       },
-      async createInputStream(t) {
+      async createInputStream(uri) {
         throw new Error("createInputStream not implemented");
       },
-      async createOutputStream(t) {
+      async createOutputStream(uri) {
         throw new Error("createOutputStream not implemented");
       },
-      async exists(t) {
-        return !1;
+      async exists(uri) {
+        return false;
       },
-      async delete(t) {
+      async delete(uri) {
         throw new Error("delete not implemented");
       },
       getURIMap() {
-        return e;
+        return uriMap;
       }
     };
   }
 }
-class bn {
-  constructor(e, t) {
-    this.resourceSet = null, this.uri = e, this._syntheticPackage = t;
-    const s = new Ie(null, null);
-    s.add(t), this._contents = xe(s);
+class SyntheticPackageResource {
+  constructor(uri, ePackage) {
+    this.resourceSet = null;
+    this.uri = uri;
+    this._syntheticPackage = ePackage;
+    const list = new BasicEList(null, null);
+    list.add(ePackage);
+    this._contents = createIndexedProxy(list);
   }
   getResourceSet() {
     return this.resourceSet;
   }
-  setResourceSet(e) {
-    this.resourceSet = e;
+  setResourceSet(resourceSet) {
+    this.resourceSet = resourceSet;
   }
   getURI() {
     return this.uri;
   }
-  setURI(e) {
-    e && (this.uri = e);
+  setURI(uri) {
+    if (uri)
+      this.uri = uri;
   }
   getContents() {
     return this._contents;
   }
   getAllContents() {
-    return this._contents.toArray()[Symbol.iterator]();
+    const contents = this._contents.toArray();
+    return contents[Symbol.iterator]();
   }
-  getEObject(e) {
-    let t = e;
-    for (; t.startsWith("/"); )
-      t = t.substring(1);
-    if (!t)
+  getEObject(uriFragment) {
+    let path = uriFragment;
+    while (path.startsWith("/")) {
+      path = path.substring(1);
+    }
+    if (!path) {
       return this._syntheticPackage;
-    const s = t.split("/"), r = Ze(this._syntheticPackage, t);
-    if (r)
-      return r;
-    if (s.length >= 2) {
-      let n = this._syntheticPackage;
-      for (let d = 0; d < s.length - 2; d++) {
-        const y = n.getESubpackages();
-        let S = null;
-        for (let C = 0; C < y.length; C++)
-          if (y.get(C).getName() === s[d]) {
-            S = y.get(C);
+    }
+    const segments = path.split("/");
+    const classifier = resolveClassifierInPackage(this._syntheticPackage, path);
+    if (classifier) {
+      return classifier;
+    }
+    if (segments.length >= 2) {
+      let currentPkg = this._syntheticPackage;
+      for (let i = 0; i < segments.length - 2; i++) {
+        const subPackages = currentPkg.getESubpackages();
+        let found = null;
+        for (let j = 0; j < subPackages.length; j++) {
+          if (subPackages.get(j).getName() === segments[i]) {
+            found = subPackages.get(j);
             break;
           }
-        if (!S)
+        }
+        if (!found)
           return null;
-        n = S;
+        currentPkg = found;
       }
-      const a = s[s.length - 2], o = n.getEClassifier(a);
-      if (o && "getEStructuralFeature" in o) {
-        const d = o.getEStructuralFeature(s[s.length - 1]);
-        if (d)
-          return d;
+      const classifierName = segments[segments.length - 2];
+      const eClassifier = currentPkg.getEClassifier(classifierName);
+      if (eClassifier && "getEStructuralFeature" in eClassifier) {
+        const feature = eClassifier.getEStructuralFeature(segments[segments.length - 1]);
+        if (feature) {
+          return feature;
+        }
       }
     }
     return null;
   }
-  getURIFragment(e) {
-    if (e === this._syntheticPackage)
+  getURIFragment(eObject) {
+    if (eObject === this._syntheticPackage) {
       return "/";
-    for (const t of this._syntheticPackage.getEClassifiers())
-      if (t === e)
-        return "//" + t.getName();
+    }
+    for (const classifier of this._syntheticPackage.getEClassifiers()) {
+      if (classifier === eObject) {
+        return "//" + classifier.getName();
+      }
+    }
     return "";
   }
-  async save(e) {
+  async save(options) {
   }
-  async load(e) {
+  async load(options) {
   }
   isLoaded() {
-    return !0;
+    return true;
   }
   unload() {
   }
   isModified() {
-    return !1;
+    return false;
   }
-  setModified(e) {
+  setModified(isModified) {
   }
   getErrors() {
     return [];
@@ -10054,22 +11943,30 @@ class bn {
     return [];
   }
 }
-class vn extends Re {
+class BasicEAnnotation extends BasicEObject {
   constructor() {
-    super(...arguments), this.source = null, this._detailsMap = null, this.eModelElement = null, this.contents = ce(this), this.references = ce(this), this.eAnnotations = ce(this);
+    super(...arguments);
+    this.source = null;
+    this._detailsMap = null;
+    this.eModelElement = null;
+    this.contents = createMetamodelEList(this);
+    this.references = createMetamodelEList(this);
+    this.eAnnotations = createMetamodelEList(this);
   }
   getOrCreateDetailsMap() {
     if (!this._detailsMap) {
-      const t = te.getEAnnotationClass().getEStructuralFeature("details"), s = te.getEStringToStringMapEntryClass();
-      this._detailsMap = Pr(this, t, s);
+      const eAnnotationClass = ecoreRegistry.getEAnnotationClass();
+      const detailsFeature = eAnnotationClass.getEStructuralFeature("details");
+      const entryEClass = ecoreRegistry.getEStringToStringMapEntryClass();
+      this._detailsMap = createEMap(this, detailsFeature, entryEClass);
     }
     return this._detailsMap;
   }
   getSource() {
     return this.source;
   }
-  setSource(e) {
-    this.source = e;
+  setSource(value) {
+    this.source = value;
   }
   getDetails() {
     return this.getOrCreateDetailsMap();
@@ -10077,8 +11974,8 @@ class vn extends Re {
   getEModelElement() {
     return this.eModelElement;
   }
-  setEModelElement(e) {
-    this.eModelElement = e;
+  setEModelElement(value) {
+    this.eModelElement = value;
   }
   getContents() {
     return this.contents;
@@ -10089,14 +11986,15 @@ class vn extends Re {
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEAnnotationClass();
+    return ecoreRegistry.getEAnnotationClass();
   }
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "source":
         return this.source;
       case "details":
@@ -10108,58 +12006,68 @@ class vn extends Re {
       case "references":
         return this.references;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "source":
-        this.source = t, super.eSet(e, t);
+        this.source = newValue;
+        super.eSet(feature, newValue);
         break;
       case "details":
-        if (t instanceof Map) {
-          const r = this.getOrCreateDetailsMap();
-          r.clear();
-          for (const [n, a] of t)
-            r.putByKey(n, a);
+        if (newValue instanceof Map) {
+          const map = this.getOrCreateDetailsMap();
+          map.clear();
+          for (const [k, v] of newValue) {
+            map.putByKey(k, v);
+          }
         }
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
         break;
       case "eModelElement":
-        this.eModelElement = t, super.eSet(e, t);
+        this.eModelElement = newValue;
+        super.eSet(feature, newValue);
         break;
       case "contents":
-        he(this.contents, t);
+        replaceListContents(this.contents, newValue);
         break;
       case "references":
-        he(this.references, t);
+        replaceListContents(this.references, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class $s extends Re {
+class BasicEEnumLiteral extends BasicEObject {
   constructor() {
-    super(...arguments), this._name = null, this._value = 0, this.instance = null, this.literal = null, this.eEnum = null, this.eAnnotations = ce(this);
+    super(...arguments);
+    this._name = null;
+    this._value = 0;
+    this.instance = null;
+    this.literal = null;
+    this.eEnum = null;
+    this.eAnnotations = createMetamodelEList(this);
   }
   getName() {
     return this._name;
   }
-  setName(e) {
-    this._name = e;
+  setName(value) {
+    this._name = value;
   }
   getValue() {
     return this._value;
   }
-  setValue(e) {
-    this._value = e;
+  setValue(value) {
+    this._value = value;
   }
   getInstance() {
     return this.instance;
   }
-  setInstance(e) {
-    this.instance = e;
+  setInstance(value) {
+    this.instance = value;
   }
   /**
    * Returns the literal string, falling back to the name when no explicit
@@ -10169,27 +12077,28 @@ class $s extends Re {
   getLiteral() {
     return this.literal ?? this._name;
   }
-  setLiteral(e) {
-    this.literal = e;
+  setLiteral(value) {
+    this.literal = value;
   }
   getEEnum() {
     return this.eEnum;
   }
-  setEEnum(e) {
-    this.eEnum = e;
+  setEEnum(value) {
+    this.eEnum = value;
   }
   // EModelElement methods
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEEnumLiteralClass();
+    return ecoreRegistry.getEEnumLiteralClass();
   }
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
         return this._name;
       case "value":
@@ -10203,37 +12112,44 @@ class $s extends Re {
       case "eAnnotations":
         return this.eAnnotations;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "name":
-        this._name = t, super.eSet(e, t);
+        this._name = newValue;
+        super.eSet(feature, newValue);
         break;
       case "value":
-        this._value = typeof t == "number" ? t : parseInt(t, 10), super.eSet(e, t);
+        this._value = typeof newValue === "number" ? newValue : parseInt(newValue, 10);
+        super.eSet(feature, newValue);
         break;
       case "instance":
-        this.instance = t, super.eSet(e, t);
+        this.instance = newValue;
+        super.eSet(feature, newValue);
         break;
       case "literal":
-        this.literal = t, super.eSet(e, t);
+        this.literal = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eEnum":
-        this.eEnum = t, super.eSet(e, t);
+        this.eEnum = newValue;
+        super.eSet(feature, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class xn extends ne {
+class BasicEEnum extends BasicEDataType {
   constructor() {
-    super(...arguments), this.eLiterals = ce(this);
+    super(...arguments);
+    this.eLiterals = createMetamodelEList(this);
   }
   getELiterals() {
     return this.eLiterals;
@@ -10241,87 +12157,113 @@ class xn extends ne {
   /**
    * Returns the literal with the given name or ordinal value.
    */
-  getEEnumLiteral(e) {
-    return typeof e == "string" ? this.eLiterals.find((t) => t.getName() === e) || null : this.eLiterals.find((t) => t.getValue() === e) || null;
+  getEEnumLiteral(nameOrValue) {
+    if (typeof nameOrValue === "string") {
+      return this.eLiterals.find((l) => l.getName() === nameOrValue) || null;
+    } else {
+      return this.eLiterals.find((l) => l.getValue() === nameOrValue) || null;
+    }
   }
   /**
    * Returns the literal with the given literal string.
    */
-  getEEnumLiteralByLiteral(e) {
-    return this.eLiterals.find((t) => t.getLiteral() === e) || null;
+  getEEnumLiteralByLiteral(literal) {
+    return this.eLiterals.find((l) => l.getLiteral() === literal) || null;
   }
   /**
    * Add a literal to this enum.
    */
-  addLiteral(e) {
-    e.setEEnum(this), this.eLiterals.push(e);
+  addLiteral(literal) {
+    literal.setEEnum(this);
+    this.eLiterals.push(literal);
   }
   eClass() {
-    return te.getEEnumClass();
+    return ecoreRegistry.getEEnumClass();
   }
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "eLiterals":
         return this.eLiterals;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    const featureName = feature.getName();
+    switch (featureName) {
       case "eLiterals":
-        if (he(this.eLiterals, t))
-          for (const r of this.eLiterals)
-            r instanceof $s && r.setEEnum(this);
-        super.eSet(e, t);
+        if (replaceListContents(this.eLiterals, newValue)) {
+          for (const lit of this.eLiterals) {
+            if (lit instanceof BasicEEnumLiteral) {
+              lit.setEEnum(this);
+            }
+          }
+        }
+        super.eSet(feature, newValue);
         break;
       default:
-        super.eSet(e, t);
+        super.eSet(feature, newValue);
     }
   }
 }
-class Rn extends Re {
+class BasicEOperation extends BasicEObject {
   constructor() {
-    super(...arguments), this.name = null, this.eContainingClass = null, this.eType = null, this.eParameters = ce(this), this.eExceptions = ce(this), this.eAnnotations = ce(this), this.eGenericType = null, this.eTypeParameters = ce(this), this.ordered = !0, this.unique = !0, this.lowerBound = 0, this.upperBound = 1;
+    super(...arguments);
+    this.name = null;
+    this.eContainingClass = null;
+    this.eType = null;
+    this.eParameters = createMetamodelEList(this);
+    this.eExceptions = createMetamodelEList(this);
+    this.eAnnotations = createMetamodelEList(this);
+    this.eGenericType = null;
+    this.eTypeParameters = createMetamodelEList(this);
+    this.ordered = true;
+    this.unique = true;
+    this.lowerBound = 0;
+    this.upperBound = 1;
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   getEContainingClass() {
     return this.eContainingClass;
   }
-  setEContainingClass(e) {
-    this.eContainingClass = e;
+  setEContainingClass(value) {
+    this.eContainingClass = value;
   }
   getEType() {
-    return !this.eType && this.eGenericType ? this.eGenericType.getERawType() : this.eType;
+    if (!this.eType && this.eGenericType) {
+      return this.eGenericType.getERawType();
+    }
+    return this.eType;
   }
   getEGenericType() {
     return this.eGenericType;
   }
-  setEGenericType(e) {
-    this.eGenericType = e;
+  setEGenericType(value) {
+    this.eGenericType = value;
   }
   getETypeParameters() {
     return this.eTypeParameters;
   }
-  setEType(e) {
-    this.eType = e;
+  setEType(value) {
+    this.eType = value;
   }
   getEParameters() {
     return this.eParameters;
   }
-  addParameter(e) {
-    this.eParameters.add(e);
+  addParameter(parameter) {
+    this.eParameters.add(parameter);
   }
   getEExceptions() {
     return this.eExceptions;
   }
-  addException(e) {
-    this.eExceptions.add(e);
+  addException(exception) {
+    this.eExceptions.add(exception);
   }
   isMany() {
     return this.upperBound < 0 || this.upperBound > 1;
@@ -10332,59 +12274,69 @@ class Rn extends Re {
   getLowerBound() {
     return this.lowerBound;
   }
-  setLowerBound(e) {
-    this.lowerBound = e;
+  setLowerBound(value) {
+    this.lowerBound = value;
   }
   getUpperBound() {
     return this.upperBound;
   }
-  setUpperBound(e) {
-    this.upperBound = e;
+  setUpperBound(value) {
+    this.upperBound = value;
   }
   getOperationID() {
-    return this.eContainingClass ? this.eContainingClass.getOperationID(this) : -1;
+    if (!this.eContainingClass)
+      return -1;
+    return this.eContainingClass.getOperationID(this);
   }
-  isOverrideOf(e) {
-    if (this.name !== e.getName())
-      return !1;
-    const t = this.eParameters, s = e.getEParameters();
-    if (t.length !== s.length)
-      return !1;
-    for (let r = 0; r < t.length; r++) {
-      const n = t[r].getEType(), a = s[r].getEType();
-      if (n !== a)
-        return !1;
+  isOverrideOf(someOperation) {
+    if (this.name !== someOperation.getName()) {
+      return false;
     }
-    return !this.eContainingClass || !e.getEContainingClass() ? !1 : this.eContainingClass.getEAllSuperTypes().includes(e.getEContainingClass());
+    const myParams = this.eParameters;
+    const otherParams = someOperation.getEParameters();
+    if (myParams.length !== otherParams.length) {
+      return false;
+    }
+    for (let i = 0; i < myParams.length; i++) {
+      const myParamType = myParams[i].getEType();
+      const otherParamType = otherParams[i].getEType();
+      if (myParamType !== otherParamType) {
+        return false;
+      }
+    }
+    if (!this.eContainingClass || !someOperation.getEContainingClass()) {
+      return false;
+    }
+    return this.eContainingClass.getEAllSuperTypes().includes(someOperation.getEContainingClass());
   }
   isOrdered() {
     return this.ordered;
   }
-  setOrdered(e) {
-    this.ordered = e;
+  setOrdered(value) {
+    this.ordered = value;
   }
   isUnique() {
     return this.unique;
   }
-  setUnique(e) {
-    this.unique = e;
+  setUnique(value) {
+    this.unique = value;
   }
   // EObject methods
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEOperationClass();
+    return ecoreRegistry.getEOperationClass();
   }
   /**
    * Reflective get - binds the declared fields to the reflective API, so the
    * XMI loader and typed accessors see the same state.
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    switch (feature.getName()) {
       case "name":
         return this.name;
       case "eType":
@@ -10408,87 +12360,99 @@ class Rn extends Re {
       case "upperBound":
         return this.upperBound;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    switch (feature.getName()) {
       case "name":
-        this.name = t;
+        this.name = newValue;
         break;
       case "eType":
-        this.eType = t;
+        this.eType = newValue;
         break;
       case "eGenericType":
-        this.eGenericType = t;
+        this.eGenericType = newValue;
         break;
       case "eTypeParameters":
-        he(this.eTypeParameters, t);
+        replaceListContents(this.eTypeParameters, newValue);
         break;
       case "eParameters":
-        he(this.eParameters, t);
+        replaceListContents(this.eParameters, newValue);
         break;
       case "eExceptions":
-        he(this.eExceptions, t);
+        replaceListContents(this.eExceptions, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       case "ordered":
-        this.ordered = t === !0 || t === "true";
+        this.ordered = newValue === true || newValue === "true";
         break;
       case "unique":
-        this.unique = t === !0 || t === "true";
+        this.unique = newValue === true || newValue === "true";
         break;
       case "lowerBound":
-        this.lowerBound = Number(t);
+        this.lowerBound = Number(newValue);
         break;
       case "upperBound":
-        this.upperBound = Number(t);
+        this.upperBound = Number(newValue);
         break;
     }
-    super.eSet(e, t);
+    super.eSet(feature, newValue);
   }
 }
-class Pn extends Re {
+class BasicEParameter extends BasicEObject {
   constructor() {
-    super(...arguments), this.name = null, this.eType = null, this.eOperation = null, this.eAnnotations = ce(this), this.eGenericType = null, this.ordered = !0, this.unique = !0, this.lowerBound = 0, this.upperBound = 1;
+    super(...arguments);
+    this.name = null;
+    this.eType = null;
+    this.eOperation = null;
+    this.eAnnotations = createMetamodelEList(this);
+    this.eGenericType = null;
+    this.ordered = true;
+    this.unique = true;
+    this.lowerBound = 0;
+    this.upperBound = 1;
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   getEType() {
-    return !this.eType && this.eGenericType ? this.eGenericType.getERawType() : this.eType;
+    if (!this.eType && this.eGenericType) {
+      return this.eGenericType.getERawType();
+    }
+    return this.eType;
   }
   getEGenericType() {
     return this.eGenericType;
   }
-  setEGenericType(e) {
-    this.eGenericType = e;
+  setEGenericType(value) {
+    this.eGenericType = value;
   }
-  setEType(e) {
-    this.eType = e;
+  setEType(value) {
+    this.eType = value;
   }
   getEOperation() {
     return this.eOperation;
   }
-  setEOperation(e) {
-    this.eOperation = e;
+  setEOperation(value) {
+    this.eOperation = value;
   }
   isOrdered() {
     return this.ordered;
   }
-  setOrdered(e) {
-    this.ordered = e;
+  setOrdered(value) {
+    this.ordered = value;
   }
   isUnique() {
     return this.unique;
   }
-  setUnique(e) {
-    this.unique = e;
+  setUnique(value) {
+    this.unique = value;
   }
   isMany() {
     return this.upperBound < 0 || this.upperBound > 1;
@@ -10499,30 +12463,30 @@ class Pn extends Re {
   getLowerBound() {
     return this.lowerBound;
   }
-  setLowerBound(e) {
-    this.lowerBound = e;
+  setLowerBound(value) {
+    this.lowerBound = value;
   }
   getUpperBound() {
     return this.upperBound;
   }
-  setUpperBound(e) {
-    this.upperBound = e;
+  setUpperBound(value) {
+    this.upperBound = value;
   }
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getEParameterClass();
+    return ecoreRegistry.getEParameterClass();
   }
   /**
    * Reflective get - binds the declared fields to the reflective API, so the
    * XMI loader and typed accessors see the same state.
    */
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    switch (feature.getName()) {
       case "name":
         return this.name;
       case "eType":
@@ -10540,54 +12504,59 @@ class Pn extends Re {
       case "upperBound":
         return this.upperBound;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    switch (feature.getName()) {
       case "name":
-        this.name = t;
+        this.name = newValue;
         break;
       case "eType":
-        this.eType = t;
+        this.eType = newValue;
         break;
       case "eGenericType":
-        this.eGenericType = t;
+        this.eGenericType = newValue;
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
       case "ordered":
-        this.ordered = t === !0 || t === "true";
+        this.ordered = newValue === true || newValue === "true";
         break;
       case "unique":
-        this.unique = t === !0 || t === "true";
+        this.unique = newValue === true || newValue === "true";
         break;
       case "lowerBound":
-        this.lowerBound = Number(t);
+        this.lowerBound = Number(newValue);
         break;
       case "upperBound":
-        this.upperBound = Number(t);
+        this.upperBound = Number(newValue);
         break;
     }
-    super.eSet(e, t);
+    super.eSet(feature, newValue);
   }
 }
-class Fn extends Re {
+class BasicEGenericType extends BasicEObject {
   constructor() {
-    super(...arguments), this.eClassifier = null, this.eTypeParameter = null, this.eTypeArguments = ce(this), this.eUpperBound = null, this.eLowerBound = null;
+    super(...arguments);
+    this.eClassifier = null;
+    this.eTypeParameter = null;
+    this.eTypeArguments = createMetamodelEList(this);
+    this.eUpperBound = null;
+    this.eLowerBound = null;
   }
   getEClassifier() {
     return this.eClassifier;
   }
-  setEClassifier(e) {
-    this.eClassifier = e;
+  setEClassifier(value) {
+    this.eClassifier = value;
   }
   getETypeParameter() {
     return this.eTypeParameter;
   }
-  setETypeParameter(e) {
-    this.eTypeParameter = e;
+  setETypeParameter(value) {
+    this.eTypeParameter = value;
   }
   getETypeArguments() {
     return this.eTypeArguments;
@@ -10595,14 +12564,14 @@ class Fn extends Re {
   getEUpperBound() {
     return this.eUpperBound;
   }
-  setEUpperBound(e) {
-    this.eUpperBound = e;
+  setEUpperBound(value) {
+    this.eUpperBound = value;
   }
   getELowerBound() {
     return this.eLowerBound;
   }
-  setELowerBound(e) {
-    this.eLowerBound = e;
+  setELowerBound(value) {
+    this.eLowerBound = value;
   }
   /**
    * The erasure of this generic type. For a classifier reference that is the
@@ -10610,20 +12579,25 @@ class Fn extends Re {
    * bound, mirroring Java EMF's EGenericTypeImpl.getERawType().
    */
   getERawType() {
-    if (this.eClassifier)
+    if (this.eClassifier) {
       return this.eClassifier;
-    if (this.eTypeParameter) {
-      const e = this.eTypeParameter.getEBounds();
-      if (e.length > 0)
-        return e[0].getERawType();
     }
-    return this.eUpperBound ? this.eUpperBound.getERawType() : te.getEObjectClass();
+    if (this.eTypeParameter) {
+      const bounds = this.eTypeParameter.getEBounds();
+      if (bounds.length > 0) {
+        return bounds[0].getERawType();
+      }
+    }
+    if (this.eUpperBound) {
+      return this.eUpperBound.getERawType();
+    }
+    return ecoreRegistry.getEObjectClass();
   }
   eClass() {
-    return te.getEGenericTypeClass();
+    return ecoreRegistry.getEGenericTypeClass();
   }
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    switch (feature.getName()) {
       case "eClassifier":
         return this.eClassifier;
       case "eTypeParameter":
@@ -10635,39 +12609,42 @@ class Fn extends Re {
       case "eLowerBound":
         return this.eLowerBound;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    switch (feature.getName()) {
       case "eClassifier":
-        this.eClassifier = t;
+        this.eClassifier = newValue;
         break;
       case "eTypeParameter":
-        this.eTypeParameter = t;
+        this.eTypeParameter = newValue;
         break;
       case "eTypeArguments":
-        he(this.eTypeArguments, t);
+        replaceListContents(this.eTypeArguments, newValue);
         break;
       case "eUpperBound":
-        this.eUpperBound = t;
+        this.eUpperBound = newValue;
         break;
       case "eLowerBound":
-        this.eLowerBound = t;
+        this.eLowerBound = newValue;
         break;
     }
-    super.eSet(e, t);
+    super.eSet(feature, newValue);
   }
 }
-class kn extends Re {
+class BasicETypeParameter extends BasicEObject {
   constructor() {
-    super(...arguments), this.name = null, this.eBounds = ce(this), this.eAnnotations = ce(this);
+    super(...arguments);
+    this.name = null;
+    this.eBounds = createMetamodelEList(this);
+    this.eAnnotations = createMetamodelEList(this);
   }
   getName() {
     return this.name;
   }
-  setName(e) {
-    this.name = e;
+  setName(value) {
+    this.name = value;
   }
   getEBounds() {
     return this.eBounds;
@@ -10675,14 +12652,14 @@ class kn extends Re {
   getEAnnotations() {
     return this.eAnnotations;
   }
-  getEAnnotation(e) {
-    return this.eAnnotations.find((t) => t.getSource() === e) || null;
+  getEAnnotation(source) {
+    return this.eAnnotations.find((a) => a.getSource() === source) || null;
   }
   eClass() {
-    return te.getETypeParameterClass();
+    return ecoreRegistry.getETypeParameterClass();
   }
-  eGet(e) {
-    switch (e.getName()) {
+  eGet(feature) {
+    switch (feature.getName()) {
       case "name":
         return this.name;
       case "eBounds":
@@ -10690,30 +12667,35 @@ class kn extends Re {
       case "eAnnotations":
         return this.eAnnotations;
       default:
-        return super.eGet(e);
+        return super.eGet(feature);
     }
   }
-  eSet(e, t) {
-    switch (e.getName()) {
+  eSet(feature, newValue) {
+    switch (feature.getName()) {
       case "name":
-        this.name = t;
+        this.name = newValue;
         break;
       case "eBounds":
-        he(this.eBounds, t);
+        replaceListContents(this.eBounds, newValue);
         break;
       case "eAnnotations":
-        he(this.eAnnotations, t);
+        replaceListContents(this.eAnnotations, newValue);
         break;
     }
-    super.eSet(e, t);
+    super.eSet(feature, newValue);
   }
 }
-const Bn = "ecore.xml.type";
-let nt = null;
-function Mn() {
-  return nt || (nt = new On(), nt.initialize(), we.INSTANCE.set(Gs, nt)), nt;
+const XML_TYPE_NS_PREFIX = "ecore.xml.type";
+let xmlTypePackageInstance = null;
+function getXMLTypePackage() {
+  if (!xmlTypePackageInstance) {
+    xmlTypePackageInstance = new XMLTypePackageImpl();
+    xmlTypePackageInstance.initialize();
+    EPackageRegistry.INSTANCE.set(XML_TYPE_NS_URI, xmlTypePackageInstance);
+  }
+  return xmlTypePackageInstance;
 }
-const Dn = [
+const DATA_TYPE_DEFS = [
   // Commonly used
   ["AnySimpleType", "java.lang.Object"],
   ["AnyURI", "java.lang.String"],
@@ -10774,69 +12756,141 @@ const Dn = [
   ["UnsignedShort", "int"],
   ["UnsignedShortObject", "java.lang.Integer"]
 ];
-class On extends De {
+class XMLTypePackageImpl extends BasicEPackage {
   constructor() {
-    super(), this._dataTypes = /* @__PURE__ */ new Map(), this._initialized = !1, this.setName("type"), this.setNsURI(Gs), this.setNsPrefix(Bn);
+    super();
+    this._dataTypes = /* @__PURE__ */ new Map();
+    this._initialized = false;
+    this.setName("type");
+    this.setNsURI(XML_TYPE_NS_URI);
+    this.setNsPrefix(XML_TYPE_NS_PREFIX);
   }
   initialize() {
     if (this._initialized)
       return;
-    this._initialized = !0;
-    for (const [t, s] of Dn) {
-      const r = new ne();
-      r.setName(t), r.setInstanceClassName(s), this.getEClassifiers().push(r), this._dataTypes.set(t, r);
+    this._initialized = true;
+    for (const [name, instanceClassName] of DATA_TYPE_DEFS) {
+      const dt = new BasicEDataType();
+      dt.setName(name);
+      dt.setInstanceClassName(instanceClassName);
+      this.getEClassifiers().push(dt);
+      this._dataTypes.set(name, dt);
     }
-    for (const t of this.getEClassifiers())
-      "setEPackage" in t && t.setEPackage(this);
-    const e = new Un(this);
-    this.setEFactoryInstance(e), this.registerConverters();
+    for (const classifier of this.getEClassifiers()) {
+      if ("setEPackage" in classifier) {
+        classifier.setEPackage(this);
+      }
+    }
+    const factory = new XMLTypeFactory(this);
+    this.setEFactoryInstance(factory);
+    this.registerConverters();
   }
   registerConverters() {
-    const e = { fromString: (o) => o.toLowerCase() === "true" || o === "1", toString: (o) => String(o) };
-    j.registerByName("Boolean", e), j.registerByName("BooleanObject", e);
-    const t = { fromString: (o) => parseInt(o, 10), toString: (o) => String(o) };
-    j.registerByName("Int", t), j.registerByName("IntObject", t), j.registerByName("Short", t), j.registerByName("ShortObject", t), j.registerByName("Byte", t), j.registerByName("ByteObject", t), j.registerByName("UnsignedByte", t), j.registerByName("UnsignedByteObject", t), j.registerByName("UnsignedShort", t), j.registerByName("UnsignedShortObject", t), j.registerByName("UnsignedInt", t), j.registerByName("UnsignedIntObject", t);
-    const s = {
-      fromString: (o) => {
-        const d = parseInt(o, 10);
-        return Math.abs(d) > Number.MAX_SAFE_INTEGER ? BigInt(o) : d;
+    const boolConv = { fromString: (s) => s.toLowerCase() === "true" || s === "1", toString: (v) => String(v) };
+    dataTypeRegistry.registerByName("Boolean", boolConv);
+    dataTypeRegistry.registerByName("BooleanObject", boolConv);
+    const intConv = { fromString: (s) => parseInt(s, 10), toString: (v) => String(v) };
+    dataTypeRegistry.registerByName("Int", intConv);
+    dataTypeRegistry.registerByName("IntObject", intConv);
+    dataTypeRegistry.registerByName("Short", intConv);
+    dataTypeRegistry.registerByName("ShortObject", intConv);
+    dataTypeRegistry.registerByName("Byte", intConv);
+    dataTypeRegistry.registerByName("ByteObject", intConv);
+    dataTypeRegistry.registerByName("UnsignedByte", intConv);
+    dataTypeRegistry.registerByName("UnsignedByteObject", intConv);
+    dataTypeRegistry.registerByName("UnsignedShort", intConv);
+    dataTypeRegistry.registerByName("UnsignedShortObject", intConv);
+    dataTypeRegistry.registerByName("UnsignedInt", intConv);
+    dataTypeRegistry.registerByName("UnsignedIntObject", intConv);
+    const longConv = {
+      fromString: (s) => {
+        const n = parseInt(s, 10);
+        return Math.abs(n) > Number.MAX_SAFE_INTEGER ? BigInt(s) : n;
       },
-      toString: (o) => String(o)
+      toString: (v) => String(v)
     };
-    j.registerByName("Long", s), j.registerByName("LongObject", s);
-    const r = { fromString: (o) => parseFloat(o), toString: (o) => String(o) };
-    j.registerByName("Float", r), j.registerByName("FloatObject", r), j.registerByName("Double", r), j.registerByName("DoubleObject", r);
-    const n = { fromString: (o) => o, toString: (o) => o ?? "0" };
-    j.registerByName("Decimal", n), j.registerByName("Integer", n), j.registerByName("NonNegativeInteger", n), j.registerByName("NonPositiveInteger", n), j.registerByName("NegativeInteger", n), j.registerByName("PositiveInteger", n), j.registerByName("UnsignedLong", n);
-    const a = { fromString: (o) => o, toString: (o) => o ?? "" };
-    j.registerByName("String", a), j.registerByName("AnySimpleType", a), j.registerByName("AnyURI", a), j.registerByName("NormalizedString", a), j.registerByName("Token", a), j.registerByName("Name", a), j.registerByName("NCName", a), j.registerByName("Language", a), j.registerByName("ID", a), j.registerByName("IDREF", a), j.registerByName("ENTITY", a), j.registerByName("NMTOKEN", a), j.registerByName("Date", a), j.registerByName("DateTime", a), j.registerByName("Time", a), j.registerByName("Duration", a), j.registerByName("GDay", a), j.registerByName("GMonth", a), j.registerByName("GMonthDay", a), j.registerByName("GYear", a), j.registerByName("GYearMonth", a), j.registerByName("QName", a), j.registerByName("NOTATION", a);
+    dataTypeRegistry.registerByName("Long", longConv);
+    dataTypeRegistry.registerByName("LongObject", longConv);
+    const floatConv = { fromString: (s) => parseFloat(s), toString: (v) => String(v) };
+    dataTypeRegistry.registerByName("Float", floatConv);
+    dataTypeRegistry.registerByName("FloatObject", floatConv);
+    dataTypeRegistry.registerByName("Double", floatConv);
+    dataTypeRegistry.registerByName("DoubleObject", floatConv);
+    const bigConv = { fromString: (s) => s, toString: (v) => v ?? "0" };
+    dataTypeRegistry.registerByName("Decimal", bigConv);
+    dataTypeRegistry.registerByName("Integer", bigConv);
+    dataTypeRegistry.registerByName("NonNegativeInteger", bigConv);
+    dataTypeRegistry.registerByName("NonPositiveInteger", bigConv);
+    dataTypeRegistry.registerByName("NegativeInteger", bigConv);
+    dataTypeRegistry.registerByName("PositiveInteger", bigConv);
+    dataTypeRegistry.registerByName("UnsignedLong", bigConv);
+    const strConv = { fromString: (s) => s, toString: (v) => v ?? "" };
+    dataTypeRegistry.registerByName("String", strConv);
+    dataTypeRegistry.registerByName("AnySimpleType", strConv);
+    dataTypeRegistry.registerByName("AnyURI", strConv);
+    dataTypeRegistry.registerByName("NormalizedString", strConv);
+    dataTypeRegistry.registerByName("Token", strConv);
+    dataTypeRegistry.registerByName("Name", strConv);
+    dataTypeRegistry.registerByName("NCName", strConv);
+    dataTypeRegistry.registerByName("Language", strConv);
+    dataTypeRegistry.registerByName("ID", strConv);
+    dataTypeRegistry.registerByName("IDREF", strConv);
+    dataTypeRegistry.registerByName("ENTITY", strConv);
+    dataTypeRegistry.registerByName("NMTOKEN", strConv);
+    dataTypeRegistry.registerByName("Date", strConv);
+    dataTypeRegistry.registerByName("DateTime", strConv);
+    dataTypeRegistry.registerByName("Time", strConv);
+    dataTypeRegistry.registerByName("Duration", strConv);
+    dataTypeRegistry.registerByName("GDay", strConv);
+    dataTypeRegistry.registerByName("GMonth", strConv);
+    dataTypeRegistry.registerByName("GMonthDay", strConv);
+    dataTypeRegistry.registerByName("GYear", strConv);
+    dataTypeRegistry.registerByName("GYearMonth", strConv);
+    dataTypeRegistry.registerByName("QName", strConv);
+    dataTypeRegistry.registerByName("NOTATION", strConv);
   }
-  getDataType(e) {
-    return this._dataTypes.get(e) ?? null;
+  getDataType(name) {
+    return this._dataTypes.get(name) ?? null;
   }
 }
-class Un extends Yt {
-  constructor(e) {
-    super(), this._ePackage = e;
+class XMLTypeFactory extends BasicEFactory {
+  constructor(ePackage) {
+    super();
+    this._ePackage = ePackage;
   }
   getEPackage() {
     return this._ePackage;
   }
-  create(e) {
-    return super.create(e);
+  create(eClass) {
+    return super.create(eClass);
   }
 }
-const zt = "http://www.eclipse.org/emf/2002/Ecore", Ln = "ecore", Gs = "http://www.eclipse.org/emf/2003/XMLType";
-let Qe = null;
-function Kt() {
-  return Qe || (Qe = new $n(), Qe.initialize(), jn(), te.register(Kt)), Qe;
+const ECORE_NS_URI = "http://www.eclipse.org/emf/2002/Ecore";
+const ECORE_NS_PREFIX = "ecore";
+const XML_TYPE_NS_URI = "http://www.eclipse.org/emf/2003/XMLType";
+let ecorePackageInstance = null;
+function getEcorePackage() {
+  if (!ecorePackageInstance) {
+    ecorePackageInstance = new EcorePackageImpl();
+    ecorePackageInstance.initialize();
+    registerEcorePackage();
+    ecoreRegistry.register(getEcorePackage);
+  }
+  return ecorePackageInstance;
 }
-function jn() {
-  Qe && (we.INSTANCE.set(zt, Qe), Mn());
+function registerEcorePackage() {
+  if (ecorePackageInstance) {
+    EPackageRegistry.INSTANCE.set(ECORE_NS_URI, ecorePackageInstance);
+    getXMLTypePackage();
+  }
 }
-class $n extends De {
+class EcorePackageImpl extends BasicEPackage {
   constructor() {
-    super(), this._initialized = !1, this.setName("ecore"), this.setNsURI(zt), this.setNsPrefix(Ln);
+    super();
+    this._initialized = false;
+    this.setName("ecore");
+    this.setNsURI(ECORE_NS_URI);
+    this.setNsPrefix(ECORE_NS_PREFIX);
   }
   /**
    * Initialize the package (called once)
@@ -10844,120 +12898,410 @@ class $n extends De {
   initialize() {
     if (this._initialized)
       return;
-    this._initialized = !0, this.createDataTypes(), this.createClasses(), this.createAttributes(), this.createReferences(), this.initializeClassifierPackages();
-    const e = new Gn(this);
-    this.setEFactoryInstance(e);
+    this._initialized = true;
+    this.createDataTypes();
+    this.createClasses();
+    this.createAttributes();
+    this.createReferences();
+    this.initializeClassifierPackages();
+    const factory = new EcoreFactory(this);
+    this.setEFactoryInstance(factory);
   }
   /**
    * Set the ePackage reference on all classifiers
    */
   initializeClassifierPackages() {
-    for (const e of this.getEClassifiers())
-      "setEPackage" in e && e.setEPackage(this);
+    for (const classifier of this.getEClassifiers()) {
+      if ("setEPackage" in classifier) {
+        classifier.setEPackage(this);
+      }
+    }
   }
   createDataTypes() {
-    this._eBooleanDataType = new ne(), this._eBooleanDataType.setName("EBoolean"), this._eBooleanDataType.setInstanceClassName("boolean"), this.getEClassifiers().push(this._eBooleanDataType), this._eIntDataType = new ne(), this._eIntDataType.setName("EInt"), this._eIntDataType.setInstanceClassName("int"), this.getEClassifiers().push(this._eIntDataType), this._eStringDataType = new ne(), this._eStringDataType.setName("EString"), this._eStringDataType.setInstanceClassName("java.lang.String"), this.getEClassifiers().push(this._eStringDataType), this._eDoubleDataType = new ne(), this._eDoubleDataType.setName("EDouble"), this._eDoubleDataType.setInstanceClassName("double"), this.getEClassifiers().push(this._eDoubleDataType), this._eFloatDataType = new ne(), this._eFloatDataType.setName("EFloat"), this._eFloatDataType.setInstanceClassName("float"), this.getEClassifiers().push(this._eFloatDataType), this._eLongDataType = new ne(), this._eLongDataType.setName("ELong"), this._eLongDataType.setInstanceClassName("long"), this.getEClassifiers().push(this._eLongDataType), this._eShortDataType = new ne(), this._eShortDataType.setName("EShort"), this._eShortDataType.setInstanceClassName("short"), this.getEClassifiers().push(this._eShortDataType), this._eByteDataType = new ne(), this._eByteDataType.setName("EByte"), this._eByteDataType.setInstanceClassName("byte"), this.getEClassifiers().push(this._eByteDataType), this._eCharDataType = new ne(), this._eCharDataType.setName("EChar"), this._eCharDataType.setInstanceClassName("char"), this.getEClassifiers().push(this._eCharDataType), this._eDateDataType = new ne(), this._eDateDataType.setName("EDate"), this._eDateDataType.setInstanceClassName("java.util.Date"), this.getEClassifiers().push(this._eDateDataType), this._eBigIntegerDataType = new ne(), this._eBigIntegerDataType.setName("EBigInteger"), this._eBigIntegerDataType.setInstanceClassName("java.math.BigInteger"), this.getEClassifiers().push(this._eBigIntegerDataType), this._eBigDecimalDataType = new ne(), this._eBigDecimalDataType.setName("EBigDecimal"), this._eBigDecimalDataType.setInstanceClassName("java.math.BigDecimal"), this.getEClassifiers().push(this._eBigDecimalDataType), this._eFeatureMapEntryDataType = new ne(), this._eFeatureMapEntryDataType.setName("EFeatureMapEntry"), this._eFeatureMapEntryDataType.setInstanceClassName("org.eclipse.emf.ecore.util.FeatureMap.Entry"), this.getEClassifiers().push(this._eFeatureMapEntryDataType), this._eJavaObjectDataType = new ne(), this._eJavaObjectDataType.setName("EJavaObject"), this._eJavaObjectDataType.setInstanceClassName("java.lang.Object"), this.getEClassifiers().push(this._eJavaObjectDataType), this._eJavaClassDataType = new ne(), this._eJavaClassDataType.setName("EJavaClass"), this._eJavaClassDataType.setInstanceClassName("java.lang.Class"), this.getEClassifiers().push(this._eJavaClassDataType);
+    this._eBooleanDataType = new BasicEDataType();
+    this._eBooleanDataType.setName("EBoolean");
+    this._eBooleanDataType.setInstanceClassName("boolean");
+    this.getEClassifiers().push(this._eBooleanDataType);
+    this._eIntDataType = new BasicEDataType();
+    this._eIntDataType.setName("EInt");
+    this._eIntDataType.setInstanceClassName("int");
+    this.getEClassifiers().push(this._eIntDataType);
+    this._eStringDataType = new BasicEDataType();
+    this._eStringDataType.setName("EString");
+    this._eStringDataType.setInstanceClassName("java.lang.String");
+    this.getEClassifiers().push(this._eStringDataType);
+    this._eDoubleDataType = new BasicEDataType();
+    this._eDoubleDataType.setName("EDouble");
+    this._eDoubleDataType.setInstanceClassName("double");
+    this.getEClassifiers().push(this._eDoubleDataType);
+    this._eFloatDataType = new BasicEDataType();
+    this._eFloatDataType.setName("EFloat");
+    this._eFloatDataType.setInstanceClassName("float");
+    this.getEClassifiers().push(this._eFloatDataType);
+    this._eLongDataType = new BasicEDataType();
+    this._eLongDataType.setName("ELong");
+    this._eLongDataType.setInstanceClassName("long");
+    this.getEClassifiers().push(this._eLongDataType);
+    this._eShortDataType = new BasicEDataType();
+    this._eShortDataType.setName("EShort");
+    this._eShortDataType.setInstanceClassName("short");
+    this.getEClassifiers().push(this._eShortDataType);
+    this._eByteDataType = new BasicEDataType();
+    this._eByteDataType.setName("EByte");
+    this._eByteDataType.setInstanceClassName("byte");
+    this.getEClassifiers().push(this._eByteDataType);
+    this._eCharDataType = new BasicEDataType();
+    this._eCharDataType.setName("EChar");
+    this._eCharDataType.setInstanceClassName("char");
+    this.getEClassifiers().push(this._eCharDataType);
+    this._eDateDataType = new BasicEDataType();
+    this._eDateDataType.setName("EDate");
+    this._eDateDataType.setInstanceClassName("java.util.Date");
+    this.getEClassifiers().push(this._eDateDataType);
+    this._eBigIntegerDataType = new BasicEDataType();
+    this._eBigIntegerDataType.setName("EBigInteger");
+    this._eBigIntegerDataType.setInstanceClassName("java.math.BigInteger");
+    this.getEClassifiers().push(this._eBigIntegerDataType);
+    this._eBigDecimalDataType = new BasicEDataType();
+    this._eBigDecimalDataType.setName("EBigDecimal");
+    this._eBigDecimalDataType.setInstanceClassName("java.math.BigDecimal");
+    this.getEClassifiers().push(this._eBigDecimalDataType);
+    this._eFeatureMapEntryDataType = new BasicEDataType();
+    this._eFeatureMapEntryDataType.setName("EFeatureMapEntry");
+    this._eFeatureMapEntryDataType.setInstanceClassName("org.eclipse.emf.ecore.util.FeatureMap.Entry");
+    this.getEClassifiers().push(this._eFeatureMapEntryDataType);
+    this._eJavaObjectDataType = new BasicEDataType();
+    this._eJavaObjectDataType.setName("EJavaObject");
+    this._eJavaObjectDataType.setInstanceClassName("java.lang.Object");
+    this.getEClassifiers().push(this._eJavaObjectDataType);
+    this._eJavaClassDataType = new BasicEDataType();
+    this._eJavaClassDataType.setName("EJavaClass");
+    this._eJavaClassDataType.setInstanceClassName("java.lang.Class");
+    this.getEClassifiers().push(this._eJavaClassDataType);
   }
   createClasses() {
-    this._eObjectClass = new re(), this._eObjectClass.setName("EObject"), this.getEClassifiers().push(this._eObjectClass), this._eModelElementClass = new re(), this._eModelElementClass.setName("EModelElement"), this._eModelElementClass.setAbstract(!0), this._eModelElementClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eModelElementClass), this._eNamedElementClass = new re(), this._eNamedElementClass.setName("ENamedElement"), this._eNamedElementClass.setAbstract(!0), this._eNamedElementClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eNamedElementClass), this._eTypedElementClass = new re(), this._eTypedElementClass.setName("ETypedElement"), this._eTypedElementClass.setAbstract(!0), this._eTypedElementClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypedElementClass), this._eClassifierClass = new re(), this._eClassifierClass.setName("EClassifier"), this._eClassifierClass.setAbstract(!0), this._eClassifierClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eClassifierClass), this._eClassClass = new re(), this._eClassClass.setName("EClass"), this._eClassClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eClassClass), this._eDataTypeClass = new re(), this._eDataTypeClass.setName("EDataType"), this._eDataTypeClass.getESuperTypes().push(this._eClassifierClass), this.getEClassifiers().push(this._eDataTypeClass), this._eEnumClass = new re(), this._eEnumClass.setName("EEnum"), this._eEnumClass.getESuperTypes().push(this._eDataTypeClass), this.getEClassifiers().push(this._eEnumClass), this._eEnumLiteralClass = new re(), this._eEnumLiteralClass.setName("EEnumLiteral"), this._eEnumLiteralClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eEnumLiteralClass), this._ePackageClass = new re(), this._ePackageClass.setName("EPackage"), this._ePackageClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._ePackageClass), this._eFactoryClass = new re(), this._eFactoryClass.setName("EFactory"), this._eFactoryClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eFactoryClass), this._eStructuralFeatureClass = new re(), this._eStructuralFeatureClass.setName("EStructuralFeature"), this._eStructuralFeatureClass.setAbstract(!0), this._eStructuralFeatureClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eStructuralFeatureClass), this._eAttributeClass = new re(), this._eAttributeClass.setName("EAttribute"), this._eAttributeClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eAttributeClass), this._eReferenceClass = new re(), this._eReferenceClass.setName("EReference"), this._eReferenceClass.getESuperTypes().push(this._eStructuralFeatureClass), this.getEClassifiers().push(this._eReferenceClass), this._eOperationClass = new re(), this._eOperationClass.setName("EOperation"), this._eOperationClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eOperationClass), this._eParameterClass = new re(), this._eParameterClass.setName("EParameter"), this._eParameterClass.getESuperTypes().push(this._eTypedElementClass), this.getEClassifiers().push(this._eParameterClass), this._eAnnotationClass = new re(), this._eAnnotationClass.setName("EAnnotation"), this._eAnnotationClass.getESuperTypes().push(this._eModelElementClass), this.getEClassifiers().push(this._eAnnotationClass), this._eTypeParameterClass = new re(), this._eTypeParameterClass.setName("ETypeParameter"), this._eTypeParameterClass.getESuperTypes().push(this._eNamedElementClass), this.getEClassifiers().push(this._eTypeParameterClass), this._eGenericTypeClass = new re(), this._eGenericTypeClass.setName("EGenericType"), this._eGenericTypeClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eGenericTypeClass), this._eStringToStringMapEntryClass = new re(), this._eStringToStringMapEntryClass.setName("EStringToStringMapEntry"), this._eStringToStringMapEntryClass.getESuperTypes().push(this._eObjectClass), this.getEClassifiers().push(this._eStringToStringMapEntryClass);
+    this._eObjectClass = new BasicEClass();
+    this._eObjectClass.setName("EObject");
+    this.getEClassifiers().push(this._eObjectClass);
+    this._eModelElementClass = new BasicEClass();
+    this._eModelElementClass.setName("EModelElement");
+    this._eModelElementClass.setAbstract(true);
+    this._eModelElementClass.getESuperTypes().push(this._eObjectClass);
+    this.getEClassifiers().push(this._eModelElementClass);
+    this._eNamedElementClass = new BasicEClass();
+    this._eNamedElementClass.setName("ENamedElement");
+    this._eNamedElementClass.setAbstract(true);
+    this._eNamedElementClass.getESuperTypes().push(this._eModelElementClass);
+    this.getEClassifiers().push(this._eNamedElementClass);
+    this._eTypedElementClass = new BasicEClass();
+    this._eTypedElementClass.setName("ETypedElement");
+    this._eTypedElementClass.setAbstract(true);
+    this._eTypedElementClass.getESuperTypes().push(this._eNamedElementClass);
+    this.getEClassifiers().push(this._eTypedElementClass);
+    this._eClassifierClass = new BasicEClass();
+    this._eClassifierClass.setName("EClassifier");
+    this._eClassifierClass.setAbstract(true);
+    this._eClassifierClass.getESuperTypes().push(this._eNamedElementClass);
+    this.getEClassifiers().push(this._eClassifierClass);
+    this._eClassClass = new BasicEClass();
+    this._eClassClass.setName("EClass");
+    this._eClassClass.getESuperTypes().push(this._eClassifierClass);
+    this.getEClassifiers().push(this._eClassClass);
+    this._eDataTypeClass = new BasicEClass();
+    this._eDataTypeClass.setName("EDataType");
+    this._eDataTypeClass.getESuperTypes().push(this._eClassifierClass);
+    this.getEClassifiers().push(this._eDataTypeClass);
+    this._eEnumClass = new BasicEClass();
+    this._eEnumClass.setName("EEnum");
+    this._eEnumClass.getESuperTypes().push(this._eDataTypeClass);
+    this.getEClassifiers().push(this._eEnumClass);
+    this._eEnumLiteralClass = new BasicEClass();
+    this._eEnumLiteralClass.setName("EEnumLiteral");
+    this._eEnumLiteralClass.getESuperTypes().push(this._eNamedElementClass);
+    this.getEClassifiers().push(this._eEnumLiteralClass);
+    this._ePackageClass = new BasicEClass();
+    this._ePackageClass.setName("EPackage");
+    this._ePackageClass.getESuperTypes().push(this._eNamedElementClass);
+    this.getEClassifiers().push(this._ePackageClass);
+    this._eFactoryClass = new BasicEClass();
+    this._eFactoryClass.setName("EFactory");
+    this._eFactoryClass.getESuperTypes().push(this._eModelElementClass);
+    this.getEClassifiers().push(this._eFactoryClass);
+    this._eStructuralFeatureClass = new BasicEClass();
+    this._eStructuralFeatureClass.setName("EStructuralFeature");
+    this._eStructuralFeatureClass.setAbstract(true);
+    this._eStructuralFeatureClass.getESuperTypes().push(this._eTypedElementClass);
+    this.getEClassifiers().push(this._eStructuralFeatureClass);
+    this._eAttributeClass = new BasicEClass();
+    this._eAttributeClass.setName("EAttribute");
+    this._eAttributeClass.getESuperTypes().push(this._eStructuralFeatureClass);
+    this.getEClassifiers().push(this._eAttributeClass);
+    this._eReferenceClass = new BasicEClass();
+    this._eReferenceClass.setName("EReference");
+    this._eReferenceClass.getESuperTypes().push(this._eStructuralFeatureClass);
+    this.getEClassifiers().push(this._eReferenceClass);
+    this._eOperationClass = new BasicEClass();
+    this._eOperationClass.setName("EOperation");
+    this._eOperationClass.getESuperTypes().push(this._eTypedElementClass);
+    this.getEClassifiers().push(this._eOperationClass);
+    this._eParameterClass = new BasicEClass();
+    this._eParameterClass.setName("EParameter");
+    this._eParameterClass.getESuperTypes().push(this._eTypedElementClass);
+    this.getEClassifiers().push(this._eParameterClass);
+    this._eAnnotationClass = new BasicEClass();
+    this._eAnnotationClass.setName("EAnnotation");
+    this._eAnnotationClass.getESuperTypes().push(this._eModelElementClass);
+    this.getEClassifiers().push(this._eAnnotationClass);
+    this._eTypeParameterClass = new BasicEClass();
+    this._eTypeParameterClass.setName("ETypeParameter");
+    this._eTypeParameterClass.getESuperTypes().push(this._eNamedElementClass);
+    this.getEClassifiers().push(this._eTypeParameterClass);
+    this._eGenericTypeClass = new BasicEClass();
+    this._eGenericTypeClass.setName("EGenericType");
+    this._eGenericTypeClass.getESuperTypes().push(this._eObjectClass);
+    this.getEClassifiers().push(this._eGenericTypeClass);
+    this._eStringToStringMapEntryClass = new BasicEClass();
+    this._eStringToStringMapEntryClass.setName("EStringToStringMapEntry");
+    this._eStringToStringMapEntryClass.getESuperTypes().push(this._eObjectClass);
+    this.getEClassifiers().push(this._eStringToStringMapEntryClass);
   }
   createAttributes() {
-    const e = new ee();
-    e.setName("name"), e.setEType(this._eStringDataType), this._eNamedElementClass.getEStructuralFeatures().push(e);
-    const t = new ee();
-    t.setName("ordered"), t.setEType(this._eBooleanDataType), t.setDefaultValueLiteral("true"), this._eTypedElementClass.getEStructuralFeatures().push(t);
-    const s = new ee();
-    s.setName("unique"), s.setEType(this._eBooleanDataType), s.setDefaultValueLiteral("true"), this._eTypedElementClass.getEStructuralFeatures().push(s);
-    const r = new ee();
-    r.setName("lowerBound"), r.setEType(this._eIntDataType), r.setDefaultValueLiteral("0"), this._eTypedElementClass.getEStructuralFeatures().push(r);
-    const n = new ee();
-    n.setName("upperBound"), n.setEType(this._eIntDataType), n.setDefaultValueLiteral("1"), this._eTypedElementClass.getEStructuralFeatures().push(n);
-    const a = new ee();
-    a.setName("instanceClassName"), a.setEType(this._eStringDataType), this._eClassifierClass.getEStructuralFeatures().push(a);
-    const o = new ee();
-    o.setName("abstract"), o.setEType(this._eBooleanDataType), o.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(o);
-    const d = new ee();
-    d.setName("interface"), d.setEType(this._eBooleanDataType), d.setDefaultValueLiteral("false"), this._eClassClass.getEStructuralFeatures().push(d);
-    const y = new ee();
-    y.setName("nsURI"), y.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(y);
-    const S = new ee();
-    S.setName("nsPrefix"), S.setEType(this._eStringDataType), this._ePackageClass.getEStructuralFeatures().push(S);
-    const C = new ee();
-    C.setName("changeable"), C.setEType(this._eBooleanDataType), C.setDefaultValueLiteral("true"), this._eStructuralFeatureClass.getEStructuralFeatures().push(C);
-    const A = new ee();
-    A.setName("volatile"), A.setEType(this._eBooleanDataType), A.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(A);
-    const b = new ee();
-    b.setName("transient"), b.setEType(this._eBooleanDataType), b.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(b);
-    const R = new ee();
-    R.setName("defaultValueLiteral"), R.setEType(this._eStringDataType), this._eStructuralFeatureClass.getEStructuralFeatures().push(R);
-    const M = new ee();
-    M.setName("unsettable"), M.setEType(this._eBooleanDataType), M.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(M);
-    const U = new ee();
-    U.setName("derived"), U.setEType(this._eBooleanDataType), U.setDefaultValueLiteral("false"), this._eStructuralFeatureClass.getEStructuralFeatures().push(U);
-    const _ = new ee();
-    _.setName("iD"), _.setEType(this._eBooleanDataType), _.setDefaultValueLiteral("false"), this._eAttributeClass.getEStructuralFeatures().push(_);
-    const x = new ee();
-    x.setName("containment"), x.setEType(this._eBooleanDataType), x.setDefaultValueLiteral("false"), this._eReferenceClass.getEStructuralFeatures().push(x);
-    const D = new ee();
-    D.setName("resolveProxies"), D.setEType(this._eBooleanDataType), D.setDefaultValueLiteral("true"), this._eReferenceClass.getEStructuralFeatures().push(D);
-    const $ = new ee();
-    $.setName("value"), $.setEType(this._eIntDataType), $.setDefaultValueLiteral("0"), this._eEnumLiteralClass.getEStructuralFeatures().push($);
-    const L = new ee();
-    L.setName("literal"), L.setEType(this._eStringDataType), this._eEnumLiteralClass.getEStructuralFeatures().push(L);
-    const Ee = new ee();
-    Ee.setName("source"), Ee.setEType(this._eStringDataType), this._eAnnotationClass.getEStructuralFeatures().push(Ee);
-    const fe = new ee();
-    fe.setName("key"), fe.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(fe);
-    const Pe = new ee();
-    Pe.setName("value"), Pe.setEType(this._eStringDataType), this._eStringToStringMapEntryClass.getEStructuralFeatures().push(Pe);
-    const N = new ee();
-    N.setName("serializable"), N.setEType(this._eBooleanDataType), N.setDefaultValueLiteral("true"), this._eDataTypeClass.getEStructuralFeatures().push(N);
+    const nameAttr = new BasicEAttribute();
+    nameAttr.setName("name");
+    nameAttr.setEType(this._eStringDataType);
+    this._eNamedElementClass.getEStructuralFeatures().push(nameAttr);
+    const orderedAttr = new BasicEAttribute();
+    orderedAttr.setName("ordered");
+    orderedAttr.setEType(this._eBooleanDataType);
+    orderedAttr.setDefaultValueLiteral("true");
+    this._eTypedElementClass.getEStructuralFeatures().push(orderedAttr);
+    const uniqueAttr = new BasicEAttribute();
+    uniqueAttr.setName("unique");
+    uniqueAttr.setEType(this._eBooleanDataType);
+    uniqueAttr.setDefaultValueLiteral("true");
+    this._eTypedElementClass.getEStructuralFeatures().push(uniqueAttr);
+    const lowerBoundAttr = new BasicEAttribute();
+    lowerBoundAttr.setName("lowerBound");
+    lowerBoundAttr.setEType(this._eIntDataType);
+    lowerBoundAttr.setDefaultValueLiteral("0");
+    this._eTypedElementClass.getEStructuralFeatures().push(lowerBoundAttr);
+    const upperBoundAttr = new BasicEAttribute();
+    upperBoundAttr.setName("upperBound");
+    upperBoundAttr.setEType(this._eIntDataType);
+    upperBoundAttr.setDefaultValueLiteral("1");
+    this._eTypedElementClass.getEStructuralFeatures().push(upperBoundAttr);
+    const instanceClassNameAttr = new BasicEAttribute();
+    instanceClassNameAttr.setName("instanceClassName");
+    instanceClassNameAttr.setEType(this._eStringDataType);
+    this._eClassifierClass.getEStructuralFeatures().push(instanceClassNameAttr);
+    const abstractAttr = new BasicEAttribute();
+    abstractAttr.setName("abstract");
+    abstractAttr.setEType(this._eBooleanDataType);
+    abstractAttr.setDefaultValueLiteral("false");
+    this._eClassClass.getEStructuralFeatures().push(abstractAttr);
+    const interfaceAttr = new BasicEAttribute();
+    interfaceAttr.setName("interface");
+    interfaceAttr.setEType(this._eBooleanDataType);
+    interfaceAttr.setDefaultValueLiteral("false");
+    this._eClassClass.getEStructuralFeatures().push(interfaceAttr);
+    const nsURIAttr = new BasicEAttribute();
+    nsURIAttr.setName("nsURI");
+    nsURIAttr.setEType(this._eStringDataType);
+    this._ePackageClass.getEStructuralFeatures().push(nsURIAttr);
+    const nsPrefixAttr = new BasicEAttribute();
+    nsPrefixAttr.setName("nsPrefix");
+    nsPrefixAttr.setEType(this._eStringDataType);
+    this._ePackageClass.getEStructuralFeatures().push(nsPrefixAttr);
+    const changeableAttr = new BasicEAttribute();
+    changeableAttr.setName("changeable");
+    changeableAttr.setEType(this._eBooleanDataType);
+    changeableAttr.setDefaultValueLiteral("true");
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(changeableAttr);
+    const volatileAttr = new BasicEAttribute();
+    volatileAttr.setName("volatile");
+    volatileAttr.setEType(this._eBooleanDataType);
+    volatileAttr.setDefaultValueLiteral("false");
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(volatileAttr);
+    const transientAttr = new BasicEAttribute();
+    transientAttr.setName("transient");
+    transientAttr.setEType(this._eBooleanDataType);
+    transientAttr.setDefaultValueLiteral("false");
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(transientAttr);
+    const defaultValueLiteralAttr = new BasicEAttribute();
+    defaultValueLiteralAttr.setName("defaultValueLiteral");
+    defaultValueLiteralAttr.setEType(this._eStringDataType);
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(defaultValueLiteralAttr);
+    const unsettableAttr = new BasicEAttribute();
+    unsettableAttr.setName("unsettable");
+    unsettableAttr.setEType(this._eBooleanDataType);
+    unsettableAttr.setDefaultValueLiteral("false");
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(unsettableAttr);
+    const derivedAttr = new BasicEAttribute();
+    derivedAttr.setName("derived");
+    derivedAttr.setEType(this._eBooleanDataType);
+    derivedAttr.setDefaultValueLiteral("false");
+    this._eStructuralFeatureClass.getEStructuralFeatures().push(derivedAttr);
+    const idAttr = new BasicEAttribute();
+    idAttr.setName("iD");
+    idAttr.setEType(this._eBooleanDataType);
+    idAttr.setDefaultValueLiteral("false");
+    this._eAttributeClass.getEStructuralFeatures().push(idAttr);
+    const containmentAttr = new BasicEAttribute();
+    containmentAttr.setName("containment");
+    containmentAttr.setEType(this._eBooleanDataType);
+    containmentAttr.setDefaultValueLiteral("false");
+    this._eReferenceClass.getEStructuralFeatures().push(containmentAttr);
+    const resolveProxiesAttr = new BasicEAttribute();
+    resolveProxiesAttr.setName("resolveProxies");
+    resolveProxiesAttr.setEType(this._eBooleanDataType);
+    resolveProxiesAttr.setDefaultValueLiteral("true");
+    this._eReferenceClass.getEStructuralFeatures().push(resolveProxiesAttr);
+    const valueAttr = new BasicEAttribute();
+    valueAttr.setName("value");
+    valueAttr.setEType(this._eIntDataType);
+    valueAttr.setDefaultValueLiteral("0");
+    this._eEnumLiteralClass.getEStructuralFeatures().push(valueAttr);
+    const literalAttr = new BasicEAttribute();
+    literalAttr.setName("literal");
+    literalAttr.setEType(this._eStringDataType);
+    this._eEnumLiteralClass.getEStructuralFeatures().push(literalAttr);
+    const sourceAttr = new BasicEAttribute();
+    sourceAttr.setName("source");
+    sourceAttr.setEType(this._eStringDataType);
+    this._eAnnotationClass.getEStructuralFeatures().push(sourceAttr);
+    const keyAttr = new BasicEAttribute();
+    keyAttr.setName("key");
+    keyAttr.setEType(this._eStringDataType);
+    this._eStringToStringMapEntryClass.getEStructuralFeatures().push(keyAttr);
+    const mapValueAttr = new BasicEAttribute();
+    mapValueAttr.setName("value");
+    mapValueAttr.setEType(this._eStringDataType);
+    this._eStringToStringMapEntryClass.getEStructuralFeatures().push(mapValueAttr);
+    const serializableAttr = new BasicEAttribute();
+    serializableAttr.setName("serializable");
+    serializableAttr.setEType(this._eBooleanDataType);
+    serializableAttr.setDefaultValueLiteral("true");
+    this._eDataTypeClass.getEStructuralFeatures().push(serializableAttr);
   }
   createReferences() {
-    const e = new le();
-    e.setName("eAnnotations"), e.setEType(this._eAnnotationClass), e.setContainment(!0), e.setUpperBound(-1), this._eModelElementClass.getEStructuralFeatures().push(e);
-    const t = new le();
-    t.setName("eType"), t.setEType(this._eClassifierClass), this._eTypedElementClass.getEStructuralFeatures().push(t);
-    const s = new le();
-    s.setName("eSuperTypes"), s.setEType(this._eClassClass), s.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(s);
-    const r = new le();
-    r.setName("eStructuralFeatures"), r.setEType(this._eStructuralFeatureClass), r.setContainment(!0), r.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(r);
-    const n = new le();
-    n.setName("eOperations"), n.setEType(this._eOperationClass), n.setContainment(!0), n.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(n);
-    const a = new le();
-    a.setName("eClassifiers"), a.setEType(this._eClassifierClass), a.setContainment(!0), a.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(a);
-    const o = new le();
-    o.setName("eSubpackages"), o.setEType(this._ePackageClass), o.setContainment(!0), o.setUpperBound(-1), this._ePackageClass.getEStructuralFeatures().push(o);
-    const d = new le();
-    d.setName("eFactoryInstance"), d.setEType(this._eFactoryClass), this._ePackageClass.getEStructuralFeatures().push(d);
-    const y = new le();
-    y.setName("eLiterals"), y.setEType(this._eEnumLiteralClass), y.setContainment(!0), y.setUpperBound(-1), this._eEnumClass.getEStructuralFeatures().push(y);
-    const S = new le();
-    S.setName("eOpposite"), S.setEType(this._eReferenceClass), this._eReferenceClass.getEStructuralFeatures().push(S);
-    const C = new le();
-    C.setName("eParameters"), C.setEType(this._eParameterClass), C.setContainment(!0), C.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(C);
-    const A = new le();
-    A.setName("details"), A.setEType(this._eStringToStringMapEntryClass), A.setContainment(!0), A.setUpperBound(-1), this._eAnnotationClass.getEStructuralFeatures().push(A);
-    const b = new le();
-    b.setName("eGenericType"), b.setEType(this._eGenericTypeClass), b.setContainment(!0), this._eTypedElementClass.getEStructuralFeatures().push(b);
-    const R = new le();
-    R.setName("eTypeParameters"), R.setEType(this._eTypeParameterClass), R.setContainment(!0), R.setUpperBound(-1), this._eClassifierClass.getEStructuralFeatures().push(R);
-    const M = new le();
-    M.setName("eGenericSuperTypes"), M.setEType(this._eGenericTypeClass), M.setContainment(!0), M.setUpperBound(-1), this._eClassClass.getEStructuralFeatures().push(M);
-    const U = new le();
-    U.setName("eTypeParameters"), U.setEType(this._eTypeParameterClass), U.setContainment(!0), U.setUpperBound(-1), this._eOperationClass.getEStructuralFeatures().push(U);
-    const _ = new le();
-    _.setName("eBounds"), _.setEType(this._eGenericTypeClass), _.setContainment(!0), _.setUpperBound(-1), this._eTypeParameterClass.getEStructuralFeatures().push(_);
-    const x = new le();
-    x.setName("eClassifier"), x.setEType(this._eClassifierClass), this._eGenericTypeClass.getEStructuralFeatures().push(x);
-    const D = new le();
-    D.setName("eTypeParameter"), D.setEType(this._eTypeParameterClass), this._eGenericTypeClass.getEStructuralFeatures().push(D);
-    const $ = new le();
-    $.setName("eTypeArguments"), $.setEType(this._eGenericTypeClass), $.setContainment(!0), $.setUpperBound(-1), this._eGenericTypeClass.getEStructuralFeatures().push($);
-    const L = new le();
-    L.setName("eUpperBound"), L.setEType(this._eGenericTypeClass), L.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(L);
-    const Ee = new le();
-    Ee.setName("eLowerBound"), Ee.setEType(this._eGenericTypeClass), Ee.setContainment(!0), this._eGenericTypeClass.getEStructuralFeatures().push(Ee);
+    const eAnnotationsRef = new BasicEReference();
+    eAnnotationsRef.setName("eAnnotations");
+    eAnnotationsRef.setEType(this._eAnnotationClass);
+    eAnnotationsRef.setContainment(true);
+    eAnnotationsRef.setUpperBound(-1);
+    this._eModelElementClass.getEStructuralFeatures().push(eAnnotationsRef);
+    const eTypeRef = new BasicEReference();
+    eTypeRef.setName("eType");
+    eTypeRef.setEType(this._eClassifierClass);
+    this._eTypedElementClass.getEStructuralFeatures().push(eTypeRef);
+    const eSuperTypesRef = new BasicEReference();
+    eSuperTypesRef.setName("eSuperTypes");
+    eSuperTypesRef.setEType(this._eClassClass);
+    eSuperTypesRef.setUpperBound(-1);
+    this._eClassClass.getEStructuralFeatures().push(eSuperTypesRef);
+    const eStructuralFeaturesRef = new BasicEReference();
+    eStructuralFeaturesRef.setName("eStructuralFeatures");
+    eStructuralFeaturesRef.setEType(this._eStructuralFeatureClass);
+    eStructuralFeaturesRef.setContainment(true);
+    eStructuralFeaturesRef.setUpperBound(-1);
+    this._eClassClass.getEStructuralFeatures().push(eStructuralFeaturesRef);
+    const eOperationsRef = new BasicEReference();
+    eOperationsRef.setName("eOperations");
+    eOperationsRef.setEType(this._eOperationClass);
+    eOperationsRef.setContainment(true);
+    eOperationsRef.setUpperBound(-1);
+    this._eClassClass.getEStructuralFeatures().push(eOperationsRef);
+    const eClassifiersRef = new BasicEReference();
+    eClassifiersRef.setName("eClassifiers");
+    eClassifiersRef.setEType(this._eClassifierClass);
+    eClassifiersRef.setContainment(true);
+    eClassifiersRef.setUpperBound(-1);
+    this._ePackageClass.getEStructuralFeatures().push(eClassifiersRef);
+    const eSubpackagesRef = new BasicEReference();
+    eSubpackagesRef.setName("eSubpackages");
+    eSubpackagesRef.setEType(this._ePackageClass);
+    eSubpackagesRef.setContainment(true);
+    eSubpackagesRef.setUpperBound(-1);
+    this._ePackageClass.getEStructuralFeatures().push(eSubpackagesRef);
+    const eFactoryInstanceRef = new BasicEReference();
+    eFactoryInstanceRef.setName("eFactoryInstance");
+    eFactoryInstanceRef.setEType(this._eFactoryClass);
+    this._ePackageClass.getEStructuralFeatures().push(eFactoryInstanceRef);
+    const eLiteralsRef = new BasicEReference();
+    eLiteralsRef.setName("eLiterals");
+    eLiteralsRef.setEType(this._eEnumLiteralClass);
+    eLiteralsRef.setContainment(true);
+    eLiteralsRef.setUpperBound(-1);
+    this._eEnumClass.getEStructuralFeatures().push(eLiteralsRef);
+    const eOppositeRef = new BasicEReference();
+    eOppositeRef.setName("eOpposite");
+    eOppositeRef.setEType(this._eReferenceClass);
+    this._eReferenceClass.getEStructuralFeatures().push(eOppositeRef);
+    const eParametersRef = new BasicEReference();
+    eParametersRef.setName("eParameters");
+    eParametersRef.setEType(this._eParameterClass);
+    eParametersRef.setContainment(true);
+    eParametersRef.setUpperBound(-1);
+    this._eOperationClass.getEStructuralFeatures().push(eParametersRef);
+    const detailsRef = new BasicEReference();
+    detailsRef.setName("details");
+    detailsRef.setEType(this._eStringToStringMapEntryClass);
+    detailsRef.setContainment(true);
+    detailsRef.setUpperBound(-1);
+    this._eAnnotationClass.getEStructuralFeatures().push(detailsRef);
+    const eGenericTypeRef = new BasicEReference();
+    eGenericTypeRef.setName("eGenericType");
+    eGenericTypeRef.setEType(this._eGenericTypeClass);
+    eGenericTypeRef.setContainment(true);
+    this._eTypedElementClass.getEStructuralFeatures().push(eGenericTypeRef);
+    const eTypeParametersRef = new BasicEReference();
+    eTypeParametersRef.setName("eTypeParameters");
+    eTypeParametersRef.setEType(this._eTypeParameterClass);
+    eTypeParametersRef.setContainment(true);
+    eTypeParametersRef.setUpperBound(-1);
+    this._eClassifierClass.getEStructuralFeatures().push(eTypeParametersRef);
+    const eGenericSuperTypesRef = new BasicEReference();
+    eGenericSuperTypesRef.setName("eGenericSuperTypes");
+    eGenericSuperTypesRef.setEType(this._eGenericTypeClass);
+    eGenericSuperTypesRef.setContainment(true);
+    eGenericSuperTypesRef.setUpperBound(-1);
+    this._eClassClass.getEStructuralFeatures().push(eGenericSuperTypesRef);
+    const eOperationTypeParametersRef = new BasicEReference();
+    eOperationTypeParametersRef.setName("eTypeParameters");
+    eOperationTypeParametersRef.setEType(this._eTypeParameterClass);
+    eOperationTypeParametersRef.setContainment(true);
+    eOperationTypeParametersRef.setUpperBound(-1);
+    this._eOperationClass.getEStructuralFeatures().push(eOperationTypeParametersRef);
+    const eBoundsRef = new BasicEReference();
+    eBoundsRef.setName("eBounds");
+    eBoundsRef.setEType(this._eGenericTypeClass);
+    eBoundsRef.setContainment(true);
+    eBoundsRef.setUpperBound(-1);
+    this._eTypeParameterClass.getEStructuralFeatures().push(eBoundsRef);
+    const eClassifierRef = new BasicEReference();
+    eClassifierRef.setName("eClassifier");
+    eClassifierRef.setEType(this._eClassifierClass);
+    this._eGenericTypeClass.getEStructuralFeatures().push(eClassifierRef);
+    const eTypeParameterRef = new BasicEReference();
+    eTypeParameterRef.setName("eTypeParameter");
+    eTypeParameterRef.setEType(this._eTypeParameterClass);
+    this._eGenericTypeClass.getEStructuralFeatures().push(eTypeParameterRef);
+    const eTypeArgumentsRef = new BasicEReference();
+    eTypeArgumentsRef.setName("eTypeArguments");
+    eTypeArgumentsRef.setEType(this._eGenericTypeClass);
+    eTypeArgumentsRef.setContainment(true);
+    eTypeArgumentsRef.setUpperBound(-1);
+    this._eGenericTypeClass.getEStructuralFeatures().push(eTypeArgumentsRef);
+    const eUpperBoundRef = new BasicEReference();
+    eUpperBoundRef.setName("eUpperBound");
+    eUpperBoundRef.setEType(this._eGenericTypeClass);
+    eUpperBoundRef.setContainment(true);
+    this._eGenericTypeClass.getEStructuralFeatures().push(eUpperBoundRef);
+    const eLowerBoundRef = new BasicEReference();
+    eLowerBoundRef.setName("eLowerBound");
+    eLowerBoundRef.setEType(this._eGenericTypeClass);
+    eLowerBoundRef.setContainment(true);
+    this._eGenericTypeClass.getEStructuralFeatures().push(eLowerBoundRef);
   }
   // Getters for EClasses
   getEObjectClass() {
@@ -11058,57 +13402,63 @@ class $n extends De {
     return this._eJavaObjectDataType;
   }
 }
-class Gn extends Yt {
-  constructor(e) {
-    super(), this._ePackage = e;
+class EcoreFactory extends BasicEFactory {
+  constructor(ePackage) {
+    super();
+    this._ePackage = ePackage;
   }
   getEPackage() {
     return this._ePackage;
   }
-  create(e) {
-    switch (e.getName()) {
+  create(eClass) {
+    const className = eClass.getName();
+    switch (className) {
       case "EClass":
-        return new re();
+        return new BasicEClass();
       case "EAttribute":
-        return new ee();
+        return new BasicEAttribute();
       case "EReference":
-        return new le();
+        return new BasicEReference();
       case "EDataType":
-        return new ne();
+        return new BasicEDataType();
       case "EEnum":
-        return new xn();
+        return new BasicEEnum();
       case "EEnumLiteral":
-        return new $s();
+        return new BasicEEnumLiteral();
       case "EAnnotation":
-        return new vn();
+        return new BasicEAnnotation();
       case "EPackage":
-        return new De();
+        return new BasicEPackage();
       case "EOperation":
-        return new Rn();
+        return new BasicEOperation();
       case "EParameter":
-        return new Pn();
+        return new BasicEParameter();
       case "EGenericType":
-        return new Fn();
+        return new BasicEGenericType();
       case "ETypeParameter":
-        return new kn();
+        return new BasicETypeParameter();
       default:
-        return super.create(e);
+        return super.create(eClass);
     }
   }
 }
-Kt();
-class Wn extends An {
+getEcorePackage();
+class EResourceSetImpl extends BasicResourceSet {
   constructor() {
-    super(), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new mt()), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new mt()), this.getPackageRegistry().set(zt, Kt());
+    super();
+    this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new XMIResourceFactory());
+    this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new XMIResourceFactory());
+    this.getPackageRegistry().set(ECORE_NS_URI, getEcorePackage());
   }
   /**
    * Create resource and return with loadFromString support
    */
-  createResource(e) {
-    return super.createResource(e);
+  createResource(uri) {
+    const resource = super.createResource(uri);
+    return resource;
   }
 }
-const Xn = `<?xml version="1.0" encoding="UTF-8"?>
+const eventModelContent = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2024 Contributors to the Eclipse Foundation.
@@ -11173,10 +13523,13 @@ const Xn = `<?xml version="1.0" encoding="UTF-8"?>
         </eAnnotations>
     </eClassifiers>
 
-</ecore:EPackage>`, Es = "http://org.eclipse.daanse.board.app.lib.events";
-class Ws {
+</ecore:EPackage>`;
+const EVENTS_NS_URI = "http://org.eclipse.daanse.board.app.lib.events";
+class EcoreMetadataService {
   constructor() {
-    this.modelCache = /* @__PURE__ */ new Map(), this.resourceSet = this.createResourceSet(), this.loadEventsModelSync();
+    this.modelCache = /* @__PURE__ */ new Map();
+    this.resourceSet = this.createResourceSet();
+    this.loadEventsModelSync();
   }
   /**
    * Creates a ResourceSet with registered Ecore package
@@ -11185,23 +13538,25 @@ class Ws {
    * factory for the `.ecore` extension in its constructor.
    */
   createResourceSet() {
-    return new Wn();
+    return new EResourceSetImpl();
   }
   /**
    * Load the Events model synchronously and register it in the PackageRegistry
    */
   loadEventsModelSync() {
     try {
-      const t = this.createLoadedResource(
-        `${Es}/EventModel.ecore`,
-        Xn
-      ).getContents();
-      if (t.size() > 0) {
-        const s = t.get(0);
-        this.registerPackage(s), console.log("✅ Loaded and registered Events model package with nsURI:", s.getNsURI());
+      const resource = this.createLoadedResource(
+        `${EVENTS_NS_URI}/EventModel.ecore`,
+        eventModelContent
+      );
+      const contents = resource.getContents();
+      if (contents.size() > 0) {
+        const eventsPackage = contents.get(0);
+        this.registerPackage(eventsPackage);
+        console.log("✅ Loaded and registered Events model package with nsURI:", eventsPackage.getNsURI());
       }
-    } catch (e) {
-      console.error("❌ Failed to load Events model:", e);
+    } catch (error) {
+      console.error("❌ Failed to load Events model:", error);
     }
   }
   /**
@@ -11212,20 +13567,24 @@ class Ws {
    * `.ecore` returns one, so a missing method means the URI did not resolve to
    * an XMI resource and the caller needs to know.
    */
-  createLoadedResource(e, t) {
-    const s = this.resourceSet.createResource(Y.createURI(e));
-    if (typeof s.loadFromString != "function")
+  createLoadedResource(uri, content) {
+    const resource = this.resourceSet.createResource(URI.createURI(uri));
+    if (typeof resource.loadFromString !== "function") {
       throw new Error(
-        `Resource for "${e}" does not support loading from a string; expected an XMI resource.`
+        `Resource for "${uri}" does not support loading from a string; expected an XMI resource.`
       );
-    return s.loadFromString(t), s;
+    }
+    resource.loadFromString(content);
+    return resource;
   }
   /**
    * Register an EPackage in the ResourceSet's package registry under its nsURI
    */
-  registerPackage(e) {
-    const t = e.getNsURI();
-    t && this.resourceSet.getPackageRegistry().set(t, e);
+  registerPackage(pkg) {
+    const nsURI = pkg.getNsURI();
+    if (nsURI) {
+      this.resourceSet.getPackageRegistry().set(nsURI, pkg);
+    }
   }
   /**
    * Get the ResourceSet instance
@@ -11236,152 +13595,195 @@ class Ws {
   /**
    * Load an Ecore model from a URI string
    */
-  async loadModel(e, t) {
+  async loadModel(widgetType, ecoreUri) {
     try {
-      const r = await (await fetch(t)).text();
-      await this.loadModelFromString(e, r, t);
-    } catch (s) {
-      throw console.error(`Failed to load Ecore model from ${t}:`, s), s;
+      const data = await fetch(ecoreUri);
+      const dataAsText = await data.text();
+      await this.loadModelFromString(widgetType, dataAsText, ecoreUri);
+    } catch (error) {
+      console.error(`Failed to load Ecore model from ${ecoreUri}:`, error);
+      throw error;
     }
   }
   /**
    * Load an Ecore model from a string
    */
-  async loadModelFromString(e, t, s = "model.ecore") {
+  async loadModelFromString(widgetType, ecoreContent, uri = "model.ecore") {
     try {
-      const n = this.createLoadedResource(s, t).getContents();
-      if (n.size() > 0) {
-        const a = n.get(0);
-        this.modelCache.set(e, a), console.log(`✅ Loaded Ecore model for widget type "${e}" from ${s}`);
+      const resource = this.createLoadedResource(uri, ecoreContent);
+      const contents = resource.getContents();
+      if (contents.size() > 0) {
+        const pkg = contents.get(0);
+        this.modelCache.set(widgetType, pkg);
+        console.log(`✅ Loaded Ecore model for widget type "${widgetType}" from ${uri}`);
       }
-    } catch (r) {
-      throw console.error(`Failed to parse Ecore model for ${e}:`, r), r;
+    } catch (error) {
+      console.error(`Failed to parse Ecore model for ${widgetType}:`, error);
+      throw error;
     }
   }
   /**
    * Register an already loaded EPackage for a widget type
    */
-  registerModel(e, t) {
-    this.modelCache.set(e, t);
+  registerModel(widgetType, ecorePackage) {
+    this.modelCache.set(widgetType, ecorePackage);
   }
   /**
    * Extract action metadata from an Ecore model
    */
-  extractActions(e) {
-    const t = this.modelCache.get(e);
-    if (!t)
-      return console.warn(`No Ecore model registered for widget type "${e}"`), [];
-    const s = [], r = t.getEClassifiers();
-    for (let n = 0; n < r.size(); n++) {
-      const a = r.get(n);
-      if (ps(a)) {
-        const o = a;
-        if (!this.extendsWidgetActionInterface(o))
+  extractActions(widgetType) {
+    const pkg = this.modelCache.get(widgetType);
+    if (!pkg) {
+      console.warn(`No Ecore model registered for widget type "${widgetType}"`);
+      return [];
+    }
+    const actions = [];
+    const classifiers = pkg.getEClassifiers();
+    for (let i = 0; i < classifiers.size(); i++) {
+      const classifier = classifiers.get(i);
+      if (isEClass(classifier)) {
+        const eClass = classifier;
+        const isWidgetActionInterface = this.extendsWidgetActionInterface(eClass);
+        if (!isWidgetActionInterface) {
           continue;
-        const y = o.getEOperations();
-        for (let S = 0; S < y.length; S++) {
-          const C = y[S], A = C.getName(), b = C.getEAnnotation(
+        }
+        const operations = eClass.getEOperations();
+        for (let j = 0; j < operations.length; j++) {
+          const operation = operations[j];
+          const operationName = operation.getName();
+          const widgetActionAnnotation = operation.getEAnnotation(
             "org.eclipse.daanse.board.app.lib.events/WidgetAction"
           );
-          if (b) {
-            const R = this.getAnnotationDetail(b, "eventType"), M = [], U = C.getEParameters();
-            for (let _ = 0; _ < U.length; _++) {
-              const x = U[_], D = x.getEType(), $ = this.mapEcoreTypeToTS(D), L = x.getEAnnotation(
+          if (widgetActionAnnotation) {
+            const eventType = this.getAnnotationDetail(widgetActionAnnotation, "eventType");
+            const parameters = [];
+            const eParameters = operation.getEParameters();
+            for (let k = 0; k < eParameters.length; k++) {
+              const param = eParameters[k];
+              const paramType = param.getEType();
+              const tsType = this.mapEcoreTypeToTS(paramType);
+              const actionParamAnnotation = param.getEAnnotation(
                 "org.eclipse.daanse.board.app.lib.events/ActionParameter"
               );
-              let fe = x.getLowerBound() === 0;
-              L && this.getAnnotationDetail(L, "optional") === "true" && (fe = !0), M.push({
-                name: x.getName() || `arg${_}`,
-                type: $,
-                optional: fe,
-                index: _
+              const lowerBound = param.getLowerBound();
+              let optional = lowerBound === 0;
+              if (actionParamAnnotation) {
+                const optionalDetail = this.getAnnotationDetail(actionParamAnnotation, "optional");
+                if (optionalDetail === "true") {
+                  optional = true;
+                }
+              }
+              parameters.push({
+                name: param.getName() || `arg${k}`,
+                type: tsType,
+                optional,
+                index: k
               });
             }
-            s.push({
-              methodName: A || `action${S}`,
-              eventType: R || `${e}.${A}`,
-              parameters: M
+            actions.push({
+              methodName: operationName || `action${j}`,
+              eventType: eventType || `${widgetType}.${operationName}`,
+              parameters
             });
           }
         }
       }
     }
-    return console.log(`📝 Extracted ${s.length} actions from Ecore model for "${e}":`, s), s;
+    console.log(`📝 Extracted ${actions.length} actions from Ecore model for "${widgetType}":`, actions);
+    return actions;
   }
   /**
    * Get annotation detail value by key
    */
-  getAnnotationDetail(e, t) {
-    return e.getDetails().getByKey(t) || void 0;
+  getAnnotationDetail(annotation, key) {
+    return annotation.getDetails().getByKey(key) || void 0;
   }
   /**
    * Extract payload metadata from an Ecore model by class name
    */
-  extractPayloadMetadata(e, t) {
-    const s = this.modelCache.get(e);
-    if (!s)
-      return console.warn(`No Ecore model registered for widget type "${e}"`), null;
-    const r = s.getEClassifiers();
-    for (let n = 0; n < r.size(); n++) {
-      const a = r.get(n);
-      if (ps(a)) {
-        const o = a;
-        if (o.getName() === t) {
-          const d = [], y = o.getEAllStructuralFeatures();
-          for (let S = 0; S < y.length; S++) {
-            const C = y[S], A = C.getName(), b = C.getEType(), R = C.getLowerBound(), M = C.getUpperBound();
-            let U = this.mapEcoreTypeToTS(b);
-            (M > 1 || M === -1) && (U += "[]");
-            const _ = R === 0;
-            d.push({
-              name: A,
-              type: U,
-              optional: _
+  extractPayloadMetadata(widgetType, payloadClassName) {
+    const pkg = this.modelCache.get(widgetType);
+    if (!pkg) {
+      console.warn(`No Ecore model registered for widget type "${widgetType}"`);
+      return null;
+    }
+    const classifiers = pkg.getEClassifiers();
+    for (let i = 0; i < classifiers.size(); i++) {
+      const classifier = classifiers.get(i);
+      if (isEClass(classifier)) {
+        const eClass = classifier;
+        if (eClass.getName() === payloadClassName) {
+          const properties = [];
+          const features = eClass.getEAllStructuralFeatures();
+          for (let j = 0; j < features.length; j++) {
+            const feature = features[j];
+            const featureName = feature.getName();
+            const featureType = feature.getEType();
+            const lowerBound = feature.getLowerBound();
+            const upperBound = feature.getUpperBound();
+            let tsType = this.mapEcoreTypeToTS(featureType);
+            if (upperBound > 1 || upperBound === -1) {
+              tsType += "[]";
+            }
+            const optional = lowerBound === 0;
+            properties.push({
+              name: featureName,
+              type: tsType,
+              optional
             });
           }
           return {
-            className: t,
-            properties: d
+            className: payloadClassName,
+            properties
           };
         }
       }
     }
-    return console.warn(`Payload class "${t}" not found in Ecore model for "${e}"`), null;
+    console.warn(`Payload class "${payloadClassName}" not found in Ecore model for "${widgetType}"`);
+    return null;
   }
   /**
    * Check if an EClass extends WidgetActionInterface
    */
-  extendsWidgetActionInterface(e) {
-    const t = e.getESuperTypes();
-    for (let s = 0; s < t.length; s++) {
-      const r = t[s], n = r.getName(), a = r.getEPackage()?.getNsURI() ?? null;
-      if (n === "WidgetActionInterface" && a === Es || this.extendsWidgetActionInterface(r))
-        return !0;
+  extendsWidgetActionInterface(eClass) {
+    const superTypes = eClass.getESuperTypes();
+    for (let i = 0; i < superTypes.length; i++) {
+      const superType = superTypes[i];
+      const superTypeName = superType.getName();
+      const superTypeNsURI = superType.getEPackage()?.getNsURI() ?? null;
+      if (superTypeName === "WidgetActionInterface" && superTypeNsURI === EVENTS_NS_URI) {
+        return true;
+      }
+      if (this.extendsWidgetActionInterface(superType)) {
+        return true;
+      }
     }
-    return !1;
+    return false;
   }
   /**
    * Map Ecore data types to TypeScript types
    */
-  mapEcoreTypeToTS(e) {
-    if (!e) return "any";
-    const t = e.getName(), s = t || String(e);
-    return {
-      EString: "string",
-      EInt: "number",
-      EDouble: "number",
-      EFloat: "number",
-      EBoolean: "boolean",
-      EDate: "Date",
-      EBigInteger: "number",
-      EBigDecimal: "number",
-      ELong: "number",
-      EShort: "number",
-      EByte: "number",
-      EChar: "string",
-      EByteArray: "Uint8Array",
-      EJavaObject: "any"
-    }[s] || s;
+  mapEcoreTypeToTS(eType) {
+    if (!eType) return "any";
+    const name = eType.getName();
+    const typeName = name ? name : String(eType);
+    const typeMap = {
+      "EString": "string",
+      "EInt": "number",
+      "EDouble": "number",
+      "EFloat": "number",
+      "EBoolean": "boolean",
+      "EDate": "Date",
+      "EBigInteger": "number",
+      "EBigDecimal": "number",
+      "ELong": "number",
+      "EShort": "number",
+      "EByte": "number",
+      "EChar": "string",
+      "EByteArray": "Uint8Array",
+      "EJavaObject": "any"
+    };
+    return typeMap[typeName] || typeName;
   }
   /**
    * Clear all cached models
@@ -11390,197 +13792,126 @@ class Ws {
     this.modelCache.clear();
   }
 }
-const Xs = Symbol.for($t), qn = `<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (c) 2025 Contributors to the Eclipse Foundation.
-
-  This program and the accompanying materials are made
-  available under the terms of the Eclipse Public License 2.0
-  which is available at https://www.eclipse.org/legal/epl-2.0/
-
-  SPDX-License-Identifier: EPL-2.0
-
-  Contributors:
-    Smart City Jena
--->
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="systemactions" nsURI="http://org.eclipse.daanse.board.app.lib.events.systemactions"
-    nsPrefix="systemactions">
-
-  <eClassifiers xsi:type="ecore:EClass" name="SystemActions" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="System-level actions that can be triggered by events"/>
-    </eAnnotations>
-
-    <eOperations name="changePage">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Navigate to a different page"/>
-      </eAnnotations>
-      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
-        <details key="eventType" value="system.changePage"/>
-      </eAnnotations>
-      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="ID of the page to navigate to"/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-
-    <eOperations name="setGlobalVariable">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Set or update a global variable"/>
-      </eAnnotations>
-      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
-        <details key="eventType" value="system.setGlobalVariable"/>
-      </eAnnotations>
-      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Name of the variable to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Value to set"/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-  </eClassifiers>
-
-  <eClassifiers xsi:type="ecore:EClass" name="PageActions">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Page-level actions that can be triggered by events"/>
-    </eAnnotations>
-
-    <eOperations name="setPageVariable">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Set or update a page-scoped variable"/>
-      </eAnnotations>
-      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
-        <details key="eventType" value="page.setPageVariable"/>
-      </eAnnotations>
-      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Name of the variable to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Value to set"/>
-        </eAnnotations>
-      </eParameters>
-      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Optional page ID (defaults to current page)"/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-  </eClassifiers>
-</ecore:EPackage>`;
-Nt.createLogger("daanse:events:registry");
-const Yn = Ns, zn = Is, Kn = As, Hn = bs, Vn = Xs;
-function qs({ services: l, log: e }) {
-  const t = new Ss();
-  l.register(Tt, t);
-  const s = new ws();
-  l.register(St, s);
-  const r = l.construct(gt);
-  l.register(Lt, r);
-  const n = l.construct(pt);
-  l.register(jt, n), n.setup(l);
-  const a = new Ws();
-  l.register($t, a), s.setEcoreMetadataService(a), t.setEcoreMetadataService(a), e.info("Ereignis-Registries bereit");
+const ECORE_METADATA_SERVICE = Symbol.for(ECORE_METADATA_SERVICE_ID);
+const SystemActions = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n  Copyright (c) 2025 Contributors to the Eclipse Foundation.\n\n  This program and the accompanying materials are made\n  available under the terms of the Eclipse Public License 2.0\n  which is available at https://www.eclipse.org/legal/epl-2.0/\n\n  SPDX-License-Identifier: EPL-2.0\n\n  Contributors:\n    Smart City Jena\n-->\n<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="systemactions" nsURI="http://org.eclipse.daanse.board.app.lib.events.systemactions"\n    nsPrefix="systemactions">\n\n  <eClassifiers xsi:type="ecore:EClass" name="SystemActions" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="System-level actions that can be triggered by events"/>\n    </eAnnotations>\n\n    <eOperations name="changePage">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Navigate to a different page"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.changePage"/>\n      </eAnnotations>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="ID of the page to navigate to"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n\n    <eOperations name="setGlobalVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a global variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="system.setGlobalVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n\n  <eClassifiers xsi:type="ecore:EClass" name="PageActions">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="Page-level actions that can be triggered by events"/>\n    </eAnnotations>\n\n    <eOperations name="setPageVariable">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Set or update a page-scoped variable"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="page.setPageVariable"/>\n      </eAnnotations>\n      <eParameters name="variableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the variable to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Value to set"/>\n        </eAnnotations>\n      </eParameters>\n      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Optional page ID (defaults to current page)"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n</ecore:EPackage>';
+loggerFactory.createLogger("daanse:events:registry");
+const identifier = EVENT_REGISTRY;
+const actionsIdentifier = EVENT_ACTIONS_REGISTRY;
+const managerIdentifier = EVENT_MANAGER;
+const bridgeIdentifier = EVENT_BUS_BRIDGE;
+const ecoreServiceIdentifier = ECORE_METADATA_SERVICE;
+function activate$1({ services, log: ausgabe }) {
+  const eventRegistry = new EventRegistry();
+  services.register(EVENT_REGISTRY_ID, eventRegistry);
+  const actionsRegistry = new EventActionsRegistry();
+  services.register(EVENT_ACTIONS_REGISTRY_ID, actionsRegistry);
+  const eventManager = services.construct(EventManager);
+  services.register(EVENT_MANAGER_ID, eventManager);
+  const bridge = services.construct(EventBusBridge);
+  services.register(EVENT_BUS_BRIDGE_ID, bridge);
+  bridge.setup(services);
+  const ecoreService = new EcoreMetadataService();
+  services.register(ECORE_METADATA_SERVICE_ID, ecoreService);
+  actionsRegistry.setEcoreMetadataService(ecoreService);
+  eventRegistry.setEcoreMetadataService(ecoreService);
+  ausgabe.info("Ereignis-Registries bereit");
 }
-function Ys({ services: l }) {
-  for (const e of [
-    $t,
-    jt,
-    Lt,
-    St,
-    Tt
-  ])
-    l.unregister(e);
+function deactivate$1({ services }) {
+  for (const id of [
+    ECORE_METADATA_SERVICE_ID,
+    EVENT_BUS_BRIDGE_ID,
+    EVENT_MANAGER_ID,
+    EVENT_ACTIONS_REGISTRY_ID,
+    EVENT_REGISTRY_ID
+  ]) {
+    services.unregister(id);
+  }
 }
-const Jn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  ActionParameter: ur,
-  Comperator: Me,
-  Condition: nr,
-  ECORE_METADATA_SERVICE: Xs,
-  EVENT_ACTIONS_REGISTRY: Is,
-  EVENT_ACTIONS_REGISTRY_ID: St,
-  EVENT_BUS_BRIDGE: bs,
-  EVENT_MANAGER: As,
-  EVENT_REGISTRY: Ns,
-  EVENT_REGISTRY_ID: Tt,
-  EcoreMetadataService: Ws,
-  EventActionsRegistry: ws,
+  ActionParameter,
+  Comperator,
+  Condition,
+  ECORE_METADATA_SERVICE,
+  EVENT_ACTIONS_REGISTRY,
+  EVENT_ACTIONS_REGISTRY_ID,
+  EVENT_BUS_BRIDGE,
+  EVENT_MANAGER,
+  EVENT_REGISTRY,
+  EVENT_REGISTRY_ID,
+  EcoreMetadataService,
+  EventActionsRegistry,
   get EventBusBridge() {
-    return pt;
+    return EventBusBridge;
   },
   get EventManager() {
-    return gt;
+    return EventManager;
   },
-  EventRegistry: Ss,
+  EventRegistry,
   get PageActionInterface() {
-    return kt;
+    return PageActionInterface;
   },
   get Payload() {
-    return qe;
+    return Payload;
   },
   get SystemActionInterface() {
-    return Ft;
+    return SystemActionInterface;
   },
-  SystemActionsEcoreContent: qn,
-  WidgetAction: cr,
+  SystemActionsEcoreContent: SystemActions,
+  WidgetAction,
   get WidgetActionInterface() {
-    return ot;
+    return WidgetActionInterface;
   },
-  actionsIdentifier: zn,
-  activate: qs,
-  bridgeIdentifier: Hn,
-  deactivate: Ys,
-  ecoreServiceIdentifier: Vn,
-  getWidgetActions: _s,
-  identifier: Yn,
-  managerIdentifier: Kn
-}, Symbol.toStringTag, { value: "Module" })), Cs = "org.eclipse.daanse.board.app.lib.events", Qn = "0.0.1-next.1";
-async function ni(l) {
-  const e = globalThis.__tsm__;
-  if (!e)
-    throw new Error(`${Cs}: tsm runtime is not initialized`);
-  e.register(Cs, Jn, Qn, "lib.events"), await qs?.(l);
+  actionsIdentifier,
+  activate: activate$1,
+  bridgeIdentifier,
+  deactivate: deactivate$1,
+  ecoreServiceIdentifier,
+  getWidgetActions,
+  identifier,
+  managerIdentifier
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.events";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.events");
+  await activate$1?.(context);
 }
-async function ii(l) {
-  await Ys?.(l);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  ur as ActionParameter,
-  Me as Comperator,
-  nr as Condition,
-  Xs as ECORE_METADATA_SERVICE,
-  Is as EVENT_ACTIONS_REGISTRY,
-  ci as EVENT_ACTIONS_REGISTRY_ID,
-  bs as EVENT_BUS_BRIDGE,
-  As as EVENT_MANAGER,
-  Ns as EVENT_REGISTRY,
-  ui as EVENT_REGISTRY_ID,
-  Ws as EcoreMetadataService,
-  ws as EventActionsRegistry,
-  pt as EventBusBridge,
-  gt as EventManager,
-  Ss as EventRegistry,
-  kt as PageActionInterface,
-  qe as Payload,
-  Ft as SystemActionInterface,
-  qn as SystemActionsEcoreContent,
-  cr as WidgetAction,
-  ot as WidgetActionInterface,
-  zn as actionsIdentifier,
-  ni as activate,
-  Hn as bridgeIdentifier,
-  ii as deactivate,
-  Vn as ecoreServiceIdentifier,
-  _s as getWidgetActions,
-  Yn as identifier,
-  Kn as managerIdentifier
+  ActionParameter,
+  Comperator,
+  Condition,
+  ECORE_METADATA_SERVICE,
+  EVENT_ACTIONS_REGISTRY,
+  EVENT_ACTIONS_REGISTRY_ID2 as EVENT_ACTIONS_REGISTRY_ID,
+  EVENT_BUS_BRIDGE,
+  EVENT_MANAGER,
+  EVENT_REGISTRY,
+  EVENT_REGISTRY_ID2 as EVENT_REGISTRY_ID,
+  EcoreMetadataService,
+  EventActionsRegistry,
+  EventBusBridge,
+  EventManager,
+  EventRegistry,
+  PageActionInterface,
+  Payload,
+  SystemActionInterface,
+  SystemActions as SystemActionsEcoreContent,
+  WidgetAction,
+  WidgetActionInterface,
+  actionsIdentifier,
+  activate,
+  bridgeIdentifier,
+  deactivate,
+  ecoreServiceIdentifier,
+  getWidgetActions,
+  identifier,
+  managerIdentifier
 };

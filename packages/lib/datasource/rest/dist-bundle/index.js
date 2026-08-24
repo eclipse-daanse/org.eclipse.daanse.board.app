@@ -1,118 +1,170 @@
-import { inject as y, injectable as v } from "@eclipse-daanse/tsm";
-import { BaseDatasource as b } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY as w } from "org.eclipse.daanse.board.app.lib.api.connection";
-import _ from "org.eclipse.daanse.board.app.lib.utils.helpers";
-const { serviceId: d } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var R = Object.defineProperty, g = Object.getOwnPropertyDescriptor, p = (e, t, r, n) => {
-  for (var o = n > 1 ? void 0 : n ? g(t, r) : t, i = e.length - 1, s; i >= 0; i--)
-    (s = e[i]) && (o = (n ? s(t, r, o) : s(o)) || o);
-  return n && o && R(t, r, o), o;
+const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { inject, injectable } from "@eclipse-daanse/tsm";
+import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
+import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __decorateClass = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result) __defProp(target, key, result);
+  return result;
 };
-let c = class extends b {
+let RestStore = class extends BaseDatasource {
   connection;
   resourceUrl = null;
   selectedJSONValue;
   connectionRepository;
-  init(e) {
-    super.init(e), this.connection = e.connection, this.resourceUrl = super.initVariable(e.resourceUrl), this.selectedJSONValue = e.selectedJSONValue, this.pollingInterval = e.pollingInterval ?? 5e3, this.pollingEnabled && this.startPolling(this.pollingInterval);
+  init(configuration) {
+    super.init(configuration);
+    this.connection = configuration.connection;
+    this.resourceUrl = super.initVariable(configuration.resourceUrl);
+    this.selectedJSONValue = configuration.selectedJSONValue;
+    this.pollingInterval = configuration.pollingInterval ?? 5e3;
+    if (this.pollingEnabled) {
+      this.startPolling(this.pollingInterval);
+    }
   }
   //   async getData<T extends keyof DataMap>(type: T): Promise<DataMap[T]> {
-  async getData(e) {
-    let t = null;
-    if (!this.connectionRepository)
+  async getData(type) {
+    let response = null;
+    if (!this.connectionRepository) {
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    try {
-      const o = await (await this.connectionRepository.getConnection(
-        this.connection
-      ).fetch({ url: this.resourceUrl?.value || "" })).json();
-      return t = o, this.selectedJSONValue && (t = _.extractDataByPath(o, this.selectedJSONValue)), e === "DataTable" ? t = this.parseToDataTable(t) : e === "object" || e === "string" && (t = JSON.stringify(t)), t;
-    } catch (r) {
-      console.log(r), console.warn("Invalid resource URL", r.name);
     }
-    return t;
+    try {
+      const connection = this.connectionRepository.getConnection(
+        this.connection
+      );
+      const req = await connection.fetch({ url: this.resourceUrl?.value || "" });
+      const data = await req.json();
+      response = data;
+      if (this.selectedJSONValue) {
+        response = helpers.extractDataByPath(data, this.selectedJSONValue);
+      }
+      if (type === "DataTable") {
+        response = this.parseToDataTable(response);
+      } else if (type === "object") {
+      } else if (type === "string") {
+        response = JSON.stringify(response);
+      }
+      return response;
+    } catch (e) {
+      console.log(e);
+      console.warn("Invalid resource URL", e.name);
+    }
+    return response;
   }
   async getOriginalData() {
-    if (!this.connectionRepository)
+    if (!this.connectionRepository) {
       throw new Error("ConnectionRepository is not provided to Store Classes");
+    }
     try {
-      return await (await this.connectionRepository.getConnection(
+      const connection = this.connectionRepository.getConnection(
         this.connection
-      ).fetch({ url: this.resourceUrl?.value || "" })).json();
+      );
+      const req = await connection.fetch({ url: this.resourceUrl?.value || "" });
+      const data = await req.json();
+      return data;
     } catch (e) {
       console.warn("Invalid resource URL", e.name);
     }
   }
   // TODO: Add proper typing and imports for interfaces
   // parseToDataTable(data: any): IDataTable {
-  parseToDataTable(e) {
-    if (!Array.isArray(e)) return { items: [], headers: [], rows: [] };
-    const t = ["index"], r = [], n = e.map((o, i) => {
-      if (typeof o != "object") return {};
-      const s = {
-        index: i
+  parseToDataTable(data) {
+    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
+    const headers = ["index"];
+    const rows = [];
+    const items = data.map((item, index) => {
+      if (typeof item !== "object") return {};
+      const row = {
+        index
       };
-      for (const a in o)
-        typeof o[a] == "object" || Array.isArray(o[a]) || (t.includes(a) || t.push(a), s[a] = o[a]);
-      return s;
+      for (const key in item) {
+        if (typeof item[key] === "object" || Array.isArray(item[key])) continue;
+        if (!headers.includes(key)) {
+          headers.push(key);
+        }
+        row[key] = item[key];
+      }
+      return row;
     });
-    return n.forEach((o, i) => {
-      r[i] = [], t.forEach((s) => {
-        r[i].push(o[s]);
+    items.forEach((item, index) => {
+      rows[index] = [];
+      headers.forEach((header) => {
+        rows[index].push(item[header]);
       });
-    }), { items: n, headers: t, rows: r };
+    });
+    return { items, headers, rows };
   }
-  callEvent(e, t) {
+  callEvent(event, params) {
     console.warn(
-      `Event "${e}" is not available for this type of store`,
-      t
+      `Event "${event}" is not available for this type of store`,
+      params
     );
   }
   destroy() {
     this.stopPolling();
   }
-  static validateConfiguration(e) {
-    return !(!e.connection || !e.resourceUrl);
+  static validateConfiguration(configuration) {
+    if (!configuration.connection) {
+      return false;
+    }
+    if (!configuration.resourceUrl) {
+      return false;
+    }
+    return true;
   }
 };
-p([
-  y(w)
-], c.prototype, "connectionRepository", 2);
-c = p([
-  v()
-], c);
-const l = d("RestStoreFactory"), O = Symbol.for(l);
-function f({ services: e }) {
-  e.register(l, (t) => {
-    if (!c.validateConfiguration(t))
+__decorateClass([
+  inject(CONNECTION_REPOSITORY)
+], RestStore.prototype, "connectionRepository", 2);
+RestStore = __decorateClass([
+  injectable()
+], RestStore);
+const REST_STORE_FACTORY = serviceId("RestStoreFactory");
+const factorySymbol = Symbol.for(REST_STORE_FACTORY);
+function activate$1({ services }) {
+  services.register(REST_STORE_FACTORY, (config) => {
+    if (!RestStore.validateConfiguration(config)) {
       throw new Error(
         "Invalid RestStore configuration. Please provide a valid configuration."
       );
-    const r = e.construct(c);
-    return r.init(t), r;
+    }
+    const store = services.construct(RestStore);
+    store.init(config);
+    return store;
   });
 }
-function h({ services: e }) {
-  e.unregister(l);
+function deactivate$1({ services }) {
+  services.unregister(REST_STORE_FACTORY);
 }
-const S = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  REST_STORE_FACTORY: l,
-  activate: f,
-  deactivate: h,
-  factorySymbol: O
-}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.datasource.rest", m = "0.0.1-next.1";
-async function j(e) {
-  const t = globalThis.__tsm__;
-  if (!t)
-    throw new Error(`${u}: tsm runtime is not initialized`);
-  t.register(u, S, m, "lib.datasource.rest"), await f?.(e);
+  REST_STORE_FACTORY,
+  activate: activate$1,
+  deactivate: deactivate$1,
+  factorySymbol
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.rest";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.rest");
+  await activate$1?.(context);
 }
-async function D(e) {
-  await h?.(e);
+async function deactivate(context) {
+  await deactivate$1?.(context);
 }
 export {
-  l as REST_STORE_FACTORY,
-  j as activate,
-  D as deactivate,
-  O as factorySymbol
+  REST_STORE_FACTORY,
+  activate,
+  deactivate,
+  factorySymbol
 };

@@ -1,59 +1,66 @@
-(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-7f505d2d]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-7f505d2d]{font-size:var(--a48f8840);color:var(--v34b31368);text-align:var(--v2c3809b9);font-weight:var(--v0788cc15);font-style:var(--ccf41bcc);text-decoration:var(--v1f06182b);overflow:hidden}.settings-container[data-v-99382129]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.settings-block[data-v-99382129]{display:flex;flex-direction:row;align-items:center;gap:8px}.text-title[data-v-99382129]{width:100%}.text-size[data-v-99382129]{width:100%;margin-left:12px}.text-weight[data-v-99382129]{width:100px}.loading[data-v-99382129]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}.toolbar[data-v-99382129]{display:flex;flex-wrap:wrap;gap:.25rem;padding:.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.375rem}.toolbar-group[data-v-99382129]{display:flex;gap:2px;padding-right:.5rem;margin-right:.25rem;border-right:1px solid #e5e7eb}.toolbar-group[data-v-99382129]:last-child{border-right:none;padding-right:0;margin-right:0}.toolbar-btn[data-v-99382129]{min-width:28px!important;height:28px!important;padding:0 4px!important;border:1px solid transparent!important;border-radius:.25rem!important}.toolbar-btn[data-v-99382129]:hover{background-color:#e5e7eb!important}.is-active[data-v-99382129]{background-color:#fff3e0!important;border-color:#ec9c1d!important;color:#c45e00!important}.toolbar-group--inputs[data-v-99382129]{align-items:center;gap:.25rem}.toolbar-input[data-v-99382129]{max-width:70px}\n";})();
-import { EVENT_ACTIONS_REGISTRY as ct, EVENT_REGISTRY_ID as dt, EVENT_ACTIONS_REGISTRY_ID as vt } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as pt, deactivate as ht, component as yt, inject as ke } from "@eclipse-daanse/tsm";
-import { defineComponent as ze, mergeModels as gt, useCssVars as wt, useModel as Ge, computed as Ee, toRefs as _t, inject as te, onMounted as mt, onUnmounted as bt, ref as ce, watch as Ve, createElementBlock as Ct, openBlock as He, normalizeStyle as xt, withModifiers as Tt, createElementVNode as $, toDisplayString as Mt, resolveComponent as X, createBlock as Ot, withCtx as ee, createVNode as I, unref as se, normalizeClass as G } from "vue";
-import { useRoute as St } from "vue-router";
-import { VariableComplexStringWrapper as It, VariableWrapper as U, useDatasourceRepository as kt, WrapperTypes as Et } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import We from "org.eclipse.daanse.board.app.lib.utils.helpers";
-import { Reference as L, ModelClass as Vt } from "org.eclipse.daanse.board.app.lib.annotations";
-import { WidgetAction as Be, WidgetActionInterface as Pt, Payload as fe } from "org.eclipse.daanse.board.app.lib.events";
-import { identifier as Rt } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { ComplexTextInput as At, VariableInput as Pe } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Dt } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Wt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), jt = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var zt = Object.defineProperty, Gt = Object.getOwnPropertyDescriptor, H = (m, g, l, v) => {
-  for (var s = v > 1 ? void 0 : v ? Gt(g, l) : g, w = m.length - 1, d; w >= 0; w--)
-    (d = m[w]) && (s = (v ? d(g, l, s) : d(s)) || s);
-  return v && s && zt(g, l, s), s;
+(function(){var i="ui.vue.widget.text.plain",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.text-container[data-v-7f505d2d] {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    height: 100%;\n    gap: 1rem;\n    align-items: stretch;\n}\n.component[data-v-7f505d2d] {\n    font-size: var(--a48f8840);\n    color: var(--v34b31368);\n    text-align: var(--v2c3809b9);\n    font-weight: var(--v0788cc15);\n    font-style: var(--ccf41bcc);\n    text-decoration: var(--v1f06182b);\n    overflow: hidden;\n}\n\n.settings-container[data-v-99382129] {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 1rem;\n}\n.settings-block[data-v-99382129] {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  gap: 8px;\n}\n.text-title[data-v-99382129] {\n  width: 100%;\n}\n.text-size[data-v-99382129] {\n  width: 100%;\n  margin-left: 12px;\n}\n.text-weight[data-v-99382129] {\n  width: 100px;\n}\n.loading[data-v-99382129] {\n  height: 100%;\n  padding: 50px;\n  border-radius: 4px;\n  margin-bottom: 1rem;\n  background-color: var(--app-response-background);\n}\n.toolbar[data-v-99382129] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.25rem;\n  padding: 0.5rem;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n}\n.toolbar-group[data-v-99382129] {\n  display: flex;\n  gap: 2px;\n  padding-right: 0.5rem;\n  margin-right: 0.25rem;\n  border-right: 1px solid #e5e7eb;\n}\n.toolbar-group[data-v-99382129]:last-child {\n  border-right: none;\n  padding-right: 0;\n  margin-right: 0;\n}\n.toolbar-btn[data-v-99382129] {\n  min-width: 28px !important;\n  height: 28px !important;\n  padding: 0 4px !important;\n  border: 1px solid transparent !important;\n  border-radius: 0.25rem !important;\n}\n.toolbar-btn[data-v-99382129]:hover {\n  background-color: #e5e7eb !important;\n}\n.is-active[data-v-99382129] {\n  background-color: #fff3e0 !important;\n  border-color: rgb(236, 156, 29) !important;\n  color: #c45e00 !important;\n}\n.toolbar-group--inputs[data-v-99382129] {\n  align-items: center;\n  gap: 0.25rem;\n}\n.toolbar-input[data-v-99382129] {\n  max-width: 70px;\n}\n";})();
+import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
+import { defineComponent, mergeModels, useCssVars, useModel, computed, toRefs, inject, onMounted, onUnmounted, ref, watch, createElementBlock, openBlock, normalizeStyle, withModifiers, createElementVNode, toDisplayString, resolveComponent, createBlock, withCtx, createVNode, unref, normalizeClass } from "vue";
+import { useRoute } from "vue-router";
+import { VariableComplexStringWrapper, VariableWrapper, useDatasourceRepository, WrapperTypes } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import helpers from "org.eclipse.daanse.board.app.lib.utils.helpers";
+import { Reference, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
+const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
+import { identifier } from "org.eclipse.daanse.board.app.lib.api.variable";
+import { ComplexTextInput, VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
+const Icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2081C22.5%2077.6863%2025.1863%2075%2028.5%2075H76.5C79.8137%2075%2082.5%2077.6863%2082.5%2081V84C82.5%2087.3137%2079.8137%2090%2076.5%2090H28.5C25.1863%2090%2022.5%2087.3137%2022.5%2084V81Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2058.5C22.5%2055.1863%2025.1863%2052.5%2028.5%2052.5H91.5C94.8137%2052.5%2097.5%2055.1863%2097.5%2058.5V61.5C97.5%2064.8137%2094.8137%2067.5%2091.5%2067.5H28.5C25.1863%2067.5%2022.5%2064.8137%2022.5%2061.5V58.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2036C43.5%2032.6863%2046.1863%2030%2049.5%2030H91.5C94.8137%2030%2097.5%2032.6863%2097.5%2036V39C97.5%2042.3137%2094.8137%2045%2091.5%2045H49.5C46.1863%2045%2043.5%2042.3137%2043.5%2039V36Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2045.189C23.5947%2045.189%2023.2307%2045.091%2022.9367%2044.895C22.6427%2044.685%2022.4607%2044.405%2022.3907%2044.055C22.3207%2043.691%2022.3837%2043.285%2022.5797%2042.837L27.8087%2031.581C28.0607%2031.035%2028.3687%2030.636%2028.7327%2030.384C29.1107%2030.132%2029.5377%2030.006%2030.0137%2030.006C30.4897%2030.006%2030.9027%2030.132%2031.2527%2030.384C31.6167%2030.636%2031.9317%2031.035%2032.1977%2031.581L37.4267%2042.837C37.6507%2043.285%2037.7277%2043.691%2037.6577%2044.055C37.6017%2044.419%2037.4267%2044.699%2037.1327%2044.895C36.8527%2045.091%2036.5027%2045.189%2036.0827%2045.189C35.5227%2045.189%2035.0887%2045.063%2034.7807%2044.811C34.4867%2044.559%2034.2207%2044.153%2033.9827%2043.593L32.8487%2040.926L34.3187%2041.997H25.6667L27.1577%2040.926L26.0237%2043.593C25.7717%2044.153%2025.5127%2044.559%2025.2467%2044.811C24.9807%2045.063%2024.5747%2045.189%2024.0287%2045.189ZM29.9717%2034.227L27.5357%2040.044L26.9477%2039.036H33.0587L32.4707%2040.044L30.0137%2034.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var __defProp$2 = Object.defineProperty;
+var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
+var __decorateClass$2 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result) __defProp$2(target, key, result);
+  return result;
 };
-let P = class {
-  text = new It();
-  fontSize = new U();
-  fontColor = new U();
-  fontWeight = new U();
-  fontStyle = new U();
-  textDecoration = new U();
-  horizontalAlign = new U();
-  verticalAlign = new U();
+let TextSettings = class {
+  text = new VariableComplexStringWrapper();
+  fontSize = new VariableWrapper();
+  fontColor = new VariableWrapper();
+  fontWeight = new VariableWrapper();
+  fontStyle = new VariableWrapper();
+  textDecoration = new VariableWrapper();
+  horizontalAlign = new VariableWrapper();
+  verticalAlign = new VariableWrapper();
 };
-H([
-  L("VariableComplexStringWrapper")
-], P.prototype, "text", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "fontSize", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "fontColor", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "fontWeight", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "fontStyle", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "textDecoration", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "horizontalAlign", 2);
-H([
-  L("VariableWrapper")
-], P.prototype, "verticalAlign", 2);
-P = H([
-  Vt({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings" })
-], P);
-var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Ae = {};
+__decorateClass$2([
+  Reference("VariableComplexStringWrapper")
+], TextSettings.prototype, "text", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "fontSize", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "fontColor", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "fontWeight", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "fontStyle", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "textDecoration", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "horizontalAlign", 2);
+__decorateClass$2([
+  Reference("VariableWrapper")
+], TextSettings.prototype, "verticalAlign", 2);
+TextSettings = __decorateClass$2([
+  ModelClass({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings" })
+], TextSettings);
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+var _Reflect = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -68,239 +75,306 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var De;
-function Ht() {
-  if (De) return Ae;
-  De = 1;
-  var m;
-  return (function(g) {
-    (function(l) {
-      var v = typeof globalThis == "object" ? globalThis : typeof Re == "object" ? Re : typeof self == "object" ? self : typeof this == "object" ? this : B(), s = w(g);
-      typeof v.Reflect < "u" && (s = w(v.Reflect, s)), l(s, v), typeof v.Reflect > "u" && (v.Reflect = g);
-      function w(R, S) {
-        return function(V, y) {
-          Object.defineProperty(R, V, { configurable: !0, writable: !0, value: y }), S && S(V, y);
+var hasRequired_Reflect;
+function require_Reflect() {
+  if (hasRequired_Reflect) return _Reflect;
+  hasRequired_Reflect = 1;
+  var Reflect2;
+  (function(Reflect3) {
+    (function(factory) {
+      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
+      var exporter = makeExporter(Reflect3);
+      if (typeof root.Reflect !== "undefined") {
+        exporter = makeExporter(root.Reflect, exporter);
+      }
+      factory(exporter, root);
+      if (typeof root.Reflect === "undefined") {
+        root.Reflect = Reflect3;
+      }
+      function makeExporter(target, previous) {
+        return function(key, value) {
+          Object.defineProperty(target, key, { configurable: true, writable: true, value });
+          if (previous)
+            previous(key, value);
         };
       }
-      function d() {
+      function functionThis() {
         try {
           return Function("return this;")();
-        } catch {
+        } catch (_) {
         }
       }
-      function D() {
+      function indirectEvalThis() {
         try {
-          return (0, eval)("(function() { return this; })()");
-        } catch {
+          return (void 0, eval)("(function() { return this; })()");
+        } catch (_) {
         }
       }
-      function B() {
-        return d() || D();
+      function sloppyModeThis() {
+        return functionThis() || indirectEvalThis();
       }
-    })(function(l, v) {
-      var s = Object.prototype.hasOwnProperty, w = typeof Symbol == "function", d = w && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", D = w && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", B = typeof Object.create == "function", R = { __proto__: [] } instanceof Array, S = !B && !R, V = {
+    })(function(exporter, root) {
+      var hasOwn = Object.prototype.hasOwnProperty;
+      var supportsSymbol = typeof Symbol === "function";
+      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
+      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
+      var supportsCreate = typeof Object.create === "function";
+      var supportsProto = { __proto__: [] } instanceof Array;
+      var downLevel = !supportsCreate && !supportsProto;
+      var HashMap = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: B ? function() {
-          return ue(/* @__PURE__ */ Object.create(null));
-        } : R ? function() {
-          return ue({ __proto__: null });
+        create: supportsCreate ? function() {
+          return MakeDictionary(/* @__PURE__ */ Object.create(null));
+        } : supportsProto ? function() {
+          return MakeDictionary({ __proto__: null });
         } : function() {
-          return ue({});
+          return MakeDictionary({});
         },
-        has: S ? function(e, t) {
-          return s.call(e, t);
-        } : function(e, t) {
-          return t in e;
+        has: downLevel ? function(map, key) {
+          return hasOwn.call(map, key);
+        } : function(map, key) {
+          return key in map;
         },
-        get: S ? function(e, t) {
-          return s.call(e, t) ? e[t] : void 0;
-        } : function(e, t) {
-          return e[t];
+        get: downLevel ? function(map, key) {
+          return hasOwn.call(map, key) ? map[key] : void 0;
+        } : function(map, key) {
+          return map[key];
         }
-      }, y = Object.getPrototypeOf(Function), E = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : ot(), x = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : lt(), N = typeof WeakMap == "function" ? WeakMap : ut(), j = w ? Symbol.for("@reflect-metadata:registry") : void 0, F = rt(), Z = at(F);
-      function ae(e, t, n, r) {
-        if (c(n)) {
-          if (!be(e))
+      };
+      var functionPrototype = Object.getPrototypeOf(Function);
+      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
+      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
+      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
+      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
+      var metadataRegistry = GetOrCreateMetadataRegistry();
+      var metadataProvider = CreateMetadataProvider(metadataRegistry);
+      function decorate(decorators, target, propertyKey, attributes) {
+        if (!IsUndefined(propertyKey)) {
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!Ce(t))
+          if (!IsObject(target))
             throw new TypeError();
-          return Ye(e, t);
+          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
+            throw new TypeError();
+          if (IsNull(attributes))
+            attributes = void 0;
+          propertyKey = ToPropertyKey(propertyKey);
+          return DecorateProperty(decorators, target, propertyKey, attributes);
         } else {
-          if (!be(e))
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!M(t))
+          if (!IsConstructor(target))
             throw new TypeError();
-          if (!M(r) && !c(r) && !Y(r))
-            throw new TypeError();
-          return Y(r) && (r = void 0), n = A(n), Je(e, t, n, r);
+          return DecorateConstructor(decorators, target);
         }
       }
-      l("decorate", ae);
-      function T(e, t) {
-        function n(r, f) {
-          if (!M(r))
+      exporter("decorate", decorate);
+      function metadata(metadataKey, metadataValue) {
+        function decorator(target, propertyKey) {
+          if (!IsObject(target))
             throw new TypeError();
-          if (!c(f) && !tt(f))
+          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
             throw new TypeError();
-          ye(e, t, r, f);
+          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
         }
-        return n;
+        return decorator;
       }
-      l("metadata", T);
-      function k(e, t, n, r) {
-        if (!M(n))
+      exporter("metadata", metadata);
+      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(r) || (r = A(r)), ye(e, t, n, r);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
       }
-      l("defineMetadata", k);
-      function z(e, t, n) {
-        if (!M(t))
+      exporter("defineMetadata", defineMetadata);
+      function hasMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(n) || (n = A(n)), ve(e, t, n);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
       }
-      l("hasMetadata", z);
-      function q(e, t, n) {
-        if (!M(t))
+      exporter("hasMetadata", hasMetadata);
+      function hasOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(n) || (n = A(n)), ie(e, t, n);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
       }
-      l("hasOwnMetadata", q);
-      function Ue(e, t, n) {
-        if (!M(t))
+      exporter("hasOwnMetadata", hasOwnMetadata);
+      function getMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(n) || (n = A(n)), pe(e, t, n);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
       }
-      l("getMetadata", Ue);
-      function Ne(e, t, n) {
-        if (!M(t))
+      exporter("getMetadata", getMetadata);
+      function getOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(n) || (n = A(n)), he(e, t, n);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
       }
-      l("getOwnMetadata", Ne);
-      function Fe(e, t) {
-        if (!M(e))
+      exporter("getOwnMetadata", getOwnMetadata);
+      function getMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(t) || (t = A(t)), ge(e, t);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryMetadataKeys(target, propertyKey);
       }
-      l("getMetadataKeys", Fe);
-      function Ze(e, t) {
-        if (!M(e))
+      exporter("getMetadataKeys", getMetadataKeys);
+      function getOwnMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return c(t) || (t = A(t)), we(e, t);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryOwnMetadataKeys(target, propertyKey);
       }
-      l("getOwnMetadataKeys", Ze);
-      function qe(e, t, n) {
-        if (!M(t))
+      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
+      function deleteMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        if (c(n) || (n = A(n)), !M(t))
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        if (!IsObject(target))
           throw new TypeError();
-        c(n) || (n = A(n));
-        var r = Q(
-          t,
-          n,
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        var provider = GetMetadataProvider(
+          target,
+          propertyKey,
           /*Create*/
-          !1
+          false
         );
-        return c(r) ? !1 : r.OrdinaryDeleteMetadata(e, t, n);
+        if (IsUndefined(provider))
+          return false;
+        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
       }
-      l("deleteMetadata", qe);
-      function Ye(e, t) {
-        for (var n = e.length - 1; n >= 0; --n) {
-          var r = e[n], f = r(t);
-          if (!c(f) && !Y(f)) {
-            if (!Ce(f))
+      exporter("deleteMetadata", deleteMetadata);
+      function DecorateConstructor(decorators, target) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsConstructor(decorated))
               throw new TypeError();
-            t = f;
+            target = decorated;
           }
         }
-        return t;
+        return target;
       }
-      function Je(e, t, n, r) {
-        for (var f = e.length - 1; f >= 0; --f) {
-          var b = e[f], O = b(t, n, r);
-          if (!c(O) && !Y(O)) {
-            if (!M(O))
+      function DecorateProperty(decorators, target, propertyKey, descriptor) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target, propertyKey, descriptor);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsObject(decorated))
               throw new TypeError();
-            r = O;
+            descriptor = decorated;
           }
         }
-        return r;
+        return descriptor;
       }
-      function ve(e, t, n) {
-        var r = ie(e, t, n);
-        if (r)
-          return !0;
-        var f = le(t);
-        return Y(f) ? !1 : ve(e, f, n);
+      function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return true;
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryHasMetadata(MetadataKey, parent, P);
+        return false;
       }
-      function ie(e, t, n) {
-        var r = Q(
-          t,
-          n,
+      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        return c(r) ? !1 : me(r.OrdinaryHasOwnMetadata(e, t, n));
+        if (IsUndefined(provider))
+          return false;
+        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
       }
-      function pe(e, t, n) {
-        var r = ie(e, t, n);
-        if (r)
-          return he(e, t, n);
-        var f = le(t);
-        if (!Y(f))
-          return pe(e, f, n);
+      function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryGetMetadata(MetadataKey, parent, P);
+        return void 0;
       }
-      function he(e, t, n) {
-        var r = Q(
-          t,
-          n,
+      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        if (!c(r))
-          return r.OrdinaryGetOwnMetadata(e, t, n);
+        if (IsUndefined(provider))
+          return;
+        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
       }
-      function ye(e, t, n, r) {
-        var f = Q(
-          n,
-          r,
+      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !0
+          true
         );
-        f.OrdinaryDefineOwnMetadata(e, t, n, r);
+        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
       }
-      function ge(e, t) {
-        var n = we(e, t), r = le(e);
-        if (r === null)
-          return n;
-        var f = ge(r, t);
-        if (f.length <= 0)
-          return n;
-        if (n.length <= 0)
-          return f;
-        for (var b = new x(), O = [], p = 0, a = n; p < a.length; p++) {
-          var i = a[p], o = b.has(i);
-          o || (b.add(i), O.push(i));
+      function OrdinaryMetadataKeys(O, P) {
+        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (parent === null)
+          return ownKeys;
+        var parentKeys = OrdinaryMetadataKeys(parent, P);
+        if (parentKeys.length <= 0)
+          return ownKeys;
+        if (ownKeys.length <= 0)
+          return parentKeys;
+        var set = new _Set();
+        var keys = [];
+        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
+          var key = ownKeys_1[_i];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        for (var u = 0, h = f; u < h.length; u++) {
-          var i = h[u], o = b.has(i);
-          o || (b.add(i), O.push(i));
+        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
+          var key = parentKeys_1[_a];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        return O;
+        return keys;
       }
-      function we(e, t) {
-        var n = Q(
-          e,
-          t,
+      function OrdinaryOwnMetadataKeys(O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*create*/
-          !1
+          false
         );
-        return n ? n.OrdinaryOwnMetadataKeys(e, t) : [];
+        if (!provider) {
+          return [];
+        }
+        return provider.OrdinaryOwnMetadataKeys(O, P);
       }
-      function _e(e) {
-        if (e === null)
+      function Type(x) {
+        if (x === null)
           return 1;
-        switch (typeof e) {
+        switch (typeof x) {
           case "undefined":
             return 0;
           case "boolean":
@@ -312,571 +386,776 @@ function Ht() {
           case "number":
             return 5;
           case "object":
-            return e === null ? 1 : 6;
+            return x === null ? 1 : 6;
           default:
             return 6;
         }
       }
-      function c(e) {
-        return e === void 0;
+      function IsUndefined(x) {
+        return x === void 0;
       }
-      function Y(e) {
-        return e === null;
+      function IsNull(x) {
+        return x === null;
       }
-      function Qe(e) {
-        return typeof e == "symbol";
+      function IsSymbol(x) {
+        return typeof x === "symbol";
       }
-      function M(e) {
-        return typeof e == "object" ? e !== null : typeof e == "function";
+      function IsObject(x) {
+        return typeof x === "object" ? x !== null : typeof x === "function";
       }
-      function Xe(e, t) {
-        switch (_e(e)) {
+      function ToPrimitive(input, PreferredType) {
+        switch (Type(input)) {
           case 0:
-            return e;
+            return input;
           case 1:
-            return e;
+            return input;
           case 2:
-            return e;
+            return input;
           case 3:
-            return e;
+            return input;
           case 4:
-            return e;
+            return input;
           case 5:
-            return e;
+            return input;
         }
-        var n = "string", r = xe(e, d);
-        if (r !== void 0) {
-          var f = r.call(e, n);
-          if (M(f))
+        var hint = "string";
+        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
+        if (exoticToPrim !== void 0) {
+          var result = exoticToPrim.call(input, hint);
+          if (IsObject(result))
             throw new TypeError();
-          return f;
+          return result;
         }
-        return Ke(e);
+        return OrdinaryToPrimitive(input);
       }
-      function Ke(e, t) {
-        var n, r, f;
+      function OrdinaryToPrimitive(O, hint) {
+        var valueOf, result, toString_2;
         {
-          var b = e.toString;
-          if (K(b)) {
-            var r = b.call(e);
-            if (!M(r))
-              return r;
+          var toString_1 = O.toString;
+          if (IsCallable(toString_1)) {
+            var result = toString_1.call(O);
+            if (!IsObject(result))
+              return result;
           }
-          var n = e.valueOf;
-          if (K(n)) {
-            var r = n.call(e);
-            if (!M(r))
-              return r;
+          var valueOf = O.valueOf;
+          if (IsCallable(valueOf)) {
+            var result = valueOf.call(O);
+            if (!IsObject(result))
+              return result;
           }
         }
         throw new TypeError();
       }
-      function me(e) {
-        return !!e;
+      function ToBoolean(argument) {
+        return !!argument;
       }
-      function et(e) {
-        return "" + e;
+      function ToString(argument) {
+        return "" + argument;
       }
-      function A(e) {
-        var t = Xe(e);
-        return Qe(t) ? t : et(t);
+      function ToPropertyKey(argument) {
+        var key = ToPrimitive(argument);
+        if (IsSymbol(key))
+          return key;
+        return ToString(key);
       }
-      function be(e) {
-        return Array.isArray ? Array.isArray(e) : e instanceof Object ? e instanceof Array : Object.prototype.toString.call(e) === "[object Array]";
+      function IsArray(argument) {
+        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
       }
-      function K(e) {
-        return typeof e == "function";
+      function IsCallable(argument) {
+        return typeof argument === "function";
       }
-      function Ce(e) {
-        return typeof e == "function";
+      function IsConstructor(argument) {
+        return typeof argument === "function";
       }
-      function tt(e) {
-        switch (_e(e)) {
+      function IsPropertyKey(argument) {
+        switch (Type(argument)) {
           case 3:
-            return !0;
+            return true;
           case 4:
-            return !0;
+            return true;
           default:
-            return !1;
+            return false;
         }
       }
-      function oe(e, t) {
-        return e === t || e !== e && t !== t;
+      function SameValueZero(x, y) {
+        return x === y || x !== x && y !== y;
       }
-      function xe(e, t) {
-        var n = e[t];
-        if (n != null) {
-          if (!K(n))
-            throw new TypeError();
-          return n;
+      function GetMethod(V, P) {
+        var func = V[P];
+        if (func === void 0 || func === null)
+          return void 0;
+        if (!IsCallable(func))
+          throw new TypeError();
+        return func;
+      }
+      function GetIterator(obj) {
+        var method = GetMethod(obj, iteratorSymbol);
+        if (!IsCallable(method))
+          throw new TypeError();
+        var iterator = method.call(obj);
+        if (!IsObject(iterator))
+          throw new TypeError();
+        return iterator;
+      }
+      function IteratorValue(iterResult) {
+        return iterResult.value;
+      }
+      function IteratorStep(iterator) {
+        var result = iterator.next();
+        return result.done ? false : result;
+      }
+      function IteratorClose(iterator) {
+        var f = iterator["return"];
+        if (f)
+          f.call(iterator);
+      }
+      function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
+          return proto;
+        if (proto !== functionPrototype)
+          return proto;
+        var prototype = O.prototype;
+        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
+        if (prototypeProto == null || prototypeProto === Object.prototype)
+          return proto;
+        var constructor = prototypeProto.constructor;
+        if (typeof constructor !== "function")
+          return proto;
+        if (constructor === O)
+          return proto;
+        return constructor;
+      }
+      function CreateMetadataRegistry() {
+        var fallback;
+        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
+          fallback = CreateFallbackProvider(root.Reflect);
         }
-      }
-      function Te(e) {
-        var t = xe(e, D);
-        if (!K(t))
-          throw new TypeError();
-        var n = t.call(e);
-        if (!M(n))
-          throw new TypeError();
-        return n;
-      }
-      function Me(e) {
-        return e.value;
-      }
-      function Oe(e) {
-        var t = e.next();
-        return t.done ? !1 : t;
-      }
-      function Se(e) {
-        var t = e.return;
-        t && t.call(e);
-      }
-      function le(e) {
-        var t = Object.getPrototypeOf(e);
-        if (typeof e != "function" || e === y || t !== y)
-          return t;
-        var n = e.prototype, r = n && Object.getPrototypeOf(n);
-        if (r == null || r === Object.prototype)
-          return t;
-        var f = r.constructor;
-        return typeof f != "function" || f === e ? t : f;
-      }
-      function nt() {
-        var e;
-        !c(j) && typeof v.Reflect < "u" && !(j in v.Reflect) && typeof v.Reflect.defineMetadata == "function" && (e = it(v.Reflect));
-        var t, n, r, f = new N(), b = {
-          registerProvider: O,
-          getProvider: a,
-          setProvider: o
+        var first;
+        var second;
+        var rest;
+        var targetProviderMap = new _WeakMap();
+        var registry = {
+          registerProvider,
+          getProvider,
+          setProvider
         };
-        return b;
-        function O(u) {
-          if (!Object.isExtensible(b))
+        return registry;
+        function registerProvider(provider) {
+          if (!Object.isExtensible(registry)) {
             throw new Error("Cannot add provider to a frozen registry.");
-          switch (!0) {
-            case e === u:
+          }
+          switch (true) {
+            case fallback === provider:
               break;
-            case c(t):
-              t = u;
+            case IsUndefined(first):
+              first = provider;
               break;
-            case t === u:
+            case first === provider:
               break;
-            case c(n):
-              n = u;
+            case IsUndefined(second):
+              second = provider;
               break;
-            case n === u:
+            case second === provider:
               break;
             default:
-              r === void 0 && (r = new x()), r.add(u);
+              if (rest === void 0)
+                rest = new _Set();
+              rest.add(provider);
               break;
           }
         }
-        function p(u, h) {
-          if (!c(t)) {
-            if (t.isProviderFor(u, h))
-              return t;
-            if (!c(n)) {
-              if (n.isProviderFor(u, h))
-                return t;
-              if (!c(r))
-                for (var _ = Te(r); ; ) {
-                  var C = Oe(_);
-                  if (!C)
-                    return;
-                  var W = Me(C);
-                  if (W.isProviderFor(u, h))
-                    return Se(_), W;
+        function getProviderNoCache(O, P) {
+          if (!IsUndefined(first)) {
+            if (first.isProviderFor(O, P))
+              return first;
+            if (!IsUndefined(second)) {
+              if (second.isProviderFor(O, P))
+                return first;
+              if (!IsUndefined(rest)) {
+                var iterator = GetIterator(rest);
+                while (true) {
+                  var next = IteratorStep(iterator);
+                  if (!next) {
+                    return void 0;
+                  }
+                  var provider = IteratorValue(next);
+                  if (provider.isProviderFor(O, P)) {
+                    IteratorClose(iterator);
+                    return provider;
+                  }
                 }
-            }
-          }
-          if (!c(e) && e.isProviderFor(u, h))
-            return e;
-        }
-        function a(u, h) {
-          var _ = f.get(u), C;
-          return c(_) || (C = _.get(h)), c(C) && (C = p(u, h), c(C) || (c(_) && (_ = new E(), f.set(u, _)), _.set(h, C))), C;
-        }
-        function i(u) {
-          if (c(u))
-            throw new TypeError();
-          return t === u || n === u || !c(r) && r.has(u);
-        }
-        function o(u, h, _) {
-          if (!i(_))
-            throw new Error("Metadata provider not registered.");
-          var C = a(u, h);
-          if (C !== _) {
-            if (!c(C))
-              return !1;
-            var W = f.get(u);
-            c(W) && (W = new E(), f.set(u, W)), W.set(h, _);
-          }
-          return !0;
-        }
-      }
-      function rt() {
-        var e;
-        return !c(j) && M(v.Reflect) && Object.isExtensible(v.Reflect) && (e = v.Reflect[j]), c(e) && (e = nt()), !c(j) && M(v.Reflect) && Object.isExtensible(v.Reflect) && Object.defineProperty(v.Reflect, j, {
-          enumerable: !1,
-          configurable: !1,
-          writable: !1,
-          value: e
-        }), e;
-      }
-      function at(e) {
-        var t = new N(), n = {
-          isProviderFor: function(i, o) {
-            var u = t.get(i);
-            return c(u) ? !1 : u.has(o);
-          },
-          OrdinaryDefineOwnMetadata: O,
-          OrdinaryHasOwnMetadata: f,
-          OrdinaryGetOwnMetadata: b,
-          OrdinaryOwnMetadataKeys: p,
-          OrdinaryDeleteMetadata: a
-        };
-        return F.registerProvider(n), n;
-        function r(i, o, u) {
-          var h = t.get(i), _ = !1;
-          if (c(h)) {
-            if (!u)
-              return;
-            h = new E(), t.set(i, h), _ = !0;
-          }
-          var C = h.get(o);
-          if (c(C)) {
-            if (!u)
-              return;
-            if (C = new E(), h.set(o, C), !e.setProvider(i, o, n))
-              throw h.delete(o), _ && t.delete(i), new Error("Wrong provider for target.");
-          }
-          return C;
-        }
-        function f(i, o, u) {
-          var h = r(
-            o,
-            u,
-            /*Create*/
-            !1
-          );
-          return c(h) ? !1 : me(h.has(i));
-        }
-        function b(i, o, u) {
-          var h = r(
-            o,
-            u,
-            /*Create*/
-            !1
-          );
-          if (!c(h))
-            return h.get(i);
-        }
-        function O(i, o, u, h) {
-          var _ = r(
-            u,
-            h,
-            /*Create*/
-            !0
-          );
-          _.set(i, o);
-        }
-        function p(i, o) {
-          var u = [], h = r(
-            i,
-            o,
-            /*Create*/
-            !1
-          );
-          if (c(h))
-            return u;
-          for (var _ = h.keys(), C = Te(_), W = 0; ; ) {
-            var Ie = Oe(C);
-            if (!Ie)
-              return u.length = W, u;
-            var st = Me(Ie);
-            try {
-              u[W] = st;
-            } catch (ft) {
-              try {
-                Se(C);
-              } finally {
-                throw ft;
               }
             }
-            W++;
           }
+          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
+            return fallback;
+          }
+          return void 0;
         }
-        function a(i, o, u) {
-          var h = r(
-            o,
-            u,
-            /*Create*/
-            !1
-          );
-          if (c(h) || !h.delete(i))
-            return !1;
-          if (h.size === 0) {
-            var _ = t.get(o);
-            c(_) || (_.delete(u), _.size === 0 && t.delete(_));
+        function getProvider(O, P) {
+          var providerMap = targetProviderMap.get(O);
+          var provider;
+          if (!IsUndefined(providerMap)) {
+            provider = providerMap.get(P);
           }
-          return !0;
+          if (!IsUndefined(provider)) {
+            return provider;
+          }
+          provider = getProviderNoCache(O, P);
+          if (!IsUndefined(provider)) {
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return provider;
+        }
+        function hasProvider(provider) {
+          if (IsUndefined(provider))
+            throw new TypeError();
+          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
+        }
+        function setProvider(O, P, provider) {
+          if (!hasProvider(provider)) {
+            throw new Error("Metadata provider not registered.");
+          }
+          var existingProvider = getProvider(O, P);
+          if (existingProvider !== provider) {
+            if (!IsUndefined(existingProvider)) {
+              return false;
+            }
+            var providerMap = targetProviderMap.get(O);
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return true;
         }
       }
-      function it(e) {
-        var t = e.defineMetadata, n = e.hasOwnMetadata, r = e.getOwnMetadata, f = e.getOwnMetadataKeys, b = e.deleteMetadata, O = new N(), p = {
-          isProviderFor: function(a, i) {
-            var o = O.get(a);
-            return !c(o) && o.has(i) ? !0 : f(a, i).length ? (c(o) && (o = new x(), O.set(a, o)), o.add(i), !0) : !1;
+      function GetOrCreateMetadataRegistry() {
+        var metadataRegistry2;
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          metadataRegistry2 = root.Reflect[registrySymbol];
+        }
+        if (IsUndefined(metadataRegistry2)) {
+          metadataRegistry2 = CreateMetadataRegistry();
+        }
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          Object.defineProperty(root.Reflect, registrySymbol, {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: metadataRegistry2
+          });
+        }
+        return metadataRegistry2;
+      }
+      function CreateMetadataProvider(registry) {
+        var metadata2 = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var targetMetadata = metadata2.get(O);
+            if (IsUndefined(targetMetadata))
+              return false;
+            return targetMetadata.has(P);
           },
-          OrdinaryDefineOwnMetadata: t,
-          OrdinaryHasOwnMetadata: n,
-          OrdinaryGetOwnMetadata: r,
-          OrdinaryOwnMetadataKeys: f,
-          OrdinaryDeleteMetadata: b
+          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
+          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
+          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
+          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
+          OrdinaryDeleteMetadata
         };
-        return p;
+        metadataRegistry.registerProvider(provider);
+        return provider;
+        function GetOrCreateMetadataMap(O, P, Create) {
+          var targetMetadata = metadata2.get(O);
+          var createdTargetMetadata = false;
+          if (IsUndefined(targetMetadata)) {
+            if (!Create)
+              return void 0;
+            targetMetadata = new _Map();
+            metadata2.set(O, targetMetadata);
+            createdTargetMetadata = true;
+          }
+          var metadataMap = targetMetadata.get(P);
+          if (IsUndefined(metadataMap)) {
+            if (!Create)
+              return void 0;
+            metadataMap = new _Map();
+            targetMetadata.set(P, metadataMap);
+            if (!registry.setProvider(O, P, provider)) {
+              targetMetadata.delete(P);
+              if (createdTargetMetadata) {
+                metadata2.delete(O);
+              }
+              throw new Error("Wrong provider for target.");
+            }
+          }
+          return metadataMap;
+        }
+        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          return ToBoolean(metadataMap.has(MetadataKey));
+        }
+        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return void 0;
+          return metadataMap.get(MetadataKey);
+        }
+        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            true
+          );
+          metadataMap.set(MetadataKey, MetadataValue);
+        }
+        function OrdinaryOwnMetadataKeys2(O, P) {
+          var keys = [];
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return keys;
+          var keysObj = metadataMap.keys();
+          var iterator = GetIterator(keysObj);
+          var k = 0;
+          while (true) {
+            var next = IteratorStep(iterator);
+            if (!next) {
+              keys.length = k;
+              return keys;
+            }
+            var nextValue = IteratorValue(next);
+            try {
+              keys[k] = nextValue;
+            } catch (e) {
+              try {
+                IteratorClose(iterator);
+              } finally {
+                throw e;
+              }
+            }
+            k++;
+          }
+        }
+        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          if (!metadataMap.delete(MetadataKey))
+            return false;
+          if (metadataMap.size === 0) {
+            var targetMetadata = metadata2.get(O);
+            if (!IsUndefined(targetMetadata)) {
+              targetMetadata.delete(P);
+              if (targetMetadata.size === 0) {
+                metadata2.delete(targetMetadata);
+              }
+            }
+          }
+          return true;
+        }
       }
-      function Q(e, t, n) {
-        var r = F.getProvider(e, t);
-        if (!c(r))
-          return r;
-        if (n) {
-          if (F.setProvider(e, t, Z))
-            return Z;
+      function CreateFallbackProvider(reflect) {
+        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
+        var metadataOwner = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var metadataPropertySet = metadataOwner.get(O);
+            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
+              return true;
+            }
+            if (getOwnMetadataKeys2(O, P).length) {
+              if (IsUndefined(metadataPropertySet)) {
+                metadataPropertySet = new _Set();
+                metadataOwner.set(O, metadataPropertySet);
+              }
+              metadataPropertySet.add(P);
+              return true;
+            }
+            return false;
+          },
+          OrdinaryDefineOwnMetadata: defineMetadata2,
+          OrdinaryHasOwnMetadata: hasOwnMetadata2,
+          OrdinaryGetOwnMetadata: getOwnMetadata2,
+          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
+          OrdinaryDeleteMetadata: deleteMetadata2
+        };
+        return provider;
+      }
+      function GetMetadataProvider(O, P, Create) {
+        var registeredProvider = metadataRegistry.getProvider(O, P);
+        if (!IsUndefined(registeredProvider)) {
+          return registeredProvider;
+        }
+        if (Create) {
+          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
+            return metadataProvider;
+          }
           throw new Error("Illegal state.");
         }
+        return void 0;
       }
-      function ot() {
-        var e = {}, t = [], n = (
+      function CreateMapPolyfill() {
+        var cacheSentinel = {};
+        var arraySentinel = [];
+        var MapIterator = (
           /** @class */
           (function() {
-            function p(a, i, o) {
-              this._index = 0, this._keys = a, this._values = i, this._selector = o;
+            function MapIterator2(keys, values, selector) {
+              this._index = 0;
+              this._keys = keys;
+              this._values = values;
+              this._selector = selector;
             }
-            return p.prototype["@@iterator"] = function() {
+            MapIterator2.prototype["@@iterator"] = function() {
               return this;
-            }, p.prototype[D] = function() {
+            };
+            MapIterator2.prototype[iteratorSymbol] = function() {
               return this;
-            }, p.prototype.next = function() {
-              var a = this._index;
-              if (a >= 0 && a < this._keys.length) {
-                var i = this._selector(this._keys[a], this._values[a]);
-                return a + 1 >= this._keys.length ? (this._index = -1, this._keys = t, this._values = t) : this._index++, { value: i, done: !1 };
+            };
+            MapIterator2.prototype.next = function() {
+              var index = this._index;
+              if (index >= 0 && index < this._keys.length) {
+                var result = this._selector(this._keys[index], this._values[index]);
+                if (index + 1 >= this._keys.length) {
+                  this._index = -1;
+                  this._keys = arraySentinel;
+                  this._values = arraySentinel;
+                } else {
+                  this._index++;
+                }
+                return { value: result, done: false };
               }
-              return { value: void 0, done: !0 };
-            }, p.prototype.throw = function(a) {
-              throw this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), a;
-            }, p.prototype.return = function(a) {
-              return this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), { value: a, done: !0 };
-            }, p;
+              return { value: void 0, done: true };
+            };
+            MapIterator2.prototype.throw = function(error) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              throw error;
+            };
+            MapIterator2.prototype.return = function(value) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              return { value, done: true };
+            };
+            return MapIterator2;
           })()
-        ), r = (
+        );
+        var Map2 = (
           /** @class */
           (function() {
-            function p() {
-              this._keys = [], this._values = [], this._cacheKey = e, this._cacheIndex = -2;
+            function Map3() {
+              this._keys = [];
+              this._values = [];
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
             }
-            return Object.defineProperty(p.prototype, "size", {
+            Object.defineProperty(Map3.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
-              enumerable: !0,
-              configurable: !0
-            }), p.prototype.has = function(a) {
+              enumerable: true,
+              configurable: true
+            });
+            Map3.prototype.has = function(key) {
               return this._find(
-                a,
+                key,
                 /*insert*/
-                !1
+                false
               ) >= 0;
-            }, p.prototype.get = function(a) {
-              var i = this._find(
-                a,
+            };
+            Map3.prototype.get = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              return i >= 0 ? this._values[i] : void 0;
-            }, p.prototype.set = function(a, i) {
-              var o = this._find(
-                a,
+              return index >= 0 ? this._values[index] : void 0;
+            };
+            Map3.prototype.set = function(key, value) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !0
+                true
               );
-              return this._values[o] = i, this;
-            }, p.prototype.delete = function(a) {
-              var i = this._find(
-                a,
+              this._values[index] = value;
+              return this;
+            };
+            Map3.prototype.delete = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              if (i >= 0) {
-                for (var o = this._keys.length, u = i + 1; u < o; u++)
-                  this._keys[u - 1] = this._keys[u], this._values[u - 1] = this._values[u];
-                return this._keys.length--, this._values.length--, oe(a, this._cacheKey) && (this._cacheKey = e, this._cacheIndex = -2), !0;
+              if (index >= 0) {
+                var size = this._keys.length;
+                for (var i = index + 1; i < size; i++) {
+                  this._keys[i - 1] = this._keys[i];
+                  this._values[i - 1] = this._values[i];
+                }
+                this._keys.length--;
+                this._values.length--;
+                if (SameValueZero(key, this._cacheKey)) {
+                  this._cacheKey = cacheSentinel;
+                  this._cacheIndex = -2;
+                }
+                return true;
               }
-              return !1;
-            }, p.prototype.clear = function() {
-              this._keys.length = 0, this._values.length = 0, this._cacheKey = e, this._cacheIndex = -2;
-            }, p.prototype.keys = function() {
-              return new n(this._keys, this._values, f);
-            }, p.prototype.values = function() {
-              return new n(this._keys, this._values, b);
-            }, p.prototype.entries = function() {
-              return new n(this._keys, this._values, O);
-            }, p.prototype["@@iterator"] = function() {
+              return false;
+            };
+            Map3.prototype.clear = function() {
+              this._keys.length = 0;
+              this._values.length = 0;
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
+            };
+            Map3.prototype.keys = function() {
+              return new MapIterator(this._keys, this._values, getKey);
+            };
+            Map3.prototype.values = function() {
+              return new MapIterator(this._keys, this._values, getValue);
+            };
+            Map3.prototype.entries = function() {
+              return new MapIterator(this._keys, this._values, getEntry);
+            };
+            Map3.prototype["@@iterator"] = function() {
               return this.entries();
-            }, p.prototype[D] = function() {
+            };
+            Map3.prototype[iteratorSymbol] = function() {
               return this.entries();
-            }, p.prototype._find = function(a, i) {
-              if (!oe(this._cacheKey, a)) {
+            };
+            Map3.prototype._find = function(key, insert) {
+              if (!SameValueZero(this._cacheKey, key)) {
                 this._cacheIndex = -1;
-                for (var o = 0; o < this._keys.length; o++)
-                  if (oe(this._keys[o], a)) {
-                    this._cacheIndex = o;
+                for (var i = 0; i < this._keys.length; i++) {
+                  if (SameValueZero(this._keys[i], key)) {
+                    this._cacheIndex = i;
                     break;
                   }
+                }
               }
-              return this._cacheIndex < 0 && i && (this._cacheIndex = this._keys.length, this._keys.push(a), this._values.push(void 0)), this._cacheIndex;
-            }, p;
+              if (this._cacheIndex < 0 && insert) {
+                this._cacheIndex = this._keys.length;
+                this._keys.push(key);
+                this._values.push(void 0);
+              }
+              return this._cacheIndex;
+            };
+            return Map3;
           })()
         );
-        return r;
-        function f(p, a) {
-          return p;
+        return Map2;
+        function getKey(key, _) {
+          return key;
         }
-        function b(p, a) {
-          return a;
+        function getValue(_, value) {
+          return value;
         }
-        function O(p, a) {
-          return [p, a];
+        function getEntry(key, value) {
+          return [key, value];
         }
       }
-      function lt() {
-        var e = (
+      function CreateSetPolyfill() {
+        var Set2 = (
           /** @class */
           (function() {
-            function t() {
-              this._map = new E();
+            function Set3() {
+              this._map = new _Map();
             }
-            return Object.defineProperty(t.prototype, "size", {
+            Object.defineProperty(Set3.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
-              enumerable: !0,
-              configurable: !0
-            }), t.prototype.has = function(n) {
-              return this._map.has(n);
-            }, t.prototype.add = function(n) {
-              return this._map.set(n, n), this;
-            }, t.prototype.delete = function(n) {
-              return this._map.delete(n);
-            }, t.prototype.clear = function() {
+              enumerable: true,
+              configurable: true
+            });
+            Set3.prototype.has = function(value) {
+              return this._map.has(value);
+            };
+            Set3.prototype.add = function(value) {
+              return this._map.set(value, value), this;
+            };
+            Set3.prototype.delete = function(value) {
+              return this._map.delete(value);
+            };
+            Set3.prototype.clear = function() {
               this._map.clear();
-            }, t.prototype.keys = function() {
+            };
+            Set3.prototype.keys = function() {
               return this._map.keys();
-            }, t.prototype.values = function() {
+            };
+            Set3.prototype.values = function() {
               return this._map.keys();
-            }, t.prototype.entries = function() {
+            };
+            Set3.prototype.entries = function() {
               return this._map.entries();
-            }, t.prototype["@@iterator"] = function() {
+            };
+            Set3.prototype["@@iterator"] = function() {
               return this.keys();
-            }, t.prototype[D] = function() {
+            };
+            Set3.prototype[iteratorSymbol] = function() {
               return this.keys();
-            }, t;
+            };
+            return Set3;
           })()
         );
-        return e;
+        return Set2;
       }
-      function ut() {
-        var e = 16, t = V.create(), n = r();
+      function CreateWeakMapPolyfill() {
+        var UUID_SIZE = 16;
+        var keys = HashMap.create();
+        var rootKey = CreateUniqueKey();
         return (
           /** @class */
           (function() {
-            function a() {
-              this._key = r();
+            function WeakMap2() {
+              this._key = CreateUniqueKey();
             }
-            return a.prototype.has = function(i) {
-              var o = f(
-                i,
+            WeakMap2.prototype.has = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return o !== void 0 ? V.has(o, this._key) : !1;
-            }, a.prototype.get = function(i) {
-              var o = f(
-                i,
+              return table !== void 0 ? HashMap.has(table, this._key) : false;
+            };
+            WeakMap2.prototype.get = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return o !== void 0 ? V.get(o, this._key) : void 0;
-            }, a.prototype.set = function(i, o) {
-              var u = f(
-                i,
+              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
+            };
+            WeakMap2.prototype.set = function(target, value) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !0
+                true
               );
-              return u[this._key] = o, this;
-            }, a.prototype.delete = function(i) {
-              var o = f(
-                i,
+              table[this._key] = value;
+              return this;
+            };
+            WeakMap2.prototype.delete = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return o !== void 0 ? delete o[this._key] : !1;
-            }, a.prototype.clear = function() {
-              this._key = r();
-            }, a;
+              return table !== void 0 ? delete table[this._key] : false;
+            };
+            WeakMap2.prototype.clear = function() {
+              this._key = CreateUniqueKey();
+            };
+            return WeakMap2;
           })()
         );
-        function r() {
-          var a;
+        function CreateUniqueKey() {
+          var key;
           do
-            a = "@@WeakMap@@" + p();
-          while (V.has(t, a));
-          return t[a] = !0, a;
+            key = "@@WeakMap@@" + CreateUUID();
+          while (HashMap.has(keys, key));
+          keys[key] = true;
+          return key;
         }
-        function f(a, i) {
-          if (!s.call(a, n)) {
-            if (!i)
-              return;
-            Object.defineProperty(a, n, { value: V.create() });
+        function GetOrCreateWeakMapTable(target, create) {
+          if (!hasOwn.call(target, rootKey)) {
+            if (!create)
+              return void 0;
+            Object.defineProperty(target, rootKey, { value: HashMap.create() });
           }
-          return a[n];
+          return target[rootKey];
         }
-        function b(a, i) {
-          for (var o = 0; o < i; ++o)
-            a[o] = Math.random() * 255 | 0;
-          return a;
+        function FillRandomBytes(buffer, size) {
+          for (var i = 0; i < size; ++i)
+            buffer[i] = Math.random() * 255 | 0;
+          return buffer;
         }
-        function O(a) {
-          if (typeof Uint8Array == "function") {
-            var i = new Uint8Array(a);
-            return typeof crypto < "u" ? crypto.getRandomValues(i) : typeof msCrypto < "u" ? msCrypto.getRandomValues(i) : b(i, a), i;
+        function GenRandomBytes(size) {
+          if (typeof Uint8Array === "function") {
+            var array = new Uint8Array(size);
+            if (typeof crypto !== "undefined") {
+              crypto.getRandomValues(array);
+            } else if (typeof msCrypto !== "undefined") {
+              msCrypto.getRandomValues(array);
+            } else {
+              FillRandomBytes(array, size);
+            }
+            return array;
           }
-          return b(new Array(a), a);
+          return FillRandomBytes(new Array(size), size);
         }
-        function p() {
-          var a = O(e);
-          a[6] = a[6] & 79 | 64, a[8] = a[8] & 191 | 128;
-          for (var i = "", o = 0; o < e; ++o) {
-            var u = a[o];
-            (o === 4 || o === 6 || o === 8) && (i += "-"), u < 16 && (i += "0"), i += u.toString(16).toLowerCase();
+        function CreateUUID() {
+          var data = GenRandomBytes(UUID_SIZE);
+          data[6] = data[6] & 79 | 64;
+          data[8] = data[8] & 191 | 128;
+          var result = "";
+          for (var offset = 0; offset < UUID_SIZE; ++offset) {
+            var byte = data[offset];
+            if (offset === 4 || offset === 6 || offset === 8)
+              result += "-";
+            if (byte < 16)
+              result += "0";
+            result += byte.toString(16).toLowerCase();
           }
-          return i;
+          return result;
         }
       }
-      function ue(e) {
-        return e.__ = void 0, delete e.__, e;
+      function MakeDictionary(obj) {
+        obj.__ = void 0;
+        delete obj.__;
+        return obj;
       }
     });
-  })(m || (m = {})), Ae;
+  })(Reflect2 || (Reflect2 = {}));
+  return _Reflect;
 }
-Ht();
-var Bt = Object.defineProperty, $t = Object.getOwnPropertyDescriptor, $e = (m, g, l, v) => {
-  for (var s = $t(g, l), w = m.length - 1, d; w >= 0; w--)
-    (d = m[w]) && (s = d(g, l, s) || s);
-  return s && Bt(g, l, s), s;
+require_Reflect();
+var __defProp$1 = Object.defineProperty;
+var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
+var __decorateClass$1 = (decorators, target, key, kind) => {
+  var result = __getOwnPropDesc$1(target, key);
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = decorator(target, key, result) || result;
+  if (result) __defProp$1(target, key, result);
+  return result;
 };
-class re extends Pt {
+class TextWidgetInterface extends WidgetActionInterface {
   clearContent() {
     throw new Error("clearContent not implemented");
   }
@@ -884,67 +1163,82 @@ class re extends Pt {
     throw new Error("copyContent not implemented");
   }
 }
-$e([
-  Be({ eventType: "text.clearContent" })
-], re.prototype, "clearContent");
-$e([
-  Be({ eventType: "text.copyContent" })
-], re.prototype, "copyContent");
-const Lt = { class: "component" }, Ut = /* @__PURE__ */ ze({
+__decorateClass$1([
+  WidgetAction({ eventType: "text.clearContent" })
+], TextWidgetInterface.prototype, "clearContent");
+__decorateClass$1([
+  WidgetAction({ eventType: "text.copyContent" })
+], TextWidgetInterface.prototype, "copyContent");
+const _hoisted_1$1 = { class: "component" };
+const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "TextWidget",
-  props: /* @__PURE__ */ gt({
+  props: /* @__PURE__ */ mergeModels({
     datasourceId: {},
     id: {}
   }, {
-    configv: { required: !0 },
-    configvModifiers: {}
+    "configv": { required: true },
+    "configvModifiers": {}
   }),
   emits: ["update:configv"],
-  setup(m, { expose: g }) {
-    wt((T) => ({
-      a48f8840: ae.value,
-      v34b31368: x.value.fontColor.value,
-      v2c3809b9: x.value.horizontalAlign.value,
-      v0788cc15: x.value.fontWeight.value,
-      ccf41bcc: x.value.fontStyle.value,
-      v1f06182b: x.value.textDecoration.value
+  setup(__props, { expose: __expose }) {
+    useCssVars((_ctx) => ({
+      "a48f8840": fontSizeStyle.value,
+      "v34b31368": config.value.fontColor.value,
+      "v2c3809b9": config.value.horizontalAlign.value,
+      "v0788cc15": config.value.fontWeight.value,
+      "ccf41bcc": config.value.fontStyle.value,
+      "v1f06182b": config.value.textDecoration.value
     }));
-    const l = m, { datasourceId: v, id: s } = _t(l), w = te(Wt.TINY_EMITTER), d = te(ct), B = St().params.pageid || "";
-    class R extends re {
+    const props = __props;
+    const { datasourceId, id: widgetId } = toRefs(props);
+    const eventBus = inject(identifiers.TINY_EMITTER);
+    const actionsRegistry = inject(EVENT_ACTIONS_REGISTRY);
+    const route = useRoute();
+    const pageId = route.params.pageid || "";
+    class TextWidgetApi extends TextWidgetInterface {
       clearContent() {
-        x.value?.text && (x.value.text.value = "");
+        if (config.value?.text) config.value.text.value = "";
       }
       copyContent() {
-        const k = Z.value || "";
-        navigator.clipboard?.writeText(k).catch(() => {
+        const text = calculatedString.value || "";
+        navigator.clipboard?.writeText(text).catch(() => {
         });
       }
     }
-    const S = new R();
-    g(S), mt(() => {
-      s?.value && d.registerInstance(s.value, S, "TextWidget", B);
-    }), bt(() => {
-      s?.value && d.unregisterInstance(s.value);
+    const api = new TextWidgetApi();
+    __expose(api);
+    onMounted(() => {
+      if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, "TextWidget", pageId);
     });
-    const V = () => {
-      s?.value && w.emit("widget:TextWidget:click", {
+    onUnmounted(() => {
+      if (widgetId?.value) actionsRegistry.unregisterInstance(widgetId.value);
+    });
+    const emitClick = () => {
+      if (!widgetId?.value) return;
+      eventBus.emit("widget:TextWidget:click", {
         type: "widget:TextWidget:click",
-        widgetId: s.value,
-        payload: { widgetId: s.value, timestamp: Date.now() }
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
       });
-    }, y = () => {
-      s?.value && w.emit("widget:TextWidget:right_click", {
+    };
+    const emitRightClick = () => {
+      if (!widgetId?.value) return;
+      eventBus.emit("widget:TextWidget:right_click", {
         type: "widget:TextWidget:right_click",
-        widgetId: s.value,
-        payload: { widgetId: s.value, timestamp: Date.now() }
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, timestamp: Date.now() }
       });
-    }, E = (T) => {
-      s?.value && w.emit("widget:TextWidget:text_change", {
+    };
+    const emitTextChange = (newText) => {
+      if (!widgetId?.value) return;
+      eventBus.emit("widget:TextWidget:text_change", {
         type: "widget:TextWidget:text_change",
-        widgetId: s.value,
-        payload: { widgetId: s.value, text: T, timestamp: Date.now() }
+        widgetId: widgetId.value,
+        payload: { widgetId: widgetId.value, text: newText, timestamp: Date.now() }
       });
-    }, x = Ge(m, "configv"), N = {
+    };
+    const config = useModel(__props, "configv");
+    const defaultConfig = {
       text: "Some text",
       fontSize: 12,
       fontColor: "#000",
@@ -953,81 +1247,115 @@ const Lt = { class: "component" }, Ut = /* @__PURE__ */ ze({
       textDecoration: "none",
       horizontalAlign: "Left",
       verticalAlign: "Top"
-    }, j = ce(null), { update: F } = kt(v, "object", j);
-    Object.keys(N).forEach((T) => {
-      if (x.value[T] === void 0 || x.value[T] === null) {
-        const k = Reflect.getMetadata("Reference", P.prototype, T), z = Et[k], q = N[T];
-        x.value[T] = new z(q);
+    };
+    const data = ref(null);
+    const { update } = useDatasourceRepository(datasourceId, "object", data);
+    Object.keys(defaultConfig).forEach((key) => {
+      if (config.value[key] === void 0 || config.value[key] === null) {
+        const refTypeName = Reflect.getMetadata("Reference", TextSettings.prototype, key);
+        const Constructor = WrapperTypes[refTypeName];
+        const defaultValue = defaultConfig[key];
+        config.value[key] = new Constructor(defaultValue);
       }
-    }), Ve(v, (T, k) => {
-      F(T, k);
     });
-    const Z = Ee(() => {
-      if (!x.value.text.value)
+    watch(datasourceId, (newVal, oldVal) => {
+      update(newVal, oldVal);
+    });
+    const calculatedString = computed(() => {
+      if (!config.value.text.value) {
         return "";
-      const { parts: T } = We.widget.extractValuesAndFullObject(x.value.text.value);
-      let k = "";
-      for (const z of T)
-        if (z.path || z.path === null) {
-          const q = We.widget.getValueByPath(j.value, z.path);
-          k += q !== void 0 ? JSON.stringify(q) : z.text;
-        } else
-          k += z.text;
-      return k;
-    }), ae = Ee(() => (x.value?.fontSize?.value || 12) + "px");
-    return Ve(Z, (T, k) => {
-      T !== k && E(T);
-    }), (T, k) => (He(), Ct("div", {
-      class: "text-container",
-      onClick: V,
-      onContextmenu: Tt(y, ["prevent"]),
-      style: xt({
-        "justify-content": x.value.verticalAlign?.value === "Top" ? "flex-start" : x.value.verticalAlign?.value === "Center" ? "center" : "flex-end"
-      })
-    }, [
-      $("div", Lt, Mt(Z.value), 1)
-    ], 36));
+      }
+      const { parts } = helpers.widget.extractValuesAndFullObject(config.value.text.value);
+      let result = "";
+      for (const part of parts) {
+        if (part.path || part.path === null) {
+          const value = helpers.widget.getValueByPath(data.value, part.path);
+          result += value !== void 0 ? JSON.stringify(value) : part.text;
+        } else {
+          result += part.text;
+        }
+      }
+      return result;
+    });
+    const fontSizeStyle = computed(() => {
+      return (config.value?.fontSize?.value || 12) + "px";
+    });
+    watch(calculatedString, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        emitTextChange(newVal);
+      }
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: "text-container",
+        onClick: emitClick,
+        onContextmenu: withModifiers(emitRightClick, ["prevent"]),
+        style: normalizeStyle({
+          "justify-content": config.value.verticalAlign?.value === "Top" ? "flex-start" : config.value.verticalAlign?.value === "Center" ? "center" : "flex-end"
+        })
+      }, [
+        createElementVNode("div", _hoisted_1$1, toDisplayString(calculatedString.value), 1)
+      ], 36);
+    };
   }
-}), Le = (m, g) => {
-  const l = m.__vccOpts || m;
-  for (const [v, s] of g)
-    l[v] = s;
-  return l;
-}, Nt = /* @__PURE__ */ Le(Ut, [["__scopeId", "data-v-7f505d2d"]]), Ft = { class: "settings-container" }, Zt = { class: "settings-block" }, qt = { class: "toolbar" }, Yt = { class: "toolbar-group toolbar-group--inputs" }, Jt = { class: "toolbar-group" }, Qt = { class: "toolbar-group" }, Xt = { class: "toolbar-group" }, Kt = /* @__PURE__ */ ze({
+});
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+const TextWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-7f505d2d"]]);
+const _hoisted_1 = { class: "settings-container" };
+const _hoisted_2 = { class: "settings-block" };
+const _hoisted_3 = { class: "toolbar" };
+const _hoisted_4 = { class: "toolbar-group toolbar-group--inputs" };
+const _hoisted_5 = { class: "toolbar-group" };
+const _hoisted_6 = { class: "toolbar-group" };
+const _hoisted_7 = { class: "toolbar-group" };
+const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "TextWidgetSettings",
   props: {
-    modelValue: { required: !0 },
-    modelModifiers: {}
+    "modelValue": { required: true },
+    "modelModifiers": {}
   },
   emits: ["update:modelValue"],
-  setup(m) {
-    ce({});
-    const g = ce({
-      widgetSection: !1,
-      storeSection: !1
-    }), l = Ge(m, "modelValue");
-    console.log(l), te(Rt);
-    const v = te("i18n"), s = (w) => v ? v.t(w) : w;
-    return (w, d) => {
-      const D = X("VaInput"), B = X("va-input"), R = X("va-color-input"), S = X("VaButton"), V = X("va-collapse");
-      return He(), Ot(V, {
-        modelValue: g.value.widgetSection,
-        "onUpdate:modelValue": d[12] || (d[12] = (y) => g.value.widgetSection = y),
+  setup(__props) {
+    ref({});
+    const opened = ref({
+      widgetSection: false,
+      storeSection: false
+    });
+    const widgetSettings = useModel(__props, "modelValue");
+    console.log(widgetSettings);
+    inject(identifier);
+    const i18n = inject("i18n");
+    const t = (key) => i18n ? i18n.t(key) : key;
+    return (_ctx, _cache) => {
+      const _component_VaInput = resolveComponent("VaInput");
+      const _component_va_input = resolveComponent("va-input");
+      const _component_va_color_input = resolveComponent("va-color-input");
+      const _component_VaButton = resolveComponent("VaButton");
+      const _component_va_collapse = resolveComponent("va-collapse");
+      return openBlock(), createBlock(_component_va_collapse, {
+        modelValue: opened.value.widgetSection,
+        "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => opened.value.widgetSection = $event),
         icon: "settings",
-        header: s("textBase:TextWidget.title")
+        header: t("textBase:TextWidget.title")
       }, {
-        default: ee(() => [
-          $("div", Ft, [
-            $("div", Zt, [
-              I(se(At), {
-                modelValue: l.value.text,
-                "onUpdate:modelValue": d[0] || (d[0] = (y) => l.value.text = y)
+        default: withCtx(() => [
+          createElementVNode("div", _hoisted_1, [
+            createElementVNode("div", _hoisted_2, [
+              createVNode(unref(ComplexTextInput), {
+                modelValue: widgetSettings.value.text,
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => widgetSettings.value.text = $event)
               }, {
-                default: ee(({ value: y, change: E }) => [
-                  I(D, {
-                    modelValue: y,
-                    onInput: E,
-                    label: s("textBase:TextWidget.label"),
+                default: withCtx(({ value, change }) => [
+                  createVNode(_component_VaInput, {
+                    modelValue: value,
+                    onInput: change,
+                    label: t("textBase:TextWidget.label"),
                     placeholder: "Enter text with variables...",
                     class: "w-full"
                   }, null, 8, ["modelValue", "onInput", "label"])
@@ -1035,113 +1363,113 @@ const Lt = { class: "component" }, Ut = /* @__PURE__ */ ze({
                 _: 1
               }, 8, ["modelValue"])
             ]),
-            $("div", qt, [
-              $("div", Yt, [
-                I(se(Pe), {
-                  modelValue: l.value.fontSize,
-                  "onUpdate:modelValue": d[1] || (d[1] = (y) => l.value.fontSize = y),
-                  label: s("textBase:TextWidget.fontSize")
+            createElementVNode("div", _hoisted_3, [
+              createElementVNode("div", _hoisted_4, [
+                createVNode(unref(VariableInput), {
+                  modelValue: widgetSettings.value.fontSize,
+                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => widgetSettings.value.fontSize = $event),
+                  label: t("textBase:TextWidget.fontSize")
                 }, {
-                  default: ee(({ value: y, change: E }) => [
-                    I(B, {
-                      "model-value": y,
-                      onInput: E,
+                  default: withCtx(({ value, change }) => [
+                    createVNode(_component_va_input, {
+                      "model-value": value,
+                      onInput: change,
                       placeholder: "Size",
                       class: "toolbar-input"
                     }, null, 8, ["model-value", "onInput"])
                   ]),
                   _: 1
                 }, 8, ["modelValue", "label"]),
-                I(se(Pe), {
-                  modelValue: l.value.fontColor,
-                  "onUpdate:modelValue": d[2] || (d[2] = (y) => l.value.fontColor = y),
-                  label: s("textBase:TextWidget.fontColor")
+                createVNode(unref(VariableInput), {
+                  modelValue: widgetSettings.value.fontColor,
+                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => widgetSettings.value.fontColor = $event),
+                  label: t("textBase:TextWidget.fontColor")
                 }, {
-                  default: ee(({ value: y, change: E }) => [
-                    I(R, {
-                      "model-value": y,
-                      onInput: E,
+                  default: withCtx(({ value, change }) => [
+                    createVNode(_component_va_color_input, {
+                      "model-value": value,
+                      onInput: change,
                       class: "toolbar-input"
                     }, null, 8, ["model-value", "onInput"])
                   ]),
                   _: 1
                 }, 8, ["modelValue", "label"])
               ]),
-              $("div", Jt, [
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.fontWeight.value === "bold" }]),
+              createElementVNode("div", _hoisted_5, [
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.fontWeight.value === "bold" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_bold",
-                  onClick: d[3] || (d[3] = (y) => l.value.fontWeight.value = l.value.fontWeight.value === "bold" ? "normal" : "bold"),
+                  onClick: _cache[3] || (_cache[3] = ($event) => widgetSettings.value.fontWeight.value = widgetSettings.value.fontWeight.value === "bold" ? "normal" : "bold"),
                   title: "Bold"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.fontStyle.value === "italic" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.fontStyle.value === "italic" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_italic",
-                  onClick: d[4] || (d[4] = (y) => l.value.fontStyle.value = l.value.fontStyle.value === "italic" ? "normal" : "italic"),
+                  onClick: _cache[4] || (_cache[4] = ($event) => widgetSettings.value.fontStyle.value = widgetSettings.value.fontStyle.value === "italic" ? "normal" : "italic"),
                   title: "Italic"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.textDecoration.value === "underline" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.textDecoration.value === "underline" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_underlined",
-                  onClick: d[5] || (d[5] = (y) => l.value.textDecoration.value = l.value.textDecoration.value === "underline" ? "None" : "underline"),
+                  onClick: _cache[5] || (_cache[5] = ($event) => widgetSettings.value.textDecoration.value = widgetSettings.value.textDecoration.value === "underline" ? "None" : "underline"),
                   title: "Underline"
                 }, null, 8, ["class"])
               ]),
-              $("div", Qt, [
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.horizontalAlign.value === "Left" }]),
+              createElementVNode("div", _hoisted_6, [
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.horizontalAlign.value === "Left" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_align_left",
-                  onClick: d[6] || (d[6] = (y) => l.value.horizontalAlign.value = "Left"),
+                  onClick: _cache[6] || (_cache[6] = ($event) => widgetSettings.value.horizontalAlign.value = "Left"),
                   title: "Left"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.horizontalAlign.value === "Center" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.horizontalAlign.value === "Center" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_align_center",
-                  onClick: d[7] || (d[7] = (y) => l.value.horizontalAlign.value = "Center"),
+                  onClick: _cache[7] || (_cache[7] = ($event) => widgetSettings.value.horizontalAlign.value = "Center"),
                   title: "Center"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.horizontalAlign.value === "Right" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.horizontalAlign.value === "Right" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "format_align_right",
-                  onClick: d[8] || (d[8] = (y) => l.value.horizontalAlign.value = "Right"),
+                  onClick: _cache[8] || (_cache[8] = ($event) => widgetSettings.value.horizontalAlign.value = "Right"),
                   title: "Right"
                 }, null, 8, ["class"])
               ]),
-              $("div", Xt, [
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.verticalAlign.value === "Top" }]),
+              createElementVNode("div", _hoisted_7, [
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.verticalAlign.value === "Top" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "vertical_align_top",
-                  onClick: d[9] || (d[9] = (y) => l.value.verticalAlign.value = "Top"),
+                  onClick: _cache[9] || (_cache[9] = ($event) => widgetSettings.value.verticalAlign.value = "Top"),
                   title: "Top"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.verticalAlign.value === "Center" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.verticalAlign.value === "Center" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "vertical_align_center",
-                  onClick: d[10] || (d[10] = (y) => l.value.verticalAlign.value = "Center"),
+                  onClick: _cache[10] || (_cache[10] = ($event) => widgetSettings.value.verticalAlign.value = "Center"),
                   title: "Center"
                 }, null, 8, ["class"]),
-                I(S, {
-                  class: G(["toolbar-btn", { "is-active": l.value.verticalAlign.value === "Bottom" }]),
+                createVNode(_component_VaButton, {
+                  class: normalizeClass(["toolbar-btn", { "is-active": widgetSettings.value.verticalAlign.value === "Bottom" }]),
                   size: "small",
                   preset: "secondary",
                   icon: "vertical_align_bottom",
-                  onClick: d[11] || (d[11] = (y) => l.value.verticalAlign.value = "Bottom"),
+                  onClick: _cache[11] || (_cache[11] = ($event) => widgetSettings.value.verticalAlign.value = "Bottom"),
                   title: "Bottom"
                 }, null, 8, ["class"])
               ])
@@ -1152,50 +1480,61 @@ const Lt = { class: "component" }, Ut = /* @__PURE__ */ ze({
       }, 8, ["modelValue", "header"]);
     };
   }
-}), en = /* @__PURE__ */ Le(Kt, [["__scopeId", "data-v-99382129"]]), tn = [
-  { name: "Text Clicked", type: "click", description: "Triggered when the text widget is clicked", payloadType: fe },
-  { name: "Text Right Clicked", type: "right_click", description: "Triggered when the text widget is right-clicked", payloadType: fe },
-  { name: "Text Changed", type: "text_change", description: "Triggered when the text changes", payloadType: fe }
+});
+const TextWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-99382129"]]);
+const TextWidgetEvents = [
+  { name: "Text Clicked", type: "click", description: "Triggered when the text widget is clicked", payloadType: Payload },
+  { name: "Text Right Clicked", type: "right_click", description: "Triggered when the text widget is right-clicked", payloadType: Payload },
+  { name: "Text Changed", type: "text_change", description: "Triggered when the text changes", payloadType: Payload }
 ];
-var nn = Object.defineProperty, rn = Object.getOwnPropertyDescriptor, de = (m, g, l, v) => {
-  for (var s = v > 1 ? void 0 : v ? rn(g, l) : g, w = m.length - 1, d; w >= 0; w--)
-    (d = m[w]) && (s = (v ? d(g, l, s) : d(s)) || s);
-  return v && s && nn(g, l, s), s;
-}, je = (m, g) => (l, v) => g(l, v, m);
-const J = "TextWidget";
-let ne = class {
-  constructor(m, g) {
-    this.events = m, this.actions = g;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __decorateClass = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result) __defProp(target, key, result);
+  return result;
+};
+var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
+const WIDGET_TYPE = "TextWidget";
+let TextWidgetProvider = class {
+  constructor(events, actions) {
+    this.events = events;
+    this.actions = actions;
   }
-  type = J;
-  component = Nt;
-  settingsComponent = en;
+  type = WIDGET_TYPE;
+  component = TextWidget;
+  settingsComponent = TextWidgetSettings;
   supportedDSTypes = [];
-  icon = jt;
+  icon = Icon;
   name = "Text";
   register() {
-    this.events.registerWidget(J, tn), this.actions.registerWidgetType(J, re, "widget");
+    this.events.registerWidget(WIDGET_TYPE, TextWidgetEvents);
+    this.actions.registerWidgetType(WIDGET_TYPE, TextWidgetInterface, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(J), this.actions.unregisterWidgetType(J);
+    this.events.unregisterWidget(WIDGET_TYPE);
+    this.actions.unregisterWidgetType(WIDGET_TYPE);
   }
 };
-de([
-  pt()
-], ne.prototype, "register", 1);
-de([
-  ht()
-], ne.prototype, "unregister", 1);
-ne = de([
-  yt({
-    service: [Dt],
-    properties: { "widget.type": J }
+__decorateClass([
+  activate()
+], TextWidgetProvider.prototype, "register", 1);
+__decorateClass([
+  deactivate()
+], TextWidgetProvider.prototype, "unregister", 1);
+TextWidgetProvider = __decorateClass([
+  component({
+    service: [WIDGET_SERVICE_ID],
+    properties: { "widget.type": WIDGET_TYPE }
   }),
-  je(0, ke(dt)),
-  je(1, ke(vt))
-], ne);
+  __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),
+  __decorateParam(1, inject$1(EVENT_ACTIONS_REGISTRY_ID))
+], TextWidgetProvider);
 export {
-  Nt as TextWidget,
-  ne as TextWidgetProvider,
-  en as TextWidgetSettings
+  TextWidget,
+  TextWidgetProvider,
+  TextWidgetSettings
 };
