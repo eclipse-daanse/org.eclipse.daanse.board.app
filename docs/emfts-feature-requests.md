@@ -270,6 +270,31 @@ paketübergreifend sieht. Nötig ist eine Option wie unser `-a`
 nicht emittiert, und beim GenConfig-Laden erscheint eine vermutlich
 harmlose Forward-Ref-Warnung.
 
+### FR-C4 — decorator-Modus: Enum-Literale werden ignoriert
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/28>
+
+Probelauf 2026-08-24 (Stand `f750ebc`, drei Modelle im Diff gegen
+`tools/generator`): Enums werden numerisch statt mit den
+`EEnumLiteral`-Literalen emittiert (`eq = 0` statt `eq = '=='`) —
+laufzeitbrechend, weil persistierte Konfigurationen die Literale tragen.
+
+### FR-C5 — decorator-Modus: Wertsemantik der Features
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/29>
+
+Aus demselben Probelauf, vier zusammengehörige Lücken: eTypeArguments
+(Generics) fallen weg, Referenz-Defaults kommen als rohe Literale statt
+Instanziierung (`= 12` an einem `VariableWrapper`), Attribut-Defaults und
+Pflichtigkeit gehen verloren (`comparator?:` statt `= Comparator.eq`),
+mehrwertige Features starten uninitalisiert statt `= []`.
+
+**Probelauf-Fazit:** @Documentation (C1/#27), Cross-Package (C2/#25) und
+geteilte Annotationen (C3/#26) sind verifiziert; Struktur, Imports und
+Doku sind adoptionsreif — Klassen-Doku emittiert der codegen sogar
+zusätzlich, und `.js`-Endungen auf relativen Imports sind ESM-korrekter
+als unser Output. Der Umstieg wartet auf C4/C5.
+
 ### Keine Lücke (Korrektur zu unserer früheren Annahme)
 
 Wir hatten `--no_factories` als fehlend notiert. Im `emf`-Modus lässt sich
