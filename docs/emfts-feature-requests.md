@@ -289,6 +289,30 @@ Instanziierung (`= 12` an einem `VariableWrapper`), Attribut-Defaults und
 Pflichtigkeit gehen verloren (`comparator?:` statt `= Comparator.eq`),
 mehrwertige Features starten uninitalisiert statt `= []`.
 
+### FR-C8/C9/C10 — Nachzügler aus dem zweiten Volllauf (2026-08-24, Stand `19e70c9`)
+
+C6 (#30, extends) und C7 (#31, Custom-Dekoratoren) sind **verifiziert
+behoben** — null verlorene Supertypen, null verlorene `@WidgetAction`.
+Der zweite Volllauf fand drei Nachzügler:
+
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/31> (Rest):
+  Operationsparameter verlieren ihr `?` — auch bei explizitem
+  `lowerBound="0"` (15 Stellen).
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/32>:
+  Annotation-Imports pauschal statt nur genutzte (Treiber prunt bis
+  dahin, als Workaround markiert); dazu kosmetisch Doppel-Importe aus
+  demselben Paket.
+- <https://github.com/eclipse-fennec/emf.ts.codegen/issues/33> — **der
+  letzte echte Blocker**: einwertige Klassenreferenzen ohne
+  `defaultValueLiteral` werden optional-uninitialisiert statt
+  instanziiert (31 Referenzen in 7 Paketen; unsere Settings-UIs binden
+  v-model direkt auf die Wrapper-Instanzen).
+
+Board-seitig in diesem Zug erledigt: `Documentation`-Dekorator in
+lib.annotations akzeptiert jetzt auch Klassen (der codegen emittiert
+Klassen-Doku), und vier Konsumstellen (chart/image) vertragen die
+ehrlicheren gen-Typen.
+
 ### FR-C6/C7 — Vollmigration blockiert: extends aus Dependency-Modellen und Custom-Dekoratoren
 
 Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/30>

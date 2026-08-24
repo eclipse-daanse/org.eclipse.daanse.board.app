@@ -85,14 +85,14 @@ const initInterval = () => {
   if (interval) {
     clearInterval(interval)
   }
-  if ((config.value.imagesSettings.diashowInterval ?? 0) > 0) {
+  if ((config.value.imagesSettings?.diashowInterval ?? 0) > 0) {
     interval = setInterval(() => {
       if (currentImage.value === config.value.images.length - 1) {
         currentImage.value = 0
         return
       }
       toNext()
-    }, (config.value.imagesSettings.diashowInterval ?? 1) * 1000)
+    }, (config.value.imagesSettings?.diashowInterval ?? 1) * 1000)
   }
 }
 

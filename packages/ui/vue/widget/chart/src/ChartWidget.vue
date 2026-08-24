@@ -189,7 +189,7 @@ const chartData = computed(() => {
   if (dataCopy.datasets && Array.isArray(dataCopy.datasets)) {
     dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
       // Check if there's a series-specific setting for this dataset
-      const seriesSettings = config.value?.seriesSettings?.find(
+      const seriesSettings: any = config.value?.seriesSettings?.find(
         (s: any) => (s.seriesIndex as any)?.value === index
       )
 

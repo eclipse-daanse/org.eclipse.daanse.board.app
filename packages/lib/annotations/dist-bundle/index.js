@@ -1,4 +1,5 @@
-var oe = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, ue = {};
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+var _Reflect = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -13,239 +14,306 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var se;
-function Fe() {
-  if (se) return ue;
-  se = 1;
-  var _;
-  return (function(b) {
-    (function(p) {
-      var M = typeof globalThis == "object" ? globalThis : typeof oe == "object" ? oe : typeof self == "object" ? self : typeof this == "object" ? this : D(), k = T(b);
-      typeof M.Reflect < "u" && (k = T(M.Reflect, k)), p(k, M), typeof M.Reflect > "u" && (M.Reflect = b);
-      function T(R, I) {
-        return function(m, j) {
-          Object.defineProperty(R, m, { configurable: !0, writable: !0, value: j }), I && I(m, j);
+var hasRequired_Reflect;
+function require_Reflect() {
+  if (hasRequired_Reflect) return _Reflect;
+  hasRequired_Reflect = 1;
+  var Reflect2;
+  (function(Reflect3) {
+    (function(factory) {
+      var root = typeof globalThis === "object" ? globalThis : typeof commonjsGlobal === "object" ? commonjsGlobal : typeof self === "object" ? self : typeof this === "object" ? this : sloppyModeThis();
+      var exporter = makeExporter(Reflect3);
+      if (typeof root.Reflect !== "undefined") {
+        exporter = makeExporter(root.Reflect, exporter);
+      }
+      factory(exporter, root);
+      if (typeof root.Reflect === "undefined") {
+        root.Reflect = Reflect3;
+      }
+      function makeExporter(target, previous) {
+        return function(key, value) {
+          Object.defineProperty(target, key, { configurable: true, writable: true, value });
+          if (previous)
+            previous(key, value);
         };
       }
-      function F() {
+      function functionThis() {
         try {
           return Function("return this;")();
-        } catch {
+        } catch (_) {
         }
       }
-      function E() {
+      function indirectEvalThis() {
         try {
-          return (0, eval)("(function() { return this; })()");
-        } catch {
+          return (void 0, eval)("(function() { return this; })()");
+        } catch (_) {
         }
       }
-      function D() {
-        return F() || E();
+      function sloppyModeThis() {
+        return functionThis() || indirectEvalThis();
       }
-    })(function(p, M) {
-      var k = Object.prototype.hasOwnProperty, T = typeof Symbol == "function", F = T && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", E = T && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", D = typeof Object.create == "function", R = { __proto__: [] } instanceof Array, I = !D && !R, m = {
+    })(function(exporter, root) {
+      var hasOwn = Object.prototype.hasOwnProperty;
+      var supportsSymbol = typeof Symbol === "function";
+      var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
+      var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
+      var supportsCreate = typeof Object.create === "function";
+      var supportsProto = { __proto__: [] } instanceof Array;
+      var downLevel = !supportsCreate && !supportsProto;
+      var HashMap = {
         // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-        create: D ? function() {
-          return B(/* @__PURE__ */ Object.create(null));
-        } : R ? function() {
-          return B({ __proto__: null });
+        create: supportsCreate ? function() {
+          return MakeDictionary(/* @__PURE__ */ Object.create(null));
+        } : supportsProto ? function() {
+          return MakeDictionary({ __proto__: null });
         } : function() {
-          return B({});
+          return MakeDictionary({});
         },
-        has: I ? function(e, t) {
-          return k.call(e, t);
-        } : function(e, t) {
-          return t in e;
+        has: downLevel ? function(map, key) {
+          return hasOwn.call(map, key);
+        } : function(map, key) {
+          return key in map;
         },
-        get: I ? function(e, t) {
-          return k.call(e, t) ? e[t] : void 0;
-        } : function(e, t) {
-          return e[t];
+        get: downLevel ? function(map, key) {
+          return hasOwn.call(map, key) ? map[key] : void 0;
+        } : function(map, key) {
+          return map[key];
         }
-      }, j = Object.getPrototypeOf(Function), C = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Ce(), U = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : xe(), W = typeof WeakMap == "function" ? WeakMap : De(), P = T ? Symbol.for("@reflect-metadata:registry") : void 0, G = Se(), q = Ie(G);
-      function de(e, t, r, n) {
-        if (s(r)) {
-          if (!K(e))
+      };
+      var functionPrototype = Object.getPrototypeOf(Function);
+      var _Map = typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
+      var _Set = typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
+      var _WeakMap = typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
+      var registrySymbol = supportsSymbol ? Symbol.for("@reflect-metadata:registry") : void 0;
+      var metadataRegistry = GetOrCreateMetadataRegistry();
+      var metadataProvider = CreateMetadataProvider(metadataRegistry);
+      function decorate(decorators, target, propertyKey, attributes) {
+        if (!IsUndefined(propertyKey)) {
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!ee(t))
+          if (!IsObject(target))
             throw new TypeError();
-          return ge(e, t);
+          if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
+            throw new TypeError();
+          if (IsNull(attributes))
+            attributes = void 0;
+          propertyKey = ToPropertyKey(propertyKey);
+          return DecorateProperty(decorators, target, propertyKey, attributes);
         } else {
-          if (!K(e))
+          if (!IsArray(decorators))
             throw new TypeError();
-          if (!y(t))
+          if (!IsConstructor(target))
             throw new TypeError();
-          if (!y(n) && !s(n) && !S(n))
-            throw new TypeError();
-          return S(n) && (n = void 0), r = O(r), Oe(e, t, r, n);
+          return DecorateConstructor(decorators, target);
         }
       }
-      p("decorate", de);
-      function le(e, t) {
-        function r(n, u) {
-          if (!y(n))
+      exporter("decorate", decorate);
+      function metadata(metadataKey, metadataValue) {
+        function decorator(target, propertyKey) {
+          if (!IsObject(target))
             throw new TypeError();
-          if (!s(u) && !Re(u))
+          if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
             throw new TypeError();
-          Y(e, t, n, u);
+          OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
         }
-        return r;
+        return decorator;
       }
-      p("metadata", le);
-      function he(e, t, r, n) {
-        if (!y(r))
+      exporter("metadata", metadata);
+      function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(n) || (n = O(n)), Y(e, t, r, n);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
       }
-      p("defineMetadata", he);
-      function ve(e, t, r) {
-        if (!y(t))
+      exporter("defineMetadata", defineMetadata);
+      function hasMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(r) || (r = O(r)), L(e, t, r);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
       }
-      p("hasMetadata", ve);
-      function ye(e, t, r) {
-        if (!y(t))
+      exporter("hasMetadata", hasMetadata);
+      function hasOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(r) || (r = O(r)), H(e, t, r);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
       }
-      p("hasOwnMetadata", ye);
-      function we(e, t, r) {
-        if (!y(t))
+      exporter("hasOwnMetadata", hasOwnMetadata);
+      function getMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(r) || (r = O(r)), N(e, t, r);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
       }
-      p("getMetadata", we);
-      function pe(e, t, r) {
-        if (!y(t))
+      exporter("getMetadata", getMetadata);
+      function getOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(r) || (r = O(r)), Z(e, t, r);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
       }
-      p("getOwnMetadata", pe);
-      function _e(e, t) {
-        if (!y(e))
+      exporter("getOwnMetadata", getOwnMetadata);
+      function getMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(t) || (t = O(t)), $(e, t);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryMetadataKeys(target, propertyKey);
       }
-      p("getMetadataKeys", _e);
-      function Me(e, t) {
-        if (!y(e))
+      exporter("getMetadataKeys", getMetadataKeys);
+      function getOwnMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        return s(t) || (t = O(t)), J(e, t);
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryOwnMetadataKeys(target, propertyKey);
       }
-      p("getOwnMetadataKeys", Me);
-      function be(e, t, r) {
-        if (!y(t))
+      exporter("getOwnMetadataKeys", getOwnMetadataKeys);
+      function deleteMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
           throw new TypeError();
-        if (s(r) || (r = O(r)), !y(t))
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        if (!IsObject(target))
           throw new TypeError();
-        s(r) || (r = O(r));
-        var n = x(
-          t,
-          r,
+        if (!IsUndefined(propertyKey))
+          propertyKey = ToPropertyKey(propertyKey);
+        var provider = GetMetadataProvider(
+          target,
+          propertyKey,
           /*Create*/
-          !1
+          false
         );
-        return s(n) ? !1 : n.OrdinaryDeleteMetadata(e, t, r);
+        if (IsUndefined(provider))
+          return false;
+        return provider.OrdinaryDeleteMetadata(metadataKey, target, propertyKey);
       }
-      p("deleteMetadata", be);
-      function ge(e, t) {
-        for (var r = e.length - 1; r >= 0; --r) {
-          var n = e[r], u = n(t);
-          if (!s(u) && !S(u)) {
-            if (!ee(u))
+      exporter("deleteMetadata", deleteMetadata);
+      function DecorateConstructor(decorators, target) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsConstructor(decorated))
               throw new TypeError();
-            t = u;
+            target = decorated;
           }
         }
-        return t;
+        return target;
       }
-      function Oe(e, t, r, n) {
-        for (var u = e.length - 1; u >= 0; --u) {
-          var h = e[u], w = h(t, r, n);
-          if (!s(w) && !S(w)) {
-            if (!y(w))
+      function DecorateProperty(decorators, target, propertyKey, descriptor) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+          var decorator = decorators[i];
+          var decorated = decorator(target, propertyKey, descriptor);
+          if (!IsUndefined(decorated) && !IsNull(decorated)) {
+            if (!IsObject(decorated))
               throw new TypeError();
-            n = w;
+            descriptor = decorated;
           }
         }
-        return n;
+        return descriptor;
       }
-      function L(e, t, r) {
-        var n = H(e, t, r);
-        if (n)
-          return !0;
-        var u = z(t);
-        return S(u) ? !1 : L(e, u, r);
+      function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return true;
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryHasMetadata(MetadataKey, parent, P);
+        return false;
       }
-      function H(e, t, r) {
-        var n = x(
-          t,
-          r,
+      function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        return s(n) ? !1 : X(n.OrdinaryHasOwnMetadata(e, t, r));
+        if (IsUndefined(provider))
+          return false;
+        return ToBoolean(provider.OrdinaryHasOwnMetadata(MetadataKey, O, P));
       }
-      function N(e, t, r) {
-        var n = H(e, t, r);
-        if (n)
-          return Z(e, t, r);
-        var u = z(t);
-        if (!S(u))
-          return N(e, u, r);
+      function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn2 = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn2)
+          return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+          return OrdinaryGetMetadata(MetadataKey, parent, P);
+        return void 0;
       }
-      function Z(e, t, r) {
-        var n = x(
-          t,
-          r,
+      function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !1
+          false
         );
-        if (!s(n))
-          return n.OrdinaryGetOwnMetadata(e, t, r);
+        if (IsUndefined(provider))
+          return;
+        return provider.OrdinaryGetOwnMetadata(MetadataKey, O, P);
       }
-      function Y(e, t, r, n) {
-        var u = x(
-          r,
-          n,
+      function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*Create*/
-          !0
+          true
         );
-        u.OrdinaryDefineOwnMetadata(e, t, r, n);
+        provider.OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P);
       }
-      function $(e, t) {
-        var r = J(e, t), n = z(e);
-        if (n === null)
-          return r;
-        var u = $(n, t);
-        if (u.length <= 0)
-          return r;
-        if (r.length <= 0)
-          return u;
-        for (var h = new U(), w = [], c = 0, a = r; c < a.length; c++) {
-          var i = a[c], f = h.has(i);
-          f || (h.add(i), w.push(i));
+      function OrdinaryMetadataKeys(O, P) {
+        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (parent === null)
+          return ownKeys;
+        var parentKeys = OrdinaryMetadataKeys(parent, P);
+        if (parentKeys.length <= 0)
+          return ownKeys;
+        if (ownKeys.length <= 0)
+          return parentKeys;
+        var set = new _Set();
+        var keys = [];
+        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
+          var key = ownKeys_1[_i];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        for (var o = 0, d = u; o < d.length; o++) {
-          var i = d[o], f = h.has(i);
-          f || (h.add(i), w.push(i));
+        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
+          var key = parentKeys_1[_a];
+          var hasKey = set.has(key);
+          if (!hasKey) {
+            set.add(key);
+            keys.push(key);
+          }
         }
-        return w;
+        return keys;
       }
-      function J(e, t) {
-        var r = x(
-          e,
-          t,
+      function OrdinaryOwnMetadataKeys(O, P) {
+        var provider = GetMetadataProvider(
+          O,
+          P,
           /*create*/
-          !1
+          false
         );
-        return r ? r.OrdinaryOwnMetadataKeys(e, t) : [];
+        if (!provider) {
+          return [];
+        }
+        return provider.OrdinaryOwnMetadataKeys(O, P);
       }
-      function Q(e) {
-        if (e === null)
+      function Type(x) {
+        if (x === null)
           return 1;
-        switch (typeof e) {
+        switch (typeof x) {
           case "undefined":
             return 0;
           case "boolean":
@@ -257,613 +325,821 @@ function Fe() {
           case "number":
             return 5;
           case "object":
-            return e === null ? 1 : 6;
+            return x === null ? 1 : 6;
           default:
             return 6;
         }
       }
-      function s(e) {
-        return e === void 0;
+      function IsUndefined(x) {
+        return x === void 0;
       }
-      function S(e) {
-        return e === null;
+      function IsNull(x) {
+        return x === null;
       }
-      function me(e) {
-        return typeof e == "symbol";
+      function IsSymbol(x) {
+        return typeof x === "symbol";
       }
-      function y(e) {
-        return typeof e == "object" ? e !== null : typeof e == "function";
+      function IsObject(x) {
+        return typeof x === "object" ? x !== null : typeof x === "function";
       }
-      function ke(e, t) {
-        switch (Q(e)) {
+      function ToPrimitive(input, PreferredType) {
+        switch (Type(input)) {
           case 0:
-            return e;
+            return input;
           case 1:
-            return e;
+            return input;
           case 2:
-            return e;
+            return input;
           case 3:
-            return e;
+            return input;
           case 4:
-            return e;
+            return input;
           case 5:
-            return e;
+            return input;
         }
-        var r = "string", n = te(e, F);
-        if (n !== void 0) {
-          var u = n.call(e, r);
-          if (y(u))
+        var hint = "string";
+        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
+        if (exoticToPrim !== void 0) {
+          var result = exoticToPrim.call(input, hint);
+          if (IsObject(result))
             throw new TypeError();
-          return u;
+          return result;
         }
-        return Te(e);
+        return OrdinaryToPrimitive(input);
       }
-      function Te(e, t) {
-        var r, n, u;
+      function OrdinaryToPrimitive(O, hint) {
+        var valueOf, result, toString_2;
         {
-          var h = e.toString;
-          if (A(h)) {
-            var n = h.call(e);
-            if (!y(n))
-              return n;
+          var toString_1 = O.toString;
+          if (IsCallable(toString_1)) {
+            var result = toString_1.call(O);
+            if (!IsObject(result))
+              return result;
           }
-          var r = e.valueOf;
-          if (A(r)) {
-            var n = r.call(e);
-            if (!y(n))
-              return n;
+          var valueOf = O.valueOf;
+          if (IsCallable(valueOf)) {
+            var result = valueOf.call(O);
+            if (!IsObject(result))
+              return result;
           }
         }
         throw new TypeError();
       }
-      function X(e) {
-        return !!e;
+      function ToBoolean(argument) {
+        return !!argument;
       }
-      function Ee(e) {
-        return "" + e;
+      function ToString(argument) {
+        return "" + argument;
       }
-      function O(e) {
-        var t = ke(e);
-        return me(t) ? t : Ee(t);
+      function ToPropertyKey(argument) {
+        var key = ToPrimitive(argument);
+        if (IsSymbol(key))
+          return key;
+        return ToString(key);
       }
-      function K(e) {
-        return Array.isArray ? Array.isArray(e) : e instanceof Object ? e instanceof Array : Object.prototype.toString.call(e) === "[object Array]";
+      function IsArray(argument) {
+        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : Object.prototype.toString.call(argument) === "[object Array]";
       }
-      function A(e) {
-        return typeof e == "function";
+      function IsCallable(argument) {
+        return typeof argument === "function";
       }
-      function ee(e) {
-        return typeof e == "function";
+      function IsConstructor(argument) {
+        return typeof argument === "function";
       }
-      function Re(e) {
-        switch (Q(e)) {
+      function IsPropertyKey(argument) {
+        switch (Type(argument)) {
           case 3:
-            return !0;
+            return true;
           case 4:
-            return !0;
+            return true;
           default:
-            return !1;
+            return false;
         }
       }
-      function V(e, t) {
-        return e === t || e !== e && t !== t;
+      function SameValueZero(x, y) {
+        return x === y || x !== x && y !== y;
       }
-      function te(e, t) {
-        var r = e[t];
-        if (r != null) {
-          if (!A(r))
-            throw new TypeError();
-          return r;
+      function GetMethod(V, P) {
+        var func = V[P];
+        if (func === void 0 || func === null)
+          return void 0;
+        if (!IsCallable(func))
+          throw new TypeError();
+        return func;
+      }
+      function GetIterator(obj) {
+        var method = GetMethod(obj, iteratorSymbol);
+        if (!IsCallable(method))
+          throw new TypeError();
+        var iterator = method.call(obj);
+        if (!IsObject(iterator))
+          throw new TypeError();
+        return iterator;
+      }
+      function IteratorValue(iterResult) {
+        return iterResult.value;
+      }
+      function IteratorStep(iterator) {
+        var result = iterator.next();
+        return result.done ? false : result;
+      }
+      function IteratorClose(iterator) {
+        var f = iterator["return"];
+        if (f)
+          f.call(iterator);
+      }
+      function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
+          return proto;
+        if (proto !== functionPrototype)
+          return proto;
+        var prototype = O.prototype;
+        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
+        if (prototypeProto == null || prototypeProto === Object.prototype)
+          return proto;
+        var constructor = prototypeProto.constructor;
+        if (typeof constructor !== "function")
+          return proto;
+        if (constructor === O)
+          return proto;
+        return constructor;
+      }
+      function CreateMetadataRegistry() {
+        var fallback;
+        if (!IsUndefined(registrySymbol) && typeof root.Reflect !== "undefined" && !(registrySymbol in root.Reflect) && typeof root.Reflect.defineMetadata === "function") {
+          fallback = CreateFallbackProvider(root.Reflect);
         }
-      }
-      function re(e) {
-        var t = te(e, E);
-        if (!A(t))
-          throw new TypeError();
-        var r = t.call(e);
-        if (!y(r))
-          throw new TypeError();
-        return r;
-      }
-      function ne(e) {
-        return e.value;
-      }
-      function ae(e) {
-        var t = e.next();
-        return t.done ? !1 : t;
-      }
-      function ie(e) {
-        var t = e.return;
-        t && t.call(e);
-      }
-      function z(e) {
-        var t = Object.getPrototypeOf(e);
-        if (typeof e != "function" || e === j || t !== j)
-          return t;
-        var r = e.prototype, n = r && Object.getPrototypeOf(r);
-        if (n == null || n === Object.prototype)
-          return t;
-        var u = n.constructor;
-        return typeof u != "function" || u === e ? t : u;
-      }
-      function Pe() {
-        var e;
-        !s(P) && typeof M.Reflect < "u" && !(P in M.Reflect) && typeof M.Reflect.defineMetadata == "function" && (e = je(M.Reflect));
-        var t, r, n, u = new W(), h = {
-          registerProvider: w,
-          getProvider: a,
-          setProvider: f
+        var first;
+        var second;
+        var rest;
+        var targetProviderMap = new _WeakMap();
+        var registry = {
+          registerProvider,
+          getProvider,
+          setProvider
         };
-        return h;
-        function w(o) {
-          if (!Object.isExtensible(h))
+        return registry;
+        function registerProvider(provider) {
+          if (!Object.isExtensible(registry)) {
             throw new Error("Cannot add provider to a frozen registry.");
-          switch (!0) {
-            case e === o:
+          }
+          switch (true) {
+            case fallback === provider:
               break;
-            case s(t):
-              t = o;
+            case IsUndefined(first):
+              first = provider;
               break;
-            case t === o:
+            case first === provider:
               break;
-            case s(r):
-              r = o;
+            case IsUndefined(second):
+              second = provider;
               break;
-            case r === o:
+            case second === provider:
               break;
             default:
-              n === void 0 && (n = new U()), n.add(o);
+              if (rest === void 0)
+                rest = new _Set();
+              rest.add(provider);
               break;
           }
         }
-        function c(o, d) {
-          if (!s(t)) {
-            if (t.isProviderFor(o, d))
-              return t;
-            if (!s(r)) {
-              if (r.isProviderFor(o, d))
-                return t;
-              if (!s(n))
-                for (var l = re(n); ; ) {
-                  var v = ae(l);
-                  if (!v)
-                    return;
-                  var g = ne(v);
-                  if (g.isProviderFor(o, d))
-                    return ie(l), g;
+        function getProviderNoCache(O, P) {
+          if (!IsUndefined(first)) {
+            if (first.isProviderFor(O, P))
+              return first;
+            if (!IsUndefined(second)) {
+              if (second.isProviderFor(O, P))
+                return first;
+              if (!IsUndefined(rest)) {
+                var iterator = GetIterator(rest);
+                while (true) {
+                  var next = IteratorStep(iterator);
+                  if (!next) {
+                    return void 0;
+                  }
+                  var provider = IteratorValue(next);
+                  if (provider.isProviderFor(O, P)) {
+                    IteratorClose(iterator);
+                    return provider;
+                  }
                 }
-            }
-          }
-          if (!s(e) && e.isProviderFor(o, d))
-            return e;
-        }
-        function a(o, d) {
-          var l = u.get(o), v;
-          return s(l) || (v = l.get(d)), s(v) && (v = c(o, d), s(v) || (s(l) && (l = new C(), u.set(o, l)), l.set(d, v))), v;
-        }
-        function i(o) {
-          if (s(o))
-            throw new TypeError();
-          return t === o || r === o || !s(n) && n.has(o);
-        }
-        function f(o, d, l) {
-          if (!i(l))
-            throw new Error("Metadata provider not registered.");
-          var v = a(o, d);
-          if (v !== l) {
-            if (!s(v))
-              return !1;
-            var g = u.get(o);
-            s(g) && (g = new C(), u.set(o, g)), g.set(d, l);
-          }
-          return !0;
-        }
-      }
-      function Se() {
-        var e;
-        return !s(P) && y(M.Reflect) && Object.isExtensible(M.Reflect) && (e = M.Reflect[P]), s(e) && (e = Pe()), !s(P) && y(M.Reflect) && Object.isExtensible(M.Reflect) && Object.defineProperty(M.Reflect, P, {
-          enumerable: !1,
-          configurable: !1,
-          writable: !1,
-          value: e
-        }), e;
-      }
-      function Ie(e) {
-        var t = new W(), r = {
-          isProviderFor: function(i, f) {
-            var o = t.get(i);
-            return s(o) ? !1 : o.has(f);
-          },
-          OrdinaryDefineOwnMetadata: w,
-          OrdinaryHasOwnMetadata: u,
-          OrdinaryGetOwnMetadata: h,
-          OrdinaryOwnMetadataKeys: c,
-          OrdinaryDeleteMetadata: a
-        };
-        return G.registerProvider(r), r;
-        function n(i, f, o) {
-          var d = t.get(i), l = !1;
-          if (s(d)) {
-            if (!o)
-              return;
-            d = new C(), t.set(i, d), l = !0;
-          }
-          var v = d.get(f);
-          if (s(v)) {
-            if (!o)
-              return;
-            if (v = new C(), d.set(f, v), !e.setProvider(i, f, r))
-              throw d.delete(f), l && t.delete(i), new Error("Wrong provider for target.");
-          }
-          return v;
-        }
-        function u(i, f, o) {
-          var d = n(
-            f,
-            o,
-            /*Create*/
-            !1
-          );
-          return s(d) ? !1 : X(d.has(i));
-        }
-        function h(i, f, o) {
-          var d = n(
-            f,
-            o,
-            /*Create*/
-            !1
-          );
-          if (!s(d))
-            return d.get(i);
-        }
-        function w(i, f, o, d) {
-          var l = n(
-            o,
-            d,
-            /*Create*/
-            !0
-          );
-          l.set(i, f);
-        }
-        function c(i, f) {
-          var o = [], d = n(
-            i,
-            f,
-            /*Create*/
-            !1
-          );
-          if (s(d))
-            return o;
-          for (var l = d.keys(), v = re(l), g = 0; ; ) {
-            var fe = ae(v);
-            if (!fe)
-              return o.length = g, o;
-            var Ge = ne(fe);
-            try {
-              o[g] = Ge;
-            } catch (Ae) {
-              try {
-                ie(v);
-              } finally {
-                throw Ae;
               }
             }
-            g++;
           }
+          if (!IsUndefined(fallback) && fallback.isProviderFor(O, P)) {
+            return fallback;
+          }
+          return void 0;
         }
-        function a(i, f, o) {
-          var d = n(
-            f,
-            o,
-            /*Create*/
-            !1
-          );
-          if (s(d) || !d.delete(i))
-            return !1;
-          if (d.size === 0) {
-            var l = t.get(f);
-            s(l) || (l.delete(o), l.size === 0 && t.delete(l));
+        function getProvider(O, P) {
+          var providerMap = targetProviderMap.get(O);
+          var provider;
+          if (!IsUndefined(providerMap)) {
+            provider = providerMap.get(P);
           }
-          return !0;
+          if (!IsUndefined(provider)) {
+            return provider;
+          }
+          provider = getProviderNoCache(O, P);
+          if (!IsUndefined(provider)) {
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return provider;
+        }
+        function hasProvider(provider) {
+          if (IsUndefined(provider))
+            throw new TypeError();
+          return first === provider || second === provider || !IsUndefined(rest) && rest.has(provider);
+        }
+        function setProvider(O, P, provider) {
+          if (!hasProvider(provider)) {
+            throw new Error("Metadata provider not registered.");
+          }
+          var existingProvider = getProvider(O, P);
+          if (existingProvider !== provider) {
+            if (!IsUndefined(existingProvider)) {
+              return false;
+            }
+            var providerMap = targetProviderMap.get(O);
+            if (IsUndefined(providerMap)) {
+              providerMap = new _Map();
+              targetProviderMap.set(O, providerMap);
+            }
+            providerMap.set(P, provider);
+          }
+          return true;
         }
       }
-      function je(e) {
-        var t = e.defineMetadata, r = e.hasOwnMetadata, n = e.getOwnMetadata, u = e.getOwnMetadataKeys, h = e.deleteMetadata, w = new W(), c = {
-          isProviderFor: function(a, i) {
-            var f = w.get(a);
-            return !s(f) && f.has(i) ? !0 : u(a, i).length ? (s(f) && (f = new U(), w.set(a, f)), f.add(i), !0) : !1;
+      function GetOrCreateMetadataRegistry() {
+        var metadataRegistry2;
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          metadataRegistry2 = root.Reflect[registrySymbol];
+        }
+        if (IsUndefined(metadataRegistry2)) {
+          metadataRegistry2 = CreateMetadataRegistry();
+        }
+        if (!IsUndefined(registrySymbol) && IsObject(root.Reflect) && Object.isExtensible(root.Reflect)) {
+          Object.defineProperty(root.Reflect, registrySymbol, {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: metadataRegistry2
+          });
+        }
+        return metadataRegistry2;
+      }
+      function CreateMetadataProvider(registry) {
+        var metadata2 = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var targetMetadata = metadata2.get(O);
+            if (IsUndefined(targetMetadata))
+              return false;
+            return targetMetadata.has(P);
           },
-          OrdinaryDefineOwnMetadata: t,
-          OrdinaryHasOwnMetadata: r,
-          OrdinaryGetOwnMetadata: n,
-          OrdinaryOwnMetadataKeys: u,
-          OrdinaryDeleteMetadata: h
+          OrdinaryDefineOwnMetadata: OrdinaryDefineOwnMetadata2,
+          OrdinaryHasOwnMetadata: OrdinaryHasOwnMetadata2,
+          OrdinaryGetOwnMetadata: OrdinaryGetOwnMetadata2,
+          OrdinaryOwnMetadataKeys: OrdinaryOwnMetadataKeys2,
+          OrdinaryDeleteMetadata
         };
-        return c;
+        metadataRegistry.registerProvider(provider);
+        return provider;
+        function GetOrCreateMetadataMap(O, P, Create) {
+          var targetMetadata = metadata2.get(O);
+          var createdTargetMetadata = false;
+          if (IsUndefined(targetMetadata)) {
+            if (!Create)
+              return void 0;
+            targetMetadata = new _Map();
+            metadata2.set(O, targetMetadata);
+            createdTargetMetadata = true;
+          }
+          var metadataMap = targetMetadata.get(P);
+          if (IsUndefined(metadataMap)) {
+            if (!Create)
+              return void 0;
+            metadataMap = new _Map();
+            targetMetadata.set(P, metadataMap);
+            if (!registry.setProvider(O, P, provider)) {
+              targetMetadata.delete(P);
+              if (createdTargetMetadata) {
+                metadata2.delete(O);
+              }
+              throw new Error("Wrong provider for target.");
+            }
+          }
+          return metadataMap;
+        }
+        function OrdinaryHasOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          return ToBoolean(metadataMap.has(MetadataKey));
+        }
+        function OrdinaryGetOwnMetadata2(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return void 0;
+          return metadataMap.get(MetadataKey);
+        }
+        function OrdinaryDefineOwnMetadata2(MetadataKey, MetadataValue, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            true
+          );
+          metadataMap.set(MetadataKey, MetadataValue);
+        }
+        function OrdinaryOwnMetadataKeys2(O, P) {
+          var keys = [];
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return keys;
+          var keysObj = metadataMap.keys();
+          var iterator = GetIterator(keysObj);
+          var k = 0;
+          while (true) {
+            var next = IteratorStep(iterator);
+            if (!next) {
+              keys.length = k;
+              return keys;
+            }
+            var nextValue = IteratorValue(next);
+            try {
+              keys[k] = nextValue;
+            } catch (e) {
+              try {
+                IteratorClose(iterator);
+              } finally {
+                throw e;
+              }
+            }
+            k++;
+          }
+        }
+        function OrdinaryDeleteMetadata(MetadataKey, O, P) {
+          var metadataMap = GetOrCreateMetadataMap(
+            O,
+            P,
+            /*Create*/
+            false
+          );
+          if (IsUndefined(metadataMap))
+            return false;
+          if (!metadataMap.delete(MetadataKey))
+            return false;
+          if (metadataMap.size === 0) {
+            var targetMetadata = metadata2.get(O);
+            if (!IsUndefined(targetMetadata)) {
+              targetMetadata.delete(P);
+              if (targetMetadata.size === 0) {
+                metadata2.delete(targetMetadata);
+              }
+            }
+          }
+          return true;
+        }
       }
-      function x(e, t, r) {
-        var n = G.getProvider(e, t);
-        if (!s(n))
-          return n;
-        if (r) {
-          if (G.setProvider(e, t, q))
-            return q;
+      function CreateFallbackProvider(reflect) {
+        var defineMetadata2 = reflect.defineMetadata, hasOwnMetadata2 = reflect.hasOwnMetadata, getOwnMetadata2 = reflect.getOwnMetadata, getOwnMetadataKeys2 = reflect.getOwnMetadataKeys, deleteMetadata2 = reflect.deleteMetadata;
+        var metadataOwner = new _WeakMap();
+        var provider = {
+          isProviderFor: function(O, P) {
+            var metadataPropertySet = metadataOwner.get(O);
+            if (!IsUndefined(metadataPropertySet) && metadataPropertySet.has(P)) {
+              return true;
+            }
+            if (getOwnMetadataKeys2(O, P).length) {
+              if (IsUndefined(metadataPropertySet)) {
+                metadataPropertySet = new _Set();
+                metadataOwner.set(O, metadataPropertySet);
+              }
+              metadataPropertySet.add(P);
+              return true;
+            }
+            return false;
+          },
+          OrdinaryDefineOwnMetadata: defineMetadata2,
+          OrdinaryHasOwnMetadata: hasOwnMetadata2,
+          OrdinaryGetOwnMetadata: getOwnMetadata2,
+          OrdinaryOwnMetadataKeys: getOwnMetadataKeys2,
+          OrdinaryDeleteMetadata: deleteMetadata2
+        };
+        return provider;
+      }
+      function GetMetadataProvider(O, P, Create) {
+        var registeredProvider = metadataRegistry.getProvider(O, P);
+        if (!IsUndefined(registeredProvider)) {
+          return registeredProvider;
+        }
+        if (Create) {
+          if (metadataRegistry.setProvider(O, P, metadataProvider)) {
+            return metadataProvider;
+          }
           throw new Error("Illegal state.");
         }
+        return void 0;
       }
-      function Ce() {
-        var e = {}, t = [], r = (
+      function CreateMapPolyfill() {
+        var cacheSentinel = {};
+        var arraySentinel = [];
+        var MapIterator = (
           /** @class */
           (function() {
-            function c(a, i, f) {
-              this._index = 0, this._keys = a, this._values = i, this._selector = f;
+            function MapIterator2(keys, values, selector) {
+              this._index = 0;
+              this._keys = keys;
+              this._values = values;
+              this._selector = selector;
             }
-            return c.prototype["@@iterator"] = function() {
+            MapIterator2.prototype["@@iterator"] = function() {
               return this;
-            }, c.prototype[E] = function() {
+            };
+            MapIterator2.prototype[iteratorSymbol] = function() {
               return this;
-            }, c.prototype.next = function() {
-              var a = this._index;
-              if (a >= 0 && a < this._keys.length) {
-                var i = this._selector(this._keys[a], this._values[a]);
-                return a + 1 >= this._keys.length ? (this._index = -1, this._keys = t, this._values = t) : this._index++, { value: i, done: !1 };
+            };
+            MapIterator2.prototype.next = function() {
+              var index = this._index;
+              if (index >= 0 && index < this._keys.length) {
+                var result = this._selector(this._keys[index], this._values[index]);
+                if (index + 1 >= this._keys.length) {
+                  this._index = -1;
+                  this._keys = arraySentinel;
+                  this._values = arraySentinel;
+                } else {
+                  this._index++;
+                }
+                return { value: result, done: false };
               }
-              return { value: void 0, done: !0 };
-            }, c.prototype.throw = function(a) {
-              throw this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), a;
-            }, c.prototype.return = function(a) {
-              return this._index >= 0 && (this._index = -1, this._keys = t, this._values = t), { value: a, done: !0 };
-            }, c;
+              return { value: void 0, done: true };
+            };
+            MapIterator2.prototype.throw = function(error) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              throw error;
+            };
+            MapIterator2.prototype.return = function(value) {
+              if (this._index >= 0) {
+                this._index = -1;
+                this._keys = arraySentinel;
+                this._values = arraySentinel;
+              }
+              return { value, done: true };
+            };
+            return MapIterator2;
           })()
-        ), n = (
+        );
+        var Map2 = (
           /** @class */
           (function() {
-            function c() {
-              this._keys = [], this._values = [], this._cacheKey = e, this._cacheIndex = -2;
+            function Map3() {
+              this._keys = [];
+              this._values = [];
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
             }
-            return Object.defineProperty(c.prototype, "size", {
+            Object.defineProperty(Map3.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
-              enumerable: !0,
-              configurable: !0
-            }), c.prototype.has = function(a) {
+              enumerable: true,
+              configurable: true
+            });
+            Map3.prototype.has = function(key) {
               return this._find(
-                a,
+                key,
                 /*insert*/
-                !1
+                false
               ) >= 0;
-            }, c.prototype.get = function(a) {
-              var i = this._find(
-                a,
+            };
+            Map3.prototype.get = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              return i >= 0 ? this._values[i] : void 0;
-            }, c.prototype.set = function(a, i) {
-              var f = this._find(
-                a,
+              return index >= 0 ? this._values[index] : void 0;
+            };
+            Map3.prototype.set = function(key, value) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !0
+                true
               );
-              return this._values[f] = i, this;
-            }, c.prototype.delete = function(a) {
-              var i = this._find(
-                a,
+              this._values[index] = value;
+              return this;
+            };
+            Map3.prototype.delete = function(key) {
+              var index = this._find(
+                key,
                 /*insert*/
-                !1
+                false
               );
-              if (i >= 0) {
-                for (var f = this._keys.length, o = i + 1; o < f; o++)
-                  this._keys[o - 1] = this._keys[o], this._values[o - 1] = this._values[o];
-                return this._keys.length--, this._values.length--, V(a, this._cacheKey) && (this._cacheKey = e, this._cacheIndex = -2), !0;
+              if (index >= 0) {
+                var size = this._keys.length;
+                for (var i = index + 1; i < size; i++) {
+                  this._keys[i - 1] = this._keys[i];
+                  this._values[i - 1] = this._values[i];
+                }
+                this._keys.length--;
+                this._values.length--;
+                if (SameValueZero(key, this._cacheKey)) {
+                  this._cacheKey = cacheSentinel;
+                  this._cacheIndex = -2;
+                }
+                return true;
               }
-              return !1;
-            }, c.prototype.clear = function() {
-              this._keys.length = 0, this._values.length = 0, this._cacheKey = e, this._cacheIndex = -2;
-            }, c.prototype.keys = function() {
-              return new r(this._keys, this._values, u);
-            }, c.prototype.values = function() {
-              return new r(this._keys, this._values, h);
-            }, c.prototype.entries = function() {
-              return new r(this._keys, this._values, w);
-            }, c.prototype["@@iterator"] = function() {
+              return false;
+            };
+            Map3.prototype.clear = function() {
+              this._keys.length = 0;
+              this._values.length = 0;
+              this._cacheKey = cacheSentinel;
+              this._cacheIndex = -2;
+            };
+            Map3.prototype.keys = function() {
+              return new MapIterator(this._keys, this._values, getKey);
+            };
+            Map3.prototype.values = function() {
+              return new MapIterator(this._keys, this._values, getValue);
+            };
+            Map3.prototype.entries = function() {
+              return new MapIterator(this._keys, this._values, getEntry);
+            };
+            Map3.prototype["@@iterator"] = function() {
               return this.entries();
-            }, c.prototype[E] = function() {
+            };
+            Map3.prototype[iteratorSymbol] = function() {
               return this.entries();
-            }, c.prototype._find = function(a, i) {
-              if (!V(this._cacheKey, a)) {
+            };
+            Map3.prototype._find = function(key, insert) {
+              if (!SameValueZero(this._cacheKey, key)) {
                 this._cacheIndex = -1;
-                for (var f = 0; f < this._keys.length; f++)
-                  if (V(this._keys[f], a)) {
-                    this._cacheIndex = f;
+                for (var i = 0; i < this._keys.length; i++) {
+                  if (SameValueZero(this._keys[i], key)) {
+                    this._cacheIndex = i;
                     break;
                   }
+                }
               }
-              return this._cacheIndex < 0 && i && (this._cacheIndex = this._keys.length, this._keys.push(a), this._values.push(void 0)), this._cacheIndex;
-            }, c;
+              if (this._cacheIndex < 0 && insert) {
+                this._cacheIndex = this._keys.length;
+                this._keys.push(key);
+                this._values.push(void 0);
+              }
+              return this._cacheIndex;
+            };
+            return Map3;
           })()
         );
-        return n;
-        function u(c, a) {
-          return c;
+        return Map2;
+        function getKey(key, _) {
+          return key;
         }
-        function h(c, a) {
-          return a;
+        function getValue(_, value) {
+          return value;
         }
-        function w(c, a) {
-          return [c, a];
+        function getEntry(key, value) {
+          return [key, value];
         }
       }
-      function xe() {
-        var e = (
+      function CreateSetPolyfill() {
+        var Set2 = (
           /** @class */
           (function() {
-            function t() {
-              this._map = new C();
+            function Set3() {
+              this._map = new _Map();
             }
-            return Object.defineProperty(t.prototype, "size", {
+            Object.defineProperty(Set3.prototype, "size", {
               get: function() {
                 return this._map.size;
               },
-              enumerable: !0,
-              configurable: !0
-            }), t.prototype.has = function(r) {
-              return this._map.has(r);
-            }, t.prototype.add = function(r) {
-              return this._map.set(r, r), this;
-            }, t.prototype.delete = function(r) {
-              return this._map.delete(r);
-            }, t.prototype.clear = function() {
+              enumerable: true,
+              configurable: true
+            });
+            Set3.prototype.has = function(value) {
+              return this._map.has(value);
+            };
+            Set3.prototype.add = function(value) {
+              return this._map.set(value, value), this;
+            };
+            Set3.prototype.delete = function(value) {
+              return this._map.delete(value);
+            };
+            Set3.prototype.clear = function() {
               this._map.clear();
-            }, t.prototype.keys = function() {
+            };
+            Set3.prototype.keys = function() {
               return this._map.keys();
-            }, t.prototype.values = function() {
+            };
+            Set3.prototype.values = function() {
               return this._map.keys();
-            }, t.prototype.entries = function() {
+            };
+            Set3.prototype.entries = function() {
               return this._map.entries();
-            }, t.prototype["@@iterator"] = function() {
+            };
+            Set3.prototype["@@iterator"] = function() {
               return this.keys();
-            }, t.prototype[E] = function() {
+            };
+            Set3.prototype[iteratorSymbol] = function() {
               return this.keys();
-            }, t;
+            };
+            return Set3;
           })()
         );
-        return e;
+        return Set2;
       }
-      function De() {
-        var e = 16, t = m.create(), r = n();
+      function CreateWeakMapPolyfill() {
+        var UUID_SIZE = 16;
+        var keys = HashMap.create();
+        var rootKey = CreateUniqueKey();
         return (
           /** @class */
           (function() {
-            function a() {
-              this._key = n();
+            function WeakMap2() {
+              this._key = CreateUniqueKey();
             }
-            return a.prototype.has = function(i) {
-              var f = u(
-                i,
+            WeakMap2.prototype.has = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return f !== void 0 ? m.has(f, this._key) : !1;
-            }, a.prototype.get = function(i) {
-              var f = u(
-                i,
+              return table !== void 0 ? HashMap.has(table, this._key) : false;
+            };
+            WeakMap2.prototype.get = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return f !== void 0 ? m.get(f, this._key) : void 0;
-            }, a.prototype.set = function(i, f) {
-              var o = u(
-                i,
+              return table !== void 0 ? HashMap.get(table, this._key) : void 0;
+            };
+            WeakMap2.prototype.set = function(target, value) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !0
+                true
               );
-              return o[this._key] = f, this;
-            }, a.prototype.delete = function(i) {
-              var f = u(
-                i,
+              table[this._key] = value;
+              return this;
+            };
+            WeakMap2.prototype.delete = function(target) {
+              var table = GetOrCreateWeakMapTable(
+                target,
                 /*create*/
-                !1
+                false
               );
-              return f !== void 0 ? delete f[this._key] : !1;
-            }, a.prototype.clear = function() {
-              this._key = n();
-            }, a;
+              return table !== void 0 ? delete table[this._key] : false;
+            };
+            WeakMap2.prototype.clear = function() {
+              this._key = CreateUniqueKey();
+            };
+            return WeakMap2;
           })()
         );
-        function n() {
-          var a;
+        function CreateUniqueKey() {
+          var key;
           do
-            a = "@@WeakMap@@" + c();
-          while (m.has(t, a));
-          return t[a] = !0, a;
+            key = "@@WeakMap@@" + CreateUUID();
+          while (HashMap.has(keys, key));
+          keys[key] = true;
+          return key;
         }
-        function u(a, i) {
-          if (!k.call(a, r)) {
-            if (!i)
-              return;
-            Object.defineProperty(a, r, { value: m.create() });
+        function GetOrCreateWeakMapTable(target, create) {
+          if (!hasOwn.call(target, rootKey)) {
+            if (!create)
+              return void 0;
+            Object.defineProperty(target, rootKey, { value: HashMap.create() });
           }
-          return a[r];
+          return target[rootKey];
         }
-        function h(a, i) {
-          for (var f = 0; f < i; ++f)
-            a[f] = Math.random() * 255 | 0;
-          return a;
+        function FillRandomBytes(buffer, size) {
+          for (var i = 0; i < size; ++i)
+            buffer[i] = Math.random() * 255 | 0;
+          return buffer;
         }
-        function w(a) {
-          if (typeof Uint8Array == "function") {
-            var i = new Uint8Array(a);
-            return typeof crypto < "u" ? crypto.getRandomValues(i) : typeof msCrypto < "u" ? msCrypto.getRandomValues(i) : h(i, a), i;
+        function GenRandomBytes(size) {
+          if (typeof Uint8Array === "function") {
+            var array = new Uint8Array(size);
+            if (typeof crypto !== "undefined") {
+              crypto.getRandomValues(array);
+            } else if (typeof msCrypto !== "undefined") {
+              msCrypto.getRandomValues(array);
+            } else {
+              FillRandomBytes(array, size);
+            }
+            return array;
           }
-          return h(new Array(a), a);
+          return FillRandomBytes(new Array(size), size);
         }
-        function c() {
-          var a = w(e);
-          a[6] = a[6] & 79 | 64, a[8] = a[8] & 191 | 128;
-          for (var i = "", f = 0; f < e; ++f) {
-            var o = a[f];
-            (f === 4 || f === 6 || f === 8) && (i += "-"), o < 16 && (i += "0"), i += o.toString(16).toLowerCase();
+        function CreateUUID() {
+          var data = GenRandomBytes(UUID_SIZE);
+          data[6] = data[6] & 79 | 64;
+          data[8] = data[8] & 191 | 128;
+          var result = "";
+          for (var offset = 0; offset < UUID_SIZE; ++offset) {
+            var byte = data[offset];
+            if (offset === 4 || offset === 6 || offset === 8)
+              result += "-";
+            if (byte < 16)
+              result += "0";
+            result += byte.toString(16).toLowerCase();
           }
-          return i;
+          return result;
         }
       }
-      function B(e) {
-        return e.__ = void 0, delete e.__, e;
+      function MakeDictionary(obj) {
+        obj.__ = void 0;
+        delete obj.__;
+        return obj;
       }
     });
-  })(_ || (_ = {})), ue;
+  })(Reflect2 || (Reflect2 = {}));
+  return _Reflect;
 }
-Fe();
-function Ue() {
-  return function(_, b) {
-    Reflect.defineMetadata("Attribute", !0, _, b);
+require_Reflect();
+function Attribute() {
+  return function(target, propertyKey) {
+    Reflect.defineMetadata("Attribute", true, target, propertyKey);
   };
 }
-function We(_) {
-  return function(b, p) {
-    Reflect.defineMetadata("Reference", _, b, p);
+function Reference(type) {
+  return function(target, propertyKey) {
+    Reflect.defineMetadata("Reference", type, target, propertyKey);
   };
 }
-function He(_) {
-  return function(b, p) {
-    Reflect.defineMetadata("Enum", _, b, p);
+function Enum(type) {
+  return function(target, propertyKey) {
+    Reflect.defineMetadata("Enum", type, target, propertyKey);
   };
 }
-function Ve(_) {
-  return function(b) {
-    Reflect.defineMetadata("ModelClass", _, b, "modelClass");
+function ModelClass(attr) {
+  return function(target) {
+    Reflect.defineMetadata("ModelClass", attr, target, "modelClass");
   };
 }
-function ze(_) {
-  return function(b, p) {
-    Reflect.defineMetadata("Documentation", _, b, p);
+function Documentation(type) {
+  return function(target, propertyKey) {
+    if (propertyKey === void 0) {
+      Reflect.defineMetadata("Documentation", type, target);
+    } else {
+      Reflect.defineMetadata("Documentation", type, target, propertyKey);
+    }
   };
 }
-const Be = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  Attribute: Ue,
-  Documentation: ze,
-  Enum: He,
-  ModelClass: Ve,
-  Reference: We
-}, Symbol.toStringTag, { value: "Module" })), ce = "org.eclipse.daanse.board.app.lib.annotations", qe = "0.0.1-next.1";
-async function Le(_) {
-  const b = globalThis.__tsm__;
-  if (!b)
-    throw new Error(`${ce}: tsm runtime is not initialized`);
-  b.register(ce, Be, qe, "lib.annotations"), await void 0;
+  Attribute,
+  Documentation,
+  Enum,
+  ModelClass,
+  Reference
+}, Symbol.toStringTag, { value: "Module" }));
+const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.annotations";
+const VERSION = "0.0.1-next.1";
+async function activate(context) {
+  const runtime = globalThis.__tsm__;
+  if (!runtime) {
+    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
+  }
+  runtime.register(LIBRARY_ID, library, VERSION, "lib.annotations");
+  await void 0;
 }
-async function Ne(_) {
+async function deactivate(context) {
   await void 0;
 }
 export {
-  Ue as Attribute,
-  ze as Documentation,
-  He as Enum,
-  Ve as ModelClass,
-  We as Reference,
-  Le as activate,
-  Ne as deactivate
+  Attribute,
+  Documentation,
+  Enum,
+  ModelClass,
+  Reference,
+  activate,
+  deactivate
 };

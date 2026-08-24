@@ -38,7 +38,7 @@
 import { execFileSync } from 'node:child_process'
 import {
   globSync, readFileSync, readdirSync, statSync,
-  mkdirSync, rmSync, cpSync, existsSync, mkdtempSync,
+  mkdirSync, rmSync, cpSync, existsSync, mkdtempSync, writeFileSync,
 } from 'node:fs'
 import { join, dirname, basename, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -85,6 +85,22 @@ function packageFor(nsuri) {
     ?? (nsuri.replace(/^http:\/\//, '').startsWith('org.eclipse.daanse')
       ? nsuri.replace(/^http:\/\//, '')
       : undefined)
+}
+
+
+/**
+ * WORKAROUND (emf.ts.codegen#32): the generator imports every annotation
+ * helper whether or not the class uses it; consumers compile these sources
+ * under noUnusedLocals. Prune the unused names until the emitter does.
+ */
+function pruneUnusedAnnotationImports(file) {
+  const source = readFileSync(file, 'utf-8')
+  const match = source.match(/import \{([^}]*)\} from '([^']*lib\.annotations)';?\n/)
+  if (!match) return
+  const rest = source.replace(match[0], '')
+  const used = match[1].split(',').map((n) => n.trim()).filter((n) => new RegExp('@' + n + '\\(').test(rest))
+  const replacement = used.length ? `import { ${used.join(', ')} } from '${match[2]}';\n` : ''
+  writeFileSync(file, source.replace(match[0], replacement))
 }
 
 // ----------------------------------------------------------------- generate
@@ -134,6 +150,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
           if (statSync(full).isDirectory()) flatten(full)
           else if (entry.endsWith('.ts') && entry !== 'index.ts') {
             cpSync(full, join(genDir, entry))
+            pruneUnusedAnnotationImports(join(genDir, entry))
           }
         }
       }

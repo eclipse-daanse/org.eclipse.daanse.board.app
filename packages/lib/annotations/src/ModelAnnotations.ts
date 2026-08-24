@@ -35,8 +35,16 @@ export function ModelClass(attr: {type: string}) {
   };
 }
 
+/**
+ * Attaches model documentation as metadata - on a feature, an operation or
+ * the class itself (the generator emits class-level documentation too).
+ */
 export function Documentation(type: string) {
-  return function (target: any, propertyKey: string) {
-    Reflect.defineMetadata("Documentation", type, target, propertyKey);
+  return function (target: any, propertyKey?: string) {
+    if (propertyKey === undefined) {
+      Reflect.defineMetadata("Documentation", type, target);
+    } else {
+      Reflect.defineMetadata("Documentation", type, target, propertyKey);
+    }
   };
 }
