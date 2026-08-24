@@ -195,7 +195,10 @@ der [Entscheidungsvorlage](./emfts-generator-entscheidung.md).
 
 ### FR-C1 — `decorator`- und `plain`-Modus brechen in der Operations-Schleife ab
 
-Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/24>
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/24> —
+**behoben, verifiziert am 2026-08-24** gegen lokalen Stand `45dea57`
+(0.0.2-next.1): `decorator` und `plain` generieren für `lib.connection.rest`
+fehlerfrei; Output strukturell äquivalent zu unserem Generator.
 
 `init --mode decorator` erzeugt eine GenConfig, `generate` damit scheitert:
 
@@ -220,7 +223,9 @@ Wechsel kein Generatorwechsel, sondern ein Umbau der Modellschicht.
 
 ### FR-C2 — `href`-Verweise auf andere Pakete werden in `init` nicht aufgelöst
 
-Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/25>
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/25> —
+**behoben, verifiziert am 2026-08-24**: ohne `-d` jetzt eine klare Meldung,
+mit `-d`/`--import-mapping` läuft `init` durch (exakt der Vorschlag).
 
 Unsere Modelle bauen über Paketgrenzen hinweg aufeinander auf:
 
@@ -245,6 +250,19 @@ nennt, statt mit `getNsURI is not a function`.
 **Warum uns das betrifft:** Von 41 Modellen im Projekt nutzen die meisten
 dieses Muster. Es ist die Art, wie unsere Modelle aufeinander aufbauen, kein
 Randfall.
+
+### FR-C3 — decorator-Modus: Annotationen aus geteiltem Paket importieren
+
+Eingereicht: <https://github.com/eclipse-fennec/emf.ts.codegen/issues/26>
+
+Bei der Verifikation von C1 gefunden: der decorator-Modus generiert pro
+Modell ein eigenes `ModelAnnotations.ts` mit `Symbol('…')`-Keys — 41 Modelle
+hießen 41 Dekorator-Kopien, deren Metadaten kein zentraler Leser
+paketübergreifend sieht. Nötig ist eine Option wie unser `-a`
+(Annotations-Import aus `lib.annotations`); solange die fehlt, bleibt
+`tools/generator` unser Generator. Außerdem gemeldet: `@Documentation` wird
+nicht emittiert, und beim GenConfig-Laden erscheint eine vermutlich
+harmlose Forward-Ref-Warnung.
 
 ### Keine Lücke (Korrektur zu unserer früheren Annahme)
 
