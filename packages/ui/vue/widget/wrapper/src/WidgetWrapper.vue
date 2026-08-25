@@ -72,23 +72,30 @@ const openSettings = (id: string): void => {
   emit('openSettings', id)
 }
 
+/*
+ * Widget chrome as specified in docs/mdx-workbench-layout-mockups.html:
+ * pane surface, a real 1px edge in the divider colour, 8px radius and the
+ * --shadow-e2 elevation (0 2px 8px, 14% ink) instead of the old 5/5/12 drop
+ * shadow. These are the defaults for newly placed widgets - widgets already
+ * on a board keep the wrapperConfig stored with them.
+ */
 const defaultConfig = {
   title: "",
-  backgroundColor: "#fff",
+  backgroundColor: "#f6f7f9",
   backgroundColorTransparence: 255,
-  titleColor: "#7c7c7c",
+  titleColor: "#575d68",
   padding: 0,
-  titleFontSize: 15,
-  borderSize: 0,
-  borderColor: "#ccc",
-  borderRadius: 15,
+  titleFontSize: 12,
+  borderSize: 1,
+  borderColor: "#ccd1d9",
+  borderRadius: 8,
   blur: 0,
   fullscreen: false,
-  shadowColor: "#333",
-  shadowBlur: 12,
-  shadowX: 5,
-  shadowY: 5,
-  shadowTransparence: 25,
+  shadowColor: "#191e2d",
+  shadowBlur: 8,
+  shadowX: 0,
+  shadowY: 2,
+  shadowTransparence: 36,
   transparency: 255
 }
 

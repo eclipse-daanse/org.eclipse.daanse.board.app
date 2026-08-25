@@ -450,18 +450,19 @@ const change = (e: any) => {
 }
 
 .dottet {
-  background: #fafafa;
-  background-image: radial-gradient(#b8b8b8 1px, transparent 0);
-  background-size: 40px 40px;
-  background-position: -19px -19px;
+  /* Board surface from the mockups: canvas token, 24px dot grid */
+  background: var(--color-canvas, #dee1e7);
+  background-image: radial-gradient(var(--color-divider, #ccd1d9) 1px, transparent 0);
+  background-size: 24px 24px;
+  background-position: -12px -12px;
   background-repeat: repeat;
 }
 
 .ghost-placeholder {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  border: 2px dashed #ccc;
+  background-color: color-mix(in srgb, var(--color-accent, #2f5fbd) 10%, transparent);
+  border-radius: var(--radius-sm, 5px);
+  border: 2px dashed var(--color-outline, #b9bec9);
   z-index: 1000000;
   pointer-events: none;
 }
@@ -481,10 +482,10 @@ const change = (e: any) => {
   left: 80px;
   width: 200px;
   height: 140px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: var(--color-pane, #f6f7f9);
+  border: 1px solid var(--color-divider, #ccd1d9);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-e2, 0 2px 8px rgba(25, 30, 45, 0.14));
   z-index: 999999;
   cursor: pointer;
   overflow: hidden;
@@ -498,15 +499,15 @@ const change = (e: any) => {
 
 .minimap-widget {
   position: absolute;
-  background: rgba(21, 78, 194, 0.3);
-  border: 1px solid rgba(21, 78, 194, 0.5);
+  background: color-mix(in srgb, var(--color-accent, #2f5fbd) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent, #2f5fbd) 55%, transparent);
   border-radius: 1px;
 }
 
 .minimap-viewport {
   position: absolute;
-  border: 2px solid #e42222;
-  background: rgba(228, 34, 34, 0.08);
+  border: 2px solid var(--color-err, #b02a1c);
+  background: color-mix(in srgb, var(--color-err, #b02a1c) 8%, transparent);
   border-radius: 2px;
   pointer-events: none;
 }
@@ -540,11 +541,12 @@ const change = (e: any) => {
 
 .canvas-context-menu {
   position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--color-raised, #ffffff);
+  border: 1px solid var(--color-divider, #ccd1d9);
+  border-radius: var(--radius-sm, 5px);
   padding: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-e2, 0 2px 8px rgba(25, 30, 45, 0.14));
+  color: var(--color-fg, #22252b);
   z-index: 10000001;
 }
 

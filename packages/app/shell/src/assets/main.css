@@ -24,97 +24,224 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
 @source inline("grid grid-cols-2 grid-rows-4");
 @source inline("row-span-4 col-span-1 overflow-auto");
 
-@theme {
+/* =====================================================================
+ * Design tokens - taken from docs/mdx-workbench-layout-mockups.html.
+ *
+ * Light is the default because the components still carry hardcoded light
+ * values; the dark set (the mockups' base theme) is one attribute away:
+ * <html data-theme="dark">. Every text colour below was measured against
+ * the surface it actually sits on and clears WCAG AA (>= 4.5:1); the
+ * numbers are documented in the mockups' token tables.
+ *
+ * Naming: --color-* so Tailwind 4 derives utilities (bg-pane, text-dim...).
+ * The --mdxwb-* aliases below feed the MDX Workbench panes, so both worlds
+ * share one palette and switch themes together.
+ * ===================================================================== */
+@theme static {
+  /* --- surfaces ------------------------------------------------------ */
+  --color-bg: #e9ebef;           /* app ground, editor surface, inputs */
+  --color-pane: #f6f7f9;         /* panels, topbar, activity rail, widgets */
+  --color-raised: #ffffff;       /* buttons, table heads, chips, badges */
+  --color-canvas: #dee1e7;       /* board surface behind the widgets */
+  --color-divider: #ccd1d9;      /* panel edges, splitters, table rules */
+  --color-outline: #b9bec9;      /* outlines of things you can operate */
+
+  /* --- text and accents ---------------------------------------------- */
+  --color-fg: #22252b;           /* 14.3:1 on pane */
+  --color-dim: #575d68;          /*  6.2:1 - secondary text, labels */
+  --color-accent: #2f5fbd;       /*  5.6:1 - interaction, selection */
+  --color-onAccent: #ffffff;     /*  6.0:1 - text ON the accent fill */
+  --color-brand: #7a5a07;        /*  6.0:1 - Daanse mark as text */
+  --color-brandFill: #c08a10;    /* Daanse mark as a fill */
+  --color-onBrand: #1a1c22;      /*  5.6:1 - text ON the brand fill */
+  --color-ok: #1f6f4a;           /*  5.7:1 */
+  --color-warn: #7d5710;         /*  6.0:1 */
+  --color-err: #b02a1c;          /*  6.1:1 */
+
+  /* --- MDX syntax ---------------------------------------------------- */
+  --color-kw: #1f4fa8;
+  --color-measure: #7d5710;
+  --color-member: #1f6f4a;
+  --color-fn: #7b3fa0;
+
+  /* --- kept for compatibility, re-pointed at the new palette --------- */
   --color-white: #fff;
-  --color-daanse_blue: #3f3cbb;
-  --color-daanse_grey: #2E2E2E;
-  --color-primary: #154EC2;
-  --color-secondary: #767C88;
-  --color-success: #3D9209;
-  --color-info: #158DE3;
-  --color-danger: #E42222;
-  --color-warning: #FFD43A;
-  --color-backgroundPrimary: #f6f6f6;
-  --color-backgroundSecondary: #FFFFFF;
-  --color-backgroundElement: #ECF0F1;
-  --color-backgroundBorder: #DEE5F2;
-  --color-textPrimary: #262824;
-  --color-textInverted: #FFFFFF
+  --color-primary: #2f5fbd;
+  --color-secondary: #575d68;
+  --color-success: #1f6f4a;
+  --color-info: #2f5fbd;
+  --color-danger: #b02a1c;
+  --color-warning: #7d5710;
+  --color-backgroundPrimary: #e9ebef;
+  --color-backgroundSecondary: #f6f7f9;
+  --color-backgroundElement: #ffffff;
+  --color-backgroundBorder: #ccd1d9;
+  --color-textPrimary: #22252b;
+  --color-textInverted: #ffffff;
+  --color-daanse_blue: #2f5fbd;
+  --color-daanse_grey: #22252b;
+
+  /* --- type scale: the sizes the mockups set ------------------------- */
+  --text-xs: 11px;    /* badges, counters, status bar, panel headers */
+  --text-sm: 12px;    /* secondary UI, tabs, tables, widget titles */
+  --text-base: 13px;  /* standard UI: tree rows, forms, buttons */
+  --text-lg: 15px;    /* headings inside panes, empty states */
+  --text-xl: 24px;    /* KPI values */
+
+  /* --- radii: five steps instead of the previous twelve -------------- */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* --- elevation ----------------------------------------------------- */
+  --shadow-e1: 0 1px 2px rgba(25, 30, 45, 0.14);
+  --shadow-e2: 0 2px 8px rgba(25, 30, 45, 0.14);
+  --shadow-e3: 0 8px 24px rgba(25, 30, 45, 0.14);
+
+  /* --- fixed shell metrics ------------------------------------------- */
+  --spacing-topbar: 42px;
+  --spacing-rail: 52px;
+  --spacing-panelHeader: 30px;
+  --spacing-splitter: 4px;
+  --spacing-statusbar: 24px;
 }
+
+/* Dark set - the mockups' base theme. Enable with <html data-theme="dark">. */
+:root[data-theme='dark'] {
+  --color-bg: #1e1f24;
+  --color-pane: #25262c;
+  --color-raised: #2c2d34;
+  --color-canvas: #191a1e;
+  --color-divider: #383a43;
+  --color-outline: #464a53;
+
+  --color-fg: #d9dbe1;        /* 10.9:1 on pane */
+  --color-dim: #9aa0ab;       /*  5.7:1 */
+  --color-accent: #7fb0ff;    /*  6.9:1 */
+  --color-onAccent: #10131a;  /*  8.5:1 - a bright fill needs dark text */
+  --color-brand: #e0ab2c;     /*  7.2:1 */
+  --color-brandFill: #e0ab2c;
+  --color-onBrand: #10131a;   /*  8.9:1 */
+  --color-ok: #6cc79a;        /*  7.4:1 */
+  --color-warn: #e0b26a;      /*  7.7:1 */
+  --color-err: #ec8189;       /*  5.8:1 */
+
+  --color-kw: #7fb0ff;
+  --color-measure: #e0b26a;
+  --color-member: #6cc79a;
+  --color-fn: #cf95d4;
+
+  --color-primary: #7fb0ff;
+  --color-secondary: #9aa0ab;
+  --color-success: #6cc79a;
+  --color-info: #7fb0ff;
+  --color-danger: #ec8189;
+  --color-warning: #e0b26a;
+  --color-backgroundPrimary: #1e1f24;
+  --color-backgroundSecondary: #25262c;
+  --color-backgroundElement: #2c2d34;
+  --color-backgroundBorder: #383a43;
+  --color-textPrimary: #d9dbe1;
+  --color-textInverted: #10131a;
+  --color-daanse_grey: #d9dbe1;
+
+  --shadow-e1: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-e2: 0 2px 8px rgba(0, 0, 0, 0.42);
+  --shadow-e3: 0 8px 24px rgba(0, 0, 0, 0.42);
+}
+
+/* The MDX Workbench panes read --mdxwb-*; feeding them from the same tokens
+ * is what lets the workbench inherit the app's theme (integration plan 6.4). */
+:root {
+  --mdxwb-bg: var(--color-bg);
+  --mdxwb-pane: var(--color-pane);
+  --mdxwb-raised: var(--color-raised);
+  --mdxwb-border: var(--color-divider);
+  --mdxwb-outline: var(--color-outline);
+  --mdxwb-fg: var(--color-fg);
+  --mdxwb-dim: var(--color-dim);
+  --mdxwb-accent: var(--color-accent);
+  --mdxwb-on-accent: var(--color-onAccent);
+  --mdxwb-ok: var(--color-ok);
+  --mdxwb-warn: var(--color-warn);
+  --mdxwb-err: var(--color-err);
+  --mdxwb-kw: var(--color-kw);
+  --mdxwb-measure: var(--color-measure);
+  --mdxwb-member: var(--color-member);
+  --mdxwb-fn: var(--color-fn);
+}
+
 @layer components {
+  /* These were frosted glass over a photo background. The mockups put panels
+   * on a plain surface with a real edge instead - same class names, so no
+   * markup had to change. */
   .ice_gray {
-
     padding: var(--spacing-6);
-    background: rgb(232 232 232 / 35%) !important;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-    box-shadow: var(--shadow-xl);
-    -webkit-backdrop-filter: blur(10px) !important;
-    backdrop-filter: blur(10px) !important;
-    /* border: 1px solid #cecece; */
-    filter: saturate(2);
-
-
+    background: var(--color-pane);
+    border-right: 1px solid var(--color-divider);
+    box-shadow: var(--shadow-e1);
   }
   .ice {
-
     padding: var(--spacing-6);
-    background: rgb(247 243 243 / 85%) !important;
-    border-radius: 16px;
-
-
-    -webkit-backdrop-filter: blur(10px) !important;
-    backdrop-filter: blur(10px) !important;
-    /*border: 1px solid #d5d5d5*/
+    background: var(--color-pane);
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-e2);
   }
-  .z-mx{
+  .z-mx {
     z-index: 30000;
   }
 }
-body{
-  --va-sidebar-z-index:30000;
-  --moveable-color:#b9b9b9!important;
-  font-family: "Roboto", sans-serif;
-  --va-font-family:"Roboto", sans-serif;
+
+body {
+  --va-sidebar-z-index: 30000;
+  --moveable-color: var(--color-outline) !important;
+  font-family: 'Roboto', sans-serif;
+  --va-font-family: 'Roboto', sans-serif;
   font-optical-sizing: auto;
-  font-weight: 200;
+  /* was 200 - a hairline weight at 13px is barely readable; the mockups
+   * use 400 for body and 500/600 for emphasis */
+  font-weight: 400;
+  font-size: var(--text-base);
   font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
+  font-variation-settings: 'wdth' 100;
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
+
+/* Numbers line up - as they do in the mockups' result grids and KPIs */
+table {
+  font-variant-numeric: tabular-nums;
+}
+
 .rCS1w3zcxh {
-  --moveable-color:#e5e4e4!important;
+  --moveable-color: var(--color-outline) !important;
   .moveable-line {
     width: 1px;
     height: 1px;
-    /* background: #4af; */
-    /* background: var(--moveable-color); */
-    background:none!important;
-    border-bottom: 2px dashed #e5e4e4 !important;
+    background: none !important;
+    border-bottom: 2px dashed var(--color-outline) !important;
     transform-origin: 0px 50%;
   }
 }
-.va-modal__overlay{
-  opacity: 1!important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background: rgb(204 204 204 / 55%) !important;
-
+.va-modal__overlay {
+  opacity: 1 !important;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  background: rgb(25 30 45 / 45%) !important;
 }
 .va-modal {
-  z-index: 3000000!important;
-
+  z-index: 3000000 !important;
 }
 :root .daans {
   --va-button-font-weight: 400;
 }
-:root{
-
-}
-
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Fix color picker positioning - browser needs dimensions to calculate popup position */
@@ -122,4 +249,3 @@ body{
   width: 1px !important;
   height: 1px !important;
 }
-

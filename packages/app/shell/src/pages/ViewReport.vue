@@ -232,17 +232,19 @@ const navigateToLoad = () => {
   width: 100%;
   height: 100%;
   position: relative;
+  /* Board surface from the mockups (view mode): canvas token, no dot grid */
+  background: var(--color-canvas, #dee1e7);
 }
 
 .report-container__title {
   width: 100%;
   padding: 16px;
-  border-bottom: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed var(--color-divider, #ccd1d9);
 }
 
 .report-container .widgets-adding-controls {
   display: flex;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-divider, #ccd1d9);
   border-radius: 8px;
   margin: 16px;
 }

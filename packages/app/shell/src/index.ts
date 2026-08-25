@@ -54,16 +54,49 @@ let app: VueApp | undefined
 export async function activate({ services, log }: ActivationContext) {
   app = createApp(App)
 
+  /*
+   * Vuestic palette, aligned with the design tokens in assets/main.css
+   * (which come from docs/mdx-workbench-layout-mockups.html). Keep the two
+   * in step: these values are what the va-* components paint with, the CSS
+   * tokens are what everything else uses.
+   */
   app.use(createVuestic({
     config: {
       colors: {
         presets: {
           light: {
-            primary: '#606060',
-            lightPrim: '#cbcbcb',
-            orange: '#c29803',
-            active: 'rgba(147,147,147,0.25)',
-            textPrimary: '#3a3a3a',
+            primary: '#2f5fbd',
+            secondary: '#575d68',
+            success: '#1f6f4a',
+            info: '#2f5fbd',
+            danger: '#b02a1c',
+            warning: '#7d5710',
+            lightPrim: '#ccd1d9',
+            orange: '#c08a10',
+            active: 'rgba(47,95,189,0.12)',
+            backgroundPrimary: '#f6f7f9',
+            backgroundSecondary: '#ffffff',
+            backgroundElement: '#e9ebef',
+            backgroundBorder: '#ccd1d9',
+            textPrimary: '#22252b',
+            textInverted: '#ffffff',
+          },
+          dark: {
+            primary: '#7fb0ff',
+            secondary: '#9aa0ab',
+            success: '#6cc79a',
+            info: '#7fb0ff',
+            danger: '#ec8189',
+            warning: '#e0b26a',
+            lightPrim: '#383a43',
+            orange: '#e0ab2c',
+            active: 'rgba(127,176,255,0.18)',
+            backgroundPrimary: '#25262c',
+            backgroundSecondary: '#2c2d34',
+            backgroundElement: '#1e1f24',
+            backgroundBorder: '#383a43',
+            textPrimary: '#d9dbe1',
+            textInverted: '#10131a',
           },
         },
       },
