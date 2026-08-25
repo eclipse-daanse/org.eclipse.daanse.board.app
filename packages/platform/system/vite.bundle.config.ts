@@ -122,10 +122,6 @@ export default defineConfig({
     tsmPlugin({
       manifest: resolve(__dirname, 'manifest.json'),
       components: 'derive',
-      // The tsm.js artefact bundles the framework API on purpose - this is
-      // the system bundle exporting org.osgi.framework. The path is the
-      // symlinked tsm workspace, which the boundary check sees as outside.
-      boundary: { allow: ['../../../../EMFTs/tsm'] },
       sharedModules,
       // Cast: tsm links its own vite copy, whose Plugin type is nominally
       // incompatible with the workspace's - same shape, different identity.

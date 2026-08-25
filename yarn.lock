@@ -499,16 +499,13 @@
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.13.0.tgz"
   integrity sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==
 
-"@eclipse-daanse/tsm@link:../EMFTs/tsm":
-  version "0.0.0"
-  uid ""
-
-"@eclipse-daanse/tsm@link:EMFTs/tsm":
-  version "0.0.0"
-  uid ""
-
-"@eclipse-daanse/tsm@link:packages/EMFTs/tsm":
-  version "0.0.0"
+"@eclipse-daanse/tsm@0.1.0-next.1":
+  version "0.1.0-next.1"
+  resolved "https://registry.npmjs.org/@eclipse-daanse/tsm/-/tsm-0.1.0-next.1.tgz#612aea31352651a54db18bb8336ccc22f96c8941"
+  integrity sha512-ClNPhU1Z31LwtQsbazYbhJopXP6kUXzFotnDTLdUWxsE+XIuM8bxXvMgfwVR3AmaZD6j45Xm1lNiK3kx9S/QGw==
+  dependencies:
+    reflect-metadata "^0.2.2"
+    semver "^7.7.3"
 
 "@egjs/agent@^2.2.1":
   version "2.4.4"

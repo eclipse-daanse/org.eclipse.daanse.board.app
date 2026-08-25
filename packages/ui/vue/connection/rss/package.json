@@ -28,7 +28,7 @@
     "org.eclipse.daanse.board.app.lib.connection.rss": "^0.0.1-next.1",
     "lodash": "^4.17.16",
     "vue-json-pretty": "^2.4.0",
-    "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
+    "@eclipse-daanse/tsm": "0.1.0-next.1"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

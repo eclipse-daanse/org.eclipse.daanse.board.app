@@ -1,18 +1,16 @@
-import { EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
-import { DATASOURCE_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.datasource";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { WidgetAction, ActionParameter } from "org.eclipse.daanse.board.app.lib.events";
-import { ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
-class OGCSTAToChartComposer extends BaseDatasource {
+import { EVENT_ACTIONS_REGISTRY_ID as $ } from "org.eclipse.daanse.board.app.lib.api.events";
+import { DATASOURCE_REPOSITORY as G } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { BaseDatasource as P } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { WidgetAction as b, ActionParameter as A } from "org.eclipse.daanse.board.app.lib.events";
+import { ModelClass as B } from "org.eclipse.daanse.board.app.lib.annotations";
+const { serviceId: R } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+class y extends P {
   /**
    * Dependencies arrive through the constructor - the factory in this
    * package's activate passes them from the registry. No global lookups.
    */
-  constructor(datasourceRepository, actionsRegistry) {
-    super();
-    this.datasourceRepository = datasourceRepository;
-    this.actionsRegistry = actionsRegistry;
+  constructor(t, e) {
+    super(), this.datasourceRepository = t, this.actionsRegistry = e;
   }
   instanceId = "";
   configuration;
@@ -26,24 +24,16 @@ class OGCSTAToChartComposer extends BaseDatasource {
   get datastreams() {
     return this.configuration?.datastreams || [];
   }
-  set datastreams(value) {
-    if (this.configuration) {
-      this.configuration.datastreams = value;
-    }
+  set datastreams(t) {
+    this.configuration && (this.configuration.datastreams = t);
   }
   destroy() {
-    console.log(`Destroying OGCSTAToChartComposer: ${this.instanceId}`);
-    if (this.instanceId) {
+    if (console.log(`Destroying OGCSTAToChartComposer: ${this.instanceId}`), this.instanceId)
       try {
-        if (this.actionsRegistry) {
-          const actionsRegistry = this.actionsRegistry;
-          actionsRegistry.unregisterInstance(this.instanceId);
-          console.log(`📝 Unregistered OGCSTAToChartComposer instance: ${this.instanceId}`);
-        }
-      } catch (error) {
-        console.warn("Could not unregister composer instance:", error);
+        this.actionsRegistry && (this.actionsRegistry.unregisterInstance(this.instanceId), console.log(`📝 Unregistered OGCSTAToChartComposer instance: ${this.instanceId}`));
+      } catch (t) {
+        console.warn("Could not unregister composer instance:", t);
       }
-    }
   }
   /**
    * Get the instance ID for this composer
@@ -54,11 +44,11 @@ class OGCSTAToChartComposer extends BaseDatasource {
   /**
    * Set the instance ID (called by factory)
    */
-  setInstanceId(id) {
-    this.instanceId = id;
+  setInstanceId(t) {
+    this.instanceId = t;
   }
-  isUpdating = false;
-  pendingUpdate = false;
+  isUpdating = !1;
+  pendingUpdate = !1;
   cachedData = null;
   cachedThingsStructure = [];
   // Cache Things structure for operation mode
@@ -67,517 +57,356 @@ class OGCSTAToChartComposer extends BaseDatasource {
   requestSessionId = 0;
   // Incremented on each thing switch to invalidate old requests
   static availableTypes = ["ogcsta"];
-  init(configuration) {
-    super.init(configuration);
-    this.configuration = configuration;
-    if (!Array.isArray(configuration.datastreams)) {
-      configuration.datastreams = [];
-    }
-    if (!Array.isArray(configuration.thingIds)) {
-      configuration.thingIds = [];
-    }
-    this.connectedDatasources = configuration.connectedDatasources;
-    this.thingIds = configuration.thingIds;
-    const updateFn = async () => {
+  init(t) {
+    super.init(t), this.configuration = t, Array.isArray(t.datastreams) || (t.datastreams = []), Array.isArray(t.thingIds) || (t.thingIds = []), this.connectedDatasources = t.connectedDatasources, this.thingIds = t.thingIds;
+    const e = async () => {
       if (this.isUpdating) {
-        console.log("🔄 Update already in progress, marking pending update");
-        this.pendingUpdate = true;
+        console.log("🔄 Update already in progress, marking pending update"), this.pendingUpdate = !0;
         return;
       }
-      this.isUpdating = true;
-      this.pendingUpdate = false;
+      this.isUpdating = !0, this.pendingUpdate = !1;
       try {
-        console.log("📊 OGCSTAToChartComposer: Datasource updated, notifying widgets...");
-        this.loadingPromises.clear();
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        this.notify();
-        if (this.pendingUpdate) {
-          console.log("🔄 Processing pending update");
-          this.pendingUpdate = false;
-          setTimeout(() => updateFn(), 100);
-        }
+        console.log("📊 OGCSTAToChartComposer: Datasource updated, notifying widgets..."), this.loadingPromises.clear(), await new Promise((a) => setTimeout(a, 50)), this.notify(), this.pendingUpdate && (console.log("🔄 Processing pending update"), this.pendingUpdate = !1, setTimeout(() => e(), 100));
       } finally {
-        this.isUpdating = false;
+        this.isUpdating = !1;
       }
-    };
-    const datasourceRepository = this.datasourceRepository;
-    this.connectedDatasources.filter((datasourceId) => datasourceId).forEach((ds) => {
-      const datasource = datasourceRepository.getDatasource(ds);
-      datasource.subscribe(updateFn);
-    });
-    setTimeout(() => {
-      console.log("📊 OGCSTAToChartComposer: Initial notify to load data");
-      this.notify();
+    }, s = this.datasourceRepository;
+    this.connectedDatasources.filter((a) => a).forEach((a) => {
+      s.getDatasource(a).subscribe(e);
+    }), setTimeout(() => {
+      console.log("📊 OGCSTAToChartComposer: Initial notify to load data"), this.notify();
     }, 100);
   }
-  async getData(type, options) {
-    const datasourceRepository = this.datasourceRepository;
-    const data = await Promise.all(
-      this.connectedDatasources.filter((datasourceId) => datasourceId).map(async (datasourceId) => {
-        if (!datasourceRepository) {
+  async getData(t, e) {
+    const s = this.datasourceRepository, a = await Promise.all(
+      this.connectedDatasources.filter((n) => n).map(async (n) => {
+        if (!s)
           throw new Error("DatasourceRepository is not provided to DataSource Classes");
-        }
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        if (this.datastreams.length === 0) {
-          console.log("⚠️ No datastreams configured yet");
-          return { things: [], datastreams: [], observations: [] };
-        }
-        let resultMap = datasourceInstance.resultMap;
-        if (!resultMap?.datastreams || resultMap.datastreams.length === 0) {
+        const o = s.getDatasource(n);
+        if (this.datastreams.length === 0)
+          return console.log("⚠️ No datastreams configured yet"), { things: [], datastreams: [], observations: [] };
+        let i = o.resultMap;
+        if (!i?.datastreams || i.datastreams.length === 0) {
           console.log("📊 OGCSTAToChartComposer: Initializing datasource...");
           try {
-            await datasourceInstance.getData("OGCSTAData", { reload: true });
-            resultMap = datasourceInstance.resultMap;
-            console.log("📊 OGCSTAToChartComposer: Datasource initialized");
-          } catch (error) {
-            console.error("Failed to initialize datasource:", error);
+            await o.getData("OGCSTAData", { reload: !0 }), i = o.resultMap, console.log("📊 OGCSTAToChartComposer: Datasource initialized");
+          } catch (l) {
+            console.error("Failed to initialize datasource:", l);
           }
         }
-        console.log(`📊 Reading observations from datastreams in cache`);
-        const dsConfig = datasourceInstance.configuration;
-        const allObservations = [];
-        const missingDatastreams = [];
-        if (resultMap?.datastreams) {
-          console.log(`✅ Found ${resultMap.datastreams.length} datastreams in cache`);
-          for (const ds of this.datastreams) {
-            const datastream = resultMap.datastreams.find((d) => d.iotId == ds.datastreamId);
-            if (datastream?.observations && datastream.observations.length > 0) {
-              console.log(`📊 Found ${datastream.observations.length} observations in datastream ${ds.datastreamId}`);
-              datastream.observations.forEach((obs) => {
-                obs.ds_source = ds.datastreamId;
-                allObservations.push(obs);
-              });
-            } else {
-              console.log(`⚠️ No observations in cache for datastream ${ds.datastreamId}, will load directly`);
-              missingDatastreams.push(ds);
-            }
+        console.log("📊 Reading observations from datastreams in cache");
+        const c = o.configuration, d = [], r = [];
+        if (i?.datastreams) {
+          console.log(`✅ Found ${i.datastreams.length} datastreams in cache`);
+          for (const l of this.datastreams) {
+            const m = i.datastreams.find((g) => g.iotId == l.datastreamId);
+            m?.observations && m.observations.length > 0 ? (console.log(`📊 Found ${m.observations.length} observations in datastream ${l.datastreamId}`), m.observations.forEach((g) => {
+              g.ds_source = l.datastreamId, d.push(g);
+            })) : (console.log(`⚠️ No observations in cache for datastream ${l.datastreamId}, will load directly`), r.push(l));
           }
-        } else {
-          console.log(`⚠️ No datastreams in cache, will load all directly`);
-          missingDatastreams.push(...this.datastreams);
-        }
-        if (missingDatastreams.length > 0) {
-          console.log(`📊 Loading ${missingDatastreams.length} missing datastreams directly`);
-          const historyConfig = dsConfig?.history || {
-            enabled: true,
+        } else
+          console.log("⚠️ No datastreams in cache, will load all directly"), r.push(...this.datastreams);
+        if (r.length > 0) {
+          console.log(`📊 Loading ${r.length} missing datastreams directly`);
+          const l = c?.history || {
+            enabled: !0,
             phenomenonTime: {
-              startVariable: dsConfig?.history?.phenomenonTime?.startVariable,
-              endVariable: dsConfig?.history?.phenomenonTime?.endVariable
+              startVariable: c?.history?.phenomenonTime?.startVariable,
+              endVariable: c?.history?.phenomenonTime?.endVariable
             }
           };
-          for (const ds of missingDatastreams) {
+          for (const m of r)
             try {
-              const loadKey = `${datasourceId}:${ds.datastreamId}`;
-              if (this.loadingPromises.has(loadKey)) {
-                console.log(`⏳ Already loading datastream ${ds.datastreamId}, reusing promise`);
-                const observations = await this.loadingPromises.get(loadKey);
-                observations.forEach((obs) => {
-                  allObservations.push(obs);
+              const g = `${n}:${m.datastreamId}`;
+              if (this.loadingPromises.has(g))
+                console.log(`⏳ Already loading datastream ${m.datastreamId}, reusing promise`), (await this.loadingPromises.get(g)).forEach((v) => {
+                  d.push(v);
                 });
-              } else {
-                console.log(`📊 Loading observations for missing datastream ${ds.datastreamId}`);
-                const loadPromise = datasourceInstance.getHistoricalObservations(
-                  ds.datastreamId,
-                  historyConfig
-                ).then((observations2) => {
-                  observations2.forEach((obs) => {
-                    obs.ds_source = ds.datastreamId;
-                  });
-                  console.log(`✅ Loaded ${observations2.length} observations for ${ds.datastreamId}`);
-                  setTimeout(() => this.loadingPromises.delete(loadKey), 100);
-                  return observations2;
-                }).catch((error) => {
-                  this.loadingPromises.delete(loadKey);
-                  console.error(`❌ Failed to load observations for ${ds.datastreamId}:`, error);
-                  throw error;
+              else {
+                console.log(`📊 Loading observations for missing datastream ${m.datastreamId}`);
+                const T = o.getHistoricalObservations(
+                  m.datastreamId,
+                  l
+                ).then((u) => (u.forEach((S) => {
+                  S.ds_source = m.datastreamId;
+                }), console.log(`✅ Loaded ${u.length} observations for ${m.datastreamId}`), setTimeout(() => this.loadingPromises.delete(g), 100), u)).catch((u) => {
+                  throw this.loadingPromises.delete(g), console.error(`❌ Failed to load observations for ${m.datastreamId}:`, u), u;
                 });
-                this.loadingPromises.set(loadKey, loadPromise);
-                const observations = await loadPromise;
-                observations.forEach((obs) => {
-                  allObservations.push(obs);
+                this.loadingPromises.set(g, T), (await T).forEach((u) => {
+                  d.push(u);
                 });
               }
-            } catch (error) {
-              console.error(`Error loading observations for ${ds.datastreamId}:`, error);
+            } catch (g) {
+              console.error(`Error loading observations for ${m.datastreamId}:`, g);
             }
-          }
         }
-        console.log(`✅ Total observations collected: ${allObservations.length}`);
-        return {
-          things: resultMap?.things || [],
-          datastreams: resultMap?.datastreams || [],
-          observations: allObservations
+        return console.log(`✅ Total observations collected: ${d.length}`), {
+          things: i?.things || [],
+          datastreams: i?.datastreams || [],
+          observations: d
         };
       })
     );
-    if (type === "ChartData") {
-      const chartData = this.composeChartData(data);
-      this.cachedData = chartData;
-      return chartData;
-    } else if (type === "DataTable") {
-      const tableData = this.composeDataTable(data);
-      this.cachedData = tableData;
-      return tableData;
-    } else {
-      console.warn("Invalid data type for OGCSTAToChartComposer");
-      return null;
-    }
+    if (t === "ChartData") {
+      const n = this.composeChartData(a);
+      return this.cachedData = n, n;
+    } else if (t === "DataTable") {
+      const n = this.composeDataTable(a);
+      return this.cachedData = n, n;
+    } else
+      return console.warn("Invalid data type for OGCSTAToChartComposer"), null;
   }
   async getOriginalData() {
     return [];
   }
-  callEvent(event, params) {
-    if (event === "switchThingByName" && params?.name) {
-      this.switchThingByName(params.name);
+  callEvent(t, e) {
+    if (t === "switchThingByName" && e?.name) {
+      this.switchThingByName(e.name);
       return;
     }
-    if (event === "switchThingById" && params?.id) {
-      this.switchThingById(params.id);
+    if (t === "switchThingById" && e?.id) {
+      this.switchThingById(e.id);
       return;
     }
-    console.warn(`Event "${event}" is not available for OGCSTAToChartComposer`, params);
+    console.warn(`Event "${t}" is not available for OGCSTAToChartComposer`, e);
   }
   /**
    * Switch to a different Thing by its name
    * @param name - The name of the Thing to switch to
    */
-  async switchThingByName(name) {
-    console.log(`🔄 OGCSTAToChartComposer: Switching thing by name: "${name}"`);
-    const thing = await this.findThingByName(name);
-    if (thing) {
-      const thingId = thing["@iot.id"] || thing.iotId;
-      await this.switchToThing(thingId, thing);
-    } else {
-      console.warn(`⚠️ Thing with name "${name}" not found`);
-    }
+  async switchThingByName(t) {
+    console.log(`🔄 OGCSTAToChartComposer: Switching thing by name: "${t}"`);
+    const e = await this.findThingByName(t);
+    if (e) {
+      const s = e["@iot.id"] || e.iotId;
+      await this.switchToThing(s, e);
+    } else
+      console.warn(`⚠️ Thing with name "${t}" not found`);
   }
   /**
     * Switch to a different Thing by its ID
     * @param id - The ID of the Thing to switch to
     */
-  async switchThingById(id) {
-    console.log(`🔄 OGCSTAToChartComposer: Switching thing by id: "${id}"`);
-    const thing = await this.findThingById(id);
-    if (thing) {
-      await this.switchToThing(id, thing);
-    } else {
-      console.warn(`⚠️ Thing with id "${id}" not found`);
-    }
+  async switchThingById(t) {
+    console.log(`🔄 OGCSTAToChartComposer: Switching thing by id: "${t}"`);
+    const e = await this.findThingById(t);
+    e ? await this.switchToThing(t, e) : console.warn(`⚠️ Thing with id "${t}" not found`);
   }
   /**
    * Find a Thing by its name from connected datasources
    */
-  async findThingByName(name) {
-    await this.refreshThingsCache();
-    const thing = this.allThingsCache.find((t) => {
-      const thingName = t.name || t.Name;
-      return thingName === name || thingName?.toLowerCase() === name.toLowerCase();
-    });
-    return thing || null;
+  async findThingByName(t) {
+    return await this.refreshThingsCache(), this.allThingsCache.find((s) => {
+      const a = s.name || s.Name;
+      return a === t || a?.toLowerCase() === t.toLowerCase();
+    }) || null;
   }
   /**
    * Find a Thing by its ID from connected datasources
    */
-  async findThingById(id) {
-    await this.refreshThingsCache();
-    const thing = this.allThingsCache.find((t) => {
-      const thingId = t["@iot.id"] || t.iotId;
-      return thingId == id;
-    });
-    return thing || null;
+  async findThingById(t) {
+    return await this.refreshThingsCache(), this.allThingsCache.find((s) => (s["@iot.id"] || s.iotId) == t) || null;
   }
   /**
    * Refresh the cache of all things from connected datasources
    */
   async refreshThingsCache() {
-    if (this.allThingsCache.length > 0) {
+    if (this.allThingsCache.length > 0)
       return;
-    }
-    const datasourceRepository = this.datasourceRepository;
-    for (const datasourceId of this.connectedDatasources) {
-      if (!datasourceId) continue;
-      try {
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        const resultMap = datasourceInstance.resultMap;
-        if (resultMap?.things && resultMap.things.length > 0) {
-          this.allThingsCache.push(...resultMap.things);
-        } else {
-          const data = await datasourceInstance.getData("OGCSTAData", {
-            isolatedRequest: true,
-            filter: {
-              things: {
-                includeDatastreams: true,
-                includeLocations: false
+    const t = this.datasourceRepository;
+    for (const e of this.connectedDatasources)
+      if (e)
+        try {
+          const s = t.getDatasource(e), a = s.resultMap;
+          if (a?.things && a.things.length > 0)
+            this.allThingsCache.push(...a.things);
+          else {
+            const n = await s.getData("OGCSTAData", {
+              isolatedRequest: !0,
+              filter: {
+                things: {
+                  includeDatastreams: !0,
+                  includeLocations: !1
+                }
               }
-            }
-          });
-          if (data?.things) {
-            this.allThingsCache.push(...data.things);
+            });
+            n?.things && this.allThingsCache.push(...n.things);
           }
+        } catch (s) {
+          console.error(`Error loading things from datasource ${e}:`, s);
         }
-      } catch (error) {
-        console.error(`Error loading things from datasource ${datasourceId}:`, error);
-      }
-    }
     console.log(`📦 Cached ${this.allThingsCache.length} things for lookup`);
   }
   /**
    * Load datastreams for a specific thing if not already loaded
    */
-  async loadDatastreamsForThing(thingId) {
-    const thing = this.allThingsCache.find((t) => {
-      const tId = t["@iot.id"] || t.iotId;
-      return tId == thingId;
-    });
-    if (thing?.datastreams && thing.datastreams.length > 0) {
-      console.log(`📦 Thing ${thingId} already has ${thing.datastreams.length} datastreams cached`);
-      return thing;
-    }
-    console.log(`📡 Loading datastreams for thing ${thingId}...`);
-    const datasourceRepository = this.datasourceRepository;
-    for (const datasourceId of this.connectedDatasources) {
-      if (!datasourceId) continue;
-      try {
-        const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-        const data = await datasourceInstance.getData("OGCSTAData", {
-          isolatedRequest: true,
-          filter: {
-            things: {
-              ids: [thingId],
-              includeDatastreams: true,
-              includeLocations: false
+  async loadDatastreamsForThing(t) {
+    const e = this.allThingsCache.find((a) => (a["@iot.id"] || a.iotId) == t);
+    if (e?.datastreams && e.datastreams.length > 0)
+      return console.log(`📦 Thing ${t} already has ${e.datastreams.length} datastreams cached`), e;
+    console.log(`📡 Loading datastreams for thing ${t}...`);
+    const s = this.datasourceRepository;
+    for (const a of this.connectedDatasources)
+      if (a)
+        try {
+          const o = await s.getDatasource(a).getData("OGCSTAData", {
+            isolatedRequest: !0,
+            filter: {
+              things: {
+                ids: [t],
+                includeDatastreams: !0,
+                includeLocations: !1
+              }
             }
+          });
+          if (o?.things && o.things.length > 0) {
+            const i = o.things[0];
+            return console.log(`✅ Loaded ${i.datastreams?.length || 0} datastreams for thing ${t}`), e ? e.datastreams = i.datastreams : this.allThingsCache.push(i), e || i;
           }
-        });
-        if (data?.things && data.things.length > 0) {
-          const loadedThing = data.things[0];
-          console.log(`✅ Loaded ${loadedThing.datastreams?.length || 0} datastreams for thing ${thingId}`);
-          if (thing) {
-            thing.datastreams = loadedThing.datastreams;
-          } else {
-            this.allThingsCache.push(loadedThing);
-          }
-          return thing || loadedThing;
+        } catch (n) {
+          console.error(`Error loading datastreams for thing ${t}:`, n);
         }
-      } catch (error) {
-        console.error(`Error loading datastreams for thing ${thingId}:`, error);
-      }
-    }
-    return thing;
+    return e;
   }
   /**
    * Switch to a specific thing (without changing datastreams)
    * Use addDatastreamsByName or similar actions to configure datastreams separately
    */
-  async switchToThing(thingId, thing) {
-    console.log(`🔄 Switching to thing: ${thingId} (${thing.name || "unnamed"})`);
-    this.requestSessionId++;
-    console.log(`🔄 New request session: ${this.requestSessionId}`);
-    this.loadingPromises.clear();
-    this.thingIds = [thingId];
-    if (this.configuration) {
-      this.configuration.thingIds.splice(0, this.configuration.thingIds.length, thingId);
-    }
-    this.cachedData = null;
+  async switchToThing(t, e) {
+    console.log(`🔄 Switching to thing: ${t} (${e.name || "unnamed"})`), this.requestSessionId++, console.log(`🔄 New request session: ${this.requestSessionId}`), this.loadingPromises.clear(), this.thingIds = [t], this.configuration && this.configuration.thingIds.splice(0, this.configuration.thingIds.length, t), this.cachedData = null;
   }
   /**
    * Add datastreams by name pattern
    * @param name - The name (or part of name) of datastreams to add
    */
-  async addDatastreamsByName(name) {
-    console.log(`➕ OGCSTAToChartComposer: Adding datastreams by name: "${name}"`);
-    await this.refreshThingsCache();
-    const matchingDatastreams = [];
-    for (const thingId of this.thingIds) {
-      const thing = await this.loadDatastreamsForThing(thingId);
-      if (!thing) {
-        console.warn(`⚠️ Thing ${thingId} not found`);
+  async addDatastreamsByName(t) {
+    console.log(`➕ OGCSTAToChartComposer: Adding datastreams by name: "${t}"`), await this.refreshThingsCache();
+    const e = [];
+    for (const s of this.thingIds) {
+      const a = await this.loadDatastreamsForThing(s);
+      if (!a) {
+        console.warn(`⚠️ Thing ${s} not found`);
         continue;
       }
-      if (thing.datastreams) {
-        for (const ds of thing.datastreams) {
-          const dsName = ds.name || "";
-          const dsId = String(ds["@iot.id"] || ds.iotId);
-          if (dsName === name || dsName.toLowerCase().includes(name.toLowerCase())) {
-            const alreadyExists = this.datastreams.some((d) => d.datastreamId === dsId);
-            if (!alreadyExists) {
-              matchingDatastreams.push({
-                datastreamId: dsId,
-                label: dsName,
-                color: this.generateColor()
-              });
-            }
-          }
+      if (a.datastreams)
+        for (const n of a.datastreams) {
+          const o = n.name || "", i = String(n["@iot.id"] || n.iotId);
+          (o === t || o.toLowerCase().includes(t.toLowerCase())) && (this.datastreams.some((d) => d.datastreamId === i) || e.push({
+            datastreamId: i,
+            label: o,
+            color: this.generateColor()
+          }));
         }
-      }
     }
-    if (matchingDatastreams.length > 0) {
-      console.log(`✅ Found ${matchingDatastreams.length} matching datastream(s)`, matchingDatastreams);
-      this.datastreams.push(...matchingDatastreams);
-      console.log(`📊 Total datastreams now: ${this.datastreams.length}`, this.datastreams);
-      this.cachedData = null;
-      console.log(`🔔 Calling notify() on instance ${this.instanceId}`);
-      this.notify();
-    } else {
-      console.warn(`⚠️ No datastreams matching "${name}" found in instance ${this.instanceId}`);
-    }
+    e.length > 0 ? (console.log(`✅ Found ${e.length} matching datastream(s)`, e), this.datastreams.push(...e), console.log(`📊 Total datastreams now: ${this.datastreams.length}`, this.datastreams), this.cachedData = null, console.log(`🔔 Calling notify() on instance ${this.instanceId}`), this.notify()) : console.warn(`⚠️ No datastreams matching "${t}" found in instance ${this.instanceId}`);
   }
   /**
    * Remove all datastreams from the composer
    */
   removeAllDatastreams() {
-    console.log(`🗑️ OGCSTAToChartComposer: Removing all datastreams`);
-    this.datastreams.splice(0, this.datastreams.length);
-    this.cachedData = null;
-    this.notify();
+    console.log("🗑️ OGCSTAToChartComposer: Removing all datastreams"), this.datastreams.splice(0, this.datastreams.length), this.cachedData = null, this.notify();
   }
   /**
    * Remove a specific datastream by name
    * @param name - The name of the datastream to remove
    */
-  removeDatastreamByName(name) {
-    console.log(`🗑️ OGCSTAToChartComposer: Removing datastream by name: "${name}"`);
-    const initialLength = this.datastreams.length;
-    const indicesToRemove = [];
-    this.datastreams.forEach((ds, index) => {
-      const dsLabel = ds.label || "";
-      if (dsLabel === name || dsLabel.toLowerCase().includes(name.toLowerCase())) {
-        indicesToRemove.push(index);
-      }
+  removeDatastreamByName(t) {
+    console.log(`🗑️ OGCSTAToChartComposer: Removing datastream by name: "${t}"`);
+    const e = this.datastreams.length, s = [];
+    this.datastreams.forEach((n, o) => {
+      const i = n.label || "";
+      (i === t || i.toLowerCase().includes(t.toLowerCase())) && s.push(o);
     });
-    for (let i = indicesToRemove.length - 1; i >= 0; i--) {
-      this.datastreams.splice(indicesToRemove[i], 1);
-    }
-    const removedCount = initialLength - this.datastreams.length;
-    if (removedCount > 0) {
-      console.log(`✅ Removed ${removedCount} datastream(s)`);
-      this.cachedData = null;
-      this.notify();
-    } else {
-      console.warn(`⚠️ No datastreams matching "${name}" found to remove`);
-    }
+    for (let n = s.length - 1; n >= 0; n--)
+      this.datastreams.splice(s[n], 1);
+    const a = e - this.datastreams.length;
+    a > 0 ? (console.log(`✅ Removed ${a} datastream(s)`), this.cachedData = null, this.notify()) : console.warn(`⚠️ No datastreams matching "${t}" found to remove`);
   }
-  composeChartData(ogcStaDataArray) {
-    const chartData = {
+  composeChartData(t) {
+    const e = {
       labels: [],
       datasets: []
     };
     console.log("📊 OGCSTAToChartComposer: Starting chart data composition");
-    const allTimestamps = /* @__PURE__ */ new Set();
-    const datastreamObservations = /* @__PURE__ */ new Map();
-    this.datastreams.forEach((datastreamSelection) => {
-      const observationsByTimestamp = /* @__PURE__ */ new Map();
-      for (const ogcStaData of ogcStaDataArray) {
-        if (ogcStaData?.observations && ogcStaData.observations.length > 0) {
-          const relevantObservations = ogcStaData.observations.filter((obs) => {
-            const obsDatastreamId = obs.ds_source || obs["Datastream@iot.navigationLink"]?.match(/Datastreams\((.+?)\)/)?.[1] || obs.datastreamId;
-            return obsDatastreamId == datastreamSelection.datastreamId;
-          });
-          console.log(`📊 Found ${relevantObservations.length} observations for datastream ${datastreamSelection.datastreamId}`);
-          relevantObservations.forEach((obs) => {
-            const timestamp = obs.phenomenonTime || obs.resultTime || (/* @__PURE__ */ new Date()).toISOString();
-            allTimestamps.add(timestamp);
-            observationsByTimestamp.set(timestamp, obs.result);
+    const s = /* @__PURE__ */ new Set(), a = /* @__PURE__ */ new Map();
+    this.datastreams.forEach((o) => {
+      const i = /* @__PURE__ */ new Map();
+      for (const c of t) {
+        if (c?.observations && c.observations.length > 0) {
+          const d = c.observations.filter((r) => (r.ds_source || r["Datastream@iot.navigationLink"]?.match(/Datastreams\((.+?)\)/)?.[1] || r.datastreamId) == o.datastreamId);
+          console.log(`📊 Found ${d.length} observations for datastream ${o.datastreamId}`), d.forEach((r) => {
+            const l = r.phenomenonTime || r.resultTime || (/* @__PURE__ */ new Date()).toISOString();
+            s.add(l), i.set(l, r.result);
           });
         }
-        if (ogcStaData?.things) {
-          for (const thing of ogcStaData.things) {
-            if (!thing.datastreams) continue;
-            const datastream = thing.datastreams.find((ds) => {
-              const dsId = ds["@iot.id"] || ds.iotId;
-              return dsId === datastreamSelection.datastreamId;
+        if (c?.things)
+          for (const d of c.things) {
+            if (!d.datastreams) continue;
+            const r = d.datastreams.find((l) => (l["@iot.id"] || l.iotId) === o.datastreamId);
+            r && r.observations && r.observations.length > 0 && r.observations.forEach((l) => {
+              const m = l.phenomenonTime || l.resultTime || (/* @__PURE__ */ new Date()).toISOString();
+              s.add(m), i.set(m, l.result);
             });
-            if (datastream && datastream.observations && datastream.observations.length > 0) {
-              datastream.observations.forEach((obs) => {
-                const timestamp = obs.phenomenonTime || obs.resultTime || (/* @__PURE__ */ new Date()).toISOString();
-                allTimestamps.add(timestamp);
-                observationsByTimestamp.set(timestamp, obs.result);
-              });
-            }
           }
-        }
       }
-      datastreamObservations.set(datastreamSelection.datastreamId, observationsByTimestamp);
+      a.set(o.datastreamId, i);
     });
-    const sortedTimestamps = Array.from(allTimestamps).sort();
-    chartData.labels = sortedTimestamps;
-    this.datastreams.forEach((datastreamSelection) => {
-      const observations = datastreamObservations.get(datastreamSelection.datastreamId) || /* @__PURE__ */ new Map();
-      const dataset = {
-        label: datastreamSelection.label || datastreamSelection.datastreamId,
-        data: sortedTimestamps.map((ts) => observations.get(ts) ?? null),
-        backgroundColor: datastreamSelection.color || this.generateColor(),
-        borderColor: datastreamSelection.color || this.generateColor()
+    const n = Array.from(s).sort();
+    return e.labels = n, this.datastreams.forEach((o) => {
+      const i = a.get(o.datastreamId) || /* @__PURE__ */ new Map(), c = {
+        label: o.label || o.datastreamId,
+        data: n.map((d) => i.get(d) ?? null),
+        backgroundColor: o.color || this.generateColor(),
+        borderColor: o.color || this.generateColor()
       };
-      chartData.datasets.push(dataset);
-    });
-    console.log("📊 Chart data composed:", chartData);
-    return chartData;
+      e.datasets.push(c);
+    }), console.log("📊 Chart data composed:", e), e;
   }
-  composeDataTable(ogcStaDataArray) {
-    const dataTable = {
+  composeDataTable(t) {
+    const e = {
       headers: ["Datastream", "Value", "Unit", "Timestamp"],
       rows: [],
       items: []
     };
-    console.log("📊 OGCSTAToChartComposer: Starting data table composition");
-    this.datastreams.forEach((datastreamSelection) => {
-      for (const ogcStaData of ogcStaDataArray) {
-        if (ogcStaData?.observations && ogcStaData.observations.length > 0) {
-          const relevantObservations = ogcStaData.observations.filter((obs) => {
-            const obsDatastreamId = obs.ds_source || obs["Datastream@iot.navigationLink"]?.match(/Datastreams\((.+?)\)/)?.[1] || obs.datastreamId;
-            return obsDatastreamId == datastreamSelection.datastreamId;
-          });
-          relevantObservations.forEach((observation) => {
-            const item = {
-              datastream: datastreamSelection.label || datastreamSelection.datastreamId,
-              value: observation.result,
-              unit: "",
-              // Unit not available in observation-only mode
-              timestamp: observation.phenomenonTime || observation.resultTime || ""
-            };
-            dataTable.items.push(item);
-            dataTable.rows.push([
-              item.datastream,
-              item.value,
-              item.unit,
-              item.timestamp
-            ]);
-          });
-        }
-        if (ogcStaData?.things) {
-          for (const thing of ogcStaData.things) {
-            if (!thing.datastreams) continue;
-            const datastream = thing.datastreams.find((ds) => {
-              const dsId = ds["@iot.id"] || ds.iotId;
-              return dsId === datastreamSelection.datastreamId;
+    return console.log("📊 OGCSTAToChartComposer: Starting data table composition"), this.datastreams.forEach((s) => {
+      for (const a of t)
+        if (a?.observations && a.observations.length > 0 && a.observations.filter((o) => (o.ds_source || o["Datastream@iot.navigationLink"]?.match(/Datastreams\((.+?)\)/)?.[1] || o.datastreamId) == s.datastreamId).forEach((o) => {
+          const i = {
+            datastream: s.label || s.datastreamId,
+            value: o.result,
+            unit: "",
+            // Unit not available in observation-only mode
+            timestamp: o.phenomenonTime || o.resultTime || ""
+          };
+          e.items.push(i), e.rows.push([
+            i.datastream,
+            i.value,
+            i.unit,
+            i.timestamp
+          ]);
+        }), a?.things)
+          for (const n of a.things) {
+            if (!n.datastreams) continue;
+            const o = n.datastreams.find((i) => (i["@iot.id"] || i.iotId) === s.datastreamId);
+            o && o.observations && o.observations.length > 0 && o.observations.forEach((i) => {
+              const c = {
+                datastream: s.label || o.name,
+                value: i.result,
+                unit: o.unitOfMeasurement?.symbol || "",
+                timestamp: i.phenomenonTime || i.resultTime || ""
+              };
+              e.items.push(c), e.rows.push([
+                c.datastream,
+                c.value,
+                c.unit,
+                c.timestamp
+              ]);
             });
-            if (datastream && datastream.observations && datastream.observations.length > 0) {
-              datastream.observations.forEach((observation) => {
-                const item = {
-                  datastream: datastreamSelection.label || datastream.name,
-                  value: observation.result,
-                  unit: datastream.unitOfMeasurement?.symbol || "",
-                  timestamp: observation.phenomenonTime || observation.resultTime || ""
-                };
-                dataTable.items.push(item);
-                dataTable.rows.push([
-                  item.datastream,
-                  item.value,
-                  item.unit,
-                  item.timestamp
-                ]);
-              });
-            }
           }
-        }
-      }
-    });
-    console.log("📊 Data table composed:", dataTable);
-    return dataTable;
+    }), console.log("📊 Data table composed:", e), e;
   }
   generateColor() {
-    const colors = [
+    const t = [
       "#FF6384",
       "#36A2EB",
       "#FFCE56",
@@ -587,163 +416,215 @@ class OGCSTAToChartComposer extends BaseDatasource {
       "#FF6384",
       "#C9CBCF"
     ];
-    return colors[Math.floor(Math.random() * colors.length)];
+    return t[Math.floor(Math.random() * t.length)];
   }
-  static validateConfiguration(config) {
-    if (!config.connectedDatasources || !Array.isArray(config.connectedDatasources)) {
-      return false;
-    }
-    if (config.connectedDatasources.length === 0) {
-      return false;
-    }
-    if (!config.datastreams || !Array.isArray(config.datastreams)) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !(!t.connectedDatasources || !Array.isArray(t.connectedDatasources) || t.connectedDatasources.length === 0 || !t.datastreams || !Array.isArray(t.datastreams));
   }
   // Helper to get available datastreams from connected datasources
-  static async getAvailableDatastreams(connectedDatasources, thingIds, datasourceRepository) {
-    if (!datasourceRepository) {
+  static async getAvailableDatastreams(t, e, s) {
+    if (!s)
       throw new Error("DatasourceRepository is required");
-    }
-    if (!thingIds || thingIds.length === 0) {
+    if (!e || e.length === 0)
       return [];
-    }
-    const allDatastreams = [];
-    for (const datasourceId of connectedDatasources) {
-      const datasourceInstance = datasourceRepository.getDatasource(datasourceId);
-      const options = {
-        isolatedRequest: true,
+    const a = [];
+    for (const n of t) {
+      const o = s.getDatasource(n), i = {
+        isolatedRequest: !0,
         // Don't affect cache, only load for UI
         filter: {
           things: {
-            ids: thingIds,
-            includeDatastreams: true,
-            includeLocations: false
+            ids: e,
+            includeDatastreams: !0,
+            includeLocations: !1
           }
         }
-      };
-      const data = await datasourceInstance.getData("OGCSTAData", options);
-      if (data?.things) {
-        for (const thing of data.things) {
-          if (thing.datastreams) {
-            thing.datastreams.forEach((ds) => {
-              allDatastreams.push({
-                id: ds["@iot.id"] || ds.iotId,
-                name: ds.name,
-                description: ds.description,
-                unit: ds.unitOfMeasurement?.symbol || "",
-                thingId: thing["@iot.id"] || thing.iotId,
-                thingName: thing.name
-              });
+      }, c = await o.getData("OGCSTAData", i);
+      if (c?.things)
+        for (const d of c.things)
+          d.datastreams && d.datastreams.forEach((r) => {
+            a.push({
+              id: r["@iot.id"] || r.iotId,
+              name: r.name,
+              description: r.description,
+              unit: r.unitOfMeasurement?.symbol || "",
+              thingId: d["@iot.id"] || d.iotId,
+              thingName: d.name
             });
-          }
-        }
-      }
+          });
     }
-    return allDatastreams;
+    return a;
   }
 }
-const ecoreModelContent = '<?xml version="1.0" encoding="UTF-8"?>\n<!--\n  Copyright (c) 2025 Contributors to the Eclipse Foundation.\n\n  This program and the accompanying materials are made\n  available under the terms of the Eclipse Public License 2.0\n  which is available at https://www.eclipse.org/legal/epl-2.0/\n\n  SPDX-License-Identifier: EPL-2.0\n\n  Contributors:\n    Smart City Jena\n-->\n<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ogcsta2chartactions"\n    nsURI="http://org.eclipse.daanse.board.app.lib.composer.ogcsta2chart.actions"\n    nsPrefix="ogcsta2chartactions">\n\n  <eClassifiers xsi:type="ecore:EClass" name="OGCSTAToChartComposerActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">\n    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n      <details key="documentation" value="Actions for the OGC STA to Chart Composer"/>\n    </eAnnotations>\n\n    <eOperations name="switchThingByName">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Switch the active Thing in the composer by its name"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="ogcsta2chart.switchThingByName"/>\n      </eAnnotations>\n      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the Thing to switch to"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n\n    <eOperations name="switchThingById">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Switch the active Thing in the composer by its ID"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="ogcsta2chart.switchThingById"/>\n      </eAnnotations>\n      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="ID of the Thing to switch to"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n\n    <eOperations name="addDatastreamsByName">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Add datastreams matching the given name pattern"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="ogcsta2chart.addDatastreamsByName"/>\n      </eAnnotations>\n      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name or pattern of datastreams to add"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n\n    <eOperations name="removeAllDatastreams">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Remove all datastreams from the composer"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="ogcsta2chart.removeAllDatastreams"/>\n      </eAnnotations>\n    </eOperations>\n\n    <eOperations name="removeDatastreamByName">\n      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n        <details key="documentation" value="Remove a datastream by its name"/>\n      </eAnnotations>\n      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">\n        <details key="eventType" value="ogcsta2chart.removeDatastreamByName"/>\n      </eAnnotations>\n      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">\n        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">\n          <details key="documentation" value="Name of the datastream to remove"/>\n        </eAnnotations>\n      </eParameters>\n    </eOperations>\n  </eClassifiers>\n</ecore:EPackage>\n';
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
-};
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-let OGCSTAToChartComposerInterface = class {
-  switchThingByName(name) {
+const _ = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2025 Contributors to the Eclipse Foundation.
+
+  This program and the accompanying materials are made
+  available under the terms of the Eclipse Public License 2.0
+  which is available at https://www.eclipse.org/legal/epl-2.0/
+
+  SPDX-License-Identifier: EPL-2.0
+
+  Contributors:
+    Smart City Jena
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ogcsta2chartactions"
+    nsURI="http://org.eclipse.daanse.board.app.lib.composer.ogcsta2chart.actions"
+    nsPrefix="ogcsta2chartactions">
+
+  <eClassifiers xsi:type="ecore:EClass" name="OGCSTAToChartComposerActions" interface="true" eSuperTypes="http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Actions for the OGC STA to Chart Composer"/>
+    </eAnnotations>
+
+    <eOperations name="switchThingByName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Switch the active Thing in the composer by its name"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="ogcsta2chart.switchThingByName"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the Thing to switch to"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+
+    <eOperations name="switchThingById">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Switch the active Thing in the composer by its ID"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="ogcsta2chart.switchThingById"/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="ID of the Thing to switch to"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+
+    <eOperations name="addDatastreamsByName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Add datastreams matching the given name pattern"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="ogcsta2chart.addDatastreamsByName"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name or pattern of datastreams to add"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+
+    <eOperations name="removeAllDatastreams">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Remove all datastreams from the composer"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="ogcsta2chart.removeAllDatastreams"/>
+      </eAnnotations>
+    </eOperations>
+
+    <eOperations name="removeDatastreamByName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Remove a datastream by its name"/>
+      </eAnnotations>
+      <eAnnotations source="org.eclipse.daanse.board.app.lib.events/WidgetAction">
+        <details key="eventType" value="ogcsta2chart.removeDatastreamByName"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Name of the datastream to remove"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>
+`;
+var N = Object.defineProperty, M = Object.getOwnPropertyDescriptor, w = (h, t, e, s) => {
+  for (var a = s > 1 ? void 0 : s ? M(t, e) : t, n = h.length - 1, o; n >= 0; n--)
+    (o = h[n]) && (a = (s ? o(t, e, a) : o(a)) || a);
+  return s && a && N(t, e, a), a;
+}, D = (h, t) => (e, s) => t(e, s, h);
+let p = class {
+  switchThingByName(h) {
     throw new Error("switchThingByName not implemented");
   }
-  switchThingById(id) {
+  switchThingById(h) {
     throw new Error("switchThingById not implemented");
   }
 };
-__decorateClass([
-  WidgetAction({ eventType: "ogcsta2chart.switchThingByName" }),
-  __decorateParam(0, ActionParameter())
-], OGCSTAToChartComposerInterface.prototype, "switchThingByName", 1);
-__decorateClass([
-  WidgetAction({ eventType: "ogcsta2chart.switchThingById" }),
-  __decorateParam(0, ActionParameter())
-], OGCSTAToChartComposerInterface.prototype, "switchThingById", 1);
-OGCSTAToChartComposerInterface = __decorateClass([
-  ModelClass({
+w([
+  b({ eventType: "ogcsta2chart.switchThingByName" }),
+  D(0, A())
+], p.prototype, "switchThingByName", 1);
+w([
+  b({ eventType: "ogcsta2chart.switchThingById" }),
+  D(0, A())
+], p.prototype, "switchThingById", 1);
+p = w([
+  B({
     type: "http://org.eclipse.daanse.board.app.lib.composer.ogcsta2chart#//OGCSTAToChartComposerInterface"
   })
-], OGCSTAToChartComposerInterface);
-const symbol = Symbol.for("OGCSTAToChartComposer");
-const WIDGET_TYPE = "OGCSTAToChartComposer";
-const OGCSTA_TO_CHART_COMPOSER = serviceId("OGCSTAToChartComposer");
-function activate$1({ services, log }) {
-  const actionsRegistry = services.getRequired(EVENT_ACTIONS_REGISTRY_ID);
-  services.register(OGCSTA_TO_CHART_COMPOSER, (config) => {
-    if (!OGCSTAToChartComposer.validateConfiguration(config)) {
+], p);
+const F = Symbol.for("OGCSTAToChartComposer"), f = "OGCSTAToChartComposer", C = R("OGCSTAToChartComposer");
+function O({ services: h, log: t }) {
+  const e = h.getRequired($);
+  h.register(C, (s) => {
+    if (!y.validateConfiguration(s))
       throw new Error(
         "Invalid OGCSTAToChartComposer configuration. Please provide a valid configuration."
       );
-    }
-    const composer = new OGCSTAToChartComposer(
-      services.getRequired(DATASOURCE_REPOSITORY),
-      actionsRegistry
+    const a = new y(
+      h.getRequired(G),
+      e
     );
-    composer.init(config);
-    if (config._isTemporaryPreview) {
-      composer.setInstanceId(`preview-${config.uid || config.name}-${Date.now()}`);
-      return composer;
-    }
-    const instanceId = config.uid || config.name || `composer-${Date.now()}`;
-    composer.setInstanceId(instanceId);
-    actionsRegistry.registerInstance(instanceId, composer, WIDGET_TYPE);
-    return composer;
-  });
-  actionsRegistry.registerActionsFromEcoreString(
-    WIDGET_TYPE,
-    ecoreModelContent,
+    if (a.init(s), s._isTemporaryPreview)
+      return a.setInstanceId(`preview-${s.uid || s.name}-${Date.now()}`), a;
+    const n = s.uid || s.name || `composer-${Date.now()}`;
+    return a.setInstanceId(n), e.registerInstance(n, a, f), a;
+  }), e.registerActionsFromEcoreString(
+    f,
+    _,
     "system",
     "OGCSTAToChartActions.ecore"
-  );
-  log.info(`Aktionen fuer ${WIDGET_TYPE} aus dem Ecore-Modell eingetragen`);
+  ), t.info(`Aktionen fuer ${f} aus dem Ecore-Modell eingetragen`);
 }
-function deactivate$1({ services }) {
-  services.unregister(OGCSTA_TO_CHART_COMPOSER);
+function E({ services: h }) {
+  h.unregister(C);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const L = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  OGCSTAToChartComposer,
+  OGCSTAToChartComposer: y,
   get OGCSTAToChartComposerInterface() {
-    return OGCSTAToChartComposerInterface;
+    return p;
   },
-  OGCSTA_TO_CHART_COMPOSER,
-  WIDGET_TYPE,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  symbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.composer.ogcsta2chart";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.composer.ogcsta2chart");
-  await activate$1?.(context);
+  OGCSTA_TO_CHART_COMPOSER: C,
+  WIDGET_TYPE: f,
+  activate: O,
+  deactivate: E,
+  symbol: F
+}, Symbol.toStringTag, { value: "Module" })), I = "org.eclipse.daanse.board.app.lib.composer.ogcsta2chart", k = "0.0.1-next.1";
+async function z(h) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${I}: tsm runtime is not initialized`);
+  t.register(I, L, k, "lib.composer.ogcsta2chart"), await O?.(h);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function j(h) {
+  await E?.(h);
 }
 export {
-  OGCSTAToChartComposer,
-  OGCSTAToChartComposerInterface,
-  OGCSTA_TO_CHART_COMPOSER,
-  WIDGET_TYPE,
-  activate,
-  deactivate,
-  symbol
+  y as OGCSTAToChartComposer,
+  p as OGCSTAToChartComposerInterface,
+  C as OGCSTA_TO_CHART_COMPOSER,
+  f as WIDGET_TYPE,
+  z as activate,
+  j as deactivate,
+  F as symbol
 };

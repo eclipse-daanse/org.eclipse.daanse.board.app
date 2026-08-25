@@ -1,11 +1,11 @@
-var yr = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function _i(i) {
+var wr = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function Pi(i) {
   return i && i.__esModule && Object.prototype.hasOwnProperty.call(i, "default") ? i.default : i;
 }
-var Ie = { exports: {} }, Ge, wr;
+var Ie = { exports: {} }, Ge, Er;
 function Ne() {
-  if (wr) return Ge;
-  wr = 1;
+  if (Er) return Ge;
+  Er = 1;
   const i = "2.0.0", e = 256, t = Number.MAX_SAFE_INTEGER || /* istanbul ignore next */
   9007199254740991, r = 16, n = e - 6;
   return Ge = {
@@ -27,17 +27,17 @@ function Ne() {
     FLAG_LOOSE: 2
   }, Ge;
 }
-var ze, Er;
+var ze, Rr;
 function _e() {
-  if (Er) return ze;
-  Er = 1;
+  if (Rr) return ze;
+  Rr = 1;
   var i = {};
   return ze = typeof process == "object" && i && i.NODE_DEBUG && /\bsemver\b/i.test(i.NODE_DEBUG) ? (...t) => console.error("SEMVER", ...t) : () => {
   }, ze;
 }
-var Rr;
+var br;
 function Re() {
-  return Rr || (Rr = 1, (function(i, e) {
+  return br || (br = 1, (function(i, e) {
     const {
       MAX_SAFE_COMPONENT_LENGTH: t,
       MAX_SAFE_BUILD_LENGTH: r,
@@ -61,17 +61,17 @@ function Re() {
     w("NUMERICIDENTIFIER", "0|[1-9]\\d*"), w("NUMERICIDENTIFIERLOOSE", "\\d+"), w("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${p}*`), w("MAINVERSION", `(${f[c.NUMERICIDENTIFIER]})\\.(${f[c.NUMERICIDENTIFIER]})\\.(${f[c.NUMERICIDENTIFIER]})`), w("MAINVERSIONLOOSE", `(${f[c.NUMERICIDENTIFIERLOOSE]})\\.(${f[c.NUMERICIDENTIFIERLOOSE]})\\.(${f[c.NUMERICIDENTIFIERLOOSE]})`), w("PRERELEASEIDENTIFIER", `(?:${f[c.NONNUMERICIDENTIFIER]}|${f[c.NUMERICIDENTIFIER]})`), w("PRERELEASEIDENTIFIERLOOSE", `(?:${f[c.NONNUMERICIDENTIFIER]}|${f[c.NUMERICIDENTIFIERLOOSE]})`), w("PRERELEASE", `(?:-(${f[c.PRERELEASEIDENTIFIER]}(?:\\.${f[c.PRERELEASEIDENTIFIER]})*))`), w("PRERELEASELOOSE", `(?:-?(${f[c.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${f[c.PRERELEASEIDENTIFIERLOOSE]})*))`), w("BUILDIDENTIFIER", `${p}+`), w("BUILD", `(?:\\+(${f[c.BUILDIDENTIFIER]}(?:\\.${f[c.BUILDIDENTIFIER]})*))`), w("FULLPLAIN", `v?${f[c.MAINVERSION]}${f[c.PRERELEASE]}?${f[c.BUILD]}?`), w("FULL", `^${f[c.FULLPLAIN]}$`), w("LOOSEPLAIN", `[v=\\s]*${f[c.MAINVERSIONLOOSE]}${f[c.PRERELEASELOOSE]}?${f[c.BUILD]}?`), w("LOOSE", `^${f[c.LOOSEPLAIN]}$`), w("GTLT", "((?:<|>)?=?)"), w("XRANGEIDENTIFIERLOOSE", `${f[c.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`), w("XRANGEIDENTIFIER", `${f[c.NUMERICIDENTIFIER]}|x|X|\\*`), w("XRANGEPLAIN", `[v=\\s]*(${f[c.XRANGEIDENTIFIER]})(?:\\.(${f[c.XRANGEIDENTIFIER]})(?:\\.(${f[c.XRANGEIDENTIFIER]})(?:${f[c.PRERELEASE]})?${f[c.BUILD]}?)?)?`), w("XRANGEPLAINLOOSE", `[v=\\s]*(${f[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${f[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${f[c.XRANGEIDENTIFIERLOOSE]})(?:${f[c.PRERELEASELOOSE]})?${f[c.BUILD]}?)?)?`), w("XRANGE", `^${f[c.GTLT]}\\s*${f[c.XRANGEPLAIN]}$`), w("XRANGELOOSE", `^${f[c.GTLT]}\\s*${f[c.XRANGEPLAINLOOSE]}$`), w("COERCEPLAIN", `(^|[^\\d])(\\d{1,${t}})(?:\\.(\\d{1,${t}}))?(?:\\.(\\d{1,${t}}))?`), w("COERCE", `${f[c.COERCEPLAIN]}(?:$|[^\\d])`), w("COERCEFULL", f[c.COERCEPLAIN] + `(?:${f[c.PRERELEASE]})?(?:${f[c.BUILD]})?(?:$|[^\\d])`), w("COERCERTL", f[c.COERCE], !0), w("COERCERTLFULL", f[c.COERCEFULL], !0), w("LONETILDE", "(?:~>?)"), w("TILDETRIM", `(\\s*)${f[c.LONETILDE]}\\s+`, !0), e.tildeTrimReplace = "$1~", w("TILDE", `^${f[c.LONETILDE]}${f[c.XRANGEPLAIN]}$`), w("TILDELOOSE", `^${f[c.LONETILDE]}${f[c.XRANGEPLAINLOOSE]}$`), w("LONECARET", "(?:\\^)"), w("CARETTRIM", `(\\s*)${f[c.LONECARET]}\\s+`, !0), e.caretTrimReplace = "$1^", w("CARET", `^${f[c.LONECARET]}${f[c.XRANGEPLAIN]}$`), w("CARETLOOSE", `^${f[c.LONECARET]}${f[c.XRANGEPLAINLOOSE]}$`), w("COMPARATORLOOSE", `^${f[c.GTLT]}\\s*(${f[c.LOOSEPLAIN]})$|^$`), w("COMPARATOR", `^${f[c.GTLT]}\\s*(${f[c.FULLPLAIN]})$|^$`), w("COMPARATORTRIM", `(\\s*)${f[c.GTLT]}\\s*(${f[c.LOOSEPLAIN]}|${f[c.XRANGEPLAIN]})`, !0), e.comparatorTrimReplace = "$1$2$3", w("HYPHENRANGE", `^\\s*(${f[c.XRANGEPLAIN]})\\s+-\\s+(${f[c.XRANGEPLAIN]})\\s*$`), w("HYPHENRANGELOOSE", `^\\s*(${f[c.XRANGEPLAINLOOSE]})\\s+-\\s+(${f[c.XRANGEPLAINLOOSE]})\\s*$`), w("STAR", "(<|>)?=?\\s*\\*"), w("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$"), w("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
   })(Ie, Ie.exports)), Ie.exports;
 }
-var We, br;
-function Ht() {
-  if (br) return We;
-  br = 1;
+var We, $r;
+function Kt() {
+  if ($r) return We;
+  $r = 1;
   const i = Object.freeze({ loose: !0 }), e = Object.freeze({});
   return We = (r) => r ? typeof r != "object" ? i : r : e, We;
 }
-var Xe, $r;
-function bn() {
-  if ($r) return Xe;
-  $r = 1;
+var Xe, Ir;
+function $n() {
+  if (Ir) return Xe;
+  Ir = 1;
   const i = /^[0-9]+$/, e = (r, n) => {
     if (typeof r == "number" && typeof n == "number")
       return r === n ? 0 : r < n ? -1 : 1;
@@ -83,11 +83,11 @@ function bn() {
     rcompareIdentifiers: (r, n) => e(n, r)
   }, Xe;
 }
-var Ye, Ir;
+var Ye, Or;
 function ee() {
-  if (Ir) return Ye;
-  Ir = 1;
-  const i = _e(), { MAX_LENGTH: e, MAX_SAFE_INTEGER: t } = Ne(), { safeRe: r, t: n } = Re(), s = Ht(), { compareIdentifiers: o } = bn();
+  if (Or) return Ye;
+  Or = 1;
+  const i = _e(), { MAX_LENGTH: e, MAX_SAFE_INTEGER: t } = Ne(), { safeRe: r, t: n } = Re(), s = Kt(), { compareIdentifiers: o } = $n();
   class a {
     constructor(d, c) {
       if (c = s(c), d instanceof a) {
@@ -244,10 +244,10 @@ function ee() {
   }
   return Ye = a, Ye;
 }
-var He, Or;
+var He, Sr;
 function he() {
-  if (Or) return He;
-  Or = 1;
+  if (Sr) return He;
+  Sr = 1;
   const i = ee();
   return He = (t, r, n = !1) => {
     if (t instanceof i)
@@ -261,30 +261,30 @@ function he() {
     }
   }, He;
 }
-var Ke, Sr;
-function Pi() {
-  if (Sr) return Ke;
-  Sr = 1;
+var Ke, Cr;
+function ji() {
+  if (Cr) return Ke;
+  Cr = 1;
   const i = he();
   return Ke = (t, r) => {
     const n = i(t, r);
     return n ? n.version : null;
   }, Ke;
 }
-var Je, Cr;
-function ji() {
-  if (Cr) return Je;
-  Cr = 1;
+var Je, Ar;
+function Di() {
+  if (Ar) return Je;
+  Ar = 1;
   const i = he();
   return Je = (t, r) => {
     const n = i(t.trim().replace(/^[=v]+/, ""), r);
     return n ? n.version : null;
   }, Je;
 }
-var Ze, Ar;
+var Ze, Mr;
 function ki() {
-  if (Ar) return Ze;
-  Ar = 1;
+  if (Mr) return Ze;
+  Mr = 1;
   const i = ee();
   return Ze = (t, r, n, s, o) => {
     typeof n == "string" && (o = s, s = n, n = void 0);
@@ -298,10 +298,10 @@ function ki() {
     }
   }, Ze;
 }
-var Qe, Mr;
-function Di() {
-  if (Mr) return Qe;
-  Mr = 1;
+var Qe, Tr;
+function qi() {
+  if (Tr) return Qe;
+  Tr = 1;
   const i = he();
   return Qe = (t, r) => {
     const n = i(t, null, !0), s = i(r, null, !0), o = n.compare(s);
@@ -318,129 +318,129 @@ function Di() {
     return n.major !== s.major ? p + "major" : n.minor !== s.minor ? p + "minor" : n.patch !== s.patch ? p + "patch" : "prerelease";
   }, Qe;
 }
-var et, Tr;
-function qi() {
-  if (Tr) return et;
-  Tr = 1;
+var et, Lr;
+function Fi() {
+  if (Lr) return et;
+  Lr = 1;
   const i = ee();
   return et = (t, r) => new i(t, r).major, et;
 }
-var tt, Lr;
-function Fi() {
-  if (Lr) return tt;
-  Lr = 1;
+var tt, Nr;
+function xi() {
+  if (Nr) return tt;
+  Nr = 1;
   const i = ee();
   return tt = (t, r) => new i(t, r).minor, tt;
 }
-var rt, Nr;
-function xi() {
-  if (Nr) return rt;
-  Nr = 1;
+var rt, _r;
+function Bi() {
+  if (_r) return rt;
+  _r = 1;
   const i = ee();
   return rt = (t, r) => new i(t, r).patch, rt;
 }
-var nt, _r;
-function Bi() {
-  if (_r) return nt;
-  _r = 1;
+var nt, Pr;
+function Vi() {
+  if (Pr) return nt;
+  Pr = 1;
   const i = he();
   return nt = (t, r) => {
     const n = i(t, r);
     return n && n.prerelease.length ? n.prerelease : null;
   }, nt;
 }
-var it, Pr;
+var it, jr;
 function re() {
-  if (Pr) return it;
-  Pr = 1;
+  if (jr) return it;
+  jr = 1;
   const i = ee();
   return it = (t, r, n) => new i(t, n).compare(new i(r, n)), it;
 }
-var st, jr;
-function Vi() {
-  if (jr) return st;
-  jr = 1;
+var st, Dr;
+function Ui() {
+  if (Dr) return st;
+  Dr = 1;
   const i = re();
   return st = (t, r, n) => i(r, t, n), st;
 }
 var ot, kr;
-function Ui() {
+function Gi() {
   if (kr) return ot;
   kr = 1;
   const i = re();
   return ot = (t, r) => i(t, r, !0), ot;
 }
-var at, Dr;
-function Kt() {
-  if (Dr) return at;
-  Dr = 1;
+var at, qr;
+function Jt() {
+  if (qr) return at;
+  qr = 1;
   const i = ee();
   return at = (t, r, n) => {
     const s = new i(t, n), o = new i(r, n);
     return s.compare(o) || s.compareBuild(o);
   }, at;
 }
-var ct, qr;
-function Gi() {
-  if (qr) return ct;
-  qr = 1;
-  const i = Kt();
+var ct, Fr;
+function zi() {
+  if (Fr) return ct;
+  Fr = 1;
+  const i = Jt();
   return ct = (t, r) => t.sort((n, s) => i(n, s, r)), ct;
 }
-var ft, Fr;
-function zi() {
-  if (Fr) return ft;
-  Fr = 1;
-  const i = Kt();
+var ft, xr;
+function Wi() {
+  if (xr) return ft;
+  xr = 1;
+  const i = Jt();
   return ft = (t, r) => t.sort((n, s) => i(s, n, r)), ft;
 }
-var dt, xr;
+var dt, Br;
 function Pe() {
-  if (xr) return dt;
-  xr = 1;
+  if (Br) return dt;
+  Br = 1;
   const i = re();
   return dt = (t, r, n) => i(t, r, n) > 0, dt;
 }
-var ut, Br;
-function Jt() {
-  if (Br) return ut;
-  Br = 1;
+var ut, Vr;
+function Zt() {
+  if (Vr) return ut;
+  Vr = 1;
   const i = re();
   return ut = (t, r, n) => i(t, r, n) < 0, ut;
 }
-var lt, Vr;
-function $n() {
-  if (Vr) return lt;
-  Vr = 1;
+var lt, Ur;
+function In() {
+  if (Ur) return lt;
+  Ur = 1;
   const i = re();
   return lt = (t, r, n) => i(t, r, n) === 0, lt;
 }
-var ht, Ur;
-function In() {
-  if (Ur) return ht;
-  Ur = 1;
+var ht, Gr;
+function On() {
+  if (Gr) return ht;
+  Gr = 1;
   const i = re();
   return ht = (t, r, n) => i(t, r, n) !== 0, ht;
 }
-var pt, Gr;
-function Zt() {
-  if (Gr) return pt;
-  Gr = 1;
+var pt, zr;
+function Qt() {
+  if (zr) return pt;
+  zr = 1;
   const i = re();
   return pt = (t, r, n) => i(t, r, n) >= 0, pt;
 }
-var gt, zr;
-function Qt() {
-  if (zr) return gt;
-  zr = 1;
+var gt, Wr;
+function er() {
+  if (Wr) return gt;
+  Wr = 1;
   const i = re();
   return gt = (t, r, n) => i(t, r, n) <= 0, gt;
 }
-var mt, Wr;
-function On() {
-  if (Wr) return mt;
-  Wr = 1;
-  const i = $n(), e = In(), t = Pe(), r = Zt(), n = Jt(), s = Qt();
+var mt, Xr;
+function Sn() {
+  if (Xr) return mt;
+  Xr = 1;
+  const i = In(), e = On(), t = Pe(), r = Qt(), n = Zt(), s = er();
   return mt = (a, f, d, c) => {
     switch (f) {
       case "===":
@@ -466,10 +466,10 @@ function On() {
     }
   }, mt;
 }
-var vt, Xr;
-function Wi() {
-  if (Xr) return vt;
-  Xr = 1;
+var vt, Yr;
+function Xi() {
+  if (Yr) return vt;
+  Yr = 1;
   const i = ee(), e = he(), { safeRe: t, t: r } = Re();
   return vt = (s, o) => {
     if (s instanceof i)
@@ -493,10 +493,10 @@ function Wi() {
     return e(`${f}.${d}.${c}${l}${p}`, o);
   }, vt;
 }
-var yt, Yr;
-function Xi() {
-  if (Yr) return yt;
-  Yr = 1;
+var yt, Hr;
+function Yi() {
+  if (Hr) return yt;
+  Hr = 1;
   class i {
     constructor() {
       this.max = 1e3, this.map = /* @__PURE__ */ new Map();
@@ -522,10 +522,10 @@ function Xi() {
   }
   return yt = i, yt;
 }
-var wt, Hr;
+var wt, Kr;
 function ne() {
-  if (Hr) return wt;
-  Hr = 1;
+  if (Kr) return wt;
+  Kr = 1;
   const i = /\s+/g;
   class e {
     constructor(v, A) {
@@ -607,7 +607,7 @@ function ne() {
     }
   }
   wt = e;
-  const t = Xi(), r = new t(), n = Ht(), s = je(), o = _e(), a = ee(), {
+  const t = Yi(), r = new t(), n = Kt(), s = je(), o = _e(), a = ee(), {
     safeRe: f,
     t: d,
     comparatorTrimReplace: c,
@@ -660,10 +660,10 @@ function ne() {
   };
   return wt;
 }
-var Et, Kr;
+var Et, Jr;
 function je() {
-  if (Kr) return Et;
-  Kr = 1;
+  if (Jr) return Et;
+  Jr = 1;
   const i = Symbol("SemVer ANY");
   class e {
     static get ANY() {
@@ -704,13 +704,13 @@ function je() {
     }
   }
   Et = e;
-  const t = Ht(), { safeRe: r, t: n } = Re(), s = On(), o = _e(), a = ee(), f = ne();
+  const t = Kt(), { safeRe: r, t: n } = Re(), s = Sn(), o = _e(), a = ee(), f = ne();
   return Et;
 }
-var Rt, Jr;
-function ke() {
-  if (Jr) return Rt;
-  Jr = 1;
+var Rt, Zr;
+function De() {
+  if (Zr) return Rt;
+  Zr = 1;
   const i = ne();
   return Rt = (t, r, n) => {
     try {
@@ -721,17 +721,17 @@ function ke() {
     return r.test(t);
   }, Rt;
 }
-var bt, Zr;
-function Yi() {
-  if (Zr) return bt;
-  Zr = 1;
+var bt, Qr;
+function Hi() {
+  if (Qr) return bt;
+  Qr = 1;
   const i = ne();
   return bt = (t, r) => new i(t, r).set.map((n) => n.map((s) => s.value).join(" ").trim().split(" ")), bt;
 }
-var $t, Qr;
-function Hi() {
-  if (Qr) return $t;
-  Qr = 1;
+var $t, en;
+function Ki() {
+  if (en) return $t;
+  en = 1;
   const i = ee(), e = ne();
   return $t = (r, n, s) => {
     let o = null, a = null, f = null;
@@ -745,10 +745,10 @@ function Hi() {
     }), o;
   }, $t;
 }
-var It, en;
-function Ki() {
-  if (en) return It;
-  en = 1;
+var It, tn;
+function Ji() {
+  if (tn) return It;
+  tn = 1;
   const i = ee(), e = ne();
   return It = (r, n, s) => {
     let o = null, a = null, f = null;
@@ -762,10 +762,10 @@ function Ki() {
     }), o;
   }, It;
 }
-var Ot, tn;
-function Ji() {
-  if (tn) return Ot;
-  tn = 1;
+var Ot, rn;
+function Zi() {
+  if (rn) return Ot;
+  rn = 1;
   const i = ee(), e = ne(), t = Pe();
   return Ot = (n, s) => {
     n = new e(n, s);
@@ -798,10 +798,10 @@ function Ji() {
     return o && n.test(o) ? o : null;
   }, Ot;
 }
-var St, rn;
-function Zi() {
-  if (rn) return St;
-  rn = 1;
+var St, nn;
+function Qi() {
+  if (nn) return St;
+  nn = 1;
   const i = ne();
   return St = (t, r) => {
     try {
@@ -811,11 +811,11 @@ function Zi() {
     }
   }, St;
 }
-var Ct, nn;
-function er() {
-  if (nn) return Ct;
-  nn = 1;
-  const i = ee(), e = je(), { ANY: t } = e, r = ne(), n = ke(), s = Pe(), o = Jt(), a = Qt(), f = Zt();
+var Ct, sn;
+function tr() {
+  if (sn) return Ct;
+  sn = 1;
+  const i = ee(), e = je(), { ANY: t } = e, r = ne(), n = De(), s = Pe(), o = Zt(), a = er(), f = Qt();
   return Ct = (c, l, p, m) => {
     c = new i(c, m), l = new r(l, m);
     let j, w, N, q, W;
@@ -844,32 +844,32 @@ function er() {
     return !0;
   }, Ct;
 }
-var At, sn;
-function Qi() {
-  if (sn) return At;
-  sn = 1;
-  const i = er();
+var At, on;
+function es() {
+  if (on) return At;
+  on = 1;
+  const i = tr();
   return At = (t, r, n) => i(t, r, ">", n), At;
 }
-var Mt, on;
-function es() {
-  if (on) return Mt;
-  on = 1;
-  const i = er();
+var Mt, an;
+function ts() {
+  if (an) return Mt;
+  an = 1;
+  const i = tr();
   return Mt = (t, r, n) => i(t, r, "<", n), Mt;
 }
-var Tt, an;
-function ts() {
-  if (an) return Tt;
-  an = 1;
+var Tt, cn;
+function rs() {
+  if (cn) return Tt;
+  cn = 1;
   const i = ne();
   return Tt = (t, r, n) => (t = new i(t, n), r = new i(r, n), t.intersects(r, n)), Tt;
 }
-var Lt, cn;
-function rs() {
-  if (cn) return Lt;
-  cn = 1;
-  const i = ke(), e = re();
+var Lt, fn;
+function ns() {
+  if (fn) return Lt;
+  fn = 1;
+  const i = De(), e = re();
   return Lt = (t, r, n) => {
     const s = [];
     let o = null, a = null;
@@ -884,11 +884,11 @@ function rs() {
     return c.length < l.length ? c : r;
   }, Lt;
 }
-var Nt, fn;
-function ns() {
-  if (fn) return Nt;
-  fn = 1;
-  const i = ne(), e = je(), { ANY: t } = e, r = ke(), n = re(), s = (l, p, m = {}) => {
+var Nt, dn;
+function is() {
+  if (dn) return Nt;
+  dn = 1;
+  const i = ne(), e = je(), { ANY: t } = e, r = De(), n = re(), s = (l, p, m = {}) => {
     if (l === p)
       return !0;
     l = new i(l, m), p = new i(p, m);
@@ -971,11 +971,11 @@ function ns() {
   };
   return Nt = s, Nt;
 }
-var _t, dn;
-function is() {
-  if (dn) return _t;
-  dn = 1;
-  const i = Re(), e = Ne(), t = ee(), r = bn(), n = he(), s = Pi(), o = ji(), a = ki(), f = Di(), d = qi(), c = Fi(), l = xi(), p = Bi(), m = re(), j = Vi(), w = Ui(), N = Kt(), q = Gi(), W = zi(), x = Pe(), Z = Jt(), Q = $n(), B = In(), X = Zt(), _ = Qt(), ae = On(), pe = Wi(), ge = je(), me = ne(), ve = ke(), b = Yi(), v = Hi(), A = Ki(), S = Ji(), M = Zi(), C = er(), L = Qi(), F = es(), P = ts(), E = rs(), G = ns();
+var _t, un;
+function ss() {
+  if (un) return _t;
+  un = 1;
+  const i = Re(), e = Ne(), t = ee(), r = $n(), n = he(), s = ji(), o = Di(), a = ki(), f = qi(), d = Fi(), c = xi(), l = Bi(), p = Vi(), m = re(), j = Ui(), w = Gi(), N = Jt(), q = zi(), W = Wi(), x = Pe(), Z = Zt(), Q = In(), B = On(), X = Qt(), _ = er(), ae = Sn(), pe = Xi(), ge = je(), me = ne(), ve = De(), b = Hi(), v = Ki(), A = Ji(), S = Zi(), M = Qi(), C = tr(), L = es(), F = ts(), P = rs(), E = ns(), G = is();
   return _t = {
     parse: n,
     valid: s,
@@ -1024,21 +1024,21 @@ function is() {
     rcompareIdentifiers: r.rcompareIdentifiers
   }, _t;
 }
-var K = is();
-const le = /* @__PURE__ */ _i(K);
-function Sn(i) {
+var K = ss();
+const le = /* @__PURE__ */ Pi(K);
+function Cn(i) {
   return i.cardinality ? i.cardinality.startsWith("1..") : i.optional !== !0;
 }
-function Cn(i) {
+function An(i) {
   return i.cardinality?.endsWith("..n") === !0;
 }
-function un(i) {
+function ln(i) {
   return typeof i == "string" ? { id: i } : i;
 }
 function Pt(i) {
   return typeof i == "string" ? i : i.id;
 }
-class An {
+class Mn {
   /**
    * Resolve dependencies and return load order
    * Uses Kahn's algorithm for topological sorting
@@ -1063,7 +1063,7 @@ class An {
     }
     for (const s of e)
       for (const o of s.dependencies ?? []) {
-        const a = un(o), f = n.get(a.id);
+        const a = ln(o), f = n.get(a.id);
         if (!f)
           t.missing.push({ moduleId: s.id, missingDep: a.id });
         else if (a.versionRange && !K.satisfies(f.version, a.versionRange)) {
@@ -1133,7 +1133,7 @@ class An {
     for (const n of e.dependencies ?? [])
       r.add(Pt(n));
     for (const n of e.requiresService ?? []) {
-      if (!Sn(n) || Cn(n))
+      if (!Cn(n) || An(n))
         continue;
       const s = t.get(n.id);
       s && s !== e.id && r.add(s);
@@ -1267,7 +1267,7 @@ class An {
     const t = [], r = /* @__PURE__ */ new Map();
     for (const n of e)
       for (const s of n.dependencies ?? []) {
-        const o = un(s);
+        const o = ln(s);
         if (o.versionRange) {
           const a = r.get(o.id) ?? [];
           a.push({ requiredBy: n.id, versionRange: o.versionRange }), r.set(o.id, a);
@@ -1301,7 +1301,7 @@ class An {
     return `No compatible version found. Required: ${t.join(", ")}`;
   }
 }
-var ln = {};
+var hn = {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -1316,14 +1316,14 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var hn;
-function ss() {
-  if (hn) return ln;
-  hn = 1;
+var pn;
+function os() {
+  if (pn) return hn;
+  pn = 1;
   var i;
   return (function(e) {
     (function(t) {
-      var r = typeof globalThis == "object" ? globalThis : typeof yr == "object" ? yr : typeof self == "object" ? self : typeof this == "object" ? this : f(), n = s(e);
+      var r = typeof globalThis == "object" ? globalThis : typeof wr == "object" ? wr : typeof self == "object" ? self : typeof this == "object" ? this : f(), n = s(e);
       typeof r.Reflect < "u" && (n = s(r.Reflect, n)), t(n, r), typeof r.Reflect > "u" && (r.Reflect = e);
       function s(d, c) {
         return function(l, p) {
@@ -1365,16 +1365,16 @@ function ss() {
         } : function(u, h) {
           return u[h];
         }
-      }, p = Object.getPrototypeOf(Function), m = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Ai(), j = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Mi(), w = typeof WeakMap == "function" ? WeakMap : Ti(), N = s ? Symbol.for("@reflect-metadata:registry") : void 0, q = Oi(), W = Si(q);
+      }, p = Object.getPrototypeOf(Function), m = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Mi(), j = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Ti(), w = typeof WeakMap == "function" ? WeakMap : Li(), N = s ? Symbol.for("@reflect-metadata:registry") : void 0, q = Si(), W = Ci(q);
       function x(u, h, g, y) {
         if (E(g)) {
-          if (!dr(u))
+          if (!ur(u))
             throw new TypeError();
-          if (!ur(h))
+          if (!lr(h))
             throw new TypeError();
           return ve(u, h);
         } else {
-          if (!dr(u))
+          if (!ur(u))
             throw new TypeError();
           if (!V(h))
             throw new TypeError();
@@ -1388,7 +1388,7 @@ function ss() {
         function g(y, T) {
           if (!V(y))
             throw new TypeError();
-          if (!E(T) && !$i(T))
+          if (!E(T) && !Ii(T))
             throw new TypeError();
           C(u, h, y, T);
         }
@@ -1456,7 +1456,7 @@ function ss() {
         for (var g = u.length - 1; g >= 0; --g) {
           var y = u[g], T = y(h);
           if (!E(T) && !G(T)) {
-            if (!ur(T))
+            if (!lr(T))
               throw new TypeError();
             h = T;
           }
@@ -1488,7 +1488,7 @@ function ss() {
           /*Create*/
           !1
         );
-        return E(y) ? !1 : fr(y.OrdinaryHasOwnMetadata(u, h, g));
+        return E(y) ? !1 : dr(y.OrdinaryHasOwnMetadata(u, h, g));
       }
       function S(u, h, g) {
         var y = A(u, h, g);
@@ -1526,12 +1526,12 @@ function ss() {
           return g;
         if (g.length <= 0)
           return T;
-        for (var Y = new j(), J = [], k = 0, R = g; k < R.length; k++) {
-          var $ = R[k], I = Y.has($);
+        for (var Y = new j(), J = [], D = 0, R = g; D < R.length; D++) {
+          var $ = R[D], I = Y.has($);
           I || (Y.add($), J.push($));
         }
-        for (var O = 0, D = T; O < D.length; O++) {
-          var $ = D[O], I = Y.has($);
+        for (var O = 0, k = T; O < k.length; O++) {
+          var $ = k[O], I = Y.has($);
           I || (Y.add($), J.push($));
         }
         return J;
@@ -1577,7 +1577,7 @@ function ss() {
       function V(u) {
         return typeof u == "object" ? u !== null : typeof u == "function";
       }
-      function Ei(u, h) {
+      function Ri(u, h) {
         switch (P(u)) {
           case 0:
             return u;
@@ -1592,16 +1592,16 @@ function ss() {
           case 5:
             return u;
         }
-        var g = "string", y = lr(u, o);
+        var g = "string", y = hr(u, o);
         if (y !== void 0) {
           var T = y.call(u, g);
           if (V(T))
             throw new TypeError();
           return T;
         }
-        return Ri(u);
+        return bi(u);
       }
-      function Ri(u, h) {
+      function bi(u, h) {
         var g, y, T;
         {
           var Y = u.toString;
@@ -1619,26 +1619,26 @@ function ss() {
         }
         throw new TypeError();
       }
-      function fr(u) {
+      function dr(u) {
         return !!u;
       }
-      function bi(u) {
+      function $i(u) {
         return "" + u;
       }
       function ie(u) {
-        var h = Ei(u);
-        return z(h) ? h : bi(h);
+        var h = Ri(u);
+        return z(h) ? h : $i(h);
       }
-      function dr(u) {
+      function ur(u) {
         return Array.isArray ? Array.isArray(u) : u instanceof Object ? u instanceof Array : Object.prototype.toString.call(u) === "[object Array]";
       }
       function $e(u) {
         return typeof u == "function";
       }
-      function ur(u) {
+      function lr(u) {
         return typeof u == "function";
       }
-      function $i(u) {
+      function Ii(u) {
         switch (P(u)) {
           case 3:
             return !0;
@@ -1651,7 +1651,7 @@ function ss() {
       function Be(u, h) {
         return u === h || u !== u && h !== h;
       }
-      function lr(u, h) {
+      function hr(u, h) {
         var g = u[h];
         if (g != null) {
           if (!$e(g))
@@ -1659,8 +1659,8 @@ function ss() {
           return g;
         }
       }
-      function hr(u) {
-        var h = lr(u, a);
+      function pr(u) {
+        var h = hr(u, a);
         if (!$e(h))
           throw new TypeError();
         var g = h.call(u);
@@ -1668,14 +1668,14 @@ function ss() {
           throw new TypeError();
         return g;
       }
-      function pr(u) {
+      function gr(u) {
         return u.value;
       }
-      function gr(u) {
+      function mr(u) {
         var h = u.next();
         return h.done ? !1 : h;
       }
-      function mr(u) {
+      function vr(u) {
         var h = u.return;
         h && h.call(u);
       }
@@ -1689,9 +1689,9 @@ function ss() {
         var T = y.constructor;
         return typeof T != "function" || T === u ? h : T;
       }
-      function Ii() {
+      function Oi() {
         var u;
-        !E(N) && typeof r.Reflect < "u" && !(N in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (u = Ci(r.Reflect));
+        !E(N) && typeof r.Reflect < "u" && !(N in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (u = Ai(r.Reflect));
         var h, g, y, T = new w(), Y = {
           registerProvider: J,
           getProvider: R,
@@ -1719,59 +1719,59 @@ function ss() {
               break;
           }
         }
-        function k(O, D) {
+        function D(O, k) {
           if (!E(h)) {
-            if (h.isProviderFor(O, D))
+            if (h.isProviderFor(O, k))
               return h;
             if (!E(g)) {
-              if (g.isProviderFor(O, D))
+              if (g.isProviderFor(O, k))
                 return h;
               if (!E(y))
-                for (var U = hr(y); ; ) {
-                  var H = gr(U);
+                for (var U = pr(y); ; ) {
+                  var H = mr(U);
                   if (!H)
                     return;
-                  var te = pr(H);
-                  if (te.isProviderFor(O, D))
-                    return mr(U), te;
+                  var te = gr(H);
+                  if (te.isProviderFor(O, k))
+                    return vr(U), te;
                 }
             }
           }
-          if (!E(u) && u.isProviderFor(O, D))
+          if (!E(u) && u.isProviderFor(O, k))
             return u;
         }
-        function R(O, D) {
+        function R(O, k) {
           var U = T.get(O), H;
-          return E(U) || (H = U.get(D)), E(H) && (H = k(O, D), E(H) || (E(U) && (U = new m(), T.set(O, U)), U.set(D, H))), H;
+          return E(U) || (H = U.get(k)), E(H) && (H = D(O, k), E(H) || (E(U) && (U = new m(), T.set(O, U)), U.set(k, H))), H;
         }
         function $(O) {
           if (E(O))
             throw new TypeError();
           return h === O || g === O || !E(y) && y.has(O);
         }
-        function I(O, D, U) {
+        function I(O, k, U) {
           if (!$(U))
             throw new Error("Metadata provider not registered.");
-          var H = R(O, D);
+          var H = R(O, k);
           if (H !== U) {
             if (!E(H))
               return !1;
             var te = T.get(O);
-            E(te) && (te = new m(), T.set(O, te)), te.set(D, U);
+            E(te) && (te = new m(), T.set(O, te)), te.set(k, U);
           }
           return !0;
         }
       }
-      function Oi() {
+      function Si() {
         var u;
-        return !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && (u = r.Reflect[N]), E(u) && (u = Ii()), !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, N, {
+        return !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && (u = r.Reflect[N]), E(u) && (u = Oi()), !E(N) && V(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, N, {
           enumerable: !1,
           configurable: !1,
           writable: !1,
           value: u
         }), u;
       }
-      function Si(u) {
+      function Ci(u) {
         var h = new w(), g = {
           isProviderFor: function($, I) {
             var O = h.get($);
@@ -1780,98 +1780,98 @@ function ss() {
           OrdinaryDefineOwnMetadata: J,
           OrdinaryHasOwnMetadata: T,
           OrdinaryGetOwnMetadata: Y,
-          OrdinaryOwnMetadataKeys: k,
+          OrdinaryOwnMetadataKeys: D,
           OrdinaryDeleteMetadata: R
         };
         return q.registerProvider(g), g;
         function y($, I, O) {
-          var D = h.get($), U = !1;
-          if (E(D)) {
+          var k = h.get($), U = !1;
+          if (E(k)) {
             if (!O)
               return;
-            D = new m(), h.set($, D), U = !0;
+            k = new m(), h.set($, k), U = !0;
           }
-          var H = D.get(I);
+          var H = k.get(I);
           if (E(H)) {
             if (!O)
               return;
-            if (H = new m(), D.set(I, H), !u.setProvider($, I, g))
-              throw D.delete(I), U && h.delete($), new Error("Wrong provider for target.");
+            if (H = new m(), k.set(I, H), !u.setProvider($, I, g))
+              throw k.delete(I), U && h.delete($), new Error("Wrong provider for target.");
           }
           return H;
         }
         function T($, I, O) {
-          var D = y(
+          var k = y(
             I,
             O,
             /*Create*/
             !1
           );
-          return E(D) ? !1 : fr(D.has($));
+          return E(k) ? !1 : dr(k.has($));
         }
         function Y($, I, O) {
-          var D = y(
+          var k = y(
             I,
             O,
             /*Create*/
             !1
           );
-          if (!E(D))
-            return D.get($);
+          if (!E(k))
+            return k.get($);
         }
-        function J($, I, O, D) {
+        function J($, I, O, k) {
           var U = y(
             O,
-            D,
+            k,
             /*Create*/
             !0
           );
           U.set($, I);
         }
-        function k($, I) {
-          var O = [], D = y(
+        function D($, I) {
+          var O = [], k = y(
             $,
             I,
             /*Create*/
             !1
           );
-          if (E(D))
+          if (E(k))
             return O;
-          for (var U = D.keys(), H = hr(U), te = 0; ; ) {
-            var vr = gr(H);
-            if (!vr)
+          for (var U = k.keys(), H = pr(U), te = 0; ; ) {
+            var yr = mr(H);
+            if (!yr)
               return O.length = te, O;
-            var Li = pr(vr);
+            var Ni = gr(yr);
             try {
-              O[te] = Li;
-            } catch (Ni) {
+              O[te] = Ni;
+            } catch (_i) {
               try {
-                mr(H);
+                vr(H);
               } finally {
-                throw Ni;
+                throw _i;
               }
             }
             te++;
           }
         }
         function R($, I, O) {
-          var D = y(
+          var k = y(
             I,
             O,
             /*Create*/
             !1
           );
-          if (E(D) || !D.delete($))
+          if (E(k) || !k.delete($))
             return !1;
-          if (D.size === 0) {
+          if (k.size === 0) {
             var U = h.get(I);
             E(U) || (U.delete(O), U.size === 0 && h.delete(U));
           }
           return !0;
         }
       }
-      function Ci(u) {
-        var h = u.defineMetadata, g = u.hasOwnMetadata, y = u.getOwnMetadata, T = u.getOwnMetadataKeys, Y = u.deleteMetadata, J = new w(), k = {
+      function Ai(u) {
+        var h = u.defineMetadata, g = u.hasOwnMetadata, y = u.getOwnMetadata, T = u.getOwnMetadataKeys, Y = u.deleteMetadata, J = new w(), D = {
           isProviderFor: function(R, $) {
             var I = J.get(R);
             return !E(I) && I.has($) ? !0 : T(R, $).length ? (E(I) && (I = new j(), J.set(R, I)), I.add($), !0) : !1;
@@ -1882,7 +1882,7 @@ function ss() {
           OrdinaryOwnMetadataKeys: T,
           OrdinaryDeleteMetadata: Y
         };
-        return k;
+        return D;
       }
       function ye(u, h, g) {
         var y = q.getProvider(u, h);
@@ -1894,63 +1894,63 @@ function ss() {
           throw new Error("Illegal state.");
         }
       }
-      function Ai() {
+      function Mi() {
         var u = {}, h = [], g = (
           /** @class */
           (function() {
-            function k(R, $, I) {
+            function D(R, $, I) {
               this._index = 0, this._keys = R, this._values = $, this._selector = I;
             }
-            return k.prototype["@@iterator"] = function() {
+            return D.prototype["@@iterator"] = function() {
               return this;
-            }, k.prototype[a] = function() {
+            }, D.prototype[a] = function() {
               return this;
-            }, k.prototype.next = function() {
+            }, D.prototype.next = function() {
               var R = this._index;
               if (R >= 0 && R < this._keys.length) {
                 var $ = this._selector(this._keys[R], this._values[R]);
                 return R + 1 >= this._keys.length ? (this._index = -1, this._keys = h, this._values = h) : this._index++, { value: $, done: !1 };
               }
               return { value: void 0, done: !0 };
-            }, k.prototype.throw = function(R) {
+            }, D.prototype.throw = function(R) {
               throw this._index >= 0 && (this._index = -1, this._keys = h, this._values = h), R;
-            }, k.prototype.return = function(R) {
+            }, D.prototype.return = function(R) {
               return this._index >= 0 && (this._index = -1, this._keys = h, this._values = h), { value: R, done: !0 };
-            }, k;
+            }, D;
           })()
         ), y = (
           /** @class */
           (function() {
-            function k() {
+            function D() {
               this._keys = [], this._values = [], this._cacheKey = u, this._cacheIndex = -2;
             }
-            return Object.defineProperty(k.prototype, "size", {
+            return Object.defineProperty(D.prototype, "size", {
               get: function() {
                 return this._keys.length;
               },
               enumerable: !0,
               configurable: !0
-            }), k.prototype.has = function(R) {
+            }), D.prototype.has = function(R) {
               return this._find(
                 R,
                 /*insert*/
                 !1
               ) >= 0;
-            }, k.prototype.get = function(R) {
+            }, D.prototype.get = function(R) {
               var $ = this._find(
                 R,
                 /*insert*/
                 !1
               );
               return $ >= 0 ? this._values[$] : void 0;
-            }, k.prototype.set = function(R, $) {
+            }, D.prototype.set = function(R, $) {
               var I = this._find(
                 R,
                 /*insert*/
                 !0
               );
               return this._values[I] = $, this;
-            }, k.prototype.delete = function(R) {
+            }, D.prototype.delete = function(R) {
               var $ = this._find(
                 R,
                 /*insert*/
@@ -1962,19 +1962,19 @@ function ss() {
                 return this._keys.length--, this._values.length--, Be(R, this._cacheKey) && (this._cacheKey = u, this._cacheIndex = -2), !0;
               }
               return !1;
-            }, k.prototype.clear = function() {
+            }, D.prototype.clear = function() {
               this._keys.length = 0, this._values.length = 0, this._cacheKey = u, this._cacheIndex = -2;
-            }, k.prototype.keys = function() {
+            }, D.prototype.keys = function() {
               return new g(this._keys, this._values, T);
-            }, k.prototype.values = function() {
+            }, D.prototype.values = function() {
               return new g(this._keys, this._values, Y);
-            }, k.prototype.entries = function() {
+            }, D.prototype.entries = function() {
               return new g(this._keys, this._values, J);
-            }, k.prototype["@@iterator"] = function() {
+            }, D.prototype["@@iterator"] = function() {
               return this.entries();
-            }, k.prototype[a] = function() {
+            }, D.prototype[a] = function() {
               return this.entries();
-            }, k.prototype._find = function(R, $) {
+            }, D.prototype._find = function(R, $) {
               if (!Be(this._cacheKey, R)) {
                 this._cacheIndex = -1;
                 for (var I = 0; I < this._keys.length; I++)
@@ -1984,21 +1984,21 @@ function ss() {
                   }
               }
               return this._cacheIndex < 0 && $ && (this._cacheIndex = this._keys.length, this._keys.push(R), this._values.push(void 0)), this._cacheIndex;
-            }, k;
+            }, D;
           })()
         );
         return y;
-        function T(k, R) {
-          return k;
+        function T(D, R) {
+          return D;
         }
-        function Y(k, R) {
+        function Y(D, R) {
           return R;
         }
-        function J(k, R) {
-          return [k, R];
+        function J(D, R) {
+          return [D, R];
         }
       }
-      function Mi() {
+      function Ti() {
         var u = (
           /** @class */
           (function() {
@@ -2034,7 +2034,7 @@ function ss() {
         );
         return u;
       }
-      function Ti() {
+      function Li() {
         var u = 16, h = l.create(), g = y();
         return (
           /** @class */
@@ -2078,7 +2078,7 @@ function ss() {
         function y() {
           var R;
           do
-            R = "@@WeakMap@@" + k();
+            R = "@@WeakMap@@" + D();
           while (l.has(h, R));
           return h[R] = !0, R;
         }
@@ -2102,7 +2102,7 @@ function ss() {
           }
           return Y(new Array(R), R);
         }
-        function k() {
+        function D() {
           var R = J(u);
           R[6] = R[6] & 79 | 64, R[8] = R[8] & 191 | 128;
           for (var $ = "", I = 0; I < u; ++I) {
@@ -2116,11 +2116,11 @@ function ss() {
         return u.__ = void 0, delete u.__, u;
       }
     });
-  })(i || (i = {})), ln;
+  })(i || (i = {})), hn;
 }
-ss();
-const tr = Symbol.for("tsm:injectable"), Ft = Symbol.for("tsm:inject"), xt = Symbol.for("tsm:inject:property"), De = Symbol.for("tsm:scope"), rr = Symbol.for("tsm:component"), Mn = Symbol.for("tsm:component:activate"), Tn = Symbol.for("tsm:component:deactivate"), Ln = Symbol.for("tsm:component:modified"), Bt = Symbol.for("tsm:inject:all"), Vt = Symbol.for("tsm:component:bind"), Ut = Symbol.for("tsm:component:unbind");
-function os(i, e = {}) {
+os();
+const rr = Symbol.for("tsm:injectable"), Ft = Symbol.for("tsm:inject"), xt = Symbol.for("tsm:inject:property"), ke = Symbol.for("tsm:scope"), nr = Symbol.for("tsm:component"), Tn = Symbol.for("tsm:component:activate"), Ln = Symbol.for("tsm:component:deactivate"), Nn = Symbol.for("tsm:component:modified"), Bt = Symbol.for("tsm:inject:all"), Vt = Symbol.for("tsm:component:bind"), Ut = Symbol.for("tsm:component:unbind");
+function as(i, e = {}) {
   return (t, r) => {
     const n = t.constructor, s = Reflect.getOwnMetadata(Bt, n) ?? [];
     Reflect.defineMetadata(Bt, [...s, {
@@ -2134,12 +2134,12 @@ function os(i, e = {}) {
 function jt(i) {
   return Reflect.getOwnMetadata(Bt, i) ?? [];
 }
-function as() {
+function cs() {
   return (i) => {
-    Reflect.defineMetadata(tr, !0, i);
+    Reflect.defineMetadata(rr, !0, i);
   };
 }
-function cs(i, e) {
+function fs(i, e) {
   return (t, r, n) => {
     if (n !== void 0) {
       const s = Reflect.getOwnMetadata(Ft, t) ?? [];
@@ -2158,19 +2158,19 @@ function cs(i, e) {
     }
   };
 }
-function fs() {
-  return (i) => {
-    Reflect.defineMetadata(De, "singleton", i);
-  };
-}
 function ds() {
   return (i) => {
-    Reflect.defineMetadata(De, "module", i);
+    Reflect.defineMetadata(ke, "singleton", i);
   };
 }
 function us() {
   return (i) => {
-    Reflect.defineMetadata(De, "transient", i);
+    Reflect.defineMetadata(ke, "module", i);
+  };
+}
+function ls() {
+  return (i) => {
+    Reflect.defineMetadata(ke, "transient", i);
   };
 }
 function Gt(i) {
@@ -2179,14 +2179,9 @@ function Gt(i) {
 function zt(i) {
   return Reflect.getOwnMetadata(xt, i) ?? [];
 }
-function ls(i = {}) {
+function hs(i = {}) {
   return (e) => {
-    Reflect.defineMetadata(rr, i, e), Reflect.defineMetadata(tr, !0, e);
-  };
-}
-function hs() {
-  return (i, e) => {
-    Reflect.defineMetadata(Mn, e, i.constructor);
+    Reflect.defineMetadata(nr, i, e), Reflect.defineMetadata(rr, !0, e);
   };
 }
 function ps() {
@@ -2199,25 +2194,30 @@ function gs() {
     Reflect.defineMetadata(Ln, e, i.constructor);
   };
 }
-function ms(i) {
-  return Reflect.getOwnMetadata(rr, i);
+function ms() {
+  return (i, e) => {
+    Reflect.defineMetadata(Nn, e, i.constructor);
+  };
 }
 function vs(i) {
-  return Reflect.getOwnMetadata(rr, i) !== void 0;
+  return Reflect.getOwnMetadata(nr, i);
 }
-function pn(i) {
-  return Reflect.getOwnMetadata(Mn, i);
+function ys(i) {
+  return Reflect.getOwnMetadata(nr, i) !== void 0;
 }
 function gn(i) {
   return Reflect.getOwnMetadata(Tn, i);
 }
-function ys(i, e) {
+function mn(i) {
+  return Reflect.getOwnMetadata(Ln, i);
+}
+function ws(i, e) {
   return (t, r) => {
     const n = Reflect.getOwnMetadata(Vt, t.constructor) ?? [];
     Reflect.defineMetadata(Vt, [...n, { serviceId: i, method: r, optional: e?.optional === !0 }], t.constructor);
   };
 }
-function ws(i) {
+function Es(i) {
   return (e, t) => {
     const r = Reflect.getOwnMetadata(Ut, e.constructor) ?? [];
     Reflect.defineMetadata(Ut, [...r, { serviceId: i, method: t, optional: !1 }], e.constructor);
@@ -2226,19 +2226,19 @@ function ws(i) {
 function Ce(i) {
   return Reflect.getOwnMetadata(Vt, i) ?? [];
 }
-function mn(i) {
+function vn(i) {
   return Reflect.getOwnMetadata(Ut, i) ?? [];
 }
-function vn(i) {
-  return Reflect.getOwnMetadata(Ln, i);
-}
 function yn(i) {
-  return Reflect.getOwnMetadata(tr, i) === !0;
+  return Reflect.getOwnMetadata(Nn, i);
 }
-function Es(i) {
-  return Reflect.getOwnMetadata(De, i);
+function wn(i) {
+  return Reflect.getOwnMetadata(rr, i) === !0;
 }
-class Rs {
+function Rs(i) {
+  return Reflect.getOwnMetadata(ke, i);
+}
+class bs {
   source;
   read;
   position = 0;
@@ -2285,13 +2285,13 @@ class Rs {
   parseItem() {
     const e = this.readAttribute(), t = this.readOperator(), { parts: r, wildcards: n } = this.readValue();
     if (t === "~=") {
-      const o = wn(r.join(""));
-      return (a) => Oe(this.read(a, e), (f) => typeof f == "string" || typeof f == "number" ? wn(String(f)) === o : !1);
+      const o = En(r.join(""));
+      return (a) => Oe(this.read(a, e), (f) => typeof f == "string" || typeof f == "number" ? En(String(f)) === o : !1);
     }
     if (t === "=" && n) {
       if (r.every((a) => a.length === 0))
         return (a) => this.read(a, e) !== void 0;
-      const o = bs(r);
+      const o = $s(r);
       return (a) => Oe(
         this.read(a, e),
         // A wildcard is a string operation: OSGi does not apply it to numbers
@@ -2300,7 +2300,7 @@ class Rs {
       );
     }
     const s = r.join("");
-    return t === "=" ? (o) => Oe(this.read(o, e), (a) => Os(a, s)) : (o) => Oe(this.read(o, e), (a) => Ss(a, s, t));
+    return t === "=" ? (o) => Oe(this.read(o, e), (a) => Ss(a, s)) : (o) => Oe(this.read(o, e), (a) => Cs(a, s, t));
   }
   readAttribute() {
     const e = this.position;
@@ -2363,11 +2363,11 @@ class Rs {
     return new Error(`Invalid service filter at position ${this.position}: ${e} — '${this.source}'`);
   }
 }
-function bs(i) {
+function $s(i) {
   const e = i.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join(".*");
   return new RegExp(`^${e}$`);
 }
-const $s = (i, e) => {
+const Is = (i, e) => {
   const t = i[e];
   if (t !== void 0)
     return t;
@@ -2375,40 +2375,40 @@ const $s = (i, e) => {
   for (const [n, s] of Object.entries(i))
     if (n.toLowerCase() === r)
       return s;
-}, Is = (i, e) => i[e];
+}, Os = (i, e) => i[e];
 function Oe(i, e) {
   return i === void 0 ? !1 : Array.isArray(i) ? i.some((t) => e(t)) : e(i);
 }
-function Os(i, e) {
-  return typeof i == "boolean" ? String(i) === e.trim() : typeof i == "number" ? Nn(e) === i : i === e;
+function Ss(i, e) {
+  return typeof i == "boolean" ? String(i) === e.trim() : typeof i == "number" ? _n(e) === i : i === e;
 }
-function Nn(i) {
+function _n(i) {
   const e = i.trim();
   return e.length === 0 ? Number.NaN : Number(e);
 }
-function Ss(i, e, t) {
+function Cs(i, e, t) {
   if (typeof i == "boolean")
     return !1;
   if (typeof i == "number") {
-    const r = Nn(e);
+    const r = _n(e);
     return Number.isNaN(r) ? !1 : t === ">=" ? i >= r : i <= r;
   }
   return t === ">=" ? i >= e : i <= e;
 }
-function wn(i) {
+function En(i) {
   return i.replace(/\s+/g, "").toLowerCase();
 }
 function qe(i, e = {}) {
-  return new Rs(i, e.caseSensitive === !0 ? Is : $s).parse();
+  return new bs(i, e.caseSensitive === !0 ? Os : Is).parse();
 }
 function se(i) {
   const e = { ...i.properties };
   return e["service.ranking"] = i.ranking, i.providedBy !== void 0 && (e["service.providedBy"] = i.providedBy), e;
 }
-function kt(i, e) {
+function Dt(i, e) {
   return `${i}#${e.seq}`;
 }
-class _n {
+class Pn {
   services = /* @__PURE__ */ new Map();
   bindings = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
@@ -2483,7 +2483,7 @@ class _n {
       serviceId: e,
       providedBy: t.providedBy,
       ranking: t.ranking,
-      key: kt(e, t),
+      key: Dt(e, t),
       unregister: () => this.unregisterRegistration(e, t.seq),
       setProperties: (r, n = {}) => this.updateProperties(e, t, r, n),
       resolve: () => {
@@ -2589,9 +2589,9 @@ class _n {
    * delegate to the primary ID, so the same singleton is shared.
    */
   bindClass(e, t, r = {}) {
-    if (!yn(t))
+    if (!wn(t))
       throw new Error(`Class '${t.name}' is not decorated with @injectable(). Add @injectable() to use bindClass().`);
-    const n = Gt(t), s = zt(t), o = Es(t), a = r.scope ?? o ?? "singleton";
+    const n = Gt(t), s = zt(t), o = Rs(t), a = r.scope ?? o ?? "singleton";
     for (const c of [...n, ...s]) {
       let l = this.injectedInto.get(c.serviceId);
       l || (l = /* @__PURE__ */ new Set(), this.injectedInto.set(c.serviceId, l)), l.add(e);
@@ -2654,7 +2654,7 @@ class _n {
    * where the scope would be wrong rather than merely absent.
    */
   constructFor(e, t) {
-    if (!yn(t))
+    if (!wn(t))
       throw new Error(`Class '${t.name}' is not decorated with @injectable() or @component(), so its dependencies are unknown`);
     const r = /* @__PURE__ */ new Set(), n = Gt(t).map((o) => {
       const a = this.resolveFor(e, o.serviceId, r);
@@ -2689,7 +2689,7 @@ class _n {
   }
   /** Resolve one reference on behalf of a module — see {@link getFor} */
   resolveReferenceFor(e, t) {
-    const r = this.registrationsOf(t.serviceId).find((n) => kt(t.serviceId, n) === t.key);
+    const r = this.registrationsOf(t.serviceId).find((n) => Dt(t.serviceId, n) === t.key);
     if (r)
       return this.instantiate(t.serviceId, r, /* @__PURE__ */ new Set(), e);
   }
@@ -2750,7 +2750,7 @@ class _n {
       if (l === void 0 && !c.optional)
         throw new Error(`Dependency '${c.serviceId}' not found (required by '${e}')`);
       return l;
-    }), d = t.factory(...f);
+    }), d = t.deps === void 0 ? t.factory(s) : t.factory(...f);
     if (t.propertyDeps)
       for (const c of t.propertyDeps) {
         const l = this.resolveFor(a, c.serviceId, r);
@@ -2821,7 +2821,7 @@ class _n {
   checkRequirements(e) {
     const t = [];
     for (const r of e) {
-      if (!Sn(r))
+      if (!Cn(r))
         continue;
       (r.target !== void 0 ? this.countProviders(r.id, r.target) > 0 : this.has(r.id)) || t.push(r.id);
     }
@@ -2845,7 +2845,7 @@ class _n {
       scope: n.scope,
       instantiated: n.instance !== void 0,
       properties: se(n),
-      key: kt(e, n)
+      key: Dt(e, n)
     }));
   }
   /**
@@ -3066,7 +3066,7 @@ class _n {
       }));
   }
 }
-class Pn {
+class jn {
   moduleId;
   target;
   declaredRankings;
@@ -3272,8 +3272,8 @@ class Pn {
     return this.ownRegistrations = [], e.releaseConsumer?.(this.moduleId), t;
   }
 }
-const jn = "tsm.component.runtime", we = "osgi.extender", kn = "osgi.component", Dn = "osgi.metatype", Ee = "osgi.implementation", qn = "osgi.cm", Fn = "tsm.feature.service", xn = "osgi.feature", Bn = "1.0.0", Me = "1.0";
-function Vn(i) {
+const Dn = "tsm.component.runtime", we = "osgi.extender", kn = "osgi.component", qn = "osgi.metatype", Ee = "osgi.implementation", Fn = "osgi.cm", xn = "tsm.feature.service", Bn = "osgi.feature", Vn = "1.0.0", Me = "1.0";
+function Un(i) {
   let e = "", t = 0;
   for (; t < i.length; ) {
     const r = i[t];
@@ -3319,7 +3319,7 @@ function Fe(i) {
 function fe(i) {
   return `${i.name}@${i.version}`;
 }
-const Cs = {
+const As = {
   String: (i) => i,
   Integer: (i) => Number.parseInt(i, 10),
   Long: (i) => Number.parseInt(i, 10),
@@ -3327,29 +3327,29 @@ const Cs = {
   Double: (i) => Number.parseFloat(i),
   Boolean: (i) => i === "true"
 };
-function As(i, e) {
+function Ms(i, e) {
   return i.replace(/\$\{([^}]*)\}/g, (t, r) => {
     const n = e[r];
     return n == null ? t : String(n);
   });
 }
-function nr(i, e = {}) {
+function ir(i, e = {}) {
   const t = { ...i.variables, ...e }, r = {};
   for (const [n, s] of Object.entries(i.configurations)) {
     const o = {};
     for (const [a, f] of Object.entries(s)) {
-      const d = a.lastIndexOf(":"), c = d > 0 ? a.slice(d + 1) : void 0, l = c === void 0 ? void 0 : Cs[c], p = l === void 0 ? a : a.slice(0, d), m = typeof f == "string" ? As(f, t) : f;
+      const d = a.lastIndexOf(":"), c = d > 0 ? a.slice(d + 1) : void 0, l = c === void 0 ? void 0 : As[c], p = l === void 0 ? a : a.slice(0, d), m = typeof f == "string" ? Ms(f, t) : f;
       o[p] = l !== void 0 && typeof m == "string" ? l(m) : m;
     }
     r[n] = o;
   }
   return r;
 }
-function ir(i, e = {}) {
+function sr(i, e = {}) {
   return Object.entries(i.variables).filter(([t, r]) => r === null && e[t] === void 0).map(([t]) => t);
 }
-function Un(i) {
-  const e = typeof i == "string" ? JSON.parse(Vn(i)) : i;
+function Gn(i) {
+  const e = typeof i == "string" ? JSON.parse(Un(i)) : i;
   if (typeof e != "object" || e === null)
     throw new Error("A feature document has to be a JSON object");
   if (typeof e.id != "string")
@@ -3361,16 +3361,16 @@ function Un(i) {
     id: Fe(e.id),
     name: de(e.name, "name"),
     description: de(e.description, "description"),
-    categories: Object.freeze(Ms(e.categories)),
+    categories: Object.freeze(Ts(e.categories)),
     complete: e.complete === !0,
     docURL: de(e.docURL, "docURL"),
     license: de(e.license, "license"),
     scm: de(e.scm, "scm"),
     vendor: de(e.vendor, "vendor"),
-    bundles: Object.freeze(Gn(e.bundles)),
-    configurations: Object.freeze(Ts(e.configurations)),
-    variables: Object.freeze(Ls(e.variables)),
-    extensions: Object.freeze(Ns(e.extensions))
+    bundles: Object.freeze(zn(e.bundles)),
+    configurations: Object.freeze(Ls(e.configurations)),
+    variables: Object.freeze(Ns(e.variables)),
+    extensions: Object.freeze(_s(e.extensions))
   });
 }
 function de(i, e) {
@@ -3380,14 +3380,14 @@ function de(i, e) {
     return i;
   }
 }
-function Ms(i) {
+function Ts(i) {
   if (i === void 0)
     return [];
   if (!Array.isArray(i) || i.some((e) => typeof e != "string"))
     throw new Error('Feature "categories" has to be an array of strings');
   return [...i];
 }
-function Gn(i) {
+function zn(i) {
   if (i === void 0)
     return [];
   if (!Array.isArray(i))
@@ -3410,7 +3410,7 @@ function Gn(i) {
     });
   });
 }
-function Ts(i) {
+function Ls(i) {
   if (i === void 0)
     return {};
   if (typeof i != "object" || i === null || Array.isArray(i))
@@ -3423,7 +3423,7 @@ function Ts(i) {
   }
   return e;
 }
-function Ls(i) {
+function Ns(i) {
   if (i === void 0)
     return {};
   if (typeof i != "object" || i === null || Array.isArray(i))
@@ -3436,7 +3436,7 @@ function Ls(i) {
   }
   return e;
 }
-function Ns(i) {
+function _s(i) {
   if (i === void 0)
     return {};
   if (typeof i != "object" || i === null || Array.isArray(i))
@@ -3445,7 +3445,7 @@ function Ns(i) {
   for (const [t, r] of Object.entries(i)) {
     if (typeof r != "object" || r === null)
       throw new Error(`Extension '${t}' has to be an object`);
-    const n = r, s = _s(n.kind, t);
+    const n = r, s = Ps(n.kind, t);
     switch (n.type) {
       case "text":
         if (!Array.isArray(n.text) || n.text.some((o) => typeof o != "string"))
@@ -3465,7 +3465,7 @@ function Ns(i) {
         e[t] = Object.freeze({
           type: "artifacts",
           kind: s,
-          artifacts: Object.freeze(Gn(n.artifacts))
+          artifacts: Object.freeze(zn(n.artifacts))
         });
         break;
       default:
@@ -3474,14 +3474,14 @@ function Ns(i) {
   }
   return e;
 }
-function _s(i, e) {
+function Ps(i, e) {
   if (i === void 0)
     return "optional";
   if (i !== "mandatory" && i !== "optional" && i !== "transient")
     throw new Error(`Extension '${e}' has kind '${String(i)}'; expected 'mandatory', 'optional' or 'transient'`);
   return i;
 }
-function zn(i, e = {}) {
+function Wn(i, e = {}) {
   const t = {
     "feature-resource-version": Me,
     id: fe(i.id)
@@ -3491,13 +3491,13 @@ function zn(i, e = {}) {
     ...r.metadata
   }))), Object.keys(i.configurations).length > 0 && (t.configurations = i.configurations), Object.keys(i.variables).length > 0 && (t.variables = i.variables), Object.keys(i.extensions).length > 0 && (t.extensions = i.extensions), JSON.stringify(t, void 0, e.indent ?? 2);
 }
-function sr(i, e = {}) {
+function or(i, e = {}) {
   const t = [], r = /* @__PURE__ */ new Map();
   i.bundles.forEach((s, o) => {
     const a = fe(s.id), f = r.get(a);
     f !== void 0 ? t.push({ at: `bundles[${o}]`, problem: `'${a}' is already listed at ${f}` }) : r.set(a, o);
   });
-  for (const s of ir(i, e.supplied))
+  for (const s of sr(i, e.supplied))
     t.push({
       at: `variables.${s}`,
       problem: "declared without a default, so a value has to be supplied"
@@ -3510,33 +3510,33 @@ function sr(i, e = {}) {
     });
   return t;
 }
-const Wn = Object.freeze({
-  readFeature: Un,
-  writeFeature: zn,
-  validateFeature: sr,
-  resolveConfigurations: nr,
-  missingVariables: ir,
+const Xn = Object.freeze({
+  readFeature: Gn,
+  writeFeature: Wn,
+  validateFeature: or,
+  resolveConfigurations: ir,
+  missingVariables: sr,
   getId: (i, e) => ({ name: i, version: e }),
   parseId: Fe,
   formatId: fe
-}), ce = "osgi.identity", or = "osgi.service", xe = "tsm.library", Xn = "1.5.0", Yn = "1.4.0", Hn = "1.6.0", Kn = "tsm.module", Ps = "resolve", Te = "system.bundle", Jn = "environment";
-function Zn(i) {
-  return i === void 0 || i === Ps;
-}
+}), ce = "osgi.identity", ar = "osgi.service", xe = "tsm.library", Yn = "1.5.0", Hn = "1.4.0", Kn = "1.6.0", Jn = "tsm.module", js = "resolve", Te = "system.bundle", Zn = "environment";
 function Qn(i) {
+  return i === void 0 || i === js;
+}
+function ei(i) {
   const e = [
     {
       namespace: ce,
       attributes: {
         [ce]: i.id,
-        type: Kn,
+        type: Jn,
         version: i.version
       }
     }
   ];
   for (const t of i.provides ?? [])
     e.push({
-      namespace: or,
+      namespace: ar,
       attributes: {
         // A list, as in the specification: one capability may cover several IDs
         objectClass: [t.id],
@@ -3545,7 +3545,7 @@ function Qn(i) {
     });
   return [...e, ...i.capabilities ?? []];
 }
-function ei(i) {
+function ti(i) {
   const e = [];
   for (const t of i.dependencies ?? []) {
     const r = typeof t == "string" ? { id: t } : t;
@@ -3567,7 +3567,7 @@ function ei(i) {
   }
   for (const t of i.requiresService ?? [])
     e.push({
-      namespace: or,
+      namespace: ar,
       filter: `(objectClass=${Se(t.id)})`,
       // The runtime requirement may be mandatory while the resolution is not:
       // cardinality 0..n means the module runs with no provider at all
@@ -3584,8 +3584,8 @@ function ei(i) {
 function Se(i) {
   return i.replace(/[\\()*]/g, (e) => `\\${e}`);
 }
-function ti(i, e) {
-  if (e.namespace !== i.namespace || !Zn(e.directives?.effective))
+function ri(i, e) {
+  if (e.namespace !== i.namespace || !Qn(e.directives?.effective))
     return !1;
   const t = e.attributes ?? {};
   if (i.versionRange !== void 0) {
@@ -3595,13 +3595,13 @@ function ti(i, e) {
   }
   return i.filter === void 0 ? !0 : qe(i.filter, { caseSensitive: !0 })(t);
 }
-function ri(i) {
+function ni(i) {
   return (i instanceof Map ? [...i].map(([t, r]) => [t, r.version]) : Object.entries(i)).map(([t, r]) => ({
     namespace: xe,
     attributes: { library: t, version: r }
   }));
 }
-function ni(i = {}) {
+function ii(i = {}) {
   return {
     id: Te,
     name: "System Bundle",
@@ -3615,45 +3615,45 @@ function ni(i = {}) {
       // exactly as it would require Felix SCR
       {
         namespace: we,
-        attributes: { [we]: kn, version: Xn }
+        attributes: { [we]: kn, version: Yn }
       },
       // These two only when they are really there: a capability nobody can rely
       // on is worse than none, because a module would resolve and then find
       // nothing behind it
       ...i.metatype === !0 ? [{
         namespace: we,
-        attributes: { [we]: Dn, version: Yn }
+        attributes: { [we]: qn, version: Hn }
       }] : [],
       // Always there, as the feature service needs nothing from the application
       {
         namespace: Ee,
         attributes: {
-          [Ee]: xn,
-          version: Bn
+          [Ee]: Bn,
+          version: Vn
         }
       },
       ...i.configurationAdmin === !0 ? [{
         namespace: Ee,
         attributes: {
-          [Ee]: qn,
-          version: Hn
+          [Ee]: Fn,
+          version: Kn
         }
       }] : [],
-      ...i.libraries ? ri(i.libraries) : [],
+      ...i.libraries ? ni(i.libraries) : [],
       ...i.capabilities ?? []
     ]
   };
 }
-function ii(i, e = {}) {
+function si(i, e = {}) {
   const t = [
-    ...i.flatMap((a) => Qn(a).map((f) => ({ provider: a.id, capability: f }))),
-    ...(e.offered ?? []).map((a) => ({ provider: Jn, capability: a }))
+    ...i.flatMap((a) => ei(a).map((f) => ({ provider: a.id, capability: f }))),
+    ...(e.offered ?? []).map((a) => ({ provider: Zn, capability: a }))
   ], r = [], n = [], s = [], o = /* @__PURE__ */ new Set();
   for (const a of i)
-    for (const f of ei(a)) {
-      if (!Zn(f.effective))
+    for (const f of ti(a)) {
+      if (!Qn(f.effective))
         continue;
-      const d = t.filter((p) => ti(f, p.capability)), c = { moduleId: a.id, requirement: f, wires: [] };
+      const d = t.filter((p) => ri(f, p.capability)), c = { moduleId: a.id, requirement: f, wires: [] };
       if (s.push(c), d.length === 0) {
         if ((f.resolution ?? "mandatory") === "optional")
           continue;
@@ -3665,7 +3665,7 @@ function ii(i, e = {}) {
         n.push(m), c.failure = m, o.add(a.id);
         continue;
       }
-      const l = (f.cardinality ?? "single") === "multiple" ? d : [js(d)];
+      const l = (f.cardinality ?? "single") === "multiple" ? d : [Ds(d)];
       for (const p of l) {
         const m = {
           requirer: a.id,
@@ -3683,31 +3683,31 @@ function ii(i, e = {}) {
     resolved: i.map((a) => a.id).filter((a) => !o.has(a))
   };
 }
-function js(i) {
+function Ds(i) {
   return i.reduce((e, t) => {
-    const r = En(t.capability), n = En(e.capability);
+    const r = Rn(t.capability), n = Rn(e.capability);
     return r === void 0 || n === void 0 ? e : le.gt(r, n) ? t : e;
   });
 }
-function En(i) {
+function Rn(i) {
   const e = i.attributes?.version;
   return typeof e == "string" && le.valid(e) ? e : void 0;
 }
-function si(i, e) {
+function oi(i, e) {
   return {
     requires: i.wires.filter((t) => t.requirer === e),
     provides: i.wires.filter((t) => t.provider === e)
   };
 }
-const oi = "tsm.configuration.admin", Wt = "~", Ae = "|";
+const ai = "tsm.configuration.admin", Wt = "~", Ae = "|";
 function Le(i, e) {
   if (!e)
     return [i];
   const t = [i + Ae + e.id];
   return e.version !== void 0 && t.unshift(i + Ae + e.id + Ae + e.version), t.push(i), t;
 }
-const ai = "service.pid", ci = "service.factoryPid";
-class fi {
+const ci = "service.pid", fi = "service.factoryPid";
+class di {
   records = /* @__PURE__ */ new Map();
   constructor(e = []) {
     for (const t of e)
@@ -3751,7 +3751,7 @@ class ks {
     localStorage.removeItem(this.prefix + e);
   }
 }
-function Ds(i, e) {
+function qs(i, e) {
   const t = /* @__PURE__ */ new Map();
   for (const [r, n] of Object.entries(e)) {
     const s = r.toLowerCase(), o = t.get(s);
@@ -3766,7 +3766,7 @@ function Ds(i, e) {
     }
   }
 }
-function qs(i, e) {
+function Fs(i, e) {
   if (i === void 0)
     return !1;
   const t = Object.keys(i);
@@ -3775,7 +3775,7 @@ function qs(i, e) {
     return Array.isArray(n) && Array.isArray(s) ? n.length === s.length && n.every((o, a) => o === s[a]) : n === s;
   });
 }
-class Fs {
+class xs {
   entries = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
   store;
@@ -3791,7 +3791,7 @@ class Fs {
    */
   metatype;
   constructor(e = {}) {
-    this.store = e.store ?? new fi(), this.metatype = e.metatype, this.loaded = this.load();
+    this.store = e.store ?? new di(), this.metatype = e.metatype, this.loaded = this.load();
   }
   /**
    * Refuse values a schema says are wrong.
@@ -3936,7 +3936,7 @@ class Fs {
    */
   effectiveProperties(e) {
     const t = { ...e.properties };
-    return t[ai] = e.pid, e.factoryPid !== void 0 && (t[ci] = e.factoryPid), t;
+    return t[ci] = e.pid, e.factoryPid !== void 0 && (t[fi] = e.factoryPid), t;
   }
   handleFor(e) {
     const t = () => {
@@ -3952,7 +3952,7 @@ class Fs {
       getProperties: () => e.properties === void 0 || e.deleted ? void 0 : this.effectiveProperties(e),
       update: async (r) => {
         if (t(), r !== void 0)
-          Ds(e.pid, r), this.assertValidAgainstSchema(e.pid, r), e.properties = { ...r };
+          qs(e.pid, r), this.assertValidAgainstSchema(e.pid, r), e.properties = { ...r };
         else if (e.properties === void 0)
           throw new Error(`Configuration '${e.pid}' has no properties to re-deliver; call update(properties) first`);
         e.changeCount++, await this.store.save({
@@ -3962,24 +3962,24 @@ class Fs {
           changeCount: e.changeCount
         }), this.notify({ type: "updated", pid: e.pid, factoryPid: e.factoryPid });
       },
-      updateIfDifferent: async (r) => (t(), qs(e.properties, r) ? !1 : (await this.handleFor(e).update(r), !0)),
+      updateIfDifferent: async (r) => (t(), Fs(e.properties, r) ? !1 : (await this.handleFor(e).update(r), !0)),
       delete: async () => {
         t(), e.deleted = !0, this.entries.delete(e.pid), await this.store.remove(e.pid), this.notify({ type: "deleted", pid: e.pid, factoryPid: e.factoryPid });
       }
     };
   }
 }
-function xs(i) {
+function Bs(i) {
   return i;
 }
-const Bs = "~";
-function Vs(i) {
+const Vs = "~";
+function Us(i) {
   return (i.cardinality ?? "single") !== "single";
 }
-function Us(i) {
+function Gs(i) {
   return typeof i.cardinality == "number" ? i.cardinality : void 0;
 }
-class Gs {
+class zs {
   singletons = /* @__PURE__ */ new Map();
   factories = /* @__PURE__ */ new Map();
   /** Which module registered a PID, so a teardown can take its schemas with it */
@@ -4018,13 +4018,13 @@ class Gs {
   getObjectClassDefinition(e, t) {
     const r = this.definitionFor(e);
     if (r)
-      return t === void 0 ? r : di(r, t);
+      return t === void 0 ? r : ui(r, t);
   }
   definitionFor(e) {
     const t = this.singletons.get(e) ?? this.factories.get(e);
     if (t)
       return t;
-    const r = e.indexOf(Bs);
+    const r = e.indexOf(Vs);
     if (!(r < 0))
       return this.factories.get(e.slice(0, r));
   }
@@ -4067,7 +4067,7 @@ class Gs {
         o.required !== !1 && o.default === void 0 && n.push({ attribute: s, message: "is required" });
         continue;
       }
-      n.push(...zs(s, o, a));
+      n.push(...Ws(s, o, a));
     }
     return n;
   }
@@ -4081,24 +4081,24 @@ class Gs {
     return { values: r, errors: this.validate(e, r) };
   }
 }
-function zs(i, e, t) {
-  const r = [], n = Vs(e);
+function Ws(i, e, t) {
+  const r = [], n = Us(e);
   if (n !== Array.isArray(t))
     return r.push({
       attribute: i,
       message: n ? "expects a list of values" : "expects a single value"
     }), r;
-  const s = Array.isArray(t) ? [...t] : [t], o = Us(e);
+  const s = Array.isArray(t) ? [...t] : [t], o = Gs(e);
   o !== void 0 && s.length > o && r.push({ attribute: i, message: `takes at most ${o} value(s)` });
   for (const a of s)
-    r.push(...Ws(i, e, a));
+    r.push(...Xs(i, e, a));
   if (e.validate) {
     const a = e.validate(t);
     a !== void 0 && r.push({ attribute: i, message: a });
   }
   return r;
 }
-function Ws(i, e, t) {
+function Xs(i, e, t) {
   const r = [];
   switch (e.type) {
     case "boolean":
@@ -4133,7 +4133,7 @@ function Ws(i, e, t) {
   }
   return r;
 }
-function di(i, e) {
+function ui(i, e) {
   const t = i.localization?.[e];
   if (!t)
     return i;
@@ -4155,15 +4155,18 @@ function di(i, e) {
     attributes: n
   };
 }
-const ui = "tsm.metatype", li = "tsm.component.factory", ar = "component.factory", hi = "component.name";
-function Xs(i) {
-  return `(${ar}=${i})`;
+const li = "tsm.metatype", hi = "tsm.component.factory", cr = "component.factory", pi = "component.name";
+function Ys(i) {
+  return `(${cr}=${i})`;
 }
-const Xt = "tsm.condition", be = "condition.id", cr = "true", pi = Object.freeze({}), Ys = `(${be}=${cr})`;
-function Hs(i, e) {
+function Hs(i) {
+  return i;
+}
+const Xt = "tsm.module.context", Yt = "tsm.condition", be = "condition.id", fr = "true", gi = Object.freeze({}), Ks = `(${be}=${fr})`;
+function Js(i, e) {
   return { ...e, [be]: i };
 }
-function Ks(i) {
+function Zs(i) {
   return `(${be}=${i})`;
 }
 const oe = /* @__PURE__ */ new Map(), ue = {
@@ -4220,7 +4223,7 @@ Make sure the host application has registered this library.`);
     return e;
   }
 };
-function Js() {
+function Qs() {
   if (typeof window < "u") {
     if (window.__tsm__)
       return console.warn("[TSM] Runtime already initialized, returning existing instance"), window.__tsm__;
@@ -4228,20 +4231,20 @@ function Js() {
   }
   return ue;
 }
-function Yt() {
+function Ht() {
   return typeof window < "u" && !!window.__tsm__;
 }
-function Zs(i, e) {
+function eo(i, e) {
   if (i === null || typeof i != "object" && typeof i != "function")
     throw new Error(`Container for module '${e}' is ${i === null ? "null" : typeof i}; expected a module namespace, as an import() resolves to`);
 }
-const Rn = 10, Qs = /* @__PURE__ */ new Set([
+const bn = 10, to = /* @__PURE__ */ new Set([
   "resolving",
   "loading",
   "activating",
   "active",
   "unsatisfied"
-]), eo = {
+]), ro = {
   loadTimeout: 1e4,
   continueOnError: !0,
   hotReload: !1,
@@ -4254,7 +4257,7 @@ const Rn = 10, Qs = /* @__PURE__ */ new Set([
   sharedLibraries: "runtime",
   entryResolver: void 0
 };
-let Dt = class {
+let kt = class {
   prefix;
   constructor(e = "[TSM]") {
     this.prefix = e;
@@ -4272,7 +4275,7 @@ let Dt = class {
     console.error(`${this.prefix} ${e}`, ...t);
   }
 };
-function to(i) {
+function no(i) {
   return [
     ...Gt(i).map((e) => ({
       serviceId: e.serviceId,
@@ -4290,27 +4293,27 @@ function to(i) {
     }))
   ];
 }
-function ro(i, e) {
+function io(i, e) {
   return i.length === e.length && i.every((t, r) => t === e[r]);
 }
-const no = "\0singleton", io = "\0factory:";
+const so = "\0singleton", oo = "\0factory:";
 function qt(i) {
-  return i.factory && i.pid !== void 0 ? i.pid : no;
+  return i.factory && i.pid !== void 0 ? i.pid : so;
 }
-function so(i, e) {
+function ao(i, e) {
   const t = Object.keys(i);
   return t.length !== Object.keys(e).length ? !1 : t.every((r) => {
     const n = i[r], s = e[r];
     return Array.isArray(n) && Array.isArray(s) ? n.length === s.length && n.every((o, a) => o === s[a]) : n === s;
   });
 }
-const oo = new Function("specifier", "return import(specifier)");
-function ao(i) {
-  return typeof i.activate == "function" || typeof i.deactivate == "function" ? !0 : Object.entries(i).some(([e, t]) => e !== "default" && typeof t == "function" && vs(t));
+const co = new Function("specifier", "return import(specifier)");
+function fo(i) {
+  return typeof i.activate == "function" || typeof i.deactivate == "function" ? !0 : Object.entries(i).some(([e, t]) => e !== "default" && typeof t == "function" && ys(t));
 }
-async function co(i) {
+async function uo(i) {
   try {
-    return await oo(i);
+    return await co(i);
   } catch (e) {
     if (e?.code === "ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING")
       return await import(
@@ -4320,11 +4323,11 @@ async function co(i) {
     throw e;
   }
 }
-class fo {
+class lo {
   modules = /* @__PURE__ */ new Map();
   manifests = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
-  resolver = new An();
+  resolver = new Mn();
   options;
   services;
   logger;
@@ -4388,7 +4391,7 @@ class fo {
   queue = Promise.resolve();
   pendingTasks = 0;
   constructor(e = {}) {
-    this.options = { ...eo, ...e }, this.services = e.serviceRegistry ?? new _n(), this.logger = e.logger ?? new Dt(), this.publishTrueCondition(), this.publishComponentRuntime(), this.publishFeatureService(), this.observeServiceRegistry(), this.observeConfigurations(e.configurationAdmin), this.publishMetatype(e.metatype);
+    this.options = { ...ro, ...e }, this.services = e.serviceRegistry ?? new Pn(), this.logger = e.logger ?? new kt(), this.publishTrueCondition(), this.publishComponentRuntime(), this.publishModuleContext(), this.publishFeatureService(), this.observeServiceRegistry(), this.observeConfigurations(e.configurationAdmin), this.publishMetatype(e.metatype);
   }
   /**
    * Register the condition that always holds.
@@ -4400,9 +4403,9 @@ class fo {
    * whether some other component asked first.
    */
   publishTrueCondition() {
-    this.services.register(Xt, pi, {
+    this.services.register(Yt, gi, {
       providedBy: "tsm",
-      properties: { [be]: cr }
+      properties: { [be]: fr }
     });
   }
   /**
@@ -4426,7 +4429,35 @@ class fo {
       enableComponent: (t, r) => this.enableComponent(t, r),
       getDisabledComponents: () => this.getDisabledComponents()
     };
-    this.services.register(jn, e, { providedBy: "tsm" });
+    this.services.register(Dn, e, { providedBy: "tsm" });
+  }
+  /**
+   * Publish each module's own context as a service, so a component can take it
+   * as a constructor dependency.
+   *
+   * `@activate(context)` already hands a component its context, and that is the
+   * closer analogue of DS 112.5.8. What it cannot do is serve a class whose
+   * dependency on the registry is *constructional* — an identifier resolver, a
+   * repository that looks services up at call time. Such a class had to be built
+   * and registered by hand in the module's `activate`, which is exactly the
+   * declarative form it should have been able to take.
+   *
+   * `module` scope is what makes one service id answer with a different context
+   * per module: the factory is told who it is building for. Without that this
+   * would need one registration per module under one id, and every consumer
+   * filtering for its own.
+   *
+   * The *component* half of the context — configuration, properties — is not here
+   * on purpose. It differs per instance, and at construction time the instance
+   * does not exist yet; `@activate` is where it belongs, and where it is.
+   */
+  publishModuleContext() {
+    typeof this.services.bind == "function" && this.services.bind(Xt, (e) => {
+      const t = e === void 0 ? void 0 : this.modules.get(e);
+      if (!t)
+        throw new Error(`${Xt} is a per-module service; ${e === void 0 ? "nobody" : `'${e}'`} has no context here`);
+      return this.createContext(t);
+    }, { scope: "module", providedBy: "tsm" });
   }
   /**
    * Publish the feature service, as OSGi has it in the registry (159.11).
@@ -4437,14 +4468,14 @@ class fo {
    * launcher and not here, which is the line the specification draws too.
    */
   publishFeatureService() {
-    this.services.register(Fn, Wn, { providedBy: "tsm" });
+    this.services.register(xn, Xn, { providedBy: "tsm" });
   }
   /**
    * Take the schema registry and publish it, as the Metatype Service is a service
    * in OSGi too — so a configuration user interface can be a module.
    */
   publishMetatype(e) {
-    e && (this.metatype = e, this.services.register(ui, e, { providedBy: "tsm" }));
+    e && (this.metatype = e, this.services.register(li, e, { providedBy: "tsm" }));
   }
   /**
    * Watch configuration, and publish the admin as a service.
@@ -4458,7 +4489,7 @@ class fo {
       onConfigurationEvent: (t) => {
         this.enqueue(() => this.applyConfiguration(t));
       }
-    }, e.addListener(this.configurationListener), this.services.register(oi, e, { providedBy: "tsm" }));
+    }, e.addListener(this.configurationListener), this.services.register(ai, e, { providedBy: "tsm" }));
   }
   /**
    * Watch the registry for services that active modules depend on.
@@ -4653,7 +4684,7 @@ class fo {
     const t = /* @__PURE__ */ new Map();
     for (const r of e) {
       const n = this.countProviders(r.id, r.target);
-      t.set(r.id, Cn(r) ? n : Math.min(n, 1));
+      t.set(r.id, An(r) ? n : Math.min(n, 1));
     }
     return t;
   }
@@ -4700,9 +4731,9 @@ class fo {
    */
   exceedsCascadeBudget(e) {
     const t = e.manifest.id, r = (this.cascadeActivations.get(t) ?? 0) + 1;
-    if (this.cascadeActivations.set(t, r), r <= Rn)
+    if (this.cascadeActivations.set(t, r), r <= bn)
       return !1;
-    const n = new Error(`Module ${t} activated and parked ${Rn} times in one cascade; giving up to avoid an endless loop`);
+    const n = new Error(`Module ${t} activated and parked ${bn} times in one cascade; giving up to avoid an endless loop`);
     return e.state = "error", e.error = n, this.logger.error(n.message), this.emit({
       type: "error",
       moduleId: t,
@@ -4796,9 +4827,9 @@ class fo {
     return (e !== void 0 ? [[e, this.componentRuntimes.get(e) ?? []]] : [...this.componentRuntimes.entries()]).flatMap(([r, n]) => n.map((s) => this.describeComponent(r, s)));
   }
   describeComponent(e, t) {
-    const r = pn(t.ctor), n = [...t.instances.values()].map((s) => ({
+    const r = gn(t.ctor), n = [...t.instances.values()].map((s) => ({
       pid: s.pid,
-      state: s.instance !== void 0 || this.isInstantiated(s) ? "active" : "satisfied",
+      state: s.failed !== void 0 ? "failed-activation" : s.instance !== void 0 || this.isInstantiated(s) ? "active" : "satisfied",
       properties: s.properties
     }));
     if (n.length === 0) {
@@ -4812,8 +4843,8 @@ class fo {
       services: [...t.options.service ?? []],
       immediate: t.options.immediate ?? r !== void 0,
       hasActivate: r !== void 0,
-      hasDeactivate: gn(t.ctor) !== void 0,
-      hasModified: vn(t.ctor) !== void 0,
+      hasDeactivate: mn(t.ctor) !== void 0,
+      hasModified: yn(t.ctor) !== void 0,
       references: t.references,
       collections: jt(t.ctor).map((s) => ({
         serviceId: s.serviceId,
@@ -4893,7 +4924,7 @@ class fo {
       throw new Error(`Module ${e.id} is disabled — enableModule() first`);
     }
     const r = this.modules.get(e.id);
-    if (r && Qs.has(r.state))
+    if (r && to.has(r.state))
       return r;
     const n = {
       manifest: e,
@@ -4958,7 +4989,7 @@ class fo {
     const t = e.sharedDependencies;
     if (!t || t.length === 0 || this.options.sharedLibraries === "import-map")
       return;
-    if (!Yt())
+    if (!Ht())
       throw new Error(`Module '${e.id}' requires shared libraries (${t.map((n) => n.id).join(", ")}), but TSM runtime is not initialized. Call initTsmRuntime() and register shared libraries before loading modules.`);
     const r = ue.validate(t);
     if (!r.valid) {
@@ -5011,10 +5042,10 @@ Available shared libraries:
   async loadEntry(e, t) {
     const r = t !== void 0 ? t : this.preloaded.get(e.id) ?? this.options.entryResolver?.(e);
     if (r !== void 0)
-      return Zs(r, e.id), this.preloaded.set(e.id, r), r;
+      return eo(r, e.id), this.preloaded.set(e.id, r), r;
     try {
-      const s = await co(e.entry);
-      return ao(s) ? s : s.default ?? s;
+      const s = await uo(e.entry);
+      return fo(s) ? s : s.default ?? s;
     } catch (n) {
       throw new Error(`Failed to load module entry: ${e.entry} - ${n}`);
     }
@@ -5078,7 +5109,7 @@ Available shared libraries:
       options: f,
       className: a.name,
       target: r,
-      references: to(a),
+      references: no(a),
       pids: this.pidsOf(a, f),
       policy: f.configurationPolicy ?? "optional",
       instances: /* @__PURE__ */ new Map()
@@ -5220,7 +5251,7 @@ Available shared libraries:
    * waits and the module keeps running, as DS has it (112.5.2).
    */
   missingReferences(e) {
-    const t = new Set(mn(e.ctor).filter((s) => e.references.find((a) => a.serviceId === s.serviceId)?.optional === !0).map((s) => s.serviceId)), r = e.references.filter((s) => !s.optional && !t.has(s.serviceId) && !this.services.has(s.serviceId)).map((s) => s.serviceId), n = e.options.satisfyingCondition;
+    const t = new Set(vn(e.ctor).filter((s) => e.references.find((a) => a.serviceId === s.serviceId)?.optional === !0).map((s) => s.serviceId)), r = e.references.filter((s) => !s.optional && !t.has(s.serviceId) && !this.services.has(s.serviceId)).map((s) => s.serviceId), n = e.options.satisfyingCondition;
     return n !== void 0 && this.matchingConditions(n) === 0 && r.push(`condition ${n}`), r;
   }
   /**
@@ -5232,7 +5263,7 @@ Available shared libraries:
    */
   matchingConditions(e) {
     try {
-      return this.services.countProviders(Xt, e);
+      return this.services.countProviders(Yt, e);
     } catch (t) {
       return this.logger.error(`Invalid satisfying condition '${e}':`, t), 0;
     }
@@ -5293,7 +5324,7 @@ Available shared libraries:
         continue;
       }
       const f = n[o.propertyKey];
-      if (!(Array.isArray(f) && ro(f, a))) {
+      if (!(Array.isArray(f) && io(f, a))) {
         if (o.fieldOption === "update") {
           if (Array.isArray(f)) {
             f.length = 0, f.push(...a);
@@ -5319,7 +5350,7 @@ Available shared libraries:
   async applyBindings(e, t, r) {
     if (r.instance === void 0)
       return;
-    const n = new Map(mn(t.ctor).map((s) => [s.serviceId, s.method]));
+    const n = new Map(vn(t.ctor).map((s) => [s.serviceId, s.method]));
     for (const s of Ce(t.ctor)) {
       const o = this.services.has(s.serviceId), a = r.bound.has(s.serviceId);
       if (o && !a) {
@@ -5357,7 +5388,7 @@ Available shared libraries:
         return [...s.values()];
       },
       newInstance: async (d = {}) => {
-        const c = io + String(++o), l = { ...this.declaredDefaults(t), ...d }, p = this.registerInstance(e, t, { factory: !0, values: l }, c);
+        const c = oo + String(++o), l = { ...this.declaredDefaults(t), ...d }, p = this.registerInstance(e, t, { factory: !0, values: l }, c);
         await this.activateInstance(e, t, p, { force: !0 });
         const m = {
           get instance() {
@@ -5370,12 +5401,12 @@ Available shared libraries:
         };
         return s.set(c, m), m;
       }
-    }, f = n.register(li, a, {
+    }, f = n.register(hi, a, {
       ranking: t.options.ranking,
       properties: {
         ...t.options.properties,
-        [ar]: r,
-        [hi]: t.className
+        [cr]: r,
+        [pi]: t.className
       }
     });
     t.factory = {
@@ -5430,11 +5461,16 @@ Available shared libraries:
   async activateInstance(e, t, r, n = {}) {
     if (r.instance !== void 0)
       return;
-    const s = pn(t.ctor), o = Ce(t.ctor), a = jt(t.ctor);
+    const s = gn(t.ctor), o = Ce(t.ctor), a = jt(t.ctor);
     if (!(n.force === !0 || (t.options.immediate ?? (s !== void 0 || o.length > 0 || a.length > 0))))
       return;
     const d = r.registration ? r.registration.resolve() : this.scopeFor(e.manifest.id).construct(t.ctor);
-    d && (r.instance = d, this.applyCollections(e, t, r), await this.bindAvailable(e, t, r), s !== void 0 && await this.callComponentMethod(e, t, r, s));
+    if (d && (r.instance = d, this.applyCollections(e, t, r), await this.bindAvailable(e, t, r), s !== void 0))
+      try {
+        await this.callComponentMethod(e, t, r, s);
+      } catch (c) {
+        this.logger.error(`@activate of ${t.className} in ${e.manifest.id} threw, so the component is discarded:`, c), r.failed = c, r.instance = void 0, r.registration?.unregister(), r.registration = void 0;
+      }
   }
   /**
    * Hand the instance every `@bind()` service that is there, in declaration order.
@@ -5478,7 +5514,7 @@ Available shared libraries:
       // logger under the component's own name for the same reason.
       // For a factory instance the PID is part of the name — one line per
       // instance is otherwise indistinguishable from the same line four times
-      log: new Dt(r.pid !== void 0 && r.pid !== t.className ? `[${e.manifest.id}/${t.className}(${r.pid})]` : `[${e.manifest.id}/${t.className}]`),
+      log: new kt(r.pid !== void 0 && r.pid !== t.className ? `[${e.manifest.id}/${t.className}(${r.pid})]` : `[${e.manifest.id}/${t.className}]`),
       configuration: r.configuration,
       properties: r.properties,
       configurationPid: r.pid
@@ -5531,9 +5567,9 @@ Available shared libraries:
    */
   async updateInstance(e, t, r, n) {
     const s = this.propertiesFor(t.options.properties, n.values);
-    if (so(r.properties, s))
+    if (ao(r.properties, s))
       return;
-    const o = vn(t.ctor), a = r.instance !== void 0 || this.isInstantiated(r);
+    const o = yn(t.ctor), a = r.instance !== void 0 || this.isInstantiated(r);
     if (a && o === void 0) {
       await this.stopInstance(e, t, qt(n), r);
       const d = this.registerInstance(e, t, n);
@@ -5563,7 +5599,7 @@ Available shared libraries:
   /** Run one instance's `@deactivate` method and withdraw its services */
   async stopInstance(e, t, r, n) {
     t.instances.delete(r);
-    const s = gn(t.ctor);
+    const s = mn(t.ctor);
     if (s !== void 0 && n.instance)
       try {
         await this.callComponentMethod(e, t, n, s);
@@ -5625,7 +5661,7 @@ Available shared libraries:
     for (const n of Object.values(t)) {
       if (typeof n != "function")
         continue;
-      const s = ms(n);
+      const s = vs(n);
       s !== void 0 && r.push({ ctor: n, options: s });
     }
     return r;
@@ -5673,7 +5709,7 @@ Available shared libraries:
       getModule: (t) => this.getModuleExports(t),
       isModuleLoaded: (t) => this.isLoaded(t),
       services: this.scopeFor(e.manifest.id),
-      log: new Dt(`[${e.manifest.id}]`)
+      log: new kt(`[${e.manifest.id}]`)
     };
   }
   /**
@@ -5685,7 +5721,7 @@ Available shared libraries:
       const r = /* @__PURE__ */ new Map(), n = /* @__PURE__ */ new Map();
       for (const s of this.manifests.get(e)?.provides ?? [])
         s.ranking !== void 0 && r.set(s.id, s.ranking), s.properties !== void 0 && n.set(s.id, s.properties);
-      t = new Pn(e, this.services, r, n), this.scopes.set(e, t);
+      t = new jn(e, this.services, r, n), this.scopes.set(e, t);
     }
     return t;
   }
@@ -5822,7 +5858,7 @@ Available shared libraries:
    * is kept is what `requiresService` checks at runtime.
    */
   getWiring() {
-    return ii([...this.getManifests(), this.getSystemBundle()]);
+    return si([...this.getManifests(), this.getSystemBundle()]);
   }
   /**
    * The module standing for the runtime itself, as OSGi's system bundle does.
@@ -5840,8 +5876,8 @@ Available shared libraries:
    * exist; `generateImportMap()` checks them instead.
    */
   getSystemBundle() {
-    const e = this.options.sharedLibraries !== "import-map" && Yt() ? ue.getRegistered() : void 0;
-    return ni({
+    const e = this.options.sharedLibraries !== "import-map" && Ht() ? ue.getRegistered() : void 0;
+    return ii({
       libraries: e,
       capabilities: this.options.systemCapabilities,
       // What this loader was actually given, so a module requiring it resolves
@@ -5854,7 +5890,7 @@ Available shared libraries:
    * What a module is wired to, and what is wired to it — Gogo's `inspect`.
    */
   getModuleWiring(e) {
-    return si(this.getWiring(), e);
+    return oi(this.getWiring(), e);
   }
   /**
    * Requirements that no registered manifest can ever satisfy.
@@ -5905,14 +5941,14 @@ Available shared libraries:
       }
   }
 }
-const uo = {
+const ho = {
   fetchTimeout: 1e4,
   fetchFn: (i, e) => fetch(i, e),
   logger: void 0,
   cacheTtl: 300 * 1e3
   // 5 minutes
 };
-class lo {
+class po {
   prefix;
   constructor(e = "[TSM Registry]") {
     this.prefix = e;
@@ -5930,7 +5966,7 @@ class lo {
     console.error(`${this.prefix} ${e}`, ...t);
   }
 }
-class ho {
+class go {
   repositories = /* @__PURE__ */ new Map();
   discovered = /* @__PURE__ */ new Map();
   listeners = /* @__PURE__ */ new Set();
@@ -5940,7 +5976,7 @@ class ho {
   indexCache = /* @__PURE__ */ new Map();
   manifestCache = /* @__PURE__ */ new Map();
   constructor(e = {}) {
-    this.options = { ...uo, ...e }, this.logger = e.logger ?? new lo();
+    this.options = { ...ho, ...e }, this.logger = e.logger ?? new po();
   }
   /**
    * Add a plugin repository
@@ -6175,10 +6211,7 @@ class ho {
       }
   }
 }
-function po(i) {
-  return i;
-}
-function gi(i) {
+function mi(i) {
   const e = {};
   for (const t of i)
     for (const r of t.capabilities ?? []) {
@@ -6198,8 +6231,8 @@ function gi(i) {
     }
   return e;
 }
-function go(i, e = {}) {
-  const t = {}, r = [], n = [], s = [], o = gi(i);
+function mo(i, e = {}) {
+  const t = {}, r = [], n = [], s = [], o = mi(i);
   for (const [a, f] of Object.entries(o)) {
     if (e[a] === void 0)
       continue;
@@ -6236,19 +6269,19 @@ function go(i, e = {}) {
     }
   return { importMap: { imports: t }, missing: r, incompatible: n, shadowed: s };
 }
-function mo(i) {
+function vo(i) {
   return `<script type="importmap">
 ${JSON.stringify(i, null, 2).replace(/<\/script/gi, "<\\/script")}
 <\/script>`;
 }
-function vo(i, e = document) {
+function yo(i, e = document) {
   if (e.querySelector('script[type="importmap"]') !== null)
     return !1;
   const t = e.createElement("script");
   return t.type = "importmap", t.textContent = JSON.stringify(i), e.head.appendChild(t), !0;
 }
-async function yo(i, e) {
-  const { loader: t, configurationAdmin: r, resolve: n } = e, s = fe(i.id), o = sr(i, {
+async function wo(i, e) {
+  const { loader: t, configurationAdmin: r, resolve: n } = e, s = fe(i.id), o = or(i, {
     supplied: e.variables,
     handles: e.handles
   });
@@ -6256,7 +6289,7 @@ async function yo(i, e) {
     throw new Error(`Feature ${s} cannot be installed:
 ` + o.map((p) => `  ${p.at}: ${p.problem}`).join(`
 `));
-  const a = nr(i, e.variables), f = Object.keys(a);
+  const a = ir(i, e.variables), f = Object.keys(a);
   if (f.length > 0 && !r)
     throw new Error(`Feature ${s} carries configuration for ${f.length} PID(s) but no Configuration Admin was given — its components would start on defaults`);
   const d = [], c = [];
@@ -6272,61 +6305,61 @@ async function yo(i, e) {
   const l = e.load === !1 ? [] : d.map((p) => p.id).filter((p) => t.getModule(p)?.state === "active");
   return { feature: i, manifests: d, loaded: l, configured: f };
 }
-function mi(i, e) {
+function vi(i, e) {
   const t = new Set(i.bundles.map((n) => n.id.name));
   return e.loader.getWiring().unresolved.filter((n) => t.has(n.moduleId)).map((n) => `${n.moduleId}: ${n.requirement.namespace}` + (n.requirement.filter ? ` ${n.requirement.filter}` : "") + ` (${n.reason})`);
 }
-function wo(i, e) {
-  return mi(i, e).length === 0;
+function Eo(i, e) {
+  return vi(i, e).length === 0;
 }
-const vi = "https://json-schema.org/draft/2020-12/schema";
-function yi(i, e = {}) {
-  const t = e.locale === void 0 ? i : di(i, e.locale), r = {}, n = [], s = [];
+const yi = "https://json-schema.org/draft/2020-12/schema";
+function wi(i, e = {}) {
+  const t = e.locale === void 0 ? i : ui(i, e.locale), r = {}, n = [], s = [];
   for (const [a, f] of Object.entries(t.attributes))
-    r[a] = $o(f), f.required !== !1 && f.default === void 0 && n.push(a), f.validate !== void 0 && s.push(a);
+    r[a] = Io(f), f.required !== !1 && f.default === void 0 && n.push(a), f.validate !== void 0 && s.push(a);
   const o = {
-    $schema: vi,
+    $schema: yi,
     type: "object",
     "x-tsm-object-class": t.id,
     properties: r
   };
   return e.id !== void 0 && (o.$id = e.id), t.name !== void 0 && (o.title = t.name), t.description !== void 0 && (o.description = t.description), n.length > 0 && (o.required = n), s.length > 0 && (o["x-tsm-validated"] = s), e.locale === void 0 && i.localization !== void 0 && (o["x-tsm-localization"] = i.localization), o;
 }
-function Eo(i, e = {}) {
-  const t = Array.isArray(i) ? [...i] : bo(i, e.locale), r = {}, n = /* @__PURE__ */ new Set();
+function Ro(i, e = {}) {
+  const t = Array.isArray(i) ? [...i] : $o(i, e.locale), r = {}, n = /* @__PURE__ */ new Set();
   for (const o of t) {
-    const a = yi(o, e);
+    const a = wi(o, e);
     delete a.$schema, delete a.$id;
-    const f = wi(o.id, n);
-    Ro(f, a, r, n), r[f] = a;
+    const f = Ei(o.id, n);
+    bo(f, a, r, n), r[f] = a;
   }
-  const s = { $schema: vi, $defs: r };
+  const s = { $schema: yi, $defs: r };
   return e.id !== void 0 && (s.$id = e.id), e.name !== void 0 && (s.title = e.name), s;
 }
-function Ro(i, e, t, r) {
+function bo(i, e, t, r) {
   for (const [n, s] of Object.entries(e.properties ?? {})) {
     const o = s.type === "array" && s.items ? s.items : s;
     if (o.enum === void 0)
       continue;
-    const a = wi(`${i} ${n}`, r);
+    const a = Ei(`${i} ${n}`, r);
     t[a] = { enum: o.enum }, o["x-tsm-option-labels"] !== void 0 && (t[a]["x-tsm-option-labels"] = o["x-tsm-option-labels"]), delete o.enum, delete o["x-tsm-option-labels"], delete o.type, o.$ref = `#/$defs/${a}`;
   }
 }
-function bo(i, e) {
+function $o(i, e) {
   return [...i.getPids(), ...i.getFactoryPids()].map((t) => i.getObjectClassDefinition(t, e)).filter((t) => t !== void 0);
 }
-function wi(i, e) {
+function Ei(i, e) {
   const t = i.split(/[^A-Za-z0-9]+/).filter((s) => s.length > 0).map((s) => s[0].toUpperCase() + s.slice(1)).join("") || "Configuration";
   let r = t, n = 1;
   for (; e.has(r); )
     r = `${t}${++n}`;
   return e.add(r), r;
 }
-function $o(i) {
-  const e = Io(i), t = i.cardinality ?? "single", r = t === "single" ? e : { type: "array", items: e };
+function Io(i) {
+  const e = Oo(i), t = i.cardinality ?? "single", r = t === "single" ? e : { type: "array", items: e };
   return typeof t == "number" && (r.maxItems = t), i.name !== void 0 && (r.title = i.name), i.description !== void 0 && (r.description = i.description), i.default !== void 0 && (r.default = i.default), r;
 }
-function Io(i) {
+function Oo(i) {
   const e = {
     type: i.type === "password" ? "string" : i.type
   };
@@ -6339,187 +6372,189 @@ function Io(i) {
   }
   return e;
 }
-const So = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Co = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  CM_VERSION: Hn,
+  CM_VERSION: Kn,
   COMPONENT_EXTENDER: kn,
-  COMPONENT_FACTORY: ar,
-  COMPONENT_FACTORY_SERVICE_ID: li,
-  COMPONENT_NAME: hi,
-  COMPONENT_RUNTIME_SERVICE_ID: jn,
+  COMPONENT_FACTORY: cr,
+  COMPONENT_FACTORY_SERVICE_ID: hi,
+  COMPONENT_NAME: pi,
+  COMPONENT_RUNTIME_SERVICE_ID: Dn,
   CONDITION_ID: be,
-  CONDITION_SERVICE_ID: Xt,
-  CONFIGURATION_ADMIN_SERVICE_ID: oi,
-  CONFIGURATION_IMPLEMENTATION: qn,
-  ConfigurationAdmin: Fs,
-  DS_VERSION: Xn,
-  DefaultServiceRegistry: _n,
-  DependencyResolver: An,
-  ENVIRONMENT: Jn,
+  CONDITION_SERVICE_ID: Yt,
+  CONFIGURATION_ADMIN_SERVICE_ID: ai,
+  CONFIGURATION_IMPLEMENTATION: Fn,
+  ConfigurationAdmin: xs,
+  DS_VERSION: Yn,
+  DefaultServiceRegistry: Pn,
+  DependencyResolver: Mn,
+  ENVIRONMENT: Zn,
   EXTENDER_NAMESPACE: we,
   FACTORY_PID_SEPARATOR: Wt,
-  FEATURE_IMPLEMENTATION: xn,
+  FEATURE_IMPLEMENTATION: Bn,
   FEATURE_RESOURCE_VERSION: Me,
-  FEATURE_SERVICE_ID: Fn,
-  FEATURE_VERSION: Bn,
+  FEATURE_SERVICE_ID: xn,
+  FEATURE_VERSION: Vn,
   IDENTITY_NAMESPACE: ce,
   IMPLEMENTATION_NAMESPACE: Ee,
   LIBRARY_NAMESPACE: xe,
   LocalStorageConfigurationStore: ks,
-  METATYPE_EXTENDER: Dn,
-  METATYPE_SERVICE_ID: ui,
-  METATYPE_VERSION: Yn,
-  MODULE_TYPE: Kn,
-  MemoryConfigurationStore: fi,
-  MetatypeRegistry: Gs,
-  ModuleLoader: fo,
-  PluginRegistry: ho,
-  SERVICE_FACTORY_PID: ci,
-  SERVICE_NAMESPACE: or,
-  SERVICE_PID: ai,
+  METATYPE_EXTENDER: qn,
+  METATYPE_SERVICE_ID: li,
+  METATYPE_VERSION: Hn,
+  MODULE_CONTEXT_SERVICE_ID: Xt,
+  MODULE_TYPE: Jn,
+  MemoryConfigurationStore: di,
+  MetatypeRegistry: zs,
+  ModuleLoader: lo,
+  PluginRegistry: go,
+  SERVICE_FACTORY_PID: fi,
+  SERVICE_NAMESPACE: ar,
+  SERVICE_PID: ci,
   SYSTEM_BUNDLE_ID: Te,
-  ScopedServiceRegistry: Pn,
+  ScopedServiceRegistry: jn,
   TARGETED_PID_SEPARATOR: Ae,
-  TRUE_CONDITION: pi,
-  TRUE_CONDITION_FILTER: Ys,
-  TRUE_CONDITION_ID: cr,
-  activate: hs,
-  bind: ys,
-  capabilitiesOf: Qn,
-  component: ls,
-  componentFactoryFilter: Xs,
-  conditionFilter: Ks,
-  conditionProperties: Hs,
+  TRUE_CONDITION: gi,
+  TRUE_CONDITION_FILTER: Ks,
+  TRUE_CONDITION_ID: fr,
+  activate: ps,
+  bind: ws,
+  capabilitiesOf: ei,
+  component: hs,
+  componentFactoryFilter: Ys,
+  conditionFilter: Zs,
+  conditionProperties: Js,
   createServiceFilter: qe,
-  deactivate: ps,
-  featureService: Wn,
+  deactivate: gs,
+  featureService: Xn,
   formatFeatureId: fe,
-  generateImportMap: go,
-  importMapScript: mo,
-  initTsmRuntime: Js,
-  inject: cs,
-  injectAll: os,
-  injectable: as,
-  installFeature: yo,
-  installImportMap: vo,
-  isComplete: wo,
-  isTsmRuntimeAvailable: Yt,
-  libraryCapabilities: ri,
-  missingVariables: ir,
-  modified: gs,
-  objectClass: xs,
-  offeredByModules: gi,
+  generateImportMap: mo,
+  importMapScript: vo,
+  initTsmRuntime: Qs,
+  inject: fs,
+  injectAll: as,
+  injectable: cs,
+  installFeature: wo,
+  installImportMap: yo,
+  isComplete: Eo,
+  isTsmRuntimeAvailable: Ht,
+  libraryCapabilities: ni,
+  missingVariables: sr,
+  modified: ms,
+  objectClass: Bs,
+  offeredByModules: mi,
   parseFeatureId: Fe,
-  perModule: ds,
-  readFeature: Un,
-  requirementsOf: ei,
-  resolveConfigurations: nr,
-  resolveWiring: ii,
-  satisfies: ti,
-  serviceId: po,
-  singleton: fs,
-  stripComments: Vn,
-  systemBundle: ni,
+  perModule: us,
+  readFeature: Gn,
+  requirementsOf: ti,
+  resolveConfigurations: ir,
+  resolveWiring: si,
+  satisfies: ri,
+  serviceId: Hs,
+  singleton: ds,
+  stripComments: Un,
+  systemBundle: ii,
   targetedPids: Le,
-  toJsonSchema: yi,
-  toMetamodelSchema: Eo,
-  transient: us,
+  toJsonSchema: wi,
+  toMetamodelSchema: Ro,
+  transient: ls,
   tsmRuntime: ue,
-  unbind: ws,
-  unsatisfiedRequirements: mi,
-  validateFeature: sr,
-  wiringOf: si,
-  writeFeature: zn
+  unbind: Es,
+  unsatisfiedRequirements: vi,
+  validateFeature: or,
+  wiringOf: oi,
+  writeFeature: Wn
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  Hn as CM_VERSION,
+  Kn as CM_VERSION,
   kn as COMPONENT_EXTENDER,
-  ar as COMPONENT_FACTORY,
-  li as COMPONENT_FACTORY_SERVICE_ID,
-  hi as COMPONENT_NAME,
-  jn as COMPONENT_RUNTIME_SERVICE_ID,
+  cr as COMPONENT_FACTORY,
+  hi as COMPONENT_FACTORY_SERVICE_ID,
+  pi as COMPONENT_NAME,
+  Dn as COMPONENT_RUNTIME_SERVICE_ID,
   be as CONDITION_ID,
-  Xt as CONDITION_SERVICE_ID,
-  oi as CONFIGURATION_ADMIN_SERVICE_ID,
-  qn as CONFIGURATION_IMPLEMENTATION,
-  Fs as ConfigurationAdmin,
-  Xn as DS_VERSION,
-  _n as DefaultServiceRegistry,
-  An as DependencyResolver,
-  Jn as ENVIRONMENT,
+  Yt as CONDITION_SERVICE_ID,
+  ai as CONFIGURATION_ADMIN_SERVICE_ID,
+  Fn as CONFIGURATION_IMPLEMENTATION,
+  xs as ConfigurationAdmin,
+  Yn as DS_VERSION,
+  Pn as DefaultServiceRegistry,
+  Mn as DependencyResolver,
+  Zn as ENVIRONMENT,
   we as EXTENDER_NAMESPACE,
   Wt as FACTORY_PID_SEPARATOR,
-  xn as FEATURE_IMPLEMENTATION,
+  Bn as FEATURE_IMPLEMENTATION,
   Me as FEATURE_RESOURCE_VERSION,
-  Fn as FEATURE_SERVICE_ID,
-  Bn as FEATURE_VERSION,
+  xn as FEATURE_SERVICE_ID,
+  Vn as FEATURE_VERSION,
   ce as IDENTITY_NAMESPACE,
   Ee as IMPLEMENTATION_NAMESPACE,
   xe as LIBRARY_NAMESPACE,
   ks as LocalStorageConfigurationStore,
-  Dn as METATYPE_EXTENDER,
-  ui as METATYPE_SERVICE_ID,
-  Yn as METATYPE_VERSION,
-  Kn as MODULE_TYPE,
-  fi as MemoryConfigurationStore,
-  Gs as MetatypeRegistry,
-  fo as ModuleLoader,
-  ho as PluginRegistry,
-  ci as SERVICE_FACTORY_PID,
-  or as SERVICE_NAMESPACE,
-  ai as SERVICE_PID,
+  qn as METATYPE_EXTENDER,
+  li as METATYPE_SERVICE_ID,
+  Hn as METATYPE_VERSION,
+  Xt as MODULE_CONTEXT_SERVICE_ID,
+  Jn as MODULE_TYPE,
+  di as MemoryConfigurationStore,
+  zs as MetatypeRegistry,
+  lo as ModuleLoader,
+  go as PluginRegistry,
+  fi as SERVICE_FACTORY_PID,
+  ar as SERVICE_NAMESPACE,
+  ci as SERVICE_PID,
   Te as SYSTEM_BUNDLE_ID,
-  Pn as ScopedServiceRegistry,
+  jn as ScopedServiceRegistry,
   Ae as TARGETED_PID_SEPARATOR,
-  pi as TRUE_CONDITION,
-  Ys as TRUE_CONDITION_FILTER,
-  cr as TRUE_CONDITION_ID,
-  hs as activate,
-  ys as bind,
-  Qn as capabilitiesOf,
-  ls as component,
-  Xs as componentFactoryFilter,
-  Ks as conditionFilter,
-  Hs as conditionProperties,
+  gi as TRUE_CONDITION,
+  Ks as TRUE_CONDITION_FILTER,
+  fr as TRUE_CONDITION_ID,
+  ps as activate,
+  ws as bind,
+  ei as capabilitiesOf,
+  hs as component,
+  Ys as componentFactoryFilter,
+  Zs as conditionFilter,
+  Js as conditionProperties,
   qe as createServiceFilter,
-  ps as deactivate,
-  So as default,
-  Wn as featureService,
+  gs as deactivate,
+  Co as default,
+  Xn as featureService,
   fe as formatFeatureId,
-  go as generateImportMap,
-  mo as importMapScript,
-  Js as initTsmRuntime,
-  cs as inject,
-  os as injectAll,
-  as as injectable,
-  yo as installFeature,
-  vo as installImportMap,
-  wo as isComplete,
-  Yt as isTsmRuntimeAvailable,
-  ri as libraryCapabilities,
-  ir as missingVariables,
-  gs as modified,
-  xs as objectClass,
-  gi as offeredByModules,
+  mo as generateImportMap,
+  vo as importMapScript,
+  Qs as initTsmRuntime,
+  fs as inject,
+  as as injectAll,
+  cs as injectable,
+  wo as installFeature,
+  yo as installImportMap,
+  Eo as isComplete,
+  Ht as isTsmRuntimeAvailable,
+  ni as libraryCapabilities,
+  sr as missingVariables,
+  ms as modified,
+  Bs as objectClass,
+  mi as offeredByModules,
   Fe as parseFeatureId,
-  ds as perModule,
-  Un as readFeature,
-  ei as requirementsOf,
-  nr as resolveConfigurations,
-  ii as resolveWiring,
-  ti as satisfies,
-  po as serviceId,
-  fs as singleton,
-  Vn as stripComments,
-  ni as systemBundle,
+  us as perModule,
+  Gn as readFeature,
+  ti as requirementsOf,
+  ir as resolveConfigurations,
+  si as resolveWiring,
+  ri as satisfies,
+  Hs as serviceId,
+  ds as singleton,
+  Un as stripComments,
+  ii as systemBundle,
   Le as targetedPids,
-  yi as toJsonSchema,
-  Eo as toMetamodelSchema,
-  us as transient,
+  wi as toJsonSchema,
+  Ro as toMetamodelSchema,
+  ls as transient,
   ue as tsmRuntime,
-  ws as unbind,
-  mi as unsatisfiedRequirements,
-  sr as validateFeature,
-  si as wiringOf,
-  zn as writeFeature
+  Es as unbind,
+  vi as unsatisfiedRequirements,
+  or as validateFeature,
+  oi as wiringOf,
+  Wn as writeFeature
 };

@@ -1,139 +1,108 @@
-import { inject } from "@eclipse-daanse/tsm";
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var __defProp = Object.defineProperty;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp(target, key, result);
-  return result;
+import { inject as y } from "@eclipse-daanse/tsm";
+import { BaseDatasource as h } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as v } from "org.eclipse.daanse.board.app.lib.api.connection";
+const { serviceId: b } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var _ = Object.defineProperty, R = (e, t, o, i) => {
+  for (var n = void 0, r = e.length - 1, s; r >= 0; r--)
+    (s = e[r]) && (n = s(t, o, n) || n);
+  return n && _(t, o, n), n;
 };
-class RssStore extends BaseDatasource {
+class l extends h {
   connection;
   connectionRepository;
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
+  init(t) {
+    super.init(t), this.connection = t.connection;
   }
   async getOriginalData() {
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    return await this.connectionRepository.getConnection(
       this.connection
-    );
-    const req = await connection.fetch({});
-    return req;
+    ).fetch({});
   }
-  async getData(type) {
-    if (!this.connectionRepository) {
+  async getData(t) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    const i = await this.connectionRepository.getConnection(
       this.connection
-    );
-    const req = await connection.fetch({});
-    if (type === "object") {
-      return req;
-    } else if (type === "string") {
-      return JSON.stringify(req);
-    } else if (type === "DataTable") {
-      const data = req.items;
-      return this.parseToDataTable(data);
-    } else {
-      console.warn("Invalid data type");
-      return null;
-    }
+    ).fetch({});
+    if (t === "object")
+      return i;
+    if (t === "string")
+      return JSON.stringify(i);
+    if (t === "DataTable") {
+      const n = i.items;
+      return this.parseToDataTable(n);
+    } else
+      return console.warn("Invalid data type"), null;
   }
-  parseToDataTable(data) {
-    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
-    const headers = ["index"];
-    const rows = [];
-    const items = data.map((item, index) => {
-      if (typeof item !== "object") return {};
-      const row = {
-        index
+  parseToDataTable(t) {
+    if (!Array.isArray(t)) return { items: [], headers: [], rows: [] };
+    const o = ["index"], i = [], n = t.map((r, s) => {
+      if (typeof r != "object") return {};
+      const c = {
+        index: s
       };
-      for (const key in item) {
-        if (typeof item[key] === "object" || Array.isArray(item[key])) continue;
-        if (!headers.includes(key)) {
-          headers.push(key);
-        }
-        row[key] = item[key];
-      }
-      return row;
+      for (const a in r)
+        typeof r[a] == "object" || Array.isArray(r[a]) || (o.includes(a) || o.push(a), c[a] = r[a]);
+      return c;
     });
-    items.forEach((item, index) => {
-      rows[index] = [];
-      headers.forEach((header) => {
-        rows[index].push(item[header]);
+    return n.forEach((r, s) => {
+      i[s] = [], o.forEach((c) => {
+        i[s].push(r[c]);
       });
-    });
-    return { items, headers, rows };
+    }), { items: n, headers: o, rows: i };
   }
-  callEvent(event, params) {
+  callEvent(t, o) {
     console.warn(
-      `Event "${event}" is not available for this type of store`,
-      params
+      `Event "${t}" is not available for this type of store`,
+      o
     );
   }
   destroy() {
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.connection) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !!t.connection;
   }
 }
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], RssStore.prototype, "connectionRepository");
-const RSS_STORE_FACTORY = serviceId("RssStoreFactory");
-const factorySymbol = Symbol.for(RSS_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(RSS_STORE_FACTORY, (config) => {
-    if (!RssStore.validateConfiguration(config)) {
+R([
+  y(v)
+], l.prototype, "connectionRepository");
+const f = b("RssStoreFactory"), g = Symbol.for(f);
+function p({ services: e }) {
+  e.register(f, (t) => {
+    if (!l.validateConfiguration(t))
       throw new Error(
         "Invalid RssStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(RssStore);
-    store.init(config);
-    return store;
+    const o = e.construct(l);
+    return o.init(t), o;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(RSS_STORE_FACTORY);
+function d({ services: e }) {
+  e.unregister(f);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const w = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  RSS_STORE_FACTORY,
-  RssStore,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.rss";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.rss");
-  await activate$1?.(context);
+  RSS_STORE_FACTORY: f,
+  RssStore: l,
+  activate: p,
+  deactivate: d,
+  factorySymbol: g
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.datasource.rss", S = "0.0.1-next.1";
+async function O(e) {
+  const t = globalThis.__tsm__;
+  if (!t)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  t.register(u, w, S, "lib.datasource.rss"), await p?.(e);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function T(e) {
+  await d?.(e);
 }
 export {
-  RSS_STORE_FACTORY,
-  RssStore,
-  activate,
-  deactivate,
-  factorySymbol
+  f as RSS_STORE_FACTORY,
+  l as RssStore,
+  O as activate,
+  T as deactivate,
+  g as factorySymbol
 };

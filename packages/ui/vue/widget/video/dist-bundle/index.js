@@ -1,51 +1,53 @@
-(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent="\n.container[data-v-c454c467] {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.container video[data-v-c454c467] {\n    width: 100%;\n    height: 100%;\n    border-radius: 3px;\n    object-fit: var(--v02309664);\n}\n\n.settings-container[data-v-71904cee] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    gap: 1rem;\n}\n";})();
-import { EVENT_ACTIONS_REGISTRY, EVENT_REGISTRY_ID, EVENT_ACTIONS_REGISTRY_ID } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate, deactivate, component, inject as inject$1 } from "@eclipse-daanse/tsm";
-import { defineComponent, mergeModels, useCssVars, computed, toRefs, useModel, inject, ref, onMounted, onUnmounted, createElementBlock, openBlock, withModifiers, createElementVNode, resolveComponent, createBlock, withCtx, createVNode, unref } from "vue";
-import { useRoute } from "vue-router";
-import { VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { Documentation, Reference, ModelClass } from "org.eclipse.daanse.board.app.lib.annotations";
-const { identifiers } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-import { WidgetAction, WidgetActionInterface, Payload } from "org.eclipse.daanse.board.app.lib.events";
-import { VariableInput } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID } from "org.eclipse.daanse.board.app.lib.api.widget";
-var __defProp$2 = Object.defineProperty;
-var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
-var __decorateClass$2 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp$2(target, key, result);
-  return result;
+(function(){var i="ui.vue.widget.video",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".container[data-v-c454c467]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.container video[data-v-c454c467]{width:100%;height:100%;border-radius:3px;object-fit:var(--v02309664)}.settings-container[data-v-71904cee]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
+import { EVENT_ACTIONS_REGISTRY as z, EVENT_REGISTRY_ID as J, EVENT_ACTIONS_REGISTRY_ID as K } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as Q, deactivate as X, component as ee, inject as D } from "@eclipse-daanse/tsm";
+import { defineComponent as R, mergeModels as te, useCssVars as oe, computed as j, toRefs as ie, useModel as $, inject as I, ref as M, onMounted as re, onUnmounted as ne, createElementBlock as de, openBlock as k, withModifiers as ae, createElementVNode as N, resolveComponent as E, createBlock as le, withCtx as F, createVNode as S, unref as se } from "vue";
+import { useRoute as pe } from "vue-router";
+import { Documentation as ue, Attribute as ve, ModelClass as A, Reference as Y } from "org.eclipse.daanse.board.app.lib.annotations";
+import { VariableWrapper as _ } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { WidgetAction as g, WidgetActionInterface as ge, Payload as c } from "org.eclipse.daanse.board.app.lib.events";
+import { VariableInput as me } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { WIDGET_SERVICE_ID as fe } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: ce } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var we = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, B = (r, o, i, t) => {
+  for (var e = t > 1 ? void 0 : t ? ye(o, i) : o, d = r.length - 1, n; d >= 0; d--)
+    (n = r[d]) && (e = (t ? n(o, i, e) : n(e)) || e);
+  return t && e && we(o, i, e), e;
 };
-let VideoSettings = class {
-  videoFitSettings;
-  videoUrl = new VariableWrapper();
+let T = class {
+  fit;
 };
-__decorateClass$2([
-  Documentation("The settings for how the video content should be fitted into its container."),
-  Reference("ObjectFitSetting")
-], VideoSettings.prototype, "videoFitSettings", 2);
-__decorateClass$2([
-  Documentation("The URL or path to the video file."),
-  Reference("VariableWrapper")
-], VideoSettings.prototype, "videoUrl", 2);
-VideoSettings = __decorateClass$2([
-  Documentation("Represents the settings for displaying a video, including its URL and how it should fit into its container."),
-  ModelClass({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings" })
-], VideoSettings);
-var __defProp$1 = Object.defineProperty;
-var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$1 = (decorators, target, key, kind) => {
-  var result = __getOwnPropDesc$1(target, key);
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp$1(target, key, result);
-  return result;
+B([
+  ue("The CSS 'object-fit' property value (e.g., 'fill', 'contain', 'cover', 'none', 'scale-down')."),
+  ve()
+], T.prototype, "fit", 2);
+T = B([
+  A({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.video#//ObjectFitSetting" })
+], T);
+var _e = Object.defineProperty, Ve = Object.getOwnPropertyDescriptor, W = (r, o, i, t) => {
+  for (var e = t > 1 ? void 0 : t ? Ve(o, i) : o, d = r.length - 1, n; d >= 0; d--)
+    (n = r[d]) && (e = (t ? n(o, i, e) : n(e)) || e);
+  return t && e && _e(o, i, e), e;
 };
-class VideoWidgetInterface extends WidgetActionInterface {
+let V = class {
+  videoFitSettings = new T();
+  videoUrl = new _();
+};
+W([
+  Y("ObjectFitSetting")
+], V.prototype, "videoFitSettings", 2);
+W([
+  Y("VariableWrapper")
+], V.prototype, "videoUrl", 2);
+V = W([
+  A({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings" })
+], V);
+var he = Object.defineProperty, Te = Object.getOwnPropertyDescriptor, m = (r, o, i, t) => {
+  for (var e = Te(o, i), d = r.length - 1, n; d >= 0; d--)
+    (n = r[d]) && (e = n(o, i, e) || e);
+  return e && he(o, i, e), e;
+};
+class v extends ge {
   play() {
     throw new Error("play not implemented");
   }
@@ -55,7 +57,7 @@ class VideoWidgetInterface extends WidgetActionInterface {
   stop() {
     throw new Error("stop not implemented");
   }
-  seek(time) {
+  seek(o) {
     throw new Error("seek not implemented");
   }
   mute() {
@@ -64,244 +66,185 @@ class VideoWidgetInterface extends WidgetActionInterface {
   unmute() {
     throw new Error("unmute not implemented");
   }
-  setVolume(volume) {
+  setVolume(o) {
     throw new Error("setVolume not implemented");
   }
 }
-__decorateClass$1([
-  WidgetAction({ eventType: "video.play" })
-], VideoWidgetInterface.prototype, "play");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.pause" })
-], VideoWidgetInterface.prototype, "pause");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.stop" })
-], VideoWidgetInterface.prototype, "stop");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.seek" })
-], VideoWidgetInterface.prototype, "seek");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.mute" })
-], VideoWidgetInterface.prototype, "mute");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.unmute" })
-], VideoWidgetInterface.prototype, "unmute");
-__decorateClass$1([
-  WidgetAction({ eventType: "video.setVolume" })
-], VideoWidgetInterface.prototype, "setVolume");
-const _hoisted_1$1 = ["src"];
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+m([
+  g({ eventType: "video.play" })
+], v.prototype, "play");
+m([
+  g({ eventType: "video.pause" })
+], v.prototype, "pause");
+m([
+  g({ eventType: "video.stop" })
+], v.prototype, "stop");
+m([
+  g({ eventType: "video.seek" })
+], v.prototype, "seek");
+m([
+  g({ eventType: "video.mute" })
+], v.prototype, "mute");
+m([
+  g({ eventType: "video.unmute" })
+], v.prototype, "unmute");
+m([
+  g({ eventType: "video.setVolume" })
+], v.prototype, "setVolume");
+const be = ["src"], Ce = /* @__PURE__ */ R({
   __name: "VideoWidget",
-  props: /* @__PURE__ */ mergeModels({
+  props: /* @__PURE__ */ te({
     datasourceId: {},
     id: {}
   }, {
-    "configv": { required: true },
-    "configvModifiers": {}
+    configv: { required: !0 },
+    configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(__props, { expose: __expose }) {
-    useCssVars((_ctx) => ({
-      "v02309664": videoFit.value
+  setup(r, { expose: o }) {
+    oe((s) => ({
+      v02309664: L.value
     }));
-    const props = __props;
-    const { id: widgetId } = toRefs(props);
-    const config = useModel(__props, "configv");
-    const eventBus = inject(identifiers.TINY_EMITTER);
-    const actionsRegistry = inject(EVENT_ACTIONS_REGISTRY);
-    const route = useRoute();
-    const pageId = route.params.pageid || "";
-    const videoElement = ref(null);
-    class VideoWidgetApi extends VideoWidgetInterface {
+    const i = r, { id: t } = ie(i), e = $(r, "configv"), d = I(ce.TINY_EMITTER), n = I(z), C = pe().params.pageid || "", l = M(null);
+    class u extends v {
       play() {
-        if (videoElement.value) {
-          videoElement.value.play();
-        }
+        l.value && l.value.play();
       }
       pause() {
-        if (videoElement.value) {
-          videoElement.value.pause();
-        }
+        l.value && l.value.pause();
       }
       stop() {
-        if (videoElement.value) {
-          videoElement.value.pause();
-          videoElement.value.currentTime = 0;
-        }
+        l.value && (l.value.pause(), l.value.currentTime = 0);
       }
-      seek(time) {
-        if (videoElement.value) {
-          videoElement.value.currentTime = time;
-        }
+      seek(a) {
+        l.value && (l.value.currentTime = a);
       }
       mute() {
-        if (videoElement.value) {
-          videoElement.value.muted = true;
-        }
+        l.value && (l.value.muted = !0);
       }
       unmute() {
-        if (videoElement.value) {
-          videoElement.value.muted = false;
-        }
+        l.value && (l.value.muted = !1);
       }
-      setVolume(volume) {
-        if (videoElement.value) {
-          videoElement.value.volume = Math.max(0, Math.min(1, volume));
-        }
+      setVolume(a) {
+        l.value && (l.value.volume = Math.max(0, Math.min(1, a)));
       }
     }
-    const api = new VideoWidgetApi();
-    __expose(api);
-    const emitClick = () => {
-      if (!widgetId?.value) return;
-      eventBus.emit("widget:VideoWidget:click", {
+    const h = new u();
+    o(h);
+    const H = () => {
+      t?.value && d.emit("widget:VideoWidget:click", {
         type: "widget:VideoWidget:click",
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    };
-    const emitRightClick = () => {
-      if (!widgetId?.value) return;
-      eventBus.emit("widget:VideoWidget:right_click", {
+    }, q = () => {
+      t?.value && d.emit("widget:VideoWidget:right_click", {
         type: "widget:VideoWidget:right_click",
-        widgetId: widgetId.value,
-        payload: { widgetId: widgetId.value, timestamp: Date.now() }
+        widgetId: t.value,
+        payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    };
-    const emitVideoEvent = (eventType, event) => {
-      if (!widgetId?.value) return;
-      let payloadData = { widgetId: widgetId.value, timestamp: Date.now() };
-      if (eventType === "timeupdate") {
-        const target = event.target;
-        payloadData.currentTime = target.currentTime;
-        payloadData.duration = target.duration;
-      } else if (eventType === "error") {
-        const target = event.target;
-        payloadData.error = target.error?.message || target.error?.code || "Unknown Error";
+    }, w = (s, a) => {
+      if (!t?.value) return;
+      let p = { widgetId: t.value, timestamp: Date.now() };
+      if (s === "timeupdate") {
+        const y = a.target;
+        p.currentTime = y.currentTime, p.duration = y.duration;
+      } else if (s === "error") {
+        const y = a.target;
+        p.error = y.error?.message || y.error?.code || "Unknown Error";
       }
-      eventBus.emit(`widget:VideoWidget:${eventType}`, {
-        type: `widget:VideoWidget:${eventType}`,
-        widgetId: widgetId.value,
-        payload: payloadData
+      d.emit(`widget:VideoWidget:${s}`, {
+        type: `widget:VideoWidget:${s}`,
+        widgetId: t.value,
+        payload: p
       });
     };
-    console.log(config);
-    const defaultConfig = {
+    console.log(e);
+    const U = {
       videoUrl: "",
       videoFitSettings: {
         fit: "cover"
       }
     };
-    onMounted(() => {
-      if (widgetId?.value) {
-        actionsRegistry.registerInstance(widgetId.value, api, "VideoWidget", pageId);
-      }
-      if (!config.value) {
-        config.value = new VideoSettings();
-      }
-      const currentUrl = config.value.videoUrl;
-      if (currentUrl === void 0 || currentUrl === null) {
-        config.value.videoUrl = new VariableWrapper(defaultConfig.videoUrl);
-      } else if (currentUrl instanceof VariableWrapper) ;
-      else if (typeof currentUrl === "object" && "value" in currentUrl) {
-        const v = new VariableWrapper(currentUrl.value);
-        if ("variable" in currentUrl) v.variable = currentUrl.variable;
-        config.value.videoUrl = v;
-      } else {
-        config.value.videoUrl = new VariableWrapper(currentUrl);
-      }
-      if (config.value && !config.value.videoFitSettings) {
-        config.value.videoFitSettings = defaultConfig.videoFitSettings;
-      }
+    re(() => {
+      t?.value && n.registerInstance(t.value, h, "VideoWidget", C), e.value || (e.value = new V());
+      const s = e.value.videoUrl;
+      if (s == null)
+        e.value.videoUrl = new _(U.videoUrl);
+      else if (!(s instanceof _)) if (typeof s == "object" && "value" in s) {
+        const a = new _(s.value);
+        "variable" in s && (a.variable = s.variable), e.value.videoUrl = a;
+      } else
+        e.value.videoUrl = new _(s);
+      e.value && !e.value.videoFitSettings && (e.value.videoFitSettings = U.videoFitSettings);
+    }), ne(() => {
+      t?.value && n.unregisterInstance(t.value);
     });
-    onUnmounted(() => {
-      if (widgetId?.value) {
-        actionsRegistry.unregisterInstance(widgetId.value);
-      }
-    });
-    const videoFit = computed(() => {
-      return config.value.videoFitSettings?.fit;
-    });
-    const videoUrlParced = computed(() => {
-      let processedString = config.value.videoUrl?.value;
-      return processedString;
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", {
-        class: "container",
-        onClick: emitClick,
-        onContextmenu: withModifiers(emitRightClick, ["prevent"])
-      }, [
-        createElementVNode("video", {
-          controls: "",
-          src: videoUrlParced.value,
-          ref_key: "videoElement",
-          ref: videoElement,
-          onPlay: _cache[0] || (_cache[0] = ($event) => emitVideoEvent("play", $event)),
-          onPause: _cache[1] || (_cache[1] = ($event) => emitVideoEvent("pause", $event)),
-          onTimeupdate: _cache[2] || (_cache[2] = ($event) => emitVideoEvent("timeupdate", $event)),
-          onEnded: _cache[3] || (_cache[3] = ($event) => emitVideoEvent("ended", $event)),
-          onError: _cache[4] || (_cache[4] = ($event) => emitVideoEvent("error", $event))
-        }, " Your browser does not support embedded videos. ", 40, _hoisted_1$1)
-      ], 32);
-    };
+    const L = j(() => e.value.videoFitSettings?.fit), Z = j(() => e.value.videoUrl?.value);
+    return (s, a) => (k(), de("div", {
+      class: "container",
+      onClick: H,
+      onContextmenu: ae(q, ["prevent"])
+    }, [
+      N("video", {
+        controls: "",
+        src: Z.value,
+        ref_key: "videoElement",
+        ref: l,
+        onPlay: a[0] || (a[0] = (p) => w("play", p)),
+        onPause: a[1] || (a[1] = (p) => w("pause", p)),
+        onTimeupdate: a[2] || (a[2] = (p) => w("timeupdate", p)),
+        onEnded: a[3] || (a[3] = (p) => w("ended", p)),
+        onError: a[4] || (a[4] = (p) => w("error", p))
+      }, " Your browser does not support embedded videos. ", 40, be)
+    ], 32));
   }
-});
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const VideoWidget = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-c454c467"]]);
-const _hoisted_1 = { class: "settings-container" };
-const _sfc_main = /* @__PURE__ */ defineComponent({
+}), G = (r, o) => {
+  const i = r.__vccOpts || r;
+  for (const [t, e] of o)
+    i[t] = e;
+  return i;
+}, Ee = /* @__PURE__ */ G(Ce, [["__scopeId", "data-v-c454c467"]]), Se = { class: "settings-container" }, Ie = /* @__PURE__ */ R({
   __name: "VideoWidgetSettings",
   props: {
-    "modelValue": { required: true },
-    "modelModifiers": {}
+    modelValue: { required: !0 },
+    modelModifiers: {}
   },
   emits: ["update:modelValue"],
-  setup(__props) {
-    const i18n = inject("i18n");
-    const t = (key) => i18n ? i18n.t(key) : key;
-    const widgetSettings = useModel(__props, "modelValue");
-    const opened = ref({
-      widgetSection: false,
-      storeSection: false
+  setup(r) {
+    const o = I("i18n"), i = (d) => o ? o.t(d) : d, t = $(r, "modelValue"), e = M({
+      widgetSection: !1,
+      storeSection: !1
     });
-    return (_ctx, _cache) => {
-      const _component_va_input = resolveComponent("va-input");
-      const _component_va_select = resolveComponent("va-select");
-      const _component_va_collapse = resolveComponent("va-collapse");
-      return openBlock(), createBlock(_component_va_collapse, {
-        modelValue: opened.value.widgetSection,
-        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => opened.value.widgetSection = $event),
+    return (d, n) => {
+      const O = E("va-input"), C = E("va-select"), l = E("va-collapse");
+      return k(), le(l, {
+        modelValue: e.value.widgetSection,
+        "onUpdate:modelValue": n[2] || (n[2] = (u) => e.value.widgetSection = u),
         icon: "settings",
-        header: t("video:VideoWidget.title")
+        header: i("video:VideoWidget.title")
       }, {
-        default: withCtx(() => [
-          createElementVNode("div", _hoisted_1, [
-            createVNode(unref(VariableInput), {
-              modelValue: widgetSettings.value.videoUrl,
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => widgetSettings.value.videoUrl = $event),
-              label: t("video:VideoWidget.videoUrl")
+        default: F(() => [
+          N("div", Se, [
+            S(se(me), {
+              modelValue: t.value.videoUrl,
+              "onUpdate:modelValue": n[0] || (n[0] = (u) => t.value.videoUrl = u),
+              label: i("video:VideoWidget.videoUrl")
             }, {
-              default: withCtx(({ value, change }) => [
-                createVNode(_component_va_input, {
-                  "model-value": value,
-                  onInput: change,
-                  label: t("video:VideoWidget.videoUrl")
+              default: F(({ value: u, change: h }) => [
+                S(O, {
+                  "model-value": u,
+                  onInput: h,
+                  label: i("video:VideoWidget.videoUrl")
                 }, null, 8, ["model-value", "onInput", "label"])
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            createVNode(_component_va_select, {
+            S(C, {
               class: "mt-2",
-              modelValue: widgetSettings.value.videoFitSettings.fit,
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => widgetSettings.value.videoFitSettings.fit = $event),
-              label: t("video:VideoWidget.videoFit"),
+              modelValue: t.value.videoFitSettings.fit,
+              "onUpdate:modelValue": n[1] || (n[1] = (u) => t.value.videoFitSettings.fit = u),
+              label: i("video:VideoWidget.videoFit"),
               options: ["Cover", "Contain", "Stretch", "Fill", "None"],
               teleport: ".settings-container"
             }, null, 8, ["modelValue", "label"])
@@ -311,66 +254,54 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }, 8, ["modelValue", "header"]);
     };
   }
-});
-const VideoWidgetSettings = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-71904cee"]]);
-const Icon = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e";
-const VideoWidgetEvents = [
-  { name: "Video Clicked", type: "click", description: "Triggered when the video widget is clicked", payloadType: Payload },
-  { name: "Video Right Clicked", type: "right_click", description: "Triggered when the video widget is right-clicked", payloadType: Payload },
-  { name: "Video Played", type: "play", description: "Triggered when the video starts or resumes playing", payloadType: Payload },
-  { name: "Video Paused", type: "pause", description: "Triggered when the video playback is paused", payloadType: Payload },
-  { name: "Video Time Updated", type: "timeupdate", description: "Triggered when the video playback position changes", payloadType: Payload },
-  { name: "Video Ended", type: "ended", description: "Triggered when the video reaches the end", payloadType: Payload },
-  { name: "Video Error", type: "error", description: "Triggered when the video encounters an error", payloadType: Payload }
+}), We = /* @__PURE__ */ G(Ie, [["__scopeId", "data-v-71904cee"]]), Pe = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e", Oe = [
+  { name: "Video Clicked", type: "click", description: "Triggered when the video widget is clicked", payloadType: c },
+  { name: "Video Right Clicked", type: "right_click", description: "Triggered when the video widget is right-clicked", payloadType: c },
+  { name: "Video Played", type: "play", description: "Triggered when the video starts or resumes playing", payloadType: c },
+  { name: "Video Paused", type: "pause", description: "Triggered when the video playback is paused", payloadType: c },
+  { name: "Video Time Updated", type: "timeupdate", description: "Triggered when the video playback position changes", payloadType: c },
+  { name: "Video Ended", type: "ended", description: "Triggered when the video reaches the end", payloadType: c },
+  { name: "Video Error", type: "error", description: "Triggered when the video encounters an error", payloadType: c }
 ];
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
-};
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-const WIDGET_TYPE = "VideoWidget";
-let VideoWidgetProvider = class {
-  constructor(events, actions) {
-    this.events = events;
-    this.actions = actions;
+var Ue = Object.defineProperty, De = Object.getOwnPropertyDescriptor, P = (r, o, i, t) => {
+  for (var e = t > 1 ? void 0 : t ? De(o, i) : o, d = r.length - 1, n; d >= 0; d--)
+    (n = r[d]) && (e = (t ? n(o, i, e) : n(e)) || e);
+  return t && e && Ue(o, i, e), e;
+}, x = (r, o) => (i, t) => o(i, t, r);
+const f = "VideoWidget";
+let b = class {
+  constructor(r, o) {
+    this.events = r, this.actions = o;
   }
-  type = WIDGET_TYPE;
-  component = VideoWidget;
-  settingsComponent = VideoWidgetSettings;
+  type = f;
+  component = Ee;
+  settingsComponent = We;
   supportedDSTypes = [];
-  icon = Icon;
+  icon = Pe;
   name = "Video";
   register() {
-    this.events.registerWidget(WIDGET_TYPE, VideoWidgetEvents);
-    this.actions.registerWidgetType(WIDGET_TYPE, VideoWidgetInterface, "widget");
+    this.events.registerWidget(f, Oe), this.actions.registerWidgetType(f, v, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(WIDGET_TYPE);
-    this.actions.unregisterWidgetType(WIDGET_TYPE);
+    this.events.unregisterWidget(f), this.actions.unregisterWidgetType(f);
   }
 };
-__decorateClass([
-  activate()
-], VideoWidgetProvider.prototype, "register", 1);
-__decorateClass([
-  deactivate()
-], VideoWidgetProvider.prototype, "unregister", 1);
-VideoWidgetProvider = __decorateClass([
-  component({
-    service: [WIDGET_SERVICE_ID],
-    properties: { "widget.type": WIDGET_TYPE }
+P([
+  Q()
+], b.prototype, "register", 1);
+P([
+  X()
+], b.prototype, "unregister", 1);
+b = P([
+  ee({
+    service: [fe],
+    properties: { "widget.type": f }
   }),
-  __decorateParam(0, inject$1(EVENT_REGISTRY_ID)),
-  __decorateParam(1, inject$1(EVENT_ACTIONS_REGISTRY_ID))
-], VideoWidgetProvider);
+  x(0, D(J)),
+  x(1, D(K))
+], b);
 export {
-  VideoWidget,
-  VideoWidgetProvider,
-  VideoWidgetSettings
+  Ee as VideoWidget,
+  b as VideoWidgetProvider,
+  We as VideoWidgetSettings
 };

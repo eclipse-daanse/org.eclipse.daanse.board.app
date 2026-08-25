@@ -1,186 +1,138 @@
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-import { inject } from "@eclipse-daanse/tsm";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var __defProp = Object.defineProperty;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = void 0;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = decorator(target, key, result) || result;
-  if (result) __defProp(target, key, result);
-  return result;
+import { BaseDatasource as d } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as h } from "org.eclipse.daanse.board.app.lib.api.connection";
+import { inject as g } from "@eclipse-daanse/tsm";
+const { serviceId: w } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var v = Object.defineProperty, R = (r, o, t, e) => {
+  for (var i = void 0, n = r.length - 1, s; n >= 0; n--)
+    (s = r[n]) && (i = s(o, t, i) || i);
+  return i && v(o, t, i), i;
 };
-class SqlXmlaStore extends BaseDatasource {
+class l extends d {
   connection;
   sql = "";
   connectionRepository;
   // private computedUrl: ComputedVariable;
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
-    this.sql = configuration.sql;
+  init(o) {
+    super.init(o), this.connection = o.connection, this.sql = o.sql;
   }
-  async getData(type) {
-    let response = null;
-    if (!this.connectionRepository) {
+  async getData(o) {
+    let t = null;
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
     try {
-      const connection = this.connectionRepository.getConnection(
+      const i = await this.connectionRepository.getConnection(
         this.connection
-      );
-      const mdxResponse = await connection.fetch({
+      ).fetch({
         data: {
           mdx: this.sql
         }
       });
-      let rowset = mdxResponse.Body?.DiscoverResponse?.return?.[0]?.root?.row;
-      if (!rowset) {
-        rowset = mdxResponse.Body?.ExecuteResponse?.return?.root?.row;
-      }
-      if (!rowset) return null;
-      let response2 = null;
-      if (type === "DataTable") {
-        response2 = this.parseToDataTable(rowset);
-      } else if (type === "object") {
-      } else if (type === "string") {
-        response2 = JSON.stringify(response2);
-      }
-      return response2;
+      let n = i.Body?.DiscoverResponse?.return?.[0]?.root?.row;
+      if (n || (n = i.Body?.ExecuteResponse?.return?.root?.row), !n) return null;
+      let s = null;
+      return o === "DataTable" ? s = this.parseToDataTable(n) : o === "object" || o === "string" && (s = JSON.stringify(s)), s;
     } catch (e) {
-      console.log(e);
-      console.warn("Invalid resource URL", e.name);
+      console.log(e), console.warn("Invalid resource URL", e.name);
     }
-    return response;
+    return t;
   }
   async getTables() {
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
     try {
-      const connection = this.connectionRepository.getConnection(
+      const t = await this.connectionRepository.getConnection(
         this.connection
-      );
-      const api = await connection.getApi();
-      console.log("API:", api);
-      const tables = await api.getTables();
-      return tables;
-    } catch (e) {
-      console.log(e);
-      console.warn("Invalid resource URL", e.name);
+      ).getApi();
+      return console.log("API:", t), await t.getTables();
+    } catch (o) {
+      console.log(o), console.warn("Invalid resource URL", o.name);
     }
   }
   async getCatalogs() {
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const conn = this.connectionRepository.getConnection(
+    const t = await this.connectionRepository.getConnection(
       this.connection
-    );
-    const api = await conn.getApi();
-    const { catalogs } = await api.getCatalogs();
-    return catalogs;
+    ).getApi(), { catalogs: e } = await t.getCatalogs();
+    return e;
   }
   async getColumns() {
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const conn = this.connectionRepository.getConnection(
+    const t = await this.connectionRepository.getConnection(
       this.connection
-    );
-    const api = await conn.getApi();
-    const { columns } = await api.getColumns();
-    return columns;
+    ).getApi(), { columns: e } = await t.getColumns();
+    return e;
   }
   async getOriginalData() {
   }
-  parseToDataTable(data) {
-    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
-    const headers = ["index"];
-    const rows = [];
-    const items = data.map((item, index) => {
-      if (typeof item !== "object") return {};
-      const row = {
-        index
+  parseToDataTable(o) {
+    if (!Array.isArray(o)) return { items: [], headers: [], rows: [] };
+    const t = ["index"], e = [], i = o.map((n, s) => {
+      if (typeof n != "object") return {};
+      const a = {
+        index: s
       };
-      for (const key in item) {
-        if (typeof item[key] === "object" || Array.isArray(item[key])) continue;
-        if (!headers.includes(key)) {
-          headers.push(key);
-        }
-        row[key] = item[key];
-      }
-      return row;
+      for (const c in n)
+        typeof n[c] == "object" || Array.isArray(n[c]) || (t.includes(c) || t.push(c), a[c] = n[c]);
+      return a;
     });
-    items.forEach((item, index) => {
-      rows[index] = [];
-      headers.forEach((header) => {
-        rows[index].push(item[header]);
+    return i.forEach((n, s) => {
+      e[s] = [], t.forEach((a) => {
+        e[s].push(n[a]);
       });
-    });
-    return { items, headers, rows };
+    }), { items: i, headers: t, rows: e };
   }
-  callEvent(event, params) {
+  callEvent(o, t) {
     console.warn(
-      `Event "${event}" is not available for this type of store`,
-      params
+      `Event "${o}" is not available for this type of store`,
+      t
     );
   }
   destroy() {
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.connection) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(o) {
+    return !!o.connection;
   }
 }
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], SqlXmlaStore.prototype, "connectionRepository");
-const SQL_XMLA_STORE_FACTORY = serviceId("SqlXmlaStoreFactory");
-const factorySymbol = Symbol.for(SQL_XMLA_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(SQL_XMLA_STORE_FACTORY, (config) => {
-    if (!SqlXmlaStore.validateConfiguration(config)) {
+R([
+  g(h)
+], l.prototype, "connectionRepository");
+const p = w("SqlXmlaStoreFactory"), m = Symbol.for(p);
+function f({ services: r }) {
+  r.register(p, (o) => {
+    if (!l.validateConfiguration(o))
       throw new Error(
         "Invalid SqlXmlaStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(SqlXmlaStore);
-    store.init(config);
-    return store;
+    const t = r.construct(l);
+    return t.init(o), t;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(SQL_XMLA_STORE_FACTORY);
+function y({ services: r }) {
+  r.unregister(p);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const b = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  SQL_XMLA_STORE_FACTORY,
-  SqlXmlaStore,
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.sql_xmla";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.sql_xmla");
-  await activate$1?.(context);
+  SQL_XMLA_STORE_FACTORY: p,
+  SqlXmlaStore: l,
+  activate: f,
+  deactivate: y,
+  factorySymbol: m
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.datasource.sql_xmla", _ = "0.0.1-next.1";
+async function T(r) {
+  const o = globalThis.__tsm__;
+  if (!o)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  o.register(u, b, _, "lib.datasource.sql_xmla"), await f?.(r);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function O(r) {
+  await y?.(r);
 }
 export {
-  SQL_XMLA_STORE_FACTORY,
-  SqlXmlaStore,
-  activate,
-  deactivate,
-  factorySymbol
+  p as SQL_XMLA_STORE_FACTORY,
+  l as SqlXmlaStore,
+  T as activate,
+  O as deactivate,
+  m as factorySymbol
 };

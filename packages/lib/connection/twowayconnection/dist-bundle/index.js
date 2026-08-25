@@ -1,54 +1,47 @@
-class TwoWayConnection {
-  ready = false;
+class r {
+  ready = !1;
   subscribers = [];
   constructor() {
   }
-  onMessage(data, topic) {
-    this.notify("message", data, topic);
+  onMessage(e, t) {
+    this.notify("message", e, t);
   }
   onConnect() {
-    this.ready = true;
-    this.notify("connect");
+    this.ready = !0, this.notify("connect");
   }
   onClose() {
-    this.ready = false;
-    this.notify("close");
+    this.ready = !1, this.notify("close");
   }
-  onError(error) {
-    this.ready = false;
-    this.notify("error", error);
+  onError(e) {
+    this.ready = !1, this.notify("error", e);
   }
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
+  subscribe(e) {
+    this.subscribers.push(e);
   }
-  unsubscribe(subscriber) {
-    this.subscribers = this.subscribers.filter((sub) => sub !== subscriber);
+  unsubscribe(e) {
+    this.subscribers = this.subscribers.filter((t) => t !== e);
   }
-  notify(event, data, topic) {
-    this.subscribers.forEach((subscriber) => {
-      subscriber(event, data, topic);
+  notify(e, t, i) {
+    this.subscribers.forEach((o) => {
+      o(e, t, i);
     });
   }
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const c = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  TwoWayConnection
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.connection.twowayconnection";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.connection.twowayconnection");
-  await void 0;
+  TwoWayConnection: r
+}, Symbol.toStringTag, { value: "Module" })), n = "org.eclipse.daanse.board.app.lib.connection.twowayconnection", a = "0.0.1-next.1";
+async function b(s) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${n}: tsm runtime is not initialized`);
+  e.register(n, c, a, "lib.connection.twowayconnection"), await void 0;
 }
-async function deactivate(context) {
+async function u(s) {
   await void 0;
 }
 export {
-  TwoWayConnection,
-  activate,
-  deactivate
+  r as TwoWayConnection,
+  b as activate,
+  u as deactivate
 };

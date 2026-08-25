@@ -34,7 +34,7 @@
     "shiki": "4.0.2",
     "simple-code-editor": "2.1.0",
     "uuid": "^14.0.0",
-    "@eclipse-daanse/tsm": "link:../../../../../EMFTs/tsm"
+    "@eclipse-daanse/tsm": "0.1.0-next.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.8",

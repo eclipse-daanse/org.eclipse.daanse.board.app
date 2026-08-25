@@ -1,144 +1,105 @@
-import { inject, injectable } from "@eclipse-daanse/tsm";
-import { BaseDatasource } from "org.eclipse.daanse.board.app.lib.datasource.base";
-import { CONNECTION_REPOSITORY } from "org.eclipse.daanse.board.app.lib.api.connection";
-const { serviceId } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
+import { inject as y, injectable as d } from "@eclipse-daanse/tsm";
+import { BaseDatasource as v } from "org.eclipse.daanse.board.app.lib.datasource.base";
+import { CONNECTION_REPOSITORY as g } from "org.eclipse.daanse.board.app.lib.api.connection";
+const { serviceId: _ } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var b = Object.defineProperty, w = Object.getOwnPropertyDescriptor, u = (t, e, o, a) => {
+  for (var r = a > 1 ? void 0 : a ? w(e, o) : e, n = t.length - 1, i; n >= 0; n--)
+    (i = t[n]) && (r = (a ? i(e, o, r) : i(r)) || r);
+  return a && r && b(e, o, r), r;
 };
-let GraphQLStore = class extends BaseDatasource {
+let c = class extends v {
   connection;
   query = "";
   connectionRepository;
-  init(configuration) {
-    super.init(configuration);
-    this.connection = configuration.connection;
-    this.query = configuration.query;
-    this.pollingInterval = configuration.pollingInterval ?? 5e3;
-    if (this.pollingEnabled) {
-      this.startPolling(this.pollingInterval);
-    }
+  init(t) {
+    super.init(t), this.connection = t.connection, this.query = t.query, this.pollingInterval = t.pollingInterval ?? 5e3, this.pollingEnabled && this.startPolling(this.pollingInterval);
   }
   get fetcher() {
-    if (!this.connectionRepository) {
+    if (!this.connectionRepository)
       throw new Error("ConnectionRepository is not provided to Store Classes");
-    }
-    const connection = this.connectionRepository.getConnection(
+    return this.connectionRepository.getConnection(
       this.connection
-    );
-    return connection.fetcher;
+    ).fetcher;
   }
-  async getData(type) {
-    if (this.query) {
-      const request = await this.fetcher({ query: this.query });
-      const result = (await request.next()).value.data;
-      return result;
-    } else {
-      console.warn("Query is not provided for GraphQLStore");
-      return null;
-    }
+  async getData(t) {
+    return this.query ? (await (await this.fetcher({ query: this.query })).next()).value.data : (console.warn("Query is not provided for GraphQLStore"), null);
   }
   async getOriginalData() {
     throw new Error("Not Implemented");
   }
-  parseToDataTable(data) {
-    if (!Array.isArray(data)) return { items: [], headers: [], rows: [] };
-    const headers = ["index"];
-    const rows = [];
-    const items = data.map((item, index) => {
-      if (typeof item !== "object") return {};
-      const row = {
-        index
+  parseToDataTable(t) {
+    if (!Array.isArray(t)) return { items: [], headers: [], rows: [] };
+    const e = ["index"], o = [], a = t.map((r, n) => {
+      if (typeof r != "object") return {};
+      const i = {
+        index: n
       };
-      for (const key in item) {
-        if (typeof item[key] === "object" || Array.isArray(item[key])) continue;
-        if (!headers.includes(key)) {
-          headers.push(key);
-        }
-        row[key] = item[key];
-      }
-      return row;
+      for (const s in r)
+        typeof r[s] == "object" || Array.isArray(r[s]) || (e.includes(s) || e.push(s), i[s] = r[s]);
+      return i;
     });
-    items.forEach((item, index) => {
-      rows[index] = [];
-      headers.forEach((header) => {
-        rows[index].push(item[header]);
+    return a.forEach((r, n) => {
+      o[n] = [], e.forEach((i) => {
+        o[n].push(r[i]);
       });
-    });
-    return { items, headers, rows };
+    }), { items: a, headers: e, rows: o };
   }
-  callEvent(event, params) {
+  callEvent(t, e) {
     console.warn(
-      `Event "${event}" is not available for this type of store`,
-      params
+      `Event "${t}" is not available for this type of store`,
+      e
     );
   }
   destroy() {
     this.stopPolling();
   }
-  static validateConfiguration(configuration) {
-    if (!configuration.connection) {
-      return false;
-    }
-    return true;
+  static validateConfiguration(t) {
+    return !!t.connection;
   }
 };
-__decorateClass([
-  inject(CONNECTION_REPOSITORY)
-], GraphQLStore.prototype, "connectionRepository", 2);
-GraphQLStore = __decorateClass([
-  injectable()
-], GraphQLStore);
-const GRAPHQL_STORE_FACTORY = serviceId("GraphQLStoreFactory");
-const factorySymbol = Symbol.for(GRAPHQL_STORE_FACTORY);
-function activate$1({ services }) {
-  services.register(GRAPHQL_STORE_FACTORY, (config) => {
-    if (!GraphQLStore.validateConfiguration(config)) {
+u([
+  y(g)
+], c.prototype, "connectionRepository", 2);
+c = u([
+  d()
+], c);
+const l = _("GraphQLStoreFactory"), m = Symbol.for(l);
+function f({ services: t }) {
+  t.register(l, (e) => {
+    if (!c.validateConfiguration(e))
       throw new Error(
         "Invalid GraphQLStore configuration. Please provide a valid configuration."
       );
-    }
-    const store = services.construct(GraphQLStore);
-    store.init(config);
-    return store;
+    const o = t.construct(c);
+    return o.init(e), o;
   });
 }
-function deactivate$1({ services }) {
-  services.unregister(GRAPHQL_STORE_FACTORY);
+function h({ services: t }) {
+  t.unregister(l);
 }
-const library = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const O = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  GRAPHQL_STORE_FACTORY,
+  GRAPHQL_STORE_FACTORY: l,
   get GraphQLStore() {
-    return GraphQLStore;
+    return c;
   },
-  activate: activate$1,
-  deactivate: deactivate$1,
-  factorySymbol
-}, Symbol.toStringTag, { value: "Module" }));
-const LIBRARY_ID = "org.eclipse.daanse.board.app.lib.datasource.graphql";
-const VERSION = "0.0.1-next.1";
-async function activate(context) {
-  const runtime = globalThis.__tsm__;
-  if (!runtime) {
-    throw new Error(`${LIBRARY_ID}: tsm runtime is not initialized`);
-  }
-  runtime.register(LIBRARY_ID, library, VERSION, "lib.datasource.graphql");
-  await activate$1?.(context);
+  activate: f,
+  deactivate: h,
+  factorySymbol: m
+}, Symbol.toStringTag, { value: "Module" })), p = "org.eclipse.daanse.board.app.lib.datasource.graphql", E = "0.0.1-next.1";
+async function I(t) {
+  const e = globalThis.__tsm__;
+  if (!e)
+    throw new Error(`${p}: tsm runtime is not initialized`);
+  e.register(p, O, E, "lib.datasource.graphql"), await f?.(t);
 }
-async function deactivate(context) {
-  await deactivate$1?.(context);
+async function P(t) {
+  await h?.(t);
 }
 export {
-  GRAPHQL_STORE_FACTORY,
-  GraphQLStore,
-  activate,
-  deactivate,
-  factorySymbol
+  l as GRAPHQL_STORE_FACTORY,
+  c as GraphQLStore,
+  I as activate,
+  P as deactivate,
+  m as factorySymbol
 };
