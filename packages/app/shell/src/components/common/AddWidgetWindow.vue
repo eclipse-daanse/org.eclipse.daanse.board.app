@@ -104,8 +104,7 @@ watch(selectedType, (newType) => {
 </script>
 
 <template>
-  <div class="add_widget_window ice z-mx p-6 shadow-sm">
-    <span class="center font-normal text-center text-lg"><h3>Add Widget</h3></span>
+  <div class="add_widget_window">
     <!--<VaSelect
       label="Store type"
       class="mx-3 my-3"
@@ -135,12 +134,12 @@ watch(selectedType, (newType) => {
     >
       <template #item="{ element }">
         <div
-          class="widgets_grid-item shadow-xs"
+          class="widgets_grid-item"
           draggable="true"
           @dragstart="(event) => onDragStart(event)"
         >
-          <img class="m-2" :src="element.icon" style="height: 50px"/>
-          <span class="font-normal">{{ element.name }}</span>
+          <span class="widgets_grid-icon"><img :src="element.icon" alt="" /></span>
+          <span class="widgets_grid-name">{{ element.name }}</span>
         </div>
       </template>
     </draggable>
@@ -149,32 +148,62 @@ watch(selectedType, (newType) => {
 </template>
 
 <style scoped>
+/* A list, not a tile grid - that is what the mockups' palette is, and it
+   survives a 240px column. */
 .widgets_grid {
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
-  /*gap: 1rem;*/
-  /*padding: 0 2px;*/
+  display: flex;
+  flex-direction: column;
 }
 
 :deep() .widgets_grid-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  /* gap: 1rem; */
-  /*border: 1px solid gray;*/
-  background-color: #f4f4f491;
-  border-radius: 5px;
-  margin:12px;
-  cursor: pointer;
+  gap: 9px;
+  padding: 6px 12px;
+  font-size: var(--text-base, 13px);
+  color: var(--color-fg);
+  cursor: grab;
+  border-radius: var(--radius-sm, 5px);
+  margin: 0 6px;
 }
 
+:deep() .widgets_grid-item:hover {
+  background: var(--color-bg);
+}
+
+:deep() .widgets_grid-icon {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm, 5px);
+  overflow: hidden;
+}
+
+:deep() .widgets_grid-icon img {
+  max-width: 18px;
+  max-height: 18px;
+}
+
+:deep() .widgets_grid-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Docked into the palette panel of the editor (mockup screen 4) - the panel
+   owns position, width and header now. */
 .add_widget_window {
-  position: absolute;
-  height: calc(100% - 100px);
-  width: 350px;
-  right: 0px;
-  top: 1px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 6px 0;
   /*background-color: #ecf0f1;
   padding: 1rem;
   border-radius: 8px;

@@ -27,6 +27,11 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
 /* =====================================================================
  * Design tokens - taken from docs/mdx-workbench-layout-mockups.html.
  *
+ * The greys are near-neutral with a hair of warmth (blue minus red is
+ * negative throughout). The mockups' cool greys plus a saturated accent made
+ * the whole surface read blue; neutral ground lets the blue act as an accent
+ * again and sits better next to the Daanse gold.
+ *
  * Light is the default because the components still carry hardcoded light
  * values; the dark set (the mockups' base theme) is one attribute away:
  * <html data-theme="dark">. Every text colour below was measured against
@@ -39,47 +44,47 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
  * ===================================================================== */
 @theme static {
   /* --- surfaces ------------------------------------------------------ */
-  --color-bg: #e9ebef;           /* app ground, editor surface, inputs */
-  --color-pane: #f6f7f9;         /* panels, topbar, activity rail, widgets */
+  --color-bg: #efefec;           /* app ground, editor surface, inputs */
+  --color-pane: #f8f8f6;         /* panels, topbar, activity rail, widgets */
   --color-raised: #ffffff;       /* buttons, table heads, chips, badges */
-  --color-canvas: #dee1e7;       /* board surface behind the widgets */
-  --color-divider: #ccd1d9;      /* panel edges, splitters, table rules */
-  --color-outline: #b9bec9;      /* outlines of things you can operate */
+  --color-canvas: #e3e3df;       /* board surface behind the widgets */
+  --color-divider: #d5d5d0;      /* panel edges, splitters, table rules */
+  --color-outline: #bebeb8;      /* outlines of things you can operate */
 
   /* --- text and accents ---------------------------------------------- */
-  --color-fg: #22252b;           /* 14.3:1 on pane */
-  --color-dim: #575d68;          /*  6.2:1 - secondary text, labels */
-  --color-accent: #2f5fbd;       /*  5.6:1 - interaction, selection */
-  --color-onAccent: #ffffff;     /*  6.0:1 - text ON the accent fill */
-  --color-brand: #7a5a07;        /*  6.0:1 - Daanse mark as text */
+  --color-fg: #24241f;           /* 14.7:1 on pane */
+  --color-dim: #5c5c55;          /*  6.3:1 - secondary text, labels */
+  --color-accent: #2b5599;       /*  6.9:1 - interaction, selection */
+  --color-onAccent: #ffffff;     /*  7.3:1 - text ON the accent fill */
+  --color-brand: #795706;        /*  6.2:1 - Daanse mark as text */
   --color-brandFill: #c08a10;    /* Daanse mark as a fill */
   --color-onBrand: #1a1c22;      /*  5.6:1 - text ON the brand fill */
-  --color-ok: #1f6f4a;           /*  5.7:1 */
-  --color-warn: #7d5710;         /*  6.0:1 */
+  --color-ok: #1f6f4a;           /*  5.8:1 */
+  --color-warn: #8a5a0c;         /*  6.0:1 */
   --color-err: #b02a1c;          /*  6.1:1 */
 
   /* --- MDX syntax ---------------------------------------------------- */
-  --color-kw: #1f4fa8;
-  --color-measure: #7d5710;
+  --color-kw: #1f4a96;
+  --color-measure: #8a5a0c;
   --color-member: #1f6f4a;
   --color-fn: #7b3fa0;
 
   /* --- kept for compatibility, re-pointed at the new palette --------- */
   --color-white: #fff;
-  --color-primary: #2f5fbd;
-  --color-secondary: #575d68;
+  --color-primary: #2b5599;
+  --color-secondary: #5c5c55;
   --color-success: #1f6f4a;
-  --color-info: #2f5fbd;
+  --color-info: #2b5599;
   --color-danger: #b02a1c;
-  --color-warning: #7d5710;
-  --color-backgroundPrimary: #e9ebef;
-  --color-backgroundSecondary: #f6f7f9;
+  --color-warning: #8a5a0c;
+  --color-backgroundPrimary: #efefec;
+  --color-backgroundSecondary: #f8f8f6;
   --color-backgroundElement: #ffffff;
-  --color-backgroundBorder: #ccd1d9;
-  --color-textPrimary: #22252b;
+  --color-backgroundBorder: #d5d5d0;
+  --color-textPrimary: #24241f;
   --color-textInverted: #ffffff;
-  --color-daanse_blue: #2f5fbd;
-  --color-daanse_grey: #22252b;
+  --color-daanse_blue: #2b5599;
+  --color-daanse_grey: #24241f;
 
   /* --- type scale: the sizes the mockups set ------------------------- */
   --text-xs: 11px;    /* badges, counters, status bar, panel headers */
@@ -109,42 +114,42 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
 
 /* Dark set - the mockups' base theme. Enable with <html data-theme="dark">. */
 :root[data-theme='dark'] {
-  --color-bg: #1e1f24;
-  --color-pane: #25262c;
-  --color-raised: #2c2d34;
-  --color-canvas: #191a1e;
-  --color-divider: #383a43;
-  --color-outline: #464a53;
+  --color-bg: #1f1f1e;
+  --color-pane: #262624;
+  --color-raised: #2d2d2b;
+  --color-canvas: #191918;
+  --color-divider: #3a3a36;
+  --color-outline: #4a4a45;
 
-  --color-fg: #d9dbe1;        /* 10.9:1 on pane */
-  --color-dim: #9aa0ab;       /*  5.7:1 */
-  --color-accent: #7fb0ff;    /*  6.9:1 */
-  --color-onAccent: #10131a;  /*  8.5:1 - a bright fill needs dark text */
-  --color-brand: #e0ab2c;     /*  7.2:1 */
-  --color-brandFill: #e0ab2c;
-  --color-onBrand: #10131a;   /*  8.9:1 */
+  --color-fg: #dcdcd7;        /* 11.0:1 on pane */
+  --color-dim: #9d9d95;       /*  5.6:1 */
+  --color-accent: #86aef0;    /*  6.7:1 */
+  --color-onAccent: #12120f;  /*  8.3:1 - a bright fill needs dark text */
+  --color-brand: #dfab35;     /*  7.2:1 */
+  --color-brandFill: #dfab35;
+  --color-onBrand: #12120f;   /*  8.9:1 */
   --color-ok: #6cc79a;        /*  7.4:1 */
-  --color-warn: #e0b26a;      /*  7.7:1 */
+  --color-warn: #dfb069;      /*  7.6:1 */
   --color-err: #ec8189;       /*  5.8:1 */
 
-  --color-kw: #7fb0ff;
-  --color-measure: #e0b26a;
+  --color-kw: #86aef0;
+  --color-measure: #dfb069;
   --color-member: #6cc79a;
   --color-fn: #cf95d4;
 
-  --color-primary: #7fb0ff;
-  --color-secondary: #9aa0ab;
+  --color-primary: #86aef0;
+  --color-secondary: #9d9d95;
   --color-success: #6cc79a;
-  --color-info: #7fb0ff;
+  --color-info: #86aef0;
   --color-danger: #ec8189;
-  --color-warning: #e0b26a;
-  --color-backgroundPrimary: #1e1f24;
-  --color-backgroundSecondary: #25262c;
-  --color-backgroundElement: #2c2d34;
-  --color-backgroundBorder: #383a43;
-  --color-textPrimary: #d9dbe1;
-  --color-textInverted: #10131a;
-  --color-daanse_grey: #d9dbe1;
+  --color-warning: #dfb069;
+  --color-backgroundPrimary: #1f1f1e;
+  --color-backgroundSecondary: #262624;
+  --color-backgroundElement: #2d2d2b;
+  --color-backgroundBorder: #3a3a36;
+  --color-textPrimary: #dcdcd7;
+  --color-textInverted: #12120f;
+  --color-daanse_grey: #dcdcd7;
 
   --shadow-e1: 0 1px 2px rgba(0, 0, 0, 0.42);
   --shadow-e2: 0 2px 8px rgba(0, 0, 0, 0.42);

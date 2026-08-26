@@ -10,112 +10,198 @@ SPDX-License-Identifier: EPL-2.0
 Contributors:
     Smart City Jena
 -->
-<script setup lang="ts">
-import { ref, watch, computed, inject } from 'vue'
 
-import {  type ILayoutItem } from '@/composables/useMovableLayout'
+<!--
+  Board editor after mockup screen 4 "Board bearbeiten": widget palette and
+  widget settings are docked panels with draggable splitters
+  (240px | 4px | canvas | 4px | 300px) instead of a floating FAB and modal
+  windows. The palette is open by default - placing widgets is what this
+  mode is for.
+-->
+
+<script setup lang="ts">
+import { ref, computed, inject, onBeforeUnmount } from 'vue'
 
 import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
 import WidgetSettingsWindow from '@/components/common/WidgetSettingsWindow.vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import PageEditor from '@/components/pageEditor/PageEditor.vue'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
-
 const widgetSettingsOpenedId = ref('')
-const route = useRoute();
+const route = useRoute()
 
-const pageID = route.params.pageid??'';
-const { widgets } = useWidgetsStore(pageID as string||'');
-
+const pageID = route.params.pageid ?? ''
+const { widgets } = useWidgetsStore((pageID as string) || '')
 
 const innerWidgets = ref<IWidget[]>([])
 
-
-const endpointfinder = inject('endpointfinder', null);
-const endPointFinder = ()=>{
-  (endpointfinder as any)()
+const endpointfinder = inject('endpointfinder', null)
+const endPointFinder = () => {
+  ;(endpointfinder as any)()
 }
-const endpointfinder_present = computed(()=>{
-  return !!endpointfinder
-})
-const widgetSelectorVisible = ref(false)
+const endpointfinder_present = computed(() => !!endpointfinder)
 
-const pageSettingsOpenedId = ref<string|undefined>(undefined);
+/* The palette is a panel now, so it starts open - the mockups show it as
+ * part of the edit mode rather than something you summon. */
+const widgetSelectorVisible = ref(true)
+
+const pageSettingsOpenedId = ref<string | undefined>(undefined)
 
 const openWidgetSettings = (id: string) => {
-  widgetSettingsOpenedId.value = id;
-  widgetSelectorVisible.value = false;
+  widgetSettingsOpenedId.value = id
 }
 
-
-
-
 const currentlyEditingWidget = computed(() => {
-  // First try to find in the widgets store
-  console.log(widgets);
-  const widgetFromStore = widgets?.find((widget:any) => widget.uid === widgetSettingsOpenedId.value)
-  if (widgetFromStore) {
-    return widgetFromStore
-  }
-  // Fallback to innerWidgets
+  const widgetFromStore = widgets?.find((widget: any) => widget.uid === widgetSettingsOpenedId.value)
+  if (widgetFromStore) return widgetFromStore
   return innerWidgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
 })
 
+/* ---- splitters ------------------------------------------------------- */
+const paletteWidth = ref(240)
+const inspectorWidth = ref(300)
+const MIN = 200
+const MAX = 460
 
+let drag: { side: 'left' | 'right'; startX: number; startW: number } | null = null
 
+const onMove = (e: PointerEvent) => {
+  if (!drag) return
+  const delta = e.clientX - drag.startX
+  const raw = drag.side === 'left' ? drag.startW + delta : drag.startW - delta
+  const clamped = Math.min(MAX, Math.max(MIN, raw))
+  if (drag.side === 'left') paletteWidth.value = clamped
+  else inspectorWidth.value = clamped
+}
 
+const endDrag = () => {
+  drag = null
+  window.removeEventListener('pointermove', onMove)
+  window.removeEventListener('pointerup', endDrag)
+  document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+}
+
+const startDrag = (side: 'left' | 'right', e: PointerEvent) => {
+  drag = {
+    side,
+    startX: e.clientX,
+    startW: side === 'left' ? paletteWidth.value : inspectorWidth.value,
+  }
+  window.addEventListener('pointermove', onMove)
+  window.addEventListener('pointerup', endDrag)
+  document.body.style.cursor = 'col-resize'
+  document.body.style.userSelect = 'none'
+}
+
+/** Keyboard equivalent for the splitters. */
+const nudge = (side: 'left' | 'right', step: number) => {
+  const target = side === 'left' ? paletteWidth : inspectorWidth
+  target.value = Math.min(MAX, Math.max(MIN, target.value + step))
+}
+
+onBeforeUnmount(endDrag)
 </script>
 
 <template>
-  <div class="report-container dottet">
-    <LayoutRenderer
-      :pageId="pageID as string"
-      @openWidgetSettings="openWidgetSettings"
+  <div class="editor">
+    <!-- Widget palette -->
+    <aside v-if="widgetSelectorVisible" class="panel" :style="{ width: paletteWidth + 'px' }">
+      <div class="ph">
+        Widgets
+        <span class="sp"></span>
+        <button
+          v-if="endpointfinder_present"
+          type="button"
+          class="pha"
+          title="Endpunkte suchen"
+          @click="endPointFinder()"
+        >
+          <va-icon name="travel_explore" size="16px" />
+        </button>
+        <button
+          type="button"
+          class="pha"
+          title="Palette schließen"
+          @click="widgetSelectorVisible = false"
+        >
+          <va-icon name="close" size="16px" />
+        </button>
+      </div>
+      <div class="pbody">
+        <AddWidgetWindow />
+      </div>
+    </aside>
 
-    ></LayoutRenderer>
+    <div
+      v-if="widgetSelectorVisible"
+      class="split-x"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Breite der Widget-Palette"
+      tabindex="0"
+      @pointerdown.prevent="startDrag('left', $event)"
+      @keydown.left.prevent="nudge('left', -16)"
+      @keydown.right.prevent="nudge('left', 16)"
+    ></div>
 
-    <div class="add_widget-button ice p-2.5 z-mx">
+    <!-- Board surface -->
+    <div class="report-container dottet">
+      <LayoutRenderer :pageId="pageID as string" @openWidgetSettings="openWidgetSettings" />
 
-      <VaButton
-        :icon="widgetSelectorVisible ? 'close' : 'add'"
-        @click="widgetSelectorVisible = !widgetSelectorVisible"
-        round
-        size="large"
-      />
-      <VaButton
-        v-if="endpointfinder_present"
-        icon="travel_explore"
-        @click="endPointFinder()"
-        round
-        size="large"
-      />
+      <button
+        v-if="!widgetSelectorVisible"
+        type="button"
+        class="palette-reopen"
+        title="Widget-Palette öffnen"
+        @click="widgetSelectorVisible = true"
+      >
+        <va-icon name="add" size="18px" />
+        Widgets
+      </button>
 
+      <div class="pages_board ice p-2.5 z-mx">
+        <PageEditor @pageSettings="(pageid) => (pageSettingsOpenedId = pageid)"></PageEditor>
+      </div>
+
+      <Transition :duration="150">
+        <PageSettings
+          v-if="pageSettingsOpenedId"
+          v-model="pageSettingsOpenedId"
+          @close="pageSettingsOpenedId = undefined"
+        ></PageSettings>
+      </Transition>
     </div>
-    <div class="pages_board ice p-2.5 z-mx">
-      <PageEditor @pageSettings="(pageid)=>pageSettingsOpenedId = pageid"></PageEditor>
-    </div>
-    <Transition :duration="150">
-      <AddWidgetWindow v-if="widgetSelectorVisible"></AddWidgetWindow>
-    </Transition>
-    <Transition :duration="150">
+
+    <div
+      v-if="widgetSettingsOpenedId"
+      class="split-x"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Breite der Widget-Einstellungen"
+      tabindex="0"
+      @pointerdown.prevent="startDrag('right', $event)"
+      @keydown.left.prevent="nudge('right', 16)"
+      @keydown.right.prevent="nudge('right', -16)"
+    ></div>
+
+    <!-- Widget inspector -->
+    <aside
+      v-if="widgetSettingsOpenedId"
+      class="panel"
+      :style="{ width: inspectorWidth + 'px' }"
+    >
       <WidgetSettingsWindow
-        v-if="widgetSettingsOpenedId"
         @close="widgetSettingsOpenedId = ''"
         v-model="currentlyEditingWidget"
       ></WidgetSettingsWindow>
-    </Transition>
-    <Transition :duration="150">
-      <PageSettings
-        v-if="pageSettingsOpenedId"
-        v-model="pageSettingsOpenedId"
-        @close="pageSettingsOpenedId = undefined"
-      ></PageSettings>
-    </Transition>
+    </aside>
   </div>
 </template>
+
 <style>
 .ghost {
   display: none;
@@ -127,45 +213,160 @@ const currentlyEditingWidget = computed(() => {
 </style>
 
 <style scoped>
+/* Three docked columns; the panels keep their width, the board takes the rest. */
+.editor {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-bg);
+}
 
-.ghost-placeholder {
+.panel {
+  flex: none;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-pane);
+  overflow: hidden;
+}
+.panel:first-child {
+  border-right: 1px solid var(--color-divider);
+}
+.panel:last-child {
+  border-left: 1px solid var(--color-divider);
+}
+
+/* Panel header: 30px, 11px uppercase, as specified in the mockups */
+.ph {
+  height: var(--spacing-panelHeader, 30px);
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 12px;
+  font-size: var(--text-xs, 11px);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  border-bottom: 1px solid var(--color-divider);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.ph .sp {
+  flex: 1;
+}
+.ph .pha {
+  border: 0;
+  background: transparent;
+  color: var(--color-dim);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs, 3px);
+}
+.ph .pha:hover {
+  color: var(--color-fg);
+  background: var(--color-bg);
+}
+.ph .pha:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.pbody {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* 4px splitter, as in the mockups - draggable, and reachable by keyboard. */
+.split-x {
+  flex: none;
+  width: var(--spacing-splitter, 4px);
+  background: var(--color-divider);
+  cursor: col-resize;
+  position: relative;
+}
+.split-x::after {
+  content: '';
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  border: 2px dashed #ccc;
-  z-index: 1000000;
-  pointer-events: none;
+  inset: 0;
+  margin: auto;
+  width: 2px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--color-outline);
+}
+.split-x:hover {
+  background: var(--color-outline);
+}
+.split-x:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -1px;
 }
 
 .report-container {
+  flex: 1 1 auto;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  width: 100%;
+  min-width: 0;
   height: 100%;
   position: relative;
   /* Board surface from the mockups (edit mode): canvas token + 24px dot grid */
-  background: var(--color-canvas, #dee1e7);
+  background: var(--color-canvas);
 }
 
 .report-container.dottet {
-  background-image: radial-gradient(var(--color-divider, #ccd1d9) 1px, transparent 0);
+  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);
   background-size: 24px 24px;
   background-position: -12px -12px;
   background-repeat: repeat;
 }
 
+/* Only shown when the palette was closed. */
+.palette-reopen {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 7px;
+  font: inherit;
+  font-size: var(--text-sm, 12px);
+  font-weight: 500;
+  color: var(--color-fg);
+  background: var(--color-pane);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm, 5px);
+  box-shadow: var(--shadow-e1);
+  cursor: pointer;
+  z-index: 10;
+}
+.palette-reopen:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
 .report-container__title {
   width: 100%;
   padding: 16px;
-  border-bottom: 1px dashed var(--color-divider, #ccd1d9);
+  border-bottom: 1px dashed var(--color-divider);
 }
 
 .report-container .widgets-adding-controls {
   display: flex;
-  border: 1px solid var(--color-divider, #ccd1d9);
-  border-radius: 8px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md, 8px);
   margin: 16px;
 }
 
@@ -208,24 +409,15 @@ const currentlyEditingWidget = computed(() => {
   z-index: 20000000 !important;
 }
 
-.add_widget-button {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  right: 30px;
-  bottom: 20px;
-}
-.pages_board{
+.pages_board {
   position: absolute;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  left: 80px;
+  left: 20px;
   bottom: 20px;
   transition: left 0.2s ease;
 }
-
 
 .v-enter-active,
 .v-leave-active {
@@ -235,23 +427,5 @@ const currentlyEditingWidget = computed(() => {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
-}
-
-
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
-}
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform:  scaleY(0%) translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: scaleY(100%) translateY(0%);
-    opacity: 1;
-  }
 }
 </style>

@@ -31,10 +31,13 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key
 </script>
 
 <template>
-  <div class="widget_settings_window ice z-mx p-6 shadow-sm">
+  <div class="widget_settings_window">
     <div class="settings-header">
-      <h3>Widget Settings</h3>
+      <span class="settings-title">Widget-Einstellungen</span>
       <code class="uid-value" :title="widget?.uid">{{ widget?.uid }}</code>
+      <button type="button" class="settings-close" title="Schließen" @click="emit('close')">
+        <va-icon name="close" size="16px" />
+      </button>
     </div>
     <div class="content" v-if="widget">
       <WidgetWrapperSettings v-model="widget.wrapperConfig" />
@@ -103,14 +106,46 @@ h3 {
 }
 
 .settings-header {
+  height: var(--spacing-panelHeader, 30px);
+  flex: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
+  gap: 8px;
+  padding: 0 6px 0 12px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.settings-title {
+  font-size: var(--text-xs, 11px);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  white-space: nowrap;
+}
+.settings-close {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: var(--color-dim);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs, 3px);
+}
+.settings-close:hover {
+  color: var(--color-fg);
+  background: var(--color-bg);
+}
+.settings-close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
 .uid-value {
-  color: #c45e00;
+  color: var(--color-brand, #795706);
   background-color: #fff3e0;
   border: 1px solid #ffcc80;
   padding: 0.15rem 0.5rem;
@@ -119,20 +154,15 @@ h3 {
   user-select: all;
 }
 
+/* Docked into the inspector panel of the editor (mockup screen 4) - the panel
+   owns position and width; this fills it. */
 .widget_settings_window {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 40px);
-  width: 400px;
-  right: 20px;
-  top: 20px;
-  background-color: #ecf0f1;
-  padding: 1rem 0;
-  border-radius: 8px;
-  z-index: 1000000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  background: var(--color-pane);
   overflow: hidden;
-  gap: 16px;
 }
 </style>
