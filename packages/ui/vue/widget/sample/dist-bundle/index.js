@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".widget[data-v-4037cc7e]{padding:12px}\n";})();
+(function(){var i="ui.vue.widget.sample",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".widget[data-v-135e6da8]{padding:12px}\n";})();
 import { EVENT_REGISTRY_ID as v } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as f, deactivate as u, component as h, inject as w } from "@eclipse-daanse/tsm";
 import { defineComponent as H, toRefs as y, inject as S, ref as V, watch as I, createElementBlock as L, openBlock as M, withModifiers as W, toDisplayString as T } from "vue";
@@ -33,14 +33,14 @@ const { identifiers: E } = __tsm__.require("org.eclipse.daanse.board.app.lib.cor
       class: "widget",
       onClick: c,
       onContextmenu: W(o, ["prevent"])
-    }, T(s.value ?? "Data do not created"), 33));
+    }, T(s.value ?? "Data do not created!!"), 33));
   }
 }), m = (t, i) => {
   const r = t.__vccOpts || t;
   for (const [e, C] of i)
     r[e] = C;
   return r;
-}, P = /* @__PURE__ */ m(x, [["__scopeId", "data-v-4037cc7e"]]), R = {};
+}, P = /* @__PURE__ */ m(x, [["__scopeId", "data-v-135e6da8"]]), R = {};
 function j(t, i) {
   return null;
 }
