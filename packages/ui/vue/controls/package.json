@@ -1,0 +1,27 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.controls",
+  "version": "0.0.1-next.1",
+  "description": "Standard controls built on the design tokens",
+  "homepage": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app#readme",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.ui.vue.controls.umd.cjs",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.controls.js",
+  "types": "./dist/org.eclipse.daanse.board.app.ui.vue.controls.d.ts",
+  "files": ["src"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-daanse/org.eclipse.daanse.board.app.git"
+  },
+  "scripts": {
+    "build": "vite build --config vite.bundle.config.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse-daanse/org.eclipse.daanse.board.app/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "vite-plugin-dts": "4.5.4"
+  },
+  "publishConfig": { "access": "public" }
+}

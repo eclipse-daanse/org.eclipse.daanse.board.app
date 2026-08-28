@@ -28,7 +28,8 @@
     "ui.vue.stores.datasouce",
     "ui.vue.stores.layout",
     "ui.vue.stores.widgets",
-    "ui.vue.widget.wrapper"
+    "ui.vue.widget.wrapper",
+    "ui.vue.controls"
   ],
   "provides": [],
   "requiresService": [
@@ -163,6 +164,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.widget.wrapper",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
       "versionRange": ">=0.0.1-0"
     }
   ]

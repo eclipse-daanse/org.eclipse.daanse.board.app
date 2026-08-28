@@ -23,6 +23,18 @@ Contributors:
 import { computed, ref } from 'vue'
 import { TOKEN_GROUPS, type TokenSpec } from '@/theme/tokens'
 import { useTheme } from '@/theme/useTheme'
+import {
+  DButton,
+  DCheckbox,
+  DChip,
+  DColorInput,
+  DDateInput,
+  DDivider,
+  DInput,
+  DSelect,
+  DSlider,
+  DSwitch,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const {
   themes,
@@ -39,6 +51,32 @@ const {
 
 const openGroup = ref<string>(TOKEN_GROUPS[0].id)
 const copied = ref(false)
+
+/** Tokens or controls - the two halves of the design system. */
+const view = ref<'tokens' | 'controls'>('tokens')
+
+/*
+ * The gallery is live, not pictures: these are the same controls the app is
+ * built from, so a token changed above shows here immediately - and a
+ * control that breaks under a theme breaks in plain sight.
+ */
+const demo = ref({
+  text: 'Bodenfeuchte Feld 3',
+  number: 38.4,
+  choice: 'ogcsta',
+  colour: '#4fa3d1',
+  when: '2026-08-28',
+  amount: 60,
+  on: true,
+  checked: true,
+  note: '',
+})
+
+const demoOptions = [
+  { uid: 'ogcsta', name: 'OGC SensorThings' },
+  { uid: 'xmla', name: 'XMLA / MDX' },
+  { uid: 'rest', name: 'REST' },
+]
 
 const changedCount = computed(() => Object.keys(overrides.value).length)
 
@@ -72,7 +110,20 @@ async function copyTheme() {
   <div class="appearance">
     <div class="panel">
       <header class="panel__head">
-        Erscheinungsbild
+        <button
+          type="button"
+          :class="['head__tab', { on: view === 'tokens' }]"
+          @click="view = 'tokens'"
+        >
+          Tokens
+        </button>
+        <button
+          type="button"
+          :class="['head__tab', { on: view === 'controls' }]"
+          @click="view = 'controls'"
+        >
+          Elemente
+        </button>
         <span class="panel__tools">
           <span v-if="changedCount" class="changed">
             {{ changedCount }} {{ changedCount === 1 ? 'Wert geändert' : 'Werte geändert' }}
@@ -86,7 +137,62 @@ async function copyTheme() {
         </span>
       </header>
 
-      <div class="body">
+      <div v-if="view === 'controls'" class="gallery">
+        <p class="gallery__lead">
+          Dieselben Elemente, aus denen die App gebaut ist. Was drüben an Tokens geändert wird,
+          steht hier sofort.
+        </p>
+
+        <section class="demo">
+          <h3 class="demo__title">Knöpfe</h3>
+          <div class="demo__row">
+            <DButton>Standard</DButton>
+            <DButton intent="primary">Speichern</DButton>
+            <DButton intent="quiet">Abbrechen</DButton>
+            <DButton intent="danger">Löschen</DButton>
+            <DButton disabled>Gesperrt</DButton>
+            <DButton busy>Lädt</DButton>
+          </div>
+          <div class="demo__row">
+            <DButton size="sm">Klein</DButton>
+            <DButton size="md">Mittel</DButton>
+            <DButton size="lg">Groß</DButton>
+          </div>
+        </section>
+
+        <section class="demo">
+          <h3 class="demo__title">Eingaben</h3>
+          <div class="demo__form">
+            <DInput v-model="demo.text" label="Titel" />
+            <DInput v-model="demo.number" label="Messwert" type="number" suffix="%" />
+            <DSelect v-model="demo.choice" label="Datenquelle" :options="demoOptions" />
+            <DColorInput v-model="demo.colour" label="Farbe" />
+            <DDateInput v-model="demo.when" label="Stichtag" />
+            <DSlider v-model="demo.amount" label="Deckung" suffix="%" />
+            <DInput v-model="demo.note" label="Notiz" :rows="2" stacked />
+            <DInput v-model="demo.text" label="Mit Fehler" error="Der Name ist schon vergeben." />
+          </div>
+        </section>
+
+        <section class="demo">
+          <h3 class="demo__title">Schalter und Marken</h3>
+          <div class="demo__row">
+            <DCheckbox v-model="demo.checked" label="Im Board zeigen" />
+            <DSwitch v-model="demo.on" label="Automatisch aktualisieren" />
+          </div>
+          <div class="demo__row">
+            <DChip>neutral</DChip>
+            <DChip tone="accent">geladen</DChip>
+            <DChip tone="ok">im Rahmen</DChip>
+            <DChip tone="warn">prüfen</DChip>
+            <DChip tone="err">getrennt</DChip>
+            <DChip tone="accent" numeric>14</DChip>
+          </div>
+          <DDivider label="Trenner" />
+        </section>
+      </div>
+
+      <div v-else class="body">
         <aside class="themes" aria-label="Themen">
           <button
             v-for="theme in themes"
@@ -207,6 +313,85 @@ async function copyTheme() {
   text-transform: uppercase;
   color: var(--color-dim);
   border-bottom: 1px solid var(--color-divider);
+}
+
+.head__tab {
+  position: relative;
+  height: 100%;
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.head__tab.on {
+  color: var(--color-fg);
+}
+
+.head__tab.on::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -1px;
+  height: 2px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+}
+
+.head__tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* -------------------------------------------------------------- gallery */
+
+.gallery {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px 18px 24px;
+  overflow-y: auto;
+  background-color: var(--color-bg);
+}
+
+.gallery__lead {
+  margin: 0 0 18px;
+  max-width: 70ch;
+  font-size: var(--text-sm);
+  color: var(--color-dim);
+}
+
+.demo {
+  margin-bottom: 26px;
+}
+
+.demo__title {
+  margin: 0 0 10px;
+  padding-bottom: 4px;
+  font-size: var(--text-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.demo__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.demo__form {
+  max-width: 460px;
 }
 
 .panel__tools {
