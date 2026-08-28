@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.xmla.filters",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".widget[data-v-eebe957d]{padding:12px;display:flex;flex-direction:column;gap:8px}.hierarchies-section[data-v-eebe957d]{display:flex;flex-direction:column;gap:4px}.hierarchies-section h4[data-v-eebe957d]{font-weight:600}.hierarchy-item[data-v-eebe957d]{width:100%;padding:4px 6px;font-size:14px;border:1px solid #ccc;margin-bottom:4px;border-radius:4px;display:flex;gap:8px;justify-content:start;align-items:center}.hierarchy-item .filter-caption[data-v-eebe957d]{font-style:italic;color:#666}.hierarchy-item .hierarchy-caption[data-v-eebe957d]{flex-grow:1}.settings-container[data-v-a4d8cb41]{display:flex;flex-direction:column;gap:2px}\n";})();
+(function(){var i="ui.vue.widget.xmla.filters",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".widget[data-v-d4a9cd2c]{padding:12px;display:flex;flex-direction:column;gap:8px}.hierarchies-section[data-v-d4a9cd2c]{display:flex;flex-direction:column;gap:4px}.hierarchies-section h4[data-v-d4a9cd2c]{font-weight:600}.hierarchy-item[data-v-d4a9cd2c]{width:100%;padding:4px 6px;font-size:14px;border:1px solid var(--color-divider);margin-bottom:4px;border-radius:4px;display:flex;gap:8px;justify-content:start;align-items:center}.hierarchy-item .filter-caption[data-v-d4a9cd2c]{font-style:italic;color:var(--color-dim)}.hierarchy-item .hierarchy-caption[data-v-d4a9cd2c]{flex-grow:1}.settings-container[data-v-a4d8cb41]{display:flex;flex-direction:column;gap:2px}\n";})();
 import { EVENT_REGISTRY_ID as B } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as O, deactivate as q, component as z, inject as G } from "@eclipse-daanse/tsm";
 import { defineComponent as D, toRefs as X, inject as J, ref as f, watch as K, onMounted as e2, resolveComponent as T, createElementBlock as u, openBlock as d, Fragment as V, createElementVNode as C, createBlock as x, createCommentVNode as y, withModifiers as t2, renderList as L, createVNode as w, toDisplayString as p, normalizeStyle as W, unref as s2, useModel as l2, withCtx as i2 } from "vue";
@@ -198,7 +198,7 @@ const { identifiers: r2 } = __tsm__.require("org.eclipse.daanse.board.app.lib.co
   for (const [n, l] of e)
     a[n] = l;
   return a;
-}, _2 = /* @__PURE__ */ Y(w2, [["__scopeId", "data-v-eebe957d"]]), I2 = { class: "settings-container" }, H2 = /* @__PURE__ */ D({
+}, _2 = /* @__PURE__ */ Y(w2, [["__scopeId", "data-v-d4a9cd2c"]]), I2 = { class: "settings-container" }, H2 = /* @__PURE__ */ D({
   __name: "FiltersWidgetSettings",
   props: {
     modelValue: {},

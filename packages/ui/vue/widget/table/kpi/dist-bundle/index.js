@@ -1,14 +1,14 @@
-(function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-34aee555]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-34aee555]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-34aee555]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-34aee555]{justify-self:start}.table_container .table[data-v-34aee555]{flex-grow:1;flex-shrink:1}.loading[data-v-34aee555]{display:flex;height:100%}.settings-container[data-v-21aafe5f]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
+(function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}.settings-container[data-v-21aafe5f]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
 import { EVENT_ACTIONS_REGISTRY as L, EVENT_REGISTRY_ID as z, EVENT_ACTIONS_REGISTRY_ID as J } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as Q, deactivate as X, component as ee, inject as D } from "@eclipse-daanse/tsm";
 import { defineComponent as F, toRefs as te, inject as W, onUnmounted as ae, ref as O, watch as j, onMounted as le, computed as _, provide as R, createElementBlock as oe, openBlock as M, withModifiers as re, createVNode as h, unref as N, useModel as ie, markRaw as ne, resolveComponent as y, createBlock as se, withCtx as H, createElementVNode as de } from "vue";
 import { useVariableRepository as ue, useDatasourceRepository as ce, VariableWrapper as T } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { useRoute as pe } from "vue-router";
-import { KpiTable as fe } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { KpiTable as ve } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
 import { WidgetAction as ge, WidgetActionInterface as he, Payload as S } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput as me } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as Te } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: ve } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+const { identifiers: fe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var Ve = Object.defineProperty, we = Object.getOwnPropertyDescriptor, Ce = (n, r, s, e) => {
   for (var t = we(r, s), l = n.length - 1, o; l >= 0; l--)
     (o = n[l]) && (t = o(r, s, t) || t);
@@ -30,7 +30,7 @@ const be = /* @__PURE__ */ F({
     id: {}
   },
   setup(n, { expose: r }) {
-    const { wrapParameters: s } = ue(), e = n, { datasourceId: t, config: l, id: o } = te(e), f = W(ve.TINY_EMITTER), d = W(L), V = pe().params.pageid || "";
+    const { wrapParameters: s } = ue(), e = n, { datasourceId: t, config: l, id: o } = te(e), v = W(fe.TINY_EMITTER), d = W(L), V = pe().params.pageid || "";
     class w extends P {
       refresh() {
         B(t.value, t.value);
@@ -41,13 +41,13 @@ const be = /* @__PURE__ */ F({
       o?.value && d.unregisterInstance(o.value);
     });
     const u = () => {
-      o?.value && f.emit("widget:KpiTableWidget:click", {
+      o?.value && v.emit("widget:KpiTableWidget:click", {
         type: "widget:KpiTableWidget:click",
         widgetId: o.value,
         payload: { widgetId: o.value, timestamp: Date.now() }
       });
     }, E = () => {
-      o?.value && f.emit("widget:KpiTableWidget:right_click", {
+      o?.value && v.emit("widget:KpiTableWidget:right_click", {
         type: "widget:KpiTableWidget:right_click",
         widgetId: o.value,
         payload: { widgetId: o.value, timestamp: Date.now() }
@@ -58,12 +58,12 @@ const be = /* @__PURE__ */ F({
     }), le(() => {
       if (o?.value && d.registerInstance(o.value, C, "KpiTableWidget", V), !l.value) return;
       const a = {
-        headerBackground: "#f0f0f0"
+        headerBackground: "var(--color-raised)"
       };
       for (const [c, g] of Object.entries(a)) {
-        const v = l.value[c];
-        let i = v;
-        if (Array.isArray(v) && (i = v[0] || g), i == null)
+        const f = l.value[c];
+        let i = f;
+        if (Array.isArray(f) && (i = f[0] || g), i == null)
           l.value[c] = new T(g);
         else if (!(i instanceof T)) if (typeof i == "object" && "value" in i) {
           const p = new T(i.value);
@@ -93,8 +93,8 @@ const be = /* @__PURE__ */ F({
     });
     function $(a) {
       const c = [];
-      function g(v) {
-        v.forEach((i) => {
+      function g(f) {
+        f.forEach((i) => {
           i.type === "Folder" ? g(i.children || []) : c.push(i);
         });
       }
@@ -106,22 +106,22 @@ const be = /* @__PURE__ */ F({
         i.forEach((p) => {
           p.type === "Folder" ? c.push({
             ...p,
-            children: p.children ? v(p.children) : []
+            children: p.children ? f(p.children) : []
           }) : (c.push({
             ...p,
             children: []
             // Remove children to flatten hierarchy
-          }), p.children && p.children.length > 0 && c.push(...v(p.children)));
+          }), p.children && p.children.length > 0 && c.push(...f(p.children)));
         });
       }
-      function v(i) {
+      function f(i) {
         const p = [];
         return i.forEach((b) => {
           p.push({
             ...b,
             children: []
             // Remove children to flatten hierarchy
-          }), b.children && b.children.length > 0 && p.push(...v(b.children));
+          }), b.children && b.children.length > 0 && p.push(...f(b.children));
         }), p;
       }
       return g(a), c;
@@ -131,7 +131,7 @@ const be = /* @__PURE__ */ F({
       onClick: u,
       onContextmenu: re(E, ["prevent"])
     }, [
-      h(N(fe), { tableData: Y.value }, null, 8, ["tableData"])
+      h(N(ve), { tableData: Y.value }, null, 8, ["tableData"])
     ], 32));
   }
 }), U = (n, r) => {
@@ -139,7 +139,7 @@ const be = /* @__PURE__ */ F({
   for (const [e, t] of r)
     s[e] = t;
   return s;
-}, ye = /* @__PURE__ */ U(be, [["__scopeId", "data-v-34aee555"]]), Ie = { class: "settings-container" }, Ee = /* @__PURE__ */ F({
+}, ye = /* @__PURE__ */ U(be, [["__scopeId", "data-v-f4b39436"]]), Ie = { class: "settings-container" }, Ee = /* @__PURE__ */ F({
   __name: "KpiTableWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -147,10 +147,10 @@ const be = /* @__PURE__ */ F({
   },
   emits: ["update:modelValue"],
   setup(n) {
-    const r = W("i18n"), s = (f) => r ? r.t(f) : f, e = ie(n, "modelValue"), t = ["Emoji", "Arrow", "Chart", "Badge"], l = ["Emoji", "Lights", "Badge"], o = O(!1);
-    return j(() => e.value, (f) => {
-      f && (f.headerBackground instanceof T || (f.headerBackground = ne(new T(f.headerBackground || "#f0f0f0"))));
-    }, { immediate: !0, deep: !0 }), (f, d) => {
+    const r = W("i18n"), s = (v) => r ? r.t(v) : v, e = ie(n, "modelValue"), t = ["Emoji", "Arrow", "Chart", "Badge"], l = ["Emoji", "Lights", "Badge"], o = O(!1);
+    return j(() => e.value, (v) => {
+      v && (v.headerBackground instanceof T || (v.headerBackground = ne(new T(v.headerBackground || "#f0f0f0"))));
+    }, { immediate: !0, deep: !0 }), (v, d) => {
       const x = y("va-color-input"), V = y("va-select"), w = y("va-checkbox"), C = y("va-collapse");
       return M(), se(C, {
         modelValue: o.value,

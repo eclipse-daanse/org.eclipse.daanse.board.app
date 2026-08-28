@@ -39,12 +39,12 @@ const props = defineProps({
     headerBackgroundColor: {
         required: false,
         type: String,
-        default: '#f5f5f5',
+        default: 'var(--color-raised)',
     },
     headerTextColor: {
         required: false,
         type: String,
-        default: '#000000',
+        default: 'var(--color-fg)',
     },
     borderColor: {
         required: false,

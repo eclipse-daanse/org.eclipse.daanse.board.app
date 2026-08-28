@@ -195,7 +195,7 @@ watch(() => props.modelValue, (newValue) => {
 
 .monaco-editor {
     height: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-divider);
 }
 
 .visual-editor-container {

@@ -77843,37 +77843,37 @@ ye({
   id: "freemarker2",
   extensions: [".ftl", ".ftlh", ".ftlx"],
   aliases: ["FreeMarker2", "Apache FreeMarker2"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagAutoInterpolationDollar)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagAutoInterpolationDollar)
 });
 ye({
   id: "freemarker2.tag-angle.interpolation-dollar",
   aliases: ["FreeMarker2 (Angle/Dollar)", "Apache FreeMarker2 (Angle/Dollar)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagAngleInterpolationDollar)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagAngleInterpolationDollar)
 });
 ye({
   id: "freemarker2.tag-bracket.interpolation-dollar",
   aliases: ["FreeMarker2 (Bracket/Dollar)", "Apache FreeMarker2 (Bracket/Dollar)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagBracketInterpolationDollar)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagBracketInterpolationDollar)
 });
 ye({
   id: "freemarker2.tag-angle.interpolation-bracket",
   aliases: ["FreeMarker2 (Angle/Bracket)", "Apache FreeMarker2 (Angle/Bracket)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagAngleInterpolationBracket)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagAngleInterpolationBracket)
 });
 ye({
   id: "freemarker2.tag-bracket.interpolation-bracket",
   aliases: ["FreeMarker2 (Bracket/Bracket)", "Apache FreeMarker2 (Bracket/Bracket)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagBracketInterpolationBracket)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagBracketInterpolationBracket)
 });
 ye({
   id: "freemarker2.tag-auto.interpolation-dollar",
   aliases: ["FreeMarker2 (Auto/Dollar)", "Apache FreeMarker2 (Auto/Dollar)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagAutoInterpolationDollar)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagAutoInterpolationDollar)
 });
 ye({
   id: "freemarker2.tag-auto.interpolation-bracket",
   aliases: ["FreeMarker2 (Auto/Bracket)", "Apache FreeMarker2 (Auto/Bracket)"],
-  loader: () => import("./freemarker2-Pr0gkIxa.js").then((o) => o.TagAutoInterpolationBracket)
+  loader: () => import("./freemarker2-BZcguN_9.js").then((o) => o.TagAutoInterpolationBracket)
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -77911,7 +77911,7 @@ ye({
   extensions: [".handlebars", ".hbs"],
   aliases: ["Handlebars", "handlebars", "hbs"],
   mimetypes: ["text/x-handlebars-template"],
-  loader: () => import("./handlebars-Dn2bLUwt.js")
+  loader: () => import("./handlebars-BNxLJwSN.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -77936,7 +77936,7 @@ ye({
   extensions: [".html", ".htm", ".shtml", ".xhtml", ".mdoc", ".jsp", ".asp", ".aspx", ".jshtm"],
   aliases: ["HTML", "htm", "html", "xhtml"],
   mimetypes: ["text/html", "text/x-jshtm", "text/template", "text/ng-template"],
-  loader: () => import("./html-5mLMAVcj.js")
+  loader: () => import("./html-DVbC9llj.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -77977,7 +77977,7 @@ ye({
   filenames: ["jakefile"],
   aliases: ["JavaScript", "javascript", "js"],
   mimetypes: ["text/javascript"],
-  loader: () => import("./javascript-DM-3HxcV.js")
+  loader: () => import("./javascript-BxR9y04q.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78052,7 +78052,7 @@ ye({
   extensions: [".liquid", ".html.liquid"],
   aliases: ["Liquid", "liquid"],
   mimetypes: ["application/liquid"],
-  loader: () => import("./liquid-ZhHKSqxm.js")
+  loader: () => import("./liquid-BdRaTX44.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78088,7 +78088,7 @@ ye({
   id: "mdx",
   extensions: [".mdx"],
   aliases: ["MDX", "mdx"],
-  loader: () => import("./mdx-M4T7dl5u.js")
+  loader: () => import("./mdx-DthmLap-.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78283,7 +78283,7 @@ ye({
   extensions: [".py", ".rpy", ".pyw", ".cpy", ".gyp", ".gypi"],
   aliases: ["Python", "py"],
   firstLine: "^#!/.*\\bpython[0-9.-]*\\b",
-  loader: () => import("./python-tYFmiu1t.js")
+  loader: () => import("./python-BYDUnemN.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78320,7 +78320,7 @@ ye({
   extensions: [".cshtml"],
   aliases: ["Razor", "razor"],
   mimetypes: ["text/x-cshtml"],
-  loader: () => import("./razor-BL0HO_PT.js")
+  loader: () => import("./razor-DKEnGWxn.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78572,7 +78572,7 @@ ye({
   extensions: [".ts", ".tsx", ".cts", ".mts"],
   aliases: ["TypeScript", "ts", "typescript"],
   mimetypes: ["text/typescript"],
-  loader: () => import("./typescript-LpvAvy4n.js")
+  loader: () => import("./typescript-Cx7gLcbu.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78640,7 +78640,7 @@ ye({
   firstLine: "(\\<\\?xml.*)|(\\<svg)|(\\<\\!doctype\\s+svg)",
   aliases: ["XML", "xml"],
   mimetypes: ["text/xml", "application/xml", "application/xaml+xml", "application/xml-dtd"],
-  loader: () => import("./xml-BCpj75w1.js")
+  loader: () => import("./xml-CdUS5CXD.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78653,7 +78653,7 @@ ye({
   extensions: [".yaml", ".yml"],
   aliases: ["YAML", "yaml", "YML", "yml"],
   mimetypes: ["application/x-yaml", "text/x-yaml"],
-  loader: () => import("./yaml-DKA0FiSe.js")
+  loader: () => import("./yaml-BNF4MySq.js")
 });
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
@@ -78756,7 +78756,7 @@ var ZP = class {
 );
 rm.languages.css = { cssDefaults: Gz, lessDefaults: Yz, scssDefaults: Zz };
 function QP() {
-  return import("./cssMode-ZcJ1bLb2.js");
+  return import("./cssMode-BDEf4AG-.js");
 }
 rm.languages.onLanguage("less", () => {
   QP().then((o) => o.setupMode(Yz));
@@ -78862,7 +78862,7 @@ BL.languages.html = {
   registerHTMLLanguageService: zL
 };
 function Vme() {
-  return import("./htmlMode-CcP8-rOV.js");
+  return import("./htmlMode--Kpqw1Ux.js");
 }
 function zL(o, e = HL, t = VL(o)) {
   const i = new Ome(o, e, t);
@@ -78939,7 +78939,7 @@ var Gme = class {
 ), Xme = () => tU().then((o) => o.getWorker());
 cv.languages.json = { jsonDefaults: eU, getWorker: Xme };
 function tU() {
-  return import("./jsonMode-D0r8w6Yj.js");
+  return import("./jsonMode-DIyCVIqg.js");
 }
 cv.languages.register({
   id: "json",
@@ -79103,7 +79103,7 @@ yp.languages.typescript = {
   getJavaScriptWorker: a_e
 };
 function UL() {
-  return import("./tsMode-DmGJ3zGl.js");
+  return import("./tsMode-HkkzStUq.js");
 }
 yp.languages.onLanguage("typescript", () => UL().then((o) => o.setupTypeScript(cU)));
 yp.languages.onLanguage("javascript", () => UL().then((o) => o.setupJavaScript(dU)));
@@ -113469,7 +113469,7 @@ const dke = { class: "editor-page" }, hke = { class: "header-container" }, uke =
   for (const [i, n] of e)
     t[i] = n;
   return t;
-}, pke = /* @__PURE__ */ fke(gke, [["__scopeId", "data-v-8ca31f8c"]]), mke = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, pke = /* @__PURE__ */ fke(gke, [["__scopeId", "data-v-ac581546"]]), mke = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   MonacoEditor: pke
 }, Symbol.toStringTag, { value: "Module" })), X7 = "org.eclipse.daanse.board.app.ui.vue.common.monaco", _ke = "0.0.1-next.1";

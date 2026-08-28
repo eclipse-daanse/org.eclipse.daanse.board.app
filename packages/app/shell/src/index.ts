@@ -44,6 +44,8 @@ import {
 import App from './App.vue'
 import router from './router'
 import Configuration from './pages/Configuration.vue'
+import Appearance from './pages/Appearance.vue'
+import { initTheme } from './theme/useTheme'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
@@ -51,6 +53,12 @@ import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
 let app: VueApp | undefined
 
 export async function activate({ services, log }: ActivationContext) {
+  /*
+   * Before the first view: main.css already carries a full set of values, so
+   * this only replaces them where the person chose something else.
+   */
+  initTheme()
+
   app = createApp(App)
 
   /*
@@ -153,6 +161,12 @@ export async function activate({ services, log }: ActivationContext) {
   configRoute.component = Configuration
   routeRegistry.registerRoute(configRoute)
 
+  const appearanceRoute = new RouteDefinition()
+  appearanceRoute.path = '/appearance'
+  appearanceRoute.name = 'appearance'
+  appearanceRoute.component = Appearance
+  routeRegistry.registerRoute(appearanceRoute)
+
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
 
   const configNav = new NavigationItem()
@@ -183,6 +197,18 @@ export async function activate({ services, log }: ActivationContext) {
       component: route.component,
       ...(route.meta ? { meta: route.meta } : {}),
     } as Parameters<typeof router.addRoute>[0])
+  }
+
+  /*
+   * A page opened straight at /configuration or /appearance rendered
+   * nothing: those routes did not exist when the router first resolved the
+   * url. Point it at the address bar now that they do - and read the url
+   * from the browser, because this runs before the first navigation, when
+   * the router still reports its start location rather than where we are.
+   */
+  const opened = window.location.pathname + window.location.search + window.location.hash
+  if (router.resolve(opened).matched.length && router.currentRoute.value.fullPath !== opened) {
+    router.replace(opened)
   }
 
   // One failing action set must not take the other down

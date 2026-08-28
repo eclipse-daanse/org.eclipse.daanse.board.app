@@ -86,6 +86,10 @@ const openEdit = () => {
  * workspace origin is carried across reloads.
  */
 const openStorage = () => router.push({ path: '/', query: { view: 'storage' } })
+
+/* Appearance is global, so it hangs off the identity end of the bar rather
+ * than the rail, which belongs to whatever board is open. */
+const openAppearance = () => router.push('/appearance')
 </script>
 
 <template>
@@ -142,6 +146,19 @@ const openStorage = () => router.push({ path: '/', query: { view: 'storage' } })
         Bearbeiten
       </button>
     </div>
+
+    <button
+      type="button"
+      class="icon-action"
+      title="Erscheinungsbild"
+      aria-label="Erscheinungsbild"
+      @click="openAppearance"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" />
+      </svg>
+    </button>
 
     <span class="avatar" title="Angemeldet">MH</span>
   </header>
@@ -283,6 +300,28 @@ const openStorage = () => router.push({ path: '/', query: { view: 'storage' } })
 .mode:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: -2px;
+}
+
+.icon-action {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-dim);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.icon-action:hover {
+  color: var(--color-fg);
+  background-color: var(--color-raised);
+}
+
+.icon-action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 
 .avatar {

@@ -228,7 +228,7 @@ watch(pageSettings,()=>{
       width: 400px;
       right: 20px;
       top: 20px;
-      background-color: #ecf0f1;
+      background-color: var(--color-pane);
       padding: 1rem 0;
       border-radius: 8px;
       z-index: 1000000;

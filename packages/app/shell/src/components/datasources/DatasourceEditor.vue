@@ -79,8 +79,8 @@ const emit = defineEmits(['close'])
 <template>
   <div class="w-full h-full flex gap-4">
     <div class="min-w-[350px]">
-      <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full">
-        <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
+      <div class="flex flex-col border border-[var(--color-divider)] rounded-lg overflow-hidden w-full h-full">
+        <div class="flex gap-4 w-full border-b border-[var(--color-divider)] px-4 py-2 items-center">
           <h4 class="flex-grow text-sm font-semibold leading-[1.5rem]">Store settings</h4>
         </div>
         <div class="flex-grow flex flex-col h-full">
@@ -109,7 +109,7 @@ const emit = defineEmits(['close'])
       </div>
     </div>
     <div class="flex-grow overflow-hidden w-full">
-      <div class="bg-white rounded-lg p-4 border border-gray-300
+      <div class="bg-pane rounded-lg p-4 border border-[var(--color-divider)]
         h-full w-full flex items-center justify-center overflow-hidden">
         <component :is="previewComponent" :data-source="datasourceProxy" :key="datasourceProxy.uid"
           @updateConfig="updateConfig" />

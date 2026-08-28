@@ -70,7 +70,7 @@ onMounted(() => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'KpiTableWidget', pageId);
     if (!config.value) return;
     const upgradeFields: Record<string, string> = {
-        headerBackground: '#f0f0f0'
+        headerBackground: 'var(--color-raised)'
     };
 
     for (const [key, defaultVal] of Object.entries(upgradeFields)) {

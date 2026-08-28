@@ -180,7 +180,7 @@ const getBackground = computed(() => {
 })
 
 const borderColor = computed(() => {
-  return widget.wrapperConfig.borderColor?.value || '#000000'
+  return widget.wrapperConfig.borderColor?.value || 'var(--color-divider)'
 })
 
 const borderSize = computed(() => {
@@ -203,7 +203,7 @@ const titleFontSize = computed(() => {
 })
 
 const titleColor = computed(() => {
-  return widget.wrapperConfig.titleColor?.value || '#000000'
+  return widget.wrapperConfig.titleColor?.value || 'var(--color-divider)'
 })
 
 // Unused? But kept for consistency
@@ -262,13 +262,13 @@ const getpadding = computed(() => {
         class="w-full h-full box-border cursor-pointer overflow-hidden sub"
         :style="{ position: 'relative', opacity: transparency }"
       >
-        <VaScrollContainer color="#cbcbcb" vertical horizontal>
+        <VaScrollContainer color="var(--color-outline)" vertical horizontal>
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
             v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
         </VaScrollContainer>
       </div>
-      <div class="hover absolute top-[25px] right-0 flex justify-end bg-white z-3000 hightz" v-if="editEnabled">
+      <div class="hover absolute top-[25px] right-0 flex justify-end z-3000 hightz" v-if="editEnabled">
         <VaButton class="control-button" @click="openSettings(widget.uid)" icon="settings" size="small">
         </VaButton>
         <VaButton class="control-button" @click="deleteWidget(widget.uid)" icon="close" color="danger" size="small">

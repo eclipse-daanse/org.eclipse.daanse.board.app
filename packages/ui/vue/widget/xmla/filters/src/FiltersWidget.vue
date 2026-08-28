@@ -276,7 +276,7 @@ const configureFilter = async (type: string, element: any) => {
   width: 100%;
   padding: 4px 6px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-divider);
   margin-bottom: 4px;
   border-radius: 4px;
   display: flex;
@@ -287,7 +287,7 @@ const configureFilter = async (type: string, element: any) => {
 
 .hierarchy-item .filter-caption {
   font-style: italic;
-  color: #666;
+  color: var(--color-dim);
 }
 
 .hierarchy-item .hierarchy-caption {

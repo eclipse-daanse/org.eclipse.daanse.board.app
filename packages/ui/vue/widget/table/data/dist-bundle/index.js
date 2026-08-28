@@ -1,13 +1,13 @@
-(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-23ba2fd9]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-23ba2fd9]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-23ba2fd9]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-23ba2fd9]{justify-self:start}.table_container .table[data-v-23ba2fd9]{flex-grow:1;flex-shrink:1}.loading[data-v-23ba2fd9]{display:flex;height:100%}.settings-container[data-v-50bce613]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
+(function(){var i="ui.vue.widget.table.data",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-5d1e9988]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-5d1e9988]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-5d1e9988]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-5d1e9988]{justify-self:start}.table_container .table[data-v-5d1e9988]{flex-grow:1;flex-shrink:1}.loading[data-v-5d1e9988]{display:flex;height:100%}.settings-container[data-v-50bce613]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
 import { EVENT_ACTIONS_REGISTRY as Q, EVENT_REGISTRY_ID as X, EVENT_ACTIONS_REGISTRY_ID as ee } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as te, deactivate as ae, component as ie, inject as D } from "@eclipse-daanse/tsm";
-import { defineComponent as V, toRefs as le, inject as I, onUnmounted as oe, ref as x, watch as E, onMounted as re, computed as ne, resolveComponent as f, createElementBlock as ce, openBlock as B, withModifiers as de, createVNode as h, normalizeStyle as se, unref as S, useModel as ge, markRaw as pe, createBlock as ue, withCtx as W, createElementVNode as me } from "vue";
+import { defineComponent as V, toRefs as le, inject as I, onUnmounted as oe, ref as x, watch as E, onMounted as re, computed as ne, resolveComponent as h, createElementBlock as ce, openBlock as B, withModifiers as de, createVNode as f, normalizeStyle as se, unref as S, useModel as ge, markRaw as pe, createBlock as ue, withCtx as W, createElementVNode as me } from "vue";
 import { useVariableRepository as ve, useDatasourceRepository as we, VariableWrapper as u } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { useRoute as _e } from "vue-router";
-import { WidgetAction as he, WidgetActionInterface as Ce, Payload as g } from "org.eclipse.daanse.board.app.lib.events";
+import { WidgetAction as fe, WidgetActionInterface as Ce, Payload as g } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput as Te } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as ke } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: fe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), ye = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+const { identifiers: he } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), ye = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var be = Object.defineProperty, De = Object.getOwnPropertyDescriptor, Ie = (o, i, r, n) => {
   for (var a = De(i, r), c = o.length - 1, t; c >= 0; c--)
     (t = o[c]) && (a = t(i, r, a) || a);
@@ -19,7 +19,7 @@ class C extends Ce {
   }
 }
 Ie([
-  he({ eventType: "dataTable.refresh" })
+  fe({ eventType: "dataTable.refresh" })
 ], C.prototype, "refresh");
 const We = /* @__PURE__ */ V({
   __name: "DataTableWidget",
@@ -29,7 +29,7 @@ const We = /* @__PURE__ */ V({
     id: {}
   },
   setup(o, { expose: i }) {
-    const { wrapParameters: r } = ve(), n = o, { datasourceId: a, config: c, id: t } = le(n), d = I(fe.TINY_EMITTER), w = I(Q), O = _e().params.pageid || "";
+    const { wrapParameters: r } = ve(), n = o, { datasourceId: a, config: c, id: t } = le(n), d = I(he.TINY_EMITTER), w = I(Q), O = _e().params.pageid || "";
     class P extends C {
       refresh() {
         y(a.value, a.value);
@@ -94,7 +94,7 @@ const We = /* @__PURE__ */ V({
       if (t?.value && w.registerInstance(t.value, k, "DataTableWidget", O), !c.value) return;
       const e = c.value.headerBackground;
       if (e == null)
-        c.value.headerBackground = new u("#f0f0f0");
+        c.value.headerBackground = new u("var(--color-raised)");
       else if (!(e instanceof u)) if (typeof e == "object" && "value" in e) {
         const l = new u(e.value);
         "variable" in e && (l.variable = e.variable), c.value.headerBackground = l;
@@ -104,7 +104,7 @@ const We = /* @__PURE__ */ V({
     const {
       headerBackground: U
     } = r({
-      headerBackground: ne(() => c.value.headerBackground?.value || "#f0f0f0")
+      headerBackground: ne(() => c.value.headerBackground?.value || "var(--color-raised)")
     }), { update: y } = we(a, "DataTable", m), q = (e) => {
       N(e.itemIndex?.toString() || "");
     }, z = (e) => {
@@ -129,7 +129,7 @@ const We = /* @__PURE__ */ V({
       l && $(b(l));
     };
     return (e, l) => {
-      const s = f("va-data-table");
+      const s = h("va-data-table");
       return B(), ce("div", {
         class: "w-full h-full",
         onClick: M,
@@ -137,7 +137,7 @@ const We = /* @__PURE__ */ V({
         onClickCapture: J,
         onContextmenuCapture: K
       }, [
-        h(s, {
+        f(s, {
           class: "table",
           items: m.value ? m.value.items : [],
           "sticky-header": "",
@@ -154,7 +154,7 @@ const We = /* @__PURE__ */ V({
   for (const [n, a] of i)
     r[n] = a;
   return r;
-}, Re = /* @__PURE__ */ H(We, [["__scopeId", "data-v-23ba2fd9"]]), Ve = { class: "settings-container" }, xe = /* @__PURE__ */ V({
+}, Re = /* @__PURE__ */ H(We, [["__scopeId", "data-v-5d1e9988"]]), Ve = { class: "settings-container" }, xe = /* @__PURE__ */ V({
   __name: "DataTableWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -166,7 +166,7 @@ const We = /* @__PURE__ */ V({
     return E(() => i.value, (n) => {
       n && (n.headerBackground instanceof u || (n.headerBackground = pe(new u(n.headerBackground || ""))));
     }, { immediate: !0, deep: !0 }), (n, a) => {
-      const c = f("va-color-input"), t = f("va-collapse");
+      const c = h("va-color-input"), t = h("va-collapse");
       return B(), ue(t, {
         modelValue: r.value,
         "onUpdate:modelValue": a[1] || (a[1] = (d) => r.value = d),
@@ -175,13 +175,13 @@ const We = /* @__PURE__ */ V({
       }, {
         default: W(() => [
           me("div", Ve, [
-            h(S(Te), {
+            f(S(Te), {
               modelValue: i.value.headerBackground,
               "onUpdate:modelValue": a[0] || (a[0] = (d) => i.value.headerBackground = d),
               label: "Header Color"
             }, {
               default: W(({ value: d, change: w }) => [
-                h(c, {
+                f(c, {
                   class: "text-color",
                   label: "Header Color",
                   "model-value": d,

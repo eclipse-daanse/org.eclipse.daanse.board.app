@@ -80,7 +80,7 @@ const { calculateValue, wrapParameters } = useVariableRepository()
 
 const resolvedStyle = wrapParameters({
     fontSize: computed(() => (config.value?.fontSize as any)?.value ?? '16'),
-    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? '#000000'),
+    fontColor: computed(() => (config.value?.fontColor as any)?.value ?? 'var(--color-fg)'),
 })
 
 const data = ref(null as any);

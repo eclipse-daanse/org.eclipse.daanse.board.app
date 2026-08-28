@@ -61,8 +61,8 @@ watch(pageID, (id) => recordOpened(id), { immediate: true })
 <style scoped>
 
 .dottet{
-  background: #fafafa;
-  background-image: radial-gradient(#b8b8b8 1px, transparent 0);
+  background: var(--color-canvas);
+  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);
   background-size: 40px 40px;
   background-position: -19px -19px;
 }
@@ -70,7 +70,7 @@ watch(pageID, (id) => recordOpened(id), { immediate: true })
   position: absolute;
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--color-outline);
   z-index: 100000;
   pointer-events: none;
 }

@@ -47,8 +47,8 @@ defineEmits(['openEditor'])
 </script>
 
 <template>
-  <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full ice">
-    <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
+  <div class="flex flex-col border border-[var(--color-divider)] rounded-lg overflow-hidden w-full h-full ice">
+    <div class="flex gap-4 w-full border-b border-[var(--color-divider)] px-4 py-2 items-center">
       <h4 class="flex-grow text-sm font-semibold">Connections</h4>
       <VaButton @click="addConnection()" icon="add" size="small"></VaButton>
     </div>
@@ -56,9 +56,9 @@ defineEmits(['openEditor'])
       <VaListItem
         v-for="(connection, index) in connections"
         :key="index"
-        class="text-sm border-b border-gray-300 border-dashed
+        class="text-sm border-b border-[var(--color-divider)] border-dashed
         last:border-none px-4 py-2 cursor-pointer"
-        :class="{ 'bg-gray-200': connection.uid === activeItemId }"
+        :class="{ 'bg-raised': connection.uid === activeItemId }"
         @click="$emit('openEditor', { type: 'Connection', itemId: connection.uid })"
       >
         <VaListItemSection>

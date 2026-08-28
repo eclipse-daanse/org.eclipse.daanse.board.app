@@ -1,5 +1,5 @@
-(function(){var i="ui.vue.common.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".folder-row[data-v-876827aa]{background-color:#f8f9fa;font-weight:500}.expandable[data-v-876827aa]{cursor:pointer}.expandable[data-v-876827aa]:hover{background-color:#f8f9fa}.expanded[data-v-876827aa]{background-color:#e3f2fd}.expand-icon[data-v-876827aa]{width:16px;margin-right:8px;font-size:12px}.folder-cell[data-v-876827aa]{color:#6c757d;text-align:right;font-style:italic}.child-count[data-v-876827aa]{margin-left:8px;font-size:.875em;color:#6c757d}.selection-cell[data-v-876827aa]{width:40px;text-align:center;padding:8px 4px}.selected[data-v-876827aa]{background-color:#e3f2fd}.va-table[data-v-19bad148]{width:100%;border-collapse:collapse;border:1px solid #ddd}.kpi-table th[data-v-19bad148]{background-color:#f5f5f5;padding:12px;text-align:left;border-bottom:2px solid #ddd;font-weight:600}.kpi-table td[data-v-19bad148]{padding:8px 12px;border-bottom:1px solid #eee}.kpi-table tr[data-v-19bad148]:hover{background-color:#f9f9f9}.selection-header[data-v-19bad148]{width:40px;text-align:center}\n";})();
-import { defineComponent as y, computed as p, createElementBlock as a, openBlock as s, createElementVNode as r, toDisplayString as v, inject as K, resolveComponent as C, createBlock as x, unref as k, ref as E, Fragment as w, createCommentVNode as f, normalizeClass as A, withModifiers as L, normalizeStyle as j, createVNode as b, renderList as B } from "vue";
+(function(){var i="ui.vue.common.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".folder-row[data-v-dfe548f6]{background-color:var(--color-raised);font-weight:500}.expandable[data-v-dfe548f6]{cursor:pointer}.expandable[data-v-dfe548f6]:hover{background-color:var(--color-raised)}.expanded[data-v-dfe548f6]{background-color:color-mix(in srgb,var(--color-accent) 16%,transparent)}.expand-icon[data-v-dfe548f6]{width:16px;margin-right:8px;font-size:12px}.folder-cell[data-v-dfe548f6]{color:var(--color-dim);text-align:right;font-style:italic}.child-count[data-v-dfe548f6]{margin-left:8px;font-size:.875em;color:var(--color-dim)}.selection-cell[data-v-dfe548f6]{width:40px;text-align:center;padding:8px 4px}.selected[data-v-dfe548f6]{background-color:color-mix(in srgb,var(--color-accent) 16%,transparent)}.va-table[data-v-b719739e]{width:100%;border-collapse:collapse;border:1px solid var(--color-divider)}.kpi-table th[data-v-b719739e]{background-color:var(--color-raised);padding:12px;text-align:left;border-bottom:2px solid var(--color-divider);font-weight:600}.kpi-table td[data-v-b719739e]{padding:8px 12px;border-bottom:1px solid var(--color-divider)}.kpi-table tr[data-v-b719739e]:hover{background-color:var(--color-bg)}.selection-header[data-v-b719739e]{width:40px;text-align:center}\n";})();
+import { defineComponent as y, computed as p, createElementBlock as a, openBlock as s, createElementVNode as r, toDisplayString as v, inject as K, resolveComponent as C, createBlock as x, unref as k, ref as E, Fragment as w, createCommentVNode as _, normalizeClass as A, withModifiers as L, normalizeStyle as j, createVNode as b, renderList as B } from "vue";
 const D = /* @__PURE__ */ y({
   __name: "KpiValueCell",
   props: {
@@ -103,19 +103,19 @@ const D = /* @__PURE__ */ y({
             onClick: n[0] || (n[0] = L(() => {
             }, ["stop"]))
           }, [
-            m.value ? f("", !0) : (s(), a("input", {
+            m.value ? _("", !0) : (s(), a("input", {
               key: 0,
               type: "checkbox",
               checked: S.value,
               onChange: V
             }, null, 40, q))
-          ])) : f("", !0),
+          ])) : _("", !0),
           r("td", {
             style: j({ paddingLeft: `${t.level * 20 + 12}px` })
           }, [
-            i.value ? (s(), a("span", H, v(u.value ? "▼" : "▶"), 1)) : f("", !0),
+            i.value ? (s(), a("span", H, v(u.value ? "▼" : "▶"), 1)) : _("", !0),
             r("span", null, v(I.value), 1),
-            i.value && !m.value ? (s(), a("span", J, "(" + v(h.value.length) + ")", 1)) : f("", !0)
+            i.value && !m.value ? (s(), a("span", J, "(" + v(h.value.length) + ")", 1)) : _("", !0)
           ], 4),
           m.value ? (s(), a("td", {
             key: 1,
@@ -136,14 +136,14 @@ const D = /* @__PURE__ */ y({
             }, null, 8, ["trend"])
           ], 64))
         ], 2),
-        i.value && u.value ? (s(!0), a(w, { key: 0 }, B(h.value, (g, _) => (s(), x(d, {
-          key: _,
+        i.value && u.value ? (s(!0), a(w, { key: 0 }, B(h.value, (g, f) => (s(), x(d, {
+          key: f,
           item: g,
           level: t.level + 1,
           "selected-items": t.selectedItems,
           "show-selection": t.showSelection,
           onToggleSelect: n[1] || (n[1] = (R) => o.$emit("toggle-select", R))
-        }, null, 8, ["item", "level", "selected-items", "show-selection"]))), 128)) : f("", !0)
+        }, null, 8, ["item", "level", "selected-items", "show-selection"]))), 128)) : _("", !0)
       ], 64);
     };
   }
@@ -152,7 +152,7 @@ const D = /* @__PURE__ */ y({
   for (const [c, u] of l)
     e[c] = u;
   return e;
-}, X = /* @__PURE__ */ N(W, [["__scopeId", "data-v-876827aa"]]), Z = { class: "va-table" }, ee = {
+}, X = /* @__PURE__ */ N(W, [["__scopeId", "data-v-dfe548f6"]]), Z = { class: "va-table" }, ee = {
   key: 0,
   class: "selection-header"
 }, te = ["checked", "indeterminate"], le = /* @__PURE__ */ y({
@@ -167,8 +167,8 @@ const D = /* @__PURE__ */ y({
     const e = t, c = l, u = E(/* @__PURE__ */ new Set()), m = (o) => {
       console.log("Extracting KPI names from items:", o);
       const n = [], d = (g) => {
-        g.forEach((_) => {
-          _.type === "KPI" && n.push(_.name), _.children?.length > 0 && d(_.children);
+        g.forEach((f) => {
+          f.type === "KPI" && n.push(f.name), f.children?.length > 0 && d(f.children);
         });
       };
       return o && o.length > 0 && d(o), n;
@@ -197,7 +197,7 @@ const D = /* @__PURE__ */ y({
               indeterminate: I.value,
               onChange: V
             }, null, 40, te)
-          ])) : f("", !0),
+          ])) : _("", !0),
           n[0] || (n[0] = r("th", null, "Name", -1)),
           n[1] || (n[1] = r("th", null, "Value", -1)),
           n[2] || (n[2] = r("th", null, "Goal", -1)),
@@ -218,7 +218,7 @@ const D = /* @__PURE__ */ y({
       ])
     ]));
   }
-}), ne = /* @__PURE__ */ N(le, [["__scopeId", "data-v-19bad148"]]), se = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}), ne = /* @__PURE__ */ N(le, [["__scopeId", "data-v-b719739e"]]), se = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   KpiTable: ne
 }, Symbol.toStringTag, { value: "Module" })), $ = "org.eclipse.daanse.board.app.ui.vue.common.kpi", oe = "0.0.1-next.1";

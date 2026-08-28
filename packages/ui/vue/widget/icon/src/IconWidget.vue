@@ -41,7 +41,7 @@ onMounted(() => {
                 if ('variable' in current) v.variable = (current as any).variable;
                 (config.value as any).iconColor = v;
             } else {
-                (config.value as any).iconColor = new VariableWrapper((current as string) || '#000000');
+                (config.value as any).iconColor = new VariableWrapper((current as string) || 'var(--color-fg)');
             }
         }
     }
@@ -87,7 +87,7 @@ const {
     iconColor,
     iconSize,
 } = wrapParameters({
-    iconColor: computed(() => (config.value.iconColor as any)?.value || '#000000'),
+    iconColor: computed(() => (config.value.iconColor as any)?.value || 'var(--color-fg)'),
     iconSize: computed(() => config.value.iconSize),
 });
 

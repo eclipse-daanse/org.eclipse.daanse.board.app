@@ -493,7 +493,7 @@ const openWidgetSettings = (id: string) => {
   padding-left:60px;
 }
 .vgl-layout {
-  --vgl-placeholder-bg: #aaa;
+  --vgl-placeholder-bg: var(--color-outline);
   min-height: 100vh;
 
 }
@@ -504,14 +504,14 @@ const openWidgetSettings = (id: string) => {
   margin: 5px;
   content: '';
   background-image:
-    linear-gradient(to right, #e9e9e9 1px, transparent 1px),
-    linear-gradient(to bottom, #e9e9e9 1px, transparent 1px);
+    linear-gradient(to right, var(--color-divider) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-divider) 1px, transparent 1px);
   background-repeat: repeat;
   background-size: calc(calc(100% - 5px) / var(--grid-cols, 12)) calc(var(--grid-row-height, 30px) + 10px);
 }
 
 :deep(.vgl-item--placeholder) {
-  outline: 2px dashed #888;
+  outline: 2px dashed var(--color-outline);
   background-color: rgba(136,136,136,0.15);
 }
 :deep(.vgl-item--resizing) { opacity: 90%; }

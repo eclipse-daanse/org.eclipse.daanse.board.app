@@ -25,7 +25,7 @@ Contributors:
           </VaButton>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex-grow">
+        <div class="bg-pane border border-[var(--color-divider)] rounded-lg overflow-hidden flex-grow">
           <!-- Header row -->
           <div class="variable-table-header">
             <div class="var-col-name">Name</div>
@@ -35,7 +35,7 @@ Contributors:
           </div>
 
           <!-- List items -->
-          <div class="divide-y divide-gray-200">
+          <div class="divide-y divide-[var(--color-divider)]">
             <template v-for="variable in store.variables" :key="variable.id">
               <div class="variable-table-row" v-if="variable.scope == VariableScope.Global">
                 <div class="var-col-name truncate">{{ variable.name }}</div>
@@ -75,7 +75,7 @@ Contributors:
           />
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex-grow">
+        <div class="bg-pane border border-[var(--color-divider)] rounded-lg overflow-hidden flex-grow">
           <!-- Header row -->
           <div class="variable-table-header">
             <div class="var-col-name">Name</div>
@@ -85,7 +85,7 @@ Contributors:
           </div>
 
           <!-- Page variables list -->
-          <div class="divide-y divide-gray-200"
+          <div class="divide-y divide-[var(--color-divider)]"
                 v-if="selectedPageId && currentPageVariables">
             <div class="variable-table-row"
                   v-for="variable in currentPageVariables" :key="variable.id">
@@ -102,13 +102,13 @@ Contributors:
           </div>
 
           <!-- Empty state for page variables -->
-          <div v-else-if="selectedPageId" class="p-8 text-center text-gray-500">
+          <div v-else-if="selectedPageId" class="p-8 text-center text-dim">
             <div class="text-2xl mb-2">📋</div>
             <p>No page variables found for this page</p>
           </div>
 
           <!-- No page selected state -->
-          <div v-else class="p-8 text-center text-gray-500">
+          <div v-else class="p-8 text-center text-dim">
             <div class="text-2xl mb-2">📄</div>
             <p>Select a page to view its variables</p>
           </div>
@@ -171,7 +171,7 @@ Contributors:
 
     <!-- Empty state (uncomment to use) -->
     <!--
-  <div class="p-8 flex flex-col items-center justify-center text-center text-gray-500">
+  <div class="p-8 flex flex-col items-center justify-center text-center text-dim">
     <div class="text-5xl mb-4">📋</div>
     <p class="mb-4">No variables found</p>
     <VaButton preset="primary" icon="add">Add Variable</VaButton>
@@ -351,13 +351,13 @@ const onPageSelected = (pageId: string) => {
 <style scoped>
 .variable-table-header {
   display: flex;
-  background-color: rgb(249 250 251);
-  border-bottom: 1px solid rgb(229 231 235);
+  background-color: var(--color-raised);
+  border-bottom: 1px solid var(--color-divider);
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgb(107 114 128);
+  color: var(--color-dim);
 }
 
 .variable-table-row {
@@ -366,7 +366,7 @@ const onPageSelected = (pageId: string) => {
 }
 
 .variable-table-row:hover {
-  background-color: rgb(249 250 251);
+  background-color: var(--color-raised);
 }
 
 .var-col-name {

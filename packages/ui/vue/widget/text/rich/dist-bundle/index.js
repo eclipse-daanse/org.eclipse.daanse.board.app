@@ -74,7 +74,7 @@ const yy = ["innerHTML"], ky = /* @__PURE__ */ tr({
       });
     }, { calculateValue: m, wrapParameters: g } = oy(), y = g({
       fontSize: $o(() => i.value?.fontSize?.value ?? "16"),
-      fontColor: $o(() => i.value?.fontColor?.value ?? "#000000")
+      fontColor: $o(() => i.value?.fontColor?.value ?? "var(--color-fg)")
     }), x = Ue(null), { update: C } = ly(r, "object", x);
     Tl(r, (A, $) => {
       C(A, $);

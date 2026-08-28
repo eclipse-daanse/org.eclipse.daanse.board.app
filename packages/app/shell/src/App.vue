@@ -23,7 +23,9 @@ Contributors:
 
 <script setup lang="ts">
 import Header from './components/common/Header.vue'
-import { inject, ref, onMounted, computed } from 'vue'
+import { inject, ref, onMounted, computed, watchEffect } from 'vue'
+import { useColors } from 'vuestic-ui'
+import { useTheme, vuesticColorsFrom } from './theme/useTheme'
 import { useRoute, useRouter } from 'vue-router'
 import {
   NAVIGATION_REGISTRY,
@@ -34,6 +36,18 @@ import { useGlobalLoading } from 'org.eclipse.daanse.board.app.ui.vue.composable
 
 const navigationItems = ref<NavigationItem[]>([])
 const { isLoading } = useGlobalLoading()
+/*
+ * The va-* components paint from their own colour store, so a theme that
+ * only writes CSS properties would leave every button, input and modal on
+ * the previous palette. One theme, both worlds.
+ */
+const { activeTheme } = useTheme()
+const { applyPreset, setColors } = useColors()
+watchEffect(() => {
+  applyPreset(activeTheme.value.dark ? 'dark' : 'light')
+  setColors(vuesticColorsFrom(activeTheme.value))
+})
+
 const route = useRoute()
 const router = useRouter()
 

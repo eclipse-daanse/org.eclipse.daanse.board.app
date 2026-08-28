@@ -125,7 +125,7 @@ onMounted(() => {
     if (!config.value) return;
     const current = config.value.headerBackground;
     if (current === undefined || current === null) {
-        config.value.headerBackground = new VariableWrapper('#f0f0f0');
+        config.value.headerBackground = new VariableWrapper('var(--color-raised)');
     } else if (current instanceof VariableWrapper) {
         // Already correct instance
     } else if (typeof current === 'object' && 'value' in current) {
@@ -142,7 +142,7 @@ onMounted(() => {
 const {
     headerBackground,
 } = wrapParameters({
-    headerBackground: computed(() => (config.value.headerBackground as any)?.value || '#f0f0f0'),
+    headerBackground: computed(() => (config.value.headerBackground as any)?.value || 'var(--color-raised)'),
 });
 
 const { update } = useDatasourceRepository(datasourceId, 'DataTable', data)

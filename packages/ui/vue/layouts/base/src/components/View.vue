@@ -66,8 +66,8 @@ onMounted(async () => {
 </template>
 <style scoped>
 .dottet{
-  background: #fafafa;
-  background-image: radial-gradient(#b8b8b8 1px, transparent 0);
+  background: var(--color-canvas);
+  background-image: radial-gradient(var(--color-divider) 1px, transparent 0);
   background-size: 40px 40px;
   background-position: -19px -19px;
 }
@@ -75,7 +75,7 @@ onMounted(async () => {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--color-outline);
   z-index: 100000;
   pointer-events: none;
 }
@@ -93,12 +93,12 @@ onMounted(async () => {
 .report-container__title {
   width: 100%;
   padding: 16px;
-  border-bottom: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed var(--color-divider);
 }
 
 .report-container .widgets-adding-controls {
   display: flex;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-divider);
   border-radius: 8px;
   margin: 16px;
 }

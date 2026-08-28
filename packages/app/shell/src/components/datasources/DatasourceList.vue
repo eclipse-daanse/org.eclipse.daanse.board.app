@@ -50,8 +50,8 @@ defineEmits(['openEditor'])
 </script>
 
 <template>
-  <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden w-full h-full ice ">
-    <div class="flex gap-4 w-full border-b border-gray-300 px-4 py-2 items-center">
+  <div class="flex flex-col border border-[var(--color-divider)] rounded-lg overflow-hidden w-full h-full ice ">
+    <div class="flex gap-4 w-full border-b border-[var(--color-divider)] px-4 py-2 items-center">
       <h4 class="flex-grow text-sm font-semibold">Stores</h4>
       <VaButton @click="endPointFinder()" icon="travel_explore" size="small"></VaButton>
       <VaButton @click="addDataSource()" icon="add" size="small"></VaButton>
@@ -61,9 +61,9 @@ defineEmits(['openEditor'])
       <VaListItem
         v-for="(dataSource, index) in dataSources"
         :key="index"
-        class="text-sm border-b border-gray-300 border-dashed
+        class="text-sm border-b border-[var(--color-divider)] border-dashed
         last:border-none px-4 py-2 cursor-pointer"
-        :class="{ 'bg-gray-200': dataSource.uid === activeItemId }"
+        :class="{ 'bg-raised': dataSource.uid === activeItemId }"
         @click="$emit('openEditor', { type: 'DataSource', itemId: dataSource.uid })"
       >
         <VaListItemSection>

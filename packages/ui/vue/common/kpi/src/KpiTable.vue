@@ -121,24 +121,24 @@ const toggleSelectAll = () => {
 .va-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-divider);
 }
 
 .kpi-table th {
-  background-color: #f5f5f5;
+  background-color: var(--color-raised);
   padding: 12px;
   text-align: left;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--color-divider);
   font-weight: 600;
 }
 
 .kpi-table td {
   padding: 8px 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-divider);
 }
 
 .kpi-table tr:hover {
-  background-color: #f9f9f9;
+  background-color: var(--color-bg);
 }
 
 .selection-header {
