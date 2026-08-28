@@ -25,6 +25,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
 import BoardFloorplan from './BoardFloorplan.vue'
 import WorkspaceStorage from './WorkspaceStorage.vue'
+import { summarizeBoard, type BoardSummary } from '@/composables/boardSummary'
+import { useBoardUsage } from '@/composables/useBoardUsage'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -38,6 +40,8 @@ const props = defineProps<{
 const router = useRouter()
 const route = useRoute()
 const query = ref('')
+
+const { usageOf, byUsage, lastOpenedLabel } = useBoardUsage()
 
 /** Boards and storage are two views of the same place, not two places. */
 const view = ref<'boards' | 'storage'>(route.query.view === 'storage' ? 'storage' : 'boards')
@@ -69,56 +73,23 @@ onUnmounted(() => {
   if (subscription) subscribable(props.pageRepo)?.unsubscribe?.(subscription)
 })
 
-interface BoardCard {
-  id: string
-  name: string
-  description: string
-  items: Array<{ id?: string; x?: number; y?: number; width?: number; height?: number }>
-  typeById: Record<string, string>
-  widgetCount: number
-  sourceCount: number
-  kinds: string[]
-}
-
-/** Widget type as a short label: 'ui.vue.widget.table.pivot' reads as 'pivot'. */
-function shortKind(type: string): string {
-  const parts = type.split('.').filter(Boolean)
-  return (parts[parts.length - 1] ?? type).replace(/widget$/i, '') || type
-}
-
-const boards = computed<BoardCard[]>(() => {
+/*
+ * Ordered by how much each board is actually used, so the ones worked with
+ * daily stay at the front and the rest keep their place behind them - a
+ * board is never hidden, only ranked.
+ */
+const boards = computed<BoardSummary[]>(() => {
   revision.value // re-read the repository whenever it announces a change
   const repo = props.pageRepo
   if (!repo) return []
 
-  return repo.getAllPageIds().map((id: string) => {
-    const page = repo.getPage(id) as PageI | undefined
-    const items = (useLayoutStore(id).layout ?? []) as BoardCard['items']
-    const widgets = (useWidgetsStore(id).widgets ?? []) as Array<{
-      uid: string
-      type: string
-      config?: { datasourceId?: string }
-    }>
-
-    const typeById: Record<string, string> = {}
-    for (const widget of widgets) typeById[widget.uid] = widget.type
-
-    const sources = new Set(
-      widgets.map((w) => w.config?.datasourceId).filter((d): d is string => Boolean(d)),
+  return repo
+    .getAllPageIds()
+    .slice()
+    .sort(byUsage)
+    .map((id: string) =>
+      summarizeBoard(id, repo.getPage(id) as PageI | undefined, useLayoutStore(id).layout, useWidgetsStore(id).widgets),
     )
-    const kinds = [...new Set(widgets.map((w) => shortKind(w.type)))]
-
-    return {
-      id,
-      name: page?.name || 'Unbenanntes Board',
-      description: page?.description ?? '',
-      items,
-      typeById,
-      widgetCount: widgets.length,
-      sourceCount: sources.size,
-      kinds,
-    }
-  })
 })
 
 const visibleBoards = computed(() => {
@@ -162,7 +133,8 @@ function openStorage() {
 </script>
 
 <template>
-  <div :class="['boards', { 'boards--storage': view === 'storage' }]">
+  <div class="boards">
+   <div class="boards__panel">
     <header class="boards__bar">
       <div class="boards__views" role="tablist" aria-label="Ansicht">
         <button
@@ -172,7 +144,7 @@ function openStorage() {
           :class="['boards__view', { on: view === 'boards' }]"
           @click="view = 'boards'"
         >
-          Boards
+          Oft genutzt
           <span v-if="boards.length" class="boards__count">{{ boards.length }}</span>
         </button>
         <button
@@ -200,6 +172,7 @@ function openStorage() {
       </div>
     </header>
 
+    <div class="boards__body">
     <!-- Nothing built yet: say what a board is and offer the one useful move -->
     <div v-if="view === 'boards' && boards.length === 0" class="boards__empty">
       <BoardFloorplan
@@ -249,6 +222,10 @@ function openStorage() {
               · {{ board.sourceCount }} {{ board.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
             </template>
           </p>
+          <p v-if="usageOf(board.id)" class="board__usage">
+            {{ usageOf(board.id)?.count }}× geöffnet · zuletzt {{ lastOpenedLabel(board.id) }}
+          </p>
+
           <ul v-if="board.kinds.length" class="board__kinds">
             <li v-for="kind in board.kinds.slice(0, 3)" :key="kind" class="board__kind">
               {{ kind }}
@@ -281,6 +258,8 @@ function openStorage() {
     </div>
 
     <WorkspaceStorage v-else @restored="view = 'boards'" />
+    </div>
+   </div>
   </div>
 </template>
 
@@ -288,63 +267,94 @@ function openStorage() {
 .boards {
   /* The page container is a column flexbox; without this the launcher
      shrinks to its content width instead of filling the surface. */
+  display: flex;
   width: 100%;
   flex: 1 1 auto;
   min-height: 0;
-  overflow: auto;
-  padding: 20px 24px 32px;
+  padding: 14px 16px 16px;
   background-color: var(--color-bg);
 }
 
-/* The storage view is a panel that reaches the bottom edge and scrolls
-   inside its own two columns, so the page itself must not scroll. */
-.boards--storage {
+/*
+ * One panel holds both views. The switch rides on its top edge the way the
+ * other detail screens carry their tabs, so it reads as part of the surface
+ * instead of floating above it.
+ */
+.boards__panel {
   display: flex;
   flex-direction: column;
-  padding-bottom: 20px;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
+.boards__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  background-color: var(--color-bg);
+  overflow: auto;
+}
+
+/* The panel's top edge: the switch on the left, the tools for the current
+   view on the right. */
 .boards__bar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding-bottom: 16px;
-  margin-bottom: 20px;
+  height: var(--spacing-panelHeader);
+  flex: none;
+  padding: 0 8px;
   border-bottom: 1px solid var(--color-divider);
 }
 
 .boards__views {
   display: flex;
+  align-items: center;
   gap: 2px;
+  height: 100%;
 }
 
 .boards__view {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  height: 100%;
+  padding: 0 12px;
   font-size: var(--text-sm);
   font-family: inherit;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-dim);
   background: none;
   border: 0;
-  border-radius: var(--radius-xs);
   cursor: pointer;
 }
 
 .boards__view:hover {
   color: var(--color-fg);
-  background-color: var(--color-pane);
 }
 
 .boards__view.on {
   color: var(--color-fg);
-  background-color: var(--color-pane);
-  box-shadow: inset 0 -2px 0 var(--color-accent);
+  font-weight: 600;
+}
+
+/* Sits on the panel edge, over the divider */
+.boards__view.on::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
 }
 
 .boards__view:focus-visible {
@@ -375,10 +385,11 @@ function openStorage() {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .boards__search {
-  height: 26px;
+  height: 22px;
   min-width: 180px;
   padding: 0 8px;
   font-size: var(--text-sm);
@@ -396,8 +407,8 @@ function openStorage() {
 }
 
 .boards__action {
-  height: 26px;
-  padding: 0 12px;
+  height: 22px;
+  padding: 0 10px;
   font-size: var(--text-sm);
   font-family: inherit;
   color: var(--color-fg);
@@ -424,7 +435,9 @@ function openStorage() {
 .boards__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  align-content: start;
   gap: 16px;
+  padding: 16px;
 }
 
 .board {
@@ -523,6 +536,12 @@ function openStorage() {
   color: var(--color-outline);
 }
 
+.board__usage {
+  margin: 3px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-dim);
+}
+
 .boards__nomatch {
   grid-column: 1 / -1;
   margin: 0;
@@ -532,7 +551,8 @@ function openStorage() {
 
 .boards__empty {
   max-width: 420px;
-  margin: 8vh auto 0;
+  margin: 10vh auto 0;
+  padding: 0 16px;
   text-align: center;
 }
 

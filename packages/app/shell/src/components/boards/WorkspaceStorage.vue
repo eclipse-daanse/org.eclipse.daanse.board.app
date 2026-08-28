@@ -293,10 +293,6 @@ watch(() => repoManager, loadPlaces)
 <template>
   <div class="storage">
     <aside class="tree" aria-label="Speicher">
-      <header class="tree__head">
-        <span class="tree__title">Speicher</span>
-      </header>
-
       <input
         v-model="query"
         class="tree__search"
@@ -450,8 +446,6 @@ watch(() => repoManager, loadPlaces)
   flex: 1 1 auto;
   min-height: 0;
   background-color: var(--color-pane);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -462,22 +456,6 @@ watch(() => repoManager, loadPlaces)
   flex-direction: column;
   min-height: 0;
   border-right: 1px solid var(--color-divider);
-}
-
-.tree__head {
-  display: flex;
-  align-items: center;
-  height: var(--spacing-panelHeader);
-  padding: 0 10px;
-  border-bottom: 1px solid var(--color-divider);
-}
-
-.tree__title {
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-dim);
 }
 
 .tree__search {
@@ -629,10 +607,14 @@ watch(() => repoManager, loadPlaces)
 }
 
 .detail__hint {
+  display: grid;
+  place-items: center;
+  flex: 1 1 auto;
   margin: 0;
   padding: 24px;
   font-size: var(--text-sm);
   color: var(--color-dim);
+  text-align: center;
 }
 
 .detail__failure {

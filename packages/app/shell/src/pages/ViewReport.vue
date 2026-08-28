@@ -13,7 +13,8 @@ Contributors:
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { inject, computed } from 'vue'
+import { inject, computed, watch } from 'vue'
+import { useBoardUsage } from '@/composables/useBoardUsage'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 import BoardsHome from '@/components/boards/BoardsHome.vue'
 import {
@@ -33,6 +34,14 @@ const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 const pageID = computed(() => {
   return (props.params?.pageid ?? route.params.pageid ?? '') as string
 })
+
+/*
+ * Counted here rather than in the launcher: a board is just as often opened
+ * from a breadcrumb, a link or a reload, and all of those pass through this
+ * page.
+ */
+const { recordOpened } = useBoardUsage()
+watch(pageID, (id) => recordOpened(id), { immediate: true })
 
 </script>
 
