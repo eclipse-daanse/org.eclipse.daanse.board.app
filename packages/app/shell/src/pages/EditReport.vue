@@ -24,7 +24,9 @@ import { ref, computed, inject, onBeforeUnmount } from 'vue'
 
 import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
-import WidgetSettingsWindow from '@/components/common/WidgetSettingsWindow.vue'
+import WidgetSettingsOverlay from '@/components/common/WidgetSettingsOverlay.vue'
+import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useRoute } from 'vue-router'
 import PageEditor from '@/components/pageEditor/PageEditor.vue'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
@@ -60,21 +62,29 @@ const currentlyEditingWidget = computed(() => {
   return innerWidgets.value.find((widget) => widget.uid === widgetSettingsOpenedId.value)
 })
 
-/* ---- splitters ------------------------------------------------------- */
+/*
+ * The preview shows the widget at the size it has on the board, so what is
+ * set here is set for the real thing rather than for a stand-in.
+ */
+const { layout } = useLayoutStore((pageID as string) || '')
+const editedWidgetSize = computed(() => {
+  const item = (layout as Array<{ id?: string; width?: number; height?: number }> | undefined)?.find(
+    (entry) => entry.id === widgetSettingsOpenedId.value,
+  )
+  if (!item?.width || !item?.height) return undefined
+  return { width: item.width, height: item.height }
+})
+
+/* ---- palette splitter ------------------------------------------------ */
 const paletteWidth = ref(240)
-const inspectorWidth = ref(300)
 const MIN = 200
 const MAX = 460
 
-let drag: { side: 'left' | 'right'; startX: number; startW: number } | null = null
+let drag: { startX: number; startW: number } | null = null
 
 const onMove = (e: PointerEvent) => {
   if (!drag) return
-  const delta = e.clientX - drag.startX
-  const raw = drag.side === 'left' ? drag.startW + delta : drag.startW - delta
-  const clamped = Math.min(MAX, Math.max(MIN, raw))
-  if (drag.side === 'left') paletteWidth.value = clamped
-  else inspectorWidth.value = clamped
+  paletteWidth.value = Math.min(MAX, Math.max(MIN, drag.startW + (e.clientX - drag.startX)))
 }
 
 const endDrag = () => {
@@ -85,22 +95,17 @@ const endDrag = () => {
   document.body.style.userSelect = ''
 }
 
-const startDrag = (side: 'left' | 'right', e: PointerEvent) => {
-  drag = {
-    side,
-    startX: e.clientX,
-    startW: side === 'left' ? paletteWidth.value : inspectorWidth.value,
-  }
+const startDrag = (_side: 'left', e: PointerEvent) => {
+  drag = { startX: e.clientX, startW: paletteWidth.value }
   window.addEventListener('pointermove', onMove)
   window.addEventListener('pointerup', endDrag)
   document.body.style.cursor = 'col-resize'
   document.body.style.userSelect = 'none'
 }
 
-/** Keyboard equivalent for the splitters. */
-const nudge = (side: 'left' | 'right', step: number) => {
-  const target = side === 'left' ? paletteWidth : inspectorWidth
-  target.value = Math.min(MAX, Math.max(MIN, target.value + step))
+/** Keyboard equivalent for the splitter. */
+const nudge = (_side: 'left', step: number) => {
+  paletteWidth.value = Math.min(MAX, Math.max(MIN, paletteWidth.value + step))
 }
 
 onBeforeUnmount(endDrag)
@@ -176,29 +181,17 @@ onBeforeUnmount(endDrag)
       </Transition>
     </div>
 
-    <div
-      v-if="widgetSettingsOpenedId"
-      class="split-x"
-      role="separator"
-      aria-orientation="vertical"
-      aria-label="Breite der Widget-Einstellungen"
-      tabindex="0"
-      @pointerdown.prevent="startDrag('right', $event)"
-      @keydown.left.prevent="nudge('right', 16)"
-      @keydown.right.prevent="nudge('right', -16)"
-    ></div>
-
-    <!-- Widget inspector -->
-    <aside
-      v-if="widgetSettingsOpenedId"
-      class="panel"
-      :style="{ width: inspectorWidth + 'px' }"
+    <!-- Widget settings: an overlay, so the widget can be shown beside them -->
+    <WidgetSettingsOverlay
+      v-if="widgetSettingsOpenedId && currentlyEditingWidget"
+      v-model="currentlyEditingWidget"
+      :board-size="editedWidgetSize"
+      @close="widgetSettingsOpenedId = ''"
     >
-      <WidgetSettingsWindow
-        @close="widgetSettingsOpenedId = ''"
-        v-model="currentlyEditingWidget"
-      ></WidgetSettingsWindow>
-    </aside>
+      <template #preview>
+        <WidgetWrapper :widget="currentlyEditingWidget" :edit-enabled="false" />
+      </template>
+    </WidgetSettingsOverlay>
   </div>
 </template>
 
