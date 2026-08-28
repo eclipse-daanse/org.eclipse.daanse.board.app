@@ -162,7 +162,7 @@ function openStorage() {
 </script>
 
 <template>
-  <div class="boards">
+  <div :class="['boards', { 'boards--storage': view === 'storage' }]">
     <header class="boards__bar">
       <div class="boards__views" role="tablist" aria-label="Ansicht">
         <button
@@ -294,6 +294,15 @@ function openStorage() {
   overflow: auto;
   padding: 20px 24px 32px;
   background-color: var(--color-bg);
+}
+
+/* The storage view is a panel that reaches the bottom edge and scrolls
+   inside its own two columns, so the page itself must not scroll. */
+.boards--storage {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  overflow: hidden;
 }
 
 .boards__bar {

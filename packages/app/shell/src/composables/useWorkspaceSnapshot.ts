@@ -80,6 +80,34 @@ export function useWorkspaceOrigin() {
   return origin
 }
 
+/** A stored workspace as it comes out of a repository. */
+export interface StoredWorkspace {
+  pages?: Record<string, { info?: { name?: string; description?: string }; widgets?: any[]; layout?: any[] }>
+  widgets?: any[]
+  datasources?: any[]
+  conections?: any[]
+  variables?: any[]
+}
+
+/**
+ * Decodes a stored payload without applying it, so a state can be inspected
+ * before it is loaded. Repositories hand it over either as the raw string or
+ * already through JSON.parse, and cyclic payloads are written with flatted -
+ * an array at the top level is the tell.
+ */
+export function parseSnapshot(content: unknown): StoredWorkspace | undefined {
+  if (!content) return undefined
+  try {
+    if (typeof content === 'string') {
+      const data = JSON.parse(content)
+      return Array.isArray(data) ? parse(content) : data
+    }
+    return Array.isArray(content) ? parse(JSON.stringify(content)) : (content as StoredWorkspace)
+  } catch {
+    return undefined
+  }
+}
+
 export function useWorkspaceSnapshot() {
   const pageRepo = inject<PageRegistryI>(PageIdentifier)
   const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
@@ -130,17 +158,8 @@ export function useWorkspaceSnapshot() {
    *   where to navigate - that is a view's business, not this one's.
    */
   function restore(content: unknown): string[] {
-    if (!content) return []
-
-    let data: any
-    if (typeof content === 'string') {
-      data = JSON.parse(content)
-      // Written with flatted when the payload contains cycles
-      if (Array.isArray(data)) data = parse(content)
-    } else {
-      data = content
-      if (Array.isArray(data)) data = parse(JSON.stringify(content))
-    }
+    const data = parseSnapshot(content) as any
+    if (!data) return []
 
     const layoutStore = useLayoutStore()
     const sources = useDataSourcesStore()
