@@ -26,7 +26,7 @@ Contributors:
  * opening are kept, so "Verwerfen" puts them back rather than being a
  * button that promises something it cannot do.
  */
-import { computed, onBeforeUnmount, onMounted, ref, inject } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, inject, watch } from 'vue'
 import { WidgetWrapperSettings } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
@@ -49,6 +49,68 @@ const t = (key: string) => (i18n ? i18n.t(key) : key)
 
 type TabId = 'data' | 'look' | 'frame' | 'variables'
 const tab = ref<TabId>('look')
+
+/* --------------------------------------------------- sections as tabs */
+
+/**
+ * The widget's own settings arrive as a stack of collapsible sections - the
+ * chart alone brings six. Stacked accordions mean scrolling past everything
+ * you are not looking for, so they are driven as tabs instead: one section
+ * open, the rest closed, their headers hidden.
+ *
+ * Read from the rendered result rather than declared, because every widget
+ * brings its own settings component and none of them knows about this
+ * overlay. If the shape is not what we expect, the sections simply stay as
+ * they were - a stack of collapsibles, which still works.
+ */
+const lookHost = ref<HTMLElement>()
+const sections = ref<Array<{ label: string; index: number }>>([])
+const activeSection = ref(0)
+
+function sectionElements(): HTMLElement[] {
+  const host = lookHost.value
+  if (!host) return []
+  return [...host.querySelectorAll(':scope > .va-collapse')] as HTMLElement[]
+}
+
+/** The header's own words, without the icon ligatures around them. */
+function labelOf(collapse: HTMLElement): string {
+  const header = collapse.querySelector('.va-collapse__header-wrapper')
+  if (!header) return ''
+  const words = [...header.querySelectorAll('*')]
+    .filter((el) => !el.classList.contains('va-icon') && el.children.length === 0)
+    .map((el) => (el.textContent ?? '').trim())
+    .filter((text) => text && !/^(expand_more|expand_less|add_circle)$/.test(text))
+  return words[0] ?? ''
+}
+
+function isOpen(collapse: HTMLElement): boolean {
+  return collapse.className.includes('--expanded')
+}
+
+function showSection(index: number) {
+  activeSection.value = index
+  sectionElements().forEach((collapse, i) => {
+    const header = collapse.querySelector('.va-collapse__header-wrapper') as HTMLElement | null
+    if (header) header.style.display = 'none'
+    const wanted = i === index
+    if (wanted !== isOpen(collapse)) header?.click()
+    collapse.style.display = wanted ? '' : 'none'
+  })
+}
+
+async function scanSections() {
+  await nextTick()
+  const found = sectionElements()
+  sections.value = found.map((el, index) => ({ label: labelOf(el) || `Abschnitt ${index + 1}`, index }))
+  if (found.length) showSection(Math.min(activeSection.value, found.length - 1))
+}
+
+/** Opening a section tab means the widget's own settings are what is shown. */
+function pickSection(index: number) {
+  tab.value = 'look'
+  showSection(index)
+}
 
 /* --------------------------------------------------------- reset point */
 
@@ -188,8 +250,13 @@ function onKey(event: KeyboardEvent) {
   if (event.key === 'Escape') discard()
 }
 
+watch(tab, (value) => {
+  if (value === 'look') scanSections()
+})
+
 onMounted(() => {
   takeSnapshot()
+  scanSections()
   window.addEventListener('keydown', onKey)
   window.addEventListener('pointermove', onDrag)
   window.addEventListener('pointerup', endDrag)
@@ -257,6 +324,7 @@ onBeforeUnmount(() => {
               Daten <span class="tab__n">{{ dataCount }}</span>
             </button>
             <button
+              v-if="!sections.length"
               type="button"
               role="tab"
               :aria-selected="tab === 'look'"
@@ -264,6 +332,17 @@ onBeforeUnmount(() => {
               @click="tab = 'look'"
             >
               Darstellung
+            </button>
+            <button
+              v-for="section in sections"
+              :key="section.index"
+              type="button"
+              role="tab"
+              :aria-selected="tab === 'look' && activeSection === section.index"
+              :class="['tab', { on: tab === 'look' && activeSection === section.index }]"
+              @click="pickSection(section.index)"
+            >
+              {{ section.label }}
             </button>
             <button
               type="button"
@@ -306,7 +385,7 @@ onBeforeUnmount(() => {
                  components have several root elements, and v-show has
                  nothing to put display:none on in that case. Kept mounted
                  so switching tabs does not reset their open sections. -->
-            <div v-show="tab === 'look'">
+            <div v-show="tab === 'look'" ref="lookHost">
               <component
                 :is="availableWidgetsSettings[widget.type]?.settingsComponent"
                 v-model="widget.config"
@@ -485,10 +564,13 @@ onBeforeUnmount(() => {
   background-color: var(--color-pane);
 }
 
+/* The chart brings six sections of its own, so the row wraps rather than
+   scrolling sideways - a tab you have to hunt for is not a tab. */
 .tabs {
   display: flex;
-  align-items: center;
-  height: var(--spacing-panelHeader);
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: var(--spacing-panelHeader);
   flex: none;
   padding: 0 6px;
   gap: 1px;
@@ -500,8 +582,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 5px;
-  height: 100%;
-  padding: 0 11px;
+  height: var(--spacing-panelHeader);
+  padding: 0 9px;
   font-family: inherit;
   font-size: var(--text-sm);
   color: var(--color-dim);
