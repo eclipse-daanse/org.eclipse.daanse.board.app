@@ -373,6 +373,8 @@ function openStorage() {
 }
 
 .boards__count {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-xs);
   font-weight: 500;
   color: var(--color-dim);
@@ -538,7 +540,9 @@ function openStorage() {
 
 .board__usage {
   margin: 3px 0 0;
+  font-family: var(--font-mono);
   font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
   color: var(--color-dim);
 }
 

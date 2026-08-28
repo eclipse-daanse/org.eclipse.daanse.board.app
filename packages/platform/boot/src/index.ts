@@ -37,8 +37,8 @@ let loaderRef: ModuleLoader | undefined
 const css = `
   position: fixed; inset: 0; z-index: 99999;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: #f6f7f8; color: #3a3a3a;
-  font: 14px/1.5 system-ui, sans-serif;
+  background: #121820; color: #dfe8ef;
+  font: 14px/1.5 'Barlow', system-ui, sans-serif;
   transition: opacity .4s ease;
 `
 
@@ -54,20 +54,20 @@ function render(total: number, done: number, current: string, errors: StartupErr
   overlay.innerHTML = `
     <div style="width:320px;text-align:center">
       <div style="font-size:18px;margin-bottom:14px">Daanse Board</div>
-      <div style="height:6px;background:#e2e4e6;border-radius:3px;overflow:hidden">
-        <div style="height:100%;width:${percent}%;background:#e0a437;transition:width .2s ease"></div>
+      <div style="height:6px;background:#232d39;border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${percent}%;background:#d8a13c;transition:width .2s ease"></div>
       </div>
-      <div style="margin-top:10px;color:#8a8f94">${done}/${total} modules · ${current || '…'}</div>
+      <div style="margin-top:10px;color:#8b9bab;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px">${done}/${total} modules · ${current || '…'}</div>
     </div>
     ${
       errors.length
         ? `<div style="margin-top:22px;max-width:560px;max-height:40vh;overflow:auto;
-             background:#fdf1f1;border:1px solid #e4b4b4;border-radius:6px;
-             padding:12px 16px;color:#8c3535;text-align:left">
+             background:#2a1c1c;border:1px solid #5c3330;border-radius:4px;
+             padding:12px 16px;color:#e2766a;text-align:left">
              <div style="font-weight:600;margin-bottom:6px">${errors.length} module(s) failed to start</div>
              ${errorRows}
-             <button id="tsm-boot-dismiss" style="margin-top:10px;padding:4px 14px;border:1px solid #c98c8c;
-               border-radius:4px;background:#fff;color:#8c3535;cursor:pointer">Continue anyway</button>
+             <button id="tsm-boot-dismiss" style="margin-top:10px;padding:4px 14px;border:1px solid #5c3330;
+               border-radius:3px;background:#232d39;color:#e2766a;cursor:pointer">Continue anyway</button>
            </div>`
         : ''
     }

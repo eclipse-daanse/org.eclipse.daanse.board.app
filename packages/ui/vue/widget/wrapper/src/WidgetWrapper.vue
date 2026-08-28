@@ -161,10 +161,15 @@ const getBackground = computed(() => {
     bgAlpha = Math.round(bgAlpha * (transparencyVal / 255))
   }
 
-  let color = (widget.wrapperConfig.backgroundColor?.value || '#FFFFFF').replace(
-    '#',
-    '',
-  )
+  /*
+   * No colour of its own means "follow the theme" - white was a sensible
+   * default while the app only had a light surface, but it burns a hole in
+   * a dark board. Widgets that carry a stored colour keep it.
+   */
+  const stored = widget.wrapperConfig.backgroundColor?.value
+  if (!stored) return 'var(--color-pane)'
+
+  let color = stored.replace('#', '')
   if (color.length == 3) {
     color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2]
   }

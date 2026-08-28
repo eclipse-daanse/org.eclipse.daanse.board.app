@@ -509,7 +509,7 @@ watch(() => repoManager, loadPlaces)
 
 .row--entry {
   padding-left: 22px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
 
@@ -544,7 +544,8 @@ watch(() => repoManager, loadPlaces)
   margin-left: auto;
   padding-left: 8px;
   flex: none;
-  font-family: inherit;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-xs);
   color: var(--color-dim);
 }
@@ -590,6 +591,8 @@ watch(() => repoManager, loadPlaces)
 }
 
 .detail__facts {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-sm);
   color: var(--color-dim);
 }
@@ -655,6 +658,8 @@ watch(() => repoManager, loadPlaces)
 
 .board__facts {
   margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-sm);
   color: var(--color-dim);
 }

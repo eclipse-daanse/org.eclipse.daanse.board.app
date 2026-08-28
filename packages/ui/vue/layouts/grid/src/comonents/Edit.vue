@@ -515,7 +515,7 @@ const openWidgetSettings = (id: string) => {
   background-color: rgba(136,136,136,0.15);
 }
 :deep(.vgl-item--resizing) { opacity: 90%; }
-:deep(.vgl-item--static) { background-color: #cce; }
+:deep(.vgl-item--static) { background-color: color-mix(in srgb, var(--color-accent) 18%, transparent); }
 
 .text {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -547,11 +547,11 @@ const openWidgetSettings = (id: string) => {
 .widget-context-menu,
 .canvas-context-menu {
   position: fixed;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
   padding: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-e2);
   z-index: 100000;
 }
 </style>

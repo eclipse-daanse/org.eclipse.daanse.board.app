@@ -11,7 +11,7 @@
  *   Smart City Jena
  **********************************************************************/
 @import
-url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 /* The old host build scanned '../../**' for utility classes; the shell owns
  * the global sheet now, so the scan has to cover the whole workspace - the
@@ -27,64 +27,70 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
 /* =====================================================================
  * Design tokens - taken from docs/mdx-workbench-layout-mockups.html.
  *
- * The greys are near-neutral with a hair of warmth (blue minus red is
- * negative throughout). The mockups' cool greys plus a saturated accent made
- * the whole surface read blue; neutral ground lets the blue act as an accent
- * again and sits better next to the Daanse gold.
+ * "Messwarte": the app states what it is - a board of live readings. The
+ * ground is dark because dashboards hang on a wall and stay open for hours,
+ * and because a dark surface lets the numbers be the brightest thing in the
+ * frame. The greys carry a blue cast so the cyan accent belongs to them
+ * rather than sitting on top; amber is the second voice, and green, amber
+ * and red are spent on state alone - never on decoration.
  *
- * Light is the default because the components still carry hardcoded light
- * values; the dark set (the mockups' base theme) is one attribute away:
- * <html data-theme="dark">. Every text colour below was measured against
- * the surface it actually sits on and clears WCAG AA (>= 4.5:1); the
- * numbers are documented in the mockups' token tables.
+ * Dark is the default set here. The light set below is its twin, not a
+ * different design: same fonts, same radii, same roles, lifted onto a pale
+ * ground for the hours spent building a board rather than watching one.
+ * Every text colour was measured against the surface it actually sits on
+ * and clears WCAG AA (>= 4.5:1).
  *
  * Naming: --color-* so Tailwind 4 derives utilities (bg-pane, text-dim...).
  * The --mdxwb-* aliases below feed the MDX Workbench panes, so both worlds
  * share one palette and switch themes together.
  * ===================================================================== */
 @theme static {
+  /* --- type: the interface speaks Barlow, every figure speaks Mono --- */
+  --font-sans: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
   /* --- surfaces ------------------------------------------------------ */
-  --color-bg: #efefec;           /* app ground, editor surface, inputs */
-  --color-pane: #f8f8f6;         /* panels, topbar, activity rail, widgets */
-  --color-raised: #ffffff;       /* buttons, table heads, chips, badges */
-  --color-canvas: #e3e3df;       /* board surface behind the widgets */
-  --color-divider: #d5d5d0;      /* panel edges, splitters, table rules */
-  --color-outline: #bebeb8;      /* outlines of things you can operate */
+  --color-bg: #121820;           /* app ground, editor surface, inputs */
+  --color-pane: #1a222c;         /* panels, topbar, activity rail, widgets */
+  --color-raised: #232d39;       /* buttons, table heads, chips, badges */
+  --color-canvas: #0e141b;       /* board surface behind the widgets */
+  --color-divider: #2a3541;      /* panel edges, splitters, table rules */
+  --color-outline: #3c4959;      /* outlines of things you can operate */
 
   /* --- text and accents ---------------------------------------------- */
-  --color-fg: #24241f;           /* 14.7:1 on pane */
-  --color-dim: #5c5c55;          /*  6.3:1 - secondary text, labels */
-  --color-accent: #2b5599;       /*  6.9:1 - interaction, selection */
-  --color-onAccent: #ffffff;     /*  7.3:1 - text ON the accent fill */
-  --color-brand: #795706;        /*  6.2:1 - Daanse mark as text */
-  --color-brandFill: #c08a10;    /* Daanse mark as a fill */
-  --color-onBrand: #1a1c22;      /*  5.6:1 - text ON the brand fill */
-  --color-ok: #1f6f4a;           /*  5.8:1 */
-  --color-warn: #8a5a0c;         /*  6.0:1 */
-  --color-err: #b02a1c;          /*  6.1:1 */
+  --color-fg: #dfe8ef;           /* 12.4:1 on pane */
+  --color-dim: #8b9bab;          /*  6.3:1 - secondary text, labels */
+  --color-accent: #4fa3d1;       /*  6.4:1 - interaction, selection */
+  --color-onAccent: #08131c;     /*  8.9:1 - text ON the accent fill */
+  --color-brand: #d8a13c;        /*  8.5:1 - Daanse mark as text */
+  --color-brandFill: #d8a13c;    /* Daanse mark as a fill */
+  --color-onBrand: #14100a;      /*  9.6:1 - text ON the brand fill */
+  --color-ok: #5fb98a;           /*  7.6:1 - reading within range */
+  --color-warn: #d8a13c;         /*  8.5:1 - reading needs attention */
+  --color-err: #e2766a;          /*  5.9:1 - reading out of range */
 
   /* --- MDX syntax ---------------------------------------------------- */
-  --color-kw: #1f4a96;
-  --color-measure: #8a5a0c;
-  --color-member: #1f6f4a;
-  --color-fn: #7b3fa0;
+  --color-kw: #4fa3d1;
+  --color-measure: #d8a13c;
+  --color-member: #5fb98a;
+  --color-fn: #c294d8;
 
   /* --- kept for compatibility, re-pointed at the new palette --------- */
   --color-white: #fff;
-  --color-primary: #2b5599;
-  --color-secondary: #5c5c55;
-  --color-success: #1f6f4a;
-  --color-info: #2b5599;
-  --color-danger: #b02a1c;
-  --color-warning: #8a5a0c;
-  --color-backgroundPrimary: #efefec;
-  --color-backgroundSecondary: #f8f8f6;
-  --color-backgroundElement: #ffffff;
-  --color-backgroundBorder: #d5d5d0;
-  --color-textPrimary: #24241f;
-  --color-textInverted: #ffffff;
-  --color-daanse_blue: #2b5599;
-  --color-daanse_grey: #24241f;
+  --color-primary: #4fa3d1;
+  --color-secondary: #8b9bab;
+  --color-success: #5fb98a;
+  --color-info: #4fa3d1;
+  --color-danger: #e2766a;
+  --color-warning: #d8a13c;
+  --color-backgroundPrimary: #121820;
+  --color-backgroundSecondary: #1a222c;
+  --color-backgroundElement: #232d39;
+  --color-backgroundBorder: #2a3541;
+  --color-textPrimary: #dfe8ef;
+  --color-textInverted: #08131c;
+  --color-daanse_blue: #4fa3d1;
+  --color-daanse_grey: #dfe8ef;
 
   /* --- type scale: the sizes the mockups set ------------------------- */
   --text-xs: 11px;    /* badges, counters, status bar, panel headers */
@@ -93,16 +99,16 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
   --text-lg: 15px;    /* headings inside panes, empty states */
   --text-xl: 24px;    /* KPI values */
 
-  /* --- radii: five steps instead of the previous twelve -------------- */
-  --radius-xs: 3px;
-  --radius-sm: 5px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* --- radii: nearly square. An instrument, not furniture ------------ */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
 
-  /* --- elevation ----------------------------------------------------- */
-  --shadow-e1: 0 1px 2px rgba(25, 30, 45, 0.14);
-  --shadow-e2: 0 2px 8px rgba(25, 30, 45, 0.14);
-  --shadow-e3: 0 8px 24px rgba(25, 30, 45, 0.14);
+  /* --- elevation: barely there; separation comes from the line ------- */
+  --shadow-e1: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-e2: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-e3: 0 8px 24px rgba(0, 0, 0, 0.5);
 
   /* --- fixed shell metrics ------------------------------------------- */
   --spacing-topbar: 42px;
@@ -112,48 +118,53 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
   --spacing-statusbar: 24px;
 }
 
-/* Dark set - the mockups' base theme. Enable with <html data-theme="dark">. */
-:root[data-theme='dark'] {
-  --color-bg: #1f1f1e;
-  --color-pane: #262624;
-  --color-raised: #2d2d2b;
-  --color-canvas: #191918;
-  --color-divider: #3a3a36;
-  --color-outline: #4a4a45;
+/*
+ * The light twin. Same design on a pale ground - for the hours spent
+ * building a board rather than watching one. Enable with
+ * <html data-theme="light">.
+ */
+:root[data-theme='light'] {
+  --color-bg: #eef1f4;
+  --color-pane: #f7f9fb;
+  --color-raised: #ffffff;
+  --color-canvas: #e2e7ec;
+  --color-divider: #d3dae1;
+  --color-outline: #b3bec9;
 
-  --color-fg: #dcdcd7;        /* 11.0:1 on pane */
-  --color-dim: #9d9d95;       /*  5.6:1 */
-  --color-accent: #86aef0;    /*  6.7:1 */
-  --color-onAccent: #12120f;  /*  8.3:1 - a bright fill needs dark text */
-  --color-brand: #dfab35;     /*  7.2:1 */
-  --color-brandFill: #dfab35;
-  --color-onBrand: #12120f;   /*  8.9:1 */
-  --color-ok: #6cc79a;        /*  7.4:1 */
-  --color-warn: #dfb069;      /*  7.6:1 */
-  --color-err: #ec8189;       /*  5.8:1 */
+  --color-fg: #16202a;        /* 14.9:1 on pane */
+  --color-dim: #55646f;       /*  5.9:1 */
+  --color-accent: #1f6690;    /*  5.6:1 */
+  --color-onAccent: #ffffff;  /*  5.9:1 */
+  --color-brand: #8a6206;     /*  5.7:1 */
+  --color-brandFill: #c08a10;
+  --color-onBrand: #14100a;
+  --color-ok: #1f6f4a;
+  --color-warn: #8a5a0c;
+  --color-err: #b02a1c;
 
-  --color-kw: #86aef0;
-  --color-measure: #dfb069;
-  --color-member: #6cc79a;
-  --color-fn: #cf95d4;
+  --color-kw: #1f6690;
+  --color-measure: #8a5a0c;
+  --color-member: #1f6f4a;
+  --color-fn: #7b3fa0;
 
-  --color-primary: #86aef0;
-  --color-secondary: #9d9d95;
-  --color-success: #6cc79a;
-  --color-info: #86aef0;
-  --color-danger: #ec8189;
-  --color-warning: #dfb069;
-  --color-backgroundPrimary: #1f1f1e;
-  --color-backgroundSecondary: #262624;
-  --color-backgroundElement: #2d2d2b;
-  --color-backgroundBorder: #3a3a36;
-  --color-textPrimary: #dcdcd7;
-  --color-textInverted: #12120f;
-  --color-daanse_grey: #dcdcd7;
+  --color-primary: #1f6690;
+  --color-secondary: #55646f;
+  --color-success: #1f6f4a;
+  --color-info: #1f6690;
+  --color-danger: #b02a1c;
+  --color-warning: #8a5a0c;
+  --color-backgroundPrimary: #eef1f4;
+  --color-backgroundSecondary: #f7f9fb;
+  --color-backgroundElement: #ffffff;
+  --color-backgroundBorder: #d3dae1;
+  --color-textPrimary: #16202a;
+  --color-textInverted: #ffffff;
+  --color-daanse_blue: #1f6690;
+  --color-daanse_grey: #16202a;
 
-  --shadow-e1: 0 1px 2px rgba(0, 0, 0, 0.42);
-  --shadow-e2: 0 2px 8px rgba(0, 0, 0, 0.42);
-  --shadow-e3: 0 8px 24px rgba(0, 0, 0, 0.42);
+  --shadow-e1: 0 1px 2px rgba(22, 32, 42, 0.14);
+  --shadow-e2: 0 2px 8px rgba(22, 32, 42, 0.14);
+  --shadow-e3: 0 8px 24px rgba(22, 32, 42, 0.14);
 }
 
 /* The MDX Workbench panes read --mdxwb-*; feeding them from the same tokens
@@ -202,8 +213,8 @@ url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100.
 body {
   --va-sidebar-z-index: 30000;
   --moveable-color: var(--color-outline) !important;
-  font-family: 'Roboto', sans-serif;
-  --va-font-family: 'Roboto', sans-serif;
+  font-family: var(--font-sans);
+  --va-font-family: var(--font-sans);
   font-optical-sizing: auto;
   /* was 200 - a hairline weight at 13px is barely readable; the mockups
    * use 400 for body and 500/600 for emphasis */

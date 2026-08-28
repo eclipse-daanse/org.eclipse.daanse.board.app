@@ -193,7 +193,7 @@ let layout = computed(() => (storedLayout.value || []).map(toGrid))
   padding-left:60px;
 }
 .vgl-layout {
-  --vgl-placeholder-bg: #aaa;
+  --vgl-placeholder-bg: var(--color-outline);
   min-height:100vh;
 }
 /* Grid background disabled in view mode */
@@ -211,7 +211,7 @@ let layout = computed(() => (storedLayout.value || []).map(toGrid))
 }
 
 :deep(.vgl-item--static) {
-  background-color: #cce;
+  background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .text {

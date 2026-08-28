@@ -92,11 +92,12 @@ const blocks = computed(() => {
 .floorplan__block {
   position: absolute;
   margin: 2px 0 0 2px;
-  border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
   border-radius: 2px;
-  /* Solid enough to read as a family at a glance, quiet enough that the
-     arrangement stays the first thing you see */
-  background-color: color-mix(in srgb, currentColor 30%, var(--color-pane));
+  /* On the dark ground a lit edge reads as a block where a filled area only
+     reads as a stain - so the outline carries the family and the fill stays
+     barely there. The arrangement is what has to come across, not the hue. */
+  border: 1px solid color-mix(in srgb, currentColor 70%, transparent);
+  background-color: color-mix(in srgb, currentColor 14%, transparent);
 }
 
 .floorplan__block--data {
