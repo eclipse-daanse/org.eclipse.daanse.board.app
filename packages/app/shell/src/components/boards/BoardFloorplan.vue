@@ -76,7 +76,7 @@ const blocks = computed(() => {
       :class="`floorplan__block--${block.family}`"
       :style="block.style"
     />
-    <span v-if="blocks.length === 0" class="floorplan__empty">no widgets</span>
+    <span v-if="blocks.length === 0" class="floorplan__empty">keine Widgets</span>
   </div>
 </template>
 

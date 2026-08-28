@@ -172,15 +172,12 @@ export async function activate({ services, log }: ActivationContext) {
   configNav.visible = true
   navRegistry.registerNavigationItem(configNav)
 
-  const saveNav = new NavigationItem()
-  saveNav.id = 'save'
-  saveNav.label = 'Store and Restore'
-  saveNav.icon = 'cloud_sync'
-  saveNav.route = '/save'
-  saveNav.routeName = 'save'
-  saveNav.order = 20
-  saveNav.visible = true
-  navRegistry.registerNavigationItem(saveNav)
+  /*
+   * Storing and restoring is deliberately not an area of its own: it is
+   * reached where it is needed - from the launcher to open a stored
+   * workspace, and from the topbar of an open board to store it. The
+   * route stays registered above; only the rail entry is gone.
+   */
 
   // Routes other modules contributed before the shell came up
   const dynamic = routeRegistry as unknown as {

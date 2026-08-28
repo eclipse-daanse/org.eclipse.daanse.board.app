@@ -62,6 +62,14 @@ const openView = () => {
 const openEdit = () => {
   if (pageId.value) router.push(`/page/${pageId.value}/edit`)
 }
+
+/*
+ * Storing belongs to the board you are looking at, not to a separate area
+ * in the rail. It opens the storage view, which is where a target
+ * repository is chosen - the workspace has no notion yet of where a given
+ * board came from, so it cannot save silently.
+ */
+const openStorage = () => router.push('/save')
 </script>
 
 <template>
@@ -79,6 +87,16 @@ const openEdit = () => {
     </nav>
 
     <span class="spacer"></span>
+
+    <button
+      v-if="showModes"
+      type="button"
+      class="action"
+      title="Arbeitsstand speichern oder laden"
+      @click="openStorage"
+    >
+      Speichern
+    </button>
 
     <div v-if="showModes" class="modes" role="group" aria-label="Modus">
       <button
@@ -168,6 +186,28 @@ const openEdit = () => {
 .spacer {
   flex: 1 1 auto;
   min-width: 8px;
+}
+
+.action {
+  height: 24px;
+  padding: 0 10px;
+  margin-right: 8px;
+  font-size: var(--text-sm, 12px);
+  font-family: inherit;
+  color: var(--color-fg);
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+}
+
+.action:hover {
+  border-color: var(--color-outline);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 
 .modes {

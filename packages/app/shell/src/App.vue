@@ -48,6 +48,13 @@ onMounted(() => {
 const boardTarget = computed(() =>
   route.params.pageid ? `/page/${route.params.pageid}` : '/page/abc',
 )
+/*
+ * The launcher has no side menu: on the boards overview there is no open
+ * board for the rail to point into, and the areas it lists are properties
+ * of a board. The rail returns as soon as one is open.
+ */
+const isLauncher = computed(() => String(route.name) === 'home' && !route.params.pageid)
+
 const boardActive = computed(() =>
   ['home', 'page', 'edit', 'pageEdit'].includes(String(route.name)),
 )
@@ -63,8 +70,8 @@ const go = (target: string) => router.push(target)
 
     <Header />
 
-    <div class="shell-body">
-      <nav class="rail" aria-label="Bereiche">
+    <div :class="['shell-body', { 'shell-body--norail': isLauncher }]">
+      <nav v-if="!isLauncher" class="rail" aria-label="Bereiche">
         <button
           type="button"
           :class="['ri', { on: boardActive }]"
@@ -125,6 +132,11 @@ const go = (target: string) => router.push(target)
   grid-template-columns: var(--spacing-rail, 52px) minmax(0, 1fr);
   min-height: 0;
   overflow: hidden;
+}
+
+/* The launcher has no rail, so the content takes the whole width */
+.shell-body--norail {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .rail {

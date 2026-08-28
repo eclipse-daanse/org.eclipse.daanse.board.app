@@ -105,7 +105,7 @@ const boards = computed<BoardCard[]>(() => {
 
     return {
       id,
-      name: page?.name || 'Untitled board',
+      name: page?.name || 'Unbenanntes Board',
       description: page?.description ?? '',
       items,
       typeById,
@@ -142,7 +142,7 @@ function createBoard() {
   const id = uuidv4()
   repo.registerPage({
     id,
-    name: 'New board',
+    name: 'Neues Board',
     description: '',
     icon: '',
     visibleInNavigation: true,
@@ -169,14 +169,14 @@ function openStorage() {
           v-model="query"
           class="boards__search"
           type="search"
-          placeholder="Filter boards"
-          aria-label="Filter boards"
+          placeholder="Boards filtern"
+          aria-label="Boards filtern"
         />
         <button class="boards__action" type="button" @click="openStorage">
-          Open from storage
+          Aus Speicher öffnen
         </button>
         <button class="boards__action boards__action--primary" type="button" @click="createBoard">
-          New board
+          Neues Board
         </button>
       </div>
     </header>
@@ -193,17 +193,17 @@ function openStorage() {
         ]"
         :type-by-id="{ a: 'chart', b: 'map', c: 'table', d: 'text' }"
       />
-      <h2 class="boards__empty-title">No boards yet</h2>
+      <h2 class="boards__empty-title">Noch kein Board</h2>
       <p class="boards__empty-text">
-        A board is a page of widgets over your data sources. Create one, or open a board you
-        stored earlier.
+        Ein Board ist eine Seite mit Widgets über deinen Datenquellen. Lege eines an oder
+        öffne einen gespeicherten Arbeitsstand.
       </p>
       <div class="boards__empty-actions">
         <button class="boards__action boards__action--primary" type="button" @click="createBoard">
-          New board
+          Neues Board
         </button>
         <button class="boards__action" type="button" @click="openStorage">
-          Open from storage
+          Aus Speicher öffnen
         </button>
       </div>
     </div>
@@ -215,7 +215,7 @@ function openStorage() {
         class="board"
         tabindex="0"
         role="button"
-        :aria-label="`Open board ${board.name}`"
+        :aria-label="`Board ${board.name} öffnen`"
         @click="openBoard(board.id)"
         @keydown.enter="openBoard(board.id)"
         @keydown.space.prevent="openBoard(board.id)"
@@ -225,9 +225,9 @@ function openStorage() {
         <div class="board__body">
           <h2 class="board__name">{{ board.name }}</h2>
           <p class="board__meta">
-            {{ board.widgetCount }} {{ board.widgetCount === 1 ? 'widget' : 'widgets' }}
+            {{ board.widgetCount }} {{ board.widgetCount === 1 ? 'Widget' : 'Widgets' }}
             <template v-if="board.sourceCount">
-              · {{ board.sourceCount }} {{ board.sourceCount === 1 ? 'source' : 'sources' }}
+              · {{ board.sourceCount }} {{ board.sourceCount === 1 ? 'Datenquelle' : 'Datenquellen' }}
             </template>
           </p>
           <ul v-if="board.kinds.length" class="board__kinds">
@@ -243,21 +243,21 @@ function openStorage() {
         <button
           class="board__edit"
           type="button"
-          :aria-label="`Edit board ${board.name}`"
+          :aria-label="`Board ${board.name} bearbeiten`"
           @click.stop="editBoard(board.id)"
         >
-          Edit
+          Bearbeiten
         </button>
       </article>
 
       <button class="board board--new" type="button" @click="createBoard">
         <span class="board__plus" aria-hidden="true">+</span>
-        <span class="board__name">New board</span>
-        <span class="board__meta">Start empty</span>
+        <span class="board__name">Neues Board</span>
+        <span class="board__meta">Leer starten</span>
       </button>
 
       <p v-if="visibleBoards.length === 0" class="boards__nomatch">
-        No board matches “{{ query }}”.
+        Kein Board passt zu „{{ query }}“.
       </p>
     </div>
   </div>
