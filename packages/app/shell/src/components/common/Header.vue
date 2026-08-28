@@ -33,24 +33,40 @@ const isEditing = computed(
   () => route.name === 'edit' || route.name === 'pageEdit' || String(route.path).endsWith('/edit'),
 )
 
-/** Where you are, as a path of labels; the last one is the current place. */
-const crumb = computed<string[]>(() => {
-  const board = pageId.value ? `Board ${pageId.value.slice(0, 8)}` : 'Board'
+/**
+ * Where you are, as a path of places. Everything but the last one is a
+ * step you can go back to - a crumb that cannot be clicked is a label,
+ * and labels do not belong in a path.
+ */
+interface Crumb {
+  label: string
+  to?: string
+}
+
+const crumb = computed<Crumb[]>(() => {
+  const boards: Crumb = { label: 'Boards', to: '/' }
+  const board: Crumb = {
+    label: pageId.value ? `Board ${pageId.value.slice(0, 8)}` : 'Board',
+    to: pageId.value ? `/page/${pageId.value}` : undefined,
+  }
   switch (route.name) {
     case 'home':
+      return [{ label: 'Boards' }]
     case 'page':
-      return ['Boards', board]
+      return [boards, { label: board.label }]
     case 'edit':
     case 'pageEdit':
-      return ['Boards', board, 'Bearbeiten']
+      return [boards, board, { label: 'Bearbeiten' }]
     case 'data':
-      return ['Übersicht', 'Verbindungen & Daten']
+      return [boards, { label: 'Verbindungen & Daten' }]
     case 'config':
-      return ['Übersicht', 'Konfiguration']
+      return [boards, { label: 'Konfiguration' }]
+    case 'save':
+      return [boards, { label: 'Speicher' }]
     case 'test':
-      return ['Übersicht', 'Test']
+      return [boards, { label: 'Test' }]
     default:
-      return [String(route.name ?? 'Board')]
+      return [boards, { label: String(route.name ?? 'Board') }]
   }
 })
 
@@ -80,9 +96,19 @@ const openStorage = () => router.push('/save')
     </span>
 
     <nav class="crumb" aria-label="Pfad">
-      <template v-for="(part, i) in crumb" :key="part + i">
+      <template v-for="(part, i) in crumb" :key="part.label + i">
         <span v-if="i > 0" class="crumb-sep" aria-hidden="true">/</span>
-        <span :class="['crumb-part', { current: i === crumb.length - 1 }]">{{ part }}</span>
+        <button
+          v-if="part.to && i < crumb.length - 1"
+          type="button"
+          class="crumb-part crumb-link"
+          @click="router.push(part.to)"
+        >
+          {{ part.label }}
+        </button>
+        <span v-else :class="['crumb-part', { current: i === crumb.length - 1 }]">
+          {{ part.label }}
+        </span>
       </template>
     </nav>
 
@@ -179,6 +205,26 @@ const openStorage = () => router.push('/save')
   color: var(--color-fg);
   font-weight: 500;
 }
+.crumb-link {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+}
+
+.crumb-link:hover {
+  color: var(--color-fg);
+  text-decoration: underline;
+}
+
+.crumb-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .crumb-sep {
   color: var(--color-outline);
 }
