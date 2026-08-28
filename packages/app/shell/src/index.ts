@@ -44,7 +44,6 @@ import {
 import App from './App.vue'
 import router from './router'
 import Configuration from './pages/Configuration.vue'
-import SaveLoad from './pages/SaveLoad.vue'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
@@ -153,12 +152,6 @@ export async function activate({ services, log }: ActivationContext) {
   configRoute.name = 'config'
   configRoute.component = Configuration
   routeRegistry.registerRoute(configRoute)
-
-  const saveRoute = new RouteDefinition()
-  saveRoute.path = '/save'
-  saveRoute.name = 'save'
-  saveRoute.component = SaveLoad
-  routeRegistry.registerRoute(saveRoute)
 
   const navRegistry = services.getRequired<NavigationRegistry>(NAVIGATION_REGISTRY_ID)
 

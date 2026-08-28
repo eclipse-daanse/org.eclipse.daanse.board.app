@@ -81,11 +81,11 @@ const openEdit = () => {
 
 /*
  * Storing belongs to the board you are looking at, not to a separate area
- * in the rail. It opens the storage view, which is where a target
- * repository is chosen - the workspace has no notion yet of where a given
- * board came from, so it cannot save silently.
+ * in the rail. It opens the launcher on its storage view, where the target
+ * entry is picked; saving in place without asking comes later, once the
+ * workspace origin is carried across reloads.
  */
-const openStorage = () => router.push('/save')
+const openStorage = () => router.push({ path: '/', query: { view: 'storage' } })
 </script>
 
 <template>

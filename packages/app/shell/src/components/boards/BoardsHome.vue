@@ -21,9 +21,10 @@ Contributors:
  * nothing is decoration standing in for data we do not have.
  */
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
 import BoardFloorplan from './BoardFloorplan.vue'
+import WorkspaceStorage from './WorkspaceStorage.vue'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import type { PageRegistryI, PageI } from 'org.eclipse.daanse.board.app.lib.api.page'
@@ -35,7 +36,11 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const route = useRoute()
 const query = ref('')
+
+/** Boards and storage are two views of the same place, not two places. */
+const view = ref<'boards' | 'storage'>(route.query.view === 'storage' ? 'storage' : 'boards')
 
 /*
  * The page repository is a plain service, not a reactive store, so a board
@@ -152,19 +157,36 @@ function createBoard() {
 }
 
 function openStorage() {
-  router.push('/save')
+  view.value = 'storage'
 }
 </script>
 
 <template>
   <div class="boards">
     <header class="boards__bar">
-      <h1 class="boards__title">
-        Boards
-        <span v-if="boards.length" class="boards__count">{{ boards.length }}</span>
-      </h1>
+      <div class="boards__views" role="tablist" aria-label="Ansicht">
+        <button
+          type="button"
+          role="tab"
+          :aria-selected="view === 'boards'"
+          :class="['boards__view', { on: view === 'boards' }]"
+          @click="view = 'boards'"
+        >
+          Boards
+          <span v-if="boards.length" class="boards__count">{{ boards.length }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          :aria-selected="view === 'storage'"
+          :class="['boards__view', { on: view === 'storage' }]"
+          @click="view = 'storage'"
+        >
+          Speicher
+        </button>
+      </div>
 
-      <div class="boards__tools">
+      <div v-if="view === 'boards'" class="boards__tools">
         <input
           v-model="query"
           class="boards__search"
@@ -172,9 +194,6 @@ function openStorage() {
           placeholder="Boards filtern"
           aria-label="Boards filtern"
         />
-        <button class="boards__action" type="button" @click="openStorage">
-          Aus Speicher öffnen
-        </button>
         <button class="boards__action boards__action--primary" type="button" @click="createBoard">
           Neues Board
         </button>
@@ -182,7 +201,7 @@ function openStorage() {
     </header>
 
     <!-- Nothing built yet: say what a board is and offer the one useful move -->
-    <div v-if="boards.length === 0" class="boards__empty">
+    <div v-if="view === 'boards' && boards.length === 0" class="boards__empty">
       <BoardFloorplan
         class="boards__empty-plan"
         :items="[
@@ -208,7 +227,7 @@ function openStorage() {
       </div>
     </div>
 
-    <div v-else class="boards__grid">
+    <div v-else-if="view === 'boards'" class="boards__grid">
       <article
         v-for="board in visibleBoards"
         :key="board.id"
@@ -260,6 +279,8 @@ function openStorage() {
         Kein Board passt zu „{{ query }}“.
       </p>
     </div>
+
+    <WorkspaceStorage v-else @restored="view = 'boards'" />
   </div>
 </template>
 
@@ -284,6 +305,42 @@ function openStorage() {
   padding-bottom: 16px;
   margin-bottom: 20px;
   border-bottom: 1px solid var(--color-divider);
+}
+
+.boards__views {
+  display: flex;
+  gap: 2px;
+}
+
+.boards__view {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--color-dim);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.boards__view:hover {
+  color: var(--color-fg);
+  background-color: var(--color-pane);
+}
+
+.boards__view.on {
+  color: var(--color-fg);
+  background-color: var(--color-pane);
+  box-shadow: inset 0 -2px 0 var(--color-accent);
+}
+
+.boards__view:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 
 .boards__title {
