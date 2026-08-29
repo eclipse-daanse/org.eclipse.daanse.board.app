@@ -182,39 +182,90 @@ watch(tab, (value) => {
  * carry variable wrappers with behaviour, so copying the whole thing would
  * lose it. Remembering the plain values is enough to put everything back.
  */
-type Entry = [Record<string, any>, string, unknown]
-
-/*
- * Two levels, because a setting can change in two ways: the value inside a
- * field's wrapper is edited, or the whole field is replaced by a new
- * wrapper. Remembering only the inner value leaves a replaced field
- * untouched - the object put back would be one nothing points at any more.
+/**
+ * The values as they stood when the overlay opened.
+ *
+ * Kept by name, not by object reference. The settings object is replaced on
+ * the way in - a stored board arrives as plain JSON and is put into a
+ * modelled instance so the form can render from the model - and a snapshot
+ * holding the old objects would write into something nothing points at any
+ * more. Names survive that swap; object identities do not.
+ *
+ * Two levels, because a setting changes in two ways: the value inside a
+ * field's wrapper, or the whole field being replaced. Lists are copied as
+ * a list of their entries, so adding or removing one can be undone.
  */
-let slots: Entry[] = []
-let values: Entry[] = []
+interface FieldState {
+  field: unknown
+  value?: unknown
+  hasValue: boolean
+  list?: unknown[]
+}
+
+let snapshot: Record<'wrapperConfig' | 'config', Record<string, FieldState>> = {
+  wrapperConfig: {},
+  config: {},
+}
+
+function bagOf(which: 'wrapperConfig' | 'config'): Record<string, any> | undefined {
+  return widget.value?.[which] as Record<string, any> | undefined
+}
+
+function asArray(value: any): unknown[] | undefined {
+  if (!value) return undefined
+  if (typeof value.toArray === 'function') return value.toArray()
+  return Array.isArray(value) ? [...value] : undefined
+}
 
 function takeSnapshot() {
-  slots = []
-  values = []
-  for (const bag of [widget.value?.wrapperConfig, widget.value?.config]) {
+  snapshot = { wrapperConfig: {}, config: {} }
+
+  for (const which of ['wrapperConfig', 'config'] as const) {
+    const bag = bagOf(which)
     if (!bag) continue
     for (const [key, field] of Object.entries(bag)) {
-      slots.push([bag as Record<string, any>, key, field])
-      if (field && typeof field === 'object' && 'value' in (field as object)) {
-        values.push([field as Record<string, any>, 'value', (field as any).value])
+      const list = asArray(field)
+      const hasValue = Boolean(field) && typeof field === 'object' && 'value' in (field as object)
+      snapshot[which][key] = {
+        field,
+        hasValue,
+        value: hasValue ? (field as any).value : undefined,
+        list,
       }
     }
   }
 }
 
 function restore() {
-  // Fields first, then the values inside them - the other way round would
-  // write into wrappers that are about to be swapped out again.
-  for (const [target, key, value] of [...slots, ...values]) {
-    try {
-      target[key] = value
-    } catch {
-      // A read-only field cannot have changed either, so nothing is lost
+  for (const which of ['wrapperConfig', 'config'] as const) {
+    const bag = bagOf(which)
+    if (!bag) continue
+
+    for (const [key, state] of Object.entries(snapshot[which])) {
+      try {
+        // A list is restored in place: the object holding it may be the one
+        // the widget reads from, so it must not be swapped for a copy
+        if (state.list) {
+          const current = bag[key]
+          if (current && typeof current.clear === 'function') {
+            current.clear()
+            for (const entry of state.list) current.add(entry)
+          } else if (Array.isArray(current)) {
+            current.splice(0, current.length, ...state.list)
+          }
+          continue
+        }
+
+        const current = bag[key]
+        const currentHasValue =
+          Boolean(current) && typeof current === 'object' && 'value' in (current as object)
+
+        // Prefer writing through the wrapper that is in place now
+        if (state.hasValue && currentHasValue) current.value = state.value
+        else bag[key] = state.field
+      } catch {
+        // A read-only field cannot have changed either, so nothing is lost
+      }
     }
   }
 }

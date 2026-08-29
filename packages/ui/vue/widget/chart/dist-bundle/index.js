@@ -12085,20 +12085,20 @@ const Fg = /* @__PURE__ */ Gi({
       backgroundColor: ot(() => r.value?.backgroundColor?.value ?? "rgba(75, 192, 192, 0.2)"),
       borderWidth: ot(() => r.value?.borderWidth?.value ?? 2),
       borderDash: ot(() => r.value?.borderDash?.value ?? []),
-      fill: ot(() => r.value?.fill ?? !1),
-      showPoints: ot(() => r.value?.showPoints ?? !0),
+      fill: ot(() => r.value?.fill?.value ?? !1),
+      showPoints: ot(() => r.value?.showPoints?.value ?? !0),
       pointColor: ot(() => r.value?.pointColor?.value ?? "rgba(75, 192, 192, 1)"),
       pointSize: ot(() => r.value?.pointSize?.value ?? 3),
       barOrientation: ot(() => r.value?.barOrientation?.value ?? "vertical"),
       stacked: ot(() => r.value?.stacked?.value ?? !1),
-      showHorizontalGrid: ot(() => r.value?.showHorizontalGrid ?? !0),
+      showHorizontalGrid: ot(() => r.value?.showHorizontalGrid?.value ?? !0),
       horizontalGridColor: ot(() => r.value?.horizontalGridColor?.value ?? "rgba(0, 0, 0, 0.1)"),
       horizontalGridWidth: ot(() => r.value?.horizontalGridWidth?.value ?? 1),
-      showVerticalGrid: ot(() => r.value?.showVerticalGrid ?? !0),
+      showVerticalGrid: ot(() => r.value?.showVerticalGrid?.value ?? !0),
       verticalGridColor: ot(() => r.value?.verticalGridColor?.value ?? "rgba(0, 0, 0, 0.1)"),
       verticalGridWidth: ot(() => r.value?.verticalGridWidth?.value ?? 1),
       dateDisplayFormat: ot(() => r.value?.dateDisplayFormat?.value ?? "dd.MM.yyyy HH:mm"),
-      annotationsEditMode: ot(() => r.value?.annotationsEditMode ?? !1)
+      annotationsEditMode: ot(() => r.value?.annotationsEditMode?.value ?? !1)
     });
     console.log(I.backgroundColor.value);
     const P = ot(() => {

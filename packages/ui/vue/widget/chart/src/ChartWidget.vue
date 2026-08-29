@@ -161,26 +161,31 @@ function seriesList(): any[] {
   return Array.isArray(list) ? list : []
 }
 
+/*
+ * Every one of these reads the value inside the wrapper, never the wrapper
+ * itself: a wrapper is an object and therefore always truthy, so a flag
+ * read without .value is permanently on - and the chart drew nothing.
+ */
 const resolvedConfig = wrapParameters({
   chartType: computed(() => (config.value?.chartType as any)?.value ?? 'bar'),
   borderColor: computed(() => (config.value?.borderColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
   backgroundColor: computed(() => (config.value?.backgroundColor as any)?.value ?? 'rgba(75, 192, 192, 0.2)'),
   borderWidth: computed(() => (config.value?.borderWidth as any)?.value ?? 2),
   borderDash: computed(() => (config.value?.borderDash as any)?.value ?? []),
-  fill: computed(() => config.value?.fill ?? false),
-  showPoints: computed(() => config.value?.showPoints ?? true),
+  fill: computed(() => (config.value?.fill as any)?.value ?? false),
+  showPoints: computed(() => (config.value?.showPoints as any)?.value ?? true),
   pointColor: computed(() => (config.value?.pointColor as any)?.value ?? 'rgba(75, 192, 192, 1)'),
   pointSize: computed(() => (config.value?.pointSize as any)?.value ?? 3),
   barOrientation: computed(() => (config.value as any)?.barOrientation?.value ?? 'vertical'),
   stacked: computed(() => (config.value as any)?.stacked?.value ?? false),
-  showHorizontalGrid: computed(() => config.value?.showHorizontalGrid ?? true),
+  showHorizontalGrid: computed(() => (config.value?.showHorizontalGrid as any)?.value ?? true),
   horizontalGridColor: computed(() => (config.value?.horizontalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
   horizontalGridWidth: computed(() => (config.value?.horizontalGridWidth as any)?.value ?? 1),
-  showVerticalGrid: computed(() => config.value?.showVerticalGrid ?? true),
+  showVerticalGrid: computed(() => (config.value?.showVerticalGrid as any)?.value ?? true),
   verticalGridColor: computed(() => (config.value?.verticalGridColor as any)?.value ?? 'rgba(0, 0, 0, 0.1)'),
   verticalGridWidth: computed(() => (config.value?.verticalGridWidth as any)?.value ?? 1),
   dateDisplayFormat: computed(() => (config.value?.dateDisplayFormat as any)?.value ?? 'dd.MM.yyyy HH:mm'),
-  annotationsEditMode: computed(() => config.value?.annotationsEditMode ?? false)
+  annotationsEditMode: computed(() => (config.value?.annotationsEditMode as any)?.value ?? false)
 })
 
 console.log(resolvedConfig.backgroundColor.value);
