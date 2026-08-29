@@ -10,7 +10,8 @@
   "module": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.wrapper.js",
   "types": "./dist/org.eclipse.daanse.board.app.ui.vue.widget.wrapper.d.ts",
   "files": [
-    "src"
+    "src",
+    "model"
   ],
   "repository": {
     "type": "git",

@@ -32,6 +32,10 @@ const defaultConfig = new WrapperSettingsImpl();
 export { WidgetWrapper, WidgetWrapperSettings, defaultConfig }
 /* The generated class and its package: what a UI model needs to render
  * these settings from the model rather than from a hand-written form. */
+/* The form for these settings, written as a model rather than as a
+ * template - grouped by what someone setting up a widget thinks about. */
+import wrapperSettingsFormXmi from '../model/ui.xmi?raw'
+export { wrapperSettingsFormXmi }
 export { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
 export { WrapperSettingsPackage }
 export type { WrapperSettings } from './gen/WrapperSettings'

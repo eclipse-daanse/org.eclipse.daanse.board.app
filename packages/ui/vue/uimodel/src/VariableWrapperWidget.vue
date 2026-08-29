@@ -29,17 +29,23 @@ import type { EObject, EStructuralFeature } from '@emfts/core'
 import { DCheckbox, DColorInput, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { kindOf, labelOf } from './buildForm'
 
+/*
+ * The shape the composer passes: the object and the feature come as props
+ * of their own, and `custom` carries what the UI model said about this
+ * field. Reading them all out of `custom` finds nothing - and a widget that
+ * finds nothing renders nothing, silently.
+ */
 const props = defineProps<{
+  eObject?: EObject
+  feature?: EStructuralFeature
   custom?: {
-    eObject?: EObject
-    feature?: EStructuralFeature
     resolvedStyle?: { label?: string; readOnly?: boolean; required?: boolean; placeholder?: string }
   }
 }>()
 
 /** The wrapper itself - never replaced, only read and written through. */
 const wrapper = computed<any>(() => {
-  const { eObject, feature } = props.custom ?? {}
+  const { eObject, feature } = props
   if (!eObject || !feature) return undefined
   const name = feature.getName?.()
   return name ? (eObject as unknown as Record<string, any>)[name] : undefined
@@ -71,12 +77,11 @@ const flag = computed({
   },
 })
 
-const kind = computed(() => (props.custom?.feature ? kindOf(props.custom.feature) : 'text'))
+const kind = computed(() => (props.feature ? kindOf(props.feature) : 'text'))
 
+/* The label the model gave the field; its name only if the model was silent. */
 const label = computed(
-  () =>
-    props.custom?.resolvedStyle?.label ??
-    (props.custom?.feature ? labelOf(props.custom.feature) : ''),
+  () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
 )
 
 const readOnly = computed(() => props.custom?.resolvedStyle?.readOnly || boundToVariable.value)

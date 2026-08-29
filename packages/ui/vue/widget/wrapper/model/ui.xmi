@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the wrapper settings.
+
+Grouped the way someone setting up a widget thinks about it - the title,
+the surface it sits on, its edge, its shadow - rather than in the order the
+generator happens to emit the features. The shadow needs four values that
+mean nothing apart from each other, and a title that is empty makes its
+size and colour pointless; both only read as one thing when they are one
+group.
+
+This is the point of modelling the form rather than deriving it: the
+derived version can only ever list seventeen fields.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="WrapperSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="WrapperSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="titleGroup" layout="VERTICAL" label="Titel">
+      <fields xsi:type="uimodel:InputWidget"
+          name="title"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/title"
+          label="Text"
+          placeholder="Ohne Titel"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="titleFontSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleFontSize"
+          label="Schriftgröße"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="titleColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleColor"
+          label="Schriftfarbe"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="surfaceGroup" layout="VERTICAL" label="Fläche">
+      <fields xsi:type="uimodel:InputWidget"
+          name="backgroundColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColor"
+          label="Hintergrund"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="backgroundColorTransparence"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColorTransparence"
+          label="Deckkraft"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="transparency"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/transparency"
+          label="Gesamtdeckkraft"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="blur"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/blur"
+          label="Weichzeichnen"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="padding"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/padding"
+          label="Innenabstand"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="Rand">
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderSize"
+          label="Stärke"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderColor"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderRadius"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderRadius"
+          label="Eckenradius"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="Schatten">
+      <fields xsi:type="uimodel:InputWidget"
+          name="shadowColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowColor"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="shadowBlur"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowBlur"
+          label="Weichheit"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="shadowX"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowX"
+          label="Versatz X"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="shadowY"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowY"
+          label="Versatz Y"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="shadowTransparence"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowTransparence"
+          label="Deckkraft"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="Verhalten">
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="fullscreen"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/fullscreen"
+          label="Vollbild erlauben"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

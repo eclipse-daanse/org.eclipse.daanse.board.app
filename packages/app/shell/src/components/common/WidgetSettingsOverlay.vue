@@ -27,7 +27,12 @@ Contributors:
  * button that promises something it cannot do.
  */
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, inject, watch } from 'vue'
-import { WidgetWrapperSettings } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import {
+  WrapperSettingsImpl,
+  WrapperSettingsPackage,
+  wrapperSettingsFormXmi,
+} from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
+import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 import { useDataSourcesStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.datasouce'
 import type { i18n } from 'org.eclipse.daanse.board.app.lib.i18next'
 import { type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
@@ -394,14 +399,18 @@ onBeforeUnmount(() => {
               />
             </div>
 
-            <!-- Still the hand-written form. Everything below it is in
-                 place - VariableWrapper is modelled, the references carry
-                 their type, and the composer builds the FormView - but the
-                 widgets inside it render nothing, and the reason has not
-                 been found yet. Switching this line over is all that is
-                 left once it is. -->
+            <!-- The form is a model: model/ui.xmi beside the Ecore, read
+                 against the package it points at. Fields are grouped the
+                 way someone setting up a widget thinks about them, which
+                 is what a form derived from the class cannot know. -->
             <div v-show="tab === 'frame'">
-              <WidgetWrapperSettings v-model="widget.wrapperConfig" />
+              <SettingsForm
+                v-model="widget.wrapperConfig"
+                :create="() => new WrapperSettingsImpl()"
+                :ui-model-xmi="wrapperSettingsFormXmi"
+                :domain-package="WrapperSettingsPackage.eINSTANCE"
+                ui-model-uri="/wrapper-settings.ui.xmi"
+              />
             </div>
 
             <template v-if="tab === 'variables'">

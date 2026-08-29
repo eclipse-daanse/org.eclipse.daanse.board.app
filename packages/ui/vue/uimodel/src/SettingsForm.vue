@@ -27,13 +27,15 @@ Contributors:
  * edits that can drift apart.
  */
 import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
-import type { EObject } from '@emfts/core'
+import type { EObject, EPackage } from '@emfts/core'
 import { UIModelComposer } from '@emfts/uimodel-composer'
 import type { UIModel } from '@emfts/uimodel-composer'
 import { componentRegistry, COMPONENT_REGISTRY_KEY } from '@emfts/vue-registry'
 import { UimodelPackage } from '@emfts/uimodel-composer'
 import { asModel } from './adopt'
+import { registerWrapperRenderer } from './registerRenderer'
 import { formFor } from './buildForm'
+import { loadUIModel } from './loadUIModel'
 import VariableWrapperWidget from './VariableWrapperWidget.vue'
 
 /*
@@ -50,6 +52,15 @@ UimodelPackage.eINSTANCE
  */
 provide(COMPONENT_REGISTRY_KEY, componentRegistry)
 
+/*
+ * One renderer for every reference to VariableWrapper - which is what every
+ * setting in this application is. Registered against the type rather than
+ * against each feature of each class: a settings class the app has never
+ * seen is then already covered, and this does not have to wait for an
+ * object to exist before it knows what to draw.
+ */
+registerWrapperRenderer()
+
 const settings = defineModel<unknown>({ required: true })
 
 const props = defineProps<{
@@ -57,6 +68,12 @@ const props = defineProps<{
   create: () => EObject
   /** A hand-written model; without one, a form is derived from the class. */
   uiModel?: UIModel
+  /** The same, still as XMI - read once against the package below. */
+  uiModelXmi?: string
+  /** The package the form's feature references point at. */
+  domainPackage?: EPackage
+  /** Name for the loaded resource, and its cache key. */
+  uiModelUri?: string
   /** Shown when the object has no features to edit. */
   emptyText?: string
 }>()
@@ -88,6 +105,13 @@ const uiModelFor = shallowRef<unknown>()
 
 const uiModel = computed<UIModel | undefined>(() => {
   if (props.uiModel) return markRaw(props.uiModel)
+
+  // A written form beats a derived one: it says how the fields belong
+  // together, which a class alone cannot
+  if (props.uiModelXmi && props.domainPackage) {
+    const written = loadUIModel(props.uiModelXmi, props.domainPackage, props.uiModelUri)
+    if (written) return markRaw(written)
+  }
   const target = model.value
   const eClass = target?.eClass?.()
   if (!eClass) return undefined
@@ -100,25 +124,7 @@ const uiModel = computed<UIModel | undefined>(() => {
 
 const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures().length ?? 0) > 0)
 
-/*
- * One renderer for every field of these settings, registered once. The
- * registry matches on the feature, and each of these models expresses its
- * fields as references to VariableWrapper - so the renderer reads the
- * wrapper and picks the control from the feature itself.
- */
-let registered = false
-function registerRenderer() {
-  if (registered) return
-  const target = model.value
-  if (!target?.eClass) return
-  for (const feature of target.eClass().getEStructuralFeatures()) {
-    componentRegistry.registerForFeature(target.eClass(), feature.getName?.() ?? '', VariableWrapperWidget)
-  }
-  registered = true
-}
 
-onMounted(registerRenderer)
-watch(model, registerRenderer)
 </script>
 
 <template>
@@ -135,6 +141,21 @@ watch(model, registerRenderer)
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--color-fg);
+}
+
+/* The composer stamps a class per group but draws no heading for it, so
+   the grouping is carried by spacing and a rule - enough to see that the
+   four shadow values belong together. */
+.settings-form :deep(.uim-c-GroupWidget) {
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.settings-form :deep(.uim-c-GroupWidget:first-child) {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 0;
 }
 
 .settings-form__empty {

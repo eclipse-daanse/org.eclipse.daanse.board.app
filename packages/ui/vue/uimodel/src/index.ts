@@ -30,3 +30,4 @@ import VariableWrapperWidget from './VariableWrapperWidget.vue'
 export { SettingsForm, VariableWrapperWidget }
 export { adopt, asModel, isModelled } from './adopt'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
+export { loadUIModel } from './loadUIModel'
