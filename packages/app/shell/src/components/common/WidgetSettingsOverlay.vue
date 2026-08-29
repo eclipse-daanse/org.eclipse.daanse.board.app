@@ -394,6 +394,12 @@ onBeforeUnmount(() => {
               />
             </div>
 
+            <!-- Still the hand-written form. The model-driven one
+                 (ui.vue.uimodel) is built and wired, but the settings
+                 models reference VariableWrapper, whose package has no
+                 Ecore of its own - so those EReferences carry no type and
+                 the composer cannot tell what to render. Switch this over
+                 once VariableWrapper is modelled. -->
             <div v-show="tab === 'frame'">
               <WidgetWrapperSettings v-model="widget.wrapperConfig" />
             </div>

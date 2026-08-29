@@ -104,7 +104,7 @@ function pruneUnusedAnnotationImports(file) {
 }
 
 /**
- * WORKAROUND (emf.ts.codegen, gemeldet): in emf mode the generator emits a
+ * WORKAROUND (emf.ts.codegen#35): in emf mode the generator emits a
  * type-only import for a referenced class it then instantiates with `new`.
  * A type import is erased at compile time, so the bundle throws
  * "X is not defined" on first use. Promote the names that are instantiated

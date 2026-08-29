@@ -1,0 +1,35 @@
+{
+  "$schema": "https://tsm.dev/schema/manifest/v1.json",
+  "id": "ui.vue.uimodel",
+  "name": "ui.vue.uimodel",
+  "version": "0.0.1-next.1",
+  "exports": {},
+  "entry": "/bundles/ui.vue.uimodel/index.js",
+  "sharedDependencies": [
+    {
+      "id": "vue",
+      "versionRange": "^3.5.0"
+    },
+    {
+      "id": "@emfts/core",
+      "versionRange": "^0.1.1-next.18"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    }
+  ],
+  "capabilities": [
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "org.eclipse.daanse.board.app.ui.vue.uimodel",
+        "version": "0.0.1-next.1"
+      }
+    }
+  ],
+  "dependencies": [
+    "platform.vue",
+    "ui.vue.controls"
+  ]
+}

@@ -11,6 +11,16 @@ Contributors: Smart City Jena
 import WidgetWrapper from './WidgetWrapper.vue'
 import WidgetWrapperSettings from './WidgetWrapperSettings.vue'
 import { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
+import { WrapperSettingsPackage } from './gen/WrapperSettingsPackage'
+/*
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null and an instance cannot say what it is - eClass()
+ * returns null and anything reading the model sees nothing. EMF expects
+ * the package to register itself when its code is loaded, and for a bundle
+ * that moment is here.
+ */
+WrapperSettingsPackage.eINSTANCE
+
 /*
  * Generated in emf mode now: the plain properties are still there, so
  * `config.title.value` keeps working - what is added is eClass(), feature
@@ -20,3 +30,8 @@ import { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
 const defaultConfig = new WrapperSettingsImpl();
 
 export { WidgetWrapper, WidgetWrapperSettings, defaultConfig }
+/* The generated class and its package: what a UI model needs to render
+ * these settings from the model rather than from a hand-written form. */
+export { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
+export { WrapperSettingsPackage }
+export type { WrapperSettings } from './gen/WrapperSettings'

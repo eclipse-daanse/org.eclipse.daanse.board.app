@@ -1325,10 +1325,13 @@ class t extends Re {
     }
   }
 }
+l.eINSTANCE;
 const ve = new t(), De = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   WidgetWrapper: Te,
   WidgetWrapperSettings: Le,
+  WrapperSettingsImpl: t,
+  WrapperSettingsPackage: l,
   defaultConfig: ve
 }, Symbol.toStringTag, { value: "Module" })), M = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", me = "0.0.1-next.1";
 async function Ue(d) {
@@ -1343,6 +1346,8 @@ async function ye(d) {
 export {
   Te as WidgetWrapper,
   Le as WidgetWrapperSettings,
+  t as WrapperSettingsImpl,
+  l as WrapperSettingsPackage,
   Ue as activate,
   ye as deactivate,
   ve as defaultConfig

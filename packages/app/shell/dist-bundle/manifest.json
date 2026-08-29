@@ -29,7 +29,8 @@
     "ui.vue.stores.layout",
     "ui.vue.stores.widgets",
     "ui.vue.widget.wrapper",
-    "ui.vue.controls"
+    "ui.vue.controls",
+    "ui.vue.uimodel"
   ],
   "provides": [],
   "requiresService": [
@@ -168,6 +169,10 @@
     },
     {
       "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.uimodel",
       "versionRange": ">=0.0.1-0"
     }
   ]
