@@ -18,6 +18,7 @@
     "@emfts/uimodel-composer": "^0.0.2-next.1",
     "@emfts/vue-registry": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.lib.api.variable": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.composables": "^0.0.1-next.1",
     "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1"
   },
   "publishConfig": {

@@ -21,6 +21,10 @@
     {
       "id": "org.eclipse.daanse.board.app.lib.api.variable",
       "versionRange": ">=0.0.1-0"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.composables",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [
@@ -35,6 +39,7 @@
   "dependencies": [
     "platform.vue",
     "ui.vue.controls",
-    "lib.api.variable"
+    "lib.api.variable",
+    "ui.vue.composables"
   ]
 }

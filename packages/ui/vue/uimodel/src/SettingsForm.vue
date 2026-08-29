@@ -33,7 +33,7 @@ import type { UIModel } from '@emfts/uimodel-composer'
 import { componentRegistry, COMPONENT_REGISTRY_KEY } from '@emfts/vue-registry'
 import { UimodelPackage } from '@emfts/uimodel-composer'
 import { asModel } from './adopt'
-import { registerWrapperRenderer } from './registerRenderer'
+import { registerListRenderer, registerWrapperRenderer } from './registerRenderer'
 import { formFor } from './buildForm'
 import { loadUIModel } from './loadUIModel'
 import VariableWrapperWidget from './VariableWrapperWidget.vue'
@@ -60,6 +60,8 @@ provide(COMPONENT_REGISTRY_KEY, componentRegistry)
  * object to exist before it knows what to draw.
  */
 registerWrapperRenderer()
+
+
 
 const settings = defineModel<unknown>({ required: true })
 
@@ -104,6 +106,16 @@ const uiModelCache = shallowRef<UIModel | undefined>()
 const uiModelFor = shallowRef<unknown>()
 
 const uiModel = computed<UIModel | undefined>(() => {
+  /*
+   * Lists are matched per feature, so their renderer needs the class -
+   * unlike the value renderer, which is registered once against
+   * VariableWrapper. Done here because this is where the class is known
+   * for certain: a watch on the model ran before the settings object had
+   * been adopted, so there was no class yet and nothing was registered.
+   */
+  const settingsClass = (settings.value as EObject | undefined)?.eClass?.()
+  if (settingsClass) registerListRenderer(settingsClass)
+
   if (props.uiModel) return markRaw(props.uiModel)
 
   // A written form beats a derived one: it says how the fields belong

@@ -25,9 +25,10 @@
  * and the app's own controls render the fields.
  */
 import SettingsForm from './SettingsForm.vue'
+import SettingsListWidget from './SettingsListWidget.vue'
 import VariableWrapperWidget from './VariableWrapperWidget.vue'
 
-export { SettingsForm, VariableWrapperWidget }
+export { SettingsForm, SettingsListWidget, VariableWrapperWidget }
 export { adopt, asModel, isModelled } from './adopt'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'

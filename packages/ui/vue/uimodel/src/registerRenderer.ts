@@ -20,8 +20,9 @@
  * would mean knowing every class in advance, and doing it again for each
  * new one.
  */
-import { EPackageRegistry, type EClass } from '@emfts/core'
+import { EPackageRegistry, type EClass, type EStructuralFeature } from '@emfts/core'
 import { componentRegistry } from '@emfts/vue-registry'
+import SettingsListWidget from './SettingsListWidget.vue'
 import VariableWrapperWidget from './VariableWrapperWidget.vue'
 
 const COMPOSABLES_NS = 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -44,4 +45,31 @@ export function registerWrapperRenderer(): boolean {
   componentRegistry.registerForReference(VariableWrapperWidget, { targetClass: target })
   done = true
   return true
+}
+
+/**
+ * The renderer for a setting that holds several things.
+ *
+ * Registered for any feature that is many-valued, whatever it points at:
+ * the list renderer builds each entry's form from the class the list is
+ * typed against, so it does not need to know the classes in advance. A
+ * single value never reaches it - the matcher only accepts isMany().
+ */
+export function registerListRenderer(eClass: EClass): void {
+  for (const feature of eClass.getEStructuralFeatures()) {
+    if (!isMany(feature)) continue
+    componentRegistry.registerForFeature(
+      eClass,
+      feature.getName?.() ?? '',
+      SettingsListWidget,
+    )
+  }
+}
+
+function isMany(feature: EStructuralFeature): boolean {
+  try {
+    return feature.isMany?.() === true || (feature.getUpperBound?.() ?? 1) !== 1
+  } catch {
+    return false
+  }
 }

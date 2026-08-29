@@ -24,6 +24,10 @@
  * claims to have, and the values that were stored.
  */
 import type { EObject } from '@emfts/core'
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
+/** The class every settings value goes through. */
+const WRAPPER_CLASS = 'VariableWrapper'
 
 /** An object that can say what it is - what the composer needs. */
 export function isModelled(value: unknown): value is EObject {
@@ -62,6 +66,44 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
 }
 
 /**
+ * Gives every wrapper-typed field a wrapper.
+ *
+ * The generator only initialises the features that carry a default, so a
+ * fresh instance has undefined where a value could go - and a field with
+ * no wrapper cannot be edited, or even shown. An empty field is a field
+ * with an empty value, so it gets one.
+ *
+ * The hand-written class, not the generated one: the widgets bind through
+ * setTo() and read .value, which is behaviour the metamodel does not
+ * describe and the generated class therefore does not have.
+ */
+export function ensureWrappers<T extends EObject>(instance: T): T {
+  const target = instance as unknown as Record<string, unknown>
+
+  for (const feature of instance.eClass().getEStructuralFeatures()) {
+    const name = feature.getName?.()
+    if (!name || target[name] !== undefined) continue
+
+    let typeName: string | undefined
+    try {
+      typeName = (feature as any).getEReferenceType?.()?.getName?.()
+    } catch {
+      // Untyped or not a reference - nothing to build
+      continue
+    }
+    if (typeName !== WRAPPER_CLASS) continue
+
+    try {
+      target[name] = new VariableWrapper()
+    } catch {
+      // A read-only feature cannot hold one either
+    }
+  }
+
+  return instance
+}
+
+/**
  * The settings for one widget, as a modelled object.
  *
  * Already-modelled input is handed back untouched: adopting it again would
@@ -69,5 +111,5 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
  * far would go to an object nothing points at any more.
  */
 export function asModel<T extends EObject>(stored: unknown, create: () => T): T {
-  return isModelled(stored) ? (stored as T) : adopt(create(), stored)
+  return ensureWrappers(isModelled(stored) ? (stored as T) : adopt(create(), stored))
 }

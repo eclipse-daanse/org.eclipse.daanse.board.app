@@ -13455,9 +13455,10 @@ last the date format. Point colour and size only mean anything once points
 are shown, and the fill colour only once the area is filled - both say so
 through a condition rather than by sitting there greyed out.
 
-The per-series settings are a list and are not in this form yet; the
-reference lines and areas are four lists the model does not type at all.
-Both still come from the hand-written component beside this.
+The series are a list, rendered by the host's list renderer: each entry is
+a form built from SeriesSettings. The reference lines and areas are four
+lists the Ecore does not type at all - there is no class to build a form
+from, so they still come from the hand-written component beside this.
 -->
 <uimodel:UIModel
     xmlns:xmi="http://www.omg.org/XMI"
@@ -13497,6 +13498,15 @@ Both still come from the hand-written component beside this.
           name="stacked"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/stacked"
           label="Gestapelt"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="seriesGroup" layout="VERTICAL" label="Datenreihen">
+      <!-- A list: each entry is a form of its own, built from SeriesSettings.
+           What a series does not set falls back to the values below. -->
+      <fields xsi:type="uimodel:InputWidget"
+          name="seriesSettings"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/seriesSettings"
+          label="Datenreihen"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="lineGroup" layout="VERTICAL" label="Linie">
@@ -13652,12 +13662,12 @@ let Wi = class {
     ePackage: () => R.eINSTANCE,
     create: () => new x(),
     /*
-     * The parts of the hand-written form the model does not describe: the
-     * per-series list, and the reference lines and areas, which are four
-     * lists the Ecore does not type. Named so that what is modelled is not
-     * offered twice, in two forms that could disagree.
+     * What the model does not describe: the reference lines and areas, four
+     * lists the Ecore does not type - there is no class to build a form
+     * from. Named so that what is modelled is not offered twice, in two
+     * forms that could disagree.
      */
-    unmodelledSections: ["Per-Series Settings", "Reference Lines & Areas"]
+    unmodelledSections: ["Reference Lines & Areas"]
   };
   register() {
     this.events.registerWidget(Te, Sp), this.actions.registerWidgetType(Te, me, "widget");
