@@ -7133,15 +7133,17 @@ function pi(s) {
 }
 function Ti(s, e) {
   if (!e || typeof e != "object") return s;
-  const t = e, r = s;
-  for (const i of s.eClass().getEStructuralFeatures()) {
-    const u = i.getName?.();
-    if (!(!u || !(u in t)))
+  const t = e, r = s, i = /* @__PURE__ */ new Set();
+  for (const u of s.eClass().getEStructuralFeatures()) {
+    const n = u.getName?.();
+    n && i.add(n);
+  }
+  for (const [u, n] of Object.entries(t))
+    if (!u.startsWith("_"))
       try {
-        r[u] = t[u];
+        r[u] = n;
       } catch {
       }
-  }
   return s;
 }
 function Si(s) {

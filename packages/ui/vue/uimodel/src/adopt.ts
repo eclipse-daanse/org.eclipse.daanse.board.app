@@ -35,11 +35,13 @@ export function isModelled(value: unknown): value is EObject {
 }
 
 /**
- * Copies stored values into a fresh instance from the factory.
+ * Copies a stored settings object into a fresh instance from the factory.
  *
- * Only features the class actually declares are taken over: a stored state
- * written by an older version may carry fields the model has since dropped,
- * and those are left behind rather than smuggled in as stray properties.
+ * Everything is carried over, not just what the model declares. A widget's
+ * settings hold more than the form shows - which data source it reads,
+ * state a widget keeps for itself - and the class describes what can be
+ * edited, not everything the object is. Dropping the rest silently cut the
+ * widget off from its data.
  *
  * Values are assigned through the plain setters, which is what makes this
  * work at all - the generated classes keep them, so a VariableWrapper that
@@ -51,11 +53,18 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
   const source = stored as Record<string, unknown>
   const target = instance as unknown as Record<string, unknown>
 
+  const declared = new Set<string>()
   for (const feature of instance.eClass().getEStructuralFeatures()) {
     const name = feature.getName?.()
-    if (!name || !(name in source)) continue
+    if (name) declared.add(name)
+  }
+
+  for (const [name, value] of Object.entries(source)) {
+    // The generated class keeps its values in _-prefixed fields behind the
+    // setters; writing those directly would go around them
+    if (name.startsWith('_')) continue
     try {
-      target[name] = source[name]
+      target[name] = value
     } catch {
       // A derived or read-only feature cannot be restored, and was never
       // stored as a value in the first place
