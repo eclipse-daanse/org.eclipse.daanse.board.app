@@ -10,7 +10,13 @@ Contributors: Smart City Jena
 
 import WidgetWrapper from './WidgetWrapper.vue'
 import WidgetWrapperSettings from './WidgetWrapperSettings.vue'
-import { WrapperSettings } from './gen/WrapperSettings'
-const defaultConfig = new WrapperSettings();
+import { WrapperSettingsImpl } from './gen/WrapperSettingsImpl'
+/*
+ * Generated in emf mode now: the plain properties are still there, so
+ * `config.title.value` keeps working - what is added is eClass(), feature
+ * literals and change notification, which is what a UI model needs to
+ * render this from the model rather than from a hand-written form.
+ */
+const defaultConfig = new WrapperSettingsImpl();
 
 export { WidgetWrapper, WidgetWrapperSettings, defaultConfig }

@@ -35,6 +35,7 @@ const VERSIONS = {
   vue: '3.5.24',
   'vue-router': '5.0.6',
   pinia: '3.0.4',
+  '@emfts/core': '0.1.1-next.18',
   vuedraggable: '4.1.0',
 } as const
 
@@ -52,17 +53,25 @@ export async function activate({ log }: ActivationContext) {
 
   // Relative imports resolve to the same URLs the import map names, so the
   // registered instances are identical to what bare imports receive.
-  const [vue, vueRouter, pinia, vuedraggable] = await Promise.all([
+  const [vue, vueRouter, pinia, vuedraggable, emftsCore] = await Promise.all([
     import('./artifacts/vue'),
     import('./artifacts/vue-router'),
     import('./artifacts/pinia'),
     import('./artifacts/vuedraggable'),
+    import('./artifacts/emfts-core'),
   ])
 
   runtime.register('vue', vue, VERSIONS.vue, 'platform.vue')
   runtime.register('vue-router', vueRouter, VERSIONS['vue-router'], 'platform.vue')
   runtime.register('pinia', pinia, VERSIONS.pinia, 'platform.vue')
   runtime.register('vuedraggable', vuedraggable, VERSIONS.vuedraggable, 'platform.vue')
+  /*
+   * EMF is built on identity: a generated package registers its EClass
+   * once, and eObject.eClass() === Package.Literals.X has to hold. Two
+   * copies would mean two registries and two EClass objects for the same
+   * model, and every such comparison would quietly fail.
+   */
+  runtime.register('@emfts/core', emftsCore, VERSIONS['@emfts/core'], 'platform.vue')
 
   log.info(
     `shared libraries ready: vue@${VERSIONS.vue}, vue-router@${VERSIONS['vue-router']}, pinia@${VERSIONS.pinia}`,

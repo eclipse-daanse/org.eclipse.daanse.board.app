@@ -34,6 +34,13 @@
         "library": "vuedraggable",
         "version": "4.1.0"
       }
+    },
+    {
+      "namespace": "tsm.library",
+      "attributes": {
+        "library": "@emfts/core",
+        "version": "0.1.1-next.18"
+      }
     }
   ]
 }

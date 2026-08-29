@@ -103,6 +103,28 @@ function pruneUnusedAnnotationImports(file) {
   writeFileSync(file, source.replace(match[0], replacement))
 }
 
+/**
+ * WORKAROUND (emf.ts.codegen, gemeldet): in emf mode the generator emits a
+ * type-only import for a referenced class it then instantiates with `new`.
+ * A type import is erased at compile time, so the bundle throws
+ * "X is not defined" on first use. Promote the names that are instantiated
+ * to a value import; the rest stay type-only.
+ */
+function promoteInstantiatedTypeImports(file) {
+  const source = readFileSync(file, 'utf-8')
+  let out = source
+  for (const match of source.matchAll(/import type \{([^}]*)\} from '([^']*)';?\n/g)) {
+    const names = match[1].split(',').map((n) => n.trim()).filter(Boolean)
+    const asValue = names.filter((n) => new RegExp('new ' + n + '\\b').test(source))
+    if (!asValue.length) continue
+    const asType = names.filter((n) => !asValue.includes(n))
+    let replacement = `import { ${asValue.join(', ')} } from '${match[2]}';\n`
+    if (asType.length) replacement += `import type { ${asType.join(', ')} } from '${match[2]}';\n`
+    out = out.replace(match[0], replacement)
+  }
+  if (out !== source) writeFileSync(file, out)
+}
+
 // ----------------------------------------------------------------- generate
 let ok = 0
 const failed = []
@@ -151,6 +173,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
           else if (entry.endsWith('.ts') && entry !== 'index.ts') {
             cpSync(full, join(genDir, entry))
             pruneUnusedAnnotationImports(join(genDir, entry))
+            promoteInstantiatedTypeImports(join(genDir, entry))
           }
         }
       }

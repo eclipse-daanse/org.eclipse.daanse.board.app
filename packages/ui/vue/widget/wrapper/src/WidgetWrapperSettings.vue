@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import { ref, computed, inject } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
-import { WrapperSettings } from './gen/WrapperSettings'
+import type { WrapperSettings } from './gen/WrapperSettings'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 

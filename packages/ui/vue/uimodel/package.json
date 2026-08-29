@@ -1,0 +1,25 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.uimodel",
+  "version": "0.0.1-next.1",
+  "description": "Settings forms rendered from a UI model, via EMFTs uimodel-composer",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "vite build --config vite.bundle.config.ts"
+  },
+  "dependencies": {
+    "@emfts/core": "^0.1.1-next.18",
+    "@emfts/uimodel-composer": "^0.0.2-next.1",
+    "@emfts/vue-registry": "^0.0.1-next.1",
+    "org.eclipse.daanse.board.app.ui.vue.controls": "^0.0.1-next.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

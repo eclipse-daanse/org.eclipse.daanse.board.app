@@ -538,6 +538,27 @@
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.2.0-next.1.tgz#6dd64965cbfc636c4a57eb856cff61e13088acc5"
   integrity sha512-Rm26aFAd/NZvQWifOFAQnysknlmJbwwiab4sPVRM4iOXItUvxbuJAEFd7j65ICzvNanD7ikUoNn6MWCSBZLx7A==
 
+"@emfts/core@^0.1.1-next.16", "@emfts/core@^0.1.1-next.18", "@emfts/core@^0.1.1-next.2":
+  version "0.1.1-next.18"
+  resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
+  integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
+
+"@emfts/uimodel-composer@^0.0.2-next.1":
+  version "0.0.2-next.1"
+  resolved "https://registry.npmjs.org/@emfts/uimodel-composer/-/uimodel-composer-0.0.2-next.1.tgz#4cb59d6480c2fedf15396cca8be2305bd22ed0b6"
+  integrity sha512-x3XYRY90Qh+Ythp3Kd84heCoeqMFt3vU64unJlLuIbAUu7+O8W1kzogiiqzlytuu8ArEa22aKLB4iim3cMzgHA==
+  dependencies:
+    "@emfts/core" "^0.1.1-next.16"
+    "@emfts/vue-registry" "^0.0.1-next.1"
+
+"@emfts/vue-registry@^0.0.1-next.1":
+  version "0.0.1-next.1"
+  resolved "https://registry.npmjs.org/@emfts/vue-registry/-/vue-registry-0.0.1-next.1.tgz#b139a91fc1381426cd1910f7928f971ce8ecbdbe"
+  integrity sha512-EKbE3PalGRgbOgrlvb/muOLhtXyzZDYD46HBO6Sp46igcqPJxIcdpL4w3elBfDLO64x8MPbcxor9uNptE3Aa4Q==
+  dependencies:
+    "@emfts/core" "^0.1.1-next.2"
+    vue "^3.4.0"
+
 "@emnapi/core@1.4.5":
   version "1.4.5"
   resolved "https://registry.npmjs.org/@emnapi/core/-/core-1.4.5.tgz#bfbb0cbbbb9f96ec4e2c4fd917b7bbe5495ceccb"

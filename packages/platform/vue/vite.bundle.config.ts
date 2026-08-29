@@ -21,7 +21,7 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
-const libraries = ['vue', 'vue-router', 'pinia', 'vuedraggable']
+const libraries = ['vue', 'vue-router', 'pinia', 'vuedraggable', '@emfts/core']
 
 export default defineConfig({
   define: {
@@ -47,6 +47,7 @@ export default defineConfig({
         'vue-router': resolve(__dirname, 'src/artifacts/vue-router.ts'),
         pinia: resolve(__dirname, 'src/artifacts/pinia.ts'),
         vuedraggable: resolve(__dirname, 'src/artifacts/vuedraggable.ts'),
+        'emfts-core': resolve(__dirname, 'src/artifacts/emfts-core.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -57,7 +58,9 @@ export default defineConfig({
         // The artefact for a library bundles that library itself; every
         // other reference stays bare for the import map.
         const artifact = importer?.match(/artifacts[\\/]([\w-]+)\.ts$/)?.[1]
-        return artifact !== source
+        // '@emfts/core' cannot be a file name; its artefact is emfts-core.ts
+        const scoped = artifact === 'emfts-core' ? '@emfts/core' : artifact
+        return scoped !== source
       },
     },
   },
