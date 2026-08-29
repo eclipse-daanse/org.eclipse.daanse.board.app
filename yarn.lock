@@ -543,10 +543,8 @@
   resolved "https://registry.npmjs.org/@emfts/core/-/core-0.1.1-next.18.tgz#63224ebf97c4d7a565398b890c40c486ca10ad50"
   integrity sha512-fJalqar3AO1vp1P0LWOhR7X1DcZY9P+nPSlwEJqVYu/e2HF0sZO9toO+HBZ5aGQyBhFeG7q5CyTCHmYJWfrmCA==
 
-"@emfts/uimodel-composer@^0.0.2-next.1":
+"@emfts/uimodel-composer@file:../EMFTs/uimodel-composer/packages/uimodel-composer":
   version "0.0.2-next.1"
-  resolved "https://registry.npmjs.org/@emfts/uimodel-composer/-/uimodel-composer-0.0.2-next.1.tgz#4cb59d6480c2fedf15396cca8be2305bd22ed0b6"
-  integrity sha512-x3XYRY90Qh+Ythp3Kd84heCoeqMFt3vU64unJlLuIbAUu7+O8W1kzogiiqzlytuu8ArEa22aKLB4iim3cMzgHA==
   dependencies:
     "@emfts/core" "^0.1.1-next.16"
     "@emfts/vue-registry" "^0.0.1-next.1"

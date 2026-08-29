@@ -155,12 +155,12 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
   color: var(--color-fg);
 }
 
-/* The composer stamps a class per group but draws no heading for it, so
-   the grouping is carried by spacing and a rule - enough to see that the
-   four shadow values belong together. */
+/* The composer draws the group's own label (emf.ts.ui#10); the spacing
+   and the rule are ours, so a group reads as a block rather than as a
+   heading with fields loosely under it. */
 .settings-form :deep(.uim-c-GroupWidget) {
   padding-top: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
   border-top: 1px solid var(--color-divider);
 }
 
@@ -168,6 +168,17 @@ const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures
   padding-top: 0;
   margin-top: 0;
   border-top: 0;
+}
+
+.settings-form :deep(.uim-group-label) {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-dim);
 }
 
 .settings-form__empty {
