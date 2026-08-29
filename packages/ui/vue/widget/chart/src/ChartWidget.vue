@@ -125,7 +125,7 @@ const { update } = useDatasourceRepository(datasourceId, "ChartData", data);
 
 const chartComponent = computed(() => {
   // Check if we have mixed chart types (different types per series)
-  const hasMixedTypes = config.value?.seriesSettings?.some(
+  const hasMixedTypes = seriesList().some(
     (s: any) => s.chartType?.value && s.chartType.value !== config.value?.chartType?.value
   )
 
@@ -152,6 +152,14 @@ const chartKey = ref(0)
 watch(() => config.value, (newVal) => {
   chartKey.value++
 }, { deep: true })
+
+/** The series settings as a plain array, whether they arrive as one or as an EList. */
+function seriesList(): any[] {
+  const list: any = config.value?.seriesSettings
+  if (!list) return []
+  if (typeof list.toArray === 'function') return list.toArray()
+  return Array.isArray(list) ? list : []
+}
 
 const resolvedConfig = wrapParameters({
   chartType: computed(() => (config.value?.chartType as any)?.value ?? 'bar'),
@@ -183,18 +191,30 @@ const chartData = computed(() => {
 
   const dataCopy = JSON.parse(JSON.stringify(data.value))
 
-  // Check if we have any series-specific settings
-  const hasSeriesSettings = config.value?.seriesSettings && config.value.seriesSettings.length > 0
+  /*
+   * The series list is an EList since the model types it against
+   * SeriesSettings - it has size() and toArray(), not length and find().
+   * Read as an array once, so the merge below stays plain.
+   */
+  const series = seriesList()
+  const hasSeriesSettings = series.length > 0
 
   if (dataCopy.datasets && Array.isArray(dataCopy.datasets)) {
     dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
       // Check if there's a series-specific setting for this dataset
-      const seriesSettings: any = config.value?.seriesSettings?.find(
+      const seriesSettings: any = series.find(
         (s: any) => (s.seriesIndex as any)?.value === index
       )
 
       // Determine chart type (series-specific or global fallback)
-      const chartType = (seriesSettings?.chartType as any)?.value ?? resolvedConfig.chartType ?? 'bar'
+      /*
+       * resolvedConfig holds computed refs, so it has to be read through
+       * .value - handing the ref itself to Chart.js sets the type to
+       * "[object Object]", which it rejects as an unknown controller. Only
+       * visible once a series exists, since type is set for series only.
+       */
+      const chartType =
+        (seriesSettings?.chartType as any)?.value ?? resolvedConfig.chartType?.value ?? 'bar'
 
       // Determine axis assignment (series-specific or default)
       const xAxisId = (seriesSettings?.xAxisId as any)?.value
