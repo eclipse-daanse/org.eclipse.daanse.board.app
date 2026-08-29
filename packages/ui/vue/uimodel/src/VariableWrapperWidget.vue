@@ -15,26 +15,29 @@ Contributors:
 /*
  * The renderer for a settings field.
  *
- * Widgets in this app hold their settings in VariableWrapper: a value that
- * may be a literal or bound to a variable, in which case it comes from
- * outside and must not be edited here. The wrapper stays in place - only
- * what is inside it changes - because the widget holds a reference to it
- * and would not see a replacement.
+ * Widgets hold their settings in VariableWrapper: a value that is either
+ * given here or taken from a variable. Both states are editable from this
+ * one field - the {x} switches between them - because a setting driven from
+ * outside is still a setting, and having to look somewhere else to see or
+ * change that is what made the old form hard to read.
  *
- * The composer hands its context in `custom`, which is the contract every
- * widget registered with the registry sees.
+ * The wrapper object itself is never replaced, only written through: the
+ * widget holds a reference to it and would not see a new one.
  */
-import { computed } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import type { EObject, EStructuralFeature } from '@emfts/core'
-import { DCheckbox, DColorInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import {
+  identifier as VARIABLE_REPOSITORY,
+  type VariableRepository,
+} from 'org.eclipse.daanse.board.app.lib.api.variable'
+import {
+  DCheckbox,
+  DColorInput,
+  DInput,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { kindOf, labelOf } from './buildForm'
 
-/*
- * The shape the composer passes: the object and the feature come as props
- * of their own, and `custom` carries what the UI model said about this
- * field. Reading them all out of `custom` finds nothing - and a widget that
- * finds nothing renders nothing, silently.
- */
 const props = defineProps<{
   eObject?: EObject
   feature?: EStructuralFeature
@@ -44,7 +47,10 @@ const props = defineProps<{
   }
 }>()
 
-/** The wrapper itself - never replaced, only read and written through. */
+/* Injected once, in setup - not inside the handlers that use it. */
+const variables = inject<VariableRepository>(VARIABLE_REPOSITORY)
+
+/** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
   const { eObject, feature } = props
   if (!eObject || !feature) return undefined
@@ -52,13 +58,58 @@ const wrapper = computed<any>(() => {
   return name ? (eObject as unknown as Record<string, any>)[name] : undefined
 })
 
-const boundToVariable = computed(() => Boolean(wrapper.value?.variable))
+/* ------------------------------------------------------------ binding */
+
+const boundName = computed<string>(() => wrapper.value?.variable ?? '')
+const isBound = computed(() => Boolean(boundName.value))
+
+/** Switched on by the {x}, or by the field already being bound. */
+const bindingMode = ref(false)
+watch(isBound, (bound) => { if (bound) bindingMode.value = true }, { immediate: true })
+
+const variableNames = computed<string[]>(() => {
+  try {
+    return (variables?.getAllVariables() ?? []).map(([name]: [string, unknown]) => name)
+  } catch {
+    return []
+  }
+})
+
+const chosenVariable = computed<string>({
+  get: () => boundName.value,
+  set: (name) => {
+    if (!wrapper.value) return
+    if (!name) return release()
+    const variable = variables?.getVariable(name)
+    if (variable) wrapper.value.setTo(variable)
+  },
+})
+
+/**
+ * Frees the field from its variable, keeping the value it had.
+ *
+ * Assigning through the wrapper's own setter is what releases it - the
+ * setter drops the reference. Writing the current value back means the
+ * field does not jump when the binding goes.
+ */
+function release() {
+  if (!wrapper.value) return
+  wrapper.value.value = wrapper.value.value
+  bindingMode.value = false
+}
+
+function toggleBinding() {
+  if (isBound.value) release()
+  else bindingMode.value = !bindingMode.value
+}
+
+/* -------------------------------------------------------------- value */
+
+const editable = computed(() => !props.custom?.resolvedStyle?.readOnly && !isBound.value)
 
 const value = computed({
   get: () => wrapper.value?.value ?? '',
-  set: (next) => {
-    if (wrapper.value && !boundToVariable.value) wrapper.value.value = next
-  },
+  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = next },
 })
 
 const numeric = computed({
@@ -66,34 +117,33 @@ const numeric = computed({
     const raw = Number(wrapper.value?.value)
     return Number.isFinite(raw) ? raw : 0
   },
-  set: (next) => {
-    if (wrapper.value && !boundToVariable.value) wrapper.value.value = String(next)
-  },
+  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = String(next) },
 })
 
 const flag = computed({
   get: () => wrapper.value?.value === true || wrapper.value?.value === 'true',
-  set: (next) => {
-    if (wrapper.value && !boundToVariable.value) wrapper.value.value = next
-  },
+  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = next },
 })
 
+/* --------------------------------------------------------------- form */
+
 /*
- * What the model said this field is.
- *
- * The widget class in the UI model is the decision - CheckboxWidget means a
- * checkbox, whatever the field happens to be called. Guessing from the name
- * is only the fallback for a form derived from the class, where nobody has
- * decided anything yet; letting it override a written model is how "fill"
- * and "stacked" ended up as text boxes.
+ * What the model said this field is. The widget class is the decision;
+ * guessing from the name is the fallback for a derived form, where nobody
+ * has decided anything yet.
  */
 const modelKind = computed<string>(() => props.custom?.rawWidget?.eClass?.()?.getName?.() ?? '')
 
 const options = computed<string[]>(() => {
   const values = props.custom?.rawWidget?.values
-  if (!values) return []
-  return typeof values.map === 'function' ? [...values] : []
+  return values && typeof values.map === 'function' ? [...values] : []
 })
+
+const numberBounds = computed(() => ({
+  min: props.custom?.rawWidget?.min,
+  max: props.custom?.rawWidget?.max,
+  step: props.custom?.rawWidget?.step,
+}))
 
 const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'text'>(() => {
   switch (modelKind.value) {
@@ -112,69 +162,143 @@ const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'text'>(() => {
   }
 })
 
-/* The label the model gave the field; its name only if the model was silent. */
 const label = computed(
   () => props.custom?.resolvedStyle?.label ?? (props.feature ? labelOf(props.feature) : ''),
 )
 
-const readOnly = computed(() => props.custom?.resolvedStyle?.readOnly || boundToVariable.value)
-
-/** What a bound field says instead of its value. */
-const boundHint = computed(() =>
-  boundToVariable.value
-    ? `Kommt aus der Variablen „${wrapper.value?.variable?.name ?? wrapper.value?.variable}“`
-    : undefined,
-)
+const noVariables = computed(() => bindingMode.value && variableNames.value.length === 0)
 </script>
 
 <template>
-  <div v-if="wrapper" :class="['bound-field', { 'bound-field--variable': boundToVariable }]">
-    <DCheckbox v-if="kind === 'flag'" v-model="flag" :label="label" :disabled="readOnly" />
+  <div v-if="wrapper" :class="['field-row', { 'field-row--bound': isBound }]">
+    <div class="field-row__control">
+      <!-- Bound: the variable takes the place of the value -->
+      <DSelect
+        v-if="bindingMode && !noVariables"
+        v-model="chosenVariable"
+        :label="label"
+        :options="variableNames"
+        :disabled="custom?.resolvedStyle?.readOnly"
+        placeholder="Keine Variable"
+        clearable
+      />
 
-    <DSelect
-      v-else-if="kind === 'choice'"
-      v-model="value"
-      :label="label"
-      :options="options"
-      :disabled="readOnly"
-      :hint="boundHint"
-      clearable
-    />
+      <DInput
+        v-else-if="noVariables"
+        :model-value="''"
+        :label="label"
+        disabled
+        hint="Es sind noch keine Variablen angelegt."
+      />
 
-    <DColorInput
-      v-else-if="kind === 'colour'"
-      v-model="value"
-      :label="label"
-      :disabled="readOnly"
-      :hint="boundHint"
-    />
+      <DCheckbox
+        v-else-if="kind === 'flag'"
+        v-model="flag"
+        :label="label"
+        :disabled="!editable"
+      />
 
-    <DInput
-      v-else-if="kind === 'number'"
-      v-model="numeric"
-      :label="label"
-      type="number"
-      :disabled="readOnly"
-      :hint="boundHint"
-    />
+      <DSelect
+        v-else-if="kind === 'choice'"
+        v-model="value"
+        :label="label"
+        :options="options"
+        :disabled="!editable"
+        clearable
+      />
 
-    <DInput
-      v-else
-      v-model="value"
-      :label="label"
-      :disabled="readOnly"
-      :placeholder="custom?.resolvedStyle?.placeholder"
-      :hint="boundHint"
-    />
+      <DColorInput
+        v-else-if="kind === 'colour'"
+        v-model="value"
+        :label="label"
+        :disabled="!editable"
+      />
+
+      <DInput
+        v-else-if="kind === 'number'"
+        v-model="numeric"
+        :label="label"
+        type="number"
+        :min="numberBounds.min"
+        :max="numberBounds.max"
+        :step="numberBounds.step"
+        :disabled="!editable"
+      />
+
+      <DInput
+        v-else
+        v-model="value"
+        :label="label"
+        :placeholder="custom?.resolvedStyle?.placeholder"
+        :disabled="!editable"
+      />
+    </div>
+
+    <!-- The switch between a value of its own and one from outside -->
+    <button
+      type="button"
+      :class="['bind', { on: isBound, armed: bindingMode && !isBound }]"
+      :title="isBound ? `Bindung an „${boundName}“ lösen` : 'An eine Variable binden'"
+      :aria-pressed="isBound"
+      @click="toggleBinding"
+    >
+      {x}
+    </button>
   </div>
 </template>
 
 <style scoped>
-/* A field whose value comes from a variable is marked, not hidden: you
-   should see that it is set, and where from. */
-.bound-field--variable {
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.field-row__control {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* A field whose value comes from outside says so, and stays legible */
+.field-row--bound {
   border-left: 2px solid var(--color-brand);
   padding-left: 6px;
   margin-left: -8px;
+}
+
+.bind {
+  width: 24px;
+  height: 26px;
+  flex: none;
+  margin-top: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: var(--color-dim);
+  background-color: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.bind:hover {
+  color: var(--color-fg);
+  border-color: var(--color-outline);
+}
+
+.bind.armed {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.bind.on {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+  background-color: color-mix(in srgb, var(--color-brand) 14%, transparent);
+}
+
+.bind:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }
 </style>

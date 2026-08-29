@@ -29,14 +29,14 @@ function F(t, e, r) {
   return i[6] = i[6] & 15 | 64, i[8] = i[8] & 63 | 128, _(i);
 }
 var g = /* @__PURE__ */ ((t) => (t.Global = "global", t.Page = "page", t))(g || {}), y = /* @__PURE__ */ ((t) => (t.ReadOnly = "readonly", t.PageOnly = "page-only", t.ExternalWritable = "external-writable", t))(y || {});
-class o {
+class l {
   subscribers = [];
   innerValue;
   intervalFn = () => {
   };
   description = "";
   refreshInterval = 0;
-  refreshType = l.None;
+  refreshType = o.None;
   refreshIntervalId = 0;
   refreshTrigger = null;
   id = q();
@@ -62,9 +62,9 @@ class o {
     this.name = e;
   }
   update(e) {
-    this.description = e.description, this.refreshInterval = e.refreshInterval || 0, this.refreshInterval = Math.max(this.refreshInterval, 300), this.refreshType = e.refreshType || l.None, this.refreshTrigger = e.refreshTrigger || null, this.refreshType === l.Interval ? this.refreshInterval && (this.refreshIntervalId = setInterval(() => {
+    this.description = e.description, this.refreshInterval = e.refreshInterval || 0, this.refreshInterval = Math.max(this.refreshInterval, 300), this.refreshType = e.refreshType || o.None, this.refreshTrigger = e.refreshTrigger || null, this.refreshType === o.Interval ? this.refreshInterval && (this.refreshIntervalId = setInterval(() => {
       this.intervalFn();
-    }, this.refreshInterval)) : this.refreshType === l.Trigger && this.refreshTrigger && this.eventBus?.on(this.refreshTrigger, () => {
+    }, this.refreshInterval)) : this.refreshType === o.Trigger && this.refreshTrigger && this.eventBus?.on(this.refreshTrigger, () => {
       this.intervalFn();
     }), this.eventBus?.emit(n.VariableUpdated);
   }
@@ -126,7 +126,7 @@ class o {
   }
 }
 const h = u("ComputedVariable"), M = Symbol.for(h);
-class V extends o {
+class V extends l {
   innerExpression = "";
   type = h;
   init(e, r) {
@@ -187,7 +187,7 @@ function U(t) {
   };
 }
 const p = u("ConstantVariable"), L = Symbol.for(p);
-class x extends o {
+class x extends l {
   type = p;
   init(e, r) {
     super.init(e, r), this.value = r.value;
@@ -213,7 +213,7 @@ function O(t) {
   };
 }
 const N = Symbol.for("QueryVariable");
-class I extends o {
+class I extends l {
   innerQueryParam = "";
   type = "query";
   init(e, r) {
@@ -240,7 +240,7 @@ function Q(t) {
   };
 }
 const z = u("QueryVariable"), Y = Symbol.for("RequestVariable");
-class f extends o {
+class f extends l {
   innerRequest = "";
   type = "request";
   time = 0;
@@ -270,7 +270,7 @@ function W(t) {
   };
 }
 const k = u("RequestVariable"), j = Symbol.for("TimeVariable");
-class E extends o {
+class E extends l {
   type = "time";
   init(e, r) {
     super.init(e, r), super.value = Date.now(), super.onInterval = () => {
@@ -290,7 +290,7 @@ function G(t) {
   };
 }
 const K = u("TimeVariable"), b = u("DateTimePickerVariable"), H = Symbol.for(b);
-class S extends o {
+class S extends l {
   type = b;
   innerDatetime = "";
   init(e, r) {
@@ -425,10 +425,10 @@ class te {
   }
   // TODO: Memory leak
   set value(e) {
-    this.reference = void 0, this.isSet = !1, this._value = e;
+    this.reference = void 0, this.isSet = !1, this.variable = null, this._value = e;
   }
 }
-var T = /* @__PURE__ */ ((t) => (t.Constant = "Constant", t.QueryParameter = "Query parameter", t.SystemProperties = "System properties", t.EnvironmentVariables = "Environment variables", t.BrowserProperties = "Browser properties", t.Time = "Time", t.Expression = "Expression", t.AsyncParameters = "Async parameters", t.ComputedString = "Computed String", t))(T || {}), n = /* @__PURE__ */ ((t) => (t.VariableUpdated = "VariableUpdated", t.VariableDeleted = "VariableDeleted", t.VariableCreated = "VariableCreated", t.VariablesCleared = "VariablesCleared", t.VariableRemoved = "VariableRemoved", t))(n || {}), l = /* @__PURE__ */ ((t) => (t.None = "None", t.Reactive = "Reactive", t.Interval = "Interval", t.Trigger = "Trigger", t))(l || {});
+var T = /* @__PURE__ */ ((t) => (t.Constant = "Constant", t.QueryParameter = "Query parameter", t.SystemProperties = "System properties", t.EnvironmentVariables = "Environment variables", t.BrowserProperties = "Browser properties", t.Time = "Time", t.Expression = "Expression", t.AsyncParameters = "Async parameters", t.ComputedString = "Computed String", t))(T || {}), n = /* @__PURE__ */ ((t) => (t.VariableUpdated = "VariableUpdated", t.VariableDeleted = "VariableDeleted", t.VariableCreated = "VariableCreated", t.VariablesCleared = "VariablesCleared", t.VariableRemoved = "VariableRemoved", t))(n || {}), o = /* @__PURE__ */ ((t) => (t.None = "None", t.Reactive = "Reactive", t.Interval = "Interval", t.Trigger = "Trigger", t))(o || {});
 function R({ services: t }) {
   const e = {
     eventBus: t.get(w),
@@ -453,7 +453,7 @@ const re = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   DateTimePickerVariableSymbol: H,
   QueryVariable: I,
   QueryVariableSymbol: N,
-  RefreshType: l,
+  RefreshType: o,
   RequestVariable: f,
   RequestVariableSymbol: Y,
   SourceType: T,
@@ -461,7 +461,7 @@ const re = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   TimeVariableSymbol: j,
   UsesComputedVariable: ee,
   VARIABLEWRAPPER: P,
-  Variable: o,
+  Variable: l,
   VariableAccessMode: y,
   VariableEvents: n,
   VariableScope: g,
@@ -474,7 +474,7 @@ async function ne(t) {
     throw new Error(`${m}: tsm runtime is not initialized`);
   e.register(m, re, ie, "lib.variables"), await R?.(t);
 }
-async function oe(t) {
+async function le(t) {
   await void 0;
 }
 export {
@@ -490,7 +490,7 @@ export {
   H as DateTimePickerVariableSymbol,
   I as QueryVariable,
   N as QueryVariableSymbol,
-  l as RefreshType,
+  o as RefreshType,
   f as RequestVariable,
   Y as RequestVariableSymbol,
   T as SourceType,
@@ -498,11 +498,11 @@ export {
   j as TimeVariableSymbol,
   ee as UsesComputedVariable,
   P as VARIABLEWRAPPER,
-  o as Variable,
+  l as Variable,
   y as VariableAccessMode,
   n as VariableEvents,
   g as VariableScope,
   te as VariableWrapper,
   ne as activate,
-  oe as deactivate
+  le as deactivate
 };

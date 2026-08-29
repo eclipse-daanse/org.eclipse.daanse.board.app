@@ -46,6 +46,12 @@ class VariableWrapper<T> {
     //this.reference?.unsubscribe(this.boundOnChange)
     this.reference = undefined;
     this.isSet = false;
+    /*
+     * The name goes with the binding. Keeping it described a binding that
+     * no longer exists, and anything asking "which variable is this on?"
+     * got an answer that was no longer true.
+     */
+    this.variable = null;
     this._value = isn;
   }
 }
