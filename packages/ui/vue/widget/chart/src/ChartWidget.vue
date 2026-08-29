@@ -21,7 +21,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { ChartSettings } from './gen/ChartSettings';
+import { ChartSettingsImpl } from './gen/ChartSettingsImpl';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
@@ -34,7 +34,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
 const config = defineModel<ChartSettings>('configv', { required: true });
-const defaultConfig = new ChartSettings();
+const defaultConfig = new ChartSettingsImpl();
 const data = ref(null as any);
 
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;

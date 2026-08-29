@@ -52,8 +52,38 @@ const availableWidgetsSettings = registeredWidgets.getAllWidgets()
 const i18n: i18n | undefined = inject('i18n')
 const t = (key: string) => (i18n ? i18n.t(key) : key)
 
-type TabId = 'data' | 'look' | 'frame' | 'variables'
+type TabId = 'data' | 'look' | 'rest' | 'frame' | 'variables'
 const tab = ref<TabId>('look')
+
+/*
+ * A widget may carry its settings form as a model, on its registration -
+ * the same place its icon and its component come from. Where it does, the
+ * form is rendered from that model; where it does not, its hand-written
+ * settings component is used as before.
+ */
+interface SettingsForm {
+  xmi: string
+  uri?: string
+  ePackage: () => any
+  create: () => any
+}
+
+const modelledLook = computed<SettingsForm | undefined>(() => {
+  const type = widget.value?.type
+  return type ? (availableWidgetsSettings[type] as { settingsForm?: SettingsForm })?.settingsForm : undefined
+})
+
+/*
+ * A model can cover only what the model describes. The chart, for one,
+ * keeps its series and its reference lines in lists the Ecore does not
+ * type, so they are not in its form - and its hand-written component stays
+ * reachable beside it rather than that part of the widget becoming
+ * unreachable. The tab disappears by itself once nothing is left in it.
+ */
+const hasHandWritten = computed(
+  () => !!(widget.value?.type && availableWidgetsSettings[widget.value.type]?.settingsComponent),
+)
+const showRestTab = computed(() => !!modelledLook.value && hasHandWritten.value)
 
 /* --------------------------------------------------- sections as tabs */
 
@@ -350,6 +380,16 @@ onBeforeUnmount(() => {
               {{ section.label }}
             </button>
             <button
+              v-if="showRestTab"
+              type="button"
+              role="tab"
+              :aria-selected="tab === 'rest'"
+              :class="['tab', { on: tab === 'rest' }]"
+              @click="tab = 'rest'"
+            >
+              Weiteres
+            </button>
+            <button
               type="button"
               role="tab"
               :aria-selected="tab === 'frame'"
@@ -391,10 +431,34 @@ onBeforeUnmount(() => {
                  nothing to put display:none on in that case. Kept mounted
                  so switching tabs does not reset their open sections. -->
             <div v-show="tab === 'look'" ref="lookHost">
+              <SettingsForm
+                v-if="modelledLook"
+                v-model="widget.config"
+                :create="modelledLook.create"
+                :ui-model-xmi="modelledLook.xmi"
+                :domain-package="modelledLook.ePackage()"
+                :ui-model-uri="modelledLook.uri"
+              />
               <component
+                v-else
                 :is="availableWidgetsSettings[widget.type]?.settingsComponent"
                 v-model="widget.config"
                 :key="widget.uid"
+                :dataSources="dataSources"
+              />
+            </div>
+
+            <!-- What the model does not describe yet -->
+            <div v-show="tab === 'rest'">
+              <p class="rest__note">
+                Einstellungen, die noch nicht im Modell beschrieben sind - beim Diagramm die
+                einzelnen Datenreihen und die Referenzlinien.
+              </p>
+              <component
+                v-if="showRestTab"
+                :is="availableWidgetsSettings[widget.type]?.settingsComponent"
+                v-model="widget.config"
+                :key="widget.uid + '-rest'"
                 :dataSources="dataSources"
               />
             </div>
@@ -639,6 +703,16 @@ onBeforeUnmount(() => {
 
 .pick {
   margin-bottom: 8px;
+}
+
+.rest__note {
+  margin: 0 0 10px;
+  padding: 7px 9px;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-dim);
+  background-color: var(--color-raised);
+  border-radius: var(--radius-xs);
 }
 
 .note {

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the chart settings.
+
+The order is the order of the decisions: first what kind of chart this is,
+then how its lines and points look, then the grid and axes it sits in, and
+last the date format. Point colour and size only mean anything once points
+are shown, and the fill colour only once the area is filled - both say so
+through a condition rather than by sitting there greyed out.
+
+The per-series settings are a list and are not in this form yet; the
+reference lines and areas are four lists the model does not type at all.
+Both still come from the hand-written component beside this.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ChartSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ChartSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="typeGroup" layout="VERTICAL" label="Diagrammtyp">
+      <fields xsi:type="uimodel:InputWidget"
+          name="chartType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/chartType"
+          label="Typ"
+          placeholder="bar, line, pie …"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="barOrientation"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/barOrientation"
+          label="Ausrichtung"
+          placeholder="vertical, horizontal"/>
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="stacked"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/stacked"
+          label="Gestapelt"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lineGroup" layout="VERTICAL" label="Linie">
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderColor"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderWidth"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderWidth"
+          label="Stärke"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderDash"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderDash"
+          label="Strichmuster"/>
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="fill"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
+          label="Fläche füllen"/>
+      <!-- Only worth setting once there is an area to fill -->
+      <fields xsi:type="uimodel:InputWidget"
+          name="backgroundColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/backgroundColor"
+          label="Füllfarbe">
+        <visibilityCondition language="JS" body="self.fill?.value === true || self.fill?.value === 'true'"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="pointGroup" layout="VERTICAL" label="Punkte">
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="showPoints"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showPoints"
+          label="Punkte zeigen"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="pointColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/pointColor"
+          label="Farbe">
+        <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget"
+          name="pointSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/pointSize"
+          label="Größe">
+        <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="gridGroup" layout="VERTICAL" label="Gitterlinien">
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="showHorizontalGrid"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showHorizontalGrid"
+          label="Waagerecht"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="horizontalGridColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/horizontalGridColor"
+          label="Farbe waagerecht">
+        <visibilityCondition language="JS" body="self.showHorizontalGrid?.value === true || self.showHorizontalGrid?.value === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget"
+          name="horizontalGridWidth"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/horizontalGridWidth"
+          label="Stärke waagerecht">
+        <visibilityCondition language="JS" body="self.showHorizontalGrid?.value === true || self.showHorizontalGrid?.value === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="showVerticalGrid"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showVerticalGrid"
+          label="Senkrecht"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="verticalGridColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/verticalGridColor"
+          label="Farbe senkrecht">
+        <visibilityCondition language="JS" body="self.showVerticalGrid?.value === true || self.showVerticalGrid?.value === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:InputWidget"
+          name="verticalGridWidth"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/verticalGridWidth"
+          label="Stärke senkrecht">
+        <visibilityCondition language="JS" body="self.showVerticalGrid?.value === true || self.showVerticalGrid?.value === 'true'"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="axisGroup" layout="VERTICAL" label="Achsen">
+      <fields xsi:type="uimodel:InputWidget"
+          name="xAxisTitle"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/xAxisTitle"
+          label="Titel X"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="yAxisTitle"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/yAxisTitle"
+          label="Titel Y"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="dateDisplayFormat"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/dateDisplayFormat"
+          label="Datumsformat"
+          placeholder="dd.MM.yyyy HH:mm"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

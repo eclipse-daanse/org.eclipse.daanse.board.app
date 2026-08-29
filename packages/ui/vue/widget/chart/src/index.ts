@@ -16,7 +16,18 @@ import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/chart.svg'
 import ChartWidget from './ChartWidget.vue'
 import ChartWidgetSettings from './ChartWidgetSettings.vue'
-import { ChartSettings } from './gen/ChartSettings'
+import type { ChartSettings } from './gen/ChartSettings'
+import { ChartSettingsImpl } from './gen/ChartSettingsImpl'
+import { ChartsettingsPackage } from './gen/ChartsettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import chartSettingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+ChartsettingsPackage.eINSTANCE
 import { ChartWidgetEvents } from './events/ChartWidgetEvents'
 import { ChartWidgetInterface } from './api/ChartWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -40,6 +51,18 @@ export class ChartWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'Chart'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: chartSettingsFormXmi,
+    uri: '/chart-settings.ui.xmi',
+    ePackage: () => ChartsettingsPackage.eINSTANCE,
+    create: () => new ChartSettingsImpl(),
+  }
+
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
     @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
@@ -58,4 +81,6 @@ export class ChartWidgetProvider implements WidgetProvider {
   }
 }
 
-export { ChartWidget, ChartWidgetSettings, ChartSettings }
+export { ChartWidget, ChartWidgetSettings }
+export { ChartSettingsImpl, ChartsettingsPackage, chartSettingsFormXmi }
+export type { ChartSettings }

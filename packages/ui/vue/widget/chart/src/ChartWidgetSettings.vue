@@ -15,7 +15,8 @@ Contributors:
 import { inject, ref, onMounted, computed, watch } from 'vue'
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next"
 import { ChartSettings } from './gen/ChartSettings'
-import { SeriesSettings } from './gen/SeriesSettings'
+import type { SeriesSettings } from './gen/SeriesSettings'
+import { SeriesSettingsImpl } from './gen/SeriesSettingsImpl'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
@@ -191,7 +192,7 @@ const addSeriesSettings = () => {
   if (!widgetSettings.value.seriesSettings) {
     widgetSettings.value.seriesSettings = []
   }
-  const newSettings = new SeriesSettings()
+  const newSettings = new SeriesSettingsImpl()
   newSettings.seriesIndex = new VariableWrapper<number>(widgetSettings.value.seriesSettings.length)
   newSettings.chartType = new VariableWrapper<string>('bar')
   newSettings.xAxisId = new VariableWrapper<string>('x')
