@@ -61,6 +61,13 @@ export class ChartWidgetProvider implements WidgetProvider {
     uri: '/chart-settings.ui.xmi',
     ePackage: () => ChartsettingsPackage.eINSTANCE,
     create: () => new ChartSettingsImpl(),
+    /*
+     * The parts of the hand-written form the model does not describe: the
+     * per-series list, and the reference lines and areas, which are four
+     * lists the Ecore does not type. Named so that what is modelled is not
+     * offered twice, in two forms that could disagree.
+     */
+    unmodelledSections: ['Per-Series Settings', 'Reference Lines & Areas'],
   }
 
   constructor(

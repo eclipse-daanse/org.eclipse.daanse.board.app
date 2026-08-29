@@ -34,16 +34,28 @@ Both still come from the hand-written component beside this.
   <components xsi:type="uimodel:FormView" name="ChartSettingsFormView">
 
     <fields xsi:type="uimodel:GroupWidget" name="typeGroup" layout="VERTICAL" label="Diagrammtyp">
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:SelectWidget"
           name="chartType"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/chartType"
-          label="Typ"
-          placeholder="bar, line, pie …"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Typ">
+        <values>line</values>
+        <values>bar</values>
+        <values>pie</values>
+        <values>doughnut</values>
+        <values>radar</values>
+        <values>polarArea</values>
+        <values>scatter</values>
+        <values>bubble</values>
+      </fields>
+      <!-- Only bars have an orientation -->
+      <fields xsi:type="uimodel:SelectWidget"
           name="barOrientation"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/barOrientation"
-          label="Ausrichtung"
-          placeholder="vertical, horizontal"/>
+          label="Balkenausrichtung">
+        <values>vertical</values>
+        <values>horizontal</values>
+        <visibilityCondition language="JS" body="self.chartType?.value === 'bar'"/>
+      </fields>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="stacked"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/stacked"
@@ -55,14 +67,20 @@ Both still come from the hand-written component beside this.
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderColor"
           label="Farbe"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderWidth"
-          label="Stärke"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Linienstärke" min="0" max="20" step="1"/>
+      <fields xsi:type="uimodel:SelectWidget"
           name="borderDash"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderDash"
-          label="Strichmuster"/>
+          label="Strichmuster">
+        <values>durchgezogen</values>
+        <values>5,5</values>
+        <values>10,5</values>
+        <values>2,2</values>
+        <values>15,5,5,5</values>
+      </fields>
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
@@ -87,10 +105,10 @@ Both still come from the hand-written component beside this.
           label="Farbe">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="pointSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/pointSize"
-          label="Größe">
+          label="Punktgröße" min="0" max="20" step="1">
         <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
       </fields>
     </fields>
@@ -99,7 +117,7 @@ Both still come from the hand-written component beside this.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showHorizontalGrid"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showHorizontalGrid"
-          label="Waagerecht"/>
+          label="Waagerechte Linien"/>
       <fields xsi:type="uimodel:InputWidget"
           name="horizontalGridColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/horizontalGridColor"
@@ -115,7 +133,7 @@ Both still come from the hand-written component beside this.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="showVerticalGrid"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/showVerticalGrid"
-          label="Senkrecht"/>
+          label="Senkrechte Linien"/>
       <fields xsi:type="uimodel:InputWidget"
           name="verticalGridColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/verticalGridColor"
@@ -139,11 +157,18 @@ Both still come from the hand-written component beside this.
           name="yAxisTitle"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/yAxisTitle"
           label="Titel Y"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:SelectWidget"
           name="dateDisplayFormat"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/dateDisplayFormat"
-          label="Datumsformat"
-          placeholder="dd.MM.yyyy HH:mm"/>
+          label="Datumsformat">
+        <values>dd.MM.yyyy</values>
+        <values>dd.MM.yyyy HH:mm</values>
+        <values>dd.MM. HH:mm</values>
+        <values>HH:mm</values>
+        <values>yyyy-MM-dd</values>
+        <values>yyyy-MM-dd HH:mm</values>
+        <values>MMM yyyy</values>
+      </fields>
     </fields>
 
   </components>

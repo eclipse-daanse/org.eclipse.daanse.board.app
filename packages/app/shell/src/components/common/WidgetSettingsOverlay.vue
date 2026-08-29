@@ -66,6 +66,8 @@ interface SettingsForm {
   uri?: string
   ePackage: () => any
   create: () => any
+  /** Sections of the hand-written form that the model does not cover. */
+  unmodelledSections?: string[]
 }
 
 const modelledLook = computed<SettingsForm | undefined>(() => {
@@ -146,6 +148,28 @@ function pickSection(index: number) {
   tab.value = 'look'
   showSection(index)
 }
+
+/*
+ * In the "Weiteres" tab, only the sections the model does not cover. The
+ * hand-written component renders all of them; showing the ones that are
+ * modelled as well would put the same setting in two places, in two forms
+ * that can disagree about it.
+ */
+const restHost = ref<HTMLElement>()
+
+async function trimRestSections() {
+  const wanted = modelledLook.value?.unmodelledSections
+  const host = restHost.value
+  if (!wanted || !host) return
+  await nextTick()
+  for (const collapse of [...host.querySelectorAll(':scope > .va-collapse')] as HTMLElement[]) {
+    collapse.style.display = wanted.includes(labelOf(collapse)) ? '' : 'none'
+  }
+}
+
+watch(tab, (value) => {
+  if (value === 'rest') trimRestSections()
+})
 
 /* --------------------------------------------------------- reset point */
 
@@ -449,7 +473,7 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- What the model does not describe yet -->
-            <div v-show="tab === 'rest'">
+            <div v-show="tab === 'rest'" ref="restHost">
               <p class="rest__note">
                 Einstellungen, die noch nicht im Modell beschrieben sind - beim Diagramm die
                 einzelnen Datenreihen und die Referenzlinien.

@@ -39,10 +39,10 @@ derived version can only ever list seventeen fields.
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/title"
           label="Text"
           placeholder="Ohne Titel"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="titleFontSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleFontSize"
-          label="Schriftgröße"/>
+          label="Schriftgröße" min="6" max="72" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="titleColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/titleColor"
@@ -54,37 +54,37 @@ derived version can only ever list seventeen fields.
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColor"
           label="Hintergrund"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="backgroundColorTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/backgroundColorTransparence"
-          label="Deckkraft"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Deckkraft" min="0" max="255" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="transparency"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/transparency"
-          label="Gesamtdeckkraft"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Gesamtdeckkraft" min="0" max="255" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="blur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/blur"
-          label="Weichzeichnen"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Weichzeichnen" min="0" max="50" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="padding"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/padding"
-          label="Innenabstand"/>
+          label="Innenabstand" min="0" max="200" step="1"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="borderGroup" layout="VERTICAL" label="Rand">
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="borderSize"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderSize"
-          label="Stärke"/>
+          label="Stärke" min="0" max="40" step="1"/>
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderColor"
           label="Farbe"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="borderRadius"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/borderRadius"
-          label="Eckenradius"/>
+          label="Eckenradius" min="0" max="100" step="1"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="shadowGroup" layout="VERTICAL" label="Schatten">
@@ -92,22 +92,22 @@ derived version can only ever list seventeen fields.
           name="shadowColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowColor"
           label="Farbe"/>
-      <fields xsi:type="uimodel:InputWidget"
+      <fields xsi:type="uimodel:NumberWidget"
           name="shadowBlur"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowBlur"
-          label="Weichheit"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Weichheit" min="0" max="100" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="shadowX"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowX"
-          label="Versatz X"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Versatz X" min="-100" max="100" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="shadowY"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowY"
-          label="Versatz Y"/>
-      <fields xsi:type="uimodel:InputWidget"
+          label="Versatz Y" min="-100" max="100" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
           name="shadowTransparence"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.wrapper#//WrapperSettings/shadowTransparence"
-          label="Deckkraft"/>
+          label="Deckkraft" min="0" max="255" step="1"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="behaviourGroup" layout="VERTICAL" label="Verhalten">

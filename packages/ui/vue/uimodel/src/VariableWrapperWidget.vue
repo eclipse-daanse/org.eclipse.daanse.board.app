@@ -26,7 +26,7 @@ Contributors:
  */
 import { computed } from 'vue'
 import type { EObject, EStructuralFeature } from '@emfts/core'
-import { DCheckbox, DColorInput, DInput } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { DCheckbox, DColorInput, DInput, DSelect } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { kindOf, labelOf } from './buildForm'
 
 /*
@@ -40,6 +40,7 @@ const props = defineProps<{
   feature?: EStructuralFeature
   custom?: {
     resolvedStyle?: { label?: string; readOnly?: boolean; required?: boolean; placeholder?: string }
+    rawWidget?: any
   }
 }>()
 
@@ -77,7 +78,39 @@ const flag = computed({
   },
 })
 
-const kind = computed(() => (props.feature ? kindOf(props.feature) : 'text'))
+/*
+ * What the model said this field is.
+ *
+ * The widget class in the UI model is the decision - CheckboxWidget means a
+ * checkbox, whatever the field happens to be called. Guessing from the name
+ * is only the fallback for a form derived from the class, where nobody has
+ * decided anything yet; letting it override a written model is how "fill"
+ * and "stacked" ended up as text boxes.
+ */
+const modelKind = computed<string>(() => props.custom?.rawWidget?.eClass?.()?.getName?.() ?? '')
+
+const options = computed<string[]>(() => {
+  const values = props.custom?.rawWidget?.values
+  if (!values) return []
+  return typeof values.map === 'function' ? [...values] : []
+})
+
+const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'text'>(() => {
+  switch (modelKind.value) {
+    case 'CheckboxWidget':
+      return 'flag'
+    case 'NumberWidget':
+      return 'number'
+    case 'SelectWidget':
+    case 'ComboboxWidget':
+      return 'choice'
+    case 'InputWidget':
+      // The metamodel has no colour widget; the name is what is left to go on
+      return props.feature && kindOf(props.feature) === 'colour' ? 'colour' : 'text'
+    default:
+      return props.feature ? kindOf(props.feature) : 'text'
+  }
+})
 
 /* The label the model gave the field; its name only if the model was silent. */
 const label = computed(
@@ -97,6 +130,16 @@ const boundHint = computed(() =>
 <template>
   <div v-if="wrapper" :class="['bound-field', { 'bound-field--variable': boundToVariable }]">
     <DCheckbox v-if="kind === 'flag'" v-model="flag" :label="label" :disabled="readOnly" />
+
+    <DSelect
+      v-else-if="kind === 'choice'"
+      v-model="value"
+      :label="label"
+      :options="options"
+      :disabled="readOnly"
+      :hint="boundHint"
+      clearable
+    />
 
     <DColorInput
       v-else-if="kind === 'colour'"
