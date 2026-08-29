@@ -153,6 +153,17 @@ watch(() => config.value, (newVal) => {
   chartKey.value++
 }, { deep: true })
 
+/**
+ * The first value that was actually set.
+ *
+ * An empty field is not a setting - clearing a colour has to fall through
+ * to what lies behind it rather than painting with an empty string, which
+ * is what `??` alone would do.
+ */
+function firstSet(...candidates: any[]): any {
+  return candidates.find((v) => v !== undefined && v !== null && v !== '')
+}
+
 /** The series settings as a plain array, whether they arrive as one or as an EList. */
 function seriesList(): any[] {
   const list: any = config.value?.seriesSettings
@@ -231,11 +242,36 @@ const chartData = computed(() => {
       const xAxisId = (seriesSettings?.xAxisId as any)?.value
       const yAxisId = (seriesSettings?.yAxisId as any)?.value
 
-      // Determine colors: series-specific > dataset (from composer) > global config
-      const borderColor = seriesSettings?.borderColor?.value ?? dataset.borderColor ?? config.value?.borderColor?.value
-      const backgroundColor = seriesSettings?.backgroundColor?.value ?? dataset.backgroundColor ?? config.value?.backgroundColor?.value
-      const borderWidth = seriesSettings?.borderWidth?.value ?? dataset.borderWidth ?? config.value?.borderWidth?.value
-      const borderDash = seriesSettings?.borderDash?.value ?? dataset.borderDash ?? config.value?.borderDash?.value
+      /*
+       * What was set here wins, and the data source is what is left when
+       * nothing was: series first, then the chart's own setting, then the
+       * colour the datasource composer proposed.
+       *
+       * The composer always supplies a colour - a configured one or one it
+       * generates - so with the dataset in front, a colour set in the form
+       * never took effect. Setting something and seeing nothing happen is
+       * worse than losing a proposal nobody asked for.
+       */
+      const borderColor = firstSet(
+        seriesSettings?.borderColor?.value,
+        config.value?.borderColor?.value,
+        dataset.borderColor,
+      )
+      const backgroundColor = firstSet(
+        seriesSettings?.backgroundColor?.value,
+        config.value?.backgroundColor?.value,
+        dataset.backgroundColor,
+      )
+      const borderWidth = firstSet(
+        seriesSettings?.borderWidth?.value,
+        config.value?.borderWidth?.value,
+        dataset.borderWidth,
+      )
+      const borderDash = firstSet(
+        seriesSettings?.borderDash?.value,
+        config.value?.borderDash?.value,
+        dataset.borderDash,
+      )
 
       // Apply settings based on chart type
       let result: any = {
@@ -264,7 +300,11 @@ const chartData = computed(() => {
         // Determine line-specific settings (series-specific or global fallback)
         const showPoints = seriesSettings?.showPoints?.value ?? config.value?.showPoints?.value ?? true
         const fillEnabled = seriesSettings?.fill?.value ?? config.value?.fill?.value ?? false
-        const pointColor = seriesSettings?.pointColor?.value ?? dataset.pointBackgroundColor ?? config.value?.pointColor?.value
+        const pointColor = firstSet(
+          seriesSettings?.pointColor?.value,
+          config.value?.pointColor?.value,
+          dataset.pointBackgroundColor,
+        )
         const pointSize = seriesSettings?.pointSize?.value ?? config.value?.pointSize?.value ?? 3
 
         result = {

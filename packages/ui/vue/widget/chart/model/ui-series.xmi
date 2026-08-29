@@ -79,7 +79,8 @@ that does not state its own.
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderColor"
-          label="Farbe"/>
+          label="Linien- und Randfarbe"
+          placeholder="sichtbar ab Stärke 1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderWidth"
@@ -97,13 +98,13 @@ that does not state its own.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/fill"
-          label="Fläche füllen"/>
+          label="Fläche unter der Linie füllen"/>
+      <!-- Always shown: see the note in the chart's own form. -->
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/backgroundColor"
-          label="Füllfarbe">
-        <visibilityCondition language="JS" body="self.fill?.value === true || self.fill?.value === 'true'"/>
-      </fields>
+          label="Flächenfarbe"
+          placeholder="Balken, Torte, gefüllte Fläche"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="seriesPoints" layout="VERTICAL" label="Punkte">

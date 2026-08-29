@@ -76,7 +76,8 @@ from, so they still come from the hand-written component beside this.
       <fields xsi:type="uimodel:InputWidget"
           name="borderColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderColor"
-          label="Farbe"/>
+          label="Linien- und Randfarbe"
+          placeholder="sichtbar ab Stärke 1"/>
       <fields xsi:type="uimodel:NumberWidget"
           name="borderWidth"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/borderWidth"
@@ -94,14 +95,15 @@ from, so they still come from the hand-written component beside this.
       <fields xsi:type="uimodel:CheckboxWidget"
           name="fill"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/fill"
-          label="Fläche füllen"/>
-      <!-- Only worth setting once there is an area to fill -->
+          label="Fläche unter der Linie füllen"/>
+      <!-- Always shown: this is what a bar, a pie or a doughnut is painted
+           with, so hiding it behind "fill" made the colour unreachable for
+           every chart type that is not a line. -->
       <fields xsi:type="uimodel:InputWidget"
           name="backgroundColor"
           feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//ChartSettings/backgroundColor"
-          label="Füllfarbe">
-        <visibilityCondition language="JS" body="self.fill?.value === true || self.fill?.value === 'true'"/>
-      </fields>
+          label="Flächenfarbe"
+          placeholder="Balken, Torte, gefüllte Fläche"/>
     </fields>
 
     <fields xsi:type="uimodel:GroupWidget" name="pointGroup" layout="VERTICAL" label="Punkte">

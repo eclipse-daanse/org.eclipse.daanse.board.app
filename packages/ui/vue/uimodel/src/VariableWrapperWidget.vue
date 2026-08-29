@@ -234,6 +234,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :disabled="!editable"
+        :hint="boundHint ?? custom?.resolvedStyle?.placeholder"
       />
 
       <DInput
