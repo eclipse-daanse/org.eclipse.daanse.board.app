@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="composables"
+                nsURI="org.eclipse.daanse.board.app.ui.vue.composables"
+                nsPrefix="composables">
+
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The types every widget setting in this application goes through. Modelled so that references to them carry a type: a settings model states its fields as references to VariableWrapper, and without this package those references resolve to nothing - which leaves anything reading the model, a UI model composer above all, unable to tell what a field is."/>
+    </eAnnotations>
+
+    <eClassifiers xsi:type="ecore:EClass" name="VariableWrapper">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A setting's value, either given directly or taken from a variable. Holding both in one place is what lets any setting in the application be driven from outside without every widget knowing about variables: the wrapper stays where it is and its content changes."/>
+        </eAnnotations>
+
+        <eTypeParameters name="T"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The value in force. Set directly it is a literal; while a variable is bound it follows that variable and setting it releases the binding."/>
+            </eAnnotations>
+            <eGenericType eTypeParameter="#//VariableWrapper/T"/>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="variable"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Name of the bound variable, or absent when the value stands on its own. The name rather than the variable itself, so a stored state can be written and read without the variables it mentions having to exist yet."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSet"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Whether a variable is bound. Kept alongside the name because a name may survive a stored state whose variable is gone."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             changeable="false" defaultValueLiteral="VARIABLEWRAPPER">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Discriminator carried into stored states, so a wrapper is recognisable as one when it comes back as plain JSON."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
+</ecore:EPackage>

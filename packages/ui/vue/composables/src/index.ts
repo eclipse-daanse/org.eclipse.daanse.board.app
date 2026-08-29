@@ -21,10 +21,25 @@ import { useGlobalLoading } from './useGlobalLoading'
 // direkt aus org.eclipse.daanse.board.app.lib.variables importieren.
 import { VariableWrapper,VARIABLEWRAPPER } from 'org.eclipse.daanse.board.app.lib.variables'
 import { VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER } from './VariableComplexStringWrapper'
+import { EPackageRegistry } from '@emfts/core'
+import { ComposablesPackage } from './gen/ComposablesPackage'
 
 const WrapperTypes = {
   'VariableWrapper': VariableWrapper,
   'VariableComplexStringWrapper': VariableComplexStringWrapper,
 }
 
+/*
+ * Building the EPackage on load and putting it in the registry, so a
+ * reference to VariableWrapper from another model resolves to a type
+ * instead of to nothing. The class itself stays hand-written - this is the
+ * metamodel beside it, not a replacement.
+ *
+ * The registration is ours to do: generated packages resolve foreign types
+ * through EPackageRegistry.INSTANCE but do not enter themselves into it,
+ * so whoever owns the package has to. Reported as emf.ts.codegen#36.
+ */
+EPackageRegistry.INSTANCE.registerPackage(ComposablesPackage.eINSTANCE)
+
+export { ComposablesPackage }
 export { useDatasourceRepository, useTemporaryStore, useVariableRepository, usePromisifiedModal, useGlobalLoading, VariableWrapper,VARIABLEWRAPPER,VariableComplexStringWrapper,VARIABLECOMPLEXSTRINGWRAPPER, WrapperTypes}

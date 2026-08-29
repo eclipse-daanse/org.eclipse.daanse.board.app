@@ -394,12 +394,12 @@ onBeforeUnmount(() => {
               />
             </div>
 
-            <!-- Still the hand-written form. The model-driven one
-                 (ui.vue.uimodel) is built and wired, but the settings
-                 models reference VariableWrapper, whose package has no
-                 Ecore of its own - so those EReferences carry no type and
-                 the composer cannot tell what to render. Switch this over
-                 once VariableWrapper is modelled. -->
+            <!-- Still the hand-written form. Everything below it is in
+                 place - VariableWrapper is modelled, the references carry
+                 their type, and the composer builds the FormView - but the
+                 widgets inside it render nothing, and the reason has not
+                 been found yet. Switching this line over is all that is
+                 left once it is. -->
             <div v-show="tab === 'frame'">
               <WidgetWrapperSettings v-model="widget.wrapperConfig" />
             </div>

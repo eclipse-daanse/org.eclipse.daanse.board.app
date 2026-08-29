@@ -26,7 +26,7 @@ Contributors:
  * form, in the stored state and in the widget, without three separate
  * edits that can drift apart.
  */
-import { computed, onMounted, provide, watch } from 'vue'
+import { computed, markRaw, onMounted, provide, shallowRef, watch } from 'vue'
 import type { EObject } from '@emfts/core'
 import { UIModelComposer } from '@emfts/uimodel-composer'
 import type { UIModel } from '@emfts/uimodel-composer'
@@ -76,10 +76,26 @@ watch(settings, ensureModelled)
 
 const model = computed(() => settings.value as EObject | undefined)
 
+/*
+ * Kept out of the reactive graph, and built once per class rather than per
+ * read. EMF compares metamodel objects by identity - an EClass against the
+ * package's literal, a feature against the class it came from - and a
+ * reactive proxy is never identical to the object it wraps, so those
+ * comparisons fail and the composer decides it has nothing to render.
+ */
+const uiModelCache = shallowRef<UIModel | undefined>()
+const uiModelFor = shallowRef<unknown>()
+
 const uiModel = computed<UIModel | undefined>(() => {
+  if (props.uiModel) return markRaw(props.uiModel)
   const target = model.value
-  if (!target?.eClass) return undefined
-  return props.uiModel ?? formFor(target.eClass())
+  const eClass = target?.eClass?.()
+  if (!eClass) return undefined
+  if (uiModelFor.value !== eClass) {
+    uiModelFor.value = eClass
+    uiModelCache.value = markRaw(formFor(eClass))
+  }
+  return uiModelCache.value
 })
 
 const hasFields = computed(() => (model.value?.eClass?.().getEStructuralFeatures().length ?? 0) > 0)
