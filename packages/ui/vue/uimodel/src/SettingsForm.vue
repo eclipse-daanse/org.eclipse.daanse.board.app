@@ -76,6 +76,13 @@ const props = defineProps<{
   domainPackage?: EPackage
   /** Name for the loaded resource, and its cache key. */
   uiModelUri?: string
+  /**
+   * Forms for classes that appear inside this one's lists. Loading them
+   * puts them in the by-class index, which is where the list renderer
+   * looks - so a series is drawn from its own form rather than from one
+   * derived from its class.
+   */
+  entryForms?: Array<{ xmi: string; uri?: string }>
   /** Shown when the object has no features to edit. */
   emptyText?: string
 }>()
@@ -120,6 +127,12 @@ const uiModel = computed<UIModel | undefined>(() => {
 
   // A written form beats a derived one: it says how the fields belong
   // together, which a class alone cannot
+  if (props.domainPackage) {
+    for (const entry of props.entryForms ?? []) {
+      loadUIModel(entry.xmi, props.domainPackage, entry.uri)
+    }
+  }
+
   if (props.uiModelXmi && props.domainPackage) {
     const written = loadUIModel(props.uiModelXmi, props.domainPackage, props.uiModelUri)
     if (written) return markRaw(written)

@@ -29,6 +29,7 @@ import {
   registerEcorePackage,
   URI,
   XMIResourceFactory,
+  type EClass,
   type EPackage,
   type XMIResource,
 } from '@emfts/core'
@@ -40,6 +41,28 @@ import {
 } from '@emfts/uimodel-composer'
 
 const cache = new Map<string, UIModel>()
+
+/*
+ * Every loaded form, by the class it is written for.
+ *
+ * A form does not only get used where it was named: the entries of a list
+ * are objects of their own class, and if someone wrote a form for that
+ * class it should be used there too, rather than one derived from the
+ * class as a stand-in. The models say which class they target, so nobody
+ * has to wire that up by hand.
+ */
+const byTargetClass = new Map<EClass, UIModel>()
+
+/** The written form for a class, if one has been loaded. */
+export function formForClass(eClass: EClass): UIModel | undefined {
+  return byTargetClass.get(eClass)
+}
+
+function indexByTarget(model: UIModel) {
+  for (const target of model.targetClasses ?? []) {
+    if (target) byTargetClass.set(target as EClass, model)
+  }
+}
 
 let metamodelReady = false
 
@@ -88,6 +111,7 @@ export function loadUIModel(xml: string, domainPackage: EPackage, uri = '/ui.xmi
 
     const model = resource.getContents().get(0) as UIModel
     cache.set(uri, model)
+    indexByTarget(model)
     return model
   } catch (error) {
     // A form that cannot be read is not a reason to take the settings down;

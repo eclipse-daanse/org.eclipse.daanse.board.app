@@ -21,6 +21,9 @@ import { ChartSettingsImpl } from './gen/ChartSettingsImpl'
 import { ChartsettingsPackage } from './gen/ChartsettingsPackage'
 /* The form for these settings, written as a model beside the Ecore. */
 import chartSettingsFormXmi from '../model/ui.xmi?raw'
+/* The form for one entry of the series list - same values as above, so a
+ * series states its type from the same list the chart does. */
+import seriesSettingsFormXmi from '../model/ui-series.xmi?raw'
 
 /*
  * Building the EPackage on load: until it exists the class literals are
@@ -61,6 +64,8 @@ export class ChartWidgetProvider implements WidgetProvider {
     uri: '/chart-settings.ui.xmi',
     ePackage: () => ChartsettingsPackage.eINSTANCE,
     create: () => new ChartSettingsImpl(),
+    /* Forms for classes that appear inside this one's lists. */
+    entryForms: [{ xmi: seriesSettingsFormXmi, uri: '/chart-series.ui.xmi' }],
     /*
      * What the model does not describe: the reference lines and areas, four
      * lists the Ecore does not type - there is no class to build a form
@@ -89,5 +94,5 @@ export class ChartWidgetProvider implements WidgetProvider {
 }
 
 export { ChartWidget, ChartWidgetSettings }
-export { ChartSettingsImpl, ChartsettingsPackage, chartSettingsFormXmi }
+export { ChartSettingsImpl, ChartsettingsPackage, chartSettingsFormXmi, seriesSettingsFormXmi }
 export type { ChartSettings }

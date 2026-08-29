@@ -30,8 +30,8 @@ import type { EClass, EObject, EStructuralFeature } from '@emfts/core'
 import { UIModelComposer } from '@emfts/uimodel-composer'
 import { DButton } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { ensureWrappers } from './adopt'
-import { formFor } from './buildForm'
-import { labelOf } from './buildForm'
+import { formFor, labelOf } from './buildForm'
+import { formForClass } from './loadUIModel'
 
 const props = defineProps<{
   eObject?: EObject
@@ -80,13 +80,25 @@ const entryClass = computed<EClass | undefined>(() => {
 })
 
 /*
- * The form for one entry, derived from its class. Built once per class:
- * the composer compares metamodel objects by identity, and a fresh model
- * per render would defeat that.
+ * The form for one entry.
+ *
+ * A written one if the widget shipped a model for this class - it can say
+ * which values a field may take, which the derived one cannot. Otherwise
+ * derived from the class, so a list is never empty for want of a form.
+ * Built once per class either way: the composer compares metamodel objects
+ * by identity, and a fresh model per render would defeat that.
  */
+const derived = new Map<EClass, ReturnType<typeof formFor>>()
+
 const entryForm = computed(() => {
   const eClass = entryClass.value
-  return eClass ? formFor(eClass, eClass.getName?.() ?? 'Eintrag') : undefined
+  if (!eClass) return undefined
+
+  const written = formForClass(eClass)
+  if (written) return written
+
+  if (!derived.has(eClass)) derived.set(eClass, formFor(eClass, eClass.getName?.() ?? 'Eintrag'))
+  return derived.get(eClass)
 })
 
 const open = ref(0)

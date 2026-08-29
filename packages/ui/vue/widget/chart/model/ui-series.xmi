@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for one data series.
+
+A series overrides the chart's own settings for itself, so the fields are
+the same ones and take the same values - the type is a choice from the same
+list, not free text, because a series with a mistyped type silently draws
+nothing.
+
+Left empty, a field falls back to the chart's setting. That is why nothing
+here is required and why the labels say what they set rather than what they
+are: "Typ" here means this series' type, the one above means every series
+that does not state its own.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SeriesSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="SeriesSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="seriesIdentity" layout="VERTICAL" label="Reihe">
+      <fields xsi:type="uimodel:InputWidget"
+          name="label"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/label"
+          label="Beschriftung"
+          placeholder="Wie im Diagramm benannt"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="seriesIndex"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/seriesIndex"
+          label="Reihennummer" min="0" step="1"/>
+      <fields xsi:type="uimodel:SelectWidget"
+          name="chartType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/chartType"
+          label="Typ">
+        <values>line</values>
+        <values>bar</values>
+        <values>pie</values>
+        <values>doughnut</values>
+        <values>radar</values>
+        <values>polarArea</values>
+        <values>scatter</values>
+        <values>bubble</values>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="seriesAxes" layout="VERTICAL" label="Achsen">
+      <fields xsi:type="uimodel:InputWidget"
+          name="xAxisId"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/xAxisId"
+          label="X-Achse"
+          placeholder="x"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="yAxisId"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/yAxisId"
+          label="Y-Achse"
+          placeholder="y"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="yAxisTitle"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/yAxisTitle"
+          label="Titel der Y-Achse"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="seriesLine" layout="VERTICAL" label="Linie">
+      <fields xsi:type="uimodel:InputWidget"
+          name="borderColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderColor"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="borderWidth"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderWidth"
+          label="Stärke" min="0" max="20" step="1"/>
+      <fields xsi:type="uimodel:SelectWidget"
+          name="borderDash"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/borderDash"
+          label="Strichmuster">
+        <values>durchgezogen</values>
+        <values>5,5</values>
+        <values>10,5</values>
+        <values>2,2</values>
+        <values>15,5,5,5</values>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="fill"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/fill"
+          label="Fläche füllen"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="backgroundColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/backgroundColor"
+          label="Füllfarbe">
+        <visibilityCondition language="JS" body="self.fill?.value === true || self.fill?.value === 'true'"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="seriesPoints" layout="VERTICAL" label="Punkte">
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="showPoints"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/showPoints"
+          label="Punkte zeigen"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="pointColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/pointColor"
+          label="Farbe">
+        <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
+      </fields>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="pointSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.chart#//SeriesSettings/pointSize"
+          label="Größe" min="0" max="20" step="1">
+        <visibilityCondition language="JS" body="self.showPoints?.value === true || self.showPoints?.value === 'true'"/>
+      </fields>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

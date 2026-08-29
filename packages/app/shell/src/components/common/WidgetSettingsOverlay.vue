@@ -68,6 +68,8 @@ interface SettingsForm {
   create: () => any
   /** Sections of the hand-written form that the model does not cover. */
   unmodelledSections?: string[]
+  /** Forms for the classes inside this widget's list settings. */
+  entryForms?: Array<{ xmi: string; uri?: string }>
 }
 
 const modelledLook = computed<SettingsForm | undefined>(() => {
@@ -462,6 +464,7 @@ onBeforeUnmount(() => {
                 :ui-model-xmi="modelledLook.xmi"
                 :domain-package="modelledLook.ePackage()"
                 :ui-model-uri="modelledLook.uri"
+                :entry-forms="modelledLook.entryForms"
               />
               <component
                 v-else
