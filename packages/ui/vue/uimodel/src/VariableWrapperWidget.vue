@@ -112,12 +112,34 @@ const value = computed({
   set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = next },
 })
 
-const numeric = computed({
+/*
+ * A number stays a number.
+ *
+ * Writing it back as a string looked harmless - most settings end up in CSS
+ * either way - but a series index is compared against the dataset's
+ * position with ===, and "0" is not 0. The series was then never found and
+ * everything set on it silently had no effect.
+ *
+ * An unset field reads as empty rather than as 0: showing a value that is
+ * not there invites setting it by accident, and for the series index that
+ * means claiming dataset 0.
+ */
+const numeric = computed<number | ''>({
   get: () => {
-    const raw = Number(wrapper.value?.value)
-    return Number.isFinite(raw) ? raw : 0
+    const raw = wrapper.value?.value
+    if (raw === undefined || raw === null || raw === '') return ''
+    const parsed = Number(raw)
+    return Number.isFinite(parsed) ? parsed : ''
   },
-  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = String(next) },
+  set: (next) => {
+    if (!wrapper.value || !editable.value) return
+    if (next === '' || next === null) {
+      wrapper.value.value = undefined
+      return
+    }
+    const parsed = Number(next)
+    wrapper.value.value = Number.isFinite(parsed) ? parsed : undefined
+  },
 })
 
 const flag = computed({

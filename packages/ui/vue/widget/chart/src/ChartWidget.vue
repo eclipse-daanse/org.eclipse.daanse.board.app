@@ -207,9 +207,15 @@ const chartData = computed(() => {
   if (dataCopy.datasets && Array.isArray(dataCopy.datasets)) {
     dataCopy.datasets = dataCopy.datasets.map((dataset: any, index: number) => {
       // Check if there's a series-specific setting for this dataset
-      const seriesSettings: any = series.find(
-        (s: any) => (s.seriesIndex as any)?.value === index
-      )
+      /*
+       * Compared as numbers: a settings value may arrive as a string,
+       * whether it was typed, stored that way, or came from a variable -
+       * and "0" === 0 is false, which loses the series without a word.
+       */
+      const seriesSettings: any = series.find((s: any) => {
+        const at = (s.seriesIndex as any)?.value
+        return at !== undefined && at !== null && at !== '' && Number(at) === index
+      })
 
       // Determine chart type (series-specific or global fallback)
       /*
