@@ -7760,10 +7760,10 @@ graphql-language-service@^5.5.1, graphql-language-service@^5.5.2:
     nullthrows "^1.0.0"
     vscode-languageserver-types "^3.17.1"
 
-graphql@^16.10.0:
-  version "16.12.0"
-  resolved "https://registry.npmjs.org/graphql/-/graphql-16.12.0.tgz"
-  integrity sha512-DKKrynuQRne0PNpEbzuEdHlYOMksHSUI8Zc9Unei5gTsMNA2/vMpoMz/yKba50pejK56qj98qM0SjYxAKi13gQ==
+graphql@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-17.0.2.tgz#05ff6f18e0801e8d040d46957eba712c1459d5d7"
+  integrity sha512-FRWbddMxfkjiB7z+aQDWIR+E34xo9I8c9mtK2RPv8PmMzKRvrdsreHL/Ui/TmwHJfhHChEtsFPyMHKI+xuarQQ==
 
 grid-layout-plus@^1.1.1:
   version "1.1.1"
