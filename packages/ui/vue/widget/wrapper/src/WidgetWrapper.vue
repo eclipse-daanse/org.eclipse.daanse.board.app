@@ -73,6 +73,29 @@ const openSettings = (id: string): void => {
 }
 
 /*
+ * What can be done with a widget while the board is being edited.
+ *
+ * A list rather than a pair of buttons: it states in one place what the
+ * board offers on a widget, and anything added here appears in the overlay
+ * without further layout work.
+ */
+const actions = computed(() => [
+  {
+    id: 'settings',
+    icon: 'settings',
+    label: 'Einstellungen',
+    run: () => openSettings(widget.uid),
+  },
+  {
+    id: 'delete',
+    icon: 'delete',
+    label: 'Löschen',
+    danger: true,
+    run: () => deleteWidget(widget.uid),
+  },
+])
+
+/*
  * Widget chrome as specified in docs/mdx-workbench-layout-mockups.html:
  * pane surface, a real 1px edge in the divider colour, 8px radius and the
  * --shadow-e2 elevation (0 2px 8px, 14% ink) instead of the old 5/5/12 drop
@@ -268,11 +291,26 @@ const getpadding = computed(() => {
             class="widget_component" />
         </VaScrollContainer>
       </div>
-      <div class="hover absolute top-[25px] right-0 flex justify-end z-3000 hightz" v-if="editEnabled">
-        <VaButton class="control-button" @click="openSettings(widget.uid)" icon="settings" size="small">
-        </VaButton>
-        <VaButton class="control-button" @click="deleteWidget(widget.uid)" icon="close" color="danger" size="small">
-        </VaButton>
+      <!--
+        While editing, hovering a widget dims it and offers what can be done
+        with it. Dimmed rather than covered: you have to see which widget you
+        are about to change, and a widget that disappears under its own menu
+        is the wrong one half the time.
+      -->
+      <div class="actions" v-if="editEnabled" aria-hidden="false">
+        <div class="actions__row">
+          <button
+            v-for="action in actions"
+            :key="action.id"
+            type="button"
+            :class="['action', { 'action--danger': action.danger }]"
+            :title="action.label"
+            @click.stop="action.run()"
+          >
+            <VaIcon :name="action.icon" class="action__icon" />
+            <span class="action__label">{{ action.label }}</span>
+          </button>
+        </div>
       </div>
     </template>
     <div v-else>
@@ -328,15 +366,81 @@ const getpadding = computed(() => {
   padding: v-bind(getpadding + "px");
 }
 
-.wrapper-container:hover .hover {
-  display: block;
-}
-
-.wrapper-container .hover {
-  display: none;
-}
-
-.hightz {
+/*
+ * The overlay covers the widget but does not take the pointer: only the
+ * buttons do. Everything between them stays draggable, so a widget can
+ * still be moved and resized while its actions are showing.
+ */
+.actions {
+  position: absolute;
+  inset: 0;
   z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--color-bg, #121820) 70%, transparent);
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+}
+
+.wrapper-container:hover .actions,
+.actions:focus-within {
+  opacity: 1;
+}
+
+/* A little above the middle: an optical centre sits higher than a measured one */
+.actions__row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6%;
+}
+
+.action {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+  padding: 8px 6px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 4px);
+  background: transparent;
+  color: var(--color-dim, #8b98a8);
+  font: inherit;
+  cursor: pointer;
+  transition: color 100ms ease, background-color 100ms ease, border-color 100ms ease;
+}
+
+.action:hover,
+.action:focus-visible {
+  color: var(--color-fg, #e6edf5);
+  background: color-mix(in srgb, var(--color-pane, #1a222c) 88%, transparent);
+  border-color: var(--color-divider, #2b3644);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--color-accent, #4fa3d1);
+  outline-offset: 1px;
+}
+
+.action--danger:hover,
+.action--danger:focus-visible {
+  color: var(--color-err, #d1584f);
+  border-color: color-mix(in srgb, var(--color-err, #d1584f) 40%, transparent);
+}
+
+.action__icon {
+  font-size: 22px;
+}
+
+/* Says what the icon does; quiet until the action is the one being pointed at */
+.action__label {
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 </style>

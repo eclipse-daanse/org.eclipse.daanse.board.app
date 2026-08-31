@@ -1,13 +1,14 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-81a272a9]{position:absolute}.wrapper-container[data-v-81a272a9]{background-color:var(--v6a72535e);border-color:var(--v776491f8);border-width:var(--v0d088b26);border-style:solid;width:100%;height:100%;box-Shadow:var(--v17af03c3);border-radius:var(--v407e3708);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-81a272a9]{border-radius:var(--v407e3708);padding:var(--bd9ee602)}.wrapper-container:hover .hover[data-v-81a272a9]{display:block}.wrapper-container .hover[data-v-81a272a9]{display:none}.hightz[data-v-81a272a9]{z-index:3000}.settings-container[data-v-affddfef]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.pad_bottom[data-v-affddfef]{padding-top:30px;padding-bottom:10px}\n";})();
-import { defineComponent as q, useCssVars as se, computed as O, inject as J, ref as k, onUnmounted as oe, resolveComponent as V, createElementBlock as x, openBlock as U, normalizeStyle as H, createCommentVNode as $, createVNode as n, toDisplayString as W, Fragment as re, createElementVNode as L, withCtx as p, createBlock as Q, resolveDynamicComponent as le, createTextVNode as M, useModel as ie, unref as r } from "vue";
-import { identifier as ne } from "org.eclipse.daanse.board.app.lib.api.widget";
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-99377e1b]{position:absolute}.wrapper-container[data-v-99377e1b]{background-color:var(--v3a1aea6b);border-color:var(--v21ec099e);border-width:var(--v8bd79cf2);border-style:solid;width:100%;height:100%;box-Shadow:var(--v761534dd);border-radius:var(--v47d005d4);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-99377e1b]{border-radius:var(--v47d005d4);padding:var(--v61c90419)}.actions[data-v-99377e1b]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-99377e1b],.actions[data-v-99377e1b]:focus-within{opacity:1}.actions__row[data-v-99377e1b]{display:flex;gap:4px;margin-bottom:6%}.action[data-v-99377e1b]{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:60px;padding:8px 6px 6px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-99377e1b]:hover,.action[data-v-99377e1b]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-99377e1b]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-99377e1b]:hover,.action--danger[data-v-99377e1b]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__icon[data-v-99377e1b]{font-size:22px}.action__label[data-v-99377e1b]{font-size:11px;line-height:1;letter-spacing:.01em;white-space:nowrap}.settings-container[data-v-affddfef]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.pad_bottom[data-v-affddfef]{padding-top:30px;padding-bottom:10px}\n";})();
+import { defineComponent as J, useCssVars as re, computed as v, inject as Q, ref as k, onUnmounted as le, resolveComponent as F, createElementBlock as U, openBlock as I, normalizeStyle as H, createCommentVNode as $, createVNode as n, toDisplayString as W, Fragment as M, createElementVNode as A, withCtx as p, createBlock as ee, resolveDynamicComponent as ie, renderList as ne, withModifiers as ue, normalizeClass as de, createTextVNode as j, useModel as ce, unref as r } from "vue";
+import { identifier as ge } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper as o } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { VariableInput as S } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { BasicEFactory as ue, BasicEPackage as de, BasicEClass as ce, BasicEReference as f, EPackageRegistry as C, BasicEObject as ge } from "@emfts/core";
-const he = {
+import { BasicEFactory as he, BasicEPackage as pe, BasicEClass as Ee, BasicEReference as f, EPackageRegistry as C, BasicEObject as Re } from "@emfts/core";
+const be = {
   key: 0,
-  class: "hover absolute top-[25px] right-0 flex justify-end z-3000 hightz"
-}, pe = { key: 2 }, Ee = { style: { "text-align": "center", padding: "1rem" } }, Re = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, we = /* @__PURE__ */ q({
+  class: "actions",
+  "aria-hidden": "false"
+}, we = { class: "actions__row" }, fe = ["title", "onClick"], Ce = { class: "action__label" }, Te = { key: 2 }, Ne = { style: { "text-align": "center", padding: "1rem" } }, Se = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, me = /* @__PURE__ */ J({
   __name: "WidgetWrapper",
   props: {
     widget: {},
@@ -15,25 +16,39 @@ const he = {
   },
   emits: ["openSettings", "removeWidget"],
   setup(u, { emit: e }) {
-    se((g) => ({
-      v6a72535e: B.value,
-      v776491f8: s.value,
-      v0d088b26: d.value + "px",
-      v17af03c3: A.value,
-      v407e3708: E.value + "px",
-      bd9ee602: Z.value + "px"
+    re((g) => ({
+      v3a1aea6b: s.value,
+      v21ec099e: d.value,
+      v8bd79cf2: E.value + "px",
+      v761534dd: V.value,
+      v47d005d4: ae.value + "px",
+      v61c90419: Z.value + "px"
     }));
-    const a = e, l = J(ne), m = k(0), y = l.onChange?.(() => {
+    const a = e, l = Q(ge), m = k(0), B = l.onChange?.(() => {
       m.value++;
     });
-    oe(() => y?.());
-    const v = O(() => (m.value, l.getWidget(u.widget.type))), R = O(() => (m.value, l.getAllWidgets())), w = k(!1), i = k(null), _ = (g) => {
-      i.value = g, w.value = !0;
+    le(() => B?.());
+    const O = v(() => (m.value, l.getWidget(u.widget.type))), R = v(() => (m.value, l.getAllWidgets())), b = k(!1), i = k(null), _ = (g) => {
+      i.value = g, b.value = !0;
     }, T = () => {
-      i.value && a("removeWidget", i.value), w.value = !1, i.value = null;
-    }, D = (g) => {
+      i.value && a("removeWidget", i.value), b.value = !1, i.value = null;
+    }, L = (g) => {
       a("openSettings", g);
-    }, N = {
+    }, D = v(() => [
+      {
+        id: "settings",
+        icon: "settings",
+        label: "Einstellungen",
+        run: () => L(u.widget.uid)
+      },
+      {
+        id: "delete",
+        icon: "delete",
+        label: "Löschen",
+        danger: !0,
+        run: () => _(u.widget.uid)
+      }
+    ]), N = {
       title: "",
       backgroundColor: "#f6f7f9",
       backgroundColorTransparence: 255,
@@ -60,34 +75,34 @@ const he = {
         u.widget.wrapperConfig[g] = new o(h);
       else if (!(h instanceof o))
         if ("value" in h) {
-          const b = new o(h.value);
-          "variable" in h && (b.variable = h.variable), u.widget.wrapperConfig[g] = b;
+          const w = new o(h.value);
+          "variable" in h && (w.variable = h.variable), u.widget.wrapperConfig[g] = w;
         } else
           u.widget.wrapperConfig[g] = new o(N[g]);
     });
-    const A = O(() => {
+    const V = v(() => {
       let g = "";
       const h = u.widget.wrapperConfig.shadowTransparence?.value;
       G(h) && (g = h.toString(16));
-      let b = (u.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
-      return b.length == 3 && (b = b[0] + b[0] + b[1] + b[1] + b[2] + b[2]), `${u.widget.wrapperConfig.shadowX?.value}px ${u.widget.wrapperConfig.shadowY?.value}px ${u.widget.wrapperConfig.shadowBlur?.value}px #${b}${g}`;
-    }), B = O(() => {
+      let w = (u.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
+      return w.length == 3 && (w = w[0] + w[0] + w[1] + w[1] + w[2] + w[2]), `${u.widget.wrapperConfig.shadowX?.value}px ${u.widget.wrapperConfig.shadowY?.value}px ${u.widget.wrapperConfig.shadowBlur?.value}px #${w}${g}`;
+    }), s = v(() => {
       let g = 255;
       const h = u.widget.wrapperConfig.backgroundColorTransparence?.value;
       G(h) && (g = h);
-      const b = u.widget.wrapperConfig.transparency?.value;
-      G(b) && (g = Math.round(g * (b / 255)));
-      const F = u.widget.wrapperConfig.backgroundColor?.value;
-      if (!F) return "var(--color-pane)";
-      let P = F.replace("#", "");
-      P.length == 3 && (P = P[0] + P[0] + P[1] + P[1] + P[2] + P[2]);
+      const w = u.widget.wrapperConfig.transparency?.value;
+      G(w) && (g = Math.round(g * (w / 255)));
+      const x = u.widget.wrapperConfig.backgroundColor?.value;
+      if (!x) return "var(--color-pane)";
+      let y = x.replace("#", "");
+      y.length == 3 && (y = y[0] + y[0] + y[1] + y[1] + y[2] + y[2]);
       const z = g < 255 ? g.toString(16).padStart(2, "0") : "";
-      return `#${P}${z}`;
-    }), s = O(() => u.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), d = O(() => u.widget.wrapperConfig.borderSize?.value || 0), E = O(() => u.widget.wrapperConfig.borderRadius?.value || 0), X = O(() => {
+      return `#${y}${z}`;
+    }), d = v(() => u.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), E = v(() => u.widget.wrapperConfig.borderSize?.value || 0), ae = v(() => u.widget.wrapperConfig.borderRadius?.value || 0), X = v(() => {
       const g = u.widget.wrapperConfig.transparency?.value;
       return G(g) ? g / 255 : 1;
-    }), te = O(() => u.widget.wrapperConfig.titleFontSize?.value || 16), K = O(() => u.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
-    O(() => {
+    }), se = v(() => u.widget.wrapperConfig.titleFontSize?.value || 16), K = v(() => u.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
+    v(() => {
       let g = (u.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
       g.length == 3 && (g = g[0] + g[0] + g[1] + g[1] + g[2] + g[2]);
       const h = u.widget.wrapperConfig.shadowTransparence?.value;
@@ -97,46 +112,46 @@ const he = {
       const h = parseInt(g);
       return isNaN(h) ? !1 : h >= 0 && h <= 255;
     }
-    const ae = O(() => {
+    const oe = v(() => {
       const g = u.widget.wrapperConfig.blur?.value;
       return G(g) ? g : "";
-    }), Z = O(() => {
+    }), Z = v(() => {
       console.log(u.widget.wrapperConfig.padding);
       const g = parseInt(u.widget.wrapperConfig.padding?.value);
       return isNaN(g) ? 0 : g;
     });
     return (g, h) => {
-      const b = V("VaScrollContainer"), F = V("VaButton"), P = V("VaIcon"), z = V("VaModal");
-      return U(), x("div", {
+      const w = F("VaScrollContainer"), x = F("VaIcon"), y = F("VaButton"), z = F("VaModal");
+      return I(), U("div", {
         class: "flex relative flex-col w-full h-full wrapper-container",
-        style: H({ "--blur-amount": ae.value + "px", "--title-color": K.value })
+        style: H({ "--blur-amount": oe.value + "px", "--title-color": K.value })
       }, [
-        u.widget.wrapperConfig.title?.value ? (U(), x("div", {
+        u.widget.wrapperConfig.title?.value ? (I(), U("div", {
           key: 0,
           class: "font-semibold capitalize",
           style: H({
-            fontSize: te.value + "px",
+            fontSize: se.value + "px",
             color: K.value,
             padding: Z.value + "px",
             paddingBottom: 0,
             opacity: X.value
           })
         }, W(u.widget.wrapperConfig.title.value), 5)) : $("", !0),
-        v.value ? (U(), x(re, { key: 1 }, [
-          L("div", {
+        O.value ? (I(), U(M, { key: 1 }, [
+          A("div", {
             class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
             style: H({ position: "relative", opacity: X.value })
           }, [
-            n(b, {
+            n(w, {
               color: "var(--color-outline)",
               vertical: "",
               horizontal: ""
             }, {
               default: p(() => [
-                (U(), Q(le(R.value[u.widget.type].component), {
+                (I(), ee(ie(R.value[u.widget.type].component), {
                   config: u.widget.config,
                   configv: u.widget.config,
-                  "onUpdate:configv": h[0] || (h[0] = (I) => u.widget.config = I),
+                  "onUpdate:configv": h[0] || (h[0] = (P) => u.widget.config = P),
                   datasourceId: u.widget.config.datasourceId,
                   id: u.widget.uid || u.widget.id,
                   class: "widget_component"
@@ -145,65 +160,67 @@ const he = {
               _: 1
             })
           ], 4),
-          u.editEnabled ? (U(), x("div", he, [
-            n(F, {
-              class: "control-button",
-              onClick: h[1] || (h[1] = (I) => D(u.widget.uid)),
-              icon: "settings",
-              size: "small"
-            }),
-            n(F, {
-              class: "control-button",
-              onClick: h[2] || (h[2] = (I) => _(u.widget.uid)),
-              icon: "close",
-              color: "danger",
-              size: "small"
-            })
+          u.editEnabled ? (I(), U("div", be, [
+            A("div", we, [
+              (I(!0), U(M, null, ne(D.value, (P) => (I(), U("button", {
+                key: P.id,
+                type: "button",
+                class: de(["action", { "action--danger": P.danger }]),
+                title: P.label,
+                onClick: ue((Ge) => P.run(), ["stop"])
+              }, [
+                n(x, {
+                  name: P.icon,
+                  class: "action__icon"
+                }, null, 8, ["name"]),
+                A("span", Ce, W(P.label), 1)
+              ], 10, fe))), 128))
+            ])
           ])) : $("", !0)
-        ], 64)) : (U(), x("div", pe, [
-          L("p", null, "Widget type " + W(u.widget.type) + " is not registered.", 1)
+        ], 64)) : (I(), U("div", Te, [
+          A("p", null, "Widget type " + W(u.widget.type) + " is not registered.", 1)
         ])),
         n(z, {
-          modelValue: w.value,
-          "onUpdate:modelValue": h[5] || (h[5] = (I) => w.value = I),
+          modelValue: b.value,
+          "onUpdate:modelValue": h[3] || (h[3] = (P) => b.value = P),
           size: "small",
           "hide-default-actions": "",
           "overlay-opacity": "0.3"
         }, {
           footer: p(() => [
-            L("div", Re, [
-              n(F, {
+            A("div", Se, [
+              n(y, {
                 preset: "secondary",
-                onClick: h[3] || (h[3] = (I) => {
-                  w.value = !1, i.value = null;
+                onClick: h[1] || (h[1] = (P) => {
+                  b.value = !1, i.value = null;
                 })
               }, {
-                default: p(() => [...h[8] || (h[8] = [
-                  M(" Abbrechen ", -1)
+                default: p(() => [...h[6] || (h[6] = [
+                  j(" Abbrechen ", -1)
                 ])]),
                 _: 1
               }),
-              n(F, {
+              n(y, {
                 color: "danger",
                 icon: "delete",
-                onClick: h[4] || (h[4] = (I) => T())
+                onClick: h[2] || (h[2] = (P) => T())
               }, {
-                default: p(() => [...h[9] || (h[9] = [
-                  M(" Löschen ", -1)
+                default: p(() => [...h[7] || (h[7] = [
+                  j(" Löschen ", -1)
                 ])]),
                 _: 1
               })
             ])
           ]),
           default: p(() => [
-            L("div", Ee, [
-              n(P, {
+            A("div", Ne, [
+              n(x, {
                 name: "warning",
                 color: "danger",
                 size: "2rem"
               }),
-              h[6] || (h[6] = L("h5", { style: { margin: "0.5rem 0" } }, "Widget löschen", -1)),
-              h[7] || (h[7] = L("p", null, "Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
+              h[4] || (h[4] = A("h5", { style: { margin: "0.5rem 0" } }, "Widget löschen", -1)),
+              h[5] || (h[5] = A("p", null, "Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
             ])
           ]),
           _: 1
@@ -211,12 +228,12 @@ const he = {
       ], 4);
     };
   }
-}), ee = (u, e) => {
+}), te = (u, e) => {
   const a = u.__vccOpts || u;
   for (const [l, m] of e)
     a[l] = m;
   return a;
-}, be = /* @__PURE__ */ ee(we, [["__scopeId", "data-v-81a272a9"]]), fe = { class: "settings-container" }, Ce = { class: "px-2" }, Te = { class: "px-2" }, Ne = { class: "px-2" }, Se = { class: "px-2" }, me = { class: "px-2" }, _e = { class: "px-2" }, ve = /* @__PURE__ */ q({
+}, _e = /* @__PURE__ */ te(me, [["__scopeId", "data-v-99377e1b"]]), ve = { class: "settings-container" }, Ae = { class: "px-2" }, Oe = { class: "px-2" }, De = { class: "px-2" }, Le = { class: "px-2" }, Pe = { class: "px-2" }, ye = { class: "px-2" }, Be = /* @__PURE__ */ J({
   __name: "WidgetWrapperSettings",
   props: {
     modelValue: { required: !0 },
@@ -224,29 +241,29 @@ const he = {
   },
   emits: ["update:modelValue"],
   setup(u) {
-    const e = ie(u, "modelValue"), a = J("i18n"), l = a ? (w) => a.t("wrapper:" + w) : (w) => w, m = k(!1), y = k(!1), v = O(() => y.value ? "#ffffff" : ""), R = (w, i) => {
-      console.log("onValueChange", i), w({
+    const e = ce(u, "modelValue"), a = Q("i18n"), l = a ? (b) => a.t("wrapper:" + b) : (b) => b, m = k(!1), B = k(!1), O = v(() => B.value ? "#ffffff" : ""), R = (b, i) => {
+      console.log("onValueChange", i), b({
         target: {
           value: i
         }
       });
     };
-    return (w, i) => {
-      const _ = V("VaDivider"), T = V("va-input"), D = V("va-color-input"), N = V("VaCounter"), A = V("VaSlider"), B = V("va-collapse");
-      return U(), Q(B, {
+    return (b, i) => {
+      const _ = F("VaDivider"), T = F("va-input"), L = F("va-color-input"), D = F("VaCounter"), N = F("VaSlider"), V = F("va-collapse");
+      return I(), ee(V, {
         modelValue: m.value,
         "onUpdate:modelValue": i[16] || (i[16] = (s) => m.value = s),
         header: "Widget wrapper settings",
         icon: "style"
       }, {
         default: p(() => [
-          L("div", fe, [
+          A("div", ve, [
             n(_, {
               class: "pad_bottom",
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", Ce, W(r(l)("WidgetWrapper.title")), 1)
+                A("span", Ae, W(r(l)("WidgetWrapper.title")), 1)
               ]),
               _: 1
             }),
@@ -284,7 +301,7 @@ const he = {
               label: r(l)("WidgetWrapper.fontColor")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(D, {
+                n(L, {
                   "model-value": s,
                   onInput: d,
                   label: r(l)("WidgetWrapper.fontColor")
@@ -297,7 +314,7 @@ const he = {
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", Te, W(r(l)("WidgetWrapper.padding")), 1)
+                A("span", Oe, W(r(l)("WidgetWrapper.padding")), 1)
               ]),
               _: 1
             }),
@@ -307,8 +324,8 @@ const he = {
               label: r(l)("WidgetWrapper.padding")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(A, {
-                  labelColor: v.value,
+                n(N, {
+                  labelColor: O.value,
                   stateful: "",
                   "model-value": s,
                   onChange: (E) => R(d, E),
@@ -317,7 +334,7 @@ const he = {
                   max: 20
                 }, {
                   append: p(() => [
-                    n(N, {
+                    n(D, {
                       "model-value": s,
                       "onUpdate:modelValue": (E) => R(d, E),
                       min: 0,
@@ -335,7 +352,7 @@ const he = {
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", Ne, W(r(l)("WidgetWrapper.background")), 1)
+                A("span", De, W(r(l)("WidgetWrapper.background")), 1)
               ]),
               _: 1
             }),
@@ -345,7 +362,7 @@ const he = {
               label: r(l)("WidgetWrapper.backgroundColor")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(D, {
+                n(L, {
                   autofocus: "",
                   label: r(l)("WidgetWrapper.backgroundColor"),
                   class: "color-fill",
@@ -361,17 +378,17 @@ const he = {
               label: r(l)("WidgetWrapper.backgroundColorTransparence")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(A, {
+                n(N, {
                   "model-value": s,
                   stateful: "",
                   onChange: (E) => R(d, E),
                   label: r(l)("WidgetWrapper.backgroundColorTrancparency"),
-                  labelColor: v.value,
+                  labelColor: O.value,
                   min: 0,
                   max: 255
                 }, {
                   append: p(() => [
-                    n(N, {
+                    n(D, {
                       "model-value": s,
                       "onUpdate:modelValue": (E) => R(d, E),
                       min: 0,
@@ -390,17 +407,17 @@ const he = {
               label: r(l)("WidgetWrapper.blur")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(A, {
+                n(N, {
                   "model-value": s,
                   stateful: "",
                   onChange: (E) => R(d, E),
                   label: r(l)("WidgetWrapper.blur"),
-                  labelColor: v.value,
+                  labelColor: O.value,
                   min: 0,
                   max: 10
                 }, {
                   append: p(() => [
-                    n(N, {
+                    n(D, {
                       "model-value": s,
                       "onUpdate:modelValue": (E) => R(d, E),
                       min: 0,
@@ -418,7 +435,7 @@ const he = {
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", Se, W(r(l)("WidgetWrapper.border")), 1)
+                A("span", Le, W(r(l)("WidgetWrapper.border")), 1)
               ]),
               _: 1
             }),
@@ -442,7 +459,7 @@ const he = {
               label: r(l)("WidgetWrapper.borderColor")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(D, {
+                n(L, {
                   autofocus: "",
                   label: r(l)("WidgetWrapper.borderColor"),
                   class: "color-fill",
@@ -471,7 +488,7 @@ const he = {
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", me, W(r(l)("WidgetWrapper.shadow")), 1)
+                A("span", Pe, W(r(l)("WidgetWrapper.shadow")), 1)
               ]),
               _: 1
             }),
@@ -523,7 +540,7 @@ const he = {
               label: r(l)("WidgetWrapper.shadowColor")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(D, {
+                n(L, {
                   autofocus: "",
                   label: r(l)("WidgetWrapper.shadowColor"),
                   class: "color-fill",
@@ -539,8 +556,8 @@ const he = {
               label: r(l)("WidgetWrapper.shadowTransparence")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(A, {
-                  labelColor: v.value,
+                n(N, {
+                  labelColor: O.value,
                   stateful: "",
                   "model-value": s,
                   onChange: (E) => R(d, E),
@@ -549,7 +566,7 @@ const he = {
                   max: 255
                 }, {
                   append: p(() => [
-                    n(N, {
+                    n(D, {
                       "model-value": s,
                       "onUpdate:modelValue": (E) => R(d, E),
                       min: 0,
@@ -567,7 +584,7 @@ const he = {
               orientation: "center"
             }, {
               default: p(() => [
-                L("span", _e, W(r(l)("WidgetWrapper.transparence")), 1)
+                A("span", ye, W(r(l)("WidgetWrapper.transparence")), 1)
               ]),
               _: 1
             }),
@@ -577,8 +594,8 @@ const he = {
               label: r(l)("WidgetWrapper.transparency")
             }, {
               default: p(({ value: s, change: d }) => [
-                n(A, {
-                  labelColor: v.value,
+                n(N, {
+                  labelColor: O.value,
                   stateful: "",
                   "model-value": s,
                   onChange: (E) => R(d, E),
@@ -588,7 +605,7 @@ const he = {
                   step: 1
                 }, {
                   append: p(() => [
-                    n(N, {
+                    n(D, {
                       "model-value": s,
                       "onUpdate:modelValue": (E) => R(d, E),
                       min: 0,
@@ -608,8 +625,8 @@ const he = {
       }, 8, ["modelValue"]);
     };
   }
-}), Ae = /* @__PURE__ */ ee(ve, [["__scopeId", "data-v-affddfef"]]);
-class Y extends ue {
+}), Ve = /* @__PURE__ */ te(Be, [["__scopeId", "data-v-affddfef"]]);
+class Y extends he {
   static get eINSTANCE() {
     return this._instance || (this._instance = new Y()), this._instance;
   }
@@ -634,7 +651,7 @@ class Y extends ue {
     }
   }
 }
-class c extends de {
+class c extends pe {
   static {
     this.eNAME = "wrapperSettings";
   }
@@ -677,7 +694,7 @@ class c extends de {
    */
   init() {
     this.setEFactoryInstance(Y.eINSTANCE);
-    const e = new ce();
+    const e = new Ee();
     e.setName("WrapperSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), c.Literals.WRAPPER_SETTINGS = e;
     const a = new f();
     a.setContainment(!1), a.setName("title"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), c.Literals.WRAPPER_SETTINGS__TITLE = a;
@@ -685,28 +702,28 @@ class c extends de {
     l.setContainment(!1), l.setName("backgroundColor"), l.setLowerBound(0), l.setUpperBound(1), e.getEStructuralFeatures().push(l), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR = l;
     const m = new f();
     m.setContainment(!1), m.setName("backgroundColorTransparence"), m.setLowerBound(0), m.setUpperBound(1), e.getEStructuralFeatures().push(m), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = m;
-    const y = new f();
-    y.setContainment(!1), y.setName("titleColor"), y.setLowerBound(0), y.setUpperBound(1), e.getEStructuralFeatures().push(y), c.Literals.WRAPPER_SETTINGS__TITLE_COLOR = y;
-    const v = new f();
-    v.setContainment(!1), v.setName("padding"), v.setLowerBound(0), v.setUpperBound(1), e.getEStructuralFeatures().push(v), c.Literals.WRAPPER_SETTINGS__PADDING = v;
+    const B = new f();
+    B.setContainment(!1), B.setName("titleColor"), B.setLowerBound(0), B.setUpperBound(1), e.getEStructuralFeatures().push(B), c.Literals.WRAPPER_SETTINGS__TITLE_COLOR = B;
+    const O = new f();
+    O.setContainment(!1), O.setName("padding"), O.setLowerBound(0), O.setUpperBound(1), e.getEStructuralFeatures().push(O), c.Literals.WRAPPER_SETTINGS__PADDING = O;
     const R = new f();
     R.setContainment(!1), R.setName("titleFontSize"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), c.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = R;
-    const w = new f();
-    w.setContainment(!1), w.setName("borderSize"), w.setLowerBound(0), w.setUpperBound(1), e.getEStructuralFeatures().push(w), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE = w;
+    const b = new f();
+    b.setContainment(!1), b.setName("borderSize"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE = b;
     const i = new f();
     i.setContainment(!1), i.setName("borderColor"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), c.Literals.WRAPPER_SETTINGS__BORDER_COLOR = i;
     const _ = new f();
     _.setContainment(!1), _.setName("borderRadius"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), c.Literals.WRAPPER_SETTINGS__BORDER_RADIUS = _;
     const T = new f();
     T.setContainment(!1), T.setName("blur"), T.setLowerBound(0), T.setUpperBound(1), e.getEStructuralFeatures().push(T), c.Literals.WRAPPER_SETTINGS__BLUR = T;
+    const L = new f();
+    L.setContainment(!1), L.setName("fullscreen"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), c.Literals.WRAPPER_SETTINGS__FULLSCREEN = L;
     const D = new f();
-    D.setContainment(!1), D.setName("fullscreen"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), c.Literals.WRAPPER_SETTINGS__FULLSCREEN = D;
+    D.setContainment(!1), D.setName("shadowColor"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), c.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = D;
     const N = new f();
-    N.setContainment(!1), N.setName("shadowColor"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), c.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = N;
-    const A = new f();
-    A.setContainment(!1), A.setName("shadowBlur"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = A;
-    const B = new f();
-    B.setContainment(!1), B.setName("shadowX"), B.setLowerBound(0), B.setUpperBound(1), e.getEStructuralFeatures().push(B), c.Literals.WRAPPER_SETTINGS__SHADOW_X = B;
+    N.setContainment(!1), N.setName("shadowBlur"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = N;
+    const V = new f();
+    V.setContainment(!1), V.setName("shadowX"), V.setLowerBound(0), V.setUpperBound(1), e.getEStructuralFeatures().push(V), c.Literals.WRAPPER_SETTINGS__SHADOW_X = V;
     const s = new f();
     s.setContainment(!1), s.setName("shadowY"), s.setLowerBound(0), s.setUpperBound(1), e.getEStructuralFeatures().push(s), c.Literals.WRAPPER_SETTINGS__SHADOW_Y = s;
     const d = new f();
@@ -715,7 +732,7 @@ class c extends de {
     E.setContainment(!1), E.setName("transparency"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), c.Literals.WRAPPER_SETTINGS__TRANSPARENCY = E, c.Literals.WRAPPER_SETTINGS__TITLE.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__PADDING.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BLUR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(C.INSTANCE.getEPackage("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class t extends ge {
+class t extends Re {
   constructor() {
     super(...arguments), this._title = new o(), this._backgroundColor = new o(), this._backgroundColorTransparence = new o(), this._titleColor = new o(), this._padding = new o(), this._titleFontSize = new o(), this._borderSize = new o(), this._borderColor = new o(), this._borderRadius = new o(), this._blur = new o(), this._fullscreen = new o(), this._shadowColor = new o(), this._shadowBlur = new o(), this._shadowX = new o(), this._shadowY = new o(), this._shadowTransparence = new o(), this._transparency = new o();
   }
@@ -1325,7 +1342,7 @@ class t extends ge {
     }
   }
 }
-const Oe = `<?xml version="1.0" encoding="UTF-8"?>
+const Fe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -1448,31 +1465,31 @@ derived version can only ever list seventeen fields.
 </uimodel:UIModel>
 `;
 c.eINSTANCE;
-const De = new t(), Le = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Ie = new t(), We = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WidgetWrapper: be,
-  WidgetWrapperSettings: Ae,
+  WidgetWrapper: _e,
+  WidgetWrapperSettings: Ve,
   WrapperSettingsImpl: t,
   WrapperSettingsPackage: c,
-  defaultConfig: De,
-  wrapperSettingsFormXmi: Oe
-}, Symbol.toStringTag, { value: "Module" })), j = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", Pe = "0.0.1-next.1";
-async function We(u) {
+  defaultConfig: Ie,
+  wrapperSettingsFormXmi: Fe
+}, Symbol.toStringTag, { value: "Module" })), q = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", Ue = "0.0.1-next.1";
+async function Xe(u) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${j}: tsm runtime is not initialized`);
-  e.register(j, Le, Pe, "ui.vue.widget.wrapper"), await void 0;
+    throw new Error(`${q}: tsm runtime is not initialized`);
+  e.register(q, We, Ue, "ui.vue.widget.wrapper"), await void 0;
 }
-async function Ue(u) {
+async function Ke(u) {
   await void 0;
 }
 export {
-  be as WidgetWrapper,
-  Ae as WidgetWrapperSettings,
+  _e as WidgetWrapper,
+  Ve as WidgetWrapperSettings,
   t as WrapperSettingsImpl,
   c as WrapperSettingsPackage,
-  We as activate,
-  Ue as deactivate,
-  De as defaultConfig,
-  Oe as wrapperSettingsFormXmi
+  Xe as activate,
+  Ke as deactivate,
+  Ie as defaultConfig,
+  Fe as wrapperSettingsFormXmi
 };
