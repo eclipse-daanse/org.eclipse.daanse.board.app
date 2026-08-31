@@ -415,12 +415,12 @@ const getpadding = computed(() => {
 
 .action {
   pointer-events: auto;
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  min-width: 60px;
-  padding: 8px 6px 6px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   border: 1px solid transparent;
   border-radius: var(--radius-md, 4px);
   background: transparent;
@@ -452,11 +452,34 @@ const getpadding = computed(() => {
   font-size: 22px;
 }
 
-/* Says what the icon does; quiet until the action is the one being pointed at */
+/*
+ * The word for the icon, under the one being pointed at.
+ *
+ * Out of the flow rather than beneath every icon: seven labels side by side
+ * need more width than a widget has, and wrapped onto two rows they filled
+ * two thirds of a small one. An icon needs its word at the moment you are
+ * about to press it, not before.
+ */
 .action__label {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-raised, #232d3a);
+  color: var(--color-fg, #e6edf5);
   font-size: 11px;
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: 0.01em;
   white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms ease;
+}
+
+.action:hover .action__label,
+.action:focus-visible .action__label {
+  opacity: 1;
 }
 </style>
