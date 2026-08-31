@@ -1,0 +1,55 @@
+/* Cube calculation script: CALCULATE, global calculated members, nested
+   SCOPE blocks with This assignments, and FREEZE.
+   The SCOPE block is from the Adventure Works sample solution quoted in
+   SCOPE Statement (MDX), Microsoft Learn. */
+
+CALCULATE ;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Profit Ratio] AS
+    [Measures].[Store Sales] / [Measures].[Store Cost],
+    FORMAT_STRING = "Percent",
+    SOLVE_ORDER = 10,
+    VISIBLE = 1,
+    DISPLAY_FOLDER = "Ratios",
+    ASSOCIATED_MEASURE_GROUP = "Sales" ;
+
+CREATE SET CURRENTCUBE.[Core Products] AS
+    Descendants([Product].[Product Categories].[All Products], [Product].[Product Categories].[Subcategory], SELF) ;
+
+Scope
+ (
+    [Date].[Fiscal Year].&[2005],
+    [Date].[Fiscal].[Fiscal Quarter].Members,
+    [Measures].[Sales Amount Quota]
+ ) ;
+
+   This = ParallelPeriod
+          (
+             [Date].[Fiscal].[Fiscal Year], 1,
+             [Date].[Fiscal].CurrentMember
+          ) * 1.35 ;
+
+/*-- Allocate equally to months in FY 2002 -----------------------------*/
+
+  Scope
+  (
+     [Date].[Fiscal Year].&[2002],
+     [Date].[Fiscal].[Month].Members
+  ) ;
+
+    This = [Date].[Fiscal].CurrentMember.Parent / 3 ;
+
+  End Scope ;
+End Scope ;
+
+Scope( Root([Date]), Leaves([Product]) ) ;
+    This = CASE
+        WHEN [Measures].[Amount] IS NULL THEN 0
+        WHEN [Measures].[Amount] < 0 THEN NULL
+        ELSE [Measures].[Amount] * 1.1
+    END ;
+End Scope ;
+
+FREEZE ( [Date].[Fiscal Year].&[2005], [Measures].[Sales Amount Quota] ) ;
+
+DROP MEMBER CURRENTCUBE.[Measures].[Profit Ratio] ;

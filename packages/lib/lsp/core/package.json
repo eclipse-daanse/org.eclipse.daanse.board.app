@@ -1,0 +1,23 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.lsp.core",
+  "version": "0.0.1-next.1",
+  "private": true,
+  "description": "Editor-agnostic LSP client plumbing: worker transport, language-client registry, language descriptor contract.",
+  "type": "module",
+  "main": "./dist/org.eclipse.daanse.board.app.lib.lsp.core.js",
+  "module": "./dist/org.eclipse.daanse.board.app.lib.lsp.core.js",
+  "types": "./dist/index.d.ts",
+  "files": ["src", "dist"],
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@codemirror/lsp-client": "~6.2.5",
+    "vscode-languageserver-types": "~3.17.5"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "vite": "^6.4.1",
+    "vite-plugin-dts": "4.5.4"
+  }
+}

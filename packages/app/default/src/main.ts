@@ -25,6 +25,7 @@ import App from './App.vue'
 import { init } from 'org.eclipse.daanse.board.app.lib.module1'
 import { container, identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import { init as initLogger } from 'org.eclipse.daanse.board.app.lib.logger'
+import { lspSpike } from './lspSpike'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 
@@ -343,3 +344,6 @@ registerTestActions().then(() => {
 })
 
 app.mount('#app')
+
+// SPIKE ONLY
+;(window as any).__lspSpike = lspSpike
