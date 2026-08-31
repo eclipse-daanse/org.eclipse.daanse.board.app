@@ -25,7 +25,18 @@ import {
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 
-const { widget } = defineProps<{ widget: any; editEnabled: boolean }>();
+const { widget, extraActions } = defineProps<{
+  widget: any
+  editEnabled: boolean
+  /**
+   * Actions from whoever places the widget.
+   *
+   * Stacking order and copying belong to the layout - it is the only thing
+   * that knows there are other widgets. The wrapper knows how to show an
+   * action, not which ones exist, so the two are kept apart.
+   */
+  extraActions?: Array<{ id: string; icon: string; label: string; danger?: boolean; run: () => void }>
+}>();
 
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
@@ -86,6 +97,7 @@ const actions = computed(() => [
     label: 'Einstellungen',
     run: () => openSettings(widget.uid),
   },
+  ...(extraActions ?? []),
   {
     id: 'delete',
     icon: 'delete',
@@ -393,7 +405,11 @@ const getpadding = computed(() => {
 /* A little above the middle: an optical centre sits higher than a measured one */
 .actions__row {
   display: flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 0 4px;
   margin-bottom: 6%;
 }
 

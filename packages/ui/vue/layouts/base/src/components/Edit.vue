@@ -151,6 +151,24 @@ const captureMousePosition = (event: MouseEvent) => {
   }
 }
 
+/*
+ * What the layout can do with a widget, for the wrapper to show.
+ *
+ * These are the actions from the right-click menu. They live here because
+ * they are only meaningful among other widgets - "nach vorn" is a statement
+ * about stacking, and a widget on its own has nothing to be in front of.
+ *
+ * The wording says what happens: the underlying moveUp/moveDown change the
+ * z order, not the position, which "Move up" rather suggested they did.
+ */
+const stackActions = (uid: string) => [
+  { id: 'front', icon: 'flip_to_front', label: 'Nach vorn', run: () => moveUp(uid) },
+  { id: 'back', icon: 'flip_to_back', label: 'Nach hinten', run: () => moveDown(uid) },
+  { id: 'top', icon: 'vertical_align_top', label: 'Ganz vorn', run: () => moveToTop(uid) },
+  { id: 'bottom', icon: 'vertical_align_bottom', label: 'Ganz hinten', run: () => moveToBottom(uid) },
+  { id: 'copy', icon: 'content_copy', label: 'Kopieren', run: () => copyWidget(uid) },
+]
+
 const copyWidget = (widgetId: string) => {
   copyWidgetComposable(widgetId)
 }
@@ -343,6 +361,7 @@ const change = (e: any) => {
                 <WidgetWrapper
                   :widget="widget"
                   :ref="`${widget.uid}_wrapper`"
+                  :extra-actions="stackActions(widget.uid)"
                   @openSettings="openWidgetSettings"
                   editEnabled
                   @removeWidget="removeWidget"

@@ -1,4 +1,4 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-99377e1b]{position:absolute}.wrapper-container[data-v-99377e1b]{background-color:var(--v3a1aea6b);border-color:var(--v21ec099e);border-width:var(--v8bd79cf2);border-style:solid;width:100%;height:100%;box-Shadow:var(--v761534dd);border-radius:var(--v47d005d4);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-99377e1b]{border-radius:var(--v47d005d4);padding:var(--v61c90419)}.actions[data-v-99377e1b]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-99377e1b],.actions[data-v-99377e1b]:focus-within{opacity:1}.actions__row[data-v-99377e1b]{display:flex;gap:4px;margin-bottom:6%}.action[data-v-99377e1b]{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:60px;padding:8px 6px 6px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-99377e1b]:hover,.action[data-v-99377e1b]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-99377e1b]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-99377e1b]:hover,.action--danger[data-v-99377e1b]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__icon[data-v-99377e1b]{font-size:22px}.action__label[data-v-99377e1b]{font-size:11px;line-height:1;letter-spacing:.01em;white-space:nowrap}.settings-container[data-v-affddfef]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.pad_bottom[data-v-affddfef]{padding-top:30px;padding-bottom:10px}\n";})();
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-ea791988]{position:absolute}.wrapper-container[data-v-ea791988]{background-color:var(--v130b6408);border-color:var(--e60f730a);border-width:var(--v4cc494a4);border-style:solid;width:100%;height:100%;box-Shadow:var(--v5c55f60c);border-radius:var(--f787e61a);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-ea791988]{border-radius:var(--f787e61a);padding:var(--v170d3194)}.actions[data-v-ea791988]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-ea791988],.actions[data-v-ea791988]:focus-within{opacity:1}.actions__row[data-v-ea791988]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-ea791988]{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:60px;padding:8px 6px 6px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-ea791988]:hover,.action[data-v-ea791988]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-ea791988]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-ea791988]:hover,.action--danger[data-v-ea791988]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__icon[data-v-ea791988]{font-size:22px}.action__label[data-v-ea791988]{font-size:11px;line-height:1;letter-spacing:.01em;white-space:nowrap}.settings-container[data-v-affddfef]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.pad_bottom[data-v-affddfef]{padding-top:30px;padding-bottom:10px}\n";})();
 import { defineComponent as J, useCssVars as re, computed as v, inject as Q, ref as k, onUnmounted as le, resolveComponent as F, createElementBlock as U, openBlock as I, normalizeStyle as H, createCommentVNode as $, createVNode as n, toDisplayString as W, Fragment as M, createElementVNode as A, withCtx as p, createBlock as ee, resolveDynamicComponent as ie, renderList as ne, withModifiers as ue, normalizeClass as de, createTextVNode as j, useModel as ce, unref as r } from "vue";
 import { identifier as ge } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper as o } from "org.eclipse.daanse.board.app.ui.vue.composables";
@@ -12,17 +12,18 @@ const be = {
   __name: "WidgetWrapper",
   props: {
     widget: {},
-    editEnabled: { type: Boolean }
+    editEnabled: { type: Boolean },
+    extraActions: {}
   },
   emits: ["openSettings", "removeWidget"],
   setup(u, { emit: e }) {
     re((g) => ({
-      v3a1aea6b: s.value,
-      v21ec099e: d.value,
-      v8bd79cf2: E.value + "px",
-      v761534dd: V.value,
-      v47d005d4: ae.value + "px",
-      v61c90419: Z.value + "px"
+      v130b6408: s.value,
+      e60f730a: d.value,
+      v4cc494a4: E.value + "px",
+      v5c55f60c: V.value,
+      f787e61a: ae.value + "px",
+      v170d3194: Z.value + "px"
     }));
     const a = e, l = Q(ge), m = k(0), B = l.onChange?.(() => {
       m.value++;
@@ -41,6 +42,7 @@ const be = {
         label: "Einstellungen",
         run: () => L(u.widget.uid)
       },
+      ...u.extraActions ?? [],
       {
         id: "delete",
         icon: "delete",
@@ -233,7 +235,7 @@ const be = {
   for (const [l, m] of e)
     a[l] = m;
   return a;
-}, _e = /* @__PURE__ */ te(me, [["__scopeId", "data-v-99377e1b"]]), ve = { class: "settings-container" }, Ae = { class: "px-2" }, Oe = { class: "px-2" }, De = { class: "px-2" }, Le = { class: "px-2" }, Pe = { class: "px-2" }, ye = { class: "px-2" }, Be = /* @__PURE__ */ J({
+}, _e = /* @__PURE__ */ te(me, [["__scopeId", "data-v-ea791988"]]), ve = { class: "settings-container" }, Ae = { class: "px-2" }, Oe = { class: "px-2" }, De = { class: "px-2" }, Le = { class: "px-2" }, Pe = { class: "px-2" }, ye = { class: "px-2" }, Be = /* @__PURE__ */ J({
   __name: "WidgetWrapperSettings",
   props: {
     modelValue: { required: !0 },
