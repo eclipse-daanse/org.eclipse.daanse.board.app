@@ -32,7 +32,7 @@ import {
   identifier as LayoutRepositoryIdentifier,
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import { v4 } from 'uuid'
-import { usePageSettings } from '@/composables/usePageSettings'
+import { usePages } from '@/composables/usePages'
 
 const route = useRoute()
 const router = useRouter()
@@ -96,8 +96,12 @@ const showModes = computed(() => Boolean(pageId.value))
 const pageRepo = inject<PageRegistryI>(PageIdentifier)
 const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
 
-/* The registry is framework-free, so its record is not reactive */
-const pagesVersion = ref(0)
+/*
+ * The registry is framework-free, so its record is not reactive: every
+ * reader lists the shared revision as a dependency, and whoever changes a
+ * page bumps it.
+ */
+const { revision: pagesVersion, touch: pagesChanged, openSettings: openPageSettings } = usePages()
 
 const pages = computed<PageI[]>(() => {
   void pagesVersion.value
@@ -166,7 +170,7 @@ function addPage() {
     visibleInNavigation: true,
     layout: baseLayout,
   } as PageI)
-  pagesVersion.value++
+  pagesChanged()
   pagesOpen.value = false
   router.push(`/page/${id}/edit`)
 }
@@ -180,7 +184,7 @@ function removePage(id: string) {
   if (!confirm(`Seite „${page?.name ?? id}" löschen? Das lässt sich nicht rückgängig machen.`)) return
 
   pageRepo?.unregisterPage(id)
-  pagesVersion.value++
+  pagesChanged()
 
   // Standing on the page that just went: move to whichever is left
   if (id === pageId.value) {
@@ -189,8 +193,6 @@ function removePage(id: string) {
   }
 }
 
-/* The settings of the open page, asked for here and shown over the board */
-const { open: openPageSettings } = usePageSettings()
 
 const openView = () => {
   if (pageId.value) router.push(`/page/${pageId.value}`)

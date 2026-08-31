@@ -29,7 +29,7 @@ import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrappe
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useRoute } from 'vue-router'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
-import { usePageSettings } from '@/composables/usePageSettings'
+import { usePages } from '@/composables/usePages'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const widgetSettingsOpenedId = ref('')
@@ -50,8 +50,8 @@ const endpointfinder_present = computed(() => !!endpointfinder)
  * part of the edit mode rather than something you summon. */
 const widgetSelectorVisible = ref(true)
 
-/* Asked for in the topbar, shown here - see usePageSettings */
-const { openFor: pageSettingsFor, close: closePageSettings } = usePageSettings()
+/* Asked for in the topbar, shown here - see usePages */
+const { settingsFor: pageSettingsFor, closeSettings: closePageSettings } = usePages()
 
 const openWidgetSettings = (id: string) => {
   widgetSettingsOpenedId.value = id
