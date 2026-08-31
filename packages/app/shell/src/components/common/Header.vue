@@ -20,8 +20,19 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import {
+  type PageRegistryI,
+  identifier as PageIdentifier,
+  type PageI,
+} from 'org.eclipse.daanse.board.app.lib.api.page'
+import {
+  type LayoutRepositoryI,
+  identifier as LayoutRepositoryIdentifier,
+} from 'org.eclipse.daanse.board.app.lib.api.layout.page'
+import { v4 } from 'uuid'
+import { usePageSettings } from '@/composables/usePageSettings'
 
 const route = useRoute()
 const router = useRouter()
@@ -72,6 +83,115 @@ const crumb = computed<Crumb[]>(() => {
 
 const showModes = computed(() => Boolean(pageId.value))
 
+/* ------------------------------------------------------- pages of a board */
+
+/*
+ * Which page of the board is open, and the way to another one.
+ *
+ * This used to float over the board in its own card, which put the answer
+ * to "where am I" in two places: a breadcrumb at the top and a card at the
+ * bottom. It belongs next to the breadcrumb, because it is the last step of
+ * the same path - a board, then a page within it.
+ */
+const pageRepo = inject<PageRegistryI>(PageIdentifier)
+const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
+
+/* The registry is framework-free, so its record is not reactive */
+const pagesVersion = ref(0)
+
+const pages = computed<PageI[]>(() => {
+  void pagesVersion.value
+  const ids = pageRepo?.getAllPageIds() ?? []
+  const found: PageI[] = []
+  for (const id of ids) {
+    const page = pageRepo?.getPage(id)
+    if (page) found.push(page)
+  }
+  return found
+})
+
+const currentPageName = computed(() => {
+  void pagesVersion.value
+  if (!pageId.value) return ''
+  try {
+    return pageRepo?.getPage(pageId.value)?.name ?? 'Seite'
+  } catch {
+    // A page that was removed while open - the name is gone, the id is not
+    return 'Seite'
+  }
+})
+
+const pagesOpen = ref(false)
+
+function choosePage(id: string) {
+  pagesOpen.value = false
+  if (id === pageId.value) return
+  router.push(isEditing.value ? `/page/${id}/edit` : `/page/${id}`)
+}
+
+/* Clicking anywhere else closes it, as a menu should */
+const menuHost = ref<HTMLElement>()
+function onDocumentPointer(event: PointerEvent) {
+  if (!pagesOpen.value) return
+  if (!menuHost.value?.contains(event.target as Node)) pagesOpen.value = false
+}
+function onEscape(event: KeyboardEvent) {
+  if (event.key === 'Escape') pagesOpen.value = false
+}
+onMounted(() => {
+  document.addEventListener('pointerdown', onDocumentPointer)
+  document.addEventListener('keydown', onEscape)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', onDocumentPointer)
+  document.removeEventListener('keydown', onEscape)
+})
+
+/*
+ * Adding and removing pages came with the card this replaces, so they come
+ * along: a switcher you cannot add to is a list of what already exists.
+ *
+ * A new page is made and opened straight away, named "Neue Seite" - the
+ * name is a field in its settings, which is one click from here, rather
+ * than a question asked before the page exists.
+ */
+function addPage() {
+  const baseLayout = layoutRepo?.getLayout('org.eclipse.daanse.board.app.ui.vue.layouts.base')
+  const id = v4()
+  pageRepo?.registerPage({
+    id,
+    name: 'Neue Seite',
+    description: '',
+    icon: '',
+    visibleInNavigation: true,
+    layout: baseLayout,
+  } as PageI)
+  pagesVersion.value++
+  pagesOpen.value = false
+  router.push(`/page/${id}/edit`)
+}
+
+/* The last page is not removable: a board with no page has nothing to show */
+const canRemove = computed(() => pages.value.length > 1)
+
+function removePage(id: string) {
+  if (!canRemove.value) return
+  const page = pages.value.find((p) => p.id === id)
+  if (!confirm(`Seite „${page?.name ?? id}" löschen? Das lässt sich nicht rückgängig machen.`)) return
+
+  pageRepo?.unregisterPage(id)
+  pagesVersion.value++
+
+  // Standing on the page that just went: move to whichever is left
+  if (id === pageId.value) {
+    const next = pages.value.find((p) => p.id !== id)
+    if (next) router.push(isEditing.value ? `/page/${next.id}/edit` : `/page/${next.id}`)
+  }
+}
+
+/* The settings of the open page, asked for here and shown over the board */
+const { open: openPageSettings } = usePageSettings()
+
 const openView = () => {
   if (pageId.value) router.push(`/page/${pageId.value}`)
 }
@@ -115,6 +235,74 @@ const openAppearance = () => router.push('/appearance')
         </span>
       </template>
     </nav>
+
+    <!--
+      The page of the board, and its settings. Right after the breadcrumb
+      because it is the last step of the same path, and only while a board
+      is open - there is no page to switch when there is no board.
+    -->
+    <div v-if="showModes" ref="menuHost" class="pages">
+      <button
+        type="button"
+        class="pages__current"
+        :aria-expanded="pagesOpen"
+        aria-haspopup="menu"
+        title="Seite wechseln"
+        @click="pagesOpen = !pagesOpen"
+      >
+        <span class="pages__name">{{ currentPageName }}</span>
+        <span class="pages__caret" aria-hidden="true">▾</span>
+      </button>
+
+      <ul v-if="pagesOpen" class="pages__menu" role="menu">
+        <li v-for="page in pages" :key="page.id" role="none" class="pages__line">
+          <button
+            type="button"
+            role="menuitem"
+            :class="['pages__item', { on: page.id === pageId }]"
+            @click="choosePage(page.id)"
+          >
+            {{ page.name }}
+          </button>
+          <button
+            v-if="canRemove"
+            type="button"
+            class="pages__remove"
+            :title="`Seite „${page.name}“ löschen`"
+            :aria-label="`Seite ${page.name} löschen`"
+            @click.stop="removePage(page.id)"
+          >
+            ×
+          </button>
+        </li>
+        <li class="pages__sep" role="separator"></li>
+        <li role="none">
+          <button type="button" role="menuitem" class="pages__item pages__add" @click="addPage">
+            + Neue Seite
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <button
+      v-if="showModes"
+      type="button"
+      class="icon-action"
+      title="Seite einrichten"
+      aria-label="Seite einrichten"
+      @click="openPageSettings(pageId)"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <path
+          d="M12 4.2v2M12 17.8v2M4.2 12h2M17.8 12h2M6.5 6.5l1.4 1.4M16.1 16.1l1.4 1.4M17.5 6.5l-1.4 1.4M7.9 16.1l-1.4 1.4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
 
     <span class="spacer"></span>
 
@@ -249,6 +437,151 @@ const openAppearance = () => router.push('/appearance')
 .spacer {
   flex: 1 1 auto;
   min-width: 8px;
+}
+
+/* ------------------------------------------------------ page of a board */
+
+.pages {
+  position: relative;
+  margin-left: 10px;
+  flex: none;
+}
+
+/*
+ * Quieter than .action: this says where you are, it does not ask to be
+ * pressed. It takes the breadcrumb's weight so the two read as one path.
+ */
+.pages__current {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 200px;
+  height: 24px;
+  padding: 0 7px;
+  font-size: var(--text-sm, 12px);
+  font-family: inherit;
+  color: var(--color-fg);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+}
+
+.pages__current:hover {
+  background-color: var(--color-raised);
+  border-color: var(--color-divider);
+}
+
+.pages__current:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.pages__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pages__caret {
+  font-size: 9px;
+  color: var(--color-dim);
+}
+
+.pages__menu {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  z-index: 400;
+  min-width: 180px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 3px;
+  margin: 0;
+  list-style: none;
+  background-color: var(--color-pane);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm, 3px);
+  box-shadow: var(--shadow-e2, 0 2px 8px rgb(0 0 0 / 14%));
+}
+
+.pages__item {
+  display: block;
+  width: 100%;
+  padding: 5px 8px;
+  font-size: var(--text-sm, 12px);
+  font-family: inherit;
+  text-align: left;
+  color: var(--color-fg);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+}
+
+.pages__item:hover {
+  background-color: var(--color-raised);
+}
+
+/* The row holds the name and, on hover, the way to remove it */
+.pages__line {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pages__line .pages__item {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pages__remove {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--color-dim);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 90ms ease, color 90ms ease;
+}
+
+.pages__line:hover .pages__remove,
+.pages__remove:focus-visible {
+  opacity: 1;
+}
+
+.pages__remove:hover {
+  color: var(--color-err);
+}
+
+.pages__sep {
+  height: 1px;
+  margin: 3px 0;
+  background-color: var(--color-divider);
+}
+
+.pages__add {
+  color: var(--color-accent);
+}
+
+/* The open page is marked, not hidden: a list that drops its own entry
+   makes you count to work out where you are */
+.pages__item.on {
+  color: var(--color-accent);
+}
+
+.pages__empty {
+  padding: 5px 8px;
+  font-size: var(--text-sm, 12px);
+  color: var(--color-dim);
 }
 
 .action {

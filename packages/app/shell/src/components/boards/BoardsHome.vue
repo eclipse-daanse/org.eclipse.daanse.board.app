@@ -118,7 +118,7 @@ function createBoard() {
   const id = uuidv4()
   repo.registerPage({
     id,
-    name: 'Neues Board',
+    name: 'Neue Seite',
     description: '',
     icon: '',
     visibleInNavigation: true,

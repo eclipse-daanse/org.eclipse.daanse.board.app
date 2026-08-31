@@ -28,8 +28,8 @@ import WidgetSettingsOverlay from '@/components/common/WidgetSettingsOverlay.vue
 import { WidgetWrapper } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { useLayoutStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.layout'
 import { useRoute } from 'vue-router'
-import PageEditor from '@/components/pageEditor/PageEditor.vue'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
+import { usePageSettings } from '@/composables/usePageSettings'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const widgetSettingsOpenedId = ref('')
@@ -50,7 +50,8 @@ const endpointfinder_present = computed(() => !!endpointfinder)
  * part of the edit mode rather than something you summon. */
 const widgetSelectorVisible = ref(true)
 
-const pageSettingsOpenedId = ref<string | undefined>(undefined)
+/* Asked for in the topbar, shown here - see usePageSettings */
+const { openFor: pageSettingsFor, close: closePageSettings } = usePageSettings()
 
 const openWidgetSettings = (id: string) => {
   widgetSettingsOpenedId.value = id
@@ -168,15 +169,17 @@ onBeforeUnmount(endDrag)
         Widgets
       </button>
 
-      <div class="pages_board ice p-2.5 z-mx">
-        <PageEditor @pageSettings="(pageid) => (pageSettingsOpenedId = pageid)"></PageEditor>
-      </div>
-
+      <!--
+        Which page is open, and how to reach another, is asked in the topbar
+        now - the card that used to float here said the same thing the
+        breadcrumb above already did. The settings still belong over the
+        board, since that is what they change.
+      -->
       <Transition :duration="150">
         <PageSettings
-          v-if="pageSettingsOpenedId"
-          v-model="pageSettingsOpenedId"
-          @close="pageSettingsOpenedId = undefined"
+          v-if="pageSettingsFor"
+          v-model="pageSettingsFor"
+          @close="closePageSettings"
         ></PageSettings>
       </Transition>
     </div>
@@ -198,10 +201,6 @@ onBeforeUnmount(endDrag)
 <style>
 .ghost {
   display: none;
-}
-
-.report-container:has(.minimap) .pages_board {
-  left: 300px;
 }
 </style>
 
@@ -400,16 +399,6 @@ onBeforeUnmount(endDrag)
 
 .va-dropdown__content.va-select-dropdown__content.va-dropdown__content-wrapper {
   z-index: 20000000 !important;
-}
-
-.pages_board {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  left: 20px;
-  bottom: 20px;
-  transition: left 0.2s ease;
 }
 
 .v-enter-active,
