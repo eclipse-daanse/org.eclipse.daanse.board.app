@@ -236,7 +236,19 @@ export default defineConfig({
         },
       ] : [])
     ],
-    dedupe: ['vue', 'debug']
+    // CodeMirror keeps module-level state (facets, the extension registry),
+    // so two copies of @codemirror/state silently break every extension —
+    // no error, just extensions that never apply. With the lsp packages each
+    // externalising these, resolution happens here, so pin them to one copy.
+    dedupe: [
+      'vue',
+      'debug',
+      '@codemirror/state',
+      '@codemirror/view',
+      '@codemirror/language',
+      '@codemirror/lsp-client',
+      'langium'
+    ]
 
   },
   server: {
