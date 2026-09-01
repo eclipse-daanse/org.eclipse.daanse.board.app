@@ -1,0 +1,357 @@
+grammar Mdx
+
+// ============================================================================
+// MDX (Multidimensional Expressions) grammar for Langium.
+//
+// Ported from the Eclipse Daanse CongoCC grammars:
+//   org.eclipse.daanse.mdx/parser.cccx/src/main/ccc/  (modern, tree-building)
+//   org.eclipse.daanse.mdx/parser.ccc/src/main/ccc/Grammer.ccc (legacy, LL-shaped)
+// The postfix-chain shape follows the legacy grammar (predicate-free); the
+// node model mirrors model.api (CallExpression + operation-atom flavors).
+//
+// Deliberate design decisions carried over from Daanse:
+//  - `(a, b)` is ALWAYS a TupleOrParenExpression — tuple vs parenthesized
+//    expression is decided semantically, never syntactically.
+//  - Function/property names (Filter, Members, Children, ...) are NOT
+//    keywords; they lex as identifiers and are classified against the
+//    MDSCHEMA_FUNCTIONS catalog in the semantic layer.
+//  - DMV queries (SELECT ... FROM $SYSTEM.x) are unified with SELECT:
+//    `ON <axis>` is optional in the grammar and enforced by validation,
+//    which removes the unbounded-lookahead site the CongoCC grammar
+//    handled with a commit marker.
+// Nested /* */ comments are supported via a custom token builder
+// (services/mdx-token-builder.ts) — nesting is not regex-expressible.
+// Deviation (documented in README): WITH MEASURE (an unimplemented stub in
+// Daanse) is omitted. WITH CELL CALCULATION, CREATE/DROP MEMBER|SET, SCOPE
+// scripts and CALL are stubs (or absent) in Daanse and are implemented here
+// from the Microsoft MDX data-definition/scripting reference instead.
+// ============================================================================
+
+entry MdxDocument:
+    (statements+=MdxStatement (';' statements+=MdxStatement)* ';'?)?;
+
+MdxStatement:
+    SelectStatement | DrillthroughStatement | ExplainStatement | RefreshStatement | UpdateStatement
+    | CreateMemberStatement | CreateSetStatement | DropMemberStatement | DropSetStatement
+    | ScopeStatement | CallStatement;
+
+// ----------------------------------------------------------------------------
+// SELECT
+// ----------------------------------------------------------------------------
+
+SelectStatement:
+    with=WithClause?
+    'SELECT' body=SelectBody?
+    'FROM' from=SelectFrom
+    slicer=SlicerClause?
+    cellProps=CellPropertyListClause?;
+
+WithClause:
+    'WITH' entries+=WithEntry+;
+
+WithEntry:
+    WithMember | WithSet | WithCellCalculation;
+
+WithMember:
+    calculated?='CALCULATED'? 'MEMBER' name=CompoundId 'AS' expression=Expression
+    (',' properties+=MemberPropertyDefinition)*;
+
+WithSet:
+    'SET' name=CompoundId 'AS' expression=Expression;
+
+// WITH CELL CALCULATION <name> FOR '<set>' AS '<expr>' [, prop = val ...] —
+// per the SSAS syntax the FOR subcube and AS formula are string literals;
+// they are deliberately NOT sub-parsed (Daanse stubs this clause entirely).
+WithCellCalculation:
+    'CELL' 'CALCULATION' name=CompoundId
+    'FOR' forSet=StringLiteral 'AS' formula=StringLiteral
+    (',' properties+=MemberPropertyDefinition)*;
+
+MemberPropertyDefinition:
+    name=ObjectIdentifier '=' value=Expression;
+
+SelectBody:
+    SelectAsterisk | SelectAxes;
+
+SelectAsterisk:
+    star?='*';
+
+SelectAxes:
+    axes+=AxisClause (',' axes+=AxisClause)*;
+
+// `ON <axis>` is grammatically optional: DMV column lists (FROM $SYSTEM.x)
+// have no axis. Validation requires ON for regular cube queries.
+AxisClause:
+    (nonEmpty?='NON' 'EMPTY')?
+    expression=Expression
+    dimensionProperties=DimensionPropertyListClause?
+    ('ON' axis=Axis)?;
+
+Axis:
+    {infer Axis}
+    ( name=('COLUMNS' | 'ROWS' | 'PAGES' | 'SECTIONS' | 'CHAPTERS')
+    | 'AXIS' '(' ordinal=NUMBER ')'
+    | ordinal=NUMBER);
+
+SelectFrom:
+    CubeReference | SubSelect | SystemTableReference;
+
+CubeReference:
+    cube=NameObjectIdentifier;
+
+// Recursive subselect/subcube. Daanse's SubStatement disallows WITH and
+// CELL PROPERTIES inside the parentheses; we accept them for error
+// tolerance and reject via validation.
+SubSelect:
+    '(' select=SelectStatement ')';
+
+SystemTableReference:
+    system?='$SYSTEM' '.' table=NameObjectIdentifier;
+
+SlicerClause:
+    'WHERE' expression=Expression;
+
+CellPropertyListClause:
+    cell?='CELL'? 'PROPERTIES' properties+=CellPropertyName (',' properties+=CellPropertyName)*;
+
+CellPropertyName:
+    name=UnreservedName;
+
+DimensionPropertyListClause:
+    dimension?='DIMENSION'? 'PROPERTIES' properties+=CompoundId (',' properties+=CompoundId)*;
+
+// ----------------------------------------------------------------------------
+// Other statements
+// ----------------------------------------------------------------------------
+
+DrillthroughStatement:
+    'DRILLTHROUGH'
+    ('MAXROWS' maxRows=NUMBER)?
+    ('FIRSTROWSET' firstRowSet=NUMBER)?
+    select=SelectStatement
+    ('RETURN' returnItems+=CompoundId (',' returnItems+=CompoundId)*)?;
+
+ExplainStatement:
+    'EXPLAIN' 'PLAN' 'FOR' (statement=SelectStatement | statement=DrillthroughStatement);
+
+RefreshStatement:
+    'REFRESH' 'CUBE' cube=NameObjectIdentifier;
+
+UpdateStatement:
+    'UPDATE' 'CUBE' cube=NameObjectIdentifier 'SET' clauses+=UpdateClause (',' clauses+=UpdateClause)*;
+
+UpdateClause:
+    target=PostfixExpression '=' value=Expression
+    allocation=('USE_EQUAL_ALLOCATION' | 'USE_EQUAL_INCREMENT' | 'USE_WEIGHTED_ALLOCATION' | 'USE_WEIGHTED_INCREMENT')?
+    ('BY' weight=Expression)?;
+
+// ----------------------------------------------------------------------------
+// Data definition / scripting statements (grammar tail)
+//
+// Daanse only models CREATE MEMBER / CREATE SET as WITH-clause bodies
+// (CreateMemberBodyClause / CreateSetBodyClause) and stubs the rest; the
+// statement forms below follow the Microsoft MDX data-definition and
+// scripting reference (CREATE MEMBER, CREATE SET, DROP MEMBER/SET, SCOPE,
+// FREEZE, CALL). The cube qualifier (CURRENTCUBE or a cube name) is simply
+// the leading segment of the CompoundId — no dedicated keyword needed.
+// ----------------------------------------------------------------------------
+
+CreateMemberStatement:
+    'CREATE' scope=('SESSION' | 'GLOBAL')? 'MEMBER' name=CompoundId 'AS' expression=Expression
+    (',' properties+=MemberPropertyDefinition)*;
+
+CreateSetStatement:
+    'CREATE' scope=('SESSION' | 'GLOBAL')? 'SET' name=CompoundId 'AS' expression=Expression;
+
+DropMemberStatement:
+    'DROP' 'MEMBER' names+=CompoundId (',' names+=CompoundId)*;
+
+DropSetStatement:
+    'DROP' 'SET' names+=CompoundId (',' names+=CompoundId)*;
+
+// SCOPE(<subcube>[, ...]); <command>; ... END SCOPE — every command inside
+// the body is ';'-terminated; the loop owns the semicolons so that commands
+// (including nested SCOPEs) stay separator-free, mirroring how MdxDocument
+// separates top-level statements. The ';' directly after SCOPE(...) is the
+// first loop iteration with no command.
+ScopeStatement:
+    'SCOPE' '(' subcubes+=Expression (',' subcubes+=Expression)* ')'
+    (';' body+=ScopeCommand?)*
+    'END' 'SCOPE';
+
+ScopeCommand:
+    ScopeStatement | FreezeStatement | AssignmentStatement;
+
+// THIS = <expr>, THIS.<property> = <expr>, or any tuple/cell reference
+// (e.g. `([Measures].[X], [Date].[2005]) = 1`) as the assignment target.
+AssignmentStatement:
+    target=PostfixExpression '=' value=Expression;
+
+// FREEZE [(<subcube>)] — the optional subcube is an ordinary expression, so
+// both `FREEZE;` and `FREEZE ([Measures].[X]);` (and `FREEZE THIS;`) parse.
+FreezeStatement:
+    {infer FreezeStatement} 'FREEZE' subcube=Expression?;
+
+// CALL <procedure>(<args>) — the procedure reference reuses the postfix
+// chain, so dotted stored-procedure names (`CALL ASSP.Proc(1)`) work.
+CallStatement:
+    'CALL' procedure=PostfixExpression;
+
+// ----------------------------------------------------------------------------
+// Expressions — precedence chain (matches Daanse):
+//   alias AS  <  OR/XOR/:  <  AND  <  NOT  <  relational (non-assoc)
+//   <  +,-,||  <  *,/  <  unary -,+,EXISTING  <  postfix .name/(args)  <  primary
+// ----------------------------------------------------------------------------
+
+Expression:
+    AliasExpression;
+
+AliasExpression infers Expression:
+    OrExpression ({infer AliasedExpression.expression=current} 'AS' alias=ObjectIdentifier)*;
+
+OrExpression infers Expression:
+    AndExpression ({infer BinaryExpression.left=current} operator=('OR' | 'XOR' | ':') right=AndExpression)*;
+
+AndExpression infers Expression:
+    NotExpression ({infer BinaryExpression.left=current} operator='AND' right=NotExpression)*;
+
+NotExpression infers Expression:
+    {infer UnaryExpression} operator='NOT' operand=NotExpression
+    | RelationalExpression;
+
+// Non-associative: at most one relational operator.
+RelationalExpression infers Expression:
+    AdditiveExpression
+    ( {infer BinaryExpression.left=current} operator=('=' | '<>' | '<' | '>' | '<=' | '>=') right=AdditiveExpression
+    | {infer IsEmptyExpression.operand=current} 'IS' 'EMPTY'
+    | {infer BinaryExpression.left=current} operator='IS' right=AdditiveExpression
+    | {infer BinaryExpression.left=current} negated?='NOT'? operator=('MATCHES' | 'IN') right=AdditiveExpression
+    )?;
+
+AdditiveExpression infers Expression:
+    MultiplicativeExpression ({infer BinaryExpression.left=current} operator=('+' | '-' | '||') right=MultiplicativeExpression)*;
+
+MultiplicativeExpression infers Expression:
+    UnaryPrefixExpression ({infer BinaryExpression.left=current} operator=('*' | '/') right=UnaryPrefixExpression)*;
+
+UnaryPrefixExpression infers Expression:
+    {infer UnaryExpression} operator=('-' | '+' | 'EXISTING') operand=UnaryPrefixExpression
+    | PostfixExpression;
+
+// Postfix chain (legacy-grammar shape, predicate-free): after any primary,
+// `.segment` continues the chain; call parentheses may only follow a name
+// segment — `(1,2).Item(0)` works, `(1,2)(3)` does not (as in Daanse).
+PostfixExpression infers Expression:
+    PrimaryExpression
+    ({infer PathExpression.receiver=current} '.' segment=ObjectIdentifier
+        (call?='(' arguments+=Expression? (',' arguments+=Expression?)* ')')?
+    )*;
+
+PrimaryExpression infers Expression:
+    Literal
+    | CastExpression
+    | CaseExpression
+    | TupleOrParenExpression
+    | SetExpression
+    | ParameterReference
+    | ThisExpression
+    | NameExpression;
+
+// The current subcube in SCOPE scripts: `THIS = ...`, `THIS.FORMAT_STRING`.
+// A real keyword (not an UnreservedName): as an identifier it would be
+// LL-ambiguous with NameExpression right here in primary position.
+ThisExpression:
+    {infer ThisExpression} 'THIS';
+
+// Bare identifier, `foo!bar!baz` qualified name, or function call `Name(args)`.
+// Argument expressions are optional so that `Fn(a, , b)` (empty slots, cf.
+// MDSCHEMA_FUNCTIONS PARAMETERINFO.SKIPPABLE) parses; empty slots are
+// reconstructed from the CST comma positions (see call-arguments util).
+NameExpression:
+    segment=ObjectIdentifier ('!' qualifiedSegments+=ObjectIdentifier)*
+    (call?='(' arguments+=Expression? (',' arguments+=Expression?)* ')')?;
+
+// `(a, b, c)` — tuple OR parenthesized expression OR empty `()`; never
+// disambiguated syntactically (see header).
+TupleOrParenExpression:
+    {infer TupleOrParenExpression} '(' (items+=Expression (',' items+=Expression)*)? ')';
+
+SetExpression:
+    {infer SetExpression} '{' (items+=Expression (',' items+=Expression)*)? '}';
+
+CaseExpression:
+    'CASE' operand=Expression?
+    branches+=WhenBranch*
+    ('ELSE' elseExpression=Expression)?
+    'END';
+
+WhenBranch:
+    'WHEN' condition=Expression 'THEN' result=Expression;
+
+// CAST(expr AS TypeName) — operand is OrExpression so `AS` stays the separator.
+CastExpression:
+    'CAST' '(' operand=OrExpression 'AS' type=NameObjectIdentifier ')';
+
+// `@param` — Mondrian-style parameter reference.
+ParameterReference:
+    name=AT_ID;
+
+// ----------------------------------------------------------------------------
+// Identifiers
+// ----------------------------------------------------------------------------
+
+// Statement-position dotted chain, e.g. WITH MEMBER names, DIMENSION
+// PROPERTIES entries, DRILLTHROUGH RETURN items.
+CompoundId:
+    segments+=ObjectIdentifier ('.' segments+=ObjectIdentifier)*;
+
+ObjectIdentifier:
+    NameObjectIdentifier | KeyObjectIdentifier;
+
+NameObjectIdentifier:
+    name=UnreservedName | quotedName=QUOTED_ID;
+
+// `&[1]&foo&[bar]` — one or more member-key segments.
+KeyObjectIdentifier:
+    keys+=(AMP_QUOTED_ID | AMP_UNQUOTED_ID)+;
+
+// Keywords that are also legal MDX function/property names in identifier
+// position (`.Properties("...")`, `.Dimension`, `Axis(0)`).
+// The grammar-tail keywords are unreserved wherever that is LL-safe: CREATE,
+// DROP and CALL only head statements, SESSION/GLOBAL/CALCULATION only ever
+// follow another keyword, so all six stay usable as ordinary identifiers.
+// SCOPE, FREEZE and THIS remain reserved — as identifiers they would be
+// ambiguous exactly where they matter (scope-body command head / primary
+// expression); THIS is covered by ThisExpression in expression position.
+UnreservedName returns string:
+    ID | 'PROPERTIES' | 'DIMENSION' | 'AXIS'
+    | 'CREATE' | 'DROP' | 'CALL' | 'SESSION' | 'GLOBAL' | 'CALCULATION';
+
+Literal:
+    NumericLiteral | StringLiteral | NullLiteral;
+
+NumericLiteral:
+    value=NUMBER;
+
+StringLiteral:
+    value=STRING;
+
+NullLiteral:
+    {infer NullLiteral} 'NULL';
+
+// ----------------------------------------------------------------------------
+// Terminals — order matters: &-forms and @-forms before ID; QUOTED_ID before
+// punctuation '['. `]]` escapes a literal ']' inside bracketed identifiers.
+// ----------------------------------------------------------------------------
+
+terminal AMP_QUOTED_ID: /&\[([^\]]|\]\])*\]/;
+terminal AMP_UNQUOTED_ID: /&[a-zA-Z][a-zA-Z0-9_]*/;
+terminal QUOTED_ID: /\[([^\]]|\]\])*\]/;
+terminal AT_ID: /@[a-zA-Z_$][a-zA-Z0-9_$]*/;
+terminal ID: /[a-zA-Z_$][a-zA-Z0-9_$]*/;
+terminal NUMBER returns number: /(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?/;
+terminal STRING: /'([^']|'')*'|"([^"]|"")*"/;
+
+hidden terminal WS: /\s+/;
+hidden terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
+hidden terminal SL_COMMENT: /(--|\/\/)[^\n\r]*/;
