@@ -649,7 +649,7 @@ watch(
                     />
                 </div>
             </div>
-            <div class="editor">
+            <div class="rte-surface">
                 <editor-content class="ml-2" :editor="editor" />
             </div>
         </div>
@@ -664,18 +664,25 @@ watch(
     gap: 1rem;
 }
 
-.editor {
+/*
+ * Named for what it is, not "editor".
+ *
+ * This style is not scoped, so ".editor" reached every element with that
+ * class in the whole app - including the board editor, which then wore this
+ * border and padding without anything in its own file saying so.
+ */
+.rte-surface {
     border: 1px solid rgb(168, 157, 157);
     height: 200px;
     padding: 5px 10px;
     overflow: auto;
 }
 
-.editor .ml-2 {
+.rte-surface .ml-2 {
     height: 100%;
 }
 
-.editor .tiptap.ProseMirror {
+.rte-surface .tiptap.ProseMirror {
     height: 100%;
     outline: none;
 }
