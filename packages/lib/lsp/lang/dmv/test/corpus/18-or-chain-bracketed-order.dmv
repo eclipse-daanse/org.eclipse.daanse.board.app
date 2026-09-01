@@ -1,0 +1,6 @@
+-- Source: https://www.biinsight.com/dax-measure-dependencies-in-ssas-tabular-and-power-bi/
+-- Construct: OR-chained comparisons and a [bracketed] ORDER BY column.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * From $SYSTEM.DISCOVER_ITEM_DEPENDENCY WHERE OBJECT_TYPE = 'UNIT' OR OBJECT_TYPE = 'CALC_FIELD' ORDER BY [EXPRESSION] ASC

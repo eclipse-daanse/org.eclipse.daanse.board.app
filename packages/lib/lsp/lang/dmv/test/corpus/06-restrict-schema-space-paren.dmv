@@ -1,0 +1,6 @@
+-- Source: https://learn.microsoft.com/en-us/analysis-services/instances/use-dynamic-management-views-dmvs-to-monitor-analysis-services
+-- Construct: SYSTEMRESTRICTSCHEMA with a space before the paren, bracketed restriction name.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+Select * from SYSTEMRESTRICTSCHEMA ($System.Discover_object_metadata, [CATALOG_NAME] = 'Northwind Trading DW')
