@@ -20,7 +20,7 @@ Contributors:
 -->
 
 <script setup lang="ts">
-import { ref, computed, inject, nextTick, onBeforeUnmount, onMounted } from 'vue'
+import { ref, computed, inject } from 'vue'
 
 import { useWidgetsStore, type IWidget } from 'org.eclipse.daanse.board.app.ui.vue.stores.widgets'
 import AddWidgetWindow from '@/components/common/AddWidgetWindow.vue'
@@ -31,6 +31,7 @@ import { useRoute } from 'vue-router'
 import PageSettings from '@/components/pageEditor/PageSettings.vue'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
+import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import LayoutRenderer from '@/components/pageEditor/LayoutRenderer.vue'
 
 const widgetSettingsOpenedId = ref('')
@@ -73,143 +74,14 @@ const editedWidgetSize = computed(() => {
   return { width: item.width, height: item.height }
 })
 
-/* ---- the palette, floating -------------------------------------------- */
+/* ---- the palette ------------------------------------------------------- */
 
 /*
- * Dragged by its title bar, resized from its bottom right corner, and the
- * board underneath stays reachable - which is the point of it floating
- * rather than taking a column of its own. Where it was left is remembered.
+ * Dragging, resizing, docking and remembering are the floating window's
+ * job - the same one the overview uses. What is left here is whether the
+ * palette shows at all, which the topbar asks about.
  */
-const {
-  visible: paletteVisible,
-  placement: palette,
-  hide: hidePalette,
-  moveTo,
-  resizeTo,
-  dockTo,
-  undock,
-  settle,
-  keepInView,
-} = useWidgetPalette()
-
-const board = ref<HTMLElement>()
-
-type Gesture =
-  | { kind: 'move'; startX: number; startY: number; fromX: number; fromY: number }
-  | { kind: 'size'; startX: number; startY: number; fromW: number; fromH: number }
-
-let gesture: Gesture | null = null
-
-function bounds() {
-  const rect = board.value?.getBoundingClientRect()
-  return { width: rect?.width ?? window.innerWidth, height: rect?.height ?? window.innerHeight }
-}
-
-/**
- * How close to an edge counts as "at it".
- *
- * Enough that aiming at the edge lands on it, small enough that a window
- * deliberately placed a little way in stays where it was put.
- */
-const SNAP = 24
-
-const onMove = (e: PointerEvent) => {
-  if (!gesture) return
-  const b = bounds()
-
-  if (gesture.kind === 'move') {
-    const w = palette.value.w
-    // Kept inside the board: a window dragged past the edge cannot be
-    // brought back, because the bar you drag it by went with it
-    const x = Math.min(
-      Math.max(0, gesture.fromX + (e.clientX - gesture.startX)),
-      Math.max(0, b.width - w),
-    )
-
-    /*
-     * Near an edge it fastens to that side over the full height: an edge is
-     * a side of the room, not somewhere to hang a small window. Anywhere
-     * else it floats, and leaving an edge gives back the window that was
-     * there before.
-     */
-    if (x <= SNAP) dockTo('left', b)
-    else if (x + w >= b.width - SNAP) dockTo('right', b)
-    else {
-      undock()
-      moveTo(
-        x,
-        Math.min(Math.max(0, gesture.fromY + (e.clientY - gesture.startY)), Math.max(0, b.height - 28)),
-      )
-    }
-    return
-  }
-
-  resizeTo(
-    gesture.fromW + (e.clientX - gesture.startX),
-    gesture.fromH + (e.clientY - gesture.startY),
-    b,
-  )
-}
-
-const endDrag = () => {
-  if (gesture) settle()
-  gesture = null
-  window.removeEventListener('pointermove', onMove)
-  window.removeEventListener('pointerup', endDrag)
-  document.body.style.userSelect = ''
-}
-
-function begin(g: Gesture) {
-  gesture = g
-  window.addEventListener('pointermove', onMove)
-  window.addEventListener('pointerup', endDrag)
-  document.body.style.userSelect = 'none'
-}
-
-const startMove = (e: PointerEvent) =>
-  begin({
-    kind: 'move',
-    startX: e.clientX,
-    startY: e.clientY,
-    fromX: palette.value.x,
-    fromY: palette.value.y,
-  })
-
-const startResize = (e: PointerEvent) =>
-  begin({
-    kind: 'size',
-    startX: e.clientX,
-    startY: e.clientY,
-    fromW: palette.value.w,
-    fromH: palette.value.h,
-  })
-
-/** Keyboard equivalent, so the window can be placed without a pointer. */
-const nudge = (dx: number, dy: number) => {
-  const b = bounds()
-  const w = palette.value.w
-  const x = Math.min(Math.max(0, palette.value.x + dx), Math.max(0, b.width - w))
-
-  if (x <= SNAP) dockTo('left', b)
-  else if (x + w >= b.width - SNAP) dockTo('right', b)
-  else {
-    undock()
-    moveTo(x, Math.min(Math.max(0, palette.value.y + dy), Math.max(0, b.height - 28)))
-  }
-  settle()
-}
-
-/* A window remembered on a wide screen must not be lost on a narrow one */
-const onResize = () => keepInView(bounds())
-onMounted(() => {
-  nextTick(onResize)
-  window.addEventListener('resize', onResize)
-})
-
-onBeforeUnmount(() => {
-  endDrag()
-  window.removeEventListener('resize', onResize)
-})
+const { visible: paletteVisible, hide: hidePalette } = useWidgetPalette()
 </script>
 
 <template>
@@ -220,36 +92,18 @@ onBeforeUnmount(() => {
       was width the widgets could have had. The button that opens it sits in
       the topbar.
     -->
-    <aside
+    <DFloatingWindow
       v-if="paletteVisible"
-      :class="[
-        'palette',
-        {
-          'palette--docked': !!palette.dock,
-          'palette--left': palette.dock === 'left',
-          'palette--right': palette.dock === 'right',
-        },
-      ]"
-      aria-label="Widgets"
-      :style="{
-        left: palette.x + 'px',
-        top: palette.y + 'px',
-        width: palette.w + 'px',
-        height: palette.h + 'px',
-      }"
+      title="Widgets"
+      remember-as="daanse.board.palette"
+      :initial="{ x: 0, y: 0, w: 240, h: 460, dock: 'left' }"
+      :min-width="180"
+      :max-width="420"
+      :min-height="200"
+      dockable
+      @close="hidePalette"
     >
-      <div
-        class="palette__bar"
-        role="toolbar"
-        tabindex="0"
-        aria-label="Palette verschieben - mit den Pfeiltasten bewegen"
-        @pointerdown.prevent="startMove($event)"
-        @keydown.left.prevent="nudge(-16, 0)"
-        @keydown.right.prevent="nudge(16, 0)"
-        @keydown.up.prevent="nudge(0, -16)"
-        @keydown.down.prevent="nudge(0, 16)"
-      >
-        <span class="palette__title">Widgets</span>
+      <template #actions>
         <button
           v-if="endpointfinder_present"
           type="button"
@@ -260,30 +114,10 @@ onBeforeUnmount(() => {
         >
           <va-icon name="travel_explore" size="15px" />
         </button>
-        <button
-          type="button"
-          class="palette__act"
-          title="Schließen"
-          aria-label="Palette schließen"
-          @pointerdown.stop
-          @click="hidePalette"
-        >
-          <va-icon name="close" size="15px" />
-        </button>
-      </div>
+      </template>
 
-      <div class="palette__body">
-        <AddWidgetWindow />
-      </div>
-
-      <div
-        class="palette__grip"
-        role="separator"
-        aria-label="Größe der Palette"
-        title="Größe ändern"
-        @pointerdown.prevent="startResize($event)"
-      ></div>
-    </aside>
+      <AddWidgetWindow />
+    </DFloatingWindow>
 
     <!-- Board surface -->
     <div class="report-container dottet">
@@ -342,58 +176,7 @@ onBeforeUnmount(() => {
   background: var(--color-bg);
 }
 
-/* ------------------------------------------------- the floating palette */
-
-.palette {
-  position: absolute;
-  /*
-   * Above the widgets and the controls they show on hover (3000), below the
-   * settings windows that cover the board (40000 and up): the palette is
-   * something you reach past a widget for, and something a settings window
-   * covers.
-   */
-  z-index: 20000;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--color-pane);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md, 4px);
-  box-shadow: var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%));
-}
-
-/* The whole bar is the handle, so there is nothing small to aim at */
-.palette__bar {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex: none;
-  height: 28px;
-  padding: 0 4px 0 10px;
-  border-bottom: 1px solid var(--color-divider);
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-}
-
-.palette__bar:active {
-  cursor: grabbing;
-}
-
-.palette__bar:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: -2px;
-}
-
-.palette__title {
-  flex: 1;
-  font-size: var(--text-xs, 11px);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-dim);
-}
-
+/* The one action the palette adds to its window's title bar */
 .palette__act {
   display: flex;
   align-items: center;
@@ -415,52 +198,6 @@ onBeforeUnmount(() => {
 .palette__act:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 1px;
-}
-
-.palette__body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
-/* Bottom right corner, where a window is resized */
-.palette__grip {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 14px;
-  height: 14px;
-  cursor: nwse-resize;
-  touch-action: none;
-}
-
-/* Fastened to a side: square against the edge it holds, and only the width
-   is still open - the height is the board's */
-.palette--docked {
-  border-radius: 0;
-}
-
-.palette--docked.palette--left {
-  border-left: 0;
-}
-
-.palette--docked.palette--right {
-  border-right: 0;
-}
-
-.palette--docked .palette__grip {
-  cursor: ew-resize;
-}
-
-.palette__grip::after {
-  content: '';
-  position: absolute;
-  right: 3px;
-  bottom: 3px;
-  width: 6px;
-  height: 6px;
-  border-right: 2px solid var(--color-outline, #3a4756);
-  border-bottom: 2px solid var(--color-outline, #3a4756);
 }
 
 .report-container {

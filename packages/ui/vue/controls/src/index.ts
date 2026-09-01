@@ -45,6 +45,7 @@ import DColorInput from './DColorInput.vue'
 import DDateInput from './DDateInput.vue'
 import DDivider from './DDivider.vue'
 import DField from './DField.vue'
+import DFloatingWindow from './DFloatingWindow.vue'
 import DIcon from './DIcon.vue'
 import DInput from './DInput.vue'
 import DModal from './DModal.vue'
@@ -62,6 +63,7 @@ export {
   DDateInput,
   DDivider,
   DField,
+  DFloatingWindow,
   DIcon,
   DInput,
   DModal,
@@ -81,6 +83,7 @@ export const CONTROLS = {
   DDateInput,
   DDivider,
   DField,
+  DFloatingWindow,
   DIcon,
   DInput,
   DModal,

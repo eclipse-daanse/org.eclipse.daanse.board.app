@@ -98,14 +98,21 @@ const canvasSize = computed(() => {
 // Minimap
 const scrollContainer = ref<HTMLElement | null>(null)
 const viewportRect = ref({ x: 0, y: 0, w: 1, h: 1 })
-const MINIMAP_WIDTH = 200
-const MINIMAP_HEIGHT = 140
+
+/*
+ * The map is drawn to whatever room it has, not to a fixed 200x140. It sits
+ * in a window that can be resized, and a map that keeps its old size in a
+ * larger window has wasted the space it was just given.
+ */
+const minimapBox = ref<HTMLElement | null>(null)
+const minimapSize = ref({ w: 200, h: 140 })
+let minimapObserver: ResizeObserver | null = null
 
 const minimapScale = computed(() => {
   const el = scrollContainer.value
   const cw = Math.max(canvasSize.value.width, el?.clientWidth || 1)
   const ch = Math.max(canvasSize.value.height, el?.clientHeight || 1)
-  return Math.min(MINIMAP_WIDTH / cw, MINIMAP_HEIGHT / ch)
+  return Math.min(minimapSize.value.w / cw, minimapSize.value.h / ch)
 })
 
 const updateViewport = () => {
@@ -143,6 +150,19 @@ const showMinimap = computed(() => {
 onMounted(() => {
   nextTick(() => updateViewport())
 })
+
+/* The map redraws itself to the window it is in, however that window changes */
+watch(minimapBox, (el) => {
+  minimapObserver?.disconnect()
+  if (!el) return
+  minimapObserver = new ResizeObserver(([entry]) => {
+    const box = entry.contentRect
+    if (box.width > 0 && box.height > 0) minimapSize.value = { w: box.width, h: box.height }
+  })
+  minimapObserver.observe(el)
+})
+
+onUnmounted(() => minimapObserver?.disconnect())
 
 watch(canvasSize, () => nextTick(() => updateViewport()))
 
@@ -417,13 +437,23 @@ const change = (e: any) => {
     </div><!-- end canvas -->
     </div><!-- end scroll-viewport -->
 
-    <!-- Minimap -->
-    <div
+    <!--
+      The overview, in the same floating window the palette uses: it shows
+      up on its own when the board outgrows the screen, so it has to be
+      movable - wherever it lands by default is over something on someone's
+      board.
+    -->
+    <DFloatingWindow
       v-if="showMinimap"
-      class="minimap"
-      @click="onMinimapClick"
+      title="Übersicht"
+      remember-as="daanse.board.minimap"
+      :initial="{ x: 16, y: 420, w: 220, h: 168 }"
+      :min-width="140"
+      :max-width="420"
+      :min-height="110"
+      :closable="false"
     >
-      <div class="minimap-canvas">
+      <div ref="minimapBox" class="minimap-canvas" @click="onMinimapClick">
         <div
           v-for="item in (layoutStore?.layout || [])"
           :key="item.id"
@@ -445,7 +475,7 @@ const change = (e: any) => {
           }"
         ></div>
       </div>
-    </div>
+    </DFloatingWindow>
   </div>
 </template>
 <style>
@@ -507,25 +537,12 @@ const change = (e: any) => {
 }
 
 /* Minimap */
-.minimap {
-  position: absolute;
-  bottom: 16px;
-  left: 80px;
-  width: 200px;
-  height: 140px;
-  background: var(--color-pane, #f6f7f9);
-  border: 1px solid var(--color-divider, #ccd1d9);
-  border-radius: var(--radius-md, 8px);
-  box-shadow: var(--shadow-e2, 0 2px 8px rgba(25, 30, 45, 0.14));
-  z-index: 999999;
-  cursor: pointer;
-  overflow: hidden;
-}
-
+/* Fills the window it was given, and is what the scale is measured against */
 .minimap-canvas {
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .minimap-widget {
