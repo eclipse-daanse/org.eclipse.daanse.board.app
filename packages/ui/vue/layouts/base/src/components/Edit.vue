@@ -67,9 +67,15 @@ const {
 
 const safeWidgets = computed(() => widgetStore?.widgets || [])
 
-// Canvas auto-sizing: compute required canvas dimensions from widget positions
-const CANVAS_PADDING_X = 550
-const CANVAS_PADDING_Y = 200
+/*
+ * How large the board has to be for what is on it.
+ *
+ * It starts at the size of its container and grows only when a widget
+ * reaches the edge - the room past the last widget is what you need to drag
+ * one further out, not a margin the board carries from the start.
+ */
+const CANVAS_PADDING_X = 160
+const CANVAS_PADDING_Y = 160
 
 const canvasSize = computed(() => {
   const layout = layoutStore?.layout || []
@@ -310,8 +316,8 @@ const change = (e: any) => {
       <div
         class="canvas dottet"
         :style="{
-          minWidth: canvasSize.width > 0 ? `max(100vw, ${canvasSize.width}px)` : undefined,
-          minHeight: canvasSize.height > 0 ? `max(100vh, ${canvasSize.height}px)` : undefined,
+          minWidth: canvasSize.width > 0 ? `max(100%, ${canvasSize.width}px)` : undefined,
+          minHeight: canvasSize.height > 0 ? `max(100%, ${canvasSize.height}px)` : undefined,
         }"
         @drop="onDrop"
         @dragover="onDragOver"
@@ -463,8 +469,14 @@ const change = (e: any) => {
 
 .canvas {
   position: relative;
-  min-width: 100vw;
-  min-height: 100vh;
+  /*
+   * The container, not the viewport: 100vw is the width of the browser
+   * window, and the board is narrower than that - the rail and the topbar
+   * take their share. Measuring against the window made the board wider
+   * than what holds it, so an empty board still had scrollbars.
+   */
+  min-width: 100%;
+  min-height: 100%;
   box-sizing: border-box;
 }
 

@@ -265,3 +265,48 @@ table {
   width: 1px !important;
   height: 1px !important;
 }
+
+/* --------------------------------------------------------- scrollbars */
+
+/*
+ * The scrollbars follow the theme like everything else.
+ *
+ * A native scrollbar is painted by the operating system, so a dark board
+ * came with a pale bar down its side - the one thing on screen that had
+ * not heard which theme is on. These are drawn from the same tokens.
+ *
+ * Both spellings are needed: scrollbar-color is the standard one and the
+ * only one Firefox reads, ::-webkit-scrollbar is what Chromium listens to
+ * and allows a thinner bar with a rounded thumb.
+ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-outline) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-outline);
+  border: 3px solid transparent;
+  border-radius: 6px;
+  /* The border is drawn in the track's colour, which leaves the thumb
+     narrower than the bar and floating in it */
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-dim);
+}
+
+/* Where two bars meet, nothing worth drawing */
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
