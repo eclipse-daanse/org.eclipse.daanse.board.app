@@ -1,0 +1,19 @@
+{
+    "projectName": "Mdx",
+    "languages": [
+        {
+            "id": "mdx-query",
+            "grammar": "src/language/mdx.langium",
+            "fileExtensions": [
+                ".mdxq",
+                ".mdxs",
+                ".mdx"
+            ],
+            "caseInsensitive": true
+        }
+    ],
+    "chevrotainParserConfig": {
+        "maxLookahead": 4
+    },
+    "out": "src/language/generated"
+}

@@ -1,0 +1,35 @@
+/* Syntax adopted from the Eclipse Daanse port kept alongside this grammar as
+   mdx.langium.alt. Every construct below was a parse or lex error before that
+   merge; docs/mdx-grammar-comparison.md records where each one came from.
+   Parsed by test/parsing/examples.test.ts like every other example here. */
+WITH
+    -- Query parameters. `@Region` used to fail in the *lexer*, so there was
+    -- no recovery and no useful diagnostic.
+    MEMBER [Measures].[Selected] AS ([Measures].[Store Sales], @Region)
+
+    -- `||` concatenates strings, at the same precedence as `+`.
+    MEMBER [Measures].[Label] AS
+        [Product].[Product Family].CurrentMember.Name || ' — ' || CAST([Measures].[Store Sales] AS STRING)
+
+    -- Composite member keys: one reference to a level keyed on two columns,
+    -- not two separate references.
+    MEMBER [Measures].[JulyOf2005] AS ([Measures].[Store Sales], [Time].[Year].&[2005]&[7])
+
+    -- A skipped argument slot, as declared by PARAMETERINFO.SKIPPABLE. The
+    -- omitted positions still count towards arity.
+    MEMBER [Measures].[LastYear] AS ParallelPeriod(, , [Time].[Year].CurrentMember)
+
+    -- `.Dimension` is an ordinary member property; DIMENSION also opens the
+    -- DIMENSION PROPERTIES clause below, and the two never compete.
+    MEMBER [Measures].[DimName] AS [Product].[Product Family].CurrentMember.Dimension.Name
+
+    -- Exponents apply to a leading-dot mantissa too: .5e3 is 500.
+    MEMBER [Measures].[Scaled] AS [Measures].[Store Sales] / .5e3
+SELECT
+    -- `AS` names a set inline. It binds looser than every operator, which is
+    -- also what keeps `AS` free as the separator inside CAST(… AS …).
+    {[Measures].[Selected], [Measures].[Label], [Measures].[Scaled]} AS Chosen ON COLUMNS,
+    [Product].[Product Family].Members
+        DIMENSION PROPERTIES [Product].[Product Family].[Name] ON ROWS
+FROM [Sales]
+WHERE [Time].[Year].&[2005]
