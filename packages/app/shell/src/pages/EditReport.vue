@@ -86,6 +86,8 @@ const {
   hide: hidePalette,
   moveTo,
   resizeTo,
+  dockTo,
+  undock,
   settle,
   keepInView,
 } = useWidgetPalette()
@@ -111,31 +113,42 @@ function bounds() {
  */
 const SNAP = 24
 
-/** The left and right edges pull: they are where a palette usually belongs. */
-function magnetic(x: number, width: number, available: number): number {
-  if (x <= SNAP) return 0
-  if (x + width >= available - SNAP) return Math.max(0, available - width)
-  return x
-}
-
 const onMove = (e: PointerEvent) => {
   if (!gesture) return
+  const b = bounds()
+
   if (gesture.kind === 'move') {
-    const b = bounds()
     const w = palette.value.w
     // Kept inside the board: a window dragged past the edge cannot be
     // brought back, because the bar you drag it by went with it
-    const x = Math.min(Math.max(0, gesture.fromX + (e.clientX - gesture.startX)), Math.max(0, b.width - w))
-    moveTo(
-      magnetic(x, w, b.width),
-      Math.min(Math.max(0, gesture.fromY + (e.clientY - gesture.startY)), Math.max(0, b.height - 28)),
+    const x = Math.min(
+      Math.max(0, gesture.fromX + (e.clientX - gesture.startX)),
+      Math.max(0, b.width - w),
     )
-  } else {
-    resizeTo(
-      gesture.fromW + (e.clientX - gesture.startX),
-      gesture.fromH + (e.clientY - gesture.startY),
-    )
+
+    /*
+     * Near an edge it fastens to that side over the full height: an edge is
+     * a side of the room, not somewhere to hang a small window. Anywhere
+     * else it floats, and leaving an edge gives back the window that was
+     * there before.
+     */
+    if (x <= SNAP) dockTo('left', b)
+    else if (x + w >= b.width - SNAP) dockTo('right', b)
+    else {
+      undock()
+      moveTo(
+        x,
+        Math.min(Math.max(0, gesture.fromY + (e.clientY - gesture.startY)), Math.max(0, b.height - 28)),
+      )
+    }
+    return
   }
+
+  resizeTo(
+    gesture.fromW + (e.clientX - gesture.startX),
+    gesture.fromH + (e.clientY - gesture.startY),
+    b,
+  )
 }
 
 const endDrag = () => {
@@ -173,7 +186,16 @@ const startResize = (e: PointerEvent) =>
 
 /** Keyboard equivalent, so the window can be placed without a pointer. */
 const nudge = (dx: number, dy: number) => {
-  moveTo(Math.max(0, palette.value.x + dx), Math.max(0, palette.value.y + dy))
+  const b = bounds()
+  const w = palette.value.w
+  const x = Math.min(Math.max(0, palette.value.x + dx), Math.max(0, b.width - w))
+
+  if (x <= SNAP) dockTo('left', b)
+  else if (x + w >= b.width - SNAP) dockTo('right', b)
+  else {
+    undock()
+    moveTo(x, Math.min(Math.max(0, palette.value.y + dy), Math.max(0, b.height - 28)))
+  }
   settle()
 }
 
@@ -200,7 +222,14 @@ onBeforeUnmount(() => {
     -->
     <aside
       v-if="paletteVisible"
-      class="palette"
+      :class="[
+        'palette',
+        {
+          'palette--docked': !!palette.dock,
+          'palette--left': palette.dock === 'left',
+          'palette--right': palette.dock === 'right',
+        },
+      ]"
       aria-label="Widgets"
       :style="{
         left: palette.x + 'px',
@@ -313,7 +342,13 @@ onBeforeUnmount(() => {
 
 .palette {
   position: absolute;
-  z-index: 900;
+  /*
+   * Above the widgets and the controls they show on hover (3000), below the
+   * settings windows that cover the board (40000 and up): the palette is
+   * something you reach past a widget for, and something a settings window
+   * covers.
+   */
+  z-index: 20000;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -393,6 +428,24 @@ onBeforeUnmount(() => {
   height: 14px;
   cursor: nwse-resize;
   touch-action: none;
+}
+
+/* Fastened to a side: square against the edge it holds, and only the width
+   is still open - the height is the board's */
+.palette--docked {
+  border-radius: 0;
+}
+
+.palette--docked.palette--left {
+  border-left: 0;
+}
+
+.palette--docked.palette--right {
+  border-right: 0;
+}
+
+.palette--docked .palette__grip {
+  cursor: ew-resize;
 }
 
 .palette__grip::after {
