@@ -33,6 +33,7 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.layout.page'
 import { v4 } from 'uuid'
 import { usePages } from '@/composables/usePages'
+import { useWidgetPalette } from '@/composables/useWidgetPalette'
 
 const route = useRoute()
 const router = useRouter()
@@ -102,6 +103,13 @@ const layoutRepo = inject<LayoutRepositoryI>(LayoutRepositoryIdentifier)
  * page bumps it.
  */
 const { revision: pagesVersion, touch: pagesChanged, openSettings: openPageSettings } = usePages()
+
+/*
+ * The widget palette floats over the board, so the way to it belongs here
+ * rather than on the board it covers - a button underneath a window is a
+ * button you cannot press.
+ */
+const { visible: paletteVisible, toggle: togglePalette } = useWidgetPalette()
 
 const pages = computed<PageI[]>(() => {
   void pagesVersion.value
@@ -285,6 +293,23 @@ const openAppearance = () => router.push('/appearance')
         </li>
       </ul>
     </div>
+
+    <button
+      v-if="isEditing"
+      type="button"
+      :class="['icon-action', { on: paletteVisible }]"
+      :aria-pressed="paletteVisible"
+      title="Widgets"
+      aria-label="Widget-Palette zeigen oder verbergen"
+      @click="togglePalette"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <rect x="3.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <rect x="13.5" y="3.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <rect x="3.5" y="13.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <rect x="13.5" y="13.5" width="7" height="7" rx="1" fill="currentColor" stroke="currentColor" stroke-width="1.6" />
+      </svg>
+    </button>
 
     <button
       v-if="showModes"
@@ -651,6 +676,12 @@ const openAppearance = () => router.push('/appearance')
 
 .icon-action:hover {
   color: var(--color-fg);
+  background-color: var(--color-raised);
+}
+
+/* A toggle says which way it stands, not just that it can be pressed */
+.icon-action.on {
+  color: var(--color-accent);
   background-color: var(--color-raised);
 }
 
