@@ -1,0 +1,7 @@
+-- Source: https://isura777.blogspot.com/2016/03/dynamic-management-views-for-ssas.html
+-- Construct: A commented-out WHERE clause after the statement — the comment must not parse.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $system.MDSCHEMA_UNITGROUP_GROUPINGS 
+    -- WHERE UNITGROUP_NAME = 'NSA NZ Orders'

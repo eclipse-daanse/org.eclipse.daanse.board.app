@@ -1,0 +1,11 @@
+-- Source: http://www.ssas-info.com/analysis-services-faq/80-ssas-2008-dmvs/962-analysis-services-2008-systemdiscover-dmvs
+-- Construct: A scalar function call in WHERE. The reference parser admits no function
+--            calls anywhere; a published query uses LEFT().
+-- Expect: reject
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT TABLE_NAME
+  FROM $system.dbschema_entries
+ WHERE TABLE_SCHEMA = '$SYSTEM'
+   AND LEFT(TABLE_NAME,8) = 'DISCOVER'
+ ORDER BY table_name

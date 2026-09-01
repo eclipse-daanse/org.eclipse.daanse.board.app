@@ -1,0 +1,6 @@
+-- Source: https://isura777.blogspot.com/2016/03/dynamic-management-views-for-ssas.html
+-- Construct: Fully lower-case, including the $system token.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $system.DBSCHEMA_CATALOGS

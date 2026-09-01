@@ -1,0 +1,7 @@
+-- Source: https://www.mssqltips.com/sqlservertip/3006/sql-server-2012-analysis-services-ssas-dmvs/
+-- Construct: AS column aliases. The reference parser reads a bare identifier per select
+--            item, with no alias production.
+-- Expect: reject
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT [CATALOG_NAME] AS Database_Name, [MODEL_NAME] AS Model_or_View_Name, [MODEL_CAPTION] AS Model_or_View_Caption, [MODEL_TYPE] AS Model_Type, [BASE_MODEL_NAME] AS Base_Model FROM $SYSTEM.MDSCHEMA_MODELS WHERE MODEL_SOURCE=1 ORDER BY MODEL_NAME

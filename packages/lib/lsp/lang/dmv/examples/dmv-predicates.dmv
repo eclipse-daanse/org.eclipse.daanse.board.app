@@ -1,0 +1,13 @@
+/* The full predicate grammar: AND/OR precedence, parentheses, NOT,
+   every comparison operator, a bare boolean column, and an @parameter
+   the client binds before sending. */
+SELECT
+    [CUBE_NAME],
+    [MEASURE_NAME],
+    [MEASURE_AGGREGATOR]
+FROM $System.MDSCHEMA_MEASURES
+WHERE CATALOG_NAME = @catalog
+  AND NOT MEASURE_IS_VISIBLE = 0
+  AND (CUBE_NAME = 'Sales' OR CUBE_NAME <> 'HR')
+  AND MEASURE_AGGREGATOR >= 1
+ORDER BY [CUBE_NAME] ASC, [MEASURE_NAME] DESC

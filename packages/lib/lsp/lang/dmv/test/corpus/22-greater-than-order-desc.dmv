@@ -1,0 +1,6 @@
+-- Source: https://thedailydba.wordpress.com/2014/01/20/finding-and-killing-ssas-sessions/
+-- Construct: The > operator against a numeric literal, then ORDER BY ... DESC.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT CHANNEL_SPID,REQUEST_CPU_TIME_MS,REQUEST_ELAPSED_TIME_MS, REQUEST_READ_KB,REQUEST_WRITE_KB, REQUEST_TEXT FROM $system.DISCOVER_REQUESTS WHERE REQUEST_ELAPSED_TIME_MS > 0 ORDER BY REQUEST_CPU_TIME_MS DESC

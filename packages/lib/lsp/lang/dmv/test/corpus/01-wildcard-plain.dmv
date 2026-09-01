@@ -1,0 +1,6 @@
+-- Source: https://learn.microsoft.com/en-us/analysis-services/instances/use-dynamic-management-views-dmvs-to-monitor-analysis-services
+-- Construct: The minimal statement: wildcard select, two-segment rowset.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $System.DISCOVER_CHANNELS
