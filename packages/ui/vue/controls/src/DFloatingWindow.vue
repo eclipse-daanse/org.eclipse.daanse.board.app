@@ -25,7 +25,8 @@ Contributors:
  * ancestor is `position: relative` - so a window is kept inside the board
  * it belongs to rather than inside the browser window.
  */
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { dockCount, dockSlot, dockWidth, joinDock, leaveDock, setDockWidth, type DockSide } from './dock'
 
 export interface Placement {
   x: number
@@ -136,25 +137,75 @@ function bounds() {
   }
 }
 
-function dockTo(side: 'left' | 'right', b: { width: number; height: number }) {
-  const p = place.value
-  const w = clampW(p.w)
+/*
+ * Its name in the register. The remembered key where there is one, so a
+ * window keeps its place in the column across reloads; the title otherwise.
+ */
+const dockId = computed(() => props.rememberAs ?? props.title)
+
+/** The area to divide up, measured when it is needed. */
+const room = ref({ width: 0, height: 0 })
+
+/**
+ * Takes this window's share of its column.
+ *
+ * Asked for, not watched: the register is written while a window joins or
+ * leaves, and a watcher that writes back the placement it just read would
+ * chase its own tail.
+ */
+function applySlot() {
+  const side = place.value.dock
+  if (!side) return
+  const slot = dockSlot(dockId.value, room.value.height)
+  if (!slot) return
+  const w = dockWidth(side)
   place.value = {
-    ...p,
+    ...place.value,
     w,
-    x: side === 'left' ? 0 : Math.max(0, b.width - w),
-    y: 0,
-    h: b.height,
-    dock: side,
-    // Only remember the floating shape on the way in, not on every move
-    freeY: p.dock ? p.freeY : p.y,
-    freeH: p.dock ? p.freeH : p.h,
+    x: side === 'left' ? 0 : Math.max(0, room.value.width - w),
+    y: slot.y,
+    h: slot.h,
   }
+}
+
+/*
+ * Another window joining or leaving the same edge changes what is left for
+ * this one. Watching the count alone is enough - it is the only thing that
+ * changes without this window doing anything.
+ */
+watch(
+  () => {
+    const side = place.value.dock
+    if (!side) return ''
+    // An edge is one column, so its windows share both the split and the width
+    return `${dockCount(side)}:${dockWidth(side)}`
+  },
+  (now) => {
+    if (!now) return
+    room.value = bounds()
+    applySlot()
+  },
+)
+
+function dockTo(side: DockSide, b: { width: number; height: number }) {
+  const p = place.value
+  room.value = b
+
+  // Only remember the floating shape on the way in, not on every move
+  const freeY = p.dock ? p.freeY : p.y
+  const freeH = p.dock ? p.freeH : p.h
+
+  if (!p.dock) setDockWidth(side, clampW(p.w))
+  joinDock(dockId.value, side, freeH, props.minHeight)
+
+  place.value = { ...p, dock: side, freeY, freeH }
+  applySlot()
 }
 
 function undock() {
   const p = place.value
   if (!p.dock) return
+  leaveDock(dockId.value)
   place.value = { ...p, y: p.freeY, h: p.freeH, dock: null }
 }
 
@@ -192,12 +243,13 @@ function onMove(e: PointerEvent) {
 
   const w = clampW(gesture.fromW + (e.clientX - gesture.startX))
   if (place.value.dock) {
-    // The height belongs to the surface; a right-docked window grows inwards
-    place.value = {
-      ...place.value,
-      w,
-      x: place.value.dock === 'left' ? 0 : Math.max(0, b.width - w),
-    }
+    /*
+     * The column's width, not this window's: they share an edge, so they
+     * share how wide it is. The height is the column's to divide.
+     */
+    room.value = b
+    setDockWidth(place.value.dock, w)
+    applySlot()
     return
   }
   place.value = {
@@ -255,11 +307,12 @@ function nudge(dx: number, dy: number) {
  */
 function keepInView() {
   const b = bounds()
+  room.value = b
   const p = place.value
   const w = Math.min(clampW(p.w), b.width)
 
   if (p.dock) {
-    place.value = { ...p, w, x: p.dock === 'left' ? 0 : Math.max(0, b.width - w), y: 0, h: b.height }
+    applySlot()
     return
   }
 
@@ -274,12 +327,21 @@ function keepInView() {
 }
 
 onMounted(() => {
+  // A window that starts docked has to say so, or the column will not know
+  if (place.value.dock) {
+    const b = bounds()
+    room.value = b
+    setDockWidth(place.value.dock, clampW(place.value.w))
+    joinDock(dockId.value, place.value.dock, place.value.freeH, props.minHeight)
+  }
   keepInView()
   window.addEventListener('resize', keepInView)
 })
 
 onBeforeUnmount(() => {
   endGesture()
+  // Its share goes back to the others
+  leaveDock(dockId.value)
   window.removeEventListener('resize', keepInView)
 })
 

@@ -448,7 +448,7 @@ const change = (e: any) => {
       v-if="showMinimap"
       title="Übersicht"
       remember-as="daanse.board.minimap"
-      :initial="{ x: 16, y: 420, w: 220, h: 168 }"
+      :initial="{ x: 0, y: 420, w: 240, h: 168, dock: 'left' }"
       :min-width="140"
       :max-width="420"
       :min-height="110"
