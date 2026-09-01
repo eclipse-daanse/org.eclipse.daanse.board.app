@@ -453,6 +453,7 @@ const change = (e: any) => {
       :max-width="420"
       :min-height="110"
       :closable="false"
+      dockable
     >
       <div ref="minimapBox" class="minimap-canvas" @click="onMinimapClick">
         <div

@@ -81,6 +81,15 @@ const props = withDefaults(
 
 const emit = defineEmits<{ close: [] }>()
 
+/*
+ * A window that starts on an edge can return to one.
+ *
+ * Declaring it docked but not dockable puts it in a state it cannot reach
+ * again: pull it off the edge once and it floats for good. The two say the
+ * same thing, so one implies the other rather than contradicting it.
+ */
+const canDock = computed(() => props.dockable || props.initial?.dock != null)
+
 /** How close to an edge counts as "at it". */
 const SNAP = 24
 
@@ -232,8 +241,8 @@ function onMove(e: PointerEvent) {
       Math.max(0, b.height - 28),
     )
 
-    if (props.dockable && x <= SNAP) dockTo('left', b)
-    else if (props.dockable && x + w >= b.width - SNAP) dockTo('right', b)
+    if (canDock.value && x <= SNAP) dockTo('left', b)
+    else if (canDock.value && x + w >= b.width - SNAP) dockTo('right', b)
     else {
       undock()
       place.value = { ...place.value, x, y }
@@ -286,8 +295,8 @@ function nudge(dx: number, dy: number) {
   const w = place.value.w
   const x = Math.min(Math.max(0, place.value.x + dx), Math.max(0, b.width - w))
 
-  if (props.dockable && x <= SNAP) dockTo('left', b)
-  else if (props.dockable && x + w >= b.width - SNAP) dockTo('right', b)
+  if (canDock.value && x <= SNAP) dockTo('left', b)
+  else if (canDock.value && x + w >= b.width - SNAP) dockTo('right', b)
   else {
     undock()
     place.value = {
