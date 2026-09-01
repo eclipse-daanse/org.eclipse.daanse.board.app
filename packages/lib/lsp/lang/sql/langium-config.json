@@ -1,0 +1,15 @@
+{
+    "projectName": "Sql",
+    "languages": [
+        {
+            "id": "sql",
+            "grammar": "src/language/sql.langium",
+            "fileExtensions": [".sql"],
+            "caseInsensitive": true
+        }
+    ],
+    "chevrotainParserConfig": {
+        "maxLookahead": 4
+    },
+    "out": "src/language/generated"
+}
