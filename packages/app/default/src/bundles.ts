@@ -169,6 +169,7 @@ import lsp1 from 'org.eclipse.daanse.board.app.lib.lsp.core/manifest.json'
 import lsp2 from 'org.eclipse.daanse.board.app.lib.lsp.server/manifest.json'
 import lsp3 from 'org.eclipse.daanse.board.app.lib.repository.lsp/manifest.json'
 import lsp4 from 'org.eclipse.daanse.board.app.ui.vue.common.lsp/manifest.json'
+import lspMdx from 'org.eclipse.daanse.board.app.lib.lsp.lang.mdx/manifest.json'
 
 export const bundles: ModuleManifest[] = [
   b0 as ModuleManifest,
@@ -322,4 +323,5 @@ export const bundles: ModuleManifest[] = [
   lsp2 as ModuleManifest,
   lsp3 as ModuleManifest,
   lsp4 as ModuleManifest,
+  lspMdx as ModuleManifest,
 ]
