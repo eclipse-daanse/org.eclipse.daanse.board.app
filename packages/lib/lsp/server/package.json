@@ -1,0 +1,41 @@
+{
+  "name": "org.eclipse.daanse.board.app.lib.lsp.server",
+  "version": "0.0.1-next.1",
+  "private": true,
+  "description": "Worker-side LSP: the Langium parse-tree serializer and the browser language-server bootstrap. Imported only from inside a worker, or from a language package's tests.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./worker": {
+      "types": "./src/worker.ts",
+      "import": "./src/worker.ts"
+    },
+    "./manifest.json": "./manifest.json"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "langium": "~4.3.1",
+    "org.eclipse.daanse.board.app.lib.lsp.core": "0.0.1-next.1",
+    "vscode-languageserver": "~10.0.1",
+    "vscode-languageserver-types": "~3.17.5",
+    "org.eclipse.daanse.board.app.lib.api.lsp": "^0.0.1-next.1"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "vite-plugin-dts": "4.5.4"
+  },
+  "license": "EPL-2.0"
+}

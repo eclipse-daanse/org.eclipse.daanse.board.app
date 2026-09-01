@@ -15,7 +15,7 @@ trim_trailing_whitespace = true
 [*.{xml,xmi,json,yml,yaml}]
 indent_size = 2
 
-[{LICENSE,*.md,*.g4}]
+[{LICENSE,*.md,*.g4,*.langium,*.langium.alt}]
 indent_size = unset
 
 [license.templates]

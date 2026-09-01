@@ -163,6 +163,13 @@ import b144 from 'org.eclipse.daanse.board.app.lib.api.events/manifest.json'
  * The dev server serves each package's dist-bundle/ under /bundles/<id>/;
  * the production build copies them into dist/bundles/.
  */
+import lspP from 'org.eclipse.daanse.board.app.platform.codemirror/manifest.json'
+import lsp0 from 'org.eclipse.daanse.board.app.lib.api.lsp/manifest.json'
+import lsp1 from 'org.eclipse.daanse.board.app.lib.lsp.core/manifest.json'
+import lsp2 from 'org.eclipse.daanse.board.app.lib.lsp.server/manifest.json'
+import lsp3 from 'org.eclipse.daanse.board.app.lib.repository.lsp/manifest.json'
+import lsp4 from 'org.eclipse.daanse.board.app.ui.vue.common.lsp/manifest.json'
+
 export const bundles: ModuleManifest[] = [
   b0 as ModuleManifest,
   b1 as ModuleManifest,
@@ -309,4 +316,10 @@ export const bundles: ModuleManifest[] = [
   b142 as ModuleManifest,
   b143 as ModuleManifest,
   b144 as ModuleManifest,
+  lspP as ModuleManifest,
+  lsp0 as ModuleManifest,
+  lsp1 as ModuleManifest,
+  lsp2 as ModuleManifest,
+  lsp3 as ModuleManifest,
+  lsp4 as ModuleManifest,
 ]
