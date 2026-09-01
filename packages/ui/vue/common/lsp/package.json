@@ -1,0 +1,53 @@
+{
+  "name": "org.eclipse.daanse.board.app.ui.vue.common.lsp",
+  "version": "0.0.1-next.1",
+  "private": true,
+  "description": "Vue components over the LSP: the CodeMirror editor, the parse-tree panel and the diagnostics list. Takes a language as a prop and imports none.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./dist/org.eclipse.daanse.board.app.ui.vue.common.lsp.js",
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "~6.20.3",
+    "@codemirror/commands": "~6.9.0",
+    "@codemirror/language": "~6.12.4",
+    "@codemirror/lint": "~6.9.7",
+    "@codemirror/lsp-client": "~6.2.5",
+    "@codemirror/search": "~6.5.11",
+    "@codemirror/state": "~6.7.1",
+    "@codemirror/view": "~6.43.8",
+    "@lezer/highlight": "~1.2.3",
+    "org.eclipse.daanse.board.app.lib.lsp.core": "0.0.1-next.1",
+    "vscode-languageserver-types": "~3.17.5",
+    "org.eclipse.daanse.board.app.lib.api.lsp": "^0.0.1-next.1"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/test-utils": "^2.4.6",
+    "typescript": "~5.9.2",
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-libcss": "^1.1.1",
+    "vitest": "^4.0.16",
+    "vue-tsc": "^3.2.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./manifest.json": "./manifest.json"
+  },
+  "license": "EPL-2.0"
+}
