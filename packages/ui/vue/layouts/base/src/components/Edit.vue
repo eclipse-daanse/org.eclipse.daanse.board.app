@@ -16,6 +16,7 @@ import Moveable from 'vue3-moveable'
 import Draggable from 'vuedraggable'
 import { useMoveableLayout, type ILayoutItem } from '../composables/useMovableLayout'
 
+import { DFloatingWindow } from 'org.eclipse.daanse.board.app.ui.vue.controls'
 import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue.widget.wrapper'
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
