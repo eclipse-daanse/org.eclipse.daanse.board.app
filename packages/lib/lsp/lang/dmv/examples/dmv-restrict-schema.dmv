@@ -1,0 +1,8 @@
+-- Rowsets that take restrictions must be wrapped in SYSTEMRESTRICTSCHEMA.
+-- Restriction names are commonly bracketed, and CATALOG_NAME is case-sensitive.
+-- Source: Dynamic Management Views (DMVs) in Analysis Services, Microsoft Learn.
+SELECT *
+FROM SYSTEMRESTRICTSCHEMA(
+    $System.DISCOVER_CSDL_METADATA,
+    [CATALOG_NAME] = 'FoodMart'
+)

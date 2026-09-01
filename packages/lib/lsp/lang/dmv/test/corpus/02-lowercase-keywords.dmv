@@ -1,0 +1,6 @@
+-- Source: https://learn.microsoft.com/en-us/analysis-services/instances/use-dynamic-management-views-dmvs-to-monitor-analysis-services
+-- Construct: Mixed/lower-case keywords and rowset — caseInsensitive lexing.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+Select * from $System.discover_object_summary
