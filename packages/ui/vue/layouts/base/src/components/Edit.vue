@@ -96,6 +96,38 @@ const canvasSize = computed(() => {
   }
 })
 
+/* ---- snapping ---------------------------------------------------------- */
+
+/**
+ * The grid a widget is dragged over is the one it lines up with.
+ *
+ * 24px, the same as the dots drawn on the surface. It used to snap to 20,
+ * so a widget came to rest between the dots it appeared to sit on.
+ */
+const GRID = 24
+
+/*
+ * Whether to snap is asked in the topbar, which is a different bundle. It
+ * says so on the root element - the same way the theme and the backdrop
+ * switch travel - and this reads it back. An attribute rather than a shared
+ * module, so neither side has to depend on the other for one boolean.
+ */
+const snapToGrid = ref(document.documentElement.getAttribute('data-board-snap') !== 'off')
+
+let snapWatcher: MutationObserver | null = null
+
+onMounted(() => {
+  snapWatcher = new MutationObserver(() => {
+    snapToGrid.value = document.documentElement.getAttribute('data-board-snap') !== 'off'
+  })
+  snapWatcher.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-board-snap'],
+  })
+})
+
+onUnmounted(() => snapWatcher?.disconnect())
+
 // Minimap
 const scrollContainer = ref<HTMLElement | null>(null)
 const viewportRect = ref({ x: 0, y: 0, w: 1, h: 1 })
@@ -414,9 +446,9 @@ const change = (e: any) => {
           v-bind:useMutationObserver="true"
           @drag="drag(widget.uid, $event)"
           @resize="resize(widget.uid, $event)"
-          :snappable="true"
-          :snapGridWidth="20"
-          :snapGridHeight="20"
+          :snappable="snapToGrid"
+          :snapGridWidth="GRID"
+          :snapGridHeight="GRID"
           :origin="false"
           :ref="`${widget.uid}_control`"
           :style="getMovableControlStyles(widget.uid)"

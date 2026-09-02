@@ -35,6 +35,7 @@ import { v4 } from 'uuid'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
 import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
+import { useGridSnap } from '@/composables/useGridSnap'
 
 const route = useRoute()
 const router = useRouter()
@@ -117,6 +118,9 @@ const { visible: paletteVisible, toggle: togglePalette } = useWidgetPalette()
  * to show - a switch that changes nothing is worse than no switch.
  */
 const { shown: backdropShown, toggle: toggleBackdrop } = useBoardBackdrop()
+
+/* Whether a dragged widget lines up with the grid it is dragged over. */
+const { snapping, toggle: toggleSnapping } = useGridSnap()
 
 const hasBackdrop = computed(() => {
   void pagesVersion.value
@@ -311,6 +315,27 @@ const openAppearance = () => router.push('/appearance')
         </li>
       </ul>
     </div>
+
+    <button
+      v-if="isEditing"
+      type="button"
+      :class="['icon-action', { on: snapping }]"
+      :aria-pressed="snapping"
+      title="Am Raster ausrichten"
+      aria-label="Widgets am Raster ausrichten"
+      @click="toggleSnapping"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <path
+          d="M9 3.5v17M15 3.5v17M3.5 9h17M3.5 15h17"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.3"
+          opacity="0.55"
+        />
+        <rect x="9" y="9" width="6" height="6" fill="currentColor" />
+      </svg>
+    </button>
 
     <button
       v-if="isEditing && hasBackdrop"

@@ -47,6 +47,7 @@ import Configuration from './pages/Configuration.vue'
 import Appearance from './pages/Appearance.vue'
 import { initTheme } from './theme/useTheme'
 import { initBoardBackdrop } from './composables/useBoardBackdrop'
+import { initGridSnap } from './composables/useGridSnap'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
@@ -60,6 +61,7 @@ export async function activate({ services, log }: ActivationContext) {
    */
   initTheme()
   initBoardBackdrop()
+  initGridSnap()
 
   app = createApp(App)
 
