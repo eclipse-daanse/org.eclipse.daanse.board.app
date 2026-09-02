@@ -46,6 +46,7 @@ import router from './router'
 import Configuration from './pages/Configuration.vue'
 import Appearance from './pages/Appearance.vue'
 import { initTheme } from './theme/useTheme'
+import { initBoardBackdrop } from './composables/useBoardBackdrop'
 import { registerSystemActions } from './systemActions'
 import { registerTestActions } from './testActions'
 import { provideVariablesStoreDependencies } from './stores/VariablesPinia'
@@ -58,6 +59,7 @@ export async function activate({ services, log }: ActivationContext) {
    * this only replaces them where the person chose something else.
    */
   initTheme()
+  initBoardBackdrop()
 
   app = createApp(App)
 

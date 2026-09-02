@@ -512,6 +512,11 @@ const change = (e: any) => {
   box-sizing: border-box;
 }
 
+/*
+ * The board surface is opaque so the grid reads and the widgets sit on
+ * something plain - a photograph behind them makes it hard to see what you
+ * are moving.
+ */
 .dottet {
   /* Board surface from the mockups: canvas token, 24px dot grid */
   background: var(--color-canvas, #dee1e7);
@@ -519,6 +524,7 @@ const change = (e: any) => {
   background-size: 24px 24px;
   background-position: -12px -12px;
   background-repeat: repeat;
+  transition: background-color 120ms ease;
 }
 
 .ghost-placeholder {
@@ -587,6 +593,17 @@ const change = (e: any) => {
   flex-direction: column;
   gap: 0.5rem;
   z-index: 99999;
+}
+
+/*
+ * Asked for from the topbar: the surface steps back and the page's own
+ * background - which the layout renderer paints underneath - shows through.
+ *
+ * The grid stays. It is what tells you where a widget will land, and that
+ * is needed most when placing something against the picture.
+ */
+:root[data-board-backdrop='on'] .canvas.dottet {
+  background-color: transparent;
 }
 
 .canvas-context-menu {

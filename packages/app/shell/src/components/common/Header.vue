@@ -34,6 +34,7 @@ import {
 import { v4 } from 'uuid'
 import { usePages } from '@/composables/usePages'
 import { useWidgetPalette } from '@/composables/useWidgetPalette'
+import { useBoardBackdrop } from '@/composables/useBoardBackdrop'
 
 const route = useRoute()
 const router = useRouter()
@@ -110,6 +111,23 @@ const { revision: pagesVersion, touch: pagesChanged, openSettings: openPageSetti
  * button you cannot press.
  */
 const { visible: paletteVisible, toggle: togglePalette } = useWidgetPalette()
+
+/*
+ * The page's own background, while editing. Offered only where there is one
+ * to show - a switch that changes nothing is worse than no switch.
+ */
+const { shown: backdropShown, toggle: toggleBackdrop } = useBoardBackdrop()
+
+const hasBackdrop = computed(() => {
+  void pagesVersion.value
+  if (!pageId.value) return false
+  try {
+    const page = pageRepo?.getPage(pageId.value)
+    return Boolean(page?.backgroundImage?.trim() || page?.backgroundColor?.trim())
+  } catch {
+    return false
+  }
+})
 
 const pages = computed<PageI[]>(() => {
   void pagesVersion.value
@@ -293,6 +311,22 @@ const openAppearance = () => router.push('/appearance')
         </li>
       </ul>
     </div>
+
+    <button
+      v-if="isEditing && hasBackdrop"
+      type="button"
+      :class="['icon-action', { on: backdropShown }]"
+      :aria-pressed="backdropShown"
+      title="Hintergrund der Seite zeigen"
+      aria-label="Hintergrund der Seite beim Bearbeiten zeigen oder verbergen"
+      @click="toggleBackdrop"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <rect x="3.5" y="5" width="17" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <circle cx="9" cy="10" r="1.6" fill="currentColor" />
+        <path d="M4 17l4.5-4.5 3 3L15 12l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      </svg>
+    </button>
 
     <button
       v-if="isEditing"
