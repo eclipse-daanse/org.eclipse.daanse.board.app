@@ -276,6 +276,148 @@ const pasteWidgetFromMenu = () => {
 /** Lands a value on the grid, or leaves it alone while snapping is off. */
 const toGrid = (value: number) => (snapToGrid.value ? Math.round(value / GRID) * GRID : value)
 
+/* ---- selecting several widgets ---------------------------------------- */
+
+/*
+ * Which widgets are picked, in the order they were picked.
+ *
+ * Ctrl or Shift and a click adds one or takes it out again; a plain click
+ * on the surface clears the lot. One widget keeps its own handles, as
+ * before - the group only takes over from two, which is when there is a
+ * group to speak of.
+ */
+const selected = ref<string[]>([])
+
+const selectionActive = computed(() => selected.value.length > 1)
+const selectionTargets = computed(() => selected.value.map((uid) => `.${uid}`))
+
+function isSelected(uid: string) {
+  return selected.value.includes(uid)
+}
+
+function toggleSelection(uid: string, event: MouseEvent) {
+  if (!event.ctrlKey && !event.metaKey && !event.shiftKey) {
+    // A plain click on a widget picks that one alone
+    selected.value = [uid]
+    return
+  }
+  selected.value = isSelected(uid)
+    ? selected.value.filter((id) => id !== uid)
+    : [...selected.value, uid]
+}
+
+function clearSelection() {
+  selected.value = []
+}
+
+/* A widget that was removed cannot stay picked */
+watch(
+  () => (layoutStore?.layout ?? []).map((item: ILayoutItem) => item.id).join(','),
+  (ids) => {
+    const alive = new Set(ids ? ids.split(',') : [])
+    const kept = selected.value.filter((uid) => alive.has(uid))
+    if (kept.length !== selected.value.length) selected.value = kept
+  },
+)
+
+/** The picked widgets' layout entries, for moving and lining up. */
+function pickedItems(): ILayoutItem[] {
+  const layout = layoutStore?.layout ?? []
+  return selected.value
+    .map((uid) => layout.find((item: ILayoutItem) => item.id === uid))
+    .filter(Boolean) as ILayoutItem[]
+}
+
+/*
+ * Moving the group.
+ *
+ * Moveable reports each member's own transform, so every one is written
+ * back from what it was given rather than from a shared offset - which
+ * keeps a member that started off-grid off-grid by the same amount, and
+ * lands them all on it when snapping is on.
+ */
+function dragGroup(e: any) {
+  for (const ev of e.events) {
+    const uid = [...ev.target.classList].find((c: string) => selected.value.includes(c))
+    if (!uid) continue
+    const item = (layoutStore?.layout ?? []).find((i: ILayoutItem) => i.id === uid)
+    if (!item) continue
+    item.x = toGrid(ev.translate[0])
+    item.y = toGrid(ev.translate[1])
+    ev.target.style.transform = `translate(${item.x}px, ${item.y}px)`
+  }
+}
+
+/* ---- lining them up ---------------------------------------------------- */
+
+/*
+ * Against the outside of the selection, not against one chosen widget: the
+ * result is the same for "align left" whichever member you picked first,
+ * which is what makes the buttons predictable.
+ */
+type Alignment = 'left' | 'hcenter' | 'right' | 'top' | 'vcenter' | 'bottom'
+
+function align(how: Alignment) {
+  const items = pickedItems()
+  if (items.length < 2) return
+
+  const left = Math.min(...items.map((i) => i.x))
+  const right = Math.max(...items.map((i) => i.x + i.width))
+  const top = Math.min(...items.map((i) => i.y))
+  const bottom = Math.max(...items.map((i) => i.y + i.height))
+
+  for (const item of items) {
+    switch (how) {
+      case 'left':
+        item.x = toGrid(left)
+        break
+      case 'right':
+        item.x = toGrid(right - item.width)
+        break
+      case 'hcenter':
+        item.x = toGrid((left + right) / 2 - item.width / 2)
+        break
+      case 'top':
+        item.y = toGrid(top)
+        break
+      case 'bottom':
+        item.y = toGrid(bottom - item.height)
+        break
+      case 'vcenter':
+        item.y = toGrid((top + bottom) / 2 - item.height / 2)
+        break
+    }
+  }
+}
+
+/*
+ * Even gaps between them.
+ *
+ * The outer two stay where they are and the rest are spread between, so
+ * distributing does not move the selection as a whole. Needs three: with
+ * two there is one gap and nothing to even out.
+ */
+function distribute(axis: 'x' | 'y') {
+  const items = pickedItems()
+  if (items.length < 3) return
+
+  const size = axis === 'x' ? 'width' : 'height'
+  const sorted = [...items].sort((a, b) => a[axis] - b[axis])
+  const first = sorted[0]
+  const last = sorted[sorted.length - 1]
+
+  const span = last[axis] - (first[axis] + first[size])
+  const between = sorted.slice(1, -1)
+  const occupied = between.reduce((sum, i) => sum + i[size], 0)
+  const gap = (span - occupied) / (sorted.length - 1)
+
+  let cursor = first[axis] + first[size] + gap
+  for (const item of between) {
+    item[axis] = toGrid(cursor)
+    cursor += item[size] + gap
+  }
+}
+
 const addWidget = (type: string, datasourceId: string, dropX: number, dropY: number) => {
   const config = { datasourceId, settings: {} }
   const wrapperConfig = cloneDeep(defaultConfig)
@@ -379,7 +521,12 @@ const change = (e: any) => {
 </script>
 
 <template>
-  <div class="report-container" @contextmenu="onCanvasContextMenu" @click="closeCanvasContextMenu">
+  <div
+    class="report-container"
+    @contextmenu="onCanvasContextMenu"
+    @click="closeCanvasContextMenu"
+    @pointerdown.self="clearSelection"
+  >
     <div class="scroll-viewport" ref="scrollContainer" @scroll="updateViewport">
       <div
         class="canvas dottet"
@@ -420,9 +567,14 @@ const change = (e: any) => {
       ></div>
       <template v-for="widget in safeWidgets" :key="widget.uid">
         <div
-          :class="`${widget.uid} dashboard-item-container`"
+          :class="[
+            widget.uid,
+            'dashboard-item-container',
+            { 'is-selected': isSelected(widget.uid) },
+          ]"
           :style="getInitialStyle(widget.uid)"
           :ref="widget.uid"
+          @pointerdown="toggleSelection(widget.uid, $event)"
         >
           <va-dropdown
             :trigger="'right-click'"
@@ -453,7 +605,9 @@ const change = (e: any) => {
             </va-dropdown-content>
           </va-dropdown>
         </div>
+        <!-- One widget keeps its own handles; from two the group takes over -->
         <Moveable
+          v-if="!selectionActive"
           v-bind:target="[`.${widget.uid}`]"
           v-bind:draggable="true"
           v-bind:resizable="true"
@@ -470,6 +624,103 @@ const change = (e: any) => {
         >
         </Moveable>
       </template>
+
+      <!--
+        The group: one set of handles around everything picked, so they move
+        as what they look like - a group - rather than one at a time.
+      -->
+      <Moveable
+        v-if="selectionActive"
+        :target="selectionTargets"
+        :draggable="true"
+        :resizable="false"
+        :useResizeObserver="true"
+        :useMutationObserver="true"
+        :origin="false"
+        :snappable="snapToGrid"
+        :snapGridWidth="GRID"
+        :snapGridHeight="GRID"
+        @dragGroup="dragGroup"
+      />
+
+      <!--
+        Shown only with something to line up. Against the outside of the
+        selection, so "left" means the same thing whichever widget was
+        picked first.
+      -->
+      <div v-if="selectionActive" class="align-bar" @pointerdown.stop>
+        <span class="align-bar__count">{{ selected.length }} gewählt</span>
+
+        <span class="align-bar__group">
+          <button type="button" class="align-bar__btn" title="Links bündig" @click="align('left')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M2 2v12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="4" y="3.5" width="9" height="3" fill="currentColor" />
+              <rect x="4" y="9.5" width="5.5" height="3" fill="currentColor" />
+            </svg>
+          </button>
+          <button type="button" class="align-bar__btn" title="Waagerecht mittig" @click="align('hcenter')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M8 2v12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="3" y="3.5" width="10" height="3" fill="currentColor" />
+              <rect x="5" y="9.5" width="6" height="3" fill="currentColor" />
+            </svg>
+          </button>
+          <button type="button" class="align-bar__btn" title="Rechts bündig" @click="align('right')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M14 2v12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="3" y="3.5" width="9" height="3" fill="currentColor" />
+              <rect x="6.5" y="9.5" width="5.5" height="3" fill="currentColor" />
+            </svg>
+          </button>
+        </span>
+
+        <span class="align-bar__group">
+          <button type="button" class="align-bar__btn" title="Oben bündig" @click="align('top')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M2 2h12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="3.5" y="4" width="3" height="9" fill="currentColor" />
+              <rect x="9.5" y="4" width="3" height="5.5" fill="currentColor" />
+            </svg>
+          </button>
+          <button type="button" class="align-bar__btn" title="Senkrecht mittig" @click="align('vcenter')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M2 8h12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="3.5" y="3" width="3" height="10" fill="currentColor" />
+              <rect x="9.5" y="5" width="3" height="6" fill="currentColor" />
+            </svg>
+          </button>
+          <button type="button" class="align-bar__btn" title="Unten bündig" @click="align('bottom')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M2 14h12" stroke="currentColor" stroke-width="1.6" />
+              <rect x="3.5" y="3" width="3" height="9" fill="currentColor" />
+              <rect x="9.5" y="6.5" width="3" height="5.5" fill="currentColor" />
+            </svg>
+          </button>
+        </span>
+
+        <!-- Evening out gaps needs a middle one to move -->
+        <span v-if="selected.length > 2" class="align-bar__group">
+          <button type="button" class="align-bar__btn" title="Waagerecht gleichmäßig verteilen" @click="distribute('x')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <rect x="1.5" y="4" width="2.5" height="8" fill="currentColor" />
+              <rect x="6.75" y="4" width="2.5" height="8" fill="currentColor" />
+              <rect x="12" y="4" width="2.5" height="8" fill="currentColor" />
+            </svg>
+          </button>
+          <button type="button" class="align-bar__btn" title="Senkrecht gleichmäßig verteilen" @click="distribute('y')">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <rect x="4" y="1.5" width="8" height="2.5" fill="currentColor" />
+              <rect x="4" y="6.75" width="8" height="2.5" fill="currentColor" />
+              <rect x="4" y="12" width="8" height="2.5" fill="currentColor" />
+            </svg>
+          </button>
+        </span>
+
+        <button type="button" class="align-bar__btn align-bar__btn--quiet" title="Auswahl aufheben" @click="clearSelection">
+          ×
+        </button>
+      </div>
 
       <!-- Canvas Context Menu (floating) for Paste -->
       <div
@@ -651,6 +902,87 @@ const change = (e: any) => {
  */
 :root[data-board-backdrop='on'] .canvas.dottet {
   background-color: transparent;
+}
+
+/* ------------------------------------------------------ several at once */
+
+/* A picked widget says so, since the group's handles surround them all
+   rather than marking each one */
+.dashboard-item-container.is-selected::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--color-accent, #2f5fbd);
+  border-radius: var(--radius-sm, 5px);
+  pointer-events: none;
+}
+
+/*
+ * The bar sits at the top of the board, over it rather than in it: the
+ * selection can be anywhere, and a bar that follows it would cover what
+ * you are lining up.
+ */
+.align-bar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  background: var(--color-pane, #f6f7f9);
+  border: 1px solid var(--color-divider, #ccd1d9);
+  border-radius: var(--radius-md, 6px);
+  box-shadow: var(--shadow-e3, 0 6px 20px rgb(0 0 0 / 22%));
+}
+
+.align-bar__count {
+  padding: 0 4px 0 6px;
+  font-size: var(--text-xs, 11px);
+  color: var(--color-dim, #6b7482);
+  white-space: nowrap;
+}
+
+/* Kinds of alignment are kept apart, so the eye finds the axis first */
+.align-bar__group {
+  display: flex;
+  gap: 1px;
+  padding-left: 8px;
+  border-left: 1px solid var(--color-divider, #ccd1d9);
+}
+
+.align-bar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--color-fg, #22252b);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs, 3px);
+  cursor: pointer;
+}
+
+.align-bar__btn:hover {
+  background-color: var(--color-raised, #ffffff);
+}
+
+.align-bar__btn:focus-visible {
+  outline: 2px solid var(--color-accent, #2f5fbd);
+  outline-offset: -2px;
+}
+
+.align-bar__btn--quiet {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--color-dim, #6b7482);
+}
+
+.align-bar__btn--quiet:hover {
+  color: var(--color-fg, #22252b);
 }
 
 .canvas-context-menu {
