@@ -295,6 +295,36 @@ function isSelected(uid: string) {
   return selected.value.includes(uid)
 }
 
+/* ---- handles on hover -------------------------------------------------- */
+
+/*
+ * Which widget the pointer is over.
+ *
+ * The resize handles only show for that one. Eight dots around every widget
+ * on a full board is a lot of furniture for something you use on one widget
+ * at a time, and it hides the board underneath.
+ */
+const hovered = ref<string | null>(null)
+
+/*
+ * A picked widget keeps its handles whether or not the pointer is on it:
+ * having picked it, you are about to do something with it, and the handles
+ * flickering as the pointer crosses the gap would be worse than showing
+ * them.
+ */
+function controlStyles(uid: string) {
+  const base = getMovableControlStyles(uid) as Record<string, unknown>
+  const visible = hovered.value === uid || isSelected(uid)
+  return {
+    ...base,
+    opacity: visible ? 1 : 0,
+    // Out of the way while invisible, so it cannot catch a click meant for
+    // the board or the widget under it
+    pointerEvents: visible ? 'auto' : 'none',
+    transition: 'opacity 90ms ease',
+  }
+}
+
 /** Whether a widget belongs to a group - marked even while nothing is picked. */
 function isGrouped(uid: string) {
   const item = (layoutStore?.layout ?? []).find((i: ILayoutItem) => i.id === uid)
@@ -633,6 +663,8 @@ const change = (e: any) => {
           :style="getInitialStyle(widget.uid)"
           :ref="widget.uid"
           @pointerdown="toggleSelection(widget.uid, $event)"
+          @pointerenter="hovered = widget.uid"
+          @pointerleave="hovered = hovered === widget.uid ? null : hovered"
         >
           <va-dropdown
             :trigger="'right-click'"
@@ -678,7 +710,7 @@ const change = (e: any) => {
           :snapGridHeight="GRID"
           :origin="false"
           :ref="`${widget.uid}_control`"
-          :style="getMovableControlStyles(widget.uid)"
+          :style="controlStyles(widget.uid)"
         >
         </Moveable>
       </template>
