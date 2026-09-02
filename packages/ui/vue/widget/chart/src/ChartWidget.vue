@@ -22,6 +22,9 @@ import { useDatasourceRepository, useVariableRepository } from 'org.eclipse.daan
 import { inject, computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChartSettingsImpl } from './gen/ChartSettingsImpl';
+// The interface, for the model this component is bound to; the Impl above
+// only supplies the defaults
+import type { ChartSettings } from './gen/ChartSettings';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
@@ -162,6 +165,20 @@ watch(() => config.value, (newVal) => {
  */
 function firstSet(...candidates: any[]): any {
   return candidates.find((v) => v !== undefined && v !== null && v !== '')
+}
+
+/**
+ * One entry of a reference line or box list.
+ *
+ * These four lists are untyped in the Ecore, so the generator gives them an
+ * EList of unknown - which has get(i) and does not answer to [i] at all.
+ * Reading them through here works either way, and is the one place to change
+ * once the lists have a class of their own.
+ */
+function annotationAt(list: unknown, index: number): any {
+  const any = list as any
+  if (typeof any?.get === 'function') return any.get(index)
+  return any?.[index]
 }
 
 /** The series settings as a plain array, whether they arrive as one or as an EList. */
@@ -372,7 +389,7 @@ const chartOptions = computed(() => {
       },
       drag({ element }: any) {
         if (editMode && config.value.horizontalLines) {
-          config.value.horizontalLines[index].value = element.y
+          annotationAt(config.value.horizontalLines, index).value = element.y
         }
       }
     }
@@ -402,7 +419,7 @@ const chartOptions = computed(() => {
       },
       drag({ element }: any) {
         if (editMode && config.value.verticalLines) {
-          config.value.verticalLines[index].value = element.x
+          annotationAt(config.value.verticalLines, index).value = element.x
         }
       }
     }
@@ -434,8 +451,8 @@ const chartOptions = computed(() => {
       drag({ element }: any) {
         if (editMode && config.value.horizontalBoxes) {
           const height = box.yMax - box.yMin
-          config.value.horizontalBoxes[index].yMin = element.y - height / 2
-          config.value.horizontalBoxes[index].yMax = element.y + height / 2
+          annotationAt(config.value.horizontalBoxes, index).yMin = element.y - height / 2
+          annotationAt(config.value.horizontalBoxes, index).yMax = element.y + height / 2
         }
       }
     }
@@ -467,8 +484,8 @@ const chartOptions = computed(() => {
       drag({ element }: any) {
         if (editMode && config.value.verticalBoxes) {
           const width = (box.xMax as number) - (box.xMin as number)
-          config.value.verticalBoxes[index].xMin = element.x - width / 2
-          config.value.verticalBoxes[index].xMax = element.x + width / 2
+          annotationAt(config.value.verticalBoxes, index).xMin = element.x - width / 2
+          annotationAt(config.value.verticalBoxes, index).xMax = element.x + width / 2
         }
       }
     }

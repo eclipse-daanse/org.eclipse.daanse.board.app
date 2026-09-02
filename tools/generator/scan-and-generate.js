@@ -110,6 +110,63 @@ function pruneUnusedAnnotationImports(file) {
  * "X is not defined" on first use. Promote the names that are instantiated
  * to a value import; the rest stay type-only.
  */
+/**
+ * WORKAROUND (emf.ts.codegen): an EOperation becomes a stub that throws, so
+ * its parameters are never read - and a project with noUnusedParameters
+ * refuses to compile the generated file. Prefixing them with _ is the
+ * convention TypeScript honours for "declared on purpose, not used".
+ *
+ * The names are not part of the signature, so nothing that calls these is
+ * affected. Belongs in the template; done here until it is.
+ */
+function silenceUnusedStubParameters(file) {
+  const before = readFileSync(file, 'utf8')
+  const after = before.replace(
+    /(\n\s+\w+\()([^)]*)(\)[^{]*\{\s*throw new Error\('[^']*not implemented'\);)/g,
+    (all, head, params, tail) => {
+      if (!params.trim()) return all
+      const renamed = params
+        .split(',')
+        .map((p) => p.replace(/^(\s*)([A-Za-z]\w*)/, (_m, space, name) => `${space}_${name}`))
+        .join(',')
+      return head + renamed + tail
+    },
+  )
+  if (after !== before) writeFileSync(file, after)
+}
+
+/**
+ * WORKAROUND (emf.ts.codegen): a class with a type parameter is referred to
+ * without one in the generated factory and impl - `VariableWrapper` where
+ * the declaration says `VariableWrapper<T>`. TypeScript refuses it, and the
+ * generator has no way to know what to put there, so `unknown` it is: the
+ * factory hands back a wrapper whose value type the caller narrows.
+ *
+ * Only the bare name is touched, never one that already carries arguments.
+ */
+function fillMissingTypeArguments(file) {
+  const before = readFileSync(file, 'utf8')
+  const generic = /\bVariableWrapper\b(?!\s*<)(?!\s*\()/g
+  const after = before.replace(
+    /(implements|extends|:|<)(\s*)VariableWrapper\b(?!\s*<)/g,
+    (_all, keyword, space) => `${keyword}${space}VariableWrapper<unknown>`,
+  )
+  if (after !== before) writeFileSync(file, after)
+}
+
+/**
+ * WORKAROUND (emf.ts.codegen): a many-valued feature whose Ecore carries
+ * defaultValueLiteral="[]" is emitted as `x: string[] = "[]"` - the literal
+ * passed through as text. An empty list is what was meant.
+ *
+ * Only the exact "[]" is touched; a real default string is left alone.
+ */
+function fixArrayDefaults(file) {
+  const before = readFileSync(file, 'utf8')
+  const after = before.replace(/(:\s*\w+\[\]\s*=\s*)(["'])\[\]\2/g, '$1[]')
+  if (after !== before) writeFileSync(file, after)
+}
+
 function promoteInstantiatedTypeImports(file) {
   const source = readFileSync(file, 'utf-8')
   let out = source
@@ -174,6 +231,9 @@ for (const [pkgDir, pkgModels] of byPackage) {
             cpSync(full, join(genDir, entry))
             pruneUnusedAnnotationImports(join(genDir, entry))
             promoteInstantiatedTypeImports(join(genDir, entry))
+            silenceUnusedStubParameters(join(genDir, entry))
+            fillMissingTypeArguments(join(genDir, entry))
+            fixArrayDefaults(join(genDir, entry))
           }
         }
       }

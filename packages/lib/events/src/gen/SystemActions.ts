@@ -13,13 +13,13 @@ import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.anno
 export class SystemActions extends SystemActionInterface {
   @Documentation("Navigate to a different page")
   @WidgetAction({eventType: "system.changePage"})
-  changePage(pageId?: string): void {
+  changePage(_pageId?: string): void {
     throw new Error('changePage not implemented');
   }
 
   @Documentation("Set or update a global variable")
   @WidgetAction({eventType: "system.setGlobalVariable"})
-  setGlobalVariable(variableName?: string, value?: unknown): void {
+  setGlobalVariable(_variableName?: string, _value?: unknown): void {
     throw new Error('setGlobalVariable not implemented');
   }
 

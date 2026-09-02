@@ -20,7 +20,7 @@ export class MapSettings {
 
   @Documentation("Optional array of additional datasource identifiers for multi-datasource support.")
   @Attribute()
-  datasourceIds: string[] = "[]";
+  datasourceIds: string[] = [];
 
   @Documentation("The URL of the base map service.")
   @Attribute()

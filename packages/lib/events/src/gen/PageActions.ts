@@ -13,7 +13,7 @@ import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
 export class PageActions {
   @Documentation("Set or update a page-scoped variable")
   @WidgetAction({eventType: "page.setPageVariable"})
-  setPageVariable(variableName?: string, value?: unknown, pageId?: string): void {
+  setPageVariable(_variableName?: string, _value?: unknown, _pageId?: string): void {
     throw new Error('setPageVariable not implemented');
   }
 

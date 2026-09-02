@@ -13,7 +13,7 @@ export abstract class TwoWayConnection extends PubSubConnection {
   @Attribute()
   ready?: boolean;
 
-  onMessage(data?: unknown, topic?: string): void {
+  onMessage(_data?: unknown, _topic?: string): void {
     throw new Error('onMessage not implemented');
   }
 
@@ -25,7 +25,7 @@ export abstract class TwoWayConnection extends PubSubConnection {
     throw new Error('onClose not implemented');
   }
 
-  onError(error?: unknown): void {
+  onError(_error?: unknown): void {
     throw new Error('onError not implemented');
   }
 

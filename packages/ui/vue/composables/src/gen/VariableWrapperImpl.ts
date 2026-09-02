@@ -14,7 +14,7 @@ import { ComposablesPackage } from './ComposablesPackage.js';
  * Implementation of VariableWrapper
  * @generated
  */
-export class VariableWrapperImpl extends BasicEObject implements VariableWrapper {
+export class VariableWrapperImpl extends BasicEObject implements VariableWrapper<unknown> {
   // Feature ID Constants (eLiterals)
   static readonly VALUE: number = 0;
   static readonly VARIABLE: number = 1;

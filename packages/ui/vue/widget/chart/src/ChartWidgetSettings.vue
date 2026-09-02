@@ -111,7 +111,8 @@ const updateBorderDash = (preset: any) => {
     // Handle both string and object values from va-select
     const presetValue = typeof preset === 'string' ? preset : preset?.value || preset
     const parsed = typeof presetValue === 'string' ? JSON.parse(presetValue) : presetValue
-    widgetSettings.value.borderDash.value = parsed
+    // Optional in the model, so it may not be there on an older board
+    if (widgetSettings.value.borderDash) widgetSettings.value.borderDash.value = parsed
   } catch (e) {
     console.error('Error parsing border dash preset:', e, preset)
   }
@@ -122,78 +123,121 @@ if (widgetSettings.value.borderDash?.value) {
   selectedBorderDashPreset.value = JSON.stringify(widgetSettings.value.borderDash.value)
 }
 
+/*
+ * The reference lines and areas are typed as lists in the model, which the
+ * generator gives an EList - it has add() and removeAt(), not push() and
+ * splice(). An untyped list still arrives as a plain array, so both are
+ * served rather than guessing which one is in hand.
+ */
+function listAdd(list: any, entry: unknown) {
+  if (typeof list?.add === 'function') list.add(entry)
+  else if (Array.isArray(list)) list.push(entry)
+}
+
+/**
+ * The four annotation lists as plain arrays, for the template.
+ *
+ * v-for cannot walk an EList, and every entry would be unknown if it could:
+ * these lists have no class in the Ecore yet. One computed per list gives
+ * the template something it can iterate and read.
+ */
+function asArray(list: any): any[] {
+  if (typeof list?.toArray === 'function') return list.toArray()
+  return Array.isArray(list) ? list : []
+}
+
+const horizontalLineList = computed(() => asArray(widgetSettings.value?.horizontalLines))
+const verticalLineList = computed(() => asArray(widgetSettings.value?.verticalLines))
+const horizontalBoxList = computed(() => asArray(widgetSettings.value?.horizontalBoxes))
+const verticalBoxList = computed(() => asArray(widgetSettings.value?.verticalBoxes))
+const seriesList = computed(() => asArray(widgetSettings.value?.seriesSettings))
+
+function listLength(list: any): number {
+  if (typeof list?.size === 'function') return list.size()
+  return Array.isArray(list) ? list.length : 0
+}
+
+function listRemoveAt(list: any, index: number) {
+  if (typeof list?.removeAt === 'function') list.removeAt(index)
+  else if (Array.isArray(list)) list.splice(index, 1)
+}
+
 // Annotation management
 const addHorizontalLine = () => {
   if (!widgetSettings.value.horizontalLines) {
-    widgetSettings.value.horizontalLines = []
+    // Nothing there at all - a stored board from before this list existed
+    widgetSettings.value.horizontalLines = [] as any
   }
-  widgetSettings.value.horizontalLines.push({
+  listAdd(widgetSettings.value.horizontalLines, ({
     value: 0,
     color: 'rgba(255, 0, 0, 0.8)',
     width: 2,
     label: 'Line'
-  })
+  }))
 }
 
 const removeHorizontalLine = (index: number) => {
-  widgetSettings.value.horizontalLines?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.horizontalLines, index)
 }
 
 const addVerticalLine = () => {
   if (!widgetSettings.value.verticalLines) {
-    widgetSettings.value.verticalLines = []
+    // Nothing there at all - a stored board from before this list existed
+    widgetSettings.value.verticalLines = [] as any
   }
-  widgetSettings.value.verticalLines.push({
+  listAdd(widgetSettings.value.verticalLines, ({
     value: 0,
     color: 'rgba(0, 0, 255, 0.8)',
     width: 2,
     label: 'Line'
-  })
+  }))
 }
 
 const removeVerticalLine = (index: number) => {
-  widgetSettings.value.verticalLines?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.verticalLines, index)
 }
 
 const addHorizontalBox = () => {
   if (!widgetSettings.value.horizontalBoxes) {
-    widgetSettings.value.horizontalBoxes = []
+    // Nothing there at all - a stored board from before this list existed
+    widgetSettings.value.horizontalBoxes = [] as any
   }
-  widgetSettings.value.horizontalBoxes.push({
+  listAdd(widgetSettings.value.horizontalBoxes, ({
     yMin: 0,
     yMax: 10,
     color: 'rgba(255, 0, 0, 0.1)',
     label: 'Range'
-  })
+  }))
 }
 
 const removeHorizontalBox = (index: number) => {
-  widgetSettings.value.horizontalBoxes?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.horizontalBoxes, index)
 }
 
 const addVerticalBox = () => {
   if (!widgetSettings.value.verticalBoxes) {
-    widgetSettings.value.verticalBoxes = []
+    // Nothing there at all - a stored board from before this list existed
+    widgetSettings.value.verticalBoxes = [] as any
   }
-  widgetSettings.value.verticalBoxes.push({
+  listAdd(widgetSettings.value.verticalBoxes, ({
     xMin: 0,
     xMax: 10,
     color: 'rgba(0, 0, 255, 0.1)',
     label: 'Range'
-  })
+  }))
 }
 
 const removeVerticalBox = (index: number) => {
-  widgetSettings.value.verticalBoxes?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.verticalBoxes, index)
 }
 
 // Series settings management
 const addSeriesSettings = () => {
   if (!widgetSettings.value.seriesSettings) {
-    widgetSettings.value.seriesSettings = []
+    widgetSettings.value.seriesSettings = [] as any
   }
   const newSettings = new SeriesSettingsImpl()
-  newSettings.seriesIndex = new VariableWrapper<number>(widgetSettings.value.seriesSettings.length)
+  newSettings.seriesIndex = new VariableWrapper<number>(listLength(widgetSettings.value.seriesSettings))
   newSettings.chartType = new VariableWrapper<string>('bar')
   newSettings.xAxisId = new VariableWrapper<string>('x')
   newSettings.yAxisId = new VariableWrapper<string>('y')
@@ -217,7 +261,7 @@ const addSeriesSettings = () => {
 }
 
 const removeSeriesSettings = (index: number) => {
-  widgetSettings.value.seriesSettings?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.seriesSettings, index)
 }
 
 // Helper to update series border dash
@@ -238,7 +282,7 @@ const updateSeriesBorderDash = (series: SeriesSettings, preset: any) => {
 // Initialize seriesSettings if it doesn't exist and migrate existing series
 onMounted(() => {
   if (!widgetSettings.value.seriesSettings) {
-    widgetSettings.value.seriesSettings = []
+    widgetSettings.value.seriesSettings = [] as any
   }
 
   // Migrate existing series to add missing fields
@@ -288,7 +332,7 @@ onMounted(() => {
           <va-button size="small" @click="addSeriesSettings">Add Series</va-button>
         </div>
 
-        <div v-for="(series, index) in widgetSettings.seriesSettings" :key="`series_${index}`"
+        <div v-for="(series, index) in seriesList" :key="`series_${index}`"
           style="border: 1px solid #ddd; padding: 16px; border-radius: 4px; margin-bottom: 12px; background: #fafafa;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
             <strong style="font-size: 15px;">Series {{ series.seriesIndex?.value ?? index }}</strong>
@@ -912,7 +956,7 @@ onMounted(() => {
           <va-button size="small" @click="addHorizontalLine">Add Line</va-button>
         </div>
 
-        <div v-for="(line, index) in widgetSettings.horizontalLines" :key="`hline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+        <div v-for="(line, index) in horizontalLineList" :key="`hline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
             <strong>Line {{ index + 1 }}</strong>
             <va-button size="small" color="danger" @click="removeHorizontalLine(index)">Remove</va-button>
@@ -951,7 +995,7 @@ onMounted(() => {
           <va-button size="small" @click="addVerticalLine">Add Line</va-button>
         </div>
 
-        <div v-for="(line, index) in widgetSettings.verticalLines" :key="`vline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+        <div v-for="(line, index) in verticalLineList" :key="`vline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
             <strong>Line {{ index + 1 }}</strong>
             <va-button size="small" color="danger" @click="removeVerticalLine(index)">Remove</va-button>
@@ -989,7 +1033,7 @@ onMounted(() => {
           <va-button size="small" @click="addHorizontalBox">Add Area</va-button>
         </div>
 
-        <div v-for="(box, index) in widgetSettings.horizontalBoxes" :key="`hbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+        <div v-for="(box, index) in horizontalBoxList" :key="`hbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
             <strong>Area {{ index + 1 }}</strong>
             <va-button size="small" color="danger" @click="removeHorizontalBox(index)">Remove</va-button>
@@ -1026,7 +1070,7 @@ onMounted(() => {
           <va-button size="small" @click="addVerticalBox">Add Area</va-button>
         </div>
 
-        <div v-for="(box, index) in widgetSettings.verticalBoxes" :key="`vbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
+        <div v-for="(box, index) in verticalBoxList" :key="`vbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
             <strong>Area {{ index + 1 }}</strong>
             <va-button size="small" color="danger" @click="removeVerticalBox(index)">Remove</va-button>

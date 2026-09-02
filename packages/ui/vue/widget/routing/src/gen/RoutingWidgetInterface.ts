@@ -13,13 +13,13 @@ import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.anno
 export abstract class RoutingWidgetInterface extends WidgetActionInterface {
   @Documentation("Adds a waypoint to the route.")
   @WidgetAction({eventType: "routing.addWaypoint"})
-  addWaypoint(lat: number, lon: number, name?: string): void {
+  addWaypoint(_lat: number, _lon: number, _name?: string): void {
     throw new Error('addWaypoint not implemented');
   }
 
   @Documentation("Removes a waypoint at a given index.")
   @WidgetAction({eventType: "routing.removeWaypoint"})
-  removeWaypoint(index: number): void {
+  removeWaypoint(_index: number): void {
     throw new Error('removeWaypoint not implemented');
   }
 
@@ -31,7 +31,7 @@ export abstract class RoutingWidgetInterface extends WidgetActionInterface {
 
   @Documentation("Sets the transport mode for routing.")
   @WidgetAction({eventType: "routing.setCosting"})
-  setCosting(costing: string): void {
+  setCosting(_costing: string): void {
     throw new Error('setCosting not implemented');
   }
 

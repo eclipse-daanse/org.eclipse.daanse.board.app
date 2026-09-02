@@ -15,17 +15,17 @@ export class NavigationRegistry {
   items: NavigationItem[] = [];
 
   @Documentation("Register a navigation menu item")
-  registerNavigationItem(item?: NavigationItem): boolean {
+  registerNavigationItem(_item?: NavigationItem): boolean {
     throw new Error('registerNavigationItem not implemented');
   }
 
   @Documentation("Unregister a navigation menu item by id")
-  unregisterNavigationItem(id?: string): boolean {
+  unregisterNavigationItem(_id?: string): boolean {
     throw new Error('unregisterNavigationItem not implemented');
   }
 
   @Documentation("Get a navigation item by id")
-  getNavigationItem(id?: string): NavigationItem {
+  getNavigationItem(_id?: string): NavigationItem {
     throw new Error('getNavigationItem not implemented');
   }
 

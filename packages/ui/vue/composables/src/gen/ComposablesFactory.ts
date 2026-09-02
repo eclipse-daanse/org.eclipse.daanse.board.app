@@ -34,7 +34,7 @@ export class ComposablesFactory extends BasicEFactory {
   /**
    * Create a new VariableWrapper instance
    */
-  createVariableWrapper(): VariableWrapper {
+  createVariableWrapper(): VariableWrapper<unknown> {
     return new VariableWrapperImpl();
   }
 

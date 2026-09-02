@@ -15,17 +15,17 @@ export class RouteRegistry {
   routes: RouteDefinition[] = [];
 
   @Documentation("Register a route definition")
-  registerRoute(route?: RouteDefinition): boolean {
+  registerRoute(_route?: RouteDefinition): boolean {
     throw new Error('registerRoute not implemented');
   }
 
   @Documentation("Unregister a route by name")
-  unregisterRoute(name?: string): boolean {
+  unregisterRoute(_name?: string): boolean {
     throw new Error('unregisterRoute not implemented');
   }
 
   @Documentation("Get a route by name")
-  getRoute(name?: string): RouteDefinition {
+  getRoute(_name?: string): RouteDefinition {
     throw new Error('getRoute not implemented');
   }
 

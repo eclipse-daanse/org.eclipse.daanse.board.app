@@ -17,7 +17,17 @@ import type { WrapperSettings } from './gen/WrapperSettings'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 
-const wrapperSettings = defineModel<WrapperSettings>({ required: true });
+/*
+ * The settings with every wrapper present.
+ *
+ * The model marks them optional because a fresh instance has none of them
+ * yet - the generator only initialises what carries a default. This form is
+ * shown after ensureWrappers has filled them in, so within this component
+ * they are there, and saying so once beats an assertion on every binding.
+ */
+type FilledSettings = { [K in keyof WrapperSettings]-?: WrapperSettings[K] }
+
+const wrapperSettings = defineModel<FilledSettings>({ required: true });
 const i118n: i18n | undefined = inject('i18n');
 const t = (i118n)
   ? (key: string) => i118n.t('wrapper:' + key)

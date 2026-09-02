@@ -13,25 +13,25 @@ import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.anno
 export abstract class MapWidgetInterface extends WidgetActionInterface {
   @Documentation("Zooms the map to a specific Thing location.")
   @WidgetAction({eventType: "map.zoomToThing"})
-  zoomToThing(thingId: string, zoom?: number, duration?: number): void {
+  zoomToThing(_thingId: string, _zoom?: number, _duration?: number): void {
     throw new Error('zoomToThing not implemented');
   }
 
   @Documentation("Selects and highlights a Thing on the map by its ID.")
   @WidgetAction({eventType: "map.selectThingById"})
-  selectThingById(thingId: string): void {
+  selectThingById(_thingId: string): void {
     throw new Error('selectThingById not implemented');
   }
 
   @Documentation("Zooms the map to a specific GeoJSON location.")
   @WidgetAction({eventType: "map.zoomToLocation"})
-  zoomToLocation(location: unknown, zoom?: number, duration?: number): void {
+  zoomToLocation(_location: unknown, _zoom?: number, _duration?: number): void {
     throw new Error('zoomToLocation not implemented');
   }
 
   @Documentation("Shows a permanent tooltip on a Thing marker.")
   @WidgetAction({eventType: "map.showTooltip"})
-  showTooltip(thingId: string, content?: string): void {
+  showTooltip(_thingId: string, _content?: string): void {
     throw new Error('showTooltip not implemented');
   }
 
@@ -43,7 +43,7 @@ export abstract class MapWidgetInterface extends WidgetActionInterface {
 
   @Documentation("Displays a route on the map from GeoJSON data.")
   @WidgetAction({eventType: "map.displayRoute"})
-  displayRoute(geojson: unknown, color?: string, width?: number): void {
+  displayRoute(_geojson: unknown, _color?: string, _width?: number): void {
     throw new Error('displayRoute not implemented');
   }
 

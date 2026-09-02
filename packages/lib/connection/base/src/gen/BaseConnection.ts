@@ -19,11 +19,11 @@ export abstract class BaseConnection {
   @Attribute()
   uid?: string;
 
-  fetch(config?: IRequestParams): unknown {
+  fetch(_config?: IRequestParams): unknown {
     throw new Error('fetch not implemented');
   }
 
-  setConfig(config?: unknown): void {
+  setConfig(_config?: unknown): void {
     throw new Error('setConfig not implemented');
   }
 
