@@ -18,6 +18,15 @@ export interface ILayoutItem {
   x: number
   y: number
   z: number
+  /**
+   * Which group it belongs to, if any.
+   *
+   * Widgets that say the same thing together - a chart and the number
+   * beside it - are moved and picked as one. Kept on the item rather than
+   * in a list of its own, so a group travels with the layout it describes
+   * and a widget that is removed takes its membership with it.
+   */
+  group?: string
 }
 
 import { ref } from 'vue'

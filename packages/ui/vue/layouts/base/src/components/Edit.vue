@@ -295,15 +295,38 @@ function isSelected(uid: string) {
   return selected.value.includes(uid)
 }
 
+/** Whether a widget belongs to a group - marked even while nothing is picked. */
+function isGrouped(uid: string) {
+  const item = (layoutStore?.layout ?? []).find((i: ILayoutItem) => i.id === uid)
+  return Boolean(item?.group)
+}
+
+/**
+ * Everything that comes with this widget: itself, plus the rest of its
+ * group. Picking one member of a group picks the group - that is what
+ * grouping them was for.
+ */
+function withGroup(uid: string): string[] {
+  const layout = layoutStore?.layout ?? []
+  const item = layout.find((i: ILayoutItem) => i.id === uid)
+  if (!item?.group) return [uid]
+  return layout.filter((i: ILayoutItem) => i.group === item.group).map((i: ILayoutItem) => i.id)
+}
+
 function toggleSelection(uid: string, event: MouseEvent) {
+  const kin = withGroup(uid)
+
   if (!event.ctrlKey && !event.metaKey && !event.shiftKey) {
-    // A plain click on a widget picks that one alone
-    selected.value = [uid]
+    // A plain click on a widget picks that one alone - or its whole group
+    selected.value = kin
     return
   }
-  selected.value = isSelected(uid)
-    ? selected.value.filter((id) => id !== uid)
-    : [...selected.value, uid]
+
+  // Ctrl-click on a group takes the group in or out as a whole
+  const alreadyIn = kin.every((id) => isSelected(id))
+  selected.value = alreadyIn
+    ? selected.value.filter((id) => !kin.includes(id))
+    : [...selected.value, ...kin.filter((id) => !isSelected(id))]
 }
 
 function clearSelection() {
@@ -345,6 +368,41 @@ function dragGroup(e: any) {
     item.x = toGrid(ev.translate[0])
     item.y = toGrid(ev.translate[1])
     ev.target.style.transform = `translate(${item.x}px, ${item.y}px)`
+  }
+}
+
+/* ---- grouping ---------------------------------------------------------- */
+
+/** True while everything picked already belongs to one and the same group. */
+const selectionIsGroup = computed(() => {
+  const items = pickedItems()
+  if (items.length < 2) return false
+  const first = items[0].group
+  return Boolean(first) && items.every((i) => i.group === first)
+})
+
+function groupSelection() {
+  const items = pickedItems()
+  if (items.length < 2) return
+  const id = `g_${Math.random().toString(36).slice(2, 9)}`
+  for (const item of items) item.group = id
+}
+
+/*
+ * Taking a group apart leaves the widgets where they are and picked as they
+ * were - only the tie between them goes.
+ */
+function ungroupSelection() {
+  for (const item of pickedItems()) delete item.group
+
+  // Members that were not picked would be left in a group of their own
+  const layout = layoutStore?.layout ?? []
+  const counts = new Map<string, number>()
+  for (const item of layout) {
+    if (item.group) counts.set(item.group, (counts.get(item.group) ?? 0) + 1)
+  }
+  for (const item of layout) {
+    if (item.group && counts.get(item.group) === 1) delete item.group
   }
 }
 
@@ -570,7 +628,7 @@ const change = (e: any) => {
           :class="[
             widget.uid,
             'dashboard-item-container',
-            { 'is-selected': isSelected(widget.uid) },
+            { 'is-selected': isSelected(widget.uid), 'in-group': isGrouped(widget.uid) },
           ]"
           :style="getInitialStyle(widget.uid)"
           :ref="widget.uid"
@@ -649,7 +707,9 @@ const change = (e: any) => {
         picked first.
       -->
       <div v-if="selectionActive" class="align-bar" @pointerdown.stop>
-        <span class="align-bar__count">{{ selected.length }} gewählt</span>
+        <span class="align-bar__count">
+          {{ selected.length }} {{ selectionIsGroup ? 'in einer Gruppe' : 'gewählt' }}
+        </span>
 
         <span class="align-bar__group">
           <button type="button" class="align-bar__btn" title="Links bündig" @click="align('left')">
@@ -713,6 +773,36 @@ const change = (e: any) => {
               <rect x="4" y="1.5" width="8" height="2.5" fill="currentColor" />
               <rect x="4" y="6.75" width="8" height="2.5" fill="currentColor" />
               <rect x="4" y="12" width="8" height="2.5" fill="currentColor" />
+            </svg>
+          </button>
+        </span>
+
+        <span class="align-bar__group">
+          <button
+            v-if="!selectionIsGroup"
+            type="button"
+            class="align-bar__btn"
+            title="Gruppieren - zusammen bewegen und wählen"
+            @click="groupSelection"
+          >
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="6" height="6" rx="1" fill="currentColor" />
+              <rect x="8.5" y="8.5" width="6" height="6" rx="1" fill="currentColor" />
+              <rect x="8.5" y="1.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.3" />
+              <rect x="1.5" y="8.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.3" />
+            </svg>
+          </button>
+          <button
+            v-else
+            type="button"
+            class="align-bar__btn"
+            title="Gruppierung aufheben"
+            @click="ungroupSelection"
+          >
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.3" />
+              <rect x="8.5" y="8.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.3" />
+              <path d="M6 10l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
             </svg>
           </button>
         </span>
@@ -913,6 +1003,19 @@ const change = (e: any) => {
   position: absolute;
   inset: -2px;
   border: 1px solid var(--color-accent, #2f5fbd);
+  border-radius: var(--radius-sm, 5px);
+  pointer-events: none;
+}
+
+/*
+ * A widget in a group says so even when nothing is picked, otherwise the
+ * tie is invisible until you click one and everything moves.
+ */
+.dashboard-item-container.in-group::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px dashed color-mix(in srgb, var(--color-accent, #2f5fbd) 45%, transparent);
   border-radius: var(--radius-sm, 5px);
   pointer-events: none;
 }
