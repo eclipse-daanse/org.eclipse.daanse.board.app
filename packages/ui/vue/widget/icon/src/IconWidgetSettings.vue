@@ -34,6 +34,8 @@ const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
 
 const opened = ref({
+  /* The picker opens first: choosing the symbol is what you came for */
+  pickerSection: true,
   widgetSection: false,
   storeSection: false,
 })
@@ -78,7 +80,13 @@ const iconStyle = computed(() => {
 </script>
 
 <template>
-  <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('IconWidget.title')">
+  <!--
+    Two sections, because they are two different things: picking the icon is
+    searching a list and clicking one - there is no value to type - while
+    everything below it is a plain setting. Split so the settings half can be
+    rendered from the model and this half kept as it is.
+  -->
+  <va-collapse v-model="opened.pickerSection" icon="search" header="Symbol wählen">
     <div class="settings-container">
       <va-input
         v-model="searchQuery"
@@ -96,6 +104,11 @@ const iconStyle = computed(() => {
           {{ icon }}
         </span>
       </div>
+    </div>
+  </va-collapse>
+
+  <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('IconWidget.title')">
+    <div class="settings-container">
       <va-checkbox
         v-model="widgetSettings.isIconFilled"
         :label="t('icon:IconWidget.iconFilled')"
