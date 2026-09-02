@@ -1,83 +1,94 @@
 (function(){var i="ui.vue.widget.progress",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".container[data-v-2f35b34c]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.grid-layout[data-v-2f35b34c]{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:1fr auto 1fr;gap:.5em;width:100%;height:100%;position:relative}.grid-layout.vertical[data-v-2f35b34c]{grid-template-columns:1fr auto 1fr;grid-template-rows:auto 1fr auto}.progress-bar[data-v-2f35b34c]{grid-column:2;grid-row:2;background:var(--v2eeb6fee);border-radius:var(--v75e282b9);justify-self:center;position:relative;display:flex;align-items:end;justify-content:start;height:var(--e8645acc);width:var(--v08112608)}.progress-percent[data-v-2f35b34c]{height:var(--v08e6ed4a);width:var(--v4a1f0289);background:var(--v0bade3dc);transition:var(--v4e602ba1);border-radius:var(--v75e282b9)}.progress-value[data-v-2f35b34c]{font-weight:600;white-space:nowrap;align-self:center;justify-self:center;color:var(--v1001132c);z-index:1000}.align-left[data-v-2f35b34c]{grid-column:1}.align-center[data-v-2f35b34c]{grid-column:2}.align-right[data-v-2f35b34c]{grid-column:3}.justify-top[data-v-2f35b34c]{grid-row:1}.justify-center[data-v-2f35b34c]{grid-row:2}.justify-bottom[data-v-2f35b34c]{grid-row:3}.settings-container[data-v-e12619d5]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.add-btn[data-v-e12619d5]{width:150px}.input[data-v-e12619d5]{width:100px}.loading[data-v-e12619d5]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}\n";})();
-import { EVENT_ACTIONS_REGISTRY as xe, EVENT_REGISTRY_ID as We, EVENT_ACTIONS_REGISTRY_ID as Ie } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as Te, deactivate as ke, component as Ee, inject as Y } from "@eclipse-daanse/tsm";
-import { defineComponent as X, mergeModels as Re, useCssVars as Me, computed as c, toRefs as Ae, inject as j, onUnmounted as Se, useModel as ee, ref as $, watch as G, onMounted as Oe, createElementBlock as le, openBlock as N, withModifiers as De, createElementVNode as E, normalizeClass as H, toDisplayString as te, resolveComponent as T, createBlock as Fe, withCtx as b, createCommentVNode as Le, createVNode as n, unref as h, createTextVNode as Ue } from "vue";
-import { useRoute as je } from "vue-router";
-import { VariableWrapper as V, useDatasourceRepository as $e } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { EVENT_ACTIONS_REGISTRY as we, EVENT_REGISTRY_ID as We, EVENT_ACTIONS_REGISTRY_ID as Te } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as Ie, deactivate as ke, component as Ee, inject as Y } from "@eclipse-daanse/tsm";
+import { defineComponent as X, mergeModels as Re, useCssVars as Ae, computed as c, toRefs as Me, inject as L, onUnmounted as Se, useModel as ee, ref as $, watch as G, onMounted as De, createElementBlock as le, openBlock as N, withModifiers as Oe, createElementVNode as R, normalizeClass as H, toDisplayString as te, resolveComponent as k, createBlock as Ue, withCtx as V, createCommentVNode as je, createVNode as n, unref as w, createTextVNode as Fe } from "vue";
+import { useRoute as Le } from "vue-router";
+import { VariableWrapper as h, useDatasourceRepository as $e } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import q from "org.eclipse.daanse.board.app.lib.utils.helpers";
-import { Reference as y, Documentation as O, Attribute as oe, Enum as ae, ModelClass as Ge } from "org.eclipse.daanse.board.app.lib.annotations";
-import { WidgetAction as re, WidgetActionInterface as Be, Payload as K } from "org.eclipse.daanse.board.app.lib.events";
-import { VariableInput as x } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { Documentation as f, Reference as _, Attribute as oe, Enum as re, ModelClass as Ge } from "org.eclipse.daanse.board.app.lib.annotations";
+import { WidgetAction as ae, WidgetActionInterface as Be, Payload as K } from "org.eclipse.daanse.board.app.lib.events";
+import { VariableInput as W } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as Ze } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: Ne } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var se = /* @__PURE__ */ ((s) => (s.LEFT = "left", s.CENTER = "center", s.RIGHT = "right", s))(se || {}), ne = /* @__PURE__ */ ((s) => (s.TOP = "top", s.CENTER = "center", s.BOTTOM = "bottom", s))(ne || {}), ze = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, f = (s, i, o, d) => {
+var se = /* @__PURE__ */ ((s) => (s.LEFT = "left", s.CENTER = "center", s.RIGHT = "right", s))(se || {}), ne = /* @__PURE__ */ ((s) => (s.TOP = "top", s.CENTER = "center", s.BOTTOM = "bottom", s))(ne || {}), ze = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, b = (s, i, o, d) => {
   for (var t = d > 1 ? void 0 : d ? Je(i, o) : i, l = s.length - 1, m; l >= 0; l--)
     (m = s[l]) && (t = (d ? m(i, o, t) : m(t)) || t);
   return d && t && ze(i, o, t), t;
 };
 let v = class {
-  progress = new V();
-  fillColor = new V();
-  gradientColor = new V();
-  backgroundColor = new V();
+  progress = new h();
+  fillColor = new h();
+  gradientColor = new h();
+  backgroundColor = new h();
   isGradient = !1;
   isVertical = !1;
-  rotation = new V();
-  min = new V();
-  max = new V();
-  textColor = new V();
-  barThickness = new V();
-  borderRadius = new V();
-  valueAlign = se.LEFT;
-  valueJustify = ne.TOP;
+  rotation = new h();
+  min = new h();
+  max = new h();
+  textColor = new h();
+  barThickness = new h();
+  borderRadius = new h();
+  valueAlign = se.CENTER;
+  valueJustify = ne.CENTER;
 };
-f([
-  y("VariableWrapper")
+b([
+  f("The current progress value, potentially as a percentage or numeric string."),
+  _("VariableWrapper")
 ], v.prototype, "progress", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The color representing the filled portion of the progress bar."),
+  _("VariableWrapper")
 ], v.prototype, "fillColor", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("An optional secondary color used if a gradient fill is enabled for the progress bar."),
+  _("VariableWrapper")
 ], v.prototype, "gradientColor", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The background color of the progress bar, representing the unfilled portion."),
+  _("VariableWrapper")
 ], v.prototype, "backgroundColor", 2);
-f([
-  O("A flag indicating whether the progress bar should use a gradient color."),
+b([
+  f("A flag indicating whether the progress bar should use a gradient color."),
   oe()
 ], v.prototype, "isGradient", 2);
-f([
-  O("A flag indicating whether the progress bar is oriented vertically."),
+b([
+  f("A flag indicating whether the progress bar is oriented vertically."),
   oe()
 ], v.prototype, "isVertical", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The rotation angle of the progress bar in degrees."),
+  _("VariableWrapper")
 ], v.prototype, "rotation", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The minimum value for the progress bar."),
+  _("VariableWrapper")
 ], v.prototype, "min", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The maximum value for the progress bar."),
+  _("VariableWrapper")
 ], v.prototype, "max", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The color of the text displayed on the progress bar."),
+  _("VariableWrapper")
 ], v.prototype, "textColor", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The thickness of the progress bar (e.g., '20px')."),
+  _("VariableWrapper")
 ], v.prototype, "barThickness", 2);
-f([
-  y("VariableWrapper")
+b([
+  f("The border radius of the progress bar (e.g., '10px')."),
+  _("VariableWrapper")
 ], v.prototype, "borderRadius", 2);
-f([
-  O("The horizontal alignment of the value text."),
-  ae("HorizontalAlign")
+b([
+  f("The horizontal alignment of the value text."),
+  re("HorizontalAlign")
 ], v.prototype, "valueAlign", 2);
-f([
-  O("The vertical alignment of the value text."),
-  ae("VerticalAlign")
+b([
+  f("The vertical alignment of the value text."),
+  re("VerticalAlign")
 ], v.prototype, "valueJustify", 2);
-v = f([
+v = b([
+  f("Represents the visual settings for a progress indicator or bar."),
   Ge({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings" })
 ], v);
 var Ye = Object.defineProperty, He = Object.getOwnPropertyDescriptor, ie = (s, i, o, d) => {
@@ -85,7 +96,7 @@ var Ye = Object.defineProperty, He = Object.getOwnPropertyDescriptor, ie = (s, i
     (m = s[l]) && (t = m(i, o, t) || t);
   return t && Ye(i, o, t), t;
 };
-class D extends Be {
+class O extends Be {
   setValue(i) {
     throw new Error("setValue not implemented");
   }
@@ -94,11 +105,11 @@ class D extends Be {
   }
 }
 ie([
-  re({ eventType: "progress.setValue" })
-], D.prototype, "setValue");
+  ae({ eventType: "progress.setValue" })
+], O.prototype, "setValue");
 ie([
-  re({ eventType: "progress.reset" })
-], D.prototype, "reset");
+  ae({ eventType: "progress.reset" })
+], O.prototype, "reset");
 const qe = /* @__PURE__ */ X({
   __name: "ProgressWidget",
   props: /* @__PURE__ */ Re({
@@ -110,34 +121,34 @@ const qe = /* @__PURE__ */ X({
   }),
   emits: ["update:configv"],
   setup(s, { expose: i }) {
-    Me((p) => ({
+    Ae((p) => ({
       v2eeb6fee: u.value,
       v75e282b9: Ve.value,
-      e8645acc: be.value,
-      v08112608: Ce.value,
+      e8645acc: Ce.value,
+      v08112608: be.value,
       v08e6ed4a: me.value,
       v4a1f0289: fe.value,
       v0bade3dc: ve.value,
       v4e602ba1: ge.value,
-      v1001132c: _e.value
+      v1001132c: ye.value
     }));
-    const o = s, { datasourceId: d, id: t } = Ae(o), l = j(Ne.TINY_EMITTER), m = j(xe), P = je().params.pageid || "";
-    class a extends D {
+    const o = s, { datasourceId: d, id: t } = Me(o), l = L(Ne.TINY_EMITTER), m = L(we), y = Le().params.pageid || "";
+    class r extends O {
       setValue(g) {
-        r.value?.progress && (r.value.progress.value = String(g));
+        a.value?.progress && (a.value.progress.value = String(g));
       }
       setMax(g) {
-        r.value?.max && (r.value.max.value = String(g));
+        a.value?.max && (a.value.max.value = String(g));
       }
       reset() {
-        r.value?.progress && (r.value.progress.value = "0");
+        a.value?.progress && (a.value.progress.value = "0");
       }
     }
-    const C = new a();
+    const C = new r();
     i(C), Se(() => {
       t?.value && m.unregisterInstance(t.value);
     });
-    const w = () => {
+    const x = () => {
       t?.value && l.emit("widget:ProgressWidget:click", {
         type: "widget:ProgressWidget:click",
         widgetId: t.value,
@@ -149,11 +160,11 @@ const qe = /* @__PURE__ */ X({
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, r = ee(s, "configv"), R = $(null), { update: F } = $e(d, "object", R);
+    }, a = ee(s, "configv"), A = $(null), { update: U } = $e(d, "object", A);
     G(d, (p, g) => {
-      F(p, g);
+      U(p, g);
     });
-    const L = {
+    const j = {
       isGradient: !1,
       isVertical: !1,
       valueAlign: "center",
@@ -170,53 +181,53 @@ const qe = /* @__PURE__ */ X({
       barThickness: "20px",
       borderRadius: "10px"
     };
-    Oe(() => {
-      t?.value && m.registerInstance(t.value, C, "ProgressWidget", P), r.value || (r.value = new v());
+    De(() => {
+      t?.value && m.registerInstance(t.value, C, "ProgressWidget", y), a.value || (a.value = new v());
       for (const [p, g] of Object.entries(e)) {
-        const _ = r.value[p];
-        if (_ == null)
-          r.value[p] = new V(g);
-        else if (!(_ instanceof V)) if (typeof _ == "object" && "value" in _) {
-          const M = new V(_.value);
-          "variable" in _ && (M.variable = _.variable), r.value[p] = M;
+        const P = a.value[p];
+        if (P == null)
+          a.value[p] = new h(g);
+        else if (!(P instanceof h)) if (typeof P == "object" && "value" in P) {
+          const M = new h(P.value);
+          "variable" in P && (M.variable = P.variable), a.value[p] = M;
         } else
-          r.value[p] = new V(_);
+          a.value[p] = new h(P);
       }
-      for (const [p, g] of Object.entries(L))
-        (r.value[p] === void 0 || r.value[p] === null) && (r.value[p] = g);
+      for (const [p, g] of Object.entries(j))
+        (a.value[p] === void 0 || a.value[p] === null) && (a.value[p] = g);
     });
-    const u = c(() => r.value.backgroundColor?.value), de = c(() => {
-      const p = r.value.rotation?.value;
+    const u = c(() => a.value.backgroundColor?.value), de = c(() => {
+      const p = a.value.rotation?.value;
       return parseFloat(p) || 0;
-    }), pe = c(() => r.value.gradientColor?.value), ve = c(
-      () => r.value.isGradient ? `linear-gradient(${de.value}deg, ${pe.value})` : r.value.fillColor?.value
+    }), pe = c(() => a.value.gradientColor?.value), ve = c(
+      () => a.value.isGradient ? `linear-gradient(${de.value}deg, ${pe.value})` : a.value.fillColor?.value
     ), ge = c(
-      () => r.value.isVertical ? "height .7s ease" : "width .7s ease"
-    ), ce = c(() => parseFloat(r.value.min?.value) || 0), U = c(() => parseFloat(r.value.max?.value) || 100), me = c(
-      () => r.value.isVertical && W.value !== null ? `${W.value / U.value * 100}%` : "35px"
+      () => a.value.isVertical ? "height .7s ease" : "width .7s ease"
+    ), ce = c(() => parseFloat(a.value.min?.value) || 0), F = c(() => parseFloat(a.value.max?.value) || 100), me = c(
+      () => a.value.isVertical && T.value !== null ? `${T.value / F.value * 100}%` : "35px"
     ), fe = c(
-      () => !r.value.isVertical && W.value !== null ? `${W.value / U.value * 100}%` : "35px"
-    ), Ce = c(
-      () => r.value.isVertical && W.value !== null ? "35px" : "100%"
+      () => !a.value.isVertical && T.value !== null ? `${T.value / F.value * 100}%` : "35px"
     ), be = c(
-      () => !r.value.isVertical && W.value !== null ? "35px" : "100%"
-    ), Ve = c(() => r.value.borderRadius?.value || "10px"), W = c(() => {
-      const p = r.value.progress;
+      () => a.value.isVertical && T.value !== null ? "35px" : "100%"
+    ), Ce = c(
+      () => !a.value.isVertical && T.value !== null ? "35px" : "100%"
+    ), Ve = c(() => a.value.borderRadius?.value || "10px"), T = c(() => {
+      const p = a.value.progress;
       if (!p) return null;
       const g = p.value;
       if (!g && g !== 0) return null;
-      const { parts: _ } = q.widget.extractValuesAndFullObject(String(g));
+      const { parts: P } = q.widget.extractValuesAndFullObject(String(g));
       let M = "";
-      for (const A of _) {
-        const J = A.path || A.path === null ? q.widget.getValueByPath(R.value, A.path) : void 0;
-        M += J !== void 0 ? J : A.text;
+      for (const S of P) {
+        const J = S.path || S.path === null ? q.widget.getValueByPath(A.value, S.path) : void 0;
+        M += J !== void 0 ? J : S.text;
       }
       const z = parseFloat(M);
       if (isNaN(z)) return null;
-      const we = ce.value, he = U.value;
-      return Math.max(we, Math.min(he, z));
-    }), Pe = c(() => {
-      switch (r.value?.valueAlign) {
+      const _e = ce.value, xe = F.value;
+      return Math.max(_e, Math.min(xe, z));
+    }), he = c(() => {
+      switch (a.value?.valueAlign) {
         case "left":
           return "align-left";
         case "right":
@@ -224,8 +235,8 @@ const qe = /* @__PURE__ */ X({
         default:
           return "align-center";
       }
-    }), _e = c(() => r.value.textColor?.value || "#000000"), ye = c(() => {
-      switch (r.value?.valueJustify) {
+    }), ye = c(() => a.value.textColor?.value || "#000000"), Pe = c(() => {
+      switch (a.value?.valueJustify) {
         case "top":
           return "justify-top";
         case "bottom":
@@ -236,17 +247,17 @@ const qe = /* @__PURE__ */ X({
     });
     return (p, g) => (N(), le("div", {
       class: "container",
-      onClick: w,
-      onContextmenu: De(I, ["prevent"])
+      onClick: x,
+      onContextmenu: Oe(I, ["prevent"])
     }, [
-      E("div", {
-        class: H(["grid-layout", { vertical: r.value.isVertical }])
+      R("div", {
+        class: H(["grid-layout", { vertical: a.value.isVertical }])
       }, [
-        E("div", {
-          class: H(["progress-value", [ye.value, Pe.value]])
-        }, te(W.value !== null ? W.value : "n/a"), 3),
-        g[0] || (g[0] = E("div", { class: "progress-bar" }, [
-          E("div", { class: "progress-percent" })
+        R("div", {
+          class: H(["progress-value", [Pe.value, he.value]])
+        }, te(T.value !== null ? T.value : "n/a"), 3),
+        g[0] || (g[0] = R("div", { class: "progress-bar" }, [
+          R("div", { class: "progress-percent" })
         ], -1))
       ], 2)
     ], 32));
@@ -267,7 +278,7 @@ const qe = /* @__PURE__ */ X({
   },
   emits: ["update:modelValue"],
   setup(s) {
-    const i = j("i18n"), o = (P) => i ? i.t(P) : P, d = $({
+    const i = L("i18n"), o = (y) => i ? i.t(y) : y, d = $({
       widgetSection: !1,
       storeSection: !1
     }), t = $([]), l = ee(s, "modelValue"), m = () => t.value.push({
@@ -276,43 +287,43 @@ const qe = /* @__PURE__ */ X({
     });
     G(
       [() => l.value.fillColor, () => t.value],
-      ([P, a]) => {
-        const C = P?.value || P;
+      ([y, r]) => {
+        const C = y?.value || y;
         if (l.value.isGradient) {
-          const w = a.length < 1 ? `${C} 0%, #FAFAFA 85%` : a.map((I) => `${I.color} ${I.location}%`).join(", ");
-          l.value.gradientColor && "value" in l.value.gradientColor ? l.value.gradientColor.value = w : l.value.gradientColor = w;
+          const x = r.length < 1 ? `${C} 0%, #FAFAFA 85%` : r.map((I) => `${I.color} ${I.location}%`).join(", ");
+          l.value.gradientColor && "value" in l.value.gradientColor ? l.value.gradientColor.value = x : l.value.gradientColor = x;
         }
       },
       { deep: !0 }
     ), G(
       () => l.value.isGradient,
-      (P) => {
-        const a = l.value.fillColor?.value || l.value.fillColor;
-        P ? t.value.push(
-          { color: `${a}`, location: 0 },
+      (y) => {
+        const r = l.value.fillColor?.value || l.value.fillColor;
+        y ? t.value.push(
+          { color: `${r}`, location: 0 },
           { color: "#FAFAFA", location: 85 }
         ) : t.value = [];
       }
     );
-    const Z = (P) => {
-      t.value = t.value.filter((a, C) => C !== P);
+    const Z = (y) => {
+      t.value = t.value.filter((r, C) => C !== y);
     };
-    return (P, a) => {
-      const C = T("va-input"), w = T("va-color-input"), I = T("va-select"), r = T("va-checkbox"), R = T("va-button"), F = T("va-data-table"), L = T("va-collapse");
-      return N(), Fe(L, {
+    return (y, r) => {
+      const C = k("va-input"), x = k("va-color-input"), I = k("va-select"), a = k("va-checkbox"), A = k("va-button"), U = k("va-data-table"), j = k("va-collapse");
+      return N(), Ue(j, {
         modelValue: d.value.widgetSection,
-        "onUpdate:modelValue": a[13] || (a[13] = (e) => d.value.widgetSection = e),
+        "onUpdate:modelValue": r[13] || (r[13] = (e) => d.value.widgetSection = e),
         header: o("progress:ProgressWidget.title"),
         icon: "settings"
       }, {
-        default: b(() => [
-          E("div", Qe, [
-            n(h(x), {
+        default: V(() => [
+          R("div", Qe, [
+            n(w(W), {
               modelValue: l.value.progress,
-              "onUpdate:modelValue": a[0] || (a[0] = (e) => l.value.progress = e),
+              "onUpdate:modelValue": r[0] || (r[0] = (e) => l.value.progress = e),
               label: o("progress:ProgressWidget.progress")
             }, {
-              default: b(({ value: e, change: u }) => [
+              default: V(({ value: e, change: u }) => [
                 n(C, {
                   "model-value": e,
                   onInput: u,
@@ -321,12 +332,12 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.min,
-              "onUpdate:modelValue": a[1] || (a[1] = (e) => l.value.min = e),
+              "onUpdate:modelValue": r[1] || (r[1] = (e) => l.value.min = e),
               label: o("progress:ProgressWidget.min")
             }, {
-              default: b(({ value: e, change: u }) => [
+              default: V(({ value: e, change: u }) => [
                 n(C, {
                   "model-value": e,
                   onInput: u,
@@ -336,12 +347,12 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.max,
-              "onUpdate:modelValue": a[2] || (a[2] = (e) => l.value.max = e),
+              "onUpdate:modelValue": r[2] || (r[2] = (e) => l.value.max = e),
               label: o("progress:ProgressWidget.max")
             }, {
-              default: b(({ value: e, change: u }) => [
+              default: V(({ value: e, change: u }) => [
                 n(C, {
                   "model-value": e,
                   onInput: u,
@@ -351,13 +362,13 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.fillColor,
-              "onUpdate:modelValue": a[3] || (a[3] = (e) => l.value.fillColor = e),
+              "onUpdate:modelValue": r[3] || (r[3] = (e) => l.value.fillColor = e),
               label: o("progress:ProgressWidget.fillColor")
             }, {
-              default: b(({ value: e, change: u }) => [
-                n(w, {
+              default: V(({ value: e, change: u }) => [
+                n(x, {
                   "model-value": e,
                   onInput: u,
                   label: o("progress:ProgressWidget.fillColor")
@@ -365,13 +376,13 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.backgroundColor,
-              "onUpdate:modelValue": a[4] || (a[4] = (e) => l.value.backgroundColor = e),
+              "onUpdate:modelValue": r[4] || (r[4] = (e) => l.value.backgroundColor = e),
               label: o("progress:ProgressWidget.backgroundColor")
             }, {
-              default: b(({ value: e, change: u }) => [
-                n(w, {
+              default: V(({ value: e, change: u }) => [
+                n(x, {
                   "model-value": e,
                   onInput: u,
                   label: o("progress:ProgressWidget.backgroundColor")
@@ -379,13 +390,13 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.textColor,
-              "onUpdate:modelValue": a[5] || (a[5] = (e) => l.value.textColor = e),
+              "onUpdate:modelValue": r[5] || (r[5] = (e) => l.value.textColor = e),
               label: o("progress:ProgressWidget.textColor")
             }, {
-              default: b(({ value: e, change: u }) => [
-                n(w, {
+              default: V(({ value: e, change: u }) => [
+                n(x, {
                   "model-value": e,
                   onInput: u,
                   label: o("progress:ProgressWidget.textColor")
@@ -393,12 +404,12 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.barThickness,
-              "onUpdate:modelValue": a[6] || (a[6] = (e) => l.value.barThickness = e),
+              "onUpdate:modelValue": r[6] || (r[6] = (e) => l.value.barThickness = e),
               label: o("progress:ProgressWidget.barThickness")
             }, {
-              default: b(({ value: e, change: u }) => [
+              default: V(({ value: e, change: u }) => [
                 n(C, {
                   "model-value": e,
                   onInput: u,
@@ -408,12 +419,12 @@ const qe = /* @__PURE__ */ X({
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            n(h(x), {
+            n(w(W), {
               modelValue: l.value.borderRadius,
-              "onUpdate:modelValue": a[7] || (a[7] = (e) => l.value.borderRadius = e),
+              "onUpdate:modelValue": r[7] || (r[7] = (e) => l.value.borderRadius = e),
               label: o("progress:ProgressWidget.borderRadius")
             }, {
-              default: b(({ value: e, change: u }) => [
+              default: V(({ value: e, change: u }) => [
                 n(C, {
                   "model-value": e,
                   onInput: u,
@@ -425,7 +436,7 @@ const qe = /* @__PURE__ */ X({
             }, 8, ["modelValue", "label"]),
             n(I, {
               modelValue: l.value.valueAlign,
-              "onUpdate:modelValue": a[8] || (a[8] = (e) => l.value.valueAlign = e),
+              "onUpdate:modelValue": r[8] || (r[8] = (e) => l.value.valueAlign = e),
               label: o("progress:ProgressWidget.valueAlign"),
               options: [
                 { text: "alignStart", value: "left" },
@@ -437,7 +448,7 @@ const qe = /* @__PURE__ */ X({
             }, null, 8, ["modelValue", "label"]),
             n(I, {
               modelValue: l.value.valueJustify,
-              "onUpdate:modelValue": a[9] || (a[9] = (e) => l.value.valueJustify = e),
+              "onUpdate:modelValue": r[9] || (r[9] = (e) => l.value.valueJustify = e),
               label: o("progress:ProgressWidget.valueAlign"),
               options: [
                 { text: "alignStart", value: "top" },
@@ -447,34 +458,34 @@ const qe = /* @__PURE__ */ X({
               "value-by": "value",
               "text-by": "text"
             }, null, 8, ["modelValue", "label"]),
-            n(r, {
+            n(a, {
               modelValue: l.value.isVertical,
-              "onUpdate:modelValue": a[10] || (a[10] = (e) => l.value.isVertical = e),
+              "onUpdate:modelValue": r[10] || (r[10] = (e) => l.value.isVertical = e),
               label: o("progress:ProgressWidget.isVertical")
             }, null, 8, ["modelValue", "label"]),
-            n(r, {
+            n(a, {
               modelValue: l.value.isGradient,
-              "onUpdate:modelValue": a[11] || (a[11] = (e) => l.value.isGradient = e),
+              "onUpdate:modelValue": r[11] || (r[11] = (e) => l.value.isGradient = e),
               label: o("progress:ProgressWidget.isGradient")
             }, null, 8, ["modelValue", "label"])
           ]),
           l.value.isGradient ? (N(), le("div", Xe, [
-            n(R, {
+            n(A, {
               class: "add-btn",
               onClick: m
             }, {
-              default: b(() => [
-                Ue(te(o("progress:ProgressWidget.addButton")), 1)
+              default: V(() => [
+                Fe(te(o("progress:ProgressWidget.addButton")), 1)
               ]),
               _: 1
             }),
-            E("div", null, [
-              n(h(x), {
+            R("div", null, [
+              n(w(W), {
                 modelValue: l.value.rotation,
-                "onUpdate:modelValue": a[12] || (a[12] = (e) => l.value.rotation = e),
+                "onUpdate:modelValue": r[12] || (r[12] = (e) => l.value.rotation = e),
                 label: o("progress:ProgressWidget.rotation")
               }, {
-                default: b(({ value: e, change: u }) => [
+                default: V(({ value: e, change: u }) => [
                   n(C, {
                     class: "mt-2",
                     "model-value": e,
@@ -484,7 +495,7 @@ const qe = /* @__PURE__ */ X({
                 ]),
                 _: 1
               }, 8, ["modelValue", "label"]),
-              n(F, {
+              n(U, {
                 class: "table-config",
                 items: t.value,
                 columns: [
@@ -493,22 +504,22 @@ const qe = /* @__PURE__ */ X({
                   { key: "actions" }
                 ]
               }, {
-                "cell(color)": b(({ rowIndex: e }) => [
-                  n(w, {
+                "cell(color)": V(({ rowIndex: e }) => [
+                  n(x, {
                     class: "input-color",
                     modelValue: t.value[e].color,
                     "onUpdate:modelValue": (u) => t.value[e].color = u
                   }, null, 8, ["modelValue", "onUpdate:modelValue"])
                 ]),
-                "cell(location)": b(({ rowIndex: e }) => [
+                "cell(location)": V(({ rowIndex: e }) => [
                   n(C, {
                     class: "input",
                     modelValue: t.value[e].location,
                     "onUpdate:modelValue": (u) => t.value[e].location = u
                   }, null, 8, ["modelValue", "onUpdate:modelValue"])
                 ]),
-                "cell(actions)": b(({ rowIndex: e }) => [
-                  n(R, {
+                "cell(actions)": V(({ rowIndex: e }) => [
+                  n(A, {
                     icon: "delete",
                     color: "danger",
                     onClick: (u) => Z(e)
@@ -517,7 +528,7 @@ const qe = /* @__PURE__ */ X({
                 _: 1
               }, 8, ["items"])
             ])
-          ])) : Le("", !0)
+          ])) : je("", !0)
         ]),
         _: 1
       }, 8, ["modelValue", "header"]);
@@ -527,45 +538,45 @@ const qe = /* @__PURE__ */ X({
   { name: "Progress Clicked", type: "click", description: "Triggered when the progress widget is clicked", payloadType: K },
   { name: "Progress Right Clicked", type: "right_click", description: "Triggered when the progress widget is right-clicked", payloadType: K }
 ];
-var al = Object.defineProperty, rl = Object.getOwnPropertyDescriptor, B = (s, i, o, d) => {
-  for (var t = d > 1 ? void 0 : d ? rl(i, o) : i, l = s.length - 1, m; l >= 0; l--)
+var rl = Object.defineProperty, al = Object.getOwnPropertyDescriptor, B = (s, i, o, d) => {
+  for (var t = d > 1 ? void 0 : d ? al(i, o) : i, l = s.length - 1, m; l >= 0; l--)
     (m = s[l]) && (t = (d ? m(i, o, t) : m(t)) || t);
-  return d && t && al(i, o, t), t;
+  return d && t && rl(i, o, t), t;
 }, Q = (s, i) => (o, d) => i(o, d, s);
-const k = "ProgressWidget";
-let S = class {
+const E = "ProgressWidget";
+let D = class {
   constructor(s, i) {
     this.events = s, this.actions = i;
   }
-  type = k;
+  type = E;
   name = "Progress";
   icon = tl;
   supportedDSTypes = [];
   component = Ke;
   settingsComponent = ll;
   register() {
-    this.events.registerWidget(k, ol), this.actions.registerWidgetType(k, D, "widget");
+    this.events.registerWidget(E, ol), this.actions.registerWidgetType(E, O, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(k), this.actions.unregisterWidgetType(k);
+    this.events.unregisterWidget(E), this.actions.unregisterWidgetType(E);
   }
 };
 B([
-  Te()
-], S.prototype, "register", 1);
+  Ie()
+], D.prototype, "register", 1);
 B([
   ke()
-], S.prototype, "unregister", 1);
-S = B([
+], D.prototype, "unregister", 1);
+D = B([
   Ee({
     service: [Ze],
-    properties: { "widget.type": k }
+    properties: { "widget.type": E }
   }),
   Q(0, Y(We)),
-  Q(1, Y(Ie))
-], S);
+  Q(1, Y(Te))
+], D);
 export {
   Ke as ProgressWidget,
-  S as ProgressWidgetProvider,
+  D as ProgressWidgetProvider,
   ll as ProgressWidgetSettings
 };

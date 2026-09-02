@@ -6,7 +6,7 @@
  */
 
 import { IBaseConnectionConfiguration } from 'org.eclipse.daanse.board.app.lib.datasource.base';
-import { Documentation, Attribute, ModelClass, Reference, Enum } from 'org.eclipse.daanse.board.app.lib.annotations';
+import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
 @Documentation("Configuration for an OGC SensorThings API (OGCSTA) data source, extending the base connection configuration.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.datasource.ogcsta#//IOGCSTAConfiguration' })

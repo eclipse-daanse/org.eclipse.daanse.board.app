@@ -1,53 +1,56 @@
-import { Documentation as lt, Attribute as ht, ModelClass as ft } from "org.eclipse.daanse.board.app.lib.annotations";
+import { Documentation as xe, Attribute as ht, ModelClass as ft } from "org.eclipse.daanse.board.app.lib.annotations";
 import { EVENT_REGISTRY_ID as gt, EVENT_ACTIONS_REGISTRY_ID as pt, EVENT_MANAGER_ID as kt, EVENT_BUS_BRIDGE_ID as Mt, ECORE_METADATA_SERVICE_ID as Ot } from "org.eclipse.daanse.board.app.lib.api.events";
 import { EVENT_ACTIONS_REGISTRY_ID as Yn, EVENT_REGISTRY_ID as qn } from "org.eclipse.daanse.board.app.lib.api.events";
 import { loggerFactory as dt } from "org.eclipse.daanse.board.app.lib.logger";
-import { injectable as cs, inject as it } from "@eclipse-daanse/tsm";
+import { injectable as cs, inject as at } from "@eclipse-daanse/tsm";
 const { TINY_EMITTER: Us } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var js = Object.defineProperty, $s = Object.getOwnPropertyDescriptor, Ve = (u, e, t, s) => {
+var js = Object.defineProperty, $s = Object.getOwnPropertyDescriptor, Je = (u, e, t, s) => {
   for (var r = s > 1 ? void 0 : s ? $s(e, t) : e, n = u.length - 1, i; n >= 0; n--)
     (i = u[n]) && (r = (s ? i(e, t, r) : i(r)) || r);
   return s && r && js(e, t, r), r;
 };
-let ke = class {
+let Me = class {
 };
-Ve([
-  lt("Type of the event (e.g., 'click_on_thing', 'click_on_datastream')."),
+Je([
+  xe("Type of the event (e.g., 'click_on_thing', 'click_on_datastream')."),
   ht()
-], ke.prototype, "eventType", 2);
-Ve([
-  lt("ID of the widget that emitted this event."),
+], Me.prototype, "eventType", 2);
+Je([
+  xe("ID of the widget that emitted this event."),
   ht()
-], ke.prototype, "widgetId", 2);
-Ve([
-  lt("Unix timestamp when the event was emitted."),
+], Me.prototype, "widgetId", 2);
+Je([
+  xe("Unix timestamp when the event was emitted."),
   ht()
-], ke.prototype, "timestamp", 2);
-Ve([
-  lt("Optional metadata object for additional context."),
+], Me.prototype, "timestamp", 2);
+Je([
+  xe("Optional metadata object for additional context."),
   ht()
-], ke.prototype, "metadata", 2);
-ke = Ve([
+], Me.prototype, "metadata", 2);
+Me = Je([
+  xe("Abstract base class for all event payloads."),
   ft({ type: "http://org.eclipse.daanse.board.app.lib.events#//Payload" })
-], ke);
+], Me);
 var Gs = Object.getOwnPropertyDescriptor, Ws = (u, e, t, s) => {
   for (var r = s > 1 ? void 0 : s ? Gs(e, t) : e, n = u.length - 1, i; n >= 0; n--)
     (i = u[n]) && (r = i(r) || r);
   return r;
 };
-let Ke = class {
+let He = class {
 };
-Ke = Ws([
+He = Ws([
+  xe("Abstract base class for all widget action interfaces. Widget-specific action interfaces should extend this class."),
   ft({ type: "http://org.eclipse.daanse.board.app.lib.events#//WidgetActionInterface" })
-], Ke);
+], He);
 var Xs = Object.getOwnPropertyDescriptor, zs = (u, e, t, s) => {
   for (var r = s > 1 ? void 0 : s ? Xs(e, t) : e, n = u.length - 1, i; n >= 0; n--)
     (i = u[n]) && (r = i(r) || r);
   return r;
 };
-let vt = class extends Ke {
+let vt = class extends He {
 };
 vt = zs([
+  xe("Abstract base class for all system-level action interfaces. System-specific action interfaces should extend this class."),
   ft({ type: "http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface" })
 ], vt);
 var Ys = Object.getOwnPropertyDescriptor, qs = (u, e, t, s) => {
@@ -55,9 +58,10 @@ var Ys = Object.getOwnPropertyDescriptor, qs = (u, e, t, s) => {
     (i = u[n]) && (r = i(r) || r);
   return r;
 };
-let At = class extends Ke {
+let At = class extends He {
 };
 At = qs([
+  xe("Abstract base class for all page-level action interfaces. Page-specific action interfaces should extend this class."),
   ft({ type: "http://org.eclipse.daanse.board.app.lib.events#//PageActionInterface" })
 ], At);
 var ve = /* @__PURE__ */ ((u) => (u.eq = "eq", u.lt = "lt", u.gt = "gt", u.lte = "lte", u.gte = "gte", u.neq = "neq", u))(ve || {});
@@ -153,22 +157,22 @@ function Js() {
         } : function(p, y) {
           return p[y];
         }
-      }, T = Object.getPrototypeOf(Function), v = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : nt(), P = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Ds(), D = typeof WeakMap == "function" ? WeakMap : Fs(), F = n ? Symbol.for("@reflect-metadata:registry") : void 0, x = ye(), te = Ct(x);
+      }, T = Object.getPrototypeOf(Function), v = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : it(), P = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Ds(), D = typeof WeakMap == "function" ? WeakMap : Fs(), F = n ? Symbol.for("@reflect-metadata:registry") : void 0, x = ye(), te = Ct(x);
       function he(p, y, C, S) {
         if (R(C)) {
-          if (!st(p))
+          if (!rt(p))
             throw new TypeError();
           if (!a(y))
             throw new TypeError();
           return yt(p, y);
         } else {
-          if (!st(p))
+          if (!rt(p))
             throw new TypeError();
           if (!$(y))
             throw new TypeError();
           if (!$(S) && !R(S) && !_e(S))
             throw new TypeError();
-          return _e(S) && (S = void 0), C = fe(C), Qe(p, y, C, S);
+          return _e(S) && (S = void 0), C = fe(C), Ze(p, y, C, S);
         }
       }
       t("decorate", he);
@@ -178,7 +182,7 @@ function Js() {
             throw new TypeError();
           if (!R(w) && !E(w))
             throw new TypeError();
-          je(p, y, S, w);
+          $e(p, y, S, w);
         }
         return C;
       }
@@ -186,19 +190,19 @@ function Js() {
       function j(p, y, C, S) {
         if (!$(C))
           throw new TypeError();
-        return R(S) || (S = fe(S)), je(p, y, C, S);
+        return R(S) || (S = fe(S)), $e(p, y, C, S);
       }
       t("defineMetadata", j);
       function ce(p, y, C) {
         if (!$(y))
           throw new TypeError();
-        return R(C) || (C = fe(C)), Ze(p, y, C);
+        return R(C) || (C = fe(C)), et(p, y, C);
       }
       t("hasMetadata", ce);
       function Se(p, y, C) {
         if (!$(y))
           throw new TypeError();
-        return R(C) || (C = fe(C)), Ue(p, y, C);
+        return R(C) || (C = fe(C)), je(p, y, C);
       }
       t("hasOwnMetadata", Se);
       function ue(p, y, C) {
@@ -219,13 +223,13 @@ function Js() {
         return R(y) || (y = fe(y)), Ne(p, y);
       }
       t("getMetadataKeys", d);
-      function Je(p, y) {
+      function Qe(p, y) {
         if (!$(p))
           throw new TypeError();
-        return R(y) || (y = fe(y)), $e(p, y);
+        return R(y) || (y = fe(y)), Ge(p, y);
       }
-      t("getOwnMetadataKeys", Je);
-      function xe(p, y, C) {
+      t("getOwnMetadataKeys", Qe);
+      function ke(p, y, C) {
         if (!$(y))
           throw new TypeError();
         if (R(C) || (C = fe(C)), !$(y))
@@ -239,7 +243,7 @@ function Js() {
         );
         return R(S) ? !1 : S.OrdinaryDeleteMetadata(p, y, C);
       }
-      t("deleteMetadata", xe);
+      t("deleteMetadata", ke);
       function yt(p, y) {
         for (var C = p.length - 1; C >= 0; --C) {
           var S = p[C], w = S(y);
@@ -251,7 +255,7 @@ function Js() {
         }
         return y;
       }
-      function Qe(p, y, C, S) {
+      function Ze(p, y, C, S) {
         for (var w = p.length - 1; w >= 0; --w) {
           var Z = p[w], re = Z(y, C, S);
           if (!R(re) && !_e(re)) {
@@ -262,24 +266,24 @@ function Js() {
         }
         return S;
       }
-      function Ze(p, y, C) {
-        var S = Ue(p, y, C);
+      function et(p, y, C) {
+        var S = je(p, y, C);
         if (S)
           return !0;
         var w = ge(y);
-        return _e(w) ? !1 : Ze(p, w, C);
+        return _e(w) ? !1 : et(p, w, C);
       }
-      function Ue(p, y, C) {
+      function je(p, y, C) {
         var S = be(
           y,
           C,
           /*Create*/
           !1
         );
-        return R(S) ? !1 : et(S.OrdinaryHasOwnMetadata(p, y, C));
+        return R(S) ? !1 : tt(S.OrdinaryHasOwnMetadata(p, y, C));
       }
       function H(p, y, C) {
-        var S = Ue(p, y, C);
+        var S = je(p, y, C);
         if (S)
           return we(p, y, C);
         var w = ge(y);
@@ -296,7 +300,7 @@ function Js() {
         if (!R(S))
           return S.OrdinaryGetOwnMetadata(p, y, C);
       }
-      function je(p, y, C, S) {
+      function $e(p, y, C, S) {
         var w = be(
           C,
           S,
@@ -306,7 +310,7 @@ function Js() {
         w.OrdinaryDefineOwnMetadata(p, y, C, S);
       }
       function Ne(p, y) {
-        var C = $e(p, y), S = ge(p);
+        var C = Ge(p, y), S = ge(p);
         if (S === null)
           return C;
         var w = Ne(S, y);
@@ -324,7 +328,7 @@ function Js() {
         }
         return re;
       }
-      function $e(p, y) {
+      function Ge(p, y) {
         var C = be(
           p,
           y,
@@ -359,13 +363,13 @@ function Js() {
       function _e(p) {
         return p === null;
       }
-      function Ge(p) {
+      function We(p) {
         return typeof p == "symbol";
       }
       function $(p) {
         return typeof p == "object" ? p !== null : typeof p == "function";
       }
-      function We(p, y) {
+      function Xe(p, y) {
         switch (U(p)) {
           case 0:
             return p;
@@ -407,17 +411,17 @@ function Js() {
         }
         throw new TypeError();
       }
-      function et(p) {
+      function tt(p) {
         return !!p;
       }
-      function tt(p) {
+      function st(p) {
         return "" + p;
       }
       function fe(p) {
-        var y = We(p);
-        return Ge(y) ? y : tt(y);
+        var y = Xe(p);
+        return We(y) ? y : st(y);
       }
-      function st(p) {
+      function rt(p) {
         return Array.isArray ? Array.isArray(p) : p instanceof Object ? p instanceof Array : Object.prototype.toString.call(p) === "[object Array]";
       }
       function c(p) {
@@ -479,7 +483,7 @@ function Js() {
       }
       function se() {
         var p;
-        !R(F) && typeof s.Reflect < "u" && !(F in s.Reflect) && typeof s.Reflect.defineMetadata == "function" && (p = rt(s.Reflect));
+        !R(F) && typeof s.Reflect < "u" && !(F in s.Reflect) && typeof s.Reflect.defineMetadata == "function" && (p = nt(s.Reflect));
         var y, C, S, w = new D(), Z = {
           registerProvider: re,
           getProvider: N,
@@ -595,7 +599,7 @@ function Js() {
             /*Create*/
             !1
           );
-          return R(O) ? !1 : et(O.has(_));
+          return R(O) ? !1 : tt(O.has(_));
         }
         function Z(_, b, A) {
           var O = S(
@@ -658,7 +662,7 @@ function Js() {
           return !0;
         }
       }
-      function rt(p) {
+      function nt(p) {
         var y = p.defineMetadata, C = p.hasOwnMetadata, S = p.getOwnMetadata, w = p.getOwnMetadataKeys, Z = p.deleteMetadata, re = new D(), M = {
           isProviderFor: function(N, _) {
             var b = re.get(N);
@@ -682,7 +686,7 @@ function Js() {
           throw new Error("Illegal state.");
         }
       }
-      function nt() {
+      function it() {
         var p = {}, y = [], C = (
           /** @class */
           (function() {
@@ -1012,7 +1016,7 @@ class us {
       this.events.delete(s);
   }
 }
-const ls = Symbol.for(gt), Oe = dt.createLogger("daanse:events:decorator"), It = Symbol.for("daanse:widgetAction"), wt = Symbol.for("daanse:actionParameter");
+const ls = Symbol.for(gt), De = dt.createLogger("daanse:events:decorator"), It = Symbol.for("daanse:widgetAction"), wt = Symbol.for("daanse:actionParameter");
 function Qs(u) {
   return function(e, t, s) {
     const r = Reflect.getMetadata(It, e.constructor) || [], n = Reflect.getMetadata("design:paramtypes", e, t) || [];
@@ -1072,7 +1076,7 @@ function Zs(u) {
       name: l || `arg${s}`,
       type: g || "any",
       optional: m
-    }), Reflect.defineMetadata(wt, n, e, r), Oe(
+    }), Reflect.defineMetadata(wt, n, e, r), De(
       "ActionParameter: %s[%d] = %s: %s%s",
       r,
       s,
@@ -1084,9 +1088,9 @@ function Zs(u) {
 }
 function hs(u) {
   const e = typeof u == "function" ? u : u.constructor;
-  Oe("getWidgetActions called with target: %o", u), Oe("  constructor: %o", e), Oe("  constructor.name: %s", e?.name);
+  De("getWidgetActions called with target: %o", u), De("  constructor: %o", e), De("  constructor.name: %s", e?.name);
   const t = Reflect.getMetadataKeys(e);
-  Oe("  All metadata keys: %o", t);
+  De("  All metadata keys: %o", t);
   let s = Reflect.getMetadata(It, e) || [];
   return s = s.map((r) => {
     const n = Reflect.getMetadata(wt, e.prototype, r.methodName) || [];
@@ -1097,7 +1101,7 @@ function hs(u) {
       );
     }
     return r;
-  }), Oe("  Actions found: %o", s), s;
+  }), De("  Actions found: %o", s), s;
 }
 class fs {
   constructor() {
@@ -1431,7 +1435,7 @@ var er = Object.getOwnPropertyDescriptor, tr = (u, e, t, s) => {
   return r;
 }, sr = (u, e) => (t, s) => e(t, s, u);
 const pe = dt.createLogger("daanse:events:manager");
-let at = class {
+let ot = class {
   constructor(u) {
     this.actionsRegistry = u, this.mappings = /* @__PURE__ */ new Map();
   }
@@ -1624,10 +1628,10 @@ let at = class {
     this.mappings.clear();
   }
 };
-at = tr([
+ot = tr([
   cs(),
-  sr(0, it("EventActionsRegistry"))
-], at);
+  sr(0, at("EventActionsRegistry"))
+], ot);
 const ps = Symbol.for(kt);
 var rr = Object.getOwnPropertyDescriptor, nr = (u, e, t, s) => {
   for (var r = s > 1 ? void 0 : s ? rr(e, t) : e, n = u.length - 1, i; n >= 0; n--)
@@ -1635,7 +1639,7 @@ var rr = Object.getOwnPropertyDescriptor, nr = (u, e, t, s) => {
   return r;
 }, St = (u, e) => (t, s) => e(t, s, u);
 const le = dt.createLogger("daanse:events:bridge");
-let ot = class {
+let ct = class {
   constructor(u, e, t) {
     this.eventManager = u, this.eventRegistry = e, this.actionsRegistry = t, this.isSetup = !1, this.registeredListeners = /* @__PURE__ */ new Set();
   }
@@ -1736,12 +1740,12 @@ let ot = class {
     }
   }
 };
-ot = nr([
+ct = nr([
   cs(),
-  St(0, it("EventManager")),
-  St(1, it("EventRegistry")),
-  St(2, it("EventActionsRegistry"))
-], ot);
+  St(0, at("EventManager")),
+  St(1, at("EventRegistry")),
+  St(2, at("EventActionsRegistry"))
+], ct);
 const ds = Symbol.for(Mt);
 function Pe(u) {
   return u && typeof u.eProxyURI == "function" && typeof u.eSetProxyURI == "function";
@@ -1766,7 +1770,7 @@ const B = {
   /** A proxy has been resolved */
   RESOLVE: 9
 }, Dt = -1, ir = -1;
-class Ye {
+class qe {
   constructor(e, t, s, r, n, i = Dt, o = !0) {
     this.notifier = e, this.eventType = t, this.feature = s, this.featureID = ir, this.oldValue = r, this.newValue = n, this.position = i, this.wasSetFlag = o;
   }
@@ -2173,7 +2177,7 @@ class me {
         return;
     } else
       return;
-    const i = new Ye(this.owner, e, n, t, s, r);
+    const i = new qe(this.owner, e, n, t, s, r);
     "eNotify" in this.owner && this.owner.eNotify(i);
   }
 }
@@ -2464,7 +2468,7 @@ class dr extends me {
         return;
     } else
       return;
-    const n = { getName: () => "contents" }, i = new Ye(this.resource, e, n, t, s, r);
+    const n = { getName: () => "contents" }, i = new qe(this.resource, e, n, t, s, r);
     "eNotify" in this.resource && this.resource.eNotify(i);
   }
 }
@@ -3031,7 +3035,7 @@ class Te {
     const t = this._eAdapters.indexOf(e);
     if (t !== -1) {
       if (this._eDeliver) {
-        const s = new Ye(this, B.REMOVING_ADAPTER, null, e, null);
+        const s = new qe(this, B.REMOVING_ADAPTER, null, e, null);
         e.notifyChanged(s);
       }
       return this._eAdapters.splice(t, 1), Er(e) ? e.unsetTarget(this) : e.setTarget(null), !0;
@@ -3078,7 +3082,7 @@ class Te {
           t.eSetContainer(this, n);
     }
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const n = new Ye(this, B.SET, e, r, t);
+      const n = new qe(this, B.SET, e, r, t);
       this.eNotify(n);
     }
   }
@@ -3100,7 +3104,7 @@ class Te {
           n && "eSetContainer" in n && n.eSetContainer(null, null);
       else typeof s == "object" && "eSetContainer" in s && s.eSetContainer(null, null);
     if (this._eDeliver && this._eAdapters.length > 0) {
-      const r = new Ye(this, B.UNSET, e, s, e.getDefaultValue());
+      const r = new qe(this, B.UNSET, e, s, e.getDefaultValue());
       this.eNotify(r);
     }
   }
@@ -3380,10 +3384,10 @@ class Tr {
 function Sr(u, e, t) {
   return new Tr(u, e, t);
 }
-var He;
+var Ve;
 (function(u) {
   u.INSTANCE_FACTORY_REGISTRY = Nr();
-})(He || (He = {}));
+})(Ve || (Ve = {}));
 function Nr() {
   const u = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map(), t = /* @__PURE__ */ new Map();
   return {
@@ -3695,7 +3699,7 @@ function Ar() {
         if (!(this instanceof s))
           return new s(c, a);
         var E = this;
-        n(E), E.q = E.c = "", E.bufferCheckPosition = e.MAX_BUFFER_LENGTH, E.encoding = null, E.opt = a || {}, E.opt.lowercase = E.opt.lowercase || E.opt.lowercasetags, E.looseCase = E.opt.lowercase ? "toLowerCase" : "toUpperCase", E.opt.maxEntityCount = E.opt.maxEntityCount || 512, E.opt.maxEntityDepth = E.opt.maxEntityDepth || 4, E.entityCount = E.entityDepth = 0, E.tags = [], E.closed = E.closedRoot = E.sawRoot = !1, E.tag = E.error = null, E.strict = !!c, E.noscript = !!(c || E.opt.noscript), E.state = d.BEGIN, E.strictEntities = E.opt.strictEntities, E.ENTITIES = E.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), E.attribList = [], E.opt.xmlns && (E.ns = Object.create(F)), E.opt.unquotedAttributeValues === void 0 && (E.opt.unquotedAttributeValues = !c), E.trackPosition = E.opt.position !== !1, E.trackPosition && (E.position = E.line = E.column = 0), xe(E, "onready");
+        n(E), E.q = E.c = "", E.bufferCheckPosition = e.MAX_BUFFER_LENGTH, E.encoding = null, E.opt = a || {}, E.opt.lowercase = E.opt.lowercase || E.opt.lowercasetags, E.looseCase = E.opt.lowercase ? "toLowerCase" : "toUpperCase", E.opt.maxEntityCount = E.opt.maxEntityCount || 512, E.opt.maxEntityDepth = E.opt.maxEntityDepth || 4, E.entityCount = E.entityDepth = 0, E.tags = [], E.closed = E.closedRoot = E.sawRoot = !1, E.tag = E.error = null, E.strict = !!c, E.noscript = !!(c || E.opt.noscript), E.state = d.BEGIN, E.strictEntities = E.opt.strictEntities, E.ENTITIES = E.strictEntities ? Object.create(e.XML_ENTITIES) : Object.create(e.ENTITIES), E.attribList = [], E.opt.xmlns && (E.ns = Object.create(F)), E.opt.unquotedAttributeValues === void 0 && (E.opt.unquotedAttributeValues = !c), E.trackPosition = E.opt.position !== !1, E.trackPosition && (E.position = E.line = E.column = 0), ke(E, "onready");
       }
       Object.create || (Object.create = function(c) {
         function a() {
@@ -3739,9 +3743,9 @@ function Ar() {
       }
       s.prototype = {
         end: function() {
-          $e(this);
+          Ge(this);
         },
-        write: st,
+        write: rt,
         resume: function() {
           return this.error = null, this;
         },
@@ -4191,49 +4195,49 @@ function Ar() {
         var a = e.ENTITIES[c], E = typeof a == "number" ? String.fromCharCode(a) : a;
         e.ENTITIES[c] = E;
       });
-      for (var Je in e.STATE)
-        e.STATE[e.STATE[Je]] = Je;
+      for (var Qe in e.STATE)
+        e.STATE[e.STATE[Qe]] = Qe;
       d = e.STATE;
-      function xe(c, a, E) {
+      function ke(c, a, E) {
         c[a] && c[a](E);
       }
       function yt(c) {
         var a = c && c.match(/(?:^|\s)encoding\s*=\s*(['"])([^'"]+)\1/i);
         return a ? a[2] : null;
       }
-      function Qe(c) {
+      function Ze(c) {
         return c ? c.toLowerCase().replace(/[^a-z0-9]/g, "") : null;
       }
-      function Ze(c, a) {
-        const E = Qe(c), f = Qe(a);
+      function et(c, a) {
+        const E = Ze(c), f = Ze(a);
         return !E || !f ? !0 : f === "utf16" ? E === "utf16le" || E === "utf16be" : E === f;
       }
-      function Ue(c, a) {
+      function je(c, a) {
         if (!(!c.strict || !c.encoding || !a || a.name !== "xml")) {
           var E = yt(a.body);
-          E && !Ze(c.encoding, E) && U(
+          E && !et(c.encoding, E) && U(
             c,
             "XML declaration encoding " + E + " does not match detected stream encoding " + c.encoding.toUpperCase()
           );
         }
       }
       function H(c, a, E) {
-        c.textNode && we(c), xe(c, a, E);
+        c.textNode && we(c), ke(c, a, E);
       }
       function we(c) {
-        c.textNode = je(c.opt, c.textNode), c.textNode && xe(c, "ontext", c.textNode), c.textNode = "";
+        c.textNode = $e(c.opt, c.textNode), c.textNode && ke(c, "ontext", c.textNode), c.textNode = "";
       }
-      function je(c, a) {
+      function $e(c, a) {
         return c.trim && (a = a.trim()), c.normalize && (a = a.replace(/\s+/g, " ")), a;
       }
       function Ne(c, a) {
         return we(c), c.trackPosition && (a += `
 Line: ` + c.line + `
 Column: ` + c.column + `
-Char: ` + c.c), a = new Error(a), c.error = a, xe(c, "onerror", a), c;
+Char: ` + c.c), a = new Error(a), c.error = a, ke(c, "onerror", a), c;
       }
-      function $e(c) {
-        return c.sawRoot && !c.closedRoot && U(c, "Unclosed root tag"), c.state !== d.BEGIN && c.state !== d.BEGIN_WHITESPACE && c.state !== d.TEXT && Ne(c, "Unexpected end"), we(c), c.c = "", c.closed = !0, xe(c, "onend"), s.call(c, c.strict, c.opt), c;
+      function Ge(c) {
+        return c.sawRoot && !c.closedRoot && U(c, "Unclosed root tag"), c.state !== d.BEGIN && c.state !== d.BEGIN_WHITESPACE && c.state !== d.TEXT && Ne(c, "Unexpected end"), we(c), c.c = "", c.closed = !0, ke(c, "onend"), s.call(c, c.strict, c.opt), c;
       }
       function U(c, a) {
         if (typeof c != "object" || !(c instanceof s))
@@ -4249,7 +4253,7 @@ Char: ` + c.c), a = new Error(a), c.error = a, xe(c, "onerror", a), c;
         var E = c.indexOf(":"), f = E < 0 ? ["", c] : c.split(":"), L = f[0], q = f[1];
         return a && c === "xmlns" && (L = "xmlns", q = ""), { prefix: L, local: q };
       }
-      function Ge(c) {
+      function We(c) {
         if (c.strict || (c.attribName = c.attribName[c.looseCase]()), c.attribList.indexOf(c.attribName) !== -1 || c.tag.attributes.hasOwnProperty(c.attribName)) {
           c.attribName = c.attribValue = "";
           return;
@@ -4289,21 +4293,21 @@ Actual: ` + c.attribValue
             "Unbound namespace prefix: " + JSON.stringify(c.tagName)
           ), E.uri = f.prefix);
           var L = c.tags[c.tags.length - 1] || c;
-          E.ns && L.ns !== E.ns && Object.keys(E.ns).forEach(function(nt) {
+          E.ns && L.ns !== E.ns && Object.keys(E.ns).forEach(function(it) {
             H(c, "onopennamespace", {
-              prefix: nt,
-              uri: E.ns[nt]
+              prefix: it,
+              uri: E.ns[it]
             });
           });
           for (var q = 0, J = c.attribList.length; q < J; q++) {
-            var ne = c.attribList[q], ie = ne[0], ge = ne[1], se = _e(ie, !0), ye = se.prefix, Ct = se.local, rt = ye === "" ? "" : E.ns[ye] || "", be = {
+            var ne = c.attribList[q], ie = ne[0], ge = ne[1], se = _e(ie, !0), ye = se.prefix, Ct = se.local, nt = ye === "" ? "" : E.ns[ye] || "", be = {
               name: ie,
               value: ge,
               prefix: ye,
               local: Ct,
-              uri: rt
+              uri: nt
             };
-            ye && ye !== "xmlns" && !rt && (U(
+            ye && ye !== "xmlns" && !nt && (U(
               c,
               "Unbound namespace prefix: " + JSON.stringify(ye)
             ), be.uri = ye), c.tag.attributes[ie] = be, H(c, "onattribute", be);
@@ -4312,7 +4316,7 @@ Actual: ` + c.attribValue
         }
         c.tag.isSelfClosing = !!a, c.sawRoot = !0, c.tags.push(c.tag), H(c, "onopentag", c.tag), a || (!c.noscript && c.tagName.toLowerCase() === "script" ? c.state = d.SCRIPT : c.state = d.TEXT, c.tag = null, c.tagName = ""), c.attribName = c.attribValue = "", c.attribList.length = 0;
       }
-      function We(c) {
+      function Xe(c) {
         if (!c.tagName) {
           U(c, "Weird empty close tag."), c.textNode += "</>", c.state = d.TEXT;
           return;
@@ -4354,19 +4358,19 @@ Actual: ` + c.attribValue
       }
       function Et(c) {
         var a = c.entity, E = a.toLowerCase(), f, L = "";
-        return c.ENTITIES[a] ? c.ENTITIES[a] : c.ENTITIES[E] ? c.ENTITIES[E] : (a = E, a.charAt(0) === "#" && (a.charAt(1) === "x" ? (a = a.slice(2), f = parseInt(a, 16), L = f.toString(16)) : (a = a.slice(1), f = parseInt(a, 10), L = f.toString(10))), a = a.replace(/^0+/, ""), isNaN(f) || L.toLowerCase() !== a || f < 0 || f > 1114111 || !et(f) ? (U(c, "Invalid character entity"), "&" + c.entity + ";") : String.fromCodePoint(f));
+        return c.ENTITIES[a] ? c.ENTITIES[a] : c.ENTITIES[E] ? c.ENTITIES[E] : (a = E, a.charAt(0) === "#" && (a.charAt(1) === "x" ? (a = a.slice(2), f = parseInt(a, 16), L = f.toString(16)) : (a = a.slice(1), f = parseInt(a, 10), L = f.toString(10))), a = a.replace(/^0+/, ""), isNaN(f) || L.toLowerCase() !== a || f < 0 || f > 1114111 || !tt(f) ? (U(c, "Invalid character entity"), "&" + c.entity + ";") : String.fromCodePoint(f));
       }
-      function et(c) {
+      function tt(c) {
         return c === 9 || c === 10 || c === 13 || c >= 32 && c <= 55295 || c >= 57344 && c <= 65533 || c >= 65536 && c <= 1114111;
       }
-      function tt(c, a) {
+      function st(c, a) {
         a === "<" ? (c.state = d.OPEN_WAKA, c.startTagPosition = c.position) : j(a) || (U(c, "Non-whitespace before first tag."), c.textNode = a, c.state = d.TEXT);
       }
       function fe(c, a) {
         var E = "";
         return a < c.length && (E = c.charAt(a)), E;
       }
-      function st(c) {
+      function rt(c) {
         var a = this;
         if (this.error)
           throw this.error;
@@ -4376,7 +4380,7 @@ Actual: ` + c.attribValue
             "Cannot write after close. Assign an onready handler."
           );
         if (c === null)
-          return $e(a);
+          return Ge(a);
         typeof c == "object" && (c = c.toString());
         for (var E = 0, f = ""; f = fe(c, E++), a.c = f, !!f; )
           switch (a.trackPosition && (a.position++, f === `
@@ -4384,10 +4388,10 @@ Actual: ` + c.attribValue
             case d.BEGIN:
               if (a.state = d.BEGIN_WHITESPACE, f === "\uFEFF")
                 continue;
-              tt(a, f);
+              st(a, f);
               continue;
             case d.BEGIN_WHITESPACE:
-              tt(a, f);
+              st(a, f);
               continue;
             case d.TEXT:
               if (a.sawRoot && !a.closedRoot) {
@@ -4450,7 +4454,7 @@ Actual: ` + c.attribValue
               f === "-" ? a.state = d.COMMENT_ENDING : a.comment += f;
               continue;
             case d.COMMENT_ENDING:
-              f === "-" ? (a.state = d.COMMENT_ENDED, a.comment = je(a.opt, a.comment), a.comment && H(a, "oncomment", a.comment), a.comment = "") : (a.comment += "-" + f, a.state = d.COMMENT);
+              f === "-" ? (a.state = d.COMMENT_ENDED, a.comment = $e(a.opt, a.comment), a.comment && H(a, "oncomment", a.comment), a.comment = "") : (a.comment += "-" + f, a.state = d.COMMENT);
               continue;
             case d.COMMENT_ENDED:
               f !== ">" ? (U(a, "Malformed comment"), a.comment += "--" + f, a.state = d.COMMENT) : a.doctype && a.doctype !== !0 ? a.state = d.DOCTYPE_DTD : a.state = d.TEXT;
@@ -4481,7 +4485,7 @@ Actual: ` + c.attribValue
                   name: a.procInstName,
                   body: a.procInstBody
                 };
-                Ue(a, ge), H(a, "onprocessinginstruction", ge), a.procInstName = a.procInstBody = "", a.state = d.TEXT;
+                je(a, ge), H(a, "onprocessinginstruction", ge), a.procInstName = a.procInstBody = "", a.state = d.TEXT;
               } else
                 a.procInstBody += "?" + f, a.state = d.PROC_INST_BODY;
               continue;
@@ -4489,7 +4493,7 @@ Actual: ` + c.attribValue
               ue(te, f) ? a.tagName += f : (R(a), f === ">" ? $(a) : f === "/" ? a.state = d.OPEN_TAG_SLASH : (j(f) || U(a, "Invalid character in tag name"), a.state = d.ATTRIB));
               continue;
             case d.OPEN_TAG_SLASH:
-              f === ">" ? ($(a, !0), We(a)) : (U(
+              f === ">" ? ($(a, !0), Xe(a)) : (U(
                 a,
                 "Forward-slash in opening tag not followed by >"
               ), a.state = d.ATTRIB);
@@ -4500,7 +4504,7 @@ Actual: ` + c.attribValue
               f === ">" ? $(a) : f === "/" ? a.state = d.OPEN_TAG_SLASH : ue(x, f) ? (a.attribName = f, a.attribValue = "", a.state = d.ATTRIB_NAME) : U(a, "Invalid attribute name");
               continue;
             case d.ATTRIB_NAME:
-              f === "=" ? a.state = d.ATTRIB_VALUE : f === ">" ? (U(a, "Attribute without value"), a.attribValue = a.attribName, Ge(a), $(a)) : j(f) ? a.state = d.ATTRIB_NAME_SAW_WHITE : ue(te, f) ? a.attribName += f : U(a, "Invalid attribute name");
+              f === "=" ? a.state = d.ATTRIB_VALUE : f === ">" ? (U(a, "Attribute without value"), a.attribValue = a.attribName, We(a), $(a)) : j(f) ? a.state = d.ATTRIB_NAME_SAW_WHITE : ue(te, f) ? a.attribName += f : U(a, "Invalid attribute name");
               continue;
             case d.ATTRIB_NAME_SAW_WHITE:
               if (f === "=")
@@ -4524,7 +4528,7 @@ Actual: ` + c.attribValue
                 f === "&" ? a.state = d.ATTRIB_VALUE_ENTITY_Q : a.attribValue += f;
                 continue;
               }
-              Ge(a), a.q = "", a.state = d.ATTRIB_VALUE_CLOSED;
+              We(a), a.q = "", a.state = d.ATTRIB_VALUE_CLOSED;
               continue;
             case d.ATTRIB_VALUE_CLOSED:
               j(f) ? a.state = d.ATTRIB : f === ">" ? $(a) : f === "/" ? a.state = d.OPEN_TAG_SLASH : ue(x, f) ? (U(a, "No whitespace between attributes"), a.attribName = f, a.attribValue = "", a.state = d.ATTRIB_NAME) : U(a, "Invalid attribute name");
@@ -4534,11 +4538,11 @@ Actual: ` + c.attribValue
                 f === "&" ? a.state = d.ATTRIB_VALUE_ENTITY_U : a.attribValue += f;
                 continue;
               }
-              Ge(a), f === ">" ? $(a) : a.state = d.ATTRIB;
+              We(a), f === ">" ? $(a) : a.state = d.ATTRIB;
               continue;
             case d.CLOSE_TAG:
               if (a.tagName)
-                f === ">" ? We(a) : ue(te, f) ? a.tagName += f : a.script ? (a.script += "</" + a.tagName + f, a.tagName = "", a.state = d.SCRIPT) : (j(f) || U(a, "Invalid tagname in closing tag"), a.state = d.CLOSE_TAG_SAW_WHITE);
+                f === ">" ? Xe(a) : ue(te, f) ? a.tagName += f : a.script ? (a.script += "</" + a.tagName + f, a.tagName = "", a.state = d.SCRIPT) : (j(f) || U(a, "Invalid tagname in closing tag"), a.state = d.CLOSE_TAG_SAW_WHITE);
               else {
                 if (j(f))
                   continue;
@@ -4548,7 +4552,7 @@ Actual: ` + c.attribValue
             case d.CLOSE_TAG_SAW_WHITE:
               if (j(f))
                 continue;
-              f === ">" ? We(a) : U(a, "Invalid characters in closing tag");
+              f === ">" ? Xe(a) : U(a, "Invalid characters in closing tag");
               continue;
             case d.TEXT_ENTITY:
             case d.ATTRIB_VALUE_ENTITY_Q:
@@ -4608,7 +4612,7 @@ Actual: ` + c.attribValue
   })(_t)), _t;
 }
 var Ir = Ar();
-const wr = /* @__PURE__ */ Hs(Ir), qt = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData", Rr = 0, Pr = 1, Lt = 2, xr = 3, kr = 4, Mr = 0, Or = 1, qe = 2, Kt = 3, Dr = 4, Fr = 5, Br = 6;
+const wr = /* @__PURE__ */ Hs(Ir), qt = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData", Rr = 0, Pr = 1, Lt = 2, xr = 3, kr = 4, Mr = 0, Or = 1, Ke = 2, Kt = 3, Dr = 4, Fr = 5, Br = 6;
 class Ht {
   constructor() {
     this.contentKindCache = /* @__PURE__ */ new Map(), this.featureKindCache = /* @__PURE__ */ new Map(), this.nameCache = /* @__PURE__ */ new Map(), this.namespaceCache = /* @__PURE__ */ new Map(), this.simpleContentFeatureCache = /* @__PURE__ */ new Map();
@@ -4654,7 +4658,7 @@ class Ht {
           t = Or;
           break;
         case "element":
-          t = qe;
+          t = Ke;
           break;
         case "attribute":
           t = Kt;
@@ -4716,7 +4720,7 @@ class Ht {
    */
   getElementFeature(e, t, s) {
     for (const r of e.getEAllStructuralFeatures()) {
-      if (this.getFeatureKind(r) !== qe)
+      if (this.getFeatureKind(r) !== Ke)
         continue;
       const i = this.getName(r) ?? r.getName();
       if (i !== s)
@@ -5085,7 +5089,7 @@ class _s {
     return `EProxy(${this._proxyURI?.toString() || "null"})`;
   }
 }
-function Be(u, e) {
+function Le(u, e) {
   let t = e;
   for (; t.startsWith("/"); )
     t = t.substring(1);
@@ -5111,7 +5115,7 @@ function Be(u, e) {
   }
   return n.getEClassifier(r);
 }
-const Xe = "error", Me = "object", Qt = "reference", bt = "xmiWrapper", Zt = "deferredType";
+const ze = "error", Oe = "object", Qt = "reference", bt = "xmiWrapper", Zt = "deferredType";
 class Gr {
   constructor() {
     this.attrs = [];
@@ -5144,7 +5148,7 @@ class Gr {
     return this.attrs.find((r) => r.uri === e && r.localName === t)?.value ?? null;
   }
 }
-const De = "http://www.w3.org/2001/XMLSchema-instance", xt = "http://www.omg.org/XMI", es = "xmlns", Wr = "type", Xr = "nil", zr = "schemaLocation", ts = "href", Yr = "id";
+const Fe = "http://www.w3.org/2001/XMLSchema-instance", xt = "http://www.omg.org/XMI", es = "xmlns", Wr = "type", Xr = "nil", zr = "schemaLocation", ts = "href", Yr = "id";
 class bs {
   constructor(e, t, s) {
     this.elements = [], this.objects = [], this.types = [], this.prefixesToFactories = /* @__PURE__ */ new Map(), this.urisToLocations = /* @__PURE__ */ new Map(), this.forwardSingleReferences = [], this.sameDocumentProxies = [], this.attribs = null, this.text = null, this.isRoot = !0, this.isNamespaceAware = !1, this.needsPushContext = !1, this.deferredFeature = null, this.deferredParent = null, this.deferredExtent = null, this.resolve = !0, this.useNewMethods = !0, this.errors = [], this.lineNumber = 0, this.columnNumber = 0, this.resource = e, this.helper = t, this.packageRegistry = e.getResourceSet()?.getPackageRegistry() || de.INSTANCE, this.extent = e.getContents(), s && this.processOptions(s);
@@ -5189,7 +5193,7 @@ class bs {
   endElement(e, t, s) {
     this.elements.pop();
     const r = this.types.pop();
-    if (r === Me) {
+    if (r === Oe) {
       const n = this.objects.pop();
       if (this.text !== null && this.text.length > 0 && n) {
         const i = this.text.trim();
@@ -5206,7 +5210,7 @@ class bs {
         }
       }
       this.text = null;
-    } else if (r === Xe)
+    } else if (r === ze)
       this.objects.pop(), this.text = null;
     else if (r === Qt)
       this.objects.pop(), this.text = null;
@@ -5257,7 +5261,7 @@ class bs {
   handleSchemaLocation() {
     if (!this.attribs)
       return;
-    const e = this.attribs.getValueByName(De, zr);
+    const e = this.attribs.getValueByName(Fe, zr);
     e && this.handleXSISchemaLocation(e);
   }
   handleXSISchemaLocation(e) {
@@ -5295,7 +5299,7 @@ class bs {
    * Get xsi:type attribute value
    */
   getXSIType() {
-    return this.attribs ? this.attribs.getValueByName(De, Wr) : null;
+    return this.attribs ? this.attribs.getValueByName(Fe, Wr) : null;
   }
   /**
    * Create object based on xsi:type
@@ -5320,7 +5324,7 @@ class bs {
    * Push object onto stack
    */
   processObject(e) {
-    this.objects.push(e), this.types.push(e ? Me : Xe);
+    this.objects.push(e), this.types.push(e ? Oe : ze);
   }
   /**
    * Handle object attributes
@@ -5329,7 +5333,7 @@ class bs {
     if (this.attribs)
       for (let t = 0; t < this.attribs.getLength(); t++) {
         const s = this.attribs.getQName(t), r = this.attribs.getValue(t), n = this.attribs.getURI(t), i = this.attribs.getLocalName(t);
-        if (!s.startsWith(es) && n !== De) {
+        if (!s.startsWith(es) && n !== Fe) {
           if (n === xt) {
             i === Yr && this.handleId(e, r);
             continue;
@@ -5360,7 +5364,7 @@ class bs {
         this.handleDeferredType(e, t);
         return;
       }
-      this.objects.push(null), this.types.push(Xe), this.error(`Feature '${t}' has no parent object`);
+      this.objects.push(null), this.types.push(ze), this.error(`Feature '${t}' has no parent object`);
       return;
     }
     const r = s.eClass(), n = e && this.helper.getURI(e) || null, i = this.helper.getFeatureWithElement(r, n, t, !0);
@@ -5374,7 +5378,7 @@ class bs {
    * Check if xsi:nil="true"
    */
   isNull() {
-    return this.attribs ? this.attribs.getValueByName(De, Xr) === "true" : !1;
+    return this.attribs ? this.attribs.getValueByName(Fe, Xr) === "true" : !1;
   }
   /**
    * Create child object for reference
@@ -5398,7 +5402,7 @@ class bs {
           if (h > 0) {
             const m = l.substring(0, h), g = l.substring(h + 1), T = this.packageRegistry.getEPackage(m);
             if (T) {
-              const v = Be(T, g);
+              const v = Le(T, g);
               v && (i = v, typeof t.setEType == "function" && t.setEType(v));
             }
           }
@@ -5441,7 +5445,7 @@ class bs {
         if (o && "getESuperTypes" in o) {
           const l = o, h = s.eClass();
           if (l === h) {
-            this.handleObjectAttribs(s), this.objects.push(s), this.types.push(Me);
+            this.handleObjectAttribs(s), this.objects.push(s), this.types.push(Oe);
             return;
           }
           if (h.isSuperTypeOf(l) && !l.isAbstract()) {
@@ -5460,14 +5464,14 @@ class bs {
               }
               this.replaceInParentContainment(s, g);
               const T = this.objects.length - 1;
-              this.objects[T] = g, this.handleObjectAttribs(g), this.objects.push(g), this.types.push(Me);
+              this.objects[T] = g, this.handleObjectAttribs(g), this.objects.push(g), this.types.push(Oe);
               return;
             }
           }
         }
       }
     }
-    this.objects.push(null), this.types.push(Xe), this.error(`Unknown feature '${t}' for type '${s.eClass().getName()}'`);
+    this.objects.push(null), this.types.push(ze), this.error(`Unknown feature '${t}' for type '${s.eClass().getName()}'`);
   }
   /**
    * Replace an object in the grandparent's containment reference.
@@ -5524,7 +5528,7 @@ class bs {
         }
       }
     }
-    i ? (this.helper.setValue(s, r, i, -1), this.handleObjectAttribs(i), this.objects[this.objects.length - 1] = i, this.types[this.types.length - 1] = Me, this.objects.push(i), this.types.push(Me)) : (this.objects.push(null), this.types.push(Xe), this.error(`Cannot resolve type '${t}' for deferred containment`));
+    i ? (this.helper.setValue(s, r, i, -1), this.handleObjectAttribs(i), this.objects[this.objects.length - 1] = i, this.types[this.types.length - 1] = Oe, this.objects.push(i), this.types.push(Oe)) : (this.objects.push(null), this.types.push(ze), this.error(`Cannot resolve type '${t}' for deferred containment`));
   }
   /**
    * Set feature value
@@ -5668,7 +5672,7 @@ class bs {
       s = s.substring(1);
     if (!s)
       return e;
-    const r = s.split("/"), n = Be(e, s);
+    const r = s.split("/"), n = Le(e, s);
     if (n)
       return n;
     if (r.length >= 2) {
@@ -5816,7 +5820,7 @@ class Hr extends bs {
 function ss(u) {
   return u != null && typeof u.getESuperTypes == "function" && typeof u.getEAllStructuralFeatures == "function";
 }
-function ct(u) {
+function ut(u) {
   return u != null && typeof u.getELiterals == "function" && typeof u.getEEnumLiteral == "function";
 }
 class As {
@@ -5851,7 +5855,7 @@ class As {
     for (const r of e)
       for (const n of this.collectPackages(r))
         t.add(n);
-    this.output.push("<xmi:XMI"), this.output.push(` xmlns:xmi="${xt}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${De}"`);
+    this.output.push("<xmi:XMI"), this.output.push(` xmlns:xmi="${xt}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${Fe}"`);
     const s = /* @__PURE__ */ new Set();
     for (const r of t) {
       const n = r.getNsURI(), i = this.getPrefix(r);
@@ -5890,7 +5894,7 @@ class As {
    */
   writeNamespaces(e) {
     const t = this.collectPackages(e);
-    this.output.push(` xmlns:xmi="${xt}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${De}"`);
+    this.output.push(` xmlns:xmi="${xt}"`), this.output.push(' xmi:version="2.0"'), this.output.push(` xmlns:xsi="${Fe}"`);
     const s = /* @__PURE__ */ new Set();
     for (const n of t) {
       const i = n.getNsURI(), o = this.getPrefix(n);
@@ -5963,7 +5967,7 @@ class As {
     for (const r of t.getEAllStructuralFeatures())
       if (!(r.isTransient() || r.isDerived()) && !(s && s.getName(r) === ":0")) {
         if (this.isAttribute(r)) {
-          if (s && s.getFeatureKind(r) === qe)
+          if (s && s.getFeatureKind(r) === Ke)
             continue;
           const n = r;
           let i = e.eGet(n);
@@ -6139,7 +6143,7 @@ class As {
     const s = e.eClass().getEAllStructuralFeatures(), r = this.helper.getExtendedMetaData();
     if (r)
       for (const n of s) {
-        if (n.isTransient() || n.isDerived() || !this.isAttribute(n) || r.getFeatureKind(n) !== qe)
+        if (n.isTransient() || n.isDerived() || !this.isAttribute(n) || r.getFeatureKind(n) !== Ke)
           continue;
         const i = e.eGet(n);
         if (i != null)
@@ -6172,7 +6176,7 @@ class As {
     const t = e.eClass(), s = this.helper.getExtendedMetaData();
     if (s)
       for (const r of t.getEAllStructuralFeatures()) {
-        if (r.isTransient() || r.isDerived() || !this.isAttribute(r) || s.getFeatureKind(r) !== qe)
+        if (r.isTransient() || r.isDerived() || !this.isAttribute(r) || s.getFeatureKind(r) !== Ke)
           continue;
         const i = e.eGet(r);
         if (i == null)
@@ -6290,7 +6294,7 @@ class As {
         n != null && r.push(this.convertSingleValueToString(e, n));
       return r.join(" ");
     }
-    if (ct(e.getEType()))
+    if (ut(e.getEType()))
       return this.convertSingleValueToString(e, t);
     if (typeof t == "string")
       return t;
@@ -6317,7 +6321,7 @@ class As {
   convertSingleValueToString(e, t) {
     if (t == null)
       return "";
-    if (!ct(e.getEType())) {
+    if (!ut(e.getEType())) {
       if (typeof t == "string")
         return t;
       if (typeof t == "boolean")
@@ -6534,15 +6538,15 @@ class Zr {
     return new Is(e);
   }
 }
-class ut {
+class lt {
   createResource(e) {
     return new Jr(e);
   }
 }
-const Le = He.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-Le.has("xml") || Le.set("xml", new Zr());
-Le.has("xmi") || Le.set("xmi", new ut());
-Le.has("ecore") || Le.set("ecore", new ut());
+const Ue = Ve.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+Ue.has("xml") || Ue.set("xml", new Zr());
+Ue.has("xmi") || Ue.set("xmi", new lt());
+Ue.has("ecore") || Ue.set("ecore", new lt());
 class en {
   constructor() {
     this.forwardReferences = [], this.errors = [];
@@ -6754,7 +6758,7 @@ class en {
       s = s.substring(1);
     if (!s)
       return e;
-    const r = s.split("/"), n = Be(e, s);
+    const r = s.split("/"), n = Le(e, s);
     if (n)
       return n;
     if (r.length >= 2) {
@@ -7088,7 +7092,7 @@ class an {
     return new nn(e);
   }
 }
-const is = He.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+const is = Ve.INSTANCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
 is.has("json") || is.set("json", new an());
 class on {
   constructor() {
@@ -7651,7 +7655,7 @@ class cn {
    * attribute does not abort the document (see XMLHandler.setFeatureValue).
    */
   createFromString(e, t) {
-    if (ct(e)) {
+    if (ut(e)) {
       if (t == null)
         return null;
       const r = this.resolveEEnumLiteral(e, t);
@@ -7671,7 +7675,7 @@ class cn {
   convertToString(e, t) {
     if (t == null)
       return "";
-    if (ct(e)) {
+    if (ut(e)) {
       const r = this.findEEnumLiteral(e, t);
       if (r)
         return r.getLiteral() ?? "";
@@ -8105,7 +8109,7 @@ class ws extends Te {
           for (const m of l) {
             const g = m.getEPackage(i);
             if (g) {
-              const D = Be(g, o);
+              const D = Le(g, o);
               if (D)
                 return this.eType = D, this.eType;
             }
@@ -8117,7 +8121,7 @@ class ws extends Te {
               for (const D of m.keys()) {
                 const F = m.getEPackage(D);
                 if (F && F.getName() === T) {
-                  const x = Be(F, o);
+                  const x = Le(F, o);
                   if (x)
                     return this.eType = x, this.eType;
                 }
@@ -8570,7 +8574,7 @@ class Y extends Te {
 })();
 class hn {
   constructor(e, t) {
-    this.resources = new me(), this.packageRegistry = e || this.createDefaultPackageRegistry(), this.resourceFactoryRegistry = t || He.INSTANCE_FACTORY_REGISTRY, this.uriConverter = this.createDefaultURIConverter();
+    this.resources = new me(), this.packageRegistry = e || this.createDefaultPackageRegistry(), this.resourceFactoryRegistry = t || Ve.INSTANCE_FACTORY_REGISTRY, this.uriConverter = this.createDefaultURIConverter();
   }
   getResources() {
     return this.resources;
@@ -8842,7 +8846,7 @@ class fn {
       t = t.substring(1);
     if (!t)
       return this._syntheticPackage;
-    const s = t.split("/"), r = Be(this._syntheticPackage, t);
+    const s = t.split("/"), r = Le(this._syntheticPackage, t);
     if (r)
       return r;
     if (s.length >= 2) {
@@ -9552,9 +9556,9 @@ class En extends Te {
   }
 }
 const Cn = "ecore.xml.type";
-let ze = null;
+let Ye = null;
 function Tn() {
-  return ze || (ze = new Nn(), ze.initialize(), de.INSTANCE.set(Ps, ze)), ze;
+  return Ye || (Ye = new Nn(), Ye.initialize(), de.INSTANCE.set(Ps, Ye)), Ye;
 }
 const Sn = [
   // Commonly used
@@ -9670,12 +9674,12 @@ class _n extends Ut {
   }
 }
 const jt = "http://www.eclipse.org/emf/2002/Ecore", bn = "ecore", Ps = "http://www.eclipse.org/emf/2003/XMLType";
-let Fe = null;
+let Be = null;
 function $t() {
-  return Fe || (Fe = new An(), Fe.initialize(), vn(), W.register($t)), Fe;
+  return Be || (Be = new An(), Be.initialize(), vn(), W.register($t)), Be;
 }
 function vn() {
-  Fe && (de.INSTANCE.set(jt, Fe), Tn());
+  Be && (de.INSTANCE.set(jt, Be), Tn());
 }
 class An extends Ae {
   constructor() {
@@ -9942,7 +9946,7 @@ class In extends Ut {
 $t();
 class wn extends hn {
   constructor() {
-    super(), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new ut()), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new ut()), this.getPackageRegistry().set(jt, $t());
+    super(), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("ecore", new lt()), this.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new lt()), this.getPackageRegistry().set(jt, $t());
   }
   /**
    * Create resource and return with loadFromString support
@@ -10326,9 +10330,9 @@ function Ms({ services: u, log: e }) {
   u.register(gt, t);
   const s = new fs();
   u.register(pt, s);
-  const r = u.construct(at);
+  const r = u.construct(ot);
   u.register(kt, r);
-  const n = u.construct(ot);
+  const n = u.construct(ct);
   u.register(Mt, n), n.setup(u);
   const i = new xs();
   u.register(Ot, i), s.setEcoreMetadataService(i), t.setEcoreMetadataService(i), e.info("Ereignis-Registries bereit");
@@ -10358,17 +10362,17 @@ const Fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   EcoreMetadataService: xs,
   EventActionsRegistry: fs,
   get EventBusBridge() {
-    return ot;
+    return ct;
   },
   get EventManager() {
-    return at;
+    return ot;
   },
   EventRegistry: us,
   get PageActionInterface() {
     return At;
   },
   get Payload() {
-    return ke;
+    return Me;
   },
   get SystemActionInterface() {
     return vt;
@@ -10376,7 +10380,7 @@ const Fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   SystemActionsEcoreContent: Pn,
   WidgetAction: Qs,
   get WidgetActionInterface() {
-    return Ke;
+    return He;
   },
   actionsIdentifier: kn,
   activate: Ms,
@@ -10409,15 +10413,15 @@ export {
   qn as EVENT_REGISTRY_ID,
   xs as EcoreMetadataService,
   fs as EventActionsRegistry,
-  ot as EventBusBridge,
-  at as EventManager,
+  ct as EventBusBridge,
+  ot as EventManager,
   us as EventRegistry,
   At as PageActionInterface,
-  ke as Payload,
+  Me as Payload,
   vt as SystemActionInterface,
   Pn as SystemActionsEcoreContent,
   Qs as WidgetAction,
-  Ke as WidgetActionInterface,
+  He as WidgetActionInterface,
   kn as actionsIdentifier,
   Gn as activate,
   On as bridgeIdentifier,

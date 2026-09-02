@@ -1,9 +1,9 @@
 (function(){var i="ui.vue.widget.icon",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".icon[data-v-baccca67]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.material-symbols-outlined[data-v-baccca67]{font-family:Material Symbols Outlined;font-weight:400;font-style:normal;font-size:var(--v63f65042);color:var(--f0e35c14);display:inline-block;line-height:1;text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr}.settings-container[data-v-53b4981a]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.icons-container[data-v-53b4981a]{display:flex;flex-wrap:wrap;gap:10px;max-height:220px;overflow-y:auto;overflow-x:hidden;width:100%;cursor:pointer;padding:10px}.material-symbols-outlined[data-v-53b4981a]{font-family:Material Symbols Outlined;font-weight:400;font-style:inherit;font-size:40px;display:inline-block;line-height:1;text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr;border:2px solid transparent;border-radius:5px;transition:border-color .5s ease,transform .5s ease}.material-symbols-outlined[data-v-53b4981a]:hover{transform:scale(1.1)}.active-icon[data-v-53b4981a]{border:2px solid rgb(0,121,0)}.slider[data-v-53b4981a]{padding:0 10px}\n";})();
 import { EVENT_REGISTRY_ID as X } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as ee, deactivate as _e, component as te, inject as oe, initTsmRuntime as ae } from "@eclipse-daanse/tsm";
-import { defineComponent as L, mergeModels as re, useCssVars as ie, unref as D, toRefs as ne, useModel as F, inject as H, onMounted as U, computed as h, createElementBlock as x, openBlock as C, Fragment as O, createElementVNode as f, withModifiers as le, mergeProps as se, toDisplayString as Z, ref as k, watch as ce, markRaw as de, resolveComponent as w, createVNode as c, withCtx as P, normalizeStyle as pe, renderList as ue, normalizeClass as me } from "vue";
+import { defineComponent as L, mergeModels as re, useCssVars as ie, unref as D, toRefs as ne, useModel as F, inject as H, onMounted as U, computed as h, createElementBlock as x, openBlock as C, Fragment as O, createElementVNode as f, withModifiers as le, mergeProps as se, toDisplayString as Z, ref as k, watch as ce, markRaw as de, resolveComponent as w, createVNode as d, withCtx as P, normalizeStyle as pe, renderList as ue, normalizeClass as me } from "vue";
 import { useVariableRepository as ge, VariableWrapper as v } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { Documentation as p, Attribute as u, ModelClass as M } from "org.eclipse.daanse.board.app.lib.annotations";
+import { Documentation as c, Attribute as u, ModelClass as M } from "org.eclipse.daanse.board.app.lib.annotations";
 import { VariableInput as fe } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { Payload as G } from "org.eclipse.daanse.board.app.lib.events";
 import { WIDGET_SERVICE_ID as be } from "org.eclipse.daanse.board.app.lib.api.widget";
@@ -13,7 +13,7 @@ var ve = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, m = (n, a,
     (l = n[s]) && (e = (t ? l(a, _, e) : l(e)) || e);
   return t && e && ve(a, _, e), e;
 };
-let d = class {
+let p = class {
   iconColor;
   iconSize;
   isIconFilled;
@@ -23,36 +23,37 @@ let d = class {
   currentIcon;
 };
 m([
-  p("Color value (hex or CSS) used to render the icon."),
+  c("Color value (hex or CSS) used to render the icon."),
   u()
-], d.prototype, "iconColor", 2);
+], p.prototype, "iconColor", 2);
 m([
-  p("The size of the icon in pixels."),
+  c("The size of the icon in pixels."),
   u()
-], d.prototype, "iconSize", 2);
+], p.prototype, "iconSize", 2);
 m([
-  p("Determines whether the icon is filled (true) or outlined (false)."),
+  c("Determines whether the icon is filled (true) or outlined (false)."),
   u()
-], d.prototype, "isIconFilled", 2);
+], p.prototype, "isIconFilled", 2);
 m([
-  p("Line thickness used to draw the icon."),
+  c("Line thickness used to draw the icon."),
   u()
-], d.prototype, "strokeWeight", 2);
+], p.prototype, "strokeWeight", 2);
 m([
-  p("Optical size used for rendering adjustments or visual balance."),
+  c("Optical size used for rendering adjustments or visual balance."),
   u()
-], d.prototype, "opticSize", 2);
+], p.prototype, "opticSize", 2);
 m([
-  p("Style variation (e.g., weight or contrast) within an icon family."),
+  c("Style variation (e.g., weight or contrast) within an icon family."),
   u()
-], d.prototype, "grade", 2);
+], p.prototype, "grade", 2);
 m([
-  p("Name or identifier of the currently selected icon."),
+  c("Name or identifier of the currently selected icon."),
   u()
-], d.prototype, "currentIcon", 2);
-d = m([
+], p.prototype, "currentIcon", 2);
+p = m([
+  c("Configuration for rendering an icon, including color, size, and style options."),
   M({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings" })
-], d);
+], p);
 const ke = /* @__PURE__ */ L({
   __name: "IconWidget",
   props: /* @__PURE__ */ re({
@@ -67,7 +68,7 @@ const ke = /* @__PURE__ */ L({
       v63f65042: D(g) + "px",
       f0e35c14: D(S)
     }));
-    const a = n, { id: _ } = ne(a), { wrapParameters: t } = ge(), e = F(n, "configv"), s = new d(), l = H(he.TINY_EMITTER);
+    const a = n, { id: _ } = ne(a), { wrapParameters: t } = ge(), e = F(n, "configv"), s = new p(), l = H(he.TINY_EMITTER);
     U(() => {
       if (e.value && (Object.assign(e.value, { ...s, ...e.value }), !(e.value.iconColor instanceof v))) {
         const o = e.value.iconColor;
@@ -170,7 +171,7 @@ const ke = /* @__PURE__ */ L({
     return (o, r) => {
       const J = w("va-input"), $ = w("va-collapse"), Q = w("va-checkbox"), K = w("va-color-input"), y = w("va-slider");
       return C(), x(O, null, [
-        c($, {
+        d($, {
           modelValue: t.value.pickerSection,
           "onUpdate:modelValue": r[1] || (r[1] = (i) => t.value.pickerSection = i),
           icon: "search",
@@ -178,7 +179,7 @@ const ke = /* @__PURE__ */ L({
         }, {
           default: P(() => [
             f("div", Ce, [
-              c(J, {
+              d(J, {
                 modelValue: b.value,
                 "onUpdate:modelValue": r[0] || (r[0] = (i) => b.value = i),
                 placeholder: "Search icon...",
@@ -198,7 +199,7 @@ const ke = /* @__PURE__ */ L({
           ]),
           _: 1
         }, 8, ["modelValue"]),
-        c($, {
+        d($, {
           modelValue: t.value.widgetSection,
           "onUpdate:modelValue": r[8] || (r[8] = (i) => t.value.widgetSection = i),
           icon: "settings",
@@ -206,18 +207,18 @@ const ke = /* @__PURE__ */ L({
         }, {
           default: P(() => [
             f("div", Ie, [
-              c(Q, {
+              d(Q, {
                 modelValue: e.value.isIconFilled,
                 "onUpdate:modelValue": r[2] || (r[2] = (i) => e.value.isIconFilled = i),
                 label: _("icon:IconWidget.iconFilled")
               }, null, 8, ["modelValue", "label"]),
-              c(D(fe), {
+              d(D(fe), {
                 modelValue: e.value.iconColor,
                 "onUpdate:modelValue": r[3] || (r[3] = (i) => e.value.iconColor = i),
                 label: _("icon:IconWidget.iconColor")
               }, {
                 default: P(({ value: i, change: E }) => [
-                  c(K, {
+                  d(K, {
                     "model-value": i,
                     onInput: E,
                     label: _("icon:IconWidget.iconColor")
@@ -225,7 +226,7 @@ const ke = /* @__PURE__ */ L({
                 ]),
                 _: 1
               }, 8, ["modelValue", "label"]),
-              c(y, {
+              d(y, {
                 class: "slider",
                 modelValue: e.value.iconSize,
                 "onUpdate:modelValue": r[4] || (r[4] = (i) => e.value.iconSize = i),
@@ -236,7 +237,7 @@ const ke = /* @__PURE__ */ L({
                 step: 10,
                 label: _("icon:IconWidget.iconSize")
               }, null, 8, ["modelValue", "label-color", "label"]),
-              c(y, {
+              d(y, {
                 class: "slider",
                 modelValue: e.value.strokeWeight,
                 "onUpdate:modelValue": r[5] || (r[5] = (i) => e.value.strokeWeight = i),
@@ -247,7 +248,7 @@ const ke = /* @__PURE__ */ L({
                 step: 100,
                 label: _("icon:IconWidget.strokeWeight")
               }, null, 8, ["modelValue", "label-color", "label"]),
-              c(y, {
+              d(y, {
                 class: "slider",
                 modelValue: e.value.opticSize,
                 "onUpdate:modelValue": r[6] || (r[6] = (i) => e.value.opticSize = i),
@@ -257,7 +258,7 @@ const ke = /* @__PURE__ */ L({
                 max: 48,
                 label: _("icon:IconWidget.opticSize")
               }, null, 8, ["modelValue", "label-color", "label"]),
-              c(y, {
+              d(y, {
                 class: "slider",
                 modelValue: e.value.grade,
                 "onUpdate:modelValue": r[7] || (r[7] = (i) => e.value.grade = i),
@@ -285,10 +286,11 @@ let I = class extends G {
   iconName;
 };
 B([
-  p("Name of the clicked icon."),
+  c("Name of the clicked icon."),
   u()
 ], I.prototype, "iconName", 2);
 I = B([
+  c("Payload emitted when an icon is clicked."),
   M({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconClickPayload" })
 ], I);
 var Se = Object.defineProperty, We = Object.getOwnPropertyDescriptor, Y = (n, a, _, t) => {
@@ -300,10 +302,11 @@ let q = class extends G {
   iconName;
 };
 Y([
-  p("Name of the right-clicked icon."),
+  c("Name of the right-clicked icon."),
   u()
 ], q.prototype, "iconName", 2);
 q = Y([
+  c("Payload emitted when an icon is right-clicked."),
   M({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconRightClickPayload" })
 ], q);
 const Pe = [

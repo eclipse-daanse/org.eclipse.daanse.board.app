@@ -1,15 +1,15 @@
 (function(){var i="ui.vue.widget.table.pivot",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-e26395f1]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-e26395f1]{overflow:hidden;padding:16px}.settings-container[data-v-fa6a53a1]{padding:16px}.settings-block[data-v-fa6a53a1]{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.settings-block[data-v-fa6a53a1]:last-child{margin-bottom:0}.settings-block h3[data-v-fa6a53a1]{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--va-primary)}.hint-text[data-v-fa6a53a1]{margin:0 0 16px;color:var(--va-text-secondary);font-size:13px}.level-header[data-v-fa6a53a1]{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600}.level-card[data-v-fa6a53a1]{border:1px solid #ddd;padding:16px;border-radius:4px;margin-bottom:12px;background:#fafafa;display:flex;flex-direction:column;gap:12px}.level-card-header[data-v-fa6a53a1]{display:flex;justify-content:space-between;align-items:center}.empty-state[data-v-fa6a53a1]{padding:20px;text-align:center;color:var(--va-text-secondary);background:#f5f5f5;border-radius:4px}.color-scale-row[data-v-fa6a53a1]{display:flex;gap:12px}.color-scale-row[data-v-fa6a53a1]>*{flex:1}\n";})();
-import { EVENT_REGISTRY_ID as ye, EVENT_ACTIONS_REGISTRY_ID as he } from "org.eclipse.daanse.board.app.lib.api.events";
+import { EVENT_REGISTRY_ID as he, EVENT_ACTIONS_REGISTRY_ID as ye } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as Ve, deactivate as _e, component as xe, inject as se } from "@eclipse-daanse/tsm";
-import { defineComponent as ve, mergeModels as Te, toRefs as Se, inject as We, useModel as ce, onMounted as ke, computed as P, ref as ge, watch as pe, createElementBlock as U, openBlock as x, withModifiers as Pe, createElementVNode as v, createBlock as K, createCommentVNode as F, unref as k, resolveComponent as D, Fragment as A, createVNode as n, withCtx as b, createTextVNode as O, renderList as re, toDisplayString as ie } from "vue";
+import { defineComponent as ve, mergeModels as Te, toRefs as Se, inject as We, useModel as ce, onMounted as ke, computed as P, ref as ge, watch as pe, createElementBlock as U, openBlock as x, withModifiers as Pe, createElementVNode as v, createBlock as K, createCommentVNode as F, unref as k, resolveComponent as D, Fragment as A, createVNode as n, withCtx as b, createTextVNode as O, renderList as ie, toDisplayString as de } from "vue";
 import { VariableWrapper as S, useVariableRepository as Le, useDatasourceRepository as Ue } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { PivotTable as Ie } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
-import { Reference as y, Documentation as de, Attribute as W, ModelClass as z } from "org.eclipse.daanse.board.app.lib.annotations";
+import { Reference as h, Attribute as W, ModelClass as z, Documentation as Q } from "org.eclipse.daanse.board.app.lib.annotations";
 import { VariableInput as L } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { Payload as G, WidgetAction as He, WidgetActionInterface as Fe } from "org.eclipse.daanse.board.app.lib.events";
 import { WIDGET_SERVICE_ID as Me } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: Re } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ne = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2025.5C37.5%2023.8431%2036.1569%2022.5%2034.5%2022.5H25.5C23.8431%2022.5%2022.5%2023.8431%2022.5%2025.5V34.5C22.5%2036.1569%2023.8431%2037.5%2025.5%2037.5H34.5C36.1569%2037.5%2037.5%2036.1569%2037.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M57.4399%2077.5607C58.3849%2076.6157%2060.0006%2077.285%2060.0006%2078.6213V84C60.0006%2084.8284%2060.6722%2085.5%2061.5006%2085.5H84C84.8284%2085.5%2085.5%2084.8284%2085.5%2084V61.5C85.5%2060.6716%2084.8284%2060%2084%2060H78.6214C77.285%2060%2076.6158%2058.3843%2077.5608%2057.4393L88.9399%2046.0606C89.5257%2045.4749%2090.4755%2045.4749%2091.0612%2046.0607L102.439%2057.4394C103.384%2058.3843%20102.715%2060%20101.379%2060H96C95.1716%2060%2094.5%2060.6716%2094.5%2061.5V93C94.5%2093.8284%2093.8284%2094.5%2093%2094.5H61.5006C60.6722%2094.5%2060.0006%2095.1716%2060.0006%2096V101.379C60.0006%20102.715%2058.3849%20103.384%2057.44%20102.44L46.0607%2091.0613C45.4749%2090.4755%2045.4749%2089.5257%2046.0607%2088.9399L57.4399%2077.5607Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var Ee = Object.defineProperty, De = Object.getOwnPropertyDescriptor, h = (s, l, r, t) => {
+var Ee = Object.defineProperty, De = Object.getOwnPropertyDescriptor, y = (s, l, r, t) => {
   for (var a = t > 1 ? void 0 : t ? De(l, r) : l, p = s.length - 1, m; p >= 0; p--)
     (m = s[p]) && (a = (t ? m(l, r, a) : m(a)) || a);
   return t && a && Ee(l, r, a), a;
@@ -36,68 +36,67 @@ let f = class {
   columnLevelStyles = [];
   conditionalFormats = [];
 };
-h([
-  y("JavaObject")
+y([
+  h("JavaObject")
 ], f.prototype, "rows", 2);
-h([
-  y("JavaObject")
+y([
+  h("JavaObject")
 ], f.prototype, "columns", 2);
-h([
-  y("JavaObject")
+y([
+  h("JavaObject")
 ], f.prototype, "cells", 2);
-h([
-  de(""),
+y([
   W()
 ], f.prototype, "tableState", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "headerBackgroundColor", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "headerTextColor", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "cellBackgroundColor", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "cellTextColor", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "borderColor", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "defaultColumnWidth", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "defaultRowHeight", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "fontSize", 2);
-h([
-  y("VariableWrapper")
+y([
+  h("VariableWrapper")
 ], f.prototype, "headerFontWeight", 2);
-h([
+y([
   W()
 ], f.prototype, "cellTextAlign", 2);
-h([
+y([
   W()
 ], f.prototype, "showRowsProperties", 2);
-h([
+y([
   W()
 ], f.prototype, "showColumnsProperties", 2);
-h([
+y([
   W()
 ], f.prototype, "showSingleMeasureHeader", 2);
-h([
-  y("LevelStyle")
+y([
+  h("LevelStyle")
 ], f.prototype, "rowLevelStyles", 2);
-h([
-  y("LevelStyle")
+y([
+  h("LevelStyle")
 ], f.prototype, "columnLevelStyles", 2);
-h([
-  y("ConditionalFormat")
+y([
+  h("ConditionalFormat")
 ], f.prototype, "conditionalFormats", 2);
-f = h([
+f = y([
   z({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTable" })
 ], f);
 const Oe = { class: "component" }, Be = /* @__PURE__ */ ve({
@@ -123,37 +122,37 @@ const Oe = { class: "component" }, Be = /* @__PURE__ */ ve({
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now() }
       });
-    }, Q = (d) => {
+    }, X = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:row_clicked", {
         type: "widget:PivotTableWidget:row_clicked",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, X = (d) => {
+    }, ee = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:row_right_clicked", {
         type: "widget:PivotTableWidget:row_right_clicked",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, ee = (d) => {
+    }, le = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:column_clicked", {
         type: "widget:PivotTableWidget:column_clicked",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, le = (d) => {
+    }, oe = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:column_right_clicked", {
         type: "widget:PivotTableWidget:column_right_clicked",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, oe = (d) => {
+    }, te = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:cell_clicked", {
         type: "widget:PivotTableWidget:cell_clicked",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), rowId: d.rowId, colId: d.colId }
       });
-    }, te = (d) => {
+    }, ae = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:cell_right_clicked", {
         type: "widget:PivotTableWidget:cell_right_clicked",
         widgetId: t.value,
@@ -171,13 +170,13 @@ const Oe = { class: "component" }, Be = /* @__PURE__ */ ve({
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, ae = (d) => {
+    }, ne = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:column_expanded", {
         type: "widget:PivotTableWidget:column_expanded",
         widgetId: t.value,
         payload: { widgetId: t.value, timestamp: Date.now(), uniqueName: d }
       });
-    }, ne = (d) => {
+    }, re = (d) => {
       t?.value && a.emit("widget:PivotTableWidget:column_collapsed", {
         type: "widget:PivotTableWidget:column_collapsed",
         widgetId: t.value,
@@ -261,9 +260,9 @@ const Oe = { class: "component" }, Be = /* @__PURE__ */ ve({
       g();
     });
     const i = (d) => {
-      e("expand", d, !0), d.area === "rows" ? q(d.value?.UName || d.value?.UNAME) : d.area === "columns" && ae(d.value?.UName || d.value?.UNAME);
+      e("expand", d, !0), d.area === "rows" ? q(d.value?.UName || d.value?.UNAME) : d.area === "columns" && ne(d.value?.UName || d.value?.UNAME);
     }, H = (d) => {
-      e("collapse", d, !0), d.area === "rows" ? Z(d.value?.UName || d.value?.UNAME) : d.area === "columns" && ne(d.value?.UName || d.value?.UNAME);
+      e("collapse", d, !0), d.area === "rows" ? Z(d.value?.UName || d.value?.UNAME) : d.area === "columns" && re(d.value?.UName || d.value?.UNAME);
     };
     return (d, c) => (x(), U("div", {
       class: "text-container",
@@ -275,12 +274,12 @@ const Oe = { class: "component" }, Be = /* @__PURE__ */ ve({
           "model-value": T.value,
           onOnExpand: i,
           onOnCollapse: H,
-          onRow_clicked: Q,
-          onRow_right_clicked: X,
-          onColumn_clicked: ee,
-          onColumn_right_clicked: le,
-          onCell_clicked: oe,
-          onCell_right_clicked: te,
+          onRow_clicked: X,
+          onRow_right_clicked: ee,
+          onColumn_clicked: le,
+          onColumn_right_clicked: oe,
+          onCell_clicked: te,
+          onCell_right_clicked: ae,
           key: JSON.stringify(T.value).length,
           rowsExpandedMembers: T.value.tableState.rowsExpandedMembers,
           columnsExpandedMembers: T.value.tableState.columnsExpandedMembers,
@@ -324,10 +323,10 @@ j([
   W()
 ], M.prototype, "level", 2);
 j([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], M.prototype, "backgroundColor", 2);
 j([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], M.prototype, "textColor", 2);
 j([
   W()
@@ -368,16 +367,16 @@ R([
   W()
 ], I.prototype, "value2", 2);
 R([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], I.prototype, "backgroundColor", 2);
 R([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], I.prototype, "textColor", 2);
 R([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], I.prototype, "minColor", 2);
 R([
-  y("VariableWrapper")
+  h("VariableWrapper")
 ], I.prototype, "maxColor", 2);
 R([
   W()
@@ -427,9 +426,9 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
       l.value.columnLevelStyles || (l.value.columnLevelStyles = []);
       const u = l.value.columnLevelStyles.length, o = new M();
       o.level = u, l.value.columnLevelStyles.push(o);
-    }, Q = (u) => {
+    }, X = (u) => {
       l.value.columnLevelStyles?.splice(u, 1);
-    }, X = [
+    }, ee = [
       { value: "greaterThan", text: "Größer als" },
       { value: "lessThan", text: "Kleiner als" },
       { value: "equals", text: "Gleich" },
@@ -439,13 +438,13 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
       { value: "colorScale", text: "Farbskala (Min→Max)" },
       { value: "topN", text: "Top N Werte" },
       { value: "bottomN", text: "Bottom N Werte" }
-    ], ee = () => Math.random().toString(36).substring(2, 9), le = () => {
+    ], le = () => Math.random().toString(36).substring(2, 9), oe = () => {
       l.value.conditionalFormats || (l.value.conditionalFormats = []);
       const u = l.value.conditionalFormats.length, o = new I();
-      o.id = ee(), o.priority = u, l.value.conditionalFormats.push(o);
-    }, oe = (u) => {
+      o.id = le(), o.priority = u, l.value.conditionalFormats.push(o);
+    }, te = (u) => {
       l.value.conditionalFormats?.splice(u, 1);
-    }, te = (u) => u === "between", q = (u) => u === "colorScale", Z = (u) => u === "contains", ae = (u) => u === "topN" || u === "bottomN", ne = (u) => u !== "colorScale";
+    }, ae = (u) => u === "between", q = (u) => u === "colorScale", Z = (u) => u === "contains", ne = (u) => u === "topN" || u === "bottomN", re = (u) => u !== "colorScale";
     return (u, o) => {
       const C = D("VaCheckbox"), V = D("va-collapse"), _ = D("va-color-input"), w = D("va-input"), $ = D("va-select"), T = D("va-button");
       return x(), U(A, null, [
@@ -695,12 +694,12 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                   _: 1
                 })
               ]),
-              (x(!0), U(A, null, re(l.value.rowLevelStyles, (e, g) => (x(), U("div", {
+              (x(!0), U(A, null, ie(l.value.rowLevelStyles, (e, g) => (x(), U("div", {
                 key: `row_level_${g}`,
                 class: "level-card"
               }, [
                 v("div", al, [
-                  v("strong", null, "Level " + ie(e.level), 1),
+                  v("strong", null, "Level " + de(e.level), 1),
                   n(T, {
                     size: "small",
                     color: "danger",
@@ -785,16 +784,16 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                   _: 1
                 })
               ]),
-              (x(!0), U(A, null, re(l.value.columnLevelStyles, (e, g) => (x(), U("div", {
+              (x(!0), U(A, null, ie(l.value.columnLevelStyles, (e, g) => (x(), U("div", {
                 key: `col_level_${g}`,
                 class: "level-card"
               }, [
                 v("div", dl, [
-                  v("strong", null, "Level " + ie(e.level), 1),
+                  v("strong", null, "Level " + de(e.level), 1),
                   n(T, {
                     size: "small",
                     color: "danger",
-                    onClick: (i) => Q(g)
+                    onClick: (i) => X(g)
                   }, {
                     default: b(() => [...o[29] || (o[29] = [
                       O("Entfernen", -1)
@@ -867,7 +866,7 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                 o[32] || (o[32] = v("span", null, "Formatierungsregeln", -1)),
                 n(T, {
                   size: "small",
-                  onClick: le
+                  onClick: oe
                 }, {
                   default: b(() => [...o[31] || (o[31] = [
                     O("Regel hinzufügen", -1)
@@ -875,16 +874,16 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                   _: 1
                 })
               ]),
-              (x(!0), U(A, null, re(l.value.conditionalFormats, (e, g) => (x(), U("div", {
+              (x(!0), U(A, null, ie(l.value.conditionalFormats, (e, g) => (x(), U("div", {
                 key: e.id,
                 class: "level-card"
               }, [
                 v("div", ml, [
-                  v("strong", null, "Regel " + ie(g + 1), 1),
+                  v("strong", null, "Regel " + de(g + 1), 1),
                   n(T, {
                     size: "small",
                     color: "danger",
-                    onClick: (i) => oe(g)
+                    onClick: (i) => te(g)
                   }, {
                     default: b(() => [...o[33] || (o[33] = [
                       O("Entfernen", -1)
@@ -896,18 +895,18 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                   label: "Bedingungstyp",
                   modelValue: e.conditionType,
                   "onUpdate:modelValue": (i) => e.conditionType = i,
-                  options: X,
+                  options: ee,
                   "value-by": "value"
                 }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                 !Z(e.conditionType) && !q(e.conditionType) ? (x(), K(w, {
                   key: 0,
-                  label: ae(e.conditionType) ? "Anzahl (N)" : "Wert",
+                  label: ne(e.conditionType) ? "Anzahl (N)" : "Wert",
                   modelValue: e.value1,
                   "onUpdate:modelValue": (i) => e.value1 = i,
                   modelModifiers: { number: !0 },
                   type: "number"
                 }, null, 8, ["label", "modelValue", "onUpdate:modelValue"])) : F("", !0),
-                te(e.conditionType) ? (x(), K(w, {
+                ae(e.conditionType) ? (x(), K(w, {
                   key: 1,
                   label: "Bis Wert",
                   modelValue: e.value2,
@@ -933,7 +932,7 @@ const Ze = { class: "settings-container" }, Ke = { class: "settings-container" }
                     "onUpdate:modelValue": (i) => e.maxColor = i
                   }, null, 8, ["modelValue", "onUpdate:modelValue"])
                 ])) : F("", !0),
-                ne(e.conditionType) ? (x(), U(A, { key: 4 }, [
+                re(e.conditionType) ? (x(), U(A, { key: 4 }, [
                   n(_, {
                     label: "Hintergrundfarbe",
                     modelValue: e.backgroundColor,
@@ -982,14 +981,15 @@ let N = class extends G {
   uniqueName;
 };
 be([
-  de("Header Unique Name."),
+  Q("Header Unique Name."),
   W()
 ], N.prototype, "uniqueName", 2);
 N = be([
+  Q("Payload emitted when a header is expanded in the pivot table."),
   z({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//HeaderExpandedPayload" })
 ], N);
-var fl = Object.defineProperty, yl = Object.getOwnPropertyDescriptor, Ce = (s, l, r, t) => {
-  for (var a = t > 1 ? void 0 : t ? yl(l, r) : l, p = s.length - 1, m; p >= 0; p--)
+var fl = Object.defineProperty, hl = Object.getOwnPropertyDescriptor, Ce = (s, l, r, t) => {
+  for (var a = t > 1 ? void 0 : t ? hl(l, r) : l, p = s.length - 1, m; p >= 0; p--)
     (m = s[p]) && (a = (t ? m(l, r, a) : m(a)) || a);
   return t && a && fl(l, r, a), a;
 };
@@ -997,13 +997,14 @@ let E = class extends G {
   uniqueName;
 };
 Ce([
-  de("Header Unique Name."),
+  Q("Header Unique Name."),
   W()
 ], E.prototype, "uniqueName", 2);
 E = Ce([
+  Q("Payload emitted when a header is clicked in the pivot table."),
   z({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//HeaderClickedPayload" })
 ], E);
-const hl = [
+const yl = [
   {
     name: "Row Expanded",
     type: "row_expanded",
@@ -1098,7 +1099,7 @@ let Y = class {
   icon = Ne;
   name = "PivotTable";
   register() {
-    this.events.registerWidget(B, hl), this.actions.registerWidgetType(B, J, "widget");
+    this.events.registerWidget(B, yl), this.actions.registerWidgetType(B, J, "widget");
   }
   unregister() {
     this.events.unregisterWidget(B), this.actions.unregisterWidgetType(B);
@@ -1115,8 +1116,8 @@ Y = ue([
     service: [Me],
     properties: { "widget.type": B }
   }),
-  me(0, se(ye)),
-  me(1, se(he))
+  me(0, se(he)),
+  me(1, se(ye))
 ], Y);
 export {
   ze as PivotTableWidget,

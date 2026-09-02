@@ -1,37 +1,50 @@
-import { Reference as b, ModelClass as u, Documentation as l, Attribute as g } from "org.eclipse.daanse.board.app.lib.annotations";
-const { serviceId: _ } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var f = Object.defineProperty, y = Object.getOwnPropertyDescriptor, c = (t, i, n, o) => {
-  for (var e = o > 1 ? void 0 : o ? y(i, n) : i, s = t.length - 1, p; s >= 0; s--)
-    (p = t[s]) && (e = (o ? p(i, n, e) : p(e)) || e);
-  return o && e && f(i, n, e), e;
+import { Reference as b, Documentation as t, ModelClass as c, Attribute as l } from "org.eclipse.daanse.board.app.lib.annotations";
+const { serviceId: y } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var I = Object.defineProperty, _ = Object.getOwnPropertyDescriptor, v = (i, r, p, a) => {
+  for (var e = a > 1 ? void 0 : a ? _(r, p) : r, g = i.length - 1, m; g >= 0; g--)
+    (m = i[g]) && (e = (a ? m(r, p, e) : m(e)) || e);
+  return a && e && I(r, p, e), e;
 };
-let m = class {
+let n = class {
   items = [];
-  registerNavigationItem(t) {
+  registerNavigationItem(i) {
     throw new Error("registerNavigationItem not implemented");
   }
-  unregisterNavigationItem(t) {
+  unregisterNavigationItem(i) {
     throw new Error("unregisterNavigationItem not implemented");
   }
-  getNavigationItem(t) {
+  getNavigationItem(i) {
     throw new Error("getNavigationItem not implemented");
   }
   getAllNavigationItems() {
     throw new Error("getAllNavigationItems not implemented");
   }
 };
-c([
+v([
   b("NavigationItem")
-], m.prototype, "items", 2);
-m = c([
-  u({ type: "http://org.eclipse.daanse.board.app.lib.repository.navigation#//NavigationRegistry" })
-], m);
-var I = Object.defineProperty, N = Object.getOwnPropertyDescriptor, a = (t, i, n, o) => {
-  for (var e = o > 1 ? void 0 : o ? N(i, n) : i, s = t.length - 1, p; s >= 0; s--)
-    (p = t[s]) && (e = (o ? p(i, n, e) : p(e)) || e);
-  return o && e && I(i, n, e), e;
+], n.prototype, "items", 2);
+v([
+  t("Register a navigation menu item")
+], n.prototype, "registerNavigationItem", 1);
+v([
+  t("Unregister a navigation menu item by id")
+], n.prototype, "unregisterNavigationItem", 1);
+v([
+  t("Get a navigation item by id")
+], n.prototype, "getNavigationItem", 1);
+v([
+  t("Get all registered navigation items, sorted by order")
+], n.prototype, "getAllNavigationItems", 1);
+n = v([
+  t("Registry for managing navigation menu items"),
+  c({ type: "http://org.eclipse.daanse.board.app.lib.repository.navigation#//NavigationRegistry" })
+], n);
+var f = Object.defineProperty, N = Object.getOwnPropertyDescriptor, s = (i, r, p, a) => {
+  for (var e = a > 1 ? void 0 : a ? N(r, p) : r, g = i.length - 1, m; g >= 0; g--)
+    (m = i[g]) && (e = (a ? m(r, p, e) : m(e)) || e);
+  return a && e && f(r, p, e), e;
 };
-let r = class {
+let o = class {
   id;
   label;
   icon;
@@ -40,62 +53,63 @@ let r = class {
   order = 0;
   visible = !0;
 };
-a([
-  l("Unique identifier for the navigation item"),
-  g()
-], r.prototype, "id", 2);
-a([
-  l("Display label for the menu item"),
-  g()
-], r.prototype, "label", 2);
-a([
-  l("Icon name (e.g., 'event', 'settings', 'preview')"),
-  g()
-], r.prototype, "icon", 2);
-a([
-  l("Vue router path (e.g., '/events', '/configuration')"),
-  g()
-], r.prototype, "route", 2);
-a([
-  l("Vue router name for matching active state"),
-  g()
-], r.prototype, "routeName", 2);
-a([
-  l("Sort order in the menu (lower numbers appear first)"),
-  g()
-], r.prototype, "order", 2);
-a([
-  l("Whether the menu item should be displayed"),
-  g()
-], r.prototype, "visible", 2);
-r = a([
-  u({ type: "http://org.eclipse.daanse.board.app.lib.repository.navigation#//NavigationItem" })
-], r);
-const d = _("NavigationRegistry"), h = Symbol.for(d), w = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+s([
+  t("Unique identifier for the navigation item"),
+  l()
+], o.prototype, "id", 2);
+s([
+  t("Display label for the menu item"),
+  l()
+], o.prototype, "label", 2);
+s([
+  t("Icon name (e.g., 'event', 'settings', 'preview')"),
+  l()
+], o.prototype, "icon", 2);
+s([
+  t("Vue router path (e.g., '/events', '/configuration')"),
+  l()
+], o.prototype, "route", 2);
+s([
+  t("Vue router name for matching active state"),
+  l()
+], o.prototype, "routeName", 2);
+s([
+  t("Sort order in the menu (lower numbers appear first)"),
+  l()
+], o.prototype, "order", 2);
+s([
+  t("Whether the menu item should be displayed"),
+  l()
+], o.prototype, "visible", 2);
+o = s([
+  t("Represents a navigation menu item in the application"),
+  c({ type: "http://org.eclipse.daanse.board.app.lib.repository.navigation#//NavigationItem" })
+], o);
+const d = y("NavigationRegistry"), h = Symbol.for(d), w = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   NAVIGATION_REGISTRY: h,
   NAVIGATION_REGISTRY_ID: d,
   get NavigationItem() {
-    return r;
+    return o;
   },
   get NavigationRegistry() {
-    return m;
+    return n;
   }
-}, Symbol.toStringTag, { value: "Module" })), v = "org.eclipse.daanse.board.app.lib.api.navigation", O = "0.0.1-next.1";
-async function P(t) {
-  const i = globalThis.__tsm__;
-  if (!i)
-    throw new Error(`${v}: tsm runtime is not initialized`);
-  i.register(v, w, O, "lib.api.navigation"), await void 0;
+}, Symbol.toStringTag, { value: "Module" })), u = "org.eclipse.daanse.board.app.lib.api.navigation", R = "0.0.1-next.1";
+async function A(i) {
+  const r = globalThis.__tsm__;
+  if (!r)
+    throw new Error(`${u}: tsm runtime is not initialized`);
+  r.register(u, w, R, "lib.api.navigation"), await void 0;
 }
-async function A(t) {
+async function P(i) {
   await void 0;
 }
 export {
   h as NAVIGATION_REGISTRY,
   d as NAVIGATION_REGISTRY_ID,
-  r as NavigationItem,
-  m as NavigationRegistry,
-  P as activate,
-  A as deactivate
+  o as NavigationItem,
+  n as NavigationRegistry,
+  A as activate,
+  P as deactivate
 };
