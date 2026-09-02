@@ -44,6 +44,34 @@ import { useOGCService } from './composables/Service'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
 import { MapSettings } from './gen/MapSettings'
+
+/**
+ * What this widget expects of the client object a service carries.
+ *
+ * The model types `Service.service` as unknown on purpose: it is whichever
+ * WMS or WFS client the service was built with, and the model has no
+ * business knowing their shapes. This says what is actually reached for, so
+ * the calls are checked against something rather than against nothing - and
+ * so the next reader can see what a service has to provide.
+ *
+ * Everything is optional because the object arrives from storage as plain
+ * JSON, without its methods, and is rebuilt from its URL - which is exactly
+ * what the checks below are for.
+ */
+interface MapServiceClient {
+  getLayers?: (...args: unknown[]) => unknown
+  getFeatureTypes?: (...args: unknown[]) => unknown
+  getOperationUrl?: (...args: unknown[]) => string
+  fetch?: (...args: unknown[]) => unknown
+  geoJson?: unknown
+  url?: string
+  serviceUrl?: string
+  _capabilitiesUrl?: string
+}
+
+/** The client of a service, as the shape this file works with. */
+const clientOf = (service: unknown): MapServiceClient | undefined =>
+  (service ?? undefined) as MapServiceClient | undefined
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { MapClickPayload } from './gen/MapClickPayload'
 import { useRoute } from 'vue-router'
@@ -334,7 +362,7 @@ onMounted(async () => {
       for (const service of config.value.services) {
         // Check if service needs reconstruction by checking for methods
         if (service.type === 'WMS') {
-          const hasGetLayersMethod = typeof service.service?.getLayers === 'function'
+          const hasGetLayersMethod = typeof clientOf(service.service)?.getLayers === 'function'
           if (!hasGetLayersMethod && service.url) {
             logServices('Reconstructing WMS service from URL: %s', service.url)
             try {
@@ -347,7 +375,7 @@ onMounted(async () => {
             }
           }
         } else if (service.type === 'WFS') {
-          const hasGetFeatureTypesMethod = typeof service.service?.getFeatureTypes === 'function'
+          const hasGetFeatureTypesMethod = typeof clientOf(service.service)?.getFeatureTypes === 'function'
           if (!hasGetFeatureTypesMethod && service.url) {
             logServices('Reconstructing WFS service from URL: %s', service.url)
             try {
@@ -369,9 +397,9 @@ onMounted(async () => {
     if (config.value.layers) {
       const newLayers = []
       for (const layer of config.value.layers) {
-        if (layer.type === 'WMSLayer' && layer.service && !layer.service.getOperationUrl) {
+        if (layer.type === 'WMSLayer' && layer.service && !clientOf(layer.service)?.getOperationUrl) {
           // Service was deserialized as plain object, reconstruct WmsEndpoint
-          const serviceUrl = layer.service._capabilitiesUrl || layer.service.url || layer.service.serviceUrl
+          const serviceUrl = clientOf(layer.service)?._capabilitiesUrl || clientOf(layer.service)?.url || clientOf(layer.service)?.serviceUrl
           if (serviceUrl) {
             try {
               const newService = await createServiceWMS(serviceUrl)
@@ -386,9 +414,9 @@ onMounted(async () => {
           }
         } else if (layer.type === 'WFSLayer' && layer.wfs_service) {
           // WFS service needs reconstruction - check if it has fetch method
-          if (typeof layer.wfs_service.fetch !== 'function') {
+          if (typeof clientOf(layer.wfs_service)?.fetch !== 'function') {
             // Deserialized WFS service - reconstruct from URL
-            const wfsUrl = layer.wfs_service.url
+            const wfsUrl = clientOf(layer.wfs_service)?.url
             if (wfsUrl) {
               try {
                 // Import WFS class dynamically
@@ -1289,7 +1317,7 @@ onUnmounted(() => {
       <l-tile-layer :attribution="config.attribution" :options="{maxNativeZoom:19,
         maxZoom:25}" :url="config.baseMapUrl"></l-tile-layer>
       <template v-for="(wmsLayer, index) in [...config.layers].reverse()" :key="`${wmsLayer.name}-${getOriginalLayerIndex(wmsLayer)}`">
-        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof wmsLayer.service.getOperationUrl === 'function'"
+        <LWmsTileLayer v-if="wmsLayer.type == 'WMSLayer' && wmsLayer.service && typeof clientOf(wmsLayer.service)?.getOperationUrl === 'function'"
                         :attribution="wmsLayer.attribution"
                         :layers="wmsLayer.name!"
                         :name="wmsLayer.name"
@@ -1304,7 +1332,7 @@ onUnmounted(() => {
         </LWmsTileLayer>
         <WFSLayer
           v-if="wmsLayer.type == 'WFSLayer'"
-          :geo-json="wmsLayer.wfs_service?.geoJson"
+          :geo-json="clientOf(wmsLayer.wfs_service)?.geoJson"
           :style-ids="wmsLayer.styleIds"
           :layer-options="getLayerOptions(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
