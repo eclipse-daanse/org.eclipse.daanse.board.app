@@ -27,8 +27,26 @@ import { useWidgetsStore } from 'org.eclipse.daanse.board.app.ui.vue.stores.widg
 import { useClipboardStore } from './useClipboardStore'
 import { cloneDeep } from 'lodash'
 
-export function useMoveableLayout(pageId: string = '') {
+/**
+ * @param gridSize how far apart the grid is, or 0 to place freely. Read on
+ *   every drag rather than passed once, so the switch takes effect at once.
+ */
+export function useMoveableLayout(pageId: string = '', gridSize: () => number = () => 0) {
   const layoutStore = useLayoutStore(pageId)
+
+  /*
+   * Lands the value on the grid.
+   *
+   * The rounding is done here rather than left to Moveable's own snapping:
+   * that only catches within a few pixels of a line, so on a 24px grid a
+   * widget came to rest wherever it was dropped four times out of five, and
+   * the setting felt like it did nothing. Asked to line up with the grid, a
+   * widget lines up with it.
+   */
+  const toGrid = (value: number) => {
+    const grid = gridSize()
+    return grid > 0 ? Math.round(value / grid) * grid : value
+  }
   const widgetStore = useWidgetsStore(pageId)
   const clipboardStore = useClipboardStore()
 
@@ -43,10 +61,10 @@ export function useMoveableLayout(pageId: string = '') {
   const processDropCoordinates = (event: DragEvent, container: HTMLElement) => {
     const { clientX, clientY } = event
     const { left, top } = container.getBoundingClientRect()
-    const dropX = clientX - left
-    const dropY = clientY - top
 
-    return { dropX, dropY }
+    // A widget put down lines up the same way one dragged does - otherwise
+    // the first thing on a board is the one thing off the grid
+    return { dropX: toGrid(clientX - left), dropY: toGrid(clientY - top) }
   }
 
   const processDragOverCoordinates = (event: DragEvent, container: HTMLElement) => {
@@ -55,8 +73,9 @@ export function useMoveableLayout(pageId: string = '') {
     const ghostX = clientX - left
     const ghostY = clientY - top
 
-    ghostPlaceholder.value.x = ghostX - ghostPlaceholder.value.width / 2
-    ghostPlaceholder.value.y = ghostY - ghostPlaceholder.value.height / 2
+    // The outline shows where it will land, so it lands where the outline is
+    ghostPlaceholder.value.x = toGrid(ghostX - ghostPlaceholder.value.width / 2)
+    ghostPlaceholder.value.y = toGrid(ghostY - ghostPlaceholder.value.height / 2)
     ghostPlaceholder.value.visible = true
   }
 
@@ -89,24 +108,27 @@ export function useMoveableLayout(pageId: string = '') {
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.x = e.translate[0]
-    item.y = e.translate[1]
+    item.x = toGrid(e.translate[0])
+    item.y = toGrid(e.translate[1])
 
-    e.target.style.transform = e.transform
+    // The element follows the value that was stored, not the raw drag
+    e.target.style.transform = `translate(${item.x}px, ${item.y}px)`
   }
 
   const resize = (id: string, e: OnResize) => {
     const item = layoutStore.layout.find((item: ILayoutItem) => item.id === id)
     if (!item) return
 
-    item.width = e.width
-    item.height = e.height
-    item.x = e.drag.translate[0]
-    item.y = e.drag.translate[1]
+    // Size lands on the grid too: an edge between two dots is as crooked
+    // as a corner between them
+    item.width = toGrid(e.width)
+    item.height = toGrid(e.height)
+    item.x = toGrid(e.drag.translate[0])
+    item.y = toGrid(e.drag.translate[1])
 
-    e.target.style.width = `${e.width}px`
-    e.target.style.height = `${e.height}px`
-    e.target.style.transform = e.drag.transform
+    e.target.style.width = `${item.width}px`
+    e.target.style.height = `${item.height}px`
+    e.target.style.transform = `translate(${item.x}px, ${item.y}px)`
   }
 
   const moveUp = (id: string) => {

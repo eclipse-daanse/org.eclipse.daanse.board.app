@@ -21,6 +21,38 @@ import { WidgetWrapper,defaultConfig } from 'org.eclipse.daanse.board.app.ui.vue
 import { cloneDeep } from 'lodash'
 import { useRouter, useRoute } from 'vue-router'
 
+/* ---- snapping ---------------------------------------------------------- */
+
+/**
+ * The grid a widget is dragged over is the one it lines up with.
+ *
+ * 24px, the same as the dots drawn on the surface. It used to snap to 20,
+ * so a widget came to rest between the dots it appeared to sit on.
+ */
+const GRID = 24
+
+/*
+ * Whether to snap is asked in the topbar, which is a different bundle. It
+ * says so on the root element - the same way the theme and the backdrop
+ * switch travel - and this reads it back. An attribute rather than a shared
+ * module, so neither side has to depend on the other for one boolean.
+ */
+const snapToGrid = ref(document.documentElement.getAttribute('data-board-snap') !== 'off')
+
+let snapWatcher: MutationObserver | null = null
+
+onMounted(() => {
+  snapWatcher = new MutationObserver(() => {
+    snapToGrid.value = document.documentElement.getAttribute('data-board-snap') !== 'off'
+  })
+  snapWatcher.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-board-snap'],
+  })
+})
+
+onUnmounted(() => snapWatcher?.disconnect())
+
 const emit = defineEmits(['openSettings', 'removeWidget'])
 
 const route = useRoute()
@@ -64,7 +96,7 @@ const {
   removeWidget: removeWidgetComposable,
   copyWidget: copyWidgetComposable,
   pasteWidget: pasteWidgetComposable,
-} = useMoveableLayout(pageId)
+} = useMoveableLayout(pageId, () => (snapToGrid.value ? GRID : 0))
 
 const safeWidgets = computed(() => widgetStore?.widgets || [])
 
@@ -96,37 +128,7 @@ const canvasSize = computed(() => {
   }
 })
 
-/* ---- snapping ---------------------------------------------------------- */
 
-/**
- * The grid a widget is dragged over is the one it lines up with.
- *
- * 24px, the same as the dots drawn on the surface. It used to snap to 20,
- * so a widget came to rest between the dots it appeared to sit on.
- */
-const GRID = 24
-
-/*
- * Whether to snap is asked in the topbar, which is a different bundle. It
- * says so on the root element - the same way the theme and the backdrop
- * switch travel - and this reads it back. An attribute rather than a shared
- * module, so neither side has to depend on the other for one boolean.
- */
-const snapToGrid = ref(document.documentElement.getAttribute('data-board-snap') !== 'off')
-
-let snapWatcher: MutationObserver | null = null
-
-onMounted(() => {
-  snapWatcher = new MutationObserver(() => {
-    snapToGrid.value = document.documentElement.getAttribute('data-board-snap') !== 'off'
-  })
-  snapWatcher.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-board-snap'],
-  })
-})
-
-onUnmounted(() => snapWatcher?.disconnect())
 
 // Minimap
 const scrollContainer = ref<HTMLElement | null>(null)
@@ -271,6 +273,9 @@ const pasteWidgetFromMenu = () => {
 
 
 
+/** Lands a value on the grid, or leaves it alone while snapping is off. */
+const toGrid = (value: number) => (snapToGrid.value ? Math.round(value / GRID) * GRID : value)
+
 const addWidget = (type: string, datasourceId: string, dropX: number, dropY: number) => {
   const config = { datasourceId, settings: {} }
   const wrapperConfig = cloneDeep(defaultConfig)
@@ -278,9 +283,16 @@ const addWidget = (type: string, datasourceId: string, dropX: number, dropY: num
   const width = ghostPlaceholder.value.width
   const height = ghostPlaceholder.value.height
 
+  /*
+   * The corner is what lands on the grid, not the pointer.
+   *
+   * A widget is dropped centred under the cursor, and rounding the cursor
+   * before subtracting half the widget put the corner half a widget off the
+   * grid again - which is why snapping appeared to do nothing on the way in.
+   */
   const layoutConfig = {
-    x: dropX - width / 2,
-    y: dropY - height / 2,
+    x: toGrid(dropX - width / 2),
+    y: toGrid(dropY - height / 2),
     width,
     height,
     z: 3005,
@@ -326,10 +338,12 @@ const getCanvasCoords = (event: DragEvent | MouseEvent) => {
   }
 }
 
+
 const onDrop = (event: DragEvent) => {
-  console.log('ondrop')
   hidePlaceholder()
   const coords = getCanvasCoords(event)
+  // Left as they are: the corner is rounded in addWidget, where the widget's
+  // own size is known
   widgetConfig.value = { dropX: coords.x, dropY: coords.y }
 }
 
@@ -339,8 +353,9 @@ const onDragOver = (event: DragEvent) => {
     isDragging.value = true
 
     const coords = getCanvasCoords(event)
-    ghostPlaceholder.value.x = coords.x - ghostPlaceholder.value.width / 2
-    ghostPlaceholder.value.y = coords.y - ghostPlaceholder.value.height / 2
+    // The outline shows where it will land, so it lands where the outline is
+    ghostPlaceholder.value.x = toGrid(coords.x - ghostPlaceholder.value.width / 2)
+    ghostPlaceholder.value.y = toGrid(coords.y - ghostPlaceholder.value.height / 2)
     ghostPlaceholder.value.visible = true
   }
 }
