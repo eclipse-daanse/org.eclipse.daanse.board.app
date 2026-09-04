@@ -5,8 +5,9 @@
  * @generated
  */
 
-import { WidgetActionInterface, WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
 
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTableInterface' })
 export abstract class PivotTableInterface extends WidgetActionInterface {

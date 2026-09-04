@@ -5,7 +5,7 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { DatastreamSummary } from './DatastreamSummary.js';
 import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
 

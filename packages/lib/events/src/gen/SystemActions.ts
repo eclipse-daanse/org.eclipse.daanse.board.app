@@ -5,8 +5,9 @@
  * @generated
  */
 
-import { SystemActionInterface, WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
 
 @Documentation("System-level actions that can be triggered by events")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events.systemactions#//SystemActions' })

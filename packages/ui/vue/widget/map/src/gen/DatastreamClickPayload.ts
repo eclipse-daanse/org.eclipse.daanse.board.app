@@ -5,7 +5,7 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events';
+import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
 
 @Documentation("Payload emitted when a Datastream is clicked on the map.")

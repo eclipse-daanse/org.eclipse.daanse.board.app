@@ -5,8 +5,9 @@
  * @generated
  */
 
-import { WidgetActionInterface, WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
 
 @Documentation("Abstract base class for Map Widget operations.")
 @ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapWidgetInterface' })

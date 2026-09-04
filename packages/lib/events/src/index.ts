@@ -9,10 +9,17 @@ Contributors: Smart City Jena
 
 */
 
-import { Payload } from './gen/Payload';
-import { WidgetActionInterface } from './gen/WidgetActionInterface';
-import { SystemActionInterface } from './gen/SystemActionInterface';
-import { PageActionInterface } from './gen/PageActionInterface';
+/*
+ * The contract comes from the api package now - it owns EventModel.ecore.
+ * Re-exported here so the many places that import these from the
+ * implementation keep working while they are moved over one at a time.
+ */
+import {
+  Payload,
+  WidgetActionInterface,
+  SystemActionInterface,
+  PageActionInterface,
+} from 'org.eclipse.daanse.board.app.lib.api.events';
 import { Condition } from './manager/Condition';
 import { Comperator } from './manager/Comperator';
 import { EventRegistry, EVENT_REGISTRY, EVENT_REGISTRY_ID, type MetadataEntry, type PayloadMetadata, type PayloadPropertyInfo, type WidgetEventDefinition } from './registry/EventRegistry';

@@ -21,7 +21,8 @@ import {
   EList,
   isEClass
 } from '@emfts/core';
-import eventModelContent from '../../model/EventModel.ecore?raw';
+// The model belongs to the api package now; read as text from there
+import eventModelContent from 'org.eclipse.daanse.board.app.lib.api.events/model/EventModel.ecore?raw';
 import { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 export { ECORE_METADATA_SERVICE_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 

@@ -5,7 +5,7 @@
  * @generated
  */
 
-import type { PageActionInterface } from 'org.eclipse.daanse.board.app.lib.events';
+import type { PageActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
 /**
  * PageVariableActions

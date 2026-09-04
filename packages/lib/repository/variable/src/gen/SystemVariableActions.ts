@@ -5,7 +5,7 @@
  * @generated
  */
 
-import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.events';
+import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
 /**
  * SystemVariableActions

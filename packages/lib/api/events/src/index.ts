@@ -28,12 +28,33 @@ import type { ResourceSet, EPackage } from '@emfts/core'
  */
 
 /*
- * Source-declared contract types of the implementation, type-only: their
- * runtime halves (decorators, the comparator, the raw ecore content) are
- * behaviour and stay with the implementation.
+ * The contract itself, generated from EventModel.ecore in this package.
+ *
+ * A model is a promise about shape, so it belongs with the interfaces
+ * rather than with one implementation of them - and a widget that emits an
+ * event should depend on what an event is, not on the thing that dispatches
+ * it. Payload and the three action interfaces are declared here and used by
+ * lib.events, which is the way round the tsm manifest already described.
  */
-import type { Payload, WidgetActionInterface, SystemActionInterface, PageActionInterface, Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping } from 'org.eclipse.daanse.board.app.lib.events'
-export type { Payload, WidgetActionInterface, SystemActionInterface, PageActionInterface, Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping }
+/*
+ * The .ecore file itself ships with this package - see "files" in
+ * package.json. Whoever needs the text at runtime imports it by path with
+ * ?raw; re-exporting it from here would make every consumer of the api
+ * resolve a ?raw import whether or not it wants the model.
+ */
+
+export { Payload } from './gen/Payload'
+export { WidgetActionInterface } from './gen/WidgetActionInterface'
+export { SystemActionInterface } from './gen/SystemActionInterface'
+export { PageActionInterface } from './gen/PageActionInterface'
+
+/*
+ * Still declared by the implementation: these carry behaviour - decorators,
+ * the comparator, the raw ecore content - and are not part of the contract
+ * a widget needs.
+ */
+import type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping } from 'org.eclipse.daanse.board.app.lib.events'
+export type { Condition, WidgetAction, ActionParameter, SystemActionsEcoreContent, WidgetEventDefinition, Comperator, MetadataEntry, PayloadMetadata, PayloadPropertyInfo, ActionDefinition, WidgetTypeRegistration, EventActionContext, EventActionMapping }
 
 export interface RegisteredInstance {
     instanceId: string;
