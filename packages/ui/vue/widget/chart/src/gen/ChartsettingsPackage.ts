@@ -10,6 +10,18 @@ import type { EClass, EAttribute, EReference, EEnum } from '@emfts/core';
 import { ChartsettingsFactory } from './ChartsettingsFactory.js';
 
 /**
+ * Resolve a dependency package from the registry, failing with an actionable
+ * message instead of a null dereference when it is not registered yet
+ */
+function requireEPackage(nsURI: string) {
+  const pkg = EPackageRegistry.INSTANCE.getEPackage(nsURI);
+  if (!pkg) {
+    throw new Error(`EPackage '${nsURI}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing ChartsettingsPackage.`);
+  }
+  return pkg;
+}
+
+/**
  * Chartsettings Package
  * @generated
  */
@@ -88,9 +100,11 @@ export class ChartsettingsPackage extends BasicEPackage {
    * Initialize package contents
    */
   private init(): void {
+    // Register this package under its nsURI so other generated packages can
+    // resolve their cross-package references from the registry (#36).
+    // eINSTANCE is already assigned at this point
+    EPackageRegistry.INSTANCE.set(ChartsettingsPackage.eNS_URI, this);
     // Wire the generated factory so loaded/created instances are typed Impls.
-    // eINSTANCE is already assigned at this point, so the factory's back
-    // reference to the package resolves without re-entering init()
     this.setEFactoryInstance(ChartsettingsFactory.eINSTANCE);
 
     // Create SeriesSettings class
@@ -473,44 +487,46 @@ export class ChartsettingsPackage extends BasicEPackage {
     // ============================================
 
     // ============================================
-    // Set ETypes for EReferences (must be done after all classes are created)
+    // Set ETypes for all features (must be done after all classes are created).
+    // An EAttribute without eType leaves the XMI reader no EDataType to
+    // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__SERIES_INDEX as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__LABEL as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__CHART_TYPE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__X_AXIS_ID as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__Y_AXIS_ID as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_WIDTH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_DASH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__FILL as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__SHOW_POINTS as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__POINT_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.SERIES_SETTINGS__POINT_SIZE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__SERIES_INDEX as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__LABEL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__CHART_TYPE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__X_AXIS_ID as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__Y_AXIS_ID as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_WIDTH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__BORDER_DASH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__FILL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__SHOW_POINTS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__POINT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.SERIES_SETTINGS__POINT_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
     (ChartsettingsPackage.Literals.CHART_SETTINGS__SERIES_SETTINGS as BasicEReference).setEType(ChartsettingsPackage.Literals.SERIES_SETTINGS);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__CHART_TYPE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__BAR_ORIENTATION as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__STACKED as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_WIDTH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_DASH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__FILL as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_POINTS as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__POINT_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__POINT_SIZE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_HORIZONTAL_GRID as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__HORIZONTAL_GRID_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__HORIZONTAL_GRID_WIDTH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_VERTICAL_GRID as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__VERTICAL_GRID_COLOR as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__VERTICAL_GRID_WIDTH as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__X_AXIS_TITLE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__ANNOTATIONS_EDIT_MODE as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
-    (ChartsettingsPackage.Literals.CHART_SETTINGS__DATE_DISPLAY_FORMAT as BasicEReference).setEType(EPackageRegistry.INSTANCE.getEPackage('org.eclipse.daanse.board.app.ui.vue.composables')!.getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__CHART_TYPE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__BAR_ORIENTATION as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__STACKED as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_WIDTH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__BORDER_DASH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__BACKGROUND_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__FILL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_POINTS as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__POINT_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__POINT_SIZE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_HORIZONTAL_GRID as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__HORIZONTAL_GRID_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__HORIZONTAL_GRID_WIDTH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__SHOW_VERTICAL_GRID as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__VERTICAL_GRID_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__VERTICAL_GRID_WIDTH as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__X_AXIS_TITLE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__Y_AXIS_TITLE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__ANNOTATIONS_EDIT_MODE as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ChartsettingsPackage.Literals.CHART_SETTINGS__DATE_DISPLAY_FORMAT as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

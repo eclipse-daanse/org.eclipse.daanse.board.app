@@ -10,7 +10,7 @@ import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.eve
 /**
  * OGCSTAToChartComposerActions
  */
-export interface OGCSTAToChartComposerActions {
+export interface OGCSTAToChartComposerActions extends SystemActionInterface {
 
   switchThingByName(name?: string): void;
   switchThingById(id?: string): void;

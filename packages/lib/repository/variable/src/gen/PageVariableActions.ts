@@ -10,7 +10,7 @@ import type { PageActionInterface } from 'org.eclipse.daanse.board.app.lib.event
 /**
  * PageVariableActions
  */
-export interface PageVariableActions {
+export interface PageVariableActions extends PageActionInterface {
 
   setPageVariable(variableName?: string, value?: unknown, pageId?: string): void;
 }

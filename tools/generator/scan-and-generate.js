@@ -75,6 +75,21 @@ function referencesOf(file) {
   const refs = new Set()
   for (const m of source.matchAll(/href="(http[^"#]+)#/g)) refs.add(m[1])
   for (const m of source.matchAll(/eClassifier="([^"#]+)#/g)) refs.add(m[1])
+  /*
+   * Inheritance across packages is written as an attribute, not an href, so
+   * it was missed - and the referenced ecore was never loaded. In decorator
+   * mode that goes unnoticed, because the supertype is only named; in emf
+   * mode the class hierarchy has to resolve, and generation failed with an
+   * unresolved proxy on a package nobody had asked for.
+   *
+   * eSuperTypes holds a space-separated list, so each entry is taken.
+   */
+  for (const m of source.matchAll(/eSuperTypes="([^"]+)"/g)) {
+    for (const uri of m[1].split(/\s+/)) {
+      const base = uri.split('#')[0]
+      if (base.startsWith('http')) refs.add(base)
+    }
+  }
   refs.delete(own)
   return [...refs].filter((r) => !r.includes('eclipse.org/emf'))
 }

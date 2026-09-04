@@ -10,7 +10,7 @@ import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.eve
 /**
  * SystemVariableActions
  */
-export interface SystemVariableActions {
+export interface SystemVariableActions extends SystemActionInterface {
 
   setGlobalVariable(variableName?: string, value?: unknown): void;
 }

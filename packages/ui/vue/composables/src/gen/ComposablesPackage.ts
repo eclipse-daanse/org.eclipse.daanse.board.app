@@ -5,7 +5,7 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
 import type { EClass, EAttribute, EReference, EEnum } from '@emfts/core';
 import { ComposablesFactory } from './ComposablesFactory.js';
 
@@ -51,9 +51,11 @@ export class ComposablesPackage extends BasicEPackage {
    * Initialize package contents
    */
   private init(): void {
+    // Register this package under its nsURI so other generated packages can
+    // resolve their cross-package references from the registry (#36).
+    // eINSTANCE is already assigned at this point
+    EPackageRegistry.INSTANCE.set(ComposablesPackage.eNS_URI, this);
     // Wire the generated factory so loaded/created instances are typed Impls.
-    // eINSTANCE is already assigned at this point, so the factory's back
-    // reference to the package resolves without re-entering init()
     this.setEFactoryInstance(ComposablesFactory.eINSTANCE);
 
     // Create VariableWrapper class
@@ -103,8 +105,14 @@ export class ComposablesPackage extends BasicEPackage {
     // ============================================
 
     // ============================================
-    // Set ETypes for EReferences (must be done after all classes are created)
+    // Set ETypes for all features (must be done after all classes are created).
+    // An EAttribute without eType leaves the XMI reader no EDataType to
+    // convert against - every value would arrive as a raw string (#37)
     // ============================================
+    (ComposablesPackage.Literals.VARIABLE_WRAPPER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EObject')!);
+    (ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
+    (ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations
