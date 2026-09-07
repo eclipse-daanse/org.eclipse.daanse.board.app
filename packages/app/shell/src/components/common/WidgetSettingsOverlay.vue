@@ -539,9 +539,14 @@ onBeforeUnmount(() => {
 
             <!-- What the model does not describe yet -->
             <div v-show="tab === 'rest'" ref="restHost">
+              <!-- The tab holds whatever the widget's model does not cover,
+                   and that is a different thing per widget: the chart's
+                   series, the icon's symbol picker, the code widget's
+                   editor. Naming one of them here told every other widget
+                   something untrue about itself. -->
               <p class="rest__note">
-                Einstellungen, die noch nicht im Modell beschrieben sind - beim Diagramm die
-                einzelnen Datenreihen und die Referenzlinien.
+                Einstellungen, die dieses Widget selbst mitbringt und die sich nicht als Feld
+                beschreiben lassen.
               </p>
               <component
                 v-if="showRestTab"
