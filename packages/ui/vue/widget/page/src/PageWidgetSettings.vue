@@ -59,51 +59,46 @@ const isValidSelection = computed(() => {
 </script>
 
 <template>
-<va-collapse
-        v-model="opened.widgetSection"
-        :header="t('page:pageWidget.title')"
-        icon="settings"
-    >
-        <div class="settings-container">
-            <!-- Dropdown für Seitenauswahl -->
-            <va-select
-                v-model="widgetSettings.path"
-                :label="t('page:pageWidget.selectPage')"
-                :options="availablePages"
-                value-by="value"
-                text-by="text"
-                :placeholder="t('page:pageWidget.selectPagePlaceholder')"
-                :color="isValidSelection ? 'primary' : 'danger'"
-            />
-            <!-- Warnung bei Selbstreferenz -->
-            <va-alert
-                v-if="!isValidSelection"
-                color="warning"
-                :border="false"
-                icon="warning"
-            >
-              {{ t('page:pageWidget.selfReferenceWarning') }}
-            </va-alert>
+  <!--
+    What is left of the hand-written form: choosing the page.
 
-            <!-- Hintergrundfarbe -->
-            <va-color-input
-                v-model="widgetSettings.backgroundColor"
-                :label="t('page:pageWidget.backgroundColor')"
-            />
-            <!-- Manueller Pfad-Input als Fallback -->
-            <va-collapse
-                v-model="opened.storeSection"
-                :header="t('page:pageWidget.manualPath')"
-                icon="edit"
-            >
-                <va-input
-                    v-model="widgetSettings.path"
-                    :label="t('page:pageWidget.path')"
-                    :color="isValidSelection ? 'primary' : 'danger'"
-                />
-            </va-collapse>
-        </div>
-    </va-collapse>
+    The choices are the pages that exist right now, so there is no list a
+    model could state; and the widget refuses the page it is sitting on,
+    which is a rule about the choice rather than a property of it. The
+    framing - the title switch and the background - is rendered from
+    model/ui.xmi beside this.
+  -->
+  <va-collapse v-model="opened.widgetSection" header="Seite wählen" icon="tab">
+    <div class="settings-container">
+      <va-select
+        v-model="widgetSettings.path"
+        :label="t('page:pageWidget.selectPage')"
+        :options="availablePages"
+        value-by="value"
+        text-by="text"
+        :placeholder="t('page:pageWidget.selectPagePlaceholder')"
+        :color="isValidSelection ? 'primary' : 'danger'"
+      />
+
+      <va-alert v-if="!isValidSelection" color="warning" :border="false" icon="warning">
+        {{ t('page:pageWidget.selfReferenceWarning') }}
+      </va-alert>
+
+      <!-- A page that is not in the list yet - one being built, or one from
+           a board that has not loaded - can still be reached by its path. -->
+      <va-collapse
+        v-model="opened.storeSection"
+        :header="t('page:pageWidget.manualPath')"
+        icon="edit"
+      >
+        <va-input
+          v-model="widgetSettings.path"
+          :label="t('page:pageWidget.path')"
+          :color="isValidSelection ? 'primary' : 'danger'"
+        />
+      </va-collapse>
+    </div>
+  </va-collapse>
 </template>
 
 <style scoped>

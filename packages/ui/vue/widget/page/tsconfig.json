@@ -20,6 +20,8 @@
     /*, Skip type checking all .d.ts files. */
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    /* Declares the ?raw imports the settings form is read through. */
+    "types": ["vite/client"]
   }
 }

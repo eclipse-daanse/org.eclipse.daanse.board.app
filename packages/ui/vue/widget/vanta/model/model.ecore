@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The animated background's settings.
+
+Four effects with almost nothing in common, so this is one class holding the
+union of what they take rather than four classes: the effect is chosen at
+runtime and changing it must not throw away what was set for the other one.
+Only the background colour is shared by all four; colour and spacing are
+shared by two.
+
+Unset means "let the effect decide" - the widget passes a value through only
+when it is there, so an empty field is not the same as a zero.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="vantasettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.vanta"
+                nsPrefix="vantasettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="VantaSettings">
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="CLOUDS"/>
+
+        <!-- Shared by all four -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+
+        <!-- CLOUDS -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="skyColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudShadowColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunGlareColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunlightColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+
+        <!-- BIRDS -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color1"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color2"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="birdSize"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="wingSpan"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="speedLimit"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="separation"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="alignment"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="cohesion"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+
+        <!-- NET and TRUNK -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="color"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="spacing"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+
+        <!-- NET -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="points"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDistance"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+
+        <!-- TRUNK -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="chaos"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+
+    </eClassifiers>
+</ecore:EPackage>
