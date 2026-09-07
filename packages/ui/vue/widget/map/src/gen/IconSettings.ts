@@ -6,6 +6,7 @@
  */
 
 import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 /**
  * IconSettings
@@ -13,7 +14,7 @@ import type { EObject } from '@emfts/core';
  */
 export interface IconSettings extends EObject {
   currentIcon?: string;
-  iconColor?: string;
+  iconColor?: VariableWrapper<string>;
   iconSize?: number;
   isIconFilled?: boolean;
   strokeWeight?: number;

@@ -488,7 +488,8 @@ export class MapSettingsPackage extends BasicEPackage {
     MapSettingsPackage.Literals.ICON_SETTINGS__CURRENT_ICON = iconSettings_currentIcon;
 
     // Create iconColor feature
-    const iconSettings_iconColor = new BasicEAttribute();
+    const iconSettings_iconColor = new BasicEReference();
+    iconSettings_iconColor.setContainment(false);
     iconSettings_iconColor.setName('iconColor');
     iconSettings_iconColor.setLowerBound(0);
     iconSettings_iconColor.setUpperBound(1);
@@ -1264,7 +1265,7 @@ export class MapSettingsPackage extends BasicEPackage {
     (MapSettingsPackage.Literals.SERVICE__SERVICE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EJavaObject')!);
     (MapSettingsPackage.Literals.SERVICE__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (MapSettingsPackage.Literals.ICON_SETTINGS__CURRENT_ICON as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (MapSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (MapSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
     (MapSettingsPackage.Literals.ICON_SETTINGS__ICON_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (MapSettingsPackage.Literals.ICON_SETTINGS__IS_ICON_FILLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (MapSettingsPackage.Literals.ICON_SETTINGS__STROKE_WEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);

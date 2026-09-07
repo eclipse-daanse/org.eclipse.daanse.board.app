@@ -341,10 +341,15 @@
                 <details key="documentation" value="The identifier or path of the currently selected icon."/>
             </eAnnotations>
         </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <!-- A wrapper, as in the icon widget's own model: these settings are
+             handed straight to an IconWidget, so the two have to agree. -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="iconColor" containment="false" defaultValueLiteral="var(--color-fg)">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="The color of the icon."/>
             </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
         </eStructuralFeatures>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

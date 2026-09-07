@@ -7,6 +7,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import type { IconSettings } from './IconSettings.js';
 import { MapSettingsPackage } from './MapSettingsPackage.js';
 
@@ -26,7 +27,7 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
 
   // Private fields
   private _currentIcon?: string;
-  private _iconColor?: string;
+  private _iconColor: VariableWrapper<string> = new VariableWrapper<string>();
   private _iconSize?: number;
   private _isIconFilled?: boolean;
   private _strokeWeight?: number;
@@ -65,11 +66,11 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
     }
   }
 
-  get iconColor(): string {
+  get iconColor(): VariableWrapper<string> {
     return this._iconColor!;
   }
 
-  set iconColor(value: string) {
+  set iconColor(value: VariableWrapper<string>) {
     const oldValue = this._iconColor;
     this._iconColor = value;
     if (this.eDeliver()) {
@@ -247,7 +248,7 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
         super.eSet(feature, newValue);
         break;
       case IconSettingsImpl.ICON_COLOR:
-        this.iconColor = newValue as string;
+        this.iconColor = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
       case IconSettingsImpl.ICON_SIZE:
@@ -284,7 +285,7 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
       case IconSettingsImpl.CURRENT_ICON:
         return this._currentIcon !== undefined;
       case IconSettingsImpl.ICON_COLOR:
-        return this._iconColor !== undefined;
+        return this._iconColor !== new VariableWrapper<string>();
       case IconSettingsImpl.ICON_SIZE:
         return this._iconSize !== undefined;
       case IconSettingsImpl.IS_ICON_FILLED:
@@ -310,7 +311,7 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
         this._currentIcon = undefined;
         return;
       case IconSettingsImpl.ICON_COLOR:
-        this._iconColor = undefined;
+        this._iconColor = new VariableWrapper<string>();
         return;
       case IconSettingsImpl.ICON_SIZE:
         this._iconSize = undefined;
