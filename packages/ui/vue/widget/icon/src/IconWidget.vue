@@ -35,14 +35,24 @@ onMounted(() => {
     if (config.value) {
         Object.assign(config.value, { ...defaultConfig, ...config.value });
 
-        if (!((config.value.iconColor as any) instanceof VariableWrapper)) {
-            const current = config.value.iconColor;
+        /*
+         * A board saved before iconColor was a wrapper holds the colour
+         * itself, or a plain object that only looks like one. The model
+         * says wrapper now, so what is stored is carried into a real one
+         * rather than trusted - a plain string here reaches v-bind as a
+         * wrapper object and paints nothing.
+         */
+        const current: unknown = config.value.iconColor;
+        if (!(current instanceof VariableWrapper)) {
             if (typeof current === 'object' && current !== null && 'value' in current) {
-                const v = new VariableWrapper((current as any).value);
-                if ('variable' in current) v.variable = (current as any).variable;
-                (config.value as any).iconColor = v;
+                const held = current as { value?: string; variable?: string };
+                const v = new VariableWrapper(held.value);
+                if (held.variable) v.variable = held.variable;
+                config.value.iconColor = v;
             } else {
-                (config.value as any).iconColor = new VariableWrapper((current as string) || 'var(--color-fg)');
+                config.value.iconColor = new VariableWrapper(
+                    typeof current === 'string' && current ? current : 'var(--color-fg)',
+                );
             }
         }
     }

@@ -11,29 +11,31 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { EVENT_REGISTRY_ID, EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import { initTsmRuntime } from '@eclipse-daanse/tsm'
 import Icon from './assets/icon.svg'
 import IconWidget from './IconWidget.vue'
 import IconWidgetSettings from './IconWidgetSettings.vue'
 import { IconWidgetEvents } from './events/IconWidgetEvents'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import type { IconSettings } from './gen/IconSettings'
+import { IconSettingsImpl } from './gen/IconSettingsImpl'
+import { IconSettingsPackage } from './gen/IconSettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import iconSettingsFormXmi from '../model/ui.xmi?raw'
 
 /*
- * The settings as this widget actually uses them.
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
  *
- * Not the generated IconSettings: the model types iconColor as a plain
- * string, while the component stores a VariableWrapper there so the colour
- * can be bound to a variable. Until the model says so too, the difference
- * is written down here rather than papered over.
+ * The events package first: the click payloads inherit from Payload, and a
+ * package cannot resolve a supertype that is not in the registry yet.
  */
-interface IIconSettings extends Omit<IconSettings, 'iconColor'> {
-  iconColor: string | VariableWrapper<string>;
-}
+EventsPackage.eINSTANCE
+IconSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'IconWidget'
 
@@ -52,6 +54,24 @@ export class IconWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Icon'
+
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: iconSettingsFormXmi,
+    uri: '/icon-settings.ui.xmi',
+    ePackage: () => IconSettingsPackage.eINSTANCE,
+    create: () => new IconSettingsImpl(),
+    /*
+     * Picking the symbol is not a field - it is searching a list and
+     * clicking one - so it stays with the hand-written component. Named so
+     * that what is modelled is not offered twice.
+     */
+    unmodelledSections: ['Symbol wählen'],
+  }
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -83,4 +103,5 @@ export class IconWidgetProvider implements WidgetProvider {
 }
 
 export { IconWidget, IconWidgetSettings }
-export type { IIconSettings }
+export { IconSettingsImpl, IconSettingsPackage, iconSettingsFormXmi }
+export type { IconSettings }

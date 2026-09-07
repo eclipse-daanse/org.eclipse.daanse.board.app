@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the icon widget, minus the symbol itself.
+
+Choosing the symbol is searching a list and clicking one - there is no value
+to type, so it stays with the hand-written component next to this. What is
+left divides in two: what the symbol looks like at a glance, and the four
+numbers of the Material Symbols variable font, which are a different kind of
+decision and are grouped apart.
+
+The ranges are the font's own, not guesses: outside them the font simply
+clamps and turning the number further does nothing visible.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="IconSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="IconSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="appearanceGroup" layout="VERTICAL" label="Aussehen">
+      <fields xsi:type="uimodel:CheckboxWidget"
+          name="isIconFilled"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/isIconFilled"
+          label="Gefüllt"/>
+      <fields xsi:type="uimodel:InputWidget"
+          name="iconColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/iconColor"
+          label="Farbe"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="iconSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/iconSize"
+          label="Größe (px)" min="10" max="1000" step="10"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="fontGroup" layout="VERTICAL" label="Schriftachsen">
+      <fields xsi:type="uimodel:NumberWidget"
+          name="strokeWeight"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/strokeWeight"
+          label="Strichstärke" min="100" max="700" step="100"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="opticSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/opticSize"
+          label="Optische Größe" min="20" max="48" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget"
+          name="grade"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconSettings/grade"
+          label="Kontrast" min="-25" max="200" step="15"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

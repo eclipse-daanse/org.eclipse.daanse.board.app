@@ -5,7 +5,7 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
 import type { EClass, EAttribute, EReference } from '@emfts/core';
 import { IconSettingsFactory } from './IconSettingsFactory.js';
 
@@ -87,7 +87,8 @@ export class IconSettingsPackage extends BasicEPackage {
     IconSettingsPackage.Literals.ICON_SETTINGS = iconSettingsClass;
 
     // Create iconColor feature
-    const iconSettings_iconColor = new BasicEAttribute();
+    const iconSettings_iconColor = new BasicEReference();
+    iconSettings_iconColor.setContainment(false);
     iconSettings_iconColor.setName('iconColor');
     iconSettings_iconColor.setLowerBound(0);
     iconSettings_iconColor.setUpperBound(1);
@@ -188,7 +189,7 @@ export class IconSettingsPackage extends BasicEPackage {
     // An EAttribute without eType leaves the XMI reader no EDataType to
     // convert against - every value would arrive as a raw string (#37)
     // ============================================
-    (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_COLOR as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__ICON_SIZE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__IS_ICON_FILLED as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (IconSettingsPackage.Literals.ICON_SETTINGS__STROKE_WEIGHT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);

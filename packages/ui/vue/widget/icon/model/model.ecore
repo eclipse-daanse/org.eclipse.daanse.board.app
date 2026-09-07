@@ -23,10 +23,16 @@
             <details key="documentation" value="Configuration for rendering an icon, including color, size, and style options."/>
         </eAnnotations>
 
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <!-- A wrapper, like every other setting: the widget has always kept
+             one here so the colour can follow a variable - the model said
+             EString and the two disagreed. -->
+        <eStructuralFeatures xsi:type="ecore:EReference" name="iconColor" containment="false" defaultValueLiteral="var(--color-fg)">
             <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
                 <details key="documentation" value="Color value (hex or CSS) used to render the icon."/>
             </eAnnotations>
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
         </eStructuralFeatures>
 
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="iconSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

@@ -11,11 +11,10 @@ Contributors:
     Smart City Jena
 -->
 <script lang="ts" setup>
-import type { IIconSettings } from './index'
-import { computed, inject, onMounted, ref, type Ref, watch, markRaw } from 'vue'
+import type { IconSettings } from './gen/IconSettings'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import MaterialIcons from './assets/output.json'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 
 // interface MaterialIcon {
 //     name: string;
@@ -39,7 +38,7 @@ const opened = ref({
   widgetSection: false,
   storeSection: false,
 })
-const widgetSettings = defineModel<IIconSettings>({ required: true })
+const widgetSettings = defineModel<IconSettings>({ required: true })
 
 const isDarkTheme: Ref<boolean> = ref(
   JSON.parse(localStorage.getItem('isDarkTheme') || 'false'),
@@ -61,14 +60,6 @@ const handleIconClick = (icon: string) => {
 onMounted(() => {
   iconsList.value = MaterialIcons
 })
-
-watch(() => widgetSettings.value, (newVal) => {
-    if (newVal) {
-        if (!(newVal.iconColor instanceof VariableWrapper)) {
-            newVal.iconColor = markRaw(new VariableWrapper<string>((newVal.iconColor as string) || '#000000'));
-        }
-    }
-}, { immediate: true, deep: true });
 
 const fontColor = computed(() => {
   return isDarkTheme.value ? '#ffffff' : ''
@@ -113,7 +104,7 @@ const iconStyle = computed(() => {
         v-model="widgetSettings.isIconFilled"
         :label="t('icon:IconWidget.iconFilled')"
       />
-      <VariableInput v-model="(widgetSettings.iconColor as unknown as VariableWrapper<string>)" :label="t('icon:IconWidget.iconColor')">
+      <VariableInput v-model="widgetSettings.iconColor!" :label="t('icon:IconWidget.iconColor')">
         <template #default="{ value, change }">
           <va-color-input
             :model-value="value"
