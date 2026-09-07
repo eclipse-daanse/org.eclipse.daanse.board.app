@@ -1,12 +1,12 @@
 (function(){var i="ui.vue.widget.weather",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".forecast-chart[data-v-73b640b9]{padding:16px}.forecast-chart h4[data-v-73b640b9]{margin:0 0 16px;color:var(--v36d633cf);font-size:1.1em;text-align:center}.chart-container[data-v-73b640b9]{position:relative;height:200px;padding:0}.no-data[data-v-73b640b9]{display:flex;align-items:center;justify-content:center;height:100%;color:var(--v36d633cf);font-style:italic}.no-data p[data-v-73b640b9]{margin:0}@media(max-width:480px){.chart-container[data-v-73b640b9]{height:150px;padding:5px}.forecast-chart h4[data-v-73b640b9]{font-size:1em}}.weather-widget[data-v-27ce0413]{padding:16px;border-radius:8px;font-family:Arial,sans-serif;height:100%;display:flex;flex-direction:column}.weather-loading[data-v-27ce0413]{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#6c757d}.spinner[data-v-27ce0413]{width:24px;height:24px;border:2px solid #e9ecef;border-top:2px solid #007bff;border-radius:50%;animation:spin-27ce0413 1s linear infinite;margin-bottom:8px}@keyframes spin-27ce0413{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.weather-error[data-v-27ce0413]{color:#dc3545;text-align:center;flex:1;display:flex;align-items:center;justify-content:center}.weather-content[data-v-27ce0413]{flex:1;display:flex;flex-direction:column}.weather-header[data-v-27ce0413]{margin-bottom:16px;border-bottom:1px solid #dee2e6;padding-bottom:12px}.weather-header h3[data-v-27ce0413]{margin:0 0 4px;color:var(--v71b427be);font-size:1.2em}.location-desc[data-v-27ce0413]{margin:0;color:var(--v71b427be);font-size:.9em;opacity:.7}.weather-main[data-v-27ce0413]{flex:1}.weather-icon-section[data-v-27ce0413]{text-align:center;margin-bottom:16px}.weather-icon[data-v-27ce0413]{font-size:5em;line-height:1}.temperature[data-v-27ce0413]{text-align:center;margin-bottom:24px}.temp-value[data-v-27ce0413]{font-size:2.5em;font-weight:200;color:var(--v71b427be)}.weather-details[data-v-27ce0413]{display:grid;gap:12px}.weather-item[data-v-27ce0413]{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#fff3;border-radius:6px}.weather-item .label[data-v-27ce0413]{color:var(--v71b427be);opacity:.7;font-weight:500}.weather-item .value[data-v-27ce0413]{color:var(--v71b427be);font-weight:600}.weather-empty[data-v-27ce0413]{text-align:center;color:#6c757d;flex:1;display:flex;align-items:center;justify-content:center}.time-range[data-v-27ce0413]{margin-top:8px;color:var(--v71b427be);opacity:.7;font-style:italic}.timestamp[data-v-27ce0413]{margin-top:8px;text-align:center}.timestamp small[data-v-27ce0413]{color:var(--v71b427be);opacity:.7;font-size:.8em}.refresh-info[data-v-27ce0413]{margin-top:16px;text-align:center;color:var(--v71b427be);opacity:.7;border-top:1px solid #dee2e6;padding-top:12px}.forecast-section[data-v-27ce0413]{margin-top:20px;border-top:2px solid #dee2e6;padding-top:16px}.forecast-title[data-v-27ce0413]{margin:0 0 20px;color:var(--v71b427be);font-size:1.3em;text-align:center}.forecast-charts[data-v-27ce0413]{display:flex;flex-direction:column;gap:20px}@media(max-width:480px){.weather-widget[data-v-27ce0413]{padding:12px}.temp-value[data-v-27ce0413]{font-size:2em}.weather-item[data-v-27ce0413]{flex-direction:column;align-items:flex-start;gap:4px}.forecast-charts[data-v-27ce0413]{gap:15px}.forecast-title[data-v-27ce0413]{font-size:1.1em}}.weather-settings[data-v-b9894535]{padding:16px;max-width:600px}.settings-section[data-v-b9894535]{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #e9ecef}.settings-section[data-v-b9894535]:last-child{border-bottom:none}.settings-section h4[data-v-b9894535]{margin:0 0 16px;color:#495057;font-size:1.1em}.input-mode-selector[data-v-b9894535],.time-mode-selector[data-v-b9894535]{display:flex;gap:16px;margin-bottom:16px}.input-mode-selector label[data-v-b9894535],.time-mode-selector label[data-v-b9894535]{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500}.form-group[data-v-b9894535]{margin-bottom:16px}.form-group label[data-v-b9894535]{display:block;margin-bottom:4px;font-weight:600;color:#495057}.form-control[data-v-b9894535]{width:100%;padding:8px 12px;border:1px solid #ced4da;border-radius:4px;font-size:14px}.form-control[data-v-b9894535]:focus{outline:none;border-color:#007bff;box-shadow:0 0 0 2px #007bff40}.form-text[data-v-b9894535]{color:#6c757d;font-size:.875em;margin-top:4px;display:block}.time-range-buttons[data-v-b9894535]{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.time-inputs[data-v-b9894535]{display:grid;gap:16px}.btn[data-v-b9894535]{padding:6px 12px;border:1px solid #ced4da;border-radius:4px;background:#f8f9fa;cursor:pointer;font-size:14px}.btn[data-v-b9894535]:hover{background:#e9ecef}.btn-sm[data-v-b9894535]{padding:4px 8px;font-size:12px}.btn-secondary[data-v-b9894535]{background:#6c757d;color:#fff;border-color:#6c757d}.btn-secondary[data-v-b9894535]:hover{background:#5a6268}.settings-validation .error[data-v-b9894535]{color:#dc3545;background:#f8d7da;border:1px solid #f5c6cb;border-radius:4px;padding:12px;margin:0}.forecast-configuration[data-v-b9894535]{margin-top:16px;padding:16px;background:#f8f9fa;border-radius:6px;border:1px solid #e9ecef}.checkbox-grid[data-v-b9894535]{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:8px 0}.checkbox-item[data-v-b9894535]{display:flex;align-items:center;gap:8px;font-weight:400!important;margin-bottom:0;cursor:pointer}.checkbox-item input[type=checkbox][data-v-b9894535]{width:auto;padding:0}.color-settings[data-v-b9894535]{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:16px 0}.color-setting-item[data-v-b9894535]{display:flex;align-items:center;gap:8px}.color-setting-item label[data-v-b9894535]{font-weight:500;color:#495057;min-width:80px;margin-bottom:0}.color-picker[data-v-b9894535]{width:40px;height:30px;border:1px solid #ced4da;border-radius:4px;cursor:pointer;padding:0}.color-picker[data-v-b9894535]:focus{outline:none;border-color:#007bff;box-shadow:0 0 0 2px #007bff40}.color-preview[data-v-b9894535]{width:20px;height:20px;border-radius:50%;border:2px solid #ffffff;box-shadow:0 0 0 1px #ced4da}@media(max-width:480px){.input-mode-selector[data-v-b9894535],.time-mode-selector[data-v-b9894535]{flex-direction:column;gap:8px}.time-range-buttons[data-v-b9894535]{flex-direction:column}.btn[data-v-b9894535]{width:100%}}\n";})();
-import { EVENT_ACTIONS_REGISTRY as co, EVENT_REGISTRY_ID as ho, EVENT_ACTIONS_REGISTRY_ID as uo } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as fo, deactivate as go, component as po, inject as Ni } from "@eclipse-daanse/tsm";
-import { ref as at, computed as et, defineComponent as _e, shallowRef as cn, h as gi, onMounted as Ye, onUnmounted as hn, watch as Yt, toRaw as pi, nextTick as dn, version as mo, isProxy as un, useCssVars as fn, toRefs as gn, createElementBlock as W, openBlock as z, createElementVNode as _, toDisplayString as Y, unref as jt, createBlock as pn, mergeModels as bo, useModel as mn, inject as Vi, withModifiers as _o, createCommentVNode as K, createTextVNode as Lt, Fragment as Fe, renderList as Re, withDirectives as dt, vModelRadio as ei, vModelText as xe, vModelSelect as yo, vModelCheckbox as ii, normalizeStyle as $i } from "vue";
-import { useRoute as xo } from "vue-router";
-import { useDatasourceRepository as vo } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { WidgetAction as ko, WidgetActionInterface as So, Payload as ji } from "org.eclipse.daanse.board.app.lib.events";
+import { WidgetActionInterfaceImpl as co, EVENT_ACTIONS_REGISTRY as ho, PayloadImpl as Ni, EVENT_REGISTRY_ID as uo, EVENT_ACTIONS_REGISTRY_ID as fo } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as go, deactivate as po, component as mo, inject as Vi } from "@eclipse-daanse/tsm";
+import { ref as at, computed as et, defineComponent as _e, shallowRef as cn, h as gi, onMounted as Ye, onUnmounted as hn, watch as Yt, toRaw as pi, nextTick as dn, version as bo, isProxy as un, useCssVars as fn, toRefs as gn, createElementBlock as W, openBlock as z, createElementVNode as _, toDisplayString as Y, unref as jt, createBlock as pn, mergeModels as _o, useModel as mn, inject as $i, withModifiers as yo, createCommentVNode as K, createTextVNode as Lt, Fragment as Fe, renderList as Re, withDirectives as dt, vModelRadio as ei, vModelText as xe, vModelSelect as xo, vModelCheckbox as ii, normalizeStyle as ji } from "vue";
+import { useRoute as vo } from "vue-router";
+import { useDatasourceRepository as wo } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { WidgetAction as So } from "org.eclipse.daanse.board.app.lib.events";
 import { WIDGET_SERVICE_ID as Mo } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: wo } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Co = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='currentColor'%3e%3cpath%20d='M12.5%206.5C10.8%206.5%209.5%207.8%209.5%209.5c0%20.3.1.6.2.9C7.6%2011.2%206%2012.9%206%2015c0%202.2%201.8%204%204%204h8c1.7%200%203-1.3%203-3%200-1.4-1-2.6-2.4-2.9.1-.4.4-.6.4-1.1%200-1.9-1.6-3.5-3.5-3.5-.8%200-1.5.3-2.1.7-.4-1.8-2-3.2-3.9-3.2v.5zm0%201c1.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.2.4.4.2c.3.2.6.3%201%20.3%201.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.1.3.3.1c1%20.3%201.8%201.2%201.8%202.3%200%201.4-1.1%202.5-2.5%202.5H10c-1.9%200-3.5-1.6-3.5-3.5s1.6-3.5%203.5-3.5c.3%200%20.6%200%20.9.1l.4.1.1-.4c.1-.3.2-.6.2-.9%200-1.4%201.1-2.5%202.5-2.5z'/%3e%3ccircle%20cx='7'%20cy='8'%20r='1'/%3e%3ccircle%20cx='17'%20cy='7'%20r='1'/%3e%3ccircle%20cx='14'%20cy='4'%20r='1'/%3e%3c/svg%3e";
+const { identifiers: ko } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Co = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='currentColor'%3e%3cpath%20d='M12.5%206.5C10.8%206.5%209.5%207.8%209.5%209.5c0%20.3.1.6.2.9C7.6%2011.2%206%2012.9%206%2015c0%202.2%201.8%204%204%204h8c1.7%200%203-1.3%203-3%200-1.4-1-2.6-2.4-2.9.1-.4.4-.6.4-1.1%200-1.9-1.6-3.5-3.5-3.5-.8%200-1.5.3-2.1.7-.4-1.8-2-3.2-3.9-3.2v.5zm0%201c1.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.2.4.4.2c.3.2.6.3%201%20.3%201.4%200%202.5%201.1%202.5%202.5%200%20.3-.1.6-.2.9l-.1.3.3.1c1%20.3%201.8%201.2%201.8%202.3%200%201.4-1.1%202.5-2.5%202.5H10c-1.9%200-3.5-1.6-3.5-3.5s1.6-3.5%203.5-3.5c.3%200%20.6%200%20.9.1l.4.1.1-.4c.1-.3.2-.6.2-.9%200-1.4%201.1-2.5%202.5-2.5z'/%3e%3ccircle%20cx='7'%20cy='8'%20r='1'/%3e%3ccircle%20cx='17'%20cy='7'%20r='1'/%3e%3ccircle%20cx='14'%20cy='4'%20r='1'/%3e%3c/svg%3e";
 function To(i, t) {
   const e = at(null), s = at(!1), n = at(null), o = et(() => {
     if (!e.value?.datastreams) return [];
@@ -7417,7 +7417,7 @@ const ro = {
   },
   ...ro,
   ...Kc
-}, Gc = mo[0] === "2" ? (i, t) => Object.assign(i, {
+}, Gc = bo[0] === "2" ? (i, t) => Object.assign(i, {
   attrs: t
 }) : (i, t) => Object.assign(i, t);
 function $t(i) {
@@ -7706,13 +7706,13 @@ var ah = Object.defineProperty, lh = Object.getOwnPropertyDescriptor, ch = (i, t
     (r = i[o]) && (n = r(t, e, n) || n);
   return n && ah(t, e, n), n;
 };
-class Bi extends So {
+class Bi extends co {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
 ch([
-  ko({ eventType: "weather.refresh" })
+  So({ eventType: "weather.refresh" })
 ], Bi.prototype, "refresh");
 const hh = {
   key: 0,
@@ -7767,7 +7767,7 @@ const hh = {
   class: "weather-empty"
 }, Hh = /* @__PURE__ */ _e({
   __name: "WeatherWidget",
-  props: /* @__PURE__ */ bo({
+  props: /* @__PURE__ */ _o({
     datasourceId: {},
     id: {}
   }, {
@@ -7779,7 +7779,7 @@ const hh = {
     fn((C) => ({
       v71b427be: _t.value
     }));
-    const e = i, { id: s } = gn(e), n = mn(i, "configv"), o = Vi(wo.TINY_EMITTER), r = Vi(co), l = xo().params.pageid || "";
+    const e = i, { id: s } = gn(e), n = mn(i, "configv"), o = $i(ko.TINY_EMITTER), r = $i(ho), l = vo().params.pageid || "";
     class c extends Bi {
       refresh() {
         M();
@@ -7799,7 +7799,7 @@ const hh = {
         widgetId: s.value,
         payload: { widgetId: s.value, timestamp: Date.now() }
       });
-    }, f = at(null), p = at(!1), g = at(null), m = at(null), { update: b, callEvent: x, getDataWithOptions: k } = vo(et(() => e.datasourceId), "WeatherData", f), {
+    }, f = at(null), p = at(!1), g = at(null), m = at(null), { update: b, callEvent: x, getDataWithOptions: k } = wo(et(() => e.datasourceId), "WeatherData", f), {
       formatTimeRange: S
     } = To(n.value, e.datasourceId), y = et(() => n.value.useTimeRange && (n.value.startTime || n.value.endTime)), M = async (C, w) => {
       if (e.datasourceId) {
@@ -8004,7 +8004,7 @@ const hh = {
     return (C, w) => (z(), W("div", {
       class: "weather-widget",
       onClick: d,
-      onContextmenu: _o(u, ["prevent"])
+      onContextmenu: yo(u, ["prevent"])
     }, [
       p.value ? (z(), W("div", hh, [...w[0] || (w[0] = [
         _("div", { class: "spinner" }, null, -1),
@@ -8249,7 +8249,7 @@ const hh = {
             _("option", { value: 18e5 }, "30 minutes", -1),
             _("option", { value: 36e5 }, "1 hour", -1)
           ])], 512), [
-            [yo, t.value.refreshInterval]
+            [xo, t.value.refreshInterval]
           ])
         ])
       ]),
@@ -8328,7 +8328,7 @@ const hh = {
             ]),
             _("span", {
               class: "color-preview",
-              style: $i({ backgroundColor: t.value.chartColors?.[h.key] })
+              style: ji({ backgroundColor: t.value.chartColors?.[h.key] })
             }, null, 4)
           ])), 64)),
           _("div", hd, [
@@ -8343,7 +8343,7 @@ const hh = {
             ]),
             _("span", {
               class: "color-preview",
-              style: $i({ backgroundColor: t.value.gridColor })
+              style: ji({ backgroundColor: t.value.gridColor })
             }, null, 4)
           ])
         ]),
@@ -8352,8 +8352,8 @@ const hh = {
     ]));
   }
 }), ud = /* @__PURE__ */ Wi(dd, [["__scopeId", "data-v-b9894535"]]), fd = [
-  { name: "Weather Clicked", type: "click", description: "Triggered when the weather widget is clicked", payloadType: ji },
-  { name: "Weather Right Clicked", type: "right_click", description: "Triggered when the weather widget is right-clicked", payloadType: ji }
+  { name: "Weather Clicked", type: "click", description: "Triggered when the weather widget is clicked", payloadType: Ni },
+  { name: "Weather Right Clicked", type: "right_click", description: "Triggered when the weather widget is right-clicked", payloadType: Ni }
 ];
 var gd = Object.defineProperty, pd = Object.getOwnPropertyDescriptor, Hi = (i, t, e, s) => {
   for (var n = s > 1 ? void 0 : s ? pd(t, e) : t, o = i.length - 1, r; o >= 0; o--)
@@ -8379,18 +8379,18 @@ let Ue = class {
   }
 };
 Hi([
-  fo()
+  go()
 ], Ue.prototype, "register", 1);
 Hi([
-  go()
+  po()
 ], Ue.prototype, "unregister", 1);
 Ue = Hi([
-  po({
+  mo({
     service: [Mo],
     properties: { "widget.type": Ut }
   }),
-  ln(0, Ni(ho)),
-  ln(1, Ni(uo))
+  ln(0, Vi(uo)),
+  ln(1, Vi(fo))
 ], Ue);
 export {
   Nh as WeatherWidget,

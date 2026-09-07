@@ -1,9 +1,9 @@
-import { Reference as b, Documentation as t, ModelClass as c, Attribute as l } from "org.eclipse.daanse.board.app.lib.annotations";
+import { Reference as _, Documentation as t, ModelClass as c, Attribute as l } from "org.eclipse.daanse.board.app.lib.annotations";
 const { serviceId: y } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var I = Object.defineProperty, _ = Object.getOwnPropertyDescriptor, v = (i, r, p, a) => {
-  for (var e = a > 1 ? void 0 : a ? _(r, p) : r, g = i.length - 1, m; g >= 0; g--)
+var b = Object.defineProperty, I = Object.getOwnPropertyDescriptor, v = (i, r, p, a) => {
+  for (var e = a > 1 ? void 0 : a ? I(r, p) : r, g = i.length - 1, m; g >= 0; g--)
     (m = i[g]) && (e = (a ? m(r, p, e) : m(e)) || e);
-  return a && e && I(r, p, e), e;
+  return a && e && b(r, p, e), e;
 };
 let n = class {
   items = [];
@@ -21,7 +21,7 @@ let n = class {
   }
 };
 v([
-  b("NavigationItem")
+  _("NavigationItem")
 ], n.prototype, "items", 2);
 v([
   t("Register a navigation menu item")

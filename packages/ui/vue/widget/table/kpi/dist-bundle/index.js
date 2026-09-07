@@ -1,26 +1,26 @@
 (function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}.settings-container[data-v-21aafe5f]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
-import { EVENT_ACTIONS_REGISTRY as L, EVENT_REGISTRY_ID as z, EVENT_ACTIONS_REGISTRY_ID as J } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as Q, deactivate as X, component as ee, inject as D } from "@eclipse-daanse/tsm";
-import { defineComponent as F, toRefs as te, inject as W, onUnmounted as ae, ref as O, watch as j, onMounted as le, computed as _, provide as R, createElementBlock as oe, openBlock as M, withModifiers as re, createVNode as h, unref as N, useModel as ie, markRaw as ne, resolveComponent as y, createBlock as se, withCtx as H, createElementVNode as de } from "vue";
-import { useVariableRepository as ue, useDatasourceRepository as ce, VariableWrapper as T } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { useRoute as pe } from "vue-router";
-import { KpiTable as ve } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-import { WidgetAction as ge, WidgetActionInterface as he, Payload as S } from "org.eclipse.daanse.board.app.lib.events";
+import { WidgetActionInterfaceImpl as L, EVENT_ACTIONS_REGISTRY as z, PayloadImpl as D, EVENT_REGISTRY_ID as J, EVENT_ACTIONS_REGISTRY_ID as Q } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as X, deactivate as ee, component as te, inject as R } from "@eclipse-daanse/tsm";
+import { defineComponent as F, toRefs as ae, inject as W, onUnmounted as le, ref as O, watch as j, onMounted as oe, computed as _, provide as H, createElementBlock as re, openBlock as M, withModifiers as ie, createVNode as h, unref as N, useModel as ne, markRaw as se, resolveComponent as y, createBlock as de, withCtx as S, createElementVNode as ue } from "vue";
+import { useVariableRepository as ce, useDatasourceRepository as pe, VariableWrapper as T } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useRoute as ve } from "vue-router";
+import { KpiTable as fe } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { WidgetAction as he } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput as me } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as Te } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: fe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+const { identifiers: ge } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var Ve = Object.defineProperty, we = Object.getOwnPropertyDescriptor, Ce = (n, r, s, e) => {
   for (var t = we(r, s), l = n.length - 1, o; l >= 0; l--)
     (o = n[l]) && (t = o(r, s, t) || t);
   return t && Ve(r, s, t), t;
 };
-class P extends he {
+class P extends L {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
 Ce([
-  ge({ eventType: "kpiTable.refresh" })
+  he({ eventType: "kpiTable.refresh" })
 ], P.prototype, "refresh");
 const be = /* @__PURE__ */ F({
   __name: "KpiTableWidget",
@@ -30,14 +30,14 @@ const be = /* @__PURE__ */ F({
     id: {}
   },
   setup(n, { expose: r }) {
-    const { wrapParameters: s } = ue(), e = n, { datasourceId: t, config: l, id: o } = te(e), v = W(fe.TINY_EMITTER), d = W(L), V = pe().params.pageid || "";
+    const { wrapParameters: s } = ce(), e = n, { datasourceId: t, config: l, id: o } = ae(e), v = W(ge.TINY_EMITTER), d = W(z), V = ve().params.pageid || "";
     class w extends P {
       refresh() {
         B(t.value, t.value);
       }
     }
     const C = new w();
-    r(C), ae(() => {
+    r(C), le(() => {
       o?.value && d.unregisterInstance(o.value);
     });
     const u = () => {
@@ -55,7 +55,7 @@ const be = /* @__PURE__ */ F({
     }, k = O(null);
     j(t, (a, c) => {
       B(a, c);
-    }), le(() => {
+    }), oe(() => {
       if (o?.value && d.registerInstance(o.value, C, "KpiTableWidget", V), !l.value) return;
       const a = {
         headerBackground: "var(--color-raised)"
@@ -85,8 +85,8 @@ const be = /* @__PURE__ */ F({
       const a = l.value.trendVisualType;
       return Array.isArray(a) ? a[0] || "Badge" : a || "Badge";
     });
-    R("statusVisualType", Z), R("trendVisualType", G);
-    const { update: B } = ce(t, "DataTable", k), Y = _(() => {
+    H("statusVisualType", Z), H("trendVisualType", G);
+    const { update: B } = pe(t, "DataTable", k), Y = _(() => {
       if (!k.value) return null;
       let a = k.value;
       return (l.value.showFolders ?? !1) || (a = $(a)), (l.value.showParentChild ?? !1) || (a = q(a)), a;
@@ -126,12 +126,12 @@ const be = /* @__PURE__ */ F({
       }
       return g(a), c;
     }
-    return (a, c) => (M(), oe("div", {
+    return (a, c) => (M(), re("div", {
       class: "w-full h-full",
       onClick: u,
-      onContextmenu: re(E, ["prevent"])
+      onContextmenu: ie(E, ["prevent"])
     }, [
-      h(N(ve), { tableData: Y.value }, null, 8, ["tableData"])
+      h(N(fe), { tableData: Y.value }, null, 8, ["tableData"])
     ], 32));
   }
 }), U = (n, r) => {
@@ -147,25 +147,25 @@ const be = /* @__PURE__ */ F({
   },
   emits: ["update:modelValue"],
   setup(n) {
-    const r = W("i18n"), s = (v) => r ? r.t(v) : v, e = ie(n, "modelValue"), t = ["Emoji", "Arrow", "Chart", "Badge"], l = ["Emoji", "Lights", "Badge"], o = O(!1);
+    const r = W("i18n"), s = (v) => r ? r.t(v) : v, e = ne(n, "modelValue"), t = ["Emoji", "Arrow", "Chart", "Badge"], l = ["Emoji", "Lights", "Badge"], o = O(!1);
     return j(() => e.value, (v) => {
-      v && (v.headerBackground instanceof T || (v.headerBackground = ne(new T(v.headerBackground || "#f0f0f0"))));
+      v && (v.headerBackground instanceof T || (v.headerBackground = se(new T(v.headerBackground || "#f0f0f0"))));
     }, { immediate: !0, deep: !0 }), (v, d) => {
       const x = y("va-color-input"), V = y("va-select"), w = y("va-checkbox"), C = y("va-collapse");
-      return M(), se(C, {
+      return M(), de(C, {
         modelValue: o.value,
         "onUpdate:modelValue": d[5] || (d[5] = (u) => o.value = u),
         header: "Kpi Table Settings",
         icon: "settings"
       }, {
-        default: H(() => [
-          de("div", Ie, [
+        default: S(() => [
+          ue("div", Ie, [
             h(N(me), {
               modelValue: e.value.headerBackground,
               "onUpdate:modelValue": d[0] || (d[0] = (u) => e.value.headerBackground = u),
               label: "Header Color"
             }, {
-              default: H(({ value: u, change: E }) => [
+              default: S(({ value: u, change: E }) => [
                 h(x, {
                   class: "text-color",
                   label: "Header Color",
@@ -204,8 +204,8 @@ const be = /* @__PURE__ */ F({
     };
   }
 }), ke = /* @__PURE__ */ U(Ee, [["__scopeId", "data-v-21aafe5f"]]), We = [
-  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: S },
-  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: S }
+  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: D },
+  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: D }
 ];
 var Pe = Object.defineProperty, Ke = Object.getOwnPropertyDescriptor, K = (n, r, s, e) => {
   for (var t = e > 1 ? void 0 : e ? Ke(r, s) : r, l = n.length - 1, o; l >= 0; l--)
@@ -231,18 +231,18 @@ let I = class {
   }
 };
 K([
-  Q()
+  X()
 ], I.prototype, "register", 1);
 K([
-  X()
+  ee()
 ], I.prototype, "unregister", 1);
 I = K([
-  ee({
+  te({
     service: [Te],
     properties: { "widget.type": m }
   }),
-  A(0, D(z)),
-  A(1, D(J))
+  A(0, R(J)),
+  A(1, R(Q))
 ], I);
 export {
   ye as KpiTableWidget,

@@ -1,21 +1,21 @@
 (function(){var i="ui.vue.widget.text.rich",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.editor-content{width:100%;height:100%;overflow-wrap:anywhere}.editor-content h1{font-size:2rem;margin-bottom:1rem}.editor-content h2{font-size:1.75rem;margin-bottom:1rem}.editor-content h3{font-size:1.5rem;margin-bottom:1rem}.editor-content h4{font-size:1.25rem;margin-bottom:1rem}.editor-content h5{font-size:1.11rem;margin-bottom:1rem}.editor-content h6{font-size:.9rem;margin-bottom:1rem}.editor-content a,.editor-content .custom-link{color:#154ec2;text-decoration:underline;cursor:pointer}.editor-content a:visited{color:#6b21a8}.editor-content ol,.editor-content ul{padding-left:1.5rem}.editor-content li{display:list-item}.editor-content ol ol,.editor-content ul ul,.editor-content ol ul,.editor-content ul ol{padding-left:1.5rem}.settings-container{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.rte-surface{border:1px solid rgb(168,157,157);height:200px;padding:5px 10px;overflow:auto}.rte-surface .ml-2{height:100%}.rte-surface .tiptap.ProseMirror{height:100%;outline:none}.custom-ordered-list,.custom-bullet-list,.tiptap ol,.tiptap ul{padding-left:1.5rem}.tiptap li{display:list-item}.tiptap ol ol,.tiptap ul ul,.tiptap ol ul,.tiptap ul ol{padding-left:1.5rem}.tiptap h1{font-size:2rem;margin-bottom:1rem}.tiptap h2{font-size:1.75rem;margin-bottom:1rem}.tiptap h3{font-size:1.5rem;margin-bottom:1rem}.tiptap h4{font-size:1.25rem;margin-bottom:1rem}.tiptap h5{font-size:1.11rem;margin-bottom:1rem}.tiptap h6{font-size:.9rem;margin-bottom:1rem}.custom-bold{font-weight:700}.custom-italic,.custom-strike{font-weight:unset}.custom-code{font-size:.9rem;padding:.25em;border-radius:.25em;background-color:#61616133;color:#616161}.custom-code-block{background:#0d0d0d;color:#fff;font-family:JetBrainsMono,monospace;padding:.75rem 1rem;border-radius:.5rem}.custom-code-block code{color:inherit;padding:0;background:none;font-size:.8rem}.custom-blockquote{padding-left:1rem;border-left:3px solid rgba(#0d0d0d,.1)}.custom-horizontal-rule{border-top:1px solid #68cef8}.custom-underline{font-weight:unset}.custom-link{color:#154ec2;text-decoration:underline;cursor:pointer}.toolbar{display:flex;flex-wrap:wrap;gap:.25rem;padding:.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.375rem}.toolbar-group{display:flex;gap:2px;padding-right:.5rem;margin-right:.25rem;border-right:1px solid #e5e7eb}.toolbar-group:last-child{border-right:none;padding-right:0;margin-right:0}.toolbar-btn{min-width:28px!important;height:28px!important;padding:0 4px!important;border:1px solid transparent!important;border-radius:.25rem!important;font-size:.7rem!important;font-weight:600!important}.toolbar-btn:hover{background-color:#e5e7eb!important}.is-active{background-color:#fff3e0!important;border-color:#ec9c1d!important;color:#c45e00!important}.toolbar-group--inputs{align-items:center;gap:3px}.toolbar-btn--var{min-width:22px!important;height:22px!important;padding:0 2px!important;font-size:.6rem!important}.toolbar-size-input{width:45px;height:26px;border:1px solid #d1d5db;border-radius:.25rem;padding:0 4px;font-size:.75rem;text-align:center;background:#fff}.toolbar-size-input:focus{outline:none;border-color:#ec9c1d}.toolbar-color-input{width:26px;height:26px;border:1px solid #d1d5db;border-radius:.25rem;padding:1px;cursor:pointer;background:#fff}.toolbar-color-input::-webkit-color-swatch-wrapper{padding:1px}.toolbar-color-input::-webkit-color-swatch{border:none;border-radius:2px}.toolbar-dropdown-wrapper{position:relative;display:flex;align-items:center}.toolbar-dropdown-arrow{width:14px;height:28px;border:none;background:transparent;cursor:pointer;font-size:.6rem;color:#6b7280;padding:0;line-height:1}.toolbar-dropdown-arrow:hover{color:#111827}.toolbar-dropdown-menu{position:absolute;top:100%;left:0;z-index:10;background:#fff;border:1px solid #e5e7eb;border-radius:.375rem;box-shadow:0 4px 12px #00000026;padding:.25rem;min-width:90px}.toolbar-dropdown-item{display:block;width:100%;padding:.35rem .5rem;border:none;background:none;cursor:pointer;font-size:.8rem;text-align:left;border-radius:.2rem;white-space:nowrap}.toolbar-dropdown-item:hover{background-color:#fff3e0;color:#c45e00}.toolbar-dropdown-empty{padding:.5rem;color:#9ca3af;font-size:.75rem;font-style:italic;text-align:center}.toolbar-dropdown-menu--wide{min-width:180px}.var-name{font-weight:500}.var-value{margin-left:.5rem;color:#9ca3af;font-size:.7rem}.loading{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}\n";})();
-import { EVENT_ACTIONS_REGISTRY as Hg, EVENT_REGISTRY_ID as Jg, EVENT_ACTIONS_REGISTRY_ID as Wg } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as qg, deactivate as jg, component as Kg, inject as Vc } from "@eclipse-daanse/tsm";
-import { defineComponent as tr, toRefs as _g, inject as Vn, onMounted as Pa, onUnmounted as Ug, computed as $o, ref as Ue, watch as Tl, createElementBlock as ge, openBlock as fe, normalizeStyle as Gg, withModifiers as qt, unref as E, createElementVNode as J, shallowRef as Yg, onBeforeUnmount as rd, h as ko, getCurrentInstance as Xg, watchEffect as Qg, nextTick as Zg, markRaw as ey, customRef as ty, useModel as ny, resolveComponent as Hc, createBlock as ry, withCtx as bt, createCommentVNode as Ht, withDirectives as iy, vModelText as sy, createVNode as V, normalizeClass as _, Fragment as ir, renderList as sr, toDisplayString as xt, createTextVNode as Jt } from "vue";
-import { useRoute as oy } from "vue-router";
-import { useVariableRepository as ly, useDatasourceRepository as ay, VariableWrapper as ks } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { WidgetActionInterfaceImpl as Hg, EVENT_ACTIONS_REGISTRY as Jg, PayloadImpl as $o, EVENT_REGISTRY_ID as Wg, EVENT_ACTIONS_REGISTRY_ID as qg } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as jg, deactivate as Kg, component as _g, inject as Vc } from "@eclipse-daanse/tsm";
+import { defineComponent as tr, toRefs as Ug, inject as Vn, onMounted as Pa, onUnmounted as Gg, computed as Po, ref as Ue, watch as Tl, createElementBlock as ge, openBlock as fe, normalizeStyle as Yg, withModifiers as qt, unref as E, createElementVNode as J, shallowRef as Xg, onBeforeUnmount as rd, h as ko, getCurrentInstance as Qg, watchEffect as Zg, nextTick as ey, markRaw as ty, customRef as ny, useModel as ry, resolveComponent as Hc, createBlock as iy, withCtx as bt, createCommentVNode as Ht, withDirectives as sy, vModelText as oy, createVNode as V, normalizeClass as _, Fragment as ir, renderList as sr, toDisplayString as xt, createTextVNode as Jt } from "vue";
+import { useRoute as ly } from "vue-router";
+import { useVariableRepository as ay, useDatasourceRepository as cy, VariableWrapper as ks } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import Jc from "org.eclipse.daanse.board.app.lib.utils.helpers";
-import { WidgetAction as id, WidgetActionInterface as uy, Payload as Po } from "org.eclipse.daanse.board.app.lib.events";
+import { WidgetAction as id } from "org.eclipse.daanse.board.app.lib.events";
 import { identifier as Lo } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { Documentation as sd, Attribute as fy, Reference as od, ModelClass as dy } from "org.eclipse.daanse.board.app.lib.annotations";
 import { WIDGET_SERVICE_ID as hy } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: cy } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), py = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2088.5C22.5%2085.1863%2025.1863%2082.5%2028.5%2082.5H76.5C79.8137%2082.5%2082.5%2085.1863%2082.5%2088.5V91.5C82.5%2094.8137%2079.8137%2097.5%2076.5%2097.5H28.5C25.1863%2097.5%2022.5%2094.8137%2022.5%2091.5V88.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2066C43.5%2062.6863%2046.1863%2060%2049.5%2060H91.5C94.8137%2060%2097.5%2062.6863%2097.5%2066V69C97.5%2072.3137%2094.8137%2075%2091.5%2075H49.5C46.1863%2075%2043.5%2072.3137%2043.5%2069V66Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2039C22.5%2038.1716%2023.1716%2037.5%2024%2037.5H29.5458C29.842%2037.5%2030.1315%2037.4123%2030.3779%2037.2481L40.5257%2030.4829C40.9736%2030.1843%2041.5471%2030.1486%2042.0286%2030.3893L55.3916%2037.0708C55.9149%2037.3324%2056.5426%2037.2659%2056.9994%2036.9004L74.1435%2023.1852C74.6536%2022.7771%2075.3691%2022.7461%2075.9126%2023.1084L96.8321%2037.0547C97.2494%2037.3329%2097.5%2037.8012%2097.5%2038.3028V46.5C97.5%2049.8137%2094.8137%2052.5%2091.5%2052.5H28.5C25.1863%2052.5%2022.5%2049.8137%2022.5%2046.5V39Z'%20fill='%23606060'/%3e%3cpath%20d='M30%2026.25C30%2028.3211%2028.3211%2030%2026.25%2030C24.1789%2030%2022.5%2028.3211%2022.5%2026.25C22.5%2024.1789%2024.1789%2022.5%2026.25%2022.5C28.3211%2022.5%2030%2024.1789%2030%2026.25Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2075.189C23.5947%2075.189%2023.2307%2075.091%2022.9367%2074.895C22.6427%2074.685%2022.4607%2074.405%2022.3907%2074.055C22.3207%2073.691%2022.3837%2073.285%2022.5797%2072.837L27.8087%2061.581C28.0607%2061.035%2028.3687%2060.636%2028.7327%2060.384C29.1107%2060.132%2029.5377%2060.006%2030.0137%2060.006C30.4897%2060.006%2030.9027%2060.132%2031.2527%2060.384C31.6167%2060.636%2031.9317%2061.035%2032.1977%2061.581L37.4267%2072.837C37.6507%2073.285%2037.7277%2073.691%2037.6577%2074.055C37.6017%2074.419%2037.4267%2074.699%2037.1327%2074.895C36.8527%2075.091%2036.5027%2075.189%2036.0827%2075.189C35.5227%2075.189%2035.0887%2075.063%2034.7807%2074.811C34.4867%2074.559%2034.2207%2074.153%2033.9827%2073.593L32.8487%2070.926L34.3187%2071.997H25.6667L27.1577%2070.926L26.0237%2073.593C25.7717%2074.153%2025.5127%2074.559%2025.2467%2074.811C24.9807%2075.063%2024.5747%2075.189%2024.0287%2075.189ZM29.9717%2064.227L27.5357%2070.044L26.9477%2069.036H33.0587L32.4707%2070.044L30.0137%2064.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
+const { identifiers: uy } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), py = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2088.5C22.5%2085.1863%2025.1863%2082.5%2028.5%2082.5H76.5C79.8137%2082.5%2082.5%2085.1863%2082.5%2088.5V91.5C82.5%2094.8137%2079.8137%2097.5%2076.5%2097.5H28.5C25.1863%2097.5%2022.5%2094.8137%2022.5%2091.5V88.5Z'%20fill='%23606060'/%3e%3cpath%20d='M43.5%2066C43.5%2062.6863%2046.1863%2060%2049.5%2060H91.5C94.8137%2060%2097.5%2062.6863%2097.5%2066V69C97.5%2072.3137%2094.8137%2075%2091.5%2075H49.5C46.1863%2075%2043.5%2072.3137%2043.5%2069V66Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2039C22.5%2038.1716%2023.1716%2037.5%2024%2037.5H29.5458C29.842%2037.5%2030.1315%2037.4123%2030.3779%2037.2481L40.5257%2030.4829C40.9736%2030.1843%2041.5471%2030.1486%2042.0286%2030.3893L55.3916%2037.0708C55.9149%2037.3324%2056.5426%2037.2659%2056.9994%2036.9004L74.1435%2023.1852C74.6536%2022.7771%2075.3691%2022.7461%2075.9126%2023.1084L96.8321%2037.0547C97.2494%2037.3329%2097.5%2037.8012%2097.5%2038.3028V46.5C97.5%2049.8137%2094.8137%2052.5%2091.5%2052.5H28.5C25.1863%2052.5%2022.5%2049.8137%2022.5%2046.5V39Z'%20fill='%23606060'/%3e%3cpath%20d='M30%2026.25C30%2028.3211%2028.3211%2030%2026.25%2030C24.1789%2030%2022.5%2028.3211%2022.5%2026.25C22.5%2024.1789%2024.1789%2022.5%2026.25%2022.5C28.3211%2022.5%2030%2024.1789%2030%2026.25Z'%20fill='%23606060'/%3e%3cpath%20d='M24.0287%2075.189C23.5947%2075.189%2023.2307%2075.091%2022.9367%2074.895C22.6427%2074.685%2022.4607%2074.405%2022.3907%2074.055C22.3207%2073.691%2022.3837%2073.285%2022.5797%2072.837L27.8087%2061.581C28.0607%2061.035%2028.3687%2060.636%2028.7327%2060.384C29.1107%2060.132%2029.5377%2060.006%2030.0137%2060.006C30.4897%2060.006%2030.9027%2060.132%2031.2527%2060.384C31.6167%2060.636%2031.9317%2061.035%2032.1977%2061.581L37.4267%2072.837C37.6507%2073.285%2037.7277%2073.691%2037.6577%2074.055C37.6017%2074.419%2037.4267%2074.699%2037.1327%2074.895C36.8527%2075.091%2036.5027%2075.189%2036.0827%2075.189C35.5227%2075.189%2035.0887%2075.063%2034.7807%2074.811C34.4867%2074.559%2034.2207%2074.153%2033.9827%2073.593L32.8487%2070.926L34.3187%2071.997H25.6667L27.1577%2070.926L26.0237%2073.593C25.7717%2074.153%2025.5127%2074.559%2025.2467%2074.811C24.9807%2075.063%2024.5747%2075.189%2024.0287%2075.189ZM29.9717%2064.227L27.5357%2070.044L26.9477%2069.036H33.0587L32.4707%2070.044L30.0137%2064.227H29.9717Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var my = Object.defineProperty, gy = Object.getOwnPropertyDescriptor, ld = (n, e, t, r) => {
   for (var i = gy(e, t), s = n.length - 1, o; s >= 0; s--)
     (o = n[s]) && (i = o(e, t, i) || i);
   return i && my(e, t, i), i;
 };
-class So extends uy {
+class So extends Hg {
   clearContent() {
     throw new Error("clearContent not implemented");
   }
@@ -37,7 +37,7 @@ const yy = ["innerHTML"], ky = /* @__PURE__ */ tr({
     id: {}
   },
   setup(n, { expose: e }) {
-    const t = n, { datasourceId: r, config: i, id: s } = _g(t), o = Vn(cy.TINY_EMITTER), l = Vn(Hg), c = oy().params.pageid || "";
+    const t = n, { datasourceId: r, config: i, id: s } = Ug(t), o = Vn(uy.TINY_EMITTER), l = Vn(Jg), c = ly().params.pageid || "";
     class u extends So {
       clearContent() {
         i.value && (i.value.editor = "");
@@ -51,7 +51,7 @@ const yy = ["innerHTML"], ky = /* @__PURE__ */ tr({
     const f = new u();
     e(f), Pa(() => {
       s?.value && l.registerInstance(s.value, f, "RichTextWidget", c);
-    }), Ug(() => {
+    }), Gg(() => {
       s?.value && l.unregisterInstance(s.value);
     });
     const d = () => {
@@ -72,14 +72,14 @@ const yy = ["innerHTML"], ky = /* @__PURE__ */ tr({
         widgetId: s.value,
         payload: { widgetId: s.value, text: A, timestamp: Date.now() }
       });
-    }, { calculateValue: m, wrapParameters: g } = ly(), y = g({
-      fontSize: $o(() => i.value?.fontSize?.value ?? "16"),
-      fontColor: $o(() => i.value?.fontColor?.value ?? "var(--color-fg)")
-    }), x = Ue(null), { update: C } = ay(r, "object", x);
+    }, { calculateValue: m, wrapParameters: g } = ay(), y = g({
+      fontSize: Po(() => i.value?.fontSize?.value ?? "16"),
+      fontColor: Po(() => i.value?.fontColor?.value ?? "var(--color-fg)")
+    }), x = Ue(null), { update: C } = cy(r, "object", x);
     Tl(r, (A, $) => {
       C(A, $);
     });
-    const T = $o(() => {
+    const T = Po(() => {
       if (!i.value.editor)
         return "";
       let A = m(i.value.editor);
@@ -99,7 +99,7 @@ const yy = ["innerHTML"], ky = /* @__PURE__ */ tr({
       class: "text-container",
       onClick: d,
       onContextmenu: qt(h, ["prevent"]),
-      style: Gg({ fontSize: E(y).fontSize.value + "px", color: E(y).fontColor.value })
+      style: Yg({ fontSize: E(y).fontSize.value + "px", color: E(y).fontColor.value })
     }, [
       J("div", {
         class: "editor-content pl-6",
@@ -26206,7 +26206,7 @@ var Jv = j.create({
   }
 }), jv = qv;
 function td(n) {
-  return ty((e, t) => ({
+  return ny((e, t) => ({
     get() {
       return e(), n;
     },
@@ -26223,7 +26223,7 @@ var Kv = class extends Fx {
   constructor(n = {}) {
     return super(n), this.contentComponent = null, this.appContext = null, this.reactiveState = td(this.view.state), this.reactiveExtensionStorage = td(this.extensionStorage), this.on("beforeTransaction", ({ nextState: e }) => {
       this.reactiveState.value = e, this.reactiveExtensionStorage.value = this.extensionStorage;
-    }), ey(this);
+    }), ty(this);
   }
   get state() {
     return this.reactiveState ? this.reactiveState.value : this.view.state;
@@ -26254,10 +26254,10 @@ var Kv = class extends Fx {
     }
   },
   setup(n) {
-    const e = Ue(), t = Xg();
-    return Qg(() => {
+    const e = Ue(), t = Qg();
+    return Zg(() => {
       const r = n.editor;
-      r && r.options.element && e.value && Zg(() => {
+      r && r.options.element && e.value && ey(() => {
         var i;
         if (!e.value || !((i = r.view.dom) != null && i.parentNode))
           return;
@@ -26341,7 +26341,7 @@ tr({
   }
 });
 var Uv = (n = {}) => {
-  const e = Yg();
+  const e = Xg();
   return Pa(() => {
     e.value = new Kv(n);
   }), rd(() => {
@@ -26820,7 +26820,7 @@ const cM = { class: "settings-container" }, uM = {
         }
         S.value.chain().focus().extendMarkRange("link").setLink({ href: k }).run();
       }
-    }, D = ny(n, "modelValue");
+    }, D = ry(n, "modelValue");
     D.value.fontSize || (D.value.fontSize = new ks("16")), D.value.fontColor || (D.value.fontColor = new ks("#000000"));
     const te = Ue({
       widgetSection: !1,
@@ -26903,7 +26903,7 @@ const cM = { class: "settings-container" }, uM = {
       }
     ), (L, k) => {
       const R = Hc("va-button"), G = Hc("va-collapse");
-      return fe(), ry(G, {
+      return fe(), iy(G, {
         modelValue: te.value.widgetSection,
         "onUpdate:modelValue": k[42] || (k[42] = (w) => te.value.widgetSection = w),
         icon: "settings",
@@ -26913,7 +26913,7 @@ const cM = { class: "settings-container" }, uM = {
           J("div", cM, [
             E(S) ? (fe(), ge("div", uM, [
               J("div", fM, [
-                iy(J("input", {
+                sy(J("input", {
                   type: "number",
                   class: "toolbar-size-input",
                   "onUpdate:modelValue": k[0] || (k[0] = (w) => s.value = w),
@@ -26923,7 +26923,7 @@ const cM = { class: "settings-container" }, uM = {
                   step: "1",
                   title: "Font Size"
                 }, null, 544), [
-                  [sy, s.value]
+                  [oy, s.value]
                 ]),
                 J("div", dM, [
                   V(R, {
@@ -27389,9 +27389,9 @@ bi = zo([
   dy({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.text.rich#//RichTextEditorSettings" })
 ], bi);
 const _M = [
-  { name: "RichText Clicked", type: "click", description: "Triggered when the richtext widget is clicked", payloadType: Po },
-  { name: "RichText Right Clicked", type: "right_click", description: "Triggered when the richtext widget is right-clicked", payloadType: Po },
-  { name: "RichText Changed", type: "text_change", description: "Triggered when the richtext changes", payloadType: Po }
+  { name: "RichText Clicked", type: "click", description: "Triggered when the richtext widget is clicked", payloadType: $o },
+  { name: "RichText Right Clicked", type: "right_click", description: "Triggered when the richtext widget is right-clicked", payloadType: $o },
+  { name: "RichText Changed", type: "text_change", description: "Triggered when the richtext changes", payloadType: $o }
 ];
 var UM = Object.defineProperty, GM = Object.getOwnPropertyDescriptor, Fc = (n, e, t, r) => {
   for (var i = r > 1 ? void 0 : r ? GM(e, t) : e, s = n.length - 1, o; s >= 0; s--)
@@ -27417,18 +27417,18 @@ let yo = class {
   }
 };
 Fc([
-  qg()
+  jg()
 ], yo.prototype, "register", 1);
 Fc([
-  jg()
+  Kg()
 ], yo.prototype, "unregister", 1);
 yo = Fc([
-  Kg({
+  _g({
     service: [hy],
     properties: { "widget.type": Fn }
   }),
-  nd(0, Vc(Jg)),
-  nd(1, Vc(Wg))
+  nd(0, Vc(Wg)),
+  nd(1, Vc(qg))
 ], yo);
 export {
   bi as RichTextEditorSettings,

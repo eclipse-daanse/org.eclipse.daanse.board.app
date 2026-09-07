@@ -1,5 +1,5 @@
 import { Reference as y, Documentation as r, ModelClass as m, Attribute as g } from "org.eclipse.daanse.board.app.lib.annotations";
-const { serviceId: _ } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { serviceId: f } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var d = Object.defineProperty, b = Object.getOwnPropertyDescriptor, l = (t, o, a, n) => {
   for (var e = n > 1 ? void 0 : n ? b(o, a) : o, s = t.length - 1, p; s >= 0; s--)
     (p = t[s]) && (e = (n ? p(o, a, e) : p(e)) || e);
@@ -70,10 +70,10 @@ u = R([
   r("Represents a Vue Router route definition"),
   m({ type: "http://org.eclipse.daanse.board.app.lib.repository.route#//RouteDefinition" })
 ], u);
-const f = _("RouteRegistry"), h = Symbol.for(f), O = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const _ = f("RouteRegistry"), h = Symbol.for(_), O = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ROUTE_REGISTRY: h,
-  ROUTE_REGISTRY_ID: f,
+  ROUTE_REGISTRY_ID: _,
   get RouteDefinition() {
     return u;
   },
@@ -92,7 +92,7 @@ async function I(t) {
 }
 export {
   h as ROUTE_REGISTRY,
-  f as ROUTE_REGISTRY_ID,
+  _ as ROUTE_REGISTRY_ID,
   u as RouteDefinition,
   i as RouteRegistry,
   P as activate,

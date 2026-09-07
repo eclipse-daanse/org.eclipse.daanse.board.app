@@ -1,19 +1,19 @@
 (function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-82423c81]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-82423c81]{overflow:hidden;position:relative;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-82423c81]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-82423c81]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-82423c81]:hover{filter:brightness(1.1)}.range-strip[data-v-82423c81]:active{cursor:grabbing}.timeline-knob[data-v-82423c81]{position:absolute;top:50%;width:24px;height:24px;background:var(--va-primary);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-82423c81]:hover{background:var(--va-primary-dark);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-82423c81]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-82423c81]{left:0;z-index:4}.fixed-knob[data-v-82423c81]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-82423c81]:hover{transform:translate(-50%,-50%)!important;background:var(--va-background-border)!important}.end-knob[data-v-82423c81]{right:-24px;z-index:4}.time-axis[data-v-82423c81]{position:relative;height:30px;background:var(--va-background-secondary);border-top:1px solid var(--va-background-border);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-82423c81]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-82423c81]{width:1px;height:8px;background:var(--va-text-secondary);margin-top:2px}.tick-label[data-v-82423c81]{font-size:.7rem;color:var(--va-text-secondary);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-82423c81]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:6px;padding:.75rem}.time-display[data-v-82423c81]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-82423c81]{font-size:.8rem;font-weight:500;color:var(--va-text-secondary)}.time-value[data-v-82423c81]{font-size:.9rem;font-weight:600;color:var(--va-text-primary);word-wrap:break-word}.controls[data-v-82423c81]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-82423c81]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--va-primary));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-82423c81]:hover:not(:disabled){background:var(--va-primary-dark);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-82423c81]:disabled{background:var(--va-background-border);color:var(--va-text-secondary);cursor:not-allowed;transform:none}.play-button.playing[data-v-82423c81]{background:var(--play-button-playing, #ff6b35);animation:pulse-82423c81 2s infinite}.play-button.playing[data-v-82423c81]:hover{filter:brightness(.9)}@keyframes pulse-82423c81{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-82423c81]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-82423c81]{font-weight:500;color:var(--va-text-primary);min-width:fit-content}.speed-control select[data-v-82423c81]{padding:.5rem;border:1px solid var(--va-background-border);border-radius:4px;background:var(--va-background-primary);color:var(--va-text-primary);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-82423c81]{flex-direction:column;gap:.75rem}.time-display[data-v-82423c81]{text-align:left}.controls[data-v-82423c81]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-82423c81]{width:28px;height:28px}.tick-label[data-v-82423c81]{font-size:.6rem}.timeline-container[data-v-82423c81]{min-height:70px}.timeline-track[data-v-82423c81]{height:35px}}.settings-container[data-v-bf68db5d]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-bf68db5d]{font-weight:600;color:var(--va-text-primary);font-size:.9rem}.datetime-group[data-v-bf68db5d]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-bf68db5d]>*{flex:1;min-width:0}.relative-time-config[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--va-background-element);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-bf68db5d]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-bf68db5d]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-bf68db5d]{flex:2;min-width:80px}.relative-time-preview[data-v-bf68db5d]{font-size:.85rem;color:var(--va-primary);padding:.5rem;background:var(--va-background-secondary);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-bf68db5d]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
-import { EVENT_ACTIONS_REGISTRY as lt, EVENT_REGISTRY_ID as it, EVENT_ACTIONS_REGISTRY_ID as ot } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as rt, deactivate as st, component as ut, inject as Fe } from "@eclipse-daanse/tsm";
-import { defineComponent as Ge, mergeModels as vt, inject as de, toRefs as dt, useModel as qe, ref as f, computed as _, watch as pe, onMounted as Ze, onUnmounted as ct, createElementBlock as z, openBlock as C, withModifiers as We, createElementVNode as u, createCommentVNode as ae, normalizeStyle as ue, Fragment as je, renderList as mt, toDisplayString as N, normalizeClass as gt, withDirectives as pt, createStaticVNode as ft, vModelSelect as bt, resolveComponent as te, createVNode as V, withCtx as Ne, createBlock as Ae } from "vue";
-import { useRoute as St } from "vue-router";
+import { WidgetActionInterfaceImpl as lt, EVENT_ACTIONS_REGISTRY as it, PayloadImpl as Fe, EVENT_REGISTRY_ID as ot, EVENT_ACTIONS_REGISTRY_ID as rt } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as st, deactivate as ut, component as vt, inject as Ae } from "@eclipse-daanse/tsm";
+import { defineComponent as Ge, mergeModels as dt, inject as de, toRefs as ct, useModel as qe, ref as f, computed as _, watch as pe, onMounted as Ze, onUnmounted as mt, createElementBlock as z, openBlock as C, withModifiers as We, createElementVNode as u, createCommentVNode as ae, normalizeStyle as ue, Fragment as je, renderList as gt, toDisplayString as N, normalizeClass as pt, withDirectives as ft, createStaticVNode as bt, vModelSelect as St, resolveComponent as te, createVNode as V, withCtx as Ne, createBlock as Ye } from "vue";
+import { useRoute as wt } from "vue-router";
 import { VariableWrapper as ye } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { identifier as Je } from "org.eclipse.daanse.board.app.lib.api.variable";
-import { WidgetAction as De, WidgetActionInterface as Tt, Payload as Ye } from "org.eclipse.daanse.board.app.lib.events";
+import { WidgetAction as De } from "org.eclipse.daanse.board.app.lib.events";
 import { WIDGET_SERVICE_ID as Mt } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: wt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+const { identifiers: Tt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var ht = Object.defineProperty, Vt = Object.getOwnPropertyDescriptor, Ee = (D, h, v, g) => {
   for (var e = Vt(h, v), y = D.length - 1, j; y >= 0; y--)
     (j = D[y]) && (e = j(h, v, e) || e);
   return e && ht(h, v, e), e;
 };
-class ce extends Tt {
+class ce extends lt {
   zoomIn() {
     throw new Error("zoomIn not implemented");
   }
@@ -63,7 +63,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
   fill: "currentColor"
 }, jt = { class: "speed-control" }, Kt = /* @__PURE__ */ Ge({
   __name: "TimelineWidget",
-  props: /* @__PURE__ */ vt({
+  props: /* @__PURE__ */ dt({
     datasourceId: {},
     id: {}
   }, {
@@ -73,7 +73,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
   emits: ["update:configv"],
   setup(D, { expose: h }) {
     de("i18n");
-    const v = D, { id: g } = dt(v), e = qe(D, "configv"), y = de(wt.TINY_EMITTER), j = de(lt), ke = St().params.pageid || "";
+    const v = D, { id: g } = ct(v), e = qe(D, "configv"), y = de(Tt.TINY_EMITTER), j = de(it), ke = wt().params.pageid || "";
     class Ie extends ce {
       zoomIn() {
         const a = new Date(e.value.rangeStart || Date.now() - 864e5), s = new Date(e.value.rangeEnd || Date.now()), o = (s.getTime() - a.getTime()) * 0.25, c = new Date(a.getTime() + o), m = new Date(s.getTime() - o);
@@ -404,7 +404,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
         n && A.value.setTo(n);
       }
       e.value.relativeTime?.enabled && Me();
-    }), ct(() => {
+    }), mt(() => {
       g?.value && j.unregisterInstance(g.value), $e();
     }), (n, a) => (C(), z("div", {
       class: "timeline-widget",
@@ -440,7 +440,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
           ], 44, xt)
         ], 4),
         u("div", Et, [
-          (C(!0), z(je, null, mt(T.value, (s) => (C(), z("div", {
+          (C(!0), z(je, null, gt(T.value, (s) => (C(), z("div", {
             key: s.timestamp,
             class: "time-tick",
             style: ue({ left: s.position + "%" })
@@ -466,7 +466,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
       ])) : ae("", !0),
       e.value.showControls !== !1 ? (C(), z("div", $t, [
         u("button", {
-          class: gt(["play-button", { playing: O.value }]),
+          class: pt(["play-button", { playing: O.value }]),
           style: ue(ze.value),
           onClick: tt,
           disabled: l.value
@@ -479,12 +479,12 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
         ], 14, Ut),
         u("div", jt, [
           a[8] || (a[8] = u("label", null, "Geschwindigkeit:", -1)),
-          pt(u("select", {
+          ft(u("select", {
             "onUpdate:modelValue": a[0] || (a[0] = (s) => $.value = s)
           }, [...a[7] || (a[7] = [
-            ft('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
+            bt('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
           ])], 512), [
-            [bt, $.value]
+            [St, $.value]
           ])
         ])
       ])) : ae("", !0)
@@ -805,7 +805,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
                     ],
                     label: v("Start time from variable")
                   }, null, 8, ["modelValue", "label"]),
-                  Y.value ? (C(), Ae(S, {
+                  Y.value ? (C(), Ye(S, {
                     key: 0,
                     modelValue: t.value.rangeStartVariable,
                     "onUpdate:modelValue": [
@@ -827,7 +827,7 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
                     ],
                     label: v("End time from variable")
                   }, null, 8, ["modelValue", "label"]),
-                  R.value ? (C(), Ae(S, {
+                  R.value ? (C(), Ye(S, {
                     key: 0,
                     modelValue: t.value.rangeEndVariable,
                     "onUpdate:modelValue": [
@@ -946,8 +946,8 @@ const yt = { class: "timeline-container" }, xt = ["title"], Dt = {
     };
   }
 }), ca = /* @__PURE__ */ Qe(da, [["__scopeId", "data-v-bf68db5d"]]), ma = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", ga = [
-  { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: Ye },
-  { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: Ye }
+  { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: Fe },
+  { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: Fe }
 ];
 var pa = Object.defineProperty, fa = Object.getOwnPropertyDescriptor, Ke = (D, h, v, g) => {
   for (var e = g > 1 ? void 0 : g ? fa(h, v) : h, y = D.length - 1, j; y >= 0; y--)
@@ -973,18 +973,18 @@ let xe = class {
   }
 };
 Ke([
-  rt()
+  st()
 ], xe.prototype, "register", 1);
 Ke([
-  st()
+  ut()
 ], xe.prototype, "unregister", 1);
 xe = Ke([
-  ut({
+  vt({
     service: [Mt],
     properties: { "widget.type": ve }
   }),
-  Xe(0, Fe(it)),
-  Xe(1, Fe(ot))
+  Xe(0, Ae(ot)),
+  Xe(1, Ae(rt))
 ], xe);
 export {
   Ht as TimelineWidget,
