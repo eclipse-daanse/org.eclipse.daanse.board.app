@@ -222,6 +222,15 @@ watch(() => props.modelValue, (newValue) => {
 .editor-surface {
     flex: 1 1 0;
     min-height: 0;
+    /*
+     * Monaco positions its own parts absolutely - the gutter, the overflow
+     * guard, the overlay widgets - and they resolve against the nearest
+     * positioned ancestor. Without one here they escaped to the dialog and
+     * drew a full-height band across it. Monaco's own class used to supply
+     * this by accident, being position:absolute itself.
+     */
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--color-divider);
 }
 
