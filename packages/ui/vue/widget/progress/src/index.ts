@@ -21,23 +21,17 @@ import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { ProgressWidgetEvents } from './events/ProgressWidgetEvents'
 import { ProgressWidgetInterface } from './api/ProgressWidgetInterface'
+import { ProgressSettingsImpl } from './gen/ProgressSettingsImpl'
+import { ProgresswidgetsPackage } from './gen/ProgresswidgetsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import progressSettingsFormXmi from '../model/ui.xmi?raw'
 
-interface IProgressSettings {
-  progress: string
-  fillColor: string
-  gradientColor?: string
-  backgroundColor: string
-  isGradient: boolean
-  isVertical: boolean
-  rotation: number
-  min?: number
-  max?: number
-  barThickness?: string
-  borderRadius?: string
-  valueAlign?: 'left' | 'center' | 'right'
-  valueJustify?: 'top' | 'center' | 'bottom'
-  textColor?: string
-}
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+ProgresswidgetsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'ProgressWidget'
 
@@ -58,6 +52,24 @@ const WIDGET_TYPE = 'ProgressWidget'
 export class ProgressWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly name = 'Progress'
+
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: progressSettingsFormXmi,
+    uri: '/progress-settings.ui.xmi',
+    ePackage: () => ProgresswidgetsPackage.eINSTANCE,
+    create: () => new ProgressSettingsImpl(),
+    /*
+     * The gradient's stops stay with the hand-written component: they are a
+     * table built up row by row, and the colour they produce is worked out
+     * rather than typed.
+     */
+    unmodelledSections: ['Farbstopps'],
+  }
   readonly icon = Icon
   readonly supportedDSTypes: string[] = []
   readonly component = ProgressWidget
@@ -82,4 +94,4 @@ export class ProgressWidgetProvider implements WidgetProvider {
 }
 
 export { ProgressWidget, ProgressWidgetSettings }
-export type { IProgressSettings }
+export { ProgressSettingsImpl, ProgresswidgetsPackage, progressSettingsFormXmi }

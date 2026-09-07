@@ -5,17 +5,14 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Represents the settings for a Mermaid diagram widget.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings' })
-export class MermaidWidgetSettings {
-  @Documentation("Defines the color scheme or style used for the Mermaid diagram.")
-  @Attribute()
-  theme: string = "default";
-
-  @Documentation("Contains the Mermaid diagram code itself.")
-  @Attribute()
-  value: string = "flowchart TD A[Christmas] -->|Get money| B(Go shopping) B --> C{Let me think} C -->|One| D[Laptop C -->|Two| E[iPhone] C -->|Three| F[fa:fa-car Car]";
+/**
+ * MermaidWidgetSettings
+ * @generated
+ */
+export interface MermaidWidgetSettings extends EObject {
+  theme?: string;
+  value?: string;
 
 }

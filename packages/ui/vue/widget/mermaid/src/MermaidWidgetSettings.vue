@@ -14,7 +14,7 @@ Contributors:
 <script lang="ts" setup>
 
 import { computed } from 'vue'
-import { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+import type { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
 
 
 const widgetSettings = defineModel<MermaidWidgetSettings>({ required: true });

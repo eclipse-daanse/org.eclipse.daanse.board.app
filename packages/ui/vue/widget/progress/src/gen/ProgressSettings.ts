@@ -5,68 +5,29 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { HorizontalAlign } from './HorizontalAlign.js';
-import { VerticalAlign } from './VerticalAlign.js';
-import { Documentation, Attribute, ModelClass, Reference, Enum } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { HorizontalAlign } from './HorizontalAlign.js';
+import type { VerticalAlign } from './VerticalAlign.js';
 
-@Documentation("Represents the visual settings for a progress indicator or bar.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.progress#//ProgressSettings' })
-export class ProgressSettings {
-  @Documentation("The current progress value, potentially as a percentage or numeric string.")
-  @Reference('VariableWrapper')
-  progress: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The color representing the filled portion of the progress bar.")
-  @Reference('VariableWrapper')
-  fillColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("An optional secondary color used if a gradient fill is enabled for the progress bar.")
-  @Reference('VariableWrapper')
-  gradientColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The background color of the progress bar, representing the unfilled portion.")
-  @Reference('VariableWrapper')
-  backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("A flag indicating whether the progress bar should use a gradient color.")
-  @Attribute()
-  isGradient: boolean = false;
-
-  @Documentation("A flag indicating whether the progress bar is oriented vertically.")
-  @Attribute()
-  isVertical: boolean = false;
-
-  @Documentation("The rotation angle of the progress bar in degrees.")
-  @Reference('VariableWrapper')
-  rotation: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The minimum value for the progress bar.")
-  @Reference('VariableWrapper')
-  min: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The maximum value for the progress bar.")
-  @Reference('VariableWrapper')
-  max: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The color of the text displayed on the progress bar.")
-  @Reference('VariableWrapper')
-  textColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The thickness of the progress bar (e.g., '20px').")
-  @Reference('VariableWrapper')
-  barThickness: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The border radius of the progress bar (e.g., '10px').")
-  @Reference('VariableWrapper')
-  borderRadius: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The horizontal alignment of the value text.")
-  @Enum('HorizontalAlign')
-  valueAlign: HorizontalAlign = HorizontalAlign.CENTER;
-
-  @Documentation("The vertical alignment of the value text.")
-  @Enum('VerticalAlign')
-  valueJustify: VerticalAlign = VerticalAlign.CENTER;
+/**
+ * ProgressSettings
+ * @generated
+ */
+export interface ProgressSettings extends EObject {
+  progress?: VariableWrapper<string>;
+  fillColor?: VariableWrapper<string>;
+  gradientColor?: VariableWrapper<string>;
+  backgroundColor?: VariableWrapper<string>;
+  isGradient?: boolean;
+  isVertical?: boolean;
+  rotation?: VariableWrapper<string>;
+  min?: VariableWrapper<string>;
+  max?: VariableWrapper<string>;
+  textColor?: VariableWrapper<string>;
+  barThickness?: VariableWrapper<string>;
+  borderRadius?: VariableWrapper<string>;
+  valueAlign?: HorizontalAlign;
+  valueJustify?: VerticalAlign;
 
 }

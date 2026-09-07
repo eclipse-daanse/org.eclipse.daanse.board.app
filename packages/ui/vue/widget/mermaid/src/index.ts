@@ -16,16 +16,21 @@ import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/text.svg'
 import MermaidWidget from './MermaidWidget.vue'
 import MermaidWidgetSettings from './MermaidWidgetSettings.vue'
-import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { MermaidWidgetEvents } from './events/MermaidWidgetEvents'
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface'
+import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
+import { MermaidwidgetsPackage } from './gen/MermaidwidgetsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import mermaidSettingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+MermaidwidgetsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
-
-interface IMermaidWidgetSettings {
-  theme: VariableWrapper<string>
-  value: VariableComplexStringWrapper
-}
 
 const WIDGET_TYPE = 'MermaidWidget'
 
@@ -44,6 +49,18 @@ export class MermaidWidgetProvider implements WidgetProvider {
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'Mermaid'
+
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: mermaidSettingsFormXmi,
+    uri: '/mermaid-settings.ui.xmi',
+    ePackage: () => MermaidwidgetsPackage.eINSTANCE,
+    create: () => new MermaidWidgetSettingsImpl(),
+  }
 
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
@@ -64,4 +81,4 @@ export class MermaidWidgetProvider implements WidgetProvider {
 }
 
 export { MermaidWidget, MermaidWidgetSettings }
-export type { IMermaidWidgetSettings }
+export { MermaidWidgetSettingsImpl, MermaidwidgetsPackage, mermaidSettingsFormXmi }

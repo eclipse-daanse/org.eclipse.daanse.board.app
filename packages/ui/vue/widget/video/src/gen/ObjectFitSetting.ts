@@ -5,13 +5,13 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Defines how the content of a replaced element (like a video or image) should be fitted into its container's box.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.video#//ObjectFitSetting' })
-export class ObjectFitSetting {
-  @Documentation("The CSS 'object-fit' property value (e.g., 'fill', 'contain', 'cover', 'none', 'scale-down').")
-  @Attribute()
+/**
+ * ObjectFitSetting
+ * @generated
+ */
+export interface ObjectFitSetting extends EObject {
   fit?: string;
 
 }

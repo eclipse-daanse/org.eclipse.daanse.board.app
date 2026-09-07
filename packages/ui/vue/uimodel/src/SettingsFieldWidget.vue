@@ -230,16 +230,21 @@ const options = computed<Array<{ value: string; text: string }>>(() => {
   })
 })
 
+/* How tall a text area is, when the form asks for one. */
+const rows = computed<number>(() => Number(props.custom?.rawWidget?.rows) || 6)
+
 const numberBounds = computed(() => ({
   min: props.custom?.rawWidget?.min,
   max: props.custom?.rawWidget?.max,
   step: props.custom?.rawWidget?.step,
 }))
 
-const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'text'>(() => {
+const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'text'>(() => {
   switch (modelKind.value) {
     case 'CheckboxWidget':
       return 'flag'
+    case 'TextAreaWidget':
+      return 'lines'
     case 'NumberWidget':
       return 'number'
     case 'SelectWidget':
@@ -306,6 +311,15 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         :label="label"
         :disabled="!editable"
         :hint="boundHint ?? custom?.resolvedStyle?.placeholder"
+      />
+
+      <DInput
+        v-else-if="kind === 'lines'"
+        v-model="value"
+        :label="label"
+        :rows="rows"
+        :placeholder="custom?.resolvedStyle?.placeholder"
+        :disabled="!editable"
       />
 
       <DInput

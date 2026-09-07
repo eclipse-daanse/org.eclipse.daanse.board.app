@@ -5,26 +5,17 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@Documentation("Defines the styling properties for a specific element or group of elements within an SVG.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgConfigItem' })
-export class SvgConfigItem {
-  @Documentation("The fill color of the SVG element (e.g., as a hex code or named color).")
-  @Reference('VariableWrapper')
-  fill: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The stroke color of the SVG element.")
-  @Reference('VariableWrapper')
-  stroke: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The width of the stroke of the SVG element (e.g., as a string with unit like '2px' or '1').")
-  @Reference('VariableWrapper')
-  strokeWidth: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The CSS class name associated with this SVG styling configuration.")
-  @Attribute()
+/**
+ * SvgConfigItem
+ * @generated
+ */
+export interface SvgConfigItem extends EObject {
+  fill?: VariableWrapper<string>;
+  stroke?: VariableWrapper<string>;
+  strokeWidth?: VariableWrapper<string>;
   className?: string;
 
 }

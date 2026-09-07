@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the mermaid widget.
+
+The diagram is written, not configured, so it gets the room to be written
+in - twelve lines, which is about where a flowchart stops fitting on one
+screen anyway. The theme comes after it: it is a choice about the finished
+diagram, and there is nothing to theme until something is drawn.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="MermaidWidgetSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="MermaidWidgetSettingsFormView">
+    <fields xsi:type="uimodel:TextAreaWidget"
+        name="value"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings/value"
+        label="Diagramm"
+        rows="12"
+        placeholder="graph TD; A--&gt;B;"/>
+    <fields xsi:type="uimodel:SelectWidget"
+        name="theme"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.mermaid#//MermaidWidgetSettings/theme"
+        label="Farbschema">
+      <values>default</values>
+      <values>neutral</values>
+      <values>dark</values>
+      <values>forest</values>
+      <values>base</values>
+    </fields>
+  </components>
+</uimodel:UIModel>

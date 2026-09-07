@@ -5,12 +5,13 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.markdown#//MarkdownWidgetSettings' })
-export class MarkdownWidgetSettings {
-  @Documentation("The Markdown content to be displayed or edited in the widget.")
-  @Attribute()
+/**
+ * MarkdownWidgetSettings
+ * @generated
+ */
+export interface MarkdownWidgetSettings extends EObject {
   value?: string;
 
 }

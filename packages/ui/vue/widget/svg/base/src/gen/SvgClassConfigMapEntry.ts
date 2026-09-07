@@ -5,18 +5,15 @@
  * @generated
  */
 
-import { SvgConfigItem } from './SvgConfigItem.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { SvgConfigItem } from './SvgConfigItem.js';
 
-@Documentation("Represents a single entry in the SVG class configuration, consisting of a class name (key) and its associated style settings (value).")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgClassConfigMapEntry' })
-export class SvgClassConfigMapEntry {
-  @Documentation("The name of the SVG class.")
-  @Attribute()
+/**
+ * SvgClassConfigMapEntry
+ * @generated
+ */
+export interface SvgClassConfigMapEntry extends EObject {
   key?: string;
-
-  @Documentation("The style settings for the specified SVG class.")
-  @Reference('SvgConfigItem')
-  value: SvgConfigItem = new SvgConfigItem();
+  value?: SvgConfigItem;
 
 }

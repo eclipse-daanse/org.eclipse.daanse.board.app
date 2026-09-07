@@ -4,11 +4,32 @@
  *
  * @generated
  */
+
 /**
  * VerticalAlign
+ * @generated
  */
-export enum VerticalAlign {
-  TOP = "top",
-  CENTER = "center",
-  BOTTOM = "bottom"
+export const VerticalAlign = {
+  TOP: 'TOP',
+  CENTER: 'CENTER',
+  BOTTOM: 'BOTTOM'
+} as const;
+
+export type VerticalAlign = typeof VerticalAlign[keyof typeof VerticalAlign];
+
+/**
+ * Get enum value by name
+ */
+export function getVerticalAlign(name: string): VerticalAlign | undefined {
+  return (VerticalAlign as Record<string, string>)[name] as VerticalAlign | undefined;
+}
+
+/**
+ * Get enum value by literal
+ */
+export function getVerticalAlignByLiteral(literal: string): VerticalAlign | undefined {
+  if (literal === 'top') return VerticalAlign.TOP;
+  if (literal === 'center') return VerticalAlign.CENTER;
+  if (literal === 'bottom') return VerticalAlign.BOTTOM;
+  return undefined;
 }

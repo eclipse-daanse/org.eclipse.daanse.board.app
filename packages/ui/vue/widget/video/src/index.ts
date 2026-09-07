@@ -18,6 +18,19 @@ import VideoWidgetSettings from './VideoWidgetSettings.vue'
 import Icon from './assets/video.svg'
 import { VideoWidgetEvents } from './events/VideoWidgetEvents'
 import { VideoWidgetInterface } from './api/VideoWidgetInterface'
+import { VideoSettingsImpl } from './gen/VideoSettingsImpl'
+import { VideoSettingsPackage } from './gen/VideoSettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import videoSettingsFormXmi from '../model/ui.xmi?raw'
+/* The form for the nested fitting options. */
+import videoFitFormXmi from '../model/ui-fit.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+VideoSettingsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
@@ -47,6 +60,20 @@ export class VideoWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'Video'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: videoSettingsFormXmi,
+    uri: '/video-settings.ui.xmi',
+    ePackage: () => VideoSettingsPackage.eINSTANCE,
+    create: () => new VideoSettingsImpl(),
+    /* The form for the class this one contains. */
+    entryForms: [{ xmi: videoFitFormXmi, uri: '/video-fit.ui.xmi' }],
+  }
+
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
     @inject(EVENT_ACTIONS_REGISTRY_ID) private readonly actions: EventActionsRegistry,
@@ -66,4 +93,5 @@ export class VideoWidgetProvider implements WidgetProvider {
 }
 
 export { VideoWidget, VideoWidgetSettings }
+export { VideoSettingsImpl, VideoSettingsPackage, videoSettingsFormXmi, videoFitFormXmi }
 export type { IVideoSettings }

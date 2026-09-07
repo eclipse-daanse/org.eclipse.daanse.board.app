@@ -5,19 +5,16 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { SvgClassConfigMapEntry } from './SvgClassConfigMapEntry.js';
-import { Documentation, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { SvgClassConfigMapEntry } from './SvgClassConfigMapEntry.js';
 
-@Documentation("Represents the settings for displaying an SVG image, including the configuration of its internal classes.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings' })
-export class SvgSettings {
-  @Documentation("The path or URL to the SVG source file.")
-  @Reference('VariableWrapper')
-  src: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("A map of class names to their configurations, containing styling information like fill and stroke.")
-  @Reference('SvgClassConfigMapEntry')
-  classesConfig: SvgClassConfigMapEntry[] = [];
+/**
+ * SvgSettings
+ * @generated
+ */
+export interface SvgSettings extends EObject {
+  src?: VariableWrapper<string>;
+  classesConfig: EList<SvgClassConfigMapEntry>;
 
 }

@@ -5,31 +5,19 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { SVGItemStyles } from './SVGItemStyles.js';
-import { Documentation, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { SVGItemStyles } from './SVGItemStyles.js';
 
-@Documentation("Represents the settings for a repeatable SVG element, often used for progress indicators or visual counters where an SVG graphic is duplicated and styled differently based on progress.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings' })
-export class RepeatableSVGSettings {
-  @Documentation("The path or URL to the base SVG source file that will be repeated.")
-  @Reference('VariableWrapper')
-  src: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("Defines the fill and stroke styles for the SVG items that are considered 'active' (e.g., representing completed progress).")
-  @Reference('SVGItemStyles')
-  activeItemStyles: SVGItemStyles = new SVGItemStyles();
-
-  @Documentation("Defines the fill and stroke styles for the SVG items that are in their 'default' state (e.g., representing remaining progress).")
-  @Reference('SVGItemStyles')
-  defaultItemStyles: SVGItemStyles = new SVGItemStyles();
-
-  @Documentation("The total number of times the SVG should be repeated. This is a string as it might represent a dynamic value or a fixed count that could be parsed.")
-  @Reference('VariableWrapper')
-  repetitions: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The current progress value, determining how many of the repeated SVGs should be styled as 'active'. This is a string as it might represent a percentage or a numeric value.")
-  @Reference('VariableWrapper')
-  progress: VariableWrapper<string> = new VariableWrapper<string>();
+/**
+ * RepeatableSVGSettings
+ * @generated
+ */
+export interface RepeatableSVGSettings extends EObject {
+  src?: VariableWrapper<string>;
+  activeItemStyles?: SVGItemStyles;
+  defaultItemStyles?: SVGItemStyles;
+  repetitions?: VariableWrapper<string>;
+  progress?: VariableWrapper<string>;
 
 }

@@ -13,12 +13,12 @@ Contributors:
 
 
 <script setup lang="ts">
-import type { IProgressSettings } from './index'
 import { inject, computed, toRefs, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
-import { ProgressSettings } from './gen/ProgressSettings'
+import type { ProgressSettings } from './gen/ProgressSettings'
+import { ProgressSettingsImpl } from './gen/ProgressSettingsImpl'
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
 const { datasourceId, id: widgetId } = toRefs(props);
@@ -104,7 +104,7 @@ const wrappedDefaults = {
 onMounted(() => {
   if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'ProgressWidget', pageId);
   if (!config.value) {
-      config.value = new ProgressSettings();
+      config.value = new ProgressSettingsImpl();
   }
 
   // Handle Wrapped Properties
@@ -206,8 +206,13 @@ const parsedProgress = computed(() => {
   return Math.max(min, Math.min(max, numeric))
 })
 
+/*
+ * Compared as the literal, not as the generated enum: the enum's members
+ * are its names (LEFT), while what a board stores - and what the form
+ * offers - is the literal the model gives them (left).
+ */
 const horizontalAlignClass = computed(() => {
-  switch (config.value?.valueAlign) {
+  switch (config.value?.valueAlign as string | undefined) {
     case "left": return "align-left"
     case "right": return "align-right"
     default: return "align-center"
@@ -216,7 +221,7 @@ const horizontalAlignClass = computed(() => {
 const textColor = computed(() => (config.value.textColor as any)?.value || "#000000")
 
 const verticalAlignClass = computed(() => {
-  switch (config.value?.valueJustify) {
+  switch (config.value?.valueJustify as string | undefined) {
     case "top": return "justify-top"
     case "bottom": return "justify-bottom"
     default: return "justify-center"

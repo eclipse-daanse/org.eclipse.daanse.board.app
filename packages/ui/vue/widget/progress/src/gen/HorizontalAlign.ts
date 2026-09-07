@@ -4,11 +4,32 @@
  *
  * @generated
  */
+
 /**
  * HorizontalAlign
+ * @generated
  */
-export enum HorizontalAlign {
-  LEFT = "left",
-  CENTER = "center",
-  RIGHT = "right"
+export const HorizontalAlign = {
+  LEFT: 'LEFT',
+  CENTER: 'CENTER',
+  RIGHT: 'RIGHT'
+} as const;
+
+export type HorizontalAlign = typeof HorizontalAlign[keyof typeof HorizontalAlign];
+
+/**
+ * Get enum value by name
+ */
+export function getHorizontalAlign(name: string): HorizontalAlign | undefined {
+  return (HorizontalAlign as Record<string, string>)[name] as HorizontalAlign | undefined;
+}
+
+/**
+ * Get enum value by literal
+ */
+export function getHorizontalAlignByLiteral(literal: string): HorizontalAlign | undefined {
+  if (literal === 'left') return HorizontalAlign.LEFT;
+  if (literal === 'center') return HorizontalAlign.CENTER;
+  if (literal === 'right') return HorizontalAlign.RIGHT;
+  return undefined;
 }

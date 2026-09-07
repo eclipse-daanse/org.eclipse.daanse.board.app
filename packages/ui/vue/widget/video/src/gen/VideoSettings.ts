@@ -5,19 +5,16 @@
  * @generated
  */
 
-import { ObjectFitSetting } from './ObjectFitSetting.js';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Documentation, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { ObjectFitSetting } from './ObjectFitSetting.js';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@Documentation("Represents the settings for displaying a video, including its URL and how it should fit into its container.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.video#//VideoSettings' })
-export class VideoSettings {
-  @Documentation("The settings for how the video content should be fitted into its container.")
-  @Reference('ObjectFitSetting')
-  videoFitSettings: ObjectFitSetting = new ObjectFitSetting();
-
-  @Documentation("The URL or path to the video file.")
-  @Reference('VariableWrapper')
-  videoUrl: VariableWrapper<string> = new VariableWrapper<string>();
+/**
+ * VideoSettings
+ * @generated
+ */
+export interface VideoSettings extends EObject {
+  videoFitSettings?: ObjectFitSetting;
+  videoUrl?: VariableWrapper<string>;
 
 }

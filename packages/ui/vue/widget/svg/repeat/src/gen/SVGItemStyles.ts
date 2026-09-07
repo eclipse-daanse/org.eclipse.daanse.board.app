@@ -5,22 +5,16 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@Documentation("Defines the basic fill and stroke properties for an SVG element.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles' })
-export class SVGItemStyles {
-  @Documentation("The fill color of the SVG item (e.g., a hex code or named color).")
-  @Reference('VariableWrapper')
-  fill: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The stroke color of the SVG item.")
-  @Reference('VariableWrapper')
-  stroke: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Documentation("The CSS class name to apply to the SVG item.")
-  @Attribute()
+/**
+ * SVGItemStyles
+ * @generated
+ */
+export interface SVGItemStyles extends EObject {
+  fill?: VariableWrapper<string>;
+  stroke?: VariableWrapper<string>;
   className?: string;
 
 }

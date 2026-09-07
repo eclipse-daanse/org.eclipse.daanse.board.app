@@ -19,9 +19,9 @@ import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { MermaidWidgetInterface } from './api/MermaidWidgetInterface';
 import mermaid from 'mermaid';
-import { IMermaidWidgetSettings } from '.';
 import {  VariableWrapper,VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
-import { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+import type { MermaidWidgetSettings } from './gen/MermaidWidgetSettings'
+import { MermaidWidgetSettingsImpl } from './gen/MermaidWidgetSettingsImpl'
 
 
 const config = defineModel<MermaidWidgetSettings>('configv', { required: true});
@@ -78,7 +78,7 @@ const emitRightClick = () => {
 
 const container = ref<HTMLDivElement | null>(null);
 const timestamp = ref(Date.now());
-const defaultConfig = new MermaidWidgetSettings();
+const defaultConfig = new MermaidWidgetSettingsImpl();
 
 onMounted(() => {
   if (config.value) {
