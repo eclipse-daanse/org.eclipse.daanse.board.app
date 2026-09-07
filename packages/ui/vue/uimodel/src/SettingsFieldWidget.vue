@@ -32,6 +32,7 @@ Contributors:
  * widget holds a reference to it and would not see a new one.
  */
 import { computed, inject, ref, watch } from 'vue'
+import { evaluateValue } from '@emfts/uimodel-composer'
 import type { EObject, EStructuralFeature } from '@emfts/core'
 import {
   identifier as VARIABLE_REPOSITORY,
@@ -200,9 +201,33 @@ const flag = computed({
  */
 const modelKind = computed<string>(() => props.custom?.rawWidget?.eClass?.()?.getName?.() ?? '')
 
-const options = computed<string[]>(() => {
-  const values = props.custom?.rawWidget?.values
-  return values && typeof values.map === 'function' ? [...values] : []
+/*
+ * The choices, and what they are called.
+ *
+ * A model lists the values the setting may take - they are what gets
+ * stored, so they are the technical ones. Where a form also gives an
+ * optionLabel, each value is run through it to get the words the reader
+ * sees: "pedestrian" is what a route is calculated with, "Zu Fuß" is what
+ * someone is choosing.
+ */
+const options = computed<Array<{ value: string; text: string }>>(() => {
+  const raw = props.custom?.rawWidget
+  const values = raw?.values
+  const list: string[] = values && typeof values.map === 'function' ? [...values] : []
+
+  const labelExpression = raw?.optionLabel
+  if (!labelExpression?.body || !props.eObject) return list.map((value) => ({ value, text: value }))
+
+  return list.map((value) => {
+    let text = value
+    try {
+      const named = evaluateValue(labelExpression, props.eObject!, { option: value })
+      if (named != null && named !== '') text = String(named)
+    } catch {
+      // A label that will not evaluate leaves the value readable as itself
+    }
+    return { value, text }
+  })
 })
 
 const numberBounds = computed(() => ({
@@ -269,6 +294,8 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         v-model="value"
         :label="label"
         :options="options"
+        value-key="value"
+        label-key="text"
         :disabled="!editable"
         clearable
       />

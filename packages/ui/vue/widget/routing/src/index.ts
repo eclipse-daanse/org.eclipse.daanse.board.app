@@ -11,13 +11,28 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { EVENT_REGISTRY_ID, EventsPackage } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/routing.svg'
 import RoutingWidget from './RoutingWidget.vue'
 import RoutingWidgetSettings from './RoutingWidgetSettings.vue'
 import { RoutingWidgetEvents } from './events/RoutingWidgetEvents'
 import { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
+import { RoutingWidgetSettingsImpl } from './gen/RoutingWidgetSettingsImpl'
+import { RoutingSettingsPackage } from './gen/RoutingSettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import routingSettingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ *
+ * The events package first: the payloads inherit from Payload, and a
+ * package cannot resolve a supertype that is not in the registry yet.
+ */
+EventsPackage.eINSTANCE
+RoutingSettingsPackage.eINSTANCE
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -40,6 +55,18 @@ export class RoutingWidgetProvider implements WidgetProvider {
   readonly icon = Icon
   readonly name = 'Routing'
 
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: routingSettingsFormXmi,
+    uri: '/routing-settings.ui.xmi',
+    ePackage: () => RoutingSettingsPackage.eINSTANCE,
+    create: () => new RoutingWidgetSettingsImpl(),
+  }
+
   constructor(
     @inject(EVENT_REGISTRY_ID) private readonly events: EventRegistry,
   ) {}
@@ -56,3 +83,4 @@ export class RoutingWidgetProvider implements WidgetProvider {
 }
 
 export { RoutingWidget, RoutingWidgetSettings }
+export { RoutingWidgetSettingsImpl, RoutingSettingsPackage, routingSettingsFormXmi }

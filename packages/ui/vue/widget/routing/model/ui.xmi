@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the routing widget.
+
+One decision: how a route is calculated when nothing else says otherwise.
+The rest of the class - the current mode, the waypoints, the geometry and
+the two totals - is what the widget works out while it runs, not something
+anyone sets here.
+
+The values are the routing service's own names, because they are what gets
+sent and stored; optionLabel gives them the words a reader picks from.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="RoutingWidgetSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="RoutingWidgetSettingsFormView">
+    <fields xsi:type="uimodel:SelectWidget"
+        name="defaultCosting"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetSettings/defaultCosting"
+        label="Verkehrsart">
+      <values>auto</values>
+      <values>bicycle</values>
+      <values>pedestrian</values>
+      <values>truck</values>
+      <values>bus</values>
+      <values>motor_scooter</values>
+      <values>motorcycle</values>
+      <optionLabel language="JS" body="({ auto: 'Auto', bicycle: 'Fahrrad', pedestrian: 'Zu Fuß', truck: 'LKW', bus: 'Bus', motor_scooter: 'Roller', motorcycle: 'Motorrad' })[option] ?? option"/>
+    </fields>
+  </components>
+</uimodel:UIModel>
