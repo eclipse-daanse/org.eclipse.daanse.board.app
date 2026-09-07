@@ -23,7 +23,8 @@
 import { EPackageRegistry, type EClass, type EStructuralFeature } from '@emfts/core'
 import { componentRegistry } from '@emfts/vue-registry'
 import SettingsListWidget from './SettingsListWidget.vue'
-import VariableWrapperWidget from './VariableWrapperWidget.vue'
+import SettingsObjectWidget from './SettingsObjectWidget.vue'
+import SettingsFieldWidget from './SettingsFieldWidget.vue'
 
 const COMPOSABLES_NS = 'org.eclipse.daanse.board.app.ui.vue.composables'
 
@@ -42,7 +43,7 @@ export function registerWrapperRenderer(): boolean {
     return false
   }
 
-  componentRegistry.registerForReference(VariableWrapperWidget, { targetClass: target })
+  componentRegistry.registerForReference(SettingsFieldWidget, { targetClass: target })
   done = true
   return true
 }
@@ -55,14 +56,77 @@ export function registerWrapperRenderer(): boolean {
  * typed against, so it does not need to know the classes in advance. A
  * single value never reaches it - the matcher only accepts isMany().
  */
-export function registerListRenderer(eClass: EClass): void {
+export function registerListRenderer(eClass: EClass, seen = new Set<EClass>()): void {
+  /* A class can contain itself through a chain; register each one once. */
+  if (seen.has(eClass)) return
+  seen.add(eClass)
+
   for (const feature of eClass.getEStructuralFeatures()) {
-    if (!isMany(feature)) continue
-    componentRegistry.registerForFeature(
-      eClass,
-      feature.getName?.() ?? '',
-      SettingsListWidget,
-    )
+    if (isMany(feature)) {
+      componentRegistry.registerForFeature(
+        eClass,
+        feature.getName?.() ?? '',
+        SettingsListWidget,
+      )
+      /* Each entry is a form too, so the class the list is typed against
+       * needs its own features registered - otherwise an entry's fields
+       * fall back to the composer's default and ignore their form. */
+      const entry = (feature as any).getEReferenceType?.()
+      if (entry) registerListRenderer(entry, seen)
+      continue
+    }
+    /*
+     * One nested object. Without this the composer has no renderer for it
+     * and falls back to a text field, which offers a line to type in where
+     * a form belongs. VariableWrapper is the exception: it is a single
+     * reference too, but it is a value rather than a nested form, and its
+     * own renderer is registered against the type above.
+     */
+    if (isContainedObject(feature)) {
+      componentRegistry.registerForFeature(
+        eClass,
+        feature.getName?.() ?? '',
+        SettingsObjectWidget,
+      )
+      /* The nested class needs its own features registered too - its lists
+       * are drawn by the same renderer, one level further in. */
+      const target = (feature as any).getEReferenceType?.()
+      if (target) registerListRenderer(target, seen)
+      continue
+    }
+
+    /*
+     * A plain attribute. The composer's own fallback draws one as a text
+     * area whatever the form says it is, so a five-value choice arrived as
+     * a box to type a guess into. The same renderer as the wrappers gets
+     * it, which is what makes the written widget class decide the control;
+     * it leaves the {x} off, there being no wrapper to bind.
+     */
+    if (isAttribute(feature)) {
+      componentRegistry.registerForFeature(
+        eClass,
+        feature.getName?.() ?? '',
+        SettingsFieldWidget,
+      )
+    }
+  }
+}
+
+function isAttribute(feature: EStructuralFeature): boolean {
+  try {
+    return (feature as any).getEReferenceType?.() == null
+  } catch {
+    return true
+  }
+}
+
+function isContainedObject(feature: EStructuralFeature): boolean {
+  try {
+    const target = (feature as any).getEReferenceType?.()
+    if (!target) return false
+    return target.getName?.() !== 'VariableWrapper'
+  } catch {
+    return false
   }
 }
 

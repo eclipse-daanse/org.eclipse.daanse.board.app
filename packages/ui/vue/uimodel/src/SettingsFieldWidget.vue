@@ -15,11 +15,18 @@ Contributors:
 /*
  * The renderer for a settings field.
  *
- * Widgets hold their settings in VariableWrapper: a value that is either
- * given here or taken from a variable. Both states are editable from this
- * one field - the {x} switches between them - because a setting driven from
+ * Most settings are held in a VariableWrapper: a value that is either given
+ * here or taken from a variable. Both states are editable from this one
+ * field - the {x} switches between them - because a setting driven from
  * outside is still a setting, and having to look somewhere else to see or
  * change that is what made the old form hard to read.
+ *
+ * Some are a plain attribute instead - a list entry's own fields, mostly.
+ * They are drawn by the same component so that the widget class written in
+ * the form still decides the control: without this the composer's own
+ * fallback draws every one of them as a text area, and a five-value choice
+ * became a box to type a guess into. Such a field has no wrapper to bind,
+ * so the {x} is not offered.
  *
  * The wrapper object itself is never replaced, only written through: the
  * widget holds a reference to it and would not see a new one.
@@ -52,15 +59,52 @@ const variables = inject<VariableRepository>(VARIABLE_REPOSITORY)
 
 /** The wrapper itself - read and written through, never swapped out. */
 const wrapper = computed<any>(() => {
+  const held = readHeld()
+  return isWrapper(held) ? held : undefined
+})
+
+function readHeld(): unknown {
   const { eObject, feature } = props
   if (!eObject || !feature) return undefined
   const name = feature.getName?.()
   return name ? (eObject as unknown as Record<string, any>)[name] : undefined
+}
+
+/*
+ * A wrapper is recognised by what it offers, not by its class: the settings
+ * object may come from the widget's own bundle with its own copy of the
+ * class, and instanceof across bundles is false even when the shape is the
+ * same.
+ */
+function isWrapper(held: unknown): boolean {
+  return typeof (held as { setTo?: unknown } | undefined)?.setTo === 'function'
+}
+
+/** Whether this field is a wrapper at all - only those can be bound. */
+const bindable = computed(() => props.feature != null && isWrapperFeature(props.feature))
+
+function isWrapperFeature(feature: EStructuralFeature): boolean {
+  try {
+    return (feature as any).getEReferenceType?.()?.getName?.() === 'VariableWrapper'
+  } catch {
+    return false
+  }
+}
+
+/** Reads and writes the plain attribute, for a field with no wrapper. */
+const plain = computed<any>({
+  get: () => readHeld(),
+  set: (next) => {
+    const { eObject, feature } = props
+    const name = feature?.getName?.()
+    if (!eObject || !name) return
+    ;(eObject as unknown as Record<string, any>)[name] = next
+  },
 })
 
 /* ------------------------------------------------------------ binding */
 
-const boundName = computed<string>(() => wrapper.value?.variable ?? '')
+const boundName = computed<string>(() => (bindable.value ? (wrapper.value?.variable ?? '') : ''))
 const isBound = computed(() => Boolean(boundName.value))
 
 /** Switched on by the {x}, or by the field already being bound. */
@@ -108,8 +152,12 @@ function toggleBinding() {
 const editable = computed(() => !props.custom?.resolvedStyle?.readOnly && !isBound.value)
 
 const value = computed({
-  get: () => wrapper.value?.value ?? '',
-  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = next },
+  get: () => (bindable.value ? wrapper.value?.value : plain.value) ?? '',
+  set: (next) => {
+    if (!editable.value) return
+    if (bindable.value) { if (wrapper.value) wrapper.value.value = next }
+    else plain.value = next
+  },
 })
 
 /*
@@ -126,25 +174,21 @@ const value = computed({
  */
 const numeric = computed<number | ''>({
   get: () => {
-    const raw = wrapper.value?.value
+    const raw = bindable.value ? wrapper.value?.value : plain.value
     if (raw === undefined || raw === null || raw === '') return ''
     const parsed = Number(raw)
     return Number.isFinite(parsed) ? parsed : ''
   },
   set: (next) => {
-    if (!wrapper.value || !editable.value) return
-    if (next === '' || next === null) {
-      wrapper.value.value = undefined
-      return
-    }
-    const parsed = Number(next)
-    wrapper.value.value = Number.isFinite(parsed) ? parsed : undefined
+    if (!editable.value) return
+    const parsed = next === '' || next === null ? undefined : Number(next)
+    value.value = parsed !== undefined && Number.isFinite(parsed) ? parsed : undefined
   },
 })
 
 const flag = computed({
-  get: () => wrapper.value?.value === true || wrapper.value?.value === 'true',
-  set: (next) => { if (wrapper.value && editable.value) wrapper.value.value = next },
+  get: () => value.value === true || value.value === 'true',
+  set: (next) => { value.value = next },
 })
 
 /* --------------------------------------------------------------- form */
@@ -192,7 +236,7 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
 </script>
 
 <template>
-  <div v-if="wrapper" :class="['field-row', { 'field-row--bound': isBound }]">
+  <div v-if="wrapper || !bindable" :class="['field-row', { 'field-row--bound': isBound }]">
     <div class="field-row__control">
       <!-- Bound: the variable takes the place of the value -->
       <DSelect
@@ -257,8 +301,10 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
       />
     </div>
 
-    <!-- The switch between a value of its own and one from outside -->
+    <!-- The switch between a value of its own and one from outside;
+         a plain attribute has no wrapper to bind, so it is left out -->
     <button
+      v-if="bindable"
       type="button"
       :class="['bind', { on: isBound, armed: bindingMode && !isBound }]"
       :title="isBound ? `Bindung an „${boundName}“ lösen` : 'An eine Variable binden'"

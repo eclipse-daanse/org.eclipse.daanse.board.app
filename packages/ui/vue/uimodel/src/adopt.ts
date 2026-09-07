@@ -91,7 +91,7 @@ export function ensureWrappers<T extends EObject>(instance: T): T {
 
   for (const feature of instance.eClass().getEStructuralFeatures()) {
     const name = feature.getName?.()
-    if (!name || target[name] !== undefined) continue
+    if (!name) continue
 
     let typeName: string | undefined
     try {
@@ -102,8 +102,17 @@ export function ensureWrappers<T extends EObject>(instance: T): T {
     }
     if (typeName !== WRAPPER_CLASS) continue
 
+    const held = target[name]
+    if (held instanceof VariableWrapper) continue
+
     try {
-      target[name] = new VariableWrapperImpl()
+      /*
+       * A board saved before this field became a wrapper holds the plain
+       * value, and adopt copies it across as it stands. Leaving it there
+       * would give the widget a string where it reads .value, so the value
+       * is kept and moved inside a wrapper rather than dropped.
+       */
+      target[name] = new VariableWrapper(held)
     } catch {
       // A read-only feature cannot hold one either
     }

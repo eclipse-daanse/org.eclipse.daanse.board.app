@@ -36,7 +36,7 @@ import { asModel } from './adopt'
 import { registerListRenderer, registerWrapperRenderer } from './registerRenderer'
 import { formFor } from './buildForm'
 import { loadUIModel } from './loadUIModel'
-import VariableWrapperWidget from './VariableWrapperWidget.vue'
+import SettingsFieldWidget from './SettingsFieldWidget.vue'
 
 /*
  * Both metamodels have to exist before anything reads them: the settings

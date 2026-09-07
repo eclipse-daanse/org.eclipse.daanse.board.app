@@ -26,9 +26,10 @@
  */
 import SettingsForm from './SettingsForm.vue'
 import SettingsListWidget from './SettingsListWidget.vue'
-import VariableWrapperWidget from './VariableWrapperWidget.vue'
+import SettingsObjectWidget from './SettingsObjectWidget.vue'
+import SettingsFieldWidget from './SettingsFieldWidget.vue'
 
-export { SettingsForm, SettingsListWidget, VariableWrapperWidget }
+export { SettingsForm, SettingsListWidget, SettingsObjectWidget, SettingsFieldWidget }
 export { adopt, asModel, isModelled } from './adopt'
 export { formFor, kindOf, labelOf, type FieldKind } from './buildForm'
 export { loadUIModel } from './loadUIModel'
