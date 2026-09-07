@@ -6,7 +6,7 @@
  */
 
 import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EEnum } from '@emfts/core';
+import type { EClass, EAttribute, EReference } from '@emfts/core';
 import { ChartsettingsFactory } from './ChartsettingsFactory.js';
 
 /**

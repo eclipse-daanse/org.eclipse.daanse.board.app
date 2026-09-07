@@ -25,7 +25,7 @@ import MapMarker from './components/MapMarker.vue'
 import ConditionSettings from './parts/conditionLogic/ConditionSettings.vue'
 import PointStyler from './parts/styler/PointStyler.vue'
 import AreaStyler from './parts/styler/AreaStyler.vue'
-import { MapWidgetInterface } from './gen/MapWidgetInterface'
+import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -60,7 +60,7 @@ export class MapWidgetProvider implements WidgetProvider {
     this.actions
       .registerActionsFromEcoreString(WIDGET_TYPE, ecoreModelContent, 'widget', 'model.ecore')
       .catch(() => {
-        this.actions.registerWidgetType(WIDGET_TYPE, MapWidgetInterface, 'widget')
+        this.actions.registerWidgetType(WIDGET_TYPE, MapWidgetInterfaceImpl, 'widget')
       })
 
     /*

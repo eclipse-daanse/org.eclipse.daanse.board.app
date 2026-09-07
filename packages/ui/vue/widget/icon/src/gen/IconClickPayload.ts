@@ -5,14 +5,13 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when an icon is clicked.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.icon#//IconClickPayload' })
-export class IconClickPayload extends Payload {
-  @Documentation("Name of the clicked icon.")
-  @Attribute()
+/**
+ * IconClickPayload
+ * @generated
+ */
+export interface IconClickPayload extends Payload {
   iconName?: string;
 
 }

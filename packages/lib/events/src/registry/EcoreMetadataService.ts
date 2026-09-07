@@ -218,7 +218,7 @@ export class EcoreMetadataService {
       if (isEClass(classifier)) {
         const eClass = classifier as EClass;
 
-        // Check if this class extends WidgetActionInterface
+        // Check if this class extends WidgetActionInterfaceImpl
         const isWidgetActionInterface = this.extendsWidgetActionInterface(eClass);
         if (!isWidgetActionInterface) {
           continue;
@@ -354,7 +354,7 @@ export class EcoreMetadataService {
   }
 
   /**
-   * Check if an EClass extends WidgetActionInterface
+   * Check if an EClass extends WidgetActionInterfaceImpl
    */
   private extendsWidgetActionInterface(eClass: EClass): boolean {
     // Check all super types

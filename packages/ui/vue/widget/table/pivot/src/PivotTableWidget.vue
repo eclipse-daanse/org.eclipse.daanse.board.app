@@ -16,7 +16,9 @@ import { inject } from 'vue'
 import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
 import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
-import { PivotTable } from "./gen/PivotTable";
+import type { PivotTable } from "./gen/PivotTable";
+// The class to instantiate: in emf mode the plain name is the interface
+import { PivotTableImpl } from "./gen/PivotTableImpl";
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { useRoute } from 'vue-router'
 
@@ -137,7 +139,7 @@ const emitColumnCollapsed = (uName: string) => {
 const config = defineModel<PivotTable>('configv', { required: true });
 const { wrapParameters } = useVariableRepository();
 
-const defaultConfig = new PivotTable()
+const defaultConfig = new PivotTableImpl()
 
 onMounted(() => {
     if (config.value) {

@@ -5,16 +5,16 @@
  * @generated
  */
 
-import { GallerySettings } from './GallerySettings.js';
-import { ImageGalleryItem } from './ImageGalleryItem.js';
-import { ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { GallerySettings } from './GallerySettings.js';
+import type { ImageGalleryItem } from './ImageGalleryItem.js';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings' })
-export class ImageSettings {
-  @Reference('GallerySettings')
-  imagesSettings: GallerySettings = new GallerySettings();
-
-  @Reference('ImageGalleryItem')
-  images: ImageGalleryItem[] = [];
+/**
+ * ImageSettings
+ * @generated
+ */
+export interface ImageSettings extends EObject {
+  imagesSettings?: GallerySettings;
+  images: EList<ImageGalleryItem>;
 
 }

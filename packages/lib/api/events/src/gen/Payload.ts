@@ -5,25 +5,16 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Abstract base class for all event payloads.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events#//Payload' })
-export abstract class Payload {
-  @Documentation("Type of the event (e.g., 'click_on_thing', 'click_on_datastream').")
-  @Attribute()
+/**
+ * Payload
+ * @generated
+ */
+export interface Payload extends EObject {
   eventType?: string;
-
-  @Documentation("ID of the widget that emitted this event.")
-  @Attribute()
   widgetId?: string;
-
-  @Documentation("Unix timestamp when the event was emitted.")
-  @Attribute()
   timestamp?: number;
-
-  @Documentation("Optional metadata object for additional context.")
-  @Attribute()
   metadata?: unknown;
 
 }

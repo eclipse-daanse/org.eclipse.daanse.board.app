@@ -5,57 +5,24 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
 
-@Documentation("Represents a single layer that can be displayed on the map.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Layer' })
-export class Layer {
-  @Documentation("Optional datasource identifier for this layer.")
-  @Attribute()
+/**
+ * Layer
+ * @generated
+ */
+export interface Layer extends EObject {
   datasourceId?: string;
-
-  @Documentation("The service associated with this layer. (Mapped from TypeScript 'any' type).")
-  @Attribute()
   service?: unknown;
-
-  @Documentation("The type of the layer (e.g., 'WMS', 'GeoJSON').")
-  @Attribute()
   type?: string;
-
-  @Documentation("A nested child layer. (Note: Original TS was single LayerI, not LayerI[]).")
-  @Reference('Layer')
   childs?: Layer;
-
-  @Documentation("The hierarchical level of the layer.")
-  @Attribute()
   level?: number;
-
-  @Documentation("Optional list of style IDs applicable to this layer.")
-  @Attribute()
-  styleIds: string[] = [];
-
-  @Documentation("Optional internal name of the layer.")
-  @Attribute()
+  styleIds: EList<string>;
   name?: string;
-
-  @Documentation("Optional display title of the layer.")
-  @Attribute()
   title?: string;
-
-  @Documentation("Optional attribution for this specific layer.")
-  @Attribute()
   attribution?: string;
-
-  @Documentation("Optional GeoJSON data for the layer. (Mapped from TypeScript 'any' type).")
-  @Attribute()
   geoJson?: unknown;
-
-  @Documentation("Optional WFS service configuration for the layer. (Mapped from TypeScript 'any' type).")
-  @Attribute()
   wfs_service?: unknown;
-
-  @Documentation("Optional opacity level for the layer (0.0 to 1.0).")
-  @Attribute()
   opacity?: number;
 
 }

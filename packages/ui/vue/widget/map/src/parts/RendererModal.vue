@@ -9,6 +9,7 @@ Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
 import { type ModelRef, reactive, ref, toRefs, watch } from 'vue'
+import { IconSettingsImpl } from '../gen/IconSettingsImpl'
 
 
 import { v4 } from 'uuid'
@@ -128,15 +129,16 @@ const addStyle = () => {
       renderer: {
         point_render_as: 'icon',
         point_prop: 'name',
-        point: {
+        // A modelled type, so built rather than written as a literal
+        point: Object.assign(new IconSettingsImpl(), {
           currentIcon: 'add_location_alt',
           iconColor: '#545050',
           iconSize: 48,
           isIconFilled: false,
           strokeWeight: 2,
           opticSize: 24,
-          grade: 1
-        },
+          grade: 1,
+        }),
         pointPin: {
           color: '#ccc'
         },
@@ -169,15 +171,16 @@ const addStyle = () => {
       renderer: {
         point_render_as: 'icon',
         point_prop: 'name',
-        point: {
+        // A modelled type, so built rather than written as a literal
+        point: Object.assign(new IconSettingsImpl(), {
           currentIcon: 'add_location_alt',
           iconColor: '#545050',
           iconSize: 48,
           isIconFilled: false,
           strokeWeight: 2,
           opticSize: 24,
-          grade: 1
-        },
+          grade: 1,
+        }),
         pointPin: {
           color: '#ccc'
         },
@@ -261,15 +264,16 @@ const addObservationRenderer = (componentId: string) => {
       renderer: {
         point_render_as: 'icon',
         point_prop: 'name',
-        point: {
+        // A modelled type, so built rather than written as a literal
+        point: Object.assign(new IconSettingsImpl(), {
           currentIcon: 'add_location_alt',
           iconColor: '#545050',
           iconSize: 48,
           isIconFilled: false,
           strokeWeight: 2,
           opticSize: 24,
-          grade: 1
-        },
+          grade: 1,
+        }),
         pointPin: {
           color: '#ccc'
         },

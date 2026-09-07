@@ -5,27 +5,18 @@
  * @generated
  */
 
-import { PointAndAreaSettings } from './PointAndAreaSettings.js';
-import { Condition } from './Condition.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { PointAndAreaSettings } from './PointAndAreaSettings.js';
+import type { Condition } from './Condition.js';
 
-@Documentation("Defines observation settings for a renderer.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Observation' })
-export class Observation {
-  @Documentation("The observation setting. (Mapped from TypeScript 'any' type).")
-  @Attribute()
+/**
+ * Observation
+ * @generated
+ */
+export interface Observation extends EObject {
   setting?: unknown;
-
-  @Documentation("The component related to the observation.")
-  @Attribute()
   component?: string;
-
-  @Documentation("Optional rendering settings for point and area (used for GeoJSON layer renderers).")
-  @Reference('PointAndAreaSettings')
-  renderer: PointAndAreaSettings = new PointAndAreaSettings();
-
-  @Documentation("A list of conditions to filter GeoJSON features within observations.")
-  @Reference('Condition')
-  conditions: Condition[] = [];
+  renderer?: PointAndAreaSettings;
+  conditions: EList<Condition>;
 
 }

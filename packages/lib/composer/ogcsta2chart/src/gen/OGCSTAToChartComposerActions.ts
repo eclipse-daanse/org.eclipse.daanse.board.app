@@ -9,12 +9,13 @@ import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.api
 
 /**
  * OGCSTAToChartComposerActions
+ * @generated
  */
 export interface OGCSTAToChartComposerActions extends SystemActionInterface {
 
-  switchThingByName(name?: string): void;
-  switchThingById(id?: string): void;
-  addDatastreamsByName(name?: string): void;
+  switchThingByName(name: string): void;
+  switchThingById(id: string): void;
+  addDatastreamsByName(name: string): void;
   removeAllDatastreams(): void;
-  removeDatastreamByName(name?: string): void;
+  removeDatastreamByName(name: string): void;
 }

@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.events'
+import { WidgetActionInterfaceImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
-export abstract class KpiTableWidgetInterface extends WidgetActionInterface {
+export abstract class KpiTableWidgetInterface extends WidgetActionInterfaceImpl {
 
   @WidgetAction({ eventType: 'kpiTable.refresh' })
   refresh(): void { throw new Error("refresh not implemented"); }

@@ -4,14 +4,38 @@
  *
  * @generated
  */
+
 /**
  * Comperator
+ * @generated
  */
-export enum Comperator {
-  eq = "eq",
-  lt = "lt",
-  gt = "gt",
-  lte = "lte",
-  gte = "gte",
-  neq = "neq"
+export const Comperator = {
+  eq: 'eq',
+  lt: 'lt',
+  gt: 'gt',
+  lte: 'lte',
+  gte: 'gte',
+  neq: 'neq'
+} as const;
+
+export type Comperator = typeof Comperator[keyof typeof Comperator];
+
+/**
+ * Get enum value by name
+ */
+export function getComperator(name: string): Comperator | undefined {
+  return (Comperator as Record<string, string>)[name] as Comperator | undefined;
+}
+
+/**
+ * Get enum value by literal
+ */
+export function getComperatorByLiteral(literal: string): Comperator | undefined {
+  if (literal === 'eq') return Comperator.eq;
+  if (literal === 'lt') return Comperator.lt;
+  if (literal === 'gt') return Comperator.gt;
+  if (literal === 'lte') return Comperator.lte;
+  if (literal === 'gte') return Comperator.gte;
+  if (literal === 'neq') return Comperator.neq;
+  return undefined;
 }

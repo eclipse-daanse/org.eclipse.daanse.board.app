@@ -5,30 +5,17 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when a route has been calculated.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RouteCalculatedPayload' })
-export class RouteCalculatedPayload extends Payload {
-  @Documentation("GeoJSON FeatureCollection of the route.")
-  @Attribute()
+/**
+ * RouteCalculatedPayload
+ * @generated
+ */
+export interface RouteCalculatedPayload extends Payload {
   geojson?: unknown;
-
-  @Documentation("Total route distance in kilometers.")
-  @Attribute()
   distance_km?: number;
-
-  @Documentation("Total route duration in minutes.")
-  @Attribute()
   duration_min?: number;
-
-  @Documentation("Array of waypoints used for the route.")
-  @Attribute()
   waypoints?: unknown;
-
-  @Documentation("Transport mode used for the route.")
-  @Attribute()
   costing?: string;
 
 }

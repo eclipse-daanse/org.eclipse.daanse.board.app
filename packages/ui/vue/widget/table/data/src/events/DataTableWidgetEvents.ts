@@ -11,15 +11,15 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const DataTableWidgetEvents: WidgetEventDefinition[] = [
-  { name: 'DataTable Clicked', type: 'click', description: 'Triggered when the datatable widget is clicked', payloadType: Payload },
-  { name: 'DataTable Right Clicked', type: 'right_click', description: 'Triggered when the datatable widget is right-clicked', payloadType: Payload },
-  { name: 'DataTable Row Clicked', type: 'row_click', description: 'Triggered when a row is clicked', payloadType: Payload },
-  { name: 'DataTable Row Right Clicked', type: 'row_right_click', description: 'Triggered when a row is right-clicked', payloadType: Payload },
-  { name: 'DataTable Column Clicked', type: 'col_click', description: 'Triggered when a column header is clicked', payloadType: Payload },
-  { name: 'DataTable Column Right Clicked', type: 'col_right_click', description: 'Triggered when a column header is right-clicked', payloadType: Payload },
-  { name: 'DataTable Cell Clicked', type: 'cell_click', description: 'Triggered when a cell is clicked', payloadType: Payload },
-  { name: 'DataTable Cell Right Clicked', type: 'cell_right_click', description: 'Triggered when a cell is right-clicked', payloadType: Payload }
+  { name: 'DataTable Clicked', type: 'click', description: 'Triggered when the datatable widget is clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Right Clicked', type: 'right_click', description: 'Triggered when the datatable widget is right-clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Row Clicked', type: 'row_click', description: 'Triggered when a row is clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Row Right Clicked', type: 'row_right_click', description: 'Triggered when a row is right-clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Column Clicked', type: 'col_click', description: 'Triggered when a column header is clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Column Right Clicked', type: 'col_right_click', description: 'Triggered when a column header is right-clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Cell Clicked', type: 'cell_click', description: 'Triggered when a cell is clicked', payloadType: PayloadImpl },
+  { name: 'DataTable Cell Right Clicked', type: 'cell_right_click', description: 'Triggered when a cell is right-clicked', payloadType: PayloadImpl }
 ];

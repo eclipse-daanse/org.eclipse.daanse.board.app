@@ -11,25 +11,25 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const MarkdownWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Markdown Clicked',
     type: 'click',
     description: 'Triggered when the markdown widget is clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Markdown Right Clicked',
     type: 'right_click',
     description: 'Triggered when the markdown widget is right-clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Markdown Text Changed',
     type: 'text_change',
     description: 'Triggered when the markdown text changes',
-    payloadType: Payload
+    payloadType: PayloadImpl
   }
 ];

@@ -5,37 +5,22 @@
  * @generated
  */
 
-import { Condition } from './Condition.js';
-import { Observation } from './Observation.js';
-import { PointAndAreaSettings } from './PointAndAreaSettings.js';
-import { ERefType } from './ERefType.js';
-import { Documentation, Attribute, ModelClass, Reference, Enum } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { Condition } from './Condition.js';
+import type { Observation } from './Observation.js';
+import type { PointAndAreaSettings } from './PointAndAreaSettings.js';
+import type { ERefType } from './ERefType.js';
 
-@Documentation("Defines a renderer based on data stream conditions.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//DSRenderer' })
-export class DSRenderer {
-  @Documentation("The name of the data stream renderer.")
-  @Attribute()
+/**
+ * DSRenderer
+ * @generated
+ */
+export interface DSRenderer extends EObject {
   name?: string;
-
-  @Documentation("A list of conditions applied to the data stream.")
-  @Reference('Condition')
-  datastream: Condition[] = [];
-
-  @Documentation("Optional list of observation settings for the renderer.")
-  @Reference('Observation')
-  observations: Observation[] = [];
-
-  @Documentation("The rendering settings for points and areas associated with this data stream.")
-  @Reference('PointAndAreaSettings')
-  renderer: PointAndAreaSettings = new PointAndAreaSettings();
-
-  @Documentation("A unique identifier for the data stream renderer.")
-  @Attribute()
+  datastream: EList<Condition>;
+  observations: EList<Observation>;
+  renderer?: PointAndAreaSettings;
   id?: string;
-
-  @Documentation("The type of reference or placement (e.g., 'Thing', 'ObservedArea').")
-  @Enum('ERefType')
-  placement: ERefType = ERefType.Thing;
+  placement?: ERefType;
 
 }

@@ -5,7 +5,7 @@
  * @generated
  */
 
-import type { EObject, BasicEObject, EClass, EStructuralFeature } from '@emfts/core';
+import type { EObject } from '@emfts/core';
 
 /**
  * VariableWrapper

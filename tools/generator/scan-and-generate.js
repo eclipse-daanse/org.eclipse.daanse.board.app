@@ -178,7 +178,59 @@ function fillMissingTypeArguments(file) {
  */
 function fixArrayDefaults(file) {
   const before = readFileSync(file, 'utf8')
-  const after = before.replace(/(:\s*\w+\[\]\s*=\s*)(["'])\[\]\2/g, '$1[]')
+  let after = before.replace(/(:\s*\w+\[\]\s*=\s*)(["'])\[\]\2/g, '$1[]')
+  /*
+   * A modelled list is an EList, created lazily in its getter - it takes no
+   * initialiser at all, and the field already carries a definite-assignment
+   * mark. The literal "[]" there is the same mistake in the other shape.
+   */
+  after = after.replace(/(!?:\s*EList<[^>]+>)\s*=\s*[^;]+;/g, '$1;')
+  if (after !== before) writeFileSync(file, after)
+}
+
+/**
+ * WORKAROUND (emf.ts.codegen): a class inheriting across packages is given
+ * a subpath import - `from 'pkg/FooImpl'` - which no package here exposes;
+ * they export from their index. Rewritten to the package name, which is
+ * where the class actually is.
+ */
+/**
+ * WORKAROUND (emf.ts.codegen#32, wider): the emitter imports the helpers a
+ * class might need, not the ones it uses - EClass, BasicEObject, EEnum and
+ * friends turn up unused. Harmless where a package compiles its own
+ * sources loosely, fatal where one ships src and a consumer compiles it
+ * under noUnusedLocals. The names that never appear again are dropped, and
+ * an import left with nothing goes with them.
+ */
+function pruneUnusedNamedImports(file) {
+  const before = readFileSync(file, 'utf8')
+  let after = before
+
+  for (const m of before.matchAll(/import (type )?\{([^}]*)\} from '([^']*)';?\n/g)) {
+    const [all, typeOnly = '', names, from] = m
+    // The rest of the file, so a name is not counted as used by its own import
+    const rest = before.replace(all, '')
+    const kept = names
+      .split(',')
+      .map((n) => n.trim())
+      .filter(Boolean)
+      .filter((n) => new RegExp(`\\b${n.replace(/^type /, '')}\\b`).test(rest))
+    if (kept.length === names.split(',').filter((n) => n.trim()).length) continue
+    const replacement = kept.length
+      ? `import ${typeOnly}{ ${kept.join(', ')} } from '${from}';\n`
+      : ''
+    after = after.replace(all, replacement)
+  }
+
+  if (after !== before) writeFileSync(file, after)
+}
+
+function collapseSubpathImports(file) {
+  const before = readFileSync(file, 'utf8')
+  const after = before.replace(
+    /from '(org\.eclipse\.daanse\.board\.app[\w.]*)\/(\w+)'/g,
+    (all, pkg) => `from '${pkg}'`,
+  )
   if (after !== before) writeFileSync(file, after)
 }
 
@@ -249,6 +301,8 @@ for (const [pkgDir, pkgModels] of byPackage) {
             silenceUnusedStubParameters(join(genDir, entry))
             fillMissingTypeArguments(join(genDir, entry))
             fixArrayDefaults(join(genDir, entry))
+            collapseSubpathImports(join(genDir, entry))
+            pruneUnusedNamedImports(join(genDir, entry))
           }
         }
       }

@@ -5,69 +5,30 @@
  * @generated
  */
 
-import { Layer } from './Layer.js';
-import { DSRenderer } from './DSRenderer.js';
-import { Renderer } from './Renderer.js';
-import { Service } from './Service.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { Layer } from './Layer.js';
+import type { DSRenderer } from './DSRenderer.js';
+import type { Renderer } from './Renderer.js';
+import type { Service } from './Service.js';
 
-@Documentation("Represents the overall settings for a map display.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapSettings' })
-export class MapSettings {
-  @Documentation("Optional identifier for the data source.")
-  @Attribute()
+/**
+ * MapSettings
+ * @generated
+ */
+export interface MapSettings extends EObject {
   datasourceId?: string;
-
-  @Documentation("Optional array of additional datasource identifiers for multi-datasource support.")
-  @Attribute()
-  datasourceIds: string[] = [];
-
-  @Documentation("The URL of the base map service.")
-  @Attribute()
-  baseMapUrl: string = "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
-
-  @Documentation("The initial zoom level of the map.")
-  @Attribute()
-  zoom: number = 14;
-
-  @Documentation("The geographical coordinates for the center of the map (e.g., [longitude, latitude]).")
-  @Attribute()
-  center: number[] = [50.93115286, 11.60392726];
-
-  @Documentation("Attribution text for the map data.")
-  @Attribute()
+  datasourceIds: EList<string>;
+  baseMapUrl?: string;
+  zoom?: number;
+  center: EList<number>;
   attribution?: string;
-
-  @Documentation("A list of layers to be displayed on the map.")
-  @Reference('Layer')
-  layers: Layer[] = [];
-
-  @Documentation("A list of data stream renderers for styling map elements.")
-  @Reference('DSRenderer')
-  styles: DSRenderer[] = [];
-
-  @Documentation("A list of OGC-compliant renderers for styling map elements.")
-  @Reference('Renderer')
-  OGCSstyles: Renderer[] = [];
-
-  @Documentation("A list of services available for the map.")
-  @Reference('Service')
-  services: Service[] = [];
-
-  @Documentation("if true maps can not be moved in viewmode")
-  @Attribute()
+  layers: EList<Layer>;
+  styles: EList<DSRenderer>;
+  OGCSstyles: EList<Renderer>;
+  services: EList<Service>;
   fixed?: boolean;
-
-  @Documentation("Enable marker clustering for OGC STA Things and Datastreams")
-  @Attribute()
   enableClustering?: boolean;
-
-  @Documentation("Color used to highlight selected Things on the map (default: #ff0000)")
-  @Attribute()
-  selectionHighlightColor: string = "#ff0000";
-
-  @Documentation("ID of the currently selected Thing (persisted across mode switches).")
-  @Attribute()
+  selectionHighlightColor?: string;
   selectedThingId?: string;
 
 }

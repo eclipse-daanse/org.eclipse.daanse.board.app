@@ -5,21 +5,15 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Settings for the Routing Widget.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetSettings' })
-export class RoutingWidgetSettings {
-  @Documentation("Default transport mode.")
-  @Attribute()
-  defaultCosting: string = "auto";
-
-  @Documentation("Currently selected transport mode.")
-  @Attribute()
-  costing: string = "auto";
-
-  @Documentation("Persisted waypoints array with lat, lon, name.")
-  @Attribute()
+/**
+ * RoutingWidgetSettings
+ * @generated
+ */
+export interface RoutingWidgetSettings extends EObject {
+  defaultCosting?: string;
+  costing?: string;
   waypoints?: unknown;
 
 }

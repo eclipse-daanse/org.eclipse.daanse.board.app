@@ -11,9 +11,9 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const RepeatableSVGWidgetEvents: WidgetEventDefinition[] = [
-  { name: 'Repeatable SVG Clicked', type: 'click', description: 'Triggered when the Repeatable SVG widget is clicked', payloadType: Payload },
-  { name: 'Repeatable SVG Right Clicked', type: 'right_click', description: 'Triggered when the Repeatable SVG widget is right-clicked', payloadType: Payload }
+  { name: 'Repeatable SVG Clicked', type: 'click', description: 'Triggered when the Repeatable SVG widget is clicked', payloadType: PayloadImpl },
+  { name: 'Repeatable SVG Right Clicked', type: 'right_click', description: 'Triggered when the Repeatable SVG widget is right-clicked', payloadType: PayloadImpl }
 ];

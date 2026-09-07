@@ -5,8 +5,8 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry, getEcorePackage } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EEnum } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEAttribute, EPackageRegistry, getEcorePackage } from '@emfts/core';
+import type { EClass, EAttribute, EReference } from '@emfts/core';
 import { ComposablesFactory } from './ComposablesFactory.js';
 
 /**

@@ -15,8 +15,10 @@ import { ref, onMounted, watch, markRaw } from 'vue'
 import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable } from './gen/PivotTable'
-import { LevelStyle } from './gen/LevelStyle'
-import { ConditionalFormat } from './gen/ConditionalFormat'
+import type { LevelStyle } from './gen/LevelStyle'
+import { LevelStyleImpl } from './gen/LevelStyleImpl'
+import type { ConditionalFormat } from './gen/ConditionalFormat'
+import { ConditionalFormatImpl } from './gen/ConditionalFormatImpl'
 
 type ConditionType = 'greaterThan' | 'lessThan' | 'equals' | 'notEquals' | 'between' | 'contains' | 'colorScale' | 'topN' | 'bottomN'
 
@@ -38,32 +40,53 @@ const textAlignOptions = [
   { value: 'right', text: 'Rechts' },
 ]
 
+/*
+ * The style lists are typed in the model, so the generator gives them an
+ * EList: add() and removeAt(), not push() and splice(). An untyped list
+ * still arrives as a plain array, so both are served.
+ */
+function listAdd(list: any, entry: unknown) {
+  if (typeof list?.add === 'function') list.add(entry)
+  else if (Array.isArray(list)) list.push(entry)
+}
+
+function listRemoveAt(list: any, index: number) {
+  if (typeof list?.removeAt === 'function') list.removeAt(index)
+  else if (Array.isArray(list)) list.splice(index, 1)
+}
+
+/** A list as a plain array, for v-for and for reading. */
+function asArray(list: any): any[] {
+  if (typeof list?.toArray === 'function') return list.toArray()
+  return Array.isArray(list) ? list : []
+}
+
 const addRowLevelStyle = () => {
   if (!widgetSettings.value.rowLevelStyles) {
-    widgetSettings.value.rowLevelStyles = []
+    widgetSettings.value.rowLevelStyles = [] as any
   }
   const nextLevel = widgetSettings.value.rowLevelStyles.length
-  const newStyle = new LevelStyle()
+  const newStyle = new LevelStyleImpl()
   newStyle.level = nextLevel
-  widgetSettings.value.rowLevelStyles.push(newStyle)
+  listAdd(widgetSettings.value.rowLevelStyles, newStyle)
 }
 
 const removeRowLevelStyle = (index: number) => {
-  widgetSettings.value.rowLevelStyles?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.rowLevelStyles, index)
 }
 
 const addColumnLevelStyle = () => {
   if (!widgetSettings.value.columnLevelStyles) {
-    widgetSettings.value.columnLevelStyles = []
+    widgetSettings.value.columnLevelStyles = [] as any
   }
   const nextLevel = widgetSettings.value.columnLevelStyles.length
-  const newStyle = new LevelStyle()
+  const newStyle = new LevelStyleImpl()
   newStyle.level = nextLevel
-  widgetSettings.value.columnLevelStyles.push(newStyle)
+  listAdd(widgetSettings.value.columnLevelStyles, newStyle)
 }
 
 const removeColumnLevelStyle = (index: number) => {
-  widgetSettings.value.columnLevelStyles?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.columnLevelStyles, index)
 }
 
 const conditionTypeOptions = [
@@ -82,17 +105,17 @@ const generateId = () => Math.random().toString(36).substring(2, 9)
 
 const addConditionalFormat = () => {
   if (!widgetSettings.value.conditionalFormats) {
-    widgetSettings.value.conditionalFormats = []
+    widgetSettings.value.conditionalFormats = [] as any
   }
   const priority = widgetSettings.value.conditionalFormats.length
-  const newFormat = new ConditionalFormat()
+  const newFormat = new ConditionalFormatImpl()
   newFormat.id = generateId()
   newFormat.priority = priority
-  widgetSettings.value.conditionalFormats.push(newFormat)
+  listAdd(widgetSettings.value.conditionalFormats, newFormat)
 }
 
 const removeConditionalFormat = (index: number) => {
-  widgetSettings.value.conditionalFormats?.splice(index, 1)
+  listRemoveAt(widgetSettings.value.conditionalFormats, index)
 }
 
 const needsSecondValue = (type?: string) => {

@@ -28,9 +28,12 @@ import {
   EventActionsRegistry,
   EVENT_ACTIONS_REGISTRY,
 } from 'org.eclipse.daanse.board.app.lib.api.events'
-import { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
-import { RouteCalculatedPayload } from './gen/RouteCalculatedPayload'
-import { WaypointPayload } from './gen/WaypointPayload'
+import type { RoutingWidgetInterface } from './gen/RoutingWidgetInterface'
+import { RoutingWidgetInterfaceImpl } from './gen/RoutingWidgetInterfaceImpl'
+import type { RouteCalculatedPayload } from './gen/RouteCalculatedPayload'
+import { RouteCalculatedPayloadImpl } from './gen/RouteCalculatedPayloadImpl'
+import type { WaypointPayload } from './gen/WaypointPayload'
+import { WaypointPayloadImpl } from './gen/WaypointPayloadImpl'
 import { RoutingWidgetSettings } from './gen/RoutingWidgetSettings'
 import {
   SET_WAYPOINTS,
@@ -271,10 +274,10 @@ function clearAll() {
 
 function emitWaypointAdded(wp: Waypoint, index: number) {
   if (!widgetId?.value) return
-  const payload = new WaypointPayload()
+  const payload = new WaypointPayloadImpl()
   payload.lat = wp.lat
   payload.lon = wp.lon
-  payload.name = wp.name
+  payload.name = wp.name ?? ''
   payload.index = index
   eventBus.emit('widget:RoutingWidget:waypoint_added', {
     type: 'widget:RoutingWidget:waypoint_added',
@@ -286,10 +289,10 @@ function emitWaypointAdded(wp: Waypoint, index: number) {
 
 function emitWaypointRemoved(wp: Waypoint, index: number) {
   if (!widgetId?.value) return
-  const payload = new WaypointPayload()
+  const payload = new WaypointPayloadImpl()
   payload.lat = wp.lat
   payload.lon = wp.lon
-  payload.name = wp.name
+  payload.name = wp.name ?? ''
   payload.index = index
   eventBus.emit('widget:RoutingWidget:waypoint_removed', {
     type: 'widget:RoutingWidget:waypoint_removed',
@@ -301,7 +304,7 @@ function emitWaypointRemoved(wp: Waypoint, index: number) {
 
 function emitRouteCalculated(result: ValhallaRouteResult) {
   if (!widgetId?.value) return
-  const payload = new RouteCalculatedPayload()
+  const payload = new RouteCalculatedPayloadImpl()
   payload.geojson = result.geojson
   payload.distance_km = result.summary.distance_km
   payload.duration_min = result.summary.duration_min
@@ -321,7 +324,7 @@ watch(routeResult, (newResult) => {
   }
 })
 
-class RoutingWidgetApi extends RoutingWidgetInterface {
+class RoutingWidgetApi extends RoutingWidgetInterfaceImpl {
   addWaypoint(lat: number, lon: number, name?: string): void {
     const wp: Waypoint = { lat, lon, name }
     waypoints.value.push(wp)

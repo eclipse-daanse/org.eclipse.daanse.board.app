@@ -5,8 +5,12 @@
  * @generated
  */
 
-import { ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//JavaObject' })
-export abstract class JavaObject {
+/**
+ * JavaObject
+ * @generated
+ */
+export interface JavaObject extends EObject {
+
 }

@@ -5,30 +5,17 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when an Observation is clicked on the map.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//ObservationClickPayload' })
-export class ObservationClickPayload extends Payload {
-  @Documentation("Observation ID.")
-  @Attribute()
+/**
+ * ObservationClickPayload
+ * @generated
+ */
+export interface ObservationClickPayload extends Payload {
   id?: string;
-
-  @Documentation("Parent Datastream ID.")
-  @Attribute()
   datastreamId?: string;
-
-  @Documentation("Phenomenon time (ISO 8601).")
-  @Attribute()
   phenomenonTime?: string;
-
-  @Documentation("Observation result value.")
-  @Attribute()
   result?: unknown;
-
-  @Documentation("Result time (ISO 8601).")
-  @Attribute()
   resultTime?: string;
 
 }

@@ -5,26 +5,16 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when a waypoint is added or removed.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//WaypointPayload' })
-export class WaypointPayload extends Payload {
-  @Documentation("Latitude of the waypoint.")
-  @Attribute()
+/**
+ * WaypointPayload
+ * @generated
+ */
+export interface WaypointPayload extends Payload {
   lat?: number;
-
-  @Documentation("Longitude of the waypoint.")
-  @Attribute()
   lon?: number;
-
-  @Documentation("Display name of the waypoint.")
-  @Attribute()
   name?: string;
-
-  @Documentation("Index of the waypoint in the list.")
-  @Attribute()
   index?: number;
 
 }

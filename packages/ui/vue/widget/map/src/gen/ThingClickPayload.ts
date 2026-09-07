@@ -5,39 +5,21 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { DatastreamSummary } from './DatastreamSummary.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EList } from '@emfts/core';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
+import type { DatastreamSummary } from './DatastreamSummary.js';
 
-@Documentation("Payload emitted when a Thing marker is clicked on the map.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//ThingClickPayload' })
-export class ThingClickPayload extends Payload {
-  @Documentation("Unique identifier of the Thing.")
-  @Attribute()
+/**
+ * ThingClickPayload
+ * @generated
+ */
+export interface ThingClickPayload extends Payload {
   id?: string;
-
-  @Documentation("Name of the Thing.")
-  @Attribute()
   name?: string;
-
-  @Documentation("Description of the Thing.")
-  @Attribute()
   description?: string;
-
-  @Documentation("Custom properties of the Thing (mapped from Record<string, any>).")
-  @Attribute()
   properties?: unknown;
-
-  @Documentation("Location geometry (GeoJSON) of the Thing.")
-  @Attribute()
   location?: unknown;
-
-  @Documentation("ID of the renderer that triggered this event.")
-  @Attribute()
   rendererId?: string;
-
-  @Documentation("Summary of datastreams associated with this Thing.")
-  @Reference('DatastreamSummary')
-  datastreams: DatastreamSummary[] = [];
+  datastreams: EList<DatastreamSummary>;
 
 }

@@ -5,8 +5,8 @@
  * @generated
  */
 
-import { BasicEPackage, BasicEClass, BasicEAttribute, BasicEReference, EPackageRegistry } from '@emfts/core';
-import type { EClass, EAttribute, EReference, EEnum } from '@emfts/core';
+import { BasicEPackage, BasicEClass, BasicEReference, EPackageRegistry } from '@emfts/core';
+import type { EClass, EAttribute, EReference } from '@emfts/core';
 import { WrapperSettingsFactory } from './WrapperSettingsFactory.js';
 
 /**

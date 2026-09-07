@@ -5,18 +5,14 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when the map background is clicked.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapClickPayload' })
-export class MapClickPayload extends Payload {
-  @Documentation("Latitude of the clicked position.")
-  @Attribute()
+/**
+ * MapClickPayload
+ * @generated
+ */
+export interface MapClickPayload extends Payload {
   lat?: number;
-
-  @Documentation("Longitude of the clicked position.")
-  @Attribute()
   lon?: number;
 
 }

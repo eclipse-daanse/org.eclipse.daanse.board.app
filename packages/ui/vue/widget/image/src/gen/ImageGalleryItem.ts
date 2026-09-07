@@ -5,14 +5,14 @@
  * @generated
  */
 
-import { Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageGalleryItem' })
-export class ImageGalleryItem {
-  @Attribute()
+/**
+ * ImageGalleryItem
+ * @generated
+ */
+export interface ImageGalleryItem extends EObject {
   id?: string;
-
-  @Attribute()
   url?: string;
 
 }

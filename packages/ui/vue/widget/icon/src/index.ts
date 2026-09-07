@@ -21,15 +21,18 @@ import { IconWidgetEvents } from './events/IconWidgetEvents'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+import type { IconSettings } from './gen/IconSettings'
 
-interface IIconSettings {
-  currentIcon: string;
+/*
+ * The settings as this widget actually uses them.
+ *
+ * Not the generated IconSettings: the model types iconColor as a plain
+ * string, while the component stores a VariableWrapper there so the colour
+ * can be bound to a variable. Until the model says so too, the difference
+ * is written down here rather than papered over.
+ */
+interface IIconSettings extends Omit<IconSettings, 'iconColor'> {
   iconColor: string | VariableWrapper<string>;
-  iconSize: number;
-  isIconFilled: boolean;
-  strokeWeight: number;
-  opticSize: number;
-  grade: number;
 }
 
 const WIDGET_TYPE = 'IconWidget'

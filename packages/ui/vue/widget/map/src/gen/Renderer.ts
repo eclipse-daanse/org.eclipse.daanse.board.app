@@ -5,40 +5,22 @@
  * @generated
  */
 
-import { Condition } from './Condition.js';
-import { PointAndAreaSettings } from './PointAndAreaSettings.js';
-import { DSRenderer } from './DSRenderer.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { Condition } from './Condition.js';
+import type { PointAndAreaSettings } from './PointAndAreaSettings.js';
+import type { DSRenderer } from './DSRenderer.js';
 
-@Documentation("Defines a general renderer, potentially with multiple data stream renderers.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Renderer' })
-export class Renderer {
-  @Documentation("The name of the renderer.")
-  @Attribute()
+/**
+ * Renderer
+ * @generated
+ */
+export interface Renderer extends EObject {
   name?: string;
-
-  @Documentation("A list of conditions related to the 'thing' being rendered.")
-  @Reference('Condition')
-  thing: Condition[] = [];
-
-  @Documentation("The primary rendering settings for points and areas.")
-  @Reference('PointAndAreaSettings')
-  renderer: PointAndAreaSettings = new PointAndAreaSettings();
-
-  @Documentation("A list of data stream renderers associated with this main renderer.")
-  @Reference('DSRenderer')
-  ds_renderer: DSRenderer[] = [];
-
-  @Documentation("Optional refresh interval for observation data in milliseconds.")
-  @Attribute()
+  thing: EList<Condition>;
+  renderer?: PointAndAreaSettings;
+  ds_renderer: EList<DSRenderer>;
   ObservationrefreshTime?: number;
-
-  @Documentation("Optional timestamp of the last update.")
-  @Attribute()
   lastUpdate?: number;
-
-  @Documentation("A unique identifier for the renderer.")
-  @Attribute()
   id?: string;
 
 }

@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const FiltersWidgetEvents: WidgetEventDefinition[] = [
-  { name: 'Filters Clicked', type: 'click', description: 'Triggered when the filters widget is clicked', payloadType: Payload },
-  { name: 'Filters Right Clicked', type: 'right_click', description: 'Triggered when the filters widget is right-clicked', payloadType: Payload },
-  { name: 'Filters Changed', type: 'change', description: 'Triggered when a filter selection changes', payloadType: Payload }
+  { name: 'Filters Clicked', type: 'click', description: 'Triggered when the filters widget is clicked', payloadType: PayloadImpl },
+  { name: 'Filters Right Clicked', type: 'right_click', description: 'Triggered when the filters widget is right-clicked', payloadType: PayloadImpl },
+  { name: 'Filters Changed', type: 'change', description: 'Triggered when a filter selection changes', payloadType: PayloadImpl }
 ];

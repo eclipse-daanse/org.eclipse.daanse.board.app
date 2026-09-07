@@ -12,69 +12,69 @@
  **********************************************************************/
 
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
-import { HeaderExpandedPayload } from '../gen/HeaderExpandedPayload';
-import { HeaderClickedPayload } from '../gen/HeaderClickedPayload';
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
+import { HeaderExpandedPayloadImpl } from '../gen/HeaderExpandedPayloadImpl';
+import { HeaderClickedPayloadImpl } from '../gen/HeaderClickedPayloadImpl';
 
 export const PivotTableEvents: WidgetEventDefinition[] = [
   {
     name: 'Row Expanded',
     type: 'row_expanded',
     description: 'Triggered when a row is expanded in the pivot table',
-    payloadType: HeaderExpandedPayload
+    payloadType: HeaderExpandedPayloadImpl
   },
   {
     name: 'Row Collapsed',
     type: 'row_collapsed',
     description: 'Triggered when a row is collapsed in the pivot table',
-    payloadType: HeaderExpandedPayload
+    payloadType: HeaderExpandedPayloadImpl
   },
   {
     name: 'Column Expanded',
     type: 'column_expanded',
     description: 'Triggered when a column is expanded in the pivot table',
-    payloadType: HeaderExpandedPayload
+    payloadType: HeaderExpandedPayloadImpl
   },
   {
     name: 'Column Collapsed',
     type: 'column_collapsed',
     description: 'Triggered when a column is collapsed in the pivot table',
-    payloadType: HeaderExpandedPayload
+    payloadType: HeaderExpandedPayloadImpl
   },
   {
     name: 'Row Clicked',
     type: 'row_clicked',
     description: 'Triggered when a row is clicked in the pivot table',
-    payloadType: HeaderClickedPayload
+    payloadType: HeaderClickedPayloadImpl
   },
   {
     name: 'Column Clicked',
     type: 'column_clicked',
     description: 'Triggered when a column is clicked in the pivot table',
-    payloadType: HeaderClickedPayload
+    payloadType: HeaderClickedPayloadImpl
   },
   {
     name: 'Row Right Clicked',
     type: 'row_right_clicked',
     description: 'Triggered when a row is right-clicked in the pivot table',
-    payloadType: HeaderClickedPayload
+    payloadType: HeaderClickedPayloadImpl
   },
   {
     name: 'Column Right Clicked',
     type: 'column_right_clicked',
     description: 'Triggered when a column is right-clicked in the pivot table',
-    payloadType: HeaderClickedPayload
+    payloadType: HeaderClickedPayloadImpl
   },
   {
     name: 'Cell Clicked',
     type: 'cell_clicked',
     description: 'Triggered when a cell is clicked in the pivot table',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Cell Right Clicked',
     type: 'cell_right_clicked',
     description: 'Triggered when a cell is right-clicked in the pivot table',
-    payloadType: Payload
+    payloadType: PayloadImpl
   }
 ];

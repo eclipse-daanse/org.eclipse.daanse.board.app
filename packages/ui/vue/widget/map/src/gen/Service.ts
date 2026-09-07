@@ -5,25 +5,16 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Defines a map service that can be used by layers.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Service' })
-export class Service {
-  @Documentation("The type of the service (e.g., 'WMS', 'WFS').")
-  @Attribute()
+/**
+ * Service
+ * @generated
+ */
+export interface Service extends EObject {
   type?: string;
-
-  @Documentation("The URL endpoint of the service.")
-  @Attribute()
   url?: string;
-
-  @Documentation("The internal service object. (Mapped from TypeScript 'any' type).")
-  @Attribute()
   service?: unknown;
-
-  @Documentation("A unique identifier for the service.")
-  @Attribute()
   id?: string;
 
 }

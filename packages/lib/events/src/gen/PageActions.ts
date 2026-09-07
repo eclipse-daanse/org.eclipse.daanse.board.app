@@ -5,16 +5,13 @@
  * @generated
  */
 
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
-import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Page-level actions that can be triggered by events")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events.systemactions#//PageActions' })
-export class PageActions {
-  @Documentation("Set or update a page-scoped variable")
-  @WidgetAction({eventType: "page.setPageVariable"})
-  setPageVariable(_variableName?: string, _value?: unknown, _pageId?: string): void {
-    throw new Error('setPageVariable not implemented');
-  }
+/**
+ * PageActions
+ * @generated
+ */
+export interface PageActions extends EObject {
 
+  setPageVariable(variableName: string, value: unknown, pageId: string): void;
 }

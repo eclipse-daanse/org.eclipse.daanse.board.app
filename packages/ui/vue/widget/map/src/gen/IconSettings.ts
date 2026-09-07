@@ -5,37 +5,19 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Defines settings for rendering icons.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//IconSettings' })
-export class IconSettings {
-  @Documentation("The identifier or path of the currently selected icon.")
-  @Attribute()
+/**
+ * IconSettings
+ * @generated
+ */
+export interface IconSettings extends EObject {
   currentIcon?: string;
-
-  @Documentation("The color of the icon.")
-  @Attribute()
   iconColor?: string;
-
-  @Documentation("The size of the icon in pixels.")
-  @Attribute()
   iconSize?: number;
-
-  @Documentation("Indicates if the icon should be filled.")
-  @Attribute()
   isIconFilled?: boolean;
-
-  @Documentation("The weight of the icon's stroke.")
-  @Attribute()
   strokeWeight?: number;
-
-  @Documentation("The optical size of the icon.")
-  @Attribute()
   opticSize?: number;
-
-  @Documentation("The grade or visual weight of the icon.")
-  @Attribute()
   grade?: number;
 
 }

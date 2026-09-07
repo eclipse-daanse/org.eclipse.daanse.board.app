@@ -5,72 +5,36 @@
  * @generated
  */
 
-import { JavaObject } from './JavaObject.js';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { LevelStyle } from './LevelStyle.js';
-import { ConditionalFormat } from './ConditionalFormat.js';
-import { Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject, EList } from '@emfts/core';
+import type { JavaObject } from './JavaObject.js';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { LevelStyle } from './LevelStyle.js';
+import type { ConditionalFormat } from './ConditionalFormat.js';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTable' })
-export class PivotTable {
-  @Reference('JavaObject')
-  rows: JavaObject[] = [];
-
-  @Reference('JavaObject')
-  columns: JavaObject[] = [];
-
-  @Reference('JavaObject')
-  cells: JavaObject[] = [];
-
-  @Attribute()
+/**
+ * PivotTable
+ * @generated
+ */
+export interface PivotTable extends EObject {
+  rows: EList<JavaObject>;
+  columns: EList<JavaObject>;
+  cells: EList<JavaObject>;
   tableState?: unknown;
-
-  @Reference('VariableWrapper')
-  headerBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  headerTextColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  cellBackgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  cellTextColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  borderColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  defaultColumnWidth: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  defaultRowHeight: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontSize: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  headerFontWeight: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Attribute()
-  cellTextAlign: string = "left";
-
-  @Attribute()
-  showRowsProperties: boolean = false;
-
-  @Attribute()
-  showColumnsProperties: boolean = false;
-
-  @Attribute()
-  showSingleMeasureHeader: boolean = false;
-
-  @Reference('LevelStyle')
-  rowLevelStyles: LevelStyle[] = [];
-
-  @Reference('LevelStyle')
-  columnLevelStyles: LevelStyle[] = [];
-
-  @Reference('ConditionalFormat')
-  conditionalFormats: ConditionalFormat[] = [];
+  headerBackgroundColor?: VariableWrapper<string>;
+  headerTextColor?: VariableWrapper<string>;
+  cellBackgroundColor?: VariableWrapper<string>;
+  cellTextColor?: VariableWrapper<string>;
+  borderColor?: VariableWrapper<string>;
+  defaultColumnWidth?: VariableWrapper<string>;
+  defaultRowHeight?: VariableWrapper<string>;
+  fontSize?: VariableWrapper<string>;
+  headerFontWeight?: VariableWrapper<string>;
+  cellTextAlign?: string;
+  showRowsProperties?: boolean;
+  showColumnsProperties?: boolean;
+  showSingleMeasureHeader?: boolean;
+  rowLevelStyles: EList<LevelStyle>;
+  columnLevelStyles: EList<LevelStyle>;
+  conditionalFormats: EList<ConditionalFormat>;
 
 }

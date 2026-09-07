@@ -12,20 +12,21 @@
  **********************************************************************/
 
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { ImageClickPayload } from '../gen/ImageClickPayload';
-import { ImageRightClickPayload } from '../gen/ImageRightClickPayload';
+// payloadType wants the class, which in emf mode is the Impl
+import { ImageClickPayloadImpl } from '../gen/ImageClickPayloadImpl';
+import { ImageRightClickPayloadImpl } from '../gen/ImageRightClickPayloadImpl';
 
 export const ImageWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Image Clicked',
     type: 'click',
     description: 'Triggered when the image is clicked',
-    payloadType: ImageClickPayload
+    payloadType: ImageClickPayloadImpl
   },
   {
     name: 'Image Right Clicked',
     type: 'right_click',
     description: 'Triggered when the image is right-clicked',
-    payloadType: ImageRightClickPayload
+    payloadType: ImageRightClickPayloadImpl
   }
 ];

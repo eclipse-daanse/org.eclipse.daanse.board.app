@@ -11,33 +11,33 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { RouteCalculatedPayload } from '../gen/RouteCalculatedPayload';
-import { WaypointPayload } from '../gen/WaypointPayload';
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { RouteCalculatedPayloadImpl } from '../gen/RouteCalculatedPayloadImpl';
+import { WaypointPayloadImpl } from '../gen/WaypointPayloadImpl';
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const RoutingWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Route Calculated',
     type: 'route_calculated',
     description: 'Triggered when a route has been calculated',
-    payloadType: RouteCalculatedPayload,
+    payloadType: RouteCalculatedPayloadImpl,
   },
   {
     name: 'Waypoint Added',
     type: 'waypoint_added',
     description: 'Triggered when a waypoint is added',
-    payloadType: WaypointPayload,
+    payloadType: WaypointPayloadImpl,
   },
   {
     name: 'Waypoint Removed',
     type: 'waypoint_removed',
     description: 'Triggered when a waypoint is removed',
-    payloadType: WaypointPayload,
+    payloadType: WaypointPayloadImpl,
   },
   {
     name: 'Route Cleared',
     type: 'route_cleared',
     description: 'Triggered when all waypoints and the route are cleared',
-    payloadType: Payload,
+    payloadType: PayloadImpl,
   },
 ];

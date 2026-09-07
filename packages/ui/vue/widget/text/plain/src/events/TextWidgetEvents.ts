@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const TextWidgetEvents: WidgetEventDefinition[] = [
-  { name: 'Text Clicked', type: 'click', description: 'Triggered when the text widget is clicked', payloadType: Payload },
-  { name: 'Text Right Clicked', type: 'right_click', description: 'Triggered when the text widget is right-clicked', payloadType: Payload },
-  { name: 'Text Changed', type: 'text_change', description: 'Triggered when the text changes', payloadType: Payload }
+  { name: 'Text Clicked', type: 'click', description: 'Triggered when the text widget is clicked', payloadType: PayloadImpl },
+  { name: 'Text Right Clicked', type: 'right_click', description: 'Triggered when the text widget is right-clicked', payloadType: PayloadImpl },
+  { name: 'Text Changed', type: 'text_change', description: 'Triggered when the text changes', payloadType: PayloadImpl }
 ];

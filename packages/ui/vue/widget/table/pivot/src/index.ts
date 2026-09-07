@@ -17,7 +17,7 @@ import Icon from './assets/pivot_table.svg'
 import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
 import { PivotTableEvents } from './events/PivotTableEvents'
-import { PivotTableInterface } from './gen/PivotTableInterface'
+import { PivotTableInterfaceImpl } from './gen/PivotTableInterfaceImpl'
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -55,7 +55,7 @@ export class PivotTableWidgetProvider implements WidgetProvider {
   @activate()
   register(): void {
     this.events.registerWidget(WIDGET_TYPE, PivotTableEvents)
-    this.actions.registerWidgetType(WIDGET_TYPE, PivotTableInterface, 'widget')
+    this.actions.registerWidgetType(WIDGET_TYPE, PivotTableInterfaceImpl, 'widget')
   }
 
   @deactivate()

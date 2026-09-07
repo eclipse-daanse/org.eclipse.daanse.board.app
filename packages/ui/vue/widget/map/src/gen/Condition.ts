@@ -5,22 +5,16 @@
  * @generated
  */
 
-import { Comperator } from './Comperator.js';
-import { Documentation, Attribute, ModelClass, Enum } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { Comperator } from './Comperator.js';
 
-@Documentation("Defines a condition for data stream filtering or styling.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Condition' })
-export class Condition {
-  @Documentation("The property name to apply the condition to.")
-  @Attribute()
+/**
+ * Condition
+ * @generated
+ */
+export interface Condition extends EObject {
   prop?: string;
-
-  @Documentation("The comparison operator to use (e.g., 'eq', 'lt').")
-  @Enum('Comperator')
-  comperator: Comperator = Comperator.eq;
-
-  @Documentation("The value to compare the property against.")
-  @Attribute()
+  comperator?: Comperator;
   value?: string;
 
 }

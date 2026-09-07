@@ -5,41 +5,17 @@
  * @generated
  */
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
-import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Abstract base class for Routing Widget operations.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.routing#//RoutingWidgetInterface' })
-export abstract class RoutingWidgetInterface extends WidgetActionInterface {
-  @Documentation("Adds a waypoint to the route.")
-  @WidgetAction({eventType: "routing.addWaypoint"})
-  addWaypoint(_lat: number, _lon: number, _name?: string): void {
-    throw new Error('addWaypoint not implemented');
-  }
+/**
+ * RoutingWidgetInterface
+ * @generated
+ */
+export interface RoutingWidgetInterface extends WidgetActionInterface {
 
-  @Documentation("Removes a waypoint at a given index.")
-  @WidgetAction({eventType: "routing.removeWaypoint"})
-  removeWaypoint(_index: number): void {
-    throw new Error('removeWaypoint not implemented');
-  }
-
-  @Documentation("Removes all waypoints and clears the current route.")
-  @WidgetAction({eventType: "routing.clearWaypoints"})
-  clearWaypoints(): void {
-    throw new Error('clearWaypoints not implemented');
-  }
-
-  @Documentation("Sets the transport mode for routing.")
-  @WidgetAction({eventType: "routing.setCosting"})
-  setCosting(_costing: string): void {
-    throw new Error('setCosting not implemented');
-  }
-
-  @Documentation("Triggers route calculation with current waypoints.")
-  @WidgetAction({eventType: "routing.calculateRoute"})
-  calculateRoute(): void {
-    throw new Error('calculateRoute not implemented');
-  }
-
+  addWaypoint(lat: number, lon: number, name: string): void;
+  removeWaypoint(index: number): void;
+  clearWaypoints(): void;
+  setCosting(costing: string): void;
+  calculateRoute(): void;
 }

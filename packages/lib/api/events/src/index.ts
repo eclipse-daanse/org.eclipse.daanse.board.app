@@ -43,10 +43,22 @@ import type { ResourceSet, EPackage } from '@emfts/core'
  * resolve a ?raw import whether or not it wants the model.
  */
 
-export { Payload } from './gen/Payload'
-export { WidgetActionInterface } from './gen/WidgetActionInterface'
-export { SystemActionInterface } from './gen/SystemActionInterface'
-export { PageActionInterface } from './gen/PageActionInterface'
+export type { Payload } from './gen/Payload'
+/*
+ * The implementations too: in emf mode the interface is the contract and
+ * the Impl is what you instantiate, so a package that hands out one has to
+ * hand out the other - and anything deriving from these needs the class to
+ * extend.
+ */
+export { PayloadImpl } from './gen/PayloadImpl'
+export { WidgetActionInterfaceImpl } from './gen/WidgetActionInterfaceImpl'
+export { SystemActionInterfaceImpl } from './gen/SystemActionInterfaceImpl'
+export { PageActionInterfaceImpl } from './gen/PageActionInterfaceImpl'
+export { EventsPackage } from './gen/EventsPackage'
+export { EventsFactory } from './gen/EventsFactory'
+export type { WidgetActionInterface } from './gen/WidgetActionInterface'
+export type { SystemActionInterface } from './gen/SystemActionInterface'
+export type { PageActionInterface } from './gen/PageActionInterface'
 
 /*
  * Still declared by the implementation: these carry behaviour - decorators,
@@ -432,7 +444,7 @@ export interface EcoreMetadataService {
   */
   extractPayloadMetadata(widgetType: string, payloadClassName: string): EcorePayloadMetadata | null;
   /**
-  * Check if an EClass extends WidgetActionInterface
+  * Check if an EClass extends WidgetActionInterfaceImpl
   */
   /**
   * Map Ecore data types to TypeScript types

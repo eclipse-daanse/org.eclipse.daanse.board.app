@@ -78,7 +78,11 @@ const pointSelectorOptions = [
       preset="secondary"
     />
     <template v-if="model.point_render_as=='icon'">
-      <IconWidgetSettings v-model="model.point"></IconWidgetSettings>
+      <!--
+        The icon form stores a VariableWrapper in iconColor where this
+        widget's model says string - the one field the two disagree on.
+      -->
+      <IconWidgetSettings v-model="(model.point as any)"></IconWidgetSettings>
     </template>
     <template v-if="model.point_render_as=='prop'">
       <VaSelect

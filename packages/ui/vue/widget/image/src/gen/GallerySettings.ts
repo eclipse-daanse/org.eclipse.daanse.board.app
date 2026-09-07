@@ -5,14 +5,14 @@
  * @generated
  */
 
-import { Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//GallerySettings' })
-export class GallerySettings {
-  @Attribute()
+/**
+ * GallerySettings
+ * @generated
+ */
+export interface GallerySettings extends EObject {
   fit?: string;
-
-  @Attribute()
   diashowInterval?: number;
 
 }

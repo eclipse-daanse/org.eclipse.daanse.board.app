@@ -5,14 +5,14 @@
  * @generated
  */
 
-import { ERefType } from './ERefType.js';
-import { Documentation, ModelClass, Enum } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { ERefType } from './ERefType.js';
 
-@Documentation("Represents the placement type of a rendered element.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//Placement' })
-export class Placement {
-  @Documentation("The type of reference or placement (e.g., 'Thing', 'ObservedArea').")
-  @Enum('ERefType')
-  placement: ERefType = ERefType.Thing;
+/**
+ * Placement
+ * @generated
+ */
+export interface Placement extends EObject {
+  placement?: ERefType;
 
 }

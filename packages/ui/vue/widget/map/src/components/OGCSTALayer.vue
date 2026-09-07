@@ -17,9 +17,13 @@ import { ERefType } from '../api/Renderer'
 import MapMarker from './MapMarker.vue'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
-import { ThingClickPayload } from '../gen/ThingClickPayload'
-import { DatastreamClickPayload } from '../gen/DatastreamClickPayload'
-import { LocationClickPayload } from '../gen/LocationClickPayload'
+import type { ThingClickPayload } from '../gen/ThingClickPayload'
+import { ThingClickPayloadImpl } from '../gen/ThingClickPayloadImpl'
+import type { DatastreamClickPayload } from '../gen/DatastreamClickPayload'
+import { DatastreamSummaryImpl } from '../gen/DatastreamSummaryImpl'
+import { DatastreamClickPayloadImpl } from '../gen/DatastreamClickPayloadImpl'
+import type { LocationClickPayload } from '../gen/LocationClickPayload'
+import { LocationClickPayloadImpl } from '../gen/LocationClickPayloadImpl'
 import { loggerFactory } from 'org.eclipse.daanse.board.app.lib.logger'
 
 const log = loggerFactory.createLogger('daanse:maps:click')
@@ -139,20 +143,23 @@ const matchedItems = computed(() => {
 const emitThingClick = (thing: any, location: any, renderer: any) => {
   if (!props.widgetId) return
 
-  const payload = new ThingClickPayload()
-  payload.id = thing['@iot.id'] || thing.iotId
-  payload.name = thing.name
-  payload.description = thing.description
+  const payload = new ThingClickPayloadImpl()
+  payload.id = (thing['@iot.id'] || thing.iotId) ?? ''
+  payload.name = thing.name ?? ''
+  payload.description = thing.description ?? ''
   payload.properties = thing.properties
   payload.location = location.location
-  payload.rendererId = renderer.id
+  payload.rendererId = renderer.id ?? ''
 
   const datastreams = thing.datastreams || thing.Datastreams || []
-  payload.datastreams = datastreams.map((ds: any) => ({
-    id: ds['@iot.id'] || ds.iotId,
-    name: ds.name,
-    observedProperty: ds.ObservedProperty?.name || ds.observedProperty?.name
-  }))
+  // A containment list belongs to its object - filled, not replaced
+  for (const ds of datastreams) {
+    const entry = new DatastreamSummaryImpl()
+    entry.id = ds['@iot.id'] || ds.iotId || ''
+    entry.name = ds.name ?? ''
+    entry.observedProperty = ds.ObservedProperty?.name || ds.observedProperty?.name || ''
+    payload.datastreams.add(entry)
+  }
 
   const event = {
     type: 'widget:MapWidget:click_on_thing',
@@ -172,18 +179,18 @@ const emitDatastreamClick = (datastream: BoxedDatastream, thing: any, subrendere
     return
   }
 
-  const payload = new DatastreamClickPayload()
-  payload.id = datastream.iotId || (datastream as any)['@iot.id']
-  payload.name = datastream.name
-  payload.thingId = thing['@iot.id'] || thing.iotId
-  payload.unitOfMeasurement = datastream.unitOfMeasurement
-  payload.observedProperty = datastream.observedProperty?.name
+  const payload = new DatastreamClickPayloadImpl()
+  payload.id = (datastream.iotId || (datastream as any)['@iot.id']) ?? ''
+  payload.name = datastream.name ?? ''
+  payload.thingId = (thing['@iot.id'] || thing.iotId) ?? ''
+  payload.unitOfMeasurement = datastream.unitOfMeasurement ?? ''
+  payload.observedProperty = datastream.observedProperty?.name ?? ''
 
   const observations = datastream.observations || []
   if (observations.length > 0) {
     const latestObs = observations[observations.length - 1]
-    payload.latestObservationResult = latestObs.result
-    payload.latestObservationTime = latestObs.phenomenonTime
+    payload.latestObservationResult = latestObs.result ?? ''
+    payload.latestObservationTime = latestObs.phenomenonTime ?? ''
   }
 
   eventBus.emit('widget:MapWidget:click_on_datastream', {
@@ -197,13 +204,16 @@ const emitDatastreamClick = (datastream: BoxedDatastream, thing: any, subrendere
 const emitLocationClick = (location: any) => {
   if (!props.widgetId) return
 
-  const payload = new LocationClickPayload()
-  payload.id = location['@iot.id'] || location.iotId
-  payload.name = location.name
+  const payload = new LocationClickPayloadImpl()
+  payload.id = (location['@iot.id'] || location.iotId) ?? ''
+  payload.name = location.name ?? ''
   payload.geometry = location.location
 
   const things = location.things || location.Things || []
-  payload.thingIds = things.map((t: any) => t['@iot.id'] || t.iotId)
+  // A containment list belongs to its object - filled, not replaced
+  for (const t of things) {
+    payload.thingIds.add(t['@iot.id'] || t.iotId || '')
+  }
 
   eventBus.emit('widget:MapWidget:click_on_location', {
     type: 'widget:MapWidget:click_on_location',
@@ -227,13 +237,13 @@ const handleDatastreamMarkerClick = (datastream: BoxedDatastream, thing: any, su
 const handleThingHover = (thing: any, location: any, renderer: any) => {
   if (!props.widgetId) return
 
-  const payload = new ThingClickPayload()
-  payload.id = thing['@iot.id'] || thing.iotId
-  payload.name = thing.name
-  payload.description = thing.description
+  const payload = new ThingClickPayloadImpl()
+  payload.id = (thing['@iot.id'] || thing.iotId) ?? ''
+  payload.name = thing.name ?? ''
+  payload.description = thing.description ?? ''
   payload.properties = thing.properties
   payload.location = location.location
-  payload.rendererId = renderer.id
+  payload.rendererId = renderer.id ?? ''
 
   eventBus.emit('widget:MapWidget:hover_on_thing', {
     type: 'widget:MapWidget:hover_on_thing',
@@ -246,18 +256,18 @@ const handleThingHover = (thing: any, location: any, renderer: any) => {
 const handleDatastreamHover = (datastream: BoxedDatastream, thing: any) => {
   if (!props.widgetId) return
 
-  const payload = new DatastreamClickPayload()
-  payload.id = datastream.iotId || (datastream as any)['@iot.id']
-  payload.name = datastream.name
-  payload.thingId = thing['@iot.id'] || thing.iotId
-  payload.unitOfMeasurement = datastream.unitOfMeasurement
-  payload.observedProperty = datastream.observedProperty?.name
+  const payload = new DatastreamClickPayloadImpl()
+  payload.id = (datastream.iotId || (datastream as any)['@iot.id']) ?? ''
+  payload.name = datastream.name ?? ''
+  payload.thingId = (thing['@iot.id'] || thing.iotId) ?? ''
+  payload.unitOfMeasurement = datastream.unitOfMeasurement ?? ''
+  payload.observedProperty = datastream.observedProperty?.name ?? ''
 
   const observations = datastream.observations || []
   if (observations.length > 0) {
     const latestObs = observations[observations.length - 1]
-    payload.latestObservationResult = latestObs.result
-    payload.latestObservationTime = latestObs.phenomenonTime
+    payload.latestObservationResult = latestObs.result ?? ''
+    payload.latestObservationTime = latestObs.phenomenonTime ?? ''
   }
 
   eventBus.emit('widget:MapWidget:hover_on_datastream', {

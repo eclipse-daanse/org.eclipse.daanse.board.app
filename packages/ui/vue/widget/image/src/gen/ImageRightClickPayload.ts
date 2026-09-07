@@ -5,14 +5,13 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when an image is right-clicked.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageRightClickPayload' })
-export class ImageRightClickPayload extends Payload {
-  @Documentation("URL or ID of the right-clicked image.")
-  @Attribute()
+/**
+ * ImageRightClickPayload
+ * @generated
+ */
+export interface ImageRightClickPayload extends Payload {
   imageUrl?: string;
 
 }

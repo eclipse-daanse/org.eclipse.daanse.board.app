@@ -5,40 +5,22 @@
  * @generated
  */
 
-import { IconSettings } from './IconSettings.js';
-import { PointPin } from './PointPin.js';
-import { MapProps } from './MapProps.js';
-import { Documentation, Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { IconSettings } from './IconSettings.js';
+import type { PointPin } from './PointPin.js';
+import type { MapProps } from './MapProps.js';
 
-@Documentation("Combines settings for rendering both points and areas.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//PointAndAreaSettings' })
-export class PointAndAreaSettings {
-  @Documentation("Optional flag to show or hide sub-elements.")
-  @Attribute()
+/**
+ * PointAndAreaSettings
+ * @generated
+ */
+export interface PointAndAreaSettings extends EObject {
   show_SubElements?: boolean;
-
-  @Documentation("Specifies how points should be rendered (e.g., 'icon', 'pin').")
-  @Attribute()
   point_render_as?: string;
-
-  @Documentation("Optional property to use for point rendering.")
-  @Attribute()
   point_prop?: string;
-
-  @Documentation("Settings for rendering points as icons.")
-  @Reference('IconSettings')
-  point: IconSettings = new IconSettings();
-
-  @Documentation("Settings for rendering points as pins.")
-  @Reference('PointPin')
-  pointPin: PointPin = new PointPin();
-
-  @Documentation("General map properties for rendering areas.")
-  @Reference('MapProps')
-  area: MapProps = new MapProps();
-
-  @Documentation("Optional settings for labels. (Mapped from TypeScript 'any' type).")
-  @Attribute()
+  point?: IconSettings;
+  pointPin?: PointPin;
+  area?: MapProps;
   label?: unknown;
 
 }

@@ -5,17 +5,14 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Defines settings for a map point pin.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//PointPin' })
-export class PointPin {
-  @Documentation("The color of the point pin.")
-  @Attribute()
+/**
+ * PointPin
+ * @generated
+ */
+export interface PointPin extends EObject {
   color?: string;
-
-  @Documentation("If true, the pin is rendered as a solid filled shape without the inner circle.")
-  @Attribute()
   solid?: boolean;
 
 }

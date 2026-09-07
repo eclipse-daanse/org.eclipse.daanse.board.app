@@ -11,19 +11,19 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const ChartWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Chart Clicked',
     type: 'click',
     description: 'Triggered when the chart is clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Chart Right Clicked',
     type: 'right_click',
     description: 'Triggered when the chart is right-clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   }
 ];

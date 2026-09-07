@@ -5,38 +5,19 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when a Datastream is clicked on the map.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//DatastreamClickPayload' })
-export class DatastreamClickPayload extends Payload {
-  @Documentation("Datastream ID.")
-  @Attribute()
+/**
+ * DatastreamClickPayload
+ * @generated
+ */
+export interface DatastreamClickPayload extends Payload {
   id?: string;
-
-  @Documentation("Datastream name.")
-  @Attribute()
   name?: string;
-
-  @Documentation("Parent Thing ID.")
-  @Attribute()
   thingId?: string;
-
-  @Documentation("Unit of measurement object.")
-  @Attribute()
   unitOfMeasurement?: unknown;
-
-  @Documentation("Observed property name.")
-  @Attribute()
   observedProperty?: string;
-
-  @Documentation("Latest observation result value.")
-  @Attribute()
   latestObservationResult?: unknown;
-
-  @Documentation("Latest observation timestamp (ISO 8601).")
-  @Attribute()
   latestObservationTime?: string;
 
 }

@@ -4,10 +4,30 @@
  *
  * @generated
  */
+
 /**
  * ERefType
+ * @generated
  */
-export enum ERefType {
-  Thing = "Thing",
-  OberservedArea = "OberservedArea"
+export const ERefType = {
+  Thing: 'Thing',
+  OberservedArea: 'OberservedArea'
+} as const;
+
+export type ERefType = typeof ERefType[keyof typeof ERefType];
+
+/**
+ * Get enum value by name
+ */
+export function getERefType(name: string): ERefType | undefined {
+  return (ERefType as Record<string, string>)[name] as ERefType | undefined;
+}
+
+/**
+ * Get enum value by literal
+ */
+export function getERefTypeByLiteral(literal: string): ERefType | undefined {
+  if (literal === 'Thing') return ERefType.Thing;
+  if (literal === 'OberservedArea') return ERefType.OberservedArea;
+  return undefined;
 }

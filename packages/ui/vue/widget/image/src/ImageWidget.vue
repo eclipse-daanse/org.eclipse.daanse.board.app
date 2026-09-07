@@ -13,7 +13,9 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
-import { ImageSettings } from './gen/ImageSettings'
+import type { ImageSettings } from './gen/ImageSettings'
+// The class to instantiate: in emf mode the plain name is the interface
+import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
@@ -41,7 +43,7 @@ const handleRightClick = (url: string) => {
   });
 };
 
-const defaultConfig = new ImageSettings();
+const defaultConfig = new ImageSettingsImpl();
 
 onMounted(() => {
   if (config.value) {

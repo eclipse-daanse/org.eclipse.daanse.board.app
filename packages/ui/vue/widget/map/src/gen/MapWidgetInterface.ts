@@ -5,53 +5,19 @@
  * @generated
  */
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
-import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Abstract base class for Map Widget operations.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//MapWidgetInterface' })
-export abstract class MapWidgetInterface extends WidgetActionInterface {
-  @Documentation("Zooms the map to a specific Thing location.")
-  @WidgetAction({eventType: "map.zoomToThing"})
-  zoomToThing(_thingId: string, _zoom?: number, _duration?: number): void {
-    throw new Error('zoomToThing not implemented');
-  }
+/**
+ * MapWidgetInterface
+ * @generated
+ */
+export interface MapWidgetInterface extends WidgetActionInterface {
 
-  @Documentation("Selects and highlights a Thing on the map by its ID.")
-  @WidgetAction({eventType: "map.selectThingById"})
-  selectThingById(_thingId: string): void {
-    throw new Error('selectThingById not implemented');
-  }
-
-  @Documentation("Zooms the map to a specific GeoJSON location.")
-  @WidgetAction({eventType: "map.zoomToLocation"})
-  zoomToLocation(_location: unknown, _zoom?: number, _duration?: number): void {
-    throw new Error('zoomToLocation not implemented');
-  }
-
-  @Documentation("Shows a permanent tooltip on a Thing marker.")
-  @WidgetAction({eventType: "map.showTooltip"})
-  showTooltip(_thingId: string, _content?: string): void {
-    throw new Error('showTooltip not implemented');
-  }
-
-  @Documentation("Hides the currently shown tooltip.")
-  @WidgetAction({eventType: "map.hideTooltip"})
-  hideTooltip(): void {
-    throw new Error('hideTooltip not implemented');
-  }
-
-  @Documentation("Displays a route on the map from GeoJSON data.")
-  @WidgetAction({eventType: "map.displayRoute"})
-  displayRoute(_geojson: unknown, _color?: string, _width?: number): void {
-    throw new Error('displayRoute not implemented');
-  }
-
-  @Documentation("Removes the currently displayed route from the map.")
-  @WidgetAction({eventType: "map.clearRoute"})
-  clearRoute(): void {
-    throw new Error('clearRoute not implemented');
-  }
-
+  zoomToThing(thingId: string, zoom: number, duration: number): void;
+  selectThingById(thingId: string): void;
+  zoomToLocation(location: unknown, zoom: number, duration: number): void;
+  showTooltip(thingId: string, content: string): void;
+  hideTooltip(): void;
+  displayRoute(geojson: unknown, color: string, width: number): void;
+  clearRoute(): void;
 }

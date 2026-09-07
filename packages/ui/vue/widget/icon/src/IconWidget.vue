@@ -14,7 +14,8 @@ Contributors:
 import { inject } from 'vue'
 import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
-import { IconSettings } from './gen/IconSettings'
+import type { IconSettings } from './gen/IconSettings'
+import { IconSettingsImpl } from './gen/IconSettingsImpl'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 
@@ -25,7 +26,7 @@ const { wrapParameters } = useVariableRepository();
 
 const config = defineModel<IconSettings>('configv', { required: true });
 
-const defaultConfig = new IconSettings();
+const defaultConfig = new IconSettingsImpl();
 
 // Get EventBus
 const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;

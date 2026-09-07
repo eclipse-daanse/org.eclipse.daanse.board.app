@@ -5,15 +5,13 @@
  * @generated
  */
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
-import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import type { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//PivotTableInterface' })
-export abstract class PivotTableInterface extends WidgetActionInterface {
-  @WidgetAction({eventType: "pivotTable.expandRow"})
-  expandRow(_rowUniqueName?: string): void {
-    throw new Error('expandRow not implemented');
-  }
+/**
+ * PivotTableInterface
+ * @generated
+ */
+export interface PivotTableInterface extends WidgetActionInterface {
 
+  expandRow(rowUniqueName: string): void;
 }

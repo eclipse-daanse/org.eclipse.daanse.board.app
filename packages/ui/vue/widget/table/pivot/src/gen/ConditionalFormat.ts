@@ -5,39 +5,23 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//ConditionalFormat' })
-export class ConditionalFormat {
-  @Attribute()
+/**
+ * ConditionalFormat
+ * @generated
+ */
+export interface ConditionalFormat extends EObject {
   id?: string;
-
-  @Attribute()
-  conditionType: string = "greaterThan";
-
-  @Attribute()
+  conditionType?: string;
   priority?: number;
-
-  @Attribute()
-  value1: string = "0";
-
-  @Attribute()
-  value2: string = "100";
-
-  @Reference('VariableWrapper')
-  backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  textColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  minColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  maxColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Attribute()
-  fontWeight: number = 400;
+  value1?: string;
+  value2?: string;
+  backgroundColor?: VariableWrapper<string>;
+  textColor?: VariableWrapper<string>;
+  minColor?: VariableWrapper<string>;
+  maxColor?: VariableWrapper<string>;
+  fontWeight?: number;
 
 }

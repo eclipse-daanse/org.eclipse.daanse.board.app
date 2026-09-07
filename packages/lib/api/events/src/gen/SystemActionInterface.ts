@@ -5,10 +5,12 @@
  * @generated
  */
 
-import { WidgetActionInterface } from './WidgetActionInterface.js';
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { WidgetActionInterface } from './WidgetActionInterface.js';
 
-@Documentation("Abstract base class for all system-level action interfaces. System-specific action interfaces should extend this class.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events#//SystemActionInterface' })
-export abstract class SystemActionInterface extends WidgetActionInterface {
+/**
+ * SystemActionInterface
+ * @generated
+ */
+export interface SystemActionInterface extends WidgetActionInterface {
+
 }

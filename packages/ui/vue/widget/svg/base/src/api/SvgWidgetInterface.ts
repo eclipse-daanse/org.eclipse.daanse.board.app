@@ -11,10 +11,10 @@
  *   Smart City Jena
  **********************************************************************/
 
-import { WidgetActionInterface } from 'org.eclipse.daanse.board.app.lib.events'
+import { WidgetActionInterfaceImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events'
 
-export abstract class SvgWidgetInterface extends WidgetActionInterface {
+export abstract class SvgWidgetInterface extends WidgetActionInterfaceImpl {
 
   @WidgetAction({ eventType: 'svg.zoom' })
   zoom(level: number): void { throw new Error("zoom not implemented"); }

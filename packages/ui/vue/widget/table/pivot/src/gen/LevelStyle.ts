@@ -5,21 +5,17 @@
  * @generated
  */
 
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { Attribute, ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//LevelStyle' })
-export class LevelStyle {
-  @Attribute()
+/**
+ * LevelStyle
+ * @generated
+ */
+export interface LevelStyle extends EObject {
   level?: number;
-
-  @Reference('VariableWrapper')
-  backgroundColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  textColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Attribute()
-  fontWeight: number = 600;
+  backgroundColor?: VariableWrapper<string>;
+  textColor?: VariableWrapper<string>;
+  fontWeight?: number;
 
 }

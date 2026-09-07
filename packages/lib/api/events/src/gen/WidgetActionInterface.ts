@@ -5,9 +5,12 @@
  * @generated
  */
 
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Abstract base class for all widget action interfaces. Widget-specific action interfaces should extend this class.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events#//WidgetActionInterface' })
-export abstract class WidgetActionInterface {
+/**
+ * WidgetActionInterface
+ * @generated
+ */
+export interface WidgetActionInterface extends EObject {
+
 }

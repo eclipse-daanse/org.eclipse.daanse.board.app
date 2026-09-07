@@ -5,14 +5,13 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when a header is expanded in the pivot table.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot#//HeaderExpandedPayload' })
-export class HeaderExpandedPayload extends Payload {
-  @Documentation("Header Unique Name.")
-  @Attribute()
+/**
+ * HeaderExpandedPayload
+ * @generated
+ */
+export interface HeaderExpandedPayload extends Payload {
   uniqueName?: string;
 
 }

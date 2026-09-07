@@ -12,53 +12,53 @@
  **********************************************************************/
 
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { ThingClickPayload } from '../gen/ThingClickPayload';
-import { DatastreamClickPayload } from '../gen/DatastreamClickPayload';
-import { ObservationClickPayload } from '../gen/ObservationClickPayload';
-import { LocationClickPayload } from '../gen/LocationClickPayload';
-import { MapClickPayload } from '../gen/MapClickPayload';
+import { ThingClickPayloadImpl } from '../gen/ThingClickPayloadImpl';
+import { DatastreamClickPayloadImpl } from '../gen/DatastreamClickPayloadImpl';
+import { ObservationClickPayloadImpl } from '../gen/ObservationClickPayloadImpl';
+import { LocationClickPayloadImpl } from '../gen/LocationClickPayloadImpl';
+import { MapClickPayloadImpl } from '../gen/MapClickPayloadImpl';
 
 export const MapWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Map Clicked',
     type: 'click_on_map',
     description: 'Triggered when the map background is clicked (provides lat/lon)',
-    payloadType: MapClickPayload
+    payloadType: MapClickPayloadImpl
   },
   {
     name: 'Thing Clicked',
     type: 'click_on_thing',
     description: 'Triggered when a Thing marker is clicked on the map',
-    payloadType: ThingClickPayload
+    payloadType: ThingClickPayloadImpl
   },
   {
     name: 'Datastream Clicked',
     type: 'click_on_datastream',
     description: 'Triggered when a Datastream is clicked on the map',
-    payloadType: DatastreamClickPayload
+    payloadType: DatastreamClickPayloadImpl
   },
   {
     name: 'Observation Clicked',
     type: 'click_on_observation',
     description: 'Triggered when an Observation is clicked on the map',
-    payloadType: ObservationClickPayload
+    payloadType: ObservationClickPayloadImpl
   },
   {
     name: 'Location Clicked',
     type: 'click_on_location',
     description: 'Triggered when a Location is clicked on the map',
-    payloadType: LocationClickPayload
+    payloadType: LocationClickPayloadImpl
   },
   {
     name: 'Thing Hovered',
     type: 'hover_on_thing',
     description: 'Triggered when hovering over a Thing marker on the map',
-    payloadType: ThingClickPayload
+    payloadType: ThingClickPayloadImpl
   },
   {
     name: 'Datastream Hovered',
     type: 'hover_on_datastream',
     description: 'Triggered when hovering over a Datastream marker on the map',
-    payloadType: DatastreamClickPayload
+    payloadType: DatastreamClickPayloadImpl
   }
 ];

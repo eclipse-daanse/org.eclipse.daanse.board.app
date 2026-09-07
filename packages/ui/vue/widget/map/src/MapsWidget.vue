@@ -43,7 +43,10 @@ import RouteLayer from './components/RouteLayer.vue'
 import { useOGCService } from './composables/Service'
 import { logMap, logDatasource, logObservations, logServices, logTasks } from './utils/logger'
 import type { MapWidgetInterface } from './gen/MapWidgetInterface'
-import { MapSettings } from './gen/MapSettings'
+// The class to extend: the interface now carries the EObject members too
+import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
+import type { MapSettings } from './gen/MapSettings'
+import { MapSettingsImpl } from './gen/MapSettingsImpl'
 
 /**
  * What this widget expects of the client object a service carries.
@@ -69,11 +72,24 @@ interface MapServiceClient {
   _capabilitiesUrl?: string
 }
 
+/**
+ * A modelled list as a plain array, for the template and for leaflet.
+ *
+ * Anything typed in the model comes back as an EList, and neither v-for nor
+ * leaflet's PointExpression knows what to do with one.
+ */
+const asArray = (list: unknown): any[] => {
+  const any = list as any
+  if (typeof any?.toArray === 'function') return any.toArray()
+  return Array.isArray(any) ? any : []
+}
+
 /** The client of a service, as the shape this file works with. */
 const clientOf = (service: unknown): MapServiceClient | undefined =>
   (service ?? undefined) as MapServiceClient | undefined
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events'
-import { MapClickPayload } from './gen/MapClickPayload'
+import type { MapClickPayload } from './gen/MapClickPayload'
+import { MapClickPayloadImpl } from './gen/MapClickPayloadImpl'
 import { useRoute } from 'vue-router'
 
 const props = defineProps<{ datasourceId: string; id: string }>()
@@ -84,7 +100,23 @@ const route = useRoute()
 const pageId = (route.params.pageid as string) || ''
 const config = defineModel<MapSettings>('configv', { required: true});
 const map = ref(null)
-const defaultConfig = new MapSettings()
+const defaultConfig = new MapSettingsImpl()
+
+/*
+ * Where the map starts when nothing says otherwise.
+ *
+ * The model carries this as defaultValueLiteral on a many-valued feature,
+ * which the generator cannot express: an EList is created empty by its
+ * getter and takes no initialiser. So it is applied here, where an empty
+ * centre would otherwise leave leaflet without one.
+ */
+const DEFAULT_CENTER = [50.93115286, 11.60392726]
+
+function ensureCentre() {
+  if (config.value.center.size() === 0) {
+    for (const value of DEFAULT_CENTER) config.value.center.add(value)
+  }
+}
 
 // Get EventActionsRegistry
 const actionsRegistry = inject<EventActionsRegistry>(EVENT_ACTIONS_REGISTRY)!
@@ -93,7 +125,7 @@ const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!
 function handleMapClick(e: any) {
   if (!widgetId?.value) return
   const { lat, lng } = e.latlng
-  const payload = new MapClickPayload()
+  const payload = new MapClickPayloadImpl()
   payload.lat = lat
   payload.lon = lng
   eventBus.emit('widget:MapWidget:click_on_map', {
@@ -356,6 +388,7 @@ const getLayerData = (layer: any) => {
 onMounted(async () => {
   if (config.value) {
     Object.assign(config.value, { ...defaultConfig, ...config.value })
+    ensureCentre()
 
     // Reconstruct services from URLs after deserialization
     if (config.value.services) {
@@ -389,8 +422,8 @@ onMounted(async () => {
           }
         }
       }
-      // Trigger reactivity by reassigning the array
-      config.value.services = [...config.value.services]
+      // The list notifies on its own now - reassigning it was a way to
+      // make a plain array reactive, and an EList cannot be replaced anyway
     }
 
     // Reconstruct service instances for WMS/WFS layers after deserialization
@@ -441,7 +474,9 @@ onMounted(async () => {
           newLayers.push(layer)
         }
       }
-      config.value.layers = newLayers
+      // Filled rather than replaced: a containment list belongs to its object
+      config.value.layers.clear()
+      for (const layer of newLayers) config.value.layers.add(layer as any)
     }
     servicesReady.value = true
   }
@@ -759,7 +794,10 @@ const mapmove = debounce(() => {
   const leaflet = (map.value as any)?.leafletObject
   if (leaflet) {
     const center = leaflet.getCenter()
-    config.value.center = [center.lat, center.lng]
+    // Two numbers into the list that holds them
+    config.value.center.clear()
+    config.value.center.add(center.lat)
+    config.value.center.add(center.lng)
     config.value.zoom = leaflet.getZoom()
   }
   loadObservationsInView()
@@ -1024,7 +1062,7 @@ const getPointformArea = (PointOrFeature: any) => {
 }
 
 
-let api = new class implements MapWidgetInterface{
+let api = new class extends MapWidgetInterfaceImpl implements MapWidgetInterface {
   zoomToThing = (thingId: string, zoom: number = 16, duration: number = 1000) => {
     if (!map.value || !(map.value as any).leafletObject) {
       console.warn('Map instance not available. Cannot zoom to thing.')
@@ -1296,7 +1334,7 @@ onUnmounted(() => {
 
   <div id="mapholder" class="holder" style="height: 100%">
     <l-map v-if="config.baseMapUrl" id="map" ref="map"
-            :center="config.center as PointExpression"
+            :center="asArray(config.center) as PointExpression"
             :max-zoom="21"
             :use-global-leaflet="false"
             :zoom="config.zoom"
@@ -1333,7 +1371,7 @@ onUnmounted(() => {
         <WFSLayer
           v-if="wmsLayer.type == 'WFSLayer'"
           :geo-json="clientOf(wmsLayer.wfs_service)?.geoJson"
-          :style-ids="wmsLayer.styleIds"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
           :get-style-by-id="getStyleById"
@@ -1342,7 +1380,7 @@ onUnmounted(() => {
         <GeoJsonLayer
           v-if="wmsLayer.type == 'GEOJSON'"
           :layer-data="getLayerData(wmsLayer)"
-          :style-ids="wmsLayer.styleIds"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
@@ -1353,7 +1391,7 @@ onUnmounted(() => {
         <RestGeoJsonLayer
           v-if="wmsLayer.type == 'REST-GEOJSON'"
           :layer-data="getLayerData(wmsLayer)"
-          :style-ids="wmsLayer.styleIds"
+          :style-ids="asArray(wmsLayer.styleIds)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :filter-feature-collection="filterFeatureCollection"
@@ -1368,7 +1406,7 @@ onUnmounted(() => {
         <OGCSTALayer
           v-if="wmsLayer.type == 'OGCSTA'"
           :locations="getLayerLocations(wmsLayer)"
-          :renderers="config.OGCSstyles ?? []"
+          :renderers="asArray(config.OGCSstyles)"
           :layer-options="getLayerOptions(wmsLayer)"
           :marker-pane="getMarkerPane(wmsLayer)"
           :area-pane="getAreaPane(wmsLayer)"

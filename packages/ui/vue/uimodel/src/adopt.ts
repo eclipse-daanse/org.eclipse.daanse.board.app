@@ -103,7 +103,7 @@ export function ensureWrappers<T extends EObject>(instance: T): T {
     if (typeName !== WRAPPER_CLASS) continue
 
     try {
-      target[name] = new VariableWrapper()
+      target[name] = new VariableWrapperImpl()
     } catch {
       // A read-only feature cannot hold one either
     }

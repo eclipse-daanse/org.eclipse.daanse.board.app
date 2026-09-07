@@ -5,21 +5,15 @@
  * @generated
  */
 
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
 
-@Documentation("Summary information about a Datastream (used in event payloads).")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//DatastreamSummary' })
-export class DatastreamSummary {
-  @Documentation("Datastream ID.")
-  @Attribute()
+/**
+ * DatastreamSummary
+ * @generated
+ */
+export interface DatastreamSummary extends EObject {
   id?: string;
-
-  @Documentation("Datastream name.")
-  @Attribute()
   name?: string;
-
-  @Documentation("Observed property name.")
-  @Attribute()
   observedProperty?: string;
 
 }

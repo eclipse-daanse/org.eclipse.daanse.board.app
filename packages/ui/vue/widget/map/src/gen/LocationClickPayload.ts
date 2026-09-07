@@ -5,26 +5,17 @@
  * @generated
  */
 
-import { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, Attribute, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EList } from '@emfts/core';
+import type { Payload } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("Payload emitted when a Location is clicked on the map.")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.map#//LocationClickPayload' })
-export class LocationClickPayload extends Payload {
-  @Documentation("Location ID.")
-  @Attribute()
+/**
+ * LocationClickPayload
+ * @generated
+ */
+export interface LocationClickPayload extends Payload {
   id?: string;
-
-  @Documentation("Location name.")
-  @Attribute()
   name?: string;
-
-  @Documentation("GeoJSON geometry of the location.")
-  @Attribute()
   geometry?: unknown;
-
-  @Documentation("Array of Thing IDs associated with this location.")
-  @Attribute()
-  thingIds: string[] = [];
+  thingIds: EList<string>;
 
 }

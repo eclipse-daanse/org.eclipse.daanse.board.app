@@ -11,25 +11,25 @@
  *   Smart City Jena
  **********************************************************************/
 import type { WidgetEventDefinition } from 'org.eclipse.daanse.board.app.lib.events'
-import { Payload } from 'org.eclipse.daanse.board.app.lib.events'
+import { PayloadImpl } from 'org.eclipse.daanse.board.app.lib.api.events'
 
 export const CodeWidgetEvents: WidgetEventDefinition[] = [
   {
     name: 'Code Clicked',
     type: 'click',
     description: 'Triggered when the code widget is clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Code Right Clicked',
     type: 'right_click',
     description: 'Triggered when the code widget is right-clicked',
-    payloadType: Payload
+    payloadType: PayloadImpl
   },
   {
     name: 'Code Text Changed',
     type: 'text_change',
     description: 'Triggered when the code text changes',
-    payloadType: Payload
+    payloadType: PayloadImpl
   }
 ];

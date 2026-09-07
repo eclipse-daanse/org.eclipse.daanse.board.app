@@ -5,23 +5,14 @@
  * @generated
  */
 
-import { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
-import { Documentation, ModelClass } from 'org.eclipse.daanse.board.app.lib.annotations';
-import { WidgetAction } from 'org.eclipse.daanse.board.app.lib.events';
+import type { SystemActionInterface } from 'org.eclipse.daanse.board.app.lib.api.events';
 
-@Documentation("System-level actions that can be triggered by events")
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.lib.events.systemactions#//SystemActions' })
-export class SystemActions extends SystemActionInterface {
-  @Documentation("Navigate to a different page")
-  @WidgetAction({eventType: "system.changePage"})
-  changePage(_pageId?: string): void {
-    throw new Error('changePage not implemented');
-  }
+/**
+ * SystemActions
+ * @generated
+ */
+export interface SystemActions extends SystemActionInterface {
 
-  @Documentation("Set or update a global variable")
-  @WidgetAction({eventType: "system.setGlobalVariable"})
-  setGlobalVariable(_variableName?: string, _value?: unknown): void {
-    throw new Error('setGlobalVariable not implemented');
-  }
-
+  changePage(pageId: string): void;
+  setGlobalVariable(variableName: string, value: unknown): void;
 }
