@@ -12,8 +12,10 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
-import { SVGItemStyles } from "./gen/SVGItemStyles";
+import type { RepeatableSVGSettings } from "./gen/RepeatableSVGSettings";
+import { RepeatableSVGSettingsImpl } from "./gen/RepeatableSVGSettingsImpl";
+import type { SVGItemStyles } from "./gen/SVGItemStyles";
+import { SVGItemStylesImpl } from "./gen/SVGItemStylesImpl";
 import { onMounted, onUnmounted, computed, ref, watch } from "vue";
 import { useRoute } from 'vue-router';
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
@@ -80,7 +82,7 @@ const emitRightClick = () => {
 const svgSource = ref("");
 // const { data } = useDatasourceRepository(datasourceId, "object");
 
-const defaultConfig = new RepeatableSVGSettings();
+const defaultConfig = new RepeatableSVGSettingsImpl();
 
 const loadSvg = async (srcWrapper: any) => {
     const src = srcWrapper?.value || srcWrapper;
@@ -122,7 +124,7 @@ const ensureStyles = (styles: SVGItemStyles | undefined) => {
 onMounted(async () => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'RepeatableSVGWidget', pageId);
     if (!config.value) {
-        config.value = new RepeatableSVGSettings();
+        config.value = new RepeatableSVGSettingsImpl();
     }
 
     // Ensure wrappers for top level
@@ -131,10 +133,10 @@ onMounted(async () => {
     ensureWrapper(config.value, 'progress', '0');
 
     // Ensure children exist and are wrapped
-    if (!config.value.activeItemStyles) config.value.activeItemStyles = new SVGItemStyles();
+    if (!config.value.activeItemStyles) config.value.activeItemStyles = new SVGItemStylesImpl();
     ensureStyles(config.value.activeItemStyles);
 
-    if (!config.value.defaultItemStyles) config.value.defaultItemStyles = new SVGItemStyles();
+    if (!config.value.defaultItemStyles) config.value.defaultItemStyles = new SVGItemStylesImpl();
     ensureStyles(config.value.defaultItemStyles);
 
     await loadSvg(config.value.src);

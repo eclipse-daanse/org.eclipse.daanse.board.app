@@ -103,11 +103,56 @@ const entryForm = computed(() => {
 
 const open = ref(0)
 
-/** What to call an entry: its own label if it has one, else its position. */
+/*
+ * What to call an entry: whatever it calls itself, else its position.
+ *
+ * The candidates are the fields that name a thing rather than describe it -
+ * a list of five whose entries are all called "Eintrag 3" is a list you
+ * have to open one by one to find anything in.
+ */
+const NAMING = ['label', 'name', 'title', 'key', 'className', 'id']
+
 function titleOf(entry: EObject, index: number): string {
-  const named = entry as unknown as Record<string, any>
-  const own = named.label?.value ?? named.name?.value ?? named.title?.value
-  return own ? String(own) : `${entryClass.value?.getName?.() ?? 'Eintrag'} ${index + 1}`
+  return nameIn(entry) ?? `${entryClass.value?.getName?.() ?? 'Eintrag'} ${index + 1}`
+}
+
+/**
+ * A name held by the object, or by the one thing it contains.
+ *
+ * A map entry keeps its identity in its value rather than in itself, so
+ * looking only at the entry leaves a list of "SvgClassConfigMapEntry 1"
+ * through 5. One level in is enough; deeper is guessing.
+ *
+ * Only what the class declares is read. An EObject also carries eContainer
+ * and eContainingFeature, and those have names of their own - the feature
+ * such a list hangs off is called classesConfig, which would otherwise
+ * title every entry in it that.
+ */
+function nameIn(object: unknown, depth = 1): string | undefined {
+  if (typeof (object as EObject | undefined)?.eClass !== 'function') return undefined
+  const held = object as unknown as Record<string, any>
+
+  let features: EStructuralFeature[]
+  try {
+    features = [...(object as EObject).eClass().getEStructuralFeatures()]
+  } catch {
+    return undefined
+  }
+
+  for (const field of NAMING) {
+    if (!features.some((feature) => feature.getName?.() === field)) continue
+    const value = held[field]
+    const own = value && typeof value === 'object' ? value.value : value
+    if (own !== undefined && own !== null && String(own) !== '') return String(own)
+  }
+
+  if (depth < 1) return undefined
+  for (const feature of features) {
+    const name = feature.getName?.()
+    const inner = name ? nameIn(held[name], depth - 1) : undefined
+    if (inner) return inner
+  }
+  return undefined
 }
 
 function add() {

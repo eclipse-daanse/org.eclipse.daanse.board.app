@@ -12,7 +12,8 @@ Contributors:
 -->
 
 <script lang="ts" setup>
-import { SvgSettings } from "./gen/SvgSettings";
+import type { SvgSettings } from "./gen/SvgSettings";
+import { SvgSettingsImpl } from "./gen/SvgSettingsImpl";
 import {
     computed,
     getCurrentInstance,
@@ -90,7 +91,7 @@ const svgSource = ref("");
 const inst = getCurrentInstance();
 const scope = (inst?.type as any).__scopeId;
 
-const defaultConfig = new SvgSettings();
+const defaultConfig = new SvgSettingsImpl();
 
 const loadSvg = async (srcWrapper: any) => {
     const src = srcWrapper?.value || srcWrapper;

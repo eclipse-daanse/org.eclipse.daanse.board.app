@@ -1,98 +1,482 @@
-(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".repeatable-svg-container[data-v-2371f225]{width:100%;height:100%;display:flex;flex-direction:row;object-fit:contain}.settings-container[data-v-20524639]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.colors[data-v-20524639]{display:flex;justify-content:space-between}.color-input[data-v-20524639]{width:49%}.loading[data-v-20524639]{height:100%;padding:50px;border-radius:4px;margin-bottom:1rem;background-color:var(--app-response-background)}\n";})();
-import { WidgetActionInterfaceImpl as pe, EVENT_ACTIONS_REGISTRY as ue, PayloadImpl as B, EVENT_REGISTRY_ID as de, EVENT_ACTIONS_REGISTRY_ID as ve } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as ce, deactivate as ge, component as me, inject as A } from "@eclipse-daanse/tsm";
-import { defineComponent as K, mergeModels as fe, toRefs as Ce, useModel as J, inject as N, ref as E, onMounted as be, onUnmounted as Se, watch as Ve, computed as y, createElementBlock as I, openBlock as h, withModifiers as he, createElementVNode as R, Fragment as q, renderList as z, resolveComponent as L, createBlock as we, withCtx as b, createVNode as v, unref as S } from "vue";
-import { VariableWrapper as m } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { Documentation as g, Reference as w, Attribute as _e, ModelClass as Q } from "org.eclipse.daanse.board.app.lib.annotations";
-import { useRoute as ye } from "vue-router";
+(function(){var i="ui.vue.widget.svg.repeat",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".repeatable-svg-container[data-v-60b124e5]{width:100%;height:100%;display:flex;flex-direction:row;object-fit:contain}\n";})();
+import { WidgetActionInterfaceImpl as re, EVENT_ACTIONS_REGISTRY as ie, PayloadImpl as O, EVENT_REGISTRY_ID as ae, EVENT_ACTIONS_REGISTRY_ID as ne } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as oe, deactivate as le, component as ue, inject as B } from "@eclipse-daanse/tsm";
+import { defineComponent as ce, mergeModels as Ee, toRefs as de, useModel as pe, inject as k, ref as V, onMounted as Se, onUnmounted as _e, watch as he, computed as T, createElementBlock as C, openBlock as m, withModifiers as fe, createElementVNode as w, Fragment as Y, renderList as U } from "vue";
+import { BasicEObject as Z, BasicEFactory as ge, BasicEPackage as Te, EPackageRegistry as K, BasicEClass as H, BasicEReference as g, BasicEAttribute as Ce, getEcorePackage as me } from "@emfts/core";
+import { useRoute as ve } from "vue-router";
+import { VariableWrapper as A } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { WidgetAction as X } from "org.eclipse.daanse.board.app.lib.events";
-import { VariableInput as V } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Re } from "org.eclipse.daanse.board.app.lib.api.widget";
+import { WIDGET_SERVICE_ID as Le } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: Ie } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var We = Object.defineProperty, Te = Object.getOwnPropertyDescriptor, D = (r, s, l, t) => {
-  for (var e = t > 1 ? void 0 : t ? Te(s, l) : s, i = r.length - 1, a; i >= 0; i--)
-    (a = r[i]) && (e = (t ? a(s, l, e) : a(e)) || e);
-  return t && e && We(s, l, e), e;
+class n extends Z {
+  // Feature ID Constants (eLiterals)
+  static FILL = 0;
+  static STROKE = 1;
+  static CLASS_NAME = 2;
+  // Private fields
+  _fill;
+  _stroke;
+  _className;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return i.Literals.S_V_G_ITEM_STYLES;
+  }
+  // Getters and Setters
+  get fill() {
+    return this._fill;
+  }
+  set fill(e) {
+    const t = this._fill;
+    this._fill = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.FILL),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.FILL,
+      merge: () => !1
+    });
+  }
+  get stroke() {
+    return this._stroke;
+  }
+  set stroke(e) {
+    const t = this._stroke;
+    this._stroke = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.STROKE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.STROKE,
+      merge: () => !1
+    });
+  }
+  get className() {
+    return this._className;
+  }
+  set className(e) {
+    const t = this._className;
+    this._className = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(n.CLASS_NAME),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => n.CLASS_NAME,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.FILL:
+        return this.fill;
+      case n.STROKE:
+        return this.stroke;
+      case n.CLASS_NAME:
+        return this.className;
+      default:
+        return super.eGet(e);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.FILL:
+        this.fill = t, super.eSet(e, t);
+        break;
+      case n.STROKE:
+        this.stroke = t, super.eSet(e, t);
+        break;
+      case n.CLASS_NAME:
+        this.className = t, super.eSet(e, t);
+        break;
+      default:
+        super.eSet(e, t);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.FILL:
+        return this._fill !== void 0;
+      case n.STROKE:
+        return this._stroke !== void 0;
+      case n.CLASS_NAME:
+        return this._className !== void 0;
+      default:
+        return super.eIsSet(e);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case n.FILL:
+        this._fill = void 0;
+        return;
+      case n.STROKE:
+        this._stroke = void 0;
+        return;
+      case n.CLASS_NAME:
+        this._className = void 0;
+        return;
+      default:
+        super.eUnset(e);
+    }
+  }
+}
+class b extends ge {
+  // Lazy singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new b()), this._instance;
+  }
+  constructor() {
+    super(), this.setEPackage(i.eINSTANCE);
+  }
+  /**
+   * Create a new RepeatableSVGSettings instance
+   */
+  createRepeatableSVGSettings() {
+    return new r();
+  }
+  /**
+   * Create a new SVGItemStyles instance
+   */
+  createSVGItemStyles() {
+    return new n();
+  }
+  /**
+   * Create an instance of the given class
+   */
+  create(e) {
+    switch (e.getName()) {
+      case "RepeatableSVGSettings":
+        return this.createRepeatableSVGSettings();
+      case "SVGItemStyles":
+        return this.createSVGItemStyles();
+      default:
+        throw new Error(`Unknown class: ${e.getName()}`);
+    }
+  }
+}
+function N(l) {
+  const e = K.INSTANCE.getEPackage(l);
+  if (!e)
+    throw new Error(`EPackage '${l}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing RepeatableSvgWidgetsPackage.`);
+  return e;
+}
+class i extends Te {
+  static eNAME = "repeatableSvgWidgets";
+  static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat";
+  static eNS_PREFIX = "repeatableSvgWidgets";
+  // Singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new i(), this._instance.init()), this._instance;
+  }
+  /**
+   * Literals for quick access to metaclasses and features
+   */
+  static Literals = {
+    REPEATABLE_S_V_G_SETTINGS: null,
+    REPEATABLE_S_V_G_SETTINGS__SRC: null,
+    REPEATABLE_S_V_G_SETTINGS__ACTIVE_ITEM_STYLES: null,
+    REPEATABLE_S_V_G_SETTINGS__DEFAULT_ITEM_STYLES: null,
+    REPEATABLE_S_V_G_SETTINGS__REPETITIONS: null,
+    REPEATABLE_S_V_G_SETTINGS__PROGRESS: null,
+    S_V_G_ITEM_STYLES: null,
+    S_V_G_ITEM_STYLES__FILL: null,
+    S_V_G_ITEM_STYLES__STROKE: null,
+    S_V_G_ITEM_STYLES__CLASS_NAME: null
+  };
+  constructor() {
+    super(), this.setName(i.eNAME), this.setNsURI(i.eNS_URI), this.setNsPrefix(i.eNS_PREFIX);
+  }
+  /**
+   * Initialize package contents
+   */
+  init() {
+    K.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(b.eINSTANCE);
+    const e = new H();
+    e.setName("RepeatableSVGSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), i.Literals.REPEATABLE_S_V_G_SETTINGS = e;
+    const t = new g();
+    t.setContainment(!1), t.setName("src"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), i.Literals.REPEATABLE_S_V_G_SETTINGS__SRC = t;
+    const a = new g();
+    a.setContainment(!0), a.setName("activeItemStyles"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), i.Literals.REPEATABLE_S_V_G_SETTINGS__ACTIVE_ITEM_STYLES = a;
+    const s = new g();
+    s.setContainment(!0), s.setName("defaultItemStyles"), s.setLowerBound(0), s.setUpperBound(1), e.getEStructuralFeatures().push(s), i.Literals.REPEATABLE_S_V_G_SETTINGS__DEFAULT_ITEM_STYLES = s;
+    const u = new g();
+    u.setContainment(!1), u.setName("repetitions"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), i.Literals.REPEATABLE_S_V_G_SETTINGS__REPETITIONS = u;
+    const c = new g();
+    c.setContainment(!1), c.setName("progress"), c.setLowerBound(0), c.setUpperBound(1), e.getEStructuralFeatures().push(c), i.Literals.REPEATABLE_S_V_G_SETTINGS__PROGRESS = c;
+    const S = new H();
+    S.setName("SVGItemStyles"), S.setAbstract(!1), S.setInterface(!1), this.getEClassifiers().push(S), S.setEPackage(this), i.Literals.S_V_G_ITEM_STYLES = S;
+    const f = new g();
+    f.setContainment(!1), f.setName("fill"), f.setLowerBound(0), f.setUpperBound(1), S.getEStructuralFeatures().push(f), i.Literals.S_V_G_ITEM_STYLES__FILL = f;
+    const _ = new g();
+    _.setContainment(!1), _.setName("stroke"), _.setLowerBound(0), _.setUpperBound(1), S.getEStructuralFeatures().push(_), i.Literals.S_V_G_ITEM_STYLES__STROKE = _;
+    const h = new Ce();
+    h.setName("className"), h.setLowerBound(0), h.setUpperBound(1), S.getEStructuralFeatures().push(h), i.Literals.S_V_G_ITEM_STYLES__CLASS_NAME = h, i.Literals.REPEATABLE_S_V_G_SETTINGS__SRC.setEType(N("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.REPEATABLE_S_V_G_SETTINGS__ACTIVE_ITEM_STYLES.setEType(i.Literals.S_V_G_ITEM_STYLES), i.Literals.REPEATABLE_S_V_G_SETTINGS__DEFAULT_ITEM_STYLES.setEType(i.Literals.S_V_G_ITEM_STYLES), i.Literals.REPEATABLE_S_V_G_SETTINGS__REPETITIONS.setEType(N("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.REPEATABLE_S_V_G_SETTINGS__PROGRESS.setEType(N("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.S_V_G_ITEM_STYLES__FILL.setEType(N("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.S_V_G_ITEM_STYLES__STROKE.setEType(N("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.S_V_G_ITEM_STYLES__CLASS_NAME.setEType(me().getEClassifier("EString"));
+  }
+}
+class r extends Z {
+  // Feature ID Constants (eLiterals)
+  static SRC = 0;
+  static ACTIVE_ITEM_STYLES = 1;
+  static DEFAULT_ITEM_STYLES = 2;
+  static REPETITIONS = 3;
+  static PROGRESS = 4;
+  // Private fields
+  _src;
+  _activeItemStyles;
+  _defaultItemStyles;
+  _repetitions;
+  _progress;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return i.Literals.REPEATABLE_S_V_G_SETTINGS;
+  }
+  // Getters and Setters
+  get src() {
+    return this._src;
+  }
+  set src(e) {
+    const t = this._src;
+    this._src = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(r.SRC),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => r.SRC,
+      merge: () => !1
+    });
+  }
+  get activeItemStyles() {
+    return this._activeItemStyles;
+  }
+  set activeItemStyles(e) {
+    const t = this._activeItemStyles;
+    this._activeItemStyles = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(r.ACTIVE_ITEM_STYLES),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => r.ACTIVE_ITEM_STYLES,
+      merge: () => !1
+    });
+  }
+  get defaultItemStyles() {
+    return this._defaultItemStyles;
+  }
+  set defaultItemStyles(e) {
+    const t = this._defaultItemStyles;
+    this._defaultItemStyles = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(r.DEFAULT_ITEM_STYLES),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => r.DEFAULT_ITEM_STYLES,
+      merge: () => !1
+    });
+  }
+  get repetitions() {
+    return this._repetitions;
+  }
+  set repetitions(e) {
+    const t = this._repetitions;
+    this._repetitions = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(r.REPETITIONS),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => r.REPETITIONS,
+      merge: () => !1
+    });
+  }
+  get progress() {
+    return this._progress;
+  }
+  set progress(e) {
+    const t = this._progress;
+    this._progress = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(r.PROGRESS),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => r.PROGRESS,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case r.SRC:
+        return this.src;
+      case r.ACTIVE_ITEM_STYLES:
+        return this.activeItemStyles;
+      case r.DEFAULT_ITEM_STYLES:
+        return this.defaultItemStyles;
+      case r.REPETITIONS:
+        return this.repetitions;
+      case r.PROGRESS:
+        return this.progress;
+      default:
+        return super.eGet(e);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case r.SRC:
+        this.src = t, super.eSet(e, t);
+        break;
+      case r.ACTIVE_ITEM_STYLES:
+        this.activeItemStyles = t, super.eSet(e, t);
+        break;
+      case r.DEFAULT_ITEM_STYLES:
+        this.defaultItemStyles = t, super.eSet(e, t);
+        break;
+      case r.REPETITIONS:
+        this.repetitions = t, super.eSet(e, t);
+        break;
+      case r.PROGRESS:
+        this.progress = t, super.eSet(e, t);
+        break;
+      default:
+        super.eSet(e, t);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case r.SRC:
+        return this._src !== void 0;
+      case r.ACTIVE_ITEM_STYLES:
+        return this._activeItemStyles !== void 0;
+      case r.DEFAULT_ITEM_STYLES:
+        return this._defaultItemStyles !== void 0;
+      case r.REPETITIONS:
+        return this._repetitions !== void 0;
+      case r.PROGRESS:
+        return this._progress !== void 0;
+      default:
+        return super.eIsSet(e);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case r.SRC:
+        this._src = void 0;
+        return;
+      case r.ACTIVE_ITEM_STYLES:
+        this._activeItemStyles = void 0;
+        return;
+      case r.DEFAULT_ITEM_STYLES:
+        this._defaultItemStyles = void 0;
+        return;
+      case r.REPETITIONS:
+        this._repetitions = void 0;
+        return;
+      case r.PROGRESS:
+        this._progress = void 0;
+        return;
+      default:
+        super.eUnset(e);
+    }
+  }
+}
+var we = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, $ = (l, e, t, a) => {
+  for (var s = Ne(e, t), u = l.length - 1, c; u >= 0; u--)
+    (c = l[u]) && (s = c(e, t, s) || s);
+  return s && we(e, t, s), s;
 };
-let f = class {
-  fill = new m();
-  stroke = new m();
-  className;
-};
-D([
-  g("The fill color of the SVG item (e.g., a hex code or named color)."),
-  w("VariableWrapper")
-], f.prototype, "fill", 2);
-D([
-  g("The stroke color of the SVG item."),
-  w("VariableWrapper")
-], f.prototype, "stroke", 2);
-D([
-  g("The CSS class name to apply to the SVG item."),
-  _e()
-], f.prototype, "className", 2);
-f = D([
-  g("Defines the basic fill and stroke properties for an SVG element."),
-  Q({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles" })
-], f);
-var Ge = Object.defineProperty, ke = Object.getOwnPropertyDescriptor, T = (r, s, l, t) => {
-  for (var e = t > 1 ? void 0 : t ? ke(s, l) : s, i = r.length - 1, a; i >= 0; i--)
-    (a = r[i]) && (e = (t ? a(s, l, e) : a(e)) || e);
-  return t && e && Ge(s, l, e), e;
-};
-let C = class {
-  src = new m();
-  activeItemStyles = new f();
-  defaultItemStyles = new f();
-  repetitions = new m();
-  progress = new m();
-};
-T([
-  g("The path or URL to the base SVG source file that will be repeated."),
-  w("VariableWrapper")
-], C.prototype, "src", 2);
-T([
-  g("Defines the fill and stroke styles for the SVG items that are considered 'active' (e.g., representing completed progress)."),
-  w("SVGItemStyles")
-], C.prototype, "activeItemStyles", 2);
-T([
-  g("Defines the fill and stroke styles for the SVG items that are in their 'default' state (e.g., representing remaining progress)."),
-  w("SVGItemStyles")
-], C.prototype, "defaultItemStyles", 2);
-T([
-  g("The total number of times the SVG should be repeated. This is a string as it might represent a dynamic value or a fixed count that could be parsed."),
-  w("VariableWrapper")
-], C.prototype, "repetitions", 2);
-T([
-  g("The current progress value, determining how many of the repeated SVGs should be styled as 'active'. This is a string as it might represent a percentage or a numeric value."),
-  w("VariableWrapper")
-], C.prototype, "progress", 2);
-C = T([
-  g("Represents the settings for a repeatable SVG element, often used for progress indicators or visual counters where an SVG graphic is duplicated and styled differently based on progress."),
-  Q({ type: "http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings" })
-], C);
-var xe = Object.defineProperty, Me = Object.getOwnPropertyDescriptor, ee = (r, s, l, t) => {
-  for (var e = Me(s, l), i = r.length - 1, a; i >= 0; i--)
-    (a = r[i]) && (e = a(s, l, e) || e);
-  return e && xe(s, l, e), e;
-};
-class P extends pe {
-  zoom(s) {
+class R extends re {
+  zoom(e) {
     throw new Error("zoom not implemented");
   }
   resetZoom() {
     throw new Error("resetZoom not implemented");
   }
 }
-ee([
+$([
   X({ eventType: "svgRepeat.zoom" })
-], P.prototype, "zoom");
-ee([
+], R.prototype, "zoom");
+$([
   X({ eventType: "svgRepeat.resetZoom" })
-], P.prototype, "resetZoom");
-const Oe = ["viewBox"], Ee = { id: "bubbleKenseo" }, He = ["width"], De = ["fill", "stroke"], Pe = ["innerHTML", "transform"], Le = ["fill", "stroke"], Ne = ["innerHTML", "transform"], $e = /* @__PURE__ */ K({
+], R.prototype, "resetZoom");
+const ye = ["viewBox"], Ae = { id: "bubbleKenseo" }, Fe = ["width"], Re = ["fill", "stroke"], Ve = ["innerHTML", "transform"], be = ["fill", "stroke"], Ge = ["innerHTML", "transform"], Me = /* @__PURE__ */ ce({
   __name: "RepeatableSvgWidget",
-  props: /* @__PURE__ */ fe({
+  props: /* @__PURE__ */ Ee({
     datasourceId: {},
     id: {}
   }, {
@@ -100,310 +484,285 @@ const Oe = ["viewBox"], Ee = { id: "bubbleKenseo" }, He = ["width"], De = ["fill
     configvModifiers: {}
   }),
   emits: ["update:configv"],
-  setup(r, { expose: s }) {
-    const l = r, { id: t } = Ce(l), e = J(r, "configv"), i = N(Ie.TINY_EMITTER), a = N(ue), _ = ye().params.pageid || "", G = E(1), o = E(null);
-    class p extends P {
-      zoom(u) {
-        G.value = Math.max(0.1, Math.min(10, u));
-        const d = o.value;
-        d && (d.style.transform = `scale(${G.value})`, d.style.transformOrigin = "top left");
+  setup(l, { expose: e }) {
+    const t = l, { id: a } = de(t), s = pe(l, "configv"), u = k(Ie.TINY_EMITTER), c = k(ie), f = ve().params.pageid || "", _ = V(1), h = V(null);
+    class j extends R {
+      zoom(E) {
+        _.value = Math.max(0.1, Math.min(10, E));
+        const d = h.value;
+        d && (d.style.transform = `scale(${_.value})`, d.style.transformOrigin = "top left");
       }
       resetZoom() {
-        G.value = 1;
-        const u = o.value;
-        u && (u.style.transform = "", u.style.transformOrigin = "");
+        _.value = 1;
+        const E = h.value;
+        E && (E.style.transform = "", E.style.transformOrigin = "");
       }
     }
-    const Z = new p();
-    s(Z);
-    const le = () => {
-      t?.value && i.emit("widget:RepeatableSVGWidget:click", {
+    const M = new j();
+    e(M);
+    const z = () => {
+      a?.value && u.emit("widget:RepeatableSVGWidget:click", {
         type: "widget:RepeatableSVGWidget:click",
-        widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now() }
+        widgetId: a.value,
+        payload: { widgetId: a.value, timestamp: Date.now() }
       });
-    }, ae = () => {
-      t?.value && i.emit("widget:RepeatableSVGWidget:right_click", {
+    }, q = () => {
+      a?.value && u.emit("widget:RepeatableSVGWidget:right_click", {
         type: "widget:RepeatableSVGWidget:right_click",
-        widgetId: t.value,
-        payload: { widgetId: t.value, timestamp: Date.now() }
+        widgetId: a.value,
+        payload: { widgetId: a.value, timestamp: Date.now() }
       });
-    }, k = E("");
-    new C();
-    const j = async (n) => {
-      const u = n?.value || n;
-      if (u && typeof u == "string")
+    }, I = V("");
+    new r();
+    const D = async (o) => {
+      const E = o?.value || o;
+      if (E && typeof E == "string")
         try {
-          const c = await (await fetch(u)).text();
-          k.value = c;
+          const p = await (await fetch(E)).text();
+          I.value = p;
         } catch (d) {
-          console.error("Failed to load SVG:", d), k.value = "";
+          console.error("Failed to load SVG:", d), I.value = "";
         }
       else
-        k.value = "";
-    }, x = (n, u, d) => {
-      const c = n[u];
-      if (c == null)
-        n[u] = new m(d);
-      else if (!(c instanceof m)) if (typeof c == "object" && "value" in c) {
-        const U = new m(c.value);
-        "variable" in c && (U.variable = c.variable), n[u] = U;
+        I.value = "";
+    }, L = (o, E, d) => {
+      const p = o[E];
+      if (p == null)
+        o[E] = new A(d);
+      else if (!(p instanceof A)) if (typeof p == "object" && "value" in p) {
+        const x = new A(p.value);
+        "variable" in p && (x.variable = p.variable), o[E] = x;
       } else
-        n[u] = new m(c);
-    }, F = (n) => {
-      n && (x(n, "fill", "#000000"), x(n, "stroke", "none"));
+        o[E] = new A(p);
+    }, P = (o) => {
+      o && (L(o, "fill", "#000000"), L(o, "stroke", "none"));
     };
-    be(async () => {
-      t?.value && a.registerInstance(t.value, Z, "RepeatableSVGWidget", _), e.value || (e.value = new C()), x(e.value, "src", ""), x(e.value, "repetitions", "1"), x(e.value, "progress", "0"), e.value.activeItemStyles || (e.value.activeItemStyles = new f()), F(e.value.activeItemStyles), e.value.defaultItemStyles || (e.value.defaultItemStyles = new f()), F(e.value.defaultItemStyles), await j(e.value.src);
-    }), Se(() => {
-      t?.value && a.unregisterInstance(t.value);
-    }), Ve(
-      () => e.value?.src?.value,
-      (n) => {
-        j(n);
+    Se(async () => {
+      a?.value && c.registerInstance(a.value, M, "RepeatableSVGWidget", f), s.value || (s.value = new r()), L(s.value, "src", ""), L(s.value, "repetitions", "1"), L(s.value, "progress", "0"), s.value.activeItemStyles || (s.value.activeItemStyles = new n()), P(s.value.activeItemStyles), s.value.defaultItemStyles || (s.value.defaultItemStyles = new n()), P(s.value.defaultItemStyles), await D(s.value.src);
+    }), _e(() => {
+      a?.value && c.unregisterInstance(a.value);
+    }), he(
+      () => s.value?.src?.value,
+      (o) => {
+        D(o);
       }
     );
-    const O = y(() => {
-      const n = e.value?.repetitions?.value ?? "1";
-      return isNaN(parseFloat(n)) ? 1 : Math.floor(Number(n));
-    }), oe = y(() => {
-      const n = e.value?.progress?.value ?? "0";
-      return isNaN(parseFloat(n)) ? 0 : Number(n);
-    }), se = y(() => e.value?.activeItemStyles?.fill?.value), re = y(() => e.value?.activeItemStyles?.stroke?.value), ie = y(() => e.value?.defaultItemStyles?.fill?.value), ne = y(() => e.value?.defaultItemStyles?.stroke?.value);
-    return (n, u) => (h(), I("div", {
+    const y = T(() => {
+      const o = s.value?.repetitions?.value ?? "1";
+      return isNaN(parseFloat(o)) ? 1 : Math.floor(Number(o));
+    }), J = T(() => {
+      const o = s.value?.progress?.value ?? "0";
+      return isNaN(parseFloat(o)) ? 0 : Number(o);
+    }), Q = T(() => s.value?.activeItemStyles?.fill?.value), ee = T(() => s.value?.activeItemStyles?.stroke?.value), te = T(() => s.value?.defaultItemStyles?.fill?.value), se = T(() => s.value?.defaultItemStyles?.stroke?.value);
+    return (o, E) => (m(), C("div", {
       class: "repeatable-svg-container",
-      onClick: le,
-      onContextmenu: he(ae, ["prevent"]),
+      onClick: z,
+      onContextmenu: fe(q, ["prevent"]),
       ref_key: "rsvgContainerRef",
-      ref: o
+      ref: h
     }, [
-      (h(), I("svg", {
+      (m(), C("svg", {
         fill: "#000000",
         version: "1.1",
         id: "Layer_1",
         xmlns: "http://www.w3.org/2000/svg",
         "xmlns:xlink": "http://www.w3.org/1999/xlink",
-        viewBox: `0 0 ${100 * O.value} 100`,
+        viewBox: `0 0 ${100 * y.value} 100`,
         "enable-background": "new 0 0 100 100",
         "xml:space": "preserve"
       }, [
-        R("defs", null, [
-          R("mask", Ee, [
-            R("rect", {
+        w("defs", null, [
+          w("mask", Ae, [
+            w("rect", {
               x: "0",
               y: "0",
               style: { fill: "#adadad" },
-              width: 100 * O.value * oe.value,
+              width: 100 * y.value * J.value,
               height: "100"
-            }, null, 8, He)
+            }, null, 8, Fe)
           ])
         ]),
-        R("g", {
-          fill: ie.value,
-          stroke: ne.value
+        w("g", {
+          fill: te.value,
+          stroke: se.value
         }, [
-          (h(!0), I(q, null, z(O.value, (d) => (h(), I("g", {
-            innerHTML: k.value,
+          (m(!0), C(Y, null, U(y.value, (d) => (m(), C("g", {
+            innerHTML: I.value,
             transform: `translate(${100 * (d - 1)}, 0)`,
             key: d
-          }, null, 8, Pe))), 128))
-        ], 8, De),
-        R("g", {
+          }, null, 8, Ve))), 128))
+        ], 8, Re),
+        w("g", {
           mask: "url(#bubbleKenseo)",
-          fill: se.value,
-          stroke: re.value
+          fill: Q.value,
+          stroke: ee.value
         }, [
-          (h(!0), I(q, null, z(O.value, (d) => (h(), I("g", {
-            innerHTML: k.value,
+          (m(!0), C(Y, null, U(y.value, (d) => (m(), C("g", {
+            innerHTML: I.value,
             transform: `translate(${100 * (d - 1)}, 0)`,
             key: d
-          }, null, 8, Ne))), 128))
-        ], 8, Le)
-      ], 8, Oe))
+          }, null, 8, Ge))), 128))
+        ], 8, be)
+      ], 8, ye))
     ], 544));
   }
-}), te = (r, s) => {
-  const l = r.__vccOpts || r;
-  for (const [t, e] of s)
-    l[t] = e;
-  return l;
-}, Ze = /* @__PURE__ */ te($e, [["__scopeId", "data-v-2371f225"]]), je = { class: "settings-container" }, Fe = /* @__PURE__ */ K({
-  __name: "RepeatableSvgWidgetSettings",
-  props: {
-    modelValue: { required: !0 },
-    modelModifiers: {}
-  },
-  emits: ["update:modelValue"],
-  setup(r) {
-    const s = N("i18n"), l = (i) => s ? s.t(i) : i, t = J(r, "modelValue"), e = E({
-      widgetSection: !1,
-      storeSection: !1
-    });
-    return (i, a) => {
-      const M = L("va-input"), _ = L("va-color-input"), G = L("va-collapse");
-      return h(), we(G, {
-        modelValue: e.value.widgetSection,
-        "onUpdate:modelValue": a[7] || (a[7] = (o) => e.value.widgetSection = o),
-        icon: "settings",
-        header: l("svgRepeat:RepeatableSvgWidget.title")
-      }, {
-        default: b(() => [
-          R("div", je, [
-            v(S(V), {
-              modelValue: t.value.src,
-              "onUpdate:modelValue": a[0] || (a[0] = (o) => t.value.src = o),
-              label: l("svgRepeat:RepeatableSvgWidget.svgSrc")
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(M, {
-                  "model-value": o,
-                  onInput: p,
-                  label: l("svgRepeat:RepeatableSvgWidget.svgSrc")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.repetitions,
-              "onUpdate:modelValue": a[1] || (a[1] = (o) => t.value.repetitions = o),
-              label: l("svgRepeat:RepeatableSvgWidget.repeations")
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(M, {
-                  "model-value": o,
-                  onInput: p,
-                  label: l("svgRepeat:RepeatableSvgWidget.repeations")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.progress,
-              "onUpdate:modelValue": a[2] || (a[2] = (o) => t.value.progress = o),
-              label: l("svgRepeat:RepeatableSvgWidget.progress")
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(M, {
-                  "model-value": o,
-                  onInput: p,
-                  label: l("svgRepeat:RepeatableSvgWidget.progress")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.activeItemStyles.fill,
-              "onUpdate:modelValue": a[3] || (a[3] = (o) => t.value.activeItemStyles.fill = o),
-              label: l("svgRepeat:RepeatableSvgWidget.activeItemFill"),
-              class: "color-input"
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(_, {
-                  "model-value": o,
-                  onInput: p,
-                  class: "width-100",
-                  label: l("svgRepeat:RepeatableSvgWidget.activeItemFill")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.activeItemStyles.stroke,
-              "onUpdate:modelValue": a[4] || (a[4] = (o) => t.value.activeItemStyles.stroke = o),
-              label: l("svgRepeat:RepeatableSvgWidget.activeItemStroke"),
-              class: "color-input"
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(_, {
-                  "model-value": o,
-                  onInput: p,
-                  class: "width-100",
-                  label: l("svgRepeat:RepeatableSvgWidget.activeItemStroke")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.defaultItemStyles.fill,
-              "onUpdate:modelValue": a[5] || (a[5] = (o) => t.value.defaultItemStyles.fill = o),
-              label: l("svgRepeat:RepeatableSvgWidget.defaultItemFill"),
-              class: "color-input"
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(_, {
-                  "model-value": o,
-                  onInput: p,
-                  class: "width-100",
-                  label: l("svgRepeat:RepeatableSvgWidget.defaultItemFill")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"]),
-            v(S(V), {
-              modelValue: t.value.defaultItemStyles.stroke,
-              "onUpdate:modelValue": a[6] || (a[6] = (o) => t.value.defaultItemStyles.stroke = o),
-              label: l("svgRepeat:RepeatableSvgWidget.defaultItemStroke"),
-              class: "color-input"
-            }, {
-              default: b(({ value: o, change: p }) => [
-                v(_, {
-                  "model-value": o,
-                  onInput: p,
-                  class: "width-100",
-                  label: l("svgRepeat:RepeatableSvgWidget.defaultItemStroke")
-                }, null, 8, ["model-value", "onInput", "label"])
-              ]),
-              _: 1
-            }, 8, ["modelValue", "label"])
-          ])
-        ]),
-        _: 1
-      }, 8, ["modelValue", "header"]);
-    };
+}), De = (l, e) => {
+  const t = l.__vccOpts || l;
+  for (const [a, s] of e)
+    t[a] = s;
+  return t;
+}, Pe = /* @__PURE__ */ De(Me, [["__scopeId", "data-v-60b124e5"]]), xe = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M46.8924%2066.198C46.4124%2066.198%2045.9084%2066.162%2045.3804%2066.09C44.8644%2066.03%2044.3724%2065.934%2043.9044%2065.802C43.4364%2065.67%2043.0164%2065.514%2042.6444%2065.334C42.3204%2065.178%2042.0924%2064.974%2041.9604%2064.722C41.8284%2064.458%2041.7804%2064.182%2041.8164%2063.894C41.8524%2063.606%2041.9544%2063.354%2042.1224%2063.138C42.2904%2062.91%2042.5124%2062.76%2042.7884%2062.688C43.0644%2062.604%2043.3764%2062.64%2043.7244%2062.796C44.1804%2063.012%2044.6964%2063.18%2045.2724%2063.3C45.8484%2063.42%2046.3884%2063.48%2046.8924%2063.48C47.6844%2063.48%2048.2364%2063.378%2048.5484%2063.174C48.8724%2062.958%2049.0344%2062.694%2049.0344%2062.382C49.0344%2062.106%2048.9204%2061.884%2048.6924%2061.716C48.4764%2061.548%2048.0864%2061.404%2047.5224%2061.284L45.4164%2060.834C44.2644%2060.594%2043.4064%2060.174%2042.8424%2059.574C42.2784%2058.974%2041.9964%2058.2%2041.9964%2057.252C41.9964%2056.628%2042.1224%2056.064%2042.3744%2055.56C42.6384%2055.044%2043.0044%2054.606%2043.4724%2054.246C43.9524%2053.886%2044.5164%2053.61%2045.1644%2053.418C45.8244%2053.214%2046.5564%2053.112%2047.3604%2053.112C47.9844%2053.112%2048.6144%2053.184%2049.2504%2053.328C49.8984%2053.46%2050.4564%2053.664%2050.9244%2053.94C51.2004%2054.084%2051.3984%2054.282%2051.5184%2054.534C51.6384%2054.786%2051.6864%2055.05%2051.6624%2055.326C51.6384%2055.59%2051.5424%2055.824%2051.3744%2056.028C51.2184%2056.232%2051.0024%2056.37%2050.7264%2056.442C50.4624%2056.502%2050.1444%2056.454%2049.7724%2056.298C49.4244%2056.142%2049.0284%2056.028%2048.5844%2055.956C48.1524%2055.872%2047.7324%2055.83%2047.3244%2055.83C46.8804%2055.83%2046.5024%2055.884%2046.1904%2055.992C45.8784%2056.088%2045.6384%2056.232%2045.4704%2056.424C45.3144%2056.616%2045.2364%2056.838%2045.2364%2057.09C45.2364%2057.342%2045.3384%2057.558%2045.5424%2057.738C45.7584%2057.906%2046.1484%2058.05%2046.7124%2058.17L48.8004%2058.62C49.9644%2058.872%2050.8344%2059.286%2051.4104%2059.862C51.9864%2060.438%2052.2744%2061.188%2052.2744%2062.112C52.2744%2062.736%2052.1484%2063.3%2051.8964%2063.804C51.6444%2064.308%2051.2844%2064.74%2050.8164%2065.1C50.3484%2065.448%2049.7844%2065.718%2049.1244%2065.91C48.4644%2066.102%2047.7204%2066.198%2046.8924%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M59.1989%2066.162C58.7429%2066.162%2058.3709%2066.066%2058.0829%2065.874C57.8069%2065.682%2057.5729%2065.376%2057.3809%2064.956L53.0249%2055.344C52.8329%2054.924%2052.7729%2054.546%2052.8449%2054.21C52.9169%2053.874%2053.0849%2053.616%2053.3489%2053.436C53.6129%2053.244%2053.9429%2053.148%2054.3389%2053.148C54.8309%2053.148%2055.1969%2053.256%2055.4369%2053.472C55.6889%2053.688%2055.9049%2054.006%2056.0849%2054.426L59.7569%2062.922H58.7489L62.4209%2054.408C62.6009%2053.988%2062.8169%2053.676%2063.0689%2053.472C63.3209%2053.256%2063.6749%2053.148%2064.1309%2053.148C64.5029%2053.148%2064.8149%2053.244%2065.0669%2053.436C65.3189%2053.616%2065.4749%2053.874%2065.5349%2054.21C65.6069%2054.546%2065.5469%2054.924%2065.3549%2055.344L60.9809%2064.956C60.8009%2065.376%2060.5729%2065.682%2060.2969%2065.874C60.0209%2066.066%2059.6549%2066.162%2059.1989%2066.162Z'%20fill='%23606060'/%3e%3cpath%20d='M73.1603%2066.198C71.7083%2066.198%2070.4723%2065.928%2069.4523%2065.388C68.4443%2064.848%2067.6763%2064.092%2067.1483%2063.12C66.6203%2062.148%2066.3563%2061.014%2066.3563%2059.718C66.3563%2058.71%2066.5123%2057.804%2066.8243%2057C67.1483%2056.184%2067.6103%2055.488%2068.2103%2054.912C68.8103%2054.324%2069.5423%2053.88%2070.4063%2053.58C71.2823%2053.268%2072.2723%2053.112%2073.3763%2053.112C73.9763%2053.112%2074.5883%2053.172%2075.2123%2053.292C75.8363%2053.4%2076.4483%2053.61%2077.0483%2053.922C77.3603%2054.066%2077.5703%2054.27%2077.6783%2054.534C77.7983%2054.786%2077.8343%2055.056%2077.7863%2055.344C77.7503%2055.62%2077.6483%2055.878%2077.4803%2056.118C77.3243%2056.346%2077.1083%2056.502%2076.8323%2056.586C76.5563%2056.658%2076.2443%2056.616%2075.8963%2056.46C75.5363%2056.292%2075.1463%2056.166%2074.7263%2056.082C74.3063%2055.986%2073.8623%2055.938%2073.3943%2055.938C72.5903%2055.938%2071.9183%2056.082%2071.3783%2056.37C70.8503%2056.658%2070.4543%2057.084%2070.1903%2057.648C69.9263%2058.212%2069.7943%2058.902%2069.7943%2059.718C69.7943%2060.942%2070.0943%2061.866%2070.6943%2062.49C71.2943%2063.114%2072.1823%2063.426%2073.3583%2063.426C73.7183%2063.426%2074.1083%2063.39%2074.5283%2063.318C74.9603%2063.246%2075.3923%2063.144%2075.8243%2063.012L75.2123%2064.254V61.176H73.9523C73.5443%2061.176%2073.2263%2061.074%2072.9983%2060.87C72.7823%2060.666%2072.6743%2060.378%2072.6743%2060.006C72.6743%2059.634%2072.7823%2059.352%2072.9983%2059.16C73.2263%2058.956%2073.5443%2058.854%2073.9523%2058.854H76.6163C77.0363%2058.854%2077.3543%2058.968%2077.5703%2059.196C77.7983%2059.412%2077.9123%2059.73%2077.9123%2060.15V64.128C77.9123%2064.488%2077.8343%2064.794%2077.6783%2065.046C77.5343%2065.298%2077.3003%2065.478%2076.9763%2065.586C76.4123%2065.778%2075.8003%2065.928%2075.1403%2066.036C74.4803%2066.144%2073.8203%2066.198%2073.1603%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M30%2030C30%2025.8579%2033.3579%2022.5%2037.5%2022.5H82.5C86.6421%2022.5%2090%2025.8579%2090%2030V36C90%2036.8284%2090.6716%2037.5%2091.5%2037.5H94.5C95.7361%2037.5%2096.4416%2038.9111%2095.7%2039.9L87.45%2050.9C86.85%2051.7%2085.65%2051.7%2085.05%2050.9L76.8%2039.9C76.0584%2038.9111%2076.7639%2037.5%2078%2037.5H81.25C81.9404%2037.5%2082.5%2036.9404%2082.5%2036.25C82.5%2032.7982%2079.7018%2030%2076.25%2030H45C40.8579%2030%2037.5%2033.3579%2037.5%2037.5V43.5C37.5%2044.3284%2036.8284%2045%2036%2045H31.5C30.6716%2045%2030%2044.3284%2030%2043.5V30Z'%20fill='%23606060'/%3e%3cpath%20d='M90%2090C90%2094.1421%2086.6421%2097.5%2082.5%2097.5H37.5C33.3579%2097.5%2030%2094.1421%2030%2090V84C30%2083.1716%2029.3284%2082.5%2028.5%2082.5H25.5C24.2639%2082.5%2023.5584%2081.0889%2024.3%2080.1L32.55%2069.1C33.15%2068.3%2034.35%2068.3%2034.95%2069.1L43.2%2080.1C43.9416%2081.0889%2043.2361%2082.5%2042%2082.5H38.75C38.0596%2082.5%2037.5%2083.0596%2037.5%2083.75C37.5%2087.2018%2040.2982%2090%2043.75%2090H75C79.1421%2090%2082.5%2086.6421%2082.5%2082.5V76.5C82.5%2075.6716%2083.1716%2075%2084%2075H88.5C89.3284%2075%2090%2075.6716%2090%2076.5V90Z'%20fill='%23606060'/%3e%3c/svg%3e", Oe = [
+  { name: "Repeatable SVG Clicked", type: "click", description: "Triggered when the Repeatable SVG widget is clicked", payloadType: O },
+  { name: "Repeatable SVG Right Clicked", type: "right_click", description: "Triggered when the Repeatable SVG widget is right-clicked", payloadType: O }
+], Be = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the repeatable SVG widget.
+
+The widget draws one small picture over and over and colours the first few
+differently - five of ten batteries filled, three of five stars. So: the
+picture, how many of it, how far along, and then the two looks that
+difference is made of. The two looks are alike on purpose - it is the same
+two properties either side of the line, and seeing them in the same order
+is what makes the pair readable.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="RepeatableSVGSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="RepeatableSVGSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="sourceGroup" layout="VERTICAL" label="Grafik">
+      <fields xsi:type="uimodel:InputWidget" name="src"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/src" label="Adresse der Grafik"
+          placeholder="https://… oder ein Pfad"/>
+      <fields xsi:type="uimodel:NumberWidget" name="repetitions"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/repetitions" label="Wie oft" min="1" step="1"/>
+      <fields xsi:type="uimodel:NumberWidget" name="progress"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/progress" label="Davon hervorgehoben" min="0" step="1"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="activeGroup" layout="VERTICAL" label="Hervorgehoben">
+      <fields xsi:type="uimodel:InputWidget" name="activeItemStyles"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/activeItemStyles" label=""/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="defaultGroup" layout="VERTICAL" label="Übrige">
+      <fields xsi:type="uimodel:InputWidget" name="defaultItemStyles"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//RepeatableSVGSettings/defaultItemStyles" label=""/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>
+`, ke = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+How one copy of the picture is painted.
+
+Used twice - once for the copies that count, once for the rest - so it says
+fill and stroke and nothing about which of the two it is. The class name is
+not offered: the widget sets the same class on every copy and tells them
+apart by position, not by naming them.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SVGItemStylesForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles"/>
+
+  <components xsi:type="uimodel:FormView" name="SVGItemStylesFormView">
+    <fields xsi:type="uimodel:InputWidget" name="fill"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/fill" label="Füllfarbe"/>
+    <fields xsi:type="uimodel:InputWidget" name="stroke"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/stroke" label="Linienfarbe"/>
+  </components>
+</uimodel:UIModel>
+`;
+var Ye = Object.defineProperty, Ue = Object.getOwnPropertyDescriptor, G = (l, e, t, a) => {
+  for (var s = a > 1 ? void 0 : a ? Ue(e, t) : e, u = l.length - 1, c; u >= 0; u--)
+    (c = l[u]) && (s = (a ? c(e, t, s) : c(s)) || s);
+  return a && s && Ye(e, t, s), s;
+}, W = (l, e) => (t, a) => e(t, a, l);
+i.eINSTANCE;
+const v = "RepeatableSVGWidget";
+let F = class {
+  constructor(l, e) {
+    this.events = l, this.actions = e;
   }
-}), Ue = /* @__PURE__ */ te(Fe, [["__scopeId", "data-v-20524639"]]), Be = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M46.8924%2066.198C46.4124%2066.198%2045.9084%2066.162%2045.3804%2066.09C44.8644%2066.03%2044.3724%2065.934%2043.9044%2065.802C43.4364%2065.67%2043.0164%2065.514%2042.6444%2065.334C42.3204%2065.178%2042.0924%2064.974%2041.9604%2064.722C41.8284%2064.458%2041.7804%2064.182%2041.8164%2063.894C41.8524%2063.606%2041.9544%2063.354%2042.1224%2063.138C42.2904%2062.91%2042.5124%2062.76%2042.7884%2062.688C43.0644%2062.604%2043.3764%2062.64%2043.7244%2062.796C44.1804%2063.012%2044.6964%2063.18%2045.2724%2063.3C45.8484%2063.42%2046.3884%2063.48%2046.8924%2063.48C47.6844%2063.48%2048.2364%2063.378%2048.5484%2063.174C48.8724%2062.958%2049.0344%2062.694%2049.0344%2062.382C49.0344%2062.106%2048.9204%2061.884%2048.6924%2061.716C48.4764%2061.548%2048.0864%2061.404%2047.5224%2061.284L45.4164%2060.834C44.2644%2060.594%2043.4064%2060.174%2042.8424%2059.574C42.2784%2058.974%2041.9964%2058.2%2041.9964%2057.252C41.9964%2056.628%2042.1224%2056.064%2042.3744%2055.56C42.6384%2055.044%2043.0044%2054.606%2043.4724%2054.246C43.9524%2053.886%2044.5164%2053.61%2045.1644%2053.418C45.8244%2053.214%2046.5564%2053.112%2047.3604%2053.112C47.9844%2053.112%2048.6144%2053.184%2049.2504%2053.328C49.8984%2053.46%2050.4564%2053.664%2050.9244%2053.94C51.2004%2054.084%2051.3984%2054.282%2051.5184%2054.534C51.6384%2054.786%2051.6864%2055.05%2051.6624%2055.326C51.6384%2055.59%2051.5424%2055.824%2051.3744%2056.028C51.2184%2056.232%2051.0024%2056.37%2050.7264%2056.442C50.4624%2056.502%2050.1444%2056.454%2049.7724%2056.298C49.4244%2056.142%2049.0284%2056.028%2048.5844%2055.956C48.1524%2055.872%2047.7324%2055.83%2047.3244%2055.83C46.8804%2055.83%2046.5024%2055.884%2046.1904%2055.992C45.8784%2056.088%2045.6384%2056.232%2045.4704%2056.424C45.3144%2056.616%2045.2364%2056.838%2045.2364%2057.09C45.2364%2057.342%2045.3384%2057.558%2045.5424%2057.738C45.7584%2057.906%2046.1484%2058.05%2046.7124%2058.17L48.8004%2058.62C49.9644%2058.872%2050.8344%2059.286%2051.4104%2059.862C51.9864%2060.438%2052.2744%2061.188%2052.2744%2062.112C52.2744%2062.736%2052.1484%2063.3%2051.8964%2063.804C51.6444%2064.308%2051.2844%2064.74%2050.8164%2065.1C50.3484%2065.448%2049.7844%2065.718%2049.1244%2065.91C48.4644%2066.102%2047.7204%2066.198%2046.8924%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M59.1989%2066.162C58.7429%2066.162%2058.3709%2066.066%2058.0829%2065.874C57.8069%2065.682%2057.5729%2065.376%2057.3809%2064.956L53.0249%2055.344C52.8329%2054.924%2052.7729%2054.546%2052.8449%2054.21C52.9169%2053.874%2053.0849%2053.616%2053.3489%2053.436C53.6129%2053.244%2053.9429%2053.148%2054.3389%2053.148C54.8309%2053.148%2055.1969%2053.256%2055.4369%2053.472C55.6889%2053.688%2055.9049%2054.006%2056.0849%2054.426L59.7569%2062.922H58.7489L62.4209%2054.408C62.6009%2053.988%2062.8169%2053.676%2063.0689%2053.472C63.3209%2053.256%2063.6749%2053.148%2064.1309%2053.148C64.5029%2053.148%2064.8149%2053.244%2065.0669%2053.436C65.3189%2053.616%2065.4749%2053.874%2065.5349%2054.21C65.6069%2054.546%2065.5469%2054.924%2065.3549%2055.344L60.9809%2064.956C60.8009%2065.376%2060.5729%2065.682%2060.2969%2065.874C60.0209%2066.066%2059.6549%2066.162%2059.1989%2066.162Z'%20fill='%23606060'/%3e%3cpath%20d='M73.1603%2066.198C71.7083%2066.198%2070.4723%2065.928%2069.4523%2065.388C68.4443%2064.848%2067.6763%2064.092%2067.1483%2063.12C66.6203%2062.148%2066.3563%2061.014%2066.3563%2059.718C66.3563%2058.71%2066.5123%2057.804%2066.8243%2057C67.1483%2056.184%2067.6103%2055.488%2068.2103%2054.912C68.8103%2054.324%2069.5423%2053.88%2070.4063%2053.58C71.2823%2053.268%2072.2723%2053.112%2073.3763%2053.112C73.9763%2053.112%2074.5883%2053.172%2075.2123%2053.292C75.8363%2053.4%2076.4483%2053.61%2077.0483%2053.922C77.3603%2054.066%2077.5703%2054.27%2077.6783%2054.534C77.7983%2054.786%2077.8343%2055.056%2077.7863%2055.344C77.7503%2055.62%2077.6483%2055.878%2077.4803%2056.118C77.3243%2056.346%2077.1083%2056.502%2076.8323%2056.586C76.5563%2056.658%2076.2443%2056.616%2075.8963%2056.46C75.5363%2056.292%2075.1463%2056.166%2074.7263%2056.082C74.3063%2055.986%2073.8623%2055.938%2073.3943%2055.938C72.5903%2055.938%2071.9183%2056.082%2071.3783%2056.37C70.8503%2056.658%2070.4543%2057.084%2070.1903%2057.648C69.9263%2058.212%2069.7943%2058.902%2069.7943%2059.718C69.7943%2060.942%2070.0943%2061.866%2070.6943%2062.49C71.2943%2063.114%2072.1823%2063.426%2073.3583%2063.426C73.7183%2063.426%2074.1083%2063.39%2074.5283%2063.318C74.9603%2063.246%2075.3923%2063.144%2075.8243%2063.012L75.2123%2064.254V61.176H73.9523C73.5443%2061.176%2073.2263%2061.074%2072.9983%2060.87C72.7823%2060.666%2072.6743%2060.378%2072.6743%2060.006C72.6743%2059.634%2072.7823%2059.352%2072.9983%2059.16C73.2263%2058.956%2073.5443%2058.854%2073.9523%2058.854H76.6163C77.0363%2058.854%2077.3543%2058.968%2077.5703%2059.196C77.7983%2059.412%2077.9123%2059.73%2077.9123%2060.15V64.128C77.9123%2064.488%2077.8343%2064.794%2077.6783%2065.046C77.5343%2065.298%2077.3003%2065.478%2076.9763%2065.586C76.4123%2065.778%2075.8003%2065.928%2075.1403%2066.036C74.4803%2066.144%2073.8203%2066.198%2073.1603%2066.198Z'%20fill='%23606060'/%3e%3cpath%20d='M30%2030C30%2025.8579%2033.3579%2022.5%2037.5%2022.5H82.5C86.6421%2022.5%2090%2025.8579%2090%2030V36C90%2036.8284%2090.6716%2037.5%2091.5%2037.5H94.5C95.7361%2037.5%2096.4416%2038.9111%2095.7%2039.9L87.45%2050.9C86.85%2051.7%2085.65%2051.7%2085.05%2050.9L76.8%2039.9C76.0584%2038.9111%2076.7639%2037.5%2078%2037.5H81.25C81.9404%2037.5%2082.5%2036.9404%2082.5%2036.25C82.5%2032.7982%2079.7018%2030%2076.25%2030H45C40.8579%2030%2037.5%2033.3579%2037.5%2037.5V43.5C37.5%2044.3284%2036.8284%2045%2036%2045H31.5C30.6716%2045%2030%2044.3284%2030%2043.5V30Z'%20fill='%23606060'/%3e%3cpath%20d='M90%2090C90%2094.1421%2086.6421%2097.5%2082.5%2097.5H37.5C33.3579%2097.5%2030%2094.1421%2030%2090V84C30%2083.1716%2029.3284%2082.5%2028.5%2082.5H25.5C24.2639%2082.5%2023.5584%2081.0889%2024.3%2080.1L32.55%2069.1C33.15%2068.3%2034.35%2068.3%2034.95%2069.1L43.2%2080.1C43.9416%2081.0889%2043.2361%2082.5%2042%2082.5H38.75C38.0596%2082.5%2037.5%2083.0596%2037.5%2083.75C37.5%2087.2018%2040.2982%2090%2043.75%2090H75C79.1421%2090%2082.5%2086.6421%2082.5%2082.5V76.5C82.5%2075.6716%2083.1716%2075%2084%2075H88.5C89.3284%2075%2090%2075.6716%2090%2076.5V90Z'%20fill='%23606060'/%3e%3c/svg%3e", Ae = [
-  { name: "Repeatable SVG Clicked", type: "click", description: "Triggered when the Repeatable SVG widget is clicked", payloadType: B },
-  { name: "Repeatable SVG Right Clicked", type: "right_click", description: "Triggered when the Repeatable SVG widget is right-clicked", payloadType: B }
-];
-var qe = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, $ = (r, s, l, t) => {
-  for (var e = t > 1 ? void 0 : t ? ze(s, l) : s, i = r.length - 1, a; i >= 0; i--)
-    (a = r[i]) && (e = (t ? a(s, l, e) : a(e)) || e);
-  return t && e && qe(s, l, e), e;
-}, Y = (r, s) => (l, t) => s(l, t, r);
-const W = "RepeatableSVGWidget";
-let H = class {
-  constructor(r, s) {
-    this.events = r, this.actions = s;
-  }
-  type = W;
-  component = Ze;
-  settingsComponent = Ue;
+  type = v;
+  component = Pe;
+  /*
+   * No hand-written form: the model covers all of it. The picture, how many
+   * of it, how far along, and the two looks - every one of them a field, so
+   * there is nothing left to write by hand.
+   */
   supportedDSTypes = [];
-  icon = Be;
+  icon = xe;
   name = "RepeatableSVG";
+  /*
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  settingsForm = {
+    xmi: Be,
+    uri: "/svg-repeat-settings.ui.xmi",
+    ePackage: () => i.eINSTANCE,
+    create: () => new r(),
+    /* The form for the class this one contains, twice. */
+    entryForms: [{ xmi: ke, uri: "/svg-repeat-styles.ui.xmi" }]
+  };
   register() {
-    this.events.registerWidget(W, Ae), this.actions.registerWidgetType(W, P, "widget");
+    this.events.registerWidget(v, Oe), this.actions.registerWidgetType(v, R, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(W), this.actions.unregisterWidgetType(W);
+    this.events.unregisterWidget(v), this.actions.unregisterWidgetType(v);
   }
 };
-$([
-  ce()
-], H.prototype, "register", 1);
-$([
-  ge()
-], H.prototype, "unregister", 1);
-H = $([
-  me({
-    service: [Re],
-    properties: { "widget.type": W }
+G([
+  oe()
+], F.prototype, "register", 1);
+G([
+  le()
+], F.prototype, "unregister", 1);
+F = G([
+  ue({
+    service: [Le],
+    properties: { "widget.type": v }
   }),
-  Y(0, A(de)),
-  Y(1, A(ve))
-], H);
+  W(0, B(ae)),
+  W(1, B(ne))
+], F);
 export {
-  H as RepeatableSVGWidgetProvider,
-  Ze as RepeatableSvgWidget,
-  Ue as RepeatableSvgWidgetSettings
+  r as RepeatableSVGSettingsImpl,
+  F as RepeatableSVGWidgetProvider,
+  Pe as RepeatableSvgWidget,
+  i as RepeatableSvgWidgetsPackage,
+  Be as repeatSettingsFormXmi
 };

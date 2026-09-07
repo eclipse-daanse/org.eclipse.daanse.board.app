@@ -36,7 +36,12 @@ export type FieldKind = 'colour' | 'number' | 'text' | 'flag'
  * type alone cannot say what a field is. The name can: these models were
  * written by people who called a colour a colour.
  */
-const COLOUR = /color|colour/i
+/*
+ * fill and stroke are colours by another name - SVG's names for them. The
+ * anchors keep strokeWidth out of it: that is a number, and it sits right
+ * beside the two in the same form.
+ */
+const COLOUR = /color|colour|^fill$|^stroke$/i
 const NUMBER = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i
 const FLAG = /^(is|has|show|enable|fullscreen|visible)/i
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+How one copy of the picture is painted.
+
+Used twice - once for the copies that count, once for the rest - so it says
+fill and stroke and nothing about which of the two it is. The class name is
+not offered: the widget sets the same class on every copy and tells them
+apart by position, not by naming them.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="SVGItemStylesForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles"/>
+
+  <components xsi:type="uimodel:FormView" name="SVGItemStylesFormView">
+    <fields xsi:type="uimodel:InputWidget" name="fill"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/fill" label="Füllfarbe"/>
+    <fields xsi:type="uimodel:InputWidget" name="stroke"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.repeat#//SVGItemStyles/stroke" label="Linienfarbe"/>
+  </components>
+</uimodel:UIModel>
