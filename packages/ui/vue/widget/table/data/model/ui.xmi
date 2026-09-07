@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the data table.
+
+One field, and no group around it: a heading over a single row says nothing
+the label does not already say.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="DataTableSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="DataTableSettingsFormView">
+    <fields xsi:type="uimodel:InputWidget" name="headerBackground"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.data#//DataTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+  </components>
+</uimodel:UIModel>

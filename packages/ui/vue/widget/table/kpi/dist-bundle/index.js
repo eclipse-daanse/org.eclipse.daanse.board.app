@@ -1,251 +1,545 @@
-(function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}.settings-container[data-v-21aafe5f]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}\n";})();
-import { WidgetActionInterfaceImpl as L, EVENT_ACTIONS_REGISTRY as z, PayloadImpl as D, EVENT_REGISTRY_ID as J, EVENT_ACTIONS_REGISTRY_ID as Q } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as X, deactivate as ee, component as te, inject as R } from "@eclipse-daanse/tsm";
-import { defineComponent as F, toRefs as ae, inject as W, onUnmounted as le, ref as O, watch as j, onMounted as oe, computed as _, provide as H, createElementBlock as re, openBlock as M, withModifiers as ie, createVNode as h, unref as N, useModel as ne, markRaw as se, resolveComponent as y, createBlock as de, withCtx as S, createElementVNode as ue } from "vue";
-import { useVariableRepository as ce, useDatasourceRepository as pe, VariableWrapper as T } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { useRoute as ve } from "vue-router";
-import { KpiTable as fe } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
-import { WidgetAction as he } from "org.eclipse.daanse.board.app.lib.events";
-import { VariableInput as me } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Te } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: ge } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), _e = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
-var Ve = Object.defineProperty, we = Object.getOwnPropertyDescriptor, Ce = (n, r, s, e) => {
-  for (var t = we(r, s), l = n.length - 1, o; l >= 0; l--)
-    (o = n[l]) && (t = o(r, s, t) || t);
-  return t && Ve(r, s, t), t;
+(function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}\n";})();
+import { WidgetActionInterfaceImpl as j, EVENT_ACTIONS_REGISTRY as M, PayloadImpl as L, EVENT_REGISTRY_ID as X, EVENT_ACTIONS_REGISTRY_ID as Z } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as $, deactivate as z, component as q, inject as V } from "@eclipse-daanse/tsm";
+import { defineComponent as J, toRefs as Q, inject as R, onUnmounted as ee, ref as te, watch as se, onMounted as ae, computed as _, provide as B, createElementBlock as re, openBlock as ie, withModifiers as ne, createVNode as oe, unref as le } from "vue";
+import { useVariableRepository as ue, useDatasourceRepository as de, VariableWrapper as E } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { useRoute as ce } from "vue-router";
+import { KpiTable as he } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
+import { WidgetAction as Te } from "org.eclipse.daanse.board.app.lib.events";
+import { BasicEFactory as Ee, BasicEPackage as ge, EPackageRegistry as b, BasicEClass as _e, BasicEReference as fe, BasicEAttribute as S, getEcorePackage as w, BasicEObject as Se } from "@emfts/core";
+import { WIDGET_SERVICE_ID as we } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: pe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ce = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
+var Ie = Object.defineProperty, Ae = Object.getOwnPropertyDescriptor, Ne = (l, e, t, u) => {
+  for (var a = Ae(e, t), r = l.length - 1, i; r >= 0; r--)
+    (i = l[r]) && (a = i(e, t, a) || a);
+  return a && Ie(e, t, a), a;
 };
-class P extends L {
+class A extends j {
   refresh() {
     throw new Error("refresh not implemented");
   }
 }
-Ce([
-  he({ eventType: "kpiTable.refresh" })
-], P.prototype, "refresh");
-const be = /* @__PURE__ */ F({
+Ne([
+  Te({ eventType: "kpiTable.refresh" })
+], A.prototype, "refresh");
+const ve = /* @__PURE__ */ J({
   __name: "KpiTableWidget",
   props: {
     datasourceId: {},
     config: {},
     id: {}
   },
-  setup(n, { expose: r }) {
-    const { wrapParameters: s } = ce(), e = n, { datasourceId: t, config: l, id: o } = ae(e), v = W(ge.TINY_EMITTER), d = W(z), V = ve().params.pageid || "";
-    class w extends P {
+  setup(l, { expose: e }) {
+    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), y = R(pe.TINY_EMITTER), P = R(M), O = ce().params.pageid || "";
+    class k extends A {
       refresh() {
-        B(t.value, t.value);
+        m(a.value, a.value);
       }
     }
-    const C = new w();
-    r(C), le(() => {
-      o?.value && d.unregisterInstance(o.value);
+    const D = new k();
+    e(D), ee(() => {
+      i?.value && P.unregisterInstance(i.value);
     });
-    const u = () => {
-      o?.value && v.emit("widget:KpiTableWidget:click", {
+    const U = () => {
+      i?.value && y.emit("widget:KpiTableWidget:click", {
         type: "widget:KpiTableWidget:click",
-        widgetId: o.value,
-        payload: { widgetId: o.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, E = () => {
-      o?.value && v.emit("widget:KpiTableWidget:right_click", {
+    }, H = () => {
+      i?.value && y.emit("widget:KpiTableWidget:right_click", {
         type: "widget:KpiTableWidget:right_click",
-        widgetId: o.value,
-        payload: { widgetId: o.value, timestamp: Date.now() }
+        widgetId: i.value,
+        payload: { widgetId: i.value, timestamp: Date.now() }
       });
-    }, k = O(null);
-    j(t, (a, c) => {
-      B(a, c);
-    }), oe(() => {
-      if (o?.value && d.registerInstance(o.value, C, "KpiTableWidget", V), !l.value) return;
-      const a = {
+    }, I = te(null);
+    se(a, (n, c) => {
+      m(n, c);
+    }), ae(() => {
+      if (i?.value && P.registerInstance(i.value, D, "KpiTableWidget", O), !r.value) return;
+      const n = {
         headerBackground: "var(--color-raised)"
       };
-      for (const [c, g] of Object.entries(a)) {
-        const f = l.value[c];
-        let i = f;
-        if (Array.isArray(f) && (i = f[0] || g), i == null)
-          l.value[c] = new T(g);
-        else if (!(i instanceof T)) if (typeof i == "object" && "value" in i) {
-          const p = new T(i.value);
-          "variable" in i && (p.variable = i.variable), l.value[c] = p;
+      for (const [c, T] of Object.entries(n)) {
+        const p = r.value[c];
+        let d = p;
+        if (Array.isArray(p) && (d = p[0] || T), d == null)
+          r.value[c] = new E(T);
+        else if (!(d instanceof E)) if (typeof d == "object" && "value" in d) {
+          const h = new E(d.value);
+          "variable" in d && (h.variable = d.variable), r.value[c] = h;
         } else
-          l.value[c] = new T(i);
+          r.value[c] = new E(d);
       }
     });
     const {
-      showParentChild: xe,
-      showFolders: Be
-    } = s({
-      showParentChild: _(() => l.value.showParentChild ?? !1),
-      showFolders: _(() => l.value.showFolders ?? !1)
-    }), Z = _(() => {
-      const a = l.value.statusVisualType;
-      return Array.isArray(a) ? a[0] || "Badge" : a || "Badge";
+      showParentChild: Fe,
+      showFolders: be
+    } = t({
+      showParentChild: _(() => r.value.showParentChild ?? !1),
+      showFolders: _(() => r.value.showFolders ?? !1)
+    }), W = _(() => {
+      const n = r.value.statusVisualType;
+      return Array.isArray(n) ? n[0] || "Badge" : n || "Badge";
     }), G = _(() => {
-      const a = l.value.trendVisualType;
-      return Array.isArray(a) ? a[0] || "Badge" : a || "Badge";
+      const n = r.value.trendVisualType;
+      return Array.isArray(n) ? n[0] || "Badge" : n || "Badge";
     });
-    H("statusVisualType", Z), H("trendVisualType", G);
-    const { update: B } = pe(t, "DataTable", k), Y = _(() => {
-      if (!k.value) return null;
-      let a = k.value;
-      return (l.value.showFolders ?? !1) || (a = $(a)), (l.value.showParentChild ?? !1) || (a = q(a)), a;
+    B("statusVisualType", W), B("trendVisualType", G);
+    const { update: m } = de(a, "DataTable", I), x = _(() => {
+      if (!I.value) return null;
+      let n = I.value;
+      return (r.value.showFolders ?? !1) || (n = Y(n)), (r.value.showParentChild ?? !1) || (n = K(n)), n;
     });
-    function $(a) {
+    function Y(n) {
       const c = [];
-      function g(f) {
-        f.forEach((i) => {
-          i.type === "Folder" ? g(i.children || []) : c.push(i);
+      function T(p) {
+        p.forEach((d) => {
+          d.type === "Folder" ? T(d.children || []) : c.push(d);
         });
       }
-      return g(a), c;
+      return T(n), c;
     }
-    function q(a) {
+    function K(n) {
       const c = [];
-      function g(i) {
-        i.forEach((p) => {
-          p.type === "Folder" ? c.push({
-            ...p,
-            children: p.children ? f(p.children) : []
+      function T(d) {
+        d.forEach((h) => {
+          h.type === "Folder" ? c.push({
+            ...h,
+            children: h.children ? p(h.children) : []
           }) : (c.push({
-            ...p,
+            ...h,
             children: []
             // Remove children to flatten hierarchy
-          }), p.children && p.children.length > 0 && c.push(...f(p.children)));
+          }), h.children && h.children.length > 0 && c.push(...p(h.children)));
         });
       }
-      function f(i) {
-        const p = [];
-        return i.forEach((b) => {
-          p.push({
-            ...b,
+      function p(d) {
+        const h = [];
+        return d.forEach((f) => {
+          h.push({
+            ...f,
             children: []
             // Remove children to flatten hierarchy
-          }), b.children && b.children.length > 0 && p.push(...f(b.children));
-        }), p;
+          }), f.children && f.children.length > 0 && h.push(...p(f.children));
+        }), h;
       }
-      return g(a), c;
+      return T(n), c;
     }
-    return (a, c) => (M(), re("div", {
+    return (n, c) => (ie(), re("div", {
       class: "w-full h-full",
-      onClick: u,
-      onContextmenu: ie(E, ["prevent"])
+      onClick: U,
+      onContextmenu: ne(H, ["prevent"])
     }, [
-      h(N(fe), { tableData: Y.value }, null, 8, ["tableData"])
+      oe(le(he), { tableData: x.value }, null, 8, ["tableData"])
     ], 32));
   }
-}), U = (n, r) => {
-  const s = n.__vccOpts || n;
-  for (const [e, t] of r)
-    s[e] = t;
-  return s;
-}, ye = /* @__PURE__ */ U(be, [["__scopeId", "data-v-f4b39436"]]), Ie = { class: "settings-container" }, Ee = /* @__PURE__ */ F({
-  __name: "KpiTableWidgetSettings",
-  props: {
-    modelValue: { required: !0 },
-    modelModifiers: {}
-  },
-  emits: ["update:modelValue"],
-  setup(n) {
-    const r = W("i18n"), s = (v) => r ? r.t(v) : v, e = ne(n, "modelValue"), t = ["Emoji", "Arrow", "Chart", "Badge"], l = ["Emoji", "Lights", "Badge"], o = O(!1);
-    return j(() => e.value, (v) => {
-      v && (v.headerBackground instanceof T || (v.headerBackground = se(new T(v.headerBackground || "#f0f0f0"))));
-    }, { immediate: !0, deep: !0 }), (v, d) => {
-      const x = y("va-color-input"), V = y("va-select"), w = y("va-checkbox"), C = y("va-collapse");
-      return M(), de(C, {
-        modelValue: o.value,
-        "onUpdate:modelValue": d[5] || (d[5] = (u) => o.value = u),
-        header: "Kpi Table Settings",
-        icon: "settings"
-      }, {
-        default: S(() => [
-          ue("div", Ie, [
-            h(N(me), {
-              modelValue: e.value.headerBackground,
-              "onUpdate:modelValue": d[0] || (d[0] = (u) => e.value.headerBackground = u),
-              label: "Header Color"
-            }, {
-              default: S(({ value: u, change: E }) => [
-                h(x, {
-                  class: "text-color",
-                  label: "Header Color",
-                  "model-value": u,
-                  onInput: E
-                }, null, 8, ["model-value", "onInput"])
-              ]),
-              _: 1
-            }, 8, ["modelValue"]),
-            h(V, {
-              modelValue: e.value.trendVisualType,
-              "onUpdate:modelValue": d[1] || (d[1] = (u) => e.value.trendVisualType = u),
-              options: t,
-              placeholder: "Trend Visual Type"
-            }, null, 8, ["modelValue"]),
-            h(V, {
-              modelValue: e.value.statusVisualType,
-              "onUpdate:modelValue": d[2] || (d[2] = (u) => e.value.statusVisualType = u),
-              options: l,
-              placeholder: "Status Visual Type"
-            }, null, 8, ["modelValue"]),
-            h(w, {
-              modelValue: e.value.showFolders,
-              "onUpdate:modelValue": d[3] || (d[3] = (u) => e.value.showFolders = u),
-              label: s("Show Folders")
-            }, null, 8, ["modelValue", "label"]),
-            h(w, {
-              modelValue: e.value.showParentChild,
-              "onUpdate:modelValue": d[4] || (d[4] = (u) => e.value.showParentChild = u),
-              label: s("Show Parent-Child")
-            }, null, 8, ["modelValue", "label"])
-          ])
-        ]),
-        _: 1
-      }, 8, ["modelValue"]);
-    };
-  }
-}), ke = /* @__PURE__ */ U(Ee, [["__scopeId", "data-v-21aafe5f"]]), We = [
-  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: D },
-  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: D }
+}), ye = (l, e) => {
+  const t = l.__vccOpts || l;
+  for (const [u, a] of e)
+    t[u] = a;
+  return t;
+}, Pe = /* @__PURE__ */ ye(ve, [["__scopeId", "data-v-f4b39436"]]), De = [
+  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: L },
+  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: L }
 ];
-var Pe = Object.defineProperty, Ke = Object.getOwnPropertyDescriptor, K = (n, r, s, e) => {
-  for (var t = e > 1 ? void 0 : e ? Ke(r, s) : r, l = n.length - 1, o; l >= 0; l--)
-    (o = n[l]) && (t = (e ? o(r, s, t) : o(t)) || t);
-  return e && t && Pe(r, s, t), t;
-}, A = (n, r) => (s, e) => r(s, e, n);
-const m = "KpiTableWidget";
-let I = class {
-  constructor(n, r) {
-    this.events = n, this.actions = r;
+class N extends Ee {
+  // Lazy singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new N()), this._instance;
   }
-  type = m;
-  component = ye;
-  settingsComponent = ke;
+  constructor() {
+    super(), this.setEPackage(o.eINSTANCE);
+  }
+  /**
+   * Create a new KpiTableSettings instance
+   */
+  createKpiTableSettings() {
+    return new s();
+  }
+  /**
+   * Create an instance of the given class
+   */
+  create(e) {
+    switch (e.getName()) {
+      case "KpiTableSettings":
+        return this.createKpiTableSettings();
+      default:
+        throw new Error(`Unknown class: ${e.getName()}`);
+    }
+  }
+}
+function me(l) {
+  const e = b.INSTANCE.getEPackage(l);
+  if (!e)
+    throw new Error(`EPackage '${l}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing KpitablesettingsPackage.`);
+  return e;
+}
+class o extends ge {
+  static eNAME = "kpitablesettings";
+  static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi";
+  static eNS_PREFIX = "kpitablesettings";
+  // Singleton instance
+  static _instance;
+  static get eINSTANCE() {
+    return this._instance || (this._instance = new o(), this._instance.init()), this._instance;
+  }
+  /**
+   * Literals for quick access to metaclasses and features
+   */
+  static Literals = {
+    KPI_TABLE_SETTINGS: null,
+    KPI_TABLE_SETTINGS__HEADER_BACKGROUND: null,
+    KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE: null,
+    KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE: null,
+    KPI_TABLE_SETTINGS__SHOW_FOLDERS: null,
+    KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD: null
+  };
+  constructor() {
+    super(), this.setName(o.eNAME), this.setNsURI(o.eNS_URI), this.setNsPrefix(o.eNS_PREFIX);
+  }
+  /**
+   * Initialize package contents
+   */
+  init() {
+    b.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(N.eINSTANCE);
+    const e = new _e();
+    e.setName("KpiTableSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.KPI_TABLE_SETTINGS = e;
+    const t = new fe();
+    t.setContainment(!1), t.setName("headerBackground"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), o.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND = t;
+    const u = new S();
+    u.setName("trendVisualType"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), o.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE = u;
+    const a = new S();
+    a.setName("statusVisualType"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), o.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE = a;
+    const r = new S();
+    r.setName("showFolders"), r.setLowerBound(0), r.setUpperBound(1), e.getEStructuralFeatures().push(r), o.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS = r;
+    const i = new S();
+    i.setName("showParentChild"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), o.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD = i, o.Literals.KPI_TABLE_SETTINGS__HEADER_BACKGROUND.setEType(me("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.KPI_TABLE_SETTINGS__TREND_VISUAL_TYPE.setEType(w().getEClassifier("EString")), o.Literals.KPI_TABLE_SETTINGS__STATUS_VISUAL_TYPE.setEType(w().getEClassifier("EString")), o.Literals.KPI_TABLE_SETTINGS__SHOW_FOLDERS.setEType(w().getEClassifier("EBoolean")), o.Literals.KPI_TABLE_SETTINGS__SHOW_PARENT_CHILD.setEType(w().getEClassifier("EBoolean"));
+  }
+}
+class s extends Se {
+  // Feature ID Constants (eLiterals)
+  static HEADER_BACKGROUND = 0;
+  static TREND_VISUAL_TYPE = 1;
+  static STATUS_VISUAL_TYPE = 2;
+  static SHOW_FOLDERS = 3;
+  static SHOW_PARENT_CHILD = 4;
+  // Private fields
+  _headerBackground = new E();
+  _trendVisualType = "Badge";
+  _statusVisualType = "Badge";
+  _showFolders = !1;
+  _showParentChild = !1;
+  /**
+   * Returns the EClass of this object
+   */
+  eClass() {
+    return o.Literals.KPI_TABLE_SETTINGS;
+  }
+  // Getters and Setters
+  get headerBackground() {
+    return this._headerBackground;
+  }
+  set headerBackground(e) {
+    const t = this._headerBackground;
+    this._headerBackground = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.HEADER_BACKGROUND),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.HEADER_BACKGROUND,
+      merge: () => !1
+    });
+  }
+  get trendVisualType() {
+    return this._trendVisualType;
+  }
+  set trendVisualType(e) {
+    const t = this._trendVisualType;
+    this._trendVisualType = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.TREND_VISUAL_TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.TREND_VISUAL_TYPE,
+      merge: () => !1
+    });
+  }
+  get statusVisualType() {
+    return this._statusVisualType;
+  }
+  set statusVisualType(e) {
+    const t = this._statusVisualType;
+    this._statusVisualType = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.STATUS_VISUAL_TYPE),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.STATUS_VISUAL_TYPE,
+      merge: () => !1
+    });
+  }
+  get showFolders() {
+    return this._showFolders;
+  }
+  set showFolders(e) {
+    const t = this._showFolders;
+    this._showFolders = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_FOLDERS),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.SHOW_FOLDERS,
+      merge: () => !1
+    });
+  }
+  get showParentChild() {
+    return this._showParentChild;
+  }
+  set showParentChild(e) {
+    const t = this._showParentChild;
+    this._showParentChild = e, this.eDeliver() && this.eNotify({
+      getNotifier: () => this,
+      getEventType: () => 1,
+      // SET
+      getFeature: () => this.eClass().getEStructuralFeature(s.SHOW_PARENT_CHILD),
+      getOldValue: () => t,
+      getNewValue: () => e,
+      getPosition: () => -1,
+      wasSet: () => !0,
+      isTouch: () => !1,
+      isReset: () => !1,
+      getFeatureID: () => s.SHOW_PARENT_CHILD,
+      merge: () => !1
+    });
+  }
+  // Reflective API
+  /**
+   * Returns the value of the given feature
+   */
+  eGet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.HEADER_BACKGROUND:
+        return this.headerBackground;
+      case s.TREND_VISUAL_TYPE:
+        return this.trendVisualType;
+      case s.STATUS_VISUAL_TYPE:
+        return this.statusVisualType;
+      case s.SHOW_FOLDERS:
+        return this.showFolders;
+      case s.SHOW_PARENT_CHILD:
+        return this.showParentChild;
+      default:
+        return super.eGet(e);
+    }
+  }
+  /**
+   * Sets the value of the given feature
+   */
+  eSet(e, t) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.HEADER_BACKGROUND:
+        this.headerBackground = t, super.eSet(e, t);
+        break;
+      case s.TREND_VISUAL_TYPE:
+        this.trendVisualType = t, super.eSet(e, t);
+        break;
+      case s.STATUS_VISUAL_TYPE:
+        this.statusVisualType = t, super.eSet(e, t);
+        break;
+      case s.SHOW_FOLDERS:
+        this.showFolders = t, super.eSet(e, t);
+        break;
+      case s.SHOW_PARENT_CHILD:
+        this.showParentChild = t, super.eSet(e, t);
+        break;
+      default:
+        super.eSet(e, t);
+    }
+  }
+  /**
+   * Returns whether the feature has been set
+   */
+  eIsSet(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.HEADER_BACKGROUND:
+        return this._headerBackground !== new E();
+      case s.TREND_VISUAL_TYPE:
+        return this._trendVisualType !== "Badge";
+      case s.STATUS_VISUAL_TYPE:
+        return this._statusVisualType !== "Badge";
+      case s.SHOW_FOLDERS:
+        return this._showFolders !== !1;
+      case s.SHOW_PARENT_CHILD:
+        return this._showParentChild !== !1;
+      default:
+        return super.eIsSet(e);
+    }
+  }
+  /**
+   * Unsets the given feature
+   */
+  eUnset(e) {
+    switch (this.eClass().getFeatureID(e)) {
+      case s.HEADER_BACKGROUND:
+        this._headerBackground = new E();
+        return;
+      case s.TREND_VISUAL_TYPE:
+        this._trendVisualType = "Badge";
+        return;
+      case s.STATUS_VISUAL_TYPE:
+        this._statusVisualType = "Badge";
+        return;
+      case s.SHOW_FOLDERS:
+        this._showFolders = !1;
+        return;
+      case s.SHOW_PARENT_CHILD:
+        this._showParentChild = !1;
+        return;
+      default:
+        super.eUnset(e);
+    }
+  }
+}
+const Le = `<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the KPI table.
+
+Split the way the two decisions differ: how a number is drawn, and what
+shape the table has. The drawing names are the table's own - it switches on
+them - so they are the values; optionLabel says what each one looks like.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="KpiTableSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="KpiTableSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="Kennzeichen">
+      <fields xsi:type="uimodel:SelectWidget" name="trendVisualType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="Trend">
+        <values>Emoji</values>
+        <values>Arrow</values>
+        <values>Chart</values>
+        <values>Badge</values>
+        <optionLabel language="JS" body="({ Emoji: 'Emoji', Arrow: 'Pfeil', Chart: 'Kurve', Badge: 'Plakette' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="statusVisualType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="Status">
+        <values>Emoji</values>
+        <values>Lights</values>
+        <values>Badge</values>
+        <optionLabel language="JS" body="({ Emoji: 'Emoji', Lights: 'Ampel', Badge: 'Plakette' })[option] ?? option"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="Aufbau">
+      <fields xsi:type="uimodel:CheckboxWidget" name="showFolders"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="Ordner zeigen"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showParentChild"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="Über- und Untereinträge zeigen"/>
+      <fields xsi:type="uimodel:InputWidget" name="headerBackground"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>
+`;
+var Ve = Object.defineProperty, Re = Object.getOwnPropertyDescriptor, v = (l, e, t, u) => {
+  for (var a = u > 1 ? void 0 : u ? Re(e, t) : e, r = l.length - 1, i; r >= 0; r--)
+    (i = l[r]) && (a = (u ? i(e, t, a) : i(a)) || a);
+  return u && a && Ve(e, t, a), a;
+}, F = (l, e) => (t, u) => e(t, u, l);
+o.eINSTANCE;
+const g = "KpiTableWidget";
+let C = class {
+  constructor(l, e) {
+    this.events = l, this.actions = e;
+  }
+  type = g;
+  component = Pe;
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  settingsForm = {
+    xmi: Le,
+    uri: "/kpi-table-settings.ui.xmi",
+    ePackage: () => o.eINSTANCE,
+    create: () => new s()
+  };
   supportedDSTypes = ["csv", "rest"];
-  icon = _e;
+  icon = Ce;
   name = "KpiTable";
   register() {
-    this.events.registerWidget(m, We), this.actions.registerWidgetType(m, P, "widget");
+    this.events.registerWidget(g, De), this.actions.registerWidgetType(g, A, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(m), this.actions.unregisterWidgetType(m);
+    this.events.unregisterWidget(g), this.actions.unregisterWidgetType(g);
   }
 };
-K([
-  X()
-], I.prototype, "register", 1);
-K([
-  ee()
-], I.prototype, "unregister", 1);
-I = K([
-  te({
-    service: [Te],
-    properties: { "widget.type": m }
+v([
+  $()
+], C.prototype, "register", 1);
+v([
+  z()
+], C.prototype, "unregister", 1);
+C = v([
+  q({
+    service: [we],
+    properties: { "widget.type": g }
   }),
-  A(0, R(J)),
-  A(1, R(Q))
-], I);
+  F(0, V(X)),
+  F(1, V(Z))
+], C);
 export {
-  ye as KpiTableWidget,
-  I as KpiTableWidgetProvider,
-  ke as KpiTableWidgetSettings
+  s as KpiTableSettingsImpl,
+  Pe as KpiTableWidget,
+  C as KpiTableWidgetProvider,
+  o as KpitablesettingsPackage,
+  Le as kpiTableSettingsFormXmi
 };

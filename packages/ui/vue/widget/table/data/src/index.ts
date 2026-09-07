@@ -15,9 +15,19 @@ import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/data_table.svg'
 import DataTableWidget from './DataTableWidget.vue'
-import DataTableWidgetSettings from './DataTableWidgetSettings.vue'
 import { DataTableWidgetEvents } from './events/DataTableWidgetEvents'
 import { DataTableWidgetInterface } from './api/DataTableWidgetInterface'
+import { DataTableSettingsImpl } from './gen/DataTableSettingsImpl'
+import { DatatablesettingsPackage } from './gen/DatatablesettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import dataTableSettingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+DatatablesettingsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import type { Component } from 'vue'
@@ -31,7 +41,20 @@ const WIDGET_TYPE = 'DataTableWidget'
 export class DataTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component: Component = DataTableWidget
-  readonly settingsComponent: Component = DataTableWidgetSettings
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: dataTableSettingsFormXmi,
+    uri: '/data-table-settings.ui.xmi',
+    ePackage: () => DatatablesettingsPackage.eINSTANCE,
+    create: () => new DataTableSettingsImpl(),
+  }
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'DataTable'
@@ -54,4 +77,5 @@ export class DataTableWidgetProvider implements WidgetProvider {
   }
 }
 
-export { DataTableWidget, DataTableWidgetSettings }
+export { DataTableWidget }
+export { DataTableSettingsImpl, DatatablesettingsPackage, dataTableSettingsFormXmi }

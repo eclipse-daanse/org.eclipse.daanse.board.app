@@ -15,9 +15,19 @@ import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/data_table.svg'
 import KpiTableWidget from './KpiTableWidget.vue'
-import KpiTableWidgetSettings from './KpiTableWidgetSettings.vue'
 import { KpiTableWidgetEvents } from './events/KpiTableWidgetEvents'
 import { KpiTableWidgetInterface } from './api/KpiTableWidgetInterface'
+import { KpiTableSettingsImpl } from './gen/KpiTableSettingsImpl'
+import { KpitablesettingsPackage } from './gen/KpitablesettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import kpiTableSettingsFormXmi from '../model/ui.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+KpitablesettingsPackage.eINSTANCE
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
 import type { Component } from 'vue'
@@ -31,7 +41,20 @@ const WIDGET_TYPE = 'KpiTableWidget'
 export class KpiTableWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component: Component = KpiTableWidget
-  readonly settingsComponent: Component = KpiTableWidgetSettings
+  /*
+   * No hand-written form: the model covers all of it, so there is nothing
+   * to keep beside it and no second place for the two to disagree.
+   *
+   * The settings form, as a model. Carried on the registration like the
+   * icon, so whoever shows the settings does not have to know this widget
+   * exists - and the shell needs no dependency on this bundle.
+   */
+  readonly settingsForm = {
+    xmi: kpiTableSettingsFormXmi,
+    uri: '/kpi-table-settings.ui.xmi',
+    ePackage: () => KpitablesettingsPackage.eINSTANCE,
+    create: () => new KpiTableSettingsImpl(),
+  }
   readonly supportedDSTypes = ['csv', 'rest']
   readonly icon = Icon
   readonly name = 'KpiTable'
@@ -54,4 +77,5 @@ export class KpiTableWidgetProvider implements WidgetProvider {
   }
 }
 
-export { KpiTableWidget, KpiTableWidgetSettings }
+export { KpiTableWidget }
+export { KpiTableSettingsImpl, KpitablesettingsPackage, kpiTableSettingsFormXmi }

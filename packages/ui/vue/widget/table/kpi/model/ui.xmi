@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the KPI table.
+
+Split the way the two decisions differ: how a number is drawn, and what
+shape the table has. The drawing names are the table's own - it switches on
+them - so they are the values; optionLabel says what each one looks like.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="KpiTableSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="KpiTableSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="marksGroup" layout="VERTICAL" label="Kennzeichen">
+      <fields xsi:type="uimodel:SelectWidget" name="trendVisualType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/trendVisualType" label="Trend">
+        <values>Emoji</values>
+        <values>Arrow</values>
+        <values>Chart</values>
+        <values>Badge</values>
+        <optionLabel language="JS" body="({ Emoji: 'Emoji', Arrow: 'Pfeil', Chart: 'Kurve', Badge: 'Plakette' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="statusVisualType"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/statusVisualType" label="Status">
+        <values>Emoji</values>
+        <values>Lights</values>
+        <values>Badge</values>
+        <optionLabel language="JS" body="({ Emoji: 'Emoji', Lights: 'Ampel', Badge: 'Plakette' })[option] ?? option"/>
+      </fields>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="shapeGroup" layout="VERTICAL" label="Aufbau">
+      <fields xsi:type="uimodel:CheckboxWidget" name="showFolders"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showFolders" label="Ordner zeigen"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showParentChild"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/showParentChild" label="Über- und Untereinträge zeigen"/>
+      <fields xsi:type="uimodel:InputWidget" name="headerBackground"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi#//KpiTableSettings/headerBackground" label="Kopfzeilenfarbe"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

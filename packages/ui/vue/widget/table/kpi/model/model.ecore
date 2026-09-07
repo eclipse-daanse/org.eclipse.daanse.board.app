@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The KPI table's settings.
+
+Two of them decide how a number is shown rather than what it is: a trend and
+a status each have several ways of being drawn, and which one reads best
+depends on the board it sits in. They are stored as the drawing's name,
+which is what the table switches on.
+
+The two flags are about the shape of the table itself - whether it keeps the
+hierarchy it was given, or flattens it.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="kpitablesettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi"
+                nsPrefix="kpitablesettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="KpiTableSettings">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="headerBackground" containment="false" defaultValueLiteral="var(--color-raised)">
+            <eGenericType eClassifier="org.eclipse.daanse.board.app.ui.vue.composables#//VariableWrapper">
+                <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eGenericType>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="trendVisualType"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="Badge"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="statusVisualType"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="Badge"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showFolders"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showParentChild"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+    </eClassifiers>
+</ecore:EPackage>
