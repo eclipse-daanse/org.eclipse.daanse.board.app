@@ -7170,10 +7170,10 @@ function fa(s) {
 function Ni(s, e) {
   return fa(mi(s) ? s : Ii(e(), s));
 }
-const Zl = /color|colour|^fill$|^stroke$/i, eo = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i, to = /^(is|has|show|enable|fullscreen|visible)/i;
+const Zl = /color|colour|background|^fill$|^stroke$/i, eo = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i, to = /^(is|has|show|enable|fullscreen|visible)/i;
 function Br(s) {
   const e = s.getName?.() ?? "", t = s.getEType?.()?.getName?.() ?? "";
-  return t === "EBoolean" || to.test(e) ? "flag" : Zl.test(e) ? "colour" : t === "EInt" || t === "EDouble" || eo.test(e) ? "number" : "text";
+  return t === "EBoolean" || to.test(e) ? "flag" : t === "EInt" || t === "EDouble" || eo.test(e) ? "number" : Zl.test(e) ? "colour" : "text";
 }
 function fr(s) {
   const t = (s.getName?.() ?? "").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ");

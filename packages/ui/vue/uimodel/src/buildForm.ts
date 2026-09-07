@@ -39,9 +39,11 @@ export type FieldKind = 'colour' | 'number' | 'text' | 'flag'
 /*
  * fill and stroke are colours by another name - SVG's names for them. The
  * anchors keep strokeWidth out of it: that is a number, and it sits right
- * beside the two in the same form.
+ * beside the two in the same form. A background is a colour here too -
+ * headerBackground is one, and nothing in these models is a background of
+ * any other kind.
  */
-const COLOUR = /color|colour|^fill$|^stroke$/i
+const COLOUR = /color|colour|background|^fill$|^stroke$/i
 const NUMBER = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i
 const FLAG = /^(is|has|show|enable|fullscreen|visible)/i
 
@@ -50,8 +52,14 @@ export function kindOf(feature: EStructuralFeature): FieldKind {
   const type = feature.getEType?.()?.getName?.() ?? ''
 
   if (type === 'EBoolean' || FLAG.test(name)) return 'flag'
-  if (COLOUR.test(name)) return 'colour'
+  /*
+   * Numbers are tested before colours because a name can carry both words
+   * and only one of them is the point: backgroundColorTransparence is how
+   * see-through a colour is, not a colour, and asking for it with a colour
+   * picker gives you no way to say a number at all.
+   */
   if (type === 'EInt' || type === 'EDouble' || NUMBER.test(name)) return 'number'
+  if (COLOUR.test(name)) return 'colour'
   return 'text'
 }
 
