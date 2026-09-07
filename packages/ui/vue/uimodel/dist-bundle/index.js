@@ -1,10 +1,11 @@
-(function(){var i="ui.vue.uimodel",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".list[data-v-4eca8f08]{margin-bottom:12px}.list__head[data-v-4eca8f08]{display:flex;align-items:center;gap:7px;padding-bottom:5px;margin-bottom:6px;border-bottom:1px solid var(--color-divider)}.list__label[data-v-4eca8f08]{font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--color-fg)}.list__count[data-v-4eca8f08]{font-family:var(--font-mono);font-size:var(--text-xs);font-variant-numeric:tabular-nums;color:var(--color-dim)}.list__spacer[data-v-4eca8f08]{flex:1 1 auto}.list__empty[data-v-4eca8f08],.list__untyped[data-v-4eca8f08]{margin:0 0 8px;font-size:var(--text-xs);line-height:1.5;color:var(--color-dim)}.entry[data-v-4eca8f08]{position:relative;margin-bottom:3px;background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.entry__head[data-v-4eca8f08]{display:flex;align-items:center;gap:6px;width:100%;padding:5px 78px 5px 8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);text-align:left;background:none;border:0;cursor:pointer}.entry__twist[data-v-4eca8f08]{width:10px;font-size:var(--text-xs);color:var(--color-dim)}.entry__actions[data-v-4eca8f08]{position:absolute;top:3px;right:5px;display:flex;gap:2px}.entry__actions button[data-v-4eca8f08]{width:20px;height:20px;font-size:var(--text-xs);color:var(--color-dim);background:none;border:1px solid transparent;border-radius:var(--radius-xs);cursor:pointer}.entry__actions button[data-v-4eca8f08]:hover:not(:disabled){color:var(--color-fg);border-color:var(--color-divider)}.entry__actions button[data-v-4eca8f08]:disabled{opacity:.3;cursor:default}.entry__remove[data-v-4eca8f08]:hover:not(:disabled){color:var(--color-err)}.entry__actions button[data-v-4eca8f08]:focus-visible,.entry__head[data-v-4eca8f08]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.entry__body[data-v-4eca8f08]{padding:8px 10px 10px;border-top:1px solid var(--color-divider)}.field-row[data-v-dfa6a444]{display:flex;align-items:flex-start;gap:6px}.field-row__control[data-v-dfa6a444]{flex:1 1 auto;min-width:0}.field-row--bound[data-v-dfa6a444]{border-left:2px solid var(--color-brand);padding-left:6px;margin-left:-8px}.bind[data-v-dfa6a444]{width:24px;height:26px;flex:none;margin-top:0;font-family:var(--font-mono);font-size:var(--text-xs);font-style:italic;color:var(--color-dim);background-color:var(--color-raised);border:1px solid var(--color-divider);border-radius:var(--radius-xs);cursor:pointer}.bind[data-v-dfa6a444]:hover{color:var(--color-fg);border-color:var(--color-outline)}.bind.armed[data-v-dfa6a444]{color:var(--color-accent);border-color:var(--color-accent)}.bind.on[data-v-dfa6a444]{color:var(--color-brand);border-color:var(--color-brand);background-color:color-mix(in srgb,var(--color-brand) 14%,transparent)}.bind[data-v-dfa6a444]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.settings-form[data-v-5d0a6b97]{font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.settings-form[data-v-5d0a6b97] .uim-c-GroupWidget{padding-top:10px;margin-top:12px;border-top:1px solid var(--color-divider)}.settings-form[data-v-5d0a6b97] .uim-c-GroupWidget:first-child{padding-top:0;margin-top:0;border-top:0}.settings-form[data-v-5d0a6b97] .uim-group-label{display:block;margin-bottom:7px;font-family:var(--font-sans);font-size:var(--text-xs);font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--color-dim)}.settings-form__empty[data-v-5d0a6b97]{margin:0;padding:12px 0;font-size:var(--text-sm);color:var(--color-dim)}\n";})();
-import { inject as et, watchEffect as Li, onScopeDispose as aa, ref as gr, computed as m, watch as dr, toValue as Me, defineComponent as ee, createBlock as q, createCommentVNode as fe, openBlock as N, resolveDynamicComponent as ia, mergeProps as ua, createElementBlock as b, createElementVNode as J, createTextVNode as Da, toDisplayString as qe, unref as de, createVNode as Er, Fragment as ht, renderList as ls, provide as fr, withCtx as vi, normalizeClass as pa, mergeModels as _i, useModel as Oi, onMounted as Ai, shallowRef as Ta, markRaw as Gr } from "vue";
-import { BasicEPackage as Ci, BasicEClass as w, BasicEAttribute as T, BasicEReference as I, getEcorePackage as Qt, BasicEObject as tt, BasicEFactory as yi, EContentAdapter as Ra, URI as Xr, EPackageRegistry as Or, BasicResourceSet as Di, XMIResourceFactory as Ri, registerEcorePackage as wi } from "@emfts/core";
-import { DButton as Fi, DSelect as Sa, DInput as Wr, DCheckbox as Pi, DColorInput as bi } from "org.eclipse.daanse.board.app.ui.vue.controls";
-import { identifier as Mi } from "org.eclipse.daanse.board.app.lib.api.variable";
-var Ui = Object.defineProperty, Vi = (s, e, t) => e in s ? Ui(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ir = (s, e, t) => Vi(s, typeof e != "symbol" ? e + "" : e, t);
-const Jt = class a extends Ci {
+(function(){var i="ui.vue.uimodel",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".list[data-v-b0db9508]{margin-bottom:12px}.list__head[data-v-b0db9508]{display:flex;align-items:center;gap:7px;padding-bottom:5px;margin-bottom:6px;border-bottom:1px solid var(--color-divider)}.list__label[data-v-b0db9508]{font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--color-fg)}.list__count[data-v-b0db9508]{font-family:var(--font-mono);font-size:var(--text-xs);font-variant-numeric:tabular-nums;color:var(--color-dim)}.list__spacer[data-v-b0db9508]{flex:1 1 auto}.list__empty[data-v-b0db9508],.list__untyped[data-v-b0db9508]{margin:0 0 8px;font-size:var(--text-xs);line-height:1.5;color:var(--color-dim)}.entry[data-v-b0db9508]{position:relative;margin-bottom:3px;background-color:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-xs)}.entry__head[data-v-b0db9508]{display:flex;align-items:center;gap:6px;width:100%;padding:5px 78px 5px 8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg);text-align:left;background:none;border:0;cursor:pointer}.entry__twist[data-v-b0db9508]{width:10px;font-size:var(--text-xs);color:var(--color-dim)}.entry__actions[data-v-b0db9508]{position:absolute;top:3px;right:5px;display:flex;gap:2px}.entry__actions button[data-v-b0db9508]{width:20px;height:20px;font-size:var(--text-xs);color:var(--color-dim);background:none;border:1px solid transparent;border-radius:var(--radius-xs);cursor:pointer}.entry__actions button[data-v-b0db9508]:hover:not(:disabled){color:var(--color-fg);border-color:var(--color-divider)}.entry__actions button[data-v-b0db9508]:disabled{opacity:.3;cursor:default}.entry__remove[data-v-b0db9508]:hover:not(:disabled){color:var(--color-err)}.entry__actions button[data-v-b0db9508]:focus-visible,.entry__head[data-v-b0db9508]:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}.entry__body[data-v-b0db9508]{padding:8px 10px 10px;border-top:1px solid var(--color-divider)}.object[data-v-8adcf520]{margin-bottom:12px}.object__label[data-v-8adcf520]{display:block;margin-bottom:6px;font-size:12px;font-weight:600;color:var(--d-text-muted, #6b7280)}.object__body[data-v-8adcf520]{padding-left:10px;border-left:2px solid var(--d-border, #e5e7eb)}.object__untyped[data-v-8adcf520]{margin:0;font-size:12px;color:var(--d-text-muted, #6b7280)}.field-row[data-v-e3b7189e]{display:flex;align-items:flex-start;gap:6px}.field-row__control[data-v-e3b7189e]{flex:1 1 auto;min-width:0}.field-row--bound[data-v-e3b7189e]{border-left:2px solid var(--color-brand);padding-left:6px;margin-left:-8px}.bind[data-v-e3b7189e]{width:24px;height:26px;flex:none;margin-top:0;font-family:var(--font-mono);font-size:var(--text-xs);font-style:italic;color:var(--color-dim);background-color:var(--color-raised);border:1px solid var(--color-divider);border-radius:var(--radius-xs);cursor:pointer}.bind[data-v-e3b7189e]:hover{color:var(--color-fg);border-color:var(--color-outline)}.bind.armed[data-v-e3b7189e]{color:var(--color-accent);border-color:var(--color-accent)}.bind.on[data-v-e3b7189e]{color:var(--color-brand);border-color:var(--color-brand);background-color:color-mix(in srgb,var(--color-brand) 14%,transparent)}.bind[data-v-e3b7189e]:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px}.settings-form[data-v-2eb13ad3]{font-family:var(--font-sans);font-size:var(--text-sm);color:var(--color-fg)}.settings-form[data-v-2eb13ad3] .uim-c-GroupWidget{padding-top:10px;margin-top:12px;border-top:1px solid var(--color-divider)}.settings-form[data-v-2eb13ad3] .uim-c-GroupWidget:first-child{padding-top:0;margin-top:0;border-top:0}.settings-form[data-v-2eb13ad3] .uim-group-label{display:block;margin-bottom:7px;font-family:var(--font-sans);font-size:var(--text-xs);font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--color-dim)}.settings-form__empty[data-v-2eb13ad3]{margin:0;padding:12px 0;font-size:var(--text-sm);color:var(--color-dim)}\n";})();
+import { inject as ot, watchEffect as Ai, onScopeDispose as la, ref as dr, computed as T, watch as os, toValue as Xe, defineComponent as se, createBlock as H, createCommentVNode as ne, openBlock as I, resolveDynamicComponent as oa, mergeProps as ca, createElementBlock as R, createElementVNode as ie, createTextVNode as ba, toDisplayString as xe, unref as ue, createVNode as hr, Fragment as mt, renderList as cs, provide as Ir, withCtx as Ci, normalizeClass as ma, mergeModels as yi, useModel as Di, onMounted as Ri, shallowRef as Ia, markRaw as kr } from "vue";
+import { BasicEPackage as wi, BasicEClass as w, BasicEAttribute as S, BasicEReference as N, getEcorePackage as Zt, BasicEObject as ct, BasicEFactory as Fi, EContentAdapter as Ma, URI as qr, EPackageRegistry as Cr, BasicResourceSet as Pi, XMIResourceFactory as bi, registerEcorePackage as Mi } from "@emfts/core";
+import { VariableWrapper as Na } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { DButton as Vi, DSelect as La, DInput as Sr, DCheckbox as Ui, DColorInput as Bi } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { identifier as Gi } from "org.eclipse.daanse.board.app.lib.api.variable";
+var Wi = Object.defineProperty, Yi = (s, e, t) => e in s ? Wi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ur = (s, e, t) => Yi(s, typeof e != "symbol" ? e + "" : e, t);
+const es = class a extends wi {
   static get eINSTANCE() {
     return this._instance || (this._instance = new a(), this._instance.init()), this._instance;
   }
@@ -17,281 +18,281 @@ const Jt = class a extends Ci {
   init() {
     const e = new w();
     e.setName("UIModel"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), a.Literals.U_I_MODEL = e;
-    const t = new T();
+    const t = new S();
     t.setName("name"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), a.Literals.U_I_MODEL__NAME = t;
-    const r = new I();
+    const r = new N();
     r.setContainment(!1), r.setName("targetClasses"), r.setLowerBound(0), r.setUpperBound(-1), e.getEStructuralFeatures().push(r), a.Literals.U_I_MODEL__TARGET_CLASSES = r;
-    const i = new T();
+    const i = new S();
     i.setName("priority"), i.setLowerBound(0), i.setUpperBound(1), e.getEStructuralFeatures().push(i), a.Literals.U_I_MODEL__PRIORITY = i;
-    const u = new I();
+    const u = new N();
     u.setContainment(!0), u.setName("filterExpression"), u.setLowerBound(0), u.setUpperBound(1), e.getEStructuralFeatures().push(u), a.Literals.U_I_MODEL__FILTER_EXPRESSION = u;
-    const n = new I();
+    const n = new N();
     n.setContainment(!0), n.setName("styles"), n.setLowerBound(0), n.setUpperBound(-1), e.getEStructuralFeatures().push(n), a.Literals.U_I_MODEL__STYLES = n;
-    const l = new I();
+    const l = new N();
     l.setContainment(!0), l.setName("templates"), l.setLowerBound(0), l.setUpperBound(-1), e.getEStructuralFeatures().push(l), a.Literals.U_I_MODEL__TEMPLATES = l;
-    const g = new I();
-    g.setContainment(!0), g.setName("components"), g.setLowerBound(1), g.setUpperBound(-1), e.getEStructuralFeatures().push(g), a.Literals.U_I_MODEL__COMPONENTS = g;
+    const h = new N();
+    h.setContainment(!0), h.setName("components"), h.setLowerBound(1), h.setUpperBound(-1), e.getEStructuralFeatures().push(h), a.Literals.U_I_MODEL__COMPONENTS = h;
     const c = new w();
     c.setName("Component"), c.setAbstract(!0), c.setInterface(!1), this.getEClassifiers().push(c), c.setEPackage(this), a.Literals.COMPONENT = c;
-    const E = new T();
+    const E = new S();
     E.setName("name"), E.setLowerBound(1), E.setUpperBound(1), c.getEStructuralFeatures().push(E), a.Literals.COMPONENT__NAME = E;
-    const h = new T();
-    h.setName("group"), h.setLowerBound(0), h.setUpperBound(1), c.getEStructuralFeatures().push(h), a.Literals.COMPONENT__GROUP = h;
-    const o = new I();
+    const g = new S();
+    g.setName("group"), g.setLowerBound(0), g.setUpperBound(1), c.getEStructuralFeatures().push(g), a.Literals.COMPONENT__GROUP = g;
+    const o = new N();
     o.setContainment(!1), o.setName("targetClasses"), o.setLowerBound(0), o.setUpperBound(-1), c.getEStructuralFeatures().push(o), a.Literals.COMPONENT__TARGET_CLASSES = o;
-    const d = new I();
+    const d = new N();
     d.setContainment(!1), d.setName("styles"), d.setLowerBound(0), d.setUpperBound(-1), c.getEStructuralFeatures().push(d), a.Literals.COMPONENT__STYLES = d;
-    const p = new I();
-    p.setContainment(!1), p.setName("children"), p.setLowerBound(0), p.setUpperBound(-1), c.getEStructuralFeatures().push(p), a.Literals.COMPONENT__CHILDREN = p;
-    const L = new w();
-    L.setName("FormView"), L.setAbstract(!1), L.setInterface(!1), this.getEClassifiers().push(L), L.setEPackage(this), a.Literals.FORM_VIEW = L;
-    const D = new I();
-    D.setContainment(!0), D.setName("fields"), D.setLowerBound(0), D.setUpperBound(-1), L.getEStructuralFeatures().push(D), a.Literals.FORM_VIEW__FIELDS = D;
-    const f = new I();
-    f.setContainment(!0), f.setName("validations"), f.setLowerBound(0), f.setUpperBound(-1), L.getEStructuralFeatures().push(f), a.Literals.FORM_VIEW__VALIDATIONS = f;
-    const M = new I();
-    M.setContainment(!0), M.setName("validationMappers"), M.setLowerBound(0), M.setUpperBound(-1), L.getEStructuralFeatures().push(M), a.Literals.FORM_VIEW__VALIDATION_MAPPERS = M;
-    const Q = new T();
-    Q.setName("mapperOrder"), Q.setLowerBound(0), Q.setUpperBound(1), L.getEStructuralFeatures().push(Q), a.Literals.FORM_VIEW__MAPPER_ORDER = Q;
-    const re = new w();
-    re.setName("TableView"), re.setAbstract(!1), re.setInterface(!1), this.getEClassifiers().push(re), re.setEPackage(this), a.Literals.TABLE_VIEW = re;
-    const O = new I();
-    O.setContainment(!0), O.setName("tableStyle"), O.setLowerBound(1), O.setUpperBound(1), re.getEStructuralFeatures().push(O), a.Literals.TABLE_VIEW__TABLE_STYLE = O;
-    const C = new w();
-    C.setName("SectionView"), C.setAbstract(!1), C.setInterface(!1), this.getEClassifiers().push(C), C.setEPackage(this), a.Literals.SECTION_VIEW = C;
-    const Y = new I();
-    Y.setContainment(!0), Y.setName("sections"), Y.setLowerBound(1), Y.setUpperBound(-1), C.getEStructuralFeatures().push(Y), a.Literals.SECTION_VIEW__SECTIONS = Y;
-    const st = new w();
-    st.setName("TabView"), st.setAbstract(!1), st.setInterface(!1), this.getEClassifiers().push(st), st.setEPackage(this), a.Literals.TAB_VIEW = st;
-    const Tt = new I();
-    Tt.setContainment(!0), Tt.setName("tabs"), Tt.setLowerBound(1), Tt.setUpperBound(-1), st.getEStructuralFeatures().push(Tt), a.Literals.TAB_VIEW__TABS = Tt;
-    const rt = new w();
-    rt.setName("SummaryView"), rt.setAbstract(!1), rt.setInterface(!1), this.getEClassifiers().push(rt), rt.setEPackage(this), a.Literals.SUMMARY_VIEW = rt;
-    const St = new I();
-    St.setContainment(!0), St.setName("summaryFields"), St.setLowerBound(1), St.setUpperBound(-1), rt.getEStructuralFeatures().push(St), a.Literals.SUMMARY_VIEW__SUMMARY_FIELDS = St;
-    const Ue = new w();
-    Ue.setName("MasterDetail"), Ue.setAbstract(!1), Ue.setInterface(!1), this.getEClassifiers().push(Ue), Ue.setEPackage(this), a.Literals.MASTER_DETAIL = Ue;
-    const ft = new I();
-    ft.setContainment(!0), ft.setName("master"), ft.setLowerBound(1), ft.setUpperBound(1), Ue.getEStructuralFeatures().push(ft), a.Literals.MASTER_DETAIL__MASTER = ft;
-    const mt = new I();
-    mt.setContainment(!0), mt.setName("detail"), mt.setLowerBound(1), mt.setUpperBound(1), Ue.getEStructuralFeatures().push(mt), a.Literals.MASTER_DETAIL__DETAIL = mt;
-    const Z = new w();
-    Z.setName("WidgetComponent"), Z.setAbstract(!0), Z.setInterface(!1), this.getEClassifiers().push(Z), Z.setEPackage(this), a.Literals.WIDGET_COMPONENT = Z;
-    const It = new I();
-    It.setContainment(!1), It.setName("feature"), It.setLowerBound(0), It.setUpperBound(1), Z.getEStructuralFeatures().push(It), a.Literals.WIDGET_COMPONENT__FEATURE = It;
-    const os = new T();
-    os.setName("label"), os.setLowerBound(0), os.setUpperBound(1), Z.getEStructuralFeatures().push(os), a.Literals.WIDGET_COMPONENT__LABEL = os;
-    const cs = new T();
-    cs.setName("placeholder"), cs.setLowerBound(0), cs.setUpperBound(1), Z.getEStructuralFeatures().push(cs), a.Literals.WIDGET_COMPONENT__PLACEHOLDER = cs;
-    const Es = new T();
-    Es.setName("readOnly"), Es.setLowerBound(0), Es.setUpperBound(1), Z.getEStructuralFeatures().push(Es), a.Literals.WIDGET_COMPONENT__READ_ONLY = Es;
-    const hs = new T();
-    hs.setName("required"), hs.setLowerBound(0), hs.setUpperBound(1), Z.getEStructuralFeatures().push(hs), a.Literals.WIDGET_COMPONENT__REQUIRED = hs;
-    const Nt = new I();
-    Nt.setContainment(!0), Nt.setName("visibilityCondition"), Nt.setLowerBound(0), Nt.setUpperBound(1), Z.getEStructuralFeatures().push(Nt), a.Literals.WIDGET_COMPONENT__VISIBILITY_CONDITION = Nt;
-    const Lt = new I();
-    Lt.setContainment(!0), Lt.setName("validations"), Lt.setLowerBound(0), Lt.setUpperBound(-1), Z.getEStructuralFeatures().push(Lt), a.Literals.WIDGET_COMPONENT__VALIDATIONS = Lt;
-    const vt = new I();
-    vt.setContainment(!0), vt.setName("validationMappers"), vt.setLowerBound(0), vt.setUpperBound(-1), Z.getEStructuralFeatures().push(vt), a.Literals.WIDGET_COMPONENT__VALIDATION_MAPPERS = vt;
-    const _t = new I();
-    _t.setContainment(!0), _t.setName("bindings"), _t.setLowerBound(0), _t.setUpperBound(-1), Z.getEStructuralFeatures().push(_t), a.Literals.WIDGET_COMPONENT__BINDINGS = _t;
-    const Ve = new w();
-    Ve.setName("PropertyBinding"), Ve.setAbstract(!1), Ve.setInterface(!1), this.getEClassifiers().push(Ve), Ve.setEPackage(this), a.Literals.PROPERTY_BINDING = Ve;
-    const gs = new T();
-    gs.setName("property"), gs.setLowerBound(1), gs.setUpperBound(1), Ve.getEStructuralFeatures().push(gs), a.Literals.PROPERTY_BINDING__PROPERTY = gs;
-    const Ot = new I();
-    Ot.setContainment(!0), Ot.setName("expression"), Ot.setLowerBound(1), Ot.setUpperBound(1), Ve.getEStructuralFeatures().push(Ot), a.Literals.PROPERTY_BINDING__EXPRESSION = Ot;
-    const Re = new w();
-    Re.setName("InputWidget"), Re.setAbstract(!1), Re.setInterface(!1), this.getEClassifiers().push(Re), Re.setEPackage(this), a.Literals.INPUT_WIDGET = Re;
-    const ds = new T();
-    ds.setName("maxLength"), ds.setLowerBound(0), ds.setUpperBound(1), Re.getEStructuralFeatures().push(ds), a.Literals.INPUT_WIDGET__MAX_LENGTH = ds;
-    const ps = new T();
-    ps.setName("value"), ps.setLowerBound(0), ps.setUpperBound(1), Re.getEStructuralFeatures().push(ps), a.Literals.INPUT_WIDGET__VALUE = ps;
-    const Ts = new T();
-    Ts.setName("password"), Ts.setLowerBound(0), Ts.setUpperBound(1), Re.getEStructuralFeatures().push(Ts), a.Literals.INPUT_WIDGET__PASSWORD = Ts;
-    const we = new w();
-    we.setName("TextAreaWidget"), we.setAbstract(!1), we.setInterface(!1), this.getEClassifiers().push(we), we.setEPackage(this), a.Literals.TEXT_AREA_WIDGET = we;
-    const Ss = new T();
-    Ss.setName("rows"), Ss.setLowerBound(0), Ss.setUpperBound(1), we.getEStructuralFeatures().push(Ss), a.Literals.TEXT_AREA_WIDGET__ROWS = Ss;
-    const fs = new T();
-    fs.setName("maxLength"), fs.setLowerBound(0), fs.setUpperBound(1), we.getEStructuralFeatures().push(fs), a.Literals.TEXT_AREA_WIDGET__MAX_LENGTH = fs;
-    const ms = new T();
-    ms.setName("value"), ms.setLowerBound(0), ms.setUpperBound(1), we.getEStructuralFeatures().push(ms), a.Literals.TEXT_AREA_WIDGET__VALUE = ms;
-    const Le = new w();
-    Le.setName("NumberWidget"), Le.setAbstract(!1), Le.setInterface(!1), this.getEClassifiers().push(Le), Le.setEPackage(this), a.Literals.NUMBER_WIDGET = Le;
-    const Is = new T();
-    Is.setName("min"), Is.setLowerBound(0), Is.setUpperBound(1), Le.getEStructuralFeatures().push(Is), a.Literals.NUMBER_WIDGET__MIN = Is;
-    const Ns = new T();
-    Ns.setName("max"), Ns.setLowerBound(0), Ns.setUpperBound(1), Le.getEStructuralFeatures().push(Ns), a.Literals.NUMBER_WIDGET__MAX = Ns;
-    const Ls = new T();
-    Ls.setName("step"), Ls.setLowerBound(0), Ls.setUpperBound(1), Le.getEStructuralFeatures().push(Ls), a.Literals.NUMBER_WIDGET__STEP = Ls;
-    const vs = new T();
-    vs.setName("value"), vs.setLowerBound(0), vs.setUpperBound(1), Le.getEStructuralFeatures().push(vs), a.Literals.NUMBER_WIDGET__VALUE = vs;
-    const Be = new w();
-    Be.setName("CheckboxWidget"), Be.setAbstract(!1), Be.setInterface(!1), this.getEClassifiers().push(Be), Be.setEPackage(this), a.Literals.CHECKBOX_WIDGET = Be;
-    const _s = new T();
-    _s.setName("asToggle"), _s.setLowerBound(0), _s.setUpperBound(1), Be.getEStructuralFeatures().push(_s), a.Literals.CHECKBOX_WIDGET__AS_TOGGLE = _s;
-    const Os = new T();
-    Os.setName("value"), Os.setLowerBound(0), Os.setUpperBound(1), Be.getEStructuralFeatures().push(Os), a.Literals.CHECKBOX_WIDGET__VALUE = Os;
-    const ve = new w();
-    ve.setName("DateWidget"), ve.setAbstract(!1), ve.setInterface(!1), this.getEClassifiers().push(ve), ve.setEPackage(this), a.Literals.DATE_WIDGET = ve;
-    const As = new T();
-    As.setName("withTime"), As.setLowerBound(0), As.setUpperBound(1), ve.getEStructuralFeatures().push(As), a.Literals.DATE_WIDGET__WITH_TIME = As;
-    const Cs = new T();
-    Cs.setName("format"), Cs.setLowerBound(0), Cs.setUpperBound(1), ve.getEStructuralFeatures().push(Cs), a.Literals.DATE_WIDGET__FORMAT = Cs;
-    const At = new I();
-    At.setContainment(!1), At.setName("constrains"), At.setLowerBound(0), At.setUpperBound(1), ve.getEStructuralFeatures().push(At), a.Literals.DATE_WIDGET__CONSTRAINS = At;
-    const ys = new T();
-    ys.setName("value"), ys.setLowerBound(0), ys.setUpperBound(1), ve.getEStructuralFeatures().push(ys), a.Literals.DATE_WIDGET__VALUE = ys;
-    const Fe = new w();
-    Fe.setName("ComboboxWidget"), Fe.setAbstract(!1), Fe.setInterface(!1), this.getEClassifiers().push(Fe), Fe.setEPackage(this), a.Literals.COMBOBOX_WIDGET = Fe;
-    const Ct = new I();
-    Ct.setContainment(!0), Ct.setName("optionLabel"), Ct.setLowerBound(0), Ct.setUpperBound(1), Fe.getEStructuralFeatures().push(Ct), a.Literals.COMBOBOX_WIDGET__OPTION_LABEL = Ct;
-    const Ds = new T();
-    Ds.setName("minSearchLength"), Ds.setLowerBound(0), Ds.setUpperBound(1), Fe.getEStructuralFeatures().push(Ds), a.Literals.COMBOBOX_WIDGET__MIN_SEARCH_LENGTH = Ds;
-    const Rs = new T();
-    Rs.setName("multiSelect"), Rs.setLowerBound(0), Rs.setUpperBound(1), Fe.getEStructuralFeatures().push(Rs), a.Literals.COMBOBOX_WIDGET__MULTI_SELECT = Rs;
-    const _e = new w();
-    _e.setName("SelectWidget"), _e.setAbstract(!1), _e.setInterface(!1), this.getEClassifiers().push(_e), _e.setEPackage(this), a.Literals.SELECT_WIDGET = _e;
-    const yt = new I();
-    yt.setContainment(!0), yt.setName("optionLabel"), yt.setLowerBound(0), yt.setUpperBound(1), _e.getEStructuralFeatures().push(yt), a.Literals.SELECT_WIDGET__OPTION_LABEL = yt;
-    const ws = new T();
-    ws.setName("multiSelect"), ws.setLowerBound(0), ws.setUpperBound(1), _e.getEStructuralFeatures().push(ws), a.Literals.SELECT_WIDGET__MULTI_SELECT = ws;
-    const Fs = new T();
-    Fs.setName("asButtonGroup"), Fs.setLowerBound(0), Fs.setUpperBound(1), _e.getEStructuralFeatures().push(Fs), a.Literals.SELECT_WIDGET__AS_BUTTON_GROUP = Fs;
-    const Ps = new T();
-    Ps.setName("values"), Ps.setLowerBound(0), Ps.setUpperBound(-1), _e.getEStructuralFeatures().push(Ps), a.Literals.SELECT_WIDGET__VALUES = Ps;
-    const pe = new w();
-    pe.setName("AllFeatures"), pe.setAbstract(!1), pe.setInterface(!1), this.getEClassifiers().push(pe), pe.setEPackage(this), a.Literals.ALL_FEATURES = pe;
-    const Dt = new I();
-    Dt.setContainment(!1), Dt.setName("with"), Dt.setLowerBound(0), Dt.setUpperBound(-1), pe.getEStructuralFeatures().push(Dt), a.Literals.ALL_FEATURES__WITH = Dt;
-    const Rt = new I();
-    Rt.setContainment(!1), Rt.setName("eType"), Rt.setLowerBound(0), Rt.setUpperBound(-1), pe.getEStructuralFeatures().push(Rt), a.Literals.ALL_FEATURES__E_TYPE = Rt;
-    const wt = new I();
-    wt.setContainment(!0), wt.setName("filter"), wt.setLowerBound(0), wt.setUpperBound(1), pe.getEStructuralFeatures().push(wt), a.Literals.ALL_FEATURES__FILTER = wt;
-    const Ft = new I();
-    Ft.setContainment(!1), Ft.setName("template"), Ft.setLowerBound(0), Ft.setUpperBound(1), pe.getEStructuralFeatures().push(Ft), a.Literals.ALL_FEATURES__TEMPLATE = Ft;
-    const Pt = new I();
-    Pt.setContainment(!0), Pt.setName("cases"), Pt.setLowerBound(0), Pt.setUpperBound(-1), pe.getEStructuralFeatures().push(Pt), a.Literals.ALL_FEATURES__CASES = Pt;
-    const bs = new T();
-    bs.setName("priority"), bs.setLowerBound(0), bs.setUpperBound(1), pe.getEStructuralFeatures().push(bs), a.Literals.ALL_FEATURES__PRIORITY = bs;
+    const V = new N();
+    V.setContainment(!1), V.setName("children"), V.setLowerBound(0), V.setUpperBound(-1), c.getEStructuralFeatures().push(V), a.Literals.COMPONENT__CHILDREN = V;
+    const B = new w();
+    B.setName("FormView"), B.setAbstract(!1), B.setInterface(!1), this.getEClassifiers().push(B), B.setEPackage(this), a.Literals.FORM_VIEW = B;
+    const p = new N();
+    p.setContainment(!0), p.setName("fields"), p.setLowerBound(0), p.setUpperBound(-1), B.getEStructuralFeatures().push(p), a.Literals.FORM_VIEW__FIELDS = p;
+    const f = new N();
+    f.setContainment(!0), f.setName("validations"), f.setLowerBound(0), f.setUpperBound(-1), B.getEStructuralFeatures().push(f), a.Literals.FORM_VIEW__VALIDATIONS = f;
+    const U = new N();
+    U.setContainment(!0), U.setName("validationMappers"), U.setLowerBound(0), U.setUpperBound(-1), B.getEStructuralFeatures().push(U), a.Literals.FORM_VIEW__VALIDATION_MAPPERS = U;
+    const A = new S();
+    A.setName("mapperOrder"), A.setLowerBound(0), A.setUpperBound(1), B.getEStructuralFeatures().push(A), a.Literals.FORM_VIEW__MAPPER_ORDER = A;
+    const b = new w();
+    b.setName("TableView"), b.setAbstract(!1), b.setInterface(!1), this.getEClassifiers().push(b), b.setEPackage(this), a.Literals.TABLE_VIEW = b;
+    const j = new N();
+    j.setContainment(!0), j.setName("tableStyle"), j.setLowerBound(1), j.setUpperBound(1), b.getEStructuralFeatures().push(j), a.Literals.TABLE_VIEW__TABLE_STYLE = j;
+    const X = new w();
+    X.setName("SectionView"), X.setAbstract(!1), X.setInterface(!1), this.getEClassifiers().push(X), X.setEPackage(this), a.Literals.SECTION_VIEW = X;
+    const re = new N();
+    re.setContainment(!0), re.setName("sections"), re.setLowerBound(1), re.setUpperBound(-1), X.getEStructuralFeatures().push(re), a.Literals.SECTION_VIEW__SECTIONS = re;
+    const ce = new w();
+    ce.setName("TabView"), ce.setAbstract(!1), ce.setInterface(!1), this.getEClassifiers().push(ce), ce.setEPackage(this), a.Literals.TAB_VIEW = ce;
+    const ae = new N();
+    ae.setContainment(!0), ae.setName("tabs"), ae.setLowerBound(1), ae.setUpperBound(-1), ce.getEStructuralFeatures().push(ae), a.Literals.TAB_VIEW__TABS = ae;
+    const ye = new w();
+    ye.setName("SummaryView"), ye.setAbstract(!1), ye.setInterface(!1), this.getEClassifiers().push(ye), ye.setEPackage(this), a.Literals.SUMMARY_VIEW = ye;
+    const L = new N();
+    L.setContainment(!0), L.setName("summaryFields"), L.setLowerBound(1), L.setUpperBound(-1), ye.getEStructuralFeatures().push(L), a.Literals.SUMMARY_VIEW__SUMMARY_FIELDS = L;
+    const v = new w();
+    v.setName("MasterDetail"), v.setAbstract(!1), v.setInterface(!1), this.getEClassifiers().push(v), v.setEPackage(this), a.Literals.MASTER_DETAIL = v;
+    const M = new N();
+    M.setContainment(!0), M.setName("master"), M.setLowerBound(1), M.setUpperBound(1), v.getEStructuralFeatures().push(M), a.Literals.MASTER_DETAIL__MASTER = M;
+    const Ne = new N();
+    Ne.setContainment(!0), Ne.setName("detail"), Ne.setLowerBound(1), Ne.setUpperBound(1), v.getEStructuralFeatures().push(Ne), a.Literals.MASTER_DETAIL__DETAIL = Ne;
+    const x = new w();
+    x.setName("WidgetComponent"), x.setAbstract(!0), x.setInterface(!1), this.getEClassifiers().push(x), x.setEPackage(this), a.Literals.WIDGET_COMPONENT = x;
+    const Ue = new N();
+    Ue.setContainment(!1), Ue.setName("feature"), Ue.setLowerBound(0), Ue.setUpperBound(1), x.getEStructuralFeatures().push(Ue), a.Literals.WIDGET_COMPONENT__FEATURE = Ue;
+    const Be = new S();
+    Be.setName("label"), Be.setLowerBound(0), Be.setUpperBound(1), x.getEStructuralFeatures().push(Be), a.Literals.WIDGET_COMPONENT__LABEL = Be;
+    const Es = new S();
+    Es.setName("placeholder"), Es.setLowerBound(0), Es.setUpperBound(1), x.getEStructuralFeatures().push(Es), a.Literals.WIDGET_COMPONENT__PLACEHOLDER = Es;
+    const hs = new S();
+    hs.setName("readOnly"), hs.setLowerBound(0), hs.setUpperBound(1), x.getEStructuralFeatures().push(hs), a.Literals.WIDGET_COMPONENT__READ_ONLY = hs;
+    const gs = new S();
+    gs.setName("required"), gs.setLowerBound(0), gs.setUpperBound(1), x.getEStructuralFeatures().push(gs), a.Literals.WIDGET_COMPONENT__REQUIRED = gs;
+    const vt = new N();
+    vt.setContainment(!0), vt.setName("visibilityCondition"), vt.setLowerBound(0), vt.setUpperBound(1), x.getEStructuralFeatures().push(vt), a.Literals.WIDGET_COMPONENT__VISIBILITY_CONDITION = vt;
+    const _t = new N();
+    _t.setContainment(!0), _t.setName("validations"), _t.setLowerBound(0), _t.setUpperBound(-1), x.getEStructuralFeatures().push(_t), a.Literals.WIDGET_COMPONENT__VALIDATIONS = _t;
+    const Ot = new N();
+    Ot.setContainment(!0), Ot.setName("validationMappers"), Ot.setLowerBound(0), Ot.setUpperBound(-1), x.getEStructuralFeatures().push(Ot), a.Literals.WIDGET_COMPONENT__VALIDATION_MAPPERS = Ot;
+    const At = new N();
+    At.setContainment(!0), At.setName("bindings"), At.setLowerBound(0), At.setUpperBound(-1), x.getEStructuralFeatures().push(At), a.Literals.WIDGET_COMPONENT__BINDINGS = At;
+    const He = new w();
+    He.setName("PropertyBinding"), He.setAbstract(!1), He.setInterface(!1), this.getEClassifiers().push(He), He.setEPackage(this), a.Literals.PROPERTY_BINDING = He;
+    const ds = new S();
+    ds.setName("property"), ds.setLowerBound(1), ds.setUpperBound(1), He.getEStructuralFeatures().push(ds), a.Literals.PROPERTY_BINDING__PROPERTY = ds;
+    const Ct = new N();
+    Ct.setContainment(!0), Ct.setName("expression"), Ct.setLowerBound(1), Ct.setUpperBound(1), He.getEStructuralFeatures().push(Ct), a.Literals.PROPERTY_BINDING__EXPRESSION = Ct;
     const Ge = new w();
-    Ge.setName("TemplateCase"), Ge.setAbstract(!1), Ge.setInterface(!1), this.getEClassifiers().push(Ge), Ge.setEPackage(this), a.Literals.TEMPLATE_CASE = Ge;
-    const bt = new I();
-    bt.setContainment(!0), bt.setName("when"), bt.setLowerBound(0), bt.setUpperBound(1), Ge.getEStructuralFeatures().push(bt), a.Literals.TEMPLATE_CASE__WHEN = bt;
-    const Mt = new I();
-    Mt.setContainment(!1), Mt.setName("widget"), Mt.setLowerBound(1), Mt.setUpperBound(1), Ge.getEStructuralFeatures().push(Mt), a.Literals.TEMPLATE_CASE__WIDGET = Mt;
+    Ge.setName("InputWidget"), Ge.setAbstract(!1), Ge.setInterface(!1), this.getEClassifiers().push(Ge), Ge.setEPackage(this), a.Literals.INPUT_WIDGET = Ge;
+    const ps = new S();
+    ps.setName("maxLength"), ps.setLowerBound(0), ps.setUpperBound(1), Ge.getEStructuralFeatures().push(ps), a.Literals.INPUT_WIDGET__MAX_LENGTH = ps;
+    const Ts = new S();
+    Ts.setName("value"), Ts.setLowerBound(0), Ts.setUpperBound(1), Ge.getEStructuralFeatures().push(Ts), a.Literals.INPUT_WIDGET__VALUE = Ts;
+    const fs = new S();
+    fs.setName("password"), fs.setLowerBound(0), fs.setUpperBound(1), Ge.getEStructuralFeatures().push(fs), a.Literals.INPUT_WIDGET__PASSWORD = fs;
     const We = new w();
-    We.setName("GroupWidget"), We.setAbstract(!1), We.setInterface(!1), this.getEClassifiers().push(We), We.setEPackage(this), a.Literals.GROUP_WIDGET = We;
-    const Ut = new I();
-    Ut.setContainment(!0), Ut.setName("fields"), Ut.setLowerBound(0), Ut.setUpperBound(-1), We.getEStructuralFeatures().push(Ut), a.Literals.GROUP_WIDGET__FIELDS = Ut;
-    const Ms = new T();
-    Ms.setName("layout"), Ms.setLowerBound(0), Ms.setUpperBound(1), We.getEStructuralFeatures().push(Ms), a.Literals.GROUP_WIDGET__LAYOUT = Ms;
-    const Pe = new w();
-    Pe.setName("Conditional"), Pe.setAbstract(!1), Pe.setInterface(!1), this.getEClassifiers().push(Pe), Pe.setEPackage(this), a.Literals.CONDITIONAL = Pe;
-    const Vt = new I();
-    Vt.setContainment(!0), Vt.setName("condition"), Vt.setLowerBound(1), Vt.setUpperBound(1), Pe.getEStructuralFeatures().push(Vt), a.Literals.CONDITIONAL__CONDITION = Vt;
-    const Bt = new I();
-    Bt.setContainment(!0), Bt.setName("then"), Bt.setLowerBound(0), Bt.setUpperBound(-1), Pe.getEStructuralFeatures().push(Bt), a.Literals.CONDITIONAL__THEN = Bt;
-    const Gt = new I();
-    Gt.setContainment(!0), Gt.setName("else"), Gt.setLowerBound(0), Gt.setUpperBound(-1), Pe.getEStructuralFeatures().push(Gt), a.Literals.CONDITIONAL__ELSE = Gt;
-    const be = new w();
-    be.setName("ForEach"), be.setAbstract(!1), be.setInterface(!1), this.getEClassifiers().push(be), be.setEPackage(this), a.Literals.FOR_EACH = be;
-    const Wt = new I();
-    Wt.setContainment(!0), Wt.setName("items"), Wt.setLowerBound(1), Wt.setUpperBound(1), be.getEStructuralFeatures().push(Wt), a.Literals.FOR_EACH__ITEMS = Wt;
-    const Yt = new I();
-    Yt.setContainment(!0), Yt.setName("body"), Yt.setLowerBound(0), Yt.setUpperBound(-1), be.getEStructuralFeatures().push(Yt), a.Literals.FOR_EACH__BODY = Yt;
-    const Us = new T();
-    Us.setName("emptyText"), Us.setLowerBound(0), Us.setUpperBound(1), be.getEStructuralFeatures().push(Us), a.Literals.FOR_EACH__EMPTY_TEXT = Us;
+    We.setName("TextAreaWidget"), We.setAbstract(!1), We.setInterface(!1), this.getEClassifiers().push(We), We.setEPackage(this), a.Literals.TEXT_AREA_WIDGET = We;
+    const Ss = new S();
+    Ss.setName("rows"), Ss.setLowerBound(0), Ss.setUpperBound(1), We.getEStructuralFeatures().push(Ss), a.Literals.TEXT_AREA_WIDGET__ROWS = Ss;
+    const ms = new S();
+    ms.setName("maxLength"), ms.setLowerBound(0), ms.setUpperBound(1), We.getEStructuralFeatures().push(ms), a.Literals.TEXT_AREA_WIDGET__MAX_LENGTH = ms;
+    const Is = new S();
+    Is.setName("value"), Is.setLowerBound(0), Is.setUpperBound(1), We.getEStructuralFeatures().push(Is), a.Literals.TEXT_AREA_WIDGET__VALUE = Is;
+    const De = new w();
+    De.setName("NumberWidget"), De.setAbstract(!1), De.setInterface(!1), this.getEClassifiers().push(De), De.setEPackage(this), a.Literals.NUMBER_WIDGET = De;
+    const Ns = new S();
+    Ns.setName("min"), Ns.setLowerBound(0), Ns.setUpperBound(1), De.getEStructuralFeatures().push(Ns), a.Literals.NUMBER_WIDGET__MIN = Ns;
+    const Ls = new S();
+    Ls.setName("max"), Ls.setLowerBound(0), Ls.setUpperBound(1), De.getEStructuralFeatures().push(Ls), a.Literals.NUMBER_WIDGET__MAX = Ls;
+    const vs = new S();
+    vs.setName("step"), vs.setLowerBound(0), vs.setUpperBound(1), De.getEStructuralFeatures().push(vs), a.Literals.NUMBER_WIDGET__STEP = vs;
+    const _s = new S();
+    _s.setName("value"), _s.setLowerBound(0), _s.setUpperBound(1), De.getEStructuralFeatures().push(_s), a.Literals.NUMBER_WIDGET__VALUE = _s;
+    const je = new w();
+    je.setName("CheckboxWidget"), je.setAbstract(!1), je.setInterface(!1), this.getEClassifiers().push(je), je.setEPackage(this), a.Literals.CHECKBOX_WIDGET = je;
+    const Os = new S();
+    Os.setName("asToggle"), Os.setLowerBound(0), Os.setUpperBound(1), je.getEStructuralFeatures().push(Os), a.Literals.CHECKBOX_WIDGET__AS_TOGGLE = Os;
+    const As = new S();
+    As.setName("value"), As.setLowerBound(0), As.setUpperBound(1), je.getEStructuralFeatures().push(As), a.Literals.CHECKBOX_WIDGET__VALUE = As;
+    const Re = new w();
+    Re.setName("DateWidget"), Re.setAbstract(!1), Re.setInterface(!1), this.getEClassifiers().push(Re), Re.setEPackage(this), a.Literals.DATE_WIDGET = Re;
+    const Cs = new S();
+    Cs.setName("withTime"), Cs.setLowerBound(0), Cs.setUpperBound(1), Re.getEStructuralFeatures().push(Cs), a.Literals.DATE_WIDGET__WITH_TIME = Cs;
+    const ys = new S();
+    ys.setName("format"), ys.setLowerBound(0), ys.setUpperBound(1), Re.getEStructuralFeatures().push(ys), a.Literals.DATE_WIDGET__FORMAT = ys;
+    const yt = new N();
+    yt.setContainment(!1), yt.setName("constrains"), yt.setLowerBound(0), yt.setUpperBound(1), Re.getEStructuralFeatures().push(yt), a.Literals.DATE_WIDGET__CONSTRAINS = yt;
+    const Ds = new S();
+    Ds.setName("value"), Ds.setLowerBound(0), Ds.setUpperBound(1), Re.getEStructuralFeatures().push(Ds), a.Literals.DATE_WIDGET__VALUE = Ds;
     const Ye = new w();
-    Ye.setName("ReferenceLinkWidget"), Ye.setAbstract(!1), Ye.setInterface(!1), this.getEClassifiers().push(Ye), Ye.setEPackage(this), a.Literals.REFERENCE_LINK_WIDGET = Ye;
-    const $t = new I();
-    $t.setContainment(!0), $t.setName("displayExpression"), $t.setLowerBound(0), $t.setUpperBound(1), Ye.getEStructuralFeatures().push($t), a.Literals.REFERENCE_LINK_WIDGET__DISPLAY_EXPRESSION = $t;
-    const Vs = new T();
-    Vs.setName("targetRoute"), Vs.setLowerBound(0), Vs.setUpperBound(1), Ye.getEStructuralFeatures().push(Vs), a.Literals.REFERENCE_LINK_WIDGET__TARGET_ROUTE = Vs;
-    const Oe = new w();
-    Oe.setName("UIModelOverlay"), Oe.setAbstract(!1), Oe.setInterface(!1), this.getEClassifiers().push(Oe), Oe.setEPackage(this), a.Literals.U_I_MODEL_OVERLAY = Oe;
-    const Bs = new T();
-    Bs.setName("name"), Bs.setLowerBound(0), Bs.setUpperBound(1), Oe.getEStructuralFeatures().push(Bs), a.Literals.U_I_MODEL_OVERLAY__NAME = Bs;
-    const Gs = new T();
-    Gs.setName("priority"), Gs.setLowerBound(0), Gs.setUpperBound(1), Oe.getEStructuralFeatures().push(Gs), a.Literals.U_I_MODEL_OVERLAY__PRIORITY = Gs;
-    const kt = new I();
-    kt.setContainment(!0), kt.setName("templates"), kt.setLowerBound(0), kt.setUpperBound(-1), Oe.getEStructuralFeatures().push(kt), a.Literals.U_I_MODEL_OVERLAY__TEMPLATES = kt;
-    const xt = new I();
-    xt.setContainment(!0), xt.setName("cases"), xt.setLowerBound(0), xt.setUpperBound(-1), Oe.getEStructuralFeatures().push(xt), a.Literals.U_I_MODEL_OVERLAY__CASES = xt;
+    Ye.setName("ComboboxWidget"), Ye.setAbstract(!1), Ye.setInterface(!1), this.getEClassifiers().push(Ye), Ye.setEPackage(this), a.Literals.COMBOBOX_WIDGET = Ye;
+    const Dt = new N();
+    Dt.setContainment(!0), Dt.setName("optionLabel"), Dt.setLowerBound(0), Dt.setUpperBound(1), Ye.getEStructuralFeatures().push(Dt), a.Literals.COMBOBOX_WIDGET__OPTION_LABEL = Dt;
+    const Rs = new S();
+    Rs.setName("minSearchLength"), Rs.setLowerBound(0), Rs.setUpperBound(1), Ye.getEStructuralFeatures().push(Rs), a.Literals.COMBOBOX_WIDGET__MIN_SEARCH_LENGTH = Rs;
+    const ws = new S();
+    ws.setName("multiSelect"), ws.setLowerBound(0), ws.setUpperBound(1), Ye.getEStructuralFeatures().push(ws), a.Literals.COMBOBOX_WIDGET__MULTI_SELECT = ws;
+    const we = new w();
+    we.setName("SelectWidget"), we.setAbstract(!1), we.setInterface(!1), this.getEClassifiers().push(we), we.setEPackage(this), a.Literals.SELECT_WIDGET = we;
+    const Rt = new N();
+    Rt.setContainment(!0), Rt.setName("optionLabel"), Rt.setLowerBound(0), Rt.setUpperBound(1), we.getEStructuralFeatures().push(Rt), a.Literals.SELECT_WIDGET__OPTION_LABEL = Rt;
+    const Fs = new S();
+    Fs.setName("multiSelect"), Fs.setLowerBound(0), Fs.setUpperBound(1), we.getEStructuralFeatures().push(Fs), a.Literals.SELECT_WIDGET__MULTI_SELECT = Fs;
+    const Ps = new S();
+    Ps.setName("asButtonGroup"), Ps.setLowerBound(0), Ps.setUpperBound(1), we.getEStructuralFeatures().push(Ps), a.Literals.SELECT_WIDGET__AS_BUTTON_GROUP = Ps;
+    const bs = new S();
+    bs.setName("values"), bs.setLowerBound(0), bs.setUpperBound(-1), we.getEStructuralFeatures().push(bs), a.Literals.SELECT_WIDGET__VALUES = bs;
+    const Le = new w();
+    Le.setName("AllFeatures"), Le.setAbstract(!1), Le.setInterface(!1), this.getEClassifiers().push(Le), Le.setEPackage(this), a.Literals.ALL_FEATURES = Le;
+    const wt = new N();
+    wt.setContainment(!1), wt.setName("with"), wt.setLowerBound(0), wt.setUpperBound(-1), Le.getEStructuralFeatures().push(wt), a.Literals.ALL_FEATURES__WITH = wt;
+    const Ft = new N();
+    Ft.setContainment(!1), Ft.setName("eType"), Ft.setLowerBound(0), Ft.setUpperBound(-1), Le.getEStructuralFeatures().push(Ft), a.Literals.ALL_FEATURES__E_TYPE = Ft;
+    const Pt = new N();
+    Pt.setContainment(!0), Pt.setName("filter"), Pt.setLowerBound(0), Pt.setUpperBound(1), Le.getEStructuralFeatures().push(Pt), a.Literals.ALL_FEATURES__FILTER = Pt;
+    const bt = new N();
+    bt.setContainment(!1), bt.setName("template"), bt.setLowerBound(0), bt.setUpperBound(1), Le.getEStructuralFeatures().push(bt), a.Literals.ALL_FEATURES__TEMPLATE = bt;
+    const Mt = new N();
+    Mt.setContainment(!0), Mt.setName("cases"), Mt.setLowerBound(0), Mt.setUpperBound(-1), Le.getEStructuralFeatures().push(Mt), a.Literals.ALL_FEATURES__CASES = Mt;
+    const Ms = new S();
+    Ms.setName("priority"), Ms.setLowerBound(0), Ms.setUpperBound(1), Le.getEStructuralFeatures().push(Ms), a.Literals.ALL_FEATURES__PRIORITY = Ms;
+    const qe = new w();
+    qe.setName("TemplateCase"), qe.setAbstract(!1), qe.setInterface(!1), this.getEClassifiers().push(qe), qe.setEPackage(this), a.Literals.TEMPLATE_CASE = qe;
+    const Vt = new N();
+    Vt.setContainment(!0), Vt.setName("when"), Vt.setLowerBound(0), Vt.setUpperBound(1), qe.getEStructuralFeatures().push(Vt), a.Literals.TEMPLATE_CASE__WHEN = Vt;
+    const Ut = new N();
+    Ut.setContainment(!1), Ut.setName("widget"), Ut.setLowerBound(1), Ut.setUpperBound(1), qe.getEStructuralFeatures().push(Ut), a.Literals.TEMPLATE_CASE__WIDGET = Ut;
+    const ze = new w();
+    ze.setName("GroupWidget"), ze.setAbstract(!1), ze.setInterface(!1), this.getEClassifiers().push(ze), ze.setEPackage(this), a.Literals.GROUP_WIDGET = ze;
+    const Bt = new N();
+    Bt.setContainment(!0), Bt.setName("fields"), Bt.setLowerBound(0), Bt.setUpperBound(-1), ze.getEStructuralFeatures().push(Bt), a.Literals.GROUP_WIDGET__FIELDS = Bt;
+    const Vs = new S();
+    Vs.setName("layout"), Vs.setLowerBound(0), Vs.setUpperBound(1), ze.getEStructuralFeatures().push(Vs), a.Literals.GROUP_WIDGET__LAYOUT = Vs;
     const $e = new w();
-    $e.setName("Style"), $e.setAbstract(!0), $e.setInterface(!0), this.getEClassifiers().push($e), $e.setEPackage(this), a.Literals.STYLE = $e;
-    const Ws = new T();
-    Ws.setName("name"), Ws.setLowerBound(0), Ws.setUpperBound(1), $e.getEStructuralFeatures().push(Ws), a.Literals.STYLE__NAME = Ws;
-    const Ys = new T();
-    Ys.setName("group"), Ys.setLowerBound(0), Ys.setUpperBound(1), $e.getEStructuralFeatures().push(Ys), a.Literals.STYLE__GROUP = Ys;
-    const Ae = new w();
-    Ae.setName("BaseStyle"), Ae.setAbstract(!0), Ae.setInterface(!1), this.getEClassifiers().push(Ae), Ae.setEPackage(this), a.Literals.BASE_STYLE = Ae;
-    const Xt = new I();
-    Xt.setContainment(!1), Xt.setName("extends"), Xt.setLowerBound(0), Xt.setUpperBound(1), Ae.getEStructuralFeatures().push(Xt), a.Literals.BASE_STYLE__EXTENDS = Xt;
-    const $s = new T();
-    $s.setName("css"), $s.setLowerBound(0), $s.setUpperBound(1), Ae.getEStructuralFeatures().push($s), a.Literals.BASE_STYLE__CSS = $s;
-    const ks = new T();
-    ks.setName("vueComponent"), ks.setLowerBound(0), ks.setUpperBound(1), Ae.getEStructuralFeatures().push(ks), a.Literals.BASE_STYLE__VUE_COMPONENT = ks;
-    const Ht = new I();
-    Ht.setContainment(!0), Ht.setName("visibilityCondition"), Ht.setLowerBound(0), Ht.setUpperBound(1), Ae.getEStructuralFeatures().push(Ht), a.Literals.BASE_STYLE__VISIBILITY_CONDITION = Ht;
+    $e.setName("Conditional"), $e.setAbstract(!1), $e.setInterface(!1), this.getEClassifiers().push($e), $e.setEPackage(this), a.Literals.CONDITIONAL = $e;
+    const Gt = new N();
+    Gt.setContainment(!0), Gt.setName("condition"), Gt.setLowerBound(1), Gt.setUpperBound(1), $e.getEStructuralFeatures().push(Gt), a.Literals.CONDITIONAL__CONDITION = Gt;
+    const Wt = new N();
+    Wt.setContainment(!0), Wt.setName("then"), Wt.setLowerBound(0), Wt.setUpperBound(-1), $e.getEStructuralFeatures().push(Wt), a.Literals.CONDITIONAL__THEN = Wt;
+    const Yt = new N();
+    Yt.setContainment(!0), Yt.setName("else"), Yt.setLowerBound(0), Yt.setUpperBound(-1), $e.getEStructuralFeatures().push(Yt), a.Literals.CONDITIONAL__ELSE = Yt;
     const ke = new w();
-    ke.setName("LayoutStyle"), ke.setAbstract(!1), ke.setInterface(!1), this.getEClassifiers().push(ke), ke.setEPackage(this), a.Literals.LAYOUT_STYLE = ke;
-    const xs = new T();
-    xs.setName("layout"), xs.setLowerBound(0), xs.setUpperBound(1), ke.getEStructuralFeatures().push(xs), a.Literals.LAYOUT_STYLE__LAYOUT = xs;
-    const Xs = new T();
-    Xs.setName("order"), Xs.setLowerBound(0), Xs.setUpperBound(1), ke.getEStructuralFeatures().push(Xs), a.Literals.LAYOUT_STYLE__ORDER = Xs;
-    const Ie = new w();
-    Ie.setName("WidgetStyle"), Ie.setAbstract(!1), Ie.setInterface(!1), this.getEClassifiers().push(Ie), Ie.setEPackage(this), a.Literals.WIDGET_STYLE = Ie;
-    const jt = new I();
-    jt.setContainment(!1), jt.setName("feature"), jt.setLowerBound(0), jt.setUpperBound(1), Ie.getEStructuralFeatures().push(jt), a.Literals.WIDGET_STYLE__FEATURE = jt;
-    const Hs = new T();
-    Hs.setName("widgetType"), Hs.setLowerBound(0), Hs.setUpperBound(1), Ie.getEStructuralFeatures().push(Hs), a.Literals.WIDGET_STYLE__WIDGET_TYPE = Hs;
-    const js = new T();
-    js.setName("label"), js.setLowerBound(0), js.setUpperBound(1), Ie.getEStructuralFeatures().push(js), a.Literals.WIDGET_STYLE__LABEL = js;
-    const qs = new T();
-    qs.setName("readOnly"), qs.setLowerBound(0), qs.setUpperBound(1), Ie.getEStructuralFeatures().push(qs), a.Literals.WIDGET_STYLE__READ_ONLY = qs;
-    const zs = new T();
-    zs.setName("order"), zs.setLowerBound(0), zs.setUpperBound(1), Ie.getEStructuralFeatures().push(zs), a.Literals.WIDGET_STYLE__ORDER = zs;
-    const at = new w();
-    at.setName("TableStyle"), at.setAbstract(!1), at.setInterface(!1), this.getEClassifiers().push(at), at.setEPackage(this), a.Literals.TABLE_STYLE = at;
-    const qt = new I();
-    qt.setContainment(!0), qt.setName("columns"), qt.setLowerBound(1), qt.setUpperBound(-1), at.getEStructuralFeatures().push(qt), a.Literals.TABLE_STYLE__COLUMNS = qt;
-    const xe = new w();
-    xe.setName("Expression"), xe.setAbstract(!1), xe.setInterface(!1), this.getEClassifiers().push(xe), xe.setEPackage(this), a.Literals.EXPRESSION = xe;
-    const Ks = new T();
-    Ks.setName("language"), Ks.setLowerBound(1), Ks.setUpperBound(1), xe.getEStructuralFeatures().push(Ks), a.Literals.EXPRESSION__LANGUAGE = Ks;
-    const Qs = new T();
-    Qs.setName("body"), Qs.setLowerBound(1), Qs.setUpperBound(1), xe.getEStructuralFeatures().push(Qs), a.Literals.EXPRESSION__BODY = Qs;
-    const Xe = new w();
-    Xe.setName("ValidationExpression"), Xe.setAbstract(!1), Xe.setInterface(!1), this.getEClassifiers().push(Xe), Xe.setEPackage(this), a.Literals.VALIDATION_EXPRESSION = Xe;
-    const Js = new T();
-    Js.setName("defaultMessage"), Js.setLowerBound(0), Js.setUpperBound(1), Xe.getEStructuralFeatures().push(Js), a.Literals.VALIDATION_EXPRESSION__DEFAULT_MESSAGE = Js;
-    const Zs = new T();
-    Zs.setName("severity"), Zs.setLowerBound(0), Zs.setUpperBound(1), Xe.getEStructuralFeatures().push(Zs), a.Literals.VALIDATION_EXPRESSION__SEVERITY = Zs;
-    const ae = new w();
-    ae.setName("ValidationMessageMapper"), ae.setAbstract(!1), ae.setInterface(!1), this.getEClassifiers().push(ae), ae.setEPackage(this), a.Literals.VALIDATION_MESSAGE_MAPPER = ae;
-    const er = new T();
-    er.setName("order"), er.setLowerBound(0), er.setUpperBound(1), ae.getEStructuralFeatures().push(er), a.Literals.VALIDATION_MESSAGE_MAPPER__ORDER = er;
-    const tr = new T();
-    tr.setName("matchCode"), tr.setLowerBound(0), tr.setUpperBound(1), ae.getEStructuralFeatures().push(tr), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_CODE = tr;
-    const sr = new T();
-    sr.setName("matchSeverity"), sr.setLowerBound(0), sr.setUpperBound(1), ae.getEStructuralFeatures().push(sr), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_SEVERITY = sr;
-    const zt = new I();
-    zt.setContainment(!0), zt.setName("matchExpression"), zt.setLowerBound(0), zt.setUpperBound(1), ae.getEStructuralFeatures().push(zt), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_EXPRESSION = zt;
-    const rr = new T();
-    rr.setName("mappedText"), rr.setLowerBound(0), rr.setUpperBound(1), ae.getEStructuralFeatures().push(rr), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT = rr;
-    const Kt = new I();
-    Kt.setContainment(!0), Kt.setName("mappedTextExpression"), Kt.setLowerBound(0), Kt.setUpperBound(1), ae.getEStructuralFeatures().push(Kt), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT_EXPRESSION = Kt;
-    const ar = new T();
-    ar.setName("mappedSeverity"), ar.setLowerBound(0), ar.setUpperBound(1), ae.getEStructuralFeatures().push(ar), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_SEVERITY = ar, a.Literals.FORM_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.TABLE_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.SECTION_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.TAB_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.SUMMARY_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.MASTER_DETAIL.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.WIDGET_COMPONENT.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.INPUT_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.TEXT_AREA_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.NUMBER_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.CHECKBOX_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.DATE_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.COMBOBOX_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.SELECT_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.ALL_FEATURES.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.GROUP_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.FOR_EACH.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.REFERENCE_LINK_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.BASE_STYLE.getESuperTypes().push(a.Literals.STYLE), a.Literals.LAYOUT_STYLE.getESuperTypes().push(a.Literals.BASE_STYLE), a.Literals.WIDGET_STYLE.getESuperTypes().push(a.Literals.BASE_STYLE), a.Literals.TABLE_STYLE.getESuperTypes().push(a.Literals.WIDGET_STYLE), a.Literals.VALIDATION_EXPRESSION.getESuperTypes().push(a.Literals.EXPRESSION), a.Literals.U_I_MODEL__TARGET_CLASSES.setEType(Qt().getEClassifier("EClass")), a.Literals.U_I_MODEL__FILTER_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.U_I_MODEL__STYLES.setEType(a.Literals.BASE_STYLE), a.Literals.U_I_MODEL__TEMPLATES.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.U_I_MODEL__COMPONENTS.setEType(a.Literals.COMPONENT), a.Literals.COMPONENT__TARGET_CLASSES.setEType(Qt().getEClassifier("EClass")), a.Literals.COMPONENT__STYLES.setEType(a.Literals.BASE_STYLE), a.Literals.COMPONENT__CHILDREN.setEType(a.Literals.COMPONENT), a.Literals.FORM_VIEW__FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.FORM_VIEW__VALIDATIONS.setEType(a.Literals.VALIDATION_EXPRESSION), a.Literals.FORM_VIEW__VALIDATION_MAPPERS.setEType(a.Literals.VALIDATION_MESSAGE_MAPPER), a.Literals.TABLE_VIEW__TABLE_STYLE.setEType(a.Literals.TABLE_STYLE), a.Literals.SECTION_VIEW__SECTIONS.setEType(a.Literals.FORM_VIEW), a.Literals.TAB_VIEW__TABS.setEType(a.Literals.COMPONENT), a.Literals.SUMMARY_VIEW__SUMMARY_FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.MASTER_DETAIL__MASTER.setEType(a.Literals.TABLE_VIEW), a.Literals.MASTER_DETAIL__DETAIL.setEType(a.Literals.COMPONENT), a.Literals.WIDGET_COMPONENT__FEATURE.setEType(Qt().getEClassifier("EStructuralFeature")), a.Literals.WIDGET_COMPONENT__VISIBILITY_CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.WIDGET_COMPONENT__VALIDATIONS.setEType(a.Literals.VALIDATION_EXPRESSION), a.Literals.WIDGET_COMPONENT__VALIDATION_MAPPERS.setEType(a.Literals.VALIDATION_MESSAGE_MAPPER), a.Literals.WIDGET_COMPONENT__BINDINGS.setEType(a.Literals.PROPERTY_BINDING), a.Literals.PROPERTY_BINDING__EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.DATE_WIDGET__CONSTRAINS.setEType(a.Literals.EXPRESSION), a.Literals.COMBOBOX_WIDGET__OPTION_LABEL.setEType(a.Literals.EXPRESSION), a.Literals.SELECT_WIDGET__OPTION_LABEL.setEType(a.Literals.EXPRESSION), a.Literals.ALL_FEATURES__WITH.setEType(Qt().getEClassifier("EStructuralFeature")), a.Literals.ALL_FEATURES__E_TYPE.setEType(Qt().getEClassifier("EClassifier")), a.Literals.ALL_FEATURES__FILTER.setEType(a.Literals.EXPRESSION), a.Literals.ALL_FEATURES__TEMPLATE.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.ALL_FEATURES__CASES.setEType(a.Literals.TEMPLATE_CASE), a.Literals.TEMPLATE_CASE__WHEN.setEType(a.Literals.EXPRESSION), a.Literals.TEMPLATE_CASE__WIDGET.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.GROUP_WIDGET__FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL__CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.CONDITIONAL__THEN.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL__ELSE.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.FOR_EACH__ITEMS.setEType(a.Literals.EXPRESSION), a.Literals.FOR_EACH__BODY.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.REFERENCE_LINK_WIDGET__DISPLAY_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.U_I_MODEL_OVERLAY__TEMPLATES.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.U_I_MODEL_OVERLAY__CASES.setEType(a.Literals.TEMPLATE_CASE), a.Literals.BASE_STYLE__EXTENDS.setEType(a.Literals.BASE_STYLE), a.Literals.BASE_STYLE__VISIBILITY_CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.WIDGET_STYLE__FEATURE.setEType(Qt().getEClassifier("EStructuralFeature")), a.Literals.TABLE_STYLE__COLUMNS.setEType(a.Literals.WIDGET_STYLE), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT_EXPRESSION.setEType(a.Literals.EXPRESSION);
+    ke.setName("ForEach"), ke.setAbstract(!1), ke.setInterface(!1), this.getEClassifiers().push(ke), ke.setEPackage(this), a.Literals.FOR_EACH = ke;
+    const $t = new N();
+    $t.setContainment(!0), $t.setName("items"), $t.setLowerBound(1), $t.setUpperBound(1), ke.getEStructuralFeatures().push($t), a.Literals.FOR_EACH__ITEMS = $t;
+    const kt = new N();
+    kt.setContainment(!0), kt.setName("body"), kt.setLowerBound(0), kt.setUpperBound(-1), ke.getEStructuralFeatures().push(kt), a.Literals.FOR_EACH__BODY = kt;
+    const Us = new S();
+    Us.setName("emptyText"), Us.setLowerBound(0), Us.setUpperBound(1), ke.getEStructuralFeatures().push(Us), a.Literals.FOR_EACH__EMPTY_TEXT = Us;
+    const Ke = new w();
+    Ke.setName("ReferenceLinkWidget"), Ke.setAbstract(!1), Ke.setInterface(!1), this.getEClassifiers().push(Ke), Ke.setEPackage(this), a.Literals.REFERENCE_LINK_WIDGET = Ke;
+    const xt = new N();
+    xt.setContainment(!0), xt.setName("displayExpression"), xt.setLowerBound(0), xt.setUpperBound(1), Ke.getEStructuralFeatures().push(xt), a.Literals.REFERENCE_LINK_WIDGET__DISPLAY_EXPRESSION = xt;
+    const Bs = new S();
+    Bs.setName("targetRoute"), Bs.setLowerBound(0), Bs.setUpperBound(1), Ke.getEStructuralFeatures().push(Bs), a.Literals.REFERENCE_LINK_WIDGET__TARGET_ROUTE = Bs;
+    const Fe = new w();
+    Fe.setName("UIModelOverlay"), Fe.setAbstract(!1), Fe.setInterface(!1), this.getEClassifiers().push(Fe), Fe.setEPackage(this), a.Literals.U_I_MODEL_OVERLAY = Fe;
+    const Gs = new S();
+    Gs.setName("name"), Gs.setLowerBound(0), Gs.setUpperBound(1), Fe.getEStructuralFeatures().push(Gs), a.Literals.U_I_MODEL_OVERLAY__NAME = Gs;
+    const Ws = new S();
+    Ws.setName("priority"), Ws.setLowerBound(0), Ws.setUpperBound(1), Fe.getEStructuralFeatures().push(Ws), a.Literals.U_I_MODEL_OVERLAY__PRIORITY = Ws;
+    const Xt = new N();
+    Xt.setContainment(!0), Xt.setName("templates"), Xt.setLowerBound(0), Xt.setUpperBound(-1), Fe.getEStructuralFeatures().push(Xt), a.Literals.U_I_MODEL_OVERLAY__TEMPLATES = Xt;
+    const Ht = new N();
+    Ht.setContainment(!0), Ht.setName("cases"), Ht.setLowerBound(0), Ht.setUpperBound(-1), Fe.getEStructuralFeatures().push(Ht), a.Literals.U_I_MODEL_OVERLAY__CASES = Ht;
+    const Qe = new w();
+    Qe.setName("Style"), Qe.setAbstract(!0), Qe.setInterface(!0), this.getEClassifiers().push(Qe), Qe.setEPackage(this), a.Literals.STYLE = Qe;
+    const Ys = new S();
+    Ys.setName("name"), Ys.setLowerBound(0), Ys.setUpperBound(1), Qe.getEStructuralFeatures().push(Ys), a.Literals.STYLE__NAME = Ys;
+    const $s = new S();
+    $s.setName("group"), $s.setLowerBound(0), $s.setUpperBound(1), Qe.getEStructuralFeatures().push($s), a.Literals.STYLE__GROUP = $s;
+    const Pe = new w();
+    Pe.setName("BaseStyle"), Pe.setAbstract(!0), Pe.setInterface(!1), this.getEClassifiers().push(Pe), Pe.setEPackage(this), a.Literals.BASE_STYLE = Pe;
+    const jt = new N();
+    jt.setContainment(!1), jt.setName("extends"), jt.setLowerBound(0), jt.setUpperBound(1), Pe.getEStructuralFeatures().push(jt), a.Literals.BASE_STYLE__EXTENDS = jt;
+    const ks = new S();
+    ks.setName("css"), ks.setLowerBound(0), ks.setUpperBound(1), Pe.getEStructuralFeatures().push(ks), a.Literals.BASE_STYLE__CSS = ks;
+    const xs = new S();
+    xs.setName("vueComponent"), xs.setLowerBound(0), xs.setUpperBound(1), Pe.getEStructuralFeatures().push(xs), a.Literals.BASE_STYLE__VUE_COMPONENT = xs;
+    const qt = new N();
+    qt.setContainment(!0), qt.setName("visibilityCondition"), qt.setLowerBound(0), qt.setUpperBound(1), Pe.getEStructuralFeatures().push(qt), a.Literals.BASE_STYLE__VISIBILITY_CONDITION = qt;
+    const Je = new w();
+    Je.setName("LayoutStyle"), Je.setAbstract(!1), Je.setInterface(!1), this.getEClassifiers().push(Je), Je.setEPackage(this), a.Literals.LAYOUT_STYLE = Je;
+    const Xs = new S();
+    Xs.setName("layout"), Xs.setLowerBound(0), Xs.setUpperBound(1), Je.getEStructuralFeatures().push(Xs), a.Literals.LAYOUT_STYLE__LAYOUT = Xs;
+    const Hs = new S();
+    Hs.setName("order"), Hs.setLowerBound(0), Hs.setUpperBound(1), Je.getEStructuralFeatures().push(Hs), a.Literals.LAYOUT_STYLE__ORDER = Hs;
+    const Ae = new w();
+    Ae.setName("WidgetStyle"), Ae.setAbstract(!1), Ae.setInterface(!1), this.getEClassifiers().push(Ae), Ae.setEPackage(this), a.Literals.WIDGET_STYLE = Ae;
+    const zt = new N();
+    zt.setContainment(!1), zt.setName("feature"), zt.setLowerBound(0), zt.setUpperBound(1), Ae.getEStructuralFeatures().push(zt), a.Literals.WIDGET_STYLE__FEATURE = zt;
+    const js = new S();
+    js.setName("widgetType"), js.setLowerBound(0), js.setUpperBound(1), Ae.getEStructuralFeatures().push(js), a.Literals.WIDGET_STYLE__WIDGET_TYPE = js;
+    const qs = new S();
+    qs.setName("label"), qs.setLowerBound(0), qs.setUpperBound(1), Ae.getEStructuralFeatures().push(qs), a.Literals.WIDGET_STYLE__LABEL = qs;
+    const zs = new S();
+    zs.setName("readOnly"), zs.setLowerBound(0), zs.setUpperBound(1), Ae.getEStructuralFeatures().push(zs), a.Literals.WIDGET_STYLE__READ_ONLY = zs;
+    const Ks = new S();
+    Ks.setName("order"), Ks.setLowerBound(0), Ks.setUpperBound(1), Ae.getEStructuralFeatures().push(Ks), a.Literals.WIDGET_STYLE__ORDER = Ks;
+    const Et = new w();
+    Et.setName("TableStyle"), Et.setAbstract(!1), Et.setInterface(!1), this.getEClassifiers().push(Et), Et.setEPackage(this), a.Literals.TABLE_STYLE = Et;
+    const Kt = new N();
+    Kt.setContainment(!0), Kt.setName("columns"), Kt.setLowerBound(1), Kt.setUpperBound(-1), Et.getEStructuralFeatures().push(Kt), a.Literals.TABLE_STYLE__COLUMNS = Kt;
+    const Ze = new w();
+    Ze.setName("Expression"), Ze.setAbstract(!1), Ze.setInterface(!1), this.getEClassifiers().push(Ze), Ze.setEPackage(this), a.Literals.EXPRESSION = Ze;
+    const Qs = new S();
+    Qs.setName("language"), Qs.setLowerBound(1), Qs.setUpperBound(1), Ze.getEStructuralFeatures().push(Qs), a.Literals.EXPRESSION__LANGUAGE = Qs;
+    const Js = new S();
+    Js.setName("body"), Js.setLowerBound(1), Js.setUpperBound(1), Ze.getEStructuralFeatures().push(Js), a.Literals.EXPRESSION__BODY = Js;
+    const et = new w();
+    et.setName("ValidationExpression"), et.setAbstract(!1), et.setInterface(!1), this.getEClassifiers().push(et), et.setEPackage(this), a.Literals.VALIDATION_EXPRESSION = et;
+    const Zs = new S();
+    Zs.setName("defaultMessage"), Zs.setLowerBound(0), Zs.setUpperBound(1), et.getEStructuralFeatures().push(Zs), a.Literals.VALIDATION_EXPRESSION__DEFAULT_MESSAGE = Zs;
+    const er = new S();
+    er.setName("severity"), er.setLowerBound(0), er.setUpperBound(1), et.getEStructuralFeatures().push(er), a.Literals.VALIDATION_EXPRESSION__SEVERITY = er;
+    const Ee = new w();
+    Ee.setName("ValidationMessageMapper"), Ee.setAbstract(!1), Ee.setInterface(!1), this.getEClassifiers().push(Ee), Ee.setEPackage(this), a.Literals.VALIDATION_MESSAGE_MAPPER = Ee;
+    const tr = new S();
+    tr.setName("order"), tr.setLowerBound(0), tr.setUpperBound(1), Ee.getEStructuralFeatures().push(tr), a.Literals.VALIDATION_MESSAGE_MAPPER__ORDER = tr;
+    const sr = new S();
+    sr.setName("matchCode"), sr.setLowerBound(0), sr.setUpperBound(1), Ee.getEStructuralFeatures().push(sr), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_CODE = sr;
+    const rr = new S();
+    rr.setName("matchSeverity"), rr.setLowerBound(0), rr.setUpperBound(1), Ee.getEStructuralFeatures().push(rr), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_SEVERITY = rr;
+    const Qt = new N();
+    Qt.setContainment(!0), Qt.setName("matchExpression"), Qt.setLowerBound(0), Qt.setUpperBound(1), Ee.getEStructuralFeatures().push(Qt), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_EXPRESSION = Qt;
+    const ar = new S();
+    ar.setName("mappedText"), ar.setLowerBound(0), ar.setUpperBound(1), Ee.getEStructuralFeatures().push(ar), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT = ar;
+    const Jt = new N();
+    Jt.setContainment(!0), Jt.setName("mappedTextExpression"), Jt.setLowerBound(0), Jt.setUpperBound(1), Ee.getEStructuralFeatures().push(Jt), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT_EXPRESSION = Jt;
+    const ir = new S();
+    ir.setName("mappedSeverity"), ir.setLowerBound(0), ir.setUpperBound(1), Ee.getEStructuralFeatures().push(ir), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_SEVERITY = ir, a.Literals.FORM_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.TABLE_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.SECTION_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.TAB_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.SUMMARY_VIEW.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.MASTER_DETAIL.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.WIDGET_COMPONENT.getESuperTypes().push(a.Literals.COMPONENT), a.Literals.INPUT_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.TEXT_AREA_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.NUMBER_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.CHECKBOX_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.DATE_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.COMBOBOX_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.SELECT_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.ALL_FEATURES.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.GROUP_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.FOR_EACH.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.REFERENCE_LINK_WIDGET.getESuperTypes().push(a.Literals.WIDGET_COMPONENT), a.Literals.BASE_STYLE.getESuperTypes().push(a.Literals.STYLE), a.Literals.LAYOUT_STYLE.getESuperTypes().push(a.Literals.BASE_STYLE), a.Literals.WIDGET_STYLE.getESuperTypes().push(a.Literals.BASE_STYLE), a.Literals.TABLE_STYLE.getESuperTypes().push(a.Literals.WIDGET_STYLE), a.Literals.VALIDATION_EXPRESSION.getESuperTypes().push(a.Literals.EXPRESSION), a.Literals.U_I_MODEL__TARGET_CLASSES.setEType(Zt().getEClassifier("EClass")), a.Literals.U_I_MODEL__FILTER_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.U_I_MODEL__STYLES.setEType(a.Literals.BASE_STYLE), a.Literals.U_I_MODEL__TEMPLATES.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.U_I_MODEL__COMPONENTS.setEType(a.Literals.COMPONENT), a.Literals.COMPONENT__TARGET_CLASSES.setEType(Zt().getEClassifier("EClass")), a.Literals.COMPONENT__STYLES.setEType(a.Literals.BASE_STYLE), a.Literals.COMPONENT__CHILDREN.setEType(a.Literals.COMPONENT), a.Literals.FORM_VIEW__FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.FORM_VIEW__VALIDATIONS.setEType(a.Literals.VALIDATION_EXPRESSION), a.Literals.FORM_VIEW__VALIDATION_MAPPERS.setEType(a.Literals.VALIDATION_MESSAGE_MAPPER), a.Literals.TABLE_VIEW__TABLE_STYLE.setEType(a.Literals.TABLE_STYLE), a.Literals.SECTION_VIEW__SECTIONS.setEType(a.Literals.FORM_VIEW), a.Literals.TAB_VIEW__TABS.setEType(a.Literals.COMPONENT), a.Literals.SUMMARY_VIEW__SUMMARY_FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.MASTER_DETAIL__MASTER.setEType(a.Literals.TABLE_VIEW), a.Literals.MASTER_DETAIL__DETAIL.setEType(a.Literals.COMPONENT), a.Literals.WIDGET_COMPONENT__FEATURE.setEType(Zt().getEClassifier("EStructuralFeature")), a.Literals.WIDGET_COMPONENT__VISIBILITY_CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.WIDGET_COMPONENT__VALIDATIONS.setEType(a.Literals.VALIDATION_EXPRESSION), a.Literals.WIDGET_COMPONENT__VALIDATION_MAPPERS.setEType(a.Literals.VALIDATION_MESSAGE_MAPPER), a.Literals.WIDGET_COMPONENT__BINDINGS.setEType(a.Literals.PROPERTY_BINDING), a.Literals.PROPERTY_BINDING__EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.DATE_WIDGET__CONSTRAINS.setEType(a.Literals.EXPRESSION), a.Literals.COMBOBOX_WIDGET__OPTION_LABEL.setEType(a.Literals.EXPRESSION), a.Literals.SELECT_WIDGET__OPTION_LABEL.setEType(a.Literals.EXPRESSION), a.Literals.ALL_FEATURES__WITH.setEType(Zt().getEClassifier("EStructuralFeature")), a.Literals.ALL_FEATURES__E_TYPE.setEType(Zt().getEClassifier("EClassifier")), a.Literals.ALL_FEATURES__FILTER.setEType(a.Literals.EXPRESSION), a.Literals.ALL_FEATURES__TEMPLATE.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.ALL_FEATURES__CASES.setEType(a.Literals.TEMPLATE_CASE), a.Literals.TEMPLATE_CASE__WHEN.setEType(a.Literals.EXPRESSION), a.Literals.TEMPLATE_CASE__WIDGET.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.GROUP_WIDGET__FIELDS.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL__CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.CONDITIONAL__THEN.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.CONDITIONAL__ELSE.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.FOR_EACH__ITEMS.setEType(a.Literals.EXPRESSION), a.Literals.FOR_EACH__BODY.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.REFERENCE_LINK_WIDGET__DISPLAY_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.U_I_MODEL_OVERLAY__TEMPLATES.setEType(a.Literals.WIDGET_COMPONENT), a.Literals.U_I_MODEL_OVERLAY__CASES.setEType(a.Literals.TEMPLATE_CASE), a.Literals.BASE_STYLE__EXTENDS.setEType(a.Literals.BASE_STYLE), a.Literals.BASE_STYLE__VISIBILITY_CONDITION.setEType(a.Literals.EXPRESSION), a.Literals.WIDGET_STYLE__FEATURE.setEType(Zt().getEClassifier("EStructuralFeature")), a.Literals.TABLE_STYLE__COLUMNS.setEType(a.Literals.WIDGET_STYLE), a.Literals.VALIDATION_MESSAGE_MAPPER__MATCH_EXPRESSION.setEType(a.Literals.EXPRESSION), a.Literals.VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT_EXPRESSION.setEType(a.Literals.EXPRESSION);
   }
 };
-ir(Jt, "eNAME", "uimodel"), ir(Jt, "eNS_URI", "http://uimodel/1.0"), ir(Jt, "eNS_PREFIX", "uimodel"), // Singleton instance
-ir(Jt, "_instance"), /**
+ur(es, "eNAME", "uimodel"), ur(es, "eNS_URI", "http://uimodel/1.0"), ur(es, "eNS_PREFIX", "uimodel"), // Singleton instance
+ur(es, "_instance"), /**
 * Literals for quick access to metaclasses and features
 */
-ir(Jt, "Literals", {
+ur(es, "Literals", {
   U_I_MODEL: null,
   U_I_MODEL__NAME: null,
   U_I_MODEL__TARGET_CLASSES: null,
@@ -428,11 +429,11 @@ ir(Jt, "Literals", {
   VALIDATION_MESSAGE_MAPPER__MAPPED_TEXT_EXPRESSION: null,
   VALIDATION_MESSAGE_MAPPER__MAPPED_SEVERITY: null
 });
-let y = Jt;
-var Bi = Object.defineProperty, Gi = (s, e, t) => e in s ? Bi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, te = (s, e, t) => Gi(s, typeof e != "symbol" ? e + "" : e, t);
-const He = class v extends tt {
+let y = es;
+var $i = Object.defineProperty, ki = (s, e, t) => e in s ? $i(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, le = (s, e, t) => ki(s, typeof e != "symbol" ? e + "" : e, t);
+const tt = class _ extends ct {
   constructor() {
-    super(...arguments), te(this, "_name"), te(this, "_targetClasses", []), te(this, "_priority", 0), te(this, "_filterExpression"), te(this, "_styles", []), te(this, "_templates", []), te(this, "_components", []);
+    super(...arguments), le(this, "_name"), le(this, "_targetClasses", []), le(this, "_priority", 0), le(this, "_filterExpression"), le(this, "_styles", []), le(this, "_templates", []), le(this, "_components", []);
   }
   /**
    * Returns the EClass of this object
@@ -450,14 +451,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.NAME),
+      getFeature: () => this.eClass().getEStructuralFeature(_.NAME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.NAME,
+      getFeatureID: () => _.NAME,
       merge: () => !1
     });
   }
@@ -470,14 +471,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.TARGET_CLASSES),
+      getFeature: () => this.eClass().getEStructuralFeature(_.TARGET_CLASSES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.TARGET_CLASSES,
+      getFeatureID: () => _.TARGET_CLASSES,
       merge: () => !1
     });
   }
@@ -490,14 +491,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.PRIORITY),
+      getFeature: () => this.eClass().getEStructuralFeature(_.PRIORITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.PRIORITY,
+      getFeatureID: () => _.PRIORITY,
       merge: () => !1
     });
   }
@@ -510,14 +511,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.FILTER_EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(_.FILTER_EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.FILTER_EXPRESSION,
+      getFeatureID: () => _.FILTER_EXPRESSION,
       merge: () => !1
     });
   }
@@ -530,14 +531,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.STYLES),
+      getFeature: () => this.eClass().getEStructuralFeature(_.STYLES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.STYLES,
+      getFeatureID: () => _.STYLES,
       merge: () => !1
     });
   }
@@ -550,14 +551,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.TEMPLATES),
+      getFeature: () => this.eClass().getEStructuralFeature(_.TEMPLATES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.TEMPLATES,
+      getFeatureID: () => _.TEMPLATES,
       merge: () => !1
     });
   }
@@ -570,14 +571,14 @@ const He = class v extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(v.COMPONENTS),
+      getFeature: () => this.eClass().getEStructuralFeature(_.COMPONENTS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => v.COMPONENTS,
+      getFeatureID: () => _.COMPONENTS,
       merge: () => !1
     });
   }
@@ -587,19 +588,19 @@ const He = class v extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.NAME:
+      case _.NAME:
         return this.name;
-      case v.TARGET_CLASSES:
+      case _.TARGET_CLASSES:
         return this.targetClasses;
-      case v.PRIORITY:
+      case _.PRIORITY:
         return this.priority;
-      case v.FILTER_EXPRESSION:
+      case _.FILTER_EXPRESSION:
         return this.filterExpression;
-      case v.STYLES:
+      case _.STYLES:
         return this.styles;
-      case v.TEMPLATES:
+      case _.TEMPLATES:
         return this.templates;
-      case v.COMPONENTS:
+      case _.COMPONENTS:
         return this.components;
       default:
         return super.eGet(e);
@@ -610,25 +611,25 @@ const He = class v extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.NAME:
+      case _.NAME:
         this.name = t, super.eSet(e, t);
         break;
-      case v.TARGET_CLASSES:
+      case _.TARGET_CLASSES:
         this.targetClasses = t, super.eSet(e, t);
         break;
-      case v.PRIORITY:
+      case _.PRIORITY:
         this.priority = t, super.eSet(e, t);
         break;
-      case v.FILTER_EXPRESSION:
+      case _.FILTER_EXPRESSION:
         this.filterExpression = t, super.eSet(e, t);
         break;
-      case v.STYLES:
+      case _.STYLES:
         this.styles = t, super.eSet(e, t);
         break;
-      case v.TEMPLATES:
+      case _.TEMPLATES:
         this.templates = t, super.eSet(e, t);
         break;
-      case v.COMPONENTS:
+      case _.COMPONENTS:
         this.components = t, super.eSet(e, t);
         break;
       default:
@@ -640,19 +641,19 @@ const He = class v extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.NAME:
+      case _.NAME:
         return this._name !== void 0;
-      case v.TARGET_CLASSES:
+      case _.TARGET_CLASSES:
         return this._targetClasses !== void 0 && this._targetClasses.length > 0;
-      case v.PRIORITY:
+      case _.PRIORITY:
         return this._priority !== 0;
-      case v.FILTER_EXPRESSION:
+      case _.FILTER_EXPRESSION:
         return this._filterExpression !== void 0;
-      case v.STYLES:
+      case _.STYLES:
         return this._styles !== void 0 && this._styles.length > 0;
-      case v.TEMPLATES:
+      case _.TEMPLATES:
         return this._templates !== void 0 && this._templates.length > 0;
-      case v.COMPONENTS:
+      case _.COMPONENTS:
         return this._components !== void 0 && this._components.length > 0;
       default:
         return super.eIsSet(e);
@@ -663,25 +664,25 @@ const He = class v extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case v.NAME:
+      case _.NAME:
         this._name = void 0;
         return;
-      case v.TARGET_CLASSES:
+      case _.TARGET_CLASSES:
         this._targetClasses = [];
         return;
-      case v.PRIORITY:
+      case _.PRIORITY:
         this._priority = 0;
         return;
-      case v.FILTER_EXPRESSION:
+      case _.FILTER_EXPRESSION:
         this._filterExpression = void 0;
         return;
-      case v.STYLES:
+      case _.STYLES:
         this._styles = [];
         return;
-      case v.TEMPLATES:
+      case _.TEMPLATES:
         this._templates = [];
         return;
-      case v.COMPONENTS:
+      case _.COMPONENTS:
         this._components = [];
         return;
       default:
@@ -689,15 +690,15 @@ const He = class v extends tt {
     }
   }
 };
-te(He, "NAME", 0), te(He, "TARGET_CLASSES", 1), te(He, "PRIORITY", 2), te(He, "FILTER_EXPRESSION", 3), te(He, "STYLES", 4), te(He, "TEMPLATES", 5), te(He, "COMPONENTS", 6);
-let Wi = He;
-const Yr = {
+le(tt, "NAME", 0), le(tt, "TARGET_CLASSES", 1), le(tt, "PRIORITY", 2), le(tt, "FILTER_EXPRESSION", 3), le(tt, "STYLES", 4), le(tt, "TEMPLATES", 5), le(tt, "COMPONENTS", 6);
+let xi = tt;
+const xr = {
   FIELD_THEN_FORM: "FIELD_THEN_FORM"
 };
-var Yi = Object.defineProperty, $i = (s, e, t) => e in s ? Yi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ye = (s, e, t) => $i(s, typeof e != "symbol" ? e + "" : e, t);
-const Zt = class F extends tt {
+var Xi = Object.defineProperty, Hi = (s, e, t) => e in s ? Xi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Me = (s, e, t) => Hi(s, typeof e != "symbol" ? e + "" : e, t);
+const ts = class F extends ct {
   constructor() {
-    super(...arguments), ye(this, "_name", ""), ye(this, "_group"), ye(this, "_targetClasses", []), ye(this, "_styles", []), ye(this, "_children", []);
+    super(...arguments), Me(this, "_name", ""), Me(this, "_group"), Me(this, "_targetClasses", []), Me(this, "_styles", []), Me(this, "_children", []);
   }
   /**
    * Returns the EClass of this object
@@ -894,12 +895,12 @@ const Zt = class F extends tt {
     }
   }
 };
-ye(Zt, "NAME", 0), ye(Zt, "GROUP", 1), ye(Zt, "TARGET_CLASSES", 2), ye(Zt, "STYLES", 3), ye(Zt, "CHILDREN", 4);
-let dt = Zt;
-var ki = Object.defineProperty, xi = (s, e, t) => e in s ? ki(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ze = (s, e, t) => xi(s, typeof e != "symbol" ? e + "" : e, t);
-const ur = class U extends dt {
+Me(ts, "NAME", 0), Me(ts, "GROUP", 1), Me(ts, "TARGET_CLASSES", 2), Me(ts, "STYLES", 3), Me(ts, "CHILDREN", 4);
+let Nt = ts;
+var ji = Object.defineProperty, qi = (s, e, t) => e in s ? ji(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, rt = (s, e, t) => qi(s, typeof e != "symbol" ? e + "" : e, t);
+const nr = class G extends Nt {
   constructor() {
-    super(...arguments), ze(this, "_fields", []), ze(this, "_validations", []), ze(this, "_validationMappers", []), ze(this, "_mapperOrder", Yr.FIELD_THEN_FORM);
+    super(...arguments), rt(this, "_fields", []), rt(this, "_validations", []), rt(this, "_validationMappers", []), rt(this, "_mapperOrder", xr.FIELD_THEN_FORM);
   }
   /**
    * Returns the EClass of this object
@@ -917,14 +918,14 @@ const ur = class U extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(U.FIELDS),
+      getFeature: () => this.eClass().getEStructuralFeature(G.FIELDS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => U.FIELDS,
+      getFeatureID: () => G.FIELDS,
       merge: () => !1
     });
   }
@@ -937,14 +938,14 @@ const ur = class U extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(U.VALIDATIONS),
+      getFeature: () => this.eClass().getEStructuralFeature(G.VALIDATIONS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => U.VALIDATIONS,
+      getFeatureID: () => G.VALIDATIONS,
       merge: () => !1
     });
   }
@@ -957,14 +958,14 @@ const ur = class U extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(U.VALIDATION_MAPPERS),
+      getFeature: () => this.eClass().getEStructuralFeature(G.VALIDATION_MAPPERS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => U.VALIDATION_MAPPERS,
+      getFeatureID: () => G.VALIDATION_MAPPERS,
       merge: () => !1
     });
   }
@@ -977,14 +978,14 @@ const ur = class U extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(U.MAPPER_ORDER),
+      getFeature: () => this.eClass().getEStructuralFeature(G.MAPPER_ORDER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => U.MAPPER_ORDER,
+      getFeatureID: () => G.MAPPER_ORDER,
       merge: () => !1
     });
   }
@@ -994,13 +995,13 @@ const ur = class U extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case U.FIELDS:
+      case G.FIELDS:
         return this.fields;
-      case U.VALIDATIONS:
+      case G.VALIDATIONS:
         return this.validations;
-      case U.VALIDATION_MAPPERS:
+      case G.VALIDATION_MAPPERS:
         return this.validationMappers;
-      case U.MAPPER_ORDER:
+      case G.MAPPER_ORDER:
         return this.mapperOrder;
       default:
         return super.eGet(e);
@@ -1011,16 +1012,16 @@ const ur = class U extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case U.FIELDS:
+      case G.FIELDS:
         this.fields = t, super.eSet(e, t);
         break;
-      case U.VALIDATIONS:
+      case G.VALIDATIONS:
         this.validations = t, super.eSet(e, t);
         break;
-      case U.VALIDATION_MAPPERS:
+      case G.VALIDATION_MAPPERS:
         this.validationMappers = t, super.eSet(e, t);
         break;
-      case U.MAPPER_ORDER:
+      case G.MAPPER_ORDER:
         this.mapperOrder = t, super.eSet(e, t);
         break;
       default:
@@ -1032,14 +1033,14 @@ const ur = class U extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case U.FIELDS:
+      case G.FIELDS:
         return this._fields !== void 0 && this._fields.length > 0;
-      case U.VALIDATIONS:
+      case G.VALIDATIONS:
         return this._validations !== void 0 && this._validations.length > 0;
-      case U.VALIDATION_MAPPERS:
+      case G.VALIDATION_MAPPERS:
         return this._validationMappers !== void 0 && this._validationMappers.length > 0;
-      case U.MAPPER_ORDER:
-        return this._mapperOrder !== Yr.FIELD_THEN_FORM;
+      case G.MAPPER_ORDER:
+        return this._mapperOrder !== xr.FIELD_THEN_FORM;
       default:
         return super.eIsSet(e);
     }
@@ -1049,29 +1050,29 @@ const ur = class U extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case U.FIELDS:
+      case G.FIELDS:
         this._fields = [];
         return;
-      case U.VALIDATIONS:
+      case G.VALIDATIONS:
         this._validations = [];
         return;
-      case U.VALIDATION_MAPPERS:
+      case G.VALIDATION_MAPPERS:
         this._validationMappers = [];
         return;
-      case U.MAPPER_ORDER:
-        this._mapperOrder = Yr.FIELD_THEN_FORM;
+      case G.MAPPER_ORDER:
+        this._mapperOrder = xr.FIELD_THEN_FORM;
         return;
       default:
         super.eUnset(e);
     }
   }
 };
-ze(ur, "FIELDS", 5), ze(ur, "VALIDATIONS", 6), ze(ur, "VALIDATION_MAPPERS", 7), ze(ur, "MAPPER_ORDER", 8);
-let Xi = ur;
-var Hi = Object.defineProperty, ji = (s, e, t) => e in s ? Hi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, wa = (s, e, t) => ji(s, typeof e != "symbol" ? e + "" : e, t);
-const Fa = class it extends dt {
+rt(nr, "FIELDS", 5), rt(nr, "VALIDATIONS", 6), rt(nr, "VALIDATION_MAPPERS", 7), rt(nr, "MAPPER_ORDER", 8);
+let zi = nr;
+var Ki = Object.defineProperty, Qi = (s, e, t) => e in s ? Ki(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Va = (s, e, t) => Qi(s, typeof e != "symbol" ? e + "" : e, t);
+const Ua = class ht extends Nt {
   constructor() {
-    super(...arguments), wa(this, "_tableStyle");
+    super(...arguments), Va(this, "_tableStyle");
   }
   /**
    * Returns the EClass of this object
@@ -1089,14 +1090,14 @@ const Fa = class it extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(it.TABLE_STYLE),
+      getFeature: () => this.eClass().getEStructuralFeature(ht.TABLE_STYLE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => it.TABLE_STYLE,
+      getFeatureID: () => ht.TABLE_STYLE,
       merge: () => !1
     });
   }
@@ -1106,7 +1107,7 @@ const Fa = class it extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case it.TABLE_STYLE:
+      case ht.TABLE_STYLE:
         return this.tableStyle;
       default:
         return super.eGet(e);
@@ -1117,7 +1118,7 @@ const Fa = class it extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case it.TABLE_STYLE:
+      case ht.TABLE_STYLE:
         this.tableStyle = t, super.eSet(e, t);
         break;
       default:
@@ -1129,7 +1130,7 @@ const Fa = class it extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case it.TABLE_STYLE:
+      case ht.TABLE_STYLE:
         return this._tableStyle !== void 0;
       default:
         return super.eIsSet(e);
@@ -1140,7 +1141,7 @@ const Fa = class it extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case it.TABLE_STYLE:
+      case ht.TABLE_STYLE:
         this._tableStyle = void 0;
         return;
       default:
@@ -1148,12 +1149,12 @@ const Fa = class it extends dt {
     }
   }
 };
-wa(Fa, "TABLE_STYLE", 5);
-let qi = Fa;
-var zi = Object.defineProperty, Ki = (s, e, t) => e in s ? zi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Pa = (s, e, t) => Ki(s, typeof e != "symbol" ? e + "" : e, t);
-const ba = class ut extends dt {
+Va(Ua, "TABLE_STYLE", 5);
+let Ji = Ua;
+var Zi = Object.defineProperty, eu = (s, e, t) => e in s ? Zi(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ba = (s, e, t) => eu(s, typeof e != "symbol" ? e + "" : e, t);
+const Ga = class gt extends Nt {
   constructor() {
-    super(...arguments), Pa(this, "_sections", []);
+    super(...arguments), Ba(this, "_sections", []);
   }
   /**
    * Returns the EClass of this object
@@ -1171,14 +1172,14 @@ const ba = class ut extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ut.SECTIONS),
+      getFeature: () => this.eClass().getEStructuralFeature(gt.SECTIONS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ut.SECTIONS,
+      getFeatureID: () => gt.SECTIONS,
       merge: () => !1
     });
   }
@@ -1188,7 +1189,7 @@ const ba = class ut extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ut.SECTIONS:
+      case gt.SECTIONS:
         return this.sections;
       default:
         return super.eGet(e);
@@ -1199,7 +1200,7 @@ const ba = class ut extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ut.SECTIONS:
+      case gt.SECTIONS:
         this.sections = t, super.eSet(e, t);
         break;
       default:
@@ -1211,7 +1212,7 @@ const ba = class ut extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ut.SECTIONS:
+      case gt.SECTIONS:
         return this._sections !== void 0 && this._sections.length > 0;
       default:
         return super.eIsSet(e);
@@ -1222,7 +1223,7 @@ const ba = class ut extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ut.SECTIONS:
+      case gt.SECTIONS:
         this._sections = [];
         return;
       default:
@@ -1230,12 +1231,12 @@ const ba = class ut extends dt {
     }
   }
 };
-Pa(ba, "SECTIONS", 5);
-let Qi = ba;
-var Ji = Object.defineProperty, Zi = (s, e, t) => e in s ? Ji(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ma = (s, e, t) => Zi(s, typeof e != "symbol" ? e + "" : e, t);
-const Ua = class nt extends dt {
+Ba(Ga, "SECTIONS", 5);
+let tu = Ga;
+var su = Object.defineProperty, ru = (s, e, t) => e in s ? su(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Wa = (s, e, t) => ru(s, typeof e != "symbol" ? e + "" : e, t);
+const Ya = class dt extends Nt {
   constructor() {
-    super(...arguments), Ma(this, "_tabs", []);
+    super(...arguments), Wa(this, "_tabs", []);
   }
   /**
    * Returns the EClass of this object
@@ -1253,14 +1254,14 @@ const Ua = class nt extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(nt.TABS),
+      getFeature: () => this.eClass().getEStructuralFeature(dt.TABS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => nt.TABS,
+      getFeatureID: () => dt.TABS,
       merge: () => !1
     });
   }
@@ -1270,7 +1271,7 @@ const Ua = class nt extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case nt.TABS:
+      case dt.TABS:
         return this.tabs;
       default:
         return super.eGet(e);
@@ -1281,7 +1282,7 @@ const Ua = class nt extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case nt.TABS:
+      case dt.TABS:
         this.tabs = t, super.eSet(e, t);
         break;
       default:
@@ -1293,7 +1294,7 @@ const Ua = class nt extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case nt.TABS:
+      case dt.TABS:
         return this._tabs !== void 0 && this._tabs.length > 0;
       default:
         return super.eIsSet(e);
@@ -1304,7 +1305,7 @@ const Ua = class nt extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case nt.TABS:
+      case dt.TABS:
         this._tabs = [];
         return;
       default:
@@ -1312,12 +1313,12 @@ const Ua = class nt extends dt {
     }
   }
 };
-Ma(Ua, "TABS", 5);
-let eu = Ua;
-var tu = Object.defineProperty, su = (s, e, t) => e in s ? tu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Va = (s, e, t) => su(s, typeof e != "symbol" ? e + "" : e, t);
-const Ba = class lt extends dt {
+Wa(Ya, "TABS", 5);
+let au = Ya;
+var iu = Object.defineProperty, uu = (s, e, t) => e in s ? iu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, $a = (s, e, t) => uu(s, typeof e != "symbol" ? e + "" : e, t);
+const ka = class pt extends Nt {
   constructor() {
-    super(...arguments), Va(this, "_summaryFields", []);
+    super(...arguments), $a(this, "_summaryFields", []);
   }
   /**
    * Returns the EClass of this object
@@ -1335,14 +1336,14 @@ const Ba = class lt extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(lt.SUMMARY_FIELDS),
+      getFeature: () => this.eClass().getEStructuralFeature(pt.SUMMARY_FIELDS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => lt.SUMMARY_FIELDS,
+      getFeatureID: () => pt.SUMMARY_FIELDS,
       merge: () => !1
     });
   }
@@ -1352,7 +1353,7 @@ const Ba = class lt extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case lt.SUMMARY_FIELDS:
+      case pt.SUMMARY_FIELDS:
         return this.summaryFields;
       default:
         return super.eGet(e);
@@ -1363,7 +1364,7 @@ const Ba = class lt extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case lt.SUMMARY_FIELDS:
+      case pt.SUMMARY_FIELDS:
         this.summaryFields = t, super.eSet(e, t);
         break;
       default:
@@ -1375,7 +1376,7 @@ const Ba = class lt extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case lt.SUMMARY_FIELDS:
+      case pt.SUMMARY_FIELDS:
         return this._summaryFields !== void 0 && this._summaryFields.length > 0;
       default:
         return super.eIsSet(e);
@@ -1386,7 +1387,7 @@ const Ba = class lt extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case lt.SUMMARY_FIELDS:
+      case pt.SUMMARY_FIELDS:
         this._summaryFields = [];
         return;
       default:
@@ -1394,12 +1395,12 @@ const Ba = class lt extends dt {
     }
   }
 };
-Va(Ba, "SUMMARY_FIELDS", 5);
-let ru = Ba;
-var au = Object.defineProperty, iu = (s, e, t) => e in s ? au(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ar = (s, e, t) => iu(s, typeof e != "symbol" ? e + "" : e, t);
-const Hr = class ie extends dt {
+$a(ka, "SUMMARY_FIELDS", 5);
+let nu = ka;
+var lu = Object.defineProperty, ou = (s, e, t) => e in s ? lu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, yr = (s, e, t) => ou(s, typeof e != "symbol" ? e + "" : e, t);
+const zr = class he extends Nt {
   constructor() {
-    super(...arguments), Ar(this, "_master"), Ar(this, "_detail");
+    super(...arguments), yr(this, "_master"), yr(this, "_detail");
   }
   /**
    * Returns the EClass of this object
@@ -1417,14 +1418,14 @@ const Hr = class ie extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ie.MASTER),
+      getFeature: () => this.eClass().getEStructuralFeature(he.MASTER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ie.MASTER,
+      getFeatureID: () => he.MASTER,
       merge: () => !1
     });
   }
@@ -1437,14 +1438,14 @@ const Hr = class ie extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ie.DETAIL),
+      getFeature: () => this.eClass().getEStructuralFeature(he.DETAIL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ie.DETAIL,
+      getFeatureID: () => he.DETAIL,
       merge: () => !1
     });
   }
@@ -1454,9 +1455,9 @@ const Hr = class ie extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ie.MASTER:
+      case he.MASTER:
         return this.master;
-      case ie.DETAIL:
+      case he.DETAIL:
         return this.detail;
       default:
         return super.eGet(e);
@@ -1467,10 +1468,10 @@ const Hr = class ie extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ie.MASTER:
+      case he.MASTER:
         this.master = t, super.eSet(e, t);
         break;
-      case ie.DETAIL:
+      case he.DETAIL:
         this.detail = t, super.eSet(e, t);
         break;
       default:
@@ -1482,9 +1483,9 @@ const Hr = class ie extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ie.MASTER:
+      case he.MASTER:
         return this._master !== void 0;
-      case ie.DETAIL:
+      case he.DETAIL:
         return this._detail !== void 0;
       default:
         return super.eIsSet(e);
@@ -1495,10 +1496,10 @@ const Hr = class ie extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ie.MASTER:
+      case he.MASTER:
         this._master = void 0;
         return;
-      case ie.DETAIL:
+      case he.DETAIL:
         this._detail = void 0;
         return;
       default:
@@ -1506,12 +1507,12 @@ const Hr = class ie extends dt {
     }
   }
 };
-Ar(Hr, "MASTER", 5), Ar(Hr, "DETAIL", 6);
-let uu = Hr;
-var nu = Object.defineProperty, lu = (s, e, t) => e in s ? nu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Cr = (s, e, t) => lu(s, typeof e != "symbol" ? e + "" : e, t);
-const jr = class ue extends tt {
+yr(zr, "MASTER", 5), yr(zr, "DETAIL", 6);
+let cu = zr;
+var Eu = Object.defineProperty, hu = (s, e, t) => e in s ? Eu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Dr = (s, e, t) => hu(s, typeof e != "symbol" ? e + "" : e, t);
+const Kr = class ge extends ct {
   constructor() {
-    super(...arguments), Cr(this, "_property", ""), Cr(this, "_expression");
+    super(...arguments), Dr(this, "_property", ""), Dr(this, "_expression");
   }
   /**
    * Returns the EClass of this object
@@ -1529,14 +1530,14 @@ const jr = class ue extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ue.PROPERTY),
+      getFeature: () => this.eClass().getEStructuralFeature(ge.PROPERTY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ue.PROPERTY,
+      getFeatureID: () => ge.PROPERTY,
       merge: () => !1
     });
   }
@@ -1549,14 +1550,14 @@ const jr = class ue extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ue.EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(ge.EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ue.EXPRESSION,
+      getFeatureID: () => ge.EXPRESSION,
       merge: () => !1
     });
   }
@@ -1566,9 +1567,9 @@ const jr = class ue extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ue.PROPERTY:
+      case ge.PROPERTY:
         return this.property;
-      case ue.EXPRESSION:
+      case ge.EXPRESSION:
         return this.expression;
       default:
         return super.eGet(e);
@@ -1579,10 +1580,10 @@ const jr = class ue extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ue.PROPERTY:
+      case ge.PROPERTY:
         this.property = t, super.eSet(e, t);
         break;
-      case ue.EXPRESSION:
+      case ge.EXPRESSION:
         this.expression = t, super.eSet(e, t);
         break;
       default:
@@ -1594,9 +1595,9 @@ const jr = class ue extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ue.PROPERTY:
+      case ge.PROPERTY:
         return this._property !== "";
-      case ue.EXPRESSION:
+      case ge.EXPRESSION:
         return this._expression !== void 0;
       default:
         return super.eIsSet(e);
@@ -1607,10 +1608,10 @@ const jr = class ue extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ue.PROPERTY:
+      case ge.PROPERTY:
         this._property = "";
         return;
-      case ue.EXPRESSION:
+      case ge.EXPRESSION:
         this._expression = void 0;
         return;
       default:
@@ -1618,12 +1619,12 @@ const jr = class ue extends tt {
     }
   }
 };
-Cr(jr, "PROPERTY", 0), Cr(jr, "EXPRESSION", 1);
-let ou = jr;
-var cu = Object.defineProperty, Eu = (s, e, t) => e in s ? cu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, j = (s, e, t) => Eu(s, typeof e != "symbol" ? e + "" : e, t);
-const Ce = class S extends dt {
+Dr(Kr, "PROPERTY", 0), Dr(Kr, "EXPRESSION", 1);
+let gu = Kr;
+var du = Object.defineProperty, pu = (s, e, t) => e in s ? du(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Z = (s, e, t) => pu(s, typeof e != "symbol" ? e + "" : e, t);
+const be = class m extends Nt {
   constructor() {
-    super(...arguments), j(this, "_feature"), j(this, "_label"), j(this, "_placeholder"), j(this, "_readOnly"), j(this, "_required"), j(this, "_visibilityCondition"), j(this, "_validations", []), j(this, "_validationMappers", []), j(this, "_bindings", []);
+    super(...arguments), Z(this, "_feature"), Z(this, "_label"), Z(this, "_placeholder"), Z(this, "_readOnly"), Z(this, "_required"), Z(this, "_visibilityCondition"), Z(this, "_validations", []), Z(this, "_validationMappers", []), Z(this, "_bindings", []);
   }
   /**
    * Returns the EClass of this object
@@ -1641,14 +1642,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.FEATURE),
+      getFeature: () => this.eClass().getEStructuralFeature(m.FEATURE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.FEATURE,
+      getFeatureID: () => m.FEATURE,
       merge: () => !1
     });
   }
@@ -1661,14 +1662,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.LABEL),
+      getFeature: () => this.eClass().getEStructuralFeature(m.LABEL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.LABEL,
+      getFeatureID: () => m.LABEL,
       merge: () => !1
     });
   }
@@ -1681,14 +1682,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.PLACEHOLDER),
+      getFeature: () => this.eClass().getEStructuralFeature(m.PLACEHOLDER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.PLACEHOLDER,
+      getFeatureID: () => m.PLACEHOLDER,
       merge: () => !1
     });
   }
@@ -1701,14 +1702,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.READ_ONLY),
+      getFeature: () => this.eClass().getEStructuralFeature(m.READ_ONLY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.READ_ONLY,
+      getFeatureID: () => m.READ_ONLY,
       merge: () => !1
     });
   }
@@ -1721,14 +1722,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.REQUIRED),
+      getFeature: () => this.eClass().getEStructuralFeature(m.REQUIRED),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.REQUIRED,
+      getFeatureID: () => m.REQUIRED,
       merge: () => !1
     });
   }
@@ -1741,14 +1742,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.VISIBILITY_CONDITION),
+      getFeature: () => this.eClass().getEStructuralFeature(m.VISIBILITY_CONDITION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.VISIBILITY_CONDITION,
+      getFeatureID: () => m.VISIBILITY_CONDITION,
       merge: () => !1
     });
   }
@@ -1761,14 +1762,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.VALIDATIONS),
+      getFeature: () => this.eClass().getEStructuralFeature(m.VALIDATIONS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.VALIDATIONS,
+      getFeatureID: () => m.VALIDATIONS,
       merge: () => !1
     });
   }
@@ -1781,14 +1782,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.VALIDATION_MAPPERS),
+      getFeature: () => this.eClass().getEStructuralFeature(m.VALIDATION_MAPPERS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.VALIDATION_MAPPERS,
+      getFeatureID: () => m.VALIDATION_MAPPERS,
       merge: () => !1
     });
   }
@@ -1801,14 +1802,14 @@ const Ce = class S extends dt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(S.BINDINGS),
+      getFeature: () => this.eClass().getEStructuralFeature(m.BINDINGS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => S.BINDINGS,
+      getFeatureID: () => m.BINDINGS,
       merge: () => !1
     });
   }
@@ -1818,23 +1819,23 @@ const Ce = class S extends dt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case S.FEATURE:
+      case m.FEATURE:
         return this.feature;
-      case S.LABEL:
+      case m.LABEL:
         return this.label;
-      case S.PLACEHOLDER:
+      case m.PLACEHOLDER:
         return this.placeholder;
-      case S.READ_ONLY:
+      case m.READ_ONLY:
         return this.readOnly;
-      case S.REQUIRED:
+      case m.REQUIRED:
         return this.required;
-      case S.VISIBILITY_CONDITION:
+      case m.VISIBILITY_CONDITION:
         return this.visibilityCondition;
-      case S.VALIDATIONS:
+      case m.VALIDATIONS:
         return this.validations;
-      case S.VALIDATION_MAPPERS:
+      case m.VALIDATION_MAPPERS:
         return this.validationMappers;
-      case S.BINDINGS:
+      case m.BINDINGS:
         return this.bindings;
       default:
         return super.eGet(e);
@@ -1845,31 +1846,31 @@ const Ce = class S extends dt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case S.FEATURE:
+      case m.FEATURE:
         this.feature = t, super.eSet(e, t);
         break;
-      case S.LABEL:
+      case m.LABEL:
         this.label = t, super.eSet(e, t);
         break;
-      case S.PLACEHOLDER:
+      case m.PLACEHOLDER:
         this.placeholder = t, super.eSet(e, t);
         break;
-      case S.READ_ONLY:
+      case m.READ_ONLY:
         this.readOnly = t, super.eSet(e, t);
         break;
-      case S.REQUIRED:
+      case m.REQUIRED:
         this.required = t, super.eSet(e, t);
         break;
-      case S.VISIBILITY_CONDITION:
+      case m.VISIBILITY_CONDITION:
         this.visibilityCondition = t, super.eSet(e, t);
         break;
-      case S.VALIDATIONS:
+      case m.VALIDATIONS:
         this.validations = t, super.eSet(e, t);
         break;
-      case S.VALIDATION_MAPPERS:
+      case m.VALIDATION_MAPPERS:
         this.validationMappers = t, super.eSet(e, t);
         break;
-      case S.BINDINGS:
+      case m.BINDINGS:
         this.bindings = t, super.eSet(e, t);
         break;
       default:
@@ -1881,23 +1882,23 @@ const Ce = class S extends dt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case S.FEATURE:
+      case m.FEATURE:
         return this._feature !== void 0;
-      case S.LABEL:
+      case m.LABEL:
         return this._label !== void 0;
-      case S.PLACEHOLDER:
+      case m.PLACEHOLDER:
         return this._placeholder !== void 0;
-      case S.READ_ONLY:
+      case m.READ_ONLY:
         return this._readOnly !== void 0;
-      case S.REQUIRED:
+      case m.REQUIRED:
         return this._required !== void 0;
-      case S.VISIBILITY_CONDITION:
+      case m.VISIBILITY_CONDITION:
         return this._visibilityCondition !== void 0;
-      case S.VALIDATIONS:
+      case m.VALIDATIONS:
         return this._validations !== void 0 && this._validations.length > 0;
-      case S.VALIDATION_MAPPERS:
+      case m.VALIDATION_MAPPERS:
         return this._validationMappers !== void 0 && this._validationMappers.length > 0;
-      case S.BINDINGS:
+      case m.BINDINGS:
         return this._bindings !== void 0 && this._bindings.length > 0;
       default:
         return super.eIsSet(e);
@@ -1908,31 +1909,31 @@ const Ce = class S extends dt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case S.FEATURE:
+      case m.FEATURE:
         this._feature = void 0;
         return;
-      case S.LABEL:
+      case m.LABEL:
         this._label = void 0;
         return;
-      case S.PLACEHOLDER:
+      case m.PLACEHOLDER:
         this._placeholder = void 0;
         return;
-      case S.READ_ONLY:
+      case m.READ_ONLY:
         this._readOnly = void 0;
         return;
-      case S.REQUIRED:
+      case m.REQUIRED:
         this._required = void 0;
         return;
-      case S.VISIBILITY_CONDITION:
+      case m.VISIBILITY_CONDITION:
         this._visibilityCondition = void 0;
         return;
-      case S.VALIDATIONS:
+      case m.VALIDATIONS:
         this._validations = [];
         return;
-      case S.VALIDATION_MAPPERS:
+      case m.VALIDATION_MAPPERS:
         this._validationMappers = [];
         return;
-      case S.BINDINGS:
+      case m.BINDINGS:
         this._bindings = [];
         return;
       default:
@@ -1940,12 +1941,12 @@ const Ce = class S extends dt {
     }
   }
 };
-j(Ce, "FEATURE", 5), j(Ce, "LABEL", 6), j(Ce, "PLACEHOLDER", 7), j(Ce, "READ_ONLY", 8), j(Ce, "REQUIRED", 9), j(Ce, "VISIBILITY_CONDITION", 10), j(Ce, "VALIDATIONS", 11), j(Ce, "VALIDATION_MAPPERS", 12), j(Ce, "BINDINGS", 13);
-let me = Ce;
-var hu = Object.defineProperty, gu = (s, e, t) => e in s ? hu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ts = (s, e, t) => gu(s, typeof e != "symbol" ? e + "" : e, t);
-const mr = class $ extends me {
+Z(be, "FEATURE", 5), Z(be, "LABEL", 6), Z(be, "PLACEHOLDER", 7), Z(be, "READ_ONLY", 8), Z(be, "REQUIRED", 9), Z(be, "VISIBILITY_CONDITION", 10), Z(be, "VALIDATIONS", 11), Z(be, "VALIDATION_MAPPERS", 12), Z(be, "BINDINGS", 13);
+let Oe = be;
+var Tu = Object.defineProperty, fu = (s, e, t) => e in s ? Tu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, rs = (s, e, t) => fu(s, typeof e != "symbol" ? e + "" : e, t);
+const Nr = class q extends Oe {
   constructor() {
-    super(...arguments), ts(this, "_maxLength"), ts(this, "_value"), ts(this, "_password");
+    super(...arguments), rs(this, "_maxLength"), rs(this, "_value"), rs(this, "_password");
   }
   /**
    * Returns the EClass of this object
@@ -1963,14 +1964,14 @@ const mr = class $ extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature($.MAX_LENGTH),
+      getFeature: () => this.eClass().getEStructuralFeature(q.MAX_LENGTH),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => $.MAX_LENGTH,
+      getFeatureID: () => q.MAX_LENGTH,
       merge: () => !1
     });
   }
@@ -1983,14 +1984,14 @@ const mr = class $ extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature($.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(q.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => $.VALUE,
+      getFeatureID: () => q.VALUE,
       merge: () => !1
     });
   }
@@ -2003,14 +2004,14 @@ const mr = class $ extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature($.PASSWORD),
+      getFeature: () => this.eClass().getEStructuralFeature(q.PASSWORD),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => $.PASSWORD,
+      getFeatureID: () => q.PASSWORD,
       merge: () => !1
     });
   }
@@ -2020,11 +2021,11 @@ const mr = class $ extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case $.MAX_LENGTH:
+      case q.MAX_LENGTH:
         return this.maxLength;
-      case $.VALUE:
+      case q.VALUE:
         return this.value;
-      case $.PASSWORD:
+      case q.PASSWORD:
         return this.password;
       default:
         return super.eGet(e);
@@ -2035,13 +2036,13 @@ const mr = class $ extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case $.MAX_LENGTH:
+      case q.MAX_LENGTH:
         this.maxLength = t, super.eSet(e, t);
         break;
-      case $.VALUE:
+      case q.VALUE:
         this.value = t, super.eSet(e, t);
         break;
-      case $.PASSWORD:
+      case q.PASSWORD:
         this.password = t, super.eSet(e, t);
         break;
       default:
@@ -2053,11 +2054,11 @@ const mr = class $ extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case $.MAX_LENGTH:
+      case q.MAX_LENGTH:
         return this._maxLength !== void 0;
-      case $.VALUE:
+      case q.VALUE:
         return this._value !== void 0;
-      case $.PASSWORD:
+      case q.PASSWORD:
         return this._password !== void 0;
       default:
         return super.eIsSet(e);
@@ -2068,13 +2069,13 @@ const mr = class $ extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case $.MAX_LENGTH:
+      case q.MAX_LENGTH:
         this._maxLength = void 0;
         return;
-      case $.VALUE:
+      case q.VALUE:
         this._value = void 0;
         return;
-      case $.PASSWORD:
+      case q.PASSWORD:
         this._password = void 0;
         return;
       default:
@@ -2082,12 +2083,12 @@ const mr = class $ extends me {
     }
   }
 };
-ts(mr, "MAX_LENGTH", 14), ts(mr, "VALUE", 15), ts(mr, "PASSWORD", 16);
-let du = mr;
-var pu = Object.defineProperty, Tu = (s, e, t) => e in s ? pu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ss = (s, e, t) => Tu(s, typeof e != "symbol" ? e + "" : e, t);
-const Ir = class k extends me {
+rs(Nr, "MAX_LENGTH", 14), rs(Nr, "VALUE", 15), rs(Nr, "PASSWORD", 16);
+let Su = Nr;
+var mu = Object.defineProperty, Iu = (s, e, t) => e in s ? mu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, as = (s, e, t) => Iu(s, typeof e != "symbol" ? e + "" : e, t);
+const Lr = class z extends Oe {
   constructor() {
-    super(...arguments), ss(this, "_rows", 4), ss(this, "_maxLength"), ss(this, "_value");
+    super(...arguments), as(this, "_rows", 4), as(this, "_maxLength"), as(this, "_value");
   }
   /**
    * Returns the EClass of this object
@@ -2105,14 +2106,14 @@ const Ir = class k extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(k.ROWS),
+      getFeature: () => this.eClass().getEStructuralFeature(z.ROWS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => k.ROWS,
+      getFeatureID: () => z.ROWS,
       merge: () => !1
     });
   }
@@ -2125,14 +2126,14 @@ const Ir = class k extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(k.MAX_LENGTH),
+      getFeature: () => this.eClass().getEStructuralFeature(z.MAX_LENGTH),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => k.MAX_LENGTH,
+      getFeatureID: () => z.MAX_LENGTH,
       merge: () => !1
     });
   }
@@ -2145,14 +2146,14 @@ const Ir = class k extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(k.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(z.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => k.VALUE,
+      getFeatureID: () => z.VALUE,
       merge: () => !1
     });
   }
@@ -2162,11 +2163,11 @@ const Ir = class k extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case k.ROWS:
+      case z.ROWS:
         return this.rows;
-      case k.MAX_LENGTH:
+      case z.MAX_LENGTH:
         return this.maxLength;
-      case k.VALUE:
+      case z.VALUE:
         return this.value;
       default:
         return super.eGet(e);
@@ -2177,13 +2178,13 @@ const Ir = class k extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case k.ROWS:
+      case z.ROWS:
         this.rows = t, super.eSet(e, t);
         break;
-      case k.MAX_LENGTH:
+      case z.MAX_LENGTH:
         this.maxLength = t, super.eSet(e, t);
         break;
-      case k.VALUE:
+      case z.VALUE:
         this.value = t, super.eSet(e, t);
         break;
       default:
@@ -2195,11 +2196,11 @@ const Ir = class k extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case k.ROWS:
+      case z.ROWS:
         return this._rows !== 4;
-      case k.MAX_LENGTH:
+      case z.MAX_LENGTH:
         return this._maxLength !== void 0;
-      case k.VALUE:
+      case z.VALUE:
         return this._value !== void 0;
       default:
         return super.eIsSet(e);
@@ -2210,13 +2211,13 @@ const Ir = class k extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case k.ROWS:
+      case z.ROWS:
         this._rows = 4;
         return;
-      case k.MAX_LENGTH:
+      case z.MAX_LENGTH:
         this._maxLength = void 0;
         return;
-      case k.VALUE:
+      case z.VALUE:
         this._value = void 0;
         return;
       default:
@@ -2224,12 +2225,12 @@ const Ir = class k extends me {
     }
   }
 };
-ss(Ir, "ROWS", 14), ss(Ir, "MAX_LENGTH", 15), ss(Ir, "VALUE", 16);
-let Su = Ir;
-var fu = Object.defineProperty, mu = (s, e, t) => e in s ? fu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ke = (s, e, t) => mu(s, typeof e != "symbol" ? e + "" : e, t);
-const nr = class V extends me {
+as(Lr, "ROWS", 14), as(Lr, "MAX_LENGTH", 15), as(Lr, "VALUE", 16);
+let Nu = Lr;
+var Lu = Object.defineProperty, vu = (s, e, t) => e in s ? Lu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, at = (s, e, t) => vu(s, typeof e != "symbol" ? e + "" : e, t);
+const lr = class W extends Oe {
   constructor() {
-    super(...arguments), Ke(this, "_min"), Ke(this, "_max"), Ke(this, "_step", 1), Ke(this, "_value");
+    super(...arguments), at(this, "_min"), at(this, "_max"), at(this, "_step", 1), at(this, "_value");
   }
   /**
    * Returns the EClass of this object
@@ -2247,14 +2248,14 @@ const nr = class V extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(V.MIN),
+      getFeature: () => this.eClass().getEStructuralFeature(W.MIN),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => V.MIN,
+      getFeatureID: () => W.MIN,
       merge: () => !1
     });
   }
@@ -2267,14 +2268,14 @@ const nr = class V extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(V.MAX),
+      getFeature: () => this.eClass().getEStructuralFeature(W.MAX),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => V.MAX,
+      getFeatureID: () => W.MAX,
       merge: () => !1
     });
   }
@@ -2287,14 +2288,14 @@ const nr = class V extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(V.STEP),
+      getFeature: () => this.eClass().getEStructuralFeature(W.STEP),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => V.STEP,
+      getFeatureID: () => W.STEP,
       merge: () => !1
     });
   }
@@ -2307,14 +2308,14 @@ const nr = class V extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(V.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(W.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => V.VALUE,
+      getFeatureID: () => W.VALUE,
       merge: () => !1
     });
   }
@@ -2324,13 +2325,13 @@ const nr = class V extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case V.MIN:
+      case W.MIN:
         return this.min;
-      case V.MAX:
+      case W.MAX:
         return this.max;
-      case V.STEP:
+      case W.STEP:
         return this.step;
-      case V.VALUE:
+      case W.VALUE:
         return this.value;
       default:
         return super.eGet(e);
@@ -2341,16 +2342,16 @@ const nr = class V extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case V.MIN:
+      case W.MIN:
         this.min = t, super.eSet(e, t);
         break;
-      case V.MAX:
+      case W.MAX:
         this.max = t, super.eSet(e, t);
         break;
-      case V.STEP:
+      case W.STEP:
         this.step = t, super.eSet(e, t);
         break;
-      case V.VALUE:
+      case W.VALUE:
         this.value = t, super.eSet(e, t);
         break;
       default:
@@ -2362,13 +2363,13 @@ const nr = class V extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case V.MIN:
+      case W.MIN:
         return this._min !== void 0;
-      case V.MAX:
+      case W.MAX:
         return this._max !== void 0;
-      case V.STEP:
+      case W.STEP:
         return this._step !== 1;
-      case V.VALUE:
+      case W.VALUE:
         return this._value !== void 0;
       default:
         return super.eIsSet(e);
@@ -2379,16 +2380,16 @@ const nr = class V extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case V.MIN:
+      case W.MIN:
         this._min = void 0;
         return;
-      case V.MAX:
+      case W.MAX:
         this._max = void 0;
         return;
-      case V.STEP:
+      case W.STEP:
         this._step = 1;
         return;
-      case V.VALUE:
+      case W.VALUE:
         this._value = void 0;
         return;
       default:
@@ -2396,12 +2397,12 @@ const nr = class V extends me {
     }
   }
 };
-Ke(nr, "MIN", 14), Ke(nr, "MAX", 15), Ke(nr, "STEP", 16), Ke(nr, "VALUE", 17);
-let Iu = nr;
-var Nu = Object.defineProperty, Lu = (s, e, t) => e in s ? Nu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, yr = (s, e, t) => Lu(s, typeof e != "symbol" ? e + "" : e, t);
-const qr = class ne extends me {
+at(lr, "MIN", 14), at(lr, "MAX", 15), at(lr, "STEP", 16), at(lr, "VALUE", 17);
+let _u = lr;
+var Ou = Object.defineProperty, Au = (s, e, t) => e in s ? Ou(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Rr = (s, e, t) => Au(s, typeof e != "symbol" ? e + "" : e, t);
+const Qr = class de extends Oe {
   constructor() {
-    super(...arguments), yr(this, "_asToggle"), yr(this, "_value");
+    super(...arguments), Rr(this, "_asToggle"), Rr(this, "_value");
   }
   /**
    * Returns the EClass of this object
@@ -2419,14 +2420,14 @@ const qr = class ne extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ne.AS_TOGGLE),
+      getFeature: () => this.eClass().getEStructuralFeature(de.AS_TOGGLE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ne.AS_TOGGLE,
+      getFeatureID: () => de.AS_TOGGLE,
       merge: () => !1
     });
   }
@@ -2439,14 +2440,14 @@ const qr = class ne extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ne.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(de.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ne.VALUE,
+      getFeatureID: () => de.VALUE,
       merge: () => !1
     });
   }
@@ -2456,9 +2457,9 @@ const qr = class ne extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ne.AS_TOGGLE:
+      case de.AS_TOGGLE:
         return this.asToggle;
-      case ne.VALUE:
+      case de.VALUE:
         return this.value;
       default:
         return super.eGet(e);
@@ -2469,10 +2470,10 @@ const qr = class ne extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ne.AS_TOGGLE:
+      case de.AS_TOGGLE:
         this.asToggle = t, super.eSet(e, t);
         break;
-      case ne.VALUE:
+      case de.VALUE:
         this.value = t, super.eSet(e, t);
         break;
       default:
@@ -2484,9 +2485,9 @@ const qr = class ne extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ne.AS_TOGGLE:
+      case de.AS_TOGGLE:
         return this._asToggle !== void 0;
-      case ne.VALUE:
+      case de.VALUE:
         return this._value !== void 0;
       default:
         return super.eIsSet(e);
@@ -2497,10 +2498,10 @@ const qr = class ne extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ne.AS_TOGGLE:
+      case de.AS_TOGGLE:
         this._asToggle = void 0;
         return;
-      case ne.VALUE:
+      case de.VALUE:
         this._value = void 0;
         return;
       default:
@@ -2508,12 +2509,12 @@ const qr = class ne extends me {
     }
   }
 };
-yr(qr, "AS_TOGGLE", 14), yr(qr, "VALUE", 15);
-let vu = qr;
-var _u = Object.defineProperty, Ou = (s, e, t) => e in s ? _u(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Qe = (s, e, t) => Ou(s, typeof e != "symbol" ? e + "" : e, t);
-const lr = class B extends me {
+Rr(Qr, "AS_TOGGLE", 14), Rr(Qr, "VALUE", 15);
+let Cu = Qr;
+var yu = Object.defineProperty, Du = (s, e, t) => e in s ? yu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, it = (s, e, t) => Du(s, typeof e != "symbol" ? e + "" : e, t);
+const or = class Y extends Oe {
   constructor() {
-    super(...arguments), Qe(this, "_withTime"), Qe(this, "_format", "DD.MM.YYYY"), Qe(this, "_constrains"), Qe(this, "_value");
+    super(...arguments), it(this, "_withTime"), it(this, "_format", "DD.MM.YYYY"), it(this, "_constrains"), it(this, "_value");
   }
   /**
    * Returns the EClass of this object
@@ -2531,14 +2532,14 @@ const lr = class B extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(B.WITH_TIME),
+      getFeature: () => this.eClass().getEStructuralFeature(Y.WITH_TIME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => B.WITH_TIME,
+      getFeatureID: () => Y.WITH_TIME,
       merge: () => !1
     });
   }
@@ -2551,14 +2552,14 @@ const lr = class B extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(B.FORMAT),
+      getFeature: () => this.eClass().getEStructuralFeature(Y.FORMAT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => B.FORMAT,
+      getFeatureID: () => Y.FORMAT,
       merge: () => !1
     });
   }
@@ -2571,14 +2572,14 @@ const lr = class B extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(B.CONSTRAINS),
+      getFeature: () => this.eClass().getEStructuralFeature(Y.CONSTRAINS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => B.CONSTRAINS,
+      getFeatureID: () => Y.CONSTRAINS,
       merge: () => !1
     });
   }
@@ -2591,14 +2592,14 @@ const lr = class B extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(B.VALUE),
+      getFeature: () => this.eClass().getEStructuralFeature(Y.VALUE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => B.VALUE,
+      getFeatureID: () => Y.VALUE,
       merge: () => !1
     });
   }
@@ -2608,13 +2609,13 @@ const lr = class B extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case B.WITH_TIME:
+      case Y.WITH_TIME:
         return this.withTime;
-      case B.FORMAT:
+      case Y.FORMAT:
         return this.format;
-      case B.CONSTRAINS:
+      case Y.CONSTRAINS:
         return this.constrains;
-      case B.VALUE:
+      case Y.VALUE:
         return this.value;
       default:
         return super.eGet(e);
@@ -2625,16 +2626,16 @@ const lr = class B extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case B.WITH_TIME:
+      case Y.WITH_TIME:
         this.withTime = t, super.eSet(e, t);
         break;
-      case B.FORMAT:
+      case Y.FORMAT:
         this.format = t, super.eSet(e, t);
         break;
-      case B.CONSTRAINS:
+      case Y.CONSTRAINS:
         this.constrains = t, super.eSet(e, t);
         break;
-      case B.VALUE:
+      case Y.VALUE:
         this.value = t, super.eSet(e, t);
         break;
       default:
@@ -2646,13 +2647,13 @@ const lr = class B extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case B.WITH_TIME:
+      case Y.WITH_TIME:
         return this._withTime !== void 0;
-      case B.FORMAT:
+      case Y.FORMAT:
         return this._format !== "DD.MM.YYYY";
-      case B.CONSTRAINS:
+      case Y.CONSTRAINS:
         return this._constrains !== void 0;
-      case B.VALUE:
+      case Y.VALUE:
         return this._value !== void 0;
       default:
         return super.eIsSet(e);
@@ -2663,16 +2664,16 @@ const lr = class B extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case B.WITH_TIME:
+      case Y.WITH_TIME:
         this._withTime = void 0;
         return;
-      case B.FORMAT:
+      case Y.FORMAT:
         this._format = "DD.MM.YYYY";
         return;
-      case B.CONSTRAINS:
+      case Y.CONSTRAINS:
         this._constrains = void 0;
         return;
-      case B.VALUE:
+      case Y.VALUE:
         this._value = void 0;
         return;
       default:
@@ -2680,12 +2681,12 @@ const lr = class B extends me {
     }
   }
 };
-Qe(lr, "WITH_TIME", 14), Qe(lr, "FORMAT", 15), Qe(lr, "CONSTRAINS", 16), Qe(lr, "VALUE", 17);
-let Au = lr;
-var Cu = Object.defineProperty, yu = (s, e, t) => e in s ? Cu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, rs = (s, e, t) => yu(s, typeof e != "symbol" ? e + "" : e, t);
-const Nr = class x extends me {
+it(or, "WITH_TIME", 14), it(or, "FORMAT", 15), it(or, "CONSTRAINS", 16), it(or, "VALUE", 17);
+let Ru = or;
+var wu = Object.defineProperty, Fu = (s, e, t) => e in s ? wu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, is = (s, e, t) => Fu(s, typeof e != "symbol" ? e + "" : e, t);
+const vr = class K extends Oe {
   constructor() {
-    super(...arguments), rs(this, "_optionLabel"), rs(this, "_minSearchLength", 2), rs(this, "_multiSelect");
+    super(...arguments), is(this, "_optionLabel"), is(this, "_minSearchLength", 2), is(this, "_multiSelect");
   }
   /**
    * Returns the EClass of this object
@@ -2703,14 +2704,14 @@ const Nr = class x extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(x.OPTION_LABEL),
+      getFeature: () => this.eClass().getEStructuralFeature(K.OPTION_LABEL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => x.OPTION_LABEL,
+      getFeatureID: () => K.OPTION_LABEL,
       merge: () => !1
     });
   }
@@ -2723,14 +2724,14 @@ const Nr = class x extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(x.MIN_SEARCH_LENGTH),
+      getFeature: () => this.eClass().getEStructuralFeature(K.MIN_SEARCH_LENGTH),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => x.MIN_SEARCH_LENGTH,
+      getFeatureID: () => K.MIN_SEARCH_LENGTH,
       merge: () => !1
     });
   }
@@ -2743,14 +2744,14 @@ const Nr = class x extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(x.MULTI_SELECT),
+      getFeature: () => this.eClass().getEStructuralFeature(K.MULTI_SELECT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => x.MULTI_SELECT,
+      getFeatureID: () => K.MULTI_SELECT,
       merge: () => !1
     });
   }
@@ -2760,11 +2761,11 @@ const Nr = class x extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case x.OPTION_LABEL:
+      case K.OPTION_LABEL:
         return this.optionLabel;
-      case x.MIN_SEARCH_LENGTH:
+      case K.MIN_SEARCH_LENGTH:
         return this.minSearchLength;
-      case x.MULTI_SELECT:
+      case K.MULTI_SELECT:
         return this.multiSelect;
       default:
         return super.eGet(e);
@@ -2775,13 +2776,13 @@ const Nr = class x extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case x.OPTION_LABEL:
+      case K.OPTION_LABEL:
         this.optionLabel = t, super.eSet(e, t);
         break;
-      case x.MIN_SEARCH_LENGTH:
+      case K.MIN_SEARCH_LENGTH:
         this.minSearchLength = t, super.eSet(e, t);
         break;
-      case x.MULTI_SELECT:
+      case K.MULTI_SELECT:
         this.multiSelect = t, super.eSet(e, t);
         break;
       default:
@@ -2793,11 +2794,11 @@ const Nr = class x extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case x.OPTION_LABEL:
+      case K.OPTION_LABEL:
         return this._optionLabel !== void 0;
-      case x.MIN_SEARCH_LENGTH:
+      case K.MIN_SEARCH_LENGTH:
         return this._minSearchLength !== 2;
-      case x.MULTI_SELECT:
+      case K.MULTI_SELECT:
         return this._multiSelect !== void 0;
       default:
         return super.eIsSet(e);
@@ -2808,13 +2809,13 @@ const Nr = class x extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case x.OPTION_LABEL:
+      case K.OPTION_LABEL:
         this._optionLabel = void 0;
         return;
-      case x.MIN_SEARCH_LENGTH:
+      case K.MIN_SEARCH_LENGTH:
         this._minSearchLength = 2;
         return;
-      case x.MULTI_SELECT:
+      case K.MULTI_SELECT:
         this._multiSelect = void 0;
         return;
       default:
@@ -2822,12 +2823,12 @@ const Nr = class x extends me {
     }
   }
 };
-rs(Nr, "OPTION_LABEL", 14), rs(Nr, "MIN_SEARCH_LENGTH", 15), rs(Nr, "MULTI_SELECT", 16);
-let Du = Nr;
-var Ru = Object.defineProperty, wu = (s, e, t) => e in s ? Ru(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Je = (s, e, t) => wu(s, typeof e != "symbol" ? e + "" : e, t);
-const or = class G extends me {
+is(vr, "OPTION_LABEL", 14), is(vr, "MIN_SEARCH_LENGTH", 15), is(vr, "MULTI_SELECT", 16);
+let Pu = vr;
+var bu = Object.defineProperty, Mu = (s, e, t) => e in s ? bu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ut = (s, e, t) => Mu(s, typeof e != "symbol" ? e + "" : e, t);
+const cr = class $ extends Oe {
   constructor() {
-    super(...arguments), Je(this, "_optionLabel"), Je(this, "_multiSelect"), Je(this, "_asButtonGroup"), Je(this, "_values", []);
+    super(...arguments), ut(this, "_optionLabel"), ut(this, "_multiSelect"), ut(this, "_asButtonGroup"), ut(this, "_values", []);
   }
   /**
    * Returns the EClass of this object
@@ -2845,14 +2846,14 @@ const or = class G extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(G.OPTION_LABEL),
+      getFeature: () => this.eClass().getEStructuralFeature($.OPTION_LABEL),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => G.OPTION_LABEL,
+      getFeatureID: () => $.OPTION_LABEL,
       merge: () => !1
     });
   }
@@ -2865,14 +2866,14 @@ const or = class G extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(G.MULTI_SELECT),
+      getFeature: () => this.eClass().getEStructuralFeature($.MULTI_SELECT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => G.MULTI_SELECT,
+      getFeatureID: () => $.MULTI_SELECT,
       merge: () => !1
     });
   }
@@ -2885,14 +2886,14 @@ const or = class G extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(G.AS_BUTTON_GROUP),
+      getFeature: () => this.eClass().getEStructuralFeature($.AS_BUTTON_GROUP),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => G.AS_BUTTON_GROUP,
+      getFeatureID: () => $.AS_BUTTON_GROUP,
       merge: () => !1
     });
   }
@@ -2905,14 +2906,14 @@ const or = class G extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(G.VALUES),
+      getFeature: () => this.eClass().getEStructuralFeature($.VALUES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => G.VALUES,
+      getFeatureID: () => $.VALUES,
       merge: () => !1
     });
   }
@@ -2922,13 +2923,13 @@ const or = class G extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case G.OPTION_LABEL:
+      case $.OPTION_LABEL:
         return this.optionLabel;
-      case G.MULTI_SELECT:
+      case $.MULTI_SELECT:
         return this.multiSelect;
-      case G.AS_BUTTON_GROUP:
+      case $.AS_BUTTON_GROUP:
         return this.asButtonGroup;
-      case G.VALUES:
+      case $.VALUES:
         return this.values;
       default:
         return super.eGet(e);
@@ -2939,16 +2940,16 @@ const or = class G extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case G.OPTION_LABEL:
+      case $.OPTION_LABEL:
         this.optionLabel = t, super.eSet(e, t);
         break;
-      case G.MULTI_SELECT:
+      case $.MULTI_SELECT:
         this.multiSelect = t, super.eSet(e, t);
         break;
-      case G.AS_BUTTON_GROUP:
+      case $.AS_BUTTON_GROUP:
         this.asButtonGroup = t, super.eSet(e, t);
         break;
-      case G.VALUES:
+      case $.VALUES:
         this.values = t, super.eSet(e, t);
         break;
       default:
@@ -2960,13 +2961,13 @@ const or = class G extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case G.OPTION_LABEL:
+      case $.OPTION_LABEL:
         return this._optionLabel !== void 0;
-      case G.MULTI_SELECT:
+      case $.MULTI_SELECT:
         return this._multiSelect !== void 0;
-      case G.AS_BUTTON_GROUP:
+      case $.AS_BUTTON_GROUP:
         return this._asButtonGroup !== void 0;
-      case G.VALUES:
+      case $.VALUES:
         return this._values !== void 0 && this._values.length > 0;
       default:
         return super.eIsSet(e);
@@ -2977,16 +2978,16 @@ const or = class G extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case G.OPTION_LABEL:
+      case $.OPTION_LABEL:
         this._optionLabel = void 0;
         return;
-      case G.MULTI_SELECT:
+      case $.MULTI_SELECT:
         this._multiSelect = void 0;
         return;
-      case G.AS_BUTTON_GROUP:
+      case $.AS_BUTTON_GROUP:
         this._asButtonGroup = void 0;
         return;
-      case G.VALUES:
+      case $.VALUES:
         this._values = [];
         return;
       default:
@@ -2994,12 +2995,12 @@ const or = class G extends me {
     }
   }
 };
-Je(or, "OPTION_LABEL", 14), Je(or, "MULTI_SELECT", 15), Je(or, "AS_BUTTON_GROUP", 16), Je(or, "VALUES", 17);
-let Fu = or;
-var Pu = Object.defineProperty, bu = (s, e, t) => e in s ? Pu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Te = (s, e, t) => bu(s, typeof e != "symbol" ? e + "" : e, t);
-const ot = class A extends me {
+ut(cr, "OPTION_LABEL", 14), ut(cr, "MULTI_SELECT", 15), ut(cr, "AS_BUTTON_GROUP", 16), ut(cr, "VALUES", 17);
+let Vu = cr;
+var Uu = Object.defineProperty, Bu = (s, e, t) => e in s ? Uu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ve = (s, e, t) => Bu(s, typeof e != "symbol" ? e + "" : e, t);
+const Tt = class C extends Oe {
   constructor() {
-    super(...arguments), Te(this, "_with", []), Te(this, "_eType", []), Te(this, "_filter"), Te(this, "_template"), Te(this, "_cases", []), Te(this, "_priority", 0);
+    super(...arguments), ve(this, "_with", []), ve(this, "_eType", []), ve(this, "_filter"), ve(this, "_template"), ve(this, "_cases", []), ve(this, "_priority", 0);
   }
   /**
    * Returns the EClass of this object
@@ -3017,14 +3018,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.WITH),
+      getFeature: () => this.eClass().getEStructuralFeature(C.WITH),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.WITH,
+      getFeatureID: () => C.WITH,
       merge: () => !1
     });
   }
@@ -3037,14 +3038,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.E_TYPE),
+      getFeature: () => this.eClass().getEStructuralFeature(C.E_TYPE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.E_TYPE,
+      getFeatureID: () => C.E_TYPE,
       merge: () => !1
     });
   }
@@ -3057,14 +3058,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.FILTER),
+      getFeature: () => this.eClass().getEStructuralFeature(C.FILTER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.FILTER,
+      getFeatureID: () => C.FILTER,
       merge: () => !1
     });
   }
@@ -3077,14 +3078,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.TEMPLATE),
+      getFeature: () => this.eClass().getEStructuralFeature(C.TEMPLATE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.TEMPLATE,
+      getFeatureID: () => C.TEMPLATE,
       merge: () => !1
     });
   }
@@ -3097,14 +3098,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.CASES),
+      getFeature: () => this.eClass().getEStructuralFeature(C.CASES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.CASES,
+      getFeatureID: () => C.CASES,
       merge: () => !1
     });
   }
@@ -3117,14 +3118,14 @@ const ot = class A extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(A.PRIORITY),
+      getFeature: () => this.eClass().getEStructuralFeature(C.PRIORITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => A.PRIORITY,
+      getFeatureID: () => C.PRIORITY,
       merge: () => !1
     });
   }
@@ -3134,17 +3135,17 @@ const ot = class A extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case A.WITH:
+      case C.WITH:
         return this.with;
-      case A.E_TYPE:
+      case C.E_TYPE:
         return this.eType;
-      case A.FILTER:
+      case C.FILTER:
         return this.filter;
-      case A.TEMPLATE:
+      case C.TEMPLATE:
         return this.template;
-      case A.CASES:
+      case C.CASES:
         return this.cases;
-      case A.PRIORITY:
+      case C.PRIORITY:
         return this.priority;
       default:
         return super.eGet(e);
@@ -3155,22 +3156,22 @@ const ot = class A extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case A.WITH:
+      case C.WITH:
         this.with = t, super.eSet(e, t);
         break;
-      case A.E_TYPE:
+      case C.E_TYPE:
         this.eType = t, super.eSet(e, t);
         break;
-      case A.FILTER:
+      case C.FILTER:
         this.filter = t, super.eSet(e, t);
         break;
-      case A.TEMPLATE:
+      case C.TEMPLATE:
         this.template = t, super.eSet(e, t);
         break;
-      case A.CASES:
+      case C.CASES:
         this.cases = t, super.eSet(e, t);
         break;
-      case A.PRIORITY:
+      case C.PRIORITY:
         this.priority = t, super.eSet(e, t);
         break;
       default:
@@ -3182,17 +3183,17 @@ const ot = class A extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case A.WITH:
+      case C.WITH:
         return this._with !== void 0 && this._with.length > 0;
-      case A.E_TYPE:
+      case C.E_TYPE:
         return this._eType !== void 0 && this._eType.length > 0;
-      case A.FILTER:
+      case C.FILTER:
         return this._filter !== void 0;
-      case A.TEMPLATE:
+      case C.TEMPLATE:
         return this._template !== void 0;
-      case A.CASES:
+      case C.CASES:
         return this._cases !== void 0 && this._cases.length > 0;
-      case A.PRIORITY:
+      case C.PRIORITY:
         return this._priority !== 0;
       default:
         return super.eIsSet(e);
@@ -3203,22 +3204,22 @@ const ot = class A extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case A.WITH:
+      case C.WITH:
         this._with = [];
         return;
-      case A.E_TYPE:
+      case C.E_TYPE:
         this._eType = [];
         return;
-      case A.FILTER:
+      case C.FILTER:
         this._filter = void 0;
         return;
-      case A.TEMPLATE:
+      case C.TEMPLATE:
         this._template = void 0;
         return;
-      case A.CASES:
+      case C.CASES:
         this._cases = [];
         return;
-      case A.PRIORITY:
+      case C.PRIORITY:
         this._priority = 0;
         return;
       default:
@@ -3226,12 +3227,12 @@ const ot = class A extends me {
     }
   }
 };
-Te(ot, "WITH", 14), Te(ot, "E_TYPE", 15), Te(ot, "FILTER", 16), Te(ot, "TEMPLATE", 17), Te(ot, "CASES", 18), Te(ot, "PRIORITY", 19);
-let Mu = ot;
-var Uu = Object.defineProperty, Vu = (s, e, t) => e in s ? Uu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Dr = (s, e, t) => Vu(s, typeof e != "symbol" ? e + "" : e, t);
-const zr = class le extends tt {
+ve(Tt, "WITH", 14), ve(Tt, "E_TYPE", 15), ve(Tt, "FILTER", 16), ve(Tt, "TEMPLATE", 17), ve(Tt, "CASES", 18), ve(Tt, "PRIORITY", 19);
+let Gu = Tt;
+var Wu = Object.defineProperty, Yu = (s, e, t) => e in s ? Wu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, wr = (s, e, t) => Yu(s, typeof e != "symbol" ? e + "" : e, t);
+const Jr = class pe extends ct {
   constructor() {
-    super(...arguments), Dr(this, "_when"), Dr(this, "_widget");
+    super(...arguments), wr(this, "_when"), wr(this, "_widget");
   }
   /**
    * Returns the EClass of this object
@@ -3249,14 +3250,14 @@ const zr = class le extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(le.WHEN),
+      getFeature: () => this.eClass().getEStructuralFeature(pe.WHEN),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => le.WHEN,
+      getFeatureID: () => pe.WHEN,
       merge: () => !1
     });
   }
@@ -3269,14 +3270,14 @@ const zr = class le extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(le.WIDGET),
+      getFeature: () => this.eClass().getEStructuralFeature(pe.WIDGET),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => le.WIDGET,
+      getFeatureID: () => pe.WIDGET,
       merge: () => !1
     });
   }
@@ -3286,9 +3287,9 @@ const zr = class le extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case le.WHEN:
+      case pe.WHEN:
         return this.when;
-      case le.WIDGET:
+      case pe.WIDGET:
         return this.widget;
       default:
         return super.eGet(e);
@@ -3299,10 +3300,10 @@ const zr = class le extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case le.WHEN:
+      case pe.WHEN:
         this.when = t, super.eSet(e, t);
         break;
-      case le.WIDGET:
+      case pe.WIDGET:
         this.widget = t, super.eSet(e, t);
         break;
       default:
@@ -3314,9 +3315,9 @@ const zr = class le extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case le.WHEN:
+      case pe.WHEN:
         return this._when !== void 0;
-      case le.WIDGET:
+      case pe.WIDGET:
         return this._widget !== void 0;
       default:
         return super.eIsSet(e);
@@ -3327,10 +3328,10 @@ const zr = class le extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case le.WHEN:
+      case pe.WHEN:
         this._when = void 0;
         return;
-      case le.WIDGET:
+      case pe.WIDGET:
         this._widget = void 0;
         return;
       default:
@@ -3338,15 +3339,15 @@ const zr = class le extends tt {
     }
   }
 };
-Dr(zr, "WHEN", 0), Dr(zr, "WIDGET", 1);
-let Bu = zr;
-const $r = {
+wr(Jr, "WHEN", 0), wr(Jr, "WIDGET", 1);
+let $u = Jr;
+const Xr = {
   VERTICAL: "VERTICAL"
 };
-var Gu = Object.defineProperty, Wu = (s, e, t) => e in s ? Gu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Rr = (s, e, t) => Wu(s, typeof e != "symbol" ? e + "" : e, t);
-const Kr = class oe extends me {
+var ku = Object.defineProperty, xu = (s, e, t) => e in s ? ku(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Fr = (s, e, t) => xu(s, typeof e != "symbol" ? e + "" : e, t);
+const Zr = class Te extends Oe {
   constructor() {
-    super(...arguments), Rr(this, "_fields", []), Rr(this, "_layout", $r.VERTICAL);
+    super(...arguments), Fr(this, "_fields", []), Fr(this, "_layout", Xr.VERTICAL);
   }
   /**
    * Returns the EClass of this object
@@ -3364,14 +3365,14 @@ const Kr = class oe extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(oe.FIELDS),
+      getFeature: () => this.eClass().getEStructuralFeature(Te.FIELDS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => oe.FIELDS,
+      getFeatureID: () => Te.FIELDS,
       merge: () => !1
     });
   }
@@ -3384,14 +3385,14 @@ const Kr = class oe extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(oe.LAYOUT),
+      getFeature: () => this.eClass().getEStructuralFeature(Te.LAYOUT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => oe.LAYOUT,
+      getFeatureID: () => Te.LAYOUT,
       merge: () => !1
     });
   }
@@ -3401,9 +3402,9 @@ const Kr = class oe extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case oe.FIELDS:
+      case Te.FIELDS:
         return this.fields;
-      case oe.LAYOUT:
+      case Te.LAYOUT:
         return this.layout;
       default:
         return super.eGet(e);
@@ -3414,10 +3415,10 @@ const Kr = class oe extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case oe.FIELDS:
+      case Te.FIELDS:
         this.fields = t, super.eSet(e, t);
         break;
-      case oe.LAYOUT:
+      case Te.LAYOUT:
         this.layout = t, super.eSet(e, t);
         break;
       default:
@@ -3429,10 +3430,10 @@ const Kr = class oe extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case oe.FIELDS:
+      case Te.FIELDS:
         return this._fields !== void 0 && this._fields.length > 0;
-      case oe.LAYOUT:
-        return this._layout !== $r.VERTICAL;
+      case Te.LAYOUT:
+        return this._layout !== Xr.VERTICAL;
       default:
         return super.eIsSet(e);
     }
@@ -3442,23 +3443,23 @@ const Kr = class oe extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case oe.FIELDS:
+      case Te.FIELDS:
         this._fields = [];
         return;
-      case oe.LAYOUT:
-        this._layout = $r.VERTICAL;
+      case Te.LAYOUT:
+        this._layout = Xr.VERTICAL;
         return;
       default:
         super.eUnset(e);
     }
   }
 };
-Rr(Kr, "FIELDS", 14), Rr(Kr, "LAYOUT", 15);
-let Yu = Kr;
-var $u = Object.defineProperty, ku = (s, e, t) => e in s ? $u(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, as = (s, e, t) => ku(s, typeof e != "symbol" ? e + "" : e, t);
-const Lr = class X extends me {
+Fr(Zr, "FIELDS", 14), Fr(Zr, "LAYOUT", 15);
+let Xu = Zr;
+var Hu = Object.defineProperty, ju = (s, e, t) => e in s ? Hu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, us = (s, e, t) => ju(s, typeof e != "symbol" ? e + "" : e, t);
+const _r = class Q extends Oe {
   constructor() {
-    super(...arguments), as(this, "_condition"), as(this, "_then", []), as(this, "_else", []);
+    super(...arguments), us(this, "_condition"), us(this, "_then", []), us(this, "_else", []);
   }
   /**
    * Returns the EClass of this object
@@ -3476,14 +3477,14 @@ const Lr = class X extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(X.CONDITION),
+      getFeature: () => this.eClass().getEStructuralFeature(Q.CONDITION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => X.CONDITION,
+      getFeatureID: () => Q.CONDITION,
       merge: () => !1
     });
   }
@@ -3496,14 +3497,14 @@ const Lr = class X extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(X.THEN),
+      getFeature: () => this.eClass().getEStructuralFeature(Q.THEN),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => X.THEN,
+      getFeatureID: () => Q.THEN,
       merge: () => !1
     });
   }
@@ -3516,14 +3517,14 @@ const Lr = class X extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(X.ELSE),
+      getFeature: () => this.eClass().getEStructuralFeature(Q.ELSE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => X.ELSE,
+      getFeatureID: () => Q.ELSE,
       merge: () => !1
     });
   }
@@ -3533,11 +3534,11 @@ const Lr = class X extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case X.CONDITION:
+      case Q.CONDITION:
         return this.condition;
-      case X.THEN:
+      case Q.THEN:
         return this.then;
-      case X.ELSE:
+      case Q.ELSE:
         return this.else;
       default:
         return super.eGet(e);
@@ -3548,13 +3549,13 @@ const Lr = class X extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case X.CONDITION:
+      case Q.CONDITION:
         this.condition = t, super.eSet(e, t);
         break;
-      case X.THEN:
+      case Q.THEN:
         this.then = t, super.eSet(e, t);
         break;
-      case X.ELSE:
+      case Q.ELSE:
         this.else = t, super.eSet(e, t);
         break;
       default:
@@ -3566,11 +3567,11 @@ const Lr = class X extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case X.CONDITION:
+      case Q.CONDITION:
         return this._condition !== void 0;
-      case X.THEN:
+      case Q.THEN:
         return this._then !== void 0 && this._then.length > 0;
-      case X.ELSE:
+      case Q.ELSE:
         return this._else !== void 0 && this._else.length > 0;
       default:
         return super.eIsSet(e);
@@ -3581,13 +3582,13 @@ const Lr = class X extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case X.CONDITION:
+      case Q.CONDITION:
         this._condition = void 0;
         return;
-      case X.THEN:
+      case Q.THEN:
         this._then = [];
         return;
-      case X.ELSE:
+      case Q.ELSE:
         this._else = [];
         return;
       default:
@@ -3595,12 +3596,12 @@ const Lr = class X extends me {
     }
   }
 };
-as(Lr, "CONDITION", 14), as(Lr, "THEN", 15), as(Lr, "ELSE", 16);
-let xu = Lr;
-var Xu = Object.defineProperty, Hu = (s, e, t) => e in s ? Xu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, is = (s, e, t) => Hu(s, typeof e != "symbol" ? e + "" : e, t);
-const vr = class H extends me {
+us(_r, "CONDITION", 14), us(_r, "THEN", 15), us(_r, "ELSE", 16);
+let qu = _r;
+var zu = Object.defineProperty, Ku = (s, e, t) => e in s ? zu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, ns = (s, e, t) => Ku(s, typeof e != "symbol" ? e + "" : e, t);
+const Or = class J extends Oe {
   constructor() {
-    super(...arguments), is(this, "_items"), is(this, "_body", []), is(this, "_emptyText");
+    super(...arguments), ns(this, "_items"), ns(this, "_body", []), ns(this, "_emptyText");
   }
   /**
    * Returns the EClass of this object
@@ -3618,14 +3619,14 @@ const vr = class H extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(H.ITEMS),
+      getFeature: () => this.eClass().getEStructuralFeature(J.ITEMS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => H.ITEMS,
+      getFeatureID: () => J.ITEMS,
       merge: () => !1
     });
   }
@@ -3638,14 +3639,14 @@ const vr = class H extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(H.BODY),
+      getFeature: () => this.eClass().getEStructuralFeature(J.BODY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => H.BODY,
+      getFeatureID: () => J.BODY,
       merge: () => !1
     });
   }
@@ -3658,14 +3659,14 @@ const vr = class H extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(H.EMPTY_TEXT),
+      getFeature: () => this.eClass().getEStructuralFeature(J.EMPTY_TEXT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => H.EMPTY_TEXT,
+      getFeatureID: () => J.EMPTY_TEXT,
       merge: () => !1
     });
   }
@@ -3675,11 +3676,11 @@ const vr = class H extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case H.ITEMS:
+      case J.ITEMS:
         return this.items;
-      case H.BODY:
+      case J.BODY:
         return this.body;
-      case H.EMPTY_TEXT:
+      case J.EMPTY_TEXT:
         return this.emptyText;
       default:
         return super.eGet(e);
@@ -3690,13 +3691,13 @@ const vr = class H extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case H.ITEMS:
+      case J.ITEMS:
         this.items = t, super.eSet(e, t);
         break;
-      case H.BODY:
+      case J.BODY:
         this.body = t, super.eSet(e, t);
         break;
-      case H.EMPTY_TEXT:
+      case J.EMPTY_TEXT:
         this.emptyText = t, super.eSet(e, t);
         break;
       default:
@@ -3708,11 +3709,11 @@ const vr = class H extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case H.ITEMS:
+      case J.ITEMS:
         return this._items !== void 0;
-      case H.BODY:
+      case J.BODY:
         return this._body !== void 0 && this._body.length > 0;
-      case H.EMPTY_TEXT:
+      case J.EMPTY_TEXT:
         return this._emptyText !== void 0;
       default:
         return super.eIsSet(e);
@@ -3723,13 +3724,13 @@ const vr = class H extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case H.ITEMS:
+      case J.ITEMS:
         this._items = void 0;
         return;
-      case H.BODY:
+      case J.BODY:
         this._body = [];
         return;
-      case H.EMPTY_TEXT:
+      case J.EMPTY_TEXT:
         this._emptyText = void 0;
         return;
       default:
@@ -3737,12 +3738,12 @@ const vr = class H extends me {
     }
   }
 };
-is(vr, "ITEMS", 14), is(vr, "BODY", 15), is(vr, "EMPTY_TEXT", 16);
-let ju = vr;
-var qu = Object.defineProperty, zu = (s, e, t) => e in s ? qu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, wr = (s, e, t) => zu(s, typeof e != "symbol" ? e + "" : e, t);
-const Qr = class ce extends me {
+ns(Or, "ITEMS", 14), ns(Or, "BODY", 15), ns(Or, "EMPTY_TEXT", 16);
+let Qu = Or;
+var Ju = Object.defineProperty, Zu = (s, e, t) => e in s ? Ju(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Pr = (s, e, t) => Zu(s, typeof e != "symbol" ? e + "" : e, t);
+const ea = class fe extends Oe {
   constructor() {
-    super(...arguments), wr(this, "_displayExpression"), wr(this, "_targetRoute");
+    super(...arguments), Pr(this, "_displayExpression"), Pr(this, "_targetRoute");
   }
   /**
    * Returns the EClass of this object
@@ -3760,14 +3761,14 @@ const Qr = class ce extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ce.DISPLAY_EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(fe.DISPLAY_EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ce.DISPLAY_EXPRESSION,
+      getFeatureID: () => fe.DISPLAY_EXPRESSION,
       merge: () => !1
     });
   }
@@ -3780,14 +3781,14 @@ const Qr = class ce extends me {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ce.TARGET_ROUTE),
+      getFeature: () => this.eClass().getEStructuralFeature(fe.TARGET_ROUTE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ce.TARGET_ROUTE,
+      getFeatureID: () => fe.TARGET_ROUTE,
       merge: () => !1
     });
   }
@@ -3797,9 +3798,9 @@ const Qr = class ce extends me {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ce.DISPLAY_EXPRESSION:
+      case fe.DISPLAY_EXPRESSION:
         return this.displayExpression;
-      case ce.TARGET_ROUTE:
+      case fe.TARGET_ROUTE:
         return this.targetRoute;
       default:
         return super.eGet(e);
@@ -3810,10 +3811,10 @@ const Qr = class ce extends me {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ce.DISPLAY_EXPRESSION:
+      case fe.DISPLAY_EXPRESSION:
         this.displayExpression = t, super.eSet(e, t);
         break;
-      case ce.TARGET_ROUTE:
+      case fe.TARGET_ROUTE:
         this.targetRoute = t, super.eSet(e, t);
         break;
       default:
@@ -3825,9 +3826,9 @@ const Qr = class ce extends me {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ce.DISPLAY_EXPRESSION:
+      case fe.DISPLAY_EXPRESSION:
         return this._displayExpression !== void 0;
-      case ce.TARGET_ROUTE:
+      case fe.TARGET_ROUTE:
         return this._targetRoute !== void 0;
       default:
         return super.eIsSet(e);
@@ -3838,10 +3839,10 @@ const Qr = class ce extends me {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ce.DISPLAY_EXPRESSION:
+      case fe.DISPLAY_EXPRESSION:
         this._displayExpression = void 0;
         return;
-      case ce.TARGET_ROUTE:
+      case fe.TARGET_ROUTE:
         this._targetRoute = void 0;
         return;
       default:
@@ -3849,12 +3850,12 @@ const Qr = class ce extends me {
     }
   }
 };
-wr(Qr, "DISPLAY_EXPRESSION", 14), wr(Qr, "TARGET_ROUTE", 15);
-let Ku = Qr;
-var Qu = Object.defineProperty, Ju = (s, e, t) => e in s ? Qu(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ze = (s, e, t) => Ju(s, typeof e != "symbol" ? e + "" : e, t);
-const cr = class W extends tt {
+Pr(ea, "DISPLAY_EXPRESSION", 14), Pr(ea, "TARGET_ROUTE", 15);
+let en = ea;
+var tn = Object.defineProperty, sn = (s, e, t) => e in s ? tn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, nt = (s, e, t) => sn(s, typeof e != "symbol" ? e + "" : e, t);
+const Er = class k extends ct {
   constructor() {
-    super(...arguments), Ze(this, "_name"), Ze(this, "_priority", 0), Ze(this, "_templates", []), Ze(this, "_cases", []);
+    super(...arguments), nt(this, "_name"), nt(this, "_priority", 0), nt(this, "_templates", []), nt(this, "_cases", []);
   }
   /**
    * Returns the EClass of this object
@@ -3872,14 +3873,14 @@ const cr = class W extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(W.NAME),
+      getFeature: () => this.eClass().getEStructuralFeature(k.NAME),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => W.NAME,
+      getFeatureID: () => k.NAME,
       merge: () => !1
     });
   }
@@ -3892,14 +3893,14 @@ const cr = class W extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(W.PRIORITY),
+      getFeature: () => this.eClass().getEStructuralFeature(k.PRIORITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => W.PRIORITY,
+      getFeatureID: () => k.PRIORITY,
       merge: () => !1
     });
   }
@@ -3912,14 +3913,14 @@ const cr = class W extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(W.TEMPLATES),
+      getFeature: () => this.eClass().getEStructuralFeature(k.TEMPLATES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => W.TEMPLATES,
+      getFeatureID: () => k.TEMPLATES,
       merge: () => !1
     });
   }
@@ -3932,14 +3933,14 @@ const cr = class W extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(W.CASES),
+      getFeature: () => this.eClass().getEStructuralFeature(k.CASES),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => W.CASES,
+      getFeatureID: () => k.CASES,
       merge: () => !1
     });
   }
@@ -3949,13 +3950,13 @@ const cr = class W extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case W.NAME:
+      case k.NAME:
         return this.name;
-      case W.PRIORITY:
+      case k.PRIORITY:
         return this.priority;
-      case W.TEMPLATES:
+      case k.TEMPLATES:
         return this.templates;
-      case W.CASES:
+      case k.CASES:
         return this.cases;
       default:
         return super.eGet(e);
@@ -3966,16 +3967,16 @@ const cr = class W extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case W.NAME:
+      case k.NAME:
         this.name = t, super.eSet(e, t);
         break;
-      case W.PRIORITY:
+      case k.PRIORITY:
         this.priority = t, super.eSet(e, t);
         break;
-      case W.TEMPLATES:
+      case k.TEMPLATES:
         this.templates = t, super.eSet(e, t);
         break;
-      case W.CASES:
+      case k.CASES:
         this.cases = t, super.eSet(e, t);
         break;
       default:
@@ -3987,13 +3988,13 @@ const cr = class W extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case W.NAME:
+      case k.NAME:
         return this._name !== void 0;
-      case W.PRIORITY:
+      case k.PRIORITY:
         return this._priority !== 0;
-      case W.TEMPLATES:
+      case k.TEMPLATES:
         return this._templates !== void 0 && this._templates.length > 0;
-      case W.CASES:
+      case k.CASES:
         return this._cases !== void 0 && this._cases.length > 0;
       default:
         return super.eIsSet(e);
@@ -4004,16 +4005,16 @@ const cr = class W extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case W.NAME:
+      case k.NAME:
         this._name = void 0;
         return;
-      case W.PRIORITY:
+      case k.PRIORITY:
         this._priority = 0;
         return;
-      case W.TEMPLATES:
+      case k.TEMPLATES:
         this._templates = [];
         return;
-      case W.CASES:
+      case k.CASES:
         this._cases = [];
         return;
       default:
@@ -4021,12 +4022,12 @@ const cr = class W extends tt {
     }
   }
 };
-Ze(cr, "NAME", 0), Ze(cr, "PRIORITY", 1), Ze(cr, "TEMPLATES", 2), Ze(cr, "CASES", 3);
-let Zu = cr;
-var en = Object.defineProperty, tn = (s, e, t) => e in s ? en(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Se = (s, e, t) => tn(s, typeof e != "symbol" ? e + "" : e, t);
-const ct = class R extends tt {
+nt(Er, "NAME", 0), nt(Er, "PRIORITY", 1), nt(Er, "TEMPLATES", 2), nt(Er, "CASES", 3);
+let rn = Er;
+var an = Object.defineProperty, un = (s, e, t) => e in s ? an(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, _e = (s, e, t) => un(s, typeof e != "symbol" ? e + "" : e, t);
+const ft = class D extends ct {
   constructor() {
-    super(...arguments), Se(this, "_extends"), Se(this, "_css"), Se(this, "_vueComponent"), Se(this, "_visibilityCondition"), Se(this, "_name"), Se(this, "_group");
+    super(...arguments), _e(this, "_extends"), _e(this, "_css"), _e(this, "_vueComponent"), _e(this, "_visibilityCondition"), _e(this, "_name"), _e(this, "_group");
   }
   /**
    * Returns the EClass of this object
@@ -4044,14 +4045,14 @@ const ct = class R extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(R.EXTENDS),
+      getFeature: () => this.eClass().getEStructuralFeature(D.EXTENDS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => R.EXTENDS,
+      getFeatureID: () => D.EXTENDS,
       merge: () => !1
     });
   }
@@ -4064,14 +4065,14 @@ const ct = class R extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(R.CSS),
+      getFeature: () => this.eClass().getEStructuralFeature(D.CSS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => R.CSS,
+      getFeatureID: () => D.CSS,
       merge: () => !1
     });
   }
@@ -4084,14 +4085,14 @@ const ct = class R extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(R.VUE_COMPONENT),
+      getFeature: () => this.eClass().getEStructuralFeature(D.VUE_COMPONENT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => R.VUE_COMPONENT,
+      getFeatureID: () => D.VUE_COMPONENT,
       merge: () => !1
     });
   }
@@ -4104,14 +4105,14 @@ const ct = class R extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(R.VISIBILITY_CONDITION),
+      getFeature: () => this.eClass().getEStructuralFeature(D.VISIBILITY_CONDITION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => R.VISIBILITY_CONDITION,
+      getFeatureID: () => D.VISIBILITY_CONDITION,
       merge: () => !1
     });
   }
@@ -4133,17 +4134,17 @@ const ct = class R extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case R.EXTENDS:
+      case D.EXTENDS:
         return this.extends;
-      case R.CSS:
+      case D.CSS:
         return this.css;
-      case R.VUE_COMPONENT:
+      case D.VUE_COMPONENT:
         return this.vueComponent;
-      case R.VISIBILITY_CONDITION:
+      case D.VISIBILITY_CONDITION:
         return this.visibilityCondition;
-      case R.NAME:
+      case D.NAME:
         return this.name;
-      case R.GROUP:
+      case D.GROUP:
         return this.group;
       default:
         return super.eGet(e);
@@ -4154,22 +4155,22 @@ const ct = class R extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case R.EXTENDS:
+      case D.EXTENDS:
         this.extends = t, super.eSet(e, t);
         break;
-      case R.CSS:
+      case D.CSS:
         this.css = t, super.eSet(e, t);
         break;
-      case R.VUE_COMPONENT:
+      case D.VUE_COMPONENT:
         this.vueComponent = t, super.eSet(e, t);
         break;
-      case R.VISIBILITY_CONDITION:
+      case D.VISIBILITY_CONDITION:
         this.visibilityCondition = t, super.eSet(e, t);
         break;
-      case R.NAME:
+      case D.NAME:
         this.name = t, super.eSet(e, t);
         break;
-      case R.GROUP:
+      case D.GROUP:
         this.group = t, super.eSet(e, t);
         break;
       default:
@@ -4181,17 +4182,17 @@ const ct = class R extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case R.EXTENDS:
+      case D.EXTENDS:
         return this._extends !== void 0;
-      case R.CSS:
+      case D.CSS:
         return this._css !== void 0;
-      case R.VUE_COMPONENT:
+      case D.VUE_COMPONENT:
         return this._vueComponent !== void 0;
-      case R.VISIBILITY_CONDITION:
+      case D.VISIBILITY_CONDITION:
         return this._visibilityCondition !== void 0;
-      case R.NAME:
+      case D.NAME:
         return this._name !== void 0;
-      case R.GROUP:
+      case D.GROUP:
         return this._group !== void 0;
       default:
         return super.eIsSet(e);
@@ -4202,22 +4203,22 @@ const ct = class R extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case R.EXTENDS:
+      case D.EXTENDS:
         this._extends = void 0;
         return;
-      case R.CSS:
+      case D.CSS:
         this._css = void 0;
         return;
-      case R.VUE_COMPONENT:
+      case D.VUE_COMPONENT:
         this._vueComponent = void 0;
         return;
-      case R.VISIBILITY_CONDITION:
+      case D.VISIBILITY_CONDITION:
         this._visibilityCondition = void 0;
         return;
-      case R.NAME:
+      case D.NAME:
         this._name = void 0;
         return;
-      case R.GROUP:
+      case D.GROUP:
         this._group = void 0;
         return;
       default:
@@ -4225,12 +4226,12 @@ const ct = class R extends tt {
     }
   }
 };
-Se(ct, "EXTENDS", 2), Se(ct, "CSS", 3), Se(ct, "VUE_COMPONENT", 4), Se(ct, "VISIBILITY_CONDITION", 5), Se(ct, "NAME", 0), Se(ct, "GROUP", 1);
-let Ga = ct;
-var sn = Object.defineProperty, rn = (s, e, t) => e in s ? sn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Fr = (s, e, t) => rn(s, typeof e != "symbol" ? e + "" : e, t);
-const Jr = class Ee extends Ga {
+_e(ft, "EXTENDS", 2), _e(ft, "CSS", 3), _e(ft, "VUE_COMPONENT", 4), _e(ft, "VISIBILITY_CONDITION", 5), _e(ft, "NAME", 0), _e(ft, "GROUP", 1);
+let xa = ft;
+var nn = Object.defineProperty, ln = (s, e, t) => e in s ? nn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, br = (s, e, t) => ln(s, typeof e != "symbol" ? e + "" : e, t);
+const ta = class Se extends xa {
   constructor() {
-    super(...arguments), Fr(this, "_layout"), Fr(this, "_order");
+    super(...arguments), br(this, "_layout"), br(this, "_order");
   }
   /**
    * Returns the EClass of this object
@@ -4248,14 +4249,14 @@ const Jr = class Ee extends Ga {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(Ee.LAYOUT),
+      getFeature: () => this.eClass().getEStructuralFeature(Se.LAYOUT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => Ee.LAYOUT,
+      getFeatureID: () => Se.LAYOUT,
       merge: () => !1
     });
   }
@@ -4268,14 +4269,14 @@ const Jr = class Ee extends Ga {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(Ee.ORDER),
+      getFeature: () => this.eClass().getEStructuralFeature(Se.ORDER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => Ee.ORDER,
+      getFeatureID: () => Se.ORDER,
       merge: () => !1
     });
   }
@@ -4285,9 +4286,9 @@ const Jr = class Ee extends Ga {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Ee.LAYOUT:
+      case Se.LAYOUT:
         return this.layout;
-      case Ee.ORDER:
+      case Se.ORDER:
         return this.order;
       default:
         return super.eGet(e);
@@ -4298,10 +4299,10 @@ const Jr = class Ee extends Ga {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case Ee.LAYOUT:
+      case Se.LAYOUT:
         this.layout = t, super.eSet(e, t);
         break;
-      case Ee.ORDER:
+      case Se.ORDER:
         this.order = t, super.eSet(e, t);
         break;
       default:
@@ -4313,9 +4314,9 @@ const Jr = class Ee extends Ga {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Ee.LAYOUT:
+      case Se.LAYOUT:
         return this._layout !== void 0;
-      case Ee.ORDER:
+      case Se.ORDER:
         return this._order !== void 0;
       default:
         return super.eIsSet(e);
@@ -4326,10 +4327,10 @@ const Jr = class Ee extends Ga {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Ee.LAYOUT:
+      case Se.LAYOUT:
         this._layout = void 0;
         return;
-      case Ee.ORDER:
+      case Se.ORDER:
         this._order = void 0;
         return;
       default:
@@ -4337,12 +4338,12 @@ const Jr = class Ee extends Ga {
     }
   }
 };
-Fr(Jr, "LAYOUT", 6), Fr(Jr, "ORDER", 7);
-let an = Jr;
-var un = Object.defineProperty, nn = (s, e, t) => e in s ? un(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, De = (s, e, t) => nn(s, typeof e != "symbol" ? e + "" : e, t);
-const es = class P extends Ga {
+br(ta, "LAYOUT", 6), br(ta, "ORDER", 7);
+let on = ta;
+var cn = Object.defineProperty, En = (s, e, t) => e in s ? cn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ve = (s, e, t) => En(s, typeof e != "symbol" ? e + "" : e, t);
+const ss = class P extends xa {
   constructor() {
-    super(...arguments), De(this, "_feature"), De(this, "_widgetType"), De(this, "_label"), De(this, "_readOnly"), De(this, "_order");
+    super(...arguments), Ve(this, "_feature"), Ve(this, "_widgetType"), Ve(this, "_label"), Ve(this, "_readOnly"), Ve(this, "_order");
   }
   /**
    * Returns the EClass of this object
@@ -4539,12 +4540,12 @@ const es = class P extends Ga {
     }
   }
 };
-De(es, "FEATURE", 6), De(es, "WIDGET_TYPE", 7), De(es, "LABEL", 8), De(es, "READ_ONLY", 9), De(es, "ORDER", 10);
-let Wa = es;
-var ln = Object.defineProperty, on = (s, e, t) => e in s ? ln(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ya = (s, e, t) => on(s, typeof e != "symbol" ? e + "" : e, t);
-const $a = class Et extends Wa {
+Ve(ss, "FEATURE", 6), Ve(ss, "WIDGET_TYPE", 7), Ve(ss, "LABEL", 8), Ve(ss, "READ_ONLY", 9), Ve(ss, "ORDER", 10);
+let Xa = ss;
+var hn = Object.defineProperty, gn = (s, e, t) => e in s ? hn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ha = (s, e, t) => gn(s, typeof e != "symbol" ? e + "" : e, t);
+const ja = class St extends Xa {
   constructor() {
-    super(...arguments), Ya(this, "_columns", []);
+    super(...arguments), Ha(this, "_columns", []);
   }
   /**
    * Returns the EClass of this object
@@ -4562,14 +4563,14 @@ const $a = class Et extends Wa {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(Et.COLUMNS),
+      getFeature: () => this.eClass().getEStructuralFeature(St.COLUMNS),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => Et.COLUMNS,
+      getFeatureID: () => St.COLUMNS,
       merge: () => !1
     });
   }
@@ -4579,7 +4580,7 @@ const $a = class Et extends Wa {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Et.COLUMNS:
+      case St.COLUMNS:
         return this.columns;
       default:
         return super.eGet(e);
@@ -4590,7 +4591,7 @@ const $a = class Et extends Wa {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case Et.COLUMNS:
+      case St.COLUMNS:
         this.columns = t, super.eSet(e, t);
         break;
       default:
@@ -4602,7 +4603,7 @@ const $a = class Et extends Wa {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Et.COLUMNS:
+      case St.COLUMNS:
         return this._columns !== void 0 && this._columns.length > 0;
       default:
         return super.eIsSet(e);
@@ -4613,7 +4614,7 @@ const $a = class Et extends Wa {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case Et.COLUMNS:
+      case St.COLUMNS:
         this._columns = [];
         return;
       default:
@@ -4621,12 +4622,12 @@ const $a = class Et extends Wa {
     }
   }
 };
-Ya($a, "COLUMNS", 11);
-let cn = $a;
-var En = Object.defineProperty, hn = (s, e, t) => e in s ? En(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Pr = (s, e, t) => hn(s, typeof e != "symbol" ? e + "" : e, t);
-const Zr = class he extends tt {
+Ha(ja, "COLUMNS", 11);
+let dn = ja;
+var pn = Object.defineProperty, Tn = (s, e, t) => e in s ? pn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Mr = (s, e, t) => Tn(s, typeof e != "symbol" ? e + "" : e, t);
+const sa = class me extends ct {
   constructor() {
-    super(...arguments), Pr(this, "_language", "OCL"), Pr(this, "_body", "");
+    super(...arguments), Mr(this, "_language", "OCL"), Mr(this, "_body", "");
   }
   /**
    * Returns the EClass of this object
@@ -4644,14 +4645,14 @@ const Zr = class he extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(he.LANGUAGE),
+      getFeature: () => this.eClass().getEStructuralFeature(me.LANGUAGE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => he.LANGUAGE,
+      getFeatureID: () => me.LANGUAGE,
       merge: () => !1
     });
   }
@@ -4664,14 +4665,14 @@ const Zr = class he extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(he.BODY),
+      getFeature: () => this.eClass().getEStructuralFeature(me.BODY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => he.BODY,
+      getFeatureID: () => me.BODY,
       merge: () => !1
     });
   }
@@ -4681,9 +4682,9 @@ const Zr = class he extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case he.LANGUAGE:
+      case me.LANGUAGE:
         return this.language;
-      case he.BODY:
+      case me.BODY:
         return this.body;
       default:
         return super.eGet(e);
@@ -4694,10 +4695,10 @@ const Zr = class he extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case he.LANGUAGE:
+      case me.LANGUAGE:
         this.language = t, super.eSet(e, t);
         break;
-      case he.BODY:
+      case me.BODY:
         this.body = t, super.eSet(e, t);
         break;
       default:
@@ -4709,9 +4710,9 @@ const Zr = class he extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case he.LANGUAGE:
+      case me.LANGUAGE:
         return this._language !== "OCL";
-      case he.BODY:
+      case me.BODY:
         return this._body !== "";
       default:
         return super.eIsSet(e);
@@ -4722,10 +4723,10 @@ const Zr = class he extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case he.LANGUAGE:
+      case me.LANGUAGE:
         this._language = "OCL";
         return;
-      case he.BODY:
+      case me.BODY:
         this._body = "";
         return;
       default:
@@ -4733,15 +4734,15 @@ const Zr = class he extends tt {
     }
   }
 };
-Pr(Zr, "LANGUAGE", 0), Pr(Zr, "BODY", 1);
-let ka = Zr;
-const kr = {
+Mr(sa, "LANGUAGE", 0), Mr(sa, "BODY", 1);
+let qa = sa;
+const Hr = {
   ERROR: "ERROR"
 };
-var gn = Object.defineProperty, dn = (s, e, t) => e in s ? gn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, br = (s, e, t) => dn(s, typeof e != "symbol" ? e + "" : e, t);
-const ea = class ge extends ka {
+var fn = Object.defineProperty, Sn = (s, e, t) => e in s ? fn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Vr = (s, e, t) => Sn(s, typeof e != "symbol" ? e + "" : e, t);
+const ra = class Ie extends qa {
   constructor() {
-    super(...arguments), br(this, "_defaultMessage"), br(this, "_severity", kr.ERROR);
+    super(...arguments), Vr(this, "_defaultMessage"), Vr(this, "_severity", Hr.ERROR);
   }
   /**
    * Returns the EClass of this object
@@ -4759,14 +4760,14 @@ const ea = class ge extends ka {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ge.DEFAULT_MESSAGE),
+      getFeature: () => this.eClass().getEStructuralFeature(Ie.DEFAULT_MESSAGE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ge.DEFAULT_MESSAGE,
+      getFeatureID: () => Ie.DEFAULT_MESSAGE,
       merge: () => !1
     });
   }
@@ -4779,14 +4780,14 @@ const ea = class ge extends ka {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(ge.SEVERITY),
+      getFeature: () => this.eClass().getEStructuralFeature(Ie.SEVERITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => ge.SEVERITY,
+      getFeatureID: () => Ie.SEVERITY,
       merge: () => !1
     });
   }
@@ -4796,9 +4797,9 @@ const ea = class ge extends ka {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ge.DEFAULT_MESSAGE:
+      case Ie.DEFAULT_MESSAGE:
         return this.defaultMessage;
-      case ge.SEVERITY:
+      case Ie.SEVERITY:
         return this.severity;
       default:
         return super.eGet(e);
@@ -4809,10 +4810,10 @@ const ea = class ge extends ka {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case ge.DEFAULT_MESSAGE:
+      case Ie.DEFAULT_MESSAGE:
         this.defaultMessage = t, super.eSet(e, t);
         break;
-      case ge.SEVERITY:
+      case Ie.SEVERITY:
         this.severity = t, super.eSet(e, t);
         break;
       default:
@@ -4824,10 +4825,10 @@ const ea = class ge extends ka {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ge.DEFAULT_MESSAGE:
+      case Ie.DEFAULT_MESSAGE:
         return this._defaultMessage !== void 0;
-      case ge.SEVERITY:
-        return this._severity !== kr.ERROR;
+      case Ie.SEVERITY:
+        return this._severity !== Hr.ERROR;
       default:
         return super.eIsSet(e);
     }
@@ -4837,23 +4838,23 @@ const ea = class ge extends ka {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case ge.DEFAULT_MESSAGE:
+      case Ie.DEFAULT_MESSAGE:
         this._defaultMessage = void 0;
         return;
-      case ge.SEVERITY:
-        this._severity = kr.ERROR;
+      case Ie.SEVERITY:
+        this._severity = Hr.ERROR;
         return;
       default:
         super.eUnset(e);
     }
   }
 };
-br(ea, "DEFAULT_MESSAGE", 2), br(ea, "SEVERITY", 3);
-let pn = ea;
-var Tn = Object.defineProperty, Sn = (s, e, t) => e in s ? Tn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, se = (s, e, t) => Sn(s, typeof e != "symbol" ? e + "" : e, t);
-const je = class _ extends tt {
+Vr(ra, "DEFAULT_MESSAGE", 2), Vr(ra, "SEVERITY", 3);
+let mn = ra;
+var In = Object.defineProperty, Nn = (s, e, t) => e in s ? In(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, oe = (s, e, t) => Nn(s, typeof e != "symbol" ? e + "" : e, t);
+const st = class O extends ct {
   constructor() {
-    super(...arguments), se(this, "_order"), se(this, "_matchCode"), se(this, "_matchSeverity"), se(this, "_matchExpression"), se(this, "_mappedText"), se(this, "_mappedTextExpression"), se(this, "_mappedSeverity");
+    super(...arguments), oe(this, "_order"), oe(this, "_matchCode"), oe(this, "_matchSeverity"), oe(this, "_matchExpression"), oe(this, "_mappedText"), oe(this, "_mappedTextExpression"), oe(this, "_mappedSeverity");
   }
   /**
    * Returns the EClass of this object
@@ -4871,14 +4872,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.ORDER),
+      getFeature: () => this.eClass().getEStructuralFeature(O.ORDER),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.ORDER,
+      getFeatureID: () => O.ORDER,
       merge: () => !1
     });
   }
@@ -4891,14 +4892,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MATCH_CODE),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MATCH_CODE),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MATCH_CODE,
+      getFeatureID: () => O.MATCH_CODE,
       merge: () => !1
     });
   }
@@ -4911,14 +4912,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MATCH_SEVERITY),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MATCH_SEVERITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MATCH_SEVERITY,
+      getFeatureID: () => O.MATCH_SEVERITY,
       merge: () => !1
     });
   }
@@ -4931,14 +4932,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MATCH_EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MATCH_EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MATCH_EXPRESSION,
+      getFeatureID: () => O.MATCH_EXPRESSION,
       merge: () => !1
     });
   }
@@ -4951,14 +4952,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MAPPED_TEXT),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MAPPED_TEXT),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MAPPED_TEXT,
+      getFeatureID: () => O.MAPPED_TEXT,
       merge: () => !1
     });
   }
@@ -4971,14 +4972,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MAPPED_TEXT_EXPRESSION),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MAPPED_TEXT_EXPRESSION),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MAPPED_TEXT_EXPRESSION,
+      getFeatureID: () => O.MAPPED_TEXT_EXPRESSION,
       merge: () => !1
     });
   }
@@ -4991,14 +4992,14 @@ const je = class _ extends tt {
       getNotifier: () => this,
       getEventType: () => 1,
       // SET
-      getFeature: () => this.eClass().getEStructuralFeature(_.MAPPED_SEVERITY),
+      getFeature: () => this.eClass().getEStructuralFeature(O.MAPPED_SEVERITY),
       getOldValue: () => t,
       getNewValue: () => e,
       getPosition: () => -1,
       wasSet: () => !0,
       isTouch: () => !1,
       isReset: () => !1,
-      getFeatureID: () => _.MAPPED_SEVERITY,
+      getFeatureID: () => O.MAPPED_SEVERITY,
       merge: () => !1
     });
   }
@@ -5008,19 +5009,19 @@ const je = class _ extends tt {
    */
   eGet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case _.ORDER:
+      case O.ORDER:
         return this.order;
-      case _.MATCH_CODE:
+      case O.MATCH_CODE:
         return this.matchCode;
-      case _.MATCH_SEVERITY:
+      case O.MATCH_SEVERITY:
         return this.matchSeverity;
-      case _.MATCH_EXPRESSION:
+      case O.MATCH_EXPRESSION:
         return this.matchExpression;
-      case _.MAPPED_TEXT:
+      case O.MAPPED_TEXT:
         return this.mappedText;
-      case _.MAPPED_TEXT_EXPRESSION:
+      case O.MAPPED_TEXT_EXPRESSION:
         return this.mappedTextExpression;
-      case _.MAPPED_SEVERITY:
+      case O.MAPPED_SEVERITY:
         return this.mappedSeverity;
       default:
         return super.eGet(e);
@@ -5031,25 +5032,25 @@ const je = class _ extends tt {
    */
   eSet(e, t) {
     switch (this.eClass().getFeatureID(e)) {
-      case _.ORDER:
+      case O.ORDER:
         this.order = t, super.eSet(e, t);
         break;
-      case _.MATCH_CODE:
+      case O.MATCH_CODE:
         this.matchCode = t, super.eSet(e, t);
         break;
-      case _.MATCH_SEVERITY:
+      case O.MATCH_SEVERITY:
         this.matchSeverity = t, super.eSet(e, t);
         break;
-      case _.MATCH_EXPRESSION:
+      case O.MATCH_EXPRESSION:
         this.matchExpression = t, super.eSet(e, t);
         break;
-      case _.MAPPED_TEXT:
+      case O.MAPPED_TEXT:
         this.mappedText = t, super.eSet(e, t);
         break;
-      case _.MAPPED_TEXT_EXPRESSION:
+      case O.MAPPED_TEXT_EXPRESSION:
         this.mappedTextExpression = t, super.eSet(e, t);
         break;
-      case _.MAPPED_SEVERITY:
+      case O.MAPPED_SEVERITY:
         this.mappedSeverity = t, super.eSet(e, t);
         break;
       default:
@@ -5061,19 +5062,19 @@ const je = class _ extends tt {
    */
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case _.ORDER:
+      case O.ORDER:
         return this._order !== void 0;
-      case _.MATCH_CODE:
+      case O.MATCH_CODE:
         return this._matchCode !== void 0;
-      case _.MATCH_SEVERITY:
+      case O.MATCH_SEVERITY:
         return this._matchSeverity !== void 0;
-      case _.MATCH_EXPRESSION:
+      case O.MATCH_EXPRESSION:
         return this._matchExpression !== void 0;
-      case _.MAPPED_TEXT:
+      case O.MAPPED_TEXT:
         return this._mappedText !== void 0;
-      case _.MAPPED_TEXT_EXPRESSION:
+      case O.MAPPED_TEXT_EXPRESSION:
         return this._mappedTextExpression !== void 0;
-      case _.MAPPED_SEVERITY:
+      case O.MAPPED_SEVERITY:
         return this._mappedSeverity !== void 0;
       default:
         return super.eIsSet(e);
@@ -5084,25 +5085,25 @@ const je = class _ extends tt {
    */
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
-      case _.ORDER:
+      case O.ORDER:
         this._order = void 0;
         return;
-      case _.MATCH_CODE:
+      case O.MATCH_CODE:
         this._matchCode = void 0;
         return;
-      case _.MATCH_SEVERITY:
+      case O.MATCH_SEVERITY:
         this._matchSeverity = void 0;
         return;
-      case _.MATCH_EXPRESSION:
+      case O.MATCH_EXPRESSION:
         this._matchExpression = void 0;
         return;
-      case _.MAPPED_TEXT:
+      case O.MAPPED_TEXT:
         this._mappedText = void 0;
         return;
-      case _.MAPPED_TEXT_EXPRESSION:
+      case O.MAPPED_TEXT_EXPRESSION:
         this._mappedTextExpression = void 0;
         return;
-      case _.MAPPED_SEVERITY:
+      case O.MAPPED_SEVERITY:
         this._mappedSeverity = void 0;
         return;
       default:
@@ -5110,12 +5111,12 @@ const je = class _ extends tt {
     }
   }
 };
-se(je, "ORDER", 0), se(je, "MATCH_CODE", 1), se(je, "MATCH_SEVERITY", 2), se(je, "MATCH_EXPRESSION", 3), se(je, "MAPPED_TEXT", 4), se(je, "MAPPED_TEXT_EXPRESSION", 5), se(je, "MAPPED_SEVERITY", 6);
-let fn = je;
-var mn = Object.defineProperty, In = (s, e, t) => e in s ? mn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Nn = (s, e, t) => In(s, e + "", t);
-const xa = class Xa extends yi {
+oe(st, "ORDER", 0), oe(st, "MATCH_CODE", 1), oe(st, "MATCH_SEVERITY", 2), oe(st, "MATCH_EXPRESSION", 3), oe(st, "MAPPED_TEXT", 4), oe(st, "MAPPED_TEXT_EXPRESSION", 5), oe(st, "MAPPED_SEVERITY", 6);
+let Ln = st;
+var vn = Object.defineProperty, _n = (s, e, t) => e in s ? vn(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, On = (s, e, t) => _n(s, e + "", t);
+const za = class Ka extends Fi {
   static get eINSTANCE() {
-    return this._instance || (this._instance = new Xa()), this._instance;
+    return this._instance || (this._instance = new Ka()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(y.eINSTANCE);
@@ -5124,169 +5125,169 @@ const xa = class Xa extends yi {
    * Create a new UIModel instance
    */
   createUIModel() {
-    return new Wi();
+    return new xi();
   }
   /**
    * Create a new FormView instance
    */
   createFormView() {
-    return new Xi();
+    return new zi();
   }
   /**
    * Create a new TableView instance
    */
   createTableView() {
-    return new qi();
+    return new Ji();
   }
   /**
    * Create a new SectionView instance
    */
   createSectionView() {
-    return new Qi();
+    return new tu();
   }
   /**
    * Create a new TabView instance
    */
   createTabView() {
-    return new eu();
+    return new au();
   }
   /**
    * Create a new SummaryView instance
    */
   createSummaryView() {
-    return new ru();
+    return new nu();
   }
   /**
    * Create a new MasterDetail instance
    */
   createMasterDetail() {
-    return new uu();
+    return new cu();
   }
   /**
    * Create a new PropertyBinding instance
    */
   createPropertyBinding() {
-    return new ou();
+    return new gu();
   }
   /**
    * Create a new InputWidget instance
    */
   createInputWidget() {
-    return new du();
+    return new Su();
   }
   /**
    * Create a new TextAreaWidget instance
    */
   createTextAreaWidget() {
-    return new Su();
+    return new Nu();
   }
   /**
    * Create a new NumberWidget instance
    */
   createNumberWidget() {
-    return new Iu();
+    return new _u();
   }
   /**
    * Create a new CheckboxWidget instance
    */
   createCheckboxWidget() {
-    return new vu();
+    return new Cu();
   }
   /**
    * Create a new DateWidget instance
    */
   createDateWidget() {
-    return new Au();
+    return new Ru();
   }
   /**
    * Create a new ComboboxWidget instance
    */
   createComboboxWidget() {
-    return new Du();
+    return new Pu();
   }
   /**
    * Create a new SelectWidget instance
    */
   createSelectWidget() {
-    return new Fu();
+    return new Vu();
   }
   /**
    * Create a new AllFeatures instance
    */
   createAllFeatures() {
-    return new Mu();
+    return new Gu();
   }
   /**
    * Create a new TemplateCase instance
    */
   createTemplateCase() {
-    return new Bu();
+    return new $u();
   }
   /**
    * Create a new GroupWidget instance
    */
   createGroupWidget() {
-    return new Yu();
+    return new Xu();
   }
   /**
    * Create a new Conditional instance
    */
   createConditional() {
-    return new xu();
+    return new qu();
   }
   /**
    * Create a new ForEach instance
    */
   createForEach() {
-    return new ju();
+    return new Qu();
   }
   /**
    * Create a new ReferenceLinkWidget instance
    */
   createReferenceLinkWidget() {
-    return new Ku();
+    return new en();
   }
   /**
    * Create a new UIModelOverlay instance
    */
   createUIModelOverlay() {
-    return new Zu();
+    return new rn();
   }
   /**
    * Create a new LayoutStyle instance
    */
   createLayoutStyle() {
-    return new an();
+    return new on();
   }
   /**
    * Create a new WidgetStyle instance
    */
   createWidgetStyle() {
-    return new Wa();
+    return new Xa();
   }
   /**
    * Create a new TableStyle instance
    */
   createTableStyle() {
-    return new cn();
+    return new dn();
   }
   /**
    * Create a new Expression instance
    */
   createExpression() {
-    return new ka();
+    return new qa();
   }
   /**
    * Create a new ValidationExpression instance
    */
   createValidationExpression() {
-    return new pn();
+    return new mn();
   }
   /**
    * Create a new ValidationMessageMapper instance
    */
   createValidationMessageMapper() {
-    return new fn();
+    return new Ln();
   }
   /**
    * Create an instance of the given class
@@ -5354,18 +5355,18 @@ const xa = class Xa extends yi {
     }
   }
 };
-Nn(xa, "_instance");
-let na = xa;
-const Ha = Symbol("uimodelComposerRegistry");
-function ja() {
-  const s = et(Ha);
+On(za, "_instance");
+let Ea = za;
+const Qa = Symbol("uimodelComposerRegistry");
+function Ja() {
+  const s = ot(Qa);
   if (!s)
     throw new Error(
       "[uimodel-composer] No ComposerRegistry provided. Make sure UIModelComposer is an ancestor of this component."
     );
   return s;
 }
-function Ln(s) {
+function An(s) {
   const e = new Map(
     s ? Object.entries(s) : []
   );
@@ -5378,16 +5379,16 @@ function Ln(s) {
     }
   };
 }
-const vn = "uic";
-function hr(s) {
+const Cn = "uic";
+function gr(s) {
   return s === !0 || s === "true";
 }
-function gt(s, e = 0) {
+function It(s, e = 0) {
   if (typeof s == "number") return s;
   const t = Number(s);
   return Number.isFinite(t) ? t : e;
 }
-const _n = {
+const yn = {
   HOVER: ":hover",
   FOCUS: ":focus",
   FOCUS_WITHIN: ":focus-within",
@@ -5397,44 +5398,44 @@ const _n = {
   INVALID: ".uim-s-invalid",
   REQUIRED: ".uim-s-required"
 };
-function Vr(s) {
+function Gr(s) {
   return s.trim().replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase() || "unnamed";
 }
-function ta(s) {
-  return `--${vn}-${Vr(s)}`;
+function aa(s) {
+  return `--${Cn}-${Gr(s)}`;
 }
-function On(s) {
-  return s.replace(/token\(\s*([^)]+?)\s*\)/g, (e, t) => `var(${ta(t)})`);
+function Dn(s) {
+  return s.replace(/token\(\s*([^)]+?)\s*\)/g, (e, t) => `var(${aa(t)})`);
 }
-function qa(s) {
-  return `uic-${Vr(s)}`;
+function Za(s) {
+  return `uic-${Gr(s)}`;
 }
-function An(s) {
-  return `uicss-theme-${Vr(s)}`;
+function Rn(s) {
+  return `uicss-theme-${Gr(s)}`;
 }
-function za(s, e) {
-  return `uicss-cond-${Vr(s.name ?? "sheet")}-${e}`;
+function ei(s, e) {
+  return `uicss-cond-${Gr(s.name ?? "sheet")}-${e}`;
 }
-function Ka(s, e = "  ") {
-  return s.filter((t) => t.property && t.value !== void 0).map((t) => `${e}${t.property.trim()}: ${On(t.value)}${hr(t.important) ? " !important" : ""};`).join(`
+function ti(s, e = "  ") {
+  return s.filter((t) => t.property && t.value !== void 0).map((t) => `${e}${t.property.trim()}: ${Dn(t.value)}${gr(t.important) ? " !important" : ""};`).join(`
 `);
 }
-function Cn(s, e) {
+function wn(s, e) {
   return e.filter((t) => t.declarations.length > 0).map((t) => {
     var r, i;
-    const u = ((i = (r = t.state) == null ? void 0 : r.getName) == null ? void 0 : i.call(r)) ?? String(t.state), n = _n[u] ?? `:${u.toLowerCase()}`;
+    const u = ((i = (r = t.state) == null ? void 0 : r.getName) == null ? void 0 : i.call(r)) ?? String(t.state), n = yn[u] ?? `:${u.toLowerCase()}`;
     return `${s}${n} {
-${Ka(t.declarations)}
+${ti(t.declarations)}
 }`;
   }).join(`
 `);
 }
-function fa(s, e, t, r) {
+function va(s, e, t, r) {
   const i = [];
   e.length > 0 && i.push(`${s} {
-${Ka(e)}
+${ti(e)}
 }`);
-  const u = Cn(s, t);
+  const u = wn(s, t);
   if (u && i.push(u), i.length === 0) return "";
   const n = i.join(`
 `);
@@ -5442,16 +5443,16 @@ ${Ka(e)}
 ${n}
 }` : n;
 }
-function Qa(s) {
-  return s.includeSubtypes === void 0 || s.includeSubtypes === null ? !0 : hr(s.includeSubtypes);
+function si(s) {
+  return s.includeSubtypes === void 0 || s.includeSubtypes === null ? !0 : gr(s.includeSubtypes);
 }
-function yn(s, e, t) {
+function Fn(s, e, t) {
   var r, i;
   let u;
   const n = (i = (r = e.targetClass) == null ? void 0 : r.getName) == null ? void 0 : i.call(r);
-  return n ? u = Qa(e) ? `.uim-c-${n}` : `.uim-component[data-uim-eclass="${n}"]` : u = ".uim-component", e.componentName && (u += `[data-uim-name="${e.componentName}"]`), e.group && (u += `[data-uim-group="${e.group}"]`), e.condition && (u += `.${za(s, t)}`), u;
+  return n ? u = si(e) ? `.uim-c-${n}` : `.uim-component[data-uim-eclass="${n}"]` : u = ".uim-component", e.componentName && (u += `[data-uim-name="${e.componentName}"]`), e.group && (u += `[data-uim-group="${e.group}"]`), e.condition && (u += `.${ei(s, t)}`), u;
 }
-function Dn(s) {
+function Pn(s) {
   const e = new Set(s), t = [], r = /* @__PURE__ */ new Set();
   function i(u, n) {
     if (r.has(u) || n.has(u)) return;
@@ -5462,10 +5463,10 @@ function Dn(s) {
   for (const u of s) i(u, /* @__PURE__ */ new Set());
   return t;
 }
-function Rn(s) {
+function bn(s) {
   const e = [];
   if (s.tokens.length > 0) {
-    const r = s.tokens.filter((i) => i.name).map((i) => `  ${ta(i.name)}: ${i.value ?? ""};`);
+    const r = s.tokens.filter((i) => i.name).map((i) => `  ${aa(i.name)}: ${i.value ?? ""};`);
     e.push(`:root, .uicss-scope {
 ${r.join(`
 `)}
@@ -5476,49 +5477,49 @@ ${r.join(`
     const i = r.overrides.filter((u) => {
       var n;
       return (n = u.token) == null ? void 0 : n.name;
-    }).map((u) => `  ${ta(u.token.name)}: ${u.value ?? ""};`);
-    hr(r.dark) && i.push("  color-scheme: dark;"), i.length > 0 && e.push(`.${An(r.name)} {
+    }).map((u) => `  ${aa(u.token.name)}: ${u.value ?? ""};`);
+    gr(r.dark) && i.push("  color-scheme: dark;"), i.length > 0 && e.push(`.${Rn(r.name)} {
 ${i.join(`
 `)}
 }`);
   }
   const t = s.rules.map((r, i) => ({ rule: r, index: i }));
-  t.sort((r, i) => gt(r.rule.priority) - gt(i.rule.priority) || r.index - i.index);
+  t.sort((r, i) => It(r.rule.priority) - It(i.rule.priority) || r.index - i.index);
   for (const { rule: r, index: i } of t) {
-    const u = fa(
-      yn(s, r, i),
+    const u = va(
+      Fn(s, r, i),
       r.declarations,
       r.states,
       r.media || void 0
     );
     u && e.push(u);
   }
-  for (const r of Dn(s.styles)) {
+  for (const r of Pn(s.styles)) {
     if (!r.name) continue;
-    const i = fa(`.${qa(r.name)}`, r.declarations, r.states);
+    const i = va(`.${Za(r.name)}`, r.declarations, r.states);
     i && e.push(i);
   }
   return e.join(`
 
 `);
 }
-function wn(s) {
-  return s.map(Rn).filter(Boolean).join(`
+function Mn(s) {
+  return s.map(bn).filter(Boolean).join(`
 
 `);
 }
 const pr = Symbol("uimodel-css:sheets");
-let Fn = 0;
-function Pn(s) {
-  const e = gr(0);
-  class t extends Ra {
+let Vn = 0;
+function Un(s) {
+  const e = dr(0);
+  class t extends Ma {
     notifyChanged(E) {
-      var h;
+      var g;
       try {
         super.notifyChanged(E);
       } catch {
       }
-      if (!((h = E.isTouch) != null && h.call(E))) {
+      if (!((g = E.isTouch) != null && g.call(E))) {
         e.value++;
         for (const o of i) n(o);
       }
@@ -5539,64 +5540,64 @@ function Pn(s) {
     if (E.eAdapterRemove)
       E.eAdapterRemove(r);
     else {
-      const h = E.eAdapters(), o = h.indexOf(r);
-      o >= 0 && h.splice(o, 1);
+      const g = E.eAdapters(), o = g.indexOf(r);
+      o >= 0 && g.splice(o, 1);
     }
   }
-  function g() {
+  function h() {
     for (const c of i) {
       l(c);
       for (const E of c.eAllContents()) l(E);
     }
     i = [];
   }
-  return dr(
-    () => [...Me(s)],
+  return os(
+    () => [...Xe(s)],
     (c) => {
-      g();
+      h();
       for (const E of c)
         n(E), i.push(E);
       e.value++;
     },
     { immediate: !0 }
-  ), aa(g), { css: m(() => (e.value, wn([...Me(s)]))), version: e };
+  ), la(h), { css: T(() => (e.value, Mn([...Xe(s)]))), version: e };
 }
-function bn(s) {
-  const { css: e, version: t } = Pn(s);
+function Bn(s) {
+  const { css: e, version: t } = Un(s);
   if (typeof document < "u") {
     const r = document.createElement("style");
-    r.id = `uimodel-css-${++Fn}`, r.setAttribute("data-uimodel-css", ""), document.head.appendChild(r), Li(() => {
+    r.id = `uimodel-css-${++Vn}`, r.setAttribute("data-uimodel-css", ""), document.head.appendChild(r), Ai(() => {
       r.textContent = e.value;
-    }), aa(() => {
+    }), la(() => {
       r.remove();
     });
   }
   return { css: e, version: t };
 }
-function Sr(s) {
+function mr(s) {
   const e = s;
-  return e && typeof e.eClass == "function" ? us(e) : s;
+  return e && typeof e.eClass == "function" ? ls(e) : s;
 }
-function us(s) {
+function ls(s) {
   return new Proxy(s, {
     get(e, t) {
       var r, i, u;
       if (typeof t != "string") return e[t];
       if (t === "eGet")
-        return (g) => {
-          var c, E, h;
-          if (typeof g == "string") {
-            const o = (h = (E = (c = e.eClass) == null ? void 0 : c.call(e)) == null ? void 0 : E.getEStructuralFeature) == null ? void 0 : h.call(E, g);
-            return o ? Sr(e.eGet(o)) : void 0;
+        return (h) => {
+          var c, E, g;
+          if (typeof h == "string") {
+            const o = (g = (E = (c = e.eClass) == null ? void 0 : c.call(e)) == null ? void 0 : E.getEStructuralFeature) == null ? void 0 : g.call(E, h);
+            return o ? mr(e.eGet(o)) : void 0;
           }
-          return Sr(e.eGet(g));
+          return mr(e.eGet(h));
         };
       if (t in e) return e[t];
       const n = t.charAt(0).toUpperCase() + t.slice(1);
-      for (const g of [`get${n}`, `is${n}`])
-        if (typeof e[g] == "function") return Sr(e[g]());
+      for (const h of [`get${n}`, `is${n}`])
+        if (typeof e[h] == "function") return mr(e[h]());
       const l = (u = (i = (r = e.eClass) == null ? void 0 : r.call(e)) == null ? void 0 : i.getEStructuralFeature) == null ? void 0 : u.call(i, t);
-      if (l) return Sr(e.eGet(l));
+      if (l) return mr(e.eGet(l));
     }
   });
 }
@@ -5605,11 +5606,11 @@ function Tr(s, e) {
   try {
     switch (s.language) {
       case "OCL":
-        return Mn(s.body, e);
+        return Gn(s.body, e);
       case "AQL":
-        return Un(s.body, e);
+        return Wn(s.body, e);
       case "JS":
-        return Vn(s.body, e);
+        return Yn(s.body, e);
       default:
         return console.warn(`[uimodel-composer] Unknown expression language: ${s.language}`), !0;
     }
@@ -5617,31 +5618,31 @@ function Tr(s, e) {
     return console.error(`[uimodel-composer] Expression evaluation failed (${s.language}):`, t), !0;
   }
 }
-function Mn(s, e) {
+function Gn(s, e) {
   try {
     const { EMFOclValidator: t } = globalThis.__emftsOcl__ ?? {};
-    return t ? new t().evaluateExpression(s, us(e)) === !0 : (console.warn("[uimodel-composer] @emfts/ocl not registered. Call registerOclEvaluator() during setup."), !0);
+    return t ? new t().evaluateExpression(s, ls(e)) === !0 : (console.warn("[uimodel-composer] @emfts/ocl not registered. Call registerOclEvaluator() during setup."), !0);
   } catch {
     return !0;
   }
 }
-function Un(s, e) {
+function Wn(s, e) {
   return console.warn("[uimodel-composer] AQL evaluation not yet implemented."), !0;
 }
-function Vn(s, e) {
-  return !!new Function("self", `"use strict"; return (${s});`)(us(e));
+function Yn(s, e) {
+  return !!new Function("self", `"use strict"; return (${s});`)(ls(e));
 }
-function Bn(s) {
+function $n(s) {
   const e = s;
-  return e && typeof e.eClass == "function" ? us(e) : s;
+  return e && typeof e.eClass == "function" ? ls(e) : s;
 }
-function la(s, e, t = {}) {
+function Wr(s, e, t = {}) {
   if (s != null && s.body)
     try {
       switch (s.language) {
         case "JS": {
           const r = Object.keys(t);
-          return new Function("self", ...r, `"use strict"; return (${s.body});`)(us(e), ...r.map((i) => Bn(t[i])));
+          return new Function("self", ...r, `"use strict"; return (${s.body});`)(ls(e), ...r.map((i) => $n(t[i])));
         }
         case "OCL": {
           const { EMFOclValidator: r } = globalThis.__emftsOcl__ ?? {};
@@ -5649,7 +5650,7 @@ function la(s, e, t = {}) {
             console.warn("[uimodel-composer] @emfts/ocl not registered. Call registerOclEvaluator() during setup.");
             return;
           }
-          return new r().evaluateExpression(s.body, us(e));
+          return new r().evaluateExpression(s.body, ls(e));
         }
         default:
           console.warn(`[uimodel-composer] evaluateValue: unsupported language ${s.language}`);
@@ -5660,43 +5661,43 @@ function la(s, e, t = {}) {
       return;
     }
 }
-function Gn(s) {
-  return s.map((e, t) => ({ overlay: e, index: t })).sort((e, t) => gt(t.overlay.priority) - gt(e.overlay.priority) || e.index - t.index).flatMap(({ overlay: e }) => [...e.cases ?? []]);
+function kn(s) {
+  return s.map((e, t) => ({ overlay: e, index: t })).sort((e, t) => It(t.overlay.priority) - It(e.overlay.priority) || e.index - t.index).flatMap(({ overlay: e }) => [...e.cases ?? []]);
 }
-function Ja(s) {
+function ri(s) {
   var e, t, r;
   return ((r = (t = (e = s.eClass) == null ? void 0 : e.call(s)) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) === "AllFeatures";
 }
-function Wn(s) {
+function xn(s) {
   var e;
   const t = (e = s.eClass) == null ? void 0 : e.call(s);
   return t ? t.getName() === "WidgetComponent" || t.getEAllSuperTypes().some((r) => r.getName() === "WidgetComponent") : !1;
 }
-function Za(s) {
+function ai(s) {
   return typeof s.isContainment == "function";
 }
-function Yn(s) {
+function Xn(s) {
   const e = [], t = /* @__PURE__ */ new Set();
   function r(i) {
-    Ja(i) ? e.push(i) : Wn(i) && i.feature && t.add(i.feature);
+    ri(i) ? e.push(i) : xn(i) && i.feature && t.add(i.feature);
     for (const u of i.eClass().getEAllStructuralFeatures()) {
-      if (!Za(u) || !u.isContainment()) continue;
+      if (!ai(u) || !u.isContainment()) continue;
       const n = i.eGet(u);
       if (!n) continue;
       const l = u.isMany() ? [...n] : [n];
-      for (const g of l) r(g);
+      for (const h of l) r(h);
     }
   }
   return r(s), { blocks: e, boundFeatures: t };
 }
-function _r(s) {
+function Ar(s) {
   var e;
   return (((e = s.with) == null ? void 0 : e.length) ?? 0) > 0;
 }
-function $n(s, e) {
+function Hn(s, e) {
   var t;
   const r = s.getEAllStructuralFeatures();
-  if (_r(e)) {
+  if (Ar(e)) {
     const u = new Set(r);
     return e.with.filter((n) => u.has(n));
   }
@@ -5712,10 +5713,10 @@ function $n(s, e) {
     (u) => Tr(e.filter, u)
   )), i;
 }
-function kn(s, e) {
+function jn(s, e) {
   const t = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Map();
   for (const u of e.blocks)
-    t.set(u, []), r.set(u, new Set($n(s, u)));
+    t.set(u, []), r.set(u, new Set(Hn(s, u)));
   const i = new Map(
     e.blocks.map((u, n) => [u, n])
   );
@@ -5728,120 +5729,120 @@ function kn(s, e) {
         n = l;
         continue;
       }
-      const g = gt(l.priority) - gt(n.priority), c = Number(_r(l)) - Number(_r(n)), E = i.get(n) - i.get(l);
-      (g > 0 || g === 0 && (c > 0 || c === 0 && E > 0)) && (n = l);
+      const h = It(l.priority) - It(n.priority), c = Number(Ar(l)) - Number(Ar(n)), E = i.get(n) - i.get(l);
+      (h > 0 || h === 0 && (c > 0 || c === 0 && E > 0)) && (n = l);
     }
     n && t.get(n).push(u);
   }
   for (const [u, n] of t) {
-    if (!_r(u)) continue;
-    const l = new Map(u.with.map((g, c) => [g, c]));
-    n.sort((g, c) => (l.get(g) ?? 0) - (l.get(c) ?? 0));
+    if (!Ar(u)) continue;
+    const l = new Map(u.with.map((h, c) => [h, c]));
+    n.sort((h, c) => (l.get(h) ?? 0) - (l.get(c) ?? 0));
   }
   return t;
 }
-function ma(s, e) {
+function _a(s, e) {
   for (const t of s ?? [])
-    if (t.widget && (!t.when || la(
+    if (t.widget && (!t.when || Wr(
       t.when,
       e
     )))
       return t.widget;
 }
-function xn(s, e, t) {
-  return ma(t?.overlayCases, e) ?? ma(s.cases, e) ?? s.template;
+function qn(s, e, t) {
+  return _a(t?.overlayCases, e) ?? _a(s.cases, e) ?? s.template;
 }
-function Mr(s) {
+function Ur(s) {
   var e, t, r;
   const i = s.eClass(), u = (e = i.getEPackage()) == null ? void 0 : e.getEFactoryInstance();
   if (!u) throw new Error(`Keine Factory für ${i.getName()}`);
   const n = u.create(i);
   for (const l of i.getEAllStructuralFeatures()) {
     if ((t = l.isDerived) != null && t.call(l) || ((r = l.isChangeable) == null ? void 0 : r.call(l)) === !1) continue;
-    const g = s.eGet(l);
-    if (g == null) continue;
-    const c = Za(l) && l.isContainment();
+    const h = s.eGet(l);
+    if (h == null) continue;
+    const c = ai(l) && l.isContainment();
     if (l.isMany()) {
-      const E = [...g];
+      const E = [...h];
       if (E.length === 0) continue;
       n.eSet(
         l,
-        c ? E.map((h) => Mr(h)) : E
+        c ? E.map((g) => Ur(g)) : E
       );
     } else
-      n.eSet(l, c ? Mr(g) : g);
+      n.eSet(l, c ? Ur(h) : h);
   }
   return n;
 }
-const Xn = /* @__PURE__ */ new Set(["AllFeatures", "Conditional", "ForEach"]);
-function xr(s) {
+const zn = /* @__PURE__ */ new Set(["AllFeatures", "Conditional", "ForEach"]);
+function jr(s) {
   var e, t, r;
   return ((r = (t = (e = s.eClass) == null ? void 0 : e.call(s)) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) ?? "";
 }
-function ei(s, e) {
-  if (xr(s) !== "GroupWidget") {
+function ii(s, e) {
+  if (jr(s) !== "GroupWidget") {
     s.feature = e;
     return;
   }
   const t = s.fields ?? [];
   for (const r of t)
-    Xn.has(xr(r)) || (xr(r) === "GroupWidget" ? ei(r, e) : !r.feature && !(r.bindings ?? []).some((i) => i.property === "feature") && (r.feature = e));
+    zn.has(jr(r)) || (jr(r) === "GroupWidget" ? ii(r, e) : !r.feature && !(r.bindings ?? []).some((i) => i.property === "feature") && (r.feature = e));
 }
-function Hn(s, e) {
-  const t = na.eINSTANCE.createValidationExpression();
+function Kn(s, e) {
+  const t = Ea.eINSTANCE.createValidationExpression();
   return t.language = "JS", t.body = `self.${s} !== null && self.${s} !== undefined && String(self.${s}).length > 0`, t.defaultMessage = `${e ?? s} ist erforderlich.`, t.severity = "ERROR", t;
 }
-function jn(s) {
+function Qn(s) {
   const e = s.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ");
   return e.charAt(0).toUpperCase() + e.slice(1);
 }
-function qn(s, e, t) {
+function Jn(s, e, t) {
   var r, i, u, n;
   const l = t ?? {
     blocks: [e],
     boundFeatures: /* @__PURE__ */ new Set()
   };
   l.blocks.includes(e) || l.blocks.push(e);
-  const g = kn(s, l).get(e) ?? [], c = [];
-  for (const E of g) {
-    const h = xn(e, E, l);
-    if (!h) {
+  const h = jn(s, l).get(e) ?? [], c = [];
+  for (const E of h) {
+    const g = qn(e, E, l);
+    if (!g) {
       console.error(
         `[uimodel-composer] AllFeatures "${e.name ?? "?"}": kein TemplateCase trifft auf Feature "${E.getName() ?? "?"}" und kein Default-Fall (template) gesetzt.`
       );
       continue;
     }
-    const o = Mr(h);
-    ei(o, E);
+    const o = Ur(g);
+    ii(o, E);
     const d = E.getName() ?? "feature";
-    o.name = d, o.label === void 0 && e.label !== void 0 && (o.label = e.label), o.placeholder === void 0 && e.placeholder !== void 0 && (o.placeholder = e.placeholder), o.readOnly === void 0 && e.readOnly !== void 0 && (o.readOnly = e.readOnly), o.required === void 0 && e.required !== void 0 && (o.required = e.required), (((r = o.styles) == null ? void 0 : r.length) ?? 0) === 0 && (((i = e.styles) == null ? void 0 : i.length) ?? 0) > 0 && (o.styles = [...e.styles]), o.label || (o.label = jn(d)), !o.group && e.group && (o.group = e.group), o.required === void 0 && gt((u = E.getLowerBound) == null ? void 0 : u.call(E)) >= 1 && (o.required = !0, (((n = o.validations) == null ? void 0 : n.length) ?? 0) === 0 && (o.validations = [Hn(d, o.label)]));
-    const p = e.bindings ?? [];
-    if (p.length > 0) {
-      const L = new Set((o.bindings ?? []).map((f) => f.property)), D = p.filter((f) => f.property && !L.has(f.property)).map((f) => Mr(f));
-      D.length > 0 && (o.bindings = [...o.bindings ?? [], ...D]);
+    o.name = d, o.label === void 0 && e.label !== void 0 && (o.label = e.label), o.placeholder === void 0 && e.placeholder !== void 0 && (o.placeholder = e.placeholder), o.readOnly === void 0 && e.readOnly !== void 0 && (o.readOnly = e.readOnly), o.required === void 0 && e.required !== void 0 && (o.required = e.required), (((r = o.styles) == null ? void 0 : r.length) ?? 0) === 0 && (((i = e.styles) == null ? void 0 : i.length) ?? 0) > 0 && (o.styles = [...e.styles]), o.label || (o.label = Qn(d)), !o.group && e.group && (o.group = e.group), o.required === void 0 && It((u = E.getLowerBound) == null ? void 0 : u.call(E)) >= 1 && (o.required = !0, (((n = o.validations) == null ? void 0 : n.length) ?? 0) === 0 && (o.validations = [Kn(d, o.label)]));
+    const V = e.bindings ?? [];
+    if (V.length > 0) {
+      const B = new Set((o.bindings ?? []).map((f) => f.property)), p = V.filter((f) => f.property && !B.has(f.property)).map((f) => Ur(f));
+      p.length > 0 && (o.bindings = [...o.bindings ?? [], ...p]);
     }
     c.push(o);
   }
   return c;
 }
-const ti = Symbol("uimodel:allfeatures-context"), si = gr(0);
-function zn() {
-  si.value++;
+const ui = Symbol("uimodel:allfeatures-context"), ni = dr(0);
+function Zn() {
+  ni.value++;
 }
-function pt() {
-  si.value;
+function Lt() {
+  ni.value;
 }
-function Kn(s) {
-  class e extends Ra {
+function el(s) {
+  class e extends Ma {
     notifyChanged(l) {
-      var g;
+      var h;
       try {
         super.notifyChanged(l);
       } catch {
       }
-      if ((g = l.isTouch) != null && g.call(l)) return;
-      zn();
-      const c = Me(s);
+      if ((h = l.isTouch) != null && h.call(l)) return;
+      Zn();
+      const c = Xe(s);
       c && i(c);
     }
   }
@@ -5855,30 +5856,30 @@ function Kn(s) {
     for (const l of n.eAllContents()) r(l);
   }
   function u(n) {
-    const l = (g) => {
-      const c = g;
+    const l = (h) => {
+      const c = h;
       if (c.eAdapterRemove)
         c.eAdapterRemove(t);
       else {
-        const E = c.eAdapters(), h = E.indexOf(t);
-        h >= 0 && E.splice(h, 1);
+        const E = c.eAdapters(), g = E.indexOf(t);
+        g >= 0 && E.splice(g, 1);
       }
     };
     l(n);
-    for (const g of n.eAllContents()) l(g);
+    for (const h of n.eAllContents()) l(h);
   }
-  dr(
-    () => Me(s),
+  os(
+    () => Xe(s),
     (n, l) => {
       l && u(l), n && i(n);
     },
     { immediate: !0 }
-  ), aa(() => {
-    const n = Me(s);
+  ), la(() => {
+    const n = Xe(s);
     n && u(n);
   });
 }
-function ri(s) {
+function li(s) {
   var e;
   if (!s) return [];
   const t = [], r = /* @__PURE__ */ new Set(), i = (u) => {
@@ -5890,65 +5891,65 @@ function ri(s) {
   for (const u of ((e = s.getEAllSuperTypes) == null ? void 0 : e.call(s)) ?? []) i(u);
   return t;
 }
-function Qn(s) {
+function tl(s) {
   var e, t, r;
   return ((r = (t = (e = s.eClass) == null ? void 0 : e.call(s)) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) === "CssStyle";
 }
-function Jn(s) {
+function sl(s) {
   const e = [], t = /* @__PURE__ */ new Set();
   function r(i) {
-    !i || t.has(i) || (t.add(i), r(i.extends), Qn(i) && i.name && e.push(qa(i.name)));
+    !i || t.has(i) || (t.add(i), r(i.extends), tl(i) && i.name && e.push(Za(i.name)));
   }
   for (const i of s ?? []) r(i);
   return e;
 }
-function Zn(s, e) {
+function rl(s, e) {
   var t, r, i;
   const u = (r = (t = s.targetClass) == null ? void 0 : t.getName) == null ? void 0 : r.call(t);
   if (u) {
-    const n = ri((i = e.eClass) == null ? void 0 : i.call(e));
-    if (Qa(s)) {
+    const n = li((i = e.eClass) == null ? void 0 : i.call(e));
+    if (si(s)) {
       if (!n.includes(u)) return !1;
     } else if (n[0] !== u)
       return !1;
   }
   return !(s.componentName && e.name !== s.componentName || s.group && e.group !== s.group);
 }
-function oa(s, e = {}) {
+function ha(s, e = {}) {
   var t;
   const r = ["uim-component"];
-  for (const i of ri((t = s.eClass) == null ? void 0 : t.call(s)))
+  for (const i of li((t = s.eClass) == null ? void 0 : t.call(s)))
     r.push(`uim-c-${i}`);
-  r.push(...Jn(s.styles)), e.resolvedCss && r.push(...e.resolvedCss.split(/\s+/).filter(Boolean));
+  r.push(...sl(s.styles)), e.resolvedCss && r.push(...e.resolvedCss.split(/\s+/).filter(Boolean));
   for (const i of e.sheets ?? [])
     i.rules.forEach((u, n) => {
-      u.condition && Zn(u, s) && e.model && Tr(u.condition, e.model) && r.push(za(i, n));
+      u.condition && rl(u, s) && e.model && Tr(u.condition, e.model) && r.push(ei(i, n));
     });
   return [...new Set(r)];
 }
-function ca(s) {
+function ga(s) {
   var e, t, r;
   const i = {}, u = (r = (t = (e = s.eClass) == null ? void 0 : e.call(s)) == null ? void 0 : t.getName) == null ? void 0 : r.call(t);
   return u && (i["data-uim-eclass"] = u), s.name && (i["data-uim-name"] = s.name), s.group && (i["data-uim-group"] = s.group), i;
 }
-function el(s, e, t) {
+function al(s, e, t) {
   const r = [];
-  return hr(t ?? s.required) && r.push("uim-s-required"), hr(e ?? s.readOnly) && r.push("uim-s-readonly"), r;
+  return gr(t ?? s.required) && r.push("uim-s-required"), gr(e ?? s.readOnly) && r.push("uim-s-readonly"), r;
 }
-function ai(s, e = /* @__PURE__ */ new Set()) {
+function oi(s, e = /* @__PURE__ */ new Set()) {
   if (!s) return {};
   if (e.has(s)) return {};
   e.add(s);
-  const t = s.extends ? ai(s.extends, e) : {}, r = tl(s);
-  return ui(t, r);
+  const t = s.extends ? oi(s.extends, e) : {}, r = il(s);
+  return Ei(t, r);
 }
-function ii(s) {
+function ci(s) {
   return s.reduce(
-    (e, t) => ui(e, ai(t)),
+    (e, t) => Ei(e, oi(t)),
     {}
   );
 }
-function tl(s) {
+function il(s) {
   const e = {};
   s.css !== void 0 && (e.css = s.css), s.vueComponent !== void 0 && (e.vueComponent = s.vueComponent);
   const t = s;
@@ -5956,7 +5957,7 @@ function tl(s) {
   const r = s;
   return r.widgetType !== void 0 && (e.widgetType = r.widgetType), r.label !== void 0 && (e.label = r.label), r.readOnly !== void 0 && (e.readOnly = r.readOnly), r.order !== void 0 && (e.order = r.order), e;
 }
-function ui(s, e) {
+function Ei(s, e) {
   return {
     ...s,
     ...Object.fromEntries(
@@ -5966,77 +5967,77 @@ function ui(s, e) {
     css: [s.css, e.css].filter(Boolean).join(" ") || void 0
   };
 }
-const Ea = /* @__PURE__ */ ee({
+const da = /* @__PURE__ */ se({
   __name: "ComponentDispatcher",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    const e = s, t = ja(), r = m(() => {
-      var l, g, c, E;
-      const h = ((E = (c = (g = (l = e.component).eClass) == null ? void 0 : g.call(l)) == null ? void 0 : c.getName) == null ? void 0 : E.call(c)) ?? "", o = t.getComposer(h);
-      return o || console.warn(`[uimodel-composer] No composer registered for EClass "${h}"`), o ?? null;
-    }), i = et(pr, void 0), u = m(() => (pt(), i?.version.value, oa(e.component, {
+    const e = s, t = Ja(), r = T(() => {
+      var l, h, c, E;
+      const g = ((E = (c = (h = (l = e.component).eClass) == null ? void 0 : h.call(l)) == null ? void 0 : c.getName) == null ? void 0 : E.call(c)) ?? "", o = t.getComposer(g);
+      return o || console.warn(`[uimodel-composer] No composer registered for EClass "${g}"`), o ?? null;
+    }), i = ot(pr, void 0), u = T(() => (Lt(), i?.version.value, ha(e.component, {
       model: e.model,
       sheets: i?.sheets.value,
-      resolvedCss: ii(e.component.styles ?? []).css
-    }))), n = m(() => ca(e.component));
-    return (l, g) => r.value ? (N(), q(ia(r.value), ua({
+      resolvedCss: ci(e.component.styles ?? []).css
+    }))), n = T(() => ga(e.component));
+    return (l, h) => r.value ? (I(), H(oa(r.value), ca({
       key: 0,
       component: s.component,
       model: s.model,
       class: u.value
-    }, n.value), null, 16, ["component", "model", "class"])) : fe("", !0);
+    }, n.value), null, 16, ["component", "model", "class"])) : ne("", !0);
   }
 });
-function ha(s) {
+function pa(s) {
   var e, t, r;
   return ((r = (t = (e = s.eClass) == null ? void 0 : e.call(s)) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) ?? "";
 }
-function sl(s) {
-  return ha(s) === "GroupWidget";
+function ul(s) {
+  return pa(s) === "GroupWidget";
 }
-function rl(s) {
-  return ha(s) === "Conditional";
+function nl(s) {
+  return pa(s) === "Conditional";
 }
-function al(s) {
-  return ha(s) === "ForEach";
+function ll(s) {
+  return pa(s) === "ForEach";
 }
-function il(s) {
+function ol(s) {
   if (!s) return [];
   const e = typeof s == "object" && Symbol.iterator in s ? s : [s], t = [];
   for (const r of e)
     r && typeof r.eClass == "function" ? t.push(r) : r != null && console.warn("[uimodel-composer] ForEach: Element ist kein EObject und wird übersprungen:", r);
   return t;
 }
-function sa(s, e, t) {
+function ia(s, e, t) {
   var r;
   const i = [];
   for (const u of s ?? [])
-    if (Ja(u)) {
+    if (ri(u)) {
       const n = (r = e.eClass) == null ? void 0 : r.call(e);
       if (!n) continue;
-      for (const l of qn(n, u, t))
+      for (const l of Jn(n, u, t))
         i.push({ kind: "widget", widget: l, model: e });
-    } else if (rl(u)) {
+    } else if (nl(u)) {
       const n = Tr(u.condition, e) ? u.then : u.else;
-      i.push(...sa(n, e, t));
-    } else if (al(u)) {
-      const n = il(la(u.items, e));
+      i.push(...ia(n, e, t));
+    } else if (ll(u)) {
+      const n = ol(Wr(u.items, e));
       if (n.length === 0) {
         u.emptyText && i.push({ kind: "note", text: u.emptyText });
         continue;
       }
       for (const l of n)
-        i.push(...sa(u.body, l, t));
-    } else sl(u) ? i.push({ kind: "group", widget: u, model: e }) : i.push({ kind: "widget", widget: u, model: e });
+        i.push(...ia(u.body, l, t));
+    } else ul(u) ? i.push({ kind: "group", widget: u, model: e }) : i.push({ kind: "widget", widget: u, model: e });
   return i;
 }
-function ni(s, e) {
-  return m(() => (pt(), Tr(Me(s), Me(e))));
+function hi(s, e) {
+  return T(() => (Lt(), Tr(Xe(s), Xe(e))));
 }
-const ul = /* @__PURE__ */ new Set([
+const cl = /* @__PURE__ */ new Set([
   "readOnly",
   "required",
   "password",
@@ -6044,7 +6045,7 @@ const ul = /* @__PURE__ */ new Set([
   "multiSelect",
   "asButtonGroup",
   "withTime"
-]), nl = /* @__PURE__ */ new Set([
+]), El = /* @__PURE__ */ new Set([
   "maxLength",
   "rows",
   "min",
@@ -6053,23 +6054,23 @@ const ul = /* @__PURE__ */ new Set([
   "minSearchLength",
   "order"
 ]);
-function ll(s, e) {
+function hl(s, e) {
   if (e === null) return s === "feature" ? null : void 0;
   if (s === "feature") return e;
-  if (ul.has(s)) return !!e;
-  if (nl.has(s)) {
+  if (cl.has(s)) return !!e;
+  if (El.has(s)) {
     const t = Number(e);
     return Number.isFinite(t) ? t : void 0;
   }
   return String(e);
 }
-function ol(s, e) {
+function gl(s, e) {
   var t;
   const r = { values: {}, featureSuppressed: !1 };
   for (const i of s.bindings ?? []) {
     const u = i.property;
     if (!u || !i.expression) continue;
-    const n = la(i.expression, e, {
+    const n = Wr(i.expression, e, {
       feature: s.feature,
       eClass: (t = e.eClass) == null ? void 0 : t.call(e)
     });
@@ -6078,24 +6079,24 @@ function ol(s, e) {
       n === null ? r.featureSuppressed = !0 : r.feature = n;
       continue;
     }
-    const l = ll(u, n);
+    const l = hl(u, n);
     l !== void 0 && (r.values[u] = l);
   }
   return r;
 }
-function li(s, e) {
-  return m(() => {
+function gi(s, e) {
+  return T(() => {
     var t;
-    pt();
-    const r = Me(s), i = ii(r.styles), u = {
+    Lt();
+    const r = Xe(s), i = ci(r.styles), u = {
       ...r.label !== void 0 ? { label: r.label } : {},
       ...r.placeholder !== void 0 ? { placeholder: r.placeholder } : {},
       ...r.readOnly !== void 0 ? { readOnly: r.readOnly } : {},
       ...r.required !== void 0 ? { required: r.required } : {}
-    }, n = e ? Me(e) : void 0;
+    }, n = e ? Xe(e) : void 0;
     if (!n || (((t = r.bindings) == null ? void 0 : t.length) ?? 0) === 0)
       return { ...i, ...u };
-    const l = ol(r, n);
+    const l = gl(r, n);
     return {
       ...i,
       ...u,
@@ -6105,14 +6106,14 @@ function li(s, e) {
     };
   });
 }
-var z = /* @__PURE__ */ ((s) => (s[s.DEFAULT = 0] = "DEFAULT", s[s.DATA_TYPE = 100] = "DATA_TYPE", s[s.ECLASS = 200] = "ECLASS", s[s.FEATURE = 300] = "FEATURE", s[s.PACKAGE = 400] = "PACKAGE", s[s.INSTANCE = 500] = "INSTANCE", s[s.OVERRIDE = 1e3] = "OVERRIDE", s))(z || {});
-function K() {
+var ee = /* @__PURE__ */ ((s) => (s[s.DEFAULT = 0] = "DEFAULT", s[s.DATA_TYPE = 100] = "DATA_TYPE", s[s.ECLASS = 200] = "ECLASS", s[s.FEATURE = 300] = "FEATURE", s[s.PACKAGE = 400] = "PACKAGE", s[s.INSTANCE = 500] = "INSTANCE", s[s.OVERRIDE = 1e3] = "OVERRIDE", s))(ee || {});
+function te() {
   return { matches: !1, priority: 0 };
 }
-function Ne(s) {
+function Ce(s) {
   return { matches: !0, priority: s };
 }
-let cl = class {
+let dl = class {
   constructor(e) {
     this.eClass = e;
   }
@@ -6123,15 +6124,15 @@ let cl = class {
   match(e) {
     const t = e.eClass;
     if (!t)
-      return K();
+      return te();
     if (t === this.eClass)
-      return Ne(z.ECLASS + 50);
+      return Ce(ee.ECLASS + 50);
     if (t.getName() === this.eClass.getName()) {
       const r = t.getEPackage(), i = this.eClass.getEPackage();
       if (r && i && r.getNsURI() === i.getNsURI())
-        return Ne(z.ECLASS + 50);
+        return Ce(ee.ECLASS + 50);
     }
-    return this.isSuperTypeOf(this.eClass, t) ? Ne(z.ECLASS) : K();
+    return this.isSuperTypeOf(this.eClass, t) ? Ce(ee.ECLASS) : te();
   }
   /**
    * Check if eClass is a supertype of potentialSubType.
@@ -6149,7 +6150,7 @@ let cl = class {
     }
     return !1;
   }
-}, El = class {
+}, pl = class {
   constructor(e) {
     this.dataTypeName = e;
   }
@@ -6160,9 +6161,9 @@ let cl = class {
     var t, r;
     const i = e.feature || e.attribute;
     if (!i || !this.isEAttribute(i))
-      return K();
+      return te();
     const u = (t = i.getEType) == null ? void 0 : t.call(i);
-    return u && ((r = u.getName) == null ? void 0 : r.call(u)) === this.dataTypeName ? Ne(z.DATA_TYPE) : K();
+    return u && ((r = u.getName) == null ? void 0 : r.call(u)) === this.dataTypeName ? Ce(ee.DATA_TYPE) : te();
   }
   /**
    * Check if the feature is an EAttribute.
@@ -6171,7 +6172,7 @@ let cl = class {
     var t, r;
     return !e || typeof e != "object" ? !1 : "getEAttributeType" in e || "eClass" in e && typeof e.eClass == "function" && ((r = (t = e.eClass()) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) === "EAttribute";
   }
-}, hl = class {
+}, Tl = class {
   constructor(e) {
     this.enumName = e;
   }
@@ -6188,14 +6189,14 @@ let cl = class {
       if (i && this.isEEnum(i))
         return this.matchEnum(i);
     }
-    return K();
+    return te();
   }
   /**
    * Match against a specific enum.
    */
   matchEnum(e) {
     var t;
-    return this.enumName ? ((t = e.getName) == null ? void 0 : t.call(e)) === this.enumName ? Ne(z.DATA_TYPE + 50) : K() : Ne(z.DATA_TYPE);
+    return this.enumName ? ((t = e.getName) == null ? void 0 : t.call(e)) === this.enumName ? Ce(ee.DATA_TYPE + 50) : te() : Ce(ee.DATA_TYPE);
   }
   /**
    * Check if the value is an EAttribute.
@@ -6211,7 +6212,7 @@ let cl = class {
     var t, r;
     return !e || typeof e != "object" ? !1 : "getELiterals" in e || "eClass" in e && typeof e.eClass == "function" && ((r = (t = e.eClass()) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) === "EEnum";
   }
-}, gl = class {
+}, fl = class {
   constructor(e, t) {
     this.containment = e, this.targetClass = t;
   }
@@ -6222,24 +6223,24 @@ let cl = class {
     var t, r, i, u, n;
     const l = e.feature || e.reference;
     if (!l || !this.isEReference(l))
-      return K();
-    const g = l;
-    let c = z.DATA_TYPE;
+      return te();
+    const h = l;
+    let c = ee.DATA_TYPE;
     if (this.containment !== void 0) {
-      if ((((t = g.isContainment) == null ? void 0 : t.call(g)) ?? !1) !== this.containment)
-        return K();
+      if ((((t = h.isContainment) == null ? void 0 : t.call(h)) ?? !1) !== this.containment)
+        return te();
       c += 25;
     }
     if (this.targetClass) {
-      const E = (r = g.getEReferenceType) == null ? void 0 : r.call(g);
+      const E = (r = h.getEReferenceType) == null ? void 0 : r.call(h);
       if (!E)
-        return K();
-      const h = (i = E.getName) == null ? void 0 : i.call(E), o = (n = (u = this.targetClass).getName) == null ? void 0 : n.call(u);
-      if (h !== o && !this.isSuperTypeOf(this.targetClass, E))
-        return K();
+        return te();
+      const g = (i = E.getName) == null ? void 0 : i.call(E), o = (n = (u = this.targetClass).getName) == null ? void 0 : n.call(u);
+      if (g !== o && !this.isSuperTypeOf(this.targetClass, E))
+        return te();
       c += 25;
     }
-    return Ne(c);
+    return Ce(c);
   }
   /**
    * Check if the value is an EReference.
@@ -6261,7 +6262,7 @@ let cl = class {
     return !1;
   }
 };
-class dl {
+class Sl {
   constructor(e, t) {
     this.eClass = e, this.featureName = t;
   }
@@ -6269,49 +6270,49 @@ class dl {
    * Match the context against this specific feature.
    */
   match(e) {
-    var t, r, i, u, n, l, g, c, E, h;
+    var t, r, i, u, n, l, h, c, E, g;
     const o = e.feature || e.attribute || e.reference;
     if (!o || ((t = o.getName) == null ? void 0 : t.call(o)) !== this.featureName)
-      return K();
+      return te();
     const d = (r = o.getEContainingClass) == null ? void 0 : r.call(o);
     if (!d)
-      return K();
+      return te();
     if (d === this.eClass)
-      return Ne(z.FEATURE);
-    const p = (i = d.getName) == null ? void 0 : i.call(d), L = (n = (u = this.eClass).getName) == null ? void 0 : n.call(u);
-    if (p === L) {
-      const D = (l = d.getEPackage) == null ? void 0 : l.call(d), f = (c = (g = this.eClass).getEPackage) == null ? void 0 : c.call(g);
-      if (D && f && ((E = D.getNsURI) == null ? void 0 : E.call(D)) === ((h = f.getNsURI) == null ? void 0 : h.call(f)))
-        return Ne(z.FEATURE);
+      return Ce(ee.FEATURE);
+    const V = (i = d.getName) == null ? void 0 : i.call(d), B = (n = (u = this.eClass).getName) == null ? void 0 : n.call(u);
+    if (V === B) {
+      const p = (l = d.getEPackage) == null ? void 0 : l.call(d), f = (c = (h = this.eClass).getEPackage) == null ? void 0 : c.call(h);
+      if (p && f && ((E = p.getNsURI) == null ? void 0 : E.call(p)) === ((g = f.getNsURI) == null ? void 0 : g.call(f)))
+        return Ce(ee.FEATURE);
     }
-    return this.isInheritedFrom(d, this.eClass) ? Ne(z.FEATURE - 10) : K();
+    return this.isInheritedFrom(d, this.eClass) ? Ce(ee.FEATURE - 10) : te();
   }
   /**
    * Check if subClass inherits from superClass.
    */
   isInheritedFrom(e, t) {
-    var r, i, u, n, l, g, c;
+    var r, i, u, n, l, h, c;
     const E = (r = e.getEAllSuperTypes) == null ? void 0 : r.call(e);
     if (!E) return !1;
-    for (const h of E) {
-      if (h === t) return !0;
-      if (((i = h.getName) == null ? void 0 : i.call(h)) === ((u = t.getName) == null ? void 0 : u.call(t))) {
-        const o = (n = h.getEPackage) == null ? void 0 : n.call(h), d = (l = t.getEPackage) == null ? void 0 : l.call(t);
-        if (o && d && ((g = o.getNsURI) == null ? void 0 : g.call(o)) === ((c = d.getNsURI) == null ? void 0 : c.call(d)))
+    for (const g of E) {
+      if (g === t) return !0;
+      if (((i = g.getName) == null ? void 0 : i.call(g)) === ((u = t.getName) == null ? void 0 : u.call(t))) {
+        const o = (n = g.getEPackage) == null ? void 0 : n.call(g), d = (l = t.getEPackage) == null ? void 0 : l.call(t);
+        if (o && d && ((h = o.getNsURI) == null ? void 0 : h.call(o)) === ((c = d.getNsURI) == null ? void 0 : c.call(d)))
           return !0;
       }
     }
     return !1;
   }
 }
-var pl = Object.defineProperty, Tl = (s, e, t) => e in s ? pl(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Ia = (s, e, t) => Tl(s, typeof e != "symbol" ? e + "" : e, t);
-let Sl = 0;
-function fl() {
-  return `descriptor-${++Sl}`;
+var ml = Object.defineProperty, Il = (s, e, t) => e in s ? ml(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Oa = (s, e, t) => Il(s, typeof e != "symbol" ? e + "" : e, t);
+let Nl = 0;
+function Ll() {
+  return `descriptor-${++Nl}`;
 }
-let ml = class {
+let vl = class {
   constructor() {
-    Ia(this, "entries", []), Ia(this, "instanceOverrides", /* @__PURE__ */ new WeakMap());
+    Oa(this, "entries", []), Oa(this, "instanceOverrides", /* @__PURE__ */ new WeakMap());
   }
   /**
    * Register a component for a specific target.
@@ -6329,7 +6330,7 @@ let ml = class {
     const r = this.createDescriptor(
       t,
       { type: "instance", eObject: e },
-      { priority: z.INSTANCE }
+      { priority: ee.INSTANCE }
     );
     return this.instanceOverrides.set(e, r), () => {
       this.instanceOverrides.delete(e);
@@ -6343,7 +6344,7 @@ let ml = class {
     return this.register(
       t,
       { type: "eclass", eClass: e },
-      { priority: z.ECLASS, ...r }
+      { priority: ee.ECLASS, ...r }
     );
   }
   /**
@@ -6354,7 +6355,7 @@ let ml = class {
     return this.register(
       t,
       { type: "datatype", dataTypeName: e },
-      { priority: z.DATA_TYPE, ...r }
+      { priority: ee.DATA_TYPE, ...r }
     );
   }
   /**
@@ -6367,7 +6368,7 @@ let ml = class {
     return this.register(
       e,
       { type: "enum", enumName: t },
-      { priority: z.DATA_TYPE, ...r }
+      { priority: ee.DATA_TYPE, ...r }
     );
   }
   /**
@@ -6382,7 +6383,7 @@ let ml = class {
         containment: t?.containment,
         targetClass: t?.targetClass
       },
-      { priority: z.DATA_TYPE, ...t }
+      { priority: ee.DATA_TYPE, ...t }
     );
   }
   /**
@@ -6393,7 +6394,7 @@ let ml = class {
     return this.register(
       r,
       { type: "feature", eClass: e, featureName: t },
-      { priority: z.FEATURE, ...i }
+      { priority: ee.FEATURE, ...i }
     );
   }
   /**
@@ -6465,7 +6466,7 @@ let ml = class {
    * Create a component descriptor from component, target, and options.
    */
   createDescriptor(e, t, r) {
-    const i = fl();
+    const i = Ll();
     if (r.matcher)
       return {
         id: i,
@@ -6491,46 +6492,46 @@ let ml = class {
   createMatcher(e, t) {
     switch (e.type) {
       case "eclass": {
-        const r = new cl(e.eClass);
+        const r = new dl(e.eClass);
         return (i) => {
           const u = r.match(i);
           return u.matches && t !== void 0 ? { matches: !0, priority: t } : u;
         };
       }
       case "datatype": {
-        const r = new El(e.dataTypeName);
+        const r = new pl(e.dataTypeName);
         return (i) => {
           const u = r.match(i);
           return u.matches && t !== void 0 ? { matches: !0, priority: t } : u;
         };
       }
       case "enum": {
-        const r = new hl(e.enumName);
+        const r = new Tl(e.enumName);
         return (i) => {
           const u = r.match(i);
           return u.matches && t !== void 0 ? { matches: !0, priority: t } : u;
         };
       }
       case "reference": {
-        const r = new gl(e.containment, e.targetClass);
+        const r = new fl(e.containment, e.targetClass);
         return (i) => {
           const u = r.match(i);
           return u.matches && t !== void 0 ? { matches: !0, priority: t } : u;
         };
       }
       case "feature": {
-        const r = new dl(e.eClass, e.featureName);
+        const r = new Sl(e.eClass, e.featureName);
         return (i) => {
           const u = r.match(i);
           return u.matches && t !== void 0 ? { matches: !0, priority: t } : u;
         };
       }
       case "instance":
-        return (r) => r.eObject === e.eObject ? Ne(t ?? z.INSTANCE) : K();
+        return (r) => r.eObject === e.eObject ? Ce(t ?? ee.INSTANCE) : te();
       case "custom":
         return e.matcher;
       default:
-        return () => K();
+        return () => te();
     }
   }
   /**
@@ -6577,17 +6578,17 @@ let ml = class {
     return !e || typeof e != "object" ? !1 : "getELiterals" in e || "eClass" in e && typeof e.eClass == "function" && ((r = (t = e.eClass()) == null ? void 0 : t.getName) == null ? void 0 : r.call(t)) === "EEnum";
   }
 };
-const ns = new ml();
-var Il = Object.defineProperty, Nl = (s, e, t) => e in s ? Il(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Na = (s, e, t) => Nl(s, typeof e != "symbol" ? e + "" : e, t);
-let Ll = class {
+const lt = new vl();
+var _l = Object.defineProperty, Ol = (s, e, t) => e in s ? _l(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t, Aa = (s, e, t) => Ol(s, typeof e != "symbol" ? e + "" : e, t);
+let Al = class {
   constructor() {
-    Na(this, "lazyRegistrations", []), Na(this, "resolvedPackages", /* @__PURE__ */ new Map());
+    Aa(this, "lazyRegistrations", []), Aa(this, "resolvedPackages", /* @__PURE__ */ new Map());
   }
   /**
    * Register a decorated component immediately.
    */
   register(e, t, r) {
-    ns.register(e, t, r);
+    lt.register(e, t, r);
   }
   /**
    * Register for lazy resolution (when EClass/EEnum is specified by name).
@@ -6619,7 +6620,7 @@ let Ll = class {
     const e = [];
     for (const t of this.lazyRegistrations) {
       const r = this.tryResolve(t.target);
-      r ? ns.register(t.component, r, t.options) : e.push(t);
+      r ? lt.register(t.component, r, t.options) : e.push(t);
     }
     this.lazyRegistrations = e;
   }
@@ -6713,39 +6714,39 @@ let Ll = class {
     this.lazyRegistrations = [], this.resolvedPackages.clear();
   }
 };
-new Ll();
-const oi = Symbol("componentRegistry");
-function vl() {
-  const s = et(oi) ?? ns;
-  function e(h) {
-    return s.getComponent(h);
+new Al();
+const di = Symbol("componentRegistry");
+function Cl() {
+  const s = ot(di) ?? lt;
+  function e(g) {
+    return s.getComponent(g);
   }
-  function t(h, o) {
-    return s.getComponentForFeature(h, o);
+  function t(g, o) {
+    return s.getComponentForFeature(g, o);
   }
-  function r(h, o) {
-    return s.getComponentForEClass(h, o);
+  function r(g, o) {
+    return s.getComponentForEClass(g, o);
   }
-  function i(h, o, d) {
-    return s.register(h, o, d);
+  function i(g, o, d) {
+    return s.register(g, o, d);
   }
-  function u(h, o) {
-    return s.registerForInstance(h, o);
+  function u(g, o) {
+    return s.registerForInstance(g, o);
   }
-  function n(h, o, d) {
-    return s.registerForEClass(h, o, d);
+  function n(g, o, d) {
+    return s.registerForEClass(g, o, d);
   }
-  function l(h, o, d) {
-    return s.registerForDataType(h, o, d);
+  function l(g, o, d) {
+    return s.registerForDataType(g, o, d);
   }
-  function g(h, o, d) {
-    return s.registerForEnum(h, o, d);
+  function h(g, o, d) {
+    return s.registerForEnum(g, o, d);
   }
-  function c(h, o) {
-    return s.registerForReference(h, o);
+  function c(g, o) {
+    return s.registerForReference(g, o);
   }
-  function E(h, o, d, p) {
-    return s.registerForFeature(h, o, d, p);
+  function E(g, o, d, V) {
+    return s.registerForFeature(g, o, d, V);
   }
   return {
     registry: s,
@@ -6756,15 +6757,15 @@ function vl() {
     registerForInstance: u,
     registerForEClass: n,
     registerForDataType: l,
-    registerForEnum: g,
+    registerForEnum: h,
     registerForReference: c,
     registerForFeature: E
   };
 }
-const _l = { class: "uimodel-fallback-widget" }, Ol = { class: "uimodel-fallback-widget__label" }, Al = {
+const yl = { class: "uimodel-fallback-widget" }, Dl = { class: "uimodel-fallback-widget__label" }, Rl = {
   key: 0,
   "aria-hidden": "true"
-}, Cl = ["rows", "value", "placeholder", "readonly", "disabled"], yl = /* @__PURE__ */ ee({
+}, wl = ["rows", "value", "placeholder", "readonly", "disabled"], Fl = /* @__PURE__ */ se({
   __name: "FallbackWidget",
   props: {
     eObject: {},
@@ -6772,81 +6773,81 @@ const _l = { class: "uimodel-fallback-widget" }, Ol = { class: "uimodel-fallback
     custom: {}
   },
   setup(s) {
-    const e = s, t = m(() => {
+    const e = s, t = T(() => {
       var o;
       return ((o = e.custom) == null ? void 0 : o.resolvedStyle) ?? {};
-    }), r = m(
+    }), r = T(
       () => {
         var o, d;
         return t.value.label ?? ((d = (o = e.feature) == null ? void 0 : o.getName) == null ? void 0 : d.call(o)) ?? "";
       }
-    ), i = m(() => t.value.placeholder ?? ""), u = m(() => g(t.value.readOnly)), n = m(() => g(t.value.required)), l = m(() => {
+    ), i = T(() => t.value.placeholder ?? ""), u = T(() => h(t.value.readOnly)), n = T(() => h(t.value.required)), l = T(() => {
       var o, d;
-      const p = (d = (o = e.custom) == null ? void 0 : o.rawWidget) == null ? void 0 : d.rows, L = Number(p);
-      return Number.isFinite(L) && L > 0 ? L : 3;
+      const V = (d = (o = e.custom) == null ? void 0 : o.rawWidget) == null ? void 0 : d.rows, B = Number(V);
+      return Number.isFinite(B) && B > 0 ? B : 3;
     });
-    function g(o) {
+    function h(o) {
       return o === !0 || o === "true";
     }
-    const c = m(() => {
+    const c = T(() => {
       var o;
       const d = (o = e.eObject) == null ? void 0 : o.eGet(e.feature);
       return d == null ? "" : String(d);
-    }), E = gr(c.value);
-    dr(c, (o) => {
+    }), E = dr(c.value);
+    os(c, (o) => {
       E.value = o;
     });
-    function h(o) {
+    function g(o) {
       var d;
-      const p = o.target.value;
-      E.value = p, (d = e.eObject) == null || d.eSet(e.feature, p);
+      const V = o.target.value;
+      E.value = V, (d = e.eObject) == null || d.eSet(e.feature, V);
     }
-    return (o, d) => (N(), b("div", _l, [
-      J("label", Ol, [
-        Da(qe(r.value), 1),
-        n.value ? (N(), b("span", Al, " *")) : fe("", !0)
+    return (o, d) => (I(), R("div", yl, [
+      ie("label", Dl, [
+        ba(xe(r.value), 1),
+        n.value ? (I(), R("span", Rl, " *")) : ne("", !0)
       ]),
-      J("textarea", {
+      ie("textarea", {
         class: "uimodel-fallback-widget__input",
         rows: l.value,
         value: E.value,
         placeholder: i.value,
         readonly: u.value,
         disabled: u.value,
-        onInput: h
-      }, null, 40, Cl)
+        onInput: g
+      }, null, 40, wl)
     ]));
   }
-}), Dl = (s, e) => {
+}), Pl = (s, e) => {
   const t = s.__vccOpts || s;
   for (const [r, i] of e)
     t[r] = i;
   return t;
-}, Rl = /* @__PURE__ */ Dl(yl, [["__scopeId", "data-v-0237261a"]]), ci = /* @__PURE__ */ ee({
+}, bl = /* @__PURE__ */ Pl(Fl, [["__scopeId", "data-v-0237261a"]]), pi = /* @__PURE__ */ se({
   __name: "WidgetComposer",
   props: {
     widget: {},
     model: {}
   },
   setup(s) {
-    const e = s, t = /* @__PURE__ */ new Set(), { getComponentForFeature: r } = vl(), i = ni(
+    const e = s, t = /* @__PURE__ */ new Set(), { getComponentForFeature: r } = Cl(), i = hi(
       () => e.widget.visibilityCondition,
       () => e.model
-    ), u = li(
+    ), u = gi(
       () => e.widget,
       () => e.model
-    ), n = m(
+    ), n = T(
       () => u.value.boundFeature ?? e.widget.feature
-    ), l = m(() => {
-      var o, d, p, L, D, f, M, Q;
+    ), l = T(() => {
+      var o, d, V, B, p, f, U, A;
       if (!n.value) return null;
-      const re = r(n.value, e.model);
-      if (re) return re;
-      const O = ((L = (p = (d = (o = e.widget).eClass) == null ? void 0 : d.call(o)) == null ? void 0 : p.getName) == null ? void 0 : L.call(p)) ?? "WidgetComponent", C = ((Q = (M = (f = (D = n.value).getEType) == null ? void 0 : f.call(D)) == null ? void 0 : M.getName) == null ? void 0 : Q.call(M)) ?? "?", Y = `${O}/${C}`;
-      return t.has(Y) || (t.add(Y), console.warn(
-        `[uimodel-composer] Kein Renderer für Widget "${O}" auf Datentyp "${C}" registriert — Fallback als Plaintext-Editor. Host: Renderer über die @emfts/vue-registry registrieren.`
-      )), Rl;
-    }), g = m(() => {
+      const b = r(n.value, e.model);
+      if (b) return b;
+      const j = ((B = (V = (d = (o = e.widget).eClass) == null ? void 0 : d.call(o)) == null ? void 0 : V.getName) == null ? void 0 : B.call(V)) ?? "WidgetComponent", X = ((A = (U = (f = (p = n.value).getEType) == null ? void 0 : f.call(p)) == null ? void 0 : U.getName) == null ? void 0 : A.call(U)) ?? "?", re = `${j}/${X}`;
+      return t.has(re) || (t.add(re), console.warn(
+        `[uimodel-composer] Kein Renderer für Widget "${j}" auf Datentyp "${X}" registriert — Fallback als Plaintext-Editor. Host: Renderer über die @emfts/vue-registry registrieren.`
+      )), bl;
+    }), h = T(() => {
       var o, d;
       return {
         eObject: e.model,
@@ -6857,190 +6858,190 @@ const _l = { class: "uimodel-fallback-widget" }, Ol = { class: "uimodel-fallback
           rawWidget: e.widget
         }
       };
-    }), c = et(pr, void 0), E = m(() => (pt(), c?.version.value, [
-      ...oa(e.widget, {
+    }), c = ot(pr, void 0), E = T(() => (Lt(), c?.version.value, [
+      ...ha(e.widget, {
         model: e.model,
         sheets: c?.sheets.value,
         resolvedCss: u.value.css
       }),
-      ...el(
+      ...al(
         e.widget,
         u.value.readOnly,
         u.value.required
       )
-    ])), h = m(() => ca(e.widget));
-    return (o, d) => de(i) && l.value && !de(u).featureSuppressed ? (N(), q(ia(l.value), ua({ key: 0 }, { ...g.value, ...h.value }, { class: E.value }), null, 16, ["class"])) : fe("", !0);
+    ])), g = T(() => ga(e.widget));
+    return (o, d) => ue(i) && l.value && !ue(u).featureSuppressed ? (I(), H(oa(l.value), ca({ key: 0 }, { ...h.value, ...g.value }, { class: E.value }), null, 16, ["class"])) : ne("", !0);
   }
-}), wl = {
+}), Ml = {
   key: 0,
   class: "uim-group-label"
-}, Fl = /* @__PURE__ */ ee({
+}, Vl = /* @__PURE__ */ se({
   __name: "GroupComposer",
   props: {
     widget: {},
     model: {}
   },
   setup(s) {
-    const e = s, t = et(pr, void 0), r = ni(
+    const e = s, t = ot(pr, void 0), r = hi(
       () => e.widget.visibilityCondition,
       () => e.model
-    ), i = li(
+    ), i = gi(
       () => e.widget,
       () => e.model
-    ), u = m(() => {
+    ), u = T(() => {
       const E = i.value.label;
       return E == null ? "" : String(E);
-    }), n = m(
+    }), n = T(
       () => String(e.widget.layout ?? "VERTICAL").toLowerCase()
-    ), l = m(() => (pt(), t?.version.value, [
-      ...oa(e.widget, {
+    ), l = T(() => (Lt(), t?.version.value, [
+      ...ha(e.widget, {
         model: e.model,
         sheets: t?.sheets.value,
         resolvedCss: i.value.css
       }),
       "uimodel-group",
       `uimodel-group--${n.value}`
-    ])), g = m(
-      () => ca(e.widget)
-    ), c = m(() => e.widget.fields ?? []);
-    return (E, h) => de(r) ? (N(), b("div", ua({
+    ])), h = T(
+      () => ga(e.widget)
+    ), c = T(() => e.widget.fields ?? []);
+    return (E, g) => ue(r) ? (I(), R("div", ca({
       key: 0,
       class: l.value
-    }, g.value), [
-      u.value ? (N(), b("div", wl, qe(u.value), 1)) : fe("", !0),
-      Er(Ei, {
+    }, h.value), [
+      u.value ? (I(), R("div", Ml, xe(u.value), 1)) : ne("", !0),
+      hr(Ti, {
         fields: c.value,
         model: s.model
       }, null, 8, ["fields", "model"])
-    ], 16)) : fe("", !0);
+    ], 16)) : ne("", !0);
   }
-}), Pl = {
+}), Ul = {
   key: 0,
   class: "uimodel-foreach-empty"
-}, Ei = /* @__PURE__ */ ee({
+}, Ti = /* @__PURE__ */ se({
   __name: "FieldsRenderer",
   props: {
     fields: {},
     model: {}
   },
   setup(s) {
-    const e = s, t = et(ti, void 0), r = et(pr, void 0), i = m(() => (pt(), r?.version.value, sa(e.fields, e.model, t?.value)));
-    return (u, n) => (N(!0), b(ht, null, ls(i.value, (l, g) => (N(), b(ht, { key: g }, [
-      l.kind === "note" ? (N(), b("p", Pl, qe(l.text), 1)) : l.kind === "group" ? (N(), q(Fl, {
+    const e = s, t = ot(ui, void 0), r = ot(pr, void 0), i = T(() => (Lt(), r?.version.value, ia(e.fields, e.model, t?.value)));
+    return (u, n) => (I(!0), R(mt, null, cs(i.value, (l, h) => (I(), R(mt, { key: h }, [
+      l.kind === "note" ? (I(), R("p", Ul, xe(l.text), 1)) : l.kind === "group" ? (I(), H(Vl, {
         key: 1,
         widget: l.widget,
         model: l.model
-      }, null, 8, ["widget", "model"])) : (N(), q(ci, {
+      }, null, 8, ["widget", "model"])) : (I(), H(pi, {
         key: 2,
         widget: l.widget,
         model: l.model
       }, null, 8, ["widget", "model"]))
     ], 64))), 128));
   }
-}), bl = { class: "uimodel-form-view" }, hi = /* @__PURE__ */ ee({
+}), Bl = { class: "uimodel-form-view" }, fi = /* @__PURE__ */ se({
   __name: "FormViewComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    return (e, t) => (N(), b("div", bl, [
-      Er(Ei, {
+    return (e, t) => (I(), R("div", Bl, [
+      hr(Ti, {
         fields: s.component.fields,
         model: s.model
       }, null, 8, ["fields", "model"])
     ]));
   }
-}), Ml = { class: "uimodel-section-view" }, Ul = /* @__PURE__ */ ee({
+}), Gl = { class: "uimodel-section-view" }, Wl = /* @__PURE__ */ se({
   __name: "SectionViewComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    return (e, t) => (N(), b("div", Ml, [
-      (N(!0), b(ht, null, ls(s.component.sections, (r) => (N(), q(hi, {
+    return (e, t) => (I(), R("div", Gl, [
+      (I(!0), R(mt, null, cs(s.component.sections, (r) => (I(), H(fi, {
         key: r.name,
         component: r,
         model: s.model
       }, null, 8, ["component", "model"]))), 128))
     ]));
   }
-}), Vl = { class: "uimodel-tab-view" }, Bl = ["data-tab"], Gl = /* @__PURE__ */ ee({
+}), Yl = { class: "uimodel-tab-view" }, $l = ["data-tab"], kl = /* @__PURE__ */ se({
   __name: "TabViewComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    return (e, t) => (N(), b("div", Vl, [
-      (N(!0), b(ht, null, ls(s.component.tabs, (r) => (N(), b("div", {
+    return (e, t) => (I(), R("div", Yl, [
+      (I(!0), R(mt, null, cs(s.component.tabs, (r) => (I(), R("div", {
         key: r.name,
         class: "uimodel-tab-panel",
         "data-tab": r.name
       }, [
-        Er(Ea, {
+        hr(da, {
           component: r,
           model: s.model
         }, null, 8, ["component", "model"])
-      ], 8, Bl))), 128))
+      ], 8, $l))), 128))
     ]));
   }
-}), Wl = { class: "uimodel-summary-view" }, Yl = /* @__PURE__ */ ee({
+}), xl = { class: "uimodel-summary-view" }, Xl = /* @__PURE__ */ se({
   __name: "SummaryViewComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    return (e, t) => (N(), b("div", Wl, [
-      (N(!0), b(ht, null, ls(s.component.summaryFields, (r) => (N(), q(ci, {
+    return (e, t) => (I(), R("div", xl, [
+      (I(!0), R(mt, null, cs(s.component.summaryFields, (r) => (I(), H(pi, {
         key: r.name,
         widget: r,
         model: s.model
       }, null, 8, ["widget", "model"]))), 128))
     ]));
   }
-}), $l = {
+}), Hl = {
   key: 1,
   class: "uimodel-table-view-placeholder"
-}, gi = /* @__PURE__ */ ee({
+}, Si = /* @__PURE__ */ se({
   __name: "TableViewComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    const e = ja(), t = m(() => e.getComposer("TableViewRenderer"));
-    return (r, i) => t.value ? (N(), q(ia(t.value), {
+    const e = Ja(), t = T(() => e.getComposer("TableViewRenderer"));
+    return (r, i) => t.value ? (I(), H(oa(t.value), {
       key: 0,
       component: s.component,
       model: s.model
-    }, null, 8, ["component", "model"])) : (N(), b("div", $l));
+    }, null, 8, ["component", "model"])) : (I(), R("div", Hl));
   }
-}), kl = { class: "uimodel-master-detail" }, xl = { class: "uimodel-master" }, Xl = { class: "uimodel-detail" }, Hl = /* @__PURE__ */ ee({
+}), jl = { class: "uimodel-master-detail" }, ql = { class: "uimodel-master" }, zl = { class: "uimodel-detail" }, Kl = /* @__PURE__ */ se({
   __name: "MasterDetailComposer",
   props: {
     component: {},
     model: {}
   },
   setup(s) {
-    return (e, t) => (N(), b("div", kl, [
-      J("div", xl, [
-        Er(gi, {
+    return (e, t) => (I(), R("div", jl, [
+      ie("div", ql, [
+        hr(Si, {
           component: s.component.master,
           model: s.model
         }, null, 8, ["component", "model"])
       ]),
-      J("div", Xl, [
-        Er(Ea, {
+      ie("div", zl, [
+        hr(da, {
           component: s.component.detail,
           model: s.model
         }, null, 8, ["component", "model"])
       ])
     ]));
   }
-}), di = /* @__PURE__ */ ee({
+}), Ta = /* @__PURE__ */ se({
   __name: "UIModelComposer",
   props: {
     uiModel: {},
@@ -7050,48 +7051,48 @@ const _l = { class: "uimodel-fallback-widget" }, Ol = { class: "uimodel-fallback
     overlays: {}
   },
   setup(s) {
-    const e = s, t = m(() => e.styleSheets ?? []), { version: r } = bn(t);
-    fr(pr, { sheets: t, version: r }), Kn(() => e.model), fr(
-      ti,
-      m(() => (pt(), {
-        ...Yn(e.uiModel),
-        overlayCases: Gn(e.overlays ?? [])
+    const e = s, t = T(() => e.styleSheets ?? []), { version: r } = Bn(t);
+    Ir(pr, { sheets: t, version: r }), el(() => e.model), Ir(
+      ui,
+      T(() => (Lt(), {
+        ...Xn(e.uiModel),
+        overlayCases: kn(e.overlays ?? [])
       }))
     );
-    const i = e.composerRegistry ?? Ln({
-      FormView: hi,
-      SectionView: Ul,
-      TabView: Gl,
-      SummaryView: Yl,
-      TableView: gi,
-      MasterDetail: Hl
+    const i = e.composerRegistry ?? An({
+      FormView: fi,
+      SectionView: Wl,
+      TabView: kl,
+      SummaryView: Xl,
+      TableView: Si,
+      MasterDetail: Kl
     });
-    fr(Ha, i);
+    Ir(Qa, i);
     function u() {
       return Tr(e.uiModel.filterExpression, e.model);
     }
-    return (n, l) => u() ? (N(!0), b(ht, { key: 0 }, ls(s.uiModel.components, (g) => (N(), q(Ea, {
-      key: g.name,
-      component: g,
+    return (n, l) => u() ? (I(!0), R(mt, { key: 0 }, cs(s.uiModel.components, (h) => (I(), H(da, {
+      key: h.name,
+      component: h,
       model: s.model
-    }, null, 8, ["component", "model"]))), 128)) : fe("", !0);
+    }, null, 8, ["component", "model"]))), 128)) : ne("", !0);
   }
 });
-function La(s) {
+function Ca(s) {
   const e = s;
   return !!e && typeof e.eIsProxy == "function" && e.eIsProxy();
 }
-function va(s, e) {
+function ya(s, e) {
   const t = e.getResourceSet(), r = s.eProxyURI();
   if (!r) return s;
   const i = r.toString(), u = i.indexOf("#");
   if (u > 0) {
-    const l = i.substring(0, u), g = i.substring(u + 1);
+    const l = i.substring(0, u), h = i.substring(u + 1);
     if (!t) return s;
     const c = e.getURI(), E = [];
-    c && !l.includes("://") && E.push(Xr.createURI(l).resolve(c).toString()), E.push(l);
-    for (const h of E) {
-      const o = t.getResource(Xr.createURI(h), !1), d = o?.getEObject(g);
+    c && !l.includes("://") && E.push(qr.createURI(l).resolve(c).toString()), E.push(l);
+    for (const g of E) {
+      const o = t.getResource(qr.createURI(g), !1), d = o?.getEObject(h);
       if (d) return d;
     }
     return s;
@@ -7099,7 +7100,7 @@ function va(s, e) {
   const n = u === 0 ? i.substring(1) : i;
   return e.getEObject(n) ?? s;
 }
-function _a(s, e) {
+function Da(s, e) {
   for (const t of s.eClass().getEAllReferences()) {
     const r = s.eGet(t);
     if (r) {
@@ -7107,30 +7108,30 @@ function _a(s, e) {
         const i = r;
         for (let u = 0; u < i.length; u++) {
           const n = i[u];
-          if (La(n)) {
-            const l = va(n, e);
+          if (Ca(n)) {
+            const l = ya(n, e);
             l !== n && (i[u] = l);
           }
         }
-      } else if (La(r)) {
-        const i = va(r, e);
+      } else if (Ca(r)) {
+        const i = ya(r, e);
         i !== r && s.eSet(t, i);
       }
     }
   }
 }
-function jl(s) {
+function Ql(s) {
   for (const e of s.getContents()) {
-    _a(e, s);
+    Da(e, s);
     for (const t of e.eAllContents())
-      _a(t, s);
+      Da(t, s);
   }
 }
-const ql = "VariableWrapper";
-function pi(s) {
+const Jl = "VariableWrapper";
+function mi(s) {
   return typeof s?.eClass == "function";
 }
-function Ti(s, e) {
+function Ii(s, e) {
   if (!e || typeof e != "object") return s;
   const t = e, r = s, i = /* @__PURE__ */ new Set();
   for (const u of s.eClass().getEStructuralFeatures()) {
@@ -7145,49 +7146,51 @@ function Ti(s, e) {
       }
   return s;
 }
-function Si(s) {
+function fa(s) {
   const e = s;
   for (const t of s.eClass().getEStructuralFeatures()) {
     const r = t.getName?.();
-    if (!r || e[r] !== void 0) continue;
+    if (!r) continue;
     let i;
     try {
       i = t.getEReferenceType?.()?.getName?.();
     } catch {
       continue;
     }
-    if (i === ql)
+    if (i !== Jl) continue;
+    const u = e[r];
+    if (!(u instanceof Na))
       try {
-        e[r] = new VariableWrapperImpl();
+        e[r] = new Na(u);
       } catch {
       }
   }
   return s;
 }
-function fi(s, e) {
-  return Si(pi(s) ? s : Ti(e(), s));
+function Ni(s, e) {
+  return fa(mi(s) ? s : Ii(e(), s));
 }
-const zl = /color|colour/i, Kl = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i, Ql = /^(is|has|show|enable|fullscreen|visible)/i;
-function Ur(s) {
-  const e = s.getName?.() ?? "", t = s.getEType?.()?.getName?.() ?? "";
-  return t === "EBoolean" || Ql.test(e) ? "flag" : zl.test(e) ? "colour" : t === "EInt" || t === "EDouble" || Kl.test(e) ? "number" : "text";
-}
+const Zl = /color|colour|^fill$|^stroke$/i, eo = /size|width|height|radius|blur|padding|transparence|transparency|opacity|zoom|count|index/i, to = /^(is|has|show|enable|fullscreen|visible)/i;
 function Br(s) {
+  const e = s.getName?.() ?? "", t = s.getEType?.()?.getName?.() ?? "";
+  return t === "EBoolean" || to.test(e) ? "flag" : Zl.test(e) ? "colour" : t === "EInt" || t === "EDouble" || eo.test(e) ? "number" : "text";
+}
+function fr(s) {
   const t = (s.getName?.() ?? "").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ");
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
-function ga(s, e = s.getName?.() ?? "Settings") {
-  const t = na.eINSTANCE, r = t.createFormView();
+function Yr(s, e = s.getName?.() ?? "Settings") {
+  const t = Ea.eINSTANCE, r = t.createFormView();
   r.name = e;
   for (const u of s.getEStructuralFeatures()) {
-    const n = Jl(t, u);
-    n.feature = u, n.label = Br(u), r.fields.push(n);
+    const n = so(t, u);
+    n.feature = u, n.label = fr(u), r.fields.push(n);
   }
   const i = t.createUIModel();
   return i.name = e, i.targetClasses.push(s), i.components.push(r), i;
 }
-function Jl(s, e) {
-  switch (Ur(e)) {
+function so(s, e) {
+  switch (Br(e)) {
     case "flag":
       return s.createCheckboxWidget();
     case "number":
@@ -7200,53 +7203,53 @@ function Jl(s, e) {
       return s.createInputWidget();
   }
 }
-const Oa = /* @__PURE__ */ new Map(), mi = /* @__PURE__ */ new Map();
-function Zl(s) {
-  return mi.get(s);
+const Ra = /* @__PURE__ */ new Map(), Li = /* @__PURE__ */ new Map();
+function vi(s) {
+  return Li.get(s);
 }
-function eo(s) {
+function ro(s) {
   for (const e of s.targetClasses ?? [])
-    e && mi.set(e, s);
+    e && Li.set(e, s);
 }
-let Aa = !1;
-function to() {
-  if (Aa) return;
-  wi();
+let wa = !1;
+function ao() {
+  if (wa) return;
+  Mi();
   const s = y.eINSTANCE;
-  s.setEFactoryInstance(na.eINSTANCE), Or.INSTANCE.set(s.getNsURI(), s), Aa = !0;
+  s.setEFactoryInstance(Ea.eINSTANCE), Cr.INSTANCE.set(s.getNsURI(), s), wa = !0;
 }
-function ra(s, e, t = "/ui.xmi") {
-  const r = Oa.get(t);
+function ua(s, e, t = "/ui.xmi") {
+  const r = Ra.get(t);
   if (r) return r;
   try {
-    to();
+    ao();
     const i = e.getNsURI();
-    i && !Or.INSTANCE.has(i) && Or.INSTANCE.set(i, e);
-    const u = new Di();
-    u.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new Ri());
-    const n = u.createResource(Xr.createURI(t));
+    i && !Cr.INSTANCE.has(i) && Cr.INSTANCE.set(i, e);
+    const u = new Pi();
+    u.getResourceFactoryRegistry().getExtensionToFactoryMap().set("xmi", new bi());
+    const n = u.createResource(qr.createURI(t));
     if (n.loadFromString(s), n.getContents().size() === 0) return;
-    jl(n);
+    Ql(n);
     const l = n.getContents().get(0);
-    return Oa.set(t, l), eo(l), l;
+    return Ra.set(t, l), ro(l), l;
   } catch (i) {
     console.warn("[ui.vue.uimodel] UI-Modell konnte nicht gelesen werden:", i);
     return;
   }
 }
-const so = { class: "list" }, ro = { class: "list__head" }, ao = { class: "list__label" }, io = { class: "list__count" }, uo = {
+const io = { class: "list" }, uo = { class: "list__head" }, no = { class: "list__label" }, lo = { class: "list__count" }, oo = {
   key: 0,
   class: "list__untyped"
-}, no = {
+}, co = {
   key: 1,
   class: "list__empty"
-}, lo = ["aria-expanded", "onClick"], oo = { class: "entry__twist" }, co = { class: "entry__title" }, Eo = {
+}, Eo = ["aria-expanded", "onClick"], ho = { class: "entry__twist" }, go = { class: "entry__title" }, po = {
   key: 0,
   class: "entry__actions"
-}, ho = ["disabled", "onClick"], go = ["disabled", "onClick"], po = ["onClick"], To = {
+}, To = ["disabled", "onClick"], fo = ["disabled", "onClick"], So = ["onClick"], mo = {
   key: 1,
   class: "entry__body"
-}, So = /* @__PURE__ */ ee({
+}, Io = /* @__PURE__ */ se({
   __name: "SettingsListWidget",
   props: {
     eObject: {},
@@ -7254,321 +7257,473 @@ const so = { class: "list" }, ro = { class: "list__head" }, ao = { class: "list_
     custom: {}
   },
   setup(s) {
-    const e = s, t = m(
-      () => e.custom?.resolvedStyle?.label ?? (e.feature ? Br(e.feature) : "")
-    ), r = m(() => e.custom?.resolvedStyle?.readOnly === !0);
+    const e = s, t = T(
+      () => e.custom?.resolvedStyle?.label ?? (e.feature ? fr(e.feature) : "")
+    ), r = T(() => e.custom?.resolvedStyle?.readOnly === !0);
     function i() {
       const p = e.feature?.getName?.();
       if (!(!p || !e.eObject))
         return e.eObject[p];
     }
-    const u = m(() => {
+    const u = T(() => {
       const p = i();
       return p ? typeof p.toArray == "function" ? p.toArray() : Array.isArray(p) ? p : [] : [];
-    }), n = m(() => {
+    }), n = T(() => {
       try {
         return e.feature?.getEReferenceType?.() ?? void 0;
       } catch {
         return;
       }
-    }), l = /* @__PURE__ */ new Map(), g = m(() => {
+    }), l = /* @__PURE__ */ new Map(), h = T(() => {
       const p = n.value;
       if (!p) return;
-      const L = Zl(p);
-      return L || (l.has(p) || l.set(p, ga(p, p.getName?.() ?? "Eintrag")), l.get(p));
-    }), c = gr(0);
-    function E(p, L) {
-      const D = p, f = D.label?.value ?? D.name?.value ?? D.title?.value;
-      return f ? String(f) : `${n.value?.getName?.() ?? "Eintrag"} ${L + 1}`;
+      const f = vi(p);
+      return f || (l.has(p) || l.set(p, Yr(p, p.getName?.() ?? "Eintrag")), l.get(p));
+    }), c = dr(0), E = ["label", "name", "title", "key", "className", "id"];
+    function g(p, f) {
+      return o(p) ?? `${n.value?.getName?.() ?? "Eintrag"} ${f + 1}`;
     }
-    function h() {
-      const p = n.value, L = e.feature?.getName?.();
-      if (!p || !L || !e.eObject) return;
-      const f = p.getEPackage?.()?.getEFactoryInstance?.()?.create(p);
-      if (!f) return;
-      Si(f);
-      const M = i();
-      if (M) {
-        if (typeof M.add == "function") M.add(f);
-        else if (Array.isArray(M)) M.push(f);
+    function o(p, f = 1) {
+      if (typeof p?.eClass != "function") return;
+      const U = p;
+      let A;
+      try {
+        A = [...p.eClass().getEStructuralFeatures()];
+      } catch {
+        return;
+      }
+      for (const b of E) {
+        if (!A.some((re) => re.getName?.() === b)) continue;
+        const j = U[b], X = j && typeof j == "object" ? j.value : j;
+        if (X != null && String(X) !== "") return String(X);
+      }
+      if (!(f < 1))
+        for (const b of A) {
+          const j = b.getName?.(), X = j ? o(U[j], f - 1) : void 0;
+          if (X) return X;
+        }
+    }
+    function d() {
+      const p = n.value, f = e.feature?.getName?.();
+      if (!p || !f || !e.eObject) return;
+      const A = p.getEPackage?.()?.getEFactoryInstance?.()?.create(p);
+      if (!A) return;
+      fa(A);
+      const b = i();
+      if (b) {
+        if (typeof b.add == "function") b.add(A);
+        else if (Array.isArray(b)) b.push(A);
         else return;
         c.value = u.value.length - 1;
       }
     }
-    function o(p) {
-      const L = i();
-      if (L) {
-        if (typeof L.removeAt == "function") L.removeAt(p);
-        else if (Array.isArray(L)) L.splice(p, 1);
+    function V(p) {
+      const f = i();
+      if (f) {
+        if (typeof f.removeAt == "function") f.removeAt(p);
+        else if (Array.isArray(f)) f.splice(p, 1);
         else return;
         c.value = Math.min(c.value, Math.max(u.value.length - 1, 0));
       }
     }
-    function d(p, L) {
-      const D = i();
-      if (!D) return;
-      const f = p + L;
-      if (!(f < 0 || f >= u.value.length)) {
-        if (typeof D.move == "function") D.move(f, p);
-        else if (Array.isArray(D)) {
-          const [M] = D.splice(p, 1);
-          D.splice(f, 0, M);
+    function B(p, f) {
+      const U = i();
+      if (!U) return;
+      const A = p + f;
+      if (!(A < 0 || A >= u.value.length)) {
+        if (typeof U.move == "function") U.move(A, p);
+        else if (Array.isArray(U)) {
+          const [b] = U.splice(p, 1);
+          U.splice(A, 0, b);
         } else return;
-        c.value = f;
+        c.value = A;
       }
     }
-    return (p, L) => (N(), b("section", so, [
-      J("header", ro, [
-        J("span", ao, qe(t.value), 1),
-        J("span", io, qe(u.value.length), 1),
-        L[1] || (L[1] = J("span", { class: "list__spacer" }, null, -1)),
-        n.value && !r.value ? (N(), q(de(Fi), {
+    return (p, f) => (I(), R("section", io, [
+      ie("header", uo, [
+        ie("span", no, xe(t.value), 1),
+        ie("span", lo, xe(u.value.length), 1),
+        f[1] || (f[1] = ie("span", { class: "list__spacer" }, null, -1)),
+        n.value && !r.value ? (I(), H(ue(Vi), {
           key: 0,
           size: "sm",
-          onClick: h
+          onClick: d
         }, {
-          default: vi(() => [...L[0] || (L[0] = [
-            Da("Hinzufügen", -1)
+          default: Ci(() => [...f[0] || (f[0] = [
+            ba("Hinzufügen", -1)
           ])]),
           _: 1
-        })) : fe("", !0)
+        })) : ne("", !0)
       ]),
-      n.value ? u.value.length ? fe("", !0) : (N(), b("p", no, "Noch nichts angelegt.")) : (N(), b("p", uo, " Diese Liste ist im Modell ohne Typ angegeben - es steht dort nur, dass es mehrere sind, nicht wovon. Solange das so ist, lässt sich hier nichts zeigen. ")),
-      (N(!0), b(ht, null, ls(u.value, (D, f) => (N(), b("div", {
-        key: f,
+      n.value ? u.value.length ? ne("", !0) : (I(), R("p", co, "Noch nichts angelegt.")) : (I(), R("p", oo, " Diese Liste ist im Modell ohne Typ angegeben - es steht dort nur, dass es mehrere sind, nicht wovon. Solange das so ist, lässt sich hier nichts zeigen. ")),
+      (I(!0), R(mt, null, cs(u.value, (U, A) => (I(), R("div", {
+        key: A,
         class: "entry"
       }, [
-        J("button", {
+        ie("button", {
           type: "button",
           class: "entry__head",
-          "aria-expanded": c.value === f,
-          onClick: (M) => c.value = c.value === f ? -1 : f
+          "aria-expanded": c.value === A,
+          onClick: (b) => c.value = c.value === A ? -1 : A
         }, [
-          J("span", oo, qe(c.value === f ? "▾" : "▸"), 1),
-          J("span", co, qe(E(D, f)), 1)
-        ], 8, lo),
-        r.value ? fe("", !0) : (N(), b("span", Eo, [
-          J("button", {
+          ie("span", ho, xe(c.value === A ? "▾" : "▸"), 1),
+          ie("span", go, xe(g(U, A)), 1)
+        ], 8, Eo),
+        r.value ? ne("", !0) : (I(), R("span", po, [
+          ie("button", {
             type: "button",
             title: "Nach oben",
-            disabled: f === 0,
-            onClick: (M) => d(f, -1)
-          }, "↑", 8, ho),
-          J("button", {
+            disabled: A === 0,
+            onClick: (b) => B(A, -1)
+          }, "↑", 8, To),
+          ie("button", {
             type: "button",
             title: "Nach unten",
-            disabled: f === u.value.length - 1,
-            onClick: (M) => d(f, 1)
-          }, " ↓ ", 8, go),
-          J("button", {
+            disabled: A === u.value.length - 1,
+            onClick: (b) => B(A, 1)
+          }, " ↓ ", 8, fo),
+          ie("button", {
             type: "button",
             title: "Entfernen",
             class: "entry__remove",
-            onClick: (M) => o(f)
-          }, "✕", 8, po)
+            onClick: (b) => V(A)
+          }, "✕", 8, So)
         ])),
-        c.value === f ? (N(), b("div", To, [
-          g.value ? (N(), q(de(di), {
+        c.value === A ? (I(), R("div", mo, [
+          h.value ? (I(), H(ue(Ta), {
             key: 0,
-            "ui-model": g.value,
-            model: D
-          }, null, 8, ["ui-model", "model"])) : fe("", !0)
-        ])) : fe("", !0)
+            "ui-model": h.value,
+            model: U
+          }, null, 8, ["ui-model", "model"])) : ne("", !0)
+        ])) : ne("", !0)
       ]))), 128))
     ]));
   }
-}), da = (s, e) => {
+}), $r = (s, e) => {
   const t = s.__vccOpts || s;
   for (const [r, i] of e)
     t[r] = i;
   return t;
-}, Ii = /* @__PURE__ */ da(So, [["__scopeId", "data-v-4eca8f08"]]), fo = { class: "field-row__control" }, mo = ["title", "aria-pressed"], Io = /* @__PURE__ */ ee({
-  __name: "VariableWrapperWidget",
+}, _i = /* @__PURE__ */ $r(Io, [["__scopeId", "data-v-b0db9508"]]), No = { class: "object" }, Lo = {
+  key: 0,
+  class: "object__label"
+}, vo = {
+  key: 1,
+  class: "object__untyped"
+}, _o = {
+  key: 2,
+  class: "object__body"
+}, Oo = /* @__PURE__ */ se({
+  __name: "SettingsObjectWidget",
   props: {
     eObject: {},
     feature: {},
     custom: {}
   },
   setup(s) {
-    const e = s, t = et(Mi), r = m(() => {
-      const { eObject: O, feature: C } = e;
-      if (!O || !C) return;
-      const Y = C.getName?.();
-      return Y ? O[Y] : void 0;
-    }), i = m(() => r.value?.variable ?? ""), u = m(() => !!i.value), n = gr(!1);
-    dr(u, (O) => {
-      O && (n.value = !0);
-    }, { immediate: !0 });
-    const l = m(() => {
+    const e = s, t = T(
+      () => e.custom?.resolvedStyle?.label ?? (e.feature ? fr(e.feature) : "")
+    ), r = T(() => {
       try {
-        return (t?.getAllVariables() ?? []).map(([O]) => O);
+        return e.feature?.getEReferenceType?.() ?? void 0;
+      } catch {
+        return;
+      }
+    });
+    function i() {
+      const c = e.feature?.getName?.();
+      if (!(!c || !e.eObject))
+        return e.eObject[c];
+    }
+    function u() {
+      const c = r.value, E = e.feature?.getName?.();
+      if (!c || !E || !e.eObject || i()) return;
+      const o = c.getEPackage?.()?.getEFactoryInstance?.()?.create(c);
+      o && (fa(o), e.eObject[E] = o);
+    }
+    os(() => [e.eObject, e.feature], u, { immediate: !0 });
+    const n = T(() => i()), l = /* @__PURE__ */ new Map(), h = T(() => {
+      const c = r.value;
+      if (!c) return;
+      const E = vi(c);
+      return E || (l.has(c) || l.set(c, Yr(c, c.getName?.() ?? "Eintrag")), l.get(c));
+    });
+    return (c, E) => (I(), R("section", No, [
+      t.value ? (I(), R("span", Lo, xe(t.value), 1)) : ne("", !0),
+      r.value ? (I(), R("div", _o, [
+        h.value && n.value ? (I(), H(ue(Ta), {
+          key: 0,
+          "ui-model": h.value,
+          model: n.value
+        }, null, 8, ["ui-model", "model"])) : ne("", !0)
+      ])) : (I(), R("p", vo, " Diese Einstellung ist im Modell ohne Typ angegeben - es steht dort nur, dass etwas enthalten ist, nicht was. Solange das so ist, lässt sich hier nichts zeigen. "))
+    ]));
+  }
+}), Oi = /* @__PURE__ */ $r(Oo, [["__scopeId", "data-v-8adcf520"]]), Ao = { class: "field-row__control" }, Co = ["title", "aria-pressed"], yo = /* @__PURE__ */ se({
+  __name: "SettingsFieldWidget",
+  props: {
+    eObject: {},
+    feature: {},
+    custom: {}
+  },
+  setup(s) {
+    const e = s, t = ot(Gi), r = T(() => {
+      const L = i();
+      return u(L) ? L : void 0;
+    });
+    function i() {
+      const { eObject: L, feature: v } = e;
+      if (!L || !v) return;
+      const M = v.getName?.();
+      return M ? L[M] : void 0;
+    }
+    function u(L) {
+      return typeof L?.setTo == "function";
+    }
+    const n = T(() => e.feature != null && l(e.feature));
+    function l(L) {
+      try {
+        return L.getEReferenceType?.()?.getName?.() === "VariableWrapper";
+      } catch {
+        return !1;
+      }
+    }
+    const h = T({
+      get: () => i(),
+      set: (L) => {
+        const { eObject: v, feature: M } = e, Ne = M?.getName?.();
+        !v || !Ne || (v[Ne] = L);
+      }
+    }), c = T(() => n.value ? r.value?.variable ?? "" : ""), E = T(() => !!c.value), g = dr(!1);
+    os(E, (L) => {
+      L && (g.value = !0);
+    }, { immediate: !0 });
+    const o = T(() => {
+      try {
+        return (t?.getAllVariables() ?? []).map(([L]) => L);
       } catch {
         return [];
       }
-    }), g = m({
-      get: () => i.value,
-      set: (O) => {
+    }), d = T({
+      get: () => c.value,
+      set: (L) => {
         if (!r.value) return;
-        if (!O) return c();
-        const C = t?.getVariable(O);
-        C && r.value.setTo(C);
+        if (!L) return V();
+        const v = t?.getVariable(L);
+        v && r.value.setTo(v);
       }
     });
-    function c() {
-      r.value && (r.value.value = r.value.value, n.value = !1);
+    function V() {
+      r.value && (r.value.value = r.value.value, g.value = !1);
     }
-    function E() {
-      u.value ? c() : n.value = !n.value;
+    function B() {
+      E.value ? V() : g.value = !g.value;
     }
-    const h = m(() => !e.custom?.resolvedStyle?.readOnly && !u.value), o = m({
-      get: () => r.value?.value ?? "",
-      set: (O) => {
-        r.value && h.value && (r.value.value = O);
+    const p = T(() => !e.custom?.resolvedStyle?.readOnly && !E.value), f = T({
+      get: () => (n.value ? r.value?.value : h.value) ?? "",
+      set: (L) => {
+        p.value && (n.value ? r.value && (r.value.value = L) : h.value = L);
       }
-    }), d = m({
+    }), U = T({
       get: () => {
-        const O = r.value?.value;
-        if (O == null || O === "") return "";
-        const C = Number(O);
-        return Number.isFinite(C) ? C : "";
+        const L = n.value ? r.value?.value : h.value;
+        if (L == null || L === "") return "";
+        const v = Number(L);
+        return Number.isFinite(v) ? v : "";
       },
-      set: (O) => {
-        if (!r.value || !h.value) return;
-        if (O === "" || O === null) {
-          r.value.value = void 0;
-          return;
+      set: (L) => {
+        if (!p.value) return;
+        const v = L === "" || L === null ? void 0 : Number(L);
+        f.value = v !== void 0 && Number.isFinite(v) ? v : void 0;
+      }
+    }), A = T({
+      get: () => f.value === !0 || f.value === "true",
+      set: (L) => {
+        f.value = L;
+      }
+    }), b = T(() => e.custom?.rawWidget?.eClass?.()?.getName?.() ?? ""), j = T(() => {
+      const L = e.custom?.rawWidget, v = L?.values, M = v && typeof v.map == "function" ? [...v] : [], Ne = L?.optionLabel;
+      return !Ne?.body || !e.eObject ? M.map((x) => ({ value: x, text: x })) : M.map((x) => {
+        let Ue = x;
+        try {
+          const Be = Wr(Ne, e.eObject, { option: x });
+          Be != null && Be !== "" && (Ue = String(Be));
+        } catch {
         }
-        const C = Number(O);
-        r.value.value = Number.isFinite(C) ? C : void 0;
-      }
-    }), p = m({
-      get: () => r.value?.value === !0 || r.value?.value === "true",
-      set: (O) => {
-        r.value && h.value && (r.value.value = O);
-      }
-    }), L = m(() => e.custom?.rawWidget?.eClass?.()?.getName?.() ?? ""), D = m(() => {
-      const O = e.custom?.rawWidget?.values;
-      return O && typeof O.map == "function" ? [...O] : [];
-    }), f = m(() => ({
+        return { value: x, text: Ue };
+      });
+    }), X = T(() => Number(e.custom?.rawWidget?.rows) || 6), re = T(() => ({
       min: e.custom?.rawWidget?.min,
       max: e.custom?.rawWidget?.max,
       step: e.custom?.rawWidget?.step
-    })), M = m(() => {
-      switch (L.value) {
+    })), ce = T(() => {
+      switch (b.value) {
         case "CheckboxWidget":
           return "flag";
+        case "TextAreaWidget":
+          return "lines";
         case "NumberWidget":
           return "number";
         case "SelectWidget":
         case "ComboboxWidget":
           return "choice";
         case "InputWidget":
-          return e.feature && Ur(e.feature) === "colour" ? "colour" : "text";
+          return e.feature && Br(e.feature) === "colour" ? "colour" : "text";
         default:
-          return e.feature ? Ur(e.feature) : "text";
+          return e.feature ? Br(e.feature) : "text";
       }
-    }), Q = m(
-      () => e.custom?.resolvedStyle?.label ?? (e.feature ? Br(e.feature) : "")
-    ), re = m(() => n.value && l.value.length === 0);
-    return (O, C) => r.value ? (N(), b("div", {
+    }), ae = T(
+      () => e.custom?.resolvedStyle?.label ?? (e.feature ? fr(e.feature) : "")
+    ), ye = T(() => g.value && o.value.length === 0);
+    return (L, v) => r.value || !n.value ? (I(), R("div", {
       key: 0,
-      class: pa(["field-row", { "field-row--bound": u.value }])
+      class: ma(["field-row", { "field-row--bound": E.value }])
     }, [
-      J("div", fo, [
-        n.value && !re.value ? (N(), q(de(Sa), {
+      ie("div", Ao, [
+        g.value && !ye.value ? (I(), H(ue(La), {
           key: 0,
-          modelValue: g.value,
-          "onUpdate:modelValue": C[0] || (C[0] = (Y) => g.value = Y),
-          label: Q.value,
-          options: l.value,
+          modelValue: d.value,
+          "onUpdate:modelValue": v[0] || (v[0] = (M) => d.value = M),
+          label: ae.value,
+          options: o.value,
           disabled: s.custom?.resolvedStyle?.readOnly,
           placeholder: "Keine Variable",
           clearable: ""
-        }, null, 8, ["modelValue", "label", "options", "disabled"])) : re.value ? (N(), q(de(Wr), {
+        }, null, 8, ["modelValue", "label", "options", "disabled"])) : ye.value ? (I(), H(ue(Sr), {
           key: 1,
           "model-value": "",
-          label: Q.value,
+          label: ae.value,
           disabled: "",
           hint: "Es sind noch keine Variablen angelegt."
-        }, null, 8, ["label"])) : M.value === "flag" ? (N(), q(de(Pi), {
+        }, null, 8, ["label"])) : ce.value === "flag" ? (I(), H(ue(Ui), {
           key: 2,
-          modelValue: p.value,
-          "onUpdate:modelValue": C[1] || (C[1] = (Y) => p.value = Y),
-          label: Q.value,
-          disabled: !h.value
-        }, null, 8, ["modelValue", "label", "disabled"])) : M.value === "choice" ? (N(), q(de(Sa), {
+          modelValue: A.value,
+          "onUpdate:modelValue": v[1] || (v[1] = (M) => A.value = M),
+          label: ae.value,
+          disabled: !p.value
+        }, null, 8, ["modelValue", "label", "disabled"])) : ce.value === "choice" ? (I(), H(ue(La), {
           key: 3,
-          modelValue: o.value,
-          "onUpdate:modelValue": C[2] || (C[2] = (Y) => o.value = Y),
-          label: Q.value,
-          options: D.value,
-          disabled: !h.value,
+          modelValue: f.value,
+          "onUpdate:modelValue": v[2] || (v[2] = (M) => f.value = M),
+          label: ae.value,
+          options: j.value,
+          "value-key": "value",
+          "label-key": "text",
+          disabled: !p.value,
           clearable: ""
-        }, null, 8, ["modelValue", "label", "options", "disabled"])) : M.value === "colour" ? (N(), q(de(bi), {
+        }, null, 8, ["modelValue", "label", "options", "disabled"])) : ce.value === "colour" ? (I(), H(ue(Bi), {
           key: 4,
-          modelValue: o.value,
-          "onUpdate:modelValue": C[3] || (C[3] = (Y) => o.value = Y),
-          label: Q.value,
-          disabled: !h.value,
-          hint: O.boundHint ?? s.custom?.resolvedStyle?.placeholder
-        }, null, 8, ["modelValue", "label", "disabled", "hint"])) : M.value === "number" ? (N(), q(de(Wr), {
+          modelValue: f.value,
+          "onUpdate:modelValue": v[3] || (v[3] = (M) => f.value = M),
+          label: ae.value,
+          disabled: !p.value,
+          hint: L.boundHint ?? s.custom?.resolvedStyle?.placeholder
+        }, null, 8, ["modelValue", "label", "disabled", "hint"])) : ce.value === "lines" ? (I(), H(ue(Sr), {
           key: 5,
-          modelValue: d.value,
-          "onUpdate:modelValue": C[4] || (C[4] = (Y) => d.value = Y),
-          label: Q.value,
-          type: "number",
-          min: f.value.min,
-          max: f.value.max,
-          step: f.value.step,
-          disabled: !h.value
-        }, null, 8, ["modelValue", "label", "min", "max", "step", "disabled"])) : (N(), q(de(Wr), {
-          key: 6,
-          modelValue: o.value,
-          "onUpdate:modelValue": C[5] || (C[5] = (Y) => o.value = Y),
-          label: Q.value,
+          modelValue: f.value,
+          "onUpdate:modelValue": v[4] || (v[4] = (M) => f.value = M),
+          label: ae.value,
+          rows: X.value,
           placeholder: s.custom?.resolvedStyle?.placeholder,
-          disabled: !h.value
+          disabled: !p.value
+        }, null, 8, ["modelValue", "label", "rows", "placeholder", "disabled"])) : ce.value === "number" ? (I(), H(ue(Sr), {
+          key: 6,
+          modelValue: U.value,
+          "onUpdate:modelValue": v[5] || (v[5] = (M) => U.value = M),
+          label: ae.value,
+          type: "number",
+          min: re.value.min,
+          max: re.value.max,
+          step: re.value.step,
+          disabled: !p.value
+        }, null, 8, ["modelValue", "label", "min", "max", "step", "disabled"])) : (I(), H(ue(Sr), {
+          key: 7,
+          modelValue: f.value,
+          "onUpdate:modelValue": v[6] || (v[6] = (M) => f.value = M),
+          label: ae.value,
+          placeholder: s.custom?.resolvedStyle?.placeholder,
+          disabled: !p.value
         }, null, 8, ["modelValue", "label", "placeholder", "disabled"]))
       ]),
-      J("button", {
+      n.value ? (I(), R("button", {
+        key: 0,
         type: "button",
-        class: pa(["bind", { on: u.value, armed: n.value && !u.value }]),
-        title: u.value ? `Bindung an „${i.value}“ lösen` : "An eine Variable binden",
-        "aria-pressed": u.value,
-        onClick: E
-      }, " {x} ", 10, mo)
-    ], 2)) : fe("", !0);
+        class: ma(["bind", { on: E.value, armed: g.value && !E.value }]),
+        title: E.value ? `Bindung an „${c.value}“ lösen` : "An eine Variable binden",
+        "aria-pressed": E.value,
+        onClick: B
+      }, " {x} ", 10, Co)) : ne("", !0)
+    ], 2)) : ne("", !0);
   }
-}), Ni = /* @__PURE__ */ da(Io, [["__scopeId", "data-v-dfa6a444"]]), No = "org.eclipse.daanse.board.app.ui.vue.composables";
-let Ca = !1;
-function Lo() {
-  if (Ca) return !0;
-  const s = Or.INSTANCE.getEPackage(No)?.getEClassifier(
+}), Sa = /* @__PURE__ */ $r(yo, [["__scopeId", "data-v-e3b7189e"]]), Do = "org.eclipse.daanse.board.app.ui.vue.composables";
+let Fa = !1;
+function Ro() {
+  if (Fa) return !0;
+  const s = Cr.INSTANCE.getEPackage(Do)?.getEClassifier(
     "VariableWrapper"
   );
-  return s ? (ns.registerForReference(Ni, { targetClass: s }), Ca = !0, !0) : !1;
+  return s ? (lt.registerForReference(Sa, { targetClass: s }), Fa = !0, !0) : !1;
 }
-function vo(s) {
-  for (const e of s.getEStructuralFeatures())
-    _o(e) && ns.registerForFeature(
-      s,
-      e.getName?.() ?? "",
-      Ii
-    );
+function na(s, e = /* @__PURE__ */ new Set()) {
+  if (!e.has(s)) {
+    e.add(s);
+    for (const t of s.getEStructuralFeatures()) {
+      if (Po(t)) {
+        lt.registerForFeature(
+          s,
+          t.getName?.() ?? "",
+          _i
+        );
+        const r = t.getEReferenceType?.();
+        r && na(r, e);
+        continue;
+      }
+      if (Fo(t)) {
+        lt.registerForFeature(
+          s,
+          t.getName?.() ?? "",
+          Oi
+        );
+        const r = t.getEReferenceType?.();
+        r && na(r, e);
+        continue;
+      }
+      wo(t) && lt.registerForFeature(
+        s,
+        t.getName?.() ?? "",
+        Sa
+      );
+    }
+  }
 }
-function _o(s) {
+function wo(s) {
+  try {
+    return s.getEReferenceType?.() == null;
+  } catch {
+    return !0;
+  }
+}
+function Fo(s) {
+  try {
+    const e = s.getEReferenceType?.();
+    return e ? e.getName?.() !== "VariableWrapper" : !1;
+  } catch {
+    return !1;
+  }
+}
+function Po(s) {
   try {
     return s.isMany?.() === !0 || (s.getUpperBound?.() ?? 1) !== 1;
   } catch {
     return !1;
   }
 }
-const Oo = { class: "settings-form" }, Ao = {
+const bo = { class: "settings-form" }, Mo = {
   key: 1,
   class: "settings-form__empty"
-}, Co = /* @__PURE__ */ ee({
+}, Vo = /* @__PURE__ */ se({
   __name: "SettingsForm",
-  props: /* @__PURE__ */ _i({
+  props: /* @__PURE__ */ yi({
     create: { type: Function },
     uiModel: {},
     uiModelXmi: {},
@@ -7582,68 +7737,70 @@ const Oo = { class: "settings-form" }, Ao = {
   }),
   emits: ["update:modelValue"],
   setup(s) {
-    y.eINSTANCE, fr(oi, ns), Lo();
-    const e = Oi(s, "modelValue"), t = s;
+    y.eINSTANCE, Ir(di, lt), Ro();
+    const e = Di(s, "modelValue"), t = s;
     function r() {
-      const c = fi(e.value, t.create);
+      const c = Ni(e.value, t.create);
       c !== e.value && (e.value = c);
     }
-    Ai(r), dr(e, r);
-    const i = m(() => e.value), u = Ta(), n = Ta(), l = m(() => {
+    Ri(r), os(e, r);
+    const i = T(() => e.value), u = Ia(), n = Ia(), l = T(() => {
       const c = e.value?.eClass?.();
-      if (c && vo(c), t.uiModel) return Gr(t.uiModel);
+      if (c && na(c), t.uiModel) return kr(t.uiModel);
       if (t.domainPackage)
         for (const o of t.entryForms ?? [])
-          ra(o.xmi, t.domainPackage, o.uri);
+          ua(o.xmi, t.domainPackage, o.uri);
       if (t.uiModelXmi && t.domainPackage) {
-        const o = ra(t.uiModelXmi, t.domainPackage, t.uiModelUri);
-        if (o) return Gr(o);
+        const o = ua(t.uiModelXmi, t.domainPackage, t.uiModelUri);
+        if (o) return kr(o);
       }
-      const h = i.value?.eClass?.();
-      if (h)
-        return n.value !== h && (n.value = h, u.value = Gr(ga(h))), u.value;
-    }), g = m(() => (i.value?.eClass?.().getEStructuralFeatures().length ?? 0) > 0);
-    return (c, E) => (N(), b("div", Oo, [
-      l.value && i.value && g.value ? (N(), q(de(di), {
+      const g = i.value?.eClass?.();
+      if (g)
+        return n.value !== g && (n.value = g, u.value = kr(Yr(g))), u.value;
+    }), h = T(() => (i.value?.eClass?.().getEStructuralFeatures().length ?? 0) > 0);
+    return (c, E) => (I(), R("div", bo, [
+      l.value && i.value && h.value ? (I(), H(ue(Ta), {
         key: 0,
         "ui-model": l.value,
         model: i.value
-      }, null, 8, ["ui-model", "model"])) : (N(), b("p", Ao, qe(s.emptyText ?? "Für dieses Widget sind keine Einstellungen modelliert."), 1))
+      }, null, 8, ["ui-model", "model"])) : (I(), R("p", Mo, xe(s.emptyText ?? "Für dieses Widget sind keine Einstellungen modelliert."), 1))
     ]));
   }
-}), yo = /* @__PURE__ */ da(Co, [["__scopeId", "data-v-5d0a6b97"]]), Do = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}), Uo = /* @__PURE__ */ $r(Vo, [["__scopeId", "data-v-2eb13ad3"]]), Bo = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  SettingsForm: yo,
-  SettingsListWidget: Ii,
-  VariableWrapperWidget: Ni,
-  adopt: Ti,
-  asModel: fi,
-  formFor: ga,
-  isModelled: pi,
-  kindOf: Ur,
-  labelOf: Br,
-  loadUIModel: ra
-}, Symbol.toStringTag, { value: "Module" })), ya = "org.eclipse.daanse.board.app.ui.vue.uimodel", Ro = "0.0.1-next.1";
-async function Yo(s) {
+  SettingsFieldWidget: Sa,
+  SettingsForm: Uo,
+  SettingsListWidget: _i,
+  SettingsObjectWidget: Oi,
+  adopt: Ii,
+  asModel: Ni,
+  formFor: Yr,
+  isModelled: mi,
+  kindOf: Br,
+  labelOf: fr,
+  loadUIModel: ua
+}, Symbol.toStringTag, { value: "Module" })), Pa = "org.eclipse.daanse.board.app.ui.vue.uimodel", Go = "0.0.1-next.1";
+async function Qo(s) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${ya}: tsm runtime is not initialized`);
-  e.register(ya, Do, Ro, "ui.vue.uimodel"), await void 0;
+    throw new Error(`${Pa}: tsm runtime is not initialized`);
+  e.register(Pa, Bo, Go, "ui.vue.uimodel"), await void 0;
 }
-async function $o(s) {
+async function Jo(s) {
   await void 0;
 }
 export {
-  yo as SettingsForm,
-  Ii as SettingsListWidget,
-  Ni as VariableWrapperWidget,
-  Yo as activate,
-  Ti as adopt,
-  fi as asModel,
-  $o as deactivate,
-  ga as formFor,
-  pi as isModelled,
-  Ur as kindOf,
-  Br as labelOf,
-  ra as loadUIModel
+  Sa as SettingsFieldWidget,
+  Uo as SettingsForm,
+  _i as SettingsListWidget,
+  Oi as SettingsObjectWidget,
+  Qo as activate,
+  Ii as adopt,
+  Ni as asModel,
+  Jo as deactivate,
+  Yr as formFor,
+  mi as isModelled,
+  Br as kindOf,
+  fr as labelOf,
+  ua as loadUIModel
 };
