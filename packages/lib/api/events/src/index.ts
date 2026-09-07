@@ -18,6 +18,8 @@
  * and consumers both depend on this package; neither depends on the other.
  */
 
+/// <reference path="./vite-env.d.ts" />
+
 import { serviceId } from 'org.eclipse.daanse.board.app.lib.core'
 import type { ResourceSet, EPackage } from '@emfts/core'
 /*
@@ -37,11 +39,16 @@ import type { ResourceSet, EPackage } from '@emfts/core'
  * lib.events, which is the way round the tsm manifest already described.
  */
 /*
- * The .ecore file itself ships with this package - see "files" in
- * package.json. Whoever needs the text at runtime imports it by path with
- * ?raw; re-exporting it from here would make every consumer of the api
- * resolve a ?raw import whether or not it wants the model.
+ * The model text, exported rather than read by path.
+ *
+ * EcoreMetadataService parses it to register the EPackage, because the
+ * generated EventsPackage carries the classes but not the eAnnotations the
+ * @WidgetAction metadata lives in. Reaching into this package's model/
+ * directory would copy the text into the consumer's bundle, where it would
+ * outlive an api upgrade and keep registering the old model - so it travels
+ * as an export, one copy, versioned with the rest of the contract.
  */
+export { default as EVENT_MODEL_ECORE } from '../model/EventModel.ecore?raw'
 
 export type { Payload } from './gen/Payload'
 /*

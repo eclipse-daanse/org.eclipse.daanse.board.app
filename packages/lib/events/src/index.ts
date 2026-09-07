@@ -14,7 +14,7 @@ Contributors: Smart City Jena
  * Re-exported here so the many places that import these from the
  * implementation keep working while they are moved over one at a time.
  */
-import {
+import type {
   Payload,
   WidgetActionInterface,
   SystemActionInterface,
@@ -87,11 +87,19 @@ export function deactivate({ services }: ActivationContext) {
   }
 }
 
-export {
+/*
+ * In emf mode these four are interfaces, so they carry no runtime value -
+ * re-exporting them as values makes the bundle ask the api module for names
+ * it does not have.
+ */
+export type {
   Payload,
   WidgetActionInterface,
   SystemActionInterface,
   PageActionInterface,
+};
+
+export {
   Condition,
   Comperator,
   EventRegistry,
