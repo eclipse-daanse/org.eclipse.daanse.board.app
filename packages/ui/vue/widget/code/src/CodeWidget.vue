@@ -15,13 +15,13 @@ Contributors:
 import { codeToHtml } from 'shiki'
 import { inject, ref, watch, toRefs, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import { ICodeSettings } from '.';
+import type { CodeSettings } from './gen/CodeSettings';
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter';
 import { EventActionsRegistry, EVENT_ACTIONS_REGISTRY } from 'org.eclipse.daanse.board.app.lib.api.events';
 import { CodeWidgetInterface } from './api/CodeWidgetInterface';
 
-const props = defineProps<{ config: ICodeSettings, id?: string }>();
+const props = defineProps<{ config: CodeSettings, id?: string }>();
 const { id: widgetId } = toRefs(props);
 
 const htmlString = ref<string>('');

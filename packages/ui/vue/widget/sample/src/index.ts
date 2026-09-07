@@ -15,7 +15,6 @@ import { EVENT_REGISTRY_ID } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/sample.svg'
 import SampleWidget from './SampleWidget.vue'
-import SampleWidgetSettings from './SampleWidgetSettings.vue'
 import { SampleWidgetEvents } from './events/SampleWidgetEvents'
 import type { EventRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -29,7 +28,11 @@ const WIDGET_TYPE = 'SampleWidget'
 export class SampleWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = SampleWidget
-  readonly settingsComponent = SampleWidgetSettings
+  /*
+   * No settings at all: this widget takes its content from a datasource and
+   * has nothing of its own to configure. The empty form it used to declare
+   * put an empty section in the dialog and suggested otherwise.
+   */
   readonly supportedDSTypes = ['csv']
   readonly icon = Icon
   readonly name = 'Sample'
@@ -49,4 +52,4 @@ export class SampleWidgetProvider implements WidgetProvider {
   }
 }
 
-export { SampleWidget, SampleWidgetSettings }
+export { SampleWidget }

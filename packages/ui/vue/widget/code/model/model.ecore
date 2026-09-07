@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The code widget's settings.
+
+The source is declared here because it is one of them, but it is not in the
+form: which editor writes it is decided at runtime - a plain text area, a
+small highlighting one, or Monaco - and a form cannot offer three editors it
+does not know about. That control stays hand-written beside it.
+
+The language is not only what the source is highlighted as; Monaco takes it
+too, so the two have to be the same value.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="codesettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.code"
+                nsPrefix="codesettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="CodeSettings">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="code"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="theme"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="github-light"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="language"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="typescript"/>
+    </eClassifiers>
+</ecore:EPackage>

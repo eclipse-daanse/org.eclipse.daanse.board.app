@@ -15,7 +15,6 @@ import { EVENT_ACTIONS_REGISTRY_ID, EVENT_REGISTRY_ID } from 'org.eclipse.daanse
 import { component, inject, activate, deactivate } from '@eclipse-daanse/tsm'
 import Icon from './assets/sample.svg'
 import RssWidget from './RssWidget.vue'
-import RssWidgetSettings from './RssWidgetSettings.vue'
 import { RssWidgetEvents } from './events/RssWidgetEvents'
 import { RssWidgetInterface } from './api/RssWidgetInterface'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
@@ -34,7 +33,11 @@ const WIDGET_TYPE = 'RssWidget'
 export class RssWidgetProvider implements WidgetProvider {
   readonly type = WIDGET_TYPE
   readonly component = RssWidget
-  readonly settingsComponent = RssWidgetSettings
+  /*
+   * No settings at all: this widget takes its content from a datasource and
+   * has nothing of its own to configure. The empty form it used to declare
+   * put an empty section in the dialog and suggested otherwise.
+   */
   readonly supportedDSTypes = []
   readonly icon = Icon
   readonly name = 'RSS'
@@ -57,4 +60,4 @@ export class RssWidgetProvider implements WidgetProvider {
   }
 }
 
-export { RssWidget, RssWidgetSettings }
+export { RssWidget }

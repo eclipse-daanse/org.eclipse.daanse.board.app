@@ -89,6 +89,17 @@ const hasHandWritten = computed(
 )
 const showRestTab = computed(() => !!modelledLook.value && hasHandWritten.value)
 
+/*
+ * Some widgets have nothing of their own to configure - an RSS feed is what
+ * its datasource says it is. Without this they were given a "Darstellung"
+ * tab that opened on nothing, which reads as a form that failed to load
+ * rather than as a widget with no settings.
+ */
+const hasOwnSettings = computed(() => !!modelledLook.value || hasHandWritten.value)
+
+/* Nothing of its own to show means the datasource is what there is. */
+watch(hasOwnSettings, (has) => { if (!has && tab.value === 'look') tab.value = 'data' }, { immediate: true })
+
 /* --------------------------------------------------- sections as tabs */
 
 /**
@@ -436,7 +447,7 @@ onBeforeUnmount(() => {
               Daten <span class="tab__n">{{ dataCount }}</span>
             </button>
             <button
-              v-if="!sections.length"
+              v-if="!sections.length && hasOwnSettings"
               type="button"
               role="tab"
               :aria-selected="tab === 'look'"
