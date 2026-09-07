@@ -51,6 +51,14 @@ onMounted(() => {
   }
 })
 
+/*
+ * Both are wrappers now, so they are read through .value - the setting is
+ * either given in the form or taken from a variable, and the widget sees
+ * only the resulting value either way.
+ */
+const fit = computed(() => config.value.imagesSettings?.fit?.value)
+const intervalSeconds = computed(() => config.value.imagesSettings?.diashowInterval?.value)
+
 // Map CSS object-fit values to Tailwind classes
 const getObjectFit = computed(() => {
   const fitMap = {
@@ -62,8 +70,7 @@ const getObjectFit = computed(() => {
   }
   return (
     fitMap[
-      (config.value.imagesSettings?.fit?.toLowerCase() as keyof typeof fitMap) ||
-        'none'
+      (fit.value?.toLowerCase() as keyof typeof fitMap) || 'none'
     ] || ''
   )
 })
@@ -87,14 +94,14 @@ const initInterval = () => {
   if (interval) {
     clearInterval(interval)
   }
-  if ((config.value.imagesSettings?.diashowInterval ?? 0) > 0) {
+  if ((intervalSeconds.value ?? 0) > 0) {
     interval = setInterval(() => {
       if (currentImage.value === config.value.images.length - 1) {
         currentImage.value = 0
         return
       }
       toNext()
-    }, (config.value.imagesSettings?.diashowInterval ?? 1) * 1000)
+    }, (intervalSeconds.value ?? 1) * 1000)
   }
 }
 
@@ -102,7 +109,7 @@ onMounted(() => {
   initInterval()
 })
 
-watch(() => config.value.imagesSettings?.diashowInterval, initInterval)
+watch(() => intervalSeconds.value, initInterval)
 
 const parsedUrl = (url: string): string => {
   return url

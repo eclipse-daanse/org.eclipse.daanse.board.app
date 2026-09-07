@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the image widget.
+
+The pictures come first, because a gallery with no pictures shows nothing
+and everything below it describes how those pictures are shown. The
+interval only means something once there is more than one picture, but it
+is left visible rather than conditional: adding the second picture is the
+normal case, and a field that appears out of nowhere is harder to find than
+one that was always there.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="ImageSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="ImageSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="picturesGroup" layout="VERTICAL" label="Bilder">
+      <!-- A list: each entry is a form of its own, built from
+           ImageGalleryItem. -->
+      <fields xsi:type="uimodel:InputWidget"
+          name="images"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/images"
+          label="Bilder"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="displayGroup" layout="VERTICAL" label="Darstellung">
+      <fields xsi:type="uimodel:InputWidget"
+          name="imagesSettings"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.image#//ImageSettings/imagesSettings"
+          label="Anzeige"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

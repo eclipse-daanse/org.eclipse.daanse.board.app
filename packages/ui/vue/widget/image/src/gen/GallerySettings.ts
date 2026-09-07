@@ -6,13 +6,14 @@
  */
 
 import type { EObject } from '@emfts/core';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
 /**
  * GallerySettings
  * @generated
  */
 export interface GallerySettings extends EObject {
-  fit?: string;
-  diashowInterval?: number;
+  fit?: VariableWrapper<string>;
+  diashowInterval?: VariableWrapper<number>;
 
 }

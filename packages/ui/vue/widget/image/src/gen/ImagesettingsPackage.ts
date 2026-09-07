@@ -140,7 +140,8 @@ export class ImagesettingsPackage extends BasicEPackage {
     ImagesettingsPackage.Literals.GALLERY_SETTINGS = gallerySettingsClass;
 
     // Create fit feature
-    const gallerySettings_fit = new BasicEAttribute();
+    const gallerySettings_fit = new BasicEReference();
+    gallerySettings_fit.setContainment(false);
     gallerySettings_fit.setName('fit');
     gallerySettings_fit.setLowerBound(0);
     gallerySettings_fit.setUpperBound(1);
@@ -148,7 +149,8 @@ export class ImagesettingsPackage extends BasicEPackage {
     ImagesettingsPackage.Literals.GALLERY_SETTINGS__FIT = gallerySettings_fit;
 
     // Create diashowInterval feature
-    const gallerySettings_diashowInterval = new BasicEAttribute();
+    const gallerySettings_diashowInterval = new BasicEReference();
+    gallerySettings_diashowInterval.setContainment(false);
     gallerySettings_diashowInterval.setName('diashowInterval');
     gallerySettings_diashowInterval.setLowerBound(0);
     gallerySettings_diashowInterval.setUpperBound(1);
@@ -205,8 +207,8 @@ export class ImagesettingsPackage extends BasicEPackage {
     (ImagesettingsPackage.Literals.IMAGE_SETTINGS__IMAGES as BasicEReference).setEType(ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM);
     (ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM__ID as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ImagesettingsPackage.Literals.IMAGE_GALLERY_ITEM__URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__FIT as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
-    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EInt')!);
+    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__FIT as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
+    (ImagesettingsPackage.Literals.GALLERY_SETTINGS__DIASHOW_INTERVAL as BasicEReference).setEType(requireEPackage('org.eclipse.daanse.board.app.ui.vue.composables').getEClassifier('VariableWrapper')!);
     (ImagesettingsPackage.Literals.IMAGE_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ImagesettingsPackage.Literals.IMAGE_RIGHT_CLICK_PAYLOAD__IMAGE_URL as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 

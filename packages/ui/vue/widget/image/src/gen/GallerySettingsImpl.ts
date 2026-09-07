@@ -7,6 +7,7 @@
 
 import { BasicEObject } from '@emfts/core';
 import type { EClass, EStructuralFeature } from '@emfts/core';
+import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import type { GallerySettings } from './GallerySettings.js';
 import { ImagesettingsPackage } from './ImagesettingsPackage.js';
 
@@ -20,8 +21,8 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
   static readonly DIASHOW_INTERVAL: number = 1;
 
   // Private fields
-  private _fit?: string;
-  private _diashowInterval?: number;
+  private _fit: VariableWrapper<string> = new VariableWrapper<string>();
+  private _diashowInterval: VariableWrapper<number> = new VariableWrapper<number>();
 
   /**
    * Returns the EClass of this object
@@ -31,11 +32,11 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
   }
 
   // Getters and Setters
-  get fit(): string {
+  get fit(): VariableWrapper<string> {
     return this._fit!;
   }
 
-  set fit(value: string) {
+  set fit(value: VariableWrapper<string>) {
     const oldValue = this._fit;
     this._fit = value;
     if (this.eDeliver()) {
@@ -55,11 +56,11 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
     }
   }
 
-  get diashowInterval(): number {
+  get diashowInterval(): VariableWrapper<number> {
     return this._diashowInterval!;
   }
 
-  set diashowInterval(value: number) {
+  set diashowInterval(value: VariableWrapper<number>) {
     const oldValue = this._diashowInterval;
     this._diashowInterval = value;
     if (this.eDeliver()) {
@@ -103,11 +104,11 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case GallerySettingsImpl.FIT:
-        this.fit = newValue as string;
+        this.fit = newValue as VariableWrapper<string>;
         super.eSet(feature, newValue);
         break;
       case GallerySettingsImpl.DIASHOW_INTERVAL:
-        this.diashowInterval = newValue as number;
+        this.diashowInterval = newValue as VariableWrapper<number>;
         super.eSet(feature, newValue);
         break;
       default:
@@ -122,9 +123,9 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case GallerySettingsImpl.FIT:
-        return this._fit !== undefined;
+        return this._fit !== new VariableWrapper<string>();
       case GallerySettingsImpl.DIASHOW_INTERVAL:
-        return this._diashowInterval !== undefined;
+        return this._diashowInterval !== new VariableWrapper<number>();
       default:
         return super.eIsSet(feature);
     }
@@ -137,10 +138,10 @@ export class GallerySettingsImpl extends BasicEObject implements GallerySettings
     const featureID = this.eClass().getFeatureID(feature);
     switch (featureID) {
       case GallerySettingsImpl.FIT:
-        this._fit = undefined;
+        this._fit = new VariableWrapper<string>();
         return;
       case GallerySettingsImpl.DIASHOW_INTERVAL:
-        this._diashowInterval = undefined;
+        this._diashowInterval = new VariableWrapper<number>();
         return;
       default:
         super.eUnset(feature);
