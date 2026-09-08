@@ -592,4 +592,30 @@ export class SeriesSettingsImpl extends BasicEObject implements SeriesSettings {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      seriesIndex: this.seriesIndex,
+      label: this.label,
+      chartType: this.chartType,
+      xAxisId: this.xAxisId,
+      yAxisId: this.yAxisId,
+      yAxisTitle: this.yAxisTitle,
+      borderColor: this.borderColor,
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderDash: this.borderDash,
+      fill: this.fill,
+      showPoints: this.showPoints,
+      pointColor: this.pointColor,
+      pointSize: this.pointSize,
+    };
+  }
 }

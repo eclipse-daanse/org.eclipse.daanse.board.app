@@ -1,33 +1,33 @@
-import { identifier as b } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { ref as w, computed as B, inject as y, onMounted as p, onUnmounted as O, watch as W, onBeforeUnmount as x } from "vue";
+import { identifier as T } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { ref as w, computed as p, inject as _, onMounted as B, onUnmounted as O, watch as W, onBeforeUnmount as x } from "vue";
 import { identifier as Y } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { identifier as M } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
 import { VariableWrapper as D, VARIABLEWRAPPER as j } from "org.eclipse.daanse.board.app.lib.variables";
 import { VARIABLEWRAPPER as ce, VariableWrapper as le } from "org.eclipse.daanse.board.app.lib.variables";
-import { BasicEObject as G, BasicEFactory as $, BasicEPackage as X, EPackageRegistry as V, BasicEClass as z, BasicEAttribute as P, getEcorePackage as _ } from "@emfts/core";
-const S = w(0);
+import { BasicEObject as G, BasicEFactory as $, BasicEPackage as X, EPackageRegistry as V, BasicEClass as z, BasicEAttribute as P, getEcorePackage as y } from "@emfts/core";
+const d = w(0);
 function F() {
   return {
-    isLoading: B(() => S.value > 0),
-    activeLoadingCount: S,
+    isLoading: p(() => d.value > 0),
+    activeLoadingCount: d,
     startLoading: () => {
-      S.value++;
+      d.value++;
     },
     stopLoading: () => {
-      S.value > 0 && S.value--;
+      d.value > 0 && d.value--;
     }
   };
 }
 function J(r, e, t, n = [], E) {
-  const c = y(b);
+  const c = _(T);
   if (!c)
     throw new Error("DatasourceRepository not provided");
-  const { startLoading: v, stopLoading: o } = F(), h = async () => {
+  const { startLoading: g, stopLoading: o } = F(), h = async () => {
     if (!r.value) {
       t.value = null;
       return;
     }
-    console.log("getData", r.value), console.log("type", e), v();
+    console.log("getData", r.value), console.log("type", e), g();
     try {
       const i = await c.getDatasource(r.value).getData(e, E?.value || {});
       e === "PivotTable" ? t.value = JSON.parse(JSON.stringify(i)) : t.value = structuredClone(i);
@@ -39,23 +39,23 @@ function J(r, e, t, n = [], E) {
   }, R = async (s, i, u = !0) => {
     if (r.value)
       try {
-        const g = c.getDatasource(
+        const v = c.getDatasource(
           r.value
-        ), T = g.callEvent(s, i, u);
-        if (!u && T instanceof Promise) {
-          await T;
-          const U = await g.getData(e);
+        ), b = v.callEvent(s, i, u);
+        if (!u && b instanceof Promise) {
+          await b;
+          const U = await v.getData(e);
           t.value = structuredClone(U);
         }
-      } catch (g) {
-        console.warn(g);
+      } catch (v) {
+        console.warn(v);
       }
   }, A = async (s) => {
     if (!r.value) {
       t.value = null;
       return;
     }
-    console.log("getDataWithOptions", r.value, s), console.log("type", e), v();
+    console.log("getDataWithOptions", r.value, s), console.log("type", e), g();
     try {
       const u = await c.getDatasource(r.value).getData(e, s);
       t.value = structuredClone(u);
@@ -73,29 +73,29 @@ function J(r, e, t, n = [], E) {
     if (!(!s || !i || s === i)) {
       try {
         const u = c.getDatasource(i);
-        u.unsubscribe(h), n.forEach((g) => {
-          u.unsubscribe(g);
+        u.unsubscribe(h), n.forEach((v) => {
+          u.unsubscribe(v);
         });
       } catch (u) {
         console.warn(u);
       }
       try {
         const u = c.getDatasource(s);
-        u.subscribe(() => h()), n.forEach((g) => {
-          u.subscribe(g);
+        u.subscribe(() => h()), n.forEach((v) => {
+          u.subscribe(v);
         });
       } catch (u) {
         console.warn(u);
       }
     }
-  }, d = () => {
+  }, S = () => {
     try {
       return c.getDatasource(r.value);
     } catch (s) {
       return console.warn(s), null;
     }
   };
-  return p(() => {
+  return B(() => {
     h();
     try {
       const s = c.getDatasource(r.value);
@@ -119,23 +119,23 @@ function J(r, e, t, n = [], E) {
     callEvent: R,
     update: f,
     getDataWithOptions: A,
-    getDatasourceInstance: d
+    getDatasourceInstance: S
   };
 }
 function Z(r, e, t) {
-  const n = y(b);
+  const n = _(T);
   if (!n)
     throw new Error("DatasourceRepository not provided");
   const E = n.getDatasourceIdentifiers(r);
-  console.log("Identifiers for datasource type", r, E), p(async () => {
+  console.log("Identifiers for datasource type", r, E), B(async () => {
     console.log(
       "Creating temporary store for type",
       r,
       "with settings",
       e.value
     );
-    const v = n.resolveIdentifier(E.Store);
-    t.value = v({ ...e.value.config, _isTemporaryPreview: !0 });
+    const g = n.resolveIdentifier(E.Store);
+    t.value = g({ ...e.value.config, _isTemporaryPreview: !0 });
   });
   const c = async () => {
     t.value?.destroy(), t.value = null;
@@ -167,12 +167,12 @@ function q(r, e = () => {
   } };
 }
 function L() {
-  const r = w(Date.now()), e = [], t = y(Y);
+  const r = w(Date.now()), e = [], t = _(Y);
   if (!t)
     throw new Error("VariableRepository not provided");
   let n = null;
   try {
-    n = y(M);
+    n = _(M);
   } catch {
     console.warn("PageContextService not available for variable resolution");
   }
@@ -185,7 +185,7 @@ function L() {
       s.unsubscribe(E), s.unsubscribe(h);
     e.length = 0;
     const f = [...o.matchAll(R)].map((s) => s[1]);
-    let d = o;
+    let S = o;
     for (const s of f)
       try {
         let i;
@@ -197,16 +197,16 @@ function L() {
         }
         if (i) {
           i.subscribe(E), i.subscribe(h), e.push(i);
-          const u = i.value, g = new RegExp(
+          const u = i.value, v = new RegExp(
             `\\{\\s*${s}\\s*\\}`,
             "g"
           );
-          d = d.replace(g, String(u));
+          S = S.replace(v, String(u));
         }
       } catch (i) {
         console.warn(`Error resolving variable ${s}:`, i);
       }
-    return d;
+    return S;
   };
   return {
     calculateValue: c,
@@ -214,7 +214,7 @@ function L() {
       const h = {};
       for (const [R, A] of Object.entries(o))
         try {
-          const f = B(() => (r.value, A && c(A.value + "")));
+          const f = p(() => (r.value, A && c(A.value + "")));
           h[R] = f;
         } catch (f) {
           console.log(f);
@@ -421,6 +421,21 @@ class a extends G {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      value: this.value,
+      variable: this.variable,
+      isSet: this.isSet,
+      type: this.type
+    };
+  }
 }
 class I extends $ {
   // Lazy singleton instance
@@ -485,7 +500,7 @@ class l extends X {
     const E = new P();
     E.setName("isSet"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), l.Literals.VARIABLE_WRAPPER__IS_SET = E;
     const c = new P();
-    c.setName("type"), c.setLowerBound(0), c.setUpperBound(1), e.getEStructuralFeatures().push(c), l.Literals.VARIABLE_WRAPPER__TYPE = c, l.Literals.VARIABLE_WRAPPER__VALUE.setEType(_().getEClassifier("EObject")), l.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(_().getEClassifier("EString")), l.Literals.VARIABLE_WRAPPER__IS_SET.setEType(_().getEClassifier("EBoolean")), l.Literals.VARIABLE_WRAPPER__TYPE.setEType(_().getEClassifier("EString"));
+    c.setName("type"), c.setLowerBound(0), c.setUpperBound(1), e.getEStructuralFeatures().push(c), l.Literals.VARIABLE_WRAPPER__TYPE = c, l.Literals.VARIABLE_WRAPPER__VALUE.setEType(y().getEClassifier("EObject")), l.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(y().getEClassifier("EString")), l.Literals.VARIABLE_WRAPPER__IS_SET.setEType(y().getEClassifier("EBoolean")), l.Literals.VARIABLE_WRAPPER__TYPE.setEType(y().getEClassifier("EString"));
   }
 }
 const H = {

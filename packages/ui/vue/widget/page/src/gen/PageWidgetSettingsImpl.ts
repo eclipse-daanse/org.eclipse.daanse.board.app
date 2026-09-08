@@ -184,4 +184,19 @@ export class PageWidgetSettingsImpl extends BasicEObject implements PageWidgetSe
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      path: this.path,
+      hideTitle: this.hideTitle,
+      backgroundColor: this.backgroundColor,
+    };
+  }
 }

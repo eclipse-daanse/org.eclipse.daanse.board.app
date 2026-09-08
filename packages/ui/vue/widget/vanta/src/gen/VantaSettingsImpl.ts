@@ -924,4 +924,39 @@ export class VantaSettingsImpl extends BasicEObject implements VantaSettings {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      type: this.type,
+      backgroundColor: this.backgroundColor,
+      skyColor: this.skyColor,
+      cloudColor: this.cloudColor,
+      cloudShadowColor: this.cloudShadowColor,
+      sunColor: this.sunColor,
+      sunGlareColor: this.sunGlareColor,
+      sunlightColor: this.sunlightColor,
+      speed: this.speed,
+      color1: this.color1,
+      color2: this.color2,
+      quantity: this.quantity,
+      birdSize: this.birdSize,
+      wingSpan: this.wingSpan,
+      speedLimit: this.speedLimit,
+      separation: this.separation,
+      alignment: this.alignment,
+      cohesion: this.cohesion,
+      color: this.color,
+      spacing: this.spacing,
+      points: this.points,
+      maxDistance: this.maxDistance,
+      chaos: this.chaos,
+    };
+  }
 }

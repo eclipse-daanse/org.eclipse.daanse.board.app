@@ -1,12 +1,12 @@
 (function(){var i="ui.vue.widget.table.kpi",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".filters[data-v-f4b39436]{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;flex-grow:0}.table_container[data-v-f4b39436]{display:flex;flex-direction:column;height:100%}.table_container .pagination[data-v-f4b39436]{flex-grow:0;padding:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;justify-items:center;align-items:end}.table_container .pagination .page_input[data-v-f4b39436]{justify-self:start}.table_container .table[data-v-f4b39436]{flex-grow:1;flex-shrink:1}.loading[data-v-f4b39436]{display:flex;height:100%}\n";})();
-import { WidgetActionInterfaceImpl as j, EVENT_ACTIONS_REGISTRY as M, PayloadImpl as L, EVENT_REGISTRY_ID as X, EVENT_ACTIONS_REGISTRY_ID as Z } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as $, deactivate as z, component as q, inject as V } from "@eclipse-daanse/tsm";
-import { defineComponent as J, toRefs as Q, inject as R, onUnmounted as ee, ref as te, watch as se, onMounted as ae, computed as _, provide as B, createElementBlock as re, openBlock as ie, withModifiers as ne, createVNode as oe, unref as le } from "vue";
-import { useVariableRepository as ue, useDatasourceRepository as de, VariableWrapper as E } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { WidgetActionInterfaceImpl as j, EVENT_ACTIONS_REGISTRY as M, PayloadImpl as V, EVENT_REGISTRY_ID as X, EVENT_ACTIONS_REGISTRY_ID as Z } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as $, deactivate as z, component as J, inject as L } from "@eclipse-daanse/tsm";
+import { defineComponent as q, toRefs as Q, inject as B, onUnmounted as ee, ref as te, watch as se, onMounted as ae, computed as _, provide as R, createElementBlock as re, openBlock as ie, withModifiers as ne, createVNode as oe, unref as le } from "vue";
+import { useVariableRepository as ue, useDatasourceRepository as de, VariableWrapper as g } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { useRoute as ce } from "vue-router";
 import { KpiTable as he } from "org.eclipse.daanse.board.app.ui.vue.common.kpi";
 import { WidgetAction as Te } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEFactory as Ee, BasicEPackage as ge, EPackageRegistry as b, BasicEClass as _e, BasicEReference as fe, BasicEAttribute as S, getEcorePackage as w, BasicEObject as Se } from "@emfts/core";
+import { BasicEFactory as ge, BasicEPackage as Ee, EPackageRegistry as b, BasicEClass as _e, BasicEReference as fe, BasicEAttribute as S, getEcorePackage as w, BasicEObject as Se } from "@emfts/core";
 import { WIDGET_SERVICE_ID as we } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: pe } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Ce = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2025.5C22.5%2023.8431%2023.8431%2022.5%2025.5%2022.5H34.5C36.1569%2022.5%2037.5%2023.8431%2037.5%2025.5V34.5C37.5%2036.1569%2036.1569%2037.5%2034.5%2037.5H25.5C23.8431%2037.5%2022.5%2036.1569%2022.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2048C45%2046.3431%2046.3431%2045%2048%2045H94.5C96.1569%2045%2097.5%2046.3431%2097.5%2048V94.5C97.5%2096.1569%2096.1569%2097.5%2094.5%2097.5H48C46.3431%2097.5%2045%2096.1569%2045%2094.5V48Z'%20fill='%23606060'/%3e%3c/svg%3e";
 var Ie = Object.defineProperty, Ae = Object.getOwnPropertyDescriptor, Ne = (l, e, t, u) => {
@@ -22,7 +22,7 @@ class A extends j {
 Ne([
   Te({ eventType: "kpiTable.refresh" })
 ], A.prototype, "refresh");
-const ve = /* @__PURE__ */ J({
+const ye = /* @__PURE__ */ q({
   __name: "KpiTableWidget",
   props: {
     datasourceId: {},
@@ -30,24 +30,24 @@ const ve = /* @__PURE__ */ J({
     id: {}
   },
   setup(l, { expose: e }) {
-    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), y = R(pe.TINY_EMITTER), P = R(M), O = ce().params.pageid || "";
-    class k extends A {
+    const { wrapParameters: t } = ue(), u = l, { datasourceId: a, config: r, id: i } = Q(u), v = B(pe.TINY_EMITTER), P = B(M), k = ce().params.pageid || "";
+    class O extends A {
       refresh() {
         m(a.value, a.value);
       }
     }
-    const D = new k();
+    const D = new O();
     e(D), ee(() => {
       i?.value && P.unregisterInstance(i.value);
     });
     const U = () => {
-      i?.value && y.emit("widget:KpiTableWidget:click", {
+      i?.value && v.emit("widget:KpiTableWidget:click", {
         type: "widget:KpiTableWidget:click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
       });
     }, H = () => {
-      i?.value && y.emit("widget:KpiTableWidget:right_click", {
+      i?.value && v.emit("widget:KpiTableWidget:right_click", {
         type: "widget:KpiTableWidget:right_click",
         widgetId: i.value,
         payload: { widgetId: i.value, timestamp: Date.now() }
@@ -56,7 +56,7 @@ const ve = /* @__PURE__ */ J({
     se(a, (n, c) => {
       m(n, c);
     }), ae(() => {
-      if (i?.value && P.registerInstance(i.value, D, "KpiTableWidget", O), !r.value) return;
+      if (i?.value && P.registerInstance(i.value, D, "KpiTableWidget", k), !r.value) return;
       const n = {
         headerBackground: "var(--color-raised)"
       };
@@ -64,12 +64,12 @@ const ve = /* @__PURE__ */ J({
         const p = r.value[c];
         let d = p;
         if (Array.isArray(p) && (d = p[0] || T), d == null)
-          r.value[c] = new E(T);
-        else if (!(d instanceof E)) if (typeof d == "object" && "value" in d) {
-          const h = new E(d.value);
+          r.value[c] = new g(T);
+        else if (!(d instanceof g)) if (typeof d == "object" && "value" in d) {
+          const h = new g(d.value);
           "variable" in d && (h.variable = d.variable), r.value[c] = h;
         } else
-          r.value[c] = new E(d);
+          r.value[c] = new g(d);
       }
     });
     const {
@@ -85,7 +85,7 @@ const ve = /* @__PURE__ */ J({
       const n = r.value.trendVisualType;
       return Array.isArray(n) ? n[0] || "Badge" : n || "Badge";
     });
-    B("statusVisualType", W), B("trendVisualType", G);
+    R("statusVisualType", W), R("trendVisualType", G);
     const { update: m } = de(a, "DataTable", I), x = _(() => {
       if (!I.value) return null;
       let n = I.value;
@@ -134,16 +134,16 @@ const ve = /* @__PURE__ */ J({
       oe(le(he), { tableData: x.value }, null, 8, ["tableData"])
     ], 32));
   }
-}), ye = (l, e) => {
+}), ve = (l, e) => {
   const t = l.__vccOpts || l;
   for (const [u, a] of e)
     t[u] = a;
   return t;
-}, Pe = /* @__PURE__ */ ye(ve, [["__scopeId", "data-v-f4b39436"]]), De = [
-  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: L },
-  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: L }
+}, Pe = /* @__PURE__ */ ve(ye, [["__scopeId", "data-v-f4b39436"]]), De = [
+  { name: "KpiTable Clicked", type: "click", description: "Triggered when the kpi table widget is clicked", payloadType: V },
+  { name: "KpiTable Right Clicked", type: "right_click", description: "Triggered when the kpi table widget is right-clicked", payloadType: V }
 ];
-class N extends Ee {
+class N extends ge {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
@@ -176,7 +176,7 @@ function me(l) {
     throw new Error(`EPackage '${l}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing KpitablesettingsPackage.`);
   return e;
 }
-class o extends ge {
+class o extends Ee {
   static eNAME = "kpitablesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.kpi";
   static eNS_PREFIX = "kpitablesettings";
@@ -226,7 +226,7 @@ class s extends Se {
   static SHOW_FOLDERS = 3;
   static SHOW_PARENT_CHILD = 4;
   // Private fields
-  _headerBackground = new E();
+  _headerBackground = new g();
   _trendVisualType = "Badge";
   _statusVisualType = "Badge";
   _showFolders = !1;
@@ -388,7 +388,7 @@ class s extends Se {
   eIsSet(e) {
     switch (this.eClass().getFeatureID(e)) {
       case s.HEADER_BACKGROUND:
-        return this._headerBackground !== new E();
+        return this._headerBackground !== new g();
       case s.TREND_VISUAL_TYPE:
         return this._trendVisualType !== "Badge";
       case s.STATUS_VISUAL_TYPE:
@@ -407,7 +407,7 @@ class s extends Se {
   eUnset(e) {
     switch (this.eClass().getFeatureID(e)) {
       case s.HEADER_BACKGROUND:
-        this._headerBackground = new E();
+        this._headerBackground = new g();
         return;
       case s.TREND_VISUAL_TYPE:
         this._trendVisualType = "Badge";
@@ -425,8 +425,24 @@ class s extends Se {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      headerBackground: this.headerBackground,
+      trendVisualType: this.trendVisualType,
+      statusVisualType: this.statusVisualType,
+      showFolders: this.showFolders,
+      showParentChild: this.showParentChild
+    };
+  }
 }
-const Le = `<?xml version="1.0" encoding="UTF-8"?>
+const Ve = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -485,18 +501,18 @@ them - so they are the values; optionLabel says what each one looks like.
   </components>
 </uimodel:UIModel>
 `;
-var Ve = Object.defineProperty, Re = Object.getOwnPropertyDescriptor, v = (l, e, t, u) => {
-  for (var a = u > 1 ? void 0 : u ? Re(e, t) : e, r = l.length - 1, i; r >= 0; r--)
+var Le = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, y = (l, e, t, u) => {
+  for (var a = u > 1 ? void 0 : u ? Be(e, t) : e, r = l.length - 1, i; r >= 0; r--)
     (i = l[r]) && (a = (u ? i(e, t, a) : i(a)) || a);
-  return u && a && Ve(e, t, a), a;
+  return u && a && Le(e, t, a), a;
 }, F = (l, e) => (t, u) => e(t, u, l);
 o.eINSTANCE;
-const g = "KpiTableWidget";
+const E = "KpiTableWidget";
 let C = class {
   constructor(l, e) {
     this.events = l, this.actions = e;
   }
-  type = g;
+  type = E;
   component = Pe;
   /*
    * No hand-written form: the model covers all of it, so there is nothing
@@ -507,7 +523,7 @@ let C = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: Le,
+    xmi: Ve,
     uri: "/kpi-table-settings.ui.xmi",
     ePackage: () => o.eINSTANCE,
     create: () => new s()
@@ -516,30 +532,30 @@ let C = class {
   icon = Ce;
   name = "KpiTable";
   register() {
-    this.events.registerWidget(g, De), this.actions.registerWidgetType(g, A, "widget");
+    this.events.registerWidget(E, De), this.actions.registerWidgetType(E, A, "widget");
   }
   unregister() {
-    this.events.unregisterWidget(g), this.actions.unregisterWidgetType(g);
+    this.events.unregisterWidget(E), this.actions.unregisterWidgetType(E);
   }
 };
-v([
+y([
   $()
 ], C.prototype, "register", 1);
-v([
+y([
   z()
 ], C.prototype, "unregister", 1);
-C = v([
-  q({
+C = y([
+  J({
     service: [we],
-    properties: { "widget.type": g }
+    properties: { "widget.type": E }
   }),
-  F(0, V(X)),
-  F(1, V(Z))
+  F(0, L(X)),
+  F(1, L(Z))
 ], C);
 export {
   s as KpiTableSettingsImpl,
   Pe as KpiTableWidget,
   C as KpiTableWidgetProvider,
   o as KpitablesettingsPackage,
-  Le as kpiTableSettingsFormXmi
+  Ve as kpiTableSettingsFormXmi
 };

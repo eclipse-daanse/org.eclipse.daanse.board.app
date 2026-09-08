@@ -332,4 +332,23 @@ export class DatastreamClickPayloadImpl extends PayloadImpl implements Datastrea
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      id: this.id,
+      name: this.name,
+      thingId: this.thingId,
+      unitOfMeasurement: this.unitOfMeasurement,
+      observedProperty: this.observedProperty,
+      latestObservationResult: this.latestObservationResult,
+      latestObservationTime: this.latestObservationTime,
+    };
+  }
 }

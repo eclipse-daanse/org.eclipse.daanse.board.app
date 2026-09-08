@@ -260,4 +260,21 @@ export class RepeatableSVGSettingsImpl extends BasicEObject implements Repeatabl
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      src: this.src,
+      activeItemStyles: this.activeItemStyles,
+      defaultItemStyles: this.defaultItemStyles,
+      repetitions: this.repetitions,
+      progress: this.progress,
+    };
+  }
 }

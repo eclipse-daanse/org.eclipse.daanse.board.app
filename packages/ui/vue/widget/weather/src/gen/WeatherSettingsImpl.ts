@@ -486,4 +486,28 @@ export class WeatherSettingsImpl extends BasicEObject implements WeatherSettings
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      thingId: this.thingId,
+      location: this.location,
+      useLocation: this.useLocation,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      useTimeRange: this.useTimeRange,
+      manualTimeSelection: this.manualTimeSelection,
+      refreshInterval: this.refreshInterval,
+      showForecast: this.showForecast,
+      selectedForecastParameters: this.selectedForecastParameters?.toArray?.() ?? this.selectedForecastParameters,
+      forecastPeriods: this.forecastPeriods?.toArray?.() ?? this.forecastPeriods,
+      gridColor: this.gridColor,
+    };
+  }
 }

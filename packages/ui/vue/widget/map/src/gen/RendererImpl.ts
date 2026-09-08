@@ -304,4 +304,23 @@ export class RendererImpl extends BasicEObject implements Renderer {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      name: this.name,
+      thing: this.thing?.toArray?.() ?? this.thing,
+      renderer: this.renderer,
+      ds_renderer: this.ds_renderer?.toArray?.() ?? this.ds_renderer,
+      ObservationrefreshTime: this.ObservationrefreshTime,
+      lastUpdate: this.lastUpdate,
+      id: this.id,
+    };
+  }
 }

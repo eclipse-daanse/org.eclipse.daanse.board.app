@@ -1,12 +1,12 @@
 (function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-82423c81]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-82423c81]{overflow:hidden;position:relative;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-82423c81]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-82423c81]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-82423c81]:hover{filter:brightness(1.1)}.range-strip[data-v-82423c81]:active{cursor:grabbing}.timeline-knob[data-v-82423c81]{position:absolute;top:50%;width:24px;height:24px;background:var(--va-primary);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-82423c81]:hover{background:var(--va-primary-dark);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-82423c81]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-82423c81]{left:0;z-index:4}.fixed-knob[data-v-82423c81]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-82423c81]:hover{transform:translate(-50%,-50%)!important;background:var(--va-background-border)!important}.end-knob[data-v-82423c81]{right:-24px;z-index:4}.time-axis[data-v-82423c81]{position:relative;height:30px;background:var(--va-background-secondary);border-top:1px solid var(--va-background-border);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-82423c81]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-82423c81]{width:1px;height:8px;background:var(--va-text-secondary);margin-top:2px}.tick-label[data-v-82423c81]{font-size:.7rem;color:var(--va-text-secondary);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-82423c81]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:6px;padding:.75rem}.time-display[data-v-82423c81]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-82423c81]{font-size:.8rem;font-weight:500;color:var(--va-text-secondary)}.time-value[data-v-82423c81]{font-size:.9rem;font-weight:600;color:var(--va-text-primary);word-wrap:break-word}.controls[data-v-82423c81]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-82423c81]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--va-primary));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-82423c81]:hover:not(:disabled){background:var(--va-primary-dark);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-82423c81]:disabled{background:var(--va-background-border);color:var(--va-text-secondary);cursor:not-allowed;transform:none}.play-button.playing[data-v-82423c81]{background:var(--play-button-playing, #ff6b35);animation:pulse-82423c81 2s infinite}.play-button.playing[data-v-82423c81]:hover{filter:brightness(.9)}@keyframes pulse-82423c81{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-82423c81]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-82423c81]{font-weight:500;color:var(--va-text-primary);min-width:fit-content}.speed-control select[data-v-82423c81]{padding:.5rem;border:1px solid var(--va-background-border);border-radius:4px;background:var(--va-background-primary);color:var(--va-text-primary);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-82423c81]{flex-direction:column;gap:.75rem}.time-display[data-v-82423c81]{text-align:left}.controls[data-v-82423c81]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-82423c81]{width:28px;height:28px}.tick-label[data-v-82423c81]{font-size:.6rem}.timeline-container[data-v-82423c81]{min-height:70px}.timeline-track[data-v-82423c81]{height:35px}}.settings-container[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-0a85bc8a]{font-weight:600;color:var(--va-text-primary);font-size:.9rem}.datetime-group[data-v-0a85bc8a]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-0a85bc8a]>*{flex:1;min-width:0}.relative-time-config[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--va-background-element);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-0a85bc8a]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-0a85bc8a]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-0a85bc8a]{flex:2;min-width:80px}.relative-time-preview[data-v-0a85bc8a]{font-size:.85rem;color:var(--va-primary);padding:.5rem;background:var(--va-background-secondary);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
 import { WidgetActionInterfaceImpl as dt, EVENT_ACTIONS_REGISTRY as Et, PayloadImpl as je, EVENT_REGISTRY_ID as vt, EVENT_ACTIONS_REGISTRY_ID as gt } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as Tt, deactivate as St, component as ht, inject as Ze } from "@eclipse-daanse/tsm";
-import { defineComponent as Qe, mergeModels as ft, inject as me, toRefs as _t, useModel as et, ref as p, computed as z, watch as Me, onMounted as tt, onUnmounted as mt, createElementBlock as $, openBlock as P, withModifiers as We, createElementVNode as S, createCommentVNode as ce, normalizeStyle as he, Fragment as at, renderList as pt, toDisplayString as Y, normalizeClass as It, withDirectives as Nt, createStaticVNode as bt, vModelSelect as Mt, resolveComponent as fe, createBlock as ze, withCtx as wt, createVNode as ee } from "vue";
+import { activate as St, deactivate as Tt, component as ht, inject as Ze } from "@eclipse-daanse/tsm";
+import { defineComponent as Qe, mergeModels as ft, inject as me, toRefs as _t, useModel as et, ref as p, computed as z, watch as Me, onMounted as tt, onUnmounted as mt, createElementBlock as $, openBlock as P, withModifiers as We, createElementVNode as T, createCommentVNode as ce, normalizeStyle as he, Fragment as at, renderList as pt, toDisplayString as Y, normalizeClass as It, withDirectives as Nt, createStaticVNode as bt, vModelSelect as Mt, resolveComponent as fe, createBlock as ze, withCtx as wt, createVNode as ee } from "vue";
 import { useRoute as Rt } from "vue-router";
-import { VariableWrapper as ye } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { VariableWrapper as Ae } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { identifier as st } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { WidgetAction as Ce } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEObject as rt, BasicEFactory as Dt, BasicEPackage as At, EPackageRegistry as yt, BasicEClass as qe, BasicEAttribute as A, BasicEReference as Vt, getEcorePackage as y } from "@emfts/core";
+import { BasicEObject as rt, BasicEFactory as Dt, BasicEPackage as yt, EPackageRegistry as At, BasicEClass as qe, BasicEAttribute as y, BasicEReference as Vt, getEcorePackage as A } from "@emfts/core";
 import { WIDGET_SERVICE_ID as Ct } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: Lt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
 var Ot = Object.defineProperty, xt = Object.getOwnPropertyDescriptor, Oe = (V, e, t, g) => {
@@ -112,7 +112,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         widgetId: g.value,
         payload: { widgetId: g.value, timestamp: Date.now() }
       });
-    }, T = p(null), G = p(new ye("")), B = p(new ye("")), M = p(!1), C = p(a.value.playbackSpeed || 1), m = p(!1), k = p(), w = p(null), x = p(null), R = p(null);
+    }, S = p(null), G = p(new Ae("")), B = p(new Ae("")), M = p(!1), C = p(a.value.playbackSpeed || 1), m = p(!1), k = p(), w = p(null), x = p(null), R = p(null);
     let ie = null, Ie = 0;
     const we = new Date(Date.now() - 720 * 60 * 60 * 1e3), Ne = new Date(Date.now() + 10080 * 60 * 1e3), Re = new Date(Date.now() - 1440 * 60 * 1e3), be = /* @__PURE__ */ new Date(), xe = (n, r) => {
       const E = /* @__PURE__ */ new Date(), l = new Date(E), c = Number(n) || 24;
@@ -144,24 +144,24 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       );
       a.value.timelineMin = n.toISOString(), a.value.timelineMax = r.toISOString();
       const l = (r.getTime() - n.getTime()) * 0.2, c = r, h = new Date(r.getTime() - l);
-      if (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = c.toISOString(), a.value.rangeStartVariable && T.value) {
-        const f = T.value.getVariable(a.value.rangeStartVariable);
+      if (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = c.toISOString(), a.value.rangeStartVariable && S.value) {
+        const f = S.value.getVariable(a.value.rangeStartVariable);
         f && (f.value = h.toISOString());
       }
-      if (a.value.rangeEndVariable && T.value) {
-        const f = T.value.getVariable(a.value.rangeEndVariable);
+      if (a.value.rangeEndVariable && S.value) {
+        const f = S.value.getVariable(a.value.rangeEndVariable);
         f && (f.value = c.toISOString());
       }
     }, Q = z(() => a.value.timelineMin ? new Date(a.value.timelineMin) : we), U = z(() => a.value.timelineMax ? new Date(a.value.timelineMax) : Ne), Z = z(() => {
-      if (a.value.rangeStartVariable && T.value) {
-        const n = T.value.getVariable(a.value.rangeStartVariable);
+      if (a.value.rangeStartVariable && S.value) {
+        const n = S.value.getVariable(a.value.rangeStartVariable);
         if (n && n.value)
           return new Date(n.value);
       }
       return a.value.rangeStart ? new Date(a.value.rangeStart) : Re;
     }), K = z(() => {
-      if (a.value.rangeEndVariable && T.value) {
-        const n = T.value.getVariable(a.value.rangeEndVariable);
+      if (a.value.rangeEndVariable && S.value) {
+        const n = S.value.getVariable(a.value.rangeEndVariable);
         if (n && n.value)
           return new Date(n.value);
       }
@@ -254,7 +254,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       return E > 0 ? `${E}d ${r % 24}h` : r > 0 ? `${r}h` : `${Math.floor(n / (1e3 * 60))}min`;
     }, _ = () => k.value?.getBoundingClientRect();
     let Ee = null;
-    const Ae = (n, r, E = !1) => {
+    const ye = (n, r, E = !1) => {
       const l = a.value.fixStartKnob ? Q.value : n || Z.value, c = r || K.value;
       if (!l || isNaN(l.getTime()) || !c || isNaN(c.getTime())) {
         console.warn("Invalid date values in updateConfig:", { actualStart: l, actualEnd: c });
@@ -266,12 +266,12 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
           rangeStart: l.toISOString(),
           rangeEnd: c.toISOString(),
           playbackSpeed: C.value
-        }, a.value.rangeStartVariable && T.value) {
-          const f = T.value.getVariable(a.value.rangeStartVariable);
+        }, a.value.rangeStartVariable && S.value) {
+          const f = S.value.getVariable(a.value.rangeStartVariable);
           f && (f.value = l.toISOString());
         }
-        if (a.value.rangeEndVariable && T.value) {
-          const f = T.value.getVariable(a.value.rangeEndVariable);
+        if (a.value.rangeEndVariable && S.value) {
+          const f = S.value.getVariable(a.value.rangeEndVariable);
           f && (f.value = c.toISOString());
         }
       };
@@ -289,13 +289,13 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         const ge = ve.clientX - E;
         let q = f + ge * h;
         q = Math.max(l, Math.min(q, N - 6e4)), X = q;
-        const oe = Math.max(0, Math.min(100, (q - l) / D * 100)), Te = Math.max(0, Math.min(100, (N - l) / D * 100));
+        const oe = Math.max(0, Math.min(100, (q - l) / D * 100)), Se = Math.max(0, Math.min(100, (N - l) / D * 100));
         w.value = oe, R.value = {
           left: oe + "%",
-          width: Te - oe + "%"
+          width: Se - oe + "%"
         };
       }, ne = () => {
-        m.value = !1, w.value = null, R.value = null, Ae(new Date(X), new Date(N), !0), document.removeEventListener("mousemove", re), document.removeEventListener("mouseup", ne);
+        m.value = !1, w.value = null, R.value = null, ye(new Date(X), new Date(N), !0), document.removeEventListener("mousemove", re), document.removeEventListener("mouseup", ne);
       };
       document.addEventListener("mousemove", re), document.addEventListener("mouseup", ne);
     }, Xe = (n) => {
@@ -309,13 +309,13 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         const ge = ve.clientX - E;
         let q = f + ge * h;
         q = Math.min(c, Math.max(q, N + 6e4)), X = q;
-        const oe = Math.max(0, Math.min(100, (N - l) / D * 100)), Te = Math.max(0, Math.min(100, (q - l) / D * 100));
-        x.value = Te, R.value = {
+        const oe = Math.max(0, Math.min(100, (N - l) / D * 100)), Se = Math.max(0, Math.min(100, (q - l) / D * 100));
+        x.value = Se, R.value = {
           left: oe + "%",
-          width: Te - oe + "%"
+          width: Se - oe + "%"
         };
       }, ne = () => {
-        m.value = !1, x.value = null, R.value = null, Ae(new Date(N), new Date(X), !0), document.removeEventListener("mousemove", re), document.removeEventListener("mouseup", ne);
+        m.value = !1, x.value = null, R.value = null, ye(new Date(N), new Date(X), !0), document.removeEventListener("mousemove", re), document.removeEventListener("mouseup", ne);
       };
       document.addEventListener("mousemove", re), document.addEventListener("mouseup", ne);
     }, lt = (n) => {
@@ -330,16 +330,16 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       let re = f, ne = N;
       const ve = (q) => {
         if (!m.value) return;
-        const Te = (q.clientX - E) * h;
-        let ue = f + Te, Se = ue + D;
-        ue < l && (ue = l, Se = ue + D), Se > c && (Se = c, ue = Se - D), re = ue, ne = Se;
-        const Ue = Math.max(0, Math.min(100, (ue - l) / X * 100)), Ye = Math.max(0, Math.min(100, (Se - l) / X * 100));
+        const Se = (q.clientX - E) * h;
+        let ue = f + Se, Te = ue + D;
+        ue < l && (ue = l, Te = ue + D), Te > c && (Te = c, ue = Te - D), re = ue, ne = Te;
+        const Ue = Math.max(0, Math.min(100, (ue - l) / X * 100)), Ye = Math.max(0, Math.min(100, (Te - l) / X * 100));
         w.value = Ue, x.value = Ye, R.value = {
           left: Ue + "%",
           width: Ye - Ue + "%"
         };
       }, ge = () => {
-        m.value = !1, w.value = null, x.value = null, R.value = null, Ae(new Date(re), new Date(ne), !0), document.removeEventListener("mousemove", ve), document.removeEventListener("mouseup", ge);
+        m.value = !1, w.value = null, x.value = null, R.value = null, ye(new Date(re), new Date(ne), !0), document.removeEventListener("mousemove", ve), document.removeEventListener("mouseup", ge);
       };
       document.addEventListener("mousemove", ve), document.addEventListener("mouseup", ge);
     }, ot = () => {
@@ -369,18 +369,18 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
           Pe(), M.value = !1;
           return;
         }
-        Ae(new Date(N), new Date(D)), Ie = n;
+        ye(new Date(N), new Date(D)), Ie = n;
       }
       ie = requestAnimationFrame($e);
     };
     Me(() => a.value.rangeStartVariable, (n) => {
-      if (n && T.value) {
-        const r = T.value.getVariable(n);
+      if (n && S.value) {
+        const r = S.value.getVariable(n);
         r && G.value.setTo(r);
       }
     }), Me(() => a.value.rangeEndVariable, (n) => {
-      if (n && T.value) {
-        const r = T.value.getVariable(n);
+      if (n && S.value) {
+        const r = S.value.getVariable(n);
         r && B.value.setTo(r);
       }
     }), Me(() => G.value.value, (n) => {
@@ -392,16 +392,16 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
     return tt(() => {
       g?.value && O.registerInstance(g.value, j, "TimelineWidget", te);
       try {
-        if (T.value = ct ?? null, !T.value) throw new Error("VariableRepository not provided");
+        if (S.value = ct ?? null, !S.value) throw new Error("VariableRepository not provided");
       } catch (n) {
         console.warn("VariableRepository not found in container:", n);
       }
-      if (a.value.timelineMin || (a.value.timelineMin = we.toISOString()), a.value.timelineMax || (a.value.timelineMax = Ne.toISOString()), a.value.rangeStart || (a.value.rangeStart = Re.toISOString()), a.value.rangeEnd || (a.value.rangeEnd = be.toISOString()), a.value.playbackSpeed ? C.value = a.value.playbackSpeed : (a.value.playbackSpeed = 1, C.value = 1), a.value.rangeStripColor || (a.value.rangeStripColor = "#d17600"), a.value.fixStartKnob === void 0 && (a.value.fixStartKnob = !1), a.value.showTimeInfo === void 0 && (a.value.showTimeInfo = !0), a.value.showControls === void 0 && (a.value.showControls = !0), a.value.stepSize === void 0 && (a.value.stepSize = "hour"), a.value.rangeStartVariable && T.value) {
-        const n = T.value.getVariable(a.value.rangeStartVariable);
+      if (a.value.timelineMin || (a.value.timelineMin = we.toISOString()), a.value.timelineMax || (a.value.timelineMax = Ne.toISOString()), a.value.rangeStart || (a.value.rangeStart = Re.toISOString()), a.value.rangeEnd || (a.value.rangeEnd = be.toISOString()), a.value.playbackSpeed ? C.value = a.value.playbackSpeed : (a.value.playbackSpeed = 1, C.value = 1), a.value.rangeStripColor || (a.value.rangeStripColor = "#d17600"), a.value.fixStartKnob === void 0 && (a.value.fixStartKnob = !1), a.value.showTimeInfo === void 0 && (a.value.showTimeInfo = !0), a.value.showControls === void 0 && (a.value.showControls = !0), a.value.stepSize === void 0 && (a.value.stepSize = "hour"), a.value.rangeStartVariable && S.value) {
+        const n = S.value.getVariable(a.value.rangeStartVariable);
         n && G.value.setTo(n);
       }
-      if (a.value.rangeEndVariable && T.value) {
-        const n = T.value.getVariable(a.value.rangeEndVariable);
+      if (a.value.rangeEndVariable && S.value) {
+        const n = S.value.getVariable(a.value.rangeEndVariable);
         n && B.value.setTo(n);
       }
       a.value.relativeTime?.enabled && Fe();
@@ -412,14 +412,14 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       onClick: se,
       onContextmenu: We(i, ["prevent"])
     }, [
-      S("div", Ft, [
-        S("div", {
+      T("div", Ft, [
+        T("div", {
           class: "timeline-track",
           ref_key: "trackRef",
           ref: k,
           style: he(Ge.value)
         }, [
-          S("div", {
+          T("div", {
             class: "range-strip",
             style: he(W.value),
             onMousedown: lt,
@@ -432,7 +432,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
               onMousedown: We(it, ["stop"]),
               title: "Startzeit"
             }, null, 36)),
-            S("div", {
+            T("div", {
               class: "timeline-knob end-knob",
               style: he({ zIndex: F.value ? 3 : 4 }),
               onMousedown: We(Xe, ["stop"]),
@@ -440,47 +440,47 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
             }, null, 36)
           ], 44, Gt)
         ], 4),
-        S("div", kt, [
+        T("div", kt, [
           (P(!0), $(at, null, pt(le.value, (E) => (P(), $("div", {
             key: E.timestamp,
             class: "time-tick",
             style: he({ left: E.position + "%" })
           }, [
-            r[1] || (r[1] = S("div", { class: "tick-mark" }, null, -1)),
-            S("div", Pt, Y(E.label), 1)
+            r[1] || (r[1] = T("div", { class: "tick-mark" }, null, -1)),
+            T("div", Pt, Y(E.label), 1)
           ], 4))), 128))
         ])
       ]),
       a.value.showTimeInfo !== !1 ? (P(), $("div", Ut, [
-        S("div", Wt, [
-          r[2] || (r[2] = S("span", { class: "time-label" }, "Start:", -1)),
-          S("span", zt, Y(H(Z.value)), 1)
+        T("div", Wt, [
+          r[2] || (r[2] = T("span", { class: "time-label" }, "Start:", -1)),
+          T("span", zt, Y(H(Z.value)), 1)
         ]),
-        S("div", Kt, [
-          r[3] || (r[3] = S("span", { class: "time-label" }, "Ende:", -1)),
-          S("span", Ht, Y(H(K.value)), 1)
+        T("div", Kt, [
+          r[3] || (r[3] = T("span", { class: "time-label" }, "Ende:", -1)),
+          T("span", Ht, Y(H(K.value)), 1)
         ]),
-        S("div", Xt, [
-          r[4] || (r[4] = S("span", { class: "time-label" }, "Dauer:", -1)),
-          S("span", $t, Y(ke()), 1)
+        T("div", Xt, [
+          r[4] || (r[4] = T("span", { class: "time-label" }, "Dauer:", -1)),
+          T("span", $t, Y(ke()), 1)
         ])
       ])) : ce("", !0),
       a.value.showControls !== !1 ? (P(), $("div", Yt, [
-        S("button", {
+        T("button", {
           class: It(["play-button", { playing: M.value }]),
           style: he(u.value),
           onClick: ot,
           disabled: I.value
         }, [
           M.value ? (P(), $("svg", qt, [...r[6] || (r[6] = [
-            S("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
+            T("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
           ])])) : (P(), $("svg", Zt, [...r[5] || (r[5] = [
-            S("path", { d: "M8 5v14l11-7z" }, null, -1)
+            T("path", { d: "M8 5v14l11-7z" }, null, -1)
           ])]))
         ], 14, jt),
-        S("div", Jt, [
-          r[8] || (r[8] = S("label", null, "Geschwindigkeit:", -1)),
-          Nt(S("select", {
+        T("div", Jt, [
+          r[8] || (r[8] = T("label", null, "Geschwindigkeit:", -1)),
+          Nt(T("select", {
             "onUpdate:modelValue": r[0] || (r[0] = (E) => C.value = E)
           }, [...r[7] || (r[7] = [
             bt('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
@@ -533,7 +533,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       fixStartKnob: !1,
       showTimeInfo: !0,
       showControls: !0
-    }), T = p(!1), G = p(), B = p(), M = p(), C = p(), m = p(null), k = p(!1), w = p(!1), x = p(new ye("")), R = p(new ye("")), ie = z(() => m.value ? m.value.getAllVariables().map(([d, u]) => u).filter((d) => d.value && typeof d.value == "string").map((d) => ({ name: d.name, value: d.value })) : []), Ie = [
+    }), S = p(!1), G = p(), B = p(), M = p(), C = p(), m = p(null), k = p(!1), w = p(!1), x = p(new Ae("")), R = p(new Ae("")), ie = z(() => m.value ? m.value.getAllVariables().map(([d, u]) => u).filter((d) => d.value && typeof d.value == "string").map((d) => ({ name: d.name, value: d.value })) : []), Ie = [
       { text: "Hours", value: "hours" },
       { text: "Days", value: "days" },
       { text: "Weeks", value: "weeks" },
@@ -611,7 +611,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       const L = {
         ...i.value,
         timelineMin: i.value.timelineMin,
-        timelineMax: T.value ? (/* @__PURE__ */ new Date()).toISOString() : i.value.timelineMax,
+        timelineMax: S.value ? (/* @__PURE__ */ new Date()).toISOString() : i.value.timelineMax,
         rangeStart: d,
         rangeEnd: u,
         relativeTime: i.value.relativeTime,
@@ -627,7 +627,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       };
       Object.assign(g.value, L);
     }, De = () => {
-      T.value || i.value.timelineMax || (i.value.timelineMax = new Date(Date.now() + 10080 * 60 * 1e3).toISOString()), W();
+      S.value || i.value.timelineMax || (i.value.timelineMax = new Date(Date.now() + 10080 * 60 * 1e3).toISOString()), W();
     }, Ge = () => {
       const d = /* @__PURE__ */ new Date(), u = new Date(d.getTime() - 720 * 60 * 60 * 1e3), L = new Date(d.getTime() + 10080 * 60 * 1e3), I = new Date(d.getTime() - 1440 * 60 * 1e3), F = /* @__PURE__ */ new Date();
       i.value = {
@@ -647,7 +647,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         fixStartKnob: !1,
         showTimeInfo: !0,
         showControls: !0
-      }, v.value = "absolute", T.value = !1, W();
+      }, v.value = "absolute", S.value = !1, W();
     }, Be = me(st);
     return tt(() => {
       try {
@@ -656,7 +656,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         console.warn("VariableRepository not found in container:", d);
       }
       if (g.value && g.value.timelineMin) {
-        if (Object.assign(i.value, g.value), T.value = !g.value.timelineMax, k.value = !!g.value.rangeStartVariable, w.value = !!g.value.rangeEndVariable, i.value.relativeTime || (i.value.relativeTime = {
+        if (Object.assign(i.value, g.value), S.value = !g.value.timelineMax, k.value = !!g.value.rangeStartVariable, w.value = !!g.value.rangeEndVariable, i.value.relativeTime || (i.value.relativeTime = {
           enabled: !1,
           offset: 24,
           unit: "hours"
@@ -672,7 +672,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         Ge();
       W();
     }), Me(() => g.value, (d) => {
-      d && (Object.assign(i.value, d), T.value = !d.timelineMax, d.relativeTime && (v.value = d.relativeTime.enabled ? "relative" : "absolute"));
+      d && (Object.assign(i.value, d), S.value = !d.timelineMax, d.relativeTime && (v.value = d.relativeTime.enabled ? "relative" : "absolute"));
     }, { deep: !0 }), (d, u) => {
       const L = fe("va-select"), I = fe("va-input"), F = fe("va-date-input"), le = fe("va-time-input"), H = fe("va-checkbox"), ke = fe("va-collapse");
       return P(), ze(ke, {
@@ -682,8 +682,8 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         header: "Zeitraum"
       }, {
         default: wt(() => [
-          S("div", ta, [
-            S("div", aa, [
+          T("div", ta, [
+            T("div", aa, [
               ee(L, {
                 modelValue: v.value,
                 "onUpdate:modelValue": [
@@ -697,9 +697,9 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
               }, null, 8, ["modelValue", "label"])
             ]),
             v.value === "relative" && i.value.relativeTime ? (P(), $("div", sa, [
-              S("label", null, Y(t("Relative Time Range")), 1),
-              S("div", ra, [
-                S("div", na, [
+              T("label", null, Y(t("Relative Time Range")), 1),
+              T("div", ra, [
+                T("div", na, [
                   ee(I, {
                     modelValue: i.value.relativeTime.offset,
                     "onUpdate:modelValue": [
@@ -726,13 +726,13 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                     class: "unit-select"
                   }, null, 8, ["modelValue", "label"])
                 ]),
-                S("div", ia, Y(t("Now")) + " - " + Y(i.value.relativeTime.offset) + " " + Y(t(i.value.relativeTime.unit)) + " → " + Y(t("Now")), 1)
+                T("div", ia, Y(t("Now")) + " - " + Y(i.value.relativeTime.offset) + " " + Y(t(i.value.relativeTime.unit)) + " → " + Y(t("Now")), 1)
               ])
             ])) : ce("", !0),
             v.value === "absolute" ? (P(), $(at, { key: 1 }, [
-              S("div", la, [
-                S("label", null, Y(t("Timeline Start")), 1),
-                S("div", oa, [
+              T("div", la, [
+                T("label", null, Y(t("Timeline Start")), 1),
+                T("div", oa, [
                   ee(F, {
                     modelValue: G.value,
                     "onUpdate:modelValue": [
@@ -751,17 +751,17 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                   }, null, 8, ["modelValue", "label"])
                 ])
               ]),
-              S("div", ua, [
-                S("label", null, Y(t("Timeline End")), 1),
+              T("div", ua, [
+                T("label", null, Y(t("Timeline End")), 1),
                 ee(H, {
-                  modelValue: T.value,
+                  modelValue: S.value,
                   "onUpdate:modelValue": [
-                    u[5] || (u[5] = (_) => T.value = _),
+                    u[5] || (u[5] = (_) => S.value = _),
                     De
                   ],
                   label: t("Use current time")
                 }, null, 8, ["modelValue", "label"]),
-                T.value ? ce("", !0) : (P(), $("div", ca, [
+                S.value ? ce("", !0) : (P(), $("div", ca, [
                   ee(F, {
                     modelValue: M.value,
                     "onUpdate:modelValue": [
@@ -781,9 +781,9 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                 ]))
               ])
             ], 64)) : ce("", !0),
-            S("div", da, [
-              S("label", null, Y(t("Variable Binding")), 1),
-              S("div", Ea, [
+            T("div", da, [
+              T("label", null, Y(t("Variable Binding")), 1),
+              T("div", Ea, [
                 ee(H, {
                   modelValue: k.value,
                   "onUpdate:modelValue": [
@@ -805,7 +805,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                   "value-by": "name"
                 }, null, 8, ["modelValue", "options", "label"])) : ce("", !0)
               ]),
-              S("div", va, [
+              T("div", va, [
                 ee(H, {
                   modelValue: w.value,
                   "onUpdate:modelValue": [
@@ -834,7 +834,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       }, 8, ["modelValue"]);
     };
   }
-}), Ta = /* @__PURE__ */ nt(ga, [["__scopeId", "data-v-0a85bc8a"]]), Sa = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", ha = [
+}), Sa = /* @__PURE__ */ nt(ga, [["__scopeId", "data-v-0a85bc8a"]]), Ta = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", ha = [
   { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: je },
   { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: je }
 ];
@@ -981,6 +981,20 @@ class b extends rt {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      enabled: this.enabled,
+      offset: this.offset,
+      unit: this.unit
+    };
+  }
 }
 class Ke extends Dt {
   // Lazy singleton instance
@@ -1017,7 +1031,7 @@ class Ke extends Dt {
     }
   }
 }
-class o extends At {
+class o extends yt {
   static eNAME = "timelinesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.timeline";
   static eNS_PREFIX = "timelinesettings";
@@ -1060,51 +1074,51 @@ class o extends At {
    * Initialize package contents
    */
   init() {
-    yt.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Ke.eINSTANCE);
+    At.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Ke.eINSTANCE);
     const e = new qe();
     e.setName("RelativeTimeConfig"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.RELATIVE_TIME_CONFIG = e;
-    const t = new A();
+    const t = new y();
     t.setName("enabled"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), o.Literals.RELATIVE_TIME_CONFIG__ENABLED = t;
-    const g = new A();
+    const g = new y();
     g.setName("offset"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), o.Literals.RELATIVE_TIME_CONFIG__OFFSET = g;
-    const a = new A();
+    const a = new y();
     a.setName("unit"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), o.Literals.RELATIVE_TIME_CONFIG__UNIT = a;
     const v = new qe();
     v.setName("TimelineSettings"), v.setAbstract(!1), v.setInterface(!1), this.getEClassifiers().push(v), v.setEPackage(this), o.Literals.TIMELINE_SETTINGS = v;
-    const O = new A();
+    const O = new y();
     O.setName("timelineMin"), O.setLowerBound(0), O.setUpperBound(1), v.getEStructuralFeatures().push(O), o.Literals.TIMELINE_SETTINGS__TIMELINE_MIN = O;
-    const J = new A();
+    const J = new y();
     J.setName("timelineMax"), J.setLowerBound(0), J.setUpperBound(1), v.getEStructuralFeatures().push(J), o.Literals.TIMELINE_SETTINGS__TIMELINE_MAX = J;
-    const te = new A();
+    const te = new y();
     te.setName("rangeStart"), te.setLowerBound(0), te.setUpperBound(1), v.getEStructuralFeatures().push(te), o.Literals.TIMELINE_SETTINGS__RANGE_START = te;
-    const ae = new A();
+    const ae = new y();
     ae.setName("rangeEnd"), ae.setLowerBound(0), ae.setUpperBound(1), v.getEStructuralFeatures().push(ae), o.Literals.TIMELINE_SETTINGS__RANGE_END = ae;
     const j = new Vt();
     j.setContainment(!0), j.setName("relativeTime"), j.setLowerBound(0), j.setUpperBound(1), v.getEStructuralFeatures().push(j), o.Literals.TIMELINE_SETTINGS__RELATIVE_TIME = j;
-    const se = new A();
+    const se = new y();
     se.setName("rangeStartVariable"), se.setLowerBound(0), se.setUpperBound(1), v.getEStructuralFeatures().push(se), o.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE = se;
-    const i = new A();
+    const i = new y();
     i.setName("rangeEndVariable"), i.setLowerBound(0), i.setUpperBound(1), v.getEStructuralFeatures().push(i), o.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE = i;
-    const T = new A();
-    T.setName("startTime"), T.setLowerBound(0), T.setUpperBound(1), v.getEStructuralFeatures().push(T), o.Literals.TIMELINE_SETTINGS__START_TIME = T;
-    const G = new A();
+    const S = new y();
+    S.setName("startTime"), S.setLowerBound(0), S.setUpperBound(1), v.getEStructuralFeatures().push(S), o.Literals.TIMELINE_SETTINGS__START_TIME = S;
+    const G = new y();
     G.setName("endTime"), G.setLowerBound(0), G.setUpperBound(1), v.getEStructuralFeatures().push(G), o.Literals.TIMELINE_SETTINGS__END_TIME = G;
-    const B = new A();
+    const B = new y();
     B.setName("currentTime"), B.setLowerBound(0), B.setUpperBound(1), v.getEStructuralFeatures().push(B), o.Literals.TIMELINE_SETTINGS__CURRENT_TIME = B;
-    const M = new A();
+    const M = new y();
     M.setName("stepSize"), M.setLowerBound(0), M.setUpperBound(1), v.getEStructuralFeatures().push(M), o.Literals.TIMELINE_SETTINGS__STEP_SIZE = M;
-    const C = new A();
+    const C = new y();
     C.setName("playbackSpeed"), C.setLowerBound(0), C.setUpperBound(1), v.getEStructuralFeatures().push(C), o.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED = C;
-    const m = new A();
+    const m = new y();
     m.setName("autoPlay"), m.setLowerBound(0), m.setUpperBound(1), v.getEStructuralFeatures().push(m), o.Literals.TIMELINE_SETTINGS__AUTO_PLAY = m;
-    const k = new A();
+    const k = new y();
     k.setName("fixStartKnob"), k.setLowerBound(0), k.setUpperBound(1), v.getEStructuralFeatures().push(k), o.Literals.TIMELINE_SETTINGS__FIX_START_KNOB = k;
-    const w = new A();
+    const w = new y();
     w.setName("showControls"), w.setLowerBound(0), w.setUpperBound(1), v.getEStructuralFeatures().push(w), o.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS = w;
-    const x = new A();
+    const x = new y();
     x.setName("rangeStripColor"), x.setLowerBound(0), x.setUpperBound(1), v.getEStructuralFeatures().push(x), o.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR = x;
-    const R = new A();
-    R.setName("showTimeInfo"), R.setLowerBound(0), R.setUpperBound(1), v.getEStructuralFeatures().push(R), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = R, o.Literals.RELATIVE_TIME_CONFIG__ENABLED.setEType(y().getEClassifier("EBoolean")), o.Literals.RELATIVE_TIME_CONFIG__OFFSET.setEType(y().getEClassifier("EInt")), o.Literals.RELATIVE_TIME_CONFIG__UNIT.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MIN.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MAX.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_START.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RELATIVE_TIME.setEType(o.Literals.RELATIVE_TIME_CONFIG), o.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__START_TIME.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__END_TIME.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__CURRENT_TIME.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__STEP_SIZE.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED.setEType(y().getEClassifier("EDouble")), o.Literals.TIMELINE_SETTINGS__AUTO_PLAY.setEType(y().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__FIX_START_KNOB.setEType(y().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS.setEType(y().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR.setEType(y().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO.setEType(y().getEClassifier("EBoolean"));
+    const R = new y();
+    R.setName("showTimeInfo"), R.setLowerBound(0), R.setUpperBound(1), v.getEStructuralFeatures().push(R), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = R, o.Literals.RELATIVE_TIME_CONFIG__ENABLED.setEType(A().getEClassifier("EBoolean")), o.Literals.RELATIVE_TIME_CONFIG__OFFSET.setEType(A().getEClassifier("EInt")), o.Literals.RELATIVE_TIME_CONFIG__UNIT.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MIN.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MAX.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_START.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RELATIVE_TIME.setEType(o.Literals.RELATIVE_TIME_CONFIG), o.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__START_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__END_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__CURRENT_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__STEP_SIZE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED.setEType(A().getEClassifier("EDouble")), o.Literals.TIMELINE_SETTINGS__AUTO_PLAY.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__FIX_START_KNOB.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO.setEType(A().getEClassifier("EBoolean"));
   }
 }
 class s extends rt {
@@ -1698,6 +1712,34 @@ class s extends rt {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      timelineMin: this.timelineMin,
+      timelineMax: this.timelineMax,
+      rangeStart: this.rangeStart,
+      rangeEnd: this.rangeEnd,
+      relativeTime: this.relativeTime,
+      rangeStartVariable: this.rangeStartVariable,
+      rangeEndVariable: this.rangeEndVariable,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      currentTime: this.currentTime,
+      stepSize: this.stepSize,
+      playbackSpeed: this.playbackSpeed,
+      autoPlay: this.autoPlay,
+      fixStartKnob: this.fixStartKnob,
+      showControls: this.showControls,
+      rangeStripColor: this.rangeStripColor,
+      showTimeInfo: this.showTimeInfo
+    };
+  }
 }
 const fa = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -1782,9 +1824,9 @@ let Ve = class {
   }
   type = _e;
   component = ea;
-  settingsComponent = Ta;
+  settingsComponent = Sa;
   supportedDSTypes = [];
-  icon = Sa;
+  icon = Ta;
   name = "Timeline";
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -1811,10 +1853,10 @@ let Ve = class {
   }
 };
 He([
-  Tt()
+  St()
 ], Ve.prototype, "register", 1);
 He([
-  St()
+  Tt()
 ], Ve.prototype, "unregister", 1);
 Ve = He([
   ht({
@@ -1828,7 +1870,7 @@ export {
   s as TimelineSettingsImpl,
   ea as TimelineWidget,
   Ve as TimelineWidgetProvider,
-  Ta as TimelineWidgetSettings,
+  Sa as TimelineWidgetSettings,
   o as TimelinesettingsPackage,
   fa as timelineSettingsFormXmi
 };

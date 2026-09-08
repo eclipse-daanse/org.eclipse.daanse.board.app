@@ -1,4 +1,4 @@
-import { BasicEFactory as m, BasicEPackage as S, EPackageRegistry as N, BasicEClass as T, BasicEAttribute as A, getEcorePackage as I, BasicEObject as g } from "@emfts/core";
+import { BasicEFactory as _, BasicEPackage as S, EPackageRegistry as N, BasicEClass as T, BasicEAttribute as A, getEcorePackage as h, BasicEObject as g } from "@emfts/core";
 const { serviceId: E } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), C = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
@@ -65,11 +65,11 @@ const { serviceId: E } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"
     </eClassifiers>
 
 </ecore:EPackage>`;
-class h extends m {
+class I extends _ {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
-    return this._instance || (this._instance = new h()), this._instance;
+    return this._instance || (this._instance = new I()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(s.eINSTANCE);
@@ -113,7 +113,7 @@ class s extends S {
    * Initialize package contents
    */
   init() {
-    N.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(h.eINSTANCE);
+    N.INSTANCE.set(s.eNS_URI, this), this.setEFactoryInstance(I.eINSTANCE);
     const e = new T();
     e.setName("Payload"), e.setAbstract(!0), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), s.Literals.PAYLOAD = e;
     const t = new A();
@@ -129,7 +129,7 @@ class s extends S {
     const c = new T();
     c.setName("SystemActionInterface"), c.setAbstract(!0), c.setInterface(!1), this.getEClassifiers().push(c), c.setEPackage(this), s.Literals.SYSTEM_ACTION_INTERFACE = c;
     const o = new T();
-    o.setName("PageActionInterface"), o.setAbstract(!0), o.setInterface(!1), this.getEClassifiers().push(o), o.setEPackage(this), s.Literals.PAGE_ACTION_INTERFACE = o, s.Literals.SYSTEM_ACTION_INTERFACE.getESuperTypes().push(s.Literals.WIDGET_ACTION_INTERFACE), s.Literals.PAGE_ACTION_INTERFACE.getESuperTypes().push(s.Literals.WIDGET_ACTION_INTERFACE), s.Literals.PAYLOAD__EVENT_TYPE.setEType(I().getEClassifier("EString")), s.Literals.PAYLOAD__WIDGET_ID.setEType(I().getEClassifier("EString")), s.Literals.PAYLOAD__TIMESTAMP.setEType(I().getEClassifier("ELong")), s.Literals.PAYLOAD__METADATA.setEType(I().getEClassifier("EJavaObject"));
+    o.setName("PageActionInterface"), o.setAbstract(!0), o.setInterface(!1), this.getEClassifiers().push(o), o.setEPackage(this), s.Literals.PAGE_ACTION_INTERFACE = o, s.Literals.SYSTEM_ACTION_INTERFACE.getESuperTypes().push(s.Literals.WIDGET_ACTION_INTERFACE), s.Literals.PAGE_ACTION_INTERFACE.getESuperTypes().push(s.Literals.WIDGET_ACTION_INTERFACE), s.Literals.PAYLOAD__EVENT_TYPE.setEType(h().getEClassifier("EString")), s.Literals.PAYLOAD__WIDGET_ID.setEType(h().getEClassifier("EString")), s.Literals.PAYLOAD__TIMESTAMP.setEType(h().getEClassifier("ELong")), s.Literals.PAYLOAD__METADATA.setEType(h().getEClassifier("EJavaObject"));
   }
 }
 class i extends g {
@@ -307,6 +307,21 @@ class i extends g {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      eventType: this.eventType,
+      widgetId: this.widgetId,
+      timestamp: this.timestamp,
+      metadata: this.metadata
+    };
+  }
 }
 class p extends g {
   // Feature ID Constants (eLiterals)
@@ -428,19 +443,19 @@ class F extends p {
     super.eUnset(e);
   }
 }
-const f = E("EventRegistry"), b = Symbol.for(f), D = E("EventActionsRegistry"), M = Symbol.for(D), w = E("EventManager"), L = Symbol.for(w), _ = E("EventBusBridge"), O = Symbol.for(_), R = E("EcoreMetadataService"), v = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const f = E("EventRegistry"), b = Symbol.for(f), D = E("EventActionsRegistry"), M = Symbol.for(D), w = E("EventManager"), L = Symbol.for(w), m = E("EventBusBridge"), O = Symbol.for(m), R = E("EcoreMetadataService"), v = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ECORE_METADATA_SERVICE_ID: R,
   EVENT_ACTIONS_REGISTRY: M,
   EVENT_ACTIONS_REGISTRY_ID: D,
   EVENT_BUS_BRIDGE: O,
-  EVENT_BUS_BRIDGE_ID: _,
+  EVENT_BUS_BRIDGE_ID: m,
   EVENT_MANAGER: L,
   EVENT_MANAGER_ID: w,
   EVENT_MODEL_ECORE: C,
   EVENT_REGISTRY: b,
   EVENT_REGISTRY_ID: f,
-  EventsFactory: h,
+  EventsFactory: I,
   EventsPackage: s,
   PageActionInterfaceImpl: F,
   PayloadImpl: i,
@@ -461,13 +476,13 @@ export {
   M as EVENT_ACTIONS_REGISTRY,
   D as EVENT_ACTIONS_REGISTRY_ID,
   O as EVENT_BUS_BRIDGE,
-  _ as EVENT_BUS_BRIDGE_ID,
+  m as EVENT_BUS_BRIDGE_ID,
   L as EVENT_MANAGER,
   w as EVENT_MANAGER_ID,
   C as EVENT_MODEL_ECORE,
   b as EVENT_REGISTRY,
   f as EVENT_REGISTRY_ID,
-  h as EventsFactory,
+  I as EventsFactory,
   s as EventsPackage,
   F as PageActionInterfaceImpl,
   i as PayloadImpl,

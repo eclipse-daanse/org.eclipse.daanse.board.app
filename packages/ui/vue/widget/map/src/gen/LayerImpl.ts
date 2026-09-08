@@ -502,4 +502,28 @@ export class LayerImpl extends BasicEObject implements Layer {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      datasourceId: this.datasourceId,
+      service: this.service,
+      type: this.type,
+      childs: this.childs,
+      level: this.level,
+      styleIds: this.styleIds?.toArray?.() ?? this.styleIds,
+      name: this.name,
+      title: this.title,
+      attribution: this.attribution,
+      geoJson: this.geoJson,
+      wfs_service: this.wfs_service,
+      opacity: this.opacity,
+    };
+  }
 }

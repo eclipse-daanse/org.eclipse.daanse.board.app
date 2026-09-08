@@ -1,8 +1,8 @@
 (function(){var i="ui.vue.widget.icon",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".icon[data-v-68eea9d7]{width:100%;height:100%;display:flex;justify-content:center;align-items:center}.material-symbols-outlined[data-v-68eea9d7]{font-family:Material Symbols Outlined;font-weight:400;font-style:normal;font-size:var(--d221fe60);color:var(--v9c7b78b2);display:inline-block;line-height:1;text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr}.settings-container[data-v-a8457eeb]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.icons-container[data-v-a8457eeb]{display:flex;flex-wrap:wrap;gap:10px;max-height:220px;overflow-y:auto;overflow-x:hidden;width:100%;cursor:pointer;padding:10px}.material-symbols-outlined[data-v-a8457eeb]{font-family:Material Symbols Outlined;font-weight:400;font-style:inherit;font-size:40px;display:inline-block;line-height:1;text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr;border:2px solid transparent;border-radius:5px;transition:border-color .5s ease,transform .5s ease}.material-symbols-outlined[data-v-a8457eeb]:hover{transform:scale(1.1)}.active-icon[data-v-a8457eeb]{border:2px solid rgb(0,121,0)}.slider[data-v-a8457eeb]{padding:0 10px}\n";})();
 import { PayloadImpl as U, EventsPackage as ee, EVENT_REGISTRY_ID as te } from "org.eclipse.daanse.board.app.lib.api.events";
 import { activate as _e, deactivate as ae, component as oe, inject as re, initTsmRuntime as ie } from "@eclipse-daanse/tsm";
-import { defineComponent as B, mergeModels as se, useCssVars as ne, unref as A, toRefs as le, useModel as Z, inject as H, onMounted as K, computed as k, createElementBlock as O, openBlock as T, Fragment as G, createElementVNode as C, withModifiers as ce, mergeProps as de, toDisplayString as Y, ref as S, resolveComponent as N, createVNode as g, withCtx as D, normalizeStyle as ue, renderList as pe, normalizeClass as me } from "vue";
-import { VariableWrapper as I, useVariableRepository as he } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { defineComponent as B, mergeModels as se, useCssVars as ne, unref as A, toRefs as le, useModel as Z, inject as H, onMounted as K, computed as k, createElementBlock as O, openBlock as T, Fragment as G, createElementVNode as C, withModifiers as ce, mergeProps as de, toDisplayString as Y, ref as S, resolveComponent as N, createVNode as g, withCtx as D, normalizeStyle as ue, renderList as pe, normalizeClass as he } from "vue";
+import { VariableWrapper as I, useVariableRepository as me } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { BasicEFactory as ge, BasicEPackage as fe, EPackageRegistry as $, BasicEClass as F, BasicEReference as be, BasicEAttribute as y, getEcorePackage as v, BasicEObject as we } from "@emfts/core";
 import { VariableInput as ve } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as ke } from "org.eclipse.daanse.board.app.lib.api.widget";
@@ -86,6 +86,18 @@ class b extends U {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      iconName: this.iconName
+    };
+  }
 }
 class w extends U {
   // Feature ID Constants (eLiterals)
@@ -165,6 +177,18 @@ class w extends U {
       default:
         super.eUnset(e);
     }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      iconName: this.iconName
+    };
   }
 }
 class W extends ge {
@@ -266,14 +290,14 @@ class o extends fe {
     p.setName("grade"), p.setLowerBound(0), p.setUpperBound(1), e.getEStructuralFeatures().push(p), o.Literals.ICON_SETTINGS__GRADE = p;
     const f = new y();
     f.setName("currentIcon"), f.setLowerBound(0), f.setUpperBound(1), e.getEStructuralFeatures().push(f), o.Literals.ICON_SETTINGS__CURRENT_ICON = f;
-    const m = new F();
-    m.setName("IconClickPayload"), m.setAbstract(!1), m.setInterface(!1), this.getEClassifiers().push(m), m.setEPackage(this), o.Literals.ICON_CLICK_PAYLOAD = m;
-    const u = new y();
-    u.setName("iconName"), u.setLowerBound(0), u.setUpperBound(1), m.getEStructuralFeatures().push(u), o.Literals.ICON_CLICK_PAYLOAD__ICON_NAME = u;
     const h = new F();
-    h.setName("IconRightClickPayload"), h.setAbstract(!1), h.setInterface(!1), this.getEClassifiers().push(h), h.setEPackage(this), o.Literals.ICON_RIGHT_CLICK_PAYLOAD = h;
+    h.setName("IconClickPayload"), h.setAbstract(!1), h.setInterface(!1), this.getEClassifiers().push(h), h.setEPackage(this), o.Literals.ICON_CLICK_PAYLOAD = h;
+    const u = new y();
+    u.setName("iconName"), u.setLowerBound(0), u.setUpperBound(1), h.getEStructuralFeatures().push(u), o.Literals.ICON_CLICK_PAYLOAD__ICON_NAME = u;
+    const m = new F();
+    m.setName("IconRightClickPayload"), m.setAbstract(!1), m.setInterface(!1), this.getEClassifiers().push(m), m.setEPackage(this), o.Literals.ICON_RIGHT_CLICK_PAYLOAD = m;
     const r = new y();
-    r.setName("iconName"), r.setLowerBound(0), r.setUpperBound(1), h.getEStructuralFeatures().push(r), o.Literals.ICON_RIGHT_CLICK_PAYLOAD__ICON_NAME = r, o.Literals.ICON_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.ICON_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.ICON_SETTINGS__ICON_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.ICON_SETTINGS__ICON_SIZE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__IS_ICON_FILLED.setEType(v().getEClassifier("EBoolean")), o.Literals.ICON_SETTINGS__STROKE_WEIGHT.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__OPTIC_SIZE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__GRADE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__CURRENT_ICON.setEType(v().getEClassifier("EString")), o.Literals.ICON_CLICK_PAYLOAD__ICON_NAME.setEType(v().getEClassifier("EString")), o.Literals.ICON_RIGHT_CLICK_PAYLOAD__ICON_NAME.setEType(v().getEClassifier("EString"));
+    r.setName("iconName"), r.setLowerBound(0), r.setUpperBound(1), m.getEStructuralFeatures().push(r), o.Literals.ICON_RIGHT_CLICK_PAYLOAD__ICON_NAME = r, o.Literals.ICON_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.ICON_RIGHT_CLICK_PAYLOAD.getESuperTypes().push(R("http://org.eclipse.daanse.board.app.lib.events").getEClassifier("Payload")), o.Literals.ICON_SETTINGS__ICON_COLOR.setEType(R("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), o.Literals.ICON_SETTINGS__ICON_SIZE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__IS_ICON_FILLED.setEType(v().getEClassifier("EBoolean")), o.Literals.ICON_SETTINGS__STROKE_WEIGHT.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__OPTIC_SIZE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__GRADE.setEType(v().getEClassifier("EInt")), o.Literals.ICON_SETTINGS__CURRENT_ICON.setEType(v().getEClassifier("EString")), o.Literals.ICON_CLICK_PAYLOAD__ICON_NAME.setEType(v().getEClassifier("EString")), o.Literals.ICON_RIGHT_CLICK_PAYLOAD__ICON_NAME.setEType(v().getEClassifier("EString"));
   }
 }
 class a extends we {
@@ -547,6 +571,24 @@ class a extends we {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      iconColor: this.iconColor,
+      iconSize: this.iconSize,
+      isIconFilled: this.isIconFilled,
+      strokeWeight: this.strokeWeight,
+      opticSize: this.opticSize,
+      grade: this.grade,
+      currentIcon: this.currentIcon
+    };
+  }
 }
 const Ie = /* @__PURE__ */ B({
   __name: "IconWidget",
@@ -560,9 +602,9 @@ const Ie = /* @__PURE__ */ B({
   setup(l) {
     ne((r) => ({
       d221fe60: A(u) + "px",
-      v9c7b78b2: A(m)
+      v9c7b78b2: A(h)
     }));
-    const e = l, { id: t } = le(e), { wrapParameters: s } = he(), _ = Z(l, "configv"), d = new a(), c = H(ye.TINY_EMITTER);
+    const e = l, { id: t } = le(e), { wrapParameters: s } = me(), _ = Z(l, "configv"), d = new a(), c = H(ye.TINY_EMITTER);
     K(() => {
       if (_.value) {
         Object.assign(_.value, { ...d, ..._.value });
@@ -602,12 +644,12 @@ const Ie = /* @__PURE__ */ B({
         payload: r
       });
     }, {
-      iconColor: m,
+      iconColor: h,
       iconSize: u
     } = s({
       iconColor: k(() => _.value.iconColor?.value || "var(--color-fg)"),
       iconSize: k(() => _.value.iconSize)
-    }), h = k(() => {
+    }), m = k(() => {
       if (_.value)
         return `
         font-variation-settings:
@@ -629,7 +671,7 @@ const Ie = /* @__PURE__ */ B({
         style: { cursor: "pointer" }
       }, [
         C("span", de(r.$attrs, {
-          style: h.value,
+          style: m.value,
           class: "material-symbols-outlined"
         }), Y(_.value.currentIcon), 17)
       ], 32)
@@ -657,13 +699,13 @@ const Ie = /* @__PURE__ */ B({
       JSON.parse(localStorage.getItem("isDarkTheme") || "false")
     ), c = S([]), p = S(""), f = k(() => c.value.filter(
       (r) => r.toLowerCase().includes(p.value.toLowerCase())
-    )), m = (r) => {
+    )), h = (r) => {
       r && (_.value.currentIcon = r);
     };
     K(() => {
       c.value = Ne;
     });
-    const u = k(() => d.value ? "#ffffff" : ""), h = k(() => 'font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 100, "opsz" 48;');
+    const u = k(() => d.value ? "#ffffff" : ""), m = k(() => 'font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 100, "opsz" 48;');
     return (r, i) => {
       const E = N("va-input"), q = N("va-collapse"), J = N("va-checkbox"), Q = N("va-color-input"), x = N("va-slider");
       return T(), O(G, null, [
@@ -683,12 +725,12 @@ const Ie = /* @__PURE__ */ B({
               }, null, 8, ["modelValue", "label"]),
               C("div", {
                 class: "icons-container",
-                style: ue(h.value)
+                style: ue(m.value)
               }, [
                 (T(!0), O(G, null, pe(f.value, (n) => (T(), O("span", {
                   key: n,
-                  onClick: (j) => m(n),
-                  class: me(["material-symbols-outlined", { "active-icon": n === _.value.currentIcon }])
+                  onClick: (j) => h(n),
+                  class: he(["material-symbols-outlined", { "active-icon": n === _.value.currentIcon }])
                 }, Y(n), 11, xe))), 128))
               ], 4)
             ])

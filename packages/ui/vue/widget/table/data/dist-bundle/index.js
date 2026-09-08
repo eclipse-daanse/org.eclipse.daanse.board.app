@@ -306,6 +306,18 @@ class g extends Ee {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      headerBackground: this.headerBackground
+    };
+  }
 }
 const xe = `<?xml version="1.0" encoding="UTF-8"?>
 <!--

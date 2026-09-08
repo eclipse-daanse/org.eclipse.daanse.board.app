@@ -444,4 +444,26 @@ export class ConditionalFormatImpl extends BasicEObject implements ConditionalFo
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      id: this.id,
+      conditionType: this.conditionType,
+      priority: this.priority,
+      value1: this.value1,
+      value2: this.value2,
+      backgroundColor: this.backgroundColor,
+      textColor: this.textColor,
+      minColor: this.minColor,
+      maxColor: this.maxColor,
+      fontWeight: this.fontWeight,
+    };
+  }
 }

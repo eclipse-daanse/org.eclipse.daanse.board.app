@@ -208,4 +208,20 @@ export class ObservationImpl extends BasicEObject implements Observation {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      setting: this.setting,
+      component: this.component,
+      renderer: this.renderer,
+      conditions: this.conditions?.toArray?.() ?? this.conditions,
+    };
+  }
 }

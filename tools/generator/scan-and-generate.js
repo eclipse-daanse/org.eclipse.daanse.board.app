@@ -225,6 +225,65 @@ function pruneUnusedNamedImports(file) {
   if (after !== before) writeFileSync(file, after)
 }
 
+/**
+ * WORKAROUND (emf.ts.codegen): an Impl keeps its values in private fields
+ * behind the getters, so JSON.stringify writes _title and _borderColor
+ * rather than title and borderColor. A stored workspace then holds names
+ * that only this class knows, and everything reading a board back - our
+ * own adopt(), the variable-wrapper factory, anything hand-written that
+ * spreads a settings object - has to know the convention or silently miss
+ * every value.
+ *
+ * Giving the class a toJSON() makes it store what the model calls these.
+ * Values are left as they are: a VariableWrapper serialises itself the way
+ * the rest of the application already reads it.
+ */
+function addToJson(file) {
+  if (!file.endsWith('Impl.ts')) return
+  const before = readFileSync(file, 'utf8')
+  if (before.includes('toJSON(')) return
+
+  /*
+   * Only the classes that hold model values; a factory or package has none.
+   *
+   * Three shapes come out of the generator and all three have to match:
+   * a field with a default, an optional one, and one the generator asserts
+   * is assigned - which is what a many-valued feature gets.
+   */
+  const fields = [...before.matchAll(/^  private _([A-Za-z0-9_]+)[!?]?\s*:\s*([^=;]+?)\s*(?:=[^;]*)?;/gm)]
+  if (!fields.length) return
+
+  const lines = fields.map(([, name, type = '']) => {
+    /* A list is stored as the values in it, not as the list object */
+    const many = /\bEList\s*</.test(type)
+    return many
+      ? `      ${name}: this.${name}?.toArray?.() ?? this.${name},`
+      : `      ${name}: this.${name},`
+  })
+
+  const method = [
+    '',
+    '  /**',
+    '   * What this object is when it is stored.',
+    '   *',
+    '   * The plain names, not the private fields the getters sit in: those',
+    '   * are this class\'s business, and a stored board is read by things',
+    '   * that only know the model.',
+    '   */',
+    '  toJSON(): Record<string, unknown> {',
+    '    return {',
+    ...lines,
+    '    };',
+    '  }',
+    '',
+  ].join('\n')
+
+  /* Before the final closing brace of the class */
+  const at = before.lastIndexOf('\n}')
+  if (at < 0) return
+  writeFileSync(file, before.slice(0, at) + '\n' + method + before.slice(at + 1))
+}
+
 function collapseSubpathImports(file) {
   const before = readFileSync(file, 'utf8')
   const after = before.replace(
@@ -303,6 +362,7 @@ for (const [pkgDir, pkgModels] of byPackage) {
             fixArrayDefaults(join(genDir, entry))
             collapseSubpathImports(join(genDir, entry))
             pruneUnusedNamedImports(join(genDir, entry))
+            addToJson(join(genDir, entry))
           }
         }
       }

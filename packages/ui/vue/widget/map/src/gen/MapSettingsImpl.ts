@@ -500,4 +500,30 @@ export class MapSettingsImpl extends BasicEObject implements MapSettings {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      datasourceId: this.datasourceId,
+      datasourceIds: this.datasourceIds?.toArray?.() ?? this.datasourceIds,
+      baseMapUrl: this.baseMapUrl,
+      zoom: this.zoom,
+      center: this.center?.toArray?.() ?? this.center,
+      attribution: this.attribution,
+      layers: this.layers?.toArray?.() ?? this.layers,
+      styles: this.styles?.toArray?.() ?? this.styles,
+      OGCSstyles: this.OGCSstyles?.toArray?.() ?? this.OGCSstyles,
+      services: this.services?.toArray?.() ?? this.services,
+      fixed: this.fixed,
+      enableClustering: this.enableClustering,
+      selectionHighlightColor: this.selectionHighlightColor,
+      selectedThingId: this.selectedThingId,
+    };
+  }
 }

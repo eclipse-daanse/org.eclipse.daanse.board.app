@@ -60148,6 +60148,20 @@ class ue extends tg {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      code: this.code,
+      theme: this.theme,
+      language: this.language
+    };
+  }
 }
 const oN = `<?xml version="1.0" encoding="UTF-8"?>
 <!--

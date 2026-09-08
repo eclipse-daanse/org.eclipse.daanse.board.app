@@ -258,4 +258,21 @@ export class RouteCalculatedPayloadImpl extends PayloadImpl implements RouteCalc
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      geojson: this.geojson,
+      distance_km: this.distance_km,
+      duration_min: this.duration_min,
+      waypoints: this.waypoints,
+      costing: this.costing,
+    };
+  }
 }

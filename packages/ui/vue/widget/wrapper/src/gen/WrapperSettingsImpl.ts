@@ -703,4 +703,33 @@ export class WrapperSettingsImpl extends BasicEObject implements WrapperSettings
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      title: this.title,
+      backgroundColor: this.backgroundColor,
+      backgroundColorTransparence: this.backgroundColorTransparence,
+      titleColor: this.titleColor,
+      padding: this.padding,
+      titleFontSize: this.titleFontSize,
+      borderSize: this.borderSize,
+      borderColor: this.borderColor,
+      borderRadius: this.borderRadius,
+      blur: this.blur,
+      fullscreen: this.fullscreen,
+      shadowColor: this.shadowColor,
+      shadowBlur: this.shadowBlur,
+      shadowX: this.shadowX,
+      shadowY: this.shadowY,
+      shadowTransparence: this.shadowTransparence,
+      transparency: this.transparency,
+    };
+  }
 }

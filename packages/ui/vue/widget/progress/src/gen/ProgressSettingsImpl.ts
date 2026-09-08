@@ -594,4 +594,30 @@ export class ProgressSettingsImpl extends BasicEObject implements ProgressSettin
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      progress: this.progress,
+      fillColor: this.fillColor,
+      gradientColor: this.gradientColor,
+      backgroundColor: this.backgroundColor,
+      isGradient: this.isGradient,
+      isVertical: this.isVertical,
+      rotation: this.rotation,
+      min: this.min,
+      max: this.max,
+      textColor: this.textColor,
+      barThickness: this.barThickness,
+      borderRadius: this.borderRadius,
+      valueAlign: this.valueAlign,
+      valueJustify: this.valueJustify,
+    };
+  }
 }

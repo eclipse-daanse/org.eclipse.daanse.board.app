@@ -1,14 +1,14 @@
 (function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-a1cdbc32]{position:absolute}.wrapper-container[data-v-a1cdbc32]{background-color:var(--v360f3c5d);border-color:var(--b35f9fe0);border-width:var(--v1eca3a79);border-style:solid;width:100%;height:100%;box-Shadow:var(--v24576062);border-radius:var(--v2920dcf0);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-a1cdbc32]{border-radius:var(--v2920dcf0);padding:var(--v7301e5ea)}.actions[data-v-a1cdbc32]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-a1cdbc32],.actions[data-v-a1cdbc32]:focus-within{opacity:1}.actions__row[data-v-a1cdbc32]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-a1cdbc32]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-a1cdbc32]:hover,.action[data-v-a1cdbc32]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-a1cdbc32]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-a1cdbc32]:hover,.action--danger[data-v-a1cdbc32]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__icon[data-v-a1cdbc32]{font-size:22px}.action__label[data-v-a1cdbc32]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-a1cdbc32],.action:focus-visible .action__label[data-v-a1cdbc32]{opacity:1}.settings-container[data-v-cdb0042e]{display:flex;flex-direction:column;align-items:stretch;gap:1rem}.pad_bottom[data-v-cdb0042e]{padding-top:30px;padding-bottom:10px}\n";})();
-import { defineComponent as J, useCssVars as le, computed as v, inject as Q, ref as k, onUnmounted as ie, resolveComponent as F, createElementBlock as U, openBlock as W, normalizeStyle as H, createCommentVNode as Z, createVNode as u, toDisplayString as I, Fragment as M, createElementVNode as O, withCtx as p, createBlock as ee, resolveDynamicComponent as ne, renderList as ue, withModifiers as de, normalizeClass as ce, createTextVNode as j, useModel as he, unref as o } from "vue";
+import { defineComponent as J, useCssVars as le, computed as v, inject as Q, ref as k, onUnmounted as ie, resolveComponent as V, createElementBlock as U, openBlock as W, normalizeStyle as H, createCommentVNode as Z, createVNode as u, toDisplayString as I, Fragment as M, createElementVNode as O, withCtx as p, createBlock as ee, resolveDynamicComponent as ne, renderList as ue, withModifiers as de, normalizeClass as ce, createTextVNode as j, useModel as he, unref as o } from "vue";
 import { identifier as ge } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper as r } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { VariableInput as S } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { BasicEFactory as pe, BasicEPackage as Re, EPackageRegistry as te, BasicEClass as Ee, BasicEReference as f, BasicEObject as be } from "@emfts/core";
-const we = {
+import { VariableInput as m } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
+import { BasicEFactory as pe, BasicEPackage as Re, EPackageRegistry as te, BasicEClass as be, BasicEReference as f, BasicEObject as we } from "@emfts/core";
+const Ee = {
   key: 0,
   class: "actions",
   "aria-hidden": "false"
-}, fe = { class: "actions__row" }, Ce = ["title", "onClick"], Te = { class: "action__label" }, me = { key: 2 }, Se = { style: { "text-align": "center", padding: "1rem" } }, _e = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, Ne = /* @__PURE__ */ J({
+}, fe = { class: "actions__row" }, Ce = ["title", "onClick"], Te = { class: "action__label" }, Se = { key: 2 }, me = { style: { "text-align": "center", padding: "1rem" } }, _e = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, Ne = /* @__PURE__ */ J({
   __name: "WidgetWrapper",
   props: {
     widget: {},
@@ -21,7 +21,7 @@ const we = {
       v360f3c5d: s.value,
       b35f9fe0: d.value,
       v1eca3a79: R.value + "px",
-      v24576062: V.value,
+      v24576062: F.value,
       v2920dcf0: se.value + "px",
       v7301e5ea: K.value + "px"
     }));
@@ -29,10 +29,10 @@ const we = {
       _.value++;
     });
     ie(() => B?.());
-    const A = v(() => (_.value, l.getWidget(i.widget.type))), E = v(() => (_.value, l.getAllWidgets())), b = k(!1), n = k(null), N = (h) => {
-      n.value = h, b.value = !0;
+    const A = v(() => (_.value, l.getWidget(i.widget.type))), b = v(() => (_.value, l.getAllWidgets())), w = k(!1), n = k(null), N = (h) => {
+      n.value = h, w.value = !0;
     }, T = () => {
-      n.value && a("removeWidget", n.value), b.value = !1, n.value = null;
+      n.value && a("removeWidget", n.value), w.value = !1, n.value = null;
     }, L = (h) => {
       a("openSettings", h);
     }, D = v(() => [
@@ -50,7 +50,7 @@ const we = {
         danger: !0,
         run: () => N(i.widget.uid)
       }
-    ]), m = {
+    ]), S = {
       title: "",
       backgroundColor: "#f6f7f9",
       backgroundColorTransparence: 255,
@@ -69,31 +69,31 @@ const we = {
       shadowTransparence: 36,
       transparency: 255
     };
-    Object.keys(m).forEach((h) => {
+    Object.keys(S).forEach((h) => {
       const g = i.widget.wrapperConfig[h];
       if (g == null)
-        i.widget.wrapperConfig[h] = new r(m[h]);
+        i.widget.wrapperConfig[h] = new r(S[h]);
       else if (typeof g != "object")
         i.widget.wrapperConfig[h] = new r(g);
       else if (!(g instanceof r))
         if ("value" in g) {
-          const w = new r(g.value);
-          "variable" in g && (w.variable = g.variable), i.widget.wrapperConfig[h] = w;
+          const E = new r(g.value);
+          "variable" in g && (E.variable = g.variable), i.widget.wrapperConfig[h] = E;
         } else
-          i.widget.wrapperConfig[h] = new r(m[h]);
+          i.widget.wrapperConfig[h] = new r(S[h]);
     });
-    const V = v(() => {
+    const F = v(() => {
       let h = "";
       const g = i.widget.wrapperConfig.shadowTransparence?.value;
       G(g) && (h = g.toString(16));
-      let w = (i.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
-      return w.length == 3 && (w = w[0] + w[0] + w[1] + w[1] + w[2] + w[2]), `${i.widget.wrapperConfig.shadowX?.value}px ${i.widget.wrapperConfig.shadowY?.value}px ${i.widget.wrapperConfig.shadowBlur?.value}px #${w}${h}`;
+      let E = (i.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
+      return E.length == 3 && (E = E[0] + E[0] + E[1] + E[1] + E[2] + E[2]), `${i.widget.wrapperConfig.shadowX?.value}px ${i.widget.wrapperConfig.shadowY?.value}px ${i.widget.wrapperConfig.shadowBlur?.value}px #${E}${h}`;
     }), s = v(() => {
       let h = 255;
       const g = i.widget.wrapperConfig.backgroundColorTransparence?.value;
       G(g) && (h = g);
-      const w = i.widget.wrapperConfig.transparency?.value;
-      G(w) && (h = Math.round(h * (w / 255)));
+      const E = i.widget.wrapperConfig.transparency?.value;
+      G(E) && (h = Math.round(h * (E / 255)));
       const x = i.widget.wrapperConfig.backgroundColor?.value;
       if (!x) return "var(--color-pane)";
       let P = x.replace("#", "");
@@ -123,7 +123,7 @@ const we = {
       return isNaN(h) ? 0 : h;
     });
     return (h, g) => {
-      const w = F("VaScrollContainer"), x = F("VaIcon"), P = F("VaButton"), z = F("VaModal");
+      const E = V("VaScrollContainer"), x = V("VaIcon"), P = V("VaButton"), z = V("VaModal");
       return W(), U("div", {
         class: "flex relative flex-col w-full h-full wrapper-container",
         style: H({ "--blur-amount": oe.value + "px", "--title-color": $.value })
@@ -144,13 +144,13 @@ const we = {
             class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
             style: H({ position: "relative", opacity: X.value })
           }, [
-            u(w, {
+            u(E, {
               color: "var(--color-outline)",
               vertical: "",
               horizontal: ""
             }, {
               default: p(() => [
-                (W(), ee(ne(E.value[i.widget.type].component), {
+                (W(), ee(ne(b.value[i.widget.type].component), {
                   config: i.widget.config,
                   configv: i.widget.config,
                   "onUpdate:configv": g[0] || (g[0] = (y) => i.widget.config = y),
@@ -162,7 +162,7 @@ const we = {
               _: 1
             })
           ], 4),
-          i.editEnabled ? (W(), U("div", we, [
+          i.editEnabled ? (W(), U("div", Ee, [
             O("div", fe, [
               (W(!0), U(M, null, ue(D.value, (y) => (W(), U("button", {
                 key: y.id,
@@ -179,12 +179,12 @@ const we = {
               ], 10, Ce))), 128))
             ])
           ])) : Z("", !0)
-        ], 64)) : (W(), U("div", me, [
+        ], 64)) : (W(), U("div", Se, [
           O("p", null, "Widget type " + I(i.widget.type) + " is not registered.", 1)
         ])),
         u(z, {
-          modelValue: b.value,
-          "onUpdate:modelValue": g[3] || (g[3] = (y) => b.value = y),
+          modelValue: w.value,
+          "onUpdate:modelValue": g[3] || (g[3] = (y) => w.value = y),
           size: "small",
           "hide-default-actions": "",
           "overlay-opacity": "0.3"
@@ -194,7 +194,7 @@ const we = {
               u(P, {
                 preset: "secondary",
                 onClick: g[1] || (g[1] = (y) => {
-                  b.value = !1, n.value = null;
+                  w.value = !1, n.value = null;
                 })
               }, {
                 default: p(() => [...g[6] || (g[6] = [
@@ -215,7 +215,7 @@ const we = {
             ])
           ]),
           default: p(() => [
-            O("div", Se, [
+            O("div", me, [
               u(x, {
                 name: "warning",
                 color: "danger",
@@ -235,7 +235,7 @@ const we = {
   for (const [l, _] of e)
     a[l] = _;
   return a;
-}, ve = /* @__PURE__ */ ae(Ne, [["__scopeId", "data-v-a1cdbc32"]]), Oe = { class: "settings-container" }, Ae = { class: "px-2" }, De = { class: "px-2" }, Le = { class: "px-2" }, ye = { class: "px-2" }, Pe = { class: "px-2" }, Be = { class: "px-2" }, Ve = /* @__PURE__ */ J({
+}, ve = /* @__PURE__ */ ae(Ne, [["__scopeId", "data-v-a1cdbc32"]]), Oe = { class: "settings-container" }, Ae = { class: "px-2" }, De = { class: "px-2" }, Le = { class: "px-2" }, ye = { class: "px-2" }, Pe = { class: "px-2" }, Be = { class: "px-2" }, Fe = /* @__PURE__ */ J({
   __name: "WidgetWrapperSettings",
   props: {
     modelValue: { required: !0 },
@@ -243,16 +243,16 @@ const we = {
   },
   emits: ["update:modelValue"],
   setup(i) {
-    const e = he(i, "modelValue"), a = Q("i18n"), l = a ? (b) => a.t("wrapper:" + b) : (b) => b, _ = k(!1), B = k(!1), A = v(() => B.value ? "#ffffff" : ""), E = (b, n) => {
-      console.log("onValueChange", n), b({
+    const e = he(i, "modelValue"), a = Q("i18n"), l = a ? (w) => a.t("wrapper:" + w) : (w) => w, _ = k(!1), B = k(!1), A = v(() => B.value ? "#ffffff" : ""), b = (w, n) => {
+      console.log("onValueChange", n), w({
         target: {
           value: n
         }
       });
     };
-    return (b, n) => {
-      const N = F("VaDivider"), T = F("va-input"), L = F("va-color-input"), D = F("VaCounter"), m = F("VaSlider"), V = F("va-collapse");
-      return W(), ee(V, {
+    return (w, n) => {
+      const N = V("VaDivider"), T = V("va-input"), L = V("va-color-input"), D = V("VaCounter"), S = V("VaSlider"), F = V("va-collapse");
+      return W(), ee(F, {
         modelValue: _.value,
         "onUpdate:modelValue": n[16] || (n[16] = (s) => _.value = s),
         header: "Widget wrapper settings",
@@ -269,7 +269,7 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.title,
               "onUpdate:modelValue": n[0] || (n[0] = (s) => e.value.title = s),
               label: o(l)("WidgetWrapper.label")
@@ -283,7 +283,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.titleFontSize,
               "onUpdate:modelValue": n[1] || (n[1] = (s) => e.value.titleFontSize = s),
               label: o(l)("WidgetWrapper.fontSize")
@@ -297,7 +297,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.titleColor,
               "onUpdate:modelValue": n[2] || (n[2] = (s) => e.value.titleColor = s),
               label: o(l)("WidgetWrapper.fontColor")
@@ -320,17 +320,17 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.padding,
               "onUpdate:modelValue": n[3] || (n[3] = (s) => e.value.padding = s),
               label: o(l)("WidgetWrapper.padding")
             }, {
               default: p(({ value: s, change: d }) => [
-                u(m, {
+                u(S, {
                   labelColor: A.value,
                   stateful: "",
                   "model-value": s,
-                  onChange: (R) => E(d, R),
+                  onChange: (R) => b(d, R),
                   label: o(l)("WidgetWrapper.padding"),
                   min: 0,
                   max: 20
@@ -338,7 +338,7 @@ const we = {
                   append: p(() => [
                     u(D, {
                       "model-value": s,
-                      "onUpdate:modelValue": (R) => E(d, R),
+                      "onUpdate:modelValue": (R) => b(d, R),
                       min: 0,
                       max: 20,
                       class: "w-[110px]"
@@ -358,7 +358,7 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.backgroundColor,
               "onUpdate:modelValue": n[4] || (n[4] = (s) => e.value.backgroundColor = s),
               label: o(l)("WidgetWrapper.backgroundColor")
@@ -374,16 +374,16 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.backgroundColorTransparence,
               "onUpdate:modelValue": n[5] || (n[5] = (s) => e.value.backgroundColorTransparence = s),
               label: o(l)("WidgetWrapper.backgroundColorTransparence")
             }, {
               default: p(({ value: s, change: d }) => [
-                u(m, {
+                u(S, {
                   "model-value": s,
                   stateful: "",
-                  onChange: (R) => E(d, R),
+                  onChange: (R) => b(d, R),
                   label: o(l)("WidgetWrapper.backgroundColorTrancparency"),
                   labelColor: A.value,
                   min: 0,
@@ -392,7 +392,7 @@ const we = {
                   append: p(() => [
                     u(D, {
                       "model-value": s,
-                      "onUpdate:modelValue": (R) => E(d, R),
+                      "onUpdate:modelValue": (R) => b(d, R),
                       min: 0,
                       max: 256,
                       class: "w-[110px]"
@@ -403,16 +403,16 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.blur,
               "onUpdate:modelValue": n[6] || (n[6] = (s) => e.value.blur = s),
               label: o(l)("WidgetWrapper.blur")
             }, {
               default: p(({ value: s, change: d }) => [
-                u(m, {
+                u(S, {
                   "model-value": s,
                   stateful: "",
-                  onChange: (R) => E(d, R),
+                  onChange: (R) => b(d, R),
                   label: o(l)("WidgetWrapper.blur"),
                   labelColor: A.value,
                   min: 0,
@@ -421,7 +421,7 @@ const we = {
                   append: p(() => [
                     u(D, {
                       "model-value": s,
-                      "onUpdate:modelValue": (R) => E(d, R),
+                      "onUpdate:modelValue": (R) => b(d, R),
                       min: 0,
                       max: 10,
                       class: "w-[110px]"
@@ -441,7 +441,7 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.borderSize,
               "onUpdate:modelValue": n[7] || (n[7] = (s) => e.value.borderSize = s),
               label: o(l)("WidgetWrapper.borderSize")
@@ -455,7 +455,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.borderColor,
               "onUpdate:modelValue": n[8] || (n[8] = (s) => e.value.borderColor = s),
               label: o(l)("WidgetWrapper.borderColor")
@@ -471,7 +471,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.borderRadius,
               "onUpdate:modelValue": n[9] || (n[9] = (s) => e.value.borderRadius = s),
               label: o(l)("WidgetWrapper.borderRadius")
@@ -494,7 +494,7 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.shadowX,
               "onUpdate:modelValue": n[10] || (n[10] = (s) => e.value.shadowX = s),
               label: o(l)("WidgetWrapper.shadowX")
@@ -508,7 +508,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.shadowY,
               "onUpdate:modelValue": n[11] || (n[11] = (s) => e.value.shadowY = s),
               label: o(l)("WidgetWrapper.shadowY")
@@ -522,7 +522,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.shadowBlur,
               "onUpdate:modelValue": n[12] || (n[12] = (s) => e.value.shadowBlur = s),
               label: o(l)("WidgetWrapper.shadowBlur")
@@ -536,7 +536,7 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.shadowColor,
               "onUpdate:modelValue": n[13] || (n[13] = (s) => e.value.shadowColor = s),
               label: o(l)("WidgetWrapper.shadowColor")
@@ -552,17 +552,17 @@ const we = {
               ]),
               _: 1
             }, 8, ["modelValue", "label"]),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.shadowTransparence,
               "onUpdate:modelValue": n[14] || (n[14] = (s) => e.value.shadowTransparence = s),
               label: o(l)("WidgetWrapper.shadowTransparence")
             }, {
               default: p(({ value: s, change: d }) => [
-                u(m, {
+                u(S, {
                   labelColor: A.value,
                   stateful: "",
                   "model-value": s,
-                  onChange: (R) => E(d, R),
+                  onChange: (R) => b(d, R),
                   label: o(l)("WidgetWrapper.shadowTransparence"),
                   min: 0,
                   max: 255
@@ -570,7 +570,7 @@ const we = {
                   append: p(() => [
                     u(D, {
                       "model-value": s,
-                      "onUpdate:modelValue": (R) => E(d, R),
+                      "onUpdate:modelValue": (R) => b(d, R),
                       min: 0,
                       max: 255,
                       class: "w-[110px]"
@@ -590,17 +590,17 @@ const we = {
               ]),
               _: 1
             }),
-            u(o(S), {
+            u(o(m), {
               modelValue: e.value.transparency,
               "onUpdate:modelValue": n[15] || (n[15] = (s) => e.value.transparency = s),
               label: o(l)("WidgetWrapper.transparency")
             }, {
               default: p(({ value: s, change: d }) => [
-                u(m, {
+                u(S, {
                   labelColor: A.value,
                   stateful: "",
                   "model-value": s,
-                  onChange: (R) => E(d, R),
+                  onChange: (R) => b(d, R),
                   label: o(l)("WidgetWrapper.transparency"),
                   min: 0,
                   max: 255,
@@ -609,7 +609,7 @@ const we = {
                   append: p(() => [
                     u(D, {
                       "model-value": s,
-                      "onUpdate:modelValue": (R) => E(d, R),
+                      "onUpdate:modelValue": (R) => b(d, R),
                       min: 0,
                       step: 1,
                       max: 255,
@@ -627,7 +627,7 @@ const we = {
       }, 8, ["modelValue"]);
     };
   }
-}), Fe = /* @__PURE__ */ ae(Ve, [["__scopeId", "data-v-cdb0042e"]]);
+}), Ve = /* @__PURE__ */ ae(Fe, [["__scopeId", "data-v-cdb0042e"]]);
 class Y extends pe {
   static get eINSTANCE() {
     return this._instance || (this._instance = new Y()), this._instance;
@@ -702,7 +702,7 @@ class c extends Re {
    */
   init() {
     te.INSTANCE.set(c.eNS_URI, this), this.setEFactoryInstance(Y.eINSTANCE);
-    const e = new Ee();
+    const e = new be();
     e.setName("WrapperSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), c.Literals.WRAPPER_SETTINGS = e;
     const a = new f();
     a.setContainment(!1), a.setName("title"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), c.Literals.WRAPPER_SETTINGS__TITLE = a;
@@ -714,10 +714,10 @@ class c extends Re {
     B.setContainment(!1), B.setName("titleColor"), B.setLowerBound(0), B.setUpperBound(1), e.getEStructuralFeatures().push(B), c.Literals.WRAPPER_SETTINGS__TITLE_COLOR = B;
     const A = new f();
     A.setContainment(!1), A.setName("padding"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), c.Literals.WRAPPER_SETTINGS__PADDING = A;
-    const E = new f();
-    E.setContainment(!1), E.setName("titleFontSize"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), c.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = E;
     const b = new f();
-    b.setContainment(!1), b.setName("borderSize"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE = b;
+    b.setContainment(!1), b.setName("titleFontSize"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), c.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = b;
+    const w = new f();
+    w.setContainment(!1), w.setName("borderSize"), w.setLowerBound(0), w.setUpperBound(1), e.getEStructuralFeatures().push(w), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE = w;
     const n = new f();
     n.setContainment(!1), n.setName("borderColor"), n.setLowerBound(0), n.setUpperBound(1), e.getEStructuralFeatures().push(n), c.Literals.WRAPPER_SETTINGS__BORDER_COLOR = n;
     const N = new f();
@@ -728,10 +728,10 @@ class c extends Re {
     L.setContainment(!1), L.setName("fullscreen"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), c.Literals.WRAPPER_SETTINGS__FULLSCREEN = L;
     const D = new f();
     D.setContainment(!1), D.setName("shadowColor"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), c.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = D;
-    const m = new f();
-    m.setContainment(!1), m.setName("shadowBlur"), m.setLowerBound(0), m.setUpperBound(1), e.getEStructuralFeatures().push(m), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = m;
-    const V = new f();
-    V.setContainment(!1), V.setName("shadowX"), V.setLowerBound(0), V.setUpperBound(1), e.getEStructuralFeatures().push(V), c.Literals.WRAPPER_SETTINGS__SHADOW_X = V;
+    const S = new f();
+    S.setContainment(!1), S.setName("shadowBlur"), S.setLowerBound(0), S.setUpperBound(1), e.getEStructuralFeatures().push(S), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = S;
+    const F = new f();
+    F.setContainment(!1), F.setName("shadowX"), F.setLowerBound(0), F.setUpperBound(1), e.getEStructuralFeatures().push(F), c.Literals.WRAPPER_SETTINGS__SHADOW_X = F;
     const s = new f();
     s.setContainment(!1), s.setName("shadowY"), s.setLowerBound(0), s.setUpperBound(1), e.getEStructuralFeatures().push(s), c.Literals.WRAPPER_SETTINGS__SHADOW_Y = s;
     const d = new f();
@@ -740,7 +740,7 @@ class c extends Re {
     R.setContainment(!1), R.setName("transparency"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), c.Literals.WRAPPER_SETTINGS__TRANSPARENCY = R, c.Literals.WRAPPER_SETTINGS__TITLE.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__PADDING.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__BLUR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), c.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(C("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class t extends be {
+class t extends we {
   constructor() {
     super(...arguments), this._title = new r(), this._backgroundColor = new r(), this._backgroundColorTransparence = new r(), this._titleColor = new r(), this._padding = new r(), this._titleFontSize = new r(), this._borderSize = new r(), this._borderColor = new r(), this._borderRadius = new r(), this._blur = new r(), this._fullscreen = new r(), this._shadowColor = new r(), this._shadowBlur = new r(), this._shadowX = new r(), this._shadowY = new r(), this._shadowTransparence = new r(), this._transparency = new r();
   }
@@ -1349,6 +1349,34 @@ class t extends be {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      title: this.title,
+      backgroundColor: this.backgroundColor,
+      backgroundColorTransparence: this.backgroundColorTransparence,
+      titleColor: this.titleColor,
+      padding: this.padding,
+      titleFontSize: this.titleFontSize,
+      borderSize: this.borderSize,
+      borderColor: this.borderColor,
+      borderRadius: this.borderRadius,
+      blur: this.blur,
+      fullscreen: this.fullscreen,
+      shadowColor: this.shadowColor,
+      shadowBlur: this.shadowBlur,
+      shadowX: this.shadowX,
+      shadowY: this.shadowY,
+      shadowTransparence: this.shadowTransparence,
+      transparency: this.transparency
+    };
+  }
 }
 const We = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -1476,7 +1504,7 @@ c.eINSTANCE;
 const Ie = new t(), Ue = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   WidgetWrapper: ve,
-  WidgetWrapperSettings: Fe,
+  WidgetWrapperSettings: Ve,
   WrapperSettingsImpl: t,
   WrapperSettingsPackage: c,
   defaultConfig: Ie,
@@ -1493,7 +1521,7 @@ async function Ke(i) {
 }
 export {
   ve as WidgetWrapper,
-  Fe as WidgetWrapperSettings,
+  Ve as WidgetWrapperSettings,
   t as WrapperSettingsImpl,
   c as WrapperSettingsPackage,
   $e as activate,

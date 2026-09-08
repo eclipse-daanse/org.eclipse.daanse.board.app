@@ -703,4 +703,33 @@ export class TimelineSettingsImpl extends BasicEObject implements TimelineSettin
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      timelineMin: this.timelineMin,
+      timelineMax: this.timelineMax,
+      rangeStart: this.rangeStart,
+      rangeEnd: this.rangeEnd,
+      relativeTime: this.relativeTime,
+      rangeStartVariable: this.rangeStartVariable,
+      rangeEndVariable: this.rangeEndVariable,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      currentTime: this.currentTime,
+      stepSize: this.stepSize,
+      playbackSpeed: this.playbackSpeed,
+      autoPlay: this.autoPlay,
+      fixStartKnob: this.fixStartKnob,
+      showControls: this.showControls,
+      rangeStripColor: this.rangeStripColor,
+      showTimeInfo: this.showTimeInfo,
+    };
+  }
 }

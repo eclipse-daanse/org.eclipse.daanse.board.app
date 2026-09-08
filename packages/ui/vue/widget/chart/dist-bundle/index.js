@@ -10979,6 +10979,31 @@ class D extends cr {
         super.eUnset(t);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      seriesIndex: this.seriesIndex,
+      label: this.label,
+      chartType: this.chartType,
+      xAxisId: this.xAxisId,
+      yAxisId: this.yAxisId,
+      yAxisTitle: this.yAxisTitle,
+      borderColor: this.borderColor,
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderDash: this.borderDash,
+      fill: this.fill,
+      showPoints: this.showPoints,
+      pointColor: this.pointColor,
+      pointSize: this.pointSize
+    };
+  }
 }
 class gn extends Ua {
   // Lazy singleton instance
@@ -11964,6 +11989,43 @@ class x extends cr {
       default:
         super.eUnset(t);
     }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      seriesSettings: this.seriesSettings?.toArray?.() ?? this.seriesSettings,
+      chartType: this.chartType,
+      barOrientation: this.barOrientation,
+      stacked: this.stacked,
+      borderColor: this.borderColor,
+      borderWidth: this.borderWidth,
+      borderDash: this.borderDash,
+      backgroundColor: this.backgroundColor,
+      fill: this.fill,
+      showPoints: this.showPoints,
+      pointColor: this.pointColor,
+      pointSize: this.pointSize,
+      showHorizontalGrid: this.showHorizontalGrid,
+      horizontalGridColor: this.horizontalGridColor,
+      horizontalGridWidth: this.horizontalGridWidth,
+      showVerticalGrid: this.showVerticalGrid,
+      verticalGridColor: this.verticalGridColor,
+      verticalGridWidth: this.verticalGridWidth,
+      xAxisTitle: this.xAxisTitle,
+      yAxisTitle: this.yAxisTitle,
+      annotationsEditMode: this.annotationsEditMode,
+      horizontalLines: this.horizontalLines?.toArray?.() ?? this.horizontalLines,
+      verticalLines: this.verticalLines?.toArray?.() ?? this.verticalLines,
+      horizontalBoxes: this.horizontalBoxes?.toArray?.() ?? this.horizontalBoxes,
+      verticalBoxes: this.verticalBoxes?.toArray?.() ?? this.verticalBoxes,
+      dateDisplayFormat: this.dateDisplayFormat
+    };
   }
 }
 var Hg = Object.defineProperty, Wg = Object.getOwnPropertyDescriptor, fi = (i, t, e, s) => {

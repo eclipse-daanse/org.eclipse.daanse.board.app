@@ -333,4 +333,23 @@ export class IconSettingsImpl extends BasicEObject implements IconSettings {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      iconColor: this.iconColor,
+      iconSize: this.iconSize,
+      isIconFilled: this.isIconFilled,
+      strokeWeight: this.strokeWeight,
+      opticSize: this.opticSize,
+      grade: this.grade,
+      currentIcon: this.currentIcon,
+    };
+  }
 }

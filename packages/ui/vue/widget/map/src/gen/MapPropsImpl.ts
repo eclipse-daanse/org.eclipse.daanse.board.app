@@ -443,4 +443,26 @@ export class MapPropsImpl extends BasicEObject implements MapProps {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      stroke: this.stroke,
+      color: this.color,
+      weight: this.weight,
+      opacity: this.opacity,
+      lineCap: this.lineCap,
+      dashOffset: this.dashOffset,
+      fill: this.fill,
+      fillOpacity: this.fillOpacity,
+      fillColor: this.fillColor,
+      className: this.className,
+    };
+  }
 }

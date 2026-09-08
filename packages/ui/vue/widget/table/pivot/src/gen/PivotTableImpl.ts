@@ -722,4 +722,36 @@ export class PivotTableImpl extends BasicEObject implements PivotTable {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      rows: this.rows?.toArray?.() ?? this.rows,
+      columns: this.columns?.toArray?.() ?? this.columns,
+      cells: this.cells?.toArray?.() ?? this.cells,
+      tableState: this.tableState,
+      headerBackgroundColor: this.headerBackgroundColor,
+      headerTextColor: this.headerTextColor,
+      cellBackgroundColor: this.cellBackgroundColor,
+      cellTextColor: this.cellTextColor,
+      borderColor: this.borderColor,
+      defaultColumnWidth: this.defaultColumnWidth,
+      defaultRowHeight: this.defaultRowHeight,
+      fontSize: this.fontSize,
+      headerFontWeight: this.headerFontWeight,
+      cellTextAlign: this.cellTextAlign,
+      showRowsProperties: this.showRowsProperties,
+      showColumnsProperties: this.showColumnsProperties,
+      showSingleMeasureHeader: this.showSingleMeasureHeader,
+      rowLevelStyles: this.rowLevelStyles?.toArray?.() ?? this.rowLevelStyles,
+      columnLevelStyles: this.columnLevelStyles?.toArray?.() ?? this.columnLevelStyles,
+      conditionalFormats: this.conditionalFormats?.toArray?.() ?? this.conditionalFormats,
+    };
+  }
 }

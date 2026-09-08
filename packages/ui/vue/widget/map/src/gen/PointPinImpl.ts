@@ -147,4 +147,18 @@ export class PointPinImpl extends BasicEObject implements PointPin {
     }
   }
 
+
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON(): Record<string, unknown> {
+    return {
+      color: this.color,
+      solid: this.solid,
+    };
+  }
 }

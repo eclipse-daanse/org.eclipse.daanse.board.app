@@ -3,13 +3,13 @@ import { WidgetActionInterfaceImpl as Z, EVENT_ACTIONS_REGISTRY as K, PayloadImp
 import { activate as te, deactivate as ie, component as se, inject as x } from "@eclipse-daanse/tsm";
 import { defineComponent as k, mergeModels as ne, useCssVars as oe, computed as L, toRefs as re, useModel as A, inject as D, ref as B, onMounted as ae, onUnmounted as le, createElementBlock as de, openBlock as M, withModifiers as ue, createElementVNode as j, resolveComponent as N, createBlock as ce, withCtx as R, createVNode as V, unref as pe } from "vue";
 import { useRoute as ge } from "vue-router";
-import { BasicEObject as X, BasicEFactory as ve, BasicEPackage as me, EPackageRegistry as $, BasicEClass as G, BasicEAttribute as he, BasicEReference as W, getEcorePackage as fe } from "@emfts/core";
+import { BasicEObject as J, BasicEFactory as ve, BasicEPackage as me, EPackageRegistry as X, BasicEClass as G, BasicEAttribute as he, BasicEReference as W, getEcorePackage as fe } from "@emfts/core";
 import { VariableWrapper as f } from "org.eclipse.daanse.board.app.ui.vue.composables";
 import { WidgetAction as I } from "org.eclipse.daanse.board.app.lib.events";
 import { VariableInput as Te } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
 import { WIDGET_SERVICE_ID as Ee } from "org.eclipse.daanse.board.app.lib.api.widget";
 const { identifiers: Ie } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-class v extends X {
+class v extends J {
   // Feature ID Constants (eLiterals)
   static FIT = 0;
   // Private fields
@@ -88,6 +88,18 @@ class v extends X {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      fit: this.fit
+    };
+  }
 }
 class C extends ve {
   // Lazy singleton instance
@@ -125,7 +137,7 @@ class C extends ve {
   }
 }
 function we(r) {
-  const e = $.INSTANCE.getEPackage(r);
+  const e = X.INSTANCE.getEPackage(r);
   if (!e)
     throw new Error(`EPackage '${r}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing VideoSettingsPackage.`);
   return e;
@@ -156,7 +168,7 @@ class a extends me {
    * Initialize package contents
    */
   init() {
-    $.INSTANCE.set(a.eNS_URI, this), this.setEFactoryInstance(C.eINSTANCE);
+    X.INSTANCE.set(a.eNS_URI, this), this.setEFactoryInstance(C.eINSTANCE);
     const e = new G();
     e.setName("ObjectFitSetting"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), a.Literals.OBJECT_FIT_SETTING = e;
     const t = new he();
@@ -169,7 +181,7 @@ class a extends me {
     o.setContainment(!1), o.setName("videoUrl"), o.setLowerBound(0), o.setUpperBound(1), i.getEStructuralFeatures().push(o), a.Literals.VIDEO_SETTINGS__VIDEO_URL = o, a.Literals.OBJECT_FIT_SETTING__FIT.setEType(fe().getEClassifier("EString")), a.Literals.VIDEO_SETTINGS__VIDEO_FIT_SETTINGS.setEType(a.Literals.OBJECT_FIT_SETTING), a.Literals.VIDEO_SETTINGS__VIDEO_URL.setEType(we("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class c extends X {
+class c extends J {
   // Feature ID Constants (eLiterals)
   static VIDEO_FIT_SETTINGS = 0;
   static VIDEO_URL = 1;
@@ -279,6 +291,19 @@ class c extends X {
       default:
         super.eUnset(e);
     }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      videoFitSettings: this.videoFitSettings,
+      videoUrl: this.videoUrl
+    };
   }
 }
 var Se = Object.defineProperty, _e = Object.getOwnPropertyDescriptor, T = (r, e, t, i) => {
@@ -441,12 +466,12 @@ const Fe = ["src"], ye = /* @__PURE__ */ k({
       }, " Your browser does not support embedded videos. ", 40, Fe)
     ], 32));
   }
-}), J = (r, e) => {
+}), $ = (r, e) => {
   const t = r.__vccOpts || r;
   for (const [i, s] of e)
     t[i] = s;
   return t;
-}, Ne = /* @__PURE__ */ J(ye, [["__scopeId", "data-v-c8b707a4"]]), Ve = { class: "settings-container" }, De = /* @__PURE__ */ k({
+}, Ne = /* @__PURE__ */ $(ye, [["__scopeId", "data-v-c8b707a4"]]), Ve = { class: "settings-container" }, De = /* @__PURE__ */ k({
   __name: "VideoWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -496,7 +521,7 @@ const Fe = ["src"], ye = /* @__PURE__ */ k({
       }, 8, ["modelValue", "header"]);
     };
   }
-}), Ce = /* @__PURE__ */ J(De, [["__scopeId", "data-v-9a8eca2e"]]), be = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e", Ue = [
+}), Ce = /* @__PURE__ */ $(De, [["__scopeId", "data-v-9a8eca2e"]]), be = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M78.75%2056.1029C81.75%2057.8349%2081.75%2062.1651%2078.75%2063.8971L47.25%2082.0836C44.25%2083.8157%2040.5%2081.6506%2040.5%2078.1865L40.5%2041.8135C40.5%2038.3494%2044.25%2036.1843%2047.25%2037.9164L78.75%2056.1029Z'%20fill='%23606060'/%3e%3c/svg%3e", Ue = [
   { name: "Video Clicked", type: "click", description: "Triggered when the video widget is clicked", payloadType: h },
   { name: "Video Right Clicked", type: "right_click", description: "Triggered when the video widget is right-clicked", payloadType: h },
   { name: "Video Played", type: "play", description: "Triggered when the video starts or resumes playing", payloadType: h },

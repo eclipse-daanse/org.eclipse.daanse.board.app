@@ -119,6 +119,19 @@ class d extends b {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      key: this.key,
+      value: this.value
+    };
+  }
 }
 class a extends b {
   // Feature ID Constants (eLiterals)
@@ -294,6 +307,21 @@ class a extends b {
       default:
         super.eUnset(e);
     }
+  }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      fill: this.fill,
+      stroke: this.stroke,
+      strokeWidth: this.strokeWidth,
+      className: this.className
+    };
   }
 }
 class A extends me {
@@ -496,6 +524,19 @@ class g extends b {
         super.eUnset(e);
     }
   }
+  /**
+   * What this object is when it is stored.
+   *
+   * The plain names, not the private fields the getters sit in: those
+   * are this class's business, and a stored board is read by things
+   * that only know the model.
+   */
+  toJSON() {
+    return {
+      src: this.src,
+      classesConfig: this.classesConfig?.toArray?.() ?? this.classesConfig
+    };
+  }
 }
 var Le = Object.defineProperty, Fe = Object.getOwnPropertyDescriptor, J = (l, e, t, r) => {
   for (var s = Fe(e, t), c = l.length - 1, u; c >= 0; c--)
@@ -548,13 +589,13 @@ const Ge = ["innerHTML"], ye = ["innerHTML"], Ve = /* @__PURE__ */ ce({
         widgetId: r.value,
         payload: { widgetId: r.value, timestamp: Date.now() }
       });
-    }, M = () => {
+    }, k = () => {
       r?.value && c.emit("widget:SVGWidget:right_click", {
         type: "widget:SVGWidget:right_click",
         widgetId: r.value,
         payload: { widgetId: r.value, timestamp: Date.now() }
       });
-    }, N = y(""), Q = (ge()?.type).__scopeId, ee = new g(), k = async (n) => {
+    }, N = y(""), Q = (ge()?.type).__scopeId, ee = new g(), M = async (n) => {
       const o = n?.value || n;
       if (o && typeof o == "string") {
         console.log("Loading SVG from:", o);
@@ -579,13 +620,13 @@ const Ge = ["innerHTML"], ye = ["innerHTML"], Ve = /* @__PURE__ */ ce({
     Ce(async () => {
       r?.value && u.registerInstance(r.value, D, "SVGWidget", E), s.value && (Object.assign(s.value, { ...ee, ...s.value }), console.log("SVG config:", s.value), console.log("SVG config.value.src:", s.value.src), console.log("SVG config.value (as any).settings:", s.value.settings), !s.value.src && s.value.settings?.src && (console.log("Using legacy settings structure"), s.value.src = s.value.settings.src, s.value.settings.classesConfig && (s.value.classesConfig = s.value.settings.classesConfig)), I(s.value, "src", ""), s.value.classesConfig && s.value.classesConfig.forEach((n) => {
         n.value && (I(n.value, "fill", ""), I(n.value, "stroke", ""), I(n.value, "strokeWidth", ""));
-      }), await k(s.value.src));
+      }), await M(s.value.src));
     }), pe(() => {
       r?.value && u.unregisterInstance(r.value);
     }), fe(
       () => s.value?.src?.value,
       (n) => {
-        console.log("SVG src changed to:", n), k(n);
+        console.log("SVG src changed to:", n), M(n);
       }
     );
     const te = K(() => {
@@ -607,7 +648,7 @@ const Ge = ["innerHTML"], ye = ["innerHTML"], Ve = /* @__PURE__ */ ce({
         class: "svg",
         innerHTML: W.value,
         onClick: R,
-        onContextmenu: X(M, ["prevent"]),
+        onContextmenu: X(k, ["prevent"]),
         ref_key: "svgContainerRef",
         ref: f
       }), null, 16, ye),
@@ -615,7 +656,7 @@ const Ge = ["innerHTML"], ye = ["innerHTML"], Ve = /* @__PURE__ */ ce({
         key: 0,
         class: "fallback",
         onClick: R,
-        onContextmenu: X(M, ["prevent"])
+        onContextmenu: X(k, ["prevent"])
       }, " No SVG configured ", 32)) : Ee("", !0)
     ], 64));
   }
@@ -663,7 +704,7 @@ come from here or from a variable.
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgSettings/classesConfig" label="Klassenregeln"/>
   </components>
 </uimodel:UIModel>
-`, Me = `<?xml version="1.0" encoding="UTF-8"?>
+`, ke = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -696,7 +737,7 @@ different things.
         feature="http://org.eclipse.daanse.board.app.ui.vue.widget.svg.base#//SvgClassConfigMapEntry/value" label=""/>
   </components>
 </uimodel:UIModel>
-`, ke = `<?xml version="1.0" encoding="UTF-8"?>
+`, Me = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -769,8 +810,8 @@ let F = class {
     create: () => new g(),
     /* Forms for the classes that appear inside this one. */
     entryForms: [
-      { xmi: Me, uri: "/svg-entry.ui.xmi" },
-      { xmi: ke, uri: "/svg-rule.ui.xmi" }
+      { xmi: ke, uri: "/svg-entry.ui.xmi" },
+      { xmi: Me, uri: "/svg-rule.ui.xmi" }
     ]
   };
   register() {
