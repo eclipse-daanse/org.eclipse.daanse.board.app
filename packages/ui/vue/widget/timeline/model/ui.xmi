@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the timeline: playing it and drawing it.
+
+Which stretch of time it covers stays with the hand-written component - it
+is given either as two moments or as an offset from now, typed or taken
+from a variable, and each end is edited as a date and a time apart. None of
+that is a field.
+
+The step and the speed store what the widget switches on; optionLabel gives
+them the words. The speed is a factor, so its labels are the factors.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="TimelineSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="TimelineSettingsFormView">
+
+    <fields xsi:type="uimodel:GroupWidget" name="playbackGroup" layout="VERTICAL" label="Wiedergabe">
+      <fields xsi:type="uimodel:SelectWidget" name="stepSize"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/stepSize" label="Schrittweite">
+        <values>minute</values>
+        <values>hour</values>
+        <values>day</values>
+        <values>week</values>
+        <values>month</values>
+        <optionLabel language="JS" body="({ minute: 'Eine Minute', hour: 'Eine Stunde', day: 'Ein Tag', week: 'Eine Woche', month: 'Ein Monat' })[option] ?? option"/>
+      </fields>
+      <fields xsi:type="uimodel:SelectWidget" name="playbackSpeed"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/playbackSpeed" label="Geschwindigkeit">
+        <values>0.25</values>
+        <values>0.5</values>
+        <values>1</values>
+        <values>2</values>
+        <values>4</values>
+        <optionLabel language="JS" body="option + '-fach'"/>
+      </fields>
+      <fields xsi:type="uimodel:CheckboxWidget" name="autoPlay"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/autoPlay" label="Beim Laden starten"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="fixStartKnob"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/fixStartKnob" label="Anfang festhalten"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showControls"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showControls" label="Bedienelemente zeigen"/>
+    </fields>
+
+    <fields xsi:type="uimodel:GroupWidget" name="lookGroup" layout="VERTICAL" label="Darstellung">
+      <fields xsi:type="uimodel:InputWidget" name="rangeStripColor"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/rangeStripColor" label="Farbe des Ausschnitts"/>
+      <fields xsi:type="uimodel:CheckboxWidget" name="showTimeInfo"
+          feature="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline#//TimelineSettings/showTimeInfo" label="Zeitangaben zeigen"/>
+    </fields>
+
+  </components>
+</uimodel:UIModel>

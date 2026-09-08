@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The weather widget's settings.
+
+Which stretch of time it reads is not in the form: it is one of three modes
+with quick ranges beside it and a button that sets both ends to now, and
+the two moments are stored as the shortened ISO strings a datetime-local
+field produces rather than as full ones.
+
+Neither are the chart colours: there is one per parameter, keyed by the
+parameter, and the set of parameters is what the forecast fields choose
+from. A map like that is not a field.
+
+The refresh interval is in milliseconds because that is what setInterval
+takes and what the widget stores.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="weathersettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.weather"
+                nsPrefix="weathersettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="WeatherSettings">
+
+        <!-- Which thing is read; set on the datasource, not here -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="thingId"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="location"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="useLocation"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+
+        <!-- The stretch of time; edited by the hand-written component -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="useTimeRange"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="manualTimeSelection"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+
+        <!-- How often it is read again, in milliseconds -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="refreshInterval"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="300000"/>
+
+        <!-- The forecast -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showForecast"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="selectedForecastParameters"
+                             upperBound="-1"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="forecastPeriods"
+                             upperBound="-1"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+</ecore:EPackage>

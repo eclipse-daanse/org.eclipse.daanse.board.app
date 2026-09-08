@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The timeline's settings.
+
+Two kinds of thing live here. Playing the timeline and drawing it are plain
+settings and are in the form. Which stretch of time it covers is not: it is
+either given as two moments or as an offset from now, either typed or taken
+from a variable, and the ends are edited as a date and a time apart. That
+half stays with the hand-written component.
+
+The moments are stored as ISO strings rather than dates, because that is
+what the widget reads and what a board carries between sessions.
+-->
+<ecore:EPackage xmi:version="2.0"
+                xmlns:xmi="http://www.omg.org/XMI"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+                name="timelinesettings"
+                nsURI="http://org.eclipse.daanse.board.app.ui.vue.widget.timeline"
+                nsPrefix="timelinesettings">
+
+    <eClassifiers xsi:type="ecore:EClass" name="RelativeTimeConfig">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                             defaultValueLiteral="24"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="hours"/>
+    </eClassifiers>
+
+    <eClassifiers xsi:type="ecore:EClass" name="TimelineSettings">
+
+        <!-- The stretch of time; edited by the hand-written component -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="timelineMin"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="timelineMax"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeStart"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeEnd"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="relativeTime"
+                             eType="#//RelativeTimeConfig" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeStartVariable"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeEndVariable"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentTime"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+
+        <!-- Playing it -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="stepSize"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="hour"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="playbackSpeed"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+                             defaultValueLiteral="1"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoPlay"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixStartKnob"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showControls"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="true"/>
+
+        <!-- Drawing it -->
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeStripColor"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             defaultValueLiteral="#d17600"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="showTimeInfo"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                             defaultValueLiteral="true"/>
+    </eClassifiers>
+</ecore:EPackage>

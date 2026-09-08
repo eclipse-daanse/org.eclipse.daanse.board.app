@@ -12,10 +12,19 @@ Contributors:
 -->
 
 <template>
+  <!--
+    What is left of the hand-written form: which stretch of time the
+    timeline covers.
+
+    It is given either as two moments or as an offset from now, typed or
+    taken from a variable, and each end is edited as a date and a time
+    apart - none of which is a field. Playing the timeline and drawing it
+    are rendered from model/ui.xmi beside this.
+  -->
   <va-collapse
     v-model="opened.timelineSection"
     icon="timeline"
-    :header="t('Timeline Settings')"
+    header="Zeitraum"
   >
     <div class="settings-container">
       <!-- Time Range Mode -->
@@ -143,82 +152,6 @@ Contributors:
     </div>
   </va-collapse>
 
-  <!-- Playback Settings -->
-  <va-collapse
-    v-model="opened.playbackSection"
-    icon="play_circle"
-    :header="t('Playback')"
-  >
-    <div class="settings-container">
-      <div class="setting-group">
-        <va-select
-          v-model="settings.stepSize"
-          :label="t('Step Size')"
-          :options="stepSizeOptions"
-          value-by="value"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-select
-          v-model="settings.playbackSpeed"
-          :label="t('Playback Speed')"
-          :options="speedOptions"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.autoPlay"
-          :label="t('Auto-play on load')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.fixStartKnob"
-          :label="t('Fix start knob at beginning')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.showControls"
-          :label="t('Show playback controls')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-    </div>
-  </va-collapse>
-
-  <!-- Styling Settings -->
-  <va-collapse
-    v-model="opened.stylingSection"
-    icon="palette"
-    :header="t('Styling')"
-  >
-    <div class="settings-container">
-      <div class="setting-group">
-        <va-color-input
-          v-model="settings.rangeStripColor"
-          :label="t('Range Strip Color')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-
-      <div class="setting-group">
-        <va-checkbox
-          v-model="settings.showTimeInfo"
-          :label="t('Show time information panel')"
-          @update:modelValue="onSettingsChange"
-        />
-      </div>
-    </div>
-  </va-collapse>
 </template>
 
 <script lang="ts" setup>
@@ -264,9 +197,8 @@ interface TimelineSettings {
 const widgetSettings = defineModel<TimelineSettings>({ required: true });
 
 const opened = ref({
-  timelineSection: false,
-  playbackSection: false,
-  stylingSection: false
+  /* The only section left, and the reason to open the tab */
+  timelineSection: true
 });
 
 // Time range mode: 'relative' or 'absolute'
@@ -326,22 +258,6 @@ const availableVariables = computed(() => {
     .filter((v: any) => v.value && typeof v.value === 'string')
     .map((v: any) => ({ name: v.name, value: v.value }));
 });
-
-const stepSizeOptions = computed(() => [
-  { text: '1 Minute', value: 'minute' },
-  { text: '1 Hour', value: 'hour' },
-  { text: '1 Day', value: 'day' },
-  { text: '1 Week', value: 'week' },
-  { text: '1 Month', value: 'month' }
-]);
-
-const speedOptions = computed(() => [
-  { text: '0.25x', value: 0.25 },
-  { text: '0.5x', value: 0.5 },
-  { text: '1x', value: 1 },
-  { text: '2x', value: 2 },
-  { text: '4x', value: 4 }
-]);
 
 const timeUnitOptions = [
   { text: 'Hours', value: 'hours' },
