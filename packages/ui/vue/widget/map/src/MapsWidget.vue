@@ -25,7 +25,7 @@ import type { GeoJsonObject, GeoJsonProperties, Geometry, Polygon } from 'geojso
 import type { Datastream } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
 import { Task, useTaskManager } from './composables/tasktimer'
 import { FILTER, FILTERRESET, UPDATE_MQTT_SUBSCRIPTIONS, MQTT_UNSUBSCRIBE_ALL } from 'org.eclipse.daanse.board.app.lib.datasource.ogcsta'
-import { useDatasourceRepository } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useDatasourceRepository, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import booleanContains from '@turf/boolean-contains'
 import { feature } from '@turf/helpers'
 import pointOnFeature from '@turf/point-on-feature'
@@ -387,7 +387,12 @@ const getLayerData = (layer: any) => {
 
 onMounted(async () => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        })
     ensureCentre()
 
     // Reconstruct services from URLs after deserialization

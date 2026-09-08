@@ -1,14 +1,14 @@
-import { identifier as T } from "org.eclipse.daanse.board.app.lib.api.datasource";
-import { ref as w, computed as p, inject as _, onMounted as B, onUnmounted as O, watch as W, onBeforeUnmount as x } from "vue";
+import { identifier as p } from "org.eclipse.daanse.board.app.lib.api.datasource";
+import { ref as w, computed as T, inject as _, onMounted as B, onUnmounted as U, watch as W, onBeforeUnmount as x } from "vue";
 import { identifier as Y } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { identifier as M } from "org.eclipse.daanse.board.app.lib.api.pagecontext";
 import { VariableWrapper as D, VARIABLEWRAPPER as j } from "org.eclipse.daanse.board.app.lib.variables";
-import { VARIABLEWRAPPER as ce, VariableWrapper as le } from "org.eclipse.daanse.board.app.lib.variables";
-import { BasicEObject as G, BasicEFactory as $, BasicEPackage as X, EPackageRegistry as V, BasicEClass as z, BasicEAttribute as P, getEcorePackage as y } from "@emfts/core";
+import { VARIABLEWRAPPER as le, VariableWrapper as Ee } from "org.eclipse.daanse.board.app.lib.variables";
+import { BasicEObject as G, BasicEFactory as $, BasicEPackage as J, EPackageRegistry as V, BasicEClass as X, BasicEAttribute as y, getEcorePackage as P } from "@emfts/core";
 const d = w(0);
 function F() {
   return {
-    isLoading: p(() => d.value > 0),
+    isLoading: T(() => d.value > 0),
     activeLoadingCount: d,
     startLoading: () => {
       d.value++;
@@ -18,16 +18,16 @@ function F() {
     }
   };
 }
-function J(r, e, t, n = [], E) {
-  const c = _(T);
+function z(r, e, t, n = [], E) {
+  const c = _(p);
   if (!c)
     throw new Error("DatasourceRepository not provided");
-  const { startLoading: g, stopLoading: o } = F(), h = async () => {
+  const { startLoading: f, stopLoading: o } = F(), h = async () => {
     if (!r.value) {
       t.value = null;
       return;
     }
-    console.log("getData", r.value), console.log("type", e), g();
+    console.log("getData", r.value), console.log("type", e), f();
     try {
       const i = await c.getDatasource(r.value).getData(e, E?.value || {});
       e === "PivotTable" ? t.value = JSON.parse(JSON.stringify(i)) : t.value = structuredClone(i);
@@ -41,11 +41,11 @@ function J(r, e, t, n = [], E) {
       try {
         const v = c.getDatasource(
           r.value
-        ), b = v.callEvent(s, i, u);
-        if (!u && b instanceof Promise) {
-          await b;
-          const U = await v.getData(e);
-          t.value = structuredClone(U);
+        ), N = v.callEvent(s, i, u);
+        if (!u && N instanceof Promise) {
+          await N;
+          const O = await v.getData(e);
+          t.value = structuredClone(O);
         }
       } catch (v) {
         console.warn(v);
@@ -55,7 +55,7 @@ function J(r, e, t, n = [], E) {
       t.value = null;
       return;
     }
-    console.log("getDataWithOptions", r.value, s), console.log("type", e), g();
+    console.log("getDataWithOptions", r.value, s), console.log("type", e), f();
     try {
       const u = await c.getDatasource(r.value).getData(e, s);
       t.value = structuredClone(u);
@@ -64,7 +64,7 @@ function J(r, e, t, n = [], E) {
     } finally {
       o();
     }
-  }, f = (s, i) => {
+  }, g = (s, i) => {
     try {
       h();
     } catch (u) {
@@ -105,7 +105,7 @@ function J(r, e, t, n = [], E) {
     } catch (s) {
       console.warn(s);
     }
-  }), O(() => {
+  }), U(() => {
     try {
       const s = c.getDatasource(r.value);
       s.unsubscribe(h), n.forEach((i) => {
@@ -117,13 +117,13 @@ function J(r, e, t, n = [], E) {
   }), {
     data: t,
     callEvent: R,
-    update: f,
+    update: g,
     getDataWithOptions: A,
     getDatasourceInstance: S
   };
 }
 function Z(r, e, t) {
-  const n = _(T);
+  const n = _(p);
   if (!n)
     throw new Error("DatasourceRepository not provided");
   const E = n.getDatasourceIdentifiers(r);
@@ -134,8 +134,8 @@ function Z(r, e, t) {
       "with settings",
       e.value
     );
-    const g = n.resolveIdentifier(E.Store);
-    t.value = g({ ...e.value.config, _isTemporaryPreview: !0 });
+    const f = n.resolveIdentifier(E.Store);
+    t.value = f({ ...e.value.config, _isTemporaryPreview: !0 });
   });
   const c = async () => {
     t.value?.destroy(), t.value = null;
@@ -184,9 +184,9 @@ function L() {
     for (const s of e)
       s.unsubscribe(E), s.unsubscribe(h);
     e.length = 0;
-    const f = [...o.matchAll(R)].map((s) => s[1]);
+    const g = [...o.matchAll(R)].map((s) => s[1]);
     let S = o;
-    for (const s of f)
+    for (const s of g)
       try {
         let i;
         try {
@@ -214,14 +214,19 @@ function L() {
       const h = {};
       for (const [R, A] of Object.entries(o))
         try {
-          const f = p(() => (r.value, A && c(A.value + "")));
-          h[R] = f;
-        } catch (f) {
-          console.log(f);
+          const g = T(() => (r.value, A && c(A.value + "")));
+          h[R] = g;
+        } catch (g) {
+          console.log(g);
         }
       return h;
     }
   };
+}
+function H(r) {
+  if (!r || typeof r != "object") return {};
+  const e = r;
+  return typeof e.toJSON == "function" ? e.toJSON() : r;
 }
 const m = "VARIABLECOMPLEXSTRINGWRAPPER";
 class C {
@@ -464,7 +469,7 @@ class I extends $ {
     }
   }
 }
-class l extends X {
+class l extends J {
   static eNAME = "composables";
   static eNS_URI = "org.eclipse.daanse.board.app.ui.vue.composables";
   static eNS_PREFIX = "composables";
@@ -491,56 +496,58 @@ class l extends X {
    */
   init() {
     V.INSTANCE.set(l.eNS_URI, this), this.setEFactoryInstance(I.eINSTANCE);
-    const e = new z();
+    const e = new X();
     e.setName("VariableWrapper"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), l.Literals.VARIABLE_WRAPPER = e;
-    const t = new P();
+    const t = new y();
     t.setName("value"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), l.Literals.VARIABLE_WRAPPER__VALUE = t;
-    const n = new P();
+    const n = new y();
     n.setName("variable"), n.setLowerBound(0), n.setUpperBound(1), e.getEStructuralFeatures().push(n), l.Literals.VARIABLE_WRAPPER__VARIABLE = n;
-    const E = new P();
+    const E = new y();
     E.setName("isSet"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), l.Literals.VARIABLE_WRAPPER__IS_SET = E;
-    const c = new P();
-    c.setName("type"), c.setLowerBound(0), c.setUpperBound(1), e.getEStructuralFeatures().push(c), l.Literals.VARIABLE_WRAPPER__TYPE = c, l.Literals.VARIABLE_WRAPPER__VALUE.setEType(y().getEClassifier("EObject")), l.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(y().getEClassifier("EString")), l.Literals.VARIABLE_WRAPPER__IS_SET.setEType(y().getEClassifier("EBoolean")), l.Literals.VARIABLE_WRAPPER__TYPE.setEType(y().getEClassifier("EString"));
+    const c = new y();
+    c.setName("type"), c.setLowerBound(0), c.setUpperBound(1), e.getEStructuralFeatures().push(c), l.Literals.VARIABLE_WRAPPER__TYPE = c, l.Literals.VARIABLE_WRAPPER__VALUE.setEType(P().getEClassifier("EObject")), l.Literals.VARIABLE_WRAPPER__VARIABLE.setEType(P().getEClassifier("EString")), l.Literals.VARIABLE_WRAPPER__IS_SET.setEType(P().getEClassifier("EBoolean")), l.Literals.VARIABLE_WRAPPER__TYPE.setEType(P().getEClassifier("EString"));
   }
 }
-const H = {
+const K = {
   VariableWrapper: D,
   VariableComplexStringWrapper: C
 };
 V.INSTANCE.registerPackage(l.eINSTANCE);
-const K = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Q = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   ComposablesPackage: l,
   VARIABLECOMPLEXSTRINGWRAPPER: m,
   VARIABLEWRAPPER: j,
   VariableComplexStringWrapper: C,
   VariableWrapper: D,
-  WrapperTypes: H,
-  useDatasourceRepository: J,
+  WrapperTypes: K,
+  plainSettings: H,
+  useDatasourceRepository: z,
   useGlobalLoading: F,
   usePromisifiedModal: q,
   useTemporaryStore: Z,
   useVariableRepository: L
-}, Symbol.toStringTag, { value: "Module" })), N = "org.eclipse.daanse.board.app.ui.vue.composables", Q = "0.0.1-next.1";
-async function ie(r) {
+}, Symbol.toStringTag, { value: "Module" })), b = "org.eclipse.daanse.board.app.ui.vue.composables", k = "0.0.1-next.1";
+async function ne(r) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${N}: tsm runtime is not initialized`);
-  e.register(N, K, Q, "ui.vue.composables"), await void 0;
+    throw new Error(`${b}: tsm runtime is not initialized`);
+  e.register(b, Q, k, "ui.vue.composables"), await void 0;
 }
-async function ne(r) {
+async function oe(r) {
   await void 0;
 }
 export {
   l as ComposablesPackage,
   m as VARIABLECOMPLEXSTRINGWRAPPER,
-  ce as VARIABLEWRAPPER,
+  le as VARIABLEWRAPPER,
   C as VariableComplexStringWrapper,
-  le as VariableWrapper,
-  H as WrapperTypes,
-  ie as activate,
-  ne as deactivate,
-  J as useDatasourceRepository,
+  Ee as VariableWrapper,
+  K as WrapperTypes,
+  ne as activate,
+  oe as deactivate,
+  H as plainSettings,
+  z as useDatasourceRepository,
   F as useGlobalLoading,
   q as usePromisifiedModal,
   Z as useTemporaryStore,

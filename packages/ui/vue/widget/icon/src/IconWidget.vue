@@ -12,6 +12,7 @@ Contributors:
 -->
 <script lang="ts" setup>
 import { inject } from 'vue'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { computed, onMounted, toRefs } from "vue";
 import { useVariableRepository, VariableWrapper } from "org.eclipse.daanse.board.app.ui.vue.composables"
 import type { IconSettings } from './gen/IconSettings'
@@ -33,7 +34,12 @@ const eventBus = inject<TinyEmitter>(identifiers.TINY_EMITTER)!;
 
 onMounted(() => {
     if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
+        /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        });
 
         /*
          * A board saved before iconColor was a wrapper holds the colour

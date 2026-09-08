@@ -157,7 +157,7 @@ Contributors:
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted, inject } from 'vue';
 import type { i18n } from "org.eclipse.daanse.board.app.lib.i18next";
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 import {
   identifier as variableIdentifier,
   type VariableRepository
@@ -506,7 +506,9 @@ onMounted(() => {
   }
 
   if (widgetSettings.value && widgetSettings.value.timelineMin) {
-    Object.assign(settings.value, widgetSettings.value);
+    /* By the model's names: the settings object may be a generated
+       instance, whose own properties are the private fields */
+    Object.assign(settings.value, plainSettings(widgetSettings.value));
     useCurrentTimeAsMax.value = !widgetSettings.value.timelineMax;
 
     useStartVariable.value = !!widgetSettings.value.rangeStartVariable;
@@ -543,7 +545,7 @@ onMounted(() => {
 // Watch for external changes
 watch(() => widgetSettings.value, (newSettings) => {
   if (newSettings) {
-    Object.assign(settings.value, newSettings);
+    Object.assign(settings.value, plainSettings(newSettings));
     useCurrentTimeAsMax.value = !newSettings.timelineMax;
     if (newSettings.relativeTime) {
       timeRangeMode.value = newSettings.relativeTime.enabled ? 'relative' : 'absolute';

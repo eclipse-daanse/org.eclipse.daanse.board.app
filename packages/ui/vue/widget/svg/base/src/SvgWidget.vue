@@ -23,7 +23,7 @@ import {
     watch,
 } from "vue";
 import { useRoute } from 'vue-router';
-import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 // import { useDatasourceRepository } from "../composables/datasourceRepository";
 
 const props = defineProps<{ datasourceId: string, id?: string }>();
@@ -130,7 +130,12 @@ const ensureWrapper = (obj: any, key: string, defaultVal: any) => {
 onMounted(async () => {
     if (widgetId?.value) actionsRegistry.registerInstance(widgetId.value, api, 'SVGWidget', pageId);
     if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
+        /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        });
         console.log('SVG config:', config.value);
         console.log('SVG config.value.src:', config.value.src);
         console.log('SVG config.value (as any).settings:', (config.value as any).settings);

@@ -1,20 +1,20 @@
-(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-82423c81]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-82423c81]{overflow:hidden;position:relative;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-82423c81]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-82423c81]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-82423c81]:hover{filter:brightness(1.1)}.range-strip[data-v-82423c81]:active{cursor:grabbing}.timeline-knob[data-v-82423c81]{position:absolute;top:50%;width:24px;height:24px;background:var(--va-primary);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-82423c81]:hover{background:var(--va-primary-dark);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-82423c81]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-82423c81]{left:0;z-index:4}.fixed-knob[data-v-82423c81]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-82423c81]:hover{transform:translate(-50%,-50%)!important;background:var(--va-background-border)!important}.end-knob[data-v-82423c81]{right:-24px;z-index:4}.time-axis[data-v-82423c81]{position:relative;height:30px;background:var(--va-background-secondary);border-top:1px solid var(--va-background-border);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-82423c81]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-82423c81]{width:1px;height:8px;background:var(--va-text-secondary);margin-top:2px}.tick-label[data-v-82423c81]{font-size:.7rem;color:var(--va-text-secondary);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-82423c81]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:6px;padding:.75rem}.time-display[data-v-82423c81]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-82423c81]{font-size:.8rem;font-weight:500;color:var(--va-text-secondary)}.time-value[data-v-82423c81]{font-size:.9rem;font-weight:600;color:var(--va-text-primary);word-wrap:break-word}.controls[data-v-82423c81]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-82423c81]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--va-primary));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-82423c81]:hover:not(:disabled){background:var(--va-primary-dark);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-82423c81]:disabled{background:var(--va-background-border);color:var(--va-text-secondary);cursor:not-allowed;transform:none}.play-button.playing[data-v-82423c81]{background:var(--play-button-playing, #ff6b35);animation:pulse-82423c81 2s infinite}.play-button.playing[data-v-82423c81]:hover{filter:brightness(.9)}@keyframes pulse-82423c81{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-82423c81]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-82423c81]{font-weight:500;color:var(--va-text-primary);min-width:fit-content}.speed-control select[data-v-82423c81]{padding:.5rem;border:1px solid var(--va-background-border);border-radius:4px;background:var(--va-background-primary);color:var(--va-text-primary);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-82423c81]{flex-direction:column;gap:.75rem}.time-display[data-v-82423c81]{text-align:left}.controls[data-v-82423c81]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-82423c81]{width:28px;height:28px}.tick-label[data-v-82423c81]{font-size:.6rem}.timeline-container[data-v-82423c81]{min-height:70px}.timeline-track[data-v-82423c81]{height:35px}}.settings-container[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-0a85bc8a]{font-weight:600;color:var(--va-text-primary);font-size:.9rem}.datetime-group[data-v-0a85bc8a]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-0a85bc8a]>*{flex:1;min-width:0}.relative-time-config[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--va-background-element);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-0a85bc8a]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-0a85bc8a]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-0a85bc8a]{flex:2;min-width:80px}.relative-time-preview[data-v-0a85bc8a]{font-size:.85rem;color:var(--va-primary);padding:.5rem;background:var(--va-background-secondary);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-0a85bc8a]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
-import { WidgetActionInterfaceImpl as dt, EVENT_ACTIONS_REGISTRY as Et, PayloadImpl as je, EVENT_REGISTRY_ID as vt, EVENT_ACTIONS_REGISTRY_ID as gt } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as St, deactivate as Tt, component as ht, inject as Ze } from "@eclipse-daanse/tsm";
-import { defineComponent as Qe, mergeModels as ft, inject as me, toRefs as _t, useModel as et, ref as p, computed as z, watch as Me, onMounted as tt, onUnmounted as mt, createElementBlock as $, openBlock as P, withModifiers as We, createElementVNode as T, createCommentVNode as ce, normalizeStyle as he, Fragment as at, renderList as pt, toDisplayString as Y, normalizeClass as It, withDirectives as Nt, createStaticVNode as bt, vModelSelect as Mt, resolveComponent as fe, createBlock as ze, withCtx as wt, createVNode as ee } from "vue";
-import { useRoute as Rt } from "vue-router";
-import { VariableWrapper as Ae } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { identifier as st } from "org.eclipse.daanse.board.app.lib.api.variable";
+(function(){var i="ui.vue.widget.timeline",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".timeline-widget[data-v-e6f250af]{display:flex;flex-direction:column;gap:1rem;padding:1rem}.timeline-container[data-v-e6f250af]{overflow:hidden;position:relative;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:8px;padding:1rem;min-height:80px}.timeline-track[data-v-e6f250af]{position:relative;height:40px;border-radius:20px;margin-bottom:1rem;cursor:pointer;transition:background-color .2s ease}.range-strip[data-v-e6f250af]{position:absolute;top:0;height:100%;border-width:1px;border-style:solid;border-radius:20px;cursor:grab;transition:background-color .2s ease,border-color .2s ease;z-index:1}.range-strip[data-v-e6f250af]:hover{filter:brightness(1.1)}.range-strip[data-v-e6f250af]:active{cursor:grabbing}.timeline-knob[data-v-e6f250af]{position:absolute;top:50%;width:24px;height:24px;background:var(--va-primary);border:3px solid white;border-radius:50%;cursor:grab;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0003;transition:all .2s ease;z-index:3}.timeline-knob[data-v-e6f250af]:hover{background:var(--va-primary-dark);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 4px 12px #0000004d}.timeline-knob[data-v-e6f250af]:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}.start-knob[data-v-e6f250af]{left:0;z-index:4}.fixed-knob[data-v-e6f250af]{cursor:not-allowed!important;opacity:.7}.fixed-knob[data-v-e6f250af]:hover{transform:translate(-50%,-50%)!important;background:var(--va-background-border)!important}.end-knob[data-v-e6f250af]{right:-24px;z-index:4}.time-axis[data-v-e6f250af]{position:relative;height:30px;background:var(--va-background-secondary);border-top:1px solid var(--va-background-border);border-radius:0 0 8px 8px;margin:0 -1rem -1rem;padding:0 1rem}.time-tick[data-v-e6f250af]{position:absolute;top:0;height:100%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%);pointer-events:none;z-index:2}.tick-mark[data-v-e6f250af]{width:1px;height:8px;background:var(--va-text-secondary);margin-top:2px}.tick-label[data-v-e6f250af]{font-size:.7rem;color:var(--va-text-secondary);margin-top:4px;white-space:nowrap;user-select:none}.time-info[data-v-e6f250af]{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;background:var(--va-background-primary);border:1px solid var(--va-background-border);border-radius:6px;padding:.75rem}.time-display[data-v-e6f250af]{display:flex;flex-direction:column;gap:.25rem;flex:1;text-align:center}.time-label[data-v-e6f250af]{font-size:.8rem;font-weight:500;color:var(--va-text-secondary)}.time-value[data-v-e6f250af]{font-size:.9rem;font-weight:600;color:var(--va-text-primary);word-wrap:break-word}.controls[data-v-e6f250af]{display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap}.play-button[data-v-e6f250af]{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:none;border-radius:50%;background:var(--play-button-bg, var(--va-primary));color:#fff;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 8px #0003}.play-button[data-v-e6f250af]:hover:not(:disabled){background:var(--va-primary-dark);transform:scale(1.05);box-shadow:0 4px 12px #0000004d}.play-button[data-v-e6f250af]:disabled{background:var(--va-background-border);color:var(--va-text-secondary);cursor:not-allowed;transform:none}.play-button.playing[data-v-e6f250af]{background:var(--play-button-playing, #ff6b35);animation:pulse-e6f250af 2s infinite}.play-button.playing[data-v-e6f250af]:hover{filter:brightness(.9)}@keyframes pulse-e6f250af{0%{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}50%{box-shadow:0 4px 16px var(--play-button-bg, rgba(255, 107, 53, .8))}to{box-shadow:0 2px 8px var(--play-button-bg, rgba(255, 107, 53, .4))}}.speed-control[data-v-e6f250af]{display:flex;align-items:center;gap:.5rem;font-size:.9rem}.speed-control label[data-v-e6f250af]{font-weight:500;color:var(--va-text-primary);min-width:fit-content}.speed-control select[data-v-e6f250af]{padding:.5rem;border:1px solid var(--va-background-border);border-radius:4px;background:var(--va-background-primary);color:var(--va-text-primary);font-size:.9rem;cursor:pointer}@media(max-width:768px){.time-info[data-v-e6f250af]{flex-direction:column;gap:.75rem}.time-display[data-v-e6f250af]{text-align:left}.controls[data-v-e6f250af]{flex-direction:column;gap:.75rem}.timeline-knob[data-v-e6f250af]{width:28px;height:28px}.tick-label[data-v-e6f250af]{font-size:.6rem}.timeline-container[data-v-e6f250af]{min-height:70px}.timeline-track[data-v-e6f250af]{height:35px}}.settings-container[data-v-58392934]{display:flex;flex-direction:column;gap:1rem;padding:1rem;overflow-x:hidden}.setting-group[data-v-58392934]{display:flex;flex-direction:column;gap:.5rem;min-width:0}.setting-group>label[data-v-58392934]{font-weight:600;color:var(--va-text-primary);font-size:.9rem}.datetime-group[data-v-58392934]{display:flex;flex-direction:row;gap:.5rem;align-items:flex-start}.datetime-group[data-v-58392934]>*{flex:1;min-width:0}.relative-time-config[data-v-58392934]{display:flex;flex-direction:column;gap:.75rem;padding:.75rem;background:var(--va-background-element);border-radius:4px;min-width:0;overflow:hidden}.relative-time-row[data-v-58392934]{display:flex;gap:.5rem;align-items:flex-end;min-width:0}.offset-input[data-v-58392934]{flex:1;min-width:60px;max-width:100px}.unit-select[data-v-58392934]{flex:2;min-width:80px}.relative-time-preview[data-v-58392934]{font-size:.85rem;color:var(--va-primary);padding:.5rem;background:var(--va-background-secondary);border-radius:4px;text-align:center;word-break:break-word}.variable-config[data-v-58392934]{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}\n";})();
+import { WidgetActionInterfaceImpl as Et, EVENT_ACTIONS_REGISTRY as vt, PayloadImpl as je, EVENT_REGISTRY_ID as gt, EVENT_ACTIONS_REGISTRY_ID as St } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as Tt, deactivate as ht, component as ft, inject as Ze } from "@eclipse-daanse/tsm";
+import { defineComponent as et, mergeModels as _t, inject as me, toRefs as mt, useModel as tt, ref as p, computed as z, watch as Me, onMounted as at, onUnmounted as pt, createElementBlock as $, openBlock as P, withModifiers as We, createElementVNode as T, createCommentVNode as ce, normalizeStyle as he, Fragment as st, renderList as It, toDisplayString as Y, normalizeClass as Nt, withDirectives as bt, createStaticVNode as Mt, vModelSelect as wt, resolveComponent as fe, createBlock as ze, withCtx as Rt, createVNode as ee } from "vue";
+import { useRoute as Lt } from "vue-router";
+import { VariableWrapper as Ae, plainSettings as qe } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { identifier as rt } from "org.eclipse.daanse.board.app.lib.api.variable";
 import { WidgetAction as Ce } from "org.eclipse.daanse.board.app.lib.events";
-import { BasicEObject as rt, BasicEFactory as Dt, BasicEPackage as yt, EPackageRegistry as At, BasicEClass as qe, BasicEAttribute as y, BasicEReference as Vt, getEcorePackage as A } from "@emfts/core";
-import { WIDGET_SERVICE_ID as Ct } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Lt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
-var Ot = Object.defineProperty, xt = Object.getOwnPropertyDescriptor, Oe = (V, e, t, g) => {
-  for (var a = xt(e, t), v = V.length - 1, O; v >= 0; v--)
+import { BasicEObject as nt, BasicEFactory as yt, BasicEPackage as At, EPackageRegistry as Vt, BasicEClass as Je, BasicEAttribute as y, BasicEReference as Ct, getEcorePackage as A } from "@emfts/core";
+import { WIDGET_SERVICE_ID as Ot } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: Dt } = __tsm__.require("org.eclipse.daanse.board.app.lib.core");
+var xt = Object.defineProperty, Ft = Object.getOwnPropertyDescriptor, Oe = (V, e, t, g) => {
+  for (var a = Ft(e, t), v = V.length - 1, O; v >= 0; v--)
     (O = V[v]) && (a = O(e, t, a) || a);
-  return a && Ot(e, t, a), a;
+  return a && xt(e, t, a), a;
 };
-class pe extends dt {
+class pe extends Et {
   zoomIn() {
     throw new Error("zoomIn not implemented");
   }
@@ -40,31 +40,31 @@ Oe([
 Oe([
   Ce({ eventType: "timeline.jumpToNow" })
 ], pe.prototype, "jumpToNow");
-const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
+const Gt = { class: "timeline-container" }, Bt = ["title"], kt = {
   key: 1,
   class: "timeline-knob start-knob fixed-knob",
   title: "Startzeit (fixiert)"
-}, kt = { class: "time-axis" }, Pt = { class: "tick-label" }, Ut = {
+}, Pt = { class: "time-axis" }, Ut = { class: "tick-label" }, Wt = {
   key: 0,
   class: "time-info"
-}, Wt = { class: "time-display" }, zt = { class: "time-value" }, Kt = { class: "time-display" }, Ht = { class: "time-value" }, Xt = { class: "time-display" }, $t = { class: "time-value" }, Yt = {
+}, zt = { class: "time-display" }, Kt = { class: "time-value" }, Ht = { class: "time-display" }, Xt = { class: "time-value" }, $t = { class: "time-display" }, Yt = { class: "time-value" }, jt = {
   key: 1,
   class: "controls"
-}, jt = ["disabled"], Zt = {
+}, Zt = ["disabled"], qt = {
   key: 0,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-}, qt = {
+}, Jt = {
   key: 1,
   width: "24",
   height: "24",
   viewBox: "0 0 24 24",
   fill: "currentColor"
-}, Jt = { class: "speed-control" }, Qt = /* @__PURE__ */ Qe({
+}, Qt = { class: "speed-control" }, ea = /* @__PURE__ */ et({
   __name: "TimelineWidget",
-  props: /* @__PURE__ */ ft({
+  props: /* @__PURE__ */ _t({
     datasourceId: {},
     id: {}
   }, {
@@ -74,11 +74,11 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
   emits: ["update:configv"],
   setup(V, { expose: e }) {
     me("i18n");
-    const t = V, { id: g } = _t(t), a = et(V, "configv"), v = me(Lt.TINY_EMITTER), O = me(Et), te = Rt().params.pageid || "";
+    const t = V, { id: g } = mt(t), a = tt(V, "configv"), v = me(Dt.TINY_EMITTER), O = me(vt), te = Lt().params.pageid || "";
     class ae extends pe {
       zoomIn() {
         const r = new Date(a.value.rangeStart || Date.now() - 864e5), E = new Date(a.value.rangeEnd || Date.now()), c = (E.getTime() - r.getTime()) * 0.25, h = new Date(r.getTime() + c), f = new Date(E.getTime() - c);
-        f.getTime() - h.getTime() > 6e4 && (a.value = { ...a.value, rangeStart: h.toISOString(), rangeEnd: f.toISOString() });
+        f.getTime() - h.getTime() > 6e4 && (a.value.rangeStart = h.toISOString(), a.value.rangeEnd = f.toISOString());
       }
       zoomOut() {
         const r = new Date(a.value.rangeStart || Date.now() - 864e5), E = new Date(a.value.rangeEnd || Date.now()), c = (E.getTime() - r.getTime()) * 0.5, h = new Date(Math.max(
@@ -88,14 +88,14 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
           E.getTime() + c,
           new Date(a.value.timelineMax || Date.now() + 864e5 * 7).getTime()
         ));
-        a.value = { ...a.value, rangeStart: h.toISOString(), rangeEnd: f.toISOString() };
+        a.value.rangeStart = h.toISOString(), a.value.rangeEnd = f.toISOString();
       }
       setDateRange(r, E) {
-        a.value = { ...a.value, rangeStart: r, rangeEnd: E };
+        a.value.rangeStart = r, a.value.rangeEnd = E;
       }
       jumpToNow() {
         const r = /* @__PURE__ */ new Date(), E = new Date(a.value.rangeEnd || r).getTime() - new Date(a.value.rangeStart || r).getTime(), l = r, c = new Date(r.getTime() - E);
-        a.value = { ...a.value, rangeStart: c.toISOString(), rangeEnd: l.toISOString() };
+        a.value.rangeStart = c.toISOString(), a.value.rangeEnd = l.toISOString();
       }
     }
     const j = new ae();
@@ -261,12 +261,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         return;
       }
       const h = () => {
-        if (a.value = {
-          ...a.value,
-          rangeStart: l.toISOString(),
-          rangeEnd: c.toISOString(),
-          playbackSpeed: C.value
-        }, a.value.rangeStartVariable && S.value) {
+        if (a.value.rangeStart = l.toISOString(), a.value.rangeEnd = c.toISOString(), a.value.playbackSpeed = C.value, a.value.rangeStartVariable && S.value) {
           const f = S.value.getVariable(a.value.rangeStartVariable);
           f && (f.value = l.toISOString());
         }
@@ -276,7 +271,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         }
       };
       E ? (Ee && (clearTimeout(Ee), Ee = null), h()) : (Ee && clearTimeout(Ee), Ee = setTimeout(h, 300));
-    }, it = (n) => {
+    }, lt = (n) => {
       if (a.value.fixStartKnob)
         return;
       n.preventDefault(), m.value = !0;
@@ -318,7 +313,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         m.value = !1, x.value = null, R.value = null, ye(new Date(N), new Date(X), !0), document.removeEventListener("mousemove", re), document.removeEventListener("mouseup", ne);
       };
       document.addEventListener("mousemove", re), document.addEventListener("mouseup", ne);
-    }, lt = (n) => {
+    }, ot = (n) => {
       if (a.value.fixStartKnob) {
         Xe(n);
         return;
@@ -342,9 +337,9 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         m.value = !1, w.value = null, x.value = null, R.value = null, ye(new Date(re), new Date(ne), !0), document.removeEventListener("mousemove", ve), document.removeEventListener("mouseup", ge);
       };
       document.addEventListener("mousemove", ve), document.addEventListener("mouseup", ge);
-    }, ot = () => {
-      M.value = !M.value, M.value ? ut() : Pe();
     }, ut = () => {
+      M.value = !M.value, M.value ? ct() : Pe();
+    }, ct = () => {
       Ie = performance.now(), $e();
     }, Pe = () => {
       ie && (cancelAnimationFrame(ie), ie = null);
@@ -388,11 +383,11 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
     }), Me(() => B.value.value, (n) => {
       n && a.value.rangeEndVariable && new Date(n).getTime() !== K.value.getTime() && (a.value.rangeEnd = n);
     });
-    const ct = me(st);
-    return tt(() => {
+    const dt = me(rt);
+    return at(() => {
       g?.value && O.registerInstance(g.value, j, "TimelineWidget", te);
       try {
-        if (S.value = ct ?? null, !S.value) throw new Error("VariableRepository not provided");
+        if (S.value = dt ?? null, !S.value) throw new Error("VariableRepository not provided");
       } catch (n) {
         console.warn("VariableRepository not found in container:", n);
       }
@@ -405,14 +400,14 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         n && B.value.setTo(n);
       }
       a.value.relativeTime?.enabled && Fe();
-    }), mt(() => {
+    }), pt(() => {
       g?.value && O.unregisterInstance(g.value), Pe();
     }), (n, r) => (P(), $("div", {
       class: "timeline-widget",
       onClick: se,
       onContextmenu: We(i, ["prevent"])
     }, [
-      T("div", Ft, [
+      T("div", Gt, [
         T("div", {
           class: "timeline-track",
           ref_key: "trackRef",
@@ -422,14 +417,14 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
           T("div", {
             class: "range-strip",
             style: he(W.value),
-            onMousedown: lt,
+            onMousedown: ot,
             title: a.value.fixStartKnob ? "Timeline-Bereich (Start fixiert)" : "Timeline-Bereich - ziehen zum Verschieben"
           }, [
-            a.value.fixStartKnob ? (P(), $("div", Bt)) : (P(), $("div", {
+            a.value.fixStartKnob ? (P(), $("div", kt)) : (P(), $("div", {
               key: 0,
               class: "timeline-knob start-knob",
               style: he({ zIndex: F.value ? 5 : 4 }),
-              onMousedown: We(it, ["stop"]),
+              onMousedown: We(lt, ["stop"]),
               title: "Startzeit"
             }, null, 36)),
             T("div", {
@@ -438,71 +433,71 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
               onMousedown: We(Xe, ["stop"]),
               title: "Endzeit"
             }, null, 36)
-          ], 44, Gt)
+          ], 44, Bt)
         ], 4),
-        T("div", kt, [
-          (P(!0), $(at, null, pt(le.value, (E) => (P(), $("div", {
+        T("div", Pt, [
+          (P(!0), $(st, null, It(le.value, (E) => (P(), $("div", {
             key: E.timestamp,
             class: "time-tick",
             style: he({ left: E.position + "%" })
           }, [
             r[1] || (r[1] = T("div", { class: "tick-mark" }, null, -1)),
-            T("div", Pt, Y(E.label), 1)
+            T("div", Ut, Y(E.label), 1)
           ], 4))), 128))
         ])
       ]),
-      a.value.showTimeInfo !== !1 ? (P(), $("div", Ut, [
-        T("div", Wt, [
+      a.value.showTimeInfo !== !1 ? (P(), $("div", Wt, [
+        T("div", zt, [
           r[2] || (r[2] = T("span", { class: "time-label" }, "Start:", -1)),
-          T("span", zt, Y(H(Z.value)), 1)
+          T("span", Kt, Y(H(Z.value)), 1)
         ]),
-        T("div", Kt, [
+        T("div", Ht, [
           r[3] || (r[3] = T("span", { class: "time-label" }, "Ende:", -1)),
-          T("span", Ht, Y(H(K.value)), 1)
+          T("span", Xt, Y(H(K.value)), 1)
         ]),
-        T("div", Xt, [
+        T("div", $t, [
           r[4] || (r[4] = T("span", { class: "time-label" }, "Dauer:", -1)),
-          T("span", $t, Y(ke()), 1)
+          T("span", Yt, Y(ke()), 1)
         ])
       ])) : ce("", !0),
-      a.value.showControls !== !1 ? (P(), $("div", Yt, [
+      a.value.showControls !== !1 ? (P(), $("div", jt, [
         T("button", {
-          class: It(["play-button", { playing: M.value }]),
+          class: Nt(["play-button", { playing: M.value }]),
           style: he(u.value),
-          onClick: ot,
+          onClick: ut,
           disabled: I.value
         }, [
-          M.value ? (P(), $("svg", qt, [...r[6] || (r[6] = [
+          M.value ? (P(), $("svg", Jt, [...r[6] || (r[6] = [
             T("path", { d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z" }, null, -1)
-          ])])) : (P(), $("svg", Zt, [...r[5] || (r[5] = [
+          ])])) : (P(), $("svg", qt, [...r[5] || (r[5] = [
             T("path", { d: "M8 5v14l11-7z" }, null, -1)
           ])]))
-        ], 14, jt),
-        T("div", Jt, [
+        ], 14, Zt),
+        T("div", Qt, [
           r[8] || (r[8] = T("label", null, "Geschwindigkeit:", -1)),
-          Nt(T("select", {
+          bt(T("select", {
             "onUpdate:modelValue": r[0] || (r[0] = (E) => C.value = E)
           }, [...r[7] || (r[7] = [
-            bt('<option value="0.25" data-v-82423c81>0.25x</option><option value="0.5" data-v-82423c81>0.5x</option><option value="1" data-v-82423c81>1x</option><option value="2" data-v-82423c81>2x</option><option value="4" data-v-82423c81>4x</option>', 5)
+            Mt('<option value="0.25" data-v-e6f250af>0.25x</option><option value="0.5" data-v-e6f250af>0.5x</option><option value="1" data-v-e6f250af>1x</option><option value="2" data-v-e6f250af>2x</option><option value="4" data-v-e6f250af>4x</option>', 5)
           ])], 512), [
-            [Mt, C.value]
+            [wt, C.value]
           ])
         ])
       ])) : ce("", !0)
     ], 32));
   }
-}), nt = (V, e) => {
+}), it = (V, e) => {
   const t = V.__vccOpts || V;
   for (const [g, a] of e)
     t[g] = a;
   return t;
-}, ea = /* @__PURE__ */ nt(Qt, [["__scopeId", "data-v-82423c81"]]), ta = { class: "settings-container" }, aa = { class: "setting-group" }, sa = {
+}, ta = /* @__PURE__ */ it(ea, [["__scopeId", "data-v-e6f250af"]]), aa = { class: "settings-container" }, sa = { class: "setting-group" }, ra = {
   key: 0,
   class: "setting-group"
-}, ra = { class: "relative-time-config" }, na = { class: "relative-time-row" }, ia = { class: "relative-time-preview" }, la = { class: "setting-group" }, oa = { class: "datetime-group" }, ua = { class: "setting-group" }, ca = {
+}, na = { class: "relative-time-config" }, ia = { class: "relative-time-row" }, la = { class: "relative-time-preview" }, oa = { class: "setting-group" }, ua = { class: "datetime-group" }, ca = { class: "setting-group" }, da = {
   key: 0,
   class: "datetime-group"
-}, da = { class: "setting-group" }, Ea = { class: "variable-config" }, va = { class: "variable-config" }, ga = /* @__PURE__ */ Qe({
+}, Ea = { class: "setting-group" }, va = { class: "variable-config" }, ga = { class: "variable-config" }, Sa = /* @__PURE__ */ et({
   __name: "TimelineWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -510,7 +505,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
   },
   emits: ["update:modelValue"],
   setup(V) {
-    const e = me("i18n"), t = (d) => e ? e.t(d) : d, g = et(V, "modelValue"), a = p({
+    const e = me("i18n"), t = (d) => e ? e.t(d) : d, g = tt(V, "modelValue"), a = p({
       /* The only section left, and the reason to open the tab */
       timelineSection: !0
     }), v = p("absolute"), O = [
@@ -648,15 +643,15 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         showTimeInfo: !0,
         showControls: !0
       }, v.value = "absolute", S.value = !1, W();
-    }, Be = me(st);
-    return tt(() => {
+    }, Be = me(rt);
+    return at(() => {
       try {
         if (m.value = Be ?? null, !m.value) throw new Error("VariableRepository not provided");
       } catch (d) {
         console.warn("VariableRepository not found in container:", d);
       }
       if (g.value && g.value.timelineMin) {
-        if (Object.assign(i.value, g.value), S.value = !g.value.timelineMax, k.value = !!g.value.rangeStartVariable, w.value = !!g.value.rangeEndVariable, i.value.relativeTime || (i.value.relativeTime = {
+        if (Object.assign(i.value, qe(g.value)), S.value = !g.value.timelineMax, k.value = !!g.value.rangeStartVariable, w.value = !!g.value.rangeEndVariable, i.value.relativeTime || (i.value.relativeTime = {
           enabled: !1,
           offset: 24,
           unit: "hours"
@@ -672,7 +667,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         Ge();
       W();
     }), Me(() => g.value, (d) => {
-      d && (Object.assign(i.value, d), S.value = !d.timelineMax, d.relativeTime && (v.value = d.relativeTime.enabled ? "relative" : "absolute"));
+      d && (Object.assign(i.value, qe(d)), S.value = !d.timelineMax, d.relativeTime && (v.value = d.relativeTime.enabled ? "relative" : "absolute"));
     }, { deep: !0 }), (d, u) => {
       const L = fe("va-select"), I = fe("va-input"), F = fe("va-date-input"), le = fe("va-time-input"), H = fe("va-checkbox"), ke = fe("va-collapse");
       return P(), ze(ke, {
@@ -681,9 +676,9 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
         icon: "timeline",
         header: "Zeitraum"
       }, {
-        default: wt(() => [
-          T("div", ta, [
-            T("div", aa, [
+        default: Rt(() => [
+          T("div", aa, [
+            T("div", sa, [
               ee(L, {
                 modelValue: v.value,
                 "onUpdate:modelValue": [
@@ -696,10 +691,10 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                 "value-by": "value"
               }, null, 8, ["modelValue", "label"])
             ]),
-            v.value === "relative" && i.value.relativeTime ? (P(), $("div", sa, [
+            v.value === "relative" && i.value.relativeTime ? (P(), $("div", ra, [
               T("label", null, Y(t("Relative Time Range")), 1),
-              T("div", ra, [
-                T("div", na, [
+              T("div", na, [
+                T("div", ia, [
                   ee(I, {
                     modelValue: i.value.relativeTime.offset,
                     "onUpdate:modelValue": [
@@ -726,13 +721,13 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                     class: "unit-select"
                   }, null, 8, ["modelValue", "label"])
                 ]),
-                T("div", ia, Y(t("Now")) + " - " + Y(i.value.relativeTime.offset) + " " + Y(t(i.value.relativeTime.unit)) + " → " + Y(t("Now")), 1)
+                T("div", la, Y(t("Now")) + " - " + Y(i.value.relativeTime.offset) + " " + Y(t(i.value.relativeTime.unit)) + " → " + Y(t("Now")), 1)
               ])
             ])) : ce("", !0),
-            v.value === "absolute" ? (P(), $(at, { key: 1 }, [
-              T("div", la, [
+            v.value === "absolute" ? (P(), $(st, { key: 1 }, [
+              T("div", oa, [
                 T("label", null, Y(t("Timeline Start")), 1),
-                T("div", oa, [
+                T("div", ua, [
                   ee(F, {
                     modelValue: G.value,
                     "onUpdate:modelValue": [
@@ -751,7 +746,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                   }, null, 8, ["modelValue", "label"])
                 ])
               ]),
-              T("div", ua, [
+              T("div", ca, [
                 T("label", null, Y(t("Timeline End")), 1),
                 ee(H, {
                   modelValue: S.value,
@@ -761,7 +756,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                   ],
                   label: t("Use current time")
                 }, null, 8, ["modelValue", "label"]),
-                S.value ? ce("", !0) : (P(), $("div", ca, [
+                S.value ? ce("", !0) : (P(), $("div", da, [
                   ee(F, {
                     modelValue: M.value,
                     "onUpdate:modelValue": [
@@ -781,9 +776,9 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                 ]))
               ])
             ], 64)) : ce("", !0),
-            T("div", da, [
+            T("div", Ea, [
               T("label", null, Y(t("Variable Binding")), 1),
-              T("div", Ea, [
+              T("div", va, [
                 ee(H, {
                   modelValue: k.value,
                   "onUpdate:modelValue": [
@@ -805,7 +800,7 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
                   "value-by": "name"
                 }, null, 8, ["modelValue", "options", "label"])) : ce("", !0)
               ]),
-              T("div", va, [
+              T("div", ga, [
                 ee(H, {
                   modelValue: w.value,
                   "onUpdate:modelValue": [
@@ -834,11 +829,11 @@ const Ft = { class: "timeline-container" }, Gt = ["title"], Bt = {
       }, 8, ["modelValue"]);
     };
   }
-}), Sa = /* @__PURE__ */ nt(ga, [["__scopeId", "data-v-0a85bc8a"]]), Ta = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", ha = [
+}), Ta = /* @__PURE__ */ it(Sa, [["__scopeId", "data-v-58392934"]]), ha = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3crect%20x='18'%20y='56'%20width='84'%20height='8'%20rx='4'%20fill='%23606060'/%3e%3ccircle%20cx='30'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='60'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3ccircle%20cx='90'%20cy='60'%20r='10'%20fill='%23606060'/%3e%3crect%20x='25'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='55'%20y='32'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3crect%20x='85'%20y='72'%20width='10'%20height='16'%20rx='2'%20fill='%23606060'/%3e%3c/svg%3e", fa = [
   { name: "Timeline Clicked", type: "click", description: "Triggered when the timeline widget is clicked", payloadType: je },
   { name: "Timeline Right Clicked", type: "right_click", description: "Triggered when the timeline widget is right-clicked", payloadType: je }
 ];
-class b extends rt {
+class b extends nt {
   // Feature ID Constants (eLiterals)
   static ENABLED = 0;
   static OFFSET = 1;
@@ -996,7 +991,7 @@ class b extends rt {
     };
   }
 }
-class Ke extends Dt {
+class Ke extends yt {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
@@ -1031,7 +1026,7 @@ class Ke extends Dt {
     }
   }
 }
-class o extends yt {
+class o extends At {
   static eNAME = "timelinesettings";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.timeline";
   static eNS_PREFIX = "timelinesettings";
@@ -1074,8 +1069,8 @@ class o extends yt {
    * Initialize package contents
    */
   init() {
-    At.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Ke.eINSTANCE);
-    const e = new qe();
+    Vt.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Ke.eINSTANCE);
+    const e = new Je();
     e.setName("RelativeTimeConfig"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.RELATIVE_TIME_CONFIG = e;
     const t = new y();
     t.setName("enabled"), t.setLowerBound(0), t.setUpperBound(1), e.getEStructuralFeatures().push(t), o.Literals.RELATIVE_TIME_CONFIG__ENABLED = t;
@@ -1083,7 +1078,7 @@ class o extends yt {
     g.setName("offset"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), o.Literals.RELATIVE_TIME_CONFIG__OFFSET = g;
     const a = new y();
     a.setName("unit"), a.setLowerBound(0), a.setUpperBound(1), e.getEStructuralFeatures().push(a), o.Literals.RELATIVE_TIME_CONFIG__UNIT = a;
-    const v = new qe();
+    const v = new Je();
     v.setName("TimelineSettings"), v.setAbstract(!1), v.setInterface(!1), this.getEClassifiers().push(v), v.setEPackage(this), o.Literals.TIMELINE_SETTINGS = v;
     const O = new y();
     O.setName("timelineMin"), O.setLowerBound(0), O.setUpperBound(1), v.getEStructuralFeatures().push(O), o.Literals.TIMELINE_SETTINGS__TIMELINE_MIN = O;
@@ -1093,7 +1088,7 @@ class o extends yt {
     te.setName("rangeStart"), te.setLowerBound(0), te.setUpperBound(1), v.getEStructuralFeatures().push(te), o.Literals.TIMELINE_SETTINGS__RANGE_START = te;
     const ae = new y();
     ae.setName("rangeEnd"), ae.setLowerBound(0), ae.setUpperBound(1), v.getEStructuralFeatures().push(ae), o.Literals.TIMELINE_SETTINGS__RANGE_END = ae;
-    const j = new Vt();
+    const j = new Ct();
     j.setContainment(!0), j.setName("relativeTime"), j.setLowerBound(0), j.setUpperBound(1), v.getEStructuralFeatures().push(j), o.Literals.TIMELINE_SETTINGS__RELATIVE_TIME = j;
     const se = new y();
     se.setName("rangeStartVariable"), se.setLowerBound(0), se.setUpperBound(1), v.getEStructuralFeatures().push(se), o.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE = se;
@@ -1121,7 +1116,7 @@ class o extends yt {
     R.setName("showTimeInfo"), R.setLowerBound(0), R.setUpperBound(1), v.getEStructuralFeatures().push(R), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO = R, o.Literals.RELATIVE_TIME_CONFIG__ENABLED.setEType(A().getEClassifier("EBoolean")), o.Literals.RELATIVE_TIME_CONFIG__OFFSET.setEType(A().getEClassifier("EInt")), o.Literals.RELATIVE_TIME_CONFIG__UNIT.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MIN.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__TIMELINE_MAX.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_START.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RELATIVE_TIME.setEType(o.Literals.RELATIVE_TIME_CONFIG), o.Literals.TIMELINE_SETTINGS__RANGE_START_VARIABLE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__RANGE_END_VARIABLE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__START_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__END_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__CURRENT_TIME.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__STEP_SIZE.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__PLAYBACK_SPEED.setEType(A().getEClassifier("EDouble")), o.Literals.TIMELINE_SETTINGS__AUTO_PLAY.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__FIX_START_KNOB.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__SHOW_CONTROLS.setEType(A().getEClassifier("EBoolean")), o.Literals.TIMELINE_SETTINGS__RANGE_STRIP_COLOR.setEType(A().getEClassifier("EString")), o.Literals.TIMELINE_SETTINGS__SHOW_TIME_INFO.setEType(A().getEClassifier("EBoolean"));
   }
 }
-class s extends rt {
+class s extends nt {
   // Feature ID Constants (eLiterals)
   static TIMELINE_MIN = 0;
   static TIMELINE_MAX = 1;
@@ -1741,7 +1736,7 @@ class s extends rt {
     };
   }
 }
-const fa = `<?xml version="1.0" encoding="UTF-8"?>
+const _a = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -1811,11 +1806,11 @@ them the words. The speed is a factor, so its labels are the factors.
   </components>
 </uimodel:UIModel>
 `;
-var _a = Object.defineProperty, ma = Object.getOwnPropertyDescriptor, He = (V, e, t, g) => {
-  for (var a = g > 1 ? void 0 : g ? ma(e, t) : e, v = V.length - 1, O; v >= 0; v--)
+var ma = Object.defineProperty, pa = Object.getOwnPropertyDescriptor, He = (V, e, t, g) => {
+  for (var a = g > 1 ? void 0 : g ? pa(e, t) : e, v = V.length - 1, O; v >= 0; v--)
     (O = V[v]) && (a = (g ? O(e, t, a) : O(a)) || a);
-  return g && a && _a(e, t, a), a;
-}, Je = (V, e) => (t, g) => e(t, g, V);
+  return g && a && ma(e, t, a), a;
+}, Qe = (V, e) => (t, g) => e(t, g, V);
 o.eINSTANCE;
 const _e = "TimelineWidget";
 let Ve = class {
@@ -1823,10 +1818,10 @@ let Ve = class {
     this.events = V, this.actions = e;
   }
   type = _e;
-  component = ea;
-  settingsComponent = Sa;
+  component = ta;
+  settingsComponent = Ta;
   supportedDSTypes = [];
-  icon = Ta;
+  icon = ha;
   name = "Timeline";
   /*
    * The settings form, as a model. Carried on the registration like the
@@ -1834,7 +1829,7 @@ let Ve = class {
    * exists - and the shell needs no dependency on this bundle.
    */
   settingsForm = {
-    xmi: fa,
+    xmi: _a,
     uri: "/timeline-settings.ui.xmi",
     ePackage: () => o.eINSTANCE,
     create: () => new s(),
@@ -1846,31 +1841,31 @@ let Ve = class {
     unmodelledSections: ["Zeitraum"]
   };
   register() {
-    this.events.registerWidget(_e, ha), this.actions.registerWidgetType(_e, pe, "widget");
+    this.events.registerWidget(_e, fa), this.actions.registerWidgetType(_e, pe, "widget");
   }
   unregister() {
     this.events.unregisterWidget(_e), this.actions.unregisterWidgetType(_e);
   }
 };
 He([
-  St()
+  Tt()
 ], Ve.prototype, "register", 1);
 He([
-  Tt()
+  ht()
 ], Ve.prototype, "unregister", 1);
 Ve = He([
-  ht({
-    service: [Ct],
+  ft({
+    service: [Ot],
     properties: { "widget.type": _e }
   }),
-  Je(0, Ze(vt)),
-  Je(1, Ze(gt))
+  Qe(0, Ze(gt)),
+  Qe(1, Ze(St))
 ], Ve);
 export {
   s as TimelineSettingsImpl,
-  ea as TimelineWidget,
+  ta as TimelineWidget,
   Ve as TimelineWidgetProvider,
-  Sa as TimelineWidgetSettings,
+  Ta as TimelineWidgetSettings,
   o as TimelinesettingsPackage,
-  fa as timelineSettingsFormXmi
+  _a as timelineSettingsFormXmi
 };

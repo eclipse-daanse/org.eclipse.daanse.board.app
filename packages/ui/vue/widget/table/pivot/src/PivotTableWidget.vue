@@ -14,7 +14,7 @@ Contributors:
 <script lang="ts" setup>
 import { inject } from 'vue'
 import { toRefs, ref, watch, onMounted, computed, markRaw } from "vue";
-import { useVariableRepository, useDatasourceRepository, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import { useVariableRepository, useDatasourceRepository, VariableWrapper, plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { PivotTable as PivotTableComponent } from 'org.eclipse.daanse.board.app.ui.vue.common.xmla';
 import type { PivotTable } from "./gen/PivotTable";
 // The class to instantiate: in emf mode the plain name is the interface
@@ -143,7 +143,12 @@ const defaultConfig = new PivotTableImpl()
 
 onMounted(() => {
     if (config.value) {
-        Object.assign(config.value, { ...defaultConfig, ...config.value });
+        /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        });
     }
 
     // actionsRegistry.registerInstance(widgetId.value, api, 'MapWidget', pageId);

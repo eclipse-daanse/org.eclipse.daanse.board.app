@@ -1,13 +1,13 @@
-(function(){var i="ui.vue.widget.table.pivot",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-ddf7bd40]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-ddf7bd40]{overflow:hidden;padding:16px}.settings-container[data-v-6b0d43bf]{padding:16px}.settings-block[data-v-6b0d43bf]{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.settings-block[data-v-6b0d43bf]:last-child{margin-bottom:0}.settings-block h3[data-v-6b0d43bf]{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--va-primary)}.hint-text[data-v-6b0d43bf]{margin:0 0 16px;color:var(--va-text-secondary);font-size:13px}.level-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600}.level-card[data-v-6b0d43bf]{border:1px solid #ddd;padding:16px;border-radius:4px;margin-bottom:12px;background:#fafafa;display:flex;flex-direction:column;gap:12px}.level-card-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center}.empty-state[data-v-6b0d43bf]{padding:20px;text-align:center;color:var(--va-text-secondary);background:#f5f5f5;border-radius:4px}.color-scale-row[data-v-6b0d43bf]{display:flex;gap:12px}.color-scale-row[data-v-6b0d43bf]>*{flex:1}\n";})();
-import { PayloadImpl as Le, WidgetActionInterfaceImpl as ye, EVENT_REGISTRY_ID as Fe, EVENT_ACTIONS_REGISTRY_ID as Ue } from "org.eclipse.daanse.board.app.lib.api.events";
-import { activate as Be, deactivate as We, component as xe, inject as me } from "@eclipse-daanse/tsm";
-import { defineComponent as we, mergeModels as He, toRefs as be, inject as Me, useModel as ve, onMounted as ke, computed as F, ref as De, watch as Re, createElementBlock as B, openBlock as R, withModifiers as Ge, createElementVNode as C, createBlock as Ce, createCommentVNode as Q, unref as y, resolveComponent as ae, Fragment as ge, createVNode as d, withCtx as p, createTextVNode as ie, renderList as Te, toDisplayString as pe } from "vue";
-import { VariableWrapper as c, useVariableRepository as Ye, useDatasourceRepository as Xe } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { PivotTable as Ke } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
-import { BasicEObject as fe, BasicEFactory as qe, BasicEPackage as ze, EPackageRegistry as Ie, BasicEClass as P, BasicEReference as S, BasicEAttribute as v, getEcorePackage as D, createContainmentEList as ne } from "@emfts/core";
+(function(){var i="ui.vue.widget.table.pivot",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".text-container[data-v-498e0ac7]{display:flex;flex-direction:column;width:100%;height:100%;gap:1rem;align-items:stretch}.component[data-v-498e0ac7]{overflow:hidden;padding:16px}.settings-container[data-v-6b0d43bf]{padding:16px}.settings-block[data-v-6b0d43bf]{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.settings-block[data-v-6b0d43bf]:last-child{margin-bottom:0}.settings-block h3[data-v-6b0d43bf]{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--va-primary)}.hint-text[data-v-6b0d43bf]{margin:0 0 16px;color:var(--va-text-secondary);font-size:13px}.level-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600}.level-card[data-v-6b0d43bf]{border:1px solid #ddd;padding:16px;border-radius:4px;margin-bottom:12px;background:#fafafa;display:flex;flex-direction:column;gap:12px}.level-card-header[data-v-6b0d43bf]{display:flex;justify-content:space-between;align-items:center}.empty-state[data-v-6b0d43bf]{padding:20px;text-align:center;color:var(--va-text-secondary);background:#f5f5f5;border-radius:4px}.color-scale-row[data-v-6b0d43bf]{display:flex;gap:12px}.color-scale-row[data-v-6b0d43bf]>*{flex:1}\n";})();
+import { PayloadImpl as Le, WidgetActionInterfaceImpl as Fe, EVENT_REGISTRY_ID as Ue, EVENT_ACTIONS_REGISTRY_ID as Be } from "org.eclipse.daanse.board.app.lib.api.events";
+import { activate as We, deactivate as xe, component as He, inject as me } from "@eclipse-daanse/tsm";
+import { defineComponent as ve, mergeModels as Me, toRefs as be, inject as ke, useModel as De, onMounted as Ge, computed as F, ref as Ie, watch as Re, createElementBlock as B, openBlock as R, withModifiers as Ye, createElementVNode as C, createBlock as Ce, createCommentVNode as Q, unref as y, resolveComponent as ae, Fragment as ge, createVNode as d, withCtx as p, createTextVNode as ie, renderList as Te, toDisplayString as pe } from "vue";
+import { VariableWrapper as c, useVariableRepository as Xe, plainSettings as Ae, useDatasourceRepository as Ke } from "org.eclipse.daanse.board.app.ui.vue.composables";
+import { PivotTable as qe } from "org.eclipse.daanse.board.app.ui.vue.common.xmla";
+import { BasicEObject as fe, BasicEFactory as ze, BasicEPackage as Ze, EPackageRegistry as Ve, BasicEClass as P, BasicEReference as S, BasicEAttribute as v, getEcorePackage as D, createContainmentEList as ne } from "@emfts/core";
 import { VariableInput as U } from "org.eclipse.daanse.board.app.ui.vue.variable.components";
-import { WIDGET_SERVICE_ID as Je } from "org.eclipse.daanse.board.app.lib.api.widget";
-const { identifiers: Ze } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), Qe = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2025.5C37.5%2023.8431%2036.1569%2022.5%2034.5%2022.5H25.5C23.8431%2022.5%2022.5%2023.8431%2022.5%2025.5V34.5C22.5%2036.1569%2023.8431%2037.5%2025.5%2037.5H34.5C36.1569%2037.5%2037.5%2036.1569%2037.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M57.4399%2077.5607C58.3849%2076.6157%2060.0006%2077.285%2060.0006%2078.6213V84C60.0006%2084.8284%2060.6722%2085.5%2061.5006%2085.5H84C84.8284%2085.5%2085.5%2084.8284%2085.5%2084V61.5C85.5%2060.6716%2084.8284%2060%2084%2060H78.6214C77.285%2060%2076.6158%2058.3843%2077.5608%2057.4393L88.9399%2046.0606C89.5257%2045.4749%2090.4755%2045.4749%2091.0612%2046.0607L102.439%2057.4394C103.384%2058.3843%20102.715%2060%20101.379%2060H96C95.1716%2060%2094.5%2060.6716%2094.5%2061.5V93C94.5%2093.8284%2093.8284%2094.5%2093%2094.5H61.5006C60.6722%2094.5%2060.0006%2095.1716%2060.0006%2096V101.379C60.0006%20102.715%2058.3849%20103.384%2057.44%20102.44L46.0607%2091.0613C45.4749%2090.4755%2045.4749%2089.5257%2046.0607%2088.9399L57.4399%2077.5607Z'%20fill='%23606060'/%3e%3c/svg%3e";
+import { WIDGET_SERVICE_ID as Qe } from "org.eclipse.daanse.board.app.lib.api.widget";
+const { identifiers: Je } = __tsm__.require("org.eclipse.daanse.board.app.lib.core"), je = "data:image/svg+xml,%3csvg%20width='120'%20height='120'%20viewBox='0%200%20120%20120'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M105%207.5H15C10.8579%207.5%207.5%2010.8579%207.5%2015V105C7.5%20109.142%2010.8579%20112.5%2015%20112.5H105C109.142%20112.5%20112.5%20109.142%20112.5%20105V15C112.5%2010.8579%20109.142%207.5%20105%207.5ZM15%200C6.71573%200%200%206.71573%200%2015V105C0%20113.284%206.71573%20120%2015%20120H105C113.284%20120%20120%20113.284%20120%20105V15C120%206.71573%20113.284%200%20105%200H15Z'%20fill='%23606060'/%3e%3cpath%20d='M22.5%2048C22.5%2046.3431%2023.8431%2045%2025.5%2045H34.5C36.1569%2045%2037.5%2046.3431%2037.5%2048V94.5C37.5%2096.1569%2036.1569%2097.5%2034.5%2097.5H25.5C23.8431%2097.5%2022.5%2096.1569%2022.5%2094.5V48Z'%20fill='%23606060'/%3e%3cpath%20d='M45%2025.5C45%2023.8431%2046.3431%2022.5%2048%2022.5H94.5C96.1569%2022.5%2097.5%2023.8431%2097.5%2025.5V34.5C97.5%2036.1569%2096.1569%2037.5%2094.5%2037.5H48C46.3431%2037.5%2045%2036.1569%2045%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M37.5%2025.5C37.5%2023.8431%2036.1569%2022.5%2034.5%2022.5H25.5C23.8431%2022.5%2022.5%2023.8431%2022.5%2025.5V34.5C22.5%2036.1569%2023.8431%2037.5%2025.5%2037.5H34.5C36.1569%2037.5%2037.5%2036.1569%2037.5%2034.5V25.5Z'%20fill='%23606060'/%3e%3cpath%20d='M57.4399%2077.5607C58.3849%2076.6157%2060.0006%2077.285%2060.0006%2078.6213V84C60.0006%2084.8284%2060.6722%2085.5%2061.5006%2085.5H84C84.8284%2085.5%2085.5%2084.8284%2085.5%2084V61.5C85.5%2060.6716%2084.8284%2060%2084%2060H78.6214C77.285%2060%2076.6158%2058.3843%2077.5608%2057.4393L88.9399%2046.0606C89.5257%2045.4749%2090.4755%2045.4749%2091.0612%2046.0607L102.439%2057.4394C103.384%2058.3843%20102.715%2060%20101.379%2060H96C95.1716%2060%2094.5%2060.6716%2094.5%2061.5V93C94.5%2093.8284%2093.8284%2094.5%2093%2094.5H61.5006C60.6722%2094.5%2060.0006%2095.1716%2060.0006%2096V101.379C60.0006%20102.715%2058.3849%20103.384%2057.44%20102.44L46.0607%2091.0613C45.4749%2090.4755%2045.4749%2089.5257%2046.0607%2088.9399L57.4399%2077.5607Z'%20fill='%23606060'/%3e%3c/svg%3e";
 class O extends fe {
   // Feature ID Constants (eLiterals)
   static LEVEL = 0;
@@ -772,7 +772,7 @@ class H extends Le {
     };
   }
 }
-class Se extends qe {
+class Se extends ze {
   // Lazy singleton instance
   static _instance;
   static get eINSTANCE() {
@@ -832,12 +832,12 @@ class Se extends qe {
   }
 }
 function m(N) {
-  const e = Ie.INSTANCE.getEPackage(N);
+  const e = Ve.INSTANCE.getEPackage(N);
   if (!e)
     throw new Error(`EPackage '${N}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing PivotTablePackage.`);
   return e;
 }
-class o extends ze {
+class o extends Ze {
   static eNAME = "PivotTable";
   static eNS_URI = "http://org.eclipse.daanse.board.app.ui.vue.widget.table.pivot";
   static eNS_PREFIX = "PivotTable";
@@ -901,7 +901,7 @@ class o extends ze {
    * Initialize package contents
    */
   init() {
-    Ie.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Se.eINSTANCE);
+    Ve.INSTANCE.set(o.eNS_URI, this), this.setEFactoryInstance(Se.eINSTANCE);
     const e = new P();
     e.setName("PivotTable"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), o.Literals.PIVOT_TABLE = e;
     const t = new S();
@@ -914,10 +914,10 @@ class o extends ze {
     A.setName("tableState"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), o.Literals.PIVOT_TABLE__TABLE_STATE = A;
     const I = new S();
     I.setContainment(!1), I.setName("headerBackgroundColor"), I.setLowerBound(0), I.setUpperBound(1), e.getEStructuralFeatures().push(I), o.Literals.PIVOT_TABLE__HEADER_BACKGROUND_COLOR = I;
-    const b = new S();
-    b.setContainment(!1), b.setName("headerTextColor"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), o.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR = b;
     const M = new S();
-    M.setContainment(!1), M.setName("cellBackgroundColor"), M.setLowerBound(0), M.setUpperBound(1), e.getEStructuralFeatures().push(M), o.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR = M;
+    M.setContainment(!1), M.setName("headerTextColor"), M.setLowerBound(0), M.setUpperBound(1), e.getEStructuralFeatures().push(M), o.Literals.PIVOT_TABLE__HEADER_TEXT_COLOR = M;
+    const b = new S();
+    b.setContainment(!1), b.setName("cellBackgroundColor"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), o.Literals.PIVOT_TABLE__CELL_BACKGROUND_COLOR = b;
     const k = new S();
     k.setContainment(!1), k.setName("cellTextColor"), k.setLowerBound(0), k.setUpperBound(1), e.getEStructuralFeatures().push(k), o.Literals.PIVOT_TABLE__CELL_TEXT_COLOR = k;
     const G = new S();
@@ -1607,9 +1607,9 @@ class r extends fe {
     };
   }
 }
-const je = { class: "component" }, $e = /* @__PURE__ */ we({
+const $e = { class: "component" }, Pe = /* @__PURE__ */ ve({
   __name: "PivotTableWidget",
-  props: /* @__PURE__ */ He({
+  props: /* @__PURE__ */ Me({
     datasourceId: {},
     id: {}
   }, {
@@ -1618,7 +1618,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
   }),
   emits: ["update:configv"],
   setup(N) {
-    const e = N, { datasourceId: t, id: n } = be(e), _ = Me(Ze.TINY_EMITTER), A = () => {
+    const e = N, { datasourceId: t, id: n } = be(e), _ = ke(Je.TINY_EMITTER), A = () => {
       n?.value && _.emit("widget:PivotTableWidget:click", {
         type: "widget:PivotTableWidget:click",
         widgetId: n.value,
@@ -1630,13 +1630,13 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
         widgetId: n.value,
         payload: { widgetId: n.value, timestamp: Date.now() }
       });
-    }, b = (a) => {
+    }, M = (a) => {
       n?.value && _.emit("widget:PivotTableWidget:row_clicked", {
         type: "widget:PivotTableWidget:row_clicked",
         widgetId: n.value,
         payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
       });
-    }, M = (a) => {
+    }, b = (a) => {
       n?.value && _.emit("widget:PivotTableWidget:row_right_clicked", {
         type: "widget:PivotTableWidget:row_right_clicked",
         widgetId: n.value,
@@ -1690,9 +1690,12 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
         widgetId: n.value,
         payload: { widgetId: n.value, timestamp: Date.now(), uniqueName: a }
       });
-    }, T = ve(N, "configv"), { wrapParameters: J } = Ye(), u = new r();
-    ke(() => {
-      T.value && Object.assign(T.value, { ...u, ...T.value });
+    }, T = De(N, "configv"), { wrapParameters: J } = Xe(), u = new r();
+    Ge(() => {
+      T.value && Object.assign(T.value, {
+        ...Ae(u),
+        ...Ae(T.value)
+      });
     });
     const l = J({
       headerBackgroundColor: F(() => T.value?.headerBackgroundColor?.value ?? u.headerBackgroundColor),
@@ -1761,7 +1764,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
       showRowsProperties: T.value?.showRowsProperties || u.showRowsProperties,
       showColumnsProperties: T.value?.showColumnsProperties || u.showColumnsProperties,
       showSingleMeasureHeader: T.value?.showSingleMeasureHeader ?? u.showSingleMeasureHeader
-    })), L = De(null), { callEvent: W, update: w } = Xe(t, "PivotTable", L, [], f);
+    })), L = Ie(null), { callEvent: W, update: w } = Ke(t, "PivotTable", L, [], f);
     Re(t, (a, h) => {
       w(a, h);
     }), Re(() => f.value, () => {
@@ -1775,15 +1778,15 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
     return (a, h) => (R(), B("div", {
       class: "text-container",
       onClick: A,
-      onContextmenu: Ge(I, ["prevent"])
+      onContextmenu: Ye(I, ["prevent"])
     }, [
-      C("div", je, [
-        L.value ? (R(), Ce(y(Ke), {
+      C("div", $e, [
+        L.value ? (R(), Ce(y(qe), {
           "model-value": L.value,
           onOnExpand: s,
           onOnCollapse: E,
-          onRow_clicked: b,
-          onRow_right_clicked: M,
+          onRow_clicked: M,
+          onRow_right_clicked: b,
           onColumn_clicked: k,
           onColumn_right_clicked: G,
           onCell_clicked: Y,
@@ -1810,24 +1813,24 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
       ])
     ], 32));
   }
-}), Ve = (N, e) => {
+}), ye = (N, e) => {
   const t = N.__vccOpts || N;
   for (const [n, _] of e)
     t[n] = _;
   return t;
-}, Pe = /* @__PURE__ */ Ve($e, [["__scopeId", "data-v-ddf7bd40"]]), et = { class: "settings-container" }, tt = { class: "settings-container" }, st = { class: "settings-block" }, rt = { class: "settings-block" }, lt = { class: "settings-block" }, ot = { class: "settings-container" }, at = { class: "settings-block" }, it = { class: "settings-container" }, nt = { class: "settings-block" }, ut = { class: "settings-container" }, dt = { class: "level-header" }, ct = { class: "level-card-header" }, ht = {
+}, et = /* @__PURE__ */ ye(Pe, [["__scopeId", "data-v-498e0ac7"]]), tt = { class: "settings-container" }, st = { class: "settings-container" }, rt = { class: "settings-block" }, lt = { class: "settings-block" }, ot = { class: "settings-block" }, at = { class: "settings-container" }, it = { class: "settings-block" }, nt = { class: "settings-container" }, ut = { class: "settings-block" }, dt = { class: "settings-container" }, ct = { class: "level-header" }, ht = { class: "level-card-header" }, Et = {
   key: 0,
   class: "empty-state"
-}, Et = { class: "settings-container" }, _t = { class: "level-header" }, gt = { class: "level-card-header" }, Ct = {
+}, _t = { class: "settings-container" }, gt = { class: "level-header" }, Ct = { class: "level-card-header" }, Lt = {
   key: 0,
   class: "empty-state"
-}, Lt = { class: "settings-container" }, Ot = { class: "level-header" }, Tt = { class: "level-card-header" }, pt = {
+}, Ot = { class: "settings-container" }, Tt = { class: "level-header" }, pt = { class: "level-card-header" }, ft = {
   key: 3,
   class: "color-scale-row"
-}, ft = {
+}, St = {
   key: 0,
   class: "empty-state"
-}, St = /* @__PURE__ */ we({
+}, Nt = /* @__PURE__ */ ve({
   __name: "PivotTableWidgetSettings",
   props: {
     modelValue: { required: !0 },
@@ -1835,7 +1838,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
   },
   emits: ["update:modelValue"],
   setup(N) {
-    const e = ve(N, "modelValue"), t = De({
+    const e = De(N, "modelValue"), t = Ie({
       colorsSection: !0,
       dimensionsSection: !1,
       textSection: !1,
@@ -1858,9 +1861,9 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
       e.value.rowLevelStyles || (e.value.rowLevelStyles = []);
       const u = e.value.rowLevelStyles.length, l = new O();
       l.level = u, _(e.value.rowLevelStyles, l);
-    }, b = (u) => {
+    }, M = (u) => {
       A(e.value.rowLevelStyles, u);
-    }, M = () => {
+    }, b = () => {
       e.value.columnLevelStyles || (e.value.columnLevelStyles = []);
       const u = e.value.columnLevelStyles.length, l = new O();
       l.level = u, _(e.value.columnLevelStyles, l);
@@ -1893,7 +1896,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "palette"
         }, {
           default: p(() => [
-            C("div", et, [
+            C("div", tt, [
               d(V, {
                 modelValue: e.value.showRowsProperties,
                 "onUpdate:modelValue": l[0] || (l[0] = (s) => e.value.showRowsProperties = s),
@@ -1923,8 +1926,8 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "palette"
         }, {
           default: p(() => [
-            C("div", tt, [
-              C("div", st, [
+            C("div", st, [
+              C("div", rt, [
                 l[20] || (l[20] = C("h3", null, "Header", -1)),
                 d(y(U), {
                   modelValue: e.value.headerBackgroundColor,
@@ -1955,7 +1958,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   _: 1
                 }, 8, ["modelValue"])
               ]),
-              C("div", rt, [
+              C("div", lt, [
                 l[21] || (l[21] = C("h3", null, "Zellen", -1)),
                 d(y(U), {
                   modelValue: e.value.cellBackgroundColor,
@@ -1986,7 +1989,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   _: 1
                 }, 8, ["modelValue"])
               ]),
-              C("div", lt, [
+              C("div", ot, [
                 l[22] || (l[22] = C("h3", null, "Rahmen", -1)),
                 d(y(U), {
                   modelValue: e.value.borderColor,
@@ -2014,8 +2017,8 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "straighten"
         }, {
           default: p(() => [
-            C("div", ot, [
-              C("div", at, [
+            C("div", at, [
+              C("div", it, [
                 d(y(U), {
                   modelValue: e.value.defaultColumnWidth,
                   "onUpdate:modelValue": l[10] || (l[10] = (s) => e.value.defaultColumnWidth = s),
@@ -2062,8 +2065,8 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "text_fields"
         }, {
           default: p(() => [
-            C("div", it, [
-              C("div", nt, [
+            C("div", nt, [
+              C("div", ut, [
                 d(y(U), {
                   modelValue: e.value.fontSize,
                   "onUpdate:modelValue": l[13] || (l[13] = (s) => e.value.fontSize = s),
@@ -2118,9 +2121,9 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "table_rows"
         }, {
           default: p(() => [
-            C("div", ut, [
+            C("div", dt, [
               l[26] || (l[26] = C("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Zeilen-Headern. ", -1)),
-              C("div", dt, [
+              C("div", ct, [
                 l[24] || (l[24] = C("span", null, "Level-Konfiguration", -1)),
                 d(w, {
                   size: "small",
@@ -2136,12 +2139,12 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                 key: `row_level_${E}`,
                 class: "level-card"
               }, [
-                C("div", ct, [
+                C("div", ht, [
                   C("strong", null, "Level " + pe(s.level), 1),
                   d(w, {
                     size: "small",
                     color: "danger",
-                    onClick: (a) => b(E)
+                    onClick: (a) => M(E)
                   }, {
                     default: p(() => [...l[25] || (l[25] = [
                       ie("Entfernen", -1)
@@ -2196,7 +2199,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   step: 100
                 }, null, 8, ["modelValue", "onUpdate:modelValue"])
               ]))), 128)),
-              e.value.rowLevelStyles?.length ? Q("", !0) : (R(), B("div", ht, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
+              e.value.rowLevelStyles?.length ? Q("", !0) : (R(), B("div", Et, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
             ])
           ]),
           _: 1
@@ -2208,13 +2211,13 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "view_column"
         }, {
           default: p(() => [
-            C("div", Et, [
+            C("div", _t, [
               l[30] || (l[30] = C("p", { class: "hint-text" }, " Definiere individuelle Styles für verschiedene Hierarchie-Level in den Spalten-Headern. ", -1)),
-              C("div", _t, [
+              C("div", gt, [
                 l[28] || (l[28] = C("span", null, "Level-Konfiguration", -1)),
                 d(w, {
                   size: "small",
-                  onClick: M
+                  onClick: b
                 }, {
                   default: p(() => [...l[27] || (l[27] = [
                     ie("Level hinzufügen", -1)
@@ -2226,7 +2229,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                 key: `col_level_${E}`,
                 class: "level-card"
               }, [
-                C("div", gt, [
+                C("div", Ct, [
                   C("strong", null, "Level " + pe(s.level), 1),
                   d(w, {
                     size: "small",
@@ -2286,7 +2289,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   step: 100
                 }, null, 8, ["modelValue", "onUpdate:modelValue"])
               ]))), 128)),
-              e.value.columnLevelStyles?.length ? Q("", !0) : (R(), B("div", Ct, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
+              e.value.columnLevelStyles?.length ? Q("", !0) : (R(), B("div", Lt, ' Keine Level-Styles definiert. Klicke "Level hinzufügen" um anzufangen. '))
             ])
           ]),
           _: 1
@@ -2298,9 +2301,9 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
           icon: "format_color_fill"
         }, {
           default: p(() => [
-            C("div", Lt, [
+            C("div", Ot, [
               l[34] || (l[34] = C("p", { class: "hint-text" }, " Definiere Regeln zur automatischen Formatierung von Zellen basierend auf ihren Werten. ", -1)),
-              C("div", Ot, [
+              C("div", Tt, [
                 l[32] || (l[32] = C("span", null, "Formatierungsregeln", -1)),
                 d(w, {
                   size: "small",
@@ -2316,7 +2319,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                 key: s.id,
                 class: "level-card"
               }, [
-                C("div", Tt, [
+                C("div", pt, [
                   C("strong", null, "Regel " + pe(E + 1), 1),
                   d(w, {
                     size: "small",
@@ -2358,7 +2361,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   modelValue: s.value1,
                   "onUpdate:modelValue": (a) => s.value1 = a
                 }, null, 8, ["modelValue", "onUpdate:modelValue"])) : Q("", !0),
-                z(s.conditionType) ? (R(), B("div", pt, [
+                z(s.conditionType) ? (R(), B("div", ft, [
                   d(f, {
                     label: "Min-Farbe",
                     modelValue: s.minColor,
@@ -2401,7 +2404,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
                   min: 0
                 }, null, 8, ["modelValue", "onUpdate:modelValue"])
               ]))), 128)),
-              e.value.conditionalFormats?.length ? Q("", !0) : (R(), B("div", ft, ' Keine Formatierungsregeln definiert. Klicke "Regel hinzufügen" um anzufangen. '))
+              e.value.conditionalFormats?.length ? Q("", !0) : (R(), B("div", St, ' Keine Formatierungsregeln definiert. Klicke "Regel hinzufügen" um anzufangen. '))
             ])
           ]),
           _: 1
@@ -2409,7 +2412,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
       ], 64);
     };
   }
-}), Nt = /* @__PURE__ */ Ve(St, [["__scopeId", "data-v-6b0d43bf"]]), mt = [
+}), mt = /* @__PURE__ */ ye(Nt, [["__scopeId", "data-v-6b0d43bf"]]), Rt = [
   {
     name: "Row Expanded",
     type: "row_expanded",
@@ -2471,7 +2474,7 @@ const je = { class: "component" }, $e = /* @__PURE__ */ we({
     payloadType: Le
   }
 ];
-class Rt extends ye {
+class At extends Fe {
   // Feature ID Constants (eLiterals)
   // Private fields
   /**
@@ -2514,45 +2517,45 @@ class Rt extends ye {
     throw new Error("expandRow not implemented");
   }
 }
-var At = Object.defineProperty, wt = Object.getOwnPropertyDescriptor, Ne = (N, e, t, n) => {
-  for (var _ = n > 1 ? void 0 : n ? wt(e, t) : e, A = N.length - 1, I; A >= 0; A--)
+var wt = Object.defineProperty, vt = Object.getOwnPropertyDescriptor, Ne = (N, e, t, n) => {
+  for (var _ = n > 1 ? void 0 : n ? vt(e, t) : e, A = N.length - 1, I; A >= 0; A--)
     (I = N[A]) && (_ = (n ? I(e, t, _) : I(_)) || _);
-  return n && _ && At(e, t, _), _;
-}, Ae = (N, e) => (t, n) => e(t, n, N);
+  return n && _ && wt(e, t, _), _;
+}, we = (N, e) => (t, n) => e(t, n, N);
 const ue = "PivotTableWidget";
 let Oe = class {
   constructor(N, e) {
     this.events = N, this.actions = e;
   }
   type = ue;
-  component = Pe;
-  settingsComponent = Nt;
+  component = et;
+  settingsComponent = mt;
   supportedDSTypes = [];
-  icon = Qe;
+  icon = je;
   name = "PivotTable";
   register() {
-    this.events.registerWidget(ue, mt), this.actions.registerWidgetType(ue, Rt, "widget");
+    this.events.registerWidget(ue, Rt), this.actions.registerWidgetType(ue, At, "widget");
   }
   unregister() {
     this.events.unregisterWidget(ue), this.actions.unregisterWidgetType(ue);
   }
 };
 Ne([
-  Be()
+  We()
 ], Oe.prototype, "register", 1);
 Ne([
-  We()
+  xe()
 ], Oe.prototype, "unregister", 1);
 Oe = Ne([
-  xe({
-    service: [Je],
+  He({
+    service: [Qe],
     properties: { "widget.type": ue }
   }),
-  Ae(0, me(Fe)),
-  Ae(1, me(Ue))
+  we(0, me(Ue)),
+  we(1, me(Be))
 ], Oe);
 export {
-  Pe as PivotTableWidget,
+  et as PivotTableWidget,
   Oe as PivotTableWidgetProvider,
-  Nt as PivotTableWidgetSettings
+  mt as PivotTableWidgetSettings
 };

@@ -13,6 +13,7 @@ Contributors:
 
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch, type Ref, computed, toRefs } from 'vue'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import type { ImageSettings } from './gen/ImageSettings'
 // The class to instantiate: in emf mode the plain name is the interface
 import { ImageSettingsImpl } from './gen/ImageSettingsImpl'
@@ -47,7 +48,12 @@ const defaultConfig = new ImageSettingsImpl();
 
 onMounted(() => {
   if (config.value) {
-    Object.assign(config.value, { ...defaultConfig, ...config.value })
+    /* Read by the model's names: spreading a generated instance gives
+         * the private fields the getters sit in, not the features. */
+        Object.assign(config.value, {
+            ...plainSettings(defaultConfig),
+            ...plainSettings(config.value),
+        })
   }
 })
 

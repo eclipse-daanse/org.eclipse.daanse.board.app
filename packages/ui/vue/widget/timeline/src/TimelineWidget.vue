@@ -182,7 +182,11 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
         const newStart = new Date(start.getTime() + shrink);
         const newEnd = new Date(end.getTime() - shrink);
         if (newEnd.getTime() - newStart.getTime() > 60000) {
-            config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+            /* Written in place: replacing the object with a spread of it
+             * would hand back the private fields of a generated instance
+             * and drop everything else the settings hold. */
+            config.value.rangeStart = newStart.toISOString();
+            config.value.rangeEnd = newEnd.toISOString();
         }
     }
     zoomOut(): void {
@@ -199,10 +203,12 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
             end.getTime() + expand,
             new Date(config.value.timelineMax || Date.now() + 86400000 * 7).getTime()
         ));
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        config.value.rangeStart = newStart.toISOString();
+        config.value.rangeEnd = newEnd.toISOString();
     }
     setDateRange(start: string, end: string): void {
-        config.value = { ...config.value, rangeStart: start, rangeEnd: end };
+        config.value.rangeStart = start;
+        config.value.rangeEnd = end;
     }
     jumpToNow(): void {
         const now = new Date();
@@ -210,7 +216,8 @@ class TimelineWidgetApi extends TimelineWidgetInterface {
             new Date(config.value.rangeStart || now).getTime();
         const newEnd = now;
         const newStart = new Date(now.getTime() - duration);
-        config.value = { ...config.value, rangeStart: newStart.toISOString(), rangeEnd: newEnd.toISOString() };
+        config.value.rangeStart = newStart.toISOString();
+        config.value.rangeEnd = newEnd.toISOString();
     }
 }
 const api = new TimelineWidgetApi();
@@ -583,12 +590,9 @@ const updateConfig = (newStart?: Date, newEnd?: Date, immediate = false) => {
   }
 
   const updateFn = () => {
-    config.value = {
-      ...config.value,
-      rangeStart: actualStart.toISOString(),
-      rangeEnd: actualEnd.toISOString(),
-      playbackSpeed: playbackSpeed.value
-    };
+    config.value.rangeStart = actualStart.toISOString();
+    config.value.rangeEnd = actualEnd.toISOString();
+    config.value.playbackSpeed = playbackSpeed.value;
 
     // Update variables if they are configured
     if (config.value.rangeStartVariable && variableRepository.value) {
