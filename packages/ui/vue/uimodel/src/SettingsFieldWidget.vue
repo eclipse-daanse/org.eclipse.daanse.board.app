@@ -92,6 +92,56 @@ function isWrapperFeature(feature: EStructuralFeature): boolean {
   }
 }
 
+/** Several values rather than one - a set of choices, not a value. */
+const isMany = computed(() => {
+  try {
+    return props.feature?.isMany?.() === true || (props.feature?.getUpperBound?.() ?? 1) !== 1
+  } catch {
+    return false
+  }
+})
+
+/*
+ * The chosen values, whatever shape they arrive in.
+ *
+ * A generated class holds an EList; a board saved as JSON brings back a
+ * plain array. Both are read through the same few operations so the rest
+ * of this does not have to care which it got.
+ */
+function chosenList(): any {
+  const name = props.feature?.getName?.()
+  if (!name || !props.eObject) return undefined
+  return (props.eObject as unknown as Record<string, any>)[name]
+}
+
+const chosen = computed<Array<string | number>>(() => {
+  const list = chosenList()
+  if (!list) return []
+  if (typeof list.toArray === 'function') return list.toArray()
+  return Array.isArray(list) ? list : []
+})
+
+function isChosen(value: string | number): boolean {
+  return chosen.value.some((held) => held === value)
+}
+
+function toggle(value: string | number, on: boolean) {
+  const list = chosenList()
+  if (!list || !editable.value) return
+
+  if (on) {
+    if (isChosen(value)) return
+    if (typeof list.add === 'function') list.add(value)
+    else if (Array.isArray(list)) list.push(value)
+    return
+  }
+
+  const at = chosen.value.findIndex((held) => held === value)
+  if (at < 0) return
+  if (typeof list.removeAt === 'function') list.removeAt(at)
+  else if (Array.isArray(list)) list.splice(at, 1)
+}
+
 /** Reads and writes the plain attribute, for a field with no wrapper. */
 const plain = computed<any>({
   get: () => readHeld(),
@@ -152,6 +202,13 @@ function toggleBinding() {
 
 const editable = computed(() => !props.custom?.resolvedStyle?.readOnly && !isBound.value)
 
+/*
+ * What a bound field says under itself. The colour field asked for this and
+ * nothing defined it, so it read as undefined and fell through to the
+ * placeholder - which is the one thing a bound field is not showing.
+ */
+const boundHint = computed(() => (isBound.value ? `Von „${boundName.value}“` : undefined))
+
 const value = computed({
   get: () => (bindable.value ? wrapper.value?.value : plain.value) ?? '',
   set: (next) => {
@@ -210,21 +267,33 @@ const modelKind = computed<string>(() => props.custom?.rawWidget?.eClass?.()?.ge
  * sees: "pedestrian" is what a route is calculated with, "Zu Fuß" is what
  * someone is choosing.
  */
-const options = computed<Array<{ value: string; text: string }>>(() => {
+/*
+ * A model lists its values as text, because that is what XMI holds. Where
+ * the feature they are stored in is a number, they are handed back as
+ * numbers: a playback speed of "0.5" multiplies into a string, and the
+ * chosen option would not match the stored one on the way back in either.
+ */
+const storesNumber = computed(() => {
+  const type = props.feature?.getEType?.()?.getName?.()
+  return type === 'EInt' || type === 'EDouble' || type === 'ELong' || type === 'EFloat'
+})
+
+const options = computed<Array<{ value: string | number; text: string }>>(() => {
   const raw = props.custom?.rawWidget
   const values = raw?.values
   const list: string[] = values && typeof values.map === 'function' ? [...values] : []
-
   const labelExpression = raw?.optionLabel
-  if (!labelExpression?.body || !props.eObject) return list.map((value) => ({ value, text: value }))
 
-  return list.map((value) => {
-    let text = value
-    try {
-      const named = evaluateValue(labelExpression, props.eObject!, { option: value })
-      if (named != null && named !== '') text = String(named)
-    } catch {
-      // A label that will not evaluate leaves the value readable as itself
+  return list.map((given) => {
+    const value = storesNumber.value ? Number(given) : given
+    let text = given
+    if (labelExpression?.body && props.eObject) {
+      try {
+        const named = evaluateValue(labelExpression, props.eObject, { option: given })
+        if (named != null && named !== '') text = String(named)
+      } catch {
+        // A label that will not evaluate leaves the value readable as itself
+      }
     }
     return { value, text }
   })
@@ -239,7 +308,10 @@ const numberBounds = computed(() => ({
   step: props.custom?.rawWidget?.step,
 }))
 
-const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'text'>(() => {
+const kind = computed<'flag' | 'number' | 'colour' | 'choice' | 'lines' | 'set' | 'text'>(() => {
+  /* Several values are a set of choices however the form names the field */
+  if (isMany.value) return 'set'
+
   switch (modelKind.value) {
     case 'CheckboxWidget':
       return 'flag'
@@ -286,6 +358,21 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
         disabled
         hint="Es sind noch keine Variablen angelegt."
       />
+
+      <!-- Several values: every choice is shown, ticked or not. A list
+           this size is read by scanning it, and a dropdown that has to be
+           opened to see what is in it hides exactly that. -->
+      <fieldset v-else-if="kind === 'set'" class="set">
+        <legend class="set__label">{{ label }}</legend>
+        <DCheckbox
+          v-for="option in options"
+          :key="String(option.value)"
+          :model-value="isChosen(option.value)"
+          :label="option.text"
+          :disabled="!editable"
+          @update:model-value="(on: boolean) => toggle(option.value, on)"
+        />
+      </fieldset>
 
       <DCheckbox
         v-else-if="kind === 'flag'"
@@ -358,6 +445,19 @@ const noVariables = computed(() => bindingMode.value && variableNames.value.leng
 </template>
 
 <style scoped>
+.set {
+  margin: 0 0 7px;
+  padding: 0;
+  border: 0;
+}
+
+.set__label {
+  padding: 0;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--d-text-muted, #6b7280);
+}
+
 .field-row {
   display: flex;
   align-items: flex-start;

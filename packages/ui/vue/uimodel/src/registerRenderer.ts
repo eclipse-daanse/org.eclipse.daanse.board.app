@@ -63,6 +63,21 @@ export function registerListRenderer(eClass: EClass, seen = new Set<EClass>()): 
 
   for (const feature of eClass.getEStructuralFeatures()) {
     if (isMany(feature)) {
+      /*
+       * A list of plain values - which forecast parameters to chart, say -
+       * is not a list of things to open one at a time. It is a set of
+       * choices, and the field renderer draws it as one; the list renderer
+       * would ask it which class its entries are and find no answer.
+       */
+      if (isAttribute(feature)) {
+        componentRegistry.registerForFeature(
+          eClass,
+          feature.getName?.() ?? '',
+          SettingsFieldWidget,
+        )
+        continue
+      }
+
       componentRegistry.registerForFeature(
         eClass,
         feature.getName?.() ?? '',
