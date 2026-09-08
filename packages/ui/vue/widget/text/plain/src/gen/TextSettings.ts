@@ -5,33 +5,22 @@
  * @generated
  */
 
-import { VariableComplexStringWrapper, VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
-import { ModelClass, Reference } from 'org.eclipse.daanse.board.app.lib.annotations';
+import type { EObject } from '@emfts/core';
+import type { VariableComplexStringWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
+import type { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables';
 
-@ModelClass({ type: 'http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings' })
-export class TextSettings {
-  @Reference('VariableComplexStringWrapper')
-  text: VariableComplexStringWrapper<string> = new VariableComplexStringWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontSize: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontColor: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontWeight: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  fontStyle: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  textDecoration: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  horizontalAlign: VariableWrapper<string> = new VariableWrapper<string>();
-
-  @Reference('VariableWrapper')
-  verticalAlign: VariableWrapper<string> = new VariableWrapper<string>();
+/**
+ * TextSettings
+ * @generated
+ */
+export interface TextSettings extends EObject {
+  text?: VariableComplexStringWrapper<string>;
+  fontSize?: VariableWrapper<string>;
+  fontColor?: VariableWrapper<string>;
+  fontWeight?: VariableWrapper<string>;
+  fontStyle?: VariableWrapper<string>;
+  textDecoration?: VariableWrapper<string>;
+  horizontalAlign?: VariableWrapper<string>;
+  verticalAlign?: VariableWrapper<string>;
 
 }

@@ -38,6 +38,9 @@ export class ComposablesPackage extends BasicEPackage {
     VARIABLE_WRAPPER__VARIABLE: null as unknown as EAttribute | EReference,
     VARIABLE_WRAPPER__IS_SET: null as unknown as EAttribute | EReference,
     VARIABLE_WRAPPER__TYPE: null as unknown as EAttribute | EReference,
+    VARIABLE_COMPLEX_STRING_WRAPPER: null as unknown as EClass,
+    VARIABLE_COMPLEX_STRING_WRAPPER__VALUE: null as unknown as EAttribute | EReference,
+    VARIABLE_COMPLEX_STRING_WRAPPER__TYPE: null as unknown as EAttribute | EReference,
   };
 
   private constructor() {
@@ -99,6 +102,31 @@ export class ComposablesPackage extends BasicEPackage {
     variableWrapperClass.getEStructuralFeatures().push(variableWrapper_type);
     ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE = variableWrapper_type;
 
+    // Create VariableComplexStringWrapper class
+    const variableComplexStringWrapperClass = new BasicEClass();
+    variableComplexStringWrapperClass.setName('VariableComplexStringWrapper');
+    variableComplexStringWrapperClass.setAbstract(false);
+    variableComplexStringWrapperClass.setInterface(false);
+    this.getEClassifiers().push(variableComplexStringWrapperClass);
+    variableComplexStringWrapperClass.setEPackage(this);
+    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER = variableComplexStringWrapperClass;
+
+    // Create value feature
+    const variableComplexStringWrapper_value = new BasicEAttribute();
+    variableComplexStringWrapper_value.setName('value');
+    variableComplexStringWrapper_value.setLowerBound(0);
+    variableComplexStringWrapper_value.setUpperBound(1);
+    variableComplexStringWrapperClass.getEStructuralFeatures().push(variableComplexStringWrapper_value);
+    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE = variableComplexStringWrapper_value;
+
+    // Create type feature
+    const variableComplexStringWrapper_type = new BasicEAttribute();
+    variableComplexStringWrapper_type.setName('type');
+    variableComplexStringWrapper_type.setLowerBound(0);
+    variableComplexStringWrapper_type.setUpperBound(1);
+    variableComplexStringWrapperClass.getEStructuralFeatures().push(variableComplexStringWrapper_type);
+    ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE = variableComplexStringWrapper_type;
+
 
     // ============================================
     // Set ESuperTypes (must be done after all classes are created)
@@ -113,6 +141,8 @@ export class ComposablesPackage extends BasicEPackage {
     (ComposablesPackage.Literals.VARIABLE_WRAPPER__VARIABLE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
     (ComposablesPackage.Literals.VARIABLE_WRAPPER__IS_SET as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EBoolean')!);
     (ComposablesPackage.Literals.VARIABLE_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
+    (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__VALUE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EObject')!);
+    (ComposablesPackage.Literals.VARIABLE_COMPLEX_STRING_WRAPPER__TYPE as BasicEAttribute).setEType(getEcorePackage().getEClassifier('EString')!);
 
     // ============================================
     // Register XML name mappings from ExtendedMetaData annotations

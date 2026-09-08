@@ -10,6 +10,8 @@ import type { EClass, EObject } from '@emfts/core';
 import { ComposablesPackage } from './ComposablesPackage.js';
 import { VariableWrapper } from './VariableWrapper.js';
 import { VariableWrapperImpl } from './VariableWrapperImpl.js';
+import { VariableComplexStringWrapper } from './VariableComplexStringWrapper.js';
+import { VariableComplexStringWrapperImpl } from './VariableComplexStringWrapperImpl.js';
 
 /**
  * Factory for creating Composables model objects
@@ -39,12 +41,21 @@ export class ComposablesFactory extends BasicEFactory {
   }
 
   /**
+   * Create a new VariableComplexStringWrapper instance
+   */
+  createVariableComplexStringWrapper(): VariableComplexStringWrapper<unknown> {
+    return new VariableComplexStringWrapperImpl();
+  }
+
+  /**
    * Create an instance of the given class
    */
   override create(eClass: EClass): EObject {
     switch (eClass.getName()) {
       case 'VariableWrapper':
         return this.createVariableWrapper();
+      case 'VariableComplexStringWrapper':
+        return this.createVariableComplexStringWrapper();
       default:
         throw new Error(`Unknown class: ${eClass.getName()}`);
     }

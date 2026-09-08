@@ -159,13 +159,17 @@ function silenceUnusedStubParameters(file) {
  *
  * Only the bare name is touched, never one that already carries arguments.
  */
+const GENERIC_CLASSES = ['VariableWrapper', 'VariableComplexStringWrapper']
+
 function fillMissingTypeArguments(file) {
   const before = readFileSync(file, 'utf8')
-  const generic = /\bVariableWrapper\b(?!\s*<)(?!\s*\()/g
-  const after = before.replace(
-    /(implements|extends|:|<)(\s*)VariableWrapper\b(?!\s*<)/g,
-    (_all, keyword, space) => `${keyword}${space}VariableWrapper<unknown>`,
-  )
+  let after = before
+  for (const name of GENERIC_CLASSES) {
+    after = after.replace(
+      new RegExp(`(implements|extends|:|<)(\\s*)${name}\\b(?!\\s*<)`, 'g'),
+      (_all, keyword, space) => `${keyword}${space}${name}<unknown>`,
+    )
+  }
   if (after !== before) writeFileSync(file, after)
 }
 

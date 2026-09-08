@@ -144,14 +144,35 @@ function toggle(value: string | number, on: boolean) {
 
 /** Reads and writes the plain attribute, for a field with no wrapper. */
 const plain = computed<any>({
-  get: () => readHeld(),
+  get: () => {
+    const held = readHeld()
+    return holdsValue(held) ? (held as { value: unknown }).value : held
+  },
   set: (next) => {
     const { eObject, feature } = props
     const name = feature?.getName?.()
     if (!eObject || !name) return
+
+    /*
+     * Written through, not over. A field can hold something that is not a
+     * bindable wrapper but still keeps its value inside - the complex
+     * string wrapper, which stores a text naming variables and hands back
+     * the text with them substituted. Assigning the field would put a
+     * string where that object was and lose what it does.
+     */
+    const held = readHeld()
+    if (holdsValue(held)) {
+      ;(held as { value: unknown }).value = next
+      return
+    }
     ;(eObject as unknown as Record<string, any>)[name] = next
   },
 })
+
+/** Something that keeps its value inside rather than being one. */
+function holdsValue(held: unknown): boolean {
+  return Boolean(held) && typeof held === 'object' && 'value' in (held as object)
+}
 
 /* ------------------------------------------------------------ binding */
 

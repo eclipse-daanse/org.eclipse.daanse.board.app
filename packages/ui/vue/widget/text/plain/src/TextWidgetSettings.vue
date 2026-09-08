@@ -37,10 +37,10 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
 </script>
 
 <template>
-  <va-collapse v-model="opened.widgetSection" icon="settings" :header="t('textBase:TextWidget.title')">
+  <va-collapse v-model="opened.widgetSection" icon="settings" header="Text und Formatierung">
     <div class="settings-container">
       <div class="settings-block">
-        <ComplexTextInput v-model="widgetSettings.text">
+        <ComplexTextInput v-model="widgetSettings.text!">
           <template #default="{ value, change }">
             <VaInput
               :modelValue="value"
@@ -54,36 +54,28 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
       </div>
       <div class="toolbar">
         <!-- Font Size & Color -->
-        <div class="toolbar-group toolbar-group--inputs">
-          <VariableInput v-model="widgetSettings.fontSize" :label="t('textBase:TextWidget.fontSize')">
-            <template #default="{ value, change }">
-              <va-input :model-value="value" @input="change" placeholder="Size" class="toolbar-input" />
-            </template>
-          </VariableInput>
-          <VariableInput v-model="widgetSettings.fontColor" :label="t('textBase:TextWidget.fontColor')">
-            <template #default="{ value, change }">
-              <va-color-input :model-value="value" @input="change" class="toolbar-input" />
-            </template>
-          </VariableInput>
-        </div>
+        <!--
+          Size and colour are not here any more: they are typed, so they are
+          rendered from model/ui.xmi beside this. What is left is pressed.
+        -->
         <!-- Text Format -->
         <div class="toolbar-group">
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_bold"
-            :class="{ 'is-active': widgetSettings.fontWeight.value === 'bold' }"
-            @click="widgetSettings.fontWeight.value = widgetSettings.fontWeight.value === 'bold' ? 'normal' : 'bold'"
+            :class="{ 'is-active': widgetSettings.fontWeight!.value === 'bold' }"
+            @click="widgetSettings.fontWeight!.value = widgetSettings.fontWeight!.value === 'bold' ? 'normal' : 'bold'"
             title="Bold"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_italic"
-            :class="{ 'is-active': widgetSettings.fontStyle.value === 'italic' }"
-            @click="widgetSettings.fontStyle.value = widgetSettings.fontStyle.value === 'italic' ? 'normal' : 'italic'"
+            :class="{ 'is-active': widgetSettings.fontStyle!.value === 'italic' }"
+            @click="widgetSettings.fontStyle!.value = widgetSettings.fontStyle!.value === 'italic' ? 'normal' : 'italic'"
             title="Italic"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_underlined"
-            :class="{ 'is-active': widgetSettings.textDecoration.value === 'underline' }"
-            @click="widgetSettings.textDecoration.value = widgetSettings.textDecoration.value === 'underline' ? 'None' : 'underline'"
+            :class="{ 'is-active': widgetSettings.textDecoration!.value === 'underline' }"
+            @click="widgetSettings.textDecoration!.value = widgetSettings.textDecoration!.value === 'underline' ? 'None' : 'underline'"
             title="Underline"
           />
         </div>
@@ -91,20 +83,20 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
         <div class="toolbar-group">
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_align_left"
-            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Left' }"
-            @click="widgetSettings.horizontalAlign.value = 'Left'"
+            :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Left' }"
+            @click="widgetSettings.horizontalAlign!.value = 'Left'"
             title="Left"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_align_center"
-            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Center' }"
-            @click="widgetSettings.horizontalAlign.value = 'Center'"
+            :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Center' }"
+            @click="widgetSettings.horizontalAlign!.value = 'Center'"
             title="Center"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="format_align_right"
-            :class="{ 'is-active': widgetSettings.horizontalAlign.value === 'Right' }"
-            @click="widgetSettings.horizontalAlign.value = 'Right'"
+            :class="{ 'is-active': widgetSettings.horizontalAlign!.value === 'Right' }"
+            @click="widgetSettings.horizontalAlign!.value = 'Right'"
             title="Right"
           />
         </div>
@@ -112,20 +104,20 @@ const t = (key: string) => (i18n) ? i18n.t(key) : key;
         <div class="toolbar-group">
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="vertical_align_top"
-            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Top' }"
-            @click="widgetSettings.verticalAlign.value = 'Top'"
+            :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Top' }"
+            @click="widgetSettings.verticalAlign!.value = 'Top'"
             title="Top"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="vertical_align_center"
-            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Center' }"
-            @click="widgetSettings.verticalAlign.value = 'Center'"
+            :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Center' }"
+            @click="widgetSettings.verticalAlign!.value = 'Center'"
             title="Center"
           />
           <VaButton class="toolbar-btn" size="small" preset="secondary"
             icon="vertical_align_bottom"
-            :class="{ 'is-active': widgetSettings.verticalAlign.value === 'Bottom' }"
-            @click="widgetSettings.verticalAlign.value = 'Bottom'"
+            :class="{ 'is-active': widgetSettings.verticalAlign!.value === 'Bottom' }"
+            @click="widgetSettings.verticalAlign!.value = 'Bottom'"
             title="Bottom"
           />
         </div>

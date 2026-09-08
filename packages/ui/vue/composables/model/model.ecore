@@ -60,4 +60,27 @@
         </eStructuralFeatures>
     </eClassifiers>
 
+    <eClassifiers xsi:type="ecore:EClass" name="VariableComplexStringWrapper">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A setting whose value is a text with variables named inside it, rather than a value that follows one variable. The text is what is stored and edited; reading the value substitutes the variables it names, so a caption can say what a board is showing without the widget knowing which variables exist."/>
+        </eAnnotations>
+
+        <eTypeParameters name="T"/>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="The text with its variables substituted. Setting it stores the text as written, variable names and all."/>
+            </eAnnotations>
+            <eGenericType eTypeParameter="#//VariableComplexStringWrapper/T"/>
+        </eStructuralFeatures>
+
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type"
+                             eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+                             changeable="false" defaultValueLiteral="VARIABLECOMPLEXSTRINGWRAPPER">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                <details key="documentation" value="Discriminator carried into stored states, so it is recognisable as one when it comes back as plain JSON."/>
+            </eAnnotations>
+        </eStructuralFeatures>
+    </eClassifiers>
+
 </ecore:EPackage>

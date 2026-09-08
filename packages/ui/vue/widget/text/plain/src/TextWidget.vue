@@ -16,7 +16,7 @@ import { inject, computed, toRefs, onMounted, onUnmounted, ref, watch, getCurren
 import { useRoute } from 'vue-router'
 import { useDatasourceRepository, VariableComplexStringWrapper, VariableWrapper, WrapperTypes } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import helpers from 'org.eclipse.daanse.board.app.lib.utils.helpers'
-import { TextSettings } from './gen/TextSettings'
+import type { TextSettings } from './gen/TextSettings'
 import 'reflect-metadata';
 
 const props = defineProps<{ datasourceId: string; id?: string }>();
@@ -91,14 +91,29 @@ const defaultConfig = {
 const data = ref(null as any);
 const { update } = useDatasourceRepository(datasourceId, "object", data);
 
-Object.keys(defaultConfig).forEach((key) => {
-  if (config.value[key as keyof TextSettings] === undefined || config.value[key as keyof TextSettings] === null) {
-    const refTypeName = Reflect.getMetadata("Reference", TextSettings.prototype, key);
-    const Constructor = WrapperTypes[refTypeName as keyof typeof WrapperTypes];
-    const defaultValue = defaultConfig[key as keyof typeof defaultConfig];
-    (config.value as any)[key] = new Constructor(defaultValue as string);
+/*
+ * Every setting gets a wrapper, and an empty one gets the value this widget
+ * starts from.
+ *
+ * A fresh instance from the factory carries empty wrappers, and a board
+ * stored before this widget was modelled carries none at all - both would
+ * render as nothing. The class of wrapper is named here rather than read
+ * off a decorator: the settings are generated from the model now, and the
+ * model says which field holds a text that can name variables inside it.
+ */
+const wrapperFor = (key: string, value: string | number) =>
+  key === 'text'
+    ? new VariableComplexStringWrapper<string>(String(value))
+    : new VariableWrapper<string>(String(value))
+
+for (const [key, value] of Object.entries(defaultConfig)) {
+  const held = (config.value as Record<string, any>)[key]
+  if (held === undefined || held === null) {
+    (config.value as Record<string, any>)[key] = wrapperFor(key, value)
+  } else if (held.value === undefined || held.value === null || held.value === '') {
+    held.value = String(value)
   }
-});
+}
 
 watch(datasourceId, (newVal, oldVal) => {
     update(newVal, oldVal);
@@ -106,12 +121,12 @@ watch(datasourceId, (newVal, oldVal) => {
 
 
 const calculatedString = computed(() => {
-    if (!config.value.text.value) {
+    if (!config.value.text?.value) {
         return "";
     }
 
 
-    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.text.value);
+    const { parts } = helpers.widget.extractValuesAndFullObject(config.value.text!.value);
     let result = "";
 
     for (const part of parts) {
@@ -161,11 +176,11 @@ watch(calculatedString, (newVal, oldVal) => {
 
 .component {
     font-size: v-bind('fontSizeStyle');
-    color: v-bind('config.fontColor.value');
-    text-align: v-bind('config.horizontalAlign.value');
-    font-weight: v-bind('config.fontWeight.value');
-    font-style: v-bind('config.fontStyle.value');
-    text-decoration: v-bind('config.textDecoration.value');
+    color: v-bind('config.fontColor?.value');
+    text-align: v-bind('config.horizontalAlign?.value');
+    font-weight: v-bind('config.fontWeight?.value');
+    font-style: v-bind('config.fontStyle?.value');
+    text-decoration: v-bind('config.textDecoration?.value');
     overflow: hidden;
 }
 </style>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+
+The form for the text widget: the two values that are typed.
+
+What the text says, and how it is set - bold, italic, underlined, aligned -
+stay with the hand-written half beside this. Those are pressed, not typed:
+six alignment buttons say at a glance which way the text sits, where six
+entries in two dropdowns would not. And the text itself is written in a
+field that can name variables inside it, which is a way of composing rather
+than a value to enter.
+
+Size and colour are neither. They sat in the same toolbar only because
+that is where there was room.
+-->
+<uimodel:UIModel
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmi:version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:uimodel="http://uimodel/1.0"
+    name="TextSettingsForm">
+
+  <targetClasses href="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings"/>
+
+  <components xsi:type="uimodel:FormView" name="TextSettingsFormView">
+    <fields xsi:type="uimodel:NumberWidget" name="fontSize"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontSize" label="Schriftgröße (px)"
+        min="1" max="400" step="1"/>
+    <fields xsi:type="uimodel:InputWidget" name="fontColor"
+        feature="http://org.eclipse.daanse.board.app.ui.vue.widget.text.plain#//TextSettings/fontColor" label="Schriftfarbe"/>
+  </components>
+</uimodel:UIModel>
