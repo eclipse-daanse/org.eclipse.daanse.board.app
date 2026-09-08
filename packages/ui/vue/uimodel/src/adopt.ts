@@ -29,9 +29,61 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 /** The class every settings value goes through. */
 const WRAPPER_CLASS = 'VariableWrapper'
 
+/** What one calls itself once it has been serialised. */
+const WRAPPER_TYPE = 'VARIABLEWRAPPER'
+
 /** An object that can say what it is - what the composer needs. */
 export function isModelled(value: unknown): value is EObject {
   return typeof (value as EObject | undefined)?.eClass === 'function'
+}
+
+/*
+ * What a generated instance keeps for EMF rather than for the widget.
+ *
+ * These are written out with everything else when a workspace is stored,
+ * and they mean nothing on the way back: the resource, container and
+ * adapters belong to the instance that was serialised, not to this one.
+ */
+const BOOKKEEPING = new Set([
+  '_eResource',
+  '_eContainer',
+  '_eContainerFeature',
+  '_eProxyURI',
+  '_eAdapters',
+  '_eDeliver',
+  'eSettings',
+])
+
+/**
+ * The feature a stored key stands for, or nothing if it stands for none.
+ *
+ * A settings object that has been through storage comes back the way it
+ * was serialised: a generated class keeps its values in _-prefixed fields
+ * behind the setters, and those are what get written out. Reading the
+ * plain name off them puts each value back through the setter it came
+ * from.
+ */
+function featureFor(name: string): string | undefined {
+  if (BOOKKEEPING.has(name)) return undefined
+  return name.startsWith('_') ? name.slice(1) : name
+}
+
+/**
+ * A wrapper that has been through storage, rebuilt.
+ *
+ * Serialising one writes its private _value out alongside its type, so what
+ * comes back is a plain object that looks like a wrapper and behaves like
+ * nothing. Wrapping it again would put that whole object where the value
+ * belongs, and the widget would render "[object Object]".
+ */
+function asWrapper(value: unknown): VariableWrapper<unknown> | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const held = value as Record<string, unknown>
+  if (held.type !== WRAPPER_TYPE) return undefined
+
+  const rebuilt = new VariableWrapper(held._value)
+  if (typeof held.variable === 'string') rebuilt.variable = held.variable
+  return rebuilt
 }
 
 /**
@@ -53,18 +105,13 @@ export function adopt<T extends EObject>(instance: T, stored: unknown): T {
   const source = stored as Record<string, unknown>
   const target = instance as unknown as Record<string, unknown>
 
-  const declared = new Set<string>()
-  for (const feature of instance.eClass().getEStructuralFeatures()) {
-    const name = feature.getName?.()
-    if (name) declared.add(name)
-  }
-
-  for (const [name, value] of Object.entries(source)) {
-    // The generated class keeps its values in _-prefixed fields behind the
-    // setters; writing those directly would go around them
-    if (name.startsWith('_')) continue
+  for (const [stored, value] of Object.entries(source)) {
+    const name = featureFor(stored)
+    if (!name) continue
+    /* A plain key wins over the _-prefixed one for the same feature */
+    if (stored.startsWith('_') && name in source) continue
     try {
-      target[name] = value
+      target[name] = asWrapper(value) ?? value
     } catch {
       // A derived or read-only feature cannot be restored, and was never
       // stored as a value in the first place
