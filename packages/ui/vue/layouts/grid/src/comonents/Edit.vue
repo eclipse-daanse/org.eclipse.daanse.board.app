@@ -92,6 +92,7 @@ import { cloneDeep, isEqual } from 'lodash'
 import throttle from 'lodash/throttle'
 import { useClipboardStore } from 'org.eclipse.daanse.board.app.ui.vue.layouts.base'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 /** Grid Settings — direkt aus dem Page Repository lesen */
@@ -328,7 +329,13 @@ const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 function syncLayoutSettings() {
   if (pageRepo && pageID.value) {
     const page = pageRepo.getPage(pageID.value)
-    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+    /* Copied by the model's names: the settings are a modelled instance
+       once the form has been open, and spreading one gives the private
+       fields its getters sit in - the grid then silently fell back to
+       every default while the form showed what had been set. */
+    layoutSettingsRef.value = page?.layoutSettings
+      ? { ...plainSettings(page.layoutSettings) }
+      : undefined
   }
 }
 

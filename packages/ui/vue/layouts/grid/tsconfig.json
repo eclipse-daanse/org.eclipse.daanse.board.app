@@ -1,6 +1,8 @@
 {
   "exclude": ["node_modules", "dist", "dist-bundle", "vite.bundle.config.ts"],
   "compilerOptions": {
+    /* Declares the ?raw imports the settings form is read through. */
+    "types": ["vite/client"],
     "sourceMap": true,
     "declarationMap": true,
     "inlineSources": true,

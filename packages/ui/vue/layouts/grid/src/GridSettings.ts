@@ -8,6 +8,8 @@
   Contributors: Smart City Jena
 */
 
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+
 export interface GridSettingsI {
   rowHeight: number
   cols: { lg: number; md: number; sm: number; xs: number; xxs: number }
@@ -20,10 +22,18 @@ export const DEFAULT_GRID_SETTINGS: GridSettingsI = {
 
 export const BREAKPOINTS = { lg: 1800, md: 1200, sm: 768, xs: 480, xxs: 0 } as const
 
+/**
+ * The settings as the layout uses them, with anything unset filled in.
+ *
+ * Read through plainSettings because these arrive as a modelled instance
+ * once the form has been open: spreading one gives the private fields its
+ * getters sit in, so the columns would all silently fall back to their
+ * defaults while the form showed the values that had been set.
+ */
 export function resolveGridSettings(layoutSettings?: Record<string, any>): GridSettingsI {
-  const s = layoutSettings ?? {}
+  const s = plainSettings(layoutSettings) as Record<string, any>
   return {
-    rowHeight: s.rowHeight ?? DEFAULT_GRID_SETTINGS.rowHeight,
-    cols: { ...DEFAULT_GRID_SETTINGS.cols, ...s.cols }
+    rowHeight: (s.rowHeight as number) ?? DEFAULT_GRID_SETTINGS.rowHeight,
+    cols: { ...DEFAULT_GRID_SETTINGS.cols, ...plainSettings(s.cols) }
   }
 }

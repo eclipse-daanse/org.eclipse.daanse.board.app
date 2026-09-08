@@ -37,6 +37,7 @@ import {
   DSelect,
   DSwitch,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { SettingsForm } from 'org.eclipse.daanse.board.app.ui.vue.uimodel'
 
 const pageid = defineModel<string>({ required: true })
 const emit = defineEmits(['close'])
@@ -172,10 +173,23 @@ watch(
       <section class="group">
         <h3 class="group__label">Layout</h3>
         <DSelect v-model="layoutId" label="Layout" :options="availableLayouts" value-key="id" label-key="name" />
-        <!-- What a layout itself offers, rendered by the layout -->
+        <!--
+          What a layout itself offers. A model where the layout carries one -
+          the form is a model beside its Ecore, the same way a widget's is -
+          and the layout's own component where it does not.
+        -->
+        <SettingsForm
+          v-if="pageSettings.layout?.settingsForm"
+          v-model="pageSettings.layoutSettings"
+          :create="pageSettings.layout.settingsForm.create as () => any"
+          :ui-model-xmi="pageSettings.layout.settingsForm.xmi"
+          :domain-package="pageSettings.layout.settingsForm.ePackage() as any"
+          :ui-model-uri="pageSettings.layout.settingsForm.uri"
+          :entry-forms="pageSettings.layout.settingsForm.entryForms"
+        />
         <component
+          v-else-if="pageSettings.layout?.settings"
           :is="pageSettings.layout.settings"
-          v-if="pageSettings.layout?.settings"
           v-model="pageSettings.layoutSettings"
         />
       </section>

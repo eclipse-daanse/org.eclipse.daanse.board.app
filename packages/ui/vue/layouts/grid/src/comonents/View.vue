@@ -41,6 +41,7 @@ import { useRoute } from 'vue-router'
 import { identifiers } from 'org.eclipse.daanse.board.app.lib.core'
 import type { TinyEmitter } from 'tiny-emitter'
 import { BREAKPOINTS, resolveGridSettings } from '../GridSettings'
+import { plainSettings } from 'org.eclipse.daanse.board.app.ui.vue.composables'
 import { identifier as PageIdentifier, type PageRegistryI } from 'org.eclipse.daanse.board.app.lib.api.page'
 
 const props = defineProps<{
@@ -79,7 +80,13 @@ const pageRepo = inject<PageRegistryI>(PageIdentifier) ?? null
 function syncLayoutSettings() {
   if (pageRepo && pageId) {
     const page = pageRepo.getPage(pageId)
-    layoutSettingsRef.value = page?.layoutSettings ? { ...page.layoutSettings } : undefined
+    /* Copied by the model's names: the settings are a modelled instance
+       once the form has been open, and spreading one gives the private
+       fields its getters sit in - the grid then silently fell back to
+       every default while the form showed what had been set. */
+    layoutSettingsRef.value = page?.layoutSettings
+      ? { ...plainSettings(page.layoutSettings) }
+      : undefined
   }
 }
 

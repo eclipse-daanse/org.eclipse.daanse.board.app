@@ -16,7 +16,19 @@ import {
 import type { ActivationContext } from 'org.eclipse.daanse.board.app.lib.core'
 import View from './comonents/View.vue'
 import Edit from './comonents/Edit.vue'
-import GridSettingsPanel from './comonents/GridSettingsPanel.vue'
+import { GridSettingsImpl } from './gen/GridSettingsImpl'
+import { GridsettingsPackage } from './gen/GridsettingsPackage'
+/* The form for these settings, written as a model beside the Ecore. */
+import gridSettingsFormXmi from '../model/ui.xmi?raw'
+/* The form for the columns it contains. */
+import gridColumnsFormXmi from '../model/ui-columns.xmi?raw'
+
+/*
+ * Building the EPackage on load: until it exists the class literals are
+ * null, an instance cannot say what it is, and nothing can render it from
+ * the model.
+ */
+GridsettingsPackage.eINSTANCE
 
 const LAYOUT_ID = 'org.eclipse.daanse.board.app.ui.vue.layouts.grid'
 
@@ -27,7 +39,18 @@ export function activate({ services }: ActivationContext) {
     description: 'responsive grid-based layout',
     component: View,
     editor: Edit,
-    settings: GridSettingsPanel,
+    /*
+     * No hand-written panel: a row height and five column counts are
+     * fields, so there is nothing to keep beside the model and no second
+     * place for the two to disagree.
+     */
+    settingsForm: {
+      xmi: gridSettingsFormXmi,
+      uri: '/grid-settings.ui.xmi',
+      ePackage: () => GridsettingsPackage.eINSTANCE,
+      create: () => new GridSettingsImpl(),
+      entryForms: [{ xmi: gridColumnsFormXmi, uri: '/grid-columns.ui.xmi' }],
+    },
   } as LayoutI)
 }
 
