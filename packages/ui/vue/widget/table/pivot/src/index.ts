@@ -18,6 +18,7 @@ import PivotTableWidget from './PivotTableWidget.vue'
 import PivotTableWidgetSettings from './PivotTableWidgetSettings.vue'
 import { PivotTableEvents } from './events/PivotTableEvents'
 import { PivotTableInterfaceImpl } from './gen/PivotTableInterfaceImpl'
+import { PivotTablePackage } from './gen/PivotTablePackage'
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
@@ -28,6 +29,16 @@ interface IPivotTable {
   cells: any[][]
   tableState: any
 }
+
+/*
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null, and a generated instance cannot say what it is -
+ * eClass() returns null, so the action interface registered below fails
+ * the moment anything asks it for a feature. EMF expects the package to
+ * register itself when its code is loaded, and for a bundle that moment
+ * is here.
+ */
+PivotTablePackage.eINSTANCE
 
 const WIDGET_TYPE = 'PivotTableWidget'
 

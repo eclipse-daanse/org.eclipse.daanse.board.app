@@ -2522,6 +2522,7 @@ var wt = Object.defineProperty, vt = Object.getOwnPropertyDescriptor, Ne = (N, e
     (I = N[A]) && (_ = (n ? I(e, t, _) : I(_)) || _);
   return n && _ && wt(e, t, _), _;
 }, we = (N, e) => (t, n) => e(t, n, N);
+o.eINSTANCE;
 const ue = "PivotTableWidget";
 let Oe = class {
   constructor(N, e) {

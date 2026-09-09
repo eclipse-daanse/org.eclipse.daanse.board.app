@@ -26,9 +26,20 @@ import ConditionSettings from './parts/conditionLogic/ConditionSettings.vue'
 import PointStyler from './parts/styler/PointStyler.vue'
 import AreaStyler from './parts/styler/AreaStyler.vue'
 import { MapWidgetInterfaceImpl } from './gen/MapWidgetInterfaceImpl'
+import { MapSettingsPackage } from './gen/MapSettingsPackage'
 import ecoreModelContent from '../model/model.ecore?raw'
 import type { EventRegistry, EventActionsRegistry } from 'org.eclipse.daanse.board.app.lib.api.events'
 import { WIDGET_SERVICE_ID, type WidgetProvider } from 'org.eclipse.daanse.board.app.lib.api.widget'
+
+/*
+ * Touching eINSTANCE is what builds the EPackage: until then the class
+ * literals are null, an instance cannot say what it is, and the first
+ * getter that asks for a feature - the map's centre, on every mount -
+ * fails with "Cannot read properties of null". EMF expects the package to
+ * register itself when its code is loaded, and for a bundle that moment
+ * is here.
+ */
+MapSettingsPackage.eINSTANCE
 
 const WIDGET_TYPE = 'MapWidget'
 

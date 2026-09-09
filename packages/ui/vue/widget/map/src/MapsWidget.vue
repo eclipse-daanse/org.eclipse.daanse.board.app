@@ -112,10 +112,28 @@ const defaultConfig = new MapSettingsImpl()
  */
 const DEFAULT_CENTER = [50.93115286, 11.60392726]
 
-function ensureCentre() {
-  if (config.value.center.size() === 0) {
-    for (const value of DEFAULT_CENTER) config.value.center.add(value)
+/**
+ * Puts a whole list into the configuration, by the name the model gives it.
+ *
+ * The model types these as ELists, but what the widget holds is a plain
+ * object: toJSON is how the generated defaults get in, and it hands a
+ * many-valued feature back as an array. So the values replace the list.
+ * A board stored while one of them was still an EList carries one, and
+ * that is filled rather than replaced - a containment list belongs to its
+ * object.
+ */
+function setList(name: 'center' | 'layers', values: unknown[]) {
+  const held = (config.value as any)[name] as { clear?: () => void; add?: (value: unknown) => void }
+  if (typeof held?.clear === 'function' && typeof held?.add === 'function') {
+    held.clear()
+    for (const value of values) held.add!(value)
+    return
   }
+  ;(config.value as any)[name] = values
+}
+
+function ensureCentre() {
+  if (asArray(config.value.center).length === 0) setList('center', DEFAULT_CENTER)
 }
 
 // Get EventActionsRegistry
@@ -479,9 +497,7 @@ onMounted(async () => {
           newLayers.push(layer)
         }
       }
-      // Filled rather than replaced: a containment list belongs to its object
-      config.value.layers.clear()
-      for (const layer of newLayers) config.value.layers.add(layer as any)
+      setList('layers', newLayers)
     }
     servicesReady.value = true
   }
@@ -799,10 +815,7 @@ const mapmove = debounce(() => {
   const leaflet = (map.value as any)?.leafletObject
   if (leaflet) {
     const center = leaflet.getCenter()
-    // Two numbers into the list that holds them
-    config.value.center.clear()
-    config.value.center.add(center.lat)
-    config.value.center.add(center.lng)
+    setList('center', [center.lat, center.lng])
     config.value.zoom = leaflet.getZoom()
   }
   loadObservationsInView()
