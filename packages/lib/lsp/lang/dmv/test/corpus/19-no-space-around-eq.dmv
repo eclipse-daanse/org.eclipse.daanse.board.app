@@ -1,0 +1,6 @@
+-- Source: https://www.biinsight.com/dax-measure-dependencies-in-ssas-tabular-and-power-bi/
+-- Construct: Lower-case keywords with no whitespace around =, spaced string value.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+select * from $SYSTEM.DISCOVER_ITEM_DEPENDENCY where OBJECT='Order Amount TST'

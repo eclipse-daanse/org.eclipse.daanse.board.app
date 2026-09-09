@@ -1,0 +1,7 @@
+-- Source: http://jeremykingsql.blogspot.com/2011/11/analysis-services-dmvs.html
+-- Construct: Function calls in the select list plus arithmetic. Neither exists in the
+--            reference parser; a published query uses both.
+-- Expect: reject
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+select mid(request_text, instr(request_text, '') + 13, 25) from $system.discover_requests where instr(request_text, 'ProcessFull') > 0

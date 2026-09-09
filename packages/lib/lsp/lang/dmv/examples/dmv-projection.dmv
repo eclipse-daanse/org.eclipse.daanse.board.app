@@ -1,0 +1,9 @@
+/* DISTINCT, TOP, an explicit column list and ORDER BY.
+   Listing the schema rowsets a server exposes is the canonical way to
+   discover what else you can query. */
+SELECT DISTINCT TOP 20
+    TABLE_NAME,
+    TABLE_TYPE
+FROM $System.DBSCHEMA_TABLES
+WHERE TABLE_TYPE = 'SCHEMA'
+ORDER BY TABLE_NAME ASC

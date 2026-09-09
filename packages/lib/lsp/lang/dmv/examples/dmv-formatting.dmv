@@ -1,0 +1,12 @@
+/* How DMV queries look when people write them rather than document them:
+   a long AND chain one condition per line, and a multi-column ORDER BY
+   whose direction is written only on the last column — the first sorts
+   ascending by default. Normalized from a published query; see
+   test/dmv/corpus/. */
+SELECT *
+FROM $SYSTEM.DISCOVER_SEGMENT_GROUPING_STAT
+WHERE DATABASE_NAME = 'Northwind Trading DW'
+  AND MODEL_NAME = 'Northwind Trading'
+  AND UNIT_GROUP_NAME = 'Online Orders'
+  AND SEGMENT_NAME = 'Online_Orders_2003'
+ORDER BY GROUPING_NAME, ATTRIBUTE_COUNT_MAX desc

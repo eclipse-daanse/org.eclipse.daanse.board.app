@@ -1,0 +1,9 @@
+/* AND/OR mixed with no parentheses at all, which is how the predicate is
+   actually written in the field. AND binds tighter, so this reads as
+   (A AND B) OR (C AND D) — the parse tree, not the layout, decides.
+   Normalized from a published query; see test/dmv/corpus/. */
+SELECT [TABLE], OBJECT, OBJECT_TYPE, REFERENCED_TABLE, REFERENCED_OBJECT, REFERENCED_OBJECT_TYPE
+FROM $SYSTEM.DISCOVER_ITEM_DEPENDENCY
+WHERE OBJECT_TYPE = 'CALC_FIELD' AND REFERENCED_OBJECT_TYPE = 'FIELD'
+   OR OBJECT_TYPE = 'UNIT' AND REFERENCED_OBJECT_TYPE = 'UNIT'
+ORDER BY [TABLE] ASC

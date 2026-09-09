@@ -1,0 +1,462 @@
+/*
+* Copyright (c) 2026 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
+
+
+// DMV query language, syntax based on DMX SELECT:
+// https://learn.microsoft.com/en-us/analysis-services/instances/use-dynamic-management-views-dmvs-to-monitor-analysis-services
+// JOIN, GROUP BY, LIKE, CAST and CONVERT are not part of the language.
+BASE_NAME = Dmv;
+IGNORE_CASE = true;
+PARSER_PACKAGE = org.eclipse.daanse.dmv.parser.ccc;
+NODE_PACKAGE = org.eclipse.daanse.dmv.parser.ccc.tree;
+TABS_TO_SPACES = 4;
+PRESERVE_TABS = true;
+NODE_PREFIX = "AST";
+COPYRIGHT_BLURB="\n*\n* Copyright (c) 2026 Contributors to the Eclipse Foundation.\n*\n* This program and the accompanying materials are made\n* available under the terms of the Eclipse Public License 2.0\n* which is available at https://www.eclipse.org/legal/epl-2.0/\n*\n* SPDX-License-Identifier: EPL-2.0\n*\n* Contributors: see corresponding .ccc file\n";
+
+INJECT PARSER_CLASS :
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.eclipse.daanse.dmv.model.api.ComparisonOperator;
+import org.eclipse.daanse.dmv.model.api.DmvLiteral;
+import org.eclipse.daanse.dmv.model.api.DmvPredicate;
+import org.eclipse.daanse.dmv.model.api.DmvStatement;
+import org.eclipse.daanse.dmv.model.api.DmvValue;
+import org.eclipse.daanse.dmv.model.api.Junction;
+import org.eclipse.daanse.dmv.model.api.OrderByItem;
+import org.eclipse.daanse.dmv.model.api.Restriction;
+import org.eclipse.daanse.dmv.model.record.BareColumnR;
+import org.eclipse.daanse.dmv.model.record.ComparisonR;
+import org.eclipse.daanse.dmv.model.record.DmvStatementR;
+import org.eclipse.daanse.dmv.model.record.JunctionR;
+import org.eclipse.daanse.dmv.model.record.NegationR;
+import org.eclipse.daanse.dmv.model.record.NumericLiteralR;
+import org.eclipse.daanse.dmv.model.record.OrderByItemR;
+import org.eclipse.daanse.dmv.model.record.ParameterReferenceR;
+import org.eclipse.daanse.dmv.model.record.RestrictionR;
+import org.eclipse.daanse.dmv.model.record.StringLiteralR;
+{
+    private static String unquoteBracketed(String image) {
+        return image.substring(1, image.length() - 1).replace("]]", "]");
+    }
+
+    private static String unquoteSingle(String image) {
+        return image.substring(1, image.length() - 1).replace("''", "'");
+    }
+
+    private static String unquoteDouble(String image) {
+        return image.substring(1, image.length() - 1).replace("\"\"", "\"");
+    }
+}
+
+
+// Keywords (IGNORE_CASE applies)
+TOKEN :
+  < AND : "AND" >
+| < ASC : "ASC" >
+| < BY : "BY" >
+| < DESC : "DESC" >
+| < DISTINCT : "DISTINCT" >
+| < FROM : "FROM" >
+| < NOT : "NOT" >
+| < OR : "OR" >
+| < ORDER : "ORDER" >
+| < SELECT : "SELECT" >
+| < SYSTEMRESTRICTSCHEMA : "SYSTEMRESTRICTSCHEMA" >
+| < TOP : "TOP" >
+| < WHERE : "WHERE" >
+| < SYSTEM_CUBE : "$SYSTEM" >
+;
+
+
+// White space
+SKIP :
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+;
+
+
+/*
+ * Comments: -- and // to end of line, slash-star blocks.
+ */
+< DEFAULT >
+MORE :
+  "//" : IN_SINGLE_LINE_COMMENT
+| "--" : IN_SINGLE_LINE_COMMENT
+| "/*" : IN_MULTI_LINE_COMMENT
+;
+
+< IN_SINGLE_LINE_COMMENT >
+UNPARSED :
+  < SINGLE_LINE_COMMENT :
+    "\n"
+  | "\r"
+  | "\r\n" > : DEFAULT
+;
+
+< IN_MULTI_LINE_COMMENT >
+UNPARSED :
+  < MULTI_LINE_COMMENT : "*/" > : DEFAULT
+;
+
+< IN_SINGLE_LINE_COMMENT, IN_MULTI_LINE_COMMENT >
+MORE :
+  < ~[ ] >
+;
+
+
+/*
+ * Separators
+ */
+< DEFAULT >
+TOKEN :
+  < LPAREN : "(" >
+| < RPAREN : ")" >
+| < COMMA : "," >
+| < SEMICOLON : ";" >
+| < DOT : "." >
+;
+
+
+/*
+ * Operators
+ */
+< DEFAULT >
+TOKEN :
+  < ASTERISK : "*" >
+| < EQ : "=" >
+| < GE : ">=" >
+| < GT : ">" >
+| < LE : "<=" >
+| < LT : "<" >
+| < NE : "<>" >
+| < MINUS : "-" >
+| < ATSIGN : "@" >
+;
+
+
+/*
+ * Identifiers: bare names or [bracketed], ]] escapes ] inside brackets.
+ */
+< DEFAULT >
+TOKEN :
+  < ID :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+|
+  < QUOTED_ID :
+    "["
+    (
+      (~[ "]" ])
+    | ("]]")
+    )*
+    "]"
+  >
+|
+  < #LETTER : [ "A"-"Z", "_", "a"-"z" ] >
+|
+  < #DIGIT : [ "0"-"9" ] >
+;
+
+
+// Literals
+TOKEN :
+  < UNSIGNED_INTEGER_LITERAL : ([ "0"-"9" ])+ >
+|
+  < DECIMAL_NUMERIC_LITERAL :
+    ([ "0"-"9" ])+ "." ([ "0"-"9" ])*
+  | "." ([ "0"-"9" ])+
+  >
+|
+  < SINGLE_QUOTED_STRING :
+    "'"
+    (
+      (~[ "'" ])
+    | ("''")
+    )*
+    "'" >
+|
+  < DOUBLE_QUOTED_STRING :
+    "\""
+    (
+      (~[ "\"" ])
+    | ("\"\"")
+    )*
+    "\"" >
+;
+
+
+// ----------------------------------------------------------------------------
+// <dmvStatement> ::= SELECT [DISTINCT] [TOP <n>] ( * | <column> [, <column>]* )
+//                    FROM ( $SYSTEM.<rowsetName>
+//                         | SYSTEMRESTRICTSCHEMA ( $SYSTEM.<rowsetName>
+//                                                  [, <restrictionName> = <literal>]* ) )
+//                    [WHERE <predicate>]
+//                    [ORDER BY <column> [ASC|DESC] [, <column> [ASC|DESC]]*]
+//                    [;]
+//
+DmvStatement parseDmvStatement :
+{
+  boolean distinct = false;
+  Optional<Integer> top = Optional.empty();
+  List<String> columns = new ArrayList<>();
+  String table = null;
+  List<Restriction> restrictions = new ArrayList<>();
+  DmvPredicate where = null;
+  List<OrderByItem> orderBy = new ArrayList<>();
+  String c;
+  Restriction r;
+  OrderByItem o;
+}
+  < SELECT >
+  (
+    < DISTINCT >
+    { distinct = true; }
+  )?
+  (
+    < TOP > < UNSIGNED_INTEGER_LITERAL >
+    { top = Optional.of(Integer.valueOf(getToken(0).getImage())); }
+  )?
+  (
+    // all columns, spelled the way every client spells it; same as naming none
+    < ASTERISK >
+    |
+    c = parseIdentifier
+    { columns.add(c); }
+    (
+      < COMMA > c = parseIdentifier
+      { columns.add(c); }
+    )*
+  )
+  < FROM >
+  (
+    < SYSTEMRESTRICTSCHEMA > < LPAREN >
+    table = parseSystemRowset
+    (
+      < COMMA > r = parseRestriction
+      { restrictions.add(r); }
+    )*
+    < RPAREN >
+    |
+    table = parseSystemRowset
+  )
+  (
+    < WHERE > where = parsePredicate
+  )?
+  (
+    < ORDER > < BY >
+    o = parseOrderByItem
+    { orderBy.add(o); }
+    (
+      < COMMA > o = parseOrderByItem
+      { orderBy.add(o); }
+    )*
+  )?
+  ( < SEMICOLON > )?
+  < EOF >
+  {
+    return new DmvStatementR(distinct, top, columns, table, restrictions,
+        Optional.ofNullable(where), orderBy);
+  }
+;
+
+
+String parseSystemRowset :
+{
+  String table;
+}
+  < SYSTEM_CUBE > < DOT > table = parseIdentifier
+  {
+    return table;
+  }
+;
+
+
+// Restriction names appear unquoted and [bracketed] in the wild.
+Restriction parseRestriction :
+{
+  String name;
+  DmvLiteral value;
+}
+  name = parseIdentifier < EQ > value = parseLiteral
+  {
+    return new RestrictionR(name, value);
+  }
+;
+
+
+String parseIdentifier :
+  < ID >
+  { return getToken(0).getImage(); }
+|
+  < QUOTED_ID >
+  { return unquoteBracketed(getToken(0).getImage()); }
+;
+
+
+DmvLiteral parseLiteral :
+{
+  boolean negative = false;
+}
+  < SINGLE_QUOTED_STRING >
+  { return new StringLiteralR(unquoteSingle(getToken(0).getImage())); }
+|
+  < DOUBLE_QUOTED_STRING >
+  { return new StringLiteralR(unquoteDouble(getToken(0).getImage())); }
+|
+  (
+    < MINUS >
+    { negative = true; }
+  )?
+  (
+    < UNSIGNED_INTEGER_LITERAL >
+  |
+    < DECIMAL_NUMERIC_LITERAL >
+  )
+  {
+    BigDecimal number = new BigDecimal(getToken(0).getImage());
+    return new NumericLiteralR(negative ? number.negate() : number);
+  }
+;
+
+
+// Entry point for parsing a predicate on its own (TCK, tooling).
+DmvPredicate parsePredicateStandalone :
+{
+  DmvPredicate predicate;
+}
+  predicate = parsePredicate < EOF >
+  {
+    return predicate;
+  }
+;
+
+
+// OR has the lowest precedence, then AND, then NOT, then comparison/parentheses.
+// Chains are flattened: a AND b AND c is one Junction(AND, [a, b, c]).
+DmvPredicate parsePredicate :
+{
+  DmvPredicate p;
+  List<DmvPredicate> terms = new ArrayList<>();
+}
+  p = parseAndPredicate
+  { terms.add(p); }
+  (
+    < OR > p = parseAndPredicate
+    { terms.add(p); }
+  )*
+  {
+    return terms.size() == 1 ? terms.get(0) : new JunctionR(Junction.Operator.OR, terms);
+  }
+;
+
+
+DmvPredicate parseAndPredicate :
+{
+  DmvPredicate p;
+  List<DmvPredicate> terms = new ArrayList<>();
+}
+  p = parseUnaryPredicate
+  { terms.add(p); }
+  (
+    < AND > p = parseUnaryPredicate
+    { terms.add(p); }
+  )*
+  {
+    return terms.size() == 1 ? terms.get(0) : new JunctionR(Junction.Operator.AND, terms);
+  }
+;
+
+
+DmvPredicate parseUnaryPredicate :
+{
+  DmvPredicate p;
+}
+  < NOT > p = parseUnaryPredicate
+  { return new NegationR(p); }
+|
+  p = parsePrimaryPredicate
+  { return p; }
+;
+
+
+DmvPredicate parsePrimaryPredicate :
+{
+  DmvPredicate p;
+  String column;
+  ComparisonOperator operator = null;
+  DmvValue value = null;
+}
+  < LPAREN > p = parsePredicate < RPAREN >
+  { return p; }
+|
+  column = parseIdentifier
+  (
+    operator = parseComparisonOperator value = parseValue
+  )?
+  {
+    return operator == null
+        ? new BareColumnR(column)
+        : new ComparisonR(column, operator, value);
+  }
+;
+
+
+ComparisonOperator parseComparisonOperator :
+  < EQ > { return ComparisonOperator.EQ; }
+| < NE > { return ComparisonOperator.NE; }
+| < LE > { return ComparisonOperator.LE; }
+| < GE > { return ComparisonOperator.GE; }
+| < LT > { return ComparisonOperator.LT; }
+| < GT > { return ComparisonOperator.GT; }
+;
+
+
+DmvValue parseValue :
+{
+  DmvLiteral literal;
+}
+  < ATSIGN > < ID >
+  { return new ParameterReferenceR(getToken(0).getImage()); }
+|
+  literal = parseLiteral
+  { return literal; }
+;
+
+
+OrderByItem parseOrderByItem :
+{
+  String column;
+  boolean descending = false;
+}
+  column = parseIdentifier
+  (
+    < ASC >
+  |
+    < DESC >
+    { descending = true; }
+  )?
+  {
+    return new OrderByItemR(column, descending);
+  }
+;

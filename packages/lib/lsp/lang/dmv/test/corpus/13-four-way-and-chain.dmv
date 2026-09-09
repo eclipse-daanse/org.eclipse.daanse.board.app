@@ -1,0 +1,12 @@
+-- Source: https://asstoredprocedures.github.io/functions/DMV/
+-- Construct: Four AND-ed comparisons, then multi-column ORDER BY with a direction on the last only.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT *
+FROM $SYSTEM.DISCOVER_SEGMENT_GROUPING_STAT
+WHERE DATABASE_NAME = 'Northwind Trading DW'
+  AND MODEL_NAME = 'Northwind Trading'
+  AND UNIT_GROUP_NAME = 'Online Orders'
+  AND SEGMENT_NAME = 'Online_Orders_2003'
+ORDER BY GROUPING_NAME, ATTRIBUTE_COUNT_MAX desc

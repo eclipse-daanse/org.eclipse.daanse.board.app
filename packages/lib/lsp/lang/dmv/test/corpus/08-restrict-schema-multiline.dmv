@@ -1,0 +1,6 @@
+-- Source: https://www.fourmoo.com/2022/02/02/power-bi-which-tables-and-columns-are-being-used-the-most-in-power-bi-premium-premium-per-user/
+-- Construct: SYSTEMRESTRICTSCHEMA restricting on a bracketed name with a spaced string value.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+Select * from SYSTEMRESTRICTSCHEMA ($System.DISCOVER_STORAGE_UNIT_FIELD_SEGMENTS, [DATABASE_NAME] = 'Retail Dataset')

@@ -1,0 +1,12 @@
+{
+    "projectName": "Dmv",
+    "languages": [
+        {
+            "id": "dmv",
+            "grammar": "src/language/dmv.langium",
+            "fileExtensions": [".dmv"],
+            "caseInsensitive": true
+        }
+    ],
+    "out": "src/language/generated"
+}

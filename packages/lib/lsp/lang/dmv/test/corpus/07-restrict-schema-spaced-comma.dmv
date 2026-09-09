@@ -1,0 +1,6 @@
+-- Source: https://sqlsoldier.net/wp/sqlserver/usingsystemrestrictschemafunctioninmdxtoquerydmvs
+-- Construct: SYSTEMRESTRICTSCHEMA with spaces around the comma and no space around =.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM SYSTEMRESTRICTSCHEMA ( $SYSTEM.DISCOVER_NODES , INSTANCE_NAME='SQL2012' )

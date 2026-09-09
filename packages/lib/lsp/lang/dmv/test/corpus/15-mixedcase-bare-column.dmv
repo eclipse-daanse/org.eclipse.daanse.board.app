@@ -1,0 +1,6 @@
+-- Source: https://isura777.blogspot.com/2016/03/dynamic-management-views-for-ssas.html
+-- Construct: A CamelCase bare identifier in ORDER BY.
+-- Expect: parse
+-- Normalized: identifiers and string values substituted; casing, spacing,
+--             line breaks and quoting preserved exactly as published.
+SELECT * FROM $system.DISCOVER_RESOURCEUSAGE ORDER BY ResourceUsed DESC
