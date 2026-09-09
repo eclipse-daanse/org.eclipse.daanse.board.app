@@ -16,6 +16,12 @@ import { onMounted, computed } from 'vue'
 import { ChartSettings } from './gen/ChartSettings'
 import type { SeriesSettings } from './gen/SeriesSettings'
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  DButton,
+  DCheckbox,
+  DColorInput,
+  DInput,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
 const widgetSettings = defineModel<ChartSettings>({ required: true })
@@ -165,161 +171,149 @@ onMounted(() => {
 <template>
   <section class="settings-section" data-section="Reference Lines & Areas">
     <div class="settings-container">
-      <!-- Edit Mode Toggle -->
+      <!--
+        Written through the wrapper, not over it: the setting is a
+        VariableWrapper, and binding the checkbox at the setting itself
+        would put a plain boolean where the wrapper was. The untyped
+        control this replaced let that pass.
+      -->
       <div class="settings-block">
-        <va-checkbox
+        <DCheckbox
           v-if="widgetSettings.annotationsEditMode"
           label="Enable Drag & Drop (Move annotations in chart)"
-          v-model="widgetSettings.annotationsEditMode"
-        />
+          v-model="widgetSettings.annotationsEditMode!.value" />
       </div>
 
       <!-- Horizontal Lines (Y-Axis) -->
       <div class="settings-block">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="block__head">
           <h3>Horizontal Lines (Y-Axis)</h3>
-          <va-button size="small" @click="addHorizontalLine">Add Line</va-button>
+          <DButton size="sm" @click="addHorizontalLine">Add Line</DButton>
         </div>
 
-        <div v-for="(line, index) in horizontalLineList" :key="`hline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div v-for="(line, index) in horizontalLineList" :key="`hline_${index}`" class="entry">
+          <div class="entry__head">
             <strong>Line {{ index + 1 }}</strong>
-            <va-button size="small" color="danger" @click="removeHorizontalLine(index)">Remove</va-button>
+            <DButton size="sm" intent="danger" @click="removeHorizontalLine(index)">Remove</DButton>
           </div>
 
-          <va-input
+          <DInput
             label="Y-Value"
             v-model.number="line.value"
-            type="number"
-          />
+            type="number" />
 
-          <va-color-input
+          <DColorInput
             label="Color"
-            v-model="line.color"
-          />
+            v-model="line.color" />
 
-          <va-input
+          <DInput
             label="Line Width (px)"
             v-model.number="line.width"
             type="number"
             :min="1"
-            :max="10"
-          />
+            :max="10" />
 
-          <va-input
+          <DInput
             label="Label (optional)"
-            v-model="line.label"
-          />
+            v-model="line.label" />
         </div>
       </div>
 
       <!-- Vertical Lines (X-Axis) -->
-      <div class="settings-block" style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="settings-block">
+        <div class="block__head">
           <h3>Vertical Lines (X-Axis)</h3>
-          <va-button size="small" @click="addVerticalLine">Add Line</va-button>
+          <DButton size="sm" @click="addVerticalLine">Add Line</DButton>
         </div>
 
-        <div v-for="(line, index) in verticalLineList" :key="`vline_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div v-for="(line, index) in verticalLineList" :key="`vline_${index}`" class="entry">
+          <div class="entry__head">
             <strong>Line {{ index + 1 }}</strong>
-            <va-button size="small" color="danger" @click="removeVerticalLine(index)">Remove</va-button>
+            <DButton size="sm" intent="danger" @click="removeVerticalLine(index)">Remove</DButton>
           </div>
 
-          <va-input
+          <DInput
             label="X-Value"
-            v-model="line.value"
-          />
+            v-model="line.value" />
 
-          <va-color-input
+          <DColorInput
             label="Color"
-            v-model="line.color"
-          />
+            v-model="line.color" />
 
-          <va-input
+          <DInput
             label="Line Width (px)"
             v-model.number="line.width"
             type="number"
             :min="1"
-            :max="10"
-          />
+            :max="10" />
 
-          <va-input
+          <DInput
             label="Label (optional)"
-            v-model="line.label"
-          />
+            v-model="line.label" />
         </div>
       </div>
 
       <!-- Horizontal Boxes (Y-Axis Ranges) -->
-      <div class="settings-block" style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="settings-block">
+        <div class="block__head">
           <h3>Horizontal Areas (Y-Axis Ranges)</h3>
-          <va-button size="small" @click="addHorizontalBox">Add Area</va-button>
+          <DButton size="sm" @click="addHorizontalBox">Add Area</DButton>
         </div>
 
-        <div v-for="(box, index) in horizontalBoxList" :key="`hbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div v-for="(box, index) in horizontalBoxList" :key="`hbox_${index}`" class="entry">
+          <div class="entry__head">
             <strong>Area {{ index + 1 }}</strong>
-            <va-button size="small" color="danger" @click="removeHorizontalBox(index)">Remove</va-button>
+            <DButton size="sm" intent="danger" @click="removeHorizontalBox(index)">Remove</DButton>
           </div>
 
-          <va-input
+          <DInput
             label="Y-Min"
             v-model.number="box.yMin"
-            type="number"
-          />
+            type="number" />
 
-          <va-input
+          <DInput
             label="Y-Max"
             v-model.number="box.yMax"
-            type="number"
-          />
+            type="number" />
 
-          <va-color-input
+          <DColorInput
             label="Fill Color"
-            v-model="box.color"
-          />
+            v-model="box.color" />
 
-          <va-input
+          <DInput
             label="Label (optional)"
-            v-model="box.label"
-          />
+            v-model="box.label" />
         </div>
       </div>
 
       <!-- Vertical Boxes (X-Axis Ranges) -->
-      <div class="settings-block" style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="settings-block">
+        <div class="block__head">
           <h3>Vertical Areas (X-Axis Ranges)</h3>
-          <va-button size="small" @click="addVerticalBox">Add Area</va-button>
+          <DButton size="sm" @click="addVerticalBox">Add Area</DButton>
         </div>
 
-        <div v-for="(box, index) in verticalBoxList" :key="`vbox_${index}`" style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div v-for="(box, index) in verticalBoxList" :key="`vbox_${index}`" class="entry">
+          <div class="entry__head">
             <strong>Area {{ index + 1 }}</strong>
-            <va-button size="small" color="danger" @click="removeVerticalBox(index)">Remove</va-button>
+            <DButton size="sm" intent="danger" @click="removeVerticalBox(index)">Remove</DButton>
           </div>
 
-          <va-input
+          <DInput
             label="X-Min"
-            v-model="box.xMin"
-          />
+            v-model="box.xMin" />
 
-          <va-input
+          <DInput
             label="X-Max"
-            v-model="box.xMax"
-          />
+            v-model="box.xMax" />
 
-          <va-color-input
+          <DColorInput
             label="Fill Color"
-            v-model="box.color"
-          />
+            v-model="box.color" />
 
-          <va-input
+          <DInput
             label="Label (optional)"
-            v-model="box.label"
-          />
+            v-model="box.label" />
         </div>
       </div>
     </div>
@@ -338,9 +332,37 @@ onMounted(() => {
 }
 
 .settings-block h3 {
-  margin: 0 0 8px 0;
+  margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--va-primary);
+  color: var(--color-fg);
+}
+
+.settings-block + .settings-block {
+  margin-top: 20px;
+}
+
+.block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* One line or one area, in a frame that says where it starts and ends */
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md, 4px);
+  margin-bottom: 8px;
+}
+
+.entry__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-fg);
 }
 </style>
