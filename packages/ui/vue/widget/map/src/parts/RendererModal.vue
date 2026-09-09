@@ -8,7 +8,7 @@ SPDX-License-Identifier: EPL-2.0
 Contributors: Smart City Jena
 -->
 <script lang="ts" setup>
-import { type ModelRef, reactive, ref, toRefs, watch } from 'vue'
+import { computed, type ModelRef, reactive, ref, toRefs, watch } from 'vue'
 import { IconSettingsImpl } from '../gen/IconSettingsImpl'
 
 
@@ -31,6 +31,13 @@ import PlacementSytler from './../parts/styler/PlacementSytler.vue'
 import OberservationsStyler from './../parts/styler/OberservationsStyler.vue'
 import AutoUpdateSettings from './styler/AutoUpdateSettings.vue'
 import { useDataPointRegistry } from './../composables/datapointRegistry'
+import {
+  DButton,
+  DDivider,
+  DIcon,
+  DModal,
+  DTabs,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
 const model: ModelRef<(IDSRenderer | IRenderer)[]> = defineModel<(IDSRenderer | IRenderer)[]>({
@@ -365,31 +372,63 @@ watch(showModal, (val) => {
 watch(selection,()=>{
   tabNo.value = 0
 })
+
+/*
+ * The style being renamed, by id.
+ *
+ * One at a time, so the name in the tree is a label until it is clicked
+ * and an input while it is being written - which is what the render-less
+ * value component this replaced was doing, once per row.
+ */
+const editingName = ref<string | undefined>(undefined)
+
+/**
+ * What the selected renderer can be set up with.
+ *
+ * An observation renderer has only its own settings; a thing renderer can
+ * be told how often to look again; a datastream renderer is placed against
+ * the thing or its observed area. Everything else is conditions and the
+ * two stylers.
+ */
+const tabNames = computed<string[]>(() => {
+  const selected = selection.value
+  if (!selected) return []
+  if (selected.component && !selected.datastream) return ['Settings']
+  if (layerModel.value?.type === 'OGCSTA') {
+    return selected.thing
+      ? ['Conditions', 'Points', 'Areas', 'Auto-update']
+      : ['Conditions', 'Points', 'Areas', 'Placement']
+  }
+  return ['Conditions', 'Points', 'Areas']
+})
+
+const tabs = computed(() => tabNames.value.map((label) => ({ id: label, label })))
+
+/* The tabs are addressed by name; everything below still counts them. */
+const activeTab = computed<string>({
+  get: () => tabNames.value[tabNo.value] ?? tabNames.value[0] ?? '',
+  set: (label: string) => {
+    const at = tabNames.value.indexOf(label)
+    tabNo.value = at >= 0 ? at : 0
+  },
+})
 </script>
 
 <template>
 
-  <VaModal
-    v-model="showModal"
-    hide-default-actions
-    maxWidth="1200px"
-    overlay-opacity="0.2"
-  >
+  <DModal v-model="showModal" size="lg" title="Styles">
     <div class="tree_detail">
       <div class="tree">
         <div class="menu">
 
           <div class="menuitem">
             <div class="checked">
-              <VaIcon
-                class="material-icons"
-                @click="addStyle"
-              >
-                add
-              </VaIcon>
+              <DButton intent="quiet" title="Add style" @click="addStyle">
+                <DIcon name="add" size="sm" />
+              </DButton>
             </div>
           </div>
-          <va-divider></va-divider>
+          <DDivider />
           <div v-for="style in model" :key="style.id"
           >
             <div :class="{'active':style.id==selection?.id}" class="menuitem" @click="selection=style">
@@ -401,56 +440,38 @@ watch(selection,()=>{
                                 layerModel?.styleIds?.push(style.id)
                             }
                         }">
-                <VaIcon
-                  :color="(layerModel?.styleIds?.includes(style.id))?'primary':'#eeeeee'"
-                  class="material-icons"
-                >
-                  checked
-                </VaIcon>
+                <DIcon
+                  name="check"
+                  size="sm"
+                  :tone="layerModel?.styleIds?.includes(style.id) ? 'color-accent' : 'color-divider'"
+                />
               </div>
               <div class="icon">
-                <VaBadge
-                  :offset="[5,14]"
-                  class="mr-6"
-                  color="#efefef"
-                  overlap
-                  style="--va-badge-text-wrapper-border-radius: 50%;"
-                  text="Th"
-                >
-                  <VaIcon
-                    class="material-icons"
-                  >
-                    style
-
-                  </VaIcon>
-                </VaBadge>
+                <span class="marked">
+                  <DIcon name="style" size="sm" />
+                  <span class="marked__tag">Th</span>
+                </span>
               </div>
               <div class="text">
-                <VaValue v-slot="v">
-                  <input v-if="v.value" v-model="style.name" class="item__input" style="width: 100%;" @blur="v.value = false">
-                  <span v-else @click="v.value = true">
-                            {{ style.name }}
-                            </span>
-
-                  <!--<VaButton :icon="v.value ? 'save' : 'edit'" preset="plain" size="small" @click="v.value = !v.value" />-->
-                </VaValue>
+                <input
+                  v-if="editingName === style.id"
+                  v-model="style.name"
+                  class="item__input"
+                  @blur="editingName = undefined"
+                  @keyup.enter="editingName = undefined"
+                >
+                <span v-else @click="editingName = style.id">{{ style.name }}</span>
 
               </div>
               <div class="options">
                 <template v-if="layerModel?.type =='OGCSTA' && (style as IRenderer)?.thing">
-                  <VaButton
-                    icon="add"
-                    preset="secondary"
-                    round
-                    @click="addDSStyle"
-                  />
+                  <DButton intent="quiet" title="Add datastream style" @click="addDSStyle">
+                    <DIcon name="add" size="sm" />
+                  </DButton>
                 </template>
-                <VaButton
-                  icon="delete"
-                  preset="secondary"
-                  round
-                  @click="confirmDeleteStyle(style)"
-                />
+                <DButton intent="quiet" title="Delete style" @click="confirmDeleteStyle(style)">
+                  <DIcon name="delete" size="sm" />
+                </DButton>
               </div>
             </div>
             <template v-if="(style as IRenderer)?.thing">
@@ -459,53 +480,36 @@ watch(selection,()=>{
                       @click="selection=substyle">
                   <div></div>
                   <div class="icon">
-                    <VaBadge
-                      :offset="[5,14]"
-                      class="mr-6"
-                      color="#efefef"
-                      overlap
-                      style="--va-badge-text-wrapper-border-radius: 50%;"
-                      text="DS"
-                    >
-                      <VaIcon
-                        class="material-icons"
-                      >
-                        settings
-
-                      </VaIcon>
-                    </VaBadge>
+                    <span class="marked">
+                      <DIcon name="settings" size="sm" />
+                      <span class="marked__tag">DS</span>
+                    </span>
                   </div>
                   <div class="text">
-                    <VaValue v-slot="v">
-                      <input v-if="v.value" v-model="substyle.name" class="item__input" style="width: 100%;" @blur="v.value = false">
-                      <span v-else @click="v.value = true">
-                            {{ substyle.name }}
-                            </span>
-
-                      <!--<VaButton :icon="v.value ? 'save' : 'edit'" preset="plain" size="small" @click="v.value = !v.value" />-->
-                    </VaValue>
+                    <input
+                      v-if="editingName === substyle.id"
+                      v-model="substyle.name"
+                      class="item__input"
+                      @blur="editingName = undefined"
+                      @keyup.enter="editingName = undefined"
+                    >
+                    <span v-else @click="editingName = substyle.id">{{ substyle.name }}</span>
 
                   </div>
                   <div class="options">
-                    <VaButton
-                      icon="add"
-                      preset="secondary"
-                      round
-                      @click="promptAddObservation(substyle)"
-                    />
-                    <VaButton
-                      icon="delete"
-                      preset="secondary"
-                      round
-                      @click="()=>{
+                    <DButton intent="quiet" title="Add observation" @click="promptAddObservation(substyle)">
+                      <DIcon name="add" size="sm" />
+                    </DButton>
+                    <DButton intent="quiet" title="Delete datastream style" @click="()=>{
                         const parentStyle = style as IRenderer;
                         const index = parentStyle.ds_renderer.indexOf(substyle);
                         if(index !== -1){
                           parentStyle.ds_renderer.splice(index, 1);
                           if(selection?.id === substyle.id) selection = undefined;
                         }
-                      }"
-                    />
+                      }">
+                      <DIcon name="delete" size="sm" />
+                    </DButton>
                   </div>
                 </div>
 
@@ -516,38 +520,25 @@ watch(selection,()=>{
                           @click="selection=obs">
                       <div></div>
                       <div class="icon">
-                        <VaBadge
-                          :offset="[5,14]"
-                          class="mr-6"
-                          color="#efefef"
-                          overlap
-                          style="--va-badge-text-wrapper-border-radius: 50%;"
-                          text="Obs"
-                        >
-                          <VaIcon
-                            class="material-icons"
-                          >
-                            visibility
-                          </VaIcon>
-                        </VaBadge>
+                        <span class="marked">
+                          <DIcon name="visibility" size="sm" />
+                          <span class="marked__tag">Obs</span>
+                        </span>
                       </div>
                       <div class="text">
                         {{ obs.component || 'Observation' }}
                       </div>
                       <div class="options">
-                        <VaButton
-                          icon="delete"
-                          preset="secondary"
-                          round
-                          @click="()=>{
+                        <DButton intent="quiet" title="Delete observation" @click="()=>{
                             if (!substyle.observations) return;
                             const index = substyle.observations.indexOf(obs);
                             if(index !== -1){
                               substyle.observations.splice(index, 1);
                               if(selection === obs) selection = undefined;
                             }
-                          }"
-                        />
+                          }">
+                          <DIcon name="delete" size="sm" />
+                        </DButton>
                       </div>
                     </div>
                   </div>
@@ -562,57 +553,10 @@ watch(selection,()=>{
 
       </div>
       <div class="detail">
-        <VaTabs v-model="tabNo">
-          <template #tabs>
-            <template v-if=" layerModel?.type =='OGCSTA'">
-              <!-- Thing Renderer -->
-              <template v-if="selection?.thing">
-                <VaTab
-                  v-for="tab in ['Conditions', 'Points', 'Areas', 'Auto-update']"
-                  :key="tab"
-                >
-                  {{ tab }}
-                </VaTab>
-              </template>
-              <!-- Observation Renderer -->
-              <template v-else-if="selection?.component && !selection?.datastream">
-                <VaTab>Settings</VaTab>
-              </template>
-              <!-- DS Renderer -->
-              <template v-else-if="layerModel?.type =='OGCSTA'">
-                <VaTab
-                  v-for="tab in ['Conditions', 'Points', 'Areas', 'Placement']"
-                  :key="tab"
-                >
-                  {{ tab }}
-                </VaTab>
-              </template>
-              <template v-else>
-                <VaTab
-                  v-for="tab in ['Conditions', 'Points', 'Areas']"
-                  :key="tab"
-                >
-                  {{ tab }}
-                </VaTab>
-              </template>
-            </template>
-            <template v-else>
-              <VaTab
-                v-for="tab in ['Conditions', 'Points', 'Areas']"
-                :key="tab"
-              >
-                {{ tab }}
-              </VaTab>
-            </template>
-
-          </template>
-        </VaTabs>
+        <DTabs v-model="activeTab" :tabs="tabs" label="Renderer settings" />
         <!--<RenderPropertyListItemDataStream v-model="model"></RenderPropertyListItemDataStream>-->
         <div v-if="selection" class="content">
-          <VaScrollContainer
-            class="scroller"
-            vertical
-          >
+          <div class="scroller">
             <!-- Observation Renderer Content -->
             <template v-if="selection?.component && !selection?.datastream">
               <div class="full">
@@ -650,38 +594,30 @@ watch(selection,()=>{
                 </template>
               </div>
             </template>
-          </VaScrollContainer>
+          </div>
 
 
         </div>
         <div v-else class="content center">
-          <VaIcon :size="74" class="material-icons">
-            style
-          </VaIcon>
+          <DIcon name="style" size="lg" class="empty__icon" />
           <span><span class="underline blue" @click="addStyle">create</span> or select Sytle to edit</span>
         </div>
 
       </div>
     </div>
-    <template #footer>
-      <div style="display: flex; justify-content: flex-end; padding: 8px;">
-        <VaButton @click="showModal = false">Close</VaButton>
-      </div>
+    <template #actions>
+      <DButton @click="showModal = false">Close</DButton>
     </template>
-
-  </VaModal>
+  </DModal>
 
   <!-- Delete Confirmation Modal -->
-  <VaModal
+  <DModal
     v-model="showDeleteConfirmation"
-    title="Delete Style"
-    size="small"
-    ok-text="Delete"
-    cancel-text="Cancel"
-    @ok="performDelete(styleToDelete)"
+    title="Delete style"
+    size="sm"
     @cancel="cancelDelete"
   >
-    <div style="padding: 10px;">
+    <div class="prose">
       <p><strong>Warning:</strong> This style "{{ styleToDelete?.name }}" is used by {{ affectedLayers.length }} layer(s):</p>
       <ul style="margin: 10px 0; padding-left: 20px;">
         <li v-for="(layer, index) in affectedLayers" :key="index">
@@ -691,32 +627,35 @@ watch(selection,()=>{
       <p>If you delete this style, it will be removed from all these layers.</p>
       <p><strong>Do you want to continue?</strong></p>
     </div>
-  </VaModal>
+    <template #actions>
+      <DButton intent="quiet" @click="cancelDelete">Cancel</DButton>
+      <DButton intent="danger" @click="performDelete(styleToDelete)">Delete</DButton>
+    </template>
+  </DModal>
 
   <!-- Observation Renderer Type Selection Modal -->
-  <VaModal
+  <DModal
     v-model="showObservationTypeDialog"
-    title="Select Observation Renderer Type"
-    size="medium"
-    hide-default-actions
+    title="Select observation renderer"
+    size="md"
   >
-    <div style="padding: 20px;">
-      <p style="margin-bottom: 15px;">Choose which type of renderer to use for observations:</p>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <VaButton
+    <div class="prose">
+      <p>Choose which type of renderer to use for observations:</p>
+      <div class="choices">
+        <DButton
           v-for="[id, desc] in getAllDataPointRenderers()"
           :key="id"
+          class="choice"
           @click="addObservationRenderer(id)"
-          style="justify-content: flex-start;"
         >
-          <div style="text-align: left;">
-            <div style="font-weight: bold;">{{ desc.name }}</div>
-            <div style="font-size: 0.85em; opacity: 0.7;">{{ desc.description }}</div>
-          </div>
-        </VaButton>
+          <span class="choice__text">
+            <span class="choice__name">{{ desc.name }}</span>
+            <span class="choice__what">{{ desc.description }}</span>
+          </span>
+        </DButton>
       </div>
     </div>
-  </VaModal>
+  </DModal>
 </template>
 
 <style scoped>
@@ -738,7 +677,79 @@ watch(selection,()=>{
 }
 
 .detail {
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--color-divider);
+}
+
+/*
+ * An icon with a two-letter tag in its corner: which kind of renderer a
+ * row is - a thing, a datastream, an observation - without a word of it in
+ * the row's own width.
+ */
+.marked {
+  position: relative;
+  display: inline-flex;
+}
+
+.marked__tag {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--color-raised);
+  color: var(--color-dim);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  line-height: 14px;
+}
+
+.item__input {
+  width: 100%;
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm, 3px);
+  background: var(--color-pane);
+  color: var(--color-fg);
+  font: inherit;
+  padding: 1px 4px;
+}
+
+.prose {
+  padding: 4px 2px;
+  color: var(--color-fg);
+  line-height: 1.5;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.choice {
+  justify-content: flex-start;
+  height: auto;
+  padding: 8px 10px;
+}
+
+.choice__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.choice__name {
+  font-weight: 600;
+}
+
+.choice__what {
+  font-size: var(--text-xs);
+  opacity: 0.75;
+}
+
+.empty__icon {
+  font-size: 74px;
 }
 
 .menuitem {
@@ -755,7 +766,7 @@ watch(selection,()=>{
   }
 
   &.active {
-    background-color: #e5e7eb;
+    background-color: var(--color-raised);
   }
 
   .options {
@@ -775,8 +786,11 @@ watch(selection,()=>{
   height: 500px;
   padding: 0 0 0 15px;
 
+  /* The panel scrolls inside the dialog; main.css paints the bar */
   .scroller {
     min-height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   &.center {
@@ -785,7 +799,7 @@ watch(selection,()=>{
     align-content: center;
     justify-content: center;
     align-items: center;
-    color: #8f8f8f;
+    color: var(--color-dim);
   }
 }
 
@@ -794,7 +808,7 @@ watch(selection,()=>{
 }
 
 .blue {
-  color: rgb(19, 51, 112);
+  color: var(--color-accent);
 }
 
 .rowlayout {

@@ -28,8 +28,12 @@ import MaterialIcons from './assets/output.json'
 
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
 import {
+  DCheckbox,
+  DColorInput,
   DInput,
+  DSlider,
 } from 'org.eclipse.daanse.board.app.ui.vue.controls'
+import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -64,10 +68,15 @@ const iconStyle = computed(() => {
 
 <template>
   <!--
-    Only the picker is left here: choosing an icon is searching a list and
-    clicking one, which is not a value anyone types, so it has no field in
-    the model. Everything else the widget offers is rendered from
-    model/ui.xmi beside this.
+    Two sections, because they are two different things: picking the icon
+    is searching a list and clicking one - there is no value to type -
+    while everything below it is a plain setting.
+
+    The second section looks redundant beside the model, and inside this
+    widget's own settings it is: the overlay hides it, because
+    unmodelledSections names only the picker. It is here for the map
+    widget, which renders this component whole to style its points and has
+    no model form beside it.
   -->
   <section class="settings-section" data-section="Symbol wählen">
     <div class="settings-container">
@@ -88,6 +97,52 @@ const iconStyle = computed(() => {
           {{ icon }}
         </span>
       </div>
+    </div>
+  </section>
+
+  <section class="settings-section" :data-section="t('IconWidget.title')">
+    <div class="settings-container">
+      <DCheckbox
+        v-model="widgetSettings.isIconFilled"
+        :label="t('icon:IconWidget.iconFilled')"
+      />
+      <VariableInput v-model="widgetSettings.iconColor!" :label="t('icon:IconWidget.iconColor')">
+        <template #default="{ value, change }">
+          <DColorInput
+            :model-value="value"
+            @update:model-value="change"
+            :label="t('icon:IconWidget.iconColor')"
+          />
+        </template>
+      </VariableInput>
+      <DSlider
+        v-model="widgetSettings.iconSize"
+        :min="10"
+        :max="1000"
+        :step="10"
+        suffix="px"
+        :label="t('icon:IconWidget.iconSize')"
+      />
+      <DSlider
+        v-model="widgetSettings.strokeWeight"
+        :min="100"
+        :max="700"
+        :step="100"
+        :label="t('icon:IconWidget.strokeWeight')"
+      />
+      <DSlider
+        v-model="widgetSettings.opticSize"
+        :min="20"
+        :max="48"
+        :label="t('icon:IconWidget.opticSize')"
+      />
+      <DSlider
+        v-model="widgetSettings.grade"
+        :min="-25"
+        :max="200"
+        :step="15"
+        :label="t('icon:IconWidget.grade')"
+      />
     </div>
   </section>
 </template>

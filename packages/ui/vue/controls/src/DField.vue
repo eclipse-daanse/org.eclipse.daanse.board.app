@@ -39,7 +39,7 @@ withDefaults(
 
 <template>
   <div :class="['field', { 'field--stacked': stacked, 'field--invalid': !!error }]">
-    <label v-if="label" class="field__label" :for="for">
+    <label v-if="label" class="field__label" :for="$props.for">
       {{ label }}
       <span v-if="required" class="field__required" aria-hidden="true">*</span>
     </label>

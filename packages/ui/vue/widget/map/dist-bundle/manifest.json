@@ -15,6 +15,7 @@
     "lib.logger",
     "platform.vue",
     "ui.vue.composables",
+    "ui.vue.controls",
     "ui.vue.widget.icon"
   ],
   "requiresService": [
@@ -77,6 +78,10 @@
     {
       "id": "@emfts/core",
       "versionRange": "^0.1.1-next.18"
+    },
+    {
+      "id": "org.eclipse.daanse.board.app.ui.vue.controls",
+      "versionRange": ">=0.0.1-0"
     }
   ],
   "capabilities": [

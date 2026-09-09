@@ -15,6 +15,14 @@ import { type ModelRef, reactive } from 'vue'
 
 import { Comperator, type ICondition, type IPointAndAreaSettings, type IRenderer } from './../../api/Renderer'
 import {IconWidgetSettings,IconWidget}  from 'org.eclipse.daanse.board.app.ui.vue.widget.icon'
+import {
+  DCheckbox,
+  DColorInput,
+  DDivider,
+  DInput,
+  DRadioGroup,
+  DSelect,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const model: ModelRef<IPointAndAreaSettings> = defineModel<IPointAndAreaSettings>({
   default: () => {
@@ -71,11 +79,13 @@ const pointSelectorOptions = [
 <template>
 
   <div class="flex flex-col md6 pa-3">
-    <VaButtonToggle
+    <DRadioGroup
       v-model="model.point_render_as"
       :options="pointSelectorOptions"
-      border-color="primary"
-      preset="secondary"
+      value-key="value"
+      label-key="label"
+      label="render point as"
+      inline
     />
     <template v-if="model.point_render_as=='icon'">
       <!--
@@ -85,41 +95,34 @@ const pointSelectorOptions = [
       <IconWidgetSettings v-model="(model.point as any)"></IconWidgetSettings>
     </template>
     <template v-if="model.point_render_as=='prop'">
-      <VaSelect
+      <DSelect
         v-model="model.point_prop"
         :options="thingsPropOptions"
         label="DataStream Prop"
         placeholder="Select an option"
-        text-by="text"
-        value-by="selector"
+        label-key="text"
+        value-key="selector"
       />
     </template>
     <template v-if="model.point_render_as=='image'">
-      <VaInput
+      <DInput
         v-model="model.point_image_url"
         label="Image URL"
         placeholder="https://example.com/image.png"
       />
-      <VaInput
+      <DInput
         v-model.number="model.point_image_size"
         type="number"
-        label="Image Size (px)"
+        label="Image Size"
+        suffix="px"
         placeholder="32"
       />
     </template>
     <template v-if="model.point_render_as!='none'">
-      <VaDivider class="mb15" />
+      <DDivider class="mb15" />
 
-      <va-color-input
-        v-model="model.pointPin.color"
-        class="pin-color"
-        label="Pin Color"
-
-      />
-      <VaCheckbox
-        v-model="model.pointPin.solid"
-        label="Solid (vollflächig)"
-      />
+      <DColorInput v-model="model.pointPin.color" class="pin-color" label="Pin colour" />
+      <DCheckbox v-model="model.pointPin.solid" label="Solid" />
     </template>
   </div>
   <div class="flex flex-col md6 pa-3">

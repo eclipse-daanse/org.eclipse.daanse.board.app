@@ -49,6 +49,7 @@ import DFloatingWindow from './DFloatingWindow.vue'
 import DIcon from './DIcon.vue'
 import DInput from './DInput.vue'
 import DModal from './DModal.vue'
+import DRadioGroup from './DRadioGroup.vue'
 import DSelect from './DSelect.vue'
 import DSlider from './DSlider.vue'
 import DSwitch from './DSwitch.vue'
@@ -67,6 +68,7 @@ export {
   DIcon,
   DInput,
   DModal,
+  DRadioGroup,
   DSelect,
   DSlider,
   DSwitch,
@@ -87,6 +89,7 @@ export const CONTROLS = {
   DIcon,
   DInput,
   DModal,
+  DRadioGroup,
   DSelect,
   DSlider,
   DSwitch,
