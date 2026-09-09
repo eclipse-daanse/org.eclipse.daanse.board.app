@@ -20,7 +20,6 @@ import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables
 const options = ref([] as Array<VariableOption>);
 const model = defineModel<VariableWrapper<any>>({ required: true });
 const props = defineProps<{ label?: string }>();
-console.log(model.value);
 
 interface VariableOption {
   label: string;
@@ -54,10 +53,25 @@ const getVariableValue = (name: string) => {
   return variable ? variable.value : null;
 }
 
-const onChange = (e: any) => {
-  console.log('onChange triggered', e)
+/**
+ * The new value, however the control reports it.
+ *
+ * A control in the slot may hand back the value or the event that carried
+ * it - Vuestic's inputs emit update:modelValue with the value, a plain
+ * input emits an event. Reading both here is what lets the slot take any
+ * control without its caller knowing which kind it got.
+ */
+function valueOf(given: unknown): string {
+  const event = given as { target?: { value?: unknown } } | null
+  if (event && typeof event === 'object' && event.target && 'value' in event.target) {
+    return String(event.target.value ?? '')
+  }
+  return given == null ? '' : String(given)
+}
+
+const onChange = (given: unknown) => {
   if (model.value) {
-    model.value.value = e.target.value;
+    model.value.value = valueOf(given);
   }
 }
 
