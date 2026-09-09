@@ -14,7 +14,6 @@ Contributors:
 import type { IconSettings } from './gen/IconSettings'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import MaterialIcons from './assets/output.json'
-import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.components'
 
 // interface MaterialIcon {
 //     name: string;
@@ -28,6 +27,9 @@ import { VariableInput } from 'org.eclipse.daanse.board.app.ui.vue.variable.comp
 // }
 
 import type {i18n} from "org.eclipse.daanse.board.app.lib.i18next"
+import {
+  DInput,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 const i18n:i18n|undefined = inject('i18n');
 const t = (key:string)=>(i18n)?i18n.t(key):key;
@@ -55,10 +57,6 @@ onMounted(() => {
   iconsList.value = MaterialIcons
 })
 
-const fontColor = computed(() => {
-  return isDarkTheme.value ? '#ffffff' : ''
-})
-
 const iconStyle = computed(() => {
   return `font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 100, "opsz" 48;`
 })
@@ -66,15 +64,16 @@ const iconStyle = computed(() => {
 
 <template>
   <!--
-    Two sections, because they are two different things: picking the icon is
-    searching a list and clicking one - there is no value to type - while
-    everything below it is a plain setting. Split so the settings half can be
-    rendered from the model and this half kept as it is.
+    Only the picker is left here: choosing an icon is searching a list and
+    clicking one, which is not a value anyone types, so it has no field in
+    the model. Everything else the widget offers is rendered from
+    model/ui.xmi beside this.
   -->
   <section class="settings-section" data-section="Symbol wählen">
     <div class="settings-container">
-      <va-input
+      <DInput
         v-model="searchQuery"
+        type="search"
         placeholder="Search icon..."
         :label="t('icon:IconWidget.iconSearch')"
       />
@@ -89,63 +88,6 @@ const iconStyle = computed(() => {
           {{ icon }}
         </span>
       </div>
-    </div>
-  </section>
-
-  <section class="settings-section" :data-section="t('IconWidget.title')">
-    <div class="settings-container">
-      <va-checkbox
-        v-model="widgetSettings.isIconFilled"
-        :label="t('icon:IconWidget.iconFilled')"
-      />
-      <VariableInput v-model="widgetSettings.iconColor!" :label="t('icon:IconWidget.iconColor')">
-        <template #default="{ value, change }">
-          <va-color-input
-            :model-value="value"
-            @input="change"
-            :label="t('icon:IconWidget.iconColor')"
-          />
-        </template>
-      </VariableInput>
-      <va-slider
-        class="slider"
-        v-model="widgetSettings.iconSize"
-        :label-color="fontColor"
-        track-label-visible
-        :min="10"
-        :max="1000"
-        :step="10"
-        :label="t('icon:IconWidget.iconSize')"
-      />
-      <va-slider
-        class="slider"
-        v-model="widgetSettings.strokeWeight"
-        :label-color="fontColor"
-        track-label-visible
-        :min="100"
-        :max="700"
-        :step="100"
-        :label="t('icon:IconWidget.strokeWeight')"
-      />
-      <va-slider
-        class="slider"
-        v-model="widgetSettings.opticSize"
-        :label-color="fontColor"
-        track-label-visible
-        :min="20"
-        :max="48"
-        :label="t('icon:IconWidget.opticSize')"
-      />
-      <va-slider
-        class="slider"
-        v-model="widgetSettings.grade"
-        :label-color="fontColor"
-        track-label-visible
-        :min="-25"
-        :max="200"
-        :step="15"
-        :label="t('icon:IconWidget.grade')"
-      />
     </div>
   </section>
 </template>
