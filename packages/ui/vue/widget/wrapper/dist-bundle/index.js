@@ -1,13 +1,14 @@
-(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-a1cdbc32]{position:absolute}.wrapper-container[data-v-a1cdbc32]{background-color:var(--v360f3c5d);border-color:var(--b35f9fe0);border-width:var(--v1eca3a79);border-style:solid;width:100%;height:100%;box-Shadow:var(--v24576062);border-radius:var(--v2920dcf0);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-a1cdbc32]{border-radius:var(--v2920dcf0);padding:var(--v7301e5ea)}.actions[data-v-a1cdbc32]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-a1cdbc32],.actions[data-v-a1cdbc32]:focus-within{opacity:1}.actions__row[data-v-a1cdbc32]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-a1cdbc32]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-a1cdbc32]:hover,.action[data-v-a1cdbc32]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-a1cdbc32]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-a1cdbc32]:hover,.action--danger[data-v-a1cdbc32]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__icon[data-v-a1cdbc32]{font-size:22px}.action__label[data-v-a1cdbc32]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-a1cdbc32],.action:focus-visible .action__label[data-v-a1cdbc32]{opacity:1}\n";})();
-import { defineComponent as ee, useCssVars as te, computed as c, inject as se, ref as V, onUnmounted as re, resolveComponent as U, createElementBlock as y, openBlock as m, normalizeStyle as z, createCommentVNode as K, createVNode as G, toDisplayString as k, Fragment as Z, createElementVNode as P, withCtx as I, createBlock as ae, resolveDynamicComponent as ie, renderList as oe, withModifiers as ne, normalizeClass as le, createTextVNode as $ } from "vue";
-import { identifier as ue } from "org.eclipse.daanse.board.app.lib.api.widget";
+(function(){var i="ui.vue.widget.wrapper",d=document,s=d.querySelector('style[data-tsm-bundle="'+i+'"]');if(!s){s=d.createElement('style');s.setAttribute('data-tsm-bundle',i);d.head.appendChild(s);}s.textContent=".absolute[data-v-98bcbb39]{position:absolute}.wrapper-container[data-v-98bcbb39]{background-color:var(--v4cd81e68);border-color:var(--v057018db);border-width:var(--v02ed1f04);border-style:solid;width:100%;height:100%;box-Shadow:var(--v2e44214c);border-radius:var(--v526b7f53);backdrop-filter:blur(var(--blur-amount))}.sub[data-v-98bcbb39]{border-radius:var(--v526b7f53);padding:var(--aabc1cd4)}.scroll[data-v-98bcbb39]{width:100%;height:100%;overflow:auto}.confirm__title[data-v-98bcbb39]{margin:0;font-family:var(--font-sans);font-size:var(--text-base);font-weight:600;color:var(--color-fg)}.confirm__text[data-v-98bcbb39]{margin:0;color:var(--color-dim);line-height:1.5}.actions[data-v-98bcbb39]{position:absolute;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--color-bg, #121820) 70%,transparent);opacity:0;transition:opacity .12s ease;pointer-events:none}.wrapper-container:hover .actions[data-v-98bcbb39],.actions[data-v-98bcbb39]:focus-within{opacity:1}.actions__row[data-v-98bcbb39]{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:100%;padding:0 4px;margin-bottom:6%}.action[data-v-98bcbb39]{pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid transparent;border-radius:var(--radius-md, 4px);background:transparent;color:var(--color-dim, #8b98a8);font:inherit;cursor:pointer;transition:color .1s ease,background-color .1s ease,border-color .1s ease}.action[data-v-98bcbb39]:hover,.action[data-v-98bcbb39]:focus-visible{color:var(--color-fg, #e6edf5);background:color-mix(in srgb,var(--color-pane, #1a222c) 88%,transparent);border-color:var(--color-divider, #2b3644)}.action[data-v-98bcbb39]:focus-visible{outline:2px solid var(--color-accent, #4fa3d1);outline-offset:1px}.action--danger[data-v-98bcbb39]:hover,.action--danger[data-v-98bcbb39]:focus-visible{color:var(--color-err, #d1584f);border-color:color-mix(in srgb,var(--color-err, #d1584f) 40%,transparent)}.action__label[data-v-98bcbb39]{position:absolute;top:calc(100% + 2px);left:50%;transform:translate(-50%);padding:2px 6px;border-radius:var(--radius-sm, 3px);background:var(--color-raised, #232d3a);color:var(--color-fg, #e6edf5);font-size:11px;line-height:1.4;letter-spacing:.01em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 90ms ease}.action:hover .action__label[data-v-98bcbb39],.action:focus-visible .action__label[data-v-98bcbb39]{opacity:1}\n";})();
+import { defineComponent as se, useCssVars as re, computed as c, inject as ae, ref as U, onUnmounted as ie, createElementBlock as P, openBlock as v, normalizeStyle as x, createCommentVNode as Y, createVNode as B, toDisplayString as V, Fragment as X, createElementVNode as m, createBlock as oe, resolveDynamicComponent as ne, renderList as le, withModifiers as ue, normalizeClass as de, unref as y, withCtx as G, createTextVNode as K } from "vue";
+import { identifier as ce } from "org.eclipse.daanse.board.app.lib.api.widget";
 import { VariableWrapper as r } from "org.eclipse.daanse.board.app.ui.vue.composables";
-import { BasicEFactory as de, BasicEPackage as ce, EPackageRegistry as j, BasicEClass as he, BasicEReference as u, BasicEObject as ge } from "@emfts/core";
-const Re = {
+import { DIcon as Z, DModal as he, DButton as M } from "org.eclipse.daanse.board.app.ui.vue.controls";
+import { BasicEFactory as ge, BasicEPackage as Re, EPackageRegistry as j, BasicEClass as Ee, BasicEReference as u, BasicEObject as we } from "@emfts/core";
+const fe = { class: "scroll" }, Te = {
   key: 0,
   class: "actions",
   "aria-hidden": "false"
-}, Ee = { class: "actions__row" }, we = ["title", "onClick"], fe = { class: "action__label" }, Te = { key: 2 }, Ce = { style: { "text-align": "center", padding: "1rem" } }, be = { style: { display: "flex", "justify-content": "flex-end", gap: "0.5rem" } }, Ne = /* @__PURE__ */ ee({
+}, Ce = { class: "actions__row" }, be = ["title", "onClick"], Ne = { class: "action__label" }, Se = { key: 2 }, pe = /* @__PURE__ */ se({
   __name: "WidgetWrapper",
   props: {
     widget: {},
@@ -16,22 +17,24 @@ const Re = {
   },
   emits: ["openSettings", "removeWidget"],
   setup(a, { emit: e }) {
-    te((o) => ({
-      v360f3c5d: L.value,
-      b35f9fe0: D.value,
-      v1eca3a79: v.value + "px",
-      v24576062: A.value,
-      v2920dcf0: q.value + "px",
-      v7301e5ea: X.value + "px"
+    re((o) => ({
+      v4cd81e68: D.value,
+      v057018db: L.value,
+      v02ed1f04: q.value + "px",
+      v2e44214c: A.value,
+      v526b7f53: J.value + "px",
+      aabc1cd4: W.value + "px"
     }));
-    const s = e, h = se(ue), R = V(0), C = h.onChange?.(() => {
-      R.value++;
+    const s = e, h = ae(ce), g = U(0), C = h.onChange?.(() => {
+      g.value++;
     });
-    re(() => C?.());
-    const b = c(() => (R.value, h.getWidget(a.widget.type))), N = c(() => (R.value, h.getAllWidgets())), E = V(!1), w = V(null), S = (o) => {
-      w.value = o, E.value = !0;
+    ie(() => C?.());
+    const b = c(() => (g.value, h.getWidget(a.widget.type))), N = c(() => (g.value, h.getAllWidgets())), R = U(!1), E = U(null), S = (o) => {
+      E.value = o, R.value = !0;
     }, p = () => {
-      w.value && s("removeWidget", w.value), E.value = !1, w.value = null;
+      E.value && s("removeWidget", E.value), R.value = !1, E.value = null;
+    }, f = () => {
+      R.value = !1, E.value = null;
     }, _ = (o) => {
       s("openSettings", o);
     }, O = c(() => [
@@ -49,7 +52,7 @@ const Re = {
         danger: !0,
         run: () => S(a.widget.uid)
       }
-    ]), T = {
+    ]), w = {
       title: "",
       backgroundColor: "#f6f7f9",
       backgroundColorTransparence: 255,
@@ -68,10 +71,10 @@ const Re = {
       shadowTransparence: 36,
       transparency: 255
     };
-    Object.keys(T).forEach((o) => {
+    Object.keys(w).forEach((o) => {
       const n = a.widget.wrapperConfig[o];
       if (n == null)
-        a.widget.wrapperConfig[o] = new r(T[o]);
+        a.widget.wrapperConfig[o] = new r(w[o]);
       else if (typeof n != "object")
         a.widget.wrapperConfig[o] = new r(n);
       else if (!(n instanceof r))
@@ -79,165 +82,149 @@ const Re = {
           const l = new r(n.value);
           "variable" in n && (l.variable = n.variable), a.widget.wrapperConfig[o] = l;
         } else
-          a.widget.wrapperConfig[o] = new r(T[o]);
+          a.widget.wrapperConfig[o] = new r(w[o]);
     });
     const A = c(() => {
       let o = "";
       const n = a.widget.wrapperConfig.shadowTransparence?.value;
-      B(n) && (o = n.toString(16));
+      F(n) && (o = n.toString(16));
       let l = (a.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
       return l.length == 3 && (l = l[0] + l[0] + l[1] + l[1] + l[2] + l[2]), `${a.widget.wrapperConfig.shadowX?.value}px ${a.widget.wrapperConfig.shadowY?.value}px ${a.widget.wrapperConfig.shadowBlur?.value}px #${l}${o}`;
-    }), L = c(() => {
+    }), D = c(() => {
       let o = 255;
       const n = a.widget.wrapperConfig.backgroundColorTransparence?.value;
-      B(n) && (o = n);
+      F(n) && (o = n);
       const l = a.widget.wrapperConfig.transparency?.value;
-      B(l) && (o = Math.round(o * (l / 255)));
-      const F = a.widget.wrapperConfig.backgroundColor?.value;
-      if (!F) return "var(--color-pane)";
-      let f = F.replace("#", "");
-      f.length == 3 && (f = f[0] + f[0] + f[1] + f[1] + f[2] + f[2]);
-      const x = o < 255 ? o.toString(16).padStart(2, "0") : "";
-      return `#${f}${x}`;
-    }), D = c(() => a.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), v = c(() => a.widget.wrapperConfig.borderSize?.value || 0), q = c(() => a.widget.wrapperConfig.borderRadius?.value || 0), W = c(() => {
+      F(l) && (o = Math.round(o * (l / 255)));
+      const I = a.widget.wrapperConfig.backgroundColor?.value;
+      if (!I) return "var(--color-pane)";
+      let T = I.replace("#", "");
+      T.length == 3 && (T = T[0] + T[0] + T[1] + T[1] + T[2] + T[2]);
+      const te = o < 255 ? o.toString(16).padStart(2, "0") : "";
+      return `#${T}${te}`;
+    }), L = c(() => a.widget.wrapperConfig.borderColor?.value || "var(--color-divider)"), q = c(() => a.widget.wrapperConfig.borderSize?.value || 0), J = c(() => a.widget.wrapperConfig.borderRadius?.value || 0), k = c(() => {
       const o = a.widget.wrapperConfig.transparency?.value;
-      return B(o) ? o / 255 : 1;
-    }), J = c(() => a.widget.wrapperConfig.titleFontSize?.value || 16), Y = c(() => a.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
+      return F(o) ? o / 255 : 1;
+    }), Q = c(() => a.widget.wrapperConfig.titleFontSize?.value || 16), H = c(() => a.widget.wrapperConfig.titleColor?.value || "var(--color-divider)");
     c(() => {
       let o = (a.widget.wrapperConfig.shadowColor?.value || "#FFFFFF").replace("#", "");
       o.length == 3 && (o = o[0] + o[0] + o[1] + o[1] + o[2] + o[2]);
       const n = a.widget.wrapperConfig.shadowTransparence?.value;
-      return o + (B(n) ? n.toString(16) : "");
+      return o + (F(n) ? n.toString(16) : "");
     });
-    function B(o) {
+    function F(o) {
       const n = parseInt(o);
       return isNaN(n) ? !1 : n >= 0 && n <= 255;
     }
-    const Q = c(() => {
+    const ee = c(() => {
       const o = a.widget.wrapperConfig.blur?.value;
-      return B(o) ? o : "";
-    }), X = c(() => {
+      return F(o) ? o : "";
+    }), W = c(() => {
       console.log(a.widget.wrapperConfig.padding);
       const o = parseInt(a.widget.wrapperConfig.padding?.value);
       return isNaN(o) ? 0 : o;
     });
-    return (o, n) => {
-      const l = U("VaScrollContainer"), F = U("VaIcon"), f = U("VaButton"), x = U("VaModal");
-      return m(), y("div", {
-        class: "flex relative flex-col w-full h-full wrapper-container",
-        style: z({ "--blur-amount": Q.value + "px", "--title-color": Y.value })
-      }, [
-        a.widget.wrapperConfig.title?.value ? (m(), y("div", {
-          key: 0,
-          class: "font-semibold capitalize",
-          style: z({
-            fontSize: J.value + "px",
-            color: Y.value,
-            padding: X.value + "px",
-            paddingBottom: 0,
-            opacity: W.value
+    return (o, n) => (v(), P("div", {
+      class: "flex relative flex-col w-full h-full wrapper-container",
+      style: x({ "--blur-amount": ee.value + "px", "--title-color": H.value })
+    }, [
+      a.widget.wrapperConfig.title?.value ? (v(), P("div", {
+        key: 0,
+        class: "font-semibold capitalize",
+        style: x({
+          fontSize: Q.value + "px",
+          color: H.value,
+          padding: W.value + "px",
+          paddingBottom: 0,
+          opacity: k.value
+        })
+      }, V(a.widget.wrapperConfig.title.value), 5)) : Y("", !0),
+      b.value ? (v(), P(X, { key: 1 }, [
+        m("div", {
+          class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
+          style: x({ position: "relative", opacity: k.value })
+        }, [
+          m("div", fe, [
+            (v(), oe(ne(N.value[a.widget.type].component), {
+              config: a.widget.config,
+              configv: a.widget.config,
+              "onUpdate:configv": n[0] || (n[0] = (l) => a.widget.config = l),
+              datasourceId: a.widget.config.datasourceId,
+              id: a.widget.uid || a.widget.id,
+              class: "widget_component"
+            }, null, 40, ["config", "configv", "datasourceId", "id"]))
+          ])
+        ], 4),
+        a.editEnabled ? (v(), P("div", Te, [
+          m("div", Ce, [
+            (v(!0), P(X, null, le(O.value, (l) => (v(), P("button", {
+              key: l.id,
+              type: "button",
+              class: de(["action", { "action--danger": l.danger }]),
+              title: l.label,
+              onClick: ue((I) => l.run(), ["stop"])
+            }, [
+              B(y(Z), {
+                name: l.icon,
+                size: "lg"
+              }, null, 8, ["name"]),
+              m("span", Ne, V(l.label), 1)
+            ], 10, be))), 128))
+          ])
+        ])) : Y("", !0)
+      ], 64)) : (v(), P("div", Se, [
+        m("p", null, "Widget type " + V(a.widget.type) + " is not registered.", 1)
+      ])),
+      B(y(he), {
+        modelValue: R.value,
+        "onUpdate:modelValue": n[1] || (n[1] = (l) => R.value = l),
+        size: "sm",
+        onCancel: f
+      }, {
+        header: G(() => [
+          B(y(Z), {
+            name: "warning",
+            size: "lg",
+            tone: "color-err"
+          }),
+          n[2] || (n[2] = m("h2", { class: "confirm__title" }, "Widget löschen", -1))
+        ]),
+        actions: G(() => [
+          B(y(M), {
+            intent: "quiet",
+            onClick: f
+          }, {
+            default: G(() => [...n[3] || (n[3] = [
+              K("Abbrechen", -1)
+            ])]),
+            _: 1
+          }),
+          B(y(M), {
+            intent: "danger",
+            onClick: p
+          }, {
+            default: G(() => [...n[4] || (n[4] = [
+              K("Löschen", -1)
+            ])]),
+            _: 1
           })
-        }, k(a.widget.wrapperConfig.title.value), 5)) : K("", !0),
-        b.value ? (m(), y(Z, { key: 1 }, [
-          P("div", {
-            class: "w-full h-full box-border cursor-pointer overflow-hidden sub",
-            style: z({ position: "relative", opacity: W.value })
-          }, [
-            G(l, {
-              color: "var(--color-outline)",
-              vertical: "",
-              horizontal: ""
-            }, {
-              default: I(() => [
-                (m(), ae(ie(N.value[a.widget.type].component), {
-                  config: a.widget.config,
-                  configv: a.widget.config,
-                  "onUpdate:configv": n[0] || (n[0] = (g) => a.widget.config = g),
-                  datasourceId: a.widget.config.datasourceId,
-                  id: a.widget.uid || a.widget.id,
-                  class: "widget_component"
-                }, null, 40, ["config", "configv", "datasourceId", "id"]))
-              ]),
-              _: 1
-            })
-          ], 4),
-          a.editEnabled ? (m(), y("div", Re, [
-            P("div", Ee, [
-              (m(!0), y(Z, null, oe(O.value, (g) => (m(), y("button", {
-                key: g.id,
-                type: "button",
-                class: le(["action", { "action--danger": g.danger }]),
-                title: g.label,
-                onClick: ne((De) => g.run(), ["stop"])
-              }, [
-                G(F, {
-                  name: g.icon,
-                  class: "action__icon"
-                }, null, 8, ["name"]),
-                P("span", fe, k(g.label), 1)
-              ], 10, we))), 128))
-            ])
-          ])) : K("", !0)
-        ], 64)) : (m(), y("div", Te, [
-          P("p", null, "Widget type " + k(a.widget.type) + " is not registered.", 1)
-        ])),
-        G(x, {
-          modelValue: E.value,
-          "onUpdate:modelValue": n[3] || (n[3] = (g) => E.value = g),
-          size: "small",
-          "hide-default-actions": "",
-          "overlay-opacity": "0.3"
-        }, {
-          footer: I(() => [
-            P("div", be, [
-              G(f, {
-                preset: "secondary",
-                onClick: n[1] || (n[1] = (g) => {
-                  E.value = !1, w.value = null;
-                })
-              }, {
-                default: I(() => [...n[6] || (n[6] = [
-                  $(" Abbrechen ", -1)
-                ])]),
-                _: 1
-              }),
-              G(f, {
-                color: "danger",
-                icon: "delete",
-                onClick: n[2] || (n[2] = (g) => p())
-              }, {
-                default: I(() => [...n[7] || (n[7] = [
-                  $(" Löschen ", -1)
-                ])]),
-                _: 1
-              })
-            ])
-          ]),
-          default: I(() => [
-            P("div", Ce, [
-              G(F, {
-                name: "warning",
-                color: "danger",
-                size: "2rem"
-              }),
-              n[4] || (n[4] = P("h5", { style: { margin: "0.5rem 0" } }, "Widget löschen", -1)),
-              n[5] || (n[5] = P("p", null, "Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.", -1))
-            ])
-          ]),
-          _: 1
-        }, 8, ["modelValue"])
-      ], 4);
-    };
+        ]),
+        default: G(() => [
+          n[5] || (n[5] = m("p", { class: "confirm__text" }, " Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden. ", -1))
+        ]),
+        _: 1
+      }, 8, ["modelValue"])
+    ], 4));
   }
-}), Se = (a, e) => {
+}), _e = (a, e) => {
   const s = a.__vccOpts || a;
-  for (const [h, R] of e)
-    s[h] = R;
+  for (const [h, g] of e)
+    s[h] = g;
   return s;
-}, pe = /* @__PURE__ */ Se(Ne, [["__scopeId", "data-v-a1cdbc32"]]);
-class H extends de {
+}, Oe = /* @__PURE__ */ _e(pe, [["__scopeId", "data-v-98bcbb39"]]);
+class z extends ge {
   static get eINSTANCE() {
-    return this._instance || (this._instance = new H()), this._instance;
+    return this._instance || (this._instance = new z()), this._instance;
   }
   constructor() {
     super(), this.setEPackage(i.eINSTANCE);
@@ -266,7 +253,7 @@ function d(a) {
     throw new Error(`EPackage '${a}' is not registered. Access the eINSTANCE of that model's generated package (or register it via EPackageRegistry.INSTANCE.registerPackage) before initializing WrapperSettingsPackage.`);
   return e;
 }
-class i extends ce {
+class i extends Re {
   static {
     this.eNAME = "wrapperSettings";
   }
@@ -308,46 +295,46 @@ class i extends ce {
    * Initialize package contents
    */
   init() {
-    j.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(H.eINSTANCE);
-    const e = new he();
+    j.INSTANCE.set(i.eNS_URI, this), this.setEFactoryInstance(z.eINSTANCE);
+    const e = new Ee();
     e.setName("WrapperSettings"), e.setAbstract(!1), e.setInterface(!1), this.getEClassifiers().push(e), e.setEPackage(this), i.Literals.WRAPPER_SETTINGS = e;
     const s = new u();
     s.setContainment(!1), s.setName("title"), s.setLowerBound(0), s.setUpperBound(1), e.getEStructuralFeatures().push(s), i.Literals.WRAPPER_SETTINGS__TITLE = s;
     const h = new u();
     h.setContainment(!1), h.setName("backgroundColor"), h.setLowerBound(0), h.setUpperBound(1), e.getEStructuralFeatures().push(h), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR = h;
-    const R = new u();
-    R.setContainment(!1), R.setName("backgroundColorTransparence"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = R;
+    const g = new u();
+    g.setContainment(!1), g.setName("backgroundColorTransparence"), g.setLowerBound(0), g.setUpperBound(1), e.getEStructuralFeatures().push(g), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE = g;
     const C = new u();
     C.setContainment(!1), C.setName("titleColor"), C.setLowerBound(0), C.setUpperBound(1), e.getEStructuralFeatures().push(C), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR = C;
     const b = new u();
     b.setContainment(!1), b.setName("padding"), b.setLowerBound(0), b.setUpperBound(1), e.getEStructuralFeatures().push(b), i.Literals.WRAPPER_SETTINGS__PADDING = b;
     const N = new u();
     N.setContainment(!1), N.setName("titleFontSize"), N.setLowerBound(0), N.setUpperBound(1), e.getEStructuralFeatures().push(N), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE = N;
+    const R = new u();
+    R.setContainment(!1), R.setName("borderSize"), R.setLowerBound(0), R.setUpperBound(1), e.getEStructuralFeatures().push(R), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE = R;
     const E = new u();
-    E.setContainment(!1), E.setName("borderSize"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE = E;
-    const w = new u();
-    w.setContainment(!1), w.setName("borderColor"), w.setLowerBound(0), w.setUpperBound(1), e.getEStructuralFeatures().push(w), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR = w;
+    E.setContainment(!1), E.setName("borderColor"), E.setLowerBound(0), E.setUpperBound(1), e.getEStructuralFeatures().push(E), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR = E;
     const S = new u();
     S.setContainment(!1), S.setName("borderRadius"), S.setLowerBound(0), S.setUpperBound(1), e.getEStructuralFeatures().push(S), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS = S;
     const p = new u();
     p.setContainment(!1), p.setName("blur"), p.setLowerBound(0), p.setUpperBound(1), e.getEStructuralFeatures().push(p), i.Literals.WRAPPER_SETTINGS__BLUR = p;
+    const f = new u();
+    f.setContainment(!1), f.setName("fullscreen"), f.setLowerBound(0), f.setUpperBound(1), e.getEStructuralFeatures().push(f), i.Literals.WRAPPER_SETTINGS__FULLSCREEN = f;
     const _ = new u();
-    _.setContainment(!1), _.setName("fullscreen"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), i.Literals.WRAPPER_SETTINGS__FULLSCREEN = _;
+    _.setContainment(!1), _.setName("shadowColor"), _.setLowerBound(0), _.setUpperBound(1), e.getEStructuralFeatures().push(_), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = _;
     const O = new u();
-    O.setContainment(!1), O.setName("shadowColor"), O.setLowerBound(0), O.setUpperBound(1), e.getEStructuralFeatures().push(O), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR = O;
-    const T = new u();
-    T.setContainment(!1), T.setName("shadowBlur"), T.setLowerBound(0), T.setUpperBound(1), e.getEStructuralFeatures().push(T), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = T;
+    O.setContainment(!1), O.setName("shadowBlur"), O.setLowerBound(0), O.setUpperBound(1), e.getEStructuralFeatures().push(O), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR = O;
+    const w = new u();
+    w.setContainment(!1), w.setName("shadowX"), w.setLowerBound(0), w.setUpperBound(1), e.getEStructuralFeatures().push(w), i.Literals.WRAPPER_SETTINGS__SHADOW_X = w;
     const A = new u();
-    A.setContainment(!1), A.setName("shadowX"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), i.Literals.WRAPPER_SETTINGS__SHADOW_X = A;
-    const L = new u();
-    L.setContainment(!1), L.setName("shadowY"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), i.Literals.WRAPPER_SETTINGS__SHADOW_Y = L;
+    A.setContainment(!1), A.setName("shadowY"), A.setLowerBound(0), A.setUpperBound(1), e.getEStructuralFeatures().push(A), i.Literals.WRAPPER_SETTINGS__SHADOW_Y = A;
     const D = new u();
     D.setContainment(!1), D.setName("shadowTransparence"), D.setLowerBound(0), D.setUpperBound(1), e.getEStructuralFeatures().push(D), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE = D;
-    const v = new u();
-    v.setContainment(!1), v.setName("transparency"), v.setLowerBound(0), v.setUpperBound(1), e.getEStructuralFeatures().push(v), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY = v, i.Literals.WRAPPER_SETTINGS__TITLE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__PADDING.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
+    const L = new u();
+    L.setContainment(!1), L.setName("transparency"), L.setLowerBound(0), L.setUpperBound(1), e.getEStructuralFeatures().push(L), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY = L, i.Literals.WRAPPER_SETTINGS__TITLE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BACKGROUND_COLOR_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__PADDING.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TITLE_FONT_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_SIZE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BORDER_RADIUS.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__FULLSCREEN.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_COLOR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_BLUR.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_X.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_Y.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__SHADOW_TRANSPARENCE.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper")), i.Literals.WRAPPER_SETTINGS__TRANSPARENCY.setEType(d("org.eclipse.daanse.board.app.ui.vue.composables").getEClassifier("VariableWrapper"));
   }
 }
-class t extends ge {
+class t extends we {
   constructor() {
     super(...arguments), this._title = new r(), this._backgroundColor = new r(), this._backgroundColorTransparence = new r(), this._titleColor = new r(), this._padding = new r(), this._titleFontSize = new r(), this._borderSize = new r(), this._borderColor = new r(), this._borderRadius = new r(), this._blur = new r(), this._fullscreen = new r(), this._shadowColor = new r(), this._shadowBlur = new r(), this._shadowX = new r(), this._shadowY = new r(), this._shadowTransparence = new r(), this._transparency = new r();
   }
@@ -985,7 +972,7 @@ class t extends ge {
     };
   }
 }
-const _e = `<?xml version="1.0" encoding="UTF-8"?>
+const Ae = `<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*********************************************************************
 * Copyright (c) 2026 Contributors to the Eclipse Foundation.
@@ -1108,29 +1095,29 @@ derived version can only ever list seventeen fields.
 </uimodel:UIModel>
 `;
 i.eINSTANCE;
-const Oe = new t(), Ae = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const De = new t(), Le = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  WidgetWrapper: pe,
+  WidgetWrapper: Oe,
   WrapperSettingsImpl: t,
   WrapperSettingsPackage: i,
-  defaultConfig: Oe,
-  wrapperSettingsFormXmi: _e
-}, Symbol.toStringTag, { value: "Module" })), M = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", Le = "0.0.1-next.1";
-async function Be(a) {
+  defaultConfig: De,
+  wrapperSettingsFormXmi: Ae
+}, Symbol.toStringTag, { value: "Module" })), $ = "org.eclipse.daanse.board.app.ui.vue.widget.wrapper", ve = "0.0.1-next.1";
+async function Ie(a) {
   const e = globalThis.__tsm__;
   if (!e)
-    throw new Error(`${M}: tsm runtime is not initialized`);
-  e.register(M, Ae, Le, "ui.vue.widget.wrapper"), await void 0;
+    throw new Error(`${$}: tsm runtime is not initialized`);
+  e.register($, Le, ve, "ui.vue.widget.wrapper"), await void 0;
 }
-async function Fe(a) {
+async function Ue(a) {
   await void 0;
 }
 export {
-  pe as WidgetWrapper,
+  Oe as WidgetWrapper,
   t as WrapperSettingsImpl,
   i as WrapperSettingsPackage,
-  Be as activate,
-  Fe as deactivate,
-  Oe as defaultConfig,
-  _e as wrapperSettingsFormXmi
+  Ie as activate,
+  Ue as deactivate,
+  De as defaultConfig,
+  Ae as wrapperSettingsFormXmi
 };

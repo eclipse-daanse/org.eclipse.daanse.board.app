@@ -23,6 +23,11 @@ import {
 } from 'org.eclipse.daanse.board.app.lib.api.widget'
 
 import { VariableWrapper } from 'org.eclipse.daanse.board.app.ui.vue.composables'
+import {
+  DButton,
+  DIcon,
+  DModal,
+} from 'org.eclipse.daanse.board.app.ui.vue.controls'
 
 
 const { widget, extraActions } = defineProps<{
@@ -75,6 +80,17 @@ const confirmDelete = (): void => {
   if (widgetToDelete.value) {
     emit('removeWidget', widgetToDelete.value)
   }
+  showDeleteConfirm.value = false
+  widgetToDelete.value = null
+}
+
+/*
+ * Escape and a click on the scrim close the dialog as well as the button
+ * does, so the widget waiting to be deleted is dropped here rather than in
+ * the button's handler - otherwise a dismissed dialog leaves it pending and
+ * the next confirmation deletes something nobody asked about.
+ */
+const cancelDelete = (): void => {
   showDeleteConfirm.value = false
   widgetToDelete.value = null
 }
@@ -297,11 +313,11 @@ const getpadding = computed(() => {
         class="w-full h-full box-border cursor-pointer overflow-hidden sub"
         :style="{ position: 'relative', opacity: transparency }"
       >
-        <VaScrollContainer color="var(--color-outline)" vertical horizontal>
+        <div class="scroll">
           <component :is="availableWidgets[widget.type].component" :config="widget.config"
             v-model:configv="widget.config" :datasourceId="widget.config.datasourceId" :id="widget.uid || widget.id"
             class="widget_component" />
-        </VaScrollContainer>
+        </div>
       </div>
       <!--
         While editing, hovering a widget dims it and offers what can be done
@@ -319,7 +335,7 @@ const getpadding = computed(() => {
             :title="action.label"
             @click.stop="action.run()"
           >
-            <VaIcon :name="action.icon" class="action__icon" />
+            <DIcon :name="action.icon" size="lg" />
             <span class="action__label">{{ action.label }}</span>
           </button>
         </div>
@@ -329,28 +345,22 @@ const getpadding = computed(() => {
       <p>Widget type {{ widget.type }} is not registered.</p>
     </div>
 
-    <VaModal
-      v-model="showDeleteConfirm"
-      size="small"
-      hide-default-actions
-      overlay-opacity="0.3"
-    >
-      <div style="text-align: center; padding: 1rem;">
-        <VaIcon name="warning" color="danger" size="2rem" />
-        <h5 style="margin: 0.5rem 0;">Widget löschen</h5>
-        <p>Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
-      </div>
-      <template #footer>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <VaButton preset="secondary" @click="showDeleteConfirm = false; widgetToDelete = null;">
-            Abbrechen
-          </VaButton>
-          <VaButton color="danger" icon="delete" @click="confirmDelete()">
-            Löschen
-          </VaButton>
-        </div>
+    <DModal v-model="showDeleteConfirm" size="sm" @cancel="cancelDelete">
+      <template #header>
+        <DIcon name="warning" size="lg" tone="color-err" />
+        <h2 class="confirm__title">Widget löschen</h2>
       </template>
-    </VaModal>
+
+      <p class="confirm__text">
+        Möchtest du dieses Widget wirklich löschen? Diese Aktion kann nicht rückgängig gemacht
+        werden.
+      </p>
+
+      <template #actions>
+        <DButton intent="quiet" @click="cancelDelete">Abbrechen</DButton>
+        <DButton intent="danger" @click="confirmDelete">Löschen</DButton>
+      </template>
+    </DModal>
   </div>
 </template>
 <style scoped>
@@ -376,6 +386,33 @@ const getpadding = computed(() => {
 .sub {
   border-radius: v-bind(borderRadius + "px");
   padding: v-bind(getpadding + "px");
+}
+
+/*
+ * The widget scrolls inside its frame rather than pushing it open.
+ *
+ * Nothing here paints the bar: the app styles every scrollbar from the
+ * theme tokens in main.css, which is what the third-party container this
+ * replaced was being asked - and refusing - to do.
+ */
+.scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.confirm__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.confirm__text {
+  margin: 0;
+  color: var(--color-dim);
+  line-height: 1.5;
 }
 
 /*
@@ -446,10 +483,6 @@ const getpadding = computed(() => {
 .action--danger:focus-visible {
   color: var(--color-err, #d1584f);
   border-color: color-mix(in srgb, var(--color-err, #d1584f) 40%, transparent);
-}
-
-.action__icon {
-  font-size: 22px;
 }
 
 /*
